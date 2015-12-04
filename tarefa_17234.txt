@@ -1,0 +1,896 @@
+Tarefa : 17234 
+Resumo : Integração Material / Fármacia
+Observ.: Está em anexo o documento de EF
+---------------------------------------------------------------------------
+Data : 2008-11-06
+Fechando tarefa para release 2.1.82.
+
+---------------------------------------------------------------------------
+Data : 2008-11-06
+Módulo de Farmácia - Este Módulo é voltado para Entrega de Medicamento aos pacientes, e totalmente integrado com o Módulo Materiais do DBPortal.
+Módulo de Farmácia - Este Módulo é voltado para Entrega de Medicamento aos pacientes, e totalmente integrado com o Módulo Materiais do DBPortal.
+---------------------------------------------------------------------------
+Data : 2008-11-06
+Fechar Tarefa para Release 82
+
+---------------------------------------------------------------------------
+Data : 2008-11-03
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081101_v80, rodados menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-11-03
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-11-03
+Pode testar      http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/        micro 2  base auto_capivari_20081101_v80, rodados menus e sql da tarefa na base.
+
+---------------------------------------------------------------------------
+Data : 2008-11-03
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-29
+Tarefa da Farmácia está OK.
+Estou devolvendo a Tarefa para comitar as classes, e mandar para o Teste. 
+---------------------------------------------------------------------------
+Data : 2008-10-28
+Revisão na Tarefa da Farmácia
+
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081019_v80, rodado menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Conversa sobre os Testes.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Conversa sobre os Testes.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Conversa sobre os Testes.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-27
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Testes feitos na Tarefa. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Testes feitos na Tarefa.
+
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Conversa sobre os Testes.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Conversa sobre os Testes.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Conversa sobre os Testes.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-27
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081019_v79, rodado menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-27
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-24
+Ajuste necessários :
+
+1 - incluir na consulta da aba Itens Retirados a coluna com o código da Requisição e trocar o nome da coluna Sequencia por Retirada.
+
+2 - No Comprovante Impresso da retirada o Nro  do Recibo de Retirada é o numero da requisição e tem que ser o nro da Retirada (o nro sequencial que aparece na consulta da aba Itens Retirados.
+
+
+Obs sobre o teste:
+
+  As alterações que pedidas foram atendidas.
+
+---------------------------------------------------------------------------
+Data : 2008-10-24
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081019_v79, rodado menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-24
+tarefa concluida pra testes
+
+---------------------------------------------------------------------------
+Data : 2008-10-24
+criar ambiente de testes
+
+---------------------------------------------------------------------------
+Data : 2008-10-24
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-23
+Testes Realizados
+1. Em alguns casos relatados para Jamile pelo telefone, está gravando na atendrequiitemmei apenas um registro, quando possui mais de um lote;
+2. Ao [Alterar] um item está se perdendo na hora de emitir o Comprovante, está aparecendo apenas um lote;
+3. Se puder mudar os itens do Recibo para o mesmo modelo do Iuri;
+O que o Reis pediu foi atendido corretamente. Ok
+---------------------------------------------------------------------------
+Data : 2008-10-23
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081019_v79, rodado menus e sql da tarefa na base.
+
+---------------------------------------------------------------------------
+Data : 2008-10-23
+no arquivo db_tmp_far_retirada_classe.php na function sql_query() inner join db_usuarios  tem q arrumar a palavra db_usu_rios por usuarios.
+como conversa com eduardo e reis
+---------------------------------------------------------------------------
+Data : 2008-10-23
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-23
+Conversa com a Jamile sobre os Testes.
+Conversa com a Jamile sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-21
+Testes na Tarefa.
+
+---------------------------------------------------------------------------
+Data : 2008-10-22
+Erros observados :
+
+1- Não esta procurando o CGS quando informado o código pelo campo, só acha quando for pela
+    ancora do campo CGS.
+
+
+2 - Só mostra corretamente a quantidade lançada na func [ Ver Lotes ] , na primeira vez que consulta ,mas se eu trocar a quantidade por outra , mantendo o mesmo medicamento, e clicar na ancora [Ver Lotes] , dai o programa não atualiza a func [ Ver Lotes ] com a alteração do campo quantidade.
+
+    Atenção : Só começa a funcionar normalmente quando se clica no botão [ Rateio automático ] da func [ Ver Lotes ], mas se clicar no botão [ Lançar ] da na func [ Ver Lotes ], o programa volta a não informar corretamente na func [ Ver Lotes ] a quantidade lançada no campo quantidade.
+
+             Ver solução.
+
+    Uma das soluções para este problema seria não deixar incluir o mesmo medicamento mais de
+uma vez.
+     
+4 - Esta gerando erro na tela quando se altera um dos medicamentos que esta sendo mostrado em "itens requisitados".
+
+---------------------------------------------------------------------------
+Data : 2008-10-22
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081019_v79, rodado menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-21
+criar ambiente teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-21
+Pode testar   http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/    micro 2  base  auto_capivari_20081019_v79, rodado menus e sql da tarefa na base.
+
+---------------------------------------------------------------------------
+Data : 2008-10-21
+criar ambiente de teste e atualizar  os menus
+atualizar os menus
+---------------------------------------------------------------------------
+Data : 2008-10-20
+tarefa concluida pra teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-20
+Conversa sobre a Farmácia.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-16
+Analizando estrutura para tabelas temporárias
+Tarefa repassada para Jamile fazer os teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-15
+Testes executados
+
+---------------------------------------------------------------------------
+Data : 2008-10-15
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 52 base auto_capivari_20081013_v78, rodado menus e sql da tarefa nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-15
+criar ambiente teste
+alteracao tabela far_retiradaitemlote ok
+---------------------------------------------------------------------------
+Data : 2008-10-15
+criar ambiente de teste
+alteracao tabela far_retiradaitemlote
+---------------------------------------------------------------------------
+Data : 2008-10-15
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 52 base auto_capivari_20081013_v78, rodado menus e sql da tarefa nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-15
+criar ambiente de teste
+data, inclusao do lote na tabela
+---------------------------------------------------------------------------
+Data : 2008-10-15
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 52 base auto_capivari_20081013_v78, rodado menus e sql da tarefa nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-15
+criar ambiente de teste
+erros na tela, data, e o campo quantidade
+---------------------------------------------------------------------------
+Data : 2008-10-15
+Conversa sobre os Testes
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-15
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 52 base auto_capivari_20081013_v78, rodado menus e sql da tarefa nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-15
+Conversa sobre as Tarefas.
+Conversa sobre os Testes
+---------------------------------------------------------------------------
+Data : 2008-10-15
+Conversa sobre a Tarefa.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-15
+ajustando detalhes
+todos os erros arrumados
+---------------------------------------------------------------------------
+Data : 2008-10-15
+criar ambiente de teste
+itens 1,2,4,5,6 resolvidos
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Conversa sobre a Tarefa.
+Conversa sobre os Testes na Tarefa
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Feito os Teste e repassado algumas correções para Jamile via (MSN) 
+
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 52 base auto_capivari_20081013_v78, rodado menus e sql da tarefa nessa base.
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Conversa com a Jamile.
+Conversa sobre os Teste
+---------------------------------------------------------------------------
+Data : 2008-10-14
+arrumando layout
+Para o CGS do Requisitante 778 não esta trazendo o campo  [número do endereço]  e [Identidade] devemos corrigir.OK
+No Procedimento > Entrega de Medicamento o campo Data da Receita  deve utilizar o mesmo parâmetros do campo Número da Receita para saber se é obrigatório ou opcional;   OK
+---------------------------------------------------------------------------
+Data : 2008-10-14
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Conversa da Jamile
+Conversa sobre os Testes
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Conversa com a Jamile.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Acompanhamento dos Testes.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Esta em Anexo o documento dos layout nos Testes realizados na Tarefa. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Esta em Anexo em (Erros 04). Nos Testes realizados na Tarefa.
+
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Criando tabelas temporárias.
+
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Pode testar     http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/     micro 52 base auto_capivari_20081013_v78, rodado menus e sql da tarefa nessa base.
+
+---------------------------------------------------------------------------
+Data : 2008-10-14
+Gerar ambiente de Teste 
+auto_capivari_20081013_v78  - IP 52
+---------------------------------------------------------------------------
+Data : 2008-10-13
+Realizados Teste na Tarefa 
+
+---------------------------------------------------------------------------
+Data : 2008-10-14
+verificando forma pra criar tabela temporaria e ajustando layout
+
+---------------------------------------------------------------------------
+Data : 2008-10-13
+verificando forma para criar tabela temporária para farmácia.
+
+---------------------------------------------------------------------------
+Data : 2008-10-13
+Pode testar       http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/         micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar        http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/       micro 52 base auto_capivari_20081011_v78, rodado menus e sql da tarefa nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-13
+Auxilio na criação da tabela temporária
+
+---------------------------------------------------------------------------
+Data : 2008-10-13
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-13
+Pode testar       http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/      micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base.
+Pode testar       http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/      micro 52 base auto_capivari_20081011_v78, rodado menus e sql da tarefa nessa base.
+---------------------------------------------------------------------------
+Data : 2008-10-13
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-10
+Fazer as correções que estão em Anexo
+
+---------------------------------------------------------------------------
+Data : 2008-10-10
+Conversa sobre o Módulo Farmácia.
+Conversa sobre os Teste.
+---------------------------------------------------------------------------
+Data : 2008-10-10
+Conversa sobre as Tarefas do sistema.
+Definições sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-10
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 52 base auto_capivari_20081006_v77, rodado menus e sql da tarefa nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-10
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-10
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 52 base auto_capivari_20081006_v77, rodado menus e sql da tarefa nessa base.
+---------------------------------------------------------------------------
+Data : 2008-10-10
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-10
+Item 1 - 5 estão corretos;
+Item 6 esta com problemas 
+
+---------------------------------------------------------------------------
+Data : 2008-10-10
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa nessa base. 
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 52 base auto_capivari_20081006_v77, rodado menus e sql da tarefa nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-09
+Teste a acompanhamento da Tarefa.
+
+---------------------------------------------------------------------------
+Data : 2008-10-09
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-09
+Pode testar       http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/    micro 2  base  auto_capivari_20081004_v77, rodado menus e sql da taerfa nessa base.
+Pode testar       http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/    micro 52  base  auto_capivari_20081006_v77,    rodado menus e sql da taerfa nessa base.
+---------------------------------------------------------------------------
+Data : 2008-10-09
+sql
+alter table far_retirada drop fa04_t_posologia;
+alter table far_retiradaitens drop fa06_t_obs;
+---------------------------------------------------------------------------
+Data : 2008-10-09
+esta em anexo o documento com os erros corrigidos
+
+---------------------------------------------------------------------------
+Data : 2008-10-09
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-08
+Esta em Anexo o documentos com os erros.
+Documento: Relação dos Erros.
+---------------------------------------------------------------------------
+Data : 2008-10-08
+Pode testar acessando http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/  Base auto_capivari_20081006_v77   micro 52  ... Rodado Sql, Funções e Menus.... Copiado fontes da Tarefa 17511  e rodado seus Sql's e Funções.
+
+---------------------------------------------------------------------------
+Data : 2008-10-08
+sql
+alter table far_tiporeceita add fa03_c_numeroreceita char(2);
+---------------------------------------------------------------------------
+Data : 2008-10-07
+criar ambiente de teste e rodar os menus
+
+---------------------------------------------------------------------------
+Data : 2008-10-07
+sql
+CREATE SEQUENCE faretiradaitemlote_fa09_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE TABLE far_retiradaitemlote(
+fa09_i_codigo		int4 default 0,
+fa09_i_retiradaitens		int4 default 0,
+fa09_i_matestoqueitem		int4 default 0,
+fa09_f_quant		float4 default 0,
+CONSTRAINT far_retiradaitemlote_codi_pk PRIMARY KEY (fa09_i_codigo));
+
+
+
+ALTER TABLE far_retiradaitemlote
+ADD CONSTRAINT far_retiradaitemlote_matestoqueitem_fk FOREIGN KEY (fa09_i_matestoqueitem)
+REFERENCES matestoqueitem;
+
+ALTER TABLE far_retiradaitemlote
+ADD CONSTRAINT far_retiradaitemlote_retiradaitens_fk FOREIGN KEY (fa09_i_retiradaitens)
+REFERENCES far_retiradaitens;
+
+---------------------------------------------------------------------------
+Data : 2008-10-07
+Conversa sobre a Tarefa da Farmácia
+Conversamos sobre os Testes
+---------------------------------------------------------------------------
+Data : 2008-10-07
+Conversa sobre a Tarefa da Farmácia.
+Conversamos sobre os Testes
+---------------------------------------------------------------------------
+Data : 2008-10-07
+Deve ser feitas algumas alterações:
+1. Ao emitir o recibo está dando erro quando não possui um profissional cadastrado, deve emitir e validar os outros campos;
+2. Foi enviado por email o modelo do Recibo de Entrega com algumas mudanças no documento; 
+
+---------------------------------------------------------------------------
+Data : 2008-10-07
+Jamile corrigir o select na rotina de Retirada de Medicamento (select sum(m70_valor)as vlrtot,sum(m70_quant)as quantot from matestoque where m70_coddepto = 35 and m70_codmatmater=6) não pode ser 6 deve ser 52, pois o 6 é do campo fa01_i_codigo, mas deveria pegar o 52 do campo  fa01_i_codmater.
+
+---------------------------------------------------------------------------
+Data : 2008-10-07
+Pergunta sobre a Tarefa da Farmácia.
+Conversa sobre os Testes.
+---------------------------------------------------------------------------
+Data : 2008-10-07
+Pergunta da Tarefa da Farmácia.
+Conversa da Tarefa da Farmácia.
+---------------------------------------------------------------------------
+Data : 2008-10-07
+Pergunta sobre a Tarefa da Farmácia.
+Conversa sobre os Testes da Tarefa.
+---------------------------------------------------------------------------
+Data : 2008-10-06
+Analisei o fonte far1_far_retirada001.php e a classe db_far_retiradaitens_classe.php, mais especificamente o método sql_query_retiradaitens() , para entender porque a Jamile não estava conseguindo mostrar no box [ ITENS REQUISITADOS ] só o(s) item(ns) solicitado na retirada. 
+Notei que a tabela far_retiradaitens só tem ponteiro para o código do material mas não tem ponteiro para o m71_codlanc da tabela  matestoqueitemlote, este campo que faz a ligação entre o itens material e o lote .por isso que, eu acho ,teria que existir um campo chamado fa06_i_codlanc para guardar a ligação com o lote que foi escolhido para a retirada .
+
+---------------------------------------------------------------------------
+Data : 2008-10-06
+Pode testar    http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/       micro 2 base auto_capivari_20081004_v77, rodado menus e sql da tarefa na base e copiados fontes da tarefa 17511 e rodado sql e funções dessa tarefa na base.
+base capivari_teste_20081002_v77, micro 52 atualizada na versão release 2.1.77. Rodei os sql, funções e menus da tarefa 17234 e 17511 nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-03
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-03
+Testando a Tarefa do Módulo de Farmácia. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-03
+Testando a Tarefa do Módulo de Farmácia. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-02
+Testando a Tarefa do Módulo de Farmácia. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-02
+Testando a Tarefa do Módulo de Farmácia.
+
+---------------------------------------------------------------------------
+Data : 2008-10-03
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20080927_v76, rodado menus e sql da tarefa na base e copiados fontes da tarefa 17511 e rodado sql e funções dessa tarefa na base. 
+base capivari_teste_20081002_v77, micro 52 atualizada na versão release 2.1.77. Rodei os sql, funções e menus da tarefa 17234 e 17511 nessa base. 
+---------------------------------------------------------------------------
+Data : 2008-10-03
+criar ambiente teste e rodar menus
+
+---------------------------------------------------------------------------
+Data : 2008-10-03
+atualiza menus
+
+---------------------------------------------------------------------------
+Data : 2008-10-03
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20080927_v76, rodado menus e sql da tarefa na base e copiados fontes da tarefa 17511 e rodado sql e funções dessa tarefa na base. 
+base capivari_teste_20081002_v77, micro 52 atualizada na versão release 2.1.77. Rodei os sql, funções e menus da tarefa 17234 e 17511 nessa base.
+---------------------------------------------------------------------------
+Data : 2008-10-03
+Conversa com a Jamile.
+Conversa com o Jamile.
+---------------------------------------------------------------------------
+Data : 2008-10-03
+Conversa sobre a Tarefa da Farmácia.
+Conversa com a Jamile
+---------------------------------------------------------------------------
+Data : 2008-10-03
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-02
+Pode testar      http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/          micro 2 base auto_capivari_20080927_v76, rodado menus e sql da tarefa na base e copiados fontes da tarefa 17511 e rodado sql e funções dessa tarefa na base.
+Eduardo criei a base   capivari_teste_20081002_v77, micro 52 atualizada na versão release 2.1.77.
+Rodei os sql, funções e menus da tarefa 17234 e 17511 nessa base.
+---------------------------------------------------------------------------
+Data : 2008-10-02
+Executando tarefa  criado base capivari_teste_20081002 no micro52 a pedido do eduardo.
+
+---------------------------------------------------------------------------
+Data : 2008-10-02
+atualizar os menus
+
+---------------------------------------------------------------------------
+Data : 2008-10-02
+Conversa sobre os teste da Farmácia
+Conversa sobre o menu Procedimento > Parâmetros
+---------------------------------------------------------------------------
+Data : 2008-10-02
+criar ambiente teste  e tem q rodar os menus 
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Acerto e conversa com a Jamile e Marcelo para acertar o ambiente de Teste.
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20080927_v76, rodado menus e sql da tarefa na base e copiados fontes da tarefa 17511 e rodado sql e funções dessa tarefa na base.
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20080927_v76, rodado menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+marcelo preciso q vc gere o ambiente de novo.
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20080927_v76, rodado menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Marcelo, gera o ambiente  teste de novo.
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20080927_v76, rodado menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+criar ambiente teste
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Fazendo os Testes
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Pode testar http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/ micro 2 base auto_capivari_20080927_v76, rodado menus e sql da tarefa na base. 
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Queria saber sobre o recibo de entrega da Farmácia, para emitir o lote e validade.
+A ligação caiu e foi completada via MSN.
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Ligou para avisar que já tinha liberado a Tarefa para teste.
+O Marcelo já criou o ambiente de teste.
+---------------------------------------------------------------------------
+Data : 2008-10-01
+atualiza menus
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+JAMILE verificar andamentos do EDUARDO, se a tarefa possui menus colocar andamentos de menus.
+
+---------------------------------------------------------------------------
+Data : 2008-10-01
+Não possui menu no ambiente de Teste
+
+---------------------------------------------------------------------------
+Data : 2008-09-30
+Pode testar        http://192.168.0.2/tarefas/tarefa_17234/dbportal_tarefa_17234/   micro 2 base auto_capivari_20080927_v76, rodado sql da tarefa na base.
+
+---------------------------------------------------------------------------
+Data : 2008-09-30
+criar ambiente de teste
+
+---------------------------------------------------------------------------
+Data : 2008-09-30
+sql
+
+CREATE SEQUENCE farclass_fa05_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE farmatersaude_fa01_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE farparametros_fa02_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE farretirada_fa04_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE faretiradait_fa06_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE faretiradarequi_fa07_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE farequisitante_fa08_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+CREATE SEQUENCE fartiporeceita_fa03_i_codigo_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+
+
+
+
+CREATE TABLE far_class(
+fa05_i_codigo		int4 default 0,
+fa05_c_class		char(50) ,
+fa05_c_tipo		char(2) ,
+fa05_t_obs		text ,
+fa05_c_descr		char(50) ,
+CONSTRAINT far_class_codi_pk PRIMARY KEY (fa05_i_codigo));
+
+
+
+CREATE TABLE far_matersaude(
+fa01_i_codigo		int4 default 0,
+fa01_t_obs		text ,
+fa01_i_codmater		int4 default 0,
+fa01_i_class		int4 default 0,
+CONSTRAINT far_matersaude_codi_pk PRIMARY KEY (fa01_i_codigo));
+
+
+
+CREATE TABLE far_parametros(
+fa02_i_codigo		int4 default 0,
+fa02_i_dbestrutura		int4 default 0,
+fa02_c_descr		char(60) ,
+fa02_c_digitacao		char(2) ,
+CONSTRAINT far_parametros_codi_pk PRIMARY KEY (fa02_i_codigo));
+
+
+CREATE TABLE far_retirada(
+fa04_i_codigo		int4 default 0,
+fa04_c_numeroreceita		char(10) ,
+fa04_d_dtvalidade		date default null,
+fa04_i_unidades		int4 default 0,
+fa04_i_cgsund		int4 default 0,
+fa04_i_tiporeceita		int4 default 0,
+fa04_i_dbusuario		int4 default 0,
+fa04_d_data		date default null,
+fa04_i_profissional		int4 default 0,
+fa04_t_posologia		text ,
+CONSTRAINT far_retirada_codi_pk PRIMARY KEY (fa04_i_codigo));
+
+
+
+CREATE TABLE far_retiradaitens(
+fa06_i_codigo		int4 default 0,
+fa06_t_posologia		text ,
+fa06_i_retirada		int4 default 0,
+fa06_i_matersaude		int4 default 0,
+fa06_t_obs		text ,
+fa06_f_quant		float8 default 0,
+CONSTRAINT far_retiradaitens_codi_pk PRIMARY KEY (fa06_i_codigo));
+
+
+
+CREATE TABLE far_retiradarequi(
+fa07_i_codigo		int4 default 0,
+fa07_i_retirada		int4 default 0,
+fa07_i_matrequi		int4 default 0,
+CONSTRAINT far_retiradarequi_codi_pk PRIMARY KEY (fa07_i_codigo));
+
+
+CREATE TABLE far_retiradarequisitante(
+fa08_i_codigo		int4 default 0,
+fa08_i_cgsund		int4 default 0,
+fa08_i_retirada		int4 default 0,
+CONSTRAINT far_retiradarequisitante_codi_pk PRIMARY KEY (fa08_i_codigo));
+
+
+
+CREATE TABLE far_tiporeceita(
+fa03_i_codigo		int4 default 0,
+fa03_c_descr		char(50) ,
+fa03_c_profissional		char(2) ,
+fa03_t_posologia		text ,
+fa03_c_requisitante		char(50) ,
+fa03_c_paciente		char(50) ,
+fa03_c_numeroreceita		char(10) ,
+fa03_c_quant		char(5) ,
+CONSTRAINT far_tiporeceita_codi_pk PRIMARY KEY (fa03_i_codigo));
+
+
+
+
+
+
+ALTER TABLE far_matersaude
+ADD CONSTRAINT far_matersaude_class_fk FOREIGN KEY (fa01_i_class)
+REFERENCES far_class;
+
+ALTER TABLE far_matersaude
+ADD CONSTRAINT far_matersaude_codmater_fk FOREIGN KEY (fa01_i_codmater)
+REFERENCES matmater;
+
+ALTER TABLE far_parametros
+ADD CONSTRAINT far_parametros_dbestrutura_fk FOREIGN KEY (fa02_i_dbestrutura)
+REFERENCES db_estrutura;
+
+ALTER TABLE far_retirada
+ADD CONSTRAINT far_retirada_tiporeceita_fk FOREIGN KEY (fa04_i_tiporeceita)
+REFERENCES far_tiporeceita;
+
+ALTER TABLE far_retirada
+ADD CONSTRAINT far_retirada_dbusuario_fk FOREIGN KEY (fa04_i_dbusuario)
+REFERENCES db_usuarios;
+
+ALTER TABLE far_retirada
+ADD CONSTRAINT far_retirada_cgsund_fk FOREIGN KEY (fa04_i_cgsund)
+REFERENCES cgs_und;
+
+ALTER TABLE far_retirada
+ADD CONSTRAINT far_retirada_profissional_fk FOREIGN KEY (fa04_i_profissional)
+REFERENCES medicos;
+
+ALTER TABLE far_retirada
+ADD CONSTRAINT far_retirada_unidades_fk FOREIGN KEY (fa04_i_unidades)
+REFERENCES unidades;
+
+ALTER TABLE far_retiradaitens
+ADD CONSTRAINT far_retiradaitens_retirada_fk FOREIGN KEY (fa06_i_retirada)
+REFERENCES far_retirada;
+
+ALTER TABLE far_retiradaitens
+ADD CONSTRAINT far_retiradaitens_matersaude_fk FOREIGN KEY (fa06_i_matersaude)
+REFERENCES far_matersaude;
+
+ALTER TABLE far_retiradarequi
+ADD CONSTRAINT far_retiradarequi_retirada_fk FOREIGN KEY (fa07_i_retirada)
+REFERENCES far_retirada;
+
+ALTER TABLE far_retiradarequi
+ADD CONSTRAINT far_retiradarequi_matrequi_fk FOREIGN KEY (fa07_i_matrequi)
+REFERENCES matrequi;
+
+ALTER TABLE far_retiradarequisitante
+ADD CONSTRAINT far_retiradarequisitante_retirada_fk FOREIGN KEY (fa08_i_retirada)
+REFERENCES far_retirada;
+
+ALTER TABLE far_retiradarequisitante
+ADD CONSTRAINT far_retiradarequisitante_cgsund_fk FOREIGN KEY (fa08_i_cgsund)
+REFERENCES cgs_und;
+
+
+
+
+
+
+
+CREATE UNIQUE INDEX farclass_class_in ON far_class(fa05_c_class);
+---------------------------------------------------------------------------
+Data : 2008-09-26
+Como vai ser o Modelo do Comprovante de entrega?
+Vou emitir um documento da Requisição Automática e fazer alguns ajustes e te mandar.
+---------------------------------------------------------------------------
+Data : 2008-09-25
+Eduardo estou com dificuldades para saber quais as Tabelas usar para dar baixa no estoque e controle de medicamento.
+Jamile vou tem que conversar com o Paulo para repassar as tabelas novamente, depois eu retorno a ligação.
+---------------------------------------------------------------------------
+Data : 2008-09-23
+Foi anexado um Documento com as telas da Saída de Requisição automática
+
+---------------------------------------------------------------------------
+Data : 2008-09-18
+Possui um campo conta na tabela do patrimônio, manter a estrutura para o Farmácia.
+Não precisa desse campo para Farmácia.
+---------------------------------------------------------------------------
+Data : 2008-09-18
+Como vai ser a mascara dos parâmetros?
+Igual a do patrimonial, o usuário que deve definir o número de casas decimais e separar por ponto. Exemplo ###.### assim fica com dois níveis.
+---------------------------------------------------------------------------
+Data : 2008-09-15
+Cristian, Tarefa para execução do Módulo Farmácia
+
+---------------------------------------------------------------------------
+Data : 2008-09-15
+Anexado o DEF para a realização da Tarefa.
+
+---------------------------------------------------------------------------
+Data : 2008-09-11
+Revisão do DEF, para adaptar conforme a reunião com (Paulo, Eduardo, Cristian e Jamile).
+Conversado por telefone com a farmacêutica de Capivari Eveline.  
+---------------------------------------------------------------------------
+Data : 2008-09-11
+Reunião com Paulo para definir alguns tópicos referente ao Módulo de Farmácia.
+
+---------------------------------------------------------------------------
+Data : 2008-09-11
+Reunião com (Eduardo, Iuri, Cristian e Jamile) para revisão da rotina de integração do Módulo Materiais e Farmácia.
+
+---------------------------------------------------------------------------
+Data : 2008-08-08
+Reformulando o documento de EF e adicionado os layout das Telas.
+
+---------------------------------------------------------------------------
+Data : 2008-07-18
+Tarefa para execução
+Anexado o documento de especificação funcional

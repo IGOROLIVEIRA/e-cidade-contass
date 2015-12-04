@@ -1,0 +1,45 @@
+#!/bin/bash
+export LC_ALL=pt_BR.ISO-8859-1
+export LANG="$LC_ALL"
+HOSTNAME=`hostname`
+CAMINHO="/var/www/e-cidade/updatedb"
+EXECUTADOS="/tmp/scripts_executados.sh"
+mkdir -p /var/www/e-cidade/updatedb/log/
+
+cd $CAMINHO
+for SCRIPTS in $(ls *.sql);
+do
+ echo $SCRIPTS >> $CAMINHO/scripts_disponiveis.sh	
+done
+cat $CAMINHO/scripts_disponiveis.sh | sort > $CAMINHO/scripts_disponiveis_ordenado.sh
+
+cat $CAMINHO/conn | while read BANCO PORTA CLIENTE
+do
+
+   if [ $HOSTNAME == $CLIENTE ]; then
+        psql -U dbportal -p $PORTA $BANCO -f $CAMINHO/update_table.sh
+   fi
+
+   cat $EXECUTADOS | sort > $CAMINHO/scripts_executados_ordenado.sh
+
+   diff --side-by-side --suppress-common-lines $CAMINHO/scripts_disponiveis_ordenado.sh  $CAMINHO/scripts_executados_ordenado.sh | cut -d" " -f1 > $CAMINHO/scripts_nao_executados.sh
+
+   if [ $HOSTNAME == $CLIENTE ]; then
+
+	cat $CAMINHO/scripts_nao_executados.sh | while read SCRIPT
+	do
+cat <<EOF>> $CAMINHO/$SCRIPT
+begin;
+INSERT INTO updatedb (nomescript,dataexec) VALUES ('$SCRIPT','`date +%Y-%m-%d`') ;
+commit;
+EOF
+echo "$CAMINHO/$SCRIPT"
+        psql -U dbportal -p $PORTA $BANCO -f "$CAMINHO/$SCRIPT" &> $CAMINHO/log/`date +%Y-%m-%d_%H:%M:%S`_`echo $BANCO`_`echo $SCRIPT | cut -d"/" -f6`.log
+   	done
+   fi
+
+done
+
+#rm $EXECUTADOS
+rm $CAMINHO/*.sql $CAMINHO/*.sh $CAMINHO/conn
+

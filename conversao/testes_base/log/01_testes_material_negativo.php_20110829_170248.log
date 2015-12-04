@@ -1,0 +1,31 @@
+
+[29/08/2011 17:02:48] - BASE PARA IMPORTACAO Prefeitura: host=localhost 
+                dbname=cmibiracatu 
+                port=5432 
+                user=dbportal 
+                password=
+[29/08/2011 17:02:48] 
+[29/08/2011 17:02:48] *** INICIO Script 01_testes_material_negativo.php ***
+[29/08/2011 17:02:48] 
+[29/08/2011 17:02:48] Arquivo de Log: log/01_testes_material_negativo.php_20110829_170248.log
+[29/08/2011 17:02:48]     Script PHP: 01_testes_material_negativo.php
+[29/08/2011 17:02:48] 
+[29/08/2011 17:02:48] Iniciando Sessao
+[29/08/2011 17:02:48] Setando Variáveis da Sessao
+[29/08/2011 17:02:48] Iniciando Processamento
+
+
+[29/08/2011 17:02:48] Processando SaldoEstoqueDiferenteMovimentacao.test.php
+[29/08/2011 17:02:48] Script: SaldoEstoqueDiferenteMovimentacao.test.php Não encontrou erro ................................................................................ [  OK  ]
+[29/08/2011 17:02:48] 
+[29/08/2011 17:02:48] Processando MaterialSaidaAnteriorentrada.test.php
+[29/08/2011 17:02:48] Script: MaterialSaidaAnteriorentrada.test.php Não encontrou erro ..................................................................................... [  OK  ]
+[29/08/2011 17:02:48] 
+[29/08/2011 17:02:48] Processando MaterialSaldoNegativo.test.php
+[29/08/2011 17:02:48] Script: MaterialSaldoNegativo.test.php Não encontrou erro ............................................................................................ [  OK  ]
+[29/08/2011 17:02:48] 
+[29/08/2011 17:02:48] Inicio: 17:02:48
+[29/08/2011 17:02:48] Final.: 17:02:48
+[29/08/2011 17:02:48] 
+[29/08/2011 17:02:48] *** FINAL Script 01_testes_material_negativo.php ***
+[29/08/2011 17:02:48] 

@@ -1,0 +1,10 @@
+{
+  "campo_obrigatorio" : "Campo [sCampo] é de preenchimento obrigatório.",
+  "encerrado_sucesso" : "Encerramento efetuado com sucesso.",
+  "cancelado_sucesso" : "Cancelamento do encerramento efetuado com sucesso.",
+  "confirma_exclui_regra" : "Confirma exclusão da regra?",
+  "excluido_sucesso" : "Exclusão efetuada com sucesso.",
+  "salvo_sucesso" : "Regra salva com sucesso.",
+  "confirmar_processamento" : "Confirmar encerramento [sEncerramento]?",
+  "confirmar_cancelamento" : "Confirmar cancelamento do encerramento [sEncerramento]?"
+}

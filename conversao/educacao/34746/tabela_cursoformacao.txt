@@ -1,0 +1,1224 @@
+1 | ADMINISTRAÇÃO | 345A01 | Administração
+1 | ADMINISTRAÇÃO | 345A22 | Administração bancária
+1 | ADMINISTRAÇÃO | 345A16 | Administração da produção industrial
+1 | ADMINISTRAÇÃO | 345A15 | Administração de agroindústria
+1 | ADMINISTRAÇÃO | 345A14 | Administração de agronegócios
+1 | ADMINISTRAÇÃO | 345A02 | Administração de cooperativas
+1 | ADMINISTRAÇÃO | 345A03 | Administração de empresas
+1 | ADMINISTRAÇÃO | 345A26 | Administração de eventos
+1 | ADMINISTRAÇÃO | 345A27 | Administração de materiais
+1 | ADMINISTRAÇÃO | 345A04 | Administração de recursos humanos
+1 | ADMINISTRAÇÃO | 345A21 | Administração de sistemas de informações
+1 | ADMINISTRAÇÃO | 345A24 | Administração de transportes
+1 | ADMINISTRAÇÃO | 345A17 | Administração dos serviços de saúde
+1 | ADMINISTRAÇÃO | 345A05 | Administração em análise de sistemas / informática
+1 | ADMINISTRAÇÃO | 345A06 | Administração em comércio exterior
+1 | ADMINISTRAÇÃO | 345A20 | Administração em marketing
+1 | ADMINISTRAÇÃO | 345A23 | Administração em micro e pequenas empresas
+1 | ADMINISTRAÇÃO | 345A13 | Administração em prestação de serviços
+1 | ADMINISTRAÇÃO | 345A19 | Administração em turismo
+1 | ADMINISTRAÇÃO | 345A25 | Administração financeira
+1 | ADMINISTRAÇÃO | 345A07 | Administração hospitalar
+1 | ADMINISTRAÇÃO | 345A08 | Administração hoteleira
+1 | ADMINISTRAÇÃO | 345A18 | Administração industrial
+1 | ADMINISTRAÇÃO | 345A09 | Administração mercadológica
+1 | ADMINISTRAÇÃO | 345A10 | Administração pública
+1 | ADMINISTRAÇÃO | 345A11 | Administração rural
+1 | ADMINISTRAÇÃO | 345A12 | Avaliação de desempenho
+1 | ADMINISTRAÇÃO | 345C02 | Ciências gerenciais
+1 | ADMINISTRAÇÃO | 345C01 | Competências gerenciais
+1 | ADMINISTRAÇÃO | 345E01 | Empreendedorismo
+1 | ADMINISTRAÇÃO | 345F01 | Formação de executivos
+1 | ADMINISTRAÇÃO | 146F27 | Formação de professor de administração
+1 | ADMINISTRAÇÃO | 345G20 | Gestão ambiental
+1 | ADMINISTRAÇÃO | 345G01 | Gestão da ciência
+1 | ADMINISTRAÇÃO | 345G02 | Gestão da educação
+1 | ADMINISTRAÇÃO | 345G03 | Gestão da informação
+1 | ADMINISTRAÇÃO | 345G04 | Gestão da produção
+1 | ADMINISTRAÇÃO | 345G19 | Gestão da produção de vestuário
+1 | ADMINISTRAÇÃO | 345G26 | Gestão da segurança
+1 | ADMINISTRAÇÃO | 345G14 | Gestão de cidades
+1 | ADMINISTRAÇÃO | 345G16 | Gestão de comercio
+1 | ADMINISTRAÇÃO | 345G05 | Gestão de emprego
+1 | ADMINISTRAÇÃO | 345G06 | Gestão de empresas
+1 | ADMINISTRAÇÃO | 345G07 | Gestão de escritório
+1 | ADMINISTRAÇÃO | 345G08 | Gestão de estabelecimentos de ensino
+1 | ADMINISTRAÇÃO | 345G22 | Gestão de imóveis
+1 | ADMINISTRAÇÃO | 345G25 | Gestão de inovação
+1 | ADMINISTRAÇÃO | 345G15 | Gestão de negócios
+1 | ADMINISTRAÇÃO | 345G21 | Gestão de negócios internacionais
+1 | ADMINISTRAÇÃO | 345G23 | Gestão de organizações
+1 | ADMINISTRAÇÃO | 345G09 | Gestão de pessoal / recursos humanos
+1 | ADMINISTRAÇÃO | 345G10 | Gestão de qualidade
+1 | ADMINISTRAÇÃO | 345G27 | Gestão de recursos de informática
+1 | ADMINISTRAÇÃO | 345G18 | Gestão de serviços
+1 | ADMINISTRAÇÃO | 345G28 | Gestão de supermercados
+1 | ADMINISTRAÇÃO | 345G11 | Gestão de treinamento e formação
+1 | ADMINISTRAÇÃO | 345G12 | Gestão do lazer
+1 | ADMINISTRAÇÃO | 345G24 | Gestão estratégica de empresas
+1 | ADMINISTRAÇÃO | 345G17 | Gestão financeira
+1 | ADMINISTRAÇÃO | 345G13 | Gestão logística
+1 | ADMINISTRAÇÃO | 345R01 | Recrutamento
+1 | ADMINISTRAÇÃO | 345T01 | Teoria e comportamento organizacional
+1 | ADMINISTRAÇÃO | 345T02 | Treinamento empresarial
+1 | ADMINISTRAÇÃO | 1A9999 | Outro Curso da Área
+2 | AGRONOMIA | 621A04 | Agronomia
+2 | AGRONOMIA | 146F01 | Formação de professor de agronomia
+2 | AGRONOMIA | 2A9999 | Outro Curso da Área
+3 | ANÁLISE DE SISTEMAS | 483A01 | Análise de sistemas
+3 | ANÁLISE DE SISTEMAS | 3A9999 | Outro Curso da Área
+4 | ARQUEOLOGIA | 225A01 | Arqueologia
+4 | ARQUEOLOGIA | 4A9999 | Outro Curso da Área
+5 | ARQUITETURA E URBANISMO | 581A01 | Arquitetura
+5 | ARQUITETURA E URBANISMO | 581A02 | Arquitetura de grandes estruturas
+5 | ARQUITETURA E URBANISMO | 581A03 | Arquitetura de interiores
+5 | ARQUITETURA E URBANISMO | 581A04 | Arquitetura e paisagismo
+5 | ARQUITETURA E URBANISMO | 581A05 | Arquitetura e urbanismo
+5 | ARQUITETURA E URBANISMO | 581C01 | Cartografia / topografia
+5 | ARQUITETURA E URBANISMO | 581D01 | Desenho arquitetônico
+5 | ARQUITETURA E URBANISMO | 581D02 | Desenvolvimento comunitário
+5 | ARQUITETURA E URBANISMO | 581D03 | Desenvolvimento rural
+5 | ARQUITETURA E URBANISMO | 581D04 | Design e planejamento arquitetônico urbano
+5 | ARQUITETURA E URBANISMO | 581E01 | Estudos urbanos
+5 | ARQUITETURA E URBANISMO | 146F35 | Formação de professor de arquitetura e urbanismo
+5 | ARQUITETURA E URBANISMO | 581L01 | Levantamento topográfico
+5 | ARQUITETURA E URBANISMO | 581P01 | Paisagismo
+5 | ARQUITETURA E URBANISMO | 581P02 | Planejamento comunitário
+5 | ARQUITETURA E URBANISMO | 581P03 | Planejamento de cidade e campo
+5 | ARQUITETURA E URBANISMO | 581P04 | Planejamento de cidades
+5 | ARQUITETURA E URBANISMO | 581P05 | Planejamento de cidades de médio e pequeno porte
+5 | ARQUITETURA E URBANISMO | 581P06 | Planejamento urbano
+5 | ARQUITETURA E URBANISMO | 581P07 | Planejamento urbano e regional
+5 | ARQUITETURA E URBANISMO | 581P08 | Projetos de construção
+5 | ARQUITETURA E URBANISMO | 581U01 | Urbanismo
+5 | ARQUITETURA E URBANISMO | 5A9999 | Outro Curso da Área
+6 | ARTES (GERAL) | 210A01 | Artes
+6 | ARTES (GERAL) | 210A02 | Artes e artesanato
+6 | ARTES (GERAL) | 210A03 | Artes e educação
+6 | ARTES (GERAL) | 210A04 | Artes e mídia
+6 | ARTES (GERAL) | 210E01 | Educação artística
+6 | ARTES (GERAL) | 146F02 | Formação de professor de artes (educação artística)
+6 | ARTES (GERAL) | 145F03 | Formação de professor de desenho
+6 | ARTES (GERAL) | 144F10 | Formação de professor de educação artística para educação básica
+6 | ARTES (GERAL) | 6A9999 | Outro Curso da Área
+7 | ARTES CÊNICAS | 212A01 | Artes cênicas
+7 | ARTES CÊNICAS | 212A02 | Artes cênicas - indumentária
+7 | ARTES CÊNICAS | 212C02 | Cenografia
+7 | ARTES CÊNICAS | 212C03 | Circo
+7 | ARTES CÊNICAS | 212C06 | Coreografia
+7 | ARTES CÊNICAS | 212D01 | Dança (arte)
+7 | ARTES CÊNICAS | 212D02 | Direção teatral
+7 | ARTES CÊNICAS | 212E01 | Elocução
+7 | ARTES CÊNICAS | 146F07 | Formação de professor de dança
+7 | ARTES CÊNICAS | 146F22 | Formação de professor de teatro (artes cênicas)
+7 | ARTES CÊNICAS | 212H02 | História do teatro
+7 | ARTES CÊNICAS | 212I02 | Interpretação teatral
+7 | ARTES CÊNICAS | 212M01 | Modelos de moda / manequins (top models)
+7 | ARTES CÊNICAS | 212T01 | Teatro
+7 | ARTES CÊNICAS | 7A9999 | Outro Curso da Área
+8 | ARTESANATO | 215A01 | Arte floral
+8 | ARTESANATO | 215A02 | Artes com fibras, têxteis e produtos de tear
+8 | ARTESANATO | 215A03 | Artes e artesanato em vidro
+8 | ARTESANATO | 215A05 | Artesanato, artes populares e trabalhos manuais
+8 | ARTESANATO | 215A04 | Artesanato decorativo em metal
+8 | ARTESANATO | 215B01 | Bordado (artesanal)
+8 | ARTESANATO | 215C01 | Cerâmica (artesanal)
+8 | ARTESANATO | 215C02 | Conservação de material cultural
+8 | ARTESANATO | 215C03 | Criação de jóias (design)
+8 | ARTESANATO | 215E01 | Entalhamento em madeira
+8 | ARTESANATO | 215E02 | Entalhamento em pedra (artesanal)
+8 | ARTESANATO | 215F01 | Fabricação de instrumentos musicais (não industrial)
+8 | ARTESANATO | 215F02 | Fabricação de jóias (artesanais)
+8 | ARTESANATO | 215I01 | Instrumentos musicais (reparos e afinação)
+8 | ARTESANATO | 215L01 | Lapidação e montagem de jóias
+8 | ARTESANATO | 215O01 | Ourivesaria
+8 | ARTESANATO | 215R01 | Restauração
+8 | ARTESANATO | 215T01 | Tecelagem (artesanal)
+8 | ARTESANATO | 8A9999 | Outro Curso da Área
+9 | BÁSICOS / PROGRAMAS ESPECIAIS | 010B00 | Básicos / Programas especiais
+9 | BÁSICOS / PROGRAMAS ESPECIAIS | 9A9999 | Outro Curso da Área
+10 | BELAS ARTES | 211A01 | Artes plásticas
+10 | BELAS ARTES | 211A02 | Artes visuais
+10 | BELAS ARTES | 211B01 | Belas artes
+10 | BELAS ARTES | 211C01 | Cinema e animação
+10 | BELAS ARTES | 211D01 | Desenho (artístico)
+10 | BELAS ARTES | 211D02 | Desenho e plástica
+10 | BELAS ARTES | 211E01 | Escultura
+10 | BELAS ARTES | 211E02 | Estética
+10 | BELAS ARTES | 211E03 | Estudos de arte
+10 | BELAS ARTES | 211F01 | Filosofia da arte
+10 | BELAS ARTES | 146F03 | Formação de professor de artes plásticas
+10 | BELAS ARTES | 146F04 | Formação de professor de artes visuais
+10 | BELAS ARTES | 211G01 | Gravura (artística)
+10 | BELAS ARTES | 211H01 | História da arte
+10 | BELAS ARTES | 211H02 | História do cinema
+10 | BELAS ARTES | 211L01 | Litografia
+10 | BELAS ARTES | 211P01 | Pintura (artística)
+10 | BELAS ARTES | 211P02 | Pintura e gravura
+10 | BELAS ARTES | 211S01 | Serigrafia
+10 | BELAS ARTES | 211T01 | Teoria da arte
+10 | BELAS ARTES | 109999 | Outro Curso da Área
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 322A01 | Arquivologia
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 322B01 | Biblioteconomia
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 322B02 | Busca da informação
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 322C01 | Ciência da informação
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 322D01 | Documentação
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 322D02 | Documentação museológica
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 146F41 | Formação de professor de arquivologia
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 146F32 | Formação de professor de biblioteconomia
+11 | BIBLIOTECONOMIA, DOCUMENTAÇÃO E ARQUIVOS | 119999 | Outro Curso da Área
+12 | CIÊNCIA ATUARIAL | 462C01 | Ciência atuarial
+12 | CIÊNCIA ATUARIAL | 129999 | Outro Curso da Área
+13 | CIÊNCIA DA COMPUTAÇÃO | 481A01 | Administração de redes
+13 | CIÊNCIA DA COMPUTAÇÃO | 481A02 | Arquitetura de computadores
+13 | CIÊNCIA DA COMPUTAÇÃO | 481B01 | Banco de dados
+13 | CIÊNCIA DA COMPUTAÇÃO | 481C01 | Ciência da computação
+13 | CIÊNCIA DA COMPUTAÇÃO | 481C02 | Computação gráfica
+13 | CIÊNCIA DA COMPUTAÇÃO | 481E01 | Engenharia de computação (hardware)
+13 | CIÊNCIA DA COMPUTAÇÃO | 481E02 | Engenharia de softwares
+13 | CIÊNCIA DA COMPUTAÇÃO | 146F05 | Formação de professor de computação (informática)
+13 | CIÊNCIA DA COMPUTAÇÃO | 481I01 | Informática (ciência da computação)
+13 | CIÊNCIA DA COMPUTAÇÃO | 481I02 | Inteligência artificial
+13 | CIÊNCIA DA COMPUTAÇÃO | 481L01 | Linguagens de programação (visual basic, c++ etc)
+13 | CIÊNCIA DA COMPUTAÇÃO | 481P01 | Processamento de alto desempenho
+13 | CIÊNCIA DA COMPUTAÇÃO | 481R01 | Robótica
+13 | CIÊNCIA DA COMPUTAÇÃO | 481S01 | Sistemas operacionais
+13 | CIÊNCIA DA COMPUTAÇÃO | 481T01 | Tecnologia da informação
+13 | CIÊNCIA DA COMPUTAÇÃO | 481T02 | Tecnologia em desenvolvimento de softwares
+13 | CIÊNCIA DA COMPUTAÇÃO | 481T03 | Tecnologia em informática
+13 | CIÊNCIA DA COMPUTAÇÃO | 139999 | Outro Curso da Área
+14 | CIÊNCIA POLÍTICA | 313C01 | Ciência política
+14 | CIÊNCIA POLÍTICA | 313D01 | Direitos humanos
+14 | CIÊNCIA POLÍTICA | 313E01 | Educação cívica
+14 | CIÊNCIA POLÍTICA | 313E02 | Estudos sobre paz e conflitos
+14 | CIÊNCIA POLÍTICA | 145F27 | Formação de professor de ciência política
+14 | CIÊNCIA POLÍTICA | 313H01 | História política
+14 | CIÊNCIA POLÍTICA | 313P01 | Política
+14 | CIÊNCIA POLÍTICA | 149999 | Outro Curso da Área
+15 | CIÊNCIAS | 420C01 | Ciências
+15 | CIÊNCIAS | 145F02 | Formação de professor de ciências
+15 | CIÊNCIAS | 159999 | Outro Curso da Área
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 852A01 | Administração de parques nacionais
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 422C01 | Ciências ambientais
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 850C02 | Conservação / proteção ambiental
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 852C01 | Conservação da natureza
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 850C01 | Conservação do solo e das águas
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851C01 | Conservação do solo e das reservas hidrológicas
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 852C02 | Conservação dos recursos naturais
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 852C03 | Conservação e manejo da terra
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851C02 | Controle ambiental
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851C03 | Controle da poluição das águas
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851C04 | Controle da poluição do ar
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851C05 | Controle da poluição sonora
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851C06 | Controle de descargas industriais
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 422E01 | Ecologia
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 852F01 | Formação de guardas da vida selvagem
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 146F37 | Formação de professor em ciências ambientais
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 850G01 | Gestão ambiental
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 852M01 | Manejo da vida selvagem
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 850M01 | Meio ambiente
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 422P01 | Preservação do meio ambiente
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851R01 | Reciclagem
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 850R01 | Recursos naturais
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 422S01 | Saneamento ambiental
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 422S02 | Saneamento básico
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 422T01 | Tecnologia ambiental
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851T01 | Tecnologia da proteção ambiental
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 851T02 | Tecnologia ecológica
+16 | CIÊNCIAS AMBIENTAIS E PROTEÇÃO AMBIENTAL | 169999 | Outro Curso da Área
+17 | CIÊNCIAS BIOLÓGICAS | 421B01 | Biofísica
+17 | CIÊNCIAS BIOLÓGICAS | 421B02 | Biologia
+17 | CIÊNCIAS BIOLÓGICAS | 421B04 | Biologia - modalidade médica
+17 | CIÊNCIAS BIOLÓGICAS | 421B14 | Biologia ambiental
+17 | CIÊNCIAS BIOLÓGICAS | 421B03 | Biologia marinha
+17 | CIÊNCIAS BIOLÓGICAS | 421B05 | Biologia molecular
+17 | CIÊNCIAS BIOLÓGICAS | 421B06 | Biologia vegetal
+17 | CIÊNCIAS BIOLÓGICAS | 421B07 | Biomedicina
+17 | CIÊNCIAS BIOLÓGICAS | 421B08 | Biometria
+17 | CIÊNCIAS BIOLÓGICAS | 421B09 | Bioquímica
+17 | CIÊNCIAS BIOLÓGICAS | 421B11 | Bioquímica e análise
+17 | CIÊNCIAS BIOLÓGICAS | 421B12 | Bioquímica industrial
+17 | CIÊNCIAS BIOLÓGICAS | 421B13 | Bioquímica toxicológica
+17 | CIÊNCIAS BIOLÓGICAS | 421B10 | Botânica
+17 | CIÊNCIAS BIOLÓGICAS | 421C01 | Ciências biológicas
+17 | CIÊNCIAS BIOLÓGICAS | 421C02 | Ciências da vida
+17 | CIÊNCIAS BIOLÓGICAS | 421E01 | Entomologia
+17 | CIÊNCIAS BIOLÓGICAS | 421F01 | Farmacologia
+17 | CIÊNCIAS BIOLÓGICAS | 145F01 | Formação de professor de biologia
+17 | CIÊNCIAS BIOLÓGICAS | 421G01 | Genética
+17 | CIÊNCIAS BIOLÓGICAS | 421L01 | Limnologia
+17 | CIÊNCIAS BIOLÓGICAS | 421M01 | Microbiologia
+17 | CIÊNCIAS BIOLÓGICAS | 421O01 | Ornitologia
+17 | CIÊNCIAS BIOLÓGICAS | 421P01 | Parasitologia
+17 | CIÊNCIAS BIOLÓGICAS | 421T01 | Toxicologia
+17 | CIÊNCIAS BIOLÓGICAS | 421V01 | Virologia
+17 | CIÊNCIAS BIOLÓGICAS | 421Z01 | Zoologia
+17 | CIÊNCIAS BIOLÓGICAS | 179999 | Outro Curso da Área
+18 | CIÊNCIAS CONTÁBEIS | 344A01 | Auditoria
+18 | CIÊNCIAS CONTÁBEIS | 344C02 | Ciências contábeis
+18 | CIÊNCIAS CONTÁBEIS | 344C01 | Contabilidade
+18 | CIÊNCIAS CONTÁBEIS | 344C03 | Contabilidade e custos
+18 | CIÊNCIAS CONTÁBEIS | 344T01 | Tributação
+18 | CIÊNCIAS CONTÁBEIS | 189999 | Outro Curso da Área
+19 | CIÊNCIAS DA EDUCAÇÃO | 142A01 | Administração educacional
+19 | CIÊNCIAS DA EDUCAÇÃO | 142A02 | Avaliação educacional, testes e medidas educacionais
+19 | CIÊNCIAS DA EDUCAÇÃO | 142C01 | Ciência da educação
+19 | CIÊNCIAS DA EDUCAÇÃO | 142C02 | Currículos e programas
+19 | CIÊNCIAS DA EDUCAÇÃO | 142D01 | Didática
+19 | CIÊNCIAS DA EDUCAÇÃO | 142E01 | Educação de jovens e adultos
+19 | CIÊNCIAS DA EDUCAÇÃO | 142E02 | Educação especial
+19 | CIÊNCIAS DA EDUCAÇÃO | 142E03 | Educação infantil
+19 | CIÊNCIAS DA EDUCAÇÃO | 142E04 | Educação organizacional
+19 | CIÊNCIAS DA EDUCAÇÃO | 199999 | Outro Curso da Área
+20 | CIÊNCIAS DA TERRA | 443C01 | Ciência da terra
+20 | CIÊNCIAS DA TERRA | 443C02 | Ciência marinha
+20 | CIÊNCIAS DA TERRA | 443C03 | Ciências atmosféricas
+20 | CIÊNCIAS DA TERRA | 443C04 | Ciências da vida marinha
+20 | CIÊNCIAS DA TERRA | 146F31 | Formação de professor de ciências do mar
+20 | CIÊNCIAS DA TERRA | 443G01 | Geociência
+20 | CIÊNCIAS DA TERRA | 443G02 | Geodésia
+20 | CIÊNCIAS DA TERRA | 443G03 | Geofísica
+20 | CIÊNCIAS DA TERRA | 443H01 | Hidrogeologia
+20 | CIÊNCIAS DA TERRA | 443H02 | Hidrologia
+20 | CIÊNCIAS DA TERRA | 443M01 | Meteorologia
+20 | CIÊNCIAS DA TERRA | 443M02 | Mineralogia
+20 | CIÊNCIAS DA TERRA | 443O01 | Oceanografia
+20 | CIÊNCIAS DA TERRA | 443O02 | Oceanologia
+20 | CIÊNCIAS DA TERRA | 443P01 | Paleontologia
+20 | CIÊNCIAS DA TERRA | 443S01 | Sismologia
+20 | CIÊNCIAS DA TERRA | 443T01 | Topografia
+20 | CIÊNCIAS DA TERRA | 443V01 | Vulcanologia
+20 | CIÊNCIAS DA TERRA | 209999 | Outro Curso da Área
+21 | CIÊNCIAS DOMÉSTICAS | 814C01 | Ciências domésticas
+21 | CIÊNCIAS DOMÉSTICAS | 814E01 | Economia do consumidor
+21 | CIÊNCIAS DOMÉSTICAS | 814E02 | Economia doméstica
+21 | CIÊNCIAS DOMÉSTICAS | 146F14 | Formação de professor de economia doméstica
+21 | CIÊNCIAS DOMÉSTICAS | 219999 | Outro Curso da Área
+22 | CIÊNCIAS SOCIAIS | 310C01 | Ciências comportamentais
+22 | CIÊNCIAS SOCIAIS | 310C02 | Ciências sociais
+22 | CIÊNCIAS SOCIAIS | 145F24 | Formação de professor de sociologia
+22 | CIÊNCIAS SOCIAIS | 145F25 | Formação de professor em ciências sociais
+22 | CIÊNCIAS SOCIAIS | 312S01 | Sociologia
+22 | CIÊNCIAS SOCIAIS | 229999 | Outro Curso da Área
+23 | COMUNICAÇÃO SOCIAL | 321C01 | Cinema e vídeo
+23 | COMUNICAÇÃO SOCIAL | 321C02 | Comunicação social (redação e conteúdo)
+23 | COMUNICAÇÃO SOCIAL | 321I01 | Informação (redação e conteúdo)
+23 | COMUNICAÇÃO SOCIAL | 321J01 | Jornalismo
+23 | COMUNICAÇÃO SOCIAL | 342M01 | Marketing e propaganda
+23 | COMUNICAÇÃO SOCIAL | 342M02 | Mercadologia (marketing)
+23 | COMUNICAÇÃO SOCIAL | 321N01 | Noticiário e reportagem
+23 | COMUNICAÇÃO SOCIAL | 342P01 | Pesquisa de mercado
+23 | COMUNICAÇÃO SOCIAL | 321P01 | Produção editorial
+23 | COMUNICAÇÃO SOCIAL | 321P02 | Publicação (disseminação de mensagens)
+23 | COMUNICAÇÃO SOCIAL | 342P02 | Publicidade e propaganda
+23 | COMUNICAÇÃO SOCIAL | 321R02 | Radialismo
+23 | COMUNICAÇÃO SOCIAL | 321R01 | Rádio e tele-jornalismo
+23 | COMUNICAÇÃO SOCIAL | 342R01 | Relações públicas
+23 | COMUNICAÇÃO SOCIAL | 239999 | Outro Curso da Área
+24 | CONSTRUÇÃO CIVIL | 582A01 | Abastecimento de  água
+24 | CONSTRUÇÃO CIVIL | 582C01 | Cantaria
+24 | CONSTRUÇÃO CIVIL | 582C02 | Carpintaria e marcenaria em edificações
+24 | CONSTRUÇÃO CIVIL | 582C03 | Concretagem
+24 | CONSTRUÇÃO CIVIL | 582C04 | Construção civil
+24 | CONSTRUÇÃO CIVIL | 582C05 | Construção de edificações
+24 | CONSTRUÇÃO CIVIL | 582C06 | Construção de estradas
+24 | CONSTRUÇÃO CIVIL | 582C07 | Construção de pontes
+24 | CONSTRUÇÃO CIVIL | 582D01 | Demolição
+24 | CONSTRUÇÃO CIVIL | 582D02 | Desenho de projetos
+24 | CONSTRUÇÃO CIVIL | 582D03 | Desenho técnico
+24 | CONSTRUÇÃO CIVIL | 582E01 | Encanamentos
+24 | CONSTRUÇÃO CIVIL | 582E13 | Estruturas metálicas (para construção)
+24 | CONSTRUÇÃO CIVIL | 146F06 | Formação de professor de construção civil
+24 | CONSTRUÇÃO CIVIL | 146F38 | Formação de professor de engenharia de agrimensura
+24 | CONSTRUÇÃO CIVIL | 582I01 | Instalação de encanamentos
+24 | CONSTRUÇÃO CIVIL | 582I02 | Insulação
+24 | CONSTRUÇÃO CIVIL | 582I03 | Irrigação e drenagem (construção)
+24 | CONSTRUÇÃO CIVIL | 582M01 | Manutenção de edificações
+24 | CONSTRUÇÃO CIVIL | 582M02 | Materiais de construção (produção e utilização)
+24 | CONSTRUÇÃO CIVIL | 582O01 | Operação de canteiros de obras
+24 | CONSTRUÇÃO CIVIL | 582Q01 | Quantificação de material (detalhamento)
+24 | CONSTRUÇÃO CIVIL | 582R01 | Renovação de edificações
+24 | CONSTRUÇÃO CIVIL | 582R02 | Revestimento de pisos
+24 | CONSTRUÇÃO CIVIL | 582S01 | Saneamento (edificação)
+24 | CONSTRUÇÃO CIVIL | 582T01 | Tecnologia de construção
+24 | CONSTRUÇÃO CIVIL | 582T02 | Tecnologia de edificação
+24 | CONSTRUÇÃO CIVIL | 582T03 | Tecnologia e engenharia de águas
+24 | CONSTRUÇÃO CIVIL | 582T04 | Tecnologia em estradas
+24 | CONSTRUÇÃO CIVIL | 582T05 | Tecnologia em movimento de terra e pavimentação
+24 | CONSTRUÇÃO CIVIL | 582T06 | Tecnologia em obras do solo
+24 | CONSTRUÇÃO CIVIL | 582T07 | Tecnologia em obras hidráulicas
+24 | CONSTRUÇÃO CIVIL | 582V01 | Ventilação (edificações)
+24 | CONSTRUÇÃO CIVIL | 582V02 | Vitrificação
+24 | CONSTRUÇÃO CIVIL | 249999 | Outro Curso da Área
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525C01 | Construção de barcos
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525C02 | Construção de helicópteros
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525C03 | Construção e reparos de veículos
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525C04 | Construção naval
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525E01 | Eletricidade automotiva
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525E02 | Eletricidade de veículos
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525I01 | Indústria de motocicletas
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525I02 | Indústria de veículos a motor
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525I03 | Infra-estrutura aeronáutica
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525M01 | Manutenção aeronáutica
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525M02 | Manutenção naval
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525M03 | Mecânica de máquinas agrícolas
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525M04 | Mecânica de veículos
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525P01 | Polimento / jateamento
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 525T01 | Tecnologia aeroespacial
+25 | CONSTRUÇÃO E MANUTENÇÃO DE VEÍCULOS A MOTOR | 259999 | Outro Curso da Área
+26 | DESIGN | 214D01 | Decoração de interiores
+26 | DESIGN | 214D02 | Desenho de moda
+26 | DESIGN | 214D03 | Desenho de produtos industriais (artístico)
+26 | DESIGN | 214D04 | Desenho industrial (artístico)
+26 | DESIGN | 214D05 | Design
+26 | DESIGN | 214D06 | Design de interiores
+26 | DESIGN | 214E01 | Estilismo
+26 | DESIGN | 214F01 | Figurinos
+26 | DESIGN | 146F33 | Formação de professor de decoração
+26 | DESIGN | 214M01 | Moda
+26 | DESIGN | 214M02 | Modelagem
+26 | DESIGN | 214P01 | Projeto de produto
+26 | DESIGN | 214V01 | Vitrines
+26 | DESIGN | 269999 | Outro Curso da Área
+27 | DIREITO | 380C01 | Cartórios / prática notarial
+27 | DIREITO | 380D01 | Direito
+27 | DIREITO | 380D02 | Direito administrativo
+27 | DIREITO | 380D03 | Direito civil
+27 | DIREITO | 380D04 | Direito comercial
+27 | DIREITO | 380D05 | Direito constitucional
+27 | DIREITO | 380D06 | Direito criminal
+27 | DIREITO | 380D07 | Direito do trabalho
+27 | DIREITO | 380D15 | Direito empresarial
+27 | DIREITO | 380D08 | Direito financeiro e tributário
+27 | DIREITO | 380D09 | Direito internacional / comércio exterior
+27 | DIREITO | 380D10 | Direito penal
+27 | DIREITO | 380D11 | Direito político
+27 | DIREITO | 380D12 | Direito privado
+27 | DIREITO | 380D13 | Direito processual
+27 | DIREITO | 380D14 | Direito público
+27 | DIREITO | 380E01 | Estudos de direito
+27 | DIREITO | 380E02 | Estudos de justiça criminal
+27 | DIREITO | 380E03 | Estudos para-legais
+27 | DIREITO | 380H01 | História do direito
+27 | DIREITO | 380J01 | Jurisprudência
+27 | DIREITO | 380L01 | Legislação
+27 | DIREITO | 380L02 | Legislação trabalhista
+27 | DIREITO | 380P01 | Prática legal / processo
+27 | DIREITO | 279999 | Outro Curso da Área
+28 | ECONOMIA | 314C01 | Contas nacionais
+28 | ECONOMIA | 314E01 | Econometria
+28 | ECONOMIA | 314E02 | Economia
+28 | ECONOMIA | 314E03 | Economia internacional
+28 | ECONOMIA | 314E04 | Economia política
+28 | ECONOMIA | 314H01 | História econômica
+28 | ECONOMIA | 314M01 | Macro economia
+28 | ECONOMIA | 314M02 | Micro economia
+28 | ECONOMIA | 289999 | Outro Curso da Área
+29 | EDUCAÇÃO FÍSICA | 720E01 | Educação física
+29 | EDUCAÇÃO FÍSICA | 813E01 | Esportes
+29 | EDUCAÇÃO FÍSICA | 813F01 | Formação de árbitros e outras autoridades esportivas
+29 | EDUCAÇÃO FÍSICA | 146F15 | Formação de professor de educação física
+29 | EDUCAÇÃO FÍSICA | 144F09 | Formação de professor de educação física para educação básica
+29 | EDUCAÇÃO FÍSICA | 146F25 | Formação de professor em treinamento físico/esportivo
+29 | EDUCAÇÃO FÍSICA | 813F02 | Formação de técnicos e treinadores esportivos
+29 | EDUCAÇÃO FÍSICA | 813G02 | Gestão desportiva e de Lazer
+29 | EDUCAÇÃO FÍSICA | 813G01 | Ginástica
+29 | EDUCAÇÃO FÍSICA | 813T01 | Treinamento físico (esportes)
+29 | EDUCAÇÃO FÍSICA | 299999 | Outro Curso da Área
+30 | ELETRICIDADE E ENERGIA | 522D01 | Distribuição (abastecimento) de gás
+30 | ELETRICIDADE E ENERGIA | 522D02 | Distribuição de energia elétrica
+30 | ELETRICIDADE E ENERGIA | 522E01 | Eletricidade
+30 | ELETRICIDADE E ENERGIA | 522E02 | Energia nuclear, hidráulica e térmica
+30 | ELETRICIDADE E ENERGIA | 522E03 | Energia solar
+30 | ELETRICIDADE E ENERGIA | 522E08 | Estudos de energia
+30 | ELETRICIDADE E ENERGIA | 146F16 | Formação de professor de eletricidade
+30 | ELETRICIDADE E ENERGIA | 522G01 | Geração de energia elétrica
+30 | ELETRICIDADE E ENERGIA | 522I01 | Instalação e manutenção de linhas de força
+30 | ELETRICIDADE E ENERGIA | 522I02 | Instalações elétricas
+30 | ELETRICIDADE E ENERGIA | 522P01 | Produção de energia
+30 | ELETRICIDADE E ENERGIA | 522R01 | Refrigeração / aquecimento
+30 | ELETRICIDADE E ENERGIA | 522T01 | Tecnologia elétrica
+30 | ELETRICIDADE E ENERGIA | 522T02 | Tecnologia em eletrotécnica
+30 | ELETRICIDADE E ENERGIA | 522T03 | Tecnologia em manutenção elétrica
+30 | ELETRICIDADE E ENERGIA | 522T04 | Transmissão de energia elétrica
+30 | ELETRICIDADE E ENERGIA | 522T05 | Transmissão e distribuição de energia elétrica
+30 | ELETRICIDADE E ENERGIA | 309999 | Outro Curso da Área
+31 | ELETRÔNICA | 523A01 | Automação
+31 | ELETRÔNICA | 523C01 | Controle e automação
+31 | ELETRÔNICA | 523E01 | Eletrônica
+31 | ELETRÔNICA | 523E02 | Eletrônica de radiodifusão
+31 | ELETRÔNICA | 523E03 | Eletrônica industrial
+31 | ELETRÔNICA | 146F28 | Formação de professor de eletrônica
+31 | ELETRÔNICA | 523I01 | Instalação de equipamentos de comunicação
+31 | ELETRÔNICA | 523M01 | Manutenção de aparelhos médico-hospitalares
+31 | ELETRÔNICA | 523M02 | Manutenção de equipamentos de comunicação
+31 | ELETRÔNICA | 523M03 | Manutenção de equipamentos eletrônicos
+31 | ELETRÔNICA | 523M04 | Manutenção de máquinas e equipamentos
+31 | ELETRÔNICA | 523M05 | Manutenção e operação
+31 | ELETRÔNICA | 523R01 | Redes de computadores
+31 | ELETRÔNICA | 523S01 | Sistemas de comunicação
+31 | ELETRÔNICA | 523S02 | Sistemas de comunicação sem fio
+31 | ELETRÔNICA | 523T02 | Tecnologia de transmissão de dados
+31 | ELETRÔNICA | 523T03 | Tecnologia digital
+31 | ELETRÔNICA | 523T06 | Tecnologia eletrônica
+31 | ELETRÔNICA | 520T02 | Tecnologia em Gestão de Telecomunicações
+31 | ELETRÔNICA | 523T04 | Tecnologia mecatrônica
+31 | ELETRÔNICA | 523T01 | Telecomunicações
+31 | ELETRÔNICA | 523T05 | Telemática
+31 | ELETRÔNICA | 319999 | Outro Curso da Área
+32 | ENFERMAGEM | 723A01 | Atenção a deficientes e incapacitados
+32 | ENFERMAGEM | 723A02 | Atenção primária a idosos
+32 | ENFERMAGEM | 723E01 | Enfermagem
+32 | ENFERMAGEM | 723E02 | Enfermagem básica
+32 | ENFERMAGEM | 723E03 | Enfermagem de saúde pública
+32 | ENFERMAGEM | 723E04 | Enfermagem e obstetrícia
+32 | ENFERMAGEM | 723E05 | Enfermagem gerontológica
+32 | ENFERMAGEM | 723E06 | Enfermagem médico-cirúrgica
+32 | ENFERMAGEM | 723E07 | Enfermagem odontológica
+32 | ENFERMAGEM | 723E08 | Enfermagem psiquiátrica
+32 | ENFERMAGEM | 146F17 | Formação de professor de enfermagem
+32 | ENFERMAGEM | 723H01 | Higiene infantil (enfermagem)
+32 | ENFERMAGEM | 723H02 | Higiene médica
+32 | ENFERMAGEM | 329999 | Outro Curso da Área
+33 | ENGENHARIA | 520E01 | Engenharia
+33 | ENGENHARIA | 525E03 | Engenharia aeroespacial
+33 | ENGENHARIA | 525E04 | Engenharia aeronáutica
+33 | ENGENHARIA | 621E03 | Engenharia agrícola
+33 | ENGENHARIA | 520E02 | Engenharia ambiental
+33 | ENGENHARIA | 525E05 | Engenharia automotiva
+33 | ENGENHARIA | 520E08 | Engenharia Biomédica
+33 | ENGENHARIA | 524E01 | Engenharia bioquímica
+33 | ENGENHARIA | 582E02 | Engenharia cartográfica
+33 | ENGENHARIA | 582E03 | Engenharia civil
+33 | ENGENHARIA | 582A02 | Engenharia de Agrimensura
+33 | ENGENHARIA | 541E01 | Engenharia de alimentos
+33 | ENGENHARIA | 524E02 | Engenharia de biotecnologia
+33 | ENGENHARIA | 522E04 | Engenharia de climas
+33 | ENGENHARIA | 523E04 | Engenharia de computação
+33 | ENGENHARIA | 523E05 | Engenharia de comunicações
+33 | ENGENHARIA | 582E04 | Engenharia de construção
+33 | ENGENHARIA | 523E06 | Engenharia de controle
+33 | ENGENHARIA | 523E11 | Engenharia de controle e automação
+33 | ENGENHARIA | 582E05 | Engenharia de docas e instalações portuárias
+33 | ENGENHARIA | 582E06 | Engenharia de edificações
+33 | ENGENHARIA | 582E07 | Engenharia de escavação
+33 | ENGENHARIA | 523E07 | Engenharia de hardware
+33 | ENGENHARIA | 520E03 | Engenharia de manutenção
+33 | ENGENHARIA | 520E04 | Engenharia de materiais
+33 | ENGENHARIA | 543E01 | Engenharia de materiais - madeira
+33 | ENGENHARIA | 543E02 | Engenharia de materiais - papel
+33 | ENGENHARIA | 543E03 | Engenharia de materiais - plástico
+33 | ENGENHARIA | 543E04 | Engenharia de materiais - vidro
+33 | ENGENHARIA | 544E01 | Engenharia de minas
+33 | ENGENHARIA | 624E01 | Engenharia de pesca
+33 | ENGENHARIA | 544E07 | Engenharia de petróleo
+33 | ENGENHARIA | 524E03 | Engenharia de processos químicos
+33 | ENGENHARIA | 520E05 | Engenharia de produção
+33 | ENGENHARIA | 582E08 | Engenharia de produção civil
+33 | ENGENHARIA | 543E05 | Engenharia de produção de materiais
+33 | ENGENHARIA | 544E02 | Engenharia de produção de minas
+33 | ENGENHARIA | 522E05 | Engenharia de produção elétrica
+33 | ENGENHARIA | 521E01 | Engenharia de produção mecânica
+33 | ENGENHARIA | 521E02 | Engenharia de produção metalúrgica
+33 | ENGENHARIA | 524E04 | Engenharia de produção química
+33 | ENGENHARIA | 542E01 | Engenharia de produção têxtil
+33 | ENGENHARIA | 582E09 | Engenharia de recursos hídricos
+33 | ENGENHARIA | 523E08 | Engenharia de redes de comunicação
+33 | ENGENHARIA | 523E12 | Engenharia de telecomunicações
+33 | ENGENHARIA | 525E06 | Engenharia de veículos e motores
+33 | ENGENHARIA | 522E06 | Engenharia elétrica
+33 | ENGENHARIA | 523E09 | Engenharia eletrônica
+33 | ENGENHARIA | 522E09 | Engenharia eletrotécnica
+33 | ENGENHARIA | 582E10 | Engenharia estrutural
+33 | ENGENHARIA | 520E07 | Engenharia física
+33 | ENGENHARIA | 623E01 | Engenharia florestal
+33 | ENGENHARIA | 544E06 | Engenharia geológica
+33 | ENGENHARIA | 520E06 | Engenharia industrial
+33 | ENGENHARIA | 582E11 | Engenharia industrial civil
+33 | ENGENHARIA | 544E03 | Engenharia industrial de minas
+33 | ENGENHARIA | 522E07 | Engenharia industrial elétrica
+33 | ENGENHARIA | 521E03 | Engenharia industrial mecânica
+33 | ENGENHARIA | 521E04 | Engenharia industrial metalúrgica
+33 | ENGENHARIA | 524E05 | Engenharia industrial química
+33 | ENGENHARIA | 542E02 | Engenharia industrial têxtil
+33 | ENGENHARIA | 525E07 | Engenharia marítima
+33 | ENGENHARIA | 521E05 | Engenharia mecânica
+33 | ENGENHARIA | 523E10 | Engenharia mecatrônica
+33 | ENGENHARIA | 521E06 | Engenharia metalúrgica
+33 | ENGENHARIA | 525E08 | Engenharia naval
+33 | ENGENHARIA | 524E06 | Engenharia nuclear
+33 | ENGENHARIA | 524E07 | Engenharia química
+33 | ENGENHARIA | 582E12 | Engenharia sanitária
+33 | ENGENHARIA | 542E03 | Engenharia têxtil
+33 | ENGENHARIA | 339999 | Outro Curso da Área
+34 | ESTATÍSTICA | 462A01 | Amostragem (survey sampling)
+34 | ESTATÍSTICA | 462E01 | Estatística
+34 | ESTATÍSTICA | 462E02 | Estatística aplicada
+34 | ESTATÍSTICA | 462E03 | Estatística matemática (teórica)
+34 | ESTATÍSTICA | 462E04 | Estatística não paramétrica
+34 | ESTATÍSTICA | 145F06 | Formação de professor de estatística
+34 | ESTATÍSTICA | 462P01 | Projetos de pesquisas (survey design)
+34 | ESTATÍSTICA | 462T01 | Teoria das probabilidades
+34 | ESTATÍSTICA | 349999 | Outro Curso da Área
+35 | ESTUDOS CULTURAIS | 312A01 | Antropologia social
+35 | ESTUDOS CULTURAIS | 312C01 | Criminologia
+35 | ESTUDOS CULTURAIS | 312C02 | Culturas regionais
+35 | ESTUDOS CULTURAIS | 312D01 | Demografia / estudos populacionais
+35 | ESTUDOS CULTURAIS | 312E01 | Estudos culturais
+35 | ESTUDOS CULTURAIS | 312E02 | Estudos de gênero
+35 | ESTUDOS CULTURAIS | 312E04 | Etnologia
+35 | ESTUDOS CULTURAIS | 145F23 | Formação de professor de antropologia
+35 | ESTUDOS CULTURAIS | 312F01 | Futurologia
+35 | ESTUDOS CULTURAIS | 312G01 | Geografia cultural
+35 | ESTUDOS CULTURAIS | 312G02 | Geografia humana
+35 | ESTUDOS CULTURAIS | 312G03 | Geografia social
+35 | ESTUDOS CULTURAIS | 312P01 | Produção cultural
+35 | ESTUDOS CULTURAIS | 312T01 | Teoria do conflito social
+35 | ESTUDOS CULTURAIS | 359999 | Outro Curso da Área
+36 | ESTUDOS SOCIAIS | 312E03 | Estudos sociais
+36 | ESTUDOS SOCIAIS | 145F07 | Formação de professor de estudos sociais
+36 | ESTUDOS SOCIAIS | 369999 | Outro Curso da Área
+37 | FARMÁCIA | 727A01 | Análises clínicas
+37 | FARMÁCIA | 727A02 | Análises clínicas e toxicológicas
+37 | FARMÁCIA | 727A03 | Análises toxicológicas
+37 | FARMÁCIA | 727F01 | Farmácia
+37 | FARMÁCIA | 727F02 | Farmácia bioquímica
+37 | FARMÁCIA | 727F03 | Farmácia bromatológica
+37 | FARMÁCIA | 727F04 | Farmácia de manipulação
+37 | FARMÁCIA | 727F05 | Farmácia industrial
+37 | FARMÁCIA | 146F30 | Formação de professor de farmácia
+37 | FARMÁCIA | 379999 | Outro Curso da Área
+38 | FILOSOFIA | 226E01 | Ética
+38 | FILOSOFIA | 226F01 | Filosofia
+38 | FILOSOFIA | 145F08 | Formação de professor de filosofia
+38 | FILOSOFIA | 226L01 | Lógica
+38 | FILOSOFIA | 226M01 | Moral
+38 | FILOSOFIA | 389999 | Outro Curso da Área
+39 | FINANÇAS, BANCOS E SEGUROS | 343A02 | Análise de investimentos
+39 | FINANÇAS, BANCOS E SEGUROS | 343A01 | Análise financeira
+39 | FINANÇAS, BANCOS E SEGUROS | 343B01 | Bancos e finanças
+39 | FINANÇAS, BANCOS E SEGUROS | 343C01 | Corretagem de valores
+39 | FINANÇAS, BANCOS E SEGUROS | 343F01 | Finanças, bancos, seguros
+39 | FINANÇAS, BANCOS E SEGUROS | 343F02 | Formação de executivos para instituições financeiras
+39 | FINANÇAS, BANCOS E SEGUROS | 343I01 | Investimentos e títulos/valores (securities)
+39 | FINANÇAS, BANCOS E SEGUROS | 343M01 | Mercado de capitais
+39 | FINANÇAS, BANCOS E SEGUROS | 343N01 | Negócios financeiros
+39 | FINANÇAS, BANCOS E SEGUROS | 343O01 | Orçamentos contábeis
+39 | FINANÇAS, BANCOS E SEGUROS | 343P01 | Pensões
+39 | FINANÇAS, BANCOS E SEGUROS | 343S01 | Seguros
+39 | FINANÇAS, BANCOS E SEGUROS | 343T01 | Teoria financeira
+39 | FINANÇAS, BANCOS E SEGUROS | 399999 | Outro Curso da Área
+40 | FÍSICA E ASTRONOMIA | 441A01 | Acústica
+40 | FÍSICA E ASTRONOMIA | 441A02 | Astrofísica
+40 | FÍSICA E ASTRONOMIA | 441A03 | Astronomia
+40 | FÍSICA E ASTRONOMIA | 441C01 | Ciência espacial
+40 | FÍSICA E ASTRONOMIA | 440C01 | Ciências físicas
+40 | FÍSICA E ASTRONOMIA | 441C02 | Ciências planetárias
+40 | FÍSICA E ASTRONOMIA | 441F01 | Física
+40 | FÍSICA E ASTRONOMIA | 441F02 | Física & associada
+40 | FÍSICA E ASTRONOMIA | 441F03 | Física aplicada
+40 | FÍSICA E ASTRONOMIA | 441F04 | Física nuclear
+40 | FÍSICA E ASTRONOMIA | 145F09 | Formação de professor de física
+40 | FÍSICA E ASTRONOMIA | 441O01 | Ótica
+40 | FÍSICA E ASTRONOMIA | 409999 | Outro Curso da Área
+41 | FISIOTERAPIA | 726F01 | Fisioterapia
+41 | FISIOTERAPIA | 146F39 | Formação de professor de fisioterapia
+41 | FISIOTERAPIA | 419999 | Outro Curso da Área
+42 | FONOAUDIOLOGIA | 726F03 | Fonoaudiologia
+42 | FONOAUDIOLOGIA | 146F24 | Formação de professor em fonoaudiologia
+42 | FONOAUDIOLOGIA | 429999 | Outro Curso da Área
+43 | FORMAÇÃO DE PROFESSOR DE DISCIPLINAS PROFISSIONAIS (GERAL) | 146F08 | Formação de professor de disciplinas do setor de serviços
+43 | FORMAÇÃO DE PROFESSOR DE DISCIPLINAS PROFISSIONAIS (GERAL) | 146F09 | Formação de professor de disciplinas do setor primário (agricultura, pecuária, etc)
+43 | FORMAÇÃO DE PROFESSOR DE DISCIPLINAS PROFISSIONAIS (GERAL) | 146F10 | Formação de professor de disciplinas do setor secundário (indústria)
+43 | FORMAÇÃO DE PROFESSOR DE DISCIPLINAS PROFISSIONAIS (GERAL) | 146F11 | Formação de professor de disciplinas do setor terciário (comércio)
+43 | FORMAÇÃO DE PROFESSOR DE DISCIPLINAS PROFISSIONAIS (GERAL) | 146F12 | Formação de professor de disciplinas profissionalizantes do ensino médio
+43 | FORMAÇÃO DE PROFESSOR DE DISCIPLINAS PROFISSIONAIS (GERAL) | 146F13 | Formação de professor de disciplinas técnicas
+43 | FORMAÇÃO DE PROFESSOR DE DISCIPLINAS PROFISSIONAIS (GERAL) | 146F23 | Formação de professor do ensino técnico
+43 | FORMAÇÃO DE PROFESSOR DE DISCIPLINAS PROFISSIONAIS (GERAL) | 439999 | Outro Curso da Área
+44 | FORMAÇÃO DE PROFESSOR DE ENGENHARIA | 146F26 | Formação de professor de engenharia de pesca
+44 | FORMAÇÃO DE PROFESSOR DE ENGENHARIA | 146F36 | Formação de professor de engenharia florestal
+44 | FORMAÇÃO DE PROFESSOR DE ENGENHARIA | 449999 | Outro Curso da Área
+45 | FORMAÇÃO MILITAR | 863A01 | Arte militar
+45 | FORMAÇÃO MILITAR | 863C01 | Ciência militar
+45 | FORMAÇÃO MILITAR | 863E01 | Estudos sobre defesa
+45 | FORMAÇÃO MILITAR | 863F01 | Formação militar
+45 | FORMAÇÃO MILITAR | 863S01 | Segurança nacional
+45 | FORMAÇÃO MILITAR | 863T01 | Teoria da guerra
+45 | FORMAÇÃO MILITAR | 459999 | Outro Curso da Área
+46 | GEOGRAFIA | 145F10 | Formação de professor de geografia
+46 | GEOGRAFIA | 443G04 | Geografia
+46 | GEOGRAFIA | 443G05 | Geografia (natureza)
+46 | GEOGRAFIA | 469999 | Outro Curso da Área
+47 | GEOLOGIA | 146F18 | Formação de professor de geologia
+47 | GEOLOGIA | 443G06 | Geologia
+47 | GEOLOGIA | 520G01 | Geoprocessamento
+47 | GEOLOGIA | 479999 | Outro Curso da Área
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341A01 | Almoxarifado / gestão de estoques
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341A02 | Armazenagem
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 340C01 | Comércio
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341C01 | Compra e venda
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341C02 | Compras
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341C03 | Compras, licitações e contratos
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 340E01 | Economia de  negócios (economia empresarial)
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341L01 | Leilões
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 340N01 | Negócios e administração
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341N01 | Negócios imobiliários
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 340N02 | Negócios internacionais
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 340P01 | Planejamento administrativo
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341R01 | Representação de vendas
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341S01 | Serviços ao consumidor
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341T01 | Técnicas de demonstração
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341V01 | Vendas em atacado
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341V02 | Vendas em varejo
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341V03 | Vendas pela internet
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 341V04 | Vendas por telefone
+48 | GERECIAMENTO, COMÉRCIO E VENDAS | 489999 | Outro Curso da Área
+49 | HISTÓRIA | 225E01 | Estudos medievais e da renascença
+49 | HISTÓRIA | 145F11 | Formação de professor de história
+49 | HISTÓRIA | 225H01 | História
+49 | HISTÓRIA | 225H03 | História da  cultura
+49 | HISTÓRIA | 225H02 | História da ciência e das idéias
+49 | HISTÓRIA | 225H04 | História da literatura
+49 | HISTÓRIA | 225H05 | História e filosofia da ciência e da tecnologia
+49 | HISTÓRIA | 499999 | Outro Curso da Área
+50 | HOTELARIA | 811C01 | Cozinha industrial (do tipo restaurante e hotel)
+50 | HOTELARIA | 811G01 | Gastronomia
+50 | HOTELARIA | 811H02 | Hotelaria
+50 | HOTELARIA | 811H01 | Hotelaria e restaurantes
+50 | HOTELARIA | 811S01 | Serviços de alimentação (catering)
+50 | HOTELARIA | 509999 | Outro Curso da Área
+51 | HUMANIDADES | 220H01 | Humanidades
+51 | HUMANIDADES | 519999 | Outro Curso da Área
+52 | LETRAS | 223C01 | Comunicação Assistiva
+52 | LETRAS | 223F01 | Filologia da língua vernácula
+52 | LETRAS | 145F12 | Formação de professor de letras
+52 | LETRAS | 145F13 | Formação de professor de língua/literatura estrangeira clássica
+52 | LETRAS | 145F14 | Formação de professor de língua/literatura estrangeira moderna
+52 | LETRAS | 145F16 | Formação de professor de língua/literatura vernácula e língua estrangeira clássica
+52 | LETRAS | 145F17 | Formação de professor de língua/literatura vernácula e língua estrangeira moderna
+52 | LETRAS | 145F15 | Formação de professor de língua/literatura vernácula (português)
+52 | LETRAS | 145F22 | Formação de professor de lingüística
+52 | LETRAS | 145F26 | Formação de professor de segunda língua
+52 | LETRAS | 146F43 | Formação de professor de tradução e interpretação
+52 | LETRAS | 222I01 | Intérprete
+52 | LETRAS | 220L01 | Letras
+52 | LETRAS | 223L02 | Linguagem de sinais
+52 | LETRAS | 220L02 | Língua/literatura vernácula e línguas/literaturas estrangeiras clássicas
+52 | LETRAS | 220L03 | Língua/literatura vernácula e línguas/literaturas estrangeiras modernas
+52 | LETRAS | 223L01 | Língua/literatura vernácula (português)
+52 | LETRAS | 222L02 | Línguas mortas/clássicas
+52 | LETRAS | 223L03 | Línguas nativas
+52 | LETRAS | 222L01 | Línguas/literaturas estrangeiras modernas
+52 | LETRAS | 223L04 | Lingüística da língua vernácula
+52 | LETRAS | 222L03 | Lingüística de línguas estrangeiras
+52 | LETRAS | 225L01 | Lingüística geral
+52 | LETRAS | 220L04 | Lingüística (línguas)
+52 | LETRAS | 220L07 | Literatura
+52 | LETRAS | 225L02 | Literatura comparada
+52 | LETRAS | 223M01 | Manutenção da língua
+52 | LETRAS | 223O01 | Oratória e retórica (língua vernácula)
+52 | LETRAS | 223R01 | Redação criativa / expressão escrita
+52 | LETRAS | 223R02 | Revisão de textos
+52 | LETRAS | 222S01 | Segundas línguas
+52 | LETRAS | 223S01 | Semântica da língua vernácula
+52 | LETRAS | 222S02 | Semântica de línguas estrangeiras
+52 | LETRAS | 222T01 | Tradutor
+52 | LETRAS | 222T02 | Tradutor e intérprete
+52 | LETRAS | 529999 | Outro Curso da Área
+53 | MATEMÁTICA | 461A01 | Álgebra
+53 | MATEMÁTICA | 461A02 | Análise
+53 | MATEMÁTICA | 461A03 | Análise numérica
+53 | MATEMÁTICA | 145F18 | Formação de professor de matemática
+53 | MATEMÁTICA | 461G01 | Geometria e topologia
+53 | MATEMÁTICA | 461M01 | Matemática
+53 | MATEMÁTICA | 461M02 | Matemática aplicada
+53 | MATEMÁTICA | 461M03 | Matemática computacional (informática)
+53 | MATEMÁTICA | 461M04 | Matemática industrial
+53 | MATEMÁTICA | 461P01 | Pesquisa operacional
+53 | MATEMÁTICA | 539999 | Outro Curso da Área
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543C01 | Cerâmica (industrial)
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543C02 | Construção de barcos (não motorizados)
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543F01 | Fabricação de borracha
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543F02 | Fabricação de fibra sintética
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543F03 | Fabricação de móveis
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543F04 | Fabricação de plásticos
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543F05 | Fabricação e processamento de papel
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543M01 | Marcenaria / carpintaria (industrial)
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543M02 | Movelaria artesanal
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543P06 | Polímeros
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543P01 | Processamento de borracha
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543P05 | Produção de jóias
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543P02 | Produção de vidro (industrial)
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543P04 | Produção gráfica
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543P03 | Produção industrial de diamantes
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543T01 | Tecnologia de madeira
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543T02 | Tecnologia de materiais (papel,plástico,vidro)
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543T03 | Trabalhos de cantaria
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 543U01 | Usinagem e torneamento de madeira
+54 | MATERIAIS (MADEIRA, PAPEL, PLÁSTICO, VIDRO) | 549999 | Outro Curso da Área
+55 | MECÂNICA | 521F01 | Fabricação de armas
+55 | MECÂNICA | 521F02 | Fabricação de caldeiras e soldagem
+55 | MECÂNICA | 521F03 | Fabricação de ferramentas e matrizes
+55 | MECÂNICA | 146F19 | Formação de professor de mecânica
+55 | MECÂNICA | 521F04 | Fundição de metais e fabricação de formas
+55 | MECÂNICA | 521H01 | Hidráulica
+55 | MECÂNICA | 521M01 | Manutenção mecânica
+55 | MECÂNICA | 521M02 | Mecânica
+55 | MECÂNICA | 521M03 | Mecânica de precisão
+55 | MECÂNICA | 521M04 | Micro-mecânica
+55 | MECÂNICA | 521M05 | Montagem, torneamento e usinagem de metais
+55 | MECÂNICA | 521R01 | Relojoaria
+55 | MECÂNICA | 521S01 | Siderurgia
+55 | MECÂNICA | 521S02 | Soldagem
+55 | MECÂNICA | 521T01 | Tecnologia em eletromecânica
+55 | MECÂNICA | 521T03 | Tecnologia mecânica
+55 | MECÂNICA | 521T02 | Tecnologia metalúrgica
+55 | MECÂNICA | 521T04 | Trabalhos com metais laminados
+55 | MECÂNICA | 559999 | Outro Curso da Área
+56 | MEDICINA | 721A01 | Anatomia
+56 | MEDICINA | 721A02 | Anestesiologia
+56 | MEDICINA | 721A03 | Audiologia / ciências da audição
+56 | MEDICINA | 721B01 | Bacteriologia
+56 | MEDICINA | 721C01 | Cardiologia
+56 | MEDICINA | 721C02 | Ciência médica
+56 | MEDICINA | 721C03 | Cirurgia
+56 | MEDICINA | 721C04 | Cirurgia plástica
+56 | MEDICINA | 721C05 | Citologia
+56 | MEDICINA | 721D01 | Dermatologia
+56 | MEDICINA | 721E01 | Epidemiologia
+56 | MEDICINA | 721E02 | Estomatologia
+56 | MEDICINA | 721F01 | Fisiologia
+56 | MEDICINA | 721G01 | Gerontologia
+56 | MEDICINA | 721G02 | Ginecologia
+56 | MEDICINA | 721H01 | Hematologia
+56 | MEDICINA | 721H02 | Histologia
+56 | MEDICINA | 721I01 | Imunologia
+56 | MEDICINA | 721M01 | Medicina
+56 | MEDICINA | 721M02 | Medicina geral
+56 | MEDICINA | 721M03 | Medicina homeopática
+56 | MEDICINA | 721M04 | Medicina interna
+56 | MEDICINA | 721M05 | Medicina legal
+56 | MEDICINA | 721M06 | Medicina naturopática
+56 | MEDICINA | 721M07 | Medicina preventiva e social
+56 | MEDICINA | 721N01 | Neurologia
+56 | MEDICINA | 721O01 | Obstetrícia e ginecologia
+56 | MEDICINA | 721O02 | Oftalmologia
+56 | MEDICINA | 721O03 | Oncologia
+56 | MEDICINA | 721P01 | Patologia
+56 | MEDICINA | 721P02 | Pediatria
+56 | MEDICINA | 721P03 | Psiquiatria
+56 | MEDICINA | 569999 | Outro Curso da Área
+57 | MINERAÇÃO E EXTRAÇÃO | 544E04 | Extração de matéria prima
+57 | MINERAÇÃO E EXTRAÇÃO | 544E05 | Extração de petróleo e gás
+57 | MINERAÇÃO E EXTRAÇÃO | 544M01 | Mineração de carvão
+57 | MINERAÇÃO E EXTRAÇÃO | 544M02 | Mineração e extração
+57 | MINERAÇÃO E EXTRAÇÃO | 544S01 | Supervisão de pedreiras
+57 | MINERAÇÃO E EXTRAÇÃO | 544T01 | Tecnologia de mineração
+57 | MINERAÇÃO E EXTRAÇÃO | 544T03 | Tecnologia em Rochas Ornamentais
+57 | MINERAÇÃO E EXTRAÇÃO | 544T02 | Tecnologia mineral
+57 | MINERAÇÃO E EXTRAÇÃO | 579999 | Outro Curso da Área
+58 | MUSEOLOGIA | 225M01 | Museologia
+58 | MUSEOLOGIA | 589999 | Outro Curso da Área
+59 | MÚSICA | 212A03 | Artes líricas
+59 | MÚSICA | 212C01 | Canto
+59 | MÚSICA | 212C05 | Composição e regência
+59 | MÚSICA | 212C04 | Composição (musical)
+59 | MÚSICA | 146F29 | Formação de professor de canto
+59 | MÚSICA | 146F20 | Formação de professor de música
+59 | MÚSICA | 212H01 | História da música
+59 | MÚSICA | 212I01 | Instrumento (música)
+59 | MÚSICA | 212M02 | Música
+59 | MÚSICA | 212M03 | Música e palco
+59 | MÚSICA | 212R01 | Regência (musical)
+59 | MÚSICA | 599999 | Outro Curso da Área
+60 | NUTRIÇÃO | 146F21 | Formação de professor de nutrição e dietética
+60 | NUTRIÇÃO | 726N02 | Nutrição
+60 | NUTRIÇÃO | 726N01 | Nutrição e dietética
+60 | NUTRIÇÃO | 609999 | Outro Curso da Área
+61 | ODONTOLOGIA | 724C01 | Ciência dentária
+61 | ODONTOLOGIA | 724C02 | Cirurgia odontológica
+61 | ODONTOLOGIA | 724D01 | Dentística
+61 | ODONTOLOGIA | 724E01 | Endodontia
+61 | ODONTOLOGIA | 724H01 | Higiene dental
+61 | ODONTOLOGIA | 724O01 | Odontologia
+61 | ODONTOLOGIA | 724O02 | Odontologia clínica
+61 | ODONTOLOGIA | 724O03 | Ortodontia
+61 | ODONTOLOGIA | 724P01 | Periodontia
+61 | ODONTOLOGIA | 724T01 | Tecnologia de laboratório dentário
+61 | ODONTOLOGIA | 724T02 | Tecnologia em prótese
+61 | ODONTOLOGIA | 724T03 | Tecnologia odontológica
+61 | ODONTOLOGIA | 619999 | Outro Curso da Área
+62 | PEDAGOGIA | 140E01 | Educação a distância
+62 | PEDAGOGIA | 140E02 | Educação e comunicação
+62 | PEDAGOGIA | 144F01 | Formação de professor das séries finais do ensino fundamental
+62 | PEDAGOGIA | 144F02 | Formação de professor das séries iniciais do ensino fundamental
+62 | PEDAGOGIA | 144F03 | Formação de professor de alfabetização (língua de origem)
+62 | PEDAGOGIA | 143F01 | Formação de professor de creche
+62 | PEDAGOGIA | 145F04 | Formação de professor de educação cívica
+62 | PEDAGOGIA | 144F04 | Formação de professor de educação especial
+62 | PEDAGOGIA | 143F02 | Formação de professor de educação infantil
+62 | PEDAGOGIA | 144F05 | Formação de professor de educação infantil e séries iniciais do ensino fundamental
+62 | PEDAGOGIA | 144F08 | Formação de professor de jovens e adultos
+62 | PEDAGOGIA | 145F19 | Formação de professor de matérias pedagógicas
+62 | PEDAGOGIA | 143F03 | Formação de professor de pré-escola
+62 | PEDAGOGIA | 144F06 | Formação de professor do ensino fundamental
+62 | PEDAGOGIA | 144F07 | Formação de professor do ensino médio
+62 | PEDAGOGIA | 144F11 | Formação de professor para a educação básica
+62 | PEDAGOGIA | 142I01 | Inspeção escolar
+62 | PEDAGOGIA | 144N01 | Normal superior
+62 | PEDAGOGIA | 142O01 | Orientação educacional
+62 | PEDAGOGIA | 142P01 | Pedagogia
+62 | PEDAGOGIA | 142P02 | Pesquisa educacional
+62 | PEDAGOGIA | 142P03 | Psicopedagogia
+62 | PEDAGOGIA | 142S01 | Supervisão educacional
+62 | PEDAGOGIA | 140T01 | Tecnologia da educação
+62 | PEDAGOGIA | 140T02 | Treinamento e desenvolvimento de recursos humanos
+62 | PEDAGOGIA | 629999 | Outro Curso da Área
+63 | PROCESSAMENTO DE ALIMENTOS | 541A01 | Armazenamento e maturação de vinhos
+63 | PROCESSAMENTO DE ALIMENTOS | 541C01 | Ciência de laticínios
+63 | PROCESSAMENTO DE ALIMENTOS | 541C02 | Ciência de vinhos (enologia)
+63 | PROCESSAMENTO DE ALIMENTOS | 541C03 | Ciência dos alimentos
+63 | PROCESSAMENTO DE ALIMENTOS | 541D01 | Destilaria
+63 | PROCESSAMENTO DE ALIMENTOS | 541F01 | Fabricação de cervejas
+63 | PROCESSAMENTO DE ALIMENTOS | 541F02 | Fabricação de doces
+63 | PROCESSAMENTO DE ALIMENTOS | 541F03 | Fabricação de pães
+63 | PROCESSAMENTO DE ALIMENTOS | 541H01 | Higiene / manuseio de alimentos
+63 | PROCESSAMENTO DE ALIMENTOS | 541I02 | Indústrias de laticínios (industriais)
+63 | PROCESSAMENTO DE ALIMENTOS | 541I01 | Indústrias de processamento de alimentos
+63 | PROCESSAMENTO DE ALIMENTOS | 541P01 | Preparação de alimentos
+63 | PROCESSAMENTO DE ALIMENTOS | 541P02 | Preparação de bebidas fermentadas
+63 | PROCESSAMENTO DE ALIMENTOS | 541P03 | Preservação de alimentos
+63 | PROCESSAMENTO DE ALIMENTOS | 541P04 | Processamento de alimentos e bebidas
+63 | PROCESSAMENTO DE ALIMENTOS | 541P05 | Processamento de carnes
+63 | PROCESSAMENTO DE ALIMENTOS | 541P06 | Processamento de fumo
+63 | PROCESSAMENTO DE ALIMENTOS | 541P07 | Processamento do café
+63 | PROCESSAMENTO DE ALIMENTOS | 541P08 | Produção de queijos
+63 | PROCESSAMENTO DE ALIMENTOS | 541P09 | Produção de vinhos
+63 | PROCESSAMENTO DE ALIMENTOS | 541P10 | Produção industrial de padaria / farináceos
+63 | PROCESSAMENTO DE ALIMENTOS | 541T01 | Tecnologia de alimentos
+63 | PROCESSAMENTO DE ALIMENTOS | 541T02 | Tecnologia em açúcar e álcool
+63 | PROCESSAMENTO DE ALIMENTOS | 541T03 | Tecnologia em produção de cachaça
+63 | PROCESSAMENTO DE ALIMENTOS | 639999 | Outro Curso da Área
+64 | PROCESSAMENTO DE DADOS | 483P01 | Processamento de dados
+64 | PROCESSAMENTO DE DADOS | 483P02 | Programação de computadores
+64 | PROCESSAMENTO DE DADOS | 649999 | Outro Curso da Área
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621A01 | Agricultura
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621A06 | Agroecologia
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621A02 | Agroexploração
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621A03 | Agroindústria
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621A05 | Agropecuária
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621C01 | Ciência do solo
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621C02 | Ciências agrárias
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621C03 | Construção de pomares
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621C04 | Construção de vinhedos
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621C05 | Criação de animais
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622C01 | Cultivo de gramados /turfa
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621E01 | Economia agrícola
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621E02 | Empresas agrícolas / operação de agroindústrias
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622F01 | Floricultura
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 146F40 | Formação de professor de zootecnia
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621F01 | Fruticultura
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622H01 | Horticultura
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622J01 | Jardins
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621M01 | Manejo avícola
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621M02 | Manejo da produção agrícola
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621M03 | Manejo da produção animal
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621M04 | Manejo de eqüinos
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622M01 | Manejo de viveiros (horticultura)
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622M02 | Manutenção de áreas verdes
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621M05 | Manutenção de fazendas
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622M03 | Manutenção de gramados esportivos
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622O01 | Operação de estufas
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622P01 | Produção de plantas ornamentais
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621S01 | Solos
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 622T01 | Técnicas de horticultura
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621T01 | Técnicas de irrigação
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621T02 | Tecnologia agronômica
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621T03 | Tecnologia em Agronegócio
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621T04 | Tecnologia em Cafeicultura
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621T05 | Tecnologia em Produção de grãos
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621V01 | Viticultura
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 621Z01 | Zootecnia
+65 | PRODUÇÃO AGRÍCOLA E PECUÁRIA | 659999 | Outro Curso da Área
+66 | PROFISSÕES INDUSTRIAIS | 520A01 | Automação industrial
+66 | PROFISSÕES INDUSTRIAIS | 520C01 | Controle de qualidade (técnico)
+66 | PROFISSÕES INDUSTRIAIS | 520D01 | Desenho industrial
+66 | PROFISSÕES INDUSTRIAIS | 540F01 | Fabricação e processamento
+66 | PROFISSÕES INDUSTRIAIS | 520M01 | Manutenção industrial
+66 | PROFISSÕES INDUSTRIAIS | 520P01 | Processos industriais
+66 | PROFISSÕES INDUSTRIAIS | 520P02 | Produção industrial
+66 | PROFISSÕES INDUSTRIAIS | 520Q01 | Qualidade total
+66 | PROFISSÕES INDUSTRIAIS | 520S01 | Sensoriamento remoto
+66 | PROFISSÕES INDUSTRIAIS | 520T01 | Tecnologias de materiais
+66 | PROFISSÕES INDUSTRIAIS | 669999 | Outro Curso da Área
+67 | PSICOLOGIA | 145F20 | Formação de professor de psicologia
+67 | PSICOLOGIA | 311F01 | Formação de psicólogos
+67 | PSICOLOGIA | 311P06 | Formação de psicólogos
+67 | PSICOLOGIA | 311P01 | Psicanálise
+67 | PSICOLOGIA | 311P02 | Psicologia
+67 | PSICOLOGIA | 311P03 | Psicologia do desenvolvimento
+67 | PSICOLOGIA | 311P07 | Psicologia do trabalho
+67 | PSICOLOGIA | 311P04 | Psicologia infantil
+67 | PSICOLOGIA | 311P05 | Psicoterapia
+67 | PSICOLOGIA | 311R01 | Relações humanas
+67 | PSICOLOGIA | 679999 | Outro Curso da Área
+68 | QUÍMICA | 145F21 | Formação de professor de química
+68 | QUÍMICA | 442P01 | Petrologia
+68 | QUÍMICA | 442Q01 | Química
+68 | QUÍMICA | 442Q02 | Química analítica
+68 | QUÍMICA | 442Q08 | Química de alimentos
+68 | QUÍMICA | 442Q09 | Química de biotecnologia
+68 | QUÍMICA | 442Q03 | Química de polímeros
+68 | QUÍMICA | 442Q04 | Química industrial
+68 | QUÍMICA | 442Q05 | Química inorgânica
+68 | QUÍMICA | 442Q06 | Química orgânica
+68 | QUÍMICA | 442Q07 | Química tecnológica
+68 | QUÍMICA | 689999 | Outro Curso da Área
+69 | RECURSOS FLORESTAIS | 623C01 | Caça e captura de animais
+69 | RECURSOS FLORESTAIS | 623F01 | Formação de guardas florestais
+69 | RECURSOS FLORESTAIS | 623H01 | Heveicultura
+69 | RECURSOS FLORESTAIS | 623P01 | Preservação de florestas
+69 | RECURSOS FLORESTAIS | 623S01 | Silvicultura
+69 | RECURSOS FLORESTAIS | 623T01 | Técnicas de produtos florestais
+69 | RECURSOS FLORESTAIS | 699999 | Outro Curso da Área
+70 | RECURSOS PESQUEIROS | 624A01 | Aqüicultura
+70 | RECURSOS PESQUEIROS | 624C01 | Ciência e tecnologia da pesca
+70 | RECURSOS PESQUEIROS | 624C02 | Criação de peixes - piscicultura
+70 | RECURSOS PESQUEIROS | 624C03 | Cultura de crustáceos e mariscos
+70 | RECURSOS PESQUEIROS | 624F01 | Fazendas de criação de peixes
+70 | RECURSOS PESQUEIROS | 624M01 | Manejo de recursos pesqueiros
+70 | RECURSOS PESQUEIROS | 624O01 | Oceanocultura
+70 | RECURSOS PESQUEIROS | 624P01 | Pesca
+70 | RECURSOS PESQUEIROS | 624T01 | Tecnologia de Produção Pesqueira
+70 | RECURSOS PESQUEIROS | 709999 | Outro Curso da Área
+71 | RELAÇÕES INTERNACIONAIS | 313R01 | Relações internacionais
+71 | RELAÇÕES INTERNACIONAIS | 719999 | Outro Curso da Área
+72 | RELIGIÃO E TEOLOGIA | 221E01 | Estudo de textos sagrados
+72 | RELIGIÃO E TEOLOGIA | 221E02 | Estudos religiosos
+72 | RELIGIÃO E TEOLOGIA | 221F01 | Formação de missionários
+72 | RELIGIÃO E TEOLOGIA | 145F05 | Formação de professor de educação religiosa
+72 | RELIGIÃO E TEOLOGIA | 221H01 | História das religiões
+72 | RELIGIÃO E TEOLOGIA | 221T01 | Teologia
+72 | RELIGIÃO E TEOLOGIA | 729999 | Outro Curso da Área
+73 | SAÚDE (CURSOS GERAIS) | 720N01 | Naturologia
+73 | SAÚDE (CURSOS GERAIS) | 720S01 | Saúde (programas ou cursos gerais)
+73 | SAÚDE (CURSOS GERAIS) | 720S02 | Saúde pública
+73 | SAÚDE (CURSOS GERAIS) | 739999 | Outro Curso da Área
+74 | SECRETARIADO | 346A01 | Automação de escritórios
+74 | SECRETARIADO | 346C01 | Correspondência comercial
+74 | SECRETARIADO | 146F42 | Formação de professor de secretariado
+74 | SECRETARIADO | 346P01 | Processamento de informações / entrada de dados
+74 | SECRETARIADO | 346R01 | Registros de tribunais
+74 | SECRETARIADO | 346S01 | Secretariado
+74 | SECRETARIADO | 346S02 | Secretariado em língua estrangeira
+74 | SECRETARIADO | 346S03 | Secretariado executivo
+74 | SECRETARIADO | 220L05 | Secretariado executivo bilíngüe
+74 | SECRETARIADO | 220L06 | Secretariado executivo trilíngüe
+74 | SECRETARIADO | 346S04 | Secretariado na área educacional
+74 | SECRETARIADO | 346S05 | Secretariado na área jurídica
+74 | SECRETARIADO | 346S06 | Secretariado na área médica
+74 | SECRETARIADO | 346S07 | Serviços administrativos e de secretaria
+74 | SECRETARIADO | 346T01 | Taquigrafia / estenografia
+74 | SECRETARIADO | 749999 | Outro Curso da Área
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762A01 | Aconselhamento e orientação
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762A02 | Aconselhamento e orientação familiar e conjugal
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762A03 | Aconselhamento e orientação profissional
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762A04 | Aconselhamento e orientação profissional para alcoólatras e toxicômanos
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762A05 | Aconselhamento e orientação vocacional
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762A06 | Agressão física  e maus tratos (conhecimentos sobre)
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762A07 | Alcoolismo, tabagismo e toxicomania (conhecimentos sobre)
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 761A01 | Atendimento à criança (não médico)
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 761A02 | Atendimento aos jovens
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762A08 | Atendimento social
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762P01 | Política social
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762P02 | Prática social
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 761R01 | Recreação infantil
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 761R02 | Recreação para jovens
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762S01 | Serviço social
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 762T01 | Teoria social (aplicada)
+75 | SERVIÇO SOCIAL E ORIENTAÇÃO | 759999 | Outro Curso da Área
+76 | SERVIÇOS A PARTICULARES | 810S01 | Serviços a particulares
+76 | SERVIÇOS A PARTICULARES | 769999 | Outro Curso da Área
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853A01 | Abastecimento de águas (serviço)
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853C01 | Coleta de lixo
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853H01 | Higiene  comunitária
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853I01 | Inspeção sanitária
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853I02 | Inspeção sanitária de alimentos
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853I03 | Inspeção sanitária de medicamentos e suplementos alimentares
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853S01 | Saneamento comunitário
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853T01 | Tratamento dágua
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 853T02 | Tratamento sanitário (refugos e esgotos)
+77 | SERVIÇOS COMUNITÁRIOS DE SANEAMENTO | 779999 | Outro Curso da Área
+78 | SERVIÇOS DE BELEZA | 815C01 | Cosmetologia
+78 | SERVIÇOS DE BELEZA | 815M01 | Massagem (estética)
+78 | SERVIÇOS DE BELEZA | 815T01 | Terapias da beleza
+78 | SERVIÇOS DE BELEZA | 789999 | Outro Curso da Área
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 861D01 | Defesa civil
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 862E01 | Ergonomia
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 146F34 | Formação de professor em segurança pública
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 862H01 | Higiene industrial
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 861P01 | Proteção contra o fogo e combate a incêndios
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 862S01 | Saúde e segurança no trabalho
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 861S01 | Segurança civil
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 861S03 | Segurança e prevenção de sinistros
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 861S02 | Segurança pública
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 861S04 | Serviços alfandegários
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 860S01 | Serviços de segurança
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 862S02 | Stress no trabalho
+79 | SERVIÇOS DE SEGURANÇA E PROTEÇÃO DE PESSOAS E PROPRIEDADES | 799999 | Outro Curso da Área
+80 | SISTEMAS DE INFORMAÇÃO | 483I01 | Informática educacional
+80 | SISTEMAS DE INFORMAÇÃO | 483S01 | Segurança da informação
+80 | SISTEMAS DE INFORMAÇÃO | 483S02 | Sistemas de informação
+80 | SISTEMAS DE INFORMAÇÃO | 809999 | Outro Curso da Área
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213A02 | Animação
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213A03 | Arte para publicações
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213A04 | Artes gráficas
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213A05 | Audiovisuais
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213C01 | Cinematografia
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213C04 | Composição e editoração
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213C02 | Composição gráfica informatizada
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213C03 | Composição tipográfica (diagramação)
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213C05 | Comunicação visual
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213C06 | Criação gráfica
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213D01 | Diagramação em computador
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213E01 | Edição de filme e vídeo tape
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213E02 | Editoração
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213F01 | Fotografia
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213I01 | Iluminação
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213I02 | Ilustração
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213A01 | Impressão gráfica
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213I03 | Impressão (silk screen, tela)
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213R02 | Laboratório fotográfico
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213L01 | Layout
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213M02 | Multimídia
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213O01 | Operação de câmera
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213O02 | Operação de equipamento de composição
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213O03 | Operador de áudio - diskjockey (dj)
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213P01 | Produção cinematográfica
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213P02 | Produção de multimídia
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213P03 | Produção de música gravada
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213P04 | Produção de rádio e tv
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213P06 | Programação visual
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213P05 | Publicação em computador (desktop publishing)
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213R01 | Reprodução gráfica
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 213S01 | Som e imagem
+81 | TÉCNICAS AUDIOVISUAIS E PRODUÇÃO DE MÍDIA | 819999 | Outro Curso da Área
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725B01 | Banco de sangue
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725F01 | Fabricação de lentes óticas
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725I01 | Instrumentação cirúrgica
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725P01 | Prótese auditiva
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725P02 | Próteses / lentes óticas
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725P03 | Próteses ortopédicas
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725R01 | Radiologia
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725R02 | Radioterapia
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T01 | Tecnologia de ambulância
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T02 | Tecnologia de aparelhos auditivos
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T14 | Tecnologia de laboratório de análises
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T03 | Tecnologia de laboratório médico
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T04 | Tecnologia de medicina legal
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T05 | Tecnologia de próteses
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T06 | Tecnologia de radiologia
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T07 | Tecnologia de raio-x (médica)
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T08 | Tecnologia em ortóptica
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T09 | Tecnologia em ótica
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T10 | Tecnologia médica
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T12 | Tecnologia oftálmica
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T11 | Tecnologias de medicina nuclear
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 725T13 | Tecnologias paramédicas de emergência
+82 | TECNOLOGIA DE DIAGNÓSTICOS E TRATAMENTO | 829999 | Outro Curso da Área
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 524M01 | Manutenção petroquímica
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 524O01 | Operação de fábricas e máquinas (processamento)
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 524P01 | Processamento de petróleo / gás / petroquímicos
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 524R01 | Refinamento de petróleo
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 524T01 | Tecnologia de laboratório
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 524T02 | Tecnologia de processos
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 524T05 | Tecnologia em processos industriais
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 524T03 | Tecnologia química
+83 | TECNOLOGIA QUÍMICA E DE PROCESSOS | 839999 | Outro Curso da Área
+84 | TERAPIA E REABILITAÇÃO | 726F02 | Foniatria
+84 | TERAPIA E REABILITAÇÃO | 146F44 | Formação de professor de psicomotricidade
+84 | TERAPIA E REABILITAÇÃO | 726M01 | Massagem (médica)
+84 | TERAPIA E REABILITAÇÃO | 726M02 | Musicoterapia
+84 | TERAPIA E REABILITAÇÃO | 726O01 | Optometria
+84 | TERAPIA E REABILITAÇÃO | 726O02 | Osteopatia
+84 | TERAPIA E REABILITAÇÃO | 726P01 | Patologia e terapia da fala
+84 | TERAPIA E REABILITAÇÃO | 726P02 | Psicomotricidade
+84 | TERAPIA E REABILITAÇÃO | 726Q01 | Quiroprática
+84 | TERAPIA E REABILITAÇÃO | 726R01 | Reabilitação
+84 | TERAPIA E REABILITAÇÃO | 726R02 | Reabilitação profissional
+84 | TERAPIA E REABILITAÇÃO | 726R03 | Reflexologia
+84 | TERAPIA E REABILITAÇÃO | 726S01 | Serviços de saúde mental
+84 | TERAPIA E REABILITAÇÃO | 726T01 | Terapia ocupacional
+84 | TERAPIA E REABILITAÇÃO | 849999 | Outro Curso da Área
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542B01 | Bordados e trabalhos de agulha (industriais)
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542C01 | Ciência da lã
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542C02 | Confecção de roupas
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542C03 | Costura (industrial)
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542E04 | Estofamento
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542F01 | Fabricação de artigos de couro
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542F02 | Fabricação de calçados
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542F03 | Fiação
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542I01 | Indústria do vestuário
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542I02 | Indústria têxtil
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542P01 | Peleteria
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542P02 | Processamento de couro
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542P03 | Produção de artigos de couro
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542P04 | Produção de peles e couros
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542T01 | Tecelagem (industrial)
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542T02 | Técnicas têxteis
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542T03 | Têxteis, vestuário e calçados
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542T04 | Trabalhos em lã
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542T05 | Tratamento de peles
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 542T06 | Tricô (industrial)
+85 | TÊXTEIS, ROUPAS, COUROS E CALÇADOS | 859999 | Outro Curso da Área
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840A01 | Aviação
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840C04 | Ciência aeronáutica
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840C01 | Ciência náutica
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840C02 | Comunicações (por ar, estrada de ferro, rodovia, etc)
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840C03 | Controle de tráfego aéreo
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840N01 | Navegação aérea
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840N02 | Navegação fluvial
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840N03 | Navegação marítima
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840O01 | Operação de aeronaves
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840O02 | Operação de ferrovias
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840O03 | Operação de navios
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840O04 | Operação de veículos rodoviários a motor
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840O05 | Operações de correio / serviços postais
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840S02 | Serviço aeroportuário
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840S01 | Serviço portuário
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840T01 | Tecnologias de navegação
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840T02 | Transportes
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 840V01 | Vôo e navegação
+86 | TRANSPORTES E SERVIÇOS (CURSOS GERAIS) | 869999 | Outro Curso da Área
+87 | TURISMO | 812E01 | Eventos
+87 | TURISMO | 812L01 | Lazer e turismo
+87 | TURISMO | 812P01 | Planejamento e organização do turismo
+87 | TURISMO | 812R01 | Recreação e lazer
+87 | TURISMO | 812T01 | Turismo
+87 | TURISMO | 812T02 | Turismo e hotelaria
+87 | TURISMO | 812V01 | Viagens e turismo
+87 | TURISMO | 879999 | Outro Curso da Área
+88 | USO DO COMPUTADOR | 482C01 | Comércio eletrônico
+88 | USO DO COMPUTADOR | 482S01 | Softwares básicos
+88 | USO DO COMPUTADOR | 482S06 | Softwares para computação gráfica
+88 | USO DO COMPUTADOR | 482S02 | Softwares para editoração e publicação
+88 | USO DO COMPUTADOR | 482S03 | Softwares para planilhas de cálculo (spreadsheets)
+88 | USO DO COMPUTADOR | 482S04 | Softwares para processamento de dados
+88 | USO DO COMPUTADOR | 482S05 | Softwares para processamento de textos
+88 | USO DO COMPUTADOR | 482U01 | Uso da internet
+88 | USO DO COMPUTADOR | 482U02 | Utilização de softwares
+88 | USO DO COMPUTADOR | 889999 | Outro Curso da Área
+89 | VETERINÁRIA | 641C01 | Ciências veterinárias
+89 | VETERINÁRIA | 641C02 | Cuidados com a saúde animal
+89 | VETERINÁRIA | 641M01 | Medicina veterinária
+89 | VETERINÁRIA | 641R01 | Reprodução animal (ciência)
+89 | VETERINÁRIA | 641T01 | Técnicas de reprodução animal
+89 | VETERINÁRIA | 899999 | Outro Curso da Área
+90 | VIDA PROFISSIONAL | 347D01 | Desenvolvimento do trabalho
+90 | VIDA PROFISSIONAL | 347N01 | Necessidades dos clientes
+90 | VIDA PROFISSIONAL | 347O01 | Organização no trabalho
+90 | VIDA PROFISSIONAL | 347P01 | Padrões de qualidade no trabalho
+90 | VIDA PROFISSIONAL | 347R01 | Relações industriais
+90 | VIDA PROFISSIONAL | 347S03 | Sindicalismo
+90 | VIDA PROFISSIONAL | 347V01 | Vida profissional
+90 | VIDA PROFISSIONAL | 909999 | Outro Curso da Área

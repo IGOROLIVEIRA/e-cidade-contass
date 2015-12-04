@@ -1,0 +1,52 @@
+100Serviço de atenção a saúde no sistema penitenciário                                                                     200806
+101Estratégia de saúde da família                                                                                          200806
+102Estratégias de agentes comunitário de saúde                                                                             200806
+103Serviço de regulação médica de urgências - Central SAMU 192                                                             200806
+104Servico de regulação de servicos de saúde                                                                               200806
+105Serviço de assistência de alta complexidade em neurocirurgia                                                            200806
+106Serviço de atenção a DST/HIV/AIDS                                                                                       200806
+107Serviço de atenção a saúde auditiva                                                                                     200806
+108Serviço de atenção a saúde do trabalhador                                                                               200806
+109Serviço de atenção a saúde dos adolecentes em conflito com a lei, em regime de internação e internação provisória       200806
+110Serviço de atenção a saúde reprodutiva                                                                                  200806
+111Serviço de atenção ao paciente com tuberculose                                                                          200806
+112Serviço de atenção ao pré-natal, parto e nascimento                                                                     200806
+113Serviço de atenção domiciliar                                                                                           200806
+114Serviço de atenção em saúde bucal                                                                                       200806
+115Serviço de atenção psicossocial                                                                                         200806
+116Serviço de cirurgia cardiovascular                                                                                      200806
+117Serviço de cirurgia reparadora                                                                                          200806
+118Serviço de cirurgia torácica                                                                                            200806
+119Serviço de controle de tabagismo                                                                                        200806
+120Serviço de diagnóstico por anatomia patológica e/ou citopatologia                                                       200806
+121Serviço de diagnóstico por imagem                                                                                       200806
+122Serviço de diagnóstico por métodos gráficos/dinâmicos                                                                   200806
+123Serviço de dispensação de órteses, próteses e materiais especiais                                                       200806
+124Serviço de endocrinologia                                                                                               200806
+125Serviço de farmácia                                                                                                     200806
+126Serviço de fisioterapia                                                                                                 200806
+127Serviço de atenção à obesidade grave                                                                                    200806
+128Serviço de hemoterapia                                                                                                  200806
+129Servico de laboratório de histocompatibilidade                                                                          200806
+130Serviço de nefrologia/urologia                                                                                          200806
+131Serviço de oftalmologia                                                                                                 200806
+132Serviço de oncologia                                                                                                    200806
+133Serviço de pneumologia                                                                                                  200806
+134Serviço de práticas integrativas e complementares                                                                       200806
+135Serviço de reabilitação                                                                                                 200806
+136Serviço de suporte nutricional                                                                                          200806
+137Serviço de telemedicina                                                                                                 200806
+138Serviço de traumato-ortopedia                                                                                           200806
+139Serviço de triagem neonatal                                                                                             200806
+140Serviço de urgências                                                                                                    200806
+141Serviço de vigilância em saúde                                                                                          200806
+142Serviço de endoscopia                                                                                                   200806
+143Serviço móvel de urgência (exceto SAMU)                                                                                 200806
+144Serviço posto de coleta de materiais biológicos                                                                         200806
+145Serviço de diagnóstico por laboratório clínico                                                                          200806
+146Serviço de videolaparoscopia                                                                                            200806
+147Serviço de apoio a saúde da família                                                                                     200806
+148Hospital-Dia                                                                                                            200806
+149Transplante                                                                                                             200806
+150Cirurgia vascular                                                                                                       200806
+151Medicina nuclear                                                                                                        200806

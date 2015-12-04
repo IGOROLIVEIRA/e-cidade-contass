@@ -1,0 +1,22 @@
+
+[30/08/2011 13:42:39] 
+[30/08/2011 13:42:39] Iniciando processamento do script : material/MaterialSaidaAnteriorentrada.test.php
+[30/08/2011 13:42:39] Pesquisando itens com dados Negativos
+[30/08/2011 13:42:39] Total de itens: 61
+[30/08/2011 13:42:39] [Erro]: Item 61 - TROCA DE PASTILHA DE FREIO PALIO HLF 1439 possui saidas com data anterior a Data de Entrada. Lançamento:83Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 62 - TROCA DE SAPATA DE FREIO PALIO HLF 1439 possui saidas com data anterior a Data de Entrada. Lançamento:83Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 63 - REMOVER E INSTALAR CAIXA DE MARCHA PALIO HLF 1439 possui saidas com data anterior a Data de Entrada. Lançamento:83Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 64 - TROCA DE BRAÇO DE ARTICULAÇÃO PALIO HLF 1439 possui saidas com data anterior a Data de Entrada. Lançamento:83Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 65 - TROCA DE PONTEIRA PALIO HLF 1439 possui saidas com data anterior a Data de Entrada. Lançamento:83Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 66 - TROCA DE DISCO DE FREIO PALIO HLF 1439 possui saidas com data anterior a Data de Entrada. Lançamento:83Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 67 - REMOVER E INSTALAR CAIXA DE MARCHA GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 68 - REVISAR CUBO TRASEIRO GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 69 - SOLDA DE DESCARGA GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 70 - TROCA DE BATENTE DE AMORTECEDOR TRASEIRO GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 71 - TROCA DE 2 BUCHAS DO EIXO TRASEIRO GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 72 - TROCA DE 4 BUCHAS DO AGREGADO DO MOTOR GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 73 - TROCA DE COIFA DA HOMOCINETICA LADO DA CAIXA GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 74 - TROCA DE CONJUNTO DE EMBREAGEM GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 75 - TROCA DE PASTILHA DE FREIO GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] [Erro]: Item 76 - REMOVER E INSTALAR CABEÇOTE GOL HLF3318 possui saidas com data anterior a Data de Entrada. Lançamento:90Quantidade de Movimentações inválidas:1
+[30/08/2011 13:42:39] Encontrados Item com estoque negativo. [Log: log/material/MaterialSaidaAnteriorentrada.test.php_20110830_134239.log]

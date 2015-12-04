@@ -1,0 +1,11 @@
+begin;
+CREATE TABLE updatedb
+(
+  codscript SERIAL,
+  nomescript varchar(250) not null,
+  dataexec date,
+  CONSTRAINT updatedb_codscript_pk PRIMARY KEY (codscript)
+);
+
+commit;
+copy (select nomescript from updatedb) to '/tmp/scripts_executados.sh'

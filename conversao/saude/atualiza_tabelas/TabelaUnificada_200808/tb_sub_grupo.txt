@@ -1,0 +1,58 @@
+0101Ações coletivas/individuais em saúde                                                                200808
+0601Medicamentos de dispensação excepcional                                                             200808
+0201Coleta de material                                                                                  200808
+0301Consultas / Atendimentos / Acompanhamentos                                                          200808
+0501Coleta e exames para fins de doação de orgãos, tecidos e células e de transplante                   200808
+0701Órteses, próteses e materiais especiais não relacionados ao ato cirúrgico                           200808
+0801Ações relacionadas ao estabelecimento                                                               200808
+0401Pequenas cirurgias e cirurgias de pele, tecido subcutâneo e mucosa                                  200808
+0802Ações relacionadas ao atendimento                                                                   200808
+0302Fisioterapia                                                                                        200808
+0602Medicamentos estratégicos                                                                           200808
+0402Cirurgia de glândulas endócrinas                                                                    200808
+0702Órteses, próteses e materiais especiais relacionados ao ato cirúrgico                               200808
+0202Diagnóstico em laboratório clínico                                                                  200808
+0102Vigilância em saúde                                                                                 200808
+0502Avaliação de morte encefálica                                                                       200808
+0403Cirurgia do sistema nervoso central e periférico                                                    200808
+0303Tratamentos clínicos (outras especialidades)                                                        200808
+0603Medicamentos de âmbito hospitalar                                                                   200808
+0203Diagnóstico por anatomia patológica e citopatologia                                                 200808
+0803Autorização / Regulação                                                                             200808
+0503Ações relacionadas à doação de orgãos, tecidos e células                                            200808
+0504Processamento de tecidos para transplante                                                           200808
+0304Tratamento em oncologia                                                                             200808
+0404Cirurgia das vias aéreas superiores, da cabeça e do pescoço                                         200808
+0204Diagnóstico por radiologia                                                                          200808
+0405Cirurgia do aparelho da visão                                                                       200808
+0505Transplante de orgãos, tecidos e células                                                            200808
+0205Diagnóstico por ultra-sonografia                                                                    200808
+0305Tratamento em nefrologia                                                                            200808
+0506Acompanhamento e intercorrências pós-transplante                                                    200808
+0306Hemoterapia                                                                                         200808
+0406Cirurgia do aparelho circulatório                                                                   200808
+0206Diagnóstico por tomografia                                                                          200808
+0307Tratamentos odontológicos                                                                           200808
+0207Diagnóstico por ressonância magnética                                                               200808
+0407Cirurgia do aparelho digestivo, orgãos anexos e parede abdominal                                    200808
+0408Cirurgia do sistema osteomuscular                                                                   200808
+0308Tratamento de lesões, envenenamentos e outros, decorrentes de causas externas                       200808
+0208Diagnóstico por medicina nuclear in vivo                                                            200808
+0209Diagnóstico por endoscopia                                                                          200808
+0309Terapias especializadas                                                                             200808
+0409Cirurgia do aparelho geniturinário                                                                  200808
+0210Diagnóstico por radiologia intervencionista                                                         200808
+0310Parto e nascimento                                                                                  200808
+0410Cirurgia de mama                                                                                    200808
+0411Cirurgia obstétrica                                                                                 200808
+0211Métodos diagnósticos em especialidades                                                              200808
+0212Diagnóstico e procedimentos especiais em hemoterapia                                                200808
+0412Cirurgia torácica                                                                                   200808
+0213Diagnóstico em vigilância epidemiológica e ambiental                                                200808
+0413Cirurgia reparadora                                                                                 200808
+0414Cirurgia oro-facial                                                                                 200808
+0214Diagnóstico por teste rápido                                                                        200808
+0415Outras cirurgias                                                                                    200808
+0416Cirurgia em oncologia                                                                               200808
+0417Anestesiologia                                                                                      200808
+0418Cirurgia em nefrologia                                                                              200808

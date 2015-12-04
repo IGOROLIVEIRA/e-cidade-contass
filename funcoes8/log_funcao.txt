@@ -1,0 +1,1 @@
+psql:./saude/triggers/impede_informacoes_duplicadas_lab.sql:311: NOTA:  gatilho "tg_impede_informacoes_duplicadas_lab" para tabela "lab_controlefisicofinanceiro" não existe, ignorando

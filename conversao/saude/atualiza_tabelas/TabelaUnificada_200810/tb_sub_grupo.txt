@@ -1,0 +1,58 @@
+0301Consultas / Atendimentos / Acompanhamentos                                                          200810
+0801Ações relacionadas ao estabelecimento                                                               200810
+0201Coleta de material                                                                                  200810
+0101Ações coletivas/individuais em saúde                                                                200810
+0701Órteses, próteses e materiais especiais não relacionados ao ato cirúrgico                           200810
+0601Medicamentos de dispensação excepcional                                                             200810
+0501Coleta e exames para fins de doação de orgãos, tecidos e células e de transplante                   200810
+0401Pequenas cirurgias e cirurgias de pele, tecido subcutâneo e mucosa                                  200810
+0202Diagnóstico em laboratório clínico                                                                  200810
+0102Vigilância em saúde                                                                                 200810
+0802Ações relacionadas ao atendimento                                                                   200810
+0702Órteses, próteses e materiais especiais relacionados ao ato cirúrgico                               200810
+0602Medicamentos estratégicos                                                                           200810
+0502Avaliação de morte encefálica                                                                       200810
+0402Cirurgia de glândulas endócrinas                                                                    200810
+0302Fisioterapia                                                                                        200810
+0203Diagnóstico por anatomia patológica e citopatologia                                                 200810
+0803Autorização / Regulação                                                                             200810
+0403Cirurgia do sistema nervoso central e periférico                                                    200810
+0603Medicamentos de âmbito hospitalar                                                                   200810
+0303Tratamentos clínicos (outras especialidades)                                                        200810
+0503Ações relacionadas à doação de orgãos, tecidos e células                                            200810
+0504Processamento de tecidos para transplante                                                           200810
+0204Diagnóstico por radiologia                                                                          200810
+0304Tratamento em oncologia                                                                             200810
+0404Cirurgia das vias aéreas superiores, da cabeça e do pescoço                                         200810
+0405Cirurgia do aparelho da visão                                                                       200810
+0305Tratamento em nefrologia                                                                            200810
+0205Diagnóstico por ultra-sonografia                                                                    200810
+0505Transplante de orgãos, tecidos e células                                                            200810
+0306Hemoterapia                                                                                         200810
+0506Acompanhamento e intercorrências pós-transplante                                                    200810
+0206Diagnóstico por tomografia                                                                          200810
+0406Cirurgia do aparelho circulatório                                                                   200810
+0207Diagnóstico por ressonância magnética                                                               200810
+0307Tratamentos odontológicos                                                                           200810
+0407Cirurgia do aparelho digestivo, orgãos anexos e parede abdominal                                    200810
+0408Cirurgia do sistema osteomuscular                                                                   200810
+0208Diagnóstico por medicina nuclear in vivo                                                            200810
+0308Tratamento de lesões, envenenamentos e outros, decorrentes de causas externas                       200810
+0409Cirurgia do aparelho geniturinário                                                                  200810
+0309Terapias especializadas                                                                             200810
+0209Diagnóstico por endoscopia                                                                          200810
+0410Cirurgia de mama                                                                                    200810
+0310Parto e nascimento                                                                                  200810
+0210Diagnóstico por radiologia intervencionista                                                         200810
+0411Cirurgia obstétrica                                                                                 200810
+0211Métodos diagnósticos em especialidades                                                              200810
+0412Cirurgia torácica                                                                                   200810
+0212Diagnóstico e procedimentos especiais em hemoterapia                                                200810
+0213Diagnóstico em vigilância epidemiológica e ambiental                                                200810
+0413Cirurgia reparadora                                                                                 200810
+0414Cirurgia oro-facial                                                                                 200810
+0214Diagnóstico por teste rápido                                                                        200810
+0415Outras cirurgias                                                                                    200810
+0416Cirurgia em oncologia                                                                               200810
+0417Anestesiologia                                                                                      200810
+0418Cirurgia em nefrologia                                                                              200810

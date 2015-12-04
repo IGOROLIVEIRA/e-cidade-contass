@@ -1,0 +1,32 @@
+FINANCEIRA POR RUBRICA
+RUBRICA : 0410 - EMPRESTIMO CREDINOR
+PERÍODO : 07 / 2011
++--------+----------------------------------------+-------------+-----------+--------+------------------------------+--------+------------------------------+
+ Matrícula do Servidor Nome                                     QUANTIDADE    VALOR       LOTACAO   DESCRICAO                      CARGO   DESCRICAO                     
++--------+----------------------------------------+-------------+-----------+--------+------------------------------+--------+------------------------------+
+    739-0 CARLOS ALBERTO FARNESE                           46,00      186,12   020404   SAUDE - PROGRAMA SAUDE DA FAM    0052   ODONTOLOGO
+    141-4 CLAUDICIMAR MARQUES AGUIAR                       18,00      217,58   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
+    255-0 CLEIDE PEREIRA MARTINS                           42,00      102,64   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
+    542-8 DENIZE FELIX MENDES                               3,00       99,71   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0017   AUXILIAR SERVICOS GERAIS
+    248-8 EVA APARECIDA DE JESUS                           97,00      220,47   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
+    602-5 EVANDO DE JESUS ALMEIDA                          21,00      203,59   020801   DEP. DE OBRAS, TRANSPORTES E     0039   GARI
+    446-4 GEICE KARINE OLIVEIRA ROCHA                      56,00       99,70   020201   DEPARTAMENTO ADMINISTRATIVO      0001   AGENTE ADMINISTRATIVO
+     30-2 GERALDA APARECIDA FERREIRA                       96,00      261,27   020501   DEPTO DE EDUCACAO - FUDEB 60%    0058   PROFESSOR ESTAVEL
+     31-0 GERALDO BARBOSA REIS                             38,00      277,33   020801   DEP. DE OBRAS, TRANSPORTES E     0049   MOTORISTA ESTAVEL
+    153-8 LAURENE IARA FERREIRA                            46,00      215,35   020402   FUNDO MUNICIPAL DE SAUDE         0014   AUXILIAR DE SERVICO SAUDE
+    487-1 LINCE GEOCIR CARDOSO                              3,00      119,47   020201   DEPARTAMENTO ADMINISTRATIVO      0018   AUXILIAR SERVICOS PUBLICOS
+    114-7 MAGDA APARECIDA SOUZA SANTOS                     47,00      163,56   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
+     35-3 MANOEL ANTONIO DOS SANTOS                         9,00       96,93   020801   DEP. DE OBRAS, TRANSPORTES E     0049   MOTORISTA ESTAVEL
+    632-7 MARCILENE ARIADNY SOUZA SANTOS                   18,00      168,43   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0007   ASSISTENTE EDUCACIONAL
+    347-6 MARIA DO SOCORRO ALMEIDA MOURA                   48,00      147,26   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0039   GARI
+    459-6 MARIA WALDIVIA M GONCALVES                       13,00      163,50   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0017   AUXILIAR SERVICOS GERAIS
+    237-2 MARIZA APARECIDA PEREIRA                          3,00      170,53   020801   DEP. DE OBRAS, TRANSPORTES E     0039   GARI
+     55-8 MAURO DIAS ARAUJO                                48,00      198,51   020801   DEP. DE OBRAS, TRANSPORTES E     0053   PEDREIRO
+    254-2 NATALINO PEREIRA DE ARAUJO                        5,00      186,74   020201   DEPARTAMENTO ADMINISTRATIVO      0007   ASSISTENTE EDUCACIONAL
+    290-9 ORLINDA SOARES FONSECA                           48,00      163,62   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0017   AUXILIAR SERVICOS GERAIS
+    423-5 RAQUEL RODRIGUES MOTA                            45,00      192,52   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0059   PROFESSOR PRIMEIRO CICLO
+    355-7 ROSALIA CARDOSO DOS S SOUZA                       4,00      148,22   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0039   GARI
+    613-0 ROZIMAR A RABELO DA FONSECA                      97,00      226,47   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0059   PROFESSOR PRIMEIRO CICLO
+    152-0 SILVERIA BOMPET CARDOSO                          38,00      113,14   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
++--------+----------------------------------------+-------------+-----------+--------+------------------------------+--------+------------------------------+
+TOTAL : 24  FUNCIONÁRIOS                                  889,00    4.142,66

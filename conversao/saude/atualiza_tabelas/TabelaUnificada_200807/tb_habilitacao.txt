@@ -1,0 +1,182 @@
+0101Centro de referência em atenção a saúde do idoso                                                                                                      200807
+0201Centro de referência em cirúrgia bariátrica                                                                                                           200807
+0202Unidade de alta complexidade ao paciente portador de obesidade grave                                                                                  200807
+0301Centros/Núcleos para realização de implante coclear                                                                                                   200807
+0302Diagnóstico, tratamento e reabilitação auditiva na média complexidade                                                                                 200807
+0303Diagnóstico, tratamento e reabilitação auditiva na alta complexidade                                                                                  200807
+0401Centro de tratamento da má formação labio-palatal                                                                                                     200807
+0402Laboratório Regional de Prótese Dentária                                                                                                              200807
+0403Centro de Especialidade Odontológica - CEO I                                                                                                          200807
+0404Centro de Especialidade Odontológica - CEO II                                                                                                         200807
+0405Centro de Especialidade Odontológica - CEO III                                                                                                        200807
+0501Centro de Referencia em Oftalmologia Nível I                                                                                                          200807
+0502Centro de Referência em Oftalmologia Nível II                                                                                                         200807
+0503UNIDADE DE ATENÇÃO ESPECIALIZADA EM OFTALMOLOGIA                                                                                                      200807
+0504CENTRO DE REFERÊNCIA EM OFTALMOGIA                                                                                                                    200807
+0601Psiquiatria - Classe I                                                                                                                                200807
+0602Psiquiatria - Classe II                                                                                                                               200807
+0603Psiquiatria - Classe III                                                                                                                              200807
+0604Psiquiatria - Classe IV                                                                                                                               200807
+0605Psiquiatria - Classe V                                                                                                                                200807
+0606Psiquiatria - Classe VI                                                                                                                               200807
+0607Psiquiatria - Classe VII                                                                                                                              200807
+0608Psiquiatria - Classe VIII                                                                                                                             200807
+0609Psiquiatria - Classe IX                                                                                                                               200807
+0610Psiquiatria - Classe X                                                                                                                                200807
+0611Psiquiatria - Classe XI                                                                                                                               200807
+0612Psiquiatria - Classe XII                                                                                                                              200807
+0613Psiquiatria - Classe XIII                                                                                                                             200807
+0614Psiquiatria - Classe XIV                                                                                                                              200807
+0615PNASS maior que 80%                                                                                                                                   200807
+0616Centro de Atenção Psicossocial - CAPS I                                                                                                               200807
+0617Centro de Atenção Psicossocial - CAPS II                                                                                                              200807
+0618Centro de Atenção Psicossocial - CAPS III                                                                                                             200807
+0619Centro de Atenção Psicossocial Álcool e Drogas - CAPSad                                                                                               200807
+0620Centro de Atenção Psicossocial Infantil - CAPSi                                                                                                       200807
+0621Serviço hospitalar de referência para a atenção integral aos usuários de álcool e outras drogas                                                       200807
+0622Psiquiatria Classe I - PT/GM nº251/02                                                                                                                 200807
+0623Psiquiatria Classe II - PT/GM nº251/02                                                                                                                200807
+0624Psiquiatria Classe III - PT/GM nº251/02                                                                                                               200807
+0625Psiquiatria Classe IV - PT/GM nº 251/02                                                                                                               200807
+0626Psiquiatria Classe V - PT/GM nº251/02                                                                                                                 200807
+0627Psiquiatria Classe VI - PT/GM nº251/02                                                                                                                200807
+0628Psiquiatria Classe VII - PT/GM nº251/02                                                                                                               200807
+0629Psiquiatria Classe VIII - PT/GM nº251/02                                                                                                              200807
+0630Psiquiatria III                                                                                                                                       200807
+0701Serviço de Referência de Saúde do Trabalhador Estadual A                                                                                              200807
+0702Serviço de Referência de Saúde do Trabalhador Estadual B                                                                                              200807
+0703Serviço de Referência de Saúde do Trabalhador Estadual C                                                                                              200807
+0704Serviço de Referência de Saúde do Trabalhador Regional A                                                                                              200807
+0705Serviço de Referência de Saúde do Trabalhador Regional B                                                                                              200807
+0706Serviço de Referência de Saúde do Trabalhador Regional C                                                                                              200807
+0801Unidade de assistência de alta complexidade cardiovascular                                                                                            200807
+0802Centro de referência em alta complexidade cardiovascular                                                                                              200807
+0803Cirurgia cardiovascular e procedimentos em cardiologia intervencionista                                                                               200807
+0804Cirurgia cardiovascular pediátrica                                                                                                                    200807
+0805Cirurgia vascular                                                                                                                                     200807
+0806Cirurgia vascular e procedimentos endovasculares extracardíacos                                                                                       200807
+0807Laboratório de eletrofisiologia, cirurgia cardiovascular e procedimentos de cardiologia intervencionista                                              200807
+0808Implante de marcapasso definitivo                                                                                                                     200807
+0809Cirurgia cardíaca                                                                                                                                     200807
+0810Laboratório eletrofisiológico e terapia intervencionista                                                                                              200807
+0901Cuidados prolongados - enfermidades cardiovasculares                                                                                                  200807
+0902Cuidados prolongados - enfermidades pneumológicas                                                                                                     200807
+0903Cuidados prolongados - enfermidades neurológicas                                                                                                      200807
+0904Cuidados prolongados - enfermidades osteomuscular e do tecido conjuntivo                                                                              200807
+0905Cuidados prolongados - enfermidades oncológicas                                                                                                       200807
+0906Cuidados prolongados - enfermidades decorrentes da AIDS                                                                                               200807
+0907Cuidados prolongados - enfermidades devido a causas externas                                                                                          200807
+1001Centro de referência no tratamento da dor crônica                                                                                                     200807
+1101Serviço hospitalar para tratamento AIDS                                                                                                               200807
+1102Laboratório para CD4/CD8, carga viral                                                                                                                 200807
+1103Tratamento da lipoatrofia facial do portador de HIV/AIDS                                                                                              200807
+1104Tratamento da liopodistrofia do Portador de HIV/AIDS                                                                                                  200807
+1201Fibrose cística - Hospital Dia                                                                                                                        200807
+1202Hospital Dia - Procedimentos cirúrgicos, diagnósticos ou terapêuticos                                                                                 200807
+1203Hospital Dia - AIDS                                                                                                                                   200807
+1204Hospital Dia em intercorrências pós-transplante de medula óssea e de outros precursores hematopoéticos                                                200807
+1205Hospital Dia - Geriatria                                                                                                                              200807
+1206Hospital Dia - Saúde Mental                                                                                                                           200807
+1301Internação domiciliar                                                                                                                                 200807
+1401Referência hospitalar em atendimento secundário a gestante de alto risco                                                                              200807
+1402Referência hospitalar em atendimento terciário a gestante de alto risco                                                                               200807
+1404Hospital Amigo da Criança                                                                                                                             200807
+1405Centro de referência em triagem neonatal/acompanhamento e tratamento de doenças congênitas - fenilcetonuria/hipotireoidismo congenito                 200807
+1406Centro de referência em triagem neonatal/acompanhamento e tratamento - doenças falciformes e outras hemoglobinopatias                                 200807
+1407Centro de referência em triagem neonatal/acompanhamento e tratamento - fibrose cística                                                                200807
+1501Unidade de assistência de alta complexidade em nefrologia (serviço de nefrologia)                                                                     200807
+1502Centro de referência de alta complexidade em nefrologia                                                                                               200807
+1503Hemodiálise II                                                                                                                                        200807
+1601Unidade de assistência de alta complexidade em neurologia/neurocirurgia                                                                               200807
+1602Centro de referência de alta complexidade em neurologia/neurocirurgia                                                                                 200807
+1603Trauma e anomalias do desenvolvimento                                                                                                                 200807
+1604Coluna e dos nervos periféricos                                                                                                                       200807
+1605Tumores do sistema nervoso                                                                                                                            200807
+1606Neurocirurgia vascular                                                                                                                                200807
+1607Tratamento neurocirúrgico da dor e funcional                                                                                                          200807
+1608Investigação e cirurgia de epilepsia                                                                                                                  200807
+1609Tratamento neuro-endovascular                                                                                                                         200807
+1610Neurocirurgia funcional esteriotáxica                                                                                                                 200807
+1611Epilepsia                                                                                                                                             200807
+1612Neurocirurgia I                                                                                                                                       200807
+1613Neurocirurgia II                                                                                                                                      200807
+1614Neurocirurgia III                                                                                                                                     200807
+1701Centro de Alta Complexidade em Oncologia - CACON I                                                                                                    200807
+1702Centro de Alta Complexidade em Oncologia - CACON II                                                                                                   200807
+1703Centro de Alta Complexidade em Oncologia - CACON III                                                                                                  200807
+1704Serviço isolado de radioterapia                                                                                                                       200807
+1705Serviço isolado de quimioterapia                                                                                                                      200807
+1706UNACON                                                                                                                                                200807
+1707UNACON com serviço de radioterapia                                                                                                                    200807
+1708UNACON com serviço de hematologia                                                                                                                     200807
+1709UNACON com serviço de oncologia pediátrica                                                                                                            200807
+1710UNACON exclusiva de hematologia                                                                                                                       200807
+1711UNACON exclusiva de oncologia pediátrica                                                                                                              200807
+1712CACON                                                                                                                                                 200807
+1713CACON com serviço de oncologia pediátrica                                                                                                             200807
+1714Hospital Geral com cirurgia oncológica                                                                                                                200807
+1715Serviço de radioterapia de complexo hospitalar                                                                                                        200807
+1716Serviço de Oncologia Clínica de Complexo hospitalar                                                                                                   200807
+1801Centro de referência de tratamento de osteogênesis imperfecta                                                                                         200807
+1901Laqueadura                                                                                                                                            200807
+1902Vasectomia                                                                                                                                            200807
+2001Programa de assistência ventilatoria não invasiva aos portadores de doenças neuromusculares                                                           200807
+2101Unidade de referência em assistência a queimados - média complexidade                                                                                 200807
+2102Centro de referência em assistência a queimados - alta complexidade                                                                                   200807
+2201Centro de referência de reabilitação em medicina fisica                                                                                               200807
+2202Serviço de reabilitação fisica - nível intermediário                                                                                                  200807
+2301Unidade de assistência de alta complexidade em terapia nutricional                                                                                    200807
+2302Centro de referência de alta complexidade em terapia nutricional                                                                                      200807
+2303Enteral                                                                                                                                               200807
+2304Enteral e parenteral                                                                                                                                  200807
+2305Enteral e parenteral com manipulação e fabricação da fórmula nutricional                                                                              200807
+2306Nutrição enteral                                                                                                                                      200807
+2401Transplante de medula óssea-autogênico                                                                                                                200807
+2402Transplante de medula óssea-alogênico aparentado                                                                                                      200807
+2403Transplante de medula óssea-alogênico não aparentado                                                                                                  200807
+2404Transplante de pâncreas isolado                                                                                                                       200807
+2405Transplante conjugado rim e pâncreas                                                                                                                  200807
+2406Transplante de esclera                                                                                                                                200807
+2407Transplante de córnea                                                                                                                                 200807
+2408Transplante renal                                                                                                                                     200807
+2409Transplante de fígado                                                                                                                                 200807
+2410Transplante de pulmão                                                                                                                                 200807
+2411Transplante de coração                                                                                                                                200807
+2412Busca ativa de orgãos                                                                                                                                 200807
+2413Banco de tecido ocular humano                                                                                                                         200807
+2414Banco de válvulas cardíacas                                                                                                                           200807
+2415Banco de tecido músculo-esquelético                                                                                                                   200807
+2416Banco de sangue e cordão umbilical e placentário                                                                                                      200807
+2417Exames de histocompatibilidade atraves de sorologia - Tipo I                                                                                          200807
+2418Exames de histocompatibilidade atraves de sorologia e ou biologia molecular - Tipo II                                                                 200807
+2501Unidade de atenção especializada em traumato-ortopedia                                                                                                200807
+2502Centro de referência de alta complexidade em traumato-ortopedia                                                                                       200807
+2503Coluna                                                                                                                                                200807
+2504Cintura escapular, ombro, braço e cotovelo                                                                                                            200807
+2505Antebraço, punho e mão                                                                                                                                200807
+2506Cintura pélvica, quadril, coxa                                                                                                                        200807
+2507Coxa, joelho e perna                                                                                                                                  200807
+2508Perna, tornozelo e pé                                                                                                                                 200807
+2509Ortopedia infantil                                                                                                                                    200807
+2510Traumatologia ortopédica de urgência                                                                                                                  200807
+2511Ortopedia - Coluna                                                                                                                                    200807
+2512Ortopedia - Ombro                                                                                                                                     200807
+2513Ortopedia - Mão                                                                                                                                       200807
+2514Ortopedia - Quadril                                                                                                                                   200807
+2515Ortopedia - Joelho                                                                                                                                    200807
+2516Ortopedia - Tumor Ósseo                                                                                                                               200807
+2517Outros segmentos ósseos                                                                                                                               200807
+2601UTI II - Adulto                                                                                                                                       200807
+2602UTI II - Neonatal                                                                                                                                     200807
+2603UTI II - Pediátrica                                                                                                                                   200807
+2604UTI III - Adulto                                                                                                                                      200807
+2605UTI III - Neonatal                                                                                                                                    200807
+2606UTI III - Pediátrica                                                                                                                                  200807
+2607UTI - Queimados                                                                                                                                       200807
+2699UTI I                                                                                                                                                 200807
+2701Hospital Tipo I em Urgência                                                                                                                           200807
+2702Hospital Tipo II em Urgência                                                                                                                          200807
+2703Hospital Tipo III em Urgência                                                                                                                         200807
+2801Unidade de cuidados intermediários neonatal                                                                                                           200807
+2901Videocirurgia                                                                                                                                         200807
+3001Unidade de Atenção Especializada no Processo de Transgenitalização                                                                                    200807

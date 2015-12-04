@@ -1,0 +1,24 @@
+1 | Química                          | QUI
+2 | Física                           | FIS
+3 | Matemática                       | MAT
+4 | Biologia                         | BIO
+5 | Ciências                         | CIE
+6 | Língua Portuguesa                | LPORT
+7 | Língua estrangeira/Inglês        | LINGL
+8 | Língua estrangeira/Espanhol      | LESPA
+9 | Língua estrangeira/outra         | LOUTR
+10 | Artes                           | ART
+11 | Educação Física                 | EFIS
+12 | História                        | HIS
+13 | Geografia                       | GEO
+14 | Filosofia                       | FIL
+15 | Estudos Sociais/Sociologia      | ESOC
+16 | Informática/Computação          | INF
+17 | Disc. profissionalizantes       | DPROF
+18 | Didática, Metodologia           | DID
+19 | Fundamentos da Educação         | DFUN
+20 | Disc. necessidades especiais    | DNE
+21 | Disc. sócio-cultural            | DSOC
+22 | Outras disciplinas pedagógicas  | OPEDA
+23 | Libras                          | LIB
+24 | Outras disciplinas              | ODISC

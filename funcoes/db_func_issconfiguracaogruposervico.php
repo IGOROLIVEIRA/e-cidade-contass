@@ -1,0 +1,3 @@
+<?
+$campos = "issconfiguracaogruposervico.q136_sequencial,issconfiguracaogruposervico.q136_issgruposervico,issconfiguracaogruposervico.q136_exercicio,issconfiguracaogruposervico.q136_tipotributacao,issconfiguracaogruposervico.q136_valor,issconfiguracaogruposervico.q136_localpagamento";
+?>

@@ -1,0 +1,7 @@
+
+[30/08/2011 08:22:25] 
+[30/08/2011 08:22:25] Iniciando processamento do script : material/MaterialSaldoNegativo.test.php
+[30/08/2011 08:22:25] Pesquisando itens com dados Negativos
+[30/08/2011 08:22:25] Total de itens: 1
+[30/08/2011 08:22:25] [Erro]: Item:19 - SERVIÇOS DIVERSOS Data:2011-01-03 19:17:00  Quantidade:1 Tipo: 19  Estoque: 1 Quantidade Negativa: -1
+[30/08/2011 08:22:25] Encontrados Item com estoque negativo. [Log: log/material/MaterialSaldoNegativo.test.php_20110830_082225.log]

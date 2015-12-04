@@ -1,0 +1,6 @@
+01Atenção Básica (PAB)                                                                                200809
+02Assistência Farmacêutica                                                                            200809
+04Fundo de Ações Estratégicas e Compensações (FAEC)                                                   200809
+05Incentivo - MAC                                                                                     200809
+06Média e Alta Complexidade (MAC)                                                                     200809
+07Vigilância em Saúde                                                                                 200809

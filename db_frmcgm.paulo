@@ -1,0 +1,147 @@
+<?
+  $clcgm->rotulo->label();
+  $clrotulo = new rotulocampo;
+  $clrotulo->label("DBtxt1");
+?>
+<form name="form1" method="post" >
+<table width="790" border="1" cellspacing="0" cellpadding="0">
+  <tr align="center" valign="middle"> 
+    <td height="30" colspan="2"><u>Cadastro Geral do CGM</u></td>
+  </tr>
+  <tr align="left" valign="top"> 
+    <td><table width="50%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td width="27%" title='<?=$Tz01_numcgm?>' nowrap>
+            <?=$Lz01_numcgm?>
+          </td>
+          <td width="73%" nowrap> <input type="hidden" name="z01_cadast" id="z01_cadast" value="<?=date('Y-m-d',db_getsession("DB_datausu")) ?>"> 
+            <input name="numcgm" type="text" id="numcgm" value="<?=@$z01_numcgm?>" title="<?=@$Tz01_numcgm?>" size="6" onblur="js_ValidaCampos(this,4,'<?=$Sz01_numcgm?>')"> 
+            <input name="z01_numcgm" type="hidden" id="z01_numcgm" value="<?=@$z01_numcgm?>"> 
+          </td>
+        </tr>
+        <tr> 
+          <td nowrap title=<?=@$Tz01_nome?>>
+            <?=@$Lz01_nome?>
+          </td>
+          <td nowrap><input name="z01_nome" type="text" id="$z01_nome" value="<?=@$z01_nome?>" title="<?=@$Tz01_nome?>" size="40" maxlength="40" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td width="27%" title="<?=$Tz01_cgccpf?>" nowrap>
+            <?=$Lz01_cgccpf?>
+          </td>
+          <td nowrap> <input name="z01_cgccpf" type="text" id="z01_cgccpf" value="<?=@$z01_cgccpf?>" title="<?=@$z01_cgccpf?>" size="14" maxlength="14" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=$Tz01_tipcre?>">
+            <?=$Lz01_tipcre?>
+          </td>
+          <td nowrap > <select  title="<?=$Tz01_tipcre?>" name="z01_tipcre" id="z01_tipcre" <? if ($opcao=="Excluir") {echo " disabled";}?>>
+              <option value="1" <? echo @$z01_tipcre=="1"?"selected":"" ?>>Administra&ccedil;&atilde;o 
+              P&uacute;blica</option>
+              <option value="2" <? echo @$z01_tipcre=="2"?"selected":"" ?>>N&atilde;o</option>
+            </select></td>
+        </tr>
+        <input name="z01_login" type="hidden" id="z01_login" value="<? if ($db_opcao=="Inserir") {echo $DB_id_usuario;} else {echo @$z01_login;} ?>">
+        <tr> 
+          <td nowrap title=<?=$Tz01_nacion?>>
+            <?=$Lz01_nacion?>
+          </td>
+          <td nowrap> <select  title="<?=$Tz01_nacion?>" name="z01_nacion" id="z01_nacion" <? if ($opcao=="Excluir") {echo " disabled";}?>>
+              <option value="1" <? echo @$z01_nacion=="1"?"selected":"" ?>>Brasileira</option>
+              <option value="2" <? echo @$z01_nacion=="2"?"selected":"" ?>>Estrangeira</option>
+            </select></td>
+        </tr>
+      </table></td>
+    <td><table width="50%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td nowrap title="<?=@$Tz01_incest?>">
+            <?=@$Lz01_incest?>
+          </td>
+          <td nowrap><input name="z01_incest"  title="<?=@$Tz01_incest?>" type="text" id="z01_incest" value="<?=@$z01_incest?>" size="15" maxlength="15" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=@$Tz01_ident?>">
+            <?=@$Lz01_ident?>
+          </td>
+          <td nowrap><input   title="<?=@$Tz01_ident?>" name="z01_ident" type="text" id="z01_ident" value="<?=@$z01_ident?>" size="15" maxlength="15" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td width="27%" title="<?=$Tz01_profis?>" nowrap>
+            <?=$Lz01_profis?>
+          </td>
+          <td nowrap> <input name="z01_profis" title="<?=$Tz01_profis?>" type="text" id="z01_profis" value="<?=@$z01_profis?>" size="40" maxlength="40" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=$Tz01_estciv?>">
+            <?=$Lz01_estciv?>
+          </td>
+          <td nowrap title="<?=$Tz01_estciv?>"> <select name="z01_estciv" id="z01_estciv" <? if ($opcao=="Excluir") {echo " disabled";}?>>
+              <option value="1" <? echo @$z01_estciv=="1"?"selected":"" ?>>Solteiro(a)</option>
+              <option value="2" <? echo @$z01_estciv=="2"?"selected":"" ?>>Casado(a)</option>
+              <option value="3" <? echo @$z01_estciv=="2"?"selected":"" ?>>Viúvo(a)</option>
+              <option value="4" <? echo @$z01_estciv=="2"?"selected":"" ?>>Divorciado(a)</option>
+            </select></td>
+        </tr>
+      </table></tr>
+  <tr> 
+    <td width="50%" align="center" title="<?=$TDBtxt1?>" valign="middle"><?=$LDBtxt1?></td>
+    <td width="50%" align="center" valign="middle"><u>Endere&ccedil;o pra Contato</u></td>
+  </tr>
+  <tr align="center" valign="middle"> 
+    <td width="50%"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr> 
+          <td nowrap title="<?=@$Tz01_ender?>" onClick="javascript: js_abreJanelaLogradouro();">
+            <?=@$Lz01_ender?>
+          </td>
+          <td nowrap><input title="<?=@$Tz01_ender?>" onBlur="javascript: js_abreJanelaCODLogradouro();" type="text" name="codrua" id="codrua" size="5" maxlength="4" <? if ($db_opcao=="Excluir") {echo " disabled";}?>>
+            &nbsp;
+            <input name="z01_ender" type="text" id="z01_ender" value="<?=@$z01_ender?>" size="40" maxlength="40" <? if ($opcao=="Excluir") {echo " disabled";}?>> 
+          </td>
+        </tr>
+        <tr> 
+          <td width="29%" nowrap title="<?=@$Tz01_numero?>">
+            <?=@$Lz01_numero?>
+          </td>
+          <td width="71%" nowrap  ><a name="AN3"> 
+            <input  title="<?=@$Tz01_numero?>" name="z01_numero" type="text" id="z01_numero" value="<?=@$z01_numero?>" size="8" maxlength="7" <? if ($opcao=="Excluir") {echo " disabled";}?>>
+            &nbsp;
+            <?=@$Lz01_compl?>
+            <input title="<?=@$Tz01_compl?>" name="z01_compl" type="text" id="z01_compl" value="<?=@$z01_compl?>" size="20" maxlength="20">
+            </a> </td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=@$Tz01_munic?>">
+            <?=@$Lz01_munic?>
+          </td>
+          <td nowrap><input  title="<?=@$Tz01_munic?>" name="z01_munic" type="text" id="z01_munic" value="<?=@$z01_munic?>" size="20" maxlength="20" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=@$Tz01_uf?>">
+            <?=@$Lz01_uf?>
+          </td>
+          <td nowrap><input title="<?=@$Tz01_uf?>" name="z01_uf" type="text" id="z01_uf" value="<?=@$z01_uf?>" size="2" maxlength="2" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=@$Tz01_bairro?>" onClick="javascript: js_abreJanelaBairros();">
+            <?=@$Lz01_bairro?>
+          </td>
+          <td nowrap><input  title="<?=@$Tz01_bairro?>"  onBlur="javascript: js_abreJanelaCODBairro();" type="text" name="codbairro" id="codbairro" size="5" maxlength="4" <? if ($db_opcao=="Excluir") {echo " disabled";}?>>
+            &nbsp; <input title="<?=@$Tj13_nome?>" name="z01_bairro" type="text" id="z01_bairro" value="<?=@$z01_bairro?>" size="40" maxlength="20" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=@$Tz01_cep?>">
+            <?=@$Lz01_cep?>
+          </td>
+          <td nowrap><input name="z01_cep" title="<?=@$Tz01_cep?>" type="text" id="z01_cep" value="<?=@$z01_cep?>" size="9" maxlength="9" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=@$Tz01_telef?>">
+            <?=@$Lz01_telef?>
+          </td>
+          <td nowrap><input name="z01_telef" title="<?=@$Tz01_telef?>" type="text" id="z01_telef" value="<?=@$z01_telef?>" size="12" maxlength="12" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>
+        </tr>
+        <tr> 
+          <td nowrap title="<?=@$Tz01_telcel?>">
+            <?=@$Lz01_telcel?>
+          </td>
+          <td nowrap><input name="z01_telcel" title="<?=@$Tz01_telcel?>" type="text" id="z01_telcel" value="<?=@$z01_telcel?>" size="12" maxlength="12" <? if (

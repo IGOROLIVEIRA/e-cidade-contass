@@ -1,0 +1,301 @@
+020501Ultra-sonografias do sistema circulatório (qualquer região anatômica)                               200807
+020201Exames bioquimicos                                                                                  200807
+040301Trauma e anomalias do desenvolvimento                                                               200807
+041201Traqueia e brônquios                                                                                200807
+040101Pequenas cirurgias                                                                                  200807
+050401Processamento de córnea/esclera                                                                     200807
+080201Diárias                                                                                             200807
+080301Deslocamento/Ajuda de custo                                                                         200807
+030201Assistência fisioterapêutica em alterações obstétricas, neonatais e uroginecológicas                200807
+030901Terapia nutricional                                                                                 200807
+030601Procedimentos destinados a obtenção do sangue para fins de assistência hemoterapica                 200807
+021301Exames relacionados a doenças e agravos de notificação compulsória                                  200807
+021201Exames do doador/receptor                                                                           200807
+041701Anestesias                                                                                          200807
+040401Cirurgias de ouvido, nariz e garganta                                                               200807
+031001Parto e nascimento                                                                                  200807
+030401Radioterapia                                                                                        200807
+020801Aparelho cardiovascular                                                                             200807
+021001Exames radiológicos de vasos sangüíneos e linfáticos                                                200807
+050201Avaliação clínica de morte encefálica                                                               200807
+010201Vigilancia sanitária                                                                                200807
+010101Educação em saúde                                                                                   200807
+030701Dentística                                                                                          200807
+020701RM da cabeça, pescoço e coluna vertebral                                                            200807
+040801Cintura escapular                                                                                   200807
+050301Ações relacionadas a doação de orgãos, tecidos e células                                            200807
+060201Procoagulantes em coagulopatias hereditárias                                                        200807
+030801Traumatismos                                                                                        200807
+020101Coleta de material por meio de punção/biópsia                                                       200807
+070201OPM em neurocirurgia                                                                                200807
+040701Esôfago, estômago e duodeno                                                                         200807
+041101Parto                                                                                               200807
+040201Cirurgia de tireóide e paratireóide                                                                 200807
+030501Tratamento dialítico                                                                                200807
+020301Exames citopatológicos                                                                              200807
+020901Aparelho digestivo                                                                                  200807
+070101OPM auxiliares da locomoção                                                                         200807
+041501Múltiplas                                                                                           200807
+041601Urologia                                                                                            200807
+041401Buco-maxilo-facial                                                                                  200807
+050501Transplante de tecidos e células                                                                    200807
+080101Incentivos                                                                                          200807
+030101Consultas médicas/outros profissionais  de nivel superior                                           200807
+040501Palpebras e vias lacrimais                                                                          200807
+050601Acompanhamento pós-transplante                                                                      200807
+060101Agentes anticitocinas                                                                               200807
+060301Antiinflamatórios                                                                                   200807
+030301Tratamento de doenças infecciosas e parasitárias                                                    200807
+020401Exames radiológicos da cabeça e pescoço                                                             200807
+021101Diagnóstico em angiologia                                                                           200807
+020601Tomografia da cabeça, pescoço e coluna vertebral                                                    200807
+021401Teste realizado fora da estrutura de laboratório                                                    200807
+040901Rim, ureter e bexiga                                                                                200807
+041801Acessos para dialise                                                                                200807
+041301Tratamento de queimados                                                                             200807
+041001Mama                                                                                                200807
+040601Cirurgia cardiovascular                                                                             200807
+050101Coleta e exames para identificação de doador de células-tronco hematopoéticas (busca nacional)      200807
+030702Endodontia                                                                                          200807
+020302Exames anatomopatológicos                                                                           200807
+020702RM do torax e membros superiores                                                                    200807
+040702Intestinos , reto e anus                                                                            200807
+041402Cirurgia oral                                                                                       200807
+080202Outras ações                                                                                        200807
+030802Intoxicações e envenenamentos                                                                       200807
+030502Tratamento em nefrologia em geral                                                                   200807
+030302Tratamento de doenças do sangue, orgãos hematopoéticos e alguns transtornos imunitários             200807
+020402Exames radiológicos da coluna vertebral                                                             200807
+020502Ultra-sonografias dos demais sistemas                                                               200807
+021202Procedimentos especiais em hemoterápica                                                             200807
+041802Intervençõess cirúrgicas em acessos para diálise                                                    200807
+041102Outras cirurgias relacionadas com o estado gestacional                                              200807
+040602Cirurgia vascular                                                                                   200807
+040302Coluna e nervos periféricos                                                                         200807
+041202Mediastino                                                                                          200807
+060102Antagonista do glutamato                                                                            200807
+030102Atendimento/Acompanhamento em saúde do trabalhador                                                  200807
+030602Medicina transfusional                                                                              200807
+021102Diagnóstico em cardiologia                                                                          200807
+021002Vias biliares                                                                                       200807
+040802Membros superiores                                                                                  200807
+020802Aparelho digestivo                                                                                  200807
+020102Outras formas de coleta de material                                                                 200807
+070102OPM ortopédicas                                                                                     200807
+040902Uretra                                                                                              200807
+041302Reparadora em oncológica                                                                            200807
+060302Imunossupressores                                                                                   200807
+020602Tomografia do torax e membros superiores                                                            200807
+040502Músculos oculomotores                                                                               200807
+041602Sistema linfático                                                                                   200807
+040102Cirurgias de pele, tecido subcutâneo e mucosa                                                       200807
+040202Cirurgia da suprarrenal                                                                             200807
+021302Exames relacionados ao meio ambiente                                                                200807
+020202Exames hematológicos e hemostasia                                                                   200807
+050102Exames de histocompatibilidade para identificação de receptor de células-tronco hematopoéticas      200807
+010102Saúde bucal                                                                                         200807
+030902Terapias em doenças alérgicas                                                                       200807
+020902Aparelho urinário                                                                                   200807
+070202OPM em cirurgia buco-maxilo-facial                                                                  200807
+041502Sequenciais                                                                                         200807
+040402Cirurgia da face e do sistema estomatognomático                                                     200807
+050402Processamento de tecido ósteo-fascio-condro-ligamentoso humano                                      200807
+030202Assistência fisioterapêutica em alterações oncológicas                                              200807
+030402Quimioterapia paliativa - adulto                                                                    200807
+050302Cirurgias para transplante - doador vivo                                                            200807
+050502Transplante de orgãos                                                                               200807
+050602Intercorrência pós transplante                                                                      200807
+021103Diagnóstico cinético funcional                                                                      200807
+040903Próstata e vesicula seminal                                                                         200807
+040803Coluna vertebral e caixa torácica                                                                   200807
+040603Cardiologia intervencionista                                                                        200807
+050303Manutenção e retirada de orgãos e tecidos para transplante                                          200807
+050103Coleta e exames para identificação de doador de células-tronco hematopoéticas (busca internacional) 200807
+060103Antianêmicos não hormonais                                                                          200807
+020703RM do abdomen, pelve e membros inferiores                                                           200807
+040703Pancreas, baco, figado e vias biliares                                                              200807
+040303Tumores do sistema nervoso                                                                          200807
+050403Processamento de válvula/tubo valvado cardíaco humano                                               200807
+030303Tratamento de doenças endocrinas, metabólicas e nutricionais                                        200807
+020403Exames radiológicos do torax e mediastino                                                           200807
+020803Aparelho endócrino                                                                                  200807
+041603Cabeça e pescoço                                                                                    200807
+041203Pleura                                                                                              200807
+060303Imunoterápicos                                                                                      200807
+030103Atendimento pré-hospitalar de urgência                                                              200807
+070203OPM em ortopedia                                                                                    200807
+040503Corpo vítreo, retina, coróide e esclera                                                             200807
+041503Politraumatizados                                                                                   200807
+041303Reparadora para lipodistrofia                                                                       200807
+010103Visita domiciliar                                                                                   200807
+030403Quimioterapia para controle temporário de doença - adulto                                           200807
+020903Aparelho ginecológico                                                                               200807
+070103OPM auditivas                                                                                       200807
+030803Outras consequências de causas externas                                                             200807
+030903Terapias do aparelho geniturinário                                                                  200807
+020203Exames sorológicos e imunológicos                                                                   200807
+030203Assistência fisioterapêutica em oftalmologia                                                        200807
+030703Periodontia clínica                                                                                 200807
+020603Tomografia do abdomen, pelve e membros inferiores                                                   200807
+040403Deformidade lábio palatal e crânio-facial                                                           200807
+021104Diagnóstico em ginecologia-obstetrícia                                                              200807
+020204Exames coprológicos                                                                                 200807
+040504Cavidade orbitária e globo ocular                                                                   200807
+010104Alimentação e nutrição                                                                              200807
+030104Outros atendimentos realizados por profissionais de níveis superior                                 200807
+030404Quimioterapia prévia (neoadjuvante/citorredutora)- adulto                                           200807
+041504Procedimentos cirúrgicos gerais                                                                     200807
+041304Outras cirurgias plásticas/reparadoras                                                              200807
+060304Reguladores de atividade hormonal - inibidores da prolactina                                        200807
+020404Exames radiológicos da cintura escapular e dos membros superiores                                   200807
+070204OPM em assistência cardiovascular                                                                   200807
+040604Cirurgia endovascular                                                                               200807
+030204Assistência fisioterapêutica cardiovasculares e pneumo-funcionais                                   200807
+020804Aparelho geniturinário                                                                              200807
+060104Antianêmicos hormonais                                                                              200807
+030304Tratamento de doenças do sistema nervoso central e periférico                                       200807
+040904Bolsa escrotal, testículos e cordão espermático                                                     200807
+040804Cintura pélvica                                                                                     200807
+030704Moldagem/Manutenção                                                                                 200807
+030904Terapias do aparelho cardiovascular                                                                 200807
+020904Aparelho respiratório                                                                               200807
+070104OPM oftalmológicas                                                                                  200807
+041204Parede torácica                                                                                     200807
+030804Complicações consequentes a procedimentos em saúde                                                  200807
+040704Parede e cavidade abdominal                                                                         200807
+041604Esôfago-gastro duodenal e vísceras anexas e outros orgãos intra-abdominais                          200807
+040304Neurocirurgias vasculares                                                                           200807
+050304Açõess complementares destinadas a doação de orgãos, tecidos e células.                             200807
+050104Exames imunogenéticos/histocompatibilidade para identificação de doador de orgãos                   200807
+030305Tratamento de doenças do aparelho da visão                                                          200807
+020805Aparelho esquelético                                                                                200807
+040505Conjuntiva, córnea, câmara anterior, íris, corpo ciliar e cristalino                                200807
+041605Colo-proctologia                                                                                    200807
+060305Antitrombóticos                                                                                     200807
+030905Práticas integrativas e complementares                                                              200807
+070105OPM em gastroenterologia                                                                            200807
+030105Atenção domiciliar                                                                                  200807
+021105Diagnóstico em neurologia                                                                           200807
+041205Pulmão                                                                                              200807
+030405Quimioterapia adjuvante (profilática) - adulto                                                      200807
+020405Exames radiológicos do abdomen e pelve                                                              200807
+040905Pênis                                                                                               200807
+040805Membros inferiores                                                                                  200807
+030205Assistência fisioterapêutica nas disfunções musculo esqueleticas (todas as origens)                 200807
+040305Tratamento neurocirúrgico da dor funcional                                                          200807
+050105Exames imunogenéticos/histocompatibilidade para identificação de receptor de orgãos                 200807
+070205OPM comuns                                                                                          200807
+040605Eletrofisiologia                                                                                    200807
+060105Antiasmáticos                                                                                       200807
+020205Exames de uroanálise                                                                                200807
+030206Assistência fisioterapêutica nas alterações em neurologia                                           200807
+020806Aparelho nervoso                                                                                    200807
+070206OPM em urologia                                                                                     200807
+030306Tratamento de doenças cardiovasculares                                                              200807
+070106OPM em urologia                                                                                     200807
+030106Consulta/Atendimento ás urgências (em geral)                                                        200807
+030406Quimioterapia curativa - adulto                                                                     200807
+040806Gerais                                                                                              200807
+040306Investigação e cirurgia da epilepsia                                                                200807
+050106Exames gréficos ou por imagem para diagnóstico de morte encefálica                                  200807
+060306Tensiolítico alveolar                                                                               200807
+020406Exames radiológicos da cintura pélvica e dos membros inferiores                                     200807
+020206Exames hormonais                                                                                    200807
+041606Ginecologia                                                                                         200807
+021106Diagnóstico em oftalmologia                                                                         200807
+040906Útero e anexos                                                                                      200807
+060106Antibióticos                                                                                        200807
+020807Aparelho respiratório                                                                               200807
+060307Hemoderivados                                                                                       200807
+021107Diagnóstico em otorrinolaringologia/fonoaudiologia                                                  200807
+030207Assistência fisioterapêutica em queimados                                                           200807
+030307Tratamento de doenças do aparelho digestivo                                                         200807
+070207OPM em cirurgias oftálmicas                                                                         200807
+070107OPM em odontologia                                                                                  200807
+040907Vagina, vulva e períneo                                                                             200807
+040307Tratamento neuro-endovascular                                                                       200807
+030107Atendimento/acompanhamento em reabilitação física, mental, visual e múltiplas deficiências          200807
+020207Exames toxicológicos ou de monitorização terapêutica                                                200807
+041607Oftalmologia                                                                                        200807
+030407Quimioterapia de tumores de crianca e adolescente                                                   200807
+050107Outros exames complementares para doação de orgãos, tecidos e células                               200807
+060107Antiepiléticos                                                                                      200807
+030108Atendimento/Acompanhamento psicossocial                                                             200807
+030308Tratamento de doenças da pele e do tecido  subcutâneo                                               200807
+020208Exames microbiológicos                                                                              200807
+060108Antiinflamatórios                                                                                   200807
+021108Diagnóstico em pneumologia                                                                          200807
+040308Neurocirurgia funcional estereotáxica                                                               200807
+070108OPM de anomalias buco-maxilo-facial                                                                 200807
+041608Pele e cirurgia plástica                                                                            200807
+050108Exames complementares para pacientes transplantados                                                 200807
+070208OPM em cirurgia plástica/reparadora                                                                 200807
+030408Quimioterapia - procedimentos especiais                                                             200807
+020808Aparelho hematológico                                                                               200807
+060308Medicamentos para transplante                                                                       200807
+020809Outros métodos de diagnóstico em medicina nuclear in vivo                                           200807
+020209Exames em outros líquidos biológicos                                                                200807
+030109Atendimento/Acompanhamento em saúde do idoso                                                        200807
+021109Diagnóstico em urologia                                                                             200807
+070209OPM em cirurgia de otorrinolaringologia                                                             200807
+060109Antiinflamatórios intestinais                                                                       200807
+070109Substituição/Troca em órteses/próteses                                                              200807
+030309Tratamento de doenças do sistema osteomuscular e do tecido conjuntivo                               200807
+041609Ossos e partes moles                                                                                200807
+030409Medicina nuclear - terapêutica oncológica                                                           200807
+030410Gerais em oncologia                                                                                 200807
+021110Diagnóstico em psicologia-psiquiatria                                                               200807
+070110OPM em queimados                                                                                    200807
+041610Neurocirurgia                                                                                       200807
+030110Atendimentos de enfermagem (em geral)                                                               200807
+020210Exames de genética                                                                                  200807
+030310Tratamento durante a gestação, parto e puerpério                                                    200807
+060110Antiparkinsonianos                                                                                  200807
+070210OPM em nefrologia                                                                                   200807
+060111Antipsicóticos                                                                                      200807
+070211OPM em queimados                                                                                    200807
+030311Tratamento de malformações congênitas, deformidades e anomalias cromossômicas                       200807
+030111Atendimento/Acompanhamento queimados                                                                200807
+041611Cirurgia torácica                                                                                   200807
+021111Diagnóstico em cardiologia intervencionista                                                         200807
+020211Exames para triagem neonatal                                                                        200807
+030112Atendimento/acompanhamento de diagnóstico de doenças endocrinas/metabolicas e nutricionais          200807
+041612Mastologia                                                                                          200807
+021112Diagnóstico em traumato-ortopedia                                                                   200807
+020212Exames imunohematológicos                                                                           200807
+060112Antivirais                                                                                          200807
+030312Tratamentos por medicina nuclear in vivo                                                            200807
+070212OPM para transplantes                                                                               200807
+030313Tratamento de pacientes sob cuidados prolongados                                                    200807
+041613Otorrinolaringologia                                                                                200807
+030113Acompanhamento em outras especialidades                                                             200807
+060113Bloqueadores neuromusculares                                                                        200807
+030314Tratamento de doenças do ouvido/apófise mastóide e vias aéreas                                      200807
+060114Ceratolíticos sistêmicos                                                                            200807
+030315Tratamento das doenças do aparelho geniturinário                                                    200807
+060115Complementos alimentares para fenilcetonúricos                                                      200807
+030316Tratamento de algumas afecçõess originadas no período neonatal                                      200807
+060116Fatores de crescimento mielóides                                                                    200807
+030317Tratamento dos transtornos mentais e comportamentais                                                200807
+060117Hipnoanalgésicos                                                                                    200807
+060118Hipolipemiantes                                                                                     200807
+030318Tratamento HIV/AIDS                                                                                 200807
+060119Imunomoduladores                                                                                    200807
+030319Reabilitação                                                                                        200807
+060120Imunossupressores                                                                                   200807
+060121Imunoterapicos                                                                                      200807
+060122Inibidores da acetilcolinesterase                                                                   200807
+060123Mucolíticos                                                                                         200807
+060124Quelantes do ferro                                                                                  200807
+060125Outros quelantes                                                                                    200807
+060126Reguladores da atividade hormonal-agonistas da vasopressina                                         200807
+060127Reguladores da atividade hormonal-analogos do GNRH                                                  200807
+060128Reguladores da atividade hormonal-antiandrogênicos                                                  200807
+060129Reguladores da atividade hormonal-inibidores das gonadotrofinas                                     200807
+060130Reguladores da atividade hormonal-inibidores do hormônio do crescimento                             200807
+060131Reguladores da atividade hormonal-inibidores de prolactina                                          200807
+060132Reguladores da atividade hormonal-hormonios de crescimento                                          200807
+060133Reguladores da atividade hormonal-hormonios tireoidianos                                            200807
+060134Reguladores da atividade hormonal-mineralocorticóides                                               200807
+060135Reguladores da homeostase do cálcio                                                                 200807
+060136Repositores enzimáticos                                                                             200807

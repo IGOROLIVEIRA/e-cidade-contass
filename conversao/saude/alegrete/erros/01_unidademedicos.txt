@@ -1,0 +1,22 @@
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medi_fk
+DETAIL:  Chave (sd04_i_medico)=(95341) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (218, 1350, 95341, 0, '',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medi_fk
+DETAIL:  Chave (sd04_i_medico)=(95341) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (234, 135011, 95341, 0, '',
+                                  'A',
+                                  null, null
+                                 )
+            

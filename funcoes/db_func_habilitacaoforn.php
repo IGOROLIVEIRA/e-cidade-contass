@@ -1,0 +1,3 @@
+<?
+$campos = "habilitacaoforn.l206_sequencial,habilitacaoforn.l206_fornecedor,habilitacaoforn.l206_licitacao,habilitacaoforn.l206_representante,habilitacaoforn.l206_datahab,habilitacaoforn.l206_numcertidaoinss,habilitacaoforn.l206_dataemissaoinss,habilitacaoforn.l206_datavalidadeinss,habilitacaoforn.l206_numcertidaofgts,habilitacaoforn.l206_dataemissaofgts,habilitacaoforn.l206_datavalidadefgts,habilitacaoforn.l206_numcertidaocndt,habilitacaoforn.l206_dataemissaocndt,habilitacaoforn.l206_datavalidadecndt";
+?>

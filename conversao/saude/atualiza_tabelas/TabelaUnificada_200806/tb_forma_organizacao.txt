@@ -1,0 +1,301 @@
+010101Educação em saúde                                                                                   200806
+080301Deslocamento/Ajuda de custo                                                                         200806
+020101Coleta de material por meio de punção/biópsia                                                       200806
+020201Exames bioquimicos                                                                                  200806
+020301Exames citopatológicos                                                                              200806
+020401Exames radiológicos da cabeça e pescoço                                                             200806
+020501Ultra-sonografias do sistema circulatório (qualquer região anatômica)                               200806
+020601Tomografia da cabeça, pescoço e coluna vertebral                                                    200806
+020701RM da cabeça, pescoço e coluna vertebral                                                            200806
+020801Aparelho cardiovascular                                                                             200806
+020901Aparelho digestivo                                                                                  200806
+021001Exames radiológicos de vasos sangüíneos e linfáticos                                                200806
+021101Diagnóstico em angiologia                                                                           200806
+021201Exames do doador/receptor                                                                           200806
+021301Exames relacionados a doenças e agravos de notificação compulsória                                  200806
+021401Teste realizado fora da estrutura de laboratório                                                    200806
+030101Consultas médicas/outros profissionais  de nivel superior                                           200806
+030201Assistência fisioterapêutica em alterações obstétricas, neonatais e uroginecológicas                200806
+030301Tratamento de doenças infecciosas e parasitárias                                                    200806
+030401Radioterapia                                                                                        200806
+030501Tratamento dialítico                                                                                200806
+030601Procedimentos destinados a obtenção do sangue para fins de assistência hemoterapica                 200806
+030701Dentística                                                                                          200806
+030801Traumatismos                                                                                        200806
+030901Terapia nutricional                                                                                 200806
+031001Parto e nascimento                                                                                  200806
+040101Pequenas cirurgias                                                                                  200806
+040201Cirurgia de tireóide e paratireóide                                                                 200806
+040301Trauma e anomalias do desenvolvimento                                                               200806
+040401Cirurgias de ouvido, nariz e garganta                                                               200806
+040501Palpebras e vias lacrimais                                                                          200806
+040601Cirurgia cardiovascular                                                                             200806
+040701Esôfago, estômago e duodeno                                                                         200806
+040801Cintura escapular                                                                                   200806
+040901Rim, ureter e bexiga                                                                                200806
+041001Mama                                                                                                200806
+041101Parto                                                                                               200806
+041201Traqueia e brônquios                                                                                200806
+041301Tratamento de queimados                                                                             200806
+041401Buco-maxilo-facial                                                                                  200806
+041501Múltiplas                                                                                           200806
+041601Urologia                                                                                            200806
+041701Anestesias                                                                                          200806
+041801Acessos para dialise                                                                                200806
+050101Coleta e exames para identificação de doador de células-tronco hematopoéticas (busca nacional)      200806
+050201Avaliação clínica de morte encefálica                                                               200806
+050301Ações relacionadas a doação de orgãos, tecidos e células                                            200806
+050401Processamento de córnea/esclera                                                                     200806
+050501Transplante de tecidos e células                                                                    200806
+050601Acompanhamento pós-transplante                                                                      200806
+060101Agentes anticitocinas                                                                               200806
+060201Procoagulantes em coagulopatias hereditárias                                                        200806
+060301Antiinflamatórios                                                                                   200806
+070101OPM auxiliares da locomoção                                                                         200806
+070201OPM em neurocirurgia                                                                                200806
+080101Incentivos                                                                                          200806
+080201Diárias                                                                                             200806
+010201Vigilancia sanitária                                                                                200806
+010102Saúde bucal                                                                                         200806
+020102Outras formas de coleta de material                                                                 200806
+020202Exames hematológicos e hemostasia                                                                   200806
+020302Exames anatomopatológicos                                                                           200806
+020402Exames radiológicos da coluna vertebral                                                             200806
+020502Ultra-sonografias dos demais sistemas                                                               200806
+020602Tomografia do torax e membros superiores                                                            200806
+020702RM do torax e membros superiores                                                                    200806
+020802Aparelho digestivo                                                                                  200806
+020902Aparelho urinário                                                                                   200806
+021002Vias biliares                                                                                       200806
+021102Diagnóstico em cardiologia                                                                          200806
+021202Procedimentos especiais em hemoterápica                                                             200806
+021302Exames relacionados ao meio ambiente                                                                200806
+030102Atendimento/Acompanhamento em saúde do trabalhador                                                  200806
+030202Assistência fisioterapêutica em alterações oncológicas                                              200806
+030302Tratamento de doenças do sangue, orgãos hematopoéticos e alguns transtornos imunitários             200806
+030402Quimioterapia paliativa - adulto                                                                    200806
+030502Tratamento em nefrologia em geral                                                                   200806
+030602Medicina transfusional                                                                              200806
+030702Endodontia                                                                                          200806
+030802Intoxicações e envenenamentos                                                                       200806
+030902Terapias em doenças alérgicas                                                                       200806
+040102Cirurgias de pele, tecido subcutâneo e mucosa                                                       200806
+040202Cirurgia da suprarrenal                                                                             200806
+040302Coluna e nervos periféricos                                                                         200806
+040402Cirurgia da face e do sistema estomatognomático                                                     200806
+040502Músculos oculomotores                                                                               200806
+040602Cirurgia vascular                                                                                   200806
+040702Intestinos , reto e anus                                                                            200806
+040802Membros superiores                                                                                  200806
+040902Uretra                                                                                              200806
+041102Outras cirurgias relacionadas com o estado gestacional                                              200806
+041202Mediastino                                                                                          200806
+041302Reparadora em oncológica                                                                            200806
+041402Cirurgia oral                                                                                       200806
+041502Sequenciais                                                                                         200806
+041602Sistema linfático                                                                                   200806
+041802Intervençõess cirúrgicas em acessos para diálise                                                    200806
+050102Exames de histocompatibilidade para identificação de receptor de células-tronco hematopoéticas      200806
+050302Cirurgias para transplante - doador vivo                                                            200806
+050402Processamento de tecido ósteo-fascio-condro-ligamentoso humano                                      200806
+050502Transplante de orgãos                                                                               200806
+050602Intercorrência pós transplante                                                                      200806
+060102Antagonista do glutamato                                                                            200806
+060302Imunossupressores                                                                                   200806
+070102OPM ortopédicas                                                                                     200806
+070202OPM em cirurgia buco-maxilo-facial                                                                  200806
+080202Outras ações                                                                                        200806
+070203OPM em ortopedia                                                                                    200806
+030903Terapias do aparelho geniturinário                                                                  200806
+040403Deformidade lábio palatal e crânio-facial                                                           200806
+040503Corpo vítreo, retina, coróide e esclera                                                             200806
+040603Cardiologia intervencionista                                                                        200806
+040703Pancreas, baco, figado e vias biliares                                                              200806
+040803Coluna vertebral e caixa torácica                                                                   200806
+040903Próstata e vesicula seminal                                                                         200806
+041203Pleura                                                                                              200806
+041303Reparadora para lipodistrofia                                                                       200806
+041503Politraumatizados                                                                                   200806
+041603Cabeça e pescoço                                                                                    200806
+050103Coleta e exames para identificação de doador de células-tronco hematopoéticas (busca internacional) 200806
+050303Manutenção e retirada de orgãos e tecidos para transplante                                          200806
+050403Processamento de válvula/tubo valvado cardíaco humano                                               200806
+060103Antianêmicos não hormonais                                                                          200806
+060303Imunoterápicos                                                                                      200806
+070103OPM auditivas                                                                                       200806
+010103Visita domiciliar                                                                                   200806
+020203Exames sorológicos e imunológicos                                                                   200806
+020403Exames radiológicos do torax e mediastino                                                           200806
+020603Tomografia do abdomen, pelve e membros inferiores                                                   200806
+020703RM do abdomen, pelve e membros inferiores                                                           200806
+020803Aparelho endócrino                                                                                  200806
+020903Aparelho ginecológico                                                                               200806
+021103Diagnóstico cinético funcional                                                                      200806
+030103Atendimento pré-hospitalar de urgência                                                              200806
+030203Assistência fisioterapêutica em oftalmologia                                                        200806
+030303Tratamento de doenças endocrinas, metabólicas e nutricionais                                        200806
+030403Quimioterapia para controle temporário de doença - adulto                                           200806
+030703Periodontia clínica                                                                                 200806
+030803Outras consequências de causas externas                                                             200806
+040303Tumores do sistema nervoso                                                                          200806
+070204OPM em assistência cardiovascular                                                                   200806
+030904Terapias do aparelho cardiovascular                                                                 200806
+040504Cavidade orbitária e globo ocular                                                                   200806
+040604Cirurgia endovascular                                                                               200806
+040704Parede e cavidade abdominal                                                                         200806
+040804Cintura pélvica                                                                                     200806
+040904Bolsa escrotal, testículos e cordão espermático                                                     200806
+041204Parede torácica                                                                                     200806
+041304Outras cirurgias plásticas/reparadoras                                                              200806
+041504Procedimentos cirúrgicos gerais                                                                     200806
+041604Esôfago-gastro duodenal e vísceras anexas e outros orgãos intra-abdominais                          200806
+050104Exames imunogenéticos/histocompatibilidade para identificação de doador de orgãos                   200806
+050304Açõess complementares destinadas a doação de orgãos, tecidos e células.                             200806
+060104Antianêmicos hormonais                                                                              200806
+060304Reguladores de atividade hormonal - inibidores da prolactina                                        200806
+070104OPM oftalmológicas                                                                                  200806
+010104Alimentação e nutrição                                                                              200806
+020204Exames coprológicos                                                                                 200806
+020404Exames radiológicos da cintura escapular e dos membros superiores                                   200806
+020804Aparelho geniturinário                                                                              200806
+020904Aparelho respiratório                                                                               200806
+021104Diagnóstico em ginecologia-obstetrícia                                                              200806
+030104Outros atendimentos realizados por profissionais de níveis superior                                 200806
+030204Assistência fisioterapêutica cardiovasculares e pneumo-funcionais                                   200806
+030304Tratamento de doenças do sistema nervoso central e periférico                                       200806
+030404Quimioterapia prévia (neoadjuvante/citorredutora)- adulto                                           200806
+030704Moldagem/Manutenção                                                                                 200806
+030804Complicações consequentes a procedimentos em saúde                                                  200806
+040304Neurocirurgias vasculares                                                                           200806
+070205OPM comuns                                                                                          200806
+030905Práticas integrativas e complementares                                                              200806
+040505Conjuntiva, córnea, câmara anterior, íris, corpo ciliar e cristalino                                200806
+040605Eletrofisiologia                                                                                    200806
+040805Membros inferiores                                                                                  200806
+040905Pênis                                                                                               200806
+041205Pulmão                                                                                              200806
+041605Colo-proctologia                                                                                    200806
+050105Exames imunogenéticos/histocompatibilidade para identificação de receptor de orgãos                 200806
+060105Antiasmáticos                                                                                       200806
+060305Antitrombóticos                                                                                     200806
+070105OPM em gastroenterologia                                                                            200806
+020205Exames de uroanálise                                                                                200806
+020405Exames radiológicos do abdomen e pelve                                                              200806
+020805Aparelho esquelético                                                                                200806
+021105Diagnóstico em neurologia                                                                           200806
+030105Atenção domiciliar                                                                                  200806
+030205Assistência fisioterapêutica nas disfunções musculo esqueleticas (todas as origens)                 200806
+030305Tratamento de doenças do aparelho da visão                                                          200806
+030405Quimioterapia adjuvante (profilática) - adulto                                                      200806
+040305Tratamento neurocirúrgico da dor funcional                                                          200806
+070206OPM em urologia                                                                                     200806
+030406Quimioterapia curativa - adulto                                                                     200806
+040806Gerais                                                                                              200806
+040906Útero e anexos                                                                                      200806
+041606Ginecologia                                                                                         200806
+050106Exames gréficos ou por imagem para diagnóstico de morte encefálica                                  200806
+060106Antibióticos                                                                                        200806
+060306Tensiolítico alveolar                                                                               200806
+070106OPM em urologia                                                                                     200806
+020206Exames hormonais                                                                                    200806
+020406Exames radiológicos da cintura pélvica e dos membros inferiores                                     200806
+020806Aparelho nervoso                                                                                    200806
+021106Diagnóstico em oftalmologia                                                                         200806
+030106Consulta/Atendimento ás urgências (em geral)                                                        200806
+030206Assistência fisioterapêutica nas alterações em neurologia                                           200806
+030306Tratamento de doenças cardiovasculares                                                              200806
+040306Investigação e cirurgia da epilepsia                                                                200806
+070107OPM em odontologia                                                                                  200806
+070207OPM em cirurgias oftálmicas                                                                         200806
+040307Tratamento neuro-endovascular                                                                       200806
+040907Vagina, vulva e períneo                                                                             200806
+041607Oftalmologia                                                                                        200806
+050107Outros exames complementares para doação de orgãos, tecidos e células                               200806
+060107Antiepiléticos                                                                                      200806
+060307Hemoderivados                                                                                       200806
+020207Exames toxicológicos ou de monitorização terapêutica                                                200806
+020807Aparelho respiratório                                                                               200806
+021107Diagnóstico em otorrinolaringologia/fonoaudiologia                                                  200806
+030107Atendimento/acompanhamento em reabilitação física, mental, visual e múltiplas deficiências          200806
+030207Assistência fisioterapêutica em queimados                                                           200806
+030307Tratamento de doenças do aparelho digestivo                                                         200806
+030407Quimioterapia de tumores de crianca e adolescente                                                   200806
+070108OPM de anomalias buco-maxilo-facial                                                                 200806
+020208Exames microbiológicos                                                                              200806
+030408Quimioterapia - procedimentos especiais                                                             200806
+030308Tratamento de doenças da pele e do tecido  subcutâneo                                               200806
+030108Atendimento/Acompanhamento psicossocial                                                             200806
+021108Diagnóstico em pneumologia                                                                          200806
+020808Aparelho hematológico                                                                               200806
+060308Medicamentos para transplante                                                                       200806
+060108Antiinflamatórios                                                                                   200806
+050108Exames complementares para pacientes transplantados                                                 200806
+041608Pele e cirurgia plástica                                                                            200806
+070208OPM em cirurgia plástica/reparadora                                                                 200806
+040308Neurocirurgia funcional estereotáxica                                                               200806
+021109Diagnóstico em urologia                                                                             200806
+060109Antiinflamatórios intestinais                                                                       200806
+030109Atendimento/Acompanhamento em saúde do idoso                                                        200806
+020809Outros métodos de diagnóstico em medicina nuclear in vivo                                           200806
+070109Substituição/Troca em órteses/próteses                                                              200806
+030309Tratamento de doenças do sistema osteomuscular e do tecido conjuntivo                               200806
+020209Exames em outros líquidos biológicos                                                                200806
+070209OPM em cirurgia de otorrinolaringologia                                                             200806
+030409Medicina nuclear - terapêutica oncológica                                                           200806
+041609Ossos e partes moles                                                                                200806
+070110OPM em queimados                                                                                    200806
+030310Tratamento durante a gestação, parto e puerpério                                                    200806
+030410Gerais em oncologia                                                                                 200806
+021110Diagnóstico em psicologia-psiquiatria                                                               200806
+041610Neurocirurgia                                                                                       200806
+060110Antiparkinsonianos                                                                                  200806
+030110Atendimentos de enfermagem (em geral)                                                               200806
+070210OPM em nefrologia                                                                                   200806
+020210Exames de genética                                                                                  200806
+030311Tratamento de malformações congênitas, deformidades e anomalias cromossômicas                       200806
+030111Atendimento/Acompanhamento queimados                                                                200806
+021111Diagnóstico em cardiologia intervencionista                                                         200806
+020211Exames para triagem neonatal                                                                        200806
+070211OPM em queimados                                                                                    200806
+060111Antipsicóticos                                                                                      200806
+041611Cirurgia torácica                                                                                   200806
+060112Antivirais                                                                                          200806
+041612Mastologia                                                                                          200806
+070212OPM para transplantes                                                                               200806
+021112Diagnóstico em traumato-ortopedia                                                                   200806
+030312Tratamentos por medicina nuclear in vivo                                                            200806
+030112Atendimento/acompanhamento de diagnóstico de doenças endocrinas/metabolicas e nutricionais          200806
+020212Exames imunohematológicos                                                                           200806
+041613Otorrinolaringologia                                                                                200806
+030113Acompanhamento em outras especialidades                                                             200806
+030313Tratamento de pacientes sob cuidados prolongados                                                    200806
+060113Bloqueadores neuromusculares                                                                        200806
+060114Ceratolíticos sistêmicos                                                                            200806
+030314Tratamento de doenças do ouvido/apófise mastóide e vias aéreas                                      200806
+030315Tratamento das doenças do aparelho geniturinário                                                    200806
+060115Complementos alimentares para fenilcetonúricos                                                      200806
+030316Tratamento de algumas afecçõess originadas no período neonatal                                      200806
+060116Fatores de crescimento mielóides                                                                    200806
+030317Tratamento dos transtornos mentais e comportamentais                                                200806
+060117Hipnoanalgésicos                                                                                    200806
+060118Hipolipemiantes                                                                                     200806
+030318Tratamento HIV/AIDS                                                                                 200806
+030319Reabilitação                                                                                        200806
+060119Imunomoduladores                                                                                    200806
+060120Imunossupressores                                                                                   200806
+060121Imunoterapicos                                                                                      200806
+060122Inibidores da acetilcolinesterase                                                                   200806
+060123Mucolíticos                                                                                         200806
+060124Quelantes do ferro                                                                                  200806
+060125Outros quelantes                                                                                    200806
+060126Reguladores da atividade hormonal-agonistas da vasopressina                                         200806
+060127Reguladores da atividade hormonal-analogos do GNRH                                                  200806
+060128Reguladores da atividade hormonal-antiandrogênicos                                                  200806
+060129Reguladores da atividade hormonal-inibidores das gonadotrofinas                                     200806
+060130Reguladores da atividade hormonal-inibidores do hormônio do crescimento                             200806
+060131Reguladores da atividade hormonal-inibidores de prolactina                                          200806
+060132Reguladores da atividade hormonal-hormonios de crescimento                                          200806
+060133Reguladores da atividade hormonal-hormonios tireoidianos                                            200806
+060134Reguladores da atividade hormonal-mineralocorticóides                                               200806
+060135Reguladores da homeostase do cálcio                                                                 200806
+060136Repositores enzimáticos                                                                             200806

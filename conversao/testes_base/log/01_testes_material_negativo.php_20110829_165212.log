@@ -1,0 +1,31 @@
+
+[29/08/2011 16:52:12] - BASE PARA IMPORTACAO Prefeitura: host=localhost 
+                dbname=cmbocaiuva 
+                port=5432 
+                user=dbportal 
+                password=
+[29/08/2011 16:52:12] 
+[29/08/2011 16:52:12] *** INICIO Script 01_testes_material_negativo.php ***
+[29/08/2011 16:52:12] 
+[29/08/2011 16:52:12] Arquivo de Log: log/01_testes_material_negativo.php_20110829_165212.log
+[29/08/2011 16:52:12]     Script PHP: 01_testes_material_negativo.php
+[29/08/2011 16:52:12] 
+[29/08/2011 16:52:12] Iniciando Sessao
+[29/08/2011 16:52:13] Setando Variáveis da Sessao
+[29/08/2011 16:52:13] Iniciando Processamento
+
+
+[29/08/2011 16:52:13] Processando SaldoEstoqueDiferenteMovimentacao.test.php
+[29/08/2011 16:52:13] Script: SaldoEstoqueDiferenteMovimentacao.test.php Não encontrou erro ................................................................................ [  OK  ]
+[29/08/2011 16:52:13] 
+[29/08/2011 16:52:13] Processando MaterialSaidaAnteriorentrada.test.php
+[29/08/2011 16:52:13] Script: MaterialSaidaAnteriorentrada.test.php Não encontrou erro ..................................................................................... [  OK  ]
+[29/08/2011 16:52:13] 
+[29/08/2011 16:52:13] Processando MaterialSaldoNegativo.test.php
+[29/08/2011 16:52:13] Script: MaterialSaldoNegativo.test.php Não encontrou erro ............................................................................................ [  OK  ]
+[29/08/2011 16:52:13] 
+[29/08/2011 16:52:13] Inicio: 16:52:12
+[29/08/2011 16:52:13] Final.: 16:52:13
+[29/08/2011 16:52:13] 
+[29/08/2011 16:52:13] *** FINAL Script 01_testes_material_negativo.php ***
+[29/08/2011 16:52:13] 

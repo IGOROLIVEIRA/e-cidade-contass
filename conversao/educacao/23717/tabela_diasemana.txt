@@ -1,0 +1,7 @@
+1 | DOMINGO         | D
+2 | SEGUNDA         | S
+3 | TERÇA           | T
+4 | QUARTA          | Q
+5 | QUINTA          | Q
+6 | SEXTA           | S
+7 | SÁBADO          | S

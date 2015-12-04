@@ -1,0 +1,31 @@
+<?
+$DB_COR_FUNDO = "#00CCFF";
+$DB_FILES = "/e-cidade/imagens/files";
+$DB_DIRPCB = "/home/sistema";
+$DB_EXEC = "/usr/bin/dbs";
+$DB_NETSTAT = "netstat";
+$DB_USUARIO = "dbportal";
+$DB_SENHA = "";
+
+
+// Array de Servidores
+/*
+$DB_CONEXAO[0]["SERVIDOR"] = "localhost";
+$DB_CONEXAO[0]["BASE"]     = "%";
+$DB_CONEXAO[0]["PORTA"]    = "5432";
+$DB_CONEXAO[0]["USUARIO"]  = "dbportal";
+$DB_CONEXAO[0]["SENHA"]    = "";
+*/
+$DB_SERVIDOR = "localhost";
+$DB_BASE     = "cmarinos";
+$DB_PORTA    = "5432";
+$DB_BASE_CORRETA = "";
+
+$DB_SELLER = "on";
+$DB_VALIDA_REQUISITOS = false;
+
+$DB_PORTA_ALT = "5432";
+
+#ini_set("error_reporting","E_ALL & ~NOTICE");
+
+?>

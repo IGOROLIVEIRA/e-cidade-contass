@@ -1,0 +1,218 @@
+<?
+  $clcgm->rotulo->label();
+  $cldb_cgmruas->rotulo->label();
+  $cldb_cgmbairro->rotulo->label();
+  $clrotulo = new rotulocampo;
+  $clrotulo->label("DBtxt1");
+  $clrotulo->label("DBtxt5");
+  
+?> 
+<table width="100%" border="0" cellspacing="0">
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<form name="form1" method="post" >
+  <table width="730" border="1" cellspacing="0" cellpadding="0">
+    <tr align="left" valign="top"> 
+      <td><table width="50%" border="0" cellspacing="0" cellpadding="0">
+          <tr> 
+            <td width="27%" title='<?=$Tz01_numcgm?>' nowrap> 
+              <?=$Lz01_numcgm?>
+            </td>
+            <td width="73%" nowrap> 
+             <input type="hidden" name="z01_cadast" id="z01_cadast" value="<?=date('Y-m-d',db_getsession("DB_datausu")) ?>"> 
+          <?
+		  db_input('z01_numcgm',6,$Iz01_numcgm,true,'text',3);
+		  ?>
+         </td>
+          </tr>
+          <tr> 
+            <td nowrap title=<?=@$Tz01_nome?>> 
+              <?=@$Lz01_nome?>
+            </td>
+            <td nowrap title="<?=@$Tz01_nome?>"> 
+              <?
+		  db_input('z01_nome',40,$Iz01_nome,true,'text',$db_opcao);
+		  ?>
+              <!--input title="<?=@$Tz01_nome?>" name="z01_nome" 
+		  type="text" id="z01_nome" 
+		  value="<?=@$z01_nome?>" 
+		  size="40" maxlength="<?=@$Mz01_nome?>" <? if ($db_opcao=="Excluir") {echo " disabled";}?> 
+		  onBlur="js_ValidaCampos(this,2,'<?=$Sz01_nome?>','<?=$Uz01_nome?>');" <?=$Uz01_nome?>-->
+            </td>
+          </tr>
+          <tr> 
+            <td width="27%" title="<?=$Tz01_cgccpf?>" nowrap> 
+              <?=$Lz01_cgccpf?>
+            </td>
+            <td nowrap> 
+              <?
+		  db_input('z01_cgccpf',14,$Iz01_cgccpf,true,'text',$db_opcao);
+		  ?>
+            </td>
+          </tr>
+          <tr> 
+            <td nowrap title="<?=$Tz01_tipcre?>"> 
+              <?=$Lz01_tipcre?>
+            </td>
+            <td nowrap > 
+			<?
+		    $x = array("1"=>"Empresa Pública","2"=>"Empresa Privada");
+		    db_select('z01_tipcre',$x,true,$db_opcao);
+		    ?>
+			<!--select  title="<?=$Tz01_tipcre?>" name="z01_tipcre" id="z01_tipcre" <? if ($opcao=="Excluir") {echo " disabled";}?>>
+                <option value="1" <? echo @$z01_tipcre=="1"?"selected":"" ?>>Administra&ccedil;&atilde;o 
+                P&uacute;blica</option>
+                <option value="2" <? echo @$z01_tipcre=="2"?"selected":"" ?>>N&atilde;o</option>
+              </select--></td>
+          </tr>
+          <input name="z01_login" type="hidden" id="z01_login" value="<? if ($db_opcao=="Inserir") {echo $DB_id_usuario;} else {echo @$z01_login;} ?>">
+          <tr> 
+            <td nowrap title=<?=$Tz01_nacion?>> 
+              <?=$Lz01_nacion?>
+            </td>
+            <td nowrap> 
+			<?
+		    $x = array("1"=>"Brasileira","2"=>"Estrangeira");
+		    db_select('z01_nacion',$x,true,$db_opcao);
+		    ?>
+			<!--select  title="<?=$Tz01_nacion?>" name="z01_nacion" id="z01_nacion" <? if ($opcao=="Excluir") {echo " disabled";}?>>
+                <option value="1" <? echo @$z01_nacion=="1"?"selected":"" ?>>Brasileira</option>
+                <option value="2" <? echo @$z01_nacion=="2"?"selected":"" ?>>Estrangeira</option>
+              </select--></td>
+          </tr>
+        </table></td>
+      <td><table width="50%" border="0" cellspacing="0" cellpadding="0">
+          <tr> 
+            <td nowrap title="<?=@$Tz01_incest?>"> 
+              <?=@$Lz01_incest?>
+            </td>
+            <td nowrap> 
+              <?
+
+		  db_input('z01_incest',15,$Iz01_incest,true,'text',$db_opcao);
+
+		  ?>
+              <!-- <input name="z01_incest"  title="<?=@$Tz01_incest?>" type="text" id="z01_incest" value="<?=@$z01_incest?>" size="15" maxlength="15" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>-->
+          </tr>
+          <tr> 
+            <td nowrap title="<?=@$Tz01_ident?>"> 
+              <?=@$Lz01_ident?>
+            </td>
+            <td nowrap> 
+              <!--<input title="<?=@$Tz01_ident?>" name="z01_ident" type="text" id="z01_ident" value="<?=@$z01_ident?>" size="15" maxlength="15" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>-->
+              <?
+
+		  db_input('z01_ident',15,$Iz01_ident,true,'text',$db_opcao);
+
+		  ?>
+          </tr>
+          <tr> 
+            <td width="27%" title="<?=$Tz01_profis?>" nowrap> 
+              <?=$Lz01_profis?>
+            </td>
+            <td nowrap> 
+              <?
+
+		  db_input('z01_profis',40,$Iz01_profis,true,'text',$db_opcao);
+
+		  ?>
+              <!-- <input name="z01_profis" title="<?=$Tz01_profis?>" type="text" id="z01_profis" value="<?=@$z01_profis?>" size="40" maxlength="40" <? if ($opcao=="Excluir") {echo " disabled";}?>></td>-->
+          </tr>
+          <tr> 
+            <td nowrap title="<?=$Tz01_estciv?>"> 
+              <?=$Lz01_estciv?>
+            </td>
+            <td nowrap title="<?=$Tz01_estciv?>">
+			<?
+		    $x = array("1"=>"Solteiro","2"=>"Casado","3"=>"Viúvo","4"=>"Divorciado");
+		    db_select('z01_estciv',$x,true,$db_opcao);
+		    ?>
+            </td>
+          </tr>
+        </table></tr>
+    <tr> 
+      <td width="39%" align="center" title="<?=$TDBtxt1?>" valign="middle">
+        <?=$LDBtxt1?>
+      </td>
+      <td width="61%" align="center" valign="middle" title="<?=$TDBtxt5?>">
+        <?=$LDBtxt5?>
+      </td>
+    </tr>
+    <tr align="center" valign="middle"> 
+      <td width="39%"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
+          <tr> 
+            <td nowrap title="<?=@$Tz01_ender?>" onClick="javascript: js_abreJanelaLogradouro();"> 
+<script>
+	function js_abreJanelaLogradouro(){
+		listaFuncRuas.jan.location.href = 'func_ruas.php?funcao_js=parent.js_insereCODLogradouro|0|1';
+		listaFuncRuas.mostraMsg();
+		listaFuncRuas.show();
+		listaFuncRuas.focus();
+	}
+    function js_insereCODLogradouro(valorEscolhido1,valorEscolhido2){
+	  document.form1.j14_codigo.value = valorEscolhido1;
+	  document.form1.z01_ender.value = valorEscolhido2;
+      listaFuncRuas.hide();
+    }
+</script>
+<?
+      $listaFuncRuas = new janela("listaFuncRuas","");
+	  $listaFuncRuas->posX=1;
+	  $listaFuncRuas->posY=20;
+	  $listaFuncRuas->largura=785;
+	  $listaFuncRuas->altura=430;
+	  $listaFuncRuas->titulo="Visualização da lista com logradouros";
+	  $listaFuncRuas->iniciarVisivel = false;
+	  $listaFuncRuas->mostrar();
+
+?>
+              <?=@$Lz01_ender?>
+            </td>
+            <td nowrap> 
+            <?
+		    db_input('j14_codigo',5,$Ij14_codigo,true,'hidden',$db_opcao);
+		    ?>
+              <!--<input title="<?=@$Tz01_ender?>" onBlur="javascript: js_abreJanelaCODLogradouro();" type="text" name="codrua" id="codrua" size="5" maxlength="4" <? if ($db_opcao=="Excluir") {echo " disabled";}?>>-->
+               
+              <?
+
+		  db_input('z01_ender',40,$Iz01_ender,true,'text',$db_opcao);
+
+		  ?>
+              <!--<input name="z01_ender" type="text" id="z01_ender" value="<?=@$z01_ender?>" size="40" maxlength="40" <? if ($opcao=="Excluir") {echo " disabled";}?>> -->
+            </td>
+          </tr>
+          <tr> 
+            <td width="29%" nowrap title="<?=@$Tz01_numero?>"> 
+              <?=@$Lz01_numero?>
+            </td>
+            <td width="71%" nowrap  ><a name="AN3"> 
+              <?
+
+		  db_input('z01_numero',8,$Iz01_numero,true,'text',$db_opcao);
+
+		  ?>
+              <!--<input  title="<?=@$Tz01_numero?>" name="z01_numero" type="text" id="z01_numero" value="<?=@$z01_numero?>" size="8" maxlength="7" <? if ($opcao=="Excluir") {echo " disabled";}?>>-->
+              &nbsp; 
+              <?=@$Lz01_compl?>
+              <?
+
+		  db_input('z01_compl',10,$Iz01_compl,true,'text',$db_opcao);
+
+		  ?>
+              <!--<input title="<?=@$Tz01_compl?>" name="z01_compl" type="text" id="z01_compl" value="<?=@$z01_compl?>" size="20" maxlength="20">-->
+              </a> </td>
+          </tr>
+          <tr> 
+            <td nowrap title="<?=@$Tz01_munic?>"> 
+              <?=@$Lz01_munic?>
+            </td>
+            <td nowrap> 
+              <?
+
+		  db_input('z01_munic',20,$Iz01_munic,true,'text',$db_opcao);
+
+		  ?>
+              <!--<input  title="<?=@$Tz01_munic?>" name="z01_munic" type="text" id="z01_munic" value="<?=@$z01_munic?>" size="

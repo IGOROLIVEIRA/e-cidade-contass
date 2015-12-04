@@ -1,0 +1,27 @@
+FINANCEIRA POR RUBRICA
+RUBRICA : 0410 - EMPRESTIMO CREDINOR
+PERÍODO : 03 / 2011
++--------+----------------------------------------+-------------+-----------+--------+------------------------------+--------+------------------------------+
+ Matrícula do Servidor Nome                                     QUANTIDADE    VALOR       LOTACAO   DESCRICAO                      CARGO   DESCRICAO                     
++--------+----------------------------------------+-------------+-----------+--------+------------------------------+--------+------------------------------+
+      3-5 ALMERINDA DIAS ARAUJO                             3,00       69,14   020501   DEPTO DE EDUCACAO - FUDEB 60%    0058   PROFESSOR ESTAVEL
+    739-0 CARLOS ALBERTO FARNESE                           50,00      186,12   020404   SAUDE - PROGRAMA SAUDE DA FAM    0052   ODONTOLOGO
+    141-4 CLAUDICIMAR MARQUES AGUIAR                       22,00      217,58   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
+    255-0 CLEIDE PEREIRA MARTINS                           46,00      102,64   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
+    542-8 DENIZE FELIX MENDES                               9,00       99,71   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0017   AUXILIAR SERVICOS GERAIS
+    469-3 EVANDERLIANE SOARES DA COSTA                      3,00      148,21   020902   FUNDO MUNICIPAL ASSISTENCIA S    0007   ASSISTENTE EDUCACIONAL
+    602-5 EVANDO DE JESUS ALMEIDA                           9,00      203,59   020801   DEP. DE OBRAS, TRANSPORTES E     0039   GARI
+    153-8 LAURENE IARA FERREIRA                            50,00      215,35   020402   FUNDO MUNICIPAL DE SAUDE         0014   AUXILIAR DE SERVICO SAUDE
+    487-1 LINCE GEOCIR CARDOSO                             29,00      119,47   020201   DEPARTAMENTO ADMINISTRATIVO      0018   AUXILIAR SERVICOS PUBLICOS
+    114-7 MAGDA APARECIDA SOUZA SANTOS                     51,00      163,56   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
+     35-3 MANOEL ANTONIO DOS SANTOS                        13,00       96,93   020801   DEP. DE OBRAS, TRANSPORTES E     0049   MOTORISTA ESTAVEL
+    632-7 MARCILENE ARIADNY SOUZA SANTOS                   22,00      168,43   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0007   ASSISTENTE EDUCACIONAL
+    347-6 MARIA DO SOCORRO ALMEIDA MOURA                   52,00      147,26   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0039   GARI
+    237-2 MARIZA APARECIDA PEREIRA                          7,00      170,53   020801   DEP. DE OBRAS, TRANSPORTES E     0039   GARI
+     55-8 MAURO DIAS ARAUJO                                52,00      198,51   020801   DEP. DE OBRAS, TRANSPORTES E     0053   PEDREIRO
+    290-9 ORLINDA SOARES FONSECA                           52,00      163,62   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0017   AUXILIAR SERVICOS GERAIS
+    423-5 RAQUEL RODRIGUES MOTA                            49,00      192,52   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0059   PROFESSOR PRIMEIRO CICLO
+    355-7 ROSALIA CARDOSO DOS S SOUZA                      98,00      148,22   020502   DEPTO EDUCAÇÃO - FUNDEB 40%      0039   GARI
+    152-0 SILVERIA BOMPET CARDOSO                          18,00      113,14   020501   DEPTO DE EDUCACAO - FUDEB 60%    0059   PROFESSOR PRIMEIRO CICLO
++--------+----------------------------------------+-------------+-----------+--------+------------------------------+--------+------------------------------+
+TOTAL : 19  FUNCIONÁRIOS                                  635,00    2.924,53

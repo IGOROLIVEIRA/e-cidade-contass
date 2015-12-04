@@ -1,0 +1,90 @@
+
+[07/01/2013 14:33:53] - BASE PARA IMPORTACAO  Destino: host=127.0.0.1 
+	 	                    dbname=portal_transparencia 
+		                    port=5432 
+		                    user=dbportal 
+		                    password=
+[07/01/2013 14:33:53] - BASE PARA IMPORTACAO Prefeitura: host=127.0.0.1 
+                           dbname=cmbh 
+                           port=5432 
+                           user=dbportal 
+                           password=
+[07/01/2013 14:33:53] 
+[07/01/2013 14:33:54] AVISO: Verificando Scripts em ./db/0
+[07/01/2013 14:33:54] AVISO: Inserindo vers√£o 0 do schema da base de dados
+[07/01/2013 14:33:54] AVISO: Carregando script 001.sql da vers√£o 0 na ordem de execu√ß√£o 1
+[07/01/2013 14:33:54] AVISO: Verificando Scripts em ./db/1
+[07/01/2013 14:33:54] AVISO: Inserindo vers√£o 1 do schema da base de dados
+[07/01/2013 14:33:54] AVISO: Carregando script 001.sql da vers√£o 1 na ordem de execu√ß√£o 1
+[07/01/2013 14:33:54] AVISO: Verificando Scripts em ./db/2
+[07/01/2013 14:33:54] AVISO: Inserindo vers√£o 2 do schema da base de dados
+[07/01/2013 14:33:54] AVISO: Carregando script 001.sql da vers√£o 2 na ordem de execu√ß√£o 1
+[07/01/2013 14:33:54] AVISO: Verificando Scripts a serem aplicados na base de dados ... 
+[07/01/2013 14:33:54] AVISO: Existe(m) 3 Script(s) para ser(em) aplicado(s) na base de dados ... 
+[07/01/2013 14:33:54] AVISO: Aplicando script 001.sql da vers√£o 0 na ordem de execu√ß√£o 1
+[07/01/2013 14:33:56] AVISO: Aplicando script 001.sql da vers√£o 1 na ordem de execu√ß√£o 1
+[07/01/2013 14:33:57] AVISO: Aplicando script 001.sql da vers√£o 2 na ordem de execu√ß√£o 1
+[07/01/2013 14:33:57] AVISO: Foi(ram) aplicado(s) 3 script(s) na base de dados ...
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //--------------------------- CONFIGURA TABELA DE IMPORTA«√O---------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //-------------------------------- IMPORTA INSTITUI«’ES--------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] Total de Registros Encontrados : 2
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //----------------------------------- IMPORTA ORG√OS-----------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] Total de Registros Encontrados : 20
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //---------------------------------- IMPORTA UNIDADES----------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] Total de Registros Encontrados : 26
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //---------------------------------- IMPORTA PROJETOS----------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] Total de Registros Encontrados : 20
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //---------------------------------- IMPORTA FUN«’ES-----------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] Total de Registros Encontrados : 29
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //--------------------------------- IMPORTA SUBFUN«’ES---------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] Total de Registros Encontrados : 111
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //--------------------------------- IMPORTA PROGRAMAS----------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] Total de Registros Encontrados : 6
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //---------------------------------- IMPORTA RECURSOS----------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] Total de Registros Encontrados : 7
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] //-------------------------------- IMPORTA PLANOCONTAS---------------------------------//
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:57] 
+[07/01/2013 14:33:58] Total de Registros Encontrados : 15373
+[07/01/2013 14:34:03] 
+[07/01/2013 14:34:03] //---------------------------------- IMPORTA RECEITAS----------------------------------//
+[07/01/2013 14:34:03] 
+[07/01/2013 14:34:03] 
+[07/01/2013 14:34:03] Total de Registros Encontrados : 22
+[07/01/2013 14:34:03] 
+[07/01/2013 14:34:03] //------------------------- IMPORTA MOVIMENTA«’ES DAS RECEITAS-------------------------//
+[07/01/2013 14:34:03] 
+[07/01/2013 14:34:03] 
+[07/01/2013 14:34:03] Nenhum recurso encontrado!
+[07/01/2013 14:34:04] 
+[07/01/2013 14:34:04] //----------------------------- FIM PROCESSAMENTO COM ERRO-----------------------------//
+[07/01/2013 14:34:04] 
+[07/01/2013 14:34:04] 

@@ -1,0 +1,1587 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<receitas>
+     <receita codigo="1000.00.00" descricao="Receitas Correntes" tipo="2" />
+     <receita codigo="1100.00.00" descricao="Receita Tributária" tipo="2" />
+     <receita codigo="1110.00.00" descricao="Impostos" tipo="2" />
+     <receita codigo="1112.00.00" descricao="Impostos sobre o Patrimônio e a Renda" tipo="2" />
+     <receita codigo="1112.01.00" descricao="Imposto sobre a Propriedade Territorial Rural" tipo="2" />
+     <receita codigo="1112.01.01" descricao="Imposto sobre a Propriedade Territorial Rural – Municípios Conveniados" tipo="1" />
+     <receita codigo="1112.02.00" descricao="Imposto sobre a Propriedade Predial e Territorial Urbana" tipo="1" />
+     <receita codigo="1112.04.00" descricao="Imposto sobre a Renda e Proventos de Qualquer Natureza" tipo="2" />
+     <receita codigo="1112.04.31" descricao="Imposto de Renda Retido nas Fontes sobre os Rendimentos do Trabalho" tipo="1" />
+     <receita codigo="1112.04.34" descricao="Imposto de Renda Retido nas Fontes sobre Outros Rendimentos" tipo="1" />
+     <receita codigo="1112.08.00" descricao="Imposto sobre Transmissão &quot;Inter Vivos&quot; de Bens Imóveis e de Direitos Reais sobre Imóveis" tipo="1" />
+     <receita codigo="1113.00.00" descricao="Impostos sobre a Produção e a Circulação" tipo="2" />
+     <receita codigo="1113.05.00" descricao="Imposto sobre Serviços de Qualquer Natureza" tipo="2" />
+     <receita codigo="1113.05.01" descricao="Imposto sobre Serviços de Qualquer Natureza" tipo="1" />
+     <receita codigo="1113.05.02" descricao="Adicional ISS - Fundo Municipal de Combate à Pobreza" tipo="1" />
+     <receita codigo="1120.00.00" descricao="Taxas" tipo="2" />
+     <receita codigo="1121.00.00" descricao="Taxas pelo Exercício do Poder de Polícia" tipo="2" />
+     <receita codigo="1121.02.00" descricao="Taxa de Fiscalização das Telecomunicações" tipo="2" />
+     <receita codigo="1121.02.01" descricao="Taxa de Fiscalização de Instalação" tipo="1" />
+     <receita codigo="1121.02.02" descricao="Taxa de Fiscalização de Funcionamento" tipo="1" />
+     <receita codigo="1121.03.00" descricao="Taxa de Controle e Fiscalização de Produtos Químicos" tipo="1" />
+     <receita codigo="1121.17.00" descricao="Taxa de Fiscalização de Vigilância Sanitária" tipo="1" />
+     <receita codigo="1121.20.00" descricao="Taxa de Saúde Suplementar" tipo="1" />
+     <receita codigo="1121.21.00" descricao="Taxa de Controle e Fiscalização Ambiental" tipo="1" />
+     <receita codigo="1121.24.00" descricao="Taxa de Fiscalização sobre a Distribuição Gratuita de Prêmios e Sorteios" tipo="1" />
+     <receita codigo="1121.25.00" descricao="Taxa de Licença para Funcionamento de Estabelecimentos Comerciais, Indústria e Prestadora de Serviços" tipo="1" />
+     <receita codigo="1121.26.00" descricao="Taxa de Publicidade Comercial" tipo="1" />
+     <receita codigo="1121.27.00" descricao="Taxa de Apreensão e Depósito" tipo="1" />
+     <receita codigo="1121.28.00" descricao="Taxa de Funcionamento de Estabelecimentos em Horário Especial" tipo="1" />
+     <receita codigo="1121.29.00" descricao="Taxa de Licença para Execução de Obras" tipo="1" />
+     <receita codigo="1121.30.00" descricao="Taxa de Autorização de Funcionamento de Transporte" tipo="1" />
+     <receita codigo="1121.31.00" descricao="Taxa de Utilização de Área de Domínio Público" tipo="1" />
+     <receita codigo="1121.32.00" descricao="Taxa de Aprovação do Projeto de Construção Civil" tipo="1" />
+     <receita codigo="1121.34.00" descricao="Taxa de Fiscalização de Aparelhos de Transporte" tipo="1" />
+     <receita codigo="1121.35.00" descricao="Taxa de Alinhamento e Nivelamento" tipo="1" />
+     <receita codigo="1121.36.00" descricao="Taxa de Apreensão, Depósito ou Liberação de Animais" tipo="1" />
+     <receita codigo="1121.99.00" descricao="Outras Taxas pelo Exercício do Poder de Polícia" tipo="1" />
+     <receita codigo="1122.00.00" descricao="Taxas pela Prestação de Serviços" tipo="2" />
+     <receita codigo="1122.12.00" descricao="Emolumentos e Custas Processuais Administrativas" tipo="2" />
+     <receita codigo="1122.12.01" descricao="Emolumentos e Custas de Apreciação de Atos e Contratos" tipo="1" />
+     <receita codigo="1122.12.02" descricao="Emolumentos e Custas Decorrentes de Consultas" tipo="1" />
+     <receita codigo="1122.21.00" descricao="Taxas de Serviços Cadastrais" tipo="1" />
+     <receita codigo="1122.22.00" descricao="Taxas de Serviços Aquícolas" tipo="" />
+     <receita codigo="1122.28.00" descricao="Taxa de Cemitérios" tipo="1" />
+     <receita codigo="1122.90.00" descricao="Taxa de Limpeza Pública" tipo="1" />
+     <receita codigo="1122.99.00" descricao="Outras Taxas pela Prestação de Serviços" tipo="1" />
+     <receita codigo="1130.00.00" descricao="Contribuição de Melhoria" tipo="2" />
+     <receita codigo="1130.01.00" descricao="Contribuição de Melhoria para Expansão da Rede de Água Potável e Esgoto Sanitário" tipo="1" />
+     <receita codigo="1130.02.00" descricao="Contribuição de Melhoria para Expansão da Rede de Iluminação Pública na Cidade" tipo="1" />
+     <receita codigo="1130.03.00" descricao="Contribuição de Melhoria para Expansão da Rede de Iluminação Pública Rural" tipo="1" />
+     <receita codigo="1130.04.00" descricao="Contribuição de Melhoria para Pavimentação e Obras Complementares" tipo="1" />
+     <receita codigo="1130.99.00" descricao="Outras Contribuições de Melhoria" tipo="1" />
+     <receita codigo="1200.00.00" descricao="Receitas de Contribuições" tipo="2" />
+     <receita codigo="1210.00.00" descricao="Contribuições Sociais" tipo="2" />
+     <receita codigo="1210.29.00" descricao="Contribuições para o Regime Próprio de Previdência do Servidor Público" tipo="2" />
+     <receita codigo="1210.29.01" descricao="Contribuição Patronal de Servidor Ativo Civil para Regime Próprio" tipo="1" />
+     <receita codigo="1210.29.03" descricao="Contribuição Patronal - Inativo Civil" tipo="1" />
+     <receita codigo="1210.29.05" descricao="Contribuição Patronal - Pensionista Civil" tipo="1" />
+     <receita codigo="1210.29.07" descricao="Contribuição do Servidor Ativo Civil para o Regime Próprio" tipo="1" />
+     <receita codigo="1210.29.09" descricao="Contribuições do Servidor Inativo Civil para o Regime Próprio" tipo="1" />
+     <receita codigo="1210.29.11" descricao="Contribuições de Pensionista Civil para o Regime Próprio" tipo="1" />
+     <receita codigo="1210.29.13" descricao="Contribuição Previdenciária para Amortização do Déficit Atuarial" tipo="1" />
+     <receita codigo="1210.29.15" descricao="Contribuição Previdenciária em Regime de Parcelamento de Débitos - RPPS" tipo="1" />
+     <receita codigo="1210.29.16" descricao="Receita de Recolhimento da Contribuição Patronal, Oriunda do Pagamento de Sentenças Judiciais" tipo="1" />
+     <receita codigo="1210.29.17" descricao="Receita de Recolhimento da Contribuição do Servidor Ativo Civil, Oriunda do Pagamento de Sentenças Judiciais" tipo="1" />
+     <receita codigo="1210.29.18" descricao="Receita de Recolhimento da Contribuição do Servidor Inativo Civil, Oriunda do Pagamento de Sentenças Judiciais" tipo="1" />
+     <receita codigo="1210.29.19" descricao="Receita de Recolhimento de Pensionista Civil, Oriunda do Pagamento de Sentenças Judiciais" tipo="1" />
+     <receita codigo="1210.99.00" descricao="Outras Contribuições Sociais" tipo="2" />
+     <receita codigo="1210.99.51" descricao="Contribuição Patronal para Assistência à Saúde do Servidor" tipo="1" />
+     <receita codigo="1210.99.52" descricao="Contribuição de Servidor para Assistência à Saúde" tipo="1" />
+     <receita codigo="1210.99.99" descricao="Outras Contribuições Sociais" tipo="1" />
+     <receita codigo="1230.00.00" descricao="Contribuição para o Custeio do Serviço de Iluminação Pública" tipo="1" />
+     <receita codigo="1300.00.00" descricao="Receita Patrimonial" tipo="2" />
+     <receita codigo="1310.00.00" descricao="Receitas Imobiliárias" tipo="2" />
+     <receita codigo="1311.00.00" descricao="Alugueis" tipo="1" />
+     <receita codigo="1312.00.00" descricao="Arrendamentos" tipo="1" />
+     <receita codigo="1313.00.00" descricao="Foros" tipo="1" />
+     <receita codigo="1314.00.00" descricao="Laudêmios" tipo="1" />
+     <receita codigo="1319.00.00" descricao="Outras Receitas Imobiliárias" tipo="1" />
+     <receita codigo="1320.00.00" descricao="Receitas de Valores Mobiliários" tipo="2" />
+     <receita codigo="1321.00.00" descricao="Juros de Títulos de Renda" tipo="1" />
+     <receita codigo="1322.00.00" descricao="Dividendos" tipo="1" />
+     <receita codigo="1323.00.00" descricao="Participações" tipo="1" />
+     <receita codigo="1325.00.00" descricao="Remuneração de Depósitos Bancários" tipo="2" />
+     <receita codigo="1325.01.00" descricao="Remuneração de Depósitos de Recursos Vinculados" tipo="2" />
+     <receita codigo="1325.01.01" descricao="Receita de Remuneração de Depósitos Bancários de Recursos Vinculados – Royalties" tipo="1" />
+     <receita codigo="1325.01.02" descricao="Receita de Remuneração de Depósitos Bancários de Recursos Vinculados – FUNDEB" tipo="1" />
+     <receita codigo="1325.01.03" descricao="Receita de Remuneração de Depósitos Bancários de Recursos Vinculados – Fundo de Saúde" tipo="1" />
+     <receita codigo="1325.01.05" descricao="Receita de Remuneração de Depósitos Bancários de Recursos Vinculados – Manutenção e Desenvolvimento do Ensino (MDE)" tipo="1" />
+     <receita codigo="1325.01.06" descricao="Receita de Remuneração de Depósitos Bancários de Recursos Vinculados – Ações e Serviços Públicos de Saúde" tipo="1" />
+     <receita codigo="1325.01.09" descricao="Receita de Remuneração de Depósitos Bancários de Recursos Vinculados – Contribuição de Intervenção no Domínio Econômico (CIDE)" tipo="1" />
+     <receita codigo="1325.01.10" descricao="Receita de Remuneração de Depósitos Bancários de Recursos Vinculados – Fundo Nacional de Assistência Social (FNAS)" tipo="1" />
+     <receita codigo="1325.01.99" descricao="Receita de Remuneração de Outros Depósitos Bancários de Recursos Vinculados" tipo="1" />
+     <receita codigo="1325.02.00" descricao="Remuneração de Depósitos de Recursos Não Vinculados" tipo="2" />
+     <receita codigo="1325.02.01" descricao="Receita de Remuneração de Depósitos de Poupança" tipo="1" />
+     <receita codigo="1325.02.99" descricao="Remuneração de Outros Depósitos de Recursos Não Vinculados" tipo="1" />
+     <receita codigo="1326.00.00" descricao="Remuneração de Depósitos Especiais" tipo="1" />
+     <receita codigo="1327.00.00" descricao="Remuneração de Saldos de Recursos Não Desembolsados" tipo="1" />
+     <receita codigo="1328.00.00" descricao="Remuneração dos Investimentos do Regime Próprio de Previdência do Servidor" tipo="2" />
+     <receita codigo="1328.10.00" descricao="Remuneração dos Investimentos do Regime Próprio de Previdência do Servidor em Renda Fixa" tipo="1" />
+     <receita codigo="1328.20.00" descricao="Remuneração dos Investimentos do Regime Próprio de Previdência do Servidor em Renda Variável" tipo="1" />
+     <receita codigo="1328.30.00" descricao="Remuneração dos Investimentos do Regime Próprio de Previdência do Servidor em Fundos Imobiliários" tipo="1" />
+     <receita codigo="1329.00.00" descricao="Outras Receitas de Valores Mobiliários" tipo="1" />
+     <receita codigo="1330.00.00" descricao="Receita de Concessões e Permissões" tipo="2" />
+     <receita codigo="1331.00.00" descricao="Receita de Concessões e Permissões – Serviços" tipo="2" />
+     <receita codigo="1331.01.00" descricao="Receita de Concessões e Permissões – Serviços de Transporte" tipo="2" />
+     <receita codigo="1331.01.05" descricao="Receita de Outorga dos Serviços de Transporte Coletivo Local e Intermunicipal" tipo="1" />
+     <receita codigo="1331.01.99" descricao="Outras Receitas de Concessões e Permissões – Serviços de Transporte" tipo="1" />
+     <receita codigo="1331.99.00" descricao="Outras Receitas de Concessões e Permissões - Serviços" tipo="1" />
+     <receita codigo="1333.00.00" descricao="Receita de Concessões e Permissões – Direitos de Uso de Bens Públicos" tipo="2" />
+     <receita codigo="1333.01.00" descricao="Receita de Concessão de Direito Real de Uso de Área Pública" tipo="1" />
+     <receita codigo="1333.99.00" descricao="Outras Receitas de Concessões e Permissões – Direitos de Uso de Bens Públicos" tipo="1" />
+     <receita codigo="1339.00.00" descricao="Outras Receitas de Concessões e Permissões" tipo="1" />
+     <receita codigo="1352.00.00" descricao="Receita de Outorga a Título Oneroso das Atividades de Pesquisa e Lavra de Petróleo e Gás Natural" tipo="1" />
+     <receita codigo="1360.00.00" descricao="Receita da Cessão de Direitos" tipo="2" />
+     <receita codigo="1361.00.00" descricao="Receita de Cessão do Direito de Operacionalização de Pagamentos" tipo="2" />
+     <receita codigo="1361.01.00" descricao="Receita de Cessão do Direito de Operacionalização da Folha de Pagamento de Pessoal" tipo="1" />
+     <receita codigo="1361.02.00" descricao="Receita de Cessão do Direito de Operacionalização da Folha de Pagamento de Benefícios" tipo="1" />
+     <receita codigo="1361.03.00" descricao="Receita de Cessão do Direito de Operacionalização de Pagamento a Fornecedores" tipo="1" />
+     <receita codigo="1390.00.00" descricao="Outras Receitas Patrimoniais" tipo="1" />
+     <receita codigo="1400.00.00" descricao="Receita Agropecuária" tipo="2" />
+     <receita codigo="1410.00.00" descricao="Receita da Produção Vegetal" tipo="1" />
+     <receita codigo="1420.00.00" descricao="Receita da Produção Animal e Derivados" tipo="1" />
+     <receita codigo="1490.00.00" descricao="Outras Receitas Agropecuárias" tipo="1" />
+     <receita codigo="1500.00.00" descricao="Receita Industrial" tipo="2" />
+     <receita codigo="1520.00.00" descricao="Receita da Indústria de Transformação" tipo="2" />
+     <receita codigo="1520.12.00" descricao="Receita da Indústria Mecânica" tipo="1" />
+     <receita codigo="1520.20.00" descricao="Receita da Indústria Química" tipo="1" />
+     <receita codigo="1520.21.00" descricao="Receita da Indústria de Produtos Farmacêuticos e Veterinários" tipo="1" />
+     <receita codigo="1520.26.00" descricao="Receita da Indústria de Produtos Alimentares" tipo="1" />
+     <receita codigo="1520.27.00" descricao="Receita da Indústria de Bebidas e Destilados" tipo="1" />
+     <receita codigo="1520.28.00" descricao="Receita da Usina de Tratamento de Lixo" tipo="1" />
+     <receita codigo="1520.29.00" descricao="Receita da Indústria Editorial e Gráfica" tipo="1" />
+     <receita codigo="1520.99.00" descricao="Outras Receitas da Indústria de Transformação" tipo="1" />
+     <receita codigo="1530.00.00" descricao="Receita da Indústria de Construção" tipo="1" />
+     <receita codigo="1590.00.00" descricao="Outras Receitas Industriais" tipo="1" />
+     <receita codigo="1600.00.00" descricao="Receita de Serviços" tipo="2" />
+     <receita codigo="1600.01.00" descricao="Serviços Comerciais" tipo="2" />
+     <receita codigo="1600.01.01" descricao="Serviços de Comercialização de Medicamentos" tipo="1" />
+     <receita codigo="1600.01.02" descricao="Serviços de Comercialização de Livros, Periódicos, Materiais Escolares e Publicidade" tipo="1" />
+     <receita codigo="1600.01.03" descricao="Serviços de Comercialização e Distribuição de Produtos Agropecuários" tipo="1" />
+     <receita codigo="1600.01.06" descricao="Serviço de Comercialização de Produtos, Dados e Materiais de Informática" tipo="1" />
+     <receita codigo="1600.01.10" descricao="Receita de Comercialização de Fardamentos" tipo="1" />
+     <receita codigo="1600.01.99" descricao="Outros Serviços Comerciais" tipo="1" />
+     <receita codigo="1600.02.00" descricao="Serviços Financeiros" tipo="2" />
+     <receita codigo="1600.02.01" descricao="Serviços de Juros de Empréstimos" tipo="1" />
+     <receita codigo="1600.02.06" descricao="Serviços de Remuneração sobre Repasse para Programas de Desenvolvimento Econômico" tipo="1" />
+     <receita codigo="1600.02.99" descricao="Outros Serviços Financeiros" tipo="1" />
+     <receita codigo="1600.03.00" descricao="Serviços de Transporte" tipo="2" />
+     <receita codigo="1600.03.01" descricao="Serviços de Transporte Rodoviário" tipo="1" />
+     <receita codigo="1600.03.03" descricao="Serviço de Transporte Hidroviário" tipo="1" />
+     <receita codigo="1600.03.06" descricao="Receita de Terminais Rodoviários" tipo="1" />
+     <receita codigo="1600.03.99" descricao="Outros Serviços de Transporte" tipo="1" />
+     <receita codigo="1600.04.00" descricao="Serviços de Comunicação" tipo="1" />
+     <receita codigo="1600.05.00" descricao="Serviços de Saúde" tipo="2" />
+     <receita codigo="1600.05.01" descricao="Serviços Hospitalares" tipo="1" />
+     <receita codigo="1600.05.03" descricao="Serviços Radiológicos e Laboratoriais" tipo="1" />
+     <receita codigo="1600.05.05" descricao="Serviços de Assistência à Saúde Suplementar do Servidor Civil" tipo="1" />
+     <receita codigo="1600.05.10" descricao="Serviços Ambulatoriais" tipo="1" />
+     <receita codigo="1600.05.99" descricao="Outros Serviços de Saúde" tipo="1" />
+     <receita codigo="1600.06.00" descricao="Serviços Portuários" tipo="1" />
+     <receita codigo="1600.07.00" descricao="Serviços de Armazenagem" tipo="1" />
+     <receita codigo="1600.08.00" descricao="Serviços de Processamento de Dados" tipo="1" />
+     <receita codigo="1600.10.00" descricao="Serviços de Informações Estatísticas" tipo="1" />
+     <receita codigo="1600.12.00" descricao="Serviços Tecnológicos" tipo="1" />
+     <receita codigo="1600.13.00" descricao="Serviços Administrativos" tipo="2" />
+     <receita codigo="1600.13.01" descricao="Serviços de Inscrição em Concursos Públicos" tipo="1" />
+     <receita codigo="1600.13.02" descricao="Serviços de Venda de Editais" tipo="1" />
+     <receita codigo="1600.13.03" descricao="Serviços Especiais PM/Bombeiro" tipo="1" />
+     <receita codigo="1600.13.04" descricao="Serviços de Expedição de Certificados" tipo="1" />
+     <receita codigo="1600.13.06" descricao="Serviços de Fornecimento de Listagens" tipo="1" />
+     <receita codigo="1600.13.07" descricao="Serviços de Fotocópias ou Cópias Heliográficas" tipo="1" />
+     <receita codigo="1600.13.99" descricao="Outros Serviços Administrativos" tipo="1" />
+     <receita codigo="1600.14.00" descricao="Serviços de Inspeção e Fiscalização" tipo="1" />
+     <receita codigo="1600.16.00" descricao="Serviços Educacionais" tipo="1" />
+     <receita codigo="1600.17.00" descricao="Serviços Agropecuários" tipo="1" />
+     <receita codigo="1600.18.00" descricao="Serviços de Reparação, Manutenção e Instalação" tipo="1" />
+     <receita codigo="1600.19.00" descricao="Serviços Recreativos e Culturais" tipo="1" />
+     <receita codigo="1600.20.00" descricao="Serviços de Consultoria, Assistência Técnica e Análise de Projetos" tipo="2" />
+     <receita codigo="1600.20.01" descricao="Serviços de Consultoria, Assistência Técnica e Análise de Projetos - Aplicações Livres" tipo="1" />
+     <receita codigo="1600.20.02" descricao="Serviços de Consultoria, Assistência Técnica e Análise de Projetos - Aplicações Vinculadas a Atividades de Pesquisa e Desenvolvimento" tipo="1" />
+     <receita codigo="1600.21.00" descricao="Serviços de Hospedagem e Alimentação" tipo="1" />
+     <receita codigo="1600.22.00" descricao="Serviços de Estudos e Pesquisas" tipo="1" />
+     <receita codigo="1600.26.00" descricao="Serviços de Fornecimento de Água" tipo="1" />
+     <receita codigo="1600.28.00" descricao="Serviços de Geoprocessamento" tipo="1" />
+     <receita codigo="1600.29.00" descricao="Serviço de Cadastramento de Fornecedores" tipo="1" />
+     <receita codigo="1600.41.00" descricao="Serviços de Captação, Adução, Tratamento, Reserva e Distribuição de Água" tipo="1" />
+     <receita codigo="1600.42.00" descricao="Serviços de Coleta, Transporte, Tratamento e Destino Final de Esgotos" tipo="1" />
+     <receita codigo="1600.43.00" descricao="Serviços de Coleta, Transporte, Tratamento e Destino Final de Resíduos Sólidos" tipo="1" />
+     <receita codigo="1600.44.00" descricao="Serviço de Abate de Animais" tipo="1" />
+     <receita codigo="1600.45.00" descricao="Serviços de Preparação da Terra em Propriedades Particulares" tipo="1" />
+     <receita codigo="1600.46.00" descricao="Serviços de Cemitério" tipo="1" />
+     <receita codigo="1600.48.00" descricao="Serviços de Religamento de Água" tipo="1" />
+     <receita codigo="1600.50.00" descricao="Tarifas de Inscrição em Concursos e Processos Seletivos" tipo="1" />
+     <receita codigo="1600.99.00" descricao="Outros Serviços" tipo="1" />
+     <receita codigo="1700.00.00" descricao="Transferências Correntes" tipo="2" />
+     <receita codigo="1720.00.00" descricao="Transferências Intergovernamentais" tipo="2" />
+     <receita codigo="1721.00.00" descricao="Transferências da União" tipo="2" />
+     <receita codigo="1721.01.00" descricao="Participação na Receita da União" tipo="2" />
+     <receita codigo="1721.01.02" descricao="Cota-parte do Fundo de Participação dos Municípios" tipo="1" />
+     <receita codigo="1721.01.05" descricao="Cota-parte do Imposto sobre a Propriedade Territorial Rural" tipo="1" />
+     <receita codigo="1721.01.32" descricao="Cota-parte do Imposto sobre Operações de Crédito, Câmbio e Seguro, ou Relativas a Títulos ou Valores Mobiliários - Comercialização do Ouro" tipo="1" />
+     <receita codigo="1721.22.00" descricao="Transferência da Compensação Financeira pela Exploração de Recursos Naturais" tipo="2" />
+     <receita codigo="1721.22.11" descricao="Cota-parte da Compensação Financeira de Recursos Hídricos" tipo="1" />
+     <receita codigo="1721.22.20" descricao="Cota-parte da Compensação Financeira de Recursos Minerais (CFEM)" tipo="1" />
+     <receita codigo="1721.22.40" descricao="Cota-parte Royalties pelo Excedente da Produção do Petróleo – Lei N° 9.478/97, Artigo 49, I e II" tipo="1" />
+     <receita codigo="1721.22.50" descricao="Cota-parte Royalties pela Participação Especial Lei N° 9.478/97, Artigo 50" tipo="1" />
+     <receita codigo="1721.22.70" descricao="Cota-parte do Fundo Especial do Petróleo (FEP)" tipo="1" />
+     <receita codigo="1721.22.90" descricao="Outras Transferências Decorrentes de Compensação Financeira pela Exploração de Recursos Naturais" tipo="1" />
+     <receita codigo="1721.33.00" descricao="Transferência de Recursos do Sistema Único de Saúde (SUS) Repasses Fundo a Fundo" tipo="2" />
+     <receita codigo="1721.33.11" descricao="Transferência de Recursos do SUS – Bloco Atenção Básica" tipo="1" />
+     <receita codigo="1721.33.12" descricao="Transferência de Recursos do SUS – Bloco Atenção de Média e Alta Complexidade Ambulatorial e Hospitalar" tipo="1" />
+     <receita codigo="1721.33.13" descricao="Transferência de Recursos do SUS – Bloco Vigilância em Saúde" tipo="1" />
+     <receita codigo="1721.33.14" descricao="Transferência de Recursos do SUS – Bloco Assistência Farmacêutica" tipo="1" />
+     <receita codigo="1721.33.15" descricao="Transferência de Recursos do SUS – Bloco Gestão do SUS" tipo="1" />
+     <receita codigo="1721.33.99" descricao="Outros Programas Financiados por Transferência Fundo a Fundo" tipo="1" />
+     <receita codigo="1721.34.00" descricao="Transferência de Recursos do Fundo Nacional de Assistência Social (FNAS)" tipo="1" />
+     <receita codigo="1721.35.00" descricao="Transferência de Recursos do Fundo Nacional do Desenvolvimento da Educação (FNDE)" tipo="2" />
+     <receita codigo="1721.35.01" descricao="Transferências do Salário-Educação" tipo="1" />
+     <receita codigo="1721.35.02" descricao="Transferências Diretas do FNDE Referentes ao Programa Dinheiro Direto na Escola (PDDE)" tipo="1" />
+     <receita codigo="1721.35.03" descricao="Transferências Diretas do FNDE Referentes ao Programa Nacional de Alimentação Escolar (PNAE)" tipo="1" />
+     <receita codigo="1721.35.04" descricao="Transferências Diretas do FNDE Referentes ao Programa Nacional de Apoio ao Transporte do Escolar (PNATE)" tipo="1" />
+     <receita codigo="1721.35.99" descricao="Outras Transferências Diretas do FNDE" tipo="1" />
+     <receita codigo="1721.36.00" descricao="Transferência Financeira do ICMS - Desoneração - LC N° 87/96" tipo="1" />
+     <receita codigo="1721.37.00" descricao="Transferências a Consórcios Públicos" tipo="1" />
+     <receita codigo="1721.99.00" descricao="Outras Transferências da União" tipo="1" />
+     <receita codigo="1722.00.00" descricao="Transferências do Estado" tipo="2" />
+     <receita codigo="1722.01.00" descricao="Participação na Receita do Estado" tipo="2" />
+     <receita codigo="1722.01.01" descricao="Cota-parte do ICMS" tipo="1" />
+     <receita codigo="1722.01.02" descricao="Cota-parte do IPVA" tipo="1" />
+     <receita codigo="1722.01.04" descricao="Cota-parte do IPI sobre Exportação" tipo="1" />
+     <receita codigo="1722.01.13" descricao="Cota-parte da Contribuição de Intervenção no Domínio Econômico" tipo="1" />
+     <receita codigo="1722.01.99" descricao="Outras Participações na Receita do Estado" tipo="1" />
+     <receita codigo="1722.22.00" descricao="Transferência da Cota-parte da Compensação Financeira (25%)" tipo="2" />
+     <receita codigo="1722.22.11" descricao="Cota-parte da Compensação Financeira Recursos Hídricos" tipo="1" />
+     <receita codigo="1722.22.20" descricao="Cota-parte da Compensação Financeira de Recursos Minerais (CFEM)" tipo="1" />
+     <receita codigo="1722.22.30" descricao="Cota-parte Royalties - Compensação Financeira pela Produção do Petróleo - Lei N° 7.990/89, Artigo 9°" tipo="1" />
+     <receita codigo="1722.22.90" descricao="Outras Transferências Decorrentes de Compensações Financeiras" tipo="1" />
+     <receita codigo="1722.33.00" descricao="Transferência de Recursos do Estado para Programas de Saúde – Repasses Fundo a Fundo" tipo="1" />
+     <receita codigo="1722.37.00" descricao="Transferências a Consórcios Públicos" tipo="1" />
+     <receita codigo="1722.99.00" descricao="Outras Transferências do Estado" tipo="1" />
+     <receita codigo="1723.00.00" descricao="Transferências dos Municípios" tipo="2" />
+     <receita codigo="1723.01.00" descricao="Transferência de Recursos do Sistema Único de Saúde (SUS)" tipo="1" />
+     <receita codigo="1723.37.00" descricao="Transferências a Consórcios Públicos" tipo="1" />
+     <receita codigo="1723.99.00" descricao="Outras Transferências dos Municípios" tipo="1" />
+     <receita codigo="1724.00.00" descricao="Transferências Multigovernamentais" tipo="2" />
+     <receita codigo="1724.01.00" descricao="Transferências de Recursos do Fundo de Manutenção e Desenvolvimento da Educação Básica e de Valorização dos Profissionais da Educação (FUNDEB)" tipo="1" />
+     <receita codigo="1724.02.00" descricao="Transferência de Recursos da Complementação da União ao FUNDEB" tipo="1" />
+     <receita codigo="1724.99.00" descricao="Outras Transferências Multigovernamentais" tipo="1" />
+     <receita codigo="1730.00.00" descricao="Transferências de Instituições Privadas" tipo="1" />
+     <receita codigo="1740.00.00" descricao="Transferências do Exterior" tipo="1" />
+     <receita codigo="1750.00.00" descricao="Transferências de Pessoas" tipo="1" />
+     <receita codigo="1760.00.00" descricao="Transferências de Convênios" tipo="2" />
+     <receita codigo="1761.00.00" descricao="Transferências de Convênios da União e de suas Entidades" tipo="2" />
+     <receita codigo="1761.01.00" descricao="Transferências de Convênios da União para o Sistema Único de Saúde" tipo="1" />
+     <receita codigo="1761.02.00" descricao="Transferências de Convênios da União Destinadas a Programas de Educação" tipo="1" />
+     <receita codigo="1761.03.00" descricao="Transferências de Convênios da União Destinadas a Programas de Assistência Social" tipo="1" />
+     <receita codigo="1761.04.00" descricao="Transferências de Convênios da União Destinadas a Programas de Combate à Fome" tipo="1" />
+     <receita codigo="1761.05.00" descricao="Transferências de Convênios da União Destinadas a Programas de Saneamento Básico" tipo="1" />
+     <receita codigo="1761.99.00" descricao="Outras Transferências de Convênios da União" tipo="1" />
+     <receita codigo="1762.00.00" descricao="Transferências de Convênios do Estado e de Suas Entidades" tipo="2" />
+     <receita codigo="1762.01.00" descricao="Transferências de Convênios do Estado para o Sistema Único de Saúde (SUS)" tipo="1" />
+     <receita codigo="1762.02.00" descricao="Transferências de Convênios do Estado Destinadas a Programas de Educação" tipo="1" />
+     <receita codigo="1762.99.00" descricao="Outras Transferências de Convênio dos Estados" tipo="1" />
+     <receita codigo="1763.00.00" descricao="Transferências de Convênios dos Municípios e de Suas Entidades" tipo="2" />
+     <receita codigo="1763.01.00" descricao="Transferências de Convênios dos Municípios para o Sistema Único de Saúde (SUS)" tipo="1" />
+     <receita codigo="1763.02.00" descricao="Transferências de Convênios dos Municípios Destinadas a Programas de Educação" tipo="1" />
+     <receita codigo="1763.99.00" descricao="Outras Transferências de Convênios dos Municípios" tipo="1" />
+     <receita codigo="1764.00.00" descricao="Transferências de Convênios de Instituições Privadas" tipo="1" />
+     <receita codigo="1765.00.00" descricao="Transferência de Convênios do Exterior" tipo="1" />
+     <receita codigo="1770.00.00" descricao="Transferências para o Combate à Fome" tipo="2" />
+     <receita codigo="1771.00.00" descricao="Provenientes do Exterior" tipo="1" />
+     <receita codigo="1772.00.00" descricao="Provenientes de Pessoas Jurídicas" tipo="1" />
+     <receita codigo="1773.00.00" descricao="Provenientes de Pessoas Físicas" tipo="1" />
+     <receita codigo="1774.00.00" descricao="Provenientes de Depósitos Não Identificados" tipo="1" />
+     <receita codigo="1900.00.00" descricao="Outras Receitas Correntes" tipo="2" />
+     <receita codigo="1910.00.00" descricao="Multas e Juros de Mora" tipo="2" />
+     <receita codigo="1911.00.00" descricao="Multas e Juros de Mora dos Tributos" tipo="2" />
+     <receita codigo="1911.08.00" descricao="Multas e Juros de Mora do Imposto sobre a Propriedade Territorial Rural" tipo="2" />
+     <receita codigo="1911.08.01" descricao="Multas e Juros de Mora do Imposto sobre a Propriedade Territorial Rural – Municípios Conveniados" tipo="1" />
+     <receita codigo="1911.31.00" descricao="Multas e Juros de Mora da Taxa de Fiscalização das Telecomunicações" tipo="1" />
+     <receita codigo="1911.35.00" descricao="Multas e Juros de Mora da Taxa de Fiscalização e Vigilância Sanitária" tipo="1" />
+     <receita codigo="1911.38.00" descricao="Multas e Juros de Mora do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU)" tipo="1" />
+     <receita codigo="1911.39.00" descricao="Multas e Juros de Mora do Imposto sobre a Transferência de Bens Imóveis (ITBI)" tipo="1" />
+     <receita codigo="1911.40.00" descricao="Multas e Juros de Mora do Imposto sobre Serviços de Qualquer Natureza (ISS)" tipo="1" />
+     <receita codigo="1911.98.00" descricao="Multas e Juros de Mora das Contribuições de Melhoria" tipo="1" />
+     <receita codigo="1911.99.00" descricao="Multas e Juros de Mora de Outros Tributos" tipo="1" />
+     <receita codigo="1912.00.00" descricao="Multas e Juros de Mora das Contribuições" tipo="2" />
+     <receita codigo="1912.29.00" descricao="Multas e Juros de Mora das Contribuições para o Regime Próprio de Previdência do Servidor" tipo="1" />
+     <receita codigo="1912.29.01" descricao="Multas e Juros de Mora da Contribuição Patronal para o Regime Próprio de Previdência" tipo="1" />
+     <receita codigo="1912.29.02" descricao="Multas e Juros de Mora da Contribuição do Servidor para o Regime Próprio de Previdência" tipo="1" />
+     <receita codigo="1912.56.00" descricao="Multas e Juros de Mora das Compensações Financeiras entre Regime Geral e os Regimes Próprios de Previdência dos Servidores" tipo="1" />
+     <receita codigo="1912.99.00" descricao="Multas e Juros de Mora de Outras Contribuições" tipo="1" />
+     <receita codigo="1913.00.00" descricao="Multas e Juros de Mora da Dívida Ativa dos Tributos" tipo="2" />
+     <receita codigo="1913.08.00" descricao="Multas e Juros de Mora da Dívida Ativa do Imposto sobre a Propriedade Territorial Rural (ITR)" tipo="1" />
+     <receita codigo="1913.09.00" descricao="Multas e Juros de Mora da Dívida Ativa da Taxa de Fiscalização das Telecomunicações" tipo="1" />
+     <receita codigo="1913.11.00" descricao="Multas e Juros de Mora da Dívida Ativa do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU)" tipo="1" />
+     <receita codigo="1913.12.00" descricao="Multas e Juros de Mora da Dívida Ativa do Imposto sobre a Transmissão Inter - Vivos e Bens Imóveis (ITBI)" tipo="1" />
+     <receita codigo="1913.13.00" descricao="Multas e Juros de Mora da Dívida Ativa do Imposto sobre Serviços de Qualquer Natureza (ISS)" tipo="1" />
+     <receita codigo="1913.35.00" descricao="Multas e Juros de Mora da Dívida Ativa das Taxas de Fiscalização e Vigilância Sanitária" tipo="1" />
+     <receita codigo="1913.98.00" descricao="Multas e Juros de Mora da Dívida Ativa das Contribuições de Melhoria" tipo="1" />
+     <receita codigo="1913.99.00" descricao="Multas e Juros de Mora da Divida Ativa de Outros Tributos" tipo="1" />
+     <receita codigo="1914.00.00" descricao="Multas e Juros de Mora da Dívida Ativa das Contribuições" tipo="1" />
+     <receita codigo="1915.00.00" descricao="Multas e Juros de Mora da Dívida Ativa de Outras Receitas" tipo="2" />
+     <receita codigo="1915.19.00" descricao="Multas e Juros de Mora da Dívida Ativa das Compensações Financeiras entre Regime Geral e os Regimes Próprios de Previdência dos Servidores" tipo="1" />
+     <receita codigo="1915.99.00" descricao="Outras Multas e Juros de Mora da Dívida Ativa de Outras Receitas" tipo="1" />
+     <receita codigo="1918.00.00" descricao="Multas e Juros de Mora de Outras Receitas" tipo="2" />
+     <receita codigo="1918.01.00" descricao="Multas e Juros de Mora de Aluguel" tipo="1" />
+     <receita codigo="1918.21.00" descricao="Multas e Juros de Mora do Ressarcimento Decorrente de Ações Regressivas Oriundas da Relação de Trabalho" tipo="1" />
+     <receita codigo="1918.99.00" descricao="Outras Multas e Juros de Mora" tipo="1" />
+     <receita codigo="1919.00.00" descricao="Multas de Outras Origens" tipo="2" />
+     <receita codigo="1919.15.00" descricao="Multas Previstas na Legislação de Trânsito" tipo="1" />
+     <receita codigo="1919.26.00" descricao="Multas Previstas na Legislação sobre Defesa dos Direitos Difusos" tipo="1" />
+     <receita codigo="1919.27.00" descricao="Multas e Juros Previstos em Contratos" tipo="1" />
+     <receita codigo="1919.35.00" descricao="Multas por Danos ao Meio Ambiente" tipo="1" />
+     <receita codigo="1919.50.00" descricao="Multas por Auto de Infração" tipo="1" />
+     <receita codigo="1919.99.00" descricao="Outras Multas" tipo="1" />
+     <receita codigo="1920.00.00" descricao="Indenizações e Restituições" tipo="2" />
+     <receita codigo="1921.00.00" descricao="Indenizações" tipo="2" />
+     <receita codigo="1921.05.00" descricao="Indenizações previstas na Legislação sobre Defesa de Direitos Difusos" tipo="1" />
+     <receita codigo="1921.06.00" descricao="Indenizações por Danos Causados ao Patrimônio Público" tipo="1" />
+     <receita codigo="1921.99.00" descricao="Outras Indenizações" tipo="1" />
+     <receita codigo="1922.00.00" descricao="Restituições" tipo="2" />
+     <receita codigo="1922.01.00" descricao="Restituições de Convênios" tipo="1" />
+     <receita codigo="1922.02.00" descricao="Restituições de Benefícios Não Desembolsados" tipo="1" />
+     <receita codigo="1922.07.00" descricao="Recuperação de Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="1922.10.00" descricao="Compensações Financeiras entre o Regime Geral e os Regimes Próprios de Previdência dos Servidores" tipo="1" />
+     <receita codigo="1922.22.00" descricao="Ressarcimento Decorrente de Ações Regressivas Oriundas da Relação de Trabalho" tipo="1" />
+     <receita codigo="1922.99.00" descricao="Outras Restituições" tipo="1" />
+     <receita codigo="1930.00.00" descricao="Receita da Dívida Ativa" tipo="2" />
+     <receita codigo="1931.00.00" descricao="Receita da Dívida Ativa Tributária" tipo="2" />
+     <receita codigo="1931.04.00" descricao="Receita da Dívida Ativa do Imposto sobre a Propriedade Territorial Rural (ITR)" tipo="1" />
+     <receita codigo="1931.08.00" descricao="Receita da Dívida Ativa da Taxa de Fiscalização de Telecomunicações" tipo="1" />
+     <receita codigo="1931.11.00" descricao="Receita da Dívida Ativa do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU)" tipo="1" />
+     <receita codigo="1931.12.00" descricao="Receita da Dívida Ativa do Imposto sobre a Transferência de Bens Imóveis (ITBI)" tipo="1" />
+     <receita codigo="1931.13.00" descricao="Receita da Dívida Ativa do Imposto sobre Serviços de Qualquer Natureza (ISS)" tipo="1" />
+     <receita codigo="1931.35.00" descricao="Receita da Dívida Ativa da Taxa de Fiscalização e Vigilância Sanitária" tipo="1" />
+     <receita codigo="1931.98.00" descricao="Receita da Dívida Ativa das Contribuições de Melhoria" tipo="1" />
+     <receita codigo="1931.99.00" descricao="Receita da Dívida Ativa de Outros Tributos" tipo="1" />
+     <receita codigo="1932.00.00" descricao="Receita da Dívida Ativa Não Tributária" tipo="2" />
+     <receita codigo="1932.11.00" descricao="Receita da Dívida Ativa de Aluguéis" tipo="1" />
+     <receita codigo="1932.12.00" descricao="Receita da Dívida Ativa de Foros" tipo="1" />
+     <receita codigo="1932.13.00" descricao="Receita da Dívida Ativa de Taxa de Ocupação" tipo="1" />
+     <receita codigo="1932.14.00" descricao="Receita da Dívida Ativa de Arrendamento" tipo="1" />
+     <receita codigo="1932.15.00" descricao="Receita da Dívida Ativa de Laudêmios" tipo="1" />
+     <receita codigo="1932.16.00" descricao="Receita da Dívida Ativa de Outras Contribuições" tipo="1" />
+     <receita codigo="1932.35.00" descricao="Receita da Dívida Ativa das Compensações Financeiras entre Regime Geral e os Regimes Próprios de Previdência dos Servidores" tipo="1" />
+     <receita codigo="1932.42.00" descricao="Receita da Dívida Ativa por Multa de Trânsito" tipo="1" />
+     <receita codigo="1932.99.00" descricao="Receita da Dívida Ativa Não Tributária de Outras Receitas" tipo="1" />
+     <receita codigo="1940.00.00" descricao="Receitas Decorrentes de Aportes Periódicos para a Amortização de Déficit Atuarial do RPPS" tipo="1" />
+     <receita codigo="1990.00.00" descricao="Receitas Diversas" tipo="2" />
+     <receita codigo="1990.02.00" descricao="Receita de Ônus de Sucumbência de Ações Judiciais" tipo="2" />
+     <receita codigo="1990.02.01" descricao="Receita de Honorários de Advogados" tipo="1" />
+     <receita codigo="1990.02.02" descricao="Receita de Ônus de Sucumbência" tipo="1" />
+     <receita codigo="1990.03.00" descricao="Receita Decorrente de Alienação de Bens Apreendidos" tipo="2" />
+     <receita codigo="1990.03.01" descricao="Receita de Leilões de Mercadorias Apreendidas" tipo="1" />
+     <receita codigo="1990.03.02" descricao="Receita de Alienação de Bens Apreendidos" tipo="1" />
+     <receita codigo="1990.03.03" descricao="Receita de Alienação de Bens Caucionados" tipo="1" />
+     <receita codigo="1990.03.04" descricao="Receita de Alienação de Bens Apreendidos Associados ao Tráfico Ilícito de Entorpecentes e Drogas Afins" tipo="1" />
+     <receita codigo="1990.08.00" descricao="Demais Receitas para o Desenvolvimento do Desporto" tipo="1" />
+     <receita codigo="1990.99.00" descricao="Outras Receitas" tipo="1" />
+     <receita codigo="2000.00.00" descricao="Receitas de Capital" tipo="2" />
+     <receita codigo="2100.00.00" descricao="Operações de Crédito" tipo="2" />
+     <receita codigo="2110.00.00" descricao="Operações de Crédito Internas" tipo="2" />
+     <receita codigo="2111.00.00" descricao="Títulos de Responsabilidade do Tesouro" tipo="2" />
+     <receita codigo="2111.01.00" descricao="Títulos de Responsabilidade do Tesouro – Refinanciamento da Dívida Pública" tipo="1" />
+     <receita codigo="2111.02.00" descricao="Títulos da Dívida Agrária (TDA)" tipo="1" />
+     <receita codigo="2111.03.00" descricao="Títulos de Responsabilidade do Tesouro – Outras Aplicações" tipo="1" />
+     <receita codigo="2114.00.00" descricao="Operações de Crédito Internas - Contratuais" tipo="2" />
+     <receita codigo="2114.01.00" descricao="Operações de Crédito Internas para Programas de Educação" tipo="1" />
+     <receita codigo="2114.02.00" descricao="Operações de Crédito Internas para Programas de Saúde" tipo="1" />
+     <receita codigo="2114.03.00" descricao="Operações de Crédito Internas para Programas de Saneamento" tipo="1" />
+     <receita codigo="2114.04.00" descricao="Operações de Crédito Internas para Programas de Meio Ambiente" tipo="1" />
+     <receita codigo="2114.05.00" descricao="Operações de Crédito Internas para Programas de Modernização da Administração Pública" tipo="1" />
+     <receita codigo="2114.06.00" descricao="Operações de Crédito Internas para Refinanciamento da Dívida Contratual" tipo="1" />
+     <receita codigo="2114.07.00" descricao="Operações de Crédito Internas para Programas de Moradia Popular" tipo="1" />
+     <receita codigo="2114.99.00" descricao="Outras Operações de Crédito Internas - Contratuais" tipo="1" />
+     <receita codigo="2119.00.00" descricao="Outras Operações de Créditos Internas" tipo="1" />
+     <receita codigo="2120.00.00" descricao="Operações de Crédito Externas" tipo="2" />
+     <receita codigo="2122.00.00" descricao="Títulos de Responsabilidade do Tesouro" tipo="2" />
+     <receita codigo="2122.01.00" descricao="Títulos de Responsabilidade do Tesouro - Refinanciamento da Dívida Pública" tipo="1" />
+     <receita codigo="2122.02.00" descricao="Títulos de Responsabilidade do Tesouro - Outras Aplicações" tipo="1" />
+     <receita codigo="2123.00.00" descricao="Operações de Crédito Externas - Contratuais" tipo="2" />
+     <receita codigo="2123.01.00" descricao="Operações de Crédito Externas para Programas de Educação" tipo="1" />
+     <receita codigo="2123.02.00" descricao="Operações de Crédito Externas para Programas de Saúde" tipo="1" />
+     <receita codigo="2123.03.00" descricao="Operações de Crédito Externas para Programas de Saneamento" tipo="1" />
+     <receita codigo="2123.04.00" descricao="Operações de Crédito Externas para Programas de Meio Ambiente" tipo="1" />
+     <receita codigo="2123.05.00" descricao="Operações de Crédito Externas para Programas de Modernização da Administração Pública" tipo="1" />
+     <receita codigo="2123.07.00" descricao="Operações de Crédito Externas para Refinanciamento da Dívida Contratual" tipo="1" />
+     <receita codigo="2123.99.00" descricao="Outras Operações de Crédito Externas - Contratuais" tipo="1" />
+     <receita codigo="2129.00.00" descricao="Outras Operações de Créditos Externas" tipo="1" />
+     <receita codigo="2200.00.00" descricao="Alienação de Bens" tipo="2" />
+     <receita codigo="2210.00.00" descricao="Alienação de Bens Móveis" tipo="2" />
+     <receita codigo="2211.00.00" descricao="Alienação de Títulos Mobiliários" tipo="1" />
+     <receita codigo="2212.00.00" descricao="Alienação de Estoques" tipo="2" />
+     <receita codigo="2212.03.00" descricao="Alienação de Estoques Comerciais e Sociais - Comercialização" tipo="1" />
+     <receita codigo="2212.07.00" descricao="Alienação de Estoques do Programa de Aquisição de Alimentos (PAA)" tipo="1" />
+     <receita codigo="2212.99.00" descricao="Outras Aplicações de Estoques" tipo="1" />
+     <receita codigo="2214.00.00" descricao="Alienação de Animais Reprodutores e Matrizes" tipo="1" />
+     <receita codigo="2215.00.00" descricao="Alienação de Veículos" tipo="1" />
+     <receita codigo="2216.00.00" descricao="Alienação de Móveis e Utensílios" tipo="1" />
+     <receita codigo="2217.00.00" descricao="Alienação de Equipamentos" tipo="1" />
+     <receita codigo="2219.00.00" descricao="Alienação de Outros Bens Móveis" tipo="1" />
+     <receita codigo="2220.00.00" descricao="Alienação de Bens Imóveis" tipo="2" />
+     <receita codigo="2221.00.00" descricao="Alienação de Imóveis Rurais para Colonização e Reforma Agrária" tipo="1" />
+     <receita codigo="2222.00.00" descricao="Produto de Alienações" tipo="1" />
+     <receita codigo="2224.00.00" descricao="Alienação de Imóveis Rurais" tipo="1" />
+     <receita codigo="2225.00.00" descricao="Alienação de Imóveis Urbanos" tipo="1" />
+     <receita codigo="2229.00.00" descricao="Alienação de Outros Bens Imóveis" tipo="1" />
+     <receita codigo="2300.00.00" descricao="Amortização de Empréstimos" tipo="2" />
+     <receita codigo="2300.40.00" descricao="Amortização de Empréstimos - Refinanciamento de Dívida de Médio e Longo Prazo" tipo="1" />
+     <receita codigo="2300.70.00" descricao="Outras Amortizações de Empréstimos" tipo="2" />
+     <receita codigo="2300.70.01" descricao="Amortização de Empréstimos – Em Títulos" tipo="1" />
+     <receita codigo="2300.70.02" descricao="Amortização de Empréstimos – Em Contratos" tipo="1" />
+     <receita codigo="2300.80.00" descricao="Amortização de Financiamentos" tipo="2" />
+     <receita codigo="2300.80.01" descricao="Amortização de Financiamentos de Bens" tipo="1" />
+     <receita codigo="2300.80.02" descricao="Amortização de Financiamentos de Projetos" tipo="1" />
+     <receita codigo="2300.99.00" descricao="Amortização de Empréstimos Diversos" tipo="1" />
+     <receita codigo="2400.00.00" descricao="Transferências de Capital" tipo="2" />
+     <receita codigo="2420.00.00" descricao="Transferências Intergovernamentais" tipo="2" />
+     <receita codigo="2421.00.00" descricao="Transferências da União" tipo="2" />
+     <receita codigo="2421.01.00" descricao="Transferências de Recursos do Sistema Único De Saúde (SUS)" tipo="2" />
+     <receita codigo="2421.01.01" descricao="Transferências de Recursos do SUS – Bloco Investimentos na Rede de Serviços de Saúde" tipo="1" />
+     <receita codigo="2421.02.00" descricao="Transferências de Recursos Destinados a Programas de Educação" tipo="1" />
+     <receita codigo="2421.37.00" descricao="Transferências a Consórcios Públicos" tipo="1" />
+     <receita codigo="2421.99.00" descricao="Outras Transferências da União" tipo="1" />
+     <receita codigo="2422.00.00" descricao="Transferências dos Estados" tipo="2" />
+     <receita codigo="2422.01.00" descricao="Transferências de Recursos do Sistema Único de Saúde (SUS)" tipo="1" />
+     <receita codigo="2422.02.00" descricao="Transferências de Recursos destinados a Programas de Educação" tipo="1" />
+     <receita codigo="2422.37.00" descricao="Transferências a Consórcios Públicos" tipo="1" />
+     <receita codigo="2422.99.00" descricao="Outras Transferências dos Estados" tipo="1" />
+     <receita codigo="2423.00.00" descricao="Transferências dos Municípios" tipo="2" />
+     <receita codigo="2423.01.00" descricao="Transferências de Recursos destinados a Programas de Saúde" tipo="1" />
+     <receita codigo="2423.02.00" descricao="Transferências de Recursos destinados a Programas de Educação" tipo="1" />
+     <receita codigo="2423.37.00" descricao="Transferências a Consórcios Públicos" tipo="1" />
+     <receita codigo="2423.99.00" descricao="Outras Transferências dos Municípios" tipo="1" />
+     <receita codigo="2430.00.00" descricao="Transferências de Instituições Privadas" tipo="1" />
+     <receita codigo="2440.00.00" descricao="Transferências do Exterior" tipo="1" />
+     <receita codigo="2450.00.00" descricao="Transferências de Pessoas" tipo="1" />
+     <receita codigo="2460.00.00" descricao="Transferência de Outras Instituições Públicas" tipo="1" />
+     <receita codigo="2470.00.00" descricao="Transferências de Convênios" tipo="2" />
+     <receita codigo="2471.00.00" descricao="Transferência de Convênios da União e de Suas Entidades" tipo="2" />
+     <receita codigo="2471.01.00" descricao="Transferências de Convênios da União para o Sistema Único de Saúde (SUS)" tipo="1" />
+     <receita codigo="2471.02.00" descricao="Transferências de Convênios da União destinadas a Programas de Educação" tipo="1" />
+     <receita codigo="2471.03.00" descricao="Transferências de Convênios da União destinadas a Programas de Saneamento Básico" tipo="1" />
+     <receita codigo="2471.04.00" descricao="Transferências de Convênios da União destinadas a Programas de Meio Ambiente" tipo="1" />
+     <receita codigo="2471.05.00" descricao="Transferências de Convênios da União destinadas a Programas de Infra-Estrutura em Transporte" tipo="1" />
+     <receita codigo="2471.99.00" descricao="Outras Transferências de Convênio da União" tipo="1" />
+     <receita codigo="2472.00.00" descricao="Transferência de Convênios do Estado e de suas Entidades" tipo="2" />
+     <receita codigo="2472.01.00" descricao="Transferências de Convênios dos Estados para o Sistema Único de Saúde (SUS)" tipo="1" />
+     <receita codigo="2472.02.00" descricao="Transferências de Convênios dos Estados Destinadas a Programas de Educação" tipo="1" />
+     <receita codigo="2472.03.00" descricao="Transferências de Convênios dos Estados Destinadas a Programas de Saneamento Básico" tipo="1" />
+     <receita codigo="2472.04.00" descricao="Transferências de Convênios dos Estados Destinadas a Programas de Meio Ambiente" tipo="1" />
+     <receita codigo="2472.05.00" descricao="Transferências de Convênios dos Estados Destinadas a Programas de Infra-Estrutura em Transporte" tipo="1" />
+     <receita codigo="2472.99.00" descricao="Outras Transferências de Convênios dos Estados" tipo="1" />
+     <receita codigo="2473.00.00" descricao="Transferência de Convênios dos Municípios e de Suas Entidades" tipo="2" />
+     <receita codigo="2473.01.00" descricao="Transferências de Convênios dos Municípios Destinadas a Programas de Saúde" tipo="1" />
+     <receita codigo="2473.02.00" descricao="Transferências de Convênios dos Municípios Destinadas a Programas de Educação" tipo="1" />
+     <receita codigo="2473.99.00" descricao="Outras Transferências de Convênio dos Municípios" tipo="1" />
+     <receita codigo="2474.00.00" descricao="Transferência de Convênios de Instituições Privadas" tipo="1" />
+     <receita codigo="2475.00.00" descricao="Transferência de Convênio do Exterior" tipo="1" />
+     <receita codigo="2480.00.00" descricao="Transferências para o Combate à Fome" tipo="2" />
+     <receita codigo="2481.00.00" descricao="Provenientes do Exterior" tipo="1" />
+     <receita codigo="2482.00.00" descricao="Provenientes de Pessoas Jurídicas" tipo="1" />
+     <receita codigo="2483.00.00" descricao="Provenientes de Pessoas Físicas" tipo="1" />
+     <receita codigo="2484.00.00" descricao="Provenientes de Depósitos Não Identificados" tipo="1" />
+     <receita codigo="2500.00.00" descricao="Outras Receitas de Capital" tipo="2" />
+     <receita codigo="2520.00.00" descricao="Integralização do Capital Social" tipo="2" />
+     <receita codigo="2521.00.00" descricao="Integralização com Recursos do Tesouro" tipo="1" />
+     <receita codigo="2522.00.00" descricao="Integralização com Recursos de Outras Fontes" tipo="1" />
+     <receita codigo="2550.00.00" descricao="Receita da Dívida Ativa Proveniente de Amortização de Empréstimos e Financiamentos" tipo="1" />
+     <receita codigo="2590.00.00" descricao="Outras Receitas" tipo="1" />
+     <receita codigo="7 +" descricao="Receitas Correntes Intraorçamentárias (substituir o dígito 1 pelo dígito 7)" tipo="2" />
+     <receita codigo="8 +" descricao="Receitas de Capital Intraorçamentárias (substituir o dígito 2 pelo dígito 8)" tipo="2" />
+     <receita codigo="90.0000.00.00" descricao="Deduções da Receita" tipo="2" />
+     <receita codigo="91.0000.00.00" descricao="Renúncia (ao detalhar, acrescentar a rubrica da receita a ser deduzida)" tipo="2" />
+     <receita codigo="92.0000.00.00" descricao="Restituições (ao detalhar, acrescentar a rubrica da receita a ser deduzida)" tipo="2" />
+     <receita codigo="92.1112.02.00" descricao="Restituição do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU)" tipo="1" />
+     <receita codigo="92.1112.04.31" descricao="Restituição do Imposto de Renda Retido nas Fontes sobre os Rendimentos do Trabalho (IRRF)" tipo="1" />
+     <receita codigo="92.1112.08.00" descricao="Restituição do Imposto sobre Transmissão &quot;Inter Vivos&quot; de Bens Imóveis e de Direitos Reais sobre Imóveis (ITBI)" tipo="1" />
+     <receita codigo="92.1113.05.00" descricao="Restituição do Imposto sobre Serviços de Qualquer Natureza (ISS)" tipo="1" />
+     <receita codigo="93.0000.00.00" descricao="Descontos Concedidos (ao detalhar, acrescentar a rubrica da receita a ser deduzida)" tipo="2" />
+     <receita codigo="95.0000.00.00" descricao="FUNDEB" tipo="2" />
+     <receita codigo="95.1721.01.00" descricao="Dedução das Receitas de Transferências da União" tipo="2" />
+     <receita codigo="95.1721.01.02" descricao="Dedução de Receita para Formação do FUNDEB - FPM" tipo="1" />
+     <receita codigo="95.1721.01.05" descricao="Dedução de Receita para Formação do FUNDEB - ITR" tipo="1" />
+     <receita codigo="95.1721.36.00" descricao="Dedução de Receita para Formação do FUNDEB - ICMS Desoneração – LC N° 87/96" tipo="1" />
+     <receita codigo="95.1722.01.00" descricao="Dedução das Receitas de Transferência dos Estados" tipo="2" />
+     <receita codigo="95.1722.01.01" descricao="Dedução de Receita para Formação do FUNDEB - ICMS" tipo="1" />
+     <receita codigo="95.1722.01.02" descricao="Dedução de Receita para Formação do FUNDEB - IPVA" tipo="1" />
+     <receita codigo="95.1722.01.04" descricao="Dedução de Receita para Formação do FUNDEB - IPI sobre Exportação" tipo="1" />
+     <receita codigo="96.0000.00.00" descricao="Compensações (ao detalhar, acrescentar a rubrica da receita a ser deduzida)" tipo="2" />
+     <receita codigo="98.0000.00.00" descricao="Retificações (ao detalhar, acrescentar a rubrica da receita a ser deduzida)" tipo="2" />
+     <receita codigo="99.0000.00.00" descricao="Outras Deduções (ao detalhar, acrescentar a rubrica da receita a ser deduzida)" tipo="2" />
+     <receita codigo="3.0.00.00.00" descricao="Despesas Correntes" tipo="2" />
+     <receita codigo="3.1.00.00.00" descricao="Pessoal e Encargos Sociais" tipo="2" />
+     <receita codigo="3.1.71.00.00" descricao="Transferências a Consórcios Públicos" tipo="2" />
+     <receita codigo="3.1.71.04.00" descricao="Contratação por Tempo Determinado" tipo="1" />
+     <receita codigo="3.1.71.07.00" descricao="Contribuições a Entidades Fechadas de Previdência" tipo="1" />
+     <receita codigo="3.1.71.08.00" descricao="Outros Benefícios Assistenciais" tipo="2" />
+     <receita codigo="3.1.71.08.01" descricao="Outros Benefícios Assistenciais de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.71.08.02" descricao="Outros Benefícios Assistenciais de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.71.09.00" descricao="Salário-família" tipo="2" />
+     <receita codigo="3.1.71.09.01" descricao="Salário-família de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.71.09.02" descricao="Salário-família de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.71.11.00" descricao="Vencimentos e Vantagens Fixas - Pessoal Civil" tipo="1" />
+     <receita codigo="3.1.71.13.00" descricao="Obrigações Patronais" tipo="1" />
+     <receita codigo="3.1.71.16.00" descricao="Outras Despesas Variáveis - Pessoal Civil" tipo="1" />
+     <receita codigo="3.1.71.34.00" descricao="Outras Despesas de Pessoal Decorrentes de Contratos de Terceirização" tipo="1" />
+     <receita codigo="3.1.71.67.00" descricao="Depósitos Compulsórios" tipo="1" />
+     <receita codigo="31.71.70.00" descricao="Rateio pela Participação em Consórcio Público" tipo="1" />
+     <receita codigo="3.1.71.91.00" descricao="Sentenças Judiciais" tipo="2" />
+     <receita codigo="3.1.71.91.01" descricao="Sentenças Judiciais de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.71.91.02" descricao="Sentenças Judiciais de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.71.92.00" descricao="Despesas de Exercícios Anteriores" tipo="2" />
+     <receita codigo="3.1.71.92.01" descricao="Despesas de Exercícios Anteriores de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.71.92.02" descricao="Despesas de Exercícios Anteriores de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.71.94.00" descricao="Indenizações e Restituições Trabalhistas" tipo="2" />
+     <receita codigo="3.1.71.94.01" descricao="Indenizações por Demissão de Servidores ou Empregados" tipo="1" />
+     <receita codigo="3.1.71.94.02" descricao="Incentivos à Demissão Voluntária" tipo="1" />
+     <receita codigo="3.1.71.94.03" descricao="Restituições Trabalhistas" tipo="1" />
+     <receita codigo="3.1.71.96.00" descricao="Ressarcimento de Despesas de Pessoal Requisitado" tipo="1" />
+     <receita codigo="3.1.71.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.1.90.00.00" descricao="Aplicações Diretas" tipo="2" />
+     <receita codigo="3.1.90.01.00" descricao="Aposentadorias, Reserva Remunerada e Reformas" tipo="2" />
+     <receita codigo="3.1.90.01.01" descricao="Aposentadorias Custeadas com Recursos do RPPS" tipo="1" />
+     <receita codigo="3.1.90.01.02" descricao="Aposentadorias Custeadas com Recursos Ordinários do Tesouro" tipo="1" />
+     <receita codigo="3.1.90.03.00" descricao="Pensões" tipo="2" />
+     <receita codigo="3.1.90.03.01" descricao="Pensões Custeadas com Recursos do RPPS" tipo="1" />
+     <receita codigo="3.1.90.03.02" descricao="Pensões Custeadas com Recursos Ordinários do Tesouro" tipo="1" />
+     <receita codigo="3.1.90.04.00" descricao="Contratação por Tempo Determinado" tipo="1" />
+     <receita codigo="3.1.90.05.00" descricao="Outros Benefícios Previdenciários" tipo="1" />
+     <receita codigo="3.1.90.07.00" descricao="Contribuições a Entidades Fechadas de Previdência" tipo="1" />
+     <receita codigo="3.1.90.08.00" descricao="Outros Benefícios Assistenciais" tipo="2" />
+     <receita codigo="3.1.90.08.01" descricao="Outros Benefícios Assistenciais de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.90.08.02" descricao="Outros Benefícios Assistenciais de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.90.09.00" descricao="Salário-família" tipo="2" />
+     <receita codigo="3.1.90.09.01" descricao="Salário-família de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.90.09.02" descricao="Salário-família de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.90.11.00" descricao="Vencimentos e Vantagens Fixas – Pessoal Civil" tipo="2" />
+     <receita codigo="3.1.90.11.01" descricao="Pessoal do FUNDEB (Recursos: Mínimo de 60%)" tipo="1" />
+     <receita codigo="3.1.90.11.02" descricao="Pessoal do FUNDEB (Recursos: até 40%)" tipo="1" />
+     <receita codigo="3.1.90.11.03" descricao="Pessoal de Cargo Efetivo (Vinculado ao RPPS), exceto FUNDEB" tipo="1" />
+     <receita codigo="3.1.90.11.04" descricao="Pessoal de Cargo Efetivo (Vinculado ao INSS), exceto FUNDEB" tipo="1" />
+     <receita codigo="3.1.90.11.05" descricao="Pessoal de Cargo Comissionado, exceto FUNDEB" tipo="1" />
+     <receita codigo="3.1.90.11.06" descricao="Subsídio de Vereador" tipo="1" />
+     <receita codigo="3.1.90.11.07" descricao="Subsídio de Prefeito" tipo="1" />
+     <receita codigo="3.1.90.11.08" descricao="Subsídio de Vice-prefeito" tipo="1" />
+     <receita codigo="3.1.90.11.09" descricao="Subsídio de Secretário Municipal" tipo="1" />
+     <receita codigo="3.1.90.11.10" descricao="Subsídio de Presidente da Câmara" tipo="1" />
+     <receita codigo="3.1.90.11.99" descricao="Outros" tipo="1" />
+     <receita codigo="3.1.90.13.00" descricao="Obrigações Patronais" tipo="2" />
+     <receita codigo="3.1.90.13.01" descricao="FGTS (exceto o Incidente sobre o FUNDEB)" tipo="1" />
+     <receita codigo="3.1.90.13.02" descricao="Contribuição Patronal para o RPPS (exceto a Incidente sobre o FUNDEB)" tipo="1" />
+     <receita codigo="3.1.90.13.03" descricao="Contribuição Patronal para o INSS (exceto a Incidente sobre o FUNDEB)" tipo="1" />
+     <receita codigo="3.1.90.13.04" descricao="Obrigações Patronais Referentes ao FUNDEB (Mínimo de 60%)" tipo="1" />
+     <receita codigo="3.1.90.13.05" descricao="Obrigações Patronais Referentes ao FUNDEB (até 40%)" tipo="1" />
+     <receita codigo="3.1.90.13.99" descricao="Outras Obrigações" tipo="1" />
+     <receita codigo="3.1.90.16.00" descricao="Outras Despesas Variáveis - Pessoal Civil" tipo="1" />
+     <receita codigo="3.1.90.34.00" descricao="Outras Despesas de Pessoal Decorrentes de Contratos de Terceirização" tipo="2" />
+     <receita codigo="3.1.90.34.01" descricao="Assessoria Jurídica" tipo="1" />
+     <receita codigo="3.1.90.34.02" descricao="Assessoria Contábil" tipo="1" />
+     <receita codigo="3.1.90.34.03" descricao="Credenciamentos" tipo="1" />
+     <receita codigo="3.1.90.34.99" descricao="Outros" tipo="1" />
+     <receita codigo="3.1.90.67.00" descricao="Depósitos Compulsórios" tipo="1" />
+     <receita codigo="3.1.90.91.00" descricao="Sentenças Judiciais" tipo="2" />
+     <receita codigo="3.1.90.91.01" descricao="Sentenças Judiciais de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.90.91.02" descricao="Sentenças Judiciais de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.90.92.00" descricao="Despesas de Exercícios Anteriores" tipo="2" />
+     <receita codigo="3.1.90.92.01" descricao="Despesas de Exercícios Anteriores de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.90.92.02" descricao="Despesas de Exercícios Anteriores de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.90.94.00" descricao="Indenizações e Restituições Trabalhistas" tipo="2" />
+     <receita codigo="3.1.90.94.01" descricao="Indenizações por Demissão de Servidores ou Empregados" tipo="1" />
+     <receita codigo="3.1.90.94.02" descricao="Incentivos à Demissão Voluntária" tipo="1" />
+     <receita codigo="3.1.90.94.03" descricao="Restituições Trabalhistas" tipo="1" />
+     <receita codigo="3.1.90.96.00" descricao="Ressarcimento de Despesas de Pessoal Requisitado" tipo="1" />
+     <receita codigo="3.1.90.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.1.91.00.00" descricao="Aplicação Direta Decorrente de Operação entre Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social" tipo="2" />
+     <receita codigo="3.1.91.04.00" descricao="Contratação por Tempo Determinado" tipo="1" />
+     <receita codigo="3.1.91.13.00" descricao="Obrigações Patronais" tipo="2" />
+     <receita codigo="3.1.91.13.01" descricao="FGTS (exceto a Incidente sobre o FUNDEB)" tipo="1" />
+     <receita codigo="3.1.91.13.02" descricao="Contribuição Patronal para o RPPS (exceto a Incidente sobre o FUNDEB)" tipo="1" />
+     <receita codigo="3.1.91.13.03" descricao="Contribuição Patronal para o INSS (exceto a Incidente sobre o FUNDEB)" tipo="1" />
+     <receita codigo="3.1.91.13.04" descricao="Obrigações Patronais Referentes ao FUNDEB (Mínimo de 60%)" tipo="1" />
+     <receita codigo="3.1.91.13.05" descricao="Obrigações Patronais Referentes ao FUNDEB (até 40%)" tipo="1" />
+     <receita codigo="3.1.91.13.99" descricao="Outras Obrigações" tipo="1" />
+     <receita codigo="3.1.91.91.00" descricao="Sentenças Judiciais" tipo="2" />
+     <receita codigo="3.1.91.91.01" descricao="Sentenças Judiciais de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.91.91.02" descricao="Sentenças Judiciais de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.91.92.00" descricao="Despesas de Exercícios Anteriores" tipo="2" />
+     <receita codigo="3.1.91.92.01" descricao="Despesas de Exercícios Anteriores de Pessoal Ativo" tipo="1" />
+     <receita codigo="3.1.91.92.02" descricao="Despesas de Exercícios Anteriores de Inativos e Pensionistas" tipo="1" />
+     <receita codigo="3.1.91.94.00" descricao="Indenizações e Restituições Trabalhistas" tipo="2" />
+     <receita codigo="3.1.91.94.01" descricao="Indenizações por Demissão de Servidores ou Empregados" tipo="1" />
+     <receita codigo="3.1.91.94.02" descricao="Incentivos à Demissão Voluntária" tipo="1" />
+     <receita codigo="3.1.91.94.03" descricao="Restituições Trabalhistas" tipo="1" />
+     <receita codigo="3.1.91.96.00" descricao="Ressarcimento de Despesas de Pessoal Requisitado" tipo="1" />
+     <receita codigo="3.1.99.00.00" descricao="A Definir" tipo="2" />
+     <receita codigo="3.1.99.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.2.00.00.00" descricao="Juros e Encargos da Dívida" tipo="2" />
+     <receita codigo="3.2.71.00.00" descricao="Transferências a Consórcios Públicos" tipo="2" />
+     <receita codigo="3.2.71.21.00" descricao="Juros sobre a Dívida por Contrato" tipo="1" />
+     <receita codigo="3.2.71.22.00" descricao="Outros Encargos sobre a Dívida por Contrato" tipo="1" />
+     <receita codigo="3.2.71.23.00" descricao="Juros, Deságios e Descontos da Dívida Mobiliária" tipo="1" />
+     <receita codigo="3.2.71.24.00" descricao="Outros Encargos sobre a Dívida Mobiliária" tipo="1" />
+     <receita codigo="3.2.71.25.00" descricao="Encargos sobre Operações de Crédito por Antecipação da Receita" tipo="1" />
+     <receita codigo="3.2.71.70.00" descricao="Rateio pela Participação em Consórcio Público" tipo="1" />
+     <receita codigo="3.2.71.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="3.2.71.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.2.71.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.2.71.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.2.90.00.00" descricao="Aplicações Diretas" tipo="2" />
+     <receita codigo="3.2.90.21.00" descricao="Juros sobre a Dívida por Contrato" tipo="2" />
+     <receita codigo="3.2.90.21.01" descricao="Juros sobre a Dívida por Contrato – Interna" tipo="1" />
+     <receita codigo="3.2.90.21.02" descricao="Juros sobre a Dívida por Contrato – Externa" tipo="1" />
+     <receita codigo="3.2.90.22.00" descricao="Outros Encargos sobre a Dívida por Contrato" tipo="2" />
+     <receita codigo="3.2.90.22.01" descricao="Outros Encargos sobre a Dívida por Contrato – Interna" tipo="1" />
+     <receita codigo="3.2.90.22.02" descricao="Outros Encargos sobre a Dívida por Contrato – Externa" tipo="1" />
+     <receita codigo="3.2.90.23.00" descricao="Juros, Deságios e Descontos da Dívida Mobiliária" tipo="1" />
+     <receita codigo="3.2.90.24.00" descricao="Outros Encargos sobre a Dívida Mobiliária" tipo="1" />
+     <receita codigo="3.2.90.25.00" descricao="Encargos sobre Operações de Crédito por Antecipação da Receita" tipo="1" />
+     <receita codigo="3.2.90.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="3.2.90.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.2.90.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.2.90.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.2.91.00.00" descricao="Aplicação Direta Decorrente de Operação entre Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social" tipo="2" />
+     <receita codigo="3.2.91.21.00" descricao="Juros sobre a Dívida por Contrato" tipo="1" />
+     <receita codigo="3.2.91.22.00" descricao="Outros Encargos sobre a Dívida por Contrato" tipo="1" />
+     <receita codigo="3.2.91.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="3.2.91.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.2.91.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.2.99.00.00" descricao="A Definir" tipo="2" />
+     <receita codigo="3.2.99.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.00.00.00" descricao="Outras Despesas Correntes" tipo="2" />
+     <receita codigo="3.3.20.00.00" descricao="Transferências à União" tipo="2" />
+     <receita codigo="3.3.20.01.00" descricao="Aposentadorias, Reserva Remunerada e Reformas" tipo="1" />
+     <receita codigo="3.3.20.03.00" descricao="Pensões" tipo="1" />
+     <receita codigo="3.3.20.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.20.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="3.3.20.81.00" descricao="Distribuição Constitucional ou Legal de Receitas" tipo="1" />
+     <receita codigo="3.3.20.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.20.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.3.20.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.22.00.00" descricao="Execução Orçamentária Delegada à União" tipo="2" />
+     <receita codigo="3.3.22.14.00" descricao="Diárias - Civil" tipo="1" />
+     <receita codigo="3.3.22.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="3.3.22.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="3.3.22.36.00" descricao="Outros Serviços de Terceiros - Pessoa Física" tipo="1" />
+     <receita codigo="3.3.22.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.22.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.30.00.00" descricao="Transferências a Estados e ao Distrito Federal" tipo="2" />
+     <receita codigo="3.3.30.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="3.3.30.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="3.3.30.36.00" descricao="Outros Serviços de Terceiros - Pessoa Física" tipo="1" />
+     <receita codigo="3.3.30.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.30.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.30.81.00" descricao="Distribuição Constitucional ou Legal de Receitas" tipo="1" />
+     <receita codigo="3.3.30.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.30.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.3.30.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.31.00.00" descricao="Transferências a Estados e ao Distrito Federal – Fundo a Fundo" tipo="2" />
+     <receita codigo="3.3.31.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="3.3.31.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="3.3.31.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.31.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.32.00.00" descricao="Execução Orçamentária Delegada a Estados e ao Distrito Federal" tipo="2" />
+     <receita codigo="3.3.32.14.00" descricao="Diárias - Civil" tipo="1" />
+     <receita codigo="3.3.32.18.00" descricao="Auxílio Financeiro a Estudantes" tipo="1" />
+     <receita codigo="3.3.32.20.00" descricao="Auxílio Financeiro a Pesquisadores" tipo="1" />
+     <receita codigo="3.3.32.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="3.3.32.33.00" descricao="Passagens e Despesas com Locomoção" tipo="1" />
+     <receita codigo="3.3.32.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="3.3.32.36.00" descricao="Outros Serviços de Terceiros - Pessoa Física" tipo="1" />
+     <receita codigo="3.3.32.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.32.47.00" descricao="Obrigações Tributárias e Contributivas" tipo="1" />
+     <receita codigo="3.3.32.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.32.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.3.32.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.40.00.00" descricao="Transferências a Municípios" tipo="2" />
+     <receita codigo="3.3.40.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.40.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.40.81.00" descricao="Distribuição Constitucional ou Legal de Receitas" tipo="1" />
+     <receita codigo="3.3.40.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.40.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.3.40.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.50.00.00" descricao="Transferências a Instituições Privadas sem Fins Lucrativos" tipo="2" />
+     <receita codigo="3.3.50.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="3.3.50.34.00" descricao="Outras Despesas de Pessoal Decorrentes de Contratos de Terceirização" tipo="1" />
+     <receita codigo="3.3.50.36.00" descricao="Outros Serviços de Terceiros - Pessoa Física" tipo="1" />
+     <receita codigo="3.3.50.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.50.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.50.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="3.3.50.43.00" descricao="Subvenções Sociais" tipo="1" />
+     <receita codigo="3.3.50.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.50.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.60.00.00" descricao="Transferências a Instituições Privadas com Fins Lucrativos" tipo="2" />
+     <receita codigo="3.3.60.39.00" descricao="Outros Serviços de Terceiros – Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.60.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.60.45.00" descricao="Subvenções Econômicas" tipo="1" />
+     <receita codigo="3.3.60.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.60.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.70.00.00" descricao="Transferências a Instituições Multigovernamentais" tipo="2" />
+     <receita codigo="3.3.70.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.70.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.70.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.71.00.00" descricao="Transferências a Consórcios Públicos" tipo="2" />
+     <receita codigo="3.3.71.04.00" descricao="Contratação por Tempo Determinado" tipo="1" />
+     <receita codigo="3.3.71.08.00" descricao="Outros Benefícios Assistenciais" tipo="1" />
+     <receita codigo="3.3.71.14.00" descricao="Diárias – Civil" tipo="1" />
+     <receita codigo="3.3.71.18.00" descricao="Auxílio Financeiro a Estudantes" tipo="1" />
+     <receita codigo="3.3.71.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="3.3.71.31.00" descricao="Premiações Culturais, Artísticas, Científicas, Desportivas e Outras" tipo="1" />
+     <receita codigo="3.3.71.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="3.3.71.33.00" descricao="Passagens e Despesas com Locomoção" tipo="1" />
+     <receita codigo="3.3.71.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="3.3.71.36.00" descricao="Outros Serviços de Terceiros – Pessoa Física" tipo="1" />
+     <receita codigo="3.3.71.37.00" descricao="Locação de Mão-de-obra" tipo="1" />
+     <receita codigo="3.3.71.38.00" descricao="Arrendamento Mercantil" tipo="1" />
+     <receita codigo="3.3.71.39.00" descricao="Outros Serviços de Terceiros – Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.71.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.71.46.00" descricao="Auxílio-alimentação" tipo="1" />
+     <receita codigo="3.3.71.47.00" descricao="Obrigações Tributárias e Contributivas" tipo="1" />
+     <receita codigo="3.3.71.48.00" descricao="Outros Auxílios Financeiros a Pessoas Físicas" tipo="1" />
+     <receita codigo="3.3.71.49.00" descricao="Auxílio-Transporte" tipo="1" />
+     <receita codigo="3.3.71.67.00" descricao="Depósitos Compulsórios" tipo="1" />
+     <receita codigo="3.3.71.70.00" descricao="Rateio pela Participação em Consórcio Público" tipo="1" />
+     <receita codigo="3.3.71.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="3.3.71.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.71.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.3.71.95.00" descricao="Indenizações pela Execução de Trabalhos de Campo" tipo="1" />
+     <receita codigo="3.3.71.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.72.00.00" descricao="Execução Orçamentária Delegada a Consórcios Públicos" tipo="2" />
+     <receita codigo="3.3.72.14.00" descricao="Diárias – Civil" tipo="1" />
+     <receita codigo="3.3.72.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="3.3.72.31.00" descricao="Premiações Culturais, Artísticas, Científicas, Desportivas e Outras" tipo="1" />
+     <receita codigo="3.3.72.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="3.3.72.33.00" descricao="Passagens e Despesas com Locomoção" tipo="1" />
+     <receita codigo="3.3.72.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="3.3.72.36.00" descricao="Outros Serviços de Terceiros – Pessoa Física" tipo="1" />
+     <receita codigo="3.3.72.37.00" descricao="Locação de Mão-de-obra" tipo="1" />
+     <receita codigo="3.3.72.39.00" descricao="Outros Serviços de Terceiros – Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.72.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.72.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.80.00.00" descricao="Transferências ao Exterior" tipo="2" />
+     <receita codigo="3.3.80.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.80.43.00" descricao="Subvenções Sociais" tipo="1" />
+     <receita codigo="3.3.80.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.90.00.00" descricao="Aplicações Diretas" tipo="2" />
+     <receita codigo="3.3.90.01.00" descricao="Aposentadorias, Reserva Remunerada e Reformas" tipo="2" />
+     <receita codigo="3.3.90.01.01" descricao="Aposentadorias Custeadas com Recursos do RPPS" tipo="1" />
+     <receita codigo="3.3.90.01.02" descricao="Aposentadorias Custeadas com Recursos Ordinários do Tesouro" tipo="1" />
+     <receita codigo="3.3.90.03.00" descricao="Pensões" tipo="2" />
+     <receita codigo="3.3.90.03.01" descricao="Pensões Custeadas com Recursos do RPPS" tipo="1" />
+     <receita codigo="3.3.90.03.02" descricao="Pensões Custeadas com Recursos Ordinários do Tesouro" tipo="1" />
+     <receita codigo="3.3.90.04.00" descricao="Contratação por Tempo Determinado" tipo="1" />
+     <receita codigo="3.3.90.05.00" descricao="Outros Benefícios Previdenciários" tipo="1" />
+     <receita codigo="3.3.90.06.00" descricao="Benefício Mensal ao Deficiente e ao Idoso" tipo="1" />
+     <receita codigo="3.3.90.08.00" descricao="Outros Benefícios Assistenciais" tipo="1" />
+     <receita codigo="3.3.90.09.00" descricao="Salário-família" tipo="1" />
+     <receita codigo="3.3.90.10.00" descricao="Outros Benefícios de Natureza Social" tipo="1" />
+     <receita codigo="3.3.90.14.00" descricao="Diárias – Pessoal Civil" tipo="1" />
+     <receita codigo="3.3.90.18.00" descricao="Auxílio Financeiro a Estudantes" tipo="1" />
+     <receita codigo="3.3.90.19.00" descricao="Auxílio-fardamento" tipo="1" />
+     <receita codigo="3.3.90.20.00" descricao="Auxílio Financeiro a Pesquisadores" tipo="1" />
+     <receita codigo="3.3.90.27.00" descricao="Encargos para a Honra de Avais, Garantias, Seguros e Similares" tipo="1" />
+     <receita codigo="3.3.90.28.00" descricao="Remuneração de Cotas de Fundos Autárquicos" tipo="1" />
+     <receita codigo="3.3.90.29.00" descricao="Distribuição de Resultado de Empresas Estatais Dependentes" tipo="1" />
+     <receita codigo="3.3.90.30.00" descricao="Material de Consumo" tipo="2" />
+     <receita codigo="3.3.90.30.01" descricao="Combustíveis e Lubrificantes Automotivos" tipo="1" />
+     <receita codigo="3.3.90.30.02" descricao="Combustíveis e Lubrificantes de Aviação" tipo="1" />
+     <receita codigo="3.3.90.30.03" descricao="Combustíveis e Lubrificantes para Outras Finalidades" tipo="1" />
+     <receita codigo="3.3.90.30.04" descricao="Gás Engarrafado" tipo="1" />
+     <receita codigo="3.3.90.30.05" descricao="Explosivos e Munições" tipo="1" />
+     <receita codigo="3.3.90.30.06" descricao="Alimentos para Animais" tipo="1" />
+     <receita codigo="3.3.90.30.07" descricao="Gêneros de Alimentação" tipo="1" />
+     <receita codigo="3.3.90.30.08" descricao="Animais para Pesquisa e Abate" tipo="1" />
+     <receita codigo="3.3.90.30.09" descricao="Medicamentos" tipo="1" />
+     <receita codigo="3.3.90.30.10" descricao="Material Odontológico" tipo="1" />
+     <receita codigo="3.3.90.30.11" descricao="Material Químico" tipo="1" />
+     <receita codigo="3.3.90.30.12" descricao="Material de Coudelaria ou de Uso Zootécnico" tipo="1" />
+     <receita codigo="3.3.90.30.13" descricao="Material de Caça e Pesca" tipo="1" />
+     <receita codigo="3.3.90.30.14" descricao="Material Educativo e Esportivo" tipo="1" />
+     <receita codigo="3.3.90.30.15" descricao="Material para Festividades e Homenagens" tipo="1" />
+     <receita codigo="3.3.90.30.16" descricao="Material de Expediente" tipo="1" />
+     <receita codigo="3.3.90.30.17" descricao="Material de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.90.30.18" descricao="Materiais e Medicamentos para Uso Veterinário" tipo="1" />
+     <receita codigo="3.3.90.30.19" descricao="Material de Acondicionamento e Embalagem" tipo="1" />
+     <receita codigo="3.3.90.30.20" descricao="Material de Cama, Mesa e Banho" tipo="1" />
+     <receita codigo="3.3.90.30.21" descricao="Material de Copa e Cozinha" tipo="1" />
+     <receita codigo="3.3.90.30.22" descricao="Material de Limpeza e Produção de Higienização" tipo="1" />
+     <receita codigo="3.3.90.30.23" descricao="Uniformes, Tecidos e Aviamentos" tipo="1" />
+     <receita codigo="3.3.90.30.24" descricao="Material para Manutenção de Bens Imóveis" tipo="1" />
+     <receita codigo="3.3.90.30.25" descricao="Material para Manutenção de Bens Móveis" tipo="1" />
+     <receita codigo="3.3.90.30.26" descricao="Material Elétrico e Eletrônico" tipo="1" />
+     <receita codigo="3.3.90.30.27" descricao="Material de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="3.3.90.30.28" descricao="Material de Proteção e Segurança" tipo="1" />
+     <receita codigo="3.3.90.30.29" descricao="Material para Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="3.3.90.30.30" descricao="Material para Comunicações" tipo="1" />
+     <receita codigo="3.3.90.30.31" descricao="Sementes, Mudas de Plantas e Insumos" tipo="1" />
+     <receita codigo="3.3.90.30.32" descricao="Material Para Produção Industrial" tipo="1" />
+     <receita codigo="3.3.90.30.33" descricao="Sobressalentes, Máquinas, Motores e Embarcações" tipo="1" />
+     <receita codigo="3.3.90.30.34" descricao="Material Laboratorial" tipo="1" />
+     <receita codigo="3.3.90.30.35" descricao="Material Hospitalar" tipo="1" />
+     <receita codigo="3.3.90.30.36" descricao="Suprimento de Proteção ao Vôo" tipo="1" />
+     <receita codigo="3.3.90.30.37" descricao="Material para Manutenção de Veículos" tipo="1" />
+     <receita codigo="3.3.90.30.38" descricao="Material Biológico" tipo="1" />
+     <receita codigo="3.3.90.30.39" descricao="Material Gráfico" tipo="1" />
+     <receita codigo="3.3.90.30.40" descricao="Ferramentas" tipo="1" />
+     <receita codigo="3.3.90.30.41" descricao="Material para Reabilitação Profissional" tipo="1" />
+     <receita codigo="3.3.90.30.42" descricao="Material de Sinalização Visual e Afins" tipo="1" />
+     <receita codigo="3.3.90.30.43" descricao="Material Técnico para Seleção e Treinamento" tipo="1" />
+     <receita codigo="3.3.90.30.44" descricao="Material Bibliográfico Não Imobilizável" tipo="1" />
+     <receita codigo="3.3.90.30.45" descricao="Aquisição de Softwares de Base" tipo="1" />
+     <receita codigo="3.3.90.30.46" descricao="Bens Móveis Não Ativáveis" tipo="1" />
+     <receita codigo="3.3.90.30.47" descricao="Bandeiras, Flâmulas e Insígnias" tipo="1" />
+     <receita codigo="3.3.90.30.99" descricao="Outros Materiais de Consumo" tipo="1" />
+     <receita codigo="3.3.90.31.00" descricao="Premiações Culturais, Artísticas, Científicas, Desportivas e Outras" tipo="1" />
+     <receita codigo="3.3.90.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="3.3.90.33.00" descricao="Passagens e Despesas com Locomoção" tipo="1" />
+     <receita codigo="3.3.90.34.00" descricao="Outras Despesas de Pessoal Decorrentes de Contratos de Terceirização" tipo="1" />
+     <receita codigo="3.3.90.35.00" descricao="Serviços de Consultoria" tipo="2" />
+     <receita codigo="3.3.90.35.01" descricao="Consultoria Contábil" tipo="1" />
+     <receita codigo="3.3.90.35.02" descricao="Consultoria Jurídica" tipo="1" />
+     <receita codigo="3.3.90.35.99" descricao="Outros" tipo="1" />
+     <receita codigo="3.3.90.36.00" descricao="Outros Serviços de Terceiros – Pessoa Física" tipo="2" />
+     <receita codigo="3.3.90.36.01" descricao="Condomínios" tipo="1" />
+     <receita codigo="3.3.90.36.02" descricao="Diárias a Colaboradores Eventuais no País" tipo="1" />
+     <receita codigo="3.3.90.36.03" descricao="Diárias a Colaboradores Eventuais no Exterior" tipo="1" />
+     <receita codigo="3.3.90.36.04" descricao="Comissões e Corretagens" tipo="1" />
+     <receita codigo="3.3.90.36.05" descricao="Direitos Autorais" tipo="1" />
+     <receita codigo="3.3.90.36.06" descricao="Serviços Técnicos" tipo="1" />
+     <receita codigo="3.3.90.36.07" descricao="Estagiários" tipo="1" />
+     <receita codigo="3.3.90.36.08" descricao="Bolsa de Iniciação ao Trabalho" tipo="1" />
+     <receita codigo="3.3.90.36.09" descricao="Salários de Internos em Penitenciárias" tipo="1" />
+     <receita codigo="3.3.90.36.10" descricao="Pró-Labore a Consultores Eventuais" tipo="1" />
+     <receita codigo="3.3.90.36.11" descricao="Capatazia, Estiva e Pesagem" tipo="1" />
+     <receita codigo="3.3.90.36.12" descricao="Conferências e Exposições" tipo="1" />
+     <receita codigo="3.3.90.36.13" descricao="Armazenagem" tipo="1" />
+     <receita codigo="3.3.90.36.14" descricao="Locação de Imóveis" tipo="1" />
+     <receita codigo="3.3.90.36.15" descricao="Locação de Bens Móveis e Intangíveis" tipo="1" />
+     <receita codigo="3.3.90.36.16" descricao="Manutenção e Conservação de Equipamentos" tipo="1" />
+     <receita codigo="3.3.90.36.17" descricao="Manutenção e Conservação de Veículos" tipo="1" />
+     <receita codigo="3.3.90.36.18" descricao="Manutenção e Conservação de Bens Móveis de Outras Naturezas" tipo="1" />
+     <receita codigo="3.3.90.36.19" descricao="Manutenção e Conservação de Bens Imóveis" tipo="1" />
+     <receita codigo="3.3.90.36.20" descricao="Fornecimento de Alimentação" tipo="1" />
+     <receita codigo="3.3.90.36.21" descricao="Serviços de Caráter Secreto ou Reservado" tipo="1" />
+     <receita codigo="3.3.90.36.22" descricao="Serviços de Limpeza e Conservação" tipo="1" />
+     <receita codigo="3.3.90.36.23" descricao="Serviços Domésticos" tipo="1" />
+     <receita codigo="3.3.90.36.24" descricao="Serviços de Comunicação em Geral" tipo="1" />
+     <receita codigo="3.3.90.36.25" descricao="Serviço de Seleção e Treinamento" tipo="1" />
+     <receita codigo="3.3.90.36.26" descricao="Serviços Médicos e Odontológicos" tipo="1" />
+     <receita codigo="3.3.90.36.27" descricao="Serviços de Reabilitação Profissional" tipo="1" />
+     <receita codigo="3.3.90.36.28" descricao="Serviços de Assistência Social" tipo="1" />
+     <receita codigo="3.3.90.36.29" descricao="Serviços de Perícias Médicas por Benefícios" tipo="1" />
+     <receita codigo="3.3.90.36.30" descricao="Serviço de Apoio Administrativo, Técnico e Operacional" tipo="1" />
+     <receita codigo="3.3.90.36.31" descricao="Serviço de Conservação e Rebeneficiamento de Mercadorias" tipo="1" />
+     <receita codigo="3.3.90.36.32" descricao="Confecção de Material de Acondicionamento e Embalagem" tipo="1" />
+     <receita codigo="3.3.90.36.33" descricao="Confecção de Uniformes, Bandeiras e Flâmulas" tipo="1" />
+     <receita codigo="3.3.90.36.34" descricao="Fretes e Transportes de Encomendas" tipo="1" />
+     <receita codigo="3.3.90.36.35" descricao="Encargos Financeiros Dedutíveis" tipo="1" />
+     <receita codigo="3.3.90.36.36" descricao="Multas Dedutíveis" tipo="1" />
+     <receita codigo="3.3.90.36.37" descricao="Juros" tipo="1" />
+     <receita codigo="3.3.90.36.38" descricao="Encargos Financeiros Indedutíveis" tipo="1" />
+     <receita codigo="3.3.90.36.39" descricao="Multas Indedutíveis" tipo="1" />
+     <receita codigo="3.3.90.36.40" descricao="Jetons a Conselheiros" tipo="1" />
+     <receita codigo="3.3.90.36.41" descricao="Diárias a Conselheiros" tipo="1" />
+     <receita codigo="3.3.90.36.42" descricao="Transporte Escolar" tipo="1" />
+     <receita codigo="3.3.90.36.43" descricao="Serviços de Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="3.3.90.36.44" descricao="Manutenção de Repartições Sediadas no Exterior" tipo="1" />
+     <receita codigo="3.3.90.36.99" descricao="Outros Serviços de Pessoa Física" tipo="1" />
+     <receita codigo="3.3.90.37.00" descricao="Locação de Mão-de-obra" tipo="1" />
+     <receita codigo="3.3.90.38.00" descricao="Arrendamento Mercantil" tipo="1" />
+     <receita codigo="3.3.90.39.00" descricao="Outros Serviços de Terceiros – Pessoa Jurídica" tipo="2" />
+     <receita codigo="3.3.90.39.01" descricao="Assinaturas de Periódicos e Anuidades" tipo="1" />
+     <receita codigo="3.3.90.39.02" descricao="Condomínios" tipo="1" />
+     <receita codigo="3.3.90.39.03" descricao="Comissões e Corretagens" tipo="1" />
+     <receita codigo="3.3.90.39.04" descricao="Direitos Autorais" tipo="1" />
+     <receita codigo="3.3.90.39.05" descricao="Serviços Técnicos Profissionais" tipo="1" />
+     <receita codigo="3.3.90.39.06" descricao="Capatazia, Estiva e Pesagem" tipo="1" />
+     <receita codigo="3.3.90.39.07" descricao="Descontos Financeiros Concedidos" tipo="1" />
+     <receita codigo="3.3.90.39.08" descricao="Manutenção de Software" tipo="1" />
+     <receita codigo="3.3.90.39.09" descricao="Armazenagem" tipo="1" />
+     <receita codigo="3.3.90.39.10" descricao="Locação de Imóveis" tipo="1" />
+     <receita codigo="3.3.90.39.11" descricao="Locação de Softwares" tipo="1" />
+     <receita codigo="3.3.90.39.12" descricao="Locação de Máquinas e Equipamentos" tipo="1" />
+     <receita codigo="3.3.90.39.13" descricao="Locação de Bens Móveis Tangíveis ou Intangíveis, de Outras Naturezas" tipo="1" />
+     <receita codigo="3.3.90.39.14" descricao="Manutenção e Conservação de Bens Imóveis" tipo="1" />
+     <receita codigo="3.3.90.39.15" descricao="Manutenção e Conservação de Máquinas e Equipamentos" tipo="1" />
+     <receita codigo="3.3.90.39.16" descricao="Manutenção e Conservação de Veículos" tipo="1" />
+     <receita codigo="3.3.90.39.17" descricao="Manutenção e Conservação de Bens Móveis de Outras Naturezas" tipo="1" />
+     <receita codigo="3.3.90.39.18" descricao="Manutenção e Conservação de Estradas ou Outras Vias" tipo="1" />
+     <receita codigo="3.3.90.39.19" descricao="Exposições, Congressos e Conferências" tipo="1" />
+     <receita codigo="3.3.90.39.20" descricao="Festividades e Homenagens" tipo="1" />
+     <receita codigo="3.3.90.39.21" descricao="Multas Dedutíveis" tipo="1" />
+     <receita codigo="3.3.90.39.22" descricao="Multas Indedutíveis" tipo="1" />
+     <receita codigo="3.3.90.39.23" descricao="Juros" tipo="1" />
+     <receita codigo="3.3.90.39.24" descricao="Encargos Financeiros Dedutíveis" tipo="1" />
+     <receita codigo="3.3.90.39.25" descricao="Encargos Financeiros Indedutíveis" tipo="1" />
+     <receita codigo="3.3.90.39.26" descricao="Programa de Alimentação do Trabalhador" tipo="1" />
+     <receita codigo="3.3.90.39.27" descricao="Fornecimento de Alimentação" tipo="1" />
+     <receita codigo="3.3.90.39.28" descricao="Serviços de Caráter Secreto ou Reservado" tipo="1" />
+     <receita codigo="3.3.90.39.29" descricao="Serviços de Energia Elétrica" tipo="1" />
+     <receita codigo="3.3.90.39.30" descricao="Serviços de Água e Esgoto" tipo="1" />
+     <receita codigo="3.3.90.39.31" descricao="Serviços de Gás" tipo="1" />
+     <receita codigo="3.3.90.39.32" descricao="Serviços Domésticos" tipo="1" />
+     <receita codigo="3.3.90.39.33" descricao="Serviços de Comunicação em Geral" tipo="1" />
+     <receita codigo="3.3.90.39.34" descricao="Serviço de Seleção e Treinamento" tipo="1" />
+     <receita codigo="3.3.90.39.35" descricao="Produções Jornalísticas" tipo="1" />
+     <receita codigo="3.3.90.39.36" descricao="Serviço Médico-hospitalar, Odontológico e Laboratorial" tipo="1" />
+     <receita codigo="3.3.90.39.37" descricao="Serviços de Análises e Pesquisas Científicas" tipo="1" />
+     <receita codigo="3.3.90.39.38" descricao="Serviços de Reabilitação Profissional" tipo="1" />
+     <receita codigo="3.3.90.39.39" descricao="Serviços de Assistência Social" tipo="1" />
+     <receita codigo="3.3.90.39.40" descricao="Serviços de Creches e Assistência Pré-escolar" tipo="1" />
+     <receita codigo="3.3.90.39.41" descricao="Serviços de Perícias Médicas por Benefícios" tipo="1" />
+     <receita codigo="3.3.90.39.42" descricao="Serviços de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.90.39.43" descricao="Serviços de Telecomunicações" tipo="1" />
+     <receita codigo="3.3.90.39.44" descricao="Serviços de Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="3.3.90.39.45" descricao="Serviços de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="3.3.90.39.46" descricao="Serviços de Socorro e Salvamento" tipo="1" />
+     <receita codigo="3.3.90.39.47" descricao="Serviços de Produção Industrial" tipo="1" />
+     <receita codigo="3.3.90.39.48" descricao="Serviços Gráficos" tipo="1" />
+     <receita codigo="3.3.90.39.49" descricao="Serviços de Apoio ao Ensino" tipo="1" />
+     <receita codigo="3.3.90.39.50" descricao="Serviços Judiciários" tipo="1" />
+     <receita codigo="3.3.90.39.51" descricao="Serviços Funerários" tipo="1" />
+     <receita codigo="3.3.90.39.52" descricao="Serviço de Conservação e Rebeneficiamento de Mercadorias" tipo="1" />
+     <receita codigo="3.3.90.39.53" descricao="Seguros em Geral" tipo="1" />
+     <receita codigo="3.3.90.39.54" descricao="Confecção de Uniformes, Bandeiras e Flâmulas" tipo="1" />
+     <receita codigo="3.3.90.39.55" descricao="Confecção de Material de Acondicionamento e Embalagem" tipo="1" />
+     <receita codigo="3.3.90.39.56" descricao="Vale-Transporte" tipo="1" />
+     <receita codigo="3.3.90.39.57" descricao="Transporte Escolar" tipo="1" />
+     <receita codigo="3.3.90.39.58" descricao="Fretes e Transportes de Encomendas" tipo="1" />
+     <receita codigo="3.3.90.39.59" descricao="Classificação de Produtos" tipo="1" />
+     <receita codigo="3.3.90.39.60" descricao="Vigilância Ostensiva" tipo="1" />
+     <receita codigo="3.3.90.39.61" descricao="Limpeza e Conservação" tipo="1" />
+     <receita codigo="3.3.90.39.62" descricao="Serviço de Apoio Administrativo, Técnico e Operacional" tipo="1" />
+     <receita codigo="3.3.90.39.63" descricao="Hospedagens" tipo="1" />
+     <receita codigo="3.3.90.39.64" descricao="Serviços Bancários" tipo="1" />
+     <receita codigo="3.3.90.39.65" descricao="Serviços de Cópias e Reprodução de Documentos" tipo="1" />
+     <receita codigo="3.3.90.39.66" descricao="Serviços em Itens Reparáveis de Aviação" tipo="1" />
+     <receita codigo="3.3.90.39.67" descricao="Serviços Relacionados à Industrialização Aeroespacial" tipo="1" />
+     <receita codigo="3.3.90.39.68" descricao="Serviços de Publicidade e Propaganda" tipo="1" />
+     <receita codigo="3.3.90.39.69" descricao="Manutenção de Repartições – Serviço Exterior" tipo="1" />
+     <receita codigo="3.3.90.39.70" descricao="Aquisição de Softwares de Aplicação" tipo="1" />
+     <receita codigo="3.3.90.39.71" descricao="Manutenção Conservação de Equipamentos de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.90.39.72" descricao="Despesas de Teleprocessamento" tipo="1" />
+     <receita codigo="3.3.90.39.99" descricao="Outros Serviços de Terceiros – Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.90.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.90.43.00" descricao="Subvenções" tipo="1" />
+     <receita codigo="3.3.90.45.00" descricao="Subvenções Econômicas" tipo="1" />
+     <receita codigo="3.3.90.46.00" descricao="Auxílio-alimentação" tipo="1" />
+     <receita codigo="3.3.90.47.00" descricao="Obrigações Tributárias e Contributivas" tipo="1" />
+     <receita codigo="3.3.90.48.00" descricao="Outros Auxílios Financeiros a Pessoas Físicas" tipo="1" />
+     <receita codigo="3.3.90.49.00" descricao="Auxílio-Transporte" tipo="1" />
+     <receita codigo="3.3.90.62.00" descricao="Aquisição de Produtos para Revenda" tipo="1" />
+     <receita codigo="3.3.90.67.00" descricao="Depósitos Compulsórios" tipo="1" />
+     <receita codigo="3.3.90.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="3.3.90.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.90.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.3.90.95.00" descricao="Indenização pela Execução de Trabalho de Campo" tipo="1" />
+     <receita codigo="3.3.90.96.00" descricao="Ressarcimento de Despesas de Pessoal Requisitado" tipo="1" />
+     <receita codigo="3.3.90.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.91.00.00" descricao="Aplicação Direta Decorrente de Operação entre Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social" tipo="2" />
+     <receita codigo="3.3.91.28.00" descricao="Remuneração de Cotas de Fundos Autárquicos" tipo="1" />
+     <receita codigo="3.3.91.29.00" descricao="Distribuição de Resultado de Empresas Estatais Dependentes" tipo="1" />
+     <receita codigo="3.3.91.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="3.3.91.31.00" descricao="Premiações Culturais, Artísticas, Científicas, Desportivas e Outras" tipo="1" />
+     <receita codigo="3.3.91.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="3.3.91.33.00" descricao="Passagens e Despesas com Locomoção" tipo="1" />
+     <receita codigo="3.3.91.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="3.3.91.36.00" descricao="Outros Serviços de Terceiros - Pessoa Física" tipo="1" />
+     <receita codigo="3.3.91.37.00" descricao="Locação de Mão-de-obra" tipo="1" />
+     <receita codigo="3.3.91.38.00" descricao="Arrendamento Mercantil" tipo="1" />
+     <receita codigo="3.3.91.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.91.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="3.3.91.47.00" descricao="Obrigações Tributárias e Contributivas" tipo="1" />
+     <receita codigo="3.3.91.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="3.3.91.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="3.3.91.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="3.3.91.95.00" descricao="Indenização pela Execução de Trabalhos de Campo" tipo="1" />
+     <receita codigo="3.3.91.97.00" descricao="Aporte para Cobertura do Déficit Atuarial do RPPS" tipo="1" />
+     <receita codigo="3.3.91.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.93.00.00" descricao="Aplicação Direta Decorrente de Operação de Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social com Consórcio Público do qual o Ente Participe (1) (I)" tipo="2" />
+     <receita codigo="3.3.93.30.00" descricao="Material de Consumo" tipo="2" />
+     <receita codigo="3.3.93.30.01" descricao="Combustíveis e Lubrificantes Automotivos" tipo="1" />
+     <receita codigo="3.3.93.30.02" descricao="Combustíveis e Lubrificantes de Aviação" tipo="1" />
+     <receita codigo="3.3.93.30.03" descricao="Combustíveis e Lubrificantes para Outras Finalidades" tipo="1" />
+     <receita codigo="3.3.93.30.04" descricao="Gás Engarrafado" tipo="1" />
+     <receita codigo="3.3.93.30.05" descricao="Explosivos e Munições" tipo="1" />
+     <receita codigo="3.3.93.30.06" descricao="Alimentos para Animais" tipo="1" />
+     <receita codigo="3.3.93.30.07" descricao="Gêneros de Alimentação" tipo="1" />
+     <receita codigo="3.3.93.30.08" descricao="Animais para Pesquisa e Abate" tipo="1" />
+     <receita codigo="3.3.93.30.09" descricao="Medicamentos" tipo="1" />
+     <receita codigo="3.3.93.30.10" descricao="Material Odontológico" tipo="1" />
+     <receita codigo="3.3.93.30.11" descricao="Material Químico" tipo="1" />
+     <receita codigo="3.3.93.30.12" descricao="Material de Coudelaria ou de Uso Zootécnico" tipo="1" />
+     <receita codigo="3.3.93.30.13" descricao="Material de Caça e Pesca" tipo="1" />
+     <receita codigo="3.3.93.30.14" descricao="Material Educativo e Esportivo" tipo="1" />
+     <receita codigo="3.3.93.30.15" descricao="Material para Festividades e Homenagens" tipo="1" />
+     <receita codigo="3.3.93.30.16" descricao="Material de Expediente" tipo="1" />
+     <receita codigo="3.3.93.30.17" descricao="Material de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.93.30.18" descricao="Materiais e Medicamentos para Uso Veterinário" tipo="1" />
+     <receita codigo="3.3.93.30.19" descricao="Material de Acondicionamento e Embalagem" tipo="1" />
+     <receita codigo="3.3.93.30.20" descricao="Material de Cama, Mesa e Banho" tipo="1" />
+     <receita codigo="3.3.93.30.21" descricao="Material de Copa e Cozinha" tipo="1" />
+     <receita codigo="3.3.93.30.22" descricao="Material de Limpeza e Produção de Higienização" tipo="1" />
+     <receita codigo="3.3.93.30.23" descricao="Uniformes, Tecidos e Aviamentos" tipo="1" />
+     <receita codigo="3.3.93.30.24" descricao="Material para Manutenção de Bens Imóveis" tipo="1" />
+     <receita codigo="3.3.93.30.25" descricao="Material para Manutenção de Bens Móveis" tipo="1" />
+     <receita codigo="3.3.93.30.26" descricao="Material Elétrico e Eletrônico" tipo="1" />
+     <receita codigo="3.3.93.30.27" descricao="Material de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="3.3.93.30.28" descricao="Material de Proteção e Segurança" tipo="1" />
+     <receita codigo="3.3.93.30.29" descricao="Material para Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="3.3.93.30.30" descricao="Material para Comunicações" tipo="1" />
+     <receita codigo="3.3.93.30.31" descricao="Sementes, Mudas de Plantas e Insumos" tipo="1" />
+     <receita codigo="3.3.93.30.32" descricao="Material Para Produção Industrial" tipo="1" />
+     <receita codigo="3.3.93.30.33" descricao="Sobressalentes, Máquinas, Motores e Embarcações" tipo="1" />
+     <receita codigo="3.3.93.30.34" descricao="Material Laboratorial" tipo="1" />
+     <receita codigo="3.3.93.30.35" descricao="Material Hospitalar" tipo="1" />
+     <receita codigo="3.3.93.30.36" descricao="Suprimento de Proteção ao Vôo" tipo="1" />
+     <receita codigo="3.3.93.30.37" descricao="Material para Manutenção de Veículos" tipo="1" />
+     <receita codigo="3.3.93.30.38" descricao="Material Biológico" tipo="1" />
+     <receita codigo="3.3.93.30.39" descricao="Material Gráfico" tipo="1" />
+     <receita codigo="3.3.93.30.40" descricao="Ferramentas" tipo="1" />
+     <receita codigo="3.3.93.30.41" descricao="Material para Reabilitação Profissional" tipo="1" />
+     <receita codigo="3.3.93.30.42" descricao="Material de Sinalização Visual e Afins" tipo="1" />
+     <receita codigo="3.3.93.30.43" descricao="Material Técnico para Seleção e Treinamento" tipo="1" />
+     <receita codigo="3.3.93.30.44" descricao="Material Bibliográfico Não Imobilizável" tipo="1" />
+     <receita codigo="3.3.93.30.45" descricao="Aquisição de Softwares de Base" tipo="1" />
+     <receita codigo="3.3.93.30.46" descricao="Bens Móveis Não Ativáveis" tipo="1" />
+     <receita codigo="3.3.93.30.47" descricao="Bandeiras, Flâmulas e Insígnias" tipo="1" />
+     <receita codigo="3.3.93.30.99" descricao="Outros Materiais de Consumo" tipo="1" />
+     <receita codigo="3.3.93.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="3.3.93.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="2" />
+     <receita codigo="3.3.93.39.01" descricao="Assinaturas de Periódicos e Anuidades" tipo="1" />
+     <receita codigo="3.3.93.39.02" descricao="Condomínios" tipo="1" />
+     <receita codigo="3.3.93.39.03" descricao="Comissões e Corretagens" tipo="1" />
+     <receita codigo="3.3.93.39.04" descricao="Direitos Autorais" tipo="1" />
+     <receita codigo="3.3.93.39.05" descricao="Serviços Técnicos Profissionais" tipo="1" />
+     <receita codigo="3.3.93.39.06" descricao="Capatazia, Estiva e Pesagem" tipo="1" />
+     <receita codigo="3.3.93.39.07" descricao="Descontos Financeiros Concedidos" tipo="1" />
+     <receita codigo="3.3.93.39.08" descricao="Manutenção de Software" tipo="1" />
+     <receita codigo="3.3.93.39.09" descricao="Armazenagem" tipo="1" />
+     <receita codigo="3.3.93.39.10" descricao="Locação de Imóveis" tipo="1" />
+     <receita codigo="3.3.93.39.11" descricao="Locação de Softwares" tipo="1" />
+     <receita codigo="3.3.93.39.12" descricao="Locação de Máquinas e Equipamentos" tipo="1" />
+     <receita codigo="3.3.93.39.13" descricao="Locação de Bens Móveis Tangíveis ou Intangíveis, de Outras Naturezas" tipo="1" />
+     <receita codigo="3.3.93.39.14" descricao="Manutenção e Conservação de Bens Imóveis" tipo="1" />
+     <receita codigo="3.3.93.39.15" descricao="Manutenção e Conservação de Máquinas e Equipamentos" tipo="1" />
+     <receita codigo="3.3.93.39.16" descricao="Manutenção e Conservação de Veículos" tipo="1" />
+     <receita codigo="3.3.93.39.17" descricao="Manutenção e Conservação de Bens Móveis de Outras Naturezas" tipo="1" />
+     <receita codigo="3.3.93.39.18" descricao="Manutenção e Conservação de Estradas ou Outras Vias" tipo="1" />
+     <receita codigo="3.3.93.39.19" descricao="Exposições, Congressos e Conferências" tipo="1" />
+     <receita codigo="3.3.93.39.20" descricao="Festividades e Homenagens" tipo="1" />
+     <receita codigo="3.3.93.39.21" descricao="Multas Dedutíveis" tipo="1" />
+     <receita codigo="3.3.93.39.22" descricao="Multas Indedutíveis" tipo="1" />
+     <receita codigo="3.3.93.39.23" descricao="Juros" tipo="1" />
+     <receita codigo="3.3.93.39.24" descricao="Encargos Financeiros Dedutíveis" tipo="1" />
+     <receita codigo="3.3.93.39.25" descricao="Encargos Financeiros Indedutíveis" tipo="1" />
+     <receita codigo="3.3.93.39.26" descricao="Programa de Alimentação do Trabalhador" tipo="1" />
+     <receita codigo="3.3.93.39.27" descricao="Fornecimento de Alimentação" tipo="1" />
+     <receita codigo="3.3.93.39.28" descricao="Serviços de Caráter Secreto ou Reservado" tipo="1" />
+     <receita codigo="3.3.93.39.29" descricao="Serviços de Energia Elétrica" tipo="1" />
+     <receita codigo="3.3.93.39.30" descricao="Serviços de Água e Esgoto" tipo="1" />
+     <receita codigo="3.3.93.39.31" descricao="Serviços de Gás" tipo="1" />
+     <receita codigo="3.3.93.39.32" descricao="Serviços Domésticos" tipo="1" />
+     <receita codigo="3.3.93.39.33" descricao="Serviços de Comunicação em Geral" tipo="1" />
+     <receita codigo="3.3.93.39.34" descricao="Serviço de Seleção e Treinamento" tipo="1" />
+     <receita codigo="3.3.93.39.35" descricao="Produções Jornalísticas" tipo="1" />
+     <receita codigo="3.3.93.39.36" descricao="Serviço Médico-hospitalar, Odontológico e Laboratorial" tipo="1" />
+     <receita codigo="3.3.93.39.37" descricao="Serviços de Análises e Pesquisas Científicas" tipo="1" />
+     <receita codigo="3.3.93.39.38" descricao="Serviços de Reabilitação Profissional" tipo="1" />
+     <receita codigo="3.3.93.39.39" descricao="Serviços de Assistência Social" tipo="1" />
+     <receita codigo="3.3.93.39.40" descricao="Serviços de Creches e Assistência Pré-escolar" tipo="1" />
+     <receita codigo="3.3.93.39.41" descricao="Serviços de Perícias Médicas por Benefícios" tipo="1" />
+     <receita codigo="3.3.93.39.42" descricao="Serviços de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.93.39.43" descricao="Serviços de Telecomunicações" tipo="1" />
+     <receita codigo="3.3.93.39.44" descricao="Serviços de Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="3.3.93.39.45" descricao="Serviços de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="3.3.93.39.46" descricao="Serviços de Socorro e Salvamento" tipo="1" />
+     <receita codigo="3.3.93.39.47" descricao="Serviços de Produção Industrial" tipo="1" />
+     <receita codigo="3.3.93.39.48" descricao="Serviços Gráficos" tipo="1" />
+     <receita codigo="3.3.93.39.49" descricao="Serviços de Apoio ao Ensino" tipo="1" />
+     <receita codigo="3.3.93.39.50" descricao="Serviços Judiciários" tipo="1" />
+     <receita codigo="3.3.93.39.51" descricao="Serviços Funerários" tipo="1" />
+     <receita codigo="3.3.93.39.52" descricao="Serviço de Conservação e Rebeneficiamento de Mercadorias" tipo="1" />
+     <receita codigo="3.3.93.39.53" descricao="Seguros em Geral" tipo="1" />
+     <receita codigo="3.3.93.39.54" descricao="Confecção de Uniformes, Bandeiras e Flâmulas" tipo="1" />
+     <receita codigo="3.3.93.39.55" descricao="Confecção de Material de Acondicionamento e Embalagem" tipo="1" />
+     <receita codigo="3.3.93.39.56" descricao="Vale-Transporte" tipo="1" />
+     <receita codigo="3.3.93.39.57" descricao="Transporte Escolar" tipo="1" />
+     <receita codigo="3.3.93.39.58" descricao="Fretes e Transportes de Encomendas" tipo="1" />
+     <receita codigo="3.3.93.39.59" descricao="Classificação de Produtos" tipo="1" />
+     <receita codigo="3.3.93.39.60" descricao="Vigilância Ostensiva" tipo="1" />
+     <receita codigo="3.3.93.39.61" descricao="Limpeza e Conservação" tipo="1" />
+     <receita codigo="3.3.93.39.62" descricao="Serviço de Apoio Administrativo, Técnico e Operacional" tipo="1" />
+     <receita codigo="3.3.93.39.63" descricao="Hospedagens" tipo="1" />
+     <receita codigo="3.3.93.39.64" descricao="Serviços Bancários" tipo="1" />
+     <receita codigo="3.3.93.39.65" descricao="Serviços de Cópias e Reprodução de Documentos" tipo="1" />
+     <receita codigo="3.3.93.39.66" descricao="Serviços em Itens Reparáveis de Aviação" tipo="1" />
+     <receita codigo="3.3.93.39.67" descricao="Serviços Relacionados à Industrialização Aeroespacial" tipo="1" />
+     <receita codigo="3.3.93.39.68" descricao="Serviços de Publicidade e Propaganda" tipo="1" />
+     <receita codigo="3.3.93.39.69" descricao="Manutenção de Repartições – Serviço Exterior" tipo="1" />
+     <receita codigo="3.3.93.39.70" descricao="Aquisição de Softwares de Aplicação" tipo="1" />
+     <receita codigo="3.3.93.39.71" descricao="Manutenção Conservação de Equipamentos de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.93.39.72" descricao="Despesas de Teleprocessamento" tipo="1" />
+     <receita codigo="3.3.93.39.99" descricao="Outros Serviços de Terceiros – Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.93.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.94.00.00" descricao="Aplicação Direta Decorrente de Operação de Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social com Consórcio Público do qual o Ente Não Participe (1) (I)" tipo="2" />
+     <receita codigo="3.3.94.30.00" descricao="Material de Consumo" tipo="2" />
+     <receita codigo="3.3.94.30.01" descricao="Combustíveis e Lubrificantes Automotivos" tipo="1" />
+     <receita codigo="3.3.94.30.02" descricao="Combustíveis e Lubrificantes de Aviação" tipo="1" />
+     <receita codigo="3.3.94.30.03" descricao="Combustíveis e Lubrificantes para Outras Finalidades" tipo="1" />
+     <receita codigo="3.3.94.30.04" descricao="Gás Engarrafado" tipo="1" />
+     <receita codigo="3.3.94.30.05" descricao="Explosivos e Munições" tipo="1" />
+     <receita codigo="3.3.94.30.06" descricao="Alimentos para Animais" tipo="1" />
+     <receita codigo="3.3.94.30.07" descricao="Gêneros de Alimentação" tipo="1" />
+     <receita codigo="3.3.94.30.08" descricao="Animais para Pesquisa e Abate" tipo="1" />
+     <receita codigo="3.3.94.30.09" descricao="Medicamentos" tipo="1" />
+     <receita codigo="3.3.94.30.10" descricao="Material Odontológico" tipo="1" />
+     <receita codigo="3.3.94.30.11" descricao="Material Químico" tipo="1" />
+     <receita codigo="3.3.94.30.12" descricao="Material de Coudelaria ou de Uso Zootécnico" tipo="1" />
+     <receita codigo="3.3.94.30.13" descricao="Material de Caça e Pesca" tipo="1" />
+     <receita codigo="3.3.94.30.14" descricao="Material Educativo e Esportivo" tipo="1" />
+     <receita codigo="3.3.94.30.15" descricao="Material para Festividades e Homenagens" tipo="1" />
+     <receita codigo="3.3.94.30.16" descricao="Material de Expediente" tipo="1" />
+     <receita codigo="3.3.94.30.17" descricao="Material de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.94.30.18" descricao="Materiais e Medicamentos para Uso Veterinário" tipo="1" />
+     <receita codigo="3.3.94.30.19" descricao="Material de Acondicionamento e Embalagem" tipo="1" />
+     <receita codigo="3.3.94.30.20" descricao="Material de Cama, Mesa e Banho" tipo="1" />
+     <receita codigo="3.3.94.30.21" descricao="Material de Copa e Cozinha" tipo="1" />
+     <receita codigo="3.3.94.30.22" descricao="Material de Limpeza e Produção de Higienização" tipo="1" />
+     <receita codigo="3.3.94.30.23" descricao="Uniformes, Tecidos e Aviamentos" tipo="1" />
+     <receita codigo="3.3.94.30.24" descricao="Material para Manutenção de Bens Imóveis" tipo="1" />
+     <receita codigo="3.3.94.30.25" descricao="Material para Manutenção de Bens Móveis" tipo="1" />
+     <receita codigo="3.3.94.30.26" descricao="Material Elétrico e Eletrônico" tipo="1" />
+     <receita codigo="3.3.94.30.27" descricao="Material de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="3.3.94.30.28" descricao="Material de Proteção e Segurança" tipo="1" />
+     <receita codigo="3.3.94.30.29" descricao="Material para Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="3.3.94.30.30" descricao="Material para Comunicações" tipo="1" />
+     <receita codigo="3.3.94.30.31" descricao="Sementes, Mudas de Plantas e Insumos" tipo="1" />
+     <receita codigo="3.3.94.30.32" descricao="Material Para Produção Industrial" tipo="1" />
+     <receita codigo="3.3.94.30.33" descricao="Sobressalentes, Máquinas, Motores e Embarcações" tipo="1" />
+     <receita codigo="3.3.94.30.34" descricao="Material Laboratorial" tipo="1" />
+     <receita codigo="3.3.94.30.35" descricao="Material Hospitalar" tipo="1" />
+     <receita codigo="3.3.94.30.36" descricao="Suprimento de Proteção ao Vôo" tipo="1" />
+     <receita codigo="3.3.94.30.37" descricao="Material para Manutenção de Veículos" tipo="1" />
+     <receita codigo="3.3.94.30.38" descricao="Material Biológico" tipo="1" />
+     <receita codigo="3.3.94.30.39" descricao="Material Gráfico" tipo="1" />
+     <receita codigo="3.3.94.30.40" descricao="Ferramentas" tipo="1" />
+     <receita codigo="3.3.94.30.41" descricao="Material para Reabilitação Profissional" tipo="1" />
+     <receita codigo="3.3.94.30.42" descricao="Material de Sinalização Visual e Afins" tipo="1" />
+     <receita codigo="3.3.94.30.43" descricao="Material Técnico para Seleção e Treinamento" tipo="1" />
+     <receita codigo="3.3.94.30.44" descricao="Material Bibliográfico Não Imobilizável" tipo="1" />
+     <receita codigo="3.3.94.30.45" descricao="Aquisição de Softwares de Base" tipo="1" />
+     <receita codigo="3.3.94.30.46" descricao="Bens Móveis Não Ativáveis" tipo="1" />
+     <receita codigo="3.3.94.30.47" descricao="Bandeiras, Flâmulas e Insígnias" tipo="1" />
+     <receita codigo="3.3.94.30.99" descricao="Outros Materiais de Consumo" tipo="1" />
+     <receita codigo="3.3.94.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="3.3.94.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="2" />
+     <receita codigo="3.3.94.39.01" descricao="Assinaturas de Periódicos e Anuidades" tipo="1" />
+     <receita codigo="3.3.94.39.02" descricao="Condomínios" tipo="1" />
+     <receita codigo="3.3.94.39.03" descricao="Comissões e Corretagens" tipo="1" />
+     <receita codigo="3.3.94.39.04" descricao="Direitos Autorais" tipo="1" />
+     <receita codigo="3.3.94.39.05" descricao="Serviços Técnicos Profissionais" tipo="1" />
+     <receita codigo="3.3.94.39.06" descricao="Capatazia, Estiva e Pesagem" tipo="1" />
+     <receita codigo="3.3.94.39.07" descricao="Descontos Financeiros Concedidos" tipo="1" />
+     <receita codigo="3.3.94.39.08" descricao="Manutenção de Software" tipo="1" />
+     <receita codigo="3.3.94.39.09" descricao="Armazenagem" tipo="1" />
+     <receita codigo="3.3.94.39.10" descricao="Locação de Imóveis" tipo="1" />
+     <receita codigo="3.3.94.39.11" descricao="Locação de Softwares" tipo="1" />
+     <receita codigo="3.3.94.39.12" descricao="Locação de Máquinas e Equipamentos" tipo="1" />
+     <receita codigo="3.3.94.39.13" descricao="Locação de Bens Móveis Tangíveis ou Intangíveis, de Outras Naturezas" tipo="1" />
+     <receita codigo="3.3.94.39.14" descricao="Manutenção e Conservação de Bens Imóveis" tipo="1" />
+     <receita codigo="3.3.94.39.15" descricao="Manutenção e Conservação de Máquinas e Equipamentos" tipo="1" />
+     <receita codigo="3.3.94.39.16" descricao="Manutenção e Conservação de Veículos" tipo="1" />
+     <receita codigo="3.3.94.39.17" descricao="Manutenção e Conservação de Bens Móveis de Outras Naturezas" tipo="1" />
+     <receita codigo="3.3.94.39.18" descricao="Manutenção e Conservação de Estradas ou Outras Vias" tipo="1" />
+     <receita codigo="3.3.94.39.19" descricao="Exposições, Congressos e Conferências" tipo="1" />
+     <receita codigo="3.3.94.39.20" descricao="Festividades e Homenagens" tipo="1" />
+     <receita codigo="3.3.94.39.21" descricao="Multas Dedutíveis" tipo="1" />
+     <receita codigo="3.3.94.39.22" descricao="Multas Indedutíveis" tipo="1" />
+     <receita codigo="3.3.94.39.23" descricao="Juros" tipo="1" />
+     <receita codigo="3.3.94.39.24" descricao="Encargos Financeiros Dedutíveis" tipo="1" />
+     <receita codigo="3.3.94.39.25" descricao="Encargos Financeiros Indedutíveis" tipo="1" />
+     <receita codigo="3.3.94.39.26" descricao="Programa de Alimentação do Trabalhador" tipo="1" />
+     <receita codigo="3.3.94.39.27" descricao="Fornecimento de Alimentação" tipo="1" />
+     <receita codigo="3.3.94.39.28" descricao="Serviços de Caráter Secreto ou Reservado" tipo="1" />
+     <receita codigo="3.3.94.39.29" descricao="Serviços de Energia Elétrica" tipo="1" />
+     <receita codigo="3.3.94.39.30" descricao="Serviços de Água e Esgoto" tipo="1" />
+     <receita codigo="3.3.94.39.31" descricao="Serviços de Gás" tipo="1" />
+     <receita codigo="3.3.94.39.32" descricao="Serviços Domésticos" tipo="1" />
+     <receita codigo="3.3.94.39.33" descricao="Serviços de Comunicação em Geral" tipo="1" />
+     <receita codigo="3.3.94.39.34" descricao="Serviço de Seleção e Treinamento" tipo="1" />
+     <receita codigo="3.3.94.39.35" descricao="Produções Jornalísticas" tipo="1" />
+     <receita codigo="3.3.94.39.36" descricao="Serviço Médico-hospitalar, Odontológico e Laboratorial" tipo="1" />
+     <receita codigo="3.3.94.39.37" descricao="Serviços de Análises e Pesquisas Científicas" tipo="1" />
+     <receita codigo="3.3.94.39.38" descricao="Serviços de Reabilitação Profissional" tipo="1" />
+     <receita codigo="3.3.94.39.39" descricao="Serviços de Assistência Social" tipo="1" />
+     <receita codigo="3.3.94.39.40" descricao="Serviços de Creches e Assistência Pré-escolar" tipo="1" />
+     <receita codigo="3.3.94.39.41" descricao="Serviços de Perícias Médicas por Benefícios" tipo="1" />
+     <receita codigo="3.3.94.39.42" descricao="Serviços de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.94.39.43" descricao="Serviços de Telecomunicações" tipo="1" />
+     <receita codigo="3.3.94.39.44" descricao="Serviços de Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="3.3.94.39.45" descricao="Serviços de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="3.3.94.39.46" descricao="Serviços de Socorro e Salvamento" tipo="1" />
+     <receita codigo="3.3.94.39.47" descricao="Serviços de Produção Industrial" tipo="1" />
+     <receita codigo="3.3.94.39.48" descricao="Serviços Gráficos" tipo="1" />
+     <receita codigo="3.3.94.39.49" descricao="Serviços de Apoio ao Ensino" tipo="1" />
+     <receita codigo="3.3.94.39.50" descricao="Serviços Judiciários" tipo="1" />
+     <receita codigo="3.3.94.39.51" descricao="Serviços Funerários" tipo="1" />
+     <receita codigo="3.3.94.39.52" descricao="Serviço de Conservação e Rebeneficiamento de Mercadorias" tipo="1" />
+     <receita codigo="3.3.94.39.53" descricao="Seguros em Geral" tipo="1" />
+     <receita codigo="3.3.94.39.54" descricao="Confecção de Uniformes, Bandeiras e Flâmulas" tipo="1" />
+     <receita codigo="3.3.94.39.55" descricao="Confecção de Material de Acondicionamento e Embalagem" tipo="1" />
+     <receita codigo="3.3.94.39.56" descricao="Vale-Transporte" tipo="1" />
+     <receita codigo="3.3.94.39.57" descricao="Transporte Escolar" tipo="1" />
+     <receita codigo="3.3.94.39.58" descricao="Fretes e Transportes de Encomendas" tipo="1" />
+     <receita codigo="3.3.94.39.59" descricao="Classificação de Produtos" tipo="1" />
+     <receita codigo="3.3.94.39.60" descricao="Vigilância Ostensiva" tipo="1" />
+     <receita codigo="3.3.94.39.61" descricao="Limpeza e Conservação" tipo="1" />
+     <receita codigo="3.3.94.39.62" descricao="Serviço de Apoio Administrativo, Técnico e Operacional" tipo="1" />
+     <receita codigo="3.3.94.39.63" descricao="Hospedagens" tipo="1" />
+     <receita codigo="3.3.94.39.64" descricao="Serviços Bancários" tipo="1" />
+     <receita codigo="3.3.94.39.65" descricao="Serviços de Cópias e Reprodução de Documentos" tipo="1" />
+     <receita codigo="3.3.94.39.66" descricao="Serviços em Itens Reparáveis de Aviação" tipo="1" />
+     <receita codigo="3.3.94.39.67" descricao="Serviços Relacionados à Industrialização Aeroespacial" tipo="1" />
+     <receita codigo="3.3.94.39.68" descricao="Serviços de Publicidade e Propaganda" tipo="1" />
+     <receita codigo="3.3.94.39.69" descricao="Manutenção de Repartições – Serviço Exterior" tipo="1" />
+     <receita codigo="3.3.94.39.70" descricao="Aquisição de Softwares de Aplicação" tipo="1" />
+     <receita codigo="3.3.94.39.71" descricao="Manutenção Conservação de Equipamentos de Processamento de Dados" tipo="1" />
+     <receita codigo="3.3.94.39.72" descricao="Despesas de Teleprocessamento" tipo="1" />
+     <receita codigo="3.3.94.39.99" descricao="Outros Serviços de Terceiros – Pessoa Jurídica" tipo="1" />
+     <receita codigo="3.3.94.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="3.3.99.00.00" descricao="A Definir" tipo="2" />
+     <receita codigo="3.3.99.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.0.00.00.00" descricao="Despesas de Capital" tipo="2" />
+     <receita codigo="4.4.00.00.00" descricao="Investimentos" tipo="2" />
+     <receita codigo="4.4.20.00.00" descricao="Transferências à União" tipo="2" />
+     <receita codigo="4.4.20.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.4.20.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.4.20.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.20.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.4.20.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.30.00.00" descricao="Transferências a Estados e ao Distrito Federal" tipo="2" />
+     <receita codigo="4.4.30.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.4.30.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.4.30.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.30.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.40.00.00" descricao="Transferências a Municípios" tipo="2" />
+     <receita codigo="4.4.40.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.4.40.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.4.40.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.40.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.50.00.00" descricao="Transferências a Instituições Privadas sem Fins Lucrativos" tipo="2" />
+     <receita codigo="4.4.50.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="4.4.50.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="4.4.50.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="4.4.50.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.4.50.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.4.50.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.50.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.60.00.00" descricao="Transferências a Instituições Privadas com Fins Lucrativos" tipo="2" />
+     <receita codigo="4.4.60.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.4.60.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.70.00.00" descricao="Transferências a Instituições Multigovernamentais" tipo="2" />
+     <receita codigo="4.4.70.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.4.70.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.4.70.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.70.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.71.00.00" descricao="Transferências a Consórcios Públicos" tipo="2" />
+     <receita codigo="4.4.71.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.4.71.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.4.71.51.00" descricao="Obras e Instalações" tipo="1" />
+     <receita codigo="4.4.71.52.00" descricao="Equipamentos e Material Permanente" tipo="1" />
+     <receita codigo="4.4.71.61.00" descricao="Aquisição de Imóveis" tipo="1" />
+     <receita codigo="4.4.71.65.00" descricao="Contribuição ou Aumento de Capital de Empresas" tipo="1" />
+     <receita codigo="4.4.71.70.00" descricao="Rateio pela Participação em Consórcio Público" tipo="1" />
+     <receita codigo="4.4.71.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.71.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.4.71.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.72.00.00" descricao="Execução Orçamentária Delegada a Consórcios Públicos" tipo="2" />
+     <receita codigo="4.4.72.14.00" descricao="Diárias – Civil" tipo="1" />
+     <receita codigo="4.4.72.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="4.4.72.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="4.4.72.33.00" descricao="Passagens e Despesas com Locomoção" tipo="1" />
+     <receita codigo="4.4.72.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="4.4.72.36.00" descricao="Outros Serviços de Terceiros - Pessoa Física" tipo="1" />
+     <receita codigo="4.4.72.37.00" descricao="Locação de Mão-de-obra" tipo="1" />
+     <receita codigo="4.4.72.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="4.4.72.51.00" descricao="Obras e Instalações" tipo="1" />
+     <receita codigo="4.4.72.52.00" descricao="Equipamentos e Material Permanente" tipo="1" />
+     <receita codigo="4.4.72.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.72.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.80.00.00" descricao="Transferências ao Exterior" tipo="2" />
+     <receita codigo="4.4.80.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.4.80.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.90.00.00" descricao="Aplicações Diretas" tipo="2" />
+     <receita codigo="4.4.90.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="4.4.90.33.00" descricao="Passagens e Despesas com Locomoção" tipo="1" />
+     <receita codigo="4.4.90.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="4.4.90.36.00" descricao="Outros Serviços de Terceiros - Pessoa Física" tipo="1" />
+     <receita codigo="4.4.90.37.00" descricao="Locação de Mão-de-obra" tipo="1" />
+     <receita codigo="4.4.90.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="4.4.90.47.00" descricao="Obrigações Tributárias e Contributivas" tipo="1" />
+     <receita codigo="4.4.90.51.00" descricao="Obras e Instalações" tipo="2" />
+     <receita codigo="4.4.90.51.01" descricao="Obras e Instalações de Domínio Público" tipo="1" />
+     <receita codigo="4.4.90.51.02" descricao="Obras e Instalações de Domínio Patrimonial" tipo="1" />
+     <receita codigo="4.4.90.51.03" descricao="Obras e Instalações de Natureza Industrial" tipo="1" />
+     <receita codigo="4.4.90.52.00" descricao="Equipamentos e Material Permanente" tipo="2" />
+     <receita codigo="4.4.90.52.01" descricao="Aeronaves" tipo="1" />
+     <receita codigo="4.4.90.52.02" descricao="Aparelhos de Medição e Orientação" tipo="1" />
+     <receita codigo="4.4.90.52.03" descricao="Aparelhos e Equipamentos de Comunicação" tipo="1" />
+     <receita codigo="4.4.90.52.04" descricao="Aparelhos, Equipamentos, Utensílios Médico-odontológicos, Laboratoriais e Hospitalares" tipo="1" />
+     <receita codigo="4.4.90.52.05" descricao="Aparelhos e Equipamentos para Esportes e Diversões" tipo="1" />
+     <receita codigo="4.4.90.52.06" descricao="Aparelhos e Utensílios Domésticos" tipo="1" />
+     <receita codigo="4.4.90.52.07" descricao="Armamentos" tipo="1" />
+     <receita codigo="4.4.90.52.08" descricao="Coleções e Materiais Bibliográficos" tipo="1" />
+     <receita codigo="4.4.90.52.09" descricao="Discotecas e Filmotecas" tipo="1" />
+     <receita codigo="4.4.90.52.10" descricao="Embarcações" tipo="1" />
+     <receita codigo="4.4.90.52.11" descricao="Equipamentos de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="4.4.90.52.12" descricao="Equipamento de Proteção, Segurança e Socorro" tipo="1" />
+     <receita codigo="4.4.90.52.13" descricao="Instrumentos Musicais e Artísticos" tipo="1" />
+     <receita codigo="4.4.90.52.14" descricao="Máquinas e Equipamentos de Natureza Industrial" tipo="1" />
+     <receita codigo="4.4.90.52.15" descricao="Máquinas e Equipamentos Energéticos" tipo="1" />
+     <receita codigo="4.4.90.52.16" descricao="Máquinas e Equipamentos Gráficos" tipo="1" />
+     <receita codigo="4.4.90.52.17" descricao="Equipamentos para Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="4.4.90.52.18" descricao="Máquinas, Utensílios e Equipamentos Diversos" tipo="1" />
+     <receita codigo="4.4.90.52.19" descricao="Equipamentos de Processamento de Dados" tipo="1" />
+     <receita codigo="4.4.90.52.20" descricao="Máquinas, Instalações e Utensílios de Escritório" tipo="1" />
+     <receita codigo="4.4.90.52.21" descricao="Máquinas, Ferramentas e Utensílios de Oficina" tipo="1" />
+     <receita codigo="4.4.90.52.22" descricao="Equipamentos e Utensílios Hidráulicos e Elétricos" tipo="1" />
+     <receita codigo="4.4.90.52.23" descricao="Máquinas e Equipamentos Agrícolas e Rodoviários" tipo="1" />
+     <receita codigo="4.4.90.52.24" descricao="Mobiliário em Geral" tipo="1" />
+     <receita codigo="4.4.90.52.25" descricao="Obras de Arte e Peças para Museu" tipo="1" />
+     <receita codigo="4.4.90.52.26" descricao="Semoventes e Equipamentos de Montaria" tipo="1" />
+     <receita codigo="4.4.90.52.27" descricao="Veículos Diversos" tipo="1" />
+     <receita codigo="4.4.90.52.28" descricao="Veículos Ferroviários" tipo="1" />
+     <receita codigo="4.4.90.52.29" descricao="Peças Não Incorporáveis a Imóveis" tipo="1" />
+     <receita codigo="4.4.90.52.30" descricao="Veículos de Tração Mecânica" tipo="1" />
+     <receita codigo="4.4.90.52.31" descricao="Carros de Combate" tipo="1" />
+     <receita codigo="4.4.90.52.32" descricao="Equipamentos, Peças e Acessórios Aeronáuticos" tipo="1" />
+     <receita codigo="4.4.90.52.33" descricao="Equipamentos, Peças e Acessórios de Proteção Ao Vôo" tipo="1" />
+     <receita codigo="4.4.90.52.34" descricao="Acessórios para Automóveis" tipo="1" />
+     <receita codigo="4.4.90.52.35" descricao="Equipamentos de Mergulho e Salvamento" tipo="1" />
+     <receita codigo="4.4.90.52.36" descricao="Equipamentos e Sistema de Proteção e Vigilância Ambiental" tipo="1" />
+     <receita codigo="4.4.90.52.99" descricao="Outros Materiais Permanentes" tipo="1" />
+     <receita codigo="4.4.90.61.00" descricao="Aquisição de Imóveis" tipo="1" />
+     <receita codigo="4.4.90.61.01" descricao="Aquisição de Imóveis de Domínio Público" tipo="1" />
+     <receita codigo="4.4.90.61.02" descricao="Aquisição de Imóveis de Domínio Patrimonial" tipo="1" />
+     <receita codigo="4.4.90.61.03" descricao="Aquisição de Imóveis de Natureza Industrial" tipo="1" />
+     <receita codigo="4.4.90.65.00" descricao="Constituição ou Aumento de Capital de Empresas" tipo="1" />
+     <receita codigo="4.4.90.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="4.4.90.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.90.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.4.90.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.91.00.00" descricao="Aplicação Direta Decorrente de Operação entre Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social" tipo="2" />
+     <receita codigo="4.4.91.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="4.4.91.47.00" descricao="Obrigações Tributárias e Contributivas" tipo="1" />
+     <receita codigo="4.4.91.51.00" descricao="Obras e Instalações" tipo="1" />
+     <receita codigo="4.4.91.52.00" descricao="Equipamentos e Material Permanente" tipo="1" />
+     <receita codigo="4.4.91.61.00" descricao="Aquisição de Imóveis" tipo="1" />
+     <receita codigo="4.4.91.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="4.4.91.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.4.91.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.4.91.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.4.93.00.00" descricao="Aplicação Direta Decorrente de Operação de Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social com Consórcio Público do qual o Ente Participe (1) (I)" tipo="2" />
+     <receita codigo="4.4.93.51.00" descricao="Obras e Instalações" tipo="2" />
+     <receita codigo="4.4.93.51.01" descricao="Obras e Instalações de Domínio Público" tipo="1" />
+     <receita codigo="4.4.93.51.02" descricao="Obras e Instalações de Domínio Patrimonial" tipo="1" />
+     <receita codigo="4.4.93.51.03" descricao="Obras e Instalações de Natureza Industrial" tipo="1" />
+     <receita codigo="4.4.93.52.00" descricao="Equipamentos e Material Permanente" tipo="2" />
+     <receita codigo="4.4.93.52.01" descricao="Aeronaves" tipo="1" />
+     <receita codigo="4.4.93.52.02" descricao="Aparelhos de Medição e Orientação" tipo="1" />
+     <receita codigo="4.4.93.52.03" descricao="Aparelhos e Equipamentos de Comunicação" tipo="1" />
+     <receita codigo="4.4.93.52.04" descricao="Aparelhos, Equipamentos, Utensílios Médico-odontológicos, Laboratoriais e Hospitalares" tipo="1" />
+     <receita codigo="4.4.93.52.05" descricao="Aparelhos e Equipamentos para Esportes e Diversões" tipo="1" />
+     <receita codigo="4.4.93.52.06" descricao="Aparelhos e Utensílios Domésticos" tipo="1" />
+     <receita codigo="4.4.93.52.07" descricao="Armamentos" tipo="1" />
+     <receita codigo="4.4.93.52.08" descricao="Coleções e Materiais Bibliográficos" tipo="1" />
+     <receita codigo="4.4.93.52.09" descricao="Discotecas e Filmotecas" tipo="1" />
+     <receita codigo="4.4.93.52.10" descricao="Embarcações" tipo="1" />
+     <receita codigo="4.4.93.52.11" descricao="Equipamentos de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="4.4.93.52.12" descricao="Equipamento de Proteção, Segurança e Socorro" tipo="1" />
+     <receita codigo="4.4.93.52.13" descricao="Instrumentos Musicais e Artísticos" tipo="1" />
+     <receita codigo="4.4.93.52.14" descricao="Máquinas e Equipamentos de Natureza Industrial" tipo="1" />
+     <receita codigo="4.4.93.52.15" descricao="Máquinas e Equipamentos Energéticos" tipo="1" />
+     <receita codigo="4.4.93.52.16" descricao="Máquinas e Equipamentos Gráficos" tipo="1" />
+     <receita codigo="4.4.93.52.17" descricao="Equipamentos para Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="4.4.93.52.18" descricao="Máquinas, Utensílios e Equipamentos Diversos" tipo="1" />
+     <receita codigo="4.4.93.52.19" descricao="Equipamentos de Processamento de Dados" tipo="1" />
+     <receita codigo="4.4.93.52.20" descricao="Máquinas, Instalações e Utensílios de Escritório" tipo="1" />
+     <receita codigo="4.4.93.52.21" descricao="Máquinas, Ferramentas e Utensílios de Oficina" tipo="1" />
+     <receita codigo="4.4.93.52.22" descricao="Equipamentos e Utensílios Hidráulicos e Elétricos" tipo="1" />
+     <receita codigo="4.4.93.52.23" descricao="Máquinas e Equipamentos Agrícolas e Rodoviários" tipo="1" />
+     <receita codigo="4.4.93.52.24" descricao="Mobiliário em Geral" tipo="1" />
+     <receita codigo="4.4.93.52.25" descricao="Obras de Arte e Peças para Museu" tipo="1" />
+     <receita codigo="4.4.93.52.26" descricao="Semoventes e Equipamentos de Montaria" tipo="1" />
+     <receita codigo="4.4.93.52.27" descricao="Veículos Diversos" tipo="1" />
+     <receita codigo="4.4.93.52.28" descricao="Veículos Ferroviários" tipo="1" />
+     <receita codigo="4.4.93.52.29" descricao="Peças Não Incorporáveis a Imóveis" tipo="1" />
+     <receita codigo="4.4.93.52.30" descricao="Veículos de Tração Mecânica" tipo="1" />
+     <receita codigo="4.4.93.52.31" descricao="Carros de Combate" tipo="1" />
+     <receita codigo="4.4.93.52.32" descricao="Equipamentos, Peças e Acessórios Aeronáuticos" tipo="1" />
+     <receita codigo="4.4.93.52.33" descricao="Equipamentos, Peças e Acessórios de Proteção Ao Vôo" tipo="1" />
+     <receita codigo="4.4.93.52.34" descricao="Acessórios para Automóveis" tipo="1" />
+     <receita codigo="4.4.93.52.35" descricao="Equipamentos de Mergulho e Salvamento" tipo="1" />
+     <receita codigo="4.4.93.52.36" descricao="Equipamentos e Sistema de Proteção e Vigilância Ambiental" tipo="1" />
+     <receita codigo="4.4.93.52.99" descricao="Outros Materiais Permanentes" tipo="1" />
+     <receita codigo="4.4.93.99.00" descricao="A classificar" tipo="1" />
+     <receita codigo="4.4.94.00.00" descricao="Aplicação Direta Decorrente de Operação de Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social com Consórcio Público do qual o Ente Não Participe(1) (I)" tipo="2" />
+     <receita codigo="4.4.94.51.00" descricao="Obras e Instalações" tipo="2" />
+     <receita codigo="4.4.94.51.01" descricao="Obras e Instalações de Domínio Público" tipo="1" />
+     <receita codigo="4.4.94.51.02" descricao="Obras e Instalações de Domínio Patrimonial" tipo="1" />
+     <receita codigo="4.4.94.51.03" descricao="Obras e Instalações de Natureza Industrial" tipo="1" />
+     <receita codigo="4.4.94.52.00" descricao="Equipamentos e Material Permanente" tipo="2" />
+     <receita codigo="4.4.94.52.01" descricao="Aeronaves" tipo="1" />
+     <receita codigo="4.4.94.52.02" descricao="Aparelhos de Medição e Orientação" tipo="1" />
+     <receita codigo="4.4.94.52.03" descricao="Aparelhos e Equipamentos de Comunicação" tipo="1" />
+     <receita codigo="4.4.94.52.04" descricao="Aparelhos, Equipamentos, Utensílios Médico-odontológicos, Laboratoriais e Hospitalares" tipo="1" />
+     <receita codigo="4.4.94.52.05" descricao="Aparelhos e Equipamentos para Esportes e Diversões" tipo="1" />
+     <receita codigo="4.4.94.52.06" descricao="Aparelhos e Utensílios Domésticos" tipo="1" />
+     <receita codigo="4.4.94.52.07" descricao="Armamentos" tipo="1" />
+     <receita codigo="4.4.94.52.08" descricao="Coleções e Materiais Bibliográficos" tipo="1" />
+     <receita codigo="4.4.94.52.09" descricao="Discotecas e Filmotecas" tipo="1" />
+     <receita codigo="4.4.94.52.10" descricao="Embarcações" tipo="1" />
+     <receita codigo="4.4.94.52.11" descricao="Equipamentos de Manobra e Patrulhamento" tipo="1" />
+     <receita codigo="4.4.94.52.12" descricao="Equipamento de Proteção, Segurança e Socorro" tipo="1" />
+     <receita codigo="4.4.94.52.13" descricao="Instrumentos Musicais e Artísticos" tipo="1" />
+     <receita codigo="4.4.94.52.14" descricao="Máquinas e Equipamentos de Natureza Industrial" tipo="1" />
+     <receita codigo="4.4.94.52.15" descricao="Máquinas e Equipamentos Energéticos" tipo="1" />
+     <receita codigo="4.4.94.52.16" descricao="Máquinas e Equipamentos Gráficos" tipo="1" />
+     <receita codigo="4.4.94.52.17" descricao="Equipamentos para Áudio, Vídeo e Foto" tipo="1" />
+     <receita codigo="4.4.94.52.18" descricao="Máquinas, Utensílios e Equipamentos Diversos" tipo="1" />
+     <receita codigo="4.4.94.52.19" descricao="Equipamentos de Processamento de Dados" tipo="1" />
+     <receita codigo="4.4.94.52.20" descricao="Máquinas, Instalações e Utensílios de Escritório" tipo="1" />
+     <receita codigo="4.4.94.52.21" descricao="Máquinas, Ferramentas e Utensílios de Oficina" tipo="1" />
+     <receita codigo="4.4.94.52.22" descricao="Equipamentos e Utensílios Hidráulicos e Elétricos" tipo="1" />
+     <receita codigo="4.4.94.52.23" descricao="Máquinas e Equipamentos Agrícolas e Rodoviários" tipo="1" />
+     <receita codigo="4.4.94.52.24" descricao="Mobiliário em Geral" tipo="1" />
+     <receita codigo="4.4.94.52.25" descricao="Obras de Arte e Peças para Museu" tipo="1" />
+     <receita codigo="4.4.94.52.26" descricao="Semoventes e Equipamentos de Montaria" tipo="1" />
+     <receita codigo="4.4.94.52.27" descricao="Veículos Diversos" tipo="1" />
+     <receita codigo="4.4.94.52.28" descricao="Veículos Ferroviários" tipo="1" />
+     <receita codigo="4.4.94.52.29" descricao="Peças Não Incorporáveis a Imóveis" tipo="1" />
+     <receita codigo="4.4.94.52.30" descricao="Veículos de Tração Mecânica" tipo="1" />
+     <receita codigo="4.4.94.52.31" descricao="Carros de Combate" tipo="1" />
+     <receita codigo="4.4.94.52.32" descricao="Equipamentos, Peças e Acessórios Aeronáuticos" tipo="1" />
+     <receita codigo="4.4.94.52.33" descricao="Equipamentos, Peças e Acessórios de Proteção Ao Vôo" tipo="1" />
+     <receita codigo="4.4.94.52.34" descricao="Acessórios para Automóveis" tipo="1" />
+     <receita codigo="4.4.94.52.35" descricao="Equipamentos de Mergulho e Salvamento" tipo="1" />
+     <receita codigo="4.4.94.52.36" descricao="Equipamentos e Sistema de Proteção e Vigilância Ambiental" tipo="1" />
+     <receita codigo="4.4.94.52.99" descricao="Outros Materiais Permanentes" tipo="1" />
+     <receita codigo="4.4.94.99.00" descricao="A classificar" tipo="1" />
+     <receita codigo="4.4.99.00.00" descricao="A Definir" tipo="2" />
+     <receita codigo="4.4.99.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.5.00.00.00" descricao="Inversões Financeiras" tipo="2" />
+     <receita codigo="4.5.30.00.00" descricao="Transferências a Estados e ao Distrito Federal" tipo="2" />
+     <receita codigo="4.5.30.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.5.30.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.5.30.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.5.30.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.5.40.00.00" descricao="Transferências a Municípios" tipo="2" />
+     <receita codigo="4.5.40.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.5.40.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.5.40.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.5.40.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.5.50.00.00" descricao="Transferências a Instituições Privadas sem Fins Lucrativos" tipo="2" />
+     <receita codigo="4.5.50.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.5.50.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.5.50.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.5.50.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.5.60.00.00" descricao="Transferências a Instituições Privadas com Fins Lucrativos" tipo="2" />
+     <receita codigo="4.5.60.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.5.60.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.5.71.00.00" descricao="Transferências a Consórcios Públicos" tipo="2" />
+     <receita codigo="4.5.71.41.00" descricao="Contribuições" tipo="1" />
+     <receita codigo="4.5.71.42.00" descricao="Auxílios" tipo="1" />
+     <receita codigo="4.5.71.51.00" descricao="Obras e Instalações" tipo="1" />
+     <receita codigo="4.5.71.52.00" descricao="Equipamentos e Material Permanente" tipo="1" />
+     <receita codigo="4.5.71.61.00" descricao="Aquisição de Imóveis" tipo="1" />
+     <receita codigo="4.5.71.62.00" descricao="Aquisição de Produtos Para Revenda" tipo="1" />
+     <receita codigo="4.5.71.63.00" descricao="Aquisição de Títulos De Crédito" tipo="1" />
+     <receita codigo="4.5.71.64.00" descricao="Aquisição de Títulos Representativos de Capital Já Integralizado" tipo="1" />
+     <receita codigo="4.5.71.65.00" descricao="Constituição ou Aumento de Capital de Empresas" tipo="1" />
+     <receita codigo="4.5.71.66.00" descricao="Concessão de Empréstimos e Financiamentos" tipo="1" />
+     <receita codigo="4.5.71.67.00" descricao="Depósitos Compulsórios" tipo="1" />
+     <receita codigo="4.5.71.70.00" descricao="Rateio pela Participação em Consórcio Público" tipo="1" />
+     <receita codigo="4.5.71.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="4.5.71.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.5.71.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.5.71.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.5.72.00.00" descricao="Execução Orçamentária Delegada a Consórcios Públicos" tipo="2" />
+     <receita codigo="4.5.72.14.00" descricao="Diárias - Civil" tipo="1" />
+     <receita codigo="4.5.72.30.00" descricao="Material de Consumo" tipo="1" />
+     <receita codigo="4.5.72.32.00" descricao="Material, Bem ou Serviço para Distribuição Gratuita" tipo="1" />
+     <receita codigo="4.5.72.33.00" descricao="Passagens e Despesas com Locomoção" tipo="1" />
+     <receita codigo="4.5.72.35.00" descricao="Serviços de Consultoria" tipo="1" />
+     <receita codigo="4.5.72.36.00" descricao="Outros Serviços de Terceiros - Pessoa Física" tipo="1" />
+     <receita codigo="4.5.72.37.00" descricao="Locação de Mão-de-obra" tipo="1" />
+     <receita codigo="4.5.72.39.00" descricao="Outros Serviços de Terceiros - Pessoa Jurídica" tipo="1" />
+     <receita codigo="4.5.72.51.00" descricao="Obras e Instalações" tipo="1" />
+     <receita codigo="4.5.72.52.00" descricao="Equipamentos e Material Permanente" tipo="1" />
+     <receita codigo="4.5.72.61.00" descricao="Aquisição de Imóveis" tipo="1" />
+     <receita codigo="4.5.72.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.5.72.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.5.90.00.00" descricao="Aplicações Diretas" tipo="2" />
+     <receita codigo="4.5.90.52.00" descricao="Equipamentos e Material Permanente" tipo="1" />
+     <receita codigo="4.5.90.61.00" descricao="Aquisição de Imóveis" tipo="2" />
+     <receita codigo="4.5.90.61.01" descricao="Aquisição de Imóveis de Domínio Público" tipo="1" />
+     <receita codigo="4.5.90.61.02" descricao="Aquisição de Imóveis de Domínio Patrimonial" tipo="1" />
+     <receita codigo="4.5.90.61.03" descricao="Aquisição de Imóveis de Natureza Industrial" tipo="1" />
+     <receita codigo="4.5.90.62.00" descricao="Aquisição de Produtos para Revenda" tipo="1" />
+     <receita codigo="4.5.90.63.00" descricao="Aquisição de Títulos de Crédito" tipo="1" />
+     <receita codigo="4.5.90.64.00" descricao="Aquisição de Títulos Representativos de Capital Já Integralizado" tipo="1" />
+     <receita codigo="4.5.90.65.00" descricao="Constituição ou Aumento de Capital de Empresas" tipo="1" />
+     <receita codigo="4.5.90.66.00" descricao="Concessão de Empréstimos e Financiamentos" tipo="1" />
+     <receita codigo="4.5.90.67.00" descricao="Depósitos Compulsórios" tipo="1" />
+     <receita codigo="4.5.90.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="4.5.90.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.5.90.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.5.90.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.5.91.00.00" descricao="Aplicação Direta Decorrente de Operação entre Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social" tipo="2" />
+     <receita codigo="4.5.91.47.00" descricao="Obrigações Tributárias e Contributivas" tipo="1" />
+     <receita codigo="4.5.91.52.00" descricao="Equipamentos e Material Permanente" tipo="1" />
+     <receita codigo="4.5.91.61.00" descricao="Aquisição de Imóveis" tipo="1" />
+     <receita codigo="4.5.91.62.00" descricao="Aquisição de Produtos Para Revenda" tipo="1" />
+     <receita codigo="4.5.91.63.00" descricao="Aquisição de Títulos De Crédito" tipo="1" />
+     <receita codigo="4.5.91.64.00" descricao="Aquisição de Títulos Representativos de Capital Já Integralizado" tipo="1" />
+     <receita codigo="4.5.91.65.00" descricao="Constituição ou Aumento de Capital de Empresas" tipo="1" />
+     <receita codigo="4.5.91.66.00" descricao="Concessão de Empréstimos e Financiamentos" tipo="1" />
+     <receita codigo="4.5.91.67.00" descricao="Depósitos Compulsórios" tipo="1" />
+     <receita codigo="4.5.91.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="4.5.91.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.5.91.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.5.91.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.5.99.00.00" descricao="A Definir" tipo="2" />
+     <receita codigo="4.5.99.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.6.00.00.00" descricao="Amortização da Dívida" tipo="2" />
+     <receita codigo="4.6.71.00.00" descricao="Transferências a Consórcios Públicos" tipo="2" />
+     <receita codigo="4.6.71.70.00" descricao="Rateio pela Participação em Consórcio Público" tipo="1" />
+     <receita codigo="4.6.71.71.00" descricao="Principal da Dívida Contratual Resgatado" tipo="1" />
+     <receita codigo="4.6.71.72.00" descricao="Principal da Dívida Mobiliária Resgatado" tipo="1" />
+     <receita codigo="4.6.71.73.00" descricao="Correção Monetária ou Cambial da Dívida Contratual Resgatada" tipo="1" />
+     <receita codigo="4.6.71.74.00" descricao="Correção Monetária ou Cambial da Dívida Mobiliária Resgatada" tipo="1" />
+     <receita codigo="4.6.71.75.00" descricao="Correção Monetária da Dívida de Operação de Crédito por Antecipação da Receita" tipo="1" />
+     <receita codigo="4.6.71.76.00" descricao="Principal Corrigido da Dívida Mobiliária Refinanciado" tipo="1" />
+     <receita codigo="4.6.71.77.00" descricao="Principal Corrigido da Dívida Contratual Refinanciado" tipo="1" />
+     <receita codigo="4.6.71.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="4.6.71.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.6.71.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.6.71.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.6.90.00.00" descricao="Aplicações Diretas" tipo="2" />
+     <receita codigo="4.6.90.71.00" descricao="Principal da Dívida Contratual Resgatado" tipo="2" />
+     <receita codigo="4.6.90.71.01" descricao="Principal da Dívida por Contrato - Interna" tipo="1" />
+     <receita codigo="4.6.90.71.02" descricao="Principal da Dívida por Contrato - Externa" tipo="1" />
+     <receita codigo="4.6.90.72.00" descricao="Principal da Dívida Mobiliária Resgatado" tipo="1" />
+     <receita codigo="4.6.90.73.00" descricao="Correção Monetária ou Cambial da Dívida Contratual Resgatada" tipo="1" />
+     <receita codigo="4.6.90.74.00" descricao="Correção Monetária ou Cambial da Dívida Mobiliária Resgatada" tipo="1" />
+     <receita codigo="4.6.90.75.00" descricao="Correção Monetária da Dívida de Operação de Crédito por Antecipação da Receita" tipo="1" />
+     <receita codigo="4.6.90.76.00" descricao="Principal Corrigido da Dívida Mobiliária Refinanciado" tipo="1" />
+     <receita codigo="4.6.90.77.00" descricao="Principal Corrigido da Dívida Contratual Refinanciado" tipo="1" />
+     <receita codigo="4.6.90.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="4.6.90.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.6.90.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.6.90.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.6.91.00.00" descricao="Aplicação Direta Decorrente de Operação entre Órgãos, Fundos e Entidades Integrantes dos Orçamentos Fiscal e da Seguridade Social" tipo="2" />
+     <receita codigo="4.6.91.71.00" descricao="Principal da Dívida Contratual Resgatado" tipo="1" />
+     <receita codigo="4.6.91.72.00" descricao="Principal da Dívida Mobiliária Resgatado" tipo="1" />
+     <receita codigo="4.6.91.73.00" descricao="Correção Monetária ou Cambial da Dívida Contratual Resgatada" tipo="1" />
+     <receita codigo="4.6.91.74.00" descricao="Correção Monetária ou Cambial da Dívida Mobiliária Resgatada" tipo="1" />
+     <receita codigo="4.6.91.75.00" descricao="Correção Monetária da Dívida de Operação de Crédito por Antecipação da Receita" tipo="1" />
+     <receita codigo="4.6.91.76.00" descricao="Principal Corrigido da Dívida Mobiliária Refinanciado" tipo="1" />
+     <receita codigo="4.6.91.77.00" descricao="Principal Corrigido da Dívida Contratual Refinanciado" tipo="1" />
+     <receita codigo="4.6.91.91.00" descricao="Sentenças Judiciais" tipo="1" />
+     <receita codigo="4.6.91.92.00" descricao="Despesas de Exercícios Anteriores" tipo="1" />
+     <receita codigo="4.6.91.93.00" descricao="Indenizações e Restituições" tipo="1" />
+     <receita codigo="4.6.91.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="4.6.99.00.00" descricao="A Definir" tipo="2" />
+     <receita codigo="4.6.99.99.00" descricao="A Classificar" tipo="1" />
+     <receita codigo="9.9.00.00.00" descricao="Reserva de Contingência ou Reserva do RPPS" tipo="2" />
+     <receita codigo="9.9.99.00.00" descricao="Reserva de Contingência ou Reserva do RPPS" tipo="2" />
+     <receita codigo="9.9.99.99.00" descricao="Reserva de Contingência ou Reserva do RPPS" tipo="2" />
+     <receita codigo="9.9.99.99.99" descricao="Reserva de Contingência ou Reserva do RPPS" tipo="1" />
+</receitas>
+

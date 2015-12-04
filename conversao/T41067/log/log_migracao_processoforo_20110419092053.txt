@@ -1,0 +1,22 @@
+
+[19/04/2011 09:20:53] Migrando registros(Definidos).
+[19/04/2011 09:20:53] Registros encontrados: (Definidos)                                        
+[19/04/2011 09:20:53] -------------+-----------------+------------+--------------+------------- 
+[19/04/2011 09:20:53]  v55_inicial |   v55_codforo   |  v55_data  | v55_id_login | v55_codvara  
+[19/04/2011 09:20:53] -------------+-----------------+------------+--------------+------------- 
+[19/04/2011 09:20:53] Total de registros encontados: 0
+[19/04/2011 09:20:53] 
+[19/04/2011 09:20:53] Migracao registros(Definidos) concluida com sucesso.
+[19/04/2011 09:20:53] 
+[19/04/2011 09:20:53] Migrando registros(Indefinidos, vazio ou nulos).
+[19/04/2011 09:20:53] Registros encontrados: (Indefinidos, Vazio ou Nulos)                      
+[19/04/2011 09:20:53] -------------+-----------------+------------+--------------+------------- 
+[19/04/2011 09:20:53]  v55_inicial |   v55_codforo   |  v55_data  | v55_id_login | v55_codvara  
+[19/04/2011 09:20:53] -------------+-----------------+------------+--------------+------------- 
+[19/04/2011 09:20:53] Total de registros encontados: 0
+[19/04/2011 09:20:53] 
+[19/04/2011 09:20:53] Migracao registros(Indefinidos, Vazio ou Nulos) concluida com sucesso.
+[19/04/2011 09:20:53] 
+[19/04/2011 09:20:53] OBS: Favor verificar os logs gerados no diretorio ./log.
+[19/04/2011 09:20:53] OBS: Cuidado script deve ser executado apenas 1x, para nao duplicar os registros.
+[19/04/2011 09:20:53] 

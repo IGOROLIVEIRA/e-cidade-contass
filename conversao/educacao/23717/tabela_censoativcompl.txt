@@ -1,0 +1,48 @@
+11001 | História da música e teoria musical                                                                                                                                                  | 11
+11002 | Canto coral                                                                                                                                                                          | 11
+11003 | Instrumentos: Piano, Violão, Guitarra, Violino, Flauta, Trompete etc.                                                                                                                | 11
+12001 | História da arte                                                                                                                                                                     | 12
+12002 | Pintura, Grafite,  Desenho, Escultura, Colagem, Desenho gráfico etc                                                                                                                  | 12
+13001 | Oficina de cinema, Projeção de filmes, Cineclubismo etc                                                                                                                              | 13
+14001 | Teatro                                                                                                                                                                               | 14
+14002 | Dança                                                                                                                                                                                | 14
+14003 | Circo e Ópera                                                                                                                                                                        | 14
+19999 | Outra categoria de arte e cultura                                                                                                                                                    | 19
+21001 | Brincadeiras, Jogos não estruturados, Festas etc.                                                                                                                                    | 21
+22001 | Futebol e Futsal                                                                                                                                                                     | 22
+22002 | Ginástica Olímpica, Localizada, Aeróbica, Tênis de mesa.                                                                                                                             | 22
+22003 | Vôlei, Basquete, Handebol, Natação.                                                                                                                                                  | 22
+22004 | Capoeira                                                                                                                                                                             | 22
+22005 | Artes Marciais (Taekwondo, Jiu Jitsu, Judô etc)                                                                                                                                      | 22
+29999 | Outra categoria de esporte e lazer                                                                                                                                                   | 29
+31001 | Matemática                                                                                                                                                                           | 31
+31002 | Português                                                                                                                                                                            | 31
+31003 | Letramento e alfabetização                                                                                                                                                           | 31
+31004 | Ciências                                                                                                                                                                             | 31
+31005 | História e Geografia                                                                                                                                                                 | 31
+31006 | Línguas estrangeiras e indígenas                                                                                                                                                     | 31
+39999 | Outra categoria de Acompanhamento Pedagógico                                                                                                                                         | 39
+41001 | Direitos  de crianças e adolescentes                                                                                                                                                 | 41
+41002 | Ética e Cidadania                                                                                                                                                                    | 41
+41003 | Enfrentamento do racismo                                                                                                                                                             | 41
+41004 | Trabalho infantil                                                                                                                                                                    | 41
+41005 | Enfrentamento da violência na escola e na família                                                                                                                                    | 41
+49999 | Outra categoria de Direitos Humanos e Cidadania                                                                                                                                      | 49
+51001 | Educação ambiental                                                                                                                                                                   | 51
+51002 | Horta escolar e/ou comunitária                                                                                                                                                       | 51
+51003 | Com-vidas/ Agenda 21 Escolar                                                                                                                                                         | 51
+51004 | Reciclagem                                                                                                                                                                           | 51
+59999 | Outra categoria de Meio Ambiente e Desenvolvimento                                                                                                                                   | 59
+61001 | Informática e tecnologia da informação e comunicação                                                                                                                                 | 61
+61002 | Rádio escolar                                                                                                                                                                        | 61
+61003 | Jornal escolar                                                                                                                                                                       | 61
+69999 | Outra categoria de Inclusão Digital e Comunicação                                                                                                                                    | 69
+71001 | Alimentação                                                                                                                                                                          | 71
+71002 | Higiene                                                                                                                                                                              | 71
+71003 | Direitos sexuais e reprodutivos                                                                                                                                                      | 71
+71004 | Prevenção ao uso de álcool e outras drogas                                                                                                                                           | 71
+79999 | Outra categoria de Saúde, Alimentação e Prevenção                                                                                                                                    | 79
+89999 | Especificar a atividade                                                                                                                                                              | 89
+91001 | Peti - Ministério do Desenvolvimento Social e Combate à Fome/MDS                                                                                                                     | 91
+91002 | Segundo Tempo - Ministério do Esporte                                                                                                                                                | 91
+99999 | Outra categoria de Programa Intersetorial (Programa apoiado por instituiçaõ ou fundação pública ou privada. Por exemplo: Banco do Brasil, Petrobrás, Vale do Rio Doce, entre outros. | 99

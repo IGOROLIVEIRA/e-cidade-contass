@@ -1,0 +1,99 @@
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(95341) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (218, 1350, 95341, 0, '',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(95341) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (234, 135011, 95341, 0, '',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(105216) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (26, 135024, 105216, 60, '15202',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(95082) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (27, 135011, 95082, 60, '6208',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(80635) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (28, 135011, 80635, 60, '9346',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(60698) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (29, 135011, 60698, 60, '3825',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(82000) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (30, 1350, 82000, 60, '4609',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(97103) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (31, 341, 97103, 60, '13760',
+                                  'A',
+                                  null, null
+                                 )
+            
+ERRO:  inserção ou atualização em tabela unidademedicos viola restrição de chave estrangeira unidademedicos_medico_fk
+DETAIL:  Chave (sd04_i_medico)=(87626) não está presente na tabela medicos.
+insert into unidademedicos (sd04_i_codigo, sd04_i_unidade, sd04_i_medico, sd04_i_numerodias, sd04_v_registroconselho,
+                                         sd04_c_situacao,
+                                         sd04_i_orgaoemissor, sd04_i_vinculo
+                                        )
+                          values (32, 341, 87626, 60, '99999',
+                                  'A',
+                                  null, null
+                                 )
+            

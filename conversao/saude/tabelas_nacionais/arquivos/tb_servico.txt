@@ -1,0 +1,51 @@
+100Serviço de atenção a saúde no sistema penitenciário                                                                     200805
+101Estratégia de saúde da família                                                                                          200805
+102Estratégias de agentes comunitário de saúde                                                                             200805
+103Serviço de regulação médica de urgências - Central SAMU 192                                                             200805
+104Servico de regulação de servicos de saúde                                                                               200805
+105Serviço de assistência de alta complexidade em neurocirurgia                                                            200805
+106Serviço de atenção a DST/HIV/AIDS                                                                                       200805
+107Serviço de atenção a saúde auditiva                                                                                     200805
+108Serviço de atenção a saúde do trabalhador                                                                               200805
+109Serviço de atenção a saúde dos adolecentes em conflito com a lei, em regime de internação e internação provisória       200805
+110Serviço de atenção a saúde reprodutiva                                                                                  200805
+111Serviço de atenção ao paciente com tuberculose                                                                          200805
+112Serviço de atenção ao pré-natal, parto e nascimento                                                                     200805
+113Serviço de atenção domiciliar                                                                                           200805
+114Serviço de atenção em saúde bucal                                                                                       200805
+115Serviço de atenção psicossocial                                                                                         200805
+116Serviço de cirurgia cardiovascular                                                                                      200805
+117Serviço de cirurgia reparadora                                                                                          200805
+118Serviço de cirurgia torácica                                                                                            200805
+119Serviço de controle de tabagismo                                                                                        200805
+120Serviço de diagnóstico por anatomia patológica e/ou citopatologia                                                       200805
+121Serviço de diagnóstico por imagem                                                                                       200805
+122Serviço de diagnóstico por métodos gráficos/dinâmicos                                                                   200805
+123Serviço de dispensação de órteses, próteses e materiais especiais                                                       200805
+124Serviço de endocrinologia                                                                                               200805
+125Serviço de farmácia                                                                                                     200805
+126Serviço de fisioterapia                                                                                                 200805
+127Serviço de atenção à obesidade grave                                                                                    200805
+128Serviço de hemoterapia                                                                                                  200805
+129Servico de laboratório de histocompatibilidade                                                                          200805
+130Serviço de nefrologia/urologia                                                                                          200805
+131Serviço de oftalmologia                                                                                                 200805
+132Serviço de oncologia                                                                                                    200805
+133Serviço de pneumologia                                                                                                  200805
+134Serviço de práticas integrativas e complementares                                                                       200805
+135Serviço de reabilitação                                                                                                 200805
+136Serviço de suporte nutricional                                                                                          200805
+137Serviço de telemedicina                                                                                                 200805
+138Serviço de traumato-ortopedia                                                                                           200805
+139Serviço de triagem neonatal                                                                                             200805
+140Serviço de urgências                                                                                                    200805
+141Serviço de vigilância em saúde                                                                                          200805
+142Serviço de endoscopia                                                                                                   200805
+143Serviço móvel de urgência (exceto SAMU)                                                                                 200805
+144Serviço posto de coleta de materiais biológicos                                                                         200805
+145Serviço de diagnóstico por laboratório clínico                                                                          200805
+146Serviço de videolaparoscopia                                                                                            200805
+147Serviço de apoio a saúde da família                                                                                     200805
+148Hospital-Dia                                                                                                            200805
+149Transplante                                                                                                             200805
+150Cirurgia vascular                                                                                                       200805

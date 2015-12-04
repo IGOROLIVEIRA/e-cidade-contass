@@ -1,0 +1,52 @@
+
+[03/09/2010 16:00:26] - BASE PARA IMPORTACAO Destino : host=192.168.0.244 
+                       dbname=imam 
+                       port=5432 
+                       user=dbportal 
+                       password=imam21
+[03/09/2010 16:08:05] Inicio: 16:00:26
+[03/09/2010 16:08:05] Final.: 16:08:05
+[03/09/2010 16:08:05] 
+[03/09/2010 16:08:05] *** FINAL Script endereco_cgm.php ***
+[03/09/2010 16:08:05] 
+[24/09/2010 15:58:04] - BASE PARA IMPORTACAO Destino : host= 
+                       dbname=contass 
+                       port=5432 
+                       user=postgres 
+                       password=
+[24/09/2010 15:58:04] Erro ao conectar na Destino (host= 
+                       dbname=contass 
+                       port=5432 
+                       user=postgres 
+                       password=)...
+[24/09/2010 15:58:43] - BASE PARA IMPORTACAO Destino : host=192.168.0.244 
+                       dbname=contass 
+                       port=5432 
+                       user=postgres 
+                       password=
+[24/09/2010 15:58:47] Inicio: 15:58:43
+[24/09/2010 15:58:47] Final.: 15:58:47
+[24/09/2010 15:58:47] 
+[24/09/2010 15:58:47] *** FINAL Script endereco_cgm.php ***
+[24/09/2010 15:58:47] 
+[21/10/2010 16:49:10] - BASE PARA IMPORTACAO Destino : host=localhost 
+                       dbname=e-cidade 
+                       port=5432 
+                       user=postgres 
+                       password=
+[21/10/2010 16:49:10] ERRO: db_query - DEBUG BACKTRACE:
+array (
+  0 => 
+  array (
+    'file' => '/var/www/pmverdelandia/conversao/T38290/endereco/endereco_cgm.php',
+    'line' => 17,
+    'function' => 'db_query',
+    'args' => 
+    array (
+      0 => NULL,
+      1 => 'select * from w_temp_cadender ',
+      2 => 'log/enderecoCgm.txt',
+    ),
+  ),
+)
+[21/10/2010 16:49:10] ERRO: PostgreSQL (last)   - ERRO:  relação "w_temp_cadender" não existe

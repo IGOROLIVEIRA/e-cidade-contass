@@ -1,0 +1,160 @@
+<?
+require("libs/db_stdlib.php");
+require("libs/db_conecta.php");
+include("libs/db_sessoes.php");
+include("libs/db_usuariosonline.php");
+include("classes/db_adesaoregprecos_classe.php");
+include("classes/db_itensregpreco_classe.php");
+include("dbforms/db_funcoes.php");
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+db_postmemory($HTTP_POST_VARS);
+$clcflicita          = new cl_cflicita;
+$cladesaoregprecos = new cl_adesaoregprecos;
+$db_opcao = 1;
+$db_botao = true;
+
+if(isset($incluir)){
+
+  db_inicio_transacao();
+  $cladesaoregprecos->incluir(null);
+if($cladesaoregprecos->erro_status=="0"){
+  
+    $cladesaoregprecos->erro(true,false);
+    $db_botao=true;
+    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    if($cladesaoregprecos->erro_campo!=""){
+      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".focus();</script>";
+    }
+  }else{
+  	
+  	$sSql = "select * from adesaoregprecos order by si06_sequencial desc limit 1;";
+  $rsResult = pg_query($sSql);
+  db_fieldsmemory($rsResult,0);
+  $_SESSION["codigoAdesao"] = $si06_sequencial;
+    echo "<script>
+    alert('Inclusão efetuada com sucesso');
+    parent.document.formaba.db_itens.disabled=false;
+    parent.mo_camada('db_itens');
+  	top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$si06_sequencial."';
+	</script>";
+   
+    //$cladesaoregprecos->erro(true,true);
+  }
+  db_fim_transacao();
+}
+if(isset($alterar)){
+  db_inicio_transacao();
+  $db_opcao = 2;
+  $cladesaoregprecos->alterar($si06_sequencial);
+  db_fim_transacao();
+  $_SESSION["codigoAdesao"] = $si06_sequencial;
+  echo "<script>
+    parent.document.formaba.db_itens.disabled=false;
+  	top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$si06_sequencial."';
+	</script>";
+   
+  
+}else if(isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])){
+   $db_opcao = 2;
+   if (!isset($chavepesquisa)) {
+   	$chavepesquisa = $_SESSION["codigoAdesao"];
+   } 
+   unset($_SESSION["codigoAdesao"]);
+   $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa)); 
+   db_fieldsmemory($result,0);
+   $db_botao = true;
+    
+}
+if(isset($excluir)){
+  db_inicio_transacao();
+  $db_opcao = 3;
+  $clitensregpreco = new cl_itensregpreco;
+  $clitensregpreco->excluir(null," si07_sequencialadesao = $si06_sequencial");
+  $cladesaoregprecos->excluir($si06_sequencial);
+  db_fim_transacao();
+}else if(isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])){
+   //$db_opcao = 3;
+   if (!isset($chavepesquisa)) {
+   	$chavepesquisa = $_SESSION["codigoAdesao"];
+   } 
+   unset($_SESSION["codigoAdesao"]);
+   echo "<script>
+    parent.document.formaba.db_itens.disabled=false;
+  	top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$chavepesquisa."';
+	</script>";
+   $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa)); 
+   db_fieldsmemory($result,0);
+   $db_botao = true;
+   
+}
+?>
+<html>
+<head>
+<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" CONTENT="0">
+<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<link href="estilos.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+<table width="790" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+    <center>
+	<?
+	include("forms/db_frmadesaoregprecos.php");
+	?>
+    </center>
+	</td>
+  </tr>
+</table>
+</body>
+</html>
+<script>
+//js_tabulacaoforms("form1","si06_orgaogerenciador",true,1,"si06_orgaogerenciador",true);
+</script>
+<?
+/*if(isset($incluir)){
+  if($cladesaoregprecos->erro_status=="0"){
+  
+    $cladesaoregprecos->erro(true,false);
+    $db_botao=true;
+    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    if($cladesaoregprecos->erro_campo!=""){
+      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".focus();</script>";
+    }
+  }else{
+    $cladesaoregprecos->erro(true,true);
+  }
+}*/
+if(isset($alterar)){
+  if($cladesaoregprecos->erro_status=="0"){
+    $cladesaoregprecos->erro(true,false);
+    $db_botao=true;
+    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    if($cladesaoregprecos->erro_campo!=""){
+      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".focus();</script>";
+    }
+  }else{
+    $cladesaoregprecos->erro(true,false);
+    $db_opcao=22;    
+  }
+}
+if($db_opcao==22){
+  echo "<script>document.form1.pesquisar.click();</script>";
+}
+if(isset($excluir)){
+  if($cladesaoregprecos->erro_status=="0"){
+    $cladesaoregprecos->erro(true,false);
+  }else{
+    $cladesaoregprecos->erro(true,true);
+  }
+}
+if($db_opcao==33){
+  echo "<script>document.form1.pesquisar.click();</script>";
+}
+
+?>

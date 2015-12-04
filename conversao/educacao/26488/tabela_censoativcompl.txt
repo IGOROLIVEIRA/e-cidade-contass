@@ -1,0 +1,61 @@
+11 | 11001 | História da música e teoria musical
+11 | 11002 | Canto coral
+11 | 11003 | Instrumentos: Piano, Violão, Guitarra, Violino, Flauta, Trompete etc.
+11 | 11004 | Banda Fanfarra, Percussão
+11 | 11005 | Hip Hop
+12 | 12001 | História da arte
+12 | 12002 | Pintura, Grafite,  Desenho, Escultura, Colagem, Desenho gráfico etc
+13 | 13001 | Oficina de cinema, Projeção de filmes, Cineclubismo etc
+14 | 14001 | Teatro
+14 | 14002 | Dança
+14 | 14003 | Circo e Ópera
+15 | 15001 | Capoeira
+19 | 19999 | Outra categoria de arte e cultura
+21 | 21001 | Brincadeiras, Jogos não estruturados, Festas etc.
+22 | 22001 | Futebol e Futsal
+22 | 22002 | Ginástica Olímpica, Localizada, Aeróbica, Tênis de mesa.
+22 | 22003 | Vôlei, Basquete, Handebol, Natação.
+22 | 22005 | Artes Marciais (Taekwondo, Jiu Jitsu, Judô, karatê etc)
+22 | 22006 | Xadrez Tradicional e Xadrez Virtual
+22 | 22007 | Yoga
+29 | 29999 | Outra categoria de esporte e lazer
+31 | 31001 | Matemática
+31 | 31002 | Português
+31 | 31003 | Letramento e alfabetização
+31 | 31004 | Ciências
+31 | 31005 | História e Geografia
+31 | 31006 | Línguas estrangeiras e indígenas
+31 | 31007 | Leitura e produção de texto
+31 | 31008 | Laboratório de Ciências (física ótica, calorimetria, Célula animal, etc)
+31 | 31009 | Filosofia e Sociologia
+39 | 39999 | Outra categoria de Acompanhamento Pedagógico
+41 | 41001 | Direitos  de crianças e adolescentes
+41 | 41002 | Ética e Cidadania
+41 | 41003 | Enfrentamento do racismo
+41 | 41004 | Trabalho infantil
+41 | 41005 | Enfrentamento da violência na escola e na família
+41 | 41006 | Direitos Humanos e Ambiente Escolar
+49 | 49999 | Outra categoria de Direitos Humanos e Cidadania
+51 | 51001 | Educação ambiental
+51 | 51002 | Horta escolar e/ou comunitária
+51 | 51003 | Com-vidas/ Agenda 21 Escolar
+51 | 51004 | Reciclagem
+59 | 59999 | Outra categoria de Meio Ambiente e Desenvolvimento
+61 | 61001 | Informática e tecnologia da informação e comunicação
+61 | 61002 | Rádio escolar
+61 | 61003 | Jornal escolar
+61 | 61004 | Histórias em quadrinhos
+61 | 61005 | Mídias alternativas
+69 | 69999 | Outra categoria de Inclusão Digital e Comunicação
+71 | 71001 | Alimentação
+71 | 71002 | Higiene
+71 | 71003 | Direitos sexuais e reprodutivos
+71 | 71004 | Prevenção ao uso de álcool e outras drogas
+79 | 79999 | Outra categoria de Saúde, Alimentação e Prevenção
+81 | 81001 | Atividades de iniciação profissional
+91 | 91001 | Peti - Ministério do Desenvolvimento Social e Combate à Fome/MDS
+91 | 91002 | Segundo Tempo - Ministério do Esporte
+91 | 91003 | Programa Mais Educação
+99 | 99999 | Outra categoria de Programa Intersetorial (Programa apoiado por instituição ou fundação pública ou privada).
+101 | 10101 | Laboratórios e Projetos Científicos
+109 | 10999 | Outra categoria de Educação Científica

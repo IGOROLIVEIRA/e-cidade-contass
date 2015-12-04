@@ -1,0 +1,5 @@
+
+[28/09/2010 18:04:02] 
+[28/09/2010 18:04:02] OBS: Favor verificar os logs gerados no diretorio ./log.
+[28/09/2010 18:04:02] OBS: Cuidado script deve ser executado apenas 1x, para nao duplicar os registros.
+[28/09/2010 18:04:02] 

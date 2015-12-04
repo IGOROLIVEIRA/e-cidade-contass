@@ -1,0 +1,92 @@
+<?
+set_time_limit(0);
+//include("../../../libs/db_conn.php");
+
+  $DB_SERVIDOR = "192.168.0.2";
+  $DB_BASE     = "auto_carazinho_20091001_v2_2_8";
+  $DB_USUARIO  = "postgres";
+  $DB_SENHA    = "";
+  $DB_PORTA    = "5433;
+
+if(!($conn = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA"))) {
+ echo "Erro ao conectar origem...\n\n";
+ exit;
+}else{
+ echo "conectado...\n\n";
+}
+pg_query($conn,"select fc_startsession()");
+function Progresso($linha,$total,$dado1,$dado2,$titulo){
+ $linha++;
+ $percent = ($linha/$total)*100;
+ $percorrido = floor($percent);
+ $restante = 100-$percorrido;
+ $tracos = "";
+ for($t=0;$t<$percorrido;$t++){
+  $tracos .= "#";
+ }
+ $brancos = "";
+ for($t=0;$t<$restante;$t++){
+  $brancos .= ".";
+ }
+ echo " $titulo";
+ echo " $linha de $total registros.\n";
+ echo " [".$tracos.$brancos."] ".number_format($percent,2,".",".")."%\n";
+ if($titulo!=" PROGRESSÃO TOTAL DA TAREFA"){
+  echo " ---> ".trim($dado1)." -- ".trim($dado2)."\n";
+ }
+}
+pg_exec("begin");
+sleep(1);
+
+system("clear");
+echo " ->Iniciando processo...\n\n";
+
+$sql_alter1 = pg_query("DROP INDEX efetividaderh_esc_mes_ano_in;");
+$sql_alter2 = pg_query("ALTER TABLE efetividaderh ADD ed98_d_dataini date");
+$sql_alter3 = pg_query("ALTER TABLE efetividaderh ADD ed98_d_datafim date");
+$sql_alter4 = pg_query("ALTER TABLE efetividaderh ADD ed98_c_tipocomp char(1)");
+
+system("clear");
+echo " ->Verificando registros...\n\n";
+
+$sql = "SELECT ed98_i_codigo,ed98_i_escola,ed98_i_mes,ed98_i_ano
+        FROM efetividaderh
+        ORDER BY ed98_i_escola,ed98_i_ano,ed98_i_mes";
+$result = pg_query($sql);
+$linhas = pg_num_rows($result);
+$erro = false;
+for($x=0;$x<$linhas;$x++){
+ $cod_efetiv = trim(pg_result($result,$x,'ed98_i_codigo'));
+ $mes_efetiv = trim(pg_result($result,$x,'ed98_i_mes'));
+ $ano_efetiv = trim(pg_result($result,$x,'ed98_i_ano'));
+ $escola     = trim(pg_result($result,$x,'ed98_i_escola'));
+
+ $data_ini = date("Y-m-d",mktime(0, 0, 0, $mes_efetiv, 1, $ano_efetiv));
+ $data_fim = date("Y-m-t",mktime(0, 0, 0, $mes_efetiv, 1, $ano_efetiv));
+ $sql_up = "UPDATE efetividaderh SET
+             ed98_d_dataini = '$data_ini',
+             ed98_d_datafim = '$data_fim',
+             ed98_c_tipocomp = 'M'
+            WHERE ed98_i_codigo = $cod_efetiv
+           ";
+ $result_up = pg_query($sql_up);
+ if($result_up==false){
+  $erro = true;
+  break;
+ }else{
+  system("clear");
+  echo Progresso($x,$linhas,$cod_efetiv,$data_ini." | ".$data_fim," PROGRESSÃO EFETIVIDADERH:");
+ }
+}
+if($erro==true){
+ echo "\n\n SQL: ".$sql_up."\n\n";
+ pg_query("rollback");
+ exit;
+}
+if($erro==false){
+ system("clear");
+ echo "\n\nProcesso Concluido\n\n";
+ pg_query("commit");
+ exit;
+}
+?>

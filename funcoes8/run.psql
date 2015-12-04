@@ -1,0 +1,4 @@
+select fc_startsession();
+\i ./saude/get_valor_procedimento.sql 
+\i ./saude/triggers/impede_informacoes_duplicadas_lab.sql 
+\i ./tributario/parcelamento/parc_getselectorigens_atjuros.sql 

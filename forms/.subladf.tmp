@@ -1,0 +1,197 @@
+<?
+//MODULO: licitacao
+include("dbforms/db_classesgenericas.php");
+$clcredenciamento->rotulo->label();
+$cliframe_seleciona = new cl_iframe_seleciona;
+$clliclicitem = new cl_liclicitem;
+?>
+
+<script>
+function js_submit() {
+
+      var dados="";
+      var itens = new Array();
+      var iframe = document.getElementById('ativ');
+      var campos = iframe.contentWindow.document.getElementsByTagName('input');
+
+      for (i=0;i<campos.length;i++) {
+        campo = campos[i];
+        if (campo.type == 'checkbox'){
+
+          if (campo.checked) {
+
+            itens[i] = campo.value;
+          }
+        }
+      }
+      document.getElementById('l205_itens').value = itens;
+      document.form1.submit();
+    }
+</script>
+
+<form name="form1" method="post" action="">
+<center>
+<table border="0">
+  <tr>
+    <td nowrap title="<?=@$Tl205_sequencial?>">
+       <?=@$Ll205_sequencial?>
+    </td>
+    <td> 
+<?
+db_input('l205_sequencial',10,$Il205_sequencial,true,'text',3,"")
+?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tl205_fornecedor?>">
+       <?=@$Ll205_fornecedor?>
+    </td>
+    <td> 
+       <?
+       $sWhere = "1!=1";
+       if (isset($pc20_codorc) && !empty($pc20_codorc)) {
+        $sWhere = "pc21_codorc=".@$pc20_codorc;
+       }
+       $result_forn = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_numcgm,z01_nome","",$sWhere));
+       db_selectrecord("l205_fornecedor",$result_forn,true,$db_opcao);
+       ?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tl205_datacred?>">
+       <?=@$Ll205_datacred?>
+    </td>
+    <td> 
+<?
+db_inputdata('l205_datacred',@$l205_datacred_dia,@$l205_datacred_mes,@$l205_datacred_ano,true,'text',$db_opcao,"")
+?>
+    </td>
+  </tr>
+
+
+
+
+     <tr>
+    <td align="right"  nowrap title="<?=@$Tl205_inscriestadual?>">
+       <?
+       db_ancora(@$Ll205_inscriestadual,"js_pesquisapc21_numcgm(true);",$db_opcao);
+       ?>
+    </td>
+    <td> 
+    <?
+    db_input('l205_inscriestadual',8,$Il205_inscriestadual,true,'text',$db_opcao," onchange='js_pesquisapc21_numcgm(false);'")
+    ?>
+    </td>
+  </tr>
+
+  <tr>
+    <td> 
+    <input name="l205_itens[]" type="hidden" id="l205_itens" value="">
+    <input name="l20_codigo" type="hidden" id="l20_codigo" value="<? echo $l20_codigo ?>">
+    </td>
+  </tr>
+  </table>
+  </center>
+
+<?
+ if(!empty($l20_codigo)) {
+                
+                $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, ";
+                $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, pc11_resum, pc23_obs";
+                $sOrdem   = "l21_ordem";
+                $sWhere   = "l21_codliclicita = {$l20_codigo} ";
+                // die($clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere));
+                $sSqlItemLicitacao = $clliclicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere);
+                $result=$clliclicitem->sql_record($sSqlItemLicitacao);
+                $numrows = $clliclicitem->numrows;
+                if ($numrows > 0) {
+                  $sql     = $clcredenciamento->itensCredenciados(null, $sCampos, $sOrdem, $sWhere);
+                  $result  = $clcredenciamento->sql_record($sql);
+                  $numrows = $clcredenciamento->numrows;
+                  if ($numrows > 0) {
+                    $db_opcao     = 3;
+                    $sql_marca    = $sql;
+                    $sql_disabled = $sSqlItemLicitacao;
+                     echo 
+                    "<script> 
+                    document.getElementById('l205_datacred').style.backgroundColor = '#DEB887';
+                    document.getElementById('l205_datacred').readOnly = true;
+                    document.getElementById('l205_inscriestadual').style.backgroundColor = '#DEB887';
+                    document.getElementById('l205_inscriestadual').readOnly = true;
+                    </script>";
+                  }
+
+                }
+  }
+?>
+
+<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" <? if($db_opcao == 1){ ?> onclick="js_submit()" <? } ?> type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+<input name="novo" type="button" id="novo" value="Novo" onclick="js_aba();" >
+ <center>
+    <table>
+          <?
+           $cliframe_seleciona->sql=@$sSqlItemLicitacao;
+           $cliframe_seleciona->campos  = $sCampos;
+           $cliframe_seleciona->legenda="Itens";
+
+           if($db_opcao == 2) {
+             $cliframe_seleciona->sql_marca=@$sql_marca;
+           }
+           if ($db_opcao == 1 || $db_opcao == 3 || $db_opcao == 33) {
+             $cliframe_seleciona->sql_disabled=@$sql_disabled;
+           }
+           $cliframe_seleciona->iframe_nome ="itens_teste"; 
+           $cliframe_seleciona->chaves = "pc81_codprocitem";
+           $cliframe_seleciona->iframe_seleciona(1);
+           
+           ?>
+    </table>
+  </center>
+
+</form>
+<script>
+function js_pesquisa(){
+  js_OpenJanelaIframe('','db_iframe_credenciamento','func_credenciamento.php?funcao_js=parent.js_preenchepesquisa|l205_sequencial','Pesquisa',true);
+}
+function js_preenchepesquisa(chave){
+  db_iframe_credenciamento.hide();
+  <?
+  if($db_opcao!=1){
+    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
+  }
+  ?>
+}
+
+/**
+* CGM
+*/
+function js_pesquisapc21_numcgm(mostra) {
+  if(mostra==true){
+    js_OpenJanelaIframe('','func_nome','func_nome.php?funcao_js=parent.js_mostracgm1|z01_incest','Pesquisa',true);
+  }else{
+     if(document.form1.pc21_numcgm.value != ''){
+        js_OpenJanelaIframe('','func_nome','func_nome.php?pesquisa_chave='+document.form1.pc21_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+     }else{
+       document.form1.z01_nome.value = '';
+     }
+  }
+}
+function js_mostracgm(erro,chave){
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.pc21_numcgm.focus();
+    document.form1.pc21_numcgm.value = '';
+  }
+}
+function js_mostracgm1(chave1){
+  document.form1.l205_inscriestadual.value = chave1;
+  func_nome.hide();
+}
+
+function js_aba(){
+  mo_camada(db_forn)
+
+}
+
+</script>

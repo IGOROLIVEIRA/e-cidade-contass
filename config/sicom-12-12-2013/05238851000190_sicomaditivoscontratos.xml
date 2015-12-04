@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<aditivoscontratos>
+  <aditivoscontrato instituicao="1" codigo="1" codAditivo="100" nroContrato="100" AnoContrato="2013" dataAssinaturaContOriginal="12/12/2013" tipoTermoAditivo="1" dscAlteracao="teste" nroSeqTermoAditivo="100" dataAssinaturaTermoAditivo="12/12/2013" novaDataTermino="12/12/2014" valorAditivo="100" valorAtualizadoContrato="100" dataPublicacao="12/12/2013" veiculoDivulgacao="jornal"/>
+</aditivoscontratos>

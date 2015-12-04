@@ -1,0 +1,10 @@
+begin;
+select fc_startsession();
+update db_itensmenu set libcliente='t' where id_item=8987;
+update db_itensmenu set libcliente='t' where id_item=8986;
+update db_itensmenu set libcliente='t' where id_item=8989;
+update db_itensmenu set libcliente='t' where id_item=8988;
+update db_menu set id_item = 32 where id_item_filho=8987;
+update db_menu set modulo=2000018 where id_item_filho = 8987;
+update db_menu set modulo=2000018 where id_item = 8987;
+commit;

@@ -1,0 +1,54 @@
+106;SICOM IP ORGAO;0;arquivos de orgaos;3
+173;SICOM AM AOP;1;;3
+175;SICOM AM CVC;3;;3
+147;SICOM AM IDE;1;Identificacao da Remessa;3
+155;SICOM AM RESPLIC;2;;3
+156;SICOM AM HABLIC;2;;3
+157;SICOM AM JULGLIC;2;;3
+150;SICOM AM ARC;2;;3
+105;SICOM IP IDE;0;Identificacao do Municipio;3
+154;SICOM AM ABERLIC;4;Abertura da Licitacao;3
+158;SICOM AM HOMOLIC;2;;3
+159;SICOM AM PARELIC;1;;3
+107;SICOM IP LPP;0;arquivos da lei do PPA;3
+160;SICOM AM REGADESAO;3;;3
+138;SICOM IP LOA;0;LEI ORCAMENTARIA;3
+139;SICOM IP LDO;0;Lei de diretrizes Orcamentarias;3
+140;SICOM IP UOC;0;Unidades Orcamentarias;3
+142;SICOM IP REC;0;Receita Orcamentaria dos orgaos;3
+143;SICOM IP MTFIS;0;Detalhamento das Metas Fiscais;3
+144;SICOM IP RFIS;0;Detalhamento dos Riscos Fiscais;3
+145;SICOM IP MTBIARREC;0;Metas de Arrecadacao de Receita;3
+137;SICOM IP PRO;0;Programas;3
+141;SICOM IP AMP;0;Acoes e Metas;3
+161;SICOM AM DISPENSA;6;;3
+163;SICOM AM CONTRATOS;7;;3
+165;SICOM AM CAIXA;3;;3
+166;SICOM AM EMP;3;;3
+167;SICOM AM ANL;2;;3
+168;SICOM AM RSP;2;;3
+169;SICOM AM LQD;2;;3
+170;SICOM AM ALQ;2;;3
+171;SICOM AM EXT;1;;3
+174;SICOM AM NTF;3;;3
+176;SICOM AM DDC;1;;3
+177;SICOM AM PARPPS;1;;3
+178;SICOM AM DCLRF;1;;3
+179;SICOM AIP IDE;1;;3
+148;SICOM AM ORGAO;2;orgaos;3
+149;SICOM AM REC;2;Detalhamento das Receitas do Mes;3
+151;SICOM AM LAO;3;Lei de Alteracao Orcamentaria;3
+152;SICOM AM AOC;1;Alteracoes Orcamentarias;3
+153;SICOM AM REGLIC;1;Decreto Municipal Regulamentador do Pregao / Registro de Precos;3
+164;SICOM AM CTB;3;;3
+172;SICOM AM OPS;4;Pagamentos das Despesas (exceto Extra-Orcamentaria);3
+180;SICOM AIP INCPRO;1;;3
+181;SICOM AIP INCAMP;2;;3
+197;SICOM AM OBELAC;2;Outras Baixas de Empenhos por Lancamento Contabil;3
+193;SICOM AM AOB;2;Anulacoes de Outras Baixas de Empenhos por Lancamento Contabil;3
+194;SICOM AM PAREC;2;Previsao Atualizada da Receita;3
+195;SICOM AIP IUOC;1;Inclusao de Unidades Orcamentarias;3
+196;SICOM AM AEX;0;Anulacao das Extra-Orcamentaria\r\n;3
+108;SICOM IP DSP;2;Detalhamento das Acoes e Metas do PPA;3
+100217;SICOM IP PERC;0;percentual para aquisicao de bens e servicos licitaveis;3
+

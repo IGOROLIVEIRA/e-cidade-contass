@@ -1,0 +1,58 @@
+0801Ações relacionadas ao estabelecimento                                                               200807
+0301Consultas / Atendimentos / Acompanhamentos                                                          200807
+0401Pequenas cirurgias e cirurgias de pele, tecido subcutâneo e mucosa                                  200807
+0201Coleta de material                                                                                  200807
+0101Ações coletivas/individuais em saúde                                                                200807
+0601Medicamentos de dispensação excepcional                                                             200807
+0501Coleta e exames para fins de doação de orgãos, tecidos e células e de transplante                   200807
+0701Órteses, próteses e materiais especiais não relacionados ao ato cirúrgico                           200807
+0202Diagnóstico em laboratório clínico                                                                  200807
+0802Ações relacionadas ao atendimento                                                                   200807
+0502Avaliação de morte encefálica                                                                       200807
+0702Órteses, próteses e materiais especiais relacionados ao ato cirúrgico                               200807
+0302Fisioterapia                                                                                        200807
+0102Vigilância em saúde                                                                                 200807
+0602Medicamentos estratégicos                                                                           200807
+0402Cirurgia de glândulas endócrinas                                                                    200807
+0603Medicamentos de âmbito hospitalar                                                                   200807
+0503Ações relacionadas à doação de orgãos, tecidos e células                                            200807
+0803Autorização / Regulação                                                                             200807
+0303Tratamentos clínicos (outras especialidades)                                                        200807
+0203Diagnóstico por anatomia patológica e citopatologia                                                 200807
+0403Cirurgia do sistema nervoso central e periférico                                                    200807
+0304Tratamento em oncologia                                                                             200807
+0504Processamento de tecidos para transplante                                                           200807
+0404Cirurgia das vias aéreas superiores, da cabeça e do pescoço                                         200807
+0204Diagnóstico por radiologia                                                                          200807
+0305Tratamento em nefrologia                                                                            200807
+0205Diagnóstico por ultra-sonografia                                                                    200807
+0405Cirurgia do aparelho da visão                                                                       200807
+0505Transplante de orgãos, tecidos e células                                                            200807
+0406Cirurgia do aparelho circulatório                                                                   200807
+0506Acompanhamento e intercorrências pós-transplante                                                    200807
+0306Hemoterapia                                                                                         200807
+0206Diagnóstico por tomografia                                                                          200807
+0307Tratamentos odontológicos                                                                           200807
+0207Diagnóstico por ressonância magnética                                                               200807
+0407Cirurgia do aparelho digestivo, orgãos anexos e parede abdominal                                    200807
+0408Cirurgia do sistema osteomuscular                                                                   200807
+0308Tratamento de lesões, envenenamentos e outros, decorrentes de causas externas                       200807
+0208Diagnóstico por medicina nuclear in vivo                                                            200807
+0409Cirurgia do aparelho geniturinário                                                                  200807
+0209Diagnóstico por endoscopia                                                                          200807
+0309Terapias especializadas                                                                             200807
+0210Diagnóstico por radiologia intervencionista                                                         200807
+0410Cirurgia de mama                                                                                    200807
+0310Parto e nascimento                                                                                  200807
+0411Cirurgia obstétrica                                                                                 200807
+0211Métodos diagnósticos em especialidades                                                              200807
+0412Cirurgia torácica                                                                                   200807
+0212Diagnóstico e procedimentos especiais em hemoterapia                                                200807
+0213Diagnóstico em vigilância epidemiológica e ambiental                                                200807
+0413Cirurgia reparadora                                                                                 200807
+0214Diagnóstico por teste rápido                                                                        200807
+0414Cirurgia oro-facial                                                                                 200807
+0415Outras cirurgias                                                                                    200807
+0416Cirurgia em oncologia                                                                               200807
+0417Anestesiologia                                                                                      200807
+0418Cirurgia em nefrologia                                                                              200807
