@@ -21,17 +21,10 @@ require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
  * Dados Complementares Sicom Acompanhamento Mensal
  * @author marcelo
  * @package Contabilidade
+ * @revision Rodrigo e Igor
  */
 class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-
-    /**
-     *
-     * Codigo do layout. (db_layouttxt.db50_codigo)
-     * @var Integer
-     */
-    protected $iCodigoLayout = 229;
-
     /**
      *
      * Nome do arquivo a ser criado
@@ -88,15 +81,15 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         /**
          * selecionar arquivo xml de acordo com o tipo da instituição
          */
-        $sSql  = "SELECT * FROM db_config inner join infocomplementaresinstit on codigo = si09_instit where codigo = ".db_getsession('DB_instit');
+        $sSql = "SELECT * FROM db_config inner join infocomplementaresinstit on codigo = si09_instit where codigo = " . db_getsession('DB_instit');
 
         $rsInst = db_query($sSql);
-        $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
-        $iTipoInstit  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
+        $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
+        $iTipoInstit = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
         /*
          * Se for câmara não busca receita.
          */
-        if($iTipoInstit != 1) {
+        if ($iTipoInstit != 1) {
 
             $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
@@ -104,7 +97,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 throw new Exception("Arquivo de natureza da receita inexistente!");
             }
 
-            $sTextoXml    = file_get_contents($sArquivo);
+            $sTextoXml = file_get_contents($sArquivo);
             $oDOMDocument = new DOMDocument();
             $oDOMDocument->loadXML($sTextoXml);
             $oNaturezaReceita = $oDOMDocument->getElementsByTagName('receita');
@@ -114,11 +107,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         /**
          * selecionar arquivo xml de dados elemento da despesa
          */
-        $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomelementodespesa.xml";
+        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
         if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de elemento da despesa inexistente!");
         }
-        $sTextoXml    = file_get_contents($sArquivo);
+        $sTextoXml = file_get_contents($sArquivo);
         $oDOMDocument = new DOMDocument();
         $oDOMDocument->loadXML($sTextoXml);
         $oElementos = $oDOMDocument->getElementsByTagName('elemento');
@@ -180,7 +173,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_anousu = " . db_getsession("DB_anousu") . " ) as x
+                             where c60_anousu = " . db_getsession("DB_anousu") . ") as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 //where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '622130300') as x
         $rsReg10 = db_query($sqlReg10) or die($sqlReg10);
@@ -253,7 +246,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                          AND DATE_PART('MONTH',c69_data) = " . $nMes . ") as debito
                                          where saldoinicial != 0 or creditos != 0 or debitos != 0";
 
-                if(pg_num_rows(pg_query($sSqlSaldoAnt)) == 0){
+                if (pg_num_rows(pg_query($sSqlSaldoAnt)) == 0) {
                     continue;
                 }
 
@@ -333,7 +326,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 if (substr($oContas10->si177_contacontaabil, 0, 5) != '62213') {
                     $sSqlDotacoes = "select distinct o58_coddot as c73_coddot,
                                     si09_codorgaotce as codorgao,
-                                    case when o41_unidade is not null then
+                                    case when o41_unidade is not null or o41_unidade = 0 then
                                     lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)||lpad(o41_unidade,3,0)
                                     else lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) end as codunidadesub,
 					                o58_funcao as codfuncao,
@@ -357,7 +350,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                     $sSqlDotacoes = "select distinct c73_coddot,
                                     si09_codorgaotce as codorgao,
-                                    case when o41_unidade is not null then
+                                    case when o41_unidade is not null or o41_unidade = 0 then
                                     lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)||lpad(o41_unidade,3,0)
                                     else lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) end as codunidadesub,
 					                o58_funcao as codfuncao,
@@ -380,7 +373,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  JOIN orctiporec ON o58_codigo = o15_codigo
 					  left join infocomplementaresinstit on  o58_instit = si09_instit
 					  where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes}";
-					  //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
+                    //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
 
                     $nContaCorrente = 102;
 
@@ -483,7 +476,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                            GROUP BY c28_tipo) AS debitos";
 
                     $rsReg11saldos = db_query($sSqlReg11saldos) or die($sSqlReg11saldos);
-                    
+
                     for ($iContSaldo = 0; $iContSaldo < pg_num_rows($rsReg11saldos); $iContSaldo++) {
 
                         $oReg11Saldo = db_utils::fieldsMemory($rsReg11saldos, $iContSaldo);
@@ -498,10 +491,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             foreach ($oElementos as $oElemento) {
 
                                 if ($oElemento->getAttribute('instituicao') == db_getsession("DB_instit")
-                                    && $oElemento->getAttribute('elementoEcidade') == $sElemento) {
+                                    && $oElemento->getAttribute('elementoEcidade') == $sElemento
+                                ) {
 
-                                    $sElemento = substr(1,6,$oElemento->getAttribute('elementoSicom'));
-                                    $sSubElemento = substr(7,2,$oElemento->getAttribute('elementoSicom'));
+                                    $sElemento = substr(1, 6, $oElemento->getAttribute('elementoSicom'));
+                                    $sSubElemento = substr(7, 2, $oElemento->getAttribute('elementoSicom'));
 
                                 }
                             }
@@ -665,7 +659,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                         $oReg12Saldo = db_utils::fieldsMemory($rsReg12saldos, $iContSaldo12);
 
-                        if (!(($oReg12Saldo->saldoanterior == "" || $oReg12Saldo->saldoanterior == 0)  && $oReg12Saldo->debitos == "" && $oReg12Saldo->creditos == "")) {
+                        if (!(($oReg12Saldo->saldoanterior == "" || $oReg12Saldo->saldoanterior == 0) && $oReg12Saldo->debitos == "" && $oReg12Saldo->creditos == "")) {
 
                             /* RECEITAS QUE DEVEM SER SUBSTIUIDAS RUBRICA CADASTRADA ERRADA */
                             $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140',
@@ -679,7 +673,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 if ($oNatureza->getAttribute('instituicao') == db_getsession("DB_instit")
                                     && $oNatureza->getAttribute('receitaEcidade') == $sNaturezaReceita
                                 ) {
-                                    $sNaturezaReceita = substr(1,8,$oNatureza->getAttribute('receitaSicom'));
+                                    $sNaturezaReceita = substr(1, 8, $oNatureza->getAttribute('receitaSicom'));
                                     break;
 
                                 }
@@ -740,7 +734,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  */
                 $sSqlDotacoes13 = "select distinct o58_coddot,
                                     si09_codorgaotce as codorgao,
-                                    case when o41_unidade is not null then
+                                    case when o41_unidade is not null or o41_unidade = 0 then
                                     lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)||lpad(o41_unidade,3,0)
                                     else lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) end as codunidadesub,
 					                o58_funcao as codfuncao,
@@ -895,7 +889,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             /*
              * DADOS PARA GERAÇÃO DO REGISTRO 14 RESTOS A PAGAR,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 14
-             * @todo: Falta processar os lançamentos para ter registros de empenhos na tabela contacorrentedetalhe
+             *
              */
 
             if ($oContas10->nregobrig == 14) {
@@ -903,7 +897,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $sSqlRestos = "select distinct
                                     e60_coddot,
                                     si09_codorgaotce as codorgao,
-                                    case when o41_unidade is not null then
+                                    case when o41_unidade is not null or o41_unidade = 0 then
                                     lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)||lpad(o41_unidade,3,0)
                                     else lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) end as codunidadesub,
                                     o58_funcao as codfuncao,
@@ -1139,11 +1133,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $obalancete15->si182_totaldebitossf = $oReg15Saldo->debitos;
                             $obalancete15->si182_totalcreditossf = $oReg15Saldo->creditos;
                             $obalancete15->si182_saldofinalsf = $oReg15Saldo->anterior + $oReg15Saldo->debitos - $oReg15Saldo->creditos;
-                            if($obalancete15->si182_saldofinalsf == 0){
+                            if ($obalancete15->si182_saldofinalsf == 0) {
                                 $obalancete15->si182_naturezasaldofinalsf = $oContas10->naturezasaldo;
-                            }elseif($obalancete15->si182_saldofinalsf > 0){
+                            } elseif ($obalancete15->si182_saldofinalsf > 0) {
                                 $obalancete15->si182_naturezasaldofinalsf = 'D';
-                            }else{
+                            } else {
                                 $obalancete15->si182_naturezasaldofinalsf = 'C';
                             }
                             //$obalancete15->si182_naturezasaldofinalsf = $obalancete15->si182_saldofinalsf >= 0 ? 'D' : 'C';
@@ -1167,7 +1161,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             /*
              * DADOS PARA GERAÇÃO DO REGISTRO 16 Controle por Fonte de Recursos e Atributo SF,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 16
-             * @todo: validar SQL
+             *
              */
 
             if ($oContas10->nregobrig == 16) {
@@ -1269,7 +1263,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             /*
              * DADOS PARA GERAÇÃO DO REGISTRO 17 Controle por Fonte de Recursos, Atributo SF e Conta Bancária,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 17
-             * @todo: validar SQL, definir nContacorrente
+             *
              */
 
             if ($oContas10->nregobrig == 17) {
@@ -1327,7 +1321,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                     $rsResultVerifica = db_query($sSqlVerifica) or die($sSqlVerifica);
 
-                    if (pg_num_rows($rsResultVerifica) == 0 ){
+                    if (pg_num_rows($rsResultVerifica) == 0) {
 
                         $sSqlReg17saldos = "SELECT
                                                round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoanterior,
@@ -1924,7 +1918,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             $obalancete10->si177_totaldebitos = number_format(abs($oDado10->si177_totaldebitos), 2, '.', '');
             $obalancete10->si177_totalcreditos = number_format(abs($oDado10->si177_totalcreditos), 2, '.', '');
             $obalancete10->si177_saldofinal = number_format(abs($oDado10->si177_saldofinal), 2, '.', '');
-            $obalancete10->si177_naturezasaldofinal = $oDado10->si177_saldofinal == 0 ? $oDado10->naturezasaldo : ($oDado10->si177_saldofinal > 0 ? 'D' : 'C');
+            $obalancete10->si177_naturezasaldofinal = $obalancete10->si177_saldofinal == 0 ? $oDado10->naturezasaldo : ($obalancete10->si177_saldofinal > 0 ? 'D' : 'C');
             $obalancete10->si177_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $obalancete10->si177_instit = db_getsession("DB_instit");
 
@@ -2021,7 +2015,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             }
 
             foreach ($oDado10->reg14 as $reg14) {
-
                 $obalreg14 = new cl_balancete142015();
 
                 $obalreg14->si181_tiporegistro = $reg14->si181_tiporegistro;
