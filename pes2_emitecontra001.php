@@ -1,62 +1,22 @@
-<?php
-/**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-
-require_once 'libs/db_stdlib.php';
-require_once 'libs/db_conecta.php';
-
-include_once 'libs/db_sessoes.php';
-include_once 'libs/db_usuariosonline.php';
-include_once 'dbforms/db_funcoes.php';
-include_once 'dbforms/db_classesgenericas.php';
-include_once 'classes/db_gerfcom_classe.php';
-
-$aux       = new cl_arquivo_auxiliar;
+<?
+require("libs/db_stdlib.php");
+require("libs/db_conecta.php");
+include("libs/db_sessoes.php");
+include("libs/db_usuariosonline.php");
+include("dbforms/db_funcoes.php");
+include("dbforms/db_classesgenericas.php");
+include("classes/db_gerfcom_classe.php");
+$aux = new cl_arquivo_auxiliar;
 $clgerfcom = new cl_gerfcom;
-$clrotulo  = new rotulocampo;
-$gform     = new cl_formulario_rel_pes;
-
+$clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt23');
 $clrotulo->label('DBtxt25');
 $clrotulo->label('DBtxt27');
 $clrotulo->label('DBtxt28');
 $clrotulo->label('r48_semest');
-$clrotulo->label('rh56_localtrab');
-$clrotulo->label('rh55_descr');
-
-if (!isset($xano) || (isset($xano) && (trim($xano) == "" || $xano == 0))) {
-  $xano = db_anofolha();
-}
-$Sxano = "Ano";
-
-if (!isset($xmes) || (isset($xmes) && trim($xmes) == "" || $xmes == 0)) {
-  $xmes = db_mesfolha();
-}
-$Sxmes = "Mês";
-
+$clrotulo->label("rh56_localtrab");
+$clrotulo->label("rh55_descr");
+$gform = new cl_formulario_rel_pes;
 db_postmemory($HTTP_POST_VARS);
 ?>
 <html>
@@ -66,7 +26,6 @@ db_postmemory($HTTP_POST_VARS);
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
 <script>
 function js_filtra(){
   document.form1.submit();
@@ -79,138 +38,54 @@ function js_filtra(){
   <form name="form1" class="container" method="post" action="">
   <fieldset>
     <legend>Contra-Cheques (Laser)</legend>
-    <table align="center" border="0" class="form-container">
-      <tr>
-        <td align="right" nowrap title="Digite o Ano / Mês de competência">
-          <strong>Ano / Mês :</strong>
-        </td>
-        <td>
-          <?php db_input('xano', 4, 1, true, 'text', 2, 'onchange="js_anomes();"'); ?> /
-          <?php db_input('xmes', 2, 1, true, 'text', 2, 'onchange="js_anomes();"'); ?>
-        </td>
-      </tr>
+
+      <table align="center" border="0" class="form-container">
+
+        <tr>
+          <td align="right" nowrap title="Digite o Ano / Mês de competência">
+            <strong>Ano / Mês :&nbsp;&nbsp;</strong>
+          </td>
+          <td>
+            <?
+            if(!isset($xano) || (isset($xano) && (trim($xano) == "" || $xano == 0))){
+              $xano = db_anofolha();
+            }
+            $Sxano = "Ano";
+            db_input('xano',4,1,true,'text',2,'onchange="js_anomes();"');
+            ?>
+            &nbsp;/&nbsp;
+            <?
+            if(!isset($xmes) || (isset($xmes) && trim($xmes) == "" || $xmes == 0)){
+              $xmes = db_mesfolha();
+            }
+            $Sxmes = "Mês";
+            db_input('xmes',2,1,true,'text',2,'onchange="js_anomes();"');
+            ?>
+          </td>
+        </tr>
       <tr >
         <td align="right" nowrap title="Digite o Ano / Mes de competência" >
-          <?php
-          $gform->selecao = true;
-          $gform->desabam = false;
-          $gform->manomes = false;
-          $gform->gera_form(db_anofolha(),db_mesfolha());
-          ?>
+        <?
+        $gform->selecao = true;
+        $gform->desabam = false;
+        $gform->manomes = false;
+        $gform->gera_form(db_anofolha(),db_mesfolha());
+        ?>
         </td>
       </tr>
-      <tr>
-        <td align="right" >
-          <strong>Tipo de Folha :</strong>
-        </td>
-        <td>
-          <select name="folha" onchange="js_tipofolha();">
-            <?php if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) { ?>
-
-              <?php if (count(FolhaPagamentoSalario::getFolhasFechadasCompetencia(new DBCompetencia($xano, $xmes)))) { ?>
-                <option value="salario" <?= isset($folha) && $folha == 'salario' ? 'selected': '' ?>>
-                  Salário
-                </option>
-              <?php } ?>
-
-              <?php if (count(FolhaPagamentoSuplementar::getFolhasFechadasCompetencia(new DBCompetencia($xano, $xmes)))) { ?>
-                <option value="suplementar" <?= isset($folha) && $folha == 'suplementar' ? 'selected' : '' ?>>
-                  Suplementar
-                </option>
-              <?php } ?>
-
-              <?php if (count(FolhaPagamentoComplementar::getFolhasFechadasCompetencia(new DBCompetencia($xano, $xmes)))) { ?>
-                <option value="complementar" <?= isset($folha) && $folha == 'complementar' ? 'selected' : '' ?>>
-                  Complementar
-                </option>
-              <?php } ?>
-            <?php } else { ?>
-
-              <option value='salario' <?= isset($folha) && $folha == 'salario' ? 'selected': '' ?>>
-                Salário
-              </option>
-              <option value='complementar' <?= isset($folha) && $folha == 'complementar' ? 'selected': '' ?>>
-                Complementar
-              </option>
-            <?php } ?>
-
-            <option value='rescisao' <?= isset($folha) && $folha == 'rescisao' ? 'selected': '' ?>>
-              Rescisão
-            </option>
-            <option value='13salario' <?= isset($folha) && $folha == '13salario' ? 'selected': '' ?>>
-              13o. Salário
-            </option>
-            <option value='adiantamento' <?= isset($folha) && $folha == 'adiantamento' ? 'selected': '' ?>>
-              Adiantamento
-            </option>
-          </select>
-        </td>
-      </tr>
-      <?php if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) { ?>
-        <?php if(isset($folha) && $folha == "suplementar") { ?>
-
-          <?php
-          $aSuplementarFechada = FolhaPagamentoSuplementar::getFolhasFechadasCompetencia(
-            new DBCompetencia($xano, $xmes)
-          );
-          ?>
-
-          <?php if (!empty($aSuplementarFechada)) { ?>
-            <tr>
-              <td align="left">
-                <strong>Nro. Suplementar:</strong>
-              </td>
-              <td>
-                <select name="r48_semest">
-                  <?php foreach ($aSuplementarFechada as $oSuplementar) { ?>
-                    <option value="<?= $oSuplementar->getNumero() ?>"><?= $oSuplementar->getNumero(); ?></option>
-                  <?php } ?>
-                </select>
-              </td>
-            </tr>
-          <?php } else { ?>
-            <tr>
-              <td colspan="2" align="center">
-                <font color="red">Sem suplementar para este período.</font>
-                <?php $suplementar = 0; ?>
-                <?php db_input("suplementar", 2, 0, true, 'hidden', 3); ?>
-              </td>
-            </tr>
-          <?php } ?>
-        <?php } elseif(isset($folha) && $folha == "complementar") { ?>
-
-          <?php
-          $aComplementarFechada = FolhaPagamentoComplementar::getFolhasFechadasCompetencia(
-            new DBCompetencia($xano, $xmes)
-          );
-          ?>
-
-          <?php if (!empty($aComplementarFechada)) { ?>
-            <tr>
-              <td align="left">
-                <strong>Nro. Complementar:</strong>
-              </td>
-              <td>
-                <select name="r48_semest">
-                  <?php foreach ($aComplementarFechada as $oComplementar) { ?>
-                    <option value="<?= $oComplementar->getNumero() ?>"><?= $oComplementar->getNumero(); ?></option>
-                  <?php } ?>
-                </select>
-              </td>
-            </tr>
-          <?php } else { ?>
-            <tr>
-              <td colspan="2" align="center">
-                <font color="red">Sem complementar para este período.</font>
-                <?php $complementar = 0; ?>
-                <?php db_input("complementar", 2, 0, true, 'hidden', 3); ?>
-              </td>
-            </tr>
-          <?php } ?>
-        <?php } ?>
-      <?php } else { ?>
-        <?php
-        if (isset($folha) && $folha == "complementar") {
+        <tr>
+          <td align="right" ><strong>Tipo de Folha :</strong></td>
+          <td>
+            <select name="folha" onchange="js_tipofolha();">
+              <option value = 'salario'       <?=((isset($folha)&&$folha=="salario")?"selected":"")?>>Salário
+              <option value = 'complementar'  <?=((isset($folha)&&$folha=="complementar")?"selected":"")?>>Complementar
+              <option value = 'rescisao'      <?=((isset($folha)&&$folha=="rescisao")?"selected":"")?>>Rescisão
+              <option value = '13salario'     <?=((isset($folha)&&$folha=="13salario")?"selected":"")?>>13o. Salário
+              <option value = 'adiantamento'  <?=((isset($folha)&&$folha=="adiantamento")?"selected":"")?>>Adiantamento
+          </td>
+        </tr>
+        <?
+        if(isset($folha) && $folha == "complementar"){
           $result_semest = $clgerfcom->sql_record($clgerfcom->sql_query_file(null,null,null,null,"distinct r48_semest",null, " r48_anousu = $xano and r48_mesusu = $xmes and r48_instit = ".db_getsession('DB_instit')));
           if($clgerfcom->numrows > 0){
             echo "
@@ -243,7 +118,6 @@ function js_filtra(){
           }
         }
         ?>
-      <?php } ?>
 	<tr>
 	  <td align="right" ><strong>Ordem:</strong></td>
 	  <td>
@@ -379,7 +253,7 @@ function js_filtra(){
     <tr>
       <td nowrap title="<?=@$Trh56_localtrab?>" align="right">
         <?
-        db_ancora("<b>Local de trabalho:</b>","js_pesquisarh56_localtrab(true);",1);
+        db_ancora("<b>Local de trabalho</b>","js_pesquisarh56_localtrab(true);",1);
         ?>
       </td>
       <td>
@@ -452,10 +326,14 @@ function js_mostrarhlocaltrab1(chave1,chave2){
   db_iframe_rhlocaltrab.hide();
 }
 function js_tipofolha(){
-  document.form1.submit();
+  if(document.form1.folha.value == "complementar" || document.form1.r48_semest){
+    document.form1.submit();
+  }
 }
 function js_anomes(){
-  document.form1.submit();
+  if(document.form1.folha.value == "complementar"){
+    document.form1.submit();
+  }
 }
 function js_copiacampo(){
   if(document.form1.cod_fim.value== ""){
@@ -506,9 +384,7 @@ function js_emite(evt){
       return false;
     }
 
-    if (!oCampo) {
-      continue;
-    }
+    if (!oCampo) {continue;}
 
     if (aCampos[iIndex] == aCampoNotNull[iIndex] && oCampo.value == "") {
       alert("Campo não pode ficar em branco.");
@@ -516,87 +392,43 @@ function js_emite(evt){
       evt.stopImmediatePropagation();
       return false;
     }
-
     var sValorAnterior = oCampo.value;
-
-    oCampo.onkeyup = evt;
-
+    //oCampo.onkeyup(evt);
     if (sValorAnterior != "" && oCampo.value == "") {
       evt.stopImmediatePropagation();
       return false;
     }
   };
 
-  /**
-   * Atribui a variáveis todos os
-   * elementos do formulário.
-   */
-  var oOpcao     = document.form1.folha;
-  var oAno       = document.form1.xano;
-  var oMes       = document.form1.xmes;
-  var oFiltro    = document.form1.filtro;
-  var oMensagem  = document.form1.mensagem1;
-  var oSelecao   = document.form1.selecao;
-  var oOrdem     = document.form1.ordem;
-  var oTipoLocal = document.form1.tipo_local;
-  var oNumVias   = document.form1.num_vias;
-  var oLocal     = document.form1.rh56_localtrab;
-  var oLista     = document.form1.lista;
-  var oCodIni    = document.form1.cod_ini;
-  var oCodFim    = document.form1.cod_fim;
-  var oSemest    = document.form1.r48_semest;
-
-  /**
-   * Atribui valores dos elementos
-   * obrigatórios ao array que
-   * virará o URL de parametros.
-   */
-  var aParams = [
-    'sOpcao='     + oOpcao.value,
-    'iAno='       + oAno.value,
-    'iMes='       + oMes.value,
-    'sFiltro='    + oFiltro.value,
-    'sMensagem='  + oMensagem.value.urlEncode(),
-    'sSelecao='   + oSelecao.value,
-    'sOrdem='     + oOrdem.value,
-    'sTipoLocal=' + oTipoLocal.value,
-    'iNumVias='   + oNumVias.value,
-    'sLocal='     + oLocal.value,
-  ];
-
-  if (oSemest !== undefined) {
-    aParams.push('iSemest=' + oSemest.value);
-  }
-
-  if (oLista !== undefined && oLista.length) {
-
-    var sLista = oLista[0].value;
-    for (var i = oLista.length - 1; i >= 1; i--) {
-      sLista += ',' + oLista[i].value;
-    };
-
-    aParams.push('sLista=' + sLista);
-  };
-
-  if (oCodIni !== undefined) {
-
-    aParams.push('iCodIni='   + oCodIni.value);
-
-    if (oCodFim.value != '') {
-      aParams.push('iCodFim=' + oCodFim.value);
-    } else {
-      aParams.push('iCodFim=' + oCodIni.value);
+  obj=document.form1;
+  vir="";
+  dados=""; 
+  query="";
+  if (document.form1.lista){
+    for(x=0;x<document.form1.lista.length;x++){
+      dados+=vir+document.form1.lista.options[x].value;
+      vir=",";
     }
   }
+  if (document.form1.cod_ini){
+    if (document.form1.cod_fim.value==""){
+      document.form1.cod_fim.value=document.form1.cod_ini.value;
+    }
+    query='&codini='+document.form1.cod_ini.value+'&codfim='+document.form1.cod_fim.value;
+  }
+  if (dados!=""){
+    query+='&dados='+dados;
+  }
 
-  var janela = window.open(
-    'pes2_contra_cheque.php?' + aParams.join('&'),
-    '',
-    'width='   + (screen.availWidth  - 5)  +
-    ',height=' + (screen.availHeight - 40) +
-    ',scrollbars=1,location=0'
-  );
-
-  janela.moveTo(0, 0);
+  if(document.form1.r48_semest){
+    query+= "&semest="+document.form1.r48_semest.value;
+  }
+  query+="&selecao="+document.form1.selecao.value;
+  query+="&ordem="+document.form1.ordem.value;
+  query+="&tipo_local="+document.form1.tipo_local.value;
+  query+="&num_vias="+document.form1.num_vias.value;
+  query+="&local="+document.form1.rh56_localtrab.value;
+  jan = window.open('pes2_contra_cheque.php?opcao='+document.form1.folha.value+'&ano='+document.form1.xano.value+'&mes='+document.form1.xmes.value+'&filtro='+document.form1.filtro.value+'&msg='+document.form1.mensagem1.value+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan.moveTo(0,0);
 }
 </script>
