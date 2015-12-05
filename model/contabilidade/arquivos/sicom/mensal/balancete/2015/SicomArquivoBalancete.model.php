@@ -326,7 +326,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 if (substr($oContas10->si177_contacontaabil, 0, 5) != '62213') {
                     $sSqlDotacoes = "select distinct o58_coddot as c73_coddot,
                                     si09_codorgaotce as codorgao,
-                                    case when o41_unidade is not null or o41_unidade = 0 then
+                                    case when o41_unidade is not null or o41_unidade <> 0 then
                                     lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)||lpad(o41_unidade,3,0)
                                     else lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) end as codunidadesub,
 					                o58_funcao as codfuncao,
@@ -350,7 +350,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                     $sSqlDotacoes = "select distinct c73_coddot,
                                     si09_codorgaotce as codorgao,
-                                    case when o41_unidade is not null or o41_unidade = 0 then
+                                    case when o41_unidade is not null or o41_unidade <> 0 then
                                     lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)||lpad(o41_unidade,3,0)
                                     else lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) end as codunidadesub,
 					                o58_funcao as codfuncao,
@@ -494,7 +494,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     && $oElemento->getAttribute('elementoEcidade') == $sElemento
                                 ) {
 
-                                    $sElemento = substr(1, 6, $oElemento->getAttribute('elementoSicom'));
+                                    $sElemento = substr(1, 8, $oElemento->getAttribute('elementoSicom'));
                                     $sSubElemento = substr(7, 2, $oElemento->getAttribute('elementoSicom'));
 
                                 }
@@ -734,7 +734,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  */
                 $sSqlDotacoes13 = "select distinct o58_coddot,
                                     si09_codorgaotce as codorgao,
-                                    case when o41_unidade is not null or o41_unidade = 0 then
+                                    case when o41_unidade is not null or o41_unidade <> 0 then
                                     lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)||lpad(o41_unidade,3,0)
                                     else lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) end as codunidadesub,
 					                o58_funcao as codfuncao,
@@ -897,7 +897,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $sSqlRestos = "select distinct
                                     e60_coddot,
                                     si09_codorgaotce as codorgao,
-                                    case when o41_unidade is not null or o41_unidade = 0 then
+                                    case when o41_unidade is not null or o41_unidade <> 0 then
                                     lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)||lpad(o41_unidade,3,0)
                                     else lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) end as codunidadesub,
                                     o58_funcao as codfuncao,
