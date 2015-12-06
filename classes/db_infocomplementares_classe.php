@@ -21,6 +21,7 @@ class cl_infocomplementares {
    var $si08_instit = 0; 
    var $si08_tipoliquidante = 0; 
    var $si08_tratacodunidade = 0; 
+   var $si08_orcmodalidadelic = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si08_sequencial = int8 = Código Sequencial 
@@ -28,6 +29,7 @@ class cl_infocomplementares {
                  si08_instit = int8 = Instituição 
                  si08_tipoliquidante = int8 = Tipo do Liquidante 
                  si08_tratacodunidade = int8 = Tratar Cod. Unidade 
+                 si08_orcmodalidadelic = int8 = Orçamento por modalidade de licitação
                  ";
    //funcao construtor da classe 
    function cl_infocomplementares() { 
@@ -52,6 +54,7 @@ class cl_infocomplementares {
        $this->si08_instit = ($this->si08_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si08_instit"]:$this->si08_instit);
        $this->si08_tipoliquidante = ($this->si08_tipoliquidante == ""?@$GLOBALS["HTTP_POST_VARS"]["si08_tipoliquidante"]:$this->si08_tipoliquidante);
        $this->si08_tratacodunidade = ($this->si08_tratacodunidade == ""?@$GLOBALS["HTTP_POST_VARS"]["si08_tratacodunidade"]:$this->si08_tratacodunidade);
+       $this->si08_orcmodalidadelic = ($this->si08_orcmodalidadelic == ""?@$GLOBALS["HTTP_POST_VARS"]["si08_orcmodalidadelic"]:$this->si08_orcmodalidadelic);
      }else{
        $this->si08_sequencial = ($this->si08_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si08_sequencial"]:$this->si08_sequencial);
      }
@@ -95,6 +98,20 @@ class cl_infocomplementares {
        $this->erro_status = "0";
        return false;
      }
+
+     /*
+      * Campo adicionado por causa do sicom balancete em 2015
+      */
+     if($this->si08_orcmodalidadelic == null ){ 
+       $this->erro_sql = " Campo Orçamento por modalidade de licitação não Informado.";
+       $this->erro_campo = "si08_orcmodalidadelic";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
      if($si08_sequencial == "" || $si08_sequencial == null ){
        $result = db_query("select nextval('infocomplementares_si08_sequencial_seq')"); 
        if($result==false){
@@ -132,14 +149,16 @@ class cl_infocomplementares {
                                       ,si08_anousu 
                                       ,si08_instit 
                                       ,si08_tipoliquidante 
-                                      ,si08_tratacodunidade 
+                                      ,si08_tratacodunidade
+                                      ,si08_orcmodalidadelic 
                        )
                 values (
                                 $this->si08_sequencial 
                                ,$this->si08_anousu 
                                ,$this->si08_instit 
                                ,$this->si08_tipoliquidante 
-                               ,$this->si08_tratacodunidade 
+                               ,$this->si08_tratacodunidade
+                               ,$this->si08_orcmodalidadelic 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -249,6 +268,24 @@ class cl_infocomplementares {
          return false;
        }
      }
+
+     /** 
+      * Campo adicionado por causa do sicom balancete em 2015
+      */
+     if(trim($this->si08_orcmodalidadelic)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si08_orcmodalidadelic"])){ 
+       $sql  .= $virgula." si08_orcmodalidadelic = $this->si08_orcmodalidadelic ";
+       $virgula = ",";
+       if(trim($this->si08_orcmodalidadelic) == null ){ 
+         $this->erro_sql = " Campo Orçamento por modalidade de licitação não Informado.";
+         $this->erro_campo = "si08_orcmodalidadelic";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
      $sql .= " where ";
      if($si08_sequencial!=null){
        $sql .= " si08_sequencial = $this->si08_sequencial";
