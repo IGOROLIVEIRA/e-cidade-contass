@@ -48,7 +48,7 @@ db_select('si08_tipoliquidante',$x,true,$db_opcao,"");
  * Campo adicionado por causa do sicom balancete em 2015
  */
 $x = array("0"=>"NÃO","1"=>"SIM");
-db_select('si08_orcmodalidadelic',$x,true,$db_opcao,"");
+db_select('si08_orcmodalidadeaplic',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
