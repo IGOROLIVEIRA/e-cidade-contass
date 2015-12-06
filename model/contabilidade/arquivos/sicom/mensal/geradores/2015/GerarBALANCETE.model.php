@@ -79,7 +79,7 @@ class GerarBALANCETE extends GerarAM
                 $this->sLinha = $aCSVBALANCETE10;
                 $this->adicionaLinha();
 
-                
+
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsBALANCETE11); $iCont11++) {
 
                     $aBALACETE11 = pg_fetch_array($rsBALANCETE11, $iCont11);
@@ -94,7 +94,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE11['si178_codsubfuncao'] = str_pad($aBALACETE11['si178_codsubfuncao'], 3, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE11['si178_codprograma'] = str_pad($aBALACETE11['si178_codprograma'], 4, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE11['si178_idacao'] = str_pad($aBALACETE11['si178_idacao'], 4, "0", STR_PAD_LEFT);
-                        $aCSVBALANCETE11['si178_idsubacao'] = ($aBALACETE11['si178_idsubacao'] == ' ' ? $aBALACETE11['si178_idsubacao'] : str_pad($aBALACETE11['si178_idsubacao'], 4, "0", STR_PAD_LEFT));
+                        $aCSVBALANCETE11['si178_idsubacao'] = ($aBALACETE11['si178_idsubacao'] == 0 ? ' ' : str_pad($aBALACETE11['si178_idsubacao'], 4, "0", STR_PAD_LEFT));
                         $aCSVBALANCETE11['si178_naturezadespesa'] = str_pad($aBALACETE11['si178_naturezadespesa'], 6, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE11['si178_subelemento'] = str_pad($aBALACETE11['si178_subelemento'], 2, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE11['si178_codfontrecursos'] = str_pad($aBALACETE11['si178_codfontrecursos'], 3, "0", STR_PAD_LEFT);
@@ -109,7 +109,7 @@ class GerarBALANCETE extends GerarAM
                         $this->adicionaLinha();
                     }
                 }
-                
+
                 for ($iCont12 = 0; $iCont12 < pg_num_rows($rsBALANCETE12); $iCont12++) {
 
                     $aBALACETE12 = pg_fetch_array($rsBALANCETE12, $iCont12);
@@ -131,7 +131,7 @@ class GerarBALANCETE extends GerarAM
                         $this->adicionaLinha();
                     }
                 }
-                
+
                 for ($iCont13 = 0; $iCont13 < pg_num_rows($rsBALANCETE13); $iCont13++) {
 
                     $aBALACETE13 = pg_fetch_array($rsBALANCETE13, $iCont13);
@@ -142,7 +142,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE13['si180_contacontabil'] = str_pad($aBALACETE13['si180_contacontabil'], 9, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE13['si180_codprograma'] = str_pad($aBALACETE13['si180_codprograma'], 6, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE13['si180_idacao'] = str_pad($aBALACETE13['si180_idacao'], 3, "0", STR_PAD_LEFT);
-                        $aCSVBALANCETE13['si180_idsubacao'] = $aBALACETE13['si180_idsubacao'] == "" ? " " : $aBALACETE13['si180_idsubacao'];
+                        $aCSVBALANCETE13['si180_idsubacao'] = $aBALACETE13['si180_idsubacao'] == 0 ? ' ' : str_pad($aBALACETE13['si180_idacao'], 4, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE13['si180_saldoinicialpa'] = number_format($aBALACETE13['si180_saldoiniciaipa'], 2, ",", "");
                         $aCSVBALANCETE13['si180_naturezasaldoinicialpa'] = str_pad($aBALACETE13['si180_naturezasaldoiniciaipa'], 1, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE13['si180_totaldebitospa'] = number_format($aBALACETE13['si180_totaldebitospa'], 2, ",", "");
@@ -154,7 +154,7 @@ class GerarBALANCETE extends GerarAM
                         $this->adicionaLinha();
                     }
                 }
-                
+
                 for ($iCont14 = 0; $iCont14 < pg_num_rows($rsBALANCETE14); $iCont14++) {
 
                     $aBALACETE14 = pg_fetch_array($rsBALANCETE14, $iCont14);
@@ -170,7 +170,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE14['si181_codsubfuncao'] = str_pad($aBALACETE14['si181_codsubfuncao'], 3, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codprograma'] = str_pad($aBALACETE14['si181_codprograma'], 4, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_idacao'] = str_pad($aBALACETE14['si181_idacao'], 4, "0", STR_PAD_LEFT);
-                        $aCSVBALANCETE14['si181_idsubacao'] = ($aBALACETE14['si181_idsubacao'] == ' ' ? $aBALACETE14['si181_idsubacao'] : str_pad($aBALACETE14['si181_idsubacao'], 4, "0", STR_PAD_LEFT));
+                        $aCSVBALANCETE14['si181_idsubacao'] = ($aBALACETE14['si181_idsubacao'] == 0 ? ' ' : str_pad($aBALACETE14['si181_idsubacao'], 4, "0", STR_PAD_LEFT));
                         $aCSVBALANCETE14['si181_naturezadespesa'] = str_pad($aBALACETE14['si181_naturezadespesa'], 6, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_subelemento'] = str_pad($aBALACETE14['si181_subelemento'], 2, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codfontrecursos'] = str_pad($aBALACETE14['si181_codfontrecursos'], 3, "0", STR_PAD_LEFT);
