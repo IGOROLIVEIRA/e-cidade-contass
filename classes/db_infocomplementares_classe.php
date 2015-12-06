@@ -29,7 +29,7 @@ class cl_infocomplementares {
                  si08_instit = int8 = Instituição 
                  si08_tipoliquidante = int8 = Tipo do Liquidante 
                  si08_tratacodunidade = int8 = Tratar Cod. Unidade 
-                 si08_orcmodalidadelic = int8 = Orçamento por modalidade de licitação
+                 si08_orcmodalidadelic = int8 = Orçamento por modalidade de aplicação
                  ";
    //funcao construtor da classe 
    function cl_infocomplementares() { 
@@ -103,7 +103,7 @@ class cl_infocomplementares {
       * Campo adicionado por causa do sicom balancete em 2015
       */
      if($this->si08_orcmodalidadelic == null ){ 
-       $this->erro_sql = " Campo Orçamento por modalidade de licitação não Informado.";
+       $this->erro_sql = " Campo Orçamento por modalidade de aplicação não Informado.";
        $this->erro_campo = "si08_orcmodalidadelic";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -276,7 +276,7 @@ class cl_infocomplementares {
        $sql  .= $virgula." si08_orcmodalidadelic = $this->si08_orcmodalidadelic ";
        $virgula = ",";
        if(trim($this->si08_orcmodalidadelic) == null ){ 
-         $this->erro_sql = " Campo Orçamento por modalidade de licitação não Informado.";
+         $this->erro_sql = " Campo Orçamento por modalidade de aplicação não Informado.";
          $this->erro_campo = "si08_orcmodalidadelic";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";

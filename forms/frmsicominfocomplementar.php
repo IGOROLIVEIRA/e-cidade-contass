@@ -40,7 +40,7 @@ db_select('si08_tipoliquidante',$x,true,$db_opcao,"");
 
   <tr>
     <td>
-       <b>Orçamento por modalidade de licitação: </b>
+       <b>Orçamento por modalidade de aplicação: </b>
     </td>
     <td> 
 <?
