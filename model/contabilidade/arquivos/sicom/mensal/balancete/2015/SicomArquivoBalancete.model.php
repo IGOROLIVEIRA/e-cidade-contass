@@ -103,6 +103,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             $oNaturezaReceita = $oDOMDocument->getElementsByTagName('receita');
 
         }
+        /**
+         * Array com os estrutruais do orçamento modalidade aplicação.
+         */
+        $aContasModalidadeAplicacao = array('52211', '52212', '52213', '52219', '62211', '62212');
 
         /**
          * selecionar arquivo xml de dados elemento da despesa
@@ -336,13 +340,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					                o55_origemacao as idsubacao,
 					                substr(o56_elemento,2,6) as naturezadadespesa,
 					                '00' as subelemento,
-					                o15_codtri as codfontrecursos
+					                o15_codtri as codfontrecursos, si08_orcmodalidadeaplic
 					  from orcdotacao
 					  join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
 					  join orcelemento ON o56_codele = o58_codele and o58_anousu = o56_anousu
 					  JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
 					  JOIN orctiporec ON o58_codigo = o15_codigo
-					  left join infocomplementaresinstit on  o58_instit = si09_instit
+					  inner join infocomplementaresinstit on  o58_instit = si09_instit
+					  inner join infocomplementares on si09_instit = si08_instit
 					  where o58_anousu = " . db_getsession("DB_anousu");
                     $nContaCorrente = 101;
 
@@ -505,7 +510,15 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                             $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 7, 2);
                                         }
                                     }
+                                }
+                            }
+                            /**
+                             * Verifica se a contacontabil faz parte do Orçamento por modalidade de aplicação e trata o elemento.
+                             */
+                            if (in_array(substr($oContas10->si177_contacontaabil, 0, 5), $aContasModalidadeAplicacao)) {
 
+                                if ($oReg11->si08_orcmodalidadeaplic == 1) {
+                                    $sElemento = substr($sElemento, 0, 4) . "00";
                                 }
                             }
 
