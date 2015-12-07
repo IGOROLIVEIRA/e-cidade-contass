@@ -255,12 +255,12 @@ try {
 
 
 			$rsTabelaLancamentos = db_query("create temp table w_conlancam as
-                                      SELECT DISTINCT c108_codlan
+                                      SELECT DISTINCT c108_codlan c70_codlan
                                 FROM conlancaminscrestosapagarnaoprocessados
                                 inner join conlancam on c108_codlan = c70_codlan
                                 WHERE c70_anousu = " . db_getsession('DB_anousu') . "
                                 UNION ALL
-                                SELECT DISTINCT c108_codlan
+                                SELECT DISTINCT c108_codlan c70_codlan
                                 FROM conlancaminscrestosapagarprocessados
                                 inner join conlancam on c108_codlan = c70_codlan
                                 WHERE c70_anousu = " . db_getsession('DB_anousu'));
