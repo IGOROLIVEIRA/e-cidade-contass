@@ -32,7 +32,7 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("libs/JSON.php");
-require_once ('model/contabilidade/lancamento/LancamentoAuxiliarInscricaoRestosAPagarProcessados.model.php');
+require_once('model/contabilidade/lancamento/LancamentoAuxiliarInscricaoRestosAPagarProcessados.model.php');
 
 require_once("dbforms/db_funcoes.php");
 
@@ -47,21 +47,21 @@ db_app::import("contabilidade.*");
 db_app::import("empenho.EmpenhoFinanceiro");
 db_app::import("empenho.RestosAPagar");
 db_app::import("contabilidade.contacorrente.*");
-$oJson             = new services_json();
-$oParam            = $oJson->decode(str_replace("\\","",$_POST["json"]));
-$oRetorno          = new db_stdClass();
-$oRetorno->status  = 1;
+$oJson = new services_json();
+$oParam = $oJson->decode(str_replace("\\", "", $_POST["json"]));
+$oRetorno = new db_stdClass();
+$oRetorno->status = 1;
 $oRetorno->message = '';
 
 $iInstituicao = db_getsession("DB_instit");
-$iAnoSessao   = db_getsession("DB_anousu");
+$iAnoSessao = db_getsession("DB_anousu");
 
-/*
+/**
  * Rotina de Escrituração de Resto A Pagar Não Processado e Processado
  * @author: Contass Consultoria
- * @description: Desenvolvimento do SICOM Balancete. A rotina foi modificada para realizar a escrituração de 
+ * @description: Desenvolvimento do SICOM Balancete. A rotina foi modificada para realizar a escrituração de
  * empenho por empenho. Também foi incluído na rotina a escrituração de resto a pagar processado.
- * Para isso foram criados as classes: EscrituracaoRestosApagarProcessados.model.php, 
+ * Para isso foram criados as classes: EscrituracaoRestosApagarProcessados.model.php,
  * LancamentoAuxiliarInscricaoRestosAPagarProcessados.model.php e as tabelas inscricaorestosapagarprocessados,
  * conlancaminscrestosapagarprocessados
  *
@@ -73,77 +73,102 @@ try {
 
 		case 'getDadosRestosAPagar' :
 
-		$oRetorno->lBloquearTela = false;
+			$oRetorno->lBloquearTela = false;
 
-		if ( (EscrituracaoRestosAPagarNaoProcessados::existeLancamentoPeriodo($iAnoSessao, $iInstituicao, $oParam->lProcessados)) &&
-		 		 (EscrituracaoRestosAPagarProcessados::existeLancamentoPeriodo($iAnoSessao, $iInstituicao, $oParam->lProcessados))) {
-			$oRetorno->lBloquearTela = true;
-		}
+			if ((EscrituracaoRestosAPagarNaoProcessados::existeLancamentoPeriodo($iAnoSessao, $iInstituicao, $oParam->lProcessados)) &&
+				(EscrituracaoRestosAPagarProcessados::existeLancamentoPeriodo($iAnoSessao, $iInstituicao, $oParam->lProcessados))
+			) {
+				$oRetorno->lBloquearTela = true;
+			}
 
-		//Nao Processados
-		
-		$nValorNp  = EscrituracaoRestosAPagarNaoProcessados::getValorLancamento($iAnoSessao,
-			$iInstituicao,
-			$oParam->lProcessados);
+			//Nao Processados
 
-		if ($nValorNp == 0) {	
-			$nValorNp = RestosAPagar::getValorNaoProcessadoAno($iAnoSessao, $iInstituicao);
-		}
+			$nValorNp = EscrituracaoRestosAPagarNaoProcessados::getValorLancamento($iAnoSessao,
+				$iInstituicao,
+				$oParam->lProcessados);
 
-		//Processados
-		
-		$nValorP  = EscrituracaoRestosAPagarProcessados::getValorLancamento($iAnoSessao,
-			$iInstituicao,
-			$oParam->lProcessados);
+			if ($nValorNp == 0) {
+				$nValorNp = RestosAPagar::getValorNaoProcessadoAno($iAnoSessao, $iInstituicao);
+			}
 
-		if ($nValorP == 0) {
-			$nValorP = RestosAPagar::getValorProcessadoAno($iAnoSessao, $iInstituicao);
-		}
+			//Processados
 
-		$oRetorno->nValorNp = $nValorNp;
-		$oRetorno->nValorP = $nValorP;
+			$nValorP = EscrituracaoRestosAPagarProcessados::getValorLancamento($iAnoSessao,
+				$iInstituicao,
+				$oParam->lProcessados);
 
-		break;
+			if ($nValorP == 0) {
+				$nValorP = RestosAPagar::getValorProcessadoAno($iAnoSessao, $iInstituicao);
+			}
+
+			$oRetorno->nValorNp = $nValorNp;
+			$oRetorno->nValorP = $nValorP;
+
+			break;
 
 		case 'processar'    :
-			case 'desprocessar' :
 
 			db_inicio_transacao();
 
-		   /*
-			* Resto A Pagar Não Processado
-			*
-			*/
+			/*
+             * Resto A Pagar Não Processado
+             *
+             */
 
-			$oEscrituracao       = new EscrituracaoRestosAPagarNaoProcessados($iAnoSessao, $iInstituicao);
+			$oEscrituracao = new EscrituracaoRestosAPagarNaoProcessados($iAnoSessao, $iInstituicao);
 
 			$iCodigoEscrituracao = null;
-			$iCodigoDocumento    = null;
-			$sObservacao         = db_stdClass::normalizeStringJson($oParam->sObservacao);
+			$iCodigoDocumento = null;
+			$sObservacao = db_stdClass::normalizeStringJson($oParam->sObservacao);
 
 			if ($oParam->exec == 'processar') {
 
-			  	// Documento 2005: INSCRIÇÃO DE RESTOS A PAGAR NÃO PROCESSADOS
-				$iCodigoDocumento    = 2005;
 				$iCodigoEscrituracao = $oEscrituracao->escriturar();
 
 			} else {
 
-				// Documento 2006:	ESTORNO DE INSCR. DE RP NÃO PROCESSADOS
-				$iCodigoDocumento    = 2006;
 				$iCodigoEscrituracao = $oEscrituracao->cancelarEscrituracao();
 			}
 
-			$rsSqlEmpresto  = RestosAPagar::getValorNaoProcessadoAnalitico($iAnoSessao, $iInstituicao);
+			$rsSqlEmpresto = RestosAPagar::getValorNaoProcessadoAnalitico($iAnoSessao, $iInstituicao);
 
 			for ($iContRP = 0; $iContRP < pg_num_rows($rsSqlEmpresto); $iContRP++) {
 
 				$oEmpresto = db_utils::fieldsMemory($rsSqlEmpresto, $iContRP);
 
-				$oEmpenhoFinanceiro    = new EmpenhoFinanceiro($oEmpresto->e91_numemp);
+				$oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpresto->e91_numemp);
+
+				if ($oEmpenhoFinanceiro->getAnoUso() == db_getsession('DB_anousu') - 1) {
+
+					if ($oParam->exec == 'processar') {
+
+						// Documento 2005: INSCRIÇÃO DE RESTOS A PAGAR NÃO PROCESSADOS
+						$iCodigoDocumento = 2005;
+
+					} else {
+
+						// Documento 2006:	ESTORNO DE INSCR. DE RP NÃO PROCESSADOS
+						$iCodigoDocumento = 2006;
+					}
+				} else {
+
+					if ($oParam->exec == 'processar') {
+
+						// Documento 2009: INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
+						$iCodigoDocumento = 2009;
+
+					} else {
+
+						// Documento 2010:	ESTORNO INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
+						$iCodigoDocumento = 2010;
+
+					}
+
+				}
+
 				$oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
 				$oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
-				$oLancamentoAuxiliar   = new LancamentoAuxiliarInscricaoRestosAPagarNaoProcessado();
+				$oLancamentoAuxiliar = new LancamentoAuxiliarInscricaoRestosAPagarNaoProcessado();
 				$oLancamentoAuxiliar->setValorTotal($oEmpresto->valor);
 				$oLancamentoAuxiliar->setObservacaoHistorico($sObservacao);
 				$oLancamentoAuxiliar->setInscricaoRestosAPagarNaoProcessados($iCodigoEscrituracao);
@@ -154,39 +179,65 @@ try {
 			}
 
 			/*
-			* Resto A Pagar Processado
-			*
-			*/
+            * Resto A Pagar Processado
+            *
+            */
 
-			$oEscrituracao       = new EscrituracaoRestosAPagarProcessados($iAnoSessao, $iInstituicao);
+			$oEscrituracao = new EscrituracaoRestosAPagarProcessados($iAnoSessao, $iInstituicao);
 
 			$iCodigoEscrituracao = null;
-			$iCodigoDocumento    = null;
-			$sObservacao         = db_stdClass::normalizeStringJson($oParam->sObservacao);
+			$iCodigoDocumento = null;
+			$sObservacao = db_stdClass::normalizeStringJson($oParam->sObservacao);
 
 			if ($oParam->exec == 'processar') {
 
-			  	// Documento 2007: INSCRIÇÃO DE RESTOS A PAGAR PROCESSADOS
-				$iCodigoDocumento    = 2007;
 				$iCodigoEscrituracao = $oEscrituracao->escriturar();
 
 			} else {
 
-				// Documento 2008:	ESTORNO DE INSCR. DE RP PROCESSADOS
-				$iCodigoDocumento    = 2008;
 				$iCodigoEscrituracao = $oEscrituracao->cancelarEscrituracao();
 			}
 
-			$rsSqlEmpresto  = RestosAPagar::getValorProcessadoAnalitico($iAnoSessao, $iInstituicao);
-			
+			$rsSqlEmpresto = RestosAPagar::getValorProcessadoAnalitico($iAnoSessao, $iInstituicao);
+
 			for ($iContRP = 0; $iContRP < pg_num_rows($rsSqlEmpresto); $iContRP++) {
 
 				$oEmpresto = db_utils::fieldsMemory($rsSqlEmpresto, $iContRP);
 
-				$oEmpenhoFinanceiro    = new EmpenhoFinanceiro($oEmpresto->e91_numemp);
+				$oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpresto->e91_numemp);
+
+				if ($oEmpenhoFinanceiro->getAnoUso() == db_getsession('DB_anousu') - 1) {
+
+					if ($oParam->exec == 'processar') {
+
+						// Documento 2007: INSCRIÇÃO DE RESTOS A PAGAR PROCESSADOS
+						$iCodigoDocumento = 2007;
+
+
+					} else {
+
+						// Documento 2008:	ESTORNO DE INSCR. DE RP PROCESSADOS
+						$iCodigoDocumento = 2008;
+
+					}
+				} else {
+
+					if ($oParam->exec == 'processar') {
+
+						// Documento 2011: INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
+						$iCodigoDocumento = 2011;
+
+					} else {
+
+						// Documento 2012:	ESTORNO INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
+						$iCodigoDocumento = 2012;
+
+					}
+				}
+
 				$oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
 				$oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
-				$oLancamentoAuxiliar   = new LancamentoAuxiliarInscricaoRestosAPagarProcessado();
+				$oLancamentoAuxiliar = new LancamentoAuxiliarInscricaoRestosAPagarProcessado();
 				$oLancamentoAuxiliar->setValorTotal($oEmpresto->valor);
 				$oLancamentoAuxiliar->setObservacaoHistorico($sObservacao);
 				$oLancamentoAuxiliar->setInscricaoRestosAPagarProcessados($iCodigoEscrituracao);
@@ -199,31 +250,249 @@ try {
 			db_fim_transacao(false);
 
 			break;
+		case 'desprocessar' :
+			db_inicio_transacao();
+
+
+			$rsTabelaLancamentos = db_query("create temp table w_conlancam as
+                                      SELECT DISTINCT c108_codlan
+                                FROM conlancaminscrestosapagarnaoprocessados
+                                inner join conlancam on c108_codlan = c70_codlan
+                                WHERE c70_anousu = " . db_getsession('DB_anousu') . "
+                                UNION ALL
+                                SELECT DISTINCT c108_codlan
+                                FROM conlancaminscrestosapagarprocessados
+                                inner join conlancam on c108_codlan = c70_codlan
+                                WHERE c70_anousu = " . db_getsession('DB_anousu'));
+
+			if (!$rsTabelaLancamentos) {
+				throw new Exception('Não foi possivel criar tabela para exclusão de lançamentos');
+			}
+
+			$rsConlancamemp = db_query("DELETE FROM conlancamemp
+                                        WHERE c75_codlan IN
+                                            (select c70_codlan from w_conlancam)");
+
+			if (!$rsConlancamemp) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamemp');
+			}
+
+			$rsConlancambol = db_query("DELETE FROM conlancambol
+                                            WHERE c77_codlan IN
+                                                (select c70_codlan from w_conlancam)");
+
+			if (!$rsConlancambol) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancambol');
+			}
+
+
+			$rsConlancamdig = db_query("DELETE FROM conlancamdig
+                                            WHERE c78_codlan IN
+                                                (select c70_codlan from w_conlancam)");
+
+			if (!$rsConlancamdig) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamdig');
+			}
+
+			$rsDeleteConlancamCgm = db_query("delete from conlancamcgm  where c76_codlan in (select c70_codlan from w_conlancam)");
+			if (!$rsDeleteConlancamCgm) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamcgm');
+			}
+			$rsDeleteConlancamGrupo = db_query("delete from conlancamcorgrupocorrente
+                                         where c23_conlancam in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlancamGrupo) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamGrupo');
+			}
+
+			$rsDeletePagordemdescontolanc = db_query("DELETE FROM pagordemdescontolanc
+                                                        WHERE e33_conlancam IN (select c70_codlan from w_conlancam)");
+			if (!$rsDeletePagordemdescontolanc) {
+				throw new Exception('Não foi possivel excluir dados da tabela pagordemdescontolanc');
+			}
+
+			$rsDeleteconlancammatestoqueinimei = db_query("DELETE FROM conlancammatestoqueinimei
+                                                        WHERE c103_conlancam IN (select c70_codlan from w_conlancam)");
+			if (!$rsDeleteconlancammatestoqueinimei) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancammatestoqueinimei');
+			}
+
+			$rsDeleteConlancamCorrente = db_query("delete from conlancamcorrente
+                                            where c86_conlancam in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlancamCorrente) {
+				throw new Exception("Não foi possivel excluir dados da tabela conlancamcorrente\n" . pg_last_error());
+			}
+
+			$rsDeleteConlancamRec = db_query("delete from conlancamrec
+                                       where c74_codlan in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlancamRec) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamrec');
+			}
+
+			$rsDeleteConlancamCompl = db_query("delete from conlancamcompl
+                                       where c72_codlan in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlancamCompl) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamcompl');
+			}
+
+			$rsDeleteConlancamnota = db_query("DELETE FROM conlancamnota
+                                                WHERE c66_codlan IN (select c70_codlan from w_conlancam)");
+			if (!$rsDeleteConlancamnota) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamnota');
+			}
+
+			$rsDeleteConlancamele = db_query("DELETE FROM conlancamele
+                                                WHERE c67_codlan IN (select c70_codlan from w_conlancam)");
+			if (!$rsDeleteConlancamele) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamele');
+			}
+
+			$rsDeleteConlancamPag = db_query("delete from conlancampag
+                                       where c82_codlan in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlancamPag) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancampag');
+			}
+
+			$rsDeleteConlancamDoc = db_query("delete from conlancamdoc
+                                       where c71_codlan in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlancamDoc) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamdoc');
+			}
+
+			$rsDeleteConlancamdot = db_query("DELETE FROM conlancamdot
+                                                    WHERE c73_codlan IN
+                                                        (select c70_codlan from w_conlancam)");
+
+			if (!$rsDeleteConlancamdot) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamdot');
+			}
+
+			$rsdeleteConlancamlr = db_query("DELETE FROM conlancamlr
+                                                WHERE c81_sequen IN
+                                                    (SELECT c69_sequen
+                                                     FROM conlancamval
+                                                     WHERE c69_codlan IN
+                                                         (select c70_codlan from w_conlancam))");
+
+			if (!$rsdeleteConlancamlr) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamlr');
+			}
+
+			$rsDeleteConlancamCC = db_query("delete from contacorrentedetalheconlancamval
+                                       where c28_conlancamval in (select c69_sequen
+                                                                    from conlancamval
+                                                                   where c69_codlan in (select c70_codlan
+                                                                                         from w_conlancam)
+                                                                   )"
+			);
+			if (!$rsDeleteConlancamCC) {
+				throw new Exception('Não foi possivel excluir dados da tabela contacorrentedetalheconlancamval');
+			}
+
+			$rsDeleteConlanordem = db_query(" delete from conlancamordem
+                                        where c03_codlan in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlanordem) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamordem');
+			}
+
+			$rsDeleteConlancamVal = db_query(" delete from conlancamval
+                                        where c69_codlan in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlancamVal) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamval');
+			}
+
+			$rsDeleteConlancamCP = db_query("delete from conlancamconcarpeculiar
+                                      where c08_codlan in (select c70_codlan from w_conlancam)"
+			);
+			if (!$rsDeleteConlancamCP) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamconcarpeculiar');
+			}
+
+			$rsDeleteConlancamord = db_query("delete from conlancamord where c80_codlan in (select c70_codlan from w_conlancam)");
+
+			if (!$rsDeleteConlancamrod) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamord');
+			}
+
+			$rsDeleteConlancamInstit = db_query("delete from conlancaminstit where c02_codlan in (select c70_codlan from w_conlancam)");
+
+			if (!$rsDeleteConlancamInstit) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancaminstit');
+			}
+
+			$rsDeleteConlancamOrdem = db_query("delete from conlancamordem where c03_codlan in (select c70_codlan from w_conlancam)");
+
+			if (!$rsDeleteConlancamOrdem) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamordem');
+			}
+
+			$rsDeleteconlancambem = db_query("delete from conlancambem where c110_codlan in (select c70_codlan from w_conlancam)");
+
+			if (!$rsDeleteConlancamOrdem) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamordem');
+			}
+
+			$rsDeleteconlancaminscrestosapagarnaoprocessados = db_query("delete from conlancaminscrestosapagarnaoprocessados where c108_codlan in (select c70_codlan from w_conlancam)");
+
+			if (!$rsDeleteconlancaminscrestosapagarnaoprocessados) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancaminscrestosapagarnaoprocessados');
+			}
+
+			$rsDeleteconlancaminscrestosapagarprocessados = db_query("delete from conlancaminscrestosapagarprocessados where c108_codlan in (select c70_codlan from w_conlancam)");
+
+			if (!$rsDeleteconlancaminscrestosapagarprocessados) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancaminscrestosapagarprocessados');
+			}
+
+			$rsDeleteConlancam = db_query("delete from conlancam where c70_codlan in (select c70_codlan from w_conlancam)");
+			if (!$rsDeleteConlancam) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancam');
+			}
+
+			$rsDeleteInscricaorestosapagarprocessados = db_query("delete from inscricaorestosapagarprocessados where c107_instit = ".db_getsession('DB_instit')." and c107_anousu = ".db_getsession('DB_anousu'));
+			if (!$rsDeleteInscricaorestosapagarprocessados) {
+				throw new Exception('Não foi possivel excluir dados da tabela inscricaorestosapagarprocessados');
+			}
+
+			$rsDeleteInscricaorestosapagarnaoprocessados = db_query("delete from inscricaorestosapagarnaoprocessados where c107_instit = ".db_getsession('DB_instit')." and c107_anousu = ".db_getsession('DB_anousu'));
+			if (!$rsDeleteInscricaorestosapagarnaoprocessados) {
+				throw new Exception('Não foi possivel excluir dados da tabela inscricaorestosapagarnaoprocessados');
+			}
+
+			db_fim_transacao(false);
+			break;
 
 	}
 
-} catch (BusinessException $oErro){
+} catch (BusinessException $oErro) {
 
-	$oRetorno->status  = 2;
+	$oRetorno->status = 2;
 	$oRetorno->message = $oErro->getMessage();
 
 	db_fim_transacao(true);
 
 } catch (ParameterException $oErro) {
 
-	$oRetorno->status  = 2;
+	$oRetorno->status = 2;
 	$oRetorno->message = $oErro->getMessage();
 
 } catch (DBException $oErro) {
 
-	$oRetorno->status  = 2;
+	$oRetorno->status = 2;
 	$oRetorno->message = $oErro->getMessage();
 
 	db_fim_transacao(true);
 
 } catch (Exception $oErro) {
 
-	$oRetorno->status  = 2;
+	$oRetorno->status = 2;
 	$oRetorno->message = $oErro->getMessage();
 
 	db_fim_transacao(true);
