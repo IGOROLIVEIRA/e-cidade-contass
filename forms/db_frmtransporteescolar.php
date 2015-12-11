@@ -18,8 +18,8 @@ $clrotulo->label("ve01_codigo");
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?= @$Tv200_anousu ?>">
-                    <?= @$Lv200_anousu ?>
+                <td nowrap title="Campo: v200_anousu">
+                    <strong>Ano: </strong>
                 </td>
                 <td>
                     <?
@@ -30,8 +30,8 @@ $clrotulo->label("ve01_codigo");
                     if ($v200_anousu == ''){
                         $v200_anousu = db_getsession('DB_anousu');
                     }
-                    db_input('v200_anousu', 10, $Iv200_anousu, true, 'text', 3, "", db_getsession("DB_anousu"));
                     ?>
+                    <input type="text" name="v200_anousu" autocomplete="off" style="background-color:#DEB887;" readonly="" maxlength="4" size="10" title="Campo:v200_anousu " tabindex="0" value="<?php echo $v200_anousu; ?>"/>
                 </td>
             </tr>
             <tr>
