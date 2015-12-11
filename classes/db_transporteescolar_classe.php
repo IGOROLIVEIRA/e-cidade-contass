@@ -364,6 +364,12 @@ class cl_transporteescolar {
          return false;
        }
      }
+     /**
+      * @ocorrencia: 1211
+      * @Task: Correção da rotina de inclusão/alteração do transporte escolar. Acrescentado o SQL do anousu.
+      * @author: Rodrigo@contass
+      */
+     $sql .= ", v200_anousu = ".db_getsession('DB_anousu');
      $sql .= " where ";
      if($v200_sequencial!=null){
        $sql .= " v200_sequencial = $this->v200_sequencial";

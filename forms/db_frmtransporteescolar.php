@@ -31,7 +31,7 @@ $clrotulo->label("ve01_codigo");
                         $v200_anousu = db_getsession('DB_anousu');
                     }
                     ?>
-                    <input type="text" name="v200_anousu" autocomplete="off" style="background-color:#DEB887;" readonly="" maxlength="4" size="10" title="Campo:v200_anousu " tabindex="0" value="<?php echo $v200_anousu; ?>"/>
+                    <input type="text" name="v200_anousu" id="v200_anousu" autocomplete="off" style="background-color:#DEB887;" readonly="" maxlength="4" size="10" title="Campo:v200_anousu " tabindex="0" value="<?php echo $v200_anousu; ?>"/>
                 </td>
             </tr>
             <tr>
