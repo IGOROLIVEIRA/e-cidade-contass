@@ -417,7 +417,7 @@ try {
 
 			$rsDeleteConlancamord = db_query("delete from conlancamord where c80_codlan in (select c70_codlan from w_conlancam)");
 
-			if (!$rsDeleteConlancamrod) {
+			if (!$rsDeleteConlancamord) {
 				throw new Exception('Não foi possivel excluir dados da tabela conlancamord');
 			}
 
@@ -456,12 +456,12 @@ try {
 				throw new Exception('Não foi possivel excluir dados da tabela conlancam');
 			}
 
-			$rsDeleteInscricaorestosapagarprocessados = db_query("delete from inscricaorestosapagarprocessados where c107_instit = ".db_getsession('DB_instit')." and c107_anousu = ".db_getsession('DB_anousu'));
+			$rsDeleteInscricaorestosapagarprocessados = db_query("delete from inscricaorestosapagarprocessados where c107_instit = ".db_getsession('DB_instit')." and c107_ano = ".db_getsession('DB_anousu'));
 			if (!$rsDeleteInscricaorestosapagarprocessados) {
 				throw new Exception('Não foi possivel excluir dados da tabela inscricaorestosapagarprocessados');
 			}
 
-			$rsDeleteInscricaorestosapagarnaoprocessados = db_query("delete from inscricaorestosapagarnaoprocessados where c107_instit = ".db_getsession('DB_instit')." and c107_anousu = ".db_getsession('DB_anousu'));
+			$rsDeleteInscricaorestosapagarnaoprocessados = db_query("delete from inscricaorestosapagarnaoprocessados where c107_instit = ".db_getsession('DB_instit')." and c107_ano = ".db_getsession('DB_anousu'));
 			if (!$rsDeleteInscricaorestosapagarnaoprocessados) {
 				throw new Exception('Não foi possivel excluir dados da tabela inscricaorestosapagarnaoprocessados');
 			}
