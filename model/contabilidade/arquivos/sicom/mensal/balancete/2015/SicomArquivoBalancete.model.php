@@ -1106,7 +1106,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     if ($sElementoXml == $sElemento . $sSubElemento) {
 
                                         $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                        $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 7, 2);
+                                        $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
 
                                     }
                                 }
