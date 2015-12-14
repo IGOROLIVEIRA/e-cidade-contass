@@ -526,7 +526,7 @@ function js_Imprimetermo() {
              */
             if ( db_permissaomenu(db_getsession("DB_anousu"), 40, 9740) == "true") {
         ?>
-              <tr style=<?=$sDisplayNone?>>
+              <tr style=<?//=$sDisplayNone?>>
                 <td align="center" nowrap bgcolor="#CCCCCC" style="cursor:hand"><input name='imprime' type='button' onClick="js_Impressao()" value='Imprime Alvará'></td>
               </tr>
        <?php
