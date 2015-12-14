@@ -846,7 +846,7 @@ function js_getValoresDetalhamento(){
     nValorLinha = parseFloat(oGridDetalhamento.aRows[iLinha].aCells[2].getValue());
     iSequencial = oGridDetalhamento.aRows[iLinha].aCells[0].getValue();
 
-    if ( !empty(nValorLinha) && nValorLinha > 0 ) {
+    if ( !empty(nValorLinha) && nValorLinha != 0 ) {
 
     	var oValores              = new Object();
     	    oValores.iSequencial  = iSequencial;
@@ -868,7 +868,7 @@ function js_somavalores() {
 
   for (iLinha = 0; iLinha < iTotalLinhas; iLinha++) {
 
-    nValorLinha  = oGridDetalhamento.aRows[iLinha].aCells[2].getValue();
+    nValorLinha  = Math.abs(oGridDetalhamento.aRows[iLinha].aCells[2].getValue());
 
 	  nTotal      += parseFloat(nValorLinha).toFixed(2);
   }
@@ -982,7 +982,7 @@ function js_retornoDetalhamento(oAjax) {
         aRow[2].addStyle("height","100%");
         aRow[2].addStyle("width","100px");
         aRow[2].addEvent("onBlur","qtditem"+iInd+".sValue=this.value;");
-        aRow[2].addEvent("onKeyPress"," return js_teclas(event,this); ");
+        //aRow[2].addEvent("onKeyPress"," return js_teclas(event,this); ");
         aRow[2].addEvent("onChange","js_somavalores();");
         oGridDetalhamento.addRow(aRow);
         oGridDetalhamento.aRows[iInd].aCells[0].sEvents = "ondblclick='js_viewDetalhamentos("+oDado.iCodigo+");'";

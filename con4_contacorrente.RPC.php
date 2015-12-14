@@ -391,7 +391,15 @@ try {
 
         /*
          * case para implantação de saldo em conta corrente
-         * sera implantado com mesusu 0 e para o ano de 2013
+         * sera implantado com mesusu 0 e para o anousu
+         */
+        /**
+         * @description:
+         * Funcionalidade adaptada para a geração do SICOM Balancete
+         * Descrição da alteração:
+         * 1. Quando o sTipoImplantacao for crédito e o nValor for negativo, devemos implantar na contacorrentesaldo como débito, se não será crédito.
+         * 2. Quando o sTipoImplantacao for débito e o nValor for negativo, devemos implantar na contacorrentesaldo como crédito, se não será débito.
+         * @author: rodrigo@contass e igor@contass
          */
         case "implantarSaldoContaCorrente" :
 
@@ -424,8 +432,27 @@ try {
                     throw new DBException("ERRO [ 1 ] - Excluindo Registros - " . $oDaoContaCorrenteSaldo->erro_msg);
                 }
 
-                if ($oValores->nValor <= 0) {
+                if ($oValores->nValor == 0) {
                     continue;
+                }
+
+                if ($sTipoImplantacao == 'debito') {
+
+                    if ($oValores->nValor < 0) {
+
+                        $sColunaImplantar = "c29_credito";
+                        $sColunaZerar = "c29_debito";
+
+                    }
+
+                } elseif ($sTipoImplantacao == 'credito') {
+
+                    if ($oValores->nValor < 0) {
+
+                        $sColunaImplantar = "c29_debito";
+                        $sColunaZerar = "c29_credito";
+
+                    }
                 }
 
                 /*
@@ -444,7 +471,7 @@ try {
                 $oDaoContaCorrenteSaldo->c29_contacorrentedetalhe = $oValores->iSequencial;
                 $oDaoContaCorrenteSaldo->c29_anousu = $iAnoUsu;
                 $oDaoContaCorrenteSaldo->c29_mesusu = '0';
-                $oDaoContaCorrenteSaldo->$sColunaImplantar = $oValores->nValor;
+                $oDaoContaCorrenteSaldo->$sColunaImplantar = abs($oValores->nValor);
                 $oDaoContaCorrenteSaldo->$sColunaZerar = '0';
 
                 // se retornou registros devemos alterar
