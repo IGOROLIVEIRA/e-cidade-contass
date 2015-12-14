@@ -868,7 +868,7 @@ function js_somavalores() {
 
   for (iLinha = 0; iLinha < iTotalLinhas; iLinha++) {
 
-    nValorLinha  = Math.abs(oGridDetalhamento.aRows[iLinha].aCells[2].getValue());
+    nValorLinha  = oGridDetalhamento.aRows[iLinha].aCells[2].getValue();
 
 	  nTotal      += parseFloat(nValorLinha).toFixed(2);
   }
