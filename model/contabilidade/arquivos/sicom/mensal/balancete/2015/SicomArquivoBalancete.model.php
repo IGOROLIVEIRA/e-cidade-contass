@@ -195,62 +195,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
              */
             if ($nMes != 1) {
 
-                $sSqlSaldoAnt_old = "select * from
-                                    (SELECT coalesce(round(sum(valor)::numeric,2),0) AS saldoinicial
-                                    FROM
-                                       (SELECT coalesce(round(sum(c69_valor)::numeric,2),0) AS valor
-                                       FROM conlancamval
-                                       WHERE c69_debito IN
-                                           (SELECT c61_reduz
-                                            FROM conplanoreduz
-                                            WHERE c61_codcon = {$oReg10->codcon} AND c61_anousu = " . db_getsession("DB_anousu") . ")
-                                         AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
-                                         AND DATE_PART('MONTH',c69_data) >= 1
-                                         AND DATE_PART('MONTH',c69_data) < " . $nMes . "
-
-                                       UNION ALL
-
-                                       SELECT coalesce((round(sum(c69_valor)::numeric,2)) * -1,0) AS valor
-                                       FROM conlancamval
-                                       WHERE c69_credito IN
-                                           (SELECT c61_reduz
-                                            FROM conplanoreduz
-                                            WHERE c61_codcon = {$oReg10->codcon} AND c61_anousu = " . db_getsession("DB_anousu") . ")
-                                         AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
-                                         AND DATE_PART('MONTH',c69_data) >= 1
-                                         AND DATE_PART('MONTH',c69_data) < " . $nMes . "
-
-                                       UNION ALL
-
-                                       SELECT coalesce(round((CASE WHEN c62_vlrcre = 0
-                                                              AND c62_vlrdeb != 0 THEN c62_vlrdeb WHEN c62_vlrcre != 0
-                                                              AND c62_vlrdeb = 0 THEN c62_vlrcre * -1 ELSE c62_vlrdeb END)::numeric,2),0) AS valor
-                                       FROM conplanoexe
-                                       WHERE c62_reduz IN
-                                           (SELECT c61_reduz
-                                            FROM conplanoreduz
-                                            WHERE c61_codcon = {$oReg10->codcon} AND c61_anousu = " . db_getsession("DB_anousu") . ")
-                                         AND c62_anousu = " . db_getsession("DB_anousu") . ") AS movimento) as saldoinicial,
-
-                                    (SELECT coalesce(round(sum(c69_valor)::numeric,2),0) AS creditos
-                                       FROM conlancamval
-                                       WHERE c69_credito IN
-                                           (SELECT c61_reduz
-                                            FROM conplanoreduz
-                                            WHERE c61_codcon = {$oReg10->codcon} AND c61_anousu = " . db_getsession("DB_anousu") . ")
-                                         AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
-                                         AND DATE_PART('MONTH',c69_data) = " . $nMes . ") as credito,
-
-                                    (SELECT coalesce(round(sum(c69_valor)::numeric,2),0) AS debitos
-                                       FROM conlancamval
-                                       WHERE c69_debito IN
-                                           (SELECT c61_reduz
-                                            FROM conplanoreduz
-                                            WHERE c61_codcon = {$oReg10->codcon} AND c61_anousu = " . db_getsession("DB_anousu") . ")
-                                         AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
-                                         AND DATE_PART('MONTH',c69_data) = " . $nMes . ") as debito
-                                         where saldoinicial != 0 or creditos != 0 or debitos != 0";
-
                 $sSqlSaldoAnt = " select sinal_anterior,sinal_final,sum(saldoinicial) saldoinicial, sum(debitos) debitos, sum(creditos) creditos from(SELECT estrut_mae,
                                            estrut,
                                            c61_reduz,
@@ -386,7 +330,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  JOIN orctiporec ON o58_codigo = o15_codigo
 					  inner join infocomplementaresinstit on  o58_instit = si09_instit
 					  inner join infocomplementares on si09_instit = si08_instit
-					  where o58_anousu = " . db_getsession("DB_anousu");
+					  where o58_instit = ".db_getsession('DB_instit')." and o58_anousu = " . db_getsession("DB_anousu");
                     $nContaCorrente = 101;
 
                 } else {
@@ -416,7 +360,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
 					  JOIN orctiporec ON o58_codigo = o15_codigo
 					  left join infocomplementaresinstit on  o58_instit = si09_instit
-					  where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes}";
+					  where o58_instit = ".db_getsession('DB_instit')." and DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes}";
                     //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
 
                     $nContaCorrente = 102;
@@ -624,7 +568,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                 FROM conplanoorcamento
                                                 INNER JOIN conplanoorcamentoanalitica ON c61_codcon = conplanoorcamento.c60_codcon AND c61_anousu = conplanoorcamento.c60_anousu
                                                 INNER JOIN orctiporec ON conplanoorcamentoanalitica.c61_codigo = orctiporec.o15_codigo
-                                                WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4')
+                                                WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = ".db_getsession('DB_instit')."
                                                 AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu");
 
                 $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die($sSqlVinculoContaOrcamento);
@@ -951,10 +895,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 }
             }
 
-            /*
+            /**
              * DADOS PARA GERAÇÃO DO REGISTRO 14 RESTOS A PAGAR,
              * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 14
-             *
+             * @todo: buscar o codunidadesuborig
              */
 
             if ($oContas10->nregobrig == 14) {
