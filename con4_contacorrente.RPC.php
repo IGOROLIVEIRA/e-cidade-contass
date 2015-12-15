@@ -443,6 +443,9 @@ try {
                         $sColunaImplantar = "c29_credito";
                         $sColunaZerar = "c29_debito";
 
+                    } else {
+                        $sColunaImplantar = "c29_debito";
+                        $sColunaZerar = "c29_credito";
                     }
 
                 } elseif ($sTipoImplantacao == 'credito') {
@@ -452,6 +455,9 @@ try {
                         $sColunaImplantar = "c29_debito";
                         $sColunaZerar = "c29_credito";
 
+                    } else {
+                        $sColunaImplantar = "c29_credito";
+                        $sColunaZerar = "c29_debito";
                     }
                 }
 
@@ -679,14 +685,28 @@ try {
 
                     // se existir valor ja implantado, setamos eles no objeto que irá retornar
                     if ($oDaoContaCorrenteSaldo->numrows > 0) {
-
+                        /**
+                         * @description:
+                         * se o saldo da conta for credito e o saldo implantado no cc for debito, então o valor deve ser negativado.
+                         * se o saldo da conta for debito e o saldo implantado no cc for credito, então o valor deve ser negativado.
+                         */
                         $oValorInplantado = db_utils::fieldsMemory($rsImplantado, 0);
 
                         $oDadosDetalhes->nValorImplantado = $oValorInplantado->c29_credito;
 
                         if ($oValorInplantado->c29_credito == 0 || $oValorInplantado->c29_credito == null) {
-                            $oDadosDetalhes->nValorImplantado = $oValorInplantado->c29_debito;
+                            if ($oValoresConplanoExe->c62_vlrcre > 0) {
+                                $oDadosDetalhes->nValorImplantado = $oValorInplantado->c29_debito * -1;
+                            } else {
+                                $oDadosDetalhes->nValorImplantado = $oValorInplantado->c29_debito;
+                            }
+
+                        } else {
+                            if ($oValoresConplanoExe->c62_vlrdeb > 0) {
+                                $oDadosDetalhes->nValorImplantado = $oValorInplantado->c29_credito * -1;
+                            }
                         }
+
                     }
 
                     // adicionamos o objeto com os atributos que irão para tela em array
