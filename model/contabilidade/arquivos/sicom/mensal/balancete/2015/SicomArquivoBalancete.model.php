@@ -72,6 +72,47 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
     }
 
     /**
+     *  Função que busca dotacao pelo codigo do orgao e unidade no exercicio da sessao.
+     *  Se não encontrar, busca o padrão.
+     */
+    public function getDotacaoByCodunidadesub($iOrgao, $iUnidade)
+    {
+        try {
+
+            $sSql = "select case when o41_subunidade != 0 or not null then
+                        lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0)||lpad(o41_subunidade::integer,3,0)
+                        else lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0) end as codunidadesub
+                        from orcdotacao
+                        inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+                        inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                 where o58_orgao = {$iOrgao}
+                 and o58_unidade = {$iUnidade}
+                 and o58_anousu = " . db_getsession('DB_anousu') .
+                " and o58_instit = " . db_getsession('DB_instit') . " limit 1";
+
+            $rsSql = db_query($sSql);
+
+            if (pg_num_rows($rsSql) > 0) {
+
+                $sCodUnidadesub = db_utils::fieldsMemory(db_query($sSql), 0)->codunidadesub;
+
+            } else {
+
+                $sCodUnidadesub = db_utils::fieldsMemory(db_query("select si08_codunidadesub from infocomplementares where si08_instit = " . db_getsession('DB_instit') . " and si08_anousu = " . db_getsession('DB_anousu')), 0)->si08_codunidadesub;
+
+            }
+
+            return $sCodUnidadesub;
+
+        } catch (Exception $e) {
+
+            throw new Exception("Erro: ".$e->getMessage());
+
+        }
+
+    }
+
+    /**
      * selecionar os dados para arquivo
      * @see iPadArquivoBase::gerarDados()
      */
@@ -93,9 +134,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
             $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
-            if (!file_exists($sArquivo)) {
+            /*if (!file_exists($sArquivo)) {
                 throw new Exception("Arquivo de natureza da receita inexistente!");
-            }
+            }*/
 
             $sTextoXml = file_get_contents($sArquivo);
             $oDOMDocument = new DOMDocument();
@@ -112,9 +153,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
          * selecionar arquivo xml de dados elemento da despesa
          */
         $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
-        if (!file_exists($sArquivo)) {
+        /*if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de elemento da despesa inexistente!");
-        }
+        }*/
         $sTextoXml = file_get_contents($sArquivo);
         $oDOMDocument = new DOMDocument();
         $oDOMDocument->loadXML($sTextoXml);
@@ -177,7 +218,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_anousu = " . db_getsession("DB_anousu") . ") as x
+                             where c60_anousu = " . db_getsession("DB_anousu") . " and c60_nregobrig = 14) as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 //where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '622130300') as x
         $rsReg10 = db_query($sqlReg10) or die($sqlReg10);
@@ -225,8 +266,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                        INNER JOIN conplano p ON r.c61_codcon = c60_codcon
                                        AND r.c61_anousu = c60_anousu
                                        LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
-                                       WHERE c62_anousu = ".db_getsession('DB_anousu')."
-                                         AND c61_instit IN (".db_getsession('DB_instit').")
+                                       WHERE c62_anousu = " . db_getsession('DB_anousu') . "
+                                         AND c61_instit IN (" . db_getsession('DB_instit') . ")
 						 AND c61_codcon = {$oReg10->codcon} ) AS x) as y where saldoinicial > 0 or debitos > 0 or creditos > 0 group by 1,2";
 
                 if (pg_num_rows(pg_query($sSqlSaldoAnt)) == 0) {
@@ -237,7 +278,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $nCreditos = db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->creditos;
                 $nDebitos = db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->debitos;
                 $sNaturezaSaldoIni = db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->sinal_anterior;
-                $sNaturezaSaldoFim =db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->sinal_final;
+                $sNaturezaSaldoFim = db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->sinal_final;
 
             }
 
@@ -255,7 +296,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 $obalancete->si177_tiporegistro = "10";
                 $obalancete->si177_contacontaabil = $oReg10->contacontabil;
-                $obalancete->si177_saldoinicial = ($sNaturezaSaldoIni == 'C' ? $nSaldoInicial*-1 : $nSaldoInicial);
+                $obalancete->si177_saldoinicial = ($sNaturezaSaldoIni == 'C' ? $nSaldoInicial * -1 : $nSaldoInicial);
                 $obalancete->si177_totaldebitos = $nDebitos;
                 $obalancete->si177_totalcreditos = $nCreditos;
                 $obalancete->si177_saldofinal = $obalancete->si177_saldoinicial + $nDebitos - $nCreditos;
@@ -283,7 +324,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
             } else {
                 $obalancete->contas[] = $oReg10->c61_reduz;
-                $aDadosAgrupados10[$sHash]->si177_saldoinicial += ($sNaturezaSaldoIni == 'C' ? $nSaldoInicial*-1 : $nSaldoInicial);
+                $aDadosAgrupados10[$sHash]->si177_saldoinicial += ($sNaturezaSaldoIni == 'C' ? $nSaldoInicial * -1 : $nSaldoInicial);
                 $aDadosAgrupados10[$sHash]->si177_totaldebitos += $nDebitos;
                 $aDadosAgrupados10[$sHash]->si177_totalcreditos += $nCreditos;
                 $aDadosAgrupados10[$sHash]->si177_saldofinal += $nSaldoInicial + $nDebitos - $nCreditos;
@@ -330,7 +371,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  JOIN orctiporec ON o58_codigo = o15_codigo
 					  inner join infocomplementaresinstit on  o58_instit = si09_instit
 					  inner join infocomplementares on si09_instit = si08_instit
-					  where o58_instit = ".db_getsession('DB_instit')." and o58_anousu = " . db_getsession("DB_anousu");
+					  where o58_instit = " . db_getsession('DB_instit') . " and o58_anousu = " . db_getsession("DB_anousu");
                     $nContaCorrente = 101;
 
                 } else {
@@ -360,7 +401,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
 					  JOIN orctiporec ON o58_codigo = o15_codigo
 					  left join infocomplementaresinstit on  o58_instit = si09_instit
-					  where o58_instit = ".db_getsession('DB_instit')." and DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes}";
+					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes}";
                     //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
 
                     $nContaCorrente = 102;
@@ -568,7 +609,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                 FROM conplanoorcamento
                                                 INNER JOIN conplanoorcamentoanalitica ON c61_codcon = conplanoorcamento.c60_codcon AND c61_anousu = conplanoorcamento.c60_anousu
                                                 INNER JOIN orctiporec ON conplanoorcamentoanalitica.c61_codigo = orctiporec.o15_codigo
-                                                WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = ".db_getsession('DB_instit')."
+                                                WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
                                                 AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu");
 
                 $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die($sSqlVinculoContaOrcamento);
@@ -919,7 +960,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     o15_codtri as codfontrecursos,
                                     e60_codemp nroempenho,
                                     e60_numemp numemp,
-                                    e60_anousu anoinscricao
+                                    e60_anousu anoinscricao,
+                                    o58_orgao,o58_unidade
                                     from conlancamval
                                     inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                     inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
@@ -1056,7 +1098,22 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 }
                             }
 
-                            $sHash14 = '14' . $oContas10->si177_contacontaabil . $oReg14->codorgao . $oReg14->codunidadesub . $oReg14->codunidadesub . $oReg14->codfuncao . $oReg14->codsubfuncao . $oReg14->codprograma;
+                            /**
+                             * Realiza o tratamento do codunidadesub e do codunidadesuborig
+                             * 1. Toma-se como verdade que o codunidadesub é sempre igual ao codunidadesuborig, ou seja, não houve alteração
+                             * 2. Verifica se existe dotacao em 2015 passando a unidade e o orgao
+                             * 3. Caso nao exista, então buscamos o padrao e passamos para o sCodunidadesub, e o valor do sCodunidadesub é passado para o $sCodunidadesubOrig
+                             */
+
+                            $sCodunidadesub = $oReg14->codunidadesub;
+                            $sCodunidadesubOrig = $oReg14->codunidadesub;
+
+                            if (!($oReg14->codunidadesub == $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade))) {
+                                $sCodunidadesub = $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade);
+                                $sCodunidadesubOrig = $oReg14->codunidadesub;
+                            }
+
+                            $sHash14 = '14' . $oContas10->si177_contacontaabil . $oReg14->codorgao . $sCodunidadesub . $sCodunidadesubOrig . $oReg14->codfuncao . $oReg14->codsubfuncao . $oReg14->codprograma;
                             $sHash14 .= $oReg14->idacao . $oReg14->idsubacao . $sElemento . $sSubElemento . $oReg14->codfontrecursos . $oReg14->nroempenho . $oReg14->anoinscricao;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg14[$sHash14])) {
@@ -1066,8 +1123,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $obalancete14->si181_tiporegistro = 14;
                                 $obalancete14->si181_contacontabil = $oContas10->si177_contacontaabil;
                                 $obalancete14->si181_codorgao = $oReg14->codorgao;
-                                $obalancete14->si181_codunidadesub = $oReg14->codunidadesub;
-                                $obalancete14->si181_codunidadesuborig = $oReg14->codunidadesub;
+                                $obalancete14->si181_codunidadesub = $sCodunidadesub;
+                                $obalancete14->si181_codunidadesuborig = $sCodunidadesubOrig;
                                 $obalancete14->si181_codfuncao = $oReg14->codfuncao;
                                 $obalancete14->si181_codsubfuncao = $oReg14->codsubfuncao;
                                 $obalancete14->si181_codprograma = trim($oReg14->codprograma);
