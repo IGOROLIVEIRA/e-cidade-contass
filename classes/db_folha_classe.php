@@ -867,8 +867,8 @@ class cl_folha {
      $sql .= "                             and rh02_instit = ".db_getsession("DB_instit");  
      $sql .= "      inner join rhpessoalmovcontabancaria on rhpessoalmov.rh02_seqpes = rhpessoalmovcontabancaria.rh138_rhpessoalmov ";
      $sql .= "                                          and rhpessoalmov.rh02_instit = rhpessoalmovcontabancaria.rh138_instit";
-     $sql .= "      inner join contabancaria on contabancaria.db83_sequencial = rhpessoalmovcontabancaria.rh138_contabancaria";
-     $sql .= "      inner join bancoagencia  on bancoagencia.db89_sequencial = contabancaria.db83_bancoagencia";
+     $sql .= "      left join contabancaria on contabancaria.db83_sequencial = rhpessoalmovcontabancaria.rh138_contabancaria";
+     $sql .= "      left join bancoagencia  on bancoagencia.db89_sequencial = contabancaria.db83_bancoagencia";
      $sql2 = "";
      if($dbwhere==""){
        if($r38_regist!=null ){
