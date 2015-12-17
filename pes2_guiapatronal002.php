@@ -299,7 +299,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            round(sum(parcela_patronal),2)       as patronal1
     from 
     (
-    select r01_regist                         as soma,
+    select rh01_regist                         as soma,
            sum(base)                          as base,
            sum(ded)                           as ded,
            sum(dev)                           as dev,
@@ -343,8 +343,8 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            ";
     }
     $result = db_query($sql);
-//  echo $sql;exit;
-    //db_criatabela($result);exit;
+// echo $sql;exit;
+  //db_criatabela($result);exit;
     $xxnum = pg_numrows($result);
     if ($xxnum == 0){
       db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Códigos cadastrados no período de '.$mes.' / '.$ano);
