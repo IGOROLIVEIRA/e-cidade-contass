@@ -448,19 +448,6 @@ class cl_empautoriza {
          return false;
        }
      }
-     if(trim($this->e54_numerl)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e54_numerl"])){
-       $sql  .= $virgula." e54_numerl = $this->e54_numerl ";
-       $virgula = ",";
-       if(trim($this->e54_numerl) == null ){
-         $this->erro_sql = " Campo Número da Licitação: nao Informado.";
-         $this->erro_campo = "e54_numerl";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
      if(trim($this->e54_destin)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e54_destin"])){
        $sql  .= $virgula." e54_destin = '$this->e54_destin' ";
        $virgula = ",";
