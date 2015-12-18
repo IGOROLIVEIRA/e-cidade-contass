@@ -427,7 +427,7 @@ class RequisicaoMaterial {
           if ($oDaoMatEstoqueIniMei->erro_status == '0') {
 
             $sMsgErro  = "Erro[6] - Não Foi possível atualizar saldo do estoque do ";
-            $sMsgErro .= "material({$aItensRequisicao->iCodMater}).\nErro Técnico: \n{$oDaoMatEstoqueIniMei->erro_msg}";
+            $sMsgErro .= "material({$aItensRequisicao[$iInd]->iCodMater}).\nErro Técnico: \n{$oDaoMatEstoqueIniMei->erro_msg}";
             throw new Exception($sMsgErro);
           }
           /*
