@@ -307,7 +307,7 @@ function js_mostraissbase1(chave1,chave2){
 }
 function js_pesquisa_tomador(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_issnotaavulsatomador','db_iframe_cgm','func_nome.php?testanome=true&funcao_js=parent.js_mostratomador1|z01_numcgm|z01_nome|z01_cgccpf','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo.iframe_issnotaavulsatomador','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostratomador1|z01_numcgm|z01_nome|z01_cgccpf','Pesquisa',true);
   } 
 }
 function js_mostratomador1(chave1,chave2,chave3){
