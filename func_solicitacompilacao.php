@@ -162,13 +162,13 @@ $clsolicita->rotulo->label("pc10_data");
         $campos = " distinct ".$campos;
         if (isset($trazapenascomlicitacao)) {
           
-          $where_depart .= "and l20_licsituacao = 1";
+          $where_depart .= "and l20_licsituacao = 10";
           $campos       .= " , l20_codtipocom";
         }
 
         if (isset($apenaslicitacaojulgada)) {
 
-          $where_depart .= "and l20_licsituacao = 1 ";
+          $where_depart .= "and l20_licsituacao = 10";
         }
         if (isset($validavigencia)) {
 
