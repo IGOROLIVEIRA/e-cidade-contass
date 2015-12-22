@@ -41,22 +41,26 @@ class RestosAPagar extends EmpenhoFinanceiro {
    * @param integer $iInstituicao
    */
   public static function getValorNaoProcessadoAno($iAno, $iInstituicao) {
+    try {
+      $oDaoEmpresto = db_utils::getDao("empresto");
 
-    $oDaoEmpresto  = db_utils::getDao("empresto");
+      $WhereEmpresto = "e91_anousu = {$iAno}";
+      $WhereEmpresto .= " and e60_instit = {$iInstituicao}";
 
-    $WhereEmpresto  = "e91_anousu = {$iAno}";
-    $WhereEmpresto .= " and e60_instit = {$iInstituicao}";
+      $sCampos = "coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0) as valor";
+      $sSqlEmpresto = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null, $WhereEmpresto);
+      $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
 
-    $sCampos       = "coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0) as valor";
-    $sSqlEmpresto  = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null,$WhereEmpresto);
-    $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+      $nValor = db_utils::fieldsMemory($rsSqlEmpresto, 0)->valor;
+      return (float) $nValor;
 
-    if ($rsSqlEmpresto == false || $oDaoEmpresto->erro_status == "0") {
+    } catch (Exception $ex){
+
       throw new Exception('Erro técnico: erro ao buscar valor de restos a pagar não processado1.');
+
     }
 
-    $nValor = db_utils::fieldsMemory($rsSqlEmpresto, 0)->valor;
-    return (float) $nValor;
+
   }
 
   /**
@@ -65,17 +69,19 @@ class RestosAPagar extends EmpenhoFinanceiro {
    * @param integer $iInstituicao
    */
   public static function getValorNaoProcessadoAnalitico($iAno, $iInstituicao) {
+    try {
+      $oDaoEmpresto = db_utils::getDao("empresto");
+      $WhereEmpresto = "e91_anousu = {$iAno}";
+      $WhereEmpresto .= " and e60_instit = {$iInstituicao} group by 1 having round(coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0),4) > 0";
 
-    $oDaoEmpresto  = db_utils::getDao("empresto");
-    $WhereEmpresto  = "e91_anousu = {$iAno}";
-    $WhereEmpresto .= " and e60_instit = {$iInstituicao} group by 1 having round(coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0),4) > 0";
+      $sCampos = "e91_numemp, round(sum(e91_vlremp - e91_vlranu - e91_vlrliq),4) as valor";
+      $sSqlEmpresto = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null, $WhereEmpresto);
+      $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
 
-    $sCampos       = "e91_numemp, round(sum(e91_vlremp - e91_vlranu - e91_vlrliq),4) as valor";
-    $sSqlEmpresto  = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null,$WhereEmpresto); 
-    $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+    } catch (Exception $ex){
 
-    if ($rsSqlEmpresto == false || $oDaoEmpresto->erro_status == "0") {
       throw new Exception('Erro técnico: erro ao buscar valor de restos a pagar não processado.2');
+
     }
 
     return $rsSqlEmpresto;
@@ -87,22 +93,25 @@ class RestosAPagar extends EmpenhoFinanceiro {
    * @param integer $iInstituicao
    */
   public static function getValorProcessadoAno($iAno, $iInstituicao) {
+    try {
+      $oDaoEmpresto = db_utils::getDao("empresto");
 
-    $oDaoEmpresto  = db_utils::getDao("empresto");
+      $WhereEmpresto = "e91_anousu = {$iAno}";
+      $WhereEmpresto .= " and e60_instit = {$iInstituicao}";
 
-    $WhereEmpresto  = "e91_anousu = {$iAno}";
-    $WhereEmpresto .= " and e60_instit = {$iInstituicao}";
+      $sCampos = "coalesce(sum(e91_vlrliq - e91_vlrpag), 0) as valor";
+      $sSqlEmpresto = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null, $WhereEmpresto);
+      $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
 
-    $sCampos       = "coalesce(sum(e91_vlrliq - e91_vlrpag), 0) as valor";
-    $sSqlEmpresto  = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null,$WhereEmpresto);
-    $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+      $nValor = db_utils::fieldsMemory($rsSqlEmpresto, 0)->valor;
+      return (float) $nValor;
 
-    if ($rsSqlEmpresto == false || $oDaoEmpresto->erro_status == "0") {
+    } catch (Exception $ex){
+
       throw new Exception('Erro técnico: erro ao buscar valor de restos a pagar processado.');
+
     }
 
-    $nValor = db_utils::fieldsMemory($rsSqlEmpresto, 0)->valor;
-    return (float) $nValor;
   }
 
   /**
@@ -111,16 +120,17 @@ class RestosAPagar extends EmpenhoFinanceiro {
    * @param integer $iInstituicao
    */
   public static function getValorProcessadoAnalitico($iAno, $iInstituicao) {
+    try {
 
-    $oDaoEmpresto  = db_utils::getDao("empresto");
-    $WhereEmpresto  = "e91_anousu = {$iAno}";
-    $WhereEmpresto .= " and e60_instit = {$iInstituicao} group by 1 having round(sum(e91_vlrliq - e91_vlrpag),4) > 0";
+      $oDaoEmpresto = db_utils::getDao("empresto");
+      $WhereEmpresto = "e91_anousu = {$iAno}";
+      $WhereEmpresto .= " and e60_instit = {$iInstituicao} group by 1 having round(sum(e91_vlrliq - e91_vlrpag),4) > 0";
 
-    $sCampos       = "e91_numemp, round(sum(e91_vlrliq - e91_vlrpag),4) as valor";
-    $sSqlEmpresto  = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null,$WhereEmpresto);
-    $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+      $sCampos = "e91_numemp, round(sum(e91_vlrliq - e91_vlrpag),4) as valor";
+      $sSqlEmpresto = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null, $WhereEmpresto);
+      $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
 
-    if ($rsSqlEmpresto == false || $oDaoEmpresto->erro_status == "0") {
+    } catch (Exception $ex){
       throw new Exception('Erro técnico: erro ao buscar valor de restos a pagar processado.');
     }
 
