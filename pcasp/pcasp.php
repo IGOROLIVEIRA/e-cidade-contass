@@ -46,17 +46,16 @@ if (pg_num_rows($rsResult) > 0) {
 	$oDados['planoorc'] =$linha->planoorc;
 	$oDados['planoorc'] =  $linha->planoorc;
 	$oDados['descplano'] = $linha->descplano;
-	$aDados[]=$oDados;
 	
 	
-	/*
+	
 	if(substr($linha->planoorc, 0,1) != '3' && substr($linha->planoorc, 0,1) != '4'){
 		$oDados['planoorc'] = "4".str_pad(str_replace(".", "", str_replace(" ", "", $linha->planoorc)),14,'0',STR_PAD_RIGHT);
 		
 	}else{
 		$oDados['planoorc'] = "3".str_pad(str_replace(".", "", str_replace(" ", "", $linha->planoorc)),14,'0',STR_PAD_RIGHT);
-	}*/
-		
+	}	
+	$aDados[]=$oDados;
 	
   }
 } else {
@@ -83,8 +82,7 @@ foreach ($aDados as $aD) {
    
     $rsResult_pcasp = pg_query($conexao_postgre, "select c60_codcon 
    							from conplano WHERE c60_estrut = '{$aD['codpcasp']}' and c60_anousu = ".$dbano);
-	
-          	if (pg_num_rows($rsResult_pcasp) > 0) {
+            if (pg_num_rows($rsResult_pcasp) > 0) {
           		for($x = 0; $x< pg_num_rows($rsResult_pcasp);$x++){
 						$linha = pg_fetch_object($rsResult_pcasp,$x);
 						$oDadosDb['codpcasp'] = $linha->c60_codcon;
