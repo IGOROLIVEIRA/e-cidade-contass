@@ -223,8 +223,27 @@ if (!empty($oProcessoProtocolo)) {
       <td nowrap="nowrap" title="<?=@$Tl20_local?>">
         <b><?=@$Ll20_local?></b>
       </td>
-      <td colspan='3' align='left' class="valor" >
+      <td nowrap="nowrap" class="valor" style="text-align: left;" >
         <?php echo $oLicitatacao->l20_local ?>
+      </td>
+
+      <td nowrap="nowrap" title="<?=@$Tl20_tipojulg?>">
+        <b><?=@$Ll20_tipojulg?></b>
+      </td>
+      <td nowrap="nowrap" class="valor" style="text-align: left;" >
+        <?php switch($oLicitatacao->l20_tipojulg){
+          case 1:
+                echo "Por item";
+                break;
+          case 2:
+                echo "Global";
+                break;
+          case 3:
+                echo "Por lote";
+                break;
+          default:
+                echo "0";
+        } ?>
       </td>
     </tr>
      <tr>
