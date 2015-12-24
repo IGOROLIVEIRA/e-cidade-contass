@@ -1,0 +1,11 @@
+begin;
+select fc_startsession();
+delete from bensmotbaixa;
+insert into bensmotbaixa (t51_motivo,t51_descr) values (1,'Alienacao');
+insert into bensmotbaixa (t51_motivo,t51_descr) values (2,'Obsolescencia (bens inserviveis)');
+insert into bensmotbaixa (t51_motivo,t51_descr) values (3,'Sinistro');
+insert into bensmotbaixa (t51_motivo,t51_descr) values (4,'Doacao');
+insert into bensmotbaixa (t51_motivo,t51_descr) values (5,'Cessao');
+insert into bensmotbaixa (t51_motivo,t51_descr) values (6,'Transferencia');
+insert into bensmotbaixa (t51_motivo,t51_descr) values (99,'Outros');
+commit;
