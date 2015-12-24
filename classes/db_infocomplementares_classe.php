@@ -105,26 +105,14 @@ class cl_infocomplementares {
      * Campo adicionado por causa do sicom balancete em 2015
      */
     if($this->si08_orcmodalidadeaplic == null ){
-      $this->erro_sql = " Campo Orçamento por modalidade de aplicação não Informado.";
-      $this->erro_campo = "si08_orcmodalidadeaplic";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
+      $this->si08_orcmodalidadeaplic = "null";
     }
 
     /*
      * Campo adicionado por causa do sicom balancete em 2015
      */
     if($this->si08_codunidadesub == null ){
-      $this->erro_sql = " Campo Orçamento por modalidade de aplicação não Informado.";
-      $this->erro_campo = "si08_codunidadesub";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
+      $this->si08_codunidadesub = "null";
     }
 
     if($si08_sequencial == "" || $si08_sequencial == null ){
@@ -290,17 +278,9 @@ class cl_infocomplementares {
      * Campo adicionado por causa do sicom balancete em 2015
      */
     if(trim($this->si08_orcmodalidadeaplic)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si08_orcmodalidadeaplic"])){
-      $sql  .= $virgula." si08_orcmodalidadeaplic = $this->si08_orcmodalidadeaplic ";
+      $sql  .= $virgula." si08_orcmodalidadeaplic = ". ($this->si08_orcmodalidadeaplic == "" || $this->si08_orcmodalidadeaplic == null ? "null" : $this->si08_orcmodalidadeaplic);
       $virgula = ",";
-      if(trim($this->si08_orcmodalidadeaplic) == null ){
-        $this->erro_sql = " Campo Orçamento por modalidade de aplicação não Informado.";
-        $this->erro_campo = "si08_orcmodalidadeaplic";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
+
     }
 
     /**
@@ -310,13 +290,9 @@ class cl_infocomplementares {
       $sql  .= $virgula." si08_codunidadesub = '$this->si08_codunidadesub' ";
       $virgula = ",";
       if(trim($this->si08_codunidadesub) == null ){
-        $this->erro_sql = " Campo Orçamento por modalidade de aplicação não Informado.";
-        $this->erro_campo = "si08_codunidadesub";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
+        $sql  .= $virgula." si08_codunidadesub = null ";
+        $virgula = ",";
+
       }
     }
 
