@@ -1399,7 +1399,7 @@ if($res_exc == false){
     $sWherePensao .= "                and rh01_instit = ".db_getsession("DB_instit").")";
     $result_test = $clpensao->sql_record($clpensao->sql_query_file (null,null,null,null,"*",null,$sWherePensao));
 
-    if ($result_test && pg_num_rows($result_test) == 0) {
+    if ($clpensao->numrows==0){
 
       $sWherePensao  = "     r52_anousu = ".$dataii_ano;
       $sWherePensao .= " and r52_mesusu = ".$dataii_mes;
