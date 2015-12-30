@@ -88,7 +88,7 @@ $oDaoTipoProcDpto = new cl_tipoprocdepto();
   <tr> 
     <td align="center" valign="top"> 
       <?
-      $where = " p51_instit=".db_getsession("DB_instit");
+      $where = " p51_instit=".db_getsession("DB_instit")." and p200_ano = ". db_getsession("DB_anousu");
       if ((isset($grupo) && $grupo == 1) || (isset($grupo) && $grupo == 2)) {
       	$where .= " and p51_tipoprocgrupo = $grupo";
       }
@@ -128,7 +128,6 @@ $oDaoTipoProcDpto = new cl_tipoprocdepto();
           $sCamposDepart  = "distinct {$campos}";
           $sSqlBuscaTipos = $oDaoTipoProcDpto->sql_query_depto(null, $sCamposDepart, "p51_codigo", $sWhereDepart);
         }
-
         db_lovrot($sSqlBuscaTipos, 15, "()", "", $funcao_js);
       } else {
       	
@@ -141,7 +140,7 @@ $oDaoTipoProcDpto = new cl_tipoprocdepto();
      	  $sWhere .= "and {$where}                                                                  ";
      	  
      	  if (isset($sDepartamentos) && $sDepartamentos != "") {
-          
+
      	    $sWhereDepart   = " and db_depart.coddepto in ({$sDepartamentos})";
           $sCamposDepart  = "distinct {$campos}";
           $sSqlBuscaChave = $oDaoTipoProcDpto->sql_query_depto(null, "*", "p51_codigo", $sWhere. $sWhereDepart);

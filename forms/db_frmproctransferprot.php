@@ -170,7 +170,7 @@ function js_carregaGridProcessos() {
 	oGridProcessos = new DBGrid('ctnProcessos');
 	oGridProcessos.nameInstance = 'oGridProcessos';
 	oGridProcessos.setCheckbox(0);
-	oGridProcessos.setCellWidth(new Array("15%", "15%", "15%", "15%", "30%", "20%", "20%"));
+	oGridProcessos.setCellWidth(new Array("15%", "15%", "15%", "15%", "30%", "20%", "10%", "10%", "10%", "30%"));
 
 	/**
 	 * Alterado a visibilidade da Grid de acordo com o Módulo que acessa o fonte, sendo que é utilizado uma variável
@@ -185,23 +185,28 @@ function js_carregaGridProcessos() {
 	  	                               "Processo", 
 	  	                               "Atendimento", 
 	  	                               "Requerente", 
-	  	                               "Tipo Processo", 
+	  	                               "Tipo Processo",
+                                       "Numeração",
 	  	                               "Depto. Padrão",
-	  	                               "Cod. Depart.",
-	  	                               "Limite")
+	  	                               "Limite",
+                                       "Cod. Depart.")
                                     );
-	oGridProcessos.setCellAlign(new Array('center', 'center', 'center', 'center', 'left', 'left', 'left'));
+	oGridProcessos.setCellAlign(new Array('center', 'center', 'center', 'center', 'left', 'left', 'left','center','center','center'));
 
 	oGridProcessos.aHeaders[1].lDisplayed = false;
 	oGridProcessos.aHeaders[2].lDisplayed = false;
 	oGridProcessos.aHeaders[8].lDisplayed = false;
-	oGridProcessos.aHeaders[9].lDisplayed = false;
+
+
+
 	if (oUrl.grupo == 1 ) {
 
 	  oGridProcessos.aHeaders[1].lDisplayed = true;
 		oGridProcessos.aHeaders[2].lDisplayed = true;
 		oGridProcessos.aHeaders[3].lDisplayed = false;
 		oGridProcessos.aHeaders[4].lDisplayed = false;
+        oGridProcessos.aHeaders[9].lDisplayed = false;
+        oGridProcessos.aHeaders[10].lDisplayed = true;
 	}
 	
 	oGridProcessos.show($('ctnProcessos'));
@@ -275,9 +280,10 @@ function js_retornoPopulaGridProcesos(oAjax) {
         aLinha[3] = oProcesso.ov01_numero + '/' + oProcesso.ov01_anousu;
         aLinha[4] = oProcesso.z01_nome.urlDecode();
         aLinha[5] = oProcesso.p51_descr.urlDecode();
-        aLinha[6] = oProcesso.coddepto + ' - ' + oProcesso.descrdepto.urlDecode();
+        aLinha[9] = oProcesso.coddepto + ' - ' + oProcesso.descrdepto.urlDecode();
         aLinha[7] = oProcesso.coddepto;
         aLinha[8] = oProcesso.limiteBloqueado;
+        aLinha[6] = oProcesso.p58_numeracao;
         
       	sClass = "normal";
 				if (parseInt($F('id_usuario')) == oProcesso.p58_id_usuario) {
@@ -331,6 +337,7 @@ function js_reOrdenaGridProcessos(sOrdenador) {
 	  case 'col8':
 		  var sCampo = 'descrdepto';
 		break;
+
 	}
 	/**
 	 * Chamamos a pesquisa que popula a grid que já está preparada para receber na assinatura um campo
@@ -391,13 +398,14 @@ function js_telaDiferencas(aListaDiferenca) {
       aRow[2] = "<input style='width:100%' type='text' id='dia"+oProcesso.p58_codproc+"' value=''/>";
       aRow[3] = sSelect;
       aRow[4] = Object.toJSON(oProcesso);
+
       oDBGridProcessosDif.addRow(aRow);
-      
+
     }
   );
 
   oDBGridProcessosDif.renderRows();
-    
+
 }
 
 

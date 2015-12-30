@@ -60,7 +60,8 @@ class cl_protprocesso {
    var $p58_publico = 'f'; 
    var $p58_instit = 0; 
    var $p58_numero = null; 
-   var $p58_ano = 0; 
+   var $p58_ano = 0;
+   var $p58_numeracao = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  p58_codproc = int4 = Número de Controle 
@@ -78,10 +79,11 @@ class cl_protprocesso {
                  p58_publico = bool = Despacho Publico 
                  p58_instit = int4 = Código da Instituição 
                  p58_numero = varchar(30) = Número do Processo 
-                 p58_ano = int4 = Ano do Processo 
+                 p58_ano = int4 = Ano do Processo
+                 p58_numeracao = int4 = Numeração
                  ";
-   //funcao construtor da classe 
-   function cl_protprocesso() { 
+   //funcao construtor da classe
+   function cl_protprocesso() {
      //classes dos rotulos dos campos
      $this->rotulo = new rotulo("protprocesso"); 
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
@@ -253,6 +255,14 @@ class cl_protprocesso {
        $this->erro_status = "0";
        return false;
      }
+     if(($this->p58_numeracao == null) || ($this->p58_numeracao == "") ){
+         $this->erro_sql = " Campo Numeração nao declarado.";
+         $this->erro_banco = "Chave Primaria zerada.";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+     }
      $sql = "insert into protprocesso(
                                        p58_codproc 
                                       ,p58_codigo 
@@ -269,7 +279,8 @@ class cl_protprocesso {
                                       ,p58_publico 
                                       ,p58_instit 
                                       ,p58_numero 
-                                      ,p58_ano 
+                                      ,p58_ano
+                                      ,p58_numeracao
                        )
                 values (
                                 $this->p58_codproc 
@@ -286,10 +297,11 @@ class cl_protprocesso {
                                ,'$this->p58_interno' 
                                ,'$this->p58_publico' 
                                ,$this->p58_instit 
-                               ,'$this->p58_numero' 
-                               ,$this->p58_ano 
+                               ,'$this->p58_numero'
+                               ,$this->p58_ano
+                               ,$this->p58_numeracao
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -522,6 +534,19 @@ class cl_protprocesso {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->p58_numeracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p58_numeracao"])){
+         $sql  .= $virgula." p58_numeracao = $this->p58_numeracao ";
+         $virgula = ",";
+         if(trim($this->p58_numeracao) == null ){
+             $this->erro_sql = " Campo Ano do Processo nao Informado.";
+             $this->erro_campo = "Numeracao";
+             $this->erro_banco = "";
+             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+             $this->erro_status = "0";
+             return false;
+         }
      }
      $sql .= " where ";
      if($p58_codproc!=null){
@@ -1244,7 +1269,7 @@ $virgula = ",";
      * Não foi utilizada a classe protprocesso por conta da complexibilidade da mesma.
      */
     $sSqlBuscaProcessos  = " select x.* ";
-    $sSqlBuscaProcessos .= "   from (select p58_codproc, p58_requer as z01_nome,  p51_descr,  p58_id_usuario, p58_codandam, ";
+    $sSqlBuscaProcessos .= "   from (select p58_numeracao, p58_codproc, p58_requer as z01_nome,  p51_descr,  p58_id_usuario, p58_codandam, ";
     $sSqlBuscaProcessos .= "                coddepto, descrdepto, limite, p58_ano, p58_numero||'/'||p58_ano as processoprotocolo, ";
     $sSqlBuscaProcessos .= "                ov01_numero, ov01_anousu ";
     $sSqlBuscaProcessos .= "           from protprocesso ";

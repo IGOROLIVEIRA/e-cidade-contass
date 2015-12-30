@@ -132,12 +132,13 @@ $db_botao = true;
 
           db_atutermometro($i, pg_num_rows($rs), 'termometro');
 					db_fieldsmemory($rs,$i);
-					$sqlproc = "select p58_despacho,p58_publico  from protprocesso where p58_codproc = ".$p63_codproc;
+					$sqlproc = "select p58_despacho,p58_publico, p58_numeracao  from protprocesso where p58_codproc = ".$p63_codproc;
 
 					$rsproc = db_query($sqlproc);
 					//inclui o andamento
-					$despach = pg_result($rsproc,0,"p58_despacho");
-					$publico = pg_result($rsproc,0,"p58_publico");
+					$despach   = pg_result($rsproc,0,"p58_despacho");
+					$publico   = pg_result($rsproc,0,"p58_publico");
+					$numeracao = pg_result($rsproc,0,"p58_numeracao");
 					$despach =  str_replace("'","",$despach);
 					$publico =  str_replace("'","",$publico);
 
@@ -187,10 +188,11 @@ $db_botao = true;
 					}
 
 					//atualiza codandam da tabela protprocesso;
-					$clprotprocesso->p58_codproc  = $p63_codproc;
-					$clprotprocesso->p58_codandam = $clprocandam->p61_codandam;
-					$clprotprocesso->p58_despacho = " ";
-          $clprotprocesso->p58_instit   = db_getsession("DB_instit");
+					$clprotprocesso->p58_codproc   = $p63_codproc;
+					$clprotprocesso->p58_codandam  = $clprocandam->p61_codandam;
+					$clprotprocesso->p58_despacho  = " ";
+					$clprotprocesso->p58_numeracao = $numeracao;
+					$clprotprocesso->p58_instit    = db_getsession("DB_instit");
 					$clprotprocesso->alterar($p63_codproc);
 
 					if ($clprotprocesso->erro_status == "1") {
@@ -228,18 +230,19 @@ $db_botao = true;
 										descrdepto,
 										login,
 							array_to_string( array_accum( p58_numero||'/'||p58_ano ), ', ') as p63_codproc,
---										case
---											when count(*) = 1 then
---												(select  cast(protprocesso.p58_numero||'/'||p58_ano as varchar)
---													 from proctransferproc x
---													      inner join protprocesso on p63_codproc = p58_codproc
---													where x.p63_codtran = p62_codtran
---													limit 1)
---											else
---												null
---										end as p63_codproc,
+/*										case
+											when count(*) = 1 then
+												(select  cast(protprocesso.p58_numero||'/'||p58_ano as varchar)
+													 from proctransferproc x
+													      inner join protprocesso on p63_codproc = p58_codproc
+													where x.p63_codtran = p62_codtran
+													limit 1)
+											else
+												null
+										end as p63_codproc,*/
                     p58_requer,
-                    p51_descr as p58_codigo
+                    p51_descr as p58_codigo,
+                    p58_numeracao as dl_Numeraçao
 							 from proctransferproc
 				 inner join proctransfer on p62_codtran = p63_codtran
 				 inner join protprocesso on p58_codproc = p63_codproc
@@ -260,7 +263,8 @@ $db_botao = true;
                     login,
                     p63_codproc,
                     p58_requer,
-                    p51_descr
+                    p51_descr,
+                    p58_numeracao
 					 order by p62_codtran desc";
 
       //echo $sqltran;

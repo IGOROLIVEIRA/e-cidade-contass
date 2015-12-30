@@ -466,6 +466,7 @@ class cl_tipoproc {
      $sql .= "      inner join db_config     on db_config.codigo             = tipoproc.p51_instit";
      $sql .= "      inner join tipoprocgrupo on tipoprocgrupo.p40_sequencial = tipoproc.p51_tipoprocgrupo";
      $sql .= "      inner join cgm           on cgm.z01_numcgm               = db_config.numcgm";
+     $sql .= "      left  join numeracaotipoproc           on numeracaotipoproc.p200_tipoproc  = tipoproc.p51_codigo";
      
      $sql2 = "";
      if($dbwhere==""){

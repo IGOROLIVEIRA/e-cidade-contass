@@ -127,7 +127,8 @@ $oDaoProtPocesso = db_utils::getDao('protprocesso');
   					        nome,
   		    		      p58_codigo,
   					        cgm.*,
-                    to_char(p58_dtproc,'DD/MM/YYYY') as dtproc
+                    to_char(p58_dtproc,'DD/MM/YYYY') as dtproc,
+                    p58_numeracao
                from protprocesso 
               	 	  inner join tipoproc on p58_codigo = p51_codigo
   			   		      inner join cgm on z01_numcgm = p58_numcgm
@@ -193,6 +194,7 @@ if ($oProtParam->p90_modelcapaproc != 3) {
     $pdf1->p58_dtproc  = $p58_dtproc;
     $pdf1->nome	   = $nome;
     $pdf1->p58_obs	   = $p58_obs;
+    $pdf1->p58_numeracao = $p58_numeracao;
   
     if (isset($p90_imprimevar) and $p90_imprimevar == "t"){
       $pdf1->result_vars = $clprocvar->sql_record($clprocvar->sql_query_varconteudo($p58_codproc,

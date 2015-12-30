@@ -40,6 +40,7 @@ require_once("classes/db_db_syscampo_classe.php");
 require_once("classes/db_procprocessodoc_classe.php");
 require_once("classes/db_arrenumcgm_classe.php");
 require_once("classes/db_protparam_classe.php");
+require_once("classes/db_numeracaotipoproc_classe.php");
 require_once("dbforms/db_funcoes.php");
 
 db_app::import("protocolo.ProcessoProtocoloNumeracao");
@@ -57,6 +58,7 @@ $clprocprocessodoc = new cl_procprocessodoc;
 $clproctipovar     = new cl_proctipovar;
 $clandpadrao       = new cl_andpadrao;
 $clarrenumcgm      = new cl_arrenumcgm;
+$clnumeracaotipoproc = new cl_numeracaotipoproc;
 
 $db_opcao = 1;
 $sqlerro  = false;
@@ -65,6 +67,14 @@ $db_botao = false;
 $p58_dtproc_dia = date("d", db_getsession("DB_datausu"));
 $p58_dtproc_mes = date("m", db_getsession("DB_datausu"));
 $p58_dtproc_ano = date("Y", db_getsession("DB_datausu"));
+
+
+$result = $clnumeracaotipoproc->sql_record($clnumeracaotipoproc->sql_query('','*','',"p200_tipoproc = $p58_codigo and p200_ano = ".db_getsession("DB_anousu")  ));
+
+if ($clnumeracaotipoproc->numrows != null || $clnumeracaotipoproc->numrows != "") {
+  db_fieldsmemory($result,0);
+  $p58_numeracao = $p200_numeracao+1;
+}
 
 if (isset($oGet->incpro) && $oGet->incpro != "") {
   $sOnLoad  = "";
@@ -98,9 +108,18 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
        $clprotprocesso->p58_instit     = db_getsession("DB_instit");
        $clprotprocesso->p58_numero     = "{$iNumeroProcesso}";
        $clprotprocesso->p58_ano        = db_getsession("DB_anousu");
+       $clprotprocesso->p58_numeracao  = $p58_numeracao; 
        $clprotprocesso->incluir($p58_codproc);
 
        $p58_codproc = $clprotprocesso->p58_codproc;
+
+       $result = $clnumeracaotipoproc->sql_record($clnumeracaotipoproc->sql_query('','*','',"p200_tipoproc = $p58_codproc"));
+       db_fieldsmemory($result,0);
+
+       $clnumeracaotipoproc->p200_codigo = $p200_codigo;
+       $clnumeracaotipoproc->p200_numeracao = $p58_numeracao;
+       $clnumeracaotipoproc->alterar($p200_codigo);
+
 
        if ( $clprotprocesso->erro_status == '0' ) {
          $lSqlErro = true;
@@ -186,6 +205,8 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
 
   }
 }
+
+
 ?>
 <html>
 <head>

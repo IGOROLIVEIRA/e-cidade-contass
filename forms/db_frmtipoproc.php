@@ -88,7 +88,7 @@ $func_iframe->altura=430;
 $func_iframe->titulo='Pesquisa';
 $func_iframe->iniciarVisivel = false;
 $func_iframe->mostrar();
-if($db_opcao == 22 || $db_opcao == 33){
+if($db_opcao == 22  || $db_opcao == 33 ){
 ?>
 <script>
 onLoad=js_pesquisa();

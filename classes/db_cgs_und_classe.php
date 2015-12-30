@@ -1689,7 +1689,7 @@ if($this->z01_i_cgm == null ){
                                       ".($this->z01_b_faleceu == "" ? "FALSE":"TRUE").",
                                       ".($this->z01_d_falecimento == "null" || $this->z01_d_falecimento == ""?"null":"'".$this->z01_d_falecimento."'").",
                                       ".($this->z01_b_descnomemae == "" ? "FALSE":"TRUE").",
-                                      '$this->z01_i_naturalidade',
+                                      ".(empty($this->z01_i_naturalidade) ? '0' : "'".$this->z01_i_naturalidade."'").",
                                       ".(empty($this->z01_i_paisorigem) ? 'null' : "'".$this->z01_i_paisorigem."'").",
                                       ".(empty($this->z01_v_municnasc) ? 'null' : "'".$this->z01_v_municnasc."'").",
                                       ".(empty($this->z01_v_ufnasc) ? 'null' : "'".$this->z01_v_ufnasc."'").",

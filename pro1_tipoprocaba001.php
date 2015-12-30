@@ -36,30 +36,23 @@ db_postmemory($HTTP_SERVER_VARS);
 db_postmemory($HTTP_POST_VARS);
 $cltipoproc = new cl_tipoproc;
 $clnumeracaotipoproc = new cl_numeracaotipoproc;
-$db_opcao = 33;
-$db_botao = false;
-if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir"){
-  $result = $cltipoproc->sql_record("select p58_codigo from protprocesso where p58_codigo = $p51_codigo limit 1");
-  if($cltipoproc->numrows > 0){
-   db_msgbox('Aviso:\nExclusão não permitida!\nEste Tipo de Processo possui processos vinculados.');   	
-   $sqlerro = true;	
-  }
+$db_opcao = 1;
+$db_botao = true;
+if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir"){
+
+  db_inicio_transacao();
   
-  if($sqlerro == false){ 
-   db_inicio_transacao();
+  $cltipoproc->p51_tipoprocgrupo = 1; 
+  $cltipoproc->p51_identificado  = 'false';
+  $cltipoproc->p51_instit        = db_getsession("DB_instit");
+  $cltipoproc->incluir($p51_codigo);
 
-   $result = $clnumeracaotipoproc->sql_record($clnumeracaotipoproc->sql_query('','*','',"p200_tipoproc = $p51_codigo"));
-   db_fieldsmemory($result,0);
-
-   $clnumeracaotipoproc->excluir($p200_codigo);
-   $cltipoproc->excluir($p51_codigo);
-   db_fim_transacao();
-  }
-}else if(isset($chavepesquisa)){
-   $result = $cltipoproc->sql_record($cltipoproc->sql_query($chavepesquisa)); 
-   db_fieldsmemory($result,0);
-   $db_opcao = 3;
-   $db_botao = true;
+  $clnumeracaotipoproc->p200_ano = db_getsession("DB_anousu"); 
+  $clnumeracaotipoproc->p200_numeracao = null;
+  $clnumeracaotipoproc->p200_tipoproc = $cltipoproc->p51_codigo;
+  $clnumeracaotipoproc->incluir();
+	
+  db_fim_transacao();
 }
 ?>
 <html>
@@ -71,14 +64,6 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
@@ -91,14 +76,40 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir
   </tr>
 </table>
 </body>
-<? 
-	  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-	?>
 </html>
 <?
-if($cltipoproc->erro_status=="0"){
-  $cltipoproc->erro(true,false);
-}else{
-  $cltipoproc->erro(true,true);
+
+if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir"){
+
+  if($sqlerro == true){
+      if (trim($erro_msg) == ""){
+           $erro_msg = "Inclusão abortada";
+      }
+
+      db_msgbox($erro_msg);
+
+//    $clliclicita->erro(true,false);
+    $db_botao=true;
+    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    if($clliclicita->erro_campo!=""){
+      echo "<script> document.form1.".$clliclicita->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$clliclicita->erro_campo.".focus();</script>";
+    };
+  }else{
+     $db_botao = true;
+    db_msgbox("Inclusão Efetuada com Sucesso!!");
+
+    echo "<script> document.form1.db_opcao.disabled=true;</script>  ";
+
+    $script = "<script>
+               parent.iframe_numeracao.location.href='pro1_numeracaotipoproc002.php?chavepesquisa=$cltipoproc->p51_codigo;';\n
+               parent.document.formaba.numeracao.disabled=false;\n
+               parent.mo_camada('numeracao');\n";
+		
+    $script .= "</script>\n";
+
+    echo $script;
+  };
 };
+
 ?>

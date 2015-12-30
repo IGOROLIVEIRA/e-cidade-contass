@@ -101,7 +101,18 @@ function js_testa(opcao) {
 		<?
 		  db_input('p58_codproc',10,$Ip58_codproc,true,'text',3,"");
 		?>
-  </td>
+    </td>
+
+    <td nowrap title="Numeração">
+       <strong>Numeração: </strong>
+    </td>
+    <td>
+                <?
+                  db_input('p58_numeracao',10,$Ip58_numeracao,true,'text',3,"");
+                ?>
+    </td>
+
+
 </tr>
   <tr>
     <td nowrap title="<?=@$Tp58_dtproc;?>">
@@ -442,7 +453,7 @@ document.form1.ndocs.value = ncods;
 }
 
 function js_AlteraCGM(cgm) {
-     var sUrl = "prot1_cadcgm002.php?chavepesquisa="+cgm+"&testanome=true&autoprot=true";
+     var sUrl = "prot1_cadcgm002.php?chavepesquisa="+cgm+"&autoprot=true";
      
      db_iframe.jan.location.href = sUrl;
      db_iframe.mostraMsg();
@@ -502,7 +513,7 @@ function js_pesquisap58_numcgm(mostra){
   }
   
   if(mostra==true){
-     var sUrl = "func_nome.php?funcao_js=parent.js_mostracgm1|0|1&testanome=true&incproc=true";
+     var sUrl = "func_nome.php?funcao_js=parent.js_mostracgm1|0|1&incproc=true";
      
      db_iframe.jan.location.href = sUrl;
      db_iframe.mostraMsg();

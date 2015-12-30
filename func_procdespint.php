@@ -137,7 +137,9 @@ if ($reimprime == 1) {
         }
         $sql = "select p58_codproc as dl_cod_processo, 
 		                   p58_numero  as dl_processo, 
-		                   z01_nome    as dl_nome_ou_Razão_social,   
+		                   z01_nome    as dl_nome_ou_Razão_social,
+		                   p58_numeracao as dl_numeracao,
+		                   p51_descr as dl_tipo_processo,
 		                   p58_dtproc  , 
 		                   p58_obs, 
 		                   p68_codproc 
@@ -147,7 +149,9 @@ if ($reimprime == 1) {
                 				            z01_nome,
 		                                p58_dtproc,
                                     p58_obs,                                    
-                				            arqproc.p68_codproc
+                				            arqproc.p68_codproc,
+                				            p58_numeracao,
+                				            p51_descr
                 			         from protprocesso
                 			               inner join tipoproc on p51_codigo = p58_codigo
                 				             inner join cgm on p58_numcgm = z01_numcgm
@@ -155,7 +159,7 @@ if ($reimprime == 1) {
                 				             left join arqproc on arqproc.p68_codproc = protprocesso.p58_codproc
                 			       where $where ) as x
 			           where   x.p68_codproc is null order by x.p58_codproc desc";
-                
+
         db_lovrot($sql,15,"()","",$funcao_js);
       } else {
 

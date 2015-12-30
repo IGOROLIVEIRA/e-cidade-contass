@@ -429,6 +429,7 @@ switch ($oPost->sMethod) {
 			$oProcesso->limiteBloqueado   = $lLimite;
 			$oProcesso->p58_ano           = $oProcessoEncontrado->p58_ano;
 			$oProcesso->processoProtocolo = $oProcessoEncontrado->processoprotocolo;
+			$oProcesso->p58_numeracao     = $oProcessoEncontrado->p58_numeracao;
 			$aProcessosEncontrados[]      = $oProcesso;
 		}
 		$aRetorno->aProcessosEncontrados = $aProcessosEncontrados;

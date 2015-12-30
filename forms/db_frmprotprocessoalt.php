@@ -79,6 +79,15 @@ function js_novo() {
       db_input('p58_codproc',12,$Ip58_codproc,true,'text',3,"");
     ?>
   </td>
+   <td nowrap title="Numeração">
+       <strong>Numeração: </strong>
+    </td>
+    <td>
+                <?
+                  db_input('p58_numeracao',10,$Ip58_numeracao,true,'text',3,"");
+                ?>
+    </td>
+
   </tr>
   <tr>
     <td nowrap title="<?=@$Tp58_numero?>">

@@ -36,7 +36,7 @@ if ($cldb_config->numrows > 0) {
 } else {
   $nomeinst = '';
 }
-$sqlpara = "select pd.descrdepto as pdepto,
+$sqlpara = "select    pd.descrdepto as pdepto,
                       p62_coddepto,
                       p63_codtran,
                       pu.nome as pusu,
@@ -69,6 +69,7 @@ $sqlpara = "select pd.descrdepto as pdepto,
 
 $sqlproc = "select p63_codproc,
                        z01_nome,
+                       p58_numeracao,
                        p51_descr,
                        p58_obs,
                        to_char(p58_dtproc,'YYYY') as anoproc,
@@ -174,7 +175,8 @@ for ($multiplo = 1; $multiplo <= $iNumeroPaginas; $multiplo++) {
     $pdf->cell(20, 3, 'Protocolo', 0, 0, "R", 0);
     $pdf->cell(75, 3, 'Requerente', 0, 0, "L", 0);
     $pdf->cell(50, 3, 'Descrição', 0, 0, "L", 0);
-    $pdf->cell(75, 3, 'Tipo', 0, 1, "L", 0);
+    $pdf->cell(34, 3, 'Tipo', 0, 0, "L", 0);
+    $pdf->cell(15, 3, 'Numeração', 0, 1, "L", 0);
     $pdf->Setfont('Arial', '', 7);
 
     for ($ii = $multiplofor; $ii < ($multiplo * 15); $ii++) {
@@ -194,7 +196,8 @@ for ($multiplo = 1; $multiplo <= $iNumeroPaginas; $multiplo++) {
       $pdf->cell(20, 3, $sNumeroProtocolo, 0, 0, "R", 0);
       $pdf->cell(75, 3, $z01_nome, 0, 0, "L", 0);
       $pdf->cell(50, 3, substr($p58_obs, 0, 30), 0, 0, "L", 0);
-      $pdf->cell(75, 3, substr($p51_descr, 0, 35), 0, 1, "L", 0);
+      $pdf->cell(38, 3, substr($p51_descr, 0, 30), 0, 0, "L", 0);
+      $pdf->cell(10, 3, substr($p58_numeracao, 0, 35), 0, 1, "L", 0);
       if ($ii == $nNumeroLinhas - 1) {
         break;
       }

@@ -107,7 +107,7 @@ $clprotprocesso->rotulo->label("p58_numero");
       if (!isset($pesquisa_chave)) {
         if(isset($campos) == false) {
           
-           $campos  = "p58_codproc,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero, z01_numcgm as DB_p58_numcgm,";
+           $campos  = "p58_codproc,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero, p58_numeracao as dl_Numeracao, z01_numcgm as DB_p58_numcgm,";
            $campos .= " z01_nome,p58_dtproc,p51_descr,p58_obs,p58_requer as DB_p58_requer";
         }
         if (isset($chave_p58_codproc) && (trim($chave_p58_codproc)!="")) {

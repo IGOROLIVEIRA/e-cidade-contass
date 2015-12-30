@@ -1,7 +1,7 @@
 <?
 /*
  *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
+ *  Copyright (C) 2009  DBselller Servicos de Informatica             
  *                            www.dbseller.com.br                     
  *                         e-cidade@dbseller.com.br                   
  *                                                                    
@@ -28,57 +28,10 @@
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
-include("libs/db_utils.php");
 include("libs/db_usuariosonline.php");
-include("classes/db_tipoproc_classe.php");
 include("dbforms/db_funcoes.php");
-db_postmemory($HTTP_SERVER_VARS);
-db_postmemory($_POST);
-$cltipoproc = new cl_tipoproc;
-$db_opcao = 22;
-$db_botao = false;
-$sqlerro  = false;
-
-$oPost = db_utils::postMemory($_POST);
-
-if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar"){
-
-  $result = $cltipoproc->sql_record("select p58_codigo,p51_dtlimite as limite from protprocesso inner join tipoproc on p51_codigo = p58_codigo where p58_codigo = $p51_codigo limit 1");
-  if($cltipoproc->numrows > 0) {
-
-   db_fieldsmemory($result,0);
-
-   $d1 = substr($p51_dtlimite,6,4).substr($p51_dtlimite,3,2).substr($p51_dtlimite,0,2);
-   $d2 = substr($limite,0,4).substr($limite,5,2).substr($limite,8,2);
-   if (db_getsession("DB_administrador") != 1 && $d2 != "" && $d2 < date('Ymd',db_getsession("DB_datausu")) ) {
-
-	   db_msgbox('Aviso:\nAlteração não Permitida!\nData limite do processo menor que a data atual\nData Limite:'.db_formatar($limite,'d'));
-   	  $sqlerro = true;
-   } else if (db_getsession("DB_administrador") != 1 && $d1 > $d2 && $d2 != "") {
-
-	   db_msgbox('Aviso:\nAlteração não Permitida!\nData limite do processo menor que a data atual\nData Limite:'.db_formatar($limite,'d'));
-   	 $sqlerro = true;
-   } else if(db_getsession("DB_administrador") != 1 && $d1 == $d2) {
-
-   	 db_msgbox('Aviso:\nJá existe um Processo cadastrado para o tipo escolhido!\nAlteração não permitida!');
-   	 $sqlerro = true;
-   }
-
-   $cltipoproc->p51_descr = $oPost->p51_descr;
-  }
-  if ($sqlerro == false) {
-
-    db_inicio_transacao();
-    $cltipoproc->alterar($p51_codigo);
-    db_fim_transacao();
-  }
-}else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $result = $cltipoproc->sql_record($cltipoproc->sql_query(null,"*",null,"p51_codigo = $chavepesquisa
-                                      and p51_instit=".db_getsession("DB_instit")));
-   db_fieldsmemory($result,0);
-   $db_botao = true;
-}
+include("dbforms/db_classesgenericas.php");
+$clcriaabas = new cl_criaabas;
 ?>
 <html>
 <head>
@@ -88,41 +41,34 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr>
-    <td width="360" height="18">&nbsp;</td>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
+<table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+  <tr> 
+    <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-	<?
-	include("forms/db_frmtipoproc.php");
-	?>
-    </center>
-	</td>
+<table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+      <?
+		    $clcriaabas->identifica = array("tipoproc"=>"Tipo Processo",
+		                                    "numeracao"     =>"Numeracao"  );
+		    $clcriaabas->sizecampo  = array("tipoproc"=>"20","numeracao"=>"20");		    
+		    $clcriaabas->src        = array("tipoproc"=>"pro1_tipoprocaba002.php",
+		                                    "numeracao"     =>"pro1_numeracaotipoproc002.php");
+		   	  $clcriaabas->disabled   =  array("numeracao"=>"true");
+			  $clcriaabas->cria_abas(); 
+      ?> 
+     </td>
   </tr>
 </table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+<form name="form1">
+</form>
+<? 
+	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
-<?
-if($cltipoproc->erro_status=="0"){
-  $cltipoproc->erro(true,false);
-  $db_botao=true;
-  echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-  if($cltipoproc->erro_campo!=""){
-    echo "<script> document.form1.".$cltipoproc->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-    echo "<script> document.form1.".$cltipoproc->erro_campo.".focus();</script>";
-  };
-}else{
-  $cltipoproc->erro(true,true);
-};
-?>

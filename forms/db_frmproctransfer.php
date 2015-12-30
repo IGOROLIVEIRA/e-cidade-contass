@@ -194,6 +194,7 @@ $clrotulo->label("descrdepto");
     //update protprocesso set p58_numero = p58_codproc where p58_numero = ''; 
     
     $sql  = " select distinct 																																							";
+    $sql .= "        p58_numeracao,                                                                           ";
     $sql .= "        p58_codproc,                                                                           ";
     $sql .= "        p58_dtproc, 	                                                                          ";
     $sql .= "        p58_requer,                                                                            ";
@@ -252,7 +253,7 @@ $clrotulo->label("descrdepto");
     $sql .= "					 limit 1 ) is not null                                                                ";
     $sql .= "          {$where}                                                                             ";
     $sql .= "   order by $ordem desc                                                                        ";
-
+    //echo $sql;exit;
     $rs = db_query($sql) or die($sql);
     $numrows = pg_num_rows($rs);
 	
@@ -269,6 +270,7 @@ $clrotulo->label("descrdepto");
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("p58_dtproc") ;' >Data                </a></b></td>
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("z01_nome")   ;' >Titular             </a></b></td>
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("p51_descr")  ;' >Tipo                </a></b></td>
+                <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("p58_numeracao")  ;' >Numeração                </a></b></td>
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("proxdepto")  ;' >Proximo Departamento</a></b></td>
              </tr>
              <tbody style='height:300;overflow:scroll;' id="listaProcesso">
@@ -348,6 +350,7 @@ $clrotulo->label("descrdepto");
 				                <td $class nowrap style = 'padding-right: 7px'>".$p58_dtproc."</td>
 				                <td $class nowrap style = 'padding-right: 7px;'>".$z01_nome."</td>
 				                <td $class nowrap style = 'padding-right: 7px;'>".$p51_descr."</td>
+				                <td $class nowrap style = 'padding-right: 7px;'>".$p58_numeracao."</td>
 				                <td $class nowrap style = 'padding-right: 7px;'>".@$proxdescr."</td>
 				              </tr>";
 							} else {
@@ -365,6 +368,7 @@ $clrotulo->label("descrdepto");
 				                <td $class nowrap style = 'padding-right: 7px'>".$p58_dtproc."</td>
 				                <td $class nowrap style = 'padding-right: 7px;'>".$z01_nome."</td>
 				                <td $class nowrap style = 'padding-right: 7px;'>".$p51_descr."</td>
+				                <td $class nowrap style = 'padding-right: 7px;'>".$p58_numeracao."</td>
 				                <td $class nowrap style = 'padding-right: 7px;'>".@$proxdescr."</td>
 				              </tr>";                                         
 							}
@@ -384,6 +388,7 @@ $clrotulo->label("descrdepto");
 				              <td $class nowrap style = 'padding-right: 7px'>".$p58_dtproc."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".$z01_nome."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".$p51_descr."</td>
+				              <td $class nowrap style = 'padding-right: 7px;'>".$p58_numeracao."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".@$proxdescr."</td>
 				            </tr>";
 						}
@@ -402,6 +407,7 @@ $clrotulo->label("descrdepto");
 				              <td $class nowrap style = 'padding-right: 7px;'>".$p58_dtproc."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".$z01_nome."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".$p51_descr."</td>
+				              <td $class nowrap style = 'padding-right: 7px;'>".$p58_numeracao."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".@$proxdescr."</td>
 				            </tr>";
 						} else {
@@ -419,6 +425,7 @@ $clrotulo->label("descrdepto");
 				              <td $class nowrap style = 'padding-right: 7px;'>".$p58_dtproc."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".$z01_nome."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".$p51_descr."</td>
+				              <td $class nowrap style = 'padding-right: 7px;'>".$p58_numeracao."</td>
 				              <td $class nowrap style = 'padding-right: 7px;'>".@$proxdescr."</td>
 				            </tr>";
 						}

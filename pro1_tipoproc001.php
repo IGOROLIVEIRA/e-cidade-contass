@@ -29,23 +29,9 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
-include("classes/db_tipoproc_classe.php");
 include("dbforms/db_funcoes.php");
-db_postmemory($HTTP_SERVER_VARS);
-db_postmemory($HTTP_POST_VARS);
-$cltipoproc = new cl_tipoproc;
-$db_opcao = 1;
-$db_botao = true;
-if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir"){
-
-  db_inicio_transacao();
-  
-  $cltipoproc->p51_tipoprocgrupo = 1; 
-  $cltipoproc->p51_identificado  = 'false';
-  $cltipoproc->p51_instit        = db_getsession("DB_instit");
-  $cltipoproc->incluir($p51_codigo);
-  db_fim_transacao();
-}
+include("dbforms/db_classesgenericas.php");
+$clcriaabas = new cl_criaabas;
 ?>
 <html>
 <head>
@@ -55,41 +41,37 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
+<table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
   <tr> 
-    <td width="360" height="18">&nbsp;</td>
+    <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
+<table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-    <center>
-	<?
-	include("forms/db_frmtipoproc.php");
-	?>
-    </center>
-	</td>
+      <?
+
+	$clcriaabas->identifica = array("tipoproc"=>"Tipo Processo",
+                                                    "numeracao"     =>"Numeracao"  );
+                    $clcriaabas->sizecampo  = array("tipoproc"=>"20","numeracao"=>"20");
+                    $clcriaabas->src        = array("tipoproc"=>"pro1_tipoprocaba001.php",
+                                                    "numeracao"     =>"pro1_numeracaotipoproc002.php");
+                          $clcriaabas->disabled   =  array("numeracao"=>"true");
+                          $clcriaabas->cria_abas();
+
+
+      ?> 
+     </td>
   </tr>
 </table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+<form name="form1">
+</form>
+<? 
+	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
-<?
-if($cltipoproc->erro_status=="0"){
-  $cltipoproc->erro(true,false);
-  $db_botao=true;
-  echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-  if($cltipoproc->erro_campo!=""){
-    echo "<script> document.form1.".$cltipoproc->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-    echo "<script> document.form1.".$cltipoproc->erro_campo.".focus();</script>";
-  };
-}else{
-  $cltipoproc->erro(true,true);
-};
-?>

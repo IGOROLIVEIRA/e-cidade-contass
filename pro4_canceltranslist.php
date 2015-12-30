@@ -95,7 +95,8 @@ function js_marca(obj){
                                     where p30_procapensado  = p58_codproc limit 1)  ";
        $sql = " select * 
                   from proctransferproc 
-                       inner join protprocesso on p63_codproc = p58_codproc 
+                       inner join protprocesso on p63_codproc = p58_codproc
+                       inner join tipoproc on p51_codigo = p58_codigo
                        inner join cgm on z01_numcgm = p58_numcgm 
                  where p63_codtran = {$cod} {$where} ";
        //die($sql);
@@ -111,6 +112,8 @@ function js_marca(obj){
 	     <td class='table_header' align='center'  title='$Tp58_dtproc'>".str_replace(":","",$Lp58_dtproc)."</td>
 	     <td class='table_header' align='center'  title='$Tp58_hora'>".str_replace(":","",$Lp58_hora)."</td>
 	     <td class='table_header' align='center'  title='$Tz01_nome'><b>Titular do Processo</b></td>
+	     <td class='table_header' align='center'  title='$Tp51_tipo'><b>Tipo</b></td>
+	     <td class='table_header' align='center'  title='Numeração'><b>Numeração</b></td>
 	   </tr>
           "; 	   
        }else{
@@ -127,6 +130,8 @@ function js_marca(obj){
 		      <td  class='linhagrid'  align='center' title='$Tp58_dtproc'><label style=\"cursor: hand\"><small>".db_formatar($p58_dtproc,'d')."</small></label></td>
 		      <td  class='linhagrid'  align='center' title='$Tp58_hora'><label style=\"cursor: hand\"><small>{$p58_hora}</small></label></td>
 		      <td  class='linhagrid'  align='center' title='$Tz01_nome'><label style=\"cursor: hand\"><small>{$z01_nome}</small></label></td>
+		      <td  class='linhagrid'  align='center' title='$Tp51_codigo'><label style=\"cursor: hand\"><small>{$p51_descr}</small></label></td>
+		      <td  class='linhagrid'  align='center' title='Numeração'><label style=\"cursor: hand\"><small>{$p58_numeracao}</small></label></td>
 		   </tr>";
        } echo"
 	   </table>";	        

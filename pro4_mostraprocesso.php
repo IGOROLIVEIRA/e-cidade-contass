@@ -51,13 +51,14 @@ db_postmemory($HTTP_POST_VARS);
      <tr>
         <td>
         <? if (isset($codtran)){
-              $sqlproc = "select p63_codproc,
+              $sqlproc = "select p58_numeracao,
                                  (case when p58_requer isnull then z01_nome else p58_requer end) as requer,
                                  p51_descr,
                                  p58_numero||'/'||p58_ano as p58_numero,
                                  p58_obs,
                                  to_char(p58_dtproc,'YYYY') as anoproc,
-                                 to_char(p58_dtproc,'DD/MM/YYYY') as p58_dtproc
+                                 to_char(p58_dtproc,'DD/MM/YYYY') as p58_dtproc,
+                                 p63_codproc
                           from   proctransferproc
                                  inner join protprocesso on  p63_codproc = p58_codproc
 				                         inner join proctransfer on p63_codtran = p62_codtran
@@ -68,7 +69,7 @@ db_postmemory($HTTP_POST_VARS);
          ?>
          <table border=1 cellspacing=0 style="border:1px solid black">
            <tr>
-             <td bgcolor="#999999" align=center><b>N. Controle</b></td>
+             <td bgcolor="#999999" align=center><b>Numeração</b></td>
              <td bgcolor="#999999" align=center><b>Processo</b></td>
              <td bgcolor="#999999" align=center><b>Requerente</b></td>
              <td bgcolor="#999999" align=center width=125><b>Descrição</b></td>
@@ -89,7 +90,7 @@ db_postmemory($HTTP_POST_VARS);
                     $cor = "bgcolor='#FFFFFF'";
                 }
                 echo "<tr>";
-                echo "<td $cor><a name='$i' href='' onClick='js_mostraproc(\"$p63_codproc\")'>Inf ->".$p63_codproc."</a></td>";
+                echo "<td $cor><a name='$i' href='' onClick='js_mostraproc(\"$p63_codproc\")'>Inf ->".$p58_numeracao."</a></td>";
                 echo "<td $cor>{$p58_numero}</td>";
                 echo "<td $cor>".$requer."</td>";
                 echo "<td $cor>".$p51_descr."</td>";

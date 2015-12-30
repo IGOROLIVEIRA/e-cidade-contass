@@ -94,10 +94,13 @@ $rotulo->label("p58_codproc");
       $sql = "SELECT distinct p67_codproc,
                      cast(p58_numero||'/'||p58_ano::varchar as varchar) as p58_numero, 
                      p67_dtarq,
+                     p58_numeracao as dl_Numeração,
+                     p51_descr as dl_tipo_processo,
                      (case when p58_requer isnull then z01_nome else p58_requer end) as dl_Requerente,
                      p67_historico
                from  procarquiv 
                      inner join protprocesso on p67_codproc = p58_codproc
+                     inner join tipoproc on p51_codigo = p58_codigo
                      inner join cgm on p58_numcgm = z01_numcgm
                      inner join arqproc on p67_codproc = p68_codproc
                      left join arqandam on p69_codarquiv = p67_codarquiv and p69_arquivado is false

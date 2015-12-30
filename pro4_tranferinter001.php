@@ -215,6 +215,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
         <td class='cabec' align='center'>Data do Processo</td>
         <td class='cabec' align='center'>Hora</td>
         <td class='cabec' align='center'>Nome/Razão Social</td>
+        <td class='cabec' align='center'>Numeração</td>
       </tr>
   <?
 	   $sql = "select * from (
@@ -304,6 +305,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
               		      <td  class='corpo'  align='center' title='$Tp58_dtproc'><label style=\"cursor: hand\"><small>".db_formatar($p58_dtproc,'d')."</small></label></td>
               		      <td  class='corpo'  align='center' title='$Tp58_hora'><label style=\"cursor: hand\"><small>$p58_hora</small></label></td>
               		      <td  class='corpo'  align='center' title='$Tz01_nome'><label style=\"cursor: hand\"><small>$z01_nome</small></label></td>
+              		      <td  class='corpo'  align='center' title='$p58_numeracao'><label style=\"cursor: hand\"><small>$p58_numeracao</small></label></td>
               		   </tr>";
         	       }
           	   } else {
@@ -318,6 +320,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
              		      <td  class='corpo'  align='center' title='$Tp58_dtproc'><label style=\"cursor: hand\"><small>".db_formatar($p58_dtproc,'d')."</small></label></td>
              		      <td  class='corpo'  align='center' title='$Tp58_hora'><label style=\"cursor: hand\"><small>$p58_hora</small></label></td>
              		      <td  class='corpo'  align='center' title='$Tz01_nome'><label style=\"cursor: hand\"><small>$z01_nome</small></label></td>
+             		      <td  class='corpo'  align='center' title='$p58_numeracao'><label style=\"cursor: hand\"><small>$p58_numeracao</small></label></td>
              		   </tr>";
                }
 	   }else{
@@ -337,6 +340,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 		  <td  class='corpo'  align='center' title='$Tp58_dtproc'><label style=\"cursor: hand\"><small>".db_formatar($p58_dtproc,'d')."</small></label></td>
 		  <td  class='corpo'  align='center' title='$Tp58_hora'><label style=\"cursor: hand\"><small>$p58_hora</small></label></td>
 		  <td  class='corpo'  align='center' title='$Tz01_nome'><label style=\"cursor: hand\"><small>$z01_nome</small></label></td>
+		  <td  class='corpo'  align='center' title='$p58_numeracao'><label style=\"cursor: hand\"><small>$p58_numeracao</small></label></td>
 	       </tr>";
 	   }else{
 	   echo"
@@ -348,6 +352,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 		  <td  class='corpo'  align='center' title='$Tp58_dtproc'><label style=\"cursor: hand\"><small>".db_formatar($p58_dtproc,'d')."</small></label></td>
 		  <td  class='corpo'  align='center' title='$Tp58_hora'><label style=\"cursor: hand\"><small>$p58_hora</small></label></td>
 		  <td  class='corpo'  align='center' title='$Tz01_nome'><label style=\"cursor: hand\"><small>$z01_nome</small></label></td>
+		  <td  class='corpo'  align='center' title='$p58_numeracao'><label style=\"cursor: hand\"><small>$p58_numeracao</small></label></td>
 	       </tr>";
 	   }
 	   
@@ -368,6 +373,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 		  <td  class='corpo'  align='center' title='$Tp58_dtproc'><label style=\"cursor: hand\"><small>".db_formatar($p58_dtproc,'d')."</small></label></td>
 		  <td  class='corpo'  align='center' title='$Tp58_hora'><label style=\"cursor: hand\"><small>$p58_hora</small></label></td>
 		  <td  class='corpo'  align='center' title='$Tz01_nome'><label style=\"cursor: hand\"><small>$z01_nome</small></label></td>
+		  <td  class='corpo'  align='center' title='$p58_numeracao'><label style=\"cursor: hand\"><small>$p58_numeracao</small></label></td>
 	       </tr>";
 	   }else{
 	   echo"
@@ -379,6 +385,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 		  <td  class='corpo'  align='center' title='$Tp58_dtproc'><label style=\"cursor: hand\"><small>".db_formatar($p58_dtproc,'d')."</small></label></td>
 		  <td  class='corpo'  align='center' title='$Tp58_hora'><label style=\"cursor: hand\"><small>$p58_hora</small></label></td>
 		  <td  class='corpo'  align='center' title='$Tz01_nome'><label style=\"cursor: hand\"><small>$z01_nome</small></label></td>
+		  <td  class='corpo'  align='center' title='$p58_numeracao'><label style=\"cursor: hand\"><small>$p58_numeracao</small></label></td>
 	       </tr>";
 	     }
 	   }
