@@ -40,10 +40,29 @@ $clparecerlicitacao = new cl_parecerlicitacao;
            if(file_exists("funcoes/db_func_parecerlicitacao.php")==true){
              include("funcoes/db_func_parecerlicitacao.php");
            }else{
-           $campos = "parecerlicitacao.oid,parecerlicitacao.*";
+           $campos = "l200_sequencial,l20_codigo, l200_licitacao,
+case when l20_codtipocom = 14 then 'TOMADA DE PREÇO'
+        when l20_codtipocom = 15 then 'CONVITE'
+        when l20_codtipocom = 16 then 'CONCORRENCIA'
+        when l20_codtipocom = 17 then 'PREGAO ELETRONICO'
+        when l20_codtipocom = 18 then 'PREGAO PRESENCIAL'
+        when l20_codtipocom = 19 then 'DISPENSA DE LICITACAO'
+        when l20_codtipocom = 20 then 'CONCURSO'
+        when l20_codtipocom = 21 then 'INEXIGIBILIDADE'
+        when l20_codtipocom = 22 then 'TERMO ADITIVO'
+        when l20_codtipocom = 24 then 'CHAMADA PUBLICA'
+        when l20_codtipocom = 26 then 'ADESAO A REGISTRO DE PREÇO'
+        when l20_codtipocom = 27 then 'DISPENSA POR CHAMADA PUBLICA'
+        when l20_codtipocom = 28 then 'INEXIGIBILIDADE POR CREDENCIAMENTO'
+end as dl_Modalidade,
+l20_objeto,
+l200_exercicio,
+l200_data,
+l200_tipoparecer,
+z01_nome ";
            }
         }
-	         $sql = $clparecerlicitacao->sql_query();
+	         $sql = $clparecerlicitacao->sql_query('',$campos);
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
