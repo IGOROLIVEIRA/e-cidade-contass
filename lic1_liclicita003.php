@@ -40,6 +40,7 @@ include("classes/db_liclicitemlote_classe.php");
 include("classes/db_liclicitemanu_classe.php");
 include("classes/db_liclicitasituacao_classe.php");
 include("classes/db_cflicita_classe.php");
+include("classes/db_liccomissaocgm_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
@@ -53,6 +54,7 @@ $clliclicitaweb      = new cl_liclicitaweb;
 $clliclicitasituacao = new cl_liclicitasituacao;
 $clcflicita          = new cl_cflicita;
 $clliclicitaproc     = new cl_liclicitaproc;
+$clliccomissaocgm    = new cl_liccomissaocgm;
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
@@ -81,11 +83,20 @@ if(isset($excluir)){
 		}
 
 	}
+
+    if ($sqlerro==false){
+        $clliccomissaocgm->excluir(null,"l31_licitacao=$l20_codigo");
+        if ($clliccomissaocgm->erro_status==0){
+            $sqlerro=true;
+            $erro_msg=$clliccomissaocgm->erro_msg;
+        }
+    }
   
 	$result_item = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo",null,"l21_codliclicita=$l20_codigo"));
   $numrows_item = $clliclicitem->numrows;
   for($w=0;$w<$numrows_item;$w++){
     db_fieldsmemory($result_item,$w);
+
     if ($sqlerro==false){
       $clpcorcamitemlic->excluir(null,"pc26_liclicitem=$l21_codigo");
       if ($clpcorcamitemlic->erro_status==0){

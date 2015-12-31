@@ -55,7 +55,8 @@ $clrotulo->label("ve01_codigo");
                 </td>
                 <td>
                     <?
-                    db_input('v200_escola', 50, $Iv200_escola, true, 'text', $db_opcao, "")
+                    db_textarea('v200_escola', 2, 50, $Iv200_escola, true, 'text', $db_opcao);
+                    //db_input('v200_escola', 50, $Iv200_escola, true, 'text', $db_opcao, "")
                     ?>
                 </td>
             </tr>
@@ -65,7 +66,8 @@ $clrotulo->label("ve01_codigo");
                 </td>
                 <td>
                     <?
-                    db_input('v200_localidade', 50, $Iv200_localidade, true, 'text', $db_opcao, "")
+                    db_textarea('v200_localidade', 2, 50, $Iv200_localidade, true, 'text', $db_opcao);
+                    //db_input('v200_localidade', 50, $Iv200_localidade, true, 'text', $db_opcao, "")
                     ?>
                 </td>
             </tr>

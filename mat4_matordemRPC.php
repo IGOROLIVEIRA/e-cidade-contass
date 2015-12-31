@@ -201,7 +201,10 @@ if ($method == "getDados") {
                                     $objJson->aItens,
                                     $objJson->oInfoNota,
                                     $sObservacao,
-                                    $sNumeroProcesso
+                                    $sNumeroProcesso,
+                                    $objJson->sNotaFiscalEletronica,
+                                    $objJson->sChaveAcesso,
+                                    $objJson->sNumeroSerie
                                   );
     db_fim_transacao(false);
     echo $json->encode(array("mensagem" => "Entrada da ordem de compra efetuada com sucesso.", "status" => 1));

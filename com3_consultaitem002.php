@@ -80,7 +80,14 @@ if(isset($pc01_codmater)){
 				<table border="0">
   					<tr>
     					<td nowrap title="<?=@$Tpc01_codmater?>"><?=@$Lpc01_codmater?></td>
-    					<td><?db_input('pc01_codmater',6,$Ipc01_codmater,true,'text',3,"");?></td>
+    					<td>
+							<?db_input('pc01_codmater',6,$Ipc01_codmater,true,'text',3,"");?>
+							<strong>Data de cadastro</strong>
+							<?
+							$pc01_data = implode("/", array_reverse(explode("-", $pc01_data)));
+							db_input('pc01_data',10,$Ipc01_data,true,'text',3,"");
+							?>
+						</td>
   					</tr>
   					<tr>
     					<td nowrap title="<?=@$Tpc01_descrmater?>"> <?=@$Lpc01_descrmater?></td>

@@ -42,6 +42,7 @@ require_once("classes/db_pcorcamitemlic_classe.php");
 require_once("classes/db_pcorcamdescla_classe.php");
 require_once("classes/db_cflicita_classe.php");
 require_once("classes/db_homologacaoadjudica_classe.php");
+require_once("classes/db_liccomissaocgm_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -58,6 +59,7 @@ $clpcorcamdescla      = new cl_pcorcamdescla;
 $clcflicita           = new cl_cflicita;
 $oDaoLicitaPar        = new cl_pccflicitapar;
 $clhomologacao        = new cl_homologacaoadjudica;
+$clliccomissaocgm     = new cl_liccomissaocgm;
 
 $db_opcao = 22;
 $db_botao = true;
@@ -400,13 +402,22 @@ if(isset($alterar)){
       $l34_protprocesso = $p58_codproc;
     }
   }
-  $script = "<script>
+  if(db_getsession("DB_anousu") >= 2016){
+
+    $script = "<script>
        	       parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
-               parent.document.formaba.liclicitem.disabled=false;\n";   		 		
+               parent.document.formaba.liclicitem.disabled=true;\n";
+
+    echo "<script>
+            parent.iframe_resplicita.location.href='lic1_resplicitacao001.php?l20_naturezaobjeto=$l20_naturezaobjeto&l31_licitacao=$l20_codigo&l20_codtipocom=$l20_codtipocom';
+    </script>";
+   }else{
+      $script = "<script>";
+  }
 
     if (isset($tipojulg) && $tipojulg == 3) {
       $script .= "parent.iframe_liclicitemlote.location.href='lic1_liclicitemlote001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
-                  parent.document.formaba.liclicitemlote.disabled=false;\n";   		 		
+                  parent.document.formaba.liclicitemlote.disabled=true;\n";
     } else {
       $script .= "parent.document.formaba.liclicitemlote.disabled=true;\n";
     }
@@ -414,6 +425,45 @@ if(isset($alterar)){
     $script .= "</script>\n";
 
     echo $script;
+
+  $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l20_codigos and l20_naturezaobjeto = 6"));
+
+  if ($cllicita->numrows > 0) {
+
+    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l20_codigo
+      and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
+    if ($clliccomissaocgm->numrows == 9) {
+      $script = "<script>
+        parent.document.formaba.liclicitem.disabled=false;
+        parent.document.formaba.resplicita.disabled=false;
+        </script>";
+      echo $script;
+    } else if ($clliccomissaocgm->numrows > 0 and $clliccomissaocgm->numrows < 9) {
+      $script = "<script>
+        parent.document.formaba.resplicita.disabled=false;
+        </script>";
+      echo $script;
+    }
+
+  }else{
+
+    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l20_codigo
+      and l31_tipo::int in (1,2,3,4,5,6,7,8)"));
+    if ($clliccomissaocgm->numrows == 8) {
+      $script = "<script>
+        parent.document.formaba.liclicitem.disabled=false;
+        parent.document.formaba.resplicita.disabled=false;
+        </script>";
+      echo $script;
+    } else if ($clliccomissaocgm->numrows > 0 and $clliccomissaocgm->numrows < 8) {
+      $script = "<script>
+        parent.document.formaba.resplicita.disabled=false;
+        </script>";
+      echo $script;
+    }
+
+  }
+
 }
 ?>
 <html>
@@ -484,7 +534,15 @@ if(isset($alterar)){
     //$clliclicita->erro(true,true);
      $db_botao = true;
     db_msgbox("Alteração Efetuada com Sucesso!!");
-    echo "<script>location.href='lic1_liclicita002.php?chavepesquisa=$l20_codigo';</script>";
+    if(db_getsession("DB_anousu") >= 2016) {
+      echo "<script> mo_camada('resplicita'); </script>";
+      echo "<script>parent.document.formaba.resplicita.disabled=false;</script>";
+      echo "<script>location.href='lic1_liclicita002.php?chavepesquisa=$l20_codigo';</script>";
+    }else{
+      echo "<script> mo_camada('liclicitem'); </script>";
+      echo "<script>parent.document.formaba.liclicitem.disabled=false;</script>";
+      echo "<script>location.href='lic1_liclicita002.php?chavepesquisa=$l20_codigo';</script>";
+    }
   };
 };
 if($db_opcao==22){

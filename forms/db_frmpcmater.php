@@ -38,7 +38,7 @@ function js_executaIframe(val) {
   </tr>
   <tr>
     <td nowrap title="<?=@$Tpc01_descrmater?>"> <?=@$Lpc01_descrmater?>    </td>
-    <td> <? db_input('pc01_descrmater',78,$Ipc01_descrmater,true,'text',$db_opcao,"") ?>
+    <td> <? db_input('pc01_descrmater',78,$Ipc01_descrmater,true,'text',$db_opcao,'','','','','1000') ?>
     </td>
   </tr>
   <tr>
@@ -187,8 +187,12 @@ function js_executaIframe(val) {
                $vaiIframe = "?db_opcao=$db_opcao&codigomater=".$pc01_codmater."&codsubgrupo=".@$subgrupo."&codele=".@$coluna;
              }             
            }  
-           @db_selectrecord("pc01_codsubgrupo",$result,true,$db_opcao,"","","","","js_executaIframe(this.value)"); 
+           @db_selectrecord("pc01_codsubgrupo",$result,true,$db_opcao,"","","","","js_executaIframe(this.value)");
 
+        if(empty($pc01_data) || $pc01_data == "" ) {
+            $pc01_data = date('Y-m-d', db_getsession("DB_datausu"));
+        }
+        db_input('pc01_data',6,$Ipc01_data,true,'hidden',3,"");
         ?>  
       </td>
       </tr> 

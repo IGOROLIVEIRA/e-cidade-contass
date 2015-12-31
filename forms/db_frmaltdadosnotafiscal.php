@@ -172,6 +172,47 @@ $oGet = db_utils::postMemory($_GET);
           <?
           }
           ?>
+          
+          <tr>
+            <td nowrap ><b>Nota Fiscal Eletronica: </b>
+            </td>
+            <td>
+            <?
+            /**
+             * Acrescentado por causa do sicom
+             */
+            $aNfEletronica = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05',2 => 'Sim, chave de acesso municipal',3 => 'Não',4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
+            db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);'");
+            ?>
+            </td>
+          </tr>
+
+          <tr>
+            <td nowrap><b>Chave Acesso: </b>
+            </td>
+            <td>
+            <?
+            /**
+             * Acrescentado por causa do sicom
+             */
+            db_input('e69_chaveacesso', 40, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'","","","",44);
+            ?>
+            </td>
+          
+            <td nowrap><b>Número de série: </b>
+            </td>
+            <td>
+            <?
+            /**
+             * Acrescentado por causa do sicom
+             */
+            db_input('e69_nfserie', 10, 0, true, 'text', 3, "","","","",8);
+            ?>
+            </td>
+
+          </tr>
+
+          
           <tr>
              <td nowrap title="<?=@$Te11_cfop?>">
                <?
@@ -386,5 +427,66 @@ function js_mostracfop1(chave1,chave2, chave3){
   $('e10_cfop').value = chave3;
   db_iframe_cfop.hide();
   
+}
+
+// Função para liberar o campo e69_chaveacesso caso seja Nota Fiscal Eletrônica
+// Acrescentado por causa do sicom
+function js_tipoChave(iTipoNfe) {
+
+  // codições para a chave de acesso 
+  if (iTipoNfe == 1 || iTipoNfe == 2 || iTipoNfe == 4) {
+    $('e69_chaveacesso').readOnly           = false;
+    $('e69_chaveacesso').style.background   = "#FFFFFF";
+    iTipoNfe == 2 ? document.getElementById("e69_chaveacesso").maxLength = 60 : document.getElementById("e69_chaveacesso").maxLength = 44;
+  }else{
+    $('e69_chaveacesso').readOnly          = true;
+    $('e69_chaveacesso').style.background  = "#DEB887";
+  }
+
+  // codições para a Nf serie 
+  if (iTipoNfe == 2 || iTipoNfe == 3) {
+    $('e69_nfserie').readOnly           = false;
+    $('e69_nfserie').style.background   = "#FFFFFF";
+  }else{
+    $('e69_nfserie').readOnly          = true;
+    $('e69_nfserie').style.background  = "#DEB887";
+  }
+
+  $('e69_chaveacesso').value         = "";
+  $('e69_nfserie').value             = "";
+
+}
+
+
+//  Função para verificar a chave de acesso Nota Fiscal Eletrônica
+// Acrescentado por causa do sicom
+function js_verificaChaveAcesso(iChaveAcesso) {
+
+  if ($('e69_notafiscaleletronica').value == 3) {
+    return true;
+  };
+  if ($('e69_notafiscaleletronica').value == 2) {
+    return true;
+  };
+  var aChave = iChaveAcesso.split("");
+  var multiplicadores = [2, 3, 4, 5, 6, 7, 8, 9];  
+  var soma_ponderada = 0;
+  var i = 42;  
+  while (i >= 0) {    
+    for (m = 0; m < multiplicadores.length && i >= 0; m++) {      
+      soma_ponderada += aChave[i] * multiplicadores[m];     
+      i--;    
+    }  
+  }
+   
+  var resto = soma_ponderada % 11;  
+  if (aChave[43] == (11 - resto)) {
+    return true;
+  } else {    
+    alert("Chave de Acesso inválida");
+    $('e69_chaveacesso').value = '';
+    return false;  
+  }
+
 }
 </script>

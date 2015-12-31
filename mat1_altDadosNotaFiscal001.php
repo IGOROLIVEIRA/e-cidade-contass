@@ -87,6 +87,9 @@ if(isset($oPost->alterar)){
   $clempnota->e69_dtnota   =  implode("-", array_reverse(explode("/", $oPost->e69_dtnota)));
   $clempnota->e69_dtrecebe =  implode("-", array_reverse(explode("/", $oPost->e69_dtrecebe)));
   $clempnota->e69_tipodocumentosfiscal  = $oPost->e69_tipodocumentosfiscal;
+  $clempnota->e69_notafiscaleletronica  = $oPost->e69_notafiscaleletronica;
+  $clempnota->e69_chaveacesso           = $oPost->e69_chaveacesso;
+  $clempnota->e69_nfserie               = $oPost->e69_nfserie;
   $clempnota->alterar($clempnota->e69_codnota);
   $erro_msg = $clempnota->erro_msg;
   if ($clempnota->erro_status == "0") {
@@ -192,6 +195,14 @@ if (isset($oGet->chavepesquisa) && $oGet->chavepesquisa != "") {
     $e69_dtrecebe_mes =  $e69_dtrecebe[1];
     $e69_dtrecebe_ano =  $e69_dtrecebe[0];
     $e69_tipodocumentosfiscal = $oNota->e69_tipodocumentosfiscal;
+
+    /**
+     * adicionado por causa do sicom
+     */
+    $e69_notafiscaleletronica = $oNota->e69_notafiscaleletronica;
+    $e69_chaveacesso          = $oNota->e69_chaveacesso;
+    $e69_nfserie              = $oNota->e69_nfserie;
+
     $e70_valor        =  $oNota->e70_valor;
     
     $e70_vlranu       =  $oNota->e70_vlranu;

@@ -102,7 +102,8 @@ $sWhereContratos = " and 1 = 1 ";
       $situacao = 1;
 			if (isset($situacao) && trim($situacao) != '') {
 
-             $dbwhere .= "l20_licsituacao = $situacao and ";   
+             $dbwhere .= "l20_licsituacao = $situacao and l200_data <= '". date('Y-m-d',db_getsession('DB_datausu')) ."'
+             and l11_data <= '". date('Y-m-d',db_getsession('DB_datausu')) ."' and ";
          
 			}
 			$sWhereModalidade = "";
@@ -132,17 +133,17 @@ $sWhereContratos = " and 1 = 1 ";
         $campos .= ", (select max(l11_sequencial) as l11_sequencial from liclicitasituacao where l11_liclicita = l20_codigo) as l11_sequencial ";
         
         if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
-	         $sql = $clliclicita->sql_queryContratos(null,"distinct " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);
+	         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " . $campos,"l20_codigo","l20_codigo = $chave_l20_codigo $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);
         }else if(isset($chave_l20_numero) && (trim($chave_l20_numero)!="") ){
-	         $sql = $clliclicita->sql_queryContratos(null,"distinct " .$campos,"l20_codigo","l20_numero=$chave_l20_numero $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);
+	         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " .$campos,"l20_codigo","l20_numero=$chave_l20_numero $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);
 	      }else if(isset($chave_l03_descr) && (trim($chave_l03_descr)!="") ){
-	         $sql = $clliclicita->sql_queryContratos(null,"distinct " .$campos,"l20_codigo","l03_descr like '$chave_l03_descr%' $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);
+	         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " .$campos,"l20_codigo","l03_descr like '$chave_l03_descr%' $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);
         }else if(isset($chave_l03_codigo) && (trim($chave_l03_codigo)!="") ){
-	         $sql = $clliclicita->sql_queryContratos(null,"distinct " .$campos,"l20_codigo","l03_codigo=$chave_l03_codigo $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);        
+	         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " .$campos,"l20_codigo","l03_codigo=$chave_l03_codigo $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);        
         }else if(isset($chave_l20_edital) && (trim($chave_l20_edital)!="")){
-         $sql = $clliclicita->sql_queryContratos(null,"distinct " .$campos,"l20_codigo","l20_edital=$chave_l20_edital $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);
+         $sql = $clliclicita->sql_queryContratosContass(null,"distinct " .$campos,"l20_codigo","l20_edital=$chave_l20_edital $and $dbwhere $dbwhere_instit $sWhereContratos",$situacao);
         }else{
-                 $sql = $clliclicita->sql_queryContratos("","distinct " .$campos,"l20_codigo","$dbwhere $dbwhere_instit $sWhereContratos",$situacao);
+                 $sql = $clliclicita->sql_queryContratosContass("","distinct " .$campos,"l20_codigo","$dbwhere $dbwhere_instit $sWhereContratos",$situacao);
         }
 
         if (isset($param) && trim($param) != ""){
@@ -160,7 +161,7 @@ $sWhereContratos = " and 1 = 1 ";
              $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere");
            }
 	      }
-	      
+
         db_lovrot($sql.' desc ',15,"()","",$funcao_js);
         
         
@@ -188,7 +189,7 @@ $sWhereContratos = " and 1 = 1 ";
   	            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
               }
 	          } else {
-                 $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"l20_codigo = $pesquisa_chave $and $dbwhere $dbwhere_instit"));
+                 $result = $clliclicita->sql_record($clliclicita->sql_queryContratosContass(null,"*",null,"l20_codigo = $pesquisa_chave $and $dbwhere $dbwhere_instit"));
                  
                  if($clliclicita->numrows != 0){
                    

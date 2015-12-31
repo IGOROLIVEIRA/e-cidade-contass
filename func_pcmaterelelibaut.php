@@ -139,6 +139,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
     <td align="center" valign="top"> 
       <?
       $where_libaut = "1=1";
+
       $result_pcparam=$clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_itenslibaut"));
       if ($clpcparam->numrows>0) {
         db_fieldsmemory($result_pcparam,0);
@@ -148,6 +149,8 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
       }
       $repassa = array();
       $where_ativo = "";
+      $dDataAtual   = date('Y-m-d', db_getsession("DB_datausu"));
+      $where_ativo .= " and pc01_data <= '$dDataAtual' ";
       if (isset($chave_pc07_codele)) {
         $where_ativo .= " and pc07_codele=$chave_pc07_codele ";
         $repassa["chave_pc07_codele"] = $chave_pc07_codele;

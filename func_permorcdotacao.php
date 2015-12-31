@@ -52,13 +52,21 @@ if (isset($pactoplano) && $pactoplano != "") {
   if ($oDaoPactoSolicita->numrows > 0) {
       
     $oPlano  = db_utils::fieldsMemory($rsPacto, 0);
-    $sWhere .= " (o15_tipo = 1  or o58_codigo = {$oPlano->o16_orctiporec})"; 
+    $sWhere .= " (o15_tipo = 1  or o58_codigo = {$oPlano->o16_orctiporec})";
      
   }
+}else{
+  $result=db_dotacaosaldo(8,2,2,"true","" ,db_getsession("DB_anousu"),'','','','',false);
+  for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
+    if(db_utils::fieldsMemory($result, $iCont)->atual_menos_reservado == 0) {
+      $aDados[] = db_utils::fieldsMemory($result, $iCont)->o58_coddot;
+    }
+  }
+  $Dados = implode(',',$aDados);
+  $sWhere .= " o58_coddot not in ($Dados)";
 }
 // variável que determina o obrigatoriedade de digitar departamento
 //$obriga_depto = "sim";
-
 
   if(empty($elemento)){
     $elemento=null;
@@ -80,7 +88,6 @@ if (isset($pactoplano) && $pactoplano != "") {
                                  "",
                                  $sWhere
                                 );
-
 if(!isset($filtroquery)){
   // variável usada na solicitação de compras para retornar departamento quando o reduzido é digitado
   if(!isset($retornadepart)){
@@ -246,10 +253,10 @@ function js_origempermissao(){
         </table>
 	  </form>
     <?
-		
 
-   // echo $elemento;
-//    echo "<br>sql: " . $clpermusuario_dotacao->sql;
+    //echo $elemento;
+    //echo "<br>sql: " . $clpermusuario_dotacao->sql;
+
     if($clpermusuario_dotacao->sql != "" ){
       if(isset($obriga_depto) && $obriga_depto=="sim"){
         $funcao_js = "js_verifica_depto|o58_coddot";

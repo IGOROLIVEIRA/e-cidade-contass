@@ -237,14 +237,22 @@ if(isset($incluir)){
   } else {
 
   	db_msgbox($erro_msg);
-    if ($sqlerro==false){
-	  	echo " <script>
+    if ($sqlerro==false) {
+		if (db_getsession("DB_anousu") >= 2016) {
+			echo " <script>
+		           parent.iframe_liclicita.location.href='lic1_liclicita002.php?chavepesquisa=$codigo';\n
+		           parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$codigo';\n
+		           parent.document.formaba.resplicita.disabled=false;
+		           parent.mo_camada('resplicita');
+	           </script> ";
+		}else{
+			echo " <script>
 		           parent.iframe_liclicita.location.href='lic1_liclicita002.php?chavepesquisa=$codigo';\n
 		           parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$codigo';\n
 		           parent.mo_camada('liclicitem');
-				       parent.document.formaba.liclicitem.disabled=false;
 	           </script> ";
-    }
+		}
+	}
   }
 }
 ?>

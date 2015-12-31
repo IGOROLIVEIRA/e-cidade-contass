@@ -61,7 +61,8 @@ class cl_veicabast {
    var $ve70_data = null; 
    var $ve70_hora = null; 
    var $ve70_observacao = null; 
-   // cria propriedade com as variaveis do arquivo 
+   var $ve70_origemgasto = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ve70_codigo = int4 = Código do Abastecimento 
                  ve70_veiculos = int4 = Veiculo 
@@ -76,6 +77,7 @@ class cl_veicabast {
                  ve70_data = date = Data da inclusão do registro 
                  ve70_hora = char(5) = Hora da Inclusão do registro 
                  ve70_observacao = text = Observação 
+                 ve70_origemgasto = int4 = Origem do Gasto
                  ";
    //funcao construtor da classe 
    function cl_veicabast() { 
@@ -98,6 +100,7 @@ class cl_veicabast {
        $this->ve70_codigo = ($this->ve70_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_codigo"]:$this->ve70_codigo);
        $this->ve70_veiculos = ($this->ve70_veiculos == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_veiculos"]:$this->ve70_veiculos);
        $this->ve70_veiculoscomb = ($this->ve70_veiculoscomb == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_veiculoscomb"]:$this->ve70_veiculoscomb);
+       $this->ve70_origemgasto = ($this->ve70_origemgasto == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_origemgasto"]:$this->ve70_origemgasto);
        if($this->ve70_dtabast == ""){
          $this->ve70_dtabast_dia = ($this->ve70_dtabast_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"]:$this->ve70_dtabast_dia);
          $this->ve70_dtabast_mes = ($this->ve70_dtabast_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_mes"]:$this->ve70_dtabast_mes);
@@ -251,7 +254,8 @@ class cl_veicabast {
      $sql = "insert into veicabast(
                                        ve70_codigo 
                                       ,ve70_veiculos 
-                                      ,ve70_veiculoscomb 
+                                      ,ve70_veiculoscomb
+                                      ,ve70_origemgasto
                                       ,ve70_dtabast 
                                       ,ve70_litros 
                                       ,ve70_valor 
@@ -266,7 +270,8 @@ class cl_veicabast {
                 values (
                                 $this->ve70_codigo 
                                ,$this->ve70_veiculos 
-                               ,$this->ve70_veiculoscomb 
+                               ,$this->ve70_veiculoscomb
+                               ,$this->ve70_origemgasto
                                ,".($this->ve70_dtabast == "null" || $this->ve70_dtabast == ""?"null":"'".$this->ve70_dtabast."'")." 
                                ,$this->ve70_litros 
                                ,$this->ve70_valor 
@@ -321,6 +326,7 @@ class cl_veicabast {
        $resac = db_query("insert into db_acount values($acount,1610,9375,'','".AddSlashes(pg_result($resaco,0,'ve70_data'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,1610,9376,'','".AddSlashes(pg_result($resaco,0,'ve70_hora'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,1610,18842,'','".AddSlashes(pg_result($resaco,0,'ve70_observacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,1610,18843,'','".AddSlashes(pg_result($resaco,0,'ve70_origemgasto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    } 
@@ -367,6 +373,10 @@ class cl_veicabast {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->ve70_origemgasto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_origemgasto"])){
+         $sql  .= $virgula." ve70_origemgasto = $this->ve70_origemgasto ";
+         $virgula = ",";
      }
      if(trim($this->ve70_dtabast)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"] !="") ){ 
        $sql  .= $virgula." ve70_dtabast = '$this->ve70_dtabast' ";
@@ -542,6 +552,8 @@ class cl_veicabast {
            $resac = db_query("insert into db_acount values($acount,1610,9376,'".AddSlashes(pg_result($resaco,$conresaco,'ve70_hora'))."','$this->ve70_hora',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["ve70_observacao"]) || $this->ve70_observacao != "")
            $resac = db_query("insert into db_acount values($acount,1610,18842,'".AddSlashes(pg_result($resaco,$conresaco,'ve70_observacao'))."','$this->ve70_observacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve70_origemgasto"]) || $this->ve70_origemgasto != "")
+           $resac = db_query("insert into db_acount values($acount,1610,18843,'".AddSlashes(pg_result($resaco,$conresaco,'ve70_origemgasto'))."','$this->ve70_origemgasto',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $result = db_query($sql);
@@ -602,6 +614,7 @@ class cl_veicabast {
          $resac = db_query("insert into db_acount values($acount,1610,9375,'','".AddSlashes(pg_result($resaco,$iresaco,'ve70_data'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1610,9376,'','".AddSlashes(pg_result($resaco,$iresaco,'ve70_hora'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1610,18842,'','".AddSlashes(pg_result($resaco,$iresaco,'ve70_observacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1610,18843,'','".AddSlashes(pg_result($resaco,$iresaco,'ve70_origemgasto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from veicabast

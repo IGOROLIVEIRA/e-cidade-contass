@@ -107,7 +107,15 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" style='margin-top: 25px' topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 	<?
-	include("forms/db_frmveicmanut.php");
+    /**
+     * Alteração realizada para atender os diversis layouts do SICOM. Para cada ano, existem atualizações
+     * nos formularios que conflitam entre se. Portanto foi adotado que fossem criados formulários específicos
+     * para cada ano.
+     */
+    if(db_getsession('DB_anousu') > 2015)
+        include("forms/db_frmveicmanutcts.php");
+    else
+        include("forms/db_frmveicmanut.php");
 	?>
 </body>
 </html>

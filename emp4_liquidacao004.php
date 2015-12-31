@@ -307,7 +307,10 @@ switch ($objJson->method) {
                                          $objJson->e69_dtnota,
                                          $sHistorico,
                                          true,
-                                         $objJson->oInfoNota);
+                                         $objJson->oInfoNota,
+                                         $objJson->e69_notafiscaleletronica,
+                                         $objJson->e69_chaveacesso,
+                                         $objJson->e69_nfserie);
 
       if ($oRetorno !== false) {
 

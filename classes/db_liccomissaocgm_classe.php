@@ -45,13 +45,15 @@ class cl_liccomissaocgm {
    var $l31_codigo = 0; 
    var $l31_liccomissao = 0; 
    var $l31_numcgm = 0; 
-   var $l31_tipo = null; 
+   var $l31_tipo = null;
+   var $l31_licitacao = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  l31_codigo = int4 = Código Sequencial 
                  l31_liccomissao = int4 = Código Sequencial da comissão 
                  l31_numcgm = int4 = Numcgm Participante da Comissão 
-                 l31_tipo = char(1) = Tipo 
+                 l31_tipo = char(1) = Tipo
+                 l31_licitacao = int4 = Código Licitação
                  ";
    //funcao construtor da classe 
    function cl_liccomissaocgm() { 
@@ -82,7 +84,7 @@ class cl_liccomissaocgm {
    // funcao para inclusao
    function incluir ($l31_codigo){ 
       $this->atualizacampos();
-     if($this->l31_liccomissao == null ){ 
+     /*if($this->l31_liccomissao == null ){
        $this->erro_sql = " Campo Código Sequencial da comissão nao Informado.";
        $this->erro_campo = "l31_liccomissao";
        $this->erro_banco = "";
@@ -90,8 +92,8 @@ class cl_liccomissaocgm {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
-     if($this->l31_numcgm == null ){ 
+     }*/
+     if($this->l31_numcgm == null ){
        $this->erro_sql = " Campo Numcgm Participante da Comissão nao Informado.";
        $this->erro_campo = "l31_numcgm";
        $this->erro_banco = "";
@@ -103,6 +105,15 @@ class cl_liccomissaocgm {
      if($this->l31_tipo == null ){ 
        $this->erro_sql = " Campo Tipo nao Informado.";
        $this->erro_campo = "l31_tipo";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->l31_licitacao == null ){
+       $this->erro_sql = " Campo Licitação nao Informado.";
+       $this->erro_campo = "l31_licitacaos";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -145,13 +156,15 @@ class cl_liccomissaocgm {
                                        l31_codigo 
                                       ,l31_liccomissao 
                                       ,l31_numcgm 
-                                      ,l31_tipo 
+                                      ,l31_tipo
+                                      ,l31_licitacao
                        )
                 values (
                                 $this->l31_codigo 
-                               ,$this->l31_liccomissao 
+                               ,".($this->l31_liccomissao == '' ? '0' : $this->l31_liccomissao)."
                                ,$this->l31_numcgm 
-                               ,'$this->l31_tipo' 
+                               ,'$this->l31_tipo'
+                               ,$this->l31_licitacao
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -208,10 +221,10 @@ class cl_liccomissaocgm {
          return false;
        }
      }
-     if(trim($this->l31_liccomissao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l31_liccomissao"])){ 
+     if(trim($this->l31_liccomissao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l31_liccomissao"])){
        $sql  .= $virgula." l31_liccomissao = $this->l31_liccomissao ";
        $virgula = ",";
-       if(trim($this->l31_liccomissao) == null ){ 
+       if(trim($this->l31_liccomissao) == null ){
          $this->erro_sql = " Campo Código Sequencial da comissão nao Informado.";
          $this->erro_campo = "l31_liccomissao";
          $this->erro_banco = "";
@@ -240,6 +253,19 @@ class cl_liccomissaocgm {
        if(trim($this->l31_tipo) == null ){ 
          $this->erro_sql = " Campo Tipo nao Informado.";
          $this->erro_campo = "l31_tipo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->l31_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l31_licitacao"])){
+       $sql  .= $virgula." l31_licitacao = $this->l31_licitacao ";
+       $virgula = ",";
+       if(trim($this->l31_licitacao) == null ){
+         $this->erro_sql = " Campo Licitação nao Informado.";
+         $this->erro_campo = "l31_licitacao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

@@ -37,9 +37,9 @@ if(isset($db_opcaoal)){
      $l206_dataemissaocndt_dia  = "";
      $l206_datavalidadecndt_dia = "";
    }
-   $l206_datahab_dia = date('d' ,db_getsession("DB_datausu"));
+   /*$l206_datahab_dia = date('d' ,db_getsession("DB_datausu"));
    $l206_datahab_mes = date('m' ,db_getsession("DB_datausu"));
-   $l206_datahab_ano = date('Y' ,db_getsession("DB_datausu"));
+   $l206_datahab_ano = date('Y' ,db_getsession("DB_datausu"));*/
 }
 ?>
 <form name="form1" method="post" action="">

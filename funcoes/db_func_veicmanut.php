@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "distinct veicmanut.ve62_codigo,veicmanut.ve62_veiculos,veicmanut.ve62_dtmanut,veicmanut.ve62_vlrmobra,veicmanut.ve62_vlrpecas,veicmanut.ve62_descr,veicmanut.ve62_notafisc,veicmanut.ve62_medida,veicmanut.ve62_veiccadtiposervico,veicmanut.ve62_usuario,veicmanut.ve62_data,veicmanut.ve62_hora";
+$campos = "distinct veicmanut.ve62_codigo,veicmanut.ve62_veiculos,veicmanut.ve62_dtmanut,veicmanut.ve62_descr,veicmanut.ve62_notafisc,veicmanut.ve62_medida,veicmanut.ve62_veiccadtiposervico,veicmanut.ve62_usuario,veicmanut.ve62_data,veicmanut.ve62_hora";
 ?>

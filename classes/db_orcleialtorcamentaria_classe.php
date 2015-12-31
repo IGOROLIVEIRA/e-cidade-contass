@@ -101,6 +101,21 @@ class cl_orcleialtorcamentaria {
        $this->erro_status = "0";
        return false;
      }
+
+     /**
+      * Ocorrencia:
+      * Campo o200_vlautorizado obrigatorio
+      */
+
+     if($this->o200_vlautorizado == null ){
+       $this->erro_sql = " Campo Valor Autorizado nao Informado.";
+       $this->erro_campo = "o200_vlautorizado";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($o200_sequencial == "" || $o200_sequencial == null ){
        $result = db_query("select nextval('orcleialtorcamentaria_o200_sequencial_seq')"); 
        if($result==false){
@@ -253,6 +268,25 @@ class cl_orcleialtorcamentaria {
        if(trim($this->o200_descrartigo) == null ){ 
          $this->erro_sql = " Campo Descrição Artigo nao Informado.";
          $this->erro_campo = "o200_descrartigo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
+     /**
+      * Ocorrencia
+      * Campo o200_vlautorizado obrigatorio
+      */
+
+     if(trim($this->o200_vlautorizado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o200_vlautorizado"])){
+       $sql  .= $virgula." o200_vlautorizado = '$this->o200_vlautorizado' ";
+       $virgula = ",";
+       if(trim($this->o200_vlautorizado) == null ){
+         $this->erro_sql = " Campo Valor Autorizado nao Informado.";
+         $this->erro_campo = "o200_vlautorizado";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

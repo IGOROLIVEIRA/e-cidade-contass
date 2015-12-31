@@ -162,7 +162,8 @@ $sWhereContratos = " and 1 = 1 ";
         $dbwhere   = "l08_altera is true and";
       }*/
 	  if (isset($situacao) && trim($situacao) != ''){
-        $dbwhere .= "l20_licsituacao in ($situacao,11) and ";
+
+          $dbwhere .= "l20_licsituacao in ($situacao,11) or (pc50_pctipocompratribunal in (100,101,102) and l20_licsituacao in ($situacao,1,11)) and ";
       }
 
       if (!empty($oGet->validasaldo)){

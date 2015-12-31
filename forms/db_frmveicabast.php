@@ -152,6 +152,23 @@ db_app::load("estilos.css");
                                     ?>
                                 </td>
                             </tr>
+                            <?php
+                            /**
+                             * Ocorrência 1193
+                             * Campo incluído conforme solicitado em planilha anexa à ocorrencia.
+                             */
+                            ?>
+                            <tr>
+                                <td nowrap title="<?= @$Tve70_origemgasto ?>">
+                                    <?= @$Lve70_origemgasto ?>
+                                </td>
+                                <td>
+                                    <?
+                                    $x = array("1" => "ESTOQUE", "2" => "CONSUMO IMEDIATO");
+                                    db_select('ve70_origemgasto', $x, true, $db_opcao, "");
+                                    ?>
+                                </td>
+                            </tr>
                             <tr>
                                 <td nowrap title="<?= @$Tve70_dtabast ?>">
                                     <?= @$Lve70_dtabast ?>

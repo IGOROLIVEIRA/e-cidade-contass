@@ -49,6 +49,7 @@ if(((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Inclui
   $clpcmater->pc01_libaut = @$pc01_libaut;
   $clpcmater->pc01_ativo = "false";
   $clpcmater->pc01_conversao = "false";
+  $clpcmater->pc01_data = $pc01_data;
   $clpcmater->incluir(null);  
   if($clpcmater->erro_status==0){
     $sqlerro = true;

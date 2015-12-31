@@ -152,7 +152,14 @@ $rotulo->label("z01_cgccpf");
           if (isset($anul) && $anul == false) {
             $dbwhere .= " and e60_vlranu<e60_vlremp ";	  
           }
-          
+          /**
+           * @todo: acrescentar a busca pelo elemento do empenho
+           *
+          if($elementoconsumo == 1){
+            $dbwhere .= " and e60_numemp = 123 ";
+
+          }
+          */
           if (db_getsession("DB_itemmenu_acessado") != 1985513) {
             // O código abaixo, filtra do financeiro os empenhos realizados no pessoal
             $dbwhere .= " AND e60_codemp NOT IN (

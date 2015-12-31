@@ -1882,7 +1882,7 @@ class empenho {
    *  @return recordset;
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
-                            $lIniciaTransacao=true, $oInfoNota = null){
+                            $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
     $this->iPagOrdem = '';
@@ -2051,6 +2051,9 @@ class empenho {
       $objEmpNota->e69_anousu               = db_getsession("DB_anousu");
       $objEmpNota->e69_dtservidor           = date('Y-m-d');
       $objEmpNota->e69_dtinclusao           = date('Y-m-d',db_getsession("DB_datausu"));
+      $objEmpNota->e69_notafiscaleletronica = $iNfe;
+      $objEmpNota->e69_chaveacesso          = $sChaveAcesso;
+      $objEmpNota->e69_nfserie              = $sSerie;
       $objEmpNota->incluir(null);
 
       if ($objEmpNota->erro_status == 0){

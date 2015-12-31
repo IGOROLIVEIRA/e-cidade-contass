@@ -55,7 +55,8 @@ class cl_pcmater {
    var $pc01_fraciona = 'f'; 
    var $pc01_validademinima = 'f'; 
    var $pc01_obrigatorio = 'f'; 
-   var $pc01_liberaresumo = 'f'; 
+   var $pc01_liberaresumo = 'f';
+   var $pc01_data;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  pc01_codmater = int4 = Código do Material 
@@ -71,7 +72,9 @@ class cl_pcmater {
                  pc01_fraciona = bool = Fraciona 
                  pc01_validademinima = bool = Validade Mínima 
                  pc01_obrigatorio = bool = Obrigatório 
-                 pc01_liberaresumo = bool = Liberar Resumo 
+                 pc01_liberaresumo = bool = Liberar Resumo
+                 pc01_liberare = bool = Liberar Resumo
+                 pc01_data = date = Data da inclusão
                  ";
    //funcao construtor da classe 
    function cl_pcmater() { 
@@ -266,7 +269,8 @@ class cl_pcmater {
                                       ,pc01_fraciona 
                                       ,pc01_validademinima 
                                       ,pc01_obrigatorio 
-                                      ,pc01_liberaresumo 
+                                      ,pc01_liberaresumo
+                                      ,pc01_data
                        )
                 values (
                                 $this->pc01_codmater 
@@ -282,7 +286,8 @@ class cl_pcmater {
                                ,'$this->pc01_fraciona' 
                                ,'$this->pc01_validademinima' 
                                ,'$this->pc01_obrigatorio' 
-                               ,'$this->pc01_liberaresumo' 
+                               ,'$this->pc01_liberaresumo'
+                               ,'$this->pc01_data'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -502,6 +507,19 @@ class cl_pcmater {
        if(trim($this->pc01_liberaresumo) == null ){ 
          $this->erro_sql = " Campo Liberar Resumo nao Informado.";
          $this->erro_campo = "pc01_liberaresumo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->pc01_data)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_data"])){
+       $sql  .= $virgula." pc01_data = '$this->pc01_data' ";
+       $virgula = ",";
+       if(trim($this->pc01_data) == null ){
+         $this->erro_sql = " Campo data nao Informado.";
+         $this->erro_campo = "pc01_data";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -807,7 +825,7 @@ class cl_pcmater {
      }else{
        $sql .= $campos;
      }
-    
+
      $sql .= " from pcmater ";
      $sql .= "      inner join pcmaterele   on  pcmaterele.pc07_codmater = pcmater.pc01_codmater ";
      $sql .= "      inner join orcelemento  on  orcelemento.o56_codele  = pcmaterele.pc07_codele and orcelemento.o56_anousu = ".db_getsession("DB_anousu");

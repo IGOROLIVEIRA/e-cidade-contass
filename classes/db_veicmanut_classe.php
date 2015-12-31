@@ -60,8 +60,14 @@ class cl_veicmanut {
    var $ve62_data = null; 
    var $ve62_hora = null; 
    var $ve62_medida = 0; 
-   var $ve62_observacao = null; 
-   // cria propriedade com as variaveis do arquivo 
+   var $ve62_observacao = null;
+    //Campos para o db_frmveicmanutcts.php
+   var $ve62_origemgasto = null;
+   var $ve62_tipogasto = null;
+   var $ve62_atestado = null;
+   var $ve62_numemp = null;
+   var $ve62_valor = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ve62_codigo = int4 = Código Manutenção 
                  ve62_veiculos = int4 = Veiculo 
@@ -75,7 +81,12 @@ class cl_veicmanut {
                  ve62_data = date = Data da Inclusão/Alteração 
                  ve62_hora = char(5) = Hora da Inclusão/Alteração 
                  ve62_medida = float8 = Medida 
-                 ve62_observacao = text = Observação 
+                 ve62_observacao = text = Observação
+                 ve62_origemgasto = int4 = Origem do Gasto
+                 ve62_tipogasto = int4 = Tipo do Gasto
+                 ve62_atestado = int4 = Atestado do Controle Interno
+                 ve62_numemp = int = Numero do Empenho
+                 ve62_valor = int = Numero do Empenho
                  ";
    //funcao construtor da classe 
    function cl_veicmanut() { 
@@ -107,6 +118,7 @@ class cl_veicmanut {
        }
        $this->ve62_vlrmobra = ($this->ve62_vlrmobra == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_vlrmobra"]:$this->ve62_vlrmobra);
        $this->ve62_vlrpecas = ($this->ve62_vlrpecas == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_vlrpecas"]:$this->ve62_vlrpecas);
+       $this->ve62_valor = ($this->ve62_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_valor"]:$this->ve62_valor);
        $this->ve62_descr = ($this->ve62_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_descr"]:$this->ve62_descr);
        $this->ve62_notafisc = ($this->ve62_notafisc == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_notafisc"]:$this->ve62_notafisc);
        $this->ve62_veiccadtiposervico = ($this->ve62_veiccadtiposervico == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_veiccadtiposervico"]:$this->ve62_veiccadtiposervico);
@@ -121,11 +133,22 @@ class cl_veicmanut {
        }
        $this->ve62_hora = ($this->ve62_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_hora"]:$this->ve62_hora);
        $this->ve62_medida = ($this->ve62_medida == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_medida"]:$this->ve62_medida);
+       $this->ve62_origemgasto = ($this->ve62_origemgasto == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_origemgasto"]:$this->ve62_origemgasto);
+       $this->ve62_tipogasto = ($this->ve62_tipogasto == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_tipogasto"]:$this->ve62_tipogasto);
+       $this->ve62_atestado = ($this->ve62_atestado == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_atestado"]:$this->ve62_atestado);
+       $this->ve62_numemp = ($this->ve62_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_numemp"]:$this->ve62_numemp);
        $this->ve62_observacao = ($this->ve62_observacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_observacao"]:$this->ve62_observacao);
      }else{
        $this->ve62_codigo = ($this->ve62_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve62_codigo"]:$this->ve62_codigo);
      }
    }
+    /**
+     * Inicio das validações
+     * Campos comuns: ve62_codigo, ve62_veiculos, ve62_dtmanut, ve62_descr, ve62_notafisc, ve62_medida, ve62_usuario,
+     * ve62_data, ve62_hora, ve62_observacao, ve62_veiccadtiposervico
+     * Campos 2015: ve62_vlrmobra, ve62_vlrpecas
+     * Campos 2016: ve62_origemgasto, ve62_tipogasto, ve62_atestado, ve62_numemp, ve62_valor
+     */
    // funcao para inclusao
    function incluir ($ve62_codigo){ 
       $this->atualizacampos();
@@ -147,23 +170,29 @@ class cl_veicmanut {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve62_vlrmobra == null ){ 
-       $this->erro_sql = " Campo Valor da Mão de Obra nao Informado.";
-       $this->erro_campo = "ve62_vlrmobra";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->ve62_vlrmobra == null && db_getsession('DB_anousu') > 2015){
+
+         $this->ve62_vlrmobra = 0;
+     } else {
+
+         $this->erro_sql = " Campo Valor da Mão de Obra nao Informado.";
+         $this->erro_campo = "ve62_vlrmobra";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
      }
-     if($this->ve62_vlrpecas == null ){ 
-       $this->erro_sql = " Campo Valor em Peças nao Informado.";
-       $this->erro_campo = "ve62_vlrpecas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->ve62_vlrpecas == null && db_getsession('DB_anousu') > 2015){
+         $this->ve62_vlrpecas = 0;
+     } else {
+         $this->erro_sql = " Campo Valor em Peças nao Informado.";
+         $this->erro_campo = "ve62_vlrpecas";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
      }
      if($this->ve62_descr == null ){ 
        $this->erro_sql = " Campo Serviço Executado nao Informado.";
@@ -183,14 +212,11 @@ class cl_veicmanut {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve62_veiccadtiposervico == null ){ 
-       $this->erro_sql = " Campo Tipo de Serviço nao Informado.";
-       $this->erro_campo = "ve62_veiccadtiposervico";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     /*
+      * Validação removida por solicitação de Robson e Debora.
+      */
+     if($this->ve62_veiccadtiposervico == null ){
+         $this->ve62_veiccadtiposervico = 0;
      }
      if($this->ve62_usuario == null ){ 
        $this->erro_sql = " Campo Usuário nao Informado.";
@@ -228,6 +254,9 @@ class cl_veicmanut {
        $this->erro_status = "0";
        return false;
      }
+       if($ve62_numemp == "" || $ve62_numemp == null ){
+           $this->ve62_numemp = "null";
+       }
      if($ve62_codigo == "" || $ve62_codigo == null ){
        $result = db_query("select nextval('veicmanut_ve62_codigo_seq')"); 
        if($result==false){
@@ -273,7 +302,12 @@ class cl_veicmanut {
                                       ,ve62_data 
                                       ,ve62_hora 
                                       ,ve62_medida 
-                                      ,ve62_observacao 
+                                      ,ve62_observacao
+                                      ,ve62_origemgasto
+                                      ,ve62_tipogasto
+                                      ,ve62_atestado
+                                      ,ve62_numemp
+                                      ,ve62_valor
                        )
                 values (
                                 $this->ve62_codigo 
@@ -288,7 +322,12 @@ class cl_veicmanut {
                                ,".($this->ve62_data == "null" || $this->ve62_data == ""?"null":"'".$this->ve62_data."'")." 
                                ,'$this->ve62_hora' 
                                ,$this->ve62_medida 
-                               ,'$this->ve62_observacao' 
+                               ,'$this->ve62_observacao'
+                               ,$this->ve62_origemgasto
+                               ,$this->ve62_tipogasto
+                               ,$this->ve62_atestado
+                               ,$this->ve62_numemp
+                               ,$this->ve62_valor
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -333,6 +372,11 @@ class cl_veicmanut {
        $resac = db_query("insert into db_acount values($acount,1603,9337,'','".AddSlashes(pg_result($resaco,0,'ve62_hora'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,1603,11084,'','".AddSlashes(pg_result($resaco,0,'ve62_medida'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,1603,18840,'','".AddSlashes(pg_result($resaco,0,'ve62_observacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,1603,18841,'','".AddSlashes(pg_result($resaco,0,'ve62_origemgasto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,1603,18842,'','".AddSlashes(pg_result($resaco,0,'ve62_tipogasto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,1603,18843,'','".AddSlashes(pg_result($resaco,0,'ve62_atestado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,1603,18844,'','".AddSlashes(pg_result($resaco,0,'ve62_numemp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,1603,18845,'','".AddSlashes(pg_result($resaco,0,'ve62_valor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    } 
@@ -341,6 +385,13 @@ class cl_veicmanut {
       $this->atualizacampos();
      $sql = " update veicmanut set ";
      $virgula = "";
+       /**
+        * Inicio das validações
+        * Campos comuns: ve62_codigo, ve62_veiculos, ve62_dtmanut, ve62_descr, ve62_notafisc, ve62_medida, ve62_usuario,
+        * ve62_data, ve62_hora, ve62_observacao, ve62_veiccadtiposervico
+        * Campos 2015: ve62_vlrmobra, ve62_vlrpecas
+        * Campos 2016: ve62_origemgasto, ve62_tipogasto, ve62_atestado, ve62_numemp, ve62_valor
+        */
      if(trim($this->ve62_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_codigo"])){ 
        $sql  .= $virgula." ve62_codigo = $this->ve62_codigo ";
        $virgula = ",";
@@ -394,10 +445,13 @@ class cl_veicmanut {
          }
        }
      }
-     if(trim($this->ve62_vlrmobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_vlrmobra"])){ 
+     /*
+      * Este campo só sera obrigatori se o anousu da sessao for menor que 2016
+      */
+     if(trim($this->ve62_vlrmobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_vlrmobra"])){
        $sql  .= $virgula." ve62_vlrmobra = $this->ve62_vlrmobra ";
        $virgula = ",";
-       if(trim($this->ve62_vlrmobra) == null ){ 
+       if(trim($this->ve62_vlrmobra) == null && db_getsession('DB_anousu') < 2016){
          $this->erro_sql = " Campo Valor da Mão de Obra nao Informado.";
          $this->erro_campo = "ve62_vlrmobra";
          $this->erro_banco = "";
@@ -407,10 +461,13 @@ class cl_veicmanut {
          return false;
        }
      }
-     if(trim($this->ve62_vlrpecas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_vlrpecas"])){ 
+       /*
+        * Este campo só sera obrigatori se o anousu da sessao for menor que 2016
+        */
+     if(trim($this->ve62_vlrpecas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_vlrpecas"])){
        $sql  .= $virgula." ve62_vlrpecas = $this->ve62_vlrpecas ";
        $virgula = ",";
-       if(trim($this->ve62_vlrpecas) == null ){ 
+       if(trim($this->ve62_vlrpecas) == null && db_getsession('DB_anousu') < 2016){
          $this->erro_sql = " Campo Valor em Peças nao Informado.";
          $this->erro_campo = "ve62_vlrpecas";
          $this->erro_banco = "";
@@ -449,7 +506,10 @@ class cl_veicmanut {
      if(trim($this->ve62_veiccadtiposervico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_veiccadtiposervico"])){ 
        $sql  .= $virgula." ve62_veiccadtiposervico = $this->ve62_veiccadtiposervico ";
        $virgula = ",";
-       if(trim($this->ve62_veiccadtiposervico) == null ){ 
+         /*
+          * Solicitado por Robson e Debora a remoção da obrigatoriedade deste campo
+          */
+       /*if(trim($this->ve62_veiccadtiposervico) == null ){
          $this->erro_sql = " Campo Tipo de Serviço nao Informado.";
          $this->erro_campo = "ve62_veiccadtiposervico";
          $this->erro_banco = "";
@@ -457,7 +517,7 @@ class cl_veicmanut {
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
-       }
+       }*/
      }
      if(trim($this->ve62_usuario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_usuario"])){ 
        $sql  .= $virgula." ve62_usuario = $this->ve62_usuario ";
@@ -525,14 +585,42 @@ class cl_veicmanut {
          return false;
        }
      }
-     if(trim($this->ve62_observacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_observacao"])){ 
-       $sql  .= $virgula." ve62_observacao = '$this->ve62_observacao' ";
-       $virgula = ",";
+       /**
+        * Novos campos para o formulario db_frmveicmanut.php que somente deverao ser gravados em 2016
+        */
+     if(db_getsession('DB_anousu') > 2015) {
+         if (trim($this->ve62_observacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_observacao"])) {
+             $sql .= $virgula . " ve62_observacao = '$this->ve62_observacao' ";
+             $virgula = ",";
+         }
+         if (trim($this->ve62_origemgasto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_origemgasto"])) {
+             $sql .= $virgula . " ve62_origemgasto = $this->ve62_origemgasto ";
+             $virgula = ",";
+         }
+         if (trim($this->ve62_tipogasto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_tipogasto"])) {
+             $sql .= $virgula . " ve62_tipogasto = $this->ve62_tipogasto ";
+             $virgula = ",";
+         }
+         if (trim($this->ve62_atestado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_atestado"])) {
+             $sql .= $virgula . " ve62_atestado = $this->ve62_atestado ";
+             $virgula = ",";
+         }
+
+         if (trim($this->ve62_numemp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_numemp"])) {
+             $sql .= $virgula . " ve62_numemp = ".($this->ve62_numemp == "" || $this->ve62_numemp == null ? "NULL" : $this->ve62_numemp);
+             $virgula = ",";
+         }
+
+         if (trim($this->ve62_valor) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve62_valor"])) {
+             $sql .= $virgula . " ve62_valor = $this->ve62_valor ";
+             $virgula = ",";
+         }
      }
      $sql .= " where ";
      if($ve62_codigo!=null){
        $sql .= " ve62_codigo = $this->ve62_codigo";
      }
+
      $resaco = $this->sql_record($this->sql_query_file($this->ve62_codigo));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
@@ -566,6 +654,16 @@ class cl_veicmanut {
            $resac = db_query("insert into db_acount values($acount,1603,11084,'".AddSlashes(pg_result($resaco,$conresaco,'ve62_medida'))."','$this->ve62_medida',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["ve62_observacao"]) || $this->ve62_observacao != "")
            $resac = db_query("insert into db_acount values($acount,1603,18840,'".AddSlashes(pg_result($resaco,$conresaco,'ve62_observacao'))."','$this->ve62_observacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve62_origemgasto"]) || $this->ve62_origemgasto != "")
+           $resac = db_query("insert into db_acount values($acount,1603,18841,'".AddSlashes(pg_result($resaco,$conresaco,'ve62_origemgasto'))."','$this->ve62_origemgasto',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve62_tipogasto"]) || $this->ve62_tipogasto != "")
+           $resac = db_query("insert into db_acount values($acount,1603,18842,'".AddSlashes(pg_result($resaco,$conresaco,'ve62_tipogasto'))."','$this->ve62_tipogasto',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve62_atestado"]) || $this->ve62_atestado != "")
+           $resac = db_query("insert into db_acount values($acount,1603,18843,'".AddSlashes(pg_result($resaco,$conresaco,'ve62_atestado'))."','$this->ve62_atestado',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve62_numemp"]) || $this->ve62_atestado != "")
+           $resac = db_query("insert into db_acount values($acount,1603,18844,'".AddSlashes(pg_result($resaco,$conresaco,'ve62_numemp'))."','$this->ve62_numemp',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ve62_valor"]) || $this->ve62_valor != "")
+           $resac = db_query("insert into db_acount values($acount,1603,18845,'".AddSlashes(pg_result($resaco,$conresaco,'ve62_valor'))."','$this->ve62_valor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $result = db_query($sql);
@@ -626,6 +724,11 @@ class cl_veicmanut {
          $resac = db_query("insert into db_acount values($acount,1603,9337,'','".AddSlashes(pg_result($resaco,$iresaco,'ve62_hora'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1603,11084,'','".AddSlashes(pg_result($resaco,$iresaco,'ve62_medida'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1603,18840,'','".AddSlashes(pg_result($resaco,$iresaco,'ve62_observacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1603,18841,'','".AddSlashes(pg_result($resaco,$iresaco,'ve62_origemgasto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1603,18842,'','".AddSlashes(pg_result($resaco,$iresaco,'ve62_tipogasto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1603,18843,'','".AddSlashes(pg_result($resaco,$iresaco,'ve62_atestado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1603,18844,'','".AddSlashes(pg_result($resaco,$iresaco,'ve62_numemp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1603,18845,'','".AddSlashes(pg_result($resaco,$iresaco,'ve62_valor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from veicmanut

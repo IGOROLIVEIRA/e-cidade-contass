@@ -94,10 +94,10 @@ db_select('pc60_bloqueado',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tpc60_orgaoreg?>">
        <?=@$Lpc60_orgaoreg?>
     </td>
-    <td> 
+    <td>
 <?
 //db_input('pc60_orgaoreg',10,$Ipc60_orgaoreg,true,'text',$db_opcao,"")
-$x = array("1"=>"Cartório de Registro Civil de Pessoas Jurídicas","2"=>"Junta Comercial","3"=>"Ordem dos Advogados do Brasil-OAB");
+$x = array("1"=>"Cartório de Registro Civil de Pessoas Jurídicas","2"=>"Junta Comercial","3"=>"Ordem dos Advogados do Brasil-OAB","4"=>"Portal do Empreendedor (MEI)");
 db_select("pc60_orgaoreg",$x,true,$db_opcao);
 
 ?>
@@ -105,7 +105,7 @@ db_select("pc60_orgaoreg",$x,true,$db_opcao);
   </tr>
   <tr>
     <td nowrap title="<?=@$Tpc60_dtreg?>">
-       <strong>Data do Registro CVM: </strong>
+       <strong>Data do Registro no Orgão: </strong>
     </td>
     <td> 
 <?
@@ -115,7 +115,7 @@ db_inputdata('pc60_dtreg',@$pc60_dtreg_dia,@$pc60_dtreg_mes,@$pc60_dtreg_ano,tru
   </tr>
     <tr>
     <td nowrap title="<?=@$Tpc60_numeroregistro?>">
-       <?=@$Lpc60_numeroregistro?>
+       <strong>Número Registro no Orgão: </strong>
     </td>
     <td> 
 <?
@@ -135,7 +135,7 @@ db_input('pc60_cnpjcpf',14,$Ipc60_cnpjcpf,true,'text',3,"",'','#FFFFFF')
   </tr>
   <tr>
     <td nowrap title="<?=@$Tpc60_dtreg_cvm?>">
-       <?=@$Lpc60_dtreg_cvm?>
+       <strong>Data do Registro CVM: </strong>
     </td>
     <td> 
 <?

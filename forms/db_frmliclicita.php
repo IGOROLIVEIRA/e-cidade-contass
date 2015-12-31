@@ -214,7 +214,7 @@ fieldset table tr > td {
 
  
  <tr>
-    <td nowrap title="<?=@$Tl20_tipliticacao?>">
+    <td nowrap title="<?=@$Tl20_tipliticacao?>" id="tipolicitacao">
        <?=@$Ll20_tipliticacao?>
     </td>
     <td> 
@@ -227,7 +227,7 @@ fieldset table tr > td {
  
 
  <tr>
-    <td nowrap title="<?=@$Tl20_tipnaturezaproced?>">
+    <td nowrap title="<?=@$Tl20_tipnaturezaproced?>" id="tipnaturezaproced">
        <?=@$Ll20_tipnaturezaproced?>
     </td>
     <td> 
@@ -266,7 +266,7 @@ fieldset table tr > td {
  </tr>
  
  <tr>
-    <td nowrap title="<?=@$Tl20_descontotab?>">
+    <td nowrap title="<?=@$Tl20_descontotab?>" id="descontotab">
        <?=@$Ll20_descontotab?>
     </td>
     <td> 
@@ -280,7 +280,7 @@ fieldset table tr > td {
  
  
   <tr>
-    <td nowrap title="<?=@$Tl20_numeroconvidado?>">
+    <td nowrap title="<?=@$Tl20_numeroconvidado?>" id="numeroconvidado">
        <?=@$Ll20_numeroconvidado?>
     </td>
     <td> 
@@ -313,8 +313,8 @@ fieldset table tr > td {
 <table>
 
  <tr>
-    <td nowrap title="<?=@$Tl20_dataaber?>">
-      <b> Data do Certame: </b> 
+    <td nowrap title="Data Emis/Alt Edital/Convite" id="dataaber">
+      <b> Data Emis/Alt Edital/Convite : </b>
     </td>
     <td> 
       <?
@@ -332,8 +332,8 @@ fieldset table tr > td {
  </tr>
 
  <tr>
-    <td nowrap title="<?=@$Tl20_datacria?>">
-       <?=@$Ll20_datacria?>
+    <td nowrap title="Data Abertura Proc. Adm.">
+        <b>Data Abertura Proc. Adm. :</b>
     </td>
     <td>
        <?
@@ -355,8 +355,8 @@ fieldset table tr > td {
  </tr>
 
   <tr>
-    <td nowrap title="<?=@$Tl20_dtpublic?>">
-       <?=@$Ll20_dtpublic?>
+    <td nowrap title="Data Publicação DO" id="dtpublic">
+        <b>Data Publicação DO : </b>
     </td>
     <td>
        <?
@@ -366,7 +366,7 @@ fieldset table tr > td {
  </tr>
 
 <tr>
-    <td nowrap title="<?=@$Tl20_recdocumentacao?>">
+    <td nowrap title="<?=@$Tl20_recdocumentacao?>" id="recdocumentacao">
        <?=@$Ll20_recdocumentacao?>
     </td>
     <td> 
@@ -377,7 +377,7 @@ fieldset table tr > td {
  </tr>
 
  <tr>
-    <td nowrap title="<?=@$Tl20_datapublicacao1?>">
+    <td nowrap title="<?=@$Tl20_datapublicacao1?>" id="datapublicacao1">
        <?=@$Ll20_datapublicacao1?>
     </td>
     <td> 
@@ -388,7 +388,7 @@ fieldset table tr > td {
  </tr>
 
 <tr>
-    <td nowrap title="<?=@$Tl20_nomeveiculo1?>">
+    <td nowrap title="<?=@$Tl20_nomeveiculo1?>" id="nomeveiculo1">
        <?=@$Ll20_nomeveiculo1?>
     </td>
     <td> 
@@ -399,7 +399,7 @@ fieldset table tr > td {
  </tr>
 
 <tr>
-    <td nowrap title="<?=@$Tl20_datapublicacao2?>">
+    <td nowrap title="<?=@$Tl20_datapublicacao2?>" id="datapublicacao2">
        <?=@$Ll20_datapublicacao2?>
     </td>
     <td> 
@@ -410,7 +410,7 @@ fieldset table tr > td {
  </tr>
 
 <tr>
-    <td nowrap title="<?=@$Tl20_nomeveiculo2?>">
+    <td nowrap title="<?=@$Tl20_nomeveiculo2?>" id="nomeveiculo2">
        <?=@$Ll20_nomeveiculo2?>
     </td>
     <td> 
@@ -425,7 +425,7 @@ fieldset table tr > td {
 </fieldset>
 
 <fieldset>
-<legend><strong>Detalhamento para EM e EPP	</strong></legend>
+<legend><strong>Detalhamento para ME e EPP	</strong></legend>
 <table>
  <tr>
     <td nowrap title="<?=@$Tl20_critdesempate?>">
@@ -498,7 +498,7 @@ fieldset table tr > td {
        <?
         db_input('l20_liclocal',10,$Il20_liclocal,true,'text',$db_opcao," onchange='js_pesquisal20_liclocal(false);'")
        ?>
-       <?=@$Ll03_usaregistropreco?>  
+       <div id="usaregistropreco"><?=@$Ll03_usaregistropreco?></div>
        <?
        if (!isset($l20_usaregistropreco)) {
         $l20_usaregistropreco = "f";
@@ -507,21 +507,37 @@ fieldset table tr > td {
     ?>
     </td>
  </tr>
-<tr>
-    <td nowrap title="<?=@$Tl20_liccomissao?>">
-       <?
-        db_ancora(@$Ll20_liccomissao,"js_pesquisal20_liccomissao(true);",$db_opcao);
-       ?>
-    </td>
+ <?
+ if(db_getsession("DB_anousu") >= 2016){
+ ?>
+ <tr>
+
     <td>
        <?
-        db_input('l20_liccomissao',10,$Il20_liccomissao,true,'text',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
+        db_input('l20_liccomissao',10,$Il20_liccomissao,true,'hidden',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
        ?>
     </td>
   </tr>
-
+<?
+ }else {
+ ?>
+     <tr>
+         <td nowrap title="<?=@$Tl20_liccomissao?>">
+             <?
+             db_ancora(@$Ll20_liccomissao,"js_pesquisal20_liccomissao(true);",$db_opcao);
+             ?>
+         </td>
+         <td>
+             <?
+             db_input('l20_liccomissao',10,$Il20_liccomissao,true,'text',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
+             ?>
+         </td>
+     </tr>
+ <?
+ }
+ ?>
 <tr>
-    <td nowrap title="<?=@$Tl20_equipepregao?>">
+    <td nowrap title="<?=@$Tl20_equipepregao?>" id="equipepregao">
        <?
         db_ancora(@$Ll20_equipepregao,"js_pesquisal20_equipepregao(true);",$db_opcao);
        ?>
@@ -583,7 +599,7 @@ fieldset table tr > td {
 
 <table>
  <tr>
-    <td nowrap title="<?=@$Tl20_local?>">
+    <td nowrap title="<?=@$Tl20_local?>" id="local">
        <?=@$Ll20_local?>
     </td>
     <td>
@@ -660,7 +676,7 @@ fieldset table tr > td {
  
  
  <tr>
-    <td nowrap title="<?=@$Tl20_aceitabilidade?>">
+    <td nowrap title="<?=@$Tl20_aceitabilidade?>" id="aceitabilidade">
        <b>Critério de Aceitabilidade:</b>
     </td>
     <td> 
@@ -801,7 +817,7 @@ function js_ProcCod_l20_codtipocom(proc,res) {
  }
     
 
- function js_retornolicitacao(oAjax){
+ function js_retornolicitacao(oAjax) {
 
 	 
 	 var oRetorno = eval("("+oAjax.responseText+")");
@@ -828,8 +844,7 @@ function js_ProcCod_l20_codtipocom(proc,res) {
 				
 			  }
 		if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102){
-			
-			
+
 			document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
 			document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
 			document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
@@ -843,6 +858,44 @@ function js_ProcCod_l20_codtipocom(proc,res) {
 			document.getElementById("l20_tipoprocesso").disabled=false;
 			//document.getElementById("l20_dtpubratificacao").value='';
 
+            /*Demandas sicom 2016*/
+            document.form1.l20_tipliticacao.style.display='none';
+            document.form1.l20_tipnaturezaproced.style.display='none';
+            document.form1.l20_descontotab.style.display='none';
+            document.form1.l20_numeroconvidado.style.display='none';
+            document.form1.l20_dataaber.style.display='none';
+                document.form1.dtjs_l20_dataaber.style.display='none';
+            document.form1.l20_dtpublic.style.display='none';
+                document.form1.dtjs_l20_dtpublic.style.display='none';
+            document.form1.l20_recdocumentacao.style.display='none';
+                document.form1.dtjs_l20_recdocumentacao.style.display='none';
+            document.form1.l20_datapublicacao1.style.display='none';
+                document.form1.dtjs_l20_datapublicacao1.style.display='none';
+            document.form1.l20_nomeveiculo1.style.display='none';
+            document.form1.l20_datapublicacao2.style.display='none';
+                document.form1.dtjs_l20_datapublicacao2.style.display='none';
+            document.form1.l20_nomeveiculo2.style.display='none';
+            document.form1.l20_usaregistropreco.style.display='none';
+            document.form1.l20_equipepregao.style.display='none';
+            document.form1.l20_local.style.display='none';
+            document.form1.l20_aceitabilidade.style.display='none';
+
+            document.getElementById("tipolicitacao").style.display='none';
+            document.getElementById("tipnaturezaproced").style.display='none';
+            document.getElementById("descontotab").style.display='none';
+            document.getElementById("numeroconvidado").style.display='none';
+            document.getElementById("dataaber").style.display='none';
+            document.getElementById("dtpublic").style.display='none';
+            document.getElementById("recdocumentacao").style.display='none';
+            document.getElementById("datapublicacao1").style.display='none';
+            document.getElementById("nomeveiculo1").style.display='none';
+            document.getElementById("datapublicacao2").style.display='none';
+            document.getElementById("nomeveiculo2").style.display='none';
+            document.getElementById("usaregistropreco").style.display='none';
+            document.getElementById("equipepregao").style.display='none';
+            document.getElementById("local").style.display='none';
+            document.getElementById("aceitabilidade").style.display='none';
+
 		}else{
 				
 			document.getElementById("l20_veicdivulgacao").disabled=true;
@@ -853,7 +906,47 @@ function js_ProcCod_l20_codtipocom(proc,res) {
 			//document.getElementById("l20_dtpubratificacao").value='';
 			
 			 /*document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';)*/
-			  }
+
+            /*Demandas sicom 2016*/
+            document.form1.l20_tipliticacao.style.display='inline';
+            document.form1.l20_tipnaturezaproced.style.display='inline';
+            document.form1.l20_descontotab.style.display='inline';
+            document.form1.l20_numeroconvidado.style.display='inline';
+            document.form1.l20_dataaber.style.display='inline';
+                document.form1.dtjs_l20_dataaber.style.display='inline';
+            document.form1.l20_dtpublic.style.display='inline';
+                document.form1.dtjs_l20_dtpublic.style.display='inline';
+            document.form1.l20_recdocumentacao.style.display='inline';
+                document.form1.dtjs_l20_recdocumentacao.style.display='inline';
+            document.form1.l20_datapublicacao1.style.display='inline';
+                document.form1.dtjs_l20_datapublicacao1.style.display='inline';
+            document.form1.l20_nomeveiculo1.style.display='inline';
+            document.form1.l20_datapublicacao2.style.display='inline';
+                document.form1.dtjs_l20_datapublicacao2.style.display='inline';
+            document.form1.l20_nomeveiculo2.style.display='inline';
+            document.form1.l20_usaregistropreco.style.display='inline';
+            document.form1.l20_equipepregao.style.display='inline';
+            document.form1.l20_local.style.display='inline';
+            document.form1.l20_aceitabilidade.style.display='inline';
+
+            document.getElementById("tipolicitacao").style.display='inline';
+            document.getElementById("tipnaturezaproced").style.display='inline';
+            document.getElementById("descontotab").style.display='inline';
+            document.getElementById("numeroconvidado").style.display='inline';
+            document.getElementById("dataaber").style.display='inline';
+            document.getElementById("dtpublic").style.display='inline';
+            document.getElementById("recdocumentacao").style.display='inline';
+            document.getElementById("datapublicacao1").style.display='inline';
+            document.getElementById("nomeveiculo1").style.display='inline';
+            document.getElementById("datapublicacao2").style.display='inline';
+            document.getElementById("nomeveiculo2").style.display='inline';
+            document.getElementById("usaregistropreco").style.display='inline';
+            document.getElementById("equipepregao").style.display='inline';
+            document.getElementById("local").style.display='inline';
+            document.getElementById("aceitabilidade").style.display='inline';
+
+        }
+
 	}
 	/*adequando os campos para evitar  o preenchimento pelo usuario caso nao seja um tipo de  INEXIGIBILIDADE*/
 	document.getElementById("l20_veicdivulgacao").disabled=true;

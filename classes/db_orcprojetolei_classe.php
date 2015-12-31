@@ -157,6 +157,30 @@ class cl_orcprojetolei {
        $this->erro_status = "0";
        return false;
      }
+
+     /**
+      * Ocorrência
+      * Obrigatoriedade dos campos
+      * o138_textolei e o138_altpercsuplementacao
+      */
+
+     if(($this->o138_textolei == null) || ($this->o138_textolei == "") ){
+       $this->erro_sql = " Campo o138_textolei nao declarado.";
+       $this->erro_banco = "Chave Primaria zerada.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
+     if(($this->o138_altpercsuplementacao == null) || ($this->o138_altpercsuplementacao == "") ){
+       $this->erro_sql = " Campo o138_altpercsuplementacao nao declarado.";
+       $this->erro_banco = "Chave Primaria zerada.";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      $sql = "insert into orcprojetolei(
                                        o138_sequencial 
                                       ,o138_numerolei 
@@ -282,13 +306,37 @@ class cl_orcprojetolei {
          return false;
        }
      }
+
+     /**
+      * Ocorrencia
+      * Campos o138_textolei e o138_altpercsuplementacao obrigatorios.
+      */
+
      if(trim($this->o138_textolei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o138_textolei"])){ 
        $sql  .= $virgula." o138_textolei = '$this->o138_textolei' ";
        $virgula = ",";
+       if(trim($this->o138_textolei) == null ){
+         $this->erro_sql = " Campo Texto do Projeto nao Informado.";
+         $this->erro_campo = "o138_textolei";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
      }
      if(trim($this->o138_altpercsuplementacao) !="" || isset($GLOBALS["HTTP_POST_VARS"]["o138_altpercsuplementacao"])){ 
        $sql  .= $virgula." o138_altpercsuplementacao = '$this->o138_altpercsuplementacao' ";
        $virgula = ",";
+       if(trim($this->o138_altpercsuplementacao) == null ){
+         $this->erro_sql = " Campo Alteração Percentual Suplementação nao Informado.";
+         $this->erro_campo = "o138_altpercsuplementacao";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
      }
      $sql .= " where ";
      if($o138_sequencial!=null){

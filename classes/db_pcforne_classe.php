@@ -192,6 +192,14 @@ class cl_pcforne {
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
+      }elseif(strlen($this->pc60_obs) < 10 || strlen($this->pc60_obs) > 2000) {
+         $this->erro_sql = " Campo Objeto Social deve ter mais que 10 caracteres e menos que 2000 caracteres ";
+         $this->erro_campo = "pc60_obs";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
       }
       if($this->pc60_orgaoreg == null && $this->fisica_juridica == 'j'){
        $this->erro_sql = " Campo Órgão Registro nao Informado.";
@@ -220,7 +228,8 @@ class cl_pcforne {
         $this->erro_status = "0";
         return false;
       }
-      /*if($this->pc60_dtreg_cvm == null && $this->fisica_juridica == 'j'){ 
+
+      if($this->pc60_dtreg_cvm == null && $this->fisica_juridica != 'j'){
         $this->erro_sql = " Campo Data do Registro CVM nao Informado.";
         $this->erro_campo = "pc60_dtreg_cvm";
         $this->erro_banco = "";
@@ -228,8 +237,8 @@ class cl_pcforne {
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
-      }*/
-     /* if($this->pc60_numerocvm == null && $this->fisica_juridica == 'j'){ 
+      }
+      if($this->pc60_numerocvm == null && $this->fisica_juridica != 'j'){
         $this->erro_sql = " Campo Número CVM nao Informado.";
         $this->erro_campo = "pc60_numerocvm";
         $this->erro_banco = "";
@@ -237,7 +246,7 @@ class cl_pcforne {
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
-      }*/
+      }
       /*if($this->pc60_inscriestadual == null && $this->fisica_juridica == 'j'){ 
         $this->erro_sql = " Campo Inscrição Estadual nao Informado.";
         $this->erro_campo = "pc60_inscriestadual";
@@ -397,6 +406,14 @@ class cl_pcforne {
      if(trim($this->pc60_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_obs"])){ 
        $sql  .= $virgula." pc60_obs = '$this->pc60_obs' ";
        $virgula = ",";
+     }elseif(strlen($this->pc60_obs) < 10 || strlen($this->pc60_obs) > 2000) {
+         $this->erro_sql = " Campo Objeto Social deve ter mais que 10 caracteres e menos que 2000 caracteres ";
+         $this->erro_campo = "pc60_obs";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
      }
      if(trim($this->pc60_bloqueado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_bloqueado"])){ 
        $sql  .= $virgula." pc60_bloqueado = '$this->pc60_bloqueado' ";
@@ -437,7 +454,7 @@ class cl_pcforne {
          return false;
        }
      }
-     /*if(trim($this->pc60_objsocial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_objsocial"])){ 
+     if(trim($this->pc60_objsocial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_objsocial"])){
         $sql  .= $virgula." pc60_objsocial = '$this->pc60_objsocial' ";
         $virgula = ",";
         if(trim($this->pc60_objsocial) == null ){ 
@@ -449,7 +466,7 @@ class cl_pcforne {
           $this->erro_status = "0";
           return false;
         }
-      }*/
+      }
       if(trim($this->pc60_orgaoreg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_orgaoreg"])){
         $sql  .= $virgula." pc60_orgaoreg = $this->pc60_orgaoreg ";
         $virgula = ",";
@@ -509,7 +526,7 @@ class cl_pcforne {
     if(trim($this->pc60_dtreg_cvm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"] !="") ){ 
         $sql  .= $virgula." pc60_dtreg_cvm = '$this->pc60_dtreg_cvm' ";
         $virgula = ",";
-        /*if(trim($this->pc60_dtreg_cvm) == null && $this->fisica_juridica == 'j'){ 
+        if(trim($this->pc60_dtreg_cvm) == null && $this->fisica_juridica != 'j'){
           $this->erro_sql = " Campo Data do Registro CVM nao Informado.";
           $this->erro_campo = "pc60_dtreg_cvm_dia";
           $this->erro_banco = "";
@@ -517,12 +534,12 @@ class cl_pcforne {
           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
           $this->erro_status = "0";
           return false;
-        }*/
+        }
       }     else{ 
         if(isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"])){ 
           $sql  .= $virgula." pc60_dtreg_cvm = null ";
           $virgula = ",";
-          /*if(trim($this->pc60_dtreg_cvm) == null && $this->fisica_juridica == 'j'){ 
+          if(trim($this->pc60_dtreg_cvm) == null && $this->fisica_juridica != 'j'){
             $this->erro_sql = " Campo Data do Registro CVM nao Informado.";
             $this->erro_campo = "pc60_dtreg_cvm_dia";
             $this->erro_banco = "";
@@ -530,14 +547,14 @@ class cl_pcforne {
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
             return false;
-          }*/
+          }
         }
       }
       
       if(trim($this->pc60_numerocvm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numerocvm"])){ 
         $sql  .= $virgula." pc60_numerocvm = '$this->pc60_numerocvm' ";
         $virgula = ",";
-      /*if(trim($this->pc60_numerocvm) == null && $this->fisica_juridica == 'j'){ 
+        if(trim($this->pc60_numerocvm) == null && $this->fisica_juridica != 'j'){
           $this->erro_sql = " Campo Número CVM nao Informado.";
           $this->erro_campo = "pc60_numerocvm";
           $this->erro_banco = "";
@@ -545,7 +562,7 @@ class cl_pcforne {
           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
           $this->erro_status = "0";
           return false;
-        }*/
+        }
       }
       if(trim($this->pc60_inscriestadual)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_inscriestadual"])){ 
         $sql  .= $virgula." pc60_inscriestadual = '$this->pc60_inscriestadual' ";

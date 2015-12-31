@@ -64,6 +64,9 @@ class cl_empnota {
    var $e69_dtinclusao_mes = null;
    var $e69_dtinclusao_ano = null;
    var $e69_dtinclusao = null;
+   var $e69_notafiscaleletronica = 0;
+   var $e69_chaveacesso = null;
+   var $e69_nfserie = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e69_codnota = int4 = Nota
@@ -76,6 +79,9 @@ class cl_empnota {
                  e69_tipodocumentosfiscal = int4 = Tipo de Documento Fiscal
                  e69_dtservidor = date = Data do Servidor
                  e69_dtinclusao = date = Data da Inclusão
+                 e69_notafiscaleletronica = int8 = Tipo de Nota Fiscal Eletrônica
+                 e69_chaveacesso = varchar(60) = Chave de Acesso
+                 e69_nfserie = varchar(8) = Série da Nota
                  ";
    //funcao construtor da classe
    function cl_empnota() {
@@ -133,6 +139,9 @@ class cl_empnota {
             $this->e69_dtinclusao = $this->e69_dtinclusao_ano."-".$this->e69_dtinclusao_mes."-".$this->e69_dtinclusao_dia;
          }
        }
+       $this->e69_notafiscaleletronica = ($this->e69_notafiscaleletronica == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_notafiscaleletronica"]:$this->e69_notafiscaleletronica);
+       $this->e69_chaveacesso = ($this->e69_chaveacesso == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_chaveacesso"]:$this->e69_chaveacesso);
+       $this->e69_nfserie = ($this->e69_nfserie == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_nfserie"]:$this->e69_nfserie);
      }else{
        $this->e69_codnota = ($this->e69_codnota == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_codnota"]:$this->e69_codnota);
      }
@@ -253,6 +262,29 @@ class cl_empnota {
        $this->erro_status = "0";
        return false;
      }
+
+     /* 
+      * Campos incluídos por causa do sicom 
+      */
+     if( $this->e69_chaveacesso == null &&
+        ($this->e69_notafiscaleletronica == 1 || $this->e69_notafiscaleletronica == 2 || $this->e69_notafiscaleletronica == 4)){
+       $this->erro_sql = " Campo Chave de Acesso não Informado.";
+       $this->erro_campo = "e69_chaveacesso";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->e69_nfserie == null && $this->e69_notafiscaleletronica == 3){
+       $this->erro_sql = " Campo Número de série não Informado.";
+       $this->erro_campo = "e69_nfserie";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      $sql = "insert into empnota(
                                        e69_codnota
                                       ,e69_numero
@@ -264,6 +296,9 @@ class cl_empnota {
                                       ,e69_tipodocumentosfiscal
                                       ,e69_dtservidor
                                       ,e69_dtinclusao
+                                      ,e69_notafiscaleletronica
+                                      ,e69_chaveacesso
+                                      ,e69_nfserie
                        )
                 values (
                                 $this->e69_codnota
@@ -276,6 +311,9 @@ class cl_empnota {
                                ,$this->e69_tipodocumentosfiscal
                                ,".($this->e69_dtservidor == "null" || $this->e69_dtservidor == ""?"null":"'".$this->e69_dtservidor."'")."
                                ,".($this->e69_dtinclusao == "null" || $this->e69_dtinclusao == ""?"null":"'".$this->e69_dtinclusao."'")."
+                              ,$this->e69_notafiscaleletronica
+                              ,".($this->e69_chaveacesso == '' ? 'null' : $this->e69_chaveacesso)."
+                              ,".($this->e69_nfserie == '' ? 'null' : $this->e69_nfserie)."
                       )";
      $result = db_query($sql);
      if($result==false){

@@ -25,28 +25,46 @@ if(isset($incluir)){
     db_redireciona('lic1_homologacaoadjudica001.php');
   }
 
-  $parecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,'l200_licitacao ='.$l202_licitacao)));
+  $parecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao ")));
   $precomedio  = pg_num_rows($clprecomedio->sql_record($clprecomedio->sql_query(null,'*',null,'l209_licitacao ='.$l202_licitacao)));
   
   if ( $clhomologacaoadjudica->verificaPrecoReferencia($l202_licitacao) >= 1 || $precomedio >= 1 ) {
     
     if ($parecer >= 1) {
 
-      db_inicio_transacao();
-      
-      $clhomologacaoadjudica->incluir($l202_sequencial);
-      
-      $l203_itens = explode(',', $l203_itens[0]);
+      $tipoparecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao and l200_tipoparecer = 3 ")));
 
-      foreach ($l203_itens as $item) {
-        $clitenshomologacao->l203_item                = $item;
-        $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
-        $clitenshomologacao->incluir(null);
+      if ($tipoparecer < 1) {
+        echo
+        "<script>alert('Tipo do Parecer não é Juridico - Julgamento')</script>";
+        db_redireciona('lic1_homologacaoadjudica001.php');
       }
-      
-      $clhomologacaoadjudica->alteraLicitacao($l202_licitacao,10);
 
-      db_fim_transacao();
+      $parecer2     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao and l200_data <= '$l202_datahomologacao' and l200_data <= '$l202_dataadjudicacao' ")));
+
+      if ($parecer2 >= 1) {
+
+        db_inicio_transacao();
+
+        $clhomologacaoadjudica->incluir($l202_sequencial);
+
+        $l203_itens = explode(',', $l203_itens[0]);
+
+        foreach ($l203_itens as $item) {
+          $clitenshomologacao->l203_item = $item;
+          $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
+          $clitenshomologacao->incluir(null);
+        }
+
+        $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 10);
+
+        db_fim_transacao();
+
+      }else{
+        echo
+        "<script>alert('Data da Homologação ou Adjudicação é menor que a data do parecer')</script>";
+        db_redireciona('lic1_homologacaoadjudica001.php');
+      }
 
     }else if($parecer < 1 || empty($parecer)){
 

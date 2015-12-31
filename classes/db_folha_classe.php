@@ -844,7 +844,7 @@ class cl_folha {
      }
      return $sql;
   }
-   function sql_query_gerarqbag ( $r38_regist=null,$campos="*",$ordem=null,$dbwhere=""){
+       function sql_query_gerarqbag ( $r38_regist=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
