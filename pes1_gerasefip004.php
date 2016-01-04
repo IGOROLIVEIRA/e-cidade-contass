@@ -713,8 +713,10 @@ if ( isset($oPost->gerar) ) {
                 
               if ($oPessoal->h13_tpcont >= 12) {
                 if($iMesUsu == 12 && trim($oPessoal->rh05_recis) != "" ){
-                 
-                  $remuneracaosem13 = $aBaseINSS[$oPessoal->rh01_regist] + $aBaseINSS13[$oPessoal->rh01_regist];
+
+                  // LINHA COMENTADA PARA NAO DEIXAR O SISTEMA SOMAR SALARIO BASE COM SALARIO PROPORCIONAL AOS DIAS TRABALHADOS
+                  //$remuneracaosem13 = $aBaseINSS[$oPessoal->rh01_regist] + $aBaseINSS13[$oPessoal->rh01_regist];
+                  $remuneracaosem13 = $aBaseINSS[$oPessoal->rh01_regist];
                   $remuneracao13 = 0;
                 }else{
                  
