@@ -312,8 +312,8 @@ class cl_empnota {
                                ,".($this->e69_dtservidor == "null" || $this->e69_dtservidor == ""?"null":"'".$this->e69_dtservidor."'")."
                                ,".($this->e69_dtinclusao == "null" || $this->e69_dtinclusao == ""?"null":"'".$this->e69_dtinclusao."'")."
                               ,$this->e69_notafiscaleletronica
-                              ,".($this->e69_chaveacesso == '' ? 'null' : $this->e69_chaveacesso)."
-                              ,".($this->e69_nfserie == '' ? 'null' : $this->e69_nfserie)."
+                              ,'".($this->e69_chaveacesso == '' ? 'null' : $this->e69_chaveacesso)."'
+                              ,'".($this->e69_nfserie == '' ? 'null' : $this->e69_nfserie)."'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -547,6 +547,37 @@ class cl_empnota {
            $this->erro_status = "0";
            return false;
          }
+       }
+     }
+     if(trim($this->e69_notafiscaleletronica)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e69_notafiscaleletronica"])){
+       $sql  .= $virgula." e69_notafiscaleletronica = $this->e69_notafiscaleletronica ";
+       $virgula = ",";
+     }
+     if(trim($this->e69_chaveacesso)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e69_chaveacesso"])){
+       $sql  .= $virgula." e69_chaveacesso = '{$this->e69_chaveacesso}' ";
+       $virgula = ",";
+       if( $this->e69_chaveacesso == null &&
+           ($this->e69_notafiscaleletronica == 1 || $this->e69_notafiscaleletronica == 2 || $this->e69_notafiscaleletronica == 4)){
+         $this->erro_sql = " Campo Chave de Acesso não Informado.";
+         $this->erro_campo = "e69_chaveacesso";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->e69_nfserie)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e69_nfserie"])){
+       $sql  .= $virgula." e69_nfserie = '{$this->e69_nfserie}' ";
+       $virgula = ",";
+       if($this->e69_nfserie == null && $this->e69_notafiscaleletronica == 3){
+         $this->erro_sql = " Campo Número de série não Informado.";
+         $this->erro_campo = "e69_nfserie";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
        }
      }
      $sql .= " where ";
