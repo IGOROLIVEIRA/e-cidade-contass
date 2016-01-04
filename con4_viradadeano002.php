@@ -98,7 +98,7 @@ function js_imprime(virada){
     // Verifica se existe virada já processada para os itens selecionados
     // Caso exista então valida se o processamento é do exercício anterior
 	    
-    $sSqlVirada  = " select distinct c31_db_viradacaditem,                                                         ";
+    /*$sSqlVirada  = " select distinct c31_db_viradacaditem,                                                         ";
     $sSqlVirada .= "        case                                                                                   ";
     $sSqlVirada .= "          when exists( select *                                                                ";
     $sSqlVirada .= "                         from db_virada a                                                      ";
@@ -127,7 +127,7 @@ function js_imprime(virada){
         $erro_msg  = "Processamento Interrompido!";
         $erro_msg .= "\\nItem de virada nº ".implode(",",$aListaItemErro)." sem processamento no exercício anterior";    	  	    	  
   	  }
-    }
+    }*/
 
     // Verifica apartir dos itens informados se deve ser feito a validação do orçamento  
     
