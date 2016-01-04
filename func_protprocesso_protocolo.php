@@ -137,8 +137,8 @@ $clprotprocesso->rotulo->label("p58_numero");
 
       if (!isset($pesquisa_chave)) {
 
-        $campos  = "p58_codproc as dl_código_do_processo, cast(p58_numero||'/'||p58_ano as varchar) as p58_numero,z01_numcgm as DB_p58_numcgm,";
-        $campos .= "z01_nome as dl_nome_ou_razão_social,z01_nome, p58_dtproc,p51_descr,p58_obs,p58_requer as DB_p58_requer, $sCampoInstituicao";
+        $campos  = "p58_dtproc,p51_descr,cast(p58_numeracao||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numero||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
+        $campos .= "p58_codproc,p58_requer as DB_p58_requer, $sCampoInstituicao, p58_numero";
 
         /**
          * Campo de pesquisa
@@ -146,8 +146,8 @@ $clprotprocesso->rotulo->label("p58_numero");
          */
         if ( !empty($oGet->sCampoPesquisa) && $oGet->sCampoPesquisa == 'p58_codproc' ) {
 
-          $campos  = "p58_codproc, cast(p58_numero||'/'||p58_ano as varchar) as p58_numero,z01_numcgm as DB_p58_numcgm,";
-          $campos .= "z01_nome, p58_dtproc,p51_descr,p58_obs,p58_requer as DB_p58_requer, $sCampoInstituicao";
+          $campos  = "p58_dtproc,p51_descr,cast(p58_numeracao||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numero||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
+          $campos .= "p58_codproc,p58_requer as DB_p58_requer, $sCampoInstituicao, p58_numero";
         }
 
         if (isset($chave_p58_numcgm) && (trim($chave_p58_numcgm)!="") ) {

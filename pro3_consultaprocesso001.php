@@ -84,7 +84,8 @@ $rotulo->label("numeroProcesso");
 		    </td>
 		    <td> 
 					<?php
-					  db_input('p58_numero',10,$Ip58_numero,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
+					  db_input('p58_numero',10,$Ip58_numero,true,'hidden',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
+                      db_input('p58_numeracao',10,$Ip58_numeracao,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
 					  db_input('p58_requer',40,$Ip58_requer,true,'text',3,'');
 					?>
 		    </td>
@@ -188,7 +189,7 @@ function js_pesquisap58_codproc(mostra) {
   
   if(mostra) {
 
-    sUrl += '&funcao_js=parent.js_mostraprotprocesso1|p58_numero|dl_nome_ou_razão_social';
+    sUrl += '&funcao_js=parent.js_mostraprotprocesso1|p58_numero|dl_nome_ou_razão_social|dl_Processo_Nº';
     js_OpenJanelaIframe('', 'db_iframe_cgm', sUrl, 'Pesquisa de Processos', true);
 
   } else {
@@ -211,8 +212,9 @@ function js_pesquisap58_codproc(mostra) {
   }
 }
 
-function js_mostraprotprocesso(chave, chave1, erro) {
-  
+function js_mostraprotprocesso(chave, chave1, chave2, erro) {
+  alert(erro);
+  document.form1.p58_numeracao.value = chave2;
   document.form1.p58_requer.value = chave1; 
   document.form1.p58_numero.value = chave;
   
@@ -222,8 +224,9 @@ function js_mostraprotprocesso(chave, chave1, erro) {
   }
 }
 
-function js_mostraprotprocesso1(sNumero, sNome) {
-  
+function js_mostraprotprocesso1(sNumero, sNome, chave) {
+
+  document.form1.p58_numeracao.value = chave;
   document.getElementById('p58_numero').value = sNumero;
   document.getElementById('p58_requer').value = sNome;
   db_iframe_cgm.hide();

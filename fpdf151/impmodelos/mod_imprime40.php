@@ -22,13 +22,13 @@ $this->objpdf->Setfont("Times", "B", 14);
 $this->objpdf->SetLeftMargin(15);
 $this->objpdf->sety(60);
 $this->objpdf->roundedrect(10, 58, 190, 60, 2, 'df', 1234);
-$this->objpdf->cell(50, 5, "PROTOCOLO Nº: ", 0, 0, 'L');
+$this->objpdf->cell(50, 5, "PROCESSO Nº: ", 0, 0, 'L');
 $this->objpdf->Setfont("Times", "", 12);
-$this->objpdf->cell(30, 5, $sNumeroProtocolo, 0, 0, 'L');
+$this->objpdf->cell(20, 5, $this->p58_numeracao.'/'.substr($sNumeroProtocolo,3,7), 0, 0, 'L');
 $this->objpdf->Setfont("Times", "B", 14);
-$this->objpdf->cell(75, 5, "NUMERAÇÃO DO PROCESSO: ", 0, 0, 'L');
+$this->objpdf->cell(75, 5, "PROTOCOLO GERAL: ", 0, 0, 'L');
 $this->objpdf->Setfont("Times", "", 12);
-$this->objpdf->cell(20, 5, $this->p58_numeracao, 0, 1, 'L');
+$this->objpdf->cell(30, 5, $sNumeroProtocolo, 0, 1, 'L');
 $this->objpdf->Setfont("Times", "B", 14);
 $this->objpdf->cell(50, 5, "TITULAR: ", 0, 0, 'L');
 $this->objpdf->Setfont("Times", "", 12);
@@ -52,7 +52,7 @@ if (trim($this->p58_requer ) != trim($this->z01_nome )) {
   $this->objpdf->cell(75, 5, $this->p58_requer , 0, 1, 'L');
 }
 $this->objpdf->Setfont("Times", "B", 14);
-$this->objpdf->Cell(50, 5, "ASSUNTO", 0, 0, "L");
+$this->objpdf->Cell(50, 5, "TIPO DE PROCESSO", 0, 0, "L");
 $this->objpdf->Setfont("Times", "", 12);
 $this->objpdf->multicell(100, 5, $this->p51_descr , 0, 1, 'L');
 $this->objpdf->Setfont("Times", "B", 14);

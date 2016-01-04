@@ -108,7 +108,7 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
        $clprotprocesso->p58_instit     = db_getsession("DB_instit");
        $clprotprocesso->p58_numero     = "{$iNumeroProcesso}";
        $clprotprocesso->p58_ano        = db_getsession("DB_anousu");
-       $clprotprocesso->p58_numeracao  = $p58_numeracao; 
+       $clprotprocesso->p58_numeracao  = $p58_numeracao;
        $clprotprocesso->incluir($p58_codproc);
 
        $p58_codproc = $clprotprocesso->p58_codproc;
@@ -263,7 +263,8 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
       if ( isset($lSqlErro) && $lSqlErro === false) {
 
         $sMsg  = "Inclusao efetuada com Sucesso\\n";
-        $sMsg .= "Processo  : {$iNumeroProcesso}/".db_getsession("DB_anousu")."\\n";
+        //$sMsg .= "Processo  : {$iNumeroProcesso}/".db_getsession("DB_anousu")."\\n";
+        $sMsg .= "Processo  : {$p58_numeracao}/".db_getsession("DB_anousu")."\\n";
 
         if (!empty($oPost->docs)) {
           $sMsg .= "Documento : {$oPost->docs} \\n";

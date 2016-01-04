@@ -103,8 +103,8 @@ function js_testa(opcao) {
 		?>
     </td>
 
-    <td nowrap title="Numeração">
-       <strong>Numeração: </strong>
+    <td nowrap title="Processo Nº">
+       <strong>Processo Nº: </strong>
     </td>
     <td>
                 <?
