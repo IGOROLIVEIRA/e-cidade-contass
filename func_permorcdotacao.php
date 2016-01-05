@@ -55,7 +55,13 @@ if (isset($pactoplano) && $pactoplano != "") {
     $sWhere .= " (o15_tipo = 1  or o58_codigo = {$oPlano->o16_orctiporec})";
      
   }
-}else{
+}
+/**
+ * comentado por robson
+ * retirado condição pois não estava permitindo retornar dotações na hora
+ * de empenhar
+ */ 
+/*else{
   $result=db_dotacaosaldo(8,2,2,"true","" ,db_getsession("DB_anousu"),'','','','',false);
   for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
     if(db_utils::fieldsMemory($result, $iCont)->atual_menos_reservado == 0) {
@@ -64,7 +70,7 @@ if (isset($pactoplano) && $pactoplano != "") {
   }
   $Dados = implode(',',$aDados);
   $sWhere .= " o58_coddot not in ($Dados)";
-}
+}*/
 // variável que determina o obrigatoriedade de digitar departamento
 //$obriga_depto = "sim";
 
