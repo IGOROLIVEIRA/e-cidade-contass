@@ -480,7 +480,7 @@ function js_verificaChaveAcesso(iChaveAcesso) {
   }
    
   var resto = soma_ponderada % 11;  
-  if (aChave[43] == (11 - resto)) {
+  if ( (aChave[43] == (11 - resto)) || ((resto == 0 || resto == 1) && (aChave[43] == 0)) ) {
     return true;
   } else {    
     alert("Chave de Acesso inválida");
