@@ -245,7 +245,7 @@ inner join pcprocitem on pcprocitem.pc81_codprocitem = pcorcamitemproc.pc31_pcpr
 inner join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
 inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen 
 inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
-where e55_autori=3037 and pc93_pontuacao=1),'') else '' end)) as pc01_descrmater,
+where e55_autori=$e54_autori and pc93_pontuacao=1),'') else '' end)) as pc01_descrmater,
        				   e55_autori,
 		                   e55_sequen,
 		                   e55_item,
