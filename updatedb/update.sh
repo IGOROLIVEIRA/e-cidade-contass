@@ -11,7 +11,7 @@ for SCRIPTS in $(ls *.sql);
 do
  echo $SCRIPTS >> $CAMINHO/scripts_disponiveis.sh	
 done
-cat $CAMINHO/scripts_disponiveis.sh | sort > $CAMINHO/scripts_disponiveis_ordenado.sh
+cat $CAMINHO/scripts_disponiveis.sh | sort | uniq > $CAMINHO/scripts_disponiveis_ordenado.sh
 
 cat $CAMINHO/conn | while read BANCO PORTA CLIENTE
 do
@@ -20,7 +20,7 @@ do
         psql -U dbportal -p $PORTA $BANCO -f $CAMINHO/update_table.sh
    fi
 
-   cat $EXECUTADOS | sort > $CAMINHO/scripts_executados_ordenado.sh
+   cat $EXECUTADOS | sort | uniq > $CAMINHO/scripts_executados_ordenado.sh
 
    diff --side-by-side --suppress-common-lines $CAMINHO/scripts_disponiveis_ordenado.sh  $CAMINHO/scripts_executados_ordenado.sh | cut -d" " -f1 > $CAMINHO/scripts_nao_executados.sh
 
