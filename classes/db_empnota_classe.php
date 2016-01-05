@@ -311,9 +311,9 @@ class cl_empnota {
                                ,$this->e69_tipodocumentosfiscal
                                ,".($this->e69_dtservidor == "null" || $this->e69_dtservidor == ""?"null":"'".$this->e69_dtservidor."'")."
                                ,".($this->e69_dtinclusao == "null" || $this->e69_dtinclusao == ""?"null":"'".$this->e69_dtinclusao."'")."
-                              ,$this->e69_notafiscaleletronica
+                              ,".($this->e69_notafiscaleletronica == 0 || $this->e69_notafiscaleletronica == '' ? '3' : $this->e69_notafiscaleletronica)."
                               ,'".($this->e69_chaveacesso == '' ? 'null' : $this->e69_chaveacesso)."'
-                              ,'".($this->e69_nfserie == '' ? 'null' : $this->e69_nfserie)."'
+                              ,'".($this->e69_nfserie == '' ? 'S/N' : $this->e69_nfserie)."'
                       )";
      $result = db_query($sql);
      if($result==false){
