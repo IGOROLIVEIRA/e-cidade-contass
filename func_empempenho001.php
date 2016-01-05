@@ -429,7 +429,7 @@ if (isset($e60_numemp) and $e60_numemp != "") {
   ?>
   <tr>
     <td align="left" nowrap title="<?=$Te60_resumo ?>">
-    <?=$Le60_resumo ?>
+        <strong>Observação/Marca</strong>
     </td>
     <td colspan='8' width='100%' class='valores'>
     <?
