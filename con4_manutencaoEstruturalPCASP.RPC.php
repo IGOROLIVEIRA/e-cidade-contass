@@ -90,7 +90,7 @@ try {
         $sEstruturalAntigo = $oContaPCASP->getEstrutural();
 
         $iUltimoAnoPlano = $oContaPCASP->getUltimoAnoPlano('c60_codcon = '.$oContaPCASP->getCodigoConta());
-        $sEstruturalNovo = $oContaPCASP->getEstrutural();
+        $sEstruturalNovo = $oConta->estrutural;
         if (!empty($oParam->valor_nivel)) {
           $sEstruturalNovo = alterarEstrutural($oContaPCASP->getEstruturalComMascara(), $oParam->nivel, $oParam->valor_nivel);
         }
