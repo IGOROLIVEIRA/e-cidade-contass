@@ -22,7 +22,7 @@ do
 
    cat $EXECUTADOS | sort | uniq > $CAMINHO/scripts_executados_ordenado.sh
 
-   diff --side-by-side --suppress-common-lines $CAMINHO/scripts_disponiveis_ordenado.sh  $CAMINHO/scripts_executados_ordenado.sh | cut -d" " -f1 > $CAMINHO/scripts_nao_executados.sh
+   diff --side-by-side --suppress-common-lines $CAMINHO/scripts_disponiveis_ordenado.sh  $CAMINHO/scripts_executados_ordenado.sh | cut -d" " -f1 | grep '[a-zA-Z]' > $CAMINHO/scripts_nao_executados.sh
 
    if [ $HOSTNAME == $CLIENTE ]; then
 
