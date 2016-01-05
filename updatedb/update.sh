@@ -41,5 +41,5 @@ echo "$CAMINHO/$SCRIPT"
 done
 
 #rm $EXECUTADOS
-rm $CAMINHO/*.sql $CAMINHO/*.sh $CAMINHO/conn
+rm $CAMINHO/*.sql $CAMINHO/*.sh $CAMINHO/conn $CAMINHO/*.csv
 
