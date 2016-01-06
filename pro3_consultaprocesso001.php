@@ -125,7 +125,8 @@ function js_consultaProcesso() {
 
   var iNumeroProcesso = $F('p58_numero');
   var iNumeroCgm = $F('p58_numcgm');
-  var sUrl = 'pro3_consultaprocesso003.php?numeroprocesso=' + iNumeroProcesso + '&cgm=' + iNumeroCgm;
+  var iNumeracao = $F('p58_numeracao');
+  var sUrl = 'pro3_consultaprocesso003.php?numeroprocesso=' + iNumeroProcesso + '&cgm=' + iNumeroCgm + '&p58_numeracao=' + iNumeracao;
 
   if (iNumeroProcesso == "" && iNumeroCgm == "") {
 
