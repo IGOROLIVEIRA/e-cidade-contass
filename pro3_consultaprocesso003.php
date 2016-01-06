@@ -51,8 +51,6 @@ if (isset($oGet->cgm) && !empty($oGet->cgm)) {
   if (count($aNumeroProcesso) > 1 && strlen($aNumeroProcesso[1]) == 4) {
     $sWhere .= " and p58_ano = {$aNumeroProcesso[1]}";
   } else {
-    $dtNumeracao = explode('/',$p58_numeracao);
-    //$sWhere .= "  and p58_ano = " . db_getsession("DB_anousu");
     $sWhere .= "  and p58_ano = " . $dtNumeracao[1];
   }
   unset($aNumeroProcesso);

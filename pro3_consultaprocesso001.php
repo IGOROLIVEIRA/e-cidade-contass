@@ -84,8 +84,8 @@ $rotulo->label("numeroProcesso");
 		    </td>
 		    <td> 
 					<?php
-					  db_input('p58_numero',10,$Ip58_numero,true,'hidden',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
-                      db_input('p58_numeracao',10,$Ip58_numeracao,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
+					  db_input('p58_numero',10,$Ip58_numero,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
+                      //db_input('p58_numeracao',10,$Ip58_numeracao,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
 					  db_input('p58_requer',40,$Ip58_requer,true,'text',3,'');
 					?>
 		    </td>
@@ -125,8 +125,7 @@ function js_consultaProcesso() {
 
   var iNumeroProcesso = $F('p58_numero');
   var iNumeroCgm = $F('p58_numcgm');
-  var iNumeracao = $F('p58_numeracao');
-  var sUrl = 'pro3_consultaprocesso003.php?numeroprocesso=' + iNumeroProcesso + '&cgm=' + iNumeroCgm + '&p58_numeracao=' + iNumeracao;
+  var sUrl = 'pro3_consultaprocesso003.php?numeroprocesso=' + iNumeroProcesso + '&cgm=' + iNumeroCgm;
 
   if (iNumeroProcesso == "" && iNumeroCgm == "") {
 
@@ -190,7 +189,7 @@ function js_pesquisap58_codproc(mostra) {
   
   if(mostra) {
 
-    sUrl += '&funcao_js=parent.js_mostraprotprocesso1|p58_numero|dl_nome_ou_razão_social|dl_Processo_Nº';
+    sUrl += '&funcao_js=parent.js_mostraprotprocesso1|dl_PROTOCOLO_GERAL|dl_nome_ou_razão_social';
     js_OpenJanelaIframe('', 'db_iframe_cgm', sUrl, 'Pesquisa de Processos', true);
 
   } else {
@@ -213,9 +212,8 @@ function js_pesquisap58_codproc(mostra) {
   }
 }
 
-function js_mostraprotprocesso(chave, chave1, chave2, erro) {
-  alert(erro);
-  document.form1.p58_numeracao.value = chave2;
+function js_mostraprotprocesso(chave, chave1, erro) {
+
   document.form1.p58_requer.value = chave1; 
   document.form1.p58_numero.value = chave;
   
@@ -225,9 +223,8 @@ function js_mostraprotprocesso(chave, chave1, chave2, erro) {
   }
 }
 
-function js_mostraprotprocesso1(sNumero, sNome, chave) {
+function js_mostraprotprocesso1(sNumero, sNome) {
 
-  document.form1.p58_numeracao.value = chave;
   document.getElementById('p58_numero').value = sNumero;
   document.getElementById('p58_requer').value = sNome;
   db_iframe_cgm.hide();
