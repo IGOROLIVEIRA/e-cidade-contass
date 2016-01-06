@@ -4314,7 +4314,19 @@ class empenho {
          * Excluimos o vínculo com a conta corrente
          */
         $oDaoContaCorrenteDetalhe = new cl_contacorrentedetalhe();
-        $oDaoContaCorrenteDetalhe->excluir(null, "c19_numemp = {$this->numemp}");
+        $result = db_query($oDaoContaCorrenteDetalhe->sql_query_file(null,"c19_sequencial",null,"c19_numemp = {$this->numemp}"));
+        $iCodContacorrente = db_utils::fieldsMemory($result, 0)->c19_sequencial;
+        
+        // Adicionado exclusão a tabela contacorrentesaldo pois estava causando erro ao excluir da contacorrentedetalhe
+        $oDaoContaCorrenteSaldo   = new cl_contacorrentesaldo();
+        $oDaoContaCorrenteSaldo->excluir(null,"c29_contacorrentedetalhe = {$iCodContacorrente}");
+        if ($oDaoContaCorrenteSaldo->erro_status == 0 ) {
+
+          $sErroMensagem = "Erro ao excluir conta corrente saldo\n[ET] - {$oDaoContaCorrenteSaldo->erro_msg}";
+          throw new Exception($sErroMensagem);
+        }
+        
+        $oDaoContaCorrenteDetalhe->excluir(null, "c19_sequencial = {$iCodContacorrente}");
         if ($oDaoContaCorrenteDetalhe->erro_status == 0 ) {
 
           $sErroMensagem = "Erro ao excluir detalhes de conta corrente do empenho\n[ET] - {$oDaoContaCorrenteDetalhe->erro_msg}";
