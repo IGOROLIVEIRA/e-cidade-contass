@@ -95,7 +95,7 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
     </td>
     <td>
 <?
-$result_pres=$clliccomissaocgm->sql_record($clliccomissaocgm->sql_query(null,"*",null,"l31_licitacao=$l31_licitacao and l31_tipo='P'"));
+$result_pres=$clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,"*",null,"l31_licitacao=$l31_licitacao and l31_tipo='P'"));
 
 
 $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and l20_codtipocom in (6,19)"));
@@ -143,6 +143,9 @@ if($clliclicita->numrows > 0) {
 }
 ?>
     </td>
+      <?
+      db_input('l31_licitacao',40,$Il31_licitacao,true,'hidden',3,'')
+      ?>
   </tr>
   <tr>
     <td colspan="2" align="center">
@@ -159,7 +162,7 @@ if($clliclicita->numrows > 0) {
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
      if ($bDispenca == true) {
 
-         $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query(null, "l31_codigo,l31_liccomissao,l31_numcgm,cgm.z01_nome,
+         $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query_file(null, "l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome ,
    case
    when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento de dispensa ou inexigibilidade'
    when l31_tipo::varchar = '2' then '2-Cotação de preços'
@@ -175,7 +178,7 @@ if($clliclicita->numrows > 0) {
 
          if ($bNaturezaobjeto == true) {
 
-             $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query(null, "l31_codigo,l31_liccomissao,l31_numcgm,cgm.z01_nome,
+             $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query_file(null, "l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome,
                case
                when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
                when l31_tipo::varchar = '2' then '2-Emissão do edital'
@@ -191,7 +194,7 @@ if($clliclicita->numrows > 0) {
 
          }else{
 
-             $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query(null, "l31_codigo,l31_liccomissao,l31_numcgm,cgm.z01_nome,
+             $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query_file(null, "l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome,
                case
                when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
                when l31_tipo::varchar = '2' then '2-Emissão do edital'
@@ -206,14 +209,18 @@ if($clliclicita->numrows > 0) {
 
          }
 
+
      }
 
-
-	 $cliframe_alterar_excluir->campos  ="l31_codigo,l31_numcgm,z01_nome,l31_tipo";
+	 $cliframe_alterar_excluir->campos  ="l31_codigo,l31_numcgm, z01_nome,l31_tipo";
 	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
 	 $cliframe_alterar_excluir->iframe_width ="700";
 	 $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
+
+
+
+
     ?>
     </td>
    </tr>

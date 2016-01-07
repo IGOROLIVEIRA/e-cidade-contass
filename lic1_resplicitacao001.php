@@ -120,7 +120,7 @@ if(isset($incluir)){
   }
 }else if(isset($opcao)){
 
-  $result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query(null,"*",null,"l31_codigo=$l31_codigo"));
+  $result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,"*",null,"l31_codigo=$l31_codigo"));
 
   if($result!=false && $clliccomissaocgm->numrows>0){
      db_fieldsmemory($result,0);
@@ -162,7 +162,19 @@ if(isset($incluir)){
 }
 
 
-$result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query(null,"*",null,"l31_codigo=$l31_codigo"));
+$result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query(null,"
+l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm),
+               case
+               when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
+               when l31_tipo::varchar = '2' then '2-Emissão do edital'
+               when l31_tipo::varchar = '3' then '3-Pesquisa de preços'
+               when l31_tipo::varchar = '4' then '4-Informação de existência de recursos orçamentários'
+               when l31_tipo::varchar = '5' then '5-Condução do procedimento licitatório'
+               when l31_tipo::varchar = '6' then '6-Homologação'
+               when l31_tipo::varchar = '7' then '7-Adjudicação'
+               when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
+               end as l31_tipo
+",null,"l31_codigo=$l31_codigo"));
 
 if($result!=false && $clliccomissaocgm->numrows>0){
   db_fieldsmemory($result,0);
@@ -170,8 +182,9 @@ if($result!=false && $clliccomissaocgm->numrows>0){
 
 if ($l20_codtipocom == 6 || $l20_codtipocom == 19) {
 
-  $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+  $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7)"));
+
   if ($clliccomissaocgm->numrows == 7) {
     $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
@@ -182,7 +195,7 @@ if ($l20_codtipocom == 6 || $l20_codtipocom == 19) {
 
   if ($l20_naturezaobjeto == 6) {
 
-    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
     if ($clliccomissaocgm->numrows == 9) {
       $script = "<script>parent.document.formaba.liclicitem.disabled=false;
@@ -191,7 +204,7 @@ if ($l20_codtipocom == 6 || $l20_codtipocom == 19) {
     }
 
   } else {
-    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+    $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
     if ($clliccomissaocgm->numrows == 8) {
       $script = "<script>parent.document.formaba.liclicitem.disabled=false;

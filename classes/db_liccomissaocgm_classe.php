@@ -161,7 +161,7 @@ class cl_liccomissaocgm {
                        )
                 values (
                                 $this->l31_codigo 
-                               ,".($this->l31_liccomissao == '' ? '0' : $this->l31_liccomissao)."
+                               ,".($this->l31_liccomissao == '' ? 'null' : $this->l31_liccomissao)."
                                ,$this->l31_numcgm 
                                ,'$this->l31_tipo'
                                ,$this->l31_licitacao
