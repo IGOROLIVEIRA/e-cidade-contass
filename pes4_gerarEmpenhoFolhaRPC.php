@@ -449,12 +449,12 @@ try {
 			$aRecursos       = array();
 			$oDaoOPAuxiliar  = db_utils::getDao("empageordem");
 			if (!$oParam->lOPporRecurso) {
-				 
+
 				$oDaoOPAuxiliar->e42_dtpagamento = date("Y-m-d",db_getsession("DB_datausu"));
 				$oDaoOPAuxiliar->incluir(null);
 
 			}
-			 
+
 			if (isset($oParam->rescisao) && $oParam->rescisao) {
 				 
 				$aSeqPes = $oParam->aEmpenhos;
@@ -491,11 +491,11 @@ try {
 				$oEmpenho = new empenhoFolha($oEmpenhoFolha->rh72_sequencial);
 				 
 				if (!isset($aRecursos[$oEmpenho->getRecurso()]) && $oParam->lOPporRecurso) {
-					 
+
 					$oDaoOPAuxiliar->e42_dtpagamento = date("Y-m-d",db_getsession("DB_datausu"));
 					$oDaoOPAuxiliar->incluir(null);
 					$aRecursos[$oEmpenho->getRecurso()]  = $oDaoOPAuxiliar->e42_sequencial;
-					 
+
 				}
 				$iOPAuxiliar = $oParam->lOPporRecurso?$aRecursos[$oEmpenho->getRecurso()]:$oDaoOPAuxiliar->e42_sequencial;
 				$oEmpenho->setOPAuxiliar($iOPAuxiliar);
@@ -517,7 +517,7 @@ try {
 				}
 
 			}
-			 
+
 			$oRetorno->e42_sequencial = $iOPAuxiliar = $oParam->lOPporRecurso?implode(", ", $aRecursos):$iOPAuxiliar;
 			 
 			db_fim_transacao(false);

@@ -47,6 +47,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   db_inicio_transacao();
   $sqlerro=false;
   $db_opcao = 2;
+  $clpcmater->pc01_data = $pc01_data;
   $clpcmater->alterar($pc01_codmater);
   if($clpcmater->erro_status==0){
     $sqlerro = true;
