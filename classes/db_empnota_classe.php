@@ -276,7 +276,7 @@ class cl_empnota {
        $this->erro_status = "0";
        return false;
      }
-     if($this->e69_nfserie == null && $this->e69_notafiscaleletronica == 3){
+     if(($this->e69_nfserie == null || $this->e69_nfserie == '') && $this->e69_notafiscaleletronica == 3 && is_numeric($this->e69_numero)){
        $this->erro_sql = " Campo Número de série não Informado.";
        $this->erro_campo = "e69_nfserie";
        $this->erro_banco = "";

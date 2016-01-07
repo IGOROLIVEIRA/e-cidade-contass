@@ -705,13 +705,6 @@ function js_liquidar(metodo) {
       return false;
 
     }
-    if ($F('e69_nfserie') == '' && $F('e69_notafiscaleletronica') == 3 ) {
-
-      alert('O Número de série deve ser preenchida!');
-      $('e69_nfserie').focus();
-      return false;
-
-    }
 
    $('pesquisar').disabled = true;
    $('confirmar').disabled = true;

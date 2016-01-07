@@ -1446,13 +1446,6 @@ function js_confirmaEntrada() {
       return false;
 
     }
-    if ($F('e69_nfserie') == '' && $F('e69_notafiscaleletronica') == 3 ) {
-
-      alert('O Número de série deve ser preenchida!');
-      $('e69_nfserie').focus();
-      return false;
-
-    }
 
     /**
      * valor da Nota não pode ser maior que o valor da ordem de compra.
