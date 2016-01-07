@@ -62,6 +62,8 @@ db_input('l31_codigo',10,$Il31_codigo,true,'hidden',3,"");
 
 db_input('l31_licitacao',10,$Il31_licitacao,true,'hidden',3,"");
 
+db_input('l20_codtipocom',10,$Il20_codtipocom,true,'hidden',3,"");
+
 ?>
 
 

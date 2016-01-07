@@ -61,9 +61,44 @@ if(isset($incluir)){
         db_fim_transacao();
 
       }else{
+
+        $clliclicita->sql_record($clliclicita->sql_query('','*',''," l20_codigo = $l202_licitacao and l20_usaregistropreco = 't' "));
+
+        if ($clliclicita->numrows == 1) {
+
+          $parecer3     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao and l200_data <= '$l202_datahomologacao' ")));
+          if ($parecer3 >= 1) {
+
+            db_inicio_transacao();
+
+            $clhomologacaoadjudica->incluir($l202_sequencial);
+
+            $l203_itens = explode(',', $l203_itens[0]);
+
+            foreach ($l203_itens as $item) {
+              $clitenshomologacao->l203_item = $item;
+              $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
+              $clitenshomologacao->incluir(null);
+            }
+
+            $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 10);
+
+            db_fim_transacao();
+
+          }else{
+            echo
+            "<script>alert('Data da Homologação é menor que a data do parecer')</script>";
+            db_redireciona('lic1_homologacaoadjudica001.php');
+          }
+
+        }else{
+
         echo
         "<script>alert('Data da Homologação ou Adjudicação é menor que a data do parecer')</script>";
         db_redireciona('lic1_homologacaoadjudica001.php');
+
+        }
+
       }
 
     }else if($parecer < 1 || empty($parecer)){

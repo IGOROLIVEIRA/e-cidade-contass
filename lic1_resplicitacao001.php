@@ -246,7 +246,7 @@ if(isset($alterar) || isset($excluir) || isset($incluir)){
         echo "<script> document.form1.".$clliccomissaocgm->erro_campo.".focus();</script>";
     }
     if ($sqlerro==false){
-    	echo "<script>location.href='lic1_resplicitacao001.php?l31_licitacao=$l31_licitacao';</script>";
+    	echo "<script>location.href='lic1_resplicitacao001.php?l31_licitacao=$l31_licitacao&l20_codtipocom=$l20_codtipocom';</script>";
     }
 }
 ?>

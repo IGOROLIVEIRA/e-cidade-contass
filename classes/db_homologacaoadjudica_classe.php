@@ -1,7 +1,7 @@
 <?
 //MODULO: licitacao
 //CLASSE DA ENTIDADE homologacaoadjudica
-class cl_homologacaoadjudica { 
+class cl_homologacaoadjudica {
    // cria variaveis de erro 
    var $rotulo     = null; 
    var $query_sql  = null; 
@@ -40,7 +40,7 @@ class cl_homologacaoadjudica {
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
    //funcao erro 
-   function erro($mostra,$retorna) { 
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -74,7 +74,7 @@ class cl_homologacaoadjudica {
      }
    }
    // funcao para inclusao
-   function incluir ($l202_sequencial){ 
+   function incluir ($l202_sequencial){
       $this->atualizacampos();
      if($this->l202_licitacao == null ){ 
        $this->erro_sql = " Campo Licitação nao Informado.";
@@ -185,7 +185,7 @@ class cl_homologacaoadjudica {
      return true;
    } 
    // funcao para alteracao
-   function alterar ($l202_sequencial=null) { 
+   function alterar ($l202_sequencial=null) {
       $this->atualizacampos();
      $sql = " update homologacaoadjudica set ";
      $virgula = "";
