@@ -186,14 +186,16 @@ class cl_empautoriza {
        $this->erro_status = "0";
        return false;
      }
-     if($this->e54_numerl == null && $this->e54_codcom != 7 ){
-       $this->erro_sql = " Campo Número da Licitação nao Informado.";
-       $this->erro_campo = "e54_numerl";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->e54_numerl == null){
+         if(in_array($this->e54_codcom,array('1,2,3,4,5,6,10,11,12')) ) {
+             $this->erro_sql = " Campo Número da Licitação nao Informado.";
+             $this->erro_campo = "e54_numerl";
+             $this->erro_banco = "";
+             $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+             $this->erro_status = "0";
+             return false;
+         }
      }
      if($this->e54_valor == null ){
        $this->e54_valor = "0";

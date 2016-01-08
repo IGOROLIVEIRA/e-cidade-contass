@@ -417,7 +417,7 @@ if(isset($alterar)){
 
     if (isset($tipojulg) && $tipojulg == 3) {
       $script .= "parent.iframe_liclicitemlote.location.href='lic1_liclicitemlote001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
-                  parent.document.formaba.liclicitemlote.disabled=true;\n";
+                  parent.document.formaba.liclicitemlote.disabled=false;\n";
     } else {
       $script .= "parent.document.formaba.liclicitemlote.disabled=true;\n";
     }
@@ -537,9 +537,15 @@ if(isset($alterar)){
     if(db_getsession("DB_anousu") >= 2016) {
       echo "<script> mo_camada('resplicita'); </script>";
       echo "<script>parent.document.formaba.resplicita.disabled=false;</script>";
+
+      if($l20_tipojulg == 3){
+        echo "<script>parent.document.formaba.liclicitemlote.disabled=false;</script>";
+      }
+
       echo "<script>location.href='lic1_liclicita002.php?chavepesquisa=$l20_codigo';</script>";
     }else{
       echo "<script> mo_camada('liclicitem'); </script>";
+
       echo "<script>parent.document.formaba.liclicitem.disabled=false;</script>";
       echo "<script>location.href='lic1_liclicita002.php?chavepesquisa=$l20_codigo';</script>";
     }
