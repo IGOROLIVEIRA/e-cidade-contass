@@ -199,9 +199,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $sqlReg10 = "select
                     tiporegistro,
                     contacontabil,
-                    saldoinicialano,
-                    debito,
-                    credito,
+                    coalesce(saldoinicialano,0) saldoinicialano,
+                    coalesce(debito,0) debito,
+                    coalesce(credito,0) credito,
                     codcon,
                     c61_reduz,
                     c60_nregobrig,
@@ -218,9 +218,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_anousu = " . db_getsession("DB_anousu") . " ) as x
+                             where c60_anousu = " . db_getsession("DB_anousu") . ") as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
-//where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '622130300') as x
+//where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '218810102') as x
 
         $rsReg10 = db_query($sqlReg10) or die($sqlReg10);
 
@@ -236,6 +236,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
              * Verifica se é Janeiro. Caso não seja, o saldo inicial, debito e credito do mes de referencia é buscado pelo SQL abaixo.
              */
             if ($nMes != 1) {
+
+                $sEncerramento = ($nMes == 12 ? "TRUE" : "FALSE");
 
                 $sSqlSaldoAnt = " select sinal_anterior,sinal_final,sum(saldoinicial) saldoinicial, sum(debitos) debitos, sum(creditos) creditos from(SELECT estrut_mae,
                                            estrut,
@@ -260,7 +262,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                               p.c60_descr,
                                               p.c60_finali,
                                               r.c61_instit,
-                                              fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',FALSE)
+                                              fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',{$sEncerramento})
                                        FROM conplanoexe e
                                        INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
                                        AND r.c61_reduz = c62_reduz
@@ -327,7 +329,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $aDadosAgrupados10[$sHash]->si177_saldoinicial += ($sNaturezaSaldoIni == 'C' ? $nSaldoInicial * -1 : $nSaldoInicial);
                 $aDadosAgrupados10[$sHash]->si177_totaldebitos += $nDebitos;
                 $aDadosAgrupados10[$sHash]->si177_totalcreditos += $nCreditos;
-                $aDadosAgrupados10[$sHash]->si177_saldofinal += $nSaldoInicial + $nDebitos - $nCreditos;
+                $aDadosAgrupados10[$sHash]->si177_saldofinal += ($sNaturezaSaldoIni == 'C' ? $nSaldoInicial * -1 : $nSaldoInicial) + $nDebitos - $nCreditos;
             }
 
         }
