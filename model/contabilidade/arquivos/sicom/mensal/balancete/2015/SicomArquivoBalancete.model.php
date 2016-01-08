@@ -1356,8 +1356,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  *
                  * */
 
-                $sSqlCTB = "select k13_reduz as codctb,
-                             c61_codtce as codtce,
+                $sSqlCTB = "select case when c61_codtce <> 0 then c61_codtce else k13_reduz end as codctb,
                              si09_codorgaotce,
 				             c63_banco, 
 				             c63_agencia, 
