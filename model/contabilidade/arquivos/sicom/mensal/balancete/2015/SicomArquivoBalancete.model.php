@@ -79,9 +79,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
     {
         try {
 
-            $sSql = "select case when o41_subunidade != 0 or not null then
-                        lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0)||lpad(o41_subunidade::integer,3,0)
-                        else lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0) end as codunidadesub
+            $sSql = "select *, case when o41_subunidade != 0 or not null then
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub
                         from orcdotacao
                         inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
                         inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
@@ -90,7 +90,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  and o58_anousu = " . db_getsession('DB_anousu') .
                 " and o58_instit = " . db_getsession('DB_instit') . " limit 1";
 
-            $rsSql = db_query($sSql);
+            $rsSql = db_query($sSql) or die($sSql);
 
             if (pg_num_rows($rsSql) > 0) {
 
@@ -218,7 +218,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_anousu = " . db_getsession("DB_anousu") . ") as x
+                             where c60_anousu = " . db_getsession("DB_anousu") . " ) as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 //where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '218810102') as x
 
@@ -950,8 +950,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     e60_coddot,
                                     si09_codorgaotce as codorgao,
                                     case when o41_subunidade != 0 or not null then
-                                    lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0)||lpad(o41_subunidade::integer,3,0)
-                                    else lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0) end as codunidadesub,
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
                                     o58_funcao as codfuncao,
                                     o58_subfuncao as codsubfuncao,
                                     o58_programa as codprograma,
@@ -963,7 +963,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     e60_codemp nroempenho,
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
-                                    o58_orgao,o58_unidade
+                                    o58_orgao,o58_unidade,o40_codtri,o41_codtri
                                     from conlancamval
                                     inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                     inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
