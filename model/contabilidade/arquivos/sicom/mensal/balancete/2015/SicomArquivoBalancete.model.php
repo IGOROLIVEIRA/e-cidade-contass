@@ -218,7 +218,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_anousu = " . db_getsession("DB_anousu") . " ) as x
+                             where c60_anousu = " . db_getsession("DB_anousu") . ") as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 //where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '218810102') as x
 
@@ -1356,7 +1356,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  *
                  * */
 
-                $sSqlCTB = "select case when c61_codtce <> 0 then c61_codtce else k13_reduz end as codctb,
+                $sSqlCTB = "select k13_reduz,
+                             case when c61_codtce <> 0 then c61_codtce else k13_reduz end as codctb,
                              si09_codorgaotce,
 				             c63_banco, 
 				             c63_agencia, 
@@ -1432,7 +1433,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                            LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
                                            WHERE c62_anousu = " . db_getsession('DB_anousu') . "
                                              AND c61_instit IN (" . db_getsession('DB_instit') . ")
-                                             AND c61_reduz = {$objContasctb->codctb}) as x";
+                                             AND c61_reduz = {$objContasctb->k13_reduz}) as x";
 
                         $rsReg17saldos = db_query($sSqlReg17saldos) or die($sSqlReg17saldos);
 
@@ -1509,7 +1510,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                            LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
                                            WHERE c62_anousu = " . db_getsession('DB_anousu') . "
                                              AND c61_instit IN (" . db_getsession('DB_instit') . ")
-                                             AND c61_reduz = {$oCtb->si95_codctb}) as x";
+                                             AND c61_reduz = {$objContasctb->k13_reduz}) as x";
 
                             $rsReg17saldos = db_query($sSqlReg17saldos) or die($sSqlReg17saldos);
 
