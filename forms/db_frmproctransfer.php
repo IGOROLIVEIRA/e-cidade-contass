@@ -253,7 +253,7 @@ $clrotulo->label("descrdepto");
     $sql .= "					 limit 1 ) is not null                                                                ";
     $sql .= "          {$where}                                                                             ";
     $sql .= "   order by $ordem desc                                                                        ";
-    //echo $sql;exit;
+
     $rs = db_query($sql) or die($sql);
     $numrows = pg_num_rows($rs);
 	
