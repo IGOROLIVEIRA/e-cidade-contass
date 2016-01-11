@@ -355,8 +355,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     $sSqlDotacoes = "select distinct o58_coddot as c73_coddot,
                                     si09_codorgaotce as codorgao,
                                     case when o41_subunidade != 0 or not null then
-                                    lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0)||lpad(o41_subunidade::integer,3,0)
-                                    else lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0) end as codunidadesub,
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub
 					                o58_funcao as codfuncao,
 					                o58_subfuncao as codsubfuncao,
 					                o58_programa as codprograma,
@@ -381,8 +381,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     $sSqlDotacoes = "select distinct c73_coddot,
                                     si09_codorgaotce as codorgao,
                                     case when o41_subunidade != 0 or not null then
-                                    lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0)||lpad(o41_subunidade::integer,3,0)
-                                    else lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0) end as codunidadesub,
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub
 					                o58_funcao as codfuncao,
 					                o58_subfuncao as codsubfuncao,
 					                o58_programa as codprograma,
@@ -786,8 +786,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $sSqlDotacoes13 = "select distinct o58_coddot,
                                     si09_codorgaotce as codorgao,
                                     case when o41_subunidade != 0 or not null then
-                                    lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0)||lpad(o41_subunidade::integer,3,0)
-                                    else lpad(coalesce(o40_codtri,o40_orgao::varchar),2,0)||lpad(coalesce(o41_codtri,o41_unidade::varchar),3,0) end as codunidadesub,
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub
 					                o58_funcao as codfuncao,
 					                o58_subfuncao as codsubfuncao,
 					                o58_programa as codprograma,
@@ -963,7 +963,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     e60_codemp nroempenho,
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
-                                    o58_orgao,o58_unidade,o40_codtri,o41_codtri
+                                    o58_orgao,o58_unidade
                                     from conlancamval
                                     inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                     inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
