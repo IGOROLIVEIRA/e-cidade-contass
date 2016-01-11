@@ -138,21 +138,31 @@ try {
       $sObservacao                  = $oParam->sObservacao;
 
       /**
-	     * Receita - Lancamento contabil para abertura de exercicio
-	     */
+	   * Receita - Lancamento contabil para abertura de exercicio
+	   */
       $iTipoDocumento = 2003;
-  	  $nValorReceita  = ReceitaContabil::getValorPrevistoAno( $iAnoSessao, $iInstituicao );
+  	  //$nValorReceita  = ReceitaContabil::getValorPrevistoAno( $iAnoSessao, $iInstituicao );
 
-      if ($nValorReceita > 0) {
+	  $sSqlOrcreceita  = "SELECT DISTINCT o70_codigo, o70_anousu, o70_valor, o57_fonte FROM orcreceita
+	   						inner join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
+	   						inner join orctiporec on o70_codigo = o15_codigo
+	  						 where o70_instit = {$iInstituicao} and o70_anousu= {$iAnoSessao}";
+	  $rsSqlOrcreceita = db_query($sSqlOrcreceita) or die($sSqlOrcreceita);
 
-		    executaLancamento($iTipoDocumento, $nValorReceita, $iSequencialAberturaExercicio, $sObservacao );
+	  for ($iContRec = 0; $iContRec < pg_num_rows($rsSqlOrcreceita); $iContRec++) {
 
-      }
+		  $oReceita = db_utils::fieldsMemory($rsSqlOrcreceita, $iContRec);
 
-	    /**
-	     * Despesa - Lancamento contabil para abertura de exercicio
-	     */
-	    $iTipoDocumento = 2001;
+		  if($oReceita->o70_valor > 0){
+			  executaLancamento($iTipoDocumento, $oReceita->o70_valor, $iSequencialAberturaExercicio, $sObservacao, null, null, $oReceita->o70_codigo, $oReceita->o57_fonte);
+		  }
+
+	  }
+
+	  /**
+	   * Despesa - Lancamento contabil para abertura de exercicio
+	   */
+	  $iTipoDocumento = 2001;
   	  //$nValorDespesa  = Dotacao::getValorPrevistoNoAno( $iAnoSessao, $iInstituicao );
       $oDaoOrcDotacao = db_utils::getDao("orcdotacao");
       $sWhere         = "o58_anousu = {$iAnoSessao} and o58_instit = {$iInstituicao}";
@@ -286,12 +296,18 @@ echo $oJson->encode($oRetorno);
 
 /**
  * Executa lancamento
- * @param integer $iTipoDocumento
- * @param float   $nValorLancamento
- * @param integer $iSequencialAberturaExercicio
- * @param string  $sObservacao
+ * @param $iCodigoDocumento
+ * @param $nValorLancamento
+ * @param $iSequencialAberturaExercicio
+ * @param $sObservacao
+ * @param null $iCodDot
+ * @param null $iAnoDotacao
+ * @param null $iCodFontRec
+ * @param null $sEstrutFont
+ * @return bool
+ * @throws BusinessException
  */
-function executaLancamento($iCodigoDocumento, $nValorLancamento, $iSequencialAberturaExercicio, $sObservacao, $iCodDot = null, $iAnoDotacao = null) {
+function executaLancamento($iCodigoDocumento, $nValorLancamento, $iSequencialAberturaExercicio, $sObservacao, $iCodDot = null, $iAnoDotacao = null, $iCodFontRec = null, $sEstrutFont = null) {
 
 	/**
 	 * Descobre o codigo do documento pelo tipo
@@ -316,6 +332,14 @@ function executaLancamento($iCodigoDocumento, $nValorLancamento, $iSequencialAbe
     $oContaCorrenteDetalhe->setDotacao($oDotacao);
     $oLancamentoAuxiliarAberturaExercicio->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
 
+  }
+
+  if($iCodFontRec != null){
+	  $oRecurso = new Recurso($iCodFontRec);
+	  $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+	  $oContaCorrenteDetalhe->setRecurso($oRecurso);
+	  $oContaCorrenteDetalhe->setEstrutural($sEstrutFont);
+	  $oLancamentoAuxiliarAberturaExercicio->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
   }
 
 	$oEventoContabil->executaLancamento($oLancamentoAuxiliarAberturaExercicio);
