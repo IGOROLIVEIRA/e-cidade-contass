@@ -30,6 +30,9 @@ db_input('si177_sequencial',11,$Isi177_sequencial,true,'hidden',$db_opcao,"")
 db_input('si177_numemp',11,$Isi177_numemp,true,'text',3," onchange='js_pesquisasi177_numemp(false);'")
 ?>
        <?
+       if ($e60_codemp != '') {
+       	 $e60_codemp = $e60_codemp."/".$e60_anousu." ".$z01_nome;
+       }
 db_input('e60_codemp',50,$Ie60_codemp,true,'text',3,'')
        ?>
     </td>

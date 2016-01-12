@@ -35,7 +35,7 @@ $cldotacaorpsicom = new cl_dotacaorpsicom;
            $campos = "dotacaorpsicom.oid,dotacaorpsicom.*";
            }
         }
-	         $sql = $cldotacaorpsicom->sql_query();
+	         $sql = $cldotacaorpsicom->sql_query(null,$campos,"");
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';
