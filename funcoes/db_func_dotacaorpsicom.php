@@ -1,0 +1,3 @@
+<?
+$campos = "dotacaorpsicom.si177_sequencial,dotacaorpsicom.si177_numemp,dotacaorpsicom.si177_codorgaotce,dotacaorpsicom.si177_codunidadesub,dotacaorpsicom.si177_codunidadesuborig,dotacaorpsicom.si177_codfuncao,dotacaorpsicom.si177_codsubfuncao,dotacaorpsicom.si177_codprograma,dotacaorpsicom.si177_idacao,dotacaorpsicom.si177_idsubacao,dotacaorpsicom.si177_naturezadespesa,dotacaorpsicom.si177_subelemento,dotacaorpsicom.si177_codfontrecursos";
+?>
