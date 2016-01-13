@@ -99,8 +99,8 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
 <?
 $result_pres=$clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,"*",null,"l31_licitacao=$l31_licitacao and l31_tipo='P'"));
 
+$clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
 
-$clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and l20_codtipocom in (6,19)"));
 $bDispenca = false;
 if($clliclicita->numrows > 0) {
 
