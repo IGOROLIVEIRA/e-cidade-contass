@@ -402,19 +402,25 @@ if(isset($alterar)){
       $l34_protprocesso = $p58_codproc;
     }
   }
+  
   if(db_getsession("DB_anousu") >= 2016){
 
-    $script = "<script>
+  	echo "<script>
        	       parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
-               parent.document.formaba.liclicitem.disabled=true;\n";
-
+               parent.document.formaba.liclicitem.disabled=true;\n
+             </script>";
+  	
     echo "<script>
             parent.iframe_resplicita.location.href='lic1_resplicitacao001.php?l20_naturezaobjeto=$l20_naturezaobjeto&l31_licitacao=$l20_codigo&l20_codtipocom=$l20_codtipocom';
     </script>";
-   }else{
-      $script = "<script>";
-  }
-
+   } else {
+   	echo "<script>
+       	       parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
+               parent.document.formaba.liclicitem.disabled=false;\n
+             </script>";
+   }
+   
+   $script = "<script>";
     if (isset($tipojulg) && $tipojulg == 3) {
       $script .= "parent.iframe_liclicitemlote.location.href='lic1_liclicitemlote001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
                   parent.document.formaba.liclicitemlote.disabled=false;\n";
