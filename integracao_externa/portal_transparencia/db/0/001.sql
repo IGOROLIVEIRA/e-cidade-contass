@@ -268,7 +268,7 @@ CREATE SEQUENCE pessoas_id_seq;
 CREATE TABLE pessoas (
                 id INTEGER NOT NULL DEFAULT nextval('pessoas_id_seq'),
                 codpessoa INTEGER NOT NULL,
-                nome VARCHAR(40) NOT NULL,
+                nome VARCHAR(100) NOT NULL,
                 cpfcnpj VARCHAR(14) NOT NULL,
                 CONSTRAINT pessoas_id_pk PRIMARY KEY (id)
 );
