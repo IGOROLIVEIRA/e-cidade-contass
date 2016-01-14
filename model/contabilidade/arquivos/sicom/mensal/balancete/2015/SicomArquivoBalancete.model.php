@@ -237,7 +237,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
              */
             if ($nMes != 1) {
 
-                $sEncerramento = ($nMes == 12 ? "TRUE" : "FALSE");
+                $sEncerramento = ($nMes == 12 ? "FALSE" : "FALSE");
 
                 $sSqlSaldoAnt = " select sinal_anterior,sinal_final,sum(saldoinicial) saldoinicial, sum(debitos) debitos, sum(creditos) creditos from(SELECT estrut_mae,
                                            estrut,
@@ -946,6 +946,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
             if ($oContas10->nregobrig == 14) {
 
+
                 $sSqlRestos = "select distinct
                                     e60_coddot,
                                     si09_codorgaotce as codorgao,
@@ -1122,19 +1123,50 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $obalancete14 = new stdClass();
 
+                                /*
+                                 * Verifica se o empenho existe na tabela dotacaorpsicom
+                                 * Caso exista, busca os dados da dotação.
+                                 * */
+
+                                $sSqlDotacaoRpSicom = "select *
+                                                        from dotacaorpsicom
+                                                       where si177_numemp = {$oReg14->numemp}";
+
+                                if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0){
+
+                                    $aDotacaoRpSicom      = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+
+                                    $obalancete14->si181_codorgao = $aDotacaoRpSicom[0]->si177_codorgaotce;
+                                    $obalancete14->si181_codunidadesub = $aDotacaoRpSicom[0]->si177_codunidadesub;
+                                    $obalancete14->si181_codunidadesuborig = $aDotacaoRpSicom[0]->si177_codunidadesuborig;
+                                    $obalancete14->si181_codfuncao = $aDotacaoRpSicom[0]->si177_codfuncao;
+                                    $obalancete14->si181_codsubfuncao = $aDotacaoRpSicom[0]->si177_codsubfuncao;
+                                    $obalancete14->si181_codprograma = trim($aDotacaoRpSicom[0]->si177_codprograma);
+                                    $obalancete14->si181_idacao = $aDotacaoRpSicom[0]->si177_idacao;
+                                    $obalancete14->si181_idsubacao = ($aDotacaoRpSicom[0]->si177_idsubacao == 0 ? "" : $aDotacaoRpSicom[0]->si177_idsubacao);
+                                    $obalancete14->si181_naturezadespesa = $aDotacaoRpSicom[0]->si177_naturezadespesa;
+                                    $obalancete14->si181_subelemento = $aDotacaoRpSicom[0]->si177_subelemento;
+                                    $obalancete14->si181_codfontrecursos = $aDotacaoRpSicom[0]->si177_codfontrecursos;
+
+                                } else {
+
+
+                                    $obalancete14->si181_codorgao = $oReg14->codorgao;
+                                    $obalancete14->si181_codunidadesub = $sCodunidadesub;
+                                    $obalancete14->si181_codunidadesuborig = $sCodunidadesubOrig;
+                                    $obalancete14->si181_codfuncao = $oReg14->codfuncao;
+                                    $obalancete14->si181_codsubfuncao = $oReg14->codsubfuncao;
+                                    $obalancete14->si181_codprograma = trim($oReg14->codprograma);
+                                    $obalancete14->si181_idacao = $oReg14->idacao;
+                                    $obalancete14->si181_idsubacao = $oReg14->idsubacao;
+                                    $obalancete14->si181_naturezadespesa = $sElemento;
+                                    $obalancete14->si181_subelemento = $sSubElemento;
+                                    $obalancete14->si181_codfontrecursos = $oReg14->codfontrecursos;
+
+                                }
+
                                 $obalancete14->si181_tiporegistro = 14;
                                 $obalancete14->si181_contacontabil = $oContas10->si177_contacontaabil;
-                                $obalancete14->si181_codorgao = $oReg14->codorgao;
-                                $obalancete14->si181_codunidadesub = $sCodunidadesub;
-                                $obalancete14->si181_codunidadesuborig = $sCodunidadesubOrig;
-                                $obalancete14->si181_codfuncao = $oReg14->codfuncao;
-                                $obalancete14->si181_codsubfuncao = $oReg14->codsubfuncao;
-                                $obalancete14->si181_codprograma = trim($oReg14->codprograma);
-                                $obalancete14->si181_idacao = $oReg14->idacao;
-                                $obalancete14->si181_idsubacao = $oReg14->idsubacao;
-                                $obalancete14->si181_naturezadespesa = $sElemento;
-                                $obalancete14->si181_subelemento = $sSubElemento;
-                                $obalancete14->si181_codfontrecursos = $oReg14->codfontrecursos;
                                 $obalancete14->si181_nroempenho = $oReg14->nroempenho;
                                 $obalancete14->si181_anoinscricao = $oReg14->anoinscricao;
                                 $obalancete14->si181_saldoinicialrsp = $oReg14Saldo->saldoanterior;
@@ -1145,8 +1177,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $obalancete14->si181_naturezasaldofinalrsp = ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos) >= 0 ? 'D' : 'C';
                                 $obalancete14->si181_instit = db_getsession("DB_instit");
                                 $obalancete14->si181_mes = $nMes;
-
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14] = $obalancete14;
+
                             } else {
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldoinicialrsp += $oReg14Saldo->saldoanterior;
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_totaldebitosrsp += $oReg14Saldo->debitos;
@@ -1522,7 +1554,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                     $oReg17Saldo->saldoanterior = $oReg17Saldo->naturezasaldoinicialctb == 'C' ? $oReg17Saldo->saldoanterior * -1 : $oReg17Saldo->saldoanterior;
 
-                                    $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $oCtb->si95_codctb . $objContasctb->codfontrecursos;
+                                    $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . ($objContasctb->codctb == "" ? $oCtb->si95_codctb : $objContasctb->codctb) . $objContasctb->codfontrecursos;
 
                                     if (!isset($aContasReg10[$reg10Hash]->reg17[$sHash17])) {
 
@@ -1530,7 +1562,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                         $obalancete17->si184_tiporegistro = 17;
                                         $obalancete17->si184_contacontabil = $oContas10->si177_contacontaabil;
                                         $obalancete17->si184_atributosf = $oContas10->identificadorfinanceiro;
-                                        $obalancete17->si184_codctb = $oCtb->si95_codctb;
+                                        $obalancete17->si184_codctb = ($objContasctb->codctb == "" ? $oCtb->si95_codctb : $objContasctb->codctb);
                                         $obalancete17->si184_codfontrecursos = $objContasctb->codfontrecursos;
                                         $obalancete17->si184_saldoinicialctb = $oReg17Saldo->saldoanterior;
                                         $obalancete17->si184_naturezasaldoinicialctb = $oReg17Saldo->saldoanterior >= 0 ? 'D' : 'C';
