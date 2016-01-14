@@ -79,11 +79,16 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
       </tr>
       <tr>
         <td nowrap title="<?=@$Tnomeresponsavel?>">
-          <?=@$Lnomeresponsavel?>
+          <?
+            db_ancora("Responsável","js_pesquisanumcgm(true);",$db_opcao);
+          ?>
         </td>
         <td colspan="3">
           <?
-            db_input('nomeresponsavel',40,$Inomeresponsavel,true,'text',$db_opcao,"")
+            db_input('numcgm',10,1,true,'text',$db_opcao," onchange='js_pesquisanumcgm(false);'")
+          ?>
+          <?
+            db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
           ?>
         </td>
       </tr>
@@ -354,7 +359,30 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
     $('o40_orgaodescr').style.width   = '430px';
     $('o41_unidade').style.width      = '60px';
     $('o41_unidadedescr').style.width = '430px';
-    
+
+    function js_pesquisanumcgm(mostra){
+    	  if(mostra==true){
+    	    js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    	  }else{
+    	     if(document.form1.numcgm.value != ''){ 
+    	        js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+    	     }else{
+    	       document.form1.z01_nome.value = ''; 
+    	     }
+    	  }
+    	}
+    	function js_mostracgm(erro,chave){
+    	  document.form1.z01_nome.value = chave; 
+    	  if(erro==true){ 
+    	    document.form1.numcgm.focus(); 
+    	    document.form1.numcgm.value = ''; 
+    	  }
+    	}
+    	function js_mostracgm1(chave1,chave2){
+    	  document.form1.numcgm.value = chave1;
+    	  document.form1.z01_nome.value = chave2;
+    	  db_iframe_cgm.hide();
+    	}   
     
 </script>
 <?php

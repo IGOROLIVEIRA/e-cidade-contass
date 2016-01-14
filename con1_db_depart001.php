@@ -57,7 +57,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir
   $sqlerro=false;
   db_inicio_transacao();
   $cldb_depart->descrdepto       = $descrdepto;
-  $cldb_depart->nomeresponsavel  = $nomeresponsavel;
+  $cldb_depart->numcgm           = $numcgm;
   $cldb_depart->emailresponsavel = $emailresponsavel;
   $cldb_depart->limite           = $datalimite;
   $cldb_depart->emaildepto       = $emaildepto;

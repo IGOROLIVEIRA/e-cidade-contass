@@ -55,7 +55,8 @@ class cl_db_depart {
    var $faxdepto = null; 
    var $ramaldepto = null; 
    var $instit = 0; 
-   var $id_usuarioresp = 0; 
+   var $id_usuarioresp = 0;
+   var $numcgm = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  coddepto = int4 = Depart. 
@@ -68,6 +69,7 @@ class cl_db_depart {
                  faxdepto = varchar(12) = Fax 
                  ramaldepto = varchar(10) = Ramal 
                  instit = int4 = Instituição 
+                 numcgm = int8 = Numero Cgm
                  ";
    //funcao construtor da classe 
    function cl_db_depart() { 
@@ -105,6 +107,7 @@ class cl_db_depart {
        $this->ramaldepto = ($this->ramaldepto == ""?@$GLOBALS["HTTP_POST_VARS"]["ramaldepto"]:$this->ramaldepto);
        $this->instit = ($this->instit == ""?@$GLOBALS["HTTP_POST_VARS"]["instit"]:$this->instit);
        $this->id_usuarioresp = ($this->id_usuarioresp == ""?@$GLOBALS["HTTP_POST_VARS"]["id_usuarioresp"]:$this->id_usuarioresp);
+       $this->numcgm = ($this->numcgm == ""?@$GLOBALS["HTTP_POST_VARS"]["numcgm"]:$this->numcgm);
      }else{
        $this->coddepto = ($this->coddepto == ""?@$GLOBALS["HTTP_POST_VARS"]["coddepto"]:$this->coddepto);
      }
@@ -176,7 +179,8 @@ class cl_db_depart {
                                       ,emaildepto 
                                       ,faxdepto 
                                       ,ramaldepto 
-                                      ,instit 
+                                      ,instit
+                                      ,numcgm 
                        )
                 values (
                                 $this->coddepto 
@@ -188,7 +192,8 @@ class cl_db_depart {
                                ,'$this->emaildepto' 
                                ,'$this->faxdepto' 
                                ,'$this->ramaldepto' 
-                               ,$this->instit 
+                               ,$this->instit
+                               ,".($this->numcgm == 0 ? 'null' : $this->numcgm)." 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -315,6 +320,10 @@ class cl_db_depart {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->numcgm)!=0 || isset($GLOBALS["HTTP_POST_VARS"]["numcgm"])){ 
+       $sql  .= $virgula." numcgm = ".($this->numcgm == 0 ? 'null' : $this->numcgm);
+       $virgula = ",";
      }
 
      $sql .= " where ";

@@ -90,9 +90,9 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   db_fim_transacao($sqlerro);
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
-   $result = $cldb_depart->sql_record($cldb_depart->sql_query($chavepesquisa)); 
+   $result = $cldb_depart->sql_record($cldb_depart->sql_query($chavepesquisa,"*,(select z01_nome from cgm where z01_numcgm=db_depart.numcgm) as nomeresp")); 
    db_fieldsmemory($result,0);
-
+   $z01_nome = $nomeresp;
    $result = $cldb_departorg->sql_record($cldb_departorg->sql_query_file($chavepesquisa,$anousu,'db01_orgao as o40_orgao,db01_anousu as anousu, db01_unidade as o41_unidade')); 
    if($cldb_departorg->numrows>0){
      db_fieldsmemory($result,0);
