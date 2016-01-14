@@ -56,7 +56,7 @@ if ( isset($servidor) &&
 		$DB_SERVIDOR = $servidor;
     $DB_BASE     = $base;
 		$DB_PORTA    = $port;
-		$DB_USUARIO  = base64_decode($user);
+		$DB_USUARIO  = "dbportal";//base64_decode($user);
 		$DB_SENHA    = base64_decode($stdClass->db_stripTagsJson($senha));
 }
 
