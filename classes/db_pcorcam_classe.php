@@ -101,7 +101,7 @@ class cl_pcorcam {
    // funcao para inclusao
    function incluir ($pc20_codorc){
       $this->atualizacampos();
-     if($this->pc20_dtate == null ){
+     /*if($this->pc20_dtate == null ){
        $this->erro_sql = " Campo Prazo limite para entrega do orçamento nao Informado.";
        $this->erro_campo = "pc20_dtate_dia";
        $this->erro_banco = "";
@@ -109,7 +109,7 @@ class cl_pcorcam {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->pc20_hrate == null ){
        $this->erro_sql = " Campo Hora limite para entrega do orçamento nao Informado.";
        $this->erro_campo = "pc20_hrate";
@@ -239,7 +239,7 @@ class cl_pcorcam {
      if(trim($this->pc20_dtate)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc20_dtate_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc20_dtate_dia"] !="") ){
        $sql  .= $virgula." pc20_dtate = '$this->pc20_dtate' ";
        $virgula = ",";
-       if(trim($this->pc20_dtate) == null ){
+       /*if(trim($this->pc20_dtate) == null ){
          $this->erro_sql = " Campo Prazo limite para entrega do orçamento nao Informado.";
          $this->erro_campo = "pc20_dtate_dia";
          $this->erro_banco = "";
@@ -247,7 +247,7 @@ class cl_pcorcam {
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
-       }
+       }*/
      }     else{
        if(isset($GLOBALS["HTTP_POST_VARS"]["pc20_dtate_dia"])){
          $sql  .= $virgula." pc20_dtate = null ";
