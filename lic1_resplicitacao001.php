@@ -61,7 +61,9 @@ if(isset($incluir)){
     }
     db_fim_transacao($sqlerro);
 
-    if ($l20_codtipocom == 6 || $l20_codtipocom == 19) {
+    $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
+
+    if ($clliclicita->numrows > 0) {
 
       $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7)"));
@@ -126,7 +128,9 @@ if(isset($incluir)){
      db_fieldsmemory($result,0);
    }
 
-  if ($l20_codtipocom == 6 || $l20_codtipocom == 19) {
+  $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
+
+  if ($clliclicita->numrows > 0) {
 
     $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7)"));
@@ -180,7 +184,9 @@ if($result!=false && $clliccomissaocgm->numrows>0){
   db_fieldsmemory($result,0);
 }
 
-if ($l20_codtipocom == 6 || $l20_codtipocom == 19) {
+$clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
+
+if ($clliclicita->numrows > 0) {
 
   $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7)"));

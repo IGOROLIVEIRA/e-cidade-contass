@@ -159,7 +159,7 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 		                                                  '53',
 		                                                  '54') order by liclicita.l20_edital";
     
-    $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);
+    $rsResult10 = db_query($sSql);echo $sSql;exit;db_criatabela($rsResult10);
     
     $aLicitacoes = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {

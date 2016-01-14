@@ -171,7 +171,7 @@ $clrotulo->label("o15_codigo");
                 
                 <input type="checkbox" value="LeiDiretrizOrcamentaria" id="LeiDiretrizesOrcamentaria" />
                 <label for="LeiDiretrizesOrcamentaria">Lei de Diretrizes Orçamentárias</label><br>
-                
+
                 <input type="checkbox" value="UnidadeOrcamentaria" id="UnidadeOrcamentaria" />
                 <label for="UnidadeOrcamentaria">Unidades Orçamentárias</label><br> 
                 
@@ -198,6 +198,9 @@ $clrotulo->label("o15_codigo");
                 
                 <input type="checkbox" value="MetasArrecadacaoReceita" id="MetasArrecadacaoReceita" /> <label
                 for="MetasArrecadacaoReceita">Metas de Arrecadação de Receita</label><br>
+
+                <input type="checkbox" value="Consideracoes" id="Consideracoes" /> <label
+                for="Consideracoes">Considerações</label><br>
               </td>
               <td style="border: 2px groove white;" valign="top">
                 <div id='retorno'

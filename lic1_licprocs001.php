@@ -52,7 +52,7 @@ $clrotulo->label("descrdepto");
 $clrotulo->label("nome");
 $clrotulo->label("l20_codigo");
 $lRegistroPreco = false;
-$result = $clliclicita->sql_record($clliclicita->sql_query($licitacao,"l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_dataaber"));
+$result = $clliclicita->sql_record($clliclicita->sql_query($licitacao,"l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber"));
 if ($clliclicita->numrows > 0) {
 
   db_fieldsmemory($result,0);
@@ -134,7 +134,19 @@ function js_submit(codproc){
     $sWhere .= "                  where ac23_pcprocitem = pc81_codprocitem ";
     $sWhere .= "                    and (ac16_acordosituacao  not in (2,3)))";
     $sWhere .= " and pc80_codproc in (select si01_processocompra from precoreferencia)";
-    $sWhere .= " and pc80_data <= '$l20_dataaber' ";
+
+
+    $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
+
+    if ($clliclicita->numrows > 0) {
+
+        $sWhere .= " and pc80_data <= '$l20_datacria' ";
+
+    }else{
+        $sWhere .= " and pc80_data <= '$l20_dataaber' ";
+    }
+
+
     
 	if (isset ($pc30_contrandsol) && $pc30_contrandsol == 't') {
 	    
@@ -150,6 +162,7 @@ function js_submit(codproc){
                                            "(e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))
                                              and pc10_instit = ".db_getsession("DB_instit")." {$sWhere}");
     }
+    //echo $sSqlProc;
     $result_pcproc=$clpcproc->sql_record($sSqlProc);
     if (isset($codproc)&&$codproc!=""){
       $couni="codproc";
