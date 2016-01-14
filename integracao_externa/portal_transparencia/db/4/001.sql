@@ -101,3 +101,12 @@ h16_dtterm | 1988-12-22
 h16_quant  | 0
 h16_histor | 
 */
+
+/*tabela para salvar passoas que consultam folha de pagamento*/
+CREATE TABLE requisitantes (
+id serial primary key,
+matricula int8,
+cpf varchar(11),
+nome varchar(200),
+data date
+);
