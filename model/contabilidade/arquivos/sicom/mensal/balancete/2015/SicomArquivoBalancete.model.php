@@ -1484,7 +1484,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $iCodCtb = ($objContasctb->codctbtce == 0 ? $objContasctb->k13_reduz : $objContasctb->codctbtce);
 
-                                $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $iCodCtb . $this->getFontReduzAM($iCodCtb);
+                                $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $iCodCtb . ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
 
                                 if (!isset($aContasReg10[$reg10Hash]->reg17[$sHash17])) {
 
@@ -1493,7 +1493,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete17->si184_contacontabil = $oContas10->si177_contacontaabil;
                                     $obalancete17->si184_atributosf = $oContas10->identificadorfinanceiro;
                                     $obalancete17->si184_codctb = $iCodCtb;
-                                    $obalancete17->si184_codfontrecursos = $this->getFontReduzAM($iCodCtb);
+                                    $obalancete17->si184_codfontrecursos = ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
                                     $obalancete17->si184_saldoinicialctb = $oReg17Saldo->saldoanterior;
                                     $obalancete17->si184_naturezasaldoinicialctb = $oReg17Saldo->saldoanterior >= 0 ? 'D' : 'C';
                                     $obalancete17->si184_totaldebitosctb = $oReg17Saldo->debitos;
@@ -1563,7 +1563,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                     $iCodCtb = ($objContasctb->codctbtce == 0 ? $oCtb->si95_codctb : $objContasctb->codctbtce);
 
-                                    $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $iCodCtb . $this->getFontReduzAM($iCodCtb);
+                                    $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $iCodCtb . ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
 
                                     if (!isset($aContasReg10[$reg10Hash]->reg17[$sHash17])) {
 
@@ -1572,7 +1572,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                         $obalancete17->si184_contacontabil = $oContas10->si177_contacontaabil;
                                         $obalancete17->si184_atributosf = $oContas10->identificadorfinanceiro;
                                         $obalancete17->si184_codctb = $iCodCtb;
-                                        $obalancete17->si184_codfontrecursos = $this->getFontReduzAM($iCodCtb);
+                                        $obalancete17->si184_codfontrecursos = ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
                                         $obalancete17->si184_saldoinicialctb = $oReg17Saldo->saldoanterior;
                                         $obalancete17->si184_naturezasaldoinicialctb = $oReg17Saldo->saldoanterior >= 0 ? 'D' : 'C';
                                         $obalancete17->si184_totaldebitosctb = $oReg17Saldo->debitos;
