@@ -47,7 +47,13 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
     					  "pcPIBResultadoPrimario",
     					  "pcPIBResultadoNominal",
     					  "pcPIBDividaPublicaConsolidada",
-    					  "pcPIBDividaConsolidadaLiquida"    
+    					  "pcPIBDividaConsolidadaLiquida",
+						  "vlCorrenteRecPrimariasAdv",
+						  "vlConstanteRecPrimariasAdv",
+						  "vlCorrenteDspPrimariasGeradas",
+						  "vlConstanteDspPrimariasGeradas",
+						  "pcPIBrecPrimariasAdv",
+						  "pcPIBDspPrimariasGeradas",
                         );
     return $aElementos;
   }
@@ -126,11 +132,15 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		$iAnoRef = db_getsession("DB_anousu");
 		$iAno1   = $iAnoRef;
 		$iAno2   = $iAnoRef+1;
-		$iAno3   = $iAnoRef+2;
+
+	  /**
+	   * Retirado pela validação do PPA
+	   */
+		//$iAno3   = $iAnoRef+2;
 		
 		//Lista todos Anos
-		$aListaAnos = array($iAno1,$iAno2,$iAno3);
-		
+		//$aListaAnos = array($iAno1,$iAno2,$iAno3);
+	  $aListaAnos = array($iAno1,$iAno2);
 		
 		// Cria objeto valor para cada ano de cada linha
 		$oValoresRel = new stdClass();
@@ -187,7 +197,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		
 		$sWhereDadosPIB   = "     o02_orccenarioeconomicogrupo = 3        ";
 		$sWhereDadosPIB  .= " and o03_tipovalor                = 2        ";
-		$sWhereDadosPIB  .= " and o03_anoreferencia            between {$iAnoRef} and {$iAno3}";
+		//$sWhereDadosPIB  .= " and o03_anoreferencia            between {$iAnoRef} and {$iAno3}";
+	    $sWhereDadosPIB  .= " and o03_anoreferencia            between {$iAnoRef} and {$iAno2}";
 		//$sWhereDadosPIB  .= " and o03_instit                   = ".db_getsession('DB_instit');
 		$sWhereDadosPIB  .= " group by o03_anoreferencia                  ";
 		
@@ -203,7 +214,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 				$aPIB[$oDadosPIB->o03_anoreferencia] = $oDadosPIB->valor; 
 			}
 		}
-		if ( !array_key_exists($iAno1,$aPIB) || !array_key_exists($iAno2,$aPIB) || !array_key_exists($iAno3,$aPIB)) {
+		//if ( !array_key_exists($iAno1,$aPIB) || !array_key_exists($iAno2,$aPIB) || !array_key_exists($iAno3,$aPIB)) {
+	    if ( !array_key_exists($iAno1,$aPIB) || !array_key_exists($iAno2,$aPIB)) {
 			throw new Exception("Valor do PIB do Cen�rio Macroecon�mico n�o informado!", 4);
 		}
 
@@ -214,7 +226,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		$sCamposDadosTaxaInf .= " sum(o03_valorparam) as valor                ";
 		
 		$sWhereDadosTaxaInf   = "     o02_orccenarioeconomicogrupo = 2        ";
-		$sWhereDadosTaxaInf  .= " and o03_anoreferencia            between {$iAnoRef} and {$iAno3}";
+		//$sWhereDadosTaxaInf  .= " and o03_anoreferencia            between {$iAnoRef} and {$iAno3}";
+	    $sWhereDadosTaxaInf  .= " and o03_anoreferencia            between {$iAnoRef} and {$iAno2}";
 		//$sWhereDadosTaxaInf  .= " and o03_instit                   = ".db_getsession('DB_instit');
 		$sWhereDadosTaxaInf  .= " group by o03_anoreferencia                  ";
 		
@@ -229,14 +242,15 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 			} 	
 		}
 		
-		if ( !array_key_exists($iAno1,$aValTaxaDefla) || !array_key_exists($iAno2,$aValTaxaDefla) || !array_key_exists($iAno3,$aValTaxaDefla)) {
+		//if ( !array_key_exists($iAno1,$aValTaxaDefla) || !array_key_exists($iAno2,$aValTaxaDefla) || !array_key_exists($iAno3,$aValTaxaDefla)) {
+	    if ( !array_key_exists($iAno1,$aValTaxaDefla) || !array_key_exists($iAno2,$aValTaxaDefla)) {
 		  throw new Exception("Valor das taxa de infla��o do Cen�rio Macroecon�mico n�o informado!");
 		}
 		
 		// Calcula taxa de defla��o de cada ano
 		$aTaxaDefla[$iAno1] = $aValTaxaDefla[$iAno1]; 
 		$aTaxaDefla[$iAno2] = $aTaxaDefla[$iAno1] * $aValTaxaDefla[$iAno2];
-		$aTaxaDefla[$iAno3] = $aTaxaDefla[$iAno2] * $aValTaxaDefla[$iAno3];
+		//$aTaxaDefla[$iAno3] = $aTaxaDefla[$iAno2] * $aValTaxaDefla[$iAno3];
 		
 		
 		$oPPAReceita = new ppaReceita($this->getCodigoPespectiva());
@@ -324,8 +338,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		  $oReceitaTotal->aValores[$iAno1]->Constante += $oLinhaManual->colunas[1]->o117_valor;
 		  $oReceitaTotal->aValores[$iAno2]->Corrente  += $oLinhaManual->colunas[2]->o117_valor;
 		  $oReceitaTotal->aValores[$iAno2]->Constante += $oLinhaManual->colunas[3]->o117_valor;
-		  $oReceitaTotal->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
-		  $oReceitaTotal->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
+		  //$oReceitaTotal->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
+		  //$oReceitaTotal->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
 		}
 		//print_r($aValorReceitaTotal);exit("teste");
 		foreach ( $aValorReceitasPrimarias as $iInd => $oLinhaManual ){
@@ -333,8 +347,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		  $oReceitasPrimarias->aValores[$iAno1]->Constante += $oLinhaManual->colunas[1]->o117_valor;
 		  $oReceitasPrimarias->aValores[$iAno2]->Corrente  += $oLinhaManual->colunas[2]->o117_valor;
 		  $oReceitasPrimarias->aValores[$iAno2]->Constante += $oLinhaManual->colunas[3]->o117_valor;
-		  $oReceitasPrimarias->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
-		  $oReceitasPrimarias->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;        
+		  //$oReceitasPrimarias->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
+		  //$oReceitasPrimarias->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
 		}
 		  
 		foreach ( $aValorDespesaTotal as $iInd => $oLinhaManual ){
@@ -342,8 +356,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		  $oDespesaTotal->aValores[$iAno1]->Constante += $oLinhaManual->colunas[1]->o117_valor;
 		  $oDespesaTotal->aValores[$iAno2]->Corrente  += $oLinhaManual->colunas[2]->o117_valor;
 		  $oDespesaTotal->aValores[$iAno2]->Constante += $oLinhaManual->colunas[3]->o117_valor;
-		  $oDespesaTotal->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
-		  $oDespesaTotal->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;        
+		  //$oDespesaTotal->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
+		  //$oDespesaTotal->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
 		}
 		  
 		foreach ( $aValorDespesasPrimarias as $iInd => $oLinhaManual ){
@@ -351,8 +365,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		  $oDespesasPrimarias->aValores[$iAno1]->Constante += $oLinhaManual->colunas[1]->o117_valor;
 		  $oDespesasPrimarias->aValores[$iAno2]->Corrente  += $oLinhaManual->colunas[2]->o117_valor;
 		  $oDespesasPrimarias->aValores[$iAno2]->Constante += $oLinhaManual->colunas[3]->o117_valor;
-		  $oDespesasPrimarias->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
-		  $oDespesasPrimarias->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;        
+		  //$oDespesasPrimarias->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
+		  //$oDespesasPrimarias->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
 		}
 		  
 		foreach ( $aValorResultadoPrimario as $iInd =>   $oLinhaManual ){
@@ -360,8 +374,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		  $oResultadoPrimario->aValores[$iAno1]->Constante += $oLinhaManual->colunas[1]->o117_valor;
 		  $oResultadoPrimario->aValores[$iAno2]->Corrente  += $oLinhaManual->colunas[2]->o117_valor;
 		  $oResultadoPrimario->aValores[$iAno2]->Constante += $oLinhaManual->colunas[3]->o117_valor;
-		  $oResultadoPrimario->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
-		  $oResultadoPrimario->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;        
+		  //$oResultadoPrimario->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
+		  //$oResultadoPrimario->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
 		}
 		  
 		foreach ( $aValorResultadoNominal as $iInd => $oLinhaManual ){
@@ -369,8 +383,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		  $oResultadoNominal->aValores[$iAno1]->Constante += $oLinhaManual->colunas[1]->o117_valor;
 		  $oResultadoNominal->aValores[$iAno2]->Corrente  += $oLinhaManual->colunas[2]->o117_valor;
 		  $oResultadoNominal->aValores[$iAno2]->Constante += $oLinhaManual->colunas[3]->o117_valor;
-		  $oResultadoNominal->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
-		  $oResultadoNominal->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;        
+		  //$oResultadoNominal->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
+		  //$oResultadoNominal->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
 		}
 		
 		foreach ( $aValorDivPublicConsol as $iInd => $oLinhaManual ){
@@ -378,8 +392,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		  $oDivPublicConsol->aValores[$iAno1]->Constante += $oLinhaManual->colunas[1]->o117_valor;
 		  $oDivPublicConsol->aValores[$iAno2]->Corrente  += $oLinhaManual->colunas[2]->o117_valor;
 		  $oDivPublicConsol->aValores[$iAno2]->Constante += $oLinhaManual->colunas[3]->o117_valor;
-		  $oDivPublicConsol->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
-		  $oDivPublicConsol->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;        
+		  //$oDivPublicConsol->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
+		  //$oDivPublicConsol->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
 		}
 		  
 		foreach ( $aValorDivConsolLiquid as $iInd => $oLinhaManual ){
@@ -387,8 +401,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		  $oDivConsolLiquid->aValores[$iAno1]->Constante += $oLinhaManual->colunas[1]->o117_valor;
 		  $oDivConsolLiquid->aValores[$iAno2]->Corrente  += $oLinhaManual->colunas[2]->o117_valor;
 		  $oDivConsolLiquid->aValores[$iAno2]->Constante += $oLinhaManual->colunas[3]->o117_valor;
-		  $oDivConsolLiquid->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
-		  $oDivConsolLiquid->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;        
+		  //$oDivConsolLiquid->aValores[$iAno3]->Corrente  += $oLinhaManual->colunas[4]->o117_valor;
+		  //$oDivConsolLiquid->aValores[$iAno3]->Constante += $oLinhaManual->colunas[5]->o117_valor;
 		}
 		
 		
@@ -432,17 +446,16 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 	    $oDadosMTFIS->pcPIBReceitaPrimaria                = number_format($oReceitasPrimarias->aValores[${$iAnoUsu}]->PIB, 3, ",", "");
 	    $oDadosMTFIS->pcPIBDespesaTotal                   = number_format($oDespesaTotal->aValores[${$iAnoUsu}]->PIB, 3, ",", "");
 	    $oDadosMTFIS->pcPIBDespesaPrimaria                = number_format($oDespesasPrimarias->aValores[${$iAnoUsu}]->PIB, 3, ",", "");
-	    $oDadosMTFIS->pcPIBResultadoPrimario		  				= number_format($oResultadoPrimario->aValores[${$iAnoUsu}]->PIB, 3, ",", "");
+	    $oDadosMTFIS->pcPIBResultadoPrimario		  	  = number_format($oResultadoPrimario->aValores[${$iAnoUsu}]->PIB, 3, ",", "");
 	    $oDadosMTFIS->pcPIBResultadoNominal               = number_format($oResultadoNominal->aValores[${$iAnoUsu}]->PIB, 3, ",", "");
 	    $oDadosMTFIS->pcPIBDividaPublicaConsolidada       = number_format($oDivPublicConsol->aValores[${$iAnoUsu}]->PIB, 3, ",", "");
 	    $oDadosMTFIS->pcPIBDividaConsolidadaLiquida       = number_format($oDivConsolLiquid->aValores[${$iAnoUsu}]->PIB, 3, ",", "");
-
-		$oDadosMTFIS->vlCorrenteRecPrimariasAdv           = 0;
-		$oDadosMTFIS->vlConstanteRecPrimariasAdv          = 0;
-		$oDadosMTFIS->vlCorrenteDspPrimariasGeradas       = 0;
-		$oDadosMTFIS->vlConstanteDspPrimariasGeradas      = 0;
-		$oDadosMTFIS->pcPIBrecPrimariasAdv                = 0;
-		$oDadosMTFIS->pcPIBDspPrimariasGeradas            = 0;
+		$oDadosMTFIS->vlCorrenteRecPrimariasAdv           = number_format(0, 2, ",", "");
+		$oDadosMTFIS->vlConstanteRecPrimariasAdv          = number_format(0, 2, ",", "");
+		$oDadosMTFIS->vlCorrenteDspPrimariasGeradas       = number_format(0, 2, ",", "");
+		$oDadosMTFIS->vlConstanteDspPrimariasGeradas      = number_format(0, 2, ",", "");
+		$oDadosMTFIS->pcPIBrecPrimariasAdv                = number_format(0, 2, ",", "");
+		$oDadosMTFIS->pcPIBDspPrimariasGeradas            = number_format(0, 2, ",", "");
 
 
 	    
