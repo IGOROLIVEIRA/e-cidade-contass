@@ -173,7 +173,7 @@ class cl_veicmanut {
      if($this->ve62_vlrmobra == null && db_getsession('DB_anousu') > 2015){
 
          $this->ve62_vlrmobra = 0;
-     } else {
+     }else if($this->ve62_vlrmobra == null)  {
 
          $this->erro_sql = " Campo Valor da Mão de Obra nao Informado.";
          $this->erro_campo = "ve62_vlrmobra";
@@ -185,7 +185,8 @@ class cl_veicmanut {
      }
      if($this->ve62_vlrpecas == null && db_getsession('DB_anousu') > 2015){
          $this->ve62_vlrpecas = 0;
-     } else {
+     }else if($this->ve62_vlrpecas == null)  {
+
          $this->erro_sql = " Campo Valor em Peças nao Informado.";
          $this->erro_campo = "ve62_vlrpecas";
          $this->erro_banco = "";
@@ -323,12 +324,13 @@ class cl_veicmanut {
                                ,'$this->ve62_hora' 
                                ,$this->ve62_medida 
                                ,'$this->ve62_observacao'
-                               ,$this->ve62_origemgasto
-                               ,$this->ve62_tipogasto
-                               ,$this->ve62_atestado
-                               ,$this->ve62_numemp
-                               ,$this->ve62_valor
+                               ,".($this->ve62_origemgasto == "null" || $this->ve62_origemgasto == ""?"null":"'".$this->ve62_origemgasto."'")."
+                               ,".($this->ve62_tipogasto == "null" || $this->ve62_tipogasto == ""?"null":"'".$this->ve62_tipogasto."'")."
+                               ,".($this->ve62_atestado == "null" || $this->ve62_atestado == ""?"null":"'".$this->ve62_atestado."'")."
+                               ,".($this->ve62_numemp == "null" || $this->ve62_numemp == ""?"null":"'".$this->ve62_numemp."'")."
+                               ,".($this->ve62_valor == "null" || $this->ve62_valor == ""?"null":"'".$this->ve62_valor."'")."
                       )";
+
      $result = db_query($sql); 
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
