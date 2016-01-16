@@ -5,6 +5,8 @@
  */
 class ContaCorrenteDetalhe {
 
+  private $iCodigo;
+
   /**
    * @var Recurso
    */
@@ -40,6 +42,82 @@ class ContaCorrenteDetalhe {
    */
   private $oCredor;
 
+  /**
+   * @var int
+   */
+  private $iContaCorrente;
+
+  /**
+   * @var object Instituicao
+   */
+  private $oInstituicao;
+
+
+  /**
+   * @var object ContaPlano
+   */
+  private $oContaPlano;
+
+  public function __construct($iCodigoContaCorrenteDetalhe = null) {
+
+    if (!empty($iCodigoContaCorrenteDetalhe)) {
+
+      $oDaoContaCorrenteDetalhe = db_utils::getDao("contacorrentedetalhe");
+      $sSqlContaCorrenteDetalhe = $oDaoContaCorrenteDetalhe->sql_query_file($iCodigoContaCorrenteDetalhe);
+      $rsContaCorrenteDetalhe   = $oDaoContaCorrenteDetalhe->sql_record($sSqlContaCorrenteDetalhe);
+
+      if ($oDaoContaCorrenteDetalhe->numrows != 0) {
+
+        $oContaCorrenteDetalhe = db_utils::fieldsMemory($rsContaCorrenteDetalhe, 0);
+        $this->setCodigo(null);
+        $oRecurso = new Recurso($oContaCorrenteDetalhe->c19_orctiporec);
+        $this->setRecurso($oRecurso);
+        $oEmpenho = new EmpenhoFinanceiro($oContaCorrenteDetalhe->c19_numemp);
+        $this->setEmpenho($oEmpenho);
+        $oContaBancaria = new ContaBancaria($oContaCorrenteDetalhe->c19_contabancaria);
+        $this->setContaBancaria($oContaBancaria);
+        $this->setEstrutural($oContaCorrenteDetalhe->c19_estrutural);
+        $oAcordo = new Acordo($oContaCorrenteDetalhe->c19_acordo);
+        $this->setAcordo($oAcordo);
+
+        if(!empty($oContaCorrenteDetalhe->c19_numcgm)) {
+
+          if ($this->getTipoCredor($oContaCorrenteDetalhe->c19_numcgm) == "F") {
+
+            $oCredor = new CgmFisico($oContaCorrenteDetalhe->c19_numcgm);
+            $this->setCredor($oCredor);
+
+          } else {
+
+            $oCredor = new CgmJuridico($oContaCorrenteDetalhe->c19_numcgm);
+            $this->setCredor($oCredor);
+
+          }
+
+        }
+
+        $oDotacao = new Dotacao($oContaCorrenteDetalhe->c19_orcdotacao, db_getsession('DB_anousu'));
+        $this->setDotacao($oDotacao);
+
+      }
+    }
+  }
+
+  /**
+   * Retorna o código sequencial da conta corrente
+   * @return integer
+   */
+  public function getCodigo() {
+    return $this->iCodigo;
+  }
+
+  /**
+   * Seta o código sequencial
+   * @param integer $iCodigo
+   */
+  public function setCodigo($iCodigo) {
+    $this->iCodigo = $iCodigo;
+  }
   /**
    * @param ContaBancaria $oContaBancaria
    */
@@ -136,5 +214,20 @@ class ContaCorrenteDetalhe {
    */
   public function getCredor() {
     return $this->oCredor;
+  }
+
+  /**
+   * @param $iCgm
+   * @return string
+   */
+
+  public function getTipoCredor($iCgm){
+    $sSql = "select z01_cgccpf from cgm where z01_numcgm = {$iCgm}";
+    $iCgcCpf = db_utils::fieldsMemory(db_query($sSql), 0)->z01_cgccpf;
+    if(strlen($iCgcCpf) > 11){
+      return "J";
+    } else {
+      return "F";
+    }
   }
 }
