@@ -1481,7 +1481,7 @@ CACHE 1;
 
 -- TABELAS E ESTRUTURA
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aberlic102016(
 si46_sequencial		int8 NOT NULL default 0,
 si46_tiporegistro		int8 NOT NULL default 0,
@@ -1521,7 +1521,7 @@ si46_instit		int8 default 0,
 CONSTRAINT aberlic102016_sequ_pk PRIMARY KEY (si46_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aberlic112016(
 si47_sequencial		int8 NOT NULL default 0,
 si47_tiporegistro		int8 NOT NULL default 0,
@@ -1537,7 +1537,7 @@ si47_instit		int8 default 0,
 CONSTRAINT aberlic112016_sequ_pk PRIMARY KEY (si47_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aberlic122016(
 si48_sequencial		int8 NOT NULL default 0,
 si48_tiporegistro		int8 NOT NULL default 0,
@@ -1553,7 +1553,7 @@ si48_instit		int8 default 0,
 CONSTRAINT aberlic122016_sequ_pk PRIMARY KEY (si48_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aberlic132016(
 si49_sequencial		int8 NOT NULL default 0,
 si49_tiporegistro		int8 NOT NULL default 0,
@@ -1569,7 +1569,7 @@ si49_instit		int8 default 0,
 CONSTRAINT aberlic132016_sequ_pk PRIMARY KEY (si49_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aberlic142016(
 si50_sequencial		int8 NOT NULL default 0,
 si50_tiporegistro		int8 NOT NULL default 0,
@@ -1589,7 +1589,7 @@ si50_instit		int8 default 0,
 CONSTRAINT aberlic142016_sequ_pk PRIMARY KEY (si50_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aberlic152016(
 si51_sequencial		int8 NOT NULL default 0,
 si51_tiporegistro		int8 NOT NULL default 0,
@@ -1606,7 +1606,7 @@ si51_instit		int8 default 0,
 CONSTRAINT aberlic152016_sequ_pk PRIMARY KEY (si51_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aberlic162016(
 si52_sequencial		int8 NOT NULL default 0,
 si52_tiporegistro		int8 NOT NULL default 0,
@@ -1630,7 +1630,7 @@ si52_instit		int8 default 0,
 CONSTRAINT aberlic162016_sequ_pk PRIMARY KEY (si52_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aex102016(
 si130_sequencial		int8 NOT NULL default 0,
 si130_tiporegistro		int8 NOT NULL default 0,
@@ -1644,9 +1644,10 @@ si130_dtanulacaoop		date NOT NULL default null,
 si130_vlanulacaoop		float8 NOT NULL default 0,
 si130_mes		int8 NOT NULL default 0,
 si130_instit		int8 default 0,
+CONSTRAINT aex112016_sequ_pk PRIMARY KEY (si130_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE alq102016(
 si121_sequencial		int8 NOT NULL default 0,
 si121_tiporegistro		int8 NOT NULL default 0,
@@ -1667,7 +1668,7 @@ si121_instit		int8 default 0,
 CONSTRAINT alq102016_sequ_pk PRIMARY KEY (si121_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE alq112016(
 si122_sequencial		int8 NOT NULL default 0,
 si122_tiporegistro		int8 NOT NULL default 0,
@@ -1680,7 +1681,7 @@ si122_instit		int8 default 0,
 CONSTRAINT alq112016_sequ_pk PRIMARY KEY (si122_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE alq122016(
 si123_sequencial		int8 NOT NULL default 0,
 si123_tiporegistro		int8 NOT NULL default 0,
@@ -1694,7 +1695,7 @@ si123_instit		int8 default 0,
 CONSTRAINT alq122016_sequ_pk PRIMARY KEY (si123_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE anl102016(
 si110_sequencial		int8 NOT NULL default 0,
 si110_tiporegistro		int8 NOT NULL default 0,
@@ -1712,7 +1713,7 @@ si110_instit		int8 default 0,
 CONSTRAINT anl102016_sequ_pk PRIMARY KEY (si110_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE anl112016(
 si111_sequencial		int8 NOT NULL default 0,
 si111_tiporegistro		int8 NOT NULL default 0,
@@ -1727,7 +1728,7 @@ si111_instit		int8 default 0,
 CONSTRAINT anl112016_sequ_pk PRIMARY KEY (si111_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aob102016(
 si141_sequencial		int8 NOT NULL default 0,
 si141_tiporegistro		int8 NOT NULL default 0,
@@ -1749,7 +1750,7 @@ si141_instit		int8 default 0,
 CONSTRAINT aob102016_sequ_pk PRIMARY KEY (si141_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aob112016(
 si142_sequencial		int8 NOT NULL default 0,
 si142_tiporegistro		int8 NOT NULL default 0,
@@ -1762,7 +1763,7 @@ si142_instit		int8 default 0,
 CONSTRAINT aob112016_sequ_pk PRIMARY KEY (si142_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aoc102016(
 si38_sequencial		int8 NOT NULL default 0,
 si38_tiporegistro		int8 NOT NULL default 0,
@@ -1774,7 +1775,7 @@ si38_instit		int8 default 0,
 CONSTRAINT aoc102016_sequ_pk PRIMARY KEY (si38_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aoc112016(
 si39_sequencial		int8 NOT NULL default 0,
 si39_tiporegistro		int8 NOT NULL default 0,
@@ -1788,7 +1789,7 @@ si39_instit		int8 default 0,
 CONSTRAINT aoc112016_sequ_pk PRIMARY KEY (si39_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aoc122016(
 si40_sequencial		int8 NOT NULL default 0,
 si40_tiporegistro		int8 NOT NULL default 0,
@@ -1803,7 +1804,7 @@ si40_instit		int8 default 0,
 CONSTRAINT aoc122016_sequ_pk PRIMARY KEY (si40_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aoc132016(
 si41_sequencial		int8 NOT NULL default 0,
 si41_tiporegistro		int8 NOT NULL default 0,
@@ -1816,7 +1817,7 @@ si41_instit		int8 default 0,
 CONSTRAINT aoc132016_sequ_pk PRIMARY KEY (si41_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aoc142016(
 si42_sequencial		int8 NOT NULL default 0,
 si42_tiporegistro		int8 NOT NULL default 0,
@@ -1838,7 +1839,7 @@ si42_instit		int8 default 0,
 CONSTRAINT aoc142016_sequ_pk PRIMARY KEY (si42_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aop102016(
 si137_sequencial		int8 NOT NULL default 0,
 si137_tiporegistro		int8 NOT NULL default 0,
@@ -1856,7 +1857,7 @@ si137_instit		int8 default 0,
 CONSTRAINT aop102016_sequ_pk PRIMARY KEY (si137_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE aop112016(
 si138_sequencial	int8 NOT NULL default 0,
 si138_tiporegistro	int8 NOT NULL default 0,
@@ -1876,7 +1877,7 @@ si138_instit	int8 default 0,
 CONSTRAINT aop112016_sequ_pk PRIMARY KEY (si138_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE arc102016(
 si28_sequencial		int8 NOT NULL default 0,
 si28_tiporegistro		int8 NOT NULL default 0,
@@ -1895,7 +1896,7 @@ si28_instit		int8 default 0,
 CONSTRAINT arc102016_sequ_pk PRIMARY KEY (si28_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE arc112016(
 si29_sequencial		int8 NOT NULL default 0,
 si29_tiporegistro		int8 NOT NULL default 0,
@@ -1908,7 +1909,7 @@ si29_instit		int8 default 0,
 CONSTRAINT arc112016_sequ_pk PRIMARY KEY (si29_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE arc122016(
 si30_sequencial		int8 NOT NULL default 0,
 si30_tiporegistro		int8 NOT NULL default 0,
@@ -1921,7 +1922,7 @@ si30_instit		int8 default 0,
 CONSTRAINT arc122016_sequ_pk PRIMARY KEY (si30_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE arc202016(
 si31_sequencial		int8 NOT NULL default 0,
 si31_tiporegistro		int8 NOT NULL default 0,
@@ -1937,7 +1938,7 @@ si31_instit		int8 default 0,
 CONSTRAINT arc202016_sequ_pk PRIMARY KEY (si31_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE arc212016(
 si32_sequencial		int8 NOT NULL default 0,
 si32_tiporegistro		int8 NOT NULL default 0,
@@ -1949,7 +1950,7 @@ si32_instit		int8 default 0,
 CONSTRAINT arc212016_sequ_pk PRIMARY KEY (si32_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE caixa102016(
 si103_sequencial		int8 NOT NULL default 0,
 si103_tiporegistro		int8 NOT NULL default 0,
@@ -1960,7 +1961,7 @@ si103_mes		int8 NOT NULL default 0,
 si103_instit		int8 default 0,
 CONSTRAINT caixa102016_sequ_pk PRIMARY KEY (si103_sequencial));
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE caixa112016(
 si166_sequencial		int8 NOT NULL default 0,
 si166_tiporegistro		int8 NOT NULL default 0,
@@ -1972,7 +1973,7 @@ si166_instit		int8 default 0,
 CONSTRAINT caixa112016_sequ_pk PRIMARY KEY (si166_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE caixa122016(
 si104_sequencial		int8 NOT NULL default 0,
 si104_tiporegistro		int8 NOT NULL default 0,
@@ -1990,7 +1991,7 @@ si104_instit		int8 default 0,
 CONSTRAINT caixa122016_sequ_pk PRIMARY KEY (si104_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE caixa132016(
 si105_sequencial		int8 NOT NULL default 0,
 si105_tiporegistro		int8 NOT NULL default 0,
@@ -2005,7 +2006,7 @@ si105_instit		int8 default 0,
 CONSTRAINT caixa132016_sequ_pk PRIMARY KEY (si105_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE consid102016(
 si158_sequencial		int8 NOT NULL default 0,
 si158_tiporegistro		int8 NOT NULL default 0,
@@ -2016,7 +2017,7 @@ si158_instit		int8 default 0,
 CONSTRAINT consid102016_sequ_pk PRIMARY KEY (si158_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE consor102016(
 si16_sequencial		int8 NOT NULL default 0,
 si16_tiporegistro		int8 NOT NULL default 0,
@@ -2029,7 +2030,7 @@ si16_instit		int8 default 0,
 CONSTRAINT consor102016_sequ_pk PRIMARY KEY (si16_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE consor202016(
 si17_sequencial		int8 NOT NULL default 0,
 si17_tiporegistro		int8 NOT NULL default 0,
@@ -2043,7 +2044,7 @@ si17_instit		int8 default 0,
 CONSTRAINT consor202016_sequ_pk PRIMARY KEY (si17_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE consor302016(
 si18_sequencial		int8 NOT NULL default 0,
 si18_tiporegistro		int8 NOT NULL default 0,
@@ -2065,7 +2066,7 @@ si18_instit		int8 default 0,
 CONSTRAINT consor302016_sequ_pk PRIMARY KEY (si18_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE consor402016(
 si19_sequencial		int8 NOT NULL default 0,
 si19_tiporegistro		int8 NOT NULL default 0,
@@ -2078,7 +2079,7 @@ si19_instit		int8 default 0,
 CONSTRAINT consor402016_sequ_pk PRIMARY KEY (si19_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE consor502016(
 si20_sequencial		int8 NOT NULL default 0,
 si20_tiporegistro		int8 NOT NULL default 0,
@@ -2091,7 +2092,7 @@ si20_instit		int8 default 0,
 CONSTRAINT consor502016_sequ_pk PRIMARY KEY (si20_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE contratos102016(
 si83_sequencial		int8 NOT NULL default 0,
 si83_tiporegistro		int8 NOT NULL default 0,
@@ -2127,7 +2128,7 @@ si83_instit		int8 default 0,
 CONSTRAINT contratos102016_sequ_pk PRIMARY KEY (si83_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE contratos112016(
 si84_sequencial		int8 NOT NULL default 0,
 si84_tiporegistro		int8 NOT NULL default 0,
@@ -2141,7 +2142,7 @@ si84_instit		int8 default 0,
 CONSTRAINT contratos112016_sequ_pk PRIMARY KEY (si84_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE contratos122016(
 si85_sequencial		int8 NOT NULL default 0,
 si85_tiporegistro		int8 NOT NULL default 0,
@@ -2162,7 +2163,7 @@ si85_instit		int8 default 0,
 CONSTRAINT contratos122016_sequ_pk PRIMARY KEY (si85_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE contratos132016(
 si86_sequencial		int8 NOT NULL default 0,
 si86_tiporegistro		int8 NOT NULL default 0,
@@ -2176,7 +2177,7 @@ si86_instit		int8 default 0,
 CONSTRAINT contratos132016_sequ_pk PRIMARY KEY (si86_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE contratos202016(
 si87_sequencial		int8 NOT NULL default 0,
 si87_tiporegistro		int8 NOT NULL default 0,
@@ -2199,7 +2200,7 @@ si87_instit		int8 default 0,
 CONSTRAINT contratos202016_sequ_pk PRIMARY KEY (si87_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE contratos212016(
 si88_sequencial		int8 NOT NULL default 0,
 si88_tiporegistro		int8 NOT NULL default 0,
@@ -2214,7 +2215,7 @@ si88_instit		int8 default 0,
 CONSTRAINT contratos212016_sequ_pk PRIMARY KEY (si88_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE contratos302016(
 si89_sequencial		int8 NOT NULL default 0,
 si89_tiporegistro		int8 NOT NULL default 0,
@@ -2233,7 +2234,7 @@ si89_instit		int8 default 0,
 CONSTRAINT contratos302016_sequ_pk PRIMARY KEY (si89_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE contratos402016(
 si91_sequencial		int8 NOT NULL default 0,
 si91_tiporegistro		int8 NOT NULL default 0,
@@ -2248,7 +2249,7 @@ si91_instit		int8 default 0,
 CONSTRAINT contratos402016_sequ_pk PRIMARY KEY (si91_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE conv102016(
 si92_sequencial		int8 NOT NULL default 0,
 si92_tiporegistro		int8 NOT NULL default 0,
@@ -2266,7 +2267,7 @@ si92_instit		int8 default 0,
 CONSTRAINT conv102016_sequ_pk PRIMARY KEY (si92_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE conv112016(
 si93_sequencial		int8 NOT NULL default 0,
 si93_tiporegistro		int8 NOT NULL default 0,
@@ -2281,7 +2282,7 @@ si93_instit		int8 default 0,
 CONSTRAINT conv112016_sequ_pk PRIMARY KEY (si93_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE conv202016(
 si94_sequencial		int8 NOT NULL default 0,
 si94_tiporegistro		int8 NOT NULL default 0,
@@ -2299,7 +2300,7 @@ si94_instit		int8 default 0,
 CONSTRAINT conv202016_sequ_pk PRIMARY KEY (si94_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ctb102016(
 si95_sequencial		int8 NOT NULL default 0,
 si95_tiporegistro		int8 NOT NULL default 0,
@@ -2322,7 +2323,7 @@ si95_instit		int8 default 0,
 CONSTRAINT ctb102016_sequ_pk PRIMARY KEY (si95_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ctb202016(
 si96_sequencial		int8 NOT NULL default 0,
 si96_tiporegistro		int8 NOT NULL default 0,
@@ -2336,7 +2337,7 @@ si96_instit		int8 default 0,
 CONSTRAINT ctb202016_sequ_pk PRIMARY KEY (si96_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ctb212016(
 si97_sequencial		int8 NOT NULL default 0,
 si97_tiporegistro		int8 NOT NULL default 0,
@@ -2354,7 +2355,7 @@ si97_instit		int8 default 0,
 CONSTRAINT ctb212016_sequ_pk PRIMARY KEY (si97_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ctb222016(
 si98_sequencial		int8 NOT NULL default 0,
 si98_tiporegistro		int8 NOT NULL default 0,
@@ -2369,7 +2370,7 @@ si98_instit		int8 default 0,
 CONSTRAINT ctb222016_sequ_pk PRIMARY KEY (si98_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ctb302016(
 si99_sequencial		int8 NOT NULL default 0,
 si99_tiporegistro		int8 NOT NULL default 0,
@@ -2383,7 +2384,7 @@ si99_instit		int8 default 0,
 CONSTRAINT ctb302016_sequ_pk PRIMARY KEY (si99_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ctb312016(
 si100_sequencial		int8 NOT NULL default 0,
 si100_tiporegistro		int8 NOT NULL default 0,
@@ -2399,7 +2400,7 @@ si100_instit		int4 default 0,
 CONSTRAINT ctb312016_sequ_pk PRIMARY KEY (si100_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ctb402016(
 si101_sequencial		int8 NOT NULL default 0,
 si101_tiporegistro		int8 NOT NULL default 0,
@@ -2413,7 +2414,7 @@ si101_instit		int8 default 0,
 CONSTRAINT ctb402016_sequ_pk PRIMARY KEY (si101_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ctb502016(
 si102_sequencial		int8 NOT NULL default 0,
 si102_tiporegistro		int8 NOT NULL default 0,
@@ -2426,7 +2427,7 @@ si102_instit		int8 default 0,
 CONSTRAINT ctb502016_sequ_pk PRIMARY KEY (si102_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE cvc102016(
 si146_sequencial		int8 NOT NULL default 0,
 si146_tiporegistro		int8 NOT NULL default 0,
@@ -2452,7 +2453,7 @@ si146_instit		int8 default 0,
 CONSTRAINT cvc102016_sequ_pk PRIMARY KEY (si146_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE cvc202016(
 si147_sequencial		int8 NOT NULL default 0,
 si147_tiporegistro		int8 NOT NULL default 0,
@@ -2475,7 +2476,7 @@ si147_instit		int8 default 0,
 CONSTRAINT cvc202016_sequ_pk PRIMARY KEY (si147_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE cvc302016(
 si148_sequencial		int8 NOT NULL default 0,
 si148_tiporegistro		int8 NOT NULL default 0,
@@ -2507,7 +2508,7 @@ si149_instit		int8 default 0,
 CONSTRAINT cvc402016_sequ_pk PRIMARY KEY (si149_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dclrf102016(
 si157_sequencial		int8 NOT NULL default 0,
 si157_tiporegistro		int8 NOT NULL default 0,
@@ -2533,7 +2534,7 @@ si157_mes		int8 NOT NULL default 0,
 si157_instit		int8 default 0,
 CONSTRAINT dclrf102016_sequ_pk PRIMARY KEY (si157_sequencial));
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dclrf202016(
 si169_sequencial  int8 NOT NULL default 0,
 si169_tiporegistro  int8 NOT NULL default 0,
@@ -2548,7 +2549,7 @@ si169_mes   int8 NOT NULL default 0,
 si169_instit  int8 default 0,
 CONSTRAINT dclrf202016_sequ_pk PRIMARY KEY (si169_sequencial));
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ddc102016(
 si150_sequencial		int8 NOT NULL default 0,
 si150_tiporegistro		int8 NOT NULL default 0,
@@ -2561,7 +2562,7 @@ si150_instit		int8 default 0,
 CONSTRAINT ddc102016_sequ_pk PRIMARY KEY (si150_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ddc112016(
 si151_sequencial		int8 NOT NULL default 0,
 si151_tiporegistro		int8 NOT NULL default 0,
@@ -2577,7 +2578,7 @@ si151_instit		int8 default 0,
 CONSTRAINT ddc112016_sequ_pk PRIMARY KEY (si151_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ddc122016(
 si152_sequencial		int8 NOT NULL default 0,
 si152_tiporegistro		int8 NOT NULL default 0,
@@ -2590,7 +2591,7 @@ si152_instit		int8 default 0,
 CONSTRAINT ddc122016_sequ_pk PRIMARY KEY (si152_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ddc202016(
 si153_sequencial		int8 NOT NULL default 0,
 si153_tiporegistro		int8 NOT NULL default 0,
@@ -2607,7 +2608,7 @@ si153_instit		int8 default 0,
 CONSTRAINT ddc202016_sequ_pk PRIMARY KEY (si153_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ddc302016(
 si154_sequencial		int8 NOT NULL default 0,
 si154_tiporegistro		int8 NOT NULL default 0,
@@ -2630,7 +2631,7 @@ si154_instit		int8 default 0,
 CONSTRAINT ddc302016_sequ_pk PRIMARY KEY (si154_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa102016(
 si74_sequencial		int8 NOT NULL default 0,
 si74_tiporegistro		int8 ,
@@ -2652,7 +2653,7 @@ si74_instit		int8 ,
 CONSTRAINT dispensa102016_sequ_pk PRIMARY KEY (si74_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa112016(
 si75_sequencial		int8 NOT NULL default 0,
 si75_tiporegistro		int8 ,
@@ -2669,7 +2670,7 @@ si75_instit		int8 ,
 CONSTRAINT dispensa112016_sequ_pk PRIMARY KEY (si75_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa122016(
 si76_sequencial		int8 NOT NULL default 0,
 si76_tiporegistro		int8 ,
@@ -2686,7 +2687,7 @@ si76_instit		int8 ,
 CONSTRAINT dispensa122016_sequ_pk PRIMARY KEY (si76_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa132016(
 si77_sequencial		int8 NOT NULL default 0,
 si77_tiporegistro		int8,
@@ -2703,7 +2704,7 @@ si77_instit		int8 default 0,
 CONSTRAINT dispensa132016_sequ_pk PRIMARY KEY (si77_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa142016(
 si78_sequencial		int8 NOT NULL default 0,
 si78_tiporegistro		int8 ,
@@ -2720,7 +2721,7 @@ si78_instit		int8 ,
 CONSTRAINT dispensa142016_sequ_pk PRIMARY KEY (si78_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa152016(
 si79_sequencial		int8 NOT NULL default 0,
 si79_tiporegistro		int8 NOT NULL default 0,
@@ -2739,7 +2740,7 @@ si79_instit		int8 ,
 CONSTRAINT dispensa152016_sequ_pk PRIMARY KEY (si79_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa162016(
 si80_sequencial		int8 NOT NULL default 0,
 si80_tiporegistro		int8 ,
@@ -2764,7 +2765,7 @@ si80_instit		int8 ,
 CONSTRAINT dispensa162016_sequ_pk PRIMARY KEY (si80_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa172016(
 si81_sequencial		int8 NOT NULL default 0,
 si81_tiporegistro		int8 NOT NULL default 0,
@@ -2796,7 +2797,7 @@ si81_instit		int8 default 0,
 CONSTRAINT dispensa172016_sequ_pk PRIMARY KEY (si81_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE dispensa182016(
 si82_sequencial		int8 NOT NULL default 0,
 si82_tiporegistro		int8 NOT NULL default 0,
@@ -2827,7 +2828,7 @@ si82_instit		int8 default 0,
 CONSTRAINT dispensa182016_sequ_pk PRIMARY KEY (si82_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE emp102016(
 si106_sequencial		int8 NOT NULL default 0,
 si106_tiporegistro		int8 NOT NULL default 0,
@@ -2868,7 +2869,7 @@ si106_instit		int8 default 0,
 CONSTRAINT emp102016_sequ_pk PRIMARY KEY (si106_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE emp112016(
 si107_sequencial		int8 NOT NULL default 0,
 si107_tiporegistro		int8 NOT NULL default 0,
@@ -2882,7 +2883,7 @@ si107_instit		int8 default 0,
 CONSTRAINT emp112016_sequ_pk PRIMARY KEY (si107_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE emp122016(
 si108_sequencial		int8 NOT NULL default 0,
 si108_tiporegistro		int8 NOT NULL default 0,
@@ -2896,7 +2897,7 @@ si108_instit		int8 default 0,
 CONSTRAINT emp122016_sequ_pk PRIMARY KEY (si108_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE emp202016(
 si109_sequencial		int8 NOT NULL default 0,
 si109_tiporegistro		int8 NOT NULL default 0,
@@ -2913,7 +2914,7 @@ si109_instit		int8 default 0,
 CONSTRAINT emp202016_sequ_pk PRIMARY KEY (si109_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ext102016(
 si124_sequencial		int8 NOT NULL default 0,
 si124_tiporegistro		int8 NOT NULL default 0,
@@ -2928,7 +2929,7 @@ si124_instit		int8 default 0,
 CONSTRAINT ext102016_sequ_pk PRIMARY KEY (si124_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ext202016(
 si165_sequencial		int8 NOT NULL default 0,
 si165_tiporegistro		int8 NOT NULL default 0,
@@ -2946,7 +2947,7 @@ si165_instit		int8 default 0,
 CONSTRAINT ext202016_sequ_pk PRIMARY KEY (si165_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ext302016(
 si126_sequencial		int8  default 0,
 si126_tiporegistro		int8 NOT NULL default 0,
@@ -2966,7 +2967,7 @@ si126_instit		int8 default 0,
 CONSTRAINT ext302016_sequ_pk PRIMARY KEY (si126_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ext312016(
 si127_sequencial		int8  default 0,
 si127_tiporegistro		int8 NOT NULL default 0,
@@ -2984,7 +2985,7 @@ si127_instit		int8 default 0,
 CONSTRAINT ext312016_sequ_pk PRIMARY KEY (si127_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ext322016(
 si128_sequencial		int8  default 0,
 si128_tiporegistro		int8 NOT NULL default 0,
@@ -2998,7 +2999,7 @@ si128_instit		int8 default 0,
 CONSTRAINT ext322016_sequ_pk PRIMARY KEY (si128_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE hablic102016(
 si57_sequencial		int8 NOT NULL default 0,
 si57_tiporegistro		int8 NOT NULL default 0,
@@ -3033,7 +3034,7 @@ si57_instit		int8 default 0,
 CONSTRAINT hablic102016_sequ_pk PRIMARY KEY (si57_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE hablic112016(
 si58_sequencial		int8 NOT NULL default 0,
 si58_tiporegistro		int8 NOT NULL default 0,
@@ -3052,7 +3053,7 @@ si58_instit		int8 default 0,
 CONSTRAINT hablic112016_sequ_pk PRIMARY KEY (si58_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE hablic202016(
 si59_sequencial		int8 NOT NULL default 0,
 si59_tiporegistro		int8 NOT NULL default 0,
@@ -3081,7 +3082,7 @@ si59_instit		int8 default 0,
 CONSTRAINT hablic202016_sequ_pk PRIMARY KEY (si59_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE homolic102016(
 si63_sequencial		int8 NOT NULL default 0,
 si63_tiporegistro		int8 NOT NULL default 0,
@@ -3100,7 +3101,7 @@ si63_instit		int8 default 0,
 CONSTRAINT homolic102016_sequ_pk PRIMARY KEY (si63_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE homolic202016(
 si64_sequencial		int8 NOT NULL default 0,
 si64_tiporegistro		int8 NOT NULL default 0,
@@ -3118,7 +3119,7 @@ si64_instit		int8 default 0,
 CONSTRAINT homolic202016_sequ_pk PRIMARY KEY (si64_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE homolic302016(
 si65_sequencial		int8 NOT NULL default 0,
 si65_tiporegistro		int8 NOT NULL default 0,
@@ -3133,7 +3134,7 @@ si65_instit		int8 default 0,
 CONSTRAINT homolic302016_sequ_pk PRIMARY KEY (si65_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ide2016(
 si11_sequencial		int8 NOT NULL default 0,
 si11_codmunicipio		varchar(5) NOT NULL  ,
@@ -3149,7 +3150,7 @@ si11_instit		int8 default 0,
 CONSTRAINT ide2016_sequ_pk PRIMARY KEY (si11_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE incamp102016(
 si160_sequencial		int8 NOT NULL default 0,
 si160_tiporegistro		int8 NOT NULL default 0,
@@ -3172,7 +3173,7 @@ si160_instit		int8 default 0,
 CONSTRAINT incamp102016_sequ_pk PRIMARY KEY (si160_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE incamp112016(
 si161_sequencial		int8 NOT NULL default 0,
 si161_tiporegistro		int8 NOT NULL default 0,
@@ -3196,7 +3197,7 @@ si161_instit		int8 default 0,
 CONSTRAINT incamp112016_sequ_pk PRIMARY KEY (si161_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE incamp122016(
 si162_sequencial		int8 NOT NULL default 0,
 si162_tiporegistro		int8 NOT NULL default 0,
@@ -3212,7 +3213,7 @@ si162_instit		int8 default 0,
 CONSTRAINT incamp122016_sequ_pk PRIMARY KEY (si162_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE incorgao2016(
 si163_sequencial		int8 NOT NULL default 0,
 si163_codorgao		varchar(2) NOT NULL  ,
@@ -3223,7 +3224,7 @@ si163_instit		int4 default 0,
 CONSTRAINT incorgao2016_sequ_pk PRIMARY KEY (si163_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE incpro2016(
 si159_sequencial		int8 NOT NULL default 0,
 si159_codprograma		varchar(4) NOT NULL  ,
@@ -3241,7 +3242,7 @@ si159_instit		int8 default 0,
 CONSTRAINT incpro2016_sequ_pk PRIMARY KEY (si159_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE item102016(
 si43_sequencial		int8 NOT NULL default 0,
 si43_tiporegistro		int8 NOT NULL default 0,
@@ -3255,7 +3256,7 @@ si43_instit		int8 default 0,
 CONSTRAINT item102016_sequ_pk PRIMARY KEY (si43_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE iuoc2016(
 si164_sequencial		int8 NOT NULL default 0,
 si164_codorgao		varchar(2) NOT NULL  ,
@@ -3268,7 +3269,7 @@ si164_instit		int8 default 0,
 CONSTRAINT iuoc2016_sequ_pk PRIMARY KEY (si164_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE julglic102016(
 si60_sequencial		int8 NOT NULL default 0,
 si60_tiporegistro		int8 NOT NULL default 0,
@@ -3287,7 +3288,7 @@ si60_instit		int8 default 0,
 CONSTRAINT julglic102016_sequ_pk PRIMARY KEY (si60_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE julglic202016(
 si61_sequencial		int8 NOT NULL default 0,
 si61_tiporegistro		int8 NOT NULL default 0,
@@ -3305,7 +3306,7 @@ si61_instit		int8 default 0,
 CONSTRAINT julglic202016_sequ_pk PRIMARY KEY (si61_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE julglic302016(
 si62_sequencial		int8 NOT NULL default 0,
 si62_tiporegistro		int8 NOT NULL default 0,
@@ -3321,7 +3322,7 @@ si62_instit		int4 default 0,
 CONSTRAINT julglic302016_sequ_pk PRIMARY KEY (si62_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE lao102016(
 si34_sequencial		int8 NOT NULL default 0,
 si34_tiporegistro		int8 NOT NULL default 0,
@@ -3333,7 +3334,7 @@ si34_instit		int8 default 0,
 CONSTRAINT lao102016_sequ_pk PRIMARY KEY (si34_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE lao112016(
 si35_sequencial		int8 NOT NULL default 0,
 si35_tiporegistro		int8 NOT NULL default 0,
@@ -3348,7 +3349,7 @@ si35_instit		int8 default 0,
 CONSTRAINT lao112016_sequ_pk PRIMARY KEY (si35_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE lao202016(
 si36_sequencial		int8 NOT NULL default 0,
 si36_tiporegistro		int8 NOT NULL default 0,
@@ -3360,7 +3361,7 @@ si36_instit		int8 default 0,
 CONSTRAINT lao202016_sequ_pk PRIMARY KEY (si36_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE lao212016(
 si37_sequencial		int8 NOT NULL default 0,
 si37_tiporegistro		int8 NOT NULL default 0,
@@ -3375,7 +3376,7 @@ si37_instit		int8 default 0,
 CONSTRAINT lao212016_sequ_pk PRIMARY KEY (si37_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE lqd102016(
 si118_sequencial		int8 NOT NULL default 0,
 si118_tiporegistro		int8 NOT NULL default 0,
@@ -3394,7 +3395,7 @@ si118_instit		int8 default 0,
 CONSTRAINT lqd102016_sequ_pk PRIMARY KEY (si118_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE lqd112016(
 si119_sequencial		int8 NOT NULL default 0,
 si119_tiporegistro		int8 NOT NULL default 0,
@@ -3407,7 +3408,7 @@ si119_instit		int8 default 0,
 CONSTRAINT lqd112016_sequ_pk PRIMARY KEY (si119_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE lqd122016(
 si120_sequencial		int8 NOT NULL default 0,
 si120_tiporegistro		int8 NOT NULL default 0,
@@ -3421,7 +3422,7 @@ si120_instit		int8 default 0,
 CONSTRAINT lqd122016_sequ_pk PRIMARY KEY (si120_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ntf102016(
 si143_sequencial		int8 NOT NULL default 0,
 si143_tiporegistro		int8 NOT NULL default 0,
@@ -3450,7 +3451,7 @@ si143_instit		int8 default 0,
 CONSTRAINT ntf102016_sequ_pk PRIMARY KEY (si143_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ntf112016(
 si144_sequencial		int8 NOT NULL default 0,
 si144_tiporegistro		int8 NOT NULL default 0,
@@ -3464,7 +3465,7 @@ si144_instit		int8 default 0,
 CONSTRAINT ntf112016_sequ_pk PRIMARY KEY (si144_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ntf122016(
 si145_sequencial		int8 NOT NULL default 0,
 si145_tiporegistro		int8 NOT NULL default 0,
@@ -3480,7 +3481,7 @@ si145_instit		int8 default 0,
 CONSTRAINT ntf122016_sequ_pk PRIMARY KEY (si145_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE obelac102016(
 si139_sequencial		int8 NOT NULL default 0,
 si139_tiporegistro		int8 NOT NULL default 0,
@@ -3501,7 +3502,7 @@ si139_instit		int8 default 0,
 CONSTRAINT obelac102016_sequ_pk PRIMARY KEY (si139_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE obelac112016(
 si140_sequencial		int8 NOT NULL default 0,
 si140_tiporegistro		int8 NOT NULL default 0,
@@ -3514,7 +3515,7 @@ si140_instit		int8 default 0,
 CONSTRAINT obelac112016_sequ_pk PRIMARY KEY (si140_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ops102016(
 si132_sequencial		int8 NOT NULL default 0,
 si132_tiporegistro		int8 NOT NULL default 0,
@@ -3530,7 +3531,7 @@ si132_instit		int8 default 0,
 CONSTRAINT ops102016_sequ_pk PRIMARY KEY (si132_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ops112016(
 si133_sequencial		int8 NOT NULL default 0,
 si133_tiporegistro		int8 NOT NULL default 0,
@@ -3555,7 +3556,7 @@ si133_instit		int8 default 0,
 CONSTRAINT ops112016_sequ_pk PRIMARY KEY (si133_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ops122016(
 si134_sequencial		int8 NOT NULL default 0,
 si134_tiporegistro		int8 NOT NULL default 0,
@@ -3573,7 +3574,7 @@ si134_instit		int4 default 0,
 CONSTRAINT ops122016_sequ_pk PRIMARY KEY (si134_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ops132016(
 si135_sequencial		int8 NOT NULL default 0,
 si135_tiporegistro		int8 NOT NULL default 0,
@@ -3587,7 +3588,7 @@ si135_instit		int8 default 0,
 CONSTRAINT ops132016_sequ_pk PRIMARY KEY (si135_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE ops142016(
 si136_sequencial		int8 NOT NULL default 0,
 si136_tiporegistro		int8 NOT NULL default 0,
@@ -3601,7 +3602,7 @@ si136_instit		int8 default 0,
 CONSTRAINT ops142016_sequ_pk PRIMARY KEY (si136_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE orgao102016(
 si14_sequencial		int8 NOT NULL default 0,
 si14_tiporegistro		int8 NOT NULL default 0,
@@ -3616,7 +3617,7 @@ si14_instit		int8 default 0,
 CONSTRAINT orgao102016_sequ_pk PRIMARY KEY (si14_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE orgao112016(
 si15_sequencial		int8 NOT NULL default 0,
 si15_tiporegistro		int8 NOT NULL default 0,
@@ -3636,7 +3637,7 @@ si15_instit		int8 default 0,
 CONSTRAINT orgao112016_sequ_pk PRIMARY KEY (si15_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE parec102016(
 si22_sequencial		int8 NOT NULL default 0,
 si22_tiporegistro		int8 NOT NULL default 0,
@@ -3653,7 +3654,7 @@ si22_instit		int8 default 0,
 CONSTRAINT parec102016_sequ_pk PRIMARY KEY (si22_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE parec112016(
 si23_sequencial		int8 NOT NULL default 0,
 si23_tiporegistro		int8 NOT NULL default 0,
@@ -3666,7 +3667,7 @@ si23_instit		int8 default 0,
 CONSTRAINT parec112016_sequ_pk PRIMARY KEY (si23_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE parelic102016(
 si66_sequencial		int8 NOT NULL default 0,
 si66_tiporegistro		int8 NOT NULL default 0,
@@ -3682,7 +3683,7 @@ si66_instit		int8 default 0,
 CONSTRAINT parelic102016_sequ_pk PRIMARY KEY (si66_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE parpps102016(
 si156_sequencial		int8 NOT NULL default 0,
 si156_tiporegistro		int8 NOT NULL default 0,
@@ -3693,7 +3694,7 @@ si156_instit		int8 default 0,
 CONSTRAINT parpps102016_sequ_pk PRIMARY KEY (si156_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE parpps202016(
 si155_sequencial		int8 NOT NULL default 0,
 si155_tiporegistro		int8 NOT NULL default 0,
@@ -3706,7 +3707,7 @@ si155_instit		int8 default 0,
 CONSTRAINT parpps202016_sequ_pk PRIMARY KEY (si155_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE pessoa102016(
 si12_sequencial		int8 NOT NULL default 0,
 si12_tiporegistro		int8 NOT NULL default 0,
@@ -3720,7 +3721,7 @@ si12_instit		int8 default 0,
 CONSTRAINT pessoa102016_sequ_pk PRIMARY KEY (si12_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE rec102016(
 si25_sequencial		int8 NOT NULL default 0,
 si25_tiporegistro		int8 NOT NULL default 0,
@@ -3736,7 +3737,7 @@ si25_instit		int8 default 0,
 CONSTRAINT rec102016_sequ_pk PRIMARY KEY (si25_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE rec112016(
 si26_sequencial		int8 NOT NULL default 0,
 si26_tiporegistro		int8 NOT NULL default 0,
@@ -3749,7 +3750,7 @@ si26_instit		int8 default 0,
 CONSTRAINT rec112016_sequ_pk PRIMARY KEY (si26_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE regadesao102016(
 si67_sequencial		int8 NOT NULL default 0,
 si67_tiporegistro		int8 NOT NULL default 0,
@@ -3776,7 +3777,7 @@ si67_instit		int8 default 0,
 CONSTRAINT regadesao102016_sequ_pk PRIMARY KEY (si67_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE regadesao112016(
 si68_sequencial		int8 NOT NULL default 0,
 si68_tiporegistro		int8 NOT NULL default 0,
@@ -3792,7 +3793,7 @@ si68_instit		int8 default 0,
 CONSTRAINT regadesao112016_sequ_pk PRIMARY KEY (si68_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE regadesao122016(
 si69_sequencial		int8 NOT NULL default 0,
 si69_tiporegistro		int8 NOT NULL default 0,
@@ -3808,7 +3809,7 @@ si69_instit		int8 default 0,
 CONSTRAINT regadesao122016_sequ_pk PRIMARY KEY (si69_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE regadesao132016(
 si70_sequencial		int8 NOT NULL default 0,
 si70_tiporegistro		int8 NOT NULL default 0,
@@ -3824,7 +3825,7 @@ si70_instit		int8 default 0,
 CONSTRAINT regadesao132016_sequ_pk PRIMARY KEY (si70_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE regadesao142016(
 si71_sequencial		int8 NOT NULL default 0,
 si71_tiporegistro		int8 NOT NULL default 0,
@@ -3843,7 +3844,7 @@ si71_instit		int8 default 0,
 CONSTRAINT regadesao142016_sequ_pk PRIMARY KEY (si71_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE regadesao152016(
 si72_sequencial		int8 NOT NULL default 0,
 si72_tiporegistro		int8 NOT NULL default 0,
@@ -3864,7 +3865,7 @@ si72_instit		int8 default 0,
 CONSTRAINT regadesao152016_sequ_pk PRIMARY KEY (si72_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE regadesao202016(
 si73_sequencial		int8 NOT NULL default 0,
 si73_tiporegistro		int8 NOT NULL default 0,
@@ -3882,7 +3883,7 @@ si73_instit		int8 default 0,
 CONSTRAINT regadesao202016_sequ_pk PRIMARY KEY (si73_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE reglic102016(
 si44_sequencial		int8 NOT NULL default 0,
 si44_tiporegistro		int8 NOT NULL default 0,
@@ -3896,7 +3897,7 @@ si44_instit		int8 default 0,
 CONSTRAINT reglic102016_sequ_pk PRIMARY KEY (si44_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE reglic202016(
 si45_sequencial		int8 NOT NULL default 0,
 si45_tiporegistro		int8 NOT NULL default 0,
@@ -3921,7 +3922,7 @@ si45_instit		int8 default 0,
 CONSTRAINT reglic202016_sequ_pk PRIMARY KEY (si45_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE resplic102016(
 si55_sequencial		int8 NOT NULL default 0,
 si55_tiporegistro		int8 NOT NULL default 0,
@@ -3936,7 +3937,7 @@ si55_instit		int8 default 0,
 CONSTRAINT resplic102016_sequ_pk PRIMARY KEY (si55_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE resplic202016(
 si56_sequencial		int8 NOT NULL default 0,
 si56_tiporegistro		int8 NOT NULL default 0,
@@ -3959,7 +3960,7 @@ si56_instit		int8 default 0,
 CONSTRAINT resplic202016_sequ_pk PRIMARY KEY (si56_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE rsp102016(
 si112_sequencial		int8 NOT NULL default 0,
 si112_tiporegistro		int8 NOT NULL default 0,
@@ -3978,7 +3979,7 @@ si112_instit		int8 default 0,
 CONSTRAINT rsp102016_sequ_pk PRIMARY KEY (si112_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE rsp112016(
 si113_sequencial		int8 NOT NULL default 0,
 si113_tiporegistro		int8 NOT NULL default 0,
@@ -3993,7 +3994,7 @@ si113_instit		int8 default 0,
 CONSTRAINT rsp112016_sequ_pk PRIMARY KEY (si113_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE rsp122016(
 si114_sequencial		int8 NOT NULL default 0,
 si114_tiporegistro		int8 NOT NULL default 0,
@@ -4006,7 +4007,7 @@ si114_instit		int8 default 0,
 CONSTRAINT rsp122016_sequ_pk PRIMARY KEY (si114_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE rsp202016(
 si115_sequencial		int8 NOT NULL default 0,
 si115_tiporegistro		int8 NOT NULL default 0,
@@ -4031,7 +4032,7 @@ si115_instit		int8 default 0,
 CONSTRAINT rsp202016_sequ_pk PRIMARY KEY (si115_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE rsp212016(
 si116_sequencial		int8 NOT NULL default 0,
 si116_tiporegistro		int8 NOT NULL default 0,
@@ -4044,7 +4045,7 @@ si116_instit		int8 default 0,
 CONSTRAINT rsp212016_sequ_pk PRIMARY KEY (si116_sequencial));
 
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE rsp222016(
 si117_sequencial		int8 NOT NULL default 0,
 si117_tiporegistro		int8 NOT NULL default 0,
@@ -4056,7 +4057,7 @@ si117_reg20		int8 NOT NULL default 0,
 si117_instit		int8 default 0,
 CONSTRAINT rsp222016_sequ_pk PRIMARY KEY (si117_sequencial));
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE supdef102016(
 si167_sequencial		int8 NOT NULL default 0,
 si167_tiporegistro		int8 NOT NULL default 0,
@@ -4066,7 +4067,7 @@ si167_mes		int8 NOT NULL default 0,
 si167_instit		int8 default 0,
 CONSTRAINT supdef102016_sequ_pk PRIMARY KEY (si167_sequencial));
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE supdef112016(
 si168_sequencial		int8 NOT NULL default 0,
 si168_tiporegistro		int8 NOT NULL default 0,
@@ -4078,7 +4079,7 @@ si168_reg10		int8 NOT NULL default 0,
 si168_instit		int8 default 0,
 CONSTRAINT supdef112016_sequ_pk PRIMARY KEY (si168_sequencial));
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE cronem102016(
 si170_sequencial  int8 NOT NULL default 0,
 si170_tiporegistro  int8 NOT NULL default 0,
@@ -4089,7 +4090,7 @@ si170_vldotmensal   float8 NOT NULL default 0,
 si170_instit  int8 default 0,
 CONSTRAINT cronem102016_sequ_pk PRIMARY KEY (si170_sequencial));
 
--- M\F3dulo: sicom
+-- Modulo: sicom
 CREATE TABLE metareal102016(
 si171_sequencial  int8 NOT NULL default 0,
 si171_tiporegistro  int8 NOT NULL default 0,
@@ -4408,8 +4409,6 @@ CREATE  INDEX aberlic142016_si50_reg10_index ON aberlic142016(si50_reg10);
 CREATE  INDEX aberlic152016_si51_reg10_index ON aberlic152016(si51_reg10);
 
 CREATE  INDEX aberlic162016_si52_reg10_index ON aberlic162016(si52_reg10);
-
-CREATE  INDEX aex102016_si130_reg10_index ON aex102016(si130_reg10);
 
 CREATE  INDEX alq112016_si122_reg10_index ON alq112016(si122_reg10);
 
