@@ -95,9 +95,11 @@ class ContaCorrenteDetalhe {
           }
 
         }
+        if(!empty($oContaCorrenteDetalhe->c19_orcdotacao)) {
 
-        $oDotacao = new Dotacao($oContaCorrenteDetalhe->c19_orcdotacao, db_getsession('DB_anousu'));
-        $this->setDotacao($oDotacao);
+          $oDotacao = new Dotacao($oContaCorrenteDetalhe->c19_orcdotacao, db_getsession('DB_anousu'));
+          $this->setDotacao($oDotacao);
+        }
 
       }
     }
