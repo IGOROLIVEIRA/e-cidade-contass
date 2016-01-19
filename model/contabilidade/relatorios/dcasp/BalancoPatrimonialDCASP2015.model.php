@@ -134,6 +134,7 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
 
     $this->oPdf->clearHeaderDescription();
     $this->oPdf->addHeaderDescription($this->sDescricaoInstituicao);
+    $this->oPdf->addHeaderDescription("BALANÇO PATRIMONIAL");
     $this->oPdf->addHeaderDescription($sNomeQuadro);
     $this->oPdf->addHeaderDescription("EXERCÍCIO : {$this->iAnoUsu}");
     $this->oPdf->addHeaderDescription("PERÍODO : {$this->sDescricaoPeriodo}");
@@ -633,10 +634,10 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
     $this->getDadosQuadros();
     $this->configurarPdf();
 
-    $this->emitirQuadro("BALANÇO PATRIMONIAL", "ATIVO" , $this->aQuadroPrincipal);
-    $this->emitirQuadro("ATIVOS E PASSIVOS FINANCEIROS E PERMANENTES\n(Lei nº 4.320/1964)", "", $this->aQuadroAtivosPassivos);
-    $this->emitirQuadro("CONTAS DE COMPENSAÇÃO\n(Lei nº 4.320/1964)",  "", $this->aQuadroContasCompensacao);
-    $this->emitirQuadro("SUPERÁVIT/DÉFICIT FINANCEIRO\n(Lei nº 4.320/1964)",  "FONTES DE RECURSOS", $this->aQuadroSuperavitDeficit);
+    $this->emitirQuadro("QUADRO PRINCIPAL", "ATIVO" , $this->aQuadroPrincipal);
+    $this->emitirQuadro("QUADRO DE ATIVOS E PASSIVOS FINANCEIROS E PERMANENTES\n(Lei nº 4.320/1964)", "", $this->aQuadroAtivosPassivos);
+    $this->emitirQuadro("QUADRO DE CONTAS DE COMPENSAÇÃO\n(Lei nº 4.320/1964)",  "", $this->aQuadroContasCompensacao);
+    $this->emitirQuadro("QUADRO DE SUPERÁVIT/DÉFICIT FINANCEIRO\n(Lei nº 4.320/1964)",  "FONTES DE RECURSOS", $this->aQuadroSuperavitDeficit);
 
     $this->oPdf->showPDF("balancoPatrimonialDCASP_" . time());
   }

@@ -91,13 +91,13 @@ class linhaRelatorioContabil {
     $oDaoLinhasRel = db_utils::getDao("orcparamseq");
 
     $sSqlLinhaRel  = $oDaoLinhasRel->sql_query_file($this->relatorio, $this->codigo,
-                                                                          "o69_labelrel,
+        "o69_labelrel,
                                                                           o69_totalizador,
                                                                           o69_desdobrarlinha,
                                                                           o69_ordem,
                                                                           o69_origem,
                                                                           coalesce(o69_nivellinha, 0) as o69_nivellinha"
-                                                                           );
+    );
     $rsLinhas      = $oDaoLinhasRel->sql_record($sSqlLinhaRel);
     if ($oDaoLinhasRel->numrows == 0) {
       return null;
@@ -177,10 +177,10 @@ class linhaRelatorioContabil {
     $sSqlLinhas .= "    and o116_codseq     = {$this->codigo}    ";
     $sSqlLinhas .= "    and o117_instit     in({$sListaInstit})";
     if ($this->iPeriodo != null) {
-       $sSqlLinhas .= "    and o116_periodo  = ".$this->iPeriodo;
+      $sSqlLinhas .= "    and o116_periodo  = ".$this->iPeriodo;
     }
     if ($iAno != null) {
-       $sSqlLinhas .= "    and o117_anousu  = {$iAno}";
+      $sSqlLinhas .= "    and o117_anousu  = {$iAno}";
     }
     $sSqlLinhas .= $sWhere;
     $sSqlLinhas .= "  order by o117_instit, o117_linha,o116_ordem ";
@@ -190,7 +190,7 @@ class linhaRelatorioContabil {
     $iNumRows    = pg_num_rows($rsLinhas);
     for ($i = 0; $i < $iNumRows; $i++) {
 
-     // echo "iLinha: {$iLinha} - oLinha:{$oLinha->o117_linha}\n";
+      // echo "iLinha: {$iLinha} - oLinha:{$oLinha->o117_linha}\n";
 
       $oLinha = db_utils::fieldsMemory($rsLinhas,$i,false,false, $this->lEncode);
       if  ($iLinha == $oLinha->o117_linha){
@@ -247,10 +247,10 @@ class linhaRelatorioContabil {
     $sSqlLinhas .= "    and o116_codseq     = {$this->codigo}    ";
     $sSqlLinhas .= "    and o117_instit     in({$sListaInstit})";
     if ($this->iPeriodo != null) {
-       $sSqlLinhas .= "    and o116_periodo  = ".$this->iPeriodo;
+      $sSqlLinhas .= "    and o116_periodo  = ".$this->iPeriodo;
     }
     if ($iAno != null) {
-       $sSqlLinhas .= "    and o117_anousu  = {$iAno}";
+      $sSqlLinhas .= "    and o117_anousu  = {$iAno}";
     }
     $sSqlLinhas .= $sWhere;
     $sSqlLinhas .= "  order by o117_instit, o117_linha,o116_ordem ";
@@ -260,7 +260,7 @@ class linhaRelatorioContabil {
     $iNumRows    = pg_num_rows($rsLinhas);
     for ($i = 0; $i < $iNumRows; $i++) {
 
-     // echo "iLinha: {$iLinha} - oLinha:{$oLinha->o117_linha}\n";
+      // echo "iLinha: {$iLinha} - oLinha:{$oLinha->o117_linha}\n";
 
       $oLinha = db_utils::fieldsMemory($rsLinhas,$i,false,false, $this->lEncode);
       if  ($iLinha == $oLinha->codigolinha){
@@ -303,13 +303,13 @@ class linhaRelatorioContabil {
     $sSqlLinhas .= "       left join orcparamseqorcparamseqcolunavalor  on o117_orcparamseqorcparamseqcoluna = o116_sequencial";
     $sSqlLinhas .= "                                                   and o117_instit     in({$sListaInstit})";
     if ($iAno != null) {
-       $sSqlLinhas .= "    and o117_anousu  = {$iAno}";
+      $sSqlLinhas .= "    and o117_anousu  = {$iAno}";
     }
     $sSqlLinhas .= "       inner join orcparamseqcoluna             on o116_orcparamseqcoluna            = o115_sequencial";
     $sSqlLinhas .= " where o116_codparamrel = {$this->relatorio} ";
     $sSqlLinhas .= "    and o116_codseq     = {$this->codigo}    ";
     if ($this->iPeriodo != null) {
-       $sSqlLinhas .= "    and o116_periodo  = ".$this->iPeriodo;
+      $sSqlLinhas .= "    and o116_periodo  = ".$this->iPeriodo;
     }
     $sSqlLinhas .= $sWhere;
     $sSqlLinhas .= " group by o117_linha,o116_orcparamseqcoluna,o115_tipo,o116_ordem,o115_nomecoluna";
@@ -606,7 +606,7 @@ class linhaRelatorioContabil {
       $observacao           = $oDomXml->getElementsByTagName("observacao");
       $oFiltro->observacao  = '';
       if ($observacao->item(0)) {
-       $oFiltro->observacao  = $observacao->item(0)->getAttribute("valor");
+        $oFiltro->observacao  = $observacao->item(0)->getAttribute("valor");
       }
       $oRecursoLinha = $oDomXml->getElementsByTagName("recursocontalinha");
       if ($oRecursoLinha && $oRecursoLinha->item(0)) {
@@ -635,9 +635,9 @@ class linhaRelatorioContabil {
                 case linhaRelatorioContabil::ORIGEM_RECEITA:
 
                   $aRecursos = $this->getRecursosOrigemReceita(
-                    db_getsession("DB_anousu"),
-                    $sInstit,
-                    $oConta
+                      db_getsession("DB_anousu"),
+                      $sInstit,
+                      $oConta
                   );
 
                   break;
@@ -645,9 +645,9 @@ class linhaRelatorioContabil {
                 case linhaRelatorioContabil::ORIGEM_DESPESA:
 
                   $aRecursos = $this->getRecursosOrigemDespesa(
-                    db_getsession("DB_anousu"),
-                    $sInstit,
-                    $oConta
+                      db_getsession("DB_anousu"),
+                      $sInstit,
+                      $oConta
                   );
 
                   break;
@@ -655,9 +655,9 @@ class linhaRelatorioContabil {
                 default:
 
                   $aRecursos = $this->getRecursosPlanoDeContas(
-                    db_getsession("DB_anousu"),
-                    $sInstit,
-                    $oConta
+                      db_getsession("DB_anousu"),
+                      $sInstit,
+                      $oConta
                   );
 
               } // switch
@@ -718,43 +718,43 @@ class linhaRelatorioContabil {
     $oParametroLinha->contas = $oFiltro->contas;
     $oFiltro->orgao->valor   = explode(",", $oFiltro->orgao->valor);
     if (count($oFiltro->orgao->valor) == 1 && $oFiltro->orgao->valor[0] == "" ) {
-       $oFiltro->orgao->valor = array();
+      $oFiltro->orgao->valor = array();
     }
     $oParametroLinha->orcamento->orgao  = $oFiltro->orgao;
 
     $oFiltro->unidade->valor   = explode(",", $oFiltro->unidade->valor);
     if (count($oFiltro->unidade->valor) == 1 && $oFiltro->unidade->valor[0] == "" ) {
-       $oFiltro->unidade->valor = array();
+      $oFiltro->unidade->valor = array();
     }
     $oParametroLinha->orcamento->unidade  = $oFiltro->unidade;
 
     $oFiltro->funcao->valor   = explode(",", $oFiltro->funcao->valor);
     if (count($oFiltro->funcao->valor) == 1 && $oFiltro->funcao->valor[0] == "" ) {
-       $oFiltro->funcao->valor = array();
+      $oFiltro->funcao->valor = array();
     }
     $oParametroLinha->orcamento->funcao  = $oFiltro->funcao;
 
     $oFiltro->subfuncao->valor  = explode(",", $oFiltro->subfuncao->valor);
     if (count($oFiltro->subfuncao->valor) == 1 && $oFiltro->subfuncao->valor[0] == "" ) {
-       $oFiltro->subfuncao->valor = array();
+      $oFiltro->subfuncao->valor = array();
     }
     $oParametroLinha->orcamento->subfuncao = $oFiltro->subfuncao;
 
     $oFiltro->programa->valor   = explode(",", $oFiltro->programa->valor);
     if (count($oFiltro->programa->valor) == 1 && $oFiltro->programa->valor[0] == "" ) {
-       $oFiltro->programa->valor = array();
+      $oFiltro->programa->valor = array();
     }
     $oParametroLinha->orcamento->programa  = $oFiltro->programa;
 
     $oFiltro->projativ->valor   = explode(",", $oFiltro->projativ->valor);
-   if (count($oFiltro->projativ->valor) == 1 && $oFiltro->projativ->valor[0] == "" ) {
-       $oFiltro->projativ->valor = array();
+    if (count($oFiltro->projativ->valor) == 1 && $oFiltro->projativ->valor[0] == "" ) {
+      $oFiltro->projativ->valor = array();
     }
     $oParametroLinha->orcamento->projativ  = $oFiltro->projativ;
 
     $oFiltro->recurso->valor   = explode(",", trim($oFiltro->recurso->valor));
     if (count($oFiltro->recurso->valor) == 1 && $oFiltro->recurso->valor[0] == "" ) {
-       $oFiltro->recurso->valor = array();
+      $oFiltro->recurso->valor = array();
     }
     $oParametroLinha->orcamento->recurso  = $oFiltro->recurso;
     if (!isset($oFiltro->desdobrarlinha)) {
@@ -841,11 +841,11 @@ class linhaRelatorioContabil {
           $oRetorno->exclusao = true;
         }
         if ($iContaVerificar == $iContaParametro) {
-           $oRetorno->match = true;
+          $oRetorno->match = true;
         }
         /**
-        * verificamos o vinculo com o orcamento
-        */
+         * verificamos o vinculo com o orcamento
+         */
         if ($oRetorno->match) {
 
           if (count($oOrcamento->orgao->valor) == 0) {
@@ -871,11 +871,9 @@ class linhaRelatorioContabil {
           } else {
 
             if ($oOrcamento->unidade->operador == "in") {
-              $oRetorno->match = in_array($oDadosOrigem->o58_orgao."-".$oDadosOrigem->unidade,
-                                          $oOrcamento->unidade->valor)?true:false;
+              $oRetorno->match = in_array($oDadosOrigem->o58_unidade, $oOrcamento->unidade->valor)?true:false;
             } else {
-              $oRetorno->match = !in_array($oDadosOrigem->o58_orgao."-".$oDadosOrigem->unidade,
-                                           $oOrcamento->unidade->valor)?true:false;
+              $oRetorno->match = !in_array($oDadosOrigem->o58_unidade, $oOrcamento->unidade->valor)?true:false;
             }
           }
         }
@@ -1042,12 +1040,12 @@ class linhaRelatorioContabil {
           $oRetorno->exclusao = true;
         }
         if ($iContaVerificar == $iContaParametro) {
-           $oRetorno->match = true;
+          $oRetorno->match = true;
         }
-       /**
-        * verificamos o vinculo com o orcamento
-        */
-       if ($oRetorno->match) {
+        /**
+         * verificamos o vinculo com o orcamento
+         */
+        if ($oRetorno->match) {
 
           if (count($oOrcamento->orgao->valor) == 0) {
 
@@ -1072,10 +1070,10 @@ class linhaRelatorioContabil {
 
             if ($oOrcamento->unidade->operador == "in") {
               $oRetorno->match = in_array($oDadosOrigem->o58_orgao."-".$oDadosOrigem->unidade,
-                                          $oOrcamento->unidade->valor)?true:false;
+                  $oOrcamento->unidade->valor)?true:false;
             } else {
               $oRetorno->match = !in_array($oDadosOrigem->o58_orgao."-".$oDadosOrigem->unidade,
-                                           $oOrcamento->unidade->valor)?true:false;
+                  $oOrcamento->unidade->valor)?true:false;
             }
           }
         }
@@ -1212,7 +1210,7 @@ class linhaRelatorioContabil {
     /**
      * gravamos os vinculo com o orcamento
      */
-     /**
+    /**
      * gravamos os vinculo com o orcamento
      */
     $oXmlWriter->startElement("orgao");
@@ -1399,7 +1397,7 @@ class linhaRelatorioContabil {
       $observacao           = $oDomXml->getElementsByTagName("observacao");
       $oFiltro->observacao  = '';
       if ($observacao->item(0)) {
-       $oFiltro->observacao  = $observacao->item(0)->getAttribute("valor");
+        $oFiltro->observacao  = $observacao->item(0)->getAttribute("valor");
       }
       $oRecursoLinha = $oDomXml->getElementsByTagName("recursocontalinha");
       if ($oRecursoLinha && $oRecursoLinha->item(0)) {
@@ -1428,9 +1426,9 @@ class linhaRelatorioContabil {
                 case linhaRelatorioContabil::ORIGEM_RECEITA:
 
                   $aRecursos = $this->getRecursosOrigemReceita(
-                    db_getsession("DB_anousu"),
-                    db_getsession("DB_instit"),
-                    $oConta
+                      db_getsession("DB_anousu"),
+                      db_getsession("DB_instit"),
+                      $oConta
                   );
 
                   break;
@@ -1438,9 +1436,9 @@ class linhaRelatorioContabil {
                 case linhaRelatorioContabil::ORIGEM_DESPESA:
 
                   $aRecursos = $this->getRecursosOrigemDespesa(
-                    db_getsession("DB_anousu"),
-                    db_getsession("DB_instit"),
-                    $oConta
+                      db_getsession("DB_anousu"),
+                      db_getsession("DB_instit"),
+                      $oConta
                   );
 
                   break;
@@ -1448,9 +1446,9 @@ class linhaRelatorioContabil {
                 default:
 
                   $aRecursos = $this->getRecursosPlanoDeContas(
-                    db_getsession("DB_anousu"),
-                    db_getsession("DB_instit"),
-                    $oConta
+                      db_getsession("DB_anousu"),
+                      db_getsession("DB_instit"),
+                      $oConta
                   );
 
               } // switch
@@ -1486,10 +1484,10 @@ class linhaRelatorioContabil {
 
     $oDaoLinhas = db_utils::getDao("orcparamseqfiltroorcamento");
     $oDaoLinhas->excluir(null,
-                         "o133_orcparamseq    = {$this->codigo}
+        "o133_orcparamseq    = {$this->codigo}
                          and o133_orcparamrel = {$this->relatorio}
                          and o133_anousu      = {$iAno}"
-                         );
+    );
     if ($oDaoLinhas->erro_status == 0) {
 
       throw new Exception('Erro ao Excluir parâmetros.');
@@ -1588,7 +1586,7 @@ class linhaRelatorioContabil {
       $oFiltro->orcparamrel   = $oDadosOrcParamSeqSigap->o141_orcparamrel;
       $oFiltro->ano           = $oDadosOrcParamSeqSigap->o141_ano;
     } else {
-    	$oFiltro = false;
+      $oFiltro = false;
     }
 
     return $oFiltro;
@@ -1607,9 +1605,9 @@ class linhaRelatorioContabil {
     }
 
 
-  	if (!isset($oFilter)) {
-  		throw new Exception("Nenhum filtro informado!");
-  	}
+    if (!isset($oFilter)) {
+      throw new Exception("Nenhum filtro informado!");
+    }
 
     $oDaoOrcParamSeqSigap  = db_utils::getDao("orcparamseqsigap");
     $iAnoUsu               = db_getsession("DB_anousu");
@@ -1650,10 +1648,10 @@ class linhaRelatorioContabil {
 
     $oDaoOrcParamSeqSigap  = db_utils::getDao("orcparamseqsigap");
     $oDaoOrcParamSeqSigap->excluir(null,
-                                   "o141_orcparamseq     = {$this->codigo}
+        "o141_orcparamseq     = {$this->codigo}
                                     and o141_orcparamrel = {$this->relatorio}
                                     and o141_ano         = {$iAno}"
-                                  );
+    );
     if ($oDaoOrcParamSeqSigap->erro_status == 0) {
       throw new Exception("Erro ao excluir vinculo SIGAP!\nErro retornado:{$oDaoOrcParamSeqSigap->erro_msg}");
     }

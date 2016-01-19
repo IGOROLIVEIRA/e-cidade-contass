@@ -48,8 +48,12 @@ if ($iAnoUsu >= 2015 && $codigoRelatorio == FluxoCaixaDCASP2015::CODIGO_RELATORI
   header("Location: con2_fluxocaixaDCASP001_2015.php"); exit;
 }
 
+if ($iAnoUsu >= 2015 && $codigoRelatorio == VariacaoPatrimonialDCASP2015::CODIGO_RELATORIO) {
+  header("Location: con2_variacaopatrimonialDCASP001_2015.php"); exit;
+}
+
 $aRelatoriosPorQuadro = array(
-  BalancoPatrimonialDCASP2015::CODIGO_RELATORIO
+    BalancoPatrimonialDCASP2015::CODIGO_RELATORIO
 );
 
 $sStyleDisplayBalancoPatrimonial = 'none';
@@ -249,11 +253,11 @@ $imprimirValorExercicioAnterior =  $iAnoUsu - 1 >= $iAnoInicioPCASP;
     if (iCodigoRelatorio == 129) {
 
       var oParametros = {
-        exec              : "validarBalancoFinanceiro",
-        instituicao       : sInstituicao,
-        periodo           : iCodigoPeriodo,
-        relatorio         : iCodigoRelatorio,
-        exercicioAnterior : (oComboboxExercicioAnterior.value == 1)
+        exec              : "getRecursosNaoConfigurados",
+        aCodigosInstituicao      : aInstituicoesSelecionadas,
+        iCodigoPeriodo           : iCodigoPeriodo,
+        iCodigoRelatorio         : iCodigoRelatorio,
+        imprimirValorExercicioAnterior : (oComboboxExercicioAnterior.value == 1 ? 't' : 'f')
       };
 
       new AjaxRequest("con2_relatoriosdcasp.RPC.php", oParametros, function(oRetorno, lErro) {

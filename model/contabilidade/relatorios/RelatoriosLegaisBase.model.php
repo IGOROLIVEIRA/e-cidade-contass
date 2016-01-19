@@ -137,39 +137,39 @@ class RelatoriosLegaisBase {
    * @var array
    */
   static $aCamposReceita = array('saldo_inicial', 'saldo_prevadic_acum', 'saldo_inicial_prevadic', 'saldo_anterior',
-                                 'saldo_arrecadado', 'saldo_a_arrecadar', 'saldo_arrecadado_acumulado',
-                                 'saldo_prev_anterior');
+      'saldo_arrecadado', 'saldo_a_arrecadar', 'saldo_arrecadado_acumulado',
+      'saldo_prev_anterior');
 
   /**
    * Campos para cálculo do Balancete de Despesa
    * @var array
    */
   static $aCamposDespesa = array('dot_ini', 'saldo_anterior', 'empenhado', 'anulado', 'liquidado', 'pago',
-                                 'suplementado', 'reduzido', 'atual', 'reservado', 'atual_menos_reservado',
-                                 'atual_a_pagar_liquidado', 'empenhado_acumulado', 'anulado_acumulado',
-                                 'atual_a_pagar','liquidado_acumulado', 'pago_acumulado', 'suplementado_acumulado',
-                                 'reduzido_acumulado', 'proj', 'ativ', 'oper', 'ordinario', 'vinculado', 'suplemen',
-                                 'suplemen_acumulado', 'especial', 'especial_acumulado');
+      'suplementado', 'reduzido', 'atual', 'reservado', 'atual_menos_reservado',
+      'atual_a_pagar_liquidado', 'empenhado_acumulado', 'anulado_acumulado',
+      'atual_a_pagar','liquidado_acumulado', 'pago_acumulado', 'suplementado_acumulado',
+      'reduzido_acumulado', 'proj', 'ativ', 'oper', 'ordinario', 'vinculado', 'suplemen',
+      'suplemen_acumulado', 'especial', 'especial_acumulado');
 
   static $aCamposRestoPagar = array('e91_vlremp',
-                                    'e91_vlranu',
-                                    'e91_vlrliq',
-                                    'e91_vlrpag',
-                                    'vlranu',
-                                    'vlrliq',
-                                    'vlrpag',
-                                    'vlrpagnproc',
-                                    'vlranuliq',
-                                    'vlranuliqnaoproc');
+      'e91_vlranu',
+      'e91_vlrliq',
+      'e91_vlrpag',
+      'vlranu',
+      'vlrliq',
+      'vlrpag',
+      'vlrpagnproc',
+      'vlranuliq',
+      'vlranuliqnaoproc');
   /**
    * Campos para consulta do Balancete de Verificação
    * @var array
    */
   static $aCamposVerificacao = array(
-    'saldo_anterior',
-    'saldo_anterior_debito',
-    'saldo_anterior_credito',
-    'saldo_final'
+      'saldo_anterior',
+      'saldo_anterior_debito',
+      'saldo_anterior_credito',
+      'saldo_final'
   );
 
   /**
@@ -179,7 +179,7 @@ class RelatoriosLegaisBase {
   protected $aMarcadoresLinhasRelatorio = array(
       '#exercicio_anterior' => '',
       '#exercicio' => ''
-    );
+  );
 
   /**
    * Tipo de cálculo do Balancete de Receita
@@ -265,7 +265,7 @@ class RelatoriosLegaisBase {
   /**
    * define as instituicoes que serao usadas no relatorio
    *
-   * @param integer $sInstituicoes lista das instituicoes, seperadas por virgula
+   * @param string $sInstituicoes lista das instituicoes, seperadas por virgula
    */
   public function setInstituicoes($sInstituicoes) {
     $this->sListaInstit = $sInstituicoes;
@@ -363,8 +363,59 @@ class RelatoriosLegaisBase {
   }
 
   /**
+   * Verifica se há espaço na página e escreve a nota explicativa.
+   *
+   * Exemplo:
+   * $this->notaExplicativa($oPdf, array($this, 'adicionarPagina'), 20);
+   *
+   * @param  PDFDocument $oPdf     Instância da PDFDocument
+   * @param  array       $callback Callback utilizado para quebrar a página (se necessário)
+   * @param  integer     $iMargem  Margem a ser considerada no cálculo
+   * @throws ParameterException
+   */
+  public function notaExplicativa(PDFDocument $oPdf, array $callback, $iMargem = 0) {
+
+    /**
+     * Verifica se o índice zero é objeto
+     */
+    if (!is_object($callback[0])) {
+      throw new ParameterException('Não foi informada uma instância de objeto válida.');
+    }
+
+    /**
+     * Verifica se o método existe no objeto informado
+     */
+    if (!method_exists($callback[0], $callback[1])) {
+      throw new ParameterException('O método não existe no objeto informado.');
+    }
+
+    /**
+     * Verifica a visiblidade do método
+     */
+    $oReflection = new ReflectionMethod($callback[0], $callback[1]);
+    if (!$oReflection->isPublic()) {
+      throw new ParameterException('O método informado deve ser público.');
+    }
+
+    /**
+     * Calcula o tamanho da nota explicativa e caso não haja espaço
+     * suficiente para escrever chama o método passado por parâmetro
+     */
+    $iAltura = $this->oRelatorioLegal->notaExplicativa($oPdf, $this->iCodigoPeriodo, $oPdf->getAvailWidth(), false);
+    if ($oPdf->getAvailHeight() < ($iAltura + $iMargem)) {
+      call_user_func($callback);
+    }
+
+    /**
+     * Escreve a nota explicativa
+     */
+    $this->oRelatorioLegal->notaExplicativa($oPdf, $this->iCodigoPeriodo, $oPdf->getAvailWidth());
+  }
+
+  /**
    * Monta a nota explicativa
    *
+   * @deprecated Utilize o método notaExplicativa
    * @param FPDF $oPdf instancia do PDf
    * @param integer $iPeriodo Codigo do periodo
    * @param integer $iTam Tamanho da celula
@@ -460,10 +511,11 @@ class RelatoriosLegaisBase {
    * @param stdClass $oLinha       stdClass com os dados a ser Analisado
    * @param array    $aColunasCalcular
    * @param integer  $iTipoCalculo tipo do calculo que deve ser realizado
-   * @internal param string $sFormulaCalculo Formula de calculo da linha
    * @return float
    */
   protected static function calcularValorDaLinha($Recordset, stdClass $oLinha, array $aColunasCalcular, $iTipoCalculo) {
+
+
 
     $aListaColunas        = array();
     $sNomeColunaDescricao = '';
@@ -507,10 +559,10 @@ class RelatoriosLegaisBase {
       foreach ($oLinha->parametros->contas as $oConta) {
 
         $oVerificacao = $oLinha->oLinhaRelatorio->match($oConta,
-                                                        $oLinha->parametros->orcamento,
-                                                        $oDadosResource,
-                                                        $iTipoCalculo
-                                                      );
+            $oLinha->parametros->orcamento,
+            $oDadosResource,
+            $iTipoCalculo
+        );
 
         $oValoresParaCalculo = clone $oDadosResource;
         if ($oVerificacao->match) {
@@ -603,7 +655,6 @@ class RelatoriosLegaisBase {
       eval("\$nValor = {$sFormula};");
     }
 
-
     return $nValor;
   }
 
@@ -615,9 +666,9 @@ class RelatoriosLegaisBase {
     foreach ($this->aLinhasConsistencia as $oLinha) {
 
       $aValoresColunasLinhas = $oLinha->oLinhaRelatorio->getValoresColunas(null, null,
-                                                                           $this->getInstituicoes(),
-                                                                           $this->iAnoUsu
-                                                                          );
+          $this->getInstituicoes(),
+          $this->iAnoUsu
+      );
       foreach($aValoresColunasLinhas as $oValores) {
         foreach ($oValores->colunas as $oColuna) {
           $oLinha->{$oColuna->o115_nomecoluna} += $oColuna->o117_valor;
@@ -634,7 +685,7 @@ class RelatoriosLegaisBase {
     return $this->oRelatorioLegal;
   }
 
-/**
+  /**
    * Verifica quais os tipos de calculos devem ser executados para a consistência
    */
   protected function processarTiposDeCalculo() {
@@ -700,23 +751,22 @@ class RelatoriosLegaisBase {
    */
   protected function executarBalanceteDaReceita() {
 
-
     $sWhereReceita      = "o70_instit in ({$this->getInstituicoes()})";
     $rsBalanceteReceita = db_receitasaldo(11, 1, 3, true,
-                                          $sWhereReceita, $this->iAnoUsu,
-                                          $this->getDataInicial()->getDate(),
-                                          $this->getDataFinal()->getDate()
-                                          );
+        $sWhereReceita, $this->iAnoUsu,
+        $this->getDataInicial()->getDate(),
+        $this->getDataFinal()->getDate()
+    );
 
     foreach ($this->aLinhasProcessarReceita as $iLinha ) {
 
       $oLinha            = $this->aLinhasConsistencia[$iLinha];
       $aColunasProcessar = $this->processarColunasDaLinha($oLinha);
       RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteReceita,
-                                                 $oLinha,
-                                                 $aColunasProcessar,
-                                                 RelatoriosLegaisBase::TIPO_CALCULO_RECEITA
-                                                );
+          $oLinha,
+          $aColunasProcessar,
+          RelatoriosLegaisBase::TIPO_CALCULO_RECEITA
+      );
     }
     $this->limparEstruturaBalanceteReceita();
   }
@@ -728,20 +778,20 @@ class RelatoriosLegaisBase {
 
     $sWhereDespesa      = " o58_instit in({$this->getInstituicoes()})";
     $rsBalanceteDespesa = db_dotacaosaldo(8,2,2, true, $sWhereDespesa,
-                                          $this->iAnoUsu,
-                                          $this->getDataInicial()->getDate(),
-                                          $this->getDataFinal()->getDate()
-                                         );
+        $this->iAnoUsu,
+        $this->getDataInicial()->getDate(),
+        $this->getDataFinal()->getDate()
+    );
 
     foreach ($this->aLinhasProcessarDespesa as $iLinha ) {
 
       $oLinha            = $this->aLinhasConsistencia[$iLinha];
       $aColunasProcessar = $this->processarColunasDaLinha($oLinha);
       RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteDespesa,
-                                                 $oLinha,
-                                                 $aColunasProcessar,
-                                                 RelatoriosLegaisBase::TIPO_CALCULO_DESPESA
-                                                );
+          $oLinha,
+          $aColunasProcessar,
+          RelatoriosLegaisBase::TIPO_CALCULO_DESPESA
+      );
 
       $this->limparEstruturaBalanceteDespesa();
     }
@@ -754,24 +804,24 @@ class RelatoriosLegaisBase {
 
     $sWhereVerificacao      = " c61_instit in({$this->getInstituicoes()})";
     $rsBalanceteVerificacao =  db_planocontassaldo_matriz($this->iAnoUsu,
-                                                          $this->getDataInicial()->getDate(),
-                                                          $this->getDataFinal()->getDate(),
-                                                          false,
-                                                          $sWhereVerificacao,
-                                                          '',
-                                                          'true',
-                                                          'false'
-                                                         );
+        $this->getDataInicial()->getDate(),
+        $this->getDataFinal()->getDate(),
+        false,
+        $sWhereVerificacao,
+        '',
+        'true',
+        'false'
+    );
 
     foreach ($this->aLinhasProcessarVerificacao as $iLinha ) {
 
       $oLinha            = $this->aLinhasConsistencia[$iLinha];
       $aColunasProcessar = $this->processarColunasDaLinha($oLinha);
       RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacao,
-                                                 $oLinha,
-                                                 $aColunasProcessar,
-                                                 RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO
-                                                );
+          $oLinha,
+          $aColunasProcessar,
+          RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO
+      );
 
       $this->limparEstruturaBalanceteVerificacao();
 
@@ -786,10 +836,10 @@ class RelatoriosLegaisBase {
     $oDaoRestosAPagar = new cl_empresto();
     $sWhereRestoPagar = " e60_instit in({$this->getInstituicoes()})";
     $sSqlRestosaPagar = $oDaoRestosAPagar->sql_rp_novo($this->iAnoUsu,
-                                                       $sWhereRestoPagar,
-                                                       $this->getDataInicial()->getDate(),
-                                                       $this->getDataFinal()->getDate()
-                                                      );
+        $sWhereRestoPagar,
+        $this->getDataInicial()->getDate(),
+        $this->getDataFinal()->getDate()
+    );
 
     $rsRestosPagar    = db_query($sSqlRestosaPagar);
     foreach ($this->aLinhasProcessarRestosPagar as $iLinha ) {
@@ -797,10 +847,10 @@ class RelatoriosLegaisBase {
       $oLinha            = $this->aLinhasConsistencia[$iLinha];
       $aColunasProcessar = $this->processarColunasDaLinha($oLinha);
       RelatoriosLegaisBase::calcularValorDaLinha($rsRestosPagar,
-                                                 $oLinha,
-                                                 $aColunasProcessar,
-                                                 RelatoriosLegaisBase::TIPO_CALCULO_RESTO
-                                                );
+          $oLinha,
+          $aColunasProcessar,
+          RelatoriosLegaisBase::TIPO_CALCULO_RESTO
+      );
     }
   }
 
@@ -829,6 +879,11 @@ class RelatoriosLegaisBase {
       $oColuna->nome       = $oColunaRelatorio->o115_nomecoluna;
       $oColuna->formula    = $oColunaRelatorio->o116_formula;
       $oColuna->analisada  = false;
+
+      if (property_exists($oColunaRelatorio, 'agrupar')) {
+        $oColuna->agrupar = $oColunaRelatorio->agrupar;
+      }
+
       $aColunasProcessar[] = $oColuna;
     }
     return $aColunasProcessar;
@@ -966,5 +1021,150 @@ class RelatoriosLegaisBase {
    */
   public function setDataInicialPeriodo(DBDate $oDataInicialPeriodo) {
     $this->oDataInicialPeriodo = $oDataInicialPeriodo;
+  }
+
+  /**
+   * @return int
+   */
+  public function getAno() {
+    return $this->iAnoUsu;
+  }
+
+
+  /**
+   * @param RelatoriosLegaisBase $oRelatorio
+   * @param array                $aLinhasValidar
+   * @param bool                 $lValidarExercicioAnterior
+   *
+   * @return Recurso[]
+   */
+  public static function getRecursosPendentesConfiguracao(RelatoriosLegaisBase $oRelatorio, array $aLinhasValidar, $lValidarExercicioAnterior = false) {
+
+    $aRecursosNaoConfiguradosRetorno = array();
+    $iAnoAnterior         = ($oRelatorio->getDataInicial()->getAno() - 1);
+    $oDataInicialAnterior = new DBDate("01/01/{$iAnoAnterior}");
+    $oDataFinalAnterior   = new DBDate("{$oRelatorio->getDataFinal()->getDia()}/{$oRelatorio->getDataFinal()->getMes()}/{$iAnoAnterior}");
+
+    $sWhereReceita = "o70_instit in ({$oRelatorio->getInstituicoes()})";
+    $rsBalanceteReceita = db_receitasaldo(11, 1, 3, true,
+        $sWhereReceita, $oRelatorio->getAno(),
+        $oRelatorio->getDataInicial()->getDate(),
+        $oRelatorio->getDataFinal()->getDate());
+
+    $sWhereDespesa      = " o58_instit in({$oRelatorio->getInstituicoes()})";
+    $rsBalanceteDespesa = db_dotacaosaldo(8,2,2, true, $sWhereDespesa,
+        $oRelatorio->getAno(),
+        $oRelatorio->getDataInicial()->getDate(),
+        $oRelatorio->getDataFinal()->getDate());
+
+    $rsBalanceteReceitaAnoAnterior = null;
+    $rsBalanceteDespesaAnoAnterior = null;
+    if ($lValidarExercicioAnterior) {
+
+      db_query("drop table if exists work_dotacao");
+      db_query("drop table if exists work_receita");
+
+      $rsBalanceteReceitaAnoAnterior = db_receitasaldo(11, 1, 3, true,
+          $sWhereReceita, $oRelatorio->getAno(),
+          $oDataInicialAnterior->getDate(),
+          $oDataFinalAnterior->getDate());
+
+      $rsBalanceteDespesaAnoAnterior = db_dotacaosaldo(8,2,2, true, $sWhereDespesa,
+          $oRelatorio->getAno(),
+          $oDataInicialAnterior->getDate(),
+          $oDataFinalAnterior->getDate());
+    }
+
+    $aRecursos = array();
+
+    /**
+     * Pega os recursos das movimentações do exercício atual
+     */
+    for ($iRowCalculo = 0; $iRowCalculo < pg_num_rows($rsBalanceteReceita); $iRowCalculo++)  {
+      $aRecursos[] = pg_fetch_result($rsBalanceteReceita, $iRowCalculo, 'o70_codigo');
+    }
+
+    for ($iRowCalculo = 0; $iRowCalculo < pg_num_rows($rsBalanceteDespesa); $iRowCalculo++) {
+      $aRecursos[] = pg_fetch_result($rsBalanceteDespesa, $iRowCalculo, 'o58_codigo');
+    }
+
+    /**
+     * Pega os recursos das movimentações do exercício anterior
+     */
+    if ($lValidarExercicioAnterior) {
+
+      for ($iRowCalculo = 0; $iRowCalculo < pg_num_rows($rsBalanceteReceitaAnoAnterior); $iRowCalculo++)  {
+        $aRecursos[] = pg_fetch_result($rsBalanceteReceitaAnoAnterior, $iRowCalculo, 'o70_codigo');
+      }
+
+      for ($iRowCalculo = 0; $iRowCalculo < pg_num_rows($rsBalanceteDespesaAnoAnterior); $iRowCalculo++) {
+        $aRecursos[] = pg_fetch_result($rsBalanceteDespesaAnoAnterior, $iRowCalculo, 'o58_codigo');
+      }
+    }
+
+    $aRecursos = array_unique($aRecursos);
+    sort($aRecursos);
+
+    /**
+     * Pega os recursos da configuração
+     */
+    $aRecursosConfiguradosIn    = array();
+    $aRecursosConfiguradosNotIn = array();
+
+    $aLinhasRelatorio = $oRelatorio->getLinhasRelatorio();
+
+    foreach ($aLinhasValidar as $iLinhaRelatorio) {
+
+      $pArrayToMerge =& $aRecursosConfiguradosIn;
+      if (strtolower(trim($aLinhasRelatorio[$iLinhaRelatorio]->parametros->orcamento->recurso->operador)) != 'in') {
+        $pArrayToMerge =& $aRecursosConfiguradosNotIn;
+      }
+      $pArrayToMerge = array_merge($pArrayToMerge, $aLinhasRelatorio[$iLinhaRelatorio]->parametros->orcamento->recurso->valor);
+    }
+
+    $oDaoTipoRec = new cl_orctiporec();
+
+    /**
+     * Pega os recursos do tipo vinculado quando for "não contendo" na configuração
+     */
+    if (!empty($aRecursosConfiguradosNotIn)) {
+
+      $sSqlTiporec = $oDaoTipoRec->sql_query_file( null, "o15_codigo", null, "o15_codigo not in (" . implode(', ', $aRecursosConfiguradosNotIn) . ") and o15_tipo = 2");
+      $rsTiporec   = $oDaoTipoRec->sql_record($sSqlTiporec);
+
+      if ($rsTiporec && pg_num_rows($rsTiporec) > 0) {
+
+        for ($iRowTiporec = 0; $iRowTiporec < pg_num_rows($rsTiporec); $iRowTiporec++) {
+          $aRecursosConfiguradosIn[] = db_utils::fieldsMemory($rsTiporec, $iRowTiporec)->o15_codigo;
+        }
+      }
+    }
+
+    $aRecursosNaoConfigurados = array_diff($aRecursos, array_unique($aRecursosConfiguradosIn));
+    if (!empty($aRecursosNaoConfigurados)) {
+
+      $sSqlTiporec = $oDaoTipoRec->sql_query_file( null, "o15_codigo", null, "o15_codigo in (" . implode(', ', $aRecursosNaoConfigurados) . ") and o15_tipo = 2");
+      $rsTiporec   = $oDaoTipoRec->sql_record($sSqlTiporec);
+
+      if ($rsTiporec && pg_num_rows($rsTiporec) > 0) {
+
+        for ($iRowTiporec = 0; $iRowTiporec < pg_num_rows($rsTiporec); $iRowTiporec++) {
+          $oDadosTiporec = db_utils::fieldsMemory($rsTiporec, $iRowTiporec);
+
+          $aRecursosNaoConfiguradosRetorno[] = new Recurso($oDadosTiporec->o15_codigo);
+        }
+      }
+    }
+
+    db_query("drop table if exists work_dotacao");
+    db_query("drop table if exists work_receita");
+    return $aRecursosNaoConfiguradosRetorno;
+  }
+
+  /**
+   * @return Periodo
+   */
+  public function getPeriodo() {
+    return new Periodo($this->iCodigoPeriodo);
   }
 }

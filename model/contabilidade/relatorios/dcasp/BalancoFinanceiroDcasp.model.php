@@ -31,7 +31,7 @@
  *
  * @package contabilidade
  * @subpackage relatorios
- * @version $Revision: 1.11 $
+ * @version $Revision: 1.13 $
  * @author Bruno De Boni bruno.boni@dbseller.com.br
  * @author Iuri Guntchnigg iuri@dbseller.com.br
  *
@@ -46,6 +46,13 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
   private $rsBalanceteVerificacaoAnterior = null;
   private $aLinhasRelatorio = array();
 
+  private $aLinhasComRecurso = array(4, 5, 6, 15, 16, 17);
+
+  /**
+   * @type int
+   */
+  const CODIGO_RELATORIO = 129;
+
   /**
    * Contém os Recursos que não foram configurados
    * @var array
@@ -54,106 +61,10 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
 
   /**
    * Retorna os recursos vinculados que não foram vinculados nas configurações
-   * @return Recursos[]
+   * @return Recurso[]
    */
   public function getRecursosNaoConfigurados() {
     return $this->aRecursosNaoConfigurados;
-  }
-
-  /**
-   * Valida se todos os recursos do relatório estão na configuração
-   */
-  public function validarRecursos($lValidarExercicioAnterior = false) {
-
-    $this->calculaValoresRelatorio();
-
-    $this->aRecursosNaoConfigurados = array();
-
-    $aRecursos = array();
-
-    /**
-     * Pega os recursos das movimentações do exercício atual
-     */
-    for ($iRowCalculo = 0; $iRowCalculo < pg_num_rows($this->rsBalanceteReceita); $iRowCalculo++)  {
-      $aRecursos[] = pg_fetch_result($this->rsBalanceteReceita, $iRowCalculo, 'o70_codigo');
-    }
-
-    for ($iRowCalculo = 0; $iRowCalculo < pg_num_rows($this->rsBalanceteDespesa); $iRowCalculo++) {
-      $aRecursos[] = pg_fetch_result($this->rsBalanceteDespesa, $iRowCalculo, 'o58_codigo');
-    }
-
-    /**
-     * Pega os recursos das movimentações do exercício anterior
-     */
-    if ($lValidarExercicioAnterior) {
-
-      for ($iRowCalculo = 0; $iRowCalculo < pg_num_rows($this->rsBalanceteReceitaAnoAnterior); $iRowCalculo++)  {
-        $aRecursos[] = pg_fetch_result($this->rsBalanceteReceitaAnoAnterior, $iRowCalculo, 'o70_codigo');
-      }
-
-      for ($iRowCalculo = 0; $iRowCalculo < pg_num_rows($this->rsBalanceteDespesaAnterior); $iRowCalculo++) {
-        $aRecursos[] = pg_fetch_result($this->rsBalanceteDespesaAnterior, $iRowCalculo, 'o58_codigo');
-      }
-    }
-
-    $aRecursos = array_unique($aRecursos);
-    sort($aRecursos);
-
-    /**
-     * Pega os recursos da configuração
-     */
-    $aRecursosConfiguradosIn    = array();
-    $aRecursosConfiguradosNotIn = array();
-
-    foreach (array(4, 5, 6, 15, 16, 17) as $iLinhaRelatorio) {
-
-      $pArrayToMerge =& $aRecursosConfiguradosIn;
-
-      if (strtolower(trim($this->aLinhasRelatorio[$iLinhaRelatorio]->parametros->orcamento->recurso->operador)) != 'in') {
-        $pArrayToMerge =& $aRecursosConfiguradosNotIn;
-      }
-
-      $pArrayToMerge = array_merge($pArrayToMerge, $this->aLinhasRelatorio[$iLinhaRelatorio]->parametros->orcamento->recurso->valor);
-    }
-
-    $oDaoTipoRec = new cl_orctiporec();
-
-    /**
-     * Pega os recursos do tipo vinculado quando for "não contendo" na configuração
-     */
-    if (!empty($aRecursosConfiguradosNotIn)) {
-
-      $sSqlTiporec = $oDaoTipoRec->sql_query_file( null, "o15_codigo", null, "o15_codigo not in (" . implode(', ', $aRecursosConfiguradosNotIn) . ") and o15_tipo = 2");
-      $rsTiporec   = $oDaoTipoRec->sql_record($sSqlTiporec);
-
-      if ($rsTiporec && pg_num_rows($rsTiporec) > 0) {
-
-        for ($iRowTiporec = 0; $iRowTiporec < pg_num_rows($rsTiporec); $iRowTiporec++) {
-          $aRecursosConfiguradosIn[] = db_utils::fieldsMemory($rsTiporec, $iRowTiporec)->o15_codigo;
-        }
-      }
-    }
-
-    $aRecursosNaoConfigurados = array_diff($aRecursos, array_unique($aRecursosConfiguradosIn));
-
-    if (!empty($aRecursosNaoConfigurados)) {
-
-      $sSqlTiporec = $oDaoTipoRec->sql_query_file( null, "o15_codigo", null, "o15_codigo in (" . implode(', ', $aRecursosNaoConfigurados) . ") and o15_tipo = 2");
-      $rsTiporec   = $oDaoTipoRec->sql_record($sSqlTiporec);
-
-      if ($rsTiporec && pg_num_rows($rsTiporec) > 0) {
-
-        for ($iRowTiporec = 0; $iRowTiporec < pg_num_rows($rsTiporec); $iRowTiporec++) {
-          $oDadosTiporec = db_utils::fieldsMemory($rsTiporec, $iRowTiporec);
-
-          $this->aRecursosNaoConfigurados[] = new Recurso($oDadosTiporec->o15_codigo);
-        }
-
-        return false;
-      }
-    }
-
-    return true;
   }
 
   private function calculaValoresRelatorio() {
@@ -170,12 +81,6 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
 
     $this->oDataInicialAnterior = $oDataInicialAnterior;
     $this->oDataFinalAnterior   = $oDataFinalAnterior;
-
-    $aLinhasUtilizamBalanceteReceita       = array(2, 4, 6, 7);
-    $aLinhasUtilizamBalanceteDespesa       = array(13, 14, 15, 16, 17);
-    $aLinhasUtilizamBalanceteVerificacao   = array(11, 20);
-    $aLinhasUtilizamBalanceteVerificacaoExtraDebito   = array(18, 19);
-    $aLinhasUtilizamBalanceteVerificacaoExtraCredito   = array(8, 9);
 
     /**
      * Carregar a Receita do exericio atual
@@ -285,104 +190,23 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
        * Contas configuradas para Utilizar despesa
        */
       if (in_array($iLinha, $aLinhasUtilizamBalanceteDespesa)) {
-        /*
-         * Ordinária 
-         */
-      	if($iLinha == 13){
 
-	        for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesa); $iLinha++) {
-	        	$oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesa, $iLinha);
-	            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o58_codigo;
-	            $rsCodTriRec = db_query($sqlCodTriRec);
-	            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-	            if(substr($oDadosResource->o58_elemento,0,1) == '3' && substr($codRecTri,1,2) == '00'){
-	            	$oLinha->{'vlrexatual'} += $oDadosResource->empenhado_acumulado - $oDadosResource->anulado_acumulado;
-	            }
-		    }
 
-	        for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesaAnterior); $iLinha++) {
-	            $oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesaAnterior, $iLinha);
-	            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o58_codigo;
-	            $rsCodTriRec = db_query($sqlCodTriRec);
-	            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-	            if(substr($oDadosResource->o58_elemento,0,1) == '3' && substr($codRecTri,1,2) == '00'){
-	            	$oLinha->{'vlrexanter'} += $oDadosResource->empenhado_acumulado - $oDadosResource->anulado_acumulado;
-	            }
-	        }
-        } else if($iLinha == 15){
-            /*
-	         * Previdência Social 
-	         */
-	        for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesa); $iLinha++) {
-	        	$oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesa, $iLinha);
-	            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o58_codigo;
-	            $rsCodTriRec = db_query($sqlCodTriRec);
-	            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-	            if(substr($oDadosResource->o58_elemento,0,1) == '3' && substr($codRecTri,1,2) == '03'){
-	            	$oLinha->{'vlrexatual'} += $oDadosResource->empenhado_acumulado - $oDadosResource->anulado_acumulado;
-	            }
-		        
-		    }
-	        
-	        for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesaAnterior); $iLinha++) {
-	            $oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesaAnterior, $iLinha);
-	            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o58_codigo;
-	            $rsCodTriRec = db_query($sqlCodTriRec);
-	            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-	            if(substr($oDadosResource->o58_elemento,0,1) == '3' && substr($codRecTri,1,2) == '03'){
-	            	$oLinha->{'vlrexanter'} += $oDadosResource->empenhado_acumulado - $oDadosResource->anulado_acumulado;
-	            }
-	        }
-        }else  if($iLinha == 17){
+        $oColuna          = new stdClass();
+        $oColuna->nome    = 'vlrexatual';
+        $oColuna->formula = '#empenhado_acumulado - #anulado_acumulado';
+        RelatoriosLegaisBase::calcularValorDaLinha($this->rsBalanceteDespesa,
+                                                   $oLinha,
+                                                   array($oColuna),
+                                                   RelatoriosLegaisBase::TIPO_CALCULO_DESPESA);
 
-	        for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesa); $iLinha++) {
-	        	$oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesa, $iLinha);
-	        	
-	            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o58_codigo;
-	            $rsCodTriRec = db_query($sqlCodTriRec);
-	            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-	            if(substr($oDadosResource->o58_elemento,0,1) == '3' &&  in_array(substr($codRecTri,1,2), array('22','23','24','42')) ){
-	            	$oLinha->{'vlrexatual'} += $oDadosResource->empenhado_acumulado - $oDadosResource->anulado_acumulado;
-	            }
-		        
-		    }
-
-		    for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesaAnterior); $iLinha++) {
-	            $oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesaAnterior, $iLinha);
-	            	        	
-	            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o58_codigo;
-	            $rsCodTriRec = db_query($sqlCodTriRec);
-	            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-	            if(substr($oDadosResource->o58_elemento,0,1) == '3' && in_array(substr($codRecTri,1,2), array('22','23','24','42'))){
-	            	$oLinha->{'vlrexanter'} += $oDadosResource->empenhado_acumulado - $oDadosResource->anulado_acumulado;
-	            }
-	        }
-          }else if($iLinha == 16){
-
-	        for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesa); $iLinha++) {
-	        	$oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesa, $iLinha);
-	        	
-	            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o58_codigo;
-	            $rsCodTriRec = db_query($sqlCodTriRec);
-	            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-	            if( substr($oDadosResource->o58_elemento,0,1) == '3' && $codRecTri != 0 && !in_array(substr($codRecTri,1,2), array('00','22','23','24','42')) ){
-	            	$oLinha->{'vlrexatual'} += $oDadosResource->empenhado_acumulado - $oDadosResource->anulado_acumulado;
-	            }
-		        
-		    }
-
-		    for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesaAnterior); $iLinha++) {
-	            $oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesaAnterior, $iLinha);
-	            	        	
-	            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o58_codigo;
-	            $rsCodTriRec = db_query($sqlCodTriRec);
-	            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-	            if(substr($oDadosResource->o58_elemento,0,1) == '3' && $codRecTri != 0 && !in_array(substr($codRecTri,1,2), array('00','22','23','24','42'))){
-	            	$oLinha->{'vlrexanter'} += $oDadosResource->empenhado_acumulado - $oDadosResource->anulado_acumulado;
-	            }
-	        }
-         }
-        
+        $oColuna          = new stdClass();
+        $oColuna->nome    = 'vlrexanter';
+        $oColuna->formula = '#empenhado_acumulado - #anulado_acumulado';
+        RelatoriosLegaisBase::calcularValorDaLinha($this->rsBalanceteDespesaAnterior,
+                                                   $oLinha,
+                                                   array($oColuna),
+                                                   RelatoriosLegaisBase::TIPO_CALCULO_DESPESA);
       }
 
       if (in_array($iLinha, $aLinhasUtilizamBalanceteVerificacao)) {
@@ -390,7 +214,7 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
         $oColuna          = new stdClass();
         $oColuna->nome    = 'vlrexanter';
         $oColuna->formula = '#saldo_final';
-        RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacaoAnterior,
+        RelatoriosLegaisBase::calcularValorDaLinha($this->rsBalanceteVerificacaoAnterior,
                                                    $oLinha,
                                                    array($oColuna),
                                                    RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO);
@@ -398,19 +222,19 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
         $oColuna          = new stdClass();
         $oColuna->nome    = 'vlrexatual';
         $oColuna->formula = '#saldo_final';
-        RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacao,
+        RelatoriosLegaisBase::calcularValorDaLinha($this->rsBalanceteVerificacao,
                                                    $oLinha,
                                                    array($oColuna),
                                                    RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO);
 
       }
-      
+
       if ($iLinha == 10) {
 
         $oColuna          = new stdClass();
         $oColuna->nome    = 'vlrexanter';
         $oColuna->formula = '#saldo_anterior';
-        RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacaoAnterior,
+        RelatoriosLegaisBase::calcularValorDaLinha($this->rsBalanceteVerificacaoAnterior,
                                                    $oLinha,
                                                    array($oColuna),
                                                    RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO);
@@ -418,49 +242,7 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
         $oColuna          = new stdClass();
         $oColuna->nome    = 'vlrexatual';
         $oColuna->formula = '#saldo_anterior';
-        RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacao,
-                                                   $oLinha,
-                                                   array($oColuna),
-                                                   RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO);
-      }
-      /**
-       * Contas configuradas para Utilizar despesa e receita extra
-       */
-      
-      if (in_array($iLinha, $aLinhasUtilizamBalanceteVerificacaoExtraDebito)) {
-
-        $oColuna          = new stdClass();
-        $oColuna->nome    = 'vlrexanter';
-        $oColuna->formula = '#saldo_anterior_debito';
-        RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacaoAnterior,
-                                                   $oLinha,
-                                                   array($oColuna),
-                                                   RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO);
-
-        $oColuna          = new stdClass();
-        $oColuna->nome    = 'vlrexatual';
-        $oColuna->formula = '#saldo_anterior_debito';
-        RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacao,
-                                                   $oLinha,
-                                                   array($oColuna),
-                                                   RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO);
-
-      }
-      
-      if (in_array($iLinha, $aLinhasUtilizamBalanceteVerificacaoExtraCredito)) {
-
-        $oColuna          = new stdClass();
-        $oColuna->nome    = 'vlrexanter';
-        $oColuna->formula = '#saldo_anterior_credito';
-        RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacaoAnterior,
-                                                   $oLinha,
-                                                   array($oColuna),
-                                                   RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO);
-
-        $oColuna          = new stdClass();
-        $oColuna->nome    = 'vlrexatual';
-        $oColuna->formula = '#saldo_anterior_credito';
-        RelatoriosLegaisBase::calcularValorDaLinha($rsBalanceteVerificacao,
+        RelatoriosLegaisBase::calcularValorDaLinha($this->rsBalanceteVerificacao,
                                                    $oLinha,
                                                    array($oColuna),
                                                    RelatoriosLegaisBase::TIPO_CALCULO_VERIFICACAO);
@@ -474,19 +256,18 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
         $oColuna          = new stdClass();
         $oColuna->nome    = 'vlrexatual';
         $oColuna->formula = '(#empenhado - #anulado - #liquidado) + #atual_a_pagar_liquidado';
-       
-        for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesa); $iLinha++) {
-            $oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesa, $iLinha);
-	        $oLinha->{ $oColuna->nome} += ($oDadosResource->empenhado - $oDadosResource->anulado - $oDadosResource->liquidado) + $oDadosResource->atual_a_pagar_liquidado;
-	    }
+        RelatoriosLegaisBase::calcularValorDaLinha($this->rsBalanceteDespesa,
+                                                   $oLinha,
+                                                   array($oColuna),
+                                                   RelatoriosLegaisBase::TIPO_CALCULO_DESPESA);
 
         $oColuna          = new stdClass();
         $oColuna->nome    = 'vlrexanter';
         $oColuna->formula = '(#empenhado - #anulado - #liquidado) + #atual_a_pagar_liquidado';
-        for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteDespesaAnterior); $iLinha++) {
-            $oDadosResource = db_utils::fieldsMemory($rsBalanceteDespesaAnterior, $iLinha);
-	        $oLinha->{ $oColuna->nome} += ($oDadosResource->empenhado - $oDadosResource->anulado - $oDadosResource->liquidado) + $oDadosResource->atual_a_pagar_liquidado ;
-	    }
+        RelatoriosLegaisBase::calcularValorDaLinha($this->rsBalanceteDespesaAnterior,
+                                                   $oLinha,
+                                                   array($oColuna),
+                                                   RelatoriosLegaisBase::TIPO_CALCULO_DESPESA);
       }
 
 
@@ -499,84 +280,26 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
         $oColuna          = new stdClass();
         $oColuna->nome    = 'vlrexatual';
         $oColuna->formula = "#vlrpag + #vlrpagnproc";
-        		
-	    for ($iLinha = 0; $iLinha < pg_num_rows($rsRestosPagar); $iLinha++) {
-            $oDadosResource = db_utils::fieldsMemory($rsRestosPagar, $iLinha);
-	        $oLinha->{ $oColuna->nome} += $oDadosResource->vlrpag + $oDadosResource->vlrpagnproc;
-	    }
+        RelatoriosLegaisBase::calcularValorDaLinha(
+          $rsRestosPagar,
+          $oLinha,
+          array($oColuna),
+          RelatoriosLegaisBase::TIPO_CALCULO_RESTO
+        );
+
         /**
          * Saldo Anterior até o periodo
          */
         $rsRestosPagar    = $this->getResultSetRestosAPagar($this->oDataInicialAnterior, $this->oDataFinalAnterior);
         $oColuna          = new stdClass();
         $oColuna->nome    = 'vlrexanter';
-        $oColuna->formula = "(#e91_vlremp - #e91_vlranu - #e91_vlrliq) + (#e91_vlrliq - #e91_vlrpag)";
-        
-	    for ($iLinha1 = 0; $iLinha1 < pg_num_rows($rsRestosPagar); $iLinha1++) {
-             $oDadosResource = db_utils::fieldsMemory($rsRestosPagar, $iLinha1);
-	         $oLinha->{ $oColuna->nome} += $oDadosResource->vlrpag + $oDadosResource->vlrpagnproc;
-	    	
-	    }
-	    
-	    
-        
-      }
-      
-    if ($iLinha == 5) {
-		
-      	
-        /**
-         * Saldo atual até o periodo
-         */
-       
-        $oColuna          = new stdClass();
-        $oColuna->nome    = 'vlrexatual';
-      
-        /*db_criatabela($rsBalanceteReceita);
-        echo "<pre>";
-        print_r($oLinha);exit;*/
-	    for ($iLinha = 0; $iLinha < pg_num_rows($rsBalanceteReceita); $iLinha++) {
-	    	$codRecTri = 0;
-            $oDadosResource = db_utils::fieldsMemory($rsBalanceteReceita, $iLinha);
-            
-            $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o70_codigo;
-            $rsCodTriRec = db_query($sqlCodTriRec);
-           
-            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-           
-	        if($codRecTri != 0 && $codRecTri != 100 && substr($oDadosResource->o57_fonte,0,4) != '4176' && substr($oDadosResource->o57_fonte,0,4) != '4247'
-	           && substr($oDadosResource->o57_fonte,0,4) != '4721' && substr($oDadosResource->o57_fonte,0,4) != '4121' && substr($oDadosResource->o57_fonte,0,3) != '495'){
-	        	
-	        	$oLinha->{ $oColuna->nome} += $oDadosResource->saldo_arrecadado_acumulado;
-	        	
-	        }
-            
-	    }
-        /**
-         * Saldo Anterior até o periodo
-         */
-
-	    $oColuna          = new stdClass();
-        $oColuna->nome    = 'vlrexanter';
-        
-	    for ($iLinha1 = 0; $iLinha1 < pg_num_rows($rsBalanceteReceitaAnoAnterior); $iLinha1++) {
-            $oDadosResource = db_utils::fieldsMemory($rsBalanceteReceitaAnoAnterior, $iLinha1);
-	        $sqlCodTriRec = "select o15_codtri as codtri from orctiporec where o15_codigo = ".$oDadosResource->o70_codigo;
-            $rsCodTriRec = db_query($sqlCodTriRec);
-           
-            $codRecTri = db_utils::fieldsMemory($rsCodTriRec, 0)->codtri; 
-           
-	        if($codRecTri != 0 && $codRecTri != 100 && substr($oDadosResource->o57_fonte,0,4) != '4176' && substr($oDadosResource->o57_fonte,0,4) != '4247'
-	           && substr($oDadosResource->o57_fonte,0,4) != '4721' && substr($oDadosResource->o57_fonte,0,4) != '4121' && substr($oDadosResource->o57_fonte,0,3) != '495'){
-	        	
-	        	$oLinha->{ $oColuna->nome} += $oDadosResource->saldo_arrecadado_acumulado;
-	        	
-	        }
-	    	
-	    }
-	    
-	    
-        
+        $oColuna->formula = "#vlrpag + #vlrpagnproc";
+        RelatoriosLegaisBase::calcularValorDaLinha(
+          $rsRestosPagar,
+          $oLinha,
+          array($oColuna),
+          RelatoriosLegaisBase::TIPO_CALCULO_RESTO
+        );
       }
 
       /**
@@ -791,6 +514,14 @@ final class BalancoFinanceiroDcasp extends RelatoriosLegaisBase {
       }
     }
     return $oStdValores;
+  }
+
+  /**
+   * Retorna as linhas que devem possuir recurso configurado
+   * @return array
+   */
+  public function getLinhasObrigaRecurso() {
+    return $this->aLinhasComRecurso;
   }
 }
 

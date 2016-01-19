@@ -357,6 +357,7 @@ class FluxoCaixaDCASP2015 extends RelatoriosLegaisBase {
 
     $this->oPdf->clearHeaderDescription();
     $this->oPdf->addHeaderDescription($this->sDescricaoInstituicao);
+    $this->oPdf->addHeaderDescription("FLUXO DE CAIXA");
     $this->oPdf->addHeaderDescription($sNomeQuadro);
     $this->oPdf->addHeaderDescription("EXERCÍCIO : {$this->iAnoUsu}");
     $this->oPdf->addHeaderDescription("PERÍODO : {$this->sDescricaoPeriodo}");
@@ -631,7 +632,7 @@ class FluxoCaixaDCASP2015 extends RelatoriosLegaisBase {
     $this->getDadosQuadros();
     $this->configurarPdf();
 
-    $this->emitirQuadro("DEMONSTRAÇÃO DOS FLUXOS DE CAIXA", "", $this->aQuadroPrincipal);
+    $this->emitirQuadro("QUADRO PRINCIPAL", "", $this->aQuadroPrincipal);
     $this->emitirQuadro("QUADRO DE RECEITAS DERIVADAS E ORIGINÁRIAS", "", $this->aQuadroReceitas);
     $this->emitirQuadro("QUADRO DE TRANSFERÊNCIAS RECEBIDAS E CONCEDIDAS", "", $this->aQuadroTransferencias);
     $this->emitirQuadro("QUADRO DE DESEMBOLSOS DE PESSOAL E DEMAIS DESPESAS POR FUNÇÃO", "", $this->aQuadroDesembolsos);

@@ -38,55 +38,64 @@ $oGet = db_utils::postMemory($_GET);
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
-$sProgramaRelatorio = $oGet->sProgramaRelatorio;
+$sProgramaRelatorio = isset($oGet->sProgramaRelatorio) ? $oGet->sProgramaRelatorio : null;
 $codigoRelatorio = $oGet->codRelatorio;
+$iAnoSessao = db_getsession('DB_anousu');
 
-if (db_getsession('DB_anousu') >= 2015 && $codigoRelatorio == BalancoPatrimonialDcasp::CODIGO_RELATORIO) {
-  $codigoRelatorio = BalancoPatrimonialDCASP2015::CODIGO_RELATORIO;
+if ($iAnoSessao >= 2015 && $codigoRelatorio == BalancoPatrimonialDcasp::CODIGO_RELATORIO) {
+    $codigoRelatorio = BalancoPatrimonialDCASP2015::CODIGO_RELATORIO;
 }
 
-if (db_getsession('DB_anousu') >= 2015 && $codigoRelatorio == FluxoCaixaDCASP::CODIGO_RELATORIO) {
-  $codigoRelatorio = FluxoCaixaDCASP2015::CODIGO_RELATORIO;
+if ($iAnoSessao >= 2015 && $codigoRelatorio == FluxoCaixaDCASP::CODIGO_RELATORIO) {
+    $codigoRelatorio = FluxoCaixaDCASP2015::CODIGO_RELATORIO;
+}
+
+if ($iAnoSessao >= 2015 && $codigoRelatorio == VariacaoPatrimonialDCASP::CODIGO_RELATORIO) {
+    $codigoRelatorio = VariacaoPatrimonialDCASP2015::CODIGO_RELATORIO;
+}
+
+$sPathFiltrosRelatorio = "con2_relatoriosdcasp011.php?codigoRelatorio={$codigoRelatorio}&sProgramaRelatorio={$sProgramaRelatorio}";
+
+if ($iAnoSessao >= 2015 && $codigoRelatorio == BalancoFinanceiroDcasp::CODIGO_RELATORIO) {
+
+    $codigoRelatorio       = BalancoFinanceiroDCASP2015::CODIGO_RELATORIO;
+    $sPathFiltrosRelatorio = "con2_relatoriodcaspBalancoFinanceiro2015011.php?codigoRelatorio={$codigoRelatorio}";
+}
+
+if ($codigoRelatorio == BalancoOrcamentarioDCASP2015::CODIGO_RELATORIO) {
+    $sPathFiltrosRelatorio = "con2_relatoriodcaspBalancoOrcamentario2015011.php?codigoRelatorio={$codigoRelatorio}";
 }
 
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-  <table width="790" border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;">
-    <tr>
-      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-      <center>
-      <?php
-        $clcriaabas->identifica = array("relatorio"=>"Relatório",
-                                        "parametro"=>"Parâmetros",
-                                        "notas"    =>"Fonte/Notas Explicativas");
+<body class="body-default abas">
 
-        $clcriaabas->title      = array("relatorio"=>"Relatório",
-                                        "parametro"=>"Parâmetros",
-                                        "notas"    =>"Fonte/Notas Explicativas");
+<?php
+$clcriaabas->identifica = array("relatorio" => "Relatório",
+    "parametro" => "Parâmetros",
+    "notas"     => "Fonte/Notas Explicativas");
 
-        $clcriaabas->src        = array("relatorio"=>"con2_relatoriosdcasp011.php?codigoRelatorio={$codigoRelatorio}&sProgramaRelatorio={$sProgramaRelatorio}",
-                                        "parametro"=>"con4_parametrosrelatorioslegais001.php?c83_codrel={$codigoRelatorio}",
-                                        "notas"    =>"con2_conrelnotas.php?c83_codrel={$codigoRelatorio}");
+$clcriaabas->title      = array("relatorio" => "Relatório",
+    "parametro" => "Parâmetros",
+    "notas"     => "Fonte/Notas Explicativas");
 
-        $clcriaabas->sizecampo  = array("relatorio"=>"23",
-                                        "parametro"=>"23",
-                                        "notas"    =>"23");
+$clcriaabas->src        = array("relatorio" => $sPathFiltrosRelatorio,
+    "parametro" => "con4_parametrosrelatorioslegais001.php?c83_codrel={$codigoRelatorio}",
+    "notas"     => "con2_conrelnotas.php?c83_codrel={$codigoRelatorio}");
 
-      $clcriaabas->cria_abas();
-      ?>
-      </center>
-    </td>
-    </tr>
-  </table>
+$clcriaabas->sizecampo  = array("relatorio"=>"23",
+    "parametro"=>"23",
+    "notas"    =>"23");
 
-  <?php db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
+$clcriaabas->cria_abas();
+?>
+
+<?php db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
 </body>
 </html>

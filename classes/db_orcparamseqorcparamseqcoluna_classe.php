@@ -178,7 +178,7 @@ class cl_orcparamseqorcparamseqcoluna {
                                ,$this->o116_orcparamseqcoluna 
                                ,$this->o116_ordem 
                                ,$this->o116_periodo 
-                               ,'$this->o116_formula' 
+                               ,'".str_replace("'","\"",$this->o116_formula)."'
                       )";
      $result = db_query($sql); 
      if($result==false){ 

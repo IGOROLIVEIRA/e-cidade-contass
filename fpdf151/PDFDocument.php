@@ -41,6 +41,13 @@ class PDFDocument extends FPDF {
   const PRINT_LANDSCAPE = "L";
   const PRINT_PORTRAIT = "P";
 
+
+  /**
+   * @deprecated Utilizar as funções getAvailHeight e getAvailWidth
+   */
+  const FULL_WIDTH_PORTRAIT  = 190;
+  const FULL_WIDTH_LANDSCAPE = 277;
+
   /**
    * @var Callback a ser utilizado no header do relatório
    */
@@ -95,6 +102,17 @@ class PDFDocument extends FPDF {
    * @var array Array contendo as informações a imprimir no header do relatório
    */
   private $aHeaderDescription = array();
+
+  /**
+   * @param string $orientation
+   * @param string $unit
+   * @param string $format
+   */
+  public function __construct($orientation = 'P', $unit = 'mm', $format = 'A4') {
+
+    parent::__construct($orientation, $unit, $format);
+    $this->alterFont();
+  }
 
   /**
    * Seta uma nova informação no header
@@ -363,7 +381,7 @@ class PDFDocument extends FPDF {
         $emissor = @$GLOBALS["DB_login"];
       }
       $this->Cell(0,10,$sMenuAcess. "  ". $nome.'   Emissor: '.substr(ucwords(mb_strtolower($emissor)),0,30).'  Exerc: '.db_getsession("DB_anousu").
-        '   Data: '.date("d-m-Y",db_getsession("DB_datausu"))." - ".date("H:i:s"),"T",0,'L');
+          '   Data: '.date("d-m-Y",db_getsession("DB_datausu"))." - ".date("H:i:s"),"T",0,'L');
 
       $this->Cell(0,10,'Pág '.$this->PageNo().'/{nb}',0,1,'R');
     }
@@ -475,5 +493,14 @@ class PDFDocument extends FPDF {
     $this->output($sFile, false, true);
 
     return $sFile;
+  }
+
+  public function getContent() {
+
+    if($this->state<3) {
+      $this->Close();
+    }
+
+    return $this->buffer;
   }
 }

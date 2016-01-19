@@ -32,10 +32,12 @@ require_once("model/contabilidade/relatorios/RelatoriosLegaisBase.model.php");
  * @author Matheus Felini <matheus.felini@dbseller.com.br>
  * @package contabilidade
  * @subpackage relatorios
- * @version $Revision: 1.5 $
+ * @version $Revision: 1.6 $
  */
 class VariacaoPatrimonialDCASP extends RelatoriosLegaisBase {
-  
+
+  const CODIGO_RELATORIO = 132;
+
   /**
    * Busca os dados que serão impressos no relatório
    * @return array stdClass - Retorna um array contendo stdClass
