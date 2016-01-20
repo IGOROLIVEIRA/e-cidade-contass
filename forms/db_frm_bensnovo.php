@@ -1194,7 +1194,7 @@ function js_calculaValorTotal() {
     alert(_M('patrimonial.patrimonio.db_frm_bensnovo.residual_maior_que_aquisicao'));
     $("vlResidual").value = "" ;
     $("vlAquisicao").focus();
-    return false;
+    return false;svn
   } else {
 
     $("vlTotalDepreciavel").value = (vlAquisicao - vlResidual).toFixed(2);

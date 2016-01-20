@@ -11,15 +11,17 @@ $this->objpdf->roundedrect(10, 92, 190, 60, 2, 'df', 1234);
  */
 $sNumeroProtocolo = $this->p58_numero."/".$this->p58_ano;
 
-$this->objpdf->cell(50, 5, "PROTOCOLO Nº: ", 0, 0, 'L');
-$this->objpdf->Setfont("Times", "", 12);
-$this->objpdf->cell(30, 5, $sNumeroProtocolo, 0, 0, 'L');
 $this->objpdf->Setfont("Times", "B", 14);
-$this->objpdf->cell(40, 5, "Nº CONTROLE: ", 0, 0, 'L');
+$this->objpdf->SetLeftMargin(15);
+$this->objpdf->sety(60);
+$this->objpdf->roundedrect(10, 58, 190, 55, 2, 'df', 1234);
+$this->objpdf->cell(50, 5, "PROCESSO Nº: ", 0, 0, 'L');
 $this->objpdf->Setfont("Times", "", 12);
-$this->objpdf->cell(20, 5, $this->p58_codproc, 0, 0, 'L');
+$this->objpdf->cell(20, 5, $this->p58_numeracao.'/'.substr($sNumeroProtocolo,3,7), 0, 0, 'L');
 $this->objpdf->Setfont("Times", "B", 14);
-$this->objpdf->cell(20, 5, "CGM: ", 0, 0, 'L');
+$this->objpdf->cell(75, 5, "PROTOCOLO GERAL: ", 0, 0, 'L');
+$this->objpdf->Setfont("Times", "", 12);
+$this->objpdf->cell(30, 5, $sNumeroProtocolo, 0, 1, 'L');
 $this->objpdf->Setfont("Times", "", 12);
 $this->objpdf->cell(75, 5, $this->p58_numcgm , 0, 1, 'L');
 $this->objpdf->Setfont("Times", "B", 14);
