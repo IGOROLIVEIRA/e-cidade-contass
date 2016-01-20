@@ -141,9 +141,8 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 			liccomissaocgm.l31_tipo as tipoResp, l20_codigo as codigolicitacao, cgm.z01_cgccpf as nroCPFResp,
 			liclicita.l20_codigo as codlicitacao
 			FROM liclicita as liclicita 
-			INNER JOIN homologacaoadjudica as homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao) 
-			INNER JOIN liccomissao as liccomissao on (liclicita.l20_liccomissao=liccomissao.l30_codigo) 
-			INNER JOIN liccomissaocgm as liccomissaocgm on (liccomissao.l30_codigo=liccomissaocgm.l31_liccomissao) 
+			INNER JOIN homologacaoadjudica as homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
+			INNER JOIN liccomissaocgm AS liccomissaocgm ON (liclicita.l20_codigo=liccomissaocgm.l31_licitacao)
 			INNER JOIN protocolo.cgm as cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm) 
 			INNER JOIN configuracoes.db_config as db_config on (liclicita.l20_instit=db_config.codigo)
 			INNER JOIN cflicita ON (cflicita.l03_codigo = liclicita.l20_codtipocom)
@@ -159,7 +158,7 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 		                                                  '53',
 		                                                  '54') order by liclicita.l20_edital";
     
-    $rsResult10 = db_query($sSql);echo $sSql;exit;db_criatabela($rsResult10);
+    $rsResult10 = db_query($sSql);//echo $sSql;exit;db_criatabela($rsResult10);
     
     $aLicitacoes = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {

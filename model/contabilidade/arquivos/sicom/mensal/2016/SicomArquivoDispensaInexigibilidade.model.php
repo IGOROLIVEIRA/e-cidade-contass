@@ -548,8 +548,7 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 		INNER JOIN cflicita on (liclicita.l20_codtipocom = cflicita.l03_codigo)
 		INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 		INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
-		INNER JOIN liccomissao as liccomissao on (liclicita.l20_liccomissao=liccomissao.l30_codigo)
-		INNER JOIN liccomissaocgm as liccomissaocgm on (liccomissao.l30_codigo=liccomissaocgm.l31_liccomissao)
+		INNER JOIN liccomissaocgm AS liccomissaocgm ON (liclicita.l20_codigo=liccomissaocgm.l31_licitacao)
 		INNER JOIN cgm on (liccomissaocgm.l31_numcgm=cgm.z01_numcgm) 
 		LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 		INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
