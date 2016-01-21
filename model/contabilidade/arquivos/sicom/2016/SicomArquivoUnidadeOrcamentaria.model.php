@@ -60,14 +60,16 @@ class SicomArquivoUnidadeOrcamentaria extends SicomArquivoBase implements iPadAr
 		    		$iTipoUnidade = " ";
 		    	}
 		    	
-		    	$rsCodTriUnid = db_query("select o41_codtri from orcunidade where o41_unidade = ". $oUnidade->o41_unidade." 
-		    	            and o41_anousu = ".db_getsession("DB_anousu"));
+		    	$rsCodTriUnid = db_query("select o41_codtri from orcunidade 
+		    		where o41_unidade = ". $oUnidade->o41_unidade." 
+		    		  and o41_orgao = ". $oUnidade->o41_orgao."
+		    	      and o41_anousu = ".db_getsession("DB_anousu"));
 		    	$oCodTriUnid = db_utils::fieldsMemory($rsCodTriUnid, 0);
 		    	
 		      if ($oCodTriUnid->o41_codtri == 0) {
-					   $unidade = $oUnidade->o41_unidade;
+					   $unidade = $oUnidade->o41_unidade;					   
 				  } else {
-					   $unidade = $oCodTriUnid->o41_codtri;
+					   $unidade = $oCodTriUnid->o41_codtri;					   
 				  }
 				  
 		    	$rsCodTriOrg = db_query("select o40_codtri from orcorgao where o40_orgao = ". $oUnidade->o41_orgao ."
