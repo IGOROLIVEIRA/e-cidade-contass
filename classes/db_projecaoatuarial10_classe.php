@@ -22,7 +22,8 @@ class cl_projecaoatuarial10 {
    var $si168_dtcadastro_mes = null; 
    var $si168_dtcadastro_ano = null; 
    var $si168_dtcadastro = null; 
-   var $si168_instit = 0; 
+   var $si168_instit = 0;
+   var $si168_exercicio = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si168_sequencial = int8 = sequencial 
@@ -59,6 +60,7 @@ class cl_projecaoatuarial10 {
          }
        }
        $this->si168_instit = ($this->si168_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_instit"]:$this->si168_instit);
+       $this->si168_exercicio = ($this->si168_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_exercicio"]:$this->si168_exercicio);
      }else{
        $this->si168_sequencial = ($this->si168_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si168_sequencial"]:$this->si168_sequencial);
      }
@@ -87,6 +89,15 @@ class cl_projecaoatuarial10 {
      if($this->si168_instit == null ){ 
        $this->erro_sql = " Campo Instituição nao Informado.";
        $this->erro_campo = "si168_instit";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+    if($this->si168_exercicio == null ){ 
+       $this->erro_sql = " Campo Exercício nao Informado.";
+       $this->erro_campo = "si168_exercicio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -129,13 +140,15 @@ class cl_projecaoatuarial10 {
                                        si168_sequencial 
                                       ,si168_vlsaldofinanceiroexercicioanterior 
                                       ,si168_dtcadastro 
-                                      ,si168_instit 
+                                      ,si168_instit
+                                      ,si168_exercicio 
                        )
                 values (
                                 $this->si168_sequencial 
                                ,$this->si168_vlsaldofinanceiroexercicioanterior 
                                ,".($this->si168_dtcadastro == "null" || $this->si168_dtcadastro == ""?"null":"'".$this->si168_dtcadastro."'")." 
                                ,$this->si168_instit 
+                               ,$this->si168_exercicio
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -238,6 +251,19 @@ class cl_projecaoatuarial10 {
        if(trim($this->si168_instit) == null ){ 
          $this->erro_sql = " Campo Instituição nao Informado.";
          $this->erro_campo = "si168_instit";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si168_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si168_exercicio"])){ 
+       $sql  .= $virgula." si168_exercicio = $this->si168_exercicio ";
+       $virgula = ",";
+       if(trim($this->si168_exercicio) == null ){ 
+         $this->erro_sql = " Campo Exercício nao Informado.";
+         $this->erro_campo = "si168_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

@@ -95,8 +95,8 @@ db_input('si169_instit',10,$Isi169_instit,true,'hidden',$db_opcao,"")
     <?
 	 $chavepri= array("si169_sequencial"=>@$si169_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
-	 $cliframe_alterar_excluir->sql     = $clprojecaoatuarial20->sql_query_file($si169_sequencial);
-	 $cliframe_alterar_excluir->campos  ="si169_sequencial,si169_exercicio,si169_vlreceitaprevidenciaria,si169_vldespesaprevidenciaria,si169_dtcadastro,si169_instit";
+	 $cliframe_alterar_excluir->sql     = $clprojecaoatuarial20->sql_query_file($si169_sequencial,"*","","si169_instit = ".db_getsession("DB_instit"));
+	 $cliframe_alterar_excluir->campos  ="si169_sequencial,si169_exercicio,si169_vlreceitaprevidenciaria,si169_vldespesaprevidenciaria,si169_dtcadastro";
 	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
 	 $cliframe_alterar_excluir->iframe_width ="700";

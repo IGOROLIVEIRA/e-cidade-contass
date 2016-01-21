@@ -65,9 +65,9 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
     /*
      * excluir informacoes do mes selecionado registro 10
      */
-    $result = $clparpps10->sql_record($clparpps10->sql_query(NULL,"*",NULL,"si156_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si156_instit = ".db_getsession("DB_instit") ));
+    $result = $clparpps10->sql_record($clparpps10->sql_query(NULL,"*",NULL,"si156_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si156_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      $clparpps10->excluir(NULL,"si156_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si156_instit = ".db_getsession("DB_instit"));
+      $clparpps10->excluir(NULL,"si156_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si156_instit = ".db_getsession("DB_instit"));
       if ($clparpps10->erro_status == 0) {
         throw new Exception($clparpps10->erro_msg);
       }
@@ -76,72 +76,78 @@ class SicomArquivoProjecaoAtuarial extends SicomArquivoBase implements iPadArqui
     /*
      * excluir informacoes do mes selecionado registro 20
      */
-    $result = $clparpps20->sql_record($clparpps20->sql_query(NULL,"*",NULL,"si155_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si155_instit = ".db_getsession("DB_instit")));
+    $result = $clparpps20->sql_record($clparpps20->sql_query(NULL,"*",NULL,"si155_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si155_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      $clparpps20->excluir(NULL,"si155_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'].$this->sDataFinal['6']." and si155_instit = ".db_getsession("DB_instit"));
+      $clparpps20->excluir(NULL,"si155_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si155_instit = ".db_getsession("DB_instit"));
       if ($clparpps20->erro_status == 0) {
         throw new Exception($clparpps20->erro_msg);
       }
     }
+    db_fim_transacao();
+    db_inicio_transacao();
     
-    $sSql  = "SELECT si09_codorgaotce AS codorgao
+    $sSql  = "SELECT si09_codorgaotce AS codorgao,si09_tipoinstit AS tipoinstit
               FROM infocomplementaresinstit
               WHERE si09_instit = ".db_getsession("DB_instit");
       
-    $rsResult  = db_query($sSql);
+    $rsResult  = db_query($sSql);//db_criatabela($rsResult);exit;
     $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;
-      
-    /*
-     * selecionar informacoes registro 10
-     */
-    $sSql       = "select * from projecaoatuarial10 where si168_dtcadastro = between '{$this->sDataInicial}' and '{$this->sDataFinal}' and si168_instit = ". db_getsession("DB_instit");
-    
-    $rsResult10 = db_query($sSql);
+    $sTipoinstit = db_utils::fieldsMemory($rsResult, 0)->tipoinstit;
 
-    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
-      $clparpps10 = new cl_parpps102016();
-      $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      
-      $clparpps10->si156_tiporegistro                        = 10;
-      $clparpps10->si156_codorgao                            = $sCodorgao;
-      $clparpps10->si156_vlsaldofinanceiroexercicioanterior  = $oDados10->si168_vlsaldofinanceiroexercicioanterior;
-      $clparpps10->si156_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      $clparpps10->si156_instit                              = db_getsession("DB_instit");
-      
-      $clparpps10->incluir(null);
-      if ($clparpps10->erro_status == 0) {
-        throw new Exception($clparpps10->erro_msg);
-      }
-      
+    if ($this->sDataFinal['5'].$this->sDataFinal['6'] == 12 && $sTipoinstit == 5) {
+    	
+	    /*
+	     * selecionar informacoes registro 10
+	     */
+	    $sSql       = "select * from projecaoatuarial10 where si168_exercicio = ".(db_getsession("DB_anousu")-1)." and si168_instit = ". db_getsession("DB_instit");
+	    
+	    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
+	
+	    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+	      
+	      $clparpps10 = new cl_parpps102016();
+	      $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
+	      
+	      $clparpps10->si156_tiporegistro                        = 10;
+	      $clparpps10->si156_codorgao                            = $sCodorgao;
+	      $clparpps10->si156_vlsaldofinanceiroexercicioanterior  = $oDados10->si168_vlsaldofinanceiroexercicioanterior;
+	      $clparpps10->si156_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
+	      $clparpps10->si156_instit                              = db_getsession("DB_instit");
+	      
+	      $clparpps10->incluir(null);
+	      if ($clparpps10->erro_status == 0) {
+	        throw new Exception($clparpps10->erro_msg);
+	      }
+	      
+	    }
+	    
+	    /*
+	     * selecionar informacoes registro 20
+	     */
+	    $sSql       = "select * from projecaoatuarial20 where si169_exercicio >= ".(db_getsession("DB_anousu")-1)." 
+	                   and si169_instit = ".db_getsession("DB_instit")." limit 75";
+	    $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
+	    
+	    for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
+	      
+	      $clparpps20 = new cl_parpps202016();
+	      $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
+	      
+	      $clparpps20->si155_tiporegistro                     = 20;
+	      $clparpps20->si155_codorgao                         = $sCodorgao;
+	      $clparpps20->si155_exercicio                        = $oDados20->si169_exercicio;
+	      $clparpps20->si155_vlreceitaprevidenciaria          = $oDados20->si169_vlreceitaprevidenciaria;
+	      $clparpps20->si155_vldespesaprevidenciaria          = $oDados20->si169_vldespesaprevidenciaria;
+	      $clparpps20->si155_mes                              = $this->sDataFinal['5'].$this->sDataFinal['6'];
+	      $clparpps20->si155_instit                           = db_getsession("DB_instit");
+	      
+	      $clparpps20->incluir(null);
+	      if ($clparpps20->erro_status == 0) {
+	        throw new Exception($clparpps20->erro_msg);
+	      }
+	
+	    }
     }
-    
-    /*
-     * selecionar informacoes registro 20
-     */
-    $sSql       = "select * from projecaoatuarial20 where si169_dtcadastro = between '{$this->sDataInicial}' and '{$this->sDataFinal}' and si168_instit = ". db_getsession("DB_instit");
-    $rsResult20 = db_query($sSql);
-    
-    for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
-      
-      $clparpps20 = new cl_parpps202016();
-      $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-      
-      $clparpps20->si155_tiporegistro                     = 20;
-      $clparpps20->si155_codorgao                         = $sCodorgao;
-      $clparpps20->si155_exercicio                        = $oDados20->si169_exercicio;
-      $clparpps20->si155_vlreceitaprevidenciaria          = $oDados20->si169_vlreceitaprevidenciaria;
-      $clparpps20->si155_vldespesaprevidenciaria          = $oDados20->si169_vldespesaprevidenciaria;
-      $clparpps20->si155_mes                              = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      $clparpps20->si155_instit                           = db_getsession("DB_instit");
-      
-      $clparpps20->incluir(null);
-      if ($clparpps20->erro_status == 0) {
-        throw new Exception($clparpps20->erro_msg);
-      }
-
-    }
-
     db_fim_transacao();
     
     $oGerarPARPPS = new GerarPARPPS();

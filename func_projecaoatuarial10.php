@@ -40,10 +40,10 @@ $clprojecaoatuarial10 = new cl_projecaoatuarial10;
            if(file_exists("funcoes/db_func_projecaoatuarial10.php")==true){
              include("funcoes/db_func_projecaoatuarial10.php");
            }else{
-           $campos = "projecaoatuarial10.oid,projecaoatuarial10.*";
+           $campos = "si168_sequencial,si168_vlsaldofinanceiroexercicioanterior,si168_dtcadastro,si168_exercicio as dl_exercicio";
            }
         }
-	         $sql = $clprojecaoatuarial10->sql_query();
+	         $sql = $clprojecaoatuarial10->sql_query(null,$campos,"","si168_instit = ".db_getsession("DB_instit"));
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{

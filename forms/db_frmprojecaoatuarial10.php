@@ -32,6 +32,16 @@ db_input('si168_vlsaldofinanceiroexercicioanterior',14,$Isi168_vlsaldofinanceiro
 ?>
     </td>
   </tr>
+  <tr>
+    <td nowrap title="">
+       <b>Exercício:</b> 
+    </td>
+    <td> 
+<?
+db_input('si168_exercicio',4,1,true,'text',$db_opcao,"")
+?>
+    </td>
+  </tr>
   
 <?
 $si168_dtcadastro_dia = date("d");
