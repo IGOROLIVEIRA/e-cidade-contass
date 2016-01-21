@@ -61,9 +61,9 @@ class GerarPARPPS extends GerarAM {
         
         $aCSVPARPPS20['si155_tiporegistro']                =   str_pad($aPARPPS20['si155_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVPARPPS20['si155_codorgao']                    =   str_pad($aPARPPS20['si155_codorgao'], 2, "0", STR_PAD_LEFT);
-        $aCSVPARPPS20['si155_exercicio']                   =   str_pad($aPARPPS20['si155_codorgao'], 4, "0", STR_PAD_LEFT);
-        $aCSVPARPPS20['si155_vlreceitaprevidenciaria']     =   number_format($aPARPPS10['si155_vlreceitaprevidenciaria'], 2, ",", "");
-        $aCSVPARPPS20['si155_vldespesaprevidenciaria']     =   number_format($aPARPPS10['si155_vldespesaprevidenciaria'], 2, ",", "");
+        $aCSVPARPPS20['si155_exercicio']                   =   str_pad($aPARPPS20['si155_exercicio'], 4, "0", STR_PAD_LEFT);
+        $aCSVPARPPS20['si155_vlreceitaprevidenciaria']     =   number_format($aPARPPS20['si155_vlreceitaprevidenciaria'], 2, ",", "");
+        $aCSVPARPPS20['si155_vldespesaprevidenciaria']     =   number_format($aPARPPS20['si155_vldespesaprevidenciaria'], 2, ",", "");
         
         $this->sLinha = $aCSVPARPPS20;
         $this->adicionaLinha();
