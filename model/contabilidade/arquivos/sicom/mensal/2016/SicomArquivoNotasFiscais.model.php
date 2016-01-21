@@ -123,7 +123,7 @@ db_inicio_transacao();
               empnota.e69_codnota as codnotafiscal,
               si09_codorgaotce as codorgao,
               empnota.e69_numero as nfnumero,
-              'A' as nfserie,
+              case when empnota.e69_nfserie = 'S/N' then ' ' else empnota.e69_nfserie end as nfserie,
               (case length(cgm.z01_cgccpf) when 11 then 1
                 else 2
               end) as tipodocumento,
@@ -133,9 +133,9 @@ db_inicio_transacao();
               cadendermunicipio.db72_descricao as nomemunicipio,
               cgm.z01_cep as cepmunicipio,
               cgm.z01_uf as ufcredor,
-              3 as notafiscaleletronica,
-              ' ' as chaveacesso,
-              ' ' as chaveacessomunicipal,
+              empnota.e69_notafiscaleletronica as notafiscaleletronica,
+              case when empnota.e69_notafiscaleletronica=1 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
+              case when empnota.e69_notafiscaleletronica=2 then empnota.e69_chaveacesso else ' ' end as chaveacessomunicipal,
               ' ' as nfaidf,
               empnota.e69_dtnota as dtemissaonf,
               ' ' as dtvencimentonf,
