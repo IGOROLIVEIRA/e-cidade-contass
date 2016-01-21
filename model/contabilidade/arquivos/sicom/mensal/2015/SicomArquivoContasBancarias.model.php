@@ -310,9 +310,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     		 * alteração para resolver o problema de contas que tiveram a fonte de recurso alterada de um ano para o outro.
     		 * o saldo do recurso anterior será transferido para a conta com novo recurso através de um registro criado.
     		 */
-    		$sSqlRecursoAnterior = "select c61_codigo from conplanoreduz where c61_anousu = ".(db_getsession("DB_anousu")-1)." and c61_reduz = {$nConta}";
+    		$sSqlRecursoAnterior = "select o15_codtri from conplanoreduz 
+    		join orctiporec on c61_codigo = o15_codigo
+    		where c61_anousu = ".(db_getsession("DB_anousu")-1)." and c61_reduz = {$nConta}";
     		$rsFonRecAnt = db_query($sSqlRecursoAnterior);
-    		$iFonRecAnt = db_utils::fieldsMemory( $rsFonRecAnt,0)->c61_codigo;
+    		$iFonRecAnt = db_utils::fieldsMemory( $rsFonRecAnt,0)->o15_codtri;
     		if ($iFonRecAnt != $oContaAgrupada->recurso && $nMes == 1 && pg_num_rows($rsFonRecAnt) > 0 ) {
     			
     			$nSaldoInicial = 0;
