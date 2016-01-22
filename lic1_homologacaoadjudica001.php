@@ -40,7 +40,7 @@ if(isset($incluir)){
         db_redireciona('lic1_homologacaoadjudica001.php');
       }
 
-      $parecer2     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao and l200_data <= '$l202_datahomologacao' and l200_data <= '$l202_dataadjudicacao' ")));
+      $parecer2     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao and l200_data <= '$l202_datahomologacao' ")));
 
       if ($parecer2 >= 1) {
 
@@ -94,7 +94,7 @@ if(isset($incluir)){
         }else{
 
         echo
-        "<script>alert('Data da Homologação ou Adjudicação é menor que a data do parecer')</script>";
+        "<script>alert('Data da Homologação é menor que a data do parecer')</script>";
         db_redireciona('lic1_homologacaoadjudica001.php');
 
         }
