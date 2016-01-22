@@ -66,15 +66,15 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
      */
     public function getFontReduzAM($iReduz)
     {
-        $sSqlVerifica = " select distinct si96_codfontrecursos from ( SELECT distinct si96_codfontrecursos FROM ctb202015 WHERE si96_codctb = {$iReduz}
+        $sSqlVerifica = " select distinct si96_codfontrecursos, si96_anousu from ( SELECT distinct si96_codfontrecursos, 2015 as si96_anousu FROM ctb202015 WHERE si96_codctb = {$iReduz}
                                       AND si96_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos FROM ctb202014 WHERE si96_codctb = {$iReduz}) as x";
-
+        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2014 as si96_anousu FROM ctb202014 WHERE si96_codctb = {$iReduz}) as x order by 2 DESC limit 1";
         $iCodFont = db_utils::fieldsMemory(db_query($sSqlVerifica), 0)->si96_codfontrecursos;
 
         return $iCodFont;
 
     }
+
 
     /**
      *  Função que busca dotacao pelo codigo do orgao e unidade no exercicio da sessao.
