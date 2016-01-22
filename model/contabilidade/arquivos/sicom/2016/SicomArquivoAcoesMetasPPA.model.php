@@ -173,7 +173,7 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
 	        $oDadosAMP->possuiSubAcao      = 2;
 	        $oDadosAMP->idAcao             = str_pad($oMetasPPA->o55_projativ, 4, "0", STR_PAD_LEFT);
 	        $oDadosAMP->descAcao           = substr($oMetasPPA->o55_descr, 0, 100);
-	        $oDadosAMP->finalidadeAcao     = substr($oMetasPPA->o55_finali, 0, 230);
+	        $oDadosAMP->finalidadeAcao     = substr($this->removeCaracteres($oMetasPPA->o55_finali), 0, 230);
 	        $oDadosAMP->produto            = substr($oMetasPPA->o22_descrprod, 0, 50);
 	        $oDadosAMP->unidadeMedida      = ($oMetasPPA->o55_descrunidade != '')?substr($oMetasPPA->o55_descrunidade , 0, 15):"unidade";
 	        $oDadosAMP->Reg12             = array();
@@ -193,7 +193,7 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
 		    $oDadosAMP12->idAcao             = str_pad($oMetasPPA->o55_projativ, 4, "0", STR_PAD_LEFT);
             $oDadosAMP12->idSubAcao          = " ";
 		    $oDadosAMP12->descAcao           = substr($oMetasPPA->o55_descr, 0, 100);
-		    $oDadosAMP12->finalidadeAcao     = substr($oMetasPPA->o55_finali, 0, 230);
+		    $oDadosAMP12->finalidadeAcao     = substr($this->removeCaracteres($oMetasPPA->o55_finali), 0, 230);
 		    $oDadosAMP12->produto            = substr($oMetasPPA->o22_descrprod, 0, 50);
 		    $oDadosAMP12->unidadeMedida      = substr($oMetasPPA->o55_descrunidade , 0, 15);
 		    

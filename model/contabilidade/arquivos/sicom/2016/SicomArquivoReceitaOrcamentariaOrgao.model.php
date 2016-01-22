@@ -106,11 +106,12 @@ public function gerarDados(){
         $sSqlReceita  = "SELECT * FROM orcfontes f ";
   	    $sSqlReceita .= "JOIN orcreceita r ON f.o57_codfon = r.o70_codfon ";
   	    $sSqlReceita .= "AND f.o57_anousu = o70_anousu "; 
-  	    $sSqlReceita .= "JOIN orctiporec t "; 
-  	    $sSqlReceita .= "ON r.o70_codigo = t.o15_codigo "; 
-  	    $sSqlReceita .= "WHERE f.o57_anousu = ".db_getsession("DB_anousu"); 
+  	    $sSqlReceita .= "JOIN orctiporec t ";
+  	    $sSqlReceita .= "ON r.o70_codigo = t.o15_codigo ";
+        $sSqlReceita .= "JOIN conplanoorcamento cp on f.o57_codfon = cp.c60_codcon ";
+        $sSqlReceita .= "WHERE f.o57_anousu = ".db_getsession("DB_anousu");
   	    $sSqlReceita .= " AND r.o70_instit = $oInstit->codigo";
-  	    
+
   	    $rsReceita = db_query($sSqlReceita);
   	    //db_criatabela($rsReceita);
   	    $aDadosAgrupados = array();
@@ -128,7 +129,7 @@ public function gerarDados(){
             } else{
             	$rubricarec = substr($oReceita->o57_fonte, 1, 8);
             }
-            $iIdentDeducao = (substr($oReceita->o57_fonte, 0, 2) == 49) ? substr($oReceita->o70_concarpeculiar, 1, 2) : " ";
+            $iIdentDeducao = (substr($oReceita->o57_fonte, 0, 2) == 49) ? substr($oReceita->c60_estrut, 1, 2) : " ";
 
             $sHash = "10".$iIdentDeducao.$rubricarec;
             

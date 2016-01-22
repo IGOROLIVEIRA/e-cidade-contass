@@ -425,7 +425,12 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 			$oDadosMTFIS = new stdClass();
 	    $iAnoUsu = "iAno".$iCont;
 	    //exit(number_format($oDespesaTotal->aValores[${$iAnoUsu}]->Corrente, 2, "", ""));
-	    $oDadosMTFIS->exercicio = ${$iAnoUsu};
+
+		if(${$iAnoUsu}) {
+			$oDadosMTFIS->exercicio = ${$iAnoUsu};
+		}else{
+			$oDadosMTFIS->exercicio = '2018';
+		}
 	    $oDadosMTFIS->vlCorrenteReceitaTotal              = number_format($oReceitaTotal->aValores[${$iAnoUsu}]->Corrente, 2, ",", "");
 	    $oDadosMTFIS->vlCorrenteReceitaPrimaria           = number_format($oReceitasPrimarias->aValores[${$iAnoUsu}]->Corrente, 2, ",", "");
 	    $oDadosMTFIS->vlCorrenteDespesaTotal              = number_format($oDespesaTotal->aValores[${$iAnoUsu}]->Corrente, 2, ",", "");
@@ -454,10 +459,8 @@ class SicomArquivoDetalhamentoMetasFiscais extends SicomArquivoBase implements i
 		$oDadosMTFIS->vlConstanteRecPrimariasAdv          = number_format(0, 2, ",", "");
 		$oDadosMTFIS->vlCorrenteDspPrimariasGeradas       = number_format(0, 2, ",", "");
 		$oDadosMTFIS->vlConstanteDspPrimariasGeradas      = number_format(0, 2, ",", "");
-		$oDadosMTFIS->pcPIBrecPrimariasAdv                = number_format(0, 2, ",", "");
-		$oDadosMTFIS->pcPIBDspPrimariasGeradas            = number_format(0, 2, ",", "");
-
-
+		$oDadosMTFIS->pcPIBrecPrimariasAdv                = number_format(0, 3, ",", "");
+		$oDadosMTFIS->pcPIBDspPrimariasGeradas            = number_format(0, 3, ",", "");
 	    
 	    $this->aDados[] = $oDadosMTFIS;
 		}
