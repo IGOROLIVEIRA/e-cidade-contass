@@ -105,7 +105,7 @@ $oGet   = db_utils::postMemory($_GET);
           <td><b>Código TCE:</b></td>
           <td>
             <?php 
-              db_input("iCodigoTce", 10, null, true, 3, "text", 1);
+              db_input("iCodigoTce", 10, true, true, 3, "text", 1);
             ?>
           </td>
         </tr>
