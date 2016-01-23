@@ -223,6 +223,16 @@ $clrotulo->label("o15_codigo");
                 <input type="checkbox" value="SuperavitFinanceiro" id="SuperavitFinanceiro" />
                 <label for="Consideracoes">Superavit Financeiro</label><br>
                 <? } ?>
+
+                <? if (db_getsession("DB_anousu") >= 2016) {?>
+                  <input type="checkbox" value="CronogramaExecucao" id="CronogramaExecucao" />
+                  <label for="CronogramaExecucao">Cronograma de Execucao</label><br>
+                <? } ?>
+
+                <? if (db_getsession("DB_anousu") >= 2016) {?>
+                  <input type="checkbox" value="MetasFisicasRealizadas" id="MetasFisicasRealizadas" />
+                  <label for="MetasFisicasRealizadas">Metas Fisicas Realizadas</label><br>
+                <? } ?>
                 
               </td>
               

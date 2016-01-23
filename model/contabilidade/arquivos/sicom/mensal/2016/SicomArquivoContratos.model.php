@@ -264,7 +264,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
       $clcontratos10->si83_dataassinatura                = $oDados10->si172_dataassinatura;
       $clcontratos10->si83_contdeclicitacao              = $oDados10->si172_contdeclicitacao;
       $clcontratos10->si83_codorgaoresp                  = $oDados10->si172_contdeclicitacao == 5 || $oDados10->si172_contdeclicitacao == 6 ? $sCodorgao : ' ';
-      $clcontratos10->si83_codunidadesubresp             = $oDados10->si172_contdeclicitacao == 1 ? ' ' : $oDados10->codunidadesubresp;
+      $clcontratos10->si83_codunidadesubresp             = $oDados10->si172_contdeclicitacao == 1 || $oDados10->si172_contdeclicitacao == 8 ? ' ' : $oDados10->codunidadesubresp;
       $clcontratos10->si83_nroprocesso                   = $oDados10->si172_contdeclicitacao == 1 ? 0 : $sNroProcesso;
       $clcontratos10->si83_exercicioprocesso             = $oDados10->si172_contdeclicitacao == 1 ? 0 : $oDados10->l20_anousu;
       $clcontratos10->si83_tipoprocesso                  = $oDados10->si172_contdeclicitacao == 1 || $oDados10->si172_contdeclicitacao == 2 ? 0 : $oDados10->si172_tipoprocesso;

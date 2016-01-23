@@ -113,7 +113,7 @@ db_inputdata('si172_dataassinatura',@$si172_dataassinatura_dia,@$si172_dataassin
     <td> 
 <?
 $x = array("1"=>"Não ou dispensa por valor","2"=>"Licitação","3"=>"Dispensa ou Inexigibilidade","4"=>"Adesão à ata de registro de preços","5"=>"Licitação realizada por outro órgão ou entidade","6"=>"Dispensa ou Inexigibilidade realizada por outro órgão",
-  "7"=>"Licitação - Regime Diferenciado de Contratações Públicas"); 
+  "7"=>"Licitação - Regime Diferenciado de Contratações Públicas","8"=>"Licitação - Regime Diferenciado de Contratações Públicas");
 db_select('si172_contdeclicitacao',$x,true,$db_opcao,"");
 //db_input('si172_contdeclicitacao',1,$Isi172_contdeclicitacao,true,'text',$db_opcao,"")
 ?>
