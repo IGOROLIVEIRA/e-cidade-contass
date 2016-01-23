@@ -106,6 +106,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
      db_inicio_transacao();
 	 if (pg_num_rows($result) > 0) {
 
+	   $cCtb50->excluir(NULL,"si102_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si102_instit = ". db_getsession("DB_instit"));
+	   if ($cCtb50->erro_status == 0) {
+		   throw new Exception($cCtb50->erro_msg);
+		 }
+		 
 	 	 $cCtb22->excluir(NULL,"si98_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si98_instit = ". db_getsession("DB_instit"));
 		 if ($cCtb22->erro_status == 0) {
 		 	
