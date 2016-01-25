@@ -87,10 +87,10 @@ switch($oParam->exec) {
     	
       $oEscritorCSV = new padArquivoEscritorCSV();
       
-      /*$oEscritorCSV->adicionarArquivo("PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
+      $oEscritorCSV->adicionarArquivo("PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
       $oEscritorCSV->adicionarArquivo("LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
     	$oEscritorCSV->adicionarArquivo("LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
-    	$oEscritorCSV->zip("LEIS_{$sInst}_{$iAnoReferencia}");*/
+    	$oEscritorCSV->zip("LEIS_{$sInst}_{$iAnoReferencia}");
     	
     	$oEscritorCSV = new padArquivoEscritorCSV();
       
