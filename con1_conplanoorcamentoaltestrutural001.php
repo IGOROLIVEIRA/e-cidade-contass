@@ -75,7 +75,7 @@ if (isset($alterar) && trim(@$alterar) != ""){
                $novo_estrutural = $chave_c60_estrut.substr($c60_estrut,$tam_inicial,$tam_final);
 
                $sWhere       = "c60_codcon = {$codcon}";
-               $sSqlConPlan  = $clconplanoOrcamento->sql_query_file(null,null,"max(conplano.c60_anousu) as anomax",null,$sWhere);
+               $sSqlConPlan  = $clconplanoOrcamento->sql_query_file(null,null,"max(conplanoorcamento.c60_anousu) as anomax",null,$sWhere);
                $rsSqlConPlan = $clconplanoOrcamento->sql_record($sSqlConPlan);
                
                if ($clconplanoOrcamento->numrows > 0) {
