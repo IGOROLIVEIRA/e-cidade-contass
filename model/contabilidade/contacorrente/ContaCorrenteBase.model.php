@@ -129,13 +129,25 @@ abstract class ContaCorrenteBase {
       $this->oContaCorrenteDetalhe = clone $this->oContaCorrenteDetalhe;
     }
 
-    $iInstituicaoSessao        = db_getsession('DB_instit');
     $iAnoSessao                = db_getsession('DB_anousu');
-    $this->setInstituicao(InstituicaoRepository::getInstituicaoByCodigo($iInstituicaoSessao));
+    /**
+     * Buscamos a instituição do reduzido
+     * @author: rodrigo@contass
+     * @description: Alteração realizada conforme solicitado por igor@contass, devido a um problema na rotina de suplementação.
+     *
+     */
+    $oDaoConplanoreduz  = db_utils::getDao("conplanoreduz");
+    $sCamposBusca       = " distinct c61_instit ";
+    $sSqlBuscaInstit    = $oDaoConplanoreduz->sql_query_file($iCodigoReduzido, $iAnoSessao, $sCamposBusca, null, null);
+    $rsBuscaInstit      = $oDaoConplanoreduz->sql_record($sSqlBuscaInstit);
+
+    $iInstituicao       = db_utils::fieldsMemory($rsBuscaInstit, 0)->c61_instit;
+
+    $this->setInstituicao(InstituicaoRepository::getInstituicaoByCodigo($iInstituicao));
     $this->setContaPlano(ContaPlanoPCASPRepository::getContaByCodigo(null,
                                                                      $iAnoSessao,
                                                                      $iCodigoReduzido,
-                                                                     $iInstituicaoSessao
+                                                                     $iInstituicao
                                                                     )
                         );
 
