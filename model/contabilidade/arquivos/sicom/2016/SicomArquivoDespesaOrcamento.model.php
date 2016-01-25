@@ -185,21 +185,23 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
 	     * o repedit��o ocorrer� para cada linha do array $aDadosAgrupados passando a linha do registro 10 a ser gerada
 	     */
 	    foreach ($aDadosAgrupados as $oDado) {
-	
-	      $oDadosAcao = clone $oDado;
-	      unset($oDadosAcao->recursos); 
-	      $oDadosAcao->vlTotalrecurso  = number_format($oDadosAcao->vlTotalrecurso, 2, "," , "");
-	      $this->aDados[] = $oDadosAcao;
-	      /**
-	       * a repeti��o adicionar� os registros tipo 11 abaixo do registro tipo 10 correspondente para serem gravados no arquivo
-	       */
-	      foreach ($oDado->recursos as $oRecurso) {
-	        
-	        $oRecurso->tipoRegistro  = 11;
-	        $oRecurso->detalhesessao = 11;
-	        $oRecurso->codDespesa    = $oDadosAcao->codDespesa;
-	        $this->aDados[]          = $oRecurso;
-	      }
+			if($oDado->vlTotalrecurso != 0 ) {
+				$oDadosAcao = clone $oDado;
+				unset($oDadosAcao->recursos);
+				$oDadosAcao->vlTotalrecurso = number_format($oDadosAcao->vlTotalrecurso, 2, ",", "");
+				$this->aDados[] = $oDadosAcao;
+				/**
+				 * a repeti��o adicionar� os registros tipo 11 abaixo do registro tipo 10 correspondente para serem gravados no arquivo
+				 */
+				foreach ($oDado->recursos as $oRecurso) {
+
+					$oRecurso->tipoRegistro = 11;
+					$oRecurso->detalhesessao = 11;
+					$oRecurso->codDespesa = $oDadosAcao->codDespesa;
+					$this->aDados[] = $oRecurso;
+
+				}
+			}
 	    }
 	    /**
 	     * excluir tabela temporaria para a criacao da mesma com os dados da proxima instituicao

@@ -179,19 +179,23 @@ public function gerarDados(){
 	     * passar todos os dados registro 10 para o $this->aDados[]
 	     */
 	    foreach ($aDadosAgrupados as $oDado) {
-	    	
-	    	$oDadosReceita = clone $oDado;
-	    	unset($oDadosReceita->FonteRecurso);
-	    	$oDadosReceita->vlPrevisto        = number_format(abs($oDadosReceita->vlPrevisto), 2, ",", "");
-	    	$this->aDados[] = $oDadosReceita;
-	    	
-	    /**
-	     * passar todos os dados registro 11 para o $this->aDados[]
-	     */
-	    	foreach ($oDado->FonteRecurso as $oFonteRecurso) {
-	    		$oFonteRecurso->valorFonte = number_format(abs($oFonteRecurso->valorFonte), 2, ",", "");
-	    		$this->aDados[] = $oFonteRecurso;
-	    	}
+
+            if($oDado->vlPrevisto != 0) {
+
+                $oDadosReceita = clone $oDado;
+                unset($oDadosReceita->FonteRecurso);
+                $oDadosReceita->vlPrevisto = number_format(abs($oDadosReceita->vlPrevisto), 2, ",", "");
+                $this->aDados[] = $oDadosReceita;
+
+                /**
+                 * passar todos os dados registro 11 para o $this->aDados[]
+                 */
+                foreach ($oDado->FonteRecurso as $oFonteRecurso) {
+                    $oFonteRecurso->valorFonte = number_format(abs($oFonteRecurso->valorFonte), 2, ",", "");
+                    $this->aDados[] = $oFonteRecurso;
+                }
+
+            }
  
 	    }
 	    

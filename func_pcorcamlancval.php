@@ -244,7 +244,7 @@ if (isset($datafinal)){
       }
 
       if (!empty($bloqueiaRegistroPreco)) {
-        $where_sol .= " and (d.pc10_solicitacaotipo not in (3, 4, 5, 6) or d.pc10_numero is null)";
+        $where_sol .= " and (d.pc10_solicitacaotipo not in (3, 4, 5) or d.pc10_numero is null)";
       }
 
       if(!isset($pesquisa_chave)){
