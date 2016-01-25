@@ -86,7 +86,16 @@ switch($oParam->exec) {
       $iAnoReferencia = db_getsession('DB_anousu');
     	
       $oEscritorCSV = new padArquivoEscritorCSV();
-      
+      /**
+       * Verificar se existe pelo menos um pdf de leis antes de tentar processar
+       */
+      if (!file_exists("PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf") && !file_exists("LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf") 
+            && !file_exists("LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf")) {
+      	$oRetorno->status  = 2;
+        $sGetMessage       = "Envie os arquivos das Leis antes de processar!";
+        $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
+        break;
+    	}
       $oEscritorCSV->adicionarArquivo("PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
       $oEscritorCSV->adicionarArquivo("LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
     	$oEscritorCSV->adicionarArquivo("LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
