@@ -110,6 +110,7 @@ public function gerarDados(){
   	    $sSqlReceita .= "ON r.o70_codigo = t.o15_codigo ";
         $sSqlReceita .= "JOIN conplanoorcamento cp on f.o57_codfon = cp.c60_codcon ";
         $sSqlReceita .= "WHERE f.o57_anousu = ".db_getsession("DB_anousu");
+        $sSqlReceita .= " AND cp.c60_anousu = ".db_getsession("DB_anousu");
   	    $sSqlReceita .= " AND r.o70_instit = $oInstit->codigo";
 
   	    $rsReceita = db_query($sSqlReceita);
@@ -171,10 +172,12 @@ public function gerarDados(){
 			      
 			      $oDadosReceita->vlPrevisto         += $oReceita->o70_valor;
 			       
-        } 
-        //echo "<pre>";
+        }
+
+
+        //echo '<pre>';
         //print_r($aDadosAgrupados);
-    	 
+
        /**
 	     * passar todos os dados registro 10 para o $this->aDados[]
 	     */
@@ -196,7 +199,7 @@ public function gerarDados(){
                 }
 
             }
- 
+
 	    }
 	    
     }

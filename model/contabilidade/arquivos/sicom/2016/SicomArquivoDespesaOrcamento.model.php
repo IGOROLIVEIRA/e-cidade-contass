@@ -177,7 +177,9 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
 	      /**
 	       * passa cada registro 11 relacionado com o registro 10 selecionado
 	       */
-	      $oDadosAcao->recursos[] = $oDadosAcaoRecurso;
+		  if($oRegistro->dot_ini != 0) {
+			  $oDadosAcao->recursos[] = $oDadosAcaoRecurso;
+		  }
 	    }
 	    
 	    
@@ -199,7 +201,6 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
 					$oRecurso->detalhesessao = 11;
 					$oRecurso->codDespesa = $oDadosAcao->codDespesa;
 					$this->aDados[] = $oRecurso;
-
 				}
 			}
 	    }
