@@ -3638,9 +3638,21 @@ class dadosEmpenhoFolhaRescisao {
    * @param integer $iAnoUsu ano base
    * @return array
    */
-  public function getRescisoesNaoEmpenhadas($iMesUsu, $iAnoUsu) {
+  public function getRescisoesNaoEmpenhadas($iMesUsu, $iAnoUsu, $sDataInicial, $sDataFinal){
   	
 		$iInstit = db_getsession('DB_instit');
+
+	  $sBetween = "";
+
+	  if (!empty($sDataInicial) && !empty($sDataFinal)) {
+		  $oInicio = new DBDate($sDataInicial);
+		  $oFim    = new DBDate($sDataFinal);
+
+		  $sDataInicial = $oInicio->convertTo(DBDate::DATA_EN);
+		  $sDataFinal    = $oFim->convertTo(DBDate::DATA_EN);
+
+		  $sBetween = " rh05_recis between '{$sDataInicial}' and '{$sDataFinal}'";
+	  }
 
     $sSqlrescisoes  = "SELECT rh01_regist as matricula, ";
     $sSqlrescisoes .= "       rh02_seqpes as seqpes,";
@@ -3654,6 +3666,11 @@ class dadosEmpenhoFolhaRescisao {
     $sSqlrescisoes .= "   and rh02_anousu = {$iAnoUsu} ";
     $sSqlrescisoes .= "   and rh02_instit = {$iInstit} ";
     $sSqlrescisoes .= "   and rh05_empenhado is false  ";
+
+	  if (!empty($sBetween)) {
+		  $sSqlrescisoes .= " and {$sBetween} ";
+	  }
+
     $rsRescisoes    = db_query($sSqlrescisoes);
     $aRescisoes     = array();
     if (pg_num_rows($rsRescisoes) > 0) {
