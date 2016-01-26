@@ -1635,14 +1635,15 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                           (SELECT round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) AS saldoinicial
                                            FROM
                                              (SELECT
-                                                (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
-                                                 FROM contacorrente
-                                                 INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
-                                                 INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                 AND contacorrentesaldo.c29_mesusu = 0
-                                                 WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
-                                                   AND c17_sequencial = {$nContaCorrente}
-                                                   AND c19_orctiporec = {$objContasfr->o15_codigo}) AS saldoimplantado,
+                                                (SELECT SUM(saldoanterior) AS saldoanterior FROM
+                                                    (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                                                     FROM contacorrente
+                                                     INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                                     INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+                                                     AND contacorrentesaldo.c29_mesusu = 0
+                                                     WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+                                                       AND c17_sequencial = {$nContaCorrente}
+                                                       AND c19_orctiporec = {$objContasfr->o15_codigo}) as x) AS saldoimplantado,
 
                                                 (SELECT sum(c69_valor) AS debito
                                                  FROM conlancamval
