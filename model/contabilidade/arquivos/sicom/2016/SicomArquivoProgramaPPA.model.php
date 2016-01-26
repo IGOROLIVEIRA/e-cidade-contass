@@ -79,9 +79,12 @@ class SicomArquivoProgramaPPA extends SicomArquivoBase implements iPadArquivoBas
 		    $oDadosPRO->codPrograma        = str_pad($oPrograma->o54_programa, 4, "0", STR_PAD_LEFT);
 		    $oDadosPRO->nomePrograma       = substr($oPrograma->o54_descr,0 ,100);
 		    $sDescricao                    = str_replace($aCaracteres, "", substr($oPrograma->o54_finali, 0, 230));
-		    
+		    if(!isset($oPrograma->o54_finali)){
 		    $oDadosPRO->objetivo           = $sDescricao;
-		    
+			}else{
+				$oDadosPRO->objetivo       = substr($oPrograma->o54_descr,0 ,100);
+			}
+
 		    foreach ($aDespesa as $sEstimativa) {
 			    	
 			    	if($sEstimativa->iCodigo ==  $oPrograma->o54_programa){
