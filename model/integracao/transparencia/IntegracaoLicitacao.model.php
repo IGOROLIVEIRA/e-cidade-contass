@@ -57,7 +57,7 @@ class IntegracaoLicitacao extends IntegracaoBase implements IItemIntegracao {
     $sListaCamposImportar  .= "l20_datacria as datacriacao,";
     $sListaCamposImportar  .= "l20_horacria as horacriacao,";
     $sListaCamposImportar  .= "l20_horacria as horacriacao,";
-    $sListaCamposImportar  .= "l20_dataaber as dataabertura,";
+    $sListaCamposImportar  .= "case when l20_dataaber is null then l20_datacria else l20_dataaber end as dataabertura,";
     $sListaCamposImportar  .= "l20_horaaber as horaabertura,";
     $sListaCamposImportar  .= "l20_dtpublic as datapublicacao,";
     $sListaCamposImportar  .= "l20_local as local,";
