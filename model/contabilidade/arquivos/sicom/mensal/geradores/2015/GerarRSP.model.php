@@ -63,7 +63,7 @@ class GerarRSP extends GerarAM {
         /**
         *Arquivo codunidadesuborig não está no banco de dados
         */
-        $aCSVRSP10['si112_codunidadesuborig']               =   str_pad($aRSP10['si112_codunidadesub'], 5, "0", STR_PAD_LEFT);
+        $aCSVRSP10['si112_codunidadesuborig']               =   str_pad($aRSP10['si112_codunidadesuborig'], 5, "0", STR_PAD_LEFT);
         $aCSVRSP10['si112_nroempenho']                      =   substr($aRSP10['si112_nroempenho'], 0, 22);
         $aCSVRSP10['si112_exercicioempenho']                =   str_pad($aRSP10['si112_exercicioempenho'], 4, "0", STR_PAD_LEFT);
         $aCSVRSP10['si112_dtempenho']                       =   implode("", array_reverse(explode("-", $aRSP10['si112_dtempenho'])));
