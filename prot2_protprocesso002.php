@@ -92,8 +92,8 @@ for($x = 0; $x < $xxnum;$x++){
       $pdf->addpage();
       $pdf->setfont('arial','b',8);
       $pdf->cell(15,$alt,"Cód. Dep. ",1,0,"C",1);
-      $pdf->cell(60,$alt,"Departamento Origem ",1,0,"C",1);
-      $pdf->cell(55,$alt,"Instituição ",1,0,"C",1);
+      $pdf->cell(115,$alt,"Departamento Origem ",1,0,"C",1);
+/*      $pdf->cell(55,$alt,"Instituição ",1,0,"C",1);*/
       $pdf->cell(15,$alt,"Ano ",1,0,"C",1);
       $pdf->cell(20,$alt,"Processos ",1,0,"C",1);
       $pdf->cell(25,$alt,"Subtotal ",1,1,"C",1);
@@ -108,8 +108,8 @@ for($x = 0; $x < $xxnum;$x++){
      }
      $pdf->cell(190,0,"","T",1,"C",0);
      $pdf->cell(15,$alt,$p61_coddepto,0,0,"C",0);
-     $pdf->cell(60,$alt,$descrdepto,0,0,"L",0);
-     $pdf->cell(55,$alt,$nomeabrev,0,0,"C",0);
+     $pdf->cell(115,$alt,$descrdepto,"C",0,"L",0);
+/*     $pdf->cell(55,$alt,$nomeabrev,0,0,"C",0);*/
      $imprimecod = $p61_coddepto;
      $totaldepart ++;
      $totalproc = $totalproc+$subtotal;
