@@ -125,17 +125,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       }
     }
     
-    //echo db_getsession("DB_anousu");
 
-    //echo $this->sDataFinal;exit;
-    
-    /*$sSql  = "SELECT si09_codorgaotce AS codorgao
-              FROM infocomplementaresinstit
-              WHERE si09_instit = ".db_getsession("DB_instit");
-      
-    $rsResult  = db_query($sSql);
-    $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;*/
-  
     if( $this->sDataFinal['5'].$this->sDataFinal['6'] == '01'){
     /*
      * selecionar informacoes registro 10
@@ -214,7 +204,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     where (vlremp - vlranu - vlrliq) >= 0 and (vlrliq - vlrpag) >= 0";
 
     $rsResult10 = db_query($sSql);
-    //echo $sSql; db_criatabela($rsResult10);echo pg_last_error();exit;
+
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $clrsp10 = new cl_rsp102015();
@@ -222,22 +212,55 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       if ($oDados10->subunidade == 1) {
 	      $oDados10->codunidadesub .= str_pad($oDados10->subunidade,3,"0",STR_PAD_LEFT);
 	    }
-      
-      $clrsp10->si112_tiporegistro                 = 10;
-      $clrsp10->si112_codreduzidorsp               = $oDados10->codreduzidorsp;
-      $clrsp10->si112_codorgao                     = $oDados10->codorgao;
-      $clrsp10->si112_codunidadesub                = $oDados10->codunidadesub;
-      $clrsp10->si112_codunidadesuborig            = $oDados10->codunidadesub;
-      $clrsp10->si112_nroempenho                   = $oDados10->nroempenho;
-      $clrsp10->si112_exercicioempenho             = $oDados10->exercicioempenho;
-      $clrsp10->si112_dtempenho                    = $oDados10->dtempenho;
-      $clrsp10->si112_dotorig                      = $oDados10->dotorig;
-      $clrsp10->si112_vloriginal                   = $oDados10->vloriginal;
-      $clrsp10->si112_vlsaldoantproce              = $oDados10->vlsaldoantproce;
-      $clrsp10->si112_vlsaldoantnaoproc            = $oDados10->vlsaldoantnaoproc;
-      $clrsp10->si112_mes                          = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      $clrsp10->si112_instit                       = db_getsession("DB_instit");
-      
+
+        $clrsp10->si112_tiporegistro                 = 10;
+        $clrsp10->si112_codreduzidorsp               = $oDados10->codreduzidorsp;
+
+        /*
+        * Verifica se o empenho existe na tabela dotacaorpsicom
+        * Caso exista, busca os dados da dotação.
+        * */
+        $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados10->codreduzidorsp}";
+
+        if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0){
+
+            $aDotacaoRpSicom      = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+
+            $clrsp10->si112_codorgao          = $aDotacaoRpSicom[0]->si177_codorgaotce;
+            $clrsp10->si112_codunidadesub     = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 || strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0".$aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+            $clrsp10->si112_codunidadesuborig = strlen($aDotacaoRpSicom[0]->si177_codunidadesuborig) != 5 || strlen($aDotacaoRpSicom[0]->si177_codunidadesuborig) != 8 ? "0".$aDotacaoRpSicom[0]->si177_codunidadesuborig : $aDotacaoRpSicom[0]->si177_codunidadesuborig;
+            if($oDados10->exercicioempenho < 2013){
+                $sDotacaoOrig  = str_pad($aDotacaoRpSicom[0]->si177_codfuncao, 2, "0", STR_PAD_LEFT);
+                $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_codsubfuncao, 3, "0", STR_PAD_LEFT);
+                $sDotacaoOrig .= str_pad(trim($aDotacaoRpSicom[0]->si177_codprograma), 4, "0", STR_PAD_LEFT);
+                $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_idacao, 4, "0", STR_PAD_LEFT);
+                $sDotacaoOrig .= $aDotacaoRpSicom[0]->si177_naturezadespesa;
+                $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_subelemento, 2, "0", STR_PAD_LEFT);
+                $clrsp10->si112_dotorig = $sDotacaoOrig;
+                $test = 1;
+            }else{
+                $clrsp10->si112_dotorig                  = $oDados10->dotorig;
+            }
+
+        } else {
+            $clrsp10->si112_codorgao            = $oDados10->codorgao;
+            $clrsp10->si112_codunidadesub       = $oDados10->codunidadesub;
+            $clrsp10->si112_dotorig             = $oDados10->dotorig;
+            $clrsp10->si112_codunidadesuborig   = $oDados10->codunidadesub;
+        }
+        $clrsp10->si112_nroempenho                   = $oDados10->nroempenho;
+        $clrsp10->si112_exercicioempenho             = $oDados10->exercicioempenho;
+        $clrsp10->si112_dtempenho                    = $oDados10->dtempenho;
+        $clrsp10->si112_vloriginal                   = $oDados10->vloriginal;
+        $clrsp10->si112_vlsaldoantproce              = $oDados10->vlsaldoantproce;
+        $clrsp10->si112_vlsaldoantnaoproc            = $oDados10->vlsaldoantnaoproc;
+        $clrsp10->si112_mes                          = $this->sDataFinal['5'].$this->sDataFinal['6'];
+        $clrsp10->si112_instit                       = db_getsession("DB_instit");
+      if($test == 2){
+          echo "<pre>";
+          print_r($aDotacaoRpSicom);
+          print_r($clrsp10);exit;
+      }
       $clrsp10->incluir(null);
 
       if ($clrsp10->erro_status == 0) {
@@ -277,8 +300,6 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 		        }
         	}
         }
-      
-      
     }
   }
     /*
@@ -316,7 +337,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         where e60_instit = ".db_getsession("DB_instit")." and c71_coddoc in (31,32) and c71_data between '{$this->sDataInicial}' and '{$this->sDataFinal}' ";
         
     $rsResult20 = db_query($sSql);
-    //echo $sSql;db_criatabela($rsResult20);
+
     
     $aDadosAgrupados = array();
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
@@ -324,42 +345,57 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     	$oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
     	$sHash = $oDados20->nroempenho.$oDados20->exercicioempenho.$oDados20->dtmovimentacao;
     	if (!$aDadosAgrupados[$sHash]) {
-    		
-	    	$clrsp20 = new stdClass();
-	      
-	      $clrsp20->si115_tiporegistro                   = 20;
-	      $clrsp20->si115_codreduzidomov                 = $oDados20->codreduzidomov;
-	      $clrsp20->si115_codorgao                       = $oDados20->codorgao;
-	      $clrsp20->si115_codunidadesub                  = $oDados20->codunidadesub;
-	      $clrsp20->si115_nroempenho                     = $oDados20->nroempenho;
-	      $clrsp20->si115_exercicioempenho               = $oDados20->exercicioempenho;
-	      $clrsp20->si115_dtempenho                      = $oDados20->dtempenho;
-	      $clrsp20->si115_tiporestospagar                = $oDados20->tiporestospagar;
-	      $clrsp20->si115_tipomovimento                  = $oDados20->tipomovimento;
-	      $clrsp20->si115_dtmovimentacao                 = $oDados20->dtmovimentacao;
-	      $clrsp20->si115_dotorig                        = $oDados20->dotorig;
-	      $clrsp20->si115_vlmovimentacao                 = $oDados20->vlmovimentacao;
-	      $clrsp20->si115_codorgaoencampatribuic         = $oDados20->codorgaoencampatribuic;
-	      $clrsp20->si115_codunidadesubencampatribuic    = $oDados20->codunidadesubencampatribuic;
-	      $clrsp20->si115_justificativa                  = $oDados20->justificativa;
-	      $clrsp20->si115_atocancelamento                = $oDados20->atocancelamento;
-	      $clrsp20->si115_dataatocancelamento            = $oDados20->dataatocancelamento;
-	      $clrsp20->si115_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];
-	      $clrsp20->si115_instit                         = db_getsession("DB_instit");
-	      
-	      $aDadosAgrupados[$sHash] = $clrsp20;
+
+            $clrsp20 = new stdClass();
+            $clrsp20->si115_tiporegistro                   = 20;
+            $clrsp20->si115_codreduzidomov                 = $oDados20->codreduzidomov;
+
+            /*
+            * Verifica se o empenho existe na tabela dotacaorpsicom
+            * Caso exista, busca os dados da dotação.
+            * */
+            $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados20->atocancelamento}";
+            if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0){
+
+                $aDotacaoRpSicom      = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+
+                $clrsp20->si115_codorgao                     = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce,2,"0");
+                $clrsp20->si115_codunidadesub              = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 || strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0".$aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+
+            } else {
+                $clrsp20->si115_codorgao                       = $oDados20->codorgao;
+                $clrsp20->si115_codunidadesub                  = $oDados20->codunidadesub;
+            }
+
+	        $clrsp20->si115_nroempenho                     = $oDados20->nroempenho;
+	        $clrsp20->si115_exercicioempenho               = $oDados20->exercicioempenho;
+	        $clrsp20->si115_dtempenho                      = $oDados20->dtempenho;
+	        $clrsp20->si115_tiporestospagar                = $oDados20->tiporestospagar;
+	        $clrsp20->si115_tipomovimento                  = $oDados20->tipomovimento;
+	        $clrsp20->si115_dtmovimentacao                 = $oDados20->dtmovimentacao;
+	        $clrsp20->si115_dotorig                        = $oDados20->dotorig;
+	        $clrsp20->si115_vlmovimentacao                 = $oDados20->vlmovimentacao;
+	        $clrsp20->si115_codorgaoencampatribuic         = $oDados20->codorgaoencampatribuic;
+	        $clrsp20->si115_codunidadesubencampatribuic    = $oDados20->codunidadesubencampatribuic;
+	        $clrsp20->si115_justificativa                  = $oDados20->justificativa;
+	        $clrsp20->si115_atocancelamento                = $oDados20->atocancelamento;
+	        $clrsp20->si115_dataatocancelamento            = $oDados20->dataatocancelamento;
+	        $clrsp20->si115_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];
+	        $clrsp20->si115_instit                         = db_getsession("DB_instit");
+
+	        $aDadosAgrupados[$sHash] = $clrsp20;
       
              
-        $clrsp21 = new stdClass();
+            $clrsp21 = new stdClass();
        
-        $clrsp21->si116_tiporegistro            = 21;
-        $clrsp21->si116_codreduzidomov          = $oDados20->codreduzidomov;
-        $clrsp21->si116_codfontrecursos         = $oDados20->codfontrecursos;
-        $clrsp21->si116_vlmovimentacaofonte     = $oDados20->vlmovimentacao;
-        $clrsp21->si116_mes                     = $this->sDataFinal['5'].$this->sDataFinal['6'];
-        $clrsp21->si116_instit                  = db_getsession("DB_instit");
+            $clrsp21->si116_tiporegistro            = 21;
+            $clrsp21->si116_codreduzidomov          = $oDados20->codreduzidomov;
+            $clrsp21->si116_codfontrecursos         = $oDados20->codfontrecursos;
+            $clrsp21->si116_vlmovimentacaofonte     = $oDados20->vlmovimentacao;
+            $clrsp21->si116_mes                     = $this->sDataFinal['5'].$this->sDataFinal['6'];
+            $clrsp21->si116_instit                  = db_getsession("DB_instit");
         
-        $aDadosAgrupados[$sHash]->reg21 = $clrsp21;
+            $aDadosAgrupados[$sHash]->reg21 = $clrsp21;
         
     	} else {
     		$aDadosAgrupados[$sHash]->si115_vlmovimentacao += $oDados20->vlmovimentacao;
