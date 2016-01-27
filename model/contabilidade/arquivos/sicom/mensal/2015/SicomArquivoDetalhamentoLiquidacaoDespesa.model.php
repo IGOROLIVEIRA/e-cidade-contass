@@ -77,7 +77,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
     
     $sSql  = "SELECT  e50_id_usuario,(rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) as codreduzido,
     (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) as nroliquidacao,
-    e50_codord, e50_DATA, e60_anousu,
+    e50_codord, e50_DATA, e60_anousu,e60_numemp,
 			           e60_codemp, e60_emiss, o58_orgao , o58_unidade, z01_nome, 
 				   z01_cgccpf, e53_valor,e53_vlranu,  o15_codtri,  si09_codorgaotce, 
 				   o41_subunidade AS subunidade,o56_elemento
@@ -167,11 +167,24 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
 			  }
 	    	
 	    	$oDadosLiquidacao = new stdClass();
-	
+
+			/*
+			 * Verifica se o empenho existe na tabela dotacaorpsicom
+			 * Caso exista, busca os dados da dotação.
+			 * */
+			$sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oLiquidacao->e60_numemp}";
+
+			if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+				$aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+
+				$oDadosLiquidacao->si118_codorgao      = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+				$oDadosLiquidacao->si118_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 || strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+			}else{
+				$oDadosLiquidacao->si118_codorgao        = $oLiquidacao->si09_codorgaotce;
+				$oDadosLiquidacao->si118_codunidadesub   = $sCodUnidade;
+			}
 	    	$oDadosLiquidacao->si118_tiporegistro    = '10';
 	    	$oDadosLiquidacao->si118_codreduzido     = substr($oLiquidacao->codreduzido, 0, 15);
-	    	$oDadosLiquidacao->si118_codorgao        = $oLiquidacao->si09_codorgaotce;
-	    	$oDadosLiquidacao->si118_codunidadesub   = $sCodUnidade;
 		    $oDadosLiquidacao->si118_tpliquidacao    = $stpLiquidacao;
 		    $oDadosLiquidacao->si118_nroempenho      = substr($oLiquidacao->e60_codemp, 0, 22);
 		    $oDadosLiquidacao->si118_dtempenho       = $oLiquidacao->e60_emiss;
@@ -210,10 +223,10 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
     }
     foreach ($aDadosAgrupados as $oDados10) {
     			
-		  $cllqd10 = new cl_lqd102015();
+		    $cllqd10 = new cl_lqd102015();
 			$cllqd10->si118_tiporegistro          = $oDados10->si118_tiporegistro;
-		  $cllqd10->si118_codreduzido           = $oDados10->si118_codreduzido;
-		  $cllqd10->si118_codorgao              = $oDados10->si118_codorgao;
+		    $cllqd10->si118_codreduzido           = $oDados10->si118_codreduzido;
+		    $cllqd10->si118_codorgao              = $oDados10->si118_codorgao;
 			$cllqd10->si118_codunidadesub         = $oDados10->si118_codunidadesub;
 			$cllqd10->si118_tpliquidacao          = $oDados10->si118_tpliquidacao;
 			$cllqd10->si118_nroempenho            = $oDados10->si118_nroempenho;
