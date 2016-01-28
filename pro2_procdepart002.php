@@ -319,6 +319,13 @@ if ($tipo =="1") { // processos iniciados no departamento
         $pdf->cell(60,4,'USUÁRIO ATUAL','B',1,'L',1);
       }
       
+      $sql="select p58_dtproc, p58_numero, p58_ano, p58_numcgm, z01_nome, descrdepto
+              from protprocesso 
+                   inner join cgm on z01_numcgm = p58_numcgm
+                   inner join db_depart on coddepto=p58_coddepto
+             where p58_codproc = $p58_codproc "; 
+        $rr=$aux02->sql_record($sql);
+      db_fieldsmemory($rr,0);
       /**
        * Trata o processo caso o mesmo seja de OUVIDORIA
        */
