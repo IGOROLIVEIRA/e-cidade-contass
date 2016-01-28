@@ -9,7 +9,7 @@ CREATE TABLE cms.configuracoes
   CONSTRAINT configuracoes_id_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE cms.menus
+CREATE TABLE if not exists cms.menus
 (
   id serial NOT NULL,
   name character varying(100),
@@ -29,7 +29,7 @@ CREATE TABLE cms.menus
   CONSTRAINT menus_id_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE cms.users
+CREATE TABLE  if not exists cms.users
 (
   id serial NOT NULL,
   name character varying(150),
@@ -39,7 +39,7 @@ CREATE TABLE cms.users
   CONSTRAINT users_id_pk PRIMARY KEY (id)
 );
 
-CREATE TABLE cms.visitantes
+CREATE TABLE  if not exists cms.visitantes
 (
   id serial NOT NULL,
   quantidade integer NOT NULL DEFAULT 0,
