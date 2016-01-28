@@ -2,7 +2,7 @@ begin;
 
 CREATE SCHEMA cms
 
-CREATE TABLE cms.configuracoes
+CREATE TABLE if not exists cms.configuracoes
 (
   id serial NOT NULL,
   contador_visitas boolean DEFAULT true,
