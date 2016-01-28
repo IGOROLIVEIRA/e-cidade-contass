@@ -1,6 +1,6 @@
 begin;
 
-CREATE SCHEMA cms
+CREATE SCHEMA if not exists cms
 
 CREATE TABLE if not exists cms.configuracoes
 (
