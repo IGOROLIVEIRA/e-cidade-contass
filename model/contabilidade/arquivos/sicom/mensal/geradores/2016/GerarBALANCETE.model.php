@@ -49,6 +49,10 @@ class GerarBALANCETE extends GerarAM
         $rsBALANCETE21 = db_query($sSql21);
         $sSql22 = "select * from balancete222016 where si189_mes = " . $this->iMes . " and si189_instit =" . db_getsession("DB_instit");
         $rsBALANCETE22 = db_query($sSql22);
+        $sSql23 = "select * from balancete232016 where si190_mes = " . $this->iMes . " and si190_instit =" . db_getsession("DB_instit");
+        $rsBALANCETE23 = db_query($sSql23);
+        $sSql24 = "select * from balancete242016 where si191_mes = " . $this->iMes . " and si191_instit =" . db_getsession("DB_instit");
+        $rsBALANCETE24 = db_query($sSql24);
 
 
         if (pg_num_rows($rsBALANCETE10) == 0) {
