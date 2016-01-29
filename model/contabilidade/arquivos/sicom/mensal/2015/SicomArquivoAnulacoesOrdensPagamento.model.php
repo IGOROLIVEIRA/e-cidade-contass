@@ -116,7 +116,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 					 				   where c80_codord = e50_codord 
 					   					 and c71_coddoc in (5,35,37) and c71_codlan < c70_codlan)
 			    ) as dtpag,
-				e60_codemp,
+				e60_codemp,e60_numemp,
 				e60_emiss as dtempenho,
 				z01_nome,
 				z01_cgccpf,
@@ -245,11 +245,26 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
           $Hash = $oAnulacoes->c71_codlan;
           if(!isset($aAnulacoes[$Hash])){
 			   	  $oDadosAnulacao = new stdClass();
+
+				  /*
+				   * Verifica se o empenho existe na tabela dotacaorpsicom
+				   * Caso exista, busca os dados da dotação.
+				   * */
+				  $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oAnulacoes->e60_numemp}";
+				  $iFonteAlterada = '0';
+				  if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+					  $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+					  $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+					  $oDadosAnulacao->si137_codorgao      = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+					  $oDadosAnulacao->si137_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+					  $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+				  }else{
+					  $oDadosAnulacao->si137_codorgao               = $oAnulacoes->si09_codorgaotce;
+					  $oDadosAnulacao->si137_codunidadesub          = $sCodUnidade;
+				  }
 			   	  
 			   	  $oDadosAnulacao->si137_tiporegistro    			= 10;
 			   	  $oDadosAnulacao->si137_codreduzido    			= $oAnulacoes->c71_codlan;
-			   	  $oDadosAnulacao->si137_codorgao       			= $oAnulacoes->si09_codorgaotce;
-			   	  $oDadosAnulacao->si137_codunidadesub   			= $sCodUnidade;
 				  $oDadosAnulacao->si137_nroop           			= $OpdoExtorno;//$oAnulacoes->numordem;
 				  $oDadosAnulacao->si137_dtpagamento				= ($DataOpExorno == '' || $DataOpExorno == null) ? $oAnulacoes->dtanulacao : $DataOpExorno;//$oAnulacoes->dtpag; 
 				  $oDadosAnulacao->si137_nroanulacaoop    			= $OpdoExtorno;
@@ -273,7 +288,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				  $oDadosAnulacaoFonte->si138_dtempenho	         = $oAnulacoes->dtempenho;
 				  $oDadosAnulacaoFonte->si138_nroliquidacao      = $oAnulacoes->nroliquidacao;
 				  $oDadosAnulacaoFonte->si138_dtliquidacao       = $oAnulacoes->dtliquida;	
-				  $oDadosAnulacaoFonte->si138_codfontrecursos	 = str_pad($oAnulacoes->recurso, 3, "0", STR_PAD_LEFT);
+				  $oDadosAnulacaoFonte->si138_codfontrecursos	 = $iFonteAlterada != 0 ? $iFonteAlterada : str_pad($oAnulacoes->recurso, 3, "0", STR_PAD_LEFT);
 				  $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
 				  $oDadosAnulacaoFonte->si138_mes    			 = $this->sDataFinal['5'].$this->sDataFinal['6'];
 				  $oDadosAnulacaoFonte->si138_reg10              = 0;
