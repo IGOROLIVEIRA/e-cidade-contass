@@ -94,7 +94,8 @@ $sql = "select p62_codtran,
                p58_codigo,
                p58_numero||'/'||p58_ano as processos,
                p58_requer,
-               p51_descr
+               p51_descr,
+               p58_numeracao||'/'||p58_ano as p58_numeracao
         from proctransferproc
              inner join proctransfer on p62_codtran = p63_codtran
              inner join protprocesso on p63_codproc = p58_codproc
@@ -156,9 +157,8 @@ for ($x2 = 0; $x2 < $cldepart->numrows; $x2++) {
       $pdf->cell(larguraColuna(100),$alt,"Departamento que Enviou: ".$e_coddepto."-".$e_descricao,1,1,"L",0);
     }
 
-    $pdf->cell(larguraColuna(7),$alt,"Transf.",1,0,"L",0);
+    $pdf->cell(larguraColuna(6),$alt,"Transf.",1,0,"L",0);
     $pdf->cell(larguraColuna(6),$alt,"Data",1,0,"C",0);
-    $pdf->cell(larguraColuna(5),$alt,"Hora",1,0,"C",0);
 
     if ($listar==1 ) {
       $pdf->cell(larguraColuna(30),$alt,"Departamento que Enviou ",1,0,"L",0);
@@ -166,7 +166,8 @@ for ($x2 = 0; $x2 < $cldepart->numrows; $x2++) {
       $pdf->cell(larguraColuna(30),$alt,"Departamento que Receberá ",1,0,"L",0);
     }
 
-    $pdf->cell(larguraColuna(8),$alt,"Cod. Processo",1,0,"C",0);
+    $pdf->cell(larguraColuna(7),$alt,"Protocolo",1,0,"C",0);
+    $pdf->cell(larguraColuna(7),$alt,"Processo",1,0,"C",0);
     $pdf->cell(larguraColuna(26),$alt,"Requerente",1,0,"C",0);
     $pdf->cell(larguraColuna(18),$alt,"Tipo",1,1,"C",0);
 
@@ -175,19 +176,44 @@ for ($x2 = 0; $x2 < $cldepart->numrows; $x2++) {
   }
 
   $pdf->setfont('arial', '', 8);
-  $pdf->cell(larguraColuna(7),$alt,$p62_codtran,0,0,"L",0);
+  $pdf->cell(larguraColuna(6),$alt,$p62_codtran,0,0,"L",0);
   $pdf->cell(larguraColuna(6),$alt, db_formatar($p62_dttran, 'd'),0,0,"C",0);
-  $pdf->cell(larguraColuna(5),$alt,$p62_hora,0,0,"C",0);
   if ($listar==1 ) {
-    $pdf->cell(larguraColuna(30),$alt,$e_coddepto."-".$e_descricao,0,0,"L",0);
+    $pos_x = $pdf->x;
+	  $pos_y = $pdf->y;
+    $pdf->multicell(larguraColuna(30),$alt,$e_coddepto."-".$e_descricao,0,"L",0,0);
+    $pdf->x = $pos_x+larguraColuna(30);
+    $pdf->y = $pos_y;
   } else {
-    $pdf->cell(larguraColuna(30),$alt,$r_coddepto."-".$r_descricao,0,0,"L",0);
+    $pos_x = $pdf->x;
+	  $pos_y = $pdf->y;
+    $pdf->multicell(larguraColuna(30),$alt,$r_coddepto."-".$r_descricao,0,"L",0,0);
+    $pdf->x = $pos_x+larguraColuna(30);
+    $pdf->y = $pos_y;
   }
 
-  $pdf->cell(larguraColuna(8),$alt,$processos,0,0,"L",0); 
+  $pdf->cell(larguraColuna(7),$alt,$processos,0,0,"L",0); 
+  $pdf->cell(larguraColuna(7),$alt,$p58_numeracao,0,0,"L",0);
 
-  $pdf->cell(larguraColuna(26),$alt, limitarTexto($p58_requer, 45), 0,0,"L",0); 
-  $pdf->cell(larguraColuna(18),$alt, limitarTexto($p51_descr, 25),0,1,"L",0); 
+  $pos_x = $pdf->x;
+	$pos_y = $pdf->y;
+  //$pdf->cell(larguraColuna(26),$alt, limitarTexto($p58_requer, 45), 0,0,"L",0);
+  $pdf->multicell(larguraColuna(26),$alt,$p58_requer,0,"L",0,0);
+  $pdf->x = $pos_x+larguraColuna(26);
+  $pdf->y = $pos_y;
+
+  $pos_x = $pdf->x;
+	$pos_y = $pdf->y;
+  $pdf->multicell(larguraColuna(18),$alt,$p51_descr,0,"L",0,0);
+  $pdf->x = $pos_x+larguraColuna(18);
+  $pdf->y = $pos_y;
+  
+  if (strlen($p51_descr) > 25 || strlen(trim($p58_requer)) > 39 || strlen($r_coddepto."-".$r_descricao) > 49 || strlen($e_coddepto."-".$e_descricao) > 49) {
+  	$pdf->Ln($alt*2);
+  } else {
+  	$pdf->Ln($alt);
+  }
+  
 }
 
 $pdf->Output();
