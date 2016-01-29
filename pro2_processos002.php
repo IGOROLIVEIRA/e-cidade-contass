@@ -207,12 +207,13 @@ $head3 = "RELATÓRIO DE PROCESSOS ";
 
 $sSqlProcessos = "p58_codproc,
                   p58_numero,
+                  p58_numeracao||'/'||p58_ano as p58_numeracao,
                   p58_ano,
                   p58_codigo,
                   p51_descr,
                   to_char(p58_dtproc,'dd/mm/yyyy'),
                   login,
-		  p58_obs,
+		          p58_obs,
                   p58_numcgm,
                   {$sCampoMostrar} AS titular,
                   p58_coddepto,
@@ -248,37 +249,65 @@ for($x = 0; $x < $cl_processos->numrows; $x++) {
      
     $pdf->addpage("L");
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(21, $alt, "Processo", 1, 0, "C", 1);
-    $pdf->cell(14, $alt, "Data", 1, 0, "C", 1);
-    $pdf->cell(10, $alt, "Hora", 1, 0, "C", 1);
-    $pdf->cell(8, $alt, $RLp58_codigo, 1, 0, "C", 1);
+    $pdf->cell(25, $alt, "Protocolo", 1, 0, "C", 1);
+    $pdf->cell(25, $alt, "Processo", 1, 0, "C", 1);
+    $pdf->cell(18, $alt, "Data", 1, 0, "C", 1);
+    //$pdf->cell(10, $alt, "Hora", 1, 0, "C", 1);
+    //$pdf->cell(8, $alt, $RLp58_codigo, 1, 0, "C", 1);
     $pdf->cell(50, $alt, $RLp51_descr, 1, 0, "C", 1);
-    $pdf->cell(15, $alt, "Login", 1, 0, "C", 1);
+    //$pdf->cell(15, $alt, "Login", 1, 0, "C", 1);
     $pdf->cell(10, $alt, "CGM", 1, 0, "C", 1);
     $pdf->cell(65, $alt, $sTituloCampo, 1, 0,"C", 1);
     $pdf->cell(43, $alt, "Dept. Ini.", 1, 0, "C", 1);
     $pdf->cell(43, $alt, "Dept. Atual", 1, 1, "C", 1);
    
     $troca = 0;
-  }  
+  }
+
+    $altcol = 4;
+    if (strlen($p51_descr) > 28 || strlen($titular) > 40 || strlen($p58_coddepto ."-". $deptoproc) > 25 || strlen($p61_coddepto ."-". $deptoandam) > 25 ) {
+        $alt = 8;
+    } else {
+        $alt = 4;
+    }
+
   $pdf->setfont('arial', '', 7);
   
   $sNumeroProcesso = $p58_numero."/".$p58_ano;
   if (empty($p58_numero)) {
     $sNumeroProcesso = "";
   }
-  
-  $pdf->cell(21, $alt, $sNumeroProcesso, 0, 0, "C", $p);
-  $pdf->cell(14, $alt, $to_char, 0, 0, "C", $p);
-  $pdf->cell(10, $alt, $p58_hora, 0, 0, "C", $p);
-  $pdf->cell(8, $alt, $p58_codigo, 0, 0, "L", $p);
-  $pdf->cell(50, $alt, substr($p51_descr, 0, 28), 0, 0, "L", $p);
-  $pdf->cell(15, $alt, substr($login, 0, 10), 0, 0, "L", $p);
-  //$pdf->cell(10, $alt, $p58_numcgm, 0, 0, "C", $p);
+
+  $pdf->cell(25, $alt, $sNumeroProcesso, 0, 0, "C", $p);
+  $pdf->cell(25, $alt, $p58_numeracao, 0, 0, "C", $p);
+  $pdf->cell(18, $alt, $to_char, 0, 0, "C", $p);
+  //$pdf->cell(10, $alt, $p58_hora, 0, 0, "C", $p);
+  //$pdf->cell(8, $alt, $p58_codigo, 0, 0, "L", $p);
+
+  //$pdf->cell(50, $alt, substr($p51_descr, 0, 28), 0, 0, "L", $p);
+  $pos_x = $pdf->x;
+  $pos_y = $pdf->y;
+  $pdf->multicell(50,strlen($p51_descr) > 28 ? $altcol : $alt,$p51_descr,0,"L",$p);
+  $pdf->x = $pos_x+50;
+  $pdf->y = $pos_y;
+
+  //$pdf->cell(15, $alt, substr($login, 0, 10), 0, 0, "L", $p);
   $pdf->cell(10, $alt, $p58_numcgm, 0, 0, "C", $p);
-  $pdf->cell(65, $alt, substr($titular, 0, 40), 0, 0, "L", $p);
-  $pdf->cell(43, $alt, substr($p58_coddepto . "-" . substr($deptoproc, 0, 25), 0, 25), 0, 0, "L", $p);
-  $pdf->cell(43, $alt, substr($p61_coddepto . "-" . substr($deptoandam, 0, 25), 0, 25), 0, 1, "l", $p);
+  //$pdf->cell(65, $alt, substr($titular, 0, 40), 0, 0, "L", $p);
+    $pos_x = $pdf->x;
+    $pos_y = $pdf->y;
+    $pdf->multicell(65,strlen($titular) > 40 ? $altcol : $alt,$titular,0,"L",$p);
+    $pdf->x = $pos_x+65;
+    $pdf->y = $pos_y;
+  //$pdf->cell(43, $alt, substr($p58_coddepto . "-" . substr($deptoproc, 0, 25), 0, 25), 0, 0, "L", $p);
+    $pos_x = $pdf->x;
+    $pos_y = $pdf->y;
+    $pdf->multicell(43,strlen($p58_coddepto ."-". $deptoproc) > 25 ? $altcol : $alt,$p58_coddepto ."-". $deptoproc,0,"L",$p);
+    $pdf->x = $pos_x+43;
+    $pdf->y = $pos_y;
+  //$pdf->cell(43, $alt, substr($p61_coddepto . "-" . substr($deptoandam, 0, 25), 0, 25), 0, 1, "l", $p);
+
+    $pdf->multicell(43,strlen($p61_coddepto ."-". $deptoandam) > 25 ? $altcol : $alt,$p61_coddepto ."-". $deptoandam ,0,"L",$p);
 
   if ($Observacao == '1') {
     $pdf->multicell(279,$alt,$p58_obs,0,"L",$p);
