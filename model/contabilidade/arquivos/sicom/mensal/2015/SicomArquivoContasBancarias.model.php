@@ -215,26 +215,27 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 			$cCtb10->si95_dataassinaturaconvenio   		  =	$oRegistro10->dataassinaturaconvenio;
 			$cCtb10->si95_mes							  = $this->sDataFinal['5'].$this->sDataFinal['6'];
             $cCtb10->si95_instit						  = db_getsession("DB_instit");
-            $cCtb10->recurso                  = $oRegistro10->recurso;
+            $cCtb10->recurso                  			  = $oRegistro10->recurso;
             $cCtb10->contas								  = array();
 
-            
-      	    $sSqlVerifica  = "SELECT * FROM ctb102015 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco' 
+
+			$sSqlVerifica  = "SELECT * FROM ctb102015 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
           AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta' 
           AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'
           AND si95_mes < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
-      	    $sSqlVerifica .= " UNION SELECT * FROM ctb102014 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco' 
+      	    $sSqlVerifica .= " UNION ALL SELECT * FROM ctb102014 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
           AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta' 
-          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'";
-          $rsResultVerifica = db_query($sSqlVerifica);//db_criatabela($rsResultVerifica);
+          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta' ";
+			$sSqlVerifica .= " UNION ALL SELECT * FROM ctb102014 WHERE si95_codctb = ".$cCtb10->si95_codctb;
+			$rsResultVerifica = db_query($sSqlVerifica);
+
+			//echo $sSqlVerifica."<br>";db_criatabela($rsResultVerifica);
           
           if (pg_num_rows($rsResultVerifica) == 0) {
-      	  
-          	$cCtb10->incluir(null);
-			      if ($cCtb10->erro_status == 0) {
-				      throw new Exception($cCtb10->erro_msg);
-			      }
-			      
+			  $cCtb10->incluir(null);
+			  if ($cCtb10->erro_status == 0) {
+				  throw new Exception($cCtb10->erro_msg);
+			  }
           }
             $cCtb10->contas[]= $oRegistro10->codctb;
             $aBancosAgrupados[$aHash] = $cCtb10;

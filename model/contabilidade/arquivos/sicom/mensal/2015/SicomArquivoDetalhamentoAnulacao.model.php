@@ -96,7 +96,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                    (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) end as codreduzido,
                    case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
                    (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao, 
-                   c80_data, orctiporec.o15_codtri,e60_codemp, e60_emiss,  e60_anousu,
+                   c80_data, orctiporec.o15_codtri,e60_codemp, e60_emiss,  e60_anousu,e60_numemp,
 							    o58_orgao, o58_unidade,o41_subunidade, e60_codcom, sum(c70_valor) as c70_valor, c70_data, c53_tipo, c70_data,si09_codorgaotce 
 							FROM empempenho
 							INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
@@ -200,6 +200,24 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       if (!isset($aDadosAgrupados[$sHash])) {
       	
         $oDadosDetalhamento = new stdClass();
+
+
+          /*
+           * Verifica se o empenho existe na tabela dotacaorpsicom
+           * Caso exista, busca os dados da dotação.
+		   * */
+			$sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDetalhamento->e60_numemp}";
+            $iFonteAlterada = '0';
+			if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+                $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+                $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+                $oDadosDetalhamento->si121_codorgao      = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+                $oDadosDetalhamento->si121_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+                $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+            }else{
+                $oDadosDetalhamento->si121_codorgao               = $oDetalhamento->si09_codorgaotce;
+                $oDadosDetalhamento->si121_codunidadesub          = $sCodUnidade;
+            }
       
         $oDadosDetalhamento->si121_tiporegistro           = 10;
         $oDadosDetalhamento->si121_codreduzido            = substr($oDetalhamento->codreduzido, 0, 15);
@@ -223,7 +241,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       
         $oDadosDetalhamentoFonte->si122_tiporegistro       = 11;
         $oDadosDetalhamentoFonte->si122_codreduzido        = substr($oDetalhamento->codreduzido, 0, 15);
-        $oDadosDetalhamentoFonte->si122_codfontrecursos    = str_pad($oDetalhamento->o15_codtri, 3, "0", STR_PAD_LEFT);
+        $oDadosDetalhamentoFonte->si122_codfontrecursos    = $iFonteAlterada != '0' ? $iFonteAlterada : str_pad($oDetalhamento->o15_codtri, 3, "0", STR_PAD_LEFT);
         $oDadosDetalhamentoFonte->si122_valoranuladofonte  = $oDetalhamento->c70_valor;
         $oDadosDetalhamentoFonte->si122_mes				 = $this->sDataFinal['5'].$this->sDataFinal['6'];
         $oDadosDetalhamentoFonte->si122_instit 				= db_getsession("DB_instit");
@@ -270,9 +288,9 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       $oDados11->si122_codreduzido        = $oDadosAgrupados->Reg11->si122_codreduzido;
       $oDados11->si122_codfontrecursos    = $oDadosAgrupados->Reg11->si122_codfontrecursos;
       $oDados11->si122_valoranuladofonte  = $oDadosAgrupados->Reg11->si122_valoranuladofonte;
-      $oDados11->si122_mes				 = $oDadosAgrupados->Reg11->si122_mes;
-      $oDados11->si122_reg10				 = $oDados10->si121_sequencial;
-      $oDados11->si122_instit 				= $oDadosAgrupados->Reg11->si122_instit;
+      $oDados11->si122_mes				  = $oDadosAgrupados->Reg11->si122_mes;
+      $oDados11->si122_reg10			  = $oDados10->si121_sequencial;
+      $oDados11->si122_instit 			  = $oDadosAgrupados->Reg11->si122_instit;
       
       $oDados11->incluir(null);
       if ($oDados11->erro_status == 0) {
