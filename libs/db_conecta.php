@@ -140,7 +140,7 @@ if (isset($_SESSION["DB_instit"])) {
       	 * ano inicial será 2013 caso o arquivo nao exista
       	 * no arquivo config/pcasp.txt.dist  sera renomeado para pcasp.txt e adicionado o ano desejado
       	 */
-      	$iAnoPcasp = 2013;
+      	$iAnoPcasp = 2010;
       	if ( file_exists("config/pcasp.txt") ) {
 
       		$aArquivo  = file("config/pcasp.txt");
