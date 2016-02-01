@@ -33,6 +33,7 @@ class cl_rsp102015 {
    var $si112_vlsaldoantnaoproc = 0; 
    var $si112_mes = 0; 
    var $si112_instit = 0; 
+   var $si112_codunidadesuborig = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si112_sequencial = int8 = sequencial 
@@ -49,6 +50,7 @@ class cl_rsp102015 {
                  si112_vlsaldoantnaoproc = float8 = Valor do Saldo do  empenho 
                  si112_mes = int8 = Mês 
                  si112_instit = int8 = Instituição 
+                 si112_codunidadesuborig  = varchar(8) = Código da  unidade
                  ";
    //funcao construtor da classe 
    function cl_rsp102015() { 
@@ -89,6 +91,7 @@ class cl_rsp102015 {
        $this->si112_vlsaldoantnaoproc = ($this->si112_vlsaldoantnaoproc == ""?@$GLOBALS["HTTP_POST_VARS"]["si112_vlsaldoantnaoproc"]:$this->si112_vlsaldoantnaoproc);
        $this->si112_mes = ($this->si112_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si112_mes"]:$this->si112_mes);
        $this->si112_instit = ($this->si112_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si112_instit"]:$this->si112_instit);
+       $this->si112_codunidadesuborig = ($this->si112_codunidadesuborig == ""?@$GLOBALS["HTTP_POST_VARS"]["si112_codunidadesuborig"]:$this->si112_codunidadesuborig);
      }else{
        $this->si112_sequencial = ($this->si112_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si112_sequencial"]:$this->si112_sequencial);
      }
@@ -190,7 +193,8 @@ class cl_rsp102015 {
                                       ,si112_vlsaldoantproce 
                                       ,si112_vlsaldoantnaoproc 
                                       ,si112_mes 
-                                      ,si112_instit 
+                                      ,si112_instit
+                                      ,si112_codunidadesuborig 
                        )
                 values (
                                 $this->si112_sequencial 
@@ -207,8 +211,10 @@ class cl_rsp102015 {
                                ,$this->si112_vlsaldoantnaoproc 
                                ,$this->si112_mes 
                                ,$this->si112_instit 
+                               ,'$this->si112_codunidadesuborig'
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
+     //echo $sql;
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){

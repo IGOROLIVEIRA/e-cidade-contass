@@ -3976,6 +3976,7 @@ si112_vlsaldoantproce		float8 NOT NULL default 0,
 si112_vlsaldoantnaoproc		float8 NOT NULL default 0,
 si112_mes		int8 NOT NULL default 0,
 si112_instit		int8 default 0,
+si112_codunidadesuborig varchar(8),
 CONSTRAINT rsp102016_sequ_pk PRIMARY KEY (si112_sequencial));
 
 
