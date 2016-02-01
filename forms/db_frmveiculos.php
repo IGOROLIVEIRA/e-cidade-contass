@@ -103,7 +103,17 @@ if ($clveicparam->numrows>0){
     </td>
     <td> 
 <?
-db_input('ve01_codigo',10,$Ive01_codigo,true,'text',3,"")
+db_input('ve01_codigo',10,$Ive01_codigo,true,'text',3,"");
+?>
+ 
+    <b>Código Anterior: </b> 
+<?
+db_input('ve01_codigoant',10,1,true,'text',$db_opcao,"");
+?>
+
+    <b>Código da Unidade: </b> 
+<?
+db_input('ve01_codunidadesub',10,1,true,'text',$db_opcao,"","","","",8);
 ?>
     </td>
   </tr>
@@ -780,7 +790,6 @@ function js_mostramedida(){
   obj.setAttribute('value',valor);
   document.form1.appendChild(obj);
 
-  document.form1.submit();
 }
 js_situacao();
 </script>

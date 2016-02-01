@@ -70,6 +70,8 @@ class cl_veiculos {
    var $ve01_veictipoabast = 0;
    var $ve01_medidaini = 0;
    var $ve01_nroserie = 0;
+   var $ve01_codigoant = null;
+   var $ve01_codunidadesub = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ve01_codigo = int4 = Código do Veiculo
@@ -97,6 +99,8 @@ class cl_veiculos {
                  ve01_veictipoabast = int4 = Tipo de Abastecimento
                  ve01_medidaini = float8 = Medida Inicial
                  ve01_nroserie = varchar(20) = Nº de Série
+                 ve01_codigoant = integer = Codigo anterior do veiculo;
+                 ve01_codunidadesub = varchar(8) = Codigo da unidade anterior do veiculo;
                  ";
    //funcao construtor da classe
    function cl_veiculos() {
@@ -148,6 +152,8 @@ class cl_veiculos {
        $this->ve01_veictipoabast = ($this->ve01_veictipoabast == ""?@$GLOBALS["HTTP_POST_VARS"]["ve01_veictipoabast"]:$this->ve01_veictipoabast);
        $this->ve01_medidaini = ($this->ve01_medidaini == ""?@$GLOBALS["HTTP_POST_VARS"]["ve01_medidaini"]:$this->ve01_medidaini);
        $this->ve01_nroserie = ($this->ve01_nroserie == ""?@$GLOBALS["HTTP_POST_VARS"]["ve01_nroserie"]:$this->ve01_nroserie);
+       $this->ve01_codigoant = ($this->ve01_codigoant == ""?@$GLOBALS["HTTP_POST_VARS"]["ve01_codigoant"]:$this->ve01_codigoant);
+       $this->ve01_codunidadesub = ($this->ve01_codunidadesub == ""?@$GLOBALS["HTTP_POST_VARS"]["ve01_codunidadesub"]:$this->ve01_codunidadesub);
      }else{
        $this->ve01_codigo = ($this->ve01_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve01_codigo"]:$this->ve01_codigo);
      }
@@ -428,7 +434,9 @@ class cl_veiculos {
                                       ,ve01_ativo
                                       ,ve01_veictipoabast
                                       ,ve01_medidaini
-                                      ,ve01_nroserie 
+                                      ,ve01_nroserie
+                                      ,ve01_codigoant
+                                      ,ve01_codunidadesub 
                        )
                 values (
                                 $this->ve01_codigo 
@@ -455,7 +463,9 @@ class cl_veiculos {
                                ,$this->ve01_ativo 
                                ,$this->ve01_veictipoabast 
                                ,$this->ve01_medidaini
-                               ,'$this->ve01_nroserie' 
+                               ,'$this->ve01_nroserie'
+                               ,".($this->ve01_codigoant == null? 'null' : $this->ve01_codigoant)."
+                               ,'".($this->ve01_codunidadesub == null? '' : $this->ve01_codunidadesub)."'  
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -857,6 +867,14 @@ class cl_veiculos {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->ve01_codigoant)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigoant"])){ 
+       $sql  .= $virgula." ve01_codigoant = ".($this->ve01_codigoant == 0 || $this->ve01_codigoant == null ? 'null' : $this->ve01_codigoant)." ";
+       $virgula = ",";
+     }
+     if(trim($this->ve01_codunidadesub)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codunidadesub"])){ 
+       $sql  .= $virgula." ve01_codunidadesub = '".($this->ve01_codunidadesub == 0 || $this->ve01_codunidadesub == null ? '' : $this->ve01_codunidadesub)."' ";
+       $virgula = ",";
      }
      $sql .= " where ";
      if($ve01_codigo!=null){
