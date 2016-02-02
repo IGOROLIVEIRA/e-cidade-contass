@@ -105,7 +105,7 @@ class GerarCONSOR extends GerarAM {
 
           $aCSVCONSOR40['si19_tiporegistro']      =    str_pad($aCONSOR40['si19_tiporegistro'], 2, "0", STR_PAD_LEFT);
           $aCSVCONSOR40['si19_cnpjconsorcio']     =    str_pad($aCONSOR40['si19_cnpjconsorcio'], 14, "0", STR_PAD_LEFT);
-          $aCSVCONSOR40['si19_codfontrecursos']   =    str_pad($aCONSOR40['si19_codfontrecursos'], 14, "0", STR_PAD_LEFT);
+          $aCSVCONSOR40['si19_codfontrecursos']   =    str_pad($aCONSOR40['si19_codfontrecursos'], 3, "0", STR_PAD_LEFT);
           $aCSVCONSOR40['si19_vldispcaixa']       =    number_format($aCONSOR40['si19_vldispcaixa'], 2, ",", "");
 
           $this->sLinha = $aCSVCONSOR40;

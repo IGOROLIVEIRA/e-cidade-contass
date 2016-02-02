@@ -18,9 +18,12 @@ class cl_consor402015 {
    // cria variaveis do arquivo 
    var $si19_sequencial = 0; 
    var $si19_tiporegistro = 0; 
-   var $si19_codconsorcio = null; 
+   var $si19_cnpjconsorcio = null; 
    var $si19_vldispcaixa = 0; 
    var $si19_mes = 0; 
+   var $si19_codfontrecursos = null;
+   var $si19_reg20 = null;
+   var $si19_instit = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si19_sequencial = int8 = sequencial 
@@ -62,15 +65,6 @@ class cl_consor402015 {
      if($this->si19_tiporegistro == null ){ 
        $this->erro_sql = " Campo Tipo do registro nao Informado.";
        $this->erro_campo = "si19_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si19_codconsorcio == null ){ 
-       $this->erro_sql = " Campo Código do  Consórcio nao Informado.";
-       $this->erro_campo = "si19_codconsorcio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -130,16 +124,22 @@ class cl_consor402015 {
      $sql = "insert into consor402015(
                                        si19_sequencial 
                                       ,si19_tiporegistro 
-                                      ,si19_codconsorcio 
+                                      ,si19_cnpjconsorcio
+                                      ,si19_codfontrecursos
                                       ,si19_vldispcaixa 
-                                      ,si19_mes 
+                                      ,si19_mes
+                                      ,si19_reg20
+                                      ,si19_instit 
                        )
                 values (
                                 $this->si19_sequencial 
                                ,$this->si19_tiporegistro 
-                               ,'$this->si19_codconsorcio' 
+                               ,'$this->si19_cnpjconsorcio'
+                               ,$this->si19_codfontrecursos 
                                ,$this->si19_vldispcaixa 
-                               ,$this->si19_mes 
+                               ,$this->si19_mes
+                               ,$this->si19_reg20
+                               ,$this->si19_instit
                       )";
      $result = db_query($sql); 
      if($result==false){ 

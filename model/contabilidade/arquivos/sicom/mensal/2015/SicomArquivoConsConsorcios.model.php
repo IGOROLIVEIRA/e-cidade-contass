@@ -72,12 +72,12 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
      * excluir informacoes do mes selecioado
      */
     db_inicio_transacao();
-        
-    $result = db_query($clconsor30->sql_query(NULL,"*",NULL,"si18_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si18_instit = ".db_getsession("DB_instit")));
+    
+    $result = db_query($clconsor50->sql_query(NULL,"*",NULL,"si20_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si20_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clconsor30->excluir(NULL,"si18_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si18_instit = ".db_getsession("DB_instit"));
-      if ($clconsor30->erro_status == 0) {
-    	  throw new Exception($clconsor30->erro_msg);
+    	$clconsor50->excluir(NULL,"si20_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si20_instit = ".db_getsession("DB_instit"));
+      if ($clconsor50->erro_status == 0) {
+    	  throw new Exception($clconsor50->erro_msg);
       }
     }
     
@@ -89,11 +89,11 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
       }
     }
     
-    $result = db_query($clconsor50->sql_query(NULL,"*",NULL,"si20_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si20_instit = ".db_getsession("DB_instit")));
+    $result = db_query($clconsor30->sql_query(NULL,"*",NULL,"si18_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si18_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clconsor50->excluir(NULL,"si20_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si20_instit = ".db_getsession("DB_instit"));
-      if ($clconsor50->erro_status == 0) {
-    	  throw new Exception($clconsor50->erro_msg);
+    	$clconsor30->excluir(NULL,"si18_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si18_instit = ".db_getsession("DB_instit"));
+      if ($clconsor30->erro_status == 0) {
+    	  throw new Exception($clconsor30->erro_msg);
       }
     }
     
@@ -219,7 +219,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 		 */
 		if ($this->sDataFinal['5'].$this->sDataFinal['6'] == 12) {
 		  	
-		  $sSql = "select si09_codorgaotce, z01_cgccpf,c203_valor,c203_codfon from consdispcaixaano join consconsorcios on c203_consconsorcios = c200_sequencial 
+		  $sSql = "select si09_codorgaotce, z01_cgccpf,c203_valor,c203_codfontrecursos from consdispcaixaano join consconsorcios on c203_consconsorcios = c200_sequencial 
 		  join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo 
 		  join infocomplementaresinstit on codigo = si09_instit where c203_anousu = ".db_getsession("DB_anousu")." and c200_instit = ".db_getsession("DB_instit");
 		  $rsResult40 = db_query($sSql);
@@ -228,7 +228,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 		   */
 		  for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 		  	
-		    $clconsor40 = new cl_consor40015();
+		    $clconsor40 = new cl_consor402015();
 		  	$oDados40       =  db_utils::fieldsMemory($rsResult40, $iCont40);
 		  	
 		  	$clconsor40->si19_tiporegistro    = 40;
