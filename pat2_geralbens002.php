@@ -250,7 +250,7 @@ if(isset($orgaos) && isset($unidades) && isset($departamentos)){
 
 	if(isset($conv) && trim($conv) !="" && isset($bens_convenio) && trim($bens_convenio) == "S"){
 		$where_instit .= " and t09_benscadcedente = $conv";
-		$sqlrelatorio = $clbens->sql_query_convenio(null,"$campos",$ordem,"$where_instit");
+		$sqlrelatorio = $clbens->sql_query_convenio(null,"$campos",$ordem,"$where_instit","and not exists (select 1 from bensbaix where t55_codbem=t52_bem)");
 		$rsConvenio = $clbenscadcedente->sql_record($clbenscadcedente->sql_query($conv,"z01_nome as convenio"));
 		if($clbenscadcedente->numrows > 0){
 			db_fieldsmemory($rsConvenio,0);
