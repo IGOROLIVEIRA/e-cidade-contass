@@ -1,6 +1,16 @@
 BEGIN;
 
-CREATE SCHEMA IF NOT EXISTS cms
+  DO $$
+	declare
+     lRetorno boolean default true;
+     begin
+       EXECUTE ('CREATE SCHEMA cms');
+       EXECUTE ('insert into cms.visitantes values (1,1)');
+     exception
+       when others then
+         raise info 'Error Code: % - %', SQLSTATE, SQLERRM;
+         lRetorno := false;
+     END$$;
 
 CREATE TABLE if not exists cms.configuracoes
 (
@@ -45,7 +55,5 @@ CREATE TABLE  if not exists cms.visitantes
   quantidade integer NOT NULL DEFAULT 0,
   CONSTRAINT visitantes_id_pk PRIMARY KEY (id)
 );
-
-insert into cms.visitantes values (1,1);
 
 commit;
