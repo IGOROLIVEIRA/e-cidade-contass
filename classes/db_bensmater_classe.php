@@ -206,7 +206,7 @@ class cl_bensmater {
      if(trim($this->t53_ntfisc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t53_ntfisc"])){ 
        $sql  .= $virgula." t53_ntfisc = '$this->t53_ntfisc' ";
        $virgula = ",";
-       if(trim($this->t53_ntfisc) == null ){ 
+       if(trim($this->t53_ntfisc) == null ){
          $this->erro_sql = " Campo Nota fiscal nao Informado.";
          $this->erro_campo = "t53_ntfisc";
          $this->erro_banco = "";
@@ -230,7 +230,7 @@ class cl_bensmater {
      if(trim($this->t53_garant)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t53_garant_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["t53_garant_dia"] !="") ){ 
        $sql  .= $virgula." t53_garant = '$this->t53_garant' ";
        $virgula = ",";
-       if(trim($this->t53_garant) == null ){ 
+       if($this->verificaEstrutBem($this->t53_codbem)){
          $this->erro_sql = " Campo Garantia nao Informado.";
          $this->erro_campo = "t53_garant_dia";
          $this->erro_banco = "";
@@ -243,7 +243,7 @@ class cl_bensmater {
        if(trim($this->t53_garant) == null ){ 
          $sql  .= $virgula." t53_garant = null ";
          $virgula = ",";
-         if(trim($this->t53_garant) == null ){ 
+         if($this->verificaEstrutBem($this->t53_codbem)){
            $this->erro_sql = " Campo Garantia nao Informado.";
            $this->erro_campo = "t53_garant_dia";
            $this->erro_banco = "";
