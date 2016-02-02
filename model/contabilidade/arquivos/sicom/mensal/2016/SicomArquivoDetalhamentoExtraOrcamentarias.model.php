@@ -5,7 +5,7 @@ require_once ("classes/db_ext102016_classe.php");
 require_once ("classes/db_ext202016_classe.php");
 require_once ("classes/db_ext212016_classe.php");
 require_once ("classes/db_ext222016_classe.php");
-require_once ("classes/db_ext232016_classe.php");
+require_once ("classes/db_ext312016_classe.php");
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2016/GerarEXT.model.php");
 
@@ -62,9 +62,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
   	
   	$cExt10 = new cl_ext102016();
   	$cExt20 = new cl_ext202016();
-  	$cExt21 = new cl_ext212016();
-  	$cExt22 = new cl_ext222016();
-  	$cExt23 = new cl_ext232016();
+  	$cExt30 = new cl_ext302016();
+  	$cExt31 = new cl_ext312016();
   	/*
   	 * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA 
   	 * EXCLUIR OS REGISTROS E GERAR NOVAMENTE
@@ -75,16 +74,16 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
   	    db_inicio_transacao();
   	     
 	    
-	      $cExt23->excluir(NULL,"si127_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
+	      $cExt31->excluir(NULL,"si127_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
 	    								and si127_instit = ".db_getsession("DB_instit"));
-	      if ($cExt23->erro_status == 0) {
-	    	  throw new Exception($cExt23->erro_msg);
+	      if ($cExt31->erro_status == 0) {
+	    	  throw new Exception($cExt31->erro_msg);
 	      }
 	      
-	      $cExt22->excluir(NULL,"si126_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si126_instit = ".db_getsession("DB_instit"));
+	      $cExt30->excluir(NULL,"si126_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si126_instit = ".db_getsession("DB_instit"));
 	    
-	      if ($cExt22->erro_status == 0) {
-	    	  throw new Exception($cExt22->erro_msg);
+	      if ($cExt30->erro_status == 0) {
+	    	  throw new Exception($cExt30->erro_msg);
 	      }
 	      $cExt21->excluir(NULL,"si125_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." 
 	    								and si125_instit = ".db_getsession("DB_instit"));
@@ -171,7 +170,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 	 		
 	    	db_inicio_transacao();
 	        $rsPlanoContasSaldo = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, $where);
-	        
+	        db_criatabela($rsPlanoContasSaldo);
 	        db_fim_transacao(true);
 	        
 	       	//db_criatabela($rsPlanoContasSaldo);	
@@ -186,6 +185,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 		      	  $oSaldoInicioFim->sinal_final    = $oPlanoContas->sinal_final;
 		      	  $oSaldoInicioFim->sdini = $oPlanoContas->saldo_anterior;
 		      	  $oSaldoInicioFim->sdfim = $oPlanoContas->saldo_final;
+		      	  $oSaldoInicioFim->saldo_debito  = $oPlanoContas->saldo_anterior_debito;
+		      	  $oSaldoInicioFim->saldo_credito = $oPlanoContas->saldo_anterior_credito;
 		      	  
 		      	  
 		      	  $aSaldosIniFim[] = $oSaldoInicioFim;
@@ -227,7 +228,6 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 		       		$cExt10->si124_tiporegistro     = $oContaExtra->tiporegistro;
 		       		$cExt10->si124_codext  			= $oContaExtra->codtce != 0 ? $oContaExtra->codtce : $oContaExtra->codext;
 		       		$cExt10->si124_codorgao 		= $oContaExtra->codorgao;
-		       		$cExt10->si124_codunidadesub 	= $oContaExtra->codunidadesub;
 		       		$cExt10->si124_tipolancamento 	= $oContaExtra->tipolancamento;
 		       		$cExt10->si124_subtipo 			= substr($oContaExtra->subtipo,0,3).substr($oContaExtra->subtipo,-1);
 		       		$cExt10->si124_desdobrasubtipo 	= substr($oContaExtra->desdobrasubtipo,0,4);
@@ -267,7 +267,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 	    foreach ($aExt10Agrupodo as $oExt10Agrupado) {
 	    		    	
 	    	$cExt20   = new cl_ext202016();
-	    	$aExt21 = array();
+	    	$aExt30 = array();
 	    	foreach ($oExt10Agrupado->extras as $nExtras) {
 	    		
 	    	
@@ -290,65 +290,49 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 			        		$saldofinal    = $nSaldoIniFim->sinal_final == 'C' ? ($nSaldoIniFim->sdfim*-1) : $nSaldoIniFim->sdfim;
 			        		$natsaldoanteriorfonte = $nSaldoIniFim->sinal_anterior;
 			        		$natsaldoatualfonte    = $nSaldoIniFim->sinal_final;
+			        		$saldodebito  = $nSaldoIniFim->saldo_debito;
+			        		$saldocredito = $nSaldoIniFim->saldo_credito;
 			        		break;
 			        	}
 			        }			        
 			
 			        if(empty($cExt20->si165_tiporegistro)){
 			        	
-				        $cExt20->si165_tiporegistro 		   = '20';
-				        $cExt20->si165_codorgao 			   = $oExt10Agrupado->si124_codorgao;
-				        $cExt20->si165_codext 				   = $oExt10Agrupado->si124_codext;
+				        $cExt20->si165_tiporegistro 		     = '20';
+				        $cExt20->si165_codorgao 			       = $oExt10Agrupado->si124_codorgao;
+				        $cExt20->si165_codext 				       = $oExt10Agrupado->si124_codext;
 				        $cExt20->si165_codfontrecursos 		   = $oExtRecurso;
-				        $cExt20->si165_vlsaldoanteriorfonte    = $saldoanterior;
-				        $cExt20->si165_natsaldoanteriorfonte   = $natsaldoanteriorfonte == '' ? 'D' : $natsaldoanteriorfonte;
-				        $cExt20->si165_vlsaldoatualfonte       = $saldofinal;
-				        $cExt20->si165_natsaldoatualfonte      = $natsaldoatualfonte == '' ? 'D' : $natsaldoatualfonte;
-				        $cExt20->si165_mes 					   = $this->sDataFinal['5'].$this->sDataFinal['6'];
-				        $cExt20->si165_instit			       = db_getsession("DB_instit");
-				        $cExt20->ext21						   = array();
+				        $cExt20->si165_vlsaldoanteriorfonte  = $saldoanterior;
+				        $cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte == '' ? 'D' : $natsaldoanteriorfonte;
+				        $cExt20->si165_vlsaldoatualfonte     = $saldofinal;
+				        $cExt20->si165_natsaldoatualfonte    = $natsaldoatualfonte == '' ? 'D' : $natsaldoatualfonte;
+				        $cExt20->si165_totaldebitos          = $saldodebito;
+				        $cExt20->si165_totalcreditos         = $saldocredito;
+				        $cExt20->si165_mes 					         = $this->sDataFinal['5'].$this->sDataFinal['6'];
+				        $cExt20->si165_instit			           = db_getsession("DB_instit");
+				        $cExt20->ext30						           = array();
 				        
 			        }else{
 			        	
 			        	$cExt20->si165_vlsaldoanteriorfonte += $saldoanterior;
 				        $cExt20->si165_vlsaldoatualfonte    += $saldofinal;
+				        $cExt20->si165_totaldebitos          = $saldodebito;
+				        $cExt20->si165_totalcreditos         = $saldocredito;
 				        
 			        }
 			        //echo "<pre>";print_r($cExt20);
 			        
 		    /*
-	         * CARREGA OS DADOS DO REGISTRO 21 
+	         * CARREGA OS DADOS DO REGISTRO 30 
 	         */
-			$sSql21 = "select   '21' as tiporegitro,
-						         c84_conlancam as codreduzidomov,
-						         k17_codigo as codigo,
-						         k17_credito	 as codext, 
-						         o15_codtri::int as codfontrecursos,
-						         case when c71_coddoc in (130,150,160) then 1 else 2 end as categoria,
-						         c71_data as dtlancamento,
-						         k17_valor as vllancamento, 
-						         2 as tipo,c71_coddoc
-						     from slip 
-						     join conlancamslip on k17_codigo = c84_slip
-						     join conlancamdoc  on c71_codlan = c84_conlancam
-						     join conplanoreduz on k17_credito = c61_reduz and c61_anousu = ".db_getsession("DB_anousu")."
-						     join orctiporec on o15_codigo  = c61_codigo
-						left join infocomplementaresinstit on k17_instit = si09_instit
-						    where c71_data between '".$this->sDataInicial."' and '".$this->sDataFinal."' 
-						      and k17_credito = {$nExtras} and k17_situacao = 2
-						      and c71_coddoc in (120,151,161,130,160)
-						  
-						union all 
-						
-						select   '21' as tiporegitro,
-						         c84_conlancam as codreduzidomov,
+			$sSql30Geral = "select   '30' as tiporegitro,
 						         k17_codigo as codigo,
 						         k17_debito	 as codext, 
 						         o15_codtri::int as codfontrecursos,
-						         case when c71_coddoc in (130,150,160) then 1 else 2 end as categoria,
 						         c71_data as dtlancamento,
 						         k17_valor as vllancamento, 
-						         2 as tipo,c71_coddoc
+						         2 as tipo,
+						         c71_coddoc
 						     from slip 
 						     join conlancamslip on k17_codigo = c84_slip
 						     join conlancamdoc  on c71_codlan = c84_conlancam
@@ -357,68 +341,17 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 						left join infocomplementaresinstit on k17_instit = si09_instit
 						 where c71_data between '".$this->sDataInicial."' AND '".$this->sDataFinal."' 
 						   and k17_debito = {$nExtras} and k17_situacao = 2
-						   and c71_coddoc in (120,151,161,130,160) 
-						   
-						union all
-						
-						select '21' as tiporegitro,
-							     c69_codlan as codreduzidomov,
-							     0 as codigo,
-							     c69_credito	 as codext, 
-							     o15_codtri::int as codfontrecursos,
-							     1 as categoria,
-							     c69_data as dtlancamento,
-							     c69_valor as vllancamento, 
-						         0 as tipo, 1 as c71_coddoc
-						  	from conlancamval 
-						  inner join conlancamcompl on c72_codlan = c69_codlan
-						  inner join conplanoreduz on c69_credito = c61_reduz and c61_anousu = ".db_getsession("DB_anousu")."
-						  inner join orctiporec on o15_codigo  = c61_codigo
-						  inner join conlancamcorrente on c69_codlan = c86_conlancam
-						  inner join corrente on c86_id =k12_id and c86_data=k12_data and c86_autent = k12_autent
-						  inner join corgrupocorrente on c86_id =k105_id and c86_data=k105_data and c86_autent = k105_autent
-						  inner join retencaocorgrupocorrente on k105_sequencial = e47_corgrupocorrente
-						  inner join retencaoreceitas on e47_retencaoreceita = e23_sequencial and e23_ativo = 't'
-						   left join infocomplementaresinstit on c61_instit = si09_instit 
-						       where c69_credito = {$nExtras} 
-							 and c69_data between '".$this->sDataInicial."' AND '".$this->sDataFinal."' 
-							 and (c72_complem like '%planilha%' or c72_complem like '%recibo%');
+						   and c71_coddoc in (151,161);
 						
 						";
 			
-					$rsExt21 = db_query($sSql21);
-					//if ($oExt10Agrupado->si124_codext == 4218) db_criatabela($rsExt21);
+					$rsExt30Geral = db_query($sSql30Geral);
 					
-					/*FOR PARA PEGAR O REGISTRO 21 E COLOCAR NO 20*/
-					for($linha = 0; $linha < pg_num_rows($rsExt21); $linha++){
+					for($linha = 0; $linha < pg_num_rows($rsExt30Geral); $linha++){
 						 
-						 $oExt21 = db_utils::fieldsMemory($rsExt21,$linha);
-		       			 
-						 $Hash = $oExt10Agrupado->si124_codext.$oExt21->codfontrecursos.$oExt21->categoria.$oExt21->dtlancamento;
-						 //ECHO $oExt21->codext." - ".$oExt21->codreduzidomov." - ".$Hash."<BR>";
-						 if(!isset($aExt21[$Hash])){
-						 
-							 $cExt21   = new stdClass();
-			       			
-			       			 $cExt21->si125_tiporegistro 		= $oExt21->tiporegitro;
-							 $cExt21->si125_codreduzidomov 		= $oExt21->codreduzidomov;
-							 $cExt21->si125_codext 				= $oExt10Agrupado->si124_codext;
-							 $cExt21->si125_codfontrecursos 	= $oExt21->codfontrecursos;
-							 $cExt21->si125_categoria 			= $oExt21->categoria;
-							 $cExt21->si125_dtlancamento 		= $oExt21->dtlancamento;
-							 $cExt21->si125_vllancamento 		= $oExt21->vllancamento;
-			       			 $cExt21->si125_mes 				= $this->sDataFinal['5'].$this->sDataFinal['6'];
-			       			 $cExt21->si125_reg20				= $cExt20->si165_sequencial;
-				             $cExt21->si125_instit			    = db_getsession("DB_instit");
-				             $cExt21->ext22						= array();
-				             
-				             $aExt21[$Hash] = $cExt21;
-		       			
-						 }else{
-						 	$aExt21[$Hash]->si125_vllancamento += $oExt21->vllancamento;
-						 }
+						 $oExt30Geral = db_utils::fieldsMemory($rsExt30Geral,$linha);
 						
-						    $sSql22 = "select '22' as tiporegitro,
+						    $sSql30 = "select '30' as tiporegitro,
 									         c71_codlan as codreduzidomov,
 									         (slip.k17_codigo||slip.k17_debito) ::int8 as codreduzidoop,
 									         (slip.k17_codigo||slip.K17_debito) ::int8 as nroop,
@@ -427,7 +360,15 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 									         cc.z01_cgccpf as nrodocumentocredor,
 									         k17_valor as vlop,
 									         k17_texto as especificacaoop,
-									         substr(c.z01_cgccpf,1,11) as cpfresppgto,2 as tipo
+									         substr(c.z01_cgccpf,1,11) as cpfresppgto,2 as tipo,
+									         (select case when o40_codtri::int != 0 and o41_codtri::int != 0 then lpad(o40_codtri,2,0) || lpad(o41_codtri,3,0)
+					            when o40_codtri::int != 0 and o41_codtri::int = 0 then lpad(o40_codtri,2,0) || lpad(o41_unidade,3,0)
+					            when o40_codtri::int = 0 and o41_codtri::int != 0 then lpad(o40_orgao,2,0) || lpad(o41_codtri,3,0)   
+					            else lpad(o40_orgao,2,0) || lpad(o41_unidade,3,0)    
+					             end as unidade 
+					  from orcunidade 
+					  join orcorgao on o41_anousu = o40_anousu and o41_orgao = o40_orgao 
+					  where o41_instit = ".db_getsession("DB_instit")." and o40_anousu = ".db_getsession("DB_anousu")." order by o40_orgao limit 1) as codUnidadeSub
 									     from slip
 									     join slipnum on slipnum.k17_codigo = slip.k17_codigo 
 									     join conlancamslip on slip.k17_codigo = c84_slip
@@ -438,35 +379,36 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 									left join infocomplementaresinstit on k17_instit = si09_instit
 									left join cgm c on c.z01_numcgm = si09_gestor
 									 where c71_data between '".$this->sDataInicial."' AND '".$this->sDataFinal."'
-									   and slip.k17_codigo = {$oExt21->codigo} and slip.k17_situacao = 2
+									   and slip.k17_codigo = {$oExt30Geral->codigo} and slip.k17_situacao = 2
 									   and c71_coddoc in (120,151,161,130,160) ";
 									 
-					 if ($oExt21->categoria == 2) {					 
-						 $rsExt22 = db_query($sSql22);
-						 //db_criatabela($rsExt22);
-						 /*FOR PARA PEGAR O REGISTRO 22 E COLOCAR NO 21*/
-						 for($linha22 = 0; $linha22 < pg_num_rows($rsExt22); $linha22++){
+					 if ($oExt30Geral->categoria == 2) {					 
+						 $rsExt30 = db_query($sSql30);
+						 //db_criatabela($rsExt30);
+						 /*FOR PARA PEGAR O REGISTRO 31 E COLOCAR NO 30*/
+						 for($linha30 = 0; $linha30 < pg_num_rows($rsExt30); $linha30++){
 						 
-						 	$oExt22 = db_utils::fieldsMemory($rsExt22,$linha22);
+						 	$oExt30 = db_utils::fieldsMemory($rsExt30,$linha30);
 						 						 	
-						 	$cExt22 =  new stdClass();
+						 	$cExt30 =  new stdClass();
 						 						 	
-						 	$cExt22->si126_tiporegistro 		=  $oExt22->tiporegitro;
-						 	$cExt22->si126_codreduzidoeo 		=  $aExt21[$Hash]->si125_codreduzidomov;
-						 	$cExt22->si126_codreduzidoop 		=  $oExt22->codreduzidoop;
-						 	$cExt22->si126_nroop 				=  $oExt22->nroop;
-						 	$cExt22->si126_dtpagamento 			=  $oExt22->dtpagamento;
-						 	$cExt22->si126_tipodocumentocredor 	=  strlen($oExt22->nrodocumentocredor) == 11 ? 1 : 2;
-						 	$cExt22->si126_nrodocumento 		=  $oExt22->nrodocumentocredor;
-						 	$cExt22->si126_vlop 				=  $oExt22->vlop;
-						 	$cExt22->si126_especificacaoop 		= trim(preg_replace("/[^a-zA-Z0-9 ]/", "",substr(str_replace($what, $by, $oExt22->especificacaoop), 0, 200)));
-						 	$cExt22->si126_cpfresppgto 			=  $oExt22->cpfresppgto;
-						 	$cExt22->si126_mes 					=  $this->sDataFinal['5'].$this->sDataFinal['6'];
-			       			$cExt22->si126_reg21				=  0;
-				            $cExt22->si126_instit			    =  db_getsession("DB_instit");
-				            $cExt22->ext23						=  array();
+						 	$cExt30->si126_tiporegistro 		=  $oExt30->tiporegitro;
+						 	$cExt30->si126_codext 		      =  $oExt10Agrupado->si124_codext;
+						 	$cExt30->si126_codfontrecursos  =  $oExt21->codfontrecursos;
+						 	$cExt30->si126_codreduzidoop 		=  $oExt30->codreduzidoop;
+						 	$cExt30->si126_nroop 				    =  $oExt30->nroop;
+						 	$cExt30->si126_codunidadesub 		=  $oExt30->codunidadesub;
+						 	$cExt30->si126_dtpagamento 			=  $oExt30->dtpagamento;
+						 	$cExt30->si126_tipodocumentocredor =  strlen($oExt30->nrodocumentocredor) == 11 ? 1 : 2;
+						 	$cExt30->si126_nrodocumento 		   =  $oExt30->nrodocumentocredor;
+						 	$cExt30->si126_vlop 				       =  $oExt30->vlop;
+						 	$cExt30->si126_especificacaoop 		 = trim(preg_replace("/[^a-zA-Z0-9 ]/", "",substr(str_replace($what, $by, $oExt30->especificacaoop), 0, 200)));
+						 	$cExt30->si126_cpfresppgto 			   =  $oExt30->cpfresppgto;
+						 	$cExt30->si126_mes 					       =  $this->sDataFinal['5'].$this->sDataFinal['6'];
+				      $cExt30->si126_instit			         =  db_getsession("DB_instit");
+				      $cExt30->ext31						         =  array();
 				            
-				            $sSql23 ="SELECT   23 AS tiporegistro,
+				      $sSql31 ="SELECT   31 AS tiporegistro,
 											         (k17_codigo||K17_credito) AS codreduzidoop,
 											         CASE WHEN e96_codigo = 1 THEN 5
 											             WHEN e96_codigo = 2 THEN 1 
@@ -494,7 +436,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											 LEFT JOIN empageforma    ON e97_codforma = e96_codigo
 											 LEFT JOIN empageconfche  ON e91_codmov   = e81_codmov
 											       AND e91_ativo IS TRUE
-											     WHERE k17_codigo = {$oExt21->codigo}
+											     WHERE k17_codigo = {$oExt30Geral->codigo}
 											UNION ALL        
 											SELECT   23 AS tiporegistro,
 											         (k17_codigo||K17_debito) AS codreduzidoop,
@@ -524,33 +466,33 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											 LEFT JOIN empageforma    ON e97_codforma = e96_codigo
 											 LEFT JOIN empageconfche  ON e91_codmov   = e81_codmov
 											       AND e91_ativo IS TRUE
-											     WHERE k17_codigo = {$oExt21->codigo}";
+											     WHERE k17_codigo = {$oExt30Geral->codigo}";
 							
 											            
-				             $rsExt23 = db_query($sSql23);
-				             if( pg_num_rows($rsExt23) == 0){
-				             	     $cExt23 = new stdClass();
+				         $rsExt31 = db_query($sSql31);
+				         if( pg_num_rows($rsExt31) == 0){
+				           $cExt31 = new stdClass();
 								 	 
-								 	 $cExt23->si127_tiporegistro    =  23; 
-									 $cExt23->si127_codreduzidoop   =  $oExt22->codreduzidoop; 
-									 $cExt23->si127_tipodocumentoop =  99; 
-									 $cExt23->si127_nrodocumento    =  0; 
-									 $cExt23->si127_codctb          =  0; 
-									 $cExt23->si127_codfontectb     =  0; 
-									 $cExt23->si127_desctipodocumentoop =  'TED';
-									 $cExt23->si127_dtemissao       =  $oExt22->dtpagamento;
-									 $cExt23->si127_vldocumento     =  $oExt22->vlop;
-									 $cExt23->si127_mes 			=  $this->sDataFinal['5'].$this->sDataFinal['6'];
-				       			     $cExt23->si127_reg21			=  0;
-					                 $cExt23->si127_instit			=  db_getsession("DB_instit");
+								 	 $cExt31->si127_tiporegistro    =  31; 
+									 $cExt31->si127_codreduzidoop   =  $oExt30->codreduzidoop; 
+									 $cExt31->si127_tipodocumentoop =  99; 
+									 $cExt31->si127_nrodocumento    =  0; 
+									 $cExt31->si127_codctb          =  0; 
+									 $cExt31->si127_codfontectb     =  0; 
+									 $cExt31->si127_desctipodocumentoop =  'TED';
+									 $cExt31->si127_dtemissao       =  $oExt30->dtpagamento;
+									 $cExt31->si127_vldocumento     =  $oExt30->vlop;
+									 $cExt31->si127_mes 			      =  $this->sDataFinal['5'].$this->sDataFinal['6'];
+				       		 $cExt31->si127_reg21			      =  0;
+					         $cExt31->si127_instit			    =  db_getsession("DB_instit");
 					                 
-					                 $cExt22->ext23[] = $cExt23;
-				             }else{
+					         $cExt30->ext31[] = $cExt31;
+				         }else{
 				             
-						     /*FOR PARA PEGAR O REGISTRO 23 E COLOCAR NO 22*/
-								 for($linha23 = 0; $linha23 < pg_num_rows($rsExt23); $linha23++){
+						     /*FOR PARA PEGAR O REGISTRO 31 E COLOCAR NO 30*/
+								 for($linha31 = 0; $linha31 < pg_num_rows($rsExt31); $linha31++){
 								 
-								 	 $oExt23 = db_utils::fieldsMemory($rsExt23,$linha23);
+								 	 $oExt31 = db_utils::fieldsMemory($rsExt31,$linha31);
 								 	 
 								 	 $sSqlContaPagFont = "select distinct si95_codctb  as conta, si96_codfontrecursos as fonte from conplanoconta 
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
@@ -561,7 +503,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
 											si95_tipoconta::int8 = c63_tipoconta join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
-											        where c61_reduz = {$oExt23->codctb} and c61_anousu = ".db_getsession("DB_anousu")." 
+											        where c61_reduz = {$oExt31->codctb} and c61_anousu = ".db_getsession("DB_anousu")." 
 											        and si95_mes <=".$this->sDataFinal['5'].$this->sDataFinal['6'];
 				             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, si96_codfontrecursos as fonte from conplanoconta 
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
@@ -572,130 +514,105 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
 											si95_tipoconta::int8 = c63_tipoconta join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
-											        where c61_reduz = {$oExt23->codctb} and c61_anousu = ".db_getsession("DB_anousu");
+											        where c61_reduz = {$oExt31->codctb} and c61_anousu = ".db_getsession("DB_anousu");
 				           $rsResultContaPag = db_query($sSqlContaPagFont);
 				           $oConta = db_utils::fieldsMemory($rsResultContaPag, 0);
 								 	  
-								 	 $cExt23 = new stdClass();
+								 	 $cExt31 = new stdClass();
 								 	 
-								 	 $cExt23->si127_tiporegistro    	=  $oExt23->tiporegistro; 
-									 $cExt23->si127_codreduzidoop  		=  $oExt22->codreduzidoop; 
-									 $cExt23->si127_tipodocumentoop 	=  $oExt23->tipodocumentoop; 
-									 $cExt23->si127_nrodocumento    	=  $oExt23->nrodocumento; 
-									 $cExt23->si127_codctb          	=  $oConta->conta; 
-									 $cExt23->si127_codfontectb     	=  $oConta->fonte; 
-									 $cExt23->si127_desctipodocumentoop = $oExt23->tipodocumentoop == "99" ? 'TED' : ' ';
-									 $cExt23->si127_dtemissao       	=  $oExt22->dtpagamento;
-									 $cExt23->si127_vldocumento     	=  $oExt23->vldocumento;
-									 $cExt23->si127_mes 				=  $this->sDataFinal['5'].$this->sDataFinal['6'];
-				       			     $cExt23->si127_reg21				=  0;
-					                 $cExt23->si127_instit				=  db_getsession("DB_instit");
+								 	 $cExt31->si127_tiporegistro    	=  $oExt31->tiporegistro; 
+									 $cExt31->si127_codreduzidoop  		=  $oExt30->codreduzidoop; 
+									 $cExt31->si127_tipodocumentoop 	=  $oExt31->tipodocumentoop; 
+									 $cExt31->si127_nrodocumento    	=  $oExt31->nrodocumento; 
+									 $cExt31->si127_codctb          	=  $oConta->conta; 
+									 $cExt31->si127_codfontectb     	=  $oConta->fonte; 
+									 $cExt31->si127_desctipodocumentoop = $oExt31->tipodocumentoop == "99" ? 'TED' : ' ';
+									 $cExt31->si127_dtemissao       	=  $oExt30->dtpagamento;
+									 $cExt31->si127_vldocumento     	=  $oExt31->vldocumento;
+									 $cExt31->si127_mes 				      =  $this->sDataFinal['5'].$this->sDataFinal['6'];
+				       		 $cExt31->si127_reg21				      =  0;
+					         $cExt31->si127_instit				    =  db_getsession("DB_instit");
 					                 
-					                 $cExt22->ext23[] = $cExt23;
+					         $cExt30->ext31[] = $cExt31;
 					                  
-								 }//FIM FOR 23
-				             }
-						 	$aExt21[$Hash]->ext22[] = $cExt22; 
+								 }//FIM FOR 31
+				       }
+						 	$aExt30[] = $cExt30; 
 						 	
-						 }//FIM FOR 22 
+						 }//FIM FOR 30 
 					 }
 						   
 						
-					}// FIM FOR 21
+					}// FIM FOR 30 Geral
 				
 	    }
-	    $cExt20->ext21[] = $aExt21;
+	    $cExt20->ext30[] = $aExt30;
 	    //echo "<br>--------------------<br>";
 	   	//echo "<pre>";print_r($cExt20); echo "<br>--------------------<br>";
-	   	
-	   	
-
-						/*
-						 * desagrupar para salvar no bd
-						 */
-						
-						//$aCaracteres = array("°",chr(13),chr(10),"'",);
-					
-								           
-					    $cExt20->incluir(null);
-						if ($cExt20->erro_status == 0) {
-							    	  throw new Exception($cExt20->erro_msg);
-						}
-						
-						foreach($cExt20->ext21 as $aExtAgrupado){
+		           
+			$cExt20->incluir(null);		    
+			if ($cExt20->erro_status == 0) {
+			  throw new Exception($cExt20->erro_msg);
+		  }
+				/*
+				 * desagrupar para salvar no bd
+				 */		
+			  foreach($cExt20->ext30 as $aExtAgrupado){
 							
-							foreach($aExtAgrupado as $oExtAgrupado){
+				  foreach($aExtAgrupado as $oExtAgrupado){
 									 
-									 $cExt21 = new cl_ext212016();
 									 
-									 $cExt21->si125_tiporegistro 		= $oExtAgrupado->si125_tiporegistro;
-									 $cExt21->si125_codreduzidomov 		= $oExtAgrupado->si125_codreduzidomov;
-									 $cExt21->si125_codext 				= $oExtAgrupado->si125_codext;
-									 $cExt21->si125_codfontrecursos 	= $oExtAgrupado->si125_codfontrecursos;
-									 $cExt21->si125_categoria 			= $oExtAgrupado->si125_categoria;
-									 $cExt21->si125_dtlancamento 		= $oExtAgrupado->si125_dtlancamento;
-									 $cExt21->si125_vllancamento 		= $oExtAgrupado->si125_vllancamento;
-						       		 $cExt21->si125_mes 				= $this->sDataFinal['5'].$this->sDataFinal['6'];
-						       		 $cExt21->si125_reg20				= $cExt20->si165_sequencial;
-							         $cExt21->si125_instit			    = db_getsession("DB_instit");
-									 
-							         $cExt21->incluir(null);
-									 if ($cExt21->erro_status == 0) {
-									    	  throw new Exception($cExt21->erro_msg);
-									 }
-									 foreach ($oExtAgrupado->ext22 as $oext22agrupado){
+							foreach ($oExtAgrupado->ext30 as $oExt30agrupado){
 									 	
-									 	//echo "<pre>";print_r($oext22agrupado);exit;
-									 	$cExt22 = new cl_ext222016();
+									 	//echo "<pre>";print_r($oExt30agrupado);exit;
+									 	$cExt30 = new cl_ext302016();
 									 	
-									 	$cExt22->si126_tiporegistro 		=  $oext22agrupado->si126_tiporegistro;
-									 	$cExt22->si126_codreduzidoeo 		=  $oext22agrupado->si126_codreduzidoeo;
-									 	$cExt22->si126_codreduzidoop 		=  $oext22agrupado->si126_codreduzidoop;
-									 	$cExt22->si126_nroop 				=  $oext22agrupado->si126_nroop;
-									 	$cExt22->si126_dtpagamento 			=  $oext22agrupado->si126_dtpagamento;
-									 	$cExt22->si126_tipodocumentocredor 	=  $oext22agrupado->si126_tipodocumentocredor;
-									 	$cExt22->si126_nrodocumento 		=  $oext22agrupado->si126_nrodocumento;
-									 	$cExt22->si126_vlop 				=  $oext22agrupado->si126_vlop;
-									 	$cExt22->si126_especificacaoop 		=  substr($this->removeCaracteres($oext22agrupado->si126_especificacaoop),0,200);
-									 	$cExt22->si126_cpfresppgto 			=  $oext22agrupado->si126_cpfresppgto;
-									 	$cExt22->si126_mes 					=  $this->sDataFinal['5'].$this->sDataFinal['6'];
-						       			$cExt22->si126_reg21				=  $cExt21->si125_sequencial;
-							            $cExt22->si126_instit			    =  db_getsession("DB_instit");
+									 	$cExt30->si126_tiporegistro 		   =  $oExt30agrupado->si126_tiporegistro;
+									 	$cExt30->si126_codext 		         =  $oExt30agrupado->si126_codext;
+									 	$cExt30->si126_codfontrecursos 		 =  $oExt30agrupado->si126_codfontrecursos;
+									 	$cExt30->si126_codreduzidoop 		   =  $oExt30agrupado->si126_codreduzidoop;
+									 	$cExt30->si126_nroop 				       =  $oExt30agrupado->si126_nroop;
+									 	$cExt30->si126_codunidadesub 			 =  $oExt30agrupado->si126_codunidadesub;
+									 	$cExt30->si126_dtpagamento 			   =  $oExt30agrupado->si126_dtpagamento;
+									 	$cExt30->si126_tipodocumentocredor =  $oExt30agrupado->si126_tipodocumentocredor;
+									 	$cExt30->si126_nrodocumento 		   =  $oExt30agrupado->si126_nrodocumento;
+									 	$cExt30->si126_vlop 				       =  $oExt30agrupado->si126_vlop;
+									 	$cExt30->si126_especificacaoop 		 =  substr($this->removeCaracteres($oExt30agrupado->si126_especificacaoop),0,200);
+									 	$cExt30->si126_cpfresppgto 			   =  $oExt30agrupado->si126_cpfresppgto;
+									 	$cExt30->si126_mes 					       =  $this->sDataFinal['5'].$this->sDataFinal['6'];
+							      $cExt30->si126_instit			         =  db_getsession("DB_instit");
 							            
-										 $cExt22->incluir(null);
-										 if ($cExt22->erro_status == 0) {
+									  $cExt30->incluir(null);
+										if ($cExt30->erro_status == 0) {
+											throw new Exception($cExt30->erro_msg);
+										}
+										foreach ($oExt30agrupado->ext31 as $oExt31agrupado){
 										 	
-										    	  throw new Exception($cExt22->erro_msg);
-										 }
-										 foreach ($oext22agrupado->ext23 as $oext23agrupado){
+										  $cExt31 = new cl_ext312016();
 										 	
-										 	
-										 	
-										 	 $cExt23 = new cl_ext232016();
-										 	
-										 	 $cExt23->si127_tiporegistro    =  $oext23agrupado->si127_tiporegistro; 
-											 $cExt23->si127_codreduzidoop   =  $oext23agrupado->si127_codreduzidoop; 
-											 $cExt23->si127_tipodocumentoop =  $oext23agrupado->si127_tipodocumentoop; 
-											 $cExt23->si127_nrodocumento    =  $oext23agrupado->si127_nrodocumento; 
-											 $cExt23->si127_codctb          =  $oext23agrupado->si127_codctb; 
-											 $cExt23->si127_codfontectb     =  $oext23agrupado->si127_codfontectb; 
-											 $cExt23->si127_dtemissao       =  $oext23agrupado->si127_dtemissao;
-											 $cExt23->si127_vldocumento     =  $oext23agrupado->si127_vldocumento;
-											 $cExt23->si127_desctipodocumentoop =  $oext23agrupado->si127_desctipodocumentoop;
-											 $cExt23->si127_mes 			=  $this->sDataFinal['5'].$this->sDataFinal['6'];
-						       			     $cExt23->si127_reg22			=  $cExt22->si126_sequencial;
-							                 $cExt23->si127_instit			=  db_getsession("DB_instit");
+										 	$cExt31->si127_tiporegistro    =  $oExt31agrupado->si127_tiporegistro; 
+											$cExt31->si127_codreduzidoop   =  $oExt31agrupado->si127_codreduzidoop; 
+											$cExt31->si127_tipodocumentoop =  $oExt31agrupado->si127_tipodocumentoop; 
+											$cExt31->si127_nrodocumento    =  $oExt31agrupado->si127_nrodocumento; 
+											$cExt31->si127_codctb          =  $oExt31agrupado->si127_codctb; 
+											$cExt31->si127_codfontectb     =  $oExt31agrupado->si127_codfontectb; 
+											$cExt31->si127_dtemissao       =  $oExt31agrupado->si127_dtemissao;
+											$cExt31->si127_vldocumento     =  $oExt31agrupado->si127_vldocumento;
+											$cExt31->si127_desctipodocumentoop =  $oExt31agrupado->si127_desctipodocumentoop;
+											$cExt31->si127_mes 			       =  $this->sDataFinal['5'].$this->sDataFinal['6'];
+						       		$cExt31->si127_reg22			     =  $cExt30->si126_sequencial;
+							        $cExt31->si127_instit			     =  db_getsession("DB_instit");
 			    
-											 $cExt23->incluir(null);
+											$cExt31->incluir(null);
 											 
-											 if ($cExt23->erro_status == 0) {
-											    	  throw new Exception($cExt23->erro_msg);
-											 }
+											if ($cExt31->erro_status == 0) {
+											  throw new Exception($cExt31->erro_msg);
+											}
 										 	
-										 }//fim for 23
+										 }//fim for 31
 									 	
-									 }//fim for 22
-							 }//fim for 21
+									 }//fim for 30
+							   }
 						   }
 					
 	    }
