@@ -404,6 +404,21 @@ function js_preencheGrid(aSaldoContas) {
 
         }
     }
-  oGridSaldoContas.renderRows();
+  oGridSaldoContas.renderRows();js_alteraEstilo();
+}
+
+function js_alteraEstilo(){
+	document.getElementById("tablegridSaldoContasheader").style.tableLayout = 'auto';
+	document.getElementById("tablegridSaldoContasheader").style.width = '98%';
+	document.getElementById("gridSaldoContasbody").style.tableLayout = 'auto';
+	document.getElementById("gridSaldoContasbody").style.width = '98%';
+	document.getElementById("gridSaldoContasrow0checkbox").style.width = '3%';
+	document.getElementById("gridSaldoContasrow0cell0").style.width = '10%';
+	document.getElementById("gridSaldoContasrow0cell1").style.width = '50%';
+	document.getElementById("gridSaldoContasrow0cell2").style.width = '10%';
+	document.getElementById("gridSaldoContasrow0cell3").style.width = '10%';
+	//document.getElementById("gridSaldoContasbody").style.width = '98%';
+	//document.getElementById("gridSaldoContasbody").removeAttribute("table-layout");
+	//document.getElementById("gridSaldoContasbody").removeAttribute("width");
 }
 </script>
