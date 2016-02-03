@@ -117,7 +117,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
     
     $sSql ="      select  10 as tiporesgistro,
 				          si09_codorgaotce as codorgao,
-				          lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
+				          lpad((CASE WHEN o40_codtri = '0'
+                  OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                  OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub,
 				          c71_codlan||lpad(e50_codord,10,0) as nroop,
 				          c80_data as dtpagamento,
 				          c70_valor  as valor,
@@ -131,6 +133,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 				     join empempenho on e50_numemp = e60_numemp
 				     join orcdotacao on o58_anousu = e60_anousu and e60_coddot = o58_coddot
 				     join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade =o41_unidade
+				     JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 				     join conlancamord on c80_codord = e50_codord
 				     join conlancamdoc on c71_codlan = c80_codlan 
 				     join conlancam on c70_codlan = c71_codlan
@@ -214,7 +217,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 								       tipodocumentocredor,nrodocumento,codorgaoempop,codunidadeempop,subunidade 
 								  from (select 11 as tiporegistro,
 								          c71_codlan||e50_codord as codreduzidoop,
-								          lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
+								          lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub,
 								          c71_codlan||lpad(e50_codord,10,0) as nroop,
 								          case when c71_coddoc = 35 then 3
 										       when c71_coddoc = 37 then 4
@@ -239,6 +244,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 								     join empempenho on e50_numemp = e60_numemp
 								     join orcdotacao on o58_anousu = e60_anousu and e60_coddot = o58_coddot
 								     join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade =o41_unidade
+								     JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 								     join conlancamord on c80_codord = e50_codord
 								     join conlancamdoc on c71_codlan = c80_codlan
 								     join conlancam on c70_codlan = c71_codlan

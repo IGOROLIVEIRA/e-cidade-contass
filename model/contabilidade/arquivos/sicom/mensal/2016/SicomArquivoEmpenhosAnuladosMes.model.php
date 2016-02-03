@@ -105,7 +105,9 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
                 case when o40_codtri::int = 0 then o40_orgao::int else o40_codtri::int end as o58_orgao , 
                 case when o41_codtri::int = 0 then o41_unidade::int else o41_codtri::int end as o58_unidade,
 				o15_codtri,si09_codorgaotce,o41_subunidade as subunidade,
-				lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub
+				lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub
 				from empanulado 
 					join empempenho on e94_numemp = e60_numemp 
 					join orcdotacao on o58_coddot = e60_coddot

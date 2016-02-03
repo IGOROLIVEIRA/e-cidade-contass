@@ -117,10 +117,14 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 				       c61_reduz as codext, 
 				       c61_codtce as codtce,
 				       si09_codorgaotce as codorgao,
-				       (select case when o40_codtri::int != 0 and o41_codtri::int != 0 then lpad(o40_codtri,2,0) || lpad(o41_codtri,3,0)
-					            when o40_codtri::int != 0 and o41_codtri::int = 0 then lpad(o40_codtri,2,0) || lpad(o41_unidade,3,0)
-					            when o40_codtri::int = 0 and o41_codtri::int != 0 then lpad(o40_orgao,2,0) || lpad(o41_codtri,3,0)   
-					            else lpad(o40_orgao,2,0) || lpad(o41_unidade,3,0)    
+				       (select CASE
+									    WHEN o41_subunidade != 0
+									         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+									            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+									              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+									    ELSE lpad((CASE WHEN o40_codtri = '0'
+									         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+									           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)    
 					             end as unidade 
 					  from orcunidade 
 					  join orcorgao on o41_anousu = o40_anousu and o41_orgao = o40_orgao 
@@ -361,10 +365,14 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 									         k17_valor as vlop,
 									         k17_texto as especificacaoop,
 									         substr(c.z01_cgccpf,1,11) as cpfresppgto,2 as tipo,
-									         (select case when o40_codtri::int != 0 and o41_codtri::int != 0 then lpad(o40_codtri,2,0) || lpad(o41_codtri,3,0)
-					            when o40_codtri::int != 0 and o41_codtri::int = 0 then lpad(o40_codtri,2,0) || lpad(o41_unidade,3,0)
-					            when o40_codtri::int = 0 and o41_codtri::int != 0 then lpad(o40_orgao,2,0) || lpad(o41_codtri,3,0)   
-					            else lpad(o40_orgao,2,0) || lpad(o41_unidade,3,0)    
+									         (select CASE
+															    WHEN o41_subunidade != 0
+															         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+															            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+															              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+															    ELSE lpad((CASE WHEN o40_codtri = '0'
+															         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+															           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)    
 					             end as unidade 
 					  from orcunidade 
 					  join orcorgao on o41_anousu = o40_anousu and o41_orgao = o40_orgao 

@@ -124,8 +124,9 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         throw new Exception($clrsp20->erro_msg);
       }
     }
+    db_fim_transacao();
+    db_inicio_transacao();
     
-
     if( $this->sDataFinal['5'].$this->sDataFinal['6'] == '01'){
     /*
      * selecionar informacoes registro 10
@@ -146,7 +147,9 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
  from (select '10' as tiporegistro, 
   e60_numemp as codreduzidorsp,
   si09_codorgaotce as codorgao,
-        lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
+        lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub,
         o41_subunidade as subunidade,
         e60_codemp as nroempenho,
         e60_anousu as exercicioempenho,
@@ -181,6 +184,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
                 join db_config on codigo = e60_instit
                 left join infocomplementaresinstit on codigo = si09_instit
                 inner join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o41_anousu = o58_anousu
+                JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
        where    e60_anousu < ".db_getsession("DB_anousu")." and e60_instit = ".db_getsession("DB_instit")."
             and c70_data <=  '".(db_getsession("DB_anousu") -1)."-12-31'
      group by   e60_anousu,
@@ -200,7 +204,8 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
                 o58_projativ,
                 o56_elemento,
                 o15_codtri,
-                si09_codorgaotce) as restos
+                si09_codorgaotce,
+                o40_codtri,orcorgao.o40_orgao,orcunidade.o41_codtri,orcunidade.o41_unidade) as restos
     where (vlremp - vlranu - vlrliq) >= 0 and (vlrliq - vlrpag) >= 0";
 
     $rsResult10 = db_query($sSql);
@@ -310,16 +315,21 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     $sSql       = "select '20' as  tiporegistro,
 					       c70_codlan as codreduzidomov,
 					       si09_codorgaotce as codorgao,
-					       lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
+					       CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) end as codunidadesub,
 					       e60_codemp as nroempenho,
 					       e60_anousu as exercicioempenho,
 					       e60_emiss as dtempenho,
 					       case when c71_coddoc = 32 then 2 else 1 end as tiporestospagar,
 					       '1' as tipomovimento,
 					       c71_data as dtmovimentacao,
-					       case when e60_anousu = 2013 then ' ' else
-					       lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0)||lpad(o58_programa,3,0)||lpad(o58_projativ,4,0)||
-					       substr(o56_elemento,2,6)||'00' end as dotorig,
+					       ' ' as dotorig,
 					       c70_valor as vlmovimentacao,
 					       ' ' as codorgaoencampatribuic,
 					       ' ' as codunidadesubencampatribuic,
@@ -336,6 +346,10 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         join db_config on codigo = e60_instit
         join empanulado on e94_numemp = e60_numemp and c71_data = e94_data and c70_valor = e94_valor
         left join infocomplementaresinstit on codigo = si09_instit
+        JOIN orcunidade ON o58_orgao=o41_orgao
+        AND o58_unidade=o41_unidade
+       AND o58_anousu = o41_anousu
+       JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
         where e60_instit = ".db_getsession("DB_instit")." and c71_coddoc in (31,32) and c71_data between '{$this->sDataInicial}' and '{$this->sDataFinal}' ";
         
     $rsResult20 = db_query($sSql);

@@ -117,9 +117,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 		  $oDOMDocument->loadXML($sTextoXml);
 		  $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
 
-		$sSql = "SELECT DISTINCT 10 as tiporegistro,o58_orgao,o58_unidade,o15_codtri,
+		$sSql = "SELECT DISTINCT 10 as tiporegistro,CASE WHEN orcorgao.o40_codtri = '0'
+            OR NULL THEN orcorgao.o40_orgao::varchar ELSE orcorgao.o40_codtri END AS o58_orgao,CASE WHEN orcunidade.o41_codtri = '0'
+              OR NULL THEN orcunidade.o41_unidade::varchar ELSE orcunidade.o41_codtri END AS o58_unidade,o15_codtri,
 				       si09_codorgaotce as codorgao, 
-				       lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
+				       lpad((CASE WHEN orcorgao.o40_codtri = '0'
+         OR NULL THEN orcorgao.o40_orgao::varchar ELSE orcorgao.o40_codtri END),2,0)||lpad((CASE WHEN orcunidade.o41_codtri = '0'
+           OR NULL THEN orcunidade.o41_unidade::varchar ELSE orcunidade.o41_codtri END),3,0) as codunidadesub,
 				       o58_funcao as codfuncao,
 				       o58_subfuncao as codsubfuncao,
 				       o58_programa as codprograma,
@@ -137,7 +141,11 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				       e60_resumo as especificaoempenho,
 				       case when si173_codcontrato is null then 2 else 1 end as despdeccontrato,
 				       ' '::char as codorgaorespcontrato,
-				       case when si173_codcontrato is null then null else lpad(db01_orgao,2,0)||lpad(db01_unidade,3,0) end as codunidadesubrespcontrato,
+				       
+				       case when si173_codcontrato is null then null else lpad((CASE WHEN orgaodepart.o40_codtri = '0'
+         OR NULL THEN orgaodepart.o40_orgao::varchar ELSE orgaodepart.o40_codtri END),2,0)||lpad((CASE WHEN unidadedepart.o41_codtri = '0'
+           OR NULL THEN unidadedepart.o41_unidade::varchar ELSE unidadedepart.o41_codtri END),3,0) end as codunidadesubrespcontrato,
+           
 				       case when si173_codcontrato is null then null else si172_nrocontrato end as nrocontrato,
 				       case when si173_codcontrato is null then null else si172_dataassinatura end as dataassinaturacontrato,
 				       case when si174_sequencial is null then null else si174_nroseqtermoaditivo end as nrosequencialtermoaditivo,
@@ -147,10 +155,18 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				       case when l20_codigo is null then 1
 				            when l03_pctipocompratribunal in (100,101,102) then 3 else 2 end as despDecLicitacao,
 				       ' ' as codorgaoresplicit,
-				       case when l20_codigo is null then null else (select lpad(db01_orgao,2,0)||lpad(db01_unidade,3,0) as unidadesub 
+				       case when l20_codigo is null then null else (select lpad((CASE WHEN o.o40_codtri = '0'
+         OR NULL THEN o.o40_orgao::varchar ELSE o.o40_codtri END),2,0)||lpad((CASE WHEN u.o41_codtri = '0'
+           OR NULL THEN u.o41_unidade::varchar ELSE u.o41_codtri END),3,0) as unidadesub 
 				          from db_departorg 
+				          JOIN infocomplementares ON si08_anousu = db01_anousu
+                  AND si08_instit = ".db_getsession("DB_instit")."
+                  JOIN orcunidade u ON db01_orgao=u.o41_orgao
+                  AND db01_unidade=u.o41_unidade
+                  AND db01_anousu = u.o41_anousu
+                 JOIN orcorgao o on o.o40_orgao = u.o41_orgao and o.o40_anousu = u.o41_anousu
 				         where db01_coddepto = l20_codepartamento 
-				         and db01_anousu = e60_anousu) 
+				         and db01_anousu = e60_anousu limit 1) 
 				         end as codunidadesubresplicit,
 				         liclicita.l20_codigo,
 				       case when l20_codigo is null then null else l20_edital end nroprocessolicitatorio,
@@ -164,7 +180,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				       e60_numemp as numemp,
 				       case when length(cgm.z01_cgccpf) = 11 then 1 else 2 end as tipodocumento,
 				       cgm.z01_cgccpf as nrodocumento,
-				       o41_subunidade as subunidade 
+				       orcunidade.o41_subunidade as subunidade 
 				     FROM empempenho
 				     JOIN orcdotacao ON e60_coddot = o58_coddot
 				     JOIN empelemento ON e60_numemp = e64_numemp
@@ -179,13 +195,18 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				LEFT JOIN empcontratos on e60_anousu = si173_anoempenho and e60_codemp = si173_empenho::varchar
 				LEFT JOIN contratos on si173_codcontrato = si172_sequencial
 				LEFT JOIN db_departorg ON si172_codunidadesubresp::int = db01_coddepto AND db01_anousu = e60_anousu
+				
+				LEFT JOIN orcunidade unidadedepart on db01_anousu = unidadedepart.o41_anousu and db01_orgao = unidadedepart.o41_orgao and db01_unidade = unidadedepart.o41_unidade
+				LEFT JOIN orcorgao orgaodepart on orgaodepart.o40_orgao = unidadedepart.o41_orgao and orgaodepart.o40_anousu = unidadedepart.o41_anousu
+				
 				LEFT JOIN aditivoscontratos on si174_nrocontrato = si173_codcontrato
 				LEFT JOIN rescisaocontrato on si176_nrocontrato = si173_codcontrato
 				LEFT JOIN liclicita ON ((string_to_array(e60_numerol, '/'))[1])::varchar = l20_numero::varchar 
 				      AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar 
 				      AND l03_codigo = l20_codtipocom
-				LEFT JOIN orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
-				LEFT JOIN cgm o on o.z01_numcgm = o41_orddespesa
+				LEFT JOIN orcunidade on o58_anousu = orcunidade.o41_anousu and o58_orgao = orcunidade.o41_orgao and o58_unidade = orcunidade.o41_unidade
+				LEFT JOIN orcorgao on orcorgao.o40_orgao = orcunidade.o41_orgao and orcorgao.o40_anousu = orcunidade.o41_anousu
+				LEFT JOIN cgm o on o.z01_numcgm = orcunidade.o41_orddespesa
 				LEFT JOIN homologacaoadjudica on l20_codigo = l202_licitacao
 				    WHERE e60_anousu = ".db_getsession("DB_anousu")."
 				      AND o56_anousu = ".db_getsession("DB_anousu")."

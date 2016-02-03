@@ -277,14 +277,27 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
   	
 	$sSql = "SELECT DISTINCT l20_codepartamento, '10' as tipoRegistro,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,
 	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
-	liclicita.l20_dataaber as dtAbertura,
+	case when liclicita.l20_dataaber is null then liclicita.l20_datacria else liclicita.l20_dataaber end as dtAbertura,
 	liclicita.l20_naturezaobjeto as naturezaObjeto,
 	liclicita.l20_objeto as objeto,
 	liclicita.l20_justificativa as justificativa,
@@ -341,10 +354,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 		  			
 		$sSql="SELECT DISTINCT  '11' as tipoRegistro,
 		infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
@@ -397,10 +423,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 		
 		$sSql="select DISTINCT '12' as tipoRegistro,
 		infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
@@ -454,10 +493,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 		
 		$sSql=" select DISTINCT '13' as tipoRegistro,
 		infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
@@ -510,10 +562,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 		
 		$sSql="select DISTINCT '14' as tipoRegistro,
 		infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
@@ -534,10 +599,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
  
 		$sSql .=" union select DISTINCT '14' as tipoRegistro,
 		infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
@@ -583,10 +661,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 	
 		$sSql="select DISTINCT '15' as tipoRegistro,
 		infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
@@ -678,10 +769,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 
 		$sSql="select DISTINCT '16' as tipoRegistro,
 		infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,	
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
@@ -750,10 +854,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 		  
 	$sSql="select DISTINCT '17' as tipoRegistro,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,	
 	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
@@ -888,10 +1005,23 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
     
     $sSql="select DISTINCT '18' as tipoRegistro,
 	infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
-	(select case when subunidade = 1 then codunidade ||  lpad(subunidade::varchar,3,0) else codunidade end as codunidade from (select case when si08_tratacodunidade = 1 then lpad(db01_orgao,2,0) || lpad(db01_unidade,3,0) else lpad(db01_unidade,2,0) || lpad(db01_orgao,3,0) end as codunidade,o41_subunidade as subunidade from db_departorg 
-	join infocomplementares on si08_anousu = db01_anousu and si08_instit = ".db_getsession("DB_instit")."  
-join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_anousu = o41_anousu
-	where db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." limit 1) as x) as codUnidadeSubResp,
+	(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,	
 	pctipocompratribunal.l44_codigotribunal as tipoProcesso,

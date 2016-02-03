@@ -193,12 +193,20 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
 		$oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
 		  
     $sSql = "select distinct contratos.*,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,
-    (lpad(db01_orgao,2,'0') || lpad(db01_unidade,3,'0') || 
-    (case when o41_subunidade != 0 then lpad(o41_subunidade, 3, '0') else '' end ) ) as codunidadesubresp
+    (CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END) as codunidadesubresp
     from contratos 
     left join liclicita on si172_licitacao = l20_codigo
     left join db_departorg on l20_codepartamento = db01_coddepto and db01_anousu = ".db_getsession("DB_anousu")."
     left join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade and db01_anousu = o41_anousu and o41_anousu = ".db_getsession("DB_anousu")."
+    left join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
     where si172_dataassinatura <= '{$this->sDataFinal}' 
     and si172_dataassinatura >= '{$this->sDataInicial}' 
     and si172_instit = ". db_getsession("DB_instit");
@@ -212,8 +220,13 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       //if ($oDados10->si172_contdeclicitacao != 1) {
-        $sSql  = "select db01_orgao,db01_unidade,o41_subunidade from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
+        $sSql  = "select CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,
+            CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS db01_unidade,o41_subunidade from db_departorg 
+         join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
+         JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
          where db01_anousu = ".db_getsession("DB_anousu")." and db01_coddepto = ".$oDados10->si172_codunidadesubresp;
       
         $rsDepart    = db_query($sSql);//echo $sSql;db_criatabela($rsDepart);
@@ -397,7 +410,12 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
 
         if ($oDados12->si172_licitacao != '') {
            $sSql = "SELECT distinct on (o58_coddot)
-                         o58_coddot,o58_orgao, o58_unidade, o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao, 
+                         o58_coddot,
+                         CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
+									       CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,  
+              o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao, 
                    o56_elemento,o15_codtri,o58_valor,o41_subunidade from 
                    liclicitem 
                    INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
@@ -414,13 +432,19 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
         } 
         if (($oDados12->si172_licitacao == '' || pg_num_rows($rsDados)==0) && $oDados12->si173_anoempenho != '') {
           $sSql = "SELECT distinct on (o58_coddot)
-                         o58_coddot,o58_orgao, o58_unidade, o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
+                         o58_coddot,
+                         CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
+									       CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade, 
+              o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
                       o56_elemento,o15_codtri,o58_valor,o41_subunidade from empempenho 
                       join orcdotacao on e60_coddot = o58_coddot 
                       join orcelemento on o58_codele = o56_codele and o56_anousu =   ".db_getsession("DB_anousu")." 
                       join orctiporec on o58_codigo = o15_codigo
                       join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu
                       join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
+                      JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                       where o58_anousu =  ".db_getsession("DB_anousu")." and e60_anousu = ".db_getsession("DB_anousu")."
                       and e60_codemp = '".$oDados12->si173_empenho ."' and e60_anousu = '".$oDados12->si173_anoempenho ."'";
           //$sSql   .= " and e60_anousu = ".db_getsession("DB_anousu")." ";
@@ -429,8 +453,10 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
         if (pg_num_rows($rsDados)==0 && $oDados12->si172_licitacao != '') {
         	$sSql = "SELECT distinct on (o58_coddot)
                          o58_coddot,
-                         o58_orgao,
-									       o58_unidade,
+                         CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
+									       CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
 									       o58_funcao,
 									       o58_subfuncao,
 									       o58_programa,
@@ -446,13 +472,14 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
 									AND (pcdotac.pc13_coddot = orcdotacao.o58_coddot)
 									AND (orcdotacao.o58_instit = 1)
 									JOIN orcelemento ON o58_codele = o56_codele
-									AND o56_anousu = 2015
+									AND o56_anousu = ".db_getsession("DB_anousu")."
 									JOIN orctiporec ON o58_codigo = o15_codigo
 									JOIN orcprojativ ON o55_projativ = o58_projativ
 									AND o55_anousu = o58_anousu
 									JOIN orcunidade ON o58_orgao = o41_orgao
 									AND o58_unidade = o41_unidade
 									AND o58_anousu = o41_anousu
+									JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 									WHERE pc11_numero in (select solicitacao.pc53_solicitafilho from solicitavinculo compilacao
 									join solicitavinculo abertura on compilacao.pc53_solicitafilho = abertura.pc53_solicitafilho
 									join solicitavinculo estimativa on estimativa.pc53_solicitapai = abertura.pc53_solicitapai
@@ -592,9 +619,18 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
         $oDados20->si174_novadatatermino = '';
       } 
       
-       $sSql  = "select  (lpad(db01_orgao,2,'0') || lpad(db01_unidade,3,'0') || 
-    (case when o41_subunidade != 0 then lpad(o41_subunidade, 3, '0') else '' end ) ) as codunidadesub from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
+       $sSql  = "select  (CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END) as codunidadesub 
+   from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
+         JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
          where db01_anousu = ".db_getsession("DB_anousu")." and db01_coddepto = ".$oDados20->si174_codunidadesub;
       $result = db_query($sSql);//db_criatabela($result);echo $sSql;
       $sCodUnidade = db_utils::fieldsMemory($result, 0)->codunidadesub;
@@ -693,10 +729,18 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
     	$aAnoContrato = explode("-", $oDados30->si03_dataassinacontrato);
     	
     	if ($aAnoContrato[0] > 2013) {
-    	  $sSql  = "select (lpad(db01_orgao,2,'0') || lpad(db01_unidade,3,'0') || 
-                  (case when o41_subunidade != 0 then lpad(o41_subunidade, 3, '0') else '' end ) ) as codunidadesub 
-                  from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
-                  and db01_anousu = o41_anousu
+    	  $sSql  = "select  (CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END) as codunidadesub 
+   from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
+         and db01_anousu = o41_anousu
+         JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                   where db01_anousu = ".$aAnoContrato[0]." and db01_coddepto = 
                   (select si172_codunidadesubresp::integer from contratos where si172_sequencial = {$oDados30->si03_numcontrato})";
     	  $result = db_query($sSql);//db_criatabela($result);echo $sSql;echo pg_last_error();

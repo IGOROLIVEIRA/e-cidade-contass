@@ -116,12 +116,14 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 					 				   where c80_codord = e50_codord 
 					   					 and c71_coddoc in (5,35,37) and c71_codlan < c70_codlan)
 			    ) as dtpag,
-				e60_codemp,
+				e60_codemp,e60_numemp,
 				e60_emiss as dtempenho,
 				z01_nome,
 				z01_cgccpf,
-				o58_orgao,
-				o58_unidade,
+				lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao,
+				lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade,
 				o58_funcao,
 				o58_subfuncao,
 				o58_programa,
@@ -131,7 +133,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				substr(o56_elemento,2,2) as divida,
 				o15_codtri as recurso,
 				e50_obs,
-				case when date_part('year',e50_data) < 2016 then e71_codnota::varchar else
+				case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
                    (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao,
 				si09_codorgaotce,
 				o41_subunidade as subunidade 
@@ -147,6 +149,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu
 				join orctiporec on o58_codigo  = o15_codigo
 				join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
+				JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 		   left join  infocomplementaresinstit on e60_instit = si09_instit and si09_instit = ".db_getsession("DB_instit")."
 			   where c71_coddoc in (6,36,38) 
 			     and o41_instit = ".db_getsession("DB_instit")." 
@@ -245,11 +248,26 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
           $Hash = $oAnulacoes->c71_codlan;
           if(!isset($aAnulacoes[$Hash])){
 			   	  $oDadosAnulacao = new stdClass();
+
+				  /*
+				   * Verifica se o empenho existe na tabela dotacaorpsicom
+				   * Caso exista, busca os dados da dotação.
+				   * */
+				  $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oAnulacoes->e60_numemp}";
+				  $iFonteAlterada = '0';
+				  if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+					  $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+					  $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+					  $oDadosAnulacao->si137_codorgao      = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+					  $oDadosAnulacao->si137_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+					  $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+				  }else{
+					  $oDadosAnulacao->si137_codorgao               = $oAnulacoes->si09_codorgaotce;
+					  $oDadosAnulacao->si137_codunidadesub          = $sCodUnidade;
+				  }
 			   	  
 			   	  $oDadosAnulacao->si137_tiporegistro    			= 10;
 			   	  $oDadosAnulacao->si137_codreduzido    			= $oAnulacoes->c71_codlan;
-			   	  $oDadosAnulacao->si137_codorgao       			= $oAnulacoes->si09_codorgaotce;
-			   	  $oDadosAnulacao->si137_codunidadesub   			= $sCodUnidade;
 				  $oDadosAnulacao->si137_nroop           			= $OpdoExtorno;//$oAnulacoes->numordem;
 				  $oDadosAnulacao->si137_dtpagamento				= ($DataOpExorno == '' || $DataOpExorno == null) ? $oAnulacoes->dtanulacao : $DataOpExorno;//$oAnulacoes->dtpag; 
 				  $oDadosAnulacao->si137_nroanulacaoop    			= $OpdoExtorno;
@@ -273,7 +291,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				  $oDadosAnulacaoFonte->si138_dtempenho	         = $oAnulacoes->dtempenho;
 				  $oDadosAnulacaoFonte->si138_nroliquidacao      = $oAnulacoes->nroliquidacao;
 				  $oDadosAnulacaoFonte->si138_dtliquidacao       = $oAnulacoes->dtliquida;	
-				  $oDadosAnulacaoFonte->si138_codfontrecursos	 = str_pad($oAnulacoes->recurso, 3, "0", STR_PAD_LEFT);
+				  $oDadosAnulacaoFonte->si138_codfontrecursos	 = $iFonteAlterada != 0 ? $iFonteAlterada : str_pad($oAnulacoes->recurso, 3, "0", STR_PAD_LEFT);
 				  $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
 				  $oDadosAnulacaoFonte->si138_mes    			 = $this->sDataFinal['5'].$this->sDataFinal['6'];
 				  $oDadosAnulacaoFonte->si138_reg10              = 0;

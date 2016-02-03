@@ -78,7 +78,9 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
     $sSql  = "SELECT  e50_id_usuario,(rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) as codreduzido,
     (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) as nroliquidacao,
     e50_codord, e50_DATA, e60_anousu,e60_numemp,
-			           e60_codemp, e60_emiss, o58_orgao , o58_unidade, z01_nome, 
+			           e60_codemp, e60_emiss, lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade, z01_nome, 
 				   z01_cgccpf, e53_valor,e53_vlranu,  o15_codtri,  si09_codorgaotce, 
 				   o41_subunidade AS subunidade,o56_elemento
 			     FROM pagordem

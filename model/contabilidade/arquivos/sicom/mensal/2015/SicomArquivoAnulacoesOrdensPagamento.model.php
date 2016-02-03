@@ -120,8 +120,10 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				e60_emiss as dtempenho,
 				z01_nome,
 				z01_cgccpf,
-				o58_orgao,
-				o58_unidade,
+				lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao,
+				lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade,
 				o58_funcao,
 				o58_subfuncao,
 				o58_programa,
@@ -147,6 +149,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu
 				join orctiporec on o58_codigo  = o15_codigo
 				join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
+				JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 		   left join  infocomplementaresinstit on e60_instit = si09_instit and si09_instit = ".db_getsession("DB_instit")."
 			   where c71_coddoc in (6,36,38) 
 			     and o41_instit = ".db_getsession("DB_instit")." 

@@ -117,20 +117,23 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
     
     $sSql ="      select  10 as tiporesgistro,
 				          si09_codorgaotce as codorgao,
-				          lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
+				          lpad((CASE WHEN o40_codtri = '0'
+                  OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                  OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub,
 				          c71_codlan||lpad(e50_codord,10,0) as nroop,
 				          c80_data as dtpagamento,
 				          c70_valor  as valor,
 				          e50_obs as especificacaoop,
 				          o41_ordpagamento,o41_orgao,o41_unidade,o41_anousu,
 				          o.z01_cgccpf as cpfresppgto,
-				          e50_codord as ordem,
+				          e50_codord as ordem,e60_numemp,
                           o41_subunidade as subunidade,c71_codlan as lancamento
 				     from pagordem 
 				     join pagordemele on e53_codord = e50_codord 
 				     join empempenho on e50_numemp = e60_numemp
 				     join orcdotacao on o58_anousu = e60_anousu and e60_coddot = o58_coddot
 				     join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade =o41_unidade
+				JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 				     join conlancamord on c80_codord = e50_codord
 				     join conlancamdoc on c71_codlan = c80_codlan 
 				     join conlancam on c70_codlan = c71_codlan
@@ -174,9 +177,22 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 					if ($oEmpPago->subunidade != '' && $oEmpPago->subunidade != 0) {
 					  $oEmpPago->codunidadesub .= str_pad($oEmpPago->subunidade, 3, "0", STR_PAD_LEFT);
 				    }
+				   /*
+				    * Verifica se o empenho existe na tabela dotacaorpsicom
+				    * Caso exista, busca os dados da dotação.
+				    * */
+				    $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oEmpPago->e60_numemp}";
+				    $iFonteAlterada = '0';
+					if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+						$aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+						$iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+						$clops10->si132_codorgao      = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+						$clops10->si132_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+					}else{
+						$clops10->si132_codorgao        = $oEmpPago->codorgao;
+						$clops10->si132_codunidadesub   = $oEmpPago->codunidadesub;
+					}
 					$clops10->si132_tiporegistro 	= $oEmpPago->tiporesgistro;
-					$clops10->si132_codorgao 		= $oEmpPago->codorgao;
-					$clops10->si132_codunidadesub 	= $oEmpPago->codunidadesub;
 					$clops10->si132_nroop 			= $oEmpPago->nroop;
 					$clops10->si132_dtpagamento 	= $oEmpPago->dtpagamento;
 					$clops10->si132_vlop 			= $oEmpPago->valor;
@@ -201,7 +217,9 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 								       tipodocumentocredor,nrodocumento,codorgaoempop,codunidadeempop,subunidade 
 								  from (select 11 as tiporegistro,
 								          c71_codlan||e50_codord as codreduzidoop,
-								          lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
+								          lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub,
 								          c71_codlan||lpad(e50_codord,10,0) as nroop,
 								          case when c71_coddoc = 35 then 3
 										       when c71_coddoc = 37 then 4
@@ -210,7 +228,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 								          end as tipopagamento,
 								          e60_codemp as nroempenho,
 								          e60_emiss as dtempenho,
-								          case when date_part('year',e50_data) < 2016 then e71_codnota::varchar else
+								          case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else /*nao alterar esse ano*/
                    (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao,
 								          e50_data as dtliquidacao,
 								          o15_codtri as codfontrecursos,
@@ -226,6 +244,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 								     join empempenho on e50_numemp = e60_numemp
 								     join orcdotacao on o58_anousu = e60_anousu and e60_coddot = o58_coddot
 								     join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade =o41_unidade
+								     JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 								     join conlancamord on c80_codord = e50_codord
 								     join conlancamdoc on c71_codlan = c80_codlan
 								     join conlancam on c70_codlan = c71_codlan
@@ -254,7 +273,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 					    }		        
 			        $clops11->si133_tiporegistro 		= $reg11->tiporegistro;
 			        $clops11->si133_codreduzidoop 		= $reg11->codreduzidoop;
-			        $clops11->si133_codunidadesub 		= $reg11->codunidadesub;
+					$clops11->si133_codunidadesub       = $clops10->si132_codunidadesub;
+			        //$clops11->si133_codunidadesub 		= $reg11->codunidadesub;
 			        $clops11->si133_nroop				= $oEmpPago->nroop;
 			        $clops11->si133_dtpagamento 		= $oEmpPago->dtpagamento;
 			        $clops11->si133_tipopagamento 		= $reg11->tipopagamento;
@@ -262,7 +282,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 			        $clops11->si133_dtempenho 			= $reg11->dtempenho;
 			        $clops11->si133_nroliquidacao 		= $reg11->nroliquidacao;
 			        $clops11->si133_dtliquidacao 		= $reg11->dtliquidacao;
-			        $clops11->si133_codfontrecursos 	= $reg11->codfontrecursos;
+			        $clops11->si133_codfontrecursos 	= $iFonteAlterada != '0' ? $iFonteAlterada : $reg11->codfontrecursos;
 			        $clops11->si133_valorfonte 			= $oEmpPago->valor;
 			        $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
 			        $clops11->si133_nrodocumento		= $reg11->nrodocumento;
@@ -553,9 +573,23 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 					if ($oEmpPago->subunidade != '' && $oEmpPago->subunidade != 0) {
 					  $oEmpPago->codunidadesub .= str_pad($oEmpPago->subunidade, 3, "0", STR_PAD_LEFT);
 				    }
+
+					/*
+					* Verifica se o empenho existe na tabela dotacaorpsicom
+					* Caso exista, busca os dados da dotação.
+					* */
+					$sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oEmpPago->e60_numemp}";
+				    $iFonteAlterada = '0';
+					if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+						$aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+						$iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+						$clops10->si132_codorgao      = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+						$clops10->si132_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+					}else{
+						$clops10->si132_codorgao        = $oEmpPago->codorgao;
+						$clops10->si132_codunidadesub   = $oEmpPago->codunidadesub;
+					}
 					$clops10->si132_tiporegistro 	= $oEmpPago->tiporesgistro;
-					$clops10->si132_codorgao 		= $oEmpPago->codorgao;
-					$clops10->si132_codunidadesub 	= $oEmpPago->codunidadesub;
 					$clops10->si132_nroop 			= $oEmpPago->nroop;
 					$clops10->si132_dtpagamento 	= $oEmpPago->dtpagamento;
 					$clops10->si132_vlop 			= $oEmpPago->valor;
@@ -587,7 +621,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 								          end as tipopagamento,
 								          e60_codemp as nroempenho,
 								          e60_emiss as dtempenho,
-								          case when date_part('year',e50_data) < 2016 then e71_codnota::varchar else
+								          case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
                    (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao,
 								          e50_data as dtliquidacao,
 								          o15_codtri as codfontrecursos,
@@ -632,7 +666,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 					}		        
 			        $clops11->si133_tiporegistro 		= $reg11->tiporegistro;
 			        $clops11->si133_codreduzidoop 		= $reg11->codreduzidoop;
-			        $clops11->si133_codunidadesub 		= $reg11->codunidadesub;
+			        $clops11->si133_codunidadesub 		= $clops10->si132_codunidadesub;
 			        $clops11->si133_nroop				= $oEmpPago->nroop;
 			        $clops11->si133_dtpagamento 		= $oEmpPago->dtpagamento;
 			        $clops11->si133_tipopagamento 		= $reg11->tipopagamento;
@@ -640,8 +674,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 			        $clops11->si133_dtempenho 			= $reg11->dtempenho;
 			        $clops11->si133_nroliquidacao 		= $reg11->nroliquidacao;
 			        $clops11->si133_dtliquidacao 		= $reg11->dtliquidacao;
-			        $clops11->si133_codfontrecursos 	= $reg11->codfontrecursos;
-			        $clops11->si133_valorfonte 			= $oEmpPago->valor;
+			        $clops11->si133_codfontrecursos 	= $iFonteAlterada != '0' ? $iFonteAlterada : $reg11->codfontrecursos;
+					$clops11->si133_valorfonte 			= $oEmpPago->valor;
 			        $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
 			        $clops11->si133_nrodocumento		= $reg11->nrodocumento;
 			        $clops11->si133_codorgaoempop	 	= $reg11->codorgaoempop;

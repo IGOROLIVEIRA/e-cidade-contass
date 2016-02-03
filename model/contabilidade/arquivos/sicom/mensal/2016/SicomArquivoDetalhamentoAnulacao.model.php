@@ -92,12 +92,14 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
     
     $sSql      =   "SELECT e50_data,
-                   case when date_part('year',e50_data) < 2016 then e71_codnota::varchar else 
+                   case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else 
                    (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) end as codreduzido,
-                   case when date_part('year',e50_data) < 2016 then e71_codnota::varchar else
+                   case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
                    (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao, 
-                   c80_data, orctiporec.o15_codtri,e60_codemp, e60_emiss,  e60_anousu,
-							    o58_orgao, o58_unidade,o41_subunidade, e60_codcom, sum(c70_valor) as c70_valor, c70_data, c53_tipo, c70_data,si09_codorgaotce 
+                   c80_data, orctiporec.o15_codtri,e60_codemp, e60_emiss,  e60_anousu,e60_numemp,
+							    lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade,o41_subunidade, e60_codcom, sum(c70_valor) as c70_valor, c70_data, c53_tipo, c70_data,si09_codorgaotce 
 							FROM empempenho
 							INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
 							INNER JOIN conlancam ON c70_codlan = c75_codlan
@@ -140,7 +142,8 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 								 e40_descr, e60_vlrpag, e60_anousu, e60_coddot, o58_coddot, o58_orgao, o40_orgao, 
 								 o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, 
 								 c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp,e71_codnota,c80_data,e50_data,si09_codorgaotce,o41_subunidade,pagordemnota.e71_codord
-							ORDER BY e60_numemp,c70_codlan";
+							   ,o40_codtri,orcorgao.o40_orgao,orcunidade.o41_codtri,orcunidade.o41_unidade
+								 ORDER BY e60_numemp,c70_codlan";
     // and e60_numemp not in (select e91_numemp from empresto where e91_anousu = ".db_getsession('DB_anousu').")
     //echo $sSql;
     $rsDetalhamentos = db_query($sSql);
@@ -200,6 +203,24 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       if (!isset($aDadosAgrupados[$sHash])) {
       	
         $oDadosDetalhamento = new stdClass();
+
+
+          /*
+           * Verifica se o empenho existe na tabela dotacaorpsicom
+           * Caso exista, busca os dados da dotação.
+		   * */
+			$sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDetalhamento->e60_numemp}";
+            $iFonteAlterada = '0';
+			if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+                $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+                $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+                $oDadosDetalhamento->si121_codorgao      = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+                $oDadosDetalhamento->si121_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+                $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
+            }else{
+                $oDadosDetalhamento->si121_codorgao               = $oDetalhamento->si09_codorgaotce;
+                $oDadosDetalhamento->si121_codunidadesub          = $sCodUnidade;
+            }
       
         $oDadosDetalhamento->si121_tiporegistro           = 10;
         $oDadosDetalhamento->si121_codreduzido            = substr($oDetalhamento->codreduzido, 0, 15);
@@ -223,7 +244,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       
         $oDadosDetalhamentoFonte->si122_tiporegistro       = 11;
         $oDadosDetalhamentoFonte->si122_codreduzido        = substr($oDetalhamento->codreduzido, 0, 15);
-        $oDadosDetalhamentoFonte->si122_codfontrecursos    = str_pad($oDetalhamento->o15_codtri, 3, "0", STR_PAD_LEFT);
+        $oDadosDetalhamentoFonte->si122_codfontrecursos    = $iFonteAlterada != '0' ? $iFonteAlterada : str_pad($oDetalhamento->o15_codtri, 3, "0", STR_PAD_LEFT);
         $oDadosDetalhamentoFonte->si122_valoranuladofonte  = $oDetalhamento->c70_valor;
         $oDadosDetalhamentoFonte->si122_mes				 = $this->sDataFinal['5'].$this->sDataFinal['6'];
         $oDadosDetalhamentoFonte->si122_instit 				= db_getsession("DB_instit");

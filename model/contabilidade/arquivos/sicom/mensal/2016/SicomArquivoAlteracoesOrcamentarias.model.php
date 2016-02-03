@@ -354,7 +354,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
        ) as tipoDecretoAlteracao,
 	case when o47_valor > 0 then 1 else 2 end as tipoAlteracao,
 	si09_codorgaotce as codOrgao,
-	lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codUnidadeSub,
+	case when o41_subunidade != 0 or not null then
+  lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+  else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
 	o58_funcao as codFuncao,
 	o58_subfuncao as codSubFuncao,
 	o58_programa as codPrograma,
@@ -372,6 +374,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
   join db_config on o58_instit = codigo
   join orcunidade on orcdotacao.o58_orgao = orcunidade.o41_orgao and orcdotacao.o58_unidade = orcunidade.o41_unidade 
   and orcdotacao.o58_anousu = orcunidade.o41_anousu  
+  join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
   left join infocomplementaresinstit on codigo = si09_instit 
   where o46_codlei in ({$oDados10->codigovinc})";
     	$rsResult14 = db_query($sSql);

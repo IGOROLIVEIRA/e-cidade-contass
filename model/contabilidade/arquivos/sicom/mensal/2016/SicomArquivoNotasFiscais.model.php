@@ -304,7 +304,9 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
         cgm.z01_cgccpf  as nrodocumento,
         ' ' as chaveacesso,
         empnota.e69_dtnota as dtemissaonf,
-        lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
+        lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub,
         empempenho.e60_emiss as dtempenho,
         empempenho.e60_codemp as nroempenho,
         pagordem.e50_data as dtliquidacao,
@@ -320,6 +322,7 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
       inner join cgm on (empempenho.e60_numcgm=cgm.z01_numcgm)
       left join infocomplementaresinstit on si09_instit = empempenho.e60_instit
       LEFT JOIN orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
+      LEFT JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
       where orcdotacao.o58_anousu = ". db_getsession("DB_anousu") ."
       and empnota.e69_codnota = ". $oDados10->codnotafiscal;
       

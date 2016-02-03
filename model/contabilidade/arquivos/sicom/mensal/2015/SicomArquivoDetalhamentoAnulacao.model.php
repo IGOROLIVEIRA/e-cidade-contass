@@ -97,7 +97,9 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                    case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
                    (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao, 
                    c80_data, orctiporec.o15_codtri,e60_codemp, e60_emiss,  e60_anousu,e60_numemp,
-							    o58_orgao, o58_unidade,o41_subunidade, e60_codcom, sum(c70_valor) as c70_valor, c70_data, c53_tipo, c70_data,si09_codorgaotce 
+							    lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade,o41_subunidade, e60_codcom, sum(c70_valor) as c70_valor, c70_data, c53_tipo, c70_data,si09_codorgaotce 
 							FROM empempenho
 							INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
 							INNER JOIN conlancam ON c70_codlan = c75_codlan
@@ -140,7 +142,8 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 								 e40_descr, e60_vlrpag, e60_anousu, e60_coddot, o58_coddot, o58_orgao, o40_orgao, 
 								 o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, 
 								 c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp,e71_codnota,c80_data,e50_data,si09_codorgaotce,o41_subunidade,pagordemnota.e71_codord
-							ORDER BY e60_numemp,c70_codlan";
+							   ,o40_codtri,orcorgao.o40_orgao,orcunidade.o41_codtri,orcunidade.o41_unidade
+								 ORDER BY e60_numemp,c70_codlan";
     // and e60_numemp not in (select e91_numemp from empresto where e91_anousu = ".db_getsession('DB_anousu').")
     //echo $sSql;
     $rsDetalhamentos = db_query($sSql);
