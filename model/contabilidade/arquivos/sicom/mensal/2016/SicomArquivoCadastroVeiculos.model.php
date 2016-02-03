@@ -123,7 +123,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                          WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
                          WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                             ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    veiculos.ve01_codigo AS codVeiculo,
+                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
+                    veiculos.ve01_codunidadesub,
                     tipoveiculos.si04_tipoveiculo AS tpVeiculo,
                     tipoveiculos.si04_especificacao AS subTipoVeiculo,
                     substr(tipoveiculos.si04_descricao, 1, 100) AS descVeiculo,
@@ -190,7 +191,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc10->si146_tiporegistro = 10;
                 $clcvc10->si146_codorgao = $oDados10->codorgao;
-                $clcvc10->si146_codunidadesub = $oDados10->codunidadesub;
+                $clcvc10->si146_codunidadesub = $oDados10->ve01_codunidadesub != '' || $oDados10->ve01_codunidadesub != 0 ? $oDados10->ve01_codunidadesub : $oDados10->codunidadesub;
                 $clcvc10->si146_codveiculo = $oDados10->codveiculo;
                 $clcvc10->si146_tpveiculo = $oDados10->tpveiculo;
                 $clcvc10->si146_subtipoveiculo = $oDados10->subtipoveiculo;
@@ -226,7 +227,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
                     WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                         ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    veiculos.ve01_codigo AS codVeiculo,
+                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
+                    veiculos.ve01_codunidadesub,
                     1 AS origemGasto,
                     ' ' AS codUnidadeSubEmpenho,
                     ' ' AS nroEmpenho,
@@ -277,7 +279,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
                     WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                         ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    veiculos.ve01_codigo AS codVeiculo,
+                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
+                    veiculos.ve01_codunidadesub,
                     1 AS origemGasto,
                     ' ' AS codUnidadeSubEmpenho,
                     ' ' AS nroEmpenho,
@@ -328,7 +331,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
                     WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                         ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    veiculos.ve01_codigo AS codVeiculo,
+                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
+                    veiculos.ve01_codunidadesub,
                     2 AS origemGasto,
                     CASE WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT = 0) THEN lpad(o58_orgao,2,0)||lpad(unemp.o41_codtri,3,0)
                     WHEN (unemp.o41_codtri::INT = 0 AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(o58_unidade,3,0)
@@ -418,7 +422,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $oDados20->si147_tiporegistro = 20;
                 $oDados20->si147_codorgao = $oResult20->codorgao;
-                $oDados20->si147_codunidadesub = $oResult20->codunidadesub;
+                $oDados20->si147_codunidadesub = $oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0 ? $oResult20->ve01_codunidadesub : $oResult20->codunidadesub;
                 $oDados20->si147_codveiculo = $oResult20->codveiculo;
                 $oDados20->si147_origemgasto = $oResult20->origemgasto;
                 $oDados20->si147_codunidadesubempenho = $oResult20->codunidadesubempenho;
@@ -499,7 +503,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 	    WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
 	    WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
             ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-       veiculos.ve01_codigo AS codVeiculo,
+       case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
+       veiculos.ve01_codunidadesub,
        transporteescolar.v200_escola AS nomeEstabelecimento,
        transporteescolar.v200_localidade AS localidade,
        transporteescolar.v200_diasrodados AS qtdeDiasRodados,
@@ -539,7 +544,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc30->si148_tiporegistro = 30;
                 $clcvc30->si148_codorgao = $oDados30->codorgao;
-                $clcvc30->si148_codunidadesub = $oDados30->codunidadesub;
+                $clcvc30->si148_codunidadesub = $oDados30->ve01_codunidadesub != '' || $oDados30->ve01_codunidadesub != 0 ? $oDados30->ve01_codunidadesub : $oDados30->codunidadesub;
                 $clcvc30->si148_codveiculo = $oDados30->codveiculo;
                 $clcvc30->si148_nomeestabelecimento = $oDados30->nomeestabelecimento;
                 $clcvc30->si148_localidade = $oDados30->localidade;
@@ -563,7 +568,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 			    WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
 			    WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
 		            ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-			veiculos.ve01_codigo AS codVeiculo,
+			case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
+			veiculos.ve01_codunidadesub,
 			veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
 			veicbaixa.ve04_motivo AS descBaixa,
 			veicbaixa.ve04_data AS dtBaixa,
@@ -608,7 +614,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc40->si149_tiporegistro = 40;
                 $clcvc40->si149_codorgao = $oDados40->codorgao;
-                $clcvc40->si149_codunidadesub = $oDados40->codunidadesub;
+              $clcvc40->si149_codunidadesub = $oDados40->ve01_codunidadesub != '' || $oDados40->ve01_codunidadesub != 0 ? $oDados40->ve01_codunidadesub : $oDados40->codunidadesub;
                 $clcvc40->si149_codveiculo = $oDados40->codveiculo;
                 $clcvc40->si149_tipobaixa = $oDados40->tipobaixa;
                 $clcvc40->si149_descbaixa = $oDados40->descbaixa;
