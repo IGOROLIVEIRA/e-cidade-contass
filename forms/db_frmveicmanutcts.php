@@ -214,10 +214,9 @@ $sHora = db_hora();
                                 <td>
                                     <?
                                     $x = array("6" => "ÓLEO LUBRIFICANTE", "7" => "GRAXA (QUILOGRAMA)", "8" => "PEÇAS", "9" => "SERVIÇOS");
-                                    db_select('ve62_tipogasto', $x, true, $db_opcao, "onchange='js_validaTipo()'");
+                                    db_select('ve62_tipogasto', $x, true, $db_opcao, "");
                                     ?>
-                                    <span id="spantipo"
-                                          style="color: red; display: <?= ($ve62_tipogasto == "8" || $ve62_tipogasto == "9" ? "block" : "none"); ?>;">*Obrigatório informar o item na aba 'Itens'. </span>
+                                    <span id="spantipo" style="color: red; display: block;">*Obrigatório informar o item na aba 'Itens'. </span>
                                 </td>
                             </tr>
 
@@ -341,14 +340,6 @@ $sHora = db_hora();
     function js_mostraempempenho(chave1) {
         document.form1.e60_codemp.value = chave1;
         db_iframe_empempenho.hide();
-    }
-
-    function js_validaTipo() {
-        if (document.getElementById('ve62_tipogasto').value == 8 || document.getElementById('ve62_tipogasto').value == 9) {
-            document.getElementById('spantipo').style.display = "block";
-        } else {
-            document.getElementById('spantipo').style.display = "none";
-        }
     }
 
     function js_mostraEmpenho(){
