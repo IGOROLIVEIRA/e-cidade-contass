@@ -135,10 +135,10 @@ class GerarRSP extends GerarAM {
         $aCSVRSP20['si115_tiporestospagar']                 =    str_pad($aRSP20['si115_tiporestospagar'], 1, "0", STR_PAD_LEFT);
         $aCSVRSP20['si115_tipomovimento']                   =    str_pad($aRSP20['si115_tipomovimento'], 1, "0", STR_PAD_LEFT);
         $aCSVRSP20['si115_dtmovimentacao']                  =    implode("", array_reverse(explode("-", $aRSP20['si115_dtmovimentacao'])));
-        $aCSVRSP20['si115_dotorig']                         =    str_pad($aRSP20['si115_dotorig'], 21, "0", STR_PAD_LEFT);
+        $aCSVRSP20['si115_dotorig']                         =    $aRSP20['si115_dotorig'] == '' ? ' ' : $aRSP20['si115_dotorig'];
         $aCSVRSP20['si115_vlmovimentacao']                  =    number_format($aRSP20['si115_vlmovimentacao'], 2, ",", "");
-        $aCSVRSP20['si115_codorgaoencampatribuic']          =    str_pad($aRSP20['si115_codorgaoencampatribuic'], 21, "0", STR_PAD_LEFT);
-        $aCSVRSP20['si115_codunidadesubencampatribuic']     =    str_pad($aRSP20['si115_codunidadesubencampatribuic'], 8, "0", STR_PAD_LEFT);
+        $aCSVRSP20['si115_codorgaoencampatribuic']          =    $aRSP20['si115_codorgaoencampatribuic'] == '' ? ' ' : str_pad($aRSP20['si115_codorgaoencampatribuic'], 2, "0", STR_PAD_LEFT);
+        $aCSVRSP20['si115_codunidadesubencampatribuic']     =    $aRSP20['si115_codunidadesubencampatribuic'] == '' ? ' ' :  str_pad($aRSP20['si115_codunidadesubencampatribuic'], 8, "0", STR_PAD_LEFT);
         $aCSVRSP20['si115_justificativa']                   =    substr($aRSP20['si115_justificativa'], 0, 500);
         $aCSVRSP20['si115_atocancelamento']                 =    substr($aRSP20['si115_atocancelamento'], 0, 20);
         $aCSVRSP20['si115_dataatocancelamento']             =    implode("", array_reverse(explode("-", $aRSP20['si115_dataatocancelamento'])));
