@@ -284,7 +284,7 @@ join orcunidade on db01_orgao=o41_orgao and db01_unidade=o41_unidade and db01_an
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,
 	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
-	liclicita.l20_dataaber as dtAbertura,
+	liclicita.l20_datacria as dtAbertura,
 	liclicita.l20_naturezaobjeto as naturezaObjeto,
 	liclicita.l20_objeto as objeto,
 	liclicita.l20_justificativa as justificativa,
