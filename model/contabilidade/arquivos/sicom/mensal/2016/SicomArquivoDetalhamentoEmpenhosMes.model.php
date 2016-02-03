@@ -208,13 +208,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				LEFT JOIN orcorgao on orcorgao.o40_orgao = orcunidade.o41_orgao and orcorgao.o40_anousu = orcunidade.o41_anousu
 				LEFT JOIN cgm o on o.z01_numcgm = orcunidade.o41_orddespesa
 				LEFT JOIN homologacaoadjudica on l20_codigo = l202_licitacao
+
+				LEFT JOIN empempaut on e61_numemp = e60_numemp
+				LEFT JOIN empautoriza on e61_autori = e60_numemp
 				    WHERE e60_anousu = ".db_getsession("DB_anousu")."
 				      AND o56_anousu = ".db_getsession("DB_anousu")."
 				      AND o58_anousu = ".db_getsession("DB_anousu")."
 				      AND e60_instit = ".db_getsession("DB_instit")." 
 				      AND e60_emiss between '".$this->sDataInicial."' AND '".$this->sDataFinal."'  order by e60_codemp";
 		
-		
+		echo $sSql;exit;
         
 		$rsEmpenho = db_query($sSql);
         //echo pg_last_error();
@@ -324,6 +327,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				$oDadosEmpenho->si106_tipoprocesso                 = $oEmpenho->tipoprocesso;
 			}
 			$oDadosEmpenho->si106_cpfordenador				   = substr($oEmpenho->ordenador,0,11);
+
+			$oDadosEmpenho->si106_tipodespesaemprpps   	       = substr($oEmpenho->ordenador,0,11);
 			$oDadosEmpenho->si106_mes						   = $this->sDataFinal['5'].$this->sDataFinal['6'];
 			$oDadosEmpenho->si106_instit					   = db_getsession("DB_instit");
 			

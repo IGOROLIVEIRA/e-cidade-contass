@@ -146,6 +146,7 @@ if(isset($alterar) && !$sqlerro ){
 
   if ($sqlerro == false){
        $clempautoriza->e54_autori = $e54_autori;
+       $clempautoriza->e54_tipodespesa = $e54_tipodespesa;
        $clempautoriza->alterar($e54_autori);
        if($clempautoriza->erro_status=='0'){
            $erro_msg = $clempautoriza->erro_msg;

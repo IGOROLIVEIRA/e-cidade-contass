@@ -178,6 +178,8 @@ if (isset($incluir)) {
     $clempautoriza->e54_numsol = '';
     $clempautoriza->e54_anulad = null;
     $clempautoriza->e54_concarpeculiar = $e54_concarpeculiar;
+    $clempautoriza->e54_tipodespesa = $e54_tipodespesa;
+
 
     $clempautoriza->incluir(null);
     if ($clempautoriza->erro_status == 0) {

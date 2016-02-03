@@ -63,6 +63,9 @@ db_app::load("DBFormCache.js");
   #e44_tipo{
     width: 453px;
   }
+  #e54_tipodespesa{
+    width: 453px;
+  }
   #e54_tipoldescr{
     width: 200px;
   }
@@ -266,6 +269,20 @@ db_app::load("DBFormCache.js");
         db_input("c58_descr", 47, 0, true, "text", 3);
       ?>
     </td>
+  </tr>
+  <tr>
+      <td nowrap title="Tipos de despesa">
+        <strong>Tipos de despesa :</strong>
+      </td>
+      <td>
+        <?
+        /*if($e44_obriga == 0 && empty($e44_tipo)) {
+            $e44_tipo = $tipo;
+        }*/
+        $arr  = array('0'=>'Não se aplica','1'=>'Executivo','2'=>'Legislativo');
+        db_select("e54_tipodespesa", $arr, true, 1);
+        ?>
+      </td>
   </tr>
 <?
  } else {
