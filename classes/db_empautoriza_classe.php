@@ -312,6 +312,7 @@
                                           ,e54_instit
                                           ,e54_depto
                                           ,e54_concarpeculiar
+                                          ,e54_tipodespesa
                            )
                     values (
                                     $this->e54_autori
