@@ -426,7 +426,8 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
                    join orcelemento on o58_codele = o56_codele and o56_anousu = ".db_getsession("DB_anousu")." 
                    join orctiporec on o58_codigo = o15_codigo 
                    join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu 
-                   join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu 
+                   join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
+                   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu 
                    where liclicitem.l21_codliclicita = ".$oDados12->si172_licitacao;
            $rsDados = db_query($sSql);
         } 
