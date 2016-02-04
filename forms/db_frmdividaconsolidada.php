@@ -1,6 +1,11 @@
 <?
 //MODULO: sicom
+include("dbforms/db_classesgenericas.php");
 $cldividaconsolidada->rotulo->label();
+$clcgm->rotulo->label();
+$clrotulo = new rotulocampo;
+$clrotulo->label("z01_nome");
+$clrotulo->label("l20_codigo");
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -70,28 +75,34 @@ db_inputdata('si167_dtassinatura',@$si167_dtassinatura_dia,@$si167_dtassinatura_
 ?>
     </td>
   </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi167_tipodocumentocredor?>">
-       <?=@$Lsi167_tipodocumentocredor?>
-    </td>
-    <td> 
+
 <?
-$x = array("1"=>"CPF","2"=>"CNPJ","3"=>"Documento de Estrangeiros");
-db_select('si167_tipodocumentocredor',$x,true,$db_opcao,"");
+//$x = array("1"=>"CPF","2"=>"CNPJ","3"=>"Documento de Estrangeiros");
+//db_select('si167_tipodocumentocredor',$x,true,$db_opcao,"");
 //db_input('si167_tipodocumentocredor',1,$Isi167_tipodocumentocredor,true,'text',$db_opcao,"")
 ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi167_nrodocumentocredor?>">
-       <?=@$Lsi167_nrodocumentocredor?>
-    </td>
-    <td> 
+
 <?
-db_input('si167_nrodocumentocredor',14,$Isi167_nrodocumentocredor,true,'text',$db_opcao,"")
+db_input('si167_nrodocumentocredor',14,$Isi167_nrodocumentocredor,true,'hidden',$db_opcao,"")
 ?>
-    </td>
-  </tr>
+
+
+    <tr>
+        <td align="right"  nowrap title="<?=@$Tz01_numcgm?>">
+            <?
+            db_ancora(@$Lz01_numcgm,"js_pesquisaz01_numcgm(true);",$db_opcao);
+            ?>
+        </td>
+        <td>
+            <?
+            db_input('z01_numcgm',8,$Iz01_numcgm,true,'text',$db_opcao," onchange='js_pesquisaz01_numcgm(false);'")
+            ?>
+            <?
+            db_input('z01_nome',40,$Iz01_nome,true,'text',3);
+            ?>
+        </td>
+    </tr>
+
   <tr>
     <td nowrap title="<?=@$Tsi167_contratodeclei?>">
        <?=@$Lsi167_contratodeclei?>
@@ -263,4 +274,29 @@ function js_importar(){
 	    '&chavepesquisaimporta[si167_anoreferencia]='+chave3+'&chavepesquisaimporta[si167_mesreferencia]='+chave4";
 	  ?>
 	}
+
+
+function js_pesquisaz01_numcgm(mostra){
+    if(mostra==true){
+        js_OpenJanelaIframe('','func_nome','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    }else{
+        if(document.form1.z01_numcgm.value != ''){
+            js_OpenJanelaIframe('','func_nome','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        }else{
+            document.form1.z01_nome.value = '';
+        }
+    }
+}
+function js_mostracgm(erro,chave){
+    document.form1.z01_nome.value = chave;
+    if(erro==true){
+        document.form1.z01_numcgm.focus();
+        document.form1.z01_numcgm.value = '';
+    }
+}
+function js_mostracgm1(chave1,chave2){
+    document.form1.z01_numcgm.value = chave1;
+    document.form1.z01_nome.value = chave2;
+    func_nome.hide();
+}
 </script>

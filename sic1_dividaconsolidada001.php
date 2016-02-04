@@ -4,13 +4,16 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_dividaconsolidada_classe.php");
+require_once ("classes/db_cgm_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $cldividaconsolidada = new cl_dividaconsolidada;
+$clcgm               = new cl_cgm;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
+  $cldividaconsolidada->si167_numcgm = $z01_numcgm;
   $cldividaconsolidada->incluir(null);
   db_fim_transacao();
 } else if(isset($chavepesquisaimporta)){
