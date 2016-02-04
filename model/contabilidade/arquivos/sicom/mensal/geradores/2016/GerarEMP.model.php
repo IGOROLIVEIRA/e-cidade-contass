@@ -83,7 +83,7 @@ class GerarEMP extends GerarAM {
         $aCSVEMP10['si106_exercicioprocessolicitatorio']    =   $aEMP10['si106_exercicioprocessolicitatorio'] == 0 ? ' ' : str_pad($aEMP10['si106_exercicioprocessolicitatorio'], 4, "0", STR_PAD_LEFT);
         $aCSVEMP10['si106_tipoprocesso']                    =   $aEMP10['si106_tipoprocesso'] == 0 ? ' ' : str_pad($aEMP10['si106_tipoprocesso'], 1, "0", STR_PAD_LEFT);
         $aCSVEMP10['si106_cpfordenador']                    =   str_pad($aEMP10['si106_cpfordenador'], 11, "0", STR_PAD_LEFT);
-        $aCSVEMP10['si106_tipodespesaemprpps']              =   str_pad($aEMP10['si106_tipodespesaemprpps'], 1, "0", STR_PAD_LEFT);
+        $aCSVEMP10['si106_tipodespesaemprpps']              =   ($aEMP10['si106_tipodespesaemprpps'] == 0)? '' :str_pad($aEMP10['si106_tipodespesaemprpps'], 1, "0", STR_PAD_LEFT);
         
         $this->sLinha = $aCSVEMP10;
         $this->adicionaLinha();

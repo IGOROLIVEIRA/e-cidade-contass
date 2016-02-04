@@ -136,6 +136,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				       case when e60_codtipo = 2 then 3
 				            when e60_codtipo = 3 then 2
 				            else 1 end as modalidadempenho,
+				       case when si09_tipoinstit = 5 then e54_tipodespesa
+				            else 0 end as tipodespesa,
 				       case when substr(o56_elemento,1,3) = '346' then 2 else 1 end as tpempenho,
 				       e60_vlremp as vlbruto,
 				       e60_resumo as especificaoempenho,
@@ -216,9 +218,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				      AND o58_anousu = ".db_getsession("DB_anousu")."
 				      AND e60_instit = ".db_getsession("DB_instit")." 
 				      AND e60_emiss between '".$this->sDataInicial."' AND '".$this->sDataFinal."'  order by e60_codemp";
-		
-		echo $sSql;exit;
-        
+
 		$rsEmpenho = db_query($sSql);
         //echo pg_last_error();
 		//echo $sSql;db_criatabela($rsEmpenho);
@@ -328,7 +328,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 			}
 			$oDadosEmpenho->si106_cpfordenador				   = substr($oEmpenho->ordenador,0,11);
 
-			$oDadosEmpenho->si106_tipodespesaemprpps   	       = substr($oEmpenho->ordenador,0,11);
+			$oDadosEmpenho->si106_tipodespesaemprpps   	       = $oEmpenho->tipodespesa;
+
 			$oDadosEmpenho->si106_mes						   = $this->sDataFinal['5'].$this->sDataFinal['6'];
 			$oDadosEmpenho->si106_instit					   = db_getsession("DB_instit");
 			
