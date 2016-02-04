@@ -381,7 +381,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 		}
 	
 	    $oGerarEMP = new GerarEMP();
-	    $oGerarEMP->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];;
+	    $oGerarEMP->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
 	    $oGerarEMP->gerarDados();
 
 	}
