@@ -82,7 +82,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
      * selecionar informacoes registro 10
      */
 
-        $sSql       = "select * from dadoscomplementareslrf where si170_mesreferencia = '{$this->sDataFinal['6']}' and si170_instit = ". db_getsession("DB_instit");
+        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{$this->sDataFinal['6']}' and si170_instit = ". db_getsession("DB_instit");
 
         $rsResult10 = db_query($sSql);
 
@@ -93,7 +93,11 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
 
           $cldclrf10->si157_tiporegistro                        = 10;
           $cldclrf10->si157_codorgao                            = $sCodorgao;
+          $cldclrf10->si157_vlsaldoatualconcgarantiainterna     = $oDados10->si170_vlsaldoatualconcgarantiainterna;
           $cldclrf10->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
+          $cldclrf10->si157_vlsaldoatualcontragarantiainterna   = $oDados10->si170_vlsaldoatualcontragarantiainterna;
+          $cldclrf10->si157_vlsaldoatualcontragarantiaexterna   = $oDados10->si170_vlsaldoatualcontragarantiaexterna;
+          $cldclrf10->si157_medidascorretivas                   = $this->removeCaracteres($oDados10->si170_medidascorretivas);
           $cldclrf10->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
           $cldclrf10->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
           $cldclrf10->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
@@ -101,6 +105,11 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
           $cldclrf10->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
           $cldclrf10->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
           $cldclrf10->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
+          $cldclrf10->si157_publiclrf                           = $oDados10->si170_publiclrf;
+          $cldclrf10->si157_dtpublicacaorelatoriolrf            = $oDados10->si170_dtpublicacaorelatoriolrf;
+          $cldclrf10->si157_tpbimestre                          = $oDados10->si170_tpbimestre;
+          $cldclrf10->si157_metarrecada                         = $oDados10->si170_metarrecada;
+          $cldclrf10->si157_dscmedidasadotadas                  = $this->removeCaracteres($oDados10->si170_dscmedidasadotadas);
           $cldclrf10->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
           $cldclrf10->si157_instit                              = db_getsession("DB_instit");
 

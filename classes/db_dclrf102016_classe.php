@@ -232,6 +232,7 @@ class cl_dclrf102016 {
                                       ,si157_vlirpnpincentinstfinanc 
                                       ,si157_vlcompromissado 
                                       ,si157_vlrecursosnaoaplicados
+                                      ,si157_publiclrf
                                       ,si157_dtpublicacaorelatoriolrf
                                       ,si157_tpbimestre
                                       ,si157_metarrecada
@@ -247,7 +248,7 @@ class cl_dclrf102016 {
                                ,$this->si157_vlsaldoatualconcgarantia
                                ,$this->si157_vlsaldoatualcontragarantiainterna
                                ,$this->si157_vlsaldoatualcontragarantiaexterna
-                               ,$this->si157_medidascorretivas
+                               ,'$this->si157_medidascorretivas'
                                ,$this->si157_recprivatizacao 
                                ,$this->si157_vlliqincentcontrib 
                                ,$this->si157_vlliqincentinstfinanc 
@@ -256,15 +257,15 @@ class cl_dclrf102016 {
                                ,$this->si157_vlcompromissado
                                ,$this->si157_vlrecursosnaoaplicados
                                ,$this->si157_publiclrf
-                               ,$this->si157_dtpublicacaorelatoriolrf
+                               ,".($this->si157_dtpublicacaorelatoriolrf == 0 ? 'null' : "'$this->si157_dtpublicacaorelatoriolrf'")."
                                ,$this->si157_tpbimestre
                                ,$this->si157_metarrecada
-                               ,$this->si157_dscmedidasadotadas
+                               ,'$this->si157_dscmedidasadotadas'
                                ,$this->si157_mes 
                                ,$this->si157_instit 
                       )";
         $result = db_query($sql);
-        if($result==false){
+        if($result==false){die($sql);
             $this->erro_banco = str_replace("\n","",@pg_last_error());
             if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
                 $this->erro_sql   = "dclrf102016 ($this->si157_sequencial) nao Incluído. Inclusao Abortada.";

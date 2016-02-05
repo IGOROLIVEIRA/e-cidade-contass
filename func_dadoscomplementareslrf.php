@@ -40,10 +40,10 @@ $cldadoscomplementareslrf = new cl_dadoscomplementareslrf;
            if(file_exists("funcoes/db_func_dadoscomplementareslrf.php")==true){
              include("funcoes/db_func_dadoscomplementareslrf.php");
            }else{
-           $campos = "dadoscomplementareslrf.oid,dadoscomplementareslrf.*";
+           $campos = "si170_sequencial,si170_vlsaldoatualconcgarantia,si170_vlsaldoatualconcgarantia,si170_recprivatizacao,si170_vlliqincentcontrib,si170_vlcompromissado,si170_mesreferencia";
            }
         }
-	         $sql = $cldadoscomplementareslrf->sql_query();
+	         $sql = $cldadoscomplementareslrf->sql_query(NULL,$campos,'',"si170_instit = ".db_getsession("DB_instit"));
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{

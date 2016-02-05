@@ -51,7 +51,7 @@ class GerarDCLRF extends GerarAM {
         $aCSVDCLRF10['si157_vlsaldoatualconcgarantia']            =   number_format($aDCLRF10['si157_vlsaldoatualconcgarantia'], 2, ",", "");
         $aCSVDCLRF10['si157_vlsaldoatualcontragarantiainterna']   =   number_format($aDCLRF10['si157_vlsaldoatualcontragarantiainterna'], 2, ",", "");
         $aCSVDCLRF10['si157_vlsaldoatualcontragarantiaexterna']   =   number_format($aDCLRF10['si157_vlsaldoatualcontragarantiaexterna'], 2, ",", "");
-        $aCSVDCLRF10['si157_medidascorretivas']                   =   number_format($aDCLRF10['si157_medidascorretivas'], 2, ",", "");
+        $aCSVDCLRF10['si157_medidascorretivas']                   =   $aDCLRF10['si157_medidascorretivas'] == 0 ? '' : substr($aDCLRF10['si157_medidascorretivas'], 0, 4000);
         $aCSVDCLRF10['si157_recprivatizacao']                     =   number_format($aDCLRF10['si157_recprivatizacao'], 2, ",", "");
         $aCSVDCLRF10['si157_vlliqincentcontrib']                  =   number_format($aDCLRF10['si157_vlliqincentcontrib'], 2, ",", "");
         $aCSVDCLRF10['si157_vlliqincentinstfinanc']               =   number_format($aDCLRF10['si157_vlliqincentinstfinanc'], 2, ",", "");
@@ -59,11 +59,11 @@ class GerarDCLRF extends GerarAM {
         $aCSVDCLRF10['si157_vlirpnpincentinstfinanc']             =   number_format($aDCLRF10['si157_vlirpnpincentinstfinanc'], 2, ",", "");
         $aCSVDCLRF10['si157_vlcompromissado']                     =   number_format($aDCLRF10['si157_vlcompromissado'], 2, ",", "");
         $aCSVDCLRF10['si157_vlrecursosnaoaplicados']              =   number_format($aDCLRF10['si157_vlrecursosnaoaplicados'], 2, ",", "");
-        $aCSVDCLRF10['si157_publiclrf']                           =   number_format($aDCLRF10['si157_publiclrf'], 2, ",", "");
-        $aCSVDCLRF10['si157_dtpublicacaorelatoriolrf']            =   number_format($aDCLRF10['si157_dtpublicacaorelatoriolrf'], 2, ",", "");
-        $aCSVDCLRF10['si157_tpbimestre']                          =   number_format($aDCLRF10['si157_tpbimestre'], 2, ",", "");
-        $aCSVDCLRF10['si157_metarrecada']                         =   number_format($aDCLRF10['si157_metarrecada'], 2, ",", "");
-        $aCSVDCLRF10['si157_dscmedidasadotadas']                  =   substr($aDCLRF10['si157_dscmedidasadotadas'], 0, 4000);
+        $aCSVDCLRF10['si157_publiclrf']                           =   $aDCLRF10['si157_publiclrf'] == 0 ? '' : $aDCLRF10['si157_publiclrf'];
+        $aCSVDCLRF10['si157_dtpublicacaorelatoriolrf']            =   implode("", array_reverse(explode("-", $aDCLRF10['si157_dtpublicacaorelatoriolrf'])));
+        $aCSVDCLRF10['si157_tpbimestre']                          =   $aDCLRF10['si157_tpbimestre'] == 0 ? '' : $aDCLRF10['si157_tpbimestre'];
+        $aCSVDCLRF10['si157_metarrecada']                         =   $aDCLRF10['si157_metarrecada'] == 0 ? '' : $aDCLRF10['si157_metarrecada'];
+        $aCSVDCLRF10['si157_dscmedidasadotadas']                  =   $aDCLRF10['si157_dscmedidasadotadas'] == 0 ? '' : substr($aDCLRF10['si157_dscmedidasadotadas'], 0, 4000);
         
         $this->sLinha = $aCSVDCLRF10;
         $this->adicionaLinha();

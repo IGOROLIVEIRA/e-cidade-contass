@@ -20,26 +20,44 @@ class cl_dadoscomplementareslrf {
    var $si170_vlsaldoatualconcgarantia = 0; 
    var $si170_recprivatizacao = 0; 
    var $si170_vlliqincentcontrib = 0; 
-   var $si170_vlliqincentInstfinanc = 0; 
-   var $si170_vlIrpnpincentcontrib = 0; 
+   var $si170_vlliqincentinstfinanc = 0; 
+   var $si170_vlirpnpincentcontrib = 0; 
    var $si170_vllrpnpincentinstfinanc = 0; 
    var $si170_vlcompromissado = 0; 
    var $si170_vlrecursosnaoaplicados = 0; 
    var $si170_mesreferencia = 0; 
-   var $si170_instit = 0; 
+   var $si170_instit = 0;
+   var $si170_vlsaldoatualconcgarantiainterna = 0;
+   var $si170_vlsaldoatualcontragarantiainterna = 0;
+   var $si170_vlsaldoatualcontragarantiaexterna = 0;
+   var $si170_medidascorretivas = null;
+   var $si170_publiclrf = NULL;
+   var $si170_dtpublicacaorelatoriolrf = null;
+   var $si170_tpbimestre = null;
+   var $si170_metarrecada = null;
+   var $si170_dscmedidasadotadas = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si170_sequencial = int8 = sequencial 
                  si170_vlsaldoatualconcgarantia = float8 = Saldo atual das concessões 
                  si170_recprivatizacao = float8 = Receita de  Privatização 
                  si170_vlliqincentcontrib = float8 = Valor Liquidado de Incentivo 
-                 si170_vlliqincentInstfinanc = float8 = Valor concedido por Instituição 
-                 si170_vlIrpnpincentcontrib = float8 = Valor Inscrito em RP Não Processados 
+                 si170_vlliqincentinstfinanc = float8 = Valor concedido por Instituição 
+                 si170_vlirpnpincentcontrib = float8 = Valor Inscrito em RP Não Processados 
                  si170_vllrpnpincentinstfinanc = float8 = Valor Inscrito em RP Não Processados IF 
                  si170_vlcompromissado = float8 = Total dos valores compromissados 
                  si170_vlrecursosnaoaplicados = float8 = Recursos do FUNDEB não aplicados 
                  si170_mesreferencia = int8 = Mês de referência 
                  si170_instit = int8 = Instituição 
+                 si170_vlsaldoatualconcgarantiainterna = float8 = Valor
+                 si170_vlsaldoatualcontragarantiainterna = float8 = Valor
+                 si170_vlsaldoatualcontragarantiaexterna = float8 = Valor
+                 si170_medidascorretivas = text = Descrição
+                 si170_publiclrf = int8 = Publicação
+                 si170_dtpublicacaorelatoriolrf = date = data 
+                 si170_tpbimestre = int8 = Bimestre
+                 si170_metarrecada = int8 = Meta
+                 si170_dscmedidasadotadas = text = Descrição
                  ";
    //funcao construtor da classe 
    function cl_dadoscomplementareslrf() { 
@@ -63,13 +81,30 @@ class cl_dadoscomplementareslrf {
        $this->si170_vlsaldoatualconcgarantia = ($this->si170_vlsaldoatualconcgarantia == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlsaldoatualconcgarantia"]:$this->si170_vlsaldoatualconcgarantia);
        $this->si170_recprivatizacao = ($this->si170_recprivatizacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_recprivatizacao"]:$this->si170_recprivatizacao);
        $this->si170_vlliqincentcontrib = ($this->si170_vlliqincentcontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlliqincentcontrib"]:$this->si170_vlliqincentcontrib);
-       $this->si170_vlliqincentInstfinanc = ($this->si170_vlliqincentInstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlliqincentInstfinanc"]:$this->si170_vlliqincentInstfinanc);
-       $this->si170_vlIrpnpincentcontrib = ($this->si170_vlIrpnpincentcontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlIrpnpincentcontrib"]:$this->si170_vlIrpnpincentcontrib);
+       $this->si170_vlliqincentinstfinanc = ($this->si170_vlliqincentinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlliqincentinstfinanc"]:$this->si170_vlliqincentinstfinanc);
+       $this->si170_vlirpnpincentcontrib = ($this->si170_vlirpnpincentcontrib == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlirpnpincentcontrib"]:$this->si170_vlirpnpincentcontrib);
        $this->si170_vllrpnpincentinstfinanc = ($this->si170_vllrpnpincentinstfinanc == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vllrpnpincentinstfinanc"]:$this->si170_vllrpnpincentinstfinanc);
        $this->si170_vlcompromissado = ($this->si170_vlcompromissado == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlcompromissado"]:$this->si170_vlcompromissado);
        $this->si170_vlrecursosnaoaplicados = ($this->si170_vlrecursosnaoaplicados == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlrecursosnaoaplicados"]:$this->si170_vlrecursosnaoaplicados);
        $this->si170_mesreferencia = ($this->si170_mesreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_mesreferencia"]:$this->si170_mesreferencia);
        $this->si170_instit = ($this->si170_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_instit"]:$this->si170_instit);
+       $this->si170_vlsaldoatualconcgarantiainterna = ($this->si170_vlsaldoatualconcgarantiainterna == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlsaldoatualconcgarantiainterna"]:$this->si170_vlsaldoatualconcgarantiainterna);
+       $this->si170_vlsaldoatualcontragarantiainterna = ($this->si170_vlsaldoatualcontragarantiainterna == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlsaldoatualcontragarantiainterna"]:$this->si170_vlsaldoatualcontragarantiainterna);
+       $this->si170_vlsaldoatualcontragarantiaexterna = ($this->si170_vlsaldoatualcontragarantiaexterna == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_vlsaldoatualcontragarantiaexterna"]:$this->si170_vlsaldoatualcontragarantiaexterna);
+       $this->si170_medidascorretivas = ($this->si170_medidascorretivas == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_medidascorretivas"]:$this->si170_medidascorretivas);
+       $this->si170_publiclrf = ($this->si170_publiclrf == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_publiclrf"]:$this->si170_publiclrf);
+       $this->si170_dtpublicacaorelatoriolrf = ($this->si170_dtpublicacaorelatoriolrf == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_dtpublicacaorelatoriolrf"]:$this->si170_dtpublicacaorelatoriolrf);
+       if($this->si170_dtpublicacaorelatoriolrf == ""){
+         $this->si170_dtpublicacaorelatoriolrf_dia = ($this->si170_dtpublicacaorelatoriolrf_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_dtpublicacaorelatoriolrf_dia"]:$this->si170_dtpublicacaorelatoriolrf_dia);
+         $this->si170_dtpublicacaorelatoriolrf_mes = ($this->si170_dtpublicacaorelatoriolrf_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_dtpublicacaorelatoriolrf_mes"]:$this->si170_dtpublicacaorelatoriolrf_mes);
+         $this->si170_dtpublicacaorelatoriolrf_ano = ($this->si170_dtpublicacaorelatoriolrf_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_dtpublicacaorelatoriolrf_ano"]:$this->si170_dtpublicacaorelatoriolrf_ano);
+         if($this->si170_dtpublicacaorelatoriolrf_dia != ""){
+            $this->si170_dtpublicacaorelatoriolrf = $this->si170_dtpublicacaorelatoriolrf_ano."-".$this->si170_dtpublicacaorelatoriolrf_mes."-".$this->si170_dtpublicacaorelatoriolrf_dia;
+         }
+       }
+       $this->si170_tpbimestre = ($this->si170_tpbimestre == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_tpbimestre"]:$this->si170_tpbimestre);
+       $this->si170_metarrecada = ($this->si170_metarrecada == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_metarrecada"]:$this->si170_metarrecada);
+       $this->si170_dscmedidasadotadas = ($this->si170_dscmedidasadotadas == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_dscmedidasadotadas"]:$this->si170_dscmedidasadotadas);
      }else{
        $this->si170_sequencial = ($this->si170_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si170_sequencial"]:$this->si170_sequencial);
      }
@@ -104,18 +139,18 @@ class cl_dadoscomplementareslrf {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si170_vlliqincentInstfinanc == null ){ 
+     if($this->si170_vlliqincentinstfinanc == null ){ 
        $this->erro_sql = " Campo Valor concedido por Instituição nao Informado.";
-       $this->erro_campo = "si170_vlliqincentInstfinanc";
+       $this->erro_campo = "si170_vlliqincentinstfinanc";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si170_vlIrpnpincentcontrib == null ){ 
+     if($this->si170_vlirpnpincentcontrib == null ){ 
        $this->erro_sql = " Campo Valor Inscrito em RP Não Processados nao Informado.";
-       $this->erro_campo = "si170_vlIrpnpincentcontrib";
+       $this->erro_campo = "si170_vlirpnpincentcontrib";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -199,31 +234,125 @@ class cl_dadoscomplementareslrf {
        $this->erro_status = "0";
        return false;
      }
+     
+     $result = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = ".db_getsession("DB_instit"));
+     $tipoinstit = pg_result($result,0,0);
+     if($this->si170_vlsaldoatualconcgarantiainterna == null ){ 
+       $this->erro_sql = " Campo Saldo atual das concessões de garantia interna nao Informado.";
+       $this->erro_campo = "si170_vlsaldoatualconcgarantiainterna";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->si170_vlsaldoatualcontragarantiainterna == null ){ 
+       $this->erro_sql = " Campo Saldo atual das contragarantias interna recebidas nao Informado.";
+       $this->erro_campo = "si170_vlsaldoatualcontragarantiainterna";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->si170_vlsaldoatualcontragarantiaexterna == null ){ 
+       $this->erro_sql = " Campo Saldo atual das contragarantias externa recebidas nao Informado.";
+       $this->erro_campo = "si170_vlsaldoatualcontragarantiaexterna";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if(($this->si170_publiclrf == 0 || $this->si170_publiclrf == null) && ($tipoinstit == 1 || $tipoinstit == 2)){ 
+       $this->erro_sql = " Campo Publicação dos relatórios da LRF nao Informado.";
+       $this->erro_campo = "si170_publiclrf";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->si170_dtpublicacaorelatoriolrf == null && $this->si170_publiclrf == 1){ 
+       $this->erro_sql = " Campo Data de publicação dos relatórios da LRF nao Informado.";
+       $this->erro_campo = "si170_dtpublicacaorelatoriolrf_dia";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->si170_tpbimestre == 0 && $this->si170_dtpublicacaorelatoriolrf != null){ 
+       $this->erro_sql = " Campo Periodo a que se refere a data de publicação da LRF nao Informado.";
+       $this->erro_campo = "si170_tpbimestre";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->si170_metarrecada != 0 && $tipoinstit != 2){ 
+       $this->erro_sql = " Campo Atingimento da meta bimestral de arrecadação só deve ser informado pela instituição Prefeitura.";
+       $this->erro_campo = "si170_metarrecada";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->si170_dscmedidasadotadas == null && $this->si170_metarrecada == 2){ 
+       $this->erro_sql = " Campo Medidas adotadas e a adotar nao Informado.";
+       $this->erro_campo = "si170_dscmedidasadotadas";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     
      $sql = "insert into dadoscomplementareslrf(
                                        si170_sequencial 
                                       ,si170_vlsaldoatualconcgarantia 
                                       ,si170_recprivatizacao 
                                       ,si170_vlliqincentcontrib 
-                                      ,si170_vlliqincentInstfinanc 
-                                      ,si170_vlIrpnpincentcontrib 
+                                      ,si170_vlliqincentinstfinanc 
+                                      ,si170_vlirpnpincentcontrib 
                                       ,si170_vllrpnpincentinstfinanc 
                                       ,si170_vlcompromissado 
                                       ,si170_vlrecursosnaoaplicados 
                                       ,si170_mesreferencia 
                                       ,si170_instit 
+                                      ,si170_vlsaldoatualconcgarantiainterna
+                                      ,si170_vlsaldoatualcontragarantiainterna
+                                      ,si170_vlsaldoatualcontragarantiaexterna
+                                      ,si170_medidascorretivas
+                                      ,si170_publiclrf
+                                      ,si170_dtpublicacaorelatoriolrf
+                                      ,si170_tpbimestre
+                                      ,si170_metarrecada
+                                      ,si170_dscmedidasadotadas
                        )
                 values (
                                 $this->si170_sequencial 
                                ,$this->si170_vlsaldoatualconcgarantia 
                                ,$this->si170_recprivatizacao 
                                ,$this->si170_vlliqincentcontrib 
-                               ,$this->si170_vlliqincentInstfinanc 
-                               ,$this->si170_vlIrpnpincentcontrib 
+                               ,$this->si170_vlliqincentinstfinanc 
+                               ,$this->si170_vlirpnpincentcontrib 
                                ,$this->si170_vllrpnpincentinstfinanc 
                                ,$this->si170_vlcompromissado 
                                ,$this->si170_vlrecursosnaoaplicados 
                                ,$this->si170_mesreferencia 
                                ,$this->si170_instit 
+                               ,$this->si170_vlsaldoatualconcgarantiainterna
+                               ,$this->si170_vlsaldoatualcontragarantiainterna
+                               ,$this->si170_vlsaldoatualcontragarantiaexterna
+                               ,'$this->si170_medidascorretivas'
+                               ,$this->si170_publiclrf
+                               ,".($this->si170_dtpublicacaorelatoriolrf == "null" || $this->si170_dtpublicacaorelatoriolrf == ""?"null":"'".$this->si170_dtpublicacaorelatoriolrf."'")."
+                               ,$this->si170_tpbimestre
+                               ,$this->si170_metarrecada
+                               ,'$this->si170_dscmedidasadotadas'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -259,8 +388,8 @@ class cl_dadoscomplementareslrf {
        $resac = db_query("insert into db_acount values($acount,2010404,2011447,'','".AddSlashes(pg_result($resaco,0,'si170_vlsaldoatualconcgarantia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010404,2011448,'','".AddSlashes(pg_result($resaco,0,'si170_recprivatizacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010404,2011450,'','".AddSlashes(pg_result($resaco,0,'si170_vlliqincentcontrib'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010404,2011451,'','".AddSlashes(pg_result($resaco,0,'si170_vlliqincentInstfinanc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010404,2011452,'','".AddSlashes(pg_result($resaco,0,'si170_vlIrpnpincentcontrib'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2010404,2011451,'','".AddSlashes(pg_result($resaco,0,'si170_vlliqincentinstfinanc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2010404,2011452,'','".AddSlashes(pg_result($resaco,0,'si170_vlirpnpincentcontrib'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010404,2011453,'','".AddSlashes(pg_result($resaco,0,'si170_vllrpnpincentinstfinanc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010404,2011454,'','".AddSlashes(pg_result($resaco,0,'si170_vlcompromissado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010404,2011455,'','".AddSlashes(pg_result($resaco,0,'si170_vlrecursosnaoaplicados'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -326,12 +455,12 @@ class cl_dadoscomplementareslrf {
          return false;
        }
      }
-     if(trim($this->si170_vlliqincentInstfinanc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_vlliqincentInstfinanc"])){ 
-       $sql  .= $virgula." si170_vlliqincentInstfinanc = $this->si170_vlliqincentInstfinanc ";
+     if(trim($this->si170_vlliqincentinstfinanc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_vlliqincentinstfinanc"])){ 
+       $sql  .= $virgula." si170_vlliqincentinstfinanc = $this->si170_vlliqincentinstfinanc ";
        $virgula = ",";
-       if(trim($this->si170_vlliqincentInstfinanc) == null ){ 
+       if(trim($this->si170_vlliqincentinstfinanc) == null ){ 
          $this->erro_sql = " Campo Valor concedido por Instituição nao Informado.";
-         $this->erro_campo = "si170_vlliqincentInstfinanc";
+         $this->erro_campo = "si170_vlliqincentinstfinanc";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -339,12 +468,12 @@ class cl_dadoscomplementareslrf {
          return false;
        }
      }
-     if(trim($this->si170_vlIrpnpincentcontrib)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_vlIrpnpincentcontrib"])){ 
-       $sql  .= $virgula." si170_vlIrpnpincentcontrib = $this->si170_vlIrpnpincentcontrib ";
+     if(trim($this->si170_vlirpnpincentcontrib)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_vlirpnpincentcontrib"])){ 
+       $sql  .= $virgula." si170_vlirpnpincentcontrib = $this->si170_vlirpnpincentcontrib ";
        $virgula = ",";
-       if(trim($this->si170_vlIrpnpincentcontrib) == null ){ 
+       if(trim($this->si170_vlirpnpincentcontrib) == null ){ 
          $this->erro_sql = " Campo Valor Inscrito em RP Não Processados nao Informado.";
-         $this->erro_campo = "si170_vlIrpnpincentcontrib";
+         $this->erro_campo = "si170_vlirpnpincentcontrib";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -417,6 +546,118 @@ class cl_dadoscomplementareslrf {
          return false;
        }
      }
+     
+     $result = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = ".db_getsession("DB_instit"));
+     $tipoinstit = pg_result($result,0,0);
+     if(trim($this->si170_vlsaldoatualconcgarantiainterna)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_vlsaldoatualconcgarantiainterna"])){ 
+       $sql  .= $virgula." si170_vlsaldoatualconcgarantiainterna = $this->si170_vlsaldoatualconcgarantiainterna ";
+       $virgula = ",";
+	     if($this->si170_vlsaldoatualconcgarantiainterna == null ){ 
+	       $this->erro_sql = " Campo Saldo atual das concessões de garantia interna nao Informado.";
+	       $this->erro_campo = "si170_vlsaldoatualconcgarantiainterna";
+	       $this->erro_banco = "";
+	       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	       $this->erro_status = "0";
+	       return false;
+	     }
+     }
+     if(trim($this->si170_vlsaldoatualcontragarantiainterna)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_vlsaldoatualcontragarantiainterna"])){ 
+       $sql  .= $virgula." si170_vlsaldoatualcontragarantiainterna = $this->si170_vlsaldoatualcontragarantiainterna ";
+       $virgula = ",";
+	     if($this->si170_vlsaldoatualcontragarantiainterna == null ){ 
+	       $this->erro_sql = " Campo Saldo atual das contragarantias interna recebidas nao Informado.";
+	       $this->erro_campo = "si170_vlsaldoatualcontragarantiainterna";
+	       $this->erro_banco = "";
+	       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	       $this->erro_status = "0";
+	       return false;
+	     }
+     }
+     if(trim($this->si170_vlsaldoatualcontragarantiaexterna)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_vlsaldoatualcontragarantiaexterna"])){ 
+       $sql  .= $virgula." si170_vlsaldoatualcontragarantiaexterna = $this->si170_vlsaldoatualcontragarantiaexterna ";
+       $virgula = ",";
+	     if($this->si170_vlsaldoatualcontragarantiaexterna == null ){ 
+	       $this->erro_sql = " Campo Saldo atual das contragarantias externa recebidas nao Informado.";
+	       $this->erro_campo = "si170_vlsaldoatualcontragarantiaexterna";
+	       $this->erro_banco = "";
+	       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	       $this->erro_status = "0";
+	       return false;
+	     }
+     }
+     if(trim($this->si170_publiclrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_publiclrf"])){ 
+       $sql  .= $virgula." si170_publiclrf = $this->si170_publiclrf ";
+       $virgula = ",";
+	     if(($this->si170_publiclrf == 0 || $this->si170_publiclrf == null) && ($tipoinstit == 1 || $tipoinstit == 2)){ 
+	       $this->erro_sql = " Campo Publicação dos relatórios da LRF nao Informado.";
+	       $this->erro_campo = "si170_publiclrf";
+	       $this->erro_banco = "";
+	       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	       $this->erro_status = "0";
+	       return false;
+	     }
+     }
+     if(trim($this->si170_dtpublicacaorelatoriolrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_dtpublicacaorelatoriolrf"])){ 
+       $sql  .= $virgula." si170_dtpublicacaorelatoriolrf = ".($this->si170_dtpublicacaorelatoriolrf == "null" || $this->si170_dtpublicacaorelatoriolrf == ""?"null":"'".$this->si170_dtpublicacaorelatoriolrf."'");
+       $virgula = ",";
+	     if($this->si170_dtpublicacaorelatoriolrf == null && $this->si170_publiclrf == 1){ 
+	       $this->erro_sql = " Campo Data de publicação dos relatórios da LRF nao Informado.";
+	       $this->erro_campo = "si170_dtpublicacaorelatoriolrf_dia";
+	       $this->erro_banco = "";
+	       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	       $this->erro_status = "0";
+	       return false;
+	     }
+     }
+     if(trim($this->si170_tpbimestre)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_tpbimestre"])){ 
+       $sql  .= $virgula." si170_tpbimestre = $this->si170_tpbimestre ";
+       $virgula = ",";
+	     if($this->si170_tpbimestre == 0 && $this->si170_dtpublicacaorelatoriolrf != null){ 
+	       $this->erro_sql = " Campo Periodo a que se refere a data de publicação da LRF nao Informado.";
+	       $this->erro_campo = "si170_tpbimestre";
+	       $this->erro_banco = "";
+	       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	       $this->erro_status = "0";
+	       return false;
+	     }
+     }
+     if(trim($this->si170_metarrecada)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_metarrecada"])){ 
+       $sql  .= $virgula." si170_metarrecada = $this->si170_metarrecada ";
+       $virgula = ",";
+	     if($this->si170_metarrecada != 0 && $tipoinstit != 2){ 
+	       $this->erro_sql = " Campo Atingimento da meta bimestral de arrecadação só deve ser informado pela instituição Prefeitura.";
+	       $this->erro_campo = "si170_metarrecada";
+	       $this->erro_banco = "";
+	       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	       $this->erro_status = "0";
+	       return false;
+	     }
+     }
+     if(trim($this->si170_dscmedidasadotadas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_dscmedidasadotadas"])){ 
+       $sql  .= $virgula." si170_dscmedidasadotadas = '$this->si170_dscmedidasadotadas' ";
+       $virgula = ",";
+	     if($this->si170_dscmedidasadotadas == null && $this->si170_metarrecada == 2){ 
+	       $this->erro_sql = " Campo Medidas adotadas e a adotar nao Informado.";
+	       $this->erro_campo = "si170_dscmedidasadotadas";
+	       $this->erro_banco = "";
+	       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+	       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+	       $this->erro_status = "0";
+	       return false;
+	     }
+     }
+     if(trim($this->si170_medidascorretivas)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si170_medidascorretivas"])){ 
+       $sql  .= $virgula." si170_medidascorretivas = '$this->si170_medidascorretivas' ";
+       $virgula = ",";
+     }
+     
      $sql .= " where ";
      if($si170_sequencial!=null){
        $sql .= " si170_sequencial = $this->si170_sequencial";
@@ -436,10 +677,10 @@ class cl_dadoscomplementareslrf {
            $resac = db_query("insert into db_acount values($acount,2010404,2011448,'".AddSlashes(pg_result($resaco,$conresaco,'si170_recprivatizacao'))."','$this->si170_recprivatizacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si170_vlliqincentcontrib"]) || $this->si170_vlliqincentcontrib != "")
            $resac = db_query("insert into db_acount values($acount,2010404,2011450,'".AddSlashes(pg_result($resaco,$conresaco,'si170_vlliqincentcontrib'))."','$this->si170_vlliqincentcontrib',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si170_vlliqincentInstfinanc"]) || $this->si170_vlliqincentInstfinanc != "")
-           $resac = db_query("insert into db_acount values($acount,2010404,2011451,'".AddSlashes(pg_result($resaco,$conresaco,'si170_vlliqincentInstfinanc'))."','$this->si170_vlliqincentInstfinanc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si170_vlIrpnpincentcontrib"]) || $this->si170_vlIrpnpincentcontrib != "")
-           $resac = db_query("insert into db_acount values($acount,2010404,2011452,'".AddSlashes(pg_result($resaco,$conresaco,'si170_vlIrpnpincentcontrib'))."','$this->si170_vlIrpnpincentcontrib',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["si170_vlliqincentinstfinanc"]) || $this->si170_vlliqincentinstfinanc != "")
+           $resac = db_query("insert into db_acount values($acount,2010404,2011451,'".AddSlashes(pg_result($resaco,$conresaco,'si170_vlliqincentinstfinanc'))."','$this->si170_vlliqincentinstfinanc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["si170_vlirpnpincentcontrib"]) || $this->si170_vlirpnpincentcontrib != "")
+           $resac = db_query("insert into db_acount values($acount,2010404,2011452,'".AddSlashes(pg_result($resaco,$conresaco,'si170_vlirpnpincentcontrib'))."','$this->si170_vlirpnpincentcontrib',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si170_vllrpnpincentinstfinanc"]) || $this->si170_vllrpnpincentinstfinanc != "")
            $resac = db_query("insert into db_acount values($acount,2010404,2011453,'".AddSlashes(pg_result($resaco,$conresaco,'si170_vllrpnpincentinstfinanc'))."','$this->si170_vllrpnpincentinstfinanc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si170_vlcompromissado"]) || $this->si170_vlcompromissado != "")
@@ -501,8 +742,8 @@ class cl_dadoscomplementareslrf {
          $resac = db_query("insert into db_acount values($acount,2010404,2011447,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vlsaldoatualconcgarantia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010404,2011448,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_recprivatizacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010404,2011450,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vlliqincentcontrib'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,2010404,2011451,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vlliqincentInstfinanc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,2010404,2011452,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vlIrpnpincentcontrib'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2010404,2011451,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vlliqincentinstfinanc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2010404,2011452,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vlirpnpincentcontrib'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010404,2011453,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vllrpnpincentinstfinanc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010404,2011454,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vlcompromissado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010404,2011455,'','".AddSlashes(pg_result($resaco,$iresaco,'si170_vlrecursosnaoaplicados'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
