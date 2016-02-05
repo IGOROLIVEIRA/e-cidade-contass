@@ -181,11 +181,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
      
       
 	  $aHash  = $oRegistro10->si09_codorgaotce;
-	  $aHash .= $oRegistro10->c63_banco;
-	  $aHash .= $oRegistro10->c63_agencia;
-	  $aHash .= $oRegistro10->c63_dvagencia; 
-	  $aHash .= $oRegistro10->c63_conta;
-	  $aHash .= $oRegistro10->c63_dvconta;
+	  $aHash .= intval($oRegistro10->c63_banco);
+	  $aHash .= intval($oRegistro10->c63_agencia);
+	  $aHash .= intval($oRegistro10->c63_dvagencia); 
+	  $aHash .= intval($oRegistro10->c63_conta);
+	  $aHash .= intval($oRegistro10->c63_dvconta);
 	  $aHash .= $oRegistro10->tipoconta;
 	  if ($oRegistro10->si09_codorgaotce == 5) {
 	  	$aHash .= $oRegistro10->tipoaplicacao;
@@ -220,6 +220,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
             
       	    $sSqlVerifica  = "SELECT * FROM ctb102016 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco' 
+          AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta' 
+          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'
+          AND si95_mes < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
+        $sSqlVerifica  = "UNION SELECT * FROM ctb102015 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco' 
           AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta' 
           AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'
           AND si95_mes < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
@@ -573,7 +577,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								       c70_valor as vlrreceitacont       
 								     from conlancamrec
 								     join conlancam on c70_codlan = c74_codlan and c70_anousu = c74_anousu 
-								left join orcreceita on c74_codrec = o70_codrec and o70_anousu = 2016     
+								left join orcreceita on c74_codrec = o70_codrec and o70_anousu = ".db_getsession("DB_anousu")."     
 								left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
 								left join orctiporec on o15_codigo = o70_codigo
 								    where c74_codlan = {$oMovi->codreduzido}";

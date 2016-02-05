@@ -181,11 +181,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
      
       
 	  $aHash  = $oRegistro10->si09_codorgaotce;
-	  $aHash .= $oRegistro10->c63_banco;
-	  $aHash .= $oRegistro10->c63_agencia;
-	  $aHash .= $oRegistro10->c63_dvagencia; 
-	  $aHash .= $oRegistro10->c63_conta;
-	  $aHash .= $oRegistro10->c63_dvconta;
+	  $aHash .= intval($oRegistro10->c63_banco);
+	  $aHash .= intval($oRegistro10->c63_agencia);
+	  $aHash .= intval($oRegistro10->c63_dvagencia); 
+	  $aHash .= intval($oRegistro10->c63_conta);
+	  $aHash .= intval($oRegistro10->c63_dvconta);
 	  $aHash .= $oRegistro10->tipoconta;
 	  if ($oRegistro10->si09_codorgaotce == 5) {
 	  	$aHash .= $oRegistro10->tipoaplicacao;
@@ -574,7 +574,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								       c70_valor as vlrreceitacont       
 								     from conlancamrec
 								     join conlancam on c70_codlan = c74_codlan and c70_anousu = c74_anousu 
-								left join orcreceita on c74_codrec = o70_codrec and o70_anousu = 2015     
+								left join orcreceita on c74_codrec = o70_codrec and o70_anousu = ".db_getsession("DB_anousu")."     
 								left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
 								left join orctiporec on o15_codigo = o70_codigo
 								    where c74_codlan = {$oMovi->codreduzido}";
