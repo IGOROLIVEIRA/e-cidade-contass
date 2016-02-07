@@ -32,8 +32,8 @@ db_input('descricao',10,'',true,'text',3,'')
   </tr>
 
         <tr>
-            <td nowrap title="<?= @$Tces01_reduz ?>">
-                <?= @$Lces01_reduz ?>
+            <td nowrap title="Reduzido">
+                Reduzido
             </td>
             <td>
                 <?
@@ -45,9 +45,9 @@ db_input('descricao',10,'',true,'text',3,'')
     if($ces01_codcon) {
         ?>
         <tr>
-            <td nowrap title="<?= @$Tces01_fonte ?>">
+            <td nowrap title="Fonte">
                 <?
-                db_ancora(@$Lces01_fonte, "js_pesquisaces01_fonte(true);", $db_opcao);
+                db_ancora('Fonte', "js_pesquisaces01_fonte(true);", $db_opcao);
                 ?>
             </td>
             <td>
