@@ -193,7 +193,7 @@ class cl_conextsaldo {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -212,7 +212,7 @@ class cl_conextsaldo {
          $resac = db_query("insert into db_acount values($acount,1010200,1009335,'','".AddSlashes(pg_result($resaco,0,'ces01_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010200,1009336,'','".AddSlashes(pg_result($resaco,0,'ces01_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-     }
+     }*/
      return true;
    } 
    // funcao para alteracao
@@ -315,7 +315,7 @@ class cl_conextsaldo {
      if($ces01_sequencial!=null){
        $sql .= " ces01_sequencial = $this->ces01_sequencial";
      }
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -344,7 +344,7 @@ class cl_conextsaldo {
              $resac = db_query("insert into db_acount values($acount,1010200,1009336,'".AddSlashes(pg_result($resaco,$conresaco,'ces01_inst'))."','$this->ces01_inst',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -380,7 +380,7 @@ class cl_conextsaldo {
    // funcao para exclusao 
    function excluir ($ces01_sequencial=null,$dbwhere=null) { 
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -407,7 +407,7 @@ class cl_conextsaldo {
            $resac  = db_query("insert into db_acount values($acount,1010200,1009336,'','".AddSlashes(pg_result($resaco,$iresaco,'ces01_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $sql = " delete from conextsaldo
                     where ";
      $sql2 = "";
