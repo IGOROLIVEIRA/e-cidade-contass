@@ -1,8 +1,4 @@
 <?
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
-//MODULO: contabilidade
-
 include("dbforms/db_classesgenericas.php");
 
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
