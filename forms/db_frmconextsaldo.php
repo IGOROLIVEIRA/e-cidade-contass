@@ -17,7 +17,7 @@ db_input('ces01_sequencial',10,$Ices01_sequencial,true,'hidden',$db_opcao,"")
   <tr>
     <td nowrap title="<?=@$Tces01_codcon?>">
        <?
-       db_ancora(@$Lces01_codcon,"js_pesquisaces01_codcon(true);",$db_opcao);
+       db_ancora('Plano de contas',"js_pesquisaces01_codcon(true);",$db_opcao);
        ?>
     </td>
     <td> 
@@ -33,7 +33,7 @@ db_input('descricao',10,'',true,'text',3,'')
 
         <tr>
             <td nowrap title="Reduzido">
-                Reduzido
+                <strong>Reduzido: </strong>
             </td>
             <td>
                 <?
