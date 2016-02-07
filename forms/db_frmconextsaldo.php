@@ -108,7 +108,7 @@ if($ces01_codcon) {
             $chavepri= array("ces01_sequencial"=>@$ces01_sequencial);
             $cliframe_alterar_excluir->chavepri=$chavepri;
             $cliframe_alterar_excluir->sql     = $sql;
-            $cliframe_alterar_excluir->campos = "ces01_sequencial as dl_codigo, ces01_codcon as dl_Plano_de_contas , ces01_reduz as dl_Reduzido, ces01_fonte as dl_Fonte, ces01_valor as dl_Valor";
+            $cliframe_alterar_excluir->campos = "ces01_sequencial, ces01_codcon, ces01_reduz, ces01_fonte, ces01_valor";
             $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
             $cliframe_alterar_excluir->iframe_height ="160";
             $cliframe_alterar_excluir->iframe_width ="700";
