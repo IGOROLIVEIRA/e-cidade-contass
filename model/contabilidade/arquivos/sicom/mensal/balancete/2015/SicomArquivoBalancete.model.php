@@ -128,7 +128,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         /**
          * selecionar arquivo xml de acordo com o tipo da instituição
          */
-        $sSql = "SELECT * FROM db_config inner join infocomplementaresinstit on codigo = si09_instit where codigo = " . db_getsession('DB_instit');
+        $sSql  = "SELECT * FROM db_config ";
+        $sSql .= "	WHERE prefeitura = 't'";
 
         $rsInst = db_query($sSql);
         $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
