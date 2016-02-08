@@ -1013,7 +1013,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
                                     inner JOIN orctiporec ON o58_codigo = o15_codigo
                                     left join infocomplementaresinstit on  o58_instit = si09_instit
-                                    where c69_credito IN ((" . implode(',', $oContas10->contas) . ") OR c69_debito IN (" . implode(',', $oContas10->contas) . "))
+                                    where (c69_credito IN (" . implode(',', $oContas10->contas) . ") OR c69_debito IN (" . implode(',', $oContas10->contas) . "))
                                     and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
 
                 $rsRestos = db_query($sSqlRestos) or die($sSqlRestos);
