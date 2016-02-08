@@ -501,6 +501,24 @@ switch($oParam->exec) {
       $oRetorno->itens  = $aArrayArquivos;
 
     break;
+
+
+  case "processarLCF" :
+
+    $aListaArquivos .= " ".$oArquivo->caminho;
+    //print_r($aListaArquivos);
+    system("rm -f DECRETOSLEIS_{$sInst}_{$mesReferencia}_{$iAnoReferencia}.zip");
+    system("bin/zip -q DECRETOSLEIS_{$sInst}_{$mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
+    //echo $aListaArquivos;
+    $oArquivoZip = new stdClass();
+    $oArquivoZip->nome    = "DECRETOSLEIS_{$sInst}_{$mesReferencia}_{$iAnoReferencia}.zip";
+    $oArquivoZip->caminho = "DECRETOSLEIS_{$sInst}_{$mesReferencia}_{$iAnoReferencia}.zip";
+    $aArrayArquivos[] = $oArquivoZip;
+
+    $oRetorno->itens  = $aArrayArquivos;
+
+    break;
+
 }
 
 echo $oJson->encode($oRetorno);
