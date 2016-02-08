@@ -162,7 +162,8 @@ $rotulo->label("z01_cgccpf");
           */
           if (db_getsession("DB_itemmenu_acessado") != 1985513) {
             // O código abaixo, filtra do financeiro os empenhos realizados no pessoal
-            $dbwhere .= " AND e60_codemp NOT IN (
+            // Removido conforme solicitado por Igor
+            /*$dbwhere .= " AND e60_codemp NOT IN (
             SELECT DISTINCT
               e60_codemp
             FROM
@@ -183,7 +184,7 @@ $rotulo->label("z01_cgccpf");
               ON rh76_rhempenhofolha = rh72_sequencial
             WHERE rh02_anousu = " . db_getsession("DB_anousu")
               . " AND e60_numemp = rh76_numemp AND e60_instit = " . db_getsession("DB_instit") ."
-            )";
+            )";*/
           }
    
           if (isset($chave_e60_numemp) && !empty($chave_e60_numemp)) {
