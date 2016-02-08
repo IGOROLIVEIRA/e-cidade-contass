@@ -748,9 +748,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             foreach ($oNaturezaReceita as $oNatureza) {
 
-                                if ($oNatureza->getAttribute('instituicao') == db_getsession("DB_instit")
-                                    && $oNatureza->getAttribute('receitaEcidade') == $sNaturezaReceita
-                                ) {
+                                if ($oNatureza->getAttribute('receitaEcidade') == $sNaturezaReceita) {
 
                                     $sNaturezaReceita = $oNatureza->getAttribute('receitaSicom');
 
