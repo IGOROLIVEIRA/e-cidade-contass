@@ -552,17 +552,15 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $sElementoXml = $oElemento->getAttribute('elementoEcidade');
 
-                                if ($oElemento->getAttribute('instituicao') == db_getsession("DB_instit")) {
-                                    if ($nContaCorrente == 101) {
-                                        if (substr($sElementoXml, 0, 6) == $sElemento) {
-                                            $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                            $sSubElemento = '00';
-                                        }
-                                    } else {
-                                        if ($sElementoXml == $sElemento . $sSubElemento) {
-                                            $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                            $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
-                                        }
+                                if ($nContaCorrente == 101) {
+                                    if (substr($sElementoXml, 0, 6) == $sElemento) {
+                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                        $sSubElemento = '00';
+                                    }
+                                } else {
+                                    if ($sElementoXml == $sElemento . $sSubElemento) {
+                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                        $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
                                     }
                                 }
                             }
@@ -1130,15 +1128,13 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $sElementoXml = $oElemento->getAttribute('elementoEcidade');
 
-                                if ($oElemento->getAttribute('instituicao') == db_getsession("DB_instit")) {
+                                if ($sElementoXml == $sElemento . $sSubElemento) {
 
-                                    if ($sElementoXml == $sElemento . $sSubElemento) {
+                                    $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
+                                    $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
 
-                                        $sElemento = substr($oElemento->getAttribute('elementoSicom'), 0, 6);
-                                        $sSubElemento = substr($oElemento->getAttribute('elementoSicom'), 6, 2);
-
-                                    }
                                 }
+
                             }
 
                             /**
