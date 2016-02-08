@@ -64,6 +64,7 @@ $clrotulo->label("o15_codigo");
           	  <option value="10">Outubro</option>
           	  <option value="11">Novembro</option>
           	  <option value="12">Dezembro</option>
+          	  <option value="13">Encerramento</option>
           	 </select>
           	 </td>
           	</tr>

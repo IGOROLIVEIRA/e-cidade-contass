@@ -33,6 +33,28 @@ abstract class SicomArquivoBase {
   protected $sDataFinal;
   
   protected  $rsLogger;
+
+  /**
+   * Parametro de encerramento do exercício
+   * @var bool
+   */
+  protected $bEncerramento = FALSE;
+
+  /**
+   * @return boolean
+   */
+  public function getEncerramento()
+  {
+    return $this->bEncerramento;
+  }
+
+  /**
+   * @param boolean $bEncerramento
+   */
+  public function setEncerramento($bEncerramento)
+  {
+    $this->bEncerramento = $bEncerramento;
+  }
   
   /**
      *retorna array de dados

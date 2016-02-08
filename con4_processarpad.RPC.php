@@ -350,7 +350,13 @@ switch($oParam->exec) {
 
     /*
      * Definindo o periodo em que serao selecionado os dados
+     * Parametro de encerramento de exercicio.
      */
+    $bEncerramento = false;
+    if($oParam->mesReferencia == 13){
+      $oParam->mesReferencia = 12;
+      $bEncerramento = true;
+    }
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
     $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
     $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
@@ -397,9 +403,10 @@ switch($oParam->exec) {
           $oArquivo    = new $sNomeClasse;
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
+          $oArquivo->setEncerramento($bEncerramento);
           $oArquivoCsv = new stdClass();
           try {
-               
+
             $oArquivo->gerarDados();
             $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
             $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
