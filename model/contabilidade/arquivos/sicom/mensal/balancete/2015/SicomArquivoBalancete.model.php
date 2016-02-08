@@ -2258,7 +2258,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $obalreg16->si183_totalcreditosfontsf = number_format(abs($reg16->si183_totalcreditosfontsf), 2, ".", "");
                 $saldoFinal = ($reg16->si183_saldoinicialfontsf + $reg16->si183_totaldebitosfontsf - $reg16->si183_totalcreditosfontsf) == '' ? 0 : ($reg16->si183_saldoinicialfontsf + $reg16->si183_totaldebitosfontsf - $reg16->si183_totalcreditosfontsf);
                 $obalreg16->si183_saldofinalfontsf = number_format(abs($saldoFinal), 2, ".", "");
-                $obalreg16->si183_naturezasaldofinalfontsf = $saldoFinal == 0 ? $obalreg16->si183_saldoinicialfontsf : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg16->si183_naturezasaldofinalfontsf = $saldoFinal == 0 ? $obalreg16->si183_naturezasaldoinicialfontsf : ($saldoFinal > 0 ? 'D' : 'C');
                 $obalreg16->si183_instit = $reg16->si183_instit;
                 $obalreg16->si183_mes = $reg16->si183_mes;
                 $obalreg16->si183_reg10 = $obalancete10->si177_sequencial;
