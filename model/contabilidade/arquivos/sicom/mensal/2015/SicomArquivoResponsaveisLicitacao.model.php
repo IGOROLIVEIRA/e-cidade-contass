@@ -152,7 +152,8 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp, 
 			liclicita.l20_anousu as exercicioLicitacao, liclicita.l20_edital as nroProcessoLicitatorio, 
 			liccomissaocgm.l31_tipo as tipoResp, l20_codigo as codigolicitacao, cgm.z01_cgccpf as nroCPFResp,
-			liclicita.l20_codigo as codlicitacao
+			liclicita.l20_codigo as codlicitacao,
+			liclicita.l20_naturezaobjeto
 			FROM liclicita as liclicita 
 			INNER JOIN homologacaoadjudica as homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao) 
 			INNER JOIN liccomissao as liccomissao on (liclicita.l20_liccomissao=liccomissao.l30_codigo) 
@@ -179,7 +180,9 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
       
     	$clresplic10 = new cl_resplic102015();
     	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-	   
+	    if ($oDados10->l20_naturezaobjeto != 6 && $oDados10->tiporesp == 9) {
+	    	continue;
+	    }
 		 
 		 $clresplic10->si55_tiporegistro   				= 10;
 		 $clresplic10->si55_codorgao					= $oDados10->codorgaoresp           ;
