@@ -203,6 +203,8 @@ function cria_tabela(json){
 	tabela += "Elemento E-cidade";
 	tabela += "</td><td bgcolor=\"#cdcdff\" align=\"center\" nowrap=\"\">";
 	tabela += "Elemento SICOM";
+	tabela += "</td><td bgcolor=\"#cdcdff\" align=\"center\" nowrap=\"\">";
+	tabela += "Instituição";
 	tabela += "</td></tr>";
 
 	try {
@@ -226,6 +228,10 @@ function cria_tabela(json){
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
 			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].elementoSicom+"</a>";
+
+			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
+			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].elementoEcidade+"','"
+			+jsonObj[i].elementoSicom+"')\">"+jsonObj[i].instituicao+"</a>";
 			
 			tabela += "</td></tr>";
 			

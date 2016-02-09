@@ -51,6 +51,7 @@ if ($_POST['codigo1'] || $_POST['codigo2']) {
 	    $oValores->codigo          = $oRow->getAttribute("codigo");
 		  $oValores->elementoEcidade = $oRow->getAttribute("elementoEcidade");
 		  $oValores->elementoSicom   = $oRow->getAttribute("elementoSicom");
+		  $oValores->instituicao   = $oRow->getAttribute("instituicao");
 		  $aValores[] = $oValores;
 			
   	}
@@ -69,6 +70,7 @@ if ($_POST['codigo1'] || $_POST['codigo2']) {
 	  $oValores->codigo          = $oRow->getAttribute("codigo");
 		$oValores->elementoEcidade = $oRow->getAttribute("elementoEcidade");
 		$oValores->elementoSicom   = $oRow->getAttribute("elementoSicom");
+		$oValores->instituicao   = $oRow->getAttribute("instituicao");
 		$aValores[] = $oValores;
 	  if ($iCont == $oDados->length-1) {
 			break;
