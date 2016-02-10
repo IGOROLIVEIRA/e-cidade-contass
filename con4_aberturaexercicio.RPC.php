@@ -226,17 +226,20 @@ try {
 
   		/**
   		 * Receita - Lancamento contabil para abertura de exercicio
-  		 */
+		 * Removido estorno da operação. Os lançamentos serão excluídos.
+
   		$iTipoDocumento = 2004;
   		$nValorReceita  = ReceitaContabil::getValorPrevistoAno($iAnoSessao, $iInstituicao);
 
   		if ($nValorReceita > 0) {
     		executaLancamento($iTipoDocumento, $nValorReceita, $iSequencialAberturaExercicio, $sObservacao);
   		}
+		 *
+		 * */
 
   		/**
   		 * Despesa - Lancamento contabil para abertura de exercicio
-  		 */
+  		 * Removido estorno da operação. Os lançamentos serão excluídos.
   		$iTipoDocumento = 2002;
   		//$nValorDespesa  = Dotacao::getValorPrevistoNoAno($iAnoSessao, $iInstituicao);
       $oDaoOrcDotacao = db_utils::getDao("orcdotacao");
@@ -247,7 +250,7 @@ try {
           null,
           $sWhere
       );
-      
+
       $rsDotacao = $oDaoOrcDotacao->sql_record($sSqlDotacao);
       
       for ($iContDot = 0; $iContDot < pg_num_rows($rsDotacao); $iContDot++) {
@@ -260,6 +263,199 @@ try {
   		if ($nValorDespesa > 0 ) {
     		executaLancamento($iTipoDocumento, $nValorDespesa, $iSequencialAberturaExercicio, $sObservacao);
   		}
+		 */
+		$rsTabelaLancamentos = db_query("create temp table w_conlancam as
+                                      select distinct c105_codlan as c70_codlan
+                                      from conlancamaberturaexercicioorcamento
+                                      inner join aberturaexercicioorcamento on c105_aberturaexercicioorcamento = c104_sequencial
+                                      where c104_instit = ".db_getsession('DB_instit')." and c104_ano = ".db_getsession('DB_anousu'));
+
+		if (!$rsTabelaLancamentos) {
+			throw new Exception('Não foi possivel criar tabela para exclusão de lançamentos');
+		}
+
+		$rsConlancamemp = db_query("DELETE FROM conlancamemp
+                                        WHERE c75_codlan IN
+                                            (select c70_codlan from w_conlancam)");
+
+		if (!$rsConlancamemp) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamemp');
+		}
+
+		$rsConlancambol = db_query("DELETE FROM conlancambol
+                                            WHERE c77_codlan IN
+                                                (select c70_codlan from w_conlancam)");
+
+		if (!$rsConlancambol) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancambol');
+		}
+
+
+		$rsConlancamdig = db_query("DELETE FROM conlancamdig
+                                            WHERE c78_codlan IN
+                                                (select c70_codlan from w_conlancam)");
+
+		if (!$rsConlancamdig) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamdig');
+		}
+
+		$rsDeleteConlancamCgm = db_query("delete from conlancamcgm  where c76_codlan in (select c70_codlan from w_conlancam)");
+		if (!$rsDeleteConlancamCgm) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamcgm');
+		}
+		$rsDeleteConlancamGrupo = db_query("delete from conlancamcorgrupocorrente
+                                         where c23_conlancam in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlancamGrupo) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamGrupo');
+		}
+
+		$rsDeletePagordemdescontolanc = db_query("DELETE FROM pagordemdescontolanc
+                                                        WHERE e33_conlancam IN (select c70_codlan from w_conlancam)");
+		if (!$rsDeletePagordemdescontolanc) {
+			throw new Exception('Não foi possivel excluir dados da tabela pagordemdescontolanc');
+		}
+
+		$rsDeleteconlancammatestoqueinimei = db_query("DELETE FROM conlancammatestoqueinimei
+                                                        WHERE c103_conlancam IN (select c70_codlan from w_conlancam)");
+		if (!$rsDeleteconlancammatestoqueinimei) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancammatestoqueinimei');
+		}
+
+		$rsDeleteConlancamCorrente = db_query("delete from conlancamcorrente
+                                            where c86_conlancam in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlancamCorrente) {
+			throw new Exception("Não foi possivel excluir dados da tabela conlancamcorrente\n" . pg_last_error());
+		}
+
+		$rsDeleteConlancamRec = db_query("delete from conlancamrec
+                                       where c74_codlan in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlancamRec) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamrec');
+		}
+
+		$rsDeleteConlancamCompl = db_query("delete from conlancamcompl
+                                       where c72_codlan in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlancamCompl) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamcompl');
+		}
+
+		$rsDeleteConlancamnota = db_query("DELETE FROM conlancamnota
+                                                WHERE c66_codlan IN (select c70_codlan from w_conlancam)");
+		if (!$rsDeleteConlancamnota) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamnota');
+		}
+
+		$rsDeleteConlancamele = db_query("DELETE FROM conlancamele
+                                                WHERE c67_codlan IN (select c70_codlan from w_conlancam)");
+		if (!$rsDeleteConlancamele) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamele');
+		}
+
+		$rsDeleteConlancamPag = db_query("delete from conlancampag
+                                       where c82_codlan in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlancamPag) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancampag');
+		}
+
+		$rsDeleteConlancamDoc = db_query("delete from conlancamdoc
+                                       where c71_codlan in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlancamDoc) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamdoc');
+		}
+
+		$rsDeleteConlancamdot = db_query("DELETE FROM conlancamdot
+                                                    WHERE c73_codlan IN
+                                                        (select c70_codlan from w_conlancam)");
+
+		if (!$rsDeleteConlancamdot) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamdot');
+		}
+
+		$rsdeleteConlancamlr = db_query("DELETE FROM conlancamlr
+                                                WHERE c81_sequen IN
+                                                    (SELECT c69_sequen
+                                                     FROM conlancamval
+                                                     WHERE c69_codlan IN
+                                                         (select c70_codlan from w_conlancam))");
+
+		if (!$rsdeleteConlancamlr) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamlr');
+		}
+
+		$rsDeleteConlancamCC = db_query("delete from contacorrentedetalheconlancamval
+                                       where c28_conlancamval in (select c69_sequen
+                                                                    from conlancamval
+                                                                   where c69_codlan in (select c70_codlan
+                                                                                         from w_conlancam)
+                                                                   )"
+		);
+		if (!$rsDeleteConlancamCC) {
+			throw new Exception('Não foi possivel excluir dados da tabela contacorrentedetalheconlancamval');
+		}
+
+		$rsDeleteConlanordem = db_query(" delete from conlancamordem
+                                        where c03_codlan in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlanordem) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamordem');
+		}
+
+		$rsDeleteConlancamVal = db_query(" delete from conlancamval
+                                        where c69_codlan in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlancamVal) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamval');
+		}
+
+		$rsDeleteConlancamCP = db_query("delete from conlancamconcarpeculiar
+                                      where c08_codlan in (select c70_codlan from w_conlancam)"
+		);
+		if (!$rsDeleteConlancamCP) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamconcarpeculiar');
+		}
+
+		$rsDeleteConlancamord = db_query("delete from conlancamord where c80_codlan in (select c70_codlan from w_conlancam)");
+
+		if (!$rsDeleteConlancamord) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamord');
+		}
+
+		$rsDeleteConlancamInstit = db_query("delete from conlancaminstit where c02_codlan in (select c70_codlan from w_conlancam)");
+
+		if (!$rsDeleteConlancamInstit) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancaminstit');
+		}
+
+		$rsDeleteConlancamOrdem = db_query("delete from conlancamordem where c03_codlan in (select c70_codlan from w_conlancam)");
+
+		if (!$rsDeleteConlancamOrdem) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamordem');
+		}
+
+		$rsDeleteconlancambem = db_query("delete from conlancambem where c110_codlan in (select c70_codlan from w_conlancam)");
+
+		if (!$rsDeleteConlancamOrdem) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamordem');
+		}
+
+		$rsDeleteconlancamaberturaexercicioorcamento = db_query("DELETE FROM conlancamaberturaexercicioorcamento
+																	where c105_codlan IN
+																		(SELECT c70_codlan
+																		 FROM w_conlancam)");
+		if (!$rsDeleteconlancamaberturaexercicioorcamento) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancamaberturaexercicioorcamento');
+		}
+
+		$rsDeleteConlancam = db_query("delete from conlancam where c70_codlan in (select c70_codlan from w_conlancam)");
+		if (!$rsDeleteConlancam) {
+			throw new Exception('Não foi possivel excluir dados da tabela conlancam');
+		}
 
   		$oRetorno->message = 'Lançamentos desprocessados com sucesso.';
 
