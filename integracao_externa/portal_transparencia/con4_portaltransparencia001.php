@@ -1283,6 +1283,7 @@ try {
   $sSqlReceita .= "        o70_instit as codinstit,        ";
   $sSqlReceita .= "        o70_valor  as previsaoinicial   ";
   $sSqlReceita .= "   from orcreceita                      ";
+  $sSqlReceita .= "   where o70_anousu > 2012";
 
   $rsReceita    = db_query($connOrigem,$sSqlReceita);
   $iRowsReceita = pg_num_rows($rsReceita);
@@ -1651,8 +1652,8 @@ try {
   $sSqlEmpenho .= "                       from empelemento e                                                       ";
   $sSqlEmpenho .= "                   order by e.e64_numemp, e.e64_codele ) as x                                   ";
   $sSqlEmpenho .= "                                on x.e64_numemp           = empempenho.e60_numemp               ";
-  $sSqlEmpenho .= "        left join conplano      on conplano.c60_codcon    = x.e64_codele                        ";
-  $sSqlEmpenho .= "                               and conplano.c60_anousu    = empempenho.e60_anousu               ";
+  $sSqlEmpenho .= "        left join conplanoorcamento      on conplanoorcamento.c60_codcon    = x.e64_codele                        ";
+  $sSqlEmpenho .= "                               and conplanoorcamento.c60_anousu    = empempenho.e60_anousu               ";
   $sSqlEmpenho .= "        left join empempaut     on empempaut.e61_numemp   = empempenho.e60_numemp               ";
   $sSqlEmpenho .= "  where exists (  select 1                                                                      ";
   $sSqlEmpenho .= "                    from conlancamemp                                                           ";
