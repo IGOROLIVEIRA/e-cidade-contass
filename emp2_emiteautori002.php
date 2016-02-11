@@ -237,7 +237,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
    db_fieldsmemory($result,$i);
    // echo " [5] " . db_criatabela($result). "<br>------------------<br>";
 
-   $sqlitem = " select distinct (pc01_descrmater||'\\n'||(case when pc11_resum is null then pc01_complmater else pc11_resum end)||'\n'||(case when l21_codpcprocitem is null then coalesce((select 'Marca'||pc23_obs from pcorcamval
+   $sqlitem = " select distinct (pc01_descrmater||' '||(case when pc11_resum is null then pc01_complmater else pc11_resum end)||' '||(case when l21_codpcprocitem is null then coalesce((select 'Marca'||pc23_obs from pcorcamval
 inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
 inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
 inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
