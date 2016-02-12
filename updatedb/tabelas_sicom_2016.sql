@@ -1801,6 +1801,7 @@ si40_tipoleialteracao       int8 NOT NULL default 0,
 si40_mes		int8 NOT NULL default 0,
 si40_reg10		int8 NOT NULL default 0,
 si40_instit		int8 default 0,
+si40_valorabertolei     double precision,
 CONSTRAINT aoc122016_sequ_pk PRIMARY KEY (si40_sequencial));
 
 
@@ -1836,6 +1837,7 @@ si42_vlacrescimoreducao		float8 NOT NULL default 0,
 si42_mes		int8 NOT NULL default 0,
 si42_reg10		int8 NOT NULL default 0,
 si42_instit		int8 default 0,
+si42_origemrecalteracao varchar(6),
 CONSTRAINT aoc142016_sequ_pk PRIMARY KEY (si42_sequencial));
 
 

@@ -253,7 +253,32 @@ function js_preenchepesquisa(chave){
      <td> <? 
       if ($db_opcao == 1) {
 
-        $sSqlTipoSuplem = $clorcsuplemtipo->sql_query("","o48_tiposup as o46_tiposup,o48_descr","o48_tiposup");
+      	$result = db_query("select distinct o200_tipoleialteracao from orcprojeto 
+									join orcprojetoorcprojetolei on orcprojetoorcprojetolei.o139_orcprojeto = orcprojeto.o39_codproj
+									join orcprojetolei on orcprojetoorcprojetolei.o139_orcprojetolei = orcprojetolei.o138_sequencial
+									join orcleialtorcamentaria on orcleialtorcamentaria.o200_orcprojetolei = orcprojetolei.o138_sequencial
+									where o39_codproj = $o39_codproj");
+      	$aWhere = array();
+      	if (pg_num_rows($result) > 0) {
+	      	for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
+	      		db_fieldsmemory($result, $iCont);
+	      		if ($o200_tipoleialteracao == 1) {
+	      			$aWhere[] = "1001";
+	      		} elseif ($o200_tipoleialteracao == 2) {
+	      			array_push($aWhere, "1002","1003","1004","1005","1006","1007","1008","1009","1010");
+	      		} elseif ($o200_tipoleialteracao == 3) {
+	      			array_push($aWhere, "1014","1015","1016");
+	      		} elseif ($o200_tipoleialteracao == 4) {
+	      			$aWhere[] = "1017";
+	      		} elseif ($o200_tipoleialteracao == 5) {
+	      			$aWhere[] = "1012";
+	      		}
+	      	}
+      	} else {
+      		array_push($aWhere, "1001","1017","1016","1014","1015");
+      	}
+      	
+        $sSqlTipoSuplem = $clorcsuplemtipo->sql_query("","o48_tiposup as o46_tiposup,o48_descr","o48_tiposup","o48_tiposup in (".implode(",", $aWhere).")");
 	      $rtipo          = $clorcsuplemtipo->sql_record($sSqlTipoSuplem);  
         db_fieldsmemory($rtipo,0);
         db_selectrecord("o46_tiposup",$rtipo,false,$db_opcao);
