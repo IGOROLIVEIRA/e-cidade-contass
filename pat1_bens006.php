@@ -86,21 +86,78 @@ if(isset($excluir)){
   db_inicio_transacao();
 
     $clbensplaca->excluir('',"t41_bem = $t52_bem");
-    $clbensmaterialempempenho->excluir('',"t11_bensmaterial = $t52_bem");
-    $clbensdepreciacao->excluir('',"t44_bens = $t52_bem");
-    $clbensempnotaitem->excluir('',"e136_bens = $t52_bem");
-    $clbenslote->excluir('',"t43_bem = $t52_bem");
-    $clbensmater->excluir('',"t53_codbem = $t52_bem");
-    $clhistbem->excluir('',"t56_codbem = $t52_bem");
-    $clbenscedente->excluir('',"t09_bem = $t52_bem");
-    $clbens->excluir('',"t52_bem = $t52_bem");
-    $clconlancambem->excluir('',"c110_bem = $t52_bem");
-
+    if ($clbensplaca->erro_status == 0) {
+    	$sqlerro=true;
+    	$erro_msg = $clbensplaca->erro_msg;
+    }
+    if ($sqlerro == false) {
+      $clbensmaterialempempenho->excluir('',"t11_bensmaterial = $t52_bem");
+      if ($clbensmaterialempempenho->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clbensmaterialempempenho->erro_msg;
+      } 
+    }
+    if ($sqlerro == false) {
+      $clbensdepreciacao->excluir('',"t44_bens = $t52_bem");
+      if ($clbensdepreciacao->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clbensdepreciacao->erro_msg;
+      }
+    }
+    if ($sqlerro == false) {
+      $clbensempnotaitem->excluir('',"e136_bens = $t52_bem");
+      if ($clbensempnotaitem->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clbensempnotaitem->erro_msg;
+      }
+    }
+    if ($sqlerro == false) {
+      $clbenslote->excluir('',"t43_bem = $t52_bem");
+      if ($clbenslote->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clbenslote->erro_msg;
+      }
+    }
+    if ($sqlerro == false) {
+      $clbensmater->excluir('',"t53_codbem = $t52_bem");
+      if ($clbensmater->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clbensmater->erro_msg;
+      }	
+    }
+    if ($sqlerro == false) {
+      $clhistbem->excluir('',"t56_codbem = $t52_bem");
+      if ($clhistbem->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clhistbem->erro_msg;
+      }
+    }
+    if ($sqlerro == false) {
+      $clbenscedente->excluir('',"t09_bem = $t52_bem");
+      if ($clbenscedente->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clbenscedente->erro_msg;
+      }
+    }
+    if ($sqlerro == false) {
+      $clconlancambem->excluir('',"c110_bem = $t52_bem");
+      if ($clconlancambem->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clconlancambem->erro_msg;
+      }
+    }
+    if ($sqlerro == false) {
+      $clbens->excluir('',"t52_bem = $t52_bem");
+      if ($clbens->erro_status == 0) {
+    	  $sqlerro=true;
+    	  $erro_msg = $clbens->erro_msg;
+      }
+    }
   
   db_fim_transacao($sqlerro);
   
   if($sqlerro == true){
-    $erro_msg = 'Erro ao excluir bem';   
+    $erro_msg = 'Erro ao excluir bem: '.$erro_msg;   
   }else{
     $erro_msg = 'Bem excluido com sucesso';
   }
