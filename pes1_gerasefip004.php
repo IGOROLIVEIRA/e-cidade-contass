@@ -945,13 +945,13 @@ if ( isset($oPost->gerar) ) {
                     $situacao = $r45_situac;
                     $dataafasta = ($situacao == 3 || $situacao == 6 || $situacao == 8)?date("Y-m-d",mktime(0,0,0,db_subdata($r45_dtafas,"m"), db_subdata($r45_dtafas,"d") - 15, db_subdata($r45_dtafas,"a"))):$r45_dtafas;
                     $dataretorno = $r45_dtreto;
-                      
+
                     $dataini = $dataafasta;
                     $datafim = $dataretorno;
                     if($situacao == 3 || $situacao == 6 || $situacao == 8){
                       $dataini = $r45_dtafas;
                     }
-                      
+
                     if(db_subdata($dataafasta,"m") <= $iMesUsu && db_subdata($dataafasta,"a") == $iAnoUsu){
                       $datamov = $dataafasta;
                       $codmov  = $r45_codafa;
@@ -974,7 +974,7 @@ if ( isset($oPost->gerar) ) {
                           $iAnoAnt-= 1;
                         }
                         if(db_subdata($dataafasta,"m") == $iMesAnt && db_subdata($dataafasta,"a") == $iAnoAnt){
-                          $result_afasta_ant = $clafasta->sql_record($clafasta->sql_query_file(null,"*","","r45_anousu = ".$iAnoAnt." and r45_mesusu = ".$iMesAnt." and r45_regist = ".$oPessoal->rh01_regist." and r45_dtafas = '".$r45_dtafas."' and r45_situac = ".$r45_situac));
+                          $result_afasta_ant = $clafasta->sql_record($clafasta->sql_query_file(null,"*","","r45_anousu = ".$iAnoUsu." and r45_mesusu = ".$iMesUsu." and r45_regist = ".$oPessoal->rh01_regist." and r45_dtafas = '".$r45_dtafas."' and r45_situac = ".$r45_situac));
                           if($clafasta->numrows > 0){
                             $datamov = $dataafasta;
                             $codmov  = $r45_codafa;
@@ -984,7 +984,7 @@ if ( isset($oPost->gerar) ) {
                     }
                       
                     $temreg = false;
-                      
+
                     if(db_subdata($dataretorno,"m") == $iMesUsu && db_subdata($dataretorno,"a") == $iAnoUsu){
                       $datamov = $dataretorno;
                       $codmov  = $r45_codret;
