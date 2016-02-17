@@ -84,8 +84,8 @@ $clrotulo->label("o15_codigo");
                             <label for="Pessoa">Pessoas Físicas (PESSOA)</label><br>
                             <input type="checkbox" value="Terem" id="Terem" />
                             <label for="Terem">Teto Remuneratório (TEREM)</label><br>
-                            <input type="checkbox" value="Terem" id="Terem" />
-                            <label for="Terem">Folha de Pagamento do Órgão (FLPGO)</label><br>
+                            <input type="checkbox" value="Flpgo" id="Flpgo" />
+                            <label for="Flpgo">Folha de Pagamento do Órgão (FLPGO)</label><br>
                             <input type="checkbox" value="Respinf" id="Respinf" />
                             <label for="Respinf">Responsavel pelo envio das Informações (RESPINF)</label><br>
                             <input type="checkbox" value="Consideracoes" id="Consideracoes" />
