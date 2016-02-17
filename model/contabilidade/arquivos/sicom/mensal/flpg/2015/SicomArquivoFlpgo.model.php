@@ -1,10 +1,9 @@
 <?php
+
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_flpgo102015_classe.php");
 require_once ("classes/db_flpgo112015_classe.php");
-
-
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2015/GerarFLPGO.model.php");
 
 /**
@@ -61,8 +60,6 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
         $clflpgo10 = new cl_flpgo102015();
         $clflpgo11 = new cl_flpgo112015();
-
-        echo 'teste';exit;
 
         db_inicio_transacao();
 
