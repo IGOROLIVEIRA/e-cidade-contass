@@ -4,10 +4,12 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_dividaconsolidada_classe.php");
+require_once ("classes/db_cgm_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cldividaconsolidada = new cl_dividaconsolidada;
+$clcgm               = new cl_cgm;
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
