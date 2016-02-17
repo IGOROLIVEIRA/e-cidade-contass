@@ -248,7 +248,7 @@ class cl_rhlotacalend {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Ligação da lotação a um calendário nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$rh64_lota;

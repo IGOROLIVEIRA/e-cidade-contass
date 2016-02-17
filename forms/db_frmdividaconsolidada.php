@@ -124,7 +124,10 @@ db_select('si167_contratodeclei',$x,true,$db_opcao,"");
 $x = array("1"=>"Dívida Mobiliária","2"=>"Dívida Contratual de PPP","3"=>"Demais Dívidas Contratuais Internas",
   "4"=>"Dívidas Contratuais Externas","5"=>"Precatórios Posteriores a 05/05/2000 (inclusive) - Vencidos e não Pagos",
   "6"=>"Parcelamento de Dívidas de Tributos","7"=>"Parcelamento de Dívidas Previdenciárias","8"=>"Parcelamento de Dívidas das Demais Contribuições 
-Sociais","9"=>"Parcelamento de Dívidas do FGTS","10"=>"Outras Dívidas","11"=>"Passivos Reconhecidos");
+Sociais","9"=>"Parcelamento de Dívidas do FGTS","10"=>"Outras Dívidas","11"=>"Passivos Reconhecidos",
+  "12"=>"Outras Dívidas não Sujeitas ao Limite de Contratação de Operação de Crédito",
+    "13"=>"Parcelamento de Dívida com Instituição não Financeira; (Vide Manual de Demonstrativos Fiscais. Ex.: Cemig, Copasa, etc.)",
+    "14"=>"Passivo Atuarial; (Vide Manual de Demonstrativos Fiscais)");
 db_select('si167_tipolancamento',$x,true,$db_opcao,"");
 //db_input('si167_tipolancamento',2,$Isi167_tipolancamento,true,'text',$db_opcao,"")
 ?>
@@ -229,7 +232,6 @@ db_input('si167_vlsaldoatual',14,$Isi167_vlsaldoatual,true,'text',$db_opcao,"")
     </td>
   </tr>
 
-
   <tr>
     <td nowrap title="<?=@$Tsi167_mesreferencia?>">
        <?=@$Lsi167_mesreferencia?>
@@ -242,6 +244,16 @@ db_select('si167_mesreferencia',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
+    <tr>
+        <td nowrap title="Justificativa Cancelamento" colspan="2">
+            <fieldset><legend>Justificativa Cancelamento</legend>
+
+                <?
+                db_textarea('si167_justificativacancelamento', 13, 80,'',true,"text",$db_opcao,"","","",500)
+                ?>
+            </fieldset>
+        </td>
+    </tr>
   </table>
   </fieldset>
   </td>

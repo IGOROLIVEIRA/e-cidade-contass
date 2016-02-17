@@ -60,9 +60,9 @@ if($tipo == 'r'){
          r08_descr,
          rh27_rubric,
          rh27_descr
-  from  bases
+      from  bases
         inner join basesr     on r09_anousu = r08_anousu
-                             and r09_mesusu = r08_mesusu 
+                             and r09_mesusu = r08_mesusu
                              and r09_base   = r08_codigo
                              and r09_instit = r08_instit
         inner join rhrubricas on r09_rubric = rh27_rubric

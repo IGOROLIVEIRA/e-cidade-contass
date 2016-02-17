@@ -16,6 +16,7 @@ if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
   $cldividaconsolidada->si167_numcgm = $z01_numcgm;
+  $cldividaconsolidada->si167_justificativacancelamento = $si167_justificativacancelamento;
   $cldividaconsolidada->alterar($si167_sequencial);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){

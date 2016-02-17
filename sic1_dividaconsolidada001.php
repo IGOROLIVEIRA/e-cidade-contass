@@ -14,6 +14,7 @@ $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
   $cldividaconsolidada->si167_numcgm = $z01_numcgm;
+  $cldividaconsolidada->si167_justificativacancelamento = $si167_justificativacancelamento;
   $cldividaconsolidada->incluir(null);
   db_fim_transacao();
 } else if(isset($chavepesquisaimporta)){

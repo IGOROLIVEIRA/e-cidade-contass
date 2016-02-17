@@ -163,7 +163,9 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
     /*
     * selecionar informacoes registro 30
     */
-    $sSql = "select * from dividaconsolidada where si167_mesreferencia = ".$this->sDataFinal['5'].$this->sDataFinal['6']."  
+    $sSql = "select * from dividaconsolidada
+             inner join cgm on z01_numcgm = si167_cgm
+             where si167_mesreferencia = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
              and si167_anoreferencia = ".db_getsession("DB_anousu")." and si167_instit = ".db_getsession("DB_instit");
     $rsResult30 = db_query($sSql);
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
@@ -176,8 +178,8 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
       $clddc30->si154_nrocontratodivida          = $oDados30->si167_nrocontratodivida;
       $clddc30->si154_dtassinatura               = $oDados30->si167_dtassinatura;
       $clddc30->si154_tipolancamento             = $oDados30->si167_tipolancamento;
-      $clddc30->si154_tipodocumentocredor        = $oDados30->si167_tipodocumentocredor;
-      $clddc30->si154_nrodocumentocredor         = $oDados30->si167_nrodocumentocredor;
+      $clddc30->si154_tipodocumentocredor        = (srtlen($oDados30->z01_cgccpf) == 11)? 1 : 2;
+      $clddc30->si154_nrodocumentocredor         = $oDados30->z01_cgccpf;
       $clddc30->si154_justificativacancelamento  = "";
       $clddc30->si154_vlsaldoanterior            = $oDados30->si167_vlsaldoanterior;
       $clddc30->si154_vlcontratacao              = $oDados30->si167_vlcontratacao;

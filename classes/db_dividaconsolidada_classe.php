@@ -46,7 +46,9 @@ class cl_dividaconsolidada {
    var $si167_tipolancamento = null; 
    var $si167_mesreferencia = 0;
    var $si167_anoreferencia = 0;
-   var $si167_instit = 0;  
+   var $si167_instit = 0;
+   var $si167_numcgm = 0;
+   var $si167_justificativacancelamento = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si167_sequencial = int8 = sequencial 
@@ -71,6 +73,8 @@ class cl_dividaconsolidada {
                  si167_mesreferencia = int8 = Mês de referência
                  si167_anoreferencia = int8 = Ano de referência  
                  si167_instit = int8 = Instituição
+                 si167_numcgm = int8 = Número do cgm
+                 si167_justificativacancelamento = varchar(500) = Justificativa de cancelamento
                  ";
    //funcao construtor da classe 
    function cl_dividaconsolidada() { 
@@ -183,7 +187,7 @@ class cl_dividaconsolidada {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si167_tipodocumentocredor == null ){ 
+     /*if($this->si167_tipodocumentocredor == null ){
        $this->erro_sql = " Campo Tipo de  Documento nao Informado.";
        $this->erro_campo = "si167_tipodocumentocredor";
        $this->erro_banco = "";
@@ -200,7 +204,7 @@ class cl_dividaconsolidada {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->si167_vlsaldoanterior == null ){ 
        $this->erro_sql = " Campo Valor do Saldo Anterior nao Informado.";
        $this->erro_campo = "si167_vlsaldoanterior";
@@ -300,6 +304,15 @@ class cl_dividaconsolidada {
        $this->erro_status = "0";
        return false;
      }
+       if($this->si167_numcgm == null ){
+           $this->erro_sql = " Campo Número do cgm nao Informado.";
+           $this->erro_campo = "si167_numcgm";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
      if($this->si167_mesreferencia == null || $this->si167_mesreferencia == 0){ 
        $this->erro_sql = " Campo Mês de referência nao Informado.";
        $this->erro_campo = "si167_mesreferencia";
@@ -309,6 +322,19 @@ class cl_dividaconsolidada {
        $this->erro_status = "0";
        return false;
      }
+
+       if($this->si167_vlcancelamento != null || $this->si167_vlcancelamento != ""){
+           if($this->si167_justificativacancelamento == null ){
+               $this->erro_sql = " Campo Justificativa de cancelamento nao Informado.";
+               $this->erro_campo = "si167_justificativacancelamento";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+
      if($si167_sequencial == "" || $si167_sequencial == null ){
        $result = db_query("select nextval('dividaconsolidada_si167_sequencial_seq')"); 
        if($result==false){
@@ -363,7 +389,9 @@ class cl_dividaconsolidada {
                                       ,si167_tipolancamento 
                                       ,si167_mesreferencia
                                       ,si167_anoreferencia
-                                      ,si167_instit  
+                                      ,si167_instit
+                                      ,si167_numcgm
+                                      ,si167_justificativacancelamento
                        )
                 values (
                                 $this->si167_sequencial 
@@ -371,9 +399,9 @@ class cl_dividaconsolidada {
                                ,".($this->si167_dtleiautorizacao == "null" || $this->si167_dtleiautorizacao == ""?"null":"'".$this->si167_dtleiautorizacao."'")." 
                                ,".($this->si167_dtpublicacaoleiautorizacao == "null" || $this->si167_dtpublicacaoleiautorizacao == ""?"null":"'".$this->si167_dtpublicacaoleiautorizacao."'")." 
                                ,'$this->si167_nrocontratodivida' 
-                               ,".($this->si167_dtassinatura == "null" || $this->si167_dtassinatura == ""?"null":"'".$this->si167_dtassinatura."'")." 
-                               ,$this->si167_tipodocumentocredor 
-                               ,'$this->si167_nrodocumentocredor' 
+                               ,".($this->si167_dtassinatura == "null" || $this->si167_dtassinatura == ""?"null":"'".$this->si167_dtassinatura."'")."
+                               ,".($this->si167_tipodocumentocredor == "null" || $this->si167_tipodocumentocredor == ""?"null":"'".$this->si167_tipodocumentocredor."'")."
+                               ,".($this->si167_nrodocumentocredor == "null" || $this->si167_nrodocumentocredor == ""?"null":"'".$this->si167_nrodocumentocredor."'")."
                                ,$this->si167_vlsaldoanterior 
                                ,$this->si167_vlcontratacao 
                                ,$this->si167_vlamortizacao 
@@ -388,6 +416,8 @@ class cl_dividaconsolidada {
                                ,$this->si167_mesreferencia 
                                ,".db_getsession("DB_anousu")."
                                ,".db_getsession("DB_instit")."
+                               ,$this->si167_numcgm
+                               ,".($this->si167_justificativacancelamento == "null" || $this->si167_justificativacancelamento == ""?"null":"'".$this->si167_justificativacancelamento."'")."
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -567,7 +597,7 @@ class cl_dividaconsolidada {
          }
        }
      }
-     if(trim($this->si167_tipodocumentocredor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si167_tipodocumentocredor"])){ 
+     /*if(trim($this->si167_tipodocumentocredor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si167_tipodocumentocredor"])){
        $sql  .= $virgula." si167_tipodocumentocredor = $this->si167_tipodocumentocredor ";
        $virgula = ",";
        if(trim($this->si167_tipodocumentocredor) == null ){ 
@@ -592,7 +622,7 @@ class cl_dividaconsolidada {
          $this->erro_status = "0";
          return false;
        }
-     }
+     }*/
      if(trim($this->si167_vlsaldoanterior)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si167_vlsaldoanterior"])){ 
        $sql  .= $virgula." si167_vlsaldoanterior = $this->si167_vlsaldoanterior ";
        $virgula = ",";
@@ -736,6 +766,21 @@ class cl_dividaconsolidada {
          return false;
        }
      }
+
+       if(trim($this->si167_numcgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si167_numcgm"])){
+           $sql  .= $virgula." si167_numcgm = '$this->si167_numcgm' ";
+           $virgula = ",";
+           if(trim($this->si167_numcgm) == null ){
+               $this->erro_sql = " Campo Número do cgm nao Informado.";
+               $this->erro_campo = "si167_numcgm";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+
      if(trim($this->si167_mesreferencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si167_mesreferencia"])){ 
        $sql  .= $virgula." si167_mesreferencia = $this->si167_mesreferencia ";
        $virgula = ",";
@@ -749,6 +794,20 @@ class cl_dividaconsolidada {
          return false;
        }
      }
+       if($this->si167_justificativacancelamento != null || $this->si167_justificativacancelamento != ""){
+           $sql  .= $virgula." si167_justificativacancelamento = '$this->si167_justificativacancelamento' ";
+           $virgula = ",";
+       }elseif($this->si167_vlcancelamento != null || $this->si167_vlcancelamento != "") {
+           if (trim($this->si167_justificativacancelamento) == null) {
+               $this->erro_sql = " Campo Justificativa de cancelamento nao Informado.";
+               $this->erro_campo = "si167_justificativacancelamento";
+               $this->erro_banco = "";
+               $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+               $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
      $sql .= " where ";
      if($si167_sequencial!=null){
        $sql .= " si167_sequencial = $this->si167_sequencial";
