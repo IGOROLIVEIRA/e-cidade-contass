@@ -564,9 +564,10 @@ switch($oParam->exec) {
        * instanciar cada arqivo selecionado e gerar o CSV correspondente
        */
       $aArrayArquivos = array();
+
       foreach ($oParam->arquivos as $sArquivo) {
-        if (file_exists("model/contabilidade/arquivos/sicom/mensal/flpgo/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
-          require_once("model/contabilidade/arquivos/sicom/mensal/flpgo/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
+        if (file_exists("model/contabilidade/arquivos/sicom/mensal/flpg/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php")) {
+          require_once("model/contabilidade/arquivos/sicom/mensal/flpg/".db_getsession("DB_anousu")."/SicomArquivo{$sArquivo}.model.php");
           $sNomeClasse = "SicomArquivo{$sArquivo}";
           $oArquivo    = new $sNomeClasse;
           $oArquivo->setDataInicial($sDataInicial);
