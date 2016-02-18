@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE flpgo102015
-class cl_flpgo102015 { 
+class cl_flpgo102015 {
    // cria variaveis de erro 
    var $rotulo     = null; 
    var $query_sql  = null; 
@@ -10,7 +10,7 @@ class cl_flpgo102015 {
    var $numrows_alterar = 0; 
    var $numrows_excluir = 0; 
    var $erro_status= null; 
-   var $erro_sql   = null; 
+   var $erro_sql   = null;
    var $erro_banco = null;  
    var $erro_msg   = null;  
    var $erro_campo = null;  
@@ -75,7 +75,7 @@ class cl_flpgo102015 {
                  si195_inst = int8 = si195_inst 
                  ";
    //funcao construtor da classe 
-   function cl_flpgo102015() { 
+   function cl_flpgo102015() {
      //classes dos rotulos dos campos
      $this->rotulo = new rotulo("flpgo102015"); 
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
@@ -143,6 +143,7 @@ class cl_flpgo102015 {
    // funcao para inclusao
    function incluir ($si195_sequencial){ 
       $this->atualizacampos();
+
      if($this->si195_tiporegistro == null ){ 
        $this->erro_sql = " Campo Tipo registro não informado.";
        $this->erro_campo = "si195_tiporegistro";
@@ -337,6 +338,7 @@ class cl_flpgo102015 {
        $this->erro_status = "0";
        return false;
      }
+
      $sql = "insert into flpgo102015(
                                        si195_sequencial 
                                       ,si195_tiporegistro 
@@ -379,14 +381,15 @@ class cl_flpgo102015 {
                                ,".($this->si195_datefetexercicio == "null" || $this->si195_datefetexercicio == ""?"null":"'".$this->si195_datefetexercicio."'")." 
                                ,".($this->si195_datexclusao == "null" || $this->si195_datexclusao == ""?"null":"'".$this->si195_datexclusao."'")." 
                                ,'$this->si195_natsaldobruto' 
-                               ,$this->si195_vlrremuneracaobruta 
+                               ,'$this->si195_vlrremuneracaobruta'
                                ,'$this->si195_natsaldoliquido' 
-                               ,$this->si195_vlrremuneracaoliquida 
-                               ,$this->si195_vlrdeducoesobrigatorias 
-                               ,$this->si195_vlrabateteto 
+                               ,'$this->si195_vlrremuneracaoliquida'
+                               ,'$this->si195_vlrdeducoesobrigatorias'
+                               ,'$this->si195_vlrabateteto'
                                ,$this->si195_mes 
                                ,$this->si195_inst 
                       )";
+
      $result = db_query($sql); 
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -418,7 +421,7 @@ class cl_flpgo102015 {
        $resaco = $this->sql_record($this->sql_query_file($this->si195_sequencial  ));
        if(($resaco!=false)||($this->numrows!=0)){
 
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+         /*$resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
          $acount = pg_result($resac,0,0);
          $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
          $resac = db_query("insert into db_acountkey values($acount,1009276,'$this->si195_sequencial','I')");
@@ -444,7 +447,7 @@ class cl_flpgo102015 {
          $resac = db_query("insert into db_acount values($acount,1010195,1009295,'','".AddSlashes(pg_result($resaco,0,'si195_vlrdeducoesobrigatorias'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010195,1009296,'','".AddSlashes(pg_result($resaco,0,'si195_vlrabateteto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010195,1009297,'','".AddSlashes(pg_result($resaco,0,'si195_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010195,1009298,'','".AddSlashes(pg_result($resaco,0,'si195_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010195,1009298,'','".AddSlashes(pg_result($resaco,0,'si195_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
        }
      }
      return true;
@@ -834,9 +837,9 @@ class cl_flpgo102015 {
      } 
    } 
    // funcao para exclusao 
-   function excluir ($si195_sequencial=null,$dbwhere=null) { 
+   function excluir ($si195_sequencial=null,$dbwhere=null) {
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -879,7 +882,7 @@ class cl_flpgo102015 {
            $resac  = db_query("insert into db_acount values($acount,1010195,1009298,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $sql = " delete from flpgo102015
                     where ";
      $sql2 = "";
@@ -894,7 +897,7 @@ class cl_flpgo102015 {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "flpgo102015 nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$si195_sequencial;
