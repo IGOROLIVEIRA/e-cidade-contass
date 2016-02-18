@@ -529,10 +529,7 @@ class cl_pcforne {
     if(trim($this->pc60_dtreg_cvm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"] !="") ){ 
         $sql  .= $virgula." pc60_dtreg_cvm = '$this->pc60_dtreg_cvm' ";
         $virgula = ",";
-        if(trim($this->pc60_dtreg_cvm) == null && $this->fisica_juridica == 'j'){
-            $sql  .= $virgula." pc60_dtreg_cvm = null ";
-            $virgula = ",";
-        }
+
       }else{
           $sql  .= $virgula." pc60_dtreg_cvm = null ";
           $virgula = ",";
@@ -542,10 +539,7 @@ class cl_pcforne {
       if(trim($this->pc60_numerocvm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numerocvm"])){ 
         $sql  .= $virgula." pc60_numerocvm = '$this->pc60_numerocvm' ";
         $virgula = ",";
-        if(trim($this->pc60_numerocvm) == null && $this->fisica_juridica != 'j'){
-            $sql  .= $virgula." pc60_numerocvm = null ";
-            $virgula = ",";
-        }
+
       }else{
           $sql  .= $virgula." pc60_numerocvm = null ";
           $virgula = ",";
