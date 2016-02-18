@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE pessoaflpgo102016
-class cl_pessoaflpgo102016 { 
+class cl_pessoaflpgo102016 {
    // cria variaveis de erro 
    var $rotulo     = null; 
    var $query_sql  = null; 
