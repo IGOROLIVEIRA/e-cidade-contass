@@ -112,7 +112,7 @@ class cl_pcfornereprlegal {
    function incluir ($pc81_sequencia){ 
       $this->atualizacampos();
 
-     if($this->pc81_cgmforn == $this->pc81_cgmresp ){ 
+     /*if($this->pc81_cgmforn == $this->pc81_cgmresp ){
        $this->erro_sql = " Campo CGM do Representante nao pode ser o mesmo que o CGM do Fornecedor.";
        $this->erro_campo = "pc81_cgmresp";
        $this->erro_banco = "";
@@ -120,7 +120,7 @@ class cl_pcfornereprlegal {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->pc81_cgmforn == null ){ 
        $this->erro_sql = " Campo CGM do Fornecedor nao Informado.";
        $this->erro_campo = "pc81_cgmforn";
