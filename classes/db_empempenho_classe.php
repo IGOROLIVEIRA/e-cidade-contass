@@ -1611,6 +1611,54 @@ class cl_empempenho {
 
         return $sql;
     }
+
+    /**
+     * Retorna o sql com os saldos por empenho.
+     * Query usada para encerramento do exercicio PCASP.
+     * Contabilidade->Procedimentos->Utilitarios da Contabilidade->Encerramento do Exercicios PCASP
+     * @author: Rodrigo@contass
+     * @return string
+     */
+    function sql_query_saldo_encerramento_rp(){
+
+        $sql = "select * from (select
+                       e60_numemp,
+                       (vlremp - vlranu - vlrliq) as valor_nao_processado,
+                       (vlrliq - vlrpag) as valor_processado
+                 from (select
+                        e60_numemp,
+                        sum(case when c71_coddoc IN (select c53_coddoc from conhistdoc where c53_tipo = 10) then round(c70_valor,2) else 0 end) as vlremp,
+                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 11) then round(c70_valor,2) else 0 end) as vlranu,
+                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 20) then round(c70_valor,2)
+                        when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 21) then round(c70_valor,2) *-1
+                        else 0 end) as vlrliq,
+                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 30) then round(c70_valor,2)
+                        when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 31) then round(c70_valor,2) *-1
+                        else 0 end) as vlrpag
+                       from     empempenho
+                                inner join conlancamemp on e60_numemp = c75_numemp
+                                inner join conlancamcgm on c75_codlan = c76_codlan
+                                inner join cgm          on c76_numcgm = z01_numcgm
+                                inner join conlancamdoc on c75_codlan = c71_codlan
+                                inner join conlancam    on c75_codlan = c70_codlan
+                                inner join orcdotacao   on e60_coddot = o58_coddot
+                                                       and e60_anousu = o58_anousu
+                                inner join orcelemento  on o58_codele = o56_codele
+                                                       and o58_anousu = o56_anousu
+                                inner join orctiporec on o58_codigo = o15_codigo
+                                inner join db_config on codigo = e60_instit
+                                inner join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o41_anousu = o58_anousu
+                                inner JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                                left join infocomplementaresinstit on codigo = si09_instit
+                       where    e60_anousu <= ".db_getsession("DB_anousu")." and e60_instit = ".db_getsession("DB_instit")."
+                            and c70_data <=  '".db_getsession("DB_anousu")."-12-31'
+                     group by   e60_numemp
+                                ) as restos) as x
+                                where valor_nao_processado > 0 or valor_processado > 0";
+
+        return $sql;
+    }
+
     function sql_query_buscaempenhos ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){

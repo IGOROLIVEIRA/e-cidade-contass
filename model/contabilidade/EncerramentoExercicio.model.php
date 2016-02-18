@@ -289,17 +289,18 @@ class EncerramentoExercicio {
     $this->incluirDadosEncerramento(EncerramentoExercicio::ENCERRAR_RESTOS_A_PAGAR);
 
     $oDaoEmpempenho        = new cl_empempenho();
-    $sCalculoNaoProcessado = "round(e60_vlremp - e60_vlranu - e60_vlrliq, 2)";
+    /*$sCalculoNaoProcessado = "round(e60_vlremp - e60_vlranu - e60_vlrliq, 2)";
     $sCalculoProcessado    = "round(e60_vlrliq - e60_vlrpag, 2)";
 
     $sCampos         = "e60_numemp, {$sCalculoNaoProcessado} as valor_nao_processado, ";
     $sCampos        .= "{$sCalculoProcessado} as valor_processado";
 
     $sWhereEmpenho  = "(e91_anousu = {$this->iAno} or e60_anousu = {$this->iAno}) and e60_instit = {$this->oInstituicao->getCodigo()}";
-    $sWhereEmpenho .= " and ({$sCalculoProcessado} > 0 or $sCalculoNaoProcessado > 0)";
-    $sSqlEmpenho    = $oDaoEmpempenho->sql_query_encerramento_empresto($sCampos, null, $sWhereEmpenho);
+    $sWhereEmpenho .= " and ({$sCalculoProcessado} > 0 or $sCalculoNaoProcessado > 0)";*/
+    $sSqlEmpenho    = $oDaoEmpempenho->sql_query_saldo_encerramento_rp();
 
     $rsLancamentos = $oDaoEmpempenho->sql_record($sSqlEmpenho);
+
     if ($oDaoEmpempenho->numrows == 0) {
       return true;
     }
@@ -567,13 +568,14 @@ class EncerramentoExercicio {
       $rsBalancete      = $this->exececutarBalanceteVerificacao($sWhereBalancete);
 
       $iTotalLinhas     = pg_num_rows($rsBalancete);
+
       for ($iConta = 0; $iConta < $iTotalLinhas; $iConta++) {
 
         $oConta = db_utils::fieldsMemory($rsBalancete, $iConta);
         /**
-         * Contas analiticas, ou contas sem sinal, nao devemos encerrar
+         * Contas analiticas, nao devemos encerrar
          */
-        if (empty($oConta->c61_reduz) || empty($oConta->sinal_final)) {
+        if (empty($oConta->c61_reduz)) {
           continue;
         }
         /**
@@ -600,6 +602,11 @@ class EncerramentoExercicio {
             $nCreditos = ($aSaldo[0]->creditos == "" ? 0 : $aSaldo[0]->creditos);
             $nValorFinal = $nSaldoAnt + $nDebitos - $nCreditos;
 
+            /**
+             * Inverção do saldo da conta referência para o lançamento correto na conta credora.
+             */
+             $sSinalFinal = ($nValorFinal >= 0 ? 'C' : 'D');
+
             if($nValorFinal == 0){
 
               continue;
@@ -608,7 +615,7 @@ class EncerramentoExercicio {
             $oMovimentacaoContabil = new MovimentacaoContabil();
             $oMovimentacaoContabil->setConta($oConta->c61_reduz);
             $oMovimentacaoContabil->setSaldoFinal(abs($nValorFinal));
-            $oMovimentacaoContabil->setTipoSaldo($oConta->sinal_final);
+            $oMovimentacaoContabil->setTipoSaldo($sSinalFinal);
 
             $oLancamento = new LancamentoAuxiliarEncerramentoExercicio();
             $oLancamento->setValorTotal($oMovimentacaoContabil->getSaldoFinal());
