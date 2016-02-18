@@ -442,12 +442,12 @@ switch($oParam->exec) {
         $aListaArquivos .= " ".$oArquivo->caminho;
       }
       //print_r($aListaArquivos);
-      system("rm -f BALANCETE_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
-      system("bin/zip -q BALANCETE_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
+      system("rm -f BALANCETE_{$sInst}_{$sOrgao}_".($bEncerramento == true ? 13 : $oParam->mesReferencia)."_{$iAnoReferencia}.zip");
+      system("bin/zip -q BALANCETE_{$sInst}_{$sOrgao}_".($bEncerramento == true ? 13 : $oParam->mesReferencia)."_{$iAnoReferencia}.zip $aListaArquivos");
       
       $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "BALANCETE_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "BALANCETE_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $oArquivoZip->nome    = "BALANCETE_{$sInst}_{$sOrgao}_".($bEncerramento == true ? 13 : $oParam->mesReferencia)."_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "BALANCETE_{$sInst}_{$sOrgao}_".($bEncerramento == true ? 13 : $oParam->mesReferencia)."_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
       
       $oRetorno->itens  = $aArrayArquivos;
