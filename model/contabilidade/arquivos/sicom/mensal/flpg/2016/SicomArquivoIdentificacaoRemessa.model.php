@@ -81,7 +81,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
               WHERE codigo = ".db_getsession("DB_instit");
 
         $rsResult  = db_query($sSql);
-        echo $sSql;exit;
+
         /**
          * inserir informacoes no banco de dados
          */
