@@ -24,7 +24,7 @@ class GerarRESPINF extends GerarAM {
 
 
 
-		$sSql          = "select * from respinf102016 where si197_mes = ". $this->iMes." and si197_inst = ".db_getsession("DB_instit");
+		$sSql          = "select * from respinf102013 where si197_mes = ". $this->iMes." and si197_inst = ".db_getsession("DB_instit");
 		$rsRESPINF10    = db_query($sSql);
 
 		if (pg_num_rows($rsRESPINF10) == 0) {

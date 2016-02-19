@@ -8,7 +8,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2015/flpg/Ger
 
 /**
  * selecionar dados de Notas Fiscais Sicom Acompanhamento Mensal
- * @author robson
+ * @author marcelo
  * @package Contabilidade
  */
 class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {

@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE pessoaflpgo102016
-class cl_pessoaflpgo102016 {
+//CLASSE DA ENTIDADE pessoaflpgo102014
+class cl_pessoaflpgo102014 {
   // cria variaveis de erro 
   var $rotulo     = null;
   var $query_sql  = null;
@@ -45,9 +45,9 @@ class cl_pessoaflpgo102016 {
                  si193_inst = int8 = si193_inst 
                  ";
   //funcao construtor da classe 
-  function cl_pessoaflpgo102016() {
+  function cl_pessoaflpgo102014() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("pessoaflpgo102016");
+    $this->rotulo = new rotulo("pessoaflpgo102014");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
   //funcao erro 
@@ -169,10 +169,10 @@ class cl_pessoaflpgo102016 {
       return false;
     }
     if($si193_sequencial == "" || $si193_sequencial == null ){
-      $result = db_query("select nextval('pessoaflpgo102016_si193_sequencial_seq')");
+      $result = db_query("select nextval('pessoaflpgo102014_si193_sequencial_seq')");
       if($result==false){
         $this->erro_banco = str_replace("\n","",@pg_last_error());
-        $this->erro_sql   = "Verifique o cadastro da sequencia: pessoaflpgo102016_si193_sequencial_seq do campo: si193_sequencial";
+        $this->erro_sql   = "Verifique o cadastro da sequencia: pessoaflpgo102014_si193_sequencial_seq do campo: si193_sequencial";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
@@ -180,7 +180,7 @@ class cl_pessoaflpgo102016 {
       }
       $this->si193_sequencial = pg_result($result,0,0);
     }else{
-      $result = db_query("select last_value from pessoaflpgo102016_si193_sequencial_seq");
+      $result = db_query("select last_value from pessoaflpgo102014_si193_sequencial_seq");
       if(($result != false) && (pg_result($result,0,0) < $si193_sequencial)){
         $this->erro_sql = " Campo si193_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
@@ -200,7 +200,7 @@ class cl_pessoaflpgo102016 {
       $this->erro_status = "0";
       return false;
     }
-    $sql = "insert into pessoaflpgo102016(
+    $sql = "insert into pessoaflpgo102014(
                                        si193_sequencial 
                                       ,si193_tiporegistro 
                                       ,si193_tipodocumento 
@@ -231,12 +231,12 @@ class cl_pessoaflpgo102016 {
     if($result==false){
       $this->erro_banco = str_replace("\n","",@pg_last_error());
       if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-        $this->erro_sql   = "pessoaflpgo102016 ($this->si193_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "pessoaflpgo102014 ($this->si193_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_banco = "pessoaflpgo102016 já Cadastrado";
+        $this->erro_banco = "pessoaflpgo102014 já Cadastrado";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       }else{
-        $this->erro_sql   = "pessoaflpgo102016 ($this->si193_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "pessoaflpgo102014 ($this->si193_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       }
@@ -280,7 +280,7 @@ class cl_pessoaflpgo102016 {
   // funcao para alteracao
   function alterar ($si193_sequencial=null) {
     $this->atualizacampos();
-    $sql = " update pessoaflpgo102016 set ";
+    $sql = " update pessoaflpgo102014 set ";
     $virgula = "";
     if(trim($this->si193_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si193_sequencial"])){
       $sql  .= $virgula." si193_sequencial = $this->si193_sequencial ";
@@ -475,7 +475,7 @@ class cl_pessoaflpgo102016 {
     $result = db_query($sql);
     if($result==false){
       $this->erro_banco = str_replace("\n","",@pg_last_error());
-      $this->erro_sql   = "pessoaflpgo102016 nao Alterado. Alteracao Abortada.\\n";
+      $this->erro_sql   = "pessoaflpgo102014 nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : ".$this->si193_sequencial;
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -485,7 +485,7 @@ class cl_pessoaflpgo102016 {
     }else{
       if(pg_affected_rows($result)==0){
         $this->erro_banco = "";
-        $this->erro_sql = "pessoaflpgo102016 nao foi Alterado. Alteracao Executada.\\n";
+        $this->erro_sql = "pessoaflpgo102014 nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_sql .= "Valores : ".$this->si193_sequencial;
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -539,7 +539,7 @@ class cl_pessoaflpgo102016 {
         }
       }
     }
-    $sql = " delete from pessoaflpgo102016
+    $sql = " delete from pessoaflpgo102014
                     where ";
     $sql2 = "";
     if($dbwhere==null || $dbwhere ==""){
@@ -555,7 +555,7 @@ class cl_pessoaflpgo102016 {
     $result = db_query($sql.$sql2);
     if($result==false){
       $this->erro_banco = str_replace("\n","",@pg_last_error());
-      $this->erro_sql   = "pessoaflpgo102016 nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql   = "pessoaflpgo102014 nao Excluído. Exclusão Abortada.\\n";
       $this->erro_sql .= "Valores : ".$si193_sequencial;
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -565,7 +565,7 @@ class cl_pessoaflpgo102016 {
     }else{
       if(pg_affected_rows($result)==0){
         $this->erro_banco = "";
-        $this->erro_sql = "pessoaflpgo102016 nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_sql = "pessoaflpgo102014 nao Encontrado. Exclusão não Efetuada.\\n";
         $this->erro_sql .= "Valores : ".$si193_sequencial;
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -599,7 +599,7 @@ class cl_pessoaflpgo102016 {
     $this->numrows = pg_numrows($result);
     if($this->numrows==0){
       $this->erro_banco = "";
-      $this->erro_sql   = "Record Vazio na Tabela:pessoaflpgo102016";
+      $this->erro_sql   = "Record Vazio na Tabela:pessoaflpgo102014";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
@@ -620,11 +620,11 @@ class cl_pessoaflpgo102016 {
     }else{
       $sql .= $campos;
     }
-    $sql .= " from pessoaflpgo102016 ";
+    $sql .= " from pessoaflpgo102014 ";
     $sql2 = "";
     if($dbwhere==""){
       if($si193_sequencial!=null ){
-        $sql2 .= " where pessoaflpgo102016.si193_sequencial = $si193_sequencial ";
+        $sql2 .= " where pessoaflpgo102014.si193_sequencial = $si193_sequencial ";
       }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";
@@ -654,11 +654,11 @@ class cl_pessoaflpgo102016 {
     }else{
       $sql .= $campos;
     }
-    $sql .= " from pessoaflpgo102016 ";
+    $sql .= " from pessoaflpgo102014 ";
     $sql2 = "";
     if($dbwhere==""){
       if($si193_sequencial!=null ){
-        $sql2 .= " where pessoaflpgo102016.si193_sequencial = $si193_sequencial ";
+        $sql2 .= " where pessoaflpgo102014.si193_sequencial = $si193_sequencial ";
       }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";

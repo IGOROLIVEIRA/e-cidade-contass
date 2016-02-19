@@ -6,7 +6,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2015/flpg/Ger
 
 /**
  * gerar arquivo pessoal Sicom Acompanhamento Mensal
- * @author robson
+ * @author marcelo
  * @package Contabilidade
  */
 class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV {
