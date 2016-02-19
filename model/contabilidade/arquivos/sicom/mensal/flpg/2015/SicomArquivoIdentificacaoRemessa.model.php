@@ -6,7 +6,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2015/GerarIDE
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
- * @author robson
+ * @author marcelo
  * @package Contabilidade
  */
 class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadArquivoBaseCSV {

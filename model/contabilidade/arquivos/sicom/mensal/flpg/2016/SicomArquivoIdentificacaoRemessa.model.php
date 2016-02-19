@@ -6,7 +6,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2016/GerarIDE
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
- * @author robson
+ * @author marcelo
  * @package Contabilidade
  */
 class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadArquivoBaseCSV {
@@ -81,7 +81,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
               WHERE codigo = ".db_getsession("DB_instit");
 
         $rsResult  = db_query($sSql);
-
+        echo $sSql;exit;
         /**
          * inserir informacoes no banco de dados
          */
@@ -101,7 +101,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 
             $clide->si11_codmunicipio         = $oDadosIde->codmunicipio;
             $clide->si11_cnpjmunicipio        = $oDadosIde->cnpjmunicipio;
-            $clide->si11_codorgao							= $oDadosIde->codorgao;
+            $clide->si11_codorgao			  = $oDadosIde->codorgao;
             $clide->si11_tipoorgao            = $oDadosIde->tipoorgao;
             $clide->si11_exercicioreferencia  = db_getsession("DB_anousu");
             $clide->si11_mesreferencia        = $this->sDataFinal['5'].$this->sDataFinal['6'];
@@ -115,7 +115,6 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
             if ($clide->erro_status == 0) {
                 throw new Exception($clide->erro_msg);
             }
-
 
         }
 
