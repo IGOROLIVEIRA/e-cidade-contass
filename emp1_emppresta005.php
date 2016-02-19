@@ -191,7 +191,7 @@ if(isset($chavepesquisa)){
          parent.document.formaba.empprestaitem.disabled=false;
          top.corpo.iframe_empprestaitem.location.href='emp1_empprestaitem001.php?e60_codemp=$e60_codemp&e46_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}'";
 
- if (db_permissaomenu(db_getsession("DB_anousu"),db_getsession("DB_modulo"),4069) == "false"){
+ if (db_permissaomenu(db_getsession("DB_anousu"),db_getsession("DB_modulo"),9484) == "false"){
       echo "
 	 parent.document.formaba.encerra.disabled=true;";
  } else {
