@@ -2,7 +2,7 @@
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_aex102016_classe.php");
-require_once ("classes/db_aex112016_classe.php");
+//require_once ("classes/db_aex112016_classe.php");
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2016/GerarAEX.model.php");
 
@@ -60,7 +60,7 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
   	
     $cAex10 = new cl_aex102016();
   	
-    $cAex11 = new cl_aex112016();
+    //$cAex11 = new cl_aex112016();
   	
   	/*
   	 * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA 
@@ -72,10 +72,10 @@ class SicomArquivoAnulacaoExtraOrcamentaria extends SicomArquivoBase implements 
 	     
 	    if (pg_num_rows($result) > 0) {
 	    		   
-	      $cAex11->excluir(NULL,"si130_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
+	      /*$cAex11->excluir(NULL,"si130_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
 	      if ($cAex11->erro_status == 0) {
 	    	  throw new Exception($cAex11->erro_msg);
-	      }
+	      }*/
 	      $cAex10->excluir(NULL,"si129_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
 	    
 	      if ($cAex10->erro_status == 0) {
