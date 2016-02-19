@@ -32,7 +32,8 @@ class cl_ext302016 {
    var $si126_especificacaoop = null; 
    var $si126_cpfresppgto = null; 
    var $si126_mes = 0;
-   var $si126_instit = 0; 
+   var $si126_instit = 0;
+   var $si126_codunidadesub = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si126_sequencial = int8 = sequencial 
@@ -183,12 +184,13 @@ class cl_ext302016 {
                                       ,si126_codfontrecursos
                                       ,si126_dtpagamento 
                                       ,si126_tipodocumentocredor 
-                                      ,si126_nrodocumento 
+                                      ,si126_nrodocumentocredor
                                       ,si126_vlop 
                                       ,si126_especificacaoop 
                                       ,si126_cpfresppgto 
                                       ,si126_mes
-                                      ,si126_instit 
+                                      ,si126_instit
+                                      ,si126_codunidadesub
                        )
                 values (
                                 $this->si126_sequencial 
@@ -204,10 +206,11 @@ class cl_ext302016 {
                                ,'$this->si126_especificacaoop' 
                                ,'$this->si126_cpfresppgto' 
                                ,$this->si126_mes
-                               ,$this->si126_instit 
+                               ,$this->si126_instit
+                               ,'$this->si126_codunidadesub'
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){ echo pg_last_error();die($sql);
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "ext302016 ($this->si126_sequencial) nao Incluído. Inclusao Abortada.";
