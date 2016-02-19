@@ -39,6 +39,7 @@ $db_botao = false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
+  $clrhfuncao->rh37_reqcargo = $rh37_reqcargo;
   $clrhfuncao->rh37_instit = db_getsession("DB_instit");
   $clrhfuncao->alterar($rh37_funcao,db_getsession("DB_instit"));
   db_fim_transacao();

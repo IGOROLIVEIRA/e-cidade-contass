@@ -54,7 +54,7 @@ class GerarFLPGO extends GerarAM {
 				$aCSVFLPGO10['si195_dsccargo']                            =   substr($aFLPGO10['si195_dsccargo'], 0, 120);
 				$aCSVFLPGO10['si195_sglcargo']                            =   str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_reqcargo']                            =   str_pad($aFLPGO10['si195_reqcargo'], 1, "0", STR_PAD_LEFT);
-				$aCSVFLPGO10['si195_indcessao']                           =   str_pad($aFLPGO10['si195_indcessao'], 3, "0", STR_PAD_LEFT);
+				$aCSVFLPGO10['si195_indcessao']                           =   str_pad($aFLPGO10['si195_indcessao'], 1, " ", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_dsclotacao']                          =   substr($aFLPGO10['si195_dsclotacao'], 0, 22);
 				$aCSVFLPGO10['si195_vlrcargahorariasemanal']              =   number_format($aFLPGO10['si195_vlrcargahorariasemanal'], 2, ",", "");
 				$aCSVFLPGO10['si195_datefetexercicio']                    =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datefetexercicio'])));

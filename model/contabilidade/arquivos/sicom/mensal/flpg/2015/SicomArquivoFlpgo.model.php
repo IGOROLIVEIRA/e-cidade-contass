@@ -114,7 +114,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	    when h13_tpcont = '19' then 'APO'
 	    when h13_tpcont = '01' then 'EPU'
 	end as si195_sglcargo,
-	'1' as si195_reqcargo,
+	rh37_reqcargo as si195_reqcargo,
 	' ' as si195_indcessao,
 	r70_descr as si195_dsclotacao,
 	case

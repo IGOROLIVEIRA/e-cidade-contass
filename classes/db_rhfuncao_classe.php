@@ -48,8 +48,9 @@ class cl_rhfuncao {
    var $rh37_vagas = 0; 
    var $rh37_cbo = null; 
    var $rh37_lei = null; 
-   var $rh37_class = null; 
-   var $rh37_ativo = 'f'; 
+   var $rh37_class = null;
+   var $rh37_reqcargo = 0;
+   var $rh37_ativo = 'f';
    var $rh37_funcaogrupo = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
@@ -59,8 +60,9 @@ class cl_rhfuncao {
                  rh37_vagas = int4 = Vagas 
                  rh37_cbo = varchar(6) = CBO 
                  rh37_lei = text = Lei 
-                 rh37_class = varchar(5) = Classificação 
-                 rh37_ativo = bool = Ativo 
+                 rh37_class = varchar(5) = Classificação
+                 rh37_reqcargo = int4 = Requisito do Cargo
+                 rh37_ativo = bool = Ativo
                  rh37_funcaogrupo = int4 = Grupo 
                  ";
    //funcao construtor da classe 
@@ -110,6 +112,15 @@ class cl_rhfuncao {
      if($this->rh37_vagas == null ){ 
        $this->rh37_vagas = "0";
      }
+     if($this->rh37_reqcargo == null ){
+       $this->erro_sql = " Campo Requisição do cargo nao Informado.";
+       $this->erro_campo = "rh37_ativo";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($this->rh37_ativo == null ){ 
        $this->erro_sql = " Campo Ativo nao Informado.";
        $this->erro_campo = "rh37_ativo";
@@ -153,7 +164,8 @@ class cl_rhfuncao {
                                       ,rh37_vagas 
                                       ,rh37_cbo 
                                       ,rh37_lei 
-                                      ,rh37_class 
+                                      ,rh37_class
+                                      ,rh37_reqcargo
                                       ,rh37_ativo 
                                       ,rh37_funcaogrupo 
                        )
@@ -164,7 +176,8 @@ class cl_rhfuncao {
                                ,$this->rh37_vagas 
                                ,'$this->rh37_cbo' 
                                ,'$this->rh37_lei' 
-                               ,'$this->rh37_class' 
+                               ,'$this->rh37_class'
+                               ,$this->rh37_reqcargo
                                ,'$this->rh37_ativo' 
                                ,$this->rh37_funcaogrupo 
                       )";
@@ -272,6 +285,10 @@ class cl_rhfuncao {
      }
      if(trim($this->rh37_class)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_class"])){ 
        $sql  .= $virgula." rh37_class = '$this->rh37_class' ";
+       $virgula = ",";
+     }
+     if(trim($this->rh37_reqcargo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_reqcargo"])){
+       $sql  .= $virgula." rh37_reqcargo = '$this->rh37_reqcargo' ";
        $virgula = ",";
      }
      if(trim($this->rh37_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_ativo"])){ 

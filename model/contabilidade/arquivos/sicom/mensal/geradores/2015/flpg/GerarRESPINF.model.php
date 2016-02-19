@@ -8,7 +8,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
   * @package Contabilidade
   */
 
-class GerarPESSOA extends GerarAM {
+class GerarRESPINF extends GerarAM {
 
 /**
   * 
@@ -19,38 +19,38 @@ class GerarPESSOA extends GerarAM {
 	
   public function gerarDados() {
 
-  	$this->sArquivo = "PESSOA";
+  	$this->sArquivo = "RESPINF";
   	$this->abreArquivo();
-  	
-  	$sSql          = "select * from pessoaflpg102015 where si193_mes = ". $this->iMes." and si193_instit = ".db_getsession("DB_instit");
-  	$rsPESSOA10    = db_query($sSql);
 
-  	if (pg_num_rows($rsPESSOA10) == 0) {
 
-	    $aCSV['tiporegistro']       =   '99';
+
+  	$sSql          = "select * from respinf102015 where si197_mes = ". $this->iMes." and si197_inst = ".db_getsession("DB_instit");
+  	$rsRESPINF10    = db_query($sSql);
+
+  	if (pg_num_rows($rsRESPINF10) == 0) {
+
+	  $aCSV['tiporegistro']       =   '99';
       $this->sLinha = $aCSV;
       $this->adicionaLinha();
 
 	  } else {
 
-  	  for ($iCont = 0;$iCont < pg_num_rows($rsPESSOA10); $iCont++) {
+  	  for ($iCont = 0;$iCont < pg_num_rows($rsRESPINF10); $iCont++) {
 
-   	    $aPESSOA10  = pg_fetch_array($rsPESSOA10,$iCont, PGSQL_ASSOC);
+   	      $aRESPINF10  = pg_fetch_array($rsRESPINF10,$iCont, PGSQL_ASSOC);
 
-   	    unset($aPESSOA10['si193_sequencial']);
-   	    unset($aPESSOA10['si193_mes']);
-   	    unset($aPESSOA10['si193_instit']);
+   	      unset($aRESPINF10['si197_sequencial']);
+   	      unset($aRESPINF10['si197_mes']);
+   	      unset($aRESPINF10['si197_instit']);
 
-   	    $aPESSOA10['si193_tiporegistro']             =  str_pad($aPESSOA10['si193_tiporegistro'], 2, "0", STR_PAD_LEFT);
-   	    $aPESSOA10['si193_tipodocumento']            =  str_pad($aPESSOA10['si193_tipodocumento'], 1, "0", STR_PAD_LEFT);
-   	    $aPESSOA10['si193_nrodocumento']             =  substr($aPESSOA10['si193_nrodocumento'], 0,14);
-   	    $aPESSOA10['si193_nome']                     =  substr($aPESSOA10['si193_nome'], 0,120);
-        $aPESSOA10['si193_indsexo']                  =  str_pad($aPESSOA10['si193_indsexo'], 1, "0", STR_PAD_LEFT);
-        $aPESSOA10['si193_datanascimento']           =  substr($aPESSOA10['si193_justificativaalteracao'], 0,100);
-		$aPESSOA10['si193_tipocadastro']             =  substr($aPESSOA10['si193_justificativaalteracao'], 0,100);
-		$aPESSOA10['si193_justalteracao']            =  substr($aPESSOA10['si193_justificativaalteracao'], 0,100);
+		  $aCSVRESPINF10['si197_nomeresponsavel']          =  substr($aRESPINF10['si197_nomeresponsavel'], 0,120);
+		  $aCSVRESPINF10['si197_cartident']                =  substr($aRESPINF10['si197_cartident'], 0,10);
+		  $aCSVRESPINF10['si197_orgemissorci']             =  substr($aRESPINF10['si197_orgemissorci'], 0,10);
+		  $aCSVRESPINF10['si197_cpf']                      =  str_pad($aRESPINF10['si197_cpf'], 11, "0", STR_PAD_LEFT);
+		  $aCSVRESPINF10['si197_dtinicio']                 =  implode("", array_reverse(explode("-", $aRESPINF10['si197_dtinicio'])));
+		  $aCSVRESPINF10['si197_dtfinal']                  =  implode("", array_reverse(explode("-", $aRESPINF10['si197_dtfinal'])));
 
-		    $this->sLinha = $aPESSOA10;
+		  $this->sLinha = $aRESPINF10;
 	      $this->adicionaLinha();
 
 	    }

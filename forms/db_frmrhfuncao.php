@@ -95,6 +95,18 @@ if ($db_opcao == 2) {
         </td>
       </tr>
       <tr>
+        <td nowrap title="Requisito do Cargo"><b>Requisito do Cargo: </b></td>
+        <td>
+          <?
+          $areqCargo = array("1"=>"Nível superior completo ou nível médio com especialização (Ex: Magistrados, Técnicos em Contabilidade, etc)",
+              "2"=>"Profissão regulamentada privativa de profissionais de saúde (Ex: Médicos, Assistentes Sociais, Técnicos em Enfermagem etc)",
+              "3"=>"Professor",
+              "4"=>"Outras");
+          db_select('rh37_reqcargo', $areqCargo, true, $db_opcao,"");
+          ?>
+        </td>
+      </tr>
+      <tr>
         <td nowrap title="<?=@$Trh37_ativo?>"><?=@$Lrh37_ativo?></td>
         <td> 
           <?
