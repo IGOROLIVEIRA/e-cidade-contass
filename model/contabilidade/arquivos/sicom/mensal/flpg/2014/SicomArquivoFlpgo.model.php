@@ -99,7 +99,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         z01_cgccpf as si195_numcpf,
         'C' as si195_regime,
         'M' as si195_indtipopagamento,
-        rh25_vinculo as si195_indsituacaoservidorpensionista,
+        (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") AS si195_indsituacaoservidorpensionista,
         rh01_admiss as si195_datconcessaoaposentadoriapensao,
 
     case
@@ -118,9 +118,9 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	' ' as si195_indcessao,
 	r70_descr as si195_dsclotacao,
 	case
-	    when rh25_vinculo = 'P' then 00
-	    when rh25_vinculo = 'I' then 00
-	    when rh25_vinculo = 'A' then rh02_hrssem
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'P' then 00
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'I' then 00
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'A' then rh02_hrssem
 	end as si195_vlrcargahorariasemanal,
 	rh01_admiss as si195_datefetexercicio,
 	rh05_recis as si195_datexclusao,
@@ -215,9 +215,6 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	  AND padroes.r02_instit = ".db_getsession('DB_anousu')."
 	  LEFT JOIN rhlotaexe ON rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
 	  AND rhlotaexe.rh26_codigo = rhlota.r70_codigo
-	  LEFT JOIN rhlotavinc ON rhlotavinc.rh25_codigo = rhlotaexe.rh26_codigo
-	  AND rhlotavinc.rh25_anousu = rhpessoalmov.rh02_anousu
-	  AND rhlotavinc.rh25_vinculo = rhregime.rh30_vinculo
 	  INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
 
 	  WHERE

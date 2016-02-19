@@ -13,93 +13,93 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2015/flpg/Ger
  */
 class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
-    /**
-     *
-     * Codigo do layout
-     * @var Integer
-     */
-    protected $iCodigoLayout = 174;
+	/**
+	 *
+	 * Codigo do layout
+	 * @var Integer
+	 */
+	protected $iCodigoLayout = 174;
 
-    /**
-     *
-     * Nome do arquivo a ser criado
-     * @var String
-     */
-    protected $sNomeArquivo = 'FLPGO';
+	/**
+	 *
+	 * Nome do arquivo a ser criado
+	 * @var String
+	 */
+	protected $sNomeArquivo = 'FLPGO';
 
-    /**
-     *
-     * Contrutor da classe
-     */
-    public function __construct() {
+	/**
+	 *
+	 * Contrutor da classe
+	 */
+	public function __construct() {
 
-    }
+	}
 
-    /**
-     * retornar o codio do layout
-     *
-     *@return Integer
-     */
-    public function getCodigoLayout(){
-        return $this->iCodigoLayout;
-    }
+	/**
+	 * retornar o codio do layout
+	 *
+	 *@return Integer
+	 */
+	public function getCodigoLayout(){
+		return $this->iCodigoLayout;
+	}
 
-    /**
-     *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
-     *@return Array
-     */
-    public function getCampos() {
+	/**
+	 *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
+	 *@return Array
+	 */
+	public function getCampos() {
 
-    }
+	}
 
-    /**
-     * selecionar os dados de Notas Fiscais referentes a instituicao logada
-     *
-     */
-    public function gerarDados() {
+	/**
+	 * selecionar os dados de Notas Fiscais referentes a instituicao logada
+	 *
+	 */
+	public function gerarDados() {
 
 		$clflpgo10 = new cl_flpgo102015();
 		$clflpgo11 = new cl_flpgo112015();
 
-        db_inicio_transacao();
+		db_inicio_transacao();
 
-        /*
+		/*
         * excluir informacoes do mes selecionado registro 11
         */
-        $result = $clflpgo11->sql_record($clflpgo11->sql_query(NULL,"*",NULL,"si196_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si196_inst = ".db_getsession("DB_instit")));
-        if (pg_num_rows($result) > 0) {
+		$result = $clflpgo11->sql_record($clflpgo11->sql_query(NULL,"*",NULL,"si196_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si196_inst = ".db_getsession("DB_instit")));
+		if (pg_num_rows($result) > 0) {
 
-            $clflpgo11->excluir(NULL,"si196_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si196_inst = ".db_getsession("DB_instit"));
-            if ($clflpgo11->erro_status == 0) {
-                throw new Exception($clflpgo11->erro_msg);
-            }
-        }
+			$clflpgo11->excluir(NULL,"si196_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si196_inst = ".db_getsession("DB_instit"));
+			if ($clflpgo11->erro_status == 0) {
+				throw new Exception($clflpgo11->erro_msg);
+			}
+		}
 
-        /*
+		/*
          * excluir informacoes do mes selecionado registro 10
          */
-        $result = $clflpgo10->sql_record($clflpgo10->sql_query(NULL,"*",NULL,"si195_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si195_inst = ".db_getsession("DB_instit")));
+		$result = $clflpgo10->sql_record($clflpgo10->sql_query(NULL,"*",NULL,"si195_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si195_inst = ".db_getsession("DB_instit")));
 		if (pg_num_rows($result) > 0) {
-            $clflpgo10->excluir(NULL,"si195_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si195_inst = ".db_getsession("DB_instit"));
-            if ($clflpgo10->erro_status == 0) {
-                throw new Exception($clflpgo10->erro_msg);
-            }
-        }
+			$clflpgo10->excluir(NULL,"si195_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si195_inst = ".db_getsession("DB_instit"));
+			if ($clflpgo10->erro_status == 0) {
+				throw new Exception($clflpgo10->erro_msg);
+			}
+		}
 
-        db_fim_transacao();
+		db_fim_transacao();
 
-        /*
+		/*
          * selecionar informacoes registro 10
          */
-        db_inicio_transacao();
+		db_inicio_transacao();
 
-        $sSql = "  SELECT
+		$sSql = "  SELECT
 	     rh02_regist,
         '10' as si195_tiporegistro,
         z01_cgccpf as si195_numcpf,
         'C' as si195_regime,
         'M' as si195_indtipopagamento,
-        rh25_vinculo as si195_indsituacaoservidorpensionista,
+        (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") AS si195_indsituacaoservidorpensionista,
         rh01_admiss as si195_datconcessaoaposentadoriapensao,
 
     case
@@ -118,9 +118,9 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	' ' as si195_indcessao,
 	r70_descr as si195_dsclotacao,
 	case
-	    when rh25_vinculo = 'P' then 00
-	    when rh25_vinculo = 'I' then 00
-	    when rh25_vinculo = 'A' then rh02_hrssem
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'P' then 00
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'I' then 00
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'A' then rh02_hrssem
 	end as si195_vlrcargahorariasemanal,
 	rh01_admiss as si195_datefetexercicio,
 	rh05_recis as si195_datexclusao,
@@ -215,9 +215,6 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	  AND padroes.r02_instit = ".db_getsession('DB_anousu')."
 	  LEFT JOIN rhlotaexe ON rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
 	  AND rhlotaexe.rh26_codigo = rhlota.r70_codigo
-	  LEFT JOIN rhlotavinc ON rhlotavinc.rh25_codigo = rhlotaexe.rh26_codigo
-	  AND rhlotavinc.rh25_anousu = rhpessoalmov.rh02_anousu
-	  AND rhlotavinc.rh25_vinculo = rhregime.rh30_vinculo
 	  INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
 
 	  WHERE
@@ -235,13 +232,13 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	  GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
 	  ORDER BY rh02_regist asc";
 
-        $rsResult10 = db_query($sSql);
-        //echo $sSql;exit;
-        //db_criatabela($rsResult10);exit;
+		$rsResult10 = db_query($sSql);
+		//echo $sSql;exit;
+		//db_criatabela($rsResult10);exit;
 
-        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+		for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-            $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
+			$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 			$iQuantTipoPagamento = 0;
 			$aTiposPagamento = array();
 			if($oDados10->si195_vlrremuneracaobruta_mensal != 0 || $oDados10->si195_vlrremuneracaobruta_res != 0) {
@@ -618,44 +615,44 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r20_pd = 1)
   AND r08_codigo BETWEEN 'S001' AND 'S014' ";
 
-                  $rsResult11 = db_query($sSql2);
-				  //$sSql2
-				  //db_criatabela($rsResult11);
+				$rsResult11 = db_query($sSql2);
+				//$sSql2
+				//db_criatabela($rsResult11);
 
-                  for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
+				for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
-                    $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
+					$oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
-                    $clflpgo11 = new cl_flpgo112015();
-                    $clflpgo11->si196_tiporegistro            = $oDados11->si196_tiporegistro;
-                    $clflpgo11->si196_reg10                   = $clflpgo10->si195_sequencial;
-                    $clflpgo11->si196_numcpf                  = $clflpgo10->si195_numcpf;
-                    $clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
-                    $clflpgo11->si196_descoutros              = $oDados11->si196_descoutros;
-                    $clflpgo11->si196_natsaldodetalhe         = $oDados11->si196_natsaldodetalhe;
-                    $clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
-                    $clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $clflpgo11->si196_inst                    = db_getsession("DB_instit");
-                    $clflpgo11->incluir(null);
+					$clflpgo11 = new cl_flpgo112015();
+					$clflpgo11->si196_tiporegistro            = $oDados11->si196_tiporegistro;
+					$clflpgo11->si196_reg10                   = $clflpgo10->si195_sequencial;
+					$clflpgo11->si196_numcpf                  = $clflpgo10->si195_numcpf;
+					$clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
+					$clflpgo11->si196_descoutros              = $oDados11->si196_descoutros;
+					$clflpgo11->si196_natsaldodetalhe         = $oDados11->si196_natsaldodetalhe;
+					$clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
+					$clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+					$clflpgo11->si196_inst                    = db_getsession("DB_instit");
+					$clflpgo11->incluir(null);
 
-                    if ($clflpgo11->erro_status == 0) {
-                        throw new Exception($clflpgo11->erro_msg);
-                    }
+					if ($clflpgo11->erro_status == 0) {
+						throw new Exception($clflpgo11->erro_msg);
+					}
 
-                }
+				}
 
 			}
-        }
+		}
 
 		//echo '<pre>';
 		//print_r($aTiposPagamento);exit;
 
-        db_fim_transacao();
+		db_fim_transacao();
 
-        $oGerarFLPGO = new GerarFLPGO();
-        $oGerarFLPGO->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
-        $oGerarFLPGO->gerarDados();
+		$oGerarFLPGO = new GerarFLPGO();
+		$oGerarFLPGO->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		$oGerarFLPGO->gerarDados();
 
-    }
+	}
 
 }
