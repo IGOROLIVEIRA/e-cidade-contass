@@ -275,7 +275,7 @@ function js_preenchepesquisa(chave){
 	      		}
 	      	}
       	} else {
-      		array_push($aWhere, "1001","1017","1016","1014","1015");
+      		array_push($aWhere, "1001","1002","1003","1004","1017","1016","1014","1015");
       	}
       	
         $sSqlTipoSuplem = $clorcsuplemtipo->sql_query("","o48_tiposup as o46_tiposup,o48_descr","o48_tiposup","o48_tiposup in (".implode(",", $aWhere).")");
