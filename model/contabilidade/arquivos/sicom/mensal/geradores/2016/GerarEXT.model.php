@@ -82,10 +82,10 @@ class GerarEXT extends GerarAM
                 $aCSVEXT20['si165_codorgao'] = str_pad($aEXT20['si165_codorgao'], 2, "0", STR_PAD_LEFT);
                 $aCSVEXT20['si165_codext'] = substr($aEXT20['si165_codext'], 0, 15);
                 $aCSVEXT20['si165_codfontrecursos'] = str_pad($aEXT20['si165_codfontrecursos'], 3, "0", STR_PAD_LEFT);
-                $aCSVEXT20['si165_totaldebitos'] = number_format(abs($aEXT20['si165_totaldebitos']), 2, ",", "");
-                $aCSVEXT20['si165_totalcreditos'] = number_format(abs($aEXT20['si165_totalcreditos']), 2, ",", "");
                 $aCSVEXT20['si165_vlsaldoanteriorfonte'] = number_format(abs($aEXT20['si165_vlsaldoanteriorfonte']), 2, ",", "");
                 $aCSVEXT20['si165_natsaldoanteriorfonte'] = $aEXT20['si165_natsaldoanteriorfonte'];
+                $aCSVEXT20['si165_totaldebitos'] = number_format(abs($aEXT20['si165_totaldebitos']), 2, ",", "");
+                $aCSVEXT20['si165_totalcreditos'] = number_format(abs($aEXT20['si165_totalcreditos']), 2, ",", "");
                 $aCSVEXT20['si165_vlsaldoatualfonte'] = number_format(abs($aEXT20['si165_vlsaldoatualfonte']), 2, ",", "");
                 $aCSVEXT20['si165_natsaldoatualfonte'] = $aEXT20['si165_natsaldoatualfonte'];
 
