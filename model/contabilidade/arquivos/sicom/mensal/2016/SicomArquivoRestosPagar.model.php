@@ -277,7 +277,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         $clrsp11->si113_reg10                  = $clrsp10->si112_sequencial;
         $clrsp11->si113_codreduzidorsp         = $oDados10->codreduzidorsp;
 
-        $clrsp11->si113_codfontrecursos        = $iFonteAlterada != '0' ? $iFonteAlterada : $oDados10->codfontrecursos;
+        $clrsp11->si113_codfontrecursos        = $iFonteAlterada != '0' && $iFonteAlterada != '' ? $iFonteAlterada : $oDados10->codfontrecursos;
         $clrsp11->si113_vloriginalfonte        = $oDados10->vloriginal;
         $clrsp11->si113_vlsaldoantprocefonte   = $oDados10->vlsaldoantproce;
         $clrsp11->si113_vlsaldoantnaoprocfonte = $oDados10->vlsaldoantnaoproc;
