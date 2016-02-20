@@ -223,14 +223,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta' 
           AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'
           AND si95_mes < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
-        $sSqlVerifica  = "UNION SELECT * FROM ctb102015 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco' 
+        $sSqlVerifica  .= " UNION SELECT * FROM ctb102015 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
           AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta' 
-          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'
-          AND si95_mes < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
+          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'";
       	    $sSqlVerifica .= " UNION SELECT * FROM ctb102014 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco' 
           AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta' 
           AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'";
-          $rsResultVerifica = db_query($sSqlVerifica);//db_criatabela($rsResultVerifica);
+          $rsResultVerifica = db_query($sSqlVerifica);//echo $sSqlVerifica;db_criatabela($rsResultVerifica);
           
           if (pg_num_rows($rsResultVerifica) == 0) {
       	  
