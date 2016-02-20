@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_metareal102016_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2016/GerarMETAREAL.model.php");
+require_once ("classes/db_cronem102016_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2016/GerarCRONEM.model.php");
 
 /**
  * Dados Complementares Sicom Acompanhamento Mensal
@@ -23,7 +23,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
    * Nome do arquivo a ser criado
    * @var String
    */
-  protected $sNomeArquivo = 'METAREAL';
+  protected $sNomeArquivo = 'CRONEM';
 
   /**
    *
@@ -55,7 +55,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
    */
   public function gerarDados() {
 
-    $clmetareal10 = new cl_metareal102016();
+    $clmetareal10 = new cl_cronem102016();
 
     db_inicio_transacao();
 
@@ -113,7 +113,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
 
     db_fim_transacao();
 
-    $oGerarMETAREAL = new GerarMETAREAL();
+    $oGerarMETAREAL = new GerarCRONEM();
     $oGerarMETAREAL->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
     $oGerarMETAREAL->gerarDados();
 
