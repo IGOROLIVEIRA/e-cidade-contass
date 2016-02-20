@@ -171,6 +171,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $sSqlVerifica = "select si146_sequencial from cvc102016 where si146_codveiculo = '{$oDados10->codveiculo}'
 	    	and si146_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $sSqlVerifica .= " union select si146_sequencial from cvc102015 where si146_codveiculo = '{$oDados10->codveiculo}'";
                 $sSqlVerifica .= " union select si146_sequencial from cvc102014 where si146_codveiculo = '{$oDados10->codveiculo}'";
                 $rsResultVerifica = db_query($sSqlVerifica);
                 if (pg_num_rows($rsResultVerifica) > 0) {

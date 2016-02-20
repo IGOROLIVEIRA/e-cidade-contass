@@ -85,6 +85,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 and z01_cgccpf not in (select si12_nrodocumento from pessoa102016 where si12_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
+					 and z01_cgccpf not in (select si12_nrodocumento from pessoa102015)
 					 and z01_cgccpf not in (select si12_nrodocumento from pessoa102014)";
  		 
   	} else {
@@ -95,7 +96,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		       z01_cadast 
 		      from cgm where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      and (z01_cgccpf != '' and z01_cgccpf is not null)
-		      and z01_cgccpf not in (select si12_nrodocumento from pessoa102014)";
+		      and z01_cgccpf not EXISTS (select si12_nrodocumento from pessoa102015)
+		      and z01_cgccpf not EXISTS (select si12_nrodocumento from pessoa102014)";
   	}
     	
     $rsResult  = db_query($sSql);//db_criatabela($rsResult);exit;
