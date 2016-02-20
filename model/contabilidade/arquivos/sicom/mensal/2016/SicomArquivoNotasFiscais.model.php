@@ -297,12 +297,12 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
 
       $sSql = "select '20' as tiporegistro,
         empnota.e69_numero as nfnumero,
-        'A' as nfserie,
+        case when empnota.e69_nfserie = 'S/N' then ' ' else empnota.e69_nfserie end as nfserie,
         (case length(cgm.z01_cgccpf) when 11 then 1
                 else 2
               end) as tipodocumento,
         cgm.z01_cgccpf  as nrodocumento,
-        ' ' as chaveacesso,
+        case when empnota.e69_notafiscaleletronica=1 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
         empnota.e69_dtnota as dtemissaonf,
         lpad((CASE WHEN o40_codtri = '0'
          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
