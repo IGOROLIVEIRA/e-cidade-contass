@@ -123,7 +123,7 @@ db_inicio_transacao();
               empnota.e69_codnota as codnotafiscal,
               si09_codorgaotce as codorgao,
               empnota.e69_numero as nfnumero,
-              case when empnota.e69_nfserie = 'S/N' then ' ' else empnota.e69_nfserie end as nfserie,
+              ' ' as nfserie,
               (case length(cgm.z01_cgccpf) when 11 then 1
                 else 2
               end) as tipodocumento,
