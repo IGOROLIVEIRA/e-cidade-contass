@@ -333,6 +333,10 @@ try {
 
 			}
 
+			$result_selecao = $clselecao->sql_record($clselecao->sql_query_file($r44_selec,db_getsession("DB_instit"),"r44_where"));
+			if ($clselecao->numrows > 0) {
+				db_fieldsmemory($result_selecao, 0);
+			}
 			reset($arr_registrosFA);
 			for ($i=0; $i<count($arr_registrosFA); $i++) {
 				$registrocorrente = key($arr_registrosFA);
@@ -345,6 +349,7 @@ try {
 				$sWhere .= " and r21_rubric = '".$rh27_rubric."'";
 				$sWhere .= " and r21_instit = ".db_getsession("DB_instit");
 				$sWhere .= " and $whereatualizaFA";
+				$sWhere .= " and $r44_where";
 				$result_PTFAtest = $clpontofa->sql_record($clpontofa->sql_query_seleciona(null,
 																																									null,
 																																									null,
@@ -387,6 +392,7 @@ try {
 				$sWhere .= " and r47_rubric = '".$rh27_rubric."'";
 				$sWhere .= " and r47_instit = ".db_getsession("DB_instit");
 				$sWhere .= " and $whereatualizaFC";
+				$sWhere .= " and $r44_where";
 				$result_PTFCtest = $clpontocom->sql_record($clpontocom->sql_query_seleciona(null,
 						                                                                        null,
 						                                                                        null,
@@ -394,6 +400,13 @@ try {
 						                                                                        "distinct r47_regist as regist,r47_lotac as lotac",
 						                                                                        "",
 						                                                                        $sWhere));
+				/*echo $clpontocom->sql_query_seleciona(null,
+					null,
+					null,
+					null,
+					"distinct r47_regist as regist,r47_lotac as lotac",
+					"",
+					$sWhere);exit;*/
 				if ($clpontocom->numrows == 0) {
 
 					if (isset($valornov) && trim($valornov) != "") {
@@ -429,6 +442,7 @@ try {
 				$sWhere .= " and r34_rubric = '".$rh27_rubric."'";
 				$sWhere .= " and r34_instit = ".db_getsession("DB_instit");
 				$sWhere .= " and $whereatualizaF3";
+				$sWhere .= " and $r44_where";
 				$result_PTF3test = $clpontof13->sql_record($clpontof13->sql_query_seleciona(null,
 						                                                                        null,
 						                                                                        null,
@@ -473,6 +487,7 @@ try {
 				$sWhere .= " and r90_rubric = '".$rh27_rubric."'";
 				$sWhere .= " and r90_instit = ".db_getsession("DB_instit");
 				$sWhere .= " and $whereatualizaFX";
+				$sWhere .= " and $r44_where";
 				$result_PTFXtest = $clpontofx->sql_record($clpontofx->sql_query_seleciona(null,
 						                                                                      null,
 						                                                                      null,
@@ -523,6 +538,7 @@ try {
 				$sWhere .= " and r10_rubric = '".$rh27_rubric."'";
 				$sWhere .= " and r10_instit = ".db_getsession("DB_instit");
 				$sWhere .= " and $whereatualizaFS";
+				$sWhere .= " and $r44_where";
 				$result_PTFStest = $clpontofs->sql_record($clpontofs->sql_query_seleciona(null,
 						                                                                      null,
 						                                                                      null,

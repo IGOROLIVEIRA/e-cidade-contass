@@ -450,6 +450,8 @@ db_input('selecao',15, "", true, 'hidden', 3);
 db_input('iae',15, "", true, 'hidden', 3);
 db_input('testdtlim',15, "", true, 'hidden', 3);
 db_input('rh27_limdat',15, "", true, 'hidden', 3);
+db_input('rh27_rubric',15, $rh27_rubric, true, 'hidden', 3);
+db_input('r44_selec',15, $r44_selec, true, 'hidden', 3);
 ?>
 </form>
 <script>
