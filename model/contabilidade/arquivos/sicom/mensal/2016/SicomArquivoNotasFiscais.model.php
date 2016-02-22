@@ -297,7 +297,7 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
 
       $sSql = "select '20' as tiporegistro,
         empnota.e69_numero as nfnumero,
-        case when empnota.e69_nfserie = 'S/N' then ' ' else empnota.e69_nfserie end as nfserie,
+        case when empnota.e69_notafiscaleletronica = 2 then empnota.e69_nfserie else ' ' end as nfserie,
         (case length(cgm.z01_cgccpf) when 11 then 1
                 else 2
               end) as tipodocumento,
