@@ -265,7 +265,7 @@ function js_preenchepesquisa(chave){
 	      		if ($o200_tipoleialteracao == 1) {
 	      			$aWhere[] = "1001";
 	      		} elseif ($o200_tipoleialteracao == 2) {
-	      			array_push($aWhere, "1002","1003","1004","1005","1006","1007","1008","1009","1010");
+	      			array_push($aWhere, "1002","1003","1004","1005","1006","1007","1008","1009","1010","1012");
 	      		} elseif ($o200_tipoleialteracao == 3) {
 	      			array_push($aWhere, "1014","1015","1016");
 	      		} elseif ($o200_tipoleialteracao == 4) {
@@ -275,7 +275,7 @@ function js_preenchepesquisa(chave){
 	      		}
 	      	}
       	} else {
-      		array_push($aWhere, "1001","1002","1003","1004","1012","1017","1016","1014","1015");
+      		array_push($aWhere, "1001","1002","1003","1004","1017","1016","1014","1015");
       	}
       	
         $sSqlTipoSuplem = $clorcsuplemtipo->sql_query("","o48_tiposup as o46_tiposup,o48_descr","o48_tiposup","o48_tiposup in (".implode(",", $aWhere).")");
