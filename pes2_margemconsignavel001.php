@@ -1,35 +1,10 @@
 <?
-/*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
+require_once ("dbforms/db_classesgenericas.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt23');
 $clrotulo->label('DBtxt25');
@@ -67,7 +42,8 @@ function js_emite(){
 	'&tipo_margem='+document.form1.tipo_margem.value+
 	'&ordem='+document.form1.ordem.value+
 	'&ano='+document.form1.DBtxt23.value+
-	'&mes='+document.form1.DBtxt25.value;
+	'&mes='+document.form1.DBtxt25.value+
+  '&aMatriculas=' + js_campo_recebe_valores();
   jan = window.open('pes2_margemconsignavel002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
@@ -178,6 +154,42 @@ function js_emite(){
          ?>
         </td>
       </tr>
+       <tr>
+            <td colspan="2">
+              <table style="width: 100%">
+                <tr>
+                  <td align="right">
+                    <?php 
+                      
+                      $aux                                  = new cl_arquivo_auxiliar;
+                      $aux->cabecalho                       = "<strong>MATRÍCULAS SELECIONADAS</strong>";
+                      $aux->codigo                          = "rh01_regist";
+                      $aux->descr                           = "z01_nome";
+                      $aux->nomeobjeto                      = 'matriculas_selecionadas';
+                      $aux->obrigarselecao                  = false;
+                      $aux->funcao_js                       = 'js_mostra';
+                      $aux->funcao_js_hide                  = 'js_mostra1';
+                      $aux->func_arquivo                    = "func_rhpessoal.php";
+                      $aux->nomeiframe                      = "db_iframe_rhpessoal";
+                      $aux->executa_script_apos_incluir     = "document.form1.rh01_regist.focus();";
+                      $aux->mostrar_botao_lancar            = true;
+                      $aux->executa_script_lost_focus_campo = "js_insSelectmatriculas_selecionadas()";
+                      $aux->executa_script_change_focus     = "document.form1.rh01_regist.focus();";
+                      $aux->passar_query_string_para_func   = "&instit=" . db_getsession("DB_instit");
+                      $aux->localjan                        = "";
+                      $aux->db_opcao                        = 2;
+                      $aux->tipo                            = 2;
+                      $aux->top                             = 20;
+                      $aux->linhas                          = 10;
+                      $aux->vwidth                          = "360";
+                      $aux->funcao_gera_formulario();
+                      
+                    ?>
+                  </td>
+                </tr> 
+              </table>
+            </td>
+          </tr>
 </table>
 </fieldset>
 	<table>
@@ -271,6 +283,37 @@ function js_mostrabase031(chave1,chave2){
   document.form1.descr_base03.value = chave2;
   db_iframe_bases.hide();
 }
+
+function js_insere_matri () {
+    
+    var valor = document.getElementById('matriculas_selecionadas_text').value.trim();
+    
+    if ( valor == '' ) {
+      
+      if ( st ) {
+        
+        clearTimeout(st);
+      }
+        
+      return false;
+    }
+      
+    var array = valor.split(",");
+    
+    for ( var i = 0; i < array.length; i++ ) {
+      
+      document.getElementById('rh01_regist').value = array[i];
+      js_BuscaDadosArquivomatriculas_selecionadas(false);
+      
+      document.getElementById('matriculas_selecionadas_text').value = 
+        ( array.slice( i + 1, array.length ).implode(',') ).trim();
+      
+      var st = setTimeout(js_insere_matri, 500);
+      
+      break;
+    }
+    
+  }
 
 
 
