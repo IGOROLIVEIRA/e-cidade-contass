@@ -21,13 +21,24 @@ if(isset($processar)){
 }
 elseif(isset($incluir)){
   db_inicio_transacao();
+
+  $clconextsaldo->sql_record($clconextsaldo->sql_query('','*','',"ces01_codcon = $ces01_codcon and ces01_fonte = $ces01_fonte "));
+  if($clconextsaldo->numrows > 0){
+    db_msgbox('Esse lancançamento já existe!');
+  }else{
   $clconextsaldo->incluir($ces01_sequencial);
+  }
   db_fim_transacao();
 }
 elseif(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $clconextsaldo->alterar($ces01_sequencial);
+  $clconextsaldo->sql_record($clconextsaldo->sql_query('','*','',"ces01_codcon = $ces01_codcon and ces01_fonte = $ces01_fonte "));
+  if($clconextsaldo->numrows > 0){
+    db_msgbox('Esse lancançamento já existe!');
+  }else {
+    $clconextsaldo->alterar($ces01_sequencial);
+  }
   db_fim_transacao();
 }
 elseif(isset($excluir)){
