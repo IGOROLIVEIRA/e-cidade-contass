@@ -104,10 +104,10 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
 		  $clide->si11_codorgao							= $oDadosIde->codorgao;
 		  $clide->si11_tipoorgao            = $oDadosIde->tipoorgao;
 		  $clide->si11_exercicioreferencia  = db_getsession("DB_anousu");
-		  $clide->si11_mesreferencia        = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  $clide->si11_mesreferencia        = $this->getEncerramento() ? 13 : $this->sDataFinal['5'].$this->sDataFinal['6'];
 		  $clide->si11_datageracao          = date("d-m-Y");
 		  $clide->si11_codcontroleremessa   = " ";
-		  $clide->si11_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
+		  $clide->si11_mes                  = $this->getEncerramento() ? 13 : $this->sDataFinal['5'].$this->sDataFinal['6'];
 		  $clide->si11_instit               = db_getsession("DB_instit");
 		  
 		  
@@ -122,7 +122,7 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
     db_fim_transacao();
     
     $oGerarIde = new GerarIDE();
-    $oGerarIde->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    $oGerarIde->iMes = $this->getEncerramento() ? 13 : $this->sDataFinal['5'].$this->sDataFinal['6'];
     $oGerarIde->gerarDados();
     
   }
