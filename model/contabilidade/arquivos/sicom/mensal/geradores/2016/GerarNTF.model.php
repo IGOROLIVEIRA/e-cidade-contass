@@ -101,7 +101,7 @@ class GerarNTF extends GerarAM {
             $aCSVNTF20['si145_tiporegistro']             =    str_pad($aNTF20['si145_tiporegistro'], 2, "0", STR_PAD_LEFT);
             
             $aCSVNTF20['si145_nfnumero']                 =    substr($aNTF20['si145_nfnumero'], 0, 20);
-            $aCSVNTF20['si145_nfserie']                  =    substr(($aNTF20['si145_nfserie'] == 0 ? ' ': $aNTF20['si145_nfserie']) , 0, 8);
+            $aCSVNTF20['si145_nfserie']                  =    substr($aNTF20['si145_nfserie'] , 0, 8) == '0' ? ' ' : substr($aNTF20['si145_nfserie'] , 0, 8) ;
             $aCSVNTF20['si145_tipodocumento']            =    $aNTF20['si145_tipodocumento'];
             $aCSVNTF20['si145_nrodocumento']             =   substr($aNTF20['si145_nrodocumento'], 0, 14);
             $aCSVNTF20['si145_chaveacesso']              =   $aNTF20['si145_chaveacesso'] == 0 ? ' ' : $aNTF20['si145_chaveacesso'];
