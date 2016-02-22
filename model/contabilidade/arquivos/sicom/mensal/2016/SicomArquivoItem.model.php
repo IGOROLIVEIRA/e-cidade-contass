@@ -192,6 +192,8 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = ".$this->sDataFinal['5'].$thi
     	//$sSqlitem="select si43_coditem,si43_unidademedida from item102016  where si43_coditem=".$oDados10->coditem." and si43_unidademedida='{$oDados10->unidademedida}'";
     	$sSqlitem  ="select si43_coditem,si43_unidademedida from item102016  where si43_coditem=".$oDados10->coditem." and si43_mes <= ".$this->sDataFinal['5'].$this->sDataFinal['6'];
     	$sSqlitem .=" union 
+    	select si43_coditem,si43_unidademedida from item102015  where si43_coditem=".$oDados10->coditem;
+    	$sSqlitem .=" union 
     	select si43_coditem,si43_unidademedida from item102014  where si43_coditem=".$oDados10->coditem;
     	$rsResultitem = db_query($sSqlitem);//db_criatabela($rsResultitem);echo $sSqlitem;
     	/**
