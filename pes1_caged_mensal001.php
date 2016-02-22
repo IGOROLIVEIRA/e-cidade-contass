@@ -188,7 +188,7 @@ if(isset($gerar)){
         for($i=0; $i<$clrhpessoal->numrows; $i++){
           db_fieldsmemory($result_dad, $i);
           if(trim($rh01_admiss) != ""){
-            if((int)db_subdata($rh01_admiss,"m") >= (int)$mesant 
+            if( ((int)db_subdata($rh01_admiss,"m")==1&&(int)db_subdata($rh01_admiss,"a")==$anousu?13:(int)db_subdata($rh01_admiss,"m")) >= (int)$mesant 
 	    && (int)db_subdata($rh01_admiss,"a") >= (int)$anoant 
 	    && (int)db_subdata($rh01_admiss,"m") <= ( (int)$mesusu==1?13:(int)$mesusu ) 
 	    && (int)db_subdata($rh01_admiss,"a") <= (int)$anousu){
@@ -209,7 +209,7 @@ if(isset($gerar)){
 	      }
               db_insert("wkcaged",$arr_campos,$arr_vals);
             }elseif(trim($rh05_recis) != ""){
-            if((int)db_subdata($rh05_recis,"m") >= (int)$mesant 
+            if( ((int)db_subdata($rh05_recis,"m")==1&&(int)db_subdata($rh05_recis,"a")==$anousu?13:(int)db_subdata($rh05_recis,"m")) >= (int)$mesant 
 	    && (int)db_subdata($rh05_recis,"a") >= (int)$anoant 
 	    && (int)db_subdata($rh05_recis,"m") <= ( (int)$mesusu==1?13:(int)$mesusu ) 
 	    && (int)db_subdata($rh05_recis,"a") <= (int)$anousu){

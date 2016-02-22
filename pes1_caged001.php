@@ -223,7 +223,7 @@ if (isset($gerar)) {
 
           if (trim($rh01_admiss) != "") {
 
-            if ((int)db_subdata($rh01_admiss, "m") >= (int)$mesant
+            if ( ((int)db_subdata($rh01_admiss,"m")==1&&(int)db_subdata($rh01_admiss,"a")==$iAnoUsu?13:(int)db_subdata($rh01_admiss,"m")) >= (int)$mesant
               && (int)db_subdata($rh01_admiss, "a") >= (int)$anoant
               && (int)db_subdata($rh01_admiss, "m") <= ((int)$iMesUsu == 1 ? 13 : (int)$iMesUsu)
               && (int)db_subdata($rh01_admiss, "a") <= (int)$iAnoUsu
@@ -252,7 +252,7 @@ if (isset($gerar)) {
               db_insert("wkcaged", $arr_campos, $arr_vals);
             } else if (trim($rh05_recis) != "") {
 
-              if ((int)db_subdata($rh05_recis, "m") >= (int)$mesant
+              if ( ((int)db_subdata($rh05_recis,"m")==1&&(int)db_subdata($rh05_recis,"a")==$iAnoUsu?13:(int)db_subdata($rh05_recis,"m")) >= (int)$mesant
                 && (int)db_subdata($rh05_recis, "a") >= (int)$anoant
                 && (int)db_subdata($rh05_recis, "m") <= ((int)$iMesUsu == 1 ? 13 : (int)$iMesUsu)
                 && (int)db_subdata($rh05_recis, "a") <= (int)$iAnoUsu
