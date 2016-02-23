@@ -91,6 +91,9 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102016 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
 					 ";
 
     } else {
