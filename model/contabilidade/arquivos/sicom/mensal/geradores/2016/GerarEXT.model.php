@@ -109,7 +109,7 @@ class GerarEXT extends GerarAM
                 $aCSVEXT30['si126_dtpagamento'] = implode("", array_reverse(explode("-", $aEXT30['si126_dtpagamento'])));
                 $aCSVEXT30['si126_tipodocumentocredor'] = str_pad($aEXT30['si126_tipodocumentocredor'], 1, "0", STR_PAD_LEFT);
                 $aCSVEXT30['si126_nrodocumentocredor'] = substr($aEXT30['si126_nrodocumentocredor'], 0, 14);
-                $aCSVEXT30['si126_vlop'] = number_format(abs($aEXT20['si126_vlop']), 2, ",", "");
+                $aCSVEXT30['si126_vlop'] = number_format(abs($aEXT30['si126_vlop']), 2, ",", "");
                 $aCSVEXT30['si126_especificacaoop'] = substr($aEXT30['si126_especificacaoop'], 0, 200);
                 $aCSVEXT30['si126_cpfresppgto'] = substr($aEXT30['si126_cpfresppgto'], 0, 11);
 
