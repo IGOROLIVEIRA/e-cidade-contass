@@ -51,7 +51,7 @@ $clrotulo->label("o15_codigo");
           	<tr>
           	 <td>Mês Referência: </td>
           	 <td>
-          	 <select id="MesReferencia" class="MesReferencia" >
+          	 <select id="MesReferencia" class="MesReferencia" onchange="isEncerramento();">
           	  <option value="01">Janeiro</option>
           	  <option value="02">Fevereiro</option>
           	  <option value="03">Março</option>
@@ -119,6 +119,11 @@ $clrotulo->label("o15_codigo");
 </html>
 <? db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
 <script type="text/javascript">
+    function isEncerramento(){
+        $("Balancete").value = 'Balancete';
+        if($("MesReferencia").value == 13)
+            $("Balancete").value = 'BalanceteEncerramento';
+    }
 function js_processar() {
   
   var aArquivosSelecionados = new Array();
