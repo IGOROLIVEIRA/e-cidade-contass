@@ -46,7 +46,7 @@ class GerarFLPGO extends GerarAM {
 				$aFLPGO10  = pg_fetch_array($rsFLPGO10,$iCont);
 
 				$aCSVFLPGO10['si195_tiporegistro']                        =   str_pad($aFLPGO10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
-				$aCSVFLPGO10['si195_numcpf']                              =   str_pad($aFLPGO10['si195_numcpf'], 11, "0", STR_PAD_LEFT);
+				$aCSVFLPGO10['si195_numcpf']                              =   substr($aFLPGO10['si195_numcpf'], 0,11);
 				$aCSVFLPGO10['si195_regime']                              =   str_pad($aFLPGO10['si195_regime'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_indtipopagamento']                    =   str_pad($aFLPGO10['si195_indtipopagamento'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_indsituacaoservidorpensionista']      =   str_pad($aFLPGO10['si195_indsituacaoservidorpensionista'], 1, "0", STR_PAD_LEFT);

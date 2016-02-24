@@ -108,6 +108,7 @@ $clrotulo->label("o15_codigo");
                             </div>
                         </td>
                     </tr>
+                    <input type="hidden" value="<?php echo db_getsession("DB_anousu") ?>" id="AnoReferencia" />
                 </table>
             </fieldset>
             <div style="text-align: center;">
@@ -116,6 +117,11 @@ $clrotulo->label("o15_codigo");
                 <input type="button" id="btnProcessar" value="Processar"
                        onclick="js_processar();" />
             </div>
+            <tr>
+                <td colspan="2" align = "center">
+                    <input  name="emite2" id="emite2" type="button" value="Conferencia" onclick="js_emite();" >
+                </td>
+            </tr>
         </div>
     </form>
 
@@ -287,6 +293,17 @@ $clrotulo->label("o15_codigo");
         aCheckboxes.each(function (oCheckbox) {
             oCheckbox.checked = false;
         });
+    }
+
+
+    function js_emite(){
+
+        qry= "?ano="+document.form1.AnoReferencia.value;
+        qry+= "&mes="+document.form1.MesReferencia.value;
+
+        jan = window.open('con4_conferenciaflpgo.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+        jan.moveTo(0,0);
+
     }
 
 </script>

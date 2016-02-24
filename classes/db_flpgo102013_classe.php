@@ -367,7 +367,7 @@ class cl_flpgo102013 {
                 values (
                                 $this->si195_sequencial 
                                ,$this->si195_tiporegistro 
-                               ,$this->si195_numcpf 
+                               ,'$this->si195_numcpf'
                                ,'$this->si195_regime' 
                                ,'$this->si195_indtipopagamento' 
                                ,'$this->si195_indsituacaoservidorpensionista' 
