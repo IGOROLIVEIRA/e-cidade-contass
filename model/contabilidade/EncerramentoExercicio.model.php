@@ -302,6 +302,7 @@ class EncerramentoExercicio {
     $rsLancamentos = $oDaoEmpempenho->sql_record($sSqlEmpenho);
 
     if ($oDaoEmpempenho->numrows == 0) {
+      $this->desabiliarContaCorrente();
       return true;
     }
 
@@ -573,7 +574,7 @@ class EncerramentoExercicio {
 
         $oConta = db_utils::fieldsMemory($rsBalancete, $iConta);
         /**
-         * Contas analiticas, nao devemos encerrar
+         * Contas sinteticas, nao devemos encerrar
          */
         if (empty($oConta->c61_reduz)) {
           continue;
