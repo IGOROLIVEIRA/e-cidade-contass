@@ -142,7 +142,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
     	$oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
-    	if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {  
+    	if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
     	
     		
     	$sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
@@ -168,8 +168,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         }
       
     	}
-      
-    	$sHash10 = $sNaturezaReceita.substr($oDadosRec->o70_concarpeculiar, -2);
+			$iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
+    	$sHash10 = $iIdentDeducao.$sNaturezaReceita.substr($oDadosRec->o70_concarpeculiar, -2);
     	
     	
     	if (!isset($aDadosAgrupados[$sHash10])) {
@@ -180,13 +180,13 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
     	  if (substr($oDadosRec->o57_fonte, 0, 1) == 4) {
     		  $sNaturezaReceita = substr($oDadosRec->o57_fonte, 0, 8);
     	  }*/
-    	   	
+
     	  $oDados10 = new stdClass();
 		    $oDados10->si25_tiporegistro         = 10;
 		    $oDados10->si25_codreceita           = $oDadosRec->o70_codrec;
 		    $oDados10->si25_codorgao             = $sCodOrgaoTce;
 		    $oDados10->si25_ededucaodereceita    = $oDadosRec->o70_concarpeculiar != 0 ? 1 : 2;
-		    $oDados10->si25_identificadordeducao = substr($oDadosRec->o70_concarpeculiar, -2);
+		    $oDados10->si25_identificadordeducao = $iIdentDeducao;//substr($oDadosRec->o70_concarpeculiar, -2);
 		    $oDados10->si25_naturezareceita      = $sNaturezaReceita;
 		    $oDados10->si25_especificacao        = $oDadosRec->o57_descr;
 		    $oDados10->si25_vlarrecadado         = 0;
