@@ -262,6 +262,8 @@ $clrotulo->label("o15_codigo");
           <input type="button" id="btnLimparTodos" value="Limpar Todos" onclick="js_limpa();"/>
           <input type="button" id="btnProcessar" value="Processar"
             onclick="js_processar();" />
+          <input type="button" id="btnGerar" value="Gerar Relatório Contas Agrupadas"
+                 onclick="js_gerarRel();" />
         </div>
       </div>
     </form>
@@ -436,6 +438,10 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
 	  }); 
 	}
 
+function js_gerarRel(){
+  jan = window.open('con4_contasagrupadasctb.php','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan.moveTo(0,0);
+}
 </script>
 <div id='debug'>
 </div>
