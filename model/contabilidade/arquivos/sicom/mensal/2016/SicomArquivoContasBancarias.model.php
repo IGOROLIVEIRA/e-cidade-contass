@@ -326,7 +326,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     		if ($iFonRecAnt != $oContaAgrupada->recurso && $nMes == 1 && pg_num_rows($rsFonRecAnt) > 0 ) {
     			
     			$nSaldoInicial = 0;
-    		  if( !isset($oCtb20Rec->si96_codctb) ){
+    		  if( !isset($oCtb20FontRec->si96_codctb) ){
 	              		
 			      $oCtb20FontRec->si96_tiporegistro 			= '20';
 			      $oCtb20FontRec->si96_codorgao 				= $oContaAgrupada->si95_codorgao;
