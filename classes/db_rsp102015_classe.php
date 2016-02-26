@@ -184,7 +184,7 @@ class cl_rsp102015 {
                                       ,si112_tiporegistro 
                                       ,si112_codreduzidorsp 
                                       ,si112_codorgao 
-                                      ,si112_codunidadesub 
+                                      ,si112_codunidadesub
                                       ,si112_nroempenho 
                                       ,si112_exercicioempenho 
                                       ,si112_dtempenho 
@@ -194,14 +194,14 @@ class cl_rsp102015 {
                                       ,si112_vlsaldoantnaoproc 
                                       ,si112_mes 
                                       ,si112_instit
-                                      ,si112_codunidadesuborig 
+                                      ,si112_codunidadesuborig
                        )
                 values (
                                 $this->si112_sequencial 
                                ,$this->si112_tiporegistro 
                                ,$this->si112_codreduzidorsp 
                                ,'$this->si112_codorgao' 
-                               ,'$this->si112_codunidadesub' 
+                               ,'$this->si112_codunidadesub'
                                ,$this->si112_nroempenho 
                                ,$this->si112_exercicioempenho 
                                ,".($this->si112_dtempenho == "null" || $this->si112_dtempenho == ""?"null":"'".$this->si112_dtempenho."'")." 
