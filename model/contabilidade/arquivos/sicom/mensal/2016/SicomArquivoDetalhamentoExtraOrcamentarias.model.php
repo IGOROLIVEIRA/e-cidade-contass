@@ -247,22 +247,23 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                 $sSqlVerifica = "SELECT si124_sequencial FROM ext102016 WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 3) . substr($oContaExtra->subtipo, -1) . "'
 		       		AND si124_desdobrasubtipo = '" . substr($oContaExtra->desdobrasubtipo, 0, 4) . "' and si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                /*$sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102015 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
+                $sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102015 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
 		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
 		       		AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";
                 $sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102014 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
 		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
-		       		AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";*/
+		       		AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";
                 $rsResulVerifica = db_query($sSqlVerifica);//db_criatabela($rsResulVerifica);
 
                 if (pg_num_rows($rsResulVerifica) == 0) {
-
-                    $cExt10->incluir(null);
-
-                    if ($cExt10->erro_status == 0) {
-                        throw new Exception($cExt10->erro_msg);
-                    }
-
+                    $cExt10->si124_subtipo  = db_utils::fieldsMemory(db_query("select max(si124_subtipo) as subtipo from (
+                           select max(si124_subtipo) as si124_subtipo from ext102016 where si124_subtipo != '9999'
+                          union select max(si124_subtipo) as si124_subtipo from ext102015 where si124_subtipo != '9999'
+                          union select max(si124_subtipo) as si124_subtipo from ext102014 where si124_subtipo != '9999') as x"))->subtipo+1;
+                }
+                $cExt10->incluir(null);
+                if ($cExt10->erro_status == 0) {
+                    throw new Exception($cExt10->erro_msg);
                 }
 
                 $cExt10->extras[] = $oContaExtra->codext;
