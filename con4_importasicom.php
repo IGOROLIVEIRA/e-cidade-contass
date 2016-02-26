@@ -128,20 +128,17 @@ function js_processar() {
                                   onComplete:js_retornoProcessamento
 		                            }
 	      );
-  
+
 }
 
 function js_retornoProcessamento(oAjax) {
 	  js_removeObj('msgBox');
 
-      alert("Processo concluído com sucesso!");
-
-      //alert(JSON.stringify(oAjax));
 	  //$('debug').innerHTML = oAjax.responseText;
-	  /*var oRetorno = eval("("+oAjax.responseText+")");
+	  var oRetorno = eval("("+oAjax.responseText+")");
 
 	  if (oRetorno.status == 1) {
-		  alert("Processo concluído com sucesso!");  
+		  alert("Processo concluído com sucesso!");
 	    var sRetorno = "<br>";
 	    for (var i = 0; i < oRetorno.itens.length; i++) {
 
@@ -149,15 +146,14 @@ function js_retornoProcessamento(oAjax) {
 	        sRetorno += nome+"<br>";
 	      }
 	    }
-	    
+
 	    $('retorno').innerHTML = sRetorno;
 	  } else {
-	    
+
 	    $('retorno').innerHTML = '';
-	    alert("Houve um erro no processamento!");
 	    alert(oRetorno.message.urlDecode());
 	    return false;
-	  }*/
+	  }
 	} 
 
 </script>

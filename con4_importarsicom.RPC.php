@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 'Off');
-error_reporting(E_ALL);
+//ini_set('display_errors', 'Off');
+//error_reporting(E_ALL);
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("libs/db_stdlib.php");
@@ -28,7 +28,7 @@ $oRetorno->itens = array();
 switch ($oParam->exec) {
 
     case "importaSicom":
-
+        ob_start();
         $path = "importarsicom/";
         $diretorio = dir($path);
         $sArquivo = $diretorio->read();
@@ -40,6 +40,11 @@ switch ($oParam->exec) {
 
         system("bin/unzip importarsicom/$sArquivo -d importarsicom/",$varphp);
 
+        if($sArquivo == '..') {
+            $oRetorno->status = 2;
+            $oRetorno->message = 'Envie o arquivo zip para importar!';
+        }
+
         $diretorio = dir($path);
         while ($arquivo = $diretorio->read()) {
 
@@ -50,15 +55,14 @@ switch ($oParam->exec) {
                     db_inicio_transacao();
 
                     $iCtrDelete = 0;
+                    $iCtrListaArquivos = 0;
 
                     while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
                         $num = count($data);
                         $aArquivoCSV = explode(".", $arquivo);
 
                         if ($data[0] != 99 &&
-                            $aArquivoCSV[0] == 'EMP' || $aArquivoCSV[0] == 'ANL' || $aArquivoCSV[0] == 'LQD' || $aArquivoCSV[0] == 'ALQ' ||
-                            $aArquivoCSV[0] == 'OPS' || $aArquivoCSV[0] == 'AOP' || $aArquivoCSV[0] == 'EXT' || $aArquivoCSV[0] == 'CTB' ||
-                            $aArquivoCSV[0] == 'RSP'
+                            $aArquivoCSV[0] == 'EXT'
                         ) {
 
                             $sCaminhoClasse = "classes/db_" . strtolower($aArquivoCSV[0]) . $data[0] . $ano . "_classe.php";
@@ -162,14 +166,20 @@ switch ($oParam->exec) {
                                     }
                                 }
                             }
+                            ob_end_clean();
                             try {
                                 $oClasse->incluir(null);
-
-                                $oArquivoImportado->nome  = $sClasse;
+                                if ($iCtrListaArquivos == 0) {
+                                    $oArquivoImportado->nome = $aArquivoCSV[0];
+                                    $aListaArquivos[] = $oArquivoImportado;
+                                    $oRetorno->itens = $aListaArquivos;
+                                    $iCtrListaArquivos = 1;
+                                }
 
                             } catch (Exception $e) {
                                 throw new Exception ($e->getMessage());
                                 $oRetorno->status = 2;
+                                $oRetorno->message = $e->getMessage();
                             }
 
                         }
@@ -183,10 +193,8 @@ switch ($oParam->exec) {
 
         system("rm importarsicom/* ");
 
-        //print_r($oRetorno);exit;
-
         break;
 
 }
 
-echo $oRetorno->status;
+echo $oJson->encode($oRetorno);
