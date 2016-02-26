@@ -1416,7 +1416,8 @@ try {
   $sSqlReceitaMovimentacao .= "       inner join conlancam      on conlancam.c70_codlan    = conlancamrec.c74_codlan       ";
   $sSqlReceitaMovimentacao .= "       inner join conlancamdoc   on conlancamdoc.c71_codlan = conlancam.c70_codlan          ";
   $sSqlReceitaMovimentacao .= "       inner join conhistdoc     on conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc         ";
-  $sSqlReceitaMovimentacao .= "       inner join conhistdoctipo on conhistdoc.c53_tipo     = conhistdoctipo.c57_sequencial where o70_anousu >= 2013 ";
+  $sSqlReceitaMovimentacao .= "       inner join conhistdoctipo on conhistdoc.c53_tipo     = conhistdoctipo.c57_sequencial ";
+  $sSqlReceitaMovimentacao .= "       where o70_anousu >= 2013                                                              ";
   $sSqlReceitaMovimentacao .= " group by o70_codrec,o70_anousu,c70_data                                                    ";
 
   $rsReceitaMovimentacao    = db_query($connOrigem,$sSqlReceitaMovimentacao);
@@ -1449,7 +1450,7 @@ try {
     } else {
       $oReceitaMovimentacao->valor_previsao_atualizada = pg_result($rsReceitaSaldo, 0, 0);
     }
-
+    
     $oReceitaMovimentacao->receita_id = $aListaReceita[$oReceitaMovimentacao->codreceita][$oReceitaMovimentacao->exercicio];
 
     $oTBReceitasMovimentacoes->setByLineOfDBUtils($oReceitaMovimentacao);
