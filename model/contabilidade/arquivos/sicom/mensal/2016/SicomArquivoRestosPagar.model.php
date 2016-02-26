@@ -226,7 +226,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         * Caso exista, busca os dados da dotação.
         * */
         $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados10->codreduzidorsp}";
-        $iFonteAlteraca = '0';
+        $iFonteAlterada = '0';
         if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0){
 
             $aDotacaoRpSicom      = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
