@@ -526,7 +526,7 @@ MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
 
-CREATE SEQUENCE caixa112016_si103_sequencial_seq
+CREATE SEQUENCE caixa112016_si166_sequencial_seq
 INCREMENT 1
 MINVALUE 1
 MAXVALUE 9223372036854775807
@@ -1972,7 +1972,9 @@ si166_vlsaldoinicialfonte		float8 NOT NULL default 0,
 si166_vlsaldofinalfonte		float8 NOT NULL default 0,
 si166_mes		int8 NOT NULL default 0,
 si166_instit		int8 default 0,
-CONSTRAINT caixa112016_sequ_pk PRIMARY KEY (si166_sequencial));
+si166_reg10 int8 not null default 0,
+CONSTRAINT caixa112016_sequ_pk PRIMARY KEY (si166_sequencial)),
+CONSTRAINT caixa112016_reg10_fk FOREIGN KEY (si166_reg10) REFERENCES caixa102016(si103_sequencial);;
 
 
 -- Modulo: sicom
