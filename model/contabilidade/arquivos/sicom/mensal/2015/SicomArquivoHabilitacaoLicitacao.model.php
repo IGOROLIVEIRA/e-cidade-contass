@@ -247,7 +247,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 			$clhablic10->si57_nroprocessolicitatorio							=$oDados10->nroprocessolicitatorio;
 			$clhablic10->si57_tipodocumento										=$oDados10->tipodocumento;
 			$clhablic10->si57_nrodocumento										=$oDados10->nrodocumento;
-			$clhablic10->si57_objetosocial										= $this->removeCaracteres(substr($oDados10->objetosocial,0,2000));
+			$clhablic10->si57_objetosocial										=$oDados10->tipodocumento == 1? '' : $this->removeCaracteres(substr($oDados10->objetosocial,0,2000));
 			$clhablic10->si57_orgaorespregistro									=$oDados10->tipodocumento == 1? '' : $oDados10->orgaorespregistro;
 			$clhablic10->si57_dataregistro										=$oDados10->tipodocumento == 1? '' : $oDados10->dataregistro;
 			$clhablic10->si57_nroregistro										=$oDados10->tipodocumento == 1? '' : $oDados10->nroregistro;
