@@ -520,6 +520,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 			    	}else{ 
 			    		$conta   = 0;
 			    		$recurso = 0;
+			    		$iCodSis = 0;
 			    	}
 			    	
 			    	
