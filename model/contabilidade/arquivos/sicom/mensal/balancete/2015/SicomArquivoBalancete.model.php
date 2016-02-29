@@ -298,14 +298,16 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                          AND c61_instit IN (" . db_getsession('DB_instit') . ")
 						 AND c61_codcon = {$oReg10->codcon} ) AS x) as y where saldoinicial > 0 or debitos > 0 or creditos > 0 group by 1,2";
 
-                if (pg_num_rows(pg_query($sSqlSaldoAnt)) == 0) {
+                $rsSaldoAnt = db_query($sSqlSaldoAnt) or die(pg_last_error());
+
+                if (pg_num_rows($rsSaldoAnt) == 0) {
                     continue;
                 }
 
-                $nSaldoInicial = db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->saldoinicial;
-                $nCreditos = db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->creditos;
-                $nDebitos = db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->debitos;
-                $sNaturezaSaldoIni = db_utils::fieldsMemory(db_query($sSqlSaldoAnt), 0)->sinal_anterior;
+                $nSaldoInicial = db_utils::fieldsMemory($rsSaldoAnt, 0)->saldoinicial;
+                $nCreditos = db_utils::fieldsMemory($rsSaldoAnt, 0)->creditos;
+                $nDebitos = db_utils::fieldsMemory($rsSaldoAnt, 0)->debitos;
+                $sNaturezaSaldoIni = db_utils::fieldsMemory($rsSaldoAnt, 0)->sinal_anterior;
 
             }
 
@@ -435,7 +437,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 }
 
-                $rsDotacoes = db_query($sSqlDotacoes) or die($sSqlDotacoes);
+                $rsDotacoes = db_query($sSqlDotacoes) or die(pg_last_error());
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsDotacoes); $iCont11++) {
 
@@ -457,7 +459,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                  FROM contacorrente
                                                  INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                  INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                 AND contacorrentesaldo.c29_mesusu = 0
+                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
                                                  WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ") " . $sWhere . "
                                                    AND c17_sequencial = {$nContaCorrente}
                                                    AND c19_orcdotacao = {$oReg11->c73_coddot}) AS saldoimplantado,
@@ -658,7 +660,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                  FROM contacorrente
                                                  INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                  INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                 AND contacorrentesaldo.c29_mesusu = 0
+                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
                                                  WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                    AND c17_sequencial = {$nContaCorrente}
                                                    AND c19_estrutural = '{$objContas->c60_estrut}') AS saldoimplantado,
@@ -849,7 +851,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                  FROM contacorrente
                                                  INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                  INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                 AND contacorrentesaldo.c29_mesusu = 0
+                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
                                                  WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                    AND c17_sequencial = {$nContaCorrente}
                                                    AND c19_orcdotacao = {$oReg13->o58_coddot}) AS saldoimplantado,
@@ -1031,7 +1033,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                              FROM contacorrente
                                              INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                              INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                             AND contacorrentesaldo.c29_mesusu = 0
+                                             AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
                                              WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                AND c17_sequencial = {$nContaCorrente}
                                                AND c19_numemp = {$oReg14->numemp}) AS saldoimplantado,
@@ -1109,7 +1111,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                        GROUP BY c28_tipo) AS debitos";
 
                     $rsReg14saldos = db_query($sSqlReg14saldos) or die($sSqlReg14saldos);
-
+db_criatabela($rsReg14saldos);
                     for ($iContSaldo14 = 0; $iContSaldo14 < pg_num_rows($rsReg14saldos); $iContSaldo14++) {
 
                         $oReg14Saldo = db_utils::fieldsMemory($rsReg14saldos, $iContSaldo14);
@@ -1219,7 +1221,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_totalcreditosrsp += $oReg14Saldo->creditos;
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldofinalrsp += ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos) == '' ? 0 : ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos);
                                 $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_naturezasaldofinalrsp = $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldofinalrsp >= 0 ? 'D' : 'C';
-                                $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldoinicialrsp = $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldoinicialrsp >= 0 ? 'D' : 'C';
+                                $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_naturezasaldoinicialrsp = $aContasReg10[$reg10Hash]->reg14[$sHash14]->si181_saldoinicialrsp >= 0 ? 'D' : 'C';
                             }
                         }
                     }
@@ -1425,10 +1427,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $sSqlCTB = "select k13_reduz,
                              c61_codtce codctbtce,
                              si09_codorgaotce,
-				             c63_banco, 
-				             c63_agencia, 
-				             c63_conta, 
-				             c63_dvconta, 
+				             c63_banco,
+				             c63_agencia,
+				             c63_conta,
+				             c63_dvconta,
 				             c63_dvagencia,
 				             case when db83_tipoconta in (2,3) then 2 else 1 end as tipoconta,
 				             ' ' as tipoaplicacao,
@@ -1438,14 +1440,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 				             case when db83_convenio = 1 then db83_numconvenio else null end as nroconvenio,
 				             case when db83_convenio = 1 then db83_dataconvenio else null end as dataassinaturaconvenio,
 				             o15_codtri as codfontrecursos
-				       from saltes 
+				       from saltes
 				       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
 				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
 				       join orctiporec on c61_codigo = o15_codigo
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit
-				    where (k13_limite is null 
+				    where (k13_limite is null
 				    or k13_limite >= '" . $this->sDataFinal . "')
     				  and c61_instit = " . db_getsession("DB_instit") . "
     				  and c61_reduz in (" . implode(',', $oContas10->contas) . ") order by k13_reduz";
@@ -1458,7 +1460,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                     /*
                      * Busca o codigo unico do ctb enviado no AM
-                     * 
+                     *
                      */
                     $sSqlVerifica = " select distinct si95_codctb from ( SELECT distinct si95_codctb FROM ctb102015 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
@@ -1669,7 +1671,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                      FROM contacorrente
                                                      INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                      INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                     AND contacorrentesaldo.c29_mesusu = 0
+                                                     AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
                                                      WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                        AND c17_sequencial = {$nContaCorrente}
                                                        AND c19_orctiporec = {$objContasfr->o15_codigo}) as x) AS saldoimplantado,
