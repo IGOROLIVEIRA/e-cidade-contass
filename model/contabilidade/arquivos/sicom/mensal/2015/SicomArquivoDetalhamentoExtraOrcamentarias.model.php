@@ -470,7 +470,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 				            $cExt22->si126_instit			    =  db_getsession("DB_instit");
 				            $cExt22->ext23						=  array();
 				            
-				            $sSql23 ="SELECT   23 AS tiporegistro,
+				            $sSql23 ="SELECT distinct  23 AS tiporegistro,
 											         (k17_codigo||K17_credito) AS codreduzidoop,
 											         CASE WHEN e96_codigo = 1 THEN 5
 											             WHEN e96_codigo = 2 THEN 1 
@@ -500,7 +500,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											       AND e91_ativo IS TRUE
 											     WHERE k17_codigo = {$oExt21->codigo}
 											UNION ALL        
-											SELECT   23 AS tiporegistro,
+											SELECT distinct  23 AS tiporegistro,
 											         (k17_codigo||K17_debito) AS codreduzidoop,
 											         CASE WHEN e96_codigo = 1 THEN 5
 											             WHEN e96_codigo = 2 THEN 1 
@@ -531,7 +531,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											     WHERE k17_codigo = {$oExt21->codigo}";
 							
 											            
-				             $rsExt23 = db_query($sSql23);
+				             $rsExt23 = db_query($sSql23);//echo $sSql23;db_criatabela($rsExt23);
 				             if( pg_num_rows($rsExt23) == 0){
 				             	     $cExt23 = new stdClass();
 								 	 
