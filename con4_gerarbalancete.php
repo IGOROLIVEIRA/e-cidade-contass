@@ -177,6 +177,15 @@ function js_retornoProcessamento(oAjax) {
 	    }
 	    
 	    $('retorno').innerHTML = sRetorno;
+        var sCalculos = "<hr>";
+        for (var i = 0; i < oRetorno.calculos.length; i++) {
+
+            with(oRetorno.calculos[i]){
+                sCalculos += "<h3>Resultado dos cálculos do encerramento</h3><br>"+i+1+". "+mensagem+"<br> <strong>Detalhes:</strong> "+calculo+"<br><h3>Regras:</h3><br>"+regras+"<br>";
+            }
+
+        }
+        $('debug').innerHTML = sCalculos;
 	  } else {
 	    
 	    $('retorno').innerHTML = '';
@@ -184,7 +193,7 @@ function js_retornoProcessamento(oAjax) {
 	    //alert(oRetorno.message.urlDecode());
 	    return false;
 	  }
-	} 
+	}
 function js_pesquisao125_cronogramaperspectiva(mostra) {
 
     if (mostra==true){

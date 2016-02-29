@@ -1,4 +1,5 @@
 <?php
+
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("libs/db_stdlib.php");
@@ -377,7 +378,7 @@ switch($oParam->exec) {
 
       $rsOrgao = db_query($sSql);
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
-      echo pg_last_error();
+
       /*
        * array para adicionar os arquivos de inslusao de programas
        */
@@ -411,17 +412,7 @@ switch($oParam->exec) {
             $oArquivoCsv->nome    = "{$oArquivo->getNomeArquivo()}.csv";
             $oArquivoCsv->caminho = "{$oArquivo->getNomeArquivo()}.csv";
             $aArrayArquivos[] = $oArquivoCsv;
-            /*if ($sArquivo == "IdentificacaoRemessa" || $sArquivo == "ProgramasAnuais" || $sArquivo == "AcoesMetasAnuais") {
-                               
-              $oEscritorProgramasCSV->adicionarArquivo($oEscritorProgramasCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-              if ($sArquivo == "IdentificacaoRemessa") {
-                $oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-              }
-              
-            }else{
-                $oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
-            }*/
-              
+
           } catch (Exception $eErro) {
               
             $oRetorno->status  = 2;
@@ -451,9 +442,10 @@ switch($oParam->exec) {
       $aArrayArquivos[] = $oArquivoZip;
       
       $oRetorno->itens  = $aArrayArquivos;
+      if($bEncerramento)
+        $oRetorno->calculos = getCalculoEncerramento();
     }
-    
-    
+
 
     break;
     
@@ -616,3 +608,460 @@ switch($oParam->exec) {
 }
 
 echo $oJson->encode($oRetorno);
+
+/**
+ * Calculos do Encerramento do Balancete
+ */
+
+function getCalculoEncerramento(){
+
+  $sSqlEncerramento = "SELECT si177_contacontaabil,
+                                   si177_totaldebitos,
+                                   si177_totalcreditos,
+                                   si177_saldofinal,
+                                   si177_naturezasaldofinal
+                            FROM balancete10".db_getsession('DB_anousu')."
+                            WHERE si177_mes = 13";
+
+  $rsSqlEncerramento = db_query($sSqlEncerramento) or die(pg_last_error());
+  $aEncerramentos = db_utils::getColectionByRecord($rsSqlEncerramento);
+
+  foreach ($aEncerramentos as $objEncerramento) {
+    /**
+     * Subfluxo saldos de ativo e passivo
+     * Verificar se o somatório do saldo final das contas do Ativo (primeiro dígito igual a 1)
+     * é igual ao somatório do saldo final das contas do Passivo (primeiro dígito igual a 2),
+     * seguindo os passos:
+     */
+
+    /*
+     * Etapa 1 ? Filtros a serem utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja 1.
+     */
+    if (substr($objEncerramento->si177_contacontaabil, 0, 1) == "1") {
+      /*
+       * Obter o somatório dos valores informados no campo saldoFinal das contas de natureza devedora
+       * (campo naturezaSaldoFinal igual a ?D ? Natureza devedora?) e armazenar em ?Total Devedor Ativo?
+       *
+       * Obter o somatório dos valores informados no campo saldoFinal das contas de natureza credora
+       * (campo naturezaSaldoFinal igual a ?C ? Natureza credora?) e armazenar em ?Total Credor Ativo?.
+       */
+      if ($objEncerramento->si177_naturezasaldofinal == "D") {
+        $nTotalDevedorAtivo += $objEncerramento->si177_saldofinal;
+      } else {
+        $nTotalCredorAtivo += $objEncerramento->si177_saldofinal;
+      }
+
+      /*
+       * Obter o ?Total Ativo? por meio da seguinte operação: ?Total Devedor? (-) ?Total Credor?.
+       */
+      $nTotalAtivo = $nTotalDevedorAtivo - $nTotalCredorAtivo;
+
+    } elseif (substr($objEncerramento->si177_contacontaabil, 0, 1) == "2") {
+
+      /*
+       * Obter o somatório dos valores informados no campo saldoFinal das contas de natureza devedora
+       * (campo naturezaSaldoFinal igual a ?D ? Natureza devedora?) e armazenar em ?Total Devedor Passivo?
+       *
+       * Obter o somatório dos valores informados no campo saldoFinal das contas de natureza credora
+       * (campo naturezaSaldoFinal igual a ?C ? Natureza credora?) e armazenar em ?Total Credor Passivo?.
+       */
+      if ($objEncerramento->si177_naturezasaldofinal == "D") {
+        $nTotalDevedorPassivo += $objEncerramento->si177_saldofinal;
+      } else {
+        $nTotalCredorPassivo += $objEncerramento->si177_saldofinal;
+      }
+
+      /*
+       * Obter o ?Total Passivo? por meio da seguinte operação: ?Total Devedor? (-) ?Total Credor?.
+       */
+      $nTotalPassivo = $nTotalDevedorPassivo - $nTotalCredorPassivo;
+
+    } elseif (substr($objEncerramento->si177_contacontaabil, 0, 1) == "3" || substr($objEncerramento->si177_contacontaabil, 0, 1) == "4" && substr($objEncerramento->si177_contacontaabil, 0, 5) == "1") {
+      /**
+       *  Subfluxo validar encerramento das variações patrimoniais aumentativas e diminutivas
+       * 1. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos
+       * das contas de apuração do resultado do exercício ? Consolidação
+       */
+
+      /* Etapa 1 ? Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as
+       * contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.
+       */
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos VP?.
+      $nTotalDebitosVP += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos VP?.
+      $nTotalCreditosVP += $objEncerramento->si177_totalcreditos;
+
+    } elseif ($objEncerramento->si177_contacontaabil == "237110100" || $objEncerramento->si177_contacontaabil == "237210100") {
+      /**
+       * Etapa 2 ? Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00.
+       */
+
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos Resultado ?.
+      $nTotalDebitosResultado += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos Resultado?.
+      $nTotalCreditosResultado += $objEncerramento->si177_totalcreditos;
+
+    } elseif (substr($objEncerramento->si177_contacontaabil, 0, 1) == "3" || substr($objEncerramento->si177_contacontaabil, 0, 1) == "4" && substr($objEncerramento->si177_contacontaabil, 0, 5) == "2") {
+      /**
+       * Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 2,
+       * o total de débitos é igual ao total de créditos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00,
+       * e o total de créditos é igual ao total de débitos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, seguindo os passos:
+       * Etapa 1 ? Filtros utilizados: Filtrar pelo campo contaContábil
+       * obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 2.
+       */
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos VP2?.
+      $nTotalDebitosVP2 += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos VP2?.
+      $nTotalCreditosVP2 += $objEncerramento->si177_totalcreditos;
+    } elseif ($objEncerramento->si177_contacontaabil == "237120100" || $objEncerramento->si177_contacontaabil == "237220100") {
+      /**
+       * Etapa 2 ? Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00.
+       */
+
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos Resultado2 ?.
+      $nTotalDebitosResultado2 += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos Resultado2?.
+      $nTotalCreditosResultado2 += $objEncerramento->si177_totalcreditos;
+
+    } elseif (substr($objEncerramento->si177_contacontaabil, 0, 1) == "3" || substr($objEncerramento->si177_contacontaabil, 0, 1) == "4" && substr($objEncerramento->si177_contacontaabil, 0, 5) == "3") {
+      /**
+       * 3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 3,
+       * o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00,
+       * e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:
+       * Etapa 1 ? Filtros utilizados: Filtrar pelo campo contaContábil
+       * obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 3.
+       */
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos VP3?.
+      $nTotalDebitosVP3 += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos VP3?.
+      $nTotalCreditosVP3 += $objEncerramento->si177_totalcreditos;
+    } elseif ($objEncerramento->si177_contacontaabil == "237130100" || $objEncerramento->si177_contacontaabil == "237230100") {
+      /**
+       * Etapa 2 ? Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00.
+       */
+
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos Resultado3 ?.
+      $nTotalDebitosResultado3 += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos Resultado3?.
+      $nTotalCreditosResultado3 += $objEncerramento->si177_totalcreditos;
+
+    } elseif (substr($objEncerramento->si177_contacontaabil, 0, 1) == "3" || substr($objEncerramento->si177_contacontaabil, 0, 1) == "4" && substr($objEncerramento->si177_contacontaabil, 0, 5) == "4") {
+      /**
+       * 3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 4,
+       * o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00,
+       * e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:
+       * Etapa 1 ? Filtros utilizados: Filtrar pelo campo contaContábil
+       * obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 4.
+       */
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos VP4?.
+      $nTotalDebitosVP4 += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos VP4?.
+      $nTotalCreditosVP4 += $objEncerramento->si177_totalcreditos;
+    } elseif ($objEncerramento->si177_contacontaabil == "237140100" || $objEncerramento->si177_contacontaabil == "237240100") {
+      /**
+       * Etapa 2 ? Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00.
+       */
+
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos Resultado4 ?.
+      $nTotalDebitosResultado4 += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos Resultado4?.
+      $nTotalCreditosResultado4 += $objEncerramento->si177_totalcreditos;
+
+    } elseif (substr($objEncerramento->si177_contacontaabil, 0, 1) == "3" || substr($objEncerramento->si177_contacontaabil, 0, 1) == "4" && substr($objEncerramento->si177_contacontaabil, 0, 5) == "5") {
+      /**
+       * 3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 5,
+       * o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00,
+       * e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:
+       * Etapa 1 ? Filtros utilizados: Filtrar pelo campo contaContábil
+       * obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 5.
+       */
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos VP5?.
+      $nTotalDebitosVP5 += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos VP5?.
+      $nTotalCreditosVP5 += $objEncerramento->si177_totalcreditos;
+    } elseif ($objEncerramento->si177_contacontaabil == "237150100" || $objEncerramento->si177_contacontaabil == "237250100") {
+      /**
+       * Etapa 2 ? Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00.
+       */
+
+      //Obter o somatório dos valores informados no campo totalDebitos e armazena em ?Total Débitos Resultado5 ?.
+      $nTotalDebitosResultado5 += $objEncerramento->si177_totaldebitos;
+      //Obter o somatório dos valores informados no campo totalCreditos e armazena em ?Total Créditos Resultado5?.
+      $nTotalCreditosResultado5 += $objEncerramento->si177_totalcreditos;
+
+    }
+  }
+  $nTotalAtivo   = number_format(abs($nTotalAtivo),2,",",".");
+  $nTotalPassivo = number_format(abs($nTotalPassivo),2,",",".");
+  $nTotalDebitosVP = number_format(abs($nTotalDebitosVP),2,",",".");
+  $nTotalCreditosResultado = number_format(abs($nTotalCreditosResultado),2,",",".");
+  $nTotalCreditosVP = number_format(abs($nTotalCreditosVP),2,",",".");
+  $nTotalDebitosResultado = number_format(abs($nTotalDebitosResultado),2,",",".");
+  $nTotalDebitosVP2 = number_format(abs($nTotalDebitosVP2),2,",",".");
+  $nTotalCreditosResultado2 = number_format(abs($nTotalCreditosResultado2),2,",",".");
+  $nTotalCreditosVP2 = number_format(abs($nTotalCreditosVP2),2,",",".");
+  $nTotalDebitosResultado2 = number_format(abs($nTotalDebitosResultado2),2,",",".");
+  $nTotalDebitosVP3 = number_format(abs($nTotalDebitosVP3),2,",",".");
+  $nTotalCreditosResultado3 = number_format(abs($nTotalCreditosResultado3),2,",",".");
+  $nTotalCreditosVP3 = number_format(abs($nTotalCreditosVP3),2,",",".");
+  $nTotalDebitosResultado3 = number_format(abs($nTotalDebitosResultado3),2,",",".");
+  $nTotalDebitosVP4 = number_format(abs($nTotalDebitosVP4),2,",",".");
+  $nTotalCreditosResultado4 = number_format(abs($nTotalCreditosResultado4),2,",",".");
+  $nTotalCreditosVP4 = number_format(abs($nTotalCreditosVP4),2,",",".");
+  $nTotalDebitosResultado4 = number_format(abs($nTotalDebitosResultado4),2,",",".");
+  $nTotalDebitosVP5 = number_format(abs($nTotalDebitosVP5),2,",",".");
+  $nTotalCreditosResultado5 = number_format(abs($nTotalCreditosResultado5),2,",",".");
+  $nTotalCreditosVP5 = number_format(abs($nTotalCreditosVP5),2,",",".");
+  $nTotalDebitosResultado5 = number_format(abs($nTotalDebitosResultado5),2,",",".");
+
+  $aRetorno = array();
+
+  if($nTotalAtivo != $nTotalPassivo){
+    array_push($aRetorno,array("mensagem" => "ME714_CLS_1_2_SLD_FINAL_INCONSIST", "calculo" => "Total Ativo: {$nTotalAtivo} - Total Passivo: {$nTotalPassivo} = ".$nTotalAtivo-$nTotalPassivo,
+        "regras" => "<p>1. Saldo final do Ativo igual ao saldo final do Passivo após o encerramento do balancete.<br>
+                        1.1. Validação: Verificar se o somatório do saldo final das contas do Ativo (primeiro dígito igual a 1) é igual ao somatório do saldo final das contas do Passivo (primeiro dígito igual a 2), seguindo os passos:<br><br>
+                        Registro a ser utilizado: '10 - Balancete Contábil'.<br><br>
+                        Etapa 1 - Filtros a serem utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja 1.<br>
+                        Obter o somatório dos valores informados no campo saldoFinal das contas de natureza devedora (campo naturezaSaldoFinal igual a 'D - Natureza devedora') e armazenar em 'Total Devedor'.<br>
+                        Obter o somatório dos valores informados no campo saldoFinal das contas de natureza credora (campo naturezaSaldoFinal igual a 'C - Natureza credora') e armazenar em 'Total Credor'.<br><br>
+                        Obter o 'Total Ativo' por meio da seguinte operação: 'Total Devedor' (-) 'Total Credor'.<br>
+                        Etapa 2 - Filtros a serem utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja 2.<br>
+                        Obter o somatório dos valores informados no campo saldoFinal das contas de natureza credora (campo naturezaSaldoFinal igual a 'C - Natureza credora') e armazenar em 'Total Credor'.<br>
+                        Obter o somatório dos valores informados no campo saldoFinal das contas de natureza devedora (campo naturezaSaldoFinal igual a 'D - Natureza devedora') e armazenar em 'Total Devedor'.<br>
+                        Obter o 'Total Passivo' por meio da seguinte operação: 'Total Credor' (-) 'Total Devedor'.<br>
+                        Comparar 'Total Ativo' com 'Total Passivo'.<br>
+                        1.2. Mensagem: ME714_CLS_1_2_SLD_FINAL_INCONSIST.</p>"));
+  }
+
+  if($nTotalDebitosVP != $nTotalCreditosResultado){
+    array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE", "calculo" => "Total Debitos VP: {$nTotalDebitosVP} Total Creditos Resultado: {$nTotalCreditosResultado}",
+        "regras"=>"<p>1. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Consolidação.<br>
+                      1.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 1 o total de débitos é igual ao total de créditos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, e o total de créditos é igual ao total de débitos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, seguindo os passos:<br><br>
+
+                      Registro a ser utilizado: '10 - Balancete Contábil'.<br>
+                      Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
+                      Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                      Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                      Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00.<br>
+                      Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado '.<br>
+                      Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                      Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                      1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                      O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                      1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.</p>"));
+  }
+
+  if($nTotalCreditosVP != $nTotalDebitosResultado){
+    array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE","calculo" => "Total Creditos VP: {$nTotalCreditosVP} Total Debitos Resultado: {$nTotalDebitosResultado}",
+        "regras"=>utf8_encode("<p>1. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Consolidação.<br>
+                    1.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 1<br>
+                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, e o total
+                    de créditos é igual ao total de débitos das contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00, seguindo os passos:<br><br>
+
+                    Registro a ser utilizado: '10 - Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.1.01.00 e 2.3.7.2.1.01.00.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+  }
+
+  if($nTotalDebitosVP2 != $nTotalCreditosResultado2){
+    array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE2", "calculo" => "Total Debitos VP2: {$nTotalDebitosVP2} Total Creditos Resultado2: {$nTotalCreditosResultado2}",
+        "regras"=> utf8_encode("<p>2. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Intra OFSS.<br>
+                    2.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 2,<br>
+                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, <br>
+                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, seguindo os passos:<br><br>
+
+                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+  }
+
+  if($nTotalCreditosVP2 != $nTotalDebitosResultado2){
+    array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE2","calculo" => "Total Creditos VP2: {$nTotalCreditosVP2} Total Debitos Resultado2: {$nTotalDebitosResultado2}",
+        "regras"=> utf8_encode("<p>2. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Intra OFSS.<br>
+                    2.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 2,<br>
+                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, <br>
+                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00, seguindo os passos:<br><br>
+
+                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 1.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.2.01.00 e 2.3.7.2.2.01.00.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.")));
+  }
+
+  if($nTotalDebitosVP3 != $nTotalCreditosResultado3){
+    array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE3", "calculo" => "Total Debitos VP3: {$nTotalDebitosVP3} Total Creditos Resultado3: {$nTotalCreditosResultado3}",
+        "regras"=> utf8_encode("<p>3. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Inter OFSS - União.<br>
+                   3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 3,<br>
+                   o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, <br>
+                   e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:<br><br>
+
+                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 3.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+  }
+
+  if($nTotalCreditosVP3 != $nTotalDebitosResultado3){
+    array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE3","calculo" => "Total Creditos VP3: {$nTotalDebitosVP3} Total Debitos Resultado3: {$nTotalCreditosResultado3}",
+        "regras"=> utf8_encode("<p>3. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício ? Inter OFSS - União.<br>
+                   3.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 3,<br>
+                   o total de débitos é igual ao total de créditos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, <br>
+                   e o total de créditos é igual ao total de débitos das contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00, seguindo os passos:<br><br>
+
+                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 3.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.3.01.00 e 2.3.7.2.3.01.00<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+  }
+
+  if($nTotalDebitosVP4 != $nTotalCreditosResultado4){
+    array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE4", "calculo" => "Total Debitos VP4: {$nTotalDebitosVP4} Total Creditos Resultado4: {$nTotalCreditosResultado4}",
+        "regras"=>utf8_encode("<p>4. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Estado.<br>
+                    4.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 4,<br>
+                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, <br>
+                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, seguindo os passos:<br><br>
+
+                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 4.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+  }
+
+  if($nTotalCreditosVP4 != $nTotalDebitosResultado4){
+    array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE4","calculo" => "Total Creditos VP4: {$nTotalCreditosVP4} Total Debitos Resultado4: {$nTotalDebitosResultado4}",
+        "regras"=>utf8_encode("<p>4. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Estado.<br>
+                    4.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 4,<br>
+                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, <br>
+                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00, seguindo os passos:<br><br>
+
+                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 4.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.4.01.00 e 2.3.7.2.4.01.00.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+  }
+
+  if($nTotalDebitosVP5 != $nTotalCreditosResultado5){
+    array_push($aRetorno,array("mensagem"=>"ME757_DEBITOSVP_TOTAL_INCONSISTENTE5", "calculo" => "Total Debitos VP5: {$nTotalDebitosVP5} Total Creditos Resultado5: {$nTotalCreditosResultado5}",
+        "regras"=>utf8_encode("<p>5. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Município.<br>
+                    5.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 5,<br>
+                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, <br
+                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, seguindo os passos:<br<br
+
+                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 5.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+  }
+
+  if($nTotalCreditosVP5 != $nTotalDebitosResultado5){
+    array_push($aRetorno,array("mensagem"=>"ME758_CREDITOSVP_TOTAL_INCONSISTENTE5","calculo" => "Total Creditos VP5: {$nTotalCreditosVP5} Total Debitos Resultado5: {$nTotalDebitosResultado5}",
+        "regras"=>utf8_encode("<p>5. Total de débitos e créditos das classes 3 e 4 igual ao total de débitos e créditos das contas de apuração do resultado do exercício - Inter OFSS - Município.<br>
+                    5.1. Validação: Verificar se para as contas iniciadas com 3 e 4 onde o quinto digito é igual a 5,<br>
+                    o total de débitos é igual ao total de créditos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, <br
+                    e o total de créditos é igual ao total de débitos das contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00, seguindo os passos:<br<br
+
+                    Registro a ser utilizado: '10 ? Balancete Contábil'.<br>
+                    Etapa 1 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas onde o primeiro dígito seja igual a 3 e 4 e o quinto digito igual a 5.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos VP'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos VP'.<br><br>
+
+                    Etapa 2 - Filtros utilizados: Filtrar pelo campo contaContábil obtendo apenas as contas 2.3.7.1.5.01.00 e 2.3.7.2.5.01.00.<br>
+                    Obter o somatório dos valores informados no campo totalDebitos e armazena em 'Total Débitos Resultado'.<br>
+                    Obter o somatório dos valores informados no campo totalCreditos e armazena em 'Total Créditos Resultado'.<br><br>
+
+                    Etapa 3 - O 'Total Débitos VP' deve ser igual ao 'Total Créditos Resultado'.<br>
+                    1.1.1. Mensagem: ME757_DEBITOSVP_TOTAL_INCONSISTENTE.<br><br>
+
+                    O 'Total Créditos VP' deve ser igual ao 'Total Débito Resultado'.<br>
+                    1.1.2. Mensagem: ME758_CREDITOSVP_TOTAL_INCONSISTENTE.<br></p>")));
+  }
+
+  return $aRetorno;
+
+
+}
