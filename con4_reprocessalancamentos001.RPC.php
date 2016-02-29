@@ -241,8 +241,17 @@ try {
           $sSqlBuscaItemOC = $oDaoItemOC->sql_query(null, null, "m70_codmatmater, m51_codordem", "m52_sequen", implode(' and ', $aWhereItemOc));
           $rsBuscaItemOC   = $oDaoItemOC->sql_record($sSqlBuscaItemOC);
 
+          /*
+           * Alteração realizara para permitir o reprocessamento do documento 210 quando a OC não possuir item
+           */
           if ($oDaoItemOC->erro_status == "0") {
-            throw new BusinessException("Item do empenho não localizado na ordem de compra.");
+
+            $sSqlBuscaItemOC = $oDaoItemOC->sql_query2(null, null, "m60_codmater as m70_codmatmater, m52_codordem as m51_codordem", "m52_sequen", implode(' and ', $aWhereItemOc));
+            $rsBuscaItemOC   = $oDaoItemOC->sql_record($sSqlBuscaItemOC);
+          }
+
+          if (pg_num_rows($rsBuscaItemOC) == 0) {
+            throw new BusinessException("Item do empenho não localizado.");
           }
 
           $oDadoItemOrdemCompra = db_utils::fieldsMemory($rsBuscaItemOC, 0);

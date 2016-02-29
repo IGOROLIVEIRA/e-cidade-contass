@@ -964,10 +964,17 @@ class cl_conlancam {
     $sql .= "  left join empnota                      on empnota.e69_codnota                                = conlancamnota.c66_codnota                              ";
     $sql .= "  left join empnotaord                   on empnotaord.m72_codnota                             = empnota.e69_codnota                                    ";
     $sql .= "  left join matordemitem                 on matordemitem.m52_codordem                          = empnotaord.m72_codordem                                ";
-    $sql .= "  left join matestoqueitemoc             on matestoqueitemoc.m73_codmatordemitem               = matordemitem.m52_codlanc                               ";
-    $sql .= "  left join matestoqueitem               on matestoqueitem.m71_codlanc                         = matestoqueitemoc.m73_codmatestoqueitem                 ";
-    $sql .= "  left join matestoque                   on matestoque.m70_codigo                              = matestoqueitem.m71_codmatestoque                       ";
-    $sql .= "  left join matmater                     on matmater.m60_codmater                              = matestoque.m70_codmatmater                             ";
+    /**
+     * Alteração solicitada por Igor, pois estava causando erro no reprocessamento do documento 212.
+     * Apos conversa com Debora, foi identificado que é feito um procedimento de exclusão de lançamentos no modulo material, e isso estava impactando na contabilidade.
+     */
+    $sql .= "  left join empempitem                   on matordemitem.m52_numemp                            = empempitem.e62_numemp and  matordemitem.m52_sequen = empempitem.e62_sequen ";
+    $sql .= "  left join pcmater                      on pcmater.pc01_codmater                              = empempitem.e62_item                                    ";
+    $sql .= "  left join transmater                   on transmater.m63_codpcmater                          = pcmater.pc01_codmater                                    ";
+    //$sql .= "  left join matestoqueitemoc             on matestoqueitemoc.m73_codmatordemitem               = matordemitem.m52_codlanc                               ";
+    //$sql .= "  left join matestoqueitem               on matestoqueitem.m71_codlanc                         = matestoqueitemoc.m73_codmatestoqueitem                 ";
+    //$sql .= "  left join matestoque                   on matestoque.m70_codigo                              = matestoqueitem.m71_codmatestoque                       ";
+    $sql .= "  left join matmater                     on matmater.m60_codmater                              = transmater.m63_codmatmater                             ";
     $sql .= "  left join matmatermaterialestoquegrupo on matmatermaterialestoquegrupo.m68_matmater          = matmater.m60_codmater                                  ";
     $sql .= "  left join materialestoquegrupo         on materialestoquegrupo.m65_sequencial                = matmatermaterialestoquegrupo.m68_materialestoquegrupo  ";
     $sql .= "  left join materialestoquegrupoconta    on materialestoquegrupoconta.m66_materialestoquegrupo = materialestoquegrupo.m65_sequencial                    ";
