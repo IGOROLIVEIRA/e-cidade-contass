@@ -173,7 +173,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
                 inner join empresto     on e60_numemp = e91_numemp and e91_anousu = ".db_getsession("DB_anousu")." 
                 inner join conlancamemp on e60_numemp = c75_numemp
                 inner join conlancamcgm on c75_codlan = c76_codlan
-                inner join cgm          on c76_numcgm = z01_numcgm
+                inner join cgm          on e60_numcgm = z01_numcgm
                 inner join conlancamdoc on c75_codlan = c71_codlan
                 inner join conlancam    on c75_codlan = c70_codlan
                 inner join orcdotacao   on e60_coddot = o58_coddot
@@ -226,7 +226,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         * Caso exista, busca os dados da dotação.
         * */
         $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados10->codreduzidorsp}";
-        $iFonteAlteraca = '0';
+        $iFonteAlterada = '0';
         if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0){
 
             $aDotacaoRpSicom      = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
