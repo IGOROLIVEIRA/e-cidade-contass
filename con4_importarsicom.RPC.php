@@ -1,5 +1,5 @@
 <?php
-//ini_set('display_errors', 'Off');
+//ini_set('display_errors', 'On');
 //error_reporting(E_ALL);
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
@@ -28,17 +28,27 @@ $oRetorno->itens = array();
 switch ($oParam->exec) {
 
     case "importaSicom":
-        ob_start();
+
         $path = "importarsicom/";
         $diretorio = dir($path);
         $sArquivo = $diretorio->read();
+        while ($tempArquivo = $diretorio->read())  {
+            $aTempArquivo = explode('.',$tempArquivo);
+            if($aTempArquivo[1] == 'zip'){
+                $sArquivo = $tempArquivo;
+            }
+        }
+        ob_start();
         $aArquivo = explode('_', $sArquivo);
         $tipo = $aArquivo[0];
         $mes = $aArquivo[3];
         $aAno = explode('.', $aArquivo[4]);
         $ano = $aAno[0];
 
-        system("bin/unzip importarsicom/$sArquivo -d importarsicom/",$varphp);
+        system("bin/unzip importarsicom/$sArquivo -d importarsicom/");
+
+
+        ob_end_clean();
 
         if($sArquivo == '..') {
             $oRetorno->status = 2;
@@ -46,11 +56,12 @@ switch ($oParam->exec) {
         }
 
         $diretorio = dir($path);
-        while ($arquivo = $diretorio->read()) {
+
+        while ($arquivo = $diretorio->read())  {
 
             if (substr($arquivo, -3) == 'csv') {
 
-                if (($handle = fopen($path . $arquivo, "r")) !== FALSE) {
+                if (($handle = fopen($path.$arquivo, "r")) !== FALSE) {
 
                     db_inicio_transacao();
 
@@ -168,13 +179,12 @@ switch ($oParam->exec) {
                                     }
                                 }
                             }
-                            ob_end_clean();
+
                             try {
                                 $oClasse->incluir(null);
                                 if ($iCtrListaArquivos == 0) {
                                     $oArquivoImportado->nome = $aArquivoCSV[0];
-                                    $aListaArquivos[] = $oArquivoImportado;
-                                    $oRetorno->itens = $aListaArquivos;
+                                    $aListaArquivos[] = $aArquivoCSV[0];
                                     $iCtrListaArquivos = 1;
                                 }
 
@@ -189,11 +199,14 @@ switch ($oParam->exec) {
                     }
                     fclose($handle);
                     db_fim_transacao();
+                    $oRetorno->itens = $aListaArquivos;
                 }
             }
         }
 
         system("rm importarsicom/* ");
+
+
 
         break;
 

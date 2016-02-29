@@ -137,19 +137,20 @@ function js_retornoProcessamento(oAjax) {
 	  //$('debug').innerHTML = oAjax.responseText;
 	  var oRetorno = eval("("+oAjax.responseText+")");
 
-	  if (oRetorno.status == 1) {
-		  alert("Processo concluído com sucesso!");
-	    var sRetorno = "<br>";
-	    for (var i = 0; i < oRetorno.itens.length; i++) {
+    if (oRetorno.status == 1) {
 
-	      with (oRetorno.itens[i]) {
-	        sRetorno += nome+"<br>";
-	      }
-	    }
+        alert("Processo concluído com sucesso!");
+        var sRetorno = "<b>Arquivos Gerados:</b><br>";
+        for (var i = 0; i < oRetorno.itens.length; i++) {
 
-	    $('retorno').innerHTML = sRetorno;
-	  } else {
+            with (oRetorno.itens[i]) {
 
+                sRetorno += nome+"</a><br>";
+            }
+        }
+
+        $('retorno').innerHTML = sRetorno;
+    } else {
 	    $('retorno').innerHTML = '';
 	    alert(oRetorno.message.urlDecode());
 	    return false;

@@ -52,49 +52,43 @@ $pdf->setfillcolor(235);
 $alt   = 4;
 // Inicia da geracao do relatorio
 
-for($x = 0;$x < pg_numrows($result_dados);$x++){
+for($x = 0;$x < pg_numrows($result_dados);$x++) {
     db_fieldsmemory($result_dados,$x);
-
-    $cor = 1;
-
-    $pdf->setfont('arial','b',7);
-    $pdf->cell(15,$alt,"Matrícula",1,0,"L",1);
-    $pdf->cell(60,$alt,"Nome",1,0,"C",1);
-    $pdf->cell(20,$alt,"cpf",1,0,"C",1);
-    $pdf->cell(10,$alt,"Regime",1,0,"C",1);
-    $pdf->cell(15,$alt,"Tipo pag",1,0,"C",1);
-    $pdf->cell(15,$alt,"Situação",1,0,"C",1);
-    $pdf->cell(15,$alt,"Dt concessão",1,0,"C",1);
-    $pdf->cell(15,$alt,"Nome cargo",1,0,"C",1);
-    $pdf->cell(15,$alt,"Sigla Cargo",1,1,"C",1);
 
     $cor = 0;
 
     $result_cgm = db_query($rhpessoal->sql_query('','rh01_regist, z01_nome','',"z01_cgccpf = '$si195_numcpf'"));
     db_fieldsmemory($result_cgm,0);
 
-    $pdf->cell(15,$alt,$rh01_regist,1,0,"C",$cor);
-    $pdf->cell(60,$alt,$z01_nome,1,0,"L",$cor);
-    $pdf->cell(20,$alt,$si195_numcpf,1,0,"C",$cor);
-    $pdf->cell(10,$alt,$si195_regime,1,0,"C",$cor);
-    $pdf->cell(15,$alt,$si195_indtipopagamento,1,0,"C",$cor);
-    $pdf->cell(15,$alt,$si195_indsituacaoservidorpensionista,1,0,"C",$cor);
-    $pdf->cell(15,$alt,$si195_datconcessaoaposentadoriapensao,1,0,"C",$cor);
-    $pdf->cell(15,$alt,$si195_dsccargo,1,0,"C",$cor);
-    $pdf->cell(15,$alt,$si195_sglcargo,1,1,"C",$cor);
+    $pdf->setfont('arial','b',7);
 
-        $pdf->cell(15,$alt,"Requisito do Cargo",1,0,"C",1);
-        $pdf->cell(15,$alt,"Servidor Cedido",1,0,"C",1);
-        $pdf->cell(15,$alt,"Descrição da lotação",1,0,"C",1);
-        $pdf->cell(15,$alt,"Valor da carga horaria",1,0,"C",1);
-        $pdf->cell(15,$alt,"Data de exercício no cargo",1,0,"C",1);
-        $pdf->cell(15,$alt,"Data de exclusão",1,0,"C",1);
-        $pdf->cell(15,$alt,"Natureza do saldo bruto",1,0,"C",1);
-        $pdf->cell(15,$alt,"Valor total dos rendimentos",1,0,"C",1);
-        $pdf->cell(15,$alt,"Natureza do saldo líquido.",1,0,"C",1);
-        $pdf->cell(15,$alt,"Valor total dos rendimentos",1,0,"C",1);
-        $pdf->cell(15,$alt,"Valor das deduções",1,0,"C",1);
-        $pdf->cell(15,$alt,"vlrAbateTeto",1,1,"C",1);
+    $pdf->ln(6);
+
+    $pdf->cell(40,$alt,"Matrícula: ".$rh01_regist,0,0,"L",$cor);
+    $pdf->cell(40,$alt,"CPF: ".$si195_numcpf,0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Regime: ".$si195_regime,0,0,"L",$cor);
+    $pdf->cell(60,$alt,"Nome: ".$z01_nome,0,1,"L",$cor);
+    $pdf->cell(40,$alt,"Tipo pag: ".$si195_indtipopagamento,0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Situação: ".$si195_indsituacaoservidorpensionista,0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Dt concessão: ".$si195_datconcessaoaposentadoriapensao,0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Cargo: ".$si195_dsccargo,0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Sigla: ".$si195_sglcargo,0,1,"L",$cor);
+    $pdf->cell(40,$alt,"Requisito do Cargo: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Servidor Cedido: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Descrição da lotação: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Valor da carga horaria: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Data de exercício no cargo: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Data de exclusão: ",0,1,"L",$cor);
+    $pdf->cell(40,$alt,"Natureza do saldo bruto: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Valor total dos rendimentos: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Natureza do saldo líquido: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Valor total dos rendimentos: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"Valor das deduções: ",0,0,"L",$cor);
+    $pdf->cell(40,$alt,"vlrAbateTeto: ",0,1,"L",$cor);
+
+    $pdf->ln(6);
+
+
 
 }
 
