@@ -120,6 +120,21 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     	  throw new Exception($clparec10->erro_msg);
       }
     }
+
+	  /**
+	   * selecionar arquivo xml com dados das receitas
+	   */
+	  $sSql  = "SELECT * FROM db_config ";
+	  $sSql .= "	WHERE prefeitura = 't'";
+
+	  $rsInst = db_query($sSql);
+	  $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
+	  $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomnaturezareceita.xml";
+
+	  $sTextoXml    = file_get_contents($sArquivo);
+	  $oDOMDocument = new DOMDocument();
+	  $oDOMDocument->loadXML($sTextoXml);
+	  $oNaturezaReceita = $oDOMDocument->getElementsByTagName('receita');
     /* RECEITAS QUE DEVEM SER SUBSTIUIDAS RUBRICA CADASTRADA ERRADA */
     $aRectce = array('111202','111208','172136','191138','191139','191140',
                  '191308','191311','191312','191313','193104','193111',
@@ -131,6 +146,18 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     	
     	$oDadosParec = db_utils::fieldsMemory($rsResult10, $iCont10);
     	if ($oDadosParec->o70_codigo != 0 && $oDadosParec->saldo_inicial_prevadic != 0) {
+
+			$sNaturezaReceita = substr($oDadosParec->o57_fonte, 1, 8);
+			foreach ($oNaturezaReceita as $oNatureza) {
+
+				if ($oNatureza->getAttribute('instituicao') == db_getsession("DB_instit")
+					&& $oNatureza->getAttribute('receitaEcidade') == $sNaturezaReceita) {
+					$sNaturezaReceita = $oNatureza->getAttribute('receitaSicom');
+					break;
+
+				}
+
+			}
     	/**
     	 * agrupar registro 10
     	 */
