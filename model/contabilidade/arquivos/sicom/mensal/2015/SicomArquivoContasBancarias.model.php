@@ -183,9 +183,9 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 	  $aHash  = $oRegistro10->si09_codorgaotce;
 	  $aHash .= intval($oRegistro10->c63_banco);
 	  $aHash .= intval($oRegistro10->c63_agencia);
-	  $aHash .= intval($oRegistro10->c63_dvagencia); 
+	  $aHash .= $oRegistro10->c63_dvagencia;
 	  $aHash .= intval($oRegistro10->c63_conta);
-	  $aHash .= intval($oRegistro10->c63_dvconta);
+	  $aHash .= $oRegistro10->c63_dvconta;
 	  $aHash .= $oRegistro10->tipoconta;
 	  if ($oRegistro10->si09_codorgaotce == 5) {
 	  	$aHash .= $oRegistro10->tipoaplicacao;
@@ -324,7 +324,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     		if ($iFonRecAnt != $oContaAgrupada->recurso && $nMes == 1 && pg_num_rows($rsFonRecAnt) > 0 ) {
     			
     			$nSaldoInicial = 0;
-    		  if( !isset($oCtb20Rec->si96_codctb) ){
+    		  if( !isset($oCtb20FontRec->si96_codctb) ){
 	              		
 			      $oCtb20FontRec->si96_tiporegistro 			= '20';
 			      $oCtb20FontRec->si96_codorgao 				= $oContaAgrupada->si95_codorgao;
@@ -486,7 +486,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 			    	$nValor = $oMovi->valorentrsaida;
 
 			    	if($oMovi->codctbtransf != 0 && $oMovi->codctbtransf != ''){ 
-			    		$sqlcontatransf = "select  si09_codorgaotce||c63_banco||c63_agencia||c63_dvagencia||c63_conta|| 
+			    		$sqlcontatransf = "select  si09_codorgaotce||(c63_banco::integer)::varchar||(c63_agencia::integer)::varchar||c63_dvagencia||(c63_conta::integer)::varchar||
 										             c63_dvconta||case when db83_tipoconta in (2,3) then 2 else 1 end as contadebito,
 										             o15_codtri
 										       from saltes 
@@ -639,7 +639,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     	/**
     	 * inclusão do registro 20 e 21 da fonte de recurso diferente
     	 */
-    	if ($oCtb20FontRec->si96_codctb != '') {
+    	if ($oCtb20FontRec->si96_codctb != '' && ($oCtb20FontRec->si96_vlsaldoinicialfonte > 0 ||  $oCtb20FontRec->si96_vlsaldofinalfonte > 0)) {
     		
         $cCtb20 = new cl_ctb202015();
     	
@@ -698,7 +698,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 			/**
     	 * inclusão do registro 20 e 21 da fonte de recurso diferente
     	 */
-    	if ($oCtb20FontRec->si96_codctb != '') {
+    	if ($oCtb20FontRec->si96_codctb != '' && ($oCtb20FontRec->si96_vlsaldoinicialfonte > 0 ||  $oCtb20FontRec->si96_vlsaldofinalfonte > 0)) {
     		
     	  $cCtb21 = new cl_ctb212015();
 			    	
