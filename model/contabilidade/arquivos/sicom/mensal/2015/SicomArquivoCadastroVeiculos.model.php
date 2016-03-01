@@ -60,6 +60,87 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
     }
 
     /**
+     * Função que busca a quantidade utilizada do serviço e peças para o Reg20.
+     * @param $iCodVeiculo
+     * @param $iTipoGasto
+     * @return mixed
+     */
+    public function getQtdeUtilizada($iCodVeiculo, $iTipoGasto){
+        if($iTipoGasto == "09") {
+            $sSql = "SELECT CASE WHEN sum(veicmanutitem.ve63_quant) IS NULL THEN 1 ELSE sum(veicmanutitem.ve63_quant) END AS quantidade
+                            FROM veiculos.veicmanut AS veicmanut
+                            INNER JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
+                            INNER JOIN veiculos.veicmanutitempcmater AS veicmanutitempcmater ON (veicmanutitem.ve63_codigo = veicmanutitempcmater.ve64_veicmanutitem)
+                            INNER JOIN compras.pcmater AS pcmater ON (veicmanutitempcmater.ve64_pcmater = pcmater.pc01_codmater)
+                            WHERE veicmanut.ve62_veiculos = {$iCodVeiculo}
+                            AND pcmater.pc01_servico = TRUE AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
+                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        }elseif($iTipoGasto == "08"){
+            $sSql = "SELECT sum(veicmanutitem.ve63_quant) AS quantidade
+                    FROM veiculos.veicmanut AS veicmanut
+                    INNER JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
+                    INNER JOIN veiculos.veicmanutitempcmater AS veicmanutitempcmater ON (veicmanutitem.ve63_codigo = veicmanutitempcmater.ve64_veicmanutitem)
+                    INNER JOIN compras.pcmater pcmater ON (veicmanutitempcmater.ve64_pcmater = pcmater.pc01_codmater)
+                    WHERE veicmanut.ve62_veiculos = {$iCodVeiculo}
+                    AND pcmater.pc01_servico = FALSE AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
+                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        }
+
+        $rsSql = db_query($sSql) or die(pg_last_error());
+
+        return db_utils::fieldsMemory($rsSql,0)->quantidade;
+    }
+
+    /**
+     * Função que busca o valor gasto do serviço e peças para o Reg20.
+     * @param $iCodVeiculo
+     * @param $iTipoGasto
+     * @return mixed
+     */
+    public function getVlGasto($iCodVeiculo, $iTipoGasto){
+        if($iTipoGasto == "09") {
+            $sSql = "SELECT sum(veicmanut.ve62_vlrmobra) AS valor
+                            FROM veiculos.veicmanut AS veicmanut
+                            WHERE veicmanut.ve62_veiculos = {$iCodVeiculo} AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
+                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        }elseif($iTipoGasto == "08"){
+            $sSql = "SELECT sum(veicmanut.ve62_vlrpecas) AS valor
+                    FROM veiculos.veicmanut AS veicmanut
+                    WHERE veicmanut.ve62_veiculos = {$iCodVeiculo} AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
+                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        }
+
+        $rsSql = db_query($sSql) or die(pg_last_error());
+
+        return db_utils::fieldsMemory($rsSql,0)->valor;
+    }
+
+    /**
+     * Função que busca a descrição dos serviços e peças para o Reg20.
+     * @param $iCodVeiculo
+     * @param $iTipoGasto
+     * @return mixed
+     */
+    public function getDescPecasServicos($iCodVeiculo, $iTipoGasto){
+
+        if($iTipoGasto == "09") {
+            $sSql = "SELECT
+                        replace(string_agg(ve62_descr, ' '), ';',',') as desc
+                        FROM veicmanut
+                    WHERE ve62_veiculos = {$iCodVeiculo} AND ve62_vlrmobra > 0 LIMIT 1";
+        }elseif($iTipoGasto == "08"){
+            $sSql = "SELECT
+                        replace(string_agg(ve62_descr, ' '), ';',',') as desc
+                        FROM veicmanut
+                        WHERE ve62_veiculos = {$iCodVeiculo} AND ve62_vlrpecas > 0 LIMIT 1";
+        }
+
+        $rsSql = db_query($sSql) or die(pg_last_error());
+
+        return db_utils::fieldsMemory($rsSql,0)->desc;
+    }
+
+    /**
      * selecionar os dados do cadastro de veículos
      * @see iPadArquivoBase::gerarDados()
      */
@@ -234,22 +315,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     ' ' AS nroEmpenho,
                     ' '  AS dtEmpenho,
                     '09' AS tipoGasto,
-                    (SELECT CASE WHEN sum(veicmanutitem.ve63_quant) IS NULL THEN 1 ELSE sum(veicmanutitem.ve63_quant) END AS quantidade
-                            FROM veiculos.veicmanut AS veicmanut
-                            INNER JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
-                            INNER JOIN veiculos.veicmanutitempcmater AS veicmanutitempcmater ON (veicmanutitem.ve63_codigo = veicmanutitempcmater.ve64_veicmanutitem)
-                            INNER JOIN compras.pcmater AS pcmater ON (veicmanutitempcmater.ve64_pcmater = pcmater.pc01_codmater)
-                            WHERE veicmanut.ve62_veiculos = veiculos.ve01_codigo
-                            AND pcmater.pc01_servico = TRUE AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") AS qtdeUtilizada,
-                (SELECT sum(veicmanut.ve62_vlrmobra) AS valorServico
-                            FROM veiculos.veicmanut AS veicmanut
-                            WHERE veicmanut.ve62_veiculos = veiculos.ve01_codigo AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") AS vlGasto,
-                    (SELECT
-                        replace(string_agg(ve62_descr, ' '), ';',',')
-                        FROM veicmanut
-                    WHERE ve62_veiculos = ve01_codigo AND ve62_vlrmobra > 0 LIMIT 1) AS dscPecasServicos,
+                    0 AS qtdeUtilizada,
+                    1 AS vlGasto,
+                    ' ' AS dscPecasServicos,
                     '1' AS atestadoControle,
                     unveic.o41_subunidade AS subunidade,
                     DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo
@@ -270,7 +338,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHERE db_config.codigo = " . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                    --AND veiculos.ve01_codigo in (17,62)
+                    --AND veiculos.ve01_codigo in (35)
                     UNION
 
                     SELECT DISTINCT '20' AS tipoRegistro,
@@ -286,22 +354,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     ' ' AS nroEmpenho,
                     ' '  AS dtEmpenho,
                     '08' AS tipoGasto,
-                    (SELECT sum(veicmanutitem.ve63_quant) AS quantidade
-                    FROM veiculos.veicmanut AS veicmanut
-                    INNER JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
-                    INNER JOIN veiculos.veicmanutitempcmater AS veicmanutitempcmater ON (veicmanutitem.ve63_codigo = veicmanutitempcmater.ve64_veicmanutitem)
-                    INNER JOIN compras.pcmater pcmater ON (veicmanutitempcmater.ve64_pcmater = pcmater.pc01_codmater)
-                    WHERE veicmanut.ve62_veiculos = veiculos.ve01_codigo
-                    AND pcmater.pc01_servico = FALSE AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") AS qtdeUtilizada,
-                    (SELECT sum(veicmanut.ve62_vlrpecas) AS valorPecas
-                    FROM veiculos.veicmanut AS veicmanut
-                    WHERE veicmanut.ve62_veiculos = veiculos.ve01_codigo AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") AS vlGasto,
-                    (SELECT
-                        replace(string_agg(ve62_descr, ' '), ';',',')
-                        FROM veicmanut
-                        WHERE ve62_veiculos = ve01_codigo AND ve62_vlrpecas > 0 LIMIT 1) AS dscPecasServicos,
+                    0 AS qtdeUtilizada,
+                    1 AS vlGasto,
+                    ' ' AS dscPecasServicos,
                     '1' AS atestadoControle,
                     unveic.o41_subunidade AS subunidade,
                     DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo
@@ -322,7 +377,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                    --AND veiculos.ve01_codigo in (17,62)
+                    --AND veiculos.ve01_codigo in (35)
                     UNION
 
                     SELECT '20' AS tipoRegistro,
@@ -376,7 +431,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                    --AND veiculos.ve01_codigo in (17,62)
+                    --AND veiculos.ve01_codigo in (35)
                     GROUP BY veiculos.ve01_codigo, ve70_veiculoscomb, si05_atestado,
                     o58_orgao,unemp.o41_codtri,orcemp.o40_codtri,orcemp.o40_orgao,unemp.o41_unidade,
                     unveic.o41_codtri,orveic.o40_codtri,orveic.o40_orgao,unveic.o41_unidade,si09_codorgaotce,
@@ -390,7 +445,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
         $rsResult20 = db_query($sSql);
         //echo pg_last_error();
-        //db_criatabela($rsResult20);exit;
+
         /**
          * registro 20
          */
@@ -403,6 +458,12 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
             if (!isset($aDadosAgrupados20[$sHash20])) {
 
                 $oDados20 = new stdClass();
+
+                if(($oResult20->tipogasto == "08" || $oResult20->tipogasto == "09") && $this->getVlGasto($oResult20->codveiculo, $oResult20->tipogasto) == 0) {
+
+                    continue;
+                }
+
 
                 if ($oResult20->subunidade == 1) {
                     /*
@@ -429,9 +490,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $oDados20->si147_nroempenho = $oResult20->nroempenho;
                 $oDados20->si147_dtempenho = $oResult20->dtempenho;
                 $oDados20->si147_tipogasto = $oResult20->tipogasto;
-                $oDados20->si147_qtdeutilizada = $oResult20->qtdeutilizada;
-                $oDados20->si147_vlgasto = $oResult20->vlgasto;
-                $oDados20->si147_dscpecasservicos = substr($oResult20->dscpecasservicos, 0, 49);
+                $oDados20->si147_qtdeutilizada = ($oResult20->tipogasto == "08" || $oResult20->tipogasto == "09" ? $this->getQtdeUtilizada($oResult20->codveiculo,$oResult20->tipogasto) : $oResult20->qtdeutilizada);
+                $oDados20->si147_vlgasto = ($oResult20->tipogasto == "08" || $oResult20->tipogasto == "09" ? $this->getVlGasto($oResult20->codveiculo,$oResult20->tipogasto) : $oResult20->vlgasto);
+                $oDados20->si147_dscpecasservicos = ($oResult20->tipogasto == "08" || $oResult20->tipogasto == "09" ? substr($this->getDescPecasServicos($oResult20->codveiculo,$oResult20->tipogasto),0,49) : substr($oResult20->dscpecasservicos, 0, 49));
                 $oDados20->si147_atestadocontrole = $oResult20->atestadocontrole;
                 $oDados20->si147_instit = db_getsession("DB_instit");
                 $oDados20->si147_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
