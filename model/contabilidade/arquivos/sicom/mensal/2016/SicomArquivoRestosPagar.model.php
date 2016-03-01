@@ -395,7 +395,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 	        $clrsp20->si115_vlmovimentacao                 = $oDados20->vlmovimentacao;
 	        $clrsp20->si115_codorgaoencampatribuic         = $oDados20->codorgaoencampatribuic;
 	        $clrsp20->si115_codunidadesubencampatribuic    = $oDados20->codunidadesubencampatribuic;
-	        $clrsp20->si115_justificativa                  = $oDados20->justificativa;
+	        $clrsp20->si115_justificativa                  = $this->removeCaracteres($oDados20->justificativa);
 	        $clrsp20->si115_atocancelamento                = $oDados20->atocancelamento;
 	        $clrsp20->si115_dataatocancelamento            = $oDados20->dataatocancelamento;
 	        $clrsp20->si115_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];
