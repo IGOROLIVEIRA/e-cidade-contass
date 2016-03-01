@@ -205,9 +205,7 @@ class cl_aop112015 {
                                       ,si138_nroliquidacao 
                                       ,si138_dtliquidacao 
                                       ,si138_codfontrecursos 
-                                      ,si138_valoranulacaofonte 
-                                      ,si138_codorgaoempop 
-                                      ,si138_codunidadeempop 
+                                      ,si138_valoranulacaofonte
                                       ,si138_mes 
                                       ,si138_reg10 
                                       ,si138_instit 
@@ -222,9 +220,7 @@ class cl_aop112015 {
                                ,$this->si138_nroliquidacao 
                                ,".($this->si138_dtliquidacao == "null" || $this->si138_dtliquidacao == ""?"null":"'".$this->si138_dtliquidacao."'")." 
                                ,$this->si138_codfontrecursos 
-                               ,$this->si138_valoranulacaofonte 
-                               ,'$this->si138_codorgaoempop' 
-                               ,'$this->si138_codunidadeempop' 
+                               ,$this->si138_valoranulacaofonte
                                ,$this->si138_mes 
                                ,$this->si138_reg10 
                                ,$this->si138_instit 
