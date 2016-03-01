@@ -51,7 +51,7 @@ $pdf->AliasNbPages();
 $pdf->setfillcolor(235);
 $alt   = 4;
 // Inicia da geracao do relatorio
-
+$pdf->ln(1750);
 for($x = 0;$x < pg_numrows($result_dados);$x++) {
     db_fieldsmemory($result_dados,$x);
 
@@ -62,33 +62,84 @@ for($x = 0;$x < pg_numrows($result_dados);$x++) {
 
     $pdf->setfont('arial','b',7);
 
-    $pdf->ln(6);
+    $pdf->cell(40,$alt,"MATRÍCULA: ".$rh01_regist,1,0,"L",$cor);
+    $pdf->cell(40,$alt,"CPF: ".$si195_numcpf,1,0,"L",$cor);
+    $pdf->cell(30,$alt,"REGIME: ".$si195_regime,1,0,"L",$cor);
+    $pdf->cell(80,$alt,"NOME: ".$z01_nome,1,1,"L",$cor);
+    $pdf->cell(40,$alt,"TIPO PAG: ".$si195_indtipopagamento,1,0,"L",$cor);
+    $pdf->cell(40,$alt,"SITUAÇÃO: ".$si195_indsituacaoservidorpensionista,1,0,"L",$cor);
+    $pdf->cell(40,$alt,"DT CONSESSÃO: ".$si195_datconcessaoaposentadoriapensao,1,1,"L",$cor);
+    $pdf->cell(60,$alt,"CARGO: ".$si195_dsccargo,1,0,"L",$cor);
+    $pdf->cell(40,$alt,"SIGLA: ".$si195_sglcargo,1,1,"L",$cor);
+    $pdf->cell(190,$alt,"REQUISITO DO CARGO: ".  ($si195_reqcargo == 1) ." nível superior completo ou nível médio com especialização ".
+        ($si195_reqcargo == 2) ." profissionais de saúde ". ($si195_reqcargo == 3) ." professor "  ,1,1,"L",$cor);
+    $pdf->cell(40,$alt,"SERVIDOR CEDIDO: ".$si195_indcessao,1,0,"L",$cor);
+    $pdf->cell(150,$alt,"DESCRIÇÃO LOTAÇÃO: ". $si195_dsclotacao,1,1,"L",$cor);
+    $pdf->cell(40,$alt,"VALOR CARGA HORÁRIA: ". $si195_vlrcargahorariasemanal,1,0,"L",$cor);
+    $pdf->cell(50,$alt,"DT EXERCÍCIO NO CARGO: ".$si195_datefetexercicio,1,0,"L",$cor);
+    $pdf->cell(40,$alt,"DT EXCLUSÃO: ".$si195_datexclusão,1,1,"L",$cor);
+    $pdf->cell(40,$alt,"NAT - SALDO BRUTO: ".$si195_natsaldobruto,1,0,"L",$cor);
+    $pdf->cell(50,$alt,"VALOR TOTAL - RENDIMENTOS: ".$si195_vlrremuneracaobruta,1,1,"L",$cor);
+    $pdf->cell(40,$alt,"NAT - SALDO LÍQUIDO: ".$si195_natsaldoliquido,1,0,"L",$cor);
+    $pdf->cell(50,$alt,"VALOR TOTAL - RENDIMENTOS: ".$si195_vlrremuneracaoliquida,1,1,"L",$cor);
+    $pdf->cell(40,$alt,"VALOR DEDUÇÕES: ".$si195_vlrdeducoesobrigatorias,1,0,"L",$cor);
+    $pdf->cell(40,$alt,"TETO CONSTITUCIONAL: ".$si195_vlrabateteto,1,1,"L",$cor);
 
-    $pdf->cell(40,$alt,"Matrícula: ".$rh01_regist,0,0,"L",$cor);
-    $pdf->cell(40,$alt,"CPF: ".$si195_numcpf,0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Regime: ".$si195_regime,0,0,"L",$cor);
-    $pdf->cell(60,$alt,"Nome: ".$z01_nome,0,1,"L",$cor);
-    $pdf->cell(40,$alt,"Tipo pag: ".$si195_indtipopagamento,0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Situação: ".$si195_indsituacaoservidorpensionista,0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Dt concessão: ".$si195_datconcessaoaposentadoriapensao,0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Cargo: ".$si195_dsccargo,0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Sigla: ".$si195_sglcargo,0,1,"L",$cor);
-    $pdf->cell(40,$alt,"Requisito do Cargo: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Servidor Cedido: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Descrição da lotação: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Valor da carga horaria: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Data de exercício no cargo: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Data de exclusão: ",0,1,"L",$cor);
-    $pdf->cell(40,$alt,"Natureza do saldo bruto: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Valor total dos rendimentos: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Natureza do saldo líquido: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Valor total dos rendimentos: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"Valor das deduções: ",0,0,"L",$cor);
-    $pdf->cell(40,$alt,"vlrAbateTeto: ",0,1,"L",$cor);
+    $pdf->ln(1);
 
-    $pdf->ln(6);
+        $sSql2 = "
+        select distinct * from flpgo11". db_getsession('DB_anousu') ." where si196_mes = $mes and si196_reg10 = $si195_sequencial";
+
+        $result_dados2 = db_query($sSql2);
+        $numrows_dados2 = pg_numrows($result_dados2);
+        if($numrows_dados2 > 0){
+
+            $cor = 1;
+
+            $pdf->cell(68, $alt, "TIPO REMUNERAÇÃO" , 1, 0, "L", $cor);
+            $pdf->cell(40, $alt, "DESCRIÇÃO", 1, 0, "L", $cor);
+            $pdf->cell(30, $alt, "NAT - SALDO DETALHE", 1, 0, "L", $cor);
+            $pdf->cell(50, $alt, "VALOR RENDIMENTOS POR TIPO", 1, 1, "L", $cor);
+
+            $cor = 0;
+
+            for($y = 0;$y < $numrows_dados2;$y++) {
+                db_fieldsmemory($result_dados2, $y);
 
 
+                if($si196_tiporemuneracao == '01')
+                    $sTiporemuneracao = "Subsídio";
+                elseif($si196_tiporemuneracao == '02')
+                    $sTiporemuneracao = "Pensão";
+                elseif($si196_tiporemuneracao == '03')
+                    $sTiporemuneracao = "Vencimento Cargo/Função Pública/Emprego Público";
+                elseif($si196_tiporemuneracao == '04')
+                    $sTiporemuneracao = "Proventos de Aposentadoria";
+                elseif($si196_tiporemuneracao == '05')
+                    $sTiporemuneracao = "Adicional por tempo de serviço";
+                elseif($si196_tiporemuneracao == '06')
+                    $sTiporemuneracao = "Vantagens Pessoais";
+                elseif($si196_tiporemuneracao == '07')
+                    $sTiporemuneracao = "Função Gratificada";
+                elseif($si196_tiporemuneracao == '08')
+                    $sTiporemuneracao = "Vantagens Eventuais";
+                elseif($si196_tiporemuneracao == '09')
+                    $sTiporemuneracao = "Pagamento Retroativo";
+                elseif($si196_tiporemuneracao == '10')
+                    $sTiporemuneracao = "Adicional Noturno";
+
+
+                $pdf->cell(68, $alt,$sTiporemuneracao, 1, 0, "L", $cor);
+
+                $pdf->cell(40, $alt,  $si196_descoutros, 1, 0, "L", $cor);
+
+                $pdf->cell(30, $alt,  $si196_natsaldodetalhe, 1, 0, "L", $cor);
+
+                $pdf->cell(50, $alt,  $si196_vlrremuneracaodetalhada, 1, 1, "L", $cor);
+            }
+        }
+
+    $pdf->ln(2);
 
 }
 
