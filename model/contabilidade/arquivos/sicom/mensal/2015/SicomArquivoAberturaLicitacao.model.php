@@ -777,7 +777,9 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 		    	}
 		    	
 		    	
-	    $sSql=" select distinct '16' as tipoRegistro,
+	    $sSql=" select tiporegistro,codorgaoresp,codunidadesubresp,exerciciolicitacao,nroprocessolicitatorio,codorgao,
+ codunidadesub,codfuncao,codsubfuncao,codprograma,idacao,idsubacao,naturezadespesa,codfontrecursos,sum(vlrecurso) as vlrecurso,subunidade
+ from (select distinct '16' as tipoRegistro,
 		infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
 	(SELECT CASE
     WHEN o41_subunidade != 0
@@ -821,11 +823,13 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 		LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 		LEFT JOIN orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
 		WHERE db_config.codigo= " .db_getsession("DB_instit")."
-		AND liclicita.l20_codigo= $oDados10->seqlicitacao";	
+		AND liclicita.l20_codigo= $oDados10->seqlicitacao) as x group by tiporegistro,codorgaoresp,codunidadesubresp,
+		exerciciolicitacao,nroprocessolicitatorio,codorgao,codunidadesub,codfuncao,codsubfuncao,codprograma,idacao,idsubacao,
+		naturezadespesa,codfontrecursos,subunidade";
 		
 			
     	        
-    	       $rsResult16 = db_query($sSql);//db_criatabela($rsResult16);
+    	       $rsResult16 = db_query($sSql);//echo $sSql;db_criatabela($rsResult16);
 		       for ($iCont16 = 0; $iCont16 < pg_num_rows($rsResult16); $iCont16++) {
 		             	
 		         $claberlic16 = new cl_aberlic162015();
