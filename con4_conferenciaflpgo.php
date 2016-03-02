@@ -32,9 +32,7 @@ require_once ('classes/db_rhpessoal_classe.php');
 $rhpessoal = new cl_rhpessoal();
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
-$head2 = "CONFERENCIA (".$mes." / ".$ano.")";
-
-
+$head2 = "CONFERÊNCIA (".$mes." / ".$ano.")";
 
 $sSql = "
 select distinct * from flpgo10". db_getsession('DB_anousu') ." where si195_mes = $mes";
@@ -51,7 +49,52 @@ $pdf->AliasNbPages();
 $pdf->setfillcolor(235);
 $alt   = 4;
 // Inicia da geracao do relatorio
+
+
+
+
+
+
+
+
+$sSqlVerificaRubricas = "select distinct r09_base, r09_rubric from basesr INNER JOIN bases ON r09_anousu = r08_anousu
+where r09_rubric =
+    (select x.r09_rubric from
+
+(select r09_base, r09_rubric, count(*) from basesr INNER JOIN bases ON r09_anousu = r08_anousu
+		  where r09_base BETWEEN 'S001' AND 'S014'
+		  group by r09_base,r09_rubric
+		  having count(*) > 1
+		  order by r09_rubric asc
+		  ) as x
+
+		  group by 1
+		  having count(x.r09_rubric) > 1)
+and r09_base BETWEEN 'S001' AND 'S014' ";
+
+$result_verifica  = db_query($sSqlVerificaRubricas);
+$numrows_verifica = pg_numrows($result_verifica);
+
 $pdf->ln(1750);
+
+$cor = 1;
+$pdf->setfont('arial','b',7);
+$pdf->cell(80,$alt,"BASES COM RUBRICAS REPETIDAS",1,1,"C",$cor);
+$pdf->cell(40,$alt,"BASE",1,0,"L",$cor);
+$pdf->cell(40,$alt,"RUBRICA",1,1,"L",$cor);
+
+$cor = 0;
+
+for($x = 0;$x < pg_numrows($result_verifica);$x++) {
+    db_fieldsmemory($result_verifica, $x);
+
+    $pdf->cell(40,$alt,$r09_base,1,0,"L",$cor);
+    $pdf->cell(40,$alt,$r09_rubric,1,1,"L",$cor);
+
+}
+
+$pdf->ln(2);
+
 for($x = 0;$x < pg_numrows($result_dados);$x++) {
     db_fieldsmemory($result_dados,$x);
 
@@ -59,8 +102,6 @@ for($x = 0;$x < pg_numrows($result_dados);$x++) {
 
     $result_cgm = db_query($rhpessoal->sql_query('','rh01_regist, z01_nome','',"z01_cgccpf = '$si195_numcpf'"));
     db_fieldsmemory($result_cgm,0);
-
-    $pdf->setfont('arial','b',7);
 
     $pdf->cell(40,$alt,"MATRÍCULA: ".$rh01_regist,1,0,"L",$cor);
     $pdf->cell(40,$alt,"CPF: ".$si195_numcpf,1,0,"L",$cor);
