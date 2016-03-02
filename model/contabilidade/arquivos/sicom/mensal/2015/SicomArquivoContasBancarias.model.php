@@ -321,8 +321,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
     		where c61_anousu = ".(db_getsession("DB_anousu")-1)." and c61_reduz = {$nConta}";
     		$rsFonRecAnt = db_query($sSqlRecursoAnterior);
     		$iFonRecAnt = db_utils::fieldsMemory( $rsFonRecAnt,0)->o15_codtri;
-    		if ($iFonRecAnt != $oContaAgrupada->recurso && $nMes == 1 && pg_num_rows($rsFonRecAnt) > 0 ) {
-    			
+
+			$sSqlRecursoAtual = "select o15_codtri from conplanoreduz
+    		join orctiporec on c61_codigo = o15_codigo
+    		where c61_anousu = ".db_getsession("DB_anousu")." and c61_reduz = {$nConta}";
+			$rsFonRecAtual = db_query($sSqlRecursoAtual);
+			$iFonRecAtual = db_utils::fieldsMemory( $rsFonRecAtual,0)->o15_codtri;
+
+    		if ($iFonRecAnt != $iFonRecAtual && $nMes == 1 && pg_num_rows($rsFonRecAnt) > 0 ) {
+
     			$nSaldoInicial = 0;
     		  if( !isset($oCtb20FontRec->si96_codctb) ){
 	              		
