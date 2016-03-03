@@ -161,7 +161,10 @@ $sWhereContratos = " and 1 = 1 ";
      /* if (isset($tipo) && trim($tipo)!=""){
         $dbwhere   = "l08_altera is true and";
       }*/
-	  if (isset($situacao) && trim($situacao) != ''){
+
+
+
+	  if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
 
           $dbwhere .= "l20_licsituacao in ($situacao,11) or (pc50_pctipocompratribunal in (100,101,102) and l20_licsituacao in ($situacao,1,11)) and ";
       }
