@@ -311,4 +311,5 @@ function js_mostracgm1(chave1,chave2){
     document.form1.z01_nome.value = chave2;
     func_nome.hide();
 }
+document.form1.si167_tipolancamento.style.width = '365px';
 </script>
