@@ -34,8 +34,10 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_liccomissao_classe.php");
+require_once("classes/db_liclicita_classe.php");
 $clliccomissaocgm = new cl_liccomissaocgm;
 $clliccomissao = new cl_liccomissao;
+$clliclicita = new cl_liclicita;
 
 $oDaoRotulo    = new rotulocampo;
 $clliccomissao->rotulo->label();
@@ -43,7 +45,12 @@ $clliccomissao->rotulo->label();
 $oGet                = db_utils::postMemory($_GET);
 
 $campos = "l30_codigo,l30_data,l30_portaria,l30_datavalid,l30_tipo";
-$sql = $clliccomissao->sql_query('',$campos,"","l30_codigo = (select l20_liccomissao from  liclicita where l20_codigo = $l20_codigo)"); 
+$sql = $clliccomissao->sql_query('',$campos,"","l30_codigo = (select l20_liccomissao from  liclicita where l20_codigo = $l20_codigo)");
+
+$result = db_query($sql);
+db_fieldsmemory($result, 0);
+
+$sql = $clliclicita->sql_query('','*',"","l20_codigo = $l20_codigo");
 $result = db_query($sql);
 db_fieldsmemory($result, 0);
 ?>
@@ -69,46 +76,51 @@ db_fieldsmemory($result, 0);
         <div style="display: table; float:left; margin-left:10%;">
           <fieldset>
             <legend><b>Responsáveis pela Licitação</b></legend>
-            <table style="" border='0'>
-            <tr>
-              <td nowrap title="<?=$Tl30_codigo?>" style="width: 100px;">
-              <?=$Ll30_codigo?>
-              </td>
-              <td nowrap="nowrap" class="valor" style="width: 100px; text-align: left; ">
-              <?php echo $l30_codigo;?>
-              </td>
-              <td nowrap="nowrap" style=" width: 50px;">
-              <?=$Ll30_data?>
-              </td>
-              <td nowrap="nowrap" class="valor" style="width:100px; text-align: left; ">
-              <?php echo implode("/", array_reverse(explode("-", $l30_data)));?>
-              </td>
-            </tr>
-            <tr>
-              <td nowrap title="<?=$Tl30_portaria?>" style="width: 100px;">
-              <?=$Ll30_portaria?>
-              </td>
-              <td nowrap="nowrap" class="valor" style="width: 100px; text-align: left; ">
-              <?php echo $l30_portaria;?>
-              </td>
-              <td nowrap="nowrap" style=" width: 50px;">
-              <?=$Ll30_datavalid?>
-              </td>
-              <td nowrap="nowrap" class="valor" style="width:100px; text-align: left; ">
-              <?php echo implode("/", array_reverse(explode("-", $l30_datavalid)));?>
-              </td>
-            </tr>
-            <tr>
-              <td nowrap="nowrap" style=" width: 100px;">
-              <?=$Ll30_tipo?>
-              </td>
-              <td nowrap="nowrap" class="valor" style="width:100px; text-align: left; ">
-              <?php echo $l30_tipo==1?"Permanente":"Especial";?>
-              </td>
-            </tr>
-            </table>
-          <?
-          if(db_getsession('DB_anousu') >= 2016 ) {
+            <?
+            $l20_datacria  = explode('-',$l20_datacria);
+            if($l20_datacria[0] < 2016 ) {
+                ?>
+                <table style="" border='0'>
+                    <tr>
+                        <td nowrap title="<?= $Tl30_codigo ?>" style="width: 100px;">
+                            <?= $Ll30_codigo ?>
+                        </td>
+                        <td nowrap="nowrap" class="valor" style="width: 100px; text-align: left; ">
+                            <?php echo $l30_codigo; ?>
+                        </td>
+                        <td nowrap="nowrap" style=" width: 50px;">
+                            <?= $Ll30_data ?>
+                        </td>
+                        <td nowrap="nowrap" class="valor" style="width:100px; text-align: left; ">
+                            <?php echo implode("/", array_reverse(explode("-", $l30_data))); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap title="<?= $Tl30_portaria ?>" style="width: 100px;">
+                            <?= $Ll30_portaria ?>
+                        </td>
+                        <td nowrap="nowrap" class="valor" style="width: 100px; text-align: left; ">
+                            <?php echo $l30_portaria; ?>
+                        </td>
+                        <td nowrap="nowrap" style=" width: 50px;">
+                            <?= $Ll30_datavalid ?>
+                        </td>
+                        <td nowrap="nowrap" class="valor" style="width:100px; text-align: left; ">
+                            <?php echo implode("/", array_reverse(explode("-", $l30_datavalid))); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap="nowrap" style=" width: 100px;">
+                            <?= $Ll30_tipo ?>
+                        </td>
+                        <td nowrap="nowrap" class="valor" style="width:100px; text-align: left; ">
+                            <?php echo $l30_tipo == 1 ? "Permanente" : "Especial"; ?>
+                        </td>
+                    </tr>
+                </table>
+                <?
+          }
+          if($l20_datacria[0] >= 2016 ) {
 
               $sql = $clliccomissaocgm->sql_query_file(null,"
 l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm),
