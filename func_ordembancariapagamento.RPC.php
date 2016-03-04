@@ -54,11 +54,63 @@ if ($e53_codord) {
 		  }
 		
 	  }
-		$sSql = "SELECT ((e53_valor-e53_vlranu-e53_vlrpag)-(SELECT case when sum(e23_valorretencao) is null then 0 else sum(e23_valorretencao) end 
+		/*$sSql = "SELECT ((e53_valor-e53_vlranu-e53_vlrpag)-(SELECT case when sum(e23_valorretencao) is null then 0 else sum(e23_valorretencao) end
 		from retencaoreceitas join retencaopagordem on e23_retencaopagordem = e20_sequencial 
-		where e23_ativo != false and e20_pagordem = e53_codord)) as valorapagar from pagordemele where e53_codord = {$e53_codord}";
+		where e23_ativo != false and e20_pagordem = e53_codord)) as valorapagar from pagordemele where e53_codord = {$e53_codord}";*/
+		$sSql = "SELECT sum(CASE WHEN (e90_codmov IS NULL
+                      AND e97_codforma = 3)
+           OR (e91_codmov IS NULL
+               AND e97_codforma = 2)
+           OR (e97_codforma NOT IN(3,2)
+               OR e97_codforma IS NULL) THEN (e81_valor - valorretencao) ELSE 0 END) AS valor
+FROM
+  (SELECT empagemov.e81_codmov,
+          e97_codforma,
+          CASE
+              WHEN e97_codforma IS NULL THEN 'NDA'
+              ELSE e96_descr
+          END AS e96_descr,
+          e53_vlrpag,
+          e81_valor,
+          e86_codmov,
+          e90_codmov,
+          e91_codmov,
+          e91_valor,
+          fc_valorretencaomov(e81_codmov,FALSE) AS valorretencao,
+          coalesce(e43_valor,0) AS e43_valor
+   FROM empage
+   INNER JOIN empagemov ON empagemov.e81_codage = empage.e80_codage
+   INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
+   INNER JOIN pagordem ON pagordem.e50_codord = empord.e82_codord
+   INNER JOIN pagordemele ON pagordemele.e53_codord = pagordem.e50_codord
+   INNER JOIN empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
+   INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
+   INNER JOIN db_config ON db_config.codigo = empempenho.e60_instit
+   INNER JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu
+   AND orcdotacao.o58_coddot = empempenho.e60_coddot
+   INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
+   INNER JOIN emptipo ON emptipo.e41_codtipo = empempenho.e60_codtipo
+   LEFT JOIN corempagemov ON corempagemov.k12_codmov = empagemov.e81_codmov
+   LEFT JOIN empageconf ON empageconf.e86_codmov = empord.e82_codmov
+   LEFT JOIN empageconfgera ON empageconf.e86_codmov = e90_codmov
+   LEFT JOIN empageconfche ON empageconf.e86_codmov = e91_codmov
+   AND e91_ativo IS TRUE
+   LEFT JOIN empagemovforma ON e97_codmov = e81_codmov
+   LEFT JOIN empageforma ON e96_codigo = e97_codforma
+   LEFT JOIN empagenotasordem ON e81_codmov = e43_empagemov
+   LEFT JOIN empageordem ON e43_ordempagamento = e42_sequencial
+   LEFT JOIN pagordemprocesso ON e50_codord = e03_pagordem
+   WHERE ((round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2)) > 0
+          AND (round(e60_vlremp,2)-round(e60_vlranu,2)-round(e60_vlrpag,2)) > 0)
+     AND corempagemov.k12_codmov IS NULL
+     AND e81_cancelado IS NULL
+     AND e80_data <= '".date("Y-m-d",db_getsession("DB_datausu"))."'
+     AND e60_instit = ".db_getsession("DB_instit")."
+     AND e50_codord = {$e53_codord}) AS x
+WHERE e96_descr != 'NDA'
+GROUP BY e96_descr";
 		$rsResult = db_query($sSql);
-		$aValores[0]->valorapagar = db_utils::fieldsMemory($rsResult, 0)->valorapagar;
+		$aValores[0]->valorapagar = db_utils::fieldsMemory($rsResult, 0)->valor;
 		echo json_encode($aValores);
 	
 	}
