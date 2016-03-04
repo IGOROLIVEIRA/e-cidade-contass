@@ -153,7 +153,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				  left join contabancaria on c56_contabancaria = db83_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit
 				    where (k13_limite is null 
-				    or k13_limite <= '".$this->sDataFinal."')
+				    or k13_limite >= '".$this->sDataFinal."')
     				  and c61_instit = ".db_getsession("DB_instit")." order by k13_reduz";
     //echo $sSqlGeral;
     $rsContas = db_query($sSqlGeral);//db_criatabela($rsContas);
