@@ -233,7 +233,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamento->si121_dtanulacaoliq			= $oDetalhamento->c70_data;
         $oDadosDetalhamento->si121_nroliquidacaoanl		= substr($oDetalhamento->nroliquidacao, 0, 19);
         $oDadosDetalhamento->si121_tpliquidacao 			= $tpLiquidacao;
-        $oDadosDetalhamento->si121_justificativaanulacao	= 'ESTORNO DE LIQUIDAÇÃO';
+        $oDadosDetalhamento->si121_justificativaanulacao	= 'ESTORNO DE LIQUIDACAO';
         $oDadosDetalhamento->si121_vlanulado				= $oDetalhamento->c70_valor;
         $oDadosDetalhamento->si121_mes					= $this->sDataFinal['5'].$this->sDataFinal['6'];
         $oDadosDetalhamento->si121_instit 				= db_getsession("DB_instit");
