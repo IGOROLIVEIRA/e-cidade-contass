@@ -126,7 +126,7 @@ class cl_aditivoscontratos {
    // funcao para inclusao
    function incluir ($si174_sequencial){ 
       $this->atualizacampos();
-     if($this->si174_nrocontrato == null ){ 
+     if($this->si174_nrocontrato == null ){
        $this->erro_sql = " Campo Número do Contrato Original nao Informado.";
        $this->erro_campo = "si174_nrocontrato";
        $this->erro_banco = "";
@@ -144,7 +144,7 @@ class cl_aditivoscontratos {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->si174_dataassinaturacontoriginal_ano >= 2014) {
+     /*if ($this->si174_dataassinaturacontoriginal_ano >= 2014) {
        $result = db_query("select * from contratos where si172_nrocontrato = {$this->si174_nrocontrato} and si172_dataassinatura = '{$this->si174_dataassinaturacontoriginal}'");
        if(pg_num_rows($result) == 0) {
        	 $this->erro_sql = "Contrato informado não existe";
@@ -155,7 +155,7 @@ class cl_aditivoscontratos {
          $this->erro_status = "0";
          return false;
        }
-     }
+     }*/
      if($this->si174_nroseqtermoaditivo == null ){ 
        $this->erro_sql = " Campo Nro seq do Termo Aditivo nao Informado.";
        $this->erro_campo = "si174_nroseqtermoaditivo";
@@ -240,6 +240,18 @@ class cl_aditivoscontratos {
        $this->erro_status = "0";
        return false;
      }
+       /**
+        * verificação para não permitir incluir aditivos repetidos
+        */
+       $sqlVerifica = " select 1 from aditivoscontratos where si174_nrocontrato = ".$this->si174_nrocontrato." and
+       si174_dataassinaturacontoriginal = '".$this->si174_dataassinaturacontoriginal."' and si174_nroseqtermoaditivo = ".$this->si174_nroseqtermoaditivo."
+       and si174_codunidadesub = '".$this->si174_codunidadesub."'";
+       $result = db_query($sqlVerifica);
+       if(pg_num_rows($result) > 0) {
+           $this->erro_msg = "Já existe um aditivo para este Contrato com as mesmas informações.";
+           $this->erro_status = "0";
+           return false;
+       }
      if($si174_sequencial == "" || $si174_sequencial == null ){
        $result = db_query("select nextval('aditivoscontratos_si174_sequencial_seq')"); 
        if($result==false){
@@ -272,6 +284,7 @@ class cl_aditivoscontratos {
        $this->erro_status = "0";
        return false;
      }
+
      $sql = "insert into aditivoscontratos(
                                        si174_sequencial 
                                       ,si174_codunidadesub 
@@ -376,7 +389,7 @@ class cl_aditivoscontratos {
      if(trim($this->si174_nrocontrato)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si174_nrocontrato"])){ 
        $sql  .= $virgula." si174_nrocontrato = $this->si174_nrocontrato ";
        $virgula = ",";
-       if(trim($this->si174_nrocontrato) == null ){ 
+       if(trim($this->si174_nrocontrato) == null ){
          $this->erro_sql = " Campo Número do Contrato Original nao Informado.";
          $this->erro_campo = "si174_nrocontrato";
          $this->erro_banco = "";
@@ -413,7 +426,7 @@ class cl_aditivoscontratos {
          }
        }
      }
-     if ($this->si174_dataassinaturacontoriginal_ano >= 2014) {
+     /*if ($this->si174_dataassinaturacontoriginal_ano >= 2014) {
        $result = db_query("select * from contratos where si172_nrocontrato = {$this->si174_nrocontrato} and si172_dataassinatura = '{$this->si174_dataassinaturacontoriginal}'");
        if(pg_num_rows($result) == 0) {
        	 $this->erro_sql = "Contrato informado não existe";
@@ -424,7 +437,7 @@ class cl_aditivoscontratos {
          $this->erro_status = "0";
          return false;
        }
-     }
+     }*/
      if(trim($this->si174_nroseqtermoaditivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si174_nroseqtermoaditivo"])){ 
        $sql  .= $virgula." si174_nroseqtermoaditivo = $this->si174_nroseqtermoaditivo ";
        $virgula = ",";
@@ -579,6 +592,18 @@ class cl_aditivoscontratos {
          return false;
        }
      }
+       /**
+        * verificação para não permitir incluir aditivos repetidos
+        */
+       $sqlVerifica = " select 1 from aditivoscontratos where si174_nrocontrato = ".$this->si174_nrocontrato." and
+       si174_dataassinaturacontoriginal = '".$this->si174_dataassinaturacontoriginal."' and si174_nroseqtermoaditivo = ".$this->si174_nroseqtermoaditivo."
+       and si174_codunidadesub = '".$this->si174_codunidadesub."'";
+       $result = db_query($sqlVerifica);
+       if(pg_num_rows($result) > 0) {
+           $this->erro_msg = "Já existe um aditivo para este Contrato com as mesmas informações.";
+           $this->erro_status = "0";
+           return false;
+       }
      $sql .= " where ";
      if($si174_sequencial!=null){
        $sql .= " si174_sequencial = $this->si174_sequencial";
