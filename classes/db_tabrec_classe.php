@@ -1091,23 +1091,32 @@ class cl_tabrec {
   	}else{
   		$sql .= $campos;
   	}
-  	//$sql .= " from ( select k02_estorc,tabrec.k02_codigo, tabrec.k02_tipo, tabrec.k02_descr, tabrec.k02_drecei,  tabrec.k02_codjm, tabrec.k02_recjur, tabrec.k02_recmul, tabrec.k02_limite, o70_codrec,0 as c61_reduz,o70_codigo as recurso ";
-  	$sql .= "        from tabrec ";
-  	$sql .= "             inner join taborc on tabrec.k02_codigo = taborc.k02_codigo and taborc.k02_anousu = ".db_getsession("DB_anousu");
-  	$sql .= "             inner join orcreceita on taborc.k02_codrec = orcreceita.o70_codrec and orcreceita.o70_anousu = ".db_getsession("DB_anousu")." and orcreceita.o70_instit = ".db_getsession("DB_instit");
-  	if (USE_PCASP) {
+  	/**
+  	 * fazer o sql da receita conforme o tipo de instituição
+  	 */
+  	$result = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = ".db_getsession("DB_anousu"));
+  	$iTipoInstit = db_utils::fieldsMemory($result, 0)->si09_tipoinstit;
+  	if ($iTipoInstit == 2) {
+  	  //$sql .= " from ( select k02_estorc,tabrec.k02_codigo, tabrec.k02_tipo, tabrec.k02_descr, tabrec.k02_drecei,  tabrec.k02_codjm, tabrec.k02_recjur, tabrec.k02_recmul, tabrec.k02_limite, o70_codrec,0 as c61_reduz,o70_codigo as recurso ";
+  	  $sql .= "        from tabrec ";
+  	  $sql .= "             inner join taborc on tabrec.k02_codigo = taborc.k02_codigo and taborc.k02_anousu = ".db_getsession("DB_anousu");
+  	  $sql .= "             inner join orcreceita on taborc.k02_codrec = orcreceita.o70_codrec and orcreceita.o70_anousu = ".db_getsession("DB_anousu")." and orcreceita.o70_instit = ".db_getsession("DB_instit");
+  	  if (USE_PCASP) {
   
-  		$sql .= "  inner join conplanoorcamento on orcreceita.o70_anousu = conplanoorcamento.c60_anousu ";
-  		$sql .= "                              and orcreceita.o70_codfon = conplanoorcamento.c60_codcon ";
-  		$sql .= "      inner join conplanoorcamentogrupo on conplanoorcamento.c60_codcon        = conplanoorcamentogrupo.c21_codcon ";
-  		$sql .= "                                       and conplanoorcamento.c60_anousu        = conplanoorcamentogrupo.c21_anousu ";
-      $sql .= "                                       and conplanoorcamentogrupo.c21_instit   = " . db_getsession("DB_instit");
-  		$sql .= "      inner join congrupo               on conplanoorcamentogrupo.c21_congrupo = congrupo.c20_sequencial           ";
+  		  $sql .= "  inner join conplanoorcamento on orcreceita.o70_anousu = conplanoorcamento.c60_anousu ";
+  		  $sql .= "                              and orcreceita.o70_codfon = conplanoorcamento.c60_codcon ";
+  		  $sql .= "      inner join conplanoorcamentogrupo on conplanoorcamento.c60_codcon        = conplanoorcamentogrupo.c21_codcon ";
+  		  $sql .= "                                       and conplanoorcamento.c60_anousu        = conplanoorcamentogrupo.c21_anousu ";
+        $sql .= "                                       and conplanoorcamentogrupo.c21_instit   = " . db_getsession("DB_instit");
+  		  $sql .= "      inner join congrupo               on conplanoorcamentogrupo.c21_congrupo = congrupo.c20_sequencial           ";
   		
+  	  } else {
+  		  $sql .= "  inner join conplano on orcreceita.o70_anousu=conplano.c60_anousu and orcreceita.o70_codfon = conplano.c60_codcon ";
+  	  }
   	} else {
-  		$sql .= "  inner join conplano on orcreceita.o70_anousu=conplano.c60_anousu and orcreceita.o70_codfon = conplano.c60_codcon ";
+  		$sql .= "        from tabrec ";
+  	  $sql .= "             inner join tabplan on tabrec.k02_codigo = tabplan.k02_codigo and tabplan.k02_anousu = ".db_getsession("DB_anousu");
   	}
-  	
   	$sql2 = "";
   	if($dbwhere==""){
   		if($k02_codigo!=null ){
@@ -1116,8 +1125,12 @@ class cl_tabrec {
   	}else if($dbwhere != ""){
   		$sql2 = " where $dbwhere";
   	}
-  	$sql2 .= ($sql2!=""?" and ":" where ") . " (k02_limite is null or k02_limite >= '" . date('Y-m-d',db_getsession("DB_datausu")) . "')";
-    $sql2 .= " and c20_sequencial = 11 and k02_anousu = ".db_getsession("DB_anousu");
+  	if ($iTipoInstit == 2) {
+  	  $sql2 .= ($sql2!=""?" and ":" where ") . " (k02_limite is null or k02_limite >= '" . date('Y-m-d',db_getsession("DB_datausu")) . "')";
+      $sql2 .= " and c20_sequencial = 11 and k02_anousu = ".db_getsession("DB_anousu");
+  	} else {
+  		$sql2 .= ($sql2!=""?" and ":" where ") . " (k02_limite is null or k02_limite >= '" . date('Y-m-d',db_getsession("DB_datausu")) . "')";
+  	}
 
   	$sql .= $sql2;
   	if($ordem != null ){
@@ -1129,7 +1142,6 @@ class cl_tabrec {
   			$virgula = ",";
   		}
   	}
-  
   	return $sql;
   }  
   
