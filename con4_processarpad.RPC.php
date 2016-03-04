@@ -595,11 +595,11 @@ switch($oParam->exec) {
         $aListaArquivos .= " ".$oArquivo->caminho;
       }
       //print_r($aListaArquivos);
-      system("rm -f FLPGO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
-      system("bin/zip -q FLPGO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
+      system("rm -f FLPG_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+      system("bin/zip -q FLPG_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
       $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "FLPGO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "FLPGO_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $oArquivoZip->nome    = "FLPG_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "FLPG_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
       $oRetorno->itens  = $aArrayArquivos;
     }
