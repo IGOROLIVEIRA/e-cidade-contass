@@ -1,4 +1,5 @@
 <?php
+
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_ide2013_classe.php");

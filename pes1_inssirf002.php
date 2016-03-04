@@ -358,6 +358,65 @@ else if(isset($excluir)){
     $rh127_descricao          = $oDadosRegime->rh127_descricao;
   }
 }
+/**
+ * --------------------------------------------
+ * IMPORTAR
+ * --------------------------------------------
+ */
+else if(isset($importar)){
+
+
+	$clinssirf->excluir('',db_getsession("DB_instit"),"r33_mesusu = ".db_mesfolha()." and r33_anousu = ".db_anofolha()." and r33_codtab = $codtab ");
+
+	$path = "tmp/";
+	$diretorio = dir($path);
+	$sArquivo = $diretorio->read();
+
+	while ($tempArquivo = $diretorio->read())  {
+
+		if($tempArquivo == 'tabela.csv'){
+
+			if (($handle = fopen($path.$tempArquivo, "r")) !== FALSE) {
+
+				while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+
+					$clinssirf->r33_anousu = db_anofolha();
+					$clinssirf->r33_mesusu = db_mesfolha();
+					$clinssirf->r33_codtab = $codtab;
+
+					$clinssirf->r33_basfer = $r33_basfer;
+					$clinssirf->r33_basfet = $r33_basfet;
+					$clinssirf->r33_instit = db_getsession("DB_instit");
+					$clinssirf->r33_codele = $r33_codele;
+
+					$x=1;
+					foreach($data as $value){
+						if($x == 1) {
+							$clinssirf->r33_inic = $value;
+						}
+						if($x == 2) {
+							$clinssirf->r33_fim = $value;
+						}
+						if($x == 3) {
+							$clinssirf->r33_perc = $value;
+						}
+						if($x == 4){
+							$clinssirf->r33_deduzi = $value;
+							$clinssirf->incluir(null,db_getsession("DB_instit"));
+							$x=1;
+						}
+						$x++;
+					}
+
+				}
+				fclose($handle);
+
+			}
+		}
+
+	}
+
+}
 
 
 ?>

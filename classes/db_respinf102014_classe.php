@@ -1,7 +1,7 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE respinf102016
-class cl_respinf102016 {
+//CLASSE DA ENTIDADE respinf102014
+class cl_respinf102014 {
   // cria variaveis de erro 
   var $rotulo     = null;
   var $query_sql  = null;
@@ -44,9 +44,9 @@ class cl_respinf102016 {
                  si197_inst = int8 = si197_inst 
                  ";
   //funcao construtor da classe 
-  function cl_respinf102016() {
+  function cl_respinf102014() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("respinf102016");
+    $this->rotulo = new rotulo("respinf102014");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
   //funcao erro 
@@ -164,10 +164,10 @@ class cl_respinf102016 {
       return false;
     }
     if($si197_sequencial == "" || $si197_sequencial == null ){
-      $result = db_query("select nextval('respinf102016_si197_sequencial_seq')");
+      $result = db_query("select nextval('respinf102014_si197_sequencial_seq')");
       if($result==false){
         $this->erro_banco = str_replace("\n","",@pg_last_error());
-        $this->erro_sql   = "Verifique o cadastro da sequencia: respinf102016_si197_sequencial_seq do campo: si197_sequencial";
+        $this->erro_sql   = "Verifique o cadastro da sequencia: respinf102014_si197_sequencial_seq do campo: si197_sequencial";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
@@ -175,7 +175,7 @@ class cl_respinf102016 {
       }
       $this->si197_sequencial = pg_result($result,0,0);
     }else{
-      $result = db_query("select last_value from respinf102016_si197_sequencial_seq");
+      $result = db_query("select last_value from respinf102014_si197_sequencial_seq");
       if(($result != false) && (pg_result($result,0,0) < $si197_sequencial)){
         $this->erro_sql = " Campo si197_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
@@ -195,7 +195,7 @@ class cl_respinf102016 {
       $this->erro_status = "0";
       return false;
     }
-    $sql = "insert into respinf102016(
+    $sql = "insert into respinf102014(
                                        si197_sequencial 
                                       ,si197_nomeresponsavel 
                                       ,si197_cartident 
@@ -221,12 +221,12 @@ class cl_respinf102016 {
     if($result==false){
       $this->erro_banco = str_replace("\n","",@pg_last_error());
       if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-        $this->erro_sql   = "respinf102016 ($this->si197_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "respinf102014 ($this->si197_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_banco = "respinf102016 já Cadastrado";
+        $this->erro_banco = "respinf102014 já Cadastrado";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       }else{
-        $this->erro_sql   = "respinf102016 ($this->si197_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = "respinf102014 ($this->si197_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       }
@@ -268,7 +268,7 @@ class cl_respinf102016 {
   // funcao para alteracao
   function alterar ($si197_sequencial=null) {
     $this->atualizacampos();
-    $sql = " update respinf102016 set ";
+    $sql = " update respinf102014 set ";
     $virgula = "";
     if(trim($this->si197_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_sequencial"])){
       $sql  .= $virgula." si197_sequencial = $this->si197_sequencial ";
@@ -456,7 +456,7 @@ class cl_respinf102016 {
     $result = db_query($sql);
     if($result==false){
       $this->erro_banco = str_replace("\n","",@pg_last_error());
-      $this->erro_sql   = "respinf102016 nao Alterado. Alteracao Abortada.\\n";
+      $this->erro_sql   = "respinf102014 nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : ".$this->si197_sequencial;
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -466,7 +466,7 @@ class cl_respinf102016 {
     }else{
       if(pg_affected_rows($result)==0){
         $this->erro_banco = "";
-        $this->erro_sql = "respinf102016 nao foi Alterado. Alteracao Executada.\\n";
+        $this->erro_sql = "respinf102014 nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_sql .= "Valores : ".$this->si197_sequencial;
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -518,7 +518,7 @@ class cl_respinf102016 {
         }
       }
     }
-    $sql = " delete from respinf102016
+    $sql = " delete from respinf102014
                     where ";
     $sql2 = "";
     if($dbwhere==null || $dbwhere ==""){
@@ -534,7 +534,7 @@ class cl_respinf102016 {
     $result = db_query($sql.$sql2);
     if($result==false){
       $this->erro_banco = str_replace("\n","",@pg_last_error());
-      $this->erro_sql   = "respinf102016 nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql   = "respinf102014 nao Excluído. Exclusão Abortada.\\n";
       $this->erro_sql .= "Valores : ".$si197_sequencial;
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -544,7 +544,7 @@ class cl_respinf102016 {
     }else{
       if(pg_affected_rows($result)==0){
         $this->erro_banco = "";
-        $this->erro_sql = "respinf102016 nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_sql = "respinf102014 nao Encontrado. Exclusão não Efetuada.\\n";
         $this->erro_sql .= "Valores : ".$si197_sequencial;
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -578,7 +578,7 @@ class cl_respinf102016 {
     $this->numrows = pg_numrows($result);
     if($this->numrows==0){
       $this->erro_banco = "";
-      $this->erro_sql   = "Record Vazio na Tabela:respinf102016";
+      $this->erro_sql   = "Record Vazio na Tabela:respinf102014";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
@@ -599,11 +599,11 @@ class cl_respinf102016 {
     }else{
       $sql .= $campos;
     }
-    $sql .= " from respinf102016 ";
+    $sql .= " from respinf102014 ";
     $sql2 = "";
     if($dbwhere==""){
       if($si197_sequencial!=null ){
-        $sql2 .= " where respinf102016.si197_sequencial = $si197_sequencial ";
+        $sql2 .= " where respinf102014.si197_sequencial = $si197_sequencial ";
       }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";
@@ -633,11 +633,11 @@ class cl_respinf102016 {
     }else{
       $sql .= $campos;
     }
-    $sql .= " from respinf102016 ";
+    $sql .= " from respinf102014 ";
     $sql2 = "";
     if($dbwhere==""){
       if($si197_sequencial!=null ){
-        $sql2 .= " where respinf102016.si197_sequencial = $si197_sequencial ";
+        $sql2 .= " where respinf102014.si197_sequencial = $si197_sequencial ";
       }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";

@@ -52,7 +52,56 @@ if(isset($codtab) && $codigo_tab <= 2){
   $campofocoi = "r33_inic";
 }
 ?>
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript"
+          src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript"
+          src="scripts/strings.js"></script>
+  <script language="JavaScript" type="text/javascript"
+          src="scripts/prototype.js"></script>
+  <script language="JavaScript" type="text/javascript"
+          src="scripts/widgets/dbmessageBoard.widget.js"></script>
+  <script language="JavaScript" type="text/javascript"
+          src="scripts/micoxUpload.js"></script>
+</head>
+
+<div style="display: table">
+
+  <fieldset>
+    <legend>
+      <b>Enviar Arquivo com o nome tabela.csv</b>
+    </legend>
+    <table>
+
+      <tr>
+        <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+          <td>
+            Arquivo :
+            <div>&nbsp;</div>
+          </td>
+          <td>
+            <input type="file" name="tabela" />
+            <div id="TABELA" class="recebe">&nbsp;</div>
+          </td>
+          <td>
+            <input type="button" value="Enviar" onclick="micoxUpload(this.form,'pes1_uploadarquivosfolha.php','TABELA','Carregando...','Erro ao carregar')" />
+            <div>&nbsp;</div>
+          </td>
+        </form>
+      </tr>
+
+
+    </table>
+  </fieldset>
+</div>
+
 <form name="form1" method="post" action="">
+  <div style="text-align: center;">
+    <input type="submit" id="importar" name="importar" value="Importar" />
+  </div>
 <center>
 <table border="0" width="50%">
   <tr>
@@ -292,6 +341,7 @@ if(isset($codtab) && $codigo_tab <= 2){
       }
       ?>
         </table>
+
       </fieldset>
     </td>
   </tr>
@@ -305,6 +355,7 @@ if(isset($opcao)){
 }
 ?>
 <input name="voltar" type="button" id="voltar" value="Voltar" onclick="location.href='pes1_inssirf001.php'" onblur='js_setar_foco();'>
+
 <table border="0" width="50%" valign="top">
   <tr>
     <td align="center">
@@ -579,4 +630,5 @@ function js_mostraorcelemento1(chave1, chave2) {
   document.form1.o56_descr.value   = chave2;
   db_iframe_orcelemento.hide();
 }
+
 </script>
