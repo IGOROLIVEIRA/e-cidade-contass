@@ -717,7 +717,8 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
     /*
      * selecionar informacoes registro 30
      */
-    $sSql       = "select * from apostilamento 
+    $sSql       = "select * from apostilamento
+    left join contratos on si03_numcontrato=si172_sequencial
     where si03_dataapostila <= '{$this->sDataFinal}' 
     and si03_dataapostila >= '{$this->sDataInicial}'
     and si03_instit = ". db_getsession("DB_instit");
@@ -755,7 +756,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
       $clcontratos30->si89_tiporegistro                   = 30;
       $clcontratos30->si89_codorgao                       = $sCodorgao;
       $clcontratos30->si89_codunidadesub                  = $sCodUnidadeSub;
-      $clcontratos30->si89_nrocontrato                    = $oDados30->si03_numcontrato == '' ? $oDados30->si03_numcontratoanosanteriores : $oDados30->si03_numcontrato;
+      $clcontratos30->si89_nrocontrato                    = $oDados30->si172_nrocontrato == '' ? $oDados30->si03_numcontratoanosanteriores : $oDados30->si172_nrocontrato;
       $clcontratos30->si89_dtassinaturacontoriginal       = $oDados30->si03_dataassinacontrato;
       $clcontratos30->si89_tipoapostila                   = $oDados30->si03_tipoapostila;
       $clcontratos30->si89_nroseqapostila                 = $oDados30->si03_numapostilamento;
