@@ -77,7 +77,7 @@ if(isset($codtab) && $codigo_tab <= 2){
     <table>
 
       <tr>
-        <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
+        <form name="form2" id='form2' method="post" action="" enctype="multipart/form-data">
           <td>
             Arquivo :
             <div>&nbsp;</div>
