@@ -173,7 +173,7 @@ db_inicio_transacao();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      $sHash10  = $oDados10->codorgao.$oDados10->nfnumero.$oDados10->nfserie.$oDados10->tipodocumento.$oDados10->nrodocumento;
+      $sHash10  = $oDados10->codorgao.intval($oDados10->nfnumero).$oDados10->nfserie.$oDados10->tipodocumento.$oDados10->nrodocumento;
       $sHash10 .= $oDados10->chaveacesso.$oDados10->dtemissaonf;
       
       if (!$aDadosAgrupados[$sHash10]) {
