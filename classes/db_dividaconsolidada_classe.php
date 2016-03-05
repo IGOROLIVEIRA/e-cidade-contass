@@ -323,7 +323,7 @@ class cl_dividaconsolidada {
        return false;
      }
 
-       if($this->si167_vlcancelamento != null || $this->si167_vlcancelamento != ""){
+       if($this->si167_vlcancelamento > 0 ){
            if($this->si167_justificativacancelamento == null ){
                $this->erro_sql = " Campo Justificativa de cancelamento nao Informado.";
                $this->erro_campo = "si167_justificativacancelamento";
@@ -797,7 +797,7 @@ class cl_dividaconsolidada {
        if($this->si167_justificativacancelamento != null || $this->si167_justificativacancelamento != ""){
            $sql  .= $virgula." si167_justificativacancelamento = '$this->si167_justificativacancelamento' ";
            $virgula = ",";
-       }elseif($this->si167_vlcancelamento != null || $this->si167_vlcancelamento != "") {
+       }elseif($this->si167_vlcancelamento > 0 ){
            if (trim($this->si167_justificativacancelamento) == null) {
                $this->erro_sql = " Campo Justificativa de cancelamento nao Informado.";
                $this->erro_campo = "si167_justificativacancelamento";
