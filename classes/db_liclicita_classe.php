@@ -1437,7 +1437,7 @@ class cl_liclicita {
       $virgula = ",";
      }
 
-  /*if(trim($this->l20_dtpublic !="" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpublic"]))){
+  if(trim($this->l20_dtpublic !="" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpublic"]))){
     if($this->l20_dtpublic =="" || $this->l20_dtpublic==null){
       $sql  .= $virgula." l20_dtpublic =null ";
       $virgula = ",";
@@ -1455,7 +1455,7 @@ class cl_liclicita {
          $this->erro_status = "0";
          return false;
        }
-     }*/
+     }
 
      
  if(trim($this->l20_datapublicacao1 !="" || isset($GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1"]))){
