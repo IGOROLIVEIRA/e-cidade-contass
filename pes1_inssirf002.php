@@ -365,9 +365,6 @@ else if(isset($excluir)){
  */
 else if(isset($importar)){
 
-
-	$clinssirf->excluir('',db_getsession("DB_instit"),"r33_mesusu = ".db_mesfolha()." and r33_anousu = ".db_anofolha()." and r33_codtab = $codtab ");
-
 	$path = "tmp/";
 	$diretorio = dir($path);
 	$sArquivo = $diretorio->read();
@@ -375,6 +372,8 @@ else if(isset($importar)){
 	while ($tempArquivo = $diretorio->read())  {
 
 		if($tempArquivo == 'TABELA_IRRF.csv' || $tempArquivo == 'TABELA_INSS.csv'){
+
+			$clinssirf->excluir('',db_getsession("DB_instit"),"r33_mesusu = ".db_mesfolha()." and r33_anousu = ".db_anofolha()." and r33_codtab = $codtab ");
 
 			if (($handle = fopen($path.$tempArquivo, "r")) !== FALSE) {
 
