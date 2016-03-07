@@ -873,7 +873,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,	
-	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
+	case when pctipocompratribunal.l44_codigotribunal = '3' then '2'
+	when pctipocompratribunal.l44_codigotribunal = '4' then '1' else pctipocompratribunal.l44_codigotribunal end as tipoProcesso,
 	(CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
 		ELSE 2
 	END) as tipoDocumento,
