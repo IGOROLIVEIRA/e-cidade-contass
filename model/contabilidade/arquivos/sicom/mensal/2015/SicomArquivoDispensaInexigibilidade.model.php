@@ -873,8 +873,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,	
-	case when pctipocompratribunal.l44_codigotribunal = '3' then '2'
-	when pctipocompratribunal.l44_codigotribunal = '4' then '1' else pctipocompratribunal.l44_codigotribunal end as tipoProcesso,
+	pctipocompratribunal.l44_codigotribunal as tipoProcesso,
 	(CASE length(cgm.z01_cgccpf) WHEN 11 THEN 1
 		ELSE 2
 	END) as tipoDocumento,
@@ -917,7 +916,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
 	WHERE db_config.codigo= " .db_getsession("DB_instit")." AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)  
-	AND liclicita.l20_codigo= {$oDados10->codlicitacao}";
+	AND liclicita.l20_codigo= {$oDados10->codlicitacao} AND pctipocompratribunal.l44_sequencial in (100,101)";
 		
 	
 		$rsResult17 = db_query($sSql);//db_criatabela($rsResult17);
