@@ -371,14 +371,19 @@ else if(isset($importar)){
 	$path = "tmp/";
 	$diretorio = dir($path);
 	$sArquivo = $diretorio->read();
-
+	$x=0;
 	while ($tempArquivo = $diretorio->read())  {
 
-		if($tempArquivo == 'tabela.csv'){
+		if($tempArquivo == 'TABELA_IRRF.csv' || $tempArquivo == 'TABELA_INSS.csv'){
 
 			if (($handle = fopen($path.$tempArquivo, "r")) !== FALSE) {
 
 				while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+
+					if($x==0){
+						$x=1;
+						continue;
+					}
 
 					$clinssirf->r33_anousu = db_anofolha();
 					$clinssirf->r33_mesusu = db_mesfolha();
@@ -389,24 +394,27 @@ else if(isset($importar)){
 					$clinssirf->r33_instit = db_getsession("DB_instit");
 					$clinssirf->r33_codele = $r33_codele;
 
-					$x=1;
-					foreach($data as $value){
-						if($x == 1) {
-							$clinssirf->r33_inic = $value;
+
+
+						foreach ($data as $value) {
+
+							if ($x == 1) {
+								$clinssirf->r33_inic = $value;
+							}
+							if ($x == 2) {
+								$clinssirf->r33_fim = $value;
+							}
+							if ($x == 3) {
+								$clinssirf->r33_perc = $value;
+							}
+							if ($x == 4) {
+								$clinssirf->r33_deduzi = $value;
+								$clinssirf->incluir(null, db_getsession("DB_instit"));
+								$x = 0;
+							}
+							$x++;
 						}
-						if($x == 2) {
-							$clinssirf->r33_fim = $value;
-						}
-						if($x == 3) {
-							$clinssirf->r33_perc = $value;
-						}
-						if($x == 4){
-							$clinssirf->r33_deduzi = $value;
-							$clinssirf->incluir(null,db_getsession("DB_instit"));
-							$x=1;
-						}
-						$x++;
-					}
+
 
 				}
 				fclose($handle);

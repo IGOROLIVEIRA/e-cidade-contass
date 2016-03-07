@@ -72,7 +72,7 @@ if(isset($codtab) && $codigo_tab <= 2){
 
   <fieldset>
     <legend>
-      <b>Enviar Arquivo com o nome tabela.csv</b>
+      <b>Enviar Arquivo</b>
     </legend>
     <table>
 
