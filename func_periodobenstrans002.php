@@ -69,8 +69,8 @@ $pdf->SetFont("","B","");
 $pdf->Cell(15,$tam,"PLACA",1,0,"C",1);    
 $pdf->Cell(70,$tam,"DESCRICÃO",1,0,"L",1);
 $pdf->Cell(40,$tam,"ORIGEM",1,0,"L",1);
-$pdf->Cell(40,$tam,"DESTINO",1,0,"L",1);
 $pdf->Cell(40,$tam,"DIVISÃO DE ORIGEM",1,0,"L",1);
+$pdf->Cell(40,$tam,"DESTINO",1,0,"L",1);
 $pdf->Cell(40,$tam,"DIVISÃO DE DESTINO",1,0,"L",1);
 $pdf->Cell(35,$tam,"USUÁRIO",1,1,"C",1);
 
@@ -150,6 +150,27 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 	} else {
 	  $pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->origem,1,0,"L",0);
 	}
+
+	/**
+	 * imprimir  divorigem
+	 */
+	if (strlen($oDivisaoSituacao->divorigem) > 27) {
+
+		$pos_x = $pdf->x;
+		$pos_y = $pdf->y;
+		$pdf->Cell(40,$tam*$alt_novo,"",1,0,"L",0);
+		$pdf->x = $pos_x;
+		$pdf->y = $pos_y;
+		foreach ($aDivorigem as $oDivorigem) {
+			$pdf->cell(40,($tam),$oDivorigem,0,1,"L",0);
+			$pdf->x=$pos_x;
+		}
+		$pdf->x = $pos_x+40;
+		$pdf->y=$pos_y;
+
+	} else {
+		$pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->divorigem,1,0,"L",0);
+	}
   
   /**
    * imprimir  destino
@@ -172,26 +193,6 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 	  $pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->destino,1,0,"L",0);
 	}
 
-	/**
-   * imprimir  divorigem
-   */
-  if (strlen($oDivisaoSituacao->divorigem) > 27) {
-	  
-	  $pos_x = $pdf->x;
-	  $pos_y = $pdf->y;
-	  $pdf->Cell(40,$tam*$alt_novo,"",1,0,"L",0);
-	  $pdf->x = $pos_x;
-	  $pdf->y = $pos_y;
-	  foreach ($aDivorigem as $oDivorigem) {
-	    $pdf->cell(40,($tam),$oDivorigem,0,1,"L",0);
-	  	$pdf->x=$pos_x;	
-	  }
-	  $pdf->x = $pos_x+40;
-	  $pdf->y=$pos_y;
-	    
-	} else {
-	  $pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->divorigem,1,0,"L",0);
-	}
   
   /**
    * imprimir  divdestino
