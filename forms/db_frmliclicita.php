@@ -843,7 +843,8 @@ function js_ProcCod_l20_codtipocom(proc,res) {
 				document.getElementById("l20_numeroconvidado").readOnly=true;
 				
 			  }
-		if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102){
+
+		if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
 
 			document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
 			document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
@@ -960,7 +961,7 @@ function js_ProcCod_l20_codtipocom(proc,res) {
 	 
 	 var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
 	    campo=campo.replace(" ", "");
-	    if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102){
+	    if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
 		    document.getElementById("l20_veicdivulgacao").disabled=false;
 			document.getElementById("l20_dtpubratificacao").disabled=false;
 			document.getElementById("l20_justificativa").disabled=false;
