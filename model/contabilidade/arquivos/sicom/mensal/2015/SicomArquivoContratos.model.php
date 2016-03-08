@@ -789,12 +789,35 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
       
       $clcontratos40 = new cl_contratos402015();
       $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
+
+        $aAnoContrato = explode("-", $oDados40->si172_dataassinatura);
+
+        if ($aAnoContrato[0] > 2013) {
+            $sSql  = "select  (CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END) as codunidadesub
+   from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
+         and db01_anousu = o41_anousu
+         JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                  where db01_anousu = ".$aAnoContrato[0]." and db01_coddepto =
+                  (select si172_codunidadesubresp::integer from contratos where si172_sequencial = {$oDados40->si172_sequencial})";
+            $result = db_query($sSql);//db_criatabela($result);echo $sSql;echo pg_last_error();
+            $sCodUnidadeSub = db_utils::fieldsMemory($result, 0)->codunidadesub;
+        } else {
+            $sCodUnidadeSub = ' ';
+        }
       
       $clcontratos40->si91_tiporegistro                   = 40;
       $clcontratos40->si91_codorgao                       = $sCodorgao;
-      $clcontratos40->si91_codunidadesub                  = " ";
+      $clcontratos40->si91_codunidadesub                  = $sCodUnidadeSub;
       $clcontratos40->si91_nrocontrato                    = $oDados40->si172_nrocontrato;
-      $clcontratos40->si91_dtassinaturacontoriginal       = $oDados40->si176_dataassinaturacontoriginal;
+      $clcontratos40->si91_dtassinaturacontoriginal       = $oDados40->si172_dataassinatura;
       $clcontratos40->si91_datarescisao                   = $oDados40->si1176_datarescisao;
       $clcontratos40->si91_valorcancelamentocontrato      = $oDados40->si176_valorcancelamentocontrato;
       $clcontratos40->si91_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];

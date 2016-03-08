@@ -245,7 +245,7 @@ class GerarCONTRATOS extends GerarAM {
         
         $aCSVCONTRATOS40['si91_tiporegistro']                  =  str_pad($aCONTRATOS40['si91_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVCONTRATOS40['si91_codorgao']                      =  str_pad($aCONTRATOS40['si91_codorgao'], 2, "0", STR_PAD_LEFT);
-        $aCSVCONTRATOS40['si91_codunidadesub']                 =  $aCONTRATOS40['si91_codunidadesub'] == ' ' ? ' ' : str_pad($aCONTRATOS40['si91_codunidadesub'], 8, "0", STR_PAD_LEFT);
+        $aCSVCONTRATOS40['si91_codunidadesub']                 =  $aCONTRATOS40['si91_codunidadesub'] == ' ' ? ' ' : str_pad($aCONTRATOS40['si91_codunidadesub'], (strlen($aCONTRATOS40['si91_codunidadesub']) <= 5 ? 5 : 8), "0", STR_PAD_LEFT);
         $aCSVCONTRATOS40['si91_nrocontrato']                   =  substr($aCONTRATOS40['si91_nrocontrato'], 0, 14);
         $aCSVCONTRATOS40['si91_dtassinaturacontoriginal']      =  implode("", array_reverse(explode("-", $aCONTRATOS40['si91_dtassinaturacontoriginal'])));
         $aCSVCONTRATOS40['si91_datarescisao']                  =  implode("", array_reverse(explode("-", $aCONTRATOS40['si91_datarescisao'])));
