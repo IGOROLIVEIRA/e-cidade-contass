@@ -19,6 +19,7 @@ class cl_flpgo102013 {
     var $si195_sequencial = 0;
     var $si195_tiporegistro = 0;
     var $si195_numcpf = 0;
+    var $si195_codreduzidopessoa = 0;
     var $si195_regime = null;
     var $si195_indtipopagamento = null;
     var $si195_indsituacaoservidorpensionista = null;
@@ -52,7 +53,8 @@ class cl_flpgo102013 {
     var $campos = "
                  si195_sequencial = int8 = si195_sequencial 
                  si195_tiporegistro = int8 = Tipo registro 
-                 si195_numcpf = int8 = Número do CPF 
+                 si195_numcpf = int8 = Número do CPF
+                 si195_codreduzidopessoa = int8 = Código identificador da pessoa
                  si195_regime = varchar(1) = Civil (C) ou Militar (M) 
                  si195_indtipopagamento = varchar(1) = Tipo de pagamento 
                  si195_indsituacaoservidorpensionista = varchar(1) = Indica a situação do servidor público 
@@ -155,6 +157,15 @@ class cl_flpgo102013 {
         }
         if($this->si195_numcpf == null ){
             $this->erro_sql = " Campo Número do CPF não informado.";
+            $this->erro_campo = "si195_numcpf";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if($this->si195_codreduzidopessoa == null ){
+            $this->erro_sql = " Campo codigo reduzido pessoa não informado.";
             $this->erro_campo = "si195_numcpf";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -342,7 +353,8 @@ class cl_flpgo102013 {
         $sql = "insert into flpgo102013(
                                        si195_sequencial 
                                       ,si195_tiporegistro 
-                                      ,si195_numcpf 
+                                      ,si195_numcpf
+                                      ,si195_codreduzidopessoa
                                       ,si195_regime 
                                       ,si195_indtipopagamento 
                                       ,si195_indsituacaoservidorpensionista 
@@ -368,6 +380,7 @@ class cl_flpgo102013 {
                                 $this->si195_sequencial 
                                ,$this->si195_tiporegistro 
                                ,'$this->si195_numcpf'
+                               ,$this->si195_codreduzidopessoa
                                ,'$this->si195_regime' 
                                ,'$this->si195_indtipopagamento' 
                                ,'$this->si195_indsituacaoservidorpensionista' 

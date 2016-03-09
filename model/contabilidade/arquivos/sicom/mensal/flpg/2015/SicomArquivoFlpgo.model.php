@@ -291,6 +291,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 				$clflpgo10                                          = new cl_flpgo102015();
 				$clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
 				$clflpgo10->si195_numcpf                            = $oDados10->si195_numcpf;
+				$clflpgo10->si195_codreduzidopessoa                 = $oDados10->rh02_regist;
 				$clflpgo10->si195_regime             		        = $oDados10->si195_regime;
 				$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
 				$clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
@@ -627,6 +628,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
 					$clflpgo11->si196_tiporegistro            = $oDados11->si196_tiporegistro;
 					$clflpgo11->si196_reg10                   = $clflpgo10->si195_sequencial;
 					$clflpgo11->si196_numcpf                  = $clflpgo10->si195_numcpf;
+					$clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidoressoa;
 					$clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
 					$clflpgo11->si196_descoutros              = $oDados11->si196_descoutros;
 					$clflpgo11->si196_natsaldodetalhe         = $oDados11->si196_natsaldodetalhe;

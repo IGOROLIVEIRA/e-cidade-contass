@@ -19,6 +19,7 @@ class cl_flpgo112014 {
   var $si196_sequencial = 0;
   var $si196_tiporegistro = 0;
   var $si196_numcpf = 0;
+  var $si196_codreduzidopessoa = 0;
   var $si196_tiporemuneracao = 0;
   var $si196_descoutros = null;
   var $si196_natsaldodetalhe = null;
@@ -26,11 +27,13 @@ class cl_flpgo112014 {
   var $si196_mes = 0;
   var $si196_inst = 0;
   var $si196_reg10 = 0;
+
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  si196_sequencial = int8 = si196_sequencial 
                  si196_tiporegistro = int8 = Tipo registro 
-                 si196_numcpf = int8 = Número do CPF 
+                 si196_numcpf = int8 = Número do CPF
+                 si196_codreduzidopessoa = int8 = Código identificador da pessoa
                  si196_tiporemuneracao = int8 = Tipo da remuneração 
                  si196_descoutros = varchar(150) = Descrição para o tipo outros 
                  si196_natsaldodetalhe = varchar(1) = Natureza do saldo remuneratório 
@@ -85,6 +88,15 @@ class cl_flpgo112014 {
     }
     if($this->si196_numcpf == null ){
       $this->erro_sql = " Campo Número do CPF não informado.";
+      $this->erro_campo = "si196_numcpf";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if($this->si196_codreduzidopessoa == null ){
+      $this->erro_sql = " Campo codigo reduzido pessoa não informado.";
       $this->erro_campo = "si196_numcpf";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -180,8 +192,9 @@ class cl_flpgo112014 {
     }
     $sql = "insert into flpgo112014(
                                        si196_sequencial 
-                                      ,si196_tiporegistro 
-                                      ,si196_numcpf 
+                                      ,si196_tiporegistro
+                                      ,si196_numcpf
+                                      ,si196_codreduzidopessoa
                                       ,si196_tiporemuneracao 
                                       ,si196_descoutros 
                                       ,si196_natsaldodetalhe 
@@ -193,7 +206,8 @@ class cl_flpgo112014 {
                 values (
                                 $this->si196_sequencial 
                                ,$this->si196_tiporegistro 
-                               ,$this->si196_numcpf 
+                               ,$this->si196_numcpf
+                               ,$this->si196_codreduzidopessoa
                                ,$this->si196_tiporemuneracao 
                                ,'$this->si196_descoutros' 
                                ,'$this->si196_natsaldodetalhe' 
