@@ -93,6 +93,7 @@ $clbases->rotulo->label("r08_descr");
         echo '<div class="container">';
         echo '  <fieldset>';
         echo '    <legend>Resultado da Pesquisa</legend>';
+          echo $sql;
           db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
         echo '  </fieldset>';
         echo '</div>';
