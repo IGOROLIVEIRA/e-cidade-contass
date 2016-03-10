@@ -411,6 +411,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				             when c71_coddoc in (100) then 1
 				             when c71_coddoc in (140) then 5
 				             when c71_coddoc in (121,131,141,152,153,162,163,6,36,38,101) then 10
+				             when c71_coddoc in (130) then 12
 				             else 10 
 				         end as tipoentrsaida,
 				        case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50) 
@@ -418,7 +419,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				        end as descrmovimentacao,
 				        c69_valor as valorEntrsaida,
 				        case when c71_coddoc = 140 then c69_credito else null end as codctbtransf,
-				        case when c71_coddoc = 140 then o15_codtri else null end as codfontectbtransf,c71_coddoc,substr(o57_fonte,1,2) as dedu
+				        case when c71_coddoc = 140 then o15_codtri else null end as codfontectbtransf,c71_coddoc,substr(o57_fonte,1,2) as dedu,
+				        case when c72_complem ilike 'Referente%' and c71_coddoc = 5 then 1 else 0 end as retencao
 				        from conlancamval
 				        join conlancamdoc on c71_codlan = c69_codlan
 				   left join conlancamrec on c74_codlan = c69_codlan
@@ -446,7 +448,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				             join conplanoreduz on c60_codcon = c61_codcon and c61_anousu = c60_anousu 
 				             where c60_codsis = 5 and c60_anousu = ".db_getsession("DB_anousu")." and c61_reduz = c69_debito) > 0 then 11 
 				             when c71_coddoc in (121,131,141,152,153,162,163,6,36,38,101) then 8
-				             when c71_coddoc in (5,35,37) then 8 
+				             when c71_coddoc in (5,35,37,161) then 8
+				             when c71_coddoc in (120) then 13
 				             else 10 
 				         end as tipoentrsaida,
 				        case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50) 
@@ -454,7 +457,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				        end as descrmovimentacao,
 				        c69_valor as valorEntrsaida,
 				        case when c71_coddoc = 140 then c69_debito else null end as codctbtransf,
-				        case when c71_coddoc = 140 then o15_codtri else null end as codfontectbtransf,c71_coddoc,substr(o57_fonte,1,2) as dedu
+				        case when c71_coddoc = 140 then o15_codtri else null end as codfontectbtransf,c71_coddoc,substr(o57_fonte,1,2) as dedu,
+				        case when c72_complem ilike 'Referente%' and c71_coddoc = 5 then 1 else 0 end as retencao
 				        from conlancamval
 				        join conlancamdoc on c71_codlan = c69_codlan
 				   left join conlancamrec on c74_codlan = c69_codlan
@@ -540,7 +544,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 			    	/**
 			    	 * quando o codctb for igual codctbtransf, será agrupado a movimentação no tipoentrsaida 99 
 			    	 */
-			    	$sHash .= (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) ? '99' : $oMovi->tipoentrsaida);
+			    	$sHash .= (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8) ? '99' : $oMovi->tipoentrsaida);
 			    	$sHash .= ( (($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9) 
 			    	            && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0);
 			    	$sHash .= ( (($oMovi->tipoentrsaida == 5 || $oMovi->tipoentrsaida == 6 || $oMovi->tipoentrsaida == 7 || $oMovi->tipoentrsaida == 9) 
@@ -556,7 +560,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				    		  $oDadosMovi21->si97_codfontrecursos      = $oCtb20->si96_codfontrecursos;
 				    		  $oDadosMovi21->si97_codreduzidomov       = $oMovi->codreduzido ."0". $oMovi->tipomovimentacao;
 				    		  $oDadosMovi21->si97_tipomovimentacao     = $oMovi->tipomovimentacao;
-				    		  $oDadosMovi21->si97_tipoentrsaida        = (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta)) ? '99' : $oMovi->tipoentrsaida;
+				    		  $oDadosMovi21->si97_tipoentrsaida        = (($iCodSis == 5) || ($oCtb20->si96_codctb == $conta) || ($oMovi->retencao == 1 && $oMovi->tipoentrsaida == 8)) ? '99' : $oMovi->tipoentrsaida;
 				    		  $oDadosMovi21->si97_valorentrsaida       = $nValor;
 				    		  $oDadosMovi21->si97_codctbtransf  	     = (($oDadosMovi21->si97_tipoentrsaida == 5 || $oDadosMovi21->si97_tipoentrsaida == 6 || $oDadosMovi21->si97_tipoentrsaida == 7 || $oDadosMovi21->si97_tipoentrsaida == 9) 
 				    		                                              && ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
