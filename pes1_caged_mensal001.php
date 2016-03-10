@@ -147,8 +147,14 @@ if(isset($gerar)){
                                                 null,
                                                 " distinct * ",
                                                 " rh01_admiss, rh05_recis ",
-                                                " 
-                                                 rh30_regime = 2
+                                                "
+                                                rh30_regime = 2
+                                                AND ((
+                                                        DATE_PART('YEAR',rh05_recis)= ".$anousu."
+                                                    and DATE_PART('MONTH',rh05_recis)=" .$mesusu.")
+                                                    or (DATE_PART('YEAR',rh01_admiss)= ".$anousu."
+                                                    and DATE_PART('MONTH',rh01_admiss)=" .$mesusu.")
+                                                )
                                                 ");
 
       $result_dad = $clrhpessoal->sql_record($sql_dad);
