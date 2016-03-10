@@ -42,6 +42,7 @@ require_once("classes/db_cgmendereco_classe.php");
 require_once("classes/db_db_cepmunic_classe.php");
 require_once("classes/db_cgmdocumento_classe.php");
 require_once("classes/db_ruascep_classe.php");
+require_once("classes/db_cgmtipoempresa_classe.php");
 
 
 db_postmemory($HTTP_POST_VARS);
@@ -54,6 +55,7 @@ $cldb_cgmcpf    = new cl_db_cgmcpf();
 $cldb_cgmcgc    = new cl_db_cgmcgc();
 $clcgmdocumento = new cl_cgmdocumento();
 $clcgmendereco  = new cl_cgmendereco();
+$clcgmtipoempresa  = new cl_cgmtipoempresa();
 
 $db_opcao = 3;
 $db_botao = false;
@@ -126,6 +128,16 @@ if (isset ($HTTP_POST_VARS ["db_opcao"]) && $HTTP_POST_VARS ["db_opcao"] == "Exc
 	}
 	
 	$sDocWhere = "z06_numcgm=" . $z01_numcgm;
+
+	if (!$lSqlErro) {
+
+		$clcgmtipoempresa->excluir(''," z03_numcgm = $z01_numcgm");
+		$sMsgErro = $clcgmtipoempresa->erro_msg;
+		if ($clcgmtipoempresa->erro_status == 0) {
+			$lSqlErro = true;
+		}
+	}
+
 
   if (!$lSqlErro) {
     
