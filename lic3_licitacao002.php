@@ -147,7 +147,7 @@ if (!empty($oProcessoProtocolo)) {
     </tr>
      <tr>
       <td nowrap="nowrap" title="<?=@$Tl20_datacria?>">
-        <b><?=@$Ll20_datacria?></b>
+        <b>Data de Abertura do Processo licitatório:</b>
       </td>
       <td  nowrap="nowrap" class="valor" style="text-align: left;">
         <?php echo implode("/", array_reverse(explode("-", $oLicitatacao->l20_datacria))); ?>
@@ -161,7 +161,7 @@ if (!empty($oProcessoProtocolo)) {
     </tr>
     <tr>
       <td nowrap="nowrap" title="<?=@$Tl20_dataaber?>">
-       <b><?=@$Ll20_dataaber?></b>
+       <b>Data Emissao Edital/Convite:</b>
       </td>
       <td  nowrap="nowrap" class="valor" style="text-align: left;">
         <?php echo implode("/", array_reverse(explode("-", $oLicitatacao->l20_dataaber))); ?>
@@ -175,10 +175,10 @@ if (!empty($oProcessoProtocolo)) {
     </tr>
     <tr>
       <td nowrap="nowrap" >
-        <b>Data Situação:</b>
+        <b><?=@$Ll20_recdocumentacao?></b>
       </td>
       <td nowrap="nowrap" class="valor" style="text-align: left;">
-        <?php echo $dtSituacao; ?>
+        <?php echo implode("/", array_reverse(explode("-", $oLicitatacao->l20_recdocumentacao))); ?>
       </td>
       <td nowrap="nowrap" style="text-align: left;" title="<?=@$Tl20_dtpublic?>">
         <b><?=@$Ll20_dtpublic?></b>
@@ -301,6 +301,9 @@ if (!empty($oProcessoProtocolo)) {
   
   $oVerticalTab->add('dadosComissao', 'Fornecedores Habilitados',
       "lic3_fornhabilitados.php?{$sGetUrl}");
+
+  $oVerticalTab->add('dadosDispensaInexigibilidade', 'Dispensa/Inexigibilidade',
+      "lic3_infolic004.php?{$sGetUrl}");
 
   $oVerticalTab->show();
 ?>
