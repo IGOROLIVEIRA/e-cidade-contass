@@ -314,7 +314,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN pctipocompratribunal on (cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial)
 	INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
-	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
+	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo and liclicitasituacao.l11_licsituacao in (1,10)
 	WHERE db_config.codigo= " .db_getsession("DB_instit")." 
 	AND pctipocompratribunal.l44_sequencial in (100,101,102,103) AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
 	AND DATE_PART('YEAR',liclicitasituacao.l11_data)=".db_getsession("DB_anousu")."
