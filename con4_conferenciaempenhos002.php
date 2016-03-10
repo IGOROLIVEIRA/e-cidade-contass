@@ -116,10 +116,8 @@ $sSqlGeral = "SELECT empsicom.nroempenho,
                 INNER JOIN empecidade ON empsicom.nroempenho::integer = empecidade.nroempenho::integer
                 WHERE empenhadosicom <> vlremp
                   OR vlranuladosicom <> vlranu
-                  OR vlrliquidadosicom <> vlrliq
-                  OR vlrliquidadoanuladosicom <> vlrliqanl
-                  OR vlrpagosicom <> vlrpag
-                  OR vlrpagoanuladosicom <> vlrpaganl
+                  OR (vlrliquidadosicom - vlrliquidadoanuladosicom) <> (vlrliq - vlrliqanl)
+                  OR (vlrpagosicom - vlrpagoanuladosicom) <> (vlrpag - vlrpaganl)
                 ORDER BY nroempenho";
 //echo $sSqlGeral;
 $rsGeral = db_query($sSqlGeral) or die(pg_last_error());
