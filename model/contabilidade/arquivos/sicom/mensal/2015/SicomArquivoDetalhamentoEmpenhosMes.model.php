@@ -180,7 +180,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				       e60_numemp as numemp,
 				       case when length(cgm.z01_cgccpf) = 11 then 1 else 2 end as tipodocumento,
 				       cgm.z01_cgccpf as nrodocumento,
-				       orcunidade.o41_subunidade as subunidade 
+				       orcunidade.o41_subunidade as subunidade,
+				       homologacaoadjudica.l202_datahomologacao as datahomologacao
 				     FROM empempenho
 				     JOIN orcdotacao ON e60_coddot = o58_coddot
 				     JOIN empelemento ON e60_numemp = e64_numemp
@@ -201,7 +202,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				
 				LEFT JOIN aditivoscontratos on si174_nrocontrato = si173_codcontrato
 				LEFT JOIN rescisaocontrato on si176_nrocontrato = si173_codcontrato
-				LEFT JOIN liclicita ON ((string_to_array(e60_numerol, '/'))[1])::varchar = l20_numero::varchar 
+				LEFT JOIN liclicita ON ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_numero::varchar
 				      AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar 
 				      AND l03_codigo = l20_codtipocom
 				LEFT JOIN orcunidade on o58_anousu = orcunidade.o41_anousu and o58_orgao = orcunidade.o41_orgao and o58_unidade = orcunidade.o41_unidade
@@ -310,7 +311,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 			$oDadosEmpenho->si106_nroconvenio 				   = $oEmpenho->nroconvenio; 
 			$oDadosEmpenho->si106_dataassinaturaconvenio	   = $oEmpenho->dataassinaturaconvenio;
 			$aHomologa = explode("-", $oEmpenho->datahomologacao);
-			if(($oEmpenho->datahomologacao == null && $oDadosEmpenho->exercicioprocessolicitatorio < 2014) || $aHomologa[0] < 2014){
+			if(($oEmpenho->datahomologacao == null && $oEmpenho->exercicioprocessolicitatorio < 2014) || $aHomologa[0] < 2014){
 				$oDadosEmpenho->si106_despdeclicitacao             = 1;
 				$oDadosEmpenho->si106_codunidadesubresplicit       = null;
 				$oDadosEmpenho->si106_nroprocessolicitatorio       = null;
