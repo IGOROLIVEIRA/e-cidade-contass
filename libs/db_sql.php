@@ -1691,7 +1691,7 @@ class cl_gera_sql_folha {
   // A VARI�VEL where ser�: rh05_seqpes is null... Mas o where do SQL ser�:
   // where rh02_anousu = 2005 and rh02_mesusu = 11 and rh02_regist = 2870 and rh05_seqpes is null
 
-  function gerador_sql($sigla,$ano=null,$mes=null,$regist=null,$rubric=null,$campos=" * ",$order="",$where="",$instit=null, $sWhereSup = '',$iVinc){
+  function gerador_sql($sigla,$ano=null,$mes=null,$regist=null,$rubric=null,$campos=" * ",$order="",$where="",$instit=null, $sWhereSup = '',$iVinc=0){
     if($sigla == 'r14'){
       $arquivo = ' gerfsal';
       $iTipoFolha = 1;
@@ -2154,7 +2154,7 @@ class cl_gera_sql_folha {
       $sql.= "                     and padroes.r02_regime = rhpespadrao.rh03_regime ";
       $sql.= "                     and padroes.r02_codigo = rhpespadrao.rh03_padrao ";
       $sql.= "                     and padroes.r02_instit = ".db_getsession("DB_instit")." ";
-     /* if(empty($iVinc)) {
+      if($iVinc != 0) {
         $sql.= "                     
 		left join  rhlotaexe on rhlotaexe.rh26_anousu =
  rhpessoalmov.rh02_anousu
@@ -2166,7 +2166,7 @@ rhpessoalmov.rh02_anousu
                                          and rhlotavinc.rh25_vinculo = 
 rhregime.rh30_vinculo
 	";
-      }*/
+      }
     }
     if($this->usar_ins == true){
       $inner = " inner join ";
@@ -2250,7 +2250,6 @@ rhregime.rh30_vinculo
     if(trim($order) != ""){
       $sql.= " order by ".$order;
     }
-
     return $sql;
   }
 

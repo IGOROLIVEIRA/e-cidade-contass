@@ -357,7 +357,7 @@ if(isset($incluir)) {
           rh44_conta||rh44_dvconta as rh44_conta,
           rh02_fpagto,
           r70_estrut
-            ","","","",""
+            ","","","","1"
             );
       $grsubsql .= $DBwher." 
         group by regist,
