@@ -101,7 +101,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
    
     
-    $sSql  = "SELECT e94_codanu, e94_data, e94_motivo, e94_empanuladotipo, e94_numemp, e94_valor, e60_codemp, e60_emiss, 
+    /*$sSql  = "SELECT e94_codanu, e94_data, e94_motivo, e94_empanuladotipo, e94_numemp, e94_valor, e60_codemp, e60_emiss,
                 case when o40_codtri::int = 0 then o40_orgao::int else o40_codtri::int end as o58_orgao , 
                 case when o41_codtri::int = 0 then o41_unidade::int else o41_codtri::int end as o58_unidade,
 				o15_codtri,si09_codorgaotce,o41_subunidade as subunidade,
@@ -118,8 +118,29 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
 					left join  infocomplementaresinstit on o58_instit = si09_instit
 				where e94_data >= '".$this->sDataInicial."' and e94_data <= '".$this->sDataFinal."' and e60_anousu = ".db_getsession("DB_anousu")." 
 				and o58_anousu = ".db_getsession("DB_anousu")." 
-				and o58_instit = ".db_getsession("DB_instit"); 
-   
+				and o58_instit = ".db_getsession("DB_instit");*/
+
+    $sSql = "SELECT c70_codlan, c70_data, c72_complem, 1 as tipoanulacao, e60_numemp, c70_valor, e60_codemp, e60_emiss,
+                case when o40_codtri::int = 0 then o40_orgao::int else o40_codtri::int end as o58_orgao ,
+                case when o41_codtri::int = 0 then o41_unidade::int else o41_codtri::int end as o58_unidade,
+				o15_codtri,si09_codorgaotce,o41_subunidade as subunidade,
+				lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub
+				from conlancam
+                                        join conlancamcompl on c70_codlan = c72_codlan
+                                        join conlancamemp on c75_codlan = c70_codlan
+                                        join conlancamdoc on c70_codlan = c71_codlan and c71_coddoc in (2,411)
+					join empempenho on c75_numemp = e60_numemp
+					join orcdotacao on o58_coddot = e60_coddot
+					join orcorgao on o58_anousu = o40_anousu and o40_orgao = o58_orgao
+					join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
+					join orctiporec on o58_codigo = o15_codigo
+					join emptipo on e60_codtipo = e41_codtipo
+					left join  infocomplementaresinstit on o58_instit = si09_instit
+				where c70_data >= '".$this->sDataInicial."' and c70_data <= '".$this->sDataFinal."' and e60_anousu = ".db_getsession("DB_anousu")."
+				and o58_anousu = ".db_getsession("DB_anousu")."
+				and o58_instit = ".db_getsession("DB_instit");
     $rsEmpenhoAnulados = db_query($sSql);
     
     //db_criatabela($rsEmpenhoAnulados);exit;
@@ -153,14 +174,6 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
     	$oEmpenhoAnulado = db_utils::fieldsMemory($rsEmpenhoAnulados, $iCont);
     	
     	
-    	
-    	if ($oEmpenhoAnulado->e94_empanuladotipo == 1) {
-    		$sTipoAnulacao = 2;
-    	} else {
-    		$sTipoAnulacao = 1;
-    	}
-    	
-    	
     if ($sTrataCodUnidade == 2) {
       		
 	            $sCodUnidade  = str_pad($oEmpenhoAnulado->o58_orgao, 3, "0", STR_PAD_LEFT);
@@ -184,11 +197,11 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
     	$oDadosEmpenhoAnulado->si110_codunidadesub         = $sCodUnidade;
 	    $oDadosEmpenhoAnulado->si110_nroempenho            = substr($oEmpenhoAnulado->e60_codemp, 0, 22);
 	    $oDadosEmpenhoAnulado->si110_dtempenho             = $oEmpenhoAnulado->e60_emiss;
-	    $oDadosEmpenhoAnulado->si110_dtanulacao	           = $oEmpenhoAnulado->e94_data;
-	    $oDadosEmpenhoAnulado->si110_nroanulacao           = $oEmpenhoAnulado->e94_codanu;
-	    $oDadosEmpenhoAnulado->si110_tipoanulacao          = $sTipoAnulacao;
-	    $oDadosEmpenhoAnulado->si110_especanulacaoempenho  = utf8_decode(substr($oEmpenhoAnulado->e94_motivo, 0, 200));
-	    $oDadosEmpenhoAnulado->si110_vlanulacao            = $oEmpenhoAnulado->e94_valor;
+	    $oDadosEmpenhoAnulado->si110_dtanulacao	           = $oEmpenhoAnulado->c70_data;
+	    $oDadosEmpenhoAnulado->si110_nroanulacao           = $oEmpenhoAnulado->c70_codlan;
+	    $oDadosEmpenhoAnulado->si110_tipoanulacao          = $oEmpenhoAnulado->tipoanulacao;
+	    $oDadosEmpenhoAnulado->si110_especanulacaoempenho  = utf8_decode(substr($oEmpenhoAnulado->c72_complem, 0, 200));
+	    $oDadosEmpenhoAnulado->si110_vlanulacao            = $oEmpenhoAnulado->c70_valor;
 	    $oDadosEmpenhoAnulado->si110_mes      	           = $this->sDataFinal['5'].$this->sDataFinal['6'];
 	    $oDadosEmpenhoAnulado->si110_instit 			   = db_getsession("DB_instit");
 	    
@@ -207,9 +220,9 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
 	    $oDadosEmpenhoAnuladoFonte->si111_tiporegistro     = 11;
 	    $oDadosEmpenhoAnuladoFonte->si111_codunidadesub    = $sCodUnidade;
 	    $oDadosEmpenhoAnuladoFonte->si111_nroempenho       = substr($oEmpenhoAnulado->e60_codemp, 0, 22);
-	    $oDadosEmpenhoAnuladoFonte->si111_nroanulacao      = substr($oEmpenhoAnulado->e94_codanu, 0, 9);
+	    $oDadosEmpenhoAnuladoFonte->si111_nroanulacao      = substr($oEmpenhoAnulado->c70_codlan, 0, 9);
 	    $oDadosEmpenhoAnuladoFonte->si111_codfontrecursos  = substr($oEmpenhoAnulado->o15_codtri, 0, 3);
-	    $oDadosEmpenhoAnuladoFonte->si111_vlanulacaofonte  = $oEmpenhoAnulado->e94_valor;
+	    $oDadosEmpenhoAnuladoFonte->si111_vlanulacaofonte  = $oEmpenhoAnulado->c70_valor;
 	    $oDadosEmpenhoAnuladoFonte->si111_mes      		   = $this->sDataFinal['5'].$this->sDataFinal['6'];
 	    $oDadosEmpenhoAnuladoFonte->si111_reg10            = $oDadosEmpenhoAnulado->si110_sequencial;
 	    $oDadosEmpenhoAnuladoFonte->si111_instit 			   = db_getsession("DB_instit");
