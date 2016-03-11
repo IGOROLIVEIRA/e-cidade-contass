@@ -109,6 +109,7 @@ switch ($oParam->exec) {
                                 $sSqlDeleteTables = "SELECT distinct table_name FROM information_schema.columns WHERE table_name ilike '" . strtolower($aArquivoCSV[0]) . "%" . $ano . "' order by 1 DESC";
                                 $rsSqlDeleteTables = db_query($sSqlDeleteTables);
                                 $aTables = db_utils::getColectionByRecord($rsSqlDeleteTables);
+
                                 foreach ($aTables as $oTable) {
 
                                     $sSqlSIGLA = "SELECT column_name FROM information_schema.columns WHERE table_name ='" . $oTable->table_name . "' limit 1 ";
@@ -180,7 +181,7 @@ switch ($oParam->exec) {
                             }
 
                             try {
-                                $oClxasse->incluir(null);
+                                $oClasse->incluir(null);
                                 if ($iCtrListaArquivos == 0) {
                                     $oArquivoImportado->nome = $aArquivoCSV[0];
                                     $aListaArquivos[] = $aArquivoCSV[0];
@@ -190,6 +191,7 @@ switch ($oParam->exec) {
                             } catch (Exception $e) {
                                 throw new Exception ($e->getMessage());
                                 $oRetorno->status = 2;
+                                echo $e->getMessage();
                                 $oRetorno->message = $e->getMessage();
                             }
 
