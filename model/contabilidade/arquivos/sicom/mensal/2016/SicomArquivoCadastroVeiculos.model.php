@@ -103,7 +103,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
         $result = db_query($clcvc30->sql_query(NULL, "*", NULL, "si148_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si148_instit=" . db_getsession("DB_instit")));
         if (pg_num_rows($result) > 0) {
-            $clcvc30->excluir(NULL, "s148_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si148_instit=" . db_getsession("DB_instit"));
+            $clcvc30->excluir(NULL, "si148_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si148_instit=" . db_getsession("DB_instit"));
             if ($clcvc30 > erro_status == 0) {
                 throw new Exception($clcvc30->erro_msg);
             }
@@ -116,7 +116,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 throw new Exception($clcvc40->erro_msg);
             }
         }
-
+        db_fim_transacao();
+        db_inicio_transacao();
         $sSql = "SELECT DISTINCT '10' AS tipoRegistro,
                     si09_codorgaotce  AS codOrgao,
                     CASE WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
@@ -547,8 +548,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc30->si148_codorgao = $oDados30->codorgao;
                 $clcvc30->si148_codunidadesub = $oDados30->ve01_codunidadesub != '' || $oDados30->ve01_codunidadesub != 0 ? $oDados30->ve01_codunidadesub : $oDados30->codunidadesub;
                 $clcvc30->si148_codveiculo = $oDados30->codveiculo;
-                $clcvc30->si148_nomeestabelecimento = $oDados30->nomeestabelecimento;
-                $clcvc30->si148_localidade = $oDados30->localidade;
+                $clcvc30->si148_nomeestabelecimento = $this->removeCaracteres($oDados30->nomeestabelecimento);
+                $clcvc30->si148_localidade = $this->removeCaracteres($oDados30->localidade);
                 $clcvc30->si148_qtdediasrodados = $oDados30->qtdediasrodados;
                 $clcvc30->si148_distanciaestabelecimento = $oDados30->distanciaestabelecimento;
                 $clcvc30->si148_numeropassageiros = $oDados30->numeropassageiros;
