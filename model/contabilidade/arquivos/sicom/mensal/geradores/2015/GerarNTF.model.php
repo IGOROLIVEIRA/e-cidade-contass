@@ -52,7 +52,7 @@ class GerarNTF extends GerarAM {
         $aCSVNTF10['si143_codnotafiscal']              =   substr($aNTF10['si143_codnotafiscal'], 0, 15);
         $aCSVNTF10['si143_codorgao']                   =   str_pad($aNTF10['si143_codorgao'], 2, "0", STR_PAD_LEFT);
         $aCSVNTF10['si143_nfnumero']                   =   substr($aNTF10['si143_nfnumero'], 0, 20);
-        $aCSVNTF10['si143_nfserie']                    =   substr($aNTF10['si143_nfserie'], 0, 8);
+        $aCSVNTF10['si143_nfserie']                    =   $aNTF10['si143_nfserie'] == '' || $aNTF10['si143_nfserie'] == '0' ? ' ' : substr($aNTF10['si143_nfserie'], 0, 8);
         $aCSVNTF10['si143_tipodocumento']              =   str_pad($aNTF10['si143_tipodocumento'], 1, "0", STR_PAD_LEFT);
         $aCSVNTF10['si143_nrodocumento']               =   substr($aNTF10['si143_nrodocumento'], 0, 14);
         $aCSVNTF10['si143_nroinscestadual']            =   substr($aNTF10['si143_nroinscestadual'], 0, 30);
@@ -101,10 +101,10 @@ class GerarNTF extends GerarAM {
             $aCSVNTF20['si145_tiporegistro']             =    str_pad($aNTF20['si145_tiporegistro'], 2, "0", STR_PAD_LEFT);
             
             $aCSVNTF20['si145_nfnumero']                 =    substr($aNTF20['si145_nfnumero'], 0, 20);
-            $aCSVNTF20['si145_nfserie']                  =    substr($aNTF20['si145_nfserie'], 0, 8);
+            $aCSVNTF20['si145_nfserie']                  =    substr($aNTF20['si145_nfserie'] , 0, 8) == '0' ? ' ' : substr($aNTF20['si145_nfserie'] , 0, 8) ;
             $aCSVNTF20['si145_tipodocumento']            =    $aNTF20['si145_tipodocumento'];
             $aCSVNTF20['si145_nrodocumento']             =   substr($aNTF20['si145_nrodocumento'], 0, 14);
-            $aCSVNTF20['si145_chaveacesso']              =   $aNTF20['si145_chaveacesso'] == 0 ? ' ' : $aNTF10['si145_chaveacesso'];
+            $aCSVNTF20['si145_chaveacesso']              =   $aNTF20['si145_chaveacesso'] == 0 ? ' ' : $aNTF20['si145_chaveacesso'];
             $aCSVNTF20['si145_dtemissaonf']              =   implode("", array_reverse(explode("-", $aNTF20['si145_dtemissaonf'])));
             
             $aCSVNTF20['si145_codunidadesub']            =    $aNTF20['si145_codunidadesub'];

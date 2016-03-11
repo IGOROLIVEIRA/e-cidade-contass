@@ -52,7 +52,7 @@ class GerarNTF extends GerarAM {
         $aCSVNTF10['si143_codnotafiscal']              =   substr($aNTF10['si143_codnotafiscal'], 0, 15);
         $aCSVNTF10['si143_codorgao']                   =   str_pad($aNTF10['si143_codorgao'], 2, "0", STR_PAD_LEFT);
         $aCSVNTF10['si143_nfnumero']                   =   substr($aNTF10['si143_nfnumero'], 0, 20);
-        $aCSVNTF10['si143_nfserie']                    =   $aNTF10['si143_nfserie'] == '' || $aNTF10['si143_nfserie'] == 0 ? ' ' : substr($aNTF10['si143_nfserie'], 0, 8);
+        $aCSVNTF10['si143_nfserie']                    =   $aNTF10['si143_nfserie'] == '' || $aNTF10['si143_nfserie'] == '0' ? ' ' : substr($aNTF10['si143_nfserie'], 0, 8);
         $aCSVNTF10['si143_tipodocumento']              =   str_pad($aNTF10['si143_tipodocumento'], 1, "0", STR_PAD_LEFT);
         $aCSVNTF10['si143_nrodocumento']               =   substr($aNTF10['si143_nrodocumento'], 0, 14);
         $aCSVNTF10['si143_nroinscestadual']            =   substr($aNTF10['si143_nroinscestadual'], 0, 30);
