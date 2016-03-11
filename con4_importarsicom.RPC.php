@@ -109,7 +109,6 @@ switch ($oParam->exec) {
                                 $sSqlDeleteTables = "SELECT distinct table_name FROM information_schema.columns WHERE table_name ilike '" . strtolower($aArquivoCSV[0]) . "%" . $ano . "' order by 1 DESC";
                                 $rsSqlDeleteTables = db_query($sSqlDeleteTables);
                                 $aTables = db_utils::getColectionByRecord($rsSqlDeleteTables);
-
                                 foreach ($aTables as $oTable) {
 
                                     $sSqlSIGLA = "SELECT column_name FROM information_schema.columns WHERE table_name ='" . $oTable->table_name . "' limit 1 ";
@@ -166,11 +165,11 @@ switch ($oParam->exec) {
                                         $oClasse->$sColuna = null;
                                         $c++;
                                     } elseif ($tipoCampo[0] == 'date') {
-                                        if ($data[$c] != " ") {
-                                            $oClasse->$sColuna = substr($data[$c], -4) . '-' . substr($data[$c], 2, -4) . '-' . substr($data[$c], 0, 2);
+                                        if ($data[$c] == " " || $data[$c] == "" || empty($data[$c]) ) {
+                                            $oClasse->$sColuna = null;
                                             $c++;
                                         } else {
-                                            $oClasse->$sColuna = null;
+                                            $oClasse->$sColuna = substr($data[$c], -4) . '-' . substr($data[$c], 2, -4) . '-' . substr($data[$c], 0, 2);
                                             $c++;
                                         }
                                     } else {
@@ -181,7 +180,7 @@ switch ($oParam->exec) {
                             }
 
                             try {
-                                $oClasse->incluir(null);
+                                $oClxasse->incluir(null);
                                 if ($iCtrListaArquivos == 0) {
                                     $oArquivoImportado->nome = $aArquivoCSV[0];
                                     $aListaArquivos[] = $aArquivoCSV[0];
