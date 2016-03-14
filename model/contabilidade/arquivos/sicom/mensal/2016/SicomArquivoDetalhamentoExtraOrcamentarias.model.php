@@ -327,7 +327,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                     $cExt20->si165_vlsaldoanteriorfonte = $saldoanterior;
                     $cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte == '' ? 'D' : $natsaldoanteriorfonte;
                     $cExt20->si165_vlsaldoatualfonte = $saldofinal;
-                    $cExt20->si165_natsaldoatualfonte = $natsaldoatualfonte == '' ? 'D' : $natsaldoatualfonte;
+                    $cExt20->si165_natsaldoatualfonte = $natsaldoatualfonte == '' || $saldofinal == 0 ? 'C' : $natsaldoatualfonte;
                     $cExt20->si165_totaldebitos = $saldodebito;
                     $cExt20->si165_totalcreditos = $saldocredito;
                     $cExt20->si165_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -362,7 +362,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 						left join infocomplementaresinstit on k17_instit = si09_instit
 						 where c71_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
 						   and k17_debito = {$nExtras} and k17_situacao = 2
-						   and c71_coddoc in (151,161);
+						   and c71_coddoc in (151,161,120);
 						
 						";
 
@@ -406,7 +406,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 									left join cgm c on c.z01_numcgm = si09_gestor
 									 where c71_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
 									   and slip.k17_codigo = {$oExt30Geral->codigo} and slip.k17_situacao = 2
-									   and c71_coddoc in (120,151,161,130,160) ";
+									   and c71_coddoc in (120,151,161) ";
 
 
                     $rsExt30 = db_query($sSql30);
