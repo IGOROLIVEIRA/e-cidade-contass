@@ -291,6 +291,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_13,
                 );
             }
+            //print_r($aTiposPagamento);exit;
             for ($iContEx = 1; $iContEx <= $iQuantTipoPagamento; $iContEx++) {
 
                 $clflpgo10                                          = new cl_flpgo102013();
@@ -325,7 +326,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     throw new Exception($clflpgo10->erro_msg);
                 }
 
-
+                //print_r($clflpgo10);
                 $sSql2 = "  SELECT rh02_regist,
        '11' AS si196_tiporegistro,
        CASE
@@ -620,7 +621,8 @@ AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r20_pd = 1)
   AND r08_codigo BETWEEN 'S001' AND 'S014' ";
-
+                //echo '<pre>';
+                //print_r($clflpgo10);
                 $rsResult11 = db_query($sSql2);
                 //$sSql2
                 //db_criatabela($rsResult11);
@@ -633,13 +635,15 @@ WHERE rh02_regist = $oDados10->rh02_regist
                     $clflpgo11->si196_tiporegistro            = $oDados11->si196_tiporegistro;
                     $clflpgo11->si196_reg10                   = $clflpgo10->si195_sequencial;
                     $clflpgo11->si196_numcpf                  = $clflpgo10->si195_numcpf;
-                    $clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidoressoa;
+                    $clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
                     $clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
                     $clflpgo11->si196_descoutros              = $oDados11->si196_descoutros;
                     $clflpgo11->si196_natsaldodetalhe         = $oDados11->si196_natsaldodetalhe;
                     $clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
                     $clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clflpgo11->si196_inst                    = db_getsession("DB_instit");
+                    //echo '<pre>';
+                    //print_r($clflpgo11);exit;
                     $clflpgo11->incluir(null);
 
                     if ($clflpgo11->erro_status == 0) {
