@@ -246,6 +246,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 if($oDados10->si195_vlrremuneracaobruta_mensal != 0){
                     $aTiposPagamento[$iQuantTipoPagamento] = array(
                         'Matricula'=>$oDados10->rh02_regist,
+                        'codreduzidopessoa'=>$oDados10->rh02_regist.'1',
                         'si195_indtipopagamento'=>'M',
                         'si195_natsaldobruto'=>$oDados10->si195_natsaldobruto_mensal,
                         'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_mensal,
@@ -256,6 +257,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 if($oDados10->si195_vlrremuneracaobruta_res != 0){
                     $aTiposPagamento[$iQuantTipoPagamento] = array(
                         'Matricula'=>$oDados10->rh02_regist,
+                        'codreduzidopessoa'=>$oDados10->rh02_regist.'1',
                         'si195_indtipopagamento'=>'M',
                         'si195_natsaldobruto'=>$oDados10->si195_natsaldobruto_res,
                         'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_res,
@@ -268,6 +270,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $iQuantTipoPagamento++;
                 $aTiposPagamento[$iQuantTipoPagamento] = array(
                     'Matricula'=>$oDados10->rh02_regist,
+                    'codreduzidopessoa'=>$oDados10->rh02_regist.'3',
                     'si195_indtipopagamento'=>'E',
                     'si195_natsaldobruto'=>$oDados10->si195_natsaldobruto_com,
                     'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_com,
@@ -279,6 +282,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $iQuantTipoPagamento++;
                 $aTiposPagamento[$iQuantTipoPagamento] = array(
                     'Matricula'=>$oDados10->rh02_regist,
+                    'codreduzidopessoa'=>$oDados10->rh02_regist.'2',
                     'si195_indtipopagamento'=>'D',
                     'si195_natsaldobruto'=>$oDados10->si195_natsaldobruto_13,
                     'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_13,
@@ -291,7 +295,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $clflpgo10                                          = new cl_flpgo102016();
                 $clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
                 $clflpgo10->si195_numcpf                            = $oDados10->si195_numcpf;
-                $clflpgo10->si195_codreduzidopessoa                 = $oDados10->rh02_regist;
+                $clflpgo10->si195_codreduzidopessoa                 = $aTiposPagamento[$iContEx]['codreduzidopessoa'];
                 $clflpgo10->si195_regime             		        = $oDados10->si195_regime;
                 $clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
                 $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
