@@ -19,7 +19,7 @@ $this->objpdf->sety(60);
 $this->objpdf->roundedrect(10, 58, 190, 55, 2, 'df', 1234);
 $this->objpdf->cell(50, 5, "PROCESSO Nº: ", 0, 0, 'L');
 $this->objpdf->Setfont("Times", "", 12);
-$this->objpdf->cell(20, 5, $this->p58_numeracao.'/'.substr($sNumeroProtocolo,3,7), 0, 0, 'L');
+$this->objpdf->cell(20, 5, $this->p58_numeracao.'/'.substr($sNumeroProtocolo,-4), 0, 0, 'L');
 $this->objpdf->Setfont("Times", "B", 14);
 $this->objpdf->cell(75, 5, "PROTOCOLO GERAL: ", 0, 0, 'L');
 $this->objpdf->Setfont("Times", "", 12);
