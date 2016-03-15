@@ -231,7 +231,7 @@ $pdf->AliasNbPages();
 $pdf->setfillcolor(235);
 $pdf->setfont('arial', 'b', 8);
 $troca =  1;
-$tam   = 200;
+$tam   = 190;
 $alt   =  4;
 $borda =  0;
 $total =  0;
@@ -307,7 +307,7 @@ for ($x = 0; $x < $numrows_atend; $x ++) {
 		$pdf->cell(15, $alt, 'Valor Unit.', 1, 0, "C", 1);
 		$pdf->cell(20, $alt, 'Quantidade', 1, 0, "C", 1);
 		$pdf->cell(15, $alt, 'Valor Total', 1, 0, "C", 1);
-		$pdf->cell(15, $alt, 'Média', 1, 1, "C", 1);
+		$pdf->cell(25, $alt, 'Média de Consumo', 1, 1, "C", 1);
 		$troca = 0;
 		$imp=0;
 		$p=0;
@@ -375,7 +375,7 @@ for ($x = 0; $x < $numrows_atend; $x ++) {
 	$pdf->cell(20, $alt, $m41_quant, $borda, 0, "C", $p);
 	$pdf->cell(15, $alt, db_formatar($valor_total,"f"), $borda, 0, "C", $p);
 	$media = ($m41_quant/$iMesCalc);
-	$pdf->cell(15, $alt, db_formatar($media,"f"), $borda, 1, "C", $p);
+	$pdf->cell(25, $alt, db_formatar($media,"f"), $borda, 1, "C", $p);
 	
 	$total++;
 
