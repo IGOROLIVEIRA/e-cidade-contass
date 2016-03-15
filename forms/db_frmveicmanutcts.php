@@ -78,7 +78,7 @@ $sHora = db_hora();
                                 </td>
                                 <td>
                                     <?
-                                    $x = array("2" => "CONSUMO IMEDIATO", "1" => "ESTOQUE");
+                                    $x = array("1" => "ESTOQUE", "2" => "CONSUMO IMEDIATO");
                                     db_select('ve62_origemgasto', $x, true, $db_opcao, "onchange='js_mostraEmpenho()'");
                                     ?>
                                 </td>
@@ -90,7 +90,7 @@ $sHora = db_hora();
                              * Campo incluído conforme solicitado em planilha anexa à ocorrencia.
                              */
                             ?>
-                            <tr id="empenho" <?php if(!empty($ve62_numemp)) echo "style='display: none;'"; Z?>>
+                            <tr id="empenho" <?php if(empty($ve62_numemp)) echo "style='display: none;'"; Z?>>
                                 <td nowrap title="<?= $Tve62_numemp ?>">
                                     <? db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1); ?>
 

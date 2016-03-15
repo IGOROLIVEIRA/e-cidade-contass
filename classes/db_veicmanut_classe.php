@@ -255,7 +255,7 @@ class cl_veicmanut {
        $this->erro_status = "0";
        return false;
      }
-       if($ve62_numemp == "" || $ve62_numemp == null ){
+       if($this->ve62_numemp == "" || $this->ve62_numemp == null ){
            $this->ve62_numemp = "null";
        }
      if($ve62_codigo == "" || $ve62_codigo == null ){
@@ -324,12 +324,13 @@ class cl_veicmanut {
                                ,'$this->ve62_hora' 
                                ,$this->ve62_medida 
                                ,'$this->ve62_observacao'
-                               ,".($this->ve62_origemgasto == "null" || $this->ve62_origemgasto == ""?"null":"'".$this->ve62_origemgasto."'")."
-                               ,".($this->ve62_tipogasto == "null" || $this->ve62_tipogasto == ""?"null":"'".$this->ve62_tipogasto."'")."
-                               ,".($this->ve62_atestado == "null" || $this->ve62_atestado == ""?"null":"'".$this->ve62_atestado."'")."
-                               ,".($this->ve62_numemp == "null" || $this->ve62_numemp == ""?"null":"'".$this->ve62_numemp."'")."
-                               ,".($this->ve62_valor == "null" || $this->ve62_valor == ""?"null":"'".$this->ve62_valor."'")."
+                               ,".($this->ve62_origemgasto == "null" || $this->ve62_origemgasto == ""?"null":$this->ve62_origemgasto)."
+                               ,".($this->ve62_tipogasto == "null" || $this->ve62_tipogasto == ""?"null":$this->ve62_tipogasto)."
+                               ,".($this->ve62_atestado == "null" || $this->ve62_atestado == ""?"null":$this->ve62_atestado)."
+                               ,".($this->ve62_numemp == "null" || $this->ve62_numemp == ""?"null":$this->ve62_numemp)."
+                               ,".($this->ve62_valor == "null" || $this->ve62_valor == ""?"null":$this->ve62_valor)."
                       )";
+
 
      $result = db_query($sql); 
      if($result==false){ 
