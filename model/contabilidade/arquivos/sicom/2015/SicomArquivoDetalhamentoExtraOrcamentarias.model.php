@@ -146,7 +146,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 				  where c60_anousu = ".db_getsession("DB_anousu")." and c60_codsis = 7 and c61_instit = ".db_getsession("DB_instit")."
   				  ";
   	    $rsContasExtra = db_query($sSqlExt);
-  	    //db_criatabela($rsContasExtra);
+  	    db_criatabela($rsContasExtra);
   	    $aSaldosIniFim = array();
 	    for ($iContador = 0;$iContador < pg_num_rows($rsContasExtra); $iContador++) {
 	        
