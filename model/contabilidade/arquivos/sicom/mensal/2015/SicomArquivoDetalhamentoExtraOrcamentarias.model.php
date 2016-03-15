@@ -373,23 +373,24 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 							     1 as categoria,
 							     c69_data as dtlancamento,
 							     c69_valor as vllancamento, 
-						         0 as tipo, 1 as c71_coddoc
+						         0 as tipo,
+						         1 as c71_coddoc
 						  	from conlancamval 
 						  inner join conlancamcompl on c72_codlan = c69_codlan
 						  inner join conplanoreduz on c69_credito = c61_reduz and c61_anousu = ".db_getsession("DB_anousu")."
 						  inner join orctiporec on o15_codigo  = c61_codigo
 						  inner join conlancamcorrente on c69_codlan = c86_conlancam
 						  inner join corrente on c86_id =k12_id and c86_data=k12_data and c86_autent = k12_autent
-						  inner join corgrupocorrente on c86_id =k105_id and c86_data=k105_data and c86_autent = k105_autent
-						  inner join retencaocorgrupocorrente on k105_sequencial = e47_corgrupocorrente
-						  inner join retencaoreceitas on e47_retencaoreceita = e23_sequencial and e23_ativo = 't'
+						   left join corgrupocorrente on c86_id =k105_id and c86_data=k105_data and c86_autent = k105_autent
+						   left join retencaocorgrupocorrente on k105_sequencial = e47_corgrupocorrente
+						   left join retencaoreceitas on e47_retencaoreceita = e23_sequencial
 						   left join infocomplementaresinstit on c61_instit = si09_instit 
 						       where c69_credito = {$nExtras} 
 							 and c69_data between '".$this->sDataInicial."' AND '".$this->sDataFinal."' 
 							 and (c72_complem like '%planilha%' or c72_complem like '%recibo%');
 						
 						";
-			
+					//and e23_ativo = 't'
 					$rsExt21 = db_query($sSql21);
 					//if ($oExt10Agrupado->si124_codext == 4218) db_criatabela($rsExt21);
 					
