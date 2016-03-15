@@ -216,6 +216,11 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $nValorNota = str_replace('.', '', $nValorNota);
   $nValorNota = str_replace(',', '.', $nValorNota);
 
+  $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+  $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
+  $oContaCorrenteDetalhe->setDotacao($oEmpenhoFinanceiro->getDotacao());
+  $oRecurso = new Recurso($oEmpenhoFinanceiro->getDotacao()->getRecurso());
+  $oContaCorrenteDetalhe->setRecurso($oRecurso);
   $oLancamentoAuxiliarEmLiquidacao = new LancamentoAuxiliarEmpenhoEmLiquidacaoMaterialAlmoxarifado();
   $oLancamentoAuxiliarEmLiquidacao->setGrupoMaterial(new MaterialGrupo($iCodigoGrupo));
   $oLancamentoAuxiliarEmLiquidacao->setObservacaoHistorico($oParametros->sJustificativa);
@@ -225,6 +230,7 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $oLancamentoAuxiliarEmLiquidacao->setCodigoDotacao($oEmpenhoFinanceiro->getDotacao()->getCodigo());
   $oLancamentoAuxiliarEmLiquidacao->setCodigoNotaLiquidacao($iCodigoNotaLiquidacao);
   $oLancamentoAuxiliarEmLiquidacao->setValorTotal($nValorNota);
+  $oLancamentoAuxiliarEmLiquidacao->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
   $oLancamentoAuxiliarEmLiquidacao->setSaida( ( $iCodigoDocumento == 211 ? true : false) );
 
   $oEventoContabil->executaLancamento($oLancamentoAuxiliarEmLiquidacao);
