@@ -523,13 +523,10 @@ function js_confirmar(){
 <?
 if(isset($alterar)){
   if($sqlerro == true){
-      if (trim($erro_msg) == ""){
-           $erro_msg = "Alteracao abortada";
-      }
 
-      db_msgbox($erro_msg);
+    //  db_msgbox($erro_sql);
 
-//    $clliclicita->erro(true,false);
+    $clliclicita->erro(true,false);
     $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if($clliclicita->erro_campo!=""){
