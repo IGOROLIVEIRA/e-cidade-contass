@@ -558,10 +558,10 @@ function js_mostraconhist1(chave1,chave2) {
 // conta debito
 function js_pesquisac69_debito(mostra){
   if(mostra==true){
-     js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexeDebito','func_conplanoexelanc.php?lContaCorrente=false&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&funcao_js=parent.js_mostra_debito|c62_reduz|c60_descr','Pesquisa',true);
+     js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexeDebito','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&funcao_js=parent.js_mostra_debito|c62_reduz|c60_descr','Pesquisa',true);
   }else{
      if(document.form1.c69_debito.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexeDebito','func_conplanoexelanc.php?lContaCorrente=false&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&pesquisa_chave='+document.form1.c69_debito.value+'&funcao_js=parent.js_mostra_debito2','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexeDebito','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&pesquisa_chave='+document.form1.c69_debito.value+'&funcao_js=parent.js_mostra_debito2','Pesquisa',false);
      }else{
        document.form1.c69_debito.value = '';
      }
@@ -588,10 +588,10 @@ function js_mostra_debito2(chave1,erro,chave2,chave3){
 // inicio credito
 function js_pesquisac69_credito(mostra){
   if(mostra==true){
-     js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexe','func_conplanoexelanc.php?lContaCorrente=false&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&funcao_js=parent.js_mostra_credito|c62_reduz|c60_descr','Pesquisa',true);
+     js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexe','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&funcao_js=parent.js_mostra_credito|c62_reduz|c60_descr','Pesquisa',true);
   }else{
      if(document.form1.c69_credito.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexe','func_conplanoexelanc.php?lContaCorrente=false&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&pesquisa_chave='+document.form1.c69_credito.value+'&funcao_js=parent.js_mostra_credito2','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexe','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&pesquisa_chave='+document.form1.c69_credito.value+'&funcao_js=parent.js_mostra_credito2','Pesquisa',false);
      }else{
        document.form1.c69_credito.value = '';
      }
