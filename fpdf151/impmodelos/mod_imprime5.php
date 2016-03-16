@@ -688,8 +688,23 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 }
 
             }
+            if($pagina == 1) {
+                //DESCRIÇÃO DO ITEM
+                $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 2000));
+                if(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem)) > 2000){
+                    $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 2000, 3000));
+                }
 
-            $descricaoitem = pg_result($this->recorddositens, $ii, $this->descricaoitem);
+            }else{
+                //DESCRIÇÃO DO ITEM PARA PRÓXIMAS PÁGINAS
+                if(!isset($descricaoitemcontinuacao)){
+                    $descricaoitem = $descricaoitemcontinuacao;
+                    $descricaoitem .= ' '.preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 5000));
+                }else {
+                    $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 5000));
+                }
+
+            }
 
             if ($this->informa_adic == "PC") {
                 if (pg_result($this->recorddositens, $ii, $this->Snumero) != "") {
@@ -706,7 +721,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 $descricaoitem,
                 db_formatar(pg_result($this->recorddositens, $ii, $this->valor), 'v', " ", $this->casadec),
                 db_formatar(pg_result($this->recorddositens, $ii, $this->valoritem), 'f')
-            ), 3, false, 4);
+            ), 3, false, 3);
 
             $seq_item++;
 
@@ -723,7 +738,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             $retorna_obs = 0;
         }
 
-        $seta_altura_pagina_row = $this->objpdf->h - 110;
+        $seta_altura_pagina_row = $this->objpdf->h - 80;
 
         if ($pagina != 1) {
             $seta_altura_pagina_row = $this->objpdf->h - 40;
