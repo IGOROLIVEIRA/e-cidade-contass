@@ -172,6 +172,10 @@ class cl_cvc102015 {
        $this->erro_status = "0";
        return false;
      }
+
+     if(($this->si146_tipodocumento == null) || ($this->si146_tipodocumento == "") || ($this->si146_tipodocumento == " ") ){
+         $this->si146_tipodocumento = "null";
+     }
      $sql = "insert into cvc102015(
                                        si146_sequencial 
                                       ,si146_tiporegistro 
