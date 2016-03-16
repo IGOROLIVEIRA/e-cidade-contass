@@ -223,108 +223,85 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         /*
          * Registro 20
          */
-        $sSql = "SELECT DISTINCT  * FROM (SELECT DISTINCT '20' AS tipoRegistro,
-                    si09_codorgaotce AS codOrgao,
-                    CASE WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
-                    WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
-                    WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
-                        ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
-                    veiculos.ve01_codunidadesub,
-                    1 AS origemGasto,
-                    ' ' AS codUnidadeSubEmpenho,
-                    ' ' AS nroEmpenho,
-                    ' '  AS dtEmpenho,
-                    '09' AS tipoGasto,
-                    (SELECT CASE WHEN sum(veicmanutitem.ve63_quant) IS NULL THEN 1 ELSE sum(veicmanutitem.ve63_quant) END AS quantidade
-                            FROM veiculos.veicmanut AS veicmanut
-                            INNER JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
-                            INNER JOIN veiculos.veicmanutitempcmater AS veicmanutitempcmater ON (veicmanutitem.ve63_codigo = veicmanutitempcmater.ve64_veicmanutitem)
-                            INNER JOIN compras.pcmater AS pcmater ON (veicmanutitempcmater.ve64_pcmater = pcmater.pc01_codmater)
-                            WHERE veicmanut.ve62_veiculos = veiculos.ve01_codigo
-                            AND pcmater.pc01_servico = TRUE AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") AS qtdeUtilizada,
-                (SELECT sum(veicmanut.ve62_vlrmobra) AS valorServico
-                            FROM veiculos.veicmanut AS veicmanut
-                            WHERE veicmanut.ve62_veiculos = veiculos.ve01_codigo AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") AS vlGasto,
-                    (SELECT
-                        replace(string_agg(ve62_descr, ' '), ';',',')
-                        FROM veicmanut
-                    WHERE ve62_veiculos = ve01_codigo AND ve62_vlrmobra > 0 LIMIT 1) AS dscPecasServicos,
-                    '1' AS atestadoControle,
-                    unveic.o41_subunidade AS subunidade,
-                    DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo
-                    FROM veiculos.veiculos AS veiculos
-                    INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
-                    INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
-                    INNER JOIN veicretirada ON veiculos.ve01_codigo = veicretirada.ve60_veiculo
-                    INNER JOIN configuracoes.db_depart AS db_depart ON (veicretirada.ve60_coddepto =db_depart.coddepto)
-                    INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
-                    INNER JOIN veiculos .veicmanut AS veicmanut ON (veiculos. ve01_codigo=veicmanut. ve62_veiculos)
-                    INNER JOIN  orcdotacao  ON  db_config.codigo=orcdotacao.o58_instit
-                    INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto AND db01_anousu = " . db_getsession("DB_anousu") . "
-                    INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = db01_anousu
-                    INNER JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
-                    INNER JOIN orcunidade unemp ON db01_orgao = unemp.o41_orgao AND db01_unidade = unemp.o41_unidade AND unemp.o41_anousu = db01_anousu
-                    INNER JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu AND unemp.o41_orgao = orcemp.o40_orgao
-                    LEFT JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
-                    WHERE db_config.codigo = " . db_getsession("DB_instit") . "
-                    AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                    --AND veiculos.ve01_codigo in (17,62)
-                    UNION
-
-                    SELECT DISTINCT '20' AS tipoRegistro,
-                    si09_codorgaotce AS codOrgao,
-                    CASE WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
-                    WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
-                    WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
-                        ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
-                    veiculos.ve01_codunidadesub,
-                    1 AS origemGasto,
-                    ' ' AS codUnidadeSubEmpenho,
-                    ' ' AS nroEmpenho,
-                    ' '  AS dtEmpenho,
-                    '08' AS tipoGasto,
-                    (SELECT sum(veicmanutitem.ve63_quant) AS quantidade
-                    FROM veiculos.veicmanut AS veicmanut
-                    INNER JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
-                    INNER JOIN veiculos.veicmanutitempcmater AS veicmanutitempcmater ON (veicmanutitem.ve63_codigo = veicmanutitempcmater.ve64_veicmanutitem)
-                    INNER JOIN compras.pcmater pcmater ON (veicmanutitempcmater.ve64_pcmater = pcmater.pc01_codmater)
-                    WHERE veicmanut.ve62_veiculos = veiculos.ve01_codigo
-                    AND pcmater.pc01_servico = FALSE AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") AS qtdeUtilizada,
-                    (SELECT sum(veicmanut.ve62_vlrpecas) AS valorPecas
-                    FROM veiculos.veicmanut AS veicmanut
-                    WHERE veicmanut.ve62_veiculos = veiculos.ve01_codigo AND DATE_PART('YEAR' ,veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") AS vlGasto,
-                    (SELECT
-                        replace(string_agg(ve62_descr, ' '), ';',',')
-                        FROM veicmanut
-                        WHERE ve62_veiculos = ve01_codigo AND ve62_vlrpecas > 0 LIMIT 1) AS dscPecasServicos,
-                    '1' AS atestadoControle,
-                    unveic.o41_subunidade AS subunidade,
-                    DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo
-                    FROM veiculos.veiculos AS veiculos
-                    INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
-                    INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
-                    INNER JOIN veicretirada ON veiculos.ve01_codigo = veicretirada.ve60_veiculo
-                    INNER JOIN configuracoes.db_depart AS db_depart ON (veicretirada.ve60_coddepto =db_depart.coddepto)
-                    INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
-                    INNER JOIN veiculos .veicmanut AS veicmanut ON (veiculos. ve01_codigo=veicmanut. ve62_veiculos)
-                    INNER JOIN  orcdotacao  ON  db_config.codigo=orcdotacao.o58_instit
-                    INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto AND db01_anousu = " . db_getsession("DB_anousu") . "
-                    INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = db01_anousu
-                    INNER JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
-                    INNER JOIN orcunidade unemp ON db01_orgao = unemp.o41_orgao AND db01_unidade = unemp.o41_unidade AND unemp.o41_anousu = db01_anousu
-                    INNER JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu AND unemp.o41_orgao = orcemp.o40_orgao
-                    LEFT JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
-                    WHERE db_config.codigo =" . db_getsession("DB_instit") . "
-                    AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
-                    AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                    --AND veiculos.ve01_codigo in (17,62)
+        $sSql = "SELECT DISTINCT  * FROM (
+                    SELECT DISTINCT
+                      '20' AS tipoRegistro,
+                      si09_codorgaotce AS codOrgao,
+                      CASE
+                          WHEN (unveic.o41_codtri::INT != 0
+                                AND orveic.o40_codtri::INT = 0) THEN lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_codtri,3,0)
+                          WHEN (unveic.o41_codtri::INT = 0
+                                AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
+                          WHEN (unveic.o41_codtri::INT != 0
+                                AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
+                          ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
+                      END AS codunidadesub,
+                     veiculos.ve01_codigo AS codVeiculo,
+                     ve62_origemgasto AS origemGasto,
+                     CASE
+                  WHEN (unemp.o41_codtri::INT != 0
+                      AND orcemp.o40_codtri::INT = 0) THEN lpad(o58_orgao,2,0)||lpad(unemp.o41_codtri,3,0)
+                      WHEN (unemp.o41_codtri::INT = 0
+                      AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(o58_unidade,3,0)
+                      WHEN (unemp.o41_codtri::INT != 0
+                      AND orcemp.o40_codtri::INT != 0) THEN lpad(orcemp.o40_codtri,2,0)||lpad(unemp.o41_codtri,3,0)
+                  ELSE lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0)
+                  END AS codUnidadeSubEmpenho,
+                     e60_codemp AS nroEmpenho,
+                     e60_emiss::VARCHAR AS dtEmpenho,
+                     ve62_tipogasto::varchar AS tipoGasto,
+                     CASE WHEN sum(veicmanutitem.ve63_quant) IS NULL THEN 1 ELSE sum(veicmanutitem.ve63_quant) END AS qtdeUtilizada,
+                   sum(veicmanutitem.ve63_vlruni) AS vlGasto,
+                     ve62_descr AS dscPecasServicos,
+                     ve62_atestado::varchar AS atestadoControle,
+                     unveic.o41_subunidade AS subunidade,
+                     DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo
+                  FROM veiculos.veiculos AS veiculos
+                  INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
+                  INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
+                  INNER JOIN veicretirada ON veiculos.ve01_codigo = veicretirada.ve60_veiculo
+                  INNER JOIN configuracoes.db_depart AS db_depart ON (veicretirada.ve60_coddepto =db_depart.coddepto)
+                  INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
+                  INNER JOIN veiculos .veicmanut AS veicmanut ON (veiculos. ve01_codigo=veicmanut. ve62_veiculos)
+                  INNER JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
+                  INNER JOIN empenho.empempenho AS empempenho ON (veicmanut.ve62_numemp = empempenho.e60_numemp)
+                  INNER JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
+                                                                    AND empempenho.e60_anousu = orcdotacao.o58_anousu)
+                  INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto
+                  AND db01_anousu = " . db_getsession("DB_anousu") . "
+                  INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao
+                  AND db01_unidade = unveic.o41_unidade
+                  AND unveic.o41_anousu = db01_anousu
+                  INNER JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu
+                  AND o41_orgao = orveic.o40_orgao
+                  INNER JOIN orcunidade unemp ON orcdotacao.o58_orgao = unemp.o41_orgao
+                  AND orcdotacao.o58_unidade = unemp.o41_unidade
+                  AND unemp.o41_anousu = orcdotacao.o58_anousu
+                  INNER JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu
+                  AND unemp.o41_orgao = orcemp.o40_orgao
+                  INNER JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
+                  WHERE db_config.codigo = " . db_getsession("DB_instit") . "
+                   AND DATE_PART('YEAR',veicmanut.ve62_dtmanut) = " . db_getsession("DB_anousu") . "
+                   AND DATE_PART('MONTH',veicmanut.ve62_dtmanut) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                   GROUP BY veiculos.ve01_codigo,
+                           ve62_atestado,
+                           o58_orgao,
+                           unemp.o41_codtri,
+                           orcemp.o40_codtri,
+                           orcemp.o40_orgao,
+                           unemp.o41_unidade,
+                           unveic.o41_codtri,
+                           orveic.o40_codtri,
+                           orveic.o40_orgao,
+                           unveic.o41_unidade,
+                           si09_codorgaotce,
+                           o58_unidade,
+                           db_config.db21_tipoinstit,
+                           empempenho.e60_codemp,
+                           empempenho.e60_emiss,
+                           db_depart.coddepto,
+                           unveic.o41_subunidade,
+                           ve62_origemgasto,veicmanut.ve62_tipogasto,veicmanut.ve62_descr
                     UNION
 
                     SELECT '20' AS tipoRegistro,
