@@ -407,8 +407,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 				        $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, si96_codfontrecursos as fonte from conplanoconta 
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
 											join ctb102015 on 
-											si95_banco   = c63_banco and
-											si95_agencia::integer = c63_agencia::integer and 
+											si95_banco   = c63_banco
+											AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
@@ -417,8 +417,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, si96_codfontrecursos as fonte from conplanoconta 
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
 											join ctb102014 on 
-											si95_banco   = c63_banco and
-											si95_agencia::integer = c63_agencia::integer and 
+											si95_banco   = c63_banco
+											AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
@@ -461,8 +461,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
 											join ctb102015 on 
-											si95_banco   = c63_banco and
-											si95_agencia::integer = c63_agencia::integer and 
+											si95_banco   = c63_banco
+											AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
@@ -472,8 +472,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
 											join ctb102014 on 
-											si95_banco   = c63_banco and
-											si95_agencia::integer = c63_agencia::integer and 
+											si95_banco   = c63_banco
+											AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
@@ -840,8 +840,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 				        $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, si96_codfontrecursos as fonte from conplanoconta 
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
 											join ctb102015 on 
-											si95_banco   = c63_banco and
-											si95_agencia::integer = c63_agencia::integer and 
+											si95_banco   = c63_banco
+											AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
@@ -850,8 +850,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 				        $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, si96_codfontrecursos as fonte from conplanoconta 
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
 											join ctb102014 on 
-											si95_banco   = c63_banco and
-											si95_agencia::integer = c63_agencia::integer and 
+											si95_banco   = c63_banco
+											AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
@@ -881,8 +881,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
 											join ctb102014 on 
-											si95_banco   = c63_banco and
-											si95_agencia::integer = c63_agencia::integer and 
+											si95_banco   = c63_banco
+											AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
@@ -893,8 +893,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
 											join conlancampag on  c82_reduz = c61_reduz and c82_anousu = c61_anousu
 											join ctb102015 on 
-											si95_banco   = c63_banco and
-											si95_agencia::integer = c63_agencia::integer and 
+											si95_banco   = c63_banco
+											AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
 											si95_digitoverificadoragencia = c63_dvagencia and
 											si95_contabancaria = c63_conta::int8 and
 											si95_digitoverificadorcontabancaria = c63_dvconta and
