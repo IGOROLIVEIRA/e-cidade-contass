@@ -741,7 +741,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
         $seta_altura_pagina_row = $this->objpdf->h - 80;
 
         if ($pagina != 1) {
-            $seta_altura_pagina_row = $this->objpdf->h - 40;
+            $seta_altura_pagina_row = $this->objpdf->h - 70;
         }
 
         $obsitem = str_replace("\\n", "\n", $obsitem);
