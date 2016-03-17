@@ -97,7 +97,7 @@ db_textarea('o200_descrartigo',7,60,$Io200_descrartigo,true,'text',$db_opcao,"")
     </td>
     <td> 
       <?
-      db_input('o200_percautorizado',14,$o200_percautorizado,true,'text',$db_opcao,"")
+      db_input('o200_percautorizado',14,$Io200_percautorizado,true,'text',$db_opcao,"")
       ?>
     </td>
   </tr>
