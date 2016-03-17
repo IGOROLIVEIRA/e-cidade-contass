@@ -223,7 +223,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 
             /*
              * VERIFICA SE A CONTA EXTRA JA FOI INFORMADA EM  MES ANTERIOR
-             * SE EXITIR NAO INFORMAR NOVAMENTE
+             * SE EXISTIR NAO INFORMAR NOVAMENTE
              *
            $result = $cExt10->sql_record($cExt10->sql_query(NULL,"*",NULL,"si124_mes < ".$this->sDataFinal['5'].$this->sDataFinal['6']."
                             and si124_codext =".$oContaExtra->codext)." and si124_instit = ".db_getsession("DB_instit"));
@@ -255,13 +255,13 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                     $sSqlVerifica = "SELECT si124_sequencial FROM ext102016 WHERE si124_codorgao = '$oContaExtra->codorgao'
 		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 3) . substr($oContaExtra->subtipo, -1) . "'
 		       		AND si124_desdobrasubtipo = '" . substr($oContaExtra->desdobrasubtipo, 0, 4) . "' and si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102015 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
+                    /*$sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102015 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
 		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
 		       		AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";
                     $sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102014 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
 		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
-		       		AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";
-                    $rsResulVerifica = db_query($sSqlVerifica);
+		       		AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";*/
+                    $rsResulVerifica = db_query($sSqlVerifica);//db_criatabela($rsResulVerifica);echo $sSqlVerifica;
 
                     if (pg_num_rows($rsResulVerifica) == 0) {
                         $cExt10->si124_subtipo = db_utils::fieldsMemory(db_query("select max(si124_subtipo) as subtipo from (
@@ -338,8 +338,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 
                     $cExt20->si165_vlsaldoanteriorfonte += $saldoanterior;
                     $cExt20->si165_vlsaldoatualfonte += $saldofinal;
-                    $cExt20->si165_totaldebitos = $saldodebito;
-                    $cExt20->si165_totalcreditos = $saldocredito;
+                    $cExt20->si165_totaldebitos += $saldodebito;
+                    $cExt20->si165_totalcreditos += $saldocredito;
 
                 }
                 //echo "<pre>";print_r($cExt20);
