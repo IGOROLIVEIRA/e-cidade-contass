@@ -664,19 +664,22 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
        * selecionar informacoes registro 21
        */
 
-      $sSql = "select distinct itensaditivados.*, 
-      (itensaditivados.si175_coditem::varchar || (CASE WHEN e55_unid = 0 THEN 1 ELSE e55_unid END)::varchar) AS coditem,
-      pc01_descrmater
-       from aditivoscontratos 
-      inner join itensaditivados on si174_sequencial = si175_codaditivo
-      inner join pcmater on pc01_codmater = si175_coditem
-      LEFT JOIN contratos  on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and si174_nrocontrato = si172_nrocontrato
-      LEFT JOIN empcontratos ON si173_codcontrato = si172_sequencial 
-      LEFT JOIN empempenho ON empempenho.e60_codemp = empcontratos.si173_empenho::varchar
-      LEFT JOIN empempaut ON e60_numemp=e61_numemp
-      LEFT JOIN empautoriza ON e61_autori = e54_autori
-      LEFT JOIN empautitem ON e54_autori = e55_autori
-      LEFT JOIN matunid ON empautitem.e55_unid = matunid.m61_codmatunid
+      $sSql = "SELECT DISTINCT itensaditivados.*,pcmater.pc01_codmater,
+                (itensaditivados.si175_coditem::varchar ||
+coalesce ((select CASE WHEN e55_unid = 0 THEN 1 ELSE e55_unid END as unidade from
+ empcontratos
+ left JOIN empempenho ON empempenho.e60_codemp = empcontratos.si173_empenho::varchar
+ left JOIN empempaut ON e60_numemp=e61_numemp
+ left JOIN empautoriza ON e61_autori = e54_autori
+ left JOIN empautitem ON e54_autori = e55_autori
+ left JOIN matunid ON empautitem.e55_unid = matunid.m61_codmatunid where si173_codcontrato = si172_sequencial and e55_item=pc01_codmater limit 1),1)::varchar) AS coditem,
+                pc01_descrmater
+FROM aditivoscontratos
+INNER JOIN itensaditivados ON si174_sequencial = si175_codaditivo
+INNER JOIN pcmater ON pc01_codmater = si175_coditem
+LEFT JOIN contratos ON extract(YEAR
+                               FROM si174_dataassinaturacontoriginal) = si172_exerciciocontrato
+AND si174_nrocontrato = si172_nrocontrato
       where aditivoscontratos.si174_tipotermoaditivo::integer in (9,10,11,14)
       and si174_dataassinaturatermoaditivo <= '{$this->sDataFinal}' 
       and si174_dataassinaturatermoaditivo >= '{$this->sDataInicial}' 
