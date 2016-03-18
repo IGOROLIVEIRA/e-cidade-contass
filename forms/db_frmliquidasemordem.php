@@ -232,7 +232,7 @@ if (USE_PCASP) {
             ?>
             <th class='table_header' style='width:18px'>&nbsp;</th>
           </tr>
-          <tbody id='dados' style='height:150;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
+          <tbody id='dados' style='height:150px;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
           </tbody>
           <tfoot>
           <tr>
@@ -379,7 +379,11 @@ if (USE_PCASP) {
 <script>
 iTipoControle = <?=$iTipoControleCustos;?>;
 iControlaPit  = <?=$iControlaPit?>;
-
+function dataFormatada(date){
+    function pad(s) { return (s < 10) ? '0' + s : s; }
+    var d = new Date(date);
+    return [pad(d.getDate()+1), pad(d.getMonth()+1), d.getFullYear()].join('/');
+}
 var lUsaPCASP = <?php echo $lUsaPCASP;?>;
 
 
@@ -388,11 +392,29 @@ function js_emitir(codordem){
   jan.moveTo(0,0);
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
+  js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino','Pesquisa',true);
 }
-function js_preenchepesquisa(chave){
-  db_iframe_empempenho.hide();
-  js_consultaEmpenho(chave,<?=$operacao?>);
+function js_preenchepesquisa(chave,chave2,chave3,chave4){
+    r = true;
+    if(chave3 != "") {
+        data1 = new Date(chave3);
+        data2 = new Date(chave4);
+        dataAtual = new Date();
+        if(chave4 != ""){
+            if(data2 < dataAtual){
+                var r = confirm("Atenção! Empenho com o contrato "+chave2+" vencido em "+dataFormatada(data2)+". Deseja continuar?");
+            }
+        }else{
+            if(data1 < dataAtual){
+                var r = confirm("Atenção! Empenho com o contrato "+chave2+" vencido em "+dataFormatada(data1)+". Deseja continuar?");
+            }
+        }
+    }
+
+    if(r == true) {
+        db_iframe_empempenho.hide();
+        js_consultaEmpenho(chave, <?=$operacao?>);
+    }
 }
 function js_marca(){
 
@@ -1198,7 +1220,7 @@ function js_validarNumeroNota() {
 // Acrescentado por causa do sicom
 function js_tipoChave(iTipoNfe) {
 
-  // codições para a chave de acesso 
+  // codições para a chave de acesso
   if (iTipoNfe == 1 || iTipoNfe == 2 || iTipoNfe == 4) {
     $('e69_chaveacesso').readOnly           = false;
     $('e69_chaveacesso').style.background   = "#FFFFFF";
@@ -1208,7 +1230,7 @@ function js_tipoChave(iTipoNfe) {
     $('e69_chaveacesso').style.background  = "#DEB887";
   }
 
-  // codições para a Nf serie 
+  // codições para a Nf serie
   if (iTipoNfe == 2 || iTipoNfe == 3) {
     $('e69_nfserie').readOnly           = false;
     $('e69_nfserie').style.background   = "#FFFFFF";
@@ -1234,23 +1256,23 @@ function js_verificaChaveAcesso(iChaveAcesso) {
     return true;
   };
   var aChave = iChaveAcesso.split("");
-  var multiplicadores = [2, 3, 4, 5, 6, 7, 8, 9];  
+  var multiplicadores = [2, 3, 4, 5, 6, 7, 8, 9];
   var soma_ponderada = 0;
-  var i = 42;  
-  while (i >= 0) {    
-    for (m = 0; m < multiplicadores.length && i >= 0; m++) {      
-      soma_ponderada += aChave[i] * multiplicadores[m];     
-      i--;    
-    }  
+  var i = 42;
+  while (i >= 0) {
+    for (m = 0; m < multiplicadores.length && i >= 0; m++) {
+      soma_ponderada += aChave[i] * multiplicadores[m];
+      i--;
+    }
   }
-   
-  var resto = soma_ponderada % 11;  
+
+  var resto = soma_ponderada % 11;
   if ( (aChave[43] == (11 - resto)) || ((resto == 0 || resto == 1) && (aChave[43] == 0)) ) {
     return true;
-  } else {    
+  } else {
     alert("Chave de Acesso inválida");
     $('e69_chaveacesso').value = '';
-    return false;  
+    return false;
   }
 
 }

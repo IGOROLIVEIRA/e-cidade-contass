@@ -132,12 +132,17 @@ $rotulo->label("z01_cgccpf");
     <tr> 
       <td align="center" valign="top"> 
         <?php
-        $campos="e60_numemp, e60_codemp, z01_nome";
+        $campos="e60_numemp, e60_codemp, z01_nome,si172_nrocontrato,
+            si172_datafinalvigencia,
+            (select si174_novadatatermino from aditivoscontratos where si172_nrocontrato = si174_nrocontrato order by si174_sequencial DESC limit 1)";
 
         if (!isset($pesquisa_chave)) {
           $campos = "empempenho.e60_numemp,
             empempenho.e60_codemp,
             empempenho.e60_anousu,
+            si172_nrocontrato,
+            si172_datafinalvigencia,
+            (select si174_novadatatermino from aditivoscontratos where si172_nrocontrato = si174_nrocontrato order by si174_sequencial DESC limit 1),
             empempenho.e60_emiss as DB_e60_emiss,
             cgm.z01_nome,
             cgm.z01_cgccpf,
@@ -239,15 +244,16 @@ $rotulo->label("z01_cgccpf");
               else {
                 $sWherePesquisaPorCodigoEmpenho = " e60_anousu = ". db_getsession("DB_anousu");
               }
+              $aCodEmp  = explode("/",$pesquisa_chave);
+              $sWherePesquisaPorCodigoEmpenho .= " and e60_codemp = '".$aCodEmp[0]."'";
 
-              $sWherePesquisaPorCodigoEmpenho .= " and e60_codemp = '$pesquisa_chave'";
-              $sSql = $clempempenho->sql_query(null, '*', null, $sWherePesquisaPorCodigoEmpenho);
+              $sSql = $clempempenho->sql_query(null, $campos, null, $sWherePesquisaPorCodigoEmpenho);
 
             }
             else {
-              $sSql = $clempempenho->sql_query($pesquisa_chave);
+              $sSql = $clempempenho->sql_query($pesquisa_chave,$campos);
             }
-            
+
             $result = $clempempenho->sql_record($sSql);
             
             if ($clempempenho->numrows != 0) {
@@ -258,10 +264,11 @@ $rotulo->label("z01_cgccpf");
               	echo "<script>" . $funcao_js . "('{$e60_codemp} / {$e60_anousu}', false);</script>";
               }
               elseif (isset($lPesquisaPorCodigoEmpenho)) {
-              	echo "<script>" . $funcao_js . "('{$e60_numemp}', '" . str_replace("'", "\'", $z01_nome) . "', false);</script>";
+              	echo "<script>" . $funcao_js . "('{$e60_numemp}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
               }
               else {
-                echo "<script>" . $funcao_js . "('" . str_replace("'", "\'", $z01_nome) . "', false);</script>";
+
+                echo "<script>" . $funcao_js . "('" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
               }
               
               
