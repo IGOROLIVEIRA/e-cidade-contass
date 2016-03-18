@@ -99,8 +99,7 @@ $sHora = db_hora();
                                 <td title="<?= $Te60_codemp ?>">
                                     <?php db_input('ve62_numemp', 10, $Ive62_numemp, true, 'text', 3); ?>
                                     <?= @$Le60_codemp ?>
-
-                                    <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 3); ?>
+                                    <input type="text" autocomplete="off" style="background-color:#DEB887;text-transform:uppercase;" readonly="" maxlength="15" size="10" value="<?php echo "$e60_codemp/$e60_anousu"; ?>" id="e60_codemp" name="e60_codemp" title="Número do Empenho - não é o sequencial Campo:e60_codemp">
                                 </td>
 
                             </tr>
@@ -297,7 +296,7 @@ $sHora = db_hora();
                                     <fieldset>
                                         <legend><?= $Lve62_observacao ?></legend>
                                         <?php //db_textarea('ve62_observacao', 4, 69, $Ive62_observacao, true, 'text', $db_opcao); ?>
-                                        <textarea id="ve62_observacao" style="background-color:#E6E4F1" onkeyup=" js_ValidaCampos(this,0,'Observação','t','f',event); " onblur=" js_ValidaMaiusculo(this,'f',event);" cols="68" maxlength="50" rows="4" title="Observação sobre a manutenção efetuada Campo:ve62_observacao"></textarea>
+                                        <textarea name="ve62_observacao" id="ve62_observacao" style="background-color:#E6E4F1" onkeyup=" js_ValidaCampos(this,0,'Observação','t','f',event); " onblur=" js_ValidaMaiusculo(this,'f',event);" cols="68" maxlength="50" rows="4" title="Observação sobre a manutenção efetuada Campo:ve62_observacao"><?=$ve62_observacao ?></textarea>
                                     </fieldset>
                                 </td>
                             </tr>
@@ -589,7 +588,7 @@ $sHora = db_hora();
         }
 
         if(document.getElementById('ve62_descr').value.length < 5){
-            alert("O campo observação deve ter de 5 a 50 caracteres.");
+            alert("O campo Serviço Executado deve ter de 5 a 50 caracteres.");
             return false;
         }
 
