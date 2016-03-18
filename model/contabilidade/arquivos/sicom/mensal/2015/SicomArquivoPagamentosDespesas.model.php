@@ -163,16 +163,17 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 			/**
 	    	 * pegar quantidade de extornos
 	    	 */
-	    	$sSqlExtornos = "select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor from conlancamdoc join conhistdoc on c53_coddoc = c71_coddoc 
-    join conlancamord on c71_codlan =  c80_codlan join conlancam on c70_codlan = c71_codlan where c53_tipo in (21,20) and c80_codord = {$oEmpPago->ordem}";
+	    	$sSqlExtornos = "select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor from conlancamdoc join conhistdoc on c53_coddoc = c71_coddoc
+            join conlancamord on c71_codlan =  c80_codlan join conlancam on c70_codlan = c71_codlan where c53_tipo in (21,20)
+            and c70_data <= '".$this->sDataFinal."' and c80_codord = {$oEmpPago->ordem}";
 	    	$rsQuantExtornos = db_query($sSqlExtornos);
     	
     	//db_criatabela($rsQuantExtornos);
-    	if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
+    	if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
 			$sHash = $oEmpPago->ordem;
 			
-			if(!isset($aInformado[$sHash])){	
-				
+			if(!isset($aInformado[$sHash])){
+
 					$clops10 = new cl_ops102015();
 					if ($oEmpPago->subunidade != '' && $oEmpPago->subunidade != 0) {
 					  $oEmpPago->codunidadesub .= str_pad($oEmpPago->subunidade, 3, "0", STR_PAD_LEFT);
