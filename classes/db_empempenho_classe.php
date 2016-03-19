@@ -1005,7 +1005,7 @@ class cl_empempenho {
         $sql .= "      inner join orcorgao  on  orcorgao.o40_anousu = orcdotacao.o58_anousu and  orcorgao.o40_orgao = orcdotacao.o58_orgao";
         $sql .= "      inner join orcunidade  on  orcunidade.o41_anousu = orcdotacao.o58_anousu and  orcunidade.o41_orgao = orcdotacao.o58_orgao and  orcunidade.o41_unidade = orcdotacao.o58_unidade";
         $sql .= "      left  join empcontratos on si173_empenho::varchar = e60_codemp and e60_anousu = si173_anoempenho";
-        $sql .= "      inner join contratos on si173_codcontrato = si172_sequencial";
+        $sql .= "      left join contratos on si173_codcontrato = si172_sequencial";
         $sql2 = "";
         if($dbwhere==""){
             if($e60_numemp!=null ){
