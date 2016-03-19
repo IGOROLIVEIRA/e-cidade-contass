@@ -206,9 +206,9 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
                 o15_codtri,
                 si09_codorgaotce,
                 o40_codtri,orcorgao.o40_orgao,orcunidade.o41_codtri,orcunidade.o41_unidade) as restos
-    where (vlremp - vlranu - vlrliq) >= 0 and (vlrliq - vlrpag) >= 0";
+    where (vlremp - vlranu - vlrliq) > 0 or (vlrliq - vlrpag) > 0";
 
-    $rsResult10 = db_query($sSql);
+    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
