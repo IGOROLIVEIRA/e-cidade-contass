@@ -206,10 +206,11 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 	    	 * pegar quantidade de extornos
 	    	 */
 	    	$sSqlExtornos = "select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor from conlancamdoc join conhistdoc on c53_coddoc = c71_coddoc 
-    join conlancamord on c71_codlan =  c80_codlan join conlancam on c70_codlan = c71_codlan where c53_tipo in (21,20) and c80_codord = {$oAnulacoes->e50_codord}";
+    join conlancamord on c71_codlan =  c80_codlan join conlancam on c70_codlan = c71_codlan where c53_tipo in (21,20)
+    and c70_data <= '".$this->sDataFinal."' and c80_codord = {$oAnulacoes->e50_codord}";
 	    	$rsQuantExtornos = db_query($sSqlExtornos);
     	
-	    	if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
+	    	if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
     		
     		
     		  $sSqlOp = "select c70_codlan || lpad($oAnulacoes->e50_codord,10,0) as codlan, c70_data as dtpagamento from conlancam
