@@ -796,7 +796,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		orcdotacao.o58_subfuncao as codSubFuncao,
 		orcdotacao.o58_programa as codPrograma,
 		orcdotacao.o58_projativ as idAcao,
-		' ' as idSubAcao,
+		o55_origemacao as idSubAcao,
 		substr(orcelemento.o56_elemento,2,6) as naturezaDespesa,
 		orctiporec.o15_codtri as codFontRecursos,
 		orcdotacao.o58_valor as vlRecurso			
@@ -810,6 +810,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 		INNER JOIN orctiporec on (orcdotacao.o58_codigo=orctiporec.o15_codigo)
 		INNER JOIN orcelemento on (orcdotacao.o58_anousu=orcelemento.o56_anousu and orcdotacao.o58_codele=orcelemento.o56_codele)
+		INNER JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
 		LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 		INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
 		WHERE db_config.codigo= " .db_getsession("DB_instit")." AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10) 
