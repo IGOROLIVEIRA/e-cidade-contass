@@ -212,7 +212,7 @@ class cl_ddc402016 {
        && ($lSessaoDesativarAccount === false))) {
 
        $resaco = $this->sql_record($this->sql_query_file($this->si178_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
+       /*if(($resaco!=false)||($this->numrows!=0)){
 
          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
          $acount = pg_result($resac,0,0);
@@ -226,7 +226,7 @@ class cl_ddc402016 {
          $resac = db_query("insert into db_acount values($acount,1010201,1009342,'','".AddSlashes(pg_result($resaco,0,'si178_vlsaldoatual'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010201,1009344,'','".AddSlashes(pg_result($resaco,0,'si178_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010201,1009345,'','".AddSlashes(pg_result($resaco,0,'si178_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+       }*/
      }
      return true;
    } 
@@ -350,7 +350,7 @@ class cl_ddc402016 {
        $resaco = $this->sql_record($this->sql_query_file($this->si178_sequencial));
        if($this->numrows>0){
 
-         for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+         /*for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
 
            $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
            $acount = pg_result($resac,0,0);
@@ -372,7 +372,7 @@ class cl_ddc402016 {
              $resac = db_query("insert into db_acount values($acount,1010201,1009344,'".AddSlashes(pg_result($resaco,$conresaco,'si178_mes'))."','$this->si178_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si178_instit"]) || $this->si178_instit != "")
              $resac = db_query("insert into db_acount values($acount,1010201,1009345,'".AddSlashes(pg_result($resaco,$conresaco,'si178_instit'))."','$this->si178_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
+         }*/
        }
      }
      $result = db_query($sql);
@@ -422,7 +422,7 @@ class cl_ddc402016 {
        }
        if (($resaco != false) || ($this->numrows!=0)) {
 
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+         /*for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
 
            $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
            $acount = pg_result($resac,0,0);
@@ -436,7 +436,7 @@ class cl_ddc402016 {
            $resac  = db_query("insert into db_acount values($acount,1010201,1009342,'','".AddSlashes(pg_result($resaco,$iresaco,'si178_vlsaldoatual'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010201,1009344,'','".AddSlashes(pg_result($resaco,$iresaco,'si178_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010201,1009345,'','".AddSlashes(pg_result($resaco,$iresaco,'si178_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
+         }*/
        }
      }
      $sql = " delete from ddc402016
