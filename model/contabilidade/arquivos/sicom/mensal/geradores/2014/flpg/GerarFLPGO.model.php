@@ -53,11 +53,11 @@ class GerarFLPGO extends GerarAM {
 				$aCSVFLPGO10['si195_indsituacaoservidorpensionista']      =   str_pad($aFLPGO10['si195_indsituacaoservidorpensionista'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datconcessaoaposentadoriapensao'])));
 				$aCSVFLPGO10['si195_dsccargo']                            =   substr($aFLPGO10['si195_dsccargo'], 0, 120);
-				$aCSVFLPGO10['si195_sglcargo']                            =   str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
+				$aCSVFLPGO10['si195_sglcargo']                            =   ' ';//str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_reqcargo']                            =   str_pad($aFLPGO10['si195_reqcargo'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_indcessao']                           =   str_pad($aFLPGO10['si195_indcessao'], 1, " ", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_dsclotacao']                          =   substr($aFLPGO10['si195_dsclotacao'], 0, 22);
-				$aCSVFLPGO10['si195_vlrcargahorariasemanal']              =   number_format($aFLPGO10['si195_vlrcargahorariasemanal'], 2, ",", "");
+				$aCSVFLPGO10['si195_vlrcargahorariasemanal']              =   $aFLPGO10['si195_vlrcargahorariasemanal'];
 				$aCSVFLPGO10['si195_datefetexercicio']                    =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datefetexercicio'])));
 				$aCSVFLPGO10['si195_datexclusao']                         =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datexclusao'])));
 				$aCSVFLPGO10['si195_natsaldobruto']                       =   str_pad($aFLPGO10['si195_natsaldobruto'], 1, "0", STR_PAD_LEFT);

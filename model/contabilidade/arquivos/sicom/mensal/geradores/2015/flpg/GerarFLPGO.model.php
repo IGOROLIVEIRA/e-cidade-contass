@@ -53,7 +53,7 @@ class GerarFLPGO extends GerarAM {
 				$aCSVFLPGO10['si195_indsituacaoservidorpensionista']      =   str_pad($aFLPGO10['si195_indsituacaoservidorpensionista'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datconcessaoaposentadoriapensao'])));
 				$aCSVFLPGO10['si195_dsccargo']                            =   substr($aFLPGO10['si195_dsccargo'], 0, 120);
-				$aCSVFLPGO10['si195_sglcargo']                            =   str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
+				$aCSVFLPGO10['si195_sglcargo']                            =   ' ';//str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_reqcargo']                            =   str_pad($aFLPGO10['si195_reqcargo'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_indcessao']                           =   str_pad($aFLPGO10['si195_indcessao'], 1, " ", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_dsclotacao']                          =   substr($aFLPGO10['si195_dsclotacao'], 0, 22);
@@ -63,7 +63,7 @@ class GerarFLPGO extends GerarAM {
 				$aCSVFLPGO10['si195_natsaldobruto']                       =   str_pad($aFLPGO10['si195_natsaldobruto'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_vlrremuneracaobruta']                 =   number_format($aFLPGO10['si195_vlrremuneracaobruta'], 2, ",", "");
 				$aCSVFLPGO10['si195_natsaldoliquido']                     =   str_pad($aFLPGO10['si195_natsaldoliquido'], 1, "0", STR_PAD_LEFT);
-				$aCSVFLPGO10['si195_vlrremuneracaoliquida']               =   number_format($aFLPGO10['si195_vlrremuneracaoliquida'], 2, ",", "");
+				$aCSVFLPGO10['si195_vlrremuneracaoliquida']               =   $aFLPGO10['si195_vlrremuneracaoliquida'];
 				$aCSVFLPGO10['si195_vlrdeducoesobrigatorias']             =   number_format($aFLPGO10['si195_vlrdeducoesobrigatorias'], 2, ",", "");
 				$aCSVFLPGO10['si195_vlrabateteto']                        =   number_format($aFLPGO10['si195_vlrabateteto'], 2, ",", "");
 
