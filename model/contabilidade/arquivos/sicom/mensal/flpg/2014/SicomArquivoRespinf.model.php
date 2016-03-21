@@ -76,10 +76,10 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     if ($this->sDataFinal['5'].$this->sDataFinal['6'] == 01) {
       $sSql = "SELECT z01_ident,z01_nome,z01_identorgao,z01_cgccpf, si166_dataini, si166_datafim   from identificacaoresponsaveis left join cgm on si166_numcgm = z01_numcgm";
-      $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 1";
+      $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 1 and DATE_PART('YEAR',si166_dataini) = ". db_getsession('DB_anousu');
     }else{
       $sSql = "SELECT z01_ident,z01_nome,z01_identorgao,z01_cgccpf, si166_dataini, si166_datafim   from identificacaoresponsaveis left join cgm on si166_numcgm = z01_numcgm";
-      $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 1";
+      $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 1 and DATE_PART('YEAR',si166_dataini) = ". db_getsession('DB_anousu');
       $sSql .= " and z01_cgccpf not in (select si197_cpf from respinf102014 where si197_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")";
     }
 
