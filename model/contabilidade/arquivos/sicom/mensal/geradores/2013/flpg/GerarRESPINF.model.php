@@ -50,7 +50,8 @@ class GerarRESPINF extends GerarAM {
 				$aCSVRESPINF10['si197_dtinicio']                 =  implode("", array_reverse(explode("-", $aRESPINF10['si197_dtinicio'])));
 				$aCSVRESPINF10['si197_dtfinal']                  =  implode("", array_reverse(explode("-", $aRESPINF10['si197_dtfinal'])));
 
-				$this->sLinha = $aRESPINF10;
+				$this->sLinha = $aCSVRESPINF10;
+
 				$this->adicionaLinha();
 
 			}
