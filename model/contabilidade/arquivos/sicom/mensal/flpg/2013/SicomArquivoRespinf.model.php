@@ -5,7 +5,7 @@ require_once ("classes/db_respinf102013_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2013/flpg/GerarRESPINF.model.php");
 
 /**
- * Dados Complementares Sicom Acompanhamento Mensal
+ * FLPGO
  * @author marcelo
  * @package Contabilidade
  */

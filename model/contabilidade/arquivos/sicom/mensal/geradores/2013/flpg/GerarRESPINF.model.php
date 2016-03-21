@@ -3,7 +3,7 @@
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
 
 /**
- * Sicom Acompanhamento Mensal
+ * Sicom FLPGO
  * @author marcelo
  * @package Contabilidade
  */
