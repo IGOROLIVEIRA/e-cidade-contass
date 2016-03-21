@@ -308,7 +308,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
 	INNER JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
 		and pcorcamforne.pc21_orcamforne=descontotabela.l204_fornecedor
-		and descontotabela.l204_item=liclicitem.l21_codigo)
+		and descontotabela.l204_item=solicitempcmater.pc16_codmater)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
