@@ -126,12 +126,68 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	rh01_admiss as si195_datefetexercicio,
 	rh05_recis as si195_datexclusao,
 
-	(SELECT sum(r14_valor)  FROM gerfsal WHERE r14_regist = rh02_regist AND r14_mesusu = ". $this->sDataFinal['5'].$this->sDataFinal['6'] ." AND r14_anousu = ".db_getsession('DB_anousu')." AND r14_rubric BETWEEN 'R901' AND 'R915') as  si195_vlrdeducoesobrigatorias,
-
 	'0.00' as si195_vlrabateteto,
 
 
 	'D' as si195_natsaldobruto_mensal,
+
+	SUM(CASE WHEN r14_pd = 2 and
+
+	EXISTS((SELECT 1
+	  FROM basesr
+	  INNER JOIN bases ON r09_anousu = r08_anousu
+	  AND r09_mesusu = r08_mesusu
+	  AND r09_base = r08_codigo
+	  AND r09_instit = r08_instit
+	  where  r08_codigo = 'S015'
+	    and gerfsal.r14_rubric = r09_rubric)) = true
+
+
+       THEN r14_valor ELSE 0 END) AS si195_vlrdeducoesobrigatorias_mensal,
+
+    SUM(CASE WHEN r48_pd = 2 and
+
+	EXISTS((SELECT 1
+	  FROM basesr
+	  INNER JOIN bases ON r09_anousu = r08_anousu
+	  AND r09_mesusu = r08_mesusu
+	  AND r09_base = r08_codigo
+	  AND r09_instit = r08_instit
+	  where  r08_codigo = 'S015'
+	    and gerfcom.r48_rubric = r09_rubric)) = true
+
+
+       THEN r48_valor ELSE 0 END) AS si195_vlrdeducoesobrigatorias_com,
+
+      SUM(CASE WHEN r35_pd = 2 and
+
+	EXISTS((SELECT 1
+	  FROM basesr
+	  INNER JOIN bases ON r09_anousu = r08_anousu
+	  AND r09_mesusu = r08_mesusu
+	  AND r09_base = r08_codigo
+	  AND r09_instit = r08_instit
+	  where  r08_codigo = 'S015'
+	    and gerfs13.r35_rubric = r09_rubric)) = true
+
+
+       THEN r35_valor ELSE 0 END) AS si195_vlrdeducoesobrigatorias_13,
+
+       SUM(CASE WHEN r20_pd = 2 and
+
+       EXISTS((SELECT 1
+	  FROM basesr
+	  INNER JOIN bases ON r09_anousu = r08_anousu
+	  AND r09_mesusu = r08_mesusu
+	  AND r09_base = r08_codigo
+	  AND r09_instit = r08_instit
+	  where  r08_codigo = 'S015'
+	    and gerfres.r20_rubric = r09_rubric)) = true
+
+
+       THEN r20_valor ELSE 0 END) AS si195_vlrdeducoesobrigatorias_res,
+
+
 	SUM(case when r14_pd = 1 then r14_valor else 0 end) as si195_vlrremuneracaobruta_mensal,
 	case
 	  when (SUM(case when r14_pd = 1 then r14_valor else 0 end) - SUM(case when r14_pd = 2 then r14_valor else 0 end)) < 0 then 'C'
@@ -249,6 +305,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                         'Matricula'=>$oDados10->rh02_regist,
                         'codreduzidopessoa'=>$oDados10->rh02_regist.'1',
                         'si195_indtipopagamento'=>'M',
+                        'si195_vlrdeducoesobrigatorias'=>$oDados10->si195_vlrdeducoesobrigatorias_mensal,
                         'si195_natsaldobruto'=>$oDados10->si195_natsaldobruto_mensal,
                         'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_mensal,
                         'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_mensal,
@@ -260,6 +317,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                         'Matricula'=>$oDados10->rh02_regist,
                         'codreduzidopessoa'=>$oDados10->rh02_regist.'1',
                         'si195_indtipopagamento'=>'M',
+                        'si195_vlrdeducoesobrigatorias'=>$oDados10->si195_vlrdeducoesobrigatorias_res,
                         'si195_natsaldobruto'=>$oDados10->si195_natsaldobruto_res,
                         'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_res,
                         'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_res,
@@ -273,6 +331,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     'Matricula'=>$oDados10->rh02_regist,
                     'codreduzidopessoa'=>$oDados10->rh02_regist.'3',
                     'si195_indtipopagamento'=>'E',
+                    'si195_vlrdeducoesobrigatorias'=>$oDados10->si195_vlrdeducoesobrigatorias_com,
                     'si195_natsaldobruto'=>$oDados10->si195_natsaldobruto_com,
                     'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_com,
                     'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_com,
@@ -285,6 +344,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                     'Matricula'=>$oDados10->rh02_regist,
                     'codreduzidopessoa'=>$oDados10->rh02_regist.'2',
                     'si195_indtipopagamento'=>'D',
+                    'si195_vlrdeducoesobrigatorias'=>$oDados10->si195_vlrdeducoesobrigatorias_13,
                     'si195_natsaldobruto'=>$oDados10->si195_natsaldobruto_13,
                     'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_13,
                     'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_13,
@@ -303,7 +363,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
                 $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
                 $clflpgo10->si195_dsccargo                          = $oDados10->si195_dsccargo;
-                $clflpgo10->si195_sglcargo 							= $oDados10->si195_sglcargo;
+                $clflpgo10->si195_sglcargo 							= ' ';//$oDados10->si195_sglcargo;
                 $clflpgo10->si195_reqcargo 							= $oDados10->si195_reqcargo;
                 $clflpgo10->si195_indcessao 						= $oDados10->si195_indcessao;
                 $clflpgo10->si195_dsclotacao 						= $oDados10->si195_dsclotacao;
@@ -314,7 +374,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $clflpgo10->si195_vlrremuneracaobruta               = $aTiposPagamento[$iContEx]['si195_vlrremuneracaobruta'];
                 $clflpgo10->si195_natsaldoliquido                   = $aTiposPagamento[$iContEx]['si195_natsaldoliquido'];
                 $clflpgo10->si195_vlrremuneracaoliquida             = $aTiposPagamento[$iContEx]['si195_vlrremuneracaoliquida'];
-                $clflpgo10->si195_vlrdeducoesobrigatorias           = $oDados10->si195_vlrdeducoesobrigatorias;
+                $clflpgo10->si195_vlrdeducoesobrigatorias           = $aTiposPagamento[$iContEx]['si195_vlrdeducoesobrigatorias'];;
                 $clflpgo10->si195_vlrabateteto                      = $oDados10->si195_vlrabateteto;
                 $clflpgo10->si195_mes                               = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clflpgo10->si195_inst                              = db_getsession("DB_instit");
@@ -349,7 +409,10 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
            WHEN r08_codigo = 'S014' THEN rh27_descr
            ELSE ' '
        END AS si196_descoutros,
-       'D' AS si196_natsaldodetalhe,
+       CASE
+           WHEN r14_pd = 1 THEN 'D'
+           WHEN r14_pd = 2 THEN 'C'
+       END AS si196_natsaldodetalhe,
        r14_valor AS si196_vlrremuneracaodetalhada
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
@@ -396,7 +459,7 @@ AND r09_mesusu = r08_mesusu
 AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
-  AND (r14_pd = 1)
+  AND (r14_pd in (1,2))
   AND r08_codigo BETWEEN 'S001' AND 'S014'
 
   UNION
@@ -424,7 +487,10 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S014' THEN rh27_descr
            ELSE ' '
        END AS si196_descoutros,
-       'D' AS si196_natsaldodetalhe,
+       CASE
+           WHEN r48_pd = 1 THEN 'D'
+           WHEN r48_pd = 2 THEN 'C'
+       END AS si196_natsaldodetalhe,
        r48_valor AS si196_vlrremuneracaodetalhada
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
@@ -471,7 +537,7 @@ AND r09_mesusu = r08_mesusu
 AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
-  AND (r48_pd = 1)
+  AND (r48_pd in (1,2))
   AND r08_codigo BETWEEN 'S001' AND 'S014'
 
   UNION
@@ -498,7 +564,10 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S014' THEN rh27_descr
            ELSE ' '
        END AS si196_descoutros,
-       'D' AS si196_natsaldodetalhe,
+       CASE
+           WHEN r35_pd = 1 THEN 'D'
+           WHEN r35_pd = 2 THEN 'C'
+       END AS si196_natsaldodetalhe,
        r35_valor AS si196_vlrremuneracaodetalhada
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
@@ -545,7 +614,7 @@ AND r09_mesusu = r08_mesusu
 AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
-  AND (r35_pd = 1)
+  AND (r35_pd in (1,2))
   AND r08_codigo BETWEEN 'S001' AND 'S014'
 
   UNION
@@ -572,7 +641,10 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S014' THEN rh27_descr
            ELSE ' '
        END AS si196_descoutros,
-       'D' AS si196_natsaldodetalhe,
+       CASE
+           WHEN r20_pd = 1 THEN 'D'
+           WHEN r20_pd = 2 THEN 'C'
+       END AS si196_natsaldodetalhe,
        r20_valor AS si196_vlrremuneracaodetalhada
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
@@ -619,7 +691,7 @@ AND r09_mesusu = r08_mesusu
 AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
-  AND (r20_pd = 1)
+  AND (r20_pd in (1,2))
   AND r08_codigo BETWEEN 'S001' AND 'S014' ";
                 //echo '<pre>';
                 //print_r($clflpgo10);
@@ -637,7 +709,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
                     $clflpgo11->si196_numcpf                  = $clflpgo10->si195_numcpf;
                     $clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
                     $clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
-                    $clflpgo11->si196_descoutros              = $oDados11->si196_descoutros;
+                    $clflpgo11->si196_descoutros              = ' ';//$oDados11->si196_descoutros;
                     $clflpgo11->si196_natsaldodetalhe         = $oDados11->si196_natsaldodetalhe;
                     $clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
                     $clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];

@@ -3,7 +3,7 @@
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_ide2013_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2013/GerarIDE.model.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2013/flpg/GerarIDE.model.php");
 
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
