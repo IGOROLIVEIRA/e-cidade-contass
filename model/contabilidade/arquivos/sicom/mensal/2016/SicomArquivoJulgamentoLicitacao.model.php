@@ -307,7 +307,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	LEFT JOIN aberlic112016 on (liclicitemlote.l04_descricao = aberlic112016.si47_dsclote and aberlic112016.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
 	INNER JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
 	and pcorcamforne.pc21_orcamforne=descontotabela.l204_fornecedor
-	and descontotabela.l204_item=liclicitem.l21_codigo)
+	and descontotabela.l204_item=solicitempcmater.pc16_codmater)
 	LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemunid.pc17_codigo
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
