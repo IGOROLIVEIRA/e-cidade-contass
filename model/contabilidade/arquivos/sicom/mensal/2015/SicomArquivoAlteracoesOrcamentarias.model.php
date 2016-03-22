@@ -303,10 +303,10 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	 */
     	$sSql = "select '13'       as tiporegistro,
        o46_codlei as codreduzidodecreto, 
-       (case when o46_tiposup = 1001 then 3
+       (case when o46_tiposup in (1001,1006) then 3
 	     when o46_tiposup = 1002 then 4
 	     when o46_tiposup = 1003 then 1
-             when o46_tiposup in (1004,1005,1006,1007,1008,1009,1010) then 2 
+             when o46_tiposup in (1004,1005,1007,1008,1009,1010) then 2
              else 98
          end 
        ) as tipoDecretoAlteracao,
@@ -345,10 +345,10 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	 */
     	$sSql = "select '14' as tipoRegistro,
 	o46_codlei as codReduzidoDecreto,
-  (case when o46_tiposup = 1001 then 3
+  (case when o46_tiposup in (1001,1006) then 3
        when o46_tiposup = 1002 then 4
        when o46_tiposup = 1003 then 1
-             when o46_tiposup in (1004,1005,1006,1007,1008,1009,1010) then 2 
+             when o46_tiposup in (1004,1005,1007,1008,1009,1010) then 2
              else 98
          end 
        ) as tipoDecretoAlteracao,
