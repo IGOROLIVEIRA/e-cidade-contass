@@ -68,6 +68,7 @@ DROP TABLE IF EXISTS ddc112016 CASCADE;
 DROP TABLE IF EXISTS ddc122016 CASCADE;
 DROP TABLE IF EXISTS ddc202016 CASCADE;
 DROP TABLE IF EXISTS ddc302016 CASCADE;
+DROP TABLE IF EXISTS ddc402016 CASCADE;
 DROP TABLE IF EXISTS dispensa102016 CASCADE;
 DROP TABLE IF EXISTS dispensa112016 CASCADE;
 DROP TABLE IF EXISTS dispensa122016 CASCADE;
@@ -220,6 +221,7 @@ DROP SEQUENCE IF EXISTS ddc112016_si151_sequencial_seq;
 DROP SEQUENCE IF EXISTS ddc122016_si152_sequencial_seq;
 DROP SEQUENCE IF EXISTS ddc202016_si153_sequencial_seq;
 DROP SEQUENCE IF EXISTS ddc302016_si154_sequencial_seq;
+DROP SEQUENCE IF EXISTS ddc402016_si178_sequencial_seq;
 DROP SEQUENCE IF EXISTS dispensa102016_si74_sequencial_seq;
 DROP SEQUENCE IF EXISTS dispensa112016_si75_sequencial_seq;
 DROP SEQUENCE IF EXISTS dispensa122016_si76_sequencial_seq;
@@ -264,6 +266,7 @@ DROP SEQUENCE IF EXISTS lqd122016_si120_sequencial_seq;
 DROP SEQUENCE IF EXISTS ntf102016_si143_sequencial_seq;
 DROP SEQUENCE IF EXISTS ntf112016_si144_sequencial_seq;
 DROP SEQUENCE IF EXISTS ntf122016_si145_sequencial_seq;
+DROP SEQUENCE IF EXISTS ntf202016_si145_sequencial_seq;
 DROP SEQUENCE IF EXISTS obelac102016_si139_sequencial_seq;
 DROP SEQUENCE IF EXISTS obelac112016_si140_sequencial_seq;
 DROP SEQUENCE IF EXISTS ops102016_si132_sequencial_seq;
@@ -1882,6 +1885,8 @@ si138_nroliquidacao	int8 NOT NULL default 0,
 si138_dtliquidacao	date NOT NULL default null,
 si138_codfontrecursos	int8 NOT NULL default 0,
 si138_valoranulacaofonte	float8 NOT NULL default 0,
+si138_codorgaoempop        varchar(2),
+si138_codunidadeempop      varchar(8),
 si138_mes	int8 NOT NULL default 0,
 si138_reg10	int8 NOT NULL default 0,
 si138_instit	int8 default 0,
