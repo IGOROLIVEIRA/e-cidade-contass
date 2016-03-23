@@ -835,6 +835,13 @@ MAXVALUE 9223372036854775807
 START 1
 CACHE 1;
 
+CREATE SEQUENCE ddc402016_si178_sequencial_seq
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
 
 CREATE SEQUENCE dispensa102016_si74_sequencial_seq
 INCREMENT 1
@@ -1973,8 +1980,8 @@ si166_vlsaldofinalfonte		float8 NOT NULL default 0,
 si166_mes		int8 NOT NULL default 0,
 si166_instit		int8 default 0,
 si166_reg10 int8 not null default 0,
-CONSTRAINT caixa112016_sequ_pk PRIMARY KEY (si166_sequencial)),
-CONSTRAINT caixa112016_reg10_fk FOREIGN KEY (si166_reg10) REFERENCES caixa102016(si103_sequencial);;
+CONSTRAINT caixa112016_sequ_pk PRIMARY KEY (si166_sequencial),
+CONSTRAINT caixa112016_reg10_fk FOREIGN KEY (si166_reg10) REFERENCES caixa102016(si103_sequencial));
 
 
 -- Modulo: sicom
@@ -2633,6 +2640,17 @@ si154_vlsaldoatual		float8 NOT NULL default 0,
 si154_mes		int8 NOT NULL default 0,
 si154_instit		int8 default 0,
 CONSTRAINT ddc302016_sequ_pk PRIMARY KEY (si154_sequencial));
+
+CREATE TABLE ddc402016(
+si178_sequencial		int8 NOT NULL default 0,
+si178_tiporegistro		int8 NOT NULL default 0,
+si178_codorgao		int8 NOT NULL default 0,
+si178_passivoatuarial		int8 NOT NULL default 0,
+si178_vlsaldoanterior		float8 NOT NULL default 0,
+si178_vlsaldoatual		float8 default 0,
+si178_mes		int8 NOT NULL default 0,
+si178_instit		int8 default 0,
+CONSTRAINT ddc402016_sequ_pk PRIMARY KEY (si178_sequencial));
 
 
 -- Modulo: sicom
@@ -3474,7 +3492,7 @@ CREATE TABLE ntf202016(
 si145_sequencial		int8 NOT NULL default 0,
 si145_tiporegistro		int8 NOT NULL default 0,
 si145_nfnumero  		int8 NOT NULL default 0,
-si145_nfserie                   varchar(8)  default 0
+si145_nfserie                   varchar(8)  default 0,
 si145_tipodocumento  int8 not null default 0,
 si145_nrodocumento   varchar(14) not null default 0,
 si145_chaveacesso    varchar(44),
@@ -4328,10 +4346,6 @@ ALTER TABLE ntf112016
 ADD CONSTRAINT ntf112016_reg10_fk FOREIGN KEY (si144_reg10)
 REFERENCES ntf102016;
 
-ALTER TABLE ntf122016
-ADD CONSTRAINT ntf122016_reg10_fk FOREIGN KEY (si145_reg10)
-REFERENCES ntf102016;
-
 ALTER TABLE obelac112016
 ADD CONSTRAINT obelac112016_reg10_fk FOREIGN KEY (si140_reg10)
 REFERENCES lqd122016;
@@ -4511,8 +4525,6 @@ CREATE  INDEX lqd112016_si119_reg10_index ON lqd112016(si119_reg10);
 CREATE  INDEX lqd122016_si120_reg10_index ON lqd122016(si120_reg10);
 
 CREATE  INDEX ntf112016_si144_reg10_index ON ntf112016(si144_reg10);
-
-CREATE  INDEX ntf122016_si145_reg10_index ON ntf122016(si145_reg10);
 
 CREATE  INDEX obelac112016_si140_reg10_index ON obelac112016(si140_reg10);
 
