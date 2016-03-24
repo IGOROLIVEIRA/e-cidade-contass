@@ -32,12 +32,6 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
     protected $sNomeArquivo = 'EXT';
 
     /**
-     * SubTipos padrões do SICOM Ext 2016
-     * @var array
-     */
-    protected $aSubTiposSicom = array('0001','0002','0003','0004');
-
-    /**
      *
      * Construtor da classe
      */
@@ -140,18 +134,10 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 					  join orcorgao on o41_anousu = o40_anousu and o41_orgao = o40_orgao 
 					  where o41_instit = " . db_getsession("DB_instit") . " and o40_anousu = " . db_getsession("DB_anousu") . " order by o40_orgao limit 1) as codUnidadeSub,
 				       substr(c60_tipolancamento::varchar,1,2) as tipolancamento,
-				       case when c60_tipolancamento = 1 and c60_subtipolancamento not in (1,2,3,4) then c61_reduz
-				            when c60_tipolancamento = 2 then 1 
-				            when c60_tipolancamento = 3 and c60_subtipolancamento not in (1,2,3) then c61_reduz 
-				            when c60_tipolancamento = 4 and c60_subtipolancamento not in (1,2,3,4,5,6,7) then c61_reduz
-				            when (c60_tipolancamento = 99 OR c60_tipolancamento = 9999) and c60_subtipolancamento = 9999 then c61_reduz
-				            else c60_subtipolancamento
-				       end as subtipo,
-				       case when c60_tipolancamento = 1 and c60_subtipolancamento not in (1,2,3,4) then 0
-				            when c60_tipolancamento = 2 then 0
-				            when c60_tipolancamento = 3 then 0 
-				            when c60_tipolancamento = 4 and c60_subtipolancamento not in (1,2,3,4,5,6,7) then c61_reduz
-				            else c60_desdobramneto
+				       c60_subtipolancamento as subtipo,
+				       case when (c60_tipolancamento = 1 and c60_subtipolancamento in (1,2,3,4) ) or
+				                 (c60_tipolancamento = 4 and c60_subtipolancamento in (1,2) ) then c60_desdobramneto
+				            else 0
 				       end as desdobrasubtipo,
 				       substr(c60_descr,1,50) as descextraorc
 				  from conplano 
@@ -242,36 +228,30 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                 $cExt10->si124_tiporegistro = $oContaExtra->tiporegistro;
                 $cExt10->si124_codext = $oContaExtra->codtce != 0 ? $oContaExtra->codtce : $oContaExtra->codext;
                 $cExt10->si124_codorgao = $oContaExtra->codorgao;
-                $cExt10->si124_tipolancamento = $oContaExtra->tipolancamento;
-                $cExt10->si124_subtipo = substr(str_pad($oContaExtra->subtipo,4,"0",STR_PAD_LEFT), 0, 3) . substr($oContaExtra->subtipo, -1);
-                $cExt10->si124_desdobrasubtipo = substr($oContaExtra->desdobrasubtipo, 0, 4);
+                $cExt10->si124_tipolancamento = substr(str_pad($oContaExtra->tipolancamento, 2, "0", STR_PAD_LEFT), 0, 2);
+                $cExt10->si124_subtipo = substr(str_pad($oContaExtra->subtipo, 4, "0", STR_PAD_LEFT), 0, 4);
+                $cExt10->si124_desdobrasubtipo = substr(str_pad($oContaExtra->desdobrasubtipo, 4, "0", STR_PAD_LEFT), 0, 4);
                 $cExt10->si124_descextraorc = $oContaExtra->descextraorc;
                 $cExt10->si124_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $cExt10->si124_instit = db_getsession("DB_instit");
                 $cExt10->extras = array();
 
-                if(!in_array($cExt10->si124_subtipo, $this->aSubTiposSicom)) {
+                $sSqlVerifica = "SELECT si124_sequencial FROM ext102016 WHERE si124_codorgao = '$oContaExtra->codorgao'
+		       		AND si124_tipolancamento = '$cExt10->si124_tipolancamento' AND si124_subtipo = '$cExt10->si124_subtipo'
+		       		AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo' and si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                /*$sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102015 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
+                   AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
+                   AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";
+                $sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102014 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
+                   AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
+                   AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";*/
+                $rsResulVerifica = db_query($sSqlVerifica);
+                //db_criatabela($rsResulVerifica);
+                //echo $sSqlVerifica;
 
-                    $sSqlVerifica = "SELECT si124_sequencial FROM ext102016 WHERE si124_codorgao = '$oContaExtra->codorgao'
-		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 3) . substr($oContaExtra->subtipo, -1) . "'
-		       		AND si124_desdobrasubtipo = '" . substr($oContaExtra->desdobrasubtipo, 0, 4) . "' and si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    /*$sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102015 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
-		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
-		       		AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";
-                    $sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102014 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
-		       		AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
-		       		AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";*/
-                    $rsResulVerifica = db_query($sSqlVerifica);//db_criatabela($rsResulVerifica);echo $sSqlVerifica;
-
-                    if (pg_num_rows($rsResulVerifica) == 0) {
-                        $cExt10->si124_subtipo = db_utils::fieldsMemory(db_query("select max(si124_subtipo) as subtipo from (
-                           select max(si124_subtipo) as si124_subtipo from ext102016 where si124_subtipo != '9999'
-                          union select max(si124_subtipo) as si124_subtipo from ext102015 where si124_subtipo != '9999'
-                          union select max(si124_subtipo) as si124_subtipo from ext102014 where si124_subtipo != '9999') as x"),0)->subtipo + 1;
-                    }
+                if (pg_num_rows($rsResulVerifica) == 0) {
+                    $cExt10->incluir(null);
                 }
-
-                $cExt10->incluir(null);
                 if ($cExt10->erro_status == 0) {
                     throw new Exception($cExt10->erro_msg);
                 }
