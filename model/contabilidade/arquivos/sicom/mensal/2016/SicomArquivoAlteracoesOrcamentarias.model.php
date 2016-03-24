@@ -177,7 +177,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	$claoc10->si38_datadecreto  = $oDados10->datadecreto;
     	$claoc10->si38_mes          = $this->sDataFinal['5'].$this->sDataFinal['6'];
     	$claoc10->si38_instit       = db_getsession("DB_instit");
-    	
+
     	$claoc10->incluir(null);
       if ($claoc10->erro_status == 0) { 
     	  throw new Exception($claoc10->erro_msg);
@@ -268,7 +268,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
         if($oDados11->tipodecretoalteracao == 1){
           $si40_tipoleialteracao = 1;
-        }elseif($oDados11->tipodecretoalteracao == 2){
+        }elseif($oDados11->tipodecretoalteracao == 2 || $oDados11->tipodecretoalteracao == 6){
           $si40_tipoleialteracao = 2;
         }elseif($oDados11->tipodecretoalteracao == 8 || $oDados11->tipodecretoalteracao == 9 
           || $oDados11->tipodecretoalteracao == 10){

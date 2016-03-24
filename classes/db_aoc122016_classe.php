@@ -23,7 +23,9 @@ class cl_aoc122016 {
    var $si40_dataleialteracao_dia = null; 
    var $si40_dataleialteracao_mes = null; 
    var $si40_dataleialteracao_ano = null; 
-   var $si40_dataleialteracao = null; 
+   var $si40_dataleialteracao = null;
+   var $si40_tpleiorigdecreto = null;
+   var $si40_tipoleialteracao = null;
    var $si40_valorabertolei = null;
    var $si40_mes = 0; 
    var $si40_reg10 = 0; 
@@ -34,7 +36,7 @@ class cl_aoc122016 {
                  si40_tiporegistro = int8 = Tipo do registro 
                  si40_codreduzidodecreto = int8 = Código do decreto 
                  si40_nroleialteracao = varchar(6) = Número da Lei 
-                 si40_dataleialteracao = date = Data da lei 
+                 si40_dataleialteracao = date = Data da lei
                  si40_tpleiorigdecreto = varchar(6) = Tipo Lei Origem Decreto
                  si40_tipoleialteracao = int8 = Tipo Lei Alteração
                  si40_valorabertolei = float8 = Valor Aberto
@@ -72,6 +74,8 @@ class cl_aoc122016 {
             $this->si40_dataleialteracao = $this->si40_dataleialteracao_ano."-".$this->si40_dataleialteracao_mes."-".$this->si40_dataleialteracao_dia;
          }
        }
+       $this->si40_tpleiorigdecreto = ($this->si40_tpleiorigdecreto == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_tpleiorigdecreto"]:$this->si40_tpleiorigdecreto);
+       $this->si40_tipoleialteracao = ($this->si40_tipoleialteracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_tipoleialteracao"]:$this->si40_tipoleialteracao);
        $this->si40_mes = ($this->si40_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_mes"]:$this->si40_mes);
        $this->si40_reg10 = ($this->si40_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_reg10"]:$this->si40_reg10);
        $this->si40_instit = ($this->si40_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_instit"]:$this->si40_instit);
