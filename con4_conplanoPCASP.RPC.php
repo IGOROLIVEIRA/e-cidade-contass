@@ -41,294 +41,400 @@ require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
 require_once("model/contabilidade/planoconta/ClassificacaoConta.model.php");
 require_once("model/contabilidade/planoconta/ContaCorrente.model.php");
 
-$oJson             = new services_json();
-$oParam            = $oJson->decode(str_replace("\\","",$_POST["json"]));
-$oRetorno          = new stdClass();
-$oRetorno->erro    = false;
-$oRetorno->status  = 1;
+$oJson = new services_json();
+$oParam = $oJson->decode(str_replace("\\", "", $_POST["json"]));
+$oRetorno = new stdClass();
+$oRetorno->erro = false;
+$oRetorno->status = 1;
 $oRetorno->message = '';
 
 
 switch ($oParam->exec) {
 
-  case "salvarPlanoConta":
+    case "salvarPlanoConta":
 
-    /**
-     * No momento em que é salvo devemos verificar o estrutural da
-     * conta e localizar a qual conta corrente o estrutural pertence.
-     */
-
-
-    try {
-
-      db_inicio_transacao();
-      $iAno = null;
-      if ($oParam->iCodigoConta != "") {
-        $iAno = db_getsession("DB_anousu");
-      }
-      $oPlanoPCASP = new ContaPlanoPCASP       ($oParam->iCodigoConta, $iAno);
-      $oPlanoPCASP->setAno(db_getsession       ("DB_anousu"));
-      $oPlanoPCASP->setNRegObrig               ($oParam->iNRegObrig);
-      $oPlanoPCASP->setFuncao                  (db_stdClass::normalizeStringJsonEscapeString($oParam->sFuncao));
-      $oPlanoPCASP->setFinalidade              (db_stdClass::normalizeStringJsonEscapeString($oParam->sFuncionamento));
-      $oPlanoPCASP->setContraPartida           ("0");
-      $oPlanoPCASP->setDescricao               (db_stdClass::normalizeStringJsonEscapeString($oParam->sTitulo));
-      $oPlanoPCASP->setEstrutural              ($oParam->sEstrutural);
-      $oPlanoPCASP->setIdentificadorFinanceiro ($oParam->sIndicadorSuperavit);
-      $oPlanoPCASP->setNaturezaSaldo           ($oParam->iNaturezaSaldo);
-      $oPlanoPCASP->setClassificacaoConta      (new ClassificacaoConta($oParam->iClassificacao));
-      $oPlanoPCASP->setSistemaConta            (new SistemaConta($oParam->iDetalhamentoSistema));
-      $oPlanoPCASP->setSubSistema              (new SubSistemaConta($oParam->iSistemaConta));
-      
-      $oPlanoPCASP->setTipoLancamento          ($oParam->iTipoLancamento);
-      $oPlanoPCASP->setSubTipo                 (is_numeric($oParam->iSubTipo) == true && $oParam->iSubTipo != 0 ? $oParam->iSubTipo : 9999);
-      $oPlanoPCASP->setDesdobramento           (is_numeric($oParam->iDesdobramento) == true && $oParam->iDesdobramento != 0 ? $oParam->iDesdobramento : 0);
-      
-      if ( !empty($oParam->iContaBancaria) ) {
-        $oPlanoPCASP->setContaBancaria(new ContaBancaria($oParam->iContaBancaria));
-      }
+        /**
+         * No momento em que é salvo devemos verificar o estrutural da
+         * conta e localizar a qual conta corrente o estrutural pertence.
+         */
 
 
+        try {
 
-      /**
-       * quando o iTipoConta for 1 = analitica, habilita o campo contacorrente
-       * porem ele ainda nao é passado nesse case
-       * madar junto para validar se deveremos buscar a conta corrente caso ele seja = 1
-       *
-       * buscar conta corrente a partir do estrutural na contacorrenteregravinculo
-       *
-       */
-      if ($oParam->iTipoConta == 1) {
+            db_inicio_transacao();
+            $iAno = null;
+            if ($oParam->iCodigoConta != "") {
+                $iAno = db_getsession("DB_anousu");
+            }
+            $oPlanoPCASP = new ContaPlanoPCASP       ($oParam->iCodigoConta, $iAno);
+            $oPlanoPCASP->setAno(db_getsession("DB_anousu"));
+            $oPlanoPCASP->setNRegObrig($oParam->iNRegObrig);
+            $oPlanoPCASP->setFuncao(db_stdClass::normalizeStringJsonEscapeString($oParam->sFuncao));
+            $oPlanoPCASP->setFinalidade(db_stdClass::normalizeStringJsonEscapeString($oParam->sFuncionamento));
+            $oPlanoPCASP->setContraPartida("0");
+            $oPlanoPCASP->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sTitulo));
+            $oPlanoPCASP->setEstrutural($oParam->sEstrutural);
+            $oPlanoPCASP->setIdentificadorFinanceiro($oParam->sIndicadorSuperavit);
+            $oPlanoPCASP->setNaturezaSaldo($oParam->iNaturezaSaldo);
+            $oPlanoPCASP->setClassificacaoConta(new ClassificacaoConta($oParam->iClassificacao));
+            $oPlanoPCASP->setSistemaConta(new SistemaConta($oParam->iDetalhamentoSistema));
+            $oPlanoPCASP->setSubSistema(new SubSistemaConta($oParam->iSistemaConta));
 
-          $oDaoContaCorrenteRegraVinculo = db_utils::getDao("contacorrenteregravinculo");
-          $sEstrutural                   = $oParam->sEstrutural;
+            $oPlanoPCASP->setTipoLancamento($oParam->iTipoLancamento);
+            $oPlanoPCASP->setSubTipo(is_numeric($oParam->iSubTipo) == true && $oParam->iSubTipo != 0 ? $oParam->iSubTipo : 0);
+            $oPlanoPCASP->setDesdobramento(is_numeric($oParam->iDesdobramento) == true && $oParam->iDesdobramento != 0 ? $oParam->iDesdobramento : 0);
 
-          /*
-           * construimos a arvore do estrutural desejado para
-           * começar a busca
-           */
-          $aNiveisEstruturais = ContaPlano::getNiveisEstruturais(str_replace(".", "", $sEstrutural));
-
-
-          foreach ($aNiveisEstruturais as $oNiveisEstruturais) {
-
-            $sEstrutural                   = str_replace(".", "", $oNiveisEstruturais);
-            $sWhere                        = "c27_estrutural = '$sEstrutural' ";
-            $sSqlContaCorrenteRegraVinculo = $oDaoContaCorrenteRegraVinculo->sql_query_file(null, "*", null, $sWhere);
-            $rsContaCorrenteRegraVinculo   = $oDaoContaCorrenteRegraVinculo->sql_record($sSqlContaCorrenteRegraVinculo);
-
-            if ($oDaoContaCorrenteRegraVinculo->numrows > 0 ) {
-
-              $iContaCorrente = db_utils::fieldsMemory($rsContaCorrenteRegraVinculo, 0)->c27_contacorrente;
-              $oPlanoPCASP->setContaCorrente(new ContaCorrente($iContaCorrente));
-              break;
+            if (!empty($oParam->iContaBancaria)) {
+                $oPlanoPCASP->setContaBancaria(new ContaBancaria($oParam->iContaBancaria));
             }
 
-          }
 
-      }
+            /**
+             * quando o iTipoConta for 1 = analitica, habilita o campo contacorrente
+             * porem ele ainda nao é passado nesse case
+             * madar junto para validar se deveremos buscar a conta corrente caso ele seja = 1
+             *
+             * buscar conta corrente a partir do estrutural na contacorrenteregravinculo
+             *
+             */
+            if ($oParam->iTipoConta == 1) {
 
-      $oPlanoPCASP->salvar();
+                $oDaoContaCorrenteRegraVinculo = db_utils::getDao("contacorrenteregravinculo");
+                $sEstrutural = $oParam->sEstrutural;
 
-      $oRetorno->message                  = urlencode("Plano de contas salvo com sucesso.");
-      $oRetorno->iAno                     = $oPlanoPCASP->getAno();
-      $oRetorno->iNRegObrig               = $oPlanoPCASP->getNRegObrig();
-      $oRetorno->sDescricao               = urlencode($oPlanoPCASP->getDescricao());
-      $oRetorno->sEstrutural              = $oParam->sEstrutural;
-      $oRetorno->sFinalidade              = urlencode($oPlanoPCASP->getFinalidade());
-      $oRetorno->sFuncao                  = urlencode($oPlanoPCASP->getFuncao());
-      $oRetorno->sIdentificadorFinanceiro = $oPlanoPCASP->getIdentificadorFinanceiro();
-      $oRetorno->iNaturezaSaldo           = $oPlanoPCASP->getNaturezaSaldo();
-      $oRetorno->iClassificacao           = $oParam->iClassificacao;
-      $oRetorno->iDetalhamentoSistema     = $oParam->iDetalhamentoSistema;
-      $oRetorno->iSubSistemaConta         = $oParam->iSistemaConta;
-      $oRetorno->iCodigoConta             = $oPlanoPCASP->getCodigoConta();
-      
-      $oRetorno->iTipoLancamento          = $oPlanoPCASP->getTipoLancamento();
-      $oRetorno->iSubTipo                 = $oPlanoPCASP->getSubTipo();
-      $oRetorno->iDesdobramento           = $oPlanoPCASP->getDesdobramento();
-      
-      db_fim_transacao(false);
-    } catch (Exception $eErro) {
+                /*
+                 * construimos a arvore do estrutural desejado para
+                 * começar a busca
+                 */
+                $aNiveisEstruturais = ContaPlano::getNiveisEstruturais(str_replace(".", "", $sEstrutural));
 
-      $oRetorno->status  = 2;
-      $oRetorno->message = urlencode($eErro->getMessage());
-      db_fim_transacao(true);
-    }
-    break;
 
-  case "salvarReduzido":
+                foreach ($aNiveisEstruturais as $oNiveisEstruturais) {
 
-    try {
+                    $sEstrutural = str_replace(".", "", $oNiveisEstruturais);
+                    $sWhere = "c27_estrutural = '$sEstrutural' ";
+                    $sSqlContaCorrenteRegraVinculo = $oDaoContaCorrenteRegraVinculo->sql_query_file(null, "*", null, $sWhere);
+                    $rsContaCorrenteRegraVinculo = $oDaoContaCorrenteRegraVinculo->sql_record($sSqlContaCorrenteRegraVinculo);
 
-      db_inicio_transacao();
+                    if ($oDaoContaCorrenteRegraVinculo->numrows > 0) {
 
-      /*
-       * Valida se o parâmetro iCodigoReduzido está setado. Caso esteja, é realizado a ALTERAÇÃO dentro do model
-       */
-      $iReduzidoParametro = null;
-      if (isset($oParam->iCodigoReduzido)) {
-        $iReduzidoParametro = $oParam->iCodigoReduzido;
-      }
+                        $iContaCorrente = db_utils::fieldsMemory($rsContaCorrenteRegraVinculo, 0)->c27_contacorrente;
+                        $oPlanoPCASP->setContaCorrente(new ContaCorrente($iContaCorrente));
+                        break;
+                    }
 
-      $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoPlanoConta, db_getsession("DB_anousu"), $iReduzidoParametro, $oParam->iCodigoInstituicao);
-      $oPlanoPCASP->setInstituicao($oParam->iCodigoInstituicao)
-                  ->setRecurso($oParam->iCodigoRecurso)
-                  ->setCodigoTce($oParam->iCodigoTce)
-                  ->persistirReduzido();
-      db_fim_transacao(false);
-      $oRetorno->message = "Reduzidos salvos com sucesso!";
-    } catch (Exception $eErro) {
+                }
 
-      db_fim_transacao(true);
-      $oRetorno->message = urlencode($eErro->getMessage());
-    }
-    break;
+            }
 
-  case "getReduzidos":
+            $oPlanoPCASP->salvar();
+
+            $oRetorno->message = urlencode("Plano de contas salvo com sucesso.");
+            $oRetorno->iAno = $oPlanoPCASP->getAno();
+            $oRetorno->iNRegObrig = $oPlanoPCASP->getNRegObrig();
+            $oRetorno->sDescricao = urlencode($oPlanoPCASP->getDescricao());
+            $oRetorno->sEstrutural = $oParam->sEstrutural;
+            $oRetorno->sFinalidade = urlencode($oPlanoPCASP->getFinalidade());
+            $oRetorno->sFuncao = urlencode($oPlanoPCASP->getFuncao());
+            $oRetorno->sIdentificadorFinanceiro = $oPlanoPCASP->getIdentificadorFinanceiro();
+            $oRetorno->iNaturezaSaldo = $oPlanoPCASP->getNaturezaSaldo();
+            $oRetorno->iClassificacao = $oParam->iClassificacao;
+            $oRetorno->iDetalhamentoSistema = $oParam->iDetalhamentoSistema;
+            $oRetorno->iSubSistemaConta = $oParam->iSistemaConta;
+            $oRetorno->iCodigoConta = $oPlanoPCASP->getCodigoConta();
+
+            $oRetorno->iTipoLancamento = $oPlanoPCASP->getTipoLancamento();
+            $oRetorno->iSubTipo = $oPlanoPCASP->getSubTipo();
+            $oRetorno->iDesdobramento = $oPlanoPCASP->getDesdobramento();
+
+            db_fim_transacao(false);
+        } catch (Exception $eErro) {
+
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+            db_fim_transacao(true);
+        }
+        break;
+
+    case "salvarReduzido":
+
+        try {
+
+            db_inicio_transacao();
+
+            /*
+             * Valida se o parâmetro iCodigoReduzido está setado. Caso esteja, é realizado a ALTERAÇÃO dentro do model
+             */
+            $iReduzidoParametro = null;
+            if (isset($oParam->iCodigoReduzido)) {
+                $iReduzidoParametro = $oParam->iCodigoReduzido;
+            }
+
+            $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoPlanoConta, db_getsession("DB_anousu"), $iReduzidoParametro, $oParam->iCodigoInstituicao);
+            $oPlanoPCASP->setInstituicao($oParam->iCodigoInstituicao)
+                ->setRecurso($oParam->iCodigoRecurso)
+                ->setCodigoTce($oParam->iCodigoTce)
+                ->persistirReduzido();
+            db_fim_transacao(false);
+            $oRetorno->message = "Reduzidos salvos com sucesso!";
+        } catch (Exception $eErro) {
+
+            db_fim_transacao(true);
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
+
+    case "getReduzidos":
+
+        /*
+         * Busca as contas reduzidas de um plano de contas do PCASP
+         */
+        $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
+        $oRetorno->aContasReduzidas = $oPlanoPCASP->getContasReduzidas();
+        break;
+
+    case "excluirReduzido":
+
+        try {
+
+            db_inicio_transacao();
+
+            $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoPlanoConta, db_getsession("DB_anousu"), $oParam->iCodigoReduzido, $oParam->iCodigoInstituicao);
+            $oPlanoPCASP->removerReduzido($oParam->iCodigoReduzido);
+            db_fim_transacao(false);
+            $oRetorno->message = urlencode("Reduzido excluído com sucesso.");
+
+        } catch (Exception $eErro) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
+
+    case "vinculaPlanoOrcamentario":
+
+        try {
+
+            db_inicio_transacao();
+            $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoPlanoPCASP, db_getsession("DB_anousu"));
+            $oPlanoPCASP->vinculaPlanoContasOrcamento($oParam->iCodigoPlanoOrcamento);
+            db_fim_transacao(false);
+            $oRetorno->message = urlencode("Contas vinculadas com sucesso!");
+
+        } catch (Exception $eErro) {
+            db_fim_transacao(true);
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+
+        break;
+
+    case "getVinculoPlanoOrcamento":
+
+        $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
+        $aContas = $oPlanoPCASP->getVinculoContaOrcamento();
+        $oRetorno->aContasOrcamento = $aContas;
+        break;
+
+    case "excluiVinculoPlanoOrcamento":
+
+        try {
+
+            db_inicio_transacao();
+            $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
+            $oPlanoPCASP->excluiVinculoContaOrcamento($oParam->iCodigoPlanoOrcamento);
+            $oRetorno->message = urlencode("Vínculo excluído com sucesso.");
+            db_fim_transacao(false);
+
+        } catch (Exception $eErro) {
+            db_fim_transacao(true);
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+
+        break;
+
+
+    case "getPlanoContasPCASP":
+
+        $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
+        $oRetorno->dados->iCodigoConta = $oPlanoPCASP->getCodigoConta();
+        $oRetorno->dados->c60_nregobrig = $oPlanoPCASP->getNRegObrig();
+        $oRetorno->dados->c90_estrutcontabil = db_formatar($oPlanoPCASP->getEstrutural(), 'receita');
+        $oRetorno->dados->sTitulo = urlencode($oPlanoPCASP->getDescricao());
+        $oRetorno->dados->iNaturezaSaldo = $oPlanoPCASP->getNaturezaSaldo();
+        $oRetorno->dados->sFuncionamento = urlencode($oPlanoPCASP->getFinalidade());
+        $oRetorno->dados->sFuncao = urlencode($oPlanoPCASP->getFuncao());
+        $oRetorno->dados->iSistemaConta = $oPlanoPCASP->getSubSistema()->getCodigo();
+        $oRetorno->dados->iDetalhamentoSistema = $oPlanoPCASP->getSistemaConta()->getCodigoSistemaConta();
+        $oRetorno->dados->sDescricaoDetalhamentoSistema = urlencode($oPlanoPCASP->getSistemaConta()->getDescricao());
+        $oRetorno->dados->iClassificacao = $oPlanoPCASP->getClassificacaoConta()->getCodigoClasse();
+        $oRetorno->dados->sIndicadorSuperavit = $oPlanoPCASP->getIdentificadorFinanceiro();
+
+        $oRetorno->dados->iTipoLancamento = $oPlanoPCASP->getTipoLancamento();
+        $oRetorno->dados->isubtipo = $oPlanoPCASP->getSubTipo();
+        $oRetorno->dados->idesdobramento = $oPlanoPCASP->getDesdobramento();
+        $oContaCorrente = $oPlanoPCASP->getContaCorrente();
+        if (isset($oContaCorrente)) {
+
+            $oRetorno->dados->iCodigoContaCorrente = $oPlanoPCASP->getContaCorrente()->getCodigo();
+            $oRetorno->dados->sDescricaoContaCorrente = $oPlanoPCASP->getContaCorrente()->getDescricao();
+        }
+
+        $oRetorno->dados->iContaBancaria = "";
+        if ($oPlanoPCASP->getContaBancaria() != null) {
+
+            $oRetorno->dados->iContaBancaria = $oPlanoPCASP->getContaBancaria()->getSequencialContaBancaria();
+            $oRetorno->dados->sDescricaoContaBancaria = urlencode($oPlanoPCASP->getContaBancaria()->getDadosConta());
+        }
+        $oRetorno->dados->iTipoConta = 0;
+        if ($oPlanoPCASP->getContasReduzidas()) {
+            $oRetorno->dados->iTipoConta = 1;
+        }
+        //echo "<pre>";
+        //print_r($oRetorno);exit;
+        break;
+
+    case 'removerConta':
+
+        try {
+
+            db_inicio_transacao();
+            $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
+            $oPlanoPCASP->excluir();
+            db_fim_transacao(false);
+
+        } catch (Exception $eErro) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
+
+    case "removerIndicadorSuperavit":
+
+        try {
+
+            db_inicio_transacao();
+
+            $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
+            $oPlanoPCASP->setIdentificadorFinanceiro('N');
+            $oPlanoPCASP->salvar();
+            db_fim_transacao(false);
+
+        } catch (Exception $e) {
+
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro = true;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
 
     /*
-     * Busca as contas reduzidas de um plano de contas do PCASP
+     * adicionado para salvar os subtipos novos conforme exigido pelo sicom
      */
-    $oPlanoPCASP                = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
-    $oRetorno->aContasReduzidas = $oPlanoPCASP->getContasReduzidas();
-    break;
+    case "salvarSubTipo":
 
-  case "excluirReduzido":
+        require_once("classes/db_subtipo_classe.php");
+        try {
 
-    try {
+            db_inicio_transacao();
 
-      db_inicio_transacao();
+            $oSubTipo = new cl_subtipo();
+            $oSubTipo->c200_tipo        = $oParam->c200_tipo;
+            $oSubTipo->c200_subtipo     = $oParam->c200_subtipo;
+            $oSubTipo->c200_descsubtipo = str_pad($oParam->c200_subtipo, 4, "0", STR_PAD_LEFT)."-".strtoupper(urldecode($oParam->c200_descsubtipo));
+            $oSubTipo->incluir();
+            $oRetorno->status = 1;
+            $oRetorno->erro = false;
+            $oRetorno->message = urlencode(str_replace("\n", '\n',$oSubTipo->erro_msg));
+            db_fim_transacao(false);
 
-      $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoPlanoConta, db_getsession("DB_anousu"), $oParam->iCodigoReduzido, $oParam->iCodigoInstituicao);
-      $oPlanoPCASP->removerReduzido($oParam->iCodigoReduzido);
-      db_fim_transacao(false);
-      $oRetorno->message = urlencode("Reduzido excluído com sucesso.");
+        } catch (Exception $e) {
 
-    } catch (Exception $eErro) {
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro = true;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
 
-      db_fim_transacao(true);
-      $oRetorno->status  = 2;
-      $oRetorno->message = urlencode($eErro->getMessage());
-    }
-    break;
+    /*
+     * adicionado para buscar os subtipos conforme tipo selecionado
+     * alteração sicom
+     */
+    case "getSubTipo":
 
-  case "vinculaPlanoOrcamentario":
+        require_once("classes/db_subtipo_classe.php");
+        try {
 
-    try {
+            $oSubTipo = new cl_subtipo();
+            $rsSubtipo = db_query($oSubTipo->sql_query(null,"*","c200_subtipo","c200_tipo = {$oParam->c200_tipo}"));
+            $oRetorno->aSubTipos = array();
+            for ($iCont = 0; $iCont < pg_num_rows($rsSubtipo); $iCont++) {
+                $oRetorno->aSubTipos[] = db_utils::fieldsMemory($rsSubtipo, $iCont);
+            }
+            $oRetorno->status = 1;
+            $oRetorno->erro = false;
 
-      db_inicio_transacao();
-      $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoPlanoPCASP, db_getsession("DB_anousu"));
-      $oPlanoPCASP->vinculaPlanoContasOrcamento($oParam->iCodigoPlanoOrcamento);
-      db_fim_transacao(false);
-      $oRetorno->message = urlencode("Contas vinculadas com sucesso!");
+        } catch (Exception $e) {
 
-    } catch (Exception $eErro) {
-      db_fim_transacao(true);
-      $oRetorno->message = urlencode($eErro->getMessage());
-    }
+            $oRetorno->status = 2;
+            $oRetorno->erro = true;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
 
-    break;
+    /*
+     * adicionado para salvar os desdobrasubtipos novos conforme exigido pelo sicom
+     */
+    case "salvarDesdobraSubTipo":
 
-  case "getVinculoPlanoOrcamento":
+        require_once("classes/db_desdobrasubtipo_classe.php");
+        try {
 
-    $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
-    $aContas     = $oPlanoPCASP->getVinculoContaOrcamento();
-    $oRetorno->aContasOrcamento = $aContas;
-    break;
+            db_inicio_transacao();
 
-  case "excluiVinculoPlanoOrcamento":
+            $oDesdobraSubTipo = new cl_desdobrasubtipo();
+            $oDesdobraSubTipo->c201_tipo        = $oParam->c201_tipo;
+            $oDesdobraSubTipo->c201_subtipo     = $oParam->c201_subtipo;
+            $oDesdobraSubTipo->c201_desdobrasubtipo     = $oParam->c201_desdobrasubtipo;
+            $oDesdobraSubTipo->c201_descdesdobrasubtipo = str_pad($oParam->c201_desdobrasubtipo, 4, "0", STR_PAD_LEFT)."-".strtoupper(urldecode($oParam->c201_descdesdobrasubtipo));
+            $oDesdobraSubTipo->incluir();
+            $oRetorno->status = 1;
+            $oRetorno->erro = false;
+            $oRetorno->message = urlencode(str_replace("\n", '\n',$oDesdobraSubTipo->erro_msg));
+            db_fim_transacao(false);
 
-    try {
+        } catch (Exception $e) {
 
-      db_inicio_transacao();
-      $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
-      $oPlanoPCASP->excluiVinculoContaOrcamento($oParam->iCodigoPlanoOrcamento);
-      $oRetorno->message = urlencode("Vínculo excluído com sucesso.");
-      db_fim_transacao(false);
+            db_fim_transacao(true);
+            $oRetorno->status = 2;
+            $oRetorno->erro = true;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
 
-    } catch (Exception $eErro) {
-      db_fim_transacao(true);
-      $oRetorno->message = urlencode($eErro->getMessage());
-    }
+    /*
+     * adicionado para buscar os desdobrasubtipos conforme tipo e subtipo selecionado
+     * alteração sicom
+     */
+    case "getDesdobraSubTipo":
 
-    break;
+        require_once("classes/db_desdobrasubtipo_classe.php");
+        try {
 
+            $oDesdobraSubTipo = new cl_desdobrasubtipo();
+            $rsDesdobraSubtipo = db_query($oDesdobraSubTipo->sql_query(null,"*","c201_desdobrasubtipo","c201_tipo = {$oParam->c201_tipo} and c201_subtipo = {$oParam->c201_subtipo}"));
+            $oRetorno->aDesdobraSubTipos = array();
+            for ($iCont = 0; $iCont < pg_num_rows($rsDesdobraSubtipo); $iCont++) {
+                $oRetorno->aDesdobraSubTipos[] = db_utils::fieldsMemory($rsDesdobraSubtipo, $iCont);
+            }
+            $oRetorno->status = 1;
+            $oRetorno->erro = false;
 
-  case "getPlanoContasPCASP":
+        } catch (Exception $e) {
 
-    $oPlanoPCASP                                    = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
-    $oRetorno->dados->iCodigoConta                  = $oPlanoPCASP->getCodigoConta();
-    $oRetorno->dados->c60_nregobrig                 = $oPlanoPCASP->getNRegObrig();
-    $oRetorno->dados->c90_estrutcontabil            = db_formatar($oPlanoPCASP->getEstrutural(), 'receita');
-    $oRetorno->dados->sTitulo                       = urlencode($oPlanoPCASP->getDescricao());
-    $oRetorno->dados->iNaturezaSaldo                = $oPlanoPCASP->getNaturezaSaldo();
-    $oRetorno->dados->sFuncionamento                = urlencode($oPlanoPCASP->getFinalidade());
-    $oRetorno->dados->sFuncao                       = urlencode($oPlanoPCASP->getFuncao());
-    $oRetorno->dados->iSistemaConta                 = $oPlanoPCASP->getSubSistema()->getCodigo();
-    $oRetorno->dados->iDetalhamentoSistema          = $oPlanoPCASP->getSistemaConta()->getCodigoSistemaConta();
-    $oRetorno->dados->sDescricaoDetalhamentoSistema = urlencode($oPlanoPCASP->getSistemaConta()->getDescricao());
-    $oRetorno->dados->iClassificacao                = $oPlanoPCASP->getClassificacaoConta()->getCodigoClasse();
-    $oRetorno->dados->sIndicadorSuperavit           = $oPlanoPCASP->getIdentificadorFinanceiro(); 
-    
-    $oRetorno->dados->iTipoLancamento                = $oPlanoPCASP->getTipoLancamento();
-    $oRetorno->dados->isubtipo                       = $oPlanoPCASP->getSubTipo();
-    $oRetorno->dados->idesdobramento                 = $oPlanoPCASP->getDesdobramento();
-    $oContaCorrente = $oPlanoPCASP->getContaCorrente();
-    if (isset($oContaCorrente)) {
-
-	    $oRetorno->dados->iCodigoContaCorrente					= $oPlanoPCASP->getContaCorrente()->getCodigo();
-	    $oRetorno->dados->sDescricaoContaCorrente       = $oPlanoPCASP->getContaCorrente()->getDescricao();
-    }
-
-    $oRetorno->dados->iContaBancaria                = "";
-    if ($oPlanoPCASP->getContaBancaria() != null) {
-
-      $oRetorno->dados->iContaBancaria          = $oPlanoPCASP->getContaBancaria()->getSequencialContaBancaria();
-      $oRetorno->dados->sDescricaoContaBancaria = urlencode($oPlanoPCASP->getContaBancaria()->getDadosConta());
-    }
-    $oRetorno->dados->iTipoConta = 0;
-    if ($oPlanoPCASP->getContasReduzidas()) {
-      $oRetorno->dados->iTipoConta = 1;
-    }
-    //echo "<pre>";
-    //print_r($oRetorno);exit;
-    break;
-
-   case 'removerConta':
-
-      try {
-
-        db_inicio_transacao();
-        $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
-        $oPlanoPCASP->excluir();
-        db_fim_transacao(false);
-
-      } catch (Exception $eErro) {
-
-        db_fim_transacao(true);
-        $oRetorno->status  = 2;
-        $oRetorno->message = urlencode($eErro->getMessage());
-      }
-      break;
-
-  case "removerIndicadorSuperavit":
-
-    try {
-
-      db_inicio_transacao();
-
-      $oPlanoPCASP = new ContaPlanoPCASP($oParam->iCodigoConta, db_getsession("DB_anousu"));
-      $oPlanoPCASP->setIdentificadorFinanceiro('N');
-      $oPlanoPCASP->salvar();
-      db_fim_transacao(false);
-
-    } catch (Exception $e) {
-
-      db_fim_transacao(true);
-      $oRetorno->status = 2;
-      $oRetorno->erro = true;
-      $oRetorno->message = urlencode($eErro->getMessage());
-    }
+            $oRetorno->status = 2;
+            $oRetorno->erro = true;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
 }
 echo $oJson->encode($oRetorno);

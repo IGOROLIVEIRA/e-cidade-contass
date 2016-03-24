@@ -276,8 +276,8 @@ class cl_conplano {
 		,c60_naturezasaldo
 		,c60_funcao
 		,c60_tipolancamento
-		,c60_desdobramneto
 		,c60_subtipolancamento
+		,c60_desdobramneto
 		,c60_nregobrig
 		)
 		values (
@@ -524,7 +524,10 @@ class cl_conplano {
 				    $sql  .= $virgula." c60_desdobramneto = $this->c60_desdobramneto ";
 					$virgula = ",";
 				  }
-				}
+				} else {
+				   $sql  .= $virgula." c60_desdobramneto = null";
+				   $virgula = ",";
+			   }
 		}else{
 		  $sql  .= $virgula." c60_tipolancamento = null";
 		  $virgula = ",";

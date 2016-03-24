@@ -222,83 +222,71 @@ $iOpcao = 1;
       
       
       
-      
       <tr id="trTipolancamento" style="display:none;">
+          <td colspan="2">
+              <fieldset><legend>Tipos TCE-MG</legend>
+        <table>
+      <tr>
 	        <td nowrap="nowrap">
 	            <b>Tipo Lançamento</b>
 	        </td>
 	        <td>
 	          <?php
 	            $aTipoLancamento = array(0 => "", 1 => "01-Depósitos e Consignações", 2=> "02-Débitos de Tesouraria", 3 => "03-Ativo Realizável", 4 => "04-Transferências Financeiras", 9999 => "99-Outros");
-            	db_select("iTipoLancamento", $aTipoLancamento , true, $db_opcao,"onchange='js_lancamento(this.value);'");
+            	db_select("iTipoLancamento", $aTipoLancamento , true, $db_opcao,"onchange='js_getSubtipo();'");
 	          ?>
 	        </td>
 	      </tr>
+
+
+        <tr id="trsubtipo" >
+            <td nowrap="nowrap">
+                <b>SubTipo</b>
+            </td>
+            <td>
+                <?php
+                $asubTipo = array();
+                db_select("isubtipo", $asubTipo , true, $db_opcao,"onchange='js_novo_subtipo();js_getDesdobraSubtipo();'");
+                db_input("isubtipo_hidden", 5, 1, 3, "hidden", $db_opcao, "","","","",4);
+                ?>
+            </td>
+        </tr>
+
+        <tr id="trsubtipoNovo" style="display:none;">
+            <td nowrap="nowrap" colspan="2">
+                <fieldset><legend>Incluir SubTipo</legend>
+                <b>SubTipo</b><?php db_input("c200_subtipo", 5, 1, 3, "text", $db_opcao, "","","","",4); ?>
+                <b>Descrição</b><?php db_input("c200_descsubtipo", 35, 0, 3, "text", $db_opcao, "","","","text-transform: uppercase;",100); ?>
+                <input type="button" name="btnIncluirSubtipo" id="btnIncluirSubtipo" value="Adicionar"  />
+                </fieldset>
+            </td>
+        </tr>
 	      
-	      
-	      <tr id="trsubtipo1" style="display:none;">
-	        <td nowrap="nowrap">
-	            <b>SubTipo</b>
-	        </td>
-	        <td>
-	          <?php
-	            $asubTipo = array(0 => "", 1 => "0001-INSS", 2=> "0002-RPPS", 3 => "0003-IRRF", 4 => "0004-ISSQN");
-            	db_select("isubtipo", $asubTipo , true, $db_opcao,"onchange='js_subtipo(this.value);'");
-	          ?>
-	        </td>
-	      </tr>
-	      
-	      
-	      <tr id="trsubtipo2" style="display:none;">
-	        <td nowrap="nowrap">
-	            <b>SubTipo</b>
-	        </td>
-	        <td>
-	          <?php
-	            $asubTipo = array(0 => "", 1 => "0001-ARO");
-            	db_select("isubtipo", $asubTipo , true, $db_opcao,"onchange='js_subtipo(this.value);'");
-	          ?>
-	        </td>
-	      </tr>
-	      
-	      
-	      <tr id="trsubtipo4" style="display:none;">
-	        <td nowrap="nowrap">
-	            <b>SubTipo</b>
-	        </td>
-	        <td>
-	          <?php
-	            $asubTipo = array(0 => "", 1 => "0001-Duodécimo Câmara Municipal", 2=>"0002-Devolução de Numerário para a prefeitura", 3=>"0003-Aporte de Recursos para Cobertura de Insuficiência Financeira para o RPPS", 4=>"0004-Aporte de Recursos para Formação de Reserva Financeira para o RPPS", 5=>"0005-Outros Aportes Financeiros para o RPPS", 6=>"0006-Aporte de Recursos para Cobertura de Déficit Financeiro para o RPPS", 7=>"0007-Aporte de Recursos para Cobertura ou Amortização de Déficit Atuarial para o RPPS", 8=>"0008-Outros Aportes Previdenciários para o RPPS");
-            	db_select("isubtipo", $asubTipo , true, $db_opcao,"onchange='js_subtipo(this.value);'");
-	          ?>
-	        </td>
-	      </tr>
-	      
-	      <tr id="trdesdobramento1"  style="display:none;">
+	      <tr id="trdesdobramento"  >
 	        <td nowrap="nowrap">
 	            <b>Desdobramento Subtipo:</b>
 	        </td>
 	        <td>
 	          <?php
-	            $adesdobramento = array(0=> "", 1 => "0001-INSS", 2=>"0002-RPPS", 3=>"0003-IRRF", 4=>"0004-ISSQN");
-            	db_select("idesdobramento", $adesdobramento , true, $db_opcao,"onchange='js_idesdobramento(this.value);'");
+	            $adesdobramento = array();
+            	db_select("idesdobramento", $adesdobramento , true, $db_opcao,"onchange='js_novo_desdobrasubtipo();'");
+              db_input("idesdobramento_hidden", 5, 1, 3, "hidden", $db_opcao, "","","","",4);
 	          ?>
 	        </td>
 	      </tr>
-      
-      <tr id="trdesdobramento2"  style="display:none;">
-	        <td nowrap="nowrap">
-	            <b>Desdobramento Subtipo:</b>
-	        </td>
-	        <td>
-	          <?php
-	            $adesdobramento = array(0=> "", 1 => "0001-Duodécimo Câmara Municipal", 2=>"0002-Devolução de Numerário para a prefeitura ");
-            	db_select("idesdobramento", $adesdobramento , true, $db_opcao,"onchange='js_idesdobramento(this.value);'");
-	          ?>
-	        </td>
-	      </tr>
-      
-      
+            <tr id="trdesdobramentoNovo" style="display:none;">
+                <td nowrap="nowrap" colspan="2">
+                    <fieldset><legend>Incluir SubTipo</legend>
+                        <b>Desdobra SubTipo</b><?php db_input("c201_desdobrasubtipo", 5, 1, 3, "text", $db_opcao, "","","","",4); ?>
+                        <b>Descrição</b><?php db_input("c201_descdesdobrasubtipo", 35, 0, 3, "text", $db_opcao, "","","","text-transform: uppercase;",100); ?>
+                        <input type="button" name="btnIncluirDesdobraSubtipo" id="btnIncluirDesdobraSubtipo" value="Adicionar"  />
+                    </fieldset>
+                </td>
+            </tr>
+
+        </table>
+              </fieldset>
+      </td></tr>
       
       
       
@@ -351,78 +339,192 @@ $iOpcao = 1;
 
 <script>
 
-
-
-function js_lancamento(campo,mostrar){  
-	if(mostrar==false){
-	  $("trdesdobramento1").style.display = 'none';
-	  $("trdesdobramento2").style.display = 'none';
-	}
-switch(campo)
-{
-	case '1': 
-		$("trsubtipo1").style.display = '';
-		$("trsubtipo2").style.display = 'none';
-		$("trsubtipo4").style.display = 'none';	  
-		break;
-	case '2':
-		$("trsubtipo1").style.display = 'none';
-		$("trsubtipo2").style.display = '';
-		$("trsubtipo4").style.display = 'none';
-	  break;
-	  
-	case '3':
-		  //sub=9999;
-		$("trsubtipo1").style.display = 'none';
-		$("trsubtipo2").style.display = 'none';
-		$("trsubtipo4").style.display = 'none';
-
-      break;
-      
-	case '4':
-		$("trsubtipo1").style.display = 'none';
-		$("trsubtipo2").style.display = 'none';
-		$("trsubtipo4").style.display = '';
-	  break;
-
-	case '9999':
-		//sub=9999;
-		$("trsubtipo1").style.display = 'none';
-		$("trsubtipo2").style.display = 'none';
-		$("trsubtipo4").style.display = 'none';
-	  break;
- }
-}
-
-
- function js_subtipo(campo){ 
-
-		var tipo= $("iTipoLancamento").value;
-		isubtipo = campo;
-		if(tipo=='1' && (campo=='1' || campo=='2' || campo=='3' || campo=='4')){
-			$("trdesdobramento1").style.display = '';
-			$("trdesdobramento2").style.display = 'none';	
-		}
-		else{
-				$("trdesdobramento1").style.display = 'none';
-				$("trdesdobramento2").style.display = 'none';
-			 }
-		 
-		if(tipo=='4' && (campo=='1' || campo=='2')){
-			$("trdesdobramento1").style.display = 'none';
-			$("trdesdobramento2").style.display = '';	
-		}
- }
-/*para ocultar os campos*/
- $("trdesdobramento1").style.display = 'none';
- $("trdesdobramento2").style.display = 'none';
-
  var conta = $("iSistemaConta").value;
  var detalhesistema = $("iDetalhamentoSistema").value;
 
+ /**
+  * Função adicionada para incluir o subtipo conforme layout do sicom
+  */
+ $("btnIncluirSubtipo").observe("click", function() {
+//alert($("c200_subtipo").value);
+     js_divCarregando("Cadastrando SubTipo, aguarde...", "msgBox");
+     var oParam               = new Object();
+     oParam.exec              = "salvarSubTipo";
+     oParam.c200_tipo         = $("iTipoLancamento").value;
+     oParam.c200_subtipo      = $("c200_subtipo").value;
+     oParam.c200_descsubtipo  = encodeURIComponent(tagString($("c200_descsubtipo").value));
 
- function js_idesdobramento(campo) {
-	 idesdobramento = campo;
+     var oAjax                   = new Ajax.Request(sUrlRPC,
+         {method:'post',
+             parameters:'json='+Object.toJSON(oParam),
+             onComplete: js_retornosalvarSubTipo
+         }
+     );
+
+ });
+ function js_retornosalvarSubTipo(oAjax) {
+
+     js_removeObj("msgBox");
+     var oRetorno = eval("("+oAjax.responseText+")");
+     alert(oRetorno.message.urlDecode().replace('\\n',' '));
+
+     if (oRetorno.status == 1) {
+         js_getSubtipo();
+     }
+ }
+
+ function js_getSubtipo() {
+     var oParam        = new Object();
+     oParam.exec       = 'getSubTipo';
+     oParam.c200_tipo  = $("iTipoLancamento").value;
+     var oAjax         = new Ajax.Request(sUrlRPC,
+         {method:'post',
+             parameters:'json='+Object.toJSON(oParam),
+             onComplete: js_retornogetSubtipo
+         }
+     );
+ }
+ function js_retornogetSubtipo(oAjax) {
+     var oRetorno = eval("("+oAjax.responseText+")");
+     if (oRetorno.status == 2) {
+         alert(oRetorno.message.urlDecode().replace('\\n',' '));
+     } else {
+         for (var i = $("isubtipo").options.length-1; i >= 0; i--) {
+             $("isubtipo").remove(i);
+         }
+         var subtipo = document.getElementById("isubtipo");
+         var option = document.createElement("option");
+         option.text  = '';
+         option.value = '';
+         subtipo.add(option, subtipo[0]);
+         for (var i = 0; i < oRetorno.aSubTipos.length; i++) {
+             var subtipo = document.getElementById("isubtipo");
+             var option = document.createElement("option");
+             option.text  = oRetorno.aSubTipos[i].c200_descsubtipo;
+             option.value = oRetorno.aSubTipos[i].c200_subtipo;
+             subtipo.add(option, subtipo[i+1]);
+         }
+         var subtipo = document.getElementById("isubtipo");
+         var option = document.createElement("option");
+         option.text  = 'Novo';
+         option.value = 'novo';
+         subtipo.add(option, subtipo[oRetorno.aSubTipos.length+1]);
+
+         $("isubtipo").value = $("c200_descsubtipo").value == '' ? '' : $("c200_subtipo").value;
+         if($("isubtipo_hidden").value != '') {
+             $("isubtipo").value = $("isubtipo_hidden").value;
+             $("isubtipo_hidden").value = '';
+         }
+         $("c200_subtipo").value = oRetorno.aSubTipos.length == 0 ? 1 : Number(oRetorno.aSubTipos[oRetorno.aSubTipos.length-1].c200_subtipo)+1;
+         $("c200_descsubtipo").value = '';
+         js_novo_subtipo();
+     }
+ }
+ function js_novo_subtipo() {
+     if ($("isubtipo").value == 'novo') {
+         $("trsubtipoNovo").style.display = '';
+     } else {
+         $("trsubtipoNovo").style.display = 'none';
+     }
+ }
+
+ /**
+  * Função adicionada para incluir o desdobrasubtipo conforme layout do sicom
+  */
+ $("btnIncluirDesdobraSubtipo").observe("click", function() {
+     js_divCarregando("Cadastrando DesdobraSubTipo, aguarde...", "msgBox");
+     var oParam               = new Object();
+     oParam.exec              = "salvarDesdobraSubTipo";
+     oParam.c201_tipo         = $("iTipoLancamento").value;
+     oParam.c201_subtipo      = $("isubtipo").value;
+     oParam.c201_desdobrasubtipo = $("c201_desdobrasubtipo").value;
+     oParam.c201_descdesdobrasubtipo  = encodeURIComponent(tagString($("c201_descdesdobrasubtipo").value));
+
+     var oAjax                   = new Ajax.Request(sUrlRPC,
+         {method:'post',
+             parameters:'json='+Object.toJSON(oParam),
+             onComplete: js_retornosalvarDesdobraSubTipo
+         }
+     );
+
+ });
+ function js_retornosalvarDesdobraSubTipo(oAjax) {
+
+     js_removeObj("msgBox");
+     var oRetorno = eval("("+oAjax.responseText+")");
+     alert(oRetorno.message.urlDecode().replace('\\n',' '));
+
+     if (oRetorno.status == 1) {
+         js_getDesdobraSubtipo();
+     }
+ }
+
+ function js_getDesdobraSubtipo(isubtipo_inicial) {
+     var subtipo1 = [0,1,2,3,4];// a funcao IN do javascript procura pelo numero da posicao, e nao pelo conteudo, por isso precisa do zero
+     var subtipo2 = [0,1,2];// a funcao IN do javascript procura pelo numero da posicao, e nao pelo conteudo, por isso precisa do zero
+     var subtipo = isubtipo_inicial > 0 ? isubtipo_inicial : $("isubtipo").value;
+
+     if ( ($("iTipoLancamento").value == 1 && subtipo in subtipo1) || ($("iTipoLancamento").value == 4 && subtipo in subtipo2) ) {
+         var oParam = new Object();
+         oParam.exec = 'getDesdobraSubTipo';
+         oParam.c201_tipo = $("iTipoLancamento").value;
+         oParam.c201_subtipo = subtipo;
+         var oAjax = new Ajax.Request(sUrlRPC,
+             {
+                 method: 'post',
+                 parameters: 'json=' + Object.toJSON(oParam),
+                 onComplete: js_retornogetDesdobraSubtipo
+             }
+         );
+     } else {
+         for (var i = $("idesdobramento").options.length-1; i >= 0; i--) {
+             $("idesdobramento").remove(i);
+         }
+         js_novo_desdobrasubtipo();
+     }
+ }
+ function js_retornogetDesdobraSubtipo(oAjax) {
+     var oRetorno = eval("("+oAjax.responseText+")");
+     if (oRetorno.status == 2) {
+         alert(oRetorno.message.urlDecode().replace('\\n',' '));
+     } else {
+         for (var i = $("idesdobramento").options.length-1; i >= 0; i--) {
+             $("idesdobramento").remove(i);
+         }
+         var desdobrasubtipo = document.getElementById("idesdobramento");
+         var option = document.createElement("option");
+         option.text  = '';
+         option.value = '';
+         desdobrasubtipo.add(option, desdobrasubtipo[0]);
+         for (var i = 0; i < oRetorno.aDesdobraSubTipos.length; i++) {
+             var desdobrasubtipo = document.getElementById("idesdobramento");
+             var option = document.createElement("option");
+             option.text  = oRetorno.aDesdobraSubTipos[i].c201_descdesdobrasubtipo;
+             option.value = oRetorno.aDesdobraSubTipos[i].c201_desdobrasubtipo;
+             desdobrasubtipo.add(option, desdobrasubtipo[i+1]);
+         }
+         var desdobrasubtipo = document.getElementById("idesdobramento");
+         var option = document.createElement("option");
+         option.text  = 'Novo';
+         option.value = 'novo';
+         desdobrasubtipo.add(option, desdobrasubtipo[oRetorno.aDesdobraSubTipos.length+1]);
+
+         $("idesdobramento").value = $("c201_descdesdobrasubtipo").value == '' ? '' : $("c201_desdobrasubtipo").value;
+         if($("idesdobramento_hidden").value != '') {
+             $("idesdobramento").value = $("idesdobramento_hidden").value;
+             $("idesdobramento_hidden").value = '';
+         }
+         $("c201_desdobrasubtipo").value = oRetorno.aDesdobraSubTipos.length == 0 ? 1 : Number(oRetorno.aDesdobraSubTipos[oRetorno.aDesdobraSubTipos.length-1].c201_desdobrasubtipo)+1;
+         $("c201_descdesdobrasubtipo").value = '';
+         js_novo_desdobrasubtipo();
+     }
+ }
+ function js_novo_desdobrasubtipo() {
+     if ($("idesdobramento").value == 'novo') {
+         $("trdesdobramentoNovo").style.display = '';
+     } else {
+         $("trdesdobramentoNovo").style.display = 'none';
+     }
  }
 
 var sUrlRPC = "con4_conplanoPCASP.RPC.php";
@@ -474,6 +576,7 @@ function js_preenchePlanoConta(oAjax) {
       }
     }
   }
+
   $("c90_estrutcontabil").disabled = true;
   //js_lookupDetalhamentoSistema(false);
   js_lookupSistemaConta(false);
@@ -485,6 +588,13 @@ function js_preenchePlanoConta(oAjax) {
 
   var lAbaReduzidos     = oRetorno.dados.iTipoConta == 0?false:true;
   js_liberaAbasPlano(oRetorno.dados.iCodigoConta, lAbaReduzidos);
+
+    if($("iSistemaConta").value == '2'  && $("iDetalhamentoSistema").value == '7') {
+        $("isubtipo_hidden").value = oRetorno.dados["isubtipo"];
+        $("idesdobramento_hidden").value = oRetorno.dados["idesdobramento"];
+        js_getSubtipo();
+        js_getDesdobraSubtipo(oRetorno.dados["isubtipo"]);
+    }
 
 }
 
@@ -543,20 +653,21 @@ $("btnIncluir").observe("click", function() {
   var sSuperavitFinanceiro = 'N';
   var iClassificacao       = 1;
   var iTipoConta           = $("iTipoConta").value;
-  var iTipoLancamento      = $("iTipoLancamento").value;
-  var iSubTipo             = iTipoLancamento == 0 ? 0 : isubtipo;
-  var iDesdobramento       = iTipoLancamento == 0 ? 0 :idesdobramento;
-
-  if(iTipoLancamento=='3' || iSubTipo=='0'){
-	  iSubTipo='9999';
-  }
+    if(iSistemaConta == 2  && iDetalhamentoSistema == 7) {
+        var iTipoLancamento = $("iTipoLancamento").value;
+        var iSubTipo = iTipoLancamento == 0 ? 0 : $("isubtipo").value;
+        var iDesdobramento = iTipoLancamento == 0 ? 0 : $("idesdobramento").value;
+    } else {
+        var iTipoLancamento = 0;
+        var iSubTipo = 0;
+        var iDesdobramento = 0;
+    }
 
   var sFuncao              = encodeURIComponent(tagString($("sFuncao").value));
 
   /**
    * Validações dos campos
-   */  
-  var iDetalhamentoSistema = $("iDetalhamentoSistema").value; 
+   */
   if(iDetalhamentoSistema==7){
 	   if(iTipoLancamento=="0"){
 		   alert("Informe o tipo de lançamento.");
@@ -606,13 +717,13 @@ $("btnIncluir").observe("click", function() {
 		   return false;
 	   }
   }
- 
+
   if(iTipoLancamento=='4' && (iSubTipo=='1' || iSubTipo=='2')){
 	  if(iDesdobramento==""){
 		   alert("Informe o desdobramento.");
 		   $("idesdobramento").style.backgroundColor='#CDC9C9';
 		   $("idesdobramento").focus();
-		   return false;	
+		   return false;
 	   }
   }
 
@@ -771,23 +882,13 @@ function js_mostraDetalhamentoSistema(iCodigo, sDescricao) {
   var detalhesistema = $("iDetalhamentoSistema").value;
 
   if(conta !=2  || detalhesistema !=7){
-	    $("trsubtipo1").style.display = 'none';
-		$("trsubtipo2").style.display = 'none';
-		$("trsubtipo4").style.display = 'none';
-		$("trTipolancamento").style.display = 'none';
+      $('iTipoLancamento').value = '';
+      $('isubtipo').value        = '';
+      $('idesdobramento').value  = '';
+      $("trTipolancamento").style.display = 'none';
   }else{
-        var campo = $("isubtipo").value;
-        var campolancamento = $("iTipoLancamento").value; 
-	  	js_subtipo(campo);
 	    $("trTipolancamento").style.display = '';
-	    js_lancamento(campolancamento,true);
-		/*$("trsubtipo2").style.display = '';
-		
-		
-		$("trdesdobramento1").style.display = '';
-		$("trdesdobramento2").style.display = '';
-		$("trsubtipo1").style.display = '';*/
-	    }
+  }
 }
 function js_completaDetalhamentoSistema(sDescricao, lErro) {
 
@@ -804,23 +905,14 @@ function js_completaDetalhamentoSistema(sDescricao, lErro) {
   var detalhesistema = $("iDetalhamentoSistema").value;
 
   if(conta !=2  || detalhesistema !=7){
-	    $("trsubtipo1").style.display = 'none';
-		$("trsubtipo2").style.display = 'none';
-		$("trsubtipo4").style.display = 'none';
-		$("trTipolancamento").style.display = 'none';
+      $('iTipoLancamento').value = '';
+      $('isubtipo').value        = '';
+      $('idesdobramento').value  = '';
+      $("trTipolancamento").style.display = 'none';
   }else{
-        var campo = $("isubtipo").value;
-        var campolancamento = $("iTipoLancamento").value; 
-	  	js_subtipo(campo);
 	    $("trTipolancamento").style.display = '';
-	    js_lancamento(campolancamento,true);
-		/*$("trsubtipo2").style.display = '';
-		
-		
-		$("trdesdobramento1").style.display = '';
-		$("trdesdobramento2").style.display = '';
-		$("trsubtipo1").style.display = '';*/
-	    }
+
+  }
 }
 
 /**
@@ -845,23 +937,10 @@ function js_lookupSistemaConta(lMostra) {
   var detalhesistema = $("iDetalhamentoSistema").value;
 
   if(conta !=2  || detalhesistema !=7){
-	    $("trsubtipo1").style.display = 'none';
-		$("trsubtipo2").style.display = 'none';
-		$("trsubtipo4").style.display = 'none';
 		$("trTipolancamento").style.display = 'none';
   }else{
-        var campo = $("isubtipo").value;
-        var campolancamento = $("iTipoLancamento").value; 
-	  	js_subtipo(campo);
 	    $("trTipolancamento").style.display = '';
-	    js_lancamento(campolancamento,true);
-		/*$("trsubtipo2").style.display = '';
-		
-		
-		$("trdesdobramento1").style.display = '';
-		$("trdesdobramento2").style.display = '';
-		$("trsubtipo1").style.display = '';*/
-	    }
+  }
 }
  
 function js_mostraSistemaConta(iCodigo, sDescricao) {
@@ -871,23 +950,13 @@ function js_mostraSistemaConta(iCodigo, sDescricao) {
   js_validaSistemaConta();
 
   if(conta !=2  || detalhesistema !=7){
-      $("trsubtipo1").style.display = 'none';
-    $("trsubtipo2").style.display = 'none';
-    $("trsubtipo4").style.display = 'none';
+      $('iTipoLancamento').value = '';
+      $('isubtipo').value        = '';
+      $('idesdobramento').value  = '';
     $("trTipolancamento").style.display = 'none';
   }else{
-        var campo = $("isubtipo").value;
-        var campolancamento = $("iTipoLancamento").value; 
-      js_subtipo(campo);
       $("trTipolancamento").style.display = '';
-      js_lancamento(campolancamento,true);
-    /*$("trsubtipo2").style.display = '';
-    
-    
-    $("trdesdobramento1").style.display = '';
-    $("trdesdobramento2").style.display = '';
-    $("trsubtipo1").style.display = '';*/
-      }
+  }
   db_iframe_consistemaconta.hide();
 }
 function js_completaSistemaConta(sDescricao, lErro) {
