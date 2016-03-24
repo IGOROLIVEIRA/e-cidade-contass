@@ -204,7 +204,6 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 		  $clconsor30->si18_vlpagofonte               = $oDados30->c202_valorpago;
 		  $clconsor30->si18_vlanulacaopagamentofonte  = $oDados30->c202_valorpagoanu;
 		  $clconsor30->si18_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
-		  $clconsor30->si18_reg20                = $clconsor20->si17_sequencial;
 		  $clconsor30->si18_instit               = db_getsession("DB_instit");
 		  	
 		  $clconsor30->incluir(null);
@@ -236,7 +235,6 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 		  	$clconsor40->si19_codfontrecursos = $oDados40->c203_codfontrecursos;
 		  	$clconsor40->si19_vldispcaixa     = $oDados40->c203_valor;
 		  	$clconsor40->si19_mes             = $this->sDataFinal['5'].$this->sDataFinal['6'];
-		  	$clconsor40->si19_reg20           = $clconsor20->si17_sequencial;
 		  	$clconsor40->si19_instit          = db_getsession("DB_instit");
 		  	
 		    $clconsor40->incluir(null);

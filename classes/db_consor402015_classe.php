@@ -22,7 +22,6 @@ class cl_consor402015 {
    var $si19_vldispcaixa = 0; 
    var $si19_mes = 0; 
    var $si19_codfontrecursos = null;
-   var $si19_reg20 = null;
    var $si19_instit = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
@@ -128,7 +127,6 @@ class cl_consor402015 {
                                       ,si19_codfontrecursos
                                       ,si19_vldispcaixa 
                                       ,si19_mes
-                                      ,si19_reg20
                                       ,si19_instit 
                        )
                 values (
@@ -138,7 +136,6 @@ class cl_consor402015 {
                                ,$this->si19_codfontrecursos 
                                ,$this->si19_vldispcaixa 
                                ,$this->si19_mes
-                               ,$this->si19_reg20
                                ,$this->si19_instit
                       )";
      $result = db_query($sql); 

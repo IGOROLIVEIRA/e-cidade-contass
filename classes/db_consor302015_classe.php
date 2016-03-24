@@ -30,8 +30,7 @@ class cl_consor302015 {
    var $si18_vlanulacaoliquidacaofonte = 0; 
    var $si18_vlpagofonte = 0; 
    var $si18_vlanulacaopagamentofonte = 0; 
-   var $si18_mes = 0; 
-   var $si18_reg20 = 0; 
+   var $si18_mes = 0;
    var $si18_instit = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
@@ -49,8 +48,7 @@ class cl_consor302015 {
                  si18_vlanulacaoliquidacaofonte = float8 = Valor de  liquidações 
                  si18_vlpagofonte = float8 = Valor pago no mês 
                  si18_vlanulacaopagamentofonte = float8 = Valor de  pagamentos 
-                 si18_mes = int8 = Mês 
-                 si18_reg20 = int8 = reg20 
+                 si18_mes = int8 = Mês
                  si18_instit = int8 = Instituição 
                  ";
    //funcao construtor da classe 
@@ -86,7 +84,6 @@ class cl_consor302015 {
        $this->si18_vlpago = ($this->si18_vlpago == ""?@$GLOBALS["HTTP_POST_VARS"]["si18_vlpago"]:$this->si18_vlpago);
        $this->si18_vlanulacaopagamento = ($this->si18_vlanulacaopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si18_vlanulacaopagamento"]:$this->si18_vlanulacaopagamento);
        $this->si18_mes = ($this->si18_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si18_mes"]:$this->si18_mes);
-       $this->si18_reg20 = ($this->si18_reg20 == ""?@$GLOBALS["HTTP_POST_VARS"]["si18_reg20"]:$this->si18_reg20);
        $this->si18_instit = ($this->si18_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si18_instit"]:$this->si18_instit);
      }else{
        $this->si18_sequencial = ($this->si18_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si18_sequencial"]:$this->si18_sequencial);
@@ -134,9 +131,7 @@ class cl_consor302015 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si18_reg20 == null ){ 
-       $this->si18_reg20 = "0";
-     }
+
      if($this->si18_instit == null ){ 
        $this->erro_sql = " Campo Instituição nao Informado.";
        $this->erro_campo = "si18_instit";
@@ -193,8 +188,7 @@ class cl_consor302015 {
                                       ,si18_vlanulacaoliquidacaofonte 
                                       ,si18_vlpagofonte 
                                       ,si18_vlanulacaopagamentofonte 
-                                      ,si18_mes 
-                                      ,si18_reg20 
+                                      ,si18_mes
                                       ,si18_instit 
                        )
                 values (
@@ -212,8 +206,7 @@ class cl_consor302015 {
                                ,$this->si18_vlanulacaoliquidacaofonte 
                                ,$this->si18_vlpagofonte 
                                ,$this->si18_vlanulacaopagamentofonte 
-                               ,$this->si18_mes 
-                               ,$this->si18_reg20 
+                               ,$this->si18_mes
                                ,$this->si18_instit 
                       )";
      $result = db_query($sql); 
@@ -260,7 +253,6 @@ class cl_consor302015 {
        $resac = db_query("insert into db_acount values($acount,2010246,2009641,'','".AddSlashes(pg_result($resaco,0,'si18_vlpago'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010246,2009642,'','".AddSlashes(pg_result($resaco,0,'si18_vlanulacaopagamento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010246,2009738,'','".AddSlashes(pg_result($resaco,0,'si18_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010246,2011323,'','".AddSlashes(pg_result($resaco,0,'si18_reg20'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010246,2011536,'','".AddSlashes(pg_result($resaco,0,'si18_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
      }
      return true;
@@ -368,13 +360,7 @@ class cl_consor302015 {
          return false;
        }
      }
-     if(trim($this->si18_reg20)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si18_reg20"])){ 
-        if(trim($this->si18_reg20)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si18_reg20"])){ 
-           $this->si18_reg20 = "0" ; 
-        } 
-       $sql  .= $virgula." si18_reg20 = $this->si18_reg20 ";
-       $virgula = ",";
-     }
+
      if(trim($this->si18_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si18_instit"])){ 
        $sql  .= $virgula." si18_instit = $this->si18_instit ";
        $virgula = ",";
@@ -427,8 +413,6 @@ class cl_consor302015 {
            $resac = db_query("insert into db_acount values($acount,2010246,2009642,'".AddSlashes(pg_result($resaco,$conresaco,'si18_vlanulacaopagamento'))."','$this->si18_vlanulacaopagamento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si18_mes"]) || $this->si18_mes != "")
            $resac = db_query("insert into db_acount values($acount,2010246,2009738,'".AddSlashes(pg_result($resaco,$conresaco,'si18_mes'))."','$this->si18_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si18_reg20"]) || $this->si18_reg20 != "")
-           $resac = db_query("insert into db_acount values($acount,2010246,2011323,'".AddSlashes(pg_result($resaco,$conresaco,'si18_reg20'))."','$this->si18_reg20',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si18_instit"]) || $this->si18_instit != "")
            $resac = db_query("insert into db_acount values($acount,2010246,2011536,'".AddSlashes(pg_result($resaco,$conresaco,'si18_instit'))."','$this->si18_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
@@ -492,7 +476,6 @@ class cl_consor302015 {
          $resac = db_query("insert into db_acount values($acount,2010246,2009641,'','".AddSlashes(pg_result($resaco,$iresaco,'si18_vlpago'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010246,2009642,'','".AddSlashes(pg_result($resaco,$iresaco,'si18_vlanulacaopagamento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010246,2009738,'','".AddSlashes(pg_result($resaco,$iresaco,'si18_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,2010246,2011323,'','".AddSlashes(pg_result($resaco,$iresaco,'si18_reg20'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010246,2011536,'','".AddSlashes(pg_result($resaco,$iresaco,'si18_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
@@ -578,7 +561,6 @@ class cl_consor302015 {
        $sql .= $campos;
      }
      $sql .= " from consor302015 ";
-     $sql .= "      left  join consor202015  on  consor202015.si17_sequencial = consor302015.si18_reg20";
      $sql2 = "";
      if($dbwhere==""){
        if($si18_sequencial!=null ){
