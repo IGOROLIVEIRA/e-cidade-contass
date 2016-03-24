@@ -232,30 +232,24 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
         }
 
         /**
-         * selecionar informações do registro 440
+         * selecionar informações do registro 40
          */
-        $sSql = "select c61_reduz
+        $sSql = "select * from (select
+             sum(round(substr(fc_planosaldonovo(".db_getsession("DB_anousu").",c61_reduz,'{$this->sDataInicial}','{$this->sDataFinal}',FALSE),3,14)::float8,2)::float8) AS saldoinicial,
+             sum(round(substr(fc_planosaldonovo(".db_getsession("DB_anousu").",c61_reduz,'{$this->sDataInicial}','{$this->sDataFinal}',FALSE),45,14)::float8,2)::float8) AS saldo_final
         from conplano
         inner join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
-        where c60_estrut like '22721%' and c60_anousu = ".db_getsession("DB_anousu");
+        where c60_estrut like '22721%' and c60_anousu = ".db_getsession("DB_anousu").") as x where saldoinicial is not null or saldo_final is not null";
         $rsResult40 = db_query($sSql);
         for($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
             $oDados40 = db_utils::fieldsMemory($rsResult40,$iCont40);
             $clddc40 = new cl_ddc402016();
-            /**
-             * sql para pegar os saldos
-             */
-            $sSql = "select
-                     round(substr(fc_planosaldonovo(".db_getsession("DB_anousu").",$oDados40->c61_reduz,'{$this->sDataInicial}','{$this->sDataFinal}',FALSE),3,14)::float8,2)::float8 AS saldoinicial,
-                     round(substr(fc_planosaldonovo(".db_getsession("DB_anousu").",$oDados40->c61_reduz,'{$this->sDataInicial}','{$this->sDataFinal}',FALSE),45,14)::float8,2)::float8 AS saldo_final";
-            $rsResultSaldo = db_query($sSql);//db_criatabela($rsResultSaldo);echo pg_last_error();
-            $oSaldo = db_utils::fieldsMemory($rsResultSaldo,0);
 
             $clddc40->si178_tiporegistro = 40;
             $clddc40->si178_codorgao     = $sCodorgao;
-            $clddc40->si178_passivoatuarial = $oSaldo->saldoinicial > 0 || $oSaldo->saldo_final > 0 ? '1' : '2';
-            $clddc40->si178_vlsaldoanterior = $oSaldo->saldoinicial;
-            $clddc40->si178_vlsaldoatual    = $oSaldo->saldo_final;
+            $clddc40->si178_passivoatuarial = $oDados40->saldoinicial > 0 || $oDados40->saldo_final > 0 ? '1' : '2';
+            $clddc40->si178_vlsaldoanterior = $oDados40->saldoinicial;
+            $clddc40->si178_vlsaldoatual    = $oDados40->saldo_final;
             $clddc40->si178_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clddc40->si178_instit = db_getsession("DB_instit");
             $clddc40->incluir(null);
