@@ -237,6 +237,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                           ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
                       END AS codunidadesub,
                      veiculos.ve01_codigo AS codVeiculo,
+                     veiculos.ve01_codunidadesub,
                      ve62_origemgasto AS origemGasto,
                      CASE
                   WHEN (unemp.o41_codtri::INT != 0
@@ -367,7 +368,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
         //--order by veiculos.ve01_codigo
 
-        $rsResult20 = db_query($sSql);
+        $rsResult20 = db_query($sSql) or die(pg_last_error());
         //echo pg_last_error();
         //db_criatabela($rsResult20);exit;
         /**
