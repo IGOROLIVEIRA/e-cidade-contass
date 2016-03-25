@@ -233,7 +233,11 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 		       		$cExt10->si124_codorgao 		= $oContaExtra->codorgao;
 		       		$cExt10->si124_codunidadesub 	= $oContaExtra->codunidadesub;
 		       		$cExt10->si124_tipolancamento 	= $oContaExtra->tipolancamento;
-		       		$cExt10->si124_subtipo 			= substr($oContaExtra->subtipo,0,3).substr($oContaExtra->subtipo,-1);
+					if( strlen($oContaExtra->subtipo) != 1) {
+						$cExt10->si124_subtipo = substr($oContaExtra->subtipo, 0, 3) . substr($oContaExtra->subtipo, -1);
+					}else{
+						$cExt10->si124_subtipo = $oContaExtra->subtipo;
+					}
 		       		$cExt10->si124_desdobrasubtipo 	= substr($oContaExtra->desdobrasubtipo,0,4);
 		       		$cExt10->si124_descextraorc 	= $oContaExtra->descextraorc;
 		       		$cExt10->si124_mes				= $this->sDataFinal['5'].$this->sDataFinal['6'];
