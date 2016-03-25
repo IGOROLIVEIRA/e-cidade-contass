@@ -251,9 +251,9 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 
                 if (pg_num_rows($rsResulVerifica) == 0) {
                     $cExt10->incluir(null);
-                }
-                if ($cExt10->erro_status == 0) {
-                    throw new Exception($cExt10->erro_msg);
+		    if ($cExt10->erro_status == 0) {
+                       throw new Exception($cExt10->erro_msg);
+                    }
                 }
 
                 $cExt10->extras[] = $oContaExtra->codext;
