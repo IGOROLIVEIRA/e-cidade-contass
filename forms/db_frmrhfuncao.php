@@ -102,7 +102,7 @@ if ($db_opcao == 2) {
               "2"=>"Profissão regulamentada privativa de profissionais de saúde (Ex: Médicos, Assistentes Sociais, Técnicos em Enfermagem etc)",
               "3"=>"Professor",
               "4"=>"Outras");
-          db_select('rh37_reqcargo', $areqCargo, true, $db_opcao,"");
+          db_select('rh37_reqcargo', $areqCargo, true, $db_opcao);
           ?>
         </td>
       </tr>
@@ -130,6 +130,12 @@ if ($db_opcao == 2) {
 </form>
 
 <script>
+
+<?
+if($db_opcao==1){
+ echo "top.corpo.document.form1.rh37_reqcargo.value='4'";
+}
+?>
 
 function js_buscagrupo(mostra) {
   if(mostra==true){
