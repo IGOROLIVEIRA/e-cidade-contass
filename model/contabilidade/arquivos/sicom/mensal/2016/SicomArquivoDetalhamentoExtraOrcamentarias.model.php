@@ -500,8 +500,9 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 
                                 $oExt31 = db_utils::fieldsMemory($rsExt31, $linha31);
 
-                                $sSqlContaPagFont = "select distinct si95_codctb  as conta, si96_codfontrecursos as fonte from conplanoconta
-											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
+                                $sSqlContaPagFont = "select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
+											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
+											join orctiporec on c61_codigo = o15_codigo
 											join ctb102016 on 
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and 
@@ -511,8 +512,9 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											si95_tipoconta::int8 = c63_tipoconta join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
 											        and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                                $sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, si96_codfontrecursos as fonte from conplanoconta
+                                $sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
+											join orctiporec on c61_codigo = o15_codigo
 											join ctb102015 on
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and
@@ -521,8 +523,9 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											si95_digitoverificadorcontabancaria = c63_dvconta and
 											si95_tipoconta::int8 = c63_tipoconta join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
 											        where c61_reduz = {$oExt31->codctb} and c61_anousu = " . db_getsession("DB_anousu");
-                                $sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, si96_codfontrecursos as fonte from conplanoconta
-											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
+                                $sSqlContaPagFont .= " UNION select distinct si95_codctb  as conta, o15_codtri as fonte from conplanoconta
+											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
+											join orctiporec on c61_codigo = o15_codigo
 											join ctb102014 on 
 											si95_banco   = c63_banco and
 											si95_agencia = c63_agencia and 
