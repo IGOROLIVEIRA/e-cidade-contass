@@ -357,7 +357,7 @@ switch ($oParam->exec) {
             $oRetorno->erro = true;
             $oRetorno->message = urlencode($eErro->getMessage());
         }
-
+        break;
     /*
      * adicionado para buscar os subtipos conforme tipo selecionado
      * alteração sicom
@@ -382,7 +382,7 @@ switch ($oParam->exec) {
             $oRetorno->erro = true;
             $oRetorno->message = urlencode($eErro->getMessage());
         }
-
+        break;
     /*
      * adicionado para salvar os desdobrasubtipos novos conforme exigido pelo sicom
      */
@@ -411,6 +411,7 @@ switch ($oParam->exec) {
             $oRetorno->erro = true;
             $oRetorno->message = urlencode($eErro->getMessage());
         }
+        break;
 
     /*
      * adicionado para buscar os desdobrasubtipos conforme tipo e subtipo selecionado

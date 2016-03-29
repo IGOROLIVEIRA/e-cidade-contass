@@ -464,7 +464,7 @@ $iOpcao = 1;
      var subtipo2 = [0,1,2];// a funcao IN do javascript procura pelo numero da posicao, e nao pelo conteudo, por isso precisa do zero
      var subtipo = isubtipo_inicial > 0 ? isubtipo_inicial : $("isubtipo").value;
 
-     if ( ($("iTipoLancamento").value == 1 && subtipo in subtipo1) || ($("iTipoLancamento").value == 4 && subtipo in subtipo2) ) {
+     if ( ($("iTipoLancamento").value == 1 && subtipo in subtipo1) || ($("iTipoLancamento").value == 4 && subtipo in subtipo2) || ($("iTipoLancamento").value == 9999)) {
          var oParam = new Object();
          oParam.exec = 'getDesdobraSubTipo';
          oParam.c201_tipo = $("iTipoLancamento").value;
