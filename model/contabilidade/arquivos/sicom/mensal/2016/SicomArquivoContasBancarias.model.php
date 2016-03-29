@@ -377,7 +377,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,$iFonte," . $
 											when c71_coddoc = 101 then 3
 											when c71_coddoc in (5,35,37,161) then 8
 											when c71_coddoc in (131,152,163) then 10
-											when c71_coddoc in (120) then 13
+											when c71_coddoc in (120) then 99
 											when c71_coddoc in (141,140) then 6
 											else 99
 									   end as tipoentrsaida,
