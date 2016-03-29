@@ -1,4 +1,4 @@
-﻿CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, integer,integer,integer) RETURNS character varying AS
+CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, integer,integer,integer) RETURNS character varying AS
 	$$
 	declare 
 
