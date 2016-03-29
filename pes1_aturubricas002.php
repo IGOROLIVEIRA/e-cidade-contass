@@ -538,7 +538,8 @@ try {
 				$sWhere .= " and r10_rubric = '".$rh27_rubric."'";
 				$sWhere .= " and r10_instit = ".db_getsession("DB_instit");
 				$sWhere .= " and $whereatualizaFS";
-				$sWhere .= " and $r44_where";
+				//$sWhere .= " and $r44_where";
+
 				$result_PTFStest = $clpontofs->sql_record($clpontofs->sql_query_seleciona(null,
 						                                                                      null,
 						                                                                      null,
