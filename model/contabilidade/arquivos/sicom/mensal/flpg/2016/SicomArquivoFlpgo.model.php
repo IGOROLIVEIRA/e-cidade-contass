@@ -327,7 +327,15 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 }
 
                 //print_r($clflpgo10);
-                $sSql2 = "  SELECT rh02_regist,
+                $sSql2 = "
+        Select x.rh02_regist,
+               x.si196_tiporegistro,
+               x.si196_tiporemuneracao,
+               x.si196_descoutros,
+               x.si196_natsaldodetalhe,
+               sum(x.si196_vlrremuneracaodetalhada) as si196_vlrremuneracaodetalhada
+               from
+          (SELECT rh02_regist,
        '11' AS si196_tiporegistro,
        CASE
            WHEN r08_codigo = 'S001' THEN 01
@@ -620,7 +628,8 @@ AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r20_pd = 1)
-  AND r08_codigo BETWEEN 'S001' AND 'S014' ";
+  AND r08_codigo BETWEEN 'S001' AND 'S014' as x
+  group by x.rh02_regist, x.si196_tiporegistro,x.si196_tiporemuneracao, x.si196_descoutros,x.si196_natsaldodetalhe";
                 //echo '<pre>';
                 //print_r($clflpgo10);
                 $rsResult11 = db_query($sSql2);
