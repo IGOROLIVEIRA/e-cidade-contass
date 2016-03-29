@@ -75,7 +75,7 @@ class cl_aoc122016 {
          }
        }
        $this->si40_tpleiorigdecreto = ($this->si40_tpleiorigdecreto == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_tpleiorigdecreto"]:$this->si40_tpleiorigdecreto);
-       $this->si40_tipoleialteracao = ($this->si40_tipoleialteracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_tipoleialteracao"]:$this->si40_tipoleialteracao);
+       $this->si40_tipoleialteracao = ($this->si40_tipoleialteracao === ""?@$GLOBALS["HTTP_POST_VARS"]["si40_tipoleialteracao"]:$this->si40_tipoleialteracao);
        $this->si40_mes = ($this->si40_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_mes"]:$this->si40_mes);
        $this->si40_reg10 = ($this->si40_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_reg10"]:$this->si40_reg10);
        $this->si40_instit = ($this->si40_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si40_instit"]:$this->si40_instit);
