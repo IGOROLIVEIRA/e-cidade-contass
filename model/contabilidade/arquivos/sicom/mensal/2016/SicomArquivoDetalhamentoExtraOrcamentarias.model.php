@@ -136,7 +136,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 				       substr(c60_tipolancamento::varchar,1,2) as tipolancamento,
 				       c60_subtipolancamento as subtipo,
 				       case when (c60_tipolancamento = 1 and c60_subtipolancamento in (1,2,3,4) ) or
-				                 (c60_tipolancamento = 4 and c60_subtipolancamento in (1,2) ) then c60_desdobramneto
+				                 (c60_tipolancamento = 4 and c60_subtipolancamento in (1,2) ) or
+				                 (c60_tipolancamento = 9999 and c60_desdobramneto is not null) then c60_desdobramneto
 				            else 0
 				       end as desdobrasubtipo,
 				       substr(c60_descr,1,50) as descextraorc
