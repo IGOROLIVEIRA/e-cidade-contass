@@ -393,7 +393,11 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 				        
 			        if(pg_num_rows($rsPagOrd12) > 0 && $reg12->codctb != ''){
 				        $clops12 = new cl_ops122015();
-				        
+						/**
+						 * Essa consulta verifica se existe a conta no ctb102015 do mes atual e ctb102014. Caso exista ele pega o codctb e o codigo da fonte.
+						 * Caso no arquivo o campo do codctb e sua fonte estiverem em branco, significa que a consulta abaixo retornou vazio. Deve se verificar
+						 * se foi gerado o ctb102015 ou ctb102014.
+						 */
 				        $sSqlContaPagFont = "select * from ( select distinct si95_codctb  as contapag, si96_codfontrecursos as fonte from conplanoconta 
 											join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu 
 											join ctb102015 on 
