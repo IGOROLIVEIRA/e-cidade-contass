@@ -482,8 +482,14 @@ ini_set('error_reporting', '0');
         }
 
         $mais = $this->objpdf->NbLines(95,$scodpcmater.$descricaoitem);
+
         $mostra = $xlin;
         $x = $this->muda_pag($pagina,$mostra,$xcol,"false",$contapagina,$mais);
+        //echo $descricaoitem;exit;
+
+        if(isset ($resum) && $resum != ""){
+            $distanciar = '2.87';
+        }
 
         $this->objpdf->Row(array ($item, $quantitem, $unid, $scodpcmater.$descricaoitem, $valoritem, $valimp), 3, false, $distanciar, 0, 0, true);
 
