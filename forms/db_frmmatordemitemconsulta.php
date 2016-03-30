@@ -25,9 +25,11 @@
  *                                licenca/licenca_pt.txt 
  */
 
-
-
 require("../libs/db_stdlib.php");
+require("../std/label/rotulocampo.php");
+require("../std/label/RotuloCampoDB.php");
+require("../std/label/RotuloDB.php");
+require("../std/label/rotulo.php");
 require("../libs/db_conecta.php");
 include("../libs/db_sessoes.php");
 include("../libs/db_usuariosonline.php");
@@ -92,7 +94,7 @@ $clrotulo->label("pc23_obs");
  
  <?
  $where="";
- 
+
  if (isset($m51_codordem) && $m51_codordem!= "") {
 
  if (isset($e60_numemp) && $e60_numemp!=''){
@@ -105,7 +107,7 @@ $clrotulo->label("pc23_obs");
       $campos .= "(select coalesce(sum(m36_qtd), 0) from matordemitemanu where m36_matordemitem = m52_codlanc) as qtdanulado,";
       $campos .= "(select coalesce(sum(m36_vrlanu),0) from matordemitemanu where m36_matordemitem = m52_codlanc) as valoranulado";
 
-      $sSqlItens = $clmatordemitem->sql_query_ordcons(null,"$campos","","m52_codordem=$m51_codordem $where"); 
+      $sSqlItens = $clmatordemitem->sql_query_ordcons(null,"$campos","","m52_codordem=$m51_codordem $where");
       $result    = $clmatordemitem->sql_record($sSqlItens);
       $numrows   = $clmatordemitem->numrows;
 
