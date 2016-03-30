@@ -19,7 +19,7 @@ class cl_ntf202016 {
    var $si145_sequencial = 0; 
    var $si145_tiporegistro = 0; 
    
-   var $si145_nfnumero = 0;
+   var $si145_nfnumero = null;
    var $si145_nfserie	= 0;
    var $si145_tipodocumento	= 0;
    var $si145_nrodocumento	= 0;
@@ -48,7 +48,7 @@ class cl_ntf202016 {
                  si145_sequencial = int8 = sequencial 
                  si145_tiporegistro = int8 = Tipo do  registro 
                  
-                 si145_nfnumero = int8 = Numero da nota
+                 si145_nfnumero = varchar(20) = Numero da nota
                  si145_nfserie = varchar(8) = Numero de serie
                  si145_tipodocumento = int8 = Tipo do documento
                  si145_nrodocumento = varchar(14) = Numero do documento
@@ -139,7 +139,7 @@ class cl_ntf202016 {
      }
      
      if($this->si145_nfnumero == null ){ 
-       $this->si145_nfnumero = "0";
+       $this->si145_nfnumero = "'0'";
      }
      if($this->si145_nfserie == null ){ 
        $this->si145_nfserie = "0";
@@ -246,7 +246,7 @@ class cl_ntf202016 {
                                 $this->si145_sequencial 
                                ,$this->si145_tiporegistro 
                                
-                               ,$this->si145_nfnumero
+                               ,'$this->si145_nfnumero'
                                ,'$this->si145_nfserie'
                                ,$this->si145_tipodocumento
                                ,'$this->si145_nrodocumento'
@@ -333,9 +333,9 @@ class cl_ntf202016 {
      
      if(trim($this->si145_nfnumero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si145_nfnumero"])){ 
         if(trim($this->si145_nfnumero)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si145_nfnumero"])){ 
-           $this->si145_nfnumero = "0" ; 
+           $this->si145_nfnumero = "'0'" ;
         } 
-       $sql  .= $virgula." si145_nfnumero = $this->si145_nfnumero ";
+       $sql  .= $virgula." si145_nfnumero = '$this->si145_nfnumero' ";
        $virgula = ",";
      }
      if(trim($this->si145_nfserie)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si145_nfserie"])){ 

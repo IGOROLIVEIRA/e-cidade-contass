@@ -20,7 +20,7 @@ class cl_ntf102016 {
    var $si143_tiporegistro = 0; 
    var $si143_codnotafiscal = 0; 
    var $si143_codorgao = null; 
-   var $si143_nfnumero = 0; 
+   var $si143_nfnumero = null;
    var $si143_nfserie = null; 
    var $si143_tipodocumento = 0; 
    var $si143_nrodocumento = null; 
@@ -52,7 +52,7 @@ class cl_ntf102016 {
                  si143_tiporegistro = int8 = Tipo do  registro 
                  si143_codnotafiscal = int8 = Código  Identificador da Nota Fiscal 
                  si143_codorgao = varchar(2) = Código do órgão 
-                 si143_nfnumero = int8 = Número da nota  fiscal 
+                 si143_nfnumero = varchar(20) = Número da nota  fiscal
                  si143_nfserie = varchar(8) = Número de série  da nota fiscal 
                  si143_tipodocumento = int8 = Tipo de  Documento do  credor 
                  si143_nrodocumento = varchar(14) = Número do documento do credor 
@@ -149,7 +149,7 @@ class cl_ntf102016 {
        $this->si143_codnotafiscal = "0";
      }
      if($this->si143_nfnumero == null ){ 
-       $this->si143_nfnumero = "0";
+       $this->si143_nfnumero = "'0'";
      }
      if($this->si143_tipodocumento == null ){ 
        $this->si143_tipodocumento = "0";
@@ -259,7 +259,7 @@ class cl_ntf102016 {
                                ,$this->si143_tiporegistro 
                                ,$this->si143_codnotafiscal 
                                ,'$this->si143_codorgao' 
-                               ,$this->si143_nfnumero 
+                               ,'$this->si143_nfnumero'
                                ,'$this->si143_nfserie' 
                                ,$this->si143_tipodocumento 
                                ,'$this->si143_nrodocumento' 
@@ -375,9 +375,9 @@ class cl_ntf102016 {
      }
      if(trim($this->si143_nfnumero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si143_nfnumero"])){ 
         if(trim($this->si143_nfnumero)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si143_nfnumero"])){ 
-           $this->si143_nfnumero = "0" ; 
+           $this->si143_nfnumero = "'0'" ;
         } 
-       $sql  .= $virgula." si143_nfnumero = $this->si143_nfnumero ";
+       $sql  .= $virgula." si143_nfnumero = '$this->si143_nfnumero' ";
        $virgula = ",";
      }
      if(trim($this->si143_nfserie)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si143_nfserie"])){ 
