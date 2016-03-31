@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, integer,integer,integer) RETURNS character varying AS
+drop function fc_saldoctbfonte(integer,integer,integer,integer,integer);
+
+CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, varchar,integer,integer) RETURNS character varying AS
 	$$
 	declare 
 
@@ -24,23 +26,26 @@ CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, integer,integer,i
 		select coalesce(
 		(select coalesce(conctbsaldo.ces02_valor,0)	  
 		   from conctbsaldo 
+                    join orctiporec on conctbsaldo.ces02_fonte = orctiporec.o15_codigo
 		  where conctbsaldo.ces02_reduz  = iConta 
 		    and conctbsaldo.ces02_anousu = iAnousu 
 		    and conctbsaldo.ces02_inst   = iInstit 
-		    and conctbsaldo.ces02_fonte  = iFonte),
+		    and orctiporec.o15_codtri  = iFonte),
 		    (select case when c62_vlrcre > 0 then c62_vlrcre*-1 else c62_vlrdeb end as valor
-                     from conplanoexe where c62_anousu = iAnousu
+                     from conplanoexe 
+                     join orctiporec on conplanoexe.c62_codrec = orctiporec.o15_codigo
+                     where c62_anousu = iAnousu
                      and c62_reduz = iConta
-                     and c62_codrec = iFonte),0)
+                     and orctiporec.o15_codtri = iFonte),0)
 		   into nSaldoCtbInicialAno;
 	  
 	  -- SOMA TOTAL DE CREDITO POR REDUZIDO E FONTE PARA SALDO INICIAL
 	  
 		  select coalesce((select round(sum(valorcredito), 2) as vcredito from (
 								select conlancamval.c69_valor as valorcredito,
-									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codigo
-											when c71_coddoc in (100,101) then fontereceita.o15_codigo
-											else  contacreditofonte.o15_codigo
+									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codtri
+											when c71_coddoc in (100,101) then fontereceita.o15_codtri
+											else  contacreditofonte.o15_codtri
 									   end as fontemovimento
 								  from conlancamdoc
 							inner join conlancamval on conlancamval.c69_codlan  = conlancamdoc.c71_codlan
@@ -70,10 +75,10 @@ CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, integer,integer,i
 	   
 		  select coalesce((select round(sum(valordebito), 2) as vdebito from (
 								select conlancamval.c69_valor as valordebito,
-									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codigo
-											when c71_coddoc in (100,101) then fontereceita.o15_codigo
-											when c71_coddoc in (140,141) then contacreditofonte.o15_codigo
-											else  contadebitofonte.o15_codigo
+									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codtri
+											when c71_coddoc in (100,101) then fontereceita.o15_codtri
+											when c71_coddoc in (140,141) then contacreditofonte.o15_codtri
+											else  contadebitofonte.o15_codtri
 									   end as fontemovimento
 								  from conlancamdoc
 							inner join conlancamval on conlancamval.c69_codlan  = conlancamdoc.c71_codlan
@@ -100,9 +105,9 @@ CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, integer,integer,i
 	  
 		  select coalesce((select round(sum(valorcredito), 2) as vcredito from (
 								select conlancamval.c69_valor as valorcredito,
-									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codigo
-											when c71_coddoc in (100,101) then fontereceita.o15_codigo
-											else  contacreditofonte.o15_codigo
+									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codtri
+											when c71_coddoc in (100,101) then fontereceita.o15_codtri
+											else  contacreditofonte.o15_codtri
 										end as fontemovimento
 								  from conlancamdoc
 							inner join conlancamval on conlancamval.c69_codlan  = conlancamdoc.c71_codlan
@@ -128,10 +133,10 @@ CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, integer,integer,i
 	   
 		 select coalesce((select round(sum(valordebito), 2) as vdebito from (
 								select conlancamval.c69_valor as valordebito,
-									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codigo
-											when c71_coddoc in (100,101) then fontereceita.o15_codigo
-											when c71_coddoc in (140,141) then contacreditofonte.o15_codigo
-											else  contadebitofonte.o15_codigo
+									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codtri
+											when c71_coddoc in (100,101) then fontereceita.o15_codtri
+											when c71_coddoc in (140,141) then contacreditofonte.o15_codtri
+											else  contadebitofonte.o15_codtri
 									   end as fontemovimento
 								  from conlancamdoc
 							inner join conlancamval on conlancamval.c69_codlan  = conlancamdoc.c71_codlan
@@ -167,7 +172,7 @@ CREATE OR REPLACE FUNCTION fc_saldoctbfonte( integer, integer, integer,integer,i
 	  END IF;
 
 	  return TO_CHAR(ABS(iConta),'999999999999')
-		   ||TO_CHAR(ABS(iFonte),'999999999999')
+		   ||TO_CHAR(iFonte::integer,'999999999999')
 		   ||replace(TO_CHAR(ABS(nSaldoInicialMes::float8),'99999999990D99'),',','.')
 		   ||replace(TO_CHAR(ABS(tDebitoMes),'99999999990D99'),',','.')
 		   ||replace(TO_CHAR(ABS(tCreditoMes),'99999999990D99'),',','.')
