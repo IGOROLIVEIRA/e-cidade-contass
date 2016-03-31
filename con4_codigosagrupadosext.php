@@ -35,7 +35,8 @@ $head3 = "CÓDIGOS EXT AGRUPADOS SICOM";
  * SQL RETORNA TODAS AS CONTAS EXTRAS EXISTENTES NO SISTEMA
  *
  */
-$sSqlExt = "select 10 as tiporegistro,c61_codcon,
+if(db_getsession("DB_anousu") < 2016) {
+    $sSqlExt = "select 10 as tiporegistro,c61_codcon,
 				       c61_reduz as codext,
 				       c61_codtce as codtce,
 				       si09_codorgaotce as codorgao,
@@ -50,7 +51,7 @@ $sSqlExt = "select 10 as tiporegistro,c61_codcon,
 					             end as unidade
 					  from orcunidade
 					  join orcorgao on o41_anousu = o40_anousu and o41_orgao = o40_orgao
-					  where o41_instit = ".db_getsession("DB_instit")." and o40_anousu = ".db_getsession("DB_anousu")." order by o40_orgao limit 1) as codUnidadeSub,
+					  where o41_instit = " . db_getsession("DB_instit") . " and o40_anousu = " . db_getsession("DB_anousu") . " order by o40_orgao limit 1) as codUnidadeSub,
 				       substr(c60_tipolancamento::varchar,1,2) as tipolancamento,
 				       case when c60_tipolancamento = 1 and c60_subtipolancamento not in (1,2,3,4) then c61_reduz
 				            when c60_tipolancamento = 2 then 1
@@ -69,8 +70,39 @@ $sSqlExt = "select 10 as tiporegistro,c61_codcon,
 				  from conplano
 				  join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
 				  left join infocomplementaresinstit on si09_instit = c61_instit
-				  where c60_anousu = ".db_getsession("DB_anousu")." and c60_codsis = 7 and c61_instit = ".db_getsession("DB_instit")."
+				  where c60_anousu = " . db_getsession("DB_anousu") . " and c60_codsis = 7 and c61_instit = " . db_getsession("DB_instit") . "
   				order by c61_reduz  ";
+} else {
+    $sSqlExt = "select 10 as tiporegistro,c61_codcon,
+				       c61_reduz as codext,
+				       c61_codtce as codtce,
+				       si09_codorgaotce as codorgao,
+				       (select CASE
+									    WHEN o41_subunidade != 0
+									         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+									            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+									              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+									    ELSE lpad((CASE WHEN o40_codtri = '0'
+									         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+									           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+					             end as unidade
+					  from orcunidade
+					  join orcorgao on o41_anousu = o40_anousu and o41_orgao = o40_orgao
+					  where o41_instit = " . db_getsession("DB_instit") . " and o40_anousu = " . db_getsession("DB_anousu") . " order by o40_orgao limit 1) as codUnidadeSub,
+				       substr(c60_tipolancamento::varchar,1,2) as tipolancamento,
+				       c60_subtipolancamento as subtipo,
+				       case when (c60_tipolancamento = 1 and c60_subtipolancamento in (1,2,3,4) ) or
+				                 (c60_tipolancamento = 4 and c60_subtipolancamento in (1,2) ) or
+				                 (c60_tipolancamento = 9999 and c60_desdobramneto is not null) then c60_desdobramneto
+				            else 0
+				       end as desdobrasubtipo,
+				       substr(c60_descr,1,50) as descextraorc
+				  from conplano
+				  join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
+				  left join infocomplementaresinstit on si09_instit = c61_instit
+				  where c60_anousu = " . db_getsession("DB_anousu") . " and c60_codsis = 7 and c61_instit = " . db_getsession("DB_instit") . "
+  				order by c61_reduz  ";
+}
 $rsContasExtra = db_query($sSqlExt);//echo pg_last_error();db_criatabela($rsContasExtra);
 
 
