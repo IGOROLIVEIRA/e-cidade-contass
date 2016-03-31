@@ -221,7 +221,7 @@ class cl_liccomissaocgm {
          return false;
        }
      }
-     if(trim($this->l31_liccomissao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l31_liccomissao"])){
+     /*if(trim($this->l31_liccomissao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l31_liccomissao"])){
        $sql  .= $virgula." l31_liccomissao = $this->l31_liccomissao ";
        $virgula = ",";
        if(trim($this->l31_liccomissao) == null ){
@@ -233,7 +233,7 @@ class cl_liccomissaocgm {
          $this->erro_status = "0";
          return false;
        }
-     }
+     }*/
      if(trim($this->l31_numcgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l31_numcgm"])){ 
        $sql  .= $virgula." l31_numcgm = $this->l31_numcgm ";
        $virgula = ",";
