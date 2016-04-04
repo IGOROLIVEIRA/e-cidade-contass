@@ -84,7 +84,7 @@ if(isset($e60_codemp_ini) && $e60_codemp_ini != "") {
   $codemp  = split("/",$e60_codemp_ini);
 
   if (isset($e60_codemp_fim) && $e60_codemp_fim != "") {
-     $str = " e60_codemp between '".$e60_codemp_ini."' and '".$e60_codemp_fim."' and e60_anousu = {$iAnoUso} ";
+     $str = " e60_codemp::integer between ".$e60_codemp_ini." and ".$e60_codemp_fim." and e60_anousu = {$iAnoUso} ";
   } else {
        $codemp  = split("/",$e60_codemp_ini);
 
