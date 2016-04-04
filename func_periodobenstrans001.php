@@ -53,7 +53,7 @@ function js_abre(botao){
     <legend>Consulta - Transferência de Bens</legend>
     <table class="form-container">
       <tr> 
-        <td title="Bens baixados no intervalo de data"> <? db_ancora(@$Lt55_baixa,"js_pesquisa_bem(true);",3);?>  </td>
+        <td title="Bens baixados no intervalo de data"> <? db_ancora('Data da transferência',"js_pesquisa_bem(true);",3);?>  </td>
         <td>
           <?
             db_inputdata('t93_dataINI',@$t93_dataINI_dia,@$t93_dataINI_mes,@$t93_dataINI_ano,true,'text',1,"");

@@ -41,6 +41,7 @@ $pdf->SetFont("","B","");
 								t52_descr,
 								t64_class,
 								t52_ident,
+								t93_data,
 								divisaoorigem.t30_descr AS divorigem,
 								divisaodestino.t30_descr AS divdestino,
 								situabens.t70_descr AS situacao
@@ -66,13 +67,14 @@ $pdf->SetFont("","B","");
   
   $rsDivisaoSituacao = db_query($sSqlDivisao);
 
-$pdf->Cell(15,$tam,"PLACA",1,0,"C",1);    
+$pdf->Cell(15,$tam,"PLACA",1,0,"C",1);
+$pdf->Cell(15,$tam,"DATA",1,0,"C",1);
 $pdf->Cell(70,$tam,"DESCRICÃO",1,0,"L",1);
 $pdf->Cell(40,$tam,"ORIGEM",1,0,"L",1);
 $pdf->Cell(40,$tam,"DIVISÃO DE ORIGEM",1,0,"L",1);
 $pdf->Cell(40,$tam,"DESTINO",1,0,"L",1);
 $pdf->Cell(40,$tam,"DIVISÃO DE DESTINO",1,0,"L",1);
-$pdf->Cell(35,$tam,"USUÁRIO",1,1,"C",1);
+$pdf->Cell(25,$tam,"USUÁRIO",1,1,"C",1);
 
 for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 
@@ -89,13 +91,13 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
   $nValorUnitario = $oBem->getValorAquisicao();
   $iValorTotal    += $oBem->getValorAquisicao();
 
-  if (strlen($oBem->getDescricao()) > 45 || strlen($oDivisaoSituacao->divorigem) > 27 || strlen($oDivisaoSituacao->divdestino) > 27 || strlen($oDivisaoSituacao->origem) > 27 || strlen($oDivisaoSituacao->destino) > 27) {
+  if (strlen($oBem->getDescricao()) > 45 || strlen($oDivisaoSituacao->divorigem) > 27 || strlen($oDivisaoSituacao->divdestino) > 27 || strlen($oDivisaoSituacao->origem) > 25 || strlen($oDivisaoSituacao->destino) > 20) {
 		  
 	  	$aDescricao  = quebrar_texto($oBem->getDescricao(),45);
 	  	$aDivOrigem  = quebrar_texto($oDivisaoSituacao->divorigem,27);
 	  	$aDivDestino = quebrar_texto($oDivisaoSituacao->divdestino,27);
-	  	$aOrigem     = quebrar_texto($oDivisaoSituacao->origem,27);
-	  	$aDestino    = quebrar_texto($oDivisaoSituacao->destino,27);
+	  	$aOrigem     = quebrar_texto($oDivisaoSituacao->origem,25);
+	  	$aDestino    = quebrar_texto($oDivisaoSituacao->destino,20);
 	  	//$aDivOrigem  = $oDivisaoSituacao->divorigem;
 	  	//$aDivDestino = $oDivisaoSituacao->divdestino;
 	  $aDados = array(count($aDescricao),count($aDivOrigem),count($aDivDestino),count($aOrigem),count($aDestino));
@@ -104,9 +106,9 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 	} else {
 	  $alt_novo = 1;
 	}
-  	
-  
-  $pdf->Cell(15,$tam*$alt_novo,$oDivisaoSituacao->t52_ident,1,0,"C",0);   
+
+  $pdf->Cell(15,$tam*$alt_novo,$oDivisaoSituacao->t52_ident,1,0,"C",0);
+  $pdf->cell(15,$tam*$alt_novo,implode('/',array_reverse(explode('-',$oDivisaoSituacao->t93_data))),1,0,"C",0);
   
   /**
    * imprimir descricao item
@@ -128,7 +130,6 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 	} else {
 	  $pdf->Cell(70,$tam*$alt_novo,$oBem->getDescricao(),1,0,"L",0);
 	}
-  
   
   /**
    * imprimir  origem
@@ -175,7 +176,7 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
   /**
    * imprimir  destino
    */
-  if (strlen($oDivisaoSituacao->destino) > 27) {
+  if (strlen($oDivisaoSituacao->destino) > 20) {
 	  
 	  $pos_x = $pdf->x;
 	  $pos_y = $pdf->y;
@@ -215,7 +216,7 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 	  $pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->divdestino,1,0,"L",0);
 	}
 
-  	$pdf->Cell(35,$tam*$alt_novo,$oDivisaoSituacao->nome,1,1,"C",0);
+  	$pdf->Cell(25,$tam*$alt_novo,$oDivisaoSituacao->nome,1,1,"C",0);
 
 }
 
