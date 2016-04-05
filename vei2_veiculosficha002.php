@@ -475,10 +475,13 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
     $pdf->setfont('arial','b',8);
     $pdf->cell(90,$alt,'MANUTENÇÕES :',0,1,"L",0);
   
-    $sCamposVeicmanut = " distinct ve62_codigo,ve28_descr,ve62_dtmanut,ve62_vlrpecas,ve62_vlrmobra,ve62_medida ";
+    $sCamposVeicmanut  = " distinct ve62_codigo,ve28_descr,ve62_dtmanut";
+    $sCamposVeicmanut .= ",case when (ve62_vlrpecas is null or ve62_vlrpecas = 0) and ve62_tipogasto in (6,7,8) then ve62_valor else ve62_vlrpecas end as ve62_vlrpecas ";
+    $sCamposVeicmanut .= ",case when (ve62_vlrmobra is null or ve62_vlrmobra = 0) and ve62_tipogasto in (9) then ve62_valor else ve62_vlrmobra end as ve62_vlrmobra ";
+    $sCamposVeicmanut .= ",ve62_medida ";
     $sOrdemVeicmanut  = " ve62_dtmanut,ve62_codigo ";
     $sSqlVeicmanut    = $clveicmanut->sql_query_info(null,$sCamposVeicmanut, $sOrdemVeicmanut," ve62_veiculos= $veiculo ");
-  
+
     $result_manut     = $clveicmanut->sql_record($sSqlVeicmanut);
     $numrows_manut    = $clveicmanut->numrows;
     
