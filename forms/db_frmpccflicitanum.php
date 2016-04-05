@@ -36,7 +36,7 @@ $clrotulo->label("nomeinst");
 <center>
 <fieldset>
   <legend align="center">
-    <b>Configuração dos Editais</b>
+    <b>Configuração de Processo Licitatório</b>
   </legend>
 <table border="0">
   <br>
