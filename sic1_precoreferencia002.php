@@ -32,6 +32,7 @@ if (isset($imprimir)){
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
+    $clprecoreferencia->si01_justificativa = $si01_justificativa;
   $clprecoreferencia->alterar($si01_sequencial);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
