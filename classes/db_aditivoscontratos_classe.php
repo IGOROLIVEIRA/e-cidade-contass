@@ -595,7 +595,7 @@ class cl_aditivoscontratos {
        /**
         * verificação para não permitir incluir aditivos repetidos
         */
-       $sqlVerifica = " select 1 from aditivoscontratos where si174_nrocontrato = ".$this->si174_nrocontrato." and
+       $sqlVerifica = " select 1 from aditivoscontratos where si174_sequencial != $this->si174_sequencial and si174_nrocontrato = ".$this->si174_nrocontrato." and
        si174_dataassinaturacontoriginal = '".$this->si174_dataassinaturacontoriginal."' and si174_nroseqtermoaditivo = ".$this->si174_nroseqtermoaditivo."
        and si174_codunidadesub = '".$this->si174_codunidadesub."'";
        $result = db_query($sqlVerifica);
