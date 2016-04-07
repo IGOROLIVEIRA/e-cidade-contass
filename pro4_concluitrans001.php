@@ -224,25 +224,14 @@ $db_botao = true;
 
       $sqltran="
 						 select distinct
-						        p62_codtran,
-										p62_dttran,
-										p62_hora,
-										descrdepto,
-										login,
-							array_to_string( array_accum( p58_numero||'/'||p58_ano ), ', ') as p63_codproc,
-/*										case
-											when count(*) = 1 then
-												(select  cast(protprocesso.p58_numero||'/'||p58_ano as varchar)
-													 from proctransferproc x
-													      inner join protprocesso on p63_codproc = p58_codproc
-													where x.p63_codtran = p62_codtran
-													limit 1)
-											else
-												null
-										end as p63_codproc,*/
-                    p58_requer,
-                    p51_descr as p58_codigo,
-                    p58_numeracao as dl_Numeraçao
+						 		p62_dttran,
+						 		descrdepto,
+						 		p58_numeracao as dl_Numero_processo,
+						 		p51_descr as p58_codigo,
+								array_to_string( array_accum( p58_numero||'/'||p58_ano ), ', ') as p63_codproc,
+                    			p58_requer,
+								login as dl_Usuário,
+								p62_codtran
 							 from proctransferproc
 				 inner join proctransfer on p62_codtran = p63_codtran
 				 inner join protprocesso on p58_codproc = p63_codproc
@@ -256,15 +245,14 @@ $db_botao = true;
 								 or   p62_id_usorec   = 0 )
 								and p64_codtran is null
 								and p68_codproc is null
-					 group by p62_codtran,
-										p62_dttran,
-										p62_hora,
-										descrdepto,
-                    login,
+					 group by p62_dttran,
+					 descrdepto,
+					 p58_numeracao,
+					 p51_descr,
                     p63_codproc,
                     p58_requer,
-                    p51_descr,
-                    p58_numeracao
+                    login,
+                    p62_codtran
 					 order by p62_codtran desc";
 
       //echo $sqltran;
