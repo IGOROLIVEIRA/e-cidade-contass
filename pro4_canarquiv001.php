@@ -94,7 +94,7 @@ $rotulo->label("p58_codproc");
       $sql = "SELECT distinct p67_codproc,
                      cast(p58_numero||'/'||p58_ano::varchar as varchar) as p58_numero, 
                      p67_dtarq,
-                     p58_numeracao as dl_Numeração,
+                     p58_numeracao as dl_Numero_Do_Processo,
                      p51_descr as dl_tipo_processo,
                      (case when p58_requer isnull then z01_nome else p58_requer end) as dl_Requerente,
                      p67_historico
