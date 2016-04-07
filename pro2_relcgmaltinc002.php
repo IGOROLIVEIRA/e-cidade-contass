@@ -30,57 +30,57 @@ include("libs/db_sql.php");
 include("libs/db_utils.php");
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-$oGet  = db_utils::postMemory($_GET,0);
+$oGet = db_utils::postMemory($_GET, 0);
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('');
 
-$sWhere        = "";
-$sWhereCadast  = "";
+$sWhere = "";
+$sWhereCadast = "";
 $sWhereDataAlt = "";
-$sAnd          = "";
-$sBetween      = "";
-$sHeaderTipo   = "Tipo modificação: Todos";
+$sAnd = "";
+$sBetween = "";
+$sHeaderTipo = "Tipo modificação: Todos";
 $sHeaderUsuSel = "";
-$sHeaderData   = "";
+$sHeaderData = "";
 
-if($oGet->tipo != 'T'){
-	
-	switch ($oGet->tipo) {
-		case "I" :
-			   $sHeaderTipo = "Tipo modificação: Inclusões";
-			   break;
-		case "A" :
-			   $sHeaderTipo = "Tipo modificação: Alterações";
-			   break;
-	}
-	
-	$sWhere = " {$sAnd} tipo_alt = '{$oGet->tipo}' ";
-	$sAnd   = " and ";
+if ($oGet->tipo != 'T') {
+
+    switch ($oGet->tipo) {
+        case "I" :
+            $sHeaderTipo = "Tipo modificação: Inclusões";
+            break;
+        case "A" :
+            $sHeaderTipo = "Tipo modificação: Alterações";
+            break;
+    }
+
+    $sWhere = " {$sAnd} tipo_alt = '{$oGet->tipo}' ";
+    $sAnd = " and ";
 }
 
-if(trim($oGet->ususel) != ""){
-  
-  $sHeaderUsuSel = "Usuários Selecionados: ( ".$oGet->ususel." )";
-  $sWhere       .= "{$sAnd} usuario in ($oGet->ususel) ";
-  $sAnd          = " and ";
+if (trim($oGet->ususel) != "") {
+
+    $sHeaderUsuSel = "Usuários Selecionados: ( " . $oGet->ususel . " )";
+    $sWhere .= "{$sAnd} usuario in ($oGet->ususel) ";
+    $sAnd = " and ";
 }
 
 if (isset($oGet->data1) && $oGet->data1 != "--") {
-	
-	if (isset($oGet->data2) && $oGet->data2 != "--") {
-		$sHeaderData   = "Data: $oGet->data1 á $oGet->data2";
-	  $sBetween      = "between '{$oGet->data1}' and '{$oGet->data2}' ";
-	  $sWhereCadast  = "where z01_cadast {$sBetween}";	
-	  $sWhereDataAlt = "where z05_data_alt {$sBetween}";
-	}
+
+    if (isset($oGet->data2) && $oGet->data2 != "--") {
+        $sHeaderData = "Data: $oGet->data1 á $oGet->data2";
+        $sBetween = "between '{$oGet->data1}' and '{$oGet->data2}' ";
+        $sWhereCadast = "where z01_cadast {$sBetween}";
+        $sWhereDataAlt = "where z05_data_alt {$sBetween}";
+    }
 }
 
 if (isset($sWhere) && $sWhere != "") {
-	$sWhere = " where {$sWhere} ";
+    $sWhere = " where {$sWhere} ";
 }
 
-$sql  = "  select u.login,                                                                                            ";
+$sql = "  select u.login,                                                                                            ";
 $sql .= "         x.*                                                                                                 ";
 $sql .= "    from (                                                                                                   ";
 $sql .= "           select 'I'::char(1)    as tipo_alt,                                                               ";
@@ -141,111 +141,175 @@ $sql .= "order by data, numcgm, tipo_alt desc                                   
 $result = pg_query($sql);
 $linhas = pg_num_rows($result);
 
-if($linhas > 0){
-  $head2 = "RELATÓRIO CGM ALTERAÇÃO/INCLUSÃO";
-  $head4 = $sHeaderTipo;
-  $head5 = $sHeaderData;
-  $head6 = $sHeaderUsuSel;
-  
-  $pdf = new PDF(); 
-  $pdf->Open(); 
-  $pdf->AliasNbPages(); 
-  $total = 0;
-  $pdf->setfillcolor(235);
-  $pdf->setfont('arial','b',8);
-  $troca = 1;
-  $alt = 4;
-  $total = 0;
-  $p=0;
+if ($linhas > 0) {
+    $head2 = "RELATÓRIO CGM ALTERAÇÃO/INCLUSÃO";
+    $head4 = $sHeaderTipo;
+    $head5 = $sHeaderData;
+    $head6 = $sHeaderUsuSel;
+
+    $pdf = new PDF();
+    $pdf->Open();
+    $pdf->AliasNbPages();
+    $total = 0;
+    $pdf->setfillcolor(235);
+    $pdf->setfont('arial', 'b', 8);
+    $troca = 1;
+    $alt = 4;
+    $total = 0;
+    $p = 0;
 
 
-	for($x = 0; $x < $linhas;$x++){
-		
-	db_fieldsmemory($result,$x);
+    for ($x = 0; $x < $linhas; $x++) {
 
-    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
-    	
-      $pdf->addpage('L');
-      $pdf->setfont('arial','b',8);
-      
-      //linha 1
-      $pdf->cell(45,$alt,"Tipo da operação",1,0,"C",1);
-      $pdf->cell(65,$alt,"Data da operação",1,0,"L",1);
-      $pdf->cell(120,$alt,"Usuário",1,0,"L",1);
-      $pdf->cell(50,$alt,"CGM",1,1,"L",1);
-      
-      // linha 2
-      $pdf->cell(45,$alt,"CPF/CNPJ",1,0,"L",1);
-      $pdf->cell(65,$alt,"Nome",1,0,"L",1);
-      $pdf->cell(64,$alt,"Endereço",1,0,"L",1);
-      $pdf->cell(8,$alt,"Num.",1,0,"L",1);
-      $pdf->cell(30,$alt,"Compl.",1,0,"L",1);
-      $pdf->cell(45,$alt,"Município",1,0,"L",1);
-      $pdf->cell(8,$alt,"UF",1,0,"L",1);
-      $pdf->cell(15,$alt,"CEP",1,1,"L",1);
-     
-      $troca = 0;
+        db_fieldsmemory($result, $x);
+
+        if (strlen($nome) > 35) {
+            $aNome = quebrar_texto($nome, 35);
+            $alt_novo = count($aNome);
+        } else {
+            $alt_novo = 1;
+        }
+
+        if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
+
+            $pdf->addpage('L');
+            $pdf->setfont('arial', 'b', 8);
+
+            //linha 1
+            $pdf->cell(45, $alt, "Tipo da operação", 1, 0, "C", 1);
+            $pdf->cell(65, $alt, "Data da operação", 1, 0, "L", 1);
+            $pdf->cell(120, $alt, "Usuário", 1, 0, "L", 1);
+            $pdf->cell(50, $alt, "CGM", 1, 1, "L", 1);
+
+            // linha 2
+            $pdf->cell(45, $alt, "CPF/CNPJ", 1, 0, "L", 1);
+            $pdf->cell(65, $alt, "Nome", 1, 0, "L", 1);
+            $pdf->cell(64, $alt, "Endereço", 1, 0, "L", 1);
+            $pdf->cell(8, $alt, "Num.", 1, 0, "L", 1);
+            $pdf->cell(30, $alt, "Compl.", 1, 0, "L", 1);
+            $pdf->cell(45, $alt, "Município", 1, 0, "L", 1);
+            $pdf->cell(8, $alt, "UF", 1, 0, "L", 1);
+            $pdf->cell(15, $alt, "CEP", 1, 1, "L", 1);
+
+            $troca = 0;
+        }
+
+        if ($x % 2 == 0) {
+            $corfundo = 250;
+        } else {
+            $corfundo = 230;
+        }
+
+        $pdf->SetFillColor($corfundo);
+
+        if ($tipo_alt == 'A') {
+            $pdf->cell(45, $alt, "Alteração", 0, 0, "C", 1);
+        }
+
+        if ($tipo_alt == 'I') {
+            $pdf->cell(45, $alt, "Inclusão", 0, 0, "C", 1);
+        }
+
+        $pdf->cell(65, $alt, db_formatar($data, 'd'), 0, 0, "L", 1);
+        $pdf->cell(120, $alt, $login, 0, 0, "L", 1);
+        $pdf->cell(50, $alt, $numcgm, 0, 1, "L", 1);
+
+        // linha 2
+        $pdf->cell(15, $alt * $alt_novo, "Atual", 0, 0, "L", 1);
+        $pdf->cell(30, $alt * $alt_novo, db_formatar($cgccpf, (strlen($cgccpf) == 11 ? 'cpf' : 'cnpj')), 0, 0, "L", 1);
+        if (strlen($nome) > 35) {
+
+            $pos_x = $pdf->x;
+            $pos_y = $pdf->y;
+            $pdf->Cell(65, $alt * $alt_novo, "", 0, 0, "L", 1);
+            $pdf->x = $pos_x;
+            $pdf->y = $pos_y;
+            foreach ($aNome as $oNome) {
+                $pdf->cell(65, $alt, $oNome, 0, 1, "L", 1);
+                $pdf->x = $pos_x;
+            }
+            $pdf->x = $pos_x + 65;
+            $pdf->y = $pos_y;
+
+        } else {
+            $pdf->cell(65, $alt * $alt_novo, $nome, 0, 0, "L", 1);
+        }
+        $pdf->cell(64, $alt * $alt_novo, $ender, 0, 0, "L", 1);
+        $pdf->cell(8, $alt * $alt_novo, $numero, 0, 0, "L", 1);
+        $pdf->cell(30, $alt * $alt_novo, $compl, 0, 0, "L", 1);
+        $pdf->cell(45, $alt * $alt_novo, $munic, 0, 0, "L", 1);
+        $pdf->cell(8, $alt * $alt_novo, $uf, 0, 0, "L", 1);
+        $pdf->cell(15, $alt * $alt_novo, db_formatar($cep, "cep"), 0, 1, "L", 1);
+
+        //linha 3
+        if ($tipo_alt == 'A') {
+            if (strlen($nome_ant) > 35) {
+                $aNome_ant = quebrar_texto($nome_ant, 35);
+                $alt_novo_ant = count($aNome_ant);
+            } else {
+                $alt_novo_ant = 1;
+            }
+
+            $pdf->cell(15, $alt * $alt_novo_ant, "Anterior", 0, 0, "L", 1);
+
+            /*
+           operador ternario
+           (<condicao>?<corpo>:<senao>)
+        */
+
+            $pdf->cell(30, $alt * $alt_novo_ant, db_formatar($cgccpf_ant, (strlen($cgccpf_ant) == 11 ? 'cpf' : 'cnpj')), 0, 0, "L", 1);
+            if (strlen($nome_ant) > 35) {
+                $pos_x = $pdf->x;
+                $pos_y = $pdf->y;
+                $pdf->Cell(65, $alt * $alt_novo_ant, "", 0, 0, "L", 1);
+                $pdf->x = $pos_x;
+                $pdf->y = $pos_y;
+                foreach ($aNome_ant as $oNome_ant) {
+                    $pdf->cell(65, $alt, $oNome_ant, 0, 1, "L", 1);
+                    $pdf->x = $pos_x;
+                }
+                $pdf->x = $pos_x + 65;
+                $pdf->y = $pos_y;
+
+            } else {
+                $pdf->cell(65, $alt * $alt_novo_ant, $nome_ant, 0, 0, "L", 1);
+            }
+            $pdf->cell(64, $alt * $alt_novo_ant, $ender_ant, 0, 0, "L", 1);
+            $pdf->cell(8, $alt * $alt_novo_ant, $numero_ant, 0, 0, "L", 1);
+            $pdf->cell(30, $alt * $alt_novo_ant, $compl_ant, 0, 0, "L", 1);
+            $pdf->cell(45, $alt * $alt_novo_ant, $munic_ant, 0, 0, "L", 1);
+            $pdf->cell(8, $alt * $alt_novo_ant, $uf_ant, 0, 0, "L", 1);
+            $pdf->cell(15, $alt * $alt_novo_ant, db_formatar($cep_ant, "cep"), 0, 1, "L", 1);
+        }
+
+        $total = $total + 1;
+
     }
-   
-    if($x % 2 == 0){
-	    $corfundo = 250;
-	  } else {
-	    $corfundo = 230;	
-	  }
-	  
-	  $pdf->SetFillColor($corfundo);
 
-    if($tipo_alt=='A'){
-   		$pdf->cell(45,$alt,"Alteração",0,0,"C",1);
-    }
-    
-    if($tipo_alt=='I'){
-   		$pdf->cell(45,$alt,"Inclusão",0,0,"C",1);
-    }
-   
-	  $pdf->cell(65,$alt,db_formatar($data,'d'),0,0,"L",1);
-   	$pdf->cell(120,$alt,$login,0,0,"L",1);
-  	$pdf->cell(50,$alt,$numcgm,0,1,"L",1);
-  	
-   	// linha 2
-   	$pdf->cell(15,$alt,"Atual",0,0,"L",1);
-   	$pdf->cell(30,$alt,db_formatar($cgccpf,(strlen($cgccpf)==11?'cpf':'cnpj')),0,0,"L",1);
-    $pdf->cell(65,$alt,$nome,0,0,"L",1);
-    $pdf->cell(64,$alt,$ender,0,0,"L",1);
-    $pdf->cell(8,$alt,$numero,0,0,"L",1);
-    $pdf->cell(30,$alt,$compl,0,0,"L",1);
-    $pdf->cell(45,$alt,$munic,0,0,"L",1);
-    $pdf->cell(8,$alt,$uf,0,0,"L",1);
-    $pdf->cell(15,$alt,db_formatar($cep,"cep"),0,1,"L",1);
-    
-	  //linha 3
-		if ($tipo_alt=='A'){
-			
-			$pdf->cell(15,$alt,"Anterior",0,0,"L",1);
-			
-			   /*
-	          operador ternario
-	          (<condicao>?<corpo>:<senao>) 
-	       */
-			
-			  $pdf->cell(30,$alt,db_formatar($cgccpf_ant,(strlen($cgccpf_ant)==11?'cpf':'cnpj')),0,0,"L",1);
-		    $pdf->cell(65,$alt,$nome_ant,0,0,"L",1);
-		    $pdf->cell(64,$alt,$ender_ant,0,0,"L",1);
-		    $pdf->cell(8 ,$alt,$numero_ant,0,0,"L",1);
-		    $pdf->cell(30,$alt,$compl_ant,0,0,"L",1);
-		    $pdf->cell(45,$alt,$munic_ant,0,0,"L",1);
-		    $pdf->cell(8 ,$alt,$uf_ant,0,0,"L",1);
-		    $pdf->cell(15,$alt,db_formatar($cep_ant,"cep"),0,1,"L",1);
-		}
-		
-		$total = $total+1;
-		
-	}
-	
-   $pdf->ln(5);	
-   $pdf->cell(280 ,8,"TOTAL DE REGISTROS ENCONTRADO: ".$total,1,1,"C",1);
-   $pdf->Output();
+    $pdf->ln(5);
+    $pdf->cell(280, 8, "TOTAL DE REGISTROS ENCONTRADO: " . $total, 1, 1, "C", 1);
+    $pdf->Output();
 } else {
-	db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado.');
+    db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado.');
 }
+
+function quebrar_texto($texto, $tamanho)
+{
+
+    $aTexto = explode(" ", $texto);
+    $string_atual = "";
+    foreach ($aTexto as $word) {
+        $string_ant = $string_atual;
+        $string_atual .= " " . $word;
+        if (strlen($string_atual) > $tamanho) {
+            $aTextoNovo[] = trim($string_ant);
+            $string_ant = "";
+            $string_atual = $word;
+        }
+    }
+    $aTextoNovo[] = trim($string_atual);
+    return $aTextoNovo;
+
+}
+
 ?>
