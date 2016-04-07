@@ -68,7 +68,25 @@ $bancos['arquivo'] = 'pes4_geraraspprev001.php';
       echo "&nbsp;/&nbsp;";
       $mes = db_mesfolha();
       db_input('mes',2,$IDBtxt25,true,'text',2,'')
-  ?>
+    ?>
+    </td>
+    </tr>
+    <tr >
+    <td align="left" nowrap title="Tabela de Previdência" >
+        <strong>Tabela de Previdência :&nbsp;&nbsp;</strong>
+    </td>
+    <td>
+    <?
+$sql = "select distinct (cast(r33_codtab as integer) - 2) as r33_codtab,
+                                                r33_nome
+      from inssirf
+      where r33_anousu = ".db_anofolha()."
+        and r33_mesusu = ".db_mesfolha()."
+        and r33_codtab > 2
+        and r33_instit = ".db_getsession('DB_instit');
+$res = pg_query($sql);
+    db_selectrecord('prev', $res, true, 4);
+    ?>
     </td>
     </tr>
     <tr>
@@ -85,7 +103,7 @@ $bancos['arquivo'] = 'pes4_geraraspprev001.php';
         </td>
         </tr>
         <tr>
-        <td><strong>Vínculo:</strong></td>
+        <td><strong>Tipo de arquivo:</strong></td>
     <td>
     <?
       $aVinculos = array (
@@ -93,7 +111,9 @@ $bancos['arquivo'] = 'pes4_geraraspprev001.php';
                           'S' => 'Segurado',
                           'C' => 'Cargo',
                           'RB' => 'Rubrica Benefício',
-                          'FP' => 'FP'
+                          'FP' => 'FP',
+                          'HS' => 'HS',
+                          'VO' => 'VO'
                           );
       db_select("vinculo",$aVinculos,true,1);
     ?>
