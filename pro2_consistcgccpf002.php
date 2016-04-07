@@ -176,7 +176,7 @@ function CalculaCNPJ($CampoNumero){
 $head3 = "RELATÓRIOS DE CPF/CNPJ ";
 $head5 = "INVÁLIDOS";
 
-$result=$clcgm->sql_record($clcgm->sql_query_file(null,"z01_numcgm,z01_nome,z01_cgccpf","z01_numcgm",""));
+$result=$clcgm->sql_record($clcgm->sql_query_file(null,"z01_numcgm,case when z01_nomecomple is null then z01_nome else z01_nomecomple end as z01_nome,z01_cgccpf","z01_numcgm",""));
 
 if ($clcgm->numrows == 0){
    db_redireciona('db_erros.php?fechar=true&db_erro=Não existem registros cadastrados.');
@@ -199,9 +199,9 @@ for($x = 0; $x < $clcgm->numrows;$x++){
    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage();
       $pdf->setfont('arial','b',8);
-      $pdf->cell(50,$alt,$RLz01_numcgm,1,0,"C",1);
-      $pdf->cell(80,$alt,$RLz01_nome,1,0,"C",1);
-      $pdf->cell(50,$alt,$RLz01_cgccpf,1,1,"C",1);
+      $pdf->cell(15,$alt,$RLz01_numcgm,1,0,"C",1);
+      $pdf->cell(147,$alt,$RLz01_nome,1,0,"C",1);
+      $pdf->cell(30,$alt,$RLz01_cgccpf,1,1,"C",1);
       $p=0;  
       $troca = 0;
    }
@@ -219,9 +219,9 @@ for($x = 0; $x < $clcgm->numrows;$x++){
      }
      if($imprime==false){
        $pdf->setfont('arial','',7);
-       $pdf->cell(50,$alt,$z01_numcgm,0,0,"C",$p);
-       $pdf->cell(80,$alt,$z01_nome,0,0,"L",$p);
-       $pdf->cell(50,$alt,$z01_cgccpf,0,1,"C",$p);
+       $pdf->cell(15,$alt,$z01_numcgm,0,0,"C",$p);
+       $pdf->cell(147,$alt,$z01_nome,0,0,"L",$p);
+       $pdf->cell(30,$alt,$z01_cgccpf,0,1,"C",$p);
        if ($p==0){
 	 $p=1;
        }else $p=0;
