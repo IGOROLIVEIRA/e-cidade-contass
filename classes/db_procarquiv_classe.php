@@ -486,7 +486,8 @@ class cl_procarquiv {
        $sql .= $campos;
      }
      $sql .= " from procarquiv ";
-     $sql .= " inner join protprocesso on p58_codproc = p67_codproc";
+     $sql .= " inner join protprocesso on p58_codproc     = p67_codproc";
+     $sql .= " inner join tipoproc on tipoproc.p51_codigo = protprocesso.p58_codigo ";
      $sql2 = "";
      if($dbwhere==""){
        if($p67_codarquiv!=null ){

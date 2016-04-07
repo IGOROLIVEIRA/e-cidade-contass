@@ -85,7 +85,7 @@ $clprocarquiv->rotulo->label("p67_historico");
       <?
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
-           $campos = "procarquiv.*, p58_requer";
+           $campos = "p67_dtarq,p58_numeracao as dl_Numero_processo,p51_descr,p58_numero,p67_historico,p58_requer,p67_codarquiv";
         }
         if(isset($chave_p67_codarquiv) && (trim($chave_p67_codarquiv)!="") ){
 	         $sql = $clprocarquiv->sql_query($chave_p67_codarquiv,$campos,"p67_codarquiv");

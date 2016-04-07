@@ -109,17 +109,17 @@
             $iNumero = $aPartesNumero[0];
             $sWhere .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'"; 
           }
-          $sql = "(SELECT p58_codproc,
+          $sql = "(SELECT p58_numeracao as dl_Numero_processo,
+          p51_descr,
           p58_numero,
           p58_requer,
-          p58_coddepto,
-          p51_descr,
-          p78_transint,
-          p63_codtran
+          p63_codtran,
+          p58_codproc
           FROM
           (SELECT distinct  
                                Z.p58_codproc
                               ,Z.p58_numero
+                              ,z.p58_numeracao
                               ,Z.p58_requer
                               ,Z.p58_coddepto
                               ,Z.p51_descr
@@ -128,6 +128,7 @@
                               ,Z.controle
   from (SELECT p58_codproc,
          cast(p58_numero||'/'||p58_ano AS varchar) AS p58_numero,
+         p58_numeracao,
          p58_requer,
          p58_coddepto,
          p51_descr,
@@ -159,17 +160,17 @@
         }else{
           if($pesquisa_chave!=null && $pesquisa_chave!=""){
 
-                      $sql = "SELECT p58_codproc,
+                      $sql = "SELECT p58_numeracao as dl_Numero_processo,
+          p51_descr,
           p58_numero,
           p58_requer,
-          p58_coddepto,
-          p51_descr,
-          p78_transint,
-          p63_codtran
+          p63_codtran,
+          p58_codproc
           FROM
           (SELECT distinct
                                Z.p58_codproc
                               ,Z.p58_numero
+                              ,z.p58_numeracao
                               ,Z.p58_requer
                               ,Z.p58_coddepto
                               ,Z.p51_descr
@@ -178,6 +179,7 @@
                               ,Z.controle
   from (SELECT p58_codproc,
          cast(p58_numero||'/'||p58_ano AS varchar) AS p58_numero,
+         p58_numeracao,
          p58_requer,
          p58_coddepto,
          p51_descr,
