@@ -38,7 +38,7 @@ function js_executaIframe(val) {
   </tr>
   <tr>
     <td nowrap title="<?=@$Tpc01_descrmater?>"> <?=@$Lpc01_descrmater?>    </td>
-    <td> <? db_textarea('pc01_descrmater',0,75,$Ipc01_descrmater,true,'text',$db_opcao,'','','','1000') ?>
+    <td> <? db_textarea('pc01_descrmater',0,75,$Ipc01_descrmater,true,'text',$db_opcao,'','','','80') ?>
     </td>
   </tr>
   <tr>

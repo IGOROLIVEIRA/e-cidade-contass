@@ -73,7 +73,7 @@ $clrotulo->label("m63_codpcmater");
     </td>
     <td>
       <?
-      db_textarea('m60_descr',0,50,$Im60_descr,true,'text',$db_opcao,"");
+      db_textarea('m60_descr',0,50,$Im60_descr,true,'text',$db_opcao,"","","",80);
       ?>
     </td>
   </tr>

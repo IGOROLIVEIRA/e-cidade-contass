@@ -75,7 +75,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV {
   	
 	   $sSql="SELECT distinct  '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
-       pcmater.pc01_descrmater AS dscItem ,
+       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
        '' AS justificativaAlteracao
@@ -95,7 +95,7 @@ WHERE DATE_PART ('YEAR' , homologacao . l202_datahomologacao) =".db_getsession("
 UNION
 SELECT distinct '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN e55_unid = 0 THEN 1 ELSE e55_unid END)::varchar) AS coditem,
-       pcmater . pc01_descrmater AS dscItem ,
+       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
        '' AS justificativaAlteracao
@@ -117,7 +117,7 @@ WHERE empempenho.e60_instit = ".db_getsession("DB_instit")." AND ((DATE_PART ('Y
   UNION 
   SELECT distinct '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
-       pcmater . pc01_descrmater AS dscItem ,
+       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
        '' AS justificativaAlteracao
@@ -135,7 +135,7 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = ".$this->sDataFinal['5'].$thi
   UNION 
   select distinct '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
-       pcmater . pc01_descrmater AS dscItem ,
+       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
        '' AS justificativaAlteracao	
@@ -159,7 +159,7 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = ".$this->sDataFinal['5'].$thi
 	UNION 
   SELECT distinct '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
-       pcmater . pc01_descrmater AS dscItem ,
+       (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
        '' AS justificativaAlteracao
