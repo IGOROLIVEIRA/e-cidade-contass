@@ -709,7 +709,10 @@ $("btnIncluir").observe("click", function() {
    return false;
  }
 
- if(iTipoLancamento=='1' && (iSubTipo=='1' || iSubTipo=='2' || iSubTipo=='3' || iSubTipo=='4')){
+    /**
+     * retirado validação por que alguns clientes precisam salvar o desdobramento em branco
+     * /
+ /*if(iTipoLancamento=='1' && (iSubTipo=='1' || iSubTipo=='2' || iSubTipo=='3' || iSubTipo=='4')){
 	 if(iDesdobramento==""){
 		   alert("Informe o desdobramento.");
 		   $("idesdobramento").style.backgroundColor='#CDC9C9';
@@ -725,7 +728,7 @@ $("btnIncluir").observe("click", function() {
 		   $("idesdobramento").focus();
 		   return false;
 	   }
-  }
+  }*/
 
  
 
