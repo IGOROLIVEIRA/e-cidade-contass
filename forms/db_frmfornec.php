@@ -214,7 +214,6 @@ function js_pesquisapc21_numcgm(mostra) {
 }
 
 function js_mostracgm(erro, chave) {
-  alert($('z01_nome').value);
   $('z01_nome').value = chave;
   if (erro == true) {
 
