@@ -87,6 +87,15 @@ class cl_precoreferencia {
        $this->erro_status = "0";
        return false;
      }
+     if(strtotime($this->si01_datacotacao) < strtotime($this->getDataPcCompras($this->si01_processocompra))){
+       $this->erro_sql = " Campo data da cotacao nao pode ser anterior a data do processo de compras.";
+       $this->erro_campo = "si01_datacotacao";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($this->si01_tipoprecoreferencia == null ){ 
        $this->erro_sql = " Campo Tipo de Preco de Referencia nao Informado.";
        $this->erro_campo = "si01_tipoprecoreferencia";
@@ -209,6 +218,16 @@ class cl_precoreferencia {
    // funcao para alteracao
    function alterar ($si01_sequencial=null) { 
       $this->atualizacampos();
+
+     if(strtotime($this->si01_datacotacao) < strtotime($this->getDataPcCompras($this->si01_processocompra))){
+       $this->erro_sql = " Campo data da cotacao nao pode ser anterior a data do processo de compras.";
+       $this->erro_campo = "si01_datacotacao";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      $sql = " update precoreferencia set ";
      $virgula = "";
      if(trim($this->si01_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si01_sequencial"])){ 
@@ -514,6 +533,17 @@ class cl_precoreferencia {
        }
      }
      return $sql;
+  }
+
+  /**
+   * Função que retorna a data do processo de compras
+   * @param $codproc
+   * @return mixed
+   */
+  public function getDataPcCompras($codproc){
+    $sSql = "select pc80_data from compras.pcproc where pc80_codproc = $codproc";
+    $resSsql = db_query($sSql) or die(pg_last_error());
+    return db_utils::fieldsMemory($resSsql, 0)->pc80_data;
   }
 }
 ?>
