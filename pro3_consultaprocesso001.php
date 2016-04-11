@@ -42,6 +42,7 @@ $clprocandam    = new cl_procandam;
 $clproctransfer = new cl_proctransfer;
 $clprotprocesso = new cl_protprocesso;
 $clproctransand = new cl_proctransand;
+$cltipoproc     = new cl_tipoproc;
 $rotulo         = new rotulocampo();
 $rotulo->label("p58_codproc");
 $rotulo->label("p58_requer");
@@ -51,6 +52,7 @@ $rotulo->label("p58_coddepto");
 $rotulo->label("p58_numero");
 $rotulo->label("z01_nome");
 $rotulo->label("numeroProcesso");
+$rotulo->label("p51_codigo");
 
  if (!isset($grupo)) {
  	 $grupo = 1;
@@ -75,7 +77,20 @@ $rotulo->label("numeroProcesso");
       <b>Consulta de Processos</b>
     </legend>
     <table>
-    
+        <tr>
+          <td nowrap title="<?=@$Tp51_codigo?>">
+            <?
+            db_ancora(@$Lp51_codigo,"js_pesquisap51_codigo(true);",$db_opcao);
+            ?>
+          </td>
+          <td>
+            <?php
+            db_input('p51_codigo',10,$Ip51_codigo,true,'text',$db_opcao," onchange='js_pesquisap51_codigo(false);'");
+            //db_input('p58_numeracao',10,$Ip58_numeracao,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
+            db_input('p51_descr',40,$Ip51_descr,true,'text',3,'');
+            ?>
+          </td>
+        </tr>
 		  <tr>
 		    <td nowrap title="<?=@$Tp58_numero?>">
 		       <?
@@ -125,7 +140,8 @@ function js_consultaProcesso() {
 
   var iNumeroProcesso = $F('p58_numero');
   var iNumeroCgm = $F('p58_numcgm');
-  var sUrl = 'pro3_consultaprocesso003.php?numeroprocesso=' + iNumeroProcesso + '&cgm=' + iNumeroCgm;
+  var iTipoProcesso = $F('p51_codigo');
+  var sUrl = 'pro3_consultaprocesso003.php?numeroprocesso=' + iNumeroProcesso + '&cgm=' + iNumeroCgm + '&tipo=' + iTipoProcesso;
 
   if (iNumeroProcesso == "" && iNumeroCgm == "") {
 
@@ -182,14 +198,51 @@ function js_validarNumero(sNumero) {
 
   return true;
 }
+/**
+ * Funcao que busca o tipo do proceso
+ */
+function js_pesquisap51_codigo(mostra) {
+
+  var sUrl = 'func_tipoproc_todos.php?grupo='+sGrupo;
+
+  if(mostra) {
+
+    sUrl += '&funcao_js=parent.js_mostratipoproc1|p51_codigo|p51_descr';
+    js_OpenJanelaIframe('', 'db_iframe', sUrl, 'Pesquisa de Tipos de Processos', true);
+
+  } else {
+
+    sUrl += '&pesquisa_chave='+$F('p51_codigo')+'&funcao_js=parent.js_mostratipoproc&chave_p51_codigo='+$F('p51_codigo');
+    js_OpenJanelaIframe('','db_iframe', sUrl, 'Pesquisa de Tipos de Processos', false);
+  }
+}
+
+function js_mostratipoproc1(sCodigo, sDesc) {
+
+  document.getElementById('p51_codigo').value = sCodigo;
+  document.getElementById('p51_descr').value = sDesc;
+  db_iframe.hide();
+}
+
+function js_mostratipoproc(chave, chave1, erro) {
+
+  document.form1.p51_codigo.value = chave;
+  document.form1.p51_descr.value = chave1;
+
+  if (erro) {
+    document.form1.p51_codigo.focus();
+    document.form1.p51_codigo.value = '';
+  }
+}
 
 function js_pesquisap58_codproc(mostra) {
 
-  var sUrl = 'func_protprocesso_protocolo.php?grupo='+sGrupo;
-  
+  var iTipo = document.form1.p51_codigo.value;
+  var sUrl = 'func_protprocesso_protocolo.php?grupo='+sGrupo+'&iTipo='+iTipo;
+
   if(mostra) {
 
-    sUrl += '&funcao_js=parent.js_mostraprotprocesso1|dl_PROTOCOLO_GERAL|dl_nome_ou_razão_social';
+    sUrl += '&funcao_js=parent.js_mostraprotprocesso1|dl_PROTOCOLO_GERAL|dl_nome_ou_razão_social|z01_numcgm';
     js_OpenJanelaIframe('', 'db_iframe_cgm', sUrl, 'Pesquisa de Processos', true);
 
   } else {
@@ -223,10 +276,12 @@ function js_mostraprotprocesso(chave, chave1, erro) {
   }
 }
 
-function js_mostraprotprocesso1(sNumero, sNome) {
+function js_mostraprotprocesso1(sNumero, sNome, sCgm) {
 
   document.getElementById('p58_numero').value = sNumero;
   document.getElementById('p58_requer').value = sNome;
+  document.getElementById('p58_numcgm').value = sCgm;
+  document.getElementById('z01_nome').value = sNome;
   db_iframe_cgm.hide();
 }
 

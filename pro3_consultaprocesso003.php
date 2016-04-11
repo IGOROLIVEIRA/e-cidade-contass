@@ -38,13 +38,23 @@ $oGet  = db_utils::postMemory($_GET);
 
 $oDaoProcesso = db_utils::getDao("protprocesso");
 $sWhere       = "     p58_instit = ".db_getsession("DB_instit");
-$sWhere      .= " and tipoproc.p51_tipoprocgrupo = 1 ";
+
+if (isset($oGet->tipo) && !empty($oGet->tipo)) {
+  $sWhere .= " and tipoproc.p51_codigo = {$oGet->tipo} ";
+}else{
+  $sWhere      .= " and tipoproc.p51_tipoprocgrupo = 1 ";
+}
+
 
 if (isset($oGet->cgm) && !empty($oGet->cgm)) {
   $sWhere .= " and p58_numcgm = {$oGet->cgm}";
-} else if (isset($oGet->codproc) && !empty($oGet->codproc)) {
+}
+
+if (isset($oGet->codproc) && !empty($oGet->codproc)) {
   $sWhere .= " and p58_codproc = {$oGet->codproc}";
-} else if (isset($oGet->numeroprocesso) && !empty($oGet->numeroprocesso)) {
+}
+
+if (isset($oGet->numeroprocesso) && !empty($oGet->numeroprocesso)) {
   
   $aNumeroProcesso  = explode("/", $oGet->numeroprocesso);
   $sWhere          .= " and p58_numero = '{$aNumeroProcesso[0]}' " ;

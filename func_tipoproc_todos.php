@@ -96,17 +96,17 @@ $cltipoproc->rotulo->label("p51_descr");
            $campos = "tipoproc.*";
         }
         if(isset($chave_p51_codigo) && (trim($chave_p51_codigo)!="") ){
-	         $sql = $cltipoproc->sql_query(null,$campos,"p51_codigo","p51_codigo=$chave_p51_codigo  and $where");
+	         $sql = $cltipoproc->sql_query(null,$campos,"p51_dtlimite DESC","p51_codigo=$chave_p51_codigo  and $where");
         }else if(isset($chave_p51_descr) && (trim($chave_p51_descr)!="") ){
-	         $sql = $cltipoproc->sql_query("",$campos,"p51_descr"," p51_descr like '$chave_p51_descr%' and $where");
+	         $sql = $cltipoproc->sql_query("",$campos,"p51_dtlimite DESC"," p51_descr like '$chave_p51_descr%' and $where");
         }else{
            //$sql = $cltipoproc->sql_query("",$campos,"p51_descr");
-           $sql = $cltipoproc->sql_query("",$campos,"p51_descr",$where);
+           $sql = $cltipoproc->sql_query("",$campos,"p51_dtlimite DESC",$where);
         }
 	//die($sql);
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
-        $result = $cltipoproc->sql_record($cltipoproc->sql_query(null,"*","p51_codigo","p51_codigo=$chave_p51_codigo $where"));
+        $result = $cltipoproc->sql_record($cltipoproc->sql_query(null,"*","p51_dtlimite DESC","p51_codigo=$chave_p51_codigo $where"));
         if($cltipoproc->numrows!=0){
           db_fieldsmemory($result,0);
           echo "<script>".$funcao_js."('$p51_descr',false);</script>";
