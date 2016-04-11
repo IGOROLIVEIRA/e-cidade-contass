@@ -75,13 +75,15 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
      */
     if ($this->sDataFinal['5'].$this->sDataFinal['6'] == 01) {
       $sSql = "select r07_valor as si194_vlrparateto , ' ' as si194_justalteracao  from pesdiver where r07_codigo = 'D060' ";
+      $sSql .= " and r07_valor <> (select si194_vlrparateto from terem102013 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." limit 1 )";
       $sSql .= " and r07_instit = " . db_getsession("DB_instit") . " limit 1 ";
 
       $si194_tipocadastro = 1;
 
     }else{
       $sSql = "select r07_valor as si194_vlrparateto , r07_descr as si194_justalteracao from pesdiver where r07_codigo = 'D060' ";
-      $sSql .= " and r07_valor not in (select r07_valor from respinf102014 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")";
+      $sSql .= " and r07_valor <> (select si194_vlrparateto from terem102014 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." limit 1 )";
+      $sSql .= " and r07_valor <> (select si194_vlrparateto from terem102013 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." limit 1 )";
       $sSql .= " and r07_instit = " . db_getsession("DB_instit") . " limit 1 ";
       if(pg_num_rows(db_query($sSql)) > 0){
         $si194_tipocadastro = 2;
