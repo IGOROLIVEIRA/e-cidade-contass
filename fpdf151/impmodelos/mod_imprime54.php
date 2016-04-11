@@ -496,7 +496,25 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
          $this->objpdf->ln();
      }	  
 
-     $this->objpdf->Setfont('Arial','',8);
+     $this->objpdf->Setfont('Arial','',5.5);
+
+    if($pagina == 1) {
+        //DESCRIÇÃO DO ITEM
+        $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 2000));
+        if(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem)) > 2000){
+            $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 2000, 3000));
+        }
+
+    }else{
+        //DESCRIÇÃO DO ITEM PARA PRÓXIMAS PÁGINAS
+        if(!isset($descricaoitemcontinuacao)){
+            $descricaoitem = $descricaoitemcontinuacao;
+            $descricaoitem .= ' '.preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 5000));
+        }else {
+            $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 5000));
+        }
+
+    }
   
      if($volta_impressao == 0){
          $this->objpdf->Row(array(($ii+1),
