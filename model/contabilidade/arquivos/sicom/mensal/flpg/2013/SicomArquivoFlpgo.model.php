@@ -362,12 +362,24 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 $clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
                 $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
                 $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
-                $clflpgo10->si195_dsccargo                          = $oDados10->si195_dsccargo;
-                $clflpgo10->si195_sglcargo 							= ' ';//$oDados10->si195_sglcargo;
-                $clflpgo10->si195_reqcargo 							= $oDados10->si195_reqcargo;
-                $clflpgo10->si195_indcessao 						= $oDados10->si195_indcessao;
-                $clflpgo10->si195_dsclotacao 						= $oDados10->si195_dsclotacao;
-                $clflpgo10->si195_vlrcargahorariasemanal 		    = $oDados10->si195_vlrcargahorariasemanal;
+
+                if($oDados10->si195_indsituacaoservidorpensionista == 'I' || $oDados10->si195_indsituacaoservidorpensionista == 'P'){
+                    $clflpgo10->si195_dsccargo                          = ' ';//$oDados10->si195_dsccargo;
+                    $clflpgo10->si195_sglcargo 							= ' ';//$oDados10->si195_sglcargo;
+                    $clflpgo10->si195_reqcargo 							= ' ';//$oDados10->si195_reqcargo;
+                    $clflpgo10->si195_indcessao 						= ' ';//$oDados10->si195_indcessao;
+                    $clflpgo10->si195_dsclotacao 						= ' ';//$oDados10->si195_dsclotacao;
+                    $clflpgo10->si195_vlrcargahorariasemanal 		    = ' ';//$oDados10->si195_vlrcargahorariasemanal;
+                }else{
+
+                    $clflpgo10->si195_dsccargo                          = $oDados10->si195_dsccargo;
+                    $clflpgo10->si195_sglcargo 							= ' ';//$oDados10->si195_sglcargo;
+                    $clflpgo10->si195_reqcargo 							= $oDados10->si195_reqcargo;
+                    $clflpgo10->si195_indcessao 						= $oDados10->si195_indcessao;
+                    $clflpgo10->si195_dsclotacao 						= $oDados10->si195_dsclotacao;
+                    $clflpgo10->si195_vlrcargahorariasemanal 		    = $oDados10->si195_vlrcargahorariasemanal;
+                }
+
                 $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
                 $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
                 $clflpgo10->si195_natsaldobruto                     = $aTiposPagamento[$iContEx]['si195_natsaldobruto'];
