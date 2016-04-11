@@ -1,4 +1,5 @@
 <?
+
 //MODULO: compras
 $clpcmater->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -9,6 +10,27 @@ $clrotulo->label("pc04_codsubgrupo");
 $clrotulo->label("pc01_validademinima");
 $clrotulo->label("pc01_obrigatorio");
 $vaiIframe = "";
+
+/**
+ * Funcao que retorna se o item esta em uma solicitação, autorização ou empenho para permitir ou não a alteração do item como seriviço sim ou não.
+ * @param $iItem
+ * @return bool
+ */
+function verPermissaoAlteraServico($iItem)
+{
+    $clsolicitem = new cl_solicitem;
+    $clempautitem = new cl_empautitem;
+    $clempempitem = new cl_empempitem;
+    $rSql2 = db_query($clempautitem->sql_query(null, null, "e54_autori,e54_emiss,e54_anulad,descrdepto,e55_quant,e55_vlrun,e55_vltot", null, "e55_item=$iItem"));
+    $rSql3 = db_query($clempempitem->sql_query(null, null, "e60_numemp,e60_codemp,e60_emiss,nome,e62_quant,e62_vlrun,e62_vltot", null, "e62_item=$iItem"));
+    $rSql1 = db_query($clsolicitem->sql_query_pcmater(null, "pc10_numero,pc10_data,descrdepto,nome,pc11_seq, pc11_quant,pc11_vlrun,pc11_vlrun*pc11_quant as dl_Valor", "pc10_numero desc", "pc16_codmater=$iItem"));
+
+    if(pg_num_rows($rSql1) > 0 or pg_num_rows($rSql2) > 0 or pg_num_rows($rSql3) > 0){
+        return true;
+    }else{
+        return false;
+    }
+}
 ?>
 <script>
 function js_troca(){
@@ -29,7 +51,7 @@ function js_executaIframe(val) {
   <tr>
     <td nowrap title="<?=@$Tpc01_codmater?>"> <?=@$Lpc01_codmater?> </td>
     <td> <? //db_input('pc01_codmater',6,$Ipc01_codmater,true,'text',$db_opcao,"readonly")
-           // carlos  
+           // carlos
            db_input('pc01_codmater',6,$Ipc01_codmater,true,'text',3,"");
            $pc01_id_usuario = db_getsession("DB_id_usuario");
            db_input('pc01_id_usuario',6,$Ipc01_id_usuario,true,'hidden',3,"");
@@ -52,66 +74,74 @@ function js_executaIframe(val) {
     $arrlibaut_truefalse = array('t'=>'Sim','f'=>'Não');
     db_select("pc01_libaut",$arrlibaut_truefalse,true,$db_opcao);
     ?>
-    <?=$Lpc01_ativo?> 
+    <?=$Lpc01_ativo?>
     <?
     $arr_truefalse = array('f'=>'Não','t'=>'Sim');
     db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);
-    ?>  
+    ?>
     <?=$Lpc01_servico?>
     <?
-    $x = array("f"=>"Não","t"=>"Sim");
-    db_select("pc01_servico",$x,true,$db_opcao);
+     $x = array("f"=>"Não","t"=>"Sim");
+        if(isset($pc01_codmater)) {
+            if (verPermissaoAlteraServico($pc01_codmater)) {
+                db_select("pc01_servico", $x, true, 3);
+            } else {
+                db_select("pc01_servico", $x, true, $db_opcao);
+            }
+        }else{
+            db_select("pc01_servico", $x, true, $db_opcao);
+        }
     ?>
     <?=$Lpc01_veiculo?>
     <?
     $aVeic = array("f"=>"Não","t"=>"Sim");
     db_select("pc01_veiculo",$aVeic,true,$db_opcao);
     ?>
-    
+
     </td>
     <tr>
       <td>
         <?
         echo $Lpc01_fraciona;
-        ?> 
+        ?>
       </td>
       <td>
         <?
         $aFrac = array("f"=>"Não","t"=>"Sim");
         db_select("pc01_fraciona",$aFrac,true,$db_opcao);
-        ?> 
+        ?>
       </td>
     </tr>
-     
+
     <tr>
       <td nowrap>
         <?
         echo $Lpc01_validademinima;
         ?>
-      </td>   
+      </td>
       <td nowrap>
        <?
         $aValMin = array("f"=>"Não","t"=>"Sim");
         db_select("pc01_validademinima",$aValMin,true,$db_opcao);
         ?>
-     
-     
+
+
         <?
         echo $Lpc01_obrigatorio;
 
         $aPObrigatorio = array("f"=>"Não","t"=>"Sim");
         db_select("pc01_obrigatorio", $aPObrigatorio ,true,$db_opcao);
         ?>
-        
+
         <?
         echo $Lpc01_liberaresumo;
 
-        $aLiberarResumo = array("t" => "Sim", 
+        $aLiberarResumo = array("t" => "Sim",
                                 "f" => "Não");
         db_select("pc01_liberaresumo", $aLiberarResumo, true, $db_opcao);
         ?>
       </td>
-    
+
   </tr>
   <tr>
     <td><?=$Lpc03_codgrupo?> </td>
@@ -119,36 +149,36 @@ function js_executaIframe(val) {
         <?
 	  //com query_file na classe
 	  /*
-	  if (!isset($pc013_codgrupo)){ 
+	  if (!isset($pc013_codgrupo)){
              if(isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)){
                  global $pc03_codgrupo;
                  // echo "<script>alert('".$clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc01_codgrupo")."'</script>";
                  $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc03_codgrupo"));
-                 if ($clpcsubgrupo->numrows > 0 ){  
+                 if ($clpcsubgrupo->numrows > 0 ){
 	            db_fieldsmemory($result,0);
-	         }  
+	         }
               }
-	  }	    
+	  }
           $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null,"pc03_codgrupo,pc03_descrgrupo","pc03_descrgrupo"));
           @db_selectrecord("pc03_codgrupo",$result,true,$db_opcao,"","","","0","js_troca(this.value);");
   */
      if (!isset($pc01_codgrupo)){
-	    if (!isset($pc03_codgrupo)){ 
+	    if (!isset($pc03_codgrupo)){
                 if(isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)){
                    global $pc01_codgrupo;
                    $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc01_codgrupo",null,"pc04_codsubgrupo=$pc01_codsubgrupo and pc04_ativo is true"));
-                   if ($clpcsubgrupo->numrows > 0 ){  
+                   if ($clpcsubgrupo->numrows > 0 ){
 	             db_fieldsmemory($result,0);
-	           }  
+	           }
                 }
-	    }	    
+	    }
 	  }
           $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null,"pc03_codgrupo,pc03_descrgrupo","pc03_descrgrupo","pc03_ativo is true"));
           @db_selectrecord("pc01_codgrupo",$result,true,$db_opcao,"","","","0","js_troca(this.value);");
-        ?>  
-    
+        ?>
+
     </td>
-  </tr> 
+  </tr>
    <? if(isset($pc01_codgrupo) || $db_opcao != 1) { ?>
      <tr>
        <td> <?=$Lpc04_codsubgrupo?> </td>
@@ -163,10 +193,10 @@ function js_executaIframe(val) {
   	 		                              "pc04_descrsubgrupo",
  			                                $sWhere));
            if($clpcsubgrupo->numrows > 0 ){
-             
+
              db_fieldsmemory($result,0);
-             $pc04_codsubgrupo=$subgrupo;             
-             if(isset($impmater)){             	
+             $pc04_codsubgrupo=$subgrupo;
+             if(isset($impmater)){
                $result_coluna = $clpcmaterele->sql_record($clpcmaterele->sql_query_file($impmater,null,"pc07_codele"));
                $numrows_coluna = $clpcmaterele->numrows;
                $separa = "";
@@ -174,7 +204,7 @@ function js_executaIframe(val) {
                for($i=0;$i<$numrows_coluna;$i++){
                	 db_fieldsmemory($result_coluna,$i);
                	 $coluna .= $separa.$pc07_codele;
-               	 $separa  = "XX";                	 
+               	 $separa  = "XX";
                }
                //db_msgbox($subgrupo);
                $vaiIframe = "?db_opcao=$db_opcao&codigomater=".$impmater."&impmater=impmater&codsubgrupo=".$subgrupo."&codele=".$coluna;
@@ -185,17 +215,17 @@ function js_executaIframe(val) {
        		       $pc01_codmater = '';
        		     }
                $vaiIframe = "?db_opcao=$db_opcao&codigomater=".$pc01_codmater."&codsubgrupo=".@$subgrupo."&codele=".@$coluna;
-             }             
-           }  
+             }
+           }
            @db_selectrecord("pc01_codsubgrupo",$result,true,$db_opcao,"","","","","js_executaIframe(this.value)");
 
         if(empty($pc01_data) || $pc01_data == "" ) {
             $pc01_data = date('Y-m-d', db_getsession("DB_datausu"));
         }
         db_input('pc01_data',6,$Ipc01_data,true,'hidden',3,"");
-        ?>  
+        ?>
       </td>
-      </tr> 
+      </tr>
    <? }    ?>
 
    <tr>
@@ -203,11 +233,11 @@ function js_executaIframe(val) {
 	 </tr>
    <tr>
     <td colspan="2" align="center">
-    <div align="left"><b>Lista de desdobramentos<b></div>    
+    <div align="left"><b>Lista de desdobramentos<b></div>
       <iframe width="630" height="200" name="pcmater0011" src="com1_pcmater0011.php<?=$vaiIframe?>"></iframe>
     </td>
   </tr>
-  <?    
+  <?
     if($db_opcao!=1){?>
   <tr>
     <td colspan=2 bgcolor="#CCFF99" align="center"><strong>***   Elementos que não podem ser <?=$db_opcao==2?" alterados ":" excluídos "?> por estar na autorização de empenho.</strong></td>
@@ -220,7 +250,7 @@ function js_executaIframe(val) {
 <input name="db_opcao" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" disabled="disabled" <?=($db_opcao==2||$db_opcao==1?"onclick='return js_coloca();'":"")?> >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
   <?
-  
+
   if($db_opcao==1){
   	$result_pcmater = $clpcmater->sql_record($clpcmater->sql_query_file());
     	if($clpcmater->numrows>0){
@@ -246,15 +276,15 @@ function textCounter() {
   function js_coloca(codele){
 	obj = pcmater0011.document.form1;
 	var coluna='';
-	var sep=''; 
+	var sep='';
 
 	for(i=0; i<obj.length; i++){
-	  nome = obj[i].name.substr(0,10);  
+	  nome = obj[i].name.substr(0,10);
 	  if(nome=="o56_codele" && obj[i].checked==true){
 	    coluna += sep+obj[i].value;
 	    sep= "XX";
 	  }
-	} 
+	}
 	document.form1.codeles.value = coluna;
 	return true;
 	//return coluna ;
@@ -264,18 +294,18 @@ function js_pesquisapc01_codsubgrupo(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?funcao_js=parent.js_mostrapcsubgrupo1|pc04_codsubgrupo|pc04_descrsubgrupo','Pesquisa',true);
   }else{
-     if(document.form1.pc01_codsubgrupo.value != ''){ 
+     if(document.form1.pc01_codsubgrupo.value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?pesquisa_chave='+document.form1.pc01_codsubgrupo.value+'&funcao_js=parent.js_mostrapcsubgrupo','Pesquisa',false);
      }else{
-       document.form1.pc04_descrsubgrupo.value = ''; 
+       document.form1.pc04_descrsubgrupo.value = '';
      }
   }
 }
 function js_mostrapcsubgrupo(chave,erro){
-  document.form1.pc04_descrsubgrupo.value = chave; 
-  if(erro==true){ 
-    document.form1.pc01_codsubgrupo.focus(); 
-    document.form1.pc01_codsubgrupo.value = ''; 
+  document.form1.pc04_descrsubgrupo.value = chave;
+  if(erro==true){
+    document.form1.pc01_codsubgrupo.focus();
+    document.form1.pc01_codsubgrupo.value = '';
   }
 }
 function js_mostrapcsubgrupo1(chave1,chave2){
@@ -288,7 +318,7 @@ function js_pesquisa(){
 }
 function js_preenchepesquisa(chave){
 
-  document.form1.pc01_codmater.value = chave; 
+  document.form1.pc01_codmater.value = chave;
   db_iframe_pcmater.hide();
   <?
   if($db_opcao!=1){
@@ -312,17 +342,17 @@ function js_enviacodmater(chave,descr){
       obj.setAttribute('value',chave);
       document.form1.appendChild(obj);
       document.form1.submit();
-  }  
-} 
-  
+  }
+}
+
   js_executaIframe(document.form1.pc01_codsubgrupo.value);
-  
+
   <?
-  if(isset($vaiIframe) && trim($vaiIframe)!=""){  	
-  	//echo "pcmater0011.location.href = 'com1_pcmater0011.php".$vaiIframe."';";  	
+  if(isset($vaiIframe) && trim($vaiIframe)!=""){
+  	//echo "pcmater0011.location.href = 'com1_pcmater0011.php".$vaiIframe."';";
   	echo "pcmater0011.document.form1.codsubgrupo.value=document.form1.pc01_codsubgrupo.value;
           pcmater0011.document.form1.submit();";
   }
   ?>
-  
+
 </script>
