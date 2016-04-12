@@ -3805,7 +3805,7 @@ class empenho {
             throw new Exception($sErroMensagem);
           }
         }
-        if (db_strtotime($dtValidar) <= db_strtotime($oLancamentoEmpenho->data)) {//Ocorrencia 826 - Aqui a condição antiga != nao permitia a alteração da data, pois ser != significa ser menor ou maior e nunca igual.
+        if (db_strtotime($dtValidar) <= db_strtotime(isset($oLancamentoEmpenho->data) ? $oLancamentoEmpenho->data : $oDadosLancamento->data)) {//Ocorrencia 826 - Aqui a condição antiga != nao permitia a alteração da data, pois ser != significa ser menor ou maior e nunca igual.
 
           lancamentoContabil::alterarDataLancamento($iCodigoLancamento, $dtValidar);
 
