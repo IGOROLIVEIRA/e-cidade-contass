@@ -1459,18 +1459,19 @@ class cl_liclicita
                     $sql .= $virgula . " l20_dtpublic =null ";
                     $virgula = ",";
                 } else {
-                    $sql .= $virgula . " l20_dtpublic ='$this->l20_dtpublic' ";
-                    $virgula = ",";
-                }
-                //  echo $this->l20_dtpublic." ff  ".$this->l20_datacria;exit;//2013-12-06 ff 2013-12-19
-                if ($this->l20_dtpublic < $this->l20_datacria) {
-                    $this->erro_sql = " A data da publicacao em diario oficial  deve ser superior  ou igual a data de criacao.";
-                    $this->erro_campo = "l20_dtpublic";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
+                    //  echo $this->l20_dtpublic." ff  ".$this->l20_datacria;exit;//2013-12-06 ff 2013-12-19
+                    if ($this->l20_dtpublic < $this->l20_datacria) {
+                        $this->erro_sql = " A data da publicacao em diario oficial  deve ser superior  ou igual a data de criacao.";
+                        $this->erro_campo = "l20_dtpublic";
+                        $this->erro_banco = "";
+                        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                        $this->erro_status = "0";
+                        return false;
+                    }else {
+                        $sql .= $virgula . " l20_dtpublic ='$this->l20_dtpublic' ";
+                        $virgula = ",";
+                    }
                 }
             }
         }
