@@ -166,7 +166,7 @@ if($salario == 's'){
     and r14_rubric in ('$rub_base'$rub_ded)
     ".($tab_prev == 0?'':" and rh02_tbprev in ($tab_prev)")."
 
-  union
+  union all
 
   select rh02_regist as r01_regist,
          z01_nome,
@@ -189,7 +189,7 @@ if($salario == 's'){
     and r48_rubric in ('$rub_base'$rub_ded)
     ".($tab_prev == 0?'':" and rh02_tbprev in ($tab_prev)")."
                    
-  union
+  union all
 
   select rh02_regist as r01_regist,
          z01_nome,
