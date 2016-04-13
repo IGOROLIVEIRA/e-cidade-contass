@@ -118,12 +118,12 @@ if ($oLicitacao) {
     <table width="100%" border="0">
       <tr>
         <td class='negrito' width="150">
-          Nº Controle do Processo:
+          Nº do Processo:
         </td>
         <td class='dados' nowrap="nowrap" >
-          <?php echo $oProcesso->p58_codproc.$sProcessoPrincipal;?>
+          <?php echo $oProcesso->p58_numeracao;?>
         </td>
-        <td class='negrito' width="100px">Nº do Processo: </td>
+        <td class='negrito' width="100px">Nº Protocolo Geral: </td>
         <td class='dados' width="90">
           <?php echo "{$oProcesso->p58_numero}/{$oProcesso->p58_ano}"?>
         </td>
