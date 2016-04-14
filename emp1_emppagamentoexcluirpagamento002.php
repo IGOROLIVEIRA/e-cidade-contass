@@ -71,14 +71,35 @@ $clconplanoreduz  = new cl_conplanoreduz;
 $clconlancamord   = new cl_conlancamord;
 $clconlancamlr    = new cl_conlancamlr;
 
+/**
+ * adicionados para incluir a agenda
+ */
+require_once("classes/db_empage_classe.php");
+require_once("classes/db_empagetipo_classe.php");
+require_once("classes/db_empagemov_classe.php");
+require_once("classes/db_empagemovforma_classe.php");
+require_once("classes/db_empagemovconta_classe.php");
+require_once("classes/db_empord_classe.php");
+require_once("classes/db_empagepag_classe.php");
+require_once("classes/db_empageslip_classe.php");
+require_once("classes/db_pcfornecon_classe.php");
+$clempage = new cl_empage;
+$clempagetipo = new cl_empagetipo;
+$clempagemov = new cl_empagemov;
+$clempagemovforma = new cl_empagemovforma;
+$clempagemovconta = new cl_empagemovconta;
+$clempord = new cl_empord;
+$clempagepag = new cl_empagepag;
+$clempageslip = new cl_empageslip;
+$clpcfornecon = new cl_pcfornecon;
+
+
+
 require_once("classes/db_cfautent_classe.php");
 $clcfautent = new cl_cfautent;
 
 require_once("libs/db_libcaixa.php");
 $clautenticar = new cl_autenticar;
-
-require_once("classes/db_empagemov_classe.php");
-$clempagemov = new cl_empagemov;
 
 //retorna os arrays de lancamento...
 $cltranslan = new cl_translan;
@@ -94,7 +115,7 @@ db_postmemory($HTTP_POST_VARS);
 
 		try {
 
-		$sqlExcluirOp = "begin;
+		$sqlExcluirOp = "
 				create temporary table w_empordem on commit drop as select * from pagordem where  e50_codord = {$e50_codord}; 
 				create temporary table w_lancamentos on commit drop
 				                                     as select c70_codlan as lancam
@@ -382,16 +403,15 @@ db_postmemory($HTTP_POST_VARS);
 				  where e86_codmov in (select e82_codmov from empord where e82_codord = {$e50_codord});
 				 update empagemov set e81_codage = (select e80_codage from empage where e80_instit = ".db_getsession("DB_instit")." and e80_data = (select e50_data from pagordem where e50_codord = {$e50_codord} limit 1) ) 
                   where e81_codmov in (select e82_codmov from empord where e82_codord = {$e50_codord});
-				commit;
-				";
-				//echo pg_last_error();exit;
-		      /*DELETE FROM empord where e82_codmov in (select e82_codmov from w_mov);
+				DELETE FROM empord where e82_codmov in (select e82_codmov from w_mov);
 				DELETE FROM empageconf where e86_codmov in (select e82_codmov from w_mov);
 				DELETE FROM empagemovforma  where e97_codmov in (select e82_codmov from w_mov);
 				DELETE FROM empagepag where e85_codmov in (select e82_codmov from w_mov);
 				DELETE FROM empageconcarpeculiar where e79_empagemov in (select e82_codmov from w_mov);
 		        DELETE FROM empagemov where e81_codmov	 in (select e82_codmov from w_mov);
-		       */
+
+				";
+				//echo pg_last_error();exit;
 	    
 		    //echo $sqlExcluirOp;exit;
 	  	
@@ -417,7 +437,131 @@ db_postmemory($HTTP_POST_VARS);
 			        db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 			        
 		  	    }else{
+                    db_inicio_transacao();
 		  	    	$rsExluirPagOp = db_query($sqlExcluirOp);
+                    /**
+                     * INCLUIR A AGENDA
+                     */
+
+                    $sqlerro = false;
+                    $sql = "SELECT *
+FROM
+  (SELECT e50_data,
+          o15_codigo,
+          o15_descr,
+          e60_emiss,
+          e60_anousu,
+          e60_numemp,
+          e60_codemp,
+          e50_codord,
+          z01_numcgm,
+          z01_nome,
+          e53_valor,
+          e53_vlranu,
+          e53_vlrpag,
+          e60_vlrliq,
+          e60_vlrpag/*,e86_codmov,e90_codmov,e90_correto*/
+   FROM pagordem
+   INNER JOIN pagordemele ON pagordemele.e53_codord = pagordem.e50_codord
+   INNER JOIN empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
+   INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
+   INNER JOIN db_config ON db_config.codigo = empempenho.e60_instit
+   INNER JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu
+   AND orcdotacao.o58_coddot = empempenho.e60_coddot
+   INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
+   INNER JOIN emptipo ON emptipo.e41_codtipo = empempenho.e60_codtipo
+   WHERE 1=1
+     AND e60_instit = 1
+   GROUP BY e60_numemp,
+            e60_codemp,
+            e50_codord,
+            e50_data,
+            z01_numcgm,
+            z01_nome,
+            e60_emiss,
+            o15_codigo,
+            o15_descr,
+            e60_anousu,
+            /*e86_codmov,e90_codmov,e90_correto,*/e53_valor,
+                                                  e53_vlranu,
+                                                  e53_vlrpag,
+                                                  e60_vlrliq,
+                                                  e60_vlrpag) AS x
+WHERE (round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2))>0
+  AND e50_codord=$e50_codord
+  AND (round(e60_vlrliq,2) - round(e60_vlrpag,2) > 0)
+  AND (round(e53_valor,2) - round(e53_vlranu,2) > 0)
+ORDER BY e50_codord";
+
+                    $oOrdem = db_utils::fieldsMemory(db_query($sql));
+                    $ord  = $e50_codord;
+                    $emp  = $oOrdem->e60_numemp;
+                    $val  = $oOrdem->e53_valor;
+                    $data = $oOrdem->e50_data;
+                    $tip = 0;
+
+                    $result = db_query($clempage->sql_query_file(null,"*",null,"e80_data = '{$data}'"));
+                    /**
+                     * caso não exista agenda para a data, será criada uma nova
+                     */
+                    if($sqlerro == false && pg_num_rows($result) == 0){
+                        $clempage->e80_data = $data;
+                        $clempage->e80_instit = db_getsession("DB_instit");
+                        $clempage->incluir(null);
+                        if($clempage->erro_status==0){
+                            $sqlerro = true;
+                        }else{
+                            $e80_codage = $clempage->e80_codage;
+                        }
+                    } else if(pg_num_rows($result) > 0) {
+                        $e80_codage = db_utils::fieldsMemory($result)->e80_codage;
+                    }
+                    //-----------------------------------
+                    //inclui na tabela empagemov
+                    if($sqlerro == false){
+                        $clempagemov->e81_codage = $e80_codage;
+                        $clempagemov->e81_numemp = "$emp";
+                        $clempagemov->e81_valor  = "$val";
+                        $clempagemov->incluir(null);
+                        $erro_msg = $clempagemov->erro_msg;
+                        if($clempagemov->erro_status==0){
+                            $sqlerro = true;
+                        }else{
+                            $mov = $clempagemov->e81_codmov;
+                        }
+                    }
+                    //-----------------------------------
+                    //-----------------------------------
+                    //inclui contas dos fornecedores tabela empagemovconta
+                    if($sqlerro==false){
+//         echo "<BR><BR>".($clpcfornecon->sql_query_empenho(null,"pc64_contabanco","pc64_contabanco","e60_numemp=$emp"));
+                        $result_conta = $clpcfornecon->sql_record($clpcfornecon->sql_query_empenho(null,"pc64_contabanco","pc64_contabanco","e60_numemp=$emp"));
+                        if($clpcfornecon->numrows>0){
+                            db_fieldsmemory($result_conta,0);
+                            $clempagemovconta->e98_contabanco = $pc64_contabanco;
+                            $clempagemovconta->incluir($mov);
+                            if($clempagemovconta->erro_status==0){
+                                $erro_msg = $clempagemovconta->erro_msg;
+                                $sqlerro=true;
+                            }
+                        }
+                    }
+                    //-----------------------------------
+
+
+                    //inclui na tabela empord
+                    if($sqlerro==false){
+                        $clempord->e82_codord = $ord;
+                        $clempord->e82_codmov = $mov;
+                        $clempord->incluir($mov,$ord);
+                        $erro_msg = $clempord->erro_msg;
+                        if($clempord->erro_status==0){
+                            $sqlerro = true;
+                        }
+                    }
+
+                    //-----------------------------------
+                    db_fim_transacao();
 		  	    	
 					    if ($rsExluirPagOp == false) {
 					    	echo "<script> alert('Houve um erro ao excluir o pagamento!');</script>";
