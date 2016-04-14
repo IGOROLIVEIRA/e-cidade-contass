@@ -245,11 +245,14 @@ $sqlRec = "select    distinct   o15_codigo as cod_rec,
 
         for($i=0;$i<pg_numrows($result);$i++) {
           db_fieldsmemory($result,$i);
-          if (db_conplano_grupo($anousu,$o57_fonte,9004) == true){ 
-            $valor_arrecadado   += $saldo_arrecadado;
-            $receita_arre[$mes] += $saldo_arrecadado; 
+          /*
+           * condição comentada pois a verificação estava fazendo os valores de receita sempre ir zerado para o relatório
+           */
+          //if (db_conplano_grupo($anousu,$o57_fonte,9004) == true){
+            $valor_arrecadado   += $saldo_arrecadado < 0 ? 0 : $saldo_arrecadado; //condição adicionada para não considerar valores negativos no relatório
+            $receita_arre[$mes] += $saldo_arrecadado < 0 ? 0 : $saldo_arrecadado; //condição adicionada para não considerar valores negativos no relatório
             $imprimecel = true;
-          }
+          //}
         }
         if($imprimecel == false){
           $pdf->cell(22,$alt,db_formatar(0,'f'),1,0,"R",0);
