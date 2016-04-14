@@ -109,7 +109,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.rhrubricas.disabled=false;
-         top.corpo.iframe_rhrubricas.location.href='pes1_rhrubricas007.php?r09_base=".@$r08_codigo."';      
+         top.corpo.iframe_rhrubricas.location.href='pes1_rhrubricas007.php?r09_base=".@$r08_codigo."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('rhrubricas');";

@@ -70,7 +70,7 @@ $clbases->rotulo->label("r08_descr");
   </form>
   
       <?
-      $db_where = "r08_instit = ".db_getsession("DB_instit")." and r08_anousu = ".db_anofolha()." and r08_mesusu = ".db_mesfolha()."  ";
+      $db_where = "r08_instit = ".db_getsession("DB_instit")." and r08_anousu = ".db_anofolha()." and r08_mesusu = ".db_mesfolha()." and r08_codigo not ilike 'S%' ";
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_bases.php")==true){
@@ -80,11 +80,11 @@ $clbases->rotulo->label("r08_descr");
            }
         }
         if(isset($chave_r08_codigo) && (trim($chave_r08_codigo)!="") ){
-	         $sql = $clbases->sql_query(db_anofolha(),db_mesfolha(),$chave_r08_codigo,db_getsession('DB_instit'),$campos,"r08_codigo");
+	         $sql = $clbases->sql_query(db_anofolha(),db_mesfolha(),$chave_r08_codigo,db_getsession('DB_instit'),$campos,"r08_codigo","r08_codigo not ilike 'S%'");
         }else if(isset($chave_r08_descr) && (trim($chave_r08_descr)!="") ){
 	         $sql = $clbases->sql_query(db_anofolha(),db_mesfolha(),null,db_getsession('DB_instit'),$campos,"r08_descr"," r08_descr like '$chave_r08_descr%' and $db_where ");
         }else{
-           $sql = $clbases->sql_query(db_anofolha(),db_mesfolha(),null,db_getsession('DB_instit'),$campos,"r08_anousu#r08_mesusu#r08_codigo","");
+           $sql = $clbases->sql_query(db_anofolha(),db_mesfolha(),null,db_getsession('DB_instit'),$campos,"r08_anousu#r08_mesusu#r08_codigo","r08_codigo not ilike 'S%'");
         }
         $repassa = array();
         if(isset($chave_r08_descr)){
