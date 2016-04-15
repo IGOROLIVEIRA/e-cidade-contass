@@ -217,7 +217,22 @@ if ($oDaoEmpparam->numrows > 0 ) {
                 db_select("imprimefiltros",$aFiltros,true,"text",2);
               ?>              
             </td>
-          </tr>          
+          </tr>
+               <tr>
+            <td>
+              <strong>Formato:</strong>
+            </td>
+            <td>
+              <?
+                $aFormatos = array(
+                               "pdf"=>"PDF",
+                               "csv"=>"CSV"
+                              );
+
+                db_select("formato",$aFormatos,true,"text",2);
+              ?>
+            </td>
+          </tr>
           <? 
           	db_input('listacredor',10,"",true,"hidden",1);
           	db_input('filtra_despesa',10,"",true,"hidden",1);
