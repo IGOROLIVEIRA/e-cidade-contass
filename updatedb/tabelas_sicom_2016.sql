@@ -3276,7 +3276,7 @@ CREATE TABLE item102016(
 si43_sequencial		int8 NOT NULL default 0,
 si43_tiporegistro		int8 NOT NULL default 0,
 si43_coditem		int8 NOT NULL default 0,
-si43_dscItem		varchar(250) NOT NULL  ,
+si43_dscItem		text NOT NULL  ,
 si43_unidademedida		varchar(50) NOT NULL  ,
 si43_tipocadastro		int8 NOT NULL default 0,
 si43_justificativaalteracao		varchar(100)   ,
