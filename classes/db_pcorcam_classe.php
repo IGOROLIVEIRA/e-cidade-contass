@@ -585,7 +585,7 @@ class cl_pcorcam {
      $sql .= "      inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem ";
      $sql .= "      inner join pcprocitem on pcprocitem.pc81_codprocitem= pcorcamitemproc.pc31_pcprocitem ";
      $sql .= "      inner join solicitem on solicitem.pc11_codigo= pcprocitem.pc81_solicitem ";
-     $sql .= "      inner join pcdotac on pc13_codigo=solicitem.pc11_codigo ";
+     $sql .= "      left  join pcdotac on pc13_codigo=solicitem.pc11_codigo ";
      $sql .= "      left  join solicitempcmater on solicitempcmater.pc16_solicitem= solicitem.pc11_codigo ";
      $sql .= "      left  join pcmater on pcmater.pc01_codmater = solicitempcmater.pc16_codmater ";
      $sql .= "      left  join pcsubgrupo  on  pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo";
