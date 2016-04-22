@@ -241,9 +241,20 @@ if( ($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
             <td nowrap title="<?php echo $Trh01_rhsindicato; ?>">
               <?php db_ancora($Lrh01_rhsindicato, 'js_pesquisaSindicato()', $db_opcao); ?>
             </td>
-            <td nowrap colspan="3">
+            <td nowrap colspan="1">
 							<?php db_input('rh01_rhsindicato', 10, null, true, 'hidden', 3); ?>
 							<?php db_input('rh116_descricao', 42, $Irh116_descricao, true, 'text', 3); ?>
+            </td>
+
+            <td nowrap title="Colocar não para prestadores de serviço (autônomo)">
+              <b>Envio sicom: </b>
+            </td>
+            <td>
+              <?
+              $x = array('1'=>'SIM','2'=>'NÃO');
+              db_select("rh01_sicom",$x,"",$db_opcao,"","","","");
+              ?>
+
             </td>
           </tr>
 

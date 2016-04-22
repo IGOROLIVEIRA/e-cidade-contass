@@ -76,6 +76,7 @@ if(isset($alterar)){
   }
   
   if($sqlerro == false){
+    $clrhpessoal->rh01_sicom = $rh01_sicom;
     $clrhpessoal->alterar($rh01_regist);
     $erro_msg = $clrhpessoal->erro_msg;
     if($clrhpessoal->erro_status==0){  	
@@ -152,6 +153,7 @@ if(isset($alterar)){
       if(!$rsContratosEmergenciais) {
         throw new DbException("Error ao buscar total de contratos emergenciais para a matrícula");
       }
+
 
       if(pg_num_rows($rsContratosEmergenciais) == 1) {
 

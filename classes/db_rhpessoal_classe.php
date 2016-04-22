@@ -83,7 +83,8 @@ class cl_rhpessoal {
    var $rh01_depsf = 0;
    var $rh01_observacao = null;
    var $rh01_rhsindicato = 0;
-   var $rh01_reajusteparidade = 0;  
+   var $rh01_reajusteparidade = 0;
+   var $rh01_sicom = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  rh01_regist = int4 = Matrícula
@@ -112,6 +113,7 @@ class cl_rhpessoal {
                  rh01_observacao = text = Observações
                  rh01_rhsindicato = int4 = Sindicato
                  rh01_reajusteparidade = int4 = Reajuste de Paridade
+                 rh01_sicom = int4 = Condição para envio no sicom
                  ";
    //funcao construtor da classe
    function cl_rhpessoal() {
@@ -373,6 +375,7 @@ class cl_rhpessoal {
                                       ,rh01_observacao
                                       ,rh01_rhsindicato
                                       ,rh01_reajusteparidade
+                                      ,rh01_sicom
                        )
                 values (
                                 $this->rh01_regist
@@ -401,6 +404,7 @@ class cl_rhpessoal {
                                ,'$this->rh01_observacao'
                                ,$this->rh01_rhsindicato
                                ,$this->rh01_reajusteparidade
+                               ,$this->rh01_sicom
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -751,6 +755,20 @@ class cl_rhpessoal {
          return false;            
        }                          
      }
+       if(trim($this->rh01_sicom)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_sicom"])){
+           $sql  .= $virgula." rh01_sicom = '$this->rh01_sicom' ";
+           $virgula = ",";
+           if(trim($this->rh01_sicom) == null ){
+               $this->erro_sql = " Campo Sicom não informado.";
+               $this->erro_campo = "rh01_sicom";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+
      $sql .= " where ";
      if($rh01_regist!=null){
        $sql .= " rh01_regist = $this->rh01_regist";

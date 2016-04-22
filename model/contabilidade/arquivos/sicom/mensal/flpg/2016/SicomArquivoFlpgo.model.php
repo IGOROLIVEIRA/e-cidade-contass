@@ -230,6 +230,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		  or rh05_recis IS NULL
 	  )
 	  AND r14_valor is not null
+	  AND rh01_sicom = 1
 	  GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
 	  ORDER BY rh02_regist asc";
 

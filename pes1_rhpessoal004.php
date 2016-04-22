@@ -114,6 +114,8 @@ if (isset($incluir)) {
     }
 
     $clrhpessoal->rh01_anoche = "$rh01_anoche";
+    $clrhpessoal->rh01_sicom = $rh01_sicom;
+
     $clrhpessoal->incluir($rh01_regist);
     $rh01_regist = $clrhpessoal->rh01_regist;
     $erro_msg = $clrhpessoal->erro_msg;
