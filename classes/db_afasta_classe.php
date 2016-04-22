@@ -877,7 +877,10 @@ class cl_afasta {
     return $sSql;
   }
 
-   function sql_query_func ( $r45_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_func ( $r45_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+
+     $iInstit = db_getsession('DB_instit');
+
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -889,6 +892,7 @@ class cl_afasta {
      }else{
        $sql .= $campos;
      }
+
      $sql .= " from afasta                                                                                                                                         \n";
      $sql .= "      inner join rhpessoal        on  rhpessoal.rh01_regist              = afasta.r45_regist                                                         \n";
      $sql .= "      inner join rhpessoalmov     on  rhpessoal.rh01_regist              = rhpessoalmov.rh02_regist                                                  \n";
@@ -904,10 +908,14 @@ class cl_afasta {
      $sql2 = "";
      if($dbwhere==""){
        if($r45_codigo!=null ){
-         $sql2 .= " where afasta.r45_codigo = $r45_codigo "; 
-       } 
+         $sql2 .= " where afasta.r45_codigo = $r45_codigo ";
+         $sql2 .= "   and rh02_instit = {$iInstit} ";
+       }else{
+         $sql2 .= " where rh02_instit = {$iInstit} ";
+       }
      }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
+       $sql2  = " where $dbwhere";
+       $sql2 .= "   and rh02_instit = {$iInstit} ";
      }
      $sql .= $sql2;
      if($ordem != null ){
