@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "pagordemele.e53_codord,pagordemele.e53_codele,pagordemele.e53_valor,pagordemele.e53_vlranu,pagordemele.e53_vlrpag";
+$campos = "pagordemele.e53_codord,pagordemele.e53_codele,pagordemele.e53_valor,pagordemele.e53_vlranu,pagordemele.e53_vlrpag,pagordem.e50_obs";
 ?>

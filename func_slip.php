@@ -194,7 +194,7 @@ if (!isset ($pesquisa_chave)) {
 		$result = $clslip->sql_record($clslip->sql_query(null,"*",null,"k17_codigo = $pesquisa_chave $wh  and to_char(k17_data,'YYYY') = '".db_getsession("DB_anousu")."' $where_instit"));
 		if ($clslip->numrows != 0) {
 			db_fieldsmemory($result, 0);
-			echo "<script>".$funcao_js."('$k17_codigo',false);</script>";
+			echo "<script>".$funcao_js."('$k17_codigo','$k17_texto',false);</script>";
 		} else {
 			echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
 		}

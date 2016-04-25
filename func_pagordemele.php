@@ -116,7 +116,7 @@ $clpagordemele->rotulo->label("e53_valor");
           $result = $clpagordemele->sql_record($clpagordemele->sql_query($pesquisa_chave." and ".$where_instit));
           if($clpagordemele->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$e53_valor',false);</script>";
+            echo "<script>".$funcao_js."('$e53_valor','$e50_obs',false);</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

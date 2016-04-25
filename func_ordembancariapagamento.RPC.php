@@ -19,7 +19,7 @@ if ($e53_codord) {
 		echo json_encode($oDados);
 	} else {
 	
-		$sSql = "SELECT z01_nome,Z01_numcgm,pc63_contabanco,(pc63_agencia || '-' || pc63_agencia_dig || '/' || pc63_conta || '-' || pc63_conta_dig) AS contafornec 
+		$sSql = "SELECT case when z01_nomecomple is not null then z01_nomecomple else z01_nome end as z01_nome,Z01_numcgm,pc63_contabanco,(pc63_agencia || '-' || pc63_agencia_dig || '/' || pc63_conta || '-' || pc63_conta_dig) AS contafornec
 		FROM pagordem JOIN empempenho ON e50_numemp = e60_numemp 
 		JOIN cgm ON e60_numcgm = Z01_numcgm  
 		LEFT JOIN pcfornecon ON Z01_numcgm = pc63_numcgm 
@@ -27,7 +27,7 @@ if ($e53_codord) {
 		where e50_codord = {$e53_codord} ORDER BY pc64_contabanco";
 		$rsResult = db_query($sSql);
 		
-		$sSql = "SELECT z01_nome,Z01_numcgm,pc63_contabanco,(pc63_agencia || '-' || pc63_agencia_dig || '/' || pc63_conta || '-' || pc63_conta_dig) AS contafornec 
+		$sSql = "SELECT case when z01_nomecomple is not null then z01_nomecomple else z01_nome end as z01_nome,Z01_numcgm,pc63_contabanco,(pc63_agencia || '-' || pc63_agencia_dig || '/' || pc63_conta || '-' || pc63_conta_dig) AS contafornec
 		FROM pagordemconta
 		JOIN cgm ON e49_numcgm = Z01_numcgm 
 		LEFT JOIN pcfornecon ON Z01_numcgm = pc63_numcgm 
@@ -170,7 +170,7 @@ GROUP BY e96_descr,e53_valor";
 	  	
 	  	if ($k17_codigo) {
 	  		
-	  		$sSql = "SELECT k17_valor,z01_nome,z01_numcgm,pc63_contabanco,(pc63_agencia || '-' || pc63_agencia_dig || '/' || pc63_conta || '-' || pc63_conta_dig) AS contafornec 
+	  		$sSql = "SELECT k17_valor,case when z01_nomecomple is not null then z01_nomecomple else z01_nome end as z01_nome,z01_numcgm,pc63_contabanco,(pc63_agencia || '-' || pc63_agencia_dig || '/' || pc63_conta || '-' || pc63_conta_dig) AS contafornec
 	  		FROM slip s JOIN slipnum sn ON s.k17_codigo = sn.k17_codigo 
 	  		JOIN cgm ON sn.k17_numcgm = z01_numcgm 
 	  		LEFT JOIN pcfornecon ON z01_numcgm = pc63_numcgm
