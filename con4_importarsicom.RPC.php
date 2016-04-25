@@ -77,7 +77,9 @@ switch ($oParam->exec) {
                             $aArquivoCSV[0] == 'OPS' || $aArquivoCSV[0] == 'AOP' || $aArquivoCSV[0] == 'EXT' || $aArquivoCSV[0] == 'CTB' ||
                             $aArquivoCSV[0] == 'RSP'
                         ) {
-
+			    if($data[0] == 99){
+				continue;
+			    }
                             $sCaminhoClasse = "classes/db_" . strtolower($aArquivoCSV[0]) . $data[0] . $ano . "_classe.php";
                             if (file_exists($sCaminhoClasse)) {
 
@@ -162,14 +164,15 @@ switch ($oParam->exec) {
 
                                         $data[$c] = str_replace(',', '.', $data[$c]);
                                     }
-                                    if ($tipoCampo[0] == 'bigint' && $data[$c] == " ") {
+                                    if ($tipoCampo[0] == 'bigint' && trim($data[$c]) == "") {
                                         $oClasse->$sColuna = null;
                                         $c++;
                                     } elseif ($tipoCampo[0] == 'date') {
-                                        if ($data[$c] == " " || $data[$c] == "" || empty($data[$c]) ) {
+                                        if ($data[$c] == " " || trim($data[$c]) == "" || empty($data[$c]) ) {
                                             $oClasse->$sColuna = null;
                                             $c++;
                                         } else {
+					    var_dump($data[$c]);
                                             $oClasse->$sColuna = substr($data[$c], -4) . '-' . substr($data[$c], 2, -4) . '-' . substr($data[$c], 0, 2);
                                             $c++;
                                         }
