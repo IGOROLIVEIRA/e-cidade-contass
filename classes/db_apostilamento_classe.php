@@ -103,7 +103,7 @@ class cl_apostilamento {
      if($this->si03_licitacao == null ){ 
        $this->si03_licitacao = "0";
      }
-     if($this->si03_numcontrato == null && $this->si03_numcontratoanosanteriores == null){ 
+     if($this->si03_numcontrato == null && ($this->si03_numcontratoanosanteriores == null || $this->si03_numcontratoanosanteriores == 0)){
        $this->erro_sql = " Campo N Contrato nao Informado.";
        $this->erro_campo = "si03_numcontrato";
        $this->erro_banco = "";
@@ -316,7 +316,7 @@ class cl_apostilamento {
      if(trim($this->si03_numcontrato)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si03_numcontrato"])){ 
        $sql  .= $virgula." si03_numcontrato = $this->si03_numcontrato ";
        $virgula = ",";
-       if(trim($this->si03_numcontrato) == null && $this->si03_numcontratoanosanteriores == null){ 
+       if($this->si03_numcontrato == null && ($this->si03_numcontratoanosanteriores == null || $this->si03_numcontratoanosanteriores == 0)){
          $this->erro_sql = " Campo N Contrato nao Informado.";
          $this->erro_campo = "si03_numcontrato";
          $this->erro_banco = "";
@@ -461,6 +461,15 @@ class cl_apostilamento {
      if(trim($this->si03_numcontratoanosanteriores)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si03_numcontratoanosanteriores"])){ 
        $sql  .= $virgula." si03_numcontratoanosanteriores = ".($this->si03_numcontratoanosanteriores==null?'0':$this->si03_numcontratoanosanteriores);
        $virgula = ",";
+       if($this->si03_numcontrato == null && ($this->si03_numcontratoanosanteriores == null || $this->si03_numcontratoanosanteriores == 0)){
+         $this->erro_sql = " Campo N Contrato nao Informado.";
+         $this->erro_campo = "si03_numcontrato";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
      }
      $sql .= " where ";
      if($si03_sequencial!=null){
