@@ -580,7 +580,7 @@ class cl_liclicita
         }
 
 
-        if ($this->l20_dataaber == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102) {
+        if ($this->l20_dataaber == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->erro_sql = " Campo Data Edital/Convite não Informado.";
             $this->erro_campo = "l20_dataaber";
             $this->erro_banco = "";
@@ -711,7 +711,7 @@ class cl_liclicita
             return false;
         }
 
-        if ($tribunal != 100 and $tribunal != 101 and $tribunal != 102) {
+        if ($tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             if ($this->l20_equipepregao == null) {
                 $this->erro_sql = " Campo Comissão de Licitação não Informado!";
                 $this->erro_campo = "l20_equipepregao";
@@ -748,7 +748,7 @@ class cl_liclicita
             return false;
         }
 
-        if ($this->l20_recdocumentacao == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102) {
+        if ($this->l20_recdocumentacao == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->erro_sql = " Campo Recebimento Documentação não Informado.";
             $this->erro_campo = "l20_recdocumentacao";
             $this->erro_banco = "";
@@ -1536,7 +1536,7 @@ class cl_liclicita
 
         if (trim($this->l20_dataaber != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
 
-            if (trim($this->l20_dataaber) == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102) {
+            if (trim($this->l20_dataaber) == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
                 $this->erro_sql = " Campo Data Edital/Convite nao Informado.";
                 $this->erro_campo = "l20_dataaber";
                 $this->erro_banco = "";
@@ -1728,7 +1728,7 @@ class cl_liclicita
         if (trim($this->l20_equipepregao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_equipepregao"])) {
             $sql .= $virgula . " l20_equipepregao = $this->l20_equipepregao";
             $virgula = ",";
-            if (trim($this->l20_equipepregao) == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102) {
+            if (trim($this->l20_equipepregao) == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
                 $this->erro_sql = " Campo Comissão de Licitação não Informado.";
                 $this->erro_campo = "l20_equipepregao";
                 $this->erro_banco = "";
