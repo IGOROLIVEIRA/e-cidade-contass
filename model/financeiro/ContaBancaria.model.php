@@ -164,7 +164,7 @@ class ContaBancaria {
       $rsSqlContaBancaria    = $oDaoContaBancaria->sql_record($sSqlContaBancaria);
       $iNumRowsContaBancaria = $oDaoContaBancaria->numrows;
       $oRetorno->numrows     = $iNumRowsContaBancaria;
-      
+
       if ($iNumRowsContaBancaria > 0) {
         
          $oContaBancaria = db_utils::fieldsMemory($rsSqlContaBancaria,0);
@@ -189,7 +189,7 @@ class ContaBancaria {
    *
    */
   public function salvar(){
-    
+
     if (db_utils::inTransaction()) {
       
       $oDaoBancoAgencia  = db_utils::getDao("bancoagencia");
@@ -212,7 +212,7 @@ class ContaBancaria {
           throw new Exception("Erro BancoAgencia: " . $oDaoBancoAgencia->erro_msg);
         }
       }
-      
+
       /**
        * caso não ocorra erro inclui na tabela caontabancaria
        */
@@ -238,7 +238,7 @@ class ContaBancaria {
         $this->setSequencialContaBancaria();
 
         if ( $this->getSequencialContaBancaria() == null ) {
-         
+
           $oDaoContaBancaria->incluir(null);
 
           if($oDaoContaBancaria->erro_status != "0"){
@@ -249,8 +249,10 @@ class ContaBancaria {
         } else {
 
           $oDaoContaBancaria->db83_sequencial = $this->getSequencialContaBancaria();
+          pg_query('alter table rhpessoalmovcontabancaria disable trigger tg_rhpessoalmovcontabancaria');
           $oDaoContaBancaria->alterar($oDaoContaBancaria->db83_sequencial);
-          
+          pg_query('alter table rhpessoalmovcontabancaria enable trigger tg_rhpessoalmovcontabancaria');
+
           if($oDaoContaBancaria->erro_status != "0"){
             $this->setSequencialContaBancaria($oDaoContaBancaria->db83_sequencial);
           } else {
@@ -258,7 +260,7 @@ class ContaBancaria {
           }
         }
       } else {
-         
+
          $this->lErrorBanco = true;
          throw new Exception("Erro BancoAgencia:\n\n".$oDaoBancoAgencia->erro_sql);
       }
