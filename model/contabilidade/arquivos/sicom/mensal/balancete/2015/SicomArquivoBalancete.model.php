@@ -105,7 +105,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             } else {
 
                 $sCodUnidadesub = db_utils::fieldsMemory(db_query("select si08_codunidadesub from infocomplementares where si08_instit = " . db_getsession('DB_instit') . " and si08_anousu = " . db_getsession('DB_anousu')), 0)->si08_codunidadesub;
-
+                if($sCodUnidadesub == ""){
+                    throw new Exception("Não foi encontrado registro na tabela infocomplementares para a instituição ".db_getsession('DB_instit').", ano ".db_getsession('DB_anousu').". Favor realizar o cadastro pelo menu: Sicom->Cadastros->Informações Complementares.");
+                }
             }
 
             return $sCodUnidadesub;
@@ -1149,7 +1151,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             if (!($oReg14->codunidadesub == $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade))) {
                                 $sCodunidadesub = $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade);
-                                $sCodunidadesubOrig = $oReg14->codunidadesub;
+                                $sCodunidadesubOrig = $sCodunidadesub;
                             }
 
                             $sHash14 = '14' . $oContas10->si177_contacontaabil . $oReg14->codorgao . $sCodunidadesub . $sCodunidadesubOrig . $oReg14->codfuncao . $oReg14->codsubfuncao . $oReg14->codprograma;
