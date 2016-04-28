@@ -1111,7 +1111,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                        GROUP BY c28_tipo) AS debitos";
 
                     $rsReg14saldos = db_query($sSqlReg14saldos) or die($sSqlReg14saldos);
-db_criatabela($rsReg14saldos);
+
                     for ($iContSaldo14 = 0; $iContSaldo14 < pg_num_rows($rsReg14saldos); $iContSaldo14++) {
 
                         $oReg14Saldo = db_utils::fieldsMemory($rsReg14saldos, $iContSaldo14);
