@@ -96,9 +96,12 @@ $clveiccadcentral->rotulo->label("ve36_coddepto");
         }else if(isset($chave_ve36_coddepto) && (trim($chave_ve36_coddepto)!="") ){
 	         $sql = $clveiccadcentral->sql_query("",$campos,"ve36_coddepto"," ve36_coddepto like '$chave_ve36_coddepto%' ");
         }else{
-          $depart=db_getsession("DB_coddepto");
-          $where="db_depart.coddepto=$depart";
+          if(!isset($dbdepart)) {
+            $depart = db_getsession("DB_coddepto");
+            $where = "db_depart.coddepto=$depart";
+          }
            $sql = $clveiccadcentral->sql_query("",$campos,"ve36_sequencial","$where");
+
            
         }
         $repassa = array();

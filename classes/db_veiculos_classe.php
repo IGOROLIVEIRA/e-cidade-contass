@@ -1540,5 +1540,107 @@ class cl_veiculos {
      }
      return $sql;
   }
+
+    public function sql_query_movimentacao($ve01_codigo = null, $campos = "*", $ordem = null, $dbwhere = ""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= "FROM veicretirada
+                INNER JOIN db_usuarios ON db_usuarios.id_usuario = veicretirada.ve60_usuario
+                INNER JOIN db_depart ON db_depart.coddepto = veicretirada.ve60_coddepto
+                INNER JOIN veiculos ON veiculos.ve01_codigo = veicretirada.ve60_veiculo
+                INNER JOIN veiccentral ON veiculos.ve01_codigo = veiccentral.ve40_veiculos
+                INNER JOIN veiccadcentral ON ve36_sequencial = ve40_veiccadcentral and ve36_coddepto = veicretirada.ve60_coddepto
+                INNER JOIN veicmotoristas ON veicmotoristas.ve05_codigo = veicretirada.ve60_veicmotoristas
+                INNER JOIN veiccadtipo ON veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo
+                INNER JOIN veiccadmarca ON veiccadmarca.ve21_codigo = veiculos.ve01_veiccadmarca
+                INNER JOIN veiccadmodelo ON veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo
+                INNER JOIN veiccadcor ON veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor
+                INNER JOIN veiculoscomb ON veiculoscomb.ve06_veiculos = veiculos.ve01_codigo
+                INNER JOIN veiccadcomb ON veiccadcomb.ve26_codigo = veiculoscomb.ve06_veiccadcomb
+                INNER JOIN veiccadcategcnh ON veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh
+                INNER JOIN cgm ON cgm.z01_numcgm = veicmotoristas.ve05_numcgm
+                INNER JOIN veiccadcategcnh AS a ON a.ve30_codigo = veicmotoristas.ve05_veiccadcategcnh
+                INNER JOIN veicdevolucao ON veicretirada.ve60_codigo = veicdevolucao.ve61_veicretirada
+                LEFT JOIN veicabastretirada ON ve73_veicretirada = ve60_codigo
+                LEFT JOIN veicmanutretirada ON ve65_veicretirada = ve60_codigo";
+
+        $sql2 = "";
+
+        if($dbwhere==""){
+            if($ve01_codigo!=null ){
+                $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+
+        return $sql;
+    }
+
+    public function sql_query_abastecimentos($ve01_codigo = null, $campos = "*", $ordem = null, $dbwhere = ""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from veicabast
+                    inner join veiccadcomb on ve26_codigo=ve70_veiculoscomb
+                    inner join veiculos on ve01_codigo=ve70_veiculos
+                    inner join veicabastposto on ve71_veicabast=ve70_codigo
+                    inner join veiccadposto on ve29_codigo=ve71_veiccadposto
+                    left join veiccadpostointerno on ve35_veiccadposto=ve29_codigo
+                    left join veiccadpostoexterno on ve34_veiccadposto=ve29_codigo
+                    left join db_depart on coddepto=ve35_depart
+                    left join cgm on ve34_numcgm=z01_numcgm
+                    inner join empveiculos on si05_codabast=ve70_codigo
+                    inner join empempenho on e60_numemp=si05_numemp ";
+
+        $sql2 = "";
+
+        if($dbwhere==""){
+            if($ve01_codigo!=null ){
+                $sql2 .= " where veiculos.ve01_codigo = $ve01_codigo ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+
+        return $sql;
+    }
 }
 ?>
