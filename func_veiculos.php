@@ -178,6 +178,15 @@ $clveiculos->rotulo->label("ve01_veiccadtipo");
         if (isset($instit)) {
           $sWhereInstituicao = 'and instit = ' . db_getsession("DB_instit");
         }
+        if(isset($tipoabast)){
+            $sWhereInstituicao .= ' and ve01_veictipoabast = 1 ';
+        }
+
+        if(isset($central)) {
+            if($central != 0) {
+                $sWhereInstituicao = " and ve40_veiccadcentral={$central} ";
+            }
+          }
 
         $campos .= ",veiculos.ve01_quantcapacidad";
 

@@ -1076,7 +1076,10 @@ if($dbwhere==""){
                             ve70_dtabast,
                             ve70_veiculoscomb,
                             ve06_veiccadcomb,
+                            e60_codemp,
+                            e60_anousu,
                             descrdepto,
+                            coddepto,
                             (select ve60_destino 
                                from veicretirada 
                               where ve60_codigo = ve73_veicretirada 
@@ -1111,7 +1114,10 @@ if($dbwhere==""){
                           inner join veiccadcomb       on ve06_veiccadcomb  = ve26_codigo 
                           left  join veiccentral       on ve40_veiculos     = ve01_codigo
                           left  join veiccadcentral    on ve36_sequencial   = ve40_veiccadcentral
-													left  join db_depart         on ve36_coddepto     = coddepto 
+													left  join db_depart         on ve36_coddepto     = coddepto
+						  left join veicabastposto on ve71_veicabast = ve70_codigo
+						  left join empveiculos on si05_codabast = ve70_codigo
+						  inner join empempenho on e60_numemp = si05_numemp
                           order by ve01_codigo ) 
               as abast ";
      $sql2 = "";
@@ -1119,6 +1125,124 @@ if($dbwhere==""){
        if($ve70_codigo!=null ){
          $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
        } 
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+
+     return $sql;
+  }
+
+    function sql_query_abast_novo( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere="", $iCoddepto=null){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+
+     if(!empty($iCoddepto)){
+     	$dbwhereSubquery 				 =  " and ve60_coddepto = $iCoddepto ";
+     	$dbwhereSubqueryClausula = 'inner';
+     }else{
+     	$dbwhereSubquery 				 = null;
+     	$dbwhereSubqueryClausula = 'left';
+     }
+
+     $sql .= "
+              from ( select ve70_codigo,
+              							ve70_valor,
+                            ve01_codigo,
+                            ve01_placa,
+                            ve01_veiccadtipo,
+                            ve01_veiccadmarca,
+                            ve01_veiccadmodelo,
+                            ve01_veictipoabast,
+                            ve20_descr,
+                            ve21_descr,
+                            ve22_descr,
+                            ve01_anofab,
+                            ve01_anomod,
+                            ve70_data,
+                            ve70_hora,
+                            ve70_medida,
+                            ve70_ativo,
+                            ve70_litros,
+                            ve26_descr,
+                            ve70_dtabast,
+                            ve70_veiculoscomb,
+                            ve06_veiccadcomb,
+                            e60_codemp,
+                            e60_anousu,
+                            descrdepto,
+                            coddepto,
+                            ve70_origemgasto,
+                            ve71_nota,
+                            z01_nome,
+                            z01_numcgm,
+                            (select ve60_destino
+                               from veicretirada
+                              where ve60_codigo = ve73_veicretirada
+                              limit 1 ) as ve60_destino,
+                            (select ve07_sigla
+                               from veictipoabast
+                              where ve07_sequencial = ve01_veictipoabast) as ve07_sigla,
+                            coalesce( coalesce( (select ve70_medida
+                                                        from veicabast a
+                                                  where ve70_codigo = (select max(ve70_codigo)
+                                                                              from veicabast t
+                                                                       where t.ve70_codigo < veicabast.ve70_codigo
+                                                                             and t.ve70_veiculos = veicabast.ve70_veiculos
+                                                                             limit 1)
+                                                 ), ve60_medidasaida ), ve70_medida ) as ve60_medidasaida,
+                            (select ve61_medidadevol
+                               from veicdevolucao
+                                    inner join veicretirada on ve60_codigo = ve61_veicretirada
+                              where ve60_codigo = ve73_veicretirada
+                              limit 1 ) as ve61_medidadevol,
+                            ve40_veiccadcentral
+                     from veicabast
+                          $dbwhereSubqueryClausula join veicabastretirada on ve73_veicabast    = ve70_codigo
+                          $dbwhereSubqueryClausula join veicretirada      on ve73_veicretirada = ve60_codigo
+     																									 $dbwhereSubquery
+                          inner join veiculos          on ve01_codigo       = ve70_veiculos
+                          inner join veiccadmarca      on ve21_codigo       = ve01_veiccadmarca
+                          inner join veiccadmodelo     on ve22_codigo       = ve01_veiccadmodelo
+                          inner join veiccadtipo       on ve20_codigo       = ve01_veiccadtipo
+                          inner join veiculoscomb      on ve06_veiccadcomb  = ve70_veiculoscomb
+                                                      and ve06_veiculos     = ve70_veiculos
+                          inner join veiccadcomb       on ve06_veiccadcomb  = ve26_codigo
+                          left  join veiccentral       on ve40_veiculos     = ve01_codigo
+                          left  join veiccadcentral    on ve36_sequencial   = ve40_veiccadcentral
+													left  join db_depart         on ve36_coddepto     = coddepto
+						  left join veicabastposto on ve71_veicabast = ve70_codigo
+						  inner join veiccadposto on ve29_codigo = ve71_veiccadposto
+						  left join veiccadpostointerno on ve35_veiccadposto=ve29_codigo
+                          left join veiccadpostoexterno on ve34_veiccadposto=ve29_codigo
+                          left join cgm on ve34_numcgm=z01_numcgm
+						  left join empveiculos on si05_codabast = ve70_codigo
+						  inner join empempenho on e60_numemp = si05_numemp
+                          order by ve01_codigo )
+              as abast ";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($ve70_codigo!=null ){
+         $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }

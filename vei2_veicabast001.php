@@ -39,7 +39,7 @@ $clveiculos  			= new cl_veiculos;
 $aux         			= new cl_arquivo_auxiliar;
 
 $clrotulo    			= new rotulocampo;
-
+$clrotulo->label("ve71_veiccadposto");
 $clrotulo->label("ve20_descr");
 $clrotulo->label("ve21_descr");
 $clrotulo->label("ve22_descr");
@@ -91,20 +91,13 @@ function js_emite(){
   }
 
   query += "ve01_codigo="+lista_veic;
-  query += "&ve01_veiccadtipo="+obj.ve01_veiccadtipo.value;
-  query += "&ve01_veiccadmarca="+obj.ve01_veiccadmarca.value;
-  query += "&ve01_veiccadmodelo="+obj.ve01_veiccadmodelo.value;
   query += "&ve06_veiccadcomb="+obj.ve06_veiccadcomb.value;
+  query += "&ve71_veiccadposto="+obj.ve71_veiccadposto.value;
 
-  if (obj.quebrar_por.value != "0"){
-    query += "&quebrar_por="+obj.quebrar_por.value;
-  }
-  
   query += "&idCentral="+obj.idCentral.value;
-  query += "&situacao="+obj.situacao.value;  
-  query += "&listar_por="+obj.listar_por.value;
+  query += "&situacao="+obj.situacao.value;
 
-  var jan = window.open('vei2_veicabast002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  var jan = window.open('vei2_veicabast2002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
 
@@ -267,6 +260,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
                  $aux->top            = 0;
                  $aux->linhas         = 10;
                  $aux->vwhidth        = 400;
+                 $aux->passar_query_string_para_func = "&tipoabast=1&central=";
                  $aux->funcao_gera_formulario();
         	?>
        </td>
@@ -282,28 +276,22 @@ function js_mostraveiccadcomb1(chave1,chave2){
          ?>
          </td>
       </tr>
-      <tr>
-         <td nowrap align="right" title="<?=@$Tve01_veiccadmarca?>"><? db_ancora(@$Lve01_veiccadmarca,"js_pesquisave01_veiccadmarca(true);",4) ?></td>
-         <td>
-         <? 
-            db_input("ve01_veiccadmarca",10,@$Ive01_veiccadmarca,true,"text",4,"onChange='js_pesquisave01_veiccadmarca(false);'");
-         ?>
-         <?
-            db_input("ve21_descr",40,"",true,"text",3);
-         ?>
-         </td>
-      </tr>
-      <tr>
-         <td nowrap align="right" title="<?=@$Tve01_veiccadmodelo?>"><? db_ancora(@$Lve01_veiccadmodelo,"js_pesquisave01_veiccadmodelo(true);",4) ?></td>
-         <td>
-         <? 
-            db_input("ve01_veiccadmodelo",10,@$Ive01_veiccadmodelo,true,"text",4,"onChange='js_pesquisave01_veiccadmodelo(false);'");
-         ?>
-         <?
-            db_input("ve22_descr",40,"",true,"text",3);
-         ?>
-         </td>
-      </tr>
+
+        <tr>
+            <td align="right" nowrap title="<?= @$Tve71_veiccadposto ?>">
+                <?
+                db_ancora(@$Lve71_veiccadposto, "js_pesquisave71_veiccadposto(true);", $db_opcao);
+                ?>
+            </td>
+            <td>
+                <?
+                db_input('ve71_veiccadposto', 10, $Ive71_veiccadposto, true, 'text', $db_opcao, " onchange='js_pesquisave71_veiccadposto(false);'")
+                ?>
+                <?
+                db_input('posto', 40, "", true, 'text', 3, '');
+                ?>
+            </td>
+        </tr>
       <tr>
          <td nowrap align="right" title="<?=@$Tve06_veiccadcomb?>"><? db_ancora(@$Lve06_veiccadcomb,"js_pesquisave06_veiccadcomb(true);",4) ?></td>
          <td>
@@ -316,29 +304,11 @@ function js_mostraveiccadcomb1(chave1,chave2){
          </td>
       </tr>
       <tr>
-         <td nowrap align="right" title="Quebrar página"><b>Quebrar página por:</b></td>
-         <td>
-         <?
-            $x = array("0"=>"Nenhum","V"=>"Veiculo","T"=>"Tipo","M"=>"Marca","O"=>"Modelo","C"=>"Central de Veículo");
-            db_select("quebrar_por",$x,true,4);
-         ?>
-         </td>
-      </tr>
-      <tr>
          <td nowrap align="right" title="Situação"><b>Situação do Abastecimento:</b></td>
          <td>
          <?
             $y = array("0"=>"Todos os abastecimentos","1"=>"Somente Ativos", "2"=>"Somente Anulados");
             db_select("situacao",$y,true,4);
-         ?>
-         </td>
-      </tr>
-      <tr>
-         <td nowrap align="right" title="Quebrar página"><b>Listar:</b></td>
-         <td>
-         <?
-            $z = array("0"=>"Todos os abastecimentos","1"=>"Somente totalizadores");
-            db_select("listar_por",$z,true,4);
          ?>
          </td>
       </tr>
@@ -370,5 +340,44 @@ function js_mostraveiculos1(chave,chave1,chave2){
     alert("Código inexistente");
   }
 }
+function js_pesquisave71_veiccadposto(mostra) {
+    if (mostra == true) {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?funcao_js=parent.js_mostraposto1|ve29_codigo|z01_nome|descrdepto', 'Pesquisa', true);
+    } else {
+        if (document.form1.ve71_veiccadposto.value != '') {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?pesquisa_chave=' + document.form1.ve71_veiccadposto.value + '&funcao_js=parent.js_mostraposto', 'Pesquisa', false);
+        } else {
+            document.form1.posto.value = '';
+        }
+    }
+}
 
+function js_mostraposto(chave, erro) {
+    document.form1.posto.value = chave;
+    if (erro == true) {
+        document.form1.ve71_veiccadposto.focus();
+        document.form1.ve71_veiccadposto.value = '';
+    }
+}
+function js_mostraposto1(chave1, chave2, chave3) {
+    document.form1.ve71_veiccadposto.value = chave1;
+    if (chave2 != "") {
+        posto = chave2;
+    }
+    if (chave3 != "") {
+        posto = chave3;
+    }
+    document.form1.posto.value = posto;
+    db_iframe_veiccadposto.hide();
+}
+
+function js_BuscaDadosArquivoveiculos(chave){
+    document.form1.db_lanca.onclick = '';
+    var central = document.form1.idCentral.value;
+    if(chave){
+        js_OpenJanelaIframe('','db_iframe_veiculos','func_veiculos.php?funcao_js=parent.js_mostraveiculos|ve01_codigo|ve01_placa&tipoabast=1&central='+central,'Pesquisa',true);
+    }else{
+        js_OpenJanelaIframe('','db_iframe_veiculos','func_veiculos.php?pesquisa_chave='+document.form1.ve01_codigo.value+'&funcao_js=parent.js_mostraveiculos1&tipoabast=1&central='+central,'Pesquisa',false);
+    }
+}
 </script>
