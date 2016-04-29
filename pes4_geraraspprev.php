@@ -110,7 +110,6 @@ $res = pg_query($sql);
                           ''  => 'Selecione',
                           'S' => 'Segurado',
                           'C' => 'Cargo',
-                          'RB' => 'Rubrica Benefício',
                           'FP' => 'FP',
                           'HS' => 'HS',
                           'VO' => 'VO'
@@ -119,15 +118,9 @@ $res = pg_query($sql);
     ?>
     </td>
     </tr>
-    <tr>
-    <td><strong>Usa Separdor de Campo:</strong></td>
-    <td>
-    <?
-      $aSeparadorCampo = array('S' => 'Sim', 'N' => 'Não');
-      db_select("separador",$aSeparadorCampo,true,1);
-    ?>
-    </td>
-    </tr>
+
+    <input id="separador" name="separador"  type="hidden" value="N" >
+
     <?
       // Banco 104 = Caixa Econômica Federal
       if ($banco == 104) {
