@@ -83,7 +83,7 @@ if(isset($excluir)){
     parent.document.formaba.db_itens.disabled=false;
   	top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$chavepesquisa."';
 	</script>";
-   $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa)); 
+   $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa,"*,cgm.z01_nome as z01_nomeorg,c.z01_nome as z01_nomeresp"));
    db_fieldsmemory($result,0);
    $db_botao = true;
    

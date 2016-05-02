@@ -4,10 +4,9 @@ $cladesaoregprecos->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
 $clrotulo->label("z01_nome");
-$clrotulo->label("pc80_data");
 $clrotulo->label("z01_nome");
 ?>
-<fieldset style="width: 650px; height: 500px; margin-top: 0px; margin-left: 10px; float: left;"><legend><b>Adesão de registro de preço</b></legend>
+<fieldset style="width: 650px; height: 400px; margin-top: 0px; margin-left: 10px; float: left;"><legend><b>Informações do Orgão Gerenciador</b></legend>
 <form name="form1" method="post" action="">
 <center>
 <table border="0">
@@ -37,35 +36,6 @@ db_input('z01_nomeorg',40,$Iz01_nome,true,'text',3,'')
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tsi06_modalidade?>">
-      <b>
-       <?
-         db_ancora("Modalidade :","js_pesquisal20_codtipocom(true);",3);
-       ?>
-      </b>
-    </td>
-    <td> 
-      <?
-      	
-        $result_tipo=$clcflicita->sql_record($clcflicita->sql_query_numeracao(null,"l03_codigo,l03_descr", null, "l03_instit = " . db_getsession("DB_instit")));
-        if ($clcflicita->numrows==0){
-		      db_msgbox("Nenhuma Modalidade cadastrada!!");
-		      $result_tipo="";
-		      $db_opcao=3;
-		      $db_botao = false;
-		      db_input("si06_modalidade",10,"",true,"text");
-		      db_input("si06_modalidade",40,"",true,"text");
-        } else {
-          db_selectrecord("si06_modalidade",@$result_tipo,true,$db_opcao,"js_mostraRegistroPreco()");
-          if (isset($l20_codtipocom)&&$l20_codtipocom!=""){
-            echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
-          }
-        }
-      ?>
-    </td>
-  </tr>
- 
-  <tr>
     <td nowrap title="<?=@$Tsi06_numeroprc?>">
        <?=@$Lsi06_numeroprc?>
     </td>
@@ -76,6 +46,22 @@ db_input('si06_numeroprc',10,$Isi06_numeroprc,true,'text',$db_opcao,"")
     </td>
   </tr>
   <tr>
+    <td nowrap title="<?=@$Tsi06_modalidade?>">
+      <b>
+       <?
+         db_ancora("Modalidade :","js_pesquisal20_codtipocom(true);",3);
+       ?>
+      </b>
+    </td>
+    <td> 
+      <?
+      	$aModalidade = array("2" => "Pregão","1" => "Concorrência");
+		    db_select("si06_modalidade",$aModalidade,true,$db_opcao,"");
+      ?>
+    </td>
+  </tr>
+ 
+  <tr>
     <td nowrap title="<?=@$Tsi06_numlicitacao?>">
        <?=@$Lsi06_numlicitacao?>
     </td>
@@ -85,16 +71,7 @@ db_input('si06_numlicitacao',10,$Isi06_numlicitacao,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi06_dataadesao?>">
-       <?=@$Lsi06_dataadesao?>
-    </td>
-    <td> 
-<?
-db_inputdata('si06_dataadesao',@$si06_dataadesao_dia,@$si06_dataadesao_mes,@$si06_dataadesao_ano,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
+
   <tr>
     <td nowrap title="<?=@$Tsi06_dataata?>">
        <?=@$Lsi06_dataata?>
@@ -115,26 +92,7 @@ db_inputdata('si06_datavalidade',@$si06_datavalidade_dia,@$si06_datavalidade_mes
 ?>
     </td>
   </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi06_publicacaoaviso?>">
-       <?=@$Lsi06_publicacaoaviso?>
-    </td>
-    <td> 
-<?
-db_inputdata('si06_publicacaoaviso',@$si06_publicacaoaviso_dia,@$si06_publicacaoaviso_mes,@$si06_publicacaoaviso_ano,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi06_objetoadesao?>">
-       <?=@$Lsi06_objetoadesao?>
-    </td>
-    <td> 
-<?
-db_textarea('si06_objetoadesao','10','40',$Isi06_objetoadesao,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
+
   <tr>
     <td nowrap title="<?=@$Tsi06_orgarparticipante?>">
        <?=@$Lsi06_orgarparticipante?>
@@ -162,23 +120,10 @@ db_input('z01_nomeresp',40,$Iz01_nome,true,'text',3,'')
        ?>
     </td>
   </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi06_descontotabela?>">
-       <?=@$Lsi06_descontotabela?>
-    </td>
-    <td> 
-<?
-//db_input('si06_descontotabela',10,$Isi06_descontotabela,true,'text',$db_opcao,"")
-
-$x = array('1'=>'Sim','0'=>'Não');
-	db_select('si06_descontotabela',$x,true,$db_opcao," onchange='js_verifica_select(this.value);'");
-
-?>
-    </td>
-  </tr>
+  
   </table>
   </fieldset>
-  <fieldset style="width: 640px; height: 190px; margin-top: 40px; "><legend><b>Pesquisa de preços do objeto da adesão</b></legend>
+  <fieldset style="width: 640px; height: 400px; margin-top: 40px; "><legend><b>Informações do Orgão de Adesão</b></legend>
   <table>
   <tr>
     <td nowrap title="<?=@$Tsi06_numeroadm?>">
@@ -201,6 +146,64 @@ db_inputdata('si06_dataabertura',@$si06_dataabertura_dia,@$si06_dataabertura_mes
     </td>
   </tr>
   <tr>
+    <td nowrap title="<?=@$Tsi06_dataadesao?>">
+       <?=@$Lsi06_dataadesao?>
+    </td>
+    <td> 
+<?
+db_inputdata('si06_dataadesao',@$si06_dataadesao_dia,@$si06_dataadesao_mes,@$si06_dataadesao_ano,true,'text',$db_opcao,"")
+?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tsi06_publicacaoaviso?>">
+       <?=@$Lsi06_publicacaoaviso?>
+    </td>
+    <td> 
+<?
+db_inputdata('si06_publicacaoaviso',@$si06_publicacaoaviso_dia,@$si06_publicacaoaviso_mes,@$si06_publicacaoaviso_ano,true,'text',$db_opcao,"")
+?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tsi06_objetoadesao?>" colspan="2">
+    <fieldset><legend><?=@$Lsi06_objetoadesao?></legend>
+     
+<?
+db_textarea('si06_objetoadesao','10','80',$Isi06_objetoadesao,true,'text',$db_opcao,"","","",500)
+?>
+    </fieldset>
+    </td>
+  </tr>
+  
+  <tr>
+    <td nowrap title="<?=@$Tsi06_descontotabela?>">
+       <?=@$Lsi06_descontotabela?>
+    </td>
+    <td> 
+<?
+//db_input('si06_descontotabela',10,$Isi06_descontotabela,true,'text',$db_opcao,"")
+
+$x = array('2'=>'Não','1'=>'Sim');
+	db_select('si06_descontotabela',$x,true,$db_opcao," onchange='js_verifica_select(this.value);'");
+
+?>
+    </td>
+  </tr>
+  
+  <tr>
+    <td nowrap >
+       <b>Processo por Lote: </b>
+    </td>
+    <td> 
+<?
+$x = array('2'=>'Não','1'=>'Sim');
+	db_select('si06_processoporlote',$x,true,$db_opcao,"");
+?>
+    </td>
+  </tr>
+  
+  <tr>
     <td nowrap title="<?=@$Tsi06_processocompra?>">
        <?
        db_ancora(@$Lsi06_processocompra,"js_pesquisasi06_processocompra(true);",$db_opcao);
@@ -210,61 +213,24 @@ db_inputdata('si06_dataabertura',@$si06_dataabertura_dia,@$si06_dataabertura_mes
 <?
 db_input('si06_processocompra',10,$Isi06_processocompra,true,'text',$db_opcao," onchange='js_pesquisasi06_processocompra(false);'")
 ?>
-       <?
-db_input('pc80_data',10,$Ipc80_data,true,'text',3,'')
-       ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi06_fornecedor?>">
-       <?
-       db_ancora(@$Lsi06_fornecedor,"js_pesquisasi06_fornecedor(true);",$db_opcao);
-       ?>
-    </td>
-    <td> 
-<?
-db_input('si06_fornecedor',10,$Isi06_fornecedor,true,'text',$db_opcao," onchange='js_pesquisasi06_fornecedor(false);'")
-?>
-       <?
-db_input('z01_nomef',40,$Iz01_nome,true,'text',3,'')
-       ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi06_tipodocumento?>">
-       <?=@$Lsi06_tipodocumento?>
-    </td>
-    <td> 
-<?
-//db_input('si06_tipodocumento',10,$Isi06_tipodocumento,true,'text',$db_opcao,"")
-$x = array('1'=>'CPF','2'=>'CNPJ','3'=>'Documento de Estrangeiros');
-	db_select('si06_tipodocumento',$x,true,$db_opcao," onchange='js_verifica_select(this.value);'");
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tsi06_numerodocumento?>">
-       <?=@$Lsi06_numerodocumento?>
-    </td>
-    <td> 
-<?
-db_input('si06_numerodocumento',14,$Isi06_numerodocumento,true,'text',$db_opcao,"")
-?>
     </td>
   </tr>
   </table>
   <table>
   <tr>
   <td>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-<input name="excluir" type="submit" id="db_opcao" value="Excluir"> 
-<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+
 </td>
 </tr>
 </table>
 </table>
   </center>
 </fieldset>
+<div align="center">
+<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+<input name="excluir" type="submit" id="db_opcao" value="Excluir"> 
+<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+</div>
 </form>
 <script>
 function js_pesquisasi06_orgaogerenciador(mostra){
@@ -278,7 +244,7 @@ function js_pesquisasi06_orgaogerenciador(mostra){
      }
   }
 }
-function js_mostracgmorgao(chave,erro){
+function js_mostracgmorgao(erro,chave){
   document.form1.z01_nomeorg.value = chave; 
   if(erro==true){ 
     document.form1.si06_orgaogerenciador.focus(); 
@@ -292,16 +258,16 @@ function js_mostracgmorgao1(chave1,chave2){
 }
 function js_pesquisasi06_cgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgmresp1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgmresp1|z01_numcgm|z01_nome&filtro=1','Pesquisa',true);
   }else{
      if(document.form1.si06_cgm.value != ''){ 
-        js_OpenJanelaIframe('','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.si06_cgm.value+'&funcao_js=parent.js_mostracgmresp','Pesquisa',false);
+        js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.si06_cgm.value+'&funcao_js=parent.js_mostracgmresp&filtro=1','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = ''; 
      }
   }
 }
-function js_mostracgmresp(chave,erro){
+function js_mostracgmresp(erro,chave){
   document.form1.z01_nomeresp.value = chave; 
   if(erro==true){ 
     document.form1.si06_cgm.focus(); 
@@ -315,17 +281,14 @@ function js_mostracgmresp1(chave1,chave2){
 }
 function js_pesquisasi06_processocompra(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc|pc80_data','Pesquisa',true);
+    js_OpenJanelaIframe('','db_iframe_pcproc','func_pcproc.php?lFiltroPrecoRef=1&funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
   }else{
      if(document.form1.si06_processocompra.value != ''){ 
-        js_OpenJanelaIframe('','db_iframe_pcproc','func_pcproc.php?pesquisa_chave='+document.form1.si06_processocompra.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
-     }else{
-       document.form1.pc80_data.value = ''; 
+        js_OpenJanelaIframe('','db_iframe_pcproc','func_pcproc.php?lFiltroPrecoRef=1&pesquisa_chave='+document.form1.si06_processocompra.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
      }
   }
 }
 function js_mostrapcproc(chave,erro){
-  document.form1.pc80_data.value = chave; 
   if(erro==true){ 
     document.form1.si06_processocompra.focus(); 
     document.form1.si06_processocompra.value = ''; 
@@ -333,32 +296,9 @@ function js_mostrapcproc(chave,erro){
 }
 function js_mostrapcproc1(chave1,chave2){
   document.form1.si06_processocompra.value = chave1;
-  document.form1.pc80_data.value = chave2;
   db_iframe_pcproc.hide();
 }
-function js_pesquisasi06_fornecedor(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
-  }else{
-     if(document.form1.si06_fornecedor.value != ''){ 
-        js_OpenJanelaIframe('','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.si06_fornecedor.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
-     }else{
-       document.form1.z01_nomef.value = ''; 
-     }
-  }
-}
-function js_mostracgm(chave,erro){
-  document.form1.z01_nomef.value = chave; 
-  if(erro==true){ 
-    document.form1.si06_fornecedor.focus(); 
-    document.form1.si06_fornecedor.value = ''; 
-  }
-}
-function js_mostracgm1(chave1,chave2){
-  document.form1.si06_fornecedor.value = chave1;
-  document.form1.z01_nomef.value = chave2;
-  db_iframe_cgm.hide();
-}
+
 function js_pesquisa(){
 	parent.document.formaba.db_itens.disabled=true;
   js_OpenJanelaIframe('','db_iframe_adesaoregprecos','func_adesaoregprecos.php?funcao_js=parent.js_preenchepesquisa|si06_sequencial','Pesquisa',true);

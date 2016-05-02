@@ -48,8 +48,7 @@ class cl_adesaoregprecos {
    var $si06_dataabertura = null; 
    var $si06_processocompra = 0; 
    var $si06_fornecedor = 0; 
-   var $si06_tipodocumento = 0; 
-   var $si06_numerodocumento = 0; 
+   var $si06_processoporlote = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si06_sequencial = int8 = Sequencial 
@@ -69,8 +68,7 @@ class cl_adesaoregprecos {
                  si06_dataabertura = date = Data da Abertura 
                  si06_processocompra = int8 = Processo de compra 
                  si06_fornecedor = int8 = Fornecedor 
-                 si06_tipodocumento = int8 = Tipo documento 
-                 si06_numerodocumento = int8 = Número do Documento 
+                 si06_processoporlote = int8 = Processo por Lote 
                  ";
    //funcao construtor da classe 
    function cl_adesaoregprecos() { 
@@ -142,8 +140,7 @@ class cl_adesaoregprecos {
        }
        $this->si06_processocompra = ($this->si06_processocompra == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_processocompra"]:$this->si06_processocompra);
        $this->si06_fornecedor = ($this->si06_fornecedor == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_fornecedor"]:$this->si06_fornecedor);
-       $this->si06_tipodocumento = ($this->si06_tipodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_tipodocumento"]:$this->si06_tipodocumento);
-       $this->si06_numerodocumento = ($this->si06_numerodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_numerodocumento"]:$this->si06_numerodocumento);
+       $this->si06_processoporlote = ($this->si06_processoporlote == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_processoporlote"]:$this->si06_processoporlote);
      }else{
        $this->si06_sequencial = ($this->si06_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"]:$this->si06_sequencial);
      }
@@ -286,7 +283,7 @@ class cl_adesaoregprecos {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si06_fornecedor == null ){ 
+     /*if($this->si06_fornecedor == null ){
        $this->erro_sql = " Campo Fornecedor nao Informado.";
        $this->erro_campo = "si06_fornecedor";
        $this->erro_banco = "";
@@ -294,19 +291,11 @@ class cl_adesaoregprecos {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
-     if($this->si06_tipodocumento == null ){ 
-       $this->erro_sql = " Campo Tipo documento nao Informado.";
-       $this->erro_campo = "si06_tipodocumento";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si06_numerodocumento == null ){ 
-       $this->erro_sql = " Campo Número do Documento nao Informado.";
-       $this->erro_campo = "si06_numerodocumento";
+     }*/
+
+     if($this->si06_processoporlote == null ){ 
+       $this->erro_sql = " Campo Processo por Lote nao Informado.";
+       $this->erro_campo = "si06_processoporlote";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -363,10 +352,9 @@ class cl_adesaoregprecos {
                                       ,si06_descontotabela 
                                       ,si06_numeroadm 
                                       ,si06_dataabertura 
-                                      ,si06_processocompra 
-                                      ,si06_fornecedor 
-                                      ,si06_tipodocumento 
-                                      ,si06_numerodocumento 
+                                      ,si06_processocompra
+                                      ,si06_processoporlote
+                                      ,si06_instit
                        )
                 values (
                                 $this->si06_sequencial 
@@ -384,10 +372,9 @@ class cl_adesaoregprecos {
                                ,$this->si06_descontotabela 
                                ,$this->si06_numeroadm 
                                ,".($this->si06_dataabertura == "null" || $this->si06_dataabertura == ""?"null":"'".$this->si06_dataabertura."'")." 
-                               ,$this->si06_processocompra 
-                               ,$this->si06_fornecedor 
-                               ,$this->si06_tipodocumento 
-                               ,$this->si06_numerodocumento 
+                               ,$this->si06_processocompra
+                               ,$this->si06_processoporlote
+                               ,".db_getsession("DB_instit")."
                       )";
      $result = db_query($sql);
      if($result==false){ 
@@ -436,8 +423,6 @@ class cl_adesaoregprecos {
        $resac = db_query("insert into db_acount values($acount,2010205,2009310,'','".AddSlashes(pg_result($resaco,0,'si06_dataabertura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010205,2009311,'','".AddSlashes(pg_result($resaco,0,'si06_processocompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010205,2009312,'','".AddSlashes(pg_result($resaco,0,'si06_fornecedor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010205,2009313,'','".AddSlashes(pg_result($resaco,0,'si06_tipodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010205,2009314,'','".AddSlashes(pg_result($resaco,0,'si06_numerodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    } 
@@ -737,25 +722,12 @@ class cl_adesaoregprecos {
          return false;
        }
      }
-     if(trim($this->si06_tipodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_tipodocumento"])){ 
-       $sql  .= $virgula." si06_tipodocumento = $this->si06_tipodocumento ";
+     if(trim($this->si06_processoporlote)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_processoporlote"])){ 
+       $sql  .= $virgula." si06_processoporlote = $this->si06_processoporlote ";
        $virgula = ",";
-       if(trim($this->si06_tipodocumento) == null ){ 
-         $this->erro_sql = " Campo Tipo documento nao Informado.";
-         $this->erro_campo = "si06_tipodocumento";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si06_numerodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_numerodocumento"])){ 
-       $sql  .= $virgula." si06_numerodocumento = $this->si06_numerodocumento ";
-       $virgula = ",";
-       if(trim($this->si06_numerodocumento) == null ){ 
-         $this->erro_sql = " Campo Número do Documento nao Informado.";
-         $this->erro_campo = "si06_numerodocumento";
+       if(trim($this->si06_processoporlote) == null ){ 
+         $this->erro_sql = " Campo Processo por Lote nao Informado.";
+         $this->erro_campo = "si06_processoporlote";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -808,10 +780,6 @@ class cl_adesaoregprecos {
            $resac = db_query("insert into db_acount values($acount,2010205,1009311,'".AddSlashes(pg_result($resaco,$conresaco,'si06_processocompra'))."','$this->si06_processocompra',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si06_fornecedor"]) || $this->si06_fornecedor != "")
            $resac = db_query("insert into db_acount values($acount,2010205,1009312,'".AddSlashes(pg_result($resaco,$conresaco,'si06_fornecedor'))."','$this->si06_fornecedor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si06_tipodocumento"]) || $this->si06_tipodocumento != "")
-           $resac = db_query("insert into db_acount values($acount,2010205,1009313,'".AddSlashes(pg_result($resaco,$conresaco,'si06_tipodocumento'))."','$this->si06_tipodocumento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si06_numerodocumento"]) || $this->si06_numerodocumento != "")
-           $resac = db_query("insert into db_acount values($acount,2010205,1009314,'".AddSlashes(pg_result($resaco,$conresaco,'si06_numerodocumento'))."','$this->si06_numerodocumento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $result = db_query($sql);
@@ -876,8 +844,6 @@ class cl_adesaoregprecos {
          $resac = db_query("insert into db_acount values($acount,2010205,1009310,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_dataabertura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010205,1009311,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_processocompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010205,1009312,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_fornecedor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,2010205,1009313,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_tipodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,2010205,1009314,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_numerodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from adesaoregprecos
@@ -949,7 +915,7 @@ class cl_adesaoregprecos {
      return $result;
    }
    // funcao do sql 
-   function sql_query ( $si06_sequencial=null,$campos="si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_dataabertura, si06_processocompra, si06_fornecedor, si06_tipodocumento, si06_numerodocumento, cgm.z01_nome as z01_nomeorg, cgmf.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data",$ordem=null,$dbwhere=""){ 
+   function sql_query ( $si06_sequencial=null,$campos="si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgmf.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -964,7 +930,6 @@ class cl_adesaoregprecos {
      $sql .= " from adesaoregprecos ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = adesaoregprecos.si06_orgaogerenciador";
      $sql .= "      inner join cgm c on c.z01_numcgm = adesaoregprecos.si06_cgm";
-     $sql .= "      inner join cgm cgmf on cgmf.z01_numcgm = adesaoregprecos.si06_fornecedor";
      $sql .= "      inner join pcproc  on  pcproc.pc80_codproc = adesaoregprecos.si06_processocompra";
      $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcproc.pc80_usuario";
      $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";

@@ -41,7 +41,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
              include("funcoes/db_func_adesaoregprecos.php");
            }else{
            $campos = "si06_sequencial,cgm.z01_nome as dl_Orgao_Gerenciador,si06_numeroprc,si06_numlicitacao,si06_dataadesao,si06_dataata,si06_objetoadesao,
-                      c.z01_nome as dl_Resp_Aprovacao,si06_numeroadm,cgmf.z01_nome as dl_Fornecedor";
+                      c.z01_nome as dl_Resp_Aprovacao,si06_numeroadm";
            }
         }
 	    $sql = $cladesaoregprecos->sql_query(null,$campos);
@@ -50,7 +50,7 @@ $cladesaoregprecos = new cl_adesaoregprecos;
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($pesquisa_chave));
+          $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($pesquisa_chave,"*","","si06_instit = ".db_getsession("DB_instit")));
           if($cladesaoregprecos->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$oid',false);</script>";

@@ -19,13 +19,16 @@ class cl_itensregpreco {
    var $si07_sequencial = 0; 
    var $si07_numerolote = 0; 
    var $si07_numeroitem = 0; 
-   var $si07_descricaoitem = null; 
+   //var $si07_descricaoitem = null;
    var $si07_item = 0; 
    var $si07_precounitario = 0; 
    var $si07_quantidadelicitada = 0; 
    var $si07_quantidadeaderida = 0; 
-   var $si07_unidade = null; 
-   var $si07_sequencialadesao = 0; 
+   //var $si07_unidade = null;
+   var $si07_sequencialadesao = 0;
+   var $si07_descricaolote = null;
+   var $si07_fornecedor = null;
+   var $si07_codunidade = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si07_sequencial = int8 = Sequencial 
@@ -38,6 +41,9 @@ class cl_itensregpreco {
                  si07_quantidadeaderida = int8 = Quantidade Aderida 
                  si07_unidade = text = Unidade 
                  si07_sequencialadesao = int8 = Sequencial_adesão 
+                 si07_descricaolote = text = Descrição lote
+                 si07_fornecedor = int8 = Cgm fornecedor
+                 si07_codunidade = int8 = código da unidade
                  ";
    //funcao construtor da classe 
    function cl_itensregpreco() { 
@@ -60,13 +66,16 @@ class cl_itensregpreco {
        $this->si07_sequencial = ($this->si07_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_sequencial"]:$this->si07_sequencial);
        $this->si07_numerolote = ($this->si07_numerolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_numerolote"]:$this->si07_numerolote);
        $this->si07_numeroitem = ($this->si07_numeroitem == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_numeroitem"]:$this->si07_numeroitem);
-       $this->si07_descricaoitem = ($this->si07_descricaoitem == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_descricaoitem"]:$this->si07_descricaoitem);
+       //$this->si07_descricaoitem = ($this->si07_descricaoitem == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_descricaoitem"]:$this->si07_descricaoitem);
        $this->si07_item = ($this->si07_item == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_item"]:$this->si07_item);
        $this->si07_precounitario = ($this->si07_precounitario == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_precounitario"]:$this->si07_precounitario);
        $this->si07_quantidadelicitada = ($this->si07_quantidadelicitada == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_quantidadelicitada"]:$this->si07_quantidadelicitada);
        $this->si07_quantidadeaderida = ($this->si07_quantidadeaderida == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_quantidadeaderida"]:$this->si07_quantidadeaderida);
-       $this->si07_unidade = ($this->si07_unidade == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_unidade"]:$this->si07_unidade);
+       //$this->si07_unidade = ($this->si07_unidade == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_unidade"]:$this->si07_unidade);
        $this->si07_sequencialadesao = ($this->si07_sequencialadesao == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_sequencialadesao"]:$this->si07_sequencialadesao);
+       $this->si07_descricaolote = ($this->si07_descricaolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_descricaolote"]:$this->si07_descricaolote);
+       $this->si07_fornecedor = ($this->si07_fornecedor == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_fornecedor"]:$this->si07_fornecedor);
+       $this->si07_codunidade = ($this->si07_codunidade == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_codunidade"]:$this->si07_codunidade);
      }else{
        $this->si07_sequencial = ($this->si07_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si07_sequencial"]:$this->si07_sequencial);
      }
@@ -74,10 +83,7 @@ class cl_itensregpreco {
    // funcao para inclusao
    function incluir ($si07_sequencial){ 
       $this->atualizacampos();
-     if($this->si07_numerolote == null ){ 
-       $this->si07_numerolote = "0";
-     }
-     if($this->si07_numeroitem == null ){ 
+     /*if($this->si07_numeroitem == null ){ 
        $this->erro_sql = " Campo Número do Item nao Informado.";
        $this->erro_campo = "si07_numeroitem";
        $this->erro_banco = "";
@@ -85,8 +91,8 @@ class cl_itensregpreco {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
-     if($this->si07_descricaoitem == null ){ 
+     }*/
+     /*if($this->si07_descricaoitem == null ){ 
        $this->erro_sql = " Campo Descrição Item nao Informado.";
        $this->erro_campo = "si07_descricaoitem";
        $this->erro_banco = "";
@@ -94,7 +100,7 @@ class cl_itensregpreco {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->si07_item == null ){ 
        $this->erro_sql = " Campo Item nao Informado.";
        $this->erro_campo = "si07_item";
@@ -113,7 +119,8 @@ class cl_itensregpreco {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si07_quantidadelicitada == null ){ 
+     $resultDescTabela = db_query("select si06_descontotabela from adesaoregprecos where si06_sequencial = $this->si07_sequencialadesao");
+     if($this->si07_quantidadelicitada == null && pg_result($resultDescTabela,0,0) == 2){
        $this->erro_sql = " Campo Quantidade Licitada nao Informado.";
        $this->erro_campo = "si07_quantidadelicitada";
        $this->erro_banco = "";
@@ -122,7 +129,7 @@ class cl_itensregpreco {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si07_quantidadeaderida == null ){ 
+     if($this->si07_quantidadeaderida == null && pg_result($resultDescTabela,0,0) == 2){
        $this->erro_sql = " Campo Quantidade Aderida nao Informado.";
        $this->erro_campo = "si07_quantidadeaderida";
        $this->erro_banco = "";
@@ -131,7 +138,7 @@ class cl_itensregpreco {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si07_unidade == null ){ 
+     /*if($this->si07_unidade == null ){ 
        $this->erro_sql = " Campo Unidade nao Informado.";
        $this->erro_campo = "si07_unidade";
        $this->erro_banco = "";
@@ -139,7 +146,7 @@ class cl_itensregpreco {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->si07_sequencialadesao == null ){ 
        $this->erro_sql = " Campo Sequencial_adesão nao Informado.";
        $this->erro_campo = "si07_sequencialadesao";
@@ -149,8 +156,36 @@ class cl_itensregpreco {
        $this->erro_status = "0";
        return false;
      }
+     if($this->si07_codunidade == null ){ 
+       $this->erro_sql = " Campo Unidade nao Informado.";
+       $this->erro_campo = "si07_codunidade";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->si07_fornecedor == null ){ 
+       $this->erro_sql = " Campo Fornecedor Ganhador nao Informado.";
+       $this->erro_campo = "si07_fornecedor";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     $resultLote = db_query("select si06_processoporlote from adesaoregprecos where si06_sequencial = $this->si07_sequencialadesao");
+     if(($this->si07_descricaolote == null || $this->si07_numerolote == null) && pg_result($resultLote,0,0) == 1){ 
+       $this->erro_sql = " Campo Descrição e Número do Lote devem ser Informados.";
+       $this->erro_campo = "si07_numerolote";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      
-      if($si07_sequencial == "" || $si07_sequencial == null ){
+     if($si07_sequencial == "" || $si07_sequencial == null ){
        $result = db_query("select nextval('sic_itensregpreco_si07_sequencial_seq')"); 
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -182,32 +217,41 @@ class cl_itensregpreco {
        $this->erro_status = "0";
        return false;
      }
+     $resultItem = db_query("select count(*) as quantidade from itensregpreco where si07_sequencialadesao = $this->si07_sequencialadesao");
+       if(pg_result($resultItem,0,0) == 0){
+           $this->si07_numeroitem = 1;
+       } else {
+           $resultItem = db_query("select max(si07_numeroitem)+1 as si07_numeroitem from itensregpreco where si07_sequencialadesao = $this->si07_sequencialadesao");
+           $this->si07_numeroitem = pg_result($resultItem,0,0);
+       }
      
      $sql = "insert into itensregpreco(
                                        si07_sequencial 
-                                      ,si07_numerolote 
-                                      ,si07_numeroitem 
-                                      ,si07_descricaoitem 
+                                      ,si07_numerolote
+                                      ,si07_numeroitem
                                       ,si07_item 
                                       ,si07_precounitario 
                                       ,si07_quantidadelicitada 
-                                      ,si07_quantidadeaderida 
-                                      ,si07_unidade 
-                                      ,si07_sequencialadesao 
+                                      ,si07_quantidadeaderida
+                                      ,si07_sequencialadesao
+                                      ,si07_codunidade
+                                      ,si07_fornecedor
+                                      ,si07_descricaolote
                        )
                 values (
                                 $this->si07_sequencial 
-                               ,$this->si07_numerolote 
-                               ,$this->si07_numeroitem 
-                               ,'$this->si07_descricaoitem' 
+                               ,".($this->si07_numerolote == null ? 'null' : $this->si07_numerolote)."
+                               ,$this->si07_numeroitem
                                ,$this->si07_item 
-                               ,$this->si07_precounitario 
-                               ,$this->si07_quantidadelicitada 
-                               ,$this->si07_quantidadeaderida 
-                               ,'$this->si07_unidade' 
-                               ,$this->si07_sequencialadesao 
+                               ,$this->si07_precounitario
+                               ,".($this->si07_quantidadelicitada == null ? '0' : $this->si07_quantidadelicitada)."
+                               ,".($this->si07_quantidadeaderida == null ? '0' : $this->si07_quantidadeaderida)."
+                               ,$this->si07_sequencialadesao
+                               ,$this->si07_codunidade
+                               ,$this->si07_fornecedor
+                               ,'$this->si07_descricaolote'
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -268,14 +312,7 @@ class cl_itensregpreco {
          return false;
        }
      }
-     if(trim($this->si07_numerolote)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_numerolote"])){ 
-        if(trim($this->si07_numerolote)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si07_numerolote"])){ 
-           $this->si07_numerolote = "0" ; 
-        } 
-       $sql  .= $virgula." si07_numerolote = $this->si07_numerolote ";
-       $virgula = ",";
-     }
-     if(trim($this->si07_numeroitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_numeroitem"])){ 
+     /*if(trim($this->si07_numeroitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_numeroitem"])){
        $sql  .= $virgula." si07_numeroitem = $this->si07_numeroitem ";
        $virgula = ",";
        if(trim($this->si07_numeroitem) == null ){ 
@@ -287,8 +324,8 @@ class cl_itensregpreco {
          $this->erro_status = "0";
          return false;
        }
-     }
-     if(trim($this->si07_descricaoitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_descricaoitem"])){ 
+     }*/
+     /*if(trim($this->si07_descricaoitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_descricaoitem"])){
        $sql  .= $virgula." si07_descricaoitem = '$this->si07_descricaoitem' ";
        $virgula = ",";
        if(trim($this->si07_descricaoitem) == null ){ 
@@ -300,7 +337,7 @@ class cl_itensregpreco {
          $this->erro_status = "0";
          return false;
        }
-     }
+     }*/
      if(trim($this->si07_item)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_item"])){ 
        $sql  .= $virgula." si07_item = $this->si07_item ";
        $virgula = ",";
@@ -327,10 +364,11 @@ class cl_itensregpreco {
          return false;
        }
      }
+     $resultDescTabela = db_query("select si06_descontotabela from adesaoregprecos where si06_sequencial = $this->si07_sequencialadesao");
      if(trim($this->si07_quantidadelicitada)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_quantidadelicitada"])){ 
-       $sql  .= $virgula." si07_quantidadelicitada = $this->si07_quantidadelicitada ";
+       $sql  .= $virgula." si07_quantidadelicitada = ".($this->si07_quantidadelicitada == null ? '0' : $this->si07_quantidadelicitada);
        $virgula = ",";
-       if(trim($this->si07_quantidadelicitada) == null ){ 
+       if(trim($this->si07_quantidadelicitada) == null && pg_result($resultDescTabela,0,0) == 2){
          $this->erro_sql = " Campo Quantidade Licitada nao Informado.";
          $this->erro_campo = "si07_quantidadelicitada";
          $this->erro_banco = "";
@@ -341,9 +379,9 @@ class cl_itensregpreco {
        }
      }
      if(trim($this->si07_quantidadeaderida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_quantidadeaderida"])){ 
-       $sql  .= $virgula." si07_quantidadeaderida = $this->si07_quantidadeaderida ";
+       $sql  .= $virgula." si07_quantidadeaderida = ".($this->si07_quantidadeaderida == null ? '0' : $this->si07_quantidadeaderida);
        $virgula = ",";
-       if(trim($this->si07_quantidadeaderida) == null ){ 
+       if(trim($this->si07_quantidadeaderida) == null && pg_result($resultDescTabela,0,0) == 2){
          $this->erro_sql = " Campo Quantidade Aderida nao Informado.";
          $this->erro_campo = "si07_quantidadeaderida";
          $this->erro_banco = "";
@@ -353,7 +391,7 @@ class cl_itensregpreco {
          return false;
        }
      }
-     if(trim($this->si07_unidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_unidade"])){ 
+     /*if(trim($this->si07_unidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_unidade"])){
        $sql  .= $virgula." si07_unidade = '$this->si07_unidade' ";
        $virgula = ",";
        if(trim($this->si07_unidade) == null ){ 
@@ -365,7 +403,7 @@ class cl_itensregpreco {
          $this->erro_status = "0";
          return false;
        }
-     }
+     }*/
      if(trim($this->si07_sequencialadesao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_sequencialadesao"])){ 
        $sql  .= $virgula." si07_sequencialadesao = $this->si07_sequencialadesao ";
        $virgula = ",";
@@ -379,6 +417,64 @@ class cl_itensregpreco {
          return false;
        }
      }
+
+     if(trim($this->si07_codunidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_codunidade"])) {
+       $sql .= $virgula . " si07_codunidade = $this->si07_codunidade ";
+       $virgula = ",";
+       if ($this->si07_codunidade == null) {
+         $this->erro_sql = " Campo Unidade nao Informado.";
+         $this->erro_campo = "si07_codunidade";
+         $this->erro_banco = "";
+         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si07_fornecedor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_fornecedor"])) {
+       $sql .= $virgula . " si07_fornecedor = $this->si07_fornecedor ";
+       $virgula = ",";
+       if ($this->si07_fornecedor == null) {
+         $this->erro_sql = " Campo Fornecedor Ganhador nao Informado.";
+         $this->erro_campo = "si07_fornecedor";
+         $this->erro_banco = "";
+         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     $resultLote = db_query("select si06_processoporlote from adesaoregprecos where si06_sequencial = $this->si07_sequencialadesao");
+     if(trim($this->si07_numerolote)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_numerolote"])) {
+       if (trim($this->si07_numerolote) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si07_numerolote"])) {
+         $this->si07_numerolote = "0";
+       }
+       $sql .= $virgula . " si07_numerolote = $this->si07_numerolote ";
+       $virgula = ",";
+       if (($this->si07_numerolote == null || $this->si07_numerolote == "0") && pg_result($resultLote, 0, 0) == 1) {
+         $this->erro_sql = " Campo Descrição e Número do Lote devem ser Informados.";
+         $this->erro_campo = "si07_numerolote";
+         $this->erro_banco = "";
+         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si07_descricaolote)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si07_descricaolote"])) {
+       $sql .= $virgula . " si07_descricaolote = '$this->si07_descricaolote' ";
+       $virgula = ",";
+       if (($this->si07_descricaolote == null) && pg_result($resultLote, 0, 0) == 1) {
+         $this->erro_sql = " Campo Descrição e Número do Lote devem ser Informados.";
+         $this->erro_campo = "si07_descricaolote";
+         $this->erro_banco = "";
+         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
      $sql .= " where ";
      if($si07_sequencial!=null){
        $sql .= " si07_sequencial = $this->si07_sequencial";
@@ -605,6 +701,48 @@ class cl_itensregpreco {
        }
      }
      return $sql;
+  }
+
+  /**
+   * função adicionada para atender as necesidades da nova tela de itens
+   */
+  function sql_query_novo ( $si07_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from itensregpreco ";
+    $sql .= " inner join pcmater on pcmater.pc01_codmater = itensregpreco.si07_item ";
+    $sql .= " inner join db_usuarios on db_usuarios.id_usuario = pcmater.pc01_id_usuario ";
+    $sql .= " inner join pcsubgrupo on pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo ";
+    $sql .= " left join cgm on si07_fornecedor = z01_numcgm ";
+    $sql .= " left join matunid on si07_codunidade = m61_codmatunid ";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($si07_sequencial!=null ){
+        $sql2 .= " where itensregpreco.si07_sequencial = $si07_sequencial ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
   }
 }
 ?>
