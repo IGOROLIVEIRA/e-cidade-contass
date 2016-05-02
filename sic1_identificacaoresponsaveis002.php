@@ -16,10 +16,17 @@ if(isset($alterar)){
   $clidentificacaoresponsaveis->alterar($si166_sequencial);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa)); 
-   db_fieldsmemory($result,0);
-   $db_botao = true;
+  if(db_getsession("DB_modulo") != 952) {
+    $db_opcao = 2;
+    $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa));
+    db_fieldsmemory($result, 0);
+    $db_botao = true;
+  }else{
+    $db_opcao = 2;
+    $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa,'*','',"si166_tiporesponsavel = 5"));
+    db_fieldsmemory($result, 0);
+    $db_botao = true;
+  }
 }
 ?>
 <html>

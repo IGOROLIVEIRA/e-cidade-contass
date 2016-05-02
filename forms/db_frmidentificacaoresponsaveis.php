@@ -41,7 +41,11 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
     </td>
     <td> 
 <?
-$x = array('1'=>'Gestor','2'=>'Contador','3'=>'Controle Interno','4'=>'Ordenador de Despesa por Delegação');
+if(db_getsession("DB_modulo") != 952) {
+    $x = array('1' => 'Gestor', '2' => 'Contador', '3' => 'Controle Interno', '4' => 'Ordenador de Despesa por Delegação');
+}else{
+    $x = array('5' => 'Responsável pelo envio');
+}
 db_select("si166_tiporesponsavel",$x,true,$db_opcao,"onchange='mostrar_campos()'");
 //db_input('si166_tiporesponsavel',11,$Isi166_tiporesponsavel,true,'text',$db_opcao,"")
 ?>
