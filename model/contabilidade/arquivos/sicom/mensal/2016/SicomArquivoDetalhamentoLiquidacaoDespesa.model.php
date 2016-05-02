@@ -82,7 +82,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
            OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade, z01_nome, 
 				   z01_cgccpf, e53_valor,e53_vlranu,  o15_codtri,  si09_codorgaotce, 
-				   o41_subunidade AS subunidade,o56_elemento
+				   o41_subunidade AS subunidade,o56_elemento,o40_orgao,o41_unidade
 			     FROM pagordem
 			     JOIN empempenho ON e50_numemp = e60_numemp
 			     JOIN orcdotacao ON e60_coddot = o58_coddot AND o58_anousu = e60_anousu
@@ -139,8 +139,8 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
                    where usu.id_usuario = {$oLiquidacao->e50_id_usuario} and usuinst.id_instit = ".db_getsession("DB_instit");
     		} else {
     			$sSql  = "select z01_nome,substr(z01_cgccpf,1,11) as z01_cgccpf from cgm where z01_numcgm = ";
-	    	  $sSql .= "(select o41_ordliquidacao from orcunidade where o41_unidade = ".$oLiquidacao->o58_unidade;
-	    	  $sSql .= " and o41_orgao = ".$oLiquidacao->o58_orgao;
+	    	  $sSql .= "(select o41_ordliquidacao from orcunidade where o41_unidade = ".$oLiquidacao->o41_unidade;
+	    	  $sSql .= " and o41_orgao = ".$oLiquidacao->o40_orgao;
 	    	  $sSql .= " and o41_anousu = ".db_getsession("DB_anousu").")";
     		}
 	    	$rsLiquidante = db_query($sSql);
