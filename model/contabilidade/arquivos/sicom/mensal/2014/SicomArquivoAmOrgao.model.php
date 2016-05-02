@@ -148,7 +148,7 @@ left join infocomplementaresinstit on si09_instit = codigo
 		  	throw new Exception($clorgao102014->erro_msg);
 		}
     	
-    	$sSql = "select * from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_instit = ".db_getsession("DB_instit");
+    	$sSql = "select * from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_instit = ".db_getsession("DB_instit") ." and si166_tiporesponsavel not in (1,2,3,4) ";
     	$rsResult11 = db_query($sSql);
     	
     	for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
