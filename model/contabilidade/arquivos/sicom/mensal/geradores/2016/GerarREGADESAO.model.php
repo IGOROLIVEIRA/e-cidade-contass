@@ -61,9 +61,10 @@ class GerarREGADESAO extends GerarAM {
         
         $aCSVREGADESAO10['si67_tiporegistro']                =    str_pad($aREGADESAO10['si67_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVREGADESAO10['si67_codorgao']                    =    str_pad($aREGADESAO10['si67_codorgao'], 2, "0", STR_PAD_LEFT);
-        $aCSVREGADESAO10['si67_codunidadesub']               =    str_pad($aREGADESAO10['si67_codunidadesub'], 8, "0", STR_PAD_LEFT);
+        $aCSVREGADESAO10['si67_codunidadesub']               =    str_pad($aREGADESAO10['si67_codunidadesub'], (strlen($aREGADESAO10['si67_codunidadesub']) > 5 ? 8 : 5), "0", STR_PAD_LEFT);
         $aCSVREGADESAO10['si67_nroprocadesao']               =    substr($aREGADESAO10['si67_nroprocadesao'], 0, 12);
-        $aCSVREGADESAO10['si67_exercicioadesao']             =    str_pad($aREGADESAO10['si67_exercicioadesao'], 4, "0", STR_PAD_LEFT);
+        $aCSVREGADESAO10['si67_exercicioadesao']             =    str_pad($aREGADESAO10['si63_exercicioadesao'], 4, "0", STR_PAD_LEFT);
+        $aCSVREGADESAO10['si67_dtabertura']                  =    implode("", array_reverse(explode("-", $aREGADESAO10['si67_dtabertura'])));
         $aCSVREGADESAO10['si67_nomeorgaogerenciador']        =    substr($aREGADESAO10['si67_nomeorgaogerenciador'], 0, 100);
         $aCSVREGADESAO10['si67_exerciciolicitacao']          =    str_pad($aREGADESAO10['si67_exerciciolicitacao'], 4, "0", STR_PAD_LEFT);
         $aCSVREGADESAO10['si67_nroprocessolicitatorio']      =    substr($aREGADESAO10['si67_nroprocessolicitatorio'], 0, 20);
@@ -89,10 +90,10 @@ class GerarREGADESAO extends GerarAM {
 
             $aCSVREGADESAO11['si68_tiporegistro']          =   str_pad($aREGADESAO11['si68_tiporegistro'], 2, "0", STR_PAD_LEFT);
             $aCSVREGADESAO11['si68_codorgao']              =   str_pad($aREGADESAO11['si68_codorgao'], 2, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO11['si68_codunidadesub']         =   str_pad($aREGADESAO11['si68_codunidadesub'], 8, "0", STR_PAD_LEFT);
+            $aCSVREGADESAO11['si68_codunidadesub']         =   str_pad($aREGADESAO11['si68_codunidadesub'], (strlen($aREGADESAO11['si68_codunidadesub']) > 5 ? 8 : 5), "0", STR_PAD_LEFT);
             $aCSVREGADESAO11['si68_nroprocadesao']         =   substr($aREGADESAO11['si68_nroprocadesao'], 0, 12);
             $aCSVREGADESAO11['si68_exercicioadesao']       =   str_pad($aREGADESAO11['si68_exercicioadesao'], 4, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO11['si68_nrolote']               =   substr($aREGADESAO11['si68_nrolote'], 0, 4);
+            $aCSVREGADESAO11['si68_nrolote']               =   substr(($aREGADESAO11['si68_nrolote'] == 0 ? ' ' : $aREGADESAO11['si68_nrolote']), 0, 4);
             $aCSVREGADESAO11['si68_dsclote']               =   substr($aREGADESAO11['si68_dsclote'], 0, 250);
 
 
@@ -110,7 +111,7 @@ class GerarREGADESAO extends GerarAM {
 
             $aCSVREGADESAO12['si69_tiporegistro']          =   str_pad($aREGADESAO12['si69_tiporegistro'], 2, "0", STR_PAD_LEFT);
             $aCSVREGADESAO12['si69_codorgao']              =   str_pad($aREGADESAO12['si69_codorgao'], 2, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO12['si69_codunidadesub']         =   str_pad($aREGADESAO12['si69_codunidadesub'], 8, "0", STR_PAD_LEFT);
+            $aCSVREGADESAO12['si69_codunidadesub']         =   str_pad($aREGADESAO12['si69_codunidadesub'], (strlen($aREGADESAO12['si69_codunidadesub']) > 5 ? 8 : 5), "0", STR_PAD_LEFT);
             $aCSVREGADESAO12['si69_nroprocadesao']         =   substr($aREGADESAO12['si69_nroprocadesao'], 0, 12);
             $aCSVREGADESAO12['si69_exercicioadesao']       =   str_pad($aREGADESAO12['si69_exercicioadesao'], 4, "0", STR_PAD_LEFT);
             $aCSVREGADESAO12['si69_coditem']               =   substr($aREGADESAO12['si69_coditem'], 0, 15);
@@ -130,10 +131,10 @@ class GerarREGADESAO extends GerarAM {
 
             $aCSVREGADESAO13['si70_tiporegistro']          =   str_pad($aREGADESAO13['si70_tiporegistro'], 2, "0", STR_PAD_LEFT);
             $aCSVREGADESAO13['si70_codorgao']              =   str_pad($aREGADESAO13['si70_codorgao'], 2, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO13['si70_codunidadesub']         =   str_pad($aREGADESAO13['si70_codunidadesub'], 8, "0", STR_PAD_LEFT);
+            $aCSVREGADESAO13['si70_codunidadesub']         =   str_pad($aREGADESAO13['si70_codunidadesub'], (strlen($aREGADESAO13['si70_codunidadesub']) > 5 ? 8 : 5), "0", STR_PAD_LEFT);
             $aCSVREGADESAO13['si70_nroprocadesao']         =   substr($aREGADESAO13['si70_nroprocadesao'], 0, 12);
             $aCSVREGADESAO13['si70_exercicioadesao']       =   str_pad($aREGADESAO13['si70_exercicioadesao'], 4, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO13['si70_nrolote']               =   substr($aREGADESAO13['si70_nrolote'], 0, 15);
+            $aCSVREGADESAO13['si70_nrolote']               =   substr(($aREGADESAO13['si70_nrolote'] == 0 ? ' ' : $aREGADESAO13['si70_nrolote']), 0, 15);
             $aCSVREGADESAO13['si70_coditem']               =   substr($aREGADESAO13['si70_coditem'], 0, 15);
 
             $this->sLinha = $aCSVREGADESAO13;
@@ -150,10 +151,10 @@ class GerarREGADESAO extends GerarAM {
 
             $aCSVREGADESAO14['si71_tiporegistro']          =   str_pad($aREGADESAO14['si71_tiporegistro'], 2, "0", STR_PAD_LEFT);
             $aCSVREGADESAO14['si71_codorgao']              =   str_pad($aREGADESAO14['si71_codorgao'], 2, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO14['si71_codunidadesub']         =   str_pad($aREGADESAO14['si71_codunidadesub'], 8, "0", STR_PAD_LEFT);
+            $aCSVREGADESAO14['si71_codunidadesub']         =   str_pad($aREGADESAO14['si71_codunidadesub'], (strlen($aREGADESAO14['si71_codunidadesub']) > 5 ? 8 : 5), "0", STR_PAD_LEFT);
             $aCSVREGADESAO14['si71_nroprocadesao']         =   substr($aREGADESAO14['si71_nroprocadesao'], 0, 12);
             $aCSVREGADESAO14['si71_exercicioadesao']       =   str_pad($aREGADESAO14['si71_exercicioadesao'], 4, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO14['si71_nrolote']               =   substr($aREGADESAO14['si71_nrolote'], 0,4);
+            $aCSVREGADESAO14['si71_nrolote']               =   substr(($aREGADESAO14['si71_nrolote'] == 0 ? ' ' : $aREGADESAO14['si71_nrolote']), 0,4);
             $aCSVREGADESAO14['si71_coditem']               =   substr($aREGADESAO14['si71_coditem'], 0, 15);
             $aCSVREGADESAO14['si71_dtcotacao']             =   implode("", array_reverse(explode("-", $aREGADESAO14['si71_dtcotacao'])));
             $aCSVREGADESAO14['si71_vlcotprecosunitario']   =   number_format($aREGADESAO14['si71_vlcotprecosunitario'], 2, ",", "");
@@ -173,10 +174,10 @@ class GerarREGADESAO extends GerarAM {
 
             $aCSVREGADESAO15['si72_tiporegistro']          =   str_pad($aREGADESAO15['si72_tiporegistro'], 2, "0", STR_PAD_LEFT);
             $aCSVREGADESAO15['si72_codorgao']              =   str_pad($aREGADESAO15['si72_codorgao'], 2, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO15['si72_codunidadesub']         =   str_pad($aREGADESAO15['si72_codunidadesub'], 8, "0", STR_PAD_LEFT);
+            $aCSVREGADESAO15['si72_codunidadesub']         =   str_pad($aREGADESAO15['si72_codunidadesub'], (strlen($aREGADESAO15['si72_codunidadesub']) > 5 ? 8 : 5), "0", STR_PAD_LEFT);
             $aCSVREGADESAO15['si72_nroprocadesao']         =   substr($aREGADESAO15['si72_nroprocadesao'], 0, 12);
             $aCSVREGADESAO15['si72_exercicioadesao']       =   str_pad($aREGADESAO15['si72_exercicioadesao'], 4, "0", STR_PAD_LEFT);
-            $aCSVREGADESAO15['si72_nrolote']               =   substr($aREGADESAO15['si72_nrolote'], 0,4);
+            $aCSVREGADESAO15['si72_nrolote']               =   substr(($aREGADESAO15['si72_nrolote'] == 0 ? ' ' : $aREGADESAO15['si72_nrolote']), 0,4);
             $aCSVREGADESAO15['si72_coditem']               =   substr($aREGADESAO15['si72_coditem'], 0, 15);
             $aCSVREGADESAO15['si72_precounitario']         =   number_format($aREGADESAO15['si72_precounitario'], 2, ",", "");
             $aCSVREGADESAO15['si72_quantidadelicitada']    =   number_format($aREGADESAO15['si72_quantidadelicitada'], 2, ",", "");
@@ -202,10 +203,10 @@ class GerarREGADESAO extends GerarAM {
         
         $aCSVREGADESAO20['si73_tiporegistro']          =   str_pad($aREGADESAO20['si73_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVREGADESAO20['si73_codorgao']              =   str_pad($aREGADESAO20['si73_codorgao'], 2, "0", STR_PAD_LEFT);
-        $aCSVREGADESAO20['si73_codunidadesub']         =   str_pad($aREGADESAO20['si73_codunidadesub'], 8, "0", STR_PAD_LEFT);
+        $aCSVREGADESAO20['si73_codunidadesub']         =   str_pad($aREGADESAO20['si73_codunidadesub'], (strlen($aREGADESAO20['si73_codunidadesub']) > 5 ? 8 : 5), "0", STR_PAD_LEFT);
         $aCSVREGADESAO20['si73_nroprocadesao']         =   substr($aREGADESAO20['si73_nroprocadesao'], 0, 12);
         $aCSVREGADESAO20['si73_exercicioadesao']       =   str_pad($aREGADESAO20['si73_exercicioadesao'], 4, "0", STR_PAD_LEFT);
-        $aCSVREGADESAO20['si73_nrolote']               =   substr($aREGADESAO20['si73_nrolote'], 0,4);
+        $aCSVREGADESAO20['si73_nrolote']               =   substr(($aREGADESAO20['$aREGADESAO20'] == 0 ? ' ' : $aREGADESAO20['$aREGADESAO20']), 0,4);
         $aCSVREGADESAO20['si73_coditem']               =   substr($aREGADESAO20['si73_coditem'], 0, 15);
         $aCSVREGADESAO20['si73_percdesconto']          =   number_format($aREGADESAO20['si73_percdesconto'], 2, ",", "");
         $aCSVREGADESAO20['si73_tipodocumento']         =   str_pad($aREGADESAO20['si73_tipodocumento'], 1, "0", STR_PAD_LEFT);
