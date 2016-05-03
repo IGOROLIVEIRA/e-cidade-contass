@@ -1152,10 +1152,12 @@ class licitacao {
 
       /**
        * Resumo da autorização
+       * Conforme Solicitado pela ocorrência 1892, o resumo deve ser a informação preenchida na primeira tela do menu Mod. Licitação >> Procedimentos >> Gera Autorização
+       * @see: Ocorrência 1892
        */
-      $rsPcdotac = $oDaoPcdotac->sql_record($oDaoPcdotac->sql_query_solicita(null, null, null, "pc10_resumo", null, "pc13_sequencial = {$oItem->pcdotac}"));
-      $sResumo   = $oDaoPcdotac->numrows > 0 ? db_utils::fieldsMemory($rsPcdotac, 0)->pc10_resumo : $oDados->resumo;
-
+      //$rsPcdotac = $oDaoPcdotac->sql_record($oDaoPcdotac->sql_query_solicita(null, null, null, "pc10_resumo", null, "pc13_sequencial = {$oItem->pcdotac}"));
+      //$sResumo   = $oDaoPcdotac->numrows > 0 ? db_utils::fieldsMemory($rsPcdotac, 0)->pc10_resumo : $oDados->resumo;
+      $sResumo = $oDados->resumo;
       $oAutorizacao = new AutorizacaoEmpenho();
       /**
        * Não pode-se setar o codigo da reserva da solicitação na Autorizacao.
