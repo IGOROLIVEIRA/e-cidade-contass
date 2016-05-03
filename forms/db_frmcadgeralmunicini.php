@@ -88,7 +88,7 @@ function js_confirma(){
 
   if ($('cpf') ) {
 
-    if ( $F('cpf') == '11111111111' || $F('cpf') == '22222222222' || $F('cpf') == '33333333333' ||
+    if ( $F('cpf') == '11111111111' || $F('cpf') == '11111111111' || $F('cpf') == '22222222222' || $F('cpf') == '33333333333' ||
          $F('cpf') == '44444444444' || $F('cpf') == '55555555555' || $F('cpf') == '66666666666' ||
          $F('cpf') == '77777777777' || $F('cpf') == '88888888888' || $F('cpf') == '99999999999' ) {
 
@@ -96,7 +96,7 @@ function js_confirma(){
       return false;
     }
 
-    if ( $F('cpf') == '00000000000' && !lPermissaoCpfZerado) {
+    if ( $F('cpf') == '00000000000') {
 
       alert('usuário:\n\n Você não tem permissão de inserir CPF zerado!\n\n');
       $('cpf').value = '';
@@ -105,7 +105,7 @@ function js_confirma(){
     }
   }
 
-  if ($('cnpj') && $F('cnpj') == '00000000000000' && !lPermissaoCnpjZerado) {
+  if ($('cnpj') && $F('cnpj') == '00000000000000') {
     alert('usuário:\n\n Você não tem permissão de inserir CNPJ zerado!\n\n');
     $('cnpj').value = '';
     $('cnpj').focus();

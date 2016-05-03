@@ -136,7 +136,7 @@ if( (isset($cnpj) && trim($cnpj)!="") || (isset($cpf) && trim($cpf)!="") ){
   $cgccpf = str_replace("/","",$cgccpf);
   $cgccpf = str_replace("-","",$cgccpf);  
   //$result = $clcgm->sql_record($clcgm->sql_query("","cgm.z01_cgccpf,cgm.z01_numcgm",""," z01_cgccpf = '$cgccpf' and z01_cgccpf <> '' and z01_numcgm <> $z01_numcgm "));
-    if ($lPermissaoCpfZerado == "false") {
+    //if ($lPermissaoCpfZerado == "false") {
       
       if (trim($cgccpf) == "{$sZero}") {
         echo "<script>";
@@ -144,7 +144,7 @@ if( (isset($cnpj) && trim($cnpj)!="") || (isset($cpf) && trim($cpf)!="") ){
 	    echo"</script>";
 	    db_redireciona($HTTP_REFERER);
       }
-    }
+    //}
   $result = $clcgm->sql_record($clcgm->sql_query("","z01_cgccpf,cgm.z01_numcgm","","z01_cgccpf = '$cgccpf' and z01_cgccpf <> '{$sZero}'")); 
   //echo "<script>alert('aquiiiiiiiiiii');</script>";
   if(!isset($testanome) || $vldCGM ==true){
