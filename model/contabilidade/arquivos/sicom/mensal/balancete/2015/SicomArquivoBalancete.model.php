@@ -1464,13 +1464,13 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                      * Busca o codigo unico do ctb enviado no AM
                      *
                      */
-                    $sSqlVerifica = " select distinct si95_codctb from ( SELECT distinct si95_codctb FROM ctb102015 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
+                    $sSqlVerifica = " select distinct si95_codctb, ano from ( SELECT distinct si95_codctb, 2015 as ano FROM ctb102015 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta
                                       AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb FROM ctb102014 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2014 as ano FROM ctb102014 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta) as x";
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta) as x order by 2 DESC limit 1";
 
                     $rsResultVerifica = db_query($sSqlVerifica) or die($sSqlVerifica);
 
