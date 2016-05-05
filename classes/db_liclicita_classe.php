@@ -426,7 +426,7 @@ class cl_liclicita
                 return false;
             }
         } else {
-            if (strlen($this->l20_veicdivulgacao) < 5 and strlen($this->l20_veicdivulgacao) > 50) {
+            if (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50) {
                 $this->erro_msg = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -436,7 +436,7 @@ class cl_liclicita
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
-            if (strlen($this->l20_justificativa) < 10 and strlen($this->l20_justificativa) > 250) {
+            if (strlen($this->l20_justificativa) < 10 || strlen($this->l20_justificativa) > 250) {
                 $this->erro_msg = "Usuário: \\n\\n O campo Justificativa deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -456,7 +456,7 @@ class cl_liclicita
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
-            if (strlen($this->l20_razao) < 10 and strlen($this->l20_razao) > 250) {
+            if (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250) {
                 $this->erro_msg = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -1235,7 +1235,7 @@ class cl_liclicita
         }
 
         // echo "ggg".$this->l20_dtpubratificacao;exit;
-        if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102)) {
+        if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_dtpubratificacao = '$this->l20_dtpubratificacao '";
             $virgula = ",";
             if (trim($this->l20_dtpubratificacao) == null) {
@@ -1270,7 +1270,7 @@ class cl_liclicita
      $virgula = ",";
   }*/
 
-        if (trim($this->l20_tipoprocesso == 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102)) {
+        if (trim($this->l20_tipoprocesso == 0 || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_tipoprocesso = $this->l20_tipoprocesso ";
             $virgula = ",";
             if (trim($this->l20_tipoprocesso) == null || trim($this->l20_tipoprocesso) == 0) {
@@ -1284,9 +1284,11 @@ class cl_liclicita
             }
         }
 
-        if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102)) {
+        if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
 
-            if (strlen($this->l20_veicdivulgacao) < 5 and strlen($this->l20_veicdivulgacao) > 50) {
+            $sql .= $virgula . " l20_veicdivulgacao = '$this->l20_veicdivulgacao'";
+            $virgula = ",";
+            if (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50) {
 
                 $this->erro_msg = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -1310,7 +1312,7 @@ class cl_liclicita
         }
 
 
-        if (trim($this->l20_justificativa != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_justificativa"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102)) {
+        if (trim($this->l20_justificativa != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_justificativa"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_justificativa = '$this->l20_justificativa' ";
             $virgula = ",";
 
@@ -1325,7 +1327,7 @@ class cl_liclicita
             }
         } else {
 
-            if (strlen($this->l20_justificativa) < 10 and strlen($this->l20_justificativa) > 250) {
+            if (strlen($this->l20_justificativa) < 10 || strlen($this->l20_justificativa) > 250) {
                 $this->erro_msg = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -1336,11 +1338,11 @@ class cl_liclicita
             $virgula = ",";
         }
 
-        if (trim($this->l20_razao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_razao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102)) {
+        if (trim($this->l20_razao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_razao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_razao = '$this->l20_razao' ";
             $virgula = ",";
 
-            if (strlen($this->l20_razao) < 10 and strlen($this->l20_razao) > 250) {
+            if (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250) {
                 $this->erro_sql = "O campo Razão deve ter no mínimo 10 caracteres e no máximo 250";
                 $this->erro_campo = "l20_razao";
                 $this->erro_banco = "";
@@ -1516,7 +1518,7 @@ class cl_liclicita
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
             if ($tribunal != 50) {
-                if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102) {
+                if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
                     $sql .= $virgula . " l20_recdocumentacao = null ";
                     $virgula = ",";
                 } else if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
@@ -1544,11 +1546,11 @@ class cl_liclicita
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
-            } else if (trim($this->l20_dataaber) == null and $tribunal == 100 || $tribunal == 101 || $tribunal == 102) {
+            } else if (trim($this->l20_dataaber) == null and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
                 $sql .= $virgula . " l20_dataaber = null ";
                 $virgula = ",";
             } else {
-                $sql .= $virgula . " l20_dataaber =' $this->l20_dataaber' ";
+                $sql .= $virgula . " l20_dataaber ='$this->l20_dataaber' ";
                 $virgula = ",";
             }
         }
