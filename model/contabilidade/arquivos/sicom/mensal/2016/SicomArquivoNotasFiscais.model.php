@@ -352,7 +352,7 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
           $clntf20->si145_chaveacesso            = $oDados20->chaveacesso;
           $clntf20->si145_dtemissaonf            = $oDados20->dtemissaonf;
         
-          $clntf20->si145_codunidadesub          = $oDados20->codunidadesub.($oDados20->subunidade == '001' ?$oDados20->subunidade : '');
+          $clntf20->si145_codunidadesub          = $oDados20->codunidadesub.($oDados20->subunidade != '' ?$oDados20->subunidade : '');
           $clntf20->si145_dtempenho              = $oDados20->dtempenho;
           $clntf20->si145_nroempenho             = $oDados20->nroempenho;
           $clntf20->si145_dtliquidacao           = $oDados20->dtliquidacao;
