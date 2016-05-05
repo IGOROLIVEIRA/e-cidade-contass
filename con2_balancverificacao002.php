@@ -351,23 +351,23 @@ $pdf->cell(2,$alt,$sinal,0,1,"R",0);
 if ( $pdf->gety() > ( $pdf->h - 40 ) )
     $pdf->addpage("L");
 
-$tes =  "______________________________"."\n"."Tesoureiro";
-$sec =  "______________________________"."\n"."Secretaria da Fazenda";
-$cont =  "______________________________"."\n"."Contador";
-$pref =  "______________________________"."\n"."Prefeito";
-$ass_pref = $classinatura->assinatura(1000,$pref);
-//$ass_pref = $classinatura->assinatura_usuario();
-$ass_sec  = $classinatura->assinatura(1002,$sec);
-$ass_tes  = $classinatura->assinatura(1004,$tes);
-$ass_cont = $classinatura->assinatura(1005,$cont);
+
+$ass_pref = $classinatura->assinatura(9000,"",'1');
+$ass_sec  = $classinatura->assinatura(9000,"",'0');
+$ass_tes  = $classinatura->assinatura(9000,"",'2');
+$ass_cont = $classinatura->assinatura(9000,"",'3');
 
 
 //echo $ass_pref;
-$largura = ( $pdf->w ) / 2;
-$pdf->ln(10);
+$largura = ( $pdf->w ) / 4;
+$pdf->ln(50);
 $pos = $pdf->gety();
 $pdf->multicell($largura,3,$ass_pref,0,"C",0,0);
 $pdf->setxy($largura,$pos);
+$pdf->multicell($largura,3,$ass_sec,0,"C",0,0);
+$pdf->setxy($largura+65,$pos);
+$pdf->multicell($largura,3,$ass_tes,0,"C",0,0);
+$pdf->setxy($largura+130,$pos);
 $pdf->multicell($largura,3,$ass_cont,0,"C",0,0);
 
 $pdf->Output();
