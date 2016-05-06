@@ -360,7 +360,8 @@ $ass_cont = $classinatura->assinatura(9000,"",'3');
 
 //echo $ass_pref;
 $largura = ( $pdf->w ) / 4;
-$pdf->ln(50);
+$pdf->ln();
+$pdf->ln();
 $pos = $pdf->gety();
 $pdf->multicell($largura,3,$ass_pref,0,"C",0,0);
 $pdf->setxy($largura,$pos);
