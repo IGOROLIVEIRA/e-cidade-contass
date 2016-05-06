@@ -449,22 +449,8 @@ class cl_liclicita
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
-            if (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250) {
-                $this->erro_msg = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-
-            if (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250) {
-                $this->erro_msg = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-
-            if (trim($this->l20_razao) == null) {
-                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Razão";
+            if (trim($this->l20_razao) == null || (strlen($this->l20_razao) < 10 || strlen($this->l20_razao) > 250)) {
+                $this->erro_sql = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
                 $this->erro_campo = "l20_razao";
                 $this->erro_banco = "";
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
