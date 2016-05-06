@@ -162,9 +162,15 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				       case when l20_codigo is null then 1
 				            when l03_pctipocompratribunal in (100,101,102) then 3 else 2 end as despDecLicitacao,
 				       ' ' as codorgaoresplicit,
-				       case when l20_codigo is null then null else (select lpad((CASE WHEN o.o40_codtri = '0'
-         OR NULL THEN o.o40_orgao::varchar ELSE o.o40_codtri END),2,0)||lpad((CASE WHEN u.o41_codtri = '0'
-           OR NULL THEN u.o41_unidade::varchar ELSE u.o41_codtri END),3,0) as unidadesub 
+				       case when l20_codigo is null then null else (SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END as unidadesub
 				          from db_departorg 
 				          JOIN infocomplementares ON si08_anousu = db01_anousu
                   AND si08_instit = " . db_getsession("DB_instit") . "
@@ -262,9 +268,6 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 $sCodUnidade .= str_pad($oEmpenho->subunidade, 3, "0", STR_PAD_LEFT);
                 if ($oEmpenho->codunidadesubrespcontrato != '') {
                     $oEmpenho->codunidadesubrespcontrato .= str_pad($oEmpenho->subunidade, 3, "0", STR_PAD_LEFT);
-                }
-                if ($oEmpenho->codunidadesubresplicit != '') {
-                    $oEmpenho->codunidadesubresplicit .= str_pad($oEmpenho->subunidade, 3, "0", STR_PAD_LEFT);
                 }
             }
             $sElemento = substr($oEmpenho->naturezadadespesa, 0, 8);

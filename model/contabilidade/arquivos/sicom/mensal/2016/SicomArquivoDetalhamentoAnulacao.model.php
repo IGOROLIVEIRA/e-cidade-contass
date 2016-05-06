@@ -1,97 +1,103 @@
 <?php
-require_once ("model/iPadArquivoBaseCSV.interface.php");
-require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_alq102016_classe.php");
-require_once ("classes/db_alq112016_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2016/GerarALQ.model.php");
+require_once("model/iPadArquivoBaseCSV.interface.php");
+require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
+require_once("classes/db_alq102016_classe.php");
+require_once("classes/db_alq112016_classe.php");
+require_once("classes/db_alq122016_classe.php");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2016/GerarALQ.model.php");
 
- /**
-  * Anulacao da Liquidacao Sicom Acompanhamento Mensal
-  * @author marcelo
-  * @package Contabilidade
-  */
-class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadArquivoBaseCSV {
-   
-	/**
-	 * 
-	 * Codigo do layout. (db_layouttxt.db50_codigo)
-	 * @var Integer
-	 */
-  protected $iCodigoLayout = 170;
-  
-  /**
-   * 
-   * Nome do arquivo a ser criado
-   * @var String
-   */
-  protected $sNomeArquivo = 'ALQ';
-  
-  /**
-   * 
-   * Construtor da classe
-   */
-  public function __construct() {
-    
-  }
-  
-  /**
-	 * Retorna o codigo do layout
-	 *
-	 * @return Integer
-	 */
-  public function getCodigoLayout(){
-    return $this->iCodigoLayout;
-  }
-  
-  /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios 
-   *para o escritor gerar o arquivo CSV 
-   */
-  public function getCampos(){
-    
-    $aElementos[10] = array(
-						    					  "tipoRegistro",
-						    					  "codReduzido",
-						                "codOrgao",
-						                "codUnidadeSub",
-						    					  "nroEmpenho",
-						    					  "dtEmpenho",
-						    					  "dtLiquidacao",
-						                "nroLiquidacao",
-						    					  "dtAnulacaoLiq",
-						    	  				"nroLiquidacaoANL",
-						    					  "tpLiquidacao",
-						    					  "vlAnulado"
-                        );
-     $aElementos[11] = array(
-						    					  "tipoRegistro",
-						    					  "codReduzido",
-						                "codFontRecursos",
-						                "valorAnuladoFonte"
-                        );
-     $aElementos[12] = array(
-						    					  "tipoRegistro",
-						    					  "codReduzido",
-						                "mesCompetencia",
-						                "exercicioCompetencia",
-     												"vlAnuladoDspExerAnt"
-                        );
-    return $aElementos;
-  }
-  
-  /**
-   * Contratos mes para gerar o arquivo
-   * @see iPadArquivoBase::gerarDados()
-   */
-  public function gerarDados() {
-    
-  	$sSqlUnidade = "select * from infocomplementares where 
-  	si08_anousu = ".db_getsession("DB_anousu")." and si08_instit = ".db_getsession("DB_instit");
-  	
-    $rsResultUnidade = db_query($sSqlUnidade);
-    $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
-    
-    $sSql      =   "SELECT e50_data,
+/**
+ * Anulacao da Liquidacao Sicom Acompanhamento Mensal
+ * @author marcelo
+ * @package Contabilidade
+ */
+class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadArquivoBaseCSV
+{
+
+    /**
+     *
+     * Codigo do layout. (db_layouttxt.db50_codigo)
+     * @var Integer
+     */
+    protected $iCodigoLayout = 170;
+
+    /**
+     *
+     * Nome do arquivo a ser criado
+     * @var String
+     */
+    protected $sNomeArquivo = 'ALQ';
+
+    /**
+     *
+     * Construtor da classe
+     */
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * Retorna o codigo do layout
+     *
+     * @return Integer
+     */
+    public function getCodigoLayout()
+    {
+        return $this->iCodigoLayout;
+    }
+
+    /**
+     *esse metodo sera implementado criando um array com os campos que serao necessarios
+     *para o escritor gerar o arquivo CSV
+     */
+    public function getCampos()
+    {
+
+        $aElementos[10] = array(
+            "tipoRegistro",
+            "codReduzido",
+            "codOrgao",
+            "codUnidadeSub",
+            "nroEmpenho",
+            "dtEmpenho",
+            "dtLiquidacao",
+            "nroLiquidacao",
+            "dtAnulacaoLiq",
+            "nroLiquidacaoANL",
+            "tpLiquidacao",
+            "vlAnulado"
+        );
+        $aElementos[11] = array(
+            "tipoRegistro",
+            "codReduzido",
+            "codFontRecursos",
+            "valorAnuladoFonte"
+        );
+        $aElementos[12] = array(
+            "tipoRegistro",
+            "codReduzido",
+            "mesCompetencia",
+            "exercicioCompetencia",
+            "vlAnuladoDspExerAnt"
+        );
+        return $aElementos;
+    }
+
+    /**
+     * Contratos mes para gerar o arquivo
+     * @see iPadArquivoBase::gerarDados()
+     */
+    public function gerarDados()
+    {
+
+        $sSqlUnidade = "select * from infocomplementares where
+  	si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
+
+        $rsResultUnidade = db_query($sSqlUnidade);
+        $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
+
+        $sSql = "SELECT e50_data,
                    case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else 
                    (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) end as codreduzido,
                    case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
@@ -100,6 +106,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 							    lpad((CASE WHEN o40_codtri = '0'
          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
            OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade,o41_subunidade, e60_codcom, sum(c70_valor) as c70_valor, c70_data, c53_tipo, c70_data,si09_codorgaotce 
+							,o56_elemento
 							FROM empempenho
 							INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
 							INNER JOIN conlancam ON c70_codlan = c75_codlan
@@ -135,178 +142,203 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 							join pagordemnota on e71_codord = c80_codord 
 							join pagordem on  e71_codord = e50_codord
 							left join  infocomplementaresinstit on o58_instit = si09_instit 
-							WHERE c53_tipo IN (21)  AND c70_data BETWEEN '".$this->sDataInicial."' AND '".$this->sDataFinal."'
-							  AND 1=1  AND e60_instit IN (".db_getsession('DB_instit').")
+							WHERE c53_tipo IN (21)  AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
+							  AND 1=1  AND e60_instit IN (" . db_getsession('DB_instit') . ")
 							GROUP BY e60_numemp, e60_resumo, e60_destin, e60_codemp, e60_emiss, e60_numcgm, 
 								 z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, 
 								 e40_descr, e60_vlrpag, e60_anousu, e60_coddot, o58_coddot, o58_orgao, o40_orgao, 
 								 o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, 
 								 c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp,e71_codnota,c80_data,e50_data,si09_codorgaotce,o41_subunidade,pagordemnota.e71_codord
-							   ,o40_codtri,orcorgao.o40_orgao,orcunidade.o41_codtri,orcunidade.o41_unidade
+							   ,o40_codtri,orcorgao.o40_orgao,orcunidade.o41_codtri,orcunidade.o41_unidade,o56_elemento
 								 ORDER BY e60_numemp,c70_codlan";
-    // and e60_numemp not in (select e91_numemp from empresto where e91_anousu = ".db_getsession('DB_anousu').")
-    //echo $sSql;
-    $rsDetalhamentos = db_query($sSql);
-    //db_criatabela($rsDetalhamentos);echo pg_last_error();
-   
-    $clalq10 = new cl_alq102016();
-    $clalq11 = new cl_alq112016();
-    /*
-     * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
-     */
-    db_inicio_transacao();
-    $result = $clalq10->sql_record($clalq10->sql_query(NULL,"*",NULL,"si121_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'])
-         ." and si121_instit = ".db_getsession("DB_instit"));
-    if (pg_num_rows($result) > 0) {
-    	
-    	$clalq11->excluir(NULL,"si122_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
-    	." and si122_instit = ".db_getsession("DB_instit"));
-    	$clalq10->excluir(NULL,"si121_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
-    	." and si121_instit = ".db_getsession("DB_instit"));
-   
-      if ($clalq10->erro_status == 0) {
-    	  throw new Exception($clalq10->erro_msg);
-      }
-    }
-    /**
-     * percorrer registros de detalhamento anulação retornados do sql acima
-     */
-    $aDadosAgrupados = array();
-    for ($iCont = 0;$iCont < pg_num_rows($rsDetalhamentos); $iCont++) {
-    	
-      $oDetalhamento = db_utils::fieldsMemory($rsDetalhamentos,$iCont);
-      
-      if($oDetalhamento->e60_anousu == db_getsession("DB_anousu")){
-      	$tpLiquidacao = 1;
-      }else{
-      	$tpLiquidacao = 2;
-      }
-      
-      if ($sTrataCodUnidade == '2') {
-      		
-            $sCodUnidade					  = str_pad($oDetalhamento->o58_orgao, 3, "0", STR_PAD_LEFT);
-	   		$sCodUnidade					 .= str_pad($oDetalhamento->o58_unidade, 2, "0", STR_PAD_LEFT);
-	   		  
-      } else {
-      		
-        $sCodUnidade					  = str_pad($oDetalhamento->o58_orgao, 2, "0", STR_PAD_LEFT);
-	   	  $sCodUnidade					 .= str_pad($oDetalhamento->o58_unidade, 3, "0", STR_PAD_LEFT);
-      		
-      }
-      
-      if ($oDetalhamento->o41_subunidade == 1) {
-      	$sCodUnidade .= str_pad($oDetalhamento->o41_subunidade, 3, "0", STR_PAD_LEFT);
-      }
-      
-      $sHash = substr($oDetalhamento->nroliquidacao, 0, 19);
+        // and e60_numemp not in (select e91_numemp from empresto where e91_anousu = ".db_getsession('DB_anousu').")
+        //echo $sSql;
+        $rsDetalhamentos = db_query($sSql);
+        //db_criatabela($rsDetalhamentos);echo pg_last_error();
 
-      if (!isset($aDadosAgrupados[$sHash])) {
-      	
-        $oDadosDetalhamento = new stdClass();
+        $clalq10 = new cl_alq102016();
+        $clalq11 = new cl_alq112016();
+        $clalq12 = new cl_alq122016();
 
+        /*
+         * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
+         */
+        db_inicio_transacao();
+        $result = $clalq10->sql_record($clalq10->sql_query(NULL, "*", NULL, "si121_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'])
+            . " and si121_instit = " . db_getsession("DB_instit"));
+        if (pg_num_rows($result) > 0) {
 
-          /*
-           * Verifica se o empenho existe na tabela dotacaorpsicom
-           * Caso exista, busca os dados da dotação.
-		   * */
-			$sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDetalhamento->e60_numemp}";
-            $iFonteAlterada = '0';
-			if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
-                $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
-                $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
-                $oDadosDetalhamento->si121_codorgao      = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
-                $oDadosDetalhamento->si121_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
-                $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos,3,"0", STR_PAD_LEFT);
-            }else{
-                $oDadosDetalhamento->si121_codorgao               = $oDetalhamento->si09_codorgaotce;
-                $oDadosDetalhamento->si121_codunidadesub          = $sCodUnidade;
+            $clalq12->excluir(NULL, "si123_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
+                . " and si123_instit = " . db_getsession("DB_instit"));
+            $clalq11->excluir(NULL, "si122_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
+                . " and si122_instit = " . db_getsession("DB_instit"));
+            $clalq10->excluir(NULL, "si121_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']
+                . " and si121_instit = " . db_getsession("DB_instit"));
+
+            if ($clalq10->erro_status == 0) {
+                throw new Exception($clalq10->erro_msg);
             }
-      
-        $oDadosDetalhamento->si121_tiporegistro           = 10;
-        $oDadosDetalhamento->si121_codreduzido            = substr($oDetalhamento->codreduzido, 0, 15);
-        $oDadosDetalhamento->si121_codorgao               = $oDetalhamento->si09_codorgaotce;
-        $oDadosDetalhamento->si121_codunidadesub          = $sCodUnidade;
-        $oDadosDetalhamento->si121_nroempenho		        = substr($oDetalhamento->e60_codemp, 0, 22);
-        $oDadosDetalhamento->si121_dtempenho		        = $oDetalhamento->e60_emiss;
-        $oDadosDetalhamento->si121_dtliquidacao 	    	= $oDetalhamento->e50_data;
-        $oDadosDetalhamento->si121_nroliquidacao 			= substr($oDetalhamento->nroliquidacao, 0, 19);
-        $oDadosDetalhamento->si121_dtanulacaoliq			= $oDetalhamento->c70_data;
-        $oDadosDetalhamento->si121_nroliquidacaoanl		= substr($oDetalhamento->nroliquidacao, 0, 19);
-        $oDadosDetalhamento->si121_tpliquidacao 			= $tpLiquidacao;
-        $oDadosDetalhamento->si121_justificativaanulacao	= 'ESTORNO DE LIQUIDACAO';
-        $oDadosDetalhamento->si121_vlanulado				= $oDetalhamento->c70_valor;
-        $oDadosDetalhamento->si121_mes					= $this->sDataFinal['5'].$this->sDataFinal['6'];
-        $oDadosDetalhamento->si121_instit 				= db_getsession("DB_instit");
-        
-        $aDadosAgrupados[$sHash] = $oDadosDetalhamento;
-        
-        $oDadosDetalhamentoFonte = new stdClass();
-      
-        $oDadosDetalhamentoFonte->si122_tiporegistro       = 11;
-        $oDadosDetalhamentoFonte->si122_codreduzido        = substr($oDetalhamento->codreduzido, 0, 15);
-        $oDadosDetalhamentoFonte->si122_codfontrecursos    = $iFonteAlterada != '0' ? $iFonteAlterada : str_pad($oDetalhamento->o15_codtri, 3, "0", STR_PAD_LEFT);
-        $oDadosDetalhamentoFonte->si122_valoranuladofonte  = $oDetalhamento->c70_valor;
-        $oDadosDetalhamentoFonte->si122_mes				 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-        $oDadosDetalhamentoFonte->si122_instit 				= db_getsession("DB_instit");
-        
-        $aDadosAgrupados[$sHash]->Reg11 = $oDadosDetalhamentoFonte;
-      	
-      } else {
-      	
-      	$aDadosAgrupados[$sHash]->si121_vlanulado += $oDetalhamento->c70_valor;
-      	$aDadosAgrupados[$sHash]->Reg11->si122_valoranuladofonte += $oDetalhamento->c70_valor;
-      	
-      }
-      
+        }
+        db_fim_transacao();
+        db_inicio_transacao();
+        /**
+         * percorrer registros de detalhamento anulação retornados do sql acima
+         */
+        $aDadosAgrupados = array();
+        for ($iCont = 0; $iCont < pg_num_rows($rsDetalhamentos); $iCont++) {
+
+            $oDetalhamento = db_utils::fieldsMemory($rsDetalhamentos, $iCont);
+
+            if ($oDetalhamento->e60_anousu == db_getsession("DB_anousu")) {
+                $tpLiquidacao = 1;
+            } else {
+                $tpLiquidacao = 2;
+            }
+
+            if ($sTrataCodUnidade == '2') {
+
+                $sCodUnidade = str_pad($oDetalhamento->o58_orgao, 3, "0", STR_PAD_LEFT);
+                $sCodUnidade .= str_pad($oDetalhamento->o58_unidade, 2, "0", STR_PAD_LEFT);
+
+            } else {
+
+                $sCodUnidade = str_pad($oDetalhamento->o58_orgao, 2, "0", STR_PAD_LEFT);
+                $sCodUnidade .= str_pad($oDetalhamento->o58_unidade, 3, "0", STR_PAD_LEFT);
+
+            }
+
+            if ($oDetalhamento->o41_subunidade != '' && $oDetalhamento->o41_subunidade != 0) {
+                $sCodUnidade .= str_pad($oDetalhamento->o41_subunidade, 3, "0", STR_PAD_LEFT);
+            }
+
+            $sHash = substr($oDetalhamento->nroliquidacao, 0, 19);
+
+            if (!isset($aDadosAgrupados[$sHash])) {
+
+                $oDadosDetalhamento = new stdClass();
+
+
+                /*
+                 * Verifica se o empenho existe na tabela dotacaorpsicom
+                 * Caso exista, busca os dados da dotação.
+                 * */
+                $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDetalhamento->e60_numemp}";
+                $iFonteAlterada = '0';
+                if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+                    $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+                    $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 3, "0", STR_PAD_LEFT);
+                    $oDadosDetalhamento->si121_codorgao = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+                    $oDadosDetalhamento->si121_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+                    $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 3, "0", STR_PAD_LEFT);
+                } else {
+                    $oDadosDetalhamento->si121_codorgao = $oDetalhamento->si09_codorgaotce;
+                    $oDadosDetalhamento->si121_codunidadesub = $sCodUnidade;
+                }
+
+                $oDadosDetalhamento->si121_tiporegistro = 10;
+                $oDadosDetalhamento->si121_codreduzido = substr($oDetalhamento->codreduzido, 0, 15);
+                $oDadosDetalhamento->si121_codorgao = $oDetalhamento->si09_codorgaotce;
+                $oDadosDetalhamento->si121_codunidadesub = $sCodUnidade;
+                $oDadosDetalhamento->si121_nroempenho = substr($oDetalhamento->e60_codemp, 0, 22);
+                $oDadosDetalhamento->si121_dtempenho = $oDetalhamento->e60_emiss;
+                $oDadosDetalhamento->si121_dtliquidacao = $oDetalhamento->e50_data;
+                $oDadosDetalhamento->si121_nroliquidacao = substr($oDetalhamento->nroliquidacao, 0, 19);
+                $oDadosDetalhamento->si121_dtanulacaoliq = $oDetalhamento->c70_data;
+                $oDadosDetalhamento->si121_nroliquidacaoanl = substr($oDetalhamento->nroliquidacao, 0, 19);
+                $oDadosDetalhamento->si121_tpliquidacao = $tpLiquidacao;
+                $oDadosDetalhamento->si121_justificativaanulacao = 'ESTORNO DE LIQUIDACAO';
+                $oDadosDetalhamento->si121_vlanulado = $oDetalhamento->c70_valor;
+                $oDadosDetalhamento->si121_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $oDadosDetalhamento->si121_instit = db_getsession("DB_instit");
+                $oDadosDetalhamento->o56_elemento = $oDetalhamento->o56_elemento;
+
+                $aDadosAgrupados[$sHash] = $oDadosDetalhamento;
+
+                $oDadosDetalhamentoFonte = new stdClass();
+
+                $oDadosDetalhamentoFonte->si122_tiporegistro = 11;
+                $oDadosDetalhamentoFonte->si122_codreduzido = substr($oDetalhamento->codreduzido, 0, 15);
+                $oDadosDetalhamentoFonte->si122_codfontrecursos = $iFonteAlterada != '0' ? $iFonteAlterada : str_pad($oDetalhamento->o15_codtri, 3, "0", STR_PAD_LEFT);
+                $oDadosDetalhamentoFonte->si122_valoranuladofonte = $oDetalhamento->c70_valor;
+                $oDadosDetalhamentoFonte->si122_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $oDadosDetalhamentoFonte->si122_instit = db_getsession("DB_instit");
+
+                $aDadosAgrupados[$sHash]->Reg11 = $oDadosDetalhamentoFonte;
+
+            } else {
+
+                $aDadosAgrupados[$sHash]->si121_vlanulado += $oDetalhamento->c70_valor;
+                $aDadosAgrupados[$sHash]->Reg11->si122_valoranuladofonte += $oDetalhamento->c70_valor;
+
+            }
+
+        }
+
+        foreach ($aDadosAgrupados as $oDadosAgrupados) {
+
+            $oDados10 = new cl_alq102016();
+
+            $oDados10->si121_tiporegistro = 10;
+            $oDados10->si121_codreduzido = $oDadosAgrupados->si121_codreduzido;
+            $oDados10->si121_codorgao = $oDadosAgrupados->si121_codorgao;
+            $oDados10->si121_codunidadesub = $oDadosAgrupados->si121_codunidadesub;
+            $oDados10->si121_nroempenho = $oDadosAgrupados->si121_nroempenho;
+            $oDados10->si121_dtempenho = $oDadosAgrupados->si121_dtempenho;
+            $oDados10->si121_dtliquidacao = $oDadosAgrupados->si121_dtliquidacao;
+            $oDados10->si121_nroliquidacao = $oDadosAgrupados->si121_nroliquidacao;
+            $oDados10->si121_dtanulacaoliq = $oDadosAgrupados->si121_dtanulacaoliq;
+            $oDados10->si121_nroliquidacaoanl = $oDadosAgrupados->si121_nroliquidacaoanl;
+            $oDados10->si121_tpliquidacao = $oDadosAgrupados->si121_tpliquidacao;
+            $oDados10->si121_justificativaanulacao = $oDadosAgrupados->si121_justificativaanulacao;
+            $oDados10->si121_vlanulado = $oDadosAgrupados->si121_vlanulado;
+            $oDados10->si121_mes = $oDadosAgrupados->si121_mes;
+            $oDados10->si121_instit = $oDadosAgrupados->si121_instit;
+
+            $oDados10->incluir(null);
+            if ($oDados10->erro_status == 0) {
+                throw new Exception($oDados10->erro_msg);
+            }
+
+            $oDados11 = new cl_alq112016();
+
+            $oDados11->si122_tiporegistro = 11;
+            $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;
+            $oDados11->si122_codfontrecursos = $oDadosAgrupados->Reg11->si122_codfontrecursos;
+            $oDados11->si122_valoranuladofonte = $oDadosAgrupados->Reg11->si122_valoranuladofonte;
+            $oDados11->si122_mes = $oDadosAgrupados->Reg11->si122_mes;
+            $oDados11->si122_reg10 = $oDados10->si121_sequencial;
+            $oDados11->si122_instit = $oDadosAgrupados->Reg11->si122_instit;
+
+            $oDados11->incluir(null);
+            if ($oDados11->erro_status == 0) {
+                throw new Exception($oDados11->erro_msg);
+            }
+
+            if (substr($oDadosAgrupados->o56_elemento, 0, 7) == '3319092') {
+
+                $oDados12 = new cl_alq122016();
+                $oDados12->si123_tiporegistro = 12;
+                $oDados12->si123_reg10 = $oDados10->si121_sequencial;
+                $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
+                $oDados12->si123_mescompetencia = 12;
+                $oDados12->si123_exerciciocompetencia = db_getsession("DB_anousu") - 1;
+                $oDados12->si123_vlanuladodspexerant = $oDados10->si121_vlanulado;
+                $oDados12->si123_mes = $oDados10->si121_mes;
+                $oDados12->si123_instit = db_getsession("DB_instit");
+                $oDados12->incluir(null);
+                if ($oDados12->erro_status == 0) {
+                    throw new Exception($oDados12->erro_msg);
+                }
+
+            }
+
+        }
+
+        db_fim_transacao();
+
+        $oGerarALQ = new GerarALQ();
+        $oGerarALQ->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $oGerarALQ->gerarDados();
     }
-    
-    foreach ($aDadosAgrupados as $oDadosAgrupados) {
-    	
-      $oDados10 = new cl_alq102016();
-      
-      $oDados10->si121_tiporegistro           = 10;
-      $oDados10->si121_codreduzido            = $oDadosAgrupados->si121_codreduzido;
-      $oDados10->si121_codorgao               = $oDadosAgrupados->si121_codorgao;
-      $oDados10->si121_codunidadesub          = $oDadosAgrupados->si121_codunidadesub;
-      $oDados10->si121_nroempenho		        = $oDadosAgrupados->si121_nroempenho;
-      $oDados10->si121_dtempenho		        = $oDadosAgrupados->si121_dtempenho;
-      $oDados10->si121_dtliquidacao 	    	= $oDadosAgrupados->si121_dtliquidacao;
-      $oDados10->si121_nroliquidacao 			= $oDadosAgrupados->si121_nroliquidacao;
-      $oDados10->si121_dtanulacaoliq			= $oDadosAgrupados->si121_dtanulacaoliq;
-      $oDados10->si121_nroliquidacaoanl		= $oDadosAgrupados->si121_nroliquidacaoanl;
-      $oDados10->si121_tpliquidacao 			= $oDadosAgrupados->si121_tpliquidacao;
-      $oDados10->si121_justificativaanulacao	= $oDadosAgrupados->si121_justificativaanulacao;
-      $oDados10->si121_vlanulado				= $oDadosAgrupados->si121_vlanulado;
-      $oDados10->si121_mes					= $oDadosAgrupados->si121_mes;
-      $oDados10->si121_instit 				= $oDadosAgrupados->si121_instit;
-      
-      $oDados10->incluir(null);
-      if ($oDados10->erro_status == 0) {
-		  throw new Exception($oDados10->erro_msg);
-      }
-	    
-      $oDados11 = new cl_alq112016();
-      
-      $oDados11->si122_tiporegistro       = 11;
-      $oDados11->si122_codreduzido        = $oDadosAgrupados->Reg11->si122_codreduzido;
-      $oDados11->si122_codfontrecursos    = $oDadosAgrupados->Reg11->si122_codfontrecursos;
-      $oDados11->si122_valoranuladofonte  = $oDadosAgrupados->Reg11->si122_valoranuladofonte;
-      $oDados11->si122_mes				 = $oDadosAgrupados->Reg11->si122_mes;
-      $oDados11->si122_reg10				 = $oDados10->si121_sequencial;
-      $oDados11->si122_instit 				= $oDadosAgrupados->Reg11->si122_instit;
-      
-      $oDados11->incluir(null);
-      if ($oDados11->erro_status == 0) {
-		  throw new Exception($oDados11->erro_msg);
-      }
-    	
-    }
-    
-  	db_fim_transacao();
-	    
-	$oGerarALQ = new GerarALQ();
-	$oGerarALQ->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
-	$oGerarALQ->gerarDados();
-  }
-  
+
 }			

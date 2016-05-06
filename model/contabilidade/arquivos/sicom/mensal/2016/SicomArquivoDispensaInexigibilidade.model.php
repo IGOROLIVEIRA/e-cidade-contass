@@ -335,11 +335,11 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		  $dispensa10->si74_tipoprocesso    			  = $oDados10->tipoprocesso;
 		  $dispensa10->si74_dtabertura    				  = $oDados10->dtabertura  ;
 		  $dispensa10->si74_naturezaobjeto    			  = $oDados10->naturezaobjeto;
-		  $dispensa10->si74_objeto    					  = $oDados10->objeto ;
-		  $dispensa10->si74_justificativa    			  = $oDados10->justificativa ;
-		  $dispensa10->si74_razao    					  = $oDados10->razao ;
+		  $dispensa10->si74_objeto    					  = $this->removeCaracteres($oDados10->objeto);
+		  $dispensa10->si74_justificativa    			  = $this->removeCaracteres($oDados10->justificativa);
+		  $dispensa10->si74_razao    					  = $this->removeCaracteres($oDados10->razao);
 		  $dispensa10->si74_dtpublicacaotermoratificacao  = $oDados10->dtpublicacaotermoratificacao;
-		  $dispensa10->si74_veiculopublicacao    		  = $oDados10->veiculopublicacao ;
+		  $dispensa10->si74_veiculopublicacao    		  = $this->removeCaracteres($oDados10->veiculopublicacao);
 		  $dispensa10->si74_processoporlote    			  = $oDados10->processoporlote ;
 		  $dispensa10->si74_instit		   				   = db_getsession("DB_instit");
 		  $dispensa10->si74_mes          				  = $this->sDataFinal['5'].$this->sDataFinal['6'];
@@ -789,8 +789,27 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		liclicita.l20_edital as nroProcessoLicitatorio,	
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
 		infocomplementaresinstit.si09_codorgaotce as codorgaotce,
-		orcdotacao.o58_orgao as codOrgao,
-		orcdotacao.o58_unidade as codUnidadeSub,
+
+		(SELECT CASE
+    WHEN o41_subunidade != 0
+         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+    ELSE lpad((CASE WHEN o40_codtri = '0'
+         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+   END AS codunidadesub
+   FROM db_departorg
+   JOIN infocomplementares ON si08_anousu = db01_anousu
+   AND si08_instit = ".db_getsession("DB_instit")."
+   JOIN orcunidade ON db01_orgao=o41_orgao
+   AND db01_unidade=o41_unidade
+   AND db01_anousu = o41_anousu
+   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+   WHERE o40_orgao=o58_orgao and o41_unidade=o58_unidade and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSub,
+
+		orcdotacao.o58_orgao,
+		orcdotacao.o58_unidade,
 		orcdotacao.o58_funcao as codFuncao,
 		orcdotacao.o58_subfuncao as codSubFuncao,
 		orcdotacao.o58_programa as codPrograma,
@@ -831,7 +850,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		  $dispensa16->si80_nroprocesso				= $oDados16->nroprocessolicitatorio; 
 		  $dispensa16->si80_tipoprocesso			= $oDados16->tipoprocesso;
 		  $dispensa16->si80_codorgao					= $oDados16->codorgaotce;
-		  $dispensa16->si80_codunidadesub			= str_pad($oDados16->codorgao, 2,"0", STR_PAD_LEFT).str_pad($oDados16->codunidadesub, 3,"0", STR_PAD_LEFT);
+		  $dispensa16->si80_codunidadesub			= $oDados16->codunidadesub;
 		  $dispensa16->si80_codfuncao 			  = $oDados16->codfuncao;
 		  $dispensa16->si80_codsubfuncao 			= $oDados16->codsubfuncao;
 		  $dispensa16->si80_codprograma 			= $oDados16->codprograma;
