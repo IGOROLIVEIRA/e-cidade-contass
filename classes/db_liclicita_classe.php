@@ -416,18 +416,11 @@ class cl_liclicita
         }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-            if (trim($this->l20_veicdivulgacao) == null) {
-                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Veiculo de Divulgação";
+            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
+                $this->erro_sql = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
                 $this->erro_campo = "l20_veicdivulgacao";
                 $this->erro_banco = "";
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        } else {
-            if (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50) {
-                $this->erro_msg = "Usuário: \\n\\n O campo veiculo de divulgação deve ter no mínimo 5 caracteres e no máximo 50 \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
