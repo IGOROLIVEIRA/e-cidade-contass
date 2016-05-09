@@ -1295,8 +1295,8 @@ class cl_liclicita
             $sql .= $virgula . " l20_justificativa = '$this->l20_justificativa' ";
             $virgula = ",";
 
-            if (trim($this->l20_justificativa) == null) {
-                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Justificativa";
+            if (strlen($this->l20_justificativa) < 10 || strlen($this->l20_justificativa) > 250) {
+                $this->erro_sql = "Usuário: \\n\\n O campo Justificativa deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
                 $this->erro_campo = "l20_justificativa";
                 $this->erro_banco = "";
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -1305,14 +1305,6 @@ class cl_liclicita
                 return false;
             }
         } else {
-
-            if (strlen($this->l20_justificativa) < 10 || strlen($this->l20_justificativa) > 250) {
-                $this->erro_msg = "Usuário: \\n\\n O campo Razão deve ter no mínimo 10 caracteres e no máximo 250 \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-
             $sql .= $virgula . " l20_justificativa = ''";
             $virgula = ",";
         }
