@@ -91,7 +91,7 @@ class GerarALQ extends GerarAM {
           if ($aALQ10['si121_sequencial'] == $aALQ12['si123_reg10']) {
 
             $aCSVALQ12['si123_tiporegistro']             =    str_pad($aALQ12['si123_tiporegistro'], 2, "0", STR_PAD_LEFT);
-            $aCSVALQ12['si123_codreduzido']              =    substr($aALQ12['si123_codreduzidoalq'], 0, 15);
+            $aCSVALQ12['si123_codreduzido']              =    substr($aALQ12['si123_codreduzido'], 0, 15);
             $aCSVALQ12['si123_mescompetencia']           =    str_pad($aALQ12['si123_mescompetencia'], 2, "0", STR_PAD_LEFT);
             $aCSVALQ12['si123_exerciciocompetencia']     =    str_pad($aALQ12['si123_exerciciocompetencia'], 4, "0", STR_PAD_LEFT);
             $aCSVALQ12['si123_vlanuladodspexerant']      =    number_format($aALQ12['si123_vlanuladodspexerant'], 2, ",", "");
