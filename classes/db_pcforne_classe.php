@@ -406,17 +406,18 @@ class cl_pcforne {
          }
        }
      }
-     if(trim($this->pc60_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_obs"])){ 
-       $sql  .= $virgula." pc60_obs = '$this->pc60_obs' ";
-       $virgula = ",";
-     }elseif(strlen($this->pc60_obs) < 10 || strlen($this->pc60_obs) > 2000) {
-         $this->erro_sql = " Campo Objeto Social deve ter mais que 10 caracteres e menos que 2000 caracteres ";
-         $this->erro_campo = "pc60_obs";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
+     if(trim($this->pc60_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_obs"])) {
+         $sql .= $virgula . " pc60_obs = '$this->pc60_obs' ";
+         $virgula = ",";
+         if (strlen($this->pc60_obs) < 10 || strlen($this->pc60_obs) > 2000) {
+             $this->erro_sql = " Campo Objeto Social deve ter mais que 10 caracteres e menos que 2000 caracteres ";
+             $this->erro_campo = "pc60_obs";
+             $this->erro_banco = "";
+             $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+             $this->erro_status = "0";
+             return false;
+         }
      }
      if(trim($this->pc60_bloqueado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_bloqueado"])){ 
        $sql  .= $virgula." pc60_bloqueado = '$this->pc60_bloqueado' ";
@@ -574,7 +575,7 @@ class cl_pcforne {
     if(trim($this->pc60_numeroregistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numeroregistro"])){ 
         $sql  .= $virgula." pc60_numeroregistro = '$this->pc60_numeroregistro' ";
         $virgula = ",";
-      if(trim($this->pc60_numeroregistro) == null && $this->fisica_juridica == 'j'){ 
+      if((trim($this->pc60_numeroregistro) == null || $this->pc60_numeroregistro == 0) && $this->fisica_juridica == 'j'){
           $this->erro_sql = " Campo Número Registro nao Informado.";
           $this->erro_campo = "pc60_numeroregistro";
           $this->erro_banco = "";
