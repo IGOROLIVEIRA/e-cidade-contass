@@ -128,6 +128,17 @@ require_once ("dbforms/db_funcoes.php");
                     ?>
                   </td>
                 </tr>
+                <tr>
+                  <td>
+                    <label class="bold" for="c117_contareferencia" id="lbl_c117_contareferenciaa">Conta Referência:</label>
+                  </td>
+                  <td>
+                    <?php
+                    $x = array("D" => "Devedora", "C" => "Credora");
+                    db_select('c117_contareferencia',$x,'','','','c117_contareferencia');
+                    ?>
+                  </td>
+                </tr>
               </table>
             </fieldset>
           </td>
@@ -182,7 +193,8 @@ require_once ("dbforms/db_funcoes.php");
         oRegra = {
           salvar : $('incluir_regra'),
           contacredora : $('contacredora'),
-          contadevedora : $('contadevedora')
+          contadevedora : $('contadevedora'),
+          contareferencia : $('c117_contareferencia')
         },
         oData = $('data'),
         oEncerramentos = {
@@ -193,9 +205,9 @@ require_once ("dbforms/db_funcoes.php");
 
     var oGridRegras = new DBGrid("gridRegras");
     oGridRegras.nameInstance = "oGridRegras";
-    oGridRegras.setCellWidth(["40%", "40%", "20%"]);
-    oGridRegras.setCellAlign(["left", "left", "center"]);
-    oGridRegras.setHeader(["Devedora", "Credora", "Ação"]);
+    oGridRegras.setCellWidth(["40%", "40%", "20%","20%"]);
+    oGridRegras.setCellAlign(["left", "left", "center","center"]);
+    oGridRegras.setHeader(["Devedora", "Credora", "Referência", "Ação"]);
     oGridRegras.show($('gridRegras'));
 
     var oWindowRegras = new windowAux('windowRegras', 'Regras para o Encerramento de Natureza Orçamentária e Controle', 700, 420);
@@ -385,7 +397,7 @@ require_once ("dbforms/db_funcoes.php");
 
         oRetorno.aRegras.each(function(oItem) {
           oGridRegras.addRow([ oItem.c117_contadevedora,
-            oItem.c117_contacredora,
+            oItem.c117_contacredora,oItem.c117_contareferencia,
             '<input type="button" name="remover' + oItem.c117_sequencial + '" id="remover' + oItem.c117_sequencial
             + '" onclick="removerRegra(' + oItem.c117_sequencial + ')" value="E" title="Excluir"/>' ]);
         });
@@ -422,7 +434,8 @@ require_once ("dbforms/db_funcoes.php");
       var oParametros = {
         sExecucao : "salvarRegra",
         contacredora : oRegra.contacredora.value,
-        contadevedora : oRegra.contadevedora.value
+        contadevedora : oRegra.contadevedora.value,
+        contareferencia : oRegra.contareferencia.value
       }
 
       new AjaxRequest(RPC, oParametros, function(oRetorno, lErro) {

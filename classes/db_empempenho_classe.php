@@ -1652,8 +1652,8 @@ class cl_empempenho {
                                 inner join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o41_anousu = o58_anousu
                                 inner JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                 left join infocomplementaresinstit on codigo = si09_instit
-                       where    e60_anousu <= ".db_getsession("DB_anousu")." and e60_instit = ".db_getsession("DB_instit")."
-                            and c70_data <=  '".db_getsession("DB_anousu")."-12-31'
+                       where    e60_anousu = ".db_getsession("DB_anousu")." and e60_instit = ".db_getsession("DB_instit")."
+                            and c70_data between '".db_getsession("DB_anousu")."-01-01' and '".db_getsession("DB_anousu")."-12-31'
                      group by   e60_numemp
                                 ) as restos) as x
                                 where valor_nao_processado > 0 or valor_processado > 0";

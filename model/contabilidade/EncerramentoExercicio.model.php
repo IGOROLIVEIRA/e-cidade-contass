@@ -296,9 +296,10 @@ class EncerramentoExercicio {
     $sCampos        .= "{$sCalculoProcessado} as valor_processado";
 
     $sWhereEmpenho  = "(e91_anousu = {$this->iAno} or e60_anousu = {$this->iAno}) and e60_instit = {$this->oInstituicao->getCodigo()}";
-    $sWhereEmpenho .= " and ({$sCalculoProcessado} > 0 or $sCalculoNaoProcessado > 0)";*/
+    $sWhereEmpenho .= " and ({$sCalculoProcessado} > 0 or $sCalculoNaoProcessado > 0)";
+    $sSqlEmpenho    = $oDaoEmpempenho->sql_query_encerramento_empresto($sCampos, null, $sWhereEmpenho);
+    */
     $sSqlEmpenho    = $oDaoEmpempenho->sql_query_saldo_encerramento_rp();
-
     $rsLancamentos = $oDaoEmpempenho->sql_record($sSqlEmpenho);
 
     if ($oDaoEmpempenho->numrows == 0) {
@@ -545,17 +546,19 @@ class EncerramentoExercicio {
     foreach ($aRegras as $oRegra) {
 
       /**
-       * Procuramos a primeira conta analitica devedora.
-       * Está conta será usada como referencia para os lancamentos.
+       * A conta usada como referência para os lançamentos é aquela indicada na tela de cadastro das regras.
+       * @contareferencia: $sContaReferencia
        */
+
+      $sContaReferencia = ($oRegra->c117_contareferencia == "C" ? $oRegra->c117_contacredora : $oRegra->c117_contadevedora);
       $sWhereContaReferencia = "c61_instit = {$this->oInstituicao->getCodigo()} ";
-      $sWhereContaReferencia .= "and c60_estrut like '{$oRegra->c117_contadevedora}%' ";
+      $sWhereContaReferencia .= "and c60_estrut like '{$sContaReferencia}%' ";
       $sWhereContaReferencia .= "and c61_anousu = {$this->iAno}";
       $sSqlContaReferencia = $oDaoConPlano->sql_query_reduz(null, 'c61_reduz, c60_estrut', 'c60_estrut limit 1', $sWhereContaReferencia);
       $rsContaReferencia   = $oDaoConPlano->sql_record($sSqlContaReferencia);
 
       if ($oDaoConPlano->numrows == 0) {
-        throw new BusinessException("Não foram encontradas contas analiticas com a regra {$oRegra->c117_contadevedora}.");
+        throw new BusinessException("Não foram encontradas contas analiticas com a regra {$sContaReferencia}.");
       }
 
       $iContaReferencia = db_utils::fieldsMemory($rsContaReferencia, 0)->c61_reduz;

@@ -227,11 +227,12 @@ try {
 
       $oDaoRegrasEncerramento = new cl_regraencerramentonaturezaorcamentaria();
 
-      $oDaoRegrasEncerramento->c117_sequencial    = null;
-      $oDaoRegrasEncerramento->c117_anousu        = db_getsession("DB_anousu");
-      $oDaoRegrasEncerramento->c117_instit        = db_getsession("DB_instit");
-      $oDaoRegrasEncerramento->c117_contadevedora = $oParam->contadevedora;
-      $oDaoRegrasEncerramento->c117_contacredora  = $oParam->contacredora;
+      $oDaoRegrasEncerramento->c117_sequencial       = null;
+      $oDaoRegrasEncerramento->c117_anousu           = db_getsession("DB_anousu");
+      $oDaoRegrasEncerramento->c117_instit           = db_getsession("DB_instit");
+      $oDaoRegrasEncerramento->c117_contadevedora    = $oParam->contadevedora;
+      $oDaoRegrasEncerramento->c117_contacredora     = $oParam->contacredora;
+      $oDaoRegrasEncerramento->c117_contareferencia  = $oParam->contareferencia;
 
       $oDaoRegrasEncerramento->incluir(null);
 
