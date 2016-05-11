@@ -74,7 +74,12 @@ $ru) ? " e " : "").$ru;
 $sSql = "SELECT k00_codigo,k00_dtpagamento,k00_codord,k00_formapag,c63_banco,c63_conta,c63_dvconta,c63_agencia,c63_dvagencia,z01_nome,
 pc63_banco,z01_cgccpf,k00_valorpag,pc63_conta_dig,pc63_conta,pc63_agencia_dig,pc63_agencia, 
 CASE WHEN k00_codord IS NULL THEN 'SL' ELSE 'OP' END AS tipo,
-CASE WHEN k00_codord IS NULL THEN k00_slip ELSE k00_codord END AS codigo,k00_dtvencpag
+CASE WHEN k00_codord IS NULL THEN k00_slip ELSE k00_codord END AS codigo,k00_dtvencpag,
+CASE WHEN k00_codord IS NULL THEN
+  (SELECT k17_texto FROM slip WHERE k17_codigo=k00_slip and k17_instit = ".db_getsession("DB_anousu").")
+ELSE
+  (SELECT e50_obs FROM  pagordem WHERE e50_codord=k00_codord LIMIT 1)
+END  AS observacao
 FROM
 ordembancaria   
 JOIN conplanoconta ON k00_ctpagadora = c63_codcon and c63_anousu = ".db_getsession("DB_anousu")."
@@ -89,7 +94,12 @@ if (pg_num_rows($rsResult) == 0){
  $sSql = "	SELECT distinct k00_codigo,k00_dtpagamento,k00_codord,k00_formapag,c63_banco,c63_conta,c63_dvconta,c63_agencia,c63_dvagencia,z01_nome,
 						pc63_banco,z01_cgccpf,k00_valorpag,pc63_conta_dig,pc63_conta,pc63_agencia_dig,pc63_agencia, 
 						CASE WHEN k00_codord IS NULL THEN 'SL' ELSE 'OP' END AS tipo,
-						CASE WHEN k00_codord IS NULL THEN k00_slip ELSE k00_codord END AS codigo,k00_dtvencpag
+						CASE WHEN k00_codord IS NULL THEN k00_slip ELSE k00_codord END AS codigo,k00_dtvencpag,
+						CASE WHEN k00_codord IS NULL THEN
+						  (SELECT k17_texto FROM slip WHERE k17_codigo=k00_slip and k17_instit = ".db_getsession("DB_instit")." LIMIT 1)
+						ELSE
+						  (SELECT e50_obs FROM  pagordem WHERE e50_codord=k00_codord LIMIT 1)
+						  END  AS observacao
 						FROM
 						ordembancaria JOIN conplanoreduz ON k00_ctpagadora = c61_reduz  
 						JOIN conplanoconta ON c61_codcon = c63_codcon and c63_anousu = ".db_getsession("DB_anousu")."
@@ -98,7 +108,7 @@ if (pg_num_rows($rsResult) == 0){
 						LEFT JOIN pcfornecon ON z01_numcgm = pc63_numcgm and k00_contabanco = pc63_contabanco 
 						WHERE k00_codigo =  {$codigo_ordem} ORDER BY z01_nome";
             
- $rsResult = db_query($sSql);
+ $rsResult = db_query($sSql);//db_criatabela($rsResult);echo $sSql;exit;
  
 }
 $oResult0 = db_utils::fieldsMemory($rsResult, 0);
@@ -140,7 +150,7 @@ $pdf->Cell(30,$tam,"Nº Documento:",1,0,"C",1);
 $pdf->Cell(10,$tam,"Tipo:",1,0,"C",1);  
 $pdf->Cell(22,$tam,"VALOR:",1,1,"L",1);  
 $valor_total = 0;
-for ($$iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 		
   $oResult = db_utils::fieldsMemory($rsResult, $iCont);
   
@@ -183,6 +193,18 @@ for ($$iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
   $pdf->Cell(30,$tam,"Banco: ".$oResult->pc63_banco,0,0,"C",0);
   $pdf->Cell(30,$tam,"Agência: ".$oResult->pc63_agencia."-".$oResult->pc63_agencia_dig,0,0,"C",0);
   $pdf->Cell(22,$tam,"C.C: ".$oResult->pc63_conta."-".$oResult->pc63_conta_dig,0,1,"C",0);
+
+  $pos_x = $pdf->x;
+  $pos_y = $pdf->y;
+    $pdf->SetFont("","B","");
+  $pdf->Cell(175,$tam,"OBSERVAÇÃO:",0,1,"L",1);
+  $pdf->SetFont("","","");
+  $pdf->MultiCell(175,$tam,$oResult->observacao,0,"L",1);
+    $dif = $pdf->y-$pos_y-4;
+    $pdf->y = $pos_y;
+    $pdf->x = $pos_x;
+    $pdf->Cell(175,$tam+$dif,"",1,1,"L",0);
+
   $pdf->Cell(22,$tam,"Vencimento: ".date("d/m/Y",strtotime($oResult->k00_dtvencpag)),0,1,"L",0);//Ocorrência 756 - Incluído o Vencimento no relatório
   
   $pdf->Cell(175,"0.01","",1,1,"C",0);
@@ -197,7 +219,8 @@ $pdf->Cell(50,"07","TOTAL: ",0,0,"L",0);
 $pdf->Cell(125,"07","R$ ".number_format($valor_total,2,",","."),0,1,"R",0);
 $pdf->Cell(175,"0.01","",1,1,"C",0);
 
-$pdf->Cell(175,"07","VALOR EXTENSO: ".extenso($valor_total,TRUE)."***************************",0,1,"C",0);
+//$pdf->Cell(175,"07","VALOR EXTENSO: ".extenso($valor_total,TRUE)."***************************",0,1,"C",0);
+$pdf->MultiCell(175,"05","VALOR EXTENSO: ".extenso($valor_total,TRUE)."***************************",0,"L",0);
 $pdf->Cell(175,"0.01","",1,1,"C",0);
 $pdf->Cell(175,"07","",0,1,"C",0);
 $pdf->Cell(175,"07","",0,1,"C",0);

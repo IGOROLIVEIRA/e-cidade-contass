@@ -141,6 +141,8 @@
             document.form1.k00_valor.value = '';
             document.getElementById("k00_contabanco").options.length = 0;
             document.form1.k00_formapag.value = '';
+            document.form1.e50_obs.value = '';
+            document.form1.k17_texto.value = '';
             document.form1.e53_codord.focus();
             return;
         }
@@ -154,6 +156,8 @@
             document.form1.k00_valor.value = '';
             document.getElementById("k00_contabanco").options.length = 0;
             document.form1.k00_formapag.value = '';
+            document.form1.e50_obs.value = '';
+            document.form1.k17_texto.value = '';
             document.form1.e53_codord.focus();
             return;
         }
@@ -168,6 +172,8 @@
             document.form1.k00_valor.value = '';
             document.getElementById("k00_contabanco").options.length = 0;
             document.form1.k00_formapag.value = '';
+            document.form1.e50_obs.value = '';
+            document.form1.k17_texto.value = '';
             document.form1.e53_codord.focus();
             return;
         }
@@ -205,6 +211,8 @@
                         document.form1.k00_valor.value = '';
                         document.getElementById("k00_contabanco").options.length = 0;
                         document.form1.k00_formapag.value = '';
+                        document.form1.e50_obs.value = '';
+                        document.form1.k17_texto.value = '';
                         document.form1.e53_codord.focus();
                     } else {
                         var tabela = "<tr id=\"" + codigo + "\" class=\"normal\" style=\"height:1em;\">";
@@ -225,6 +233,8 @@
                         document.form1.k00_valor.value = '';
                         document.getElementById("k00_contabanco").options.length = 0;
                         document.form1.k00_formapag.value = '';
+                        document.form1.e50_obs.value = '';
+                        document.form1.k17_texto.value = '';
                         document.form1.e53_codord.focus();
                     }
                 }
@@ -285,6 +295,8 @@
             document.form1.k00_valor.value = '';
             document.getElementById("k00_contabanco").options.length = 0;
             document.form1.k00_formapag.value = '';
+            document.form1.e50_obs.value = '';
+            document.form1.k17_texto.value = '';
             document.form1.e53_codord.focus();
         } else {
             document.form1.e50_obs.value = chave2;
@@ -381,6 +393,8 @@
             document.form1.k00_valor.value = '';
             document.getElementById("k00_contabanco").options.length = 0;
             document.form1.k00_formapag.value = '';
+            document.form1.e50_obs.value = '';
+            document.form1.k17_texto.value = '';
             document.form1.k17_codigo.focus();
         } else {
             document.form1.k17_texto.value = chave2;
