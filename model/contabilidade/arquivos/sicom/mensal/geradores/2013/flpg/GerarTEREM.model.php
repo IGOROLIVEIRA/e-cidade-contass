@@ -42,8 +42,11 @@ class GerarTEREM extends GerarAM {
    	    unset($aTEREM10['si194_inst']);
 
    	      $aCSVTEREM10['si194_tiporegistro']             =  str_pad($aTEREM10['si194_tiporegistro'], 2, "0", STR_PAD_LEFT);
+		  $aCSVTEREM10['si194_cnpj']                     =  $aTEREM10['si194_cnpj'];
 		  $aCSVTEREM10['si194_vlrparateto']              =  number_format($aTEREM10['si194_vlrparateto'], 2, ",", "");
 		  $aCSVTEREM10['si194_tipocadastro']             =  str_pad($aTEREM10['si194_tipocadastro'], 1, "0", STR_PAD_LEFT);
+		  $aCSVTEREM10['si194_dtinicial']                =  implode("", array_reverse(explode("-", $aTEREM10['si194_dtinicial'])));
+		  $aCSVTEREM10['si194_dtfinal']                  =  implode("", array_reverse(explode("-", $aTEREM10['si194_dtfinal'])));
 		  $aCSVTEREM10['si194_justalteracao']            =  substr($aTEREM10['si194_justalteracao'], 0, 100);
 
 		  $this->sLinha = $aCSVTEREM10;
