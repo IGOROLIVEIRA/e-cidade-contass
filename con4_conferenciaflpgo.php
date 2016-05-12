@@ -119,11 +119,10 @@ for($x = 0;$x < pg_numrows($result_dados);$x++) {
     $pdf->cell(40,$alt,"VALOR CARGA HORÁRIA: ". $si195_vlrcargahorariasemanal,1,0,"L",$cor);
     $pdf->cell(50,$alt,"DT EXERCÍCIO NO CARGO: ".$si195_datefetexercicio,1,0,"L",$cor);
     $pdf->cell(40,$alt,"DT EXCLUSÃO: ".$si195_datexclusão,1,1,"L",$cor);
-    $pdf->cell(40,$alt,"NAT - SALDO BRUTO: ".$si195_natsaldobruto,1,0,"L",$cor);
     $pdf->cell(50,$alt,"VALOR TOTAL - RENDIMENTOS: ".$si195_vlrremuneracaobruta,1,1,"L",$cor);
     $pdf->cell(40,$alt,"NAT - SALDO LÍQUIDO: ".$si195_natsaldoliquido,1,0,"L",$cor);
     $pdf->cell(50,$alt,"VALOR TOTAL - RENDIMENTOS: ".$si195_vlrremuneracaoliquida,1,1,"L",$cor);
-    $pdf->cell(40,$alt,"VALOR DEDUÇÕES: ".$si195_vlrdeducoesobrigatorias,1,0,"L",$cor);
+    $pdf->cell(40,$alt,"VALOR DEDUÇÕES: ".$si195_vlrdeducoes,1,0,"L",$cor);
     $pdf->cell(40,$alt,"TETO CONSTITUCIONAL: ".$si195_vlrabateteto,1,1,"L",$cor);
 
     $pdf->ln(1);
@@ -137,10 +136,8 @@ for($x = 0;$x < pg_numrows($result_dados);$x++) {
 
             $cor = 1;
 
-            $pdf->cell(68, $alt, "TIPO REMUNERAÇÃO" , 1, 0, "L", $cor);
-            $pdf->cell(40, $alt, "DESCRIÇÃO", 1, 0, "L", $cor);
-            $pdf->cell(30, $alt, "NAT - SALDO DETALHE", 1, 0, "L", $cor);
-            $pdf->cell(50, $alt, "VALOR RENDIMENTOS POR TIPO", 1, 1, "L", $cor);
+            $pdf->cell(68, $alt, "PROVENTO" , 1, 0, "L", $cor);
+            $pdf->cell(50, $alt, "VALOR", 1, 1, "L", $cor);
 
             $cor = 0;
 
@@ -172,13 +169,62 @@ for($x = 0;$x < pg_numrows($result_dados);$x++) {
 
                 $pdf->cell(68, $alt,$sTiporemuneracao, 1, 0, "L", $cor);
 
-                $pdf->cell(40, $alt,  $si196_descoutros, 1, 0, "L", $cor);
-
-                $pdf->cell(30, $alt,  $si196_natsaldodetalhe, 1, 0, "L", $cor);
-
                 $pdf->cell(50, $alt,  $si196_vlrremuneracaodetalhada, 1, 1, "L", $cor);
             }
         }
+
+    $sSql3 = "
+        select distinct * from flpgo12". db_getsession('DB_anousu') ." where si197_mes = $mes and si197_reg10 = $si195_sequencial";
+
+    $result_dados3 = db_query($sSql3);
+    $numrows_dados3 = pg_numrows($result_dados3);
+    if($numrows_dados3 > 0){
+
+        $cor = 1;
+
+        $pdf->cell(68, $alt, "DESCONTO" , 1, 0, "L", $cor);
+        $pdf->cell(50, $alt, "VALOR", 1, 1, "L", $cor);
+
+        $cor = 0;
+
+        for($y = 0;$y < $numrows_dados3;$y++) {
+            db_fieldsmemory($result_dados3, $y);
+
+
+            if($si197_tipodesconto == '50')
+                $stipodesconto = "Desc de Adiantamentos";
+            elseif($si197_tipodesconto == '51')
+                $stipodesconto = "Desc do Abate Teto sobre Remuneração";
+            elseif($si197_tipodesconto == '52')
+                $stipodesconto = "Desc do Abate Teto sobre Férias";
+            elseif($si197_tipodesconto == '53')
+                $stipodesconto = "Desconto do Abate Teto sobre 13º Salário";
+            elseif($si197_tipodesconto == '54')
+                $stipodesconto = "Desc da Contribuição Previdenciária";
+            elseif($si197_tipodesconto == '55')
+                $stipodesconto = "Desc do Imposto de Renda Retido na Fonte";
+            elseif($si197_tipodesconto == '59')
+                $stipodesconto = "Desc da 1ª Parcela do 13° Salário";
+            elseif($si197_tipodesconto == '63')
+                $stipodesconto = "Desc de Assistência Médica ou Odontológica";
+            elseif($si197_tipodesconto == '64')
+                $stipodesconto = "Desc de Férias";
+            elseif($si197_tipodesconto == '65')
+                $stipodesconto = "Desc de Outros Impostos e Contribuições";
+            elseif($si197_tipodesconto == '66')
+                $stipodesconto = "Desc da Previdência Complementar ? Parte do Empregado";
+            elseif($si197_tipodesconto == '79')
+                $stipodesconto = "Desc de Pagamento Indevido em Meses Anteriores";
+            elseif($si197_tipodesconto == '99')
+                $stipodesconto = "Outros Descontos Totalizados";
+
+
+            $pdf->cell(68, $alt,$stipodesconto, 1, 0, "L", $cor);
+
+            $pdf->cell(50, $alt,  $si197_vlrdescontodetalhado, 1, 1, "L", $cor);
+        }
+    }
+
 
     $pdf->ln(2);
 
