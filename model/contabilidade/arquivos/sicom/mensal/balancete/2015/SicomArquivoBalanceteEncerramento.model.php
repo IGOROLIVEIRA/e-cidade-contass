@@ -105,6 +105,9 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                 $sCodUnidadesub = db_utils::fieldsMemory(db_query("select si08_codunidadesub from infocomplementares where si08_instit = " . db_getsession('DB_instit') . " and si08_anousu = " . db_getsession('DB_anousu')), 0)->si08_codunidadesub;
 
+                if($sCodUnidadesub == ""){
+                    throw new Exception("Não foi encontrado registro na tabela infocomplementares para a instituição ".db_getsession('DB_instit').", ano ".db_getsession('DB_anousu').". Favor realizar o cadastro pelo menu: Sicom->Cadastros->Informações Complementares.");
+                }
             }
 
             return $sCodUnidadesub;
@@ -246,7 +249,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
                              where c60_anousu = " . db_getsession("DB_anousu") . ") as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
-//where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '631710000') as x
+//where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '821140000') as x
 
         $rsReg10 = db_query($sqlReg10) or die($sqlReg10);
 
@@ -1372,7 +1375,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                             if (!($oReg14->codunidadesub == $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade))) {
                                 $sCodunidadesub = $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade);
-                                $sCodunidadesubOrig = $oReg14->codunidadesub;
+                                $sCodunidadesubOrig = $sCodunidadesub;
                             }
 
                             $sHash14 = '14' . $oContas10->si177_contacontaabil . $oReg14->codorgao . $sCodunidadesub . $sCodunidadesubOrig . $oReg14->codfuncao . $oReg14->codsubfuncao . $oReg14->codprograma;
@@ -1740,10 +1743,10 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 $sSqlCTB = "select k13_reduz,
                              c61_codtce codctbtce,
                              si09_codorgaotce,
-				             c63_banco, 
-				             c63_agencia, 
-				             c63_conta, 
-				             c63_dvconta, 
+				             c63_banco,
+				             c63_agencia,
+				             c63_conta,
+				             c63_dvconta,
 				             c63_dvagencia,
 				             case when db83_tipoconta in (2,3) then 2 else 1 end as tipoconta,
 				             ' ' as tipoaplicacao,
@@ -1753,14 +1756,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 				             case when db83_convenio = 1 then db83_numconvenio else null end as nroconvenio,
 				             case when db83_convenio = 1 then db83_dataconvenio else null end as dataassinaturaconvenio,
 				             o15_codtri as codfontrecursos
-				       from saltes 
+				       from saltes
 				       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
 				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
 				       join orctiporec on c61_codigo = o15_codigo
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit
-				    where (k13_limite is null 
+				    where (k13_limite is null
 				    or k13_limite >= '" . $this->sDataFinal . "')
     				  and c61_instit = " . db_getsession("DB_instit") . "
     				  and c61_reduz in (" . implode(',', $oContas10->contas) . ") order by k13_reduz";
@@ -1773,15 +1776,15 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                     /*
                      * Busca o codigo unico do ctb enviado no AM
-                     * 
+                     *
                      */
-                    $sSqlVerifica = " select distinct si95_codctb from ( SELECT distinct si95_codctb FROM ctb102015 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                    $sSqlVerifica = " select distinct si95_codctb, ano from ( SELECT distinct si95_codctb, 2015 as ano FROM ctb102015 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta
                                       AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb FROM ctb102014 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2014 as ano FROM ctb102014 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta') as x";
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta) as x order by 2 DESC limit 1";
 
                     $rsResultVerifica = db_query($sSqlVerifica) or die($sSqlVerifica);
 
@@ -2895,7 +2898,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg18->si185_totaldebitosfr - $obalreg18->si185_totalcreditosfr) == '' ? 0 : ($saldoFinal + $obalreg18->si185_totaldebitosfr - $obalreg18->si185_totalcreditosfr);
                     $obalreg18->si185_saldofinalfr = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg18->si185_naturezasaldofinalfr = $saldoFinal == 0 ? $obalreg18->si185_naturezasaldoinicialfr : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg18->si185_naturezasaldofinalfr = ($saldoFinal == 0 ? $obalreg18->si185_naturezasaldoinicialfr : ($saldoFinal > 0 ? 'D' : 'C'));
                 $obalreg18->si185_instit = $reg18->si185_instit;
                 $obalreg18->si185_mes = 13;
                 $obalreg18->si185_reg10 = $obalancete10->si177_sequencial;
