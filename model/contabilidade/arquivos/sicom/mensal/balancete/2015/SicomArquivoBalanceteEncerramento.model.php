@@ -2593,9 +2593,9 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $obalreg11->si178_saldofinalcd = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
 
-                $obalreg11->si178_naturezasaldofinalcd = $saldoFinal == 0 ? $obalreg11->si178_naturezasaldoinicialcd : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg11->si178_naturezasaldofinalcd = $obalreg11->si178_saldofinalcd == 0 ? $obalreg11->si178_naturezasaldoinicialcd : ($obalreg11->si178_saldofinalcd > 0 ? 'D' : 'C');
                 if ($reg11->si178_contacontaabil == "622130300" || $reg11->si178_contacontaabil == "622130400" || $reg11->si178_contacontaabil == "622110000") {
-                    $obalreg11->si178_naturezasaldofinalcd = $saldoFinal == 0 ? 'C' : ($saldoFinal > 0 ? 'D' : 'C');
+                    $obalreg11->si178_naturezasaldofinalcd = $obalreg11->si178_saldofinalcd == 0 ? 'C' : ($obalreg11->si178_saldofinalcd > 0 ? 'D' : 'C');
                 }
                 $obalreg11->si178_instit = $reg11->si178_instit;
                 $obalreg11->si178_mes = 13;
@@ -2639,7 +2639,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg12->si179_totaldebitoscr - $obalreg12->si179_totalcreditoscr) == '' ? 0 : ($saldoFinal + $obalreg12->si179_totaldebitoscr - $obalreg12->si179_totalcreditoscr);
                     $obalreg12->si179_saldofinalcr = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg12->si179_naturezasaldofinalcr = $saldoFinal == 0 ? $obalreg12->si179_naturezasaldoinicialcr : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg12->si179_naturezasaldofinalcr = $obalreg12->si179_saldofinalcr == 0 ? $obalreg12->si179_naturezasaldoinicialcr : ($obalreg12->si179_saldofinalcr > 0 ? 'D' : 'C');
                 $obalreg12->si179_instit = $reg12->si179_instit;
                 $obalreg12->si179_mes = 13;
                 $obalreg12->si179_reg10 = $obalancete10->si177_sequencial;
@@ -2682,7 +2682,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg13->si180_totaldebitospa - $obalreg13->si180_totalcreditospa) == '' ? 0 : ($saldoFinal + $obalreg13->si180_totaldebitospa - $obalreg13->si180_totalcreditospa);
                     $obalreg13->si180_saldofinaipa = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg13->si180_naturezasaldofinaipa = $saldoFinal == 0 ? $obalreg13->si180_naturezasaldoIniciaipa : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg13->si180_naturezasaldofinaipa = $obalreg13->si180_saldofinaipa == 0 ? $obalreg13->si180_naturezasaldoIniciaipa : ($obalreg13->si180_saldofinaipa > 0 ? 'D' : 'C');
                 $obalreg13->si180_instit = $reg13->si180_instit;
                 $obalreg13->si180_mes = 13;
                 $obalreg13->si180_reg10 = $obalancete10->si177_sequencial;
@@ -2733,7 +2733,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg14->si181_totaldebitosrsp - $obalreg14->si181_totalcreditosrsp) == '' ? 0 : ($saldoFinal + $obalreg14->si181_totaldebitosrsp - $obalreg14->si181_totalcreditosrsp);
                     $obalreg14->si181_saldofinalrsp = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg14->si181_naturezasaldofinalrsp = $saldoFinal == 0 ? $obalreg14->si181_naturezasaldoinicialrsp : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg14->si181_naturezasaldofinalrsp = $obalreg14->si181_saldofinalrsp == 0 ? $obalreg14->si181_naturezasaldoinicialrsp : ($obalreg14->si181_saldofinalrsp > 0 ? 'D' : 'C');
                 $obalreg14->si181_instit = $reg14->si181_instit;
                 $obalreg14->si181_mes = 13;
                 $obalreg14->si181_reg10 = $obalancete10->si177_sequencial;
@@ -2773,7 +2773,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg15->si182_totaldebitossf - $obalreg15->si182_totalcreditossf) == '' ? 0 : ($saldoFinal + $obalreg15->si182_totaldebitossf - $obalreg15->si182_totalcreditossf);
                     $obalreg15->si182_saldofinalsf = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg15->si182_naturezasaldofinalsf = $saldoFinal == 0 ? $obalreg15->si182_naturezasaldoinicialsf : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg15->si182_naturezasaldofinalsf = $obalreg15->si182_saldofinalsf == 0 ? $obalreg15->si182_naturezasaldoinicialsf : ($obalreg15->si182_saldofinalsf > 0 ? 'D' : 'C');
                 $obalreg15->si182_instit = $reg15->si182_instit;
                 $obalreg15->si182_mes = 13;
                 $obalreg15->si182_reg10 = $obalancete10->si177_sequencial;
@@ -2816,7 +2816,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg16->si183_totaldebitosfontsf - $obalreg16->si183_totalcreditosfontsf) == '' ? 0 : ($saldoFinal + $obalreg16->si183_totaldebitosfontsf - $obalreg16->si183_totalcreditosfontsf);
                     $obalreg16->si183_saldofinalfontsf = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg16->si183_naturezasaldofinalfontsf = $saldoFinal == 0 ? $obalreg16->si183_naturezasaldoinicialfontsf : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg16->si183_naturezasaldofinalfontsf = $obalreg16->si183_saldofinalfontsf == 0 ? $obalreg16->si183_naturezasaldoinicialfontsf : ($saldoFinal > 0 ? 'D' : 'C');
                 $obalreg16->si183_instit = $reg16->si183_instit;
                 $obalreg16->si183_mes = 13;
                 $obalreg16->si183_reg10 = $obalancete10->si177_sequencial;
@@ -2858,7 +2858,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg17->si184_totaldebitosctb - $obalreg17->si184_totalcreditosctb) == '' ? 0 : ($saldoFinal + $obalreg17->si184_totaldebitosctb - $obalreg17->si184_totalcreditosctb);
                     $obalreg17->si184_saldofinalctb = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg17->si184_naturezasaldofinalctb = $saldoFinal == 0 ? $obalreg17->si184_naturezasaldoinicialctb : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg17->si184_naturezasaldofinalctb = $obalreg17->si184_saldofinalctb == 0 ? $obalreg17->si184_naturezasaldoinicialctb : ($obalreg17->si184_saldofinalctb > 0 ? 'D' : 'C');
                 $obalreg17->si184_instit = $reg17->si184_instit;
                 $obalreg17->si184_mes = 13;
                 $obalreg17->si184_reg10 = $obalancete10->si177_sequencial;
@@ -2898,7 +2898,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg18->si185_totaldebitosfr - $obalreg18->si185_totalcreditosfr) == '' ? 0 : ($saldoFinal + $obalreg18->si185_totaldebitosfr - $obalreg18->si185_totalcreditosfr);
                     $obalreg18->si185_saldofinalfr = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg18->si185_naturezasaldofinalfr = ($saldoFinal == 0 ? $obalreg18->si185_naturezasaldoinicialfr : ($saldoFinal > 0 ? 'D' : 'C'));
+
+                $obalreg18->si185_naturezasaldofinalfr = ($obalreg18->si185_saldofinalfr == 0 ? $obalreg18->si185_naturezasaldoinicialfr : ($obalreg18->si185_saldofinalfr > 0 ? 'D' : 'C'));
                 $obalreg18->si185_instit = $reg18->si185_instit;
                 $obalreg18->si185_mes = 13;
                 $obalreg18->si185_reg10 = $obalancete10->si177_sequencial;
