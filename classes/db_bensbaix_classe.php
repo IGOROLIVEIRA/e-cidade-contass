@@ -396,7 +396,7 @@ class cl_bensbaix {
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = bens.t52_numcgm";
      $sql .= "      inner join db_depart  on  db_depart.coddepto = bens.t52_depart";
      $sql .= "      inner join clabens  on  clabens.t64_codcla = bens.t52_codcla";
-     $sql .= "      left join cgm as destino  on  cgm.z01_numcgm = bensbaix.t55_destino";
+     $sql .= "      left join cgm as destino  on  destino.z01_numcgm = bensbaix.t55_destino";
      $sql2 = "";
      if($dbwhere==""){
        if($t55_codbem!=null ){
