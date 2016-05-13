@@ -73,7 +73,10 @@ class GerarFLPGO extends GerarAM {
 					$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   ' ';
 					$aCSVFLPGO10['si195_dsccargo'] = substr($aFLPGO10['si195_dsccargo'], 0, 120);
 					$aCSVFLPGO10['si195_sglcargo'] = str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
-					$aCSVFLPGO10['si195_dscsiglacargo'] = substr($aFLPGO10['si195_dsccargo'], 0, 150);
+					if($aCSVFLPGO10['si195_sglcargo'] == 'OTC')
+						$aCSVFLPGO10['si195_dscsiglacargo'] = substr($aFLPGO10['si195_dsccargo'], 0, 150);
+					else
+						$aCSVFLPGO10['si195_dscsiglacargo'] = ' ';
 					$aCSVFLPGO10['si195_reqcargo'] = str_pad($aFLPGO10['si195_reqcargo'], 1, "0", STR_PAD_LEFT);
 					$aCSVFLPGO10['si195_indcessao'] = str_pad($aFLPGO10['si195_indcessao'], 1, " ", STR_PAD_LEFT);
 					$aCSVFLPGO10['si195_dsclotacao'] = substr($aFLPGO10['si195_dsclotacao'], 0, 22);
