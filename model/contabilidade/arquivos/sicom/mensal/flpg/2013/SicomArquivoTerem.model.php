@@ -111,7 +111,7 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
     $rsResult10 = db_query($sSql);
 
-    db_criatabela($rsResult10);exit;
+    //db_criatabela($rsResult10);exit;
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
