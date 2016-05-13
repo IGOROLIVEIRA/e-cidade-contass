@@ -725,7 +725,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
                 //echo $sSql2;exit;
 
                 $rsResult11 = db_query($sSql2);
-                db_criatabela($rsResult11);
+                //db_criatabela($rsResult11);
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
