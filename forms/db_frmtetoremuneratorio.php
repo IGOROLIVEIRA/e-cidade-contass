@@ -8,8 +8,8 @@ $cltetoremuneratorio->rotulo->label();
             <legend>Teto Remuneratório</legend>
 <table border="0">
   <tr>
-    <td nowrap title="<?=@$Tte01_sequencial?>">
-       <?=@$Lte01_sequencial?>
+    <td nowrap title="Sequencial">
+      <strong>Sequencial: </strong>
     </td>
     <td> 
 <?
@@ -18,8 +18,8 @@ db_input('te01_sequencial',10,$Ite01_sequencial,true,'text',3,"")
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tte01_valor?>">
-       <?=@$Lte01_valor?>
+    <td nowrap title="Valor">
+        <strong>Valor: </strong>
     </td>
     <td> 
 <?
@@ -28,8 +28,8 @@ db_input('te01_valor',10,$Ite01_valor,true,'text',$db_opcao,"")
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tte01_tipocadastro?>">
-       <?=@$Lte01_tipocadastro?>
+    <td nowrap title="Tipo cadastro">
+        <strong>Tipo cadastro: </strong>
     </td>
     <td> 
 <?
@@ -47,8 +47,8 @@ db_select("te01_tipocadastro",$x,true,$db_opcao)
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tte01_dtinicial?>">
-       <?=@$Lte01_dtinicial?>
+    <td nowrap title="Data inicial">
+        <strong>Data inicial: </strong>
     </td>
     <td> 
 <?
@@ -57,8 +57,8 @@ db_inputdata('te01_dtinicial',@$te01_dtinicial_dia,@$te01_dtinicial_mes,@$te01_d
     </td>
   </tr>
   <tr>
-    <td nowrap title="<?=@$Tte01_dtfinal?>">
-       <?=@$Lte01_dtfinal?>
+    <td nowrap title="Data final">
+        <strong>Data final: </strong>
     </td>
     <td> 
 <?
@@ -70,8 +70,8 @@ db_inputdata('te01_dtfinal',@$te01_dtfinal_dia,@$te01_dtfinal_mes,@$te01_dtfinal
   if($db_opcao == 2 || $db_opcao == 22) {
       ?>
       <tr>
-          <td nowrap title="<?= @$Tte01_justificativa ?>">
-              <?= @$Lte01_justificativa ?>
+          <td nowrap title="Justificativa">
+              <strong>Justificativa: </strong>
           </td>
           <td>
               <?
