@@ -199,32 +199,32 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
 	SUM(case when r14_pd = 1 then r14_valor else 0 end) as si195_vlrremuneracaobruta_mensal,
 	case
-	  when (SUM(case when r14_pd = 1 then r14_valor else 0 end) - SUM(case when r14_pd = 2 then r14_valor else 0 end)) < 0 then 'C'
-	  else 'D'
+	  when (SUM(case when r14_pd = 1 then r14_valor else 0 end) - SUM(case when r14_pd = 2 then r14_valor else 0 end)) < 0 then 'D'
+	  else 'C'
 	end as si195_natsaldoliquido_mensal,
 	(SUM(case when r14_pd = 1 then r14_valor else 0 end) - SUM(case when r14_pd = 2 then r14_valor else 0 end)) as si195_vlrremuneracaoliquida_mensal,
 
 	'D' as si195_natsaldobruto_com,
 	SUM(case when r48_pd = 1 then r48_valor else 0 end) as si195_vlrremuneracaobruta_com,
 	case
-	  when (SUM(case when r48_pd = 1 then r48_valor else 0 end) - SUM(case when r48_pd = 2 then r48_valor else 0 end)) < 0 then 'C'
-	  else 'D'
+	  when (SUM(case when r48_pd = 1 then r48_valor else 0 end) - SUM(case when r48_pd = 2 then r48_valor else 0 end)) < 0 then 'D'
+	  else 'C'
 	end as si195_natsaldoliquido_com,
 	(SUM(case when r48_pd = 1 then r48_valor else 0 end) - SUM(case when r48_pd = 2 then r48_valor else 0 end)) as si195_vlrremuneracaoliquida_com,
 
 	'D' as si195_natsaldobruto_13,
 	SUM(case when r35_pd = 1 then r35_valor else 0 end) as si195_vlrremuneracaobruta_13,
 	case
-	  when (SUM(case when r35_pd = 1 then r35_valor else 0 end) - SUM(case when r35_pd = 2 then r35_valor else 0 end)) < 0 then 'C'
-	  else 'D'
+	  when (SUM(case when r35_pd = 1 then r35_valor else 0 end) - SUM(case when r35_pd = 2 then r35_valor else 0 end)) < 0 then 'D'
+	  else 'C'
 	end as si195_natsaldoliquido_13,
 	(SUM(case when r35_pd = 1 then r35_valor else 0 end) - SUM(case when r35_pd = 2 then r35_valor else 0 end)) as si195_vlrremuneracaoliquida_13,
 
 	'D' as si195_natsaldobruto_res,
 	SUM(case when r20_pd = 1 then r20_valor else 0 end) as si195_vlrremuneracaobruta_res,
 	case
-	  when (SUM(case when r20_pd = 1 then r20_valor else 0 end) - SUM(case when r20_pd = 2 then r20_valor else 0 end)) < 0 then 'C'
-	  else 'D'
+	  when (SUM(case when r20_pd = 1 then r20_valor else 0 end) - SUM(case when r20_pd = 2 then r20_valor else 0 end)) < 0 then 'D'
+	  else 'C'
 	end as si195_natsaldoliquido_res,
 	(SUM(case when r20_pd = 1 then r20_valor else 0 end) - SUM(case when r20_pd = 2 then r20_valor else 0 end)) as si195_vlrremuneracaoliquida_res
 
@@ -725,7 +725,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
                 //echo $sSql2;exit;
 
                 $rsResult11 = db_query($sSql2);
-                //db_criatabela($rsResult11);
+                db_criatabela($rsResult11);
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
