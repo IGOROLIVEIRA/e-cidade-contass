@@ -380,7 +380,7 @@ class cl_tetoremuneratorio {
    // funcao para exclusao 
    function excluir ($te01_sequencial=null,$dbwhere=null) { 
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -406,7 +406,7 @@ class cl_tetoremuneratorio {
            $resac  = db_query("insert into db_acount values($acount,1010193,1009248,'','".AddSlashes(pg_result($resaco,$iresaco,'te01_justificativa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $sql = " delete from tetoremuneratorio
                     where ";
      $sql2 = "";
