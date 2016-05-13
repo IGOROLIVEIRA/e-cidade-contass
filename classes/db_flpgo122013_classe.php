@@ -189,7 +189,7 @@ class cl_flpgo122013 {
                 values (
                                 $this->si197_sequencial 
                                ,$this->si197_tiporegistro 
-                               ,$this->si197_nrodocumento
+                               ,'$this->si197_nrodocumento'
                                ,$this->si197_codreduzidopessoa
                                ,$this->si197_tipodesconto
                                ,$this->si197_vlrdescontodetalhado 

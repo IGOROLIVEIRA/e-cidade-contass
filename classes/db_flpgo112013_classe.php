@@ -193,7 +193,7 @@ class cl_flpgo112013 {
                 values (
                                 $this->si196_sequencial 
                                ,$this->si196_tiporegistro 
-                               ,$this->si196_nrodocumento
+                               ,'$this->si196_nrodocumento'
                                ,$this->si196_codreduzidopessoa
                                ,$this->si196_tiporemuneracao 
                                ,'$this->si196_desctiporemuneracao'
