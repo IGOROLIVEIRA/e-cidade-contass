@@ -190,7 +190,7 @@ class cl_tetoremuneratorio {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -208,7 +208,7 @@ class cl_tetoremuneratorio {
          $resac = db_query("insert into db_acount values($acount,1010193,1009247,'','".AddSlashes(pg_result($resaco,0,'te01_dtfinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010193,1009248,'','".AddSlashes(pg_result($resaco,0,'te01_justificativa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-     }
+     }*/
      return true;
    } 
    // funcao para alteracao
@@ -317,7 +317,7 @@ class cl_tetoremuneratorio {
      if($te01_sequencial!=null){
        $sql .= " te01_sequencial = $this->te01_sequencial";
      }
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+     /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
@@ -344,7 +344,7 @@ class cl_tetoremuneratorio {
              $resac = db_query("insert into db_acount values($acount,1010193,1009248,'".AddSlashes(pg_result($resaco,$conresaco,'te01_justificativa'))."','$this->te01_justificativa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
