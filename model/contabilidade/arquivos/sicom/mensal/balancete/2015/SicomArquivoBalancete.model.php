@@ -432,7 +432,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
 					  JOIN orctiporec ON o58_codigo = o15_codigo
 					  left join infocomplementaresinstit on  o58_instit = si09_instit
-					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes}";
+					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
                     //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
 
                     $nContaCorrente = 102;
@@ -608,7 +608,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $aContasReg10[$reg10Hash] = $oContas10;
                                 $aContasReg10[$reg10Hash]->reg11[$sHash11] = $obalancete11;
-
 
                             } else {
                                 $aContasReg10[$reg10Hash]->reg11[$sHash11]->si178_saldoinicialcd += $oReg11Saldo->saldoanterior;
