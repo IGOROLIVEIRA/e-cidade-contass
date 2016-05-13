@@ -55,10 +55,11 @@ class GerarFLPGO extends GerarAM {
 				$aCSVFLPGO10['si195_indtipopagamento']                    =   str_pad($aFLPGO10['si195_indtipopagamento'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_indsituacaoservidorpensionista']      =   str_pad($aFLPGO10['si195_indsituacaoservidorpensionista'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_dscsituacao']                         =   substr($aFLPGO10['si195_dscsituacao'], 0, 150);
-				$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datconcessaoaposentadoriapensao'])));
+
 
 				if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I' || $aFLPGO10['si195_indsituacaoservidorpensionista'] == 'P'){
 
+					$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datconcessaoaposentadoriapensao'])));
 					$aCSVFLPGO10['si195_dsccargo']                            =   ' ';
 					$aCSVFLPGO10['si195_sglcargo']                            =   ' ';
 					$aCSVFLPGO10['si195_dscsiglacargo']                       =   ' ';
@@ -69,6 +70,7 @@ class GerarFLPGO extends GerarAM {
 
 				}else {
 
+					$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   ' ';
 					$aCSVFLPGO10['si195_dsccargo'] = substr($aFLPGO10['si195_dsccargo'], 0, 120);
 					$aCSVFLPGO10['si195_sglcargo'] = str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
 					$aCSVFLPGO10['si195_dscsiglacargo'] = substr($aFLPGO10['si195_dsccargo'], 0, 150);
@@ -78,7 +80,11 @@ class GerarFLPGO extends GerarAM {
 					$aCSVFLPGO10['si195_vlrcargahorariasemanal'] = str_pad($aFLPGO10['si195_vlrcargahorariasemanal'], 2, "0", STR_PAD_LEFT);
 
 				}
-				$aCSVFLPGO10['si195_datefetexercicio']                    =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datefetexercicio'])));
+				if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I' || $aFLPGO10['si195_indsituacaoservidorpensionista'] == 'A') {
+					$aCSVFLPGO10['si195_datefetexercicio'] = implode("", array_reverse(explode("-", $aFLPGO10['si195_datefetexercicio'])));
+				}else{
+					$aCSVFLPGO10['si195_datefetexercicio'] = ' ';
+				}
 				$aCSVFLPGO10['si195_datexclusao']                         =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datexclusao'])));
 				$aCSVFLPGO10['si195_vlrremuneracaobruta']                 =   number_format($aFLPGO10['si195_vlrremuneracaobruta'], 2, ",", "");
 				$aCSVFLPGO10['si195_natsaldoliquido']                     =   str_pad($aFLPGO10['si195_natsaldoliquido'], 1, "0", STR_PAD_LEFT);
