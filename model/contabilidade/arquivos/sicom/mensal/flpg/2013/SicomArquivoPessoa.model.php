@@ -81,7 +81,6 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
                            when z01_nasc is not null then z01_nasc
                            else rh01_nasc
                            end as z01_nasc,
-
 					       z01_ultalt, 
 					       z01_obs,
 					       z01_cadast 
@@ -98,7 +97,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 select distinct case when length(z01_cgccpf) < 11 then lpad(z01_cgccpf, 11, '0') else z01_cgccpf end as z01_cgccpf,
 					       z01_nome,
 					       z01_sexo,
-					       z01_nasc,
+					       ' ' as z01_nasc,
 					       z01_ultalt,
 					       z01_obs,
 					       z01_cadast
@@ -109,6 +108,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
+					 and prefeitura = 't'
 					 ";
 
     } else {
@@ -131,7 +131,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 
 		      select z01_cgccpf,
 		       z01_nome,
-		       z01_sexo,
+		       ' ' as z01_sexo,
                z01_nasc,
 		       z01_ultalt,
 		       z01_obs,
