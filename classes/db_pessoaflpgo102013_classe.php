@@ -123,7 +123,7 @@ class cl_pessoaflpgo102013 {
       $this->erro_status = "0";
       return false;
     }
-    if($this->si193_indsexo == null ){
+    /*if($this->si193_indsexo == null ){
       $this->erro_sql = " Campo Indica o sexo não informado.";
       $this->erro_campo = "si193_indsexo";
       $this->erro_banco = "";
@@ -131,7 +131,7 @@ class cl_pessoaflpgo102013 {
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
-    }
+    }*/
     /*if($this->si193_datanascimento == null ){
       $this->erro_sql = " Campo Data de nascimento não informado.";
       $this->erro_campo = "si193_datanascimento_dia";
@@ -218,8 +218,8 @@ class cl_pessoaflpgo102013 {
                                ,$this->si193_tiporegistro 
                                ,$this->si193_tipodocumento 
                                ,'$this->si193_nrodocumento' 
-                               ,'$this->si193_nome' 
-                               ,'$this->si193_indsexo' 
+                               ,'$this->si193_nome'
+                               ,".($this->si193_indsexo == "null" || $this->si193_indsexo == ""?"null":"'".$this->si193_indsexo."'")."
                                ,".($this->si193_datanascimento == "null" || $this->si193_datanascimento == ""?"null":"'".$this->si193_datanascimento."'")." 
                                ,$this->si193_tipocadastro 
                                ,'$this->si193_justalteracao' 
