@@ -77,7 +77,11 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
       $sSql  = "select distinct case when length(z01_cgccpf) < 11 then lpad(z01_cgccpf, 11, '0') else z01_cgccpf end as z01_cgccpf,
 					       z01_nome,
 					       z01_sexo,
-					       z01_nasc,
+					       case
+                           when z01_nasc is not null then z01_nasc
+                           else rh01_nasc
+                           end as z01_nasc,
+
 					       z01_ultalt, 
 					       z01_obs,
 					       z01_cadast 
@@ -111,7 +115,10 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
       $sSql  = "select z01_cgccpf,
 		       z01_nome,
 		       z01_sexo,
-               z01_nasc,
+               case
+               when z01_nasc is not null then z01_nasc
+               else rh01_nasc
+               end as z01_nasc,
 		       z01_ultalt, 
 		       z01_obs,
 		       z01_cadast 
