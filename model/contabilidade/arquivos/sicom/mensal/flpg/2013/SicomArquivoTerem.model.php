@@ -124,7 +124,7 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
       $clterem10->si194_tipocadastro          = $tipocadastro;
       $clterem10->si194_dtinicial             = $oDados10->te01_dtinicial;
       $clterem10->si194_dtfinal               = $oDados10->te01_dtfinal;
-      $clterem10->si194_justalteracao         = $oDados10->te01_justalteracao;
+      $clterem10->si194_justalteracao         = $oDados10->te01_justificativa;
       $clterem10->si194_mes                   = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clterem10->si194_inst                  = db_getsession("DB_instit");
 
