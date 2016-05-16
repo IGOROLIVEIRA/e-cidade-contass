@@ -136,7 +136,7 @@ class cl_pessoaflpgo102013 {
       $this->erro_sql = " Campo Data de nascimento não informado.";
       $this->erro_campo = "si193_datanascimento_dia";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." Documento: ". $this->si193_nrodocumento ." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
