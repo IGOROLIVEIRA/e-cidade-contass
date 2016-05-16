@@ -24,6 +24,24 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
    * @var String
    */
   protected $sNomeArquivo = 'IDE';
+
+    protected $bEncerramento = false;
+
+    /**
+     * @return boolean
+     */
+    public function isEncerramento()
+    {
+        return $this->bEncerramento;
+    }
+
+    /**
+     * @param boolean $bEncerramento
+     */
+    public function setEncerramento($bEncerramento)
+    {
+        $this->bEncerramento = $bEncerramento;
+    }
   
   /**
    * 
@@ -86,9 +104,9 @@ class SicomArquivoIdentificacaoRemessa extends SicomArquivoBase implements iPadA
      * inserir informacoes no banco de dados
      */
     db_inicio_transacao();
-    $result = $clide->sql_record($clide->sql_query(NULL,"*",NULL,"si11_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si11_instit = ".db_getsession("DB_instit")));
+    $result = $clide->sql_record($clide->sql_query(NULL,"*",NULL,"si11_mes = ".($this->isEncerramento() ? 13 : $this->sDataFinal['5'].$this->sDataFinal['6'])." and si11_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-    	$clide->excluir(NULL,"si11_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si11_instit = ".db_getsession("DB_instit"));
+    	$clide->excluir(NULL,"si11_mes = ".($this->isEncerramento() ? 13 : $this->sDataFinal['5'].$this->sDataFinal['6'])." and si11_instit = ".db_getsession("DB_instit"));
       if ($clide->erro_status == 0) {
     	  throw new Exception($clide->erro_msg);
       }
