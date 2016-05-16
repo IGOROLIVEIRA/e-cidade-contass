@@ -82,8 +82,26 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					       z01_obs,
 					       z01_cadast 
 					  from cgm
+					  inner join rhpessoal on rh01_numcgm = z01_numcgm
 					 where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000') 
 					 and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}') 
+					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
+					 and (z01_cgccpf != '' and z01_cgccpf is not null)
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
+
+					 union
+
+					 select distinct case when length(z01_cgccpf) < 11 then lpad(z01_cgccpf, 11, '0') else z01_cgccpf end as z01_cgccpf,
+					       z01_nome,
+					       z01_sexo,
+					       z01_nasc,
+					       z01_ultalt,
+					       z01_obs,
+					       z01_cadast
+					  from cgm
+					  inner join db_config on db_config.numcgm = cgm.z01_numcgm
+					 where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
+					 and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}')
 					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
@@ -98,8 +116,24 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		       z01_obs,
 		       z01_cadast 
 		      from cgm
+		      inner join rhpessoal on rh01_numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-		      and (z01_cgccpf != '' and z01_cgccpf is not null)";
+		      and (z01_cgccpf != '' and z01_cgccpf is not null)
+
+		      UNION
+
+		      select z01_cgccpf,
+		       z01_nome,
+		       z01_sexo,
+               z01_nasc,
+		       z01_ultalt,
+		       z01_obs,
+		       z01_cadast
+		      from cgm
+		      inner join db_config on db_config.numcgm = z01_numcgm
+		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
+		      and (z01_cgccpf != '' and z01_cgccpf is not null) and prefeitura = 't'
+		      ";
     }
 
     $rsResult  = db_query($sSql);//echo $sSql; db_criatabela($rsResult);exit;
