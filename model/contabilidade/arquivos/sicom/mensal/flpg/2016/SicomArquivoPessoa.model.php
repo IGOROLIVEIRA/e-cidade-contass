@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_pessoaflpgo102016_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2016/flpg/GerarPESSOA.model.php");
+require_once ("classes/db_pessoaflpgo102013_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2013/flpg/GerarPESSOA.model.php");
 
 /**
  * gerar arquivo pessoal Sicom Acompanhamento Mensal
@@ -58,7 +58,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clpessoa = new cl_pessoaflpgo102016();
+    $clpessoa = new cl_pessoaflpgo102013();
 
     /**
      * excluir informacoes do mes selecionado
@@ -78,14 +78,14 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					       z01_nome,
 					       z01_sexo,
 					       case
-					          when z01_nasc is null then rh01_nasc
-					          else z01_nasc
-					       end as  z01_nasc,
+                           when z01_nasc is not null then z01_nasc
+                           else rh01_nasc
+                           end as z01_nasc,
 					       z01_ultalt, 
 					       z01_obs,
 					       z01_cadast 
 					  from cgm
-					   inner join rhpessoal on rh01_numcgm = z01_numcgm
+					  inner join rhpessoal on rh01_numcgm = z01_numcgm
 					 where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000') 
 					 and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}') 
 					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
@@ -94,23 +94,59 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
+
+					 union
+
+					 select distinct case when length(z01_cgccpf) < 11 then lpad(z01_cgccpf, 11, '0') else z01_cgccpf end as z01_cgccpf,
+					       z01_nome,
+					       z01_sexo,
+					       ' ' as z01_nasc,
+					       z01_ultalt,
+					       z01_obs,
+					       z01_cadast
+					  from cgm
+					  inner join db_config on db_config.numcgm = cgm.z01_numcgm
+					 where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
+					 and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}')
+					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
+					 and (z01_cgccpf != '' and z01_cgccpf is not null)
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102016 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
+					 and prefeitura = 't'
 					 ";
 
     } else {
       $sSql  = "select z01_cgccpf,
 		       z01_nome,
 		       z01_sexo,
-		       case
-					          when z01_nasc is null then rh01_nasc
-					          else z01_nasc
-					       end as  z01_nasc,
+               case
+               when z01_nasc is not null then z01_nasc
+               else rh01_nasc
+               end as z01_nasc,
 		       z01_ultalt, 
 		       z01_obs,
 		       z01_cadast 
 		      from cgm
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-		      and (z01_cgccpf != '' and z01_cgccpf is not null)";
+		      and (z01_cgccpf != '' and z01_cgccpf is not null)
+
+		      UNION
+
+		      select z01_cgccpf,
+		       z01_nome,
+		       ' ' as z01_sexo,
+               z01_nasc,
+		       z01_ultalt,
+		       z01_obs,
+		       z01_cadast
+		      from cgm
+		      inner join db_config on db_config.numcgm = z01_numcgm
+		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
+		      and (z01_cgccpf != '' and z01_cgccpf is not null) and prefeitura = 't'
+		      ";
     }
 
     $rsResult  = db_query($sSql);//echo $sSql; db_criatabela($rsResult);exit;
@@ -124,7 +160,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
     $by   = array('','','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-      $clpessoa = new cl_pessoaflpgo102016();
+      $clpessoa = new cl_pessoaflpgo102013();
       $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
 
@@ -132,7 +168,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
         continue;
       }
 
-      if(($this->sDataFinal['5'].$this->sDataFinal['6']) != '01' && db_getsession("DB_anousu") != 2014){
+      if(($this->sDataFinal['5'].$this->sDataFinal['6']) != '01' && db_getsession("DB_anousu") != 2016){
         if ($oDados->z01_cadast >= $this->sDataInicial && $oDados->z01_cadast <= $this->sDataFinal) {
           $sTipoCadastro = 1;
           $sJustificativaalteracao = ' ';

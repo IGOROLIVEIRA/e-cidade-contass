@@ -4,6 +4,7 @@ require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_flpgo102013_classe.php");
 require_once ("classes/db_flpgo112013_classe.php");
+require_once ("classes/db_flpgo122013_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2013/flpg/GerarFLPGO.model.php");
 
 
@@ -113,7 +114,10 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         z01_cgccpf as si195_nrodocumento,
         'C' as si195_regime,
         'M' as si195_indtipopagamento,
-        (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") AS si195_indsituacaoservidorpensionista,
+        case
+          when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") is not null then (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').")
+          else 'A'
+          end as si195_indsituacaoservidorpensionista,
         rh01_admiss as si195_datconcessaoaposentadoriapensao,
 
     case

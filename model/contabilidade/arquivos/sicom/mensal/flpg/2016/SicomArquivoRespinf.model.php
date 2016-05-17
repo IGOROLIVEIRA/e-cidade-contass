@@ -74,17 +74,29 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
      * selecionar informacoes registro 10
      */
 
-    if ($this->sDataFinal['5'].$this->sDataFinal['6'] == 01) {
+    /*if ($this->sDataFinal['5'].$this->sDataFinal['6'] == 01) {
       $sSql = "SELECT z01_ident,z01_nome,z01_identorgao,z01_cgccpf, si166_dataini, si166_datafim   from identificacaoresponsaveis left join cgm on si166_numcgm = z01_numcgm";
       $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 1 and DATE_PART('YEAR',si166_dataini) = ". db_getsession('DB_anousu') ." and si166_tiporesponsavel not in (5) ";
     }else{
       $sSql = "SELECT z01_ident,z01_nome,z01_identorgao,z01_cgccpf, si166_dataini, si166_datafim   from identificacaoresponsaveis left join cgm on si166_numcgm = z01_numcgm";
       $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 1 and DATE_PART('YEAR',si166_dataini) = ". db_getsession('DB_anousu');
       $sSql .= " and z01_cgccpf not in (select si197_cpf from respinf102016 where si197_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")" ." and si166_tiporesponsavel not in (5) ";
-    }
+    }*/
+
+    $sSql = "SELECT z01_ident,z01_nome,z01_identorgao,z01_cgccpf, si166_dataini, si166_datafim   from identificacaoresponsaveis left join cgm on si166_numcgm = z01_numcgm";
+    $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 1 and DATE_PART('YEAR',si166_dataini) = ". db_getsession('DB_anousu') ." and si166_tiporesponsavel not in (5) ";
+
+    $mes = $this->sDataFinal['5'].$this->sDataFinal['6'];      // Mês desejado, pode ser por ser obtido por POST, GET, etc.
+    $ano = db_getsession('DB_anousu'); // Ano atual
+    $ultimo_dia = date("t", mktime(0,0,0,$mes,'01',$ano)); // Mágica, plim!
+
+    $dtInicial = $ano.'-'.$mes.'-'.'01';
+
+    $dtFinal   = $ano.'-'.$mes.'-'.$ultimo_dia;
 
     $rsResult10 = db_query($sSql);
     //echo $sSql;exit;
+
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
@@ -94,8 +106,8 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clrespinf10->si197_cartident             = $oDados10->z01_ident;
       $clrespinf10->si197_orgemissorci          = $oDados10->z01_identorgao;
       $clrespinf10->si197_cpf                   = $oDados10->z01_cgccpf;
-      $clrespinf10->si197_dtinicio              = $this->sDataInicial;
-      $clrespinf10->si197_dtfinal               = $this->sDataFinal;
+      $clrespinf10->si197_dtinicio              = $dtInicial;
+      $clrespinf10->si197_dtfinal               = $dtFinal;
       $clrespinf10->si197_mes                   = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clrespinf10->si197_inst                  = db_getsession("DB_instit");
 
