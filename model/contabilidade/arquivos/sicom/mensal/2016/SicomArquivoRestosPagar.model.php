@@ -354,7 +354,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
        JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
         where e60_instit = ".db_getsession("DB_instit")." and c71_coddoc in (31,32) and c71_data between '{$this->sDataInicial}' and '{$this->sDataFinal}' ";
         
-    $rsResult20 = db_query($sSql);
+    $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
 
     
     $aDadosAgrupados = array();
@@ -379,10 +379,12 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 
                 $clrsp20->si115_codorgao                   = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce,2,"0");
                 $clrsp20->si115_codunidadesub              = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0".$aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+                $clrsp20->si115_codunidadesuborig          = $clrsp20->si115_codunidadesub;
 
             } else {
                 $clrsp20->si115_codorgao                       = $oDados20->codorgao;
                 $clrsp20->si115_codunidadesub                  = $oDados20->codunidadesub;
+                $clrsp20->si115_codunidadesuborig              = $oDados20->codunidadesub;
             }
 
 	        $clrsp20->si115_nroempenho                     = $oDados20->nroempenho;
@@ -430,6 +432,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       $clrsp20->si115_codreduzidomov                 = $oDados->si115_codreduzidomov;
       $clrsp20->si115_codorgao                       = $oDados->si115_codorgao;
       $clrsp20->si115_codunidadesub                  = $oDados->si115_codunidadesub;
+      $clrsp20->si115_codunidadesuborig              = $oDados->si115_codunidadesuborig;
       $clrsp20->si115_nroempenho                     = $oDados->si115_nroempenho;
       $clrsp20->si115_exercicioempenho               = $oDados->si115_exercicioempenho;
       $clrsp20->si115_dtempenho                      = $oDados->si115_dtempenho;

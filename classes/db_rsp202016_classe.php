@@ -20,7 +20,8 @@ class cl_rsp202016 {
    var $si115_tiporegistro = 0; 
    var $si115_codreduzidomov = 0; 
    var $si115_codorgao = null; 
-   var $si115_codunidadesub = null; 
+   var $si115_codunidadesub = null;
+   var $si115_codunidadesuborig = null;
    var $si115_nroempenho = 0; 
    var $si115_exercicioempenho = 0; 
    var $si115_dtempenho_dia = null; 
@@ -91,6 +92,7 @@ class cl_rsp202016 {
        $this->si115_codreduzidomov = ($this->si115_codreduzidomov == ""?@$GLOBALS["HTTP_POST_VARS"]["si115_codreduzidomov"]:$this->si115_codreduzidomov);
        $this->si115_codorgao = ($this->si115_codorgao == ""?@$GLOBALS["HTTP_POST_VARS"]["si115_codorgao"]:$this->si115_codorgao);
        $this->si115_codunidadesub = ($this->si115_codunidadesub == ""?@$GLOBALS["HTTP_POST_VARS"]["si115_codunidadesub"]:$this->si115_codunidadesub);
+       $this->si115_codunidadesuborig = ($this->si115_codunidadesuborig == ""?@$GLOBALS["HTTP_POST_VARS"]["si115_codunidadesuborig"]:$this->si115_codunidadesuborig);
        $this->si115_nroempenho = ($this->si115_nroempenho == ""?@$GLOBALS["HTTP_POST_VARS"]["si115_nroempenho"]:$this->si115_nroempenho);
        $this->si115_exercicioempenho = ($this->si115_exercicioempenho == ""?@$GLOBALS["HTTP_POST_VARS"]["si115_exercicioempenho"]:$this->si115_exercicioempenho);
        if($this->si115_dtempenho == ""){
@@ -225,7 +227,8 @@ class cl_rsp202016 {
                                       ,si115_tiporegistro 
                                       ,si115_codreduzidomov 
                                       ,si115_codorgao 
-                                      ,si115_codunidadesub 
+                                      ,si115_codunidadesub
+                                      ,si115_codunidadesuborig
                                       ,si115_nroempenho 
                                       ,si115_exercicioempenho 
                                       ,si115_dtempenho 
@@ -247,7 +250,8 @@ class cl_rsp202016 {
                                ,$this->si115_tiporegistro 
                                ,$this->si115_codreduzidomov 
                                ,'$this->si115_codorgao' 
-                               ,'$this->si115_codunidadesub' 
+                               ,'$this->si115_codunidadesub'
+                               ,'$this->si115_codunidadesuborig'
                                ,$this->si115_nroempenho 
                                ,$this->si115_exercicioempenho 
                                ,".($this->si115_dtempenho == "null" || $this->si115_dtempenho == ""?"null":"'".$this->si115_dtempenho."'")." 
