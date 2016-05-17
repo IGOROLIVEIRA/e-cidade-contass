@@ -81,7 +81,7 @@ class cl_flpgo122013 {
             return false;
         }
         if($this->si197_nrodocumento == null ){
-            $this->erro_sql = " Campo Número do CPF não informado.";
+            $this->erro_sql = " Campo Número do CPF não informado. CODPESSOA: ". $this->si197_codreduzidopessoa;
             $this->erro_campo = "si197_nrodocumento";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
