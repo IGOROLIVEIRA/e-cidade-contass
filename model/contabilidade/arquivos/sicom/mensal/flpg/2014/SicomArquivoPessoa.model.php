@@ -128,6 +128,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      and (z01_cgccpf != '' and z01_cgccpf is not null)
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
 
 		      UNION
 
@@ -142,6 +143,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      inner join db_config on db_config.numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      and (z01_cgccpf != '' and z01_cgccpf is not null) and prefeitura = 't'
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
 		      ";
     }
 
