@@ -1149,7 +1149,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $sCodunidadesubOrig = $oReg14->codunidadesub;
 
                             if (!($oReg14->codunidadesub == $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade))) {
-                                $sCodunidadesub = $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade);
+                                $sCodunidadesub = ($sCodunidadesub == '' || $sCodunidadesub == 0 ? $this->getDotacaoByCodunidadesub($oReg14->o58_orgao, $oReg14->o58_unidade) : $sCodunidadesub);
                                 $sCodunidadesubOrig = $sCodunidadesub;
                             }
 
