@@ -3,7 +3,7 @@
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
 
 /**
- * Sicom Acompanhamento Mensal
+ * Sicom FLPGO
  * @author marcelo
  * @package Contabilidade
  */
@@ -43,14 +43,15 @@ class GerarRESPINF extends GerarAM {
 				unset($aRESPINF10['si197_mes']);
 				unset($aRESPINF10['si197_instit']);
 
-				$aCSVRESPINF10['si197_nomeresponsavel']          =  substr($aRESPINF10['si197_nomeresponsavel'], 0,120);
+				/*$aCSVRESPINF10['si197_nomeresponsavel']          =  substr($aRESPINF10['si197_nomeresponsavel'], 0,120);
 				$aCSVRESPINF10['si197_cartident']                =  substr($aRESPINF10['si197_cartident'], 0,10);
-				$aCSVRESPINF10['si197_orgemissorci']             =  substr($aRESPINF10['si197_orgemissorci'], 0,10);
+				$aCSVRESPINF10['si197_orgemissorci']             =  substr($aRESPINF10['si197_orgemissorci'], 0,10);*/
 				$aCSVRESPINF10['si197_cpf']                      =  str_pad($aRESPINF10['si197_cpf'], 11, "0", STR_PAD_LEFT);
 				$aCSVRESPINF10['si197_dtinicio']                 =  implode("", array_reverse(explode("-", $aRESPINF10['si197_dtinicio'])));
 				$aCSVRESPINF10['si197_dtfinal']                  =  implode("", array_reverse(explode("-", $aRESPINF10['si197_dtfinal'])));
 
 				$this->sLinha = $aCSVRESPINF10;
+
 				$this->adicionaLinha();
 
 			}
