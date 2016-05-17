@@ -83,6 +83,13 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
       $sSql .= " and z01_cgccpf not in (select si197_cpf from respinf102013 where si197_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")" ." and si166_tiporesponsavel not in (5) ";
     }
 
+    $mes = $this->sDataFinal['5'].$this->sDataFinal['6'];      // Mês desejado, pode ser por ser obtido por POST, GET, etc.
+    $ano = db_getsession('DB_anousu'); // Ano atual
+    $ultimo_dia = date("t", mktime(0,0,0,$mes,'01',$ano)); // Mágica, plim!
+
+    $dtInicial = $ano.'-'.$mes.'-'.'01';
+
+    $dtFinal   = $ano.'-'.$mes.'-'.$ultimo_dia;
 
     $rsResult10 = db_query($sSql);
     //echo $sSql;exit;
@@ -96,8 +103,8 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clrespinf10->si197_cartident             = $oDados10->z01_ident;
       $clrespinf10->si197_orgemissorci          = $oDados10->z01_identorgao;
       $clrespinf10->si197_cpf                   = $oDados10->z01_cgccpf;
-      $clrespinf10->si197_dtinicio              = $this->sDataInicial;
-      $clrespinf10->si197_dtfinal               = $this->sDataFinal;
+      $clrespinf10->si197_dtinicio              = $dtInicial;
+      $clrespinf10->si197_dtfinal               = $dtFinal;
       $clrespinf10->si197_mes                   = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clrespinf10->si197_inst                  = db_getsession("DB_instit");
 
