@@ -9,6 +9,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2014/flpg/Ger
  * @author marcelo
  * @package Contabilidade
  */
+
 class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
   /**
@@ -55,6 +56,19 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
    */
   public function gerarDados() {
 
+    $sSql  = "SELECT db21_codigomunicipoestado AS codmunicipio,
+                cgc::varchar AS cnpjmunicipio,
+                si09_tipoinstit AS tipoorgao,
+                si09_codorgaotce AS codorgao,
+                prefeitura
+              FROM db_config
+              LEFT JOIN infocomplementaresinstit ON si09_instit = ".db_getsession("DB_instit")."
+              WHERE codigo = ".db_getsession("DB_instit");
+
+    $rsResult  = db_query($sSql);
+
+    $CNPJ = db_utils::fieldsMemory($rsResult, 0)->cnpjmunicipio;
+
     $clterem10 = new cl_terem102014();
 
     db_inicio_transacao();
@@ -74,23 +88,30 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
      * selecionar informacoes registro 10
      */
     if ($this->sDataFinal['5'].$this->sDataFinal['6'] == 01) {
-      $sSql = "select r07_valor as si194_vlrparateto , ' ' as si194_justalteracao  from pesdiver where r07_codigo = 'D060' ";
-      $sSql .= " and r07_valor <> (select si194_vlrparateto from terem102013 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." limit 1 )";
-      $sSql .= " and r07_instit = " . db_getsession("DB_instit") . " limit 1 ";
+      $sSql = "select te01_valor , te01_justificativa, te01_dtinicial, te01_dtfinal  from tetoremuneratorio where ";
+      $sSql .= " DATE_PART('YEAR',te01_dtinicial) = ".db_getsession("DB_anousu");
+      $sSql .= " limit 1 ";
 
-      $si194_tipocadastro = 1;
+      $tipocadastro = 1;
+
+      if(pg_num_rows(db_query($sSql)) == 0){
+        throw new Exception('Teto remuneratório não informado');
+      }
 
     }else{
-      $sSql = "select r07_valor as si194_vlrparateto , r07_descr as si194_justalteracao from pesdiver where r07_codigo = 'D060' ";
-      $sSql .= " and r07_valor <> (select si194_vlrparateto from terem102014 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." limit 1 )";
-      $sSql .= " and r07_valor <> (select si194_vlrparateto from terem102013 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." limit 1 )";
-      $sSql .= " and r07_instit = " . db_getsession("DB_instit") . " limit 1 ";
-      if(pg_num_rows(db_query($sSql)) > 0){
-        $si194_tipocadastro = 2;
+      $sSql  = " select te01_valor , te01_justificativa, te01_dtinicial,te01_dtfinal  from tetoremuneratorio where ";
+      $sSql .= " DATE_PART('YEAR',te01_dtinicial) = ".db_getsession("DB_anousu");
+      $sSql .= " and round(te01_valor,2) not in (select round(si194_vlrparateto,2) from terem102014 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." )";
+      $sSql .= " and round(te01_valor,2) not in (select round(si194_vlrparateto,2) from terem102013 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." )";
+      $sSql .= " limit 1";
+
+      if(pg_num_rows(db_query($sSql)) > 0) {
+        $tipocadastro = 2;
       }
     }
-    $rsResult10 = db_query($sSql);
     //echo $sSql;exit;
+    $rsResult10 = db_query($sSql);
+
     //db_criatabela($rsResult10);exit;
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -99,9 +120,12 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
       $clterem10->si194_tiporegistro          = 10;
-      $clterem10->si194_vlrparateto           = $oDados10->si194_vlrparateto;
-      $clterem10->si194_tipocadastro          = $si194_tipocadastro;
-      $clterem10->si194_justalteracao         = $oDados10->si194_justalteracao;
+      $clterem10->si194_vlrparateto           = $oDados10->te01_valor;
+      $clterem10->si194_cnpj                  = $CNPJ;//$oDados10->si194_vlrparateto;
+      $clterem10->si194_tipocadastro          = $tipocadastro;
+      $clterem10->si194_dtinicial             = $oDados10->te01_dtinicial;
+      $clterem10->si194_dtfinal               = $oDados10->te01_dtfinal;
+      $clterem10->si194_justalteracao         = $oDados10->te01_justificativa;
       $clterem10->si194_mes                   = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clterem10->si194_inst                  = db_getsession("DB_instit");
 

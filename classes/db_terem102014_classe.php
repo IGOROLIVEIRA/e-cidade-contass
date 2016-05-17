@@ -18,17 +18,29 @@ class cl_terem102014 {
   // cria variaveis do arquivo 
   var $si194_sequencial = 0;
   var $si194_tiporegistro = 0;
+  var $si194_cnpj = null;
   var $si194_vlrparateto = 0;
   var $si194_tipocadastro = 0;
+  var $si194_dtinicial_dia = null;
+  var $si194_dtinicial_mes = null;
+  var $si194_dtinicial_ano = null;
+  var $si194_dtinicial = null;
+  var $si194_dtfinal_dia = null;
+  var $si194_dtfinal_mes = null;
+  var $si194_dtfinal_ano = null;
+  var $si194_dtfinal = null;
   var $si194_justalteracao = null;
   var $si194_mes = 0;
   var $si194_inst = 0;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  si194_sequencial = int8 = si194_sequencial 
-                 si194_tiporegistro = int8 = Tipo registro 
+                 si194_tiporegistro = int8 = Tipo registro
+                 si194_cnpj = varchar(14) = CNPJ
                  si194_vlrparateto = float8 = Valor para o teto 
-                 si194_tipocadastro = int8 = Tipo de cadastro 
+                 si194_tipocadastro = int8 = Tipo de cadastro
+                 si194_dtinicial = date = Data Inicial
+                 si194_dtfinal = date = Data Final
                  si194_justalteracao = varchar(100) = Justificativa para a alteração 
                  si194_mes = int8 = si194_mes 
                  si194_inst = int8 = si194_inst 
@@ -53,8 +65,25 @@ class cl_terem102014 {
     if($exclusao==false){
       $this->si194_sequencial = ($this->si194_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_sequencial"]:$this->si194_sequencial);
       $this->si194_tiporegistro = ($this->si194_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_tiporegistro"]:$this->si194_tiporegistro);
+      $this->si194_cnpj = ($this->si194_cnpj == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_cnpj"]:$this->si194_cnpj);
       $this->si194_vlrparateto = ($this->si194_vlrparateto == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_vlrparateto"]:$this->si194_vlrparateto);
       $this->si194_tipocadastro = ($this->si194_tipocadastro == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_tipocadastro"]:$this->si194_tipocadastro);
+      if($this->te01_dtinicial == ""){
+        $this->te01_dtinicial_dia = ($this->te01_dtinicial_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtinicial_dia"]:$this->te01_dtinicial_dia);
+        $this->te01_dtinicial_mes = ($this->te01_dtinicial_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtinicial_mes"]:$this->te01_dtinicial_mes);
+        $this->te01_dtinicial_ano = ($this->te01_dtinicial_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtinicial_ano"]:$this->te01_dtinicial_ano);
+        if($this->te01_dtinicial_dia != ""){
+          $this->te01_dtinicial = $this->te01_dtinicial_ano."-".$this->te01_dtinicial_mes."-".$this->te01_dtinicial_dia;
+        }
+      }
+      if($this->te01_dtfinal == ""){
+        $this->te01_dtfinal_dia = ($this->te01_dtfinal_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtfinal_dia"]:$this->te01_dtfinal_dia);
+        $this->te01_dtfinal_mes = ($this->te01_dtfinal_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtfinal_mes"]:$this->te01_dtfinal_mes);
+        $this->te01_dtfinal_ano = ($this->te01_dtfinal_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtfinal_ano"]:$this->te01_dtfinal_ano);
+        if($this->te01_dtfinal_dia != ""){
+          $this->te01_dtfinal = $this->te01_dtfinal_ano."-".$this->te01_dtfinal_mes."-".$this->te01_dtfinal_dia;
+        }
+      }
       $this->si194_justalteracao = ($this->si194_justalteracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_justalteracao"]:$this->si194_justalteracao);
       $this->si194_mes = ($this->si194_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_mes"]:$this->si194_mes);
       $this->si194_inst = ($this->si194_inst == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_inst"]:$this->si194_inst);
@@ -74,9 +103,36 @@ class cl_terem102014 {
       $this->erro_status = "0";
       return false;
     }
+    if($this->si194_cnpj == null ){
+      $this->erro_sql = " Campo CNPJ não informado.";
+      $this->erro_campo = "si194_cnpj";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     if($this->si194_vlrparateto == null ){
       $this->erro_sql = " Campo Valor para o teto não informado.";
       $this->erro_campo = "si194_vlrparateto";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if($this->si194_dtinicial == null ){
+      $this->erro_sql = " Campo Data Inicial não informado.";
+      $this->erro_campo = "te01_dtinicial_dia";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if($this->si194_dtfinal == null ){
+      $this->erro_sql = " Campo Data Final não informado.";
+      $this->erro_campo = "si194_dtfinal_dia";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -144,18 +200,24 @@ class cl_terem102014 {
     }
     $sql = "insert into terem102014(
                                        si194_sequencial 
-                                      ,si194_tiporegistro 
+                                      ,si194_tiporegistro
+                                      ,si194_cnpj
                                       ,si194_vlrparateto 
-                                      ,si194_tipocadastro 
+                                      ,si194_tipocadastro
+                                      ,si194_dtinicial
+                                      ,si194_dtfinal
                                       ,si194_justalteracao 
                                       ,si194_mes 
                                       ,si194_inst 
                        )
                 values (
                                 $this->si194_sequencial 
-                               ,$this->si194_tiporegistro 
+                               ,$this->si194_tiporegistro
+                               ,'$this->si194_cnpj'
                                ,$this->si194_vlrparateto 
-                               ,$this->si194_tipocadastro 
+                               ,$this->si194_tipocadastro
+                               ,'$this->si194_dtinicial'
+                               ,'$this->si194_dtfinal'
                                ,'$this->si194_justalteracao' 
                                ,$this->si194_mes 
                                ,$this->si194_inst 
