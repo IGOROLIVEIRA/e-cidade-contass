@@ -105,8 +105,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                 $sCodUnidadesub = db_utils::fieldsMemory(db_query("select si08_codunidadesub from infocomplementares where si08_instit = " . db_getsession('DB_instit') . " and si08_anousu = " . db_getsession('DB_anousu')), 0)->si08_codunidadesub;
 
-                if($sCodUnidadesub == ""){
-                    throw new Exception("Não foi encontrado registro na tabela infocomplementares para a instituição ".db_getsession('DB_instit').", ano ".db_getsession('DB_anousu').". Favor realizar o cadastro pelo menu: Sicom->Cadastros->Informações Complementares.");
+                if ($sCodUnidadesub == "") {
+                    throw new Exception("Não foi encontrado registro na tabela infocomplementares para a instituição " . db_getsession('DB_instit') . ", ano " . db_getsession('DB_anousu') . ". Favor realizar o cadastro pelo menu: Sicom->Cadastros->Informações Complementares.");
                 }
             }
 
@@ -442,6 +442,40 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 					  inner join infocomplementares on si09_instit = si08_instit
 					  where o58_instit = " . db_getsession('DB_instit') . " and o58_anousu = " . db_getsession("DB_anousu");
                     $nContaCorrente = 101;
+
+                } else if (substr($oContas10->si177_contacontaabil, 0, 5) == '62213') {
+
+                    $sSqlDotacoes = "select distinct o58_coddot as c73_coddot,
+                                    si09_codorgaotce as codorgao,
+                                    case when o41_subunidade != 0 or not null then
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
+					                o58_funcao as codfuncao,
+					                o58_subfuncao as codsubfuncao,
+					                o58_programa as codprograma,
+					                o58_projativ as idacao,
+					                o55_origemacao as idsubacao,
+					                substr(o56_elemento,2,6) as naturezadadespesa,
+					                substr(o56_elemento,8,2) as subelemento,
+								    o15_codtri as codfontrecursos,
+								    e60_numemp
+					  from conlancamval
+					  inner join contacorrentedetalheconlancamval on c69_sequen = c28_conlancamval
+					  inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
+					  inner join empempenho on c19_numemp = e60_numemp
+					  join empelemento on e64_numemp = e60_numemp
+					  join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
+					  join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+					  join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+					  join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+					  JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
+					  JOIN orctiporec ON o58_codigo = o15_codigo
+					  left join infocomplementaresinstit on  o58_instit = si09_instit
+					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}
+					  and (c69_credito in (" . implode(',', $oContas10->contas) . ") or c69_debito in (" . implode(',', $oContas10->contas) . "))";
+                    //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
+
+                    $nContaCorrente = 102;
 
                 } else {
 
@@ -2542,7 +2576,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 $obalancete10->si177_saldofinal = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
             }
 
-            $obalancete10->si177_naturezasaldofinal = $oDado10->si177_saldofinal == 0 ? $obalancete10->si177_naturezasaldoinicial : (number_format($saldoFinal,2,".","") > 0 ? 'D' : 'C');
+            $obalancete10->si177_naturezasaldofinal = $oDado10->si177_saldofinal == 0 ? $obalancete10->si177_naturezasaldoinicial : (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C');
             $obalancete10->si177_mes = 13;
             $obalancete10->si177_instit = db_getsession("DB_instit");
 
@@ -2640,7 +2674,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg12->si179_totaldebitoscr - $obalreg12->si179_totalcreditoscr) == '' ? 0 : ($saldoFinal + $obalreg12->si179_totaldebitoscr - $obalreg12->si179_totalcreditoscr);
                     $obalreg12->si179_saldofinalcr = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg12->si179_naturezasaldofinalcr = $obalreg12->si179_saldofinalcr == 0 ? $obalreg12->si179_naturezasaldoinicialcr : (number_format($saldoFinal,2,".","") > 0 ? 'D' : 'C');
+                $obalreg12->si179_naturezasaldofinalcr = $obalreg12->si179_saldofinalcr == 0 ? $obalreg12->si179_naturezasaldoinicialcr : (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C');
                 $obalreg12->si179_instit = $reg12->si179_instit;
                 $obalreg12->si179_mes = 13;
                 $obalreg12->si179_reg10 = $obalancete10->si177_sequencial;
@@ -2683,7 +2717,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg13->si180_totaldebitospa - $obalreg13->si180_totalcreditospa) == '' ? 0 : ($saldoFinal + $obalreg13->si180_totaldebitospa - $obalreg13->si180_totalcreditospa);
                     $obalreg13->si180_saldofinaipa = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg13->si180_naturezasaldofinaipa = $obalreg13->si180_saldofinaipa == 0 ? $obalreg13->si180_naturezasaldoIniciaipa : (number_format($saldoFinal,2,".","") > 0 ? 'D' : 'C');
+                $obalreg13->si180_naturezasaldofinaipa = $obalreg13->si180_saldofinaipa == 0 ? $obalreg13->si180_naturezasaldoIniciaipa : (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C');
                 $obalreg13->si180_instit = $reg13->si180_instit;
                 $obalreg13->si180_mes = 13;
                 $obalreg13->si180_reg10 = $obalancete10->si177_sequencial;
@@ -2734,7 +2768,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg14->si181_totaldebitosrsp - $obalreg14->si181_totalcreditosrsp) == '' ? 0 : ($saldoFinal + $obalreg14->si181_totaldebitosrsp - $obalreg14->si181_totalcreditosrsp);
                     $obalreg14->si181_saldofinalrsp = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg14->si181_naturezasaldofinalrsp = $obalreg14->si181_saldofinalrsp == 0 ? $obalreg14->si181_naturezasaldoinicialrsp : (number_format($saldoFinal,2,".","") > 0 ? 'D' : 'C');
+                $obalreg14->si181_naturezasaldofinalrsp = $obalreg14->si181_saldofinalrsp == 0 ? $obalreg14->si181_naturezasaldoinicialrsp : (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C');
                 $obalreg14->si181_instit = $reg14->si181_instit;
                 $obalreg14->si181_mes = 13;
                 $obalreg14->si181_reg10 = $obalancete10->si177_sequencial;
@@ -2817,7 +2851,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg16->si183_totaldebitosfontsf - $obalreg16->si183_totalcreditosfontsf) == '' ? 0 : ($saldoFinal + $obalreg16->si183_totaldebitosfontsf - $obalreg16->si183_totalcreditosfontsf);
                     $obalreg16->si183_saldofinalfontsf = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg16->si183_naturezasaldofinalfontsf = $obalreg16->si183_saldofinalfontsf == 0 ? $obalreg16->si183_naturezasaldoinicialfontsf : (number_format($saldoFinal,2,".","") > 0 ? 'D' : 'C');
+                $obalreg16->si183_naturezasaldofinalfontsf = $obalreg16->si183_saldofinalfontsf == 0 ? $obalreg16->si183_naturezasaldoinicialfontsf : (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C');
                 $obalreg16->si183_instit = $reg16->si183_instit;
                 $obalreg16->si183_mes = 13;
                 $obalreg16->si183_reg10 = $obalancete10->si177_sequencial;
@@ -2859,7 +2893,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $saldoFinal = ($saldoFinal + $obalreg17->si184_totaldebitosctb - $obalreg17->si184_totalcreditosctb) == '' ? 0 : ($saldoFinal + $obalreg17->si184_totaldebitosctb - $obalreg17->si184_totalcreditosctb);
                     $obalreg17->si184_saldofinalctb = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
-                $obalreg17->si184_naturezasaldofinalctb = $obalreg17->si184_saldofinalctb == 0 ? $obalreg17->si184_naturezasaldoinicialctb : (number_format($saldoFinal,2,".","") > 0 ? 'D' : 'C');
+                $obalreg17->si184_naturezasaldofinalctb = $obalreg17->si184_saldofinalctb == 0 ? $obalreg17->si184_naturezasaldoinicialctb : (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C');
                 $obalreg17->si184_instit = $reg17->si184_instit;
                 $obalreg17->si184_mes = 13;
                 $obalreg17->si184_reg10 = $obalancete10->si177_sequencial;
@@ -2900,7 +2934,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     $obalreg18->si185_saldofinalfr = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
                 }
 
-                $obalreg18->si185_naturezasaldofinalfr = ($obalreg18->si185_saldofinalfr == 0 ? $obalreg18->si185_naturezasaldoinicialfr : (number_format($saldoFinal,2,".","") > 0 ? 'D' : 'C'));
+                $obalreg18->si185_naturezasaldofinalfr = ($obalreg18->si185_saldofinalfr == 0 ? $obalreg18->si185_naturezasaldoinicialfr : (number_format($saldoFinal, 2, ".", "") > 0 ? 'D' : 'C'));
                 $obalreg18->si185_instit = $reg18->si185_instit;
                 $obalreg18->si185_mes = 13;
                 $obalreg18->si185_reg10 = $obalancete10->si177_sequencial;
