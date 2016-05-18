@@ -1,5 +1,5 @@
 <?php
-
+echo 'teste';exit;
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_flpgo102014_classe.php");
@@ -114,7 +114,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         z01_cgccpf as si195_nrodocumento,
         'C' as si195_regime,
         'M' as si195_indtipopagamento,
-         case
+        case
           when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") is not null then (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').")
           else 'A'
           end as si195_indsituacaoservidorpensionista,
@@ -425,6 +425,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
            WHEN r08_codigo = 'S015' THEN 15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
+           WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,
        CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
@@ -506,6 +507,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S015' THEN 15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
+           WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,
        CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
@@ -586,6 +588,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S015' THEN 15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
+           WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,
        CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
@@ -666,6 +669,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S015' THEN 15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
+           WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,
        CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
@@ -741,7 +745,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
                     $clflpgo11->si196_nrodocumento            = $clflpgo10->si195_nrodocumento;
                     $clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
                     $clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
-                    $clflpgo11->si196_desctiporemuneracao              = ' ';//$oDados11->si196_desctiporemuneracao;
+                    $clflpgo11->si196_desctiporemuneracao     = $oDados11->si196_desctiporemuneracao;
                     $clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
                     $clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clflpgo11->si196_inst                    = db_getsession("DB_instit");
@@ -759,7 +763,6 @@ WHERE rh02_regist = $oDados10->rh02_regist
                Select x.rh02_regist,
                x.si197_tiporegistro,
                x.si197_tipodesconto,
-               x.si197_desctiporemuneracao,
                sum(x.si197_vlrdescontodetalhado) as si197_vlrdescontodetalhado
                from
           (SELECT rh02_regist,
@@ -1066,11 +1069,11 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) ) as x
   group by x.rh02_regist,
                x.si197_tiporegistro,
-               x.si197_tipodesconto,
-               x.si197_desctiporemuneracao";
+               x.si197_tipodesconto";
+
                 //echo '<pre>';
                 //print_r($clflpgo10);
-                //echo $sSql2;exit;
+                //echo $sSql3;exit;
 
                 $rsResult12 = db_query($sSql3);
                 //db_criatabela($rsResult11);

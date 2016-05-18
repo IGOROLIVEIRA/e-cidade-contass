@@ -298,8 +298,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		  and DATE_PART('MONTH',rh05_recis)=" .$this->sDataFinal['5'].$this->sDataFinal['6']."
 		  or rh05_recis IS NULL
 	  )
-	  AND r14_valor is not null
-	  AND rh01_sicom = 1
+	  AND ( r14_valor IS NOT NULL
+        or  r48_valor IS NOT NULL
+        or  r35_valor IS NOT NULL
+        or  r20_valor IS NOT NULL)
+	  AND   rh01_sicom = 1
 	  GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
 	  ORDER BY rh02_regist asc";
 
@@ -425,6 +428,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
            WHEN r08_codigo = 'S015' THEN 15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
+           WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,
        CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
@@ -506,6 +510,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S015' THEN 15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
+           WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,
        CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
@@ -586,6 +591,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S015' THEN 15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
+           WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,
        CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
@@ -666,6 +672,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S015' THEN 15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
+           WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,
        CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
@@ -741,7 +748,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
                     $clflpgo11->si196_nrodocumento            = $clflpgo10->si195_nrodocumento;
                     $clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
                     $clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
-                    $clflpgo11->si196_desctiporemuneracao              = ' ';//$oDados11->si196_desctiporemuneracao;
+                    $clflpgo11->si196_desctiporemuneracao     = $oDados11->si196_desctiporemuneracao;
                     $clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
                     $clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $clflpgo11->si196_inst                    = db_getsession("DB_instit");
@@ -759,7 +766,6 @@ WHERE rh02_regist = $oDados10->rh02_regist
                Select x.rh02_regist,
                x.si197_tiporegistro,
                x.si197_tipodesconto,
-               x.si197_desctiporemuneracao,
                sum(x.si197_vlrdescontodetalhado) as si197_vlrdescontodetalhado
                from
           (SELECT rh02_regist,
@@ -1066,11 +1072,11 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) ) as x
   group by x.rh02_regist,
                x.si197_tiporegistro,
-               x.si197_tipodesconto,
-               x.si197_desctiporemuneracao";
+               x.si197_tipodesconto";
+
                 //echo '<pre>';
                 //print_r($clflpgo10);
-                //echo $sSql2;exit;
+                //echo $sSql3;exit;
 
                 $rsResult12 = db_query($sSql3);
                 //db_criatabela($rsResult11);

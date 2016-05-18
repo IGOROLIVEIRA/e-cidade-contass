@@ -70,6 +70,7 @@ class cl_flpgo122014 {
     }
     // funcao para inclusao
     function incluir ($si197_sequencial){
+
         $this->atualizacampos();
         if($this->si197_tiporegistro == null ){
             $this->erro_sql = " Campo Tipo registro não informado.";

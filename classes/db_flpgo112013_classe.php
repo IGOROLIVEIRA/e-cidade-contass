@@ -102,7 +102,7 @@ class cl_flpgo112013 {
       return false;
     }
     if($this->si196_tiporemuneracao == null ){
-      $this->erro_sql = " Campo Tipo da remuneração não informado.";
+      $this->erro_sql = " Campo Tipo da remuneração não informado.". $this->si196_codreduzidopessoa;
       $this->erro_campo = "si196_tiporemuneracao";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";

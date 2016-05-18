@@ -1,8 +1,8 @@
 <?php
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
-require_once ("classes/db_pessoaflpgo102013_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2013/flpg/GerarPESSOA.model.php");
+require_once ("classes/db_pessoaflpgo102015_classe.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2015/flpg/GerarPESSOA.model.php");
 
 /**
  * gerar arquivo pessoal Sicom Acompanhamento Mensal
@@ -58,7 +58,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
-    $clpessoa = new cl_pessoaflpgo102013();
+    $clpessoa = new cl_pessoaflpgo102015();
 
     /**
      * excluir informacoes do mes selecionado
@@ -91,8 +91,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
-					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014
-					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013)
 
 					 union
 
@@ -110,8 +110,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
-					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014
-					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013)
 					 and prefeitura = 't'
 					 ";
 
@@ -130,8 +130,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      and (z01_cgccpf != '' and z01_cgccpf is not null)
-					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014
-					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013)
 
 		      UNION
 
@@ -146,8 +146,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      inner join db_config on db_config.numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      and (z01_cgccpf != '' and z01_cgccpf is not null) and prefeitura = 't'
-		      and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014
-					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013
+		      and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
+					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013)
 		      ";
     }
 
@@ -162,7 +162,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
     $by   = array('','','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-      $clpessoa = new cl_pessoaflpgo102013();
+      $clpessoa = new cl_pessoaflpgo102015();
       $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
 

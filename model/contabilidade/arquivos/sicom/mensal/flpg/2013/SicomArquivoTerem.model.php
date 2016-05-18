@@ -87,31 +87,15 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
     /*
      * selecionar informacoes registro 10
      */
-    if ($this->sDataFinal['5'].$this->sDataFinal['6'] == 01) {
-      $sSql = "select te01_valor , te01_justificativa, te01_dtinicial, te01_dtfinal  from tetoremuneratorio where ";
-      $sSql .= " DATE_PART('YEAR',te01_dtinicial) = ".db_getsession("DB_anousu");
-      $sSql .= " limit 1 ";
 
-      $tipocadastro = 1;
+    $sSql = "select te01_valor , te01_justificativa, te01_dtinicial, te01_dtfinal, te01_tipocadastro  from tetoremuneratorio where ";
+    $sSql .= " DATE_PART('YEAR',te01_dtinicial) >= ".db_getsession("DB_anousu")." and DATE_PART('YEAR',te01_dtfinal) >= ".db_getsession("DB_anousu");
+    $sSql .= " and round(te01_valor,2) not in (select round(si194_vlrparateto,2) from terem102013 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." )";
 
-      if(pg_num_rows(db_query($sSql)) == 0){
-        throw new Exception('Teto remuneratório não informado');
-      }
 
-    }else{
-      $sSql  = " select te01_valor , te01_justificativa, te01_dtinicial,te01_dtfinal  from tetoremuneratorio where ";
-      $sSql .= " DATE_PART('YEAR',te01_dtinicial) = ".db_getsession("DB_anousu")." and ";
-      $sSql .= " round(te01_valor,2) not in (select round(si194_vlrparateto,2) from terem102013 where si194_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." )";
-      $sSql .= " limit 1";
+    $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit;
 
-      if(pg_num_rows(db_query($sSql)) > 0) {
-        $tipocadastro = 2;
-      }
-    }
-    //echo $sSql;exit;
-    $rsResult10 = db_query($sSql);
 
-    //db_criatabela($rsResult10);exit;
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -121,7 +105,7 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
       $clterem10->si194_tiporegistro          = 10;
       $clterem10->si194_vlrparateto           = $oDados10->te01_valor;
       $clterem10->si194_cnpj                  = $CNPJ;//$oDados10->si194_vlrparateto;
-      $clterem10->si194_tipocadastro          = $tipocadastro;
+      $clterem10->si194_tipocadastro          = $oDados10->te01_tipocadastro;
       $clterem10->si194_dtinicial             = $oDados10->te01_dtinicial;
       $clterem10->si194_dtfinal               = $oDados10->te01_dtfinal;
       $clterem10->si194_justalteracao         = $oDados10->te01_justificativa;
