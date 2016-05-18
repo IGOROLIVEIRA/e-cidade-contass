@@ -105,8 +105,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             } else {
 
                 $sCodUnidadesub = db_utils::fieldsMemory(db_query("select si08_codunidadesub from infocomplementares where si08_instit = " . db_getsession('DB_instit') . " and si08_anousu = " . db_getsession('DB_anousu')), 0)->si08_codunidadesub;
-                if($sCodUnidadesub == ""){
-                    throw new Exception("Não foi encontrado registro na tabela infocomplementares para a instituição ".db_getsession('DB_instit').", ano ".db_getsession('DB_anousu').". Favor realizar o cadastro pelo menu: Sicom->Cadastros->Informações Complementares.");
+                if ($sCodUnidadesub == "") {
+                    throw new Exception("Não foi encontrado registro na tabela infocomplementares para a instituição " . db_getsession('DB_instit') . ", ano " . db_getsession('DB_anousu') . ". Favor realizar o cadastro pelo menu: Sicom->Cadastros->Informações Complementares.");
                 }
             }
 
@@ -130,7 +130,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         /**
          * selecionar arquivo xml de acordo com o tipo da instituição
          */
-        $sSql  = "SELECT * FROM db_config ";
+        $sSql = "SELECT * FROM db_config ";
         $sSql .= "	WHERE prefeitura = 't'";
 
         $rsInst = db_query($sSql);
@@ -162,7 +162,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
          * Array com os documentos de encerramento
          */
         $aDocumentos = db_utils::getColectionByRecord(db_query("select distinct c53_coddoc from conhistdoc where c53_tipo = 1000"));
-        foreach($aDocumentos as $key => $oDocumento){
+        foreach ($aDocumentos as $key => $oDocumento) {
             $aDocumentosEncerramento[$key] = $oDocumento->c53_coddoc;
         }
 
@@ -192,11 +192,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
          * Tratamento para o encerramento do exercicio
          */
 
-        if($this->bEncerramento){
-            $sEncerramento      = "TRUE";
+        if ($this->bEncerramento) {
+            $sEncerramento = "TRUE";
             $sWhereEncerramento = "";
         } else {
-            $sEncerramento      = "FALSE";
+            $sEncerramento = "FALSE";
             $sWhereEncerramento = " AND conhistdoc.c53_tipo not in (1000) ";
         }
 
@@ -404,6 +404,40 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 					  inner join infocomplementares on si09_instit = si08_instit
 					  where o58_instit = " . db_getsession('DB_instit') . " and o58_anousu = " . db_getsession("DB_anousu");
                     $nContaCorrente = 101;
+
+                } else if (substr($oContas10->si177_contacontaabil, 0, 5) == '62213') {
+
+                    $sSqlDotacoes = "select distinct o58_coddot as c73_coddot,
+                                    si09_codorgaotce as codorgao,
+                                    case when o41_subunidade != 0 or not null then
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
+					                o58_funcao as codfuncao,
+					                o58_subfuncao as codsubfuncao,
+					                o58_programa as codprograma,
+					                o58_projativ as idacao,
+					                o55_origemacao as idsubacao,
+					                substr(o56_elemento,2,6) as naturezadadespesa,
+					                substr(o56_elemento,8,2) as subelemento,
+								    o15_codtri as codfontrecursos,
+								    e60_numemp
+					  from conlancamval
+					  inner join contacorrentedetalheconlancamval on c69_sequen = c28_conlancamval
+					  inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
+					  inner join empempenho on c19_numemp = e60_numemp
+					  join empelemento on e64_numemp = e60_numemp
+					  join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
+					  join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+					  join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+					  join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+					  JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
+					  JOIN orctiporec ON o58_codigo = o15_codigo
+					  left join infocomplementaresinstit on  o58_instit = si09_instit
+					  where o58_instit = " . db_getsession('DB_instit') . " and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}
+					  and (c69_credito in (" . implode(',', $oContas10->contas) . ") or c69_debito in (" . implode(',', $oContas10->contas) . "))";
+                    //where DATE_PART('YEAR',c73_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c73_data) <= {$nMes} and substr(o56_elemento,2,6) = '319011' and o15_codtri = '100' and o58_projativ = 2007 and substr(o56_elemento,8,2) = '05'";
+
+                    $nContaCorrente = 102;
 
                 } else {
 
@@ -1169,9 +1203,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                         from dotacaorpsicom
                                                        where si177_numemp = {$oReg14->numemp}";
 
-                                if(pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0){
+                                if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
 
-                                    $aDotacaoRpSicom      = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+                                    $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
 
                                     $obalancete14->si181_codorgao = $aDotacaoRpSicom[0]->si177_codorgaotce;
                                     $obalancete14->si181_codunidadesub = $aDotacaoRpSicom[0]->si177_codunidadesub;
@@ -1510,7 +1544,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                             $oReg17Saldo = db_utils::fieldsMemory($rsReg17saldos, $iContSaldo17);
 
-                            if (!( $oReg17Saldo->saldoanterior == 0 && $oReg17Saldo->debitos == 0 && $oReg17Saldo->creditos == 0)) {
+                            if (!($oReg17Saldo->saldoanterior == 0 && $oReg17Saldo->debitos == 0 && $oReg17Saldo->creditos == 0)) {
 
                                 $oReg17Saldo->saldoanterior = $oReg17Saldo->naturezasaldoinicialctb == 'C' ? $oReg17Saldo->saldoanterior * -1 : $oReg17Saldo->saldoanterior;
 
@@ -1589,7 +1623,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                 $oReg17Saldo = db_utils::fieldsMemory($rsReg17saldos, $iContSaldo17);
 
-                                if (!( $oReg17Saldo->saldoanterior == 0 && $oReg17Saldo->debitos == 0 && $oReg17Saldo->creditos == 0)) {
+                                if (!($oReg17Saldo->saldoanterior == 0 && $oReg17Saldo->debitos == 0 && $oReg17Saldo->creditos == 0)) {
 
                                     $oReg17Saldo->saldoanterior = $oReg17Saldo->naturezasaldoinicialctb == 'C' ? $oReg17Saldo->saldoanterior * -1 : $oReg17Saldo->saldoanterior;
 
