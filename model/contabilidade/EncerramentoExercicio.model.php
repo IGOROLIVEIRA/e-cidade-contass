@@ -604,7 +604,7 @@ class EncerramentoExercicio {
             $nSaldoAnt = ($aSaldo[0]->saldoanterior == "" ? 0 : $aSaldo[0]->saldoanterior);
             $nDebitos  = ($aSaldo[0]->debitos == "" ? 0 : $aSaldo[0]->debitos);
             $nCreditos = ($aSaldo[0]->creditos == "" ? 0 : $aSaldo[0]->creditos);
-            $nValorFinal = $nSaldoAnt + $nDebitos - $nCreditos;
+            $nValorFinal = number_format(($nSaldoAnt + $nDebitos - $nCreditos),2,".","");
 
             /**
              * Inverção do saldo da conta referência para o lançamento correto na conta credora.
