@@ -553,7 +553,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 						        	$clops13->si135_tiporegistro 		= $reg13->tiporegistro;
 						        	$clops13->si135_codreduzidoop 		= $reg11->codreduzidoop;
 						        	$clops13->si135_tiporetencao 		= $reg13->tiporetencao;
-						        	$clops13->si135_descricaoretencao 	= $reg13->descricaoretencao;
+						        	$clops13->si135_descricaoretencao 	= substr($reg13->descricaoretencao,0,50);
 						        	$clops13->si135_vlretencao 			= $reg13->vlrentencao;
 						        	$clops13->si135_mes 				= $this->sDataFinal['5'].$this->sDataFinal['6'];
 							        $clops13->si135_reg10				= $clops10->si132_sequencial;
@@ -572,7 +572,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 						        $clops13->si135_tiporegistro 		= $oOps23ag->si135_tiporegistro;
 						        $clops13->si135_codreduzidoop 		= $oOps23ag->si135_codreduzidoop;
 						        $clops13->si135_tiporetencao 		= $oOps23ag->si135_tiporetencao;
-						        $clops13->si135_descricaoretencao 	= $oOps23ag->si135_descricaoretencao;
+						        $clops13->si135_descricaoretencao 	= substr($oOps23ag->si135_descricaoretencao,0,50);
 						        $clops13->si135_vlretencao 			= $oOps23ag->si135_vlretencao;
 						        $clops13->si135_mes 				= $oOps23ag->si135_mes;
 							    $clops13->si135_reg10				= $oOps23ag->si135_reg10;
@@ -991,7 +991,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 						        	$clops13->si135_tiporegistro 		= $reg13->tiporegistro;
 						        	$clops13->si135_codreduzidoop 		= $reg11->codreduzidoop;
 						        	$clops13->si135_tiporetencao 		= $reg13->tiporetencao;
-						        	$clops13->si135_descricaoretencao 	= $reg13->descricaoretencao;
+						        	$clops13->si135_descricaoretencao 	= substr($reg13->descricaoretencao,0,50);
 						        	$clops13->si135_vlretencao 			= $reg13->vlrentencao;
 						        	$clops13->si135_mes 				= $this->sDataFinal['5'].$this->sDataFinal['6'];
 							        $clops13->si135_reg10				= $clops10->si132_sequencial;
@@ -1010,7 +1010,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 						        $clops13->si135_tiporegistro 		= $oOps23ag->si135_tiporegistro;
 						        $clops13->si135_codreduzidoop 		= $oOps23ag->si135_codreduzidoop;
 						        $clops13->si135_tiporetencao 		= $oOps23ag->si135_tiporetencao;
-						        $clops13->si135_descricaoretencao 	= $oOps23ag->si135_descricaoretencao;
+						        $clops13->si135_descricaoretencao 	= substr($oOps23ag->si135_descricaoretencao,0,50);
 						        $clops13->si135_vlretencao 			= $oOps23ag->si135_vlretencao;
 						        $clops13->si135_mes 				= $oOps23ag->si135_mes;
 							    $clops13->si135_reg10				= $oOps23ag->si135_reg10;

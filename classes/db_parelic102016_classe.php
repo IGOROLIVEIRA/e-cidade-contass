@@ -87,6 +87,15 @@ class cl_parelic102016 {
    // funcao para inclusao
    function incluir ($si66_sequencial){ 
       $this->atualizacampos();
+       if(strlen($this->si66_nrocpf) > 11 ){
+           $this->erro_sql = " Campo Cpf do responsável não pode ser um cnpj. Favor corrigir no cadastro do parecer. Processo Licitatório $this->si66_nroprocessolicitatorio / $this->si66_exerciciolicitacao";
+           $this->erro_campo = "si66_nrocpf";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
      if($this->si66_tiporegistro == null ){ 
        $this->erro_sql = " Campo Tipo do  registro nao Informado.";
        $this->erro_campo = "si66_tiporegistro";

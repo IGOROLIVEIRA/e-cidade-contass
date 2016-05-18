@@ -40,7 +40,7 @@ $clparecerlicitacao = new cl_parecerlicitacao;
            if(file_exists("funcoes/db_func_parecerlicitacao.php")==true){
              include("funcoes/db_func_parecerlicitacao.php");
            }else{
-           $campos = "l200_sequencial,l20_codigo, l200_licitacao,
+           $campos = "l200_sequencial,l20_codigo, l200_licitacao,(select l20_edital::varchar||'/'||l20_anousu::varchar from liclicita where l20_codigo=l200_licitacao) as l20_edital,
 case when l20_codtipocom = 14 then 'TOMADA DE PREÇO'
         when l20_codtipocom = 15 then 'CONVITE'
         when l20_codtipocom = 16 then 'CONCORRENCIA'
