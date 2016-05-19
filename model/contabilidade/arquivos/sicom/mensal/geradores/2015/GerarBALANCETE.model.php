@@ -164,8 +164,8 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE14['si181_tiporegistro'] = str_pad($aBALACETE14['si181_tiporegistro'], 2, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_contacontabil'] = str_pad($aBALACETE14['si181_contacontabil'], 9, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codorgao'] = str_pad($aBALACETE14['si181_codorgao'], 2, "0", STR_PAD_LEFT);
-                        $aCSVBALANCETE14['si181_codunidadesub'] = str_pad($aBALACETE14['si181_codunidadesub'], 5, "0", STR_PAD_LEFT);
-                        $aCSVBALANCETE14['si181_codunidadesuborig'] = str_pad($aBALACETE14['si181_codunidadesuborig'], 5, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE14['si181_codunidadesub'] = str_pad($aBALACETE14['si181_codunidadesub'], (strlen($aBALACETE14['si181_codunidadesub']) <= 5 ? 5 : 8) , "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE14['si181_codunidadesuborig'] = str_pad($aBALACETE14['si181_codunidadesuborig'], (strlen($aBALACETE14['si181_codunidadesuborig']) <= 5 ? 5 : 8), "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codfuncao'] = str_pad($aBALACETE14['si181_codfuncao'], 2, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codsubfuncao'] = str_pad($aBALACETE14['si181_codsubfuncao'], 3, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codprograma'] = str_pad($aBALACETE14['si181_codprograma'], 4, "0", STR_PAD_LEFT);
