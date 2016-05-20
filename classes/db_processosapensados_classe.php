@@ -448,12 +448,13 @@ class cl_processosapensados {
       $sql .= $campos;
     }
     $sql .= " from processosapensados ";
-    $sql .= "      inner join protprocesso  on protprocesso.p58_codproc = processosapensados.p30_procprincipal";
-    $sql .= "      inner join cgm           on  cgm.z01_numcgm          = protprocesso.p58_numcgm";
-    $sql .= "      inner join db_config     on  db_config.codigo        = protprocesso.p58_instit";
-    $sql .= "      inner join db_usuarios   on  db_usuarios.id_usuario  = protprocesso.p58_id_usuario";
-    $sql .= "      inner join db_depart     on  db_depart.coddepto      = protprocesso.p58_coddepto";
-    $sql .= "      inner join tipoproc      on  tipoproc.p51_codigo     = protprocesso.p58_codigo";
+    $sql .= "      inner join protprocesso as principal ON principal.p58_codproc = processosapensados.p30_procprincipal";
+    $sql .= "      inner join protprocesso as apensado ON apensado.p58_codproc = processosapensados.p30_procapensado";
+    $sql .= "      inner join cgm           on  cgm.z01_numcgm          = principal.p58_numcgm";
+    $sql .= "      inner join db_config     on  db_config.codigo        = principal.p58_instit";
+    $sql .= "      inner join db_usuarios   on  db_usuarios.id_usuario  = principal.p58_id_usuario";
+    $sql .= "      inner join db_depart     on  db_depart.coddepto      = principal.p58_coddepto";
+    $sql .= "      inner join tipoproc      on  tipoproc.p51_codigo     = principal.p58_codigo";
     $sql2 = "";
     if ($dbwhere == "") {
        

@@ -137,7 +137,13 @@ try {
  */
 function buscaProcessosApensados ($iProcesso) {
   
-  $sCampos = " p30_procprincipal, p30_procapensado, p58_requer";
+  $sCampos = " distinct p30_procprincipal,
+               p30_procapensado,
+               principal.p58_requer,
+               principal.p58_numero AS protocologeral,
+               principal.p58_ano as anoprotocologeral,
+               apensado.p58_numero AS protocologeralapensado,
+               apensado.p58_ano as anoprotocologeralapensado";
   $sWhere  = " p30_procprincipal = {$iProcesso}";
    
   $oDaoProcessoApensado = db_utils::getDao("processosapensados");
