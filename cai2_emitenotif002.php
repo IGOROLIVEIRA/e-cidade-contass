@@ -488,7 +488,7 @@ if (!isset($notifparc)) {
     $sSql .= "        z01_nome                                                 ";
     $sSql .= "      $xxordem                                                   ";
   }
-
+  db_query("SELECT FC_PUTSESSION('DB_instit','".db_getsession('DB_instit')."');");
   $result = db_query($sSql) or die($sSql);
 
   if (pg_numrows($result) == 0){
