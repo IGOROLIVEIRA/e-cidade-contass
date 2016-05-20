@@ -84,7 +84,7 @@ class cl_rhpessoal {
    var $rh01_observacao = null;
    var $rh01_rhsindicato = 0;
    var $rh01_reajusteparidade = 0;
-   var $rh01_sicom = 0;
+   var $rh01_sicom = 1;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  rh01_regist = int4 = Matrícula
