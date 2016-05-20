@@ -90,16 +90,16 @@ switch($oParam->exec) {
       /**
        * Verificar se existe pelo menos um pdf de leis antes de tentar processar
        */
-      if (!file_exists("PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf") && !file_exists("LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf") 
-            && !file_exists("LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf")) {
+      if (!file_exists("PPA{$iAnoReferencia}.pdf") && !file_exists("LDO{$iAnoReferencia}.pdf") 
+            && !file_exists("LOA{$iAnoReferencia}.pdf")) {
       	$oRetorno->status  = 2;
         $sGetMessage       = "Envie os arquivos das Leis antes de processar!";
         $oRetorno->message = urlencode(str_replace("\\n", "\n",$sGetMessage));
         break;
     	}
-      $oEscritorCSV->adicionarArquivo("PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
-      $oEscritorCSV->adicionarArquivo("LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
-    	$oEscritorCSV->adicionarArquivo("LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf", "LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf");
+      $oEscritorCSV->adicionarArquivo("PPA{$iAnoReferencia}.pdf", "PPA{$iAnoReferencia}.pdf");
+      $oEscritorCSV->adicionarArquivo("LDO{$iAnoReferencia}.pdf", "LDO{$iAnoReferencia}.pdf");
+    	$oEscritorCSV->adicionarArquivo("LOA{$iAnoReferencia}.pdf", "LOA{$iAnoReferencia}.pdf");
     	$oEscritorCSV->zip("LEIS_{$sInst}_{$iAnoReferencia}");
     	
     	$oEscritorCSV = new padArquivoEscritorCSV();
@@ -504,17 +504,69 @@ switch($oParam->exec) {
 
   case "processarLCF" :
 
-    $aListaArquivos .= " ".$oArquivo->caminho;
-    //print_r($aListaArquivos);
-    system("rm -f DECRETOSLEIS_{$sInst}_{$mesReferencia}_{$iAnoReferencia}.zip");
-    system("bin/zip -q DECRETOSLEIS_{$sInst}_{$mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
-    //echo $aListaArquivos;
-    $oArquivoZip = new stdClass();
-    $oArquivoZip->nome    = "DECRETOSLEIS_{$sInst}_{$mesReferencia}_{$iAnoReferencia}.zip";
-    $oArquivoZip->caminho = "DECRETOSLEIS_{$sInst}_{$mesReferencia}_{$iAnoReferencia}.zip";
-    $aArrayArquivos[] = $oArquivoZip;
+    $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
+    $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
+    $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
 
-    $oRetorno->itens  = $aArrayArquivos;
+    $sSql = "SELECT db21_codigomunicipoestado FROM db_config WHERE codigo = " . db_getsession('DB_instit');
+
+    $rsInst = db_query($sSql);
+    $sInst = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
+
+    $iAnoReferencia = db_getsession('DB_anousu');
+
+    $oEscritorCSV = new padArquivoEscritorCSV();
+    /**
+     * Só vai gerar esses arquivos se os mesmos existirem
+     */
+    if (file_exists("LAO_{$iAnoReferencia}.pdf") || file_exists("LAOP_{$iAnoReferencia}.pdf")) {
+      $oEscritorCSV->adicionarArquivo("LAO_{$iAnoReferencia}.pdf", "LAO_{$iAnoReferencia}.pdf");
+      $oEscritorCSV->adicionarArquivo("LAOP_{$iAnoReferencia}.pdf", "LAOP_{$iAnoReferencia}.pdf");
+    }
+    if(isset($oParam->arquivos[0])) {
+      /**
+       * Nova lógica para gerar o DEC
+       */
+      /*
+       * Sql que busca os decretos do mes
+       */
+      $sSqlDecretosMes = "select  distinct o39_codproj as codigovinc,
+       '10' as tiporegistro,
+	     si09_codorgaotce as codorgao,
+	     o39_numero as nroDecreto,
+	     o39_data as dataDecreto,o39_tipoproj as tipodecreto
+       from
+       orcsuplem
+       join orcsuplemval  on o47_codsup = o46_codsup
+       join orcprojeto    on o46_codlei = o39_codproj
+       join db_config on prefeitura  = 't'
+       left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
+     where o39_data between  '$sDataInicial' and '$sDataFinal'";
+      $aDecretos = db_utils::getColectionByRecord(db_query($sSqlDecretosMes));
+
+      require_once("model/contabilidade/arquivos/sicom/mensal/" . db_getsession("DB_anousu") . "/SicomArquivoLegislacaoCaraterFinanceiro.model.php");
+      $oArquivo = new SicomArquivoLegislacaoCaraterFinanceiro;
+
+      foreach ($aDecretos as $objDecretos) {
+
+        /**
+         * Para cada decreto:
+         * 1. Gerar o PDF com o nome conforme o layout com o output para salvar o arquivo na pasta raiz do e-cidade
+         * 2. Incluir esse pdf no EscritorCSV
+         */
+
+        $sNomeArquivo = "DEC_".trim(preg_replace("/[^0-9\s]/", "", $objDecretos->nrodecreto))."_".db_getsession("DB_anousu").".pdf";
+        $oArquivo->gerarDecretoPdf($objDecretos->codigovinc, $sNomeArquivo);
+        $oEscritorCSV->adicionarArquivo($sNomeArquivo, $sNomeArquivo);
+      }
+      /*
+       * Fim Lógiga gerar o DEC
+       */
+    }
+    $oEscritorCSV->zip("DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}");
+    $oEscritorCSV->adicionarArquivo("tmp/DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+
+    $oRetorno->itens = $oEscritorCSV->getListaArquivos();
 
     break;
 

@@ -38,7 +38,7 @@ $clrotulo->label("o15_codigo");
 <body bgcolor="#cccccc" style="margin-top: 25px;">
 <center>
 
-    <form name="form1" method="post" action="">
+    <form name="form1" method="post" action="" enctype='multipart/form-data'>
         <div style="display: table">
             <fieldset>
                 <legend>
@@ -94,10 +94,10 @@ $clrotulo->label("o15_codigo");
                                                 </td>
                                                 <td>
                                                     <input type="file" name="LAO" />
-                                                    <div id="recebe_up_ppa" class="recebe">&nbsp;</div>
+                                                    <div id="recebe_up_lao" class="recebe">&nbsp;</div>
                                                 </td>
                                                 <td>
-                                                    <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis_lcf.php?nome_campo=LAO&ano_usu=<?=db_getsession("DB_anousu") ?>','recebe_up_ppa','Carregando...','Erro ao carregar')" />
+                                                    <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis_lcf.php?nome_campo=LAO&ano_usu=<?=db_getsession("DB_anousu") ?>','recebe_up_lao','Carregando...','Erro ao carregar')" />
                                                     <div>&nbsp;</div>
                                                 </td>
                                             </tr>
@@ -108,27 +108,19 @@ $clrotulo->label("o15_codigo");
                                                 </td>
                                                 <td>
                                                     <input type="file" name="LAOP" />
-                                                    <div id="recebe_up_ldo" class="recebe">&nbsp;</div>
+                                                    <div id="recebe_up_laop" class="recebe">&nbsp;</div>
 
                                                 </td>
                                                 <td>
-                                                    <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis_lcf.php?nome_campo=LAOP&ano_usu=<?=db_getsession("DB_anousu") ?>','recebe_up_ldo','Carregando...','Erro ao carregar')" />
+                                                    <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis_lcf.php?nome_campo=LAOP&ano_usu=<?=db_getsession("DB_anousu") ?>','recebe_up_laop','Carregando...','Erro ao carregar')" />
                                                     <div>&nbsp;</div>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    Lei REC:
-                                                    <div>&nbsp;</div>
-                                                </td>
-                                                <td>
-                                                    <input type="file" name="REC" />
-                                                    <div id="recebe_up_loa" class="recebe">&nbsp;</div>
+                                                <td valign="top">
+                                                    <input type="checkbox" value="DEC" id="DEC" />
+                                                    <label for="DEC">Decretos</label><br>
 
-                                                </td>
-                                                <td>
-                                                    <input type="button" value="Enviar" onclick="micoxUpload(this.form,'upload_leis_lcf.php?nome_campo=REC&ano_usu=<?=db_getsession("DB_anousu") ?>','recebe_up_loa','Carregando...','Erro ao carregar')" />
-                                                    <div>&nbsp;</div>
                                                 </td>
                                             </tr>
                                         </table>
@@ -165,7 +157,7 @@ $clrotulo->label("o15_codigo");
         /*
          * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
          */
-        /*aArquivos.each(function (oElemento, iIndice) {
+        aArquivos.each(function (oElemento, iIndice) {
 
             if (oElemento.checked) {
                 aArquivosSelecionados.push(oElemento.value);
@@ -175,10 +167,11 @@ $clrotulo->label("o15_codigo");
 
             alert("Nenhum arquivo foi selecionado para ser gerado");
             return false;
-        }*/
+        }
         js_divCarregando('Aguarde, processando arquivos','msgBox');
         var oParam           = new Object();
         oParam.exec          = "processarLCF";
+        oParam.arquivos      = aArquivosSelecionados;
         oParam.mesReferencia = iMesReferencia.value;
         var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
             {
