@@ -168,7 +168,10 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
             $where = " c61_instit in (" . db_getsession("DB_instit") . ") ";
             $where .= " and c61_reduz = " . $oContaExtraSaldo->codext . " and c61_reduz != 0";
 
-db_query("drop table if EXISTS work_pl");
+            /**
+             * Comando adicionado para excluir tabela temporária que, ao gerar o arquivo juntamente com outros que utilizam essa função, traz valores diferentes
+             */
+            db_query("drop table if EXISTS work_pl");
             db_inicio_transacao();
             $rsPlanoContasSaldo = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, $where);
             //db_criatabela($rsPlanoContasSaldo);

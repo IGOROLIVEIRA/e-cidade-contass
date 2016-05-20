@@ -116,7 +116,11 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
     	
     	$where  = " c61_instit in (".db_getsession("DB_instit").") and c60_codsis in (5) ";
     	$where .= "and c61_codcon = ".$oContas->c60_codcon;
- 
+
+		/**
+		 * Comando adicionado para excluir tabela temporária que, ao gerar o arquivo juntamente com outros que utilizam essa função, traz valores diferentes
+		 */
+		db_query("drop table if EXISTS work_pl");
         $rsPlanoContas = db_planocontassaldo(db_getsession("DB_anousu"),$this->sDataInicial,$this->sDataFinal,false,$where);
     	//db_criatabela($rsPlanoContas);
         for ($iContPlano = 0; $iContPlano < pg_num_rows($rsPlanoContas);$iContPlano++) {
