@@ -27,7 +27,7 @@ class cl_ext302016 {
    var $si126_dtpagamento_ano = null; 
    var $si126_dtpagamento = null; 
    var $si126_tipodocumentocredor = 0; 
-   var $si126_nrodocumento = null; 
+   var $si126_nrodocumentocredor = null;
    var $si126_vlop = 0; 
    var $si126_especificacaoop = null; 
    var $si126_cpfresppgto = null; 
@@ -45,7 +45,7 @@ class cl_ext302016 {
                  si126_codunidadesub = varchar(8) = Código da unidade ou subunidade orçamentária
                  si126_dtpagamento = date = Data de  pagamento da  OP 
                  si126_tipodocumentocredor = int8 = Tipo de  Documento do  credor 
-                 si126_nrodocumento = varchar(14) = Número do documento do credor 
+                 si126_nrodocumentocredor = varchar(14) = Número do documento do credor
                  si126_vlop = float8 = Valor da OP 
                  si126_especificacaoop = varchar(200) = Especificação da  OP 
                  si126_cpfresppgto = varchar(11) = CPF do  responsável 
@@ -85,7 +85,7 @@ class cl_ext302016 {
          }
        }
        $this->si126_tipodocumentocredor = ($this->si126_tipodocumentocredor == ""?@$GLOBALS["HTTP_POST_VARS"]["si126_tipodocumentocredor"]:$this->si126_tipodocumentocredor);
-       $this->si126_nrodocumento = ($this->si126_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si126_nrodocumento"]:$this->si126_nrodocumento);
+       $this->si126_nrodocumentocredor = ($this->si126_nrodocumentocredor == ""?@$GLOBALS["HTTP_POST_VARS"]["si126_nrodocumentocredor"]:$this->si126_nrodocumentocredor);
        $this->si126_vlop = ($this->si126_vlop == ""?@$GLOBALS["HTTP_POST_VARS"]["si126_vlop"]:$this->si126_vlop);
        $this->si126_especificacaoop = ($this->si126_especificacaoop == ""?@$GLOBALS["HTTP_POST_VARS"]["si126_especificacaoop"]:$this->si126_especificacaoop);
        $this->si126_cpfresppgto = ($this->si126_cpfresppgto == ""?@$GLOBALS["HTTP_POST_VARS"]["si126_cpfresppgto"]:$this->si126_cpfresppgto);
@@ -201,7 +201,7 @@ class cl_ext302016 {
                                ,$this->si126_codfontrecursos
                                ,".($this->si126_dtpagamento == "null" || $this->si126_dtpagamento == ""?"null":"'".$this->si126_dtpagamento."'")." 
                                ,$this->si126_tipodocumentocredor 
-                               ,'$this->si126_nrodocumento' 
+                               ,'$this->si126_nrodocumentocredor' 
                                ,$this->si126_vlop 
                                ,'$this->si126_especificacaoop' 
                                ,'$this->si126_cpfresppgto' 
@@ -317,8 +317,8 @@ class cl_ext302016 {
        $sql  .= $virgula." si126_tipodocumentocredor = $this->si126_tipodocumentocredor ";
        $virgula = ",";
      }
-     if(trim($this->si126_nrodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si126_nrodocumento"])){ 
-       $sql  .= $virgula." si126_nrodocumento = '$this->si126_nrodocumento' ";
+     if(trim($this->si126_nrodocumentocredor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si126_nrodocumentocredor"])){
+       $sql  .= $virgula." si126_nrodocumentocredor = '$this->si126_nrodocumentocredor' ";
        $virgula = ",";
      }
      if(trim($this->si126_vlop)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si126_vlop"])){ 
