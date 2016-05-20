@@ -5,7 +5,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_identificacaoresponsaveis_classe.php");
 include("dbforms/db_funcoes.php");
-if (db_getsession("DB_anousu") < 2014) {
+if (db_getsession("DB_anousu") < 2014 && db_getsession("DB_modulo") != 952) {
 echo "<script>
                                    top.corpo.location.href='con4_sicomidentresponsavel.php';
                                 </script>";
