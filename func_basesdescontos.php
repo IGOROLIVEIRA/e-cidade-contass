@@ -70,7 +70,7 @@ $clbases->rotulo->label("r08_descr");
 </form>
 
 <?
-$db_where = "r08_instit = ".db_getsession("DB_instit")." and r08_anousu = ".db_anofolha()." and r08_mesusu = ".db_mesfolha()." and r08_codigo >= 'S050%' and r08_codigo <= 'S076%' or r08_codigo = 'SD99'  ";
+$db_where = "r08_instit = ".db_getsession("DB_instit")." and r08_anousu = ".db_anofolha()." and r08_mesusu = ".db_mesfolha()." and (r08_codigo >= 'S05%' and r08_codigo <= 'S076%' or r08_codigo = 'SD99')  ";
 
 if(!isset($pesquisa_chave)){
     if(isset($campos)==false){
