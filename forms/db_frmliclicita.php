@@ -433,14 +433,14 @@ fieldset table tr > td {
     </td>
     <td> 
        <?
-        $al20_critdesempate = array("1"=>"Sim","2"=>"Não");
+        $al20_critdesempate = array("2"=>"Não","1"=>"Sim");
         db_select("l20_critdesempate",$al20_critdesempate,true,$db_opcao);
        ?>
        <td>
        <?=@$Ll20_subcontratacao?>
        </td>
        <td>
-       <?$al20_subcontratacao = array("1"=>"Sim","2"=>"Não");
+       <?$al20_subcontratacao = array("2"=>"Não","1"=>"Sim");
         db_select("l20_subcontratacao",$al20_subcontratacao,true,$db_opcao);
        ?>
        </td>
@@ -452,14 +452,14 @@ fieldset table tr > td {
     </td>
     <td> 
        <?
-        $al20_destexclusiva = array("1"=>"Sim","2"=>"Não");
+        $al20_destexclusiva = array("2"=>"Não","1"=>"Sim");
         db_select("l20_destexclusiva",$al20_destexclusiva,true,$db_opcao);
        ?>
        <td>
        <?=@$Ll20_limitecontratacao?>
        </td>
        <td>
-       <?$al20_limitcontratacao = array("1"=>"Sim","2"=>"Não");
+       <?$al20_limitcontratacao = array("2"=>"Não","1"=>"Sim");
         db_select("l20_limitcontratacao",$al20_limitcontratacao,true,$db_opcao);
        ?>
        </td>
@@ -776,11 +776,6 @@ fieldset table tr > td {
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
-document.form1.l20_descontotab.options[1].selected = true;
-document.form1.l20_critdesempate.options[1].selected = true;
-document.form1.l20_limitcontratacao.options[1].selected = true;
-document.form1.l20_destexclusiva.options[1].selected = true;
-document.form1.l20_subcontratacao.options[1].selected = true;
 document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
 document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
 document.form1.l20_local.style.backgroundColor = '#E6E4F1';
@@ -1405,14 +1400,7 @@ if(campo=='2'){
 	$('l20_usaregistropreco').disabled="disabled";
 }
 
-/* 
- *devido a maioria dos usuarios do sistema possuirem  os dados adicionais como não , automaticamente o sistema seta como nao 
- */
- document.getElementById('l20_critdesempate').value = 2;
- document.getElementById('l20_destexclusiva').value = 2;
- document.getElementById('l20_subcontratacao').value = 2;
- document.getElementById('l20_limitcontratacao').value = 2;
- document.getElementById('l20_naturezaobjeto').value = 2;
+
 
  $('l20_descontotab').value='2';
  
