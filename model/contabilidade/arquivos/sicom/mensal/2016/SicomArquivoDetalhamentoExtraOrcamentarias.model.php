@@ -168,7 +168,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
             $where = " c61_instit in (" . db_getsession("DB_instit") . ") ";
             $where .= " and c61_reduz = " . $oContaExtraSaldo->codext . " and c61_reduz != 0";
 
-
+db_query("drop table if EXISTS work_pl");
             db_inicio_transacao();
             $rsPlanoContasSaldo = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, $where);
             //db_criatabela($rsPlanoContasSaldo);
@@ -306,7 +306,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                     $cExt20->si165_codext = $oExt10Agrupado->si124_codext;
                     $cExt20->si165_codfontrecursos = $oExtRecurso;
                     $cExt20->si165_vlsaldoanteriorfonte = $saldoanterior;
-                    $cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte == '' ? 'D' : $natsaldoanteriorfonte;
+                    $cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte == '' ? 'C' : $natsaldoanteriorfonte;
                     $cExt20->si165_vlsaldoatualfonte = $saldofinal;
                     $cExt20->si165_natsaldoatualfonte = $natsaldoatualfonte == '' || $saldofinal == 0 ? 'C' : $natsaldoatualfonte;
                     $cExt20->si165_totaldebitos = $saldodebito;
@@ -407,7 +407,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                         $cExt30->si126_codunidadesub = $oExt30->codunidadesub;
                         $cExt30->si126_dtpagamento = $oExt30->dtpagamento;
                         $cExt30->si126_tipodocumentocredor = strlen($oExt30->nrodocumentocredor) == 11 ? 1 : 2;
-                        $cExt30->si126_nrodocumento = $oExt30->nrodocumentocredor;
+                        $cExt30->si126_nrodocumentocredor = $oExt30->nrodocumentocredor;
                         $cExt30->si126_vlop = $oExt30->vlop;
                         $cExt30->si126_especificacaoop = trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oExt30->especificacaoop), 0, 200)));
                         $cExt30->si126_cpfresppgto = $oExt30->cpfresppgto;
@@ -591,7 +591,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                     $cExt30->si126_codunidadesub = $oExt30agrupado->si126_codunidadesub;
                     $cExt30->si126_dtpagamento = $oExt30agrupado->si126_dtpagamento;
                     $cExt30->si126_tipodocumentocredor = $oExt30agrupado->si126_tipodocumentocredor;
-                    $cExt30->si126_nrodocumento = $oExt30agrupado->si126_nrodocumento;
+                    $cExt30->si126_nrodocumentocredor = $oExt30agrupado->si126_nrodocumentocredor;
                     $cExt30->si126_vlop = $oExt30agrupado->si126_vlop;
                     $cExt30->si126_especificacaoop = substr($this->removeCaracteres($oExt30agrupado->si126_especificacaoop), 0, 200);
                     $cExt30->si126_cpfresppgto = $oExt30agrupado->si126_cpfresppgto;
