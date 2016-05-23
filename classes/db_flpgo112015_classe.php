@@ -18,11 +18,10 @@ class cl_flpgo112015 {
   // cria variaveis do arquivo 
   var $si196_sequencial = 0;
   var $si196_tiporegistro = 0;
-  var $si196_numcpf = 0;
+  var $si196_nrodocumento = 0;
   var $si196_codreduzidopessoa = 0;
   var $si196_tiporemuneracao = 0;
-  var $si196_descoutros = null;
-  var $si196_natsaldodetalhe = null;
+  var $si196_desctiporemuneracao = null;
   var $si196_vlrremuneracaodetalhada = 0;
   var $si196_mes = 0;
   var $si196_inst = 0;
@@ -32,11 +31,10 @@ class cl_flpgo112015 {
   var $campos = "
                  si196_sequencial = int8 = si196_sequencial 
                  si196_tiporegistro = int8 = Tipo registro 
-                 si196_numcpf = int8 = Número do CPF
+                 si196_nrodocumento = int8 = Número do CPF ou CNPJ
                  si196_codreduzidopessoa = int8 = Código identificador da pessoa
                  si196_tiporemuneracao = int8 = Tipo da remuneração 
-                 si196_descoutros = varchar(150) = Descrição para o tipo outros 
-                 si196_natsaldodetalhe = varchar(1) = Natureza do saldo remuneratório 
+                 si196_desctiporemuneracao = varchar(150) = Descrição para o tipo outros
                  si196_vlrremuneracaodetalhada = float8 = Valor dos rendimentos por tipo 
                  si196_mes = int8 = si196_mes 
                  si196_inst = int8 = si196_inst 
@@ -62,10 +60,9 @@ class cl_flpgo112015 {
     if($exclusao==false){
       $this->si196_sequencial = ($this->si196_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_sequencial"]:$this->si196_sequencial);
       $this->si196_tiporegistro = ($this->si196_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tiporegistro"]:$this->si196_tiporegistro);
-      $this->si196_numcpf = ($this->si196_numcpf == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_numcpf"]:$this->si196_numcpf);
+      $this->si196_nrodocumento = ($this->si196_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_nrodocumento"]:$this->si196_nrodocumento);
       $this->si196_tiporemuneracao = ($this->si196_tiporemuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tiporemuneracao"]:$this->si196_tiporemuneracao);
-      $this->si196_descoutros = ($this->si196_descoutros == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_descoutros"]:$this->si196_descoutros);
-      $this->si196_natsaldodetalhe = ($this->si196_natsaldodetalhe == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_natsaldodetalhe"]:$this->si196_natsaldodetalhe);
+      $this->si196_desctiporemuneracao = ($this->si196_desctiporemuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_desctiporemuneracao"]:$this->si196_desctiporemuneracao);
       $this->si196_vlrremuneracaodetalhada = ($this->si196_vlrremuneracaodetalhada == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_vlrremuneracaodetalhada"]:$this->si196_vlrremuneracaodetalhada);
       $this->si196_mes = ($this->si196_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_mes"]:$this->si196_mes);
       $this->si196_inst = ($this->si196_inst == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_inst"]:$this->si196_inst);
@@ -86,9 +83,9 @@ class cl_flpgo112015 {
       $this->erro_status = "0";
       return false;
     }
-    if($this->si196_numcpf == null ){
+    if($this->si196_nrodocumento == null ){
       $this->erro_sql = " Campo Número do CPF não informado.";
-      $this->erro_campo = "si196_numcpf";
+      $this->erro_campo = "si196_nrodocumento";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -97,7 +94,7 @@ class cl_flpgo112015 {
     }
     if($this->si196_codreduzidopessoa == null ){
       $this->erro_sql = " Campo codigo reduzido pessoa não informado.";
-      $this->erro_campo = "si196_numcpf";
+      $this->erro_campo = "si196_nrodocumento";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -105,17 +102,8 @@ class cl_flpgo112015 {
       return false;
     }
     if($this->si196_tiporemuneracao == null ){
-      $this->erro_sql = " Campo Tipo da remuneração não informado.";
+      $this->erro_sql = " Campo Tipo da remuneração não informado.". $this->si196_codreduzidopessoa;
       $this->erro_campo = "si196_tiporemuneracao";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if($this->si196_natsaldodetalhe == null ){
-      $this->erro_sql = " Campo Natureza do saldo remuneratório não informado.";
-      $this->erro_campo = "si196_natsaldodetalhe";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -193,11 +181,10 @@ class cl_flpgo112015 {
     $sql = "insert into flpgo112015(
                                        si196_sequencial 
                                       ,si196_tiporegistro
-                                      ,si196_numcpf
+                                      ,si196_nrodocumento
                                       ,si196_codreduzidopessoa
                                       ,si196_tiporemuneracao 
-                                      ,si196_descoutros 
-                                      ,si196_natsaldodetalhe 
+                                      ,si196_desctiporemuneracao
                                       ,si196_vlrremuneracaodetalhada 
                                       ,si196_mes 
                                       ,si196_inst 
@@ -206,11 +193,10 @@ class cl_flpgo112015 {
                 values (
                                 $this->si196_sequencial 
                                ,$this->si196_tiporegistro 
-                               ,$this->si196_numcpf
+                               ,'$this->si196_nrodocumento'
                                ,$this->si196_codreduzidopessoa
                                ,$this->si196_tiporemuneracao 
-                               ,'$this->si196_descoutros' 
-                               ,'$this->si196_natsaldodetalhe' 
+                               ,'$this->si196_desctiporemuneracao'
                                ,$this->si196_vlrremuneracaodetalhada 
                                ,$this->si196_mes 
                                ,$this->si196_inst 
@@ -253,10 +239,9 @@ class cl_flpgo112015 {
         $resac = db_query("insert into db_acountkey values($acount,1009299,'$this->si196_sequencial','I')");
         $resac = db_query("insert into db_acount values($acount,1010196,1009299,'','".AddSlashes(pg_result($resaco,0,'si196_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010196,1009300,'','".AddSlashes(pg_result($resaco,0,'si196_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010196,1009301,'','".AddSlashes(pg_result($resaco,0,'si196_numcpf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        $resac = db_query("insert into db_acount values($acount,1010196,1009301,'','".AddSlashes(pg_result($resaco,0,'si196_nrodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010196,1009302,'','".AddSlashes(pg_result($resaco,0,'si196_tiporemuneracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010196,1009303,'','".AddSlashes(pg_result($resaco,0,'si196_descoutros'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010196,1009304,'','".AddSlashes(pg_result($resaco,0,'si196_natsaldodetalhe'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        $resac = db_query("insert into db_acount values($acount,1010196,1009303,'','".AddSlashes(pg_result($resaco,0,'si196_desctiporemuneracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010196,1009305,'','".AddSlashes(pg_result($resaco,0,'si196_vlrremuneracaodetalhada'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010196,1009306,'','".AddSlashes(pg_result($resaco,0,'si196_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010196,1009307,'','".AddSlashes(pg_result($resaco,0,'si196_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
@@ -296,12 +281,12 @@ class cl_flpgo112015 {
         return false;
       }
     }
-    if(trim($this->si196_numcpf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_numcpf"])){
-      $sql  .= $virgula." si196_numcpf = $this->si196_numcpf ";
+    if(trim($this->si196_nrodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_nrodocumento"])){
+      $sql  .= $virgula." si196_nrodocumento = $this->si196_nrodocumento ";
       $virgula = ",";
-      if(trim($this->si196_numcpf) == null ){
+      if(trim($this->si196_nrodocumento) == null ){
         $this->erro_sql = " Campo Número do CPF não informado.";
-        $this->erro_campo = "si196_numcpf";
+        $this->erro_campo = "si196_nrodocumento";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -322,22 +307,9 @@ class cl_flpgo112015 {
         return false;
       }
     }
-    if(trim($this->si196_descoutros)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_descoutros"])){
-      $sql  .= $virgula." si196_descoutros = '$this->si196_descoutros' ";
+    if(trim($this->si196_desctiporemuneracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_desctiporemuneracao"])){
+      $sql  .= $virgula." si196_desctiporemuneracao = '$this->si196_desctiporemuneracao' ";
       $virgula = ",";
-    }
-    if(trim($this->si196_natsaldodetalhe)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_natsaldodetalhe"])){
-      $sql  .= $virgula." si196_natsaldodetalhe = '$this->si196_natsaldodetalhe' ";
-      $virgula = ",";
-      if(trim($this->si196_natsaldodetalhe) == null ){
-        $this->erro_sql = " Campo Natureza do saldo remuneratório não informado.";
-        $this->erro_campo = "si196_natsaldodetalhe";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
     }
     if(trim($this->si196_vlrremuneracaodetalhada)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_vlrremuneracaodetalhada"])){
       $sql  .= $virgula." si196_vlrremuneracaodetalhada = $this->si196_vlrremuneracaodetalhada ";
@@ -412,14 +384,12 @@ class cl_flpgo112015 {
             $resac = db_query("insert into db_acount values($acount,1010196,1009299,'".AddSlashes(pg_result($resaco,$conresaco,'si196_sequencial'))."','$this->si196_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si196_tiporegistro"]) || $this->si196_tiporegistro != "")
             $resac = db_query("insert into db_acount values($acount,1010196,1009300,'".AddSlashes(pg_result($resaco,$conresaco,'si196_tiporegistro'))."','$this->si196_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_numcpf"]) || $this->si196_numcpf != "")
-            $resac = db_query("insert into db_acount values($acount,1010196,1009301,'".AddSlashes(pg_result($resaco,$conresaco,'si196_numcpf'))."','$this->si196_numcpf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_nrodocumento"]) || $this->si196_nrodocumento != "")
+            $resac = db_query("insert into db_acount values($acount,1010196,1009301,'".AddSlashes(pg_result($resaco,$conresaco,'si196_nrodocumento'))."','$this->si196_nrodocumento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si196_tiporemuneracao"]) || $this->si196_tiporemuneracao != "")
             $resac = db_query("insert into db_acount values($acount,1010196,1009302,'".AddSlashes(pg_result($resaco,$conresaco,'si196_tiporemuneracao'))."','$this->si196_tiporemuneracao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_descoutros"]) || $this->si196_descoutros != "")
-            $resac = db_query("insert into db_acount values($acount,1010196,1009303,'".AddSlashes(pg_result($resaco,$conresaco,'si196_descoutros'))."','$this->si196_descoutros',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_natsaldodetalhe"]) || $this->si196_natsaldodetalhe != "")
-            $resac = db_query("insert into db_acount values($acount,1010196,1009304,'".AddSlashes(pg_result($resaco,$conresaco,'si196_natsaldodetalhe'))."','$this->si196_natsaldodetalhe',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_desctiporemuneracao"]) || $this->si196_desctiporemuneracao != "")
+            $resac = db_query("insert into db_acount values($acount,1010196,1009303,'".AddSlashes(pg_result($resaco,$conresaco,'si196_desctiporemuneracao'))."','$this->si196_desctiporemuneracao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si196_vlrremuneracaodetalhada"]) || $this->si196_vlrremuneracaodetalhada != "")
             $resac = db_query("insert into db_acount values($acount,1010196,1009305,'".AddSlashes(pg_result($resaco,$conresaco,'si196_vlrremuneracaodetalhada'))."','$this->si196_vlrremuneracaodetalhada',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           if(isset($GLOBALS["HTTP_POST_VARS"]["si196_mes"]) || $this->si196_mes != "")
@@ -486,10 +456,9 @@ class cl_flpgo112015 {
           $resac  = db_query("insert into db_acountkey values($acount,1009299,'$si196_sequencial','E')");
           $resac  = db_query("insert into db_acount values($acount,1010196,1009299,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010196,1009300,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010196,1009301,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_numcpf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          $resac  = db_query("insert into db_acount values($acount,1010196,1009301,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_nrodocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010196,1009302,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_tiporemuneracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010196,1009303,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_descoutros'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010196,1009304,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_natsaldodetalhe'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          $resac  = db_query("insert into db_acount values($acount,1010196,1009303,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_desctiporemuneracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010196,1009305,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_vlrremuneracaodetalhada'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010196,1009306,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010196,1009307,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
