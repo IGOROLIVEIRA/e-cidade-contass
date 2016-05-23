@@ -74,6 +74,16 @@ class cl_resplic102016 {
    // funcao para inclusao
    function incluir ($si55_sequencial){ 
       $this->atualizacampos();
+     if(strlen($this->si55_nrocpfresp) > 11 ){
+       $this->erro_sql = " Responsável não pode ser Cnpj. Favor conferir Processo Licitatório: $this->si55_nroprocessolicitatorio/$this->si55_exerciciolicitacao,
+       responsável tipo $this->si55_tiporesp";
+       $this->erro_campo = "si55_nrocpfresp";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($this->si55_tiporegistro == null ){ 
        $this->erro_sql = " Campo Tipo do registro nao Informado.";
        $this->erro_campo = "si55_tiporegistro";

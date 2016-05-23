@@ -195,7 +195,6 @@ class SicomArquivoResponsaveisLicitacao extends SicomArquivoBase implements iPad
 
 		 $clresplic10->incluir(null);
 		  if ($clresplic10->erro_status == 0) {
-		  	echo "<pre>";print_r($clresplic10);
 		  	throw new Exception($clresplic10->erro_msg);
 		  }
 		  if (!in_array($oDados10->codlicitacao, $aLicitacoes)) {
