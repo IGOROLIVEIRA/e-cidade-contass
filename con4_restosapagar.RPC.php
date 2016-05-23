@@ -405,7 +405,7 @@ try {
                                         where c69_codlan in (select c70_codlan from w_conlancam)"
 			);
 			if (!$rsDeleteConlancamVal) {
-				throw new Exception('Não foi possivel excluir dados da tabela conlancamval');
+				throw new Exception('Não foi possivel excluir dados da tabela conlancamval '.pg_last_error());
 			}
 
 			$rsDeleteConlancamCP = db_query("delete from conlancamconcarpeculiar
