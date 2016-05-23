@@ -221,7 +221,17 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $obalancete11->excluir(NULL, "si178_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si178_instit = " . db_getsession("DB_instit"));
         $obalancete10->excluir(NULL, "si177_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si177_instit = " . db_getsession("DB_instit"));
 
-
+        /**
+         * Proibido informar as
+         *  contas 2.3.7.1.1.01.00,
+         *  2.3.7.1.2.01.00,
+         *  2.3.7.1.3.01.00,
+         *  2.3.7.1.4.01.00,
+         *   2.3.7.1.5.01.00no período
+         *   de fevereiro a dezembro.
+         */
+        $aContasProibidas = array("'237110100'","'237120100'","'237130100'","'237140100'","'237150100'");
+        $sWhere10 = ($nMes != 1 ? " and substr(c60_estrut,1,9) not in (" . implode(',', $aContasProibidas) . ") " : "");
         /*
          * sql pega somente contas com movimento e/ou com saldo anterior
          */
@@ -247,11 +257,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_anousu = " . db_getsession("DB_anousu") . ") as x
+                             where c60_anousu = " . db_getsession("DB_anousu") . " {$sWhere10}) as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 //where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '218810102') as x
 
-        $rsReg10 = db_query($sqlReg10) or die($sqlReg10);
+        $rsReg10 = db_query($sqlReg10) or die($sqlReg10." ".pg_last_error());
 
         $aDadosAgrupados10 = array();
         for ($iCont = 0; $iCont < pg_num_rows($rsReg10); $iCont++) {
