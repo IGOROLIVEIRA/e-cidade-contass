@@ -512,7 +512,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r14_pd in (1))
   AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' )
 
-  UNION
+  UNION ALL
 
 
   SELECT 'gerfcom' as tipo,rh02_regist,
@@ -596,7 +596,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r48_pd in (1))
   AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' )
 
-  UNION
+  UNION ALL
 
   SELECT 'gerfs13' as tipo,rh02_regist,
        '11' AS si196_tiporegistro,
@@ -679,7 +679,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r35_pd in (1))
   AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' )
 
-  UNION
+  UNION ALL
 
     SELECT 'gerfres' as tipo,rh02_regist,
        '11' AS si196_tiporegistro,
@@ -764,15 +764,19 @@ WHERE rh02_regist = $oDados10->rh02_regist
 
 				if($aTiposPagamento[$iContEx]['tipo'] == 4) {
 					$sSql2 .= " Where x.tipo = 'gerfs13' ";
+				}elseif($aTiposPagamento[$iContEx]['tipo'] == 3) {
+					$sSql2 .= " Where x.tipo = 'gerfcom' ";
 				}else{
-					$sSql2 .= " Where x.tipo <> 'gerfs13' ";
+
+					$sSql2 .= " Where x.tipo <> 'gerfcom' and x.tipo <> 'gerfs13' ";
+
 				}
 
 				$sSql2 .= " group by x.tipo, x.rh02_regist, x.si196_tiporegistro,x.si196_tiporemuneracao, x.si196_desctiporemuneracao,x.si196_natsaldodetalhe ";
 
 
 				$rsResult11 = db_query($sSql2);
-				//echo $sSql2;exit;
+				//echo $sSql2;
 				//db_criatabela($rsResult11);exit;
 
 				for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
@@ -1116,8 +1120,12 @@ WHERE rh02_regist = $oDados10->rh02_regist
 
 				if($aTiposPagamento[$iContEx]['tipo'] == 4) {
 					$sSql3 .= " Where x.tipo = 'gerfs13' ";
+				}elseif($aTiposPagamento[$iContEx]['tipo'] == 3) {
+					$sSql3 .= " Where x.tipo = 'gerfcom' ";
 				}else{
-					$sSql3 .= " Where x.tipo <> 'gerfs13' ";
+
+					$sSql3 .= " Where x.tipo <> 'gerfcom' and x.tipo <> 'gerfs13' ";
+
 				}
 
 
