@@ -60,13 +60,31 @@ class GerarFLPGO extends GerarAM {
 				if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I' || $aFLPGO10['si195_indsituacaoservidorpensionista'] == 'P'){
 
 					$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datconcessaoaposentadoriapensao'])));
-					$aCSVFLPGO10['si195_dsccargo']                            =   ' ';
-					$aCSVFLPGO10['si195_sglcargo']                            =   ' ';
+
+					if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I') {
+						$aCSVFLPGO10['si195_dsccargo'] = substr($aFLPGO10['si195_dsccargo'], 0, 120);
+						$aCSVFLPGO10['si195_sglcargo'] = str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
+					}else{
+						$aCSVFLPGO10['si195_dsccargo'] = ' ';
+						$aCSVFLPGO10['si195_sglcargo'] = ' ';
+					}
+
 					$aCSVFLPGO10['si195_dscsiglacargo']                       =   ' ';
-					$aCSVFLPGO10['si195_reqcargo']                            =   ' ';
+
+					if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I')
+						$aCSVFLPGO10['si195_reqcargo'] = str_pad($aFLPGO10['si195_reqcargo'], 1, "0", STR_PAD_LEFT);
+					else
+						$aCSVFLPGO10['si195_reqcargo'] = ' ';
+
 					$aCSVFLPGO10['si195_indcessao']                           =   ' ';
-					$aCSVFLPGO10['si195_dsclotacao']                          =   ' ';
-					$aCSVFLPGO10['si195_vlrcargahorariasemanal']              =   ' ';
+
+					if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I') {
+						$aCSVFLPGO10['si195_dsclotacao'] = substr($aFLPGO10['si195_dsclotacao'], 0, 22);
+						$aCSVFLPGO10['si195_vlrcargahorariasemanal'] = str_pad($aFLPGO10['si195_vlrcargahorariasemanal'], 2, "0", STR_PAD_LEFT);
+					}else{
+						$aCSVFLPGO10['si195_dsclotacao'] = ' ';
+						$aCSVFLPGO10['si195_vlrcargahorariasemanal'] = ' ';
+					}
 
 				}else {
 
