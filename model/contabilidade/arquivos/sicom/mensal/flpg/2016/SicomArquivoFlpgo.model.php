@@ -885,7 +885,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r14_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
 
-  UNION
+  UNION ALL
 
 
   SELECT 'gerfcom' as tipo,
@@ -963,7 +963,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r48_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
 
-  UNION
+  UNION ALL
 
   SELECT 'gerfs13' as tipo,
   		rh02_regist,
@@ -1040,7 +1040,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r35_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
 
-  UNION
+  UNION ALL
 
     SELECT
      	'gerfres' as tipo,
