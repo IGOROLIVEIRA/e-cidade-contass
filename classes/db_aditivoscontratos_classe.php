@@ -144,7 +144,7 @@ class cl_aditivoscontratos {
        $this->erro_status = "0";
        return false;
      }
-     /*if ($this->si174_dataassinaturacontoriginal_ano >= 2014) {
+     if ($this->si174_dataassinaturacontoriginal_ano >= 2014) {
        $result = db_query("select * from contratos where si172_nrocontrato = {$this->si174_nrocontrato} and si172_dataassinatura = '{$this->si174_dataassinaturacontoriginal}'");
        if(pg_num_rows($result) == 0) {
        	 $this->erro_sql = "Contrato informado não existe";
@@ -155,7 +155,7 @@ class cl_aditivoscontratos {
          $this->erro_status = "0";
          return false;
        }
-     }*/
+     }
      if($this->si174_nroseqtermoaditivo == null ){ 
        $this->erro_sql = " Campo Nro seq do Termo Aditivo nao Informado.";
        $this->erro_campo = "si174_nroseqtermoaditivo";
@@ -426,7 +426,7 @@ class cl_aditivoscontratos {
          }
        }
      }
-     /*if ($this->si174_dataassinaturacontoriginal_ano >= 2014) {
+     if ($this->si174_dataassinaturacontoriginal_ano >= 2014) {
        $result = db_query("select * from contratos where si172_nrocontrato = {$this->si174_nrocontrato} and si172_dataassinatura = '{$this->si174_dataassinaturacontoriginal}'");
        if(pg_num_rows($result) == 0) {
        	 $this->erro_sql = "Contrato informado não existe";
@@ -437,7 +437,7 @@ class cl_aditivoscontratos {
          $this->erro_status = "0";
          return false;
        }
-     }*/
+     }
      if(trim($this->si174_nroseqtermoaditivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si174_nroseqtermoaditivo"])){ 
        $sql  .= $virgula." si174_nroseqtermoaditivo = $this->si174_nroseqtermoaditivo ";
        $virgula = ",";
