@@ -94,8 +94,8 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clrespinf10 = new cl_respinf102013();
       $clrespinf10->si197_nomeresponsavel       = $oDados10->z01_nome;
-      $clrespinf10->si197_cartident             = $oDados10->z01_ident;
-      $clrespinf10->si197_orgemissorci          = 'SSP';
+      $clrespinf10->si197_cartident             = 'mg99999999';//$oDados10->z01_ident;
+      $clrespinf10->si197_orgemissorci          = 'SSP';//$oDados10->z01_identorgao;
       $clrespinf10->si197_cpf                   = $oDados10->z01_cgccpf;
       $clrespinf10->si197_dtinicio              = $dtInicial;
       $clrespinf10->si197_dtfinal               = $dtFinal;
