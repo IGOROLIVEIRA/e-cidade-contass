@@ -110,7 +110,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
 
 
-		$sSql = "select
+        $sSql = "select
 		r14_regist as rh02_regist,
 		'10' as si195_tiporegistro,
 		z01_cgccpf as si195_nrodocumento,
@@ -345,7 +345,7 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
                         'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_mensal,
                         'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_mensal,
                         'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_mensal,
-						'tipo'=>'1',
+                        'tipo'=>'1',
                     );
                 }
                 if($oDados10->si195_vlrremuneracaobruta_res != 0){
@@ -357,7 +357,7 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
                         'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_res,
                         'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_res,
                         'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_res,
-						'tipo'=>'2',
+                        'tipo'=>'2',
                     );
                 }
             }
@@ -371,7 +371,7 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
                     'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_com,
                     'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_com,
                     'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_com,
-					'tipo'=>'3',
+                    'tipo'=>'3',
                 );
             }
             if($oDados10->si195_vlrremuneracaobruta_13 != 0 ) {
@@ -384,7 +384,7 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
                     'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_13,
                     'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_13,
                     'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_13,
-					'tipo'=>'4',
+                    'tipo'=>'4',
                 );
             }
             //print_r($aTiposPagamento);exit;
@@ -762,21 +762,21 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r20_pd in (1))
   AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) ) as x ";
 
-              if($aTiposPagamento[$iContEx]['tipo'] == 4) {
-                  $sSql2 .= " Where x.tipo = 'gerfs13' ";
-              }elseif($aTiposPagamento[$iContEx]['tipo'] == 3) {
+                if($aTiposPagamento[$iContEx]['tipo'] == 4) {
+                    $sSql2 .= " Where x.tipo = 'gerfs13' ";
+                }elseif($aTiposPagamento[$iContEx]['tipo'] == 3) {
                     $sSql2 .= " Where x.tipo = 'gerfcom' ";
-              }else{
+                }else{
 
-                      $sSql2 .= " Where x.tipo <> 'gerfcom' and x.tipo <> 'gerfs13' ";
+                    $sSql2 .= " Where x.tipo <> 'gerfcom' and x.tipo <> 'gerfs13' ";
 
-              }
+                }
 
-$sSql2 .= " group by x.tipo, x.rh02_regist, x.si196_tiporegistro,x.si196_tiporemuneracao, x.si196_desctiporemuneracao,x.si196_natsaldodetalhe ";
+                $sSql2 .= " group by x.tipo, x.rh02_regist, x.si196_tiporegistro,x.si196_tiporemuneracao, x.si196_desctiporemuneracao,x.si196_natsaldodetalhe ";
 
 
                 $rsResult11 = db_query($sSql2);
-				//echo $sSql2;
+                //echo $sSql2;
                 //db_criatabela($rsResult11);exit;
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
@@ -884,7 +884,7 @@ AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r14_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
-
+  GROUP BY 1,2,3,4,5,6,7
   UNION ALL
 
 
@@ -962,6 +962,7 @@ AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r48_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
+  GROUP BY 1,2,3,4,5,6,7
 
   UNION ALL
 
@@ -1039,6 +1040,7 @@ AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r35_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
+  GROUP BY 1,2,3,4,5,6,7
 
   UNION ALL
 
@@ -1116,7 +1118,8 @@ AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r20_pd in (2))
-  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) ) as x ";
+  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
+  GROUP BY 1,2,3,4,5,6,7 ) as x ";
 
                 if($aTiposPagamento[$iContEx]['tipo'] == 4) {
                     $sSql3 .= " Where x.tipo = 'gerfs13' ";
@@ -1129,13 +1132,13 @@ WHERE rh02_regist = $oDados10->rh02_regist
                 }
 
 
-				$sSql3 .= "group by     x.tipo,
+                $sSql3 .= "group by     x.tipo,
   			   x.rh02_regist,
                x.si197_tiporegistro,
                x.si197_tipodesconto";
 
                 $rsResult12 = db_query($sSql3);
-				//echo $sSql3;
+                //echo $sSql3;
                 //db_criatabela($rsResult12);exit;
 
                 for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
