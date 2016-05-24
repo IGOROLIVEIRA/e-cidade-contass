@@ -158,7 +158,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
     sum (case when y.ordem = 'gerfsal' or y.ordem = 'gerfres'  then provento else 0 end) as si195_vlrremuneracaobruta_mensal,
 
         case when
-        	(sum (case when y.ordem = 'gerfsal' or y.ordem = 'gerfres'  then provento else 0 end) - sum (case when y.ordem = 'gerfsal' or y.ordem = 'gerfres'  then desconto else 0 end) )
+        	round((sum (case when y.ordem = 'gerfsal' or y.ordem = 'gerfres'  then provento else 0 end) - sum (case when y.ordem = 'gerfsal' or y.ordem = 'gerfres'  then desconto else 0 end) ),2)
         	 < 0 then 'D'
              else 'C'
              end as si195_natsaldoliquido_mensal,
@@ -166,7 +166,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
   		sum (case when y.ordem = 'gerfcom'  then provento else 0 end) as si195_vlrremuneracaobruta_com,
 		case when
-        	(sum (case when y.ordem = 'gerfcom' then provento else 0 end) - sum (case when y.ordem = 'gerfcom' then desconto else 0 end) )
+        	round((sum (case when y.ordem = 'gerfcom' then provento else 0 end) - sum (case when y.ordem = 'gerfcom' then desconto else 0 end) ),2)
         	 < 0 then 'D'
              else 'C'
              end as si195_natsaldoliquido_com,
@@ -174,7 +174,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
 		sum (case when y.ordem = 'gerfs13'  then provento else 0 end) as si195_vlrremuneracaobruta_13,
 		case when
-        	(sum (case when y.ordem = 'gerfs13' then provento else 0 end) - sum (case when y.ordem = 'gerfs13' then desconto else 0 end) )
+        	round((sum (case when y.ordem = 'gerfs13' then provento else 0 end) - sum (case when y.ordem = 'gerfs13' then desconto else 0 end) ),2)
         	 < 0 then 'D'
              else 'C'
              end as si195_natsaldoliquido_13,
@@ -182,7 +182,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
 		sum (case when y.ordem = 'gerfres'  then provento else 0 end) as si195_vlrremuneracaobruta_res,
 		case when
-        	(sum (case when y.ordem = 'gerfres' then provento else 0 end) - sum (case when y.ordem = 'gerfres' then desconto else 0 end) )
+        	round((sum (case when y.ordem = 'gerfres' then provento else 0 end) - sum (case when y.ordem = 'gerfres' then desconto else 0 end) ),2)
         	 < 0 then 'D'
              else 'C'
              end as si195_natsaldoliquido_res,
