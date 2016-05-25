@@ -50,32 +50,56 @@ $pdf->setfillcolor(235);
 $alt   = 4;
 // Inicia da geracao do relatorio
 
+$pdf->ln(1750);
 
+$sSqlVerificaCargo = "SELECT rh02_regist FROM rhfuncao JOIN rhpessoalmov ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao WHERE rh37_reqcargo = 0 ";
+$result_cargo  = db_query($sSqlVerificaCargo);
+$numrows_cargo = pg_numrows($result_cargo);
+$cor = 1;
+$pdf->setfont('arial', 'b', 7);
+$pdf->cell(80, $alt, "MATRICULAS SEM CARGOS DEFINIDOS", 1, 1, "C", $cor);
 
+for($x = 0;$x < pg_numrows($result_cargo);$x++) {
+    db_fieldsmemory($result_cargo, $x);
 
+    $pdf->cell(80,$alt,$rh02_regist,1,1,"C",0);
 
+}
 
-
-
-$sSqlVerificaRubricas = "select distinct r09_base, r09_rubric from basesr INNER JOIN bases ON r09_anousu = r08_anousu
-where r09_rubric =
-    (select x.r09_rubric from
-
-(select r09_base, r09_rubric, count(*) from basesr INNER JOIN bases ON r09_anousu = r08_anousu
-		  where r09_base BETWEEN 'S001' AND 'S014'
-		  group by r09_base,r09_rubric
-		  having count(*) > 1
-		  order by r09_rubric asc
-		  ) as x
-
-		  group by 1
-		  having count(x.r09_rubric) > 1)
-and r09_base BETWEEN 'S001' AND 'S014' ";
+$sSqlVerificaRubricas = "SELECT DISTINCT r09_base,
+  r09_rubric
+FROM basesr
+  INNER JOIN bases ON r09_anousu = r08_anousu
+WHERE r09_rubric in
+      (
+        SELECT x.r09_rubric
+        FROM
+          (SELECT r09_base,
+             r09_rubric
+           FROM basesr
+             INNER JOIN bases ON r09_anousu = r08_anousu
+           WHERE (r09_base BETWEEN 'S001' AND 'S017')
+                 OR (r09_base BETWEEN 'S050' AND 'S076')
+                 OR (r09_base = 'SP99')
+                 OR (r09_base = 'SD99')
+           GROUP BY r09_base,
+             r09_rubric
+           HAVING count(*) > 1
+          ) AS x
+        group by 1
+        having count(x.r09_rubric) > 1
+      )
+and
+(r09_base BETWEEN 'S001' AND 'S017')
+OR (r09_base BETWEEN 'S050' AND 'S076')
+OR (r09_base = 'SP99')
+OR (r09_base = 'SD99')
+order by r09_rubric asc";
 
 $result_verifica  = db_query($sSqlVerificaRubricas);
 $numrows_verifica = pg_numrows($result_verifica);
 
-$pdf->ln(1750);
+
 
 $cor = 1;
 $pdf->setfont('arial','b',7);
