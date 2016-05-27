@@ -432,8 +432,11 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
                sum(x.si196_vlrremuneracaodetalhada) as si196_vlrremuneracaodetalhada
                from
           (SELECT 'gerfsal' as tipo,rh02_regist,
-       '11' AS si196_tiporegistro,
-       CASE
+       '11' AS si196_tiporegistro, ";
+				if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
+					$sSql2 .= "02 AS si196_tiporemuneracao,";
+				}else{
+					$sSql2 .= "CASE
            WHEN r08_codigo = 'S001' THEN 01
            WHEN r08_codigo = 'S002' THEN 02
            WHEN r08_codigo = 'S003' THEN 03
@@ -452,8 +455,9 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
            WHEN r08_codigo = 'SP99' THEN 99
-       END AS si196_tiporemuneracao,
-       CASE
+       END AS si196_tiporemuneracao,";
+				}
+				$sSql2 .= "CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
            ELSE ' '
        END AS si196_desctiporemuneracao,
@@ -516,7 +520,11 @@ WHERE rh02_regist = $oDados10->rh02_regist
 
 
   SELECT 'gerfcom' as tipo,rh02_regist,
-       '11' AS si196_tiporegistro,
+       '11' AS si196_tiporegistro,";
+				if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
+					$sSql2 .= "02 AS si196_tiporemuneracao,";
+				}else{
+					$sSql2 .= "
        CASE
            WHEN r08_codigo = 'S001' THEN 01
            WHEN r08_codigo = 'S002' THEN 02
@@ -536,8 +544,9 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
            WHEN r08_codigo = 'SP99' THEN 99
-       END AS si196_tiporemuneracao,
-       CASE
+       END AS si196_tiporemuneracao,";
+				}
+				$sSql2 .= "CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
            ELSE ' '
        END AS si196_desctiporemuneracao,
@@ -599,7 +608,11 @@ WHERE rh02_regist = $oDados10->rh02_regist
   UNION ALL
 
   SELECT 'gerfs13' as tipo,rh02_regist,
-       '11' AS si196_tiporegistro,
+       '11' AS si196_tiporegistro,";
+				if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
+					$sSql2 .= "02 AS si196_tiporemuneracao,";
+				}else{
+					$sSql2 .= "
        CASE
            WHEN r08_codigo = 'S001' THEN 01
            WHEN r08_codigo = 'S002' THEN 02
@@ -619,8 +632,9 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
            WHEN r08_codigo = 'SP99' THEN 99
-       END AS si196_tiporemuneracao,
-       CASE
+       END AS si196_tiporemuneracao,";
+				}
+				$sSql2 .= "CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
            ELSE ' '
        END AS si196_desctiporemuneracao,
@@ -682,7 +696,11 @@ WHERE rh02_regist = $oDados10->rh02_regist
   UNION ALL
 
     SELECT 'gerfres' as tipo,rh02_regist,
-       '11' AS si196_tiporegistro,
+       '11' AS si196_tiporegistro,";
+				if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
+					$sSql2 .= "02 AS si196_tiporemuneracao,";
+				}else{
+					$sSql2 .= "
        CASE
            WHEN r08_codigo = 'S001' THEN 01
            WHEN r08_codigo = 'S002' THEN 02
@@ -702,8 +720,9 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S016' THEN 16
            WHEN r08_codigo = 'S017' THEN 17
            WHEN r08_codigo = 'SP99' THEN 99
-       END AS si196_tiporemuneracao,
-       CASE
+       END AS si196_tiporemuneracao,";
+				}
+				$sSql2 .= "CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
            ELSE ' '
        END AS si196_desctiporemuneracao,
@@ -773,7 +792,6 @@ WHERE rh02_regist = $oDados10->rh02_regist
 				}
 
 				$sSql2 .= " group by x.tipo, x.rh02_regist, x.si196_tiporegistro,x.si196_tiporemuneracao, x.si196_desctiporemuneracao,x.si196_natsaldodetalhe ";
-
 
 				$rsResult11 = db_query($sSql2);
 				//echo $sSql2;
