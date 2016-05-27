@@ -123,7 +123,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         rh01_admiss as si195_datconcessaoaposentadoriapensao,
 
     case
-	  when rh20_cargo is not null then rh04_descr
+	  when rh20_cargo <> 0 then rh04_descr
 	  else rh37_descr
 	end as si195_dsccargo,
 

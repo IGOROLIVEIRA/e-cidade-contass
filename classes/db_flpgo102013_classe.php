@@ -204,7 +204,7 @@ class cl_flpgo102013 {
             $this->si195_datconcessaoaposentadoriapensao = "null";
         }
         if($this->si195_dsccargo == null ){
-            $this->erro_sql = " Campo Nome do cargo não informado.";
+            $this->erro_sql = " Campo Nome do cargo não informado. ".$this->si195_codreduzidopessoa;
             $this->erro_campo = "si195_dsccargo";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
