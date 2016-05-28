@@ -434,7 +434,7 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
           (SELECT 'gerfsal' as tipo,rh02_regist,
        '11' AS si196_tiporegistro, ";
 				if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
-					$sSql2 .= "02 AS si196_tiporemuneracao,";
+					$sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
 				}else{
 					$sSql2 .= "CASE
            WHEN r08_codigo = 'S001' THEN 01
@@ -456,12 +456,14 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
            WHEN r08_codigo = 'S017' THEN 17
            WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,";
-				}
+
 				$sSql2 .= "CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
            ELSE ' '
-       END AS si196_desctiporemuneracao,
-       CASE
+       END AS si196_desctiporemuneracao,";
+       }
+		$sSql2 .= "CASE
+
            WHEN r14_pd = 1 THEN 'D'
            WHEN r14_pd = 2 THEN 'C'
        END AS si196_natsaldodetalhe,
@@ -522,10 +524,9 @@ WHERE rh02_regist = $oDados10->rh02_regist
   SELECT 'gerfcom' as tipo,rh02_regist,
        '11' AS si196_tiporegistro,";
 				if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
-					$sSql2 .= "02 AS si196_tiporemuneracao,";
+					$sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
 				}else{
-					$sSql2 .= "
-       CASE
+					$sSql2 .= "CASE
            WHEN r08_codigo = 'S001' THEN 01
            WHEN r08_codigo = 'S002' THEN 02
            WHEN r08_codigo = 'S003' THEN 03
@@ -545,12 +546,13 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S017' THEN 17
            WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,";
-				}
-				$sSql2 .= "CASE
+
+					$sSql2 .= "CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
            ELSE ' '
-       END AS si196_desctiporemuneracao,
-       CASE
+       END AS si196_desctiporemuneracao,";
+				}
+				$sSql2 .= "CASE
            WHEN r48_pd = 1 THEN 'D'
            WHEN r48_pd = 2 THEN 'C'
        END AS si196_natsaldodetalhe,
@@ -610,10 +612,9 @@ WHERE rh02_regist = $oDados10->rh02_regist
   SELECT 'gerfs13' as tipo,rh02_regist,
        '11' AS si196_tiporegistro,";
 				if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
-					$sSql2 .= "02 AS si196_tiporemuneracao,";
+					$sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
 				}else{
-					$sSql2 .= "
-       CASE
+					$sSql2 .= "CASE
            WHEN r08_codigo = 'S001' THEN 01
            WHEN r08_codigo = 'S002' THEN 02
            WHEN r08_codigo = 'S003' THEN 03
@@ -633,12 +634,13 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S017' THEN 17
            WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,";
-				}
-				$sSql2 .= "CASE
+
+					$sSql2 .= "CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
            ELSE ' '
-       END AS si196_desctiporemuneracao,
-       CASE
+       END AS si196_desctiporemuneracao,";
+				}
+		$sSql2 .= "CASE
            WHEN r35_pd = 1 THEN 'D'
            WHEN r35_pd = 2 THEN 'C'
        END AS si196_natsaldodetalhe,
@@ -698,10 +700,9 @@ WHERE rh02_regist = $oDados10->rh02_regist
     SELECT 'gerfres' as tipo,rh02_regist,
        '11' AS si196_tiporegistro,";
 				if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
-					$sSql2 .= "02 AS si196_tiporemuneracao,";
+					$sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
 				}else{
-					$sSql2 .= "
-       CASE
+					$sSql2 .= "CASE
            WHEN r08_codigo = 'S001' THEN 01
            WHEN r08_codigo = 'S002' THEN 02
            WHEN r08_codigo = 'S003' THEN 03
@@ -721,12 +722,13 @@ WHERE rh02_regist = $oDados10->rh02_regist
            WHEN r08_codigo = 'S017' THEN 17
            WHEN r08_codigo = 'SP99' THEN 99
        END AS si196_tiporemuneracao,";
-				}
-				$sSql2 .= "CASE
+
+					$sSql2 .= "CASE
            WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
            ELSE ' '
-       END AS si196_desctiporemuneracao,
-       CASE
+       END AS si196_desctiporemuneracao,";
+				}
+				$sSql2 .= "CASE
            WHEN r20_pd = 1 THEN 'D'
            WHEN r20_pd = 2 THEN 'C'
        END AS si196_natsaldodetalhe,
@@ -902,7 +904,7 @@ AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r14_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
-  GROUP BY 1,2,3,4,5,6,7
+
   UNION ALL
 
 
@@ -980,7 +982,7 @@ AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r48_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
-  GROUP BY 1,2,3,4,5,6,7
+
 
   UNION ALL
 
@@ -1058,7 +1060,7 @@ AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r35_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
-  GROUP BY 1,2,3,4,5,6,7
+
 
   UNION ALL
 
@@ -1137,7 +1139,7 @@ AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r20_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
-  GROUP BY 1,2,3,4,5,6,7 ) as x ";
+  ) as x ";
 
 				if($aTiposPagamento[$iContEx]['tipo'] == 4) {
 					$sSql3 .= " Where x.tipo = 'gerfs13' ";
