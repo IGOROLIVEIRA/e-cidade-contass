@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "rhfuncao.rh37_funcao,rhfuncao.rh37_descr,rhfuncao.rh37_vagas,rhfuncao.rh37_cbo,rhfuncao.rh37_lei,rhfuncao.rh37_class,rhfuncao.rh37_ativo";
+$campos = "rhfuncao.rh37_funcao,rhfuncao.rh37_descr,rhfuncao.rh37_vagas,rhfuncao.rh37_cbo,rhfuncao.rh37_lei,rhfuncao.rh37_class,rhfuncao.rh37_ativo, rhfuncao.rh37_reqcargo as dl_Cod_Sicom ";
 ?>
