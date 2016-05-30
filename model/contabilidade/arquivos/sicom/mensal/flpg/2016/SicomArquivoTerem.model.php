@@ -96,7 +96,7 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
     $sSql .= " or round(te01_valor,2) not in (select round(si194_vlrparateto,2) from terem102013))";
 
 
-    $rsResult10 = db_query($sSql);echo $sSql;db_criatabela($rsResult10);exit;
+    $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit;
 
 
 
