@@ -832,6 +832,8 @@ WHERE rh02_regist = $oDados10->rh02_regist
                from
           (SELECT 'gerfsal' as tipo,
           		rh02_regist,
+          		r08_codigo,
+		r09_rubric,
        '12' AS si197_tiporegistro,
        CASE
            WHEN r08_codigo = 'S050' THEN 50
@@ -903,13 +905,15 @@ AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r14_pd in (2))
-  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
+  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) group by 1,2,3,4,5,6,7,8,9
 
   UNION
 
 
   SELECT 'gerfcom' as tipo,
   		rh02_regist,
+  		r08_codigo,
+		r09_rubric,
        '12' AS si197_tiporegistro,
        CASE
            WHEN r08_codigo = 'S050' THEN 50
@@ -981,13 +985,15 @@ AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r48_pd in (2))
-  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
+  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) group by 1,2,3,4,5,6,7,8,9
 
 
   UNION
 
   SELECT 'gerfs13' as tipo,
   		rh02_regist,
+  		r08_codigo,
+		r09_rubric,
        '12' AS si197_tiporegistro,
        CASE
            WHEN r08_codigo = 'S050' THEN 50
@@ -1059,7 +1065,7 @@ AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r35_pd in (2))
-  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
+  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) group by 1,2,3,4,5,6,7,8,9
 
 
   UNION
@@ -1067,6 +1073,8 @@ WHERE rh02_regist = $oDados10->rh02_regist
     SELECT
      	'gerfres' as tipo,
     	rh02_regist,
+    	r08_codigo,
+		r09_rubric,
        '12' AS si197_tiporegistro,
        CASE
            WHEN r08_codigo = 'S050' THEN 50
@@ -1138,7 +1146,7 @@ AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r20_pd in (2))
-  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
+  AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) group by 1,2,3,4,5,6,7,8,9
   ) as x ";
 
                 if($aTiposPagamento[$iContEx]['tipo'] == 4) {
@@ -1158,8 +1166,6 @@ WHERE rh02_regist = $oDados10->rh02_regist
                x.si197_tipodesconto";
 
                 $rsResult12 = db_query($sSql3);
-                //echo $sSql3;
-                //db_criatabela($rsResult12);exit;
 
                 for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
 
