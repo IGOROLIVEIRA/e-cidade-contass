@@ -213,7 +213,7 @@ class cl_flpgo102013 {
             return false;
         }
         if($this->si195_sglcargo == null ){
-            $this->erro_sql = " Campo Sigla de Cargo não informado.";
+            $this->erro_sql = " Campo Sigla de Cargo não informado. ".$this->si195_codreduzidopessoa;;
             $this->erro_campo = "si195_sglcargo";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
