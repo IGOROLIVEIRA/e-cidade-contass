@@ -76,7 +76,7 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $sSql = "SELECT z01_ident,z01_nome,z01_identorgao,z01_cgccpf, si166_dataini, si166_datafim   from identificacaoresponsaveis left join cgm on si166_numcgm = z01_numcgm";
     $sSql .= " where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel = 5 and DATE_PART('YEAR',si166_dataini) <= ". db_getsession('DB_anousu')." and DATE_PART('YEAR',si166_datafim) >= ". db_getsession('DB_anousu');
-    $sSql .= " and DATE_PART('month',si166_dataini) <= ". $this->sDataInicial['5'].$this->sDataInicial['6'] ." and DATE_PART('month',si166_datafim) <= ". $this->sDataFinal['5'].$this->sDataFinal['6'];
+    $sSql .= " and (DATE_PART('month',si166_dataini) <= ". $this->sDataInicial['5'].$this->sDataInicial['6'] ." or DATE_PART('month',si166_datafim) <= ". $this->sDataFinal['5'].$this->sDataFinal['6'].")";
 
     $mes = $this->sDataFinal['5'].$this->sDataFinal['6'];      // Mês desejado, pode ser por ser obtido por POST, GET, etc.
     $ano = db_getsession('DB_anousu'); // Ano atual
@@ -85,8 +85,8 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
     $dtInicial = $ano.'-'.$mes.'-'.'01';
 
     $dtFinal   = $ano.'-'.$mes.'-'.$ultimo_dia;
-
-    $rsResult10 = db_query($sSql);
+    //echo $sSql;exit;
+    //$rsResult10 = db_query($sSql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
