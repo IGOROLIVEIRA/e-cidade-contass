@@ -897,15 +897,15 @@ INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 INNER JOIN rhrubricas ON r14_rubric = rh27_rubric
 AND r14_instit = rh27_instit
 INNER JOIN basesr ON r09_rubric = rh27_rubric
-INNER JOIN bases ON r09_anousu = r08_anousu
-AND r09_mesusu = r08_mesusu
+INNER JOIN bases ON r09_anousu = ".db_anofolha()."
+AND r09_mesusu = ".db_mesfolha()."
 AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r14_pd in (2))
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
 
-  UNION ALL
+  UNION
 
 
   SELECT 'gerfcom' as tipo,
@@ -975,8 +975,8 @@ INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 INNER JOIN rhrubricas ON r48_rubric = rh27_rubric
 AND r48_instit = rh27_instit
 INNER JOIN basesr ON r09_rubric = rh27_rubric
-INNER JOIN bases ON r09_anousu = r08_anousu
-AND r09_mesusu = r08_mesusu
+INNER JOIN bases ON r09_anousu = ".db_anofolha()."
+AND r09_mesusu = ".db_mesfolha()."
 AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
@@ -984,7 +984,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
 
 
-  UNION ALL
+  UNION
 
   SELECT 'gerfs13' as tipo,
   		rh02_regist,
@@ -1053,8 +1053,8 @@ INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 INNER JOIN rhrubricas ON r35_rubric = rh27_rubric
 AND r35_instit = rh27_instit
 INNER JOIN basesr ON r09_rubric = rh27_rubric
-INNER JOIN bases ON r09_anousu = r08_anousu
-AND r09_mesusu = r08_mesusu
+INNER JOIN bases ON r09_anousu = ".db_anofolha()."
+AND r09_mesusu = ".db_mesfolha()."
 AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
@@ -1062,7 +1062,7 @@ WHERE rh02_regist = $oDados10->rh02_regist
   AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' )
 
 
-  UNION ALL
+  UNION
 
     SELECT
      	'gerfres' as tipo,
@@ -1132,8 +1132,8 @@ INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 INNER JOIN rhrubricas ON r20_rubric = rh27_rubric
 AND r20_instit = rh27_instit
 INNER JOIN basesr ON r09_rubric = rh27_rubric
-INNER JOIN bases ON r09_anousu = r08_anousu
-AND r09_mesusu = r08_mesusu
+INNER JOIN bases ON r09_anousu = ".db_anofolha()."
+AND r09_mesusu = ".db_mesfolha()."
 AND r09_base = r08_codigo
 AND r09_instit = r08_instit
 WHERE rh02_regist = $oDados10->rh02_regist
