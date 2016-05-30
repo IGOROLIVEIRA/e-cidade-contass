@@ -431,7 +431,8 @@ group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
                x.si196_natsaldodetalhe,
                sum(x.si196_vlrremuneracaodetalhada) as si196_vlrremuneracaodetalhada
                from
-          (SELECT 'gerfsal' as tipo,rh02_regist,
+          (SELECT 'gerfsal' as tipo,rh02_regist,r08_codigo,
+		r09_rubric,
        '11' AS si196_tiporegistro, ";
                 if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
                     $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
@@ -516,12 +517,13 @@ AND r09_anousu = ".db_anofolha()."
 AND r09_mesusu = " .db_mesfolha()."
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r14_pd in (1))
-  AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' )
+  AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) group by 1,2,3,4,5,6,7,8,9
 
-  UNION ALL
+  UNION
 
 
-  SELECT 'gerfcom' as tipo,rh02_regist,
+  SELECT 'gerfcom' as tipo,rh02_regist,r08_codigo,
+		r09_rubric,
        '11' AS si196_tiporegistro,";
                 if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
                     $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
@@ -605,11 +607,12 @@ AND r09_anousu = ".db_anofolha()."
 AND r09_mesusu = " .db_mesfolha()."
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r48_pd in (1))
-  AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' )
+  AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) group by 1,2,3,4,5,6,7,8,9
 
-  UNION ALL
+  UNION
 
-  SELECT 'gerfs13' as tipo,rh02_regist,
+  SELECT 'gerfs13' as tipo,rh02_regist,r08_codigo,
+		r09_rubric,
        '11' AS si196_tiporegistro,";
                 if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
                     $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
@@ -693,11 +696,12 @@ AND r09_anousu = ".db_anofolha()."
 AND r09_mesusu = " .db_mesfolha()."
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r35_pd in (1))
-  AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' )
+  AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) group by 1,2,3,4,5,6,7,8,9
 
-  UNION ALL
+  UNION
 
-    SELECT 'gerfres' as tipo,rh02_regist,
+    SELECT 'gerfres' as tipo,rh02_regist, r08_codigo,
+		r09_rubric,
        '11' AS si196_tiporegistro,";
                 if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
                     $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
@@ -781,7 +785,7 @@ AND r09_anousu = ".db_anofolha()."
 AND r09_mesusu = " .db_mesfolha()."
 WHERE rh02_regist = $oDados10->rh02_regist
   AND (r20_pd in (1))
-  AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) ) as x ";
+  AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) group by 1,2,3,4,5,6,7,8,9 ) as x ";
 
                 if($aTiposPagamento[$iContEx]['tipo'] == 4) {
                     $sSql2 .= " Where x.tipo = 'gerfs13' ";
