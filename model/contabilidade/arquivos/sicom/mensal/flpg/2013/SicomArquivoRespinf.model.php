@@ -86,7 +86,7 @@ class SicomArquivoRespinf extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $dtFinal   = $ano.'-'.$mes.'-'.$ultimo_dia;
     //echo $sSql;exit;
-    //$rsResult10 = db_query($sSql);
+    $rsResult10 = db_query($sSql);
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
