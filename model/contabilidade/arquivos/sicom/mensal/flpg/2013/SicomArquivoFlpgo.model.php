@@ -138,9 +138,9 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	' ' as si195_indcessao,
 	r70_descr as si195_dsclotacao,
 	case
-	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'P' then 00
-	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'I' then 00
-	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") = 'A' then rh02_hrssem
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1) = 'P' then 00
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1) = 'I' then 00
+	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1) = 'A' then rh02_hrssem
 	end as si195_vlrcargahorariasemanal,
 	rh01_admiss as si195_datefetexercicio,
 	rh05_recis as si195_datexclusao,
