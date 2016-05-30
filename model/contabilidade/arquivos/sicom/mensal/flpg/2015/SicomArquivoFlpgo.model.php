@@ -117,7 +117,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         'C' as si195_regime,
         'M' as si195_indtipopagamento,
         case
-          when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').") is not null then (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu').")
+          when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1 ) is not null then (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1)
           else 'A'
           end as si195_indsituacaoservidorpensionista,
         rh01_admiss as si195_datconcessaoaposentadoriapensao,
