@@ -89,7 +89,7 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
      */
 
     $sSql = "select round(te01_valor,2) as te01_valor, te01_justificativa, te01_dtinicial, te01_dtfinal, te01_tipocadastro  from tetoremuneratorio where ";
-    $sSql .= " DATE_PART('YEAR',te01_dtinicial) >= ".db_getsession("DB_anousu")." and DATE_PART('YEAR',te01_dtfinal) = ".db_getsession("DB_anousu");
+    $sSql .= " DATE_PART('YEAR',te01_dtinicial) >= ".db_getsession("DB_anousu")." and DATE_PART('YEAR',te01_dtfinal) <= ".db_getsession("DB_anousu");
     $sSql .= " and round(te01_valor,2) not in (select round(si194_vlrparateto,2) from terem102013 where si194_mes <= ".($this->sDataFinal['5'].$this->sDataFinal['6'])." )";
 
 
