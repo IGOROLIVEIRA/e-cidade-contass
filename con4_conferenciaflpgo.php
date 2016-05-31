@@ -52,6 +52,27 @@ $alt   = 4;
 
 $pdf->ln(1750);
 
+
+$sSqlRubricasSemBase = "select rh27_rubric, rh27_descr  from rhrubricas
+where rh27_rubric not in (SELECT r09_rubric FROM basesr
+WHERE (r09_base BETWEEN 'S001' AND 'SP99')
+AND r09_anousu = ".db_anofolha()." AND r09_mesusu = ".db_mesfolha().")
+AND rh27_pd <> 3";
+$result_rsb  = db_query($sSqlRubricasSemBase);
+$numrows_rsb = pg_numrows($result_rsb);
+$cor = 1;
+$pdf->setfont('arial', 'b', 7);
+$pdf->cell(80, $alt, "Rubricas sem base", 1, 1, "C", $cor);
+
+for($x = 0;$x < pg_numrows($result_rsb);$x++) {
+    db_fieldsmemory($result_rsb, $x);
+
+    $pdf->cell(80,$alt,$rh27_rubric,1,0,"C",0);
+    $pdf->cell(80,$alt,$rh27_descr,1,1,"C",0);
+
+}
+
+
 $sSqlVerificaCargo = "select rh37_funcao from rhfuncao inner join db_config on db_config.codigo = rhfuncao.rh37_instit inner join rhfuncaogrupo on rhfuncaogrupo.rh100_sequencial = rhfuncao.rh37_funcaogrupo inner join cgm on cgm.z01_numcgm = db_config.numcgm where rh37_instit = 1 and rh37_reqcargo = 0  order by rh37_funcao ";
 $result_cargo  = db_query($sSqlVerificaCargo);
 $numrows_cargo = pg_numrows($result_cargo);
