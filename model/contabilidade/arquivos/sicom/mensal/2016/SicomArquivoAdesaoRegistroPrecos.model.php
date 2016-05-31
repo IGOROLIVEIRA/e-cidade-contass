@@ -314,7 +314,8 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
 
           $sSql = "select si07_numerolote,
                    (si07_item::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) AS coditem
-                   from itensregpreco where si07_sequencialadesao = $oDados10->si06_sequencial ";
+                   from itensregpreco where si07_sequencialadesao = $oDados10->si06_sequencial
+                   and (select si06_processoporlote from adesaoregprecos where  si06_sequencial = $oDados10->si06_sequencial) = 1";
           $rsResult13 = db_query($sSql);
           for($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
 
