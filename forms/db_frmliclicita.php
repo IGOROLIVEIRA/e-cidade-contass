@@ -271,7 +271,7 @@ fieldset table tr > td {
     </td>
     <td> 
       <?
-       $al20_descontotab = array("1"=>"1- Sim","2"=>"2- Não");
+       $al20_descontotab = array("2"=>"2- Não","1"=>"1- Sim");
         db_select("l20_descontotab",$al20_descontotab,true,$db_opcao);
       ?>
    </td>
