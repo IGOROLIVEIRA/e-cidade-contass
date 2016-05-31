@@ -113,7 +113,7 @@ $clpagordemele->rotulo->label("e53_valor");
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clpagordemele->sql_record($clpagordemele->sql_query($pesquisa_chave." and ".$where_instit));
+          $result = $clpagordemele->sql_record($clpagordemele->sql_query($pesquisa_chave." and ".$where_instit,null,"e53_codord,e53_valor,replace(pagordem.e50_obs,'\n',' ') as e50_obs"));
           if($clpagordemele->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$e53_valor','$e50_obs',false);</script>";
