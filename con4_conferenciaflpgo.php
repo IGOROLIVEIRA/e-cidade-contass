@@ -52,21 +52,22 @@ $alt   = 4;
 
 $pdf->ln(1750);
 
-$sSqlVerificaCargo = "SELECT rh02_regist FROM rhfuncao JOIN rhpessoalmov ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao WHERE rh37_reqcargo = 0 ";
+$sSqlVerificaCargo = "select rh37_funcao from rhfuncao inner join db_config on db_config.codigo = rhfuncao.rh37_instit inner join rhfuncaogrupo on rhfuncaogrupo.rh100_sequencial = rhfuncao.rh37_funcaogrupo inner join cgm on cgm.z01_numcgm = db_config.numcgm where rh37_instit = 1 and rh37_reqcargo = 0  order by rh37_funcao ";
 $result_cargo  = db_query($sSqlVerificaCargo);
 $numrows_cargo = pg_numrows($result_cargo);
 $cor = 1;
 $pdf->setfont('arial', 'b', 7);
-$pdf->cell(80, $alt, "MATRICULAS SEM CARGOS DEFINIDOS", 1, 1, "C", $cor);
+$pdf->cell(80, $alt, "CARGOS INDEFINIDOS", 1, 1, "C", $cor);
 
 for($x = 0;$x < pg_numrows($result_cargo);$x++) {
     db_fieldsmemory($result_cargo, $x);
 
-    $pdf->cell(80,$alt,$rh02_regist,1,1,"C",0);
+    $pdf->cell(80,$alt,$rh37_funcao,1,1,"C",0);
 
 }
 
-$sSqlVerificaRubricas = "SELECT DISTINCT r09_base,
+$sSqlVerificaRubricas = "select x.r09_base as r09_base, x.r09_rubric as r09_rubric from
+((SELECT DISTINCT r09_base,
   r09_rubric
 FROM basesr
   INNER JOIN bases ON r09_anousu = r08_anousu
@@ -79,9 +80,8 @@ WHERE r09_rubric in
            FROM basesr
              INNER JOIN bases ON r09_anousu = r08_anousu
            WHERE (r09_base BETWEEN 'S001' AND 'S017')
-                 OR (r09_base BETWEEN 'S050' AND 'S076')
-                 OR (r09_base = 'SP99')
-                 OR (r09_base = 'SD99')
+
+
            GROUP BY r09_base,
              r09_rubric
            HAVING count(*) > 1
@@ -89,12 +89,106 @@ WHERE r09_rubric in
         group by 1
         having count(x.r09_rubric) > 1
       )
-and
-(r09_base BETWEEN 'S001' AND 'S017')
-OR (r09_base BETWEEN 'S050' AND 'S076')
-OR (r09_base = 'SP99')
-OR (r09_base = 'SD99')
-order by r09_rubric asc";
+      and
+      (r09_base BETWEEN 'S001' AND 'S017')
+
+
+order by r09_rubric asc)
+
+union
+
+(SELECT DISTINCT r09_base,
+  r09_rubric
+FROM basesr
+  INNER JOIN bases ON r09_anousu = r08_anousu
+WHERE r09_rubric in
+      (
+        SELECT x.r09_rubric
+        FROM
+          (SELECT r09_base,
+             r09_rubric
+           FROM basesr
+             INNER JOIN bases ON r09_anousu = r08_anousu
+           WHERE (r09_base BETWEEN 'S050' AND 'S076')
+
+
+           GROUP BY r09_base,
+             r09_rubric
+           HAVING count(*) > 1
+          ) AS x
+        group by 1
+        having count(x.r09_rubric) > 1
+      )
+      and
+      (r09_base BETWEEN 'S050' AND 'S076')
+
+
+order by r09_rubric asc)
+
+
+union
+
+(SELECT DISTINCT r09_base,
+   r09_rubric
+ FROM basesr
+   INNER JOIN bases ON r09_anousu = r08_anousu
+ WHERE r09_rubric in
+       (
+         SELECT x.r09_rubric
+         FROM
+           (SELECT r09_base,
+              r09_rubric
+            FROM basesr
+              INNER JOIN bases ON r09_anousu = r08_anousu
+            WHERE (r09_base = 'SP99')
+
+
+            GROUP BY r09_base,
+              r09_rubric
+            HAVING count(*) > 1
+           ) AS x
+         group by 1
+         having count(x.r09_rubric) > 1
+       )
+       and
+       (r09_base = 'SP99')
+
+
+ order by r09_rubric asc)
+
+
+union
+
+(SELECT DISTINCT r09_base,
+   r09_rubric
+ FROM basesr
+   INNER JOIN bases ON r09_anousu = r08_anousu
+ WHERE r09_rubric in
+       (
+         SELECT x.r09_rubric
+         FROM
+           (SELECT r09_base,
+              r09_rubric
+            FROM basesr
+              INNER JOIN bases ON r09_anousu = r08_anousu
+            WHERE (r09_base = 'SD99')
+
+
+            GROUP BY r09_base,
+              r09_rubric
+            HAVING count(*) > 1
+           ) AS x
+         group by 1
+         having count(x.r09_rubric) > 1
+       )
+       and
+       (r09_base = 'SD99')
+
+
+ order by r09_rubric asc)) as x
+
+order by x.r09_rubric asc
+";
 
 $result_verifica  = db_query($sSqlVerificaRubricas);
 $numrows_verifica = pg_numrows($result_verifica);
