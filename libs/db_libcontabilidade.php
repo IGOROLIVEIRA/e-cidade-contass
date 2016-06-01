@@ -4791,7 +4791,7 @@ class cl_estrutura_sistema {
         $param[21] = $orcparamrel->sql_parametro($codrel, '21', 'f', str_replace('-', ', ', $db_selinstit), $anousu);
       }
 
-      if ($codrel == 59 || $codrel = 81) {
+      if ($codrel == 59 || $codrel == 81) {
 
         for ($iLinha = 1; $iLinha <= 22; $iLinha++) {
 
