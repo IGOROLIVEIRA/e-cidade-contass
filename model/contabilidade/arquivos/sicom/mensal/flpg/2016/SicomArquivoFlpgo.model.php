@@ -304,7 +304,7 @@ FROM
 	  AND padroes.r02_mesusu = rhpespadrao.rh03_mesusu
 	  AND padroes.r02_regime = rhpespadrao.rh03_regime
 	  AND padroes.r02_codigo = rhpespadrao.rh03_padrao
-	  AND padroes.r02_instit = ".db_getsession('DB_anousu')."
+	  AND padroes.r02_instit = ".db_getsession('DB_instit')."
 	  LEFT JOIN rhlotaexe ON rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
 	  AND rhlotaexe.rh26_codigo = rhlota.r70_codigo
 	  INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
@@ -321,6 +321,8 @@ WHERE
 	  )
 
 	  AND   rh01_sicom = 1
+
+	  AND rh01_instit = ".db_getsession('DB_instit')."
 
 group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
 ";
