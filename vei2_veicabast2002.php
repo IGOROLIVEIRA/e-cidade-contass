@@ -148,7 +148,7 @@ $sCampos = " distinct
 	      z01_numcgm cgmposto,
 	      case when ve71_nota is null or ve71_nota = '' then 'INTERNO' else z01_nome end as posto,
               ve70_codigo,
-              ve70_data,
+              ve70_dtabast as ve70_data,
               ve70_hora,
               ve26_descr,
               coalesce(ve60_medidasaida, ve70_medida) as medida_retirada,
