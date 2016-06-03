@@ -377,7 +377,7 @@ function js_submit_form(){
               		                                   pc01_descrmater,
               		                                   pc11_resum",
               		                                  "pc11_seq",
-              		                                  "pc81_codproc=$codproc");
+              		                                  "pc81_codproc=$codproc",true);
               $sql_disabled = $clpcprocitem->sql_query_pcmater(null,
                                                                "distinct pc81_codprocitem",
                                                                null,
@@ -385,7 +385,7 @@ function js_submit_form(){
                                                                 and (    l21_codliclicita <> {$licitacao}
                                                                       or l21_codliclicita = {$licitacao} and l21_codigo is not null
                                                                       or ( e54_anulad is null and e55_sequen is not null)
-                                                                    )");
+                                                                    )",true);
               if (isset($cods)&&$cods!=""){
                 $sql_marca = $clpcprocitem->sql_query_pcmater(null,
                                                               "distinct
@@ -402,7 +402,7 @@ function js_submit_form(){
                                                               "pc81_codproc=$codproc
                                                                and l21_codigo is not null
                                                                and l21_codliclicita = $licitacao
-                                                              ");
+                                                              ",true);
               }
            }
 

@@ -581,7 +581,7 @@ class cl_pcprocitem {
      }
      return $sql;
   }
-   function sql_query_pcmater ( $pc81_codprocitem=null,$campos="*",$ordem=null,$dbwhere=""){
+   function sql_query_pcmater ( $pc81_codprocitem=null,$campos="*",$ordem=null,$dbwhere="", $precoref = false){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -619,6 +619,13 @@ class cl_pcprocitem {
      $sql .= "      left join processocompraloteitem  on processocompraloteitem.pc69_pcprocitem = pcprocitem.pc81_codprocitem";
      $sql .= "      left join processocompralote      on processocompralote.pc68_sequencial = processocompraloteitem.pc69_processocompralote";
      $sql2 = "";
+     if($precoref){
+       $sql .= " inner join precoreferencia on pcproc.pc80_codproc = precoreferencia.si01_processocompra ";
+       $sql .= " join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem ";
+       $sql .= " join pcorcamitem on pc31_orcamitem = pc22_orcamitem ";
+       $sql .= " join pcorcamval on pc22_orcamitem = pc23_orcamitem ";
+       //$sql .= " join inner itemprecoreferencia on pc23_orcamitem = si02_itemproccompra ";
+     }
      if($dbwhere==""){
        if($pc81_codprocitem!=null ){
          $sql2 .= " where pcprocitem.pc81_codprocitem = $pc81_codprocitem ";
