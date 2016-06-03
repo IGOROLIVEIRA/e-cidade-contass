@@ -83,6 +83,49 @@ class cl_desdobramento {
     ";
     return analiseQueryPlanoOrcamento($sql);
   }
+
+    function sql2($where = "", $dtini, $dtfim, $w_instit = "(1) "){
+        $sql = "select
+    /* orcdotacao.o58_codele,*/
+    conplano.c60_estrut,
+    conplano.c60_descr,
+    substr(ele.o56_elemento||'00',1,15) as o56_elemento,
+    ele.o56_descr,
+    sum(case when c53_tipo = 10  then c70_valor else 0 end ) as empenhadoa,
+    sum(case when c53_tipo = 11  then c70_valor else 0 end ) as empenhado_estornadoa,
+    sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidadoa,
+    sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornadoa,
+    sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamentoa,
+    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornadoa
+    from conlancamele
+    inner join conlancam on c67_codlan=c70_codlan
+    inner join conlancamemp on c75_codlan = c70_codlan
+    inner join empempenho on e60_numemp = c75_numemp and e60_anousu=".db_getsession("DB_anousu")."
+    inner join orcdotacao on o58_coddot = empempenho.e60_coddot  and o58_anousu = e60_anousu
+    $w_elemento
+    inner join conplano on c60_codcon = orcdotacao.o58_codele and c60_anousu=".db_getsession("DB_anousu")."
+    inner join conlancamdoc on c71_codlan=c70_codlan
+    inner join conhistdoc on c71_coddoc=c53_coddoc
+    inner join orcelemento ele on ele.o56_codele=conlancamele.c67_codele and
+    ele.o56_anousu = o58_anousu
+    where ";
+        if ($where != "") {
+            $sql .= " $where and ";
+        }
+        $sql .= "
+    empempenho.e60_instit in $w_instit
+    and ( conlancam.c70_data >='".db_getsession("DB_anousu")."-01-01' and conlancam.c70_data <='$dtfim' )
+    and conhistdoc.c53_tipo in (10,11,20,21,30,31)
+    group by /* o58_codele, */
+    c60_estrut,
+    c60_descr,
+    o56_elemento,
+    o56_descr
+    order by
+    o56_elemento
+    ";
+        return analiseQueryPlanoOrcamento($sql);
+    }
 }
 
 class cl_receita_saldo_mes {

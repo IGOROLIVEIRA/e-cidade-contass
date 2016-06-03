@@ -149,7 +149,7 @@ if ($totaliza == "A")
 else
   $result = db_dotacaosaldo(2,2,4,true,$sele_work,$anousu,$dataini,$datafin);
 
-
+db_criatabela($result);exit;
 $fp = fopen("tmp/baldesp.csv","w");
 fputs($fp,"Orgão;;Unidade;;Função;;Subfunção;;Programa;;ProjAtiv;;Elemento;;Recurso;;DotIni;Suplem;Especial;Reduzido;Empenhado;Anulado;Liquidado;Pago;Empenhado_Acumulado;Anulado_acumulado;Liquidado_acumulado;Pago_acumulado\n");
 while($ln = pg_fetch_array($result)){
