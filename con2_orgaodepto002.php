@@ -60,11 +60,12 @@ $sql = "select *
                         o40_descr, 
 	                    coddepto, 
 	                    descrdepto, 
-	                    nomeresponsavel, 
+	                    z01_nome as nomeresponsavel, 
 	                    emailresponsavel 
 	               from db_depart 
                         inner join db_departorg on db01_coddepto = coddepto 
-	                    inner join orcorgao     on o40_orgao = db01_orgao 
+	                    inner join orcorgao     on o40_orgao = db01_orgao
+			    left join cgm on numcgm=z01_numcgm 
 	                                           and o40_anousu = " . db_getsession("DB_anousu") . " 
 	                                           and o40_instit = " . db_getsession("DB_instit") . "
                   where (limite is null or limite >= '" . date("y-m-d",db_getsession("DB_datausu")) . "') 
