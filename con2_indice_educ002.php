@@ -165,7 +165,14 @@ for ($x=0;$x < pg_numrows($result_deducao);$x++){
 //  if ($o57_fonte == '413250100000000'){
   if (db_conplano_grupo($anousu,$o57_fonte,9003) == true){
     $rendimentos_mde_fundef += $saldo_arrecadado;  
-  }        
+  }
+
+  /**
+   * condição adicionada para resolver o problema de não retornar as Deduções do FUNDEB no relatório
+   */
+  if ($o70_codrec > 0 and substr($o57_fonte,0,3) == '495'){
+    $plus_fundeb += abs($saldo_arrecadado);
+  }
   
 }  
 
