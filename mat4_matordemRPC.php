@@ -48,6 +48,9 @@ require_once ("model/MaterialCompras.model.php");
 require_once ("model/estoque/MaterialGrupo.model.php");
 require_once ("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php");
 require_once ("model/contabilidade/planoconta/ContaPlano.model.php");
+require_once("classes/materialestoque.model.php");
+require_once("classes/db_pcmaterele_classe.php");
+
 
 db_app::import('contabilidade.*');
 db_app::import('contabilidade.lancamento.*');
@@ -64,274 +67,304 @@ $objJson      = $json->decode(str_replace("\\","",$_POST["json"]));
 $oORdemCompra = new ordemCompra($objJson->m51_codordem);
 $method       = $objJson->method;
 $oORdemCompra->setEncodeOn();
+
 if ($method == "getDados") {
 
-  echo $oORdemCompra->ordem2Json($objJson->e69_codnota);
+    echo $oORdemCompra->ordem2Json($objJson->e69_codnota);
 } else if ($method == "anularEntradaOrdem") {
 
 
-  try {
-    $oORdemCompra->anularEntradaNota($objJson->e69_codnota);
-    $status   = 1;
-    $mensagem = "Entrada de Ordem de Compra anulada com Sucesso.";
-    $load     = 1;
+    try {
+        $oORdemCompra->anularEntradaNota($objJson->e69_codnota);
+        $status   = 1;
+        $mensagem = "Entrada de Ordem de Compra anulada com Sucesso.";
+        $load     = 1;
 
-  } catch (BusinessException $oErro) {
+    } catch (BusinessException $oErro) {
 
-    $status   = 2;
-    $mensagem = $oErro->getMessage();
-    $load     = 2;
+        $status   = 2;
+        $mensagem = $oErro->getMessage();
+        $load     = 2;
 
-  } catch (Exception $eErro) {
+    } catch (Exception $eErro) {
 
-  	$status   = 2;
-  	$mensagem = $eErro->getMessage();
-  	$load     = 2;
-  }
+        $status   = 2;
+        $mensagem = $eErro->getMessage();
+        $load     = 2;
+    }
 
 
-  echo $json->encode(array("mensagem" => urlencode($mensagem), "status" => $status, "load" => $load ));
+    echo $json->encode(array("mensagem" => urlencode($mensagem), "status" => $status, "load" => $load ));
 } else if ($method == "getOrdem"){
 
-   $oORdemCompra->setEncodeOn();
-   $oORdemCompra->getDados();
-   if ($oORdemCompra->getItensSaldo()){
-      echo $json->encode($oORdemCompra->dadosOrdem);
-   }
+    $oORdemCompra->setEncodeOn();
+    $oORdemCompra->getDados();
+    if ($oORdemCompra->getItensSaldo()){
+        echo $json->encode($oORdemCompra->dadosOrdem);
+    }
 } else if ($method == "anularOrdem"){
 
-   $oORdemCompra->anularOrdem($objJson->itensAnulados, db_stdclass::normalizeStringJsonEscapeString($objJson->sMotivo),$objJson->empanula);
-   $mensagem = '';
-   $status   = 1;
-   if ($oORdemCompra->lSqlErro){
+    $oORdemCompra->anularOrdem($objJson->itensAnulados, db_stdclass::normalizeStringJsonEscapeString($objJson->sMotivo),$objJson->empanula);
+    $mensagem = '';
+    $status   = 1;
+    if ($oORdemCompra->lSqlErro){
 
-     $mensagem = urlencode($oORdemCompra->sErroMsg);
-     $status   = 2;
-   }
-   echo $json->encode(array("mensagem" => $mensagem, "status" => $status));
+        $mensagem = urlencode($oORdemCompra->sErroMsg);
+        $status   = 2;
+    }
+    echo $json->encode(array("mensagem" => $mensagem, "status" => $status));
 } else if ($method == "getInfoEntrada") {
 
-  try {
+    try {
 
-    $oORdemCompra->destroySession();
-    $oORdemCompra->getInfoEntrada();
-    $oORdemCompra->dadosOrdem->status  = 1;
-    $oORdemCompra->dadosOrdem->itens   = $oORdemCompra->getDadosEntrada();
-    echo $json->encode($oORdemCompra->dadosOrdem);
+        $oORdemCompra->destroySession();
+        $oORdemCompra->getInfoEntrada();
+        $oORdemCompra->dadosOrdem->status  = 1;
+        $oORdemCompra->dadosOrdem->itens   = $oORdemCompra->getDadosEntrada();
+        echo $json->encode($oORdemCompra->dadosOrdem);
 
-  } catch (Exception $eErro) {
+    } catch (Exception $eErro) {
 
-    echo $json->encode(array("mensagem" => urlencode($eErro->getMessage()),
-                             "status"   => 2
-                            )
-                      );
+        echo $json->encode(array("mensagem" => urlencode($eErro->getMessage()),
+                "status"   => 2
+            )
+        );
 
-  }
+    }
 
 } else if ($method == "getInfoItem") {
 
-  echo $json->encode($oORdemCompra->getInfoItem($objJson->iCodLanc, $objJson->iIndice));
+    echo $json->encode($oORdemCompra->getInfoItem($objJson->iCodLanc, $objJson->iIndice));
 
 } else if ($method == "saveMaterial") {
 
-  try {
+    try {
 
-     $oORdemCompra->saveMaterial($objJson->iCodLanc, $objJson->oMaterial);
-     echo $json->encode(array("mensagem"  => "ok",
-                              "status"    => 1,
-                              "lFraciona" => $objJson->oMaterial->fraciona,
-                              "iCodLanc"  => $objJson->iCodLanc));
-  } catch (Exception $eErro){
+        $oORdemCompra->saveMaterial($objJson->iCodLanc, $objJson->oMaterial);
+        echo $json->encode(array("mensagem"  => "ok",
+            "status"    => 1,
+            "lFraciona" => $objJson->oMaterial->fraciona,
+            "iCodLanc"  => $objJson->iCodLanc));
+    } catch (Exception $eErro){
 
-     echo $json->encode(array("mensagem" => urlEncode($eErro->getMessage()),
-                              "status"   => 2,
-                              "lfraciona" => false,
-                            )
-                       );
-  }
+        echo $json->encode(array("mensagem" => urlEncode($eErro->getMessage()),
+                "status"   => 2,
+                "lfraciona" => false,
+            )
+        );
+    }
 } else if ($method == "getDadosEntrada") {
 
-  $aRetorno = array("aItens" => $oORdemCompra->getDadosEntrada(),"marcar" => $objJson->marcar);
-  echo $json->encode($aRetorno);
+    $aRetorno = array("aItens" => $oORdemCompra->getDadosEntrada(),"marcar" => $objJson->marcar);
+    echo $json->encode($aRetorno);
 
 } else if ($method == "cancelarFracionamento") {
 
-   if ($oORdemCompra->cancelarFracionamento($objJson->iCodLanc, $objJson->iIndice)) {
+    if ($oORdemCompra->cancelarFracionamento($objJson->iCodLanc, $objJson->iIndice)) {
 
-     echo $json->encode($oORdemCompra->getDadosEntrada());
+        echo $json->encode($oORdemCompra->getDadosEntrada());
 
-   }
+    }
 
 }  else if ($method == "desmarcarItem") {
 
-  $_SESSION["matordem{$objJson->m51_codordem}"][$objJson->iCodLanc][$objJson->iIndice]->checked = "";
+    $_SESSION["matordem{$objJson->m51_codordem}"][$objJson->iCodLanc][$objJson->iIndice]->checked = "";
 
 } else if ($method == "confirmarEntrada") {
 
-  try {
+    try {
 
-    db_inicio_transacao();
+        db_inicio_transacao();
 
-    /**
-     validação realizada pela retaguarda, para verificar se algum item esta sem vinculo com grupo e subgrupo.
-     */
-    $sComprasSemMaterial = '';
-    
-    foreach ($_SESSION["matordem{$objJson->m51_codordem}"] as $iCodLanc => $oItem) {
-    
-      foreach ($oItem as $iIndice => $oItemFilho) {
-        if ($_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->m63_codmatmater == ''){
-          $sComprasSemMaterial .= "\n".$_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->pc01_codmater .' - '.
-              $_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->pc01_descrmater;
+        /**
+        validação realizada pela retaguarda, para verificar se algum item esta sem vinculo com grupo e subgrupo.
+         */
+        $sComprasSemMaterial = '';
+
+        foreach ($_SESSION["matordem{$objJson->m51_codordem}"] as $iCodLanc => $oItem) {
+
+            foreach ($oItem as $iIndice => $oItemFilho) {
+                if ($_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->m63_codmatmater == ''){
+                    $sComprasSemMaterial .= "\n".$_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->pc01_codmater .' - '.
+                        $_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->pc01_descrmater;
+                }
+            }
         }
-      }
+        if (!empty($sComprasSemMaterial)){
+            throw new Exception("Itens sem vínculo com Material de Entrada:\n" . urldecode($sComprasSemMaterial) . "\n ");
+        }
+
+        $sObservacao     = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->sObs));
+        $sNota           = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->sNumero));
+        $sNumeroProcesso = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->e04_numeroprocesso));
+
+        $oDadosEntradaNovo = $oORdemCompra->getDadosEntrada();
+
+        $oORdemCompra->confirmaEntrada( $sNota,
+            $objJson->dtDataNota,
+            $objJson->dtRecebeNota,
+            $objJson->nValorNota,
+            $objJson->aItens,
+            $objJson->oInfoNota,
+            $sObservacao,
+            $sNumeroProcesso,
+            $objJson->sNotaFiscalEletronica,
+            $objJson->sChaveAcesso,
+            $objJson->sNumeroSerie
+        );
+
+        /**
+         * saida de material para o elemento ****
+         */
+        $pcmaterele = new cl_pcmaterele;
+
+        foreach ($oDadosEntradaNovo as $oMaterial) {
+
+            $rsElemento = $pcmaterele->sql_record($pcmaterele->sql_query($oMaterial->pc01_codmater));
+
+            $oDadosElemento = db_utils::fieldsMemory($rsElemento, 0);
+
+            $baseElemento = substr($oDadosElemento->o56_elemento,0,5);
+            if( $baseElemento = '34490' ) {
+
+                db_inicio_transacao();
+
+                $oMaterialEstoque = new materialEstoque($oMaterial->m63_codmatmater);
+                MaterialEstoque::bloqueioMovimentacaoItem($oMaterial->m63_codmatmater, db_getsession("DB_coddepto"));
+                if (isset($oMaterial->iCriterioCustoRateio)) {
+                    $oMaterialEstoque->setCriterioRateioCusto($oMaterial->iCriterioCustoRateio);
+                }
+                $oMaterialEstoque->saidaMaterial($oMaterial->m52_quant, 'Ajuste de Estoque para Material Permanente');
+                db_fim_transacao(false);
+
+            }
+
+        }
+        echo $json->encode(array("mensagem" => "Entrada da ordem de compra efetuada com sucesso.", "status" => 1));
     }
-    if (!empty($sComprasSemMaterial)){
-      throw new Exception("Itens sem vínculo com Material de Entrada:\n" . urldecode($sComprasSemMaterial) . "\n ");
-    }    
-    
-    $sObservacao     = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->sObs));
-    $sNota           = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->sNumero));
-    $sNumeroProcesso = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->e04_numeroprocesso));
+    catch (Exception $eError) {
 
-    $oORdemCompra->confirmaEntrada( $sNota,
-                                    $objJson->dtDataNota,
-                                    $objJson->dtRecebeNota,
-                                    $objJson->nValorNota,
-                                    $objJson->aItens,
-                                    $objJson->oInfoNota,
-                                    $sObservacao,
-                                    $sNumeroProcesso,
-                                    $objJson->sNotaFiscalEletronica,
-                                    $objJson->sChaveAcesso,
-                                    $objJson->sNumeroSerie
-                                  );
-    db_fim_transacao(false);
-    echo $json->encode(array("mensagem" => "Entrada da ordem de compra efetuada com sucesso.", "status" => 1));
-  }
-  catch (Exception $eError) {
+        db_fim_transacao(true);
+        echo $json->encode(array("mensagem" => urlencode($eError->getMessage()), "status" => 2));
 
-    db_fim_transacao(true);
-    echo $json->encode(array("mensagem" => urlencode($eError->getMessage()), "status" => 2));
-
-  }
+    }
 } else if ($method == "marcarItensSession") {
 
-  if ($objJson->lMarcar) {
-    $sChecked = "checked";
-  } else {
-    $sChecked = "";
-  }
-  foreach ($_SESSION["matordem{$objJson->m51_codordem}"] as $iCodLanc => $oItem) {
-
-    foreach ($oItem as $iIndice => $oItemFilho) {
-      echo $_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->checked."\n";
-      $_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->checked = $sChecked;
+    if ($objJson->lMarcar) {
+        $sChecked = "checked";
+    } else {
+        $sChecked = "";
     }
-  }
+    foreach ($_SESSION["matordem{$objJson->m51_codordem}"] as $iCodLanc => $oItem) {
+
+        foreach ($oItem as $iIndice => $oItemFilho) {
+            echo $_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->checked."\n";
+            $_SESSION["matordem{$objJson->m51_codordem}"][$iCodLanc][$iIndice]->checked = $sChecked;
+        }
+    }
 } else if ($method == "verificaBensBaixado") {
 
-  $aDocumentos = array(200 => 7,
-  		                 201 => 7,
-  		                 208 => 9,
-  		                 209 => 9,
-  		                 210 => 8,
-  		                 211 => 8);
-  $status           = 1;
-  $aGrupos          = array();
-  $iCodigoNota      = $objJson->iCodigoNota;
-  $iInstituicao     = db_getsession('DB_instit');
-  $iGrupoEmpenho    = 0;
-  $oDaoConLanCamEmp = db_utils::getDao("conlancamemp");
+    $aDocumentos = array(200 => 7,
+        201 => 7,
+        208 => 9,
+        209 => 9,
+        210 => 8,
+        211 => 8);
+    $status           = 1;
+    $aGrupos          = array();
+    $iCodigoNota      = $objJson->iCodigoNota;
+    $iInstituicao     = db_getsession('DB_instit');
+    $iGrupoEmpenho    = 0;
+    $oDaoConLanCamEmp = db_utils::getDao("conlancamemp");
 
-  $sCamposConLanCamEmp  = " c71_coddoc, ";
-  $sCamposConLanCamEmp .= " e60_numemp  ";
-  $sWhereConLanCamEmp   = "     conlancamnota.c66_codnota = {$iCodigoNota}                ";
-  $sWhereConLanCamEmp  .= " and conlancamdoc.c71_coddoc in (200, 201, 208, 209, 210, 211) ";
-  $sSqlConLanCamEmp     = $oDaoConLanCamEmp->sql_query_verificaBensBaixados(null, $sCamposConLanCamEmp, null, $sWhereConLanCamEmp);
-  $rsConLanCamEmp       = $oDaoConLanCamEmp->sql_record($sSqlConLanCamEmp);
+    $sCamposConLanCamEmp  = " c71_coddoc, ";
+    $sCamposConLanCamEmp .= " e60_numemp  ";
+    $sWhereConLanCamEmp   = "     conlancamnota.c66_codnota = {$iCodigoNota}                ";
+    $sWhereConLanCamEmp  .= " and conlancamdoc.c71_coddoc in (200, 201, 208, 209, 210, 211) ";
+    $sSqlConLanCamEmp     = $oDaoConLanCamEmp->sql_query_verificaBensBaixados(null, $sCamposConLanCamEmp, null, $sWhereConLanCamEmp);
+    $rsConLanCamEmp       = $oDaoConLanCamEmp->sql_record($sSqlConLanCamEmp);
 
-  if ($oDaoConLanCamEmp->numrows > 0) {
+    if ($oDaoConLanCamEmp->numrows > 0) {
 
-    $iDocumento         = db_utils::fieldsMemory($rsConLanCamEmp, 0)->c71_coddoc;
-    $oDadosConLanCamEmp = db_utils::fieldsMemory($rsConLanCamEmp, 0);
-    $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oDadosConLanCamEmp->e60_numemp);
-    $oContaOrcamento    = new ContaOrcamento($oEmpenhoFinanceiro->getDesdobramentoEmpenho(),
-                                             $oEmpenhoFinanceiro->getAnoUso(),
-                                             null,
-                                             $oEmpenhoFinanceiro->getInstituicao());
+        $iDocumento         = db_utils::fieldsMemory($rsConLanCamEmp, 0)->c71_coddoc;
+        $oDadosConLanCamEmp = db_utils::fieldsMemory($rsConLanCamEmp, 0);
+        $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oDadosConLanCamEmp->e60_numemp);
+        $oContaOrcamento    = new ContaOrcamento($oEmpenhoFinanceiro->getDesdobramentoEmpenho(),
+            $oEmpenhoFinanceiro->getAnoUso(),
+            null,
+            $oEmpenhoFinanceiro->getInstituicao());
 
-    if ($oContaOrcamento->getGruposContas() !== false) {
+        if ($oContaOrcamento->getGruposContas() !== false) {
 
-      $aGrupos       = $oContaOrcamento->getGruposContas();
-      $iGrupoEmpenho = $aGrupos[0]->c20_sequencial;
+            $aGrupos       = $oContaOrcamento->getGruposContas();
+            $iGrupoEmpenho = $aGrupos[0]->c20_sequencial;
+        }
+
+        $iGrupoDeveEstar    = $aDocumentos[$iDocumento];
+        if ( ($iGrupoDeveEstar != $iGrupoEmpenho)  && ($iGrupoEmpenho != 9) ) {
+
+            $oDaoConGrupo = db_utils::getDao("congrupo");
+            $sSQLConGrupo = $oDaoConGrupo->sql_query_file($iGrupoDeveEstar);
+            $rsConGrupo   = $oDaoConGrupo->sql_record($sSQLConGrupo);
+            $oConGrupo    = db_utils::fieldsMemory($rsConGrupo, 0);
+
+
+            $sMensagemErro  = "A operação não poderá ser realizada porque esta ordem de compra pertence ao empenho ". $oEmpenhoFinanceiro->getCodigo() . "/" . $oEmpenhoFinanceiro->getAnoUso();
+            $sMensagemErro .= " e sua conta de despesa não esta configurada no grupo de contas do plano orçamentário de origem, ";
+            $sMensagemErro .= "o que compromete o fechamento contábil. Solicite ao responsável pela ";
+            $sMensagemErro .= "Contabilidade a inclusão da conta " .  $oContaOrcamento->getCodigoConta() . " - " . $oContaOrcamento->getDescricao() ;
+            $sMensagemErro .= " no grupo de contas {$oConGrupo->c20_sequencial} - {$oConGrupo->c20_descr} ";
+
+            $status   = '3';
+            echo $json->encode(array("status" => $status, "sMensagem" => urlencode($sMensagemErro)));
+            return false;
+        }
     }
 
-    $iGrupoDeveEstar    = $aDocumentos[$iDocumento];
-    if ( ($iGrupoDeveEstar != $iGrupoEmpenho)  && ($iGrupoEmpenho != 9) ) {
 
-      $oDaoConGrupo = db_utils::getDao("congrupo");
-      $sSQLConGrupo = $oDaoConGrupo->sql_query_file($iGrupoDeveEstar);
-      $rsConGrupo   = $oDaoConGrupo->sql_record($sSQLConGrupo);
-      $oConGrupo    = db_utils::fieldsMemory($rsConGrupo, 0);
-
-
-      $sMensagemErro  = "A operação não poderá ser realizada porque esta ordem de compra pertence ao empenho ". $oEmpenhoFinanceiro->getCodigo() . "/" . $oEmpenhoFinanceiro->getAnoUso();
-      $sMensagemErro .= " e sua conta de despesa não esta configurada no grupo de contas do plano orçamentário de origem, ";
-      $sMensagemErro .= "o que compromete o fechamento contábil. Solicite ao responsável pela ";
-      $sMensagemErro .= "Contabilidade a inclusão da conta " .  $oContaOrcamento->getCodigoConta() . " - " . $oContaOrcamento->getDescricao() ;
-      $sMensagemErro .= " no grupo de contas {$oConGrupo->c20_sequencial} - {$oConGrupo->c20_descr} ";
-
-      $status   = '3';
-      echo $json->encode(array("status" => $status, "sMensagem" => urlencode($sMensagemErro)));
-      return false;
+    if ($oORdemCompra->getBensAtivoNota($objJson->iCodigoNota) != false) {
+        $status   = 2;
     }
-  }
 
+    if ($oORdemCompra->houveDispensaTombamentoNoPatrimonio($objJson->iCodigoNota)) {
+        $status   = 4;
+    }
 
-  if ($oORdemCompra->getBensAtivoNota($objJson->iCodigoNota) != false) {
-    $status   = 2;
-  }
-
-  if ($oORdemCompra->houveDispensaTombamentoNoPatrimonio($objJson->iCodigoNota)) {
-    $status   = 4;
-  }
-
-  echo $json->encode(array("status" => $status, "iCodigoNota" => $iCodigoNota));
+    echo $json->encode(array("status" => $status, "iCodigoNota" => $iCodigoNota));
 
 }else if ($method == "verificaNota") {
 
-  $status        = 0;
-  $sEmpenho      = "";
-  $sNota         = addslashes(db_stdClass::normalizeStringJson($objJson->sNota));
-  $iCgmFornecedor= $objJson->iCgmFornecedor;
-  $oDaoEmpNota   = db_utils::getDao("empnota");
+    $status        = 0;
+    $sEmpenho      = "";
+    $sNota         = addslashes(db_stdClass::normalizeStringJson($objJson->sNota));
+    $iCgmFornecedor= $objJson->iCgmFornecedor;
+    $oDaoEmpNota   = db_utils::getDao("empnota");
 
-  $iInstituicao  = db_getsession('DB_instit');
-  $sWhereEmpNota = "e69_numero ilike '{$sNota}' and e60_instit = {$iInstituicao} and e60_numcgm = {$iCgmFornecedor}";
-  $sSqlEmpNota   = $oDaoEmpNota->sql_query(null,
-  		                                     "distinct e60_codemp, e69_anousu",
-  		                                     "e60_codemp, e69_anousu",
-  		                                     $sWhereEmpNota);
-  $rsEmpNota     = $oDaoEmpNota->sql_record($sSqlEmpNota);
+    $iInstituicao  = db_getsession('DB_instit');
+    $sWhereEmpNota = "e69_numero ilike '{$sNota}' and e60_instit = {$iInstituicao} and e60_numcgm = {$iCgmFornecedor}";
+    $sSqlEmpNota   = $oDaoEmpNota->sql_query(null,
+        "distinct e60_codemp, e69_anousu",
+        "e60_codemp, e69_anousu",
+        $sWhereEmpNota);
+    $rsEmpNota     = $oDaoEmpNota->sql_record($sSqlEmpNota);
 
-  if ($oDaoEmpNota->numrows > 0) {
+    if ($oDaoEmpNota->numrows > 0) {
 
-		$status   = 1;
+        $status   = 1;
 
-		$aEmpenhos = array();
+        $aEmpenhos = array();
 
-    foreach (db_utils::getCollectionByRecord($rsEmpNota) as $oEmpNota) {
+        foreach (db_utils::getCollectionByRecord($rsEmpNota) as $oEmpNota) {
 
-    	$aEmpenhos[] = "\n" . $oEmpNota->e60_codemp . '/' . $oEmpNota->e69_anousu;
+            $aEmpenhos[] = "\n" . $oEmpNota->e60_codemp . '/' . $oEmpNota->e69_anousu;
+
+        }
+
+        //$iAnoEmpenho = $oEmpenho->getAnoUso();
+
+        $sEmpenho    = implode(", ", $aEmpenhos);
 
     }
-
-    //$iAnoEmpenho = $oEmpenho->getAnoUso();
-
-    $sEmpenho    = implode(", ", $aEmpenhos);
-
-  }
-  echo $json->encode(array("status" => $status, "sEmpenho" => $sEmpenho));
+    echo $json->encode(array("status" => $status, "sEmpenho" => $sEmpenho));
 
 }
