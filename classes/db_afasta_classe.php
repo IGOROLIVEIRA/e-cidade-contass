@@ -750,6 +750,7 @@ class cl_afasta {
        $sql .= $campos;
      }
      $sql .= " from afasta ";
+     $sql .= "      inner join rhpessoal on rh01_regist = r45_regist and rh01_instit  = ".db_getsession("DB_instit");
      $sql .= "      left join afastaassenta on afastaassenta.h81_afasta = afasta.r45_codigo";
      $sql2 = "";
      if($dbwhere==""){
