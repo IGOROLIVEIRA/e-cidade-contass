@@ -54,7 +54,8 @@ class cl_contabancaria {
    var $db83_convenio = null;
    var $db83_tipoaplicacao = 0;
    var $db83_numconvenio = null;
-   var $db83_dataconvenio = null; 
+   var $db83_dataconvenio = null;
+   var $db83_nroseqaplicacao = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  db83_sequencial = int4 = Codigo sequencial da conta bancaria
@@ -69,7 +70,8 @@ class cl_contabancaria {
                  db83_convenio = int8 = Convênio
                  db83_tipoaplicacao = int8 = Tipo Aplicação
                  db83_numconvenio = int8 = Número Convênio
-                 db83_dataconvenio = date = Data Convênio 
+                 db83_dataconvenio = date = Data Convênio
+                 db83_nroseqaplicacao = int8 = Número sequencial da aplicação
                  ";
    //funcao construtor da classe
    function cl_contabancaria() {
@@ -109,6 +111,7 @@ class cl_contabancaria {
             $this->db83_dataconvenio = $this->db83_dataconvenio_ano."-".$this->db83_dataconvenio_mes."-".$this->db83_dataconvenio_dia;
          }
        }
+         $this->db83_nroseqaplicacao = ($this->db83_nroseqaplicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["db83_nroseqaplicacao"]:$this->db83_nroseqaplicacao);
      }else{
        $this->db83_sequencial = ($this->db83_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["db83_sequencial"]:$this->db83_sequencial);
      }
@@ -191,6 +194,26 @@ class cl_contabancaria {
        $this->erro_status = "0";
        return false;
      }
+       $result = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit") );
+       if (pg_result($result,0,0) == 5 && ($this->db83_tipoaplicacao == null || $this->db83_tipoaplicacao == 0)) {
+           $this->erro_sql = " Campo Tipo Aplicação nao Informado.";
+           $this->erro_campo = "db83_tipoaplicacao";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+       if (pg_result($result,0,0) == 5 && ($this->db83_nroseqaplicacao == null || $this->db83_nroseqaplicacao == 0)) {
+           $this->erro_sql = " Campo Número sequencial da aplicação nao Informado.";
+           $this->erro_campo = "db83_nroseqaplicacao";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+
      if($db83_sequencial == "" || $db83_sequencial == null ){
        $result = db_query("select nextval('contabancaria_db83_sequencial_seq')");
        if($result==false){
@@ -236,7 +259,8 @@ class cl_contabancaria {
                                       ,db83_convenio
                                       ,db83_tipoaplicacao
                                       ,db83_numconvenio
-                                      ,db83_dataconvenio 
+                                      ,db83_dataconvenio
+                                      ,db83_nroseqaplicacao
                        )
                 values (
                                 $this->db83_sequencial
@@ -251,7 +275,8 @@ class cl_contabancaria {
                                ,".($this->db83_convenio == ""? "null" : $this->db83_convenio)."
                                ,".($this->db83_tipoaplicacao == ""? "null" : $this->db83_tipoaplicacao)."
                                ,".($this->db83_numconvenio == ""? "null" : $this->db83_numconvenio)."
-                               ,".($this->db83_dataconvenio == "null" || $this->db83_dataconvenio == ""?"null":"'".$this->db83_dataconvenio."'")." 
+                               ,".($this->db83_dataconvenio == "null" || $this->db83_dataconvenio == ""?"null":"'".$this->db83_dataconvenio."'")."
+                                ,".($this->db83_nroseqaplicacao == ""? "null" : $this->db83_nroseqaplicacao)."
                       )";
      
      $result = db_query($sql);
@@ -407,12 +432,36 @@ class cl_contabancaria {
        $sql  .= $virgula." db83_convenio = '$this->db83_convenio' ";
        $virgula = ",";
      }
+       $result = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit") );
      if(trim($this->db83_tipoaplicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoaplicacao"])){ 
-       $sql  .= $virgula." db83_tipoaplicacao = '$this->db83_tipoaplicacao' ";
+       $sql  .= $virgula." db83_tipoaplicacao = $this->db83_tipoaplicacao ";
        $virgula = ",";
+         if (pg_result($result,0,0) == 5 && ($this->db83_tipoaplicacao == null || $this->db83_tipoaplicacao == 0)) {
+             $this->erro_sql = " Campo Tipo Aplicação nao Informado.";
+             $this->erro_campo = "db83_tipoaplicacao";
+             $this->erro_banco = "";
+             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+             $this->erro_status = "0";
+             return false;
+         }
      }
+       if(trim($this->db83_nroseqaplicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_nroseqaplicacao"])){
+           $sql  .= $virgula." db83_nroseqaplicacao = ".($this->db83_nroseqaplicacao == null ? 'null' : $this->db83_nroseqaplicacao);
+           $virgula = ",";
+           if (pg_result($result,0,0) == 5 && ($this->db83_nroseqaplicacao == null || $this->db83_nroseqaplicacao == 0)) {
+               $this->erro_sql = " Campo Número sequencial da aplicação nao Informado.";
+               $this->erro_campo = "db83_nroseqaplicacao";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+
      if(trim($this->db83_numconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_numconvenio"])){ 
-       $sql  .= $virgula." db83_numconvenio = '$this->db83_numconvenio' ";
+       $sql  .= $virgula." db83_numconvenio = ".($this->db83_numconvenio == null ? 'null' : $this->db83_numconvenio);
        $virgula = ",";
        if(trim($this->db83_numconvenio) == null && $this->db83_convenio == 1){ 
          $this->erro_sql = " Campo Número Convênio nao Informado.";

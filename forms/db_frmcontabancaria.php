@@ -185,6 +185,17 @@ $clrotulo->label("db89_codagencia");
 				?>
 	    </td>
 	  </tr>
+
+		<tr>
+			<td nowrap title="db83_nroseqaplicacao?>">
+				<b>Número sequencial da aplicação</b>
+			</td>
+			<td>
+				<?
+				db_input('db83_nroseqaplicacao',11,1,true,'text',$db_opcao,"");
+				?>
+			</td>
+		</tr>
   </table>
 </fieldset>
 </center>

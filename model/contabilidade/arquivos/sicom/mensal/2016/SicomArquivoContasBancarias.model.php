@@ -146,8 +146,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				             c63_dvconta, 
 				             c63_dvagencia,
 				             case when db83_tipoconta in (2,3) then 2 else 1 end as tipoconta,
-				             ' ' as tipoaplicacao,
-				             ' ' as nroseqaplicacao,
+				             case when (select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit") . " ) = 5 and db83_tipoconta in (2,3)
+				             then db83_tipoaplicacao::varchar else ' ' end as tipoaplicacao,
+				             case when (select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit") . " ) = 5 and db83_tipoconta in (2,3)
+				             then db83_nroseqaplicacao::varchar else ' ' end as nroseqaplicacao,
 				             db83_descricao as desccontabancaria,
 				             CASE WHEN (db83_convenio is null or db83_convenio = 2) then 2 else  1 end as contaconvenio,
 				             case when db83_convenio = 1 then db83_numconvenio else null end as nroconvenio,
