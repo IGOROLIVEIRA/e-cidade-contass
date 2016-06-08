@@ -225,7 +225,7 @@ if ($method == "getDados") {
             $oDadosElemento = db_utils::fieldsMemory($rsElemento, 0);
 
             $baseElemento = substr($oDadosElemento->o56_elemento,0,5);
-            if( $baseElemento = '34490' ) {
+            if( $baseElemento == '34490' ) {
 
                 db_inicio_transacao();
 
@@ -235,11 +235,11 @@ if ($method == "getDados") {
                     $oMaterialEstoque->setCriterioRateioCusto($oMaterial->iCriterioCustoRateio);
                 }
                 $oMaterialEstoque->saidaMaterial($oMaterial->m52_quant, 'Ajuste de Estoque para Material Permanente');
-                db_fim_transacao(false);
 
             }
 
         }
+        db_fim_transacao(false);
         echo $json->encode(array("mensagem" => "Entrada da ordem de compra efetuada com sucesso.", "status" => 1));
     }
     catch (Exception $eError) {
