@@ -119,7 +119,7 @@ $clempagemov->rotulo->label("e81_numemp");
                                                                         WHERE c71_coddoc = 414
                                                                           AND e64_numemp = e81_numemp
                                                                        GROUP BY empelemento.e64_vlrpag
-                                                                       HAVING sum(c70_valor) < e64_vlrpag)
+                                                                       HAVING sum(c70_valor) < sum(e64_vlrpag))
                                                                   OR
                                                                       EXISTS (SELECT 1 FROM empprestaitem
                                                                         WHERE e46_numemp = e45_numemp AND e46_valor = 0)
