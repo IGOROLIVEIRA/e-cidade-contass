@@ -268,7 +268,7 @@ class cl_pcforne {
         $this->erro_status = "0";
         return false;
       }
-      if($this->pc60_numeroregistro == null && $this->fisica_juridica == 'j'){ 
+      if((trim($this->pc60_numeroregistro) == null || $this->pc60_numeroregistro == 0) && $this->fisica_juridica == 'j'){
         $this->erro_sql = " Campo Número Registro nao Informado.";
         $this->erro_campo = "pc60_numeroregistro";
         $this->erro_banco = "";
