@@ -48,7 +48,9 @@ if ($db_opcao == 1) {
     <td> 
       <?
         $t21_instit = db_getsession("DB_instit");
+        $t21_depart = db_getsession("DB_coddepto");
         db_input("t21_instit", 10, $It21_instit, true, "hidden", 3, "");
+        db_input("t21_depart", 10, 1, true, "hidden", 3, "");
         db_input('t21_codigo', 10, $It21_codigo, true, 'text', 3, "");
       ?>
     </td>

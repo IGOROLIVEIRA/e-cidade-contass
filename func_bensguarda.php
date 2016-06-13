@@ -73,7 +73,7 @@ $clbensguarda->rotulo->label("t21_codigo");
   <tr> 
     <td align="center" valign="top"> 
       <?
-      $where_instit = "t21_instit = ".db_getsession("DB_instit");
+      $where_instit = "t21_instit = ".db_getsession("DB_instit")." and t21_depart = ".db_getsession("DB_coddepto");
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_bensguarda.php")==true){

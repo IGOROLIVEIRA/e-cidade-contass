@@ -50,7 +50,8 @@ class cl_bensguarda {
    var $t21_data_ano = null; 
    var $t21_data = null; 
    var $t21_obs = null; 
-   var $t21_instit = 0; 
+   var $t21_instit = 0;
+   var $t21_depart = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  t21_codigo = int4 = Cod. Guarda 
@@ -58,7 +59,8 @@ class cl_bensguarda {
                  t21_tipoguarda = int4 = Tipo de Guarda 
                  t21_data = date = Data da Guarda 
                  t21_obs = text = Observação 
-                 t21_instit = int4 = Instituição 
+                 t21_instit = int4 = Instituição
+                 t21_depart = int8 = Departamento
                  ";
    //funcao construtor da classe 
    function cl_bensguarda() { 
@@ -91,6 +93,7 @@ class cl_bensguarda {
        }
        $this->t21_obs = ($this->t21_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_obs"]:$this->t21_obs);
        $this->t21_instit = ($this->t21_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_instit"]:$this->t21_instit);
+       $this->t21_depart = ($this->t21_depart == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_depart"]:$this->t21_depart);
      }else{
        $this->t21_codigo = ($this->t21_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["t21_codigo"]:$this->t21_codigo);
      }
@@ -128,6 +131,15 @@ class cl_bensguarda {
      if($this->t21_instit == null ){ 
        $this->erro_sql = " Campo Instituição nao Informado.";
        $this->erro_campo = "t21_instit";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->t21_depart == null ){
+       $this->erro_sql = " Campo Departamento nao Informado.";
+       $this->erro_campo = "t21_depart";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -172,7 +184,8 @@ class cl_bensguarda {
                                       ,t21_tipoguarda 
                                       ,t21_data 
                                       ,t21_obs 
-                                      ,t21_instit 
+                                      ,t21_instit
+                                      ,t21_depart
                        )
                 values (
                                 $this->t21_codigo 
@@ -180,7 +193,8 @@ class cl_bensguarda {
                                ,$this->t21_tipoguarda 
                                ,".($this->t21_data == "null" || $this->t21_data == ""?"null":"'".$this->t21_data."'")." 
                                ,'$this->t21_obs' 
-                               ,$this->t21_instit 
+                               ,$this->t21_instit
+                               ,$this->t21_depart
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -302,6 +316,19 @@ class cl_bensguarda {
        if(trim($this->t21_instit) == null ){ 
          $this->erro_sql = " Campo Instituição nao Informado.";
          $this->erro_campo = "t21_instit";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->t21_depart)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t21_depart"])){
+       $sql  .= $virgula." t21_depart = $this->t21_depart ";
+       $virgula = ",";
+       if(trim($this->t21_depart) == null ){
+         $this->erro_sql = " Campo Departamento nao Informado.";
+         $this->erro_campo = "t21_depart";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
