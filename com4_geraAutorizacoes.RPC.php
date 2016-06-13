@@ -44,6 +44,7 @@ require_once("model/empenho/AutorizacaoEmpenho.model.php");
 require_once("model/CgmFactory.model.php");
 require_once("model/ProcessoCompras.model.php");
 require_once("classes/db_pcproc_classe.php");
+require_once("libs/db_liborcamento.php");
 
 
 $oJson  = new services_json();

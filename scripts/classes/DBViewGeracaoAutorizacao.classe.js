@@ -567,6 +567,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
           if (oItem.servicoquantidade == 't') {
 
             aRow[10].addEvent('onChange', ';'+me.sInstancia+'.calcularSaldoItem(this,"'+id+'");');
+            aRow[10].addEvent('onChange', ';'+me.sInstancia+'.verificarSaldoDotacao(this,"'+id+'");');
           } else {
             aRow[10].setReadOnly(true);
           }
@@ -574,6 +575,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         } else {
           aRow[10].addEvent('onChange', ';'+me.sInstancia+'.calcularSaldoItem(this,"'+id+'");');
+          aRow[10].addEvent('onChange', ';'+me.sInstancia+'.verificarSaldoDotacao(this,"'+id+'");');
         }
         oItem.saldovalor = js_round(oItem.saldovalor, 2);
         var nValorTotal  = oItem.saldovalor;
@@ -696,6 +698,19 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
          }
       });
       me.oDataGridItens.renderRows();
+
+        /**
+         * Adicionado chamada da função verificarSaldoDotacaoCheckbox para verificar o saldo da Dotação sempre que marcar um checkbox
+         */
+      me.aItens.each( function(oItem, id) {
+          $("chkgridItensLicitacao"+oItem.codigodotacaoitem).observe('click', function() {
+              me.verificarSaldoDotacaoCheckbox();
+          });
+      });
+      $("oViewGeracaoAutorizacao.oDataGridItensSelectAll").observe('click', function() {
+          me.verificarSaldoDotacaoCheckbox();
+      });
+
     } else {
 
       alert(oRetorno.message.urlDecode());
@@ -788,6 +803,103 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     }
   }
 
+    /**
+     *  Função para verificar saldo da dotação ao digitar quantidade do item
+     *  Verifica se o total de itens é superior ao saldo disponível na dotação no dia atual
+     *  @param {object}  oCampo - campo com a quantidade digitada
+     *  @param {integer} iItem  - indice do item
+     */
+    this.verificarSaldoDotacao = function(oCampo, iItem) {
+
+        var nSaldoCampo = new Number(oCampo.value);
+
+        var aItensSelecionados = new Array();
+        var aItensCheckbox = $$("input[type='checkbox']");
+
+        var nTotalItens = new Number(0);
+        var iCodItem = oCampo.name.split("oDbTextQuant")[1];
+        var iDotacao = 0;
+
+        var nSaldoDotItem = 0;
+        me.aItens.each( function(oItem, id) {
+
+            if (oItem.codigodotacaoitem == iCodItem) {
+                nSaldoDotItem = oItem.saldodotacao;
+                iDotacao = oItem.codigodotacao;
+
+            }
+        });
+
+        aItensCheckbox.each(function (oElemento, iIndice) {
+
+            if (oElemento.checked) {
+                me.aItens.each( function(oItem, id) {
+
+                    if (oItem.codigodotacaoitem == oElemento.value) {
+                        if (oItem.codigodotacao == iDotacao) {
+                            nTotalItens += new Number($('oDbTextValor'+oElemento.value).value).valueOf();
+                        }
+
+                    }
+                });
+
+            }
+        });
+        if ( nTotalItens >  nSaldoDotItem) {
+            alert("O total dos itens da Dotação "+iDotacao+" ultrapassam o saldo da dotação na data atua. " +
+                "Total itens: R$ "+nTotalItens.toFixed(2)+" Saldo dotação: R$ "+nSaldoDotItem.toFixed(2))
+        }
+
+    }
+
+
+    /**
+     *  Função para verificar saldo da dotação
+     *  Verifica se o total de itens é superior ao saldo disponível na dotação no dia atual
+     */
+    this.verificarSaldoDotacaoCheckbox = function() {
+
+        var aItensSelecionados = new Array();
+        var aItensCheckbox = $$("input[type='checkbox']");
+
+        var nTotalItens = new Number(0);
+        var aDotacao = new Array();
+
+        var oItemAnterior = new Object();
+        oItemAnterior.codigodotacao = 0;
+        me.aItens.each( function(oItem, id) {
+
+            if (oItemAnterior.codigodotacao != oItem.codigodotacao) {
+                oItemAnterior.saldodotacao = oItem.saldodotacao;
+                oItemAnterior.codigodotacao = oItem.codigodotacao;
+                aDotacao.push(oItem);
+            }
+        });
+
+        var iRetorno = true;
+        aDotacao.each(function (oDotacao, iIndice) {
+            nTotalItens = 0;
+            aItensCheckbox.each(function (oElemento, iIndice) {
+
+              if (oElemento.checked) {
+                me.aItens.each( function(oItem, id) {
+
+                    if (oItem.codigodotacaoitem == oElemento.value && oItem.codigodotacao == oDotacao.codigodotacao) {
+                      nTotalItens += new Number($('oDbTextValor'+oElemento.value).value).valueOf();
+                    }
+                });
+
+              }
+            });
+            if ( nTotalItens >  oDotacao.saldodotacao) {
+                alert("O total dos itens da Dotação "+oDotacao.codigodotacao+" ultrapassam o saldo da dotação na data atua. " +
+                    "Total itens: R$ "+nTotalItens.toFixed(2)+" Saldo dotação: R$ "+oDotacao.saldodotacao.toFixed(2));
+                iRetorno = false;
+            }
+        });
+        return iRetorno;
+
+    }
 
   /**
    *  Função Valida Valor Total Item
@@ -824,6 +936,9 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
       alert("Selecione um item para continuar.");
       return false;
+    }
+    if (me.verificarSaldoDotacaoCheckbox() == false) {
+        return false;
     }
     js_divCarregando("Carregando autorizações, aguarde...", "msgBox");
     var aAutorizacoes = new Array();

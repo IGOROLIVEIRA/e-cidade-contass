@@ -585,10 +585,22 @@ class ProcessoCompras {
         $oDados->valorunitariofornecedor = number_format((float)$oDados->valorunitariofornecedor,
                                                         $iNumDec,
                                                          '.','');
+        /**
+         * buscamos o saldo da dotação do item na data que está sendo feita a atorização
+         */
+        $dataini = "2016-".date("m",db_getsession("DB_datausu"))."-01";
+        $datafim = date("Y-m-d",db_getsession("DB_datausu"));
+        $result = db_dotacaosaldo(8, 2, 2, true, ' o58_coddot = '.$oDados->codigodotacao.' and o58_anousu = '.db_getsession("DB_anousu"), db_getsession("DB_anousu"), $dataini, $datafim);
+        if (pg_numrows($result) > 0) {
+          $oSaldoDotacao = db_utils::fieldsMemory($result,0);
+          $oDados->saldodotacao = ($oSaldoDotacao->dot_ini+$oSaldoDotacao->suplementado_acumulado-$oSaldoDotacao->reduzido_acumulado)-$oSaldoDotacao->empenhado_acumulado+$oSaldoDotacao->anulado_acumulado-$oSaldoDotacao->reservado;
+        }
+
         $aItens[] = $oDados;
 
       }
     }
+
     return $aItens;
   }
 
@@ -784,6 +796,23 @@ class ProcessoCompras {
           }
         }
       }
+      /**
+       * verificamos se a dotação tem saldo na data que está sendo feita a atorização
+       */
+      $dataini = "2016-".date("m",db_getsession("DB_datausu"))."-01";
+      $datafim = date("Y-m-d",db_getsession("DB_datausu"));
+      $result = db_dotacaosaldo(8, 2, 2, true, ' o58_coddot = '.$oDados->dotacao.' and o58_anousu = '.db_getsession("DB_anousu"), db_getsession("DB_anousu"), $dataini, $datafim);
+      if (pg_numrows($result) > 0) {
+        $oSaldoDotacao = db_utils::fieldsMemory($result,0);
+        $nSaldoAcumuladoDisponivel = ($oSaldoDotacao->dot_ini+$oSaldoDotacao->suplementado_acumulado-$oSaldoDotacao->reduzido_acumulado)-$oSaldoDotacao->empenhado_acumulado+$oSaldoDotacao->anulado_acumulado-$oSaldoDotacao->reservado;
+        if ($nValorTotal > $nSaldoAcumuladoDisponivel) {
+          $nSaldoAcumuladoDisponivel = trim(db_formatar($nSaldoAcumuladoDisponivel,'f'));
+          $nValorTotal = trim(db_formatar($nValorTotal,'f'));
+          $sMsgErro = "Valor a autorizar($nValorTotal) maior que saldo($nSaldoAcumuladoDisponivel) da Dotação $oDados->dotacao na data atual(".date("d/m/Y",db_getsession("DB_datausu")).")";
+          throw new Exception($sMsgErro);
+        }
+      }
+
       /**
        * Salvamos a Autorizacao;
        * Resumo da autorização
