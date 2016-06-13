@@ -824,7 +824,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         me.aItens.each( function(oItem, id) {
 
             if (oItem.codigodotacaoitem == iCodItem) {
-                nSaldoDotItem = oItem.saldodotacao;
+                nSaldoDotItem =  new Number(oItem.saldofinaldotacao).valueOf();
                 iDotacao = oItem.codigodotacao;
 
             }
@@ -870,8 +870,9 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         me.aItens.each( function(oItem, id) {
 
             if (oItemAnterior.codigodotacao != oItem.codigodotacao) {
-                oItemAnterior.saldodotacao = oItem.saldodotacao;
+                oItemAnterior.saldofinaldotacao = new Number(oItem.saldofinaldotacao).valueOf();
                 oItemAnterior.codigodotacao = oItem.codigodotacao;
+                oItem.saldofinaldotacao = new Number(oItem.saldofinaldotacao).valueOf();
                 aDotacao.push(oItem);
             }
         });
@@ -891,9 +892,10 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
               }
             });
-            if ( nTotalItens >  oDotacao.saldodotacao) {
+
+            if ( nTotalItens >  oDotacao.saldofinaldotacao) {
                 alert("O total dos itens da Dotação "+oDotacao.codigodotacao+" ultrapassam o saldo da dotação na data atua. " +
-                    "Total itens: R$ "+nTotalItens.toFixed(2)+" Saldo dotação: R$ "+oDotacao.saldodotacao.toFixed(2));
+                    "Total itens: R$ "+nTotalItens.toFixed(2)+" Saldo dotação: R$ "+oDotacao.saldofinaldotacao.toFixed(2));
                 iRetorno = false;
             }
         });
