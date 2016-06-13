@@ -183,7 +183,7 @@ if ($modelo == 1) {
                                                         "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum", 
                                                         "pc11_seq", "pc22_codorc=$orcamento");  
   }
-  
+
   $result_itens = $clpcorcamitem->sql_record($sSqlMater);
   $numrows_itens = $clpcorcamitem->numrows;
   
@@ -238,6 +238,9 @@ if ($modelo == 1) {
       $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun,pc23_quant,pc23_valor,pc24_pontuacao", null, 
                                                 "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
+      if(pg_num_rows($result_valor) == 0){
+        continue;
+      }
       db_fieldsmemory($result_valor);
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
@@ -273,14 +276,16 @@ if ($modelo == 1) {
         $troca = 0;
     }
           
-    $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "sum(pc23_valor) as vltotal", null, 
+    $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "sum(pc23_valor) as vltotal", null,
                                                 "pc23_orcamforne=$pc21_orcamforne");
     $result_valor = $clpcorcamval->sql_record($sSqlJulg);
     db_fieldsmemory($result_valor);
-    $pdf->setfont('arial', '', 7);
-    $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
-    $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-    $pdf->cell(40, $alt, db_formatar($vltotal,'f'), 1, 1, "R", 0);
+    if($vltotal > 0) {
+      $pdf->setfont('arial', '', 7);
+      $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
+      $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
+      $pdf->cell(40, $alt, db_formatar($vltotal, 'f'), 1, 1, "R", 0);
+    }
     
   }
   $pdf->setfont('arial', '', 9);
