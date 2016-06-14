@@ -846,7 +846,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             }
         });
         if ( nTotalItens >  nSaldoDotItem) {
-            alert("O total dos itens da Dotação "+iDotacao+" ultrapassam o saldo da dotação na data atua. " +
+            alert("O total dos itens da Dotação "+iDotacao+" ultrapassam o saldo da dotação na data atual. " +
                 "Total itens: R$ "+nTotalItens.toFixed(2)+" Saldo dotação: R$ "+nSaldoDotItem.toFixed(2))
         }
 
@@ -894,7 +894,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
             });
 
             if ( nTotalItens >  oDotacao.saldofinaldotacao) {
-                alert("O total dos itens da Dotação "+oDotacao.codigodotacao+" ultrapassam o saldo da dotação na data atua. " +
+                alert("O total dos itens da Dotação "+oDotacao.codigodotacao+" ultrapassam o saldo da dotação na data atual. " +
                     "Total itens: R$ "+nTotalItens.toFixed(2)+" Saldo dotação: R$ "+oDotacao.saldofinaldotacao.toFixed(2));
                 iRetorno = false;
             }
