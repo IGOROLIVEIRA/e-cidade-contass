@@ -319,14 +319,12 @@ $sHora = db_hora();
 </center>
 <script type="text/javascript">
 
-    /**
-     * Ocorrência 1193
-     */
+    //Para filtrar apenas empenhos com o elemento 333903037000000, usar o parametro filtromanut=1
     function js_pesquisae60_codemp(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss&elementoconsumo=1', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss&filtromanut=1', 'Pesquisa', true);
         } else {
-            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?pesquisa_chave=' + document.form1.ve62_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1&elementoconsumo=1', 'Pesquisa', false);
+            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_empempenho', 'func_empempenho.php?pesquisa_chave=' + document.form1.ve62_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1&filtromanut=1', 'Pesquisa', false);
         }
     }
 
