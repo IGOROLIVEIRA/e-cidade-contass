@@ -135,7 +135,7 @@ $rotulo->label("z01_cgccpf");
         $campos="e60_numemp, e60_codemp, z01_nome,si172_nrocontrato,
             si172_datafinalvigencia,
             (select si174_novadatatermino from aditivoscontratos where si172_nrocontrato = si174_nrocontrato order by si174_sequencial DESC limit 1)";
-
+        $filtroempelemento = "";
         if (!isset($pesquisa_chave)) {
           $campos = "empempenho.e60_numemp,
             empempenho.e60_codemp,
@@ -158,13 +158,26 @@ $rotulo->label("z01_cgccpf");
             $dbwhere .= " and e60_vlranu<e60_vlremp ";	  
           }
           /**
-           * @todo: acrescentar a busca pelo elemento do empenho
+           * Filtro $filtroabast
+           * Busca pelo elemento do empenho para abastecimento
+           * @see ocorrência contass 1011
            *
-          if($elementoconsumo == 1){
-            $dbwhere .= " and e60_numemp = 123 ";
-
+           */
+          if($filtroabast == 1){
+            $dbwhere .= " and elementoempenho.o56_elemento in ('3339030990000') ";
+            $filtroempelemento = 1;
           }
-          */
+          /**
+           * Filtro $filtromanut
+           * Busca pelo elemento do empenho para manutencao
+           * @see ocorrência contass 2079
+           *
+           */
+          if($filtromanut == 1){
+            $dbwhere .= " and elementoempenho.o56_elemento in ('3339030370000','3339030010000') ";
+            $filtroempelemento = 1;
+          }
+
           if (db_getsession("DB_itemmenu_acessado") != 1985513) {
             // O código abaixo, filtra do financeiro os empenhos realizados no pessoal
             // Removido conforme solicitado por Igor
@@ -193,7 +206,7 @@ $rotulo->label("z01_cgccpf");
           }
    
           if (isset($chave_e60_numemp) && !empty($chave_e60_numemp)) {
-            $sql = $clempempenho->sql_query($chave_e60_numemp,$campos,"e60_numemp","$dbwhere and e60_numemp=$chave_e60_numemp ");
+            $sql = $clempempenho->sql_query($chave_e60_numemp,$campos,"e60_numemp","$dbwhere and e60_numemp=$chave_e60_numemp ",$filtroempelemento);
           }
           elseif (isset($chave_e60_codemp) && !empty($chave_e60_codemp)) {
             $arr = split("/",$chave_e60_codemp);
@@ -206,17 +219,17 @@ $rotulo->label("z01_cgccpf");
             else {
               $dbwhere_ano = "";
             }
-            $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and e60_codemp='".$arr[0]."'$dbwhere_ano");
+            $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and e60_codemp='".$arr[0]."'$dbwhere_ano",$filtroempelemento);
           }
           elseif (isset($chave_z01_nome) && !empty($chave_z01_nome)) {
-            $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and z01_nome like '$chave_z01_nome%'");
+            $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and z01_nome like '$chave_z01_nome%'",$filtroempelemento);
           }
           elseif (isset($chave_z01_cgccpf) && !empty($chave_z01_cgccpf)) {
-            $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'");
+            $sql = $clempempenho->sql_query("",$campos,"e60_numemp","$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'",$filtroempelemento);
           }
           else {
 //            $dbwhere .= " and e60_anousu = ".db_getsession("DB_anousu");
-            $sql = $clempempenho->sql_query("",$campos,"e60_numemp","{$dbwhere}");
+            $sql = $clempempenho->sql_query("",$campos,"e60_numemp","{$dbwhere}",$filtroempelemento);
           }
           
           $repassa = array(
@@ -244,14 +257,38 @@ $rotulo->label("z01_cgccpf");
               else {
                 $sWherePesquisaPorCodigoEmpenho = " e60_anousu = ". db_getsession("DB_anousu");
               }
+
+              /**
+               * Filtro $filtroabast
+               * Busca pelo elemento do empenho para abastecimento
+               * @see ocorrência contass 1011
+               *
+               */
+              if($filtroabast == 1){
+                $sWherePesquisaPorCodigoEmpenho .= " and elementoempenho.o56_elemento in ('3339030990000') ";
+                $filtroempelemento = 1;
+              }
+
+              /**
+               * Filtro $filtromanut
+               * Busca pelo elemento do empenho para manutencao
+               * @see ocorrência contass 2079
+               *
+               */
+              if($filtromanut == 1){
+                $dbwhere .= " and elementoempenho.o56_elemento in ('3339030370000','3339030010000') ";
+                $filtroempelemento = 1;
+
+              }
+
               $aCodEmp  = explode("/",$pesquisa_chave);
               $sWherePesquisaPorCodigoEmpenho .= " and e60_codemp = '".$aCodEmp[0]."'";
 
-              $sSql = $clempempenho->sql_query(null, $campos, null, $sWherePesquisaPorCodigoEmpenho);
+              $sSql = $clempempenho->sql_query(null, $campos, null, $sWherePesquisaPorCodigoEmpenho,$filtroempelemento);
 
             }
             else {
-              $sSql = $clempempenho->sql_query($pesquisa_chave,$campos);
+              $sSql = $clempempenho->sql_query($pesquisa_chave,$campos,null,"",$filtroempelemento);
             }
 
             $result = $clempempenho->sql_record($sSql);
