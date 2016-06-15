@@ -114,7 +114,7 @@ if (isset ($campos) == false) {
 	if (file_exists("funcoes/db_func_slip.php") == true) {
 		include ("funcoes/db_func_slip.php");
 	} else {
-		$campos = "k17_codigo,k17_data,k17_debito,k17_credito,k17_valor,k17_hist,k17_texto";
+		$campos = "k17_codigo,k17_data,k17_debito,k17_credito,k17_valor,k17_hist,replace(slip.k17_texto,'\n',' ') as k17_texto";
 	}
 }
 $wh  = null;
