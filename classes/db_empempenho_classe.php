@@ -976,7 +976,7 @@ class cl_empempenho {
         return $result;
     }
     // funcao do sql
-    function sql_query ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $filtroempelemento =""){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -990,6 +990,10 @@ class cl_empempenho {
         }
         $sql .= " from empempenho ";
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
+        $sql .= "      inner join empelemento  on  empempenho.e60_numemp = empelemento.e64_numemp";
+        if($filtroempelemento == 1) {
+            $sql .= "      inner join orcelemento elementoempenho  on  elementoempenho.o56_codele = empelemento.e64_codele  and elementoempenho.o56_anousu = empempenho.e60_anousu";
+        }
         $sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
         $sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
         $sql .= "      inner join pctipocompra  on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
