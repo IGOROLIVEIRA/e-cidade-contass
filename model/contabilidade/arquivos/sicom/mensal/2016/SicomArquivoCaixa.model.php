@@ -205,7 +205,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 				             when c71_coddoc in (101) and substr(o57_fonte,1,2) = '49' then 1
 				             when c71_coddoc in (140) then 4
 				             when c71_coddoc in (121,131,141,152,153,162,163,6,36,38,101) then 8
-				             when c71_coddoc in (5,35,37) then 6 
+				             when c71_coddoc in (5,35,37,161) then 6
 				             else 10 
 				         end as tipoentrsaida,
 				        case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50) 
