@@ -143,7 +143,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 	 			    where c80_data between '".$this->sDataInicial."' AND '".$this->sDataFinal."'
 				      and c71_coddoc in (5,35,37)
 				      and e60_instit = ".db_getsession("DB_instit")."
-				      
+
 				  order by e50_codord,c80_codlan";
         // $sSql;exit;
         $rsEmpenhosPagosGeral = db_query($sSql);
@@ -171,7 +171,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
     	//db_criatabela($rsQuantExtornos);
     	if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
 			$sHash = $oEmpPago->ordem;
-			
+
 			if(!isset($aInformado[$sHash])){	
 				
 					$clops10 = new cl_ops102016();
@@ -375,11 +375,15 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 										   join retencaotiporec on e23_retencaotiporec = e21_sequencial
 									      where e23_ativo = true and e20_pagordem = {$oEmpPago->ordem}";
 							$rsReteIs = db_query($sqlReten);
-							
-							if(pg_num_rows($rsReteIs) > 0 && db_utils::fieldsMemory($rsReteIs, 0)->descontar != $oEmpPago->valor){
+
+							if(pg_num_rows($rsReteIs) > 0 && db_utils::fieldsMemory($rsReteIs, 0)->descontar > 0){
 								
 							    $nVolorOp = $oEmpPago->valor - db_utils::fieldsMemory($rsReteIs, 0)->descontar;
-							    $saldopag = $nVolorOp;
+								if ($nVolorOp == 0){
+									$saldopag = db_utils::fieldsMemory($rsReteIs, 0)->descontar;
+								} else {
+									$saldopag = $nVolorOp;
+								}
 							    $aInformado[$sHash]->retencao = 1;
 							    if($nVolorOp < 0){ 
 							    	$nVolorOp = $oEmpPago->valor;
