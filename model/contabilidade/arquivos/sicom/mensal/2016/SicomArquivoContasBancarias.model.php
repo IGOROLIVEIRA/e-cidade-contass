@@ -377,7 +377,16 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'".$iFonte."'
 									   2 as tipomovimentacao,
 									   case when c71_coddoc = 101 and substr(o57_fonte,0,3) = '49' then 2
 											when c71_coddoc = 101 then 3
-											when c71_coddoc in (5,35,37,161) then 8
+											when c71_coddoc in (5,35,37) and
+											(select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor
+                              from conlancamdoc
+                              join conhistdoc on c53_coddoc = c71_coddoc
+                              join conlancamord on c71_codlan =  c80_codlan
+                              join conlancam on c70_codlan = c71_codlan
+                              where c53_tipo in (21,20)
+                              and c70_data <= '".$this->sDataFinal."' and  c80_codord = (select c80_codord from conlancamord where c80_codlan=c69_codlan limit 1)) > 0
+											then 8
+											when c71_coddoc in (161) then 8
 											when c71_coddoc in (131,152,163) then 10
 											when c71_coddoc in (120) then 99
 											when c71_coddoc in (141,140) then 6
