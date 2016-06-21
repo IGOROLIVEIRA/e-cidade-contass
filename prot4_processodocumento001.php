@@ -424,7 +424,7 @@ function js_pesquisarProcesso(lMostra) {
   var sArquivo = 'func_protprocesso_protocolo.php?funcao_js=parent.';
 
   if (lMostra) {
-    sArquivo += 'js_mostraProcesso|dl_código_do_processo|p58_numero|dl_nome_ou_razão_social';
+    sArquivo += 'js_mostraProcesso|p58_codproc|p58_numero|dl_nome_ou_razão_social';
   } else {
 
     var iNumeroProcesso = $('p58_numero').value;
