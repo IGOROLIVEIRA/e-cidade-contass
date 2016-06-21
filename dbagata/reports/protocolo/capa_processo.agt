@@ -90,7 +90,10 @@
                     cgm.z01_telef                                                              as telefone_cgm,
                     cgm.z01_bairro                                                             as bairro_cgm,
                     protprocesso.p58_numeracao                                                 as numeracao,
-                    (select array_to_string(array(select documento_processo
+                    (select descrdepto from protprocesso 
+			inner join db_depart on p58_coddepto=coddepto
+							where p58_codproc = $codigo_processo) as descr_dep_inicial,
+		    (select array_to_string(array(select documento_processo
                                                       From (select p56_descr as documento_processo
                                                              from procprocessodoc
                                                                   inner join procdoc on p56_coddoc = p81_coddoc
