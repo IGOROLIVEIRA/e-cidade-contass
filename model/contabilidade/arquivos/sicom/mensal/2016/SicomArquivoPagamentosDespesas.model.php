@@ -355,7 +355,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 							      join orctiporec on c61_codigo = o15_codigo
 							      and cg.k105_data = corrente.k12_data 
 							      and cg.k105_id = corrente.k12_id
-							left join conlancamcorgrupocorrente on c23_corgrupocorrente = cg.k105_sequencial
+							join conlancamcorgrupocorrente on c23_corgrupocorrente = cg.k105_sequencial and c23_conlancam = {$oEmpPago->lancamento}
 							where e80_instit = ".db_getsession("DB_instit")." 
 							and k12_codord = {$oEmpPago->ordem} and e81_cancelado is null";
 	
@@ -783,7 +783,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 							      join orctiporec on c61_codigo = o15_codigo
 							      and cg.k105_data = corrente.k12_data 
 							      and cg.k105_id = corrente.k12_id
-							      left join conlancamcorgrupocorrente on c23_corgrupocorrente = cg.k105_sequencial
+							      join conlancamcorgrupocorrente on c23_corgrupocorrente = cg.k105_sequencial and c23_conlancam = {$oEmpPago->lancamento}
 							where k105_corgrupotipo != 2 and e80_instit = ".db_getsession("DB_instit")." 
 							and k12_codord = {$oEmpPago->ordem} and e81_cancelado is null";
 	
