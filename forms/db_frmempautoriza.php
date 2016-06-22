@@ -163,6 +163,7 @@ db_app::load("DBFormCache.js");
       ?>
       <strong>Número da Licitação:</strong>
       <? db_input('e54_numerl', 7,"",true,'text',isset($emprocesso)&&$emprocesso==true?"1":$dop); ?>
+      <? db_input('dop',8,1,true,'hidden'); ?>
     </td>
   </tr>
   <tr>
@@ -308,7 +309,7 @@ db_app::load("DBFormCache.js");
   <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
          type="submit" id="db_opcao"
          value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
-         <?=($db_botao==false?"disabled":"")?> onclick="<?php ($db_opcao == 1) ? 'return js_salvaCache();' : ''; ?>" >
+         <?=($db_botao==false?"disabled":"")?> onclick="return js_validaLicitacao();<?php ($db_opcao == 1) ? 'return js_salvaCache();' : ' '; ?>" >
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 
 
@@ -336,7 +337,14 @@ db_app::load("DBFormCache.js");
 
 </form>
 <script>
-
+  function js_validaLicitacao() {
+    if($('dop').value != 3) {
+      alert("Para esse Tipo de Compra é necessário informar o campo Número da Licitação.");
+      return false;
+    } else {
+      return true;
+    }
+  }
 var db_opcao = <?php echo $db_opcao; ?>;
 
 var oDBFormCache = new DBFormCache('oDBFormCache', 'db_frmempautoriza.php');
