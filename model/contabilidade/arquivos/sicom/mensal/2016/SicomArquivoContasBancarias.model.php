@@ -388,7 +388,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'".$iFonte."'
 											then 8
 											when c71_coddoc in (161) then 8
 											when c71_coddoc in (131,152,163) then 10
-											when c71_coddoc in (120) then 99
+											when c71_coddoc in (120) then 13
 											when c71_coddoc in (141,140) then 6
 											else 99
 									   end as tipoentrsaida,
@@ -431,8 +431,8 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'".$iFonte."'
 									   case when c71_coddoc = 100 and substr(o57_fonte,0,3) = '49' then 16
 											when c71_coddoc = 100 then 1
 											when c71_coddoc in (6,36,38,162) then 17
-											when c71_coddoc in (121,153) then 10
-											when c71_coddoc in (130) then 12
+											when c71_coddoc in (153) then 10
+											when c71_coddoc in (130,121) then 12
 											when c71_coddoc in (141,140) then 5
 											else 99
 									   end as tipoentrsaida,
