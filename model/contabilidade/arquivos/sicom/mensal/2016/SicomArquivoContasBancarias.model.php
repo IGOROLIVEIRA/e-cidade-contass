@@ -386,7 +386,12 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'".$iFonte."'
                               where c53_tipo in (21,20)
                               and c70_data <= '".$this->sDataFinal."' and  c80_codord = (select c80_codord from conlancamord where c80_codlan=c69_codlan limit 1)) > 0
 											then 8
-											when c71_coddoc in (161) then 8
+											when c71_coddoc in (161) and
+											(select   k17_situacao
+                                             from slip
+                                             join conlancamslip on k17_codigo = c84_slip
+                                             join conlancamdoc  on c71_codlan = c84_conlancam
+                                             where c71_codlan=c69_codlan and c71_coddoc in (161) limit 1) = 2 then 8
 											when c71_coddoc in (131,152,163) then 10
 											when c71_coddoc in (120) then 13
 											when c71_coddoc in (141,140) then 6
