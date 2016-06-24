@@ -794,7 +794,7 @@ class cl_dividaconsolidada {
          return false;
        }
      }
-       if($this->si167_justificativacancelamento != null || $this->si167_justificativacancelamento != ""){
+       if($this->si167_justificativacancelamento != null || isset($GLOBALS["HTTP_POST_VARS"]["si167_justificativacancelamento"])){
            $sql  .= $virgula." si167_justificativacancelamento = '$this->si167_justificativacancelamento' ";
            $virgula = ",";
        }elseif($this->si167_vlcancelamento > 0 ){
