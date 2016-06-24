@@ -433,6 +433,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                     --AND veiculos.ve01_codigo in (35)
+                    AND NOT EXISTS (select 1 from veicabastanu where ve74_veicabast = ve70_codigo)
                     GROUP BY veiculos.ve01_codigo, ve70_veiculoscomb, si05_atestado,
                     o58_orgao,unemp.o41_codtri,orcemp.o40_codtri,orcemp.o40_orgao,unemp.o41_unidade,
                     unveic.o41_codtri,orveic.o40_codtri,orveic.o40_orgao,unveic.o41_unidade,si09_codorgaotce,
