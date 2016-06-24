@@ -239,7 +239,8 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
              sum(round(substr(fc_planosaldonovo(".db_getsession("DB_anousu").",c61_reduz,'{$this->sDataInicial}','{$this->sDataFinal}',FALSE),45,14)::float8,2)::float8) AS saldo_final
         from conplano
         inner join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
-        where c60_estrut like '22721%' and c60_anousu = ".db_getsession("DB_anousu").") as x where saldoinicial is not null or saldo_final is not null";
+        where c60_estrut like '22721%' and c61_instit = ".db_getsession("DB_instit")." and c60_anousu = ".db_getsession("DB_anousu")."
+        and (select si09_tipoinstit from infocomplementaresinstit where si09_instit=".db_getsession("DB_instit").") = 5) as x where saldoinicial is not null or saldo_final is not null";
         $rsResult40 = db_query($sSql);
         for($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
             $oDados40 = db_utils::fieldsMemory($rsResult40,$iCont40);
