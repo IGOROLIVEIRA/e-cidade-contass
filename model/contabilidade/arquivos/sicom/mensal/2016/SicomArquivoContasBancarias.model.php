@@ -393,7 +393,12 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'".$iFonte."'
                                              join conlancamdoc  on c71_codlan = c84_conlancam
                                              where c71_codlan=c69_codlan and c71_coddoc in (161) limit 1) = 2 then 8
 											when c71_coddoc in (131,152,163) then 10
-											when c71_coddoc in (120) then 13
+											when c71_coddoc in (120) and
+											 (select   k17_situacao
+                                             from slip
+                                             join conlancamslip on k17_codigo = c84_slip
+                                             join conlancamdoc  on c71_codlan = c84_conlancam
+                                             where c71_codlan=c69_codlan and c71_coddoc in (120) limit 1) = 2 then 13
 											when c71_coddoc in (141,140) then 6
 											else 99
 									   end as tipoentrsaida,
@@ -437,7 +442,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'".$iFonte."'
 											when c71_coddoc = 100 then 1
 											when c71_coddoc in (6,36,38,162) then 17
 											when c71_coddoc in (153) then 10
-											when c71_coddoc in (130,121) then 12
+											when c71_coddoc in (130) then 12
 											when c71_coddoc in (141,140) then 5
 											else 99
 									   end as tipoentrsaida,
