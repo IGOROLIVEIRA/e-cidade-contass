@@ -157,8 +157,8 @@ class GerarREGADESAO extends GerarAM {
             $aCSVREGADESAO14['si71_nrolote']               =   substr(($aREGADESAO14['si71_nrolote'] == 0 ? ' ' : $aREGADESAO14['si71_nrolote']), 0,4);
             $aCSVREGADESAO14['si71_coditem']               =   substr($aREGADESAO14['si71_coditem'], 0, 15);
             $aCSVREGADESAO14['si71_dtcotacao']             =   implode("", array_reverse(explode("-", $aREGADESAO14['si71_dtcotacao'])));
-            $aCSVREGADESAO14['si71_vlcotprecosunitario']   =   number_format($aREGADESAO14['si71_vlcotprecosunitario'], 2, ",", "");
-            $aCSVREGADESAO14['si71_quantidade']            =   number_format($aREGADESAO14['si71_quantidade'], 2, ",", "");
+            $aCSVREGADESAO14['si71_vlcotprecosunitario']   =   number_format($aREGADESAO14['si71_vlcotprecosunitario'], 4, ",", "");
+            $aCSVREGADESAO14['si71_quantidade']            =   number_format($aREGADESAO14['si71_quantidade'], 4, ",", "");
 
             $this->sLinha = $aCSVREGADESAO14;
             $this->adicionaLinha();
@@ -179,9 +179,9 @@ class GerarREGADESAO extends GerarAM {
             $aCSVREGADESAO15['si72_exercicioadesao']       =   str_pad($aREGADESAO15['si72_exercicioadesao'], 4, "0", STR_PAD_LEFT);
             $aCSVREGADESAO15['si72_nrolote']               =   substr(($aREGADESAO15['si72_nrolote'] == 0 ? ' ' : $aREGADESAO15['si72_nrolote']), 0,4);
             $aCSVREGADESAO15['si72_coditem']               =   substr($aREGADESAO15['si72_coditem'], 0, 15);
-            $aCSVREGADESAO15['si72_precounitario']         =   number_format($aREGADESAO15['si72_precounitario'], 2, ",", "");
-            $aCSVREGADESAO15['si72_quantidadelicitada']    =   number_format($aREGADESAO15['si72_quantidadelicitada'], 2, ",", "");
-            $aCSVREGADESAO15['si72_quantidadeaderida']     =   number_format($aREGADESAO15['si72_quantidadeaderida'], 2, ",", "");
+            $aCSVREGADESAO15['si72_precounitario']         =   number_format($aREGADESAO15['si72_precounitario'], 4, ",", "");
+            $aCSVREGADESAO15['si72_quantidadelicitada']    =   number_format($aREGADESAO15['si72_quantidadelicitada'], 4, ",", "");
+            $aCSVREGADESAO15['si72_quantidadeaderida']     =   number_format($aREGADESAO15['si72_quantidadeaderida'], 4, ",", "");
             $aCSVREGADESAO15['si72_tipodocumento']         =   str_pad($aREGADESAO15['si72_tipodocumento'], 1, "0", STR_PAD_LEFT);
             $aCSVREGADESAO15['si72_nrodocumento']          =   substr($aREGADESAO15['si72_nrodocumento'], 0, 14);
 
@@ -206,7 +206,7 @@ class GerarREGADESAO extends GerarAM {
         $aCSVREGADESAO20['si73_codunidadesub']         =   str_pad($aREGADESAO20['si73_codunidadesub'], (strlen($aREGADESAO20['si73_codunidadesub']) > 5 ? 8 : 5), "0", STR_PAD_LEFT);
         $aCSVREGADESAO20['si73_nroprocadesao']         =   substr($aREGADESAO20['si73_nroprocadesao'], 0, 12);
         $aCSVREGADESAO20['si73_exercicioadesao']       =   str_pad($aREGADESAO20['si73_exercicioadesao'], 4, "0", STR_PAD_LEFT);
-        $aCSVREGADESAO20['si73_nrolote']               =   substr(($aREGADESAO20['$aREGADESAO20'] == 0 ? ' ' : $aREGADESAO20['$aREGADESAO20']), 0,4);
+        $aCSVREGADESAO20['si73_nrolote']               =   substr(($aREGADESAO20['si73_nrolote'] == 0 ? ' ' : $aREGADESAO20['si73_nrolote']), 0,4);
         $aCSVREGADESAO20['si73_coditem']               =   substr($aREGADESAO20['si73_coditem'], 0, 15);
         $aCSVREGADESAO20['si73_percdesconto']          =   number_format($aREGADESAO20['si73_percdesconto'], 2, ",", "");
         $aCSVREGADESAO20['si73_tipodocumento']         =   str_pad($aREGADESAO20['si73_tipodocumento'], 1, "0", STR_PAD_LEFT);
