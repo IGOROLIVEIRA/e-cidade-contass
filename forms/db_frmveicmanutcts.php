@@ -296,7 +296,7 @@ $sHora = db_hora();
                                     <fieldset>
                                         <legend><?= $Lve62_observacao ?></legend>
                                         <?php //db_textarea('ve62_observacao', 4, 69, $Ive62_observacao, true, 'text', $db_opcao); ?>
-                                        <textarea name="ve62_observacao" id="ve62_observacao" style="background-color:#E6E4F1" onkeyup=" js_ValidaCampos(this,0,'Observação','t','f',event); " onblur=" js_ValidaMaiusculo(this,'f',event);" cols="68" maxlength="50" rows="4" title="Observação sobre a manutenção efetuada Campo:ve62_observacao"><?=$ve62_observacao ?></textarea>
+                                        <textarea name="ve62_observacao" id="ve62_observacao" style="background-color:#E6E4F1" onkeyup=" js_ValidaCampos(this,0,'Observação','t','f',event); " onblur=" js_ValidaMaiusculo(this,'f',event);" cols="68" rows="4" title="Observação sobre a manutenção efetuada Campo:ve62_observacao"><?=$ve62_observacao ?></textarea>
                                     </fieldset>
                                 </td>
                             </tr>
