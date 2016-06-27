@@ -54,7 +54,6 @@ class GerarBALANCETE extends GerarAM
         $sSql24 = "select * from balancete242016 where si191_mes = " . $this->iMes . " and si191_instit =" . db_getsession("DB_instit");
         $rsBALANCETE24 = db_query($sSql24);
 
-
         if (pg_num_rows($rsBALANCETE10) == 0) {
 
             $aCSV['tiporegistro'] = '99';
@@ -168,8 +167,8 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE14['si181_tiporegistro'] = str_pad($aBALACETE14['si181_tiporegistro'], 2, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_contacontabil'] = str_pad($aBALACETE14['si181_contacontabil'], 9, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codorgao'] = str_pad($aBALACETE14['si181_codorgao'], 2, "0", STR_PAD_LEFT);
-                        $aCSVBALANCETE14['si181_codunidadesub'] = str_pad($aBALACETE14['si181_codunidadesub'], 5, "0", STR_PAD_LEFT);
-                        $aCSVBALANCETE14['si181_codunidadesuborig'] = str_pad($aBALACETE14['si181_codunidadesuborig'], 5, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE14['si181_codunidadesub'] = str_pad($aBALACETE14['si181_codunidadesub'], (strlen($aBALACETE14['si181_codunidadesub']) <= 5 ? 5 : 8) , "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE14['si181_codunidadesuborig'] = str_pad($aBALACETE14['si181_codunidadesuborig'], (strlen($aBALACETE14['si181_codunidadesuborig']) <= 5 ? 5 : 8), "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codfuncao'] = str_pad($aBALACETE14['si181_codfuncao'], 2, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codsubfuncao'] = str_pad($aBALACETE14['si181_codsubfuncao'], 3, "0", STR_PAD_LEFT);
                         $aCSVBALANCETE14['si181_codprograma'] = str_pad($aBALACETE14['si181_codprograma'], 4, "0", STR_PAD_LEFT);
@@ -275,6 +274,48 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE18['si185_naturezasaldofinalfr'] = str_pad($aBALACETE18['si185_naturezasaldofinalfr'], 1, "0", STR_PAD_LEFT);
 
                         $this->sLinha = $aCSVBALANCETE18;
+                        $this->adicionaLinha();
+                    }
+                }
+                
+                for ($iCont23 = 0; $iCont23 < pg_num_rows($rsBALANCETE23); $iCont23++) {
+
+                    $aBALACETE23 = pg_fetch_array($rsBALANCETE23, $iCont23);
+
+                    if ($aBALACETE23['si190_reg10'] == $aBALACETE10['si177_sequencial']) {
+
+                        $aCSVBALANCETE23['si190_tiporegistro'] = str_pad($aBALACETE23['si190_tiporegistro'], 2, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE23['si190_contacontabil'] = str_pad($aBALACETE23['si190_contacontabil'], 9, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE23['si190_naturezareceita'] = str_pad($aBALACETE23['si190_naturezareceita'], 6, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE23['si190_saldoinicialnatreceita'] = number_format($aBALACETE23['si190_saldoinicialnatreceita'], 2, ",", "");
+                        $aCSVBALANCETE23['si190_naturezasaldoinicialnatreceita'] = str_pad($aBALACETE23['si190_naturezasaldoinicialnatreceita'], 1, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE23['si190_totaldebitosnatreceita'] = number_format($aBALACETE23['si190_totaldebitosnatreceita'], 2, ",", "");
+                        $aCSVBALANCETE23['si190_totalcreditosnatreceita'] = number_format($aBALACETE23['si190_totalcreditosnatreceita'], 2, ",", "");
+                        $aCSVBALANCETE23['si190_saldofinalnatreceita'] = number_format($aBALACETE23['si190_saldofinalnatreceita'], 2, ",", "");
+                        $aCSVBALANCETE23['si190_naturezasaldofinalnatreceita'] = str_pad($aBALACETE23['si190_naturezasaldofinalnatreceita'], 1, "0", STR_PAD_LEFT);
+
+                        $this->sLinha = $aCSVBALANCETE23;
+                        $this->adicionaLinha();
+                    }
+                }
+                
+                for ($iCont24 = 0; $iCont24 < pg_num_rows($rsBALANCETE24); $iCont24++) {
+
+                    $aBALACETE24 = pg_fetch_array($rsBALANCETE24, $iCont24);
+
+                    if ($aBALACETE24['si191_reg10'] == $aBALACETE10['si177_sequencial']) {
+
+                        $aCSVBALANCETE24['si191_tiporegistro'] = str_pad($aBALACETE24['si191_tiporegistro'], 2, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE24['si191_contacontabil'] = str_pad($aBALACETE24['si191_contacontabil'], 9, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE24['si191_codorgao'] = str_pad($aBALACETE24['si191_codorgao'], 2, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE24['si191_saldoinicialorgao'] = number_format($aBALACETE24['si191_saldoinicialorgao'], 2, ",", "");
+                        $aCSVBALANCETE24['si191_naturezasaldoinicialorgao'] = str_pad($aBALACETE24['si191_naturezasaldoinicialorgao'], 1, "0", STR_PAD_LEFT);
+                        $aCSVBALANCETE24['si191_totaldebitosorgao'] = number_format($aBALACETE24['si191_totaldebitosorgao'], 2, ",", "");
+                        $aCSVBALANCETE24['si191_totalcreditosorgao'] = number_format($aBALACETE24['si191_totalcreditosorgao'], 2, ",", "");
+                        $aCSVBALANCETE24['si191_saldofinalorgao'] = number_format($aBALACETE24['si191_saldofinalorgao'], 2, ",", "");
+                        $aCSVBALANCETE24['si191_naturezasaldofinalorgao'] = str_pad($aBALACETE24['si191_naturezasaldofinalorgao'], 1, "0", STR_PAD_LEFT);
+
+                        $this->sLinha = $aCSVBALANCETE24;
                         $this->adicionaLinha();
                     }
                 }
