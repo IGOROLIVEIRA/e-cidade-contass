@@ -64,9 +64,8 @@ if (isset($oGet->numero) &&  !empty($oGet->numero) ) {
 }
 
 
-$sSqlProcessoApensado     = "(select p30_procprincipal ";
-$sSqlProcessoApensado    .= "          from processosapensados";
-$sSqlProcessoApensado    .= "         where p30_procapensado = p58_codproc limit 1) as processo_principal";
+$sSqlProcessoApensado     = "(select p2.p58_numero from protprocesso p2
+where p2.p58_codproc in (select p30_procprincipal from processosapensados where p30_procapensado = {$oGet->codproc} limit 1) ) as processo_principal";
 $sSqlBuscaCodigoProcesso = $oDaoProcesso->sql_query(null, "*, {$sSqlProcessoApensado}", " 1 desc", $sWhere);
 
 $rsBuscaCodigoProcesso   = $oDaoProcesso->sql_record($sSqlBuscaCodigoProcesso);
@@ -125,7 +124,7 @@ if ($oLicitacao) {
         </td>
         <td class='negrito' width="100px">Nº Protocolo Geral: </td>
         <td class='dados' width="90">
-          <?php echo "{$oProcesso->p58_numero}/{$oProcesso->p58_ano}"?>
+          <?php echo "{$oProcesso->p58_numero}/{$oProcesso->p58_ano} $sProcessoPrincipal " ?>
         </td>
         <td rowspan="8" id="tdObservacoes" width="800" valign="top">
           &nbsp;
