@@ -242,7 +242,9 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
                     $oDespesas->pagamento = $oDadosMes->pagamento;
                     $oDespesas->pagamentoa = 0;
                     $oDespesas->pagamento_estornado = $oDadosMes->pagamento_estornado;
-                    $oDespesas->pagamento_estornadoa = 0;
+                    $oDespesas->pagamento_estornado = $oDadosMes->pagamento_estornado;
+                    $oDespesas->empenho_rpestornado = $oDadosMes->empenho_rpestornado;
+                    $oDespesas->empenho_rpestornadoa = 0;
                     $aDadosAgrupados[$sHash] = $oDespesas;
                 }
 
@@ -281,6 +283,8 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
                     $oDespesas->pagamentoa = $oDadosAteMes->pagamentoa;
                     $oDespesas->pagamento_estornado = $oDadosAteMes->pagamento_estornado;
                     $oDespesas->pagamento_estornadoa = $oDadosAteMes->pagamento_estornadoa;
+                    $oDespesas->empenho_rpestornado = $oDadosAteMes->empenho_rpestornado;
+                    $oDespesas->empenho_rpestornadoa = $oDadosAteMes->empenho_rpestornadoa;
                     $aDadosAgrupados[$sHash] = $oDespesas;
                 }
             }
@@ -297,8 +301,8 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
 
 
                 $pdf->cell(60, $alt, substr($objElementos->o56_elemento." - ".$objElementos->o56_descr, 0, 40), 0, 0, "L", 0);
-                $pdf->cell(20, $alt, db_formatar($objElementos->empenhado, 'f'), 0, 0, "R", 0);
-                $pdf->cell(30, $alt, db_formatar($objElementos->empenhadoa - $objElementos->empenhado_estornadoa, 'f'), 0, 0, "R", 0);
+                $pdf->cell(20, $alt, db_formatar($objElementos->empenhado - $objElementos->empenhado_estornado - $objElementos->empenho_rpestornado, 'f'), 0, 0, "R", 0);
+                $pdf->cell(30, $alt, db_formatar($objElementos->empenhadoa - $objElementos->empenhado_estornadoa - $objElementos->empenho_rpestornadoa, 'f'), 0, 0, "R", 0);
                 $pdf->cell(30, $alt, db_formatar($objElementos->liquidado - $objElementos->liquidado_estornado, 'f'), 0, 0, "R", 0);
                 $pdf->cell(30, $alt, db_formatar($objElementos->liquidadoa - $objElementos->liquidado_estornadoa, 'f'), 0, 0, "R", 0);
                 $pdf->cell(30, $alt, db_formatar(($objElementos->empenhadoa - $objElementos->empenhado_estornadoa) - ($objElementos->liquidadoa - $objElementos->liquidado_estornadoa), 'f'), 0, 0, "R", 0);
@@ -307,8 +311,8 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
                 $pdf->cell(30, $alt, db_formatar(($objElementos->liquidadoa - $objElementos->liquidado_estornadoa) - ($objElementos->pagamentoa - $objElementos->pagamento_estornadoa), 'f'), 0, 1, "R", 0);
 
                 //Totalizadores
-                $totgeralempenhado += $objElementos->empenhado;
-                $totgeralempenhadoa += $objElementos->empenhadoa - $objElementos->empenhado_estornadoa;
+                $totgeralempenhado += $objElementos->empenhado - $objElementos->empenhado_estornado - $objElementos->empenho_rpestornado;
+                $totgeralempenhadoa += $objElementos->empenhadoa - $objElementos->empenhado_estornadoa - $objElementos->empenho_rpestornadoa;
                 $totgeralliquidado += $objElementos->liquidado - $objElementos->liquidado_estornado;
                 $totgeralliquidadoa += $objElementos->liquidadoa - $objElementos->liquidado_estornadoa;
                 $totgeralsaldoemp += (($objElementos->empenhadoa - $objElementos->empenhado_estornadoa) - ($objElementos->liquidadoa - $objElementos->liquidado_estornadoa));
@@ -375,7 +379,7 @@ if ($pdf->gety() > ($pdf->h - 30)) {
 }
 $pdf->setfont('arial', '', 8);
 $largura = ($pdf->w) / 2;
-$pdf->ln(30);
+$pdf->ln(20);
 $pos = $pdf->gety();
 $pdf->multicell($largura, 4, $ass_pref, 0, "L", 0, 0);
 $pdf->setxy($largura, $pos);

@@ -53,7 +53,8 @@ class cl_desdobramento {
     sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidado,
     sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornado,
     sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamento,
-    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornado
+    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornado,
+    sum(case when c53_tipo = 32  then c70_valor else 0 end ) as empenho_rpestornado
     from conlancamele
     inner join conlancam on c67_codlan=c70_codlan
     inner join conlancamemp on c75_codlan = c70_codlan
@@ -72,7 +73,7 @@ class cl_desdobramento {
     $sql .= "
     empempenho.e60_instit in $w_instit
     and ( conlancam.c70_data >='$dtini' and conlancam.c70_data <='$dtfim' )
-    and conhistdoc.c53_tipo in (10,11,20,21,30,31)
+    and conhistdoc.c53_tipo in (10,11,20,21,30,31,32)
     group by /* o58_codele, */
     c60_estrut,
     c60_descr,
@@ -96,7 +97,8 @@ class cl_desdobramento {
     sum(case when c53_tipo = 20  then c70_valor else 0 end ) as liquidadoa,
     sum(case when c53_tipo = 21  then c70_valor else 0 end ) as liquidado_estornadoa,
     sum(case when c53_tipo = 30  then c70_valor else 0 end ) as pagamentoa,
-    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornadoa
+    sum(case when c53_tipo = 31  then c70_valor else 0 end ) as pagamento_estornadoa,
+    sum(case when c53_tipo = 32  then c70_valor else 0 end ) as empenho_rpestornadoa
     from conlancamele
     inner join conlancam on c67_codlan=c70_codlan
     inner join conlancamemp on c75_codlan = c70_codlan
@@ -115,7 +117,7 @@ class cl_desdobramento {
         $sql .= "
     empempenho.e60_instit in $w_instit
     and ( conlancam.c70_data >='".db_getsession("DB_anousu")."-01-01' and conlancam.c70_data <='$dtfim' )
-    and conhistdoc.c53_tipo in (10,11,20,21,30,31)
+    and conhistdoc.c53_tipo in (10,11,20,21,30,31,32)
     group by /* o58_codele, */
     c60_estrut,
     c60_descr,
