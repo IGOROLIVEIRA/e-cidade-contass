@@ -30,11 +30,11 @@ require_once("fpdf151/scpdf.php");
 require_once("classes/db_db_config_classe.php");
 
 $cldb_config = new cl_db_config;
-$result33    = $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession("DB_instit"), "*"));
+$result33 = $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession("DB_instit"), "*"));
 if ($cldb_config->numrows > 0) {
-  db_fieldsmemory($result33, 0);
+    db_fieldsmemory($result33, 0);
 } else {
-  $nomeinst = '';
+    $nomeinst = '';
 }
 $sqlpara = "select    pd.descrdepto as pdepto,
                       p62_coddepto,
@@ -85,136 +85,154 @@ $rspara = db_query($sqlpara);
 
 if (pg_numrows($rspara) == 0) {
 
-  db_redireciona('db_erros.php?fechar=true&db_erro=Sem processos nesta transferência!');
-  exit;
+    db_redireciona('db_erros.php?fechar=true&db_erro=Sem processos nesta transferência!');
+    exit;
 }
 
 $iLinhasPorPagina = 15;
-$rsproc           = db_query($sqlproc);
-$nNumeroLinhas    = pg_num_rows($rsproc);
-$imptit           = 0;
-$iNumeroPaginas   = ceil($nNumeroLinhas / $iLinhasPorPagina);
-$pdf              = new scpdf();
+$rsproc = db_query($sqlproc);
+$nNumeroLinhas = pg_num_rows($rsproc);
+$imptit = 0;
+$iNumeroPaginas = ceil($nNumeroLinhas / $iLinhasPorPagina);
+$pdf = new scpdf();
 $pdf->open();
 
 for ($multiplo = 1; $multiplo <= $iNumeroPaginas; $multiplo++) {
 
-  $pdf->AddPage();
-  $pdf->AliasNbPages();
-  $pdf->settopmargin(1);
-  $pdf->line(2, 148.5, 208, 148.5);
-  $xlin = 20;
-  $xcol = 4;
+    $pdf->AddPage();
+    $pdf->AliasNbPages();
+    $pdf->settopmargin(1);
+    $pdf->line(2, 148.5, 208, 148.5);
+    $xlin = 20;
+    $xcol = 4;
 
-  $getlogo = db_getnomelogo();
-  $logo    = ($getlogo == false ? '' : $getlogo);
+    $getlogo = db_getnomelogo();
+    $logo = ($getlogo == false ? '' : $getlogo);
 
-  db_fieldsmemory($rspara, 0);
-  $multiplofor = (($multiplo - 1) * 15);
-  for ($i = 0; $i < 2; $i++) {
+    db_fieldsmemory($rspara, 0);
+    $multiplofor = (($multiplo - 1) * 15);
+    for ($i = 0; $i < 2; $i++) {
 
-    $pdf->setfillcolor(245);
-    $pdf->roundedrect($xcol - 2, $xlin - 18, 206, 144.5, 2, 'DF', '1234');
-    $pdf->setfillcolor(255, 255, 255);
-    $pdf->Setfont('Arial', 'B', 11);
-    /*
-     * pega o ano da transferencia para colocar ao lado do numero do processo
-     * antes vinha com o ano de criação do processo.
-     */
-    $aAnoTransferencia = explode("/", $dttran);
-    $iAnoTransferencia = $aAnoTransferencia[2];
+        $pdf->setfillcolor(245);
+        $pdf->roundedrect($xcol - 2, $xlin - 18, 206, 144.5, 2, 'DF', '1234');
+        $pdf->setfillcolor(255, 255, 255);
+        $pdf->Setfont('Arial', 'B', 11);
+        /*
+         * pega o ano da transferencia para colocar ao lado do numero do processo
+         * antes vinha com o ano de criação do processo.
+         */
+        $aAnoTransferencia = explode("/", $dttran);
+        $iAnoTransferencia = $aAnoTransferencia[2];
 
-    $pdf->text(120, $xlin - 13, 'Termo de Recebimento nº ' . db_formatar($p63_codtran, "s", "0", 5, "e") . " / " . $iAnoTransferencia);
-    if ($nNumeroLinhas == 1) {
-      $pdf->text(120, $xlin - 9, "Processo nº $p58_numero / $p58_ano");
+        $pdf->text(120, $xlin - 13, 'Termo de Recebimento nº ' . db_formatar($p63_codtran, "s", "0", 5, "e") . " / " . $iAnoTransferencia);
+        if ($nNumeroLinhas == 1) {
+            $pdf->text(120, $xlin - 9, "Protocolo Geral: $p58_numero / $p58_ano");
+        }
+        if ($atendimento != "") {
+            $pdf->text(120, $xlin - 5, 'Atendimento nº ' . $atendimento);
+        }
+
+        $pdf->Image('imagens/files/' . $logo, 15, $xlin - 17, 12);
+        $pdf->Setfont('Arial', 'B', 9);
+
+        $pdf->text(40, $xlin - 15, '' . $nomeinst);
+        $pdf->Setfont('Arial', '', 9);
+        $pdf->text(40, $xlin - 11, '' . $ender);
+        $pdf->text(40, $xlin - 8, '' . $munic);
+        $pdf->text(40, $xlin - 5, '' . $telef);
+        $pdf->text(40, $xlin - 2, '' . $url);
+        $pdf->Roundedrect($xcol, $xlin + 1, $xcol + 93, 20, 2, 'DF', '1234');
+        $pdf->Setfont('Arial', 'B', 8);
+        $pdf->text($xcol + 2, $xlin + 4, 'De:');
+        $pdf->Setfont('Arial', '', 8);
+        $pdf->text($xcol + 2, $xlin + 7, 'Departamento:');
+        //$pdf->text($xcol + 25, $xlin + 7, "$p62_coddepto - $ddepto ");
+        $pos_y = $pdf->y;
+        $pos_x = $pdf->x;
+        $pdf->x = $xcol + 10;
+        $pdf->y = $xlin + 5;
+        $pdf->multicell(80, 3, "$p62_coddepto - $ddepto",0,"R");
+        $pdf->x = $pos_x;
+        $pdf->y = $pos_y;
+        $pdf->text($xcol + 13, $xlin + 16, 'Data :');
+        $pdf->text($xcol + 27, $xlin + 16, $dttran);
+        $pdf->text($xcol + 50, $xlin + 16, 'Hora: ' . $p62_hora);
+        $pdf->Setfont('Arial', 'B', 8);
+        $pdf->Roundedrect($xcol + 100, $xlin + 1, 102, 20, 2, 'DF', '1234');
+        $pdf->text($xcol + 102, $xlin + 4, 'Para:');
+        $pdf->Setfont('Arial', '', 8);
+        $pdf->text($xcol + 102, $xlin + 7, 'Departamento:');
+        //$pdf->text($xcol + 124, $xlin + 7, "$p62_coddeptorec - $pdepto");
+        $pos_y = $pdf->y;
+        $pos_x = $pdf->x;
+        $pdf->x = $xcol + 117;
+        $pdf->y = $xlin + 5;
+        $pdf->multicell(80, 3, "$p62_coddeptorec - $pdepto",0,"R");
+        $pdf->x = $pos_x;
+        $pdf->y = $pos_y;
+        $pdf->Setfont('Arial', 'B', 8);
+        $pdf->text($xcol + 2, $xlin + 25, "Atraves deste faço entregue os seguintes processos abaixo relacionados:");
+        $pdf->Roundedrect($xcol, $xlin + 30, 202, 60, 2, 'DF', '1234');
+        $pdf->sety($xlin + 30);
+        $maiscol = 0;
+        $pdf->Setfont('Arial', 'B', 8);
+        $yy = $pdf->gety();
+        $pdf->setx($xcol + 3);
+        $pdf->cell(20, 3, 'Protocolo', 0, 0, "R", 0);
+        $pdf->cell(75, 3, 'Requerente', 0, 0, "L", 0);
+        $pdf->cell(50, 3, 'Descrição', 0, 0, "L", 0);
+        $pdf->cell(34, 3, 'Tipo', 0, 0, "L", 0);
+        $pdf->cell(17, 3, 'Processo', 0, 1, "C", 0);
+        $pdf->Setfont('Arial', '', 7);
+
+        for ($ii = $multiplofor; $ii < ($multiplo * 15); $ii++) {
+
+            if ($ii >= pg_numrows($rsproc)) {
+                break;
+            }
+
+            db_fieldsmemory($rsproc, $ii);
+            $pdf->setx($xcol + 3);
+
+            $sNumeroProtocolo = $p58_numero . "/" . $p58_ano;
+            if ($p58_numero == "") {
+                $sNumeroProtocolo = "";
+            }
+
+            $pdf->cell(20, 3, $sNumeroProtocolo, 0, 0, "R", 0);
+            $pos_y = $pdf->y;
+            $pos_x = $pdf->x;
+            $pdf->multicell(75, 3, $z01_nome, 0,"L");
+            $pdf->x = $pos_x + 75;
+            $pdf->y = $pos_y;
+            $pos_y = $pdf->y;
+            $pos_x = $pdf->x;
+            $pdf->multicell(50, 3, $p58_obs, 0, "L");
+            $pdf->x = $pos_x + 50;
+            $pdf->y = $pos_y;
+            $pos_y = $pdf->y;
+            $pos_x = $pdf->x;
+            $pdf->multicell(38, 3, $p51_descr, 0, "L");
+            $pdf->x = $pos_x + 38;
+            $pdf->y = $pos_y;
+            $pdf->cell(10, 3, substr($p58_numeracao . " / " . $p58_ano, 0, 35), 0, 1, "C", 0);
+            if ($ii == $nNumeroLinhas - 1) {
+                break;
+            }
+        }
+        $pdf->Setfont('Arial', '', 6);
+        $pdf->setxy(10, $xlin + 100);
+        //$pdf->multicell(75, 2, str_repeat(".", 75) . "\n" . $dusu, 0, 'C');
+        $pdf->setxy(125, $xlin + 100);
+        if ($pusu == "") {
+            $pdf->multicell(75, 2, str_repeat(".", 75) . "\n" . 'Responsável pelo Recebimento', 0, 'C');
+        } else {
+            $pdf->multicell(75, 2, str_repeat(".", 75) . "\n" . $pusu, 0, 'C');
+        }
+        $pdf->Setfont('Arial', '', 10);
+        $pdf->text(150, $xlin + 115, 'Recebido em : __/__/___');
+        $xlin = 169;
     }
-    if ($atendimento != "") {
-      $pdf->text(120, $xlin - 5, 'Atendimento nº ' . $atendimento);
-    }
-
-    $pdf->Image('imagens/files/' . $logo, 15, $xlin - 17, 12);
-    $pdf->Setfont('Arial', 'B', 9);
-
-    $pdf->text(40, $xlin - 15, '' . $nomeinst);
-    $pdf->Setfont('Arial', '', 9);
-    $pdf->text(40, $xlin - 11, '' . $ender);
-    $pdf->text(40, $xlin - 8, '' . $munic);
-    $pdf->text(40, $xlin - 5, '' . $telef);
-    $pdf->text(40, $xlin - 2, '' . $url);
-    $pdf->Roundedrect($xcol, $xlin + 1, $xcol + 93, 20, 2, 'DF', '1234');
-    $pdf->Setfont('Arial', 'B', 8);
-    $pdf->text($xcol + 2, $xlin + 4, 'De:');
-    $pdf->Setfont('Arial', '', 8);
-    $pdf->text($xcol + 2, $xlin + 7, 'Nome :');
-    $pdf->text($xcol + 25, $xlin + 7, $dusu);
-    $pdf->text($xcol + 2, $xlin + 11, 'Instituição:');
-    $pdf->text($xcol + 25, $xlin + 11, $instide);
-    $pdf->text($xcol + 2, $xlin + 15, 'Departamento:');
-    $pdf->text($xcol + 25, $xlin + 15, "$p62_coddepto - $ddepto ");
-    $pdf->text($xcol + 2, $xlin + 19, 'Data :');
-    $pdf->text($xcol + 17, $xlin + 19, $dttran);
-    $pdf->text($xcol + 40, $xlin + 19, 'Hora: ' . $p62_hora);
-    $pdf->Setfont('Arial', 'B', 8);
-    $pdf->Roundedrect($xcol + 100, $xlin + 1, 102, 20, 2, 'DF', '1234');
-    $pdf->text($xcol + 102, $xlin + 4, 'Para:');
-    $pdf->Setfont('Arial', '', 8);
-    $pdf->text($xcol + 102, $xlin + 7, 'Nome:');
-    $pdf->text($xcol + 124, $xlin + 7, $pusu);
-    $pdf->text($xcol + 102, $xlin + 11, 'Instituição:');
-    $pdf->text($xcol + 124, $xlin + 11, $instipara);
-    $pdf->text($xcol + 102, $xlin + 15, 'Departamento:');
-    $pdf->text($xcol + 124, $xlin + 15, "$p62_coddeptorec - $pdepto");
-    $pdf->Setfont('Arial', 'B', 8);
-    $pdf->text($xcol + 2, $xlin + 25, "Atraves deste faço entregue os seguintes processos abaixo relacionados:");
-    $pdf->Roundedrect($xcol, $xlin + 30, 202, 60, 2, 'DF', '1234');
-    $pdf->sety($xlin + 30);
-    $maiscol = 0;
-    $pdf->Setfont('Arial', 'B', 8);
-    $yy = $pdf->gety();
-    $pdf->setx($xcol + 3);
-    $pdf->cell(20, 3, 'Protocolo', 0, 0, "R", 0);
-    $pdf->cell(75, 3, 'Requerente', 0, 0, "L", 0);
-    $pdf->cell(50, 3, 'Descrição', 0, 0, "L", 0);
-    $pdf->cell(34, 3, 'Tipo', 0, 0, "L", 0);
-    $pdf->cell(15, 3, 'Numeração', 0, 1, "L", 0);
-    $pdf->Setfont('Arial', '', 7);
-
-    for ($ii = $multiplofor; $ii < ($multiplo * 15); $ii++) {
-
-      if ($ii >= pg_numrows($rsproc)) {
-        break;
-      }
-
-      db_fieldsmemory($rsproc, $ii);
-      $pdf->setx($xcol + 3);
-
-      $sNumeroProtocolo = $p58_numero . "/" . $p58_ano;
-      if ($p58_numero == "") {
-        $sNumeroProtocolo = "";
-      }
-
-      $pdf->cell(20, 3, $sNumeroProtocolo, 0, 0, "R", 0);
-      $pdf->cell(75, 3, $z01_nome, 0, 0, "L", 0);
-      $pdf->cell(50, 3, substr($p58_obs, 0, 30), 0, 0, "L", 0);
-      $pdf->cell(38, 3, substr($p51_descr, 0, 30), 0, 0, "L", 0);
-      $pdf->cell(10, 3, substr($p58_numeracao, 0, 35), 0, 1, "L", 0);
-      if ($ii == $nNumeroLinhas - 1) {
-        break;
-      }
-    }
-    $pdf->Setfont('Arial', '', 6);
-    $pdf->setxy(10, $xlin + 100);
-    $pdf->multicell(75, 2, str_repeat(".", 75) . "\n" . $dusu, 0, 'C');
-    $pdf->setxy(125, $xlin + 100);
-    if ($pusu == "") {
-      $pdf->multicell(75, 2, str_repeat(".", 75) . "\n" . 'Responsável pelo Departamento', 0, 'C');
-    } else {
-      $pdf->multicell(75, 2, str_repeat(".", 75) . "\n" . $pusu, 0, 'C');
-    }
-    $pdf->Setfont('Arial', '', 10);
-    $pdf->text(150, $xlin + 115, 'Recebido em : __/__/___');
-    $xlin = 169;
-  }
 }
 
 $pdf->output();
