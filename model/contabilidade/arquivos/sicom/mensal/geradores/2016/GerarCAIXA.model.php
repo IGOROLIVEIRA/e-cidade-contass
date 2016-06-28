@@ -84,7 +84,7 @@ class GerarCAIXA extends GerarAM {
               $aCSVCAIXA12['si104_codfontecaixa']            =    substr($aCAIXA12['si104_codfontecaixa'], 0, 3);
               $aCSVCAIXA12['si104_tipomovimentacao']         =    str_pad($aCAIXA12['si104_tipomovimentacao'], 1, "0", STR_PAD_LEFT);
               $aCSVCAIXA12['si104_tipoentrsaida']            =    str_pad($aCAIXA12['si104_tipoentrsaida'], 2, "0", STR_PAD_LEFT);
-              $aCSVCAIXA12['si104_descrmovimentacao']        =    ($aCAIXA12['si104_descrmovimentacao'] == 0)? ' ' : substr($aCAIXA12['si166_descrmovimentacao'], 0, 50);
+              $aCSVCAIXA12['si104_descrmovimentacao']        =    ($aCAIXA12['si104_descrmovimentacao'] == "") ? ' ' : substr($aCAIXA12['si104_descrmovimentacao'], 0, 50);
               $aCSVCAIXA12['si104_valorentrsaida']           =    number_format($aCAIXA12['si104_valorentrsaida'], 2, ",", "");
               $aCSVCAIXA12['si104_codctbtransf']             =    ($aCAIXA12['si104_codctbtransf'] == 0)? ' ':$aCAIXA12['si104_codctbtransf'];
               $aCSVCAIXA12['si104_codfontectbtransf']        =    ($aCAIXA12['si104_codfontectbtransf']==0)?' ':$aCAIXA12['si104_codfontectbtransf'];
