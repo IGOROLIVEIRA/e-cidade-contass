@@ -578,7 +578,47 @@ class cl_db_depart {
      }
      return $sql;
   }
-   function sql_query_div ( $coddepto=null,$campos="*",$ordem=null,$dbwhere=""){
+   function sql_query_depart ( $coddepto=null,$campos="*",$ordem=null,$dbwhere=""){
+     $sql = "select ";
+     if($campos != "*" ){
+       $campos_sql = split("#",$campos);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }else{
+       $sql .= $campos;
+     }
+     $sql .= " from db_depart ";
+     $sql .= "      inner join db_departorg on db_departorg.db01_coddepto = db_depart.coddepto";
+     $sql .= "      inner join orcorgao     on orcorgao.o40_orgao         = db_departorg.db01_orgao and
+                                               orcorgao.o40_anousu        = db_departorg.db01_anousu";
+     $sql .= "      left  join departdiv    on departdiv.t30_depto        = db_depart.coddepto";
+     $sql .= "      inner join db_config  on  db_config.codigo = db_depart.instit";
+     $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_depart.numcgm";
+     $sql2 = "";
+     if($dbwhere==""){
+       if($coddepto!=null ){
+         $sql2 .= " where db_depart.coddepto = $coddepto ";
+       }
+     }else if($dbwhere != ""){
+       $sql2 = " where $dbwhere";
+     }
+     $sql .= $sql2;
+     if($ordem != null ){
+       $sql .= " order by ";
+       $campos_sql = split("#",$ordem);
+       $virgula = "";
+       for($i=0;$i<sizeof($campos_sql);$i++){
+         $sql .= $virgula.$campos_sql[$i];
+         $virgula = ",";
+       }
+     }
+     return $sql;
+  }
+
+    function sql_query_div ( $coddepto=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);

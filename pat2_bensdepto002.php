@@ -97,7 +97,7 @@ $sAnoUsu          = db_getsession("DB_anousu");
  */
 if ( !empty($depto) ) {
 
-  $res_depto = $cldbdepart->sql_record($cldbdepart->sql_query_div(null,"nomeresponsavel", null,"coddepto = $depto and $where_instit"));
+  $res_depto = $cldbdepart->sql_record($cldbdepart->sql_query_depart(null,"distinct z01_nome as nomeresponsavel", null,"coddepto = $depto and $where_instit"));
 
   if ($cldbdepart->numrows > 0){
 
