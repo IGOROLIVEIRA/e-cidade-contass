@@ -38,7 +38,7 @@ require_once ("libs/JSON.php");
 $oGet                   = db_utils::postMemory($_GET);
 $oDaoProcessosApensados = db_utils::getDao('processosapensados');
 $oJson                  = new Services_JSON();
-$sCampos                = 'p58_dtproc as data_processo, p30_procapensado as codigo_processo, z01_nome as titular,';
+$sCampos                = "p58_dtproc as data_processo, cast(p58_numero||'/'||p58_ano as varchar) as codigo_processo, z01_nome as titular,";
 $sCampos               .= 'p51_descr as tipo_processo';
 $sWhere                 = "p30_procprincipal = {$oGet->codigo_processo}";
 $sSqlProcessosApensados = $oDaoProcessosApensados->sql_query_processo_apensado(null, $sCampos, "p58_codproc", $sWhere);
@@ -72,7 +72,7 @@ $aProcessosApensados    = db_utils::getCollectionByRecord($rsProcessosApensados,
 var sListaProcessosApensados    = '<?php echo $oJson->encode($aProcessosApensados)?>';
 var oDataGridApensados          = new DBGrid('gridApensados');
 oDataGridApensados.nameInstance = 'oDataGridApensados';
-var aHeaders                    = new Array('Processo', 
+var aHeaders                    = new Array('Protocolo Geral',
                                             'Data',
                                             'Titular', 
                                             'Tipo' 
