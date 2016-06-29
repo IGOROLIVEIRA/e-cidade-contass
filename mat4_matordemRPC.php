@@ -48,8 +48,8 @@ require_once ("model/MaterialCompras.model.php");
 require_once ("model/estoque/MaterialGrupo.model.php");
 require_once ("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php");
 require_once ("model/contabilidade/planoconta/ContaPlano.model.php");
-require_once("classes/materialestoque.model.php");
-require_once("classes/db_pcmaterele_classe.php");
+/*require_once("classes/materialestoque.model.php");
+require_once("classes/db_pcmaterele_classe.php");*/
 
 
 db_app::import('contabilidade.*');
@@ -198,7 +198,7 @@ if ($method == "getDados") {
         $sNota           = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->sNumero));
         $sNumeroProcesso = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->e04_numeroprocesso));
 
-        $oDadosEntradaNovo = $oORdemCompra->getDadosEntrada();
+        /*$oDadosEntradaNovo = $oORdemCompra->getDadosEntrada();
 
         $oORdemCompra->confirmaEntrada( $sNota,
             $objJson->dtDataNota,
@@ -216,7 +216,7 @@ if ($method == "getDados") {
         /**
          * saida de material para o elemento ****
          */
-        $pcmaterele = new cl_pcmaterele;
+        /*$pcmaterele = new cl_pcmaterele;
 
         foreach ($oDadosEntradaNovo as $oMaterial) {
 
@@ -239,7 +239,7 @@ if ($method == "getDados") {
             }
 
         }
-        db_fim_transacao(false);
+        db_fim_transacao(false);*/
         echo $json->encode(array("mensagem" => "Entrada da ordem de compra efetuada com sucesso.", "status" => 1));
     }
     catch (Exception $eError) {
