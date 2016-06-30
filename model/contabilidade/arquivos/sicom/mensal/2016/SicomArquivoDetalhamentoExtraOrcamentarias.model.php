@@ -420,7 +420,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 
                         $sSql31 = "SELECT   31 AS tiporegistro,
 											         (k17_codigo||K17_credito) AS codreduzidoop,
-											         CASE WHEN e96_codigo = 1 THEN 5
+											         CASE WHEN e96_codigo = 1 OR c60_codsis = 5 THEN 5
 											             WHEN e96_codigo = 2 THEN 1 
 											             ELSE 99  
 											         END AS tipodocumentoop,
@@ -437,7 +437,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											       AND c61_anousu = c60_anousu
 											INNER JOIN orctiporec    ON c61_codigo = o15_codigo
 											INNER JOIN conplanoreduz db ON db.c61_reduz  = k17_debito and db.c61_anousu = EXTRACT(YEAR from k17_data)::int
-											INNER JOIN conplanoconta ON c63_codcon = db.c61_codcon
+											LEFT JOIN conplanoconta ON c63_codcon = db.c61_codcon
 											       AND db.c61_anousu = c63_anousu
 											INNER JOIN empageslip ON e89_codigo = k17_codigo
 											INNER JOIN empagemov  ON e81_codmov = e89_codmov
@@ -447,10 +447,11 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											 LEFT JOIN empageconfche  ON e91_codmov   = e81_codmov
 											       AND e91_ativo IS TRUE
 											     WHERE k17_codigo = {$oExt30Geral->codigo}
+											     AND (c63_codcon IS NOT NULL OR c60_codsis = 5) /*condicao adicionada para pegar apenas contas caixa e bancarias*/
 											UNION ALL        
 											SELECT   31 AS tiporegistro,
 											         (k17_codigo||K17_debito) AS codreduzidoop,
-											         CASE WHEN e96_codigo = 1 THEN 5
+											         CASE WHEN e96_codigo = 1 OR c60_codsis = 5 THEN 5
 											             WHEN e96_codigo = 2 THEN 1 
 											             ELSE 99 
 											         END AS tipodocumentoop,
@@ -467,7 +468,7 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											       AND c61_anousu = c60_anousu
 											INNER JOIN orctiporec    ON c61_codigo = o15_codigo
 											INNER JOIN conplanoreduz db ON db.c61_reduz  = k17_credito and db.c61_anousu = EXTRACT(YEAR from k17_data)::int
-											INNER JOIN conplanoconta ON c63_codcon = db.c61_codcon
+											LEFT JOIN conplanoconta ON c63_codcon = db.c61_codcon
 											       AND db.c61_anousu = c63_anousu
 											INNER JOIN empageslip ON e89_codigo = k17_codigo
 											INNER JOIN empagemov  ON e81_codmov = e89_codmov
@@ -476,7 +477,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 											 LEFT JOIN empageforma    ON e97_codforma = e96_codigo
 											 LEFT JOIN empageconfche  ON e91_codmov   = e81_codmov
 											       AND e91_ativo IS TRUE
-											     WHERE k17_codigo = {$oExt30Geral->codigo}";
+											     WHERE k17_codigo = {$oExt30Geral->codigo}
+											     AND (c63_codcon IS NOT NULL OR c60_codsis = 5) /*condicao adicionada para pegar apenas contas caixa e bancarias*/";
 
 
                         $rsExt31 = db_query($sSql31);//db_criatabela($rsExt31);
@@ -547,8 +549,8 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
                                 $cExt31->si127_codreduzidoop = $oExt30->codreduzidoop;
                                 $cExt31->si127_tipodocumentoop = $oExt31->tipodocumentoop;
                                 $cExt31->si127_nrodocumento = $oExt31->nrodocumento;
-                                $cExt31->si127_codctb = $oConta->conta;
-                                $cExt31->si127_codfontectb = $oConta->fonte;
+                                $cExt31->si127_codctb = $oExt31->tipodocumentoop == 5 ? 0 : $oConta->conta;
+                                $cExt31->si127_codfontectb = $oExt31->tipodocumentoop == 5 ? 100 : $oConta->fonte;
                                 $cExt31->si127_desctipodocumentoop = $oExt31->tipodocumentoop == "99" ? 'TED' : ' ';
                                 $cExt31->si127_dtemissao = $oExt30->dtpagamento;
                                 $cExt31->si127_vldocumento = $oExt31->vldocumento;
