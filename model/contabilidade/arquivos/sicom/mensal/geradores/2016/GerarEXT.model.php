@@ -128,8 +128,8 @@ class GerarEXT extends GerarAM
                         $aCSVEXT31['si127_codreduzidoop'] = substr($aEXT31['si127_codreduzidoop'], 0, 15);
                         $aCSVEXT31['si127_tipodocumentoop'] = str_pad($aEXT31['si127_tipodocumentoop'], 2, "0", STR_PAD_LEFT);
                         $aCSVEXT31['si127_nrodocumento'] = substr($aEXT31['si127_nrodocumento'], 0, 15);
-                        $aCSVEXT31['si127_codctb'] = substr($aEXT31['si127_codctb'], 0, 20);
-                        $aCSVEXT31['si127_codfontectb'] = str_pad($aEXT31['si127_codfontectb'], 3, "0", STR_PAD_LEFT);
+                        $aCSVEXT31['si127_codctb'] = substr(($aEXT31['si127_codctb'] == 0 ? ' ' : $aEXT31['si127_codctb']), 0, 20);
+                        $aCSVEXT31['si127_codfontectb'] = $aEXT31['si127_codfontectb'] == 0 ? ' ' : str_pad($aEXT31['si127_codfontectb'], 3, "0", STR_PAD_LEFT);
                         $aCSVEXT31['si127_desctipodocumentoop'] = substr($aEXT31['si127_desctipodocumentoop'], 0, 50);
                         $aCSVEXT31['si127_dtemissao'] = implode("", array_reverse(explode("-", $aEXT31['si127_dtemissao'])));
                         $aCSVEXT31['si127_vldocumento'] = number_format($aEXT31['si127_vldocumento'], 2, ",", "");
