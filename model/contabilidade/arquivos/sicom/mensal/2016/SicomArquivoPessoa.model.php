@@ -83,26 +83,21 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
 					       z01_nome, 
 					       z01_ultalt, 
 					       z01_obs,
-					       z01_cadast 
+					       z01_cadast
 					  from cgm 
 					 where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
-					 and ( (z01_cgccpf not in (select si12_nrodocumento from pessoa102016 where si12_mes < " . ($this->sDataFinal['5'] . $this->sDataFinal['6']) . ")
-					 and z01_cgccpf not in (select si12_nrodocumento from pessoa102015)
-					 and z01_cgccpf not in (select si12_nrodocumento from pessoa102014) )
-					 or ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}')
-					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') ) )";
+					 and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}')
+					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') ) ";
 
         } else {
             $sSql = "select z01_cgccpf,
 		       z01_nome, 
 		       z01_ultalt, 
 		       z01_obs,
-		       z01_cadast 
+		       z01_cadast
 		      from cgm where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-		      and (z01_cgccpf != '' and z01_cgccpf is not null)
-		      and z01_cgccpf not IN (select si12_nrodocumento from pessoa102015)
-		      and z01_cgccpf not IN (select si12_nrodocumento from pessoa102014)";
+		      and (z01_cgccpf != '' and z01_cgccpf is not null)";
         }
 
         $rsResult = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
@@ -124,28 +119,23 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
                 continue;
             }
 
-            if (($this->sDataFinal['5'] . $this->sDataFinal['6']) != '01' && db_getsession("DB_anousu") != 2014) {
-                if ($oDados->z01_cadast >= $this->sDataInicial && $oDados->z01_cadast <= $this->sDataFinal) {
-                    $sTipoCadastro = 1;
-                    $sJustificativaalteracao = ' ';
-                } else {
-                    $sTipoCadastro = 2;
-                    $sJustificativaalteracao = substr($oDados->z01_obs, 0, 100);
-                }
+
+            $sSqlVerifica = "select si12_nomerazaosocial from pessoa102014 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
+                                 UNION
+                                 select si12_nomerazaosocial from pessoa102015 WHERE si12_nrodocumento = '{$oDados->z01_cgccpf}'
+                                 UNION
+                                 select si12_nomerazaosocial from pessoa102016 where si12_mes < 5 AND si12_nrodocumento = '{$oDados->z01_cgccpf}'";
+            $rsDadosVerifica = db_query($sSqlVerifica);
+            if (pg_num_rows($rsDadosVerifica) == 0) {
+                $sTipoCadastro = 1;
+                $sJustificativaalteracao = ' ';
+            } else if (db_utils::fieldsMemory($rsDadosVerifica, 0)->si12_nomerazaosocial != trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oDados->z01_nome), 0, 200)))) {
+                $sTipoCadastro = 2;
+                $sJustificativaalteracao = substr($this->removeCaracteres($oDados->z01_obs), 0, 100);
             } else {
-                if (($this->sDataFinal['5'] . $this->sDataFinal['6']) != '01') {
-                    if ($oDados->z01_cadast >= $this->sDataInicial && $oDados->z01_cadast <= $this->sDataFinal) {
-                        $sTipoCadastro = 1;
-                        $sJustificativaalteracao = ' ';
-                    } else {
-                        $sTipoCadastro = 2;
-                        $sJustificativaalteracao = substr($oDados->z01_obs, 0, 100);
-                    }
-                } else {
-                    $sTipoCadastro = 1;
-                    $sJustificativaalteracao = ' ';
-                }
+                continue;
             }
+
             $aHash = $oDados->z01_cgccpf;
 
             if (!isset($aPessoas[$aHash])) {
