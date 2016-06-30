@@ -261,7 +261,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	    		  $oDadosMovi->si104_codfontecaixa           = $oContas->o15_codtri;
 	    		  $oDadosMovi->si104_tipomovimentacao        = $oMovi->tipomovimentacao;
 	    		  $oDadosMovi->si104_tipoentrsaida           = $oMovi->tipoentrsaida;
-	    		  $oDadosMovi->si104_descrmovimentacao       = $oMovi->descrmovimentacao;
+	    		  $oDadosMovi->si104_descrmovimentacao       = $oMovi->tipoentrsaida != 10 ? '' : $oMovi->descrmovimentacao;
 	    		  $oDadosMovi->si104_valorentrsaida          = $nValor;
 	    		  $oDadosMovi->si104_codctbtransf            = $oMovi->codctbtransf;
 	    		  $oDadosMovi->si104_codfontectbtransf  	 = $oMovi->codfontectbtransf;
