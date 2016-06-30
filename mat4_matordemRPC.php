@@ -48,9 +48,6 @@ require_once ("model/MaterialCompras.model.php");
 require_once ("model/estoque/MaterialGrupo.model.php");
 require_once ("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php");
 require_once ("model/contabilidade/planoconta/ContaPlano.model.php");
-/*require_once("classes/materialestoque.model.php");
-require_once("classes/db_pcmaterele_classe.php");*/
-
 
 db_app::import('contabilidade.*');
 db_app::import('contabilidade.lancamento.*');
@@ -67,7 +64,6 @@ $objJson      = $json->decode(str_replace("\\","",$_POST["json"]));
 $oORdemCompra = new ordemCompra($objJson->m51_codordem);
 $method       = $objJson->method;
 $oORdemCompra->setEncodeOn();
-
 if ($method == "getDados") {
 
     echo $oORdemCompra->ordem2Json($objJson->e69_codnota);
@@ -198,8 +194,6 @@ if ($method == "getDados") {
         $sNota           = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->sNumero));
         $sNumeroProcesso = addslashes(db_stdClass::normalizeStringJsonEscapeString($objJson->e04_numeroprocesso));
 
-        /*$oDadosEntradaNovo = $oORdemCompra->getDadosEntrada();
-
         $oORdemCompra->confirmaEntrada( $sNota,
             $objJson->dtDataNota,
             $objJson->dtRecebeNota,
@@ -212,34 +206,7 @@ if ($method == "getDados") {
             $objJson->sChaveAcesso,
             $objJson->sNumeroSerie
         );
-
-        /**
-         * saida de material para o elemento ****
-         */
-        /*$pcmaterele = new cl_pcmaterele;
-
-        foreach ($oDadosEntradaNovo as $oMaterial) {
-
-            $rsElemento = $pcmaterele->sql_record($pcmaterele->sql_query($oMaterial->pc01_codmater));
-
-            $oDadosElemento = db_utils::fieldsMemory($rsElemento, 0);
-
-            $baseElemento = substr($oDadosElemento->o56_elemento,0,5);
-            if( $baseElemento == '34490' ) {
-
-                db_inicio_transacao();
-
-                $oMaterialEstoque = new materialEstoque($oMaterial->m63_codmatmater);
-                MaterialEstoque::bloqueioMovimentacaoItem($oMaterial->m63_codmatmater, db_getsession("DB_coddepto"));
-                if (isset($oMaterial->iCriterioCustoRateio)) {
-                    $oMaterialEstoque->setCriterioRateioCusto($oMaterial->iCriterioCustoRateio);
-                }
-                $oMaterialEstoque->saidaMaterial($oMaterial->m52_quant, 'Ajuste de Estoque para Material Permanente');
-
-            }
-
-        }
-        db_fim_transacao(false);*/
+        db_fim_transacao(false);
         echo $json->encode(array("mensagem" => "Entrada da ordem de compra efetuada com sucesso.", "status" => 1));
     }
     catch (Exception $eError) {
@@ -334,23 +301,23 @@ if ($method == "getDados") {
 
 }else if ($method == "verificaNota") {
 
-    $status        = 0;
-    $sEmpenho      = "";
-    $sNota         = addslashes(db_stdClass::normalizeStringJson($objJson->sNota));
-    $iCgmFornecedor= $objJson->iCgmFornecedor;
-    $oDaoEmpNota   = db_utils::getDao("empnota");
+    $status = 0;
+    $sEmpenho = "";
+    $sNota = addslashes(db_stdClass::normalizeStringJson($objJson->sNota));
+    $iCgmFornecedor = $objJson->iCgmFornecedor;
+    $oDaoEmpNota = db_utils::getDao("empnota");
 
-    $iInstituicao  = db_getsession('DB_instit');
+    $iInstituicao = db_getsession('DB_instit');
     $sWhereEmpNota = "e69_numero ilike '{$sNota}' and e60_instit = {$iInstituicao} and e60_numcgm = {$iCgmFornecedor}";
-    $sSqlEmpNota   = $oDaoEmpNota->sql_query(null,
+    $sSqlEmpNota = $oDaoEmpNota->sql_query(null,
         "distinct e60_codemp, e69_anousu",
         "e60_codemp, e69_anousu",
         $sWhereEmpNota);
-    $rsEmpNota     = $oDaoEmpNota->sql_record($sSqlEmpNota);
+    $rsEmpNota = $oDaoEmpNota->sql_record($sSqlEmpNota);
 
     if ($oDaoEmpNota->numrows > 0) {
 
-        $status   = 1;
+        $status = 1;
 
         $aEmpenhos = array();
 
@@ -362,7 +329,7 @@ if ($method == "getDados") {
 
         //$iAnoEmpenho = $oEmpenho->getAnoUso();
 
-        $sEmpenho    = implode(", ", $aEmpenhos);
+        $sEmpenho = implode(", ", $aEmpenhos);
 
     }
     echo $json->encode(array("status" => $status, "sEmpenho" => $sEmpenho));
