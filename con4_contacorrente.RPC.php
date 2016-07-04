@@ -594,8 +594,8 @@ try {
                     $sCamposDetalhe .= ",sum(c69_valor) c69_valor, ";
                     $sCamposDetalhe .= "e60_codemp,        ";
                     $sCamposDetalhe .= "e60_anousu         ";
-                    $iAnousuEmp = db_getsession('DB_anousu')-1;
-                    $sWhereDetalhes = "c19_reduz = {$iReduzido} and e60_anousu = {$iAnousuEmp} group by c19_sequencial,
+                    $iAnousuEmp = db_getsession('DB_anousu');
+                    $sWhereDetalhes = "c19_reduz = {$iReduzido} and c69_anousu = {$iAnousuEmp} group by c19_sequencial,
 								c17_sequencial,
 								c17_contacorrente,
 								c17_descricao,
