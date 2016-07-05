@@ -148,7 +148,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 	 			    where c80_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
 				      and c71_coddoc in (5,35,37)
 				      and e60_instit = " . db_getsession("DB_instit") . "
-and e50_codord = 20161
+
 				  order by e50_codord,c80_codlan";
         // $sSql;exit;
         $rsEmpenhosPagosGeral = db_query($sSql);
