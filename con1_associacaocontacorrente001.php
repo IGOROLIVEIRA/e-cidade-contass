@@ -129,7 +129,7 @@ if ( ($iDbUsuario != 1) || ($sDbUsuario != 'dbseller') ) {
   var sUrlRPC = "con4_contacorrente.RPC.php";
 	var oGridContas          = new DBGrid('ctnGridContasAssociadas');
 	oGridContas.nameInstance = 'oGridContas';
-	var aHeaders             = new Array("Reduzido", "Estrutural", "Descrição");
+	var aHeaders             = new Array("Cód. Conta", "Estrutural", "Descrição");
 	var aAlign               = new Array("center", "center", "left");
 	var aWidth               = new Array("10%", "25%", "65%");
 	oGridContas.setCheckbox(0);
