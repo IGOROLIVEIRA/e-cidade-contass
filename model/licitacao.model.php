@@ -1115,7 +1115,7 @@ class licitacao {
          */
         $oSaldo = $this->getValoresParciais($oItem->codigoprocesso, $oDados->dotacao, $oDados->contrapartida);
 
-        if ($nNovoValorReserva > 0 && ($oSaldo->nValorAutorizacao > 0 && $oSaldo->nValorAutorizacao + $oItem->valortotal < $oSaldo->nValorItemJulgado)) {
+        /*if ($nNovoValorReserva > 0 && ($oSaldo->nValorAutorizacao > 0 && $oSaldo->nValorAutorizacao + $oItem->valortotal < $oSaldo->nValorItemJulgado)) {
 
           $oDaoOrcReserva->o80_anousu = db_getsession("DB_anousu");
           $oDaoOrcReserva->o80_coddot = $oDados->dotacao;
@@ -1133,7 +1133,8 @@ class licitacao {
             throw new Exception($sMsgErro);
           }
 
-          $oDaoOrcReservaSol->o82_codres    = $oDaoOrcReserva->o80_codres;
+
+          /*$oDaoOrcReservaSol->o82_codres    = $oDaoOrcReserva->o80_codres;
           $oDaoOrcReservaSol->o82_pcdotac   = $oDados->pcdotac;
           $oDaoOrcReservaSol->o82_solicitem = $oDados->codigoitemsolicitacao;
           $oDaoOrcReservaSol->incluir(null);
@@ -1144,7 +1145,7 @@ class licitacao {
             throw new Exception($sMsgErro);
           }
 
-        }
+        }*/
       }
       /**
        * Salvamos a Autorizacao;
