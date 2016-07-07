@@ -105,7 +105,8 @@ if(isset($chavepesquisa)){
          top.corpo.iframe_pcforneidentificacaocredor.location.href='com1_pcfornetipoidentificacaocredorgenerica001.php?pc81_cgmforn=".@$pc60_numcgm."';
          parent.document.formaba.pcforneidentificacaocredor.disabled=false;
      ";
-     $permissao=db_permissaomenu(db_getsession("DB_anousu"),28,5002);
+    //Alterado o modulo de 28 para 39 - cod modulo incorreto (Ocorrencia 2213)
+     $permissao=db_permissaomenu(db_getsession("DB_anousu"),39,5002);
      if ($permissao=='true'){
      	echo"parent.document.formaba.pcfornecon.disabled=false;
          	 top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
