@@ -296,7 +296,7 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
             $totgeralpago = 0;
             $totgeralpagoa = 0;
             $totgeralsaldoliqemp = 0;
-
+            asort($aDadosAgrupados);
             foreach ($aDadosAgrupados as $objElementos) {
 
 
