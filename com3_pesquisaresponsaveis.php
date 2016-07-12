@@ -121,6 +121,7 @@ db_fieldsmemory($result, 0);
                 <?
           }
           $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l20_codigo and pc50_pctipocompratribunal in (100,101,102,103)"));
+
             if ($clliclicita->numrows > 0) {
 
               $sql = $clliccomissaocgm->sql_query_file(null,"
@@ -138,12 +139,13 @@ l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numc
 
           }else {
 
-            $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l20_codigo and l20_naturezaobjeto = 6"));
+            $clliclicita->sql_record($clliclicita->sql_query_file('', '*', '', "l20_codigo = $l20_codigo and l20_naturezaobjeto = 6"));
 
             if ($clliclicita->numrows > 0) {
 
               $campos = "l30_codigo,l30_data,l30_portaria,l30_datavalid,l30_tipo";
-              $sql = $clliccomissaocgm->sql_query(null, "l31_codigo,z01_numcgm,cgm.z01_nome,
+              $sql = $clliccomissaocgm->sql_query(null, "l31_codigo,       l31_numcgm,
+       (select z01_nome from cgm where z01_numcgm = l31_numcgm),
    case 
    when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
                when l31_tipo::varchar = '2' then '2-Emissão do edital'
@@ -155,11 +157,12 @@ l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numc
                when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
                when l31_tipo::varchar = '9' then '9-Avaliação de Bens'
    end as l31_tipo",
-                  "", "l30_codigo = (select l20_liccomissao from  liclicita where l20_codigo = $l20_codigo)");
+                  "", "l31_licitacao =  $l20_codigo");
           }else{
 
                 $campos = "l30_codigo,l30_data,l30_portaria,l30_datavalid,l30_tipo";
-                $sql = $clliccomissaocgm->sql_query(null, "l31_codigo,z01_numcgm,cgm.z01_nome,
+                $sql = $clliccomissaocgm->sql_query_file(null, "l31_codigo,       l31_numcgm,
+       (select z01_nome from cgm where z01_numcgm = l31_numcgm),
    case
    when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
                when l31_tipo::varchar = '2' then '2-Emissão do edital'
@@ -170,7 +173,7 @@ l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numc
                when l31_tipo::varchar = '7' then '7-Adjudicação'
                when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
    end as l31_tipo",
-                    "", "l30_codigo = (select l20_liccomissao from  liclicita where l20_codigo = $l20_codigo)");
+                    "", "l31_licitacao =  $l20_codigo");
 
             }
 
