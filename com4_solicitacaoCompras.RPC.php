@@ -148,48 +148,62 @@ switch ($oParam->exec) {
       db_inicio_transacao();
       $oSolicita =  $_SESSION["oSolicita"];
 
-      if ($oSolicita->getTipoSolicitacao() == 3) {
-        $oItemNovo = new  itemSolicitacao(null, $oParam->iCodigoItem);
-      } else if ($oSolicita->getTipoSolicitacao() == 4) {
-
-        $oItemNovo = new  ItemEstimativa(null, $oParam->iCodigoItem);
-        $oItemNovo->setQuantidade($oParam->quantidade);
+      //VALIDANDO SE JÁ FOI ADD O ITEM
+      $iControle = 0;
+      $validaItens = $oSolicita->getItens();
+      if(count($validaItens) > 0) {
+        foreach ($validaItens as $row) {
+          if($oParam->iCodigoItem == $row->getCodigoMaterial()){
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode("O item $oParam->iCodigoItem já foi adicionado!!");
+            $iControle = 1;
+          }
+        }
       }
+      if($iControle == 0) {
+        if ($oSolicita->getTipoSolicitacao() == 3) {
+          $oItemNovo = new  itemSolicitacao(null, $oParam->iCodigoItem);
+        } else if ($oSolicita->getTipoSolicitacao() == 4) {
 
-      $oItemNovo->setResumo(utf8_decode(db_stdClass::db_stripTagsJson($oParam->sResumo)));
-      $oItemNovo->setJustificativa(utf8_decode(db_stdClass::db_stripTagsJson($oParam->sJustificativa)));
-      $oItemNovo->setPagamento(utf8_decode(db_stdClass::db_stripTagsJson($oParam->sPgto)));
-      $oItemNovo->setPrazos(utf8_decode(db_stdClass::db_stripTagsJson($oParam->sPrazo)));
-      $oItemNovo->setUnidade($oParam->iUnidade);
-      $oItemNovo->setQuantidadeUnidade($oParam->nQuantUnidade);
-      $oSolicita->addItem($oItemNovo);
-      $lTemEstimativa = false;
+          $oItemNovo = new  ItemEstimativa(null, $oParam->iCodigoItem);
+          $oItemNovo->setQuantidade($oParam->quantidade);
+        }
+
+        $oItemNovo->setResumo(utf8_decode(db_stdClass::db_stripTagsJson($oParam->sResumo)));
+        $oItemNovo->setJustificativa(utf8_decode(db_stdClass::db_stripTagsJson($oParam->sJustificativa)));
+        $oItemNovo->setPagamento(utf8_decode(db_stdClass::db_stripTagsJson($oParam->sPgto)));
+        $oItemNovo->setPrazos(utf8_decode(db_stdClass::db_stripTagsJson($oParam->sPrazo)));
+        $oItemNovo->setUnidade($oParam->iUnidade);
+        $oItemNovo->setQuantidadeUnidade($oParam->nQuantUnidade);
+        $oSolicita->addItem($oItemNovo);
+        $lTemEstimativa = false;
 
 
-      if ($oSolicita instanceof aberturaRegistroPreco) {
-        $lTemEstimativa = $oSolicita->hasEstimativas();
-      }
+        if ($oSolicita instanceof aberturaRegistroPreco) {
+          $lTemEstimativa = $oSolicita->hasEstimativas();
+        }
 
-      $aitens = $oSolicita->getItens();
+        $aitens = $oSolicita->getItens();
 
-      foreach ($aitens as $iIndice => $oItem) {
+        foreach ($aitens as $iIndice => $oItem) {
 
-        $oItemRetono = new stdClass;
-        $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
-        $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
-        $oItemRetono->quantidade        = $oItem->getQuantidade();
-        $oItemRetono->automatico        = $oItem->isAutomatico();
-        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n",urldecode($oItem->getResumo())));
-        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n",urldecode($oItem->getJustificativa())));
-        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPrazos())));
-        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPagamento())));
-        $oItemRetono->unidade           = $oItem->getUnidade();
-        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
-        $oItemRetono->indice            = $iIndice;
-        $oItemRetono->temestimativa     = $lTemEstimativa;
+          $oItemRetono = new stdClass;
+          $oItemRetono->codigoitem = $oItem->getCodigoMaterial();
+          $oItemRetono->descricaoitem = $oItem->getDescricaoMaterial();
+          $oItemRetono->quantidade = $oItem->getQuantidade();
+          $oItemRetono->automatico = $oItem->isAutomatico();
+          $oItemRetono->resumo = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+          $oItemRetono->justificativa = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+          $oItemRetono->prazo = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+          $oItemRetono->pagamento = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+          $oItemRetono->unidade = $oItem->getUnidade();
+          $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+          $oItemRetono->indice = $iIndice;
+          $oItemRetono->temestimativa = $lTemEstimativa;
 
-        $oRetorno->itens[] = $oItemRetono;
+          $oRetorno->itens[] = $oItemRetono;
 
+        }
       }
     } catch (Exception $eErro) {
 
