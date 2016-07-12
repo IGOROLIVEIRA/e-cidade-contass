@@ -120,12 +120,32 @@ db_fieldsmemory($result, 0);
                 </table>
                 <?
           }
-          if($l20_datacria[0] >= 2016 ) {
+          $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l20_codigo and pc50_pctipocompratribunal in (100,101,102,103)"));
+            if ($clliclicita->numrows > 0) {
 
               $sql = $clliccomissaocgm->sql_query_file(null,"
 l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm),
                case
-               when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
+               when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento de dispensa ou inexigibilidade'
+               when l31_tipo::varchar = '2' then '2-Cotação de preços'
+               when l31_tipo::varchar = '3' then '3-Informação de existência de recursos orçamentários'
+               when l31_tipo::varchar = '4' then '4-Ratificação'
+               when l31_tipo::varchar = '5' then '5-Publicação em órgão oficial'
+               when l31_tipo::varchar = '6' then '6-Parecer Jurídico'
+               when l31_tipo::varchar = '7' then '7-Parecer (outros)'
+               end as l31_tipo
+                ",null,"l31_licitacao=$l20_codigo");
+
+          }else {
+
+            $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l20_codigo and l20_naturezaobjeto = 6"));
+
+            if ($clliclicita->numrows > 0) {
+
+              $campos = "l30_codigo,l30_data,l30_portaria,l30_datavalid,l30_tipo";
+              $sql = $clliccomissaocgm->sql_query(null, "l31_codigo,z01_numcgm,cgm.z01_nome,
+   case 
+   when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
                when l31_tipo::varchar = '2' then '2-Emissão do edital'
                when l31_tipo::varchar = '3' then '3-Pesquisa de preços'
                when l31_tipo::varchar = '4' then '4-Informação de existência de recursos orçamentários'
@@ -133,25 +153,29 @@ l31_codigo,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numc
                when l31_tipo::varchar = '6' then '6-Homologação'
                when l31_tipo::varchar = '7' then '7-Adjudicação'
                when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
-               end as l31_tipo
-                ",null,"l31_licitacao=$l20_codigo");
-
-          }else {
-              $campos = "l30_codigo,l30_data,l30_portaria,l30_datavalid,l30_tipo";
-              $sql = $clliccomissaocgm->sql_query(null, "l31_codigo,z01_numcgm,cgm.z01_nome,
-   case 
-   when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
-   when l31_tipo::varchar = '2' then '2-Emissão do edital'
-   when l31_tipo::varchar = '3' then '3-Pesquisa de preços'
-   when l31_tipo::varchar = '4' then '4-Informação de existência de recursos orçamentários'
-   when l31_tipo::varchar = '5' then '5-Condução do procedimento licitatório'
-   when l31_tipo::varchar = '6' then '6-Homologação'
-   when l31_tipo::varchar = '7' then '7-Adjudicação'
-   when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
-   when l31_tipo::varchar = '9' then '9-Avaliação de Bens'
+               when l31_tipo::varchar = '9' then '9-Avaliação de Bens'
    end as l31_tipo",
                   "", "l30_codigo = (select l20_liccomissao from  liclicita where l20_codigo = $l20_codigo)");
-          }
+          }else{
+
+                $campos = "l30_codigo,l30_data,l30_portaria,l30_datavalid,l30_tipo";
+                $sql = $clliccomissaocgm->sql_query(null, "l31_codigo,z01_numcgm,cgm.z01_nome,
+   case
+   when l31_tipo::varchar = '1' then '1-Autorização para abertura do procedimento licitatório'
+               when l31_tipo::varchar = '2' then '2-Emissão do edital'
+               when l31_tipo::varchar = '3' then '3-Pesquisa de preços'
+               when l31_tipo::varchar = '4' then '4-Informação de existência de recursos orçamentários'
+               when l31_tipo::varchar = '5' then '5-Condução do procedimento licitatório'
+               when l31_tipo::varchar = '6' then '6-Homologação'
+               when l31_tipo::varchar = '7' then '7-Adjudicação'
+               when l31_tipo::varchar = '8' then '8-Publicação em órgão Oficial'
+   end as l31_tipo",
+                    "", "l30_codigo = (select l20_liccomissao from  liclicita where l20_codigo = $l20_codigo)");
+
+            }
+
+
+            }
            db_lovrot($sql, 15, "()", "");
           ?>
           </fieldset>
