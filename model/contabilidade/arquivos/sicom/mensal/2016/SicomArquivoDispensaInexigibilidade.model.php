@@ -789,25 +789,12 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		liclicita.l20_edital as nroProcessoLicitatorio,	
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
 		infocomplementaresinstit.si09_codorgaotce as codorgaotce,
-
-		(SELECT CASE
-    WHEN o41_subunidade != 0
-         OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
-            OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
-    ELSE lpad((CASE WHEN o40_codtri = '0'
-         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-   END AS codunidadesub
-   FROM db_departorg
-   JOIN infocomplementares ON si08_anousu = db01_anousu
-   AND si08_instit = ".db_getsession("DB_instit")."
-   JOIN orcunidade ON db01_orgao=o41_orgao
-   AND db01_unidade=o41_unidade
-   AND db01_anousu = o41_anousu
-   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-   WHERE o40_orgao=o58_orgao and o41_unidade=o58_unidade and db01_anousu=".db_getsession("DB_anousu")." LIMIT 1) as codUnidadeSub,
-
+		CASE WHEN o41_subunidade != 0
+		OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+		OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+		OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0) ELSE lpad((CASE WHEN o40_codtri = '0'
+		OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+		OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) END AS codunidadesub,
 		orcdotacao.o58_orgao,
 		orcdotacao.o58_unidade,
 		orcdotacao.o58_funcao as codFuncao,
@@ -825,6 +812,8 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		INNER JOIN pcprocitem on (liclicitem.l21_codpcprocitem=pcprocitem.pc81_codprocitem)
 		INNER JOIN pcdotac on (pcprocitem.pc81_solicitem=pcdotac.pc13_codigo)
 		INNER JOIN orcdotacao on (pcdotac.pc13_anousu=orcdotacao.o58_anousu and pcdotac.pc13_coddot=orcdotacao.o58_coddot)
+		inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+		inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 		INNER JOIN db_config on (liclicita.l20_instit=db_config.codigo)
 		INNER JOIN orctiporec on (orcdotacao.o58_codigo=orctiporec.o15_codigo)
 		INNER JOIN orcelemento on (orcdotacao.o58_anousu=orcelemento.o56_anousu and orcdotacao.o58_codele=orcelemento.o56_codele)
@@ -833,7 +822,6 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo
 		WHERE db_config.codigo= " .db_getsession("DB_instit")." AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10) 
 		AND liclicita.l20_codigo= {$oDados10->codlicitacao}";
-		
 		
 		$rsResult16 = db_query($sSql);
 		
