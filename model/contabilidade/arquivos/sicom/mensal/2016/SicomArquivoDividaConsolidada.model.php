@@ -213,7 +213,7 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
             $clddc30->si154_tipolancamento = $oDados30->si167_tipolancamento;
             $clddc30->si154_tipodocumentocredor = (strlen($oDados30->z01_cgccpf) == 11) ? 1 : 2;
             $clddc30->si154_nrodocumentocredor = $oDados30->z01_cgccpf;
-            $clddc30->si154_justificativacancelamento = ($oDados30->si167_justificativacancelamento == null || $oDados30->si167_justificativacancelamento == "") ? "" : $oDados30->si167_justificativacancelamento;
+            $clddc30->si154_justificativacancelamento = ($oDados30->si167_justificativacancelamento == null || $oDados30->si167_justificativacancelamento == "") ? "" : $oDados30->si167_vlcancelamento > 0 ? $oDados30->si167_justificativacancelamento : "";
             $clddc30->si154_vlsaldoanterior = $oDados30->si167_vlsaldoanterior;
             $clddc30->si154_vlcontratacao = $oDados30->si167_vlcontratacao;
             $clddc30->si154_vlamortizacao = $oDados30->si167_vlamortizacao;
