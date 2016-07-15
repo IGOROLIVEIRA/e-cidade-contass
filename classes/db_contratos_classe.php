@@ -230,7 +230,7 @@ class cl_contratos {
      }
 
      if($this->si172_nroprocesso == null ){
-         if($this->si172_licitacao != "" || $this->si172_licitacao != null) {
+         if($this->si172_licitacao != "" || $this->si172_licitacao != null || $this->si172_licitacao != 0) {
            $this->erro_sql = " Campo Número do processo cadastrado nao Informado.";
            $this->erro_campo = "si172_nroprocesso";
            $this->erro_banco = "";
