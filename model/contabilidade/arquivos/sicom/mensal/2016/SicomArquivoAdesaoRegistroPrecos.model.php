@@ -479,9 +479,15 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
               $regadesao20->si73_exercicioadesao   = $oDados10->exercicioadesao;
               $regadesao20->si73_nrolote           = $oDados20->si07_numerolote;
               $regadesao20->si73_coditem           = $oDados20->coditem;
-              $regadesao20->si73_percdesconto      = si07_precounitario;
+              $regadesao20->si73_percdesconto      = $oDados20->si07_precounitario;
               $regadesao20->si73_instit            = db_getsession("DB_instit");
               $regadesao20->si73_mes               = $this->sDataFinal['5'].$this->sDataFinal['6'];
+
+              $regadesao20->incluir(null);
+              if ($regadesao20->erro_status == 0) {
+                  throw new Exception($regadesao20->erro_msg);
+              }
+
           }
 
       }
