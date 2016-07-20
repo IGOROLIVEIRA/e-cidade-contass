@@ -170,11 +170,11 @@ $rotulo->label("z01_cgccpf");
           /**
            * Filtro $filtromanut
            * Busca pelo elemento do empenho para manutencao
-           * @see ocorrência contass 2079
+           * @see ocorrências contass 2079, 20105
            *
            */
           if($filtromanut == 1){
-            $dbwhere .= " and elementoempenho.o56_elemento in ('3339030370000','3339030010000') ";
+            $dbwhere .= " and elementoempenho.o56_elemento in ('3339039990400','3339039990000','3339039170000','3339039160000','3339039150000','3339039050000','3339036990000','3339036170000','3339036160000','3339036060000','3339030010000','3339030250000','3339030370000','3339030990000') ";
             $filtroempelemento = 1;
           }
 
