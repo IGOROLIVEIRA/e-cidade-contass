@@ -43,8 +43,8 @@ class RestosAPagar extends EmpenhoFinanceiro {
   public static function getValorNaoProcessadoAno($iAno, $iInstituicao) {
     try {
       $oDaoEmpresto = db_utils::getDao("empresto");
-
-      $WhereEmpresto = "e91_anousu = {$iAno}";
+      $iAnoEmp = $iAno - 1;
+      $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
       $WhereEmpresto .= " and e60_instit = {$iInstituicao}";
 
       $sCampos = "coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0) as valor";
@@ -71,7 +71,8 @@ class RestosAPagar extends EmpenhoFinanceiro {
   public static function getValorNaoProcessadoAnalitico($iAno, $iInstituicao) {
     try {
       $oDaoEmpresto = db_utils::getDao("empresto");
-      $WhereEmpresto = "e91_anousu = {$iAno}";
+      $iAnoEmp = $iAno - 1;
+      $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
       $WhereEmpresto .= " and e60_instit = {$iInstituicao} group by 1 having round(coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0),4) > 0";
 
       $sCampos = "e91_numemp, round(sum(e91_vlremp - e91_vlranu - e91_vlrliq),4) as valor";
@@ -95,8 +96,8 @@ class RestosAPagar extends EmpenhoFinanceiro {
   public static function getValorProcessadoAno($iAno, $iInstituicao) {
     try {
       $oDaoEmpresto = db_utils::getDao("empresto");
-
-      $WhereEmpresto = "e91_anousu = {$iAno}";
+      $iAnoEmp = $iAno - 1;
+      $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = $iAnoEmp";
       $WhereEmpresto .= " and e60_instit = {$iInstituicao}";
 
       $sCampos = "coalesce(sum(e91_vlrliq - e91_vlrpag), 0) as valor";
@@ -123,7 +124,8 @@ class RestosAPagar extends EmpenhoFinanceiro {
     try {
 
       $oDaoEmpresto = db_utils::getDao("empresto");
-      $WhereEmpresto = "e91_anousu = {$iAno}";
+      $iAnoEmp = $iAno - 1;
+      $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
       $WhereEmpresto .= " and e60_instit = {$iInstituicao} group by 1 having round(sum(e91_vlrliq - e91_vlrpag),4) > 0";
 
       $sCampos = "e91_numemp, round(sum(e91_vlrliq - e91_vlrpag),4) as valor";
