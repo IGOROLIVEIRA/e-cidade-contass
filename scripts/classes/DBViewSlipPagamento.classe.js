@@ -903,9 +903,9 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
     var sObjetoTxtConta = "me.oTxtConta" + sFunctionCompleta + "Codigo";
     var oTxtConta       = eval(sObjetoTxtConta);
 
-    var sUrlSaltes = "func_saltesreduz.php?pesquisa_chave="+oTxtConta.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preenche"+sFunctionCompleta;
+    var sUrlSaltes = "func_saltesreduz.php?pesquisa_chave="+oTxtConta.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preenche"+sFunctionCompleta+"&ver_datalimite=1"; /* Ocorrencia 2227 */
     if (lMostra) {
-      sUrlSaltes = "func_saltesreduz.php?funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|k13_reduz|k13_descr";
+      sUrlSaltes = "func_saltesreduz.php?funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|k13_reduz|k13_descr&ver_datalimite=1"; /* Ocorrencia 2227 */
     }
 
     js_OpenJanelaIframe("", 'db_iframe_'+sIframe, sUrlSaltes, "Pesquisa Contas", lMostra);
