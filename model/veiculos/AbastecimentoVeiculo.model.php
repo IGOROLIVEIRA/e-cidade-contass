@@ -65,7 +65,7 @@ class AbastecimentoVeiculo {
     if (!empty($iCodigoAbastecimento)) {
 
       $oDaoAbastecimento      = new cl_veicabast();
-      $sSqlDadosAbastecimento = $oDaoAbastecimento->sql_query_info($iCodigoAbastecimento);
+      $sSqlDadosAbastecimento = $oDaoAbastecimento->sql_query_info($iCodigoAbastecimento," DISTINCT veicabast.* ");
       $rsAbastecimento        = $oDaoAbastecimento->sql_record($sSqlDadosAbastecimento);
       if ($oDaoAbastecimento->numrows == 1) {
 
