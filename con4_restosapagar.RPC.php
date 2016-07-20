@@ -151,7 +151,8 @@ try {
 						$iCodigoDocumento = 2006;
 					}
 				} else {
-
+					continue;
+					/*
 					if ($oParam->exec == 'processar') {
 
 						// Documento 2009: INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
@@ -162,7 +163,7 @@ try {
 						// Documento 2010:	ESTORNO INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
 						$iCodigoDocumento = 2010;
 
-					}
+					}*/
 
 				}
 
@@ -221,7 +222,8 @@ try {
 
 					}
 				} else {
-
+					continue;
+					/*
 					if ($oParam->exec == 'processar') {
 
 						// Documento 2011: INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
@@ -232,7 +234,7 @@ try {
 						// Documento 2012:	ESTORNO INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
 						$iCodigoDocumento = 2012;
 
-					}
+					}*/
 				}
 
 				$oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
