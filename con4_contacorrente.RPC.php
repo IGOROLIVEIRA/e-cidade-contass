@@ -558,8 +558,9 @@ try {
             $oDaoContaCorrenteDetalhe = db_utils::getDao("contacorrentedetalhe");
             /*
              * Busca o contacorrente do reduzido
+             *
              */
-            $sSqlContaCorrente = " SELECT distinct c18_contacorrente
+            $sSqlContaCorrente = " SELECT distinct c18_contacorrente,substr(c60_estrut,1,4) as c60_estrut
 								FROM conplanocontacorrente
 								INNER JOIN conplano ON conplano.c60_codcon = conplanocontacorrente.c18_codcon
 								AND conplanocontacorrente.c18_anousu = conplano.c60_anousu
@@ -573,7 +574,7 @@ try {
 								  AND c61_instit = " . db_getsession('DB_instit') . "
 								 limit 1";
             $iCorrente = db_utils::fieldsMemory(db_query($sSqlContaCorrente), 0)->c18_contacorrente;
-
+            $sEstrutural = db_utils::fieldsMemory(db_query($sSqlContaCorrente), 0)->c60_estrut;
             $sCamposDetalhe = "distinct           ";
             $sCamposDetalhe .= "c19_sequencial,    ";
             $sCamposDetalhe .= "c17_sequencial,    ";
@@ -587,15 +588,193 @@ try {
             $sCamposDetalhe .= "db83_dvconta,      "; // CC2 - Domicilio Bancario
             $sCamposDetalhe .= "cgm.z01_nome,      ";
             $sCamposDetalhe .= "c58_descr         ";
-
+            $iTroca = 0;
             switch ($iCorrente) {
                 case 106:
+                    if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321") {
+                        $iTroca = 1;
+                        $iAnousuEmp = db_getsession('DB_anousu') - 1;
+                        $nMes = 12;
+                        $sSqlLancamentos = "
+                        select distinct c19_sequencial,
+                                            c17_descricao,
+                                            e60_numemp,
+                                            e60_codemp,
+                                            e60_anousu
+                         from conlancamval
+                                    inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
+                                    inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
+                                    inner join contacorrente on c19_contacorrente = c17_sequencial
+                                    inner join empempenho on e60_numemp = c19_numemp
+                                    inner join empelemento on e64_numemp = e60_numemp
+                                    inner join empresto on e91_numemp = e60_numemp
+                        where c19_contacorrente = {$iCorrente}
+                            and c19_reduz = {$iReduzido}
+                            and c19_instit = " . db_getsession('DB_instit') . "
+                            and DATE_PART('YEAR',c69_data) = {$iAnousuEmp} and DATE_PART('MONTH',c69_data) <= {$nMes}";
+                        $rsLancamentos = db_query($sSqlLancamentos);
+                        $aLancamento = db_utils::getColectionByRecord($rsLancamentos);
+                        $aDadosAgrupados = array();
+                        foreach ($aLancamento as $oLancamentos) {
 
-                    $sCamposDetalhe .= ",sum(c69_valor) c69_valor, ";
-                    $sCamposDetalhe .= "e60_codemp,        ";
-                    $sCamposDetalhe .= "e60_anousu         ";
-                    $iAnousuEmp = db_getsession('DB_anousu');
-                    $sWhereDetalhes = "c19_reduz = {$iReduzido} and c69_anousu = {$iAnousuEmp} group by c19_sequencial,
+                            $sSqlReg14saldos = " SELECT
+                                      (SELECT round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) AS saldoinicial
+                                       FROM
+                                         (SELECT
+                                            (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                                             FROM contacorrente
+                                             INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                             INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+                                             AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = {$iAnousuEmp}
+                                             WHERE c19_reduz = {$iReduzido}
+                                               AND c17_sequencial = {$iCorrente}
+                                               AND c19_numemp = {$oLancamentos->e60_numemp}) AS saldoimplantado,
+
+                                            (SELECT sum(c69_valor) AS debito
+                                             FROM conlancamval
+                                       INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                       AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                       INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                       INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                       INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                       INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                       WHERE c28_tipo = 'D'
+                                         AND DATE_PART('MONTH',c69_data) < " . $nMes . "
+                                         AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
+                                         AND c19_contacorrente = {$iCorrente}
+                                         AND c19_reduz = {$iReduzido}
+                                         AND c19_instit = " . db_getsession("DB_instit") . "
+                                         AND c19_numemp = {$oLancamentos->e60_numemp}
+                                         AND conhistdoc.c53_tipo not in (1000)
+                                       GROUP BY c28_tipo) AS debitoatual,
+
+                                            (SELECT sum(c69_valor) AS credito
+                                             FROM conlancamval
+                                       INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                       AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                       INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                       INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                       INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                       INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                       WHERE c28_tipo = 'C'
+                                         AND DATE_PART('MONTH',c69_data) < " . $nMes . "
+                                         AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
+                                         AND c19_contacorrente = {$iCorrente}
+                                         AND c19_reduz = {$iReduzido}
+                                         AND c19_instit = " . db_getsession("DB_instit") . "
+                                         AND c19_numemp = {$oLancamentos->e60_numemp}
+                                         AND conhistdoc.c53_tipo not in (1000)
+                                       GROUP BY c28_tipo) AS creditoatual) AS movi) AS saldoanterior,
+
+                                      (SELECT sum(c69_valor)
+                                       FROM conlancamval
+                                       INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                       AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                       INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                       INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                       INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                       INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                       WHERE c28_tipo = 'C'
+                                         AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                                         AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
+                                         AND c19_contacorrente = {$iCorrente}
+                                         AND c19_reduz = {$iReduzido}
+                                         AND c19_instit = " . db_getsession("DB_instit") . "
+                                         AND c19_numemp = {$oLancamentos->e60_numemp}
+                                         AND conhistdoc.c53_tipo not in (1000)
+                                       GROUP BY c28_tipo) AS creditos,
+
+                                      (SELECT sum(c69_valor)
+                                       FROM conlancamval
+                                       INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                       AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                       INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                       INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                       INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                       INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                       WHERE c28_tipo = 'D'
+                                         AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                                         AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
+                                         AND c19_contacorrente = {$iCorrente}
+                                         AND c19_reduz = {$iReduzido}
+                                         AND c19_instit = " . db_getsession("DB_instit") . "
+                                         AND c19_numemp = {$oLancamentos->e60_numemp}
+                                         AND conhistdoc.c53_tipo not in (1000)
+                                       GROUP BY c28_tipo) AS debitos";
+
+                            $sSqlReg14saldos .= ",(SELECT sum(c69_valor)
+                                           FROM conlancamval
+                                           INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                           AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                           INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                           INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                           INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                           INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                           WHERE c28_tipo = 'C'
+                                             AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                                             AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
+                                             AND c19_contacorrente = {$iCorrente}
+                                             AND c19_reduz = {$iReduzido}
+                                             AND c19_instit = " . db_getsession("DB_instit") . "
+                                             AND c19_numemp = {$oLancamentos->e60_numemp}
+                                             AND conhistdoc.c53_tipo in (1000)
+                                           GROUP BY c28_tipo) AS creditosEncerramento,
+
+                                          (SELECT sum(c69_valor)
+                                           FROM conlancamval
+                                           INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                           AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                           INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                           INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                           INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                           INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                           WHERE c28_tipo = 'D'
+                                             AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                                             AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
+                                             AND c19_contacorrente = {$iCorrente}
+                                             AND c19_reduz = {$iReduzido}
+                                             AND c19_instit = " . db_getsession("DB_instit") . "
+                                             AND c19_numemp = {$oLancamentos->e60_numemp}
+                                             AND conhistdoc.c53_tipo in (1000)
+                                           GROUP BY c28_tipo) AS debitosEncerramento";
+
+                            $saldoanterior  = db_utils::fieldsMemory(db_query($sSqlReg14saldos), 0)->saldoanterior;
+                            $creditos = db_utils::fieldsMemory(db_query($sSqlReg14saldos), 0)->creditos;
+                            $debitos = db_utils::fieldsMemory(db_query($sSqlReg14saldos), 0)->debitos;
+                            $creditosencerramento = db_utils::fieldsMemory(db_query($sSqlReg14saldos), 0)->creditosencerramento;
+                            $debitosencerramento = db_utils::fieldsMemory(db_query($sSqlReg14saldos), 0)->debitosencerramento;
+
+                            $nSaldoInicial = $saldoanterior + $debitos - $creditos;
+                            $nSaldoFinal = $nSaldoInicial + $debitosencerramento - $creditosencerramento;//saldo a ser implantado
+
+                            $hash = $oLancamentos->c19_sequencial;
+
+                            if (!isset($aDadosAgrupados[$hash])) {
+
+                                $oMovimento = new stdClass();
+
+                                $oMovimento->c19_sequencial = $oLancamentos->c19_sequencial;
+                                $oMovimento->c17_descricao  = $oLancamentos->c17_descricao;
+                                $oMovimento->e60_codemp     = $oLancamentos->e60_codemp;
+                                $oMovimento->e60_anousu     = $oLancamentos->e60_anousu;
+                                $oMovimento->c69_valor      = abs($nSaldoFinal);
+
+                                $aDadosAgrupados[$hash]     = $oMovimento;
+                            }
+
+                        }
+
+                        db_query('drop table if exists omov; create table omov ( c19_sequencial integer, c17_sequencial integer, c17_contacorrente varchar,c17_descricao varchar, e60_codemp integer, e60_anousu integer, c69_valor float);') or die(pg_last_error());
+                        foreach($aDadosAgrupados as $oMov){
+                            db_query("insert into omov values ({$oMov->c19_sequencial},106,'CC 106','{$oMov->c17_descricao}',{$oMov->e60_codemp},{$oMov->e60_anousu}, {$oMov->c69_valor});") or die(pg_last_error());
+                        }
+
+                    } else {
+                        $sCamposDetalhe .= ",sum(c69_valor) c69_valor, ";
+                        $sCamposDetalhe .= "e60_codemp,        ";
+                        $sCamposDetalhe .= "e60_anousu         ";
+                        $iAnousuEmp = db_getsession('DB_anousu');
+                        $sWhereDetalhes = "c19_reduz = {$iReduzido} and c69_anousu = {$iAnousuEmp}  group by c19_sequencial,
 								c17_sequencial,
 								c17_contacorrente,
 								c17_descricao,
@@ -609,12 +788,13 @@ try {
 								c58_descr,
 								e60_codemp,
 								e60_anousu ";
+                    }
                     break;
                 default:
                     $sWhereDetalhes = "c19_reduz = {$iReduzido}";
             }
 
-            $sSqlDetalhe = $oDaoContaCorrenteDetalhe->sql_query_fileAtributos(null, $sCamposDetalhe, null, $sWhereDetalhes);
+            $sSqlDetalhe = $iTroca == 0 ? $oDaoContaCorrenteDetalhe->sql_query_fileAtributos(null, $sCamposDetalhe, null, $sWhereDetalhes) : "select * from omov where c69_valor <> 0";
             $rsDetalhes = $oDaoContaCorrenteDetalhe->sql_record($sSqlDetalhe);
 
             if ($oDaoContaCorrenteDetalhe->numrows > 0) {
