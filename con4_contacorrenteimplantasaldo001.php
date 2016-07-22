@@ -873,7 +873,7 @@ function js_somavalores() {
 	  nTotal      += parseFloat(nValorLinha).toFixed(2);
   }
 
-  $('TotalForCol2').innerHTML = js_formatar(parseFloat(nTotal).toFixed(2), 'f');
+  $('TotalForCol2').innerHTML = js_formatar(parseFloat(Math.abs(nTotal)).toFixed(2), 'f');
   js_habilitaBotao();
 
 }
