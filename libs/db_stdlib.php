@@ -2215,7 +2215,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
         } else if( pg_fieldtype( $result, $j ) == "text" ) {
 
           $lCampoTipoTexto = true;
-          $var_data  = substr( pg_result( $result, $i, $j ), 0, 10 ) . "...";
+          $var_data  = substr( pg_result( $result, $i, $j ), 0, 30 ) . "...";
         } else {
 
           $lEncontrouResultado = true;
