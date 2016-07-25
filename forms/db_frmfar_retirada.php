@@ -1931,7 +1931,7 @@ function js_incluiremedio() {
     sStr  = 'N';
   }
   sStr += '#'+$F('fa06_i_matersaude');
-  sStr += '#'+$F('m60_descr').substring(0,35);
+  sStr += '#'+$F('m60_descr').substring(0,35).replace("#"," ");
   sStr += '#';//prox. disp.
   sStr += '#'+$F('contiFreq');
   sStr += '#'+$F('contimargem');
