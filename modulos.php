@@ -157,14 +157,14 @@ function js_atualizacao_versao(){
 <tr>
 <td valign="top">
 <?
-if (db_getsession("DB_id_usuario") == 1) {
+//if (db_getsession("DB_id_usuario") == 1) {
 
   $sSql  = "select id_usuario, anousu   ";
   $sSql .= "  from db_permissao         ";
   $sSql .= " where id_usuario = ".db_getsession("DB_id_usuario");
   $sSql .= "group by id_usuario, anousu ";
   $sSql .= "order by anousu desc        ";
-} else {
+/*} else {
 
   $sSql  = " select distinct on (anousu) anousu, id_usuario                                     ";
   $sSql .= "   from (select id_usuario, anousu                                                  ";
@@ -181,7 +181,7 @@ if (db_getsession("DB_id_usuario") == 1) {
   $sSql .= "         group by db_permissao.id_usuario, anousu                                   ";
   $sSql .= "         ) as x                                                                     ";
   $sSql .= "order by anousu desc                                                                ";
-}
+}*/
 
 $result = db_query($sSql);
 if(pg_numrows($result) == 0) {
@@ -460,7 +460,7 @@ $sNome             = pg_result($rsUsuarioLogado,0,1);
   /**
    * imprimir estoque minimo e ponto de pedido ao acessar mod material
    */
-  if ($nomemod == "Material" && db_getsession("DB_id_usuario") == 1) {
+  if ($nomemod == "Material" ) {
 	 ?>
 	 <iframe frameborder="1"  height="100%" width="100%" id="db_estoqponto" name="db_estoqponto" src="mat2_estoqponto.php?coddepto=<?=$coddepto?>" scrolling="auto"></iframe>
   <?
