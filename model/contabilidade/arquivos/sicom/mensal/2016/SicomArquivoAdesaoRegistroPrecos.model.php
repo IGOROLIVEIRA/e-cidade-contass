@@ -480,6 +480,8 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
               $regadesao20->si73_nrolote           = $oDados20->si07_numerolote;
               $regadesao20->si73_coditem           = $oDados20->coditem;
               $regadesao20->si73_percdesconto      = $oDados20->si07_precounitario;
+              $regadesao20->si73_tipodocumento     = $oDados20->tipodocumento;
+              $regadesao20->si73_nrodocumento      = $oDados20->z01_cgccpf;
               $regadesao20->si73_instit            = db_getsession("DB_instit");
               $regadesao20->si73_mes               = $this->sDataFinal['5'].$this->sDataFinal['6'];
 
