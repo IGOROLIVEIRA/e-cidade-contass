@@ -151,19 +151,22 @@ try {
 						$iCodigoDocumento = 2006;
 					}
 				} else {
-					continue;
-					/*
-					if ($oParam->exec == 'processar') {
+					if(db_getsession('DB_anousu') == 2015) {
 
-						// Documento 2009: INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
-						$iCodigoDocumento = 2009;
+						if ($oParam->exec == 'processar') {
 
-					} else {
+							// Documento 2009: INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
+							$iCodigoDocumento = 2009;
 
-						// Documento 2010:	ESTORNO INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
-						$iCodigoDocumento = 2010;
+						} else {
 
-					}*/
+							// Documento 2010:	ESTORNO INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
+							$iCodigoDocumento = 2010;
+
+						}
+					}else{
+						continue;
+					}
 
 				}
 
@@ -222,19 +225,21 @@ try {
 
 					}
 				} else {
-					continue;
-					/*
-					if ($oParam->exec == 'processar') {
+					if(db_getsession('DB_anousu') == 2015) {
+						if ($oParam->exec == 'processar') {
 
-						// Documento 2011: INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
-						$iCodigoDocumento = 2011;
+							// Documento 2011: INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
+							$iCodigoDocumento = 2011;
 
-					} else {
+						} else {
 
-						// Documento 2012:	ESTORNO INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
-						$iCodigoDocumento = 2012;
+							// Documento 2012:	ESTORNO INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
+							$iCodigoDocumento = 2012;
 
-					}*/
+						}
+					}else{
+						continue;
+					}
 				}
 
 				$oContaCorrenteDetalhe = new ContaCorrenteDetalhe();

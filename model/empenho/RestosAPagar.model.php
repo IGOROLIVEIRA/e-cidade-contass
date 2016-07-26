@@ -44,7 +44,11 @@ class RestosAPagar extends EmpenhoFinanceiro {
     try {
       $oDaoEmpresto = db_utils::getDao("empresto");
       $iAnoEmp = $iAno - 1;
+      if(db_getsession('DB_anousu') == 2015){
+        $WhereEmpresto = "e91_anousu = {$iAno}";
+      }else{
       $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
+      }
       $WhereEmpresto .= " and e60_instit = {$iInstituicao}";
 
       $sCampos = "coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0) as valor";
@@ -72,7 +76,11 @@ class RestosAPagar extends EmpenhoFinanceiro {
     try {
       $oDaoEmpresto = db_utils::getDao("empresto");
       $iAnoEmp = $iAno - 1;
-      $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
+      if(db_getsession('DB_anousu') == 2015){
+        $WhereEmpresto = "e91_anousu = {$iAno}";
+      }else{
+        $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
+      }
       $WhereEmpresto .= " and e60_instit = {$iInstituicao} group by 1 having round(coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0),4) > 0";
 
       $sCampos = "e91_numemp, round(sum(e91_vlremp - e91_vlranu - e91_vlrliq),4) as valor";
@@ -97,7 +105,11 @@ class RestosAPagar extends EmpenhoFinanceiro {
     try {
       $oDaoEmpresto = db_utils::getDao("empresto");
       $iAnoEmp = $iAno - 1;
-      $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = $iAnoEmp";
+      if(db_getsession('DB_anousu') == 2015){
+        $WhereEmpresto = "e91_anousu = {$iAno}";
+      }else{
+        $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
+      }
       $WhereEmpresto .= " and e60_instit = {$iInstituicao}";
 
       $sCampos = "coalesce(sum(e91_vlrliq - e91_vlrpag), 0) as valor";
@@ -125,7 +137,11 @@ class RestosAPagar extends EmpenhoFinanceiro {
 
       $oDaoEmpresto = db_utils::getDao("empresto");
       $iAnoEmp = $iAno - 1;
-      $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
+      if(db_getsession('DB_anousu') == 2015){
+        $WhereEmpresto = "e91_anousu = {$iAno}";
+      }else{
+        $WhereEmpresto = "e91_anousu = {$iAno} and e60_anousu = {$iAnoEmp}";
+      }
       $WhereEmpresto .= " and e60_instit = {$iInstituicao} group by 1 having round(sum(e91_vlrliq - e91_vlrpag),4) > 0";
 
       $sCampos = "e91_numemp, round(sum(e91_vlrliq - e91_vlrpag),4) as valor";
