@@ -247,7 +247,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
           $regadesao10->si67_dtvalidade                = $oDados10->si06_datavalidade;
           $regadesao10->si67_naturezaprocedimento      = $oDados10->si06_orgarparticipante;
           $regadesao10->si67_dtpublicacaoavisointencao = $oDados10->si06_publicacaoaviso;
-          $regadesao10->si67_objetoadesao              = $oDados10->si06_objetoadesao;
+          $regadesao10->si67_objetoadesao              = preg_replace('~[[:cntrl:]]~','',$oDados10->si06_objetoadesao);
           $regadesao10->si67_cpfresponsavel            = $oDados10->cpfresponsavel;
           $regadesao10->si67_descontotabela            = $oDados10->si06_descontotabela;
           $regadesao10->si67_processoporlote           = $oDados10->si06_processoporlote;
