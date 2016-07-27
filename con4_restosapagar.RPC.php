@@ -265,11 +265,13 @@ try {
                                       SELECT DISTINCT c108_codlan c70_codlan
                                 FROM conlancaminscrestosapagarnaoprocessados
                                 inner join conlancam on c108_codlan = c70_codlan
+                                inner join conlancaminstit on c02_codlan = c70_codlan and c02_instit = ".db_getsession('DB_instit')."
                                 WHERE c70_anousu = " . db_getsession('DB_anousu') . "
                                 UNION ALL
                                 SELECT DISTINCT c108_codlan c70_codlan
                                 FROM conlancaminscrestosapagarprocessados
                                 inner join conlancam on c108_codlan = c70_codlan
+                                inner join conlancaminstit on c02_codlan = c70_codlan and c02_instit = ".db_getsession('DB_instit')."
                                 WHERE c70_anousu = " . db_getsession('DB_anousu'));
 
 			if (!$rsTabelaLancamentos) {
