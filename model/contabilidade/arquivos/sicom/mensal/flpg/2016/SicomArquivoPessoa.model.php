@@ -78,8 +78,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					       z01_nome,
 					       z01_sexo,
 					       case
-                           when z01_nasc is not null then z01_nasc
-                           else rh01_nasc
+                           when z01_nasc is not null then z01_nasc::varchar
+                           else rh01_nasc::varchar
                            end as z01_nasc,
 					       z01_ultalt, 
 					       z01_obs,
@@ -87,8 +87,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					  from cgm
 					  inner join rhpessoal on rh01_numcgm = z01_numcgm
 					 where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000') 
-					 and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}') 
-					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
+					 AND ((DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
+              or (DATE_PART('YEAR',rh01_admiss) < ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=12))
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102016 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015)
@@ -131,6 +131,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      from cgm
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
+		      AND ((DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
+              or (DATE_PART('YEAR',rh01_admiss) < ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=12))
 		      and (z01_cgccpf != '' and z01_cgccpf is not null)
 		      and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
@@ -175,21 +177,93 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
       }
 
       if(($this->sDataFinal['5'].$this->sDataFinal['6']) != '01' && db_getsession("DB_anousu") != 2016){
-        if ($oDados->z01_cadast >= $this->sDataInicial && $oDados->z01_cadast <= $this->sDataFinal) {
+
+        if ($oDados->z01_ultalt >= $this->sDataInicial && $oDados->z01_ultalt <= $this->sDataFinal) {
+
           $sTipoCadastro = 1;
           $sJustificativaalteracao = ' ';
+
         } else {
-          $sTipoCadastro = 2;
-          $sJustificativaalteracao = substr($oDados->z01_obs,0,100);
+
+          $sSqlAlt = "SELECT
+          z01_numcgm,
+          case
+               when z01_nome <> z05_nome then ' nome '
+               when z01_sexo <> z05_sexo then ' sexo '
+               when z01_nasc <> z05_nasc then ' nasc '
+               when z01_cgccpf <> z05_cgccpf then ' cpf '
+               else ''
+               end as justificativa
+          FROM cgm
+          JOIN cgmalt ON z01_numcgm = z05_numcgm
+          WHERE (z01_nome <> z05_nome
+                 OR z01_sexo <> z05_sexo
+                 OR z01_nasc <> z05_nasc
+                 OR z01_cgccpf <> z05_cgccpf)
+            AND z01_cgccpf = '$oDados->z01_cgccpf' ";
+
+          $rsResultAlt = db_query($sSqlAlt);
+          $sJustificativaalteracao = '';
+          if(pg_num_rows($rsResultAlt) > 0 ) {
+
+            for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResultAlt); $iCont2++) {
+
+              $oDadosAlt = db_utils::fieldsMemory($rsResultAlt, $iCont2);
+
+              $sTipoCadastro = 2;
+              $sJustificativaalteracao .= ' '.$oDadosAlt->justificativa;
+
+            }
+
+          } else {
+
+            $sTipoCadastro = 1;
+            $sJustificativaalteracao = '';
+
+          }
+
         }
       }else{
         if(($this->sDataFinal['5'].$this->sDataFinal['6']) != '01'){
-          if ($oDados->z01_cadast >= $this->sDataInicial && $oDados->z01_cadast <= $this->sDataFinal) {
+          if ($oDados->z01_ultalt >= $this->sDataInicial && $oDados->z01_ultalt <= $this->sDataFinal) {
             $sTipoCadastro = 1;
             $sJustificativaalteracao = ' ';
           } else {
-            $sTipoCadastro = 2;
-            $sJustificativaalteracao = substr($oDados->z01_obs,0,100);
+
+            $sSqlAlt = "SELECT
+            z01_numcgm,
+            case
+                 when z01_nome <> z05_nome then ' nome '
+                 when z01_sexo <> z05_sexo then ' sexo '
+                 when z01_nasc <> z05_nasc then ' nasc '
+                 when z01_cgccpf <> z05_cgccpf then ' cpf '
+                 else ''
+                 end as justificativa
+            FROM cgm
+            JOIN cgmalt ON z01_numcgm = z05_numcgm
+            WHERE (z01_nome <> z05_nome
+                   OR z01_sexo <> z05_sexo
+                   OR z01_nasc <> z05_nasc
+                   OR z01_cgccpf <> z05_cgccpf)
+              AND z01_cgccpf = '$oDados->z01_cgccpf' ";
+
+            $rsResultAlt = db_query($sSqlAlt);
+            $sJustificativaalteracao = '';
+            if(pg_num_rows($rsResultAlt) > 0 ) {
+
+              for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResultAlt); $iCont2++) {
+
+                $oDadosAlt = db_utils::fieldsMemory($rsResultAlt, $iCont2);
+
+                $sTipoCadastro = 2;
+                $sJustificativaalteracao .= ' '.$oDadosAlt->justificativa;
+
+              }
+
+            }else{
+              $sTipoCadastro = 1;
+              $sJustificativaalteracao = '';
+            }
           }
         }else{
           $sTipoCadastro = 1;
