@@ -14,29 +14,29 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2016/GerarAOC
   * @package Contabilidade
   */
 class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout = 152;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'AOC';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
@@ -45,12 +45,12 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
     $aElementos[10] = array(
     			  								"tipoRegistro",
     			  								"codReduzido",
@@ -64,7 +64,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 					                  "elementoDespesa",
 								    			  "codFontRecursos",
 								    			  "nroDecreto",
-								    		    "dataDecreto",	
+								    		    "dataDecreto",
 								    			  "tipoAlteracao",
 								        		"vlAlteracao"
                         );
@@ -75,10 +75,10 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 	                          "codFontRecursos",
 	                          "valorAlteracaoFonte"
                         );
-                        
+
     return $aElementos;
   }
-  
+
   /**
    * selecionar os dados de alteracoes orcamentarias do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -90,7 +90,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
   	$claoc12 = new cl_aoc122016();
   	$claoc13 = new cl_aoc132016();
   	$claoc14 = new cl_aoc142016();
-  	
+
   	/**
   	 * excluir informacoes do mes selecionado
   	 */
@@ -102,7 +102,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	  throw new Exception($claoc11->erro_msg);
       }
     }
-    
+
     $result = $claoc12->sql_record($claoc12->sql_query(NULL,"*",NULL,"si40_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si40_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
     	$claoc12->excluir(NULL,"si40_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si40_instit = ".db_getsession("DB_instit"));
@@ -110,7 +110,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	  throw new Exception($claoc12->erro_msg);
       }
     }
-    
+
     $result = $claoc13->sql_record($claoc13->sql_query(NULL,"*",NULL,"si41_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si41_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
     	$claoc13->excluir(NULL,"si41_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si41_instit = ".db_getsession("DB_instit"));
@@ -118,7 +118,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	  throw new Exception($claoc13->erro_msg);
       }
     }
-    
+
     $result = $claoc14->sql_record($claoc14->sql_query(NULL,"*",NULL,"si42_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si42_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
     	$claoc14->excluir(NULL,"si42_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si42_instit = ".db_getsession("DB_instit"));
@@ -126,7 +126,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     	  throw new Exception($claoc14->erro_msg);
       }
     }
-    
+
     $result = $claoc10->sql_record($claoc10->sql_query(NULL,"*",NULL,"si38_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si38_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
     	$claoc10->excluir(NULL,"si38_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si38_instit = ".db_getsession("DB_instit"));
@@ -137,22 +137,22 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     /**
      * fim da exclusao dos registros do mes selecionado
      */
-  	
-    
+
+
     /**
      * selecionar as informacoes pertinentes ao AOC
      */
-    
+
     $sSql = "select  distinct o39_codproj as codigovinc,
-       '10' as tiporegistro, 
-	     si09_codorgaotce as codorgao, 
-	     o39_numero as nroDecreto,
-	     o39_data as dataDecreto,o39_tipoproj as tipodecreto  
+       '10' as tiporegistro,
+	     si09_codorgaotce as codorgao,
+	     replace(o39_numero,' ','') as nroDecreto,
+	     o39_data as dataDecreto,o39_tipoproj as tipodecreto
        from
-       orcsuplem 
-       join orcsuplemval  on o47_codsup = o46_codsup 
+       orcsuplem
+       join orcsuplemval  on o47_codsup = o46_codsup
        join orcprojeto    on o46_codlei = o39_codproj
-       join db_config on prefeitura  = 't' 
+       join db_config on prefeitura  = 't'
        left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit")."
      where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'";
     $rsResult10 = db_query($sSql);
@@ -163,33 +163,35 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     //$sSql     = "select * from orcprojetolei where o138_altpercsuplementacao = 2 and o138_data >= '{$this->sDataInicial}' and o138_data <= '{$this->sDataFinal}'";
     //$rsResultLei = db_query($sSql);
     // && pg_num_rows($rsResultLei) > 0
-    
+
     if(pg_num_rows($rsPrefeitura) > 0){
-    	
+
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-    	
+
     	$oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
     	$claoc10 = new cl_aoc102016();
-    	
+
     	$claoc10->si38_tiporegistro = 10;
     	$claoc10->si38_codorgao     = $oDados10->codorgao;
-    	$claoc10->si38_nrodecreto   = preg_replace("/[^0-9\s]/", "", $oDados10->nrodecreto);
+		$sNrodecreto = preg_replace("/[^a-zA-Z0-9]/", "",$oDados10->nrodecreto);
+		$sNrodecreto = str_replace("S","",$sNrodecreto);
+    	$claoc10->si38_nrodecreto   = $sNrodecreto;
     	$claoc10->si38_datadecreto  = $oDados10->datadecreto;
     	$claoc10->si38_mes          = $this->sDataFinal['5'].$this->sDataFinal['6'];
     	$claoc10->si38_instit       = db_getsession("DB_instit");
 
     	$claoc10->incluir(null);
-      if ($claoc10->erro_status == 0) { 
+      if ($claoc10->erro_status == 0) {
     	  throw new Exception($claoc10->erro_msg);
       }
-      
+
       /**
        * registro 11
        */
-      $sSql = "select '11' as tiporegistro, 
-       o46_codlei as codreduzidodecreto, 
+      $sSql = "select '11' as tiporegistro,
+       o46_codlei as codreduzidodecreto,
        o39_numero as nrodecreto ,
-       (case when o46_tiposup in (1002,1003,1004,1005,1006,1007,1008,1009,1010) then 2 
+       (case when o46_tiposup in (1002,1003,1004,1005,1006,1007,1008,1009,1010) then 2
 	     when o46_tiposup = 1001 then 1
 	     when o46_tiposup = 1012 then 6
 	     when o46_tiposup = 1013 then 7
@@ -197,72 +199,74 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 	     when o46_tiposup = 1014 then 9
 	     when o46_tiposup = 1015 then 10
        when o46_tiposup = 1017 then 5
-             when o46_tiposup = 1011 then 4 end 
+             when o46_tiposup = 1011 then 4 end
        ) as tipoDecretoAlteracao,
-       sum(o47_valor) as valorAberto 
-     from orcsuplem 
-     join orcsuplemval  on o47_codsup = o46_codsup 
+       sum(o47_valor) as valorAberto
+     from orcsuplem
+     join orcsuplemval  on o47_codsup = o46_codsup
      join orcprojeto    on o46_codlei = o39_codproj
      join orcsuplemtipo on o46_tiposup =  o48_tiposup
-    where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc}) 
+    where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc})
     group by o46_codlei, o39_numero,o46_tiposup";
       $rsResult11 = db_query($sSql);
       //db_criatabela($rsResult11);
-      
+
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
-      	
+
       	$oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
       	$claoc11 = new cl_aoc112016();
-      	
+
       	$claoc11->si39_tiporegistro         = 11;
       	$claoc11->si39_codreduzidodecreto   = $oDados11->codreduzidodecreto;
-      	$claoc11->si39_nrodecreto           = preg_replace("/[^0-9\s]/", "", $oDados11->nrodecreto);
+		  $sNrodecreto = preg_replace("/[^a-zA-Z0-9]/", "",$oDados11->nrodecreto);
+		  $sNrodecreto = str_replace("S","",$sNrodecreto);
+      	$claoc11->si39_nrodecreto           = $sNrodecreto;
       	$claoc11->si39_tipodecretoalteracao = $oDados11->tipodecretoalteracao;
       	$claoc11->si39_valoraberto          = $oDados11->valoraberto;
       	$claoc11->si39_mes                  = $this->sDataFinal['5'].$this->sDataFinal['6'];
       	$claoc11->si39_reg10                = $claoc10->si38_sequencial;
       	$claoc11->si39_instit               = db_getsession("DB_instit");
-      	
+
         $claoc11->incluir(null);
         if ($claoc11->erro_status == 0) {
     	    throw new Exception($claoc11->erro_msg);
         }
-      	
+
       }
-      
+
       /**
        * registro 12
        */
-      
+
        if($oDados10->tipodecreto == 1){
           $sSql = "select '12' as tiporegistro,
-                         o39_codproj as codReduzidoDecreto, 
+                         o39_codproj as codReduzidoDecreto,
                          o45_numlei as nroLeiAlteracao ,
-                         o45_datalei as dataLeiAlteracao, 'LOA' as o138_altpercsuplementacao, 1 as sql 
-                   from orcprojeto 
+                         o45_datalei as dataLeiAlteracao, 'LOA' as o138_altpercsuplementacao, 1 as sql
+                   from orcprojeto
                    join orclei on o39_codlei = o45_codlei
                   where o39_codproj in ({$oDados10->codigovinc}) ";
-          
+
        }else{
     	 $sSql = "select '12' as tiporegistro,
-                         o39_codproj as codReduzidoDecreto, 
+                         o39_codproj as codReduzidoDecreto,
                          o138_numerolei as nroLeiAlteracao ,
-                         o138_data as dataLeiAlteracao, 
+                         o138_data as dataLeiAlteracao,
                          case when o138_altpercsuplementacao =1 then 'LAOP' else 'LAO' end o138_altpercsuplementacao, 2 as sql
                    from orcprojeto
                    join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto
                    join orcprojetolei on o139_orcprojetolei = o138_sequencial
                     where o39_codproj in ({$oDados10->codigovinc})";
-       	
+
        }
-        
-    	
-    	
+
+
+
     	$rsResult12 = db_query($sSql);
     	//db_criatabela($rsResult12);echo $sSql;
-    	
+
     	for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
-    		
+
     		$oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
     		$claoc12 = new cl_aoc122016();
 
@@ -270,7 +274,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
           $si40_tipoleialteracao = 1;
         }elseif($oDados11->tipodecretoalteracao == 2 || $oDados11->tipodecretoalteracao == 6){
           $si40_tipoleialteracao = 2;
-        }elseif($oDados11->tipodecretoalteracao == 8 || $oDados11->tipodecretoalteracao == 9 
+        }elseif($oDados11->tipodecretoalteracao == 8 || $oDados11->tipodecretoalteracao == 9
           || $oDados11->tipodecretoalteracao == 10){
           $si40_tipoleialteracao = 3;
         }elseif($oDados11->tipodecretoalteracao == 5){
@@ -278,7 +282,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
         }elseif($oDados11->tipodecretoalteracao == 11){
           $si40_tipoleialteracao = 5;
         }
-    		
+
     		$claoc12->si40_tiporegistro       = 12;
     		$claoc12->si40_codreduzidodecreto = $oDados12->codreduzidodecreto;
     		$claoc12->si40_nroleialteracao    = substr($oDados12->nroleialteracao,0,6);
@@ -289,42 +293,42 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     		$claoc12->si40_mes                = $this->sDataFinal['5'].$this->sDataFinal['6'];
     		$claoc12->si40_reg10              = $claoc10->si38_sequencial;
     		$claoc12->si40_instit             = db_getsession("DB_instit");
-    		
+
     	    $claoc12->incluir(null);
     	    //echo pg_last_error();
         if ($claoc12->erro_status == 0) {
     	    throw new Exception($claoc12->erro_msg);
         }
-    		
+
     	}
-    	
+
     	/**
     	 * registro 13
     	 */
     	$sSql = "select '13'       as tiporegistro,
-       o46_codlei as codreduzidodecreto, 
+       o46_codlei as codreduzidodecreto,
        (case when o46_tiposup = 1001 then 3
 	     when o46_tiposup = 1002 then 4
 	     when o46_tiposup = 1003 then 1
-             when o46_tiposup in (1004,1005,1006,1007,1008,1009,1010) then 2 
+             when o46_tiposup in (1004,1005,1006,1007,1008,1009,1010) then 2
              else 98
-         end 
+         end
        ) as tipoDecretoAlteracao,
-       sum(o47_valor) as valorAberto 
-     from orcsuplem 
-     join orcsuplemval  on o47_codsup = o46_codsup 
+       sum(o47_valor) as valorAberto
+     from orcsuplem
+     join orcsuplemval  on o47_codsup = o46_codsup
      join orcprojeto    on o46_codlei = o39_codproj
      join orcsuplemtipo on o46_tiposup =  o48_tiposup
     where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc})
     group by o46_codlei, o39_numero,o46_tiposup";
     	 $rsResult13 = db_query($sSql);
     	//db_criatabela($rsResult13);
-    	
+
     	for ($iCont13 = 0; $iCont13 < pg_num_rows($rsResult13); $iCont13++) {
-    		
+
     		$oDados13 = db_utils::fieldsMemory($rsResult13, $iCont13);
     		$claoc13 = new cl_aoc132016();
-    		
+
     		$claoc13->si41_tiporegistro       = 13;
     		$claoc13->si41_codreduzidodecreto = $oDados13->codreduzidodecreto;
     		$claoc13->si41_origemrecalteracao = $oDados13->tipodecretoalteracao;
@@ -332,14 +336,14 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     		$claoc13->si41_mes                = $this->sDataFinal['5'].$this->sDataFinal['6'];
     		$claoc13->si41_reg10              = $claoc10->si38_sequencial;
     		$claoc13->si41_instit             = db_getsession("DB_instit");
-    		
+
     		$claoc13->incluir(null);
     	  if ($claoc13->erro_status == 0) {
     	    throw new Exception($claoc13->erro_msg);
         }
-    		
+
     	}
-    	
+
     	/**
     	 * registro 14
     	 */
@@ -348,9 +352,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
   (case when o46_tiposup = 1001 then 3
        when o46_tiposup = 1002 then 4
        when o46_tiposup = 1003 then 1
-             when o46_tiposup in (1004,1005,1006,1007,1008,1009,1010) then 2 
+             when o46_tiposup in (1004,1005,1006,1007,1008,1009,1010) then 2
              else 98
-         end 
+         end
        ) as tipoDecretoAlteracao,
 	case when o47_valor > 0 then 1 else 2 end as tipoAlteracao,
 	si09_codorgaotce as codOrgao,
@@ -366,29 +370,29 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 	o15_codtri as codFontRecursos,
 	abs(o47_valor) as vlAcrescimoReducao,
 	o41_subunidade as subunidade
-  from orcsuplemval 
-  join orcsuplem on o47_codsup = o46_codsup 
+  from orcsuplemval
+  join orcsuplem on o47_codsup = o46_codsup
   join orcdotacao on  o47_anousu = o58_anousu and o47_coddot = o58_coddot
   join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu
   join orctiporec on o58_codigo = o15_codigo
   join db_config on o58_instit = codigo
-  join orcunidade on orcdotacao.o58_orgao = orcunidade.o41_orgao and orcdotacao.o58_unidade = orcunidade.o41_unidade 
-  and orcdotacao.o58_anousu = orcunidade.o41_anousu  
+  join orcunidade on orcdotacao.o58_orgao = orcunidade.o41_orgao and orcdotacao.o58_unidade = orcunidade.o41_unidade
+  and orcdotacao.o58_anousu = orcunidade.o41_anousu
   join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-  left join infocomplementaresinstit on codigo = si09_instit 
+  left join infocomplementaresinstit on codigo = si09_instit
   where o46_codlei in ({$oDados10->codigovinc})";
     	$rsResult14 = db_query($sSql);
     	//db_criatabela($rsResult14);
-    	
+
     	$aDadosAgrupados14 = array();
     	for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
-    		
+
     		$oDadosSql14 = db_utils::fieldsMemory($rsResult14, $iCont14);
     		$sHash  = $oDadosSql14->codreduzidodecreto.$oDadosSql14->tipoalteracao.$oDadosSql14->codorgao.$oDadosSql14->codunidadesub.$oDadosSql14->codfuncao;
     		$sHash .= $oDadosSql14->codprograma.$oDadosSql14->idacao.$oDadosSql14->naturezadespesa.$oDadosSql14->codfontrecursos;
-    		
+
     		if (!isset($aDadosAgrupados14[$sHash])) {
-    			
+
     		  $oDados14 = new stdClass();
     	      $oDados14->si42_tiporegistro       = 14;
     		  $oDados14->si42_codreduzidodecreto = $oDadosSql14->codreduzidodecreto;
@@ -408,19 +412,19 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     		  $oDados14->si42_reg10              = $claoc10->si38_sequencial;
     		  $oDados14->si42_instit             = db_getsession("DB_instit");
     		  $aDadosAgrupados14[$sHash] = $oDados14;
-    			
+
     		} else {
-    			
+
     			$aDadosAgrupados14[$sHash]->si42_vlacrescimoreducao += $oDadosSql14->vlacrescimoreducao;
-    			
+
     		}
-    		
+
     	}
-    	
+
     	foreach ($aDadosAgrupados14 as $oDadosReg14) {
-    		
+
     		$claoc14 = new cl_aoc142016();
-    		
+
     		$claoc14->si42_tiporegistro       = $oDadosReg14->si42_tiporegistro;
     		$claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;
     		$claoc14->si42_tipoalteracao      = $oDadosReg14->si42_tipoalteracao;
@@ -438,22 +442,22 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
     		$claoc14->si42_mes                = $oDadosReg14->si42_mes;
     		$claoc14->si42_reg10              = $oDadosReg14->si42_reg10;
     		$claoc14->si42_instit             = $oDadosReg14->si42_instit;
-    		
+
     		$claoc14->incluir(null);
     	  if ($claoc14->erro_status == 0) {
     	    throw new Exception($claoc14->erro_msg);
         }
-    		
+
     	}
-    	
+
     }
     }
     db_fim_transacao();
-    
+
     $oGerarAOC = new GerarAOC();
     $oGerarAOC->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];;
     $oGerarAOC->gerarDados();
-  	
+
   }
-		
+
 }
