@@ -230,7 +230,7 @@ class cl_contratos {
      }
 
      if($this->si172_nroprocesso == null ){
-         if($this->si172_licitacao != "" || $this->si172_licitacao != null || $this->si172_licitacao != 0) {
+         if($this->si172_licitacao != "" && $this->si172_licitacao != null && $this->si172_licitacao != 0) {
            $this->erro_sql = " Campo Número do processo cadastrado nao Informado.";
            $this->erro_campo = "si172_nroprocesso";
            $this->erro_banco = "";
@@ -672,10 +672,10 @@ class cl_contratos {
          return false;
        }
      }
-     if(trim($this->si172_nroprocesso)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si172_nroprocesso"])){ 
+     if(trim($this->si172_nroprocesso)!="" && isset($GLOBALS["HTTP_POST_VARS"]["si172_nroprocesso"])){
        $sql  .= $virgula." si172_nroprocesso = '$this->si172_nroprocesso' ";
        $virgula = ",";
-         if($this->si172_licitacao != "" || $this->si172_licitacao != null || $this->si172_licitacao != 0) {
+         if($this->si172_licitacao != "" && $this->si172_licitacao != null && $this->si172_licitacao != 0) {
              if (trim($this->si172_nroprocesso) == null) {
                  $this->erro_sql = " Campo Número do processo cadastrado nao Informado. Valor: ";
                  $this->erro_campo = "si172_nroprocesso";
@@ -687,18 +687,22 @@ class cl_contratos {
              }
          }
      }
-     if(trim($this->si172_exercicioprocesso)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si172_exercicioprocesso"])){ 
+
+     if(trim($this->si172_exercicioprocesso)!="" && isset($GLOBALS["HTTP_POST_VARS"]["si172_exercicioprocesso"])){
        $sql  .= $virgula." si172_exercicioprocesso = $this->si172_exercicioprocesso ";
        $virgula = ",";
-       if(trim($this->si172_exercicioprocesso) == null ){ 
-         $this->erro_sql = " Campo Exercício do  processo nao Informado.";
-         $this->erro_campo = "si172_exercicioprocesso";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
+         if($this->si172_licitacao != "" && $this->si172_licitacao != null && $this->si172_licitacao != 0) {
+             if (trim($this->si172_exercicioprocesso) == null) {
+                 $this->erro_sql = " Campo Exercício do  processo nao Informado.";
+                 $this->erro_campo = "si172_exercicioprocesso";
+                 $this->erro_banco = "";
+                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                 $this->erro_status = "0";
+                 return false;
+             }
+         }
+
      }
      if(trim($this->si172_tipoprocesso)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si172_tipoprocesso"])){ 
         if(trim($this->si172_tipoprocesso)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si172_tipoprocesso"])){ 
