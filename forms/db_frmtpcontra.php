@@ -29,7 +29,7 @@
 $cltpcontra->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
-<center>
+<fieldset>
 <table border="0">
   <tr>
     <td nowrap title="<?=@$Th13_codigo?>">
@@ -72,12 +72,46 @@ db_input('h13_descr',40,$Ih13_descr,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
+    <tr>
+        <td nowrap title="Tipo">
+            <strong>Tipo de Cargo: </strong>
+        </td>
+        <td>
+            <?
+            $x = array('1' => 'CEF - Efetivo','2' => 'CRA - Comissionado de recrutamento amplo',
+                '3' => 'CRR - Comissionado de recrutamento restrito','4' => 'FPU - Função pública',
+                '5' => 'EPU - Emprego público', '6' => 'APO - Agente político', '7' => 'STP - Servidor temporário',
+                '8' => 'OTC - Outros tipos de cargo');
+            db_select("h13_tipocargo",$x,true,$db_opcao);
+            ?>
+        </td>
+    </tr>
+
+
+    <tr>
+
+        <td nowrap="" title="Tipo Cargo Descrição" id="tipocargodescricao1" style="display: none;">
+            <strong>Tipo Cargo Descrição:</strong>
+        </td>
+        <td id="tipocargodescricao2" style="display: none;">
+            <?
+            db_input('h13_tipocargodescr',45,$Ih13_tipocargodescr,true,'text',$db_opcao,'');
+            ?>
+        </td>
+    </tr>
   </table>
-  </center>
+</fieldset>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
+
+
+/*if(top.corpo.document.getElementById('h13_tipocargo').options.selectedIndex == 7){
+        top.corpo.document.getElementById('tipocargodescricao1').style.display = 'inline';
+        top.corpo.document.getElementById('tipocargodescricao2').style.display = 'inline';
+}*/
+
 function js_pesquisa(){
   js_OpenJanelaIframe('top.corpo','db_iframe_tpcontra','func_tpcontra.php?funcao_js=parent.js_preenchepesquisa|h13_codigo','Pesquisa',true);
 }
@@ -89,4 +123,14 @@ function js_preenchepesquisa(chave){
   }
   ?>
 }
+/*top.corpo.document.getElementById('h13_tipocargo').onchange=function () {
+    if(top.corpo.document.getElementById('h13_tipocargo').options.selectedIndex == 7){
+        top.corpo.document.getElementById('tipocargodescricao1').style.display = 'inline';
+        top.corpo.document.getElementById('tipocargodescricao2').style.display = 'inline';
+    }else{
+        top.corpo.document.getElementById('tipocargodescricao1').style.display = 'none';
+        top.corpo.document.getElementById('tipocargodescricao2').style.display = 'none';
+        top.corpo.document.getElementById('h13_tipocargodescr').removeAttribute('value');
+    }
+};*/
 </script>

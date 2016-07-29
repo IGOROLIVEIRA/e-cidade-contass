@@ -45,13 +45,17 @@ class cl_tpcontra {
    var $h13_codigo = 0; 
    var $h13_regime = 0; 
    var $h13_tpcont = null; 
-   var $h13_descr = null; 
-   // cria propriedade com as variaveis do arquivo 
+   var $h13_descr = null;
+   var $h13_tipocargo = 0;
+   var $h13_tipocargodescr = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  h13_codigo = int4 = Código 
                  h13_regime = int4 = Codigo do Regime do Func. 
                  h13_tpcont = varchar(2) = Tipo de contrato 
-                 h13_descr = varchar(40) = Descrição do Tipo 
+                 h13_descr = varchar(40) = Descrição do Tipo
+                 h13_tipocargo = int4 = Tipo de cargo;
+                 h13_tipocargodescr = varchar(150) Descrição do tipo de cargo;
                  ";
    //funcao construtor da classe 
    function cl_tpcontra() { 
@@ -75,6 +79,8 @@ class cl_tpcontra {
        $this->h13_regime = ($this->h13_regime == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_regime"]:$this->h13_regime);
        $this->h13_tpcont = ($this->h13_tpcont == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_tpcont"]:$this->h13_tpcont);
        $this->h13_descr = ($this->h13_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_descr"]:$this->h13_descr);
+       $this->h13_tipocargo = ($this->h13_tipocargo == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_tipocargo"]:$this->h13_tipocargo);
+       $this->h13_tipocargodescr = ($this->h13_tipocargodescr == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_tipocargodescr"]:$this->h13_tipocargodescr);
      }else{
        $this->h13_codigo = ($this->h13_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_codigo"]:$this->h13_codigo);
      }
@@ -102,6 +108,15 @@ class cl_tpcontra {
      }
      if($this->h13_descr == null ){ 
        $this->erro_sql = " Campo Descrição do Tipo nao Informado.";
+       $this->erro_campo = "h13_descr";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->h13_tipocargo == null ){
+       $this->erro_sql = " Campo Tipo de cargo nao Informado.";
        $this->erro_campo = "h13_descr";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -145,13 +160,17 @@ class cl_tpcontra {
                                        h13_codigo 
                                       ,h13_regime 
                                       ,h13_tpcont 
-                                      ,h13_descr 
+                                      ,h13_descr
+                                      ,h13_tipocargo
+                                      ,h13_tipocargodescr
                        )
                 values (
                                 $this->h13_codigo 
                                ,$this->h13_regime 
                                ,'$this->h13_tpcont' 
-                               ,'$this->h13_descr' 
+                               ,'$this->h13_descr'
+                               ,$this->h13_tipocargo
+                               ,'$this->h13_tipocargodescr'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -246,6 +265,23 @@ class cl_tpcontra {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->h13_tipocargo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_regime"])){
+       $sql  .= $virgula." h13_tipocargo = $this->h13_tipocargo ";
+       $virgula = ",";
+       if(trim($this->h13_tipocargo) == null ){
+         $this->erro_sql = " Campo Tipo cargo nao Informado.";
+         $this->erro_campo = "h13_tipocargo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->h13_tipocargodescr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_tipocargodescr"])) {
+       $sql .= $virgula . " h13_tipocargodescr = '$this->h13_tipocargodescr' ";
+       $virgula = ",";
      }
      $sql .= " where ";
      if($h13_codigo!=null){

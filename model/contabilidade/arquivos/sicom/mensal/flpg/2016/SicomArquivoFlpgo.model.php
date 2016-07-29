@@ -126,16 +126,26 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	  when rh20_cargo <> 0 then rh04_descr
 	  else rh37_descr
 	end as si195_dsccargo,
-
 	case
-	    when h13_tpcont = '20' then 'CRA'
-	    when h13_tpcont = '21' then 'CEF'
-	    when h13_tpcont = '12' then 'CEF'
-	    when h13_tpcont = '19' then 'APO'
-	    when h13_tpcont = '01' then 'EPU'
+	    when h13_tipocargo = '1' then 'CEF'
+	    when h13_tipocargo = '2' then 'CRA'
+	    when h13_tipocargo = '3' then 'CRR'
+	    when h13_tipocargo = '4' then 'FPU'
+	    when h13_tipocargo = '5' then 'EPU'
+	    when h13_tipocargo = '6' then 'APO'
+	    when h13_tipocargo = '7' then 'STP'
+	    when h13_tipocargo = '8' then 'OTC'
 	end as si195_sglcargo,
+	case
+	    when h13_tipocargo = '8' then h13_descr
+	end as si195_dscsiglacargo,
 	rh37_reqcargo as si195_reqcargo,
-	' ' as si195_indcessao,
+	case
+		when rh01_tipadm = '1' then ' '
+	    when rh01_tipadm = '2' then ' '
+	    when rh01_tipadm = '3' then 'SCS'
+	    when rh01_tipadm = '4' then 'SCO'
+	end as si195_indcessao,
 	r70_descr as si195_dsclotacao,
 	case
 	    when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1) = 'P' then 00
@@ -324,7 +334,7 @@ WHERE
 
 	  AND rh01_instit = ".db_getsession('DB_instit')."
 
-group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
+group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
 ";
 
 		$rsResult10 = db_query($sSql);
