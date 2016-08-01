@@ -18,29 +18,29 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2015/GerarCON
   * @package Contabilidade
   */
 class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout = 163;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'CONTRATOS';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
@@ -49,21 +49,41 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios 
-   *para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios
+   *para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
   }
-  
+
+    public function getCodunidadesubrespAdesao($iCodContratos){
+        $sSql = "select
+      case when o41_subunidade != 0 or not null then
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesubresp
+                        from empcontratos
+                      inner join empempenho on e60_codemp = si173_empenho::varchar and e60_anousu = si173_anoempenho
+					  join empelemento on e64_numemp = e60_numemp
+					  join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
+					  join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+					  join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+					  where si173_codcontrato = {$iCodContratos}
+      ";
+
+        $sCodunidadesubresp = db_utils::fieldsMemory(db_query($sSql), 0)->codunidadesubresp;
+
+        return $sCodunidadesubresp;
+
+    }
+
   /**
    * selecionar os dados de Leis de Alteraзгo
-   * 
+   *
    */
   public function gerarDados() {
-    
+
     $clcontratos10 = new cl_contratos102015();
     $clcontratos11 = new cl_contratos112015();
     $clcontratos12 = new cl_contratos122015();
@@ -72,7 +92,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
     $clcontratos21 = new cl_contratos212015();
     $clcontratos30 = new cl_contratos302015();
     $clcontratos40 = new cl_contratos402015();
-    
+
     db_inicio_transacao();
     // matriz de entrada
     $what = array("°",chr(13),chr(10), 'д','г','а','б','в','к','л','и','й','п','м','н','ц','х','т','у','ф','ь','щ','ъ','ы','А','Б','Г','Й','Н','У','Ъ','с','С','з','З',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','Є','є' );
@@ -85,20 +105,20 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
      */
     $result = $clcontratos13->sql_record($clcontratos13->sql_query(NULL,"*",NULL,"si86_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si86_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      
+
       $clcontratos13->excluir(NULL,"si86_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si86_instit = ".db_getsession("DB_instit"));
       if ($clcontratos13->erro_status == 0) {
         throw new Exception($clcontratos13->erro_msg);
       }
     }
     //echo pg_last_error();exit;
-    
+
     /*
      * excluir informacoes do mes selecionado registro 12
      */
     $result = $clcontratos12->sql_record($clcontratos12->sql_query(NULL,"*",NULL,"si85_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si85_instit = ".db_getsession("DB_instit") ));
     if (pg_num_rows($result) > 0) {
-      
+
       $clcontratos12->excluir(NULL,"si85_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si85_instit = ".db_getsession("DB_instit"));
       if ($clcontratos12->erro_status == 0) {
         throw new Exception($clcontratos12->erro_msg);
@@ -110,7 +130,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
      */
     $result = $clcontratos11->sql_record($clcontratos11->sql_query(NULL,"*",NULL,"si84_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si84_instit = ".db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      
+
       $clcontratos11->excluir(NULL,"si84_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si84_instit = ".db_getsession("DB_instit"));
       if ($clcontratos11->erro_status == 0) {
         throw new Exception($clcontratos11->erro_msg);
@@ -127,7 +147,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
         throw new Exception($clcontratos10->erro_msg);
       }
     }
-    
+
     /*
      * excluir informacoes do mes selecionado registro 21
      */
@@ -138,7 +158,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
         throw new Exception($clcontratos21->erro_msg);
       }
     }
-    
+
     /*
      * excluir informacoes do mes selecionado registro 20
      */
@@ -149,7 +169,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
         throw new Exception($clcontratos20->erro_msg);
       }
     }
-    
+
     /*
      * excluir informacoes do mes selecionado registro 30
      */
@@ -160,7 +180,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
         throw new Exception($clcontratos30->erro_msg);
       }
     }
-    
+
     /*
      * excluir informacoes do mes selecionado registro 40
      */
@@ -175,10 +195,10 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
     $sSql  = "SELECT si09_codorgaotce AS codorgao
               FROM infocomplementaresinstit
               WHERE si09_instit = ".db_getsession("DB_instit");
-      
+
     $rsResult  = db_query($sSql);
     $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;
-    
+
     /*
      * selecionar informacoes registro 10
      */
@@ -191,7 +211,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
 		$oDOMDocument = new DOMDocument();
 		$oDOMDocument->loadXML($sTextoXml);
 		$oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
-		  
+
     $sSql = "select distinct contratos.*,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,
     (CASE
     WHEN o41_subunidade != 0
@@ -214,7 +234,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
     $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);
        db_inicio_transacao();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
+
       $clcontratos10 = new cl_contratos102015();
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
@@ -228,7 +248,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
          where db01_anousu = ".db_getsession("DB_anousu")." and db01_coddepto = ".$oDados10->si172_codunidadesubresp;
-      
+
         $rsDepart    = db_query($sSql);//echo $sSql;db_criatabela($rsDepart);
         $sOrgDepart  = db_utils::fieldsMemory($rsDepart, 0)->db01_orgao;
         $sUnidDepart = db_utils::fieldsMemory($rsDepart, 0)->db01_unidade;
@@ -246,24 +266,24 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
       if ($sSubUnidade == 1) {
       	$sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
       }
-      
+
       /**
        * caso o empenho seja de 2013 pegar o si83_nroprocesso do xml conforme era enviado em 2013
        */
       /*if ($oDados10->l20_anousu < 2015) {
-	      	
+
 		    foreach ($oDadosComplLicitacoes as $oDadosComplLicitacao) {
-			
+
 			    if ($oDadosComplLicitacao->getAttribute('instituicao') == db_getsession("DB_instit")
 				    && $oDadosComplLicitacao->getAttribute('nroProcessoLicitatorio') == $oEmpenho->l20_codigo
 				    && $oEmpenho->l20_codigo != '') {
-			
+
 			      $sNroProcesso = substr($oDadosComplLicitacao->getAttribute('codigoProcesso'), 0, 12);
-				
+
 			    }
-				
+
 			  }
-			    
+
 	    } else {
 	    	$sNroProcesso = $oDados10->l20_edital;
 	    }*/
@@ -277,9 +297,9 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
       $clcontratos10->si83_dataassinatura                = $oDados10->si172_dataassinatura;
       $clcontratos10->si83_contdeclicitacao              = $oDados10->si172_contdeclicitacao;
       $clcontratos10->si83_codorgaoresp                  = $oDados10->si172_contdeclicitacao == 5 || $oDados10->si172_contdeclicitacao == 6 ? $sCodorgao : ' ';
-      $clcontratos10->si83_codunidadesubresp             = $oDados10->si172_contdeclicitacao == 1 ? ' ' : $oDados10->codunidadesubresp;
-      $clcontratos10->si83_nroprocesso                   = $oDados10->si172_nroprocesso;
-      $clcontratos10->si83_exercicioprocesso             = $oDados10->si172_exercicioprocesso;
+      $clcontratos10->si83_codunidadesubresp             = $oDados10->si172_contdeclicitacao == 1 || $oDados10->si172_contdeclicitacao == 8 ? ' ' : $oDados10->si172_contdeclicitacao == 4 ? $this->getCodunidadesubrespAdesao($oDados10->si172_sequencial) : $oDados10->codunidadesubresp;
+      $clcontratos10->si83_nroprocesso                   = $oDados10->si172_contdeclicitacao == 1 ? $sNroProcesso : $oDados10->si172_nroprocesso;
+      $clcontratos10->si83_exercicioprocesso             = $oDados10->si172_contdeclicitacao == 1 ? $oDados10->l20_anousu : $oDados10->si172_exercicioprocesso;
       $clcontratos10->si83_tipoprocesso                  = $oDados10->si172_contdeclicitacao == 1 || $oDados10->si172_contdeclicitacao == 2 ? 0 : $oDados10->si172_tipoprocesso;
       $clcontratos10->si83_naturezaobjeto                = $oDados10->si172_naturezaobjeto;
       $clcontratos10->si83_objetocontrato                = substr($this->removeCaracteres($oDados10->si172_objetocontrato), 0,500);
@@ -298,13 +318,13 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
       $clcontratos10->si83_veiculodivulgacao             = $this->removeCaracteres($oDados10->si172_veiculodivulgacao);
       $clcontratos10->si83_mes                           = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clcontratos10->si83_instit                        = $oDados10->si172_instit;
-      
+
       $clcontratos10->incluir(null);
 
       if ($clcontratos10->erro_status == 0) {
         throw new Exception($clcontratos10->erro_msg);
       }
-        
+
       /*
        * selecionar informacoes registro 11
        */
@@ -326,8 +346,8 @@ LEFT JOIN solicitemunid AS solicitemunid ON solicitem.pc11_codigo = solicitemuni
 where liclicitem.l21_codliclicita = ".$oDados10->si172_licitacao." and pc21_numcgm = ".$oDados10->si172_fornecedor;
         $rsItem = db_query($sSqlItemLicitacao);//db_criatabela($rsItem);echo $sSql;
 
-       } 
-       
+       }
+
        if (pg_num_rows($rsItem) == 0 || $oDados10->si172_licitacao == '') {
          $sSqlItemEmpenho = "SELECT (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS pc01_codmater,
 m60_codmater,m60_codmatunid,m61_descr,e60_numemp, e60_codemp, e60_anousu,e60_emiss, pc01_descrmater,  
@@ -341,14 +361,14 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
          $rsItem = db_query($sSqlItemEmpenho);//db_criatabela($rsItem);echo $sSql;
 
        }
-       
-        $aDadosAgrupados = array();  
+
+        $aDadosAgrupados = array();
         for ($iContItens = 0; $iContItens < pg_num_rows($rsItem); $iContItens++) {
-        
+
         	$oItens = db_utils::fieldsMemory($rsItem, $iContItens);
         	$sHash = $oItens->pc01_codmater;
         	if (!isset($aDadosAgrupados[$sHash])) {
-        		
+
 	        	$oContrato11 = new stdClass();
 	          $oContrato11->si84_tiporegistro           = 11;
 	          $oContrato11->si84_reg10                  = $clcontratos10->si83_sequencial;
@@ -359,18 +379,18 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
 	          $oContrato11->si84_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
 	          $oContrato11->si84_instit                 = db_getsession("DB_instit");
 	          $aDadosAgrupados[$sHash] = $oContrato11;
- 
+
         	} else {
         		$aDadosAgrupados[$sHash]->si84_quantidadeitem    += $oItens->quantidade;
         		$aDadosAgrupados[$sHash]->si84_valorunitarioitem += ($oItens->valorun*$oItens->quantidade);
         	}
 
         }
-      
+
       foreach ($aDadosAgrupados as $oDadosReg11) {
-      	
+
       	$clcontratos11 = new cl_contratos112015();
-        
+
         $clcontratos11->si84_tiporegistro           = 11;
         $clcontratos11->si84_reg10                  = $oDadosReg11->si84_reg10;
         $clcontratos11->si84_codcontrato            = $oDadosReg11->si84_codcontrato;
@@ -379,12 +399,12 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
         $clcontratos11->si84_valorunitarioitem      = $oDadosReg11->si84_valorunitarioitem/$oDadosReg11->si84_quantidadeitem;
         $clcontratos11->si84_mes                    = $oDadosReg11->si84_mes;
         $clcontratos11->si84_instit                 = $oDadosReg11->si84_instit;
-        
+
         $clcontratos11->incluir(null);
         if ($clcontratos11->erro_status == 0) {
           throw new Exception($clcontratos11->erro_msg);
         }
-      	
+
       }
 
       if (count($aDadosAgrupados) > 0) {
@@ -397,7 +417,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
        * selecionar informacoes registro 12
        */
 
-      $sSql = "select * from contratos left join empcontratos on si173_codcontrato = si172_sequencial 
+      $sSql = "select * from contratos left join empcontratos on si173_codcontrato = si172_sequencial
       where si172_dataassinatura <= '{$this->sDataFinal}' and si172_dataassinatura >= '{$this->sDataInicial}' 
       and si172_instit = ". db_getsession("DB_instit") ." and si172_sequencial = ".$oDados10->si172_sequencial;
 
@@ -405,7 +425,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
       $aDadosAgrupados12 = array();
       if ($oDados10->si172_naturezaobjeto != 4 || $oDados10->si172_naturezaobjeto != 5 ) {
       for ($iCont12 = 0; $iCont12 < pg_num_rows($rsResult12); $iCont12++) {
-        
+
         $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
 
         if ($oDados12->si172_licitacao != '') {
@@ -422,15 +442,15 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
                    INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo) 
                    join pcdotac on (pcdotac.pc13_codigo = solicitem.pc11_codigo) 
                    join orcdotacao on (pcdotac.pc13_anousu = orcdotacao.o58_anousu) and (pcdotac.pc13_coddot = orcdotacao.o58_coddot)
-                   and (orcdotacao.o58_instit = ".db_getsession("DB_instit").") 
-                   join orcelemento on o58_codele = o56_codele and o56_anousu = ".db_getsession("DB_anousu")." 
+                   and (orcdotacao.o58_instit = ".db_getsession("DB_instit").")
+                   join orcelemento on o58_codele = o56_codele and o56_anousu = ".db_getsession("DB_anousu")."
                    join orctiporec on o58_codigo = o15_codigo 
                    join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu 
                    join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
                    JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu 
                    where liclicitem.l21_codliclicita = ".$oDados12->si172_licitacao;
            $rsDados = db_query($sSql);
-        } 
+        }
         if (($oDados12->si172_licitacao == '' || pg_num_rows($rsDados)==0) && $oDados12->si173_anoempenho != '') {
           $sSql = "SELECT distinct on (o58_coddot)
                          o58_coddot,
@@ -441,7 +461,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
               o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
                       o56_elemento,o15_codtri,o58_valor,o41_subunidade from empempenho 
                       join orcdotacao on e60_coddot = o58_coddot 
-                      join orcelemento on o58_codele = o56_codele and o56_anousu =   ".db_getsession("DB_anousu")." 
+                      join orcelemento on o58_codele = o56_codele and o56_anousu =   ".db_getsession("DB_anousu")."
                       join orctiporec on o58_codigo = o15_codigo
                       join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu
                       join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
@@ -449,7 +469,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
                       where o58_anousu =  ".db_getsession("DB_anousu")." and e60_anousu = ".db_getsession("DB_anousu")."
                       and e60_codemp = '".$oDados12->si173_empenho ."' and e60_anousu = '".$oDados12->si173_anoempenho ."'";
           //$sSql   .= " and e60_anousu = ".db_getsession("DB_anousu")." ";
-          $rsDados = db_query($sSql);   
+          $rsDados = db_query($sSql);
         }
         if (pg_num_rows($rsDados)==0 && $oDados12->si172_licitacao != '') {
         	$sSql = "SELECT distinct on (o58_coddot)
@@ -494,25 +514,25 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
         }
 
       for ($iContDot = 0;$iContDot < pg_num_rows($rsDados); $iContDot++) {
-        $oDadosElemento = db_utils::fieldsMemory($rsDados, $iContDot);        
-      
+        $oDadosElemento = db_utils::fieldsMemory($rsDados, $iContDot);
+
         $sHash  = $oDados12->si173_codcontrato.$sCodorgao.str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT).str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
         $sHash .= $oDadosElemento->o58_funcao.$oDadosElemento->o58_subfuncao.$oDadosElemento->o58_programa.$oDadosElemento->o58_projativ;
         $sHash .= $oDadosElemento->o56_elemento.$oDadosElemento->o15_codtri;
-        
+
         if (!isset($aDadosAgrupados12[$sHash])) {
-        	
+
         	$sCodUnidade = str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT).str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
         	if ($oDadosElemento->o41_subunidade == 1) {
         		$sCodUnidade .= str_pad($oDadosElemento->o41_subunidade, 3, "0", STR_PAD_LEFT);
         	}
-        	$result = db_dotacaosaldo(8, 2, 2, true, " o58_coddot = {$oDadosElemento->o58_coddot} and o58_anousu = {$oDados10->si172_exerciciocontrato}", 
+        	$result = db_dotacaosaldo(8, 2, 2, true, " o58_coddot = {$oDadosElemento->o58_coddot} and o58_anousu = {$oDados10->si172_exerciciocontrato}",
         	                          $oDados10->si172_exerciciocontrato, $oDados10->si172_dataassinatura, $oDados10->si172_dataassinatura);
         	if (pg_num_rows($result) > 0) {
         	  $oDot = db_utils::fieldsMemory($result, 0);
         	  $oDadosElemento->o58_valor = ($oDot->dot_ini+$oDot->suplementado_acumulado-$oDot->reduzido_acumulado)-$oDot->empenhado_acumulado+$oDot->anulado_acumulado;
         	}
-        	
+
 	        $oContrato12 = new stdClass();
         	$oContrato12->si85_tiporegistro           = 12;
 	        $oContrato12->si85_reg10                  = $clcontratos10->si83_sequencial;
@@ -530,18 +550,18 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
 	        $oContrato12->si85_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
 	        $oContrato12->si85_instit                 = db_getsession("DB_instit");
 	        $aDadosAgrupados12[$sHash] = $oContrato12;
-	        
+
         } else {
         	$aDadosAgrupados12[$sHash]->si85_vlrecurso += $oDadosElemento->o58_valor;
         }
       }
-        
+
       }
       }
       //echo "<pre>";print_r($aDadosAgrupados12);
-      
+
       foreach ($aDadosAgrupados12 as $oDadosReg12) {
-      	
+
       	$clcontratos12 = new cl_contratos122015();
       	$clcontratos12->si85_tiporegistro           = 12;
         $clcontratos12->si85_reg10                  = $oDadosReg12->si85_reg10;
@@ -558,16 +578,16 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
         $clcontratos12->si85_vlrecurso              = $oDadosReg12->si85_vlrecurso;
         $clcontratos12->si85_mes                    = $oDadosReg12->si85_mes;
         $clcontratos12->si85_instit                 = $oDadosReg12->si85_instit;
-        
+
         $clcontratos12->incluir(null);
 
         if ($clcontratos12->erro_status == 0) {
           throw new Exception($clcontratos12->erro_msg);
         }
-      	
+
       }
-      
-      $sSql = "select case when length(fornecedor.z01_cgccpf) = 11 then 1 else 2 end as tipodocumento,fornecedor.z01_cgccpf as nrodocumento, 
+
+      $sSql = "select case when length(fornecedor.z01_cgccpf) = 11 then 1 else 2 end as tipodocumento,fornecedor.z01_cgccpf as nrodocumento,
       representante.z01_cgccpf as cpfrepresentantelegal
       from cgm as fornecedor
       join pcfornereprlegal on fornecedor.z01_numcgm = pcfornereprlegal.pc81_cgmforn
@@ -576,7 +596,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
 
       $rsResult13 = db_query($sSql);//db_criatabela($rsResult13);
       $oDados13 = db_utils::fieldsMemory($rsResult13, 0);
-      
+
       $clcontratos13 = new cl_contratos132015;
       $clcontratos13->si86_tiporegistro           = 13;
       $clcontratos13->si86_codcontrato            = $oDados10->si172_sequencial;
@@ -586,40 +606,40 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
       $clcontratos13->si86_reg10                  = $clcontratos10->si83_sequencial;
       $clcontratos13->si86_instit                 = db_getsession("DB_instit");
       $clcontratos13->si86_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      
+
       $clcontratos13->incluir(null);
 
       if ($clcontratos13->erro_status == 0) {
         throw new Exception($clcontratos13->erro_msg);
       }
- 
+
     }
-    
+
     /*
      * selecionar informacoes registro 20
      */
-    $sSql       = "select distinct aditivoscontratos.* 
+    $sSql       = "select distinct aditivoscontratos.*
     from aditivoscontratos 
     left JOIN contratos  on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and si174_nrocontrato = si172_nrocontrato
     where (case when si172_naturezaobjeto is null then 2 else si172_naturezaobjeto end) not in (4,5) 
     and si174_dataassinaturatermoaditivo <= '{$this->sDataFinal}' 
     and si174_dataassinaturatermoaditivo >= '{$this->sDataInicial}' 
     and si174_instit = ". db_getsession("DB_instit") ." ";
-        
+
     $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);echo $sSql;
-    
+
     for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
-      
+
       $clcontratos20 = new cl_contratos202015();
       $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-      
+
       if ($oDados20->si174_tipotermoaditivo != '6' && $oDados20->si174_tipotermoaditivo != '14') {
         $oDados20->si174_dscalteracao = '';
-      } 
+      }
       if ($oDados20->si174_tipotermoaditivo != '7' && $oDados20->si174_tipotermoaditivo != '13') {
         $oDados20->si174_novadatatermino = '';
-      } 
-      
+      }
+
        $sSql  = "select  (CASE
     WHEN o41_subunidade != 0
          OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -635,8 +655,8 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
          where db01_anousu = ".db_getsession("DB_anousu")." and db01_coddepto = ".$oDados20->si174_codunidadesub;
       $result = db_query($sSql);//db_criatabela($result);echo $sSql;
       $sCodUnidade = db_utils::fieldsMemory($result, 0)->codunidadesub;
-      
-      
+
+
       $clcontratos20->si87_tiporegistro                   = 20;
       $clcontratos20->si87_codaditivo                     = $oDados20->si174_sequencial;
       $clcontratos20->si87_codorgao                       = $sCodorgao;
@@ -654,12 +674,12 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
       $clcontratos20->si87_veiculodivulgacao              = $this->removeCaracteres($oDados20->si174_veiculodivulgacao);
       $clcontratos20->si87_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clcontratos20->si87_instit                         = $oDados20->si174_instit;
-      
+
       $clcontratos20->incluir(null);
       if ($clcontratos20->erro_status == 0) {
         throw new Exception($clcontratos20->erro_msg);
       }
-      
+
       /*
        * selecionar informacoes registro 21
        */
@@ -688,16 +708,16 @@ AND si174_nrocontrato = si172_nrocontrato
 
       $rsResult21 = db_query($sSql);//db_criatabela($rsResult21);echo $sSql;
       for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
-        
+
         $clcontratos21 = new cl_contratos212015();
         $oDados21 = db_utils::fieldsMemory($rsResult21, $iCont21);
         if ($oDados21->coditem == '') {
-        	$sSql = "SELECT si43_coditem FROM item102014 WHERE si43_dscitem LIKE 
+        	$sSql = "SELECT si43_coditem FROM item102014 WHERE si43_dscitem LIKE
         	'".trim(preg_replace("/[^a-zA-Z0-9 ]/", "",str_replace($what, $by,  $oDados21->pc01_descrmater)))."%'";
         	$result = db_query($sSql);//db_criatabela($result);
         	$oDados21->coditem = db_utils::fieldsMemory($result, 0)->si43_coditem;
         }
-        
+
         $clcontratos21->si88_tiporegistro            = 21;
         $clcontratos21->si88_reg20                   = $clcontratos20->si87_sequencial;
         $clcontratos21->si88_codaditivo              = $oDados21->si175_codaditivo;
@@ -707,14 +727,14 @@ AND si174_nrocontrato = si172_nrocontrato
         $clcontratos21->si88_valorunitarioitem       = $oDados21->si175_valorunitarioitem;
         $clcontratos21->si88_mes                     = $this->sDataFinal['5'].$this->sDataFinal['6'];
         $clcontratos21->si88_instit                  = db_getsession("DB_instit");
-        
+
         $clcontratos21->incluir(null);
         if ($clcontratos21->erro_status == 0) {
           throw new Exception($clcontratos21->erro_msg);
         }
-        
+
       }
-      
+
     }
 
     /*
@@ -725,14 +745,14 @@ AND si174_nrocontrato = si172_nrocontrato
     where si03_dataapostila <= '{$this->sDataFinal}' 
     and si03_dataapostila >= '{$this->sDataInicial}'
     and si03_instit = ". db_getsession("DB_instit");
-        
+
     $rsResult30 = db_query($sSql);
-    
+
     for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
-      
+
     	$oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
     	$aAnoContrato = explode("-", $oDados30->si03_dataassinacontrato);
-    	
+
     	if ($aAnoContrato[0] > 2013) {
     	  $sSql  = "select  (CASE
     WHEN o41_subunidade != 0
@@ -746,16 +766,16 @@ AND si174_nrocontrato = si172_nrocontrato
    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                  where db01_anousu = ".$aAnoContrato[0]." and db01_coddepto = 
+                  where db01_anousu = ".$aAnoContrato[0]." and db01_coddepto =
                   (select si172_codunidadesubresp::integer from contratos where si172_sequencial = {$oDados30->si03_numcontrato})";
     	  $result = db_query($sSql);//db_criatabela($result);echo $sSql;echo pg_last_error();
     	  $sCodUnidadeSub = db_utils::fieldsMemory($result, 0)->codunidadesub;
     	} else {
     		$sCodUnidadeSub = ' ';
     	}
-    	
+
       $clcontratos30 = new cl_contratos302015();
-      
+
       $clcontratos30->si89_tiporegistro                   = 30;
       $clcontratos30->si89_codorgao                       = $sCodorgao;
       $clcontratos30->si89_codunidadesub                  = $sCodUnidadeSub;
@@ -769,7 +789,7 @@ AND si174_nrocontrato = si172_nrocontrato
       $clcontratos30->si89_valorapostila                  = $oDados30->si03_valorapostila;
       $clcontratos30->si89_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];
       $clcontratos30->si89_instit                         = $oDados30->si03_instit;
-    
+
       $clcontratos30->incluir(null);
       if ($clcontratos30->erro_status == 0) {
         throw new Exception($clcontratos30->erro_msg);
@@ -780,16 +800,16 @@ AND si174_nrocontrato = si172_nrocontrato
      /*
      * selecionar informacoes registro 40
      */
-    $sSql       = "select * from rescisaocontrato 
+    $sSql       = "select * from rescisaocontrato
       join contratos on si176_nrocontrato = si172_sequencial
       where si1176_datarescisao <= '{$this->sDataFinal}' 
       and si1176_datarescisao >= '{$this->sDataInicial}' 
       and si172_instit = ".db_getsession("DB_instit");
-    
+
     $rsResult40 = db_query($sSql);//db_criatabela($rsResult40);
-    
+
     for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
-      
+
       $clcontratos40 = new cl_contratos402015();
       $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
@@ -815,7 +835,7 @@ AND si174_nrocontrato = si172_nrocontrato
         } else {
             $sCodUnidadeSub = ' ';
         }
-      
+
       $clcontratos40->si91_tiporegistro                   = 40;
       $clcontratos40->si91_codorgao                       = $sCodorgao;
       $clcontratos40->si91_codunidadesub                  = $sCodUnidadeSub;
@@ -831,15 +851,15 @@ AND si174_nrocontrato = si172_nrocontrato
       if ($clcontratos40->erro_status == 0) {
         throw new Exception($clcontratos40->erro_msg);
       }
-      
+
     }
 
     db_fim_transacao();
-    
+
     $oGerarCONTRATOS = new GerarCONTRATOS();
     $oGerarCONTRATOS->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
     $oGerarCONTRATOS->gerarDados();
-    
+
   }
-  
+
 }			
