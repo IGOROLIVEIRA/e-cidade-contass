@@ -128,6 +128,10 @@ $pdf->Ln();
 $pdf->cell(190,$alt,'','T',1,"R",0);
 $pdf->setfont('arial','b',10);
 $pdf->cell(25,$alt, "{$sTipoDespacho} :",0,0,"R",0);
-$pdf->multicell(160,$alt,$despacho,0,"L",0);
+if($tipo != 2) {
+  $pdf->multicell(160, $alt, $despacho, 0, "L", 0);
+}else{
+  $pdf->multicell(160, $alt, $despachoTransf, 0, "L", 0);
+}
 
 $pdf->Output();

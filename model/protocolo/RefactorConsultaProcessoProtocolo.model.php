@@ -195,6 +195,9 @@ class RefactorConsultaProcessoProtocolo {
 
             } else {
 
+              $result_proctransferdesp = $clproctransfer->sql_record($clproctransfer->sql_query_file($p62_codtran));
+              extract( (array) db_utils::fieldsMemory($result_proctransferdesp, 0));
+
               $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
               $oDadosMovimentacao->sData = db_formatar($p62_dttran, 'd');
               $oDadosMovimentacao->sHora = $p62_hora;
@@ -204,14 +207,16 @@ class RefactorConsultaProcessoProtocolo {
               $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
               $oDadosMovimentacao->sLogin = $nome;
               $oDadosMovimentacao->sObservacoes = "Transferência $p62_codtran p/ o Departamento: $coddeptodestino - $deptodestino";
-
+              $oDadosMovimentacao->sDespacho = $p62_despacho;
+              $oDadosMovimentacao->lImprimir = true;
+              $oDadosMovimentacao->iTipo = 2;
               if ( (int) $idusuariodestino > 0 ) {
                 $oDadosMovimentacao->sObservacoes .= " - usuário especificado: $idusuariodestino - $loginusuariodestino";
               } else {
                 $oDadosMovimentacao->sObservacoes .= " (sem usuário especificado)";
               }
 
-              $oDadosMovimentacao->sDespacho = "";
+              //$oDadosMovimentacao->sDespacho = "";
 
               $this->aMovimentacoes[] = $oDadosMovimentacao;
             }
@@ -637,6 +642,7 @@ class RefactorDadosMovimentacaoProcessoProtocolo {
   public $sDespacho;
   public $iAndamentoInterno;
   public $lImprimir = false;
+  public $iTipo;
 
   /**
    * Valida antes de declarar propriedades do refactor
