@@ -179,7 +179,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       $clntf102014->si143_codorgao                  = $oDados10->codorgao;
 
       $oDados10->nfnumero = str_replace("/", "", $oDados10->nfnumero);
-      if(ereg('[^0-9]',$oDados10->nfnumero)){
+      if(!ereg('[^0-9]',$oDados10->nfnumero)){
         $clntf102014->si143_nfnumero                  = null;
       }else{
         $clntf102014->si143_nfnumero                  = $oDados10->nfnumero;
