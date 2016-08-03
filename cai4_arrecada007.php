@@ -74,120 +74,127 @@ $ip = db_getsession("DB_ip");
 $porta = 5001;
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
-  //rotina que verifica se o ip do usuario irá imprimir autenticar ou naum ira fazer nada
-  $result99 = $clcfautent->sql_record($clcfautent->sql_query_file(null,"k11_tipautent as tipautent",'',"k11_ipterm = '".db_getsession("DB_ip")."' and k11_instit = ".db_getsession("DB_instit")));
-	if($clcfautent->numrows > 0){
-	  db_fieldsmemory($result99,0);
-	}else{
-	  db_msgbox("Cadastre o ip ".db_getsession('DB_ip')." como um terminal de caixa.");
-	  die();
-	}
+//rotina que verifica se o ip do usuario irá imprimir autenticar ou naum ira fazer nada
+$result99 = $clcfautent->sql_record($clcfautent->sql_query_file(null, "k11_tipautent as tipautent", '', "k11_ipterm = '" . db_getsession("DB_ip") . "' and k11_instit = " . db_getsession("DB_instit")));
+if ($clcfautent->numrows > 0) {
+    db_fieldsmemory($result99, 0);
+} else {
+    db_msgbox("Cadastre o ip " . db_getsession('DB_ip') . " como um terminal de caixa.");
+    die();
+}
 
-   //---------------------------------------
+//---------------------------------------
 
-  if(!isset($HTTP_POST_VARS["reautentica"])){
+if (!isset($HTTP_POST_VARS["reautentica"])) {
 
     db_inicio_transacao();
-    if (isset($HTTP_POST_VARS["codcla"])){
+    if (isset($HTTP_POST_VARS["codcla"])) {
 
-      try {
+        try {
 
-        $oAutenticacaoBaixaBanco = new AutenticacaoBaixaBanco($HTTP_POST_VARS["codcla"]);
-        $fc_autentica            = $oAutenticacaoBaixaBanco->autenticar();
+            $oAutenticacaoBaixaBanco = new AutenticacaoBaixaBanco($HTTP_POST_VARS["codcla"]);
+            $fc_autentica = $oAutenticacaoBaixaBanco->autenticar();
 
-        db_fim_transacao(false);
+            db_fim_transacao(false);
+            db_msgbox("Processo concluído com sucesso!");
+            ?>
+            <script>
+                parent.js_removeObj('msgBox');
+                document.location.href = 'cai4_arrecada005.php';
+            </script>
+            <?
+        } catch (BusinessException $oBusinessException) {
 
-      } catch (BusinessException $oBusinessException) {
+            db_fim_transacao(true);
+            ?>
+            <script>
+                parent.js_removeObj('msgBox');
+                parent.alert('Erro ao gerar autenticacao. Verifique :<?=str_replace("\n", '\\n', $oBusinessException->getMessage())?>');
+                document.location.href = 'cai4_arrecada005.php';
+            </script>
+            <?
+            exit;
+        } catch (Exception $oBusinessException) {
 
-        db_fim_transacao(true);
-        ?>
-    	  <script>
-        parent.js_removeObj('msgBox');
-    	  parent.alert('Erro ao gerar autenticacao. Verifique :<?=str_replace("\n", '\\n', $oBusinessException->getMessage())?>');
-    	  document.location.href = 'cai4_arrecada005.php';
-    	  </script>
-    	  <?
-  	    exit;
-      } catch (Exception $oBusinessException) {
+            db_fim_transacao(true);
+            ?>
+            <script>
+                parent.js_removeObj('msgBox');
+                parent.alert('Erro ao gerar autenticacao. Verifique :<?=str_replace("\n", '\\n', $oBusinessException->getMessage())?>');
+                document.location.href = 'cai4_arrecada005.php';
+            </script>
+            <?
+            exit;
 
-        db_fim_transacao(true);
-        ?>
-    	  <script>
-        parent.js_removeObj('msgBox');
-    	  parent.alert('Erro ao gerar autenticacao. Verifique :<?=str_replace("\n", '\\n', $oBusinessException->getMessage())?>');
-    	  document.location.href = 'cai4_arrecada005.php';
-    	  </script>
-    	  <?
-  	    exit;
-
-      }
+        }
 
     }
-  }else{
+} else {
     $HTTP_POST_VARS["codcla"] = $HTTP_POST_VARS["codautent"];
-  }
+}
 ?>
-<html>
-<head>
-<title>Documento sem t&iacute;tulo</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
-<body bgcolor=#CCCCCC bgcolor="#AAB7D5">
-<table width="100%">
-  <tr>
-    <td align="center"><font id="numeros" size="2">Processando Autentica&ccedil;&atilde;o da Classificação&nbsp;&nbsp;<?=@$HTTP_POST_VARS['codcla']?></font></td>
-  </tr>
-</table>
-<form name="form1" method="POST">
-  <input name="codautent" type="hidden" >
-  <input name="tipo" type="hidden" >
-  <input name="reduz" type="hidden" value="<?=@$HTTP_POST_VARS["codcla"]?>">
-</form>
-</body>
-</html>
+    <html>
+    <head>
+        <title>Documento sem t&iacute;tulo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    </head>
+    <body bgcolor=#CCCCCC bgcolor="#AAB7D5">
+    <table width="100%">
+        <tr>
+            <td align="center"><font id="numeros" size="2">Processando Autentica&ccedil;&atilde;o da Classificação&nbsp;&nbsp;<?= @$HTTP_POST_VARS['codcla'] ?></font>
+            </td>
+        </tr>
+    </table>
+    <form name="form1" method="POST">
+        <input name="codautent" type="hidden">
+        <input name="tipo" type="hidden">
+        <input name="reduz" type="hidden" value="<?= @$HTTP_POST_VARS["codcla"] ?>">
+    </form>
+    </body>
+    </html>
 <?
 
-   if(isset($HTTP_POST_VARS["reautentica"])){
-     $fc_autentica = $HTTP_POST_VARS["reautentica"];
-   }
+if (isset($HTTP_POST_VARS["reautentica"])) {
+    $fc_autentica = $HTTP_POST_VARS["reautentica"];
+}
 
-   if($tipautent == 1) {
+if ($tipautent == 1) {
 
-     try {
-	  	  require_once 'model/impressaoAutenticacao.php';
-  		  $oImpressao = new impressaoAutenticacao($fc_autentica);
-  		  $oModelo = $oImpressao->getModelo();
+    try {
+        require_once 'model/impressaoAutenticacao.php';
+        $oImpressao = new impressaoAutenticacao($fc_autentica);
+        $oModelo = $oImpressao->getModelo();
         $oModelo->imprimir();
-      } catch (Exception $EImpressao) {
+    } catch (Exception $EImpressao) {
         echo "<script>";
         echo "  parent.alert('{$EImpressao->getMessage()}'); ";
         echo "</script>";
         $lErro = true;
-      }
+    }
 
-   }
+}
 
-   if ($lErro == false) {
+if ($lErro == false) {
 
-     echo "<script>";
-     echo "if (parent.document.getElementById('msgBox')) {parent.js_removeObj('msgBox');}";
-     echo "if(parent.confirm('Autenticar Classificação " . $HTTP_POST_VARS["codcla"] . " Novamente?')==false){";
-     echo "  document.location.href = 'cai4_arrecada005.php';";
-     echo "}else{";
-     echo "  var obj = document.createElement('input');";
-     echo "  obj.setAttribute('name','reautentica');";
-     echo "  obj.setAttribute('type','hidden');";
-     echo "  obj.setAttribute('value','" . $fc_autentica . "');";
-     echo "  document.form1.appendChild(obj);";
-     echo "  document.form1.codautent.value = '" . $HTTP_POST_VARS["codcla"] . "';";
-     echo "  document.form1.submit();";
-     echo "}";
-     echo "</script>";
-   }
+    echo "<script>";
+    echo "if (parent.document.getElementById('msgBox')) {parent.js_removeObj('msgBox');}";
+    echo "if(parent.confirm('Autenticar Classificação " . $HTTP_POST_VARS["codcla"] . " Novamente?')==false){";
+    echo "  document.location.href = 'cai4_arrecada005.php';";
+    echo "}else{";
+    echo "  var obj = document.createElement('input');";
+    echo "  obj.setAttribute('name','reautentica');";
+    echo "  obj.setAttribute('type','hidden');";
+    echo "  obj.setAttribute('value','" . $fc_autentica . "');";
+    echo "  document.form1.appendChild(obj);";
+    echo "  document.form1.codautent.value = '" . $HTTP_POST_VARS["codcla"] . "';";
+    echo "  document.form1.submit();";
+    echo "}";
+    echo "</script>";
+}
 
-   echo "<script>";
-   echo "parent.js_removeObj('msgBox');";
-   echo "</script>";
+echo "<script>";
+echo "parent.js_removeObj('msgBox');";
+echo "</script>";
 
 exit;
 
