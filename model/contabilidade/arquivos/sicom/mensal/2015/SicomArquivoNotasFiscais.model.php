@@ -184,7 +184,7 @@ db_inicio_transacao();
         $clntf10->si143_codorgao                  = $oDados10->codorgao;
 
         $oDados10->nfnumero = str_replace("/", "", $oDados10->nfnumero);
-        if(ereg('[^0-9]',$oDados10->nfnumero)){
+        if(!ereg('[^0-9]',$oDados10->nfnumero)){
           //$clntf10->si143_nfnumero                  = null;
           continue;
         }else{
@@ -340,7 +340,7 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
           $clntf20->si145_tiporegistro           = 20;
         
           $oDados20->nfnumero = str_replace("/", "", $oDados20->nfnumero);
-          if(ereg('[^0-9]',$oDados20->nfnumero)){
+          if(!ereg('[^0-9]',$oDados20->nfnumero)){
             //$clntf20->si145_nfnumero                  = null;
             continue;
           }else{
