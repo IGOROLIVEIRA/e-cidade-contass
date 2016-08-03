@@ -257,13 +257,19 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
   </center>
 </form>
 <script>
-
+    <?php
+    /**
+     * ValidaFornecedor:
+     * Quando for passado por URL o parametro validafornecedor, só irá retornar licitações que possuem fornecedores habilitados.
+     * @see ocorrência 2278
+     */
+    ?>
 function js_pesquisal202_licitacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|pc50_descr|l20_numero&validafornecedor=1','Pesquisa',true);
   }else{
      if(document.form1.l202_licitacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?pesquisa_chave='+document.form1.l202_licitacao.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
      }else{
        document.form1.l20_codigo.value = ''; 
      }

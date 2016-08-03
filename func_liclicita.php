@@ -183,6 +183,15 @@ $sWhereContratos = " and 1 = 1 ";
         $sWhereContratos .= " and ac24_sequencial is null ";
       }
 
+      if ($validafornecedor == "1"){
+          if($dbwhere != ""){
+              $dbwhere .= " and exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
+          }else{
+              $dbwhere .= " exists (select 1 from habilitacaoforn where l206_licitacao = liclicita.l20_codigo) and ";
+          }
+
+      }
+
 
       if(!isset($pesquisa_chave)){
 

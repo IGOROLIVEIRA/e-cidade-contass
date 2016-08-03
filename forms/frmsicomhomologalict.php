@@ -319,17 +319,24 @@ function busca_itens() {
      db_iframe_liclicitem.hide();
    }
 
-
+<?php
+/**
+ * ValidaFornecedor:
+ * Quando for passado por URL o parametro validafornecedor, só irá retornar licitações que possuem fornecedores habilitados.
+ * @see ocorrência 2278
+ */
+?>
 /*
  * Pesquisar dados da licitação
  */
  function js_pesquisa_liclicita(mostra){
 	 document.form1.codigo.value = '';
 	  if(mostra==true){
-	    js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
+
+	    js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo&validafornecedor=1','Pesquisa',true);
 	  }else{
 	     if(document.form1.nroProcessoLicitatorio.value != ''){ 
-	        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.nroProcessoLicitatorio.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+	        js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.nroProcessoLicitatorio.value+'&funcao_js=parent.js_mostraliclicita&validafornecedor=1','Pesquisa',false);
 	     }else{
 	       document.form1.nroProcessoLicitatorio.value = ''; 
 	     }
