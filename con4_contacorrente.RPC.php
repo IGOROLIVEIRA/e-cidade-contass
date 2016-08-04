@@ -774,7 +774,7 @@ try {
                         $sCamposDetalhe .= "e60_codemp,        ";
                         $sCamposDetalhe .= "e60_anousu         ";
                         $iAnousuEmp = db_getsession('DB_anousu');
-                        $sWhereDetalhes = "c19_reduz = {$iReduzido} and c69_anousu = {$iAnousuEmp}  group by c19_sequencial,
+                        $sWhereDetalhes = "c19_reduz = {$iReduzido} and c69_anousu = {$iAnousuEmp} and e60_anousu < {$iAnousuEmp} group by c19_sequencial,
 								c17_sequencial,
 								c17_contacorrente,
 								c17_descricao,
