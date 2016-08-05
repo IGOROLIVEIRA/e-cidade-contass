@@ -61,7 +61,7 @@ if (isset($oGet->coddpto) && !empty($oGet->coddpto)) {
 $dtInicial = implode("-", array_reverse(explode("/", $oGet->dtInicial)));
 $dtFinal   = implode("-", array_reverse(explode("/", $oGet->dtFinal)));
 
-$sSql  = "    select distinct on (m45_codigo) m45_codigo,                                                             ";
+$sSql  = "    select m45_codigo,                                                             ";
 $sSql .= "           m40_data,                                                                                        ";
 $sSql .= "           m45_data,                                                                                        ";
 $sSql .= "           m46_codatendrequiitem,                                                                           ";
