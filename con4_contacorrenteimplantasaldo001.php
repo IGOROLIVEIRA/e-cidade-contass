@@ -838,7 +838,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
         for (iLinha = 0; iLinha < iTotalLinhas; iLinha++) {
 
-            nValorLinha = parseFloat(oGridDetalhamento.aRows[iLinha].aCells[2].getValue());
+            nValorLinha = parseFloat(oGridDetalhamento.aRows[iLinha].aCells[3].getValue());
             iSequencial = oGridDetalhamento.aRows[iLinha].aCells[0].getValue();
 
             if (!empty(nValorLinha) && nValorLinha != 0) {

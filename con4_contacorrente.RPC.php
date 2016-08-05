@@ -1038,7 +1038,7 @@ try {
 
                     $sWhereImplantacao = "     c29_contacorrentedetalhe = {$oValores->c19_sequencial} ";
                     $sWhereImplantacao .= " and c29_anousu = {$iAnoUsu} ";
-                    $sWhereImplantacao .= " and c29_mesusu = 14 ";
+                    $sWhereImplantacao .= " and c29_mesusu = 0 ";
                     $sSqlValorImplantado = $oDaoContaCorrenteSaldo->sql_query_file(null, "*", null, $sWhereImplantacao);
                     $rsImplantado = $oDaoContaCorrenteSaldo->sql_record($sSqlValorImplantado);
 
