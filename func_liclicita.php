@@ -255,7 +255,7 @@ $sWhereContratos = " and 1 = 1 ";
               if ($clliclicitem->numrows!=0) {
 
                 db_fieldsmemory($result,0);
-                echo "<script>".$funcao_js."('$l20_codigo',false);</script>";
+                echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
               }else{
   	            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
               }
@@ -266,7 +266,7 @@ $sWhereContratos = " and 1 = 1 ";
                  if($clliclicita->numrows != 0){
 
                      db_fieldsmemory($result,0);
-                     echo "<script>".$funcao_js."('$l20_codigo',false);</script>";
+                     echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
 
                  } else {
 

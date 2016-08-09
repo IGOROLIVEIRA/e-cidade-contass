@@ -101,7 +101,7 @@ $campos  = "distinct e60_numemp, to_number(e60_codemp::text,'9999999999') as e60
 $campos .= ", e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, e40_descr";
 $campos .= ", e60_vlrpag, e60_anousu, e60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr";
 $campos .= ", o15_codigo, o15_descr, fc_estruturaldotacao(e60_anousu,e60_coddot) as dl_estrutural, e60_codcom";
-$campos .= ", pc50_descr,e60_concarpeculiar";
+$campos .= ", pc50_descr,e60_concarpeculiar,e60_numerol";
 
 //---------
 // monta sql
@@ -117,7 +117,7 @@ $sValoresEmpenho = "";
 if ($nValorEmpenhoInicial != "") {
 	
 	$nValorEmpenhoInicial  = str_replace(',', '.', $nValorEmpenhoInicial);
-	$sValoresEmpenho      .= " and e60_vlremp >= {$nValorEmpenhoInicial} ";	
+	$sValoresEmpenho      .= " and e60_vlremp >= {$nValorEmpenhoInicial} ";
 }
 if ($nValorEmpenhoFinal != "") {
 	$nValorEmpenhoFinal  = str_replace(',', '.', $nValorEmpenhoFinal);
@@ -172,6 +172,24 @@ if ($listacom != "" ) {
 		$txt_where = $txt_where." and e60_codcom in  ($listacom)";
 	} else {
 		$txt_where = $txt_where." and e60_codcom not in  ($listacom)";
+	}
+}
+
+if ($listalicita != "" ) {
+	if (isset ($vercom) and $vercom == "com") {
+		$txt_where = $txt_where." and empempenho.e60_numerol IN (select l20_numero::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo in  ($listalicita))";
+
+		$txt_where = $txt_where." AND empempenho.e60_codcom IN
+    (SELECT l03_codcom
+     FROM liclicita join cflicita on l03_codigo = l20_codtipocom
+     WHERE l20_codigo IN ($listalicita))";
+	} else {
+		$txt_where = $txt_where." and empempenho.e60_numerol IN (select l20_numero::varchar ||'/'|| l20_anousu::varchar as ano from liclicita where l20_codigo not in  ($listalicita))";
+
+		$txt_where = $txt_where." AND empempenho.e60_codcom IN
+    (SELECT l03_codcom
+     FROM liclicita join cflicita on l03_codigo = l20_codtipocom
+     WHERE l20_codigo NOT IN ($listalicita))";
 	}
 }
 
@@ -307,6 +325,7 @@ if ($agrupar == "oo"){
 	  $txt_where = str_replace("yyy.", "", $txt_where);
 
 		 //die($clempempenho->sql_query_hist(null,$campos,$ordem,$txt_where));
+		//echo $clempempenho->sql_query_relatorio(null, $campos, $ordem, $txt_where);exit;
 		$sqlrelemp = $clempempenho->sql_query_relatorio(null, $campos, $ordem, $txt_where);
 		
 		
@@ -344,7 +363,8 @@ if ($agrupar == "oo"){
 					  empelemento.e64_vlrliq,
 					  empelemento.e64_vlranu,
 					  empelemento.e64_vlrpag,
-            x.e60_concarpeculiar
+            x.e60_concarpeculiar,
+            x.e60_numerol
 				  from ($sqlrelemp) as x 
 			               inner join empelemento on x.e60_numemp = e64_numemp  ".$sele_desdobramentos." 
 				       inner join orcelemento on o56_codele = e64_codele and o56_anousu = x.e60_anousu
@@ -382,7 +402,8 @@ if ($agrupar == "oo"){
 					      empelemento.e64_vlrliq,
 					      empelemento.e64_vlranu,
 					      empelemento.e64_vlrpag,
-                x.e60_concarpeculiar";
+                x.e60_concarpeculiar,
+                x.e60_numerol";
 		}
 		$sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar == "d"?" order by e64_codele, e60_emiss ":" order by $ordem ");
 		
@@ -426,7 +447,8 @@ if ($agrupar == "oo"){
 					fc_estruturaldotacao(e60_anousu,e60_coddot) as dl_estrutural,
 					e60_codcom,
 					pc50_descr,
-          e60_concarpeculiar
+          e60_concarpeculiar,
+          e60_numerol
 			   from (
 			  select e60_numemp, 
 					sum(case when c53_tipo = 10 then c70_valor else 0 end) as e60_vlremp,
@@ -535,7 +557,8 @@ if ($agrupar == "oo"){
 					pc50_descr,
 					empelemento.e64_codele,
 					orcelemento.o56_descr,
-          e60_concarpeculiar
+          e60_concarpeculiar,
+          e60_numerol
 		      from ($sqlperiodo) as x
 			    /* inner join empelemento on x.e60_numemp = e64_numemp */
 			    
@@ -571,7 +594,8 @@ if ($agrupar == "oo"){
 					pc50_descr,
 					empelemento.e64_codele,
 					orcelemento.o56_descr,
-          e60_concarpeculiar";
+          e60_concarpeculiar,
+          e60_numerol";
 		if ($agrupar == "d" ) {
 		  $sqlperiodo .= "
                        order by  empelemento.e64_codele					
@@ -875,8 +899,9 @@ if ($tipo == "a" or 1 == 1) {
 					$pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
 					$pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
 				}
-				$pdf->Cell(15, $tam, "N°", 1, 0, "C", 1);
-				$pdf->Cell(15, $tam, "EMP.", 1, 0, "C", 1);
+				$pdf->Cell(20, $tam, "TP COMPRA", 1, 0, "C", 1);
+				$pdf->Cell(11, $tam, "LICI.", 1, 0, "C", 1);
+				$pdf->Cell(11, $tam, "EMP.", 1, 0, "C", 1);
 				$pdf->Cell(15, $tam, "EMISSÃO", 1, 0, "C", 1);
 
 				if ($agrupar == "a") {
@@ -890,7 +915,7 @@ if ($tipo == "a" or 1 == 1) {
 				
 				if ($agrupar == "d") {
 					if ($mostrar == "r") {
-						$pdf->Cell(40, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1); // recurso
+						$pdf->Cell(46, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1); // recurso
 					} else
 						if ($mostrar == "t") {
 							$pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
@@ -899,7 +924,7 @@ if ($tipo == "a" or 1 == 1) {
 				
 				if ($agrupar == "r") {
 					if ($mostrar == "r") {
-						$pdf->Cell(40, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1); // recurso
+						$pdf->Cell(46, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1); // recurso
 					} else
 						if ($mostrar == "t") {
 							$pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
@@ -908,18 +933,18 @@ if ($tipo == "a" or 1 == 1) {
 
 				if ($agrupar == "orgao") {
 					if ($mostrar == "r") {
-						$pdf->Cell(40, $tam, strtoupper($RLo40_descr), 1, 0, "C", 1); // recurso
+						$pdf->Cell(46, $tam, strtoupper($RLo40_descr), 1, 0, "C", 1); // recurso
 					} elseif ($mostrar == "t") {
 						$pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
 					}
 				}
 
 				if ($agrupar == "oo") {
-					$pdf->Cell(40, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1);
+					$pdf->Cell(46, $tam, strtoupper($RLz01_nome), 1, 0, "C", 1);
 				}
 
-				$pdf->Cell(65, $tam, strtoupper($RLe60_coddot), 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
-                $pdf->Cell(15, $tam, "CP", 1, 0, "C", 1);
+				$pdf->Cell(62, $tam, strtoupper($RLe60_coddot), 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
+                //$pdf->Cell(15, $tam, "CP", 1, 0, "C", 1);
 				$pdf->Cell(18, $tam, strtoupper($RLe60_vlremp), 1, 0, "C", 1);
 				$pdf->Cell(18, $tam, strtoupper($RLe60_vlranu), 1, 0, "C", 1);
 				$pdf->Cell(18, $tam, strtoupper($RLe60_vlrliq), 1, 0, "C", 1);
@@ -1293,8 +1318,9 @@ if ($tipo == "a" or 1 == 1) {
 		
 		// o tipo sempre é == "A"
 		if ($tipo == "a" and $sememp == "n") {
-			$pdf->Cell(15, $tam, "$e60_numemp", $iBorda, 0, "R", $preenche);
-			$pdf->Cell(15, $tam, "$e60_codemp", $iBorda, 0, "R", $preenche);
+			$pdf->Cell(20, $tam, substr($pc50_descr,0,10), $iBorda, 0, "L", $preenche);
+			$pdf->Cell(11, $tam, "$e60_numerol", $iBorda, 0, "R", $preenche);
+			$pdf->Cell(11, $tam, "$e60_codemp", $iBorda, 0, "R", $preenche);
 			$pdf->Cell(15, $tam, $e60_emiss, $iBorda, 0, "C", $preenche);
 
 			if ($agrupar == "a") {
@@ -1307,14 +1333,14 @@ if ($tipo == "a" or 1 == 1) {
 			}
 			if ($agrupar == "d") {
 				if ($mostrar == "r") {
-					$pdf->Cell(40, $tam, substr($z01_nome, 0, 25), $iBorda, 0, "L", $preenche); // recurso
+					$pdf->Cell(46, $tam, substr($z01_nome, 0, 28), $iBorda, 0, "L", $preenche); // recurso
 				} elseif ($mostrar == "t") {
 					$pdf->Cell(40, $tam, $e60_codcom." - $pc50_descr", $iBorda, 0, "L", $preenche); // tipo de compra
 				}
 			}
 			if ($agrupar == "r") {
 				if ($mostrar == "r") {
-					$pdf->Cell(40, $tam, substr($z01_nome, 0, 25), $iBorda, 0, "L", $preenche); // recurso
+					$pdf->Cell(46, $tam, substr($z01_nome, 0, 28), $iBorda, 0, "L", $preenche); // recurso
 				} else
 					if ($mostrar == "t") {
 						$pdf->Cell(40, $tam, $e60_codcom." - $pc50_descr", $iBorda, 0, "L", $preenche); // tipo de compra
@@ -1322,18 +1348,18 @@ if ($tipo == "a" or 1 == 1) {
 			}
 		    if ($agrupar == "orgao") {
 				if ($mostrar == "r") {
-					$pdf->Cell(40, $tam, substr($z01_nome, 0, 25), $iBorda, 0, "L", $preenche); // recurso
+					$pdf->Cell(46, $tam, substr($z01_nome, 0, 28), $iBorda, 0, "L", $preenche); // recurso
 				} else
 					if ($mostrar == "t") {
 						$pdf->Cell(40, $tam, $e60_codcom." - $pc50_descr", $iBorda, 0, "L", $preenche); // tipo de compra
 					}
 			}		
 			if ($agrupar == "oo") {
-			  $pdf->Cell(40, $tam, substr($z01_nome,0,20),$iBorda, 0, "L", 0);
+			  $pdf->Cell(46, $tam, substr($z01_nome,0,28),$iBorda, 0, "L", 0);
 			}
 
-			$pdf->Cell(65, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT)." -  $dl_estrutural", $iBorda, 0, "L", $preenche); //quebra linha
-            $pdf->Cell(15, $tam, $e60_concarpeculiar, 0, 0, "C", $preenche);
+			$pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT)." -  $dl_estrutural", $iBorda, 0, "L", $preenche); //quebra linha
+            //$pdf->Cell(15, $tam, $e60_concarpeculiar, 0, 0, "C", $preenche);
 			$pdf->Cell(18, $tam, db_formatar($e60_vlremp, 'f'), 'B', 0, "R", $preenche);
 			$pdf->Cell(18, $tam, db_formatar($e60_vlranu, 'f'), 'B', 0, "R", $preenche);
 			$pdf->Cell(18, $tam, db_formatar($e60_vlrliq, 'f'), 'B', 0, "R", $preenche);
