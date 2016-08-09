@@ -160,13 +160,15 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
     	/**
     	 * agrupar registro 10
     	 */
-    	if( in_array(substr($oDadosParec->o57_fonte, 1, 6) ,$aRectce ) ) {
-        $sNaturezaReceita = substr($oDadosParec->o57_fonte, 1, 6)."00";
-      }else if( substr($oDadosParec->o57_fonte, 0, 2) == '49'  ){
-        $sNaturezaReceita = substr($oDadosParec->o57_fonte, 3, 8);
-      } else{
-        $sNaturezaReceita = substr($oDadosParec->o57_fonte, 1, 8);
-      }
+			if (substr($oDadosParec->o57_fonte, 1, 8) == $sNaturezaReceita) {
+				if (in_array(substr($oDadosParec->o57_fonte, 1, 6), $aRectce)) {
+					$sNaturezaReceita = substr($oDadosParec->o57_fonte, 1, 6) . "00";
+				} else if (substr($oDadosParec->o57_fonte, 0, 2) == '49') {
+					$sNaturezaReceita = substr($oDadosParec->o57_fonte, 3, 8);
+				} else {
+					$sNaturezaReceita = substr($oDadosParec->o57_fonte, 1, 8);
+				}
+			}
     	$sHash10 = $sNaturezaReceita;
     	if (!isset($aDadosAgrupados[$sHash10])) {
     		
