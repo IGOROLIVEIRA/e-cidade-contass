@@ -268,7 +268,7 @@ class cl_pcforne {
         $this->erro_status = "0";
         return false;
       }
-      if((trim($this->pc60_numeroregistro) == null || $this->pc60_numeroregistro == 0) && $this->fisica_juridica == 'j'){
+      if((trim($this->pc60_numeroregistro) == null || $this->pc60_numeroregistro == 0) && $this->fisica_juridica == 'j' && $this->pc60_orgaoreg != 4){
         $this->erro_sql = " Campo Número Registro nao Informado.";
         $this->erro_campo = "pc60_numeroregistro";
         $this->erro_banco = "";
@@ -575,7 +575,7 @@ class cl_pcforne {
     if(trim($this->pc60_numeroregistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numeroregistro"])){ 
         $sql  .= $virgula." pc60_numeroregistro = '$this->pc60_numeroregistro' ";
         $virgula = ",";
-      if((trim($this->pc60_numeroregistro) == null || $this->pc60_numeroregistro == 0) && $this->fisica_juridica == 'j'){
+      if((trim($this->pc60_numeroregistro) == null || $this->pc60_numeroregistro == 0) && $this->fisica_juridica == 'j' && $this->pc60_orgaoreg != 4){
           $this->erro_sql = " Campo Número Registro nao Informado.";
           $this->erro_campo = "pc60_numeroregistro";
           $this->erro_banco = "";
