@@ -793,8 +793,25 @@ class cl_matordemitem {
      $sql .= "       left join pcorcamjulg                          on pcorcamjulg.pc24_orcamitem      = pcorcamitemlic.pc26_orcamitem "; 
      $sql .= "                                                     and pcorcamjulg.pc24_pontuacao      = 1 ";
      $sql .= "       left join pcorcamval                           on pcorcamval.pc23_orcamitem       = pcorcamjulg.pc24_orcamitem "; 
-     $sql .= "                                                     and pcorcamval.pc23_orcamforne      = pcorcamjulg.pc24_orcamforne ";      
-     $sql .="       inner join pctipocompra                on empempenho.e60_codcom                = pctipocompra.pc50_codcom" ;   
+     $sql .= "                                                     and pcorcamval.pc23_orcamforne      = pcorcamjulg.pc24_orcamforne ";
+
+
+    $sql .= "left join pcprocitem sl ON sl.pc81_codprocitem = empautitempcprocitem.e73_pcprocitem
+
+left join pcorcamitemproc on pc31_pcprocitem = 	sl.pc81_codprocitem
+
+LEFT JOIN pcorcamjulg julgsl ON pcorcamitemproc.pc31_orcamitem = julgsl.pc24_orcamitem
+AND julgsl.pc24_pontuacao = 1
+
+left join pcorcamitem pcorcamitemsl on pcorcamitemsl.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem
+
+left join pcorcamval pcorcamvalsl on pcorcamvalsl.pc23_orcamitem = pcorcamitemsl.pc22_orcamitem
+and pcorcamvalsl.pc23_orcamitem  = julgsl.pc24_orcamitem
+and pcorcamvalsl.pc23_orcamforne = julgsl.pc24_orcamforne";
+
+     $sql .="       inner join pctipocompra                on empempenho.e60_codcom                = pctipocompra.pc50_codcom" ;
+
+
   
      $sql2 = "";
      if($dbwhere==""){

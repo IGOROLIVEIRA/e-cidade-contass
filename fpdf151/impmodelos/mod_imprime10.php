@@ -227,13 +227,13 @@
 	  db_fieldsmemory($this->recorddositens,$ii);
 	  $this->objpdf->Setfont('Arial','',7);
 
-	  $descricaoitem = pg_result($this->recorddositens,$ii,$this->descricaoitem); 
+	  $descricaoitem = pg_result($this->recorddositens,$ii,$this->descricaoitem);
     if (pg_result($this->recorddositens,$ii,$this->Snumero) != "") {
       $descricaoitem .= "\n\n".'SOLICITAÇÃO: '.pg_result($this->recorddositens,$ii,$this->Snumero);
 	  }
 
     $obsitem  = pg_result($this->recorddositens,$ii,$this->observacaoitem);
-	  $obsitem .= "\n\n".pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval);
+	  $obsitem .= pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
     $sObsItem = $obsitem;
 
     //// troca de pagina
