@@ -109,6 +109,10 @@
             $iNumero = $aPartesNumero[0];
             $sWhere .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'"; 
           }
+            /**
+             * SQL alterado para buscar apenas os processos que, também, não sejam secumdários a nenhum outro quando apensados.
+             * @see ocorrência 2315
+             */
           $sql = "(SELECT p58_numeracao as dl_Numero_processo,
           p51_descr,
           p58_numero,
@@ -152,6 +156,7 @@
   AND (NOT EXISTS (select 1 from proctransferproc as pt where pt.p63_codproc = proctransferproc.p63_codproc) OR p78_transint = 'f' OR 
   EXISTS (select 1 from proctransfer inner join db_depart as atual on atual.coddepto = proctransfer.p62_coddepto inner join db_config as instiatual on atual.instit = instiatual.codigo inner join db_depart as destino on destino.coddepto = proctransfer.p62_coddeptorec inner join db_config as destinoinst on atual.instit = destinoinst.codigo inner join db_usuarios as usu_atual on usu_atual.id_usuario = proctransfer.p62_id_usuario left join db_usuarios as usu_destino on usu_destino.id_usuario = proctransfer.p62_id_usorec where p62_codtran = proct.p62_codtran)
   )
+  AND not exists ( select 1 from processosapensados where p30_procapensado = p58_codproc limit 1)
   order by p58_dtproc desc) as Z where (Z.controle = 1 AND p78_transint is not NULL) OR (Z.controle is NULL AND p78_transint is NULL)
   OR EXISTS (select * from procandam as recebido join proctransand on p61_codandam=p64_codandam where recebido.p61_codproc=p58_codproc)
   ) AS X)";

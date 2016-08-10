@@ -91,6 +91,10 @@ $rotulo->label("p58_codproc");
     	if(isset($p58_codproc) && $p58_codproc != '' ){
     	  $where .= " and p68_codproc={$p58_codproc}";	  
     	}
+     //Não permite desarquivar secundarios
+        $where .= " and not exists ( select 1
+                                       from processosapensados
+                                      where p30_procapensado  = p58_codproc)";
       $sql = "SELECT distinct p67_codproc,
                      cast(p58_numero||'/'||p58_ano::varchar as varchar) as p58_numero, 
                      p67_dtarq,

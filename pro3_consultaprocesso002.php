@@ -63,15 +63,23 @@ if (isset($oGet->numero) &&  !empty($oGet->numero) ) {
 	$sWhere .= " and p58_numero = '{$iNumeroProcesso}' and p58_ano = {$iAno} ";
 }
 
-
+//Verifica que ele está apensado a outro processo
 $sSqlProcessoApensado     = "(select p2.p58_numero from protprocesso p2
 where p2.p58_codproc in (select p30_procprincipal from processosapensados where p30_procapensado = {$oGet->codproc} limit 1) ) as processo_principal";
 $sSqlBuscaCodigoProcesso = $oDaoProcesso->sql_query(null, "*, {$sSqlProcessoApensado}", " 1 desc", $sWhere);
+//Verifica se possui processos apensados a ele
+$bPossuiApensado = false;
+$sSqlApensados     = "select p30_procapensado from processosapensados where p30_procprincipal = {$oGet->codproc} limit 1";
+if(pg_num_rows(db_query($sSqlApensados))> 0 ){
+  $bPossuiApensado = true;
+}
+
 
 $rsBuscaCodigoProcesso   = $oDaoProcesso->sql_record($sSqlBuscaCodigoProcesso);
 
 $sProcessoPrincipal = '';
 $oProcesso = db_utils::fieldsMemory($rsBuscaCodigoProcesso, 0);
+
 if ($oProcesso->processo_principal != '') {
   
   $sProcessoPrincipal = " - <b>(Apensado ao processo {$oProcesso->processo_principal}) </b>";
@@ -221,7 +229,7 @@ if ($oLicitacao) {
       $oVerticalTab->add('dadosMovimentações', 'Movimentações', 
                          "pro3_listamovimentacoesprocesso.php?{$sGetUrl}");  
       
-      if ($oProcesso->processo_principal == '') {
+      if ($bPossuiApensado) {
         
         $oVerticalTab->add('dadosApensados', 'Apensados',
         									 "pro3_listaprocessoapensado.php?{$sGetUrl}");

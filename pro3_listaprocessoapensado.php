@@ -36,11 +36,38 @@ require_once ("dbforms/db_funcoes.php");
 require_once ("libs/JSON.php");
 
 $oGet                   = db_utils::postMemory($_GET);
+
+
+/**
+ * Busca infinita de processos apensados
+ * @see ocorrência 2315
+ */
+$sSqlApensados = "select distinct p30_procapensado from processosapensados where p30_procprincipal = {$oGet->codigo_processo}";
+$rsSec = db_query($sSqlApensados) or die($sSqlApensados . " " . pg_last_error());
+$aApensados = db_utils::getColectionByRecord($rsSec);
+$aAgrupados = array();
+$aNovo = array();
+foreach($aApensados as $oProc){
+    $aAgrupados[] = $oProc->p30_procapensado;
+    $aNovo[] = $oProc->p30_procapensado;
+}
+
+while(count($aNovo) > 0){
+    $sSqlApensados = "select distinct p30_procapensado from processosapensados where p30_procprincipal in (".implode(",",$aNovo).")";
+    $rsSec = db_query($sSqlApensados) or die($sSqlApensados . " " . pg_last_error());
+    $aApensados = db_utils::getColectionByRecord($rsSec);
+    $aNovo = array();
+    foreach($aApensados as $oProc){
+        $aAgrupados[] = $oProc->p30_procapensado;
+        $aNovo[] = $oProc->p30_procapensado;
+    }
+}
+
 $oDaoProcessosApensados = db_utils::getDao('processosapensados');
 $oJson                  = new Services_JSON();
 $sCampos                = "p58_dtproc as data_processo, cast(p58_numero||'/'||p58_ano as varchar) as codigo_processo, z01_nome as titular,";
 $sCampos               .= 'p51_descr as tipo_processo';
-$sWhere                 = "p30_procprincipal = {$oGet->codigo_processo}";
+$sWhere                 = "p58_codproc in (".implode(",",$aAgrupados).")";
 $sSqlProcessosApensados = $oDaoProcessosApensados->sql_query_processo_apensado(null, $sCampos, "p58_codproc", $sWhere);
 $rsProcessosApensados   = $oDaoProcessosApensados->sql_record($sSqlProcessosApensados);
 $aProcessosApensados    = db_utils::getCollectionByRecord($rsProcessosApensados, true, false, true);

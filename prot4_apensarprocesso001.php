@@ -126,6 +126,8 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
                 lApensado = apensado;
                 sUrl += '&apensado=' + p58_numero;
+            }else{
+                lApensado = false;
             }
             sUrl += '&funcao_js=parent.js_mostratipoproc1|1|3|0';
             js_OpenJanelaIframe("top.corpo", 'db_iframe_processo', sUrl, 'Pesquisa', true);
@@ -139,6 +141,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
                 sUrl += '&apensado=' + p58_numero;
                 sUrl += '&pesquisa_chave=' + p58_numero_apensado;
             } else {
+                lApensado = false;
                 sUrl += '&pesquisa_chave=' + p58_numero;
             }
 
