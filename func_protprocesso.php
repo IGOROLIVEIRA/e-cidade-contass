@@ -139,12 +139,14 @@ if (isset($chave_p58_requer)) {
                 $where .= " and p58_codigo = {$tipo} ";
             }
             if (isset($apensado) && trim($apensado) != '') {
+                //Não permite que um secundário tenha mais de um principal.
                 $where .= " and not exists ( select *
                                        from processosapensados
-                                      where p30_procapensado  = p58_codproc
-                                         or p30_procprincipal = p58_codproc limit 1)
+                                      where p30_procapensado  = p58_codproc limit 1)
                     and p58_codproc != {$apensado} ";
             }
+            //Não permite apensar processos arquivados.
+            $where .= " and not exists (select 1 from procarquiv where p67_codproc = p58_codproc) ";
             if (!isset($pesquisa_chave)) {
 
                 if (isset($campos) == false) {
