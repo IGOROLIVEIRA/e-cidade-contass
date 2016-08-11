@@ -237,7 +237,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
    db_fieldsmemory($result,$i);
    // echo " [5] " . db_criatabela($result). "<br>------------------<br>";
 
-   $sqlitem = " select distinct (pc01_descrmater||' '||(case when pc11_resum is null then pc01_complmater else pc11_resum end)||' '||(case when l21_codpcprocitem is null then coalesce((select 'Marca'||pc23_obs from pcorcamval
+   $sqlitem = " select distinct (pc01_descrmater||' '||(case when pc11_resum is null then pc01_complmater else pc11_resum end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
 inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
 inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
 inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
@@ -245,7 +245,29 @@ inner join pcprocitem on pcprocitem.pc81_codprocitem = pcorcamitemproc.pc31_pcpr
 inner join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
 inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen 
 inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
-where e55_autori=$e54_autori and pc93_pontuacao=1),'') else '' end)) as pc01_descrmater,
+where e55_autori=$e54_autori and pc93_pontuacao=1),'') = '' then (SELECT DISTINCT 'Marca: '||pc23_obs
+FROM empautitem empautiteminter
+inner JOIN empautitempcprocitem ON empautiteminter.e55_autori = empautitempcprocitem.e73_autori
+AND e73_sequen = e55_sequen
+inner JOIN pcprocitem ON pc81_codprocitem = e73_pcprocitem
+inner JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+inner JOIN pcorcamitem ON pc22_orcamitem = pc31_orcamitem
+inner JOIN pcorcamval ON pc23_orcamitem = pc22_orcamitem
+inner JOIN pcorcamjulg ON pc24_orcamitem = pc22_orcamitem and pc23_orcamforne = pc24_orcamforne
+WHERE e55_autori=$e54_autori
+    and empautiteminter.e55_item = empautitem.e55_item
+  AND pc24_pontuacao = 1)
+else
+    coalesce((select 'Marca'||pc23_obs from pcorcamval
+inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
+inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
+inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
+inner join pcprocitem on pcprocitem.pc81_codprocitem = pcorcamitemproc.pc31_pcprocitem
+inner join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
+inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen
+inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
+where e55_autori=$e54_autori and pc93_pontuacao=1),'')
+ end)) as pc01_descrmater,
        				   e55_autori,
 		                   e55_sequen,
 		                   e55_item,
@@ -277,9 +299,9 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'') else '' end)) as pc01_des
 	   				  order by e55_sequen,o56_elemento,e55_item
 	   					";
 
-   //die($sqlitem);
+
    $resultitem = db_query($sqlitem);
-//   db_criatabela($resultitem);
+
    $sqltot = "select sum(e55_vltot) as tot_item from empautitem where e55_autori = $e54_autori";
    $resulttot = db_query($sqltot);
    db_fieldsmemory($resulttot,0);
