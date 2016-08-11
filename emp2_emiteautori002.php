@@ -245,7 +245,7 @@ inner join pcprocitem on pcprocitem.pc81_codprocitem = pcorcamitemproc.pc31_pcpr
 inner join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
 inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen 
 inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
-where e55_autori=$e54_autori and pc93_pontuacao=1),'') = '' then (SELECT DISTINCT 'Marca: '||pc23_obs
+where e55_autori=$e54_autori and pc93_pontuacao=1),'') = '' then (coalesce((SELECT DISTINCT 'Marca: '||pc23_obs
 FROM empautitem empautiteminter
 inner JOIN empautitempcprocitem ON empautiteminter.e55_autori = empautitempcprocitem.e73_autori
 AND e73_sequen = e55_sequen
@@ -256,7 +256,7 @@ inner JOIN pcorcamval ON pc23_orcamitem = pc22_orcamitem
 inner JOIN pcorcamjulg ON pc24_orcamitem = pc22_orcamitem and pc23_orcamforne = pc24_orcamforne
 WHERE e55_autori=$e54_autori
     and empautiteminter.e55_item = empautitem.e55_item
-  AND pc24_pontuacao = 1)
+  AND pc24_pontuacao = 1),''))
 else
     coalesce((select 'Marca'||pc23_obs from pcorcamval
 inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
