@@ -95,7 +95,7 @@ $clsaltes->rotulo->label("k13_reduz");
       }
 
       if (isset($ver_datalimite) && trim(@$ver_datalimite)=="1"){
-           $dbwhere .= " and k13_limite is null or k13_limite >= '".date("Y-m-d",db_getsession("DB_datausu"))."'";
+           $dbwhere .= " and (k13_limite is null or k13_limite >= '".date("Y-m-d",db_getsession("DB_datausu"))."')";  /* OC 2386 - A falta de parenteses na data limite interferia na busca da conta na confecção de slips. */
       }
 
       if(!isset($pesquisa_chave)){
