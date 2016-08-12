@@ -16,23 +16,24 @@ class cl_consor502016 {
    var $erro_campo = null;  
    var $pagina_retorno = null; 
    // cria variaveis do arquivo 
-   var $si20_sequencial = 0; 
-   var $si20_tiporegistro = 0; 
-   var $si20_codconsorcio = null; 
-   var $si20_tipoencerramento = 0; 
-   var $si20_dataencerramento_dia = null; 
-   var $si20_dataencerramento_mes = null; 
-   var $si20_dataencerramento_ano = null; 
-   var $si20_dataencerramento = null; 
+   var $si20_sequencial = 0;
+   var $si20_codorgao = 0;
+   var $si20_cnpjconsorcio = 0;
+   var $si20_tiporegistro = 0;
+   var $si20_tipoencerramento = 0;
+   var $si20_dtencerramento = null; 
    var $si20_mes = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si20_instit = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si20_sequencial = int8 = sequencial 
                  si20_tiporegistro = int8 = Tipo do  registro 
-                 si20_codconsorcio = varchar(2) = Código do  Consórcio 
-                 si20_tipoencerramento = int8 = Tipo de  Encerramento 
-                 si20_dataencerramento = date = Data do  encerramento 
+                 si20_codorgao = varchar(2) = Código do órgão
+                 si20_cnpjconsorcio = varchar(14) = CNPJ do Consórcio
+                 si20_tipoencerramento = int8 = Tipo de  Encerramento
+                 si20_dtencerramento = date = Data do  encerramento 
                  si20_mes = int8 = Mês 
+                 si20_instit = int8 = Instit
                  ";
    //funcao construtor da classe 
    function cl_consor502016() { 
@@ -53,18 +54,13 @@ class cl_consor502016 {
    function atualizacampos($exclusao=false) {
      if($exclusao==false){
        $this->si20_sequencial = ($this->si20_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_sequencial"]:$this->si20_sequencial);
+       $this->si20_codorgao = ($this->si20_codorgao == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_codorgao"]:$this->si20_codorgao);
+       $this->si20_cnpjconsorcio = ($this->si20_cnpjconsorcio == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_cnpjconsorcio"]:$this->si20_cnpjconsorcio);
        $this->si20_tiporegistro = ($this->si20_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_tiporegistro"]:$this->si20_tiporegistro);
-       $this->si20_codconsorcio = ($this->si20_codconsorcio == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_codconsorcio"]:$this->si20_codconsorcio);
        $this->si20_tipoencerramento = ($this->si20_tipoencerramento == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_tipoencerramento"]:$this->si20_tipoencerramento);
-       if($this->si20_dataencerramento == ""){
-         $this->si20_dataencerramento_dia = ($this->si20_dataencerramento_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_dataencerramento_dia"]:$this->si20_dataencerramento_dia);
-         $this->si20_dataencerramento_mes = ($this->si20_dataencerramento_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_dataencerramento_mes"]:$this->si20_dataencerramento_mes);
-         $this->si20_dataencerramento_ano = ($this->si20_dataencerramento_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_dataencerramento_ano"]:$this->si20_dataencerramento_ano);
-         if($this->si20_dataencerramento_dia != ""){
-            $this->si20_dataencerramento = $this->si20_dataencerramento_ano."-".$this->si20_dataencerramento_mes."-".$this->si20_dataencerramento_dia;
-         }
-       }
+       $this->si20_dtencerramento = ($this->si20_dtencerramento == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_dtencerramento"]:$this->si20_dtencerramento);
        $this->si20_mes = ($this->si20_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_mes"]:$this->si20_mes);
+       $this->si20_instit = ($this->si20_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_instit"]:$this->si20_instit);
      }else{
        $this->si20_sequencial = ($this->si20_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si20_sequencial"]:$this->si20_sequencial);
      }
@@ -81,15 +77,7 @@ class cl_consor502016 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si20_codconsorcio == null ){ 
-       $this->erro_sql = " Campo Código do  Consórcio nao Informado.";
-       $this->erro_campo = "si20_codconsorcio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      if($this->si20_tipoencerramento == null ){ 
        $this->erro_sql = " Campo Tipo de  Encerramento nao Informado.";
        $this->erro_campo = "si20_tipoencerramento";
@@ -99,9 +87,9 @@ class cl_consor502016 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si20_dataencerramento == null ){ 
+     if($this->si20_dtencerramento == null ){ 
        $this->erro_sql = " Campo Data do  encerramento nao Informado.";
-       $this->erro_campo = "si20_dataencerramento_dia";
+       $this->erro_campo = "si20_dtencerramento";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -117,6 +105,37 @@ class cl_consor502016 {
        $this->erro_status = "0";
        return false;
      }
+
+     if($this->si20_instit == null ){
+       $this->erro_sql = " Campo Instit nao Informado.";
+       $this->erro_campo = "si20_instit";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
+     if($this->si20_codorgao == null ){
+       $this->erro_sql = " Campo Código do Orgao nao Informado.";
+       $this->erro_campo = "si20_codorgao";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
+     if($this->si20_codorgao == null ){
+       $this->erro_sql = " Campo CNPJ nao Informado.";
+       $this->erro_campo = "si20_cnpjconsorcio";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
      if($si20_sequencial == "" || $si20_sequencial == null ){
        $result = db_query("select nextval('consor502016_si20_sequencial_seq')"); 
        if($result==false){
@@ -152,18 +171,22 @@ class cl_consor502016 {
      $sql = "insert into consor502016(
                                        si20_sequencial 
                                       ,si20_tiporegistro 
-                                      ,si20_codconsorcio 
-                                      ,si20_tipoencerramento 
-                                      ,si20_dataencerramento 
-                                      ,si20_mes 
+                                      ,si20_codorgao
+                                      ,si20_cnpjconsorcio
+                                      ,si20_tipoencerramento
+                                      ,si20_dtencerramento 
+                                      ,si20_mes
+                                      ,si20_instit
                        )
                 values (
                                 $this->si20_sequencial 
                                ,$this->si20_tiporegistro 
-                               ,'$this->si20_codconsorcio' 
-                               ,$this->si20_tipoencerramento 
-                               ,".($this->si20_dataencerramento == "null" || $this->si20_dataencerramento == ""?"null":"'".$this->si20_dataencerramento."'")." 
+                               ,'$this->si20_codorgao'
+                               ,'$this->si20_cnpjconsorcio'
+                               ,$this->si20_tipoencerramento
+                               ,'$this->si20_dtencerramento'
                                ,$this->si20_mes 
+                               ,$this->si20_instit
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -199,8 +222,9 @@ class cl_consor502016 {
        $resac = db_query("insert into db_acount values($acount,2010248,2009648,'','".AddSlashes(pg_result($resaco,0,'si20_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010248,2009649,'','".AddSlashes(pg_result($resaco,0,'si20_codconsorcio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010248,2009650,'','".AddSlashes(pg_result($resaco,0,'si20_tipoencerramento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,2010248,2009651,'','".AddSlashes(pg_result($resaco,0,'si20_dataencerramento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2010248,2009651,'','".AddSlashes(pg_result($resaco,0,'si20_dtencerramento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010248,2009740,'','".AddSlashes(pg_result($resaco,0,'si20_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2010248,2009741,'','".AddSlashes(pg_result($resaco,0,'si20_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    } 
@@ -261,12 +285,12 @@ class cl_consor502016 {
          return false;
        }
      }
-     if(trim($this->si20_dataencerramento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si20_dataencerramento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si20_dataencerramento_dia"] !="") ){ 
-       $sql  .= $virgula." si20_dataencerramento = '$this->si20_dataencerramento' ";
+     if(trim($this->si20_dtencerramento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si20_dtencerramento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si20_dtencerramento_dia"] !="") ){ 
+       $sql  .= $virgula." si20_dtencerramento = '$this->si20_dtencerramento' ";
        $virgula = ",";
-       if(trim($this->si20_dataencerramento) == null ){ 
+       if(trim($this->si20_dtencerramento) == null ){ 
          $this->erro_sql = " Campo Data do  encerramento nao Informado.";
-         $this->erro_campo = "si20_dataencerramento_dia";
+         $this->erro_campo = "si20_dtencerramento_dia";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -274,12 +298,12 @@ class cl_consor502016 {
          return false;
        }
      }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["si20_dataencerramento_dia"])){ 
-         $sql  .= $virgula." si20_dataencerramento = null ";
+       if(isset($GLOBALS["HTTP_POST_VARS"]["si20_dtencerramento_dia"])){ 
+         $sql  .= $virgula." si20_dtencerramento = null ";
          $virgula = ",";
-         if(trim($this->si20_dataencerramento) == null ){ 
+         if(trim($this->si20_dtencerramento) == null ){ 
            $this->erro_sql = " Campo Data do  encerramento nao Informado.";
-           $this->erro_campo = "si20_dataencerramento_dia";
+           $this->erro_campo = "si20_dtencerramento_dia";
            $this->erro_banco = "";
            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -320,8 +344,8 @@ class cl_consor502016 {
            $resac = db_query("insert into db_acount values($acount,2010248,2009649,'".AddSlashes(pg_result($resaco,$conresaco,'si20_codconsorcio'))."','$this->si20_codconsorcio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si20_tipoencerramento"]) || $this->si20_tipoencerramento != "")
            $resac = db_query("insert into db_acount values($acount,2010248,2009650,'".AddSlashes(pg_result($resaco,$conresaco,'si20_tipoencerramento'))."','$this->si20_tipoencerramento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["si20_dataencerramento"]) || $this->si20_dataencerramento != "")
-           $resac = db_query("insert into db_acount values($acount,2010248,2009651,'".AddSlashes(pg_result($resaco,$conresaco,'si20_dataencerramento'))."','$this->si20_dataencerramento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["si20_dtencerramento"]) || $this->si20_dtencerramento != "")
+           $resac = db_query("insert into db_acount values($acount,2010248,2009651,'".AddSlashes(pg_result($resaco,$conresaco,'si20_dtencerramento'))."','$this->si20_dtencerramento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si20_mes"]) || $this->si20_mes != "")
            $resac = db_query("insert into db_acount values($acount,2010248,2009740,'".AddSlashes(pg_result($resaco,$conresaco,'si20_mes'))."','$this->si20_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
@@ -375,7 +399,7 @@ class cl_consor502016 {
          $resac = db_query("insert into db_acount values($acount,2010248,2009648,'','".AddSlashes(pg_result($resaco,$iresaco,'si20_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010248,2009649,'','".AddSlashes(pg_result($resaco,$iresaco,'si20_codconsorcio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010248,2009650,'','".AddSlashes(pg_result($resaco,$iresaco,'si20_tipoencerramento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,2010248,2009651,'','".AddSlashes(pg_result($resaco,$iresaco,'si20_dataencerramento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2010248,2009651,'','".AddSlashes(pg_result($resaco,$iresaco,'si20_dtencerramento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010248,2009740,'','".AddSlashes(pg_result($resaco,$iresaco,'si20_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }

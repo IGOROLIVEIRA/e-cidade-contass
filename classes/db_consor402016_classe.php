@@ -26,10 +26,11 @@ class cl_consor402016 {
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si19_sequencial = int8 = sequencial 
-                 si19_tiporegistro = int8 = Tipo do registro 
-                 si19_codconsorcio = varchar(2) = Código do  Consórcio 
+                 si19_tiporegistro = int8 = Tipo do registro
+                 si19_cnpjconsorcio = varchar(2) = Código do  Consórcio
                  si19_vldispcaixa = float8 = Valor da  disponibilidade 
                  si19_mes = int8 = Mês 
+                 si19_instit = int8 = Instit
                  ";
    //funcao construtor da classe 
    function cl_consor402016() { 
@@ -51,9 +52,10 @@ class cl_consor402016 {
      if($exclusao==false){
        $this->si19_sequencial = ($this->si19_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si19_sequencial"]:$this->si19_sequencial);
        $this->si19_tiporegistro = ($this->si19_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si19_tiporegistro"]:$this->si19_tiporegistro);
-       $this->si19_codconsorcio = ($this->si19_codconsorcio == ""?@$GLOBALS["HTTP_POST_VARS"]["si19_codconsorcio"]:$this->si19_codconsorcio);
+       $this->si19_cnpjconsorcio = ($this->si19_cnpjconsorcio == ""?@$GLOBALS["HTTP_POST_VARS"]["si19_cnpjconsorcio"]:$this->si19_cnpjconsorcio);
        $this->si19_vldispcaixa = ($this->si19_vldispcaixa == ""?@$GLOBALS["HTTP_POST_VARS"]["si19_vldispcaixa"]:$this->si19_vldispcaixa);
        $this->si19_mes = ($this->si19_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si19_mes"]:$this->si19_mes);
+       $this->si19_instit = ($this->si19_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si19_instit"]:$this->si19_instit);
      }else{
        $this->si19_sequencial = ($this->si19_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si19_sequencial"]:$this->si19_sequencial);
      }
@@ -82,6 +84,25 @@ class cl_consor402016 {
      if($this->si19_mes == null ){ 
        $this->erro_sql = " Campo Mês nao Informado.";
        $this->erro_campo = "si19_mes";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->si19_instit == null ){
+       $this->erro_sql = " Campo Instit nao Informado.";
+       $this->erro_campo = "si19_instit";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
+     if($this->si19_cnpjconsorcio == null ){
+       $this->erro_sql = " Campo CNPJ nao Informado.";
+       $this->erro_campo = "si19_cnpjconsorcio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -207,18 +228,9 @@ class cl_consor402016 {
          return false;
        }
      }
-     if(trim($this->si19_codconsorcio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si19_codconsorcio"])){ 
-       $sql  .= $virgula." si19_codconsorcio = '$this->si19_codconsorcio' ";
+     if(trim($this->si19_cnpjconsorcio)!="" && isset($GLOBALS["HTTP_POST_VARS"]["si19_cnpjconsorcio"])){
+       $sql  .= $virgula." si19_cnpjconsorcio = '$this->si19_cnpjconsorcio' ";
        $virgula = ",";
-       if(trim($this->si19_codconsorcio) == null ){ 
-         $this->erro_sql = " Campo Código do  Consórcio nao Informado.";
-         $this->erro_campo = "si19_codconsorcio";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if(trim($this->si19_vldispcaixa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si19_vldispcaixa"])){ 
        $sql  .= $virgula." si19_vldispcaixa = $this->si19_vldispcaixa ";
