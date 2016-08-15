@@ -893,7 +893,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
               }
             });
 
-            if ( nTotalItens >  oDotacao.saldofinaldotacao) {
+            if ( nTotalItens.toFixed(2) >  oDotacao.saldofinaldotacao.toFixed(2)) {
                 alert("O total dos itens da Dotação "+oDotacao.codigodotacao+" ultrapassam o saldo da dotação na data atual. " +
                     "Total itens: R$ "+nTotalItens.toFixed(2)+" Saldo dotação: R$ "+oDotacao.saldofinaldotacao.toFixed(2));
                 iRetorno = false;
