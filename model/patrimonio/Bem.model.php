@@ -1114,7 +1114,7 @@ class Bem {
       // caso nao tenha nota, verificamos o tipo de aquisição, se for doação, realizamos o lançamento
     }
 
-    if (USE_PCASP && empty($oNota) && $lIntegracaoFinanceiro) {
+    if (USE_PCASP && empty($oNota) && !$lIntegracaoFinanceiro) {
 
       /**
        *  Realiza acerto nas contas de depreciação e classificação, caso seja necessário
