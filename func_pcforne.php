@@ -110,7 +110,7 @@ $clcgm->rotulo->label("z01_cgccpf");
         //   if(file_exists("funcoes/db_func_pcforne.php")==true){
         //     include("funcoes/db_func_pcforne.php");
         //   }else{
-           $campos = "pcforne.*,z01_nome,z01_cgccpf";
+           $campos = "pc60_numcgm,pc60_dtlanc,z01_nome,z01_cgccpf";
         //   }
         }
         if(isset($chave_pc60_numcgm) && (trim($chave_pc60_numcgm)!="") ){
