@@ -216,6 +216,10 @@ if($clempautitem->numrows==0){
 
                 ?>
                 <td><? db_input('e54_valor',13,"",true,'text',3,""); ?></td>
+
+                <? db_input('c99_data',13,"",true,'hidden',3,""); ?>
+                <? db_input('dtSistema',13,"",true,'hidden',3,""); ?>
+
               </tr>
             </table>
           </td>
@@ -322,10 +326,14 @@ if(isset($tot) && $tot<0 && empty($cancelar) && isset($pesquisa_dot)){
 
     function js_mostraorcdotacao1(chave1){
       document.form1.o47_coddot.value = chave1;
-      js_dot();
 
+      if( document.form1.dtSistema.value <= document.form1.c99_data.value  ){
+        alert('Encerramento do periodo contabil para '+ formattedDate(document.form1.c99_data.value));
+      }else{
+        js_dot();
+        db_iframe_orcdotacao.hide();
+      }
 
-      db_iframe_orcdotacao.hide();
     }
     function js_pesquisa(){
       js_OpenJanelaIframe('top.corpo','db_iframe_empautidot','func_empautidot.php?funcao_js=parent.js_preenchepesquisa|e56_autori','Pesquisa',true);
@@ -338,6 +346,19 @@ if(isset($tot) && $tot<0 && empty($cancelar) && isset($pesquisa_dot)){
       }
       ?>
     }
+
+    function formattedDate(date) {
+      var d = new Date(date || Date.now()),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+      return [day,month, year].join('/');
+    }
+
   </script>
 <?php
 

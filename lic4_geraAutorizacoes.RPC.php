@@ -47,6 +47,7 @@ require_once("model/CgmJuridico.model.php");
 require_once("classes/solicitacaocompras.model.php");
 require_once("model/ProcessoCompras.model.php");
 require_once("model/empenho/AutorizacaoEmpenho.model.php");
+require_once("classes/db_condataconf_classe.php");
 
 db_app::import("empenho.*");
 $oDaoPcTipoCompra = new cl_pctipocompra();
@@ -58,6 +59,7 @@ $oParam = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = "";
+
 
 switch ($oParam->exec) {
 
@@ -238,8 +240,23 @@ switch ($oParam->exec) {
    * Gera Autorização
    */
   case "gerarAutorizacoes":
-  
-  	
+
+
+        /**
+         * controle de encerramento peri. contabil
+         */
+        $clcondataconf = new cl_condataconf;
+        $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_data'));
+        db_fieldsmemory($resultControle,0);
+
+        $dtSistema = date("Y-m-d", db_getsession("DB_datausu"));
+
+        if($dtSistema <= $c99_data  ){
+          $oRetorno->status  = 2;
+          $oRetorno->message = urlencode("Encerramento do periodo contabil para ". implode('/',array_reverse(explode('-',$c99_data))) );
+          break;
+        }
+
 		if (!isset($oParam->aAutorizacoes)) {
 			
 			$oRetorno->status  = 2;

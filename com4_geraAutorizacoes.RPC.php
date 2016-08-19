@@ -45,6 +45,7 @@ require_once("model/CgmFactory.model.php");
 require_once("model/ProcessoCompras.model.php");
 require_once("classes/db_pcproc_classe.php");
 require_once("libs/db_liborcamento.php");
+require_once("classes/db_condataconf_classe.php");
 
 
 $oJson  = new services_json();
@@ -91,6 +92,21 @@ switch ($oParam->exec) {
    * Gera autorização de empenho para os itens selecionados
    */
   case "gerarAutorizacoes":
+
+    /**
+     * controle de encerramento peri. contabil
+     */
+    $clcondataconf = new cl_condataconf;
+    $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_data'));
+    db_fieldsmemory($resultControle,0);
+
+    $dtSistema = date("Y-m-d", db_getsession("DB_datausu"));
+
+    if($dtSistema <= $c99_data  ){
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode("Encerramento do periodo contabil para ". implode('/',array_reverse(explode('-',$c99_data))) );
+      break;
+    }
   
     try {
 

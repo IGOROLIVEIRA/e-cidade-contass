@@ -74,8 +74,27 @@ class cl_orcreservaaut {
      }
    }
    // funcao para inclusao
-   function incluir ($o83_codres){ 
+   function incluir ($o83_codres){
+
       $this->atualizacampos();
+
+     /**
+      * controle de encerramento peri. contabil
+      */
+     require_once("classes/db_condataconf_classe.php");
+     $clcondataconf = new cl_condataconf;
+     $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_data'));
+     $c99_data = db_utils::fieldsMemory($resultControle,0)->c99_data;
+     $dtSistema = date("Y-m-d", db_getsession("DB_datausu"));
+     if(strtotime($dtSistema) < strtotime($c99_data)){
+       $this->erro_sql = "";
+       $this->erro_campo = "c99_data";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Teste novo";
+       $this->erro_status = "4";
+       return false;
+     }
+
      if($this->o83_autori == null ){ 
        $this->erro_sql = " Campo Número da Autorização nao Informado.";
        $this->erro_campo = "o83_autori";

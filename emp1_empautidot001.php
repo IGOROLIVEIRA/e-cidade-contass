@@ -38,8 +38,8 @@ include("classes/db_orcreserva_classe.php");
 include("classes/db_orcreservaaut_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_empautitem_classe.php");
+include("classes/db_condataconf_classe.php");
 $clempautitem = new cl_empautitem;
-
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
@@ -48,7 +48,18 @@ $clempautidot = new cl_empautidot;
 $clorcsuplemval = new cl_orcsuplemval;
 $clorcreserva = new cl_orcreserva;
 $clorcreservaaut = new cl_orcreservaaut;
-if(empty($db_opcao)){
+
+
+/**
+ * controle de encerramento peri. contabil
+ */
+$clcondataconf = new cl_condataconf;
+$resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_data'));
+db_fieldsmemory($resultControle,0);
+
+$dtSistema = date("Y-m-d", db_getsession("DB_datausu"));
+
+if(empty($db_opcao) and $dtSistema > $c99_data  ){
   $db_opcao = 1;
   $db_botao = true;
 }else{
@@ -85,6 +96,8 @@ if(isset($confirmar)){
    }
    //fim
   //====================================================================================================>>
+
+
 
   if($sqlerro==false){
     $result = $clempautidot->sql_record($clempautidot->sql_query_file($e56_autori)); 
@@ -147,8 +160,14 @@ if(isset($confirmar)){
       $clorcreservaaut->o83_codres=$o80_codres;
       $clorcreservaaut->o83_autori=$e56_autori;
       $clorcreservaaut->incluir($o80_codres);
+
      if($clorcreservaaut->erro_status==0){
-	$sqlerro=true;
+	    $sqlerro=true;
+      }
+
+      if($clorcreservaaut->erro_status==4){
+          $orcreservaauterro_msg = $clorcreservaaut->erro_msg;
+          $sqlerro=true;
       }
 
     }  
@@ -241,6 +260,8 @@ if(isset($confirmar)){
 </body>
 </html>
 <?
+
+
 if(isset($e54_valor)){
   $e54_valor = str_replace(".","",$e54_valor);
   $e54_valor = str_replace(",",".",$e54_valor);
@@ -282,6 +303,7 @@ if(isset($confirmar)||isset($cancelar)){
   };
   
 }else{
+
   if(isset($e54_valor)){
     echo "<script>top.corpo.iframe_empautret.setValorNota($e54_valor);</script>";
   }

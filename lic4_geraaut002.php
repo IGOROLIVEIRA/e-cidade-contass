@@ -32,6 +32,7 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
 
 $oGet = db_utils::postMemory($HTTP_GET_VARS);
 
@@ -93,3 +94,21 @@ td.linhagrid {padding: 1px}
   }
   
 </script>
+
+<?
+/**
+ * controle de encerramento peri. contabil
+ */
+$clcondataconf = new cl_condataconf;
+$resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_data'));
+db_fieldsmemory($resultControle,0);
+
+$dtSistema = date("Y-m-d", db_getsession("DB_datausu"));
+if($dtSistema <= $c99_data  ) {
+  echo "<script> top.corpo.document.getElementById('btnVisualizarAutorizacao').disabled = true;
+    </script>";
+}else{
+  echo "<script>top.corpo.document.getElementById('btnVisualizarAutorizacao').disabled = false</script>";
+}
+
+?>
