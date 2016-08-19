@@ -272,7 +272,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 									 where conplanoreduz.c61_reduz  in ({$nConta})
 									   and conplanoreduz.c61_anousu = " . db_getsession("DB_anousu") . "
 								 union all
-								select c61_reduz  as codctb, o15_codtri  as fontemovimento
+								select c61_reduz  as codctb, ces02_fonte::varchar  as fontemovimento
 									  from conctbsaldo
 								inner join conplanoreduz on conctbsaldo.ces02_reduz = conplanoreduz.c61_reduz and conplanoreduz.c61_anousu = conctbsaldo.ces02_anousu
 								inner join orctiporec on o15_codigo = c61_codigo
