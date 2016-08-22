@@ -471,7 +471,7 @@ FROM
    INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
    INNER JOIN emptipo ON emptipo.e41_codtipo = empempenho.e60_codtipo
    WHERE 1=1
-     AND e60_instit = 1
+     AND e60_instit = ".db_getsession("DB_instit")." /* OC 2240 - Aqui estava definido a insitituição 1 */
    GROUP BY e60_numemp,
             e60_codemp,
             e50_codord,
@@ -487,7 +487,7 @@ FROM
                                                   e53_vlrpag,
                                                   e60_vlrliq,
                                                   e60_vlrpag) AS x
-WHERE (round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2))>0
+WHERE (round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2))>=0 /* OC 2240 - Aqui estava considerando sempre para o saldo > 0 */
   AND e50_codord=$e50_codord
   AND (round(e60_vlrliq,2) - round(e60_vlrpag,2) > 0)
   AND (round(e53_valor,2) - round(e53_vlranu,2) > 0)
