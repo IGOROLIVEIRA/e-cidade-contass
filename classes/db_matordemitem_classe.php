@@ -812,7 +812,11 @@ and pcorcamvalsl.pc23_orcamforne = julgsl.pc24_orcamforne";
      $sql .="       inner join pctipocompra                on empempenho.e60_codcom                = pctipocompra.pc50_codcom" ;
 
 
-  
+     $sql .="       left join solicitemunid                on solicitemunid.pc17_codigo                = solicitem.pc11_codigo     " ;
+     $sql .="       left join matunid                on solicitemunid.pc17_unid                = matunid.m61_codmatunid" ;
+     $sql .="       left join matunid matunidaut               on empautitem.e55_unid                = matunidaut.m61_codmatunid" ;
+     $sql .="       left join matunid matunidsol               on solicitemunid.pc17_unid                = matunidsol.m61_codmatunid" ;
+
      $sql2 = "";
      if($dbwhere==""){
        if($m52_codlanc!=null ){

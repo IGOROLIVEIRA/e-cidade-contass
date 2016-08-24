@@ -159,16 +159,18 @@
 	$this->objpdf->rect($xcol    ,$xlin+24,12,6,2,'DF','12');
 	$this->objpdf->rect($xcol+ 12,$xlin+24,17,6,2,'DF','12');
 	$this->objpdf->rect($xcol+ 29,$xlin+24,13,6,2,'DF','12');//$this->objpdf->rect($xcol+ 27,$xlin+24,11,6,2,'DF','12');
-	$this->objpdf->rect($xcol+ 42,$xlin+24,101,6,2,'DF','12');//$this->objpdf->rect($xcol+ 38,$xlin+24,104,6,2,'DF','12');
-	$this->objpdf->rect($xcol+143,$xlin+24,30,6,2,'DF','12');
-	$this->objpdf->rect($xcol+173,$xlin+24,30,6,2,'DF','12');
+$this->objpdf->rect($xcol + 42, $xlin + 24, 13, 6, 2, 'DF', '12');//$this->objpdf->rect($xcol+ 27,$xlin+24,11,6,2,'DF','12');
+$this->objpdf->rect($xcol + 55, $xlin + 24, 99, 6, 2, 'DF', '12');//$this->objpdf->rect($xcol+ 38,$xlin+24,104,6,2,'DF','12');
+$this->objpdf->rect($xcol + 154, $xlin + 24, 28, 6, 2, 'DF', '12');
+$this->objpdf->rect($xcol + 182, $xlin + 24, 21, 6, 2, 'DF', '12');
 
 	$this->objpdf->rect($xcol    ,$xlin+30,12,205  -$xlin ,2,'DF','34');
 	$this->objpdf->rect($xcol+ 12,$xlin+30,17,205  -$xlin ,2,'DF','34');
 	$this->objpdf->rect($xcol+ 29,$xlin+30,13,205  -$xlin ,2,'DF','34'); //$this->objpdf->rect($xcol+ 27,$xlin+30,11,205  -$xlin ,2,'DF','34');
-	$this->objpdf->rect($xcol+ 42,$xlin+30,101,205 -$xlin ,2,'DF','34'); //$this->objpdf->rect($xcol+ 38,$xlin+30,104,205 -$xlin ,2,'DF','34');
-	$this->objpdf->rect($xcol+143,$xlin+30,30,205  -$xlin ,2,'DF','');
-	$this->objpdf->rect($xcol+173,$xlin+30,30,205  -$xlin ,2,'DF','34');
+$this->objpdf->rect($xcol + 42, $xlin + 30, 13, 205 - $xlin, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 27,$xlin+30,11,205  -$xlin ,2,'DF','34');
+$this->objpdf->rect($xcol + 55, $xlin + 30, 99, 205 - $xlin, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 38,$xlin+30,104,205 -$xlin ,2,'DF','34');
+$this->objpdf->rect($xcol + 154, $xlin + 30, 28, 205 - $xlin, 2, 'DF', '');
+$this->objpdf->rect($xcol + 182, $xlin + 30, 21, 205 - $xlin, 2, 'DF', '34');
 
   $this->objpdf->sety($xlin+28);
 	$alt = 4;
@@ -176,9 +178,10 @@
 	$this->objpdf->text($xcol+   2,$xlin+28,'ITEM');
 	$this->objpdf->text($xcol+12.5,$xlin+28,'EMPENHO');
 	$this->objpdf->text($xcol+30.5,$xlin+28,'QUANT');  //$this->objpdf->text($xcol+27.5,$xlin+28,'QUANT');
-	$this->objpdf->text($xcol+  67,$xlin+28,'MATERIAL OU SERVIÇO'); //$this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVIÇO');
-	$this->objpdf->text($xcol+ 145,$xlin+28,'VALOR UNITÁRIO');
-	$this->objpdf->text($xcol+ 176,$xlin+28,'VALOR TOTAL');
+$this->objpdf->text($xcol + 45.5, $xlin + 28, 'UNID');
+$this->objpdf->text($xcol + 77, $xlin + 28, 'MATERIAL OU SERVIÇO'); //$this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVIÇO');
+$this->objpdf->text($xcol + 156, $xlin + 28, 'VALOR UNITÁRIO');
+$this->objpdf->text($xcol + 182, $xlin + 28, 'VALOR TOTAL');
   $maiscol = 0;
 
   $this->objpdf->setfillcolor(0,0,0);
@@ -213,8 +216,8 @@
     }
   }
 	
-	$this->objpdf->SetWidths(array(12,16,13,101,30,30));  //$this->objpdf->SetWidths(array(12,16,10,104,30,30));
-	$this->objpdf->SetAligns(array('C','C','R','L','R','R'));
+$this->objpdf->SetWidths(array(12, 17, 13, 13, 99, 28, 21));  //$this->objpdf->SetWidths(array(12,16,10,104,30,30));
+$this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 	
 	$this->objpdf->setleftmargin(4);
 	$this->objpdf->sety($xlin+32);
@@ -232,10 +235,8 @@
       $descricaoitem .= "\n\n".'SOLICITAÇÃO: '.pg_result($this->recorddositens,$ii,$this->Snumero);
 	  }
 
-
     $obsitem  = pg_result($this->recorddositens,$ii,$this->observacaoitem);
-
-	  $obsitem .= "\n\n".'Marca: '.pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
+	  $obsitem .= pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
     $sObsItem = $obsitem;
 
     //// troca de pagina
@@ -258,10 +259,10 @@
 	      
 	      $xlin = 20;
 	      $xcol = 4;
-	      $this->objpdf->rect($xcol,    $xlin+205,143, 10,2,'DF','34');
-	      $this->objpdf->rect($xcol+143,$xlin+205,30, 10,2,'DF','34');
-	      $this->objpdf->rect($xcol+173,$xlin+205,30, 10,2,'DF','34');
-	      $this->objpdf->text($xcol+100 ,$xlin+211,'T O T A L   D A   P Á G I N A');
+			$this->objpdf->rect($xcol, $xlin + 205, 154, 10, 2, 'DF', '34');
+			$this->objpdf->rect($xcol + 154, $xlin + 205, 28, 10, 2, 'DF', '34');
+			$this->objpdf->rect($xcol + 182, $xlin + 205, 21, 10, 2, 'DF', '34');
+			$this->objpdf->text($xcol + 111, $xlin + 211, 'T O T A L   D A   P Á G I N A');
 
 	      $this->objpdf->SetXY(173,$xlin+205);
 	      $this->objpdf->cell(30 ,10,db_formatar($xtotal,'f'),0,0,"R");   
@@ -300,16 +301,18 @@
 	    $this->objpdf->rect($xcol    ,$xlin+54,12,6,2,'DF','12');
 	    $this->objpdf->rect($xcol+ 12,$xlin+54,17,6,2,'DF','12');
 	    $this->objpdf->rect($xcol+ 29,$xlin+54,13,6,2,'DF','12'); //$this->objpdf->rect($xcol+ 27,$xlin+54,11,6,2,'DF','12');
-	    $this->objpdf->rect($xcol+ 42,$xlin+54,101,6,2,'DF','12'); //$this->objpdf->rect($xcol+ 38,$xlin+54,104,6,2,'DF','12');
-	    $this->objpdf->rect($xcol+143,$xlin+54,30,6,2,'DF','12');
-	    $this->objpdf->rect($xcol+173,$xlin+54,30,6,2,'DF','12');
+		$this->objpdf->rect($xcol + 42, $xlin + 54, 13, 6, 2, 'DF', '12'); //$this->objpdf->rect($xcol+ 27,$xlin+54,11,6,2,'DF','12');
+		$this->objpdf->rect($xcol + 55, $xlin + 54, 99, 6, 2, 'DF', '12'); //$this->objpdf->rect($xcol+ 38,$xlin+54,104,6,2,'DF','12');
+		$this->objpdf->rect($xcol + 154, $xlin + 54, 28, 6, 2, 'DF', '12');
+		$this->objpdf->rect($xcol + 182, $xlin + 54, 21, 6, 2, 'DF', '12');
       
 	    $this->objpdf->rect($xcol,    $xlin+60,12,252,2,'DF','34');
 	    $this->objpdf->rect($xcol+ 12,$xlin+60,17,252,2,'DF','34');
 	    $this->objpdf->rect($xcol+ 29,$xlin+60,13,252,2,'DF','34'); //$this->objpdf->rect($xcol+ 27,$xlin+60,11,252,2,'DF','34');
-	    $this->objpdf->rect($xcol+ 42,$xlin+60,101,252,2,'DF','34'); //$this->objpdf->rect($xcol+ 38,$xlin+60,104,252,2,'DF','34');
-	    $this->objpdf->rect($xcol+143,$xlin+60,30,252,2,'DF','');
-	    $this->objpdf->rect($xcol+173,$xlin+60,30,252,2,'DF','34');
+		$this->objpdf->rect($xcol + 42, $xlin + 60, 13, 252, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 27,$xlin+60,11,252,2,'DF','34');
+		$this->objpdf->rect($xcol + 55, $xlin + 60, 99, 252, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 38,$xlin+60,104,252,2,'DF','34');
+		$this->objpdf->rect($xcol + 154, $xlin + 60, 28, 252, 2, 'DF', '');
+		$this->objpdf->rect($xcol + 182, $xlin + 60, 21, 252, 2, 'DF', '34');
 
 	    $this->objpdf->sety($xlin+66);
 	    $alt = 4;
@@ -317,10 +320,11 @@
 	    $this->objpdf->text($xcol+   2,$xlin+59,'ITEM');
 	    $this->objpdf->text($xcol+12.5,$xlin+59,'EMPENHO');
 	    $this->objpdf->text($xcol+30.5,$xlin+59,'QUANT');
-	    $this->objpdf->text($xcol+  70,$xlin+59,'MATERIAL OU SERVIÇO');
-	    $this->objpdf->text($xcol+ 145,$xlin+59,'VALOR UNITÁRIO');
-	    $this->objpdf->text($xcol+ 176,$xlin+59,'VALOR TOTAL');
-	    $this->objpdf->text($xcol+  43,$xlin+63,'Continuação da Página '.($pagina-1));
+		$this->objpdf->text($xcol + 45.5, $xlin + 59, 'UNID');
+		$this->objpdf->text($xcol + 77, $xlin + 59, 'MATERIAL OU SERVIÇO');
+		$this->objpdf->text($xcol + 155, $xlin + 59, 'VALOR UNITÁRIO');
+		$this->objpdf->text($xcol + 183, $xlin + 59, 'VALOR TOTAL');
+		$this->objpdf->text($xcol + 59, $xlin + 63, 'Continuação da Página ' . ($pagina - 1));
        $this->objpdf->Setfont('Arial','',8);
 
 	    $maiscol = 0;
@@ -341,7 +345,7 @@
      $this->objpdf->Row_multicell(array(pg_result($this->recorddositens,$ii,$this->codmater),
 	                            pg_result($this->recorddositens,$ii,$this->empempenho)."/"
                              .pg_result($this->recorddositens,$ii,$this->anousuemp),
-	                            pg_result($this->recorddositens,$ii,$this->quantitem),
+			pg_result($this->recorddositens, $ii, $this->quantitem), pg_result($this->recorddositens, $ii, $this->unid),
 				                      $descricaoitem."\n",
 				                      db_formatar(pg_result($this->recorddositens,$ii,$this->vlrunitem),'v'," ",$this->numdec),
   			                      db_formatar(pg_result($this->recorddositens,$ii,$this->valoritem),'f')),3,false,4,0,true);
@@ -386,7 +390,7 @@
      	$sObsItem = substr($sObsItem,0,$iLimitString)."\n".substr($sObsItem,$iLimitString,strlen($sObsItem));
      }
      
-     $sObsItem = $this->objpdf->Row_multicell(array('','','',stripslashes($sObsItem),'',''), 
+		$sObsItem = $this->objpdf->Row_multicell(array('', '', '', '',stripslashes($sObsItem), '', ''),
                                               3, 
                                               false,
                                               5,
@@ -413,10 +417,10 @@
 	  
 	  $xlin = 20;
 	  $xcol = 4;
-	  $this->objpdf->rect($xcol,$xlin+205,143, 10,2,'DF','34');
-	  $this->objpdf->rect($xcol+143,$xlin+205,30, 10,2,'DF','34');
-	  $this->objpdf->rect($xcol+173,$xlin+205,30, 10,2,'DF','34');
-	  $this->objpdf->text($xcol+100,$xlin+211,'T O T A L   G E R A L');
+	$this->objpdf->rect($xcol, $xlin + 205, 154, 10, 2, 'DF', '34');
+	$this->objpdf->rect($xcol + 154, $xlin + 205, 28, 10, 2, 'DF', '34');
+	$this->objpdf->rect($xcol + 182, $xlin + 205, 21, 10, 2, 'DF', '34');
+	$this->objpdf->text($xcol + 111, $xlin + 211, 'T O T A L   G E R A L');
 
 	  $this->objpdf->SetXY(173,$xlin+205);
 	  $this->objpdf->cell(30 ,10,db_formatar($xtotal,'f'),0,0,"R");   
@@ -435,7 +439,7 @@
 	  $this->objpdf->rect($xcol+143,$xlin+312,30,10,2,'DF','34');
 	  $this->objpdf->rect($xcol+173,$xlin+312,30,10,2,'DF','34');
 
-	  $this->objpdf->text($xcol+100 ,$xlin+319,'T O T A L   G E R A L');
+	$this->objpdf->text($xcol + 111, $xlin + 319, 'T O T A L   G E R A L');
 	  $this->objpdf->text($xcol+173 ,$xlin+319,db_formatar($xtotal,'f'));
 	}
 	$posicao_depois=$this->objpdf->gety();

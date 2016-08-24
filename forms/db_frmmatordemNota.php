@@ -296,6 +296,7 @@ if($pesqemp == true){
     <td class='table_header' align='center'><b>Seq .Empenho</b></td>
     <td class='table_header' align='center'><b>Cod. Item</b></td>
     <td class='table_header' align='center'><b>Item</b></td>
+      <td class='table_header' align='center'><b>UN</b></td>
     <td class='table_header' align='center'><b>Sequencia</b></td>
     <td class='table_header' align='center'><b>Descrição</b></td>
     <td class='table_header' align='center'><b>Quantidade</b></td>
@@ -305,7 +306,7 @@ if($pesqemp == true){
     <td class='table_header' align='center'><b>Valor</b></td>         
     <td class='table_header' style='width:18px' align='center'><b>&nbsp;</b></td> 
     </tr>
-    <tbody id='dados' style='height:150;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
+    <tbody id='dados' style='height:150px;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
     <?
 
 
@@ -327,7 +328,8 @@ if($pesqemp == true){
       $sSQLemp .= "       e62_sequen, ";
       $sSQLemp .= "	      e62_descr, ";
       $sSQLemp .= "	      e62_vlrun, ";
-      $sSQLemp .= "       e62_sequencial,";   
+      $sSQLemp .= "	      case when matunid.m61_abrev is null or matunid.m61_abrev = '' then coalesce(matunidaut.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) else coalesce(matunid.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) end as m61_abrev, ";
+      $sSQLemp .= "       e62_sequencial,";
       $sSQLemp .= "	      pc01_servico,";
       $sSQLemp .= "	      pc01_fraciona,";
       $sSQLemp .= "	     (select rnsaldoitem  from  fc_saldoitensempenho(e60_numemp, e62_sequencial)) as e62_quant,";
@@ -338,6 +340,16 @@ if($pesqemp == true){
       $sSQLemp .= "       inner join pcmater    on pc01_codmater    = e62_item";
       $sSQLemp .= "       inner join pcsubgrupo on pc04_codsubgrupo = pc01_codsubgrupo";
       $sSQLemp .= "       inner join pctipo     on pc05_codtipo     = pc04_codtipo";
+      $sSQLemp .= "       left  join empempaut             on empempaut.e61_numemp            = empempenho.e60_numemp";
+      $sSQLemp .= "       left  join empautoriza           on empempaut.e61_autori            = empautoriza.e54_autori";
+      $sSQLemp .= "       left  join empautitem            on empempaut.e61_autori            = empautitem.e55_autori and empempitem.e62_sequen          = empautitem.e55_sequen";
+      $sSQLemp .= "       left join empautitempcprocitem  pcprocitemaut  on pcprocitemaut.e73_autori        = empautitem.e55_autori and pcprocitemaut.e73_sequen        = empautitem.e55_sequen";
+      $sSQLemp .= "       left join pcprocitem                           on pcprocitem.pc81_codprocitem     = pcprocitemaut.e73_pcprocitem";
+      $sSQLemp .= "       left join solicitem                            on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem";
+      $sSQLemp .= "       left join solicitemunid                on solicitemunid.pc17_codigo                = solicitem.pc11_codigo";
+      $sSQLemp .= "       left join matunid                on solicitemunid.pc17_unid                = matunid.m61_codmatunid";
+      $sSQLemp .= "       left join matunid matunidaut               on empautitem.e55_unid                = matunidaut.m61_codmatunid";
+      $sSQLemp .= "       left join matunid matunidsol               on solicitemunid.pc17_unid                = matunidsol.m61_codmatunid";
       $sSQLemp .= " where e60_numcgm = {$e60_numcgm} {$where} {$where1}";
       $sSQLemp .="  order by e60_numemp";
       $result   = db_query($sSQLemp);
@@ -373,6 +385,7 @@ if($pesqemp == true){
         echo "  <td class='linhagrid'id='empenho{$e62_sequencial}' align='center'>$e60_numemp</td>";
         echo "  <td class='linhagrid' align='center'><small>$e62_item  </small></td>";		    
         echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater'><small>".substr($pc01_descrmater,0,20)."&nbsp;</small></td>";
+        echo "  <td class='linhagrid' id='m61_abrev{$e62_sequencial}' nowrap align='left' title='$m61_abrev'>{$m61_abrev}</td>";
         echo "  <td class='linhagrid' id='sequen{$e62_sequencial}' align='center'>$e62_sequen</td>";
         echo "  <td class='linhagrid' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr,0,20)."&nbsp;</small></td>";
         echo "  <td class='linhagrid' id='e62_quant{$e62_sequencial}' align='center'>$e62_quant</td>";

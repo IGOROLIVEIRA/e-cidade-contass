@@ -132,6 +132,7 @@ for($i = 0;$i < $num;$i++){
                                                          m52_numemp,
                                                          m52_vlruni,
                                                          m52_valor,
+                                                         case when matunid.m61_abrev is null or matunid.m61_abrev = '' then coalesce(matunidaut.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) else coalesce(matunid.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) end as m61_abrev,
                                                          pcmater.pc01_descrmater,
                                                          pc01_codmater,
 						         (case when solicitem.pc11_resum is null  or solicitem.pc11_resum ='' then pc01_complmater else solicitem.pc11_resum end)||'\n'||e55_descr AS e62_descr,
@@ -210,6 +211,7 @@ for($i = 0;$i < $num;$i++){
    $pdf1->empempenho      = 'e60_codemp';
    $pdf1->anousuemp       = 'e60_anousu';
    $pdf1->quantitem      = 'm52_quant';
+   $pdf1->unid           = 'm61_abrev';
    $pdf1->condpag        = 'e54_conpag';
    $pdf1->destino        = 'e54_destin';
    $pdf1->sOrigem        = $iOrigem . " - " .$sOrigem;
