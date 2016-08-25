@@ -272,40 +272,6 @@ class RefactorConsultaProcessoProtocolo {
 
               $this->aMovimentacoes[] = $oDadosMovimentacao;
 
-
-              //apensado
-              $result_apensados = $clprotprocessoapensados->sql_record($clprotprocessoapensados->sql_query_processo_principal('', 'p62_despacho,nome,nomeinstabrev,instit,deptoatual,departamento,p61_dtandam,p62_hora,principal.p58_numero as prin, apensado.p58_numero as apens', '', "p30_procapensado = '$codproc'"));
-
-              if (pg_num_rows($result_apensados) > 0) {
-
-              for ($y = 0; $y < $clprotprocessoapensados->numrows; $y++) {
-
-
-                extract((array)db_utils::fieldsMemory($result_apensados, $y));
-
-                $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
-                $oDadosMovimentacao->sData = db_formatar($p61_dtandam, 'd');
-                $oDadosMovimentacao->sHora = $p62_hora;
-                $oDadosMovimentacao->iDepartamento = $departamento;
-                $oDadosMovimentacao->sDepartamento = $deptoatual;
-                $oDadosMovimentacao->iInstituicao = $instit;
-                $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-                $oDadosMovimentacao->sLogin = $nome;
-                $oDadosMovimentacao->sObservacoes = "Apensado ao processo: $prin ";
-                $oDadosMovimentacao->sDespacho = $p62_despacho;
-                $oDadosMovimentacao->lImprimir = false;
-                $oDadosMovimentacao->iTipo = 2;
-                if ((int)$idusuariodestino > 0) {
-                  $oDadosMovimentacao->sObservacoes .= " - usuário especificado: 'idusuariodestino' - 'loginusuariodestino'";
-                } else {
-                  $oDadosMovimentacao->sObservacoes .= " (sem usuário especificado)";
-                }
-
-                $this->aMovimentacoes[] = $oDadosMovimentacao;
-
-                //************************************
-              }
-
             }
 
               $sQueryDespacho          = $clprocandamint->sql_query_sim(null, "*,
@@ -485,6 +451,39 @@ class RefactorConsultaProcessoProtocolo {
 
             $this->aMovimentacoes[] = $oDadosMovimentacao;
           }
+        }
+
+      //apensado
+      $result_apensados = $clprotprocessoapensados->sql_record($clprotprocessoapensados->sql_query_processo_principal('', 'principal.p58_numero as prin, apensado.p58_numero as apens', '', "p30_procapensado = '$codproc'"));
+
+      if (pg_num_rows($result_apensados) > 0) {
+
+        for ($y = 0; $y < $clprotprocessoapensados->numrows; $y++) {
+
+
+          extract((array)db_utils::fieldsMemory($result_apensados, $y));
+
+          $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
+          $oDadosMovimentacao->sData = db_formatar($p61_dtandam, 'd');
+          $oDadosMovimentacao->sHora = $p62_hora;
+          $oDadosMovimentacao->iDepartamento = $departamento;
+          $oDadosMovimentacao->sDepartamento = $deptoatual;
+          $oDadosMovimentacao->iInstituicao = $instit;
+          $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
+          $oDadosMovimentacao->sLogin = $nome;
+          $oDadosMovimentacao->sObservacoes = "Apensado ao processo: $prin ";
+          $oDadosMovimentacao->sDespacho = $p62_despacho;
+          $oDadosMovimentacao->lImprimir = false;
+          $oDadosMovimentacao->iTipo = 2;
+          if ((int)$idusuariodestino > 0) {
+            $oDadosMovimentacao->sObservacoes .= " - usuário especificado: 'idusuariodestino' - 'loginusuariodestino'";
+          } else {
+            $oDadosMovimentacao->sObservacoes .= " (sem usuário especificado)";
+          }
+
+          $this->aMovimentacoes[] = $oDadosMovimentacao;
+
+          //************************************
         }
 
       } // for transferencias
