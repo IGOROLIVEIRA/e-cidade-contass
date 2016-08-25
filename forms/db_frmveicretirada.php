@@ -33,7 +33,7 @@ $clrotulo->label("ve01_placa");
 $clrotulo->label("z01_nome");
 $clrotulo->label("descrdepto");
 $clrotulo->label("nome");
-
+$clrotulo->label("ve75_destino");
 if (!isset($ve60_datasaida)||@$ve60_datasaida==""){
   $ve60_datasaida_dia=date("d",db_getsession("DB_datausu"));	
   $ve60_datasaida_mes=date("m",db_getsession("DB_datausu"));
@@ -220,6 +220,21 @@ db_app::load("prototype.js");
               ?>
               </td>
             </tr>
+            <tr>
+              <td nowrap title="<?=@$Tve75_destino?>">
+                <?
+                db_ancora(@$Lve75_destino,"js_pesquisave75_sequencial(true);",$db_opcao);
+                ?>
+              </td>
+              <td>
+                <?
+                db_input('ve75_sequencial',10,$Ive75_sequencial,true,'text',$db_opcao,
+                    " onchange='js_pesquisave75_sequencial(false);'");
+                db_input('ve75_destino',40,$Ive75_destino,true,'text',3,'')
+                ?>
+              </td>
+            </tr>
+
           </table>
         </fieldset>
       </td>
@@ -296,6 +311,34 @@ function js_mostraveicmotoristas1(chave1,chave2){
   document.form1.z01_nome.value = chave2;
   db_iframe_veicmotoristas.hide();
 }
+
+function js_pesquisave75_sequencial(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?funcao_js=parent.js_mostradestino1|ve75_sequencial|ve75_destino','Pesquisa',true);
+  }else{
+    if(document.form1.ve75_sequencial.value != ''){
+      js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?pesquisa_chave='+document.form1.ve75_sequencial.value+'&funcao_js=parent.js_mostradestino','Pesquisa',false);
+    }else{
+      document.form1.ve75_sequencial.value = '';
+    }
+  }
+}
+function js_mostradestino(chave1,chave2,erro){
+  document.form1.ve75_sequencial.value = chave1;
+  document.form1.ve75_destino.value = chave2;
+  if(erro==true){
+    document.form1.ve75_sequencial.value = '';
+    document.form1.ve75_destino.value = '';
+  }
+}
+function js_mostradestino1(chave1,chave2){
+  document.form1.ve75_sequencial.value = chave1;
+  document.form1.ve75_destino.value = chave2;
+  db_iframe_veiccaddestino.hide();
+}
+
+
+
 function js_pesquisave60_coddepto(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true);

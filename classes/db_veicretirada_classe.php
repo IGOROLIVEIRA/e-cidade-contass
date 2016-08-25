@@ -44,11 +44,12 @@ class cl_veicretirada {
    // cria variaveis do arquivo 
    var $ve60_codigo = 0; 
    var $ve60_veiculo = 0; 
-   var $ve60_veicmotoristas = 0; 
-   var $ve60_datasaida_dia = null; 
-   var $ve60_datasaida_mes = null; 
-   var $ve60_datasaida_ano = null; 
-   var $ve60_datasaida = null; 
+   var $ve60_veicmotoristas = 0;
+   var $ve60_destinonovo = 0;
+   var $ve60_datasaida_dia = null;
+   var $ve60_datasaida_mes = null;
+   var $ve60_datasaida_ano = null;
+   var $ve60_datasaida = null;
    var $ve60_horasaida = null; 
    var $ve60_destino = null; 
    var $ve60_coddepto = 0; 
@@ -64,7 +65,8 @@ class cl_veicretirada {
                  ve60_codigo = int4 = Código Retirada 
                  ve60_veiculo = int4 = Veiculo 
                  ve60_veicmotoristas = int4 = Motorista 
-                 ve60_datasaida = date = Data Retirada 
+                 ve60_destinonovo = int4 = Motorista
+                 ve60_datasaida = date = Data Retirada
                  ve60_horasaida = char(5) = Hora Retirada 
                  ve60_destino = char(40) = Destino 
                  ve60_coddepto = int4 = Depart. 
@@ -94,6 +96,7 @@ class cl_veicretirada {
        $this->ve60_codigo = ($this->ve60_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_codigo"]:$this->ve60_codigo);
        $this->ve60_veiculo = ($this->ve60_veiculo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_veiculo"]:$this->ve60_veiculo);
        $this->ve60_veicmotoristas = ($this->ve60_veicmotoristas == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_veicmotoristas"]:$this->ve60_veicmotoristas);
+       $this->ve60_destinonovo = ($this->ve60_destinonovo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve75_sequencial"]:$this->ve60_destinonovo);
        if($this->ve60_datasaida == ""){
          $this->ve60_datasaida_dia = ($this->ve60_datasaida_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_datasaida_dia"]:$this->ve60_datasaida_dia);
          $this->ve60_datasaida_mes = ($this->ve60_datasaida_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_datasaida_mes"]:$this->ve60_datasaida_mes);
@@ -132,7 +135,7 @@ class cl_veicretirada {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve60_veicmotoristas == null ){ 
+     if($this->ve60_veicmotoristas == null ){
        $this->erro_sql = " Campo Motorista nao Informado.";
        $this->erro_campo = "ve60_veicmotoristas";
        $this->erro_banco = "";
@@ -141,7 +144,16 @@ class cl_veicretirada {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve60_datasaida == null ){ 
+     if($this->ve60_destinonovo == null ){
+       $this->erro_sql = " Campo DestinoNovo nao Informado.";
+       $this->erro_campo = "ve60_destinonovo";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->ve60_datasaida == null ){
        $this->erro_sql = " Campo Data Retirada nao Informado.";
        $this->erro_campo = "ve60_datasaida_dia";
        $this->erro_banco = "";
@@ -249,7 +261,8 @@ class cl_veicretirada {
                                        ve60_codigo 
                                       ,ve60_veiculo 
                                       ,ve60_veicmotoristas 
-                                      ,ve60_datasaida 
+                                      ,ve60_destinonovo
+                                      ,ve60_datasaida
                                       ,ve60_horasaida 
                                       ,ve60_destino 
                                       ,ve60_coddepto 
@@ -262,7 +275,8 @@ class cl_veicretirada {
                                 $this->ve60_codigo 
                                ,$this->ve60_veiculo 
                                ,$this->ve60_veicmotoristas 
-                               ,".($this->ve60_datasaida == "null" || $this->ve60_datasaida == ""?"null":"'".$this->ve60_datasaida."'")." 
+                               ,$this->ve60_destinonovo
+                               ,".($this->ve60_datasaida == "null" || $this->ve60_datasaida == ""?"null":"'".$this->ve60_datasaida."'")."
                                ,'$this->ve60_horasaida' 
                                ,'$this->ve60_destino' 
                                ,$this->ve60_coddepto 
@@ -311,6 +325,7 @@ class cl_veicretirada {
        $resac = db_query("insert into db_acount values($acount,1595,9288,'','".AddSlashes(pg_result($resaco,0,'ve60_usuario'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,1595,9289,'','".AddSlashes(pg_result($resaco,0,'ve60_data'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,1595,9290,'','".AddSlashes(pg_result($resaco,0,'ve60_hora'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       //$resac = db_query("insert into db_acount values($acount,1595,9291,'','".AddSlashes(pg_result($resaco,0,'ve60_destinonovo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,1595,11081,'','".AddSlashes(pg_result($resaco,0,'ve60_medidasaida'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
@@ -359,7 +374,20 @@ class cl_veicretirada {
          return false;
        }
      }
-     if(trim($this->ve60_datasaida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve60_datasaida_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve60_datasaida_dia"] !="") ){ 
+     if(trim($this->ve60_destinonovo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve60_destinonovo"])){
+       $sql  .= $virgula." ve60_destinonovo = $this->ve60_destinonovo ";
+       $virgula = ",";
+       if(trim($this->ve60_destinonovo) == null ){
+         $this->erro_sql = " Campo DestinoNovo nao Informado.";
+         $this->erro_campo = "ve60_destinonovo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ve60_datasaida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve60_datasaida_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve60_datasaida_dia"] !="") ){
        $sql  .= $virgula." ve60_datasaida = '$this->ve60_datasaida' ";
        $virgula = ",";
        if(trim($this->ve60_datasaida) == null ){ 
@@ -522,6 +550,8 @@ class cl_veicretirada {
            $resac = db_query("insert into db_acount values($acount,1595,9289,'".AddSlashes(pg_result($resaco,$conresaco,'ve60_data'))."','$this->ve60_data',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["ve60_hora"]))
            $resac = db_query("insert into db_acount values($acount,1595,9290,'".AddSlashes(pg_result($resaco,$conresaco,'ve60_hora'))."','$this->ve60_hora',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         //if(isset($GLOBALS["HTTP_POST_VARS"]["ve60_destinonovo"]))
+           //$resac = db_query("insert into db_acount values($acount,1595,9291,'".AddSlashes(pg_result($resaco,$conresaco,'ve60_destinonovo'))."','$this->ve60_destinonovo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["ve60_medidasaida"]))
            $resac = db_query("insert into db_acount values($acount,1595,11081,'".AddSlashes(pg_result($resaco,$conresaco,'ve60_medidasaida'))."','$this->ve60_medidasaida',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
@@ -581,6 +611,7 @@ class cl_veicretirada {
          $resac = db_query("insert into db_acount values($acount,1595,9288,'','".AddSlashes(pg_result($resaco,$iresaco,'ve60_usuario'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1595,9289,'','".AddSlashes(pg_result($resaco,$iresaco,'ve60_data'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1595,9290,'','".AddSlashes(pg_result($resaco,$iresaco,'ve60_hora'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         //$resac = db_query("insert into db_acount values($acount,1595,9291,'','".AddSlashes(pg_result($resaco,$iresaco,'ve60_destinonovo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1595,11081,'','".AddSlashes(pg_result($resaco,$iresaco,'ve60_medidasaida'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
