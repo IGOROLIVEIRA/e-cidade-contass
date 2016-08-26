@@ -153,10 +153,16 @@ if ((isset($QUERY_STRING["p58_codproc"]))) {
                 break;
             }
 
+
+
             //atualiza codandam da tabela protprocesso;
+            $resultprotprocesso = $clprotprocesso->sql_record($clprotprocesso->sql_query_file($p58_codproc));
+            db_fieldsmemory($resultprotprocesso, 0);
+
             $clprotprocesso->p58_codproc = $p58_codproc;
             $clprotprocesso->p58_codandam = $clprocandam->p61_codandam;
             $clprotprocesso->p58_despacho = " ";
+            $clprotprocesso->p58_numeracao = $p58_numeracao;
             $clprotprocesso->alterar($p58_codproc);
             if ($clprotprocesso->erro_status == "1") {
                 $erro += 0;
