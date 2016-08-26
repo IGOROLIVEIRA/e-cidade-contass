@@ -34,6 +34,7 @@ $clrotulo->label("z01_nome");
 $clrotulo->label("descrdepto");
 $clrotulo->label("nome");
 $clrotulo->label("ve75_destino");
+
 if (!isset($ve60_datasaida)||@$ve60_datasaida==""){
   $ve60_datasaida_dia=date("d",db_getsession("DB_datausu"));	
   $ve60_datasaida_mes=date("m",db_getsession("DB_datausu"));

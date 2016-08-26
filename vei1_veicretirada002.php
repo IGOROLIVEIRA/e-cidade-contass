@@ -73,9 +73,9 @@ if (isset($alterar)) {
     $iIntervalo     = DBDate::calculaIntervaloEntreDatas($oDataRetirada, $oDataDevolucao, "d");
     $sDataDevolucao = $oDataDevolucao->convertTo(DBDate::DATA_PTBR);
   
-    $sMensagem  = 'Não é possível incluir a retirada para o Veículo '.$ve60_veiculo.' - Placa '.$ve01_placa.'.\n';
-    $sMensagem .= 'O período de retirada informado é anterior ao período da última devolução: \n';
-    $sMensagem .= '- Última Devolução: '.$sDataDevolucao.' - '.$oDadosRetorno->ve61_horadevol.'\n';
+    $sMensagem  = 'Nï¿½o ï¿½ possï¿½vel incluir a retirada para o Veï¿½culo '.$ve60_veiculo.' - Placa '.$ve01_placa.'.\n';
+    $sMensagem .= 'O perï¿½odo de retirada informado ï¿½ anterior ao perï¿½odo da ï¿½ltima devoluï¿½ï¿½o: \n';
+    $sMensagem .= '- ï¿½ltima Devoluï¿½ï¿½o: '.$sDataDevolucao.' - '.$oDadosRetorno->ve61_horadevol.'\n';
     $sMensagem .= '- Nova Retirada: '.$ve60_datasaida.' - '.$ve60_horasaida;
   
     $sUrl  = "vei1_veicretirada001.php?ve60_veiculo={$ve60_veiculo}&ve01_placa={$ve01_placa}";
@@ -116,7 +116,7 @@ if (isset($alterar)) {
    $result_veictipoabast = $clveictipoabast->sql_record($clveictipoabast->sql_query($ve01_veictipoabast,"ve07_sigla"));
    if ($clveictipoabast->numrows > 0){
      db_fieldsmemory($result_veictipoabast,0);
-   } 
+   }
 }
 ?>
 <html>

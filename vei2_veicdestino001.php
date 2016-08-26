@@ -90,11 +90,6 @@ $clveiculos->rotulo->label("ve01_veiccadmodelo");
                 })
                 .join(',');
 
-//            for(i = 0; i < obj.veiculos.length; i++){
-//                lista_veic += virgula+obj.veiculos.options[i].value;
-//                virgula     = ",";
-//            }
-
             if (query != ""){
                 query += "&";
             }

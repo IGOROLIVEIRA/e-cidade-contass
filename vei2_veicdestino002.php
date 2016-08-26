@@ -282,4 +282,5 @@ while ($aVeiculo = pg_fetch_assoc($rsVeiculos)) {
 
 
 $pdf->Output();
+
 ?>
