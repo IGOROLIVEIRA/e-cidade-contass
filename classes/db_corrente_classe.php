@@ -686,7 +686,7 @@ class cl_corrente {
     $sql .= "                  k12_autent,                                                                          ";
     $sql .= "                  k12_numpre,                                                        ";
     $sql .= "                  k12_numpar                                                         ";
-    $sql .= "             from ( select corrente.k12_id,                                                           ";
+    $sql .= "             from ( select distinct corrente.k12_id,                                                           ";
     $sql .= "                           corrente.k12_autent,                                                       ";
     $sql .= "                           k12_conta,                                                                 ";
     $sql .= "                           k02_codrec,                                                                ";
