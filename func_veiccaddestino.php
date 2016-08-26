@@ -68,13 +68,14 @@ if (!isset($pesquisa_chave)) {
     if (isset($chave_ve75_destino)) {
         $repassa = array("chave_ve75_sequencial" => $chave_ve75_sequencial, "chave_ve75_destino" => $chave_ve75_destino);
     }
+
     if (isset($enviadescr)) {
         $clveiccaddestino->sql_record($sql);
         if ($clveiccaddestino->numrows > 0) {
             echo '<div class="container">';
             echo '  <fieldset>';
             echo '    <legend>Resultado da Pesquisa</legend>';
-            db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
+            db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa,false);
             echo '  </fieldset>';
             echo '</div>';
         } else {
