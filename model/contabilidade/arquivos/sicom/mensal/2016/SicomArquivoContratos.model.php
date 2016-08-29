@@ -297,7 +297,12 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
       $clcontratos10->si83_dataassinatura                = $oDados10->si172_dataassinatura;
       $clcontratos10->si83_contdeclicitacao              = $oDados10->si172_contdeclicitacao;
       $clcontratos10->si83_codorgaoresp                  = $oDados10->si172_contdeclicitacao == 5 || $oDados10->si172_contdeclicitacao == 6 ? $sCodorgao : ' ';
-      $clcontratos10->si83_codunidadesubresp             = $oDados10->si172_contdeclicitacao == 1 || $oDados10->si172_contdeclicitacao == 8 ? ' ' : $oDados10->si172_contdeclicitacao == 4 ? $this->getCodunidadesubrespAdesao($oDados10->si172_sequencial) : $oDados10->codunidadesubresp;
+        if($oDados10->si172_contdeclicitacao == 1 || $oDados10->si172_contdeclicitacao == 8)
+            $clcontratos10->si83_codunidadesubresp = ' ';
+        elseif($oDados10->si172_contdeclicitacao == 4)
+            $clcontratos10->si83_codunidadesub = $this->getCodunidadesubrespAdesao($oDados10->si172_sequencial);
+        else
+            $oDados10->codunidadesubresp;
       $clcontratos10->si83_nroprocesso                   = $oDados10->si172_contdeclicitacao == 1 ? $sNroProcesso : $oDados10->si172_nroprocesso;
       $clcontratos10->si83_exercicioprocesso             = $oDados10->si172_contdeclicitacao == 1 ? $oDados10->l20_anousu : $oDados10->si172_exercicioprocesso;
       $clcontratos10->si83_tipoprocesso                  = $oDados10->si172_contdeclicitacao == 1 || $oDados10->si172_contdeclicitacao == 2 ? 0 : $oDados10->si172_tipoprocesso;
