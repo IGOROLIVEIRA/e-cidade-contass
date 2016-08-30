@@ -454,7 +454,7 @@ class RefactorConsultaProcessoProtocolo {
         }
 
       //apensado
-      $result_apensados = $clprotprocessoapensados->sql_record($clprotprocessoapensados->sql_query_processo_principal('', 'p61_hora,principal.p58_numero as prin, apensado.p58_numero as apens', '', "p30_procapensado = '$codproc'"));
+      $result_apensados = $clprotprocessoapensados->sql_record($clprotprocessoapensados->sql_query_processo_principal('', 'distinct principal.p58_numero as prin, apensado.p58_numero as apens', '', "p30_procapensado = '$codproc'"));
 
       if (pg_num_rows($result_apensados) > 0) {
 
