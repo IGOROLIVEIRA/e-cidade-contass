@@ -454,7 +454,7 @@ class RefactorConsultaProcessoProtocolo {
         }
 
       //apensado
-      $result_apensados = $clprotprocessoapensados->sql_record($clprotprocessoapensados->sql_query_processo_principal('', 'principal.p58_numero as prin, apensado.p58_numero as apens', '', "p30_procapensado = '$codproc'"));
+      $result_apensados = $clprotprocessoapensados->sql_record($clprotprocessoapensados->sql_query_processo_principal('', 'p61_hora,principal.p58_numero as prin, apensado.p58_numero as apens', '', "p30_procapensado = '$codproc'"));
 
       if (pg_num_rows($result_apensados) > 0) {
 
@@ -464,15 +464,15 @@ class RefactorConsultaProcessoProtocolo {
           extract((array)db_utils::fieldsMemory($result_apensados, $y));
 
           $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
-          $oDadosMovimentacao->sData = db_formatar($p61_dtandam, 'd');
-          $oDadosMovimentacao->sHora = $p62_hora;
-          $oDadosMovimentacao->iDepartamento = $departamento;
-          $oDadosMovimentacao->sDepartamento = $deptoatual;
+          $oDadosMovimentacao->sData = db_formatar($p58_dtproc, 'd');
+          $oDadosMovimentacao->sHora = $p61_hora;
+          $oDadosMovimentacao->iDepartamento = $p61_coddepto;
+          $oDadosMovimentacao->sDepartamento = $descrdepto;
           $oDadosMovimentacao->iInstituicao = $instit;
           $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
           $oDadosMovimentacao->sLogin = $nome;
           $oDadosMovimentacao->sObservacoes = "Apensado ao processo: $prin ";
-          $oDadosMovimentacao->sDespacho = $p62_despacho;
+          $oDadosMovimentacao->sDespacho = $p58_despacho;
           $oDadosMovimentacao->lImprimir = false;
           $oDadosMovimentacao->iTipo = 2;
           if ((int)$idusuariodestino > 0) {
