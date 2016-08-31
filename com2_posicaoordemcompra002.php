@@ -242,7 +242,9 @@ foreach ($aItens as $iItens => $oValores ) {
   
   
   //==================================================================================================
-  
+  $nValorTotalGeralOrdem = 0;
+  $fValorTotalGeralEstoque = 0;
+
   foreach ($oValores->dados as $iDados => $oDados) {
     
     
@@ -259,8 +261,8 @@ foreach ($aItens as $iItens => $oValores ) {
     $iQuantItemOrdem        = db_formatar($oDados->quantidade_item_ordem ,'f')       ;
     $iQuantItemOrdemAnulado = db_formatar($oDados->quantidade_anulada_ordem ,'f')    ;
     $nValorUnitario         = db_formatar($oDados->valor_unitario_ordem  ,'f')       ;
+    $nValorTotalGeralOrdem += (($oDados->quantidade_item_ordem - $oDados->quantidade_anulada_ordem) * $oDados->valor_unitario_ordem);
     $nValorTotalOrdem       = db_formatar((($oDados->quantidade_item_ordem - $oDados->quantidade_anulada_ordem) * $oDados->valor_unitario_ordem),'f');
-    
     
     $iQuantEstoque         = $oDados->quantidade_estoque;
     $fValorTotalEstoque    = $oDados->valor_total_estoque;
@@ -268,8 +270,8 @@ foreach ($aItens as $iItens => $oValores ) {
       
       $nValorUnitarioEstoque = ($fValorTotalEstoque / $iQuantEstoque);
     }
+    $fValorTotalGeralEstoque += $fValorTotalEstoque;
     $fValorTotalEstoque = db_formatar($fValorTotalEstoque, "f");
-    
     $sDataDia             = date("d/m/Y", db_getsession('DB_datausu'));
     
     
@@ -298,8 +300,18 @@ foreach ($aItens as $iItens => $oValores ) {
     $oPdf->cell(20 ,  $iAlturalinha, $iDiasAtraso                      , "TLB"  ,  1, "C", 0); 
     imprimirSubCabecalho($oPdf, $iAlturalinha, false);    
   }
+  /**
+   * Totalizadores
+   * @see ocorrência 2385
+   */
+  $oPdf->cell(120,  $iAlturalinha, ""                        , "TRB" ,  0, "C", 1);
+  $oPdf->cell(45 ,  $iAlturalinha, "Total Geral: " , "LTRB" ,  0, "C", 1);
+  $oPdf->cell(15 ,  $iAlturalinha, db_formatar($nValorTotalGeralOrdem, "f") , "LTRB" ,  0, "C", 1);
+  $oPdf->cell(30 ,  $iAlturalinha, "Total Geral: "   , "LTRB" ,  0, "C", 1);
+  $oPdf->cell(15 ,  $iAlturalinha, db_formatar($fValorTotalGeralEstoque, "f"), "LTRB" ,  0, "C", 1);
+  $oPdf->cell(55 ,  $iAlturalinha, ""          , "TLB" ,  1, "C", 1);
   $oPdf->Ln($iAlturalinha);
-  imprimirCabecalho($oPdf, $iAlturalinha, false);    
+  imprimirCabecalho($oPdf, $iAlturalinha, false);
 }
 
 $oPdf->output();
