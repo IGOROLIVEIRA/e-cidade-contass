@@ -198,24 +198,29 @@ for ($multiplo = 1; $multiplo <= $iNumeroPaginas; $multiplo++) {
             if ($p58_numero == "") {
                 $sNumeroProtocolo = "";
             }
-
+            $yfinal = 0;
             $pdf->cell(20, 3, $sNumeroProtocolo, 0, 0, "R", 0);
             $pos_y = $pdf->y;
             $pos_x = $pdf->x;
             $pdf->multicell(75, 3, $z01_nome, 0,"L");
             $pdf->x = $pos_x + 75;
+            $yfinal = $pdf->y > $yfinal ? $pdf->y : $yfinal;
             $pdf->y = $pos_y;
             $pos_y = $pdf->y;
             $pos_x = $pdf->x;
-            $pdf->multicell(50, 3, $p58_obs, 0, "L");
+            $pdf->multicell(50, 3, substr($p58_obs,0,29), 0, "L");
             $pdf->x = $pos_x + 50;
+            $yfinal = $pdf->y > $yfinal ? $pdf->y : $yfinal;
             $pdf->y = $pos_y;
             $pos_y = $pdf->y;
             $pos_x = $pdf->x;
             $pdf->multicell(38, 3, $p51_descr, 0, "L");
             $pdf->x = $pos_x + 38;
+            $yfinal = $pdf->y > $yfinal ? $pdf->y : $yfinal;
             $pdf->y = $pos_y;
+
             $pdf->cell(10, 3, substr($p58_numeracao . " / " . $p58_ano, 0, 35), 0, 1, "C", 0);
+            $pdf->y = $yfinal;
             if ($ii == $nNumeroLinhas - 1) {
                 break;
             }
