@@ -259,7 +259,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
               throw new Exception($regadesao10->erro_msg);
           }
 
-          $sSql = "select distinct si07_numerolote,(select si07_descricaolote from itensregpreco desclote
+          $sSql = "select distinct si07_numerolote,(select si07_numerolote::varchar||'-'||si07_descricaolote from itensregpreco desclote
                    where desclote.si07_numerolote=itensregpreco.si07_numerolote and desclote.si07_sequencialadesao = itensregpreco.si07_sequencialadesao limit 1) as desclote
                    from itensregpreco where si07_numerolote > 0 and si07_numerolote is not null and si07_sequencialadesao = $oDados10->si06_sequencial ";
           $rsResult11 = db_query($sSql);
