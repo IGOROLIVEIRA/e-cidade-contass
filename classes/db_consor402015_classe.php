@@ -207,18 +207,9 @@ class cl_consor402015 {
          return false;
        }
      }
-     if(trim($this->si19_codconsorcio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si19_codconsorcio"])){ 
+     if(trim($this->si19_codconsorcio)!="" && isset($GLOBALS["HTTP_POST_VARS"]["si19_codconsorcio"])){
        $sql  .= $virgula." si19_codconsorcio = '$this->si19_codconsorcio' ";
        $virgula = ",";
-       if(trim($this->si19_codconsorcio) == null ){ 
-         $this->erro_sql = " Campo Código do  Consórcio nao Informado.";
-         $this->erro_campo = "si19_codconsorcio";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if(trim($this->si19_vldispcaixa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si19_vldispcaixa"])){ 
        $sql  .= $virgula." si19_vldispcaixa = $this->si19_vldispcaixa ";
