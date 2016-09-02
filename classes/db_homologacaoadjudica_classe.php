@@ -704,7 +704,7 @@ class cl_homologacaoadjudica {
         $aFornHabilita = pg_fetch_all_columns($rsSqlHabilita,0);
 
         //Se as quantidades forem diferentes, já retorna false
-        if(count($aFornJulg) != count($aFornHabilita)){
+        if(count($aFornJulg) > count($aFornHabilita)){
             return false;
         } elseif(count(array_diff($aFornJulg,$aFornHabilita)) > 0) {
             return false;
