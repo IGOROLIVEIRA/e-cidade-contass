@@ -401,7 +401,8 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
     $pdf->ln();
     $pdf->setfont('arial','b',8);
     $pdf->cell(90,$alt,'ABASTECIMENTOS :',0,1,"L",0);
-    $result_abast=$clveicabast->sql_record($clveicabast->sql_query_info(null,"*","ve70_dtabast, ve70_medida"," ve70_veiculos= $veiculo  "));
+    $sCamposAbast = "DISTINCT ve70_codigo,ve26_descr,ve70_dtabast,ve70_litros,ve70_valor,ve70_medida,coalesce(ve07_sigla,'Km') as ve07_sigla,ve73_veicretirada,ve74_data";
+    $result_abast=$clveicabast->sql_record($clveicabast->sql_query_info(null,$sCamposAbast,"ve70_dtabast, ve70_medida"," ve70_veiculos= $veiculo  "));
     $numrows_abast = $clveicabast->numrows;
     if ($numrows_abast>0){
       $troca=1;
