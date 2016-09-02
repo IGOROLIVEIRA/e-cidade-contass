@@ -40,7 +40,7 @@ $clapostilamento = new cl_apostilamento;
            if(file_exists("funcoes/db_func_apostilamento.php")==true){
              include("funcoes/db_func_apostilamento.php");
            }else{
-           $campos = "si03_sequencial,l20_edital as dl_Processo,l20_anousu,si03_numcontrato,
+           $campos = "si03_sequencial,l20_edital as dl_Processo,l20_anousu,(si172_nrocontrato||'/'||si172_exerciciocontrato) AS dl_N_Contrato,
            case when si03_numcontratoanosanteriores = 0 then null else si03_numcontratoanosanteriores end as dl_N_Contrato_Anos_Ant,
            si03_dataassinacontrato,
            (case si03_tipoapostila when 1 then 'Reajuste de preço previsto no contrato'
