@@ -24,6 +24,11 @@ if(isset($incluir)){
     echo "<script>alert('Campo Data Adjudicação é Obrigatório');</script>";
     db_redireciona('lic1_homologacaoadjudica001.php');
   }
+  //Verifica se os fornecedores vencedores estão habilitados
+  if(!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)){
+    echo "<script>alert('Procedimento abortado. Verifique os fornecedores habilitados.');</script>";
+    db_redireciona('lic1_homologacaoadjudica001.php');
+  }
 
   $parecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao ")));
   $precomedio  = pg_num_rows($clprecomedio->sql_record($clprecomedio->sql_query(null,'*',null,'l209_licitacao ='.$l202_licitacao)));

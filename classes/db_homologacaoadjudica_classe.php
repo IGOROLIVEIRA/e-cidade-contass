@@ -681,5 +681,36 @@ class cl_homologacaoadjudica {
         db_query($sql);
     }
 
+    /**
+     * Verifica se os fornecedores vencedores estão habilitados
+     * @param $iLicitacao
+     * @return bool
+     */
+    function validaFornecedoresHabilitados($iLicitacao){
+        //Busco todos os fornecedores da licitação que ganharam itens
+        $sSqlFornJulg = "SELECT DISTINCT pc24_orcamforne
+                        FROM pcorcamforne
+                        INNER JOIN pcorcamfornelic ON pc31_orcamforne = pc21_orcamforne
+                        INNER JOIN pcorcamjulg ON pc24_orcamforne = pc21_orcamforne
+                        INNER JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
+                        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamforne.pc21_codorc
+                        WHERE pc31_liclicita = {$iLicitacao}";
+        $rsSqlFornJulg = db_query($sSqlFornJulg);
+        $aFornJulg = pg_fetch_all_columns($rsSqlFornJulg,0);
+
+        //Busco todos os fornecedores habilitados para a licitação
+        $sSqlHabilita = "select distinct pc21_orcamforne from habilitacaoforn inner join pcorcamforne on l206_fornecedor = pc21_numcgm where l206_licitacao = {$iLicitacao}";
+        $rsSqlHabilita = db_query($sSqlHabilita);
+        $aFornHabilita = pg_fetch_all_columns($rsSqlHabilita,0);
+
+        //Se as quantidades forem diferentes, já retorna false
+        if(count($aFornJulg) != count($aFornHabilita)){
+            return false;
+        } elseif(count(array_diff($aFornJulg,$aFornHabilita)) > 0) {
+            return false;
+        }
+        return true;
+    }
+
 }
 ?>
