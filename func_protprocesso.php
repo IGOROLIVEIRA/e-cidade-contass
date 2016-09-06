@@ -145,8 +145,11 @@ if (isset($chave_p58_requer)) {
                                       where p30_procapensado  = p58_codproc limit 1)
                     and p58_codproc != {$apensado} ";
             }
+            /**
+             * Removido verificação de processos arquivados, conforme solicitado na ocorrência 2558
+             */
             //Não permite apensar processos arquivados.
-            $where .= " and not exists (select 1 from arqproc where p68_codproc = p58_codproc) ";
+            //$where .= " and not exists (select 1 from arqproc where p68_codproc = p58_codproc) ";
             if (!isset($pesquisa_chave)) {
 
                 if (isset($campos) == false) {
