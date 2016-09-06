@@ -134,7 +134,8 @@ $rotulo->label("z01_cgccpf");
         <?php
         $campos="e60_numemp, e60_codemp, z01_nome,si172_nrocontrato,
             si172_datafinalvigencia,
-            (select si174_novadatatermino from aditivoscontratos where si172_nrocontrato = si174_nrocontrato order by si174_sequencial DESC limit 1)";
+            si174_novadatatermino
+            ";
         $filtroempelemento = "";
         if (!isset($pesquisa_chave)) {
           $campos = "empempenho.e60_numemp,
@@ -142,7 +143,7 @@ $rotulo->label("z01_cgccpf");
             empempenho.e60_anousu,
             si172_nrocontrato,
             si172_datafinalvigencia,
-            (select si174_novadatatermino from aditivoscontratos where si172_nrocontrato = si174_nrocontrato order by si174_sequencial DESC limit 1),
+            si174_novadatatermino,
             empempenho.e60_emiss as DB_e60_emiss,
             cgm.z01_nome,
             cgm.z01_cgccpf,
@@ -153,7 +154,7 @@ $rotulo->label("z01_cgccpf");
             e60_vlranu";
           $campos = " distinct " . $campos;
           $dbwhere=" e60_instit = " . db_getsession("DB_instit");
-          
+
           if (isset($anul) && $anul == false) {
             $dbwhere .= " and e60_vlranu<e60_vlremp ";	  
           }
@@ -231,7 +232,7 @@ $rotulo->label("z01_cgccpf");
 //            $dbwhere .= " and e60_anousu = ".db_getsession("DB_anousu");
             $sql = $clempempenho->sql_query("",$campos,"e60_numemp","{$dbwhere}",$filtroempelemento);
           }
-          
+
           $repassa = array(
               "chave_z01_nome" => @$chave_z01_nome
             );
