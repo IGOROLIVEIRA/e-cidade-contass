@@ -86,7 +86,6 @@ $rotulo->label("p51_codigo");
           <td>
             <?php
             db_input('p51_codigo',10,$Ip51_codigo,true,'text',$db_opcao," onchange='js_pesquisap51_codigo(false);'");
-            //db_input('p58_numeracao',10,$Ip58_numeracao,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
             db_input('p51_descr',40,$Ip51_descr,true,'text',3,'');
             ?>
           </td>
@@ -100,7 +99,6 @@ $rotulo->label("p51_codigo");
 		    <td> 
 					<?php
 					  db_input('p58_numero',10,$Ip58_numero,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
-                      //db_input('p58_numeracao',10,$Ip58_numeracao,true,'text',$db_opcao," onchange='js_pesquisap58_codproc(false);'");
 					  db_input('p58_requer',40,$Ip58_requer,true,'text',3,'');
 					?>
 		    </td>
@@ -148,7 +146,7 @@ function js_consultaProcesso() {
     alert("Preencha um dos campos.");
     return false;
   }
-      
+
   js_OpenJanelaIframe('top.corpo', 'db_iframe', sUrl, 'Pesquisa de Processos', true);
 } 
 

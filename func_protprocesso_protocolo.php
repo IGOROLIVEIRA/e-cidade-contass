@@ -58,12 +58,12 @@ $clprotprocesso->rotulo->label("p58_numero");
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
            <tr>
-             <td align="left" width="4%" nowrap="" title="Número do Processo acompanhado do ano. Campo:p58_numeracao">
+             <td align="left" width="4%" nowrap="" title="Número do Processo acompanhado do ano. Campo:p58_numero">
                <strong>Número Processo:</strong>
              </td>
              <td align="left" width="96%" nowrap="">
 
-               <input type="text" autocomplete="off" onkeydown="return js_controla_tecla_enter(this,event);" oninput="js_ValidaCampos(this,0,'Número Processo','t','t',event);" onblur="js_ValidaMaiusculo(this,'t',event);" style="text-transform:uppercase;" maxlength="30" size="10" value="" id="chave_p58_numeracao" name="chave_p58_numeracao" title="Número do Processo acompanhado do ano. Campo:p58_numeracao">
+               <input type="text" autocomplete="off" onkeydown="return js_controla_tecla_enter(this,event);" oninput="js_ValidaCampos(this,0,'Número Processo','t','t',event);" onblur="js_ValidaMaiusculo(this,'t',event);" style="text-transform:uppercase;" maxlength="30" size="10" value="" id="chave_p58_numero" name="chave_p58_numero" title="Número do Processo acompanhado do ano. Campo:p58_numero">
              </td>
            </tr>
           <tr>
@@ -137,7 +137,7 @@ $clprotprocesso->rotulo->label("p58_numero");
 
       if (!isset($pesquisa_chave)) {
 
-        $campos  = "p58_dtproc,p51_descr,cast(p58_numeracao||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_numcgm, z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numero||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
+        $campos  = "p58_dtproc,p51_descr,cast(p58_numero||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_numcgm, z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numero||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
         $campos .= "p58_codproc,p58_requer as DB_p58_requer, p58_numero";
 
         /**
@@ -146,7 +146,7 @@ $clprotprocesso->rotulo->label("p58_numero");
          */
         if ( !empty($oGet->sCampoPesquisa) && $oGet->sCampoPesquisa == 'p58_codproc' ) {
 
-          $campos  = "p58_dtproc,p51_descr as Tipo,cast(p58_numeracao||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_numcgm, z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numero||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
+          $campos  = "p58_dtproc,p51_descr as Tipo,cast(p58_numero||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_numcgm, z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numero||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
           $campos .= "p58_codproc,p58_requer as DB_p58_requer, p58_numero";
         }
 
@@ -175,15 +175,15 @@ $clprotprocesso->rotulo->label("p58_numero");
            $where  .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
            $sql     = $clprotprocesso->sql_query("",$campos,"p58_codproc desc",
                                                 "$where ");
-	      } else if (isset($chave_p58_numeracao) && (trim($chave_p58_numeracao)!="")) {
+          } else if (isset($chave_p58_numero) && (trim($chave_p58_numero)!="")) {
 
-          $aPartesNumero = explode("/", $chave_p58_numeracao);
+          $aPartesNumero = explode("/", $chave_p58_numero);
           $iAno = db_getsession("DB_anousu");
           if (count($aPartesNumero) > 1) {
             $iAno = $aPartesNumero[1];
           }
           $iNumero = $aPartesNumero[0];
-          $where  .= " and p58_ano = {$iAno} and p58_numeracao = '{$iNumero}'";
+          $where  .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
           $sql     = $clprotprocesso->sql_query("",$campos,"p58_codproc desc",
               "$where ");
         } else if(isset($chave_unica) and ($chave_unica != '')) {
@@ -228,10 +228,9 @@ $clprotprocesso->rotulo->label("p58_numero");
 
             db_fieldsmemory($result,0);
 
-	    			if (isset($retobs) ) {
-	    				echo "<script>".$funcao_js."('$p58_numcgm','$p58_obs',false);</script>";
-
-	    			} else {
+            if (isset($retobs) ) {
+              echo "<script>".$funcao_js."('$p58_numcgm','$p58_obs',false);</script>";
+            } else {
 
               $sCampoRetorno = $p58_numero . '/' . $p58_ano;
 
@@ -240,19 +239,21 @@ $clprotprocesso->rotulo->label("p58_numero");
                 $sCampoRetorno = $oGet->sCampoRetorno;
                 $sCampoRetorno = $$sCampoRetorno;
               }
-             	echo "<script>". $funcao_js . "('$sCampoRetorno', '$z01_nome', false); </script> ";
-	    			}
+              $sCgmEscape = addslashes($z01_nome);
+              echo "<script>". $funcao_js . "('$sCampoRetorno', '$sCgmEscape', false); </script> ";
+
+            }
           } else {
-	          echo "<script>".$funcao_js."('','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+            echo "<script>".$funcao_js."('','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
 
         } else {
-	       echo "<script>".$funcao_js."('','',false);</script>";
+         echo "<script>".$funcao_js."('','',false);</script>";
         }
       }
       ?>
-     </td>
-   </tr>
+    </td>
+  </tr>
 </table>
 </body>
 </html>
