@@ -175,9 +175,31 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = ".$this->sDataFinal['5'].$thi
       LEFT JOIN matunid ON empautitem.e55_unid = matunid.m61_codmatunid
       and si174_dataassinaturatermoaditivo <= '{$this->sDataFinal}' 
       and si174_dataassinaturatermoaditivo >= '{$this->sDataInicial}'
-      and si174_instit = ". db_getsession("DB_instit");
+      and si174_instit = ". db_getsession("DB_instit")."
+      union
+      SELECT DISTINCT '10' AS tipoRegistro,
+            (pcmater.pc01_codmater::varchar || (CASE
+            WHEN m61_codmatunid IS NULL THEN 1
+            ELSE m61_codmatunid
+            END)::varchar) AS coditem,
+            (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
+            (CASE
+            WHEN m61_abrev IS NULL THEN 'UNIDAD'
+            ELSE m61_abrev
+            END) AS unidadeMedida,
+            '1' AS tipoCadastro,
+            '' AS justificativaAlteracao
+            FROM itensregpreco
+            INNER JOIN adesaoregprecos ON si07_sequencialadesao = si06_sequencial
+            INNER JOIN pcmater ON pcmater.pc01_codmater = itensregpreco.si07_item
+            INNER JOIN db_usuarios ON db_usuarios.id_usuario = pcmater.pc01_id_usuario
+            INNER JOIN pcsubgrupo ON pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo
+            LEFT JOIN cgm ON si07_fornecedor = z01_numcgm
+            LEFT JOIN matunid ON si07_codunidade = m61_codmatunid
+            WHERE si06_dataadesao between '{$this->sDataInicial}' and '{$this->sDataFinal}'
+      ";
 
-		 $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
+		 $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);
     //$aCaracteres = array("/","\\","'","\"","°","ª","º","§");
     // matriz de entrada
     $what = array("°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
