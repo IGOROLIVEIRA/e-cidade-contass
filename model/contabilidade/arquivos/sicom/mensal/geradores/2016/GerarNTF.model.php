@@ -24,13 +24,11 @@ class GerarNTF extends GerarAM {
     
     $sSql = "select * from ntf102016 where si143_mes = ". $this->iMes ." and si143_instit = ". db_getsession("DB_instit");
     $rsNTF10    = db_query($sSql);
-
     /*$sSql2 = "select * from ntf112016 where si144_mes = ". $this->iMes ." and si144_instit = ". db_getsession("DB_instit");
     $rsNTF11    = db_query($sSql2);*/
 
     $sSql3 = "select * from ntf202016 where si145_mes = ". $this->iMes ." and si145_instit = ". db_getsession("DB_instit");
     $rsNTF20    = db_query($sSql3);
-
 
   if (pg_num_rows($rsNTF10) == 0) {
 
@@ -52,7 +50,12 @@ class GerarNTF extends GerarAM {
         $aCSVNTF10['si143_codnotafiscal']              =   substr($aNTF10['si143_codnotafiscal'], 0, 15);
         $aCSVNTF10['si143_codorgao']                   =   str_pad($aNTF10['si143_codorgao'], 2, "0", STR_PAD_LEFT);
         $aCSVNTF10['si143_nfnumero']                   =   substr($aNTF10['si143_nfnumero'], 0, 20);
-        $aCSVNTF10['si143_nfserie']                    =   $aNTF10['si143_nfserie'] == '' || $aNTF10['si143_nfserie'] == '0' ? ' ' : substr($aNTF10['si143_nfserie'], 0, 8);
+        if($aNTF10['si143_nfserie'] == '')
+          $aCSVNTF10['si143_nfserie'] = ' ';
+        elseif($aNTF10['si143_nfserie'] == '0')
+          $aCSVNTF10['si143_nfserie'] = 'N';
+        else
+          $aCSVNTF10['si143_nfserie'] = substr($aNTF10['si143_nfserie'], 0, 8);
         $aCSVNTF10['si143_tipodocumento']              =   str_pad($aNTF10['si143_tipodocumento'], 1, "0", STR_PAD_LEFT);
         $aCSVNTF10['si143_nrodocumento']               =   substr($aNTF10['si143_nrodocumento'], 0, 14);
         $aCSVNTF10['si143_nroinscestadual']            =   substr($aNTF10['si143_nroinscestadual'], 0, 30);
@@ -101,7 +104,8 @@ class GerarNTF extends GerarAM {
             $aCSVNTF20['si145_tiporegistro']             =    str_pad($aNTF20['si145_tiporegistro'], 2, "0", STR_PAD_LEFT);
             
             $aCSVNTF20['si145_nfnumero']                 =    substr($aNTF20['si145_nfnumero'], 0, 20);
-            $aCSVNTF20['si145_nfserie']                  =    substr($aNTF20['si145_nfserie'] , 0, 8) == '0' ? ' ' : substr($aNTF20['si145_nfserie'] , 0, 8) ;
+            $aCSVNTF20['si145_nfserie'] =  $aCSVNTF10['si143_nfserie'];
+            //$aCSVNTF20['si145_nfserie']                  =    substr($aNTF20['si145_nfserie'] , 0, 8) == '0' ? 'N' : substr($aNTF20['si145_nfserie'] , 0, 8) ;
             $aCSVNTF20['si145_tipodocumento']            =    $aNTF20['si145_tipodocumento'];
             $aCSVNTF20['si145_nrodocumento']             =   substr($aNTF20['si145_nrodocumento'], 0, 14);
             $aCSVNTF20['si145_chaveacesso']              =   $aNTF20['si145_chaveacesso'] == 0 ? ' ' : $aNTF20['si145_chaveacesso'];
