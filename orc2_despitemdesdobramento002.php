@@ -374,21 +374,21 @@ $ass_tes = $classinatura->assinatura(9000, "", '2');
 $ass_cont = $classinatura->assinatura(9000, "", '3');
 
 //echo $ass_pref;
-if ($pdf->gety() > ($pdf->h - 30)) {
+if ($pdf->gety() > ($pdf->h - 40)) {
     $pdf->addpage();
 }
 $pdf->setfont('arial', '', 8);
-$largura = ($pdf->w) / 2;
-$pdf->ln(20);
+$largura = ( $pdf->w ) / 4;
+$pdf->ln();
+$pdf->ln();
 $pos = $pdf->gety();
-$pdf->multicell($largura, 4, $ass_pref, 0, "L", 0, 0);
-$pdf->setxy($largura, $pos);
-$pdf->multicell($largura, 4, $ass_sec, 0, "L", 0, 0);
-$pos = $pdf->gety();
-$pdf->sety($pos + 20);
-$pdf->multicell($largura, 4, $ass_tes, 0, "L", 0, 0);
-$pdf->setxy($largura, $pos + 20);
-$pdf->multicell($largura, 4, $ass_cont, 0, "L", 0, 0);
+$pdf->multicell($largura,4,$ass_pref,0,"C",0,0);
+$pdf->setxy($largura,$pos);
+$pdf->multicell($largura,4,$ass_sec,0,"C",0,0);
+$pdf->setxy($largura+65,$pos);
+$pdf->multicell($largura,4,$ass_tes,0,"C",0,0);
+$pdf->setxy($largura+130,$pos);
+$pdf->multicell($largura,4,$ass_cont,0,"C",0,0);
 
 $pdf->Output();
 ?>
