@@ -113,7 +113,7 @@ function js_mascara(evt){
     <td align="center" valign="top">
       <?
       if(!isset($pesquisa_chave)){
-        $sCampos  = "e81_codmov, e60_codemp, e60_anousu, e60_numemp, e60_emiss, e60_vlremp-e60_vlranu as e60_vlremp,";
+        $sCampos  = "distinct on (e60_numemp) e81_codmov, e60_codemp, e60_anousu, e60_numemp, e60_emiss, e60_vlremp-e60_vlranu as e60_vlremp,"; // OC 2489
         $sCampos .= "e60_vlrpag, z01_nome, e44_descr, codigo, nomeinst, e45_acerta";
 
         $sGroupBy  = "e81_codmov, e60_codemp, e60_anousu, e60_numemp, e60_emiss, e60_vlremp,";
@@ -144,7 +144,7 @@ function js_mascara(evt){
                                                           $sCampos,
                                                           "e60_codemp",
                                                           $sGroupBy,
-                                                          "$dbwhere and  e60_codemp='".$arr[0]."' {$dbwhere_ano} {$sWhereComplementar}" );
+                                                          "$dbwhere and  e60_codemp ='".$arr[0]."' {$dbwhere_ano} {$sWhereComplementar}" );
 
         } else if(isset($chave_z01_nome) && (trim($chave_z01_nome)!="")) {
           $sql = $clemppresta->sql_query_depto_movimento( null,

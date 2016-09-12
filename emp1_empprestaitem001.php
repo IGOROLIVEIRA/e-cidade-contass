@@ -69,7 +69,9 @@ if (isset($incluir)) {
     $rsTotalItens        = $clempprestaitem->sql_record($sSqlVerificaTotalItem);
     $nValorTotalItens    = db_utils::fieldsMemory($rsTotalItens, 0)->valor;
     $oEmpenhooFinanceiro = EmpenhoFinanceiroRepository::getEmpenhoFinanceiroPorNumero($e46_numemp);
-    if (($nValorTotalItens + $e46_valor) > $oEmpenhooFinanceiro->getValorEmpenho()) {
+
+      // OC 2489 - Acrescentado formatação dos valores.
+    if (round(($nValorTotalItens + $e46_valor),2) > round($oEmpenhooFinanceiro->getValorEmpenho(),2)) {
 
       $sqlerro  = true;
       $erro_msg = _M("financeiro.empenho.emp1_empprestaitem001.valor_prestacao_maior_empenho");

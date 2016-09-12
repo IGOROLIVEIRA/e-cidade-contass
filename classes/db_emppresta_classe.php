@@ -685,7 +685,7 @@ class cl_emppresta {
      }
 
      if ($ordem != null) {
-       $sql .= " order by {$ordem}";
+       $sql .= " order by e60_numemp, {$ordem} "; // OC 2489
      }
 
      return $sql;
