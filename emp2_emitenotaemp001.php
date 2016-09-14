@@ -58,6 +58,7 @@ function js_abre(){
    }
 
    query+="&listacgm="+listacgm;
+   query+="&ver="+obj.ver.value;
 
    if (obj.e60_numemp.value!=''){
        query += "&e60_numemp="+obj.e60_numemp.value;

@@ -109,8 +109,11 @@ if(isset($e60_numemp) && $e60_numemp != ''){
 
 }
 
-if(isset($listacgm) && $listacgm !=''){
-    $dbwhere .= "and cgm.z01_numcgm in ($listacgm)";
+if(isset($listacgm) && $listacgm != ''){
+    if($ver == 'com')
+        $dbwhere .= "and cgm.z01_numcgm in ($listacgm)";
+    elseif($ver == 'sem')
+        $dbwhere .= "and cgm.z01_numcgm not in ($listacgm)";
 }
 
 $sqlemp = "
