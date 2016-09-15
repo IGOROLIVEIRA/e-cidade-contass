@@ -424,19 +424,16 @@ switch ($oParam->exec){
       foreach ($oParam->aBens as $iCodigoBem) {
 
         $oBem = new Bem($iCodigoBem);
-        /**
-         * Removido validação temporariamente
-         * @see ocorrência 2430
-         */
-        //if ($oBem->getCodigoTipoDepreciacao() == null) {
-        //	$aBensErro[] = $iCodigoBem;
-       // } else {
+
+        if ($oBem->getCodigoTipoDepreciacao() == null) {
+        	$aBensErro[] = $iCodigoBem;
+        } else {
           $oBem->baixar($iMotivo, $dDataBaixa, $sObservacao, $iDestino);
-        //}
+        }
       }
-     // if (count($aBensErro) > 0) {
-      //	throw new Exception("Necessario atualizar os dados financeiros dos bens (".implode(",", $aBensErro).")");
-      //}
+      if (count($aBensErro) > 0) {
+      	throw new Exception("Necessario atualizar os dados financeiros dos bens (".implode(",", $aBensErro).")");
+      }
       db_fim_transacao(false);
     } catch (Exception $eErro) {
 
