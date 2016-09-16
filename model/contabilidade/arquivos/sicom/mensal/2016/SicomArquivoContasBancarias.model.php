@@ -496,7 +496,9 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'".$iFonte."'
 
 
                             $nValor = $oMovi->valorentrsaida;
-
+                            $conta = 0;
+                            $recurso = 0;
+                            $iCodSis = 0;
                             if ($oMovi->codctbtransf != 0 && $oMovi->codctbtransf != '') {
                                 $sqlcontatransf = "select  si09_codorgaotce||(c63_banco::integer)::varchar||(c63_agencia::integer)::varchar||c63_dvagencia||(c63_conta::integer)::varchar||
 										             c63_dvconta||case when db83_tipoconta in (2,3) then 2 else 1 end as contadebito,
