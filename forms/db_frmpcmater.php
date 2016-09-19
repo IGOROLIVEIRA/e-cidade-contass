@@ -79,7 +79,7 @@ function js_executaIframe(val) {
     $arr_truefalse = array('f'=>'Não','t'=>'Sim');
     db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);
     ?>
-    <?=$Lpc01_servico?>
+    <b>Tipo:</b>
     <?
      $x = array("f"=>"Material","t"=>"Serviço/Material Permanente");
         if(isset($pc01_codmater)) {
