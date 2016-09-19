@@ -691,7 +691,7 @@ class cl_homologacaoadjudica {
         $sSqlFornJulg = "SELECT DISTINCT pc24_orcamforne
                         FROM pcorcamforne
                         INNER JOIN pcorcamfornelic ON pc31_orcamforne = pc21_orcamforne
-                        INNER JOIN pcorcamjulg ON pc24_orcamforne = pc21_orcamforne
+                        INNER JOIN pcorcamjulg ON pc24_orcamforne = pc21_orcamforne and pc24_pontuacao = 1
                         INNER JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
                         INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamforne.pc21_codorc
                         WHERE pc31_liclicita = {$iLicitacao}";
