@@ -81,7 +81,7 @@ function js_executaIframe(val) {
     ?>
     <?=$Lpc01_servico?>
     <?
-     $x = array("f"=>"Não","t"=>"Sim");
+     $x = array("f"=>"Material","t"=>"Serviço/Material Permanente");
         if(isset($pc01_codmater)) {
             if (verPermissaoAlteraServico($pc01_codmater)) {
                 db_select("pc01_servico", $x, true, 3);

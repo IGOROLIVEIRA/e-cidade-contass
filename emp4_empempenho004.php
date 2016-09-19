@@ -262,6 +262,23 @@ if (!empty($iElemento)) {
 
 if(isset($incluir)) {
 
+  /* Ocorrência 2630
+   * Validações de datas para geração de autorizações de empenhos e geração de empenhos
+   * 1. Validar impedimento para geração de autorizações/empenhos com data anterior a data de homologação
+   * 2. Validar impedimento para geração de autorizações de empenhos de licitações que não estejam homologadas.
+   */
+  $sSqlLicitacao = "select e54_emiss
+                          from empautoriza
+                          inner join liclicita  on ltrim(((string_to_array(e54_numerl, '/'))[1])::varchar,'0') = l20_numero::varchar AND l20_anousu::varchar = ((string_to_array(e54_numerl, '/'))[2])::varchar
+                          where e54_autori = {$e54_autori} limit 1";
+
+  if(pg_num_rows(db_query($sSqlLicitacao))) {
+    if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > db_getsession('DB_datausu')) {
+      db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").");
+      db_redireciona("emp4_empempenho004.php");
+    }
+  }
+
   $sqlerro = false;
   db_inicio_transacao();
 
@@ -1030,8 +1047,21 @@ if(isset($incluir)) {
   $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);
 
-  if(mktime(0,0,0,substr($e54_emiss,5,2),substr($e54_emiss,8,2),substr($e54_emiss,0,4)) > db_getsession("DB_datausu")){
-    db_msgbox("Data da autorização (".db_formatar($e54_emiss,"d").") maior que data do empenho.");
+  /* Ocorrência 2630
+   * Validações de datas para geração de autorizações de empenhos e geração de empenhos
+   * 1. Validar impedimento para geração de autorizações/empenhos com data anterior a data de homologação
+   * 2. Validar impedimento para geração de autorizações de empenhos de licitações que não estejam homologadas.
+   */
+  $sSqlLicitacao = "select e54_emiss
+                          from empautoriza
+                          inner join liclicita  on ltrim(((string_to_array(e54_numerl, '/'))[1])::varchar,'0') = l20_numero::varchar AND l20_anousu::varchar = ((string_to_array(e54_numerl, '/'))[2])::varchar
+                          where e54_autori = {$e54_autori} limit 1";
+
+  if(pg_num_rows(db_query($sSqlLicitacao))) {
+    if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > db_getsession('DB_datausu')) {
+      db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").");
+      db_redireciona("emp4_empempenho004.php");
+    }
   }
 
   $result=$clempauthist->sql_record($clempauthist->sql_query_file($e54_autori));

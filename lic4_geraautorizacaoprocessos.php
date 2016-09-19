@@ -35,7 +35,24 @@ require("model/licitacao.model.php");
 
 $oPost = db_utils::postMemory($_POST);
 if ($oPost->lSelecionaPc == "f") {
-  db_redireciona("lic4_geraaut002.php?l20_codigo={$oPost->l20_codigo}");
+  /* Ocorrência 2630
+   * Validações de datas para geração de autorizações de empenhos e geração de empenhos
+   * 1. Validar impedimento para geração de autorizações/empenhos com data anterior a data de homologação
+   * 2. Validar impedimento para geração de autorizações de empenhos de licitações que não estejam homologadas.
+   */
+  $sSqlDataHomologacao = "select l202_datahomologacao from homologacaoadjudica where l202_licitacao = {$oPost->l20_codigo}";
+  if(pg_num_rows(db_query($sSqlDataHomologacao)) > 0) {
+      if (strtotime(db_utils::fieldsMemory(db_query($sSqlDataHomologacao), 0)->l202_datahomologacao) < db_getsession('DB_datausu')) {
+          db_redireciona("lic4_geraaut002.php?l20_codigo={$oPost->l20_codigo}");
+      } else {
+          echo "<script> alert('Não é permitido gerar autorizações de licitações cuja data de homologadação (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlDataHomologacao), 0)->l202_datahomologacao)) .") seja maior que a data da autorização (".date("d/m/Y",db_getsession('DB_datausu')).").')</script>";
+          db_redireciona("lic4_geraaut001.php");
+      }
+  }else{
+      echo "<script> alert('Não é permitido gerar autorizações de licitações não homologadas.')</script>";
+      db_redireciona("lic4_geraaut001.php");
+  }
+
 }
 $oLicitacao = new Licitacao($oPost->l20_codigo);
 $oDados     = $oLicitacao->getDados();

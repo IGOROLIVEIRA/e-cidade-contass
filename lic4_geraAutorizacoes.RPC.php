@@ -240,7 +240,23 @@ switch ($oParam->exec) {
    * Gera Autorização
    */
   case "gerarAutorizacoes":
-
+    /* Ocorrência 2630
+    * Validações de datas para geração de autorizações de empenhos e geração de empenhos
+    * 1. Validar impedimento para geração de autorizações/empenhos com data anterior a data de homologação
+    * 2. Validar impedimento para geração de autorizações de empenhos de licitações que não estejam homologadas.
+    */
+    $sSqlDataHomologacao = "select l202_datahomologacao from homologacaoadjudica where l202_licitacao = {$oParam->iCodigo}";
+    if(pg_num_rows(db_query($sSqlDataHomologacao)) > 0) {
+      if (strtotime(db_utils::fieldsMemory(db_query($sSqlDataHomologacao), 0)->l202_datahomologacao) > db_getsession('DB_datausu')) {
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode("Não é permitido gerar autorizações de licitações cuja data de homologadação (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlDataHomologacao), 0)->l202_datahomologacao)) .") seja maior que a data da autorização (".date("d/m/Y",db_getsession('DB_datausu')).").");
+        break;
+      }
+    }else{
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode("Não é permitido gerar autorizações de licitações não homologadas.");
+      break;
+    }
 
         /**
          * controle de encerramento peri. contabil
