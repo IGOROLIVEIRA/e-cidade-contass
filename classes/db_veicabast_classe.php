@@ -797,6 +797,8 @@ class cl_veicabast {
      $sql .= "      left  join veicabastretirada     on veicabastretirada.ve73_veicabast    = veicabast.ve70_codigo";
      $sql .= "      left  join veicabastanu          on veicabastanu.ve74_veicabast         = veicabast.ve70_codigo";
      $sql .= "      left  join veictipoabast          on veiculos.ve01_veictipoabast        = veictipoabast.ve07_sequencial";
+     $sql .= "      left  join empveiculos          on veicabast.ve70_codigo        = empveiculos.si05_codabast";
+     $sql .= "      left  join empempenho          on empempenho.e60_numemp        = empveiculos.si05_numemp";
      $sql2 = "";
 
 if($dbwhere==""){

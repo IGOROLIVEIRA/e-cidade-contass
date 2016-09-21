@@ -401,7 +401,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
     $pdf->ln();
     $pdf->setfont('arial','b',8);
     $pdf->cell(90,$alt,'ABASTECIMENTOS :',0,1,"L",0);
-    $sCamposAbast = "DISTINCT ve70_codigo,ve26_descr,ve70_dtabast,ve70_litros,ve70_valor,ve70_medida,coalesce(ve07_sigla,'Km') as ve07_sigla,ve73_veicretirada,ve74_data";
+    $sCamposAbast = "DISTINCT ve70_codigo,ve26_descr,ve70_dtabast,ve70_litros,ve70_valor,ve70_medida,coalesce(ve07_sigla,'Km') as ve07_sigla,ve73_veicretirada,ve74_data,case when si05_numemp is null then '' else e60_codemp||'/'||e60_anousu end as empenho";
     $result_abast=$clveicabast->sql_record($clveicabast->sql_query_info(null,$sCamposAbast,"ve70_dtabast, ve70_medida"," ve70_veiculos= $veiculo  "));
     $numrows_abast = $clveicabast->numrows;
     if ($numrows_abast>0){
@@ -425,7 +425,8 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
           $pdf->cell(20,$alt,"Valor Total",1,0,"C",1);
           $pdf->cell(20,$alt,"Medida",1,0,"C",1);
           $pdf->cell(20,$alt,"Retirada",1,0,"C",1);
-          $pdf->cell(20,$alt,"Anulado",1,1,"C",1);
+          $pdf->cell(20,$alt,"Anulado",1,0,"C",1);
+          $pdf->cell(20,$alt,"Empenho",1,1,"C",1);
           $troca = 0;
         }
          
@@ -437,8 +438,9 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
         $pdf->cell(20,$alt,db_formatar($ve70_valor,"f"),0,0,"R",$p);
         $pdf->cell(20,$alt,$ve70_medida." ".$ve07_sigla,0,0,"C",$p);
         $pdf->cell(20,$alt,$ve73_veicretirada,0,0,"C",$p);
-        $pdf->cell(20,$alt,db_formatar($ve74_data,"d"),0,1,"C",$p);
-         
+        $pdf->cell(20,$alt,db_formatar($ve74_data,"d"),0,0,"C",$p);
+        $pdf->cell(20,$alt,$empenho,0,1,"C",$p);
+
         $quant_litros   += $ve70_litros;
         $vlr_totalabast += $ve70_valor;
          
@@ -457,10 +459,11 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
       $pdf->cell(20,$alt,db_formatar($vlr_totalabast,"f"),'T',0,"R",$p);
       $pdf->cell(20,$alt,$ve70_medida ,'T',0,"C",$p);
       $pdf->cell(20,$alt,'','T',0,"C",$p);
+      $pdf->cell(20,$alt,'','T',0,"C",$p);
       $pdf->cell(20,$alt,'','T',1,"C",$p);
        
       $pdf->setfont('arial','b',8);
-      $pdf->cell(190,$alt,"Total de Abastecimentos :".$total_abast,"T",1,"L",0);
+      $pdf->cell(210,$alt,"Total de Abastecimentos :".$total_abast,"T",1,"L",0);
        
     }else{
       $pdf->cell(0,$alt,"Não Existem Abastecimentos","T",1,"L",0);
