@@ -170,7 +170,7 @@ class cl_far_matersaude {
      }
 
      if($fa01_i_codigo == "" || $fa01_i_codigo == null ){
-       $result = db_query("select nextval('farmatersaude_fa01_i_codigo_seq')");
+       /*$result = db_query("select nextval('farmatersaude_fa01_i_codigo_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
          $this->erro_sql   = "Verifique o cadastro da sequencia: farmatersaude_fa01_i_codigo_seq do campo: fa01_i_codigo";
@@ -178,8 +178,8 @@ class cl_far_matersaude {
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
-       }
-       $this->fa01_i_codigo = pg_result($result,0,0);
+       }*/
+       $this->fa01_i_codigo = $this->fa01_i_codmater;
      }else{
       //$result = db_query("select last_value from farmatersaude_fa01_i_codigo_seq");
        //if(($result != false) && (pg_result($result,0,0) < $fa01_i_codigo)){
@@ -288,7 +288,7 @@ class cl_far_matersaude {
       $this->atualizacampos();
      $sql = " update far_matersaude set ";
      $virgula = "";
-     if(trim($this->fa01_i_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fa01_i_codigo"])){
+     /*if(trim($this->fa01_i_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fa01_i_codigo"])){
        $sql  .= $virgula." fa01_i_codigo = $this->fa01_i_codigo ";
        $virgula = ",";
        if(trim($this->fa01_i_codigo) == null ){
@@ -300,13 +300,13 @@ class cl_far_matersaude {
          $this->erro_status = "0";
          return false;
        }
-     }
+     }*/
      if(trim($this->fa01_t_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fa01_t_obs"])){
        $sql  .= $virgula." fa01_t_obs = '$this->fa01_t_obs' ";
        $virgula = ",";
      }
      if(trim($this->fa01_i_codmater)!="" || isset($GLOBALS["HTTP_POST_VARS"]["fa01_i_codmater"])){
-       $sql  .= $virgula." fa01_i_codmater = $this->fa01_i_codmater ";
+       $sql  .= $virgula." fa01_i_codmater = $this->fa01_i_codmater, fa01_i_codigo = $this->fa01_i_codmater";
        $virgula = ",";
        if(trim($this->fa01_i_codmater) == null ){
          $this->erro_sql = " Campo Medicamento nao Informado.";
