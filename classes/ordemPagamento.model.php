@@ -1402,12 +1402,12 @@ class ordemPagamento {
 
 
     $oDaoLancamentosAutonomos = db_utils::getDao("rhautonomolanc");
-    $sSqlVerificaAutonomos    = $oDaoLancamentosAutonomos->sql_query_file(null,
-                                                                          "rh89_anousu,
-                                                                           rh89_mesusu,
-                                                                           rh89_valorretinss",
-                                                                          null,
-                                                                          "rh89_codord={$oDadosOrdem->e50_codord}");
+    $sSqlVerificaAutonomos    = $oDaoLancamentosAutonomos->sql_query_file(
+      null,
+      "rh89_anousu, rh89_mesusu, rh89_valorretinss",
+      null,
+      "rh89_codord={$oDadosOrdem->e50_codord}"
+    );
 
     $rsVerificaAutonomos      = $oDaoLancamentosAutonomos->sql_record($sSqlVerificaAutonomos);
 
@@ -1837,7 +1837,7 @@ class ordemPagamento {
     $oDaoEmpanuladoItem = db_utils::getDao("empanuladoitem");
     foreach ($oNota->aItens as $oItem) {
 
-      if ($oItem->nTotalDesconto > 0) {
+      if ($oItem->emp4_manuten > 0) {
 
         $sBuscaDadosItem   = $oDaoEmpNotaItem->sql_query_file($oDadosItem->e72_sequencial);
         $rsBuscaDadosItem  = $oDaoEmpNotaItem->sql_record($sBuscaDadosItem);

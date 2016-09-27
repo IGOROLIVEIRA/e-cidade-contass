@@ -467,7 +467,11 @@ function js_addRetencao() {
    soRetencaojson            = soRetencaojson.replace("(","");
    soRetencaojson            = soRetencaojson.replace(")","");
    js_divCarregando("Aguarde, Calculando retenção","msgBox");
-   var sJson   = '{"exec":"addRetencao","params":[{"oRetencao":'+soRetencaojson+',"inSession":true,"isUpdate":false}]}';
+   var sJson   = '{';
+   sJson      += '"exec":"addRetencao",';
+   sJson      += '"params":[{"oRetencao":'+soRetencaojson+',"inSession":true,"isUpdate":false}],';
+   sJson      += '"iCodMov":' + $F('e81_codmov');
+   sJson      += '}';
    url         = 'emp4_retencaonotaRPC.php';
    var oAjax   = new Ajax.Request(
                          url, 
@@ -680,6 +684,7 @@ function js_confirmar() {
   var sJson   = '{"exec":"saveRetencoes","params":[{"iCodNota":'+$F('e69_codnota')+',';
   sJson      += '"iCodOrd":'+($F('e50_codord'))+',"iCodMov":'+$F('e81_codmov')+',"aMovimentos":'+aBaseDeCalculo.toSource()+'}]}';
   var url     = 'emp4_retencaonotaRPC.php';
+  console.log(sJson);
   var oAjax   = new Ajax.Request(
                          url, 
                          {
@@ -745,9 +750,8 @@ function js_sair() {
     js_bloqueiaMenus(false);
     if (lCallBack) {
     
-      var nTotalRetencoes = gridRetencoes.sum(5, false);
+      var nTotalRetencoes = gridRetencoes.sum(5, false); // 5: coluna "Valor Retido"
       parent.js_atualizaValorRetencao($F('e81_codmov'), nTotalRetencoes, $F('e69_codnota'), $F('e50_codord'), null);
-    
     }
     parent.db_iframe_retencao.hide();
   }

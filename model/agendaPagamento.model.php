@@ -1435,7 +1435,7 @@ class agendaPagamento {
         else e97_codforma end) as e97_codforma ,
       e42_dtpagamento,
       e53_vlrpag,
-      round(e81_valor + (select coalesce(sum(e34_valordesconto), 0) from pagordemdesconto where e34_codord = e50_codord), 2) as e81_valor,
+      e81_valor,
       e86_codmov,
       e43_sequencial,
       e42_sequencial,

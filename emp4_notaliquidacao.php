@@ -62,12 +62,12 @@ switch ($oParam->exec) {
 
     try {
 
-			if ( $iTotNotas == 0 ) {
-				throw new Exception('Erro - Nenhuma nota selecionada');
-			}
+      if ( $iTotNotas == 0 ) {
+        throw new Exception('Erro - Nenhuma nota selecionada');
+      }
 
       db_inicio_transacao();
-			$lDesconto = true;
+      $lDesconto = true;
 
       for ($i = 0; $i < $iTotNotas; $i++) {
 
@@ -75,13 +75,15 @@ switch ($oParam->exec) {
 
         /* #1 - modification: ContratosPADRS */
 
-        $lDesconto = $oNotaLiquidacao->desconto($oParam->aNotas[$i],
-																								$oParam->aNotas[$i]->nValorDesconto,
-																								db_stdClass::db_stripTagsJson(utf8_decode($oParam->sMotivo)));
+        $lDesconto = $oNotaLiquidacao->desconto(
+          $oParam->aNotas[$i],
+          $oParam->aNotas[$i]->nValorDesconto,
+          db_stdClass::db_stripTagsJson(utf8_decode($oParam->sMotivo))
+        );
 
-				if ( !$lDesconto ) {
-					throw new Exception('Erro ao gerar desconto');
-				}
+        if ( !$lDesconto ) {
+          throw new Exception('Erro ao gerar desconto');
+        }
       }
 
       db_fim_transacao(false);

@@ -1136,7 +1136,7 @@ class cl_pagordem {
     $sql .= " from pagordem ";
     $sql .= "      inner join  empord    on empord.e82_codord    = pagordem.e50_codord  ";
     $sql .= "      inner join  empagemov on empagemov.e81_codmov = empord.e82_codmov";
-  
+
     $sql2 = "";
     if($dbwhere=="") {
       if($e50_codord!=null ) {

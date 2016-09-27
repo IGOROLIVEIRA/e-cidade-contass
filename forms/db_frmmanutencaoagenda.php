@@ -895,7 +895,7 @@ if (count($aParametrosEmpenho) > 0) {
           } else {
             aLinha[9]   = "";
           }
-          aLinha[10]   = js_formatar( (e53_valor-e53_vlranu),"f");
+          aLinha[10]   = "<span id='valor_com_desconto"+e81_codmov+"'>"+js_formatar( (e53_valor-e53_vlranu),"f")+"</span>";
           aLinha[11]   = "<span id='valoraut"+e81_codmov+"'>"+js_formatar(nValor, "f")+"</span>";
 
           if (lDisabled) {
@@ -913,7 +913,7 @@ if (count($aParametrosEmpenho) > 0) {
             sReadOnly  = ' readonly ';
           }
 
-          nValorTotal = (nValorTotal - e53_vlranu).toFixed(2);
+//          nValorTotal = (nValorTotal - e53_vlranu).toFixed(2);
 
           aLinha[13]  = "<input type = 'text' id='valorrow"+e81_codmov+"' size='9' style='width:100%;height:100%;text-align:right;border:1px inset'";
           aLinha[13] += " class='valores' onchange='js_calculaValor(this,"+e81_codmov+")'"+sReadOnly;

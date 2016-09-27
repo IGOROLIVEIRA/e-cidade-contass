@@ -36,26 +36,29 @@ require("model/retencaoNota.model.php");
 $oJson    = new services_json();
 $oParam   = $oJson->decode(str_replace("\\","",$_POST["json"]));
 if ($oParam->exec == "addRetencao") {
-  
-   //print_r($oParam);
-  
-   try {
-     
-     $oRetencaoNota = new retencaoNota($oParam->params[0]->oRetencao->iCodNota);
-     $oRetencaoNota->setInSession($oParam->params[0]->inSession);
-     $oRetencaoNota->addRetencao($oParam->params[0]->oRetencao, $oParam->params[0]->inSession, $oParam->params[0]->isUpdate);
-     
-     $oRetorno->aRetencoes = $oRetencaoNota->getRetencoes();
-     $oRetorno->status     = 1;
-     $oRetorno->message    = ""; 
-     echo $oJson->encode($oRetorno);
-     
-   }
+
+  try {
+
+    $oRetencaoNota = new retencaoNota($oParam->params[0]->oRetencao->iCodNota);
+    $oRetencaoNota->setInSession($oParam->params[0]->inSession);
+
+    if ($oRetencaoNota->podeInserirRetencao($oParam->params[0]->oRetencao) === true) {
+      $oRetencaoNota->addRetencao($oParam->params[0]->oRetencao, $oParam->params[0]->inSession, $oParam->params[0]->isUpdate);
+    } else {
+      throw new Exception("Erro - O valor informado deixa o valor total abaixo de 0.");
+    }
+
+    $oRetorno->aRetencoes = $oRetencaoNota->getRetencoes();
+    $oRetorno->status     = 1;
+    $oRetorno->message    = "";
+    echo $oJson->encode($oRetorno);
+
+  }
    
-   catch (Exception $eErro) {
-     echo $oJson->encode(array("status" => 2, "message"=> urlencode($eErro->getMessage())));
-   }
-   //$oRetencao = new retencaoNota($oParam->params[0]->oRetencao->iCodNota);
+  catch (Exception $eErro) {
+    echo $oJson->encode(array("status" => 2, "message"=> urlencode($eErro->getMessage())));
+  }
+  //$oRetencao = new retencaoNota($oParam->params[0]->oRetencao->iCodNota);
 } else if ($oParam->exec == 'apagarRetencao') {
 
   try {
@@ -100,11 +103,11 @@ if ($oParam->exec == "addRetencao") {
   echo $oJson->encode($oRetorno);
   
 } else if ($oParam->exec == "saveRetencoes") {
-  
+
   try {
-  
+
     db_inicio_transacao();
-     
+
     $oRetencaoNota = new retencaoNota($oParam->params[0]->iCodNota);
     if ($oParam->params[0]->iCodMov != "") {
       $oRetencaoNota->setCodigoMovimento($oParam->params[0]->iCodMov);
@@ -113,19 +116,19 @@ if ($oParam->exec == "addRetencao") {
     $oRetencaoNota->salvar($oParam->params[0]->iCodOrd, $oParam->params[0]->aMovimentos);
     $oRetencaoNota->unsetSession();
     db_fim_transacao(false);
-    $lMesAnterior = $oRetencaoNota->hasRetencoesMesAnterior(); 
-    echo $oJson->encode(array("status" => 1, 
+    $lMesAnterior = $oRetencaoNota->hasRetencoesMesAnterior();
+    echo $oJson->encode(array("status" => 1,
                         "message"=> urlencode("Retenções lançadas com sucesso"),
                         "lMesAnterior"=> $lMesAnterior)
                       );
     
-  } 
-  
+  }
+
   catch (Exception $eErro) {
     
     db_fim_transacao(true);
     echo $oJson->encode(array("status" => 2, "message"=> urlencode($eErro->getMessage())));
-   
+
   }
 } else if ($oParam->exec == "calculaRetencao") {
   

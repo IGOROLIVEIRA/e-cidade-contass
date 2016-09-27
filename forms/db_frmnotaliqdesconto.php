@@ -331,6 +331,8 @@ $db_opcao_inf=1;
 
     var oRetornoItens = eval("(" + oAjax.responseText + ")");
 
+    // A OP pode já ter algum desconto ou algum valor retido
+
     var sContentItens  = "<fieldset>";
     sContentItens     += "<legend><b>Itens da Nota "+oRetornoItens.iCodNota+"</b></legend>";
     sContentItens     += "  <div id='ctnItensNota'>";
@@ -338,7 +340,9 @@ $db_opcao_inf=1;
     sContentItens     += "</fieldset>";
     sContentItens     += "<p align='center'>";
     sContentItens     += "  <input type='button' name='btnSalvarItens' ";
-    sContentItens     += "         id='btnSalvarItens' value='Salvar' onclick='js_salvarItens("+oRetornoItens.iCodNota+")' />";
+    sContentItens     += "  id='btnSalvarItens' value='Salvar' "
+    sContentItens     += "  onclick='js_salvarItens("+oRetornoItens.iCodNota+", "+oRetornoItens.nValorOP+", "+oRetornoItens.nRetencoes+", "+oRetornoItens.nQtdMovOP+")' "
+    sContentItens     += "  />";
     sContentItens     += "</p>";
 
     oWindowItens = new windowAux('oWindowItens_'+oRetornoItens.iCodNota, "Itens da Nota: "+oRetornoItens.iCodNota, 700, 450);
@@ -429,8 +433,18 @@ $db_opcao_inf=1;
   /**
    * Função que valida e salva os dados alterados dentro de uma window!
    */
-  function js_salvarItens() {
+  function js_salvarItens(iCodNota, nValorOPComDesconto, nRetencoes, nQtdMovOP) {
 
+    // nQtdMovOP: Erro para o caso de ter mais de uma movimentaçao
+    console.log(nQtdMovOP);
+    if (nQtdMovOP > 1) {
+      alert("Impossível inserir desconto.\n\nEsta Ordem de Pagamento está dividida em "+nQtdMovOP+" movimentações.");
+      lErro = true;
+      return false;
+    }
+
+
+    var nValorOP = nValorOPComDesconto - nRetencoes;
     var lErro    = false;
     /**
      * Total de Saldo A Pagar de uma NOTA
@@ -479,7 +493,7 @@ $db_opcao_inf=1;
          *  Efetua a subtração do VALOR LIQUIDADO pelo VALOR ANULADO
          *  O usuário não pode informar um desconto maior que o resultado desta subtração
          */
-        //console.log(nValorDesconto + " ---- " + nSaldoItem);
+
         if (nValorDesconto > nSaldoItem) {
 
           sItensErro += sVirgula+sNomeProduto;
@@ -512,6 +526,15 @@ $db_opcao_inf=1;
     if (js_round(nTotalADescontar,2) > js_round(nSaldoAPagar,2)) {
 
       alert("O valor do desconto deve ser inferior ao saldo à pagar: "+js_formatar(nSaldoAPagar, 'f', 2)+".");
+      lErro = true;
+      return false;
+    }
+
+
+    // nValorOP = (valorOP - desconto - valorRetenções)
+    // Erro para o caso do (nValorOP - nTotalADescontar) < 0
+    if ((nValorOP - nTotalADescontar) <= 0) {
+      alert("O valor do desconto deixa a OP negativa, por causa dos valores retidos.\n\nValor de retenções: R$ "+js_formatar(nRetencoes, 'f', 2));
       lErro = true;
       return false;
     }
