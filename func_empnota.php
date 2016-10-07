@@ -40,6 +40,7 @@ $clempnota->rotulo->label("e69_dtnota");
 $rotulo = new rotulocampo;
 $rotulo->label("z01_nome");
 $rotulo->label("e60_codemp");
+$rotulo->label("e69_codnota");
 $rotulo->label("e60_numemp");
 ?>
 <html>
@@ -105,14 +106,16 @@ $rotulo->label("e60_numemp");
       <?
       $sWhere = "";
       $sAnd   = "";
+      if(isset($campos)==false){
+          if(file_exists("funcoes/db_func_empnota.php")==true){
+              include("funcoes/db_func_empnota.php");
+          }else{
+              $campos = "empnota.*";
+          }
+      }
+
       if(!isset($pesquisa_chave)){
-        if(isset($campos)==false){
-           if(file_exists("funcoes/db_func_empnota.php")==true){
-             include("funcoes/db_func_empnota.php");
-           }else{
-           $campos = "empnota.*";
-           }
-        }
+
         if (isset($chave_e69_numero) && (trim($chave_e69_numero)!="") ) {
 	         $sWhere .= $sAnd . "e69_numero = '".trim($chave_e69_numero)."'";
 	         $sAnd    = " and ";
@@ -158,15 +161,27 @@ $rotulo->label("e60_numemp");
         	$sAnd    = " and ";
         	   
         } 
-        $sql = $clempnota->sql_query_nota("","distinct ".$campos,"e69_codnota",$sWhere);
-        db_lovrot($sql,15,"()","",$funcao_js);
+        if ($bens === 'true') {
+            $sWhere .= $sAnd . " substr(c60_estrut,1,7) IN ('3449052') ";
+            $sAnd = " AND ";
+        }
+
+          $sql = $clempnota->sql_query_nota("","distinct ".$campos,"e69_codnota",$sWhere);
+
+          db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $sql = $clempnota->sql_query_nota("",$campos,"e69_codnota","e69_codnota = $pesquisa_chave");
+          $sql = $clempnota->sql_query_nota("",$campos,"e69_codnota","e69_codnota = '{$pesquisa_chave}''");
           $result = $clempnota->sql_record($sql);
           if($clempnota->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$e69_codnota','$e69_numero',false);</script>";
+
+            if (isset($nome_cgm) && ($nome_cgm === 'true')) {
+                echo "<script>".$funcao_js."('{$e69_codnota}', '{$e69_numero}', '{$z01_nome}', false);</script>";
+            } else {
+                echo "<script>".$funcao_js."('$e69_codnota','$e69_numero',false);</script>";
+            }
+
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

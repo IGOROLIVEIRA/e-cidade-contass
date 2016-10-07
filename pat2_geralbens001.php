@@ -37,15 +37,23 @@ include("classes/db_cfpatri_classe.php");
 include("classes/db_db_depart_classe.php");
 include("classes/db_departdiv_classe.php");
 include("libs/db_app.utils.php");
+include("classes/db_empnota_classe.php");
 
-$clrotulo = new rotulocampo;
-$cldb_depart = new cl_db_depart;
-$clcfpatric = new cl_cfpatri;
-$clbens = new cl_bens;
-$cldepartdiv = new cl_departdiv;
-$aux_orgao = new cl_arquivo_auxiliar;
-$aux_unidade = new cl_arquivo_auxiliar;
-$aux = new cl_arquivo_auxiliar;
+$clrotulo       = new rotulocampo;
+$cldb_depart    = new cl_db_depart;
+$clcfpatric     = new cl_cfpatri;
+$clbens         = new cl_bens;
+$cldepartdiv    = new cl_departdiv;
+$aux_orgao      = new cl_arquivo_auxiliar;
+$aux_unidade    = new cl_arquivo_auxiliar;
+$aux            = new cl_arquivo_auxiliar;
+//$oEmpNota       = new cl_empnota;
+
+// ocorrência 2505
+$clrotulo->label("e69_codnota");
+$clrotulo->label("e69_numero");
+$clrotulo->label("z01_nome");
+
 
 $clrotulo->label("t53_empen");
 
@@ -346,6 +354,18 @@ if ($clcfpatric->numrows > 0) {
                     <? db_input('t52_descr', 62, $It52_descr, true, 'text', $db_opcao) ?>
                 </td>
             </tr>
+            <tr>
+                <td align="right" nowrap
+                    title="<?= $Te69_numero ?>"> <? db_ancora(@$Le69_numero, "js_pesquisa_notafiscal(true);", 1); ?>
+                    <?php // db_ancora('Limpar', "js_limpa_notafiscal();", 1); ?>
+                </td>
+                <td align="left" nowrap>
+                    <?
+                    db_input("e69_numero", 10, $Ie69_numero, true, "text", 3);
+                    db_input("z01_nome", 60, $Iz01_nome, true, "text", 3);
+                    ?>
+                </td>
+            </tr>
         </table>
     </fieldset>
     <input type="button" value="Emitir relatório" onClick="js_emite();">
@@ -356,6 +376,31 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 </body>
 </html>
 <script>
+// Ocorrência 2505
+function js_pesquisa_notafiscal ( mostra ) {
+    if (mostra == true) {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_db_empnota', 'func_empnota.php?funcao_js=parent.js_mostra_notafiscal|e69_codnota|e69_numero|z01_nome&bens=true&nome_cgm=true', 'Pesquisa', true);
+    } else {
+        if (document.form1.e69_numero.value != '') {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_empnota', 'func_empnota.php?pesquisa_chave=' + document.form1.e69_codnota.value + '&funcao_js=parent.js_mostra_notafiscal&bens=true&nome_cgm=true', 'Pesquisa', false);
+        } else {
+            document.form1.e69_codnota.value = '';
+            document.form1.z01_nome.value = '';
+            document.form1.submit();
+        }
+    }
+}
+function js_mostra_notafiscal (chave0, chave1, chave2) {
+    document.form1.e69_numero.value = chave1;
+    document.form1.z01_nome.value = chave2;
+    db_iframe_db_empnota.hide();
+    document.form1.submit();
+}
+function js_limpa_notafiscal () {
+    document.form1.e69_numero.value = '';
+    document.form1.z01_nome.value = '';
+}
+
 
 
     function js_pesquisat53_empen(mostra) {
@@ -528,6 +573,11 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         if($('t52_descr').value != ""){
             var str = $('t52_descr').value;
             query +='&descr='+str.replace("%","%25");
+        }
+
+        // filtra nota
+        if ($('e69_numero').value) {
+            query += '&Enumero=' + $('e69_numero').value;
         }
 
         jan = window.open('pat2_geralbens002.php?' + query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');

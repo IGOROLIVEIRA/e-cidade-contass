@@ -43,6 +43,7 @@ $clrotulo->label('z01_nome');
 $clrotulo->label('descrdepto');
 $clrotulo->label('t64_descr');
 $clrotulo->label('t64_class');
+$clrotulo->label('t53_ntfisc');
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
@@ -165,6 +166,14 @@ if ($flag_datas == 3) {
 }
 
 
+/** nota fiscal */
+if (isset($Enumero) && !empty($Enumero)) {
+    // filtrar pela nota
+    $where_instit .= " AND (t53_ntfisc = '{$Enumero}') ";
+    $info .= "\nNota Fiscal: {$Enumero}";
+}
+
+
 $flag_forn = false;
 $flag_classi = false;
 
@@ -199,14 +208,14 @@ $where_instit .= "t52_instit = " . db_getsession("DB_instit");
 
 
 if ($t07_confplaca == 1 or $t07_confplaca == 4) {
-    $campos = "t52_bem, t52_descr, round(t52_valaqu,2) as t52_valaqu, t52_dtaqu, cast( regexp_replace( coalesce(nullif(trim(t52_ident),''), '0') , '[^0-9.,-]' , '', 'g') as numeric) as t52_ident,
+    $campos = "t53_ntfisc, t52_bem, t52_descr, round(t52_valaqu,2) as t52_valaqu, t52_dtaqu, cast( regexp_replace( coalesce(nullif(trim(t52_ident),''), '0') , '[^0-9.,-]' , '', 'g') as numeric) as t52_ident,
   					 t52_depart, descrdepto, t52_numcgm, z01_nome, t52_obs, t64_class, t64_descr, t33_divisao, departdiv.t30_descr,
   					 (select count(*)
                      from bensplaca
                           inner join bensplacaimpressa on bensplacaimpressa.t73_bensplaca = bensplaca.t41_codigo
                     where t41_bem = t52_bem) as totaletiquetas";
 } else {
-    $campos = "t52_bem, t52_descr, round(t52_valaqu,2) as t52_valaqu, t52_dtaqu, t52_ident, t52_depart, descrdepto, t52_numcgm, z01_nome, t52_obs,
+    $campos = "t53_ntfisc, t52_bem, t52_descr, round(t52_valaqu,2) as t52_valaqu, t52_dtaqu, t52_ident, t52_depart, descrdepto, t52_numcgm, z01_nome, t52_obs,
   					 t64_class, t64_descr, t33_divisao, departdiv.t30_descr,
   					 (select count(*)
                      from bensplaca
@@ -272,7 +281,8 @@ if (isset($orgaos) && isset($unidades) && isset($departamentos)) {
     }
 }
 
-//$sqlrelatorio = $clbens->sql_query(null,"$campos",$ordem,"$where_instit");
+$sqlrelatorio = $clbens->sql_query(null,"$campos",$ordem,"$where_instit");
+
 $result = $clbens->sql_record($sqlrelatorio);
 if ($clbens->numrows == 0) {
 
@@ -801,8 +811,7 @@ for ($x = 0; $x < $numrows; $x++) {
         $pdf->cell(20, $alt * $tam, $t52_ident, 0, 0, "C", $p);
         $pdf->cell(60, $alt * $tam, $t52_depart . "-" . substr($descrdepto, 0, 36), 0, 0, "L", $p);
         $pdf->cell(48, $alt * $tam, $t33_divisao . "-" . substr($t30_descr, 0, 27), 0, 0, "L", $p);
-        $placaIdentificacao = $totaletiquetas >= 1 ? "Sim" : "Não";
-        $pdf->cell(15, $alt * $tam, $placaIdentificacao, 0, 1, "C", $p);
+        $pdf->cell(15, $alt * $tam, $t53_ntfisc, 0, 1, "C", $p);
 
         if ($flag_forn == true) {
             $pdf->cell(20, $alt, $t52_numcgm, 0, 0, "C", $p);
@@ -1051,7 +1060,8 @@ for ($x = 0; $x < $numrows; $x++) {
             $pdf->cell(20, $alt, "Placa", 1, 0, "C", 1);
             $pdf->cell(60, $alt, "Departamento", 1, 0, "C", 1);
             $pdf->cell(60, $alt, "Divisao", 1, 0, "C", 1);
-            $pdf->cell(15, $alt, "Pl. Ident ", 1, 1, "C", 1);
+//            $pdf->cell(15, $alt, "Pl. Ident ", 1, 1, "C", 1);
+            $pdf->cell(15, $alt, "Nota F.", 1, 1, "C", 1);
             //Imprime classificação
             if ($quebra_por == 2) {
                 $pdf->cell(20, $alt, "Classificação", 1, 0, "C", 1);
@@ -1103,8 +1113,7 @@ for ($x = 0; $x < $numrows; $x++) {
         $pdf->cell(60, $alt * $tam, $t52_depart . "-" . substr($descrdepto, 0, 36), 0, 0, "L", $background);
         $t33_divisao = $divisao_null == true ? "" : $t33_divisao;
         $pdf->cell(60, $alt * $tam, $t33_divisao . "-" . substr($t30_descr, 0, 28), 0, 0, "L", $background);
-        $placaIdentificacao = $totaletiquetas >= 1 ? "Sim" : "Não";
-        $pdf->cell(15, $alt * $tam, $placaIdentificacao, 0, 1, "C", $p);
+        $pdf->cell(15, $alt * $tam, $t53_ntfisc, 0, 1, "C", $p);
 
         $fSoma += $t52_valaqu;
         $iTotal += 1;
@@ -1215,7 +1224,7 @@ function orgao_cabecalho($pdf, $RLt52_descr, $RLt52_ident, $RLt52_depart, $alt)
     $pdf->cell(20, $alt, $RLt52_ident, 1, 0, "C", 1);
     $pdf->cell(60, $alt, $RLt52_depart, 1, 0, "C", 1);
     $pdf->cell(48, $alt, 'Divisão', 1, 0, "C", 1);
-    $pdf->cell(15, $alt, "Pl. Ident ", 1, 1, "C", 1);
+    $pdf->cell(15, $alt, "Nota F.", 1, 1, "C", 1);
 }
 
 function quebrar_texto($texto, $tamanho)

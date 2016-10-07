@@ -880,6 +880,7 @@ class cl_empnota {
      $sql .= "      left join empnotaord    on  m72_codnota              = e69_codnota";
      $sql .= "      left join matordem      on  m72_codordem             = m51_codordem";
      $sql .= "      left join matordemanu   on  m51_codordem             = m53_codordem";
+     $sql .= "      left join conplanoorcamento on c60_codcon            = e70_codele AND c60_anousu = ".db_getsession('DB_anousu');
      $sql2 = "";
      if($dbwhere==""){
        if($e69_codnota!=null ){

@@ -687,6 +687,12 @@ class cl_bens {
     $sql .= "      inner join bensmarca          on  bensmarca.t65_sequencial = bens.t52_bensmarca";
     $sql .= "      inner join bensmodelo         on  bensmodelo.t66_sequencial = bens.t52_bensmodelo";
     $sql .= "      inner join bensmedida         on  bensmedida.t67_sequencial = bens.t52_bensmedida";
+
+    $sql .= "      left join bensmater          ON bens.t52_bem = bensmater.t53_codbem";
+    $sql .= "      left join matordem           ON bensmater.t53_ordem = matordem.m51_codordem";
+    $sql .= "      left join empnotaord         ON matordem.m51_codordem = empnotaord.m72_codordem";
+    $sql .= "      left join empnota            ON empnotaord.m72_codordem = empnota.e69_codnota";
+
     $sql2 = "";
     if($dbwhere==""){
       if($t52_bem!=null ){
