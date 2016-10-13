@@ -228,9 +228,9 @@ public function gerarDados($sDataInicial,$sDataFinal){
   public function gerarArquivo($aDados,$nomearquivo) {
 		
   	    $delimitador = ';';
-		$f = fopen('tmp/'.$nomearquivo.'.txt', 'w');
+		$f = fopen($nomearquivo.'.txt', 'w');
 		if ($f) { 
-		        
+
 		        foreach ($aDados as $linha2) {
 		            fputcsv($f, $linha2, $delimitador);
 		        }

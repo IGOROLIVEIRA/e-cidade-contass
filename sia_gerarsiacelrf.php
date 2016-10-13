@@ -176,7 +176,7 @@ function js_retornoProcessamento(oAjax) {
 
 	      with (oRetorno.itens[i]) {
 	            
-	        sRetorno += "<a  href='db_download.php?arquivo=tmp/"+nome+".txt'>"+nome+"</a><br>";
+	        sRetorno += "<a  href='db_download.php?arquivo="+nome+".txt'>"+nome+"</a><br>";
 	      }
 	    }
 	    
