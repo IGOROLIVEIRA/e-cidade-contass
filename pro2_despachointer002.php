@@ -37,9 +37,16 @@ $clrotulo       = new rotulocampo;
 
 $oGet = db_utils::postMemory($_GET);
 
+$result_atend = $clprotprocesso->sql_record($clprotprocesso->sql_query($codproc));
+
+db_fieldsmemory($result_atend, 0);
+
+$sLogin = $login;
+
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $sTipoDespacho       = "Despacho";
+
 $result_procandamint = $clprocandamint->sql_record($clprocandamint->sql_query_sim($codprocandamint));
 
 if ( $clprocandamint->numrows > 0 ) {
@@ -59,6 +66,7 @@ $sNumeroProcesso = $codproc;
  * Busca numero e ano do processo pelo codigo processo 
  */
 $sSqlNumeroProcesso = $clprotprocesso->sql_query_file($codproc, 'p58_numero, p58_ano');
+
 $rsNumeroProcesso   = $clprotprocesso->sql_record($sSqlNumeroProcesso);
 
 if ( $clprotprocesso->numrows > 0 ) {
@@ -69,9 +77,9 @@ if ( $clprotprocesso->numrows > 0 ) {
 
 $head2 = "PROCESSO N° $sNumeroProcesso";
 $head3 = "IMPRESSÃO DE ".mb_strtoupper($sTipoDespacho);
-$head4 = "Data: ".db_formatar(@$p78_data,'d');
-$head5 = "Hora: ".@$p78_hora;
-$head6 = "Usuário: ".@$nome;
+$head4 = "Data: ".db_formatar(@$p58_dtproc,'d');
+$head5 = "Hora: ".@$p58_hora;
+$head6 = "Usuário: ".@$sLogin;
 $head7 = "Público: ".@$public;
 
 $pdf = new PDF(); 

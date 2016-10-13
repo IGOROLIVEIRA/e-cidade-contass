@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
@@ -55,7 +55,7 @@ class RefactorConsultaProcessoProtocolo {
                                   );
     $clprotprocesso          = db_utils::getDao('protprocesso');
     $clprotprocessodoc       = db_utils::getDao('procprocessodoc');
-    $clprotprocessoapensados = db_utils::getDao('processosapensados'); 
+    $clprotprocessoapensados = db_utils::getDao('processosapensados');
     $clprocandam             = db_utils::getDao('procandam');
     $clproctransfer          = db_utils::getDao('proctransfer');
     $clproctransferproc      = db_utils::getDao('proctransferproc');
@@ -88,16 +88,17 @@ class RefactorConsultaProcessoProtocolo {
 
     extract( (array) db_utils::fieldsMemory($result_protprocesso, 0));
 
+
     $sSqlTransferencias      = $clproctransferproc->sql_query_file(null, null, "*", "p63_codtran", "p63_codproc = $codproc");
     $result_proctransferproc = $clproctransferproc->sql_record($sSqlTransferencias);
 
     /**
-     * Processo com transferencias 
+     * Processo com transferencias
      */
     if ( $clproctransferproc->numrows > 0 ) {
 
       /**
-       * Processo criado 
+       * Processo criado
        */
       $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
       $oDadosMovimentacao->sData = db_formatar($p58_dtproc, 'd');
@@ -106,7 +107,7 @@ class RefactorConsultaProcessoProtocolo {
       $oDadosMovimentacao->sDepartamento = $descrdepto;
       $oDadosMovimentacao->iInstituicao = $p58_instit;
       $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-      $oDadosMovimentacao->sLogin = $nome;
+      $oDadosMovimentacao->sLogin = $login;
       $oDadosMovimentacao->sObservacoes = 'Processo Criado';
       $oDadosMovimentacao->sDespacho = "";
 
@@ -117,7 +118,7 @@ class RefactorConsultaProcessoProtocolo {
       for ($y = 0; $y < $clproctransferproc->numrows; $y ++) {
 
         extract( (array) db_utils::fieldsMemory($result_proctransferproc, $y));
-        
+
         $sCamposProcessoTransf  = " atual.instit, ";
         $sCamposProcessoTransf .= " instiatual.nomeinstabrev, ";
         $sCamposProcessoTransf .= " p62_codtran, ";
@@ -127,9 +128,9 @@ class RefactorConsultaProcessoProtocolo {
         $sCamposProcessoTransf .= " p62_coddeptorec, ";
         $sCamposProcessoTransf .= " atual.descrdepto as deptoatual, ";
         $sCamposProcessoTransf .= " destino.descrdepto as deptodestino, ";
-        $sCamposProcessoTransf .= " destino.coddepto as coddeptodestino, "; 
+        $sCamposProcessoTransf .= " destino.coddepto as coddeptodestino, ";
         $sCamposProcessoTransf .= " usu_atual.nome as nome, ";
-        $sCamposProcessoTransf .= " proctransfer.p62_id_usorec as idusuariodestino, "; 
+        $sCamposProcessoTransf .= " proctransfer.p62_id_usorec as idusuariodestino, ";
         $sCamposProcessoTransf .= " usu_destino.login as loginusuariodestino ";
         $sWhereProcessoTranf    = "p62_codtran = $p63_codtran";
 
@@ -137,14 +138,14 @@ class RefactorConsultaProcessoProtocolo {
         $result_proctransfer = $clproctransfer->sql_record($sSqlProcessoTransf);
 
         /**
-         * Transferencias do processo 
+         * Transferencias do processo
          */
         if ($clproctransfer->numrows > 0) {
 
           extract( (array) db_utils::fieldsMemory($result_proctransfer, 0));
 
           /**
-           * Tramiite inicial 
+           * Tramiite inicial
            */
           if ($lTramiteInicial) {
 
@@ -155,7 +156,7 @@ class RefactorConsultaProcessoProtocolo {
             $oDadosMovimentacao->sDepartamento = $deptoatual;
             $oDadosMovimentacao->iInstituicao = $instit;
             $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-            $oDadosMovimentacao->sLogin = $nome;
+            $oDadosMovimentacao->sLogin = $login;
             $oDadosMovimentacao->sObservacoes = "Tramite Inicial $p62_codtran p/ Departamento: $coddeptodestino - $deptodestino ";
 
             if ( (int) $idusuariodestino > 0 ) {
@@ -205,7 +206,7 @@ class RefactorConsultaProcessoProtocolo {
               $oDadosMovimentacao->sDepartamento = $deptoatual;
               $oDadosMovimentacao->iInstituicao = $instit;
               $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-              $oDadosMovimentacao->sLogin = $nome;
+              $oDadosMovimentacao->sLogin = $login;
               $oDadosMovimentacao->sObservacoes = "Transferência $p62_codtran p/ o Departamento: $coddeptodestino - $deptodestino";
               $oDadosMovimentacao->sDespacho = $p62_despacho;
               $oDadosMovimentacao->lImprimir = true;
@@ -241,7 +242,7 @@ class RefactorConsultaProcessoProtocolo {
               $oDadosMovimentacao->sDepartamento = $descrdepto;
               $oDadosMovimentacao->iInstituicao = $instit;
               $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-              $oDadosMovimentacao->sLogin = $nome;
+              $oDadosMovimentacao->sLogin = $login;
 
               /**
                * Processo arquivado
@@ -290,7 +291,7 @@ class RefactorConsultaProcessoProtocolo {
                   extract( (array) db_utils::fieldsMemory($result_procandamint_des, $x));
 
                   /**
-                   * Despacho interno transferido 
+                   * Despacho interno transferido
                    */
                   if ($p78_transint == 't') {
                     break;
@@ -303,7 +304,7 @@ class RefactorConsultaProcessoProtocolo {
                   $oDadosMovimentacao->sDepartamento = $descrdepto;
                   $oDadosMovimentacao->iInstituicao = $instit;
                   $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-                  $oDadosMovimentacao->sLogin = $nome;
+                  $oDadosMovimentacao->sLogin = $login;
                   $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
                   $oDadosMovimentacao->sDespacho = "$p78_despacho";
                   $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
@@ -322,7 +323,7 @@ class RefactorConsultaProcessoProtocolo {
               $result_proctransferintand = $clproctransferintand->sql_record($clproctransferintand->sql_query_file(null, "*", "p87_codtransferint", "p87_codandam = $p61_codandam"));
 
               /**
-               * Transferncia interna 
+               * Transferncia interna
                */
               if ($clproctransferintand->numrows > 0) {
 
@@ -337,7 +338,7 @@ class RefactorConsultaProcessoProtocolo {
                   $result_proctransferint = $clproctransferint->sql_record($sSqlProcTransfInt);
 
                   /**
-                   * Transferencia interna 
+                   * Transferencia interna
                    */
                   if ($clproctransferint->numrows > 0) {
 
@@ -360,7 +361,7 @@ class RefactorConsultaProcessoProtocolo {
                     $result_procandamintand = $clprocandamintand->sql_record($sSqlProcandamintand);
 
                     /**
-                     * Recebeu transferencia interna 
+                     * Recebeu transferencia interna
                      */
                     if ($clprocandamintand->numrows > 0) {
 
@@ -393,19 +394,19 @@ class RefactorConsultaProcessoProtocolo {
                           $oDadosMovimentacao->sDepartamento = $descrdepto;
                           $oDadosMovimentacao->iInstituicao = $instit;
                           $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-                          $oDadosMovimentacao->sLogin = $nome;
+                          $oDadosMovimentacao->sLogin = $login;
                           $oDadosMovimentacao->sDespacho = "$p78_despacho";
                           $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
-                          
+
                           /**
-                           * Recebeu transferencia interna 
+                           * Recebeu transferencia interna
                            */
                           if ($p78_transint == 't') {
 
                             $oDadosMovimentacao->sObservacoes = "Recebeu Transferência Interna";
 
                           /**
-                           * Despacho interno 
+                           * Despacho interno
                            */
                           } else {
 
@@ -413,7 +414,7 @@ class RefactorConsultaProcessoProtocolo {
 
                             if ($p78_usuario == $this->iUsuarioLogado) {
                               $oDadosMovimentacao->lImprimir = true;
-                            } 
+                            }
                           }
 
                           $this->aMovimentacoes[] = $oDadosMovimentacao;
@@ -434,7 +435,7 @@ class RefactorConsultaProcessoProtocolo {
         if (isset ($oDadosParametros->p90_andatual) && $oDadosParametros->p90_andatual == "t") {
 
           /**
-           * Andamento anual 
+           * Andamento anual
            */
           if ($y == $clproctransferproc->numrows - 1) {
 
@@ -445,7 +446,7 @@ class RefactorConsultaProcessoProtocolo {
             $oDadosMovimentacao->sDepartamento = $descrdepto;
             $oDadosMovimentacao->iInstituicao = $instit;
             $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-            $oDadosMovimentacao->sLogin = $nome;
+            $oDadosMovimentacao->sLogin = $login;
             $oDadosMovimentacao->sObservacoes = "Andamento atual";
             $oDadosMovimentacao->sDespacho = "$p58_despacho";
 
@@ -470,7 +471,7 @@ class RefactorConsultaProcessoProtocolo {
           $oDadosMovimentacao->sDepartamento = $descrdepto;
           $oDadosMovimentacao->iInstituicao = $instit;
           $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-          $oDadosMovimentacao->sLogin = $nome;
+          $oDadosMovimentacao->sLogin = $login;
           $oDadosMovimentacao->sObservacoes = "Apensado ao processo: $prin ";
           $oDadosMovimentacao->sDespacho = $p58_despacho;
           $oDadosMovimentacao->lImprimir = false;
@@ -489,18 +490,18 @@ class RefactorConsultaProcessoProtocolo {
       } // for transferencias
 
     /**
-     * Recebeu processo  
+     * Recebeu processo
      */
     } else {
 
       $result_procandam = $clprocandam->sql_record($clprocandam->sql_query_com(null, "*", "p61_codandam", "p61_codproc = $codproc"));
-      
+
       if ($clprocandam->numrows > 0) {
 
         for ($xy = 0; $xy < $clprocandam->numrows; $xy ++) {
 
           extract( (array) db_utils::fieldsMemory($result_procandam, $xy));
-          
+
           $oDadosMovimentacao = new RefactorDadosMovimentacaoProcessoProtocolo();
           $oDadosMovimentacao->sData = db_formatar($p61_dtandam, 'd');
           $oDadosMovimentacao->sHora = $p61_hora;
@@ -508,7 +509,7 @@ class RefactorConsultaProcessoProtocolo {
           $oDadosMovimentacao->sDepartamento = $descrdepto;
           $oDadosMovimentacao->iInstituicao = $instit;
           $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-          $oDadosMovimentacao->sLogin = $nome;
+          $oDadosMovimentacao->sLogin = $login;
           $oDadosMovimentacao->sObservacoes = "Recebeu Processo";
           $oDadosMovimentacao->sDespacho = "$p61_despacho";
 
@@ -522,7 +523,7 @@ class RefactorConsultaProcessoProtocolo {
           $result_procandamint_des = $clprocandamint->sql_record($sSqlProcandamint_des);
 
           /**
-           *  Dispacho interno 
+           *  Dispacho interno
            */
           if ($clprocandamint->numrows > 0) {
 
@@ -531,7 +532,7 @@ class RefactorConsultaProcessoProtocolo {
               extract( (array) db_utils::fieldsMemory($result_procandamint_des, $x));
 
               /**
-               * Despacho interno transferido 
+               * Despacho interno transferido
                */
               if ($p78_transint == 't') {
                 break;
@@ -544,14 +545,14 @@ class RefactorConsultaProcessoProtocolo {
               $oDadosMovimentacao->sDepartamento = $descrdepto;
               $oDadosMovimentacao->iInstituicao = $instit;
               $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-              $oDadosMovimentacao->sLogin = $nome;
+              $oDadosMovimentacao->sLogin = $login;
               $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
               $oDadosMovimentacao->sDespacho = "$p78_despacho";
               $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
 
               if ($p78_usuario == $this->iUsuarioLogado) {
                 $oDadosMovimentacao->lImprimir = true;
-              } 
+              }
 
               $this->aMovimentacoes[] = $oDadosMovimentacao;
 
@@ -585,7 +586,7 @@ class RefactorConsultaProcessoProtocolo {
                 $oDadosMovimentacao->sObservacoes = "Transferência Interna para $usudestino";
                 $oDadosMovimentacao->sDespacho = "$p88_despacho";
 
-                $this->aMovimentacoes[] = $oDadosMovimentacao;   
+                $this->aMovimentacoes[] = $oDadosMovimentacao;
 
                 $result_procandamintand = $clprocandamintand->sql_record($clprocandamintand->sql_query_file(null, "*", "p86_codtrans", "p86_codtrans=$p88_codigo and p86_codandam = $p87_codandam "));
 
@@ -618,7 +619,7 @@ class RefactorConsultaProcessoProtocolo {
                       $oDadosMovimentacao->sDepartamento = $descrdepto;
                       $oDadosMovimentacao->iInstituicao = $instit;
                       $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-                      $oDadosMovimentacao->sLogin = $nome;
+                      $oDadosMovimentacao->sLogin = $login;
                       $oDadosMovimentacao->sDespacho = "$p78_despacho";
                       $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
 
@@ -631,12 +632,12 @@ class RefactorConsultaProcessoProtocolo {
                         $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
 
                         if ($p78_usuario == $this->iUsuarioLogado) {
-                          $oDadosMovimentacao->lImprimir = true; 
+                          $oDadosMovimentacao->lImprimir = true;
                         }
 
                       }
-                      
-                      $this->aMovimentacoes[] = $oDadosMovimentacao;            
+
+                      $this->aMovimentacoes[] = $oDadosMovimentacao;
 
                       $cod_usu = $p78_usuario;
                       $cod_procandamint = $p78_sequencial;
@@ -683,9 +684,9 @@ class RefactorDadosMovimentacaoProcessoProtocolo {
   /**
    * Valida antes de declarar propriedades do refactor
    * - nao permite usar propriedades nao declaradas
-   * 
-   * @param string $sVariavel 
-   * @param mixed $mValor 
+   *
+   * @param string $sVariavel
+   * @param mixed $mValor
    * @access public
    * @exception - variavel nao declarada
    * @return void
@@ -696,7 +697,7 @@ class RefactorDadosMovimentacaoProcessoProtocolo {
       throw new Exception(__CLASS__ . ": Propriedade {$sVariavel} não encontrada.");
     }
 
-    $this->{$sVariavel} = $mValor; 
+    $this->{$sVariavel} = $mValor;
   }
 
 }
