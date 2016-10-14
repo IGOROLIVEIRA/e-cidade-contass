@@ -49,7 +49,7 @@ $clproctransfer->rotulo->label();
 $clrotulo->label("nome");
 $clrotulo->label("descrdepto");
 
-    
+
 ?>
 <form name="form1" method="post" id="cria" action="" onsubmit="return valida(this)">
   <center>
@@ -60,24 +60,24 @@ $clrotulo->label("descrdepto");
             <table>
               <tr>
                 <td nowrap align="right" title="Usuário" width="10%">
-                  <b>Usuário:</b> 
+                  <b>Usuário:</b>
                 </td>
-                <td> 
+                <td>
                  <?
                    $sql = "select nome from db_usuarios where id_usuario = ".db_getsession("DB_id_usuario");
-                   echo pg_result(db_query($sql),0,"nome");  
-                  
+                   echo pg_result(db_query($sql),0,"nome");
+
                  ?>
                 </td>
               </tr>
               <tr>
                 <td nowrap align="right" title="Usuário" width="10%" >
-                  <b>Departamento:</b> 
+                  <b>Departamento:</b>
                 </td>
-                <td> 
+                <td>
                  <?
                    $sql = "select descrdepto from db_depart where coddepto = ".db_getsession("DB_coddepto");
-                   echo pg_result(db_query($sql),0,"descrdepto");  
+                   echo pg_result(db_query($sql),0,"descrdepto");
                  ?>
                 </td>
               </tr>
@@ -85,7 +85,7 @@ $clrotulo->label("descrdepto");
                   <td nowrap align="right" title="<?=@$Tp62_codtran?>" width="10%" >
                      <?=@$Lp62_codtran?>
                   </td>
-                  <td> 
+                  <td>
                     <?
                     db_input('p62_codtran',10,$Ip62_codtran,true,'text',3,"")
                     ?>
@@ -95,7 +95,7 @@ $clrotulo->label("descrdepto");
                   <td nowrap align="right" title="<?=@$Tp62_dttran?>" width="10%">
                      <?=@$Lp62_dttran?>
                   </td>
-                  <td> 
+                  <td>
                     <?
                     db_inputdata('p62_dttran',@$p62_dttran_dia,@$p62_dttran_mes,@$p62_dttran_ano,true,'text',3,"")
                     ?>
@@ -107,26 +107,26 @@ $clrotulo->label("descrdepto");
                      db_ancora(@$Lp62_coddeptorec,"js_pesquisap62_coddeptorec(true);",$db_opcao);
                      ?>
                   </td>
-                  <td nowrap> 
+                  <td nowrap>
                     <?
                     db_input('p62_coddeptorec',10,$Ip62_coddeptorec,true,'text',$db_opcao," onchange='js_pesquisap62_coddeptorec(false);'");
                     db_input('descrdepto',60,$Idescrdepto,true,'text',3);
                      ?>
                   </td>
                 </tr>
-                <tr>   
+                <tr>
                   <td  nowrap title="<?=@$Tp62_id_usorec?>">
                      <?=@$Lp62_id_usorec; ?>
                   </td>
                   <td nowrap>
                   <?
                    $aUsuarios = array("0" => "Selecione o Usuário");
-                   db_select("p62_id_usorec",$aUsuarios,true,$db_opcao); 
+                   db_select("p62_id_usorec",$aUsuarios,true,$db_opcao);
                   ?>
-                
+
                   </td>
-                </tr>  
-                <tr>   
+                </tr>
+                <tr>
                   <td  nowrap title="p62_despacho">
                      <strong>Despacho</strong>
                   </td>
@@ -134,21 +134,21 @@ $clrotulo->label("descrdepto");
                   <?
                   db_textarea('p62_despacho',0,80,$p62_despacho,true,'text',1,"")
                   ?>
-                
+
                   </td>
-                </tr>  
+                </tr>
             	  <tr>
             	    <td colspan="5" align="center">
-            	      <input name="incluir" type="button"  
+            	      <input name="incluir" type="button"
             	             value="<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Excluir"))?>"
-            	             <?=($db_botao==false?"disabled":"")?> 
+            	             <?=($db_botao==false?"disabled":"")?>
             	             onClick="js_validaProcessos();">
                     <input name="grupo"   type="hidden" id="grupo" value="<?=$grupo?> ">
                   </td>
-            	  </tr>  
+            	  </tr>
               </table>
             </fieldset>
-         </td>     
+         </td>
        </tr>
        <tr>
           <td colspan=5>
@@ -159,16 +159,16 @@ $clrotulo->label("descrdepto");
     if(!isset($ordem) || $ordem == ''){
       $ordem = " p58_codproc";
     }
-    
+
     $iInstituicao    = db_getsession('DB_instit');
-    
+
     $sqlParametro = "select p90_traminic from protparam where p90_instit = {$iInstituicao}";
     $rsParametro  = db_query($sqlParametro);
     $linhasParametro = pg_num_rows($rsParametro);
     if($linhasParametro > 0){
       db_fieldsmemory($rsParametro,0);
     }
-    
+
     db_input('ordem',5,"",true,'hidden',3,"");
     db_input('usuario',5,"",true,'hidden',3,"");
     db_input('p90_traminic',5,"",true,'hidden',3,"");
@@ -180,19 +180,19 @@ $clrotulo->label("descrdepto");
     if ($clprotparam->numrows>0){
       db_fieldsmemory($result_param,0);
       if (isset($p90_despachoob)&&$p90_despachoob=='t'){
-      	$sJoinValidaDespacho = " inner join procandamint on p78_codandam = p58_codandam "; 
+      	$sJoinValidaDespacho = " inner join procandamint on p78_codandam = p58_codandam ";
       }
     }
 //die("AQUIIIII >>>>>>>    ".$sJoinValidaDespacho);
-    $where = " and not exists ( select * 
+    $where = " and not exists ( select *
                                   from processosapensados 
                                  where p30_procapensado  = p58_codproc limit 1)  ";
-    
-    
+
+
     //SQL:
     //update protprocesso set p58_numero = replace (p58_numero, '/2011/', '')  where p58_numero ilike '%/%';
-    //update protprocesso set p58_numero = p58_codproc where p58_numero = ''; 
-    
+    //update protprocesso set p58_numero = p58_codproc where p58_numero = '';
+
     $sql  = " select distinct 																																							";
     $sql .= "        p58_numeracao,                                                                           ";
     $sql .= "        p58_codproc,                                                                           ";
@@ -200,8 +200,8 @@ $clrotulo->label("descrdepto");
     $sql .= "        p58_requer,                                                                            ";
     $sql .= "        p58_codigo,                                                                            ";
     $sql .= "        z01_nome,                                                                              ";
-    $sql .= "        cast( case                                                                             "; 
-    $sql .= "                when trim(p58_numero) = ''                                                     "; 
+    $sql .= "        cast( case                                                                             ";
+    $sql .= "                when trim(p58_numero) = ''                                                     ";
     $sql .= "                  then '0'                                                                     ";
     $sql .= "                else p58_numero                                                                ";
     $sql .= "              end as integer) as p58_numero,                                                   ";
@@ -235,14 +235,13 @@ $clrotulo->label("descrdepto");
     $sql .= "				 				            	  and p53_coddepto = p61_coddepto                                 ";
     $sql .= "                                      and p53_ordem    = (select count(*)                      ";
     $sql .= "                                                            from procandam pa                  ";
-    $sql .= "                                                           where pa.p61_codproc = p58_codproc) ";              
+    $sql .= "                                                           where pa.p61_codproc = p58_codproc) ";
     $sql .= "				 left join arqproc      on p68_codproc  = protprocesso.p58_codproc                      ";
     $sql .= "				 $sJoinValidaDespacho                                                                   ";
     $sql .= "				 left join proctransferintand  on p87_codandam = p78_codandam                           ";
     $sql .= "				 left join procandamintand     on p86_codandam = p78_codandam                           ";
     $sql .= "																	and p86_codtrans = p87_codtransferint                         ";
     $sql .= "	 where p61_coddepto = ".db_getsession("DB_coddepto")."                                        ";
-    $sql .= "		 and p68_codproc is null                                                                    ";
     $sql .= "    and not exists (select *                                                                   ";
     $sql .= "           from arqandam                                                                       ";
     $sql .= "           where p69_codandam = p61_codandam and p69_arquivado = 't')                          ";
@@ -251,19 +250,19 @@ $clrotulo->label("descrdepto");
     $sql .= "          			   inner join proctransand on p64_codtran = p63_codtran                         ";
     $sql .= "					 where p63_codproc = p58_codproc                                                      ";
     $sql .= "					 limit 1 ) is not null                                                                ";
-    $sql .= "          {$where}                                                                             ";
+    $sql .= "          {$where}                                                                            ";
     $sql .= "   order by $ordem desc                                                                        ";
 
     $rs = db_query($sql) or die($sql);
     $numrows = pg_num_rows($rs);
-	
-    if ($numrows > 0){  ?>   
+
+    if ($numrows > 0){  ?>
              <tr>
                 <td colspan = 7 align='center' style="text-align: left; text-indent: 30px;"><b>Processos Existentes</b>
-                 
+
                 </td>
              </tr>
-             <tr> 
+             <tr>
                 <td bgcolor='#999999'></td>
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;"><b><a href='' onClick ='return js_ordena("p58_codproc");' >N.Controle</a></b></td>
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("p58_numero::integer");' >Processo    </a></b></td>
@@ -274,16 +273,16 @@ $clrotulo->label("descrdepto");
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("proxdepto")  ;' >Proximo Departamento</a></b></td>
              </tr>
              <tbody style='height:300;overflow:scroll;' id="listaProcesso">
-            
-             <?      
+
+             <?
                 //<td align='center' bgcolor='#999999'><b>Depto padrão</b></td>
-			
-				
+
+
 			$cont = 0;
       for ($i = 0;$i < $numrows;$i++){
-      	
+
 				db_fieldsmemory($rs,$i);
-				
+
 				if ( $grupo == 2 ) {
 	        $sSqlPrazoPrevisto = "select ov15_coddepto,
 					                             descrdepto
@@ -292,11 +291,11 @@ $clrotulo->label("descrdepto");
 					                       where ov15_protprocesso = {$p58_codproc}
 					                         and ov15_ativo is true 
 					                       order by ov15_dtfim";
-					                       
+
 					$rsPrazoPrevisto      = db_query($sSqlPrazoPrevisto);
 					$iLinhasPrazoPrevisto = pg_num_rows($rsPrazoPrevisto);
-					$lProximoDepto        = false; 
-					                                             
+					$lProximoDepto        = false;
+
 					if ( $iLinhasPrazoPrevisto > 0 ) {
 					  for ( $iInd=0; $iInd < $iLinhasPrazoPrevisto; $iInd++ ) {
 					    $oPrazo = db_utils::fieldsMemory($rsPrazoPrevisto,$iInd);
@@ -304,14 +303,14 @@ $clrotulo->label("descrdepto");
 					      $proxdepto = $oPrazo->ov15_coddepto;
 					      $proxdescr = $oPrazo->descrdepto;
 					      $lProximoDepto = false;
-					    } 
+					    }
 					    if ( $oPrazo->ov15_coddepto == db_getsession('DB_coddepto') ) {
 					      $lProximoDepto = true;
 					    }
 					  }
 					}
 				}
-				
+
 				$p58_dtproc = db_formatar($p58_dtproc, "d");
 				$passou=true;
 				$sql_proc="select p63_codproc,
@@ -326,12 +325,14 @@ $clrotulo->label("descrdepto");
 						$result_and=db_query($sql_and) or die($sql_and);
 						if (pg_numrows($result_and)==0) {
 							$passou=false;
-						}
+						}else{
+                            $passou=true;
+                        }
 					}
 				}
-				
-				// echo "Processo : {$p58_codproc} passou : {$passou} <br>"; 
-				
+
+				 //echo "Processo : {$p58_codproc} passou : <br>";var_dump($passou);exit;
+
 				if ($passou==true) {
           if ($p78_codandam != "") {
             if ($p87_codandam != "") {
@@ -370,7 +371,7 @@ $clrotulo->label("descrdepto");
 				                <td $class nowrap style = 'padding-right: 7px;'>".$p51_descr."</td>
 				                <td $class nowrap style = 'padding-right: 7px;'>".$p58_numeracao."</td>
 				                <td $class nowrap style = 'padding-right: 7px;'>".@$proxdescr."</td>
-				              </tr>";                                         
+				              </tr>";
 							}
 						} else {
 							$cont ++;
@@ -434,7 +435,7 @@ $clrotulo->label("descrdepto");
       }
 			echo "<label>Total de processos: <b>$cont</b></label>";
     } else {
-      $db_botao = false;        
+      $db_botao = false;
       echo "<tr><td bgcolor='#999999'><b>Não existem processos</b></td></tr>";
     }
 
@@ -474,7 +475,7 @@ function js_telaDiferencas(aListaDiferenca) {
       sContent += "Departamento escolhido difere do andamento padrão, favor digite o número de dias referente ao departamento escolhido.</div>                                              ";
       sContent += "<table width='100%' style='padding-top:20px;'> ";
       sContent += "  <tr>                             ";
-      sContent += "    <td>                           "; 
+      sContent += "    <td>                           ";
       sContent += "      <fieldset>                   ";
       sContent += "        <div id='listaDifProcesso'>";
       sContent += "        </div>                     ";
@@ -488,8 +489,8 @@ function js_telaDiferencas(aListaDiferenca) {
       sContent += "    </td>                          ";
       sContent += "  </tr>                            ";
       sContent += "</table>                           ";
-      
-  
+
+
   windowAuxiliarDias  = new windowAux('wnddias', 'Informe a quantidade de dias', 650, 500);
   windowAuxiliarDias.setContent(sContent);
   windowAuxiliarDias.show(100,300);
@@ -497,23 +498,23 @@ function js_telaDiferencas(aListaDiferenca) {
   $('btnFechar').observe("click",js_fecharJanela);
   $('btnIncluir').observe("click",js_validaCamposDif);
   $('window'+windowAuxiliarDias.idWindow+'_btnclose').observe("click",js_fecharJanela);
- 
+
   oDBGridProcessosDif.show($('listaDifProcesso'));
   oDBGridProcessosDif.clearAll(true);
 
   aListaDiferenca.each(
     function (oProcesso,iInd){
-    
+
       if ( oProcesso.lTemDepto ) {
         var sDisabled = '';
       } else {
         var sDisabled = 'disabled';
       }
       var sSelect  = "<select style='width:100%' id='segue"+oProcesso.p58_codproc+"' "+sDisabled+"> ";
-          sSelect += "  <option value='false' >Não</option>                                         "; 
+          sSelect += "  <option value='false' >Não</option>                                         ";
           sSelect += "  <option value='true'  >Sim</option>                                         ";
           sSelect += "</select>                                                                     ";
-          
+
       aRow = new Array();
       aRow[0] = oProcesso.p58_codproc;
       aRow[1] = oProcesso.p58_requer;
@@ -521,12 +522,12 @@ function js_telaDiferencas(aListaDiferenca) {
       aRow[3] = sSelect;
       aRow[4] = Object.toJSON(oProcesso);
       oDBGridProcessosDif.addRow(aRow);
-      
+
     }
   );
 
   oDBGridProcessosDif.renderRows();
-    
+
 }
 
 
@@ -536,16 +537,16 @@ function js_fecharJanela(){
 
 
 function js_validaCamposDif(){
-  
+
   var aCamposText  = $$("#listaDifProcesso input[type='text']");
   var lRetorno     = true;
-  var aProcessoDif = new Array(); 
-  
+  var aProcessoDif = new Array();
+
   if ( $F('p62_coddeptorec') == '' ) {
     alert('Departamento de recebimento não informado!');
     return false;
-  }  
-  
+  }
+
   aCamposText.each(
     function ( eCampo, iInd ) {
       if ( eCampo.value.trim() == '') {
@@ -554,62 +555,62 @@ function js_validaCamposDif(){
       } else if ( eCampo.value.trim() == '0' ) {
         alert('Número de Dias deve ser maior que zero!');
         lRetorno = false;
-      }                  
+      }
     }
   );
-  
+
   if ( !lRetorno ) {
     return false;
   }
 
  var oProcessoDif = new Array();
-  
+
   oDBGridProcessosDif.aRows.each(
     function ( eRow, iInd ){
-      
+
       var iCodProcesso = eRow.aCells[0].getValue();
-      var iDias        = $('dia'+iCodProcesso).value; 
-      var lSegue       = false; 
-       
+      var iDias        = $('dia'+iCodProcesso).value;
+      var lSegue       = false;
+
       var iNumOpt      = $('segue'+iCodProcesso).options.length;
       for ( var iIndOpt=0; iIndOpt < iNumOpt; iIndOpt++ ) {
         if ( $('segue'+iCodProcesso).options[iIndOpt].selected ) {
           lSegue = eval($('segue'+iCodProcesso).options[iIndOpt].value);
         }
       }
-      
+
       oProcessoDif = new js_objProcesso(iCodProcesso,iDias,lSegue,true);
       aProcessoDif.push(oProcessoDif);
-       
+
     }
   );
-  
+
   var aListaChk    = js_getChkProcessos();
   var aProcessoSel = new Array();
-  
+
   aListaChk.each(
     function ( eChk, iInd ) {
       if ( eChk.checked ) {
         var oProcesso = new js_objProcesso(eChk.value,0,false,false);
-        aProcessoSel.push(oProcesso);    
-      }     
+        aProcessoSel.push(oProcesso);
+      }
     }
   );
-  
+
   aProcessoSel.each(
     function ( oProcessoSel, iIndSel ){
       aProcessoDif.each(
         function ( oProcessoDif, iIndDif ){
           if ( oProcessoSel.iCodProc == oProcessoDif.iCodProc ) {
-            oProcessoSel.iDias      = oProcessoDif.iDias; 
-            oProcessoSel.lSegue     = oProcessoDif.lSegue; 
+            oProcessoSel.iDias      = oProcessoDif.iDias;
+            oProcessoSel.lSegue     = oProcessoDif.lSegue;
             oProcessoSel.lNovoDepto = oProcessoDif.lNovoDepto;
-          } 
+          }
         }
       );
     }
   );
-  
+
   js_fecharJanela();
   js_incluirTransferencia(aProcessoSel);
 
@@ -617,20 +618,20 @@ function js_validaCamposDif(){
 
 
 function js_incluirTransferencia(aObjProcesso){
-  
+
   js_divCarregando('Aguarde...','msgBox');
-     
+
   var iNumOpt       = $('p62_id_usorec').options.length;
-  var iIdUsuarioRec = ''; 
-  
+  var iIdUsuarioRec = '';
+
   if ( !$('p62_id_usorec').disabled ) {
     for ( var iIndOpt=0; iIndOpt < iNumOpt; iIndOpt++ ) {
       if ( $('p62_id_usorec').options[iIndOpt].selected ) {
         iIdUsuarioRec = $('p62_id_usorec').options[iIndOpt].value;
       }
-    }  
-  }     
-     
+    }
+  }
+
   var sQuery  = 'sMethod=incluirTransferencia';
       sQuery += '&aObjProcesso='+Object.toJSON(aObjProcesso);
       sQuery += '&iCodDeptoRec='+$F('p62_coddeptorec');
@@ -639,10 +640,10 @@ function js_incluirTransferencia(aObjProcesso){
       sQuery += '&p62_despacho='+$F('p62_despacho');
 
       document.form1.incluir.disabled = true;
-  
+
   var oAjax   = new Ajax.Request( sUrlRPC, {
-                                             method: 'post', 
-                                             parameters: sQuery, 
+                                             method: 'post',
+                                             parameters: sQuery,
                                              onComplete: js_retornoIncluirTransferencia
                                            }
                                 );
@@ -653,9 +654,9 @@ function js_retornoIncluirTransferencia(oAjax){
   js_removeObj("msgBox");
   var aRetorno = eval("("+oAjax.responseText+")");
   var sExpReg  = new RegExp('\\\\n','g');
-  
+
   alert(aRetorno.sMsg.urlDecode().replace(sExpReg,'\n'));
-  
+
   if ( aRetorno.lErro ) {
     return false;
   } else {
@@ -663,7 +664,7 @@ function js_retornoIncluirTransferencia(oAjax){
     window.open(url,'','location=0');
     document.form1.submit();
   }
-  
+
   document.form1.incluir.disabled = false;
 
 }
@@ -676,7 +677,7 @@ function js_getChkProcessos(){
 
 
 function js_objProcesso(iCodProc,iDias,lSegue,lNovoDepto){
-  
+
   this.iCodProc   = iCodProc;
   this.iDias      = iDias;
   this.lSegue     = lSegue;
@@ -686,7 +687,7 @@ function js_objProcesso(iCodProc,iDias,lSegue,lNovoDepto){
 
 
 function js_validaProcessos(){
- 
+
   var aListaChk     = js_getChkProcessos();
   var aListaProc    = new Array();
 
@@ -694,81 +695,81 @@ function js_validaProcessos(){
     alert('Departamento de recebimento não informado!');
     return false;
   }
-  
+
   aListaChk.each(
     function ( eChk,iInd ) {
       if ( eChk.checked ) {
-        aListaProc.push(eChk.value);      
+        aListaProc.push(eChk.value);
       }
-    } 
-  );    
+    }
+  );
 
   if ( aListaProc.length == 0 ) {
     alert('Nenhum processo selecionado!');
     return false;
   }
-  
-  
-  if ( $F('grupo') ==  2 ) {  
+
+
+  if ( $F('grupo') ==  2 ) {
 
     js_divCarregando('Aguarde...','msgBox');
-     
+
     var sQuery  = 'sMethod=validaProximoDepto';
         sQuery += '&aListaProcesso='+Object.toJSON(aListaProc);
         sQuery += '&iCodDeptoRec='+$F('p62_coddeptorec');
-  
+
     var oAjax   = new Ajax.Request( sUrlRPC, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
+                                            method: 'post',
+                                            parameters: sQuery,
                                             onComplete: js_retornoValidaProcesso
                                           }
-                                  );      
+                                  );
   } else {
-  
+
     var aListaChk = js_getChkProcessos();
     var aProcesso = new Array();
-    
+
     aListaChk.each(
       function ( eChk, iInd ) {
         if ( eChk.checked ) {
           var oProcesso = new js_objProcesso(eChk.value,0,false,false);
-          aProcesso.push(oProcesso);    
-        }     
+          aProcesso.push(oProcesso);
+        }
       }
     );
-    
-    js_incluirTransferencia(aProcesso);  
-  
+
+    js_incluirTransferencia(aProcesso);
+
   }
- 
+
 }
 function js_retornoValidaProcesso(oAjax){
 
   js_removeObj("msgBox");
-   
+
   var aRetorno = eval("("+oAjax.responseText+")");
-  
+
   if ( aRetorno.aListaDiferenca.length > 0 ) {
-    
+
     js_telaDiferencas(aRetorno.aListaDiferenca);
-    
+
   } else {
-  
+
     var aListaChk = js_getChkProcessos();
     var aProcesso = new Array();
-    
+
     aListaChk.each(
       function ( eChk, iInd ) {
         if ( eChk.checked ) {
           var oProcesso = new js_objProcesso(eChk.value,0,false,false);
-          aProcesso.push(oProcesso);    
-        }     
+          aProcesso.push(oProcesso);
+        }
       }
     );
-    
+
     js_incluirTransferencia(aProcesso);
   }
-    
+
 }
 
 
@@ -784,9 +785,9 @@ function js_ajaxRequest(iCoddepto) {
     var objUsuarios    = document.form1.p62_id_usorec;
     var url       = 'pro4_consusuariodeptoRPC.php';
     var parametro = "json={icoddepto:"+iCoddepto+"}";
-    var objAjax   = new Ajax.Request (url,{ 
+    var objAjax   = new Ajax.Request (url,{
                                            method:'post',
-                                           parameters:parametro, 
+                                           parameters:parametro,
                                            onComplete:carregaDadosSelect
                                          }
                                     );
@@ -804,18 +805,18 @@ function carregaDadosSelect(oResposta) {
 
   var objUsuarios    = document.form1.p62_id_usorec;
   objUsuarios.length = 0;
- 
+
   for (var i = 0; i < aUsuarios.length; i++) {
-   
+
     objUsuarios.options[i]       = new Option();
     objUsuarios.options[i].value = aUsuarios[i].id_usuario.urlDecode();
     objUsuarios.options[i].text  = aUsuarios[i].nome.urlDecode();
-    
+
   }
   if(document.form1.usuario.value!=0 || document.form1.usuario.value!=""){
      document.form1.p62_id_usorec.value = document.form1.usuario.value;
   }
-   
+
   objUsuarios.disabled = false;
   js_removeObj('div_processando');
 
@@ -829,10 +830,10 @@ function js_pesquisap62_id_usorec(mostra){
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.p62_id_usorec.focus(); 
-    document.form1.p62_id_usorec.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.p62_id_usorec.focus();
+    document.form1.p62_id_usorec.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
@@ -874,13 +875,13 @@ function js_pesquisap62_coddeptorec(mostra){
   }
 }
 function js_mostradb_depart(chave,erro){
-  document.form1.descrdepto.value = chave; 
-  if(erro==true){ 
-    document.form1.p62_coddeptorec.focus(); 
-    document.form1.p62_coddeptorec.value = ''; 
+  document.form1.descrdepto.value = chave;
+  if(erro==true){
+    document.form1.p62_coddeptorec.focus();
+    document.form1.p62_coddeptorec.value = '';
   }
   //
-  // funcao que processa uma requisicao ajax 
+  // funcao que processa uma requisicao ajax
   // para pesquisar os usuarios do departamento
   //
   js_ajaxRequest(document.form1.p62_coddeptorec.value);
@@ -888,9 +889,9 @@ function js_mostradb_depart(chave,erro){
 }
 function js_mostradb_depart1(chave1,chave2){
   document.form1.p62_coddeptorec.value = chave1;
-  document.form1.descrdepto.value = chave2;  
+  document.form1.descrdepto.value = chave2;
   //
-  // funcao que processa uma requisicao ajax 
+  // funcao que processa uma requisicao ajax
   // para pesquisar os usuarios do departamento
   //
   js_ajaxRequest(chave1);
@@ -931,18 +932,18 @@ function js_ordena(ord){
         sbt.setAttribute("style","visibility:hidden");
         document.getElementById("cria").appendChild(sbt);
         document.getElementById("cria").submit();
-       //alert(document.form1.p62_id_usorec.value+" "+document.form1.p62_coddeptorec.value); 
+       //alert(document.form1.p62_id_usorec.value+" "+document.form1.p62_coddeptorec.value);
     }
  function valida(form){
-   
+
     itens = form.elements.length;
     var a = 0;
     for (i = 0; i < itens ;i++){
        if (form.elements[i].type=="checkbox"){
           if (form.elements[i].checked == true){
-             a = a + 1; 
-          }  
-       } 
+             a = a + 1;
+          }
+       }
    }
    if (a == 0){
       alert("Por favor escolha algum processo!");
@@ -951,8 +952,8 @@ function js_ordena(ord){
      //alert("ok");
      return true;
    }
-    
-    
+
+
  }
   function Envia_setor(coddepto,descrdepto,objCheck){
     var copiaDepart = false;
@@ -962,11 +963,11 @@ function js_ordena(ord){
     for (i = 0; i < itens ;i++){
        if (form.elements[i].type=="checkbox"){
           if (form.elements[i].checked == true){
-             a = a + 1; 
-          }  
-       } 
+             a = a + 1;
+          }
+       }
     }
-  
+
    if(document.form1.p90_traminic.value == 2){
      // Não permitir escolher departamentos diferentes;
    if (a == 0) {
@@ -983,11 +984,11 @@ function js_ordena(ord){
       objCheck.checked = false;
     }
      }else{
-  
+
        copiaDepart = true;
      }
-   
-   
+
+
    }else if(document.form1.p90_traminic.value == 3){
      //permitir escolher departamentos diferentes, mas avisar o usuário
      if((a>1 || document.form1.p62_coddeptorec.value!="" )&& document.form1.p62_coddeptorec.value!=coddepto){
@@ -996,7 +997,7 @@ function js_ordena(ord){
          alert('Aviso...Departamento padrão diferente do departamento selecionado.');
      copiaDepart = true;
        }
-     }else if(a==0){ 
+     }else if(a==0){
     document.form1.p62_coddeptorec.value = "";
         document.form1.descrdepto.value = "";
         document.form1.depart.value = "";
@@ -1006,7 +1007,7 @@ function js_ordena(ord){
    }else{
     copiaDepart = true;
    }
-     
+
    }else{
      // parametro == 1 -- permitir escolher departamentos diferentes
      copiaDepart = true;
@@ -1024,8 +1025,8 @@ function js_ordena(ord){
     }
 
   }
-     
-  function js_chamaajax(){  
+
+  function js_chamaajax(){
      if(document.form1.p62_coddeptorec.value!=0){
        js_ajaxRequest(document.form1.p62_coddeptorec.value);
      }
