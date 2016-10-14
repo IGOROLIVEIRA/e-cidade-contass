@@ -79,7 +79,7 @@ $head2 = "PROCESSO N° $sNumeroProcesso";
 $head3 = "IMPRESSÃO DE ".mb_strtoupper($sTipoDespacho);
 $head4 = "Data: ".db_formatar(@$p58_dtproc,'d');
 $head5 = "Hora: ".@$p58_hora;
-$head6 = "Usuário: ".@$sLogin;
+$head6 = "Usuário: ".@$usuario;
 $head7 = "Público: ".@$public;
 
 $pdf = new PDF(); 
