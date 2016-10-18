@@ -242,6 +242,7 @@ $clrotulo->label("descrdepto");
     $sql .= "				 left join procandamintand     on p86_codandam = p78_codandam                           ";
     $sql .= "																	and p86_codtrans = p87_codtransferint                         ";
     $sql .= "	 where p61_coddepto = ".db_getsession("DB_coddepto")."                                        ";
+    $sql .= "		 and p68_codproc is null                                                                    ";
     $sql .= "    and not exists (select *                                                                   ";
     $sql .= "           from arqandam                                                                       ";
     $sql .= "           where p69_codandam = p61_codandam and p69_arquivado = 't')                          ";
