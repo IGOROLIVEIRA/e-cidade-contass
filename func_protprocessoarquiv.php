@@ -111,7 +111,8 @@
           }
             /**
              * SQL alterado para buscar apenas os processos que, também, não sejam secumdários a nenhum outro quando apensados.
-             * @see ocorrência 2315
+             * Ajustado SQL alterado para não permite arquivar um processo em transferencia. (Veja ocorrência 575)
+             * @see ocorrências 2315, 2736
              */
           $sql = "(SELECT p58_numeracao as dl_Numero_processo,
           p51_descr,
@@ -129,7 +130,6 @@
                               ,Z.p51_descr
                               ,Z.p78_transint
                               ,Z.p63_codtran
-                              ,Z.controle
   from (SELECT p58_codproc,
          cast(p58_numero||'/'||p58_ano AS varchar) AS p58_numero,
          p58_numeracao,
@@ -137,8 +137,7 @@
          p58_coddepto,
          p51_descr,
          p78_transint,
-         p63_codtran,
-         (select 1 from proctransfer inner join db_depart as atual on atual.coddepto = proctransfer.p62_coddepto inner join db_config as instiatual on atual.instit = instiatual.codigo inner join db_depart as destino on destino.coddepto = proctransfer.p62_coddeptorec inner join db_config as destinoinst on atual.instit = destinoinst.codigo inner join db_usuarios as usu_atual on usu_atual.id_usuario = proctransfer.p62_id_usuario left join db_usuarios as usu_destino on usu_destino.id_usuario = proctransfer.p62_id_usorec where p62_codtran = (select max(x2.p63_codtran) from proctransferproc x2 where x2.p63_codproc = p58_codproc)) as controle
+         p63_codtran
   FROM protprocesso
   INNER JOIN tipoproc ON p58_codigo = p51_codigo
   LEFT JOIN procandam ON p58_codandam = p61_codandam
@@ -153,14 +152,12 @@
   where 
   p68_codproc IS NULL
   $sWhere
-  AND (NOT EXISTS (select 1 from proctransferproc as pt where pt.p63_codproc = proctransferproc.p63_codproc) OR p78_transint = 'f' OR 
-  EXISTS (select 1 from proctransfer inner join db_depart as atual on atual.coddepto = proctransfer.p62_coddepto inner join db_config as instiatual on atual.instit = instiatual.codigo inner join db_depart as destino on destino.coddepto = proctransfer.p62_coddeptorec inner join db_config as destinoinst on atual.instit = destinoinst.codigo inner join db_usuarios as usu_atual on usu_atual.id_usuario = proctransfer.p62_id_usuario left join db_usuarios as usu_destino on usu_destino.id_usuario = proctransfer.p62_id_usorec where p62_codtran = proct.p62_codtran)
-  )
   AND not exists ( select 1 from processosapensados where p30_procapensado = p58_codproc limit 1)
-  order by p58_dtproc desc) as Z where (Z.controle = 1 AND p78_transint is not NULL) OR (Z.controle is NULL AND p78_transint is NULL)
-  OR EXISTS (select * from procandam as recebido join proctransand on p61_codandam=p64_codandam where recebido.p61_codproc=p58_codproc)
+  order by p58_dtproc desc) as Z
+  where not exists (SELECT 1
+                from proctransferproc left join proctransand on p64_codtran = p63_codtran where p63_codproc = p58_codproc and p64_codtran is null)
   ) AS X)";
-              
+
         db_lovrot($sql,15,"()","",$funcao_js);
         }else{
           if($pesquisa_chave!=null && $pesquisa_chave!=""){
@@ -181,7 +178,6 @@
                               ,Z.p51_descr
                               ,Z.p78_transint
                               ,Z.p63_codtran
-                              ,Z.controle
   from (SELECT p58_codproc,
          cast(p58_numero||'/'||p58_ano AS varchar) AS p58_numero,
          p58_numeracao,
@@ -189,8 +185,7 @@
          p58_coddepto,
          p51_descr,
          p78_transint,
-         p63_codtran,
-         (select 1 from proctransfer inner join db_depart as atual on atual.coddepto = proctransfer.p62_coddepto inner join db_config as instiatual on atual.instit = instiatual.codigo inner join db_depart as destino on destino.coddepto = proctransfer.p62_coddeptorec inner join db_config as destinoinst on atual.instit = destinoinst.codigo inner join db_usuarios as usu_atual on usu_atual.id_usuario = proctransfer.p62_id_usuario left join db_usuarios as usu_destino on usu_destino.id_usuario = proctransfer.p62_id_usorec where p62_codtran = (select max(x2.p63_codtran) from proctransferproc x2 where x2.p63_codproc = p58_codproc)) as controle
+         p63_codtran
   FROM protprocesso
   INNER JOIN tipoproc ON p58_codigo = p51_codigo
   LEFT JOIN procandam ON p58_codandam = p61_codandam
@@ -206,11 +201,11 @@
   p68_codproc IS NULL
   and p58_codproc=$pesquisa_chave
   $sWhere
-  AND (NOT EXISTS (select 1 from proctransferproc as pt where pt.p63_codproc = proctransferproc.p63_codproc) OR p78_transint = 'f' OR 
-  EXISTS (select 1 from proctransfer inner join db_depart as atual on atual.coddepto = proctransfer.p62_coddepto inner join db_config as instiatual on atual.instit = instiatual.codigo inner join db_depart as destino on destino.coddepto = proctransfer.p62_coddeptorec inner join db_config as destinoinst on atual.instit = destinoinst.codigo inner join db_usuarios as usu_atual on usu_atual.id_usuario = proctransfer.p62_id_usuario left join db_usuarios as usu_destino on usu_destino.id_usuario = proctransfer.p62_id_usorec where p62_codtran = proct.p62_codtran)
-  )
-  order by p58_dtproc desc) as Z where (Z.controle = 1 AND p78_transint is not NULL) OR (Z.controle is NULL AND p78_transint is NULL)
-  OR EXISTS (select * from procandam as recebido join proctransand on p61_codandam=p64_codandam where recebido.p61_codproc=p58_codproc)
+  AND not exists ( select 1 from processosapensados where p30_procapensado = p58_codproc limit 1)
+  order by p58_dtproc desc) as Z
+  where
+  not exists (SELECT 1
+                from proctransferproc left join proctransand on p64_codtran = p63_codtran where p63_codproc = p58_codproc and p64_codtran is null)
   ) AS X)";
           	
             $result = $clprotprocesso->sql_record($sql);
