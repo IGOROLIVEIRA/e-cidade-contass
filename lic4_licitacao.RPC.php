@@ -504,7 +504,7 @@ switch ($oParam->exec) {
                               where lli.l21_codigo = liclicitem.l21_codigo) as z01_nome";
 
       $sCampos  = " distinct l21_ordem, l21_codigo, pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, ";
-      $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, e54_autori,  {$sBuscaFornecedor}";
+      $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, e54_autori,e55_quant,  {$sBuscaFornecedor}";
 
       $sOrdem   = " l21_ordem ";
       $sWhere   = " l21_codliclicita = {$oParam->iCodigoLicitacao} ";
@@ -514,6 +514,7 @@ switch ($oParam->exec) {
       }
 
       $sSqlItemLicitacao  = $oDaoLicLicitem->sql_query_inf(null, $sCampos, $sOrdem, $sWhere);
+
       $rsItensDaLicitacao = $oDaoLicLicitem->sql_record($sSqlItemLicitacao);
       $iTotalLinhas = $oDaoLicLicitem->numrows;
     }
@@ -543,7 +544,7 @@ switch ($oParam->exec) {
         $oStdDadoItem->iOrdem             = $oStdResultItem->l21_ordem;
         $oStdDadoItem->iCodigo            = $oStdResultItem->l21_codigo;
         $oStdDadoItem->sDescricaoMaterial = urlencode("{$oStdResultItem->pc01_codmater} - {$oStdResultItem->pc01_descrmater}");
-        $oStdDadoItem->iQuantidade        = $oStdResultItem->pc11_quant;
+        $oStdDadoItem->iQuantidade        = $oStdResultItem->e55_quant;
         $oStdDadoItem->sUnidadeDeMedida   = urlencode($oStdResultItem->m61_descr);
         $oStdDadoItem->sFornecedor        = urlencode($oStdResultItem->z01_nome);
         $oStdDadoItem->nValorUnitario     = trim(db_formatar($oStdResultItem->pc11_vlrun, "f"));
