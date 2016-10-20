@@ -476,8 +476,8 @@ class RefactorConsultaProcessoProtocolo {
           $oDadosMovimentacao->sDespacho = $p58_despacho;
           $oDadosMovimentacao->lImprimir = false;
           $oDadosMovimentacao->iTipo = 2;
-          if ((int)$idusuariodestino > 0) {
-            $oDadosMovimentacao->sObservacoes .= " - usuário especificado: 'idusuariodestino' - 'loginusuariodestino'";
+          if ( (int) $idusuariodestino > 0 ) {
+            $oDadosMovimentacao->sObservacoes .= " - usuário especificado: $idusuariodestino - $loginusuariodestino";
           } else {
             $oDadosMovimentacao->sObservacoes .= " (sem usuário especificado)";
           }
