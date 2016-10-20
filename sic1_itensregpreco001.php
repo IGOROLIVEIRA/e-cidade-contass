@@ -16,13 +16,24 @@ $db_opcao = 1;
 $db_botao = true;
 if (isset($incluir)) {
     db_inicio_transacao();
-    $clitensregpreco->incluir($si07_sequencial);
+    $clitensregpreco->sql_record($clitensregpreco->sql_query('','*','',"si07_item = $si07_item"));
+    if($clitensregpreco->numrows > 0){
+        echo "<script>alert('O item já está cadastrado')</script>";
+    }else{
+        $clitensregpreco->incluir($si07_sequencial);
+    }
     db_fim_transacao();
 }
 if (isset($alterar)) {
     db_inicio_transacao();
-    $db_opcao = 2;
-    $clitensregpreco->alterar($si07_sequencial);
+    $clitensregpreco->sql_record($clitensregpreco->sql_query('','*','',"si07_item = $si07_item"));
+    if($clitensregpreco->numrows > 0){
+        echo "<script>alert('O item já está cadastrado')</script>";
+        return false;
+    }else{
+        $db_opcao = 2;
+        $clitensregpreco->alterar($si07_sequencial);
+    }
     db_fim_transacao();
 } else if (isset($chavepesquisa)) {
     $db_opcao = 2;
