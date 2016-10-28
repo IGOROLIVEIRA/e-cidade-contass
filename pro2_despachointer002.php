@@ -49,6 +49,8 @@ $sTipoDespacho       = "Despacho";
 
 $result_procandamint = $clprocandamint->sql_record($clprocandamint->sql_query_sim($codprocandamint));
 
+//echo $clprocandamint->sql_query_sim($codprocandamint);exit;
+
 if ( $clprocandamint->numrows > 0 ) {
 
   db_fieldsmemory($result_procandamint, 0);
@@ -62,6 +64,8 @@ if ( $p78_publico == 't' ) {
 }
 $sNumeroProcesso = $codproc;
 
+
+
 /**
  * Busca numero e ano do processo pelo codigo processo 
  */
@@ -74,11 +78,10 @@ if ( $clprotprocesso->numrows > 0 ) {
   $oNumeroProcesso = db_utils::fieldsMemory($rsNumeroProcesso, 0);
   $sNumeroProcesso = $oNumeroProcesso->p58_numero . '/' . $oNumeroProcesso->p58_ano;
 }
-
 $head2 = "PROCESSO N° $sNumeroProcesso";
 $head3 = "IMPRESSÃO DE ".mb_strtoupper($sTipoDespacho);
-$head4 = "Data: ".db_formatar(@$p58_dtproc,'d');
-$head5 = "Hora: ".@$p58_hora;
+$head4 = "Data: ".@$dataand;
+$head5 = "Hora: ".@$horaand;
 $head6 = "Usuário: ".@$usuario;
 $head7 = "Público: ".@$public;
 

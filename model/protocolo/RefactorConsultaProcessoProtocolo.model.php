@@ -309,9 +309,9 @@ class RefactorConsultaProcessoProtocolo {
                   $oDadosMovimentacao->sDespacho = "$p78_despacho";
                   $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
 
-                  if ($p78_usuario == $this->iUsuarioLogado) {
+                  //if ($p78_usuario == $this->iUsuarioLogado) {
                     $oDadosMovimentacao->lImprimir = true;
-                  }
+                  //}
 
                   $this->aMovimentacoes[] = $oDadosMovimentacao;
 
