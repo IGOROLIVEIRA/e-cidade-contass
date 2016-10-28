@@ -227,7 +227,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
     left join db_departorg on l20_codepartamento = db01_coddepto and db01_anousu = ".db_getsession("DB_anousu")."
     left join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade and db01_anousu = o41_anousu and o41_anousu = ".db_getsession("DB_anousu")."
     left join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-    where si172_dataassinatura <= '{$this->sDataFinal}' 
+    where si172_dataassinatura <= '{$this->sDataFinal}'
     and si172_dataassinatura >= '{$this->sDataInicial}' 
     and si172_instit = ". db_getsession("DB_instit");
 
@@ -597,7 +597,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
       from cgm as fornecedor
       join pcfornereprlegal on fornecedor.z01_numcgm = pcfornereprlegal.pc81_cgmforn
       join cgm as representante on pcfornereprlegal.pc81_cgmresp = representante.z01_numcgm
-      where pcfornereprlegal.pc81_tipopart = 1 and fornecedor.z01_numcgm = ".$oDados10->si172_fornecedor;
+      where pcfornereprlegal.pc81_tipopart in (1,3) and fornecedor.z01_numcgm = ".$oDados10->si172_fornecedor;
 
       $rsResult13 = db_query($sSql);//db_criatabela($rsResult13);
       $oDados13 = db_utils::fieldsMemory($rsResult13, 0);
