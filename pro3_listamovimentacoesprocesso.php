@@ -109,7 +109,7 @@ function js_buscarMovimentacoes() {
       if (oMovimento.lImprimir) {
 
         var sButton  = "<input type='button' value='imprimir' name='Imprimir' ";
-            sButton += " onclick='js_imprimeDespacho(\"" + iCodigoProcesso + "\",\"" + oMovimento.iAndamentoInterno + "\",\"" + oMovimento.iTipo + "\",\"" + oMovimento.sDespacho + "\",\"" + oMovimento.sLogin.urlDecode() + "\")' />";
+            sButton += " onclick='js_imprimeDespacho(\"" + iCodigoProcesso + "\",\"" + oMovimento.iAndamentoInterno + "\",\"" + oMovimento.iTipo + "\",\"" + oMovimento.sDespacho + "\",\"" + oMovimento.sLogin.urlDecode() + "\",\"" + oMovimento.sData.urlDecode() + "\",\"" + oMovimento.sHora.urlDecode() + "\")' />";
         aLinha[7] = sButton;
       }
 
@@ -147,9 +147,9 @@ function js_displayAjuda(sTexto, lShow) {
   }
 }
 
-function js_imprimeDespacho(codproc, codprocandamint,tipo,despacho,usuario) {
+function js_imprimeDespacho(codproc, codprocandamint,tipo,despacho,usuario,data,hora) {
 
-  var sUrl = 'pro2_despachointer002.php?codproc='+codproc+'&codprocandamint='+codprocandamint+'&tipo='+tipo+'&usuario='+usuario+'&despachoTransf='+despacho;
+  var sUrl = 'pro2_despachointer002.php?codproc='+codproc+'&codprocandamint='+codprocandamint+'&tipo='+tipo+'&usuario='+usuario+'&despachoTransf='+despacho+'&dataand='+data+'&horaand='+hora;
   jan = window.open(sUrl, '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
