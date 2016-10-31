@@ -2352,7 +2352,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                     if (!(($oReg24Saldo->saldoanterior == "" || $oReg24Saldo->saldoanterior == 0) && $oReg24Saldo->debitos == "" && $oReg24Saldo->creditos == "")) {
 
-                        $sHash24 = '24' . $oContas10->si177_contacontaabil . $objContasorgao->codorgao;
+                        $sHash24 = '24' . $oContas10->si177_contacontaabil . $this->getCodOrgaoTce(db_getsession("DB_instit"));
 
                         if (!isset($aContasReg10[$reg10Hash]->reg24[$sHash24])) {
 
