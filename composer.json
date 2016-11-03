@@ -1,0 +1,12 @@
+{
+  "name": "contass/e-cidade",
+  "authors": [
+    {
+      "name": "Gabriel Prates",
+      "email": "me@gabsprates.com"
+    }
+  ],
+  "require": {
+    "mpdf/mpdf": "6.0.0"
+  }
+}
