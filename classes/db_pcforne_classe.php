@@ -269,7 +269,7 @@ class cl_pcforne {
         return false;
       }
       if((trim($this->pc60_numeroregistro) == null || $this->pc60_numeroregistro == 0) && $this->fisica_juridica == 'j' && $this->pc60_orgaoreg != 4){
-        $this->erro_sql = " Campo Número Registro nao Informado.";
+        $this->erro_sql = " Campo Numero Registro nao Informado.";
         $this->erro_campo = "pc60_numeroregistro";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";

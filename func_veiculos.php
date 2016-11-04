@@ -176,10 +176,10 @@ $clveiculos->rotulo->label("ve01_veiccadtipo");
         $sWhereInstituicao = null;
 
         if (isset($instit)) {
-          $sWhereInstituicao = 'and instit = ' . db_getsession("DB_instit");
+          //$sWhereInstituicao = 'and ve01_instit = ' . db_getsession("DB_instit");
         }
         if(isset($tipoabast)){
-            $sWhereInstituicao .= ' and ve01_veictipoabast = 1 ';
+            $sWhereInstituicao = ' and ve01_veictipoabast = 1 ';
         }
 
         if(isset($central)) {

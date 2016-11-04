@@ -98,6 +98,10 @@ if ($clveicparam->numrows>0){
 <center>
 <table border="0">
  <tr>
+     <?
+     $ve01_instit = db_getsession("DB_instit");
+     db_input('ve01_instit',10,$Ive01_instit,true,'hidden',3,"");
+     ?>
     <td nowrap title="<?=@$Tve01_codigo?>">
        <?=@$Lve01_codigo?>
     </td>

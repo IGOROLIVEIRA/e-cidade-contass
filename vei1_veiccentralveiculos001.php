@@ -78,7 +78,7 @@ if (isset($opcao) && $opcao == "excluir"){
 if(isset($incluir)){
   $erro_msg = "";
   $sqlerro  = false;
-  $res_veiccentral = $clveiccentral->sql_record($clveiccentral->sql_query(null,"ve40_veiccadcentral",null,"ve40_veiculos = $ve09_veiculos and ve40_veiccadcentral=$ve40_veiccadcentral "));
+  $res_veiccentral = $clveiccentral->sql_record($clveiccentral->sql_query(null,"ve40_veiccadcentral",null,"ve40_veiculos = $ve09_veiculos"));
   if ($clveiccentral->numrows > 0){
     $erro_msg                     = "Item já cadastrado. Verifique.";
     $clveicitensobrig->erro_campo = "ve40_veiccadcentral";
