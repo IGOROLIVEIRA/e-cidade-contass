@@ -73,6 +73,12 @@ final class Periodo {
    */
   private $sDescricao;
 
+  private $iDiaInicial;
+  private $iDiaFinal;
+  private $iMesInicial;
+  private $iMesMesFinal;
+  private $sSigla;
+
   /**
    * Carrega as informações do objeto
    * @throws BusinessException
@@ -85,9 +91,14 @@ final class Periodo {
     if ($oDaoPeriodo->erro_status == "0") {
       throw new BusinessException("Período [{$iCodigo}] não encontrado.");
     }
-    $oStdPeriodo      = db_utils::fieldsMemory($rsBuscaPeriodo, 0);
-    $this->iCodigo    = $iCodigo;
-    $this->sDescricao = $oStdPeriodo->o114_descricao;
+    $oStdPeriodo        = db_utils::fieldsMemory($rsBuscaPeriodo, 0);
+    $this->iCodigo      = $iCodigo;
+    $this->sDescricao   = $oStdPeriodo->o114_descricao;
+    $this->iDiaInicial  = $oStdPeriodo->o114_diainicial;
+    $this->iDiaFinal    = $oStdPeriodo->o114_diafinal;
+    $this->iMesInicial  = $oStdPeriodo->o114_mesinicial;
+    $this->iMesMesFinal = $oStdPeriodo->o114_mesfinal;
+    $this->sSigla       = $oStdPeriodo->o114_sigla;
     unset($oStdPeriodo);
   }
 
@@ -106,4 +117,110 @@ final class Periodo {
   public function getDescricao() {
     return $this->sDescricao;
   }
+
+  /**
+   * @return mixed
+   */
+  public function getDiaInicial()
+  {
+    return $this->iDiaInicial;
+  }
+
+  /**
+   * @param mixed $iDiaInicial
+   */
+  public function setDiaInicial($iDiaInicial)
+  {
+    $this->iDiaInicial = $iDiaInicial;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getDiaFinal()
+  {
+    return $this->iDiaFinal;
+  }
+
+  /**
+   * @param mixed $iDiaFinal
+   */
+  public function setDiaFinal($iDiaFinal)
+  {
+    $this->iDiaFinal = $iDiaFinal;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getMesInicial()
+  {
+    return $this->iMesInicial;
+  }
+
+  /**
+   * @param mixed $iMesInicial
+   */
+  public function setMesInicial($iMesInicial)
+  {
+    $this->iMesInicial = $iMesInicial;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getMesMesFinal()
+  {
+    return $this->iMesMesFinal;
+  }
+
+  /**
+   * @param mixed $iMesMesFinal
+   */
+  public function setMesMesFinal($iMesMesFinal)
+  {
+    $this->iMesMesFinal = $iMesMesFinal;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getSigla()
+  {
+    return $this->sSigla;
+  }
+
+  /**
+   * @param mixed $sSigla
+   */
+  public function setSigla($sSigla)
+  {
+    $this->sSigla = $sSigla;
+  }
+
+  /**
+   * Busca o período do mês
+   * @param $iMes
+   * @return $this
+   * @throws BusinessException
+   */
+  public function getPeriodoByMes($iMes){
+    $oDaoPeriodo    = new cl_periodo();
+    $rsBuscaPeriodo = $oDaoPeriodo->sql_record($oDaoPeriodo->sql_query_file(null,"*",null,"o114_mesinicial = {$iMes} and o114_mesfinal = {$iMes}"));
+    if ($oDaoPeriodo->erro_status == "0") {
+      throw new BusinessException("Período não encontrado.");
+    }
+
+    $oStdPeriodo        = db_utils::fieldsMemory($rsBuscaPeriodo, 0);
+    $this->iCodigo      = $oStdPeriodo->o114_sequencial;
+    $this->sDescricao   = $oStdPeriodo->o114_descricao;
+    $this->iDiaInicial  = $oStdPeriodo->o114_diainicial;
+    $this->iDiaFinal    = $oStdPeriodo->o114_diafinal;
+    $this->iMesInicial  = $oStdPeriodo->o114_mesinicial;
+    $this->iMesMesFinal = $oStdPeriodo->o114_mesfinal;
+    $this->sSigla       = $oStdPeriodo->o114_sigla;
+    unset($oStdPeriodo);
+    return $this;
+  }
+
 }

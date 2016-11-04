@@ -28,6 +28,15 @@
 
 class Instituicao {
 
+  const TIPO_INSTIT_PREFEITURA = 2;
+  const TIPO_INSTIT_CAMARA = 1;
+  const TIPO_INSTIT_AUTARQUIA = 3;
+  const TIPO_INSTIT_FUNDACAO = 4;
+  const TIPO_INSTIT_RPPS = 5;
+  const TIPO_INSTIT_RPPS_SAUDE = 6;
+  const TIPO_INSTIT_EMPRESA_PUBLICA = 8;
+  const TIPO_INSTIT_SOCIEDADE_ECONOMIA_MISTA = 9;
+
   /**
    * Código da Instituicao
    *
@@ -176,6 +185,10 @@ class Instituicao {
    */
   protected $lUsaSisagua;
 
+  /**
+   * @var int
+   */
+  protected $iTipoInstit;
 
   /**
    * Metodo construtor
@@ -515,6 +528,22 @@ class Instituicao {
    */
   public function setUsaSisagua($lUsaSisagua) {
     $this->lUsaSisagua = $lUsaSisagua;
+  }
+
+  /**
+   * @return int
+   */
+  public function getTipoInstit()
+  {
+    return $this->iTipoInstit;
+  }
+
+  /**
+   * @param int $iTipoInstit
+   */
+  public function setTipoInstit($iTipoInstit)
+  {
+    $this->iTipoInstit = $iTipoInstit;
   }
 }
 ?>

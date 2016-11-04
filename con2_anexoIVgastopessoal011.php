@@ -112,6 +112,7 @@ function js_emite(tipo){
             $DBtxt22_mes = date("m",db_getsession("DB_datausu"));
             $DBtxt22_dia = date("d",db_getsession("DB_datausu"));
             db_inputdata('DBtxt22',$DBtxt22_dia,$DBtxt22_mes,$DBtxt22_ano ,true,'text',4);
+
 	  ?>
         </td>
       </tr>

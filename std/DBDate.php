@@ -332,7 +332,7 @@ class DBDate {
    */
   static function getMesesNoIntervalo(DBDate $oDtInicio, DBDate $oDtFim) {
 
-    if ($oDtInicio->getMes() > $oDtFim->getMes()) {
+    if ($oDtInicio->getDate() > $oDtFim->getDate()) {
       throw new ParameterException("Data de inicio não pode ser maior que a data final");
     }
 

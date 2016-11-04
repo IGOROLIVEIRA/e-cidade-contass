@@ -1589,6 +1589,7 @@ class cl_db_config {
        $sql .= $campos;
      }
      $sql .= " from db_config ";
+     $sql .= " LEFT JOIN infocomplementaresinstit ON codigo = si09_instit ";
      $sql2 = "";
      if($dbwhere==""){
        if($codigo!=null ){

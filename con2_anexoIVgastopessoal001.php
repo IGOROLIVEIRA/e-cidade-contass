@@ -75,6 +75,7 @@ $sizecp  = array();
                 $clcriaabas->funcao_js  = array("g1"=>"");
                 $clcriaabas->sizecampo  = array("g1"=>"23");
                 $clcriaabas->cria_abas();
+
                 ?>
             </center>
         </td>

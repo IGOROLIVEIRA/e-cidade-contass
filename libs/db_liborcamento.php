@@ -1068,6 +1068,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
   $sql = "
      CREATE TEMP TABLE IF NOT EXISTS work_dotacao (
+       o58_instit integer,
        o58_anousu integer,
        o58_orgao integer,
        o58_unidade integer,
@@ -1128,7 +1129,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     (case when o15_tipo  =  1 then $tipo_pa else 0 end) as ordinario,
     (case when o15_tipo  <> 1 then $tipo_pa else 0 end) as vinculado
     from
-    (select o58_anousu,
+    (select o58_instit,o58_anousu,
     o58_orgao,
     o58_unidade,
     o58_funcao,
@@ -2395,7 +2396,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     if( $nivel_agrupar == 1 ) {
       $sql .= "
 
-      select classe,
+      select o57_fonte,o57_descr,classe,
              grupo,
              subgrupo,
              elemento,
@@ -2430,7 +2431,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     }else if( $nivel_agrupar == 0 ){
       $sql .= " substr(o57_fonte,1,1)::int4 as classe, ";
     }
-    $sql .= "
+    $sql .= "o57_fonte,o57_descr,
     substr(o57_fonte,2,1)::int4  as grupo,
     substr(o57_fonte,3,1)::int4  as subgrupo,
     substr(o57_fonte,4,1)::int4  as elemento,
@@ -2467,7 +2468,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     if( $nivel_agrupar == 1 ) {
       $sql .= "
       ) as x
-      group by classe,
+      group by o57_fonte,o57_descr,classe,
                grupo,
                subgrupo,
                elemento,
