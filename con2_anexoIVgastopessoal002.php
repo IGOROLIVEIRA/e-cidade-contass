@@ -341,11 +341,11 @@ $rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
         foreach($aDadoDeducao as $oDeducao){
         ?>
         <tr style='height:20px;'>
-            <td class="s7"><?php echo db_formatar($oDespesa->o57_fonte,"receita")." - ".$oDespesa->o57_descr; ?></td>
+            <td class="s7"><?php echo db_formatar($oDeducao->o57_fonte,"receita")." - ".$oDeducao->o57_descr; ?></td>
             <td class="s9">
                 <?php
-                $fTotalDeducoes += $oDespesa->saldo_arrecadado;
-                echo db_formatar($oDespesa->saldo_arrecadado,"f");
+                $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+                echo db_formatar($oDeducao->saldo_arrecadado,"f");
                 ?>
             </td>
 
@@ -358,11 +358,11 @@ $rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
 
         ?>
         <tr style='height:20px;'>
-            <td class="s7"><?php echo db_formatar($oDespesa->o57_fonte,"receita")." - ".$oDespesa->o57_descr; ?></td>
+            <td class="s7"><?php echo db_formatar($oDeducao->o57_fonte,"receita")." - ".$oDeducao->o57_descr; ?></td>
             <td class="s9">
                 <?php
-                $fTotalDeducoes += $oDespesa->saldo_arrecadado;
-                echo db_formatar($oDespesa->saldo_arrecadado,"f");
+                $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+                echo db_formatar($oDeducao->saldo_arrecadado,"f");
                 ?>
             </td>
 

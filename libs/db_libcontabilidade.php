@@ -5480,7 +5480,7 @@ class cl_estrutura_sistema {
         $sql .= " inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu ";
         $sql2 = "";
         if($dbwhere==""){
-            if($ac10_sequencial!=null ){
+            if($o58_elemento!=null ){
                 $sql2 .= " where work_dotacao.o58_elemento = '{$o58_elemento}' ";
             }
         }else if($dbwhere != ""){
@@ -5524,7 +5524,7 @@ class cl_estrutura_sistema {
         $sql .= " from work_receita ";
         $sql2 = "";
         if($dbwhere==""){
-            if($ac10_sequencial!=null ){
+            if($o57_fonte!=null ){
                 $sql2 .= " where work_receita.o57_fonte = '{$o57_fonte}' ";
             }
         }else if($dbwhere != ""){
