@@ -32,6 +32,7 @@
  * @version $Revision: 1.220 $
  */
 require_once("classes/db_contranslan_classe.php");
+require_once("dbforms/db_funcoes.php");
 
 //|00|//cl_despdesdobramento
 //|10|// emite despesa por desdobramento
@@ -5454,5 +5455,118 @@ class cl_estrutura_sistema {
         $oDaoFiltroUsuario->incluir(null);
       }
 
+    }
+    /**
+     * Busca o saldo da despesa
+     * @param null $o58_elemento
+     * @param string $campos
+     * @param null $ordem
+     * @param string $dbwhere
+     * @return array|stdClass[]
+     */
+    function getSaldoDespesa($o58_elemento=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from work_dotacao ";
+        $sql .= " inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($ac10_sequencial!=null ){
+                $sql2 .= " where work_dotacao.o58_elemento = '{$o58_elemento}' ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return db_utils::getColectionByRecord(db_query($sql));
+
+    }
+
+    /**
+     * Busca o saldo da receita
+     * @param null $o57_fonte
+     * @param string $campos
+     * @param null $ordem
+     * @param string $dbwhere
+     * @return array|stdClass[]
+     */
+    function getSaldoReceita($o57_fonte=null,$campos="*",$ordem=null,$dbwhere=""){
+
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from work_receita ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($ac10_sequencial!=null ){
+                $sql2 .= " where work_receita.o57_fonte = '{$o57_fonte}' ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+
+        return db_utils::getColectionByRecord(db_query($sql));
+    }
+
+    /**
+     * Função que retorna a RCL no periodo indicado
+     * @param DBDate $oDataFim
+     * @param String $instits [Ex.: 1,2,3,4,5]
+     * @return int|number
+     * @throws BusinessException
+     * @throws ParameterException
+     */
+    function getRCL(DBDate $oDataFim, $instits){
+        $oPeriodo = new Periodo;
+        $oNovaDataFim = clone $oDataFim;
+        $oDataFim->modificarIntervalo('-11 month');
+        $aPeriodoCalculo = DBDate::getMesesNoIntervalo($oDataFim,$oNovaDataFim);
+
+        $aCalculos = array();
+
+        foreach($aPeriodoCalculo as $ano => $mes){
+            $aCalculos[] = calcula_rcl2($ano, $ano. "-" . min(array_keys($aPeriodoCalculo[$ano])) . "-1", $ano."-".max(array_keys($aPeriodoCalculo[$ano]))."-".$oPeriodo->getPeriodoByMes(max(array_keys($aPeriodoCalculo[$ano])))->getDiaFinal(), $instits, true, 81);
+        }
+        $fSoma = 0;
+        foreach($aCalculos as $aCalculo){
+            $fSoma += array_sum($aCalculo);
+        }
+        return $fSoma;
     }
     ?>

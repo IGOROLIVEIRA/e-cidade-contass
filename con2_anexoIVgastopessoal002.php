@@ -40,7 +40,9 @@ $oDataIni = new DBDate($dtini);
 
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
-/*$sWhereDespesa      = " o58_instit in({$instits})";
+
+db_inicio_transacao();
+$sWhereDespesa      = " o58_instit in({$instits})";
 $rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
     $anousu,
     $dtini,
@@ -48,19 +50,12 @@ $rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
 if (pg_num_rows($rsBalanceteDespesa) == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
 }
-db_query("drop table if exists anexoivgastopessoaldespesa; create table anexoivgastopessoaldespesa as select * from work_dotacao") or die(pg_last_error());
-db_query("drop table if exists work_dotacao");*/
 
 $sWhereReceita      = "o70_instit in ({$instits})";
 $rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
     $sWhereReceita, $anousu,
     $dtini,
     $datafin );
-
-db_query("drop table if exists anexoivgastopessoalreceita; create table anexoivgastopessoalreceita as select * from work_receita") or die(pg_last_error());
-db_query("drop table if exists work_receita");
-//db_criatabela(db_query("select * from anexoivgastopessoalreceita"));
-//exit;
 
 
 ?>
@@ -106,7 +101,6 @@ db_query("drop table if exists work_receita");
         </tr>
         <?php
         /**
-         * @todo inicia a despesa por instituição
          * Para cada instit do sql
          */
         $i = 1;
@@ -128,8 +122,7 @@ db_query("drop table if exists work_receita");
             </tr>
             <?php
             $fTotalLiquidado = 0;
-            $aDespesas = getSaldoDespesa("331", $oInstit->getCodigo(), 'liquidado');
-
+            $aDespesas = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
             foreach($aDespesas as $oDespesa){
                 $fTotalLiquidado += $oDespesa->liquidado;
             ?>
@@ -159,8 +152,8 @@ db_query("drop table if exists work_receita");
                 <?php
                 $fSaldoIntaivosPensionistasProprio = 0;
                 if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
-                    $aSaldoEstrut1 = getSaldoDespesa("3319001",$oInstit->getCodigo(),"liquidado");
-                    $aSaldoEstrut2 = getSaldoDespesa("3319003",$oInstit->getCodigo(),"liquidado");
+                    $aSaldoEstrut1 = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                    $aSaldoEstrut2 = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
                     $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
                 }
                 echo db_formatar($fSaldoIntaivosPensionistasProprio,"f");
@@ -191,8 +184,8 @@ db_query("drop table if exists work_receita");
                 <?php
                 $fSaldoAposentadoriaPensoesTesouro = 0;
                 if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
-                    $aSaldoEstrut1 = getSaldoDespesa("3319001",$oInstit->getCodigo(),"liquidado");
-                    $aSaldoEstrut2 = getSaldoDespesa("3319003",$oInstit->getCodigo(),"liquidado");
+                    $aSaldoEstrut1 = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                    $aSaldoEstrut2 = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
                     $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
                 }
                 echo db_formatar($fSaldoAposentadoriaPensoesTesouro,"f");
@@ -206,7 +199,12 @@ db_query("drop table if exists work_receita");
                     CÁLCULO
                 </div>
             </td>
-            <td class="s14"><?php echo db_formatar($fTotalDespesas - ($fSaldoIntaivosPensionistasProprio + $fSaldoSentencasJudAnt + $fSaldoAposentadoriaPensoesTesouro),"f"); ?></td>
+            <td class="s14">
+                <?php
+                $fTotalDespesaPessoal = $fTotalDespesas - ($fSaldoIntaivosPensionistasProprio + $fSaldoSentencasJudAnt + $fSaldoAposentadoriaPensoesTesouro);
+                echo db_formatar($fTotalDespesaPessoal,"f");
+                ?>
+            </td>
 
         </tr>
         <tr style='height:20px;'>
@@ -216,12 +214,18 @@ db_query("drop table if exists work_receita");
         </tr>
         <tr style='height:20px;'>
             <td class="s13">Receita Corrente do Município</td>
-            <td class="s14"><?=db_formatar(getRCL($oDataFim),"f")?></td>
+            <td class="s14"><?php $fRCL = getRCL($oDataFim,$instits); echo db_formatar($fRCL,"f");  ?></td>
             <td class="s10"></td>
         </tr>
         <tr style='height:20px;'>
             <td class="s7">(-) Receita Corrente Intraorçamentária</td>
-            <td class="s9"><?php db_formatar(getSaldoReceita("47","saldo_arrecadado"),"f"); ?></td>
+            <td class="s9">
+                <?php
+                $aDadosRCI = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '47%'");
+                $fRCI = count($aDadosRCI) > 0 ? $aDadosRCI[0]->saldo_arrecadado : 0;
+                echo db_formatar($fRCI, "f");
+
+                ?></td>
             <td class="s10"></td>
         </tr>
         <tr style='height:20px;'>
@@ -230,7 +234,13 @@ db_query("drop table if exists work_receita");
                     para Regime Próprio
                 </div>
             </td>
-            <td class="s9">0,00</td>
+            <td class="s9">
+                <?php
+                $aDadosCSACRPPS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '412102907%'");
+                $fCSACRPPS = count($aDadosCSACRPPS) > 0 ? $aDadosCSACRPPS[0]->saldo_arrecadado : 0;
+                echo db_formatar($fCSACRPPS,"f");
+                ?>
+            </td>
             <td class="s10"></td>
         </tr>
         <tr style='height:20px;'>
@@ -239,7 +249,14 @@ db_query("drop table if exists work_receita");
                     Civil para o Regime Próprio
                 </div>
             </td>
-            <td class="s9">0,00</td>
+            <td class="s9">
+                <?php
+                $aDadosCSICRPPS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '412102909%'");
+                $fCSICRPPS = count($aDadosCSICRPPS) > 0 ? $aDadosCSICRPPS[0]->saldo_arrecadado : 0;
+                echo db_formatar($fCSICRPPS,"f");
+
+                ?>
+            </td>
             <td class="s10"></td>
         </tr>
         <tr style='height:20px;'>
@@ -248,7 +265,13 @@ db_query("drop table if exists work_receita");
                     para o Regime Próprio
                 </div>
             </td>
-            <td class="s9">0,00</td>
+            <td class="s9">
+                <?php
+                $aDadosCPRPPS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '412102911%'");
+                $fCPRPPS = count($aDadosCPRPPS) > 0 ? $aDadosCPRPPS[0]->saldo_arrecadado : 0;
+                echo db_formatar($fCPRPPS,"f");
+                ?>
+            </td>
             <td class="s10"></td>
         </tr>
         <tr style='height:20px;'>
@@ -257,7 +280,13 @@ db_query("drop table if exists work_receita");
                     oriunda do Pagto.Sent.JudiciaIs
                 </div>
             </td>
-            <td class="s9">0,00</td>
+            <td class="s9">
+                <?php
+                $aDadosRRCSACOPSJ = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '412102917%'");
+                $fRRCSACOPSJ = count($aDadosRRCSACOPSJ) > 0 ? $aDadosRRCSACOPSJ[0]->saldo_arrecadado : 0;
+                echo db_formatar($fRRCSACOPSJ,"f");
+                ?>
+            </td>
 
         </tr>
         <tr style='height:20px;'>
@@ -266,7 +295,13 @@ db_query("drop table if exists work_receita");
                     Civil oriunda do Pagto.Sent.Judiciais
                 </div>
             </td>
-            <td class="s9">0,00</td>
+            <td class="s9">
+                <?php
+                $aDadosRRCSICOPSJ = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '412102918%'");
+                $fRRCSICOPSJ = count($aDadosRRCSICOPSJ) > 0 ? $aDadosRRCSICOPSJ[0]->saldo_arrecadado : 0;
+                echo db_formatar($fRRCSICOPSJ,"f");
+                ?>
+            </td>
 
         </tr>
         <tr style='height:20px;'>
@@ -275,12 +310,24 @@ db_query("drop table if exists work_receita");
                     Pagto.Sent.Judiciais
                 </div>
             </td>
-            <td class="s9">0,00</td>
+            <td class="s9">
+                <?php
+                $aDadosRRCPPSJ = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '412102919%'");
+                $fRRCPPSJ = count($aDadosRRCPPSJ) > 0 ? $aDadosRRCPPSJ->saldo_arrecadado : 0;
+                echo db_formatar($fRRCPPSJ,"f");
+                ?>
+            </td>
 
         </tr>
         <tr style='height:20px;'>
             <td class="s7">(-) Comp.Financ.entre o RGPS e os RPPS</td>
-            <td class="s9">0,00</td>
+            <td class="s9">
+                <?php
+                $aDadosCFRP = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4192210%'");
+                $fCFRP = count($aDadosCFRP) > 0 ? $aDadosCFRP[0]->saldo_arrecadado : 0;
+                echo db_formatar($fCFRP,"f");
+                ?>
+            </td>
 
         </tr>
         <tr style='height:20px;'>
@@ -288,47 +335,47 @@ db_query("drop table if exists work_receita");
             <td class="s8"></td>
 
         </tr>
+        <?php
+        $fTotalDeducoes = 0;
+        $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '492%'");
+        foreach($aDadoDeducao as $oDeducao){
+        ?>
         <tr style='height:20px;'>
-            <td class="s7">92.1113.05.01 - Restituição ISSQN</td>
-            <td class="s9">1.103,13</td>
-
-        </tr>
-        <tr style='height:20px;'>
-            <td class="s7">92.1722.01.01 - Restituição da Cota Parte do ICMS</td>
-            <td class="s9">3.317,89</td>
-
-        </tr>
-        <tr style='height:20px;'>
-            <td class="s7">92.1922.01.00 - Restituição - Outras Restituições</td>
-            <td class="s9">1.439,26</td>
-
-        </tr>
-        <tr style='height:20px;'>
-            <td class="s7 softmerge">
-                <div class="softmerge-inner" style="width: 417px; left: -1px;">99.1722.01.01 - Dedução Transferências
-                    Conv. Estado para o SUS
-                </div>
+            <td class="s7"><?php echo db_formatar($oDespesa->o57_fonte,"receita")." - ".$oDespesa->o57_descr; ?></td>
+            <td class="s9">
+                <?php
+                $fTotalDeducoes += $oDespesa->saldo_arrecadado;
+                echo db_formatar($oDespesa->saldo_arrecadado,"f");
+                ?>
             </td>
-            <td class="s9">3.807,97</td>
 
         </tr>
+        <?php }
+
+        $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '499%'");
+        foreach($aDadoDeducao as $oDeducao){
+
+
+        ?>
         <tr style='height:20px;'>
-            <td class="s7 softmerge">
-                <div class="softmerge-inner" style="width: 417px; left: -1px;">99.1762.99.99 - Outras Transferências de
-                    Convênios do Estado
-                </div>
+            <td class="s7"><?php echo db_formatar($oDespesa->o57_fonte,"receita")." - ".$oDespesa->o57_descr; ?></td>
+            <td class="s9">
+                <?php
+                $fTotalDeducoes += $oDespesa->saldo_arrecadado;
+                echo db_formatar($oDespesa->saldo_arrecadado,"f");
+                ?>
             </td>
-            <td class="s9">3.699,31</td>
 
         </tr>
-        <tr style='height:20px;'>
-            <td class="s11">(-) Dedução da Receita para Formação do FUNDEB</td>
-            <td class="s12">1.961.205,65</td>
-
-        </tr>
+        <?php }?>
         <tr style='height:20px;'>
             <td class="s15">RECEITA CORRENTE LÍQUIDA = BASE DE CÁLCULO</td>
-            <td class="s16">15.917.282,71</td>
+            <td class="s16">
+                <?php
+                $fRCLBase = $fRCL-(array_sum(array($fRCI,$fCSACRPPS,$fCSICRPPS,$fCPRPPS,$fRRCSACOPSJ,$fRRCSICOPSJ,$fRRCPPSJ,$fCFRP,$fTotalDeducoes)));
+                echo db_formatar($fRCLBase,"f");
+                ?>
+            </td>
             <td class="s17"></td>
         </tr>
         <tr style='height:20px;'>
@@ -338,13 +385,13 @@ db_query("drop table if exists work_receita");
         </tr>
         <tr style='height:20px;'>
             <td class="s19">Aplicação no Exercício</td>
-            <td class="s20">47,78%</td>
-            <td class="s21">7.604.973,01</td>
+            <td class="s20"><?php echo db_formatar(($fTotalDespesaPessoal/$fRCLBase)*100,"f"); ?>%</td>
+            <td class="s21"><?php echo db_formatar($fTotalDespesaPessoal,"f") ?></td>
         </tr>
         <tr style='height:20px;'>
             <td class="s22">Permitido pela Lei Complementar 101/00</td>
             <td class="s23">60,00%</td>
-            <td class="s24">9.550.369,63</td>
+            <td class="s24"><?php echo db_formatar($fRCLBase*0.6,"f") ?></td>
         </tr>
         </tbody>
     </table>
@@ -354,52 +401,9 @@ db_query("drop table if exists work_receita");
 
 <?php
 
-/**
- * Busca o saldo da despesa
- * @param $sEstrut
- * @param $iInstit
- * @param $sCampo [liquidado, empenhado, pago, anulado, ver a tabela anexoivgastopessoaldespesa]
- * @return array|stdClass[]
- */
-function getSaldoDespesa($sEstrut, $iInstit,$sCampo = 'liquidado'){
-    $sSqlDespesas = "select o58_elemento, o56_descr,sum({$sCampo}) as liquidado from anexoivgastopessoaldespesa inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu where o58_elemento like '{$sEstrut}%' and o58_instit = {$iInstit} group by 1,2";
-    return db_utils::getColectionByRecord(db_query($sSqlDespesas));
-}
+db_query("drop table if exists work_dotacao");
+db_query("drop table if exists work_receita");
 
-/**
- * Busca o saldo da receita
- * @param $sEstrut
- * @param string $sCampo
- * @return array|stdClass[]
- */
-function getSaldoReceita($sEstrut, $sCampo = 'liquidado'){
-    $sSqlDespesas = "select o58_elemento, o56_descr,sum({$sCampo}) as liquidado from anexoivgastopessoalreceita inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu where o58_elemento like '{$sEstrut}%' group by 1,2";
-    return db_utils::getColectionByRecord(db_query($sSqlDespesas));
-}
-
-/**
- * Função que retorna a RCL no periodo indicado
- * @param DBDate $oDataFim
- * @return int|number
- * @throws BusinessException
- * @throws ParameterException
- */
-function getRCL(DBDate $oDataFim){
-    $oPeriodo = new Periodo;
-    $oNovaDataFim = clone $oDataFim;
-    $oDataFim->modificarIntervalo('-11 month');
-    $aPeriodoCalculo = DBDate::getMesesNoIntervalo($oDataFim,$oNovaDataFim);
-
-    $aCalculos = array();
-
-    foreach($aPeriodoCalculo as $ano => $mes){
-        $aCalculos[] = calcula_rcl2($ano, $ano. "-" . min(array_keys($aPeriodoCalculo[$ano])) . "-1", $ano."-".max(array_keys($aPeriodoCalculo[$ano]))."-".$oPeriodo->getPeriodoByMes(max(array_keys($aPeriodoCalculo[$ano])))->getDiaFinal(), $instits, true, 81);
-    }
-    $fSoma = 0;
-    foreach($aCalculos as $aCalculo){
-        $fSoma += array_sum($aCalculo);
-    }
-    return $fSoma;
-}
+db_fim_transacao();
 
 ?>
