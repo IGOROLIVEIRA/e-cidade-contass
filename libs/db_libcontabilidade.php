@@ -5577,10 +5577,10 @@ class cl_estrutura_sistema {
      * @param $dtfim
      * @param $sFuncao
      * @param $aSubFuncao
-     * @param $sFonte
+     * @param $aFonte
      * @return int
      */
-    function getSaldoRP($instits,$dtini,$dtfim, $sFuncao, $aSubFuncao, $sFonte){
+    function getSaldoRP($instits,$dtini,$dtfim, $sFuncao, $aSubFuncao, $aFonte){
         $fSaldo = 0;
         $clempresto = new cl_empresto;
         $sql_where_externo = "AND 1=1
@@ -5593,7 +5593,7 @@ class cl_estrutura_sistema {
                       7,
                       8,
                       9) and o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).")";
-        $sql_order = "where o15_codtri = '{$sFonte}' ORDER BY o58_orgao,
+        $sql_order = "where o15_codtri in (".implode(",",$aFonte).") ORDER BY o58_orgao,
              e60_anousu,
              e60_codemp::integer";
         $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), "e60_instit in ($instits)", $dtini, $dtfim, "", $sql_where_externo, $sql_order);
@@ -5627,7 +5627,7 @@ class cl_estrutura_sistema {
         $fSubTotal = 0;
         $aSubFuncoes = array(122,272,271,361,365,366,367);
         $sFuncao     = "12";
-        $sFonte      = "101";
+        $aFonte      = array(101);
         foreach ($aSubFuncoes as $iSubFuncao) {
             $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri = '{$sFonte}' and o58_instit in ($instits) group by 1,2");
             if (count($aDespesasProgramas) > 0) {
@@ -5637,7 +5637,7 @@ class cl_estrutura_sistema {
             }
         }
         $aDadoDeducao = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '495%'");
-        $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$sFonte);
+        $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$aFonte);
         db_query("drop table if exists work_dotacao");
         db_query("drop table if exists work_receita");
         db_fim_transacao();

@@ -198,11 +198,11 @@ ob_start();
       $fSubTotal = 0;
       $aSubFuncoes = array(122,272,271,361,365,366,367);
       $sFuncao     = "12";
-      $sFonte      = "101";
+      $aFonte      = array(101);
       foreach ($aSubFuncoes as $iSubFuncao) {
         $sDescrSubfunao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
 
-        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri = '{$sFonte}' and o58_instit in ($instits) group by 1,2");
+        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
         if (count($aDespesasProgramas) > 0) {
 
           ?>
@@ -262,7 +262,7 @@ ob_start();
         <td class="s16 bdleft" colspan="8">Processados no Exercício Atual (3)</td>
         <td class="s15">
           <?php
-          $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$sFonte);
+          $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$aFonte);
           echo db_formatar($fSaldoRP,"f");
           ?>
         </td>
