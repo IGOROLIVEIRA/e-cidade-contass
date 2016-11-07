@@ -5643,4 +5643,36 @@ class cl_estrutura_sistema {
         db_fim_transacao();
         return ($fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$fSaldoRP);
     }
+
+    /**
+     * Calculo final do relatório Anexo II da Saúde, Contabilidade->Relatorios->Relatórios de Acompanhamento
+     * Este total é utilizado no Anexo I
+     * @param $instits
+     * @param $dtini
+     * @param $dtfim
+     * @return int
+     */
+    function getTotalAnexoIISaude($instits,$dtini,$dtfim){
+        db_inicio_transacao();
+        $sWhereDespesa      = " o58_instit in({$instits})";
+        $rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
+            $anousu,
+            $dtini,
+            $dtfim);
+        $fSubTotal = 0;
+        $aSubFuncoes = array(122,272,271,301,302,303,304,305,306);
+        $sFuncao     = "12";
+        $aFonte      = array("'101'");
+        foreach ($aSubFuncoes as $iSubFuncao) {
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+            if (count($aDespesasProgramas) > 0) {
+                foreach ($aDespesasProgramas as $oDespesaPrograma) {
+                    $fSubTotal += $oDespesaPrograma->pago;
+                }
+            }
+        }
+        db_query("drop table if exists work_dotacao");
+        db_fim_transacao();
+        return $fSubTotal;
+    }
     ?>
