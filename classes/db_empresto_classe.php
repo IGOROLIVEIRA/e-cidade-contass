@@ -847,6 +847,7 @@ class cl_empresto {
 	    e91_recurso,
 	    e91_anousu,
 	    o15_descr,
+	    o15_codtri,
 	    vlranu,
 	    vlrliq,
 	    vlrpag,
@@ -887,6 +888,7 @@ class cl_empresto {
 	       e91_codtipo,
 	       e90_descr,
 	       o15_descr,
+	       o15_codtri,
          c70_anousu,
 
          coalesce(e91_vlremp,0) as e91_vlremp,
