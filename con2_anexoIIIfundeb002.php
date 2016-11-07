@@ -25,540 +25,328 @@
  *                                licenca/licenca_pt.txt
  */
 
-include("fpdf151/pdf.php");
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+
+require_once "libs/db_stdlib.php";
+require_once "libs/db_conecta.php";
+include_once "libs/db_sessoes.php";
+include_once "libs/db_usuariosonline.php";
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
-include("fpdf151/assinatura.php");
 require("vendor/mpdf/mpdf/mpdf.php");
 
 db_postmemory($HTTP_POST_VARS);
 
 $dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
 $dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
-$oDataFim = new DBDate($dtfim);
-$oDataIni = new DBDate($dtini);
 
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
-/*$sWhereDespesa      = " o58_instit in({$instits})";
-$rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
-    $anousu,
-    $dtini,
-    $datafin);
-if (pg_num_rows($rsBalanceteDespesa) == 0) {
-    db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
+foreach($aInstits as $iInstit){
+	$oInstit = new Instituicao($iInstit);
+	if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
+		break;
+	}
 }
-db_query("drop table if exists anexoivgastopessoaldespesa; create table anexoivgastopessoaldespesa as select * from work_dotacao") or die(pg_last_error());
-db_query("drop table if exists work_dotacao");*/
+
+db_inicio_transacao();
+
+$sWhereDespesa      = " o58_instit in({$instits})";
+$rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
+	$anousu,
+	$dtini,
+	$datafin);
+
+if (pg_num_rows($rsBalanceteDespesa) == 0) {
+	db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
+}
 
 $sWhereReceita      = "o70_instit in ({$instits})";
 $rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
-    $sWhereReceita, $anousu,
-    $dtini,
-    $datafin );
-
-db_query("drop table if exists anexoivgastopessoalreceita; create table anexoivgastopessoalreceita as select * from work_receita") or die(pg_last_error());
-db_query("drop table if exists work_receita");
-//db_criatabela(db_query("select * from anexoivgastopessoalreceita"));
-//exit;
+	$sWhereReceita, $anousu,
+	$dtini,
+	$datafin );
 
 
-$html = <<<HTML
+/**
+ * mPDF
+ * @param string $mode              | padrão: BLANK
+ * @param mixed $format             | padrão: A4
+ * @param float $default_font_size  | padrão: 0
+ * @param string $default_font      | padrão: ''
+ * @param float $margin_left        | padrão: 15
+ * @param float $margin_right       | padrão: 15
+ * @param float $margin_top         | padrão: 16
+ * @param float $margin_bottom      | padrão: 16
+ * @param float $margin_header      | padrão: 9
+ * @param float $margin_footer      | padrão: 9
+ *
+ * Nenhum dos parâmetros é obrigatório
+ */
 
-<html>
-<head>
-  <style type='text/css'>.ritz .waffle a { color: inherit; }.ritz .waffle .s18{border-bottom:1px SOLID #000000;border-right:2px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s15{border-bottom:2px SOLID #000000;background-color:#ffffff;text-align:left;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s6{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s8{border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s20{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:right;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s24{border-bottom:2px SOLID #000000;border-right:2px SOLID #000000;background-color:#ffffff;text-align:right;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s9{border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s2{border-bottom:2px SOLID #000000;border-right:1px SOLID transparent;background-color:#d8d8d8;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s10{background-color:#ffffff;text-align:left;font-style:italic;color:#000000;font-family:'Calibri',Arial;font-size:8pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s3{border-bottom:2px SOLID #000000;border-right:2px SOLID #000000;background-color:#d8d8d8;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s0{border-bottom:1px SOLID transparent;border-right:2px SOLID #000000;background-color:#d8d8d8;text-align:center;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s11{border-bottom:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s13{border-bottom:1px SOLID #000000;background-color:#ffffff;text-align:left;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s4{border-bottom:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s23{border-bottom:2px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s12{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s21{border-bottom:1px SOLID #000000;border-right:2px SOLID #000000;background-color:#d8d8d8;text-align:right;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s14{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s17{border-bottom:2px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s22{border-bottom:2px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s7{background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s5{border-bottom:1px SOLID #000000;border-right:1px SOLID transparent;background-color:#d8d8d8;text-align:left;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s16{border-bottom:2px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s1{background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s19{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:left;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}</style>
-</head>
-<body>
-<div class='ritz grid-container' dir='ltr'>
-    <table class='waffle' cellspacing='0' cellpadding='0'>
-        <tbody>
-        <tr style='height:20px;'>
-            <td class='s0' colspan='8'>PREFEITURA MUNICIPAL DE BOTUMIRIM</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s1' colspan='8'>ANEXO III</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s3'></td>
-            <td class='s4' colspan='7'>Período: De 01/01/2016 a 30/06/2016</td>
-        </tr>
-        <tr style='height:20px;'>
-            <th id='0R4' style='height: 20px;' class='row-headers-background'>
-            <td class='s5' colspan='8'>FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s5' colspan='8'>DOS PROFISSIONAIS DA EDUCAÇÃO ? FUNDEB</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s6' colspan='8'>DEMONSTRATIVO DOS RECURSOS RECEBIDOS E SUA APLICAÇÃO</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s7 softmerge'>
-                <div class='softmerge-inner' style='width: 198px; left: -1px;'>01 - RECURSOS:</div>
-            </td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s10'>R$</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s11 softmerge'>
-                <div class='softmerge-inner' style='width: 298px; left: -1px;'>A - Transferências Multigovernamentais:
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-            <td class='s13'></td>
-            <td class='s14'></td>
-            <td class='s14'></td>
-            <td class='s14'></td>
-            <td class='s15'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 698px; left: -1px;'>1724.01.00 - Transferências de Recursos
-                    do Fundo de Manuteção e Desenvolv. Da
-                </div>
-            </td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 598px; left: -1px;'>Educação Básica e de Valorização dos
-                    Profissionais da Educação - FUNDEB
-                </div>
-            </td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-            <td class='s18'>846.744,70</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s11 softmerge'>
-                <div class='softmerge-inner' style='width: 598px; left: -1px;'>1724.02.00 - Transf.de Recursos da
-                    Complementação da União ao FUNDEB
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-            <td class='s13'></td>
-            <td class='s19'>0,00</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 598px; left: -1px;'>B - Receitas de Aplicações Financeiras
-                    (art. 20, § único, Lei Federal 11494/2007
-                </div>
-            </td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-            <td class='s20'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s11 softmerge'>
-                <div class='softmerge-inner' style='width: 698px; left: -1px;'>1325.01.02- Receita de Remuneração de
-                    Depósitos Bancários de Rec.Vinc.FUNDEB
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-            <td class='s21'>5.551,63</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s22' colspan='2'>TOTAL DO ITEM 01:</td>
-            <td class='s23'>852.296,33</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s3'></td>
-            <td class='s3'></td>
-            <td class='s3'></td>
-            <td class='s3'></td>
-            <td class='s3'></td>
-            <td class='s3'></td>
-            <td class='s3'></td>
-            <td class='s24'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s7 softmerge'>
-                <div class='softmerge-inner' style='width: 498px; left: -1px;'>02 - APLICAÇÃO NA EDUCAÇÃO BÁSICA
-                    PÚBLICA:
-                </div>
-            </td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s17'></td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-            <td class='s9'></td>
-            <td class='s25'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s5'>Função</td>
-            <td class='s5'>Subfunções</td>
-            <td class='s5'>Programas</td>
-            <td class='s5' colspan='3'>Especificação</td>
-            <td class='s26' colspan='2'>DESPESA</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s24'></td>
-            <td class='s24'></td>
-            <td class='s24'></td>
-            <td class='s3'></td>
-            <td class='s3'></td>
-            <td class='s24'></td>
-            <td class='s26'>Parcial</td>
-            <td class='s26'>Total</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s26'>12</td>
-            <td class='s24'></td>
-            <td class='s24'></td>
-            <td class='s27'>EDUCAÇÃO</td>
-            <td class='s3'></td>
-            <td class='s24'></td>
-            <td class='s24'></td>
-            <td class='s24'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s20'></td>
-            <td class='s28'>122</td>
-            <td class='s28'>...</td>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 198px; left: -1px;'>Administração Geral</div>
-            </td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-            <td class='s29'>100.000,00</td>
-            <td class='s29'>100.000,00</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s14'></td>
-            <td class='s14'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s20'></td>
-            <td class='s28'>272</td>
-            <td class='s28'>...</td>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 298px; left: -1px;'>Previdência do Regime Estatutário</div>
-            </td>
-            <td class='s17'></td>
-            <td class='s8'></td>
-            <td class='s30'>100.000,00</td>
-            <td class='s29'>100.000,00</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s14'></td>
-            <td class='s14'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s20'></td>
-            <td class='s28'>361</td>
-            <td class='s28'>...</td>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 198px; left: -1px;'>Ensino Fundamental</div>
-            </td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-            <td class='s29'>100.000,00</td>
-            <td class='s29'>100.000,00</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s14'></td>
-            <td class='s14'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s20'></td>
-            <td class='s28'>365</td>
-            <td class='s28'>...</td>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 198px; left: -1px;'>Educação Infantil</div>
-            </td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-            <td class='s29'>100.000,00</td>
-            <td class='s29'>100.000,00</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s14'></td>
-            <td class='s14'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s20'></td>
-            <td class='s28'>366</td>
-            <td class='s28'>...</td>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 298px; left: -1px;'>Educação de Jovens e Adultos</div>
-            </td>
-            <td class='s17'></td>
-            <td class='s8'></td>
-            <td class='s30'>100.000,00</td>
-            <td class='s29'>100.000,00</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s14'></td>
-            <td class='s14'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-            <td class='s15'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s20'></td>
-            <td class='s28'>367</td>
-            <td class='s28'>...</td>
-            <td class='s16 softmerge'>
-                <div class='softmerge-inner' style='width: 198px; left: -1px;'>Educação Especial</div>
-            </td>
-            <td class='s8'></td>
-            <td class='s8'></td>
-            <td class='s29'>100.000,00</td>
-            <td class='s29'>100.000,00</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s24'></td>
-            <td class='s24'></td>
-            <td class='s24'></td>
-            <td class='s3'></td>
-            <td class='s3'></td>
-            <td class='s24'></td>
-            <td class='s24'></td>
-            <td class='s24'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s9'></td>
-            <td class='s31'>TOTAL</td>
-            <td class='s32'>600.000,00</td>
-            <td class='s32'>600.000,00</td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s11 softmerge'>
-                <div class='softmerge-inner' style='width: 598px; left: -1px;'>GASTOS COM PROFISSIONAIS DO MAGISTÉRIO DA
-                    EDUCAÇÃO BÁSICA:
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-            <td class='s13'></td>
-            <td class='s33'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s11 softmerge'>
-                <div class='softmerge-inner' style='width: 398px; left: -1px;'>Receita Total do Fundo (Anexo III, Item
-                    01) ....... =
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-            <td class='s34'>852.296,33</td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s33'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s11 softmerge'>
-                <div class='softmerge-inner' style='width: 398px; left: -1px;'>Valor Legal Mínimo
-                    ................................... 60 % =
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-            <td class='s34'>511.377,80</td>
-            <td class='s3'></td>
-            <td class='s2'></td>
-            <td class='s33'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s11 softmerge'>
-                <div class='softmerge-inner' style='width: 398px; left: -1px;'>Valor aplicado
-                    ...................................................
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-            <td class='s34'>600.000,00</td>
-            <td class='s32'>70,40%</td>
-            <td class='s2'></td>
-            <td class='s33'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s2'></td>
-            <td class='s33'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s35 softmerge'>
-                <div class='softmerge-inner' style='width: 798px; left: -1px;'>(O Valor Aplicado é composto pelas
-                    despesas com os profissionais do magistério da educação básica, em efetivo exercício de
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-        </tr>
-        <tr style='height:20px;'>
-            <td class='s35 softmerge'>
-                <div class='softmerge-inner' style='width: 798px; left: -1px;'>suas atividades na rede pública e
-                    corresp. aos comprovantes de despesas organizados de acordo c/a alínea a, artigo 15 desta IN).
-                </div>
-            </td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s12'></td>
-            <td class='s13'></td>
-        </tr>
-        </tbody>
-    </table>
-    </div>
-</body>
-</html>
-HTML;
+$mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
 
-$mpdf = new mPDF();
-$mpdf->WriteHTML(utf8_encode($html));
-$mpdf->Output();
-exit;
 
+$header = <<<HEADER
+<header>
+  <table style="width:100%;text-align:center;font-family:sans-serif;border-bottom:1px solid #000;padding-bottom:6px;">
+    <tr>
+      <th>{$oInstit->getDescricao()}</th>
+    </tr>
+    <tr>
+      <th>ANEXO III</th>
+    </tr>
+    <tr>
+      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De 01/01/2016 a 30/06/2016</td>
+    </tr>
+  </table>
+</header>
+HEADER;
+
+$footer = <<<FOOTER
+<div style='border-top:1px solid #000;width:100%;text-align:right;font-family:sans-serif;font-size:10px;height:10px;'>
+  {PAGENO}
+</div>
+FOOTER;
+
+
+$mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
+$mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
+$mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
+
+ob_start();
+
+$aRecursos      = array();
+$aPago          = array();
+$aPagoAcumulado = array();
 ?>
+	<html>
+	<head>
+		<style type="text/css">.ritz .waffle a { color: inherit; }.ritz .waffle .s20{border-bottom:1px SOLID transparent;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s22{border-bottom:1px SOLID transparent;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s11{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s26{border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s9{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s12{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:right;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s18{border-bottom:1px SOLID transparent;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s10{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s25{background-color:#ffffff;text-align:right;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s4{border-right:1px SOLID #000000;background-color:#ffffff;text-align:center;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s28{border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s15{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:right;font-weight:bold;text-decoration:underline;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s17{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:center;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s5{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:center;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:normal;overflow:hidden;word-wrap:break-word;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s8{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s21{border-bottom:1px SOLID transparent;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:right;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s19{border-bottom:1px SOLID transparent;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:center;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s23{border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s7{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:center;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s30{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:8pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s27{border-bottom:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s3{border-bottom:1px SOLID #000000;background-color:#ffffff;text-align:right;font-style:italic;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s13{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s24{background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s1{background-color:#ffffff;text-align:center;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:12pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s14{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#ffffff;text-align:right;font-weight:bold;text-decoration:underline;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s6{border-bottom:1px SOLID #000000;border-right:1px SOLID transparent;background-color:#d8d8d8;text-align:left;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s29{border-right:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:8pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s0{background-color:#ffffff;text-align:center;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:14pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s2{background-color:#ffffff;text-align:left;color:#000000;font-family:'Calibri',Arial;font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}.ritz .waffle .s16{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#d8d8d8;text-align:left;font-weight:bold;color:#000000;font-family:'Calibri',Arial;font-size:11pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:2px 3px 2px 3px;}</style>
+	</head>
+	<body>
+	<div class="ritz grid-container" dir="ltr">
+		<table class="waffle" cellspacing="0" cellpadding="0">
+			<thead>
+			<tr>
+				<th id="0C0" style="width:100px" class="column-headers-background">&nbsp;</th>
+				<th id="0C1" style="width:100px" class="column-headers-background">&nbsp;</th>
+				<th id="0C2" style="width:100px" class="column-headers-background">&nbsp;</th>
+				<th id="0C3" style="width:100px" class="column-headers-background">&nbsp;</th>
+				<th id="0C4" style="width:100px" class="column-headers-background">&nbsp;</th>
+				<th id="0C5" style="width:100px" class="column-headers-background">&nbsp;</th>
+				<th id="0C6" style="width:100px" class="column-headers-background">&nbsp;</th>
+				<th id="0C7" style="width:100px" class="column-headers-background">&nbsp;</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr style='height:20px;'>
+				<td class="s4 bdleft" colspan="8">FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s4 bdleft" colspan="8">DOS PROFISSIONAIS DA EDUCAÇÃO ? FUNDEB </td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s5 bdleft" colspan="8">DEMONSTRATIVO DOS RECURSOS RECEBIDOS E SUA APLICAÇÃO </td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s6 bdleft" colspan="7">01 - RECURSOS:</td>
+				<td class="s7">R$</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s8 bdleft" colspan="7">A - Transferências Multigovernamentais:</td>
+				<td class="s9"></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s10 bdleft" colspan="7" rowspan="2">1724.01.00 - Transferências de Recursos do Fundo de Manuteção e Desenvolv. Da
+					Educação Básica e de Valorização dos Profissionais da Educação - FUNDEB
+				</td>
+				<td class="s12">&nbsp;</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s12" >
+					<?
+					$aDadosRFMD = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4172401%'");
+					$fRFMD = count($aDadosRFMD) > 0 ? $aDadosRFMD[0]->saldo_arrecadado_acumulado : 0;
+					echo db_formatar($fRFMD, "f");
+					$aRecursos[] = $fRFMD;
+					?>
+				</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s8 bdleft" colspan="7">1724.02.00 - Transf.de Recursos da Complementação da União ao FUNDEB</td>
+				<td class="s13">
+					<?
+					$aDadosRCUF = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4172402%'");
+					$fRCUF = count($aDadosRCUF) > 0 ? $aDadosRCUF[0]->saldo_arrecadado_acumulado : 0;
+					echo db_formatar($fRCUF, "f");
+					$aRecursos[] = $fRCUF;
+					?>
+				</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s10 bdleft" colspan="7">B - Receitas de Aplicações Financeiras (art. 20, § único, Lei Federal 11494/2007</td>
+				<td class="s11"></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s8 bdleft" colspan="7">1325.01.02- Receita de Remuneração de Depósitos Bancários de Rec.Vinc.FUNDEB</td>
+				<td class="s14">
+					<?
+					$aDadosRDBR = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '413250102%'");
+					$fRDBR = count($aDadosRDBR) > 0 ? $aDadosRDBR[0]->saldo_arrecadado_acumulado : 0;
+					echo db_formatar($fRDBR, "f");
+					$aRecursos[] = $fRDBR;
+					?>
+				</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s12 bdleft" colspan="7">TOTAL DO ITEM 01:</td>
+				<td class="s15"><? echo db_formatar(array_sum($aRecursos), "f"); ?></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s9 bdleft" colspan="8"></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s16 bdleft" colspan="8">02 - APLICAÇÃO NA EDUCAÇÃO BÁSICA PÚBLICA:</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s17 bdleft">Função</td>
+				<td class="s17">Subfunções</td>
+				<td class="s17">Programas</td>
+				<td class="s17" colspan="3">Especificação</td>
+				<td class="s17" colspan="2">DESPESA</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s9 bdleft"></td>
+				<td class="s9"></td>
+				<td class="s9"></td>
+				<td class="s9" colspan="3"></td>
+				<td class="s17">Parcial</td>
+				<td class="s17">Total</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s17 bdleft">12</td>
+				<td class="s9"></td>
+				<td class="s9"></td>
+				<td class="s8" colspan="3">EDUCAÇÃO</td>
+				<td class="s9"></td>
+				<td class="s9"></td>
+			</tr>
+			<?php
+			/**
+			* @todo loop de cada subfuncao
+			*
+			*/
+			$fSubTotal = 0;
+			$aSubFuncoes = array(122,272,271,361,365,366,367);
+			$sFuncao     = "12";
+			$aFonte      = array("'118'","'119'");
+			foreach ($aSubFuncoes as $iSubFuncao) {
+				$sDescrSubfunao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
+				$aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago,coalesce(sum(pago_acumulado),0) as pago_acumulado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+				if (count($aDespesasProgramas) > 0) {
 
+				?>
+				<tr style='height:20px;'>
+					<td class="s17 bdleft"></td>
+					<td class="s9"><?= db_formatar($iSubFuncao, 'subfuncao') ?></td>
+					<td class="s9"></td>
+					<td class="s8" colspan="3"><?= $sDescrSubfunao ?></td>
+					<td class="s9"></td>
+					<td class="s9"></td>
+				</tr>
+				<?php
+				/**
+				 * @todo para cada subfuncao lista os programas
+				 */
+				foreach ($aDespesasProgramas as $oDespesaPrograma) {
+					$oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
+					$fSubTotal += $oDespesaPrograma->pago;
+					?>
+					<tr style='height:20px;'>
+						<td class="s18 bdleft"></td>
+						<td class="s19"></td>
+						<td class="s19"><?php echo db_formatar($oPrograma->getCodigoPrograma(), "programa"); ?></td>
+						<td class="s20" colspan="3"><?= $oPrograma->getDescricao() ?></td>
+						<td class="s21"><?= db_formatar($oDespesaPrograma->pago, "f"); $aPago[] =  $oDespesaPrograma->pago; ?></td>
+						<td class="s21"><?= db_formatar($oDespesaPrograma->pago_acumulado, "f");$aPagoAcumulado[] =  $oDespesaPrograma->pago_acumulado; ?></td>
+					</tr>
+				<?php }
+				?>
+				<tr style='height:20px;'>
+					<td class="s3 bdleft">&nbsp;</td>
+					<td class="s3"></td>
+					<td class="s3"></td>
+					<td class="s3" colspan="5"></td>
+					<td class="s3"></td>
+				</tr>
+				<?php
+				}
+			}
+			?>
 
-
+			<tr style='height:20px;'>
+				<td class="s12 bdleft" colspan="6">TOTAL</td>
+				<td class="s12"><? echo db_formatar(array_sum($aPago), "f"); ?></td>
+				<td class="s12"><? echo db_formatar(array_sum($aPagoAcumulado), "f"); ?></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s23 bdleft" colspan="8">GASTOS COM PROFISSIONAIS DO MAGISTÉRIO DA EDUCAÇÃO BÁSICA: </td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s24 bdleft" colspan="4">Receita Total do Fundo (Anexo III, Item 01) ....... =</td>
+				<td class="s25"><? echo db_formatar(array_sum($aRecursos), "f"); ?></td>
+				<td class="s2"></td>
+				<td class="s2"></td>
+				<td class="s26"></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s24 bdleft" colspan="4">Valor Legal Mínimo ................................... 60 % =</td>
+				<?
+				$valorLegal = array_sum($aRecursos) * 0.06;
+				?>
+				<td class="s25"><? echo db_formatar($valorLegal,'f') ?></td>
+				<td class="s27"></td>
+				<td class="s2"></td>
+				<td class="s26"></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s24 bdleft" colspan="4">Valor aplicado ...................................................</td>
+				<td class="s28"><? echo db_formatar(array_sum($aPagoAcumulado),'f'); ?></td>
+				<?
+				$iPercentual = (array_sum($aPagoAcumulado)*100)/array_sum($aRecursos);
+				?>
+				<td class="s12"><? echo sprintf("%.2f%%", $iPercentual) ?></td>
+				<td class="s2"></td>
+				<td class="s26"></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s26 bdleft" colspan="8"></td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s29 bdleft" colspan="8">(O Valor Aplicado é composto pelas despesas com os profissionais do magistério da educação básica, em efetivo exercício de </td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s30 bdleft" colspan="8">suas atividades na rede pública e corresp. aos comprovantes de despesas organizados de acordo c/a alínea a, artigo 15 desta IN).</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	</body>
+	</html>
 <?php
 
-/**
- * Busca o saldo da despesa
- * @param $sEstrut
- * @param $iInstit
- * @param $sCampo [liquidado, empenhado, pago, anulado, ver a tabela anexoivgastopessoaldespesa]
- * @return array|stdClass[]
- */
-function getSaldoDespesa($sEstrut, $iInstit,$sCampo = 'liquidado'){
-    $sSqlDespesas = "select o58_elemento, o56_descr,sum({$sCampo}) as liquidado from anexoivgastopessoaldespesa inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu where o58_elemento like '{$sEstrut}%' and o58_instit = {$iInstit} group by 1,2";
-    return db_utils::getColectionByRecord(db_query($sSqlDespesas));
-}
+$html = ob_get_contents();
+ob_end_clean();
+$mPDF->WriteHTML(utf8_encode($html));
+$mPDF->Output();
 
-/**
- * Busca o saldo da receita
- * @param $sEstrut
- * @param string $sCampo
- * @return array|stdClass[]
- */
-function getSaldoReceita($sEstrut, $sCampo = 'liquidado'){
-    $sSqlDespesas = "select o58_elemento, o56_descr,sum({$sCampo}) as liquidado from anexoivgastopessoalreceita inner join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu where o58_elemento like '{$sEstrut}%' group by 1,2";
-    return db_utils::getColectionByRecord(db_query($sSqlDespesas));
-}
 
-/**
- * Função que retorna a RCL no periodo indicado
- * @param DBDate $oDataFim
- * @return int|number
- * @throws BusinessException
- * @throws ParameterException
- */
-function getRCL(DBDate $oDataFim){
-    $oPeriodo = new Periodo;
-    $oNovaDataFim = clone $oDataFim;
-    $oDataFim->modificarIntervalo('-11 month');
-    $aPeriodoCalculo = DBDate::getMesesNoIntervalo($oDataFim,$oNovaDataFim);
+db_query("drop table if exists work_dotacao");
+db_query("drop table if exists work_receita");
 
-    $aCalculos = array();
-
-    foreach($aPeriodoCalculo as $ano => $mes){
-        $aCalculos[] = calcula_rcl2($ano, $ano. "-" . min(array_keys($aPeriodoCalculo[$ano])) . "-1", $ano."-".max(array_keys($aPeriodoCalculo[$ano]))."-".$oPeriodo->getPeriodoByMes(max(array_keys($aPeriodoCalculo[$ano])))->getDiaFinal(), $instits, true, 81);
-    }
-    $fSoma = 0;
-    foreach($aCalculos as $aCalculo){
-        $fSoma += array_sum($aCalculo);
-    }
-    return $fSoma;
-}
+db_fim_transacao();
 
 ?>
