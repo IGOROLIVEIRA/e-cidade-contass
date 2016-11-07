@@ -5569,4 +5569,78 @@ class cl_estrutura_sistema {
         }
         return $fSoma;
     }
+
+    /**
+     * Busca total do valor pago dos RP não processados
+     * @param $instits
+     * @param $dtini
+     * @param $dtfim
+     * @param $sFuncao
+     * @param $aSubFuncao
+     * @param $sFonte
+     * @return int
+     */
+    function getSaldoRP($instits,$dtini,$dtfim, $sFuncao, $aSubFuncao, $sFonte){
+        $fSaldo = 0;
+        $clempresto = new cl_empresto;
+        $sql_where_externo = "AND 1=1
+    AND o58_orgao IN (1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9) and o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).")";
+        $sql_order = "where o15_codtri = '{$sFonte}' ORDER BY o58_orgao,
+             e60_anousu,
+             e60_codemp::integer";
+        $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), "e60_instit in ($instits)", $dtini, $dtfim, "", $sql_where_externo, $sql_order);
+        $aDados = db_utils::getColectionByRecord(db_query($sqlempresto));
+        foreach($aDados as $oResto){
+            $fSaldo += $oResto->vlrpagnproc;
+        }
+        return $fSaldo;
+    }
+
+    /**
+     * Calculo final do relatório Anexo II da Educação, Contabilidade->Relatorios->Relatórios de Acompanhamento
+     * Este total é utilizado no Anexo I
+     * @param $instits
+     * @param $dtini
+     * @param $dtfim
+     * @return int
+     */
+    function getTotalAnexoIIEducacao($instits,$dtini,$dtfim){
+        db_inicio_transacao();
+        $sWhereDespesa      = " o58_instit in({$instits})";
+        $rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
+            $anousu,
+            $dtini,
+            $dtfim);
+        $sWhereReceita      = "o70_instit in ({$instits})";
+        $rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
+            $sWhereReceita, $anousu,
+            $dtini,
+            $dtfim );
+        $fSubTotal = 0;
+        $aSubFuncoes = array(122,272,271,361,365,366,367);
+        $sFuncao     = "12";
+        $sFonte      = "101";
+        foreach ($aSubFuncoes as $iSubFuncao) {
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri = '{$sFonte}' and o58_instit in ($instits) group by 1,2");
+            if (count($aDespesasProgramas) > 0) {
+                foreach ($aDespesasProgramas as $oDespesaPrograma) {
+                    $fSubTotal += $oDespesaPrograma->pago;
+                }
+            }
+        }
+        $aDadoDeducao = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '495%'");
+        $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$sFonte);
+        db_query("drop table if exists work_dotacao");
+        db_query("drop table if exists work_receita");
+        db_fim_transacao();
+        return ($fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$fSaldoRP);
+    }
     ?>

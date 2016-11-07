@@ -25,10 +25,43 @@
  *                                licenca/licenca_pt.txt
  */
 
+require_once "libs/db_stdlib.php";
+require_once "libs/db_conecta.php";
+include_once "libs/db_sessoes.php";
+include_once "libs/db_usuariosonline.php";
 include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
+db_postmemory($HTTP_POST_VARS);
+
+$dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
+$dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
+
+$instits = str_replace('-', ', ', $db_selinstit);
+$aInstits = explode(",",$instits);
+foreach($aInstits as $iInstit){
+  $oInstit = new Instituicao($iInstit);
+  if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
+    break;
+  }
+}
+db_inicio_transacao();
+
+$sWhereDespesa      = " o58_instit in({$instits})";
+$rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
+    $anousu,
+    $dtini,
+    $datafin);
+if (pg_num_rows($rsBalanceteDespesa) == 0) {
+  db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
+}
+
+$sWhereReceita      = "o70_instit in ({$instits})";
+$rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
+    $sWhereReceita, $anousu,
+    $dtini,
+    $datafin );
 
 /**
  * mPDF
@@ -53,13 +86,13 @@ $header = <<<HEADER
 <header>
   <table style="width:100%;text-align:center;font-family:sans-serif;border-bottom:1px solid #000;padding-bottom:6px;">
     <tr>
-      <th>PREFEITURA MUNICIPAL DE BOTUMIRIM</th>
+      <th>{$oInstit->getDescricao()}</th>
     </tr>
     <tr>
       <th>ANEXO II</th>
     </tr>
     <tr>
-      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De 01/01/2016 a 30/06/2016</td>
+      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De {$DBtxt21} a {$DBtxt22}</td>
     </tr>
   </table>
 </header>
@@ -156,146 +189,70 @@ ob_start();
         <td class="s12" colspan="5">EDUCAÇÃO</td>
         <td class="s3"></td>
       </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s9">122</td>
-        <td class="s3"></td>
-        <td class="s12" colspan="5">Administração Geral</td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s3"></td>
-        <td class="s9">0002</td>
-        <td class="s12" colspan="5">AÇOES DE ADMINISTRAÇÃO PUBLICA</td>
-        <td class="s13">84.679,90 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s3"></td>
-        <td class="s9">0018</td>
-        <td class="s12" colspan="5">TREINAMENTO CAPACIT DE RECURSOS HUMANOS</td>
-        <td class="s13">0,00 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft">&nbsp;</td>
-        <td class="s3"></td>
-        <td class="s3"></td>
-        <td class="s3" colspan="5"></td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s9">272</td>
-        <td class="s3"></td>
-        <td class="s12" colspan="5">Previdência do Regime Estatutário</td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s3"></td>
-        <td class="s9">0002</td>
-        <td class="s12" colspan="5">AÇOES DE ADMINISTRAÇÃO PUBLICA</td>
-        <td class="s13">28.830,85 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft">&nbsp;</td>
-        <td class="s3"></td>
-        <td class="s3"></td>
-        <td class="s3" colspan="5"></td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s9">361</td>
-        <td class="s3"></td>
-        <td class="s12" colspan="5">Ensino Fundamental</td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s3"></td>
-        <td class="s9">0020 </td>
-        <td class="s12" colspan="5">ENSINO FUNDAMENTAL</td>
-        <td class="s13">62.928,09 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s3"></td>
-        <td class="s9">0021</td>
-        <td class="s12" colspan="5">TRANSPORTE ESCOLAR</td>
-        <td class="s13">19.098,47 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft">&nbsp;</td>
-        <td class="s3"></td>
-        <td class="s3"></td>
-        <td class="s3" colspan="5"></td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s9">365</td>
-        <td class="s3"></td>
-        <td class="s12" colspan="5">Ensino Infantil</td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s3"></td>
-        <td class="s9">0024</td>
-        <td class="s12" colspan="5">AÇÕES DO ENSINO INFANTIL</td>
-        <td class="s13">6.697,33 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft">&nbsp;</td>
-        <td class="s3"></td>
-        <td class="s3"></td>
-        <td class="s3" colspan="5"></td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s9">366</td>
-        <td class="s3"></td>
-        <td class="s12" colspan="5">Educação de Jovens e Adultos</td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s3"></td>
-        <td class="s9">0025</td>
-        <td class="s12" colspan="5">EDUCAÇÃO DE JOVENS E ADULTOS</td>
-        <td class="s13">0,00 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft">&nbsp;</td>
-        <td class="s3"></td>
-        <td class="s3"></td>
-        <td class="s3" colspan="5"></td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s9">367</td>
-        <td class="s3"></td>
-        <td class="s12" colspan="5">Educação Especial</td>
-        <td class="s3"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s6 bdleft"></td>
-        <td class="s6"></td>
-        <td class="s11">0041</td>
-        <td class="s14" colspan="5">EDUCAÇÃO ESPECIAL</td>
-        <td class="s15">0,00 </td>
-      </tr>
+      <?php
+
+      /**
+       * @todo loop de cada subfuncao
+       *
+       */
+      $fSubTotal = 0;
+      $aSubFuncoes = array(122,272,271,361,365,366,367);
+      $sFuncao     = "12";
+      $sFonte      = "101";
+      foreach ($aSubFuncoes as $iSubFuncao) {
+        $sDescrSubfunao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
+
+        $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri = '{$sFonte}' and o58_instit in ($instits) group by 1,2");
+        if (count($aDespesasProgramas) > 0) {
+
+          ?>
+          <tr style='height:20px;'>
+            <td class="s3 bdleft"></td>
+            <td class="s9"><?= db_formatar($iSubFuncao, 'subfuncao') ?></td>
+            <td class="s3"></td>
+            <td class="s12" colspan="5"><?= $sDescrSubfunao ?></td>
+            <td class="s3"></td>
+          </tr>
+          <?php
+          /**
+           * @todo para cada subfuncao lista os programas
+           */
+          foreach ($aDespesasProgramas as $oDespesaPrograma) {
+            $oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
+            $fSubTotal += $oDespesaPrograma->pago;
+            ?>
+            <tr style='height:20px;'>
+              <td class="s3 bdleft"></td>
+              <td class="s3"></td>
+              <td class="s9"><?php echo db_formatar($oPrograma->getCodigoPrograma(), "programa"); ?></td>
+              <td class="s12" colspan="5"><?= $oPrograma->getDescricao() ?></td>
+              <td class="s13"><?= db_formatar($oDespesaPrograma->pago, "f") ?></td>
+            </tr>
+          <?php }
+          ?>
+          <tr style='height:20px;'>
+            <td class="s3 bdleft">&nbsp;</td>
+            <td class="s3"></td>
+            <td class="s3"></td>
+            <td class="s3" colspan="5"></td>
+            <td class="s3"></td>
+          </tr>
+          <?php
+        }
+      }
+      ?>
       <tr style='height:20px;'>
         <td class="s15 bdleft" colspan="8">SUBTOTAL</td>
-        <td class="s15">202.234,64 </td>
+        <td class="s15"><?=db_formatar($fSubTotal,"f")?></td>
       </tr>
       <tr style='height:20px;'>
         <td class="s16 bdleft" colspan="8">Contribuição ao FUNDEB - art. 1º, Lei Federal n. 11 .494/07 (2)</td>
-        <td class="s15">1.004.695,85 </td>
+        <td class="s15">
+          <?php
+          $aDadoDeducao = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '495%'");
+          echo db_formatar(abs($aDadoDeducao[0]->saldo_arrecadado_acumulado),"f");
+          ?>
+        </td>
       </tr>
       <tr style='height:20px;'>
         <td class="s16 bdleft" colspan="8">Restos a Pagar Não Processados de Exercícios Anteriores</td>
@@ -303,11 +260,16 @@ ob_start();
       </tr>
       <tr style='height:20px;'>
         <td class="s16 bdleft" colspan="8">Processados no Exercício Atual (3)</td>
-        <td class="s15">240,52 </td>
+        <td class="s15">
+          <?php
+          $fSaldoRP = getSaldoRP($instits,$dtini,$dtfim,$sFuncao,$aSubFuncoes,$sFonte);
+          echo db_formatar($fSaldoRP,"f");
+          ?>
+        </td>
       </tr>
       <tr style='height:20px;'>
         <td class="s17 bdleft" colspan="8">TOTAL</td>
-        <td class="s18">1.207.171,01 </td>
+        <td class="s18"><?=db_formatar(($fSubTotal+abs($aDadoDeducao[0]->saldo_arrecadado_acumulado)+$fSaldoRP),"f")?></td>
       </tr>
       <tr style='height:20px;'>
         <td class="s19 bdleft" colspan="9">(1) Art. 70 da Lei Federal n. 9394/96.</td>
@@ -333,8 +295,12 @@ ob_start();
 
 $html = ob_get_contents();
 ob_end_clean();
-
+db_query("drop table if exists work_dotacao");
+db_query("drop table if exists work_receita");
+db_fim_transacao();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
+
+
 
 ?>

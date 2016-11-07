@@ -25,10 +25,39 @@
  *                                licenca/licenca_pt.txt
  */
 
+require_once "libs/db_stdlib.php";
+require_once "libs/db_conecta.php";
+include_once "libs/db_sessoes.php";
+include_once "libs/db_usuariosonline.php";
 include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
+
+db_postmemory($HTTP_POST_VARS);
+
+$dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
+$dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
+
+$instits = str_replace('-', ', ', $db_selinstit);
+$aInstits = explode(",",$instits);
+foreach($aInstits as $iInstit){
+  $oInstit = new Instituicao($iInstit);
+  if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
+    break;
+  }
+}
+db_inicio_transacao();
+
+$sWhereReceita      = "o70_instit in ({$instits})";
+$rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
+    $sWhereReceita, $anousu,
+    $dtini,
+    $datafin );
+
+if (pg_num_rows($rsBalanceteReceita) == 0) {
+  db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
+}
 
 /**
  * mPDF
@@ -53,13 +82,13 @@ $header = <<<HEADER
 <header>
   <table style="width:100%;text-align:center;font-family:sans-serif;border-bottom:1px solid #000;padding-bottom:6px;">
     <tr>
-      <th>PREFEITURA MUNICIPAL DE BOTUMIRIM</th>
+      <th>{$oInstit->getDescricao()}</th>
     </tr>
     <tr>
       <th>ANEXO I</th>
     </tr>
     <tr>
-      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De 01/01/2016 a 30/06/2016</td>
+      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De {$DBtxt21} a {$DBtxt22}</td>
     </tr>
   </table>
 </header>
@@ -155,37 +184,73 @@ ob_start();
             <td class="s7 bdleft"></td>
             <td class="s8">11120101</td>
             <td class="s6" colspan="7">Imposto s/a Propriedade Territorial Rural ? Munic.Conv.</td>
-            <td class="s9">0,00 </td>
+            <td class="s9">
+              <?php
+              $aDadosIPTR = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411120101%'");
+              $fIPTR = count($aDadosIPTR) > 0 ? $aDadosIPTR[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fIPTR, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">11120200</td>
             <td class="s12" colspan="7">Imposto sobre a Propriedade Predial e Territorial Urbana ? IPTU</td>
-            <td class="s13">424,83 </td>
+            <td class="s13">
+              <?php
+              $aDadosIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411120200%'");
+              $fIPTU = count($aDadosIPTU) > 0 ? $aDadosIPTU[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fIPTU, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">11120431</td>
             <td class="s6" colspan="7">Imposto de Renda Retido nas Fontes ? IRRF (Trab.Assalariado)</td>
-            <td class="s9">64.258,59 </td>
+            <td class="s9">
+              <?php
+              $aDadosIRRF = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411120431%'");
+              $fIRRF = count($aDadosIRRF) > 0 ? $aDadosIRRF[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fIRRF, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">11120434</td>
             <td class="s12" colspan="7">Imposto de Renda Retido nas Fontes ? IRRF (Outros Rendimentos)</td>
-            <td class="s13">9.537,92 </td>
+            <td class="s13">
+              <?php
+              $aDadosIRRFO = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411120434%'");
+              $fIRRFO = count($aDadosIRRFO) > 0 ? $aDadosIRRFO[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fIRRFO, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">11120800</td>
             <td class="s6" colspan="7">Imposto sobre Transmissão Inter-Vivos de Bens Imóveis ? ITBI</td>
-            <td class="s9">2.508,49 </td>
+            <td class="s9">
+              <?php
+              $aDadosITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411120800%'");
+              $fITBI = count($aDadosITBI) > 0 ? $aDadosITBI[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fITBI, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">11130500</td>
             <td class="s12" colspan="7">Imposto sobre Serviço de Qualquer Natureza ? ISS</td>
-            <td class="s13">60.046,78 </td>
+            <td class="s13">
+              <?php
+              $aDadosISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411130500%'");
+              $fISS = count($aDadosISS) > 0 ? $aDadosISS[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fISS, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">Subtotal</td>
@@ -193,7 +258,7 @@ ob_start();
           </tr>
           <tr style='height:20px;'>
             <td class="s3 bdleft" colspan="9">&nbsp;</td>
-            <td class="s3"></td>
+            <td class="s3"><?php $fSubTotalImposto = array_sum(array($fIPTR,$fIPTU,$fIRRF,$fIRRFO,$fITBI,$fISS)); echo db_formatar($fSubTotalImposto,"f"); ?></td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">B - Transferências Correntes:</td>
@@ -203,49 +268,97 @@ ob_start();
             <td class="s7 bdleft"></td>
             <td class="s8">17210102</td>
             <td class="s6" colspan="7">Cota-parte do FPM </td>
-            <td class="s9">3.778.438,56 </td>
+            <td class="s9">
+              <?php
+              $aDadosFPM = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417210102%'");
+              $fFPM = count($aDadosFPM) > 0 ? $aDadosFPM[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fFPM, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">17210103</td>
             <td class="s12" colspan="7">Cota-parte do FPM - 1%  de Dezembro</td>
-            <td class="s13">0,00 </td>
+            <td class="s13">
+              <?php
+              $aDadosFPM1DEZ = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417210103%'");
+              $fFPM1DEZ = count($aDadosFPM1DEZ) > 0 ? $aDadosFPM1DEZ[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fFPM1DEZ, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">17210104</td>
             <td class="s6" colspan="7">Cota-parte do FPM - 1%  de Julho</td>
-            <td class="s9">0,00 </td>
+            <td class="s9">
+              <?php
+              $aDadosFPM1JUL = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417210104%'");
+              $fFPM1JUL = count($aDadosFPM1JUL) > 0 ? $aDadosFPM1JUL[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fFPM1JUL, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">17210105</td>
             <td class="s12" colspan="7">Transferência do  ITR</td>
-            <td class="s13">369,15 </td>
+            <td class="s13">
+              <?php
+              $aDadosITR = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417210105%'");
+              $fITR = count($aDadosITR) > 0 ? $aDadosITR[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fITR, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">17213600</td>
             <td class="s6" colspan="7">Transferência Financ.? Lei Comp.n. 87/96 ? ICMS Exp.</td>
-            <td class="s9">7.134,54 </td>
+            <td class="s9">
+              <?php
+              $aDadosICMS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417213600%'");
+              $fICMS = count($aDadosICMS) > 0 ? $aDadosICMS[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fICMS, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">17220101</td>
             <td class="s12" colspan="7">Participação no ICMS</td>
-            <td class="s13">1.129.362,03 </td>
+            <td class="s13">
+              <?php
+              $aDadosPARTICMS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417220101%'");
+              $fPARTICMS = count($aDadosPARTICMS) > 0 ? $aDadosPARTICMS[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fPARTICMS, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">17220102</td>
             <td class="s6" colspan="7">Imposto sobre IPVA</td>
-            <td class="s9">93.896,37 </td>
+            <td class="s9">
+              <?php
+              $aDadosIPVA = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417220102%'");
+              $fIPVA = count($aDadosIPVA) > 0 ? $aDadosIPVA[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fIPVA, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">17220104</td>
             <td class="s12" colspan="7">Cota-parte do Imposto sobre Produtos Industrializados ? IPI</td>
-            <td class="s13">14.283,18 </td>
+            <td class="s13">
+              <?php
+              $aDadosIPI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417220104%'");
+              $fIPI = count($aDadosIPI) > 0 ? $aDadosIPI[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fIPI, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">Subtotal</td>
@@ -253,7 +366,9 @@ ob_start();
           </tr>
           <tr style='height:20px;'>
             <td class="s3 bdleft" colspan="9">&nbsp;</td>
-            <td class="s3"></td>
+            <td class="s3">
+              <?php $fSubTotalCorrentes = array_sum(array($fFPM,$fFPM1DEZ,$fFPM1JUL,$fITR,$fICMS,$fPARTICMS,$fIPVA,$fIPI)); echo db_formatar($fSubTotalCorrentes,"f"); ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">C - Outras Receitas Correntes</td>
@@ -263,73 +378,145 @@ ob_start();
             <td class="s7 bdleft"></td>
             <td class="s8">19110801</td>
             <td class="s6" colspan="7">Multas e Juros de Mora do ITR-Munic.Conv.</td>
-            <td class="s9">0,00 </td>
+            <td class="s9">
+              <?php
+              $aDadosMJITR = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419110801%'");
+              $fMJITR = count($aDadosMJITR) > 0 ? $aDadosMJITR[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJITR, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">19113800</td>
             <td class="s12" colspan="7">Multas e Juros de Mora do IPTU </td>
-            <td class="s13">0,00 </td>
+            <td class="s13">
+              <?php
+              $aDadosMJIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419113800%'");
+              $fMJIPTU = count($aDadosMJITR) > 0 ? $aDadosMJIPTU[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJIPTU, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">19113900</td>
             <td class="s6" colspan="7">Multas e Juros de Mora do ITBI</td>
-            <td class="s9">0,00 </td>
+            <td class="s9">
+              <?php
+              $aDadosMJITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419113900%'");
+              $fMJTIBI = count($aDadosMJITBI) > 0 ? $aDadosMJITBI[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJTIBI, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">19114000</td>
             <td class="s12" colspan="7"> Multas e Juros de Mora do ISS </td>
-            <td class="s13">0,00 </td>
+            <td class="s13">
+              <?php
+              $aDadosMJISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419114000%'");
+              $fMJISS = count($aDadosMJISS) > 0 ? $aDadosMJISS[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJISS, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">19130800</td>
             <td class="s6" colspan="7">Multas e Juros de Mora da Dívida Ativa do ITR-Munic.Conv.</td>
-            <td class="s9">0,00 </td>
+            <td class="s9">
+              <?php
+              $aDadosMJDA = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419130800%'");
+              $fMJDA = count($aDadosMJDA) > 0 ? $aDadosMJDA[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJDA, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">19131100</td>
             <td class="s12" colspan="7">Multas e Juros de Mora da Dívida Ativa do IPTU </td>
-            <td class="s13">0,00 </td>
+            <td class="s13">
+              <?php
+              $aDadosMJDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419131100%'");
+              $fMJDAIPTU = count($aDadosMJDAIPTU) > 0 ? $aDadosMJDAIPTU[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJDAIPTU, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">19131200</td>
             <td class="s6" colspan="7">Multas e Juros de Mora da Dívida Ativa do ITBI </td>
-            <td class="s9">0,00 </td>
+            <td class="s9">
+              <?php
+              $aDadosMJDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419131200%'");
+              $fMJDAITBI = count($aDadosMJDAITBI) > 0 ? $aDadosMJDAITBI[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJDAITBI, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">19131300</td>
             <td class="s12" colspan="7">Multas e Juros de Mora da Dívida Ativa do ISS </td>
-            <td class="s13">0,00 </td>
+            <td class="s13">
+              <?php
+              $aDadosMJDAISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419131300%'");
+              $fMJDAISS = count($aDadosMJDAISS) > 0 ? $aDadosMJDAISS[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJDAISS, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">19310400</td>
             <td class="s6" colspan="7">Receita da Dívida Ativa do ITR - Munic.Conveniado</td>
-            <td class="s9">0,00 </td>
+            <td class="s9">
+              <?php
+              $aDadosRDAITR = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419310400%'");
+              $fMJDAITR = count($aDadosRDAITR) > 0 ? $aDadosRDAITR[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJDAITR, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">19311100</td>
             <td class="s12" colspan="7">Receita da Dívida Ativa do IPTU </td>
-            <td class="s13">0,00 </td>
+            <td class="s13">
+              <?php
+              $aDadosRDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419311100%'");
+              $fMJDAIPTU = count($aDadosRDAIPTU) > 0 ? $aDadosRDAIPTU[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJDAIPTU, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
             <td class="s8">19311200</td>
             <td class="s6" colspan="7">Receita da Dívida Ativa do ITBI </td>
-            <td class="s9">0,00 </td>
+            <td class="s9">
+              <?php
+              $aDadosRDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419311200%'");
+              $fMJDAITBI = count($aDadosRDAITBI) > 0 ? $aDadosRDAITBI[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJDAITBI, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s10 bdleft"></td>
             <td class="s11">19311300</td>
             <td class="s12" colspan="7">Receita da Dívida Ativa do ISS </td>
-            <td class="s13">0,00 </td>
+            <td class="s13">
+              <?php
+              $aDadosRDAISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419311300%'");
+              $fMJDAISS = count($aDadosRDAISS) > 0 ? $aDadosRDAISS[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fMJDAISS, "f");
+              ?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">Subtotal</td>
@@ -337,44 +524,73 @@ ob_start();
           </tr>
           <tr style='height:20px;'>
             <td class="s3 bdleft" colspan="9">&nbsp;</td>
-            <td class="s3"></td>
+            <td class="s3">
+              <?php
+              $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fMJDAITR,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS));
+              echo db_formatar($fSubTotalOutrasCorrentes,"f");?>
+            </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">D - Deduções das Receitas (exceto FUNDEB)</td>
             <td class="s3"></td>
           </tr>
+        <?php
+        $fTotalDeducoes = 0;
+        $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '498%'");
+        foreach($aDadoDeducao as $oDeducao){
+        ?>
           <tr style='height:20px;'>
             <td class="s7 bdleft"></td>
-            <td class="s14">98XXXXXX</td>
-            <td class="s6" colspan="7">Retificações</td>
-            <td class="s15">0,00 </td>
+            <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte,"receita"); ?></td>
+            <td class="s6" colspan="7"><?=$oDeducao->o57_descr; ?></td>
+            <td class="s15">
+              <?php
+              $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+              echo db_formatar($oDeducao->saldo_arrecadado,"f");
+              ?>
+            </td>
           </tr>
-          <tr style='height:20px;'>
-            <td class="s16 bdleft"></td>
-            <td class="s17">99XXXXXX</td>
-            <td class="s18" colspan="7">Outras Deduções</td>
-            <td class="s19">0,00 </td>
-          </tr>
+          <?php }
+          $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '499%'");
+          foreach($aDadoDeducao as $oDeducao){
+          ?>
+            <tr style='height:20px;'>
+              <td class="s7 bdleft"></td>
+              <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte,"receita"); ?></td>
+              <td class="s6" colspan="7"><?=$oDeducao->o57_descr; ?></td>
+              <td class="s15">
+                <?php
+                $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+                echo db_formatar($oDeducao->saldo_arrecadado,"f");
+                ?>
+              </td>
+            </tr>
+            <?php } ?>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">Subtotal</td>
             <td class="s3"></td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft bdbottom" colspan="9">&nbsp;</td>
-            <td class="s3 bdbottom"></td>
+            <td class="s3 bdbottom"><?=db_formatar($fTotalDeducoes,"f")?></td>
           </tr>
 
           <tr style='height:20px;'>
             <td class="s20 bdleft" colspan="9">02 ? Total das Receitas (A+B+C-D)</td>
-            <td class="s21">5.160.260,44 </td>
+            <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto+$fSubTotalCorrentes+$fSubTotalOutrasCorrentes)-$fTotalDeducoes; echo db_formatar($fTotalReceitas,"f"); ?> </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s20 bdleft" colspan="9">03 ? Valor Legal Mínimo (art. 212 da CF) 25 % =</td>
-            <td class="s21">1.290.065,11 </td>
+            <td class="s21"><?php echo db_formatar($fTotalReceitas*0.25,"f");?></td>
           </tr>
           <tr style='height:20px;'>
-            <td class="s20 bdleft" dir="ltr" colspan="9">04 ? Aplicação na Manut. e Desenv. Ensino (Anexo II) % =</td>
-            <td class="s22"></td>
+            <?php
+            db_query("drop table if exists work_receita");
+            db_fim_transacao();
+            $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim);
+            ?>
+            <td class="s20 bdleft" dir="ltr" colspan="9">04 ? Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
+            <td class="s22"><?=db_formatar($fTotalAnexoII,"f")?></td>
           </tr>
         </tbody>
       </table>
@@ -387,7 +603,6 @@ ob_start();
 
 $html = ob_get_contents();
 ob_end_clean();
-
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 

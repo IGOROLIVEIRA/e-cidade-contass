@@ -1080,6 +1080,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
        o58_coddot integer,
        o58_elemento character varying,
        o58_codigo integer,
+       o15_codtri character varying,
        dot_ini double precision,
        saldo_anterior double precision,
        empenhado double precision,
@@ -1145,7 +1146,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     substr(o56_elemento,1,7)
     else o56_elemento
     end as o58_elemento,
-    o58_codigo,
+    o58_codigo,o15_codtri,
     substr(fc_dotacaosaldo,3,12)::float8   as dot_ini,
     substr(fc_dotacaosaldo,16,12)::float8  as saldo_anterior,
     substr(fc_dotacaosaldo,29,12)::float8  as empenhado,
