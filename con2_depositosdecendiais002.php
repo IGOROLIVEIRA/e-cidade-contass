@@ -108,551 +108,229 @@ ob_start();
   
   <html>
   <head>
-    
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
     <style type="text/css">
       .ritz .waffle a { color : inherit; }
-      .ritz .waffle .s18 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s12 { background-color : #ffffff; border-right : none; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s15 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; padding : 2px 3px 2px 3px; text-align : center; text-decoration : underline; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s11 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s16 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; padding : 2px 3px 2px 3px; text-align : center; text-decoration : underline; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s4 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s14 { background-color : #ffffff; border-left : none; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s0 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial Black',Arial; font-size : 12pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s13 { background-color : #ffffff; border-left : none; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s3 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s7 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; font-style : italic; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; text-decoration : underline; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s19 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s9 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s17 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s10 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s6 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; font-style : italic; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s1 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; font-style : italic; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s5 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s8 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 12pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s2 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }</style>
+      .ritz .waffle .s12 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s9 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : center; text-decoration : underline; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s7 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s10 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : center; text-decoration : underline; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s0 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s8 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s2 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; font-style : italic; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; text-decoration : underline; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s13 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s4 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s11 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s6 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s1 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; font-style : italic; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s3 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s5 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s14 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .wrapper { width: 32%; margin-left:1%; margin-right:1%; float:left; }
+      .ritz .wrapper .waffle { width: 100%; }
+    </style>
+  
   </head>
   <body>
+  
+  
   <div class="ritz grid-container" dir="ltr">
-    <table class="waffle" cellspacing="0" cellpadding="0">
-      <thead>
-      <tr>
-        <th id="0C0" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C1" style="width:129px" class="column-headers-background">&nbsp;</th>
-        <th id="0C2" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C3" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C4" style="width:21px" class="column-headers-background">&nbsp;</th>
-        <th id="0C5" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C6" style="width:134px" class="column-headers-background">&nbsp;</th>
-        <th id="0C7" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C8" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C9" style="width:22px" class="column-headers-background">&nbsp;</th>
-        <th id="0C10" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C11" style="width:134px" class="column-headers-background">&nbsp;</th>
-        <th id="0C12" style="width:107px" class="column-headers-background">&nbsp;</th>
-        <th id="0C13" style="width:100px" class="column-headers-background">&nbsp;</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr style='height:20px;'>
-        <td class="s2">&nbsp;</td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s3"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s3"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s4 bdleft" colspan="4">DE 01/01/2012 A 10/01/2012</td>
-        <td class="s5"></td>
-        <td class="s4" colspan="4">DE 11/01/2012 A 20/01/2012  </td>
-        <td class="s5"></td>
-        <td class="s4" colspan="4">DE 21/01/2012 A 30/01/2012</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s6 bdleft" colspan="3">Depositar até o dia 20</td>
-        <td class="s7">&quot;Cheque&quot;</td>
-        <td class="s5"></td>
-        <td class="s6" colspan="3">Depositar até o dia 30</td>
-        <td class="s7">&quot;Cheque&quot;</td>
-        <td class="s5"></td>
-        <td class="s6" colspan="3">Depositar até o dia 10 do mês subsequente</td>
-        <td class="s7">&quot;Cheque&quot;</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft">IMPOSTOS</td>
-        <td class="s3"></td>
-        <td class="s9">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s8">IMPOSTOS</td>
-        <td class="s3"></td>
-        <td class="s9">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s8">IMPOSTOS</td>
-        <td class="s3"></td>
-        <td class="s9">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">11120200</td>
-        <td class="s11">IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">11120200</td>
-        <td class="s11">IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">11120200</td>
-        <td class="s11">IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">11120430</td>
-        <td class="s11">IRRF</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">11120430</td>
-        <td class="s11">IRRF</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">11120430</td>
-        <td class="s11">IRRF</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">11120800</td>
-        <td class="s11">ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">11120800</td>
-        <td class="s11">ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">11120800</td>
-        <td class="s11">ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">11130500</td>
-        <td class="s11">ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">11130500</td>
-        <td class="s11">ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">11130500</td>
-        <td class="s11">ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="4">&nbsp;</td>
-        <td class="s5"></td>
-        <td class="s5" colspan="4"></td>
-        <td class="s5"></td>
-        <td class="s5" colspan="4"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s12 softmerge bdleft">
-          <div class="softmerge-inner" style="width: 226px; left: -1px;">TRANSF.CONTITUCIONAIS</div>
-        </td>
-        <td class="s13"></td>
-        <td class="s9">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s12 softmerge">
-          <div class="softmerge-inner" style="width: 232px; left: -1px;">TRANSF.CONTITUCIONAIS</div>
-        </td>
-        <td class="s13"></td>
-        <td class="s14">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s12 softmerge">
-          <div class="softmerge-inner" style="width: 232px; left: -1px;">TRANSF.CONTITUCIONAIS</div>
-        </td>
-        <td class="s13"></td>
-        <td class="s14">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">17210102</td>
-        <td class="s11">FPM</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17210102</td>
-        <td class="s11">FPM</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17210102</td>
-        <td class="s11">FPM</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">17210105</td>
-        <td class="s11">ITR</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17210105</td>
-        <td class="s11">ITR</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17210105</td>
-        <td class="s11">ITR</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">17213600</td>
-        <td class="s11">ICMS EXP.</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17213600</td>
-        <td class="s11">ICMS EXP.</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17213600</td>
-        <td class="s11">ICMS EXP.</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">17220101</td>
-        <td class="s11">ICMS EST.</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17220101</td>
-        <td class="s11">ICMS EST.</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17220101</td>
-        <td class="s11">ICMS EST.</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">17220102</td>
-        <td class="s11">IPVA</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17220102</td>
-        <td class="s11">IPVA</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17220102</td>
-        <td class="s11">IPVA</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">17220104</td>
-        <td class="s11">IPI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17220104</td>
-        <td class="s11">IPI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">17220104</td>
-        <td class="s11">IPI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="4">&nbsp;</td>
-        <td class="s5"></td>
-        <td class="s5" colspan="4"></td>
-        <td class="s5"></td>
-        <td class="s5" colspan="4"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft" colspan="2">OUT.REC.CORRENTES</td>
-        <td class="s9">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s8" colspan="2">OUT.REC.CORRENTES</td>
-        <td class="s9">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s8" colspan="2">OUT.REC.CORRENTES</td>
-        <td class="s9">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">19113800</td>
-        <td class="s11">Multas IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19113800</td>
-        <td class="s11">Multas IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19113800</td>
-        <td class="s11">Multas IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">19113900</td>
-        <td class="s11">Multas ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19113900</td>
-        <td class="s11">Multas ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19113900</td>
-        <td class="s11">Multas ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">19114000</td>
-        <td class="s11">Multas ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19114000</td>
-        <td class="s11">Multas ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19114000</td>
-        <td class="s11">Multas ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">19311100</td>
-        <td class="s11">Dív.Ativa IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19311100</td>
-        <td class="s11">Dív.Ativa IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19311100</td>
-        <td class="s11">Dív.Ativa IPTU</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">19311200</td>
-        <td class="s11">Dív.Ativa ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19311200</td>
-        <td class="s11">Dív.Ativa ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19311200</td>
-        <td class="s11">Dív.Ativa ITBI</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s10 bdleft">19311300</td>
-        <td class="s11">Dív.Ativa ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19311300</td>
-        <td class="s11">Dív.Ativa ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-        <td class="s5"></td>
-        <td class="s10">19311300</td>
-        <td class="s11">Dív.Ativa ISSQN</td>
-        <td class="s10">0,00</td>
-        <td class="s5"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft" colspan="4">&nbsp;</td>
-        <td class="s5"></td>
-        <td class="s5" colspan="4"></td>
-        <td class="s5"></td>
-        <td class="s5" colspan="4"></td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s3 bdleft"></td>
-        <td class="s3"></td>
-        <td class="s15">Educ.</td>
-        <td class="s16">Saúde</td>
-        <td class="s5"></td>
-        <td class="s3"></td>
-        <td class="s3"></td>
-        <td class="s15">Educ.</td>
-        <td class="s16">Saúde</td>
-        <td class="s5"></td>
-        <td class="s3"></td>
-        <td class="s3"></td>
-        <td class="s15">Educ.</td>
-        <td class="s16">Saúde</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s11 bdleft">5.921-8 </td>
-        <td class="s11">Tributos Mun.</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">5.921-8 </td>
-        <td class="s11">Tributos Mun.</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">5.921-8 </td>
-        <td class="s11">Tributos Mun.</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s11 bdleft">38.007-5</td>
-        <td class="s11">FPM</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">38.007-5</td>
-        <td class="s11">FPM</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">38.007-5</td>
-        <td class="s11">FPM</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s11 bdleft">38.016-4</td>
-        <td class="s11">ITR</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">38.016-4</td>
-        <td class="s11">ITR</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">38.016-4</td>
-        <td class="s11">ITR</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s11 bdleft">283.142-2</td>
-        <td class="s11 softmerge">
-          <div class="softmerge-inner" style="width: 126px; left: -1px;">ICMS Des.Export.</div>
-        </td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">283.142-2</td>
-        <td class="s11 softmerge">
-          <div class="softmerge-inner" style="width: 131px; left: -1px;">ICMS Des.Export.</div>
-        </td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">283.142-2</td>
-        <td class="s11 softmerge">
-          <div class="softmerge-inner" style="width: 131px; left: -1px;">ICMS Des.Export.</div>
-        </td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s11 bdleft">3612-4</td>
-        <td class="s11">ICMS Est. &amp; IPI</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">3612-4</td>
-        <td class="s11">ICMS Est. &amp; IPI</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">3612-4</td>
-        <td class="s11">ICMS Est. &amp; IPI</td>
-        <td class="s10">0,00</td>
-        <td class="s17">0,00</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s11 bdleft">1927-8</td>
-        <td class="s11">IPVA</td>
-        <td class="s18">0,00</td>
-        <td class="s19">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">1927-8</td>
-        <td class="s11">IPVA</td>
-        <td class="s18">0,00</td>
-        <td class="s19">0,00</td>
-        <td class="s5"></td>
-        <td class="s11">1927-8</td>
-        <td class="s11">IPVA</td>
-        <td class="s18">0,00</td>
-        <td class="s19">0,00</td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s2 bdleft"></td>
-        <td class="s2"></td>
-        <td class="s18">0,00</td>
-        <td class="s19">0,00</td>
-        <td class="s5"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s18">0,00</td>
-        <td class="s19">0,00</td>
-        <td class="s5"></td>
-        <td class="s2"></td>
-        <td class="s2"></td>
-        <td class="s18">0,00</td>
-        <td class="s19">0,00</td>
-      </tr>
-      </tbody>
-    </table>
+    <?php for ($nCount = 0; $nCount < 3; $nCount++): ?>
+    <div class="wrapper">
+      <table class="waffle" cellspacing="0" cellpadding="0">
+        <thead>
+        <tr>
+          <th id="0C0" style="width:23%" class="column-headers-background">&nbsp;</th>
+          <th id="0C1" style="width:37%" class="column-headers-background">&nbsp;</th>
+          <th id="0C2" style="width:20%" class="column-headers-background">&nbsp;</th>
+          <th id="0C3" style="width:20%" class="column-headers-background">&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr style='height:20px;'>
+          <td class="s0 bdtop bdleft" colspan="4">DE 01/01/2012 A 10/01/2012</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s1 bdleft" colspan="3">Depositar até o dia 20</td>
+          <td class="s2">&quot;Cheque&quot;</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s3 bdleft" colspan="2">IMPOSTOS</td>
+          <td class="s4">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">11120200</td>
+          <td class="s7">IPTU</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">11120430</td>
+          <td class="s7">IRRF</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">11120800</td>
+          <td class="s7">ITBI</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">11130500</td>
+          <td class="s7">ISSQN</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s5 bdleft" colspan="4">&nbsp;</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s3 bdleft" colspan="2">TRANSF.CONTITUCIONAIS</td>
+          <td class="s4">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">17210102</td>
+          <td class="s7">FPM</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">17210105</td>
+          <td class="s7">ITR</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">17213600</td>
+          <td class="s7">ICMS EXP.</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">17220101</td>
+          <td class="s7">ICMS EST.</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">17220102</td>
+          <td class="s7">IPVA</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">17220104</td>
+          <td class="s7">IPI</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s5 bdleft" colspan="4">&nbsp;</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s3 bdleft" colspan="2">OUT.REC.CORRENTES</td>
+          <td class="s4">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">19113800</td>
+          <td class="s7">Multas IPTU</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">19113900</td>
+          <td class="s7">Multas ITBI</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">19114000</td>
+          <td class="s7">Multas ISSQN</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">19311100</td>
+          <td class="s7">Dív.Ativa IPTU</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">19311200</td>
+          <td class="s7">Dív.Ativa ITBI</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">19311300</td>
+          <td class="s7">Dív.Ativa ISSQN</td>
+          <td class="s6">0,00</td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s5 bdleft" colspan="4">&nbsp;</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s8 bdleft"></td>
+          <td class="s8"></td>
+          <td class="s9">Educ.</td>
+          <td class="s10">Saúde</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">5.921-8 </td>
+          <td class="s7">Tributos Mun.</td>
+          <td class="s6">0,00</td>
+          <td class="s11">0,00</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">38.007-5</td>
+          <td class="s7">FPM</td>
+          <td class="s6">0,00</td>
+          <td class="s11">0,00</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">38.016-4</td>
+          <td class="s7">ITR</td>
+          <td class="s6">0,00</td>
+          <td class="s11">0,00</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">283.142-2</td>
+          <td class="s7 softmerge">
+            <div class="softmerge-inner" style="width: 131px; left: -1px;">ICMS Des.Export.</div>
+          </td>
+          <td class="s6">0,00</td>
+          <td class="s11">0,00</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">3612-4</td>
+          <td class="s7">ICMS Est. &amp; IPI</td>
+          <td class="s6">0,00</td>
+          <td class="s11">0,00</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">1927-8</td>
+          <td class="s7">IPVA</td>
+          <td class="s12">0,00</td>
+          <td class="s13">0,00</td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s14 bdleft"></td>
+          <td class="s14"></td>
+          <td class="s12">0,00</td>
+          <td class="s13">0,00</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <?php endfor; ?>
   </div>
+  
   </body>
   </html>
 
@@ -662,5 +340,6 @@ $html = ob_get_contents();
 ob_end_clean();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
+//echo $html;
 
 ?>
