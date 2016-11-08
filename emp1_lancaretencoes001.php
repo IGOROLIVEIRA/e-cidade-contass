@@ -31,7 +31,7 @@ require("libs/db_utils.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 require("classes/empenho.php");
-include("dbforms/db_funcoes.php");
+include_once("dbforms/db_funcoes.php"); // OC 2799 - Problema lançamento de retenções em OP
 $clrotulo = new rotulocampo;
 $clrotulo->label("e60_numemp");
 $clrotulo->label("e60_codemp");
@@ -64,7 +64,7 @@ $db_opcao = 1;
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
     <style>
-    
+
     .MovAtualizada {
       background-color: #c97e73;
     }
