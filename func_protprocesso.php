@@ -142,9 +142,20 @@ if (isset($chave_p58_requer)) {
                 //Não permite que um secundário tenha mais de um principal.
                 $where .= " and not exists ( select *
                                        from processosapensados
-                                      where p30_procapensado  = p58_codproc limit 1)
-                    and p58_codproc != {$apensado} ";
+                                      where p30_procapensado  = p58_codproc limit 1)";
+
+                $aPartesNumero = explode("/", $apensado);
+                $iAno = db_getsession("DB_anousu");
+                if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
+                    $iAno = $aPartesNumero[1];
+                }
+                $iNumero = $aPartesNumero[0];
+                $where .= " and p58_codproc not in (select p58_codproc from protprocesso where p58_ano = {$iAno} and p58_numero = '{$iNumero}') ";
             }
+
+            //Lista apenas os processos do departamento da sessão
+            $where .= " and (select p61_coddepto from procandam where p61_codproc = p58_codproc order by p61_codandam DESC limit 1) = ".db_getsession('DB_coddepto');
+
             /**
              * Removido verificação de processos arquivados, conforme solicitado na ocorrência 2558
              */
@@ -191,7 +202,6 @@ if (isset($chave_p58_requer)) {
                 if (isset($chave_p58_codproc)) {
                     $repassa = array("chave_p58_codproc" => $chave_p58_codproc);
                 }
-
                 db_lovrot($sql . " ", 15, "()", "", $funcao_js, "", "NoMe", $repassa);
             } else {
 
@@ -206,8 +216,8 @@ if (isset($chave_p58_requer)) {
                     $where .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
 
                     $result = $clprotprocesso->sql_record($clprotprocesso->sql_query("", "*", "", $where));
-
-                    if ($clprotprocesso->numrows != 0) {
+                    $pesquisa_chave = strlen($pesquisa_chave) == 4 ? $pesquisa_chave.'/'.$iAno : $pesquisa_chave;
+                    if ($clprotprocesso->numrows != 0 && ($apensado != $pesquisa_chave)) {
 
                         db_fieldsmemory($result, 0);
                         if (isset($retobs)) {

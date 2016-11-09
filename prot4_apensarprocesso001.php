@@ -84,8 +84,9 @@ $clrotulo->label("z01_nome");
                         </td>
                         <td nowrap="nowrap">
                             <input type="hidden" id="p30_procapensado" name="p30_procapensado" value="">
+                            <input type="text" size="12" maxlength="10" id="p58_numero_apensado" name="p58_numero_apensado" title="Protocolo geral" onchange="js_pesquisaProcesso(false, true) ">
                             <?
-                            db_input('p58_numero_apensado', 12, $Ip30_procapensado, true, 'text', $db_opcao, " onchange='js_pesquisaProcesso(false, true);'");
+                            //db_input('p58_numero_apensado', 12, $Ip30_procapensado, true, 'text', $db_opcao, " onchange='js_pesquisaProcesso(false, true);'");
                             db_input('z01_nome', 40, $Iz01_nome, true, 'text', 3, "");
                             ?>
                         </td>
@@ -238,14 +239,19 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         oObject.exec = "apensandoProcessos";
         oObject.principal = $F('p58_codproc');
         oObject.apesado = $F('p30_procapensado');
+        if(oObject.principal != oObject.apesado) {
 
-        js_divCarregando('Apensando processos...', 'msgBox');
-        var objAjax = new Ajax.Request(sUrlRpc, {
-                method: 'post',
-                parameters: 'json=' + Object.toJSON(oObject),
-                onComplete: js_retornoApensar
-            }
-        );
+
+            js_divCarregando('Apensando processos...', 'msgBox');
+            var objAjax = new Ajax.Request(sUrlRpc, {
+                    method: 'post',
+                    parameters: 'json=' + Object.toJSON(oObject),
+                    onComplete: js_retornoApensar
+                }
+            );
+        }else{
+            alert("Não é permitido apensar um processo a ele mesmo.")
+        }
 
     }
 

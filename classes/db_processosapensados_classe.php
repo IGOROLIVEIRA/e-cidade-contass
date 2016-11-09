@@ -455,7 +455,7 @@ class cl_processosapensados {
     $sql .= "      inner join db_usuarios   on  db_usuarios.id_usuario  = principal.p58_id_usuario";
     $sql .= "      inner join db_depart     on  db_depart.coddepto      = principal.p58_coddepto";
     $sql .= "      inner join tipoproc      on  tipoproc.p51_codigo     = principal.p58_codigo";
-    $sql .= "      inner join procandam ON p61_codproc = principal.p58_codproc	";
+    $sql .= "      left join procandam ON p61_codproc = principal.p58_codproc	";
     $sql2 = "";
     if ($dbwhere == "") {
        

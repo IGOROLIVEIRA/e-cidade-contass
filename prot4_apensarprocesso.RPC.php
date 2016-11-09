@@ -80,6 +80,21 @@ try {
       }
 
       /**
+       * Verifica se ocorrerá loop de processos
+       * Ex.:
+       * A -> B
+       * B -> C
+       * C -> A
+       *
+       */
+      $oRet = $oDaoProcessoArquivado->getPrincipal($oParam->principal);
+
+      if($oRet->p30_procprincipal == $oParam->apesado){
+        throw new Exception("Não é possível apensar o processo ({$oParam->principal} ao {$oParam->apesado})." .
+            " Existe um vínculo entre eles através de outros apensamentos, o que configuraria um loop de processos.");
+      }
+
+      /**
        * Inclui um processo apensado a um processo principal
        */
       $oDaoProcessoApensado = db_utils::getDao("processosapensados");
@@ -149,7 +164,7 @@ function buscaProcessosApensados ($iProcesso) {
   $oDaoProcessoApensado = db_utils::getDao("processosapensados");
   $sSqlProcessoApensado = $oDaoProcessoApensado->sql_query_processo_principal(null, $sCampos, null, $sWhere);
   $rsProcessoApensado   = $oDaoProcessoApensado->sql_record($sSqlProcessoApensado);
-  
+
   if ($oDaoProcessoApensado->numrows > 0) {
   
     return db_utils::getCollectionByRecord($rsProcessoApensado, false, false, true);
