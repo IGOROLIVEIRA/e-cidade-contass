@@ -2397,7 +2397,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     if( $nivel_agrupar == 1 ) {
       $sql .= "
 
-      select o57_fonte,o57_descr,classe,
+      select classe,
              grupo,
              subgrupo,
              elemento,
@@ -2432,7 +2432,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     }else if( $nivel_agrupar == 0 ){
       $sql .= " substr(o57_fonte,1,1)::int4 as classe, ";
     }
-    $sql .= "o57_fonte,o57_descr,
+    $sql .= "
     substr(o57_fonte,2,1)::int4  as grupo,
     substr(o57_fonte,3,1)::int4  as subgrupo,
     substr(o57_fonte,4,1)::int4  as elemento,
@@ -2469,7 +2469,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     if( $nivel_agrupar == 1 ) {
       $sql .= "
       ) as x
-      group by o57_fonte,o57_descr,classe,
+      group by classe,
                grupo,
                subgrupo,
                elemento,
