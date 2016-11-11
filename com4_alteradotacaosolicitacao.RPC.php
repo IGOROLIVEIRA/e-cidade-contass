@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
-
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("libs/db_stdlib.php");
@@ -35,7 +34,7 @@ require_once("libs/db_sessoes.php");
 require_once("std/db_stdClass.php");
 require_once("model/itemSolicitacao.model.php");
 require_once("model/Dotacao.model.php");
-require_once("model/AutorizacaoEmpenho.model.php");
+require_once("model/empenho/AutorizacaoEmpenho.model.php");
 require_once("classes/solicitacaocompras.model.php");
 
 $oJson             = new services_json();

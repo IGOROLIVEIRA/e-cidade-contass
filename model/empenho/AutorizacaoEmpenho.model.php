@@ -941,5 +941,39 @@ class AutorizacaoEmpenho {
   public function setProcessoAdministrativo($sProcessoAdministrativo) {
     $this->sProcessoAdministrativo = $sProcessoAdministrativo;
   }
+
+  /**
+   * metodo que retorna se o item da dotacao possui uma autorizacao
+   * @param integer codigo do material
+   * @return boolean
+   *
+   */
+  public static function verificaItemAutorizado($iCodigoItem, $iDotacao = null, $iSolicitacao) {
+
+    // e55_item = $iCodigoItem
+    // e56_coddot = $iDotacao
+    // pc11_numero = $iSolicitacao
+
+    if (!isset($iDotacao) || empty($iDotacao)) {
+
+      return false;
+    }
+
+    $oDaoSolicitem = db_utils::getDao("solicitem");
+
+    $sWhereSolicitem  = "    pc11_codigo = {$iCodigoItem}  ";
+    $sWhereSolicitem .= "and e56_coddot  = {$iDotacao}     ";
+    $sWhereSolicitem .= "and pc11_numero = {$iSolicitacao} ";
+    $sWhereSolicitem .= "and e54_anulad is null            ";
+
+    $sSqlEmpAutItem = $oDaoSolicitem->sql_query_verificaItemAutorizado( null, "e55_autori", null, $sWhereSolicitem);
+
+    $rsEmpAutItem   = db_query($sSqlEmpAutItem);
+    if (pg_numrows($rsEmpAutItem) > 0) {
+      return true;
+    }
+    return false;
+
+  }
 }
 ?>
