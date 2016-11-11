@@ -725,7 +725,7 @@ class cl_protprocesso {
      return $result;
    }
    // funcao do sql 
-   function sql_query ( $p58_codproc=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query ( $p58_codproc=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -1263,7 +1263,7 @@ $virgula = ",";
    * @return string sql
    */
   function sql_query_processosemtramit ($iGrupo, $sOrdem, $sWhere) {
-    
+
     /**
      * SQL da busca.
      * Não foi utilizada a classe protprocesso por conta da complexibilidade da mesma.
@@ -1341,5 +1341,79 @@ $virgula = ",";
     }
 
     return $sql;
+  }
+
+
+
+  /**
+   * Processos apensados neste processo
+   * @param $iCodProcesso campo p58_codproc
+   * @param $sCampos campos para select
+   * @return mixed
+   */
+  function getProcessosApensados($iCodProcesso, $sCampos = '')
+  {
+    $sQueryProcApensado = " SELECT DISTINCT p30_procapensado "
+      ." FROM processosapensados "
+      ." WHERE p30_procprincipal = {$iCodProcesso} ";
+    $aApensados = db_utils::getCollectionByRecord(db_query($sQueryProcApensado));
+
+    if (!count($aApensados)) {
+      return false;
+    }
+    $aRetornoTmp  = array();
+    $aProcCods    = array();
+
+    foreach ($aApensados as $iProcApensado) {
+      array_push($aProcCods, intval($iProcApensado->p30_procapensado));
+      array_push($aRetornoTmp, $this->getProcessosApensados($iProcApensado->p30_procapensado));
+    }
+
+    $sCampos      = empty($sCampos)? '*' : $sCampos;
+
+    $sProcessos   = $this->sql_query(null, $sCampos, null, " p58_codproc IN (".implode(',', $aProcCods).") ");
+    
+    $aRetornoTmp  = array_filter($aRetornoTmp, function ($item)
+    {
+      // Já que alguns retornos podem ser 'false'
+      if (gettype($item) === 'array') return $item;
+    });
+    
+    $aRetorno     = db_utils::getCollectionByRecord(db_query($sProcessos));
+
+    return array_merge($aRetorno, $aRetornoTmp);
+
+  }
+  
+  
+  
+  /**
+   * Verifica se está apensado à algum processo
+   * @param $iCodProcesso campo p58_codproc
+   * @param $aPPrincipais array inteiros, são os p58_codproc dos processos principais
+   * @return mixed
+   */
+  public function getPrincipal($iCodProcesso, $aPPrincipais = array())
+  {
+    if (in_array($iCodProcesso, $aPPrincipais)) {
+      return $aPPrincipais;
+    }
+    array_push($aPPrincipais, $iCodProcesso);
+    
+    $sQueryProcPrincipal = " SELECT p30_procprincipal, coddepto, descrdepto "
+      ." FROM processosapensados "
+      ." LEFT JOIN procandam ON p61_codproc = p30_procprincipal "
+      ." LEFT JOIN db_depart ON coddepto = p61_coddepto "
+      ." WHERE p30_procapensado = {$iCodProcesso} "
+      ." ORDER BY p61_dtandam DESC, p61_hora DESC LIMIT 1 ";
+    
+    $aPrincipal = db_utils::getCollectionByRecord(db_query($sQueryProcPrincipal));
+
+    if (!count($aPrincipal)) {
+      return false;
+    }
+    $oTemPrincipal = $this->getPrincipal($aPrincipal[0]->p30_procprincipal, $aPPrincipais);
+    
+    return ($oTemPrincipal) ? $oTemPrincipal : $aPrincipal[0];
   }
 }
