@@ -130,11 +130,11 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
             }else{
                 lApensado = false;
             }
-            sUrl += '&funcao_js=parent.js_mostratipoproc1|1|3|0';
+            sUrl += '&funcao_js=parent.js_mostratipoproc1|1|3|0&validaDepartamento=true';
             js_OpenJanelaIframe("top.corpo", 'db_iframe_processo', sUrl, 'Pesquisa', true);
         } else {
 
-            var sUrl = 'func_protprocesso.php?grupo=1';
+            var sUrl = 'func_protprocesso.php?grupo=1&validaDepartamento=true';
 
             if (apensado) {
 

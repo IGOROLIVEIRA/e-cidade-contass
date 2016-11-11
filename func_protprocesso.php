@@ -152,9 +152,10 @@ if (isset($chave_p58_requer)) {
                 $iNumero = $aPartesNumero[0];
                 $where .= " and p58_codproc not in (select p58_codproc from protprocesso where p58_ano = {$iAno} and p58_numero = '{$iNumero}') ";
             }
-
             //Lista apenas os processos do departamento da sessão
-            $where .= " and (select p61_coddepto from procandam where p61_codproc = p58_codproc order by p61_codandam DESC limit 1) = ".db_getsession('DB_coddepto');
+            if($validaDepartamento) {
+                $where .= " and (select p61_coddepto from procandam where p61_codproc = p58_codproc order by p61_codandam DESC limit 1) = " . db_getsession('DB_coddepto');
+            }
 
             /**
              * Removido verificação de processos arquivados, conforme solicitado na ocorrência 2558
