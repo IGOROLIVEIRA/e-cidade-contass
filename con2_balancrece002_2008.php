@@ -51,7 +51,7 @@ function Header() {
     global $aUnidades;
     $iOrgao   = null;
     $iUnidade = null;
-    if (count($aUnidades) > 0) {
+    /*if (count($aUnidades) > 0) {
       
       $aDados   = explode("-", $aUnidades[0]);
       $iOrgao   = $aDados[0];
@@ -67,7 +67,7 @@ function Header() {
       
       $rsUnidade     = db_query($sSql);
       $oDadosUnidade = db_utils::fieldsMemory($rsUnidade, 0);
-    }
+    }*/
   //Dados da instituição
    
 //   echo ("select nomeinst,ender,munic,uf,telef,email,url,logo from db_config where codigo = ".db_getsession("DB_instit"));
