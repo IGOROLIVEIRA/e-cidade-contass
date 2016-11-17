@@ -61,7 +61,7 @@ try {
 	switch ($oParam->exec) {
 
 		case "getDadosEmpenho":
-			
+
 			$aSiglas = explode(',', $oParam->sSigla);
 			
 			$nTotalDescontos = 0; 
@@ -81,7 +81,7 @@ try {
 					foreach ($aDotacoes as $oDotacao) {
 						$aDotacoesSaldo[$oDotacao->o58_coddot] = $oDotacao;
 					}
-					
+
 				}
 				/**
 				 * selecionamos todos os empenhos do tipo que tenham empenho gerados e anulamos
@@ -580,6 +580,7 @@ try {
 			$sSqlEmpenhos  .= "                        rh01_regist,    ";
 			$sSqlEmpenhos  .= "                        rh02_seqpes,    ";
 			$sSqlEmpenhos  .= "                        rh05_recis,    ";
+			$sSqlEmpenhos  .= "                        rh72_coddot,    ";
 			$sSqlEmpenhos  .= "                        round(sum(case when rh73_pd = 2 then rh73_valor *-1 else rh73_valor end), 2) as rh73_valor,";
 			$sSqlEmpenhos  .= "                        (select count(distinct rh72_sequencial) ";
 			$sSqlEmpenhos  .= "                          from rhempenhofolha a";
@@ -624,9 +625,11 @@ try {
 			$sSqlEmpenhos  .= "                           z01_nome,      ";
 			$sSqlEmpenhos  .= "                           rh01_regist,    ";
 			$sSqlEmpenhos  .= "                           rh02_seqpes,    ";
-			$sSqlEmpenhos  .= "                           rh05_recis    ";
-			$sSqlEmpenhos  .= "                order by  rh01_regist) as x ";
-			$sSqlEmpenhos  .= "        WHERE rh73_valor <> 0 ";
+			$sSqlEmpenhos  .= "                           rh05_recis,    ";
+			$sSqlEmpenhos  .= "                           rh72_coddot    ";
+			$sSqlEmpenhos  .= "                order by  rh01_regist,rh72_coddot) as x ";
+			$sSqlEmpenhos  .= "        WHERE rh73_valor <> 0 order by rh72_coddot";
+
 			$rsDadosEmpenho = db_query($sSqlEmpenhos);
 			$aEmpenhos      = db_utils::getCollectionByRecord($rsDadosEmpenho, false, false, true);
 			$iTotalEmpenhos = count($aEmpenhos);

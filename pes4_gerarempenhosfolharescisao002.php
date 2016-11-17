@@ -553,7 +553,7 @@ function js_retornoConsultaEmpenhos(oResponse) {
 
         }
         var oCellTree = document.createElement("TD");
-        oCellTree.innerHTML  = "<img id='open"+rh02_seqpes+"' onclick='getEmpenhosFilhos("+rh02_seqpes+", \""+iProximoId+"\")' src='imagens/treeplus.gif' border='0'>";
+        oCellTree.innerHTML  = "<img id='open"+rh02_seqpes+"'  src='imagens/treeplus.gif' border='0'>";
         oCellTree.align      = "center";
 
          var oCellMatricula  = document.createElement("TD");
@@ -588,6 +588,9 @@ function js_retornoConsultaEmpenhos(oResponse) {
          if (totalempenhos == totalempenhosreserva) {
            iToTalEmpEmpenhosReservados++;
          }
+
+         getEmpenhosFilhos(rh02_seqpes,iProximoId);
+
        }
      }
      if (iToTalEmpEmpenhosReservados == oRetorno.itens.length) {
@@ -643,13 +646,13 @@ function js_retornoConsultaEmpenhos(oResponse) {
    $('valorbruto').innerHTML     = "&nbsp;&nbsp;"+js_formatar(nValorBruto, "f");
    $('valordescontos').innerHTML = "&nbsp;&nbsp;"+js_formatar(nValorDesconto, "f");
    $('valorliquido').innerHTML   = "&nbsp;&nbsp;"+js_formatar(nValorBruto - nValorDesconto, "f");
+
 }
 
 function getEmpenhosFilhos(iSequencial, iProximoEmpenho) {
 
-  var lConsulta = false;
-  if ($('no'+iSequencial).getAttribute("estado") == 1) {
-
+  var lConsulta = true;
+  /*if ($('no'+iSequencial).getAttribute("estado") == 1) {
    $('no'+iSequencial).setAttribute("estado",2);
    $('open'+iSequencial).src='imagens/treeminus.gif';
    lConsulta = true;
@@ -660,7 +663,7 @@ function getEmpenhosFilhos(iSequencial, iProximoEmpenho) {
     $('open'+iSequencial).src='imagens/treeplus.gif';
     lConsulta = false;
 
-  }
+  }*/
   /**
    * Buscamos a informacao dos dados por funcionario
    */
@@ -692,8 +695,9 @@ function getEmpenhosFilhos(iSequencial, iProximoEmpenho) {
 
 }
 
-function js_retornoGetDadosEmpenhoFilho(oResponse) {
+var aValorAcumuladoDotacao = new Array();
 
+function js_retornoGetDadosEmpenhoFilho(oResponse) {
 
   var iDotacaoAnterior       = 0;
   var nSaldoDotacaoAnterior  = 0;
@@ -702,7 +706,6 @@ function js_retornoGetDadosEmpenhoFilho(oResponse) {
 
   if (oRetorno.status == 1) {
 
-    var nValorAcumuladoDotacao = new Number(0);
     for (var j = 0; j < oRetorno.itens.length; j++) {
 
       with (oRetorno.itens[j]) {
@@ -786,27 +789,20 @@ function js_retornoGetDadosEmpenhoFilho(oResponse) {
          nSaldoDotacao          = new Number(saldodotacao);
          if (o120_orcreserva == "") {
 
-           if (rh72_coddot != iDotacaoAnterior) {
+                if (aValorAcumuladoDotacao[+rh72_coddot] == undefined) {
+                    aValorAcumuladoDotacao[+rh72_coddot] = 0;
+                }
+                aValorAcumuladoDotacao[+rh72_coddot] += new Number(rh73_valor);
 
-              nValorAcumuladoDotacao = new Number(rh73_valor);
-              nSaldoDotacaoAnterior  = new Number(saldodotacao);
-              var nSaldoDotacao      = new Number(saldodotacao);
-              nSaldoDotacao          -= nValorAcumuladoDotacao;
+                nSaldoDotacao          -= aValorAcumuladoDotacao[+rh72_coddot];
 
-           } else {
-
-             nSaldoDotacaoAnterior   = (nSaldoDotacao);
-             nValorAcumuladoDotacao += new Number(rh73_valor).toFixed(2);
-             nSaldoDotacao          -= nValorAcumuladoDotacao;
-
-           }
          }
          var oCellSaldo             = document.createElement("TD");
          oCellSaldo.style.textAlign ='right';
          oCellSaldo.innerHTML       = js_formatar(nSaldoDotacao, 'f');
          oCellSaldo.className       = "border";
          oCellSaldo.style.color     = 'black';
-         if ((nSaldoDotacao < 0 || nSaldoDotacaoAnterior < rh73_valor) && o120_orcreserva == "") {
+         if ((nSaldoDotacao < 0 ) && o120_orcreserva == "") {
 
           oCellSaldo.style.color = 'red';
 
@@ -1845,4 +1841,5 @@ $('rh72_orgao').style.width="95px";
 $('rh72_orgaodescr').style.width="300px";
 $('rh72_unidade').style.width="395px";
 $('rh72_coddot').style.width="95px";
+
 </script>
