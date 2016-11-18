@@ -30,7 +30,7 @@ include("fpdf151/assinatura.php");
 include("libs/db_sql.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_liborcamento.php");
-include("dbforms/db_funcoes.php");
+include_once("dbforms/db_funcoes.php");
 // include("dbforms/db_relrestos.php");
 include("classes/db_orcparamrel_classe.php");
 include("classes/db_empresto_classe.php");
