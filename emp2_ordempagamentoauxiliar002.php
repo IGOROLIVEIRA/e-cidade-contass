@@ -272,14 +272,20 @@ $oPdf->ln();
 $oPdf->ln(20);
 $pos = $oPdf->gety();
 
+
+$ass_admin = $classinatura->assinatura_nova(9001,"",'188');
+$ass_div   = $classinatura->assinatura_nova(9001,"",'187');
+$ass_pres  = $classinatura->assinatura_nova(9001,"",'189');
+$ass_sec   = $classinatura->assinatura_nova(9001,"",'1');
+
 $oPdf->setxy(20,$pos);
-$oPdf->multicell(50,4,"SECCEO/SECCOF/SECCOC","T","C",0,0);
+$oPdf->multicell(50,4,"$ass_sec","T","C",0,0);
 $oPdf->setxy($largura+20,$pos);
-$oPdf->multicell(50,4,"DIVISÃO DE GESTÃO FINANCEIRA","T","C",0,0);
+$oPdf->multicell(50,4,"$ass_pres","T","C",0,0);
 $oPdf->setxy($largura+85,$pos);
-$oPdf->multicell(50,4,"DIRETORIA DE ADMIN. FINANCEIRA","T","C",0,0);
+$oPdf->multicell(50,4,"$ass_div","T","C",0,0);
 $oPdf->setxy($largura+150,$pos);
-$oPdf->multicell(50,4,"PRESIDENTE","T","C",0,0);
+$oPdf->multicell(50,4,"$ass_admin","T","C",0,0);
 
 $oPdf->Output();
 
