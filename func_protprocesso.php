@@ -138,19 +138,20 @@ if (isset($chave_p58_requer)) {
             if (isset($tipo) && trim($tipo) != '') {
                 $where .= " and p58_codigo = {$tipo} ";
             }
-            if (isset($apensado) && trim($apensado) != '') {
+            if (isset($apensado)) {
                 //Não permite que um secundário tenha mais de um principal.
                 $where .= " and not exists ( select *
                                        from processosapensados
                                       where p30_procapensado  = p58_codproc limit 1)";
-
-                $aPartesNumero = explode("/", $apensado);
-                $iAno = db_getsession("DB_anousu");
-                if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
-                    $iAno = $aPartesNumero[1];
+                if(trim($apensado) != '') {
+                    $aPartesNumero = explode("/", $apensado);
+                    $iAno = db_getsession("DB_anousu");
+                    if (count($aPartesNumero) > 1 && !empty($aPartesNumero[1])) {
+                        $iAno = $aPartesNumero[1];
+                    }
+                    $iNumero = $aPartesNumero[0];
+                    $where .= " and p58_codproc not in (select p58_codproc from protprocesso where p58_ano = {$iAno} and p58_numero = '{$iNumero}') ";
                 }
-                $iNumero = $aPartesNumero[0];
-                $where .= " and p58_codproc not in (select p58_codproc from protprocesso where p58_ano = {$iAno} and p58_numero = '{$iNumero}') ";
             }
             //Lista apenas os processos do departamento da sessão
             if($validaDepartamento) {
