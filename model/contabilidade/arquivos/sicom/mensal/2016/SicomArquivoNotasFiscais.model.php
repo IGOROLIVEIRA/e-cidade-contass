@@ -173,7 +173,7 @@ db_inicio_transacao();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      $sHash10  = $oDados10->codorgao.ltrim($oDados10->nfnumero,"0").removeCaracteres($oDados10->nfserie).$oDados10->tipodocumento.$oDados10->nrodocumento;
+      $sHash10  = $oDados10->codorgao.ltrim($oDados10->nfnumero,"0").$this->removeCaracteres($oDados10->nfserie).$oDados10->tipodocumento.$oDados10->nrodocumento;
       $sHash10 .= $oDados10->chaveacesso.$oDados10->dtemissaonf;
       
       if (!$aDadosAgrupados[$sHash10]) {
@@ -191,7 +191,7 @@ db_inicio_transacao();
           $clntf10->si143_nfnumero                  = $oDados10->nfnumero;
         }
 
-        $clntf10->si143_nfserie                   = removeCaracteres($oDados10->nfserie);
+        $clntf10->si143_nfserie                   = $this->removeCaracteres($oDados10->nfserie);
         $clntf10->si143_tipodocumento             = $oDados10->tipodocumento;
         $clntf10->si143_nrodocumento              = $oDados10->nrodocumento;
         $clntf10->si143_nroinscestadual           = preg_replace("/[^0-9]/", "", $oDados10->nroinscestadual);//is_int($oDados10->nroinsdestadual)== true? $oDados10->nroinsdestadual:' ';
@@ -331,7 +331,7 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
         
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-        $sHash20  = $oDados20->nfnumero.removeCaracteres($oDados20->nfserie).$oDados20->tipodocumento.$oDados20->nrodocumento.$oDados20->chaveacesso.$oDados20->dtemissaonf;
+        $sHash20  = $oDados20->nfnumero.$this->removeCaracteres($oDados20->nfserie).$oDados20->tipodocumento.$oDados20->nrodocumento.$oDados20->chaveacesso.$oDados20->dtemissaonf;
         $sHash20 .= $oDados20->codunidadesub.$oDados20->dtempenho.$oDados20->nroempenho.$oDados20->dtliquidacao.$oDados20->nroliquidacao;
         
         if (!$aDadosAgrupados[$sHash10]->reg20[$sHash20]) {
@@ -346,7 +346,7 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
           }else{
             $clntf20->si145_nfnumero              = $oDados20->nfnumero;
           }
-          $clntf20->si145_nfserie                = removeCaracteres($oDados20->nfserie);
+          $clntf20->si145_nfserie                = $this->removeCaracteres($oDados20->nfserie);
           $clntf20->si145_tipodocumento          = $oDados20->tipodocumento;
           $clntf20->si145_nrodocumento           = $oDados20->nrodocumento;
           $clntf20->si145_chaveacesso            = $oDados20->chaveacesso;
@@ -378,7 +378,7 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
       $clntf10->si143_codnotafiscal             = $oDados10->si143_codnotafiscal;
       $clntf10->si143_codorgao                  = $oDados10->si143_codorgao;
       $clntf10->si143_nfnumero                  = $oDados10->si143_nfnumero;
-      $clntf10->si143_nfserie                   = removeCaracteres($oDados10->si143_nfserie);
+      $clntf10->si143_nfserie                   = $this->removeCaracteres($oDados10->si143_nfserie);
       $clntf10->si143_tipodocumento             = $oDados10->si143_tipodocumento;
       $clntf10->si143_nrodocumento              = $oDados10->si143_nrodocumento;
       $clntf10->si143_nroinscestadual           = $oDados10->si143_nroinscestadual;
@@ -409,7 +409,7 @@ where e55_item = pcmater.pc01_codmater and e55_autori = empautoriza.e54_autori l
       	$clntf20->si145_tiporegistro           = $oDados20->si145_tiporegistro;
         $clntf20->si145_reg10                  = $clntf10->si143_sequencial;
         $clntf20->si145_nfnumero               = $oDados20->si145_nfnumero;
-        $clntf20->si145_nfserie                = removeCaracteres($oDados20->si145_nfserie);
+        $clntf20->si145_nfserie                = $this->removeCaracteres($oDados20->si145_nfserie);
         $clntf20->si145_tipodocumento          = $oDados20->si145_tipodocumento;
         $clntf20->si145_nrodocumento           = $oDados20->si145_nrodocumento;
         $clntf20->si145_chaveacesso            = $oDados20->si145_chaveacesso;
