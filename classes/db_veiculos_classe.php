@@ -470,7 +470,7 @@ class cl_veiculos {
                                ,'$this->ve01_nroserie'
                                ,".($this->ve01_codigoant == null? 'null' : $this->ve01_codigoant)."
                                ,'".($this->ve01_codunidadesub == null? '' : $this->ve01_codunidadesub)."'
-                               ,$this->vei01_instit
+                               ,".($this->vei01_instit == null || $this->vei01_instit == '' ? db_getsession("DB_instit") : $this->vei01_instit)."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -882,7 +882,7 @@ class cl_veiculos {
        $virgula = ",";
      }
      if(trim($this->ve01_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_instit"])){
-         $sql  .= $virgula." ve01_instit = '".($this->ve01_instit == 0 || $this->ve01_instit == null ? '' : $this->ve01_instit)."' ";
+         $sql  .= $virgula." ve01_instit = '".($this->ve01_instit == 0 || $this->ve01_instit == null ? db_getsession("DB_instit") : $this->ve01_instit)."' ";
          $virgula = ",";
      }
      $sql .= " where ";
