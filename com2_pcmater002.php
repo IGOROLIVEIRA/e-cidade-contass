@@ -222,7 +222,7 @@ for($x = 0; $x < $clpcmater->numrows;$x++){
    }
    $pdf->setfont('arial','',7);
    $pdf->cell(17,$alt,$pc01_codmater,0,0,"C",0);
-   $pdf->cell(70,$alt,$pc01_descrmater,0,0,"L",0);
+   $pdf->cell(70,$alt,substr($pc01_descrmater,0,43),0,0,"L",0);
    if($grupo != "sub_grupo") {
      $pdf->cell(17,$alt,$pc04_codsubgrupo,0,0,"C",0);
      $pdf->cell(60,$alt,$pc04_descrsubgrupo,0,1,"L",0);
