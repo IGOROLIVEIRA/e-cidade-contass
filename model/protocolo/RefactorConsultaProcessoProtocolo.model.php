@@ -208,7 +208,7 @@ class RefactorConsultaProcessoProtocolo {
               $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
               $oDadosMovimentacao->sLogin = $login;
               $oDadosMovimentacao->sObservacoes = "Transferência $p62_codtran p/ o Departamento: $coddeptodestino - $deptodestino";
-              $oDadosMovimentacao->sDespacho = $p62_despacho;
+              $oDadosMovimentacao->sDespacho = utf8_decode($p62_despacho);
               $oDadosMovimentacao->lImprimir = true;
               $oDadosMovimentacao->iTipo = 2;
               if ( (int) $idusuariodestino > 0 ) {
