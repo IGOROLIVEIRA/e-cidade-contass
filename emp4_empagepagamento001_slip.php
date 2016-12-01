@@ -77,7 +77,7 @@ $clrotulo->label("e83_conta");
 
   
 $dbwhere = '(e97_codforma = 1 or  e97_codforma = 4) and k17_instit = '.db_getsession("DB_instit"); 
-$dbwhere.= ' and k17_dtaut is null and c60_anousu = '.db_getsession("DB_anousu");
+$dbwhere.= ' and k17_dtaut is null and e81_cancelado IS NULL and c60_anousu = '.db_getsession("DB_anousu");
 $dbwhere.= ' and k17_situacao = 1 ';
 
 if(isset($k17_codigo) && $k17_codigo != '' && isset($k17_codigo2) && $k17_codigo2 != '' ){
