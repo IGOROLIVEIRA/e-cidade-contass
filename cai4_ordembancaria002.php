@@ -207,7 +207,11 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
   $pdf->Cell(22,$tam,"Vencimento: ".date("d/m/Y",strtotime($oResult->k00_dtvencpag)),0,1,"L",0);//Ocorrência 756 - Incluído o Vencimento no relatório
   
-  $pdf->Cell(175,"0.01","",1,1,"C",0);
+  if ($pdf->GetY() > 250) {
+    $pdf->AddPage();
+  } else {
+    $pdf->Cell(175,"0.01","",1,1,"C",0);
+  }
 
   $valor_total += $oResult->k00_valorpag;
   
