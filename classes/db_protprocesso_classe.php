@@ -1366,21 +1366,18 @@ $virgula = ",";
 
     foreach ($aApensados as $iProcApensado) {
       array_push($aProcCods, intval($iProcApensado->p30_procapensado));
-      array_push($aRetornoTmp, $this->getProcessosApensados($iProcApensado->p30_procapensado));
+      
+      $aProcessosTmp = $this->getProcessosApensados($iProcApensado->p30_procapensado);
+      
+      if (is_array($aProcessosTmp) && !empty($aProcessosTmp)) {
+        $aRetornoTmp = array_merge($aRetornoTmp, $aProcessosTmp);
+      }
     }
 
     $sCampos      = empty($sCampos)? '*' : $sCampos;
-
     $sProcessos   = $this->sql_query(null, $sCampos, null, " p58_codproc IN (".implode(',', $aProcCods).") ");
-    
-    $aRetornoTmp  = array_filter($aRetornoTmp, function ($item)
-    {
-      // Já que alguns retornos podem ser 'false'
-      if (gettype($item) === 'array') return $item;
-    });
-    
     $aRetorno     = db_utils::getCollectionByRecord(db_query($sProcessos));
-
+  
     return array_merge($aRetorno, $aRetornoTmp);
 
   }
@@ -1400,7 +1397,12 @@ $virgula = ",";
     }
     array_push($aPPrincipais, $iCodProcesso);
     
-    $sQueryProcPrincipal = " SELECT p30_procprincipal, coddepto, descrdepto "
+    $sQueryProcPrincipal = " SELECT p30_procprincipal, coddepto, descrdepto, "
+        ." ( "
+          ." SELECT to_char(p58_dtproc,'dd/mm/yyyy') "
+          ." FROM protprocesso "
+          ." WHERE p58_codproc = p30_procprincipal "
+        ." ) AS to_char "
       ." FROM processosapensados "
       ." LEFT JOIN procandam ON p61_codproc = p30_procprincipal "
       ." LEFT JOIN db_depart ON coddepto = p61_coddepto "
