@@ -5,12 +5,12 @@ $iAnoReferencia = $_GET['ano_usu'];
 
 
 if($sNomeCampo == "PPA"){
-	$sNomeArquivo = "PPA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf";	
+	$sNomeArquivo = "PPA{$iAnoReferencia}.pdf";
 }else{
 	if($sNomeCampo == "LDO"){
-		$sNomeArquivo = "LDO{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf";
+		$sNomeArquivo = "LDO{$iAnoReferencia}.pdf";
 	}else{
-		$sNomeArquivo = "LOA{$iAnoReferencia[2]}{$iAnoReferencia[3]}.pdf";
+		$sNomeArquivo = "LOA{$iAnoReferencia}.pdf";
 	}
 }
 
