@@ -32,7 +32,7 @@ include("libs/db_usuariosonline.php");
 include("libs/db_utils.php");
 include("libs/db_libcontabilidade.php");
 include("dbforms/db_classesgenericas.php");
-include("dbforms/db_funcoes.php");
+include_once("dbforms/db_funcoes.php");
 include("classes/db_conplanoorcamento_classe.php");
 include("classes/db_orcfontes_classe.php");
 include("classes/db_orcelemento_classe.php");
