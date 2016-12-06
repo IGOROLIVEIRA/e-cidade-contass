@@ -40,7 +40,8 @@ $oPeriodo = new Periodo($o116_periodo);
 
 $oDataFim = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
 $oDataIni = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
-$iMes = ($oDataIni->getMes()-11)+12;//Calcula o mes separado por causa do meses que possuem 31 dias
+
+$iMes = $oDataIni->getMes() != 12 ? ($oDataIni->getMes()-11)+12 : $oDataIni->getMes();//Calcula o mes separado por causa do meses que possuem 31 dias, exceto para o mês de dezembro
 $oDataIni->modificarIntervalo("-11 month");//Faço isso apenas para saber o ano
 $oDataIni = new DBDate($oDataIni->getAno()."-".$iMes."-".$oPeriodo->getPeriodoByMes($iMes)->getDiaInicial());//Aqui pego o primeiro dia do mes para montar a nova data de inicio
 $dtini = $oDataIni->getDate();
