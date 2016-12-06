@@ -74,6 +74,13 @@ function js_emite(){
     cods += vir + var_if;
     vir = ",";
   }
+  sReduzidos = "";
+  oReduzidos = document.getElementById('contas').length;
+  for(z=0;z<oReduzidos;z++){
+      sReduzido = document.getElementById('contas').options[y].value;
+      sReduzidos += vir + sReduzido;
+      vir = ",";
+  }
  
   if (document.form1.o15_codigo.value == 0){
        recurso = "";
@@ -90,6 +97,7 @@ function js_emite(){
   qry += "&dataf="+document.form1.dataf_ano.value+'-'+document.form1.dataf_mes.value+'-'+document.form1.dataf_dia.value;
   qry += "&tipo="+document.form1.tipo.value;
   qry += "&recurso="+recurso;
+  qry += "&conta="+sReduzidos;
 
   jan = window.open('cai2_correceitas002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -150,6 +158,31 @@ function js_emite(){
                  ?>
               </td>
             </tr>
+              <tr>
+                  <td colspan=2 >
+                      <?
+                      $aux_conta = new cl_arquivo_auxiliar;
+                      $aux_conta->cabecalho = "<strong>Contas</strong>";
+                      $aux_conta->codigo = "k13_conta"; //chave de retorno da func
+                      $aux_conta->descr  = "k13_descr";   //chave de retorno
+                      $aux_conta->nomeobjeto = 'contas';
+                      $aux_conta->funcao_js = 'js_mostra_contas';
+                      $aux_conta->funcao_js_hide = 'js_mostra_contas1';
+                      $aux_conta->sql_exec  = "";
+                      $aux_conta->func_arquivo = "func_saltes.php";  //func a executar
+                      $aux_conta->nomeiframe = "db_iframe_saltes";
+                      $aux_conta->localjan = "";
+                      $aux_conta->onclick = "";
+                      $aux_conta->db_opcao = 2;
+                      $aux_conta->tipo = 2;
+                      $aux_conta->top = 0;
+                      $aux_conta->linhas = 5;
+                      $aux_conta->vwhidth = 400;
+                      $aux_conta->nome_botao = 'db_lanca_conta';
+                      $aux_conta->funcao_gera_formulario();
+                      ?>
+                  </td>
+              </tr>
           </table>
         </td>
       </tr>
@@ -202,6 +235,7 @@ function js_emite(){
             <option value = 'S2'>Sintético/Estrutural</option>
             <option value = 'A'>Analítico</option>
             <option value = 'S3'>Sintético/Conta</option>
+            <option value = 'S4'>Diário</option>
         </td>
       </tr>
        <tr>

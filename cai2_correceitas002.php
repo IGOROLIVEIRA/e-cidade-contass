@@ -29,6 +29,7 @@ require_once ("fpdf151/pdf.php");
 require_once ("libs/db_liborcamento.php");
 require_once ("libs/db_sql.php");
 require_once("classes/db_orctiporec_classe.php");
+require_once("model/orcamento/ReceitaContabilRepository.model.php");
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //var_dump($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -56,6 +57,10 @@ elseif ($ordem == 'd') {
   } else {
 	  $orderby = ' order by k02_tipo, c61_reduz ';
   }
+}
+
+if($sinana == 'S4'){
+	$orderby = ' order by k12_data, k02_tipo, k02_codigo ';
 }
 
 $iInstit = db_getsession("DB_instit");
@@ -86,6 +91,11 @@ $where = '';
 
 if ($codrec != '') {
 	$where = ' g.k02_codigo in ('.$codrec.') and ';
+}
+if($sinana == 'A' || $sinana == 'S4' || $sinana == 'S3') {
+	if ($conta != '') {
+		$where2 .= " and c61_reduz in ({$conta}) ";
+	}
 }
 
 $inner_sql = "";
@@ -251,6 +261,63 @@ $sql .= " ) as xxx
 			    $where2
 			    $orderby,
           k12_data ";
+
+			    /*
+			     *     left join arrehist    on k00_numpre      = k12_numpre and
+           *                              k00_numpar      = k12_numpar
+			     */
+
+}elseif ($sinana == 'S4') {
+	/**
+	 *  analitico
+	 *  baixas de banco não tem numpre, porque gera um total no caixa
+	*/
+	if($tipo == "O"){
+		$where2 .= " and k02_tipo = 'O' ";
+	}elseif($tipo == "E"){
+		$where2 .= " and k02_tipo = 'E' ";
+	}
+	$sql = "select *
+            from ( ";
+  $sSqlInterno = " select g.k02_codigo,
+				                 g.k02_tipo,
+				                 g.k02_drecei,
+				                 case when o.k02_codrec is not null 	then o.k02_codrec else p.k02_reduz end as codrec,
+				                 case when p.k02_codigo is null 	then o.k02_estorc else p.k02_estpla end as estrutural,
+				                 k12_histcor as k00_histtxt,
+				                 f.k12_data,
+				                 f.k12_numpre,
+				                 f.k12_numpar,
+				                 c61_reduz,
+				                 c60_descr,
+				                 round( f.k12_valor #subquery_desconto# ,2) as valor
+								    from cornump f
+										     inner join corrente r 		 on r.k12_id        = f.k12_id
+                                                  and r.k12_data      = f.k12_data
+                                                  and r.k12_autent    = f.k12_autent
+  										   inner join conplanoreduz c1	on r.k12_conta   = c1.c61_reduz
+                                                     and c1.c61_anousu = extract (year from r.k12_data)
+										     inner join conplano        	on c1.c61_codcon = c60_codcon
+                                                     and c60_anousu    = extract (year from r.k12_data)
+									 	     inner join tabrec g      		on g.k02_codigo  = f.k12_receit
+									 	     left outer join taborc o   	on o.k02_codigo  = g.k02_codigo
+                                                     and o.k02_anousu  = extract (year from r.k12_data)
+									 	     left outer join tabplan p  	on p.k02_codigo  = g.k02_codigo
+                                                     and p.k02_anousu  = extract (year from r.k12_data)
+										     left join corhist hist       on hist.k12_id     = f.k12_id
+                                                     and hist.k12_data   = f.k12_data
+                                                     and hist.k12_autent = f.k12_autent
+							     where $where f.k12_data between '$datai'
+		           		 	 and '$dataf'
+		           			 and r.k12_instit = ".db_getsession("DB_instit");
+
+     $sql .= str_replace("#subquery_desconto#","$sSubQueryDesconto",$sSqlInterno).
+             " union all " .
+             str_replace("#subquery_desconto#","",str_replace("cornump ", "cornumpdesconto ",$sSqlInterno));
+
+$sql .= " ) as xxx
+			    $where2
+			    $orderby";
 
 			    /*
 			     *     left join arrehist    on k00_numpre      = k12_numpre and
@@ -632,6 +699,90 @@ if ($sinana == 'S1' or $sinana == 'S3') {
 	$pdf->cell(140, 4, 'TOTAL GERAL', 1, 0, "C", $pre);
 	$pdf->cell(25, 4, db_formatar($total_reco, 'f'), 1, 1, "R", $pre);
 
+} else if($sinana == 'S4'){
+	//Diário
+	$pdf->ln(2);
+	$pdf->AddPage();
+	$pdf->SetTextColor(0, 0, 0);
+	$pdf->SetFillColor(220);
+	$pdf->SetFont('Arial', 'B', 9);
+	$pdf->Cell(10, 6, "COD", 1, 0, "C", 1);
+	$pdf->Cell(10, 6, "RED", 1, 0, "C", 1);
+	$pdf->Cell(15, 6, "DATA", 1, 0, "C", 1);
+	$pdf->Cell(15, 6, "GUIA Nº", 1, 0, "C", 1);
+	$pdf->Cell(25, 6, "ESTRUTURAL", 1, 0, "C", 1);
+	$pdf->Cell(15, 6, "FONTE", 1, 0, "C", 1);
+	$pdf->Cell(80, 6, "DESC DA RECEITA", 1, 0, "C", 1);
+	$pdf->Cell(15, 6, "CONTA", 1, 0, "L", 1);
+	$pdf->Cell(69, 6, "DESCRIÇÃO", 1, 0, "L", 1);
+	$pdf->Cell(25, 6, "VALOR", 1, 1, "C", 1);
+	$pdf->SetFont('Arial', 'B', 9);
+	$pre = 1;
+	$aDadosAgrupados = array();
+	for ($i = 0; $i < $xxnum; $i ++) {
+		db_fieldsmemory($result, $i);
+		$oDadosAgrupados = new stdClass();
+		$oDadosAgrupados->k02_codigo = $k02_codigo;
+		$oDadosAgrupados->codrec = $codrec;
+		$oDadosAgrupados->k02_tipo = $k02_tipo;
+		$oDadosAgrupados->k12_data = $k12_data;
+		$oDadosAgrupados->k12_numpre = $k12_numpre;
+		$oDadosAgrupados->estrutural = $estrutural;
+		$oDadosAgrupados->fonte = "100";
+		$oDadosAgrupados->k02_drecei = $k02_drecei;
+		$oDadosAgrupados->valor = $valor;
+		$oDadosAgrupados->c61_reduz = $c61_reduz;
+		$oDadosAgrupados->c60_descr = $c60_descr;
+		$aDadosAgrupados[$k12_data][] = $oDadosAgrupados;
+	}
+	$total_geral = 0;
+	foreach($aDadosAgrupados as $aDados) {
+		$total_nadata = 0;
+		foreach ($aDados as $oValores) {
+			$tem_desdobramento = false;
+			if ($pdf->gety() > $pdf->h - 30) {
+				$pdf->addpage("L");
+				$pdf->SetFont('Arial', 'B', 9);
+				$pdf->Cell(10, 6, "COD", 1, 0, "C", 1);
+				$pdf->Cell(10, 6, "RED", 1, 0, "C", 1);
+				$pdf->Cell(15, 6, "DATA", 1, 0, "C", 1);
+				$pdf->Cell(15, 6, "GUIA Nº", 1, 0, "C", 1);
+				$pdf->Cell(25, 6, "ESTRUTURAL", 1, 0, "C", 1);
+				$pdf->Cell(15, 6, "FONTE", 1, 0, "C", 1);
+				$pdf->Cell(80, 6, "DESC DA RECEITA", 1, 0, "C", 1);
+				$pdf->Cell(15, 6, "CONTA", 1, 0, "L", 1);
+				$pdf->Cell(69, 6, "DESCRIÇÃO", 1, 0, "L", 1);
+				$pdf->Cell(25, 6, "VALOR", 1, 1, "C", 1);
+				$pre = 1;
+			}
+			if ($pre == 1)
+				$pre = 0;
+			else
+				$pre = 1;
+
+			$pdf->setfont('arial', '', 7);
+			$pdf->cell(10, 4, $oValores->k02_codigo, 1, 0, "C", $pre);
+			$pdf->cell(10, 4, $oValores->codrec, 1, 0, "C", $pre);
+			$pdf->Cell(15, 4, db_formatar($oValores->k12_data, 'd'), 1, 0, "C", $pre);
+			$pdf->Cell(15, 4, $oValores->k12_numpre, 1, 0, "C", $pre);
+			$pdf->cell(25, 4, $oValores->estrutural, 1, 0, "C", $pre);
+			$pdf->Cell(15, 4, getFonteRecurso($oValores->k02_tipo == 'O' ? $oValores->codrec : $oValores->c61_reduz,db_getsession('DB_anousu'),$oValores->k02_tipo), 1, 0, "C", $pre);
+			$pdf->cell(80, 4, strtoupper($oValores->k02_drecei), 1, 0, "L", $pre);
+			$pdf->cell(15, 4, $oValores->c61_reduz, 1, 0, "C", $pre);
+			$pdf->cell(69, 4, $oValores->c60_descr, 1, 0, "L", $pre);
+			$pdf->cell(25, 4, db_formatar($oValores->valor, 'f'), 1, 1, "R", $pre);
+			$total_nadata += $oValores->valor;
+
+		}
+		$total_geral += $total_nadata;
+		$pdf->setfont('arial', 'B', 7);
+		$pdf->cell(254, 4, "SubTotal:", 1, 0, "R", 1);
+        $pdf->cell(25, 4, db_formatar($total_nadata, 'f'), 1, 1, "R", 1);
+		$pdf->ln(5);
+	}
+	$pdf->cell(254, 4, "Total Geral....:", 1, 0, "R", 1);
+	$pdf->cell(25, 4, db_formatar($total_geral, 'f'), 1, 1, "R", 1);
+	$pdf->ln(5);
 } else {
 
 	// relatorio analitico ( com histórico )
@@ -760,4 +911,27 @@ if ($sinana == 'S1' or $sinana == 'S3') {
 }
 
 $pdf->Output();
+
+/**
+ * Busca a fonte de recurso pela Receita.
+ * Quando for extra, busca da OP vinculada a conta arrecadadadora
+ * @param $iConta
+ * @param $iAno
+ * @param $sTipo
+ * @return mixed|string
+ */
+function getFonteRecurso($iConta, $iAno,$sTipo){
+	switch($sTipo){
+		case "O":
+			$oReceita = ReceitaContabilRepository::getReceitaByCodigo($iConta,$iAno);
+			$oFonteRecurso = new Recurso($oReceita->getTipoRecurso());
+			return $oFonteRecurso->getEstrutural();
+			break;
+		case "E":
+			$oFonteRecurso = new Recurso(ContaPlanoPCASPRepository::getContaPorReduzido($iConta,$iAno, InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')))->getRecurso());
+			return $oFonteRecurso->getEstrutural();
+			break;
+	}
+
+}
 ?>

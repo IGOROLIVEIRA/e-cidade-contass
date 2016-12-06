@@ -52,6 +52,10 @@ if ($iAnoUsu >= 2015 && $codigoRelatorio == VariacaoPatrimonialDCASP2015::CODIGO
   header("Location: con2_variacaopatrimonialDCASP001_2015.php"); exit;
 }
 
+if ($iAnoUsu >= 2015 && $codigoRelatorio == AnexoIVDemoGastoPessoal2016::CODIGO_RELATORIO) {
+  header("Location: con2_anexoIVdemogastopessoal.php"); exit;
+}
+
 $aRelatoriosPorQuadro = array(
     BalancoPatrimonialDCASP2015::CODIGO_RELATORIO
 );

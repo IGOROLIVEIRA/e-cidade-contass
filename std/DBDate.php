@@ -481,5 +481,38 @@ class DBDate {
     return $sRetorno;
   }
 
+  /**
+   * @todo alterar o parametro para DBDate
+   * Obtem os decendios de um mês. Exemplo: JANEIRO, retorna:
+   * [0] => Array
+   * (
+   * [0] => 2016-1-01
+   * [1] => 2016-1-10
+   * )
+   * [1] => Array
+   * (
+   * [0] => 2016-1-11
+   * [1] => 2016-1-20
+   * )
+   *
+   * [2] => Array
+   * (
+   * [0] => 2016-1-21
+   * [1] => 2016-1-31
+   * )
+   * @param $mes
+   * @param $ano
+   * @return array
+   */
+  public static function getDecendio($mes, $ano)
+  {
+    $nUltimo  = cal_days_in_month(CAL_GREGORIAN, $mes, $ano);
+    $aRetorno = array();
+    $aRetorno[] = array(date("{$ano}-{$mes}-01"), date("{$ano}-{$mes}-10"));
+    $aRetorno[] = array(date("{$ano}-{$mes}-11"), date("{$ano}-{$mes}-20"));
+    $aRetorno[] = array(date("{$ano}-{$mes}-21"), date("{$ano}-{$mes}-{$nUltimo}"));
+    return $aRetorno;
+  }
+
 
 }

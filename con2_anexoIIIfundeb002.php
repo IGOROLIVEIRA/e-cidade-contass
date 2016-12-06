@@ -44,30 +44,22 @@ $dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
 
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
-foreach($aInstits as $iInstit){
-	$oInstit = new Instituicao($iInstit);
-	if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-		break;
+if(count($aInstits) > 1){
+	$oInstit = new Instituicao();
+	$oInstit = $oInstit->getDadosPrefeitura();
+} else {
+	foreach ($aInstits as $iInstit) {
+		$oInstit = new Instituicao($iInstit);
 	}
 }
 
 db_inicio_transacao();
 
 $sWhereDespesa      = " o58_instit in({$instits})";
-$rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
-	$anousu,
-	$dtini,
-	$datafin);
-
-if (pg_num_rows($rsBalanceteDespesa) == 0) {
-	db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
-}
+criaWorkDotacao($sWhereDespesa,array($anousu), $dtini, $dtfim);
 
 $sWhereReceita      = "o70_instit in ({$instits})";
-$rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
-	$sWhereReceita, $anousu,
-	$dtini,
-	$datafin );
+criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
 
 /**
@@ -99,7 +91,7 @@ $header = <<<HEADER
       <th>ANEXO III</th>
     </tr>
     <tr>
-      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De 01/01/2016 a 30/06/2016</td>
+      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De {$DBtxt21} a {$DBtxt22}</td>
     </tr>
   </table>
 </header>
@@ -168,8 +160,8 @@ $aPagoAcumulado = array();
 			<tr style='height:20px;'>
 				<td class="s12" >
 					<?
-					$aDadosRFMD = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4172401%'");
-					$fRFMD = count($aDadosRFMD) > 0 ? $aDadosRFMD[0]->saldo_arrecadado_acumulado : 0;
+					$aDadosRFMD = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '4172401%'");
+					$fRFMD = count($aDadosRFMD) > 0 ? $aDadosRFMD[0]->saldo_arrecadado : 0;
 					echo db_formatar($fRFMD, "f");
 					$aRecursos[] = $fRFMD;
 					?>
@@ -179,25 +171,35 @@ $aPagoAcumulado = array();
 				<td class="s8 bdleft" colspan="7">1724.02.00 - Transf.de Recursos da Complementação da União ao FUNDEB</td>
 				<td class="s13">
 					<?
-					$aDadosRCUF = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '4172402%'");
-					$fRCUF = count($aDadosRCUF) > 0 ? $aDadosRCUF[0]->saldo_arrecadado_acumulado : 0;
+					$aDadosRCUF = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '4172402%'");
+					$fRCUF = count($aDadosRCUF) > 0 ? $aDadosRCUF[0]->saldo_arrecadado : 0;
 					echo db_formatar($fRCUF, "f");
 					$aRecursos[] = $fRCUF;
 					?>
 				</td>
 			</tr>
 			<tr style='height:20px;'>
-				<td class="s10 bdleft" colspan="7">B - Receitas de Aplicações Financeiras (art. 20, § único, Lei Federal 11494/2007</td>
+				<td class="s10 bdleft" colspan="7">B - Receitas de Aplicações Financeiras (art. 20, § único, Lei Federal 11494/2007)</td>
 				<td class="s11"></td>
 			</tr>
 			<tr style='height:20px;'>
 				<td class="s8 bdleft" colspan="7">1325.01.02- Receita de Remuneração de Depósitos Bancários de Rec.Vinc.FUNDEB</td>
 				<td class="s14">
 					<?
-					$aDadosRDBR = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '413250102%'");
-					$fRDBR = count($aDadosRDBR) > 0 ? $aDadosRDBR[0]->saldo_arrecadado_acumulado : 0;
+					$aDadosRDBR = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '413250102%'");
+					$fRDBR = count($aDadosRDBR) > 0 ? $aDadosRDBR[0]->saldo_arrecadado : 0;
 					echo db_formatar($fRDBR, "f");
 					$aRecursos[] = $fRDBR;
+					?>
+				</td>
+			</tr>
+			<tr style='height:20px;'>
+				<td class="s10 bdleft" colspan="7">C - Recursos não aplicados no exercicio anterior (art. 21, § único, Lei Federal 11494/2007) </td>
+				<td class="s14">
+					<?php
+					$fRNAEA = getSaldoTesolraria($anousu, $aInstits);
+					$aRecursos[] = $fRNAEA;
+					echo db_formatar($fRNAEA,"f");
 					?>
 				</td>
 			</tr>
@@ -305,7 +307,7 @@ $aPagoAcumulado = array();
 			<tr style='height:20px;'>
 				<td class="s24 bdleft" colspan="4">Valor Legal Mínimo ................................... 60 % =</td>
 				<?
-				$valorLegal = array_sum($aRecursos) * 0.06;
+				$valorLegal = array_sum($aRecursos) * 0.6;
 				?>
 				<td class="s25"><? echo db_formatar($valorLegal,'f') ?></td>
 				<td class="s27"></td>
@@ -314,9 +316,22 @@ $aPagoAcumulado = array();
 			</tr>
 			<tr style='height:20px;'>
 				<td class="s24 bdleft" colspan="4">Valor aplicado ...................................................</td>
-				<td class="s28"><? echo db_formatar(array_sum($aPagoAcumulado),'f'); ?></td>
+				<td class="s28">
+					<?php
+					foreach ($aSubFuncoes as $iSubFuncao) {
+						$aDespesasProgramasFonte118 = getSaldoDespesa(null, "coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in ('118') and o58_instit in ($instits)");
+						if (count($aDespesasProgramasFonte118) > 0) {
+							foreach ($aDespesasProgramasFonte118 as $oDespesaPrograma118) {
+								$fSubTotalFont118 += $oDespesaPrograma118->pago;
+							}
+
+						}
+					}
+					echo db_formatar($fSubTotalFont118,'f');
+					?>
+				</td>
 				<?
-				$iPercentual = (array_sum($aPagoAcumulado)*100)/array_sum($aRecursos);
+				$iPercentual = ($fSubTotalFont118*100)/array_sum($aRecursos);
 				?>
 				<td class="s12"><? echo sprintf("%.2f%%", $iPercentual) ?></td>
 				<td class="s2"></td>
@@ -349,4 +364,33 @@ db_query("drop table if exists work_receita");
 
 db_fim_transacao();
 
+function getSaldoTesolraria($anousu,$aInstits){
+	$iAnousuAnt = $anousu-1;
+	$sql = "select k13_conta, k13_descr, c60_estrut,c61_instit
+			from saltes
+			inner join conplanoexe on c62_anousu = {$anousu}
+			and c62_reduz = k13_conta
+			inner join conplanoreduz on c61_anousu= {$anousu} and
+			c61_reduz = c62_reduz and
+			c61_instit in (".implode(",",$aInstits).")
+			inner join conplano on c61_codcon = c60_codcon and c61_anousu=c60_anousu
+			inner join orctiporec on o15_codigo = c61_codigo
+			where orctiporec.o15_codtri in ('118','119')
+			and c60_codsis in (5,6)
+			order by k13_descr";
+	$result_contas = db_utils::getColectionByRecord(db_query($sql));
+	foreach($result_contas as $oDados){
+		$result1 = db_query("select fc_saltessaldo($oDados->k13_conta,'$iAnousuAnt-12-31','$iAnousuAnt-12-31',null,{$oDados->c61_instit})");
+		$valor = pg_result($result1, 0, 0);
+		$valor = preg_split("/\s+/", $valor);
+		if ($valor[0] != "2" || $valor[0] != "3") {
+			$tval1 += (float) str_replace(",", "", $valor[1]);
+			$tval2 += (float) str_replace(",", "", $valor[2]);
+			$tval3 += (float) str_replace(",", "", $valor[3]);
+			$tval4 += (float) str_replace(",", "", $valor[4]);
+		}
+
+	}
+	return $tval4;
+}
 ?>

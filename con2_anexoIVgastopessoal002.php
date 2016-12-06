@@ -33,39 +33,37 @@ include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
+require_once("classes/db_consexecucaoorc_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
+$oPeriodo = new Periodo($o116_periodo);
 
-$dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
-$dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
-$oDataFim = new DBDate($dtfim);
-$oDataIni = new DBDate($dtini);
-
+$oDataFim = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
+$oDataIni = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
+$iMes = ($oDataIni->getMes()-11)+12;//Calcula o mes separado por causa do meses que possuem 31 dias
+$oDataIni->modificarIntervalo("-11 month");//Faço isso apenas para saber o ano
+$oDataIni = new DBDate($oDataIni->getAno()."-".$iMes."-".$oPeriodo->getPeriodoByMes($iMes)->getDiaInicial());//Aqui pego o primeiro dia do mes para montar a nova data de inicio
+$dtini = $oDataIni->getDate();
+$dtfim = $oDataFim->getDate();
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
 
-foreach($aInstits as $iInstit){
-  $oInstit = new Instituicao($iInstit);
-  if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-    break;
+if(count($aInstits) > 1){
+  $oInstit = new Instituicao();
+  $oInstit = $oInstit->getDadosPrefeitura();
+} else {
+  foreach ($aInstits as $iInstit) {
+    $oInstit = new Instituicao($iInstit);
   }
 }
-
 db_inicio_transacao();
 $sWhereDespesa      = " o58_instit in({$instits})";
-$rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
-    $anousu,
-    $dtini,
-    $datafin);
-if (pg_num_rows($rsBalanceteDespesa) == 0) {
-    db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
-}
+//Aqui passo o(s) exercicio(s) e a funcao faz o sql para cada exercicio
+criaWorkDotacao($sWhereDespesa,array_keys(DBDate::getMesesNoIntervalo($oDataIni,$oDataFim)), $dtini, $dtfim);
 
 $sWhereReceita      = "o70_instit in ({$instits})";
-$rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
-    $sWhereReceita, $anousu,
-    $dtini,
-    $datafin );
+//Aqui passo o(s) exercicio(s) e a funcao faz o sql para cada exercicio
+criarWorkReceita($sWhereReceita, array_keys(DBDate::getMesesNoIntervalo($oDataIni,$oDataFim)), $dtini, $dtfim);
 
 
 /**
@@ -84,7 +82,7 @@ $rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
+$mPDF = new mpdf('', '', 0, '', 15, 15, 23.5, 15, 5, 11);
 
 
 $header = <<<HEADER
@@ -97,7 +95,7 @@ $header = <<<HEADER
       <th>ANEXO IV</th>
     </tr>
     <tr>
-      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De {$DBtxt21} a {$DBtxt22}</td>
+      <td style="text-align:right;font-size:10px;font-style:oblique;">Período: De {$oDataIni->getDate("d/m/Y")} a {$oDataFim->getDate("d/m/Y")}</td>
     </tr>
   </table>
 </header>
@@ -133,17 +131,18 @@ ob_start();
 .ritz .waffle .s5 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 0px 3px 0px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
 .ritz .waffle .s0 { background-color : #d8d8d8; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 0px 3px 0px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
 .ritz .waffle .s9 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 0px 3px 0px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+.column-headers-background { background-color: #d8d8d8; }
 </style>
 </head>
 <body>
   <div class="ritz grid-container" dir="ltr">
     <table class="waffle" cellspacing="0" cellpadding="0">
-      <tr>
-        <th id="1606692746C0" style="width:463px" class="column-headers-background">&nbsp;</th>
-        <th id="1606692746C1" style="width:92px" class="column-headers-background">&nbsp;</th>
-        <th id="1606692746C2" style="width:106px" class="column-headers-background">&nbsp;</th>
-      </tr>
       <tbody>
+      <tr>
+        <th id="1606692746C0" style="width:463px" class="bdtop column-headers-background">&nbsp;</th>
+        <th id="1606692746C1" style="width:92px" class="bdtop column-headers-background">&nbsp;</th>
+        <th id="1606692746C2" style="width:106px" class="bdtop column-headers-background">&nbsp;</th>
+      </tr>
       <tr style='height:19px;'>
         <td class="s0 bdleft" colspan="3">ANEXO IV</td>
       </tr>
@@ -192,6 +191,9 @@ ob_start();
         $aDespesas = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
         foreach($aDespesas as $oDespesa){
           $fTotalLiquidado += $oDespesa->liquidado;
+          if($oDespesa->o58_elemento == '3317170000000'){
+            $oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni,$oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni,$oDataFim);
+          }
           ?>
           <tr style='height:19px;'>
             <td class="s3 bdleft" colspan="2">
@@ -366,12 +368,6 @@ ob_start();
           ?>
         </td>
       </tr>
-
-      <tr style='height:19px;'>
-        <td class="s3 bdleft" colspan="2">(-) Deduções das Receitas (exceto FUNDEB)</td>
-        <td class="s4"></td>
-      </tr>
-
       <?php
       $fTotalDeducoes = 0;
       $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '492%'");
@@ -451,5 +447,25 @@ db_query("drop table if exists work_dotacao");
 db_query("drop table if exists work_receita");
 
 db_fim_transacao();
+
+/**
+ * Busca os valores informados na consolidação de consórcios (Contabilidade->Procedimentos->Consolidação de Consórcios)
+ * @param DBDate $oDataIni
+ * @param DBDate $oDataFim
+ * @return int
+ * @throws ParameterException
+ */
+function getConsolidacaoConsorcios(DBDate $oDataIni, DBDate $oDataFim){
+  $oConsexecucaoorc = new cl_consexecucaoorc();
+  $aPeriodo = DBDate::getMesesNoIntervalo($oDataIni,$oDataFim);
+  $fTotal = 0;
+  foreach($aPeriodo as $ano => $mes){
+    $sSql = $oConsexecucaoorc->sql_query_file(null,"sum(coalesce(c202_valorliquidado,0)) as c202_valorliquidado",null,"c202_anousu = ".$ano." and c202_mescompetencia in (".implode(',',array_keys($mes)).")");
+    $fTotal += db_utils::fieldsMemory(db_query($sSql), 0)->c202_valorliquidado;
+
+  }
+
+  return $fTotal;
+}
 
 ?>

@@ -121,7 +121,7 @@ foreach ($aPeriodos as $oPeriodo) {
         <!--<input name="emiterelcsv" value="Gera CSV" type="button" onclick="js_emite(2);">-->
       </td>
     </tr>
+  </table>
 </form>
-</table>
 </body>
 </html>

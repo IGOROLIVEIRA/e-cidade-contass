@@ -35,28 +35,21 @@ include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
 
 db_postmemory($HTTP_POST_VARS);
-
-$dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
-$dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
+$oPeriodo = new Periodo($o116_periodo);
+$aDecendios = DBDate::getDecendio($oPeriodo->getMesInicial(),$anousu);
+$aDecendios[0][2] = "Depositar até o dia 20";
+$aDecendios[1][2] = "Depositar até o dia 30";
+$aDecendios[2][2] = "Depositar até o dia 10 do mês subsequente";
 
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
-foreach($aInstits as $iInstit){
-  $oInstit = new Instituicao($iInstit);
-  if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-    break;
+if(count($aInstits) > 1){
+  $oInstit = new Instituicao();
+  $oInstit = $oInstit->getDadosPrefeitura();
+} else {
+  foreach ($aInstits as $iInstit) {
+    $oInstit = new Instituicao($iInstit);
   }
-}
-db_inicio_transacao();
-
-$sWhereReceita      = "o70_instit in ({$instits})";
-$rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
-  $sWhereReceita, $anousu,
-  $dtini,
-  $datafin );
-
-if (pg_num_rows($rsBalanceteReceita) == 0) {
-  db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
 }
 
 /**
@@ -136,52 +129,100 @@ ob_start();
   
   
   <div class="ritz grid-container" dir="ltr">
-    <?php for ($nCount = 0; $nCount < 3; $nCount++): ?>
+    <?php
+    foreach($aDecendios as $aPeriodo){
+      db_inicio_transacao();
+
+      $sWhereReceita      = "o70_instit in ({$instits})";
+      criarWorkReceita($sWhereReceita, array($anousu), $aPeriodo[0], $aPeriodo[1]);
+
+    ?>
     <div class="wrapper">
       <table class="waffle" cellspacing="0" cellpadding="0">
         <thead>
         <tr>
-          <th id="0C0" style="width:23%" class="column-headers-background">&nbsp;</th>
-          <th id="0C1" style="width:37%" class="column-headers-background">&nbsp;</th>
+          <th id="0C0" style="width:19%" class="column-headers-background">&nbsp;</th>
+          <th id="0C1" style="width:30%" class="column-headers-background">&nbsp;</th>
           <th id="0C2" style="width:20%" class="column-headers-background">&nbsp;</th>
           <th id="0C3" style="width:20%" class="column-headers-background">&nbsp;</th>
         </tr>
         </thead>
         <tbody>
         <tr style='height:20px;'>
-          <td class="s0 bdtop bdleft" colspan="4">DE 01/01/2012 A 10/01/2012</td>
+          <td class="s0 bdtop bdleft" colspan="4">DE <?=db_formatar($aPeriodo[0],"d")." A ".db_formatar($aPeriodo[1],"d")?></td>
         </tr>
         <tr style='height:20px;'>
-          <td class="s1 bdleft" colspan="3">Depositar até o dia 20</td>
+          <td class="s1 bdleft" colspan="3"><?=$aPeriodo[2]?></td>
           <td class="s2">&quot;Cheque&quot;</td>
         </tr>
         <tr style='height:20px;'>
           <td class="s3 bdleft" colspan="2">IMPOSTOS</td>
-          <td class="s4">0,00</td>
+          <td class="s4"></td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">11120101</td>
+          <td class="s7">IPTR</td>
+          <td class="s6">
+            <?php
+            $aDadosIPTR = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '411120101%'");
+            $fIPTR = count($aDadosIPTR) > 0 ? $aDadosIPTR[0]->saldo_arrecadado : 0;
+            echo db_formatar($fIPTR, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">11120200</td>
           <td class="s7">IPTU</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosIPTU = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4111202%'");
+            $fIPTU = count($aDadosIPTU) > 0 ? $aDadosIPTU[0]->saldo_arrecadado : 0;
+            echo db_formatar($fIPTU, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">11120430</td>
           <td class="s7">IRRF</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosIRRF = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '41112043%'");
+            $fIRRF = count($aDadosIRRF) > 0 ? $aDadosIRRF[0]->saldo_arrecadado : 0;
+            echo db_formatar($fIRRF, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">11120800</td>
           <td class="s7">ITBI</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosITBI = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4111208%'");
+            $fITBI = count($aDadosITBI) > 0 ? $aDadosITBI[0]->saldo_arrecadado : 0;
+            echo db_formatar($fITBI, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">11130500</td>
           <td class="s7">ISSQN</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosISS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4111305%'");
+            $fISS = count($aDadosISS) > 0 ? $aDadosISS[0]->saldo_arrecadado : 0;
+            echo db_formatar($fISS, "f");
+            ?>
+          </td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s3 bdleft" colspan="2"></td>
+          <td class="s4"><?=db_formatar(array_sum(array($fIPTR,$fIPTU,$fIRRF,$fITBI,$fISS)),"f")?></td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
@@ -189,43 +230,108 @@ ob_start();
         </tr>
         <tr style='height:20px;'>
           <td class="s3 bdleft" colspan="2">TRANSF.CONTITUCIONAIS</td>
-          <td class="s4">0,00</td>
+          <td class="s4"></td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">17210102</td>
           <td class="s7">FPM</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosFPM = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417210102%'");
+            $fFPM = count($aDadosFPM) > 0 ? $aDadosFPM[0]->saldo_arrecadado : 0;
+            echo db_formatar($fFPM, "f");
+            ?>
+          </td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">17210103</td>
+          <td class="s7">1% ADIC. DEZ FPM</td>
+          <td class="s6">
+            <?php
+            $aDadosFPMDEZ = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417210103%'");
+            $fFPMDEZ = count($aDadosFPMDEZ) > 0 ? $aDadosFPMDEZ[0]->saldo_arrecadado : 0;
+            echo db_formatar($fFPMDEZ, "f");
+            ?>
+          </td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">17210104</td>
+          <td class="s7">1% ADIC. JUL FPM</td>
+          <td class="s6">
+            <?php
+            $aDadosFPMJUL = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417210104%'");
+            $fFPMJUL = count($aDadosFPMJUL) > 0 ? $aDadosFPMJUL[0]->saldo_arrecadado : 0;
+            echo db_formatar($fFPMJUL, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">17210105</td>
           <td class="s7">ITR</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosITR = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417210105%'");
+            $fITR = count($aDadosITR) > 0 ? $aDadosITR[0]->saldo_arrecadado : 0;
+            echo db_formatar($fITR, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">17213600</td>
           <td class="s7">ICMS EXP.</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosICMS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4172136%'");
+            $fICMS = count($aDadosICMS) > 0 ? $aDadosICMS[0]->saldo_arrecadado : 0;
+            echo db_formatar($fICMS, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">17220101</td>
           <td class="s7">ICMS EST.</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosPARTICMS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417220101%'");
+            $fPARTICMS = count($aDadosPARTICMS) > 0 ? $aDadosPARTICMS[0]->saldo_arrecadado : 0;
+            echo db_formatar($fPARTICMS, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">17220102</td>
           <td class="s7">IPVA</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosIPVA = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417220102%'");
+            $fIPVA = count($aDadosIPVA) > 0 ? $aDadosIPVA[0]->saldo_arrecadado : 0;
+            echo db_formatar($fIPVA, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">17220104</td>
           <td class="s7">IPI</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosIPI = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '417220104%'");
+            $fIPI = count($aDadosIPI) > 0 ? $aDadosIPI[0]->saldo_arrecadado : 0;
+            echo db_formatar($fIPI, "f");
+            ?>
+          </td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s3 bdleft" colspan="2"></td>
+          <td class="s4"><?=db_formatar(array_sum(array($fFPM,$fITR,$fICMS,$fPARTICMS,$fIPVA,$fIPI,$fFPMDEZ,$fFPMJUL)),"f")?></td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
@@ -233,43 +339,96 @@ ob_start();
         </tr>
         <tr style='height:20px;'>
           <td class="s3 bdleft" colspan="2">OUT.REC.CORRENTES</td>
-          <td class="s4">0,00</td>
+          <td class="s4"></td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s6 bdleft">19110801</td>
+          <td class="s7">Multas IPTR</td>
+          <td class="s6">
+            <?php
+            $aDadosMJITR = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '419110801%'");
+            $fMJITR = count($aDadosMJITR) > 0 ? $aDadosMJITR[0]->saldo_arrecadado : 0;
+            echo db_formatar($fMJITR, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">19113800</td>
           <td class="s7">Multas IPTU</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosMJIPTU = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4191138%'");
+            $fMJIPTU = count($aDadosMJIPTU) > 0 ? $aDadosMJIPTU[0]->saldo_arrecadado : 0;
+            echo db_formatar($fMJIPTU, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">19113900</td>
           <td class="s7">Multas ITBI</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosMJITBI = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4191139%'");
+            $fMJTIBI = count($aDadosMJITBI) > 0 ? $aDadosMJITBI[0]->saldo_arrecadado : 0;
+            echo db_formatar($fMJTIBI, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">19114000</td>
           <td class="s7">Multas ISSQN</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosMJISS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4191140%'");
+            $fMJISS = count($aDadosMJISS) > 0 ? $aDadosMJISS[0]->saldo_arrecadado : 0;
+            echo db_formatar($fMJISS, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">19311100</td>
           <td class="s7">Dív.Ativa IPTU</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosRDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4193111%'");
+            $fMJDAIPTU = count($aDadosRDAIPTU) > 0 ? $aDadosRDAIPTU[0]->saldo_arrecadado : 0;
+            echo db_formatar($fMJDAIPTU, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">19311200</td>
           <td class="s7">Dív.Ativa ITBI</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosRDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4193112%'");
+            $fMJDAITBI = count($aDadosRDAITBI) > 0 ? $aDadosRDAITBI[0]->saldo_arrecadado : 0;
+            echo db_formatar($fMJDAITBI, "f");
+            ?>
+          </td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft">19311300</td>
           <td class="s7">Dív.Ativa ISSQN</td>
-          <td class="s6">0,00</td>
+          <td class="s6">
+            <?php
+            $aDadosRDAISS = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4193113%'");
+            $fMJDAISS = count($aDadosRDAISS) > 0 ? $aDadosRDAISS[0]->saldo_arrecadado : 0;
+            echo db_formatar($fMJDAISS, "f");
+            ?>
+          </td>
+          <td class="s5"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s3 bdleft" colspan="2"></td>
+          <td class="s4"><?=db_formatar(array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS)),"f")?></td>
           <td class="s5"></td>
         </tr>
         <tr style='height:20px;'>
@@ -282,53 +441,149 @@ ob_start();
           <td class="s10">Saúde</td>
         </tr>
         <tr style='height:20px;'>
-          <td class="s7 bdleft">5.921-8 </td>
-          <td class="s7">Tributos Mun.</td>
-          <td class="s6">0,00</td>
-          <td class="s11">0,00</td>
-        </tr>
-        <tr style='height:20px;'>
-          <td class="s7 bdleft">38.007-5</td>
-          <td class="s7">FPM</td>
-          <td class="s6">0,00</td>
-          <td class="s11">0,00</td>
-        </tr>
-        <tr style='height:20px;'>
-          <td class="s7 bdleft">38.016-4</td>
-          <td class="s7">ITR</td>
-          <td class="s6">0,00</td>
-          <td class="s11">0,00</td>
-        </tr>
-        <tr style='height:20px;'>
-          <td class="s7 bdleft">283.142-2</td>
-          <td class="s7 softmerge">
-            <div class="softmerge-inner" style="width: 131px; left: -1px;">ICMS Des.Export.</div>
+          <td class="s7 bdleft">Tributos Mun.</td>
+          <td class="s7"></td>
+          <td class="s6">
+            <?php
+            $fTotalTribMunEduc = (array_sum(array($fIPTR,$fIPTU,$fIRRF,$fITBI,$fISS,$fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS)))*0.25;
+            echo db_formatar($fTotalTribMunEduc,"f");
+            ?>
           </td>
-          <td class="s6">0,00</td>
-          <td class="s11">0,00</td>
+          <td class="s11">
+            <?php
+            $fTotalTribMunSaude = (array_sum(array($fIPTR,$fIPTU,$fIRRF,$fITBI,$fISS,$fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS)))*0.15;
+            echo db_formatar($fTotalTribMunSaude,"f");
+            ?>
+          </td>
         </tr>
         <tr style='height:20px;'>
-          <td class="s7 bdleft">3612-4</td>
-          <td class="s7">ICMS Est. &amp; IPI</td>
-          <td class="s6">0,00</td>
-          <td class="s11">0,00</td>
+          <td class="s7 bdleft">FPM</td>
+          <td class="s7"></td>
+          <td class="s6">
+            <?php
+            $fTotalFPMEduc = $fFPM*0.05;
+            echo db_formatar($fTotalFPMEduc, "f");
+            ?>
+          </td>
+          <td class="s11">
+            <?php
+            $fTotalFPMSaude = $fFPM*0.15;
+            echo db_formatar($fTotalFPMSaude, "f");
+            ?>
+          </td>
         </tr>
         <tr style='height:20px;'>
-          <td class="s7 bdleft">1927-8</td>
-          <td class="s7">IPVA</td>
-          <td class="s12">0,00</td>
-          <td class="s13">0,00</td>
+          <td class="s7 bdleft">FPM 1% DEZ</td>
+          <td class="s7"></td>
+          <td class="s6">
+            <?php
+            $fTotalFPMDEZEduc = $fFPMDEZ*0.25;
+            echo db_formatar($fTotalFPMDEZEduc, "f");
+            ?>
+          </td>
+          <td class="s11">
+            <?php
+            $fTotalFPMDEZSaude = 0;
+            echo db_formatar($fTotalFPMDEZSaude, "f");
+            ?>
+          </td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">FPM 1% JUL</td>
+          <td class="s7"></td>
+          <td class="s6">
+            <?php
+            $fTotalFPMJULEduc = $fFPMJUL*0.25;
+            echo db_formatar($fTotalFPMJULEduc, "f");
+            ?>
+          </td>
+          <td class="s11">
+            <?php
+            $fTotalFPMJULSaude = 0;
+            echo db_formatar($fTotalFPMJULSaude, "f");
+            ?>
+          </td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">ITR</td>
+          <td class="s7"></td>
+          <td class="s6">
+            <?php
+            $fTotalITREduc = $fITR*0.05;
+            echo db_formatar($fTotalITREduc,"f");
+            ?>
+          </td>
+          <td class="s11">
+            <?php
+            $fTotalITRSaude = $fITR*0.15;
+            echo db_formatar($fTotalITRSaude,"f");
+            ?>
+          </td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">ICMS Export</td>
+          <td class="s7 softmerge">
+            <div class="softmerge-inner" style="width: 131px; left: -1px;"></div>
+          </td>
+          <td class="s6">
+            <?php
+            $fTotalICMSEduc = $fICMS*0.05;
+            echo db_formatar($fTotalICMSEduc,"f");
+            ?>
+          </td>
+          <td class="s11">
+            <?php
+            $fTotalICMSSaude = $fICMS*0.15;
+            echo db_formatar($fTotalICMSSaude,"f");
+            ?>
+          </td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">ICMS Est. &amp; IPI</td>
+          <td class="s7"></td>
+          <td class="s6">
+            <?php
+            $fTotalICMSIPIEduc = ($fPARTICMS + $fIPI)*0.05;
+            echo db_formatar($fTotalICMSIPIEduc,"f");
+            ?>
+          </td>
+          <td class="s11">
+            <?php
+            $fTotalICMSIPISaude = ($fPARTICMS + $fIPI)*0.15;
+            echo db_formatar($fTotalICMSIPISaude,"f");
+            ?>
+          </td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">IPVA</td>
+          <td class="s7"></td>
+          <td class="s12">
+            <?php
+            $fTotalIPVAEduc = $fIPVA*0.05;
+            echo db_formatar($fTotalIPVAEduc,"f");
+            ?>
+          </td>
+          <td class="s13">
+            <?php
+            $fTotalIPVASaude = $fIPVA*0.15;
+            echo db_formatar($fTotalIPVASaude,"f");
+            ?>
+          </td>
         </tr>
         <tr style='height:20px;'>
           <td class="s14 bdleft"></td>
           <td class="s14"></td>
-          <td class="s12">0,00</td>
-          <td class="s13">0,00</td>
+          <td class="s12"><?=db_formatar(array_sum(array($fTotalFPMEduc,$fTotalITREduc,$fTotalICMSEduc,$fTotalICMSIPIEduc,$fTotalIPVAEduc,$fTotalFPMDEZEduc,$fTotalFPMJULEduc)),"f") ?></td>
+          <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSIPISaude,$fTotalIPVASaude)),"f")?></td>
         </tr>
         </tbody>
       </table>
     </div>
-    <?php endfor; ?>
+    <?php
+      db_query("drop table if exists work_receita");
+      db_fim_transacao();
+    }
+    ?>
   </div>
   
   </body>

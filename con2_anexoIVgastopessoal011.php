@@ -36,102 +36,92 @@ $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
 db_postmemory($HTTP_POST_VARS);
 $anousu = db_getsession("DB_anousu");
+// ---- array de meses
+// Código do relatório do: Demonstrações contábeis do DCASP -> Balanço Financeiro
+$codigoRelatorio = 129;
+
+$oRelatorio = new relatorioContabil($codigoRelatorio);
+
+$aPeriodos = $oRelatorio->getPeriodos();
+$aListaPeriodos = array();
+$aListaPeriodos[0] = "Selecione";
+foreach ($aPeriodos as $oPeriodo) {
+    $aListaPeriodos[$oPeriodo->o114_sequencial] = $oPeriodo->o114_descricao;
+}
 ?>
 
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
-<script>
-variavel = 1;
-function js_emite(tipo){
- sel_instit  = new Number(document.form1.db_selinstit.value);
- if(sel_instit == 0){
-     alert('Você não escolheu nenhuma Instituição. Verifique!');
-     return false;
- }
- if (tipo == 2) {
-	 document.form1.action = "orc2_despitemdesdobramento002_csv.php";
- } else {
-	 document.form1.action = "con2_anexoIVgastopessoal002.php";
- }
- // pega dados da func_selorcdotacao_aba.php
- jan = window.open('','safo' + variavel,'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
- document.form1.target = 'safo' + variavel++;
- setTimeout("document.form1.submit()",1000);
- return true;
-}
-</script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <script>
+        variavel = 1;
+        function js_emite(tipo) {
+            sel_instit = new Number(document.form1.db_selinstit.value);
+            if (sel_instit == 0) {
+                alert('Você não escolheu nenhuma Instituição. Verifique!');
+                return false;
+            }
+            if (tipo == 2) {
+                document.form1.action = "orc2_despitemdesdobramento002_csv.php";
+            } else {
+                document.form1.action = "con2_anexoIVgastopessoal002.php";
+            }
+            // pega dados da func_selorcdotacao_aba.php
+            jan = window.open('', 'safo' + variavel, 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            document.form1.target = 'safo' + variavel++;
+            setTimeout("document.form1.submit()", 1000);
+            return true;
+        }
+    </script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-  <table  align="center">
-    <form name="form1" method="post" action="con2_anexoIVgastopessoal002.php" >
-     <input type=hidden name="filtra_despesa" value="">
-     <input type=hidden name="anousu" value="<?=$anousu?>">
-      <tr>
-         <td >&nbsp;</td>
-         <td >&nbsp;</td>
-      </tr>
-      <tr>
-         <td align="center" colspan="3">
-         <?
-           db_selinstit('parent.js_limpa',300,100);
-          // ja tem instituição na aba filtros
-         ?>
-         </td>
-      </tr>
-      <tr>
-         <td colspan="2"</td>
-         <td >&nbsp;</td>
-      </tr>
+<table align="center">
+    <form name="form1" method="post" action="con2_anexoIVgastopessoal002.php">
+        <input type=hidden name="filtra_despesa" value="">
+        <input type=hidden name="anousu" value="<?= $anousu ?>">
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td align="center" colspan="3">
+                <?
+                db_selinstit('parent.js_limpa', 300, 100);
+                // ja tem instituição na aba filtros
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"
+            </td>
+            <td>&nbsp;</td>
+        </tr>
 
-      <tr>
-          <td nowrap align="right" title="<?=$TDBtxt21?>">
-            <?=$LDBtxt21?>
-          </td>
-          <td>
-	    <?
-              $DBtxt21_ano = db_getsession("DB_anousu");
-              $DBtxt21_mes = '01';
-              $DBtxt21_dia = '01';
-              db_inputdata('DBtxt21',$DBtxt21_dia,$DBtxt21_mes,$DBtxt21_ano ,true,'text',4);
-	    ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap align="right" title="<?=$TDBtxt22?>">
-          <?=$LDBtxt22?>
-        </td>
-        <td>
-	  <?
-            $DBtxt22_ano = date("Y",db_getsession("DB_datausu"));
-            $DBtxt22_mes = date("m",db_getsession("DB_datausu"));
-            $DBtxt22_dia = date("d",db_getsession("DB_datausu"));
-            db_inputdata('DBtxt22',$DBtxt22_dia,$DBtxt22_mes,$DBtxt22_ano ,true,'text',4);
-
-	  ?>
-        </td>
-      </tr>
+        <tr>
+            <td><label for="o116_periodo"><b>Período:</b></label></td>
+            <td><?php db_select("o116_periodo", $aListaPeriodos, true, 1); ?></td>
+        </tr>
 
 
-    <tr>
-        <td>&nbsp; </td>
-    </tr>
+        <tr>
+            <td>&nbsp; </td>
+        </tr>
 
 
-      </tr>
-       <tr>
-         <td colspan="2" align="center">
-	    <input name="emiterel" value="Gera Relatório" type="button" onclick="js_emite(1);">
-	    <!--<input name="emiterelcsv" value="Gera CSV" type="button" onclick="js_emite(2);">-->
-         </td>
-      </tr>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <input name="emiterel" value="Gera Relatório" type="button" onclick="js_emite(1);">
+                <!--<input name="emiterelcsv" value="Gera CSV" type="button" onclick="js_emite(2);">-->
+            </td>
+        </tr>
 
-  </form>
-  </table>
+    </form>
+</table>
 </body>
 </html>

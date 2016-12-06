@@ -386,6 +386,16 @@ if ($db_opcao == 1) {
           ?>
         </td>
       </tr>
+	  <tr>
+        <td nowrap title="<?=@$Tdb21_habitantes?>">
+           <?=@$Ldb21_habitantes?>
+        </td>
+        <td>
+          <?php
+          db_input('db21_habitantes',10,$Idb21_habitantes,true,'text',$db_opcao,"")
+          ?>
+        </td>
+      </tr>
 
       <tr>
         <td nowrap title="<?=@$Tdb21_tipopoder?>">

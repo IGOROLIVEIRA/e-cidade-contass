@@ -40,22 +40,19 @@ $dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
 
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
-foreach($aInstits as $iInstit){
-  $oInstit = new Instituicao($iInstit);
-  if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-    break;
+if(count($aInstits) > 1){
+  $oInstit = new Instituicao();
+  $oInstit = $oInstit->getDadosPrefeitura();
+} else {
+  foreach ($aInstits as $iInstit) {
+    $oInstit = new Instituicao($iInstit);
   }
 }
 db_inicio_transacao();
 
 $sWhereDespesa      = " o58_instit in({$instits})";
-$rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
-    $anousu,
-    $dtini,
-    $datafin);
-if (pg_num_rows($rsBalanceteDespesa) == 0) {
-  db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
-}
+//Aqui passo o(s) exercicio(s) e a funcao faz o sql para cada exercicio
+criaWorkDotacao($sWhereDespesa,array($anousu), $dtini, $dtfim);
 
 /**
  * mPDF
@@ -177,18 +174,18 @@ ob_start();
         <td class="s11">R$</td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s9 bdleft">12</td>
+        <td class="s9 bdleft">10</td>
         <td class="s3"></td>
         <td class="s3"></td>
-        <td class="s12" colspan="5">EDUCAÇÃO</td>
+        <td class="s12" colspan="5">SAÚDE</td>
         <td class="s3"></td>
       </tr>
       <?php
 
       $fSubTotal = 0;
       $aSubFuncoes = array(122,272,271,301,302,303,304,305,306);
-      $sFuncao     = "12";
-      $aFonte      = array("'101'");
+      $sFuncao     = "10";
+      $aFonte      = array("'102'");
       foreach ($aSubFuncoes as $iSubFuncao) {
         $sDescrSubfunao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
 
@@ -246,7 +243,6 @@ ob_start();
 $html = ob_get_contents();
 ob_end_clean();
 db_query("drop table if exists work_dotacao");
-db_query("drop table if exists work_receita");
 db_fim_transacao();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();

@@ -5554,12 +5554,16 @@ class cl_estrutura_sistema {
      */
     function getRCL(DBDate $oDataFim, $instits){
         $oPeriodo = new Periodo;
-        $oNovaDataFim = clone $oDataFim;
-        $oDataFim->modificarIntervalo('-11 month');
-        $aPeriodoCalculo = DBDate::getMesesNoIntervalo($oDataFim,$oNovaDataFim);
+        $oNovaDataFim = clone $oDataFim;//Salvo a data final
+        $iMes = ($oDataFim->getMes()-11)+12;//Calcula o mes separado por causa do meses que possuem 31 dias
+        $oDataFim->modificarIntervalo("-11 month");//Faço isso apenas para saber o ano
+        $oDataFim = new DBDate($oDataFim->getAno()."-".$iMes."-".$oPeriodo->getPeriodoByMes($iMes)->getDiaInicial());//Aqui pego o primeiro dia do mes para montar a nova data de inicio
+        $aPeriodoCalculo = DBDate::getMesesNoIntervalo($oDataFim,$oNovaDataFim);//Retorno o array com os anos e seus respectivos meses dentro do periodo informado
 
         $aCalculos = array();
-
+        /*
+         * Para cada periodo, faço o calculo da RCL e guardo tudo dentro do array $aCalculos
+         */
         foreach($aPeriodoCalculo as $ano => $mes){
             $aCalculos[] = calcula_rcl2($ano, $ano. "-" . min(array_keys($aPeriodoCalculo[$ano])) . "-1", $ano."-".max(array_keys($aPeriodoCalculo[$ano]))."-".$oPeriodo->getPeriodoByMes(max(array_keys($aPeriodoCalculo[$ano])))->getDiaFinal(), $instits, true, 81);
         }
@@ -5610,26 +5614,21 @@ class cl_estrutura_sistema {
      * @param $instits
      * @param $dtini
      * @param $dtfim
+     * @param $anousu
      * @return int
      */
-    function getTotalAnexoIIEducacao($instits,$dtini,$dtfim){
+    function getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu){
         db_inicio_transacao();
         $sWhereDespesa      = " o58_instit in({$instits})";
-        $rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
-            $anousu,
-            $dtini,
-            $dtfim);
+        criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
         $sWhereReceita      = "o70_instit in ({$instits})";
-        $rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
-            $sWhereReceita, $anousu,
-            $dtini,
-            $dtfim );
+        criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
         $fSubTotal = 0;
         $aSubFuncoes = array(122,272,271,361,365,366,367);
         $sFuncao     = "12";
-        $aFonte      = array(101);
+        $aFonte      = array("'101'");
         foreach ($aSubFuncoes as $iSubFuncao) {
-            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri = '{$sFonte}' and o58_instit in ($instits) group by 1,2");
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
             if (count($aDespesasProgramas) > 0) {
                 foreach ($aDespesasProgramas as $oDespesaPrograma) {
                     $fSubTotal += $oDespesaPrograma->pago;
@@ -5650,19 +5649,17 @@ class cl_estrutura_sistema {
      * @param $instits
      * @param $dtini
      * @param $dtfim
+     * @param $anousu
      * @return int
      */
-    function getTotalAnexoIISaude($instits,$dtini,$dtfim){
+    function getTotalAnexoIISaude($instits,$dtini,$dtfim,$anousu){
         db_inicio_transacao();
         $sWhereDespesa      = " o58_instit in({$instits})";
-        $rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
-            $anousu,
-            $dtini,
-            $dtfim);
+        criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
         $fSubTotal = 0;
         $aSubFuncoes = array(122,272,271,301,302,303,304,305,306);
-        $sFuncao     = "12";
-        $aFonte      = array("'101'");
+        $sFuncao     = "10";
+        $aFonte      = array("'102'");
         foreach ($aSubFuncoes as $iSubFuncao) {
             $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
             if (count($aDespesasProgramas) > 0) {
@@ -5672,7 +5669,267 @@ class cl_estrutura_sistema {
             }
         }
         db_query("drop table if exists work_dotacao");
+        db_query("drop table if exists work_receita");
         db_fim_transacao();
         return $fSubTotal;
+    }
+
+    /**
+     * Cria a tabela temporaria work_receita para geração dos relatorios de acompanhamento
+     * @param $sWhere
+     * @param $aAnousu
+     * @param $dtini
+     * @param $dtfim
+     */
+    function criarWorkReceita($sWhere, $aAnousu, $dtini, $dtfim){
+        $sSqlCriaTabela = "CREATE TEMP TABLE work_receita AS
+                SELECT
+                  substr(o57_fonte, 1, 1) ::int4 AS classe,
+                  o57_fonte,
+                  o57_descr,
+                  substr(o57_fonte, 2, 1) ::int4 AS grupo,
+                  substr(o57_fonte, 3, 1) ::int4 AS subgrupo,
+                  substr(o57_fonte, 4, 1) ::int4 AS elemento,
+                  substr(o57_fonte, 5, 1) ::int4 AS subelemento,
+                  substr(o57_fonte, 6, 2) ::int4 AS item,
+                  substr(o57_fonte, 8, 2) ::int4 AS subitem,
+                  substr(o57_fonte, 10, 2) ::int4 AS desdobramento1,
+                  substr(o57_fonte, 12, 2) ::int4 AS desdobramento2,
+                  substr(o57_fonte, 14, 2) ::int4 AS desdobramento3,
+                  o70_codrec,
+                  o70_concarpeculiar,
+                  o70_codigo,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 3, 12), ''), '0') AS float8) AS saldo_inicial,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 16, 12), ''), '0') AS float8) AS saldo_prevadic_acum,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 29, 12), ''), '0') AS float8) AS saldo_inicial_prevadic,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 42, 12), ''), '0') AS float8) AS saldo_anterior,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 55, 12), ''), '0') AS float8) AS saldo_arrecadado,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 68, 12), ''), '0') AS float8) AS saldo_a_arrecadar,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 81, 12), ''), '0') AS float8) AS saldo_arrecadado_acumulado,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 94, 12), ''), '0') AS float8) AS saldo_prev_anterior
+                FROM (SELECT
+                  o70_anousu,
+                  o70_codrec,
+                  o70_codfon,
+                  o70_codigo,
+                  o70_valor,
+                  o70_reclan,
+                  o70_instit,
+                  o70_concarpeculiar,
+                  o57_codfon,
+                  o57_anousu,
+                  o57_fonte,
+                  o57_descr,
+                  o57_finali,
+                  fc_receitasaldo(1999, o70_codrec, 3, '1999-01-01', '1999-01-01')
+                FROM orcreceita d
+                INNER JOIN orcfontes e
+                  ON d.o70_codfon = e.o57_codfon
+                  AND e.o57_anousu = d.o70_anousu
+                WHERE o70_anousu = 1999
+                AND o70_instit in (99)
+                ORDER BY o57_fonte) AS x; TRUNCATE work_receita; ";
+        foreach($aAnousu as $anousu){
+            $sSql = "
+                  insert into work_receita
+                  SELECT
+                  substr(o57_fonte, 1, 1) ::int4 AS classe,
+                  o57_fonte,
+                  o57_descr,
+                  substr(o57_fonte, 2, 1) ::int4 AS grupo,
+                  substr(o57_fonte, 3, 1) ::int4 AS subgrupo,
+                  substr(o57_fonte, 4, 1) ::int4 AS elemento,
+                  substr(o57_fonte, 5, 1) ::int4 AS subelemento,
+                  substr(o57_fonte, 6, 2) ::int4 AS item,
+                  substr(o57_fonte, 8, 2) ::int4 AS subitem,
+                  substr(o57_fonte, 10, 2) ::int4 AS desdobramento1,
+                  substr(o57_fonte, 12, 2) ::int4 AS desdobramento2,
+                  substr(o57_fonte, 14, 2) ::int4 AS desdobramento3,
+                  o70_codrec,
+                  o70_concarpeculiar,
+                  o70_codigo,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 3, 12), ''), '0') AS float8) AS saldo_inicial,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 16, 12), ''), '0') AS float8) AS saldo_prevadic_acum,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 29, 12), ''), '0') AS float8) AS saldo_inicial_prevadic,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 42, 12), ''), '0') AS float8) AS saldo_anterior,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 55, 12), ''), '0') AS float8) AS saldo_arrecadado,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 68, 12), ''), '0') AS float8) AS saldo_a_arrecadar,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 81, 12), ''), '0') AS float8) AS saldo_arrecadado_acumulado,
+                  CAST(COALESCE(NULLIF(substr(fc_receitasaldo, 94, 12), ''), '0') AS float8) AS saldo_prev_anterior
+                FROM (SELECT
+                  o70_anousu,
+                  o70_codrec,
+                  o70_codfon,
+                  o70_codigo,
+                  o70_valor,
+                  o70_reclan,
+                  o70_instit,
+                  o70_concarpeculiar,
+                  o57_codfon,
+                  o57_anousu,
+                  o57_fonte,
+                  o57_descr,
+                  o57_finali,
+                  fc_receitasaldo($anousu, o70_codrec, 3, '{$dtini}', '{$dtfim}')
+                FROM orcreceita d
+                INNER JOIN orcfontes e
+                  ON d.o70_codfon = e.o57_codfon
+                  AND e.o57_anousu = d.o70_anousu
+                WHERE o70_anousu = {$anousu}
+                AND {$sWhere}
+                ORDER BY o57_fonte) AS x;";
+        }
+        db_query($sSqlCriaTabela.$sSql) or die(pg_last_error());
+    }
+
+    /**
+     * Cria a tabela temporaria work_dotacao para geração dos relatorios de acompanhamento
+     * @param $sWhere
+     * @param $aAnousu Array()
+     * @param $dtini
+     * @param $dtfim
+     */
+    function criaWorkDotacao($sWhere, $aAnousu, $dtini, $dtfim){
+        $sSqlCriaTabela = " CREATE TABLE IF NOT EXISTS work_dotacao
+                        (
+                          o58_instit    INTEGER,
+                          o58_anousu    INTEGER,
+                          o58_orgao     INTEGER,
+                          o58_unidade   INTEGER,
+                          o58_funcao    INTEGER,
+                          o58_subfuncao INTEGER,
+                          o58_programa  INTEGER,
+                          o58_projativ  INTEGER,
+                          o58_codele    INTEGER,
+                          o58_coddot    INTEGER,
+                          o58_elemento CHARACTER varying,
+                          o58_codigo INTEGER,
+                          o15_codtri CHARACTER VARYING,
+                          dot_ini DOUBLE PRECISION,
+                          saldo_anterior DOUBLE PRECISION,
+                          empenhado DOUBLE PRECISION,
+                          anulado DOUBLE PRECISION,
+                          liquidado DOUBLE PRECISION,
+                          pago DOUBLE PRECISION,
+                          suplementado DOUBLE PRECISION,
+                          reduzido DOUBLE PRECISION,
+                          atual DOUBLE PRECISION,
+                          reservado DOUBLE PRECISION,
+                          atual_menos_reservado DOUBLE PRECISION,
+                          atual_a_pagar DOUBLE PRECISION,
+                          atual_a_pagar_liquidado DOUBLE PRECISION,
+                          empenhado_acumulado DOUBLE PRECISION,
+                          anulado_acumulado DOUBLE PRECISION,
+                          liquidado_acumulado DOUBLE PRECISION,
+                          pago_acumulado DOUBLE PRECISION,
+                          suplementado_acumulado DOUBLE PRECISION,
+                          reduzido_acumulado DOUBLE PRECISION,
+                          suplemen DOUBLE PRECISION,
+                          suplemen_acumulado DOUBLE PRECISION,
+                          especial DOUBLE PRECISION,
+                          especial_acumulado DOUBLE PRECISION,
+                          transfsup DOUBLE PRECISION,
+                          transfsup_acumulado DOUBLE PRECISION,
+                          transfred DOUBLE PRECISION,
+                          transfred_acumulado DOUBLE PRECISION,
+                          reservado_manual_ate_data DOUBLE PRECISION,
+                          reservado_automatico_ate_data DOUBLE PRECISION,
+                          reservado_ate_data DOUBLE PRECISION,
+                          o55_tipo INTEGER,
+                          o15_tipo INTEGER,
+                          proj DOUBLE PRECISION,
+                          ativ DOUBLE PRECISION,
+                          oper DOUBLE PRECISION,
+                          ordinario DOUBLE PRECISION,
+                          vinculado DOUBLE PRECISION
+                          ); TRUNCATE work_dotacao;";
+        foreach($aAnousu as $anousu) {
+            $sSql .= " INSERT INTO work_dotacao
+                    SELECT *,
+                           (CASE
+                                WHEN o55_tipo = 1 THEN dot_ini
+                                ELSE 0
+                            END) AS proj,
+                           (CASE
+                                WHEN o55_tipo = 2 THEN dot_ini
+                                ELSE 0
+                            END) AS ativ,
+                           (CASE
+                                WHEN o55_tipo = 3 THEN dot_ini
+                                ELSE 0
+                            END) AS oper,
+                           (CASE
+                                WHEN o15_tipo = 1 THEN dot_ini
+                                ELSE 0
+                            END) AS ordinario,
+                           (CASE
+                                WHEN o15_tipo <> 1 THEN dot_ini
+                                ELSE 0
+                            END) AS vinculado
+                    FROM
+                      (SELECT o58_instit,
+                              o58_anousu,
+                              o58_orgao,
+                              o58_unidade,
+                              o58_funcao,
+                              o58_subfuncao,
+                              o58_programa,
+                              o58_projativ,
+                              o56_codele AS o58_codele,
+                              CASE
+                                  WHEN 'nao'='sim' THEN 9999999
+                                  ELSE o58_coddot
+                              END AS o58_coddot,
+                              CASE
+                                  WHEN 'nao'='sim' THEN substr(o56_elemento,1,7)
+                                  ELSE o56_elemento
+                              END AS o58_elemento,
+                              o58_codigo,
+                              o15_codtri,
+                              substr(fc_dotacaosaldo,3,12)::float8 AS dot_ini,
+                              substr(fc_dotacaosaldo,16,12)::float8 AS saldo_anterior,
+                              substr(fc_dotacaosaldo,29,12)::float8 AS empenhado,
+                              substr(fc_dotacaosaldo,42,12)::float8 AS anulado,
+                              substr(fc_dotacaosaldo,55,12)::float8 AS liquidado,
+                              substr(fc_dotacaosaldo,68,12)::float8 AS pago,
+                              substr(fc_dotacaosaldo,81,12)::float8 AS suplementado,
+                              substr(fc_dotacaosaldo,094,12)::float8 AS reduzido,
+                              substr(fc_dotacaosaldo,107,12)::float8 AS atual,
+                              substr(fc_dotacaosaldo,120,12)::float8 AS reservado,
+                              substr(fc_dotacaosaldo,133,12)::float8 AS atual_menos_reservado,
+                              substr(fc_dotacaosaldo,146,12)::float8 AS atual_a_pagar,
+                              substr(fc_dotacaosaldo,159,12)::float8 AS atual_a_pagar_liquidado,
+                              substr(fc_dotacaosaldo,172,12)::float8 AS empenhado_acumulado,
+                              substr(fc_dotacaosaldo,185,12)::float8 AS anulado_acumulado,
+                              substr(fc_dotacaosaldo,198,12)::float8 AS liquidado_acumulado,
+                              substr(fc_dotacaosaldo,211,12)::float8 AS pago_acumulado,
+                              substr(fc_dotacaosaldo,224,12)::float8 AS suplementado_acumulado,
+                              substr(fc_dotacaosaldo,237,12)::float8 AS reduzido_acumulado,
+                              substr(fc_dotacaosaldo,250,12)::float8 AS suplemen,
+                              substr(fc_dotacaosaldo,263,12)::float8 AS suplemen_acumulado,
+                              substr(fc_dotacaosaldo,276,12)::float8 AS especial,
+                              substr(fc_dotacaosaldo,289,12)::float8 AS especial_acumulado,
+                              substr(fc_dotacaosaldo,303,12)::float8 AS transfsup,
+                              substr(fc_dotacaosaldo,316,12)::float8 AS transfsup_acumulado,
+                              substr(fc_dotacaosaldo,329,12)::float8 AS transfred,
+                              substr(fc_dotacaosaldo,342,12)::float8 AS transfred_acumulado,
+                              substr(fc_dotacaosaldo,355,12)::float8 AS reservado_manual_ate_data,
+                              substr(fc_dotacaosaldo,368,12)::float8 AS reservado_automatico_ate_data,
+                              substr(fc_dotacaosaldo,381,12)::float8 AS reservado_ate_data,
+                              o55_tipo,
+                              o15_tipo from
+                         (SELECT *, fc_dotacaosaldo({$anousu},o58_coddot,2,'{$dtini}','{$dtfim}')
+                          FROM orcdotacao w
+                          INNER JOIN orcelemento e ON w.o58_codele = e.o56_codele
+                          AND e.o56_anousu = w.o58_anousu
+                          AND e.o56_orcado IS TRUE
+                          INNER JOIN orcprojativ ope ON w.o58_projativ = ope.o55_projativ
+                          AND ope.o55_anousu = w.o58_anousu
+                          INNER JOIN orctiporec ON orctiporec.o15_codigo = w.o58_codigo
+                          WHERE o58_anousu = {$anousu}
+                            AND {$sWhere}
+                          ORDER BY o58_orgao, o58_unidade, o58_funcao, o58_subfuncao, o58_programa, o58_projativ, o56_codele, o56_elemento, o58_coddot, o58_codigo) AS x) AS xxx; ";
+        }
+        db_query($sSqlCriaTabela.$sSql) or die(pg_last_error());
     }
     ?>

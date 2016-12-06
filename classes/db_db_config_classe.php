@@ -95,9 +95,10 @@ class cl_db_config {
    var $email = null; 
    var $db21_imgmarcadagua = 0; 
    var $db21_esfera = 0; 
-   var $db21_tipopoder = 0; 
+   var $db21_tipopoder = 0;
    var $db21_codtj = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $db21_habitantes = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  codigo = int4 = Cod. Instituição 
                  nomeinst = varchar(80) = Nome da Instituição 
@@ -145,6 +146,7 @@ class cl_db_config {
                  db21_esfera = int4 = Esfera 
                  db21_tipopoder = int4 = Poder 
                  db21_codtj = int4 = Código do município na TJ 
+                 db21_habitantes = int4 = Número de Habitantes
                  ";
    //funcao construtor da classe 
    function cl_db_config() { 
@@ -231,6 +233,7 @@ class cl_db_config {
        $this->db21_esfera = ($this->db21_esfera == ""?@$GLOBALS["HTTP_POST_VARS"]["db21_esfera"]:$this->db21_esfera);
        $this->db21_tipopoder = ($this->db21_tipopoder == ""?@$GLOBALS["HTTP_POST_VARS"]["db21_tipopoder"]:$this->db21_tipopoder);
        $this->db21_codtj = ($this->db21_codtj == ""?@$GLOBALS["HTTP_POST_VARS"]["db21_codtj"]:$this->db21_codtj);
+       $this->db21_habitantes = ($this->db21_habitantes == ""?@$GLOBALS["HTTP_POST_VARS"]["db21_habitantes"]:$this->db21_habitantes);
      }else{
        $this->codigo = ($this->codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["codigo"]:$this->codigo);
      }
@@ -544,6 +547,15 @@ class cl_db_config {
        $this->erro_status = "0";
        return false;
      }
+     if($this->db21_habitantes == null ){
+       $this->erro_sql = " Campo Número de Habitantes nao Informado.";
+       $this->erro_campo = "db21_habitantes";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($codigo == "" || $codigo == null ){
        $result = db_query("select nextval('db_config_codigo_seq')"); 
        if($result==false){
@@ -623,6 +635,7 @@ class cl_db_config {
                                       ,db21_esfera 
                                       ,db21_tipopoder 
                                       ,db21_codtj 
+                                      ,db21_habitantes
                        )
                 values (
                                 $this->codigo 
@@ -671,6 +684,7 @@ class cl_db_config {
                                ,$this->db21_esfera 
                                ,$this->db21_tipopoder 
                                ,$this->db21_codtj 
+                               ,$this->db21_habitantes
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -748,6 +762,7 @@ class cl_db_config {
        $resac = db_query("insert into db_acount values($acount,83,17758,'','".AddSlashes(pg_result($resaco,0,'db21_esfera'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,83,17759,'','".AddSlashes(pg_result($resaco,0,'db21_tipopoder'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,83,18161,'','".AddSlashes(pg_result($resaco,0,'db21_codtj'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,83,18161,'','".AddSlashes(pg_result($resaco,0,'db21_habitantes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    } 
@@ -1273,6 +1288,19 @@ class cl_db_config {
          return false;
        }
      }
+     if(trim($this->db21_habitantes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db21_habitantes"])){
+       $sql  .= $virgula." db21_habitantes = $this->db21_habitantes ";
+       $virgula = ",";
+       if(trim($this->db21_habitantes) == null ){
+         $this->erro_sql = " Campo Número de Habitantes nao Informado.";
+         $this->erro_campo = "db21_habitantes";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
      $sql .= " where ";
      if($codigo!=null){
        $sql .= " codigo = $this->codigo";
@@ -1376,6 +1404,8 @@ class cl_db_config {
            $resac = db_query("insert into db_acount values($acount,83,17759,'".AddSlashes(pg_result($resaco,$conresaco,'db21_tipopoder'))."','$this->db21_tipopoder',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["db21_codtj"]) || $this->db21_codtj != "")
            $resac = db_query("insert into db_acount values($acount,83,18161,'".AddSlashes(pg_result($resaco,$conresaco,'db21_codtj'))."','$this->db21_codtj',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["db21_habitantes"]) || $this->db21_habitantes != "")
+           $resac = db_query("insert into db_acount values($acount,83,18161,'".AddSlashes(pg_result($resaco,$conresaco,'db21_habitantes'))."','$this->db21_habitantes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $result = db_query($sql);
@@ -1469,6 +1499,7 @@ class cl_db_config {
          $resac = db_query("insert into db_acount values($acount,83,17758,'','".AddSlashes(pg_result($resaco,$iresaco,'db21_esfera'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,83,17759,'','".AddSlashes(pg_result($resaco,$iresaco,'db21_tipopoder'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,83,18161,'','".AddSlashes(pg_result($resaco,$iresaco,'db21_codtj'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,83,18161,'','".AddSlashes(pg_result($resaco,$iresaco,'db21_habitantes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from db_config

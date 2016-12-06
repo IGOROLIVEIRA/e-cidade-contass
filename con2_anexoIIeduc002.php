@@ -40,28 +40,21 @@ $dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
 
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
-foreach($aInstits as $iInstit){
-  $oInstit = new Instituicao($iInstit);
-  if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-    break;
+if(count($aInstits) > 1){
+  $oInstit = new Instituicao();
+  $oInstit = $oInstit->getDadosPrefeitura();
+} else {
+  foreach ($aInstits as $iInstit) {
+    $oInstit = new Instituicao($iInstit);
   }
 }
 db_inicio_transacao();
 
 $sWhereDespesa      = " o58_instit in({$instits})";
-$rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
-    $anousu,
-    $dtini,
-    $datafin);
-if (pg_num_rows($rsBalanceteDespesa) == 0) {
-  db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
-}
+criaWorkDotacao($sWhereDespesa,array($anousu), $dtini, $dtfim);
 
 $sWhereReceita      = "o70_instit in ({$instits})";
-$rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
-    $sWhereReceita, $anousu,
-    $dtini,
-    $datafin );
+criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
 /**
  * mPDF
@@ -198,7 +191,7 @@ ob_start();
       $fSubTotal = 0;
       $aSubFuncoes = array(122,272,271,361,365,366,367);
       $sFuncao     = "12";
-      $aFonte      = array(101);
+      $aFonte      = array("'101'");
       foreach ($aSubFuncoes as $iSubFuncao) {
         $sDescrSubfunao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
 

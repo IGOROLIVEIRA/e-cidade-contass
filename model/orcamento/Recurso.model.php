@@ -58,6 +58,12 @@ class Recurso {
 
   protected $oDBEstruturaValor;
 
+  /**
+   * Codtri do recurso
+   * @var
+   */
+  protected $sEstrutural;
+
   private $lNovo = true;
 
   /**
@@ -318,6 +324,24 @@ class Recurso {
    */
   public function getDescricao() {
     return $this->sDescricao;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getEstrutural()
+  {
+    return $this->sEstrutural;
+  }
+
+  /**
+   * @param mixed $sEstrutural
+   * @return Recurso
+   */
+  public function setEstrutural($sEstrutural)
+  {
+    $this->sEstrutural = $sEstrutural;
+    return $this;
   }
 }
 ?>

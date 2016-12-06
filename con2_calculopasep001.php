@@ -71,7 +71,7 @@ $sizecp  = array();
                 <?
                 $clcriaabas->identifica = array("g1"=>"Relatório");
                 $clcriaabas->title      = array("g1"=>"Relatório");
-                $clcriaabas->src        = array("g1"=>"con2_depositosdecendiais011.php");
+                $clcriaabas->src        = array("g1"=>"con2_calculopasep011.php");
                 $clcriaabas->funcao_js  = array("g1"=>"");
                 $clcriaabas->sizecampo  = array("g1"=>"23");
                 $clcriaabas->cria_abas();

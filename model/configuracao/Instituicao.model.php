@@ -191,6 +191,11 @@ class Instituicao {
   protected $iTipoInstit;
 
   /**
+   * @var int
+   */
+  protected $iHabitantes;
+
+  /**
    * Metodo construtor
    * carrega instituicao, de acordo com o Sequencial passado
    */
@@ -200,9 +205,9 @@ class Instituicao {
 
       $oDaoDBConfig  = db_utils::getDao("db_config");
 
-      $sCampos       = "nomeinst, prefeitura, db21_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, numero,";
+      $sCampos       = "nomeinst, prefeitura, si09_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, numero,";
       $sCampos      .= "telef, url, uf, db21_compl, email, db21_usasisagua, ";
-      $sCampos      .= " (select db21_codcli from db_config where prefeitura is true) as db21_codcli ";
+      $sCampos      .= " (select db21_codcli from db_config where prefeitura is true) as db21_codcli,db21_habitantes ";
 
       $sSqlDBConfig  = $oDaoDBConfig->sql_query_file($iSequencial, $sCampos);
       $rsDBConfig    = $oDaoDBConfig->sql_record($sSqlDBConfig);
@@ -213,7 +218,7 @@ class Instituicao {
         $this->sDescricao     = $oDadoInstituicao->nomeinst;
         $this->lPrefeitura    = $oDadoInstituicao->prefeitura;
         $this->iSequencial    = $iSequencial;
-        $this->iTipo          = $oDadoInstituicao->db21_tipoinstit;
+        $this->iTipoInstit    = $oDadoInstituicao->si09_tipoinstit;
         $this->iCodigoCGM     = $oDadoInstituicao->numcgm;
         $this->iCodigoCliente = $oDadoInstituicao->db21_codcli;
         $this->sCNPJ          = $oDadoInstituicao->cgc;
@@ -228,6 +233,7 @@ class Instituicao {
         $this->sTelefone      = $oDadoInstituicao->telef;
         $this->sDescricaoAbreviada = $oDadoInstituicao->nomeinstabrev;
         $this->lUsaSisagua    = $oDadoInstituicao->db21_usasisagua == 't';
+        $this->iHabitantes    = $oDadoInstituicao->db21_habitantes;
       }
     }
     return true;
@@ -470,8 +476,8 @@ class Instituicao {
 
     $oDaoDBConfig  = new cl_db_config();
 
-    $sCampos       = "nomeinst, db21_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, munic, ";
-    $sCampos      .= "bairro, telef, url, email, db21_codigomunicipoestado, numero, db21_compl, uf, cep, fax, db21_codcli ";
+    $sCampos       = "nomeinst, si09_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, munic, ";
+    $sCampos      .= "bairro, telef, url, email, db21_codigomunicipoestado, numero, db21_compl, uf, cep, fax, db21_codcli,db21_habitantes ";
     $sSqlDBConfig  = $oDaoDBConfig->sql_query_file(null, $sCampos, null, "prefeitura is true");
 
     $rsDBConfig    = $oDaoDBConfig->sql_record($sSqlDBConfig);
@@ -498,6 +504,8 @@ class Instituicao {
       $this->sCep                 = $oDadoInstituicao->cep;
       $this->sFax                 = $oDadoInstituicao->fax;
       $this->iCodigoCliente       = $oDadoInstituicao->db21_codcli;
+      $this->iHabitantes          = $oDadoInstituicao->db21_habitantes;
+      $this->iTipoInstit          = $oDadoInstituicao->si09_tipoinstit;
 
       $oDaoMunicipio = new cl_cadendermunicipiosistema();
 
@@ -544,6 +552,22 @@ class Instituicao {
   public function setTipoInstit($iTipoInstit)
   {
     $this->iTipoInstit = $iTipoInstit;
+  }
+
+  /**
+   * @return int
+   */
+  public function getHabitantes()
+  {
+    return $this->iHabitantes;
+  }
+
+  /**
+   * @param int $iHabitantes
+   */
+  public function setHabitantes($iHabitantes)
+  {
+    $this->iHabitantes = $iHabitantes;
   }
 }
 ?>

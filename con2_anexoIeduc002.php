@@ -41,24 +41,18 @@ $dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
 
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
-foreach($aInstits as $iInstit){
-  $oInstit = new Instituicao($iInstit);
-  if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-    break;
+if(count($aInstits) > 1){
+  $oInstit = new Instituicao();
+  $oInstit = $oInstit->getDadosPrefeitura();
+} else {
+  foreach ($aInstits as $iInstit) {
+    $oInstit = new Instituicao($iInstit);
   }
 }
 db_inicio_transacao();
 
 $sWhereReceita      = "o70_instit in ({$instits})";
-$rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
-    $sWhereReceita, $anousu,
-    $dtini,
-    $datafin );
-
-if (pg_num_rows($rsBalanceteReceita) == 0) {
-  db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
-}
-
+criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 /**
  * mPDF
  * @param string $mode              | padrão: BLANK
@@ -198,7 +192,7 @@ ob_start();
             <td class="s12" colspan="7">Imposto sobre a Propriedade Predial e Territorial Urbana ? IPTU</td>
             <td class="s13">
               <?php
-              $aDadosIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411120200%'");
+              $aDadosIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4111202%'");
               $fIPTU = count($aDadosIPTU) > 0 ? $aDadosIPTU[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fIPTU, "f");
               ?>
@@ -234,7 +228,7 @@ ob_start();
             <td class="s6" colspan="7">Imposto sobre Transmissão Inter-Vivos de Bens Imóveis ? ITBI</td>
             <td class="s9">
               <?php
-              $aDadosITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411120800%'");
+              $aDadosITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4111208%'");
               $fITBI = count($aDadosITBI) > 0 ? $aDadosITBI[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fITBI, "f");
               ?>
@@ -246,7 +240,7 @@ ob_start();
             <td class="s12" colspan="7">Imposto sobre Serviço de Qualquer Natureza ? ISS</td>
             <td class="s13">
               <?php
-              $aDadosISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '411130500%'");
+              $aDadosISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4111305%'");
               $fISS = count($aDadosISS) > 0 ? $aDadosISS[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fISS, "f");
               ?>
@@ -318,7 +312,7 @@ ob_start();
             <td class="s6" colspan="7">Transferência Financ.? Lei Comp.n. 87/96 ? ICMS Exp.</td>
             <td class="s9">
               <?php
-              $aDadosICMS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417213600%'");
+              $aDadosICMS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4172136%'");
               $fICMS = count($aDadosICMS) > 0 ? $aDadosICMS[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fICMS, "f");
               ?>
@@ -393,7 +387,7 @@ ob_start();
             <td class="s13">
               <?php
               $aDadosMJIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419113800%'");
-              $fMJIPTU = count($aDadosMJITR) > 0 ? $aDadosMJIPTU[0]->saldo_arrecadado_acumulado : 0;
+              $fMJIPTU = count($aDadosMJIPTU) > 0 ? $aDadosMJIPTU[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJIPTU, "f");
               ?>
             </td>
@@ -587,7 +581,7 @@ ob_start();
             <?php
             db_query("drop table if exists work_receita");
             db_fim_transacao();
-            $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim);
+            $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
             ?>
             <td class="s20 bdleft" dir="ltr" colspan="9">04 ? Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
             <td class="s22"><?=db_formatar($fTotalAnexoII,"f")?></td>
