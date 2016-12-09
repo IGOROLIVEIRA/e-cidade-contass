@@ -54,10 +54,6 @@ if ($iAnoSessao >= 2015 && $codigoRelatorio == VariacaoPatrimonialDCASP::CODIGO_
     $codigoRelatorio = VariacaoPatrimonialDCASP2015::CODIGO_RELATORIO;
 }
 
-if ($iAnoSessao >= 2015 && $codigoRelatorio == AnexoIVDemoGastoPessoal2016::CODIGO_RELATORIO) {
-    $codigoRelatorio = AnexoIVDemoGastoPessoal2016::CODIGO_RELATORIO;
-}
-
 $sPathFiltrosRelatorio = "con2_relatoriosdcasp011.php?codigoRelatorio={$codigoRelatorio}&sProgramaRelatorio={$sProgramaRelatorio}";
 
 if ($iAnoSessao >= 2015 && $codigoRelatorio == BalancoFinanceiroDcasp::CODIGO_RELATORIO) {
