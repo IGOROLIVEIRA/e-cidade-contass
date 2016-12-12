@@ -657,7 +657,8 @@ if ($db_opcao == 1) {
 	      <?
 	      $x = array('1'=>'CÂMARA MUNICIPAL - MG','2'=>'PREFEITURA MUNICIPAL - MG','3'=>'AUTARQUIA (EXCEETO RPPS) - MG',
 	      '4'=>'FUNDAÇÃO - MG','5'=>'RPPS (REGIME PRÓPRIO DE PREVIDÊNCIA SOCIAL) - MG','6'=>'RPPS - ASSISTÊNCIA À SAÚDE - MG',
-	      '8'=>'EMPRESA PÚBLICA (APENAS AS DEPENDENTES) - MG','9'=>'SOCIEDADE DE ECONOMIA MISTA (APENAS AS DEPENDENTES) - MGA');
+	      '8'=>'EMPRESA PÚBLICA (APENAS AS DEPENDENTES) - MG','9'=>'SOCIEDADE DE ECONOMIA MISTA (APENAS AS DEPENDENTES) - MGA'
+		  ,'51'=>'CONSORCIO INTERMUNICIPAL');
 	      db_select('si09_tipoinstit',$x,true,$db_opcao,"onchange='js_mostra_cnpjprefeitura();'");
 	      ?>
 	    </td>
