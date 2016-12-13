@@ -79,7 +79,7 @@ foreach($aInstits as $iInstit){
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 20, 15, 5, 11);
+$mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 20, 15, 5, 11);
 
 
 $header = <<<HEADER
@@ -119,28 +119,25 @@ ob_start();
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style type="text/css">
       .ritz .waffle a { color : inherit; }
-      .ritz .waffle .s4 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s5 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s6 { background-color : #d8d8d8; border-bottom : 0; border-right : 0; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s2 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s3 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-style : italic; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s19 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s21 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s7 { background-color : #d8d8d8; border-bottom : 0; border-right : 0; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s10 { background-color : #ffffff; border-bottom : 0; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s11 { background-color : #ffffff; border-bottom : 0; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s12 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : 0; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s16 { background-color : #ffffff; border-bottom : 0; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s3 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s4 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s5 { background-color : #d8d8d8; border-bottom : none; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s2 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-style : italic; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s16 { background-color : #ffffff; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s18 { background-color : #ffffff; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s6 { background-color : #d8d8d8; border-bottom : none; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s9 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s10 { background-color : #ffffff; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s11 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s14 { background-color : #ffffff; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
       .ritz .waffle .s1 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 12pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s20 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s13 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s17 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s12 { background-color : #d8d8d8; border-bottom : 1px SOLID #000000; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
       .ritz .waffle .s0 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 14pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s8 { background-color : #d8d8d8; border-bottom : 0; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s15 { background-color : #ffffff; border-bottom : 0; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s17 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s18 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s14 { background-color : #ffffff; border-bottom : 0; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 10pt; padding : 2px 3px 2px 3px; text-align : left; vertical-align : bottom; white-space : nowrap; }
-      .ritz .waffle .s9 { background-color : #ffffff; border-bottom : 0; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s7 { background-color : #d8d8d8; border-bottom : none; border-right : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s13 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s15 { background-color : #ffffff; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; font-weight : bold; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
+      .ritz .waffle .s8 { background-color : #ffffff; border-bottom : none; color : #000000; direction : ltr; font-family : 'Calibri',Arial; font-size : 11pt; padding : 2px 3px 2px 3px; text-align : center; vertical-align : bottom; white-space : nowrap; }
     </style>
   </head>
   <body>
@@ -149,147 +146,93 @@ ob_start();
     <table class="waffle" cellspacing="0" cellpadding="0">
       <thead>
       <tr>
-        <th id="0C0" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C1" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C2" style="width:236px" class="column-headers-background">&nbsp;</th>
-        <th id="0C3" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C4" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C5" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C6" style="width:273px" class="column-headers-background">&nbsp;</th>
-        <th id="0C7" style="width:100px" class="column-headers-background">&nbsp;</th>
-        <th id="0C8" style="width:100px" class="column-headers-background">&nbsp;</th>
+        <th id="0C0" style="width:118px" class="column-headers-background">&nbsp;</th>
+        <th id="0C1" style="width:83px" class="column-headers-background">&nbsp;</th>
+        <th id="0C2" style="width:324px" class="column-headers-background">&nbsp;</th>
+        <th id="0C3" style="width:87px" class="column-headers-background">&nbsp;</th>
+        <th id="0C4" style="width:134px" class="column-headers-background">&nbsp;</th>
+        <th id="0C5" style="width:138px" class="column-headers-background">&nbsp;</th>
       </tr>
       </thead>
       <tbody>
       <tr style='height:20px;'>
-        <td class="s4 bdleft"></td>
-        <td class="s5" colspan="4">BANCO RETIRADA</td>
-        <td class="s5" colspan="4">BANCO DEPÓSITO</td>
+        <td class="s3 bdleft"></td>
+        <td class="s4" colspan="5">BANCOS</td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s5 bdleft">Data</td>
-        <td class="s5">Red.</td>
-        <td class="s5">Conta/Descrição</td>
-        <td class="s5">Fonte</td>
-        <td class="s5">R$</td>
-        <td class="s5">Red.</td>
-        <td class="s5">Conta/Descrição</td>
-        <td class="s5">Fonte</td>
-        <td class="s5">R$</td>
+        <td class="s4 bdleft">Data</td>
+        <td class="s4">Red.</td>
+        <td class="s4">Conta/Descrição</td>
+        <td class="s4">Fonte</td>
+        <td class="s4">Retiradas</td>
+        <td class="s4">Depositos</td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s6 bdleft">12/10/2016</td>
-        <td class="s6">4964</td>
-        <td class="s7 softmerge">
-          <div class="softmerge-inner" style="width: 233px; left: -1px;">3.028-7 B.BRASIL S/A C/C - FPM</div>
-        </td>
-        <td class="s6">102</td>
-        <td class="s8">1.000.000,00 </td>
-        <td class="s6">4965</td>
-        <td class="s7">3.028-7 B.BRASIL S/A APLIC - FPM</td>
-        <td class="s6">102</td>
-        <td class="s8">1.000.000,00 </td>
+        <td class="s5 bdleft">12/10/2016</td>
+        <td class="s5">4964</td>
+        <td class="s6">3.028-7 B.BRASIL S/A C/C - FPM</td>
+        <td class="s5">102</td>
+        <td class="s7">1.000.000,00 </td>
+        <td class="s7">1.000.000,00 </td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s9 bdleft">12/10/2016</td>
-        <td class="s9">4534</td>
-        <td class="s10">3.016-4 B.BRASIL S/A C/C - ITR</td>
-        <td class="s9">100</td>
-        <td class="s11">345,67 </td>
-        <td class="s9">4535</td>
-        <td class="s10">3.016-4 B.BRASIL S/A C/C - ITR</td>
-        <td class="s9">100</td>
-        <td class="s11">345,67 </td>
+        <td class="s8 bdleft">12/10/2016</td>
+        <td class="s8">4534</td>
+        <td class="s9">3.016-4 B.BRASIL S/A C/C - ITR</td>
+        <td class="s8">100</td>
+        <td class="s10">345,67 </td>
+        <td class="s10">345,67 </td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s6 bdleft">12/10/2016</td>
-        <td class="s6">4964</td>
-        <td class="s7 softmerge">
-          <div class="softmerge-inner" style="width: 233px; left: -1px;">3.028-7 B.BRASIL S/A C/C - FPM</div>
-        </td>
-        <td class="s12">102</td>
-        <td class="s13">150.000,00 </td>
-        <td class="s6">2232</td>
-        <td class="s7 softmerge">
-          <div class="softmerge-inner" style="width: 270px; left: -1px;">283.142-2 B.BRASIL C/C - SAÚDE 15%</div>
-        </td>
-        <td class="s12">102</td>
-        <td class="s13">150.000,00 </td>
+        <td class="s5 bdleft">12/10/2016</td>
+        <td class="s5">4964</td>
+        <td class="s6">3.028-7 B.BRASIL S/A C/C - FPM</td>
+        <td class="s11">102</td>
+        <td class="s12">150.000,00 </td>
+        <td class="s12">150.000,00 </td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s14 bdleft"></td>
-        <td class="s14"></td>
-        <td class="s15" colspan="2">SubTotal=</td>
-        <td class="s16">1.150.345,67 </td>
-        <td class="s15" colspan="3">SubTotal=</td>
-        <td class="s16">1.150.345,67 </td>
+        <td class="s13 bdleft" colspan="4">SubTotal=</td>
+        <td class="s14">1.150.345,67 </td>
+        <td class="s14">1.150.345,67 </td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s6 bdleft">12/13/2016</td>
-        <td class="s6">4964</td>
-        <td class="s7 softmerge">
-          <div class="softmerge-inner" style="width: 233px; left: -1px;">3.028-7 B.BRASIL S/A C/C - FPM</div>
-        </td>
-        <td class="s6">101</td>
-        <td class="s8">50.000,00 </td>
-        <td class="s6">2238</td>
-        <td class="s7 softmerge">
-          <div class="softmerge-inner" style="width: 270px; left: -1px;">6.133-6 B.BRASIL S/A C/C - EDUCAÇÃO 25%</div>
-        </td>
-        <td class="s6">101</td>
-        <td class="s8">50.000,00 </td>
+        <td class="s5 bdleft">12/13/2016</td>
+        <td class="s5">4964</td>
+        <td class="s6">3.028-7 B.BRASIL S/A C/C - FPM</td>
+        <td class="s5">101</td>
+        <td class="s7">50.000,00 </td>
+        <td class="s7">50.000,00 </td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s9 bdleft">12/13/2016</td>
-        <td class="s9">3254</td>
-        <td class="s10 softmerge">
-          <div class="softmerge-inner" style="width: 233px; left: -1px;">58.024-4 B.BRASIL S/A C/C - FUNDEB</div>
-        </td>
-        <td class="s9">118</td>
-        <td class="s11">60.000,00 </td>
-        <td class="s9">2240</td>
-        <td class="s10 softmerge">
-          <div class="softmerge-inner" style="width: 270px; left: -1px;">38.024-5 B.BRASIL S/A C/C - FUNDEB 60%</div>
-        </td>
-        <td class="s9">118</td>
-        <td class="s11">60.000,00 </td>
+        <td class="s8 bdleft">12/13/2016</td>
+        <td class="s8">3254</td>
+        <td class="s9">58.024-4 B.BRASIL S/A C/C - FUNDEB</td>
+        <td class="s8">118</td>
+        <td class="s10">60.000,00 </td>
+        <td class="s10">60.000,00 </td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s6 bdleft">12/13/2016</td>
-        <td class="s6">3254</td>
-        <td class="s7 softmerge">
-          <div class="softmerge-inner" style="width: 233px; left: -1px;">58.024-4 B.BRASIL S/A C/C - FUNDEB</div>
-        </td>
-        <td class="s12">119</td>
-        <td class="s13">40.000,00 </td>
-        <td class="s6">2241</td>
-        <td class="s7 softmerge">
-          <div class="softmerge-inner" style="width: 270px; left: -1px;">39.040-7 B.BRASIL S/A C/C - FUNDEB 40%</div>
-        </td>
-        <td class="s12">119</td>
-        <td class="s13">40.000,00 </td>
+        <td class="s5 bdleft">12/13/2016</td>
+        <td class="s5">3254</td>
+        <td class="s6">58.024-4 B.BRASIL S/A C/C - FUNDEB</td>
+        <td class="s11">119</td>
+        <td class="s12">40.000,00 </td>
+        <td class="s12">40.000,00 </td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s17 bdleft"></td>
-        <td class="s17"></td>
-        <td class="s18" colspan="2">SubTotal=</td>
-        <td class="s19">150.000,00 </td>
-        <td class="s18" colspan="3">SubTotal=</td>
-        <td class="s19">150.000,00 </td>
+        <td class="s15 bdleft" colspan="4">SubTotal=</td>
+        <td class="s16">150.000,00 </td>
+        <td class="s16">150.000,00 </td>
       </tr>
       <tr style='height:20px;'>
-        <td class="s2 bdleft"></td>
-        <td class="s2"></td>
-        <td class="s20" colspan="2">TOTAL GERAL =</td>
-        <td class="s21">1.300.345,67 </td>
-        <td class="s2"></td>
-        <td class="s20" colspan="2">TOTAL GERAL =</td>
-        <td class="s21">1.300.345,67 </td>
+        <td class="s17 bdleft" colspan="4">TOTAL GERAL =</td>
+        <td class="s18">1.300.345,67 </td>
+        <td class="s18">1.300.345,67 </td>
       </tr>
       </tbody>
     </table>
   </div>
-  
   
   </body>
   </html>
@@ -300,10 +243,10 @@ $html = ob_get_contents();
 ob_end_clean();
 //db_query("drop table if exists work_dotacao");
 //db_query("drop table if exists work_receita");
-db_fim_transacao();
+//db_fim_transacao();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
-
+//echo $html;
 
 
 ?>
