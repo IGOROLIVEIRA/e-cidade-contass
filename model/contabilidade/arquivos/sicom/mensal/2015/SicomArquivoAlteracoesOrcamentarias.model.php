@@ -189,15 +189,15 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
       $sSql = "select '11' as tiporegistro, 
        o46_codlei as codreduzidodecreto, 
        o39_numero as nrodecreto ,
-       (case when o46_tiposup in (1002,1003,1004,1005,1006,1007,1008,1009,1010) then 2 
-	     when o46_tiposup = 1001 then 1
+       (case when o46_tiposup in (1002,1005,1006,1007,1008,1009,1010) then 2
+	     when o46_tiposup in (1001,1003,1004) then 1
 	     when o46_tiposup = 1012 then 6
 	     when o46_tiposup = 1013 then 7
 	     when o46_tiposup = 1016 then 8
 	     when o46_tiposup = 1014 then 9
 	     when o46_tiposup = 1015 then 10
        when o46_tiposup = 1017 then 5
-             when o46_tiposup = 1011 then 4 end 
+             when o46_tiposup = 1011 then 4 end
        ) as tipoDecretoAlteracao,
        sum(o47_valor) as valorAberto 
      from orcsuplem 
