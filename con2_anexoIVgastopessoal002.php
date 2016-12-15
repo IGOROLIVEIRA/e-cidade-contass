@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
@@ -237,11 +236,8 @@ ob_start();
         <td class="s3 bdleft" colspan="2">(-) Sentenças Judiciais Anteriores</td>
         <td class="s5">
           <?php
-          /**
-           * @todo Edição manual
-           */
-          $fSaldoSentencasJudAnt = 0;
-          echo db_formatar($fSaldoSentencasJudAnt,"f");
+          $fSaldoSentencasJudAnt = getValorManual($codigorelatorio,2,$oInstit->getCodigo(),$o116_periodo,$iAnousu);
+          echo db_formatar($fSaldoSentencasJudAnt == null ? 0 : $fSaldoSentencasJudAnt,"f");
           ?>
         </td>
       </tr>
@@ -278,7 +274,11 @@ ob_start();
       <tr style='height:19px;'>
         <td class="s7 bdleft" colspan="2">Receita Corrente do Município</td>
         <td class="s8">
-          <?php $fRCL = getRCL($oDataFim,$instits); echo db_formatar($fRCL,"f"); ?>
+          <?php
+          $fValorManualRCL = getValorManual($codigorelatorio,1,$oInstit->getCodigo(),$o116_periodo,$iAnousu);
+          $fRCL = $fValorManualRCL == NULL ? getRCL($oDataFim,$instits) : $fValorManualRCL;
+          echo db_formatar($fRCL,"f");
+          ?>
         </td>
       </tr>
 
@@ -467,6 +467,25 @@ function getConsolidacaoConsorcios(DBDate $oDataIni, DBDate $oDataFim){
   }
 
   return $fTotal;
+}
+
+/**
+ * Busca os valores informados manualmente na aba 'parametros' do relatório
+ * @param $iCodRelatorio
+ * @param $iLinha
+ * @param $iInstit
+ * @param $iCodPeriodo
+ * @param $iAnousu
+ * @return array
+ */
+function getValorManual($iCodRelatorio,$iLinha,$iInstit,$iCodPeriodo,$iAnousu){
+
+  $oLinha   = new linhaRelatorioContabil($iCodRelatorio, $iLinha, $iInstit);
+  $oLinha->setPeriodo($iCodPeriodo);
+  $oLinha->setEncode(true);
+  $aValores = $oLinha->getValoresColunas(null, null, null, $iAnousu);
+  return $aValores[0]->colunas[0]->o117_valor;
+
 }
 
 ?>

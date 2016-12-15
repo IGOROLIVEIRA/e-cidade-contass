@@ -133,10 +133,10 @@ $oRotuloSaltes->label();
             </td>
           </tr>
           <tr>
-            <td><b>Lista Empenho:</b></td>
+            <td><b>Lista:</b></td>
             <td>
               <?php 
-                $aListaEmpenho = array(0 => "Geral", 1 => "Exercício", 2 => "Restos à Pagar");
+                $aListaEmpenho = array(0 => "Geral", 1 => "Exercício", 2 => "Restos à Pagar", 3 => "Extra Orçamentária");
                 db_select("iListaEmpenho", $aListaEmpenho, true, 1);
               ?>
             </td>

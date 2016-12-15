@@ -702,7 +702,8 @@ class RelatorioDMN
                                      inner join corlanc b on corrente.k12_id = b.k12_id
                                                           and corrente.k12_autent=b.k12_autent
                                                           and corrente.k12_data = b.k12_data
-                                     $sWherePCASP
+                                     left join sliptipooperacaovinculo on b.k12_codigo = k153_slip
+                                                    and k153_slipoperacaotipo in (1,2,5,6,9,10,13,14)
                                      left join saltes c   on c.k13_conta = corrente.k12_conta
                                      left join saltes d   on d.k13_conta = b.k12_conta
                                      inner join conplanoreduz r1 on b.k12_conta = r1.c61_reduz and r1.c61_anousu={$iAnousu}
@@ -781,7 +782,8 @@ class RelatorioDMN
                                      inner join corlanc b on corrente.k12_id = b.k12_id
                                                           and corrente.k12_autent=b.k12_autent
                                                           and corrente.k12_data = b.k12_data
-                                     $sWherePCASP
+                                     left join sliptipooperacaovinculo on b.k12_codigo = k153_slip
+                                                    and k153_slipoperacaotipo in (1,2,5,6,9,10,13,14)
                                      left join saltes c   on c.k13_conta = corrente.k12_conta
                                      left join saltes d   on d.k13_conta = b.k12_conta
                                      inner join conplanoreduz r1 on b.k12_conta = r1.c61_reduz and r1.c61_anousu={$iAnousu}

@@ -31,14 +31,13 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("libs/db_liborcamento.php");
+require_once("model/relatorioContabil.model.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
 db_postmemory($HTTP_POST_VARS);
 $anousu = db_getsession("DB_anousu");
-// ---- array de meses
-// Código do relatório do: Demonstrações contábeis do DCASP -> Balanço Financeiro
-$codigoRelatorio = 129;
+$codigoRelatorio = 4000003;
 
 $oRelatorio = new relatorioContabil($codigoRelatorio);
 
@@ -78,15 +77,22 @@ foreach ($aPeriodos as $oPeriodo) {
         }
     </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
+    <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
 <table align="center">
     <form name="form1" method="post" action="con2_anexoIVgastopessoal002.php">
         <input type=hidden name="filtra_despesa" value="">
         <input type=hidden name="anousu" value="<?= $anousu ?>">
+        <input type=hidden name="codigorelatorio" value="<?= $codigoRelatorio ?>">
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan=3  class='table_header'>
+                Anexo IV - Gasto com Pessoal
+            </td>
         </tr>
         <tr>
             <td align="center" colspan="3">

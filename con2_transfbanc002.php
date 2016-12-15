@@ -40,28 +40,14 @@ $dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
 
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",",$instits);
-foreach($aInstits as $iInstit){
-  $oInstit = new Instituicao($iInstit);
-  if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
-    break;
-  }
+if(count($aInstits) > 1){
+    $oInstit = new Instituicao();
+    $oInstit = $oInstit->getDadosPrefeitura();
+} else {
+    foreach ($aInstits as $iInstit) {
+        $oInstit = new Instituicao($iInstit);
+    }
 }
-//db_inicio_transacao();
-//
-//$sWhereDespesa      = " o58_instit in({$instits})";
-//$rsBalanceteDespesa = db_dotacaosaldo( 8,2,2, true, $sWhereDespesa,
-//    $anousu,
-//    $dtini,
-//    $datafin);
-//if (pg_num_rows($rsBalanceteDespesa) == 0) {
-//  db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado, verifique as datas e tente novamente');
-//}
-//
-//$sWhereReceita      = "o70_instit in ({$instits})";
-//$rsBalanceteReceita = db_receitasaldo( 3, 1, 3, true,
-//    $sWhereReceita, $anousu,
-//    $dtini,
-//    $datafin );
 
 /**
  * mPDF
@@ -79,7 +65,7 @@ foreach($aInstits as $iInstit){
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 20, 15, 5, 11);
+$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 20, 15, 5, 11);
 
 
 $header = <<<HEADER
@@ -147,103 +133,156 @@ ob_start();
       <thead>
       <tr>
         <th id="0C0" style="width:118px" class="column-headers-background">&nbsp;</th>
-        <th id="0C1" style="width:83px" class="column-headers-background">&nbsp;</th>
-        <th id="0C2" style="width:324px" class="column-headers-background">&nbsp;</th>
-        <th id="0C3" style="width:87px" class="column-headers-background">&nbsp;</th>
-        <th id="0C4" style="width:134px" class="column-headers-background">&nbsp;</th>
-        <th id="0C5" style="width:138px" class="column-headers-background">&nbsp;</th>
+        <th id="0C1" style="width:93px" class="column-headers-background">&nbsp;</th>
+        <th id="0C2" style="width:401px" class="column-headers-background">&nbsp;</th>
+        <th id="0C3" style="width:134px" class="column-headers-background">&nbsp;</th>
+        <th id="0C4" style="width:138px" class="column-headers-background">&nbsp;</th>
       </tr>
       </thead>
       <tbody>
       <tr style='height:20px;'>
         <td class="s3 bdleft"></td>
-        <td class="s4" colspan="5">BANCOS</td>
+        <td class="s4" colspan="4">BANCOS</td>
       </tr>
       <tr style='height:20px;'>
         <td class="s4 bdleft">Data</td>
         <td class="s4">Red.</td>
         <td class="s4">Conta/Descrição</td>
-        <td class="s4">Fonte</td>
         <td class="s4">Retiradas</td>
         <td class="s4">Depositos</td>
       </tr>
+      <?php
+      $bFil = false;
+      $sBackGround = "style='background-color: #d8d8d8;'";
+      $oDadosAgrupados = getDados($dtini, $dtfim, $aInstits, $anousu,$contas,$o15_codigo);
+      $fTotalGeralR = 0;
+      $fTotalGeralD = 0;
+      foreach ($oDadosAgrupados as $oDadosRelatorio) {
+          $fSubTotalR = 0;
+          $fSubTotalD = 0;
+          foreach ($oDadosRelatorio as $oValores) {
+              $bFil = $bFil ? false : true;
+              $sBackGround = $bFil ? "style='background-color: #d8d8d8;'" : "";
+              ?>
+              <tr style='height:20px;'>
+                  <td <?= $sBackGround ?> class="s8 bdleft"><?=db_formatar($oValores->sData,'d')?></td>
+                  <td <?= $sBackGround ?> class="s8"><?=$oValores->iReduz."-".$oValores->iFonte?></td>
+                  <td <?= $sBackGround ?> class="s9"><?=$oValores->sDescr?></td>
+                  <td <?= $sBackGround ?> class="s10"><?=db_formatar($oValores->fValorRetirada,'f')?></td>
+                  <td <?= $sBackGround ?> class="s10"><?=db_formatar($oValores->fValorDeposito,'f')?></td>
+              </tr>
+              <?php
+              $fSubTotalR += $oValores->fValorRetirada;
+              $fSubTotalD += $oValores->fValorDeposito;
+          }
+          $fTotalGeralR += $fSubTotalR;
+          $fTotalGeralD += $fSubTotalD;
+          ?>
+          <tr style='height:20px;'>
+              <td class="s13 bdleft" colspan="3">SubTotal=</td>
+              <td class="s14"><?=db_formatar($fSubTotalR,'f')?> </td>
+              <td class="s14"><?=db_formatar($fSubTotalD,'f')?> </td>
+          </tr>
+          <?php
+      }
+      ?>
       <tr style='height:20px;'>
-        <td class="s5 bdleft">12/10/2016</td>
-        <td class="s5">4964</td>
-        <td class="s6">3.028-7 B.BRASIL S/A C/C - FPM</td>
-        <td class="s5">102</td>
-        <td class="s7">1.000.000,00 </td>
-        <td class="s7">1.000.000,00 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft">12/10/2016</td>
-        <td class="s8">4534</td>
-        <td class="s9">3.016-4 B.BRASIL S/A C/C - ITR</td>
-        <td class="s8">100</td>
-        <td class="s10">345,67 </td>
-        <td class="s10">345,67 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft">12/10/2016</td>
-        <td class="s5">4964</td>
-        <td class="s6">3.028-7 B.BRASIL S/A C/C - FPM</td>
-        <td class="s11">102</td>
-        <td class="s12">150.000,00 </td>
-        <td class="s12">150.000,00 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s13 bdleft" colspan="4">SubTotal=</td>
-        <td class="s14">1.150.345,67 </td>
-        <td class="s14">1.150.345,67 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft">12/13/2016</td>
-        <td class="s5">4964</td>
-        <td class="s6">3.028-7 B.BRASIL S/A C/C - FPM</td>
-        <td class="s5">101</td>
-        <td class="s7">50.000,00 </td>
-        <td class="s7">50.000,00 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s8 bdleft">12/13/2016</td>
-        <td class="s8">3254</td>
-        <td class="s9">58.024-4 B.BRASIL S/A C/C - FUNDEB</td>
-        <td class="s8">118</td>
-        <td class="s10">60.000,00 </td>
-        <td class="s10">60.000,00 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s5 bdleft">12/13/2016</td>
-        <td class="s5">3254</td>
-        <td class="s6">58.024-4 B.BRASIL S/A C/C - FUNDEB</td>
-        <td class="s11">119</td>
-        <td class="s12">40.000,00 </td>
-        <td class="s12">40.000,00 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s15 bdleft" colspan="4">SubTotal=</td>
-        <td class="s16">150.000,00 </td>
-        <td class="s16">150.000,00 </td>
-      </tr>
-      <tr style='height:20px;'>
-        <td class="s17 bdleft" colspan="4">TOTAL GERAL =</td>
-        <td class="s18">1.300.345,67 </td>
-        <td class="s18">1.300.345,67 </td>
+          <td class="s17 bdleft" colspan="3">TOTAL GERAL =</td>
+          <td class="s18"><?=db_formatar($fTotalGeralR,'f')?> </td>
+          <td class="s18"><?=db_formatar($fTotalGeralD,'f')?> </td>
       </tr>
       </tbody>
     </table>
   </div>
-  
   </body>
   </html>
 
 <?php
 
+function getDados($sDtIni, $sDtFim, $aInstit, $iAnousu, $aContas, $sFonte)
+{
+    $oDadosAgrupados = Array();
+    foreach(getContasPorFonte($aInstit, $iAnousu, $aContas, $sFonte) as $oContaFonte){
+
+        $oDado = new stdClass();
+        $oDado->iReduz = $oContaFonte->c61_reduz;
+        $oDado->iFonte = $oContaFonte->o15_codtri;
+        $oDado->sDescr = $oContaFonte->c60_descr;
+        $oDado->aValores = getTransValorTferencias($sDtIni, $sDtFim, $oDado->iReduz);
+
+        $oDadosAgrupados[] = $oDado;
+
+
+    }
+    $aDadosRetorno = array();
+    foreach ($oDadosAgrupados as $oDadosRelatorio) {
+
+        foreach ($oDadosRelatorio->aValores as $oValores) {
+
+            $oDadoRetorno = new stdClass();
+            $oDadoRetorno->sData = $oValores->c69_data;
+            $oDadoRetorno->iReduz = $oDadosRelatorio->iReduz;
+            $oDadoRetorno->sDescr = $oDadosRelatorio->sDescr;
+            $oDadoRetorno->iFonte = $oDadosRelatorio->iFonte;
+            $oDadoRetorno->fValorRetirada = $oValores->saida;
+            $oDadoRetorno->fValorDeposito = $oValores->entrada;
+            $aDadosRetorno[$oValores->c69_data][] = $oDadoRetorno;
+        }
+    }
+
+    return $aDadosRetorno;
+}
+
+function getContasPorFonte($aInstit, $iAnousu, $aContas, $sFonte){
+
+    if(!empty($sFonte)){
+        $sWhereFonte = " and o15_codtri = '{$sFonte}' ";
+    }
+
+    if(!empty($aContas)){
+        $sWhereContas = " and c61_reduz in (".implode(',',$aContas).") ";
+    }
+
+    $sSqlContas  = " select distinct c61_reduz,c60_descr,o15_codtri ";
+    $sSqlContas .= " from conplanoreduz ";
+    $sSqlContas .= " inner join conplano on c61_codcon = c60_codcon and c61_anousu = c60_anousu ";
+    $sSqlContas .= " inner join orctiporec on c61_codigo = o15_codigo ";
+    $sSqlContas .= " where c61_anousu = {$iAnousu} and c61_instit in (".implode(',',$aInstit).") $sWhereFonte $sWhereContas ";
+
+    return db_utils::getCollectionByRecord(db_query($sSqlContas));
+
+}
+
+function getTransValorTferencias($sDtIni, $sDtFim,$iConta){
+
+    $sSqlTransf = "SELECT  c69_codlan,
+                           c69_data,
+                           sum(saida)AS saida,
+                           sum(entrada) AS entrada
+                    FROM
+                      (SELECT CASE
+                                  WHEN c69_credito = {$iConta} THEN c69_valor
+                                  ELSE 0
+                              END AS saida,
+                              CASE
+                                  WHEN c69_debito = {$iConta} THEN c69_valor
+                                  ELSE 0
+                              END AS entrada,
+                              c69_debito,
+                              c69_credito,
+                              c69_data,
+                              c69_codlan
+                       FROM conlancamval
+                       INNER JOIN conlancamdoc ON c71_codlan = c69_codlan
+                       WHERE (c69_credito in ({$iConta})
+                              OR c69_debito in ({$iConta}))
+                         AND c69_data BETWEEN '{$sDtIni}' AND '{$sDtFim}' and c71_coddoc in (140,141)) AS xx group by 1,2";
+
+    return db_utils::getCollectionByRecord(db_query($sSqlTransf));
+}
+
 $html = ob_get_contents();
 ob_end_clean();
-//db_query("drop table if exists work_dotacao");
-//db_query("drop table if exists work_receita");
-//db_fim_transacao();
 $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 //echo $html;

@@ -29,6 +29,7 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
+include("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
 include("libs/db_liborcamento.php");
 $clrotulo = new rotulocampo;
@@ -36,6 +37,8 @@ $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
 db_postmemory($HTTP_POST_VARS);
 $anousu = db_getsession("DB_anousu");
+$clorctiporec = new cl_orctiporec;
+$clorctiporec->rotulo->label();
 ?>
 
 <html>
@@ -115,6 +118,41 @@ function js_emite(tipo){
 	  ?>
         </td>
       </tr>
+        <tr>
+            <td colspan=2>
+                <?
+                $aux_conta = new cl_arquivo_auxiliar;
+                $aux_conta->cabecalho = "<strong>Contas</strong>";
+                $aux_conta->codigo = "k13_conta"; //chave de retorno da func
+                $aux_conta->descr = "k13_descr";   //chave de retorno
+                $aux_conta->nomeobjeto = 'contas';
+                $aux_conta->funcao_js = 'js_mostra_contas';
+                $aux_conta->funcao_js_hide = 'js_mostra_contas1';
+                $aux_conta->sql_exec = "";
+                $aux_conta->func_arquivo = "func_saltes.php";  //func a executar
+                $aux_conta->nomeiframe = "db_iframe_saltes";
+                $aux_conta->localjan = "";
+                $aux_conta->onclick = "";
+                $aux_conta->db_opcao = 2;
+                $aux_conta->tipo = 2;
+                $aux_conta->top = 0;
+                $aux_conta->linhas = 5;
+                $aux_conta->vwhidth = 400;
+                $aux_conta->nome_botao = 'db_lanca_conta';
+                $aux_conta->funcao_gera_formulario();
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td nowrap title="<?=$To15_codigo?>" align="right"><?=$Lo15_codigo?></td>
+            <td >
+                <?
+                $dbwhere     = " o15_datalimite is null or o15_datalimite > '".date('Y-m-d',db_getsession('DB_datausu'))."' and o15_codtri <> ''";
+                $res_tiporec = $clorctiporec->sql_record($clorctiporec->sql_query_file(null,"distinct o15_codtri,o15_descr","o15_codtri",$dbwhere));
+                db_selectrecord("o15_codigo",$res_tiporec,true,2,"","","","0");
+                ?>
+            </td>
+        </tr>
 
 
     <tr>

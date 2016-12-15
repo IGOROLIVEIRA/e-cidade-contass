@@ -49,7 +49,6 @@ if(count($aInstits) > 1){
     $oInstit = new Instituicao($iInstit);
   }
 }
-db_inicio_transacao();
 
 /**
  * mPDF

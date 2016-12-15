@@ -106,8 +106,8 @@ FOOTER;
 
 
 $mPDF->WriteHTML(file_get_contents('estilos/tab_relatorio.css'), 1);
-$mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
-$mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
+//$mPDF->setHTMLHeader(utf8_encode($header), 'O', true);
+//$mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 
 ob_start();
 

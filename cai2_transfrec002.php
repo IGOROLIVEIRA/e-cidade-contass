@@ -60,7 +60,7 @@ $sql ="
       ";
 $sql .= " and  ( rdeb.o15_codigo=$recurso or rcred.o15_codigo=$recurso ) ";
 
-$sql .="  order by corlanc.k12_data,rdeb.o15_codigo,rcred.o15_codigo  ";
+$sql .="  order by rdeb.o15_codigo,rcred.o15_codigo,corlanc.k12_data  ";
 
 $result = pg_query($sql);
 $rows   = pg_numrows($result);
@@ -126,7 +126,7 @@ for($linha=0;$linha<$rows;$linha++){
     }
     $pdf->Cell(30,$alt,$k17_codigo,'0','L',"C",0);
     $pdf->Cell(20,$alt,db_formatar($k12_data,'d'),'0',0,"C",0);
-    $pdf->Cell(80,$alt,substr($contra_partida.'-'.$contra_nome,0,50),'0',0,"L",0);
+    $pdf->Cell(80,$alt,$contra_partida.'-'.$contra_nome,'0',0,"L",0);
 
     if($k17_valor < 0){
      $pdf->SetTextColor(255,0,0); 
