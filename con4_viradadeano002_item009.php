@@ -96,33 +96,33 @@ if ($sqlerro == false) {
       }
     }
 
-    if ($sqlerro == false) {
-
-      // deletar permissoes do ano de origem dos usuários NAO ADMINISTRADORES
-      $dbwhere  = " anousu = {$anoorigem}                                                     ";
-      $dbwhere .= "and not exists (select *                                                   ";
-      $dbwhere .= "                  from db_usuarios                                         ";
-      $dbwhere .= "                 where db_usuarios.id_usuario    = db_permissao.id_usuario ";
-      $dbwhere .= "                   and db_usuarios.administrador = 1)                      ";
-      $oDaoDBPermissao->excluir(null, null, null, null, null, $dbwhere);
-      if ($oDaoDBPermissao->erro_status == 0) {
-
-        $sqlerro   = true;
-        $erro_msg .= $oDaoDBPermissao->erro_msg;
-      }
-    }
-
-    if ($sqlerro == false) {
-
-      $sWhere               = "anousu = {$anoorigem}";
-      $oDaoDBUsuMod->anousu = $anodestino;
-      $oDaoDBUsuMod->alterar_where($sWhere);
-      if ($oDaoDBUsuMod->erro_status == 0) {
-
-        $sqlerro   = true;
-        $erro_msg .= $oDaoDBUsuMod->erro_msg;
-      }
-    }
+//    if ($sqlerro == false) {
+//
+//      // deletar permissoes do ano de origem dos usuários NAO ADMINISTRADORES
+//      $dbwhere  = " anousu = {$anoorigem}                                                     ";
+//      $dbwhere .= "and not exists (select *                                                   ";
+//      $dbwhere .= "                  from db_usuarios                                         ";
+//      $dbwhere .= "                 where db_usuarios.id_usuario    = db_permissao.id_usuario ";
+//      $dbwhere .= "                   and db_usuarios.administrador = 1)                      ";
+//      $oDaoDBPermissao->excluir(null, null, null, null, null, $dbwhere);
+//      if ($oDaoDBPermissao->erro_status == 0) {
+//
+//        $sqlerro   = true;
+//        $erro_msg .= $oDaoDBPermissao->erro_msg;
+//      }
+//    }
+//
+//    if ($sqlerro == false) {
+//
+//      $sWhere               = "anousu = {$anoorigem}";
+//      $oDaoDBUsuMod->anousu = $anodestino;
+//      $oDaoDBUsuMod->alterar_where($sWhere);
+//      if ($oDaoDBUsuMod->erro_status == 0) {
+//
+//        $sqlerro   = true;
+//        $erro_msg .= $oDaoDBUsuMod->erro_msg;
+//      }
+//    }
 
   } else {
 
