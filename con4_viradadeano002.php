@@ -156,12 +156,13 @@ function js_imprime(virada){
 			    foreach ( $aInstit as $iInstit => $sDescrInstit ) {
 		        
 			    	// Verifica se existe vinculação do PPA com orçamento
-			    	$sSqlPPAIntegracao  = " select *                              ";
-			    	$sSqlPPAIntegracao .= "   from ppaintegracao                  ";
-			    	$sSqlPPAIntegracao .= "  where o123_ano      = {$iAnoDestino} ";
-			    	$sSqlPPAIntegracao .= "    and o123_instit   = {$iInstit}     ";
-			    	$sSqlPPAIntegracao .= "    and o123_situacao = 1              ";
-			    	$sSqlPPAIntegracao .= "    and o123_tipointegracao = 1         ";
+					$sSqlPPAIntegracao  = " select ppaintegracao.*                	 ";
+					$sSqlPPAIntegracao .= "   from ppaintegracao                  	 ";
+					$sSqlPPAIntegracao .= "	  join db_config on o123_instit = codigo ";
+					$sSqlPPAIntegracao .= "  where o123_ano      = {$iAnoDestino} 	 ";
+					$sSqlPPAIntegracao .= "    and prefeitura = 't'     		     ";
+					$sSqlPPAIntegracao .= "    and o123_situacao = 1              	 ";
+					$sSqlPPAIntegracao .= "    and o123_tipointegracao = 1        	 ";
 		
 			      $rsPPAIntegracao    = db_query($sSqlPPAIntegracao);
 		        
@@ -202,10 +203,11 @@ function js_imprime(virada){
 		        }
 		
 		        // Verifica se existe alguma receita configurada para o exercício de destino
-		        $sSqlOrcReceita  = " select *                                    ";
-		        $sSqlOrcReceita .= "   from orcreceita                           ";
-		        $sSqlOrcReceita .= "  where o70_instit = {$iInstit}              ";
-		        $sSqlOrcReceita .= "    and o70_anousu = {$iAnoDestino} limit 1; ";
+				$sSqlOrcReceita  = " select orcreceita.*                         ";
+				$sSqlOrcReceita .= "   from orcreceita                           ";
+				$sSqlOrcReceita .= "   join db_config on o70_instit = codigo     ";
+				$sSqlOrcReceita .= "  where prefeitura = 't'                     ";
+				$sSqlOrcReceita .= "    and o70_anousu = {$iAnoDestino} limit 1; ";
 		        
 		        $rsOrcReceita    = db_query($sSqlOrcReceita); 
 		        
