@@ -194,7 +194,7 @@ if ($listalicita != "" ) {
 }
 
 if (($datacredor != "--") && ($datacredor1 != "--")) {
-	$txt_where = $txt_where." and e60_emiss  between '$datacredor' and '$datacredor1'  ";
+	$txt_where = $txt_where." and e60_emiss between '$datacredor' and '$datacredor1'  ";
 	//        $datacredor=db_formatar($datacredor,"d");
 	//        $datacredor1=db_formatar($datacredor1,"d");
 	$info = "De ".db_formatar($datacredor, "d")." até ".db_formatar($datacredor1, "d").".";
@@ -428,7 +428,7 @@ if ($agrupar == "oo"){
 					z01_nome,
 					z01_cgccpf,
 					z01_munic,
-					yyy.e60_vlremp,
+					empempenho.e60_vlremp as e60_vlremp,
 					yyy.e60_vlranu,
 					yyy.e60_vlrliq,
 					e63_codhist,
@@ -451,7 +451,7 @@ if ($agrupar == "oo"){
           e60_numerol
 			   from (
 			  select e60_numemp, 
-					sum(case when c53_tipo = 10 then c70_valor else 0 end) as e60_vlremp,
+					
 					sum(case when c53_tipo = 11 then c70_valor else 0 end) as e60_vlranu,
 					sum(case when c53_tipo = 20 then c70_valor else 0 end) - sum(case when c53_tipo = 21 then c70_valor else 0 end) as e60_vlrliq,
 					sum(case when c53_tipo = 30 then c70_valor else 0 end) - sum(case when c53_tipo = 31 then c70_valor else 0 end) as e60_vlrpag
@@ -472,7 +472,7 @@ if ($agrupar == "oo"){
 					  inner join orcelemento 		on  orcelemento.o56_codele = orcdotacao.o58_codele 
 									       and  orcelemento.o56_anousu = orcdotacao.o58_anousu
 					      inner join conlancamemp 	on c75_numemp = xxx.e60_numemp
-					      inner join conlancam	on c70_codlan = c75_codlan and c70_data <= '$dataesp22'
+					      inner join conlancam	    on c70_codlan = c75_codlan and c70_data between '$dataesp11' and '$dataesp22'
 					      inner join conlancamdoc 	on c71_codlan = c70_codlan
 					      inner join conhistdoc 	on c53_coddoc = c71_coddoc and c53_tipo in (10,11,20,21,30,31)
 					      inner join conlancamdot   on c73_codlan = c75_codlan            
@@ -609,7 +609,7 @@ if ($agrupar == "oo"){
 		
 		}
 	        
-	//	echo $sqlperiodo; exit;
+		//echo $sqlperiodo; exit;
 		$res = $clempempenho->sql_record($sqlperiodo);
 		//db_criatabela($res);exit;
 		if ($clempempenho->numrows > 0) {
@@ -1503,18 +1503,32 @@ if ($tipo == "a" or 1 == 1) {
 			$pdf->Cell(18, $tam, db_formatar($g_liq - $g_pag, 'f'), "T", 0, "R", 1);
 			$pdf->Cell(18, $tam, db_formatar($g_emp - $g_anu - $g_liq, 'f'), "T", 0, "R", 1); //quebra linha
 			$pdf->Cell(18, $tam, db_formatar($g_emp - $g_anu - $g_pag, 'f'), "T", 1, "R", 1); //quebra linha
-
-			$pdf->Ln();
-		    $iTam = $sememp == "n"?165:150;
-			$pdf->Cell($iTam, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
-			$pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
-			$pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
-			$pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
-			$pdf->Cell(18, $tam, db_formatar($lanctotpag - $lanctotanupag, 'f'), "T", 0, "R", 1);
-			$pdf->Cell(18, $tam, db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'f'), "T", 0, "R", 1);
-			$pdf->Cell(18, $tam, db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'f'), "T", 0, "R", 1);
-			$pdf->Cell(18, $tam, db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'f'), "T", 1, "R", 1);
-			$pdf->SetFont('Arial', '', 7);
+			
+			if ($processar == "a") {
+				$pdf->Ln();
+		    	$iTam = $sememp == "n"?165:150;
+				$pdf->Cell($iTam, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
+				$pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
+				$pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar($lanctotpag - $lanctotanupag, 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'f'), "T", 1, "R", 1);
+				$pdf->SetFont('Arial', '', 7);
+			}else{
+				$pdf->Ln();
+		    	$iTam = $sememp == "n"?165:150;
+				$pdf->Cell($iTam, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
+				$pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
+				$pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar($lanctotpag - $lanctotanupag, 'f'), "T", 0, "R", 1);
+				/*$pdf->Cell(18, $tam, db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'f'), "T", 1, "R", 1);*/
+				$pdf->SetFont('Arial', '', 7);
+			}
 		}
 	}
 }
