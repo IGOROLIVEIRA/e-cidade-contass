@@ -267,7 +267,7 @@ abstract class AcordoMovimentacao {
       }
       
     } else {
-    	
+
       /**
        * Verifica se já possui movimentação corrente
        */
@@ -304,7 +304,7 @@ abstract class AcordoMovimentacao {
        * Inclui uma nova movimentação
        */
 	    $oDaoAcordoMovimentacao->ac10_id_usuario        = db_getsession('DB_id_usuario');
-	    $oDaoAcordoMovimentacao->ac10_datamovimento     = date("Y-m-d",db_getsession("DB_datausu"));
+	    $oDaoAcordoMovimentacao->ac10_datamovimento     = empty($this->dtMovimento) ? date("Y-m-d",db_getsession("DB_datausu")) : $this->dtMovimento;
 	    $oDaoAcordoMovimentacao->ac10_hora              = db_hora();
     	$oDaoAcordoMovimentacao->incluir(null);
       if ($oDaoAcordoMovimentacao->erro_status == 0) {

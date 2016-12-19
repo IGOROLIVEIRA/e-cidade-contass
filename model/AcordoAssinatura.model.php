@@ -47,6 +47,19 @@ class AcordoAssinatura extends AcordoMovimentacao {
    * @var string
    */
   protected $dtMovimento         = '';
+
+  /**
+   * Data da Publicacao
+   *
+   * @var string
+   */
+  protected $dtPublicacao        = '';
+
+  /**
+   * Veiculo de divulgação
+   * @var
+   */
+  protected $sVeiculoDivulgacao;
 	
   /**
    * Código do Movimento de Cancelamento
@@ -86,6 +99,42 @@ class AcordoAssinatura extends AcordoMovimentacao {
     $this->dtMovimento = $dtMovimento;
     return $this;
   }
+
+  /**
+   * @return string
+   */
+  public function getDataPublicacao()
+  {
+    return $this->dtPublicacao;
+  }
+
+  /**
+   * @param string $dtPublicacao
+   * @return AcordoAssinatura
+   */
+  public function setDataPublicacao($dtPublicacao)
+  {
+    $this->dtPublicacao = $dtPublicacao;
+    return $this;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getVeiculoDivulgacao()
+  {
+    return $this->sVeiculoDivulgacao;
+  }
+
+  /**
+   * @param mixed $sVeiculoDivulgacao
+   * @return AcordoAssinatura
+   */
+  public function setVeiculoDivulgacao($sVeiculoDivulgacao)
+  {
+    $this->sVeiculoDivulgacao = $sVeiculoDivulgacao;
+    return $this;
+  }
   
   /**
    * Persiste os dados da Acordo Movimentacao na base de dados
@@ -93,13 +142,14 @@ class AcordoAssinatura extends AcordoMovimentacao {
    * @return AcordoAssinatura
    */
   public function save() {
-    
     parent::save();
     $iCodigoAcordo = $this->getAcordo();
     
     $oDaoAcordo                      = db_utils::getDao("acordo");
     $oDaoAcordo->ac16_sequencial     = $iCodigoAcordo;
     $oDaoAcordo->ac16_dataassinatura = $this->dtMovimento;
+    $oDaoAcordo->ac16_datapublicacao = $this->getDataPublicacao();
+    $oDaoAcordo->ac16_veiculodivulgacao = $this->getVeiculoDivulgacao();
     $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
     if ($oDaoAcordo->erro_status == 0) {
       throw new Exception($oDaoAcordo->erro_msg);	
@@ -120,7 +170,7 @@ class AcordoAssinatura extends AcordoMovimentacao {
     
     $oDaoAcordo                      = db_utils::getDao("acordo");
     $oDaoAcordo->ac16_sequencial     = $iCodigoAcordo;
-    $oDaoAcordo->ac16_dataassinatura = $this->dtMovimento;
+    $oDaoAcordo->ac16_dataassinatura = "";
     $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
     if ($oDaoAcordo->erro_status == 0) {
       throw new Exception($oDaoAcordo->erro_msg); 

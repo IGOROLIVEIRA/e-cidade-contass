@@ -49,11 +49,12 @@ try {
 
       $oContrato  = AcordoRepository::getByCodigo($oParam->iAcordo);
 
-      $oPosicao                    = $oContrato->getUltimaPosicao();
+      $oPosicao                    = $oContrato->getUltimaPosicao(true);
       $oRetorno->tipocontrato      = $oContrato->getOrigem();
       $oRetorno->datainicial       = $oContrato->getDataInicial();
       $oRetorno->datafinal         = $oContrato->getDataFinal();
       $oRetorno->valores           = $oContrato->getValoresItens();
+      $oRetorno->seqaditivo        = $oContrato->getProximoNumeroAditivo($oParam->iAcordo);
 
       $aItens = array();
       foreach ($oPosicao->getItens() as $oItemPosicao) {
@@ -67,6 +68,9 @@ try {
         $oItem->valorunitario  = $oItemPosicao->getValorUnitario();
         $oItem->quantidade     = $oItemPosicao->getQuantidadeAtualizadaRenovacao();
         $oItem->valor          = $oItemPosicao->getValorAtualizadoRenovacao();
+        $aItemPosicao = $oItemPosicao->getPeriodosItem();
+        $oItem->periodoini     = $aItemPosicao[0]->dtDataInicial;
+        $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
         $oItem->dotacoes       = array();
 
         foreach($oItemPosicao->getDotacoes() as $oDotacao) {
@@ -87,7 +91,7 @@ try {
     case "processarAditamento":
 
       $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
-      $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento);
+      $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura,$oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo);
       break;
 
     case "getUnidades":

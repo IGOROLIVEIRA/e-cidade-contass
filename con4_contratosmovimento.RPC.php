@@ -159,12 +159,35 @@ switch($oParam->exec) {
       try {
         
         db_inicio_transacao();
-
       	$oAssinatura = new AcordoAssinatura();
       	$oAssinatura->setAcordo($oParam->acordo);
       	$dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
       	$oAssinatura->setDataMovimento($dtMovimento);
+        $oAssinatura->setDataPublicacao(implode("-", array_reverse(explode("/", $oParam->dtpublicacao))));
+        $oAssinatura->setVeiculoDivulgacao($oParam->veiculodivulgacao);
       	$oAssinatura->setObservacao($sObservacao);
+        $oAcordo = new Acordo($oParam->acordo);
+
+
+      /*
+       * Validações caso a origem do contrato seja Licitação
+       * O sistema não deve permitir a inclusão de acordos quando a data de assinatura do acordo for anterior a data de homologação da licitação.
+       * Para dispensa/inexigibilidade deve se validar a data de ratificação presente no cadastro de licitação
+       */
+        if($oAcordo->getOrigem() == 2){
+            foreach ($oAcordo->getLicitacoes() as $oLicitacao){
+                $bValidaDispensa = in_array($oLicitacao->getModalidade()->getCodigo(), array(9, 10)) ? true : false;
+                if (!validaDataAssinatura($oLicitacao->getCodigo(), $oParam->dtmovimentacao, $bValidaDispensa)) {
+                    $lAcordoValido = false;
+                     throw new Exception("A data de assinatura do acordo não pode ser anterior a data de homologação da licitação.");
+                }
+            }
+        }
+
+        if(strtotime($dtMovimento) > strtotime(str_replace("/","-",$oAcordo->getDataFinal()))){
+            $lAcordoValido = false;
+            throw new Exception("A data de assinatura do acordo {$oParam->dtmovimentacao} não pode ser posterior ao período de vigência do contrato {$oAcordo->getDataFinal()}.");
+        }
       	$oAssinatura->save();
       	
         db_fim_transacao(false);

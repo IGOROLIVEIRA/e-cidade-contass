@@ -698,9 +698,11 @@ class licitacao {
    * retorna todas as licitações que possuem um item ganho pelo credor.
    *
    * @param integer $iFornecedor codigo do fornecedor
+   * @param boolean $lValidaAutorizadas valida autorizadas
+   * @param boolean $lValidaHomologacao valida homologadas
    * @return array
    */
-  static function getLicitacoesByFornecedor($iFornecedor, $lValidaAutorizadas=false) {
+  static function getLicitacoesByFornecedor($iFornecedor, $lValidaAutorizadas=false, $lValidaHomologacao=false) {
 
     $oDaoLicilicitem = db_utils::getDao("liclicitem");
     $sWhere          = '';
@@ -717,6 +719,10 @@ class licitacao {
       $sWhere .= "                  where l21_codliclicita = l20_codigo";
       $sWhere .= "                    and e54_anulad is null";
       $sWhere .= " )";
+    }
+
+    if($lValidaHomologacao){
+      $sWhere .= "and exists( select 1 from homologacaoadjudica where l20_codigo = l202_licitacao)";
     }
 
     $sCampos         = "distinct l20_codigo as licitacao, l20_objeto as objeto, l20_numero as numero";

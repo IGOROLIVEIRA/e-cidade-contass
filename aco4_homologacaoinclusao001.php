@@ -76,7 +76,7 @@ fieldset table td:first-child {
   <tr> 
     <td valign="top" align="center"> 
       <fieldset>
-        <legend><b>Homologação do Acordo</b></legend>
+        <legend><b>Finalizar Acordo</b></legend>
 	      <table align="center" border="0">
 	        <tr>
 	          <td title="<?=@$Tac16_sequencial?>" align="left">
@@ -198,7 +198,7 @@ function js_homologarContrato() {
     return false;
   }
   
-  js_divCarregando('Aguarde incluindo homologação...','msgBoxHomologacaoContrato');
+  js_divCarregando('Aguarde incluindo finalização...','msgBoxHomologacaoContrato');
    
   var oParam        = new Object();
   oParam.exec       = "homologarContrato";
@@ -232,7 +232,7 @@ function js_retornoDadosHomologacao(oAjax) {
     return false;
   } else {
   
-    alert("Inclusão efetuada com Sucesso.");
+    alert("Finalizado com Sucesso.");
     return true;
   }
 }

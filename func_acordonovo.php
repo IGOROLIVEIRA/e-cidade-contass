@@ -155,7 +155,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
           }
 
           if (isset($lGeraAutorizacao) && $lGeraAutorizacao == "true") {
-            $sWhere .= " and ac16_origem in(1, 2, 3, 6) ";
+            $sWhere .= " and ac16_origem in(1, 2, 6) ";
           }
 
           if (isset($sListaOrigens) && !empty($sListaOrigens)) {
@@ -172,19 +172,13 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             if (file_exists("funcoes/db_func_acordo.php") == true) {
 
               $campos  = "distinct acordo.ac16_sequencial, ";
-              $campos .= "(ac16_numeroacordo || '/' || ac16_anousu)::varchar as ac16_numeroacordo, ";
-              $campos .= "ac17_descricao as dl_Situação, ";
-              $campos .= "acordo.ac16_coddepto, ";
-              $campos .= "descrdepto, ";
-              $campos .= "codigo, ";
-              $campos .= "nomeinst, ";
-              $campos .= "acordo.ac16_numero, ";
-              $campos .= "acordo.ac16_dataassinatura, ";
-              $campos .= "acordo.ac16_contratado, ";
+              $campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
+              $campos .= "ac10_datamovimento, ";
+              $campos .= "acordo.ac16_contratado, cgm.z01_nome,";
+              $campos .= "acordo.ac16_valor,";
+              $campos .= "acordo.ac16_datapublicacao,";
               $campos .= "acordo.ac16_datainicio, ";
-              $campos .= "acordo.ac16_datafim, ";
-              $campos .= "acordo.ac16_resumoobjeto::text, ";
-              $campos .= "ac28_descricao as dl_Origem";
+              $campos .= "acordo.ac16_datafim,ac16_resumoobjeto";
 
             } else {
               $campos = "acordo.*";
@@ -212,6 +206,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial",
                                                             "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}");
           } else {
+
             $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial", $sWhere . " and ac16_instit = {$iInstituicaoSessao} " );
           }
 
@@ -241,14 +236,14 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
               db_fieldsmemory($result,0);
               if (isset($descricao) && $descricao == 'true') {
-                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto',false);</script>";
+                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac10_datamovimento',false);</script>";
               } else {
                 echo "<script>".$funcao_js."('$ac16_sequencial',false);</script>";
               }
             } else {
 
               if (isset($descricao) && $descricao == 'true') {
-                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','',true);</script>";
+                echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado','','',true);</script>";
               } else {
                 echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
               }

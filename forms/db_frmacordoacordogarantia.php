@@ -169,7 +169,7 @@ function js_main() {
 
   oGridGarantias              = new DBGrid('oGridGarantias');
   oGridGarantias.nameInstance = "oGridgarantias";
-  oGridGarantias.setCellWidth(new Array("5%", '85%','5%'));
+  oGridGarantias.setCellWidth(new Array("10%", '75%','15%'));
   oGridGarantias.setHeader(new Array("Código",  "Descrição","Ação"));
   oGridGarantias.show($('ctnGridgarantia'));  
   js_getGarantias();

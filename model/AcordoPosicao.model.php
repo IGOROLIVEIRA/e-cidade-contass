@@ -38,12 +38,19 @@ require_once("libs/exceptions/ParameterException.php");
  */
 class AcordoPosicao {
 
-  const TIPO_INCLUSAO      = 1;
-  const TIPO_REEQUILIBRIO  = 2;
-  const TIPO_REALINHAMENTO = 3;
-  const TIPO_ADITAMENTO    = 4;
-  const TIPO_RENOVACAO     = 5;
-  const TIPO_VIGENCIA      = 6;
+  const TIPO_INCLUSAO                = 1;
+  const TIPO_REEQUILIBRIO            = 2;
+  const TIPO_REALINHAMENTO           = 3;
+  const TIPO_ADITAMENTO              = 4;
+  const TIPO_RENOVACAO               = 5;
+  const TIPO_VIGENCIA                = 6;
+  const TIPO_OUTROS                  = 7;
+  const TIPO_EXECUCAO                = 8;
+  const TIPO_ACRESCIMOITEM           = 9;
+  const TIPO_DECRESCIMOITEM          = 10;
+  const TIPO_VIGENCIAEXECUCAO        = 13;
+  const TIPO_ACRESCIMODECRESCIMOITEM = 11;
+  const TIPO_ACRESCIMODECRESCIMOITEMCONJUGADO = 14;
 
   /**
    * Codigo do acordo
@@ -817,14 +824,22 @@ class AcordoPosicao {
    * Salva o valor aditado na posicao
    *
    * @param float $nValorSaldo valor aditado
+   * @param date $dtAssinatura data da assinatura do adivito
+   * @param date $dtPublicacao data da publicação do adivito
+   * @param string $sDescricaoAlteracao descricao da alteração
+   * @param string $sVeiculoDivulgacao veiculo de divulgacao
    */
-  function salvarSaldoAditamento($nValorSaldo) {
+  function salvarSaldoAditamento($nValorSaldo,$dtAssinatura,$dtPublicacao,$sDescricaoAlteracao,$sVeiculoDivulgacao) {
 
     if (!empty($this->iCodigo)) {
 
       $oDaoAcordoPosicaoAditamento = db_utils::getDao("acordoposicaoaditamento");
-      $oDaoAcordoPosicaoAditamento->ac35_acordoposicao = $this->getCodigo();
-      $oDaoAcordoPosicaoAditamento->ac35_valor         = $nValorSaldo;
+      $oDaoAcordoPosicaoAditamento->ac35_acordoposicao                      = $this->getCodigo();
+      $oDaoAcordoPosicaoAditamento->ac35_valor                              = $nValorSaldo;
+      $oDaoAcordoPosicaoAditamento->ac35_dataassinaturatermoaditivo         = $dtAssinatura;
+      $oDaoAcordoPosicaoAditamento->ac35_datapublicacao                     = $dtPublicacao;
+      $oDaoAcordoPosicaoAditamento->ac35_descricaoalteracao                 = $sDescricaoAlteracao;
+      $oDaoAcordoPosicaoAditamento->ac35_veiculodivulgacao                  = $sVeiculoDivulgacao;
       $oDaoAcordoPosicaoAditamento->incluir(null);
     }
   }
@@ -1352,6 +1367,24 @@ class AcordoPosicao {
 
     $oDaoAcordoPosicao = new cl_acordoposicao();
     $oDaoAcordoPosicao->excluir( $this->getCodigo() );
+    /**
+     * Volta a vigencia da posicao anterior
+     * Caso seja uma exclusão de acordo, não terá uma ultima posição, pois todas já foram deletadas. Portanto essa parte do código não será executada.
+     */
+    $oDaoPosicao = db_utils::GetDao("acordoposicao");
+    $sWhere = "ac26_acordo       = {$this->getAcordo()}";
+    $sSqlultimaPosicao = $oDaoPosicao->sql_query_file(null,
+        "ac26_sequencial",
+        'ac26_numero desc limit 1',
+        $sWhere
+    );
+    $rsPosicao = $oDaoPosicao->sql_record($sSqlultimaPosicao);
+    if (pg_num_rows($rsPosicao) > 0) {
+      $oAcordo = new Acordo($this->getAcordo());
+      $oAcordo->setDataInicial($oAcordo->getUltimaPosicao(true)->getVigenciaInicial());
+      $oAcordo->setDataFinal($oAcordo->getUltimaPosicao(true)->getVigenciaFinal());
+      $oAcordo->save();
+    }
 
     if ( $oDaoAcordoPosicao->erro_status == 0 ) {
       throw new BusinessException( $oDaoAcordoPosicao->erro_msg );

@@ -86,7 +86,31 @@ $iOpcao = 3;
           </td>
         </tr>
         <tr>
-          <td nowrap><?=$Lac16_acordogrupo;?></td>
+          <td nowrap title="<?= @$Tac16_tipoorigem ?>">
+            <?= @$Lac16_tipoorigem ?>
+          </td>
+          <td>
+            <?
+            $aValores = array(
+                0 => 'Selecione',
+                1 => 'Não ou dispensa por valor',
+                2 => 'Licitação',
+                3 => 'Dispensa ou Inexigibilidade',
+                4 => 'Adesão à ata de registro de preços',
+                5 => 'Licitação realizada por outro órgão ou entidade',
+                6 => 'Dispensa ou Inexigibilidade realizada por outro órgão ou entidade',
+                7 => 'Licitação - Regime Diferenciado de Contratações Públicas ? RDC',
+                8 => 'Licitação realizada por consorcio público',
+                9 => 'Licitação realizada por outro ente da federação',
+            );
+            db_select('ac16_tipoorigem', $aValores, true, $db_opcao,
+                " onchange='js_validaOrigemTipo();' style='width:100%;'");
+
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap>Natureza do Contrato:</td>
           <td>
             <?
               db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', $iOpcao);
@@ -95,10 +119,10 @@ $iOpcao = 3;
           </td>
         </tr>
         <tr>
-          <td nowrap><?=$Lac16_numero?></td>
+          <td nowrap><?=$Lac16_numeroacordo?></td>
           <td>
             <?
-              db_input('ac16_numero', 10, $Iac16_numero, true, 'text', $iOpcao);
+              db_input('ac16_numeroacordo', 10, $Iac16_numeroacordo, true, 'text', $iOpcao);
             ?>
           </td>
         </tr>
@@ -179,6 +203,20 @@ $iOpcao = 3;
             ?>
           </td>
         </tr>
+
+        <tr>
+          <td nowrap title="<?=@$Tac16_datapublicacao?>">
+            <?=@$Lac16_datapublicacao?>
+          </td>
+
+          <td>
+            <?
+            db_inputdata('ac16_datapublicacao', @$ac16_datapublicacao_dia, @$ac16_datapublicacao_mes,
+                @$ac16_datapublicacao_ano, true, 'text', $db_opcao);
+            ?>
+          </td>
+        </tr>
+
         <tr>
         	<td>
         		<label>Períodos por Mês Comercial:</label>
@@ -198,6 +236,46 @@ $iOpcao = 3;
             <?
               db_input('ac50_sequencial', 10, $Iac50_descricao, true, 'text', $iOpcao);
               db_input('ac50_descricao', 30, $Iac50_descricao, true, 'text', $iOpcao);
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?=@$Tac16_formafornecimento?>">
+            <?=@$Lac16_formafornecimento?>
+          </td>
+          <td>
+            <?
+            db_input('ac16_formafornecimento', 50, $Iac16_formafornecimento, true, 'text', $iOpcao);
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?=@$Tac16_veiculodivulgacao?>">
+            <?=@$Lac16_veiculodivulgacao?>
+          </td>
+          <td>
+            <?
+            db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao);
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?=@$Tac16_formapagamento?>">
+            <?=@$Lac16_formapagamento?>
+          </td>
+          <td>
+            <?
+            db_textarea('ac16_formapagamento', 3, 48, $Iac16_objeto, true, 'text', $db_opcao, "","","","100");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?=@$Tac16_cpfsignatariocontratante?>">
+            <?=@$Lac16_cpfsignatariocontratante?>
+          </td>
+          <td>
+            <?
+            db_input('ac16_cpfsignatariocontratante', 11, $Iac16_cpfsignatariocontratante, true, 'text', $db_opcao);
             ?>
           </td>
         </tr>
@@ -286,9 +364,10 @@ $iOpcao = 3;
 
 $("ac16_sequencial").addClassName("field-size2");
 $("ac16_origem").addClassName("field-size9");
+$("ac16_tipoorigem").addClassName("field-size9");
 $("ac16_acordogrupo").addClassName("field-size2");
 $("ac02_descricao").addClassName("field-size7");
-$("ac16_numero").addClassName("field-size2");
+$("ac16_numeroacordo").addClassName("field-size2");
 $("ac16_contratado").addClassName("field-size2");
 $("nomecontratado").addClassName("field-size7");
 $("ac16_deptoresponsavel").addClassName("field-size2");
@@ -301,6 +380,7 @@ $("ac16_qtdrenovacao").addClassName("field-size2");
 $("ac16_tipounidtempo").addClassName("field-size2");
 $("ac26_emergencial_select_descr").addClassName("field-size2");
 $("ac16_dataassinatura").addClassName("field-size2");
+$("ac16_datapublicacao").addClassName("field-size2");
 $("ac16_periodocomercial_select_descr").addClassName("field-size2");
 $("ac50_sequencial").addClassName("field-size2");
 $("ac50_descricao").addClassName("field-size7");
@@ -376,6 +456,20 @@ function retornoBuscaDadosAcordo( oResponse ) {
     alert( oRetorno.message.urlDecode() );
     return false;
   }
+  /**
+   * $aValores = array(
+     0 => 'Selecione',
+     1 => '1 - Não ou dispensa por valor',
+     2 => '2 - Licitação',
+     3 => '3 - Dispensa ou Inexigibilidade',
+     4 => '4 - Adesão à ata de registro de preços',
+     5 => '5 - Licitação realizada por outro órgão ou entidade',
+     6 => '6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade',
+     7 => '7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC',
+     8 => '8 - Licitação realizada por consorcio público',
+     9 => '9 - Licitação realizada por outro ente da federação',
+     );
+   * /
 
   var aOrigens    = new Array();
       aOrigens[1] = 'Processo de Compras';
@@ -393,8 +487,9 @@ function retornoBuscaDadosAcordo( oResponse ) {
 
   $("ac16_sequencial").value               = oRetorno.contrato.iSequencial;
   $("ac16_origem").value                   = aOrigens[oRetorno.contrato.iOrigem];
+  $("ac16_tipoorigem").value                   = aTipoOrigens[oRetorno.contrato.iTipoOrigem];
   $("ac16_acordogrupo").value              = oRetorno.contrato.iGrupo;
-  $("ac16_numero").value                   = oRetorno.contrato.iNumero;
+  $("ac16_numeroacordo").value                   = oRetorno.contrato.iNumero;
   $("ac16_contratado").value               = oRetorno.contrato.iContratado;
   $("nomecontratado").value                = oRetorno.contrato.sNomeContratado.urlDecode();
   $("ac16_deptoresponsavel").value         = oRetorno.contrato.iDepartamentoResponsavel;
@@ -403,6 +498,10 @@ function retornoBuscaDadosAcordo( oResponse ) {
   $("ac08_descricao").value                = oRetorno.contrato.sNomeComissao.urlDecode();
   $("ac16_lei").value                      = oRetorno.contrato.sLei.urlDecode();
   $("ac16_numeroprocesso").value           = oRetorno.contrato.sNumeroProcesso.urlDecode();
+  $("ac16_formafornecimento").value        = oRetorno.contrato.sFormaFornecimento.urlDecode();
+  $("ac16_veiculodivulgacao").value        = oRetorno.contrato.sVeiculoDivulgacao.urlDecode();
+  $("ac16_formapagamento").value           = oRetorno.contrato.sFormaPagamento.urlDecode();
+  $("ac16_cpfsignatariocontratante").value = oRetorno.contrato.sCpfsignatariocontratante.urlDecode();
   $("ac16_qtdrenovacao").value             = oRetorno.contrato.iNumeroRenovacao;
   $("ac16_tipounidtempo").value            = aRenovacao[oRetorno.contrato.iTipoRenovacao];
   $("ac26_emergencial_select_descr").value = 'Não';
@@ -412,6 +511,7 @@ function retornoBuscaDadosAcordo( oResponse ) {
   }
   
   $("ac16_dataassinatura").value                = oRetorno.contrato.dtAssinatura.urlDecode();
+  $("ac16_datapublicacao").value                = oRetorno.contrato.dtPublicacao.urlDecode();
   $("ac16_periodocomercial_select_descr").value = 'Não';
 
   if ( oRetorno.contrato.lPeriodoComercial ) {
@@ -488,7 +588,7 @@ function limpaCampos() {
   $("ac16_origem").value                        = '';
   $("ac16_acordogrupo").value                   = '';
   $("ac02_descricao").value                     = '';
-  $("ac16_numero").value                        = '';
+  $("ac16_numeroacordo").value                        = '';
   $("ac16_contratado").value                    = '';
   $("nomecontratado").value                     = '';
   $("ac16_deptoresponsavel").value              = '';
@@ -501,6 +601,7 @@ function limpaCampos() {
   $("ac16_tipounidtempo").value                 = '';
   $("ac26_emergencial_select_descr").value      = '';
   $("ac16_dataassinatura").value                = '';
+  $("ac16_datapublicacao").value                = '';
   $("ac16_periodocomercial_select_descr").value = '';
   $("ac50_sequencial").value                    = '';
   $("ac50_descricao").value                     = '';

@@ -120,15 +120,7 @@ class cl_acordocomissao {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ac08_observacao == null ){ 
-       $this->erro_sql = " Campo Observação nao Informado.";
-       $this->erro_campo = "ac08_observacao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      if($this->ac08_datainicial == null ){ 
        $this->erro_sql = " Campo Data Inicial nao Informado.";
        $this->erro_campo = "ac08_datainicial_dia";
@@ -289,15 +281,6 @@ class cl_acordocomissao {
      if(trim($this->ac08_observacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac08_observacao"])){ 
        $sql  .= $virgula." ac08_observacao = '$this->ac08_observacao' ";
        $virgula = ",";
-       if(trim($this->ac08_observacao) == null ){ 
-         $this->erro_sql = " Campo Observação nao Informado.";
-         $this->erro_campo = "ac08_observacao";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if(trim($this->ac08_datainicial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac08_datainicial_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac08_datainicial_dia"] !="") ){ 
        $sql  .= $virgula." ac08_datainicial = '$this->ac08_datainicial' ";

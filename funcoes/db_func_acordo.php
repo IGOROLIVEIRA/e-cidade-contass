@@ -26,14 +26,15 @@
  */
 
 $campos  = "acordo.ac16_sequencial, ";
-$campos .= "(acordo.ac16_numeroacordo || '/' || acordo.ac16_anousu)::varchar as ac16_numeroacordo, ";
-$campos .= "acordo.ac16_acordosituacao,acordo.ac16_coddepto, ";
+$campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
+$campos .= "acordo.ac16_dataassinatura, ";
+$campos .= "acordo.ac16_contratado, cgm.z01_nome,";
+$campos .= "acordo.ac16_valor,";
+$campos .= "acordo.ac16_datapublicacao,";
+$campos .= "acordo.ac16_datainicio, ";
+$campos .= "acordo.ac16_datafim ";
+/*$campos .= "acordo.ac16_acordosituacao,acordo.ac16_coddepto, ";
 $campos .= "descrdepto,codigo, ";
 $campos .= "nomeinst, ";
-$campos .= "acordo.ac16_numero, ";
-$campos .= "acordo.ac16_dataassinatura, ";
-$campos .= "acordo.ac16_contratado, ";
-$campos .= "acordo.ac16_datainicio, ";
-$campos .= "acordo.ac16_datafim, ";
 $campos .= "acordo.ac16_resumoobjeto::text, ";
-$campos .= "acordo.ac16_origem ";
+$campos .= "acordo.ac16_origem,acordo.ac16_formafornecimento,acordo.ac16_formapagamento,acordo.ac16_cpfsignatariocontratante, acordo.ac16_datapublicacao,acordo.ac16_veiculodivulgacao ";*/

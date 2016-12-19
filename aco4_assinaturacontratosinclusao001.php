@@ -108,6 +108,30 @@ fieldset table td:first-child {
             </td>
             <td>&nbsp;</td>
           </tr>
+              <tr>
+                  <td align="left" title="<?= @$Tac16_datapublicacao ?>">
+                      <?= @$Lac16_datapublicacao ?>
+                  </td>
+
+                  <td align="left">
+                      <?
+                      db_inputdata('ac16_datapublicacao', @$ac16_datapublicacao_dia, @$ac16_datapublicacao_mes,
+                          @$ac16_datapublicacao_ano, true, 'text', $db_opcao);
+                      ?>
+                  </td>
+                  <td>&nbsp;</td>
+              </tr>
+              <tr>
+                  <td align="left" title="<?= @$Tac16_veiculodivulgacao ?>">
+                      <?= @$Lac16_veiculodivulgacao ?>
+                  </td>
+                  <td align="left" colspan="2">
+                      <?
+                      db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao);
+                      ?>
+                  </td>
+
+              </tr>
 		      <tr>
 		        <td colspan="3">
 		          <fieldset>
@@ -224,6 +248,8 @@ function js_assinarContrato() {
   oParam.exec           = "assinarContrato";
   oParam.acordo         = $F('ac16_sequencial');
   oParam.dtmovimentacao = $F('ac10_datamovimento');
+  oParam.dtpublicacao   = $F('ac16_datapublicacao');
+  oParam.veiculodivulgacao   = $F('ac16_veiculodivulgacao');
   oParam.observacao     = encodeURIComponent(tagString($F('ac10_obs')));
     
   var oAjax   = new Ajax.Request( sUrl, {
@@ -243,10 +269,12 @@ function js_retornoDadosAssinatura(oAjax) {
   
   var oRetorno = eval("("+oAjax.responseText+")");
      
-  $('ac16_sequencial').value    = "";
-  $('ac16_resumoobjeto').value  = "";
-  $('ac10_datamovimento').value = "";
-  $('ac10_obs').value           = "";
+  $('ac16_sequencial').value     = "";
+  $('ac16_resumoobjeto').value   = "";
+  $('ac10_datamovimento').value  = "";
+  $('ac16_datapublicacao').value = "";
+  $('ac16_veiculodivulgacao').value = "";
+  $('ac10_obs').value            = "";
 
   if (oRetorno.status == 2) {
     

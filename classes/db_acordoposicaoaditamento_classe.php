@@ -44,12 +44,20 @@ class cl_acordoposicaoaditamento {
    // cria variaveis do arquivo 
    var $ac35_sequencial = 0; 
    var $ac35_valor = 0; 
-   var $ac35_acordoposicao = 0; 
+   var $ac35_dataassinaturatermoaditivo = 0;
+   var $ac35_datapublicacao = 0;
+   var $ac35_descricaoalteracao = null;
+   var $ac35_veiculodivulgacao = null;
+   var $ac35_acordoposicao = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  ac35_sequencial = int4 = Código Sequencial 
                  ac35_valor = float8 = Valor do Aditamento 
-                 ac35_acordoposicao = int4 = Código da posicao 
+                 ac35_dataassinaturatermoaditivo = date = Data da assinatura
+                 ac35_datapublicacao = date = Data da Publicação
+                 ac35_descricaoalteracao = varchar = Descrição da Alteração
+                 ac35_veiculodivulgacao = varchar = Veiculo de Divulgação
+                 ac35_acordoposicao = int4 = Código da posicao
                  ";
    //funcao construtor da classe 
    function cl_acordoposicaoaditamento() { 
@@ -72,6 +80,10 @@ class cl_acordoposicaoaditamento {
        $this->ac35_sequencial = ($this->ac35_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac35_sequencial"]:$this->ac35_sequencial);
        $this->ac35_valor = ($this->ac35_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["ac35_valor"]:$this->ac35_valor);
        $this->ac35_acordoposicao = ($this->ac35_acordoposicao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac35_acordoposicao"]:$this->ac35_acordoposicao);
+       $this->ac35_dataassinaturatermoaditivo = ($this->ac35_dataassinaturatermoaditivo == ""?@$GLOBALS["HTTP_POST_VARS"]["ac35_dataassinaturatermoaditivo"]:$this->ac35_dataassinaturatermoaditivo);
+       $this->ac35_datapublicacao = ($this->ac35_datapublicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac35_datapublicacao"]:$this->ac35_datapublicacao);
+       $this->ac35_descricaoalteracao = ($this->ac35_descricaoalteracao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac35_descricaoalteracao"]:$this->ac35_descricaoalteracao);
+       $this->ac35_veiculodivulgacao = ($this->ac35_veiculodivulgacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac35_veiculodivulgacao"]:$this->ac35_veiculodivulgacao);
      }else{
        $this->ac35_sequencial = ($this->ac35_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac35_sequencial"]:$this->ac35_sequencial);
      }
@@ -92,7 +104,7 @@ class cl_acordoposicaoaditamento {
        return false;
      }
      if($ac35_sequencial == "" || $ac35_sequencial == null ){
-       $result = db_query("select nextval('acordoposicaoaditamento_ac35_sequencial_seq')"); 
+       $result = db_query("select nextval('acordoposicaoaditamento_ac35_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
          $this->erro_sql   = "Verifique o cadastro da sequencia: acordoposicaoaditamento_ac35_sequencial_seq do campo: ac35_sequencial"; 
@@ -127,11 +139,19 @@ class cl_acordoposicaoaditamento {
                                        ac35_sequencial 
                                       ,ac35_valor 
                                       ,ac35_acordoposicao 
+                                      ,ac35_dataassinaturatermoaditivo
+                                      ,ac35_datapublicacao
+                                      ,ac35_descricaoalteracao
+                                      ,ac35_veiculodivulgacao
                        )
                 values (
                                 $this->ac35_sequencial 
                                ,$this->ac35_valor 
                                ,$this->ac35_acordoposicao 
+                               ,'$this->ac35_dataassinaturatermoaditivo'
+                               ,'$this->ac35_datapublicacao'
+                               ,'$this->ac35_descricaoalteracao'
+                               ,'$this->ac35_veiculodivulgacao'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -166,6 +186,10 @@ class cl_acordoposicaoaditamento {
        $resac = db_query("insert into db_acount values($acount,3041,17200,'','".AddSlashes(pg_result($resaco,0,'ac35_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3041,17201,'','".AddSlashes(pg_result($resaco,0,'ac35_valor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3041,17202,'','".AddSlashes(pg_result($resaco,0,'ac35_acordoposicao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_dataassinaturatermoaditivo'),'','".AddSlashes(pg_result($resaco,0,'ac35_dataassinaturatermoaditivo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_datapublicacao'),'','".AddSlashes(pg_result($resaco,0,'ac35_datapublicacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_descricaoalteracao'),'','".AddSlashes(pg_result($resaco,0,'ac35_descricaoalteracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_veiculodivulgacao'),'','".AddSlashes(pg_result($resaco,0,'ac35_veiculodivulgacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    } 
@@ -224,6 +248,12 @@ class cl_acordoposicaoaditamento {
            $resac = db_query("insert into db_acount values($acount,3041,17201,'".AddSlashes(pg_result($resaco,$conresaco,'ac35_valor'))."','$this->ac35_valor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["ac35_acordoposicao"]) || $this->ac35_acordoposicao != "")
            $resac = db_query("insert into db_acount values($acount,3041,17202,'".AddSlashes(pg_result($resaco,$conresaco,'ac35_acordoposicao'))."','$this->ac35_acordoposicao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ac35_datapublicacao"]) || $this->ac35_datapublicacao != "")
+           $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_datapublicacao'),'".AddSlashes(pg_result($resaco,$conresaco,'ac35_datapublicacao'))."','$this->ac35_datapublicacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ac35_descricaoalteracao"]) || $this->ac35_descricaoalteracao != "")
+           $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_descricaoalteracao'),'".AddSlashes(pg_result($resaco,$conresaco,'ac35_descricaoalteracao'))."','$this->ac35_descricaoalteracao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["ac35_veiculodivulgacao"]) || $this->ac35_veiculodivulgacao != "")
+           $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_veiculodivulgacao'),'".AddSlashes(pg_result($resaco,$conresaco,'ac35_veiculodivulgacao'))."','$this->ac35_veiculodivulgacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $result = db_query($sql);
@@ -274,6 +304,10 @@ class cl_acordoposicaoaditamento {
          $resac = db_query("insert into db_acount values($acount,3041,17200,'','".AddSlashes(pg_result($resaco,$iresaco,'ac35_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3041,17201,'','".AddSlashes(pg_result($resaco,$iresaco,'ac35_valor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3041,17202,'','".AddSlashes(pg_result($resaco,$iresaco,'ac35_acordoposicao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_dataassinaturatermoaditivo'),'','".AddSlashes(pg_result($resaco,$iresaco,'ac35_dataassinaturatermoaditivo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_datapublicacao'),'','".AddSlashes(pg_result($resaco,$iresaco,'ac35_datapublicacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_descricaoalteracao'),'','".AddSlashes(pg_result($resaco,$iresaco,'ac35_descricaoalteracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3041,(select codcam from db_syscampo where nomecam = 'ac35_veiculodivulgacao'),'','".AddSlashes(pg_result($resaco,$iresaco,'ac35_veiculodivulgacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from acordoposicaoaditamento

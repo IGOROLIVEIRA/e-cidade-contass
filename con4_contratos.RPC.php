@@ -436,7 +436,7 @@ switch($oParam->exec) {
   case "getLicitacoesContratado":
 
 
-    $aItens = licitacao::getLicitacoesByFornecedor($oParam->iContratado, true);
+    $aItens = licitacao::getLicitacoesByFornecedor($oParam->iContratado, true, true);
 
     $aItensDevolver = array();
     foreach ($aItens as $oStdDadosLicitacao) {
@@ -517,6 +517,18 @@ switch($oParam->exec) {
     }
     break;
 
+  case "getNumeroContratoAno":
+
+    try {
+
+      $oRetorno->numero = Acordo::getProximoNumeroDoAno($oParam->iAno,$oParam->iInstit);
+    } catch (Exception $eErro) {
+
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode(str_replace("\\n", "\n",$eErro->getMessage()));
+    }
+    break;
+
   case "salvarContrato":
 
     try {
@@ -536,14 +548,21 @@ switch($oParam->exec) {
         $lAcordoValido = false;
         $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
       }
+
+      if($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura){
+        $lAcordoValido = false;
+        $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
+      }
+
       if ($lAcordoValido) {
 
         $oParam->contrato->nValorContrato = str_replace(',', '.', str_replace(".", "", $oParam->contrato->nValorContrato));
 
         $oContratado = CgmFactory::getInstanceByCgm($oParam->contrato->iContratado);
         $oContrato = new Acordo($oParam->contrato->iCodigo);
-        $oContrato->setAno(db_getsession("DB_anousu"));
+        $oContrato->setAno($oParam->contrato->iAnousu != "" ? $oParam->contrato->iAnousu : db_getsession("DB_anousu"));
         $oContrato->setDataAssinatura($oParam->contrato->dtAssinatura);
+        $oContrato->setDataPublicacao($oParam->contrato->dtPublicacao);
         $oContrato->setDataInicial($oParam->contrato->dtInicio);
         $oContrato->setDataFinal($oParam->contrato->dtTermino);
         $oContrato->setGrupo($oParam->contrato->iGrupo);
@@ -552,6 +571,7 @@ switch($oParam->exec) {
         $oContrato->setLei($oParam->contrato->sLei);
         $oContrato->setNumero($oParam->contrato->iNumero);
         $oContrato->setOrigem($oParam->contrato->iOrigem);
+        $oContrato->setTipoOrigem($oParam->contrato->iTipoOrigem);
         $oContrato->setObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sObjeto) );
         $oContrato->setResumoObjeto( db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sResumoObjeto) );
         $oContrato->setDepartamento(db_getsession("DB_coddepto"));
@@ -561,13 +581,18 @@ switch($oParam->exec) {
         $oContrato->setEmergencial($oParam->contrato->lEmergencial);
         $oContrato->setContratado($oContratado);
         $oContrato->setProcesso($oParam->contrato->sProcesso);
+        $oContrato->setFormaFornecimento($oParam->contrato->sFormaFornecimento);
+        $oContrato->setVeiculoDivulgacao($oParam->contrato->sVeiculoDivulgacao);
+        $oContrato->setFormaPagamento($oParam->contrato->sFormaPagamento);
+        $oContrato->setCpfsignatariocontratante();
         $oContrato->setComissao(new AcordoComissao($oParam->contrato->iComissao));
         $oContrato->setPeriodoComercial($oParam->contrato->lPeriodoComercial);
         $oContrato->setCategoriaAcordo($oParam->contrato->iCategoriaAcordo);
         $oContrato->setTipoUnidadeTempoVigencia($oParam->contrato->iTipoUnidadeTempoVigencia);
         $oContrato->setQtdPeriodoVigencia($oParam->contrato->iQtdPeriodoVigencia);
-        $oContrato->setClassificacao( new AcordoClassificacao($oParam->contrato->iClassificacao));
+        //$oContrato->setClassificacao( new AcordoClassificacao($oParam->contrato->iClassificacao));
         $oContrato->setValorContrato($oParam->contrato->nValorContrato);
+        $oContrato->setDataInclusao(date("Y-m-d"));
         $oContrato->save();
 
         /*
@@ -686,6 +711,8 @@ switch($oParam->exec) {
         db_fim_transacao(false);
         $_SESSION["oContrato"]     = $oContrato;
         $oRetorno->iCodigoContrato = $oContrato->getCodigoAcordo();
+        $oRetorno->sDataInclusao = $oContrato->getDataInclusao();
+        $oRetorno->iAnousu = $oContrato->getAno();
       } else {
 
         db_fim_transacao(true);
@@ -711,11 +738,15 @@ switch($oParam->exec) {
       $iDepartamentoResponsavel = $oContrato->getDepartamentoResponsavel();
       $oDepartamento            = new DBDepartamento($iDepartamentoResponsavel);
       $_SESSION["oContrato"]    = $oContrato;
+      
       $oDadosContrato = new stdClass();
       $oDadosContrato->iSequencial                  = $oContrato->getCodigoAcordo();
+      $oDadosContrato->dtInclusao                   = $oContrato->getDataInclusao();
+      $oDadosContrato->iAnousu                      = $oContrato->getAno();
       $oDadosContrato->iOrigem                      = $oContrato->getOrigem();
+      $oDadosContrato->iTipoOrigem                  = $oContrato->getTipoOrigem();
       $oDadosContrato->iGrupo                       = $oContrato->getGrupo();
-      $oDadosContrato->iNumero                      = $oContrato->getNumero();
+      $oDadosContrato->iNumero                      = $oContrato->getNumeroAcordo();
       $oDadosContrato->iContratado                  = $oContrato->getContratado()->getCodigo();
       $oDadosContrato->sNomeContratado              = urlencode($oContrato->getContratado()->getNome());
       $oDadosContrato->iDepartamentoResponsavel     = $iDepartamentoResponsavel;
@@ -723,12 +754,17 @@ switch($oParam->exec) {
       $oDadosContrato->dtInicio                     = $oContrato->getDataInicial();
       $oDadosContrato->dtTermino                    = $oContrato->getDataFinal();
       $oDadosContrato->dtAssinatura                 = $oContrato->getDataAssinatura();
+      $oDadosContrato->dtPublicacao                 = $oContrato->getDataPublicacao();
       $oDadosContrato->sLei                         = $oContrato->getLei();
       $oDadosContrato->iComissao                    = $oContrato->getComissao()->getCodigo();
       $oDadosContrato->sNomeComissao                = urlencode($oContrato->getComissao()->getDescricao());
       $oDadosContrato->sObjeto                      = urlencode($oContrato->getObjeto());
       $oDadosContrato->sResumoObjeto                = urlencode($oContrato->getResumoObjeto());
       $oDadosContrato->sNumeroProcesso              = urlencode($oContrato->getProcesso());
+      $oDadosContrato->sFormaFornecimento           = urlencode($oContrato->getFormaFornecimento());
+      $oDadosContrato->sVeiculoDivulgacao           = urlencode($oContrato->getVeiculoDivulgacao());
+      $oDadosContrato->sFormaPagamento              = urlencode($oContrato->getFormaPagamento());
+      $oDadosContrato->sCpfsignatariocontratante    = urlencode($oContrato->getCpfsignatariocontratante());
       $oDadosContrato->iNumeroRenovacao             = $oContrato->getQuantidadeRenovacao();
       $oDadosContrato->iTipoRenovacao               = $oContrato->getTipoRenovacao();
       $oDadosContrato->lPeriodoComercial            = $oContrato->getPeriodoComercial() == "t" ? "true" : false;
@@ -736,7 +772,7 @@ switch($oParam->exec) {
       $oDadosContrato->iTipoUnidadeTempoVigencia    = $oContrato->getTipoUnidadeTempoVigencia();
       $oDadosContrato->iQtdPeriodoVigencia          = $oContrato->getQtdPeriodoVigencia();
       $oDadosContrato->lEmergencial                 = $oContrato->isEmergencial();
-      $oDadosContrato->iClassificacao               = $oContrato->getClassificacao()->getCodigo();
+      //$oDadosContrato->iClassificacao               = $oContrato->getClassificacao()->getCodigo();
       $oDadosContrato->nValorContrato               = $oContrato->getValorContrato();
 
       $oRetorno->contrato = $oDadosContrato;
@@ -797,7 +833,7 @@ switch($oParam->exec) {
       $oContrato                = $_SESSION["oContrato"];
 
       $oRetorno->iTipoContrato  = $oContrato->getOrigem();
-      $oPosicao                 = $oContrato->getUltimaPosicao();
+      $oPosicao                 = $oContrato->getUltimaPosicao(true);
       $oRetorno->iCodigoPosicao = $oPosicao->getCodigo();
       $aItens                   = $oPosicao->getItens();
       $aDadosSelecaoAcordo      = array();
@@ -989,7 +1025,6 @@ switch($oParam->exec) {
     break;
 
   case "excluirDotacaoItens":
-
     $oRetorno->iElementoDotacao = '';
     if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
 
@@ -1340,6 +1375,23 @@ switch($oParam->exec) {
     }
 
     break;
+}
+/**
+ * Função que verifica se a data de assinatura do acordo é anterior a data de homologação da licitação
+ * @param $iLicitacao
+ * @param $sDataAssinatura
+ * @param $bDispensa
+ * @return boolean
+ */
+function validaDataAssinatura($iLicitacao, $sDataAssinatura, $bDispensa=false){
+
+  $sCampo = $bDispensa ? "l20_dtpubratificacao" : "l202_datahomologacao";
+  $sSql = "select {$sCampo} from homologacaoadjudica where l202_licitacao = {$iLicitacao}";
+  $sDataHomolgacao = db_utils::fieldsMemory(db_query($sSql), 0)->$sCampo;
+  if (strtotime(str_replace("/","-",$sDataAssinatura)) < strtotime($sDataHomolgacao)) {
+    return false;
+  }
+  return true;
 }
 //echo $oJson->encode($oRetorno);
 echo json_encode($oRetorno);

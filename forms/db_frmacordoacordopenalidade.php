@@ -169,7 +169,7 @@ function js_main() {
 
   oGridPenalidades              = new DBGrid('oGridPenalidades');
   oGridPenalidades.nameInstance = "oGridPenalidades";
-  oGridPenalidades.setCellWidth(new Array("5%", '85%','5%'));
+  oGridPenalidades.setCellWidth(new Array("10%", '75%','15%'));
   oGridPenalidades.setHeader(new Array("Código",  "Descrição","Ação"));
   oGridPenalidades.show($('ctnGridPenalidade'));  
   js_getPenalidades();

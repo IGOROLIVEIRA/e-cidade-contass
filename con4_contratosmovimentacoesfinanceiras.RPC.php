@@ -116,6 +116,44 @@ switch($oParam->exec) {
 
     break;
 
+    case "getAditamentos":
+
+     if (isset ($_SESSION["oContrato"])) {
+       unset($_SESSION["oContrato"]);
+     }
+     $oContrato              = new Acordo($oParam->iAcordo);
+     $_SESSION["oContrato"]  = $oContrato;
+     $aPosicoes              = $oContrato->getPosicoes();
+     $oRetorno->posicoes     = array();
+     $oRetorno->tipocontrato = $oContrato->getOrigem();
+
+     foreach ($aPosicoes as $oPosicaoContrato) {
+
+       $oPosicao        = new stdClass();
+
+       if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_INCLUSAO) {
+         continue;
+       }
+       $iTipoPosicao =  $oPosicaoContrato->getTipo();
+
+       $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
+       $oPosicao->data           = $oPosicaoContrato->getData();
+       $oPosicao->tipo           = $oPosicaoContrato->getTipo();
+       $oPosicao->numerocontrato = $oContrato->getGrupo()." - ".$oContrato->getNumero()."/".$oContrato->getAno();
+       $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
+       $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumero(), "0", 7)."";
+       $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
+       array_push($oRetorno->posicoes, $oPosicao);
+
+     }
+
+     if(count($oRetorno->posicoes) == 0 ){
+         $oRetorno->status   = 2;
+         $oRetorno->message  = urlencode('Nenhum aditamento encontrado!');
+     }
+
+    break;
+
   case "getPosicaoItens":
 
     if (isset ($_SESSION["oContrato"])) {
@@ -202,6 +240,38 @@ switch($oParam->exec) {
 
       db_fim_transacao(false);
 
+    } catch (Exception $eErro) {
+
+      db_fim_transacao(true);
+      $oRetorno->status = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+    }
+
+   break;
+
+    case "processarExclusaoPosicao":
+
+    $oContrato = $_SESSION["oContrato"];
+
+    try {
+      db_inicio_transacao();
+
+      arsort($oParam->aPosicoes);
+      foreach ($oParam->aPosicoes as $oPosicao) {
+
+          if($oPosicao->codigo == $oContrato->getUltimaPosicao(true)->getCodigo()) {
+              $oAcordoPosicao = new AcordoPosicao($oPosicao->codigo);
+              $oAcordoPosicao->remover();
+          } else {
+              throw new BusinessException( " Não é possível excluir uma aditamente que não seja o último. Para excluir um aditamento, faça a partir do último " ) ;
+          }
+
+      }
+
+
+      db_fim_transacao(false);
+        $oRetorno->status = 2;
+        $oRetorno->message = urlencode('Aditamento excluído com sucesso!');
     } catch (Exception $eErro) {
 
       db_fim_transacao(true);

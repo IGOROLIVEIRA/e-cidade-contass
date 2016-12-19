@@ -47,6 +47,7 @@ DBTextField = function (mName, sNameInstance, sValue, sSize) {
   this.sSize                     = sSize;
   this.sNameInstance             = sNameInstance;
   this.lReadOnly                 = false;
+  this.lRequired                 = true;
   this.sStringConteudo           = "";
   this.iMaxLength                = "";
   this.sStringTextarea           = "";
@@ -337,6 +338,25 @@ DBTextField = function (mName, sNameInstance, sValue, sSize) {
     }
     return;
   }
+
+  /**
+   * Define o campo como de preenchimento obrigatório.
+   * @param bollean lRequired true obrigatório
+   * return void
+   */
+  this.setRequired = function(lRequired) {
+
+    me.oHTMLElement.lRequired = lRequired;
+    me.lRequired             = lRequired;
+
+    if ( lRequired === true ) {
+      me.oHTMLElement.required = lRequired;
+    } else {
+      me.oHTMLElement.removeClassName("lRequired");
+    }
+    return;
+  }
+
 }
 
 /**

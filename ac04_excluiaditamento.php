@@ -78,7 +78,7 @@ db_app::load("estilos.css, grid.style.css");
   <br>
   <center>
     <fieldset style="width: 75%;">
-      <legend><b>Gerar Autorizações</b></legend>
+      <legend><b>Excluir Aditamentos</b></legend>
       <table style='width: 100%' border='0'>
         <tr>
           <td width="100%">
@@ -103,14 +103,6 @@ db_app::load("estilos.css, grid.style.css");
                   </fieldset>
                 </td>
               </tr>
-              <tr>
-                <td colspan='3'>
-                  <fieldset>
-                    <div id='ctnGridItens'>
-                    </div>
-                  </fieldset>
-                </td>
-              </tr>
             </table>
           </td>
         </tr>
@@ -120,7 +112,7 @@ db_app::load("estilos.css, grid.style.css");
         </tr>
       </table>
     </fieldset>
-    <input type='button' value='Visualizar Autorizações' onclick="js_buscarInformacoesAutorizacao();" style="margin-top: 10px;">
+    <input type='button' value='Excluir Aditamentos' onclick="js_processarExclusaoPosicao();" style="margin-top: 10px;">
   </center>
   <div id='frmDadosAutorizacao' style='display: none'>
   <form name='form1'>
@@ -158,7 +150,7 @@ db_app::load("estilos.css, grid.style.css");
       }
     }
     $result_tipocompra=$clpctipocompra->sql_record($clpctipocompra->sql_query_file(null,"pc50_codcom,pc50_descr"));
-    db_selectrecord("e54_codcom",$result_tipocompra,true,1,"","","","","js_buscarTipoLicitacao(this.value)");
+    db_selectrecord("e54_codcom",$result_tipocompra,true,1,"","","","","js_reload(this.value)");
     ?>
     </td>
   </tr>
@@ -355,6 +347,7 @@ function js_mostraacordo(chave1,chave2,erro) {
 
     oTxtCodigoAcordo.setValue(chave1);
     oTxtDescricaoAcordo.setValue(chave2);
+    oGridPosicoes.clearAll(true);
   }
 }
 
@@ -365,6 +358,7 @@ function js_mostraacordo1(chave1,chave2) {
 
   oTxtCodigoAcordo.setValue(chave1);
   oTxtDescricaoAcordo.setValue(chave2);
+  oGridPosicoes.clearAll(true);
   db_iframe_acordo.hide();
 }
 
@@ -379,22 +373,12 @@ function js_main() {
    oTxtDescricaoAcordo.setReadOnly(true);
 
    oGridPosicoes = new DBGrid('oGridPosicoes');
+   oGridPosicoes.nameInstance = "oGridPosicoes";
+   oGridPosicoes.setCheckbox(0);
    oGridPosicoes.setHeader(new Array('Código', 'Número', 'Tipo', "Data", "Emergencial"));
    oGridPosicoes.setHeight(100);
    oGridPosicoes.show($('ctnGridPosicoes'));
 
-   oGridItens = new DBGrid('oGridItens');
-   oGridItens.nameInstance = "oGridItens";
-   oGridItens.setCheckbox(0);
-   //oGridItens.allowSelectColumns(true);
-   oGridItens.setCellWidth(new Array('10%', '40%',  "20%", "20%","20%", "20%", "20%"));
-   oGridItens.setHeader(new Array("Código", "Material", "Quantidade", "Val. Unitário",
-                                  "Valor Total", "Qtde Autorizar", "Valor Autorizar", "Dotacoes", "iSeq"));
-   oGridItens.aHeaders[4].lDisplayed = false;
-   oGridItens.aHeaders[9].lDisplayed = false;
-   oGridItens.aHeaders[8].lDisplayed = false;
-   oGridItens.setHeight(160);
-   oGridItens.show($('ctnGridItens'));
    $('btnPesquisarPosicoes').onclick = js_pesquisarPosicoesContrato;
    iTipoAcordo = 0;
 }
@@ -407,10 +391,10 @@ function js_pesquisarPosicoesContrato() {
     return false;
   }
   js_divCarregando('Aguarde, pesquisando dados do acordo', 'msgbox');
-  oGridItens.clearAll(true);
+
   oGridPosicoes.clearAll(true);
   var oParam                 = new Object();
-  oParam.exec                = 'getPosicoesAcordo';
+  oParam.exec                = 'getAditamentos';
   oParam.lGeracaoAutorizacao = true;
   oParam.iAcordo = oTxtCodigoAcordo.getValue();
   var oAjax      = new Ajax.Request(sUrlRpc,
@@ -425,6 +409,7 @@ function js_retornoGetPosicoesAcordo(oAjax) {
 
   js_removeObj('msgbox');
   var oRetorno = eval("("+oAjax.responseText+")");
+  aPosicoesAcordo = oRetorno.posicoes;
   oGridPosicoes.clearAll(true);
   iTipoAcordo = oRetorno.tipocontrato;
   if (oRetorno.status == 1) {
@@ -438,9 +423,10 @@ function js_retornoGetPosicoesAcordo(oAjax) {
       aLinha[3]  = oPosicao.data;
       aLinha[4]  = oPosicao.emergencial.urlDecode();
       oGridPosicoes.addRow(aLinha);
-      oGridPosicoes.aRows[iLinha].sEvents='ondblclick="js_getItensPosicao('+oPosicao.codigo+','+iLinha+')"';
     });
     oGridPosicoes.renderRows();
+  }else{
+      alert(oRetorno.message.urlDecode());
   }
 }
 
@@ -1018,58 +1004,48 @@ function setInformacoesAutorizacao() {
     });
   }
 }
-/**
- * Busca o tipo de licitação para o tipo de compra escolhido
- * @param {integer} Código do tipo de compra
- */
-function js_buscarTipoLicitacao(iTipoCompra) {
 
-    if (iTipoCompra != "" && iTipoCompra != "undefined") {
+function js_processarExclusaoPosicao() {
 
-        var oParamTipoCompra         = new Object();
-        oParamTipoCompra.iTipoCompra = iTipoCompra;
-        oParamTipoCompra.exec        = "getTipoLicitacao";
-        var oAjaxTipoCompra          = new Ajax.Request('lic4_geraAutorizacoes.RPC.php',
-            {
-                method: 'post',
-                parameters:'json='+Object.toJSON(oParamTipoCompra),
-                onComplete:js_preencheTipoLicitacao
-            }
-        );
+    var aPosicoes = oGridPosicoes.getSelection("object");
+    if (aPosicoes.length == 0) {
+
+        alert('Nenhum aditamento selecionado');
+        return false;
     }
+
+    js_divCarregando('Aguarde, processando.....', 'msgbox');
+    var oParam        = new Object();
+    oParam.exec       = "processarExclusaoPosicao";
+    oParam.lProcessar = true;
+    oParam.aPosicoes  = new Array();
+    oParam.dados      = new Object();
+    for (var i = 0; i < aPosicoes.length; i++) {
+
+        with (aPosicoes[i]) {
+            var oPosicao     = new Object();
+            oPosicao.codigo  = aPosicoes[i].aCells[0].getValue();
+            oParam.aPosicoes.push(oPosicao);
+        }
+    }
+    var oAjax  = new Ajax.Request(sUrlRpc,
+        {method:'post',
+            parameters:'json='+Object.toJSON(oParam),
+            onComplete: js_retornoExcluirPosicao
+        }
+    )
 }
 
-/**
- * Preenche os tipos de licitação encontrados
- */
-function js_preencheTipoLicitacao(oAjax) {
+function js_retornoExcluirPosicao(oAjax){
+    js_removeObj('msgbox');
     var oRetorno = eval("("+oAjax.responseText+")");
-    $('e54_tipol').innerHTML = "";
-    $('e54_tipoldescr').innerHTML = "";
-    $('e54_tipol').removeAttribute('disabled');
-    $('e54_tipoldescr').removeAttribute('disabled');
-    $('e54_tipol').removeAttribute('style');
-    $('e54_tipoldescr').removeAttribute('style');
+    var sMensagem = oRetorno.message.urlDecode();
 
-    if (oRetorno.aTiposLicitacao.length > 0) {
+    if ( oRetorno.status > 1 ) {
 
-        $('e54_numerl').setAttribute('disabled','disabled');
-        oRetorno.aTiposLicitacao.each(function (oItem) {
-
-            $('e54_tipol').innerHTML        += "<option value='" + oItem.l03_tipo + "'>" + oItem.l03_tipo + "</option>";
-            $('e54_tipoldescr').innerHTML   += "<option value='" + oItem.l03_tipo + "'>" + oItem.l03_descr + "</option>";
-
-        });
-    } else {
-
-        $('e54_numerl').setAttribute('disabled',true);
-        $('e54_tipol').setAttribute('disabled',true);
-        $('e54_tipoldescr').setAttribute('disabled',true);
-        $('e54_numerl').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-        $('e54_tipol').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-        $('e54_tipoldescr').setAttribute('style','width: 68px; background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-        $('e54_numerl').value  = "";
-        //me.oTipoLicitacao.setDisable();
+        alert(sMensagem);
+        oGridPosicoes.clearAll(true);
+        return false;
     }
 }
 

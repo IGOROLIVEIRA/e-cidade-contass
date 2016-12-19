@@ -180,7 +180,7 @@ contrato = function () {
 
 	  });
 	  $('ac16_objeto').value       = sDescricao;
-	  $('ac16_resumoobjeto').value = sDescricao.substring(0, 50).toUpperCase();
+
 	  var oAjax   = new Ajax.Request(
 	                         sURL,
 	                         {
@@ -209,7 +209,7 @@ contrato = function () {
 	  var oParam         = new Object();
 	  oParam.exec        = 'getNumeroContrato';
 	  oParam.iGrupo      = $F('ac16_acordogrupo');
-	  $('ac16_numero').disabled = true;
+	  $('ac16_numeroacordo').disabled = true;
 	  var oAjax   = new Ajax.Request(
 	                         sURL,
 	                         {
@@ -220,13 +220,46 @@ contrato = function () {
 	                        );
 	}
 
+	this.getNumeroAcordoAno  = function(iAno,iInstit) {
+
+	  var oParam         = new Object();
+	  oParam.exec        = 'getNumeroContratoAno';
+	  oParam.iAno        = iAno;
+	  oParam.iInstit     = iInstit;
+	  $('ac16_numeroacordo').disabled = true;
+	  var oAjax   = new Ajax.Request(
+	                         sURL,
+	                         {
+	                          method    : 'post',
+	                          parameters: 'json='+Object.toJSON(oParam),
+	                          onComplete: me.retornoNumeroContratoAno
+	                          }
+	                        );
+	}
+
   this.retornoNumeroContrato = function (oAjax) {
 
-	  $('ac16_numero').disabled = false;
+	  $('ac16_numeroacordo').disabled = false;
 	  var oRetorno = eval("("+oAjax.responseText+")");
 	  if (oRetorno.status == 1) {
 
-	    $('ac16_numero').value = oRetorno.numero;
+	    $('ac16_numeroacordo').value = oRetorno.numero;
+	  } else {
+
+	    alert(oRetorno.message.urlDecode());
+	    $('ac16_acordogrupo').value = '';
+	    $('ac02_descricao').value   = '';
+	    return false;
+	  }
+	}
+
+	this.retornoNumeroContratoAno = function (oAjax) {
+
+	  $('ac16_numeroacordo').disabled = false;
+	  var oRetorno = eval("("+oAjax.responseText+")");
+	  if (oRetorno.status == 1) {
+
+	    $('ac16_numeroacordo').value = oRetorno.numero;
 	  } else {
 
 	    alert(oRetorno.message.urlDecode());
@@ -241,26 +274,30 @@ contrato = function () {
 	this.saveContrato = function () {
 
 	  var iGrupoContrato            = $F('ac16_acordogrupo');
-	  var iNumero                   = $F('ac16_numero');
+	  var iNumero                   = $F('ac16_numeroacordo');
 	  var iOrigem                   = $F('ac16_origem');
+	  var iTipoOrigem               = $F('ac16_tipoorigem');
 	  var iContratado               = $F('ac16_contratado');
 	  var iDepartamentoResponsavel  = $F('ac16_deptoresponsavel');
 	  var iComissao                 = $F('ac16_acordocomissao');
 	  var dtInicio                  = $F('ac16_datainicio');
 	  var dtTermino                 = $F('ac16_datafim');
 	  var sLei                      = $F('ac16_lei');
-	  var dtAssinatura              = $F('ac16_dataassinatura');
+	  var iAnousu                   = $F('ac16_anousu');
 	  var sObjeto                   = $F('ac16_objeto');
-	  var sResumoObjeto             = $F('ac16_resumoobjeto');
 	  var iQtdRenovacao             = $F('ac16_qtdrenovacao');
 	  var iUnidRenovacao            = $F('ac16_tipounidtempo');
 	  var sProcesso                 = encodeURIComponent($F('ac16_numeroprocesso'));
+	  var sFormaFornecimento        = encodeURIComponent($F('ac16_formafornecimento'));
+	  //var sVeiculoDivulgacao        = encodeURIComponent($F('ac16_veiculodivulgacao'));
+	  var sFormaPagamento           = encodeURIComponent($F('ac16_formapagamento'));
+	  //var sCpfsignatariocontratante = encodeURIComponent($F('ac16_cpfsignatariocontratante'));
 	  var lEmergencial              = $F('ac26_emergencial')=='f'?false:true;
 	  var lPeriodoComercial         = $F('ac16_periodocomercial');
 	  var iCategoriaAcordo          = $F('ac50_sequencial');
 	  var iTipoUnidadeTempoVigencia = $F('ac16_tipounidtempoperiodo');
 	  var iQtdPeriodoVigencia       = $F('ac16_qtdperiodo');
-	  var iClassificacao            = $F('ac16_acordoclassificacao');
+	  //var iClassificacao            = $F('ac16_acordoclassificacao');
 	  var nValorContrato            = $F('ac16_valor');
 
 	   if (iOrigem == "0") {
@@ -269,6 +306,18 @@ contrato = function () {
       $('ac16_origem').focus();
       return false;
     }
+		if (iTipoOrigem == "0") {
+
+      alert('Informe o Tipo da origem do acordo.');
+      $('ac16_tipoorigem').focus();
+      return false;
+    }
+		/*if (iClassificacao == "0") {
+
+      alert('Informe a classificação do acordo.');
+      $('ac16_acordoclassificacao').focus();
+      return false;
+    }*/
 	  if (iGrupoContrato == "") {
 
 	    alert('Informe o grupo do acordo.');
@@ -278,7 +327,7 @@ contrato = function () {
 	  if (iNumero == "") {
 
 	    alert('Informe o número do acordo.');
-	    $('ac16_numero').focus();
+	    $('ac16_numeroacordo').focus();
 	    return false;
 	  }
 
@@ -305,6 +354,14 @@ contrato = function () {
 
 	    alert('Informe a número da lei.');
 	    $('ac16_lei').focus();
+	    return false;
+
+	  }
+
+	  if (iAnousu == "") {
+
+	    alert('Informe o ano do contrato.');
+	    $('ac16_anousu').focus();
 	    return false;
 
 	  }
@@ -344,13 +401,6 @@ contrato = function () {
 	    return false;
 	  }
 
-	  if (sResumoObjeto == "") {
-
-	    alert('Informe o resumo objeto do Contrato.');
-	    $('ac16_resumoobjeto').focus();
-	    return false;
-	  }
-
     if (iOrigem == 6 && empty(nValorContrato)) {
 
       alert('Informe o valor do contrato.');
@@ -363,6 +413,7 @@ contrato = function () {
 	  oParam.contrato = new Object();
 
 	  oParam.contrato.iOrigem                   = iOrigem;
+	  oParam.contrato.iTipoOrigem               = iTipoOrigem;
 	  oParam.contrato.iGrupo                    = iGrupoContrato;
 	  oParam.contrato.iNumero                   = iNumero;
 	  oParam.contrato.iCodigo                   = $F('ac16_sequencial');
@@ -370,20 +421,23 @@ contrato = function () {
 	  oParam.contrato.iDepartamentoResponsavel  = iDepartamentoResponsavel;
 	  oParam.contrato.iComissao                 = iComissao;
 	  oParam.contrato.sLei                      = sLei;
+	  oParam.contrato.iAnousu                   = iAnousu;
 	  oParam.contrato.dtInicio                  = dtInicio;
 	  oParam.contrato.dtTermino                 = dtTermino;
-	  oParam.contrato.dtAssinatura              = dtAssinatura;
 	  oParam.contrato.sObjeto                   = encodeURIComponent(tagString(sObjeto));
-	  oParam.contrato.sResumoObjeto             = encodeURIComponent(tagString(sResumoObjeto));
 	  oParam.contrato.iQtdRenovacao             = iQtdRenovacao;
     oParam.contrato.iUnidRenovacao            = iUnidRenovacao;
     oParam.contrato.lEmergencial              = lEmergencial;
     oParam.contrato.sProcesso                 = sProcesso;
+    oParam.contrato.sFormaFornecimento        = sFormaFornecimento;
+    //oParam.contrato.sVeiculoDivulgacao        = sVeiculoDivulgacao;
+    oParam.contrato.sFormaPagamento           = sFormaPagamento;
+    //oParam.contrato.sCpfsignatariocontratante = sCpfsignatariocontratante;
     oParam.contrato.lPeriodoComercial         = lPeriodoComercial;
     oParam.contrato.iCategoriaAcordo          = iCategoriaAcordo;
     oParam.contrato.iTipoUnidadeTempoVigencia = iTipoUnidadeTempoVigencia;
     oParam.contrato.iQtdPeriodoVigencia       = iQtdPeriodoVigencia;
-    oParam.contrato.iClassificacao            = iClassificacao;
+    //oParam.contrato.iClassificacao            = iClassificacao;
     oParam.contrato.nValorContrato            = nValorContrato;
 	  js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
 	  var oAjax   = new Ajax.Request(
@@ -399,8 +453,10 @@ contrato = function () {
   this.bloqueiaCampos = function() {
 
     $('ac16_acordogrupo').disabled             = true;
-    $('ac16_numero').disabled                  = true;
+    $('ac16_numeroacordo').disabled                  = true;
     $('ac16_origem').disabled                  = true;
+    $('ac16_anousu').disabled                  = true;
+    $('ac16_tipoorigem').disabled              = true;
     $('ac16_contratado').disabled              = true;
     $("ac16_periodocomercial").disabled        = true;
     $("ac16_datainicio").disabled              = true;
@@ -409,6 +465,7 @@ contrato = function () {
     $("ac16_acordocomissao").disabled          = true;
     $("ac16_datainicio").style.backgroundColor = "#DEB887";
     $("ac16_datafim").style.backgroundColor    = "#DEB887";
+    $("ac16_anousu").style.backgroundColor    = "#DEB887";
 
 
 
@@ -449,6 +506,8 @@ contrato = function () {
 	  if (oRetorno.status == 1) {
 
       $('ac16_sequencial').value = oRetorno.iCodigoContrato;
+      $('ac16_datainclusao').value = js_formatar(oRetorno.sDataInclusao,"d");
+      $('ac16_anousu').value = oRetorno.iAnousu;
       if ($F('ac16_origem') == 6 || $F('ac16_origem') == '6' ) {
 
     	  $('pesquisarEmpenhos').style.display = 'inLine';
@@ -504,14 +563,16 @@ contrato = function () {
       oBtnOpcao.value            = 'Alterar';
       oBtnOpcao.name             = 'alterar';
 	    $('ac16_sequencial').value = oRetorno.contrato.iSequencial;
+		$('ac16_datainclusao').value            = js_formatar(oRetorno.contrato.dtInclusao,'d');
 	    $('ac16_origem').value     = oRetorno.contrato.iOrigem;
+	    $('ac16_tipoorigem').value     = oRetorno.contrato.iTipoOrigem;
 
 	    if (oRetorno.contrato.iOrigem == 6 || oRetorno.contrato.iOrigem == '6') {
 	    	$('pesquisarEmpenhos').style.display = 'inLine';
 	    }
-
+		//alert(oRetorno.contrato.sNumeroProcesso.urlDecode());
 	    $('ac16_acordogrupo').value           = oRetorno.contrato.iGrupo;
-	    $('ac16_numero').value                = oRetorno.contrato.iNumero;
+	    $('ac16_numeroacordo').value                = oRetorno.contrato.iNumero;
 	    $('ac16_contratado').value            = oRetorno.contrato.iContratado;
 	    $('nomecontratado').value             = oRetorno.contrato.sNomeContratado.urlDecode();
 	    $('ac16_deptoresponsavel').value      = oRetorno.contrato.iDepartamentoResponsavel;
@@ -519,19 +580,22 @@ contrato = function () {
       $('ac16_acordocomissao').value        = oRetorno.contrato.iComissao;
       $('ac08_descricao').value             = oRetorno.contrato.sNomeComissao.urlDecode();
       $('ac16_lei').value                   = oRetorno.contrato.sLei.urlDecode();
+      $('ac16_anousu').value                = oRetorno.contrato.iAnousu.urlDecode();
       $('ac16_datainicio').value            = oRetorno.contrato.dtInicio;
       $('ac16_datafim').value               = oRetorno.contrato.dtTermino;
-      $('ac16_dataassinatura').value        = oRetorno.contrato.dtAssinatura;
       $('ac16_objeto').value                = oRetorno.contrato.sObjeto.urlDecode();
-      $('ac16_resumoobjeto').value          = oRetorno.contrato.sResumoObjeto.urlDecode();
-      $('ac16_numeroprocesso').value        = oRetorno.contrato.sNumeroProcesso.urlDecode();
+      $('ac16_numeroprocesso').value      = oRetorno.contrato.sNumeroProcesso.urlDecode();
+      $('ac16_formafornecimento').value     = oRetorno.contrato.sFormaFornecimento.urlDecode();
+      //$('ac16_veiculodivulgacao').value     = oRetorno.contrato.sVeiculoDivulgacao.urlDecode();
+      $('ac16_formapagamento').value     = oRetorno.contrato.sFormaPagamento.urlDecode();
+      //$('ac16_cpfsignatariocontratante').value     = oRetorno.contrato.sCpfsignatariocontratante.urlDecode();
       $('ac16_qtdrenovacao').value          = oRetorno.contrato.iNumeroRenovacao;
       $('ac16_tipounidtempo').value         = oRetorno.contrato.iTipoRenovacao;
       $('ac16_periodocomercial').value      = oRetorno.contrato.lPeriodoComercial;
       $('ac50_sequencial').value            = oRetorno.contrato.iCategoriaAcordo;
       $('ac16_tipounidtempoperiodo').value  = oRetorno.contrato.iTipoUnidadeTempoVigencia;
       $('ac16_qtdperiodo').value            = oRetorno.contrato.iQtdPeriodoVigencia;
-      $('ac16_acordoclassificacao').value   = oRetorno.contrato.iClassificacao;
+      //$('ac16_acordoclassificacao').value   = oRetorno.contrato.iClassificacao;
       $('ac16_valor').value                 = js_formatar(oRetorno.contrato.nValorContrato, 'f');
 
       js_pesquisaac16_acordogrupo(false);

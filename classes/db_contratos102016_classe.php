@@ -201,7 +201,7 @@ class cl_contratos102016 {
      if($this->si83_contdeclicitacao == null ){ 
        $this->si83_contdeclicitacao = "0";
      }
-     if($this->si83_exercicioprocesso == null ){ 
+     if($this->si83_exercicioprocesso == ' ' || $this->si83_exercicioprocesso == null){
        $this->si83_exercicioprocesso = "0";
      }
      if($this->si83_tipoprocesso == null ){ 
@@ -278,6 +278,7 @@ class cl_contratos102016 {
        $this->erro_status = "0";
        return false;
      }
+       
      $sql = "insert into contratos102016(
                                        si83_sequencial 
                                       ,si83_tiporegistro 

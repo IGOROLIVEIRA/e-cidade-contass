@@ -87,7 +87,7 @@ class AcordoGarantia  {
       
       
       if ($iNumRowsAcordoGarantia == 0) {
-        throw  new Exception("Nenhum Registro Encontrado para a Garantia {$iCodigoGarantia}!");
+        throw  new Exception("Nenhum Registro Encontrado para a Garantia {$iCodigoGarantia}!1");
       }
       
       $oPenalidade = db_utils::fieldsMemory($rsSqlAcordoGarantia, 0);
@@ -103,10 +103,10 @@ class AcordoGarantia  {
       $sSqlAcordoGarantiaAcordoTipo     = $oDaoAcordoGarantiaAcordoTipo->sql_query(null,$sCampos,null,$sWhere);
       $rsSqlAcordoGarantiaAcordoTipo    = $oDaoAcordoGarantiaAcordoTipo->sql_record($sSqlAcordoGarantiaAcordoTipo);
       $iNumRowsAcordoGarantiaAcordoTipo = $oDaoAcordoGarantiaAcordoTipo->numrows;
-      
+
       
       if ($iNumRowsAcordoGarantiaAcordoTipo == 0) {
-        throw  new Exception("Nenhum Registro Encontrado para a Garantia {$iCodigoGarantia}!");
+        throw  new Exception("Nenhum Registro Encontrado para a Garantia {$iCodigoGarantia}!2");
       }
       
       /*

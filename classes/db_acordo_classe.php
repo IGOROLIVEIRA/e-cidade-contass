@@ -247,7 +247,7 @@ class cl_acordo {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ac16_resumoobjeto == null ){
+     /*if($this->ac16_resumoobjeto == null ){
        $this->erro_sql = " Campo Resumo Objeto não informado.";
        $this->erro_campo = "ac16_resumoobjeto";
        $this->erro_banco = "";
@@ -255,7 +255,7 @@ class cl_acordo {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->ac16_objeto == null ){
        $this->erro_sql = " Campo Objeto do Contrato não informado.";
        $this->erro_campo = "ac16_objeto";
@@ -355,7 +355,7 @@ class cl_acordo {
      if($this->ac16_acordocategoria == null ){
        $this->ac16_acordocategoria = "0";
      }
-     if($this->ac16_acordoclassificacao == null ){
+     /*if($this->ac16_acordoclassificacao == null ){
        $this->erro_sql = " Campo Sequencial da Classificação do Contrato não informado.";
        $this->erro_campo = "ac16_acordoclassificacao";
        $this->erro_banco = "";
@@ -363,7 +363,7 @@ class cl_acordo {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->ac16_numeroacordo == null ){
        $this->ac16_numeroacordo = "0";
      }
@@ -441,7 +441,7 @@ class cl_acordo {
                                ,$this->ac16_contratado
                                ,".($this->ac16_datainicio == "null" || $this->ac16_datainicio == ""?"null":"'".$this->ac16_datainicio."'")."
                                ,".($this->ac16_datafim == "null" || $this->ac16_datafim == ""?"null":"'".$this->ac16_datafim."'")."
-                               ,'$this->ac16_resumoobjeto'
+                               ,'".substr($this->ac16_objeto,0,49)."'
                                ,'$this->ac16_objeto'
                                ,$this->ac16_instit
                                ,$this->ac16_acordocomissao
@@ -456,7 +456,7 @@ class cl_acordo {
                                ,$this->ac16_qtdperiodo
                                ,$this->ac16_tipounidtempoperiodo
                                ,$this->ac16_acordocategoria
-                               ,$this->ac16_acordoclassificacao
+                               ,".($this->ac16_acordoclassificacao == "null" || $this->ac16_acordoclassificacao == ""?"null":"'".$this->ac16_acordoclassificacao."'")."
                                ,$this->ac16_numeroacordo
                                ,$this->ac16_valor
                       )";
@@ -672,21 +672,9 @@ class cl_acordo {
          }
        }
      }
-     if(trim($this->ac16_resumoobjeto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_resumoobjeto"])){
-       $sql  .= $virgula." ac16_resumoobjeto = '$this->ac16_resumoobjeto' ";
-       $virgula = ",";
-       if(trim($this->ac16_resumoobjeto) == null ){
-         $this->erro_sql = " Campo Resumo Objeto não informado.";
-         $this->erro_campo = "ac16_resumoobjeto";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
+
      if(trim($this->ac16_objeto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_objeto"])){
-       $sql  .= $virgula." ac16_objeto = '$this->ac16_objeto' ";
+       $sql  .= $virgula." ac16_objeto = '$this->ac16_objeto', ac16_resumoobjeto = '".substr($this->ac16_objeto,0,49)."'";
        $virgula = ",";
        if(trim($this->ac16_objeto) == null ){
          $this->erro_sql = " Campo Objeto do Contrato não informado.";
@@ -1112,7 +1100,7 @@ class cl_acordo {
      $sql .= "      inner join acordosituacao  on  acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
      $sql .= "      inner join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
      //$sql .= "      left  join acordocategoria  on  acordocategoria.ac50_sequencial = acordo.ac16_acordocategoria";
-     $sql .= "      inner join acordoclassificacao  on  acordoclassificacao.ac46_sequencial = acordo.ac16_acordoclassificacao";
+     //$sql .= "      inner join acordoclassificacao  on  acordoclassificacao.ac46_sequencial = acordo.ac16_acordoclassificacao";
      $sql .= "      inner join db_config  on  db_config.codigo = db_depart.instit";
      //$sql .= "      inner join db_datausuarios  on  db_datausuarios.id_usuario = db_depart.id_usuarioresp";
      $sql .= "      inner join acordonatureza  on  acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza";
@@ -1276,6 +1264,7 @@ class cl_acordo {
     $sql .= "      inner join acordoposicao       on acordoposicao.ac26_acordo           = acordo.ac16_sequencial";
     $sql .= "      left  join acordoitem          on acordoitem.ac20_acordoposicao       = acordoposicao.ac26_sequencial";
     $sql .= "      left  join acordoorigem        on acordoorigem.ac28_sequencial        = acordo.ac16_origem";
+    $sql .= "      left  join acordomovimentacao  on acordomovimentacao.ac10_acordo      = acordo.ac16_sequencial";
     $sql2 = "";
     if($dbwhere==""){
       if($ac16_sequencial!=null ){

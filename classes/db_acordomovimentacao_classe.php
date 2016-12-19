@@ -146,15 +146,7 @@ class cl_acordomovimentacao {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ac10_obs == null ){ 
-       $this->erro_sql = " Campo Observação nao Informado.";
-       $this->erro_campo = "ac10_obs";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      if($ac10_sequencial == "" || $ac10_sequencial == null ){
        $result = db_query("select nextval('acordomovimentacao_ac10_sequencial_seq')"); 
        if($result==false){
@@ -345,15 +337,6 @@ class cl_acordomovimentacao {
      if(trim($this->ac10_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac10_obs"])){ 
        $sql  .= $virgula." ac10_obs = '$this->ac10_obs' ";
        $virgula = ",";
-       if(trim($this->ac10_obs) == null ){ 
-         $this->erro_sql = " Campo Observação nao Informado.";
-         $this->erro_campo = "ac10_obs";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      $sql .= " where ";
      if($ac10_sequencial!=null){

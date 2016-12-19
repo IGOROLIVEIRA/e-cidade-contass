@@ -77,7 +77,7 @@ fieldset table td:first-child {
   <tr> 
     <td valign="top" align="center"> 
       <fieldset>
-        <legend><b>Cancelar Homolocação do Acordo</b></legend>
+        <legend><b>Cancelar Finalização do Acordo</b></legend>
         <table align="center" border="0">
           <tr>
             <td title="<?=@$Tac10_sequencial?>" align="left">
@@ -175,7 +175,7 @@ function js_mostrarpesquisahomologacao(chave) {
  */
 function js_getDadosHomologacao(iCodigo) {
 
-  js_divCarregando('Aguarde pesquisando dados da homologação...', 'msgBoxGetDadosHomologacao');
+  js_divCarregando('Aguarde pesquisando dados da finalização...', 'msgBoxGetDadosHomologacao');
    
   var oParam        = new Object();
   oParam.exec       = "getDadosHomologacao";
