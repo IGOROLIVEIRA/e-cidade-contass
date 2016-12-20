@@ -189,7 +189,7 @@ ob_start();
        *
        */
       $fSubTotal = 0;
-      $aSubFuncoes = array(122,272,271,361,365,366,367);
+      $aSubFuncoes = array(122,272,271,361,365,366,367,843);
       $sFuncao     = "12";
       $aFonte      = array("'101'");
       foreach ($aSubFuncoes as $iSubFuncao) {
