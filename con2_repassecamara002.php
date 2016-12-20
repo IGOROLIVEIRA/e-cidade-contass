@@ -334,7 +334,7 @@ ob_start();
         <td class="s9">Transferência Financeira do ICMS - Desoneração - LC 87/96</td>
         <td class="s10">
           <?php
-          $aDadosICMS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '417213600%'");
+          $aDadosICMS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4172136%'");
           $fICMS = count($aDadosICMS) > 0 ? $aDadosICMS[0]->saldo_arrecadado_acumulado : 0;
           echo db_formatar($fICMS, "f");
           ?>
