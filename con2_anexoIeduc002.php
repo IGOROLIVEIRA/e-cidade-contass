@@ -386,7 +386,7 @@ ob_start();
             <td class="s12" colspan="7">Multas e Juros de Mora do IPTU </td>
             <td class="s13">
               <?php
-              $aDadosMJIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419113800%'");
+              $aDadosMJIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4191138%'");
               $fMJIPTU = count($aDadosMJIPTU) > 0 ? $aDadosMJIPTU[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJIPTU, "f");
               ?>
@@ -398,7 +398,7 @@ ob_start();
             <td class="s6" colspan="7">Multas e Juros de Mora do ITBI</td>
             <td class="s9">
               <?php
-              $aDadosMJITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419113900%'");
+              $aDadosMJITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4191139%'");
               $fMJTIBI = count($aDadosMJITBI) > 0 ? $aDadosMJITBI[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJTIBI, "f");
               ?>
@@ -410,7 +410,7 @@ ob_start();
             <td class="s12" colspan="7"> Multas e Juros de Mora do ISS </td>
             <td class="s13">
               <?php
-              $aDadosMJISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419114000%'");
+              $aDadosMJISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4191140%'");
               $fMJISS = count($aDadosMJISS) > 0 ? $aDadosMJISS[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJISS, "f");
               ?>
@@ -422,7 +422,7 @@ ob_start();
             <td class="s6" colspan="7">Multas e Juros de Mora da Dívida Ativa do ITR-Munic.Conv.</td>
             <td class="s9">
               <?php
-              $aDadosMJDA = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419130800%'");
+              $aDadosMJDA = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4191308%'");
               $fMJDA = count($aDadosMJDA) > 0 ? $aDadosMJDA[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJDA, "f");
               ?>
@@ -434,7 +434,7 @@ ob_start();
             <td class="s12" colspan="7">Multas e Juros de Mora da Dívida Ativa do IPTU </td>
             <td class="s13">
               <?php
-              $aDadosMJDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419131100%'");
+              $aDadosMJDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4191311%'");
               $fMJDAIPTU = count($aDadosMJDAIPTU) > 0 ? $aDadosMJDAIPTU[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJDAIPTU, "f");
               ?>
@@ -446,7 +446,7 @@ ob_start();
             <td class="s6" colspan="7">Multas e Juros de Mora da Dívida Ativa do ITBI </td>
             <td class="s9">
               <?php
-              $aDadosMJDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419131200%'");
+              $aDadosMJDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4191312%'");
               $fMJDAITBI = count($aDadosMJDAITBI) > 0 ? $aDadosMJDAITBI[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJDAITBI, "f");
               ?>
@@ -458,7 +458,7 @@ ob_start();
             <td class="s12" colspan="7">Multas e Juros de Mora da Dívida Ativa do ISS </td>
             <td class="s13">
               <?php
-              $aDadosMJDAISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419131300%'");
+              $aDadosMJDAISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4191313%'");
               $fMJDAISS = count($aDadosMJDAISS) > 0 ? $aDadosMJDAISS[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJDAISS, "f");
               ?>
@@ -470,7 +470,7 @@ ob_start();
             <td class="s6" colspan="7">Receita da Dívida Ativa do ITR - Munic.Conveniado</td>
             <td class="s9">
               <?php
-              $aDadosRDAITR = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419310400%'");
+              $aDadosRDAITR = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193104%'");
               $fMJDAITR = count($aDadosRDAITR) > 0 ? $aDadosRDAITR[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJDAITR, "f");
               ?>
@@ -482,7 +482,7 @@ ob_start();
             <td class="s12" colspan="7">Receita da Dívida Ativa do IPTU </td>
             <td class="s13">
               <?php
-              $aDadosRDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419311100%'");
+              $aDadosRDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193111%'");
               $fMJDAIPTU = count($aDadosRDAIPTU) > 0 ? $aDadosRDAIPTU[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJDAIPTU, "f");
               ?>
@@ -494,7 +494,7 @@ ob_start();
             <td class="s6" colspan="7">Receita da Dívida Ativa do ITBI </td>
             <td class="s9">
               <?php
-              $aDadosRDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419311200%'");
+              $aDadosRDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193112%'");
               $fMJDAITBI = count($aDadosRDAITBI) > 0 ? $aDadosRDAITBI[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJDAITBI, "f");
               ?>
@@ -506,7 +506,7 @@ ob_start();
             <td class="s12" colspan="7">Receita da Dívida Ativa do ISS </td>
             <td class="s13">
               <?php
-              $aDadosRDAISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '419311300%'");
+              $aDadosRDAISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193113%'");
               $fMJDAISS = count($aDadosRDAISS) > 0 ? $aDadosRDAISS[0]->saldo_arrecadado_acumulado : 0;
               echo db_formatar($fMJDAISS, "f");
               ?>
