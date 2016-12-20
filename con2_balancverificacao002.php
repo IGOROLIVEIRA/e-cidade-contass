@@ -365,9 +365,9 @@ $pdf->ln();
 $pos = $pdf->gety();
 $pdf->multicell($largura,3,$ass_pref,0,"C",0,0);
 $pdf->setxy($largura,$pos);
-$pdf->multicell($largura,3,$ass_sec,0,"C",0,0);
-$pdf->setxy($largura+65,$pos);
 $pdf->multicell($largura,3,$ass_tes,0,"C",0,0);
+$pdf->setxy($largura+65,$pos);
+$pdf->multicell($largura,3,$ass_sec,0,"C",0,0);
 $pdf->setxy($largura+130,$pos);
 $pdf->multicell($largura,3,$ass_cont,0,"C",0,0);
 
