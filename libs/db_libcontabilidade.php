@@ -5555,9 +5555,9 @@ class cl_estrutura_sistema {
     function getRCL(DBDate $oDataFim, $instits){
         $oPeriodo = new Periodo;
         $oNovaDataFim = clone $oDataFim;//Salvo a data final
-        $iMes = $oDataFim->getMes() != 12 ? ($oDataFim->getMes()-11)+12 : $oDataFim->getMes();//Calcula o mes separado por causa do meses que possuem 31 dias, exceto para o mês de dezembro
+        $iMes = $oDataFim->getMes() != 12 ? ($oDataFim->getMes()-11)+12 : $oDataFim->getMes()-11;//Calcula o mes separado por causa do meses que possuem 31 dias
         $oDataFim->modificarIntervalo("-11 month");//Faço isso apenas para saber o ano
-        $oDataFim = new DBDate($oDataFim->getAno()."-".$iMes."-".$oPeriodo->getPeriodoByMes($iMes)->getDiaInicial());//Aqui pego o primeiro dia do mes para montar a nova data de inicio
+        $oDataFim = new DBDate($oDataFim->getAno()."-".$iMes."-1");//Aqui pego o primeiro dia do mes para montar a nova data de inicio
         $aPeriodoCalculo = DBDate::getMesesNoIntervalo($oDataFim,$oNovaDataFim);//Retorno o array com os anos e seus respectivos meses dentro do periodo informado
 
         $aCalculos = array();
