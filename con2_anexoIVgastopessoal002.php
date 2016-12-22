@@ -40,9 +40,9 @@ $oPeriodo = new Periodo($o116_periodo);
 $oDataFim = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
 $oDataIni = new DBDate("{$anousu}-{$oPeriodo->getMesInicial()}-{$oPeriodo->getDiaFinal()}");
 
-$iMes = $oDataIni->getMes() != 12 ? ($oDataIni->getMes()-11)+12 : $oDataIni->getMes();//Calcula o mes separado por causa do meses que possuem 31 dias, exceto para o mês de dezembro
+$iMes = $oDataIni->getMes() != 12 ? ($oDataIni->getMes()-11)+12 : $oDataIni->getMes()-11;//Calcula o mes separado por causa do meses que possuem 31 dias
 $oDataIni->modificarIntervalo("-11 month");//Faço isso apenas para saber o ano
-$oDataIni = new DBDate($oDataIni->getAno()."-".$iMes."-".$oPeriodo->getPeriodoByMes($iMes)->getDiaInicial());//Aqui pego o primeiro dia do mes para montar a nova data de inicio
+$oDataIni = new DBDate($oDataIni->getAno()."-".$iMes."-1");//Aqui pego o primeiro dia do mes para montar a nova data de inicio
 $dtini = $oDataIni->getDate();
 $dtfim = $oDataFim->getDate();
 $instits = str_replace('-', ', ', $db_selinstit);
@@ -222,10 +222,14 @@ ob_start();
         <td class="s5">
           <?php
           $fSaldoIntaivosPensionistasProprio = 0;
-          if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
-            $aSaldoEstrut1 = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-            $aSaldoEstrut2 = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-            $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
+          foreach ($aInstits as $iInstit) {
+            $oInstit = new Instituicao($iInstit);
+            if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
+              $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+              $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+              $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
+            }
+
           }
           echo db_formatar($fSaldoIntaivosPensionistasProprio,"f");
           ?>
@@ -247,10 +251,13 @@ ob_start();
         <td class="s6">
           <?php
           $fSaldoAposentadoriaPensoesTesouro = 0;
-          if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
-            $aSaldoEstrut1 = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-            $aSaldoEstrut2 = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-            $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
+          foreach ($aInstits as $iInstit) {
+            $oInstit = new Instituicao($iInstit);
+            if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+              $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+              $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+              $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
+            }
           }
           echo db_formatar($fSaldoAposentadoriaPensoesTesouro,"f");
           ?>

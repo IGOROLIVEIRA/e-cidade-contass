@@ -611,7 +611,17 @@ try {
                         where c19_contacorrente = {$iCorrente}
                             and c19_reduz = {$iReduzido}
                             and c19_instit = " . db_getsession('DB_instit') . "
-                            and DATE_PART('YEAR',c69_data) = {$iAnousuEmp} and DATE_PART('MONTH',c69_data) <= {$nMes}";
+                            and DATE_PART('YEAR',c69_data) = {$iAnousuEmp} and DATE_PART('MONTH',c69_data) <= {$nMes}
+                            union
+                            SELECT c19_sequencial,
+                                   c17_descricao,
+                                   e60_numemp,
+                                   e60_codemp,
+                                   e60_anousu
+                            FROM contacorrentedetalhe
+                            INNER JOIN contacorrente ON c19_contacorrente = c17_sequencial
+                            INNER JOIN empempenho ON e60_numemp = c19_numemp
+                            WHERE c19_numemp = 3853 and c19_reduz = {$iReduzido}";
                         $rsLancamentos = db_query($sSqlLancamentos);
                         $aLancamento = db_utils::getColectionByRecord($rsLancamentos);
                         $aDadosAgrupados = array();
