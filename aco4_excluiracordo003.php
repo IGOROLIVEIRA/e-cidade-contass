@@ -456,20 +456,6 @@ function retornoBuscaDadosAcordo( oResponse ) {
     alert( oRetorno.message.urlDecode() );
     return false;
   }
-  /**
-   * $aValores = array(
-     0 => 'Selecione',
-     1 => '1 - Não ou dispensa por valor',
-     2 => '2 - Licitação',
-     3 => '3 - Dispensa ou Inexigibilidade',
-     4 => '4 - Adesão à ata de registro de preços',
-     5 => '5 - Licitação realizada por outro órgão ou entidade',
-     6 => '6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade',
-     7 => '7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC',
-     8 => '8 - Licitação realizada por consorcio público',
-     9 => '9 - Licitação realizada por outro ente da federação',
-     );
-   * /
 
   var aOrigens    = new Array();
       aOrigens[1] = 'Processo de Compras';
