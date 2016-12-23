@@ -185,7 +185,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
     sContent += "     <td> ";
     sContent += "       <fieldset> ";
     sContent += "         <legend>Itens</legend> ";
-    sContent += "         <div id='ctnGridItens' style=\"width: 900px\"></div> ";
+    sContent += "         <div id='ctnGridItens' style=\"width: 1000px\"></div> ";
     sContent += "       </fieldset> ";
     sContent += "     </td> ";
     sContent += "   </tr> ";
@@ -466,10 +466,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
         me.oGridItens = new DBGrid('oGridItens');
         me.oGridItens.nameInstance = me.sInstance + '.oGridItens';
         me.oGridItens.setCheckbox(0);
-        me.oGridItens.setCellAlign(['right', 'left', "right", "right", "right", "center", "center", "center", "center"]);
-        me.oGridItens.setCellWidth(["5%", '20%', "10%", "10%", "10%", "10%", "5%", "15%", "15%"]);
-        me.oGridItens.setHeader(["Código", "Item", "Quantidade", "Valor Unitário", "Valor Total", "Dotações", "Seq", "Inicio Execução", "Fim Execução"]);
-        me.oGridItens.aHeaders[7].lDisplayed = false;
+        me.oGridItens.setCellAlign(['right', 'left', "right", "right","right", "right", "right", "center", "center", "center", "center"]);
+        me.oGridItens.setCellWidth(["5%", '17%', "9%", "9%","9%", "9%", "9%", "9%", "9%", "10%", "10%"]);
+        me.oGridItens.setHeader(["Código", "Item", "Qtde Anterior", "Vl Unit Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Dotações", "Seq", "Inicio Exec", "Fim Exec"]);
+        me.oGridItens.aHeaders[9].lDisplayed = false;
         me.oGridItens.setHeight(300);
         me.oGridItens.show($('ctnGridItens'));
 
@@ -754,6 +754,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
     this.aditar = function () {
 
         var oSelecionados = {};
+        var iSelecionados = [];
         /**
          * @todo incluir aqui todas as validações de campos obrigatórios para o SICOM contratos
          */
@@ -781,7 +782,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
         me.oGridItens.getRows().forEach(function (oRow) {
 
             if (oRow.isSelected) {
-                oSelecionados[oRow.aCells[7].getValue()] = oRow;
+                oSelecionados[oRow.aCells[9].getValue()] = oRow;
+                iSelecionados.push(oRow.aCells[1].getValue());
             }
         });
 
@@ -801,7 +803,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             veiculodivulgacao: me.oTxtVeiculoDivulgacao.getValue(),
             tipoaditamento: me.iTipoAditamento,
             sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),
-            aItens: []
+            aItens: [],
+            aSelecionados: iSelecionados
         }
         if(iTipoAditamento == 7){
             oParam.tipoalteracaoaditivo = me.oCboTipoAditivo.getValue();
@@ -830,11 +833,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
 
             if (oSelecionados[iIndice] != undefined) {
 
-                oItemAdicionar.quantidade = oSelecionados[iIndice].aCells[3].getValue().getNumber();
-                oItemAdicionar.valorunitario = oSelecionados[iIndice].aCells[4].getValue().getNumber();
+                oItemAdicionar.quantidade = oSelecionados[iIndice].aCells[5].getValue().getNumber();
+                oItemAdicionar.valorunitario = oSelecionados[iIndice].aCells[6].getValue().getNumber();
                 oItemAdicionar.valor = oItemAdicionar.quantidade * oItemAdicionar.valorunitario;
-                oItemAdicionar.dtexecucaoinicio = oSelecionados[iIndice].aCells[8].getValue();
-                oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[9].getValue();
+                oItemAdicionar.dtexecucaoinicio = oSelecionados[iIndice].aCells[10].getValue();
+                oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[11].getValue();
 
                 if (iTipoAditamento == 2 && (+oItemAdicionar.quantidade) > (+oItem.quantidade)) {
 
@@ -1240,6 +1243,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
 
             aLinha[0] = oItem.codigoitem;
             aLinha[1] = oItem.descricaoitem.urlDecode();
+            aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
+            aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
 
             if (!oItem.novo) {
 
@@ -1275,7 +1280,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                 oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
 
-            aLinha[2] = oInputQuantidade.toInnerHtml();
+            aLinha[4] = oInputQuantidade.toInnerHtml();
 
             oInputUnitario = new DBTextField('valorunitario' + iSeq, 'valorunitario' + iSeq, js_formatar(nUnitario, "f", 3));
             oInputUnitario.addStyle("width", "100%");
@@ -1289,8 +1294,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                 oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
 
-            aLinha[3] = oInputUnitario.toInnerHtml();
-            aLinha[4] = js_formatar(nQuantidade * nUnitario, 'f', 2);
+            aLinha[5] = oInputUnitario.toInnerHtml();
+            aLinha[6] = js_formatar(nQuantidade * nUnitario, 'f', 2);
 
             var oBotaoDotacao = document.createElement("input");
             oBotaoDotacao.type = "button";
@@ -1299,18 +1304,18 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             oBotaoDotacao.disabled = !me.lLiberaDotacoes;
             oBotaoDotacao.setAttribute("onclick", me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
 
-            aLinha[5] = oBotaoDotacao.outerHTML;
-            aLinha[6] = new String(iSeq);
+            aLinha[7] = oBotaoDotacao.outerHTML;
+            aLinha[8] = new String(iSeq);
 
             oInputPeriodoIni = new DBTextFieldData('periodoini' + iSeq, 'periodoini' + iSeq, js_formatar(oItem.periodoini, 'd'));
             oInputPeriodoFim = new DBTextFieldData('periodofim' + iSeq, 'periodofim' + iSeq, js_formatar(oItem.periodofim, 'd'));
-
+            
             if(iTipoAditamento == 6 || iTipoAditamento == 7){
-                aLinha[7] = oInputPeriodoIni.toInnerHtml();
-                aLinha[8] = oInputPeriodoFim.toInnerHtml();
+                aLinha[9] = oInputPeriodoIni.toInnerHtml().replace("size    = '10'","size    = '8'");
+                aLinha[10] = oInputPeriodoFim.toInnerHtml().replace("size    = '10'","size    = '8'");
             } else {
-                aLinha[7] = js_formatar(oItem.periodoini, 'd');
-                aLinha[8] = js_formatar(oItem.periodofim, 'd');
+                aLinha[9] = js_formatar(oItem.periodoini, 'd');
+                aLinha[10] = js_formatar(oItem.periodofim, 'd');
             }
 
 
@@ -1342,13 +1347,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
     this.calculaValorTotal = function (iLinha) {
 
         var aLinha = me.oGridItens.aRows[iLinha],
-            nQuantidade = aLinha.aCells[3].getValue().getNumber(),
-            nUnitario = aLinha.aCells[4].getValue().getNumber();
+            nQuantidade = aLinha.aCells[5].getValue().getNumber(),
+            nUnitario = aLinha.aCells[6].getValue().getNumber();
 
         aItensPosicao[iLinha].novaquantidade = nQuantidade;
         aItensPosicao[iLinha].novounitario = nUnitario;
 
-        aLinha.aCells[5].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
+        aLinha.aCells[7].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
 
         me.salvarInfoDotacoes(iLinha);
     }

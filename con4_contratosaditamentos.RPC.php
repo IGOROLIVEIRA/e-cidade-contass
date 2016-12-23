@@ -73,6 +73,13 @@ try {
         $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
         $oItem->dotacoes       = array();
 
+        /**
+         * retornar item com ultimo valor aditado ou do contrato
+         */
+        $oItemUltimoValor = $oItemPosicao->getQuantidadeValorAnterior($oParam->iAcordo,$oItem->codigoitem);
+        $oItem->qtdeanterior = $oItemUltimoValor->ac20_quantidade;
+        $oItem->vlunitanterior = $oItemUltimoValor->ac20_valorunitario;
+        
         foreach($oItemPosicao->getDotacoes() as $oDotacao) {
           $oItem->dotacoes[] = (object) array(
               'dotacao' => $oDotacao->dotacao,
@@ -91,7 +98,7 @@ try {
     case "processarAditamento":
 
       $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
-      $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura,$oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo);
+      $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura,$oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados);
       break;
 
     case "getUnidades":

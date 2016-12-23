@@ -2622,4 +2622,26 @@ class AcordoItem {
     }
     return $nPercentualExecutado;
   }
+
+
+  /**
+   * @param integer $iCodAcordo código do Acordo
+   */
+  public function getQuantidadeValorAnterior($iCodAcordo, $iCodMaterial) {
+
+    if (!empty($iCodMaterial) != null) {
+
+      $oDaoAcordoItem = db_utils::getDao("acordoitem");
+      $sWhere = "ac20_pcmater = {$iCodMaterial} and ac20_acordoposicao in (select ac26_sequencial from acordoposicao where ac26_acordo = {$iCodAcordo}) 
+        and ((ac20_quantidade > 0 and ac20_valorunitario > 0) or (ac20_acordoposicaotipo in (9,10)))";
+      $sSqlAcordoitem = $oDaoAcordoItem->sql_query_file(null, "*", "ac20_acordoposicao desc", $sWhere);
+      $rsAcordoItem   = $oDaoAcordoItem->sql_record($sSqlAcordoitem);
+      if ($oDaoAcordoItem->numrows > 0) {
+
+        return db_utils::fieldsMemory($rsAcordoItem, 0, false, false, true);
+
+      }
+    }
+  }
+
 }

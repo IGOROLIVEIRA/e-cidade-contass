@@ -2310,7 +2310,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados)
     {
 
         $nValorItens = 0;
@@ -2394,10 +2394,10 @@ class Acordo
                         $aPeriodosItem[0]->dtDataInicial = $sNovaDtExecucaoInicio->getDate();
                         $aPeriodosItem[0]->dtDataFinal = $sNovaDtExecucaoFim->getDate();
                         $aTiposAlteracao[] = 8;
-                    }
-                    if (!empty($aPeriodosItem)) {
-                        $oNovoItem->setPeriodos($aPeriodosItem);
-                    }
+                    }  
+                } 
+                if (!empty($aPeriodosItem)) {
+                    $oNovoItem->setPeriodos($aPeriodosItem);
                 }
             } else {
 
@@ -2411,7 +2411,7 @@ class Acordo
                     $oNovoItem->setPeriodos($oItem->aPeriodos);
                 }
             }
-            if (in_array($iTipoAditamento, array(4, 7))) {
+            if (in_array($iTipoAditamento, array(4, 7)) && in_array($oItem->codigoitem, $aSelecionados) ) {
                 /**
                  * Verifica se houve alteração de quantidade/valor
                  */
