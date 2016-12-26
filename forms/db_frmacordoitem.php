@@ -1906,6 +1906,19 @@ db_app::load("estilos.css, grid.style.css");
     oWindowAuxEmpenho = new windowAux("oWindowAuxEmpenho", sTituloWindowAux, 950, 500);
     var sConteudoWindow = "<fieldset>";
     sConteudoWindow += "<legend><b>Itens de Empenhos</b></legend>";
+    sConteudoWindow += "<center>";
+    sConteudoWindow += "<b>Data Inicial: </b>";
+    sConteudoWindow += new DBTextFieldData("oDBTextFieldDataInicialGeral", "oDBTextFieldData", "", 10).toInnerHtml();
+    sConteudoWindow += "&nbsp;<b>Data Final: </b>";
+    sConteudoWindow += new DBTextFieldData("oDBTextFieldDataFinalGeral", "oDBTextFieldData", "", 10).toInnerHtml();
+    sConteudoWindow += "&nbsp;<input";
+    sConteudoWindow += "  type='button'";
+    sConteudoWindow += "  name='btnAlterarDatas'";
+    sConteudoWindow += "  id='btnAlterarDatas'";
+    sConteudoWindow += "  value='Alterar Todos'";
+    sConteudoWindow += "  onclick='js_AlterarDatas();'";
+    sConteudoWindow += ">";
+    sConteudoWindow += "</center><br>";
     sConteudoWindow += "<div id='ctnGridItensEmpenho'></div>";
     sConteudoWindow += "</fieldset>";
     sConteudoWindow += "<center>";
@@ -2136,6 +2149,17 @@ db_app::load("estilos.css, grid.style.css");
     }
     js_mostrarTelaModificacaoItens();
     
+  }
+
+  function js_AlterarDatas() {
+
+    var aItensEmpenhos = oGridItensEmpenhos.getSelection();
+    
+    aItensEmpenhos.each(function (oItem, iIndice) {
+      
+      $('oDBTextFieldDataInicial'+iIndice).value = $('oDBTextFieldDataInicialGeral').value;
+      $('oDBTextFieldDataFinal'+iIndice).value = $('oDBTextFieldDataFinalGeral').value;
+    });
   }
   
   js_showGrid();

@@ -473,7 +473,7 @@ function retornoBuscaDadosAcordo( oResponse ) {
 
   $("ac16_sequencial").value               = oRetorno.contrato.iSequencial;
   $("ac16_origem").value                   = aOrigens[oRetorno.contrato.iOrigem];
-  $("ac16_tipoorigem").value                   = aTipoOrigens[oRetorno.contrato.iTipoOrigem];
+  $("ac16_tipoorigem").value                   = oRetorno.contrato.iTipoOrigem;
   $("ac16_acordogrupo").value              = oRetorno.contrato.iGrupo;
   $("ac16_numeroacordo").value                   = oRetorno.contrato.iNumero;
   $("ac16_contratado").value               = oRetorno.contrato.iContratado;

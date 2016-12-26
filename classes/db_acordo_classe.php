@@ -78,6 +78,10 @@ class cl_acordo {
    var $ac16_acordoclassificacao = 0;
    var $ac16_numeroacordo = 0;
    var $ac16_valor = 0;
+   var $ac16_tipoorigem = 0;
+   var $ac16_formafornecimento = null;
+   var $ac16_formapagamento = null;
+
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac16_sequencial = int4 = Acordo
@@ -107,6 +111,9 @@ class cl_acordo {
                  ac16_acordoclassificacao = int4 = Sequencial da Classificação do Contrato
                  ac16_numeroacordo = int4 = Número do acordo
                  ac16_valor = float8 = Valor do acordo
+                 ac16_tipoorigem = int8 = Tipo de Origem acordo
+                 ac16_formafornecimento = Forma de fornecimento acordo
+                 ac16_formapagamento = Forma de pagamento acordo
                  ";
    //funcao construtor da classe
    function cl_acordo() {
@@ -174,6 +181,9 @@ class cl_acordo {
        $this->ac16_acordoclassificacao = ($this->ac16_acordoclassificacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_acordoclassificacao"]:$this->ac16_acordoclassificacao);
        $this->ac16_numeroacordo = ($this->ac16_numeroacordo == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_numeroacordo"]:$this->ac16_numeroacordo);
        $this->ac16_valor = ($this->ac16_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_valor"]:$this->ac16_valor);
+       $this->ac16_tipoorigem = ($this->ac16_tipoorigem == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_tipoorigem"]:$this->ac16_tipoorigem);
+       $this->ac16_formafornecimento = ($this->ac16_formafornecimento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_formafornecimento"]:$this->ac16_formafornecimento);
+       $this->ac16_formapagamento = ($this->ac16_formapagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_formapagamento"]:$this->ac16_formapagamento);
      }else{
        $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
      }
@@ -370,6 +380,24 @@ class cl_acordo {
      if($this->ac16_valor == null ){
        $this->ac16_valor = "0";
      }
+     if($this->ac16_formafornecimento == null ){
+       $this->erro_sql = " Campo Forma de fornecimento não informado.";
+       $this->erro_campo = "ac16_formafornecimento";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->ac16_formapagamento == null ){
+       $this->erro_sql = " Campo Forma de pagamento não informado.";
+       $this->erro_campo = "ac16_formapagamento";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($ac16_sequencial == "" || $ac16_sequencial == null ){
        $result = db_query("select nextval('acordo_ac16_sequencial_seq')");
        if($result==false){
@@ -430,6 +458,9 @@ class cl_acordo {
                                       ,ac16_acordoclassificacao
                                       ,ac16_numeroacordo
                                       ,ac16_valor
+                                      ,ac16_tipoorigem
+                                      ,ac16_formafornecimento
+                                      ,ac16_formapagamento
                        )
                 values (
                                 $this->ac16_sequencial
@@ -445,7 +476,7 @@ class cl_acordo {
                                ,'$this->ac16_objeto'
                                ,$this->ac16_instit
                                ,$this->ac16_acordocomissao
-                               ,'$this->ac16_lei'
+                               ,".($this->ac16_lei == "" || $this->ac16_lei == 0 ? 'null' : $this->ac16_lei)."
                                ,$this->ac16_acordogrupo
                                ,$this->ac16_origem
                                ,$this->ac16_qtdrenovacao
@@ -459,6 +490,9 @@ class cl_acordo {
                                ,".($this->ac16_acordoclassificacao == "null" || $this->ac16_acordoclassificacao == ""?"null":"'".$this->ac16_acordoclassificacao."'")."
                                ,$this->ac16_numeroacordo
                                ,$this->ac16_valor
+                               ,".($this->ac16_tipoorigem == "null" || $this->ac16_tipoorigem == ""?'null':$this->ac16_tipoorigem)."
+                               ,'$this->ac16_formafornecimento'
+                               ,'$this->ac16_formapagamento'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -713,17 +747,8 @@ class cl_acordo {
        }
      }
      if(trim($this->ac16_lei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_lei"])){
-       $sql  .= $virgula." ac16_lei = '$this->ac16_lei' ";
+       $sql  .= $virgula." ac16_lei = ".($this->ac16_lei == "" || $this->ac16_lei == 0 ? 'null' : $this->ac16_lei);
        $virgula = ",";
-       if(trim($this->ac16_lei) == null ){
-         $this->erro_sql = " Campo Lei não informado.";
-         $this->erro_campo = "ac16_lei";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if(trim($this->ac16_acordogrupo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_acordogrupo"])){
        $sql  .= $virgula." ac16_acordogrupo = $this->ac16_acordogrupo ";
@@ -854,6 +879,39 @@ class cl_acordo {
         }
        $sql  .= $virgula." ac16_valor = $this->ac16_valor ";
        $virgula = ",";
+     }
+     if(trim($this->ac16_tipoorigem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_tipoorigem"])){
+        if(trim($this->ac16_tipoorigem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ac16_tipoorigem"])){
+           $this->ac16_tipoorigem = "0" ;
+        }
+       $sql  .= $virgula." ac16_tipoorigem = $this->ac16_tipoorigem ";
+       $virgula = ",";
+     }
+     if(trim($this->ac16_formafornecimento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_formafornecimento"])){
+       $sql  .= $virgula." ac16_formafornecimento = '$this->ac16_formafornecimento' ";
+       $virgula = ",";
+       if(trim($this->ac16_formafornecimento) == null ){
+         $this->erro_sql = " Campo Forma de fornecimento do Contrato não informado.";
+         $this->erro_campo = "ac16_formafornecimento";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->ac16_formapagamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_formapagamento"])){
+       $sql  .= $virgula." ac16_formapagamento = '$this->ac16_formapagamento' ";
+       $virgula = ",";
+       if(trim($this->ac16_formapagamento) == null ){
+         $this->erro_sql = " Campo Forma de pagamento do Contrato não informado.";
+         $this->erro_campo = "ac16_formapagamento";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
      }
      $sql .= " where ";
      if($ac16_sequencial!=null){
