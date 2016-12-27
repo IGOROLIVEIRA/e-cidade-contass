@@ -515,7 +515,6 @@ contrato = function () {
 
       me.bloqueiaCampos();
 
-	  //parent.mo_camada('acordoitem');
 	  parent.document.formaba.acordoitem.disabled       = false;
 	  top.corpo.iframe_acordoitem.location.href         = 'aco1_acordoitem001.php?ac20_acordo='+oRetorno.iCodigoContrato;
 	  parent.document.formaba.acordogarantia.disabled   = false;
@@ -525,6 +524,7 @@ contrato = function () {
 	  parent.document.formaba.acordodocumento.disabled  = false;
       top.corpo.iframe_acordodocumento.location.href    = 'aco1_acordodocumento001.php?ac40_acordo='+oRetorno.iCodigoContrato;
 	    alert("Acordo Salvo com Sucesso.");
+	    parent.mo_camada('acordoitem');
 	  } else {
 
 	    alert(oRetorno.message.urlDecode());
