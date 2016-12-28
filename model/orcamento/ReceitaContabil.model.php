@@ -80,6 +80,12 @@ class ReceitaContabil {
    * @var string
    */
   protected $sCaracteristicaPeculiar;
+  
+  /**
+   * Estrutrul Plano Orcamentario
+   * @var string
+   */
+  protected $sEstruturalPlanoOrcamentario;
 
   /**
    * Data da Criacao
@@ -135,6 +141,15 @@ class ReceitaContabil {
       $this->oInstituicao            = InstituicaoRepository::getInstituicaoByCodigo($oDadoReceita->o70_instit);
       $this->sCaracteristicaPeculiar = $oDadoReceita->o70_concarpeculiar;
       $this->dtCriacao               = $oDadoReceita->o70_datacriacao;
+      
+      $sSqlBuscaReceita = $oDaoOrcReceita->sql_query_dados_receita($iAno, $iCodigo);
+      $rsBuscaReceita   = $oDaoOrcReceita->sql_record($sSqlBuscaReceita);
+      $oDadoReceita                  = db_utils::fieldsMemory($rsBuscaReceita, 0);
+      if ($oDaoOrcReceita->erro_status == "0" && $this->getAno() > 2016) {
+      	throw new BusinessException("Não foi possível buscar a Estrutual Plano Orçamentário.");
+      	
+      }
+      $this->sEstruturalPlanoOrcamentario               = $oDadoReceita->c60_estrut;
       unset($oDadoReceita);
     }
     return true;
@@ -147,7 +162,8 @@ class ReceitaContabil {
                                              $sCaracteristaPeculiarRecibo=null,
                                              $iCodigoCgm = null) {
 
-
+   
+    
     $oDadoSqlGeral           = new stdClass();
     $oDadoSqlGeral->arrecada = $nValorArrecadacao;
 
@@ -157,7 +173,51 @@ class ReceitaContabil {
 
     $aValoresDesdobrados = array();
     $aReceitas           = array();
-    if (count($aDesdobramentos) > 0 && $this->getTipoRecurso() == 1) {
+    
+    /**
+     * @autor IGOR RUAS
+     * Pega o o15_codtri de acordo com a orctiporec associada a orcfontes
+     */
+    $oDaoOrcTipoRec		 = db_utils::getDao('orctiporec');
+    $sSqlBuscaRecursoTCE = $oDaoOrcTipoRec->sql_query($this->getTipoRecurso());
+    $rsBuscaRecursoTCE   = $oDaoOrcTipoRec->sql_record($sSqlBuscaRecursoTCE);
+    $oDaoOrcTipoRec      = db_utils::fieldsMemory($rsBuscaRecursoTCE, 0);
+    $nRecursoTCE         = $oDaoOrcTipoRec->o15_codtri;
+   
+    if ($oRecursoTCE->erro_status == "0" && $this->getAno() > 2016) {
+    	throw new BusinessException("Não foi possível buscar a Cod TCE {$this->getTipoRecurso()}/{$iAno}.");
+    }
+    
+    /** 
+     * @autor IGOR RUAS
+     * se aDesdobramentos vir vazia verificar se o desdobramento é obritatorio
+     * caso seja não continuar.
+     */
+    //RECEITAS CADASTRADAS ERRADA DEVER SER SUBSTITUIDAS
+    $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140','191308', '191311', '191312', '191313', '193104', '193111',
+    		'193112', '193113', '172401', '247199', '247299');
+    //print_r($this->getEstruturalPlanoOrcamentario() ." - " .substr($this->getEstruturalPlanoOrcamentario(), 1, 6) . " ->");
+    if (in_array(substr($this->getEstruturalPlanoOrcamentario(), 1, 6), $aRectce)) {
+    	$sRecitaLancamento = substr($this->getEstruturalPlanoOrcamentario(), 1, 6) . "00";
+    }else{
+    	$sRecitaLancamento = substr($this->getEstruturalPlanoOrcamentario(), 1, 8);
+    }
+    //print_r($sRecitaLancamento);exit;
+    //receita que tem desdobramento obrigatorio
+    $aReceitaDesdobradaObrigatorio = array('11120101','11120200','11120431','11120434','11120800','11130501','11130502','17210102','17210105','17213600',
+    		'17220101','17220102','17220104','19110801','19113800','19113900','19114000','19130800','19131100','19131200','19131300','19310400','19311100',
+    		'19311200','19311300','17210103','17210104','17210132','17240100','17240200');
+    
+    if (count($aDesdobramentos) <= 0 && $this->getAno() > 2016){
+    	
+    	if(in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio) && $nRecursoTCE == 100){
+    		throw new BusinessException("Recetia ".$this->getEstruturalPlanoOrcamentario()." tem que ser desdobrada.");
+    	}else if(in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio)){
+    		throw new BusinessException("Recetia ".$this->getEstruturalPlanoOrcamentario()." é desdobrada então a fonte de recurso ".$nRecursoTCE." não pode receber lançamentos na tesouraria.");
+    	}
+    	
+    }
+    if (count($aDesdobramentos) > 0 && $nRecursoTCE == 100 && $this->getAno() > 2016) {
 
 
       $nValorSoma  = 0;
@@ -194,9 +254,10 @@ class ReceitaContabil {
         $oDadoReceitaDesdobrada->valor                   = $nValorPercentual;
         $oDadoReceitaDesdobrada->tem_desobramento        = true;
         $aReceitas[$oDadosDesdobramento->codigo_receita] = $oDadoReceitaDesdobrada;
+        
       }
 
-      //VAlor total arrecado é menor que o total.
+      //Valor total arrecado é menor que o total.
       if ($nValorSoma < $oDadoSqlGeral->arrecada) {
 
         if (!isset($aReceitas[$iPrimeiraReceita])){
@@ -213,15 +274,20 @@ class ReceitaContabil {
           $aReceitas[$iCodigoReceita]->valor = round($oDadoReceita->valor * -1, 2);
         }
       }
-    } else {
+    } else if(count($aDesdobramentos) > 0 && in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio) && $this->getAno() > 2016) {
 
-      $oDadoReceita                          = new stdClass();
-      $oDadoReceita->codigo_receita          = $this->getCodigo();
-      $oDadoReceita->caracteristica_peculiar = $this->getCaracteristicaPeculiar();
-      $oDadoReceita->percentual_receita      = 0;
-      $oDadoReceita->tem_desobramento        = false;
-      $oDadoReceita->valor                   = round($oDadoSqlGeral->arrecada, 2);
-      $aReceitas[$this->getCodigo()]         = $oDadoReceita;
+    	throw new BusinessException("Recetia ".$this->getEstruturalPlanoOrcamentario()." é desdobrada então a fonte de recurso ".$nRecursoTCE." não pode receber lançamentos na tesouraria.");
+      
+    }else{
+    	
+    	$oDadoReceita                          = new stdClass();
+    	$oDadoReceita->codigo_receita          = $this->getCodigo();
+    	$oDadoReceita->caracteristica_peculiar = $this->getCaracteristicaPeculiar();
+    	$oDadoReceita->percentual_receita      = 0;
+    	$oDadoReceita->tem_desobramento        = false;
+    	$oDadoReceita->valor                   = round($oDadoSqlGeral->arrecada, 2);
+    	$aReceitas[$this->getCodigo()]         = $oDadoReceita;
+    	
     }
 
     $sCaracteristicaPeculiarPlanilhaRecibo = '';
@@ -603,6 +669,7 @@ class ReceitaContabil {
     $this->oInstituicao = $oInstituicao;
   }
 
+  
   /**
    * Retorna a caracteristica peculiar
    * @return string
@@ -617,6 +684,22 @@ class ReceitaContabil {
    */
   public function setCaracteristicaPeculiar($sCaracteristicaPeculiar) {
     $this->sCaracteristicaPeculiar = $sCaracteristicaPeculiar;
+  }
+  
+  /**
+   * Retorna a EstruturalPlanoOrcamentario
+   * @return string
+   */
+  public function getEstruturalPlanoOrcamentario() {
+  	return $this->sEstruturalPlanoOrcamentario;
+  }
+  
+  /**
+   * Seta a EstruturalPlanoOrcamentario
+   * @param string $sCaracteristicaPeculiar
+   */
+  public function setEstruturalPlanoOrcamentario($sEstruturalPlanoOrcamentario) {
+  	$this->sEstruturalPlanoOrcamentario = $sEstruturalPlanoOrcamentario;
   }
 
   /**
