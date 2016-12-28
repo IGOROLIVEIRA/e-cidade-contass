@@ -42,6 +42,13 @@ require_once("model/AcordoComissao.model.php");
 require_once("model/CgmFactory.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoComissaoMembro.model.php");
+require_once("std/DBDate.php");
+require_once("model/configuracao/InstituicaoRepository.model.php");
+require_once("model/contabilidade/ParametroIntegracaoPatrimonial.model.php");
+require_once("model/contabilidade/EventoContabil.model.php");
+require_once("model/contabilidade/lancamento/LancamentoAuxiliarAcordo.model.php");
+require_once("model/contabilidade/contacorrente/ContaCorrenteDetalhe.model.php");
+require_once("model/empenho/EmpenhoFinanceiro.model.php");
 
 $oJson                  = new services_json();
 $oParam                 = $oJson->decode(str_replace("\\","",$_POST["json"]));
@@ -182,7 +189,7 @@ try {
         }
       }
       // percorremos os empenhos selecionados,
-      // verificamos se ele ja nao está no vinculo
+      // verificamos se ele ja nao estÃ¡ no vinculo
 
       /**
        *   aqui devemos tambem a cada passada dos empenhos acumular o valor total
@@ -210,6 +217,32 @@ try {
             $oErro->erro_msg = $oDaoEmpenhoContrato->erro_msg;
             throw new Exception(_M($sCaminhoMensagens."erro_vincular_empenho_contrato", $oErro));
           }
+          /**
+          * Criar lancamento contabil para o vinculo do contrato com o empenho
+          */
+          $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
+          $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
+          if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
+
+            if ($oDaoEmpenhoContrato->erro_status != 0) {
+              
+              $oEventoContabilAcordo = new EventoContabil(900, db_getsession('DB_anousu'));
+
+              $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
+              $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpenhosVincular);
+              $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
+              $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
+              $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
+
+              $oContaCorrente = new ContaCorrenteDetalhe();
+              $oContaCorrente->setAcordo($oAcordo);
+              $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
+              $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+
+            }
+
+          }
+
         }
 
         $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpenhosVincular);
@@ -495,7 +528,7 @@ try {
 
       /**
        * Pegar todos os itens de empenho, dos empenhos vinculados ao acordo x
-       * Buscar todos itens de empenho que não estão na acordoitem ainda
+       * Buscar todos itens de empenho que nÃ£o estÃ£o na acordoitem ainda
        */
 
       $iAcordo             = $oParam->iAcordo;
@@ -551,7 +584,7 @@ try {
       $dtDataFinalPosicao   = db_formatar($oContrato->getDataFinal(), "d");
 
       /**
-       * Inclui itens de empenho ainda não vinculados ao acordo
+       * Inclui itens de empenho ainda nÃ£o vinculados ao acordo
        */
       foreach ($oParam->aItens as $oStdItem) {
 
@@ -582,7 +615,7 @@ try {
     break;
 
     default:
-      throw new ParameterException("Nenhuma Opção Definida");
+      throw new ParameterException("Nenhuma OpÃ§Ã£o Definida");
     break;
   }
 
