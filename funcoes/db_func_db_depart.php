@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "db_depart.coddepto,db_depart.descrdepto,db_depart.nomeresponsavel,db_depart.emailresponsavel,db_depart.limite,db_depart.fonedepto,db_depart.emaildepto,db_depart.faxdepto,db_depart.ramaldepto";
+$campos = "db_depart.coddepto,db_depart.descrdepto,case when pessoa.z01_nome is null then db_depart.nomeresponsavel else pessoa.z01_nome end as dl_Resposavel,db_depart.emailresponsavel,db_depart.limite,db_depart.fonedepto,db_depart.emaildepto,db_depart.faxdepto,db_depart.ramaldepto";
 ?>

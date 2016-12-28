@@ -637,6 +637,7 @@ class cl_db_depart {
      $sql .= "      left  join departdiv    on departdiv.t30_depto        = db_depart.coddepto";
      $sql .= "      inner join db_config  on  db_config.codigo = db_depart.instit";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
+     $sql .= "      left join cgm pessoa  on  pessoa.z01_numcgm = db_depart.numcgm";
      $sql2 = "";
      if($dbwhere==""){
        if($coddepto!=null ){
