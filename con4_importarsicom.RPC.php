@@ -18,8 +18,8 @@ $oJson = new services_json();
 $oParam = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
 
 
-$oArquivoImportado        = new stdClass();
-$aListaArquivos           = array();
+$oArquivoImportado = new stdClass();
+$aListaArquivos = array();
 $oRetorno = new stdClass();
 $oRetorno->status = 1;
 $oRetorno->message = 1;
@@ -32,9 +32,9 @@ switch ($oParam->exec) {
         $path = "importarsicom/";
         $diretorio = dir($path);
         $sArquivo = $diretorio->read();
-        while ($tempArquivo = $diretorio->read())  {
-            $aTempArquivo = explode('.',$tempArquivo);
-            if($aTempArquivo[1] == 'zip'){
+        while ($tempArquivo = $diretorio->read()) {
+            $aTempArquivo = explode('.', $tempArquivo);
+            if ($aTempArquivo[1] == 'zip') {
                 $sArquivo = $tempArquivo;
             }
         }
@@ -50,18 +50,18 @@ switch ($oParam->exec) {
 
         ob_end_clean();
 
-        if($sArquivo == '..') {
+        if ($sArquivo == '..') {
             $oRetorno->status = 2;
             $oRetorno->message = 'Envie o arquivo zip para importar!';
         }
 
         $diretorio = dir($path);
 
-        while ($arquivo = $diretorio->read())  {
+        while ($arquivo = $diretorio->read()) {
 
             if (substr($arquivo, -3) == 'csv') {
 
-                if (($handle = fopen($path.$arquivo, "r")) !== FALSE) {
+                if (($handle = fopen($path . $arquivo, "r")) !== FALSE) {
 
                     db_inicio_transacao();
 
@@ -77,9 +77,9 @@ switch ($oParam->exec) {
                             $aArquivoCSV[0] == 'OPS' || $aArquivoCSV[0] == 'AOP' || $aArquivoCSV[0] == 'EXT' || $aArquivoCSV[0] == 'CTB' ||
                             $aArquivoCSV[0] == 'RSP'
                         ) {
-			    if($data[0] == 99){
-				continue;
-			    }
+                            if ($data[0] == 99) {
+                                continue;
+                            }
                             $sCaminhoClasse = "classes/db_" . strtolower($aArquivoCSV[0]) . $data[0] . $ano . "_classe.php";
                             if (file_exists($sCaminhoClasse)) {
 
@@ -95,7 +95,6 @@ switch ($oParam->exec) {
                             }
 
 
-
                             $sSqlCampos = "SELECT column_name,data_type FROM information_schema.columns WHERE table_name ='" . $sTabela . "'";
                             $rsSqlCampos = db_query($sSqlCampos);
                             $aCampos = db_utils::getColectionByRecord($rsSqlCampos);
@@ -103,7 +102,7 @@ switch ($oParam->exec) {
                             $aSigla = explode('_', $aCampos[0]->column_name);
 
 
-                            if($iCtrDelete == 0) {
+                            if ($iCtrDelete == 0) {
                                 /**
                                  * EXCLUIR DADOS DA TABELA
                                  */
@@ -168,11 +167,11 @@ switch ($oParam->exec) {
                                         $oClasse->$sColuna = null;
                                         $c++;
                                     } elseif ($tipoCampo[0] == 'date') {
-                                        if ($data[$c] == " " || trim($data[$c]) == "" || empty($data[$c]) ) {
+                                        if ($data[$c] == " " || trim($data[$c]) == "" || empty($data[$c])) {
                                             $oClasse->$sColuna = null;
                                             $c++;
                                         } else {
-					    var_dump($data[$c]);
+
                                             $oClasse->$sColuna = substr($data[$c], -4) . '-' . substr($data[$c], 2, -4) . '-' . substr($data[$c], 0, 2);
                                             $c++;
                                         }
@@ -209,7 +208,6 @@ switch ($oParam->exec) {
         }
 
         system("rm importarsicom/* ");
-
 
 
         break;
