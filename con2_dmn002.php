@@ -33,6 +33,7 @@ include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
+include_once("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_POST_VARS);
 
