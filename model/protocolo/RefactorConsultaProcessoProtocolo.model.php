@@ -107,7 +107,7 @@ class RefactorConsultaProcessoProtocolo {
       $oDadosMovimentacao->sDepartamento = $descrdepto;
       $oDadosMovimentacao->iInstituicao = $p58_instit;
       $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-      $oDadosMovimentacao->sLogin = $login;
+      $oDadosMovimentacao->sLogin = $nome;
       $oDadosMovimentacao->sObservacoes = 'Processo Criado';
       $oDadosMovimentacao->sDespacho = "";
 
@@ -156,11 +156,11 @@ class RefactorConsultaProcessoProtocolo {
             $oDadosMovimentacao->sDepartamento = $deptoatual;
             $oDadosMovimentacao->iInstituicao = $instit;
             $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-            $oDadosMovimentacao->sLogin = $login;
+            $oDadosMovimentacao->sLogin = $nome;
             $oDadosMovimentacao->sObservacoes = "Tramite Inicial $p62_codtran p/ Departamento: $coddeptodestino - $deptodestino ";
 
             if ( (int) $idusuariodestino > 0 ) {
-              $oDadosMovimentacao->sObservacoes .= " - usuário especificado: $idusuariodestino - $loginusuariodestino";
+              $oDadosMovimentacao->sObservacoes .= " - usuário especificado: $idusuariodestino - $nomeusuariodestino";
             } else {
               $oDadosMovimentacao->sObservacoes .= " (sem usuário especificado)";
             }
@@ -206,13 +206,13 @@ class RefactorConsultaProcessoProtocolo {
               $oDadosMovimentacao->sDepartamento = $deptoatual;
               $oDadosMovimentacao->iInstituicao = $instit;
               $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-              $oDadosMovimentacao->sLogin = $login;
+              $oDadosMovimentacao->sLogin = $nome;
               $oDadosMovimentacao->sObservacoes = "Transferência $p62_codtran p/ o Departamento: $coddeptodestino - $deptodestino";
               $oDadosMovimentacao->sDespacho = utf8_decode($p62_despacho);
               $oDadosMovimentacao->lImprimir = true;
               $oDadosMovimentacao->iTipo = 2;
               if ( (int) $idusuariodestino > 0 ) {
-                $oDadosMovimentacao->sObservacoes .= " - usuário especificado: $idusuariodestino - $loginusuariodestino";
+                $oDadosMovimentacao->sObservacoes .= " - usuário especificado: $idusuariodestino - $nomeusuariodestino";
               } else {
                 $oDadosMovimentacao->sObservacoes .= " (sem usuário especificado)";
               }
@@ -242,7 +242,7 @@ class RefactorConsultaProcessoProtocolo {
               $oDadosMovimentacao->sDepartamento = $descrdepto;
               $oDadosMovimentacao->iInstituicao = $instit;
               $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-              $oDadosMovimentacao->sLogin = $login;
+              $oDadosMovimentacao->sLogin = $nome;
 
               /**
                * Processo arquivado
@@ -304,7 +304,7 @@ class RefactorConsultaProcessoProtocolo {
                   $oDadosMovimentacao->sDepartamento = $descrdepto;
                   $oDadosMovimentacao->iInstituicao = $instit;
                   $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-                  $oDadosMovimentacao->sLogin = $login;
+                  $oDadosMovimentacao->sLogin = $nome;
                   $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
                   $oDadosMovimentacao->sDespacho = "$p78_despacho";
                   $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
@@ -394,7 +394,7 @@ class RefactorConsultaProcessoProtocolo {
                           $oDadosMovimentacao->sDepartamento = $descrdepto;
                           $oDadosMovimentacao->iInstituicao = $instit;
                           $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-                          $oDadosMovimentacao->sLogin = $login;
+                          $oDadosMovimentacao->sLogin = $nome;
                           $oDadosMovimentacao->sDespacho = "$p78_despacho";
                           $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
 
@@ -446,7 +446,7 @@ class RefactorConsultaProcessoProtocolo {
             $oDadosMovimentacao->sDepartamento = $descrdepto;
             $oDadosMovimentacao->iInstituicao = $instit;
             $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-            $oDadosMovimentacao->sLogin = $login;
+            $oDadosMovimentacao->sLogin = $nome;
             $oDadosMovimentacao->sObservacoes = "Andamento atual";
             $oDadosMovimentacao->sDespacho = "$p58_despacho";
 
@@ -471,13 +471,13 @@ class RefactorConsultaProcessoProtocolo {
           $oDadosMovimentacao->sDepartamento = $descrdepto;
           $oDadosMovimentacao->iInstituicao = $instit;
           $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-          $oDadosMovimentacao->sLogin = $login;
+          $oDadosMovimentacao->sLogin = $nome;
           $oDadosMovimentacao->sObservacoes = "Apensado ao processo: $prin ";
           $oDadosMovimentacao->sDespacho = $p58_despacho;
           $oDadosMovimentacao->lImprimir = false;
           $oDadosMovimentacao->iTipo = 2;
           if ( (int) $idusuariodestino > 0 ) {
-            $oDadosMovimentacao->sObservacoes .= " - usuário especificado: $idusuariodestino - $loginusuariodestino";
+            $oDadosMovimentacao->sObservacoes .= " - usuário especificado: $idusuariodestino - $nomeusuariodestino";
           } else {
             $oDadosMovimentacao->sObservacoes .= " (sem usuário especificado)";
           }
@@ -509,7 +509,7 @@ class RefactorConsultaProcessoProtocolo {
           $oDadosMovimentacao->sDepartamento = $descrdepto;
           $oDadosMovimentacao->iInstituicao = $instit;
           $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-          $oDadosMovimentacao->sLogin = $login;
+          $oDadosMovimentacao->sLogin = $nome;
           $oDadosMovimentacao->sObservacoes = "Recebeu Processo";
           $oDadosMovimentacao->sDespacho = "$p61_despacho";
 
@@ -545,7 +545,7 @@ class RefactorConsultaProcessoProtocolo {
               $oDadosMovimentacao->sDepartamento = $descrdepto;
               $oDadosMovimentacao->iInstituicao = $instit;
               $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-              $oDadosMovimentacao->sLogin = $login;
+              $oDadosMovimentacao->sLogin = $nome;
               $oDadosMovimentacao->sObservacoes = "{$tipo_despacho} {$aTiposTextoDespachos[$codigo_tipo_despacho]}";
               $oDadosMovimentacao->sDespacho = "$p78_despacho";
               $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
@@ -619,7 +619,7 @@ class RefactorConsultaProcessoProtocolo {
                       $oDadosMovimentacao->sDepartamento = $descrdepto;
                       $oDadosMovimentacao->iInstituicao = $instit;
                       $oDadosMovimentacao->sInstituicao = $nomeinstabrev;
-                      $oDadosMovimentacao->sLogin = $login;
+                      $oDadosMovimentacao->sLogin = $nome;
                       $oDadosMovimentacao->sDespacho = "$p78_despacho";
                       $oDadosMovimentacao->iAndamentoInterno = $p78_sequencial;
 

@@ -326,18 +326,16 @@ $clrotulo->label("descrdepto");
 						$result_and=db_query($sql_and) or die($sql_and);
 						if (pg_numrows($result_and)==0) {
 							$passou=false;
-						}else{
-                            $passou=true;
-                        }
+						}
 					}
 				}
 
 				 //echo "Processo : {$p58_codproc} passou : <br>";var_dump($passou);exit;
 
 				if ($passou==true) {
-          if ($p78_codandam != "") {
-            if ($p87_codandam != "") {
-              if ($p86_codandam != "") {
+          if ($p78_codandam == "") {
+            if ($p87_codandam == "") {
+              if ($p86_codandam == "") {
               	$cont ++;
 								//           $setor = explode("#",$depto);
 								$class = $p61_id_usuario == db_getsession("DB_id_usuario")?"class='dono'":null;
