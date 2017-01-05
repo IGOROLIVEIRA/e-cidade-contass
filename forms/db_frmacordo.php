@@ -146,7 +146,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                 <td>
                                                     <?
                                                     $ac16_anousu = $ac16_anousu != "" ? $ac16_anousu : db_getsession('DB_anousu');
-                                                    db_input('ac16_anousu', 10, $Iac16_anousu, true, 'text', $db_opcao,"onchange='js_getNumeroAcordo();'");
+                                                    db_input('ac16_anousu', 10, $Iac16_anousu, true, 'text', $db_opcao,"");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -214,7 +214,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                 </td>
                                                 <td>
                                                     <?
-                                                    $ac16_numeroacordo = $ac16_numeroacordo != "" ? $ac16_numeroacordo : Acordo::getProximoNumeroDoAno($ac16_anousu,db_getsession('DB_instit'));
+                                                    //$ac16_numeroacordo = $ac16_numeroacordo != "" ? $ac16_numeroacordo : Acordo::getProximoNumeroDoAno($ac16_anousu,db_getsession('DB_instit'));
                                                     db_input('ac16_numeroacordo', 10, $Iac16_numeroacordo, true, 'text', $db_opcao);
                                                     ?>
                                                 </td>

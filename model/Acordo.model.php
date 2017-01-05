@@ -403,6 +403,7 @@ class Acordo
                 $this->setOrigem($oDadosAcordo->ac16_origem);
                 $this->setTipoOrigem($oDadosAcordo->ac16_tipoorigem);
                 $this->setNumero($oDadosAcordo->ac16_numero);
+                $this->setNumeroAcordo($oDadosAcordo->ac16_numeroacordo);
                 $this->setGrupo($oDadosAcordo->ac16_acordogrupo);
                 $this->setDataAssinatura(db_formatar($oDadosAcordo->ac16_dataassinatura, "d"));
                 $this->setDataPublicacao(db_formatar($oDadosAcordo->ac16_datapublicacao, "d"));
@@ -1402,7 +1403,6 @@ class Acordo
                 throw new Exception($sErroMensagem);
             }
 
-            $oDaoAcordo->ac16_numeroacordo = Acordo::getProximoNumeroDoAno($this->iAno, $this->iInstit);
             $oDaoAcordo->incluir(null);
             if ($oDaoAcordo->erro_status == 0) {
                 throw  new Exception("Erro ao salvar acordo.\nErro: {$oDaoAcordo->erro_msg}");
@@ -2993,7 +2993,7 @@ class Acordo
         $rsNumeroAnual = db_query($sSqlNumeroAnual);
 
         if (!$rsNumeroAnual) {
-            throw new Exception("Erro ao buscar próximo número do acordo.");
+            throw new Exception("Erro ao buscar próximo número do acordo.".pg_last_error());
         }
 
         return (int)db_utils::fieldsMemory($rsNumeroAnual, 0)->numero;
