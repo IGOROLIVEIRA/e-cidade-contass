@@ -190,10 +190,10 @@ class ReceitaContabil {
     
     /** 
      * @autor IGOR RUAS
-     * se aDesdobramentos vir vazia verificar se o desdobramento é obritatorio
+     * se aDesdobramentos vir vazia verificar se o desdobramento é obrigatorio
      * caso seja não continuar.
      */
-    //RECEITAS CADASTRADAS ERRADA DEVER SER SUBSTITUIDAS
+    //RECEITAS CADASTRADAS ERRADAS DEVEM SER SUBSTITUIDAS
     $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140','191308', '191311', '191312', '191313', '193104', '193111',
     		'193112', '193113', '172401', '247199', '247299');
     //print_r($this->getEstruturalPlanoOrcamentario() ." - " .substr($this->getEstruturalPlanoOrcamentario(), 1, 6) . " ->");
@@ -206,14 +206,14 @@ class ReceitaContabil {
     //receita que tem desdobramento obrigatorio
     $aReceitaDesdobradaObrigatorio = array('11120101','11120200','11120431','11120434','11120800','11130501','11130502','17210102','17210105','17213600',
     		'17220101','17220102','17220104','19110801','19113800','19113900','19114000','19130800','19131100','19131200','19131300','19310400','19311100',
-    		'19311200','19311300','17210103','17210104','17210132','17240100','17240200');
+    		'19311200','19311300','17210103','17210104','17210132');
     
     if (count($aDesdobramentos) <= 0 && $this->getAno() > 2016){
     	
     	if(in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio) && $nRecursoTCE == 100){
-    		throw new BusinessException("Recetia ".$this->getEstruturalPlanoOrcamentario()." tem que ser desdobrada.");
+    		throw new BusinessException("Receita ".$this->getEstruturalPlanoOrcamentario()." tem que ser desdobrada.");
     	}else if(in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio)){
-    		throw new BusinessException("Recetia ".$this->getEstruturalPlanoOrcamentario()." é desdobrada então a fonte de recurso ".$nRecursoTCE." não pode receber lançamentos na tesouraria.");
+    		throw new BusinessException("Receita ".$this->getEstruturalPlanoOrcamentario()." é desdobrada então a fonte de recurso ".$nRecursoTCE." não pode receber lançamentos na tesouraria.");
     	}
     	
     }
@@ -276,7 +276,7 @@ class ReceitaContabil {
       }
     } else if(count($aDesdobramentos) > 0 && in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio) && $this->getAno() > 2016) {
 
-    	throw new BusinessException("Recetia ".$this->getEstruturalPlanoOrcamentario()." é desdobrada então a fonte de recurso ".$nRecursoTCE." não pode receber lançamentos na tesouraria.");
+    	throw new BusinessException("Receita ".$this->getEstruturalPlanoOrcamentario()." é desdobrada então a fonte de recurso ".$nRecursoTCE." não pode receber lançamentos na tesouraria.");
       
     }else{
     	
