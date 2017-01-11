@@ -918,7 +918,22 @@ function js_addReceita () {
     oReceita.iIndice               = "a"+iIndiceReceitas;
     aReceitas["a"+iIndiceReceitas] = oReceita;
     iIndiceReceitas++;
-  } else {
+
+
+    var oParametro         = new Object();
+    oParametro.exec        = 'buscarDeducao';
+    oParametro.k81_receita = $F('k81_receita');
+   
+    sRPC                   = 'cai4_planilhaarrecadacao.RPC.php';
+
+    var oAjax = new Ajax.Request(sRPC,
+                {
+                 method: 'post',
+                 parameters: 'json='+Object.toJSON(oParametro),
+                 onComplete: js_criaDeducao
+                 });
+
+    } else {
     aReceitas[iAlteracao] = oReceita;
     iAlteracao            = null;
 
@@ -927,6 +942,58 @@ function js_addReceita () {
   js_renderizarGrid();
   alert("Receita inserida com sucesso!");
   //js_limpaFormularioReceita();
+}
+
+function js_criaDeducao(oAjax){
+ 
+
+  var oRetorno = eval("("+oAjax.responseText+")");
+  
+  if(oRetorno.status == 2){
+      alert(oRetorno.message);
+    }else{           
+      
+    var oReceita             = new Object();
+    //Receita
+    oReceita.iReceitaPlanilha = $F('codigo_receitaplanilha');
+    oReceita.k81_receita      = oRetorno.oDeducao.k02_codigo;
+    oReceita.k02_drecei       = oRetorno.oDeducao.k02_descr.urlDecode();
+
+    //Conta
+    oReceita.k81_conta       = $F('k81_conta');
+    oReceita.k13_descr       = $F('k13_descr');
+
+    //Origem
+    oReceita.k81_origem      = $F('k81_origem');
+    oReceita.k81_numcgm      = $F('k81_numcgm');
+    oReceita.q02_inscr       = $F('q02_inscr');
+    oReceita.j01_matric      = $F('j01_matric');
+
+    //Recurso
+    oReceita.k81_codigo      = $F('k81_codigo');
+    oReceita.k81_codigodescr = $F('k81_codigodescr');
+
+    //Característica Peculiar
+    oReceita.c58_sequencial  = $F('c58_sequencial');
+
+    //Data Recebimento
+    oReceita.k81_datareceb   = $F('k81_datareceb');
+
+    //Dados Adicionais
+    oReceita.k81_valor        = (new Number($F('k81_valor'))*0.20)*(-1);
+    oReceita.k81_obs          = $F('k81_obs');
+    oReceita.recurso          = 101;
+    oReceita.k81_operbanco    = $F('k81_operbanco');
+
+    if (iAlteracao == null) {
+
+      oReceita.iIndice               = "a"+iIndiceReceitas;
+      aReceitas["a"+iIndiceReceitas] = oReceita;
+      iIndiceReceitas++;
+
+    }
+    js_renderizarGrid();
+  }
 }
 
 /**

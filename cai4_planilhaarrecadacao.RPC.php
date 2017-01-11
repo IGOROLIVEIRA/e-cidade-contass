@@ -308,6 +308,48 @@ switch ($oParam->exec) {
       $oRetorno->message = str_replace("\n", "\\n", urlencode($oExceptionErro->getMessage()));
     }
   break;
+
+  case 'buscarDeducao':
+
+    try{
+        $oRetorno->oDeducao = buscarDeducao($oParam->k81_receita); 
+        $oRetorno->oDeducao->k02_descr = urlencode($oRetorno->oDeducao->k02_descr);
+
+    }catch (Exception $oExceptionErro) {
+      $oRetorno->status  = 2;
+      $oRetorno->message = str_replace("\n", "\\n", urlencode($oExceptionErro->getMessage()));
+    }
+    
+   break;
+
+}
+/**
+ * Busca o dedutora da receita caso exista
+ * @param integer $iInscricao
+ * @throws BusinessException
+ */
+function buscarDeducao($iReceita) {
+
+  if (empty($iReceita)) {
+
+    $sMsgErro = "Código da Receita vazio ou não informado.";
+    throw new BusinessException($sMsgErro);
+  }
+
+  $oDaoReceita   = db_utils::getDao('tabrec');
+  $sSqlReceita = $oDaoReceita->sql_query_rec_deducao($iReceita);
+  $rsReceita   = $oDaoReceita->sql_record($sSqlReceita);
+
+  if ($rsReceita && $oDaoReceita->numrows == 1) {
+    return db_utils::fieldsMemory($rsReceita,0);
+  }
+
+  $sMsgErro  = "Erro ao buscar receita dedutora.\n";
+  $sMsgErro .= "Receita: {$iReceita}";
+  $sMsgErro .= $oDaoReceita->erro_msg;
+
+  throw new BusinessException($sMsgErro);
+
 }
 
 /**
@@ -371,6 +413,9 @@ function buscaCgmInscricao($iInscricao) {
   throw new BusinessException($sMsgErro);
 
 }
+
+
+
 
 /**
  * Busca o cgm da matricula
