@@ -951,8 +951,8 @@ function js_criaDeducao(oAjax){
   
   if(oRetorno.status == 2){
       alert(oRetorno.message);
-    }else{           
-      
+    }else if ( oRetorno.oDeducao.k02_codigo != undefined  ){           
+    
     var oReceita             = new Object();
     //Receita
     oReceita.iReceitaPlanilha = $F('codigo_receitaplanilha');
@@ -982,7 +982,7 @@ function js_criaDeducao(oAjax){
     //Dados Adicionais
     oReceita.k81_valor        = (new Number($F('k81_valor'))*0.20)*(-1);
     oReceita.k81_obs          = $F('k81_obs');
-    oReceita.recurso          = 101;
+    oReceita.recurso          = oRetorno.oDeducao.o70_codigo;
     oReceita.k81_operbanco    = $F('k81_operbanco');
 
     if (iAlteracao == null) {

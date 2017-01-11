@@ -314,7 +314,7 @@ switch ($oParam->exec) {
     try{
         $oRetorno->oDeducao = buscarDeducao($oParam->k81_receita); 
         $oRetorno->oDeducao->k02_descr = urlencode($oRetorno->oDeducao->k02_descr);
-
+        
     }catch (Exception $oExceptionErro) {
       $oRetorno->status  = 2;
       $oRetorno->message = str_replace("\n", "\\n", urlencode($oExceptionErro->getMessage()));
@@ -343,12 +343,6 @@ function buscarDeducao($iReceita) {
   if ($rsReceita && $oDaoReceita->numrows == 1) {
     return db_utils::fieldsMemory($rsReceita,0);
   }
-
-  $sMsgErro  = "Erro ao buscar receita dedutora.\n";
-  $sMsgErro .= "Receita: {$iReceita}";
-  $sMsgErro .= $oDaoReceita->erro_msg;
-
-  throw new BusinessException($sMsgErro);
 
 }
 
