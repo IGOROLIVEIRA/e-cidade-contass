@@ -114,8 +114,8 @@ $clplacaixa->rotulo->label("k80_data");
         }
         
         $sWhere = null;
-        $sWhere = " and k80_dtaut is null ";
-        
+        //$sWhere = " and k80_dtaut is null ";
+        $sWhere = " and DATE_PART('Year', k80_data) = ".db_getsession("DB_anousu");
         if(isset($chave_k80_codpla) && (trim($chave_k80_codpla)!="") ){
            //$sql = $clplacaixa->sql_query_rec(null,$campos,"k80_codpla desc"," k80_instit = ".db_getsession("DB_instit")."  and k80_dtaut is null and k80_codpla = $chave_k80_codpla");
 	       $where .= "and k80_codpla = $chave_k80_codpla";

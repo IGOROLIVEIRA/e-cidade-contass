@@ -325,6 +325,24 @@ class PlanilhaArrecadacao {
   }
 
   /**
+   * metodo de exclusão de autenticação de planilha
+   * @return boolean
+   * @throws DBException|BusinessException
+   */
+  public function excluirAutenticacao (){
+   
+    
+    $oDaoPlacaixa       = db_utils::getDao('placaixa');  
+
+    $oDaoPlacaixa->sql_exluir_autenticacao($this->getCodigo());
+    
+    if ($oDaoPlacaixa->erro_status == '0' || $oDaoPlacaixa->erro_status == 0) {
+      throw new DBException("Não foi possível excluir a planilha. ".$oDaoPlacaixa->erro_msg);
+    }
+    return true;
+  }
+
+  /**
    * Exclui as receitas vinculadas na planilha
    * @return true
    */

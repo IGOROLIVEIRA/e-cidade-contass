@@ -322,6 +322,28 @@ switch ($oParam->exec) {
     
    break;
 
+   case 'excluirAutenticacaoPlanilha':
+     
+    $iPlanilha       = $oParam->iPlanilha;
+
+    db_inicio_transacao();
+
+    try {
+      
+      $oPlanilha = new PlanilhaArrecadacao($iPlanilha);
+      $oPlanilha->excluirAutenticacao();
+
+      db_fim_transacao(false);
+
+    } catch (Exception $oExceptionErro) {
+
+      db_fim_transacao(true);
+      $oRetorno->status  = 2;
+      $oRetorno->message = str_replace("\n", "\\n", urlencode($oExceptionErro->getMessage()));
+    }
+    
+   break;
+
 }
 /**
  * Busca o dedutora da receita caso exista

@@ -334,6 +334,7 @@ if ($oInstit->db21_usasisagua == "t") {
 <script>
 
 const CAMINHO_MENSAGEM = 'financeiro.caixa.cai1_planilhalancamento001.';
+sRPC                   = 'cai4_planilhaarrecadacao.RPC.php';
 
 /*
  * funcao para verificar o grupo das receitas.
@@ -924,7 +925,6 @@ function js_addReceita () {
     oParametro.exec        = 'buscarDeducao';
     oParametro.k81_receita = $F('k81_receita');
    
-    sRPC                   = 'cai4_planilhaarrecadacao.RPC.php';
 
     var oAjax = new Ajax.Request(sRPC,
                 {
@@ -1112,7 +1112,6 @@ function js_salvarPlanilha() {
 
   oParametro.iCodigoPlanilha = $F("k80_codpla");
   oParametro.aReceitas       = aReceitasPlanilha;
-  sRPC                       = 'cai4_planilhaarrecadacao.RPC.php';
 
   var oAjax = new Ajax.Request(sRPC,
               {
@@ -1134,6 +1133,8 @@ function js_completaSalvar (oAjax) {
       var sUrlOpen = "cai2_emiteplanilha002.php?codpla="+oRetorno.iCodigoPlanilha;
       var oJanelaRelatorio = window.open(sUrlOpen,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     }
+
+    js_autenticar(oRetorno.iCodigoPlanilha);
     //js_novaReceita();
   } else {
     alert(oRetorno.message.urlDecode());
@@ -1195,7 +1196,7 @@ function js_getItensPlanilha(iCodigoPlanilha) {
   var oParametro       = new Object();
   oParametro.exec      = 'importarPlanilha';
   oParametro.iPlanilha = iCodigoPlanilha;
-  sRPC                 = 'cai4_planilhaarrecadacao.RPC.php';
+  
 
   new Ajax.Request(sRPC,
                   {
@@ -1315,5 +1316,49 @@ function js_mostrarNotificacaoConta() {
   });
 
   return false;
+}
+
+function js_autenticar(iPlaninhaAutentica) {
+
+  
+  if (iPlaninhaAutentica == '') {
+
+    alert('Planilha de arrecadação não localizada.');
+    return false;
+  }
+
+  var sMensagemSalvar  = "Deseja autenticar a planilha de arrecadação selecionada?\n\n";
+  sMensagemSalvar     += "Este procedimento pode demandar algum tempo.";
+  if (!confirm(sMensagemSalvar)) {
+    return false;
+  }
+
+  js_divCarregando("Aguarde, autenticando planilha de arrecadação...", "msgBox");
+
+  var oParametro                 = new Object();
+  oParametro.exec                = 'autenticarPlanilha';
+  oParametro.iPlanilha           = iPlaninhaAutentica;
+  oParametro.k144_numeroprocesso = encodeURIComponent(tagString($F("k144_numeroprocesso")));
+
+  var oAjax = new Ajax.Request(sRPC,
+                               {
+                                method: 'post',
+                                parameters: 'json='+Object.toJSON(oParametro),
+                                onComplete:js_retornoAutenticacao
+                               }
+                              );
+}
+
+function js_retornoAutenticacao (oAjax) {
+
+  js_removeObj('msgBox');
+  var oRetorno = eval("("+oAjax.responseText+")");
+  console.log(oRetorno);
+  if (oRetorno.status == 1) {         
+         alert("Planilha "+oRetorno.iPlanilha+" autenticada com sucesso");
+         js_novaReceita();         
+  } else {
+    alert(oRetorno.message.urlDecode());
+  }
 }
 </script>

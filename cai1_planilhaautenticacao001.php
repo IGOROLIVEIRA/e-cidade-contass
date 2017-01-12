@@ -115,6 +115,7 @@ if (isset($oGet->db_opcao) && $oGet->db_opcao == 3) {
 
     <input type="button" style="<?php echo $sSTyleButtonAutenticar; ?>" value='Autenticar Planilha' id='autenticar' name='autenticar' onclick="js_autenticar();"/>
     <input type="button" style="<?php echo $sSTyleButtonExcluir; ?>" value='Excluir Planilha' id='excluir' name='excluir' onclick="js_excluirPlanilha();"/>
+    <input type="button" style="<?php echo $sSTyleButtonExcluir; ?>" value='Excluir Autenticação Planilha' id='excluirAutentic' name='excluirAutentic' onclick="js_excluirAutencacaoPlanilha();"/>
 
   </p>
   </form>
@@ -168,6 +169,49 @@ function js_retornoExclusaoPlanilha(oAjax) {
 
 	  js_limparDadosTela();
 	}
+
+function js_excluirAutencacaoPlanilha(){
+
+  var iPlanilha = $F('k80_codpla');
+
+  if (iPlanilha == '') {
+
+    alert("Selecione uma planilha de arrecadação a ser excluida.");
+    return false;
+  }
+
+  var sMensagemExcluir  = "Deseja excluir a autenticação da planilha de arrecadação selecionada?\n\n";
+  if (!confirm(sMensagemExcluir)) {
+    return false;
+  }
+
+  js_divCarregando("Aguarde, excluindo autenticação planilha de arrecadação...", "msgBox");
+
+  var oParametro       = new Object();
+  oParametro.iPlanilha = iPlanilha;
+  oParametro.exec      = 'excluirAutenticacaoPlanilha';
+  oParametro.iPlanilha = $F('k80_codpla');
+
+  var oAjax = new Ajax.Request(sRPC,
+                               {
+                                method: 'post',
+                                parameters: 'json='+Object.toJSON(oParametro),
+                                onComplete:js_retornoExclusaoAutenticacaoPlanilha
+                               }
+                              );
+
+}
+function js_retornoExclusaoAutenticacaoPlanilha(oAjax) {
+
+    js_removeObj('msgBox');
+    var oRetorno = eval("("+oAjax.responseText+")");
+
+    if (oRetorno.status == 1) {
+      alert("Autenticação exccluída com sucesso!");      
+    } else {
+      alert(oRetorno.message.urlDecode());
+    }    
+}
 
 var oGridReceitas = new DBGrid('ctnGridReceitasVinculadas');
 oGridReceitas.nameInstance = 'oGridReceitas';

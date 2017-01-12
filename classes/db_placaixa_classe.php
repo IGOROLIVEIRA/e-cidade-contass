@@ -645,5 +645,100 @@ class cl_placaixa {
     }
     return $sql;
   }
+  function sql_exluir_autenticacao($k80_codpla = null){
+    $sql = "create temp table w_planilhas on commit drop as
+                  select c86_id,c86_data,c86_autent, c86_conlancam
+                 from placaixarec 
+           inner join corplacaixa on k82_seqpla = k81_seqpla 
+           inner join conlancamcorrente  on c86_data = k82_data and c86_autent = k82_autent and c86_id = k82_id
+                where k81_codpla = {$k80_codpla};
+          update placaixa set k80_dtaut = null where k80_codpla in (select k81_codpla 
+                            from placaixarec 
+                            join corplacaixa on k82_seqpla = k81_seqpla 
+                            join w_planilhas on c86_id = k82_id 
+                             and c86_data = k82_data and c86_autent = k82_autent);
+          delete from conlancamcorgrupocorrente where c23_conlancam in (select c86_conlancam from w_planilhas);
+          delete from conlancamcgm   where c76_codlan in (select c86_conlancam from w_planilhas);
+          delete from conlancamrec   where c74_codlan in (select c86_conlancam from w_planilhas);
+          delete from conlancamcompl where c72_codlan in (select c86_conlancam from w_planilhas);
+          delete from conlancampag   where c82_codlan in (select c86_conlancam from w_planilhas);
+          delete from conlancamdoc   where c71_codlan in (select c86_conlancam from w_planilhas);
+          delete from contacorrentedetalheconlancamval 
+                where c28_conlancamval in (select c69_sequen 
+                                             from conlancamval 
+                                            where c69_codlan in (select c86_conlancam 
+                                                                   from w_planilhas));
+          delete from conlancamval where c69_codlan in (select c86_conlancam from w_planilhas);
+          delete from conlancamcorrente       where c86_conlancam in (select c86_conlancam from w_planilhas);
+          delete from conlancamconcarpeculiar where c08_codlan in (select c86_conlancam from w_planilhas);
+          delete from conlancaminstit where c02_codlan in (select c86_conlancam from w_planilhas);
+          delete from conlancamordem where c03_codlan in (select c86_conlancam from w_planilhas);
+          delete from conlancam               where c70_codlan in (select c86_conlancam from w_planilhas);
+          delete from corgrupocorrente
+                using w_planilhas 
+                where corgrupocorrente.k105_id = w_planilhas.c86_id 
+                  and corgrupocorrente.k105_data = w_planilhas.c86_data 
+                  and corgrupocorrente.k105_autent = w_planilhas.c86_autent;
+          delete from corautent
+                using w_planilhas 
+                where corautent.k12_id = w_planilhas.c86_id 
+                  and corautent.k12_data = w_planilhas.c86_data 
+                  and corautent.k12_autent = w_planilhas.c86_autent;
+          delete from cornump 
+                using w_planilhas
+                where cornump.k12_id = w_planilhas.c86_id
+                  and cornump.k12_data = w_planilhas.c86_data 
+                  and cornump.k12_autent = w_planilhas.c86_autent;
+          delete from corplacaixa
+                using w_planilhas
+                where corplacaixa.k82_id = w_planilhas.c86_id 
+                  and corplacaixa.k82_data = w_planilhas.c86_data 
+                  and corplacaixa.k82_autent = w_planilhas.c86_autent;
+          delete from corhist
+                using w_planilhas 
+                where corhist.k12_id = w_planilhas.c86_id 
+                  and corhist.k12_data = w_planilhas.c86_data 
+                  and corhist.k12_autent = w_planilhas.c86_autent;
+          delete from corrente 
+                using w_planilhas
+                where corrente.k12_id = w_planilhas.c86_id
+                  and corrente.k12_data = w_planilhas.c86_data 
+                  and corrente.k12_autent = w_planilhas.c86_autent; ";
+      $result = db_query($sql);
+      if ($result == false) {
+      $this->erro_banco = str_replace("\n", "", @pg_last_error());
+      $this->erro_sql = "Planilha de lançamento nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql .= "Valores : " . $k80_codpla;
+      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco
+          . " \\n"));
+      $this->erro_status = "0";
+      $this->numrows_excluir = 0;
+      return false;
+    } else {
+      if (pg_affected_rows($result) == 0) {
+        $this->erro_banco = "";
+        $this->erro_sql = "Planilha de lançamento nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_sql .= "Valores : " . $k80_codpla;
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco
+            . " \\n"));
+        $this->erro_status = "1";
+        $this->numrows_excluir = 0;
+        return true;
+      } else {
+        $this->erro_banco = "";
+        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+        $this->erro_sql .= "Valores : " . $k80_codpla;
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco
+            . " \\n"));
+        $this->erro_status = "1";
+        $this->numrows_excluir = pg_affected_rows($result);
+        return true;
+      }
+    }
+      
+  }
 }
 ?>
