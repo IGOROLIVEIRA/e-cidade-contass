@@ -707,7 +707,7 @@ class cl_placaixa {
       $result = db_query($sql);
       if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql = "Planilha de lançamento nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql = "Autenticação de Planilha nao Excluído. Exclusão Abortada.\\n";
       $this->erro_sql .= "Valores : " . $k80_codpla;
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco

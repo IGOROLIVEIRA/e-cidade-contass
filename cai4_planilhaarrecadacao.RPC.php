@@ -326,11 +326,12 @@ switch ($oParam->exec) {
      
     $iPlanilha       = $oParam->iPlanilha;
 
-    db_inicio_transacao();
-
+    
     try {
       
-      $oPlanilha = new PlanilhaArrecadacao($iPlanilha);
+      db_inicio_transacao();
+
+      $oPlanilha = new PlanilhaArrecadacao($iCodigoPlanilha);
       $oPlanilha->excluirAutenticacao();
 
       db_fim_transacao(false);
