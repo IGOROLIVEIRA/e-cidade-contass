@@ -451,6 +451,7 @@ sRPC                   = 'cai4_planilhaarrecadacao.RPC.php';
 
 
    oGridReceitas.aHeaders[1].lDisplayed = false;
+   oGridReceitas.hasTotalizador = true;
    oGridReceitas.setHeight(100);
    oGridReceitas.show($('ctnReceitas'));
    oGridReceitas.clearAll(true);
@@ -1002,7 +1003,7 @@ function js_criaDeducao(oAjax){
 function js_renderizarGrid() {
 
    oGridReceitas.clearAll(true);
-
+   var nTotalReceitas = 0;
   for (var iIndice in aReceitas) {
 
     var oReceita = aReceitas[iIndice];
@@ -1017,8 +1018,10 @@ function js_renderizarGrid() {
     aRow[3]  = js_formatar(oReceita.k81_valor, "f");
     aRow[4]  = "<input type='button' onclick=js_mostraReceita(\'"+iIndice+"\') value='A'/>";
     oGridReceitas.addRow(aRow);
+    nTotalReceitas = (new Number(nTotalReceitas) + new Number(oReceita.k81_valor));
   }
   oGridReceitas.renderRows();
+  $('TotalForCol4').innerHTML = "Total: "+js_formatar(nTotalReceitas, 'f');
 }
 
 /**
