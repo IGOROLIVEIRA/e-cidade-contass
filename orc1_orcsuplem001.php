@@ -138,7 +138,7 @@ if (isset($chavepesquisa) && $chavepesquisa !="") {
       
      db_fieldsmemory($res,0);
      $limiteloa            = db_formatar(($nPercentualLoa*$nValorOrcamento)/100,'f');
-     $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_codproj= $o39_codproj");
+     $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_anousu = ".db_getsession("DB_anousu")." and orcprojeto.o39_usalimite = 't' ");
      $rsSuplementacoes     = $clorcsuplem->sql_record($sSqlSuplementacoes);
      $aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
      $valorutilizado       = 0;
@@ -148,7 +148,10 @@ if (isset($chavepesquisa) && $chavepesquisa !="") {
           
          $oSuplementacao = new Suplementacao($oSuplem->o46_codsup);
          $valorutilizado += $oSuplementacao->getvalorSuplementacao();  
-       }
+       }       
+       $percentualUtilizado = ($valorutilizado/$nValorOrcamento)*100;
+       $valorutilizado = db_formatar($valorutilizado,'f');
+       
      }
    }  
 }  
@@ -231,12 +234,12 @@ function js_preenchepesquisa(chave){
     ?>
       <tr>
       <td><b>Limite LOA: </b></td>
-      <td><? db_input('limiteloa',20,'',true,'text',3);
+      <td><? db_input('limiteloa',20,'',true,'text',3); echo round($nPercentualLoa,2)."%";
       ?></td>
     </tr>
     <tr>
       <td><b>Valor Utilizado: </b></td>
-      <td><? db_input('valorutilizado',20,'',true,'text',3);
+      <td><? db_input('valorutilizado',20,'',true,'text',3) ; echo round($percentualUtilizado,4)."%";
       ?></td>
     </tr>
     <?  

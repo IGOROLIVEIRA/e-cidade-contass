@@ -36,6 +36,17 @@ require_once("libs/db_libcontabilidade.php");
 require_once("classes/lancamentoContabil.model.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
+require_once("classes/db_orcsuplem_classe.php");
+require_once("classes/db_orcsuplemtipo_classe.php");
+require_once("dbforms/db_classesgenericas.php");
+require_once("classes/db_orcprojeto_classe.php");
+require_once("classes/db_orcreservasup_classe.php");
+require_once("classes/db_orcreserva_classe.php");
+require_once("classes/db_orcsuplemrec_classe.php");
+require_once("classes/db_orcsuplemval_classe.php");
+require_once("classes/db_orcsuplementacaoparametro_classe.php");
+$clorcsuplem     = new cl_orcsuplem;
+$clorcprojeto    = new cl_orcprojeto;
 db_app::import("orcamento.suplementacao.*");
 db_app::import("Dotacao");
 $aParametros         = db_stdClass::getParametro("orcparametro", array(db_getsession("DB_anousu")));
@@ -120,6 +131,50 @@ switch ($oParam->exec) {
       
       try {
 
+        /**
+         * Verificamos se existe parametro para o orcamento no ano 
+         */
+        $nPercentualLoa = 0;
+        $aParametro = db_stdClass::getParametro("orcsuplementacaoparametro", array(db_getsession("DB_anousu")));
+        if (count($aParametro) > 0) {
+            $nPercentualLoa = $aParametro[0]->o134_percentuallimiteloa;
+         } 
+  
+        /**
+         * verificar se o percentual foi estrapolado.
+         */
+        $sSqlValorTotalOrcamento  = "select sum(o58_valor) as valororcamento ";
+        $sSqlValorTotalOrcamento .= "  from orcdotacao ";
+        $sSqlValorTotalOrcamento .= " where o58_anousu = ".db_getsession("DB_anousu");
+        $rsValorOrcamento        = db_query($sSqlValorTotalOrcamento);
+        $nValorOrcamento = 0;
+        if (pg_num_rows($rsValorOrcamento) > 0) {
+            $nValorOrcamento = db_utils::fieldsMemory($rsValorOrcamento, 0)->valororcamento;
+        }
+        $limiteloa            = ($nPercentualLoa*$nValorOrcamento)/100;
+        $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_anousu = ".db_getsession("DB_anousu")." and orcprojeto.o39_usalimite = 't' ");
+        $rsSuplementacoes     = $clorcsuplem->sql_record($sSqlSuplementacoes);
+        $aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
+        $valorutilizado       = 0;
+        $sSqlUsaLimite   = $clorcprojeto->sql_query_file($oParam->iProjeto, $campos = "o39_usalimite", null,null);
+        $rsUsaLimete     = $clorcprojeto->sql_record($sSqlUsaLimite);
+        $sUsalimite       = db_utils::fieldsMemory($rsUsaLimete,0)->o39_usalimite;
+        
+        if ($sUsalimite == 't') {
+          
+          foreach ($aSuplementacao as $oSuplem) {
+          
+            $oSuplementacao = new Suplementacao($oSuplem->o46_codsup);
+            $valorutilizado += $oSuplementacao->getvalorSuplementacao();  
+          }   
+          if( $valorutilizado > $limiteloa ){
+                $oRetorno->status  = 2;
+                $oRetorno->message = urlencode($eErro->getMessage());
+                throw new BusinessException( "Valor Total SUPLEMENTADO R$".db_formatar($valorutilizado,'f')." maior que o AUTORIZADO R$".db_formatar($limiteloa,'f') );
+          }
+          
+        }
+       
         db_inicio_transacao();
         foreach ($oParam->aSuplementacoes as $iSuplementacao) {
           $dDataProcessamento = implode("-", array_reverse(explode("/", $oParam->dataprocessamento)));
