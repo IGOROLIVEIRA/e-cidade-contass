@@ -224,13 +224,13 @@ db_app::load("prototype.js");
             <tr>
               <td nowrap title="<?=@$Tve75_destino?>">
                 <?
-                db_ancora(@$Lve75_destino,"js_pesquisave75_sequencial(true);",$db_opcao);
+                db_ancora(@$Lve75_destino,"js_pesquisave60_destinonovo(true);",$db_opcao);
                 ?>
               </td>
               <td>
                 <?
-                db_input('ve75_sequencial',10,$Ive75_sequencial,true,'text',$db_opcao,
-                    " onchange='js_pesquisave75_sequencial(false);'");
+                db_input('ve60_destinonovo',10,$Ive60_destinonovo,true,'text',$db_opcao,
+                    " onchange='js_pesquisave60_destinonovo(false);'");
                 db_input('ve75_destino',40,$Ive75_destino,true,'text',3,'')
                 ?>
               </td>
@@ -313,27 +313,27 @@ function js_mostraveicmotoristas1(chave1,chave2){
   db_iframe_veicmotoristas.hide();
 }
 
-function js_pesquisave75_sequencial(mostra){
+function js_pesquisave60_destinonovo(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?funcao_js=parent.js_mostradestino1|ve75_sequencial|ve75_destino','Pesquisa',true);
   }else{
-    if(document.form1.ve75_sequencial.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?pesquisa_chave='+document.form1.ve75_sequencial.value+'&funcao_js=parent.js_mostradestino','Pesquisa',false);
+    if(document.form1.ve60_destinonovo.value != ''){
+      js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?pesquisa_chave='+document.form1.ve60_destinonovo.value+'&funcao_js=parent.js_mostradestino','Pesquisa',false);
     }else{
-      document.form1.ve75_sequencial.value = '';
+      document.form1.ve60_destinonovo.value = '';
     }
   }
 }
 function js_mostradestino(chave1,chave2,erro){
-  document.form1.ve75_sequencial.value = chave1;
+  document.form1.ve60_destinonovo.value = chave1;
   document.form1.ve75_destino.value = chave2;
   if(erro==true){
-    document.form1.ve75_sequencial.value = '';
+    document.form1.ve60_destinonovo.value = '';
     document.form1.ve75_destino.value = '';
   }
 }
 function js_mostradestino1(chave1,chave2){
-  document.form1.ve75_sequencial.value = chave1;
+  document.form1.ve60_destinonovo.value = chave1;
   document.form1.ve75_destino.value = chave2;
   db_iframe_veiccaddestino.hide();
 }

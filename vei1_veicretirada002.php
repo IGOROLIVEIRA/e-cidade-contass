@@ -37,6 +37,7 @@ require_once ("classes/db_veicparam_classe.php");
 require_once ("classes/db_veictipoabast_classe.php");
 require_once ("classes/db_veiculos_classe.php");
 require_once ("classes/db_veicdevolucao_classe.php");
+require_once ("classes/db_veiccaddestino_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_app::import("veiculos.*");
@@ -47,6 +48,7 @@ $clveicparam     = new cl_veicparam;
 $clveictipoabast = new cl_veictipoabast;
 $clveiculos      = new cl_veiculos;
 $clveicdevolucao = new cl_veicdevolucao;
+$clveiccaddestino = new cl_veiccaddestino;
 
 $db_opcao = 22;
 $db_botao = false;
@@ -114,6 +116,9 @@ if (isset($alterar)) {
    db_fieldsmemory($result,0);
 
    $result_veictipoabast = $clveictipoabast->sql_record($clveictipoabast->sql_query($ve01_veictipoabast,"ve07_sigla"));
+
+   $result = $clveiccaddestino->sql_record($clveiccaddestino->sql_query($ve60_destinonovo,"ve75_destino"));
+   db_fieldsmemory($result,0);
    if ($clveictipoabast->numrows > 0){
      db_fieldsmemory($result_veictipoabast,0);
    }
