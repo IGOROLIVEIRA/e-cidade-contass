@@ -45,7 +45,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 </body>
 </html>
 <script>
-    function js_processar() {
+    function js_processar() {        
         js_divCarregando('Aguarde, importando contas do arquivo CTB', 'msgBox');
         var oAjax = new Ajax.Request("func_importarcontassicom.php",
             {
@@ -55,9 +55,14 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         );
     }
     function js_retornoProcessamento(oAjax) {
-
-        js_removeObj('msgBox');
-        alert("Processo concluído com sucesso!");
+    	js_removeObj('msgBox');
+    	var oRetorno = eval("("+oAjax.responseText+")");
+    	
+    	if(oRetorno.status == 2){
+			alert(oRetorno.message);
+        }else{           
+        	alert("Processo concluído com sucesso!");
+        }
 
     }
 
