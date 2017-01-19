@@ -6,14 +6,14 @@ if(!defined('DB_BIBLIOT')){
 	if ( !isset($_SESSION) ) {
 		session_start();
 	}
-  
+
   if ( !function_exists("db_menu") ) {
 
     require_once "libs/db_stdlib.php";
     require_once "libs/db_conecta.php";
     include_once "libs/db_sessoes.php";
     include_once "libs/db_usuariosonline.php";
-  } 
+  }
   db_postmemory($_POST);
   db_postmemory($_SERVER);
 
@@ -245,6 +245,39 @@ function TextWithRotation($x,$y,$txt,$txt_angle,$font_angle=0)
 
 
 }
+
+
+  /**
+   * Retorna a quantidade de linhas de um multicell tem, baseado na sua largura
+   * @param $string
+   * @param $width
+   * @return int
+   */
+  public function nQtdRows($string, $width)
+  {
+    $aPalavras    = explode(' ', $string);
+    $aNewPalavras = array();
+    $sNewString   = "";
+
+    foreach ($aPalavras as $sWord) {
+
+      $nWidth = $this->GetStringWidth("{$sNewString} {$sWord}") + 2;
+
+      if ($nWidth >= $width) {
+
+        array_push($aNewPalavras, $sNewString);
+        $sNewString = $sWord;
+
+      } else {
+        $sNewString = "{$sNewString} {$sWord}";
+      }
+
+    }
+
+    // o +1 é porque ele a última linha não é inserida no array
+    // e porque se ele estiver vazio, retorna um pra conta lá
+    return count($aNewPalavras) + 1;
+  }
 
 }
 
