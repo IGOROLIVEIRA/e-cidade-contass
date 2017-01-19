@@ -34,8 +34,6 @@ include("classes/db_cgm_classe.php");
 include("classes/db_procandam_classe.php");
 include("classes/db_db_usuarios_classe.php");
 
-ini_set("display_errors", "On");
-
 //estancia as classes
 $cl_processos = new cl_protprocesso;
 $cl_tipoproc = new cl_tipoproc;
