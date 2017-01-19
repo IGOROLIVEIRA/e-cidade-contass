@@ -39,38 +39,60 @@ $iAno = db_getsession('DB_anousu')-1;
  */
 
 
-
-$nSeqEstrut = 1;
-$nNivel     = 1;
+$nSeqEstrut         = 1;
+$nSeqEstrutBB       = 1;
+$nSeqEstrutCAIXA    = 1;
+$nSeqEstrutBRADESCO = 1;
+$nSeqEstrutITAU     = 1;
+$nNivel             = 1;
+$nNivelBB           = 1;
+$nNivelCAIXA        = 1;
+$nNivelBRADESCO     = 1;
+$nNivelITAU         = 1;
 try{
-	$aDadosSicom = getDadosSicom($iAno);
-	
+	$aDadosSicom = getDadosSicom($iAno);	
+    //echo "<pre>"; print_r($aDadosSicom);exit;
 	if (empty($aDadosSicom)){
 		throw new Exception("Não foram importados os arquivos do SICOM!");
 	}
-
+    db_inicio_transacao();
 	for ($i = 0; $i < count($aDadosSicom) ; $i++ ){
-
-		db_inicio_transacao();
-		salvar($aDadosSicom[$i], $nNivel, $nSeqEstrut);
-		db_fim_transacao(false);
-		
-		$nSeqEstrut++;
-		if($nSeqEstrut > 99 && $nNivel==1){
-			$nSeqEstrut = 1;
-			$nNivel = 2;
-		}
-		if($nSeqEstrut > 99 && $nNivel==2){
-			$nSeqEstrut = 1;
-			$nNivel = 3;
-		}
-		
+        
+        /*salvar($aDadosSicom[$i], $nNivel, $nSeqEstrut);
+        $nSeqEstrut++;
+        if($nSeqEstrut > 99 && $nNivel==1){
+            $nSeqEstrut = 1;
+            $nNivel = 2;
+        }else if($nSeqEstrut > 99 && $nNivel==2){
+            $nSeqEstrut = 1;
+            $nNivel = 3;
+        }*/
+            
+        if($aDadosSicom[$i]->si95_banco == '001'){                    
+            if($nSeqEstrutBB > 99 && $nNivelBB==1){
+                $nSeqEstrutBB = 1;
+                $nNivelBB = 2;
+            }else if($nSeqEstrutBB > 99 && $nNivelBB==2){
+                $nSeqEstrutBB = 1;
+                $nNivelBB = 3;
+            }
+            salvar($aDadosSicom[$i], $nNivelBB, $nSeqEstrutBB);    
+            $nSeqEstrutBB++;      
+        }else if($aDadosSicom[$i]->si95_banco == 104){
+            salvar($aDadosSicom[$i], $nNivelCAIXA, $nSeqEstrutCAIXA);
+            $nSeqEstrutCAIXA++;            
+        }else if($aDadosSicom[$i]->si95_banco == 237){
+            salvar($aDadosSicom[$i], $nNivel, $nSeqEstrutBRADESCO);
+            $nSeqEstrutBRADESCO++;
+        }else if($aDadosSicom[$i]->si95_banco == 341){
+            salvar($aDadosSicom[$i], $nNivel, $nSeqEstrutITAU);
+            $nSeqEstrutITAU++;
+        }else{
+            salvar($aDadosSicom[$i], $nNivel, $nSeqEstrut);
+            $nSeqEstrut++;
+        }		
 	}
-	/*foreach ($aDadosSicom as $oContaSicom){					
-		db_inicio_transacao();
-		salvar($oContaSicom);
-		db_fim_transacao(false);		
-	}*/
+	db_fim_transacao(false);
 } catch (Exception $eErro) {
 	db_fim_transacao(true);
 	$oRetorno->erro = true;
@@ -90,8 +112,8 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 		$oContaBancaria->setIdentificador('00000000000000');
 		$oContaBancaria->setCodigoOperacao('0');
 		$oContaBancaria->setTipoConta($oContaSicom->si95_tipoconta);
-		$oContaBancaria->setPlanoConta(true);
-		$oContaBancaria->setDescricaoConta($oContaSicom->si95_desccontabancaria);  
+		$oContaBancaria->setPlanoConta(true);        
+		$oContaBancaria->setDescricaoConta($oContaSicom->si95_contabancaria."-".$oContaSicom->si95_digitoverificadorcontabancaria." ".$oContaSicom->si95_desccontabancaria);  
 		$oContaBancaria->salvar();
 				
 		//regra para pegar estrutural
@@ -105,7 +127,7 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 			$sEstrutualFinal = $sEstruturalAPL;
 		}
 		
-		if($oContaBancaria->getCodigoBanco() == 1){
+		if($oContaBancaria->getCodigoBanco() == '001'){
 			
 			//banco do brasil
 			if($oContaSicom->aSaldos[0]->si96_codfontrecursos == 100 && $oContaBancaria->getTipoConta() == 1){
@@ -113,7 +135,7 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 					$sEstrutualBaseCCNaoVinculadoBB  = "010101";
 					$sEstrutualFinal                .= $sEstrutualBaseCCNaoVinculadoBB;
 					$sEstrutualFinal                .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-				}else if($nNivel ==2){
+				}elseif($nNivel ==2){
 					$sEstrutualBaseCCNaoVinculadoBB2 = "010107";
 					$sEstrutualFinal                .= $sEstrutualBaseCCNaoVinculadoBB2;
 					$sEstrutualFinal                .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
@@ -122,12 +144,12 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 					$sEstrutualFinal                 .= $sEstrutualBaseCCNaoVinculadoBB3;
 					$sEstrutualFinal                 .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
 				}								
-			}else if($oContaBancaria->getTipoConta() == 1){
+			}elseif($oContaBancaria->getTipoConta() == 1){
 				if($nNivel ==1){
 					$sEstrutualBaseCCVinculadoBB  = "020101";
 					$sEstrutualFinal             .= $sEstrutualBaseCCVinculadoBB;
 					$sEstrutualFinal             .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-				}else if($nNivel ==2){
+				}elseif($nNivel ==2){
 					$sEstrutualBaseCCVinculadoBB2  = "020107";
 					$sEstrutualFinal              .= $sEstrutualBaseCCVinculadoBB2;
 					$sEstrutualFinal              .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
@@ -142,7 +164,7 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 					$sEstrutualBaseCCAplicBB  = "010101";
 					$sEstrutualFinal         .= $sEstrutualBaseCCAplicBB;
 					$sEstrutualFinal         .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-				}else if($nNivel ==2){
+				}elseif($nNivel ==2){
 					$sEstrutualBaseCCAplicBB2 = "010107";
 					$sEstrutualFinal         .= $sEstrutualBaseCCAplicBB2;
 					$sEstrutualFinal 		 .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
@@ -161,7 +183,7 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 				$sEstrutualBaseCCNaoVinculadoCAIXA     = "010102";
 				$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculadoCAIXA;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-			}else if($oContaBancaria->getTipoConta() == 1){
+			}elseif($oContaBancaria->getTipoConta() == 1){
 				$sEstrutualBaseCCVinculadoCAIXA        = "020102";
 				$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
@@ -178,7 +200,7 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 				$sEstrutualBaseCCNaoVinculadoITAU  	   = "010103";
 				$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculadoITAU;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-			}else if($oContaBancaria->getTipoConta() == 1){
+			}elseif($oContaBancaria->getTipoConta() == 1){
 				$sEstrutualBaseCCVinculadoITAU  	   = "020103";
 				$sEstrutualFinal .= $sEstrutualBaseCCVinculadoITAU;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
@@ -195,7 +217,7 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 				$sEstrutualBaseCCNaoVinculadoBRADESCO  = "010104";
 				$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculadoBRADESCO;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-			}else if($oContaBancaria->getTipoConta() == 1){
+			}elseif($oContaBancaria->getTipoConta() == 1){
 				$sEstrutualBaseCCVinculadoBRADESCO     = "020104";
 				$sEstrutualFinal .= $sEstrutualBaseCCVinculadoBRADESCO;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
@@ -211,7 +233,7 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 				$sEstrutualBaseCCNaoVinculado   = "010199";
 				$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculado;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-			}else if($oContaBancaria->getTipoConta() == 1){
+			}elseif($oContaBancaria->getTipoConta() == 1){
 				$sEstrutualBaseCCVinculado		= "020199";
 				$sEstrutualFinal .= $sEstrutualBaseCCVinculado;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
@@ -222,16 +244,19 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 			}
 			
 		}		
-											
+		$iReduzido = 0;									
 		$oPlanoPCASP = new ContaPlanoPCASP();
-		$oPlanoPCASP = new ContaPlanoPCASP($oPlanoPCASP->getCodConPorEstrutural($sEstrutualFinal));				
+		$oPlanoPCASP = new ContaPlanoPCASP($oPlanoPCASP->getCodConPorEstrutural($sEstrutualFinal));	
+        if($oPlanoPCASP->getCodigoConta() != "" || $oPlanoPCASP->getCodigoConta() != 0){
+          $iReduzido = 	1;		
+        }
 		$oPlanoPCASP->setAno(db_getsession("DB_anousu"));
 		$oPlanoPCASP->setEstrutural($sEstrutualFinal);		
 		$oPlanoPCASP->setNRegObrig(17);
-		$oPlanoPCASP->setFuncao(db_stdClass::normalizeStringJsonEscapeString($oContaSicom->si95_desccontabancaria));
-		$oPlanoPCASP->setFinalidade(db_stdClass::normalizeStringJsonEscapeString($oContaSicom->si95_desccontabancaria));
+		$oPlanoPCASP->setFuncao($oContaSicom->si95_contabancaria."-".$oContaSicom->si95_digitoverificadorcontabancaria." ".$oContaSicom->si95_desccontabancaria);
+		$oPlanoPCASP->setFinalidade($oContaSicom->si95_contabancaria."-".$oContaSicom->si95_digitoverificadorcontabancaria." ".$oContaSicom->si95_desccontabancaria);
 		$oPlanoPCASP->setContraPartida("0");
-		$oPlanoPCASP->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oContaSicom->si95_desccontabancaria));
+		$oPlanoPCASP->setDescricao(substr($oContaSicom->si95_contabancaria."-".$oContaSicom->si95_digitoverificadorcontabancaria." ".$oContaSicom->si95_desccontabancaria,0,40));
 		$oPlanoPCASP->setContaCorrente(new ContaCorrente(103));
 		$oPlanoPCASP->setIdentificadorFinanceiro('F');
 		$oPlanoPCASP->setNaturezaSaldo(1);
@@ -242,11 +267,13 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 		$oPlanoPCASP->setTipo(2);				
 	    $oPlanoPCASP->salvar();	
 	    
+		//if($iReduzido == 1){
+            $oPlanoPCASP->setInstituicao($iInstituicao);
+            $oPlanoPCASP->setRecurso($oContaSicom->aSaldos[0]->si96_codfontrecursos);
+            $oPlanoPCASP->setCodigoTce($oContaSicom->si95_codctb);
+            $oPlanoPCASP->persistirReduzido();  
+       //}
 		
-		$oPlanoPCASP->setInstituicao($iInstituicao);
-		$oPlanoPCASP->setRecurso($oContaSicom->aSaldos[0]->si96_codfontrecursos);
-		$oPlanoPCASP->setCodigoTce($oContaSicom->si95_codctb);
-		$oPlanoPCASP->persistirReduzido();	
 		
 		$clconplanoexe = new cl_conplanoexe;
 		$nSaldoConta = 0;
@@ -280,15 +307,20 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 function getDadosSicom($iAno){
 
     $sWhere10 = " where si95_instit = " . db_getsession("DB_instit");
+    $sCampos  = " si95_sequencial, si95_tiporegistro, si95_codctb, si95_codorgao, lpad(si95_banco,3,0) as si95_banco, si95_agencia, si95_digitoverificadoragencia, ";
+    $sCampos .= " si95_contabancaria, si95_digitoverificadorcontabancaria, si95_tipoconta, si95_tipoaplicacao, si95_nroseqaplicacao, ";
+    $sCampos .= " si95_desccontabancaria, si95_contaconvenio, si95_nroconvenio::varchar, si95_dataassinaturaconvenio, si95_mes, si95_instit ";
 
     $sSql10 = "select * from (";
     for($i = 2014; $i < db_getsession('DB_anousu'); $i++){
-        $sSql10 .= " select * from ctb10{$i} {$sWhere10}  ";
+        
+        $sSql10 .= " select {$sCampos} from ctb10{$i} {$sWhere10}  ";
         //$sSql10 .= " select * from ctb10{$i} {$sWhere10} and si95_codctb in (4188,18388) ";
         $sSql10 .= $i+1 == db_getsession('DB_anousu') ? " ) as x " : " union ";
     }
 	//echo $sSql10;exit;
     $rCtb10 = db_query($sSql10);
+    //db_criatabela($rCtb10);exit;
     $aContas = db_utils::getCollectionByRecord($rCtb10);
     $aContasAgrupadas = array();
     foreach($aContas as $oConta){
@@ -312,10 +344,16 @@ function getDadosSicom($iAno){
  */
 function validaContaEncerrada($iCodCtb,$iAno){
     $sWhere50 = " where si102_instit = " . db_getsession("DB_instit");
-
+    $sCampos2014 = "si102_sequencial, si102_tiporegistro, si102_codorgao, si102_codctb, 'E' as si102_situacaoconta, si102_dataencerramento as si102_datasituacao, si102_mes, si102_instit";
+    $sCampos2015 = "si102_sequencial, si102_tiporegistro, si102_codorgao, si102_codctb, si102_situacaoconta, si102_datasituacao, si102_mes, si102_instit";
+    $sCampos2016 = "si102_sequencial, si102_tiporegistro, si102_codorgao, si102_codctb, si102_situacaoconta, si102_datasituacao, si102_mes, si102_instit";
     $sSql50 = "select si102_situacaoconta from (";
     for($i = 2014; $i < $iAno; $i++){
-        $sSql50 .= " select *, {$i} as si102_anousu from ctb50{$i} {$sWhere50} and si102_codctb = $iCodCtb ";
+        $sCampos = "*";
+        if($i == 2014){
+          $sCampos = $sCampos2014;
+        }
+        $sSql50 .= " select {$sCampos}, {$i} as si102_anousu from ctb50{$i} {$sWhere50} and si102_codctb = $iCodCtb ";
 
         $sSql50 .= $i+1 == $iAno ? " ) as x " : " union ";
     }

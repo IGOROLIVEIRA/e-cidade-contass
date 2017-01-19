@@ -223,7 +223,7 @@ class ContaBancaria {
          */
 
         $this->setSequencialBancoAgencia($oDaoBancoAgencia->db89_sequencial);
-        $oDaoContaBancaria->db83_descricao       = " ";
+        $oDaoContaBancaria->db83_descricao       = $this->isPlanoConta()?$this->getDescricaoConta():" ";
         $oDaoContaBancaria->db83_bancoagencia    = $this->getSequencialBancoAgencia();
         $oDaoContaBancaria->db83_conta           = $this->getNumeroConta();
         $oDaoContaBancaria->db83_dvconta         = $this->getDVConta();

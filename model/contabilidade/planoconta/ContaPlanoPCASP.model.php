@@ -591,6 +591,28 @@ class ContaPlanoPCASP extends ContaPlano {
     }
     return false;
   }
+  
+  /**
+   * Busca todos os codCon do plano de conta passado por parâmetro
+   * @param string $sEstrutual
+   * @return mixed
+   */
+  public function getCodConPorEstrutural($sEstrutural) {
+  
+  	if ($sEstrutural != "") {
+  
+  		$oDaoContaPlano       = db_utils::getDao("conplano");
+  		$sWhereContaPlano     = "    conplano.c60_estrut = '{$sEstrutural}' ";
+  		$sWhereContaPlano    .= "and conplano.c60_anousu = ".db_getsession("DB_anousu");
+  		$sSqlBuscaCodCon      = $oDaoContaPlano->sql_query_file(null, null, "c60_codcon", null,$sWhereContaPlano);
+  		$rsBuscaCodCon     	  = $oDaoContaPlano->sql_record($sSqlBuscaCodCon);
+  
+  		if ($oDaoContaPlano->numrows > 0) {
+  			return db_utils::fieldsMemory($rsBuscaCodCon, 0)->c60_codcon	;
+  		}
+  	}
+  	return false;
+  }
 
   /**
    * Vincula um diversos planos de contas do plano orçamentário a uma conta do plano PCASP
