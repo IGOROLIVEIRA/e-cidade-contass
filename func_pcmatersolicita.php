@@ -163,7 +163,7 @@ if(isset($o56_codele) and trim($o56_codele) != ''){
         }
 
         $campos = "distinct pcmater.pc01_codmater,
-                 pcmater.pc01_descrmater,
+                 regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,
                  pcmater.pc01_complmater,o56_codele,o56_elemento,substr(o56_descr,1,40) as o56_descr,
                  pcsubgrupo.pc04_descrsubgrupo as DB_pc04_descrsubgrupo,
                  pcmater.pc01_servico,
@@ -198,7 +198,7 @@ if(isset($o56_codele) and trim($o56_codele) != ''){
         db_lovrot(@$sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null,"pc01_descrmater,pc01_veiculo","","pc01_codmater=$pesquisa_chave and $where_ativo"));
+          $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null,"regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo","","pc01_codmater=$pesquisa_chave and $where_ativo"));
           if($clpcmater->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('" . addslashes($pc01_descrmater) . "',false,'$pc01_veiculo');</script>";
