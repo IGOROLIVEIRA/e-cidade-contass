@@ -397,7 +397,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 	        $clrsp20->si115_vlmovimentacao                 = $oDados20->vlmovimentacao;
 	        $clrsp20->si115_codorgaoencampatribuic         = $oDados20->codorgaoencampatribuic;
 	        $clrsp20->si115_codunidadesubencampatribuic    = $oDados20->codunidadesubencampatribuic;
-	        $clrsp20->si115_justificativa                  = $this->removeCaracteres($oDados20->justificativa);
+	        $clrsp20->si115_justificativa                  = substr($this->removeCaracteres($oDados20->justificativa),0,499);
 	        $clrsp20->si115_atocancelamento                = $oDados20->atocancelamento;
 	        $clrsp20->si115_dataatocancelamento            = $oDados20->dataatocancelamento;
 	        $clrsp20->si115_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];
@@ -443,7 +443,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       $clrsp20->si115_vlmovimentacao                 = $oDados->si115_vlmovimentacao;
       $clrsp20->si115_codorgaoencampatribuic         = $oDados->si115_codorgaoencampatribuic;
       $clrsp20->si115_codunidadesubencampatribuic    = $oDados->si115_codunidadesubencampatribuic;
-      $clrsp20->si115_justificativa                  = $oDados->si115_justificativa;
+      $clrsp20->si115_justificativa                  = substr($oDados->si115_justificativa,0,499);
       $clrsp20->si115_atocancelamento                = $oDados->si115_atocancelamento;
       $clrsp20->si115_dataatocancelamento            = $oDados->si115_dataatocancelamento;
       $clrsp20->si115_mes                            = $this->sDataFinal['5'].$this->sDataFinal['6'];
