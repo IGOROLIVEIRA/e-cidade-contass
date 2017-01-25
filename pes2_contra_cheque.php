@@ -123,7 +123,7 @@ $sql1= "select distinct
        		rhpessoal.*,
        		rhpessoalmov.*,
           rhpesbanco.*,
-       		rh37_descr,
+       		CASE WHEN rh04_descr= '' THEN rh37_descr ELSE rh04_descr end as rh37_descr,
        		r70_descr,
           rhregime.*,
       		substr(r70_estrut,1,7) as estrut,
