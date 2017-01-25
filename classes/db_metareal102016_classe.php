@@ -169,19 +169,19 @@ class cl_metareal102016 {
                 values (
                                 $this->si171_sequencial 
                                ,$this->si171_tiporegistro 
-                               ,$this->si171_codorgao
-                               ,$this->si171_codunidadesub
-                               ,$this->si171_codfuncao
-                               ,$this->si171_codsubfuncao
-                               ,$this->si171_codprograma
-                               ,$this->si171_idacao
-                               ,$this->si171_idsubacao
+                               ,'$this->si171_codorgao'
+                               ,'$this->si171_codunidadesub'
+                               ,'$this->si171_codfuncao'
+                               ,'$this->si171_codsubfuncao'
+                               ,'$this->si171_codprograma'
+                               ,'$this->si171_idacao'
+                               ,'$this->si171_idsubacao'
                                ,$this->si171_metarealizada
-                               ,$this->si171_justificativa
+                               ,'$this->si171_justificativa'
                                ,$this->si171_mes 
                                ,$this->si171_instit 
                       )";
-        $result = db_query($sql);
+        $result = db_query($sql);         
         if($result==false){
             $this->erro_banco = str_replace("\n","",@pg_last_error());
             if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){

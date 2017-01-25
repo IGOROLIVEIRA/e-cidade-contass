@@ -22,7 +22,7 @@ class GerarMETAREAL extends GerarAM {
     $this->sArquivo = "METAREAL";
     $this->abreArquivo();
     
-    $sSql = "select * from merareal102016 where si171_mes = ". $this->iMes;
+    $sSql = "select * from metareal102016 where si171_mes = ". $this->iMes;
     $rsMETAREAL10    = db_query($sSql);
 
 
@@ -49,7 +49,7 @@ class GerarMETAREAL extends GerarAM {
         $aCSVMETAREAL10['si171_codsubfuncao']                        =   str_pad($aMETAREAL10['si171_codsubfuncao'], 3, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_codprograma']                         =   str_pad($aMETAREAL10['si171_codprograma'], 4, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_idacao']                              =   str_pad($aMETAREAL10['si171_idacao'], 4, "0", STR_PAD_LEFT);
-        $aCSVMETAREAL10['si171_idsubacao']                           =   str_pad($aMETAREAL10['si171_idsubacao'], 4, "0", STR_PAD_LEFT);
+        $aCSVMETAREAL10['si171_idsubacao']                           =   $aMETAREAL10['si171_idsubacao'] == 0 ? ' ' : str_pad($aMETAREAL10['si171_idsubacao'], 4, "0", STR_PAD_LEFT);;
         $aCSVMETAREAL10['si171_metarealizada']                       =   number_format($aMETAREAL10['si171_metarealizada'], 2, ",", "");
         $aCSVMETAREAL10['si171_justificativa']                       =    substr($aMETAREAL10['si171_justificativa'], 0, 1000);
 
