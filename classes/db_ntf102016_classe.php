@@ -269,7 +269,7 @@ class cl_ntf102016 {
                                ,$this->si143_cepmunicipio 
                                ,'$this->si143_ufcredor' 
                                ,$this->si143_notafiscaleletronica 
-                               ,$this->si143_chaveacesso 
+                               ,'$this->si143_chaveacesso'
                                ,'$this->si143_chaveacessomunicipal' 
                                ,'$this->si143_nfaidf' 
                                ,".($this->si143_dtemissaonf == "null" || $this->si143_dtemissaonf == ""?"null":"'".$this->si143_dtemissaonf."'")." 
@@ -280,7 +280,7 @@ class cl_ntf102016 {
                                ,$this->si143_mes 
                                ,$this->si143_instit 
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -429,7 +429,7 @@ class cl_ntf102016 {
         if(trim($this->si143_chaveacesso)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si143_chaveacesso"])){ 
            $this->si143_chaveacesso = "0" ; 
         } 
-       $sql  .= $virgula." si143_chaveacesso = $this->si143_chaveacesso ";
+       $sql  .= $virgula." si143_chaveacesso = '$this->si143_chaveacesso' ";
        $virgula = ",";
      }
      if(trim($this->si143_chaveacessomunicipal)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si143_chaveacessomunicipal"])){ 
