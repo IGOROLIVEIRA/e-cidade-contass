@@ -177,7 +177,7 @@ switch($oParam->exec) {
         if($oAcordo->getOrigem() == 2){
             foreach ($oAcordo->getLicitacoes() as $oLicitacao){
                 $bValidaDispensa = in_array($oLicitacao->getModalidade()->getCodigo(), array(9, 10)) ? true : false;
-                if (!validaDataAssinatura($oLicitacao->getCodigo(), $oParam->dtmovimentacao, $bValidaDispensa)) {
+                if (!$oAcordo->validaDataAssinatura($oLicitacao->getCodigo(), $oParam->dtmovimentacao, $bValidaDispensa)) {
                     $lAcordoValido = false;
                      throw new Exception("A data de assinatura do acordo não pode ser anterior a data de homologação da licitação.");
                 }

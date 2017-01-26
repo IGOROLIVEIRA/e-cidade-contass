@@ -3105,7 +3105,7 @@ class Acordo
     function validaDataAssinatura($iLicitacao, $sDataAssinatura, $bDispensa=false){
 
         $sCampo = $bDispensa ? "l20_dtpubratificacao" : "l202_datahomologacao";
-        $sSql = "select {$sCampo} from homologacaoadjudica where l202_licitacao = {$iLicitacao}";
+        $sSql = $bDispensa ? "select l20_dtpubratificacao from liclicita where l20_codigo = {$iLicitacao}" : "select l202_datahomologacao from homologacaoadjudica where l202_licitacao = {$iLicitacao}";
         $sDataHomolgacao = db_utils::fieldsMemory(db_query($sSql), 0)->$sCampo;
         if (strtotime(str_replace("/","-",$sDataAssinatura)) < strtotime($sDataHomolgacao)) {
             return false;
