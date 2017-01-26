@@ -2,10 +2,10 @@
 $classinatura = new cl_assinatura;
 
 $xlin = 20;
-$xcol = 4;
+$xcol = 12;
 
 $this->objpdf->setfillcolor(245);
-$this->objpdf->rect($xcol -2, $xlin -18, 206, 292, 2, 'DF', '1234');
+$this->objpdf->rect($xcol -2, $xlin -18, 196, 292, 2, 'DF', '1234');
 $this->objpdf->setfillcolor(255, 255, 255);
 $this->objpdf->Setfont('Arial', 'B', 10);
 $this->objpdf->Image('imagens/files/'.$this->logo, 15, $xlin -17, 12);
@@ -33,14 +33,14 @@ if (USE_PCASP) {
 
 /// retângulo dos dados da transferência
 
-$this->objpdf->rect($xcol, $xlin +2, $xcol +198, 60, 10, 'DF', '1234');
+$this->objpdf->rect($xcol, $xlin +2, $xcol +180, 60, 10, 'DF', '1234');
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->text($xcol +2, $xlin +7, 'DATA');
 $this->objpdf->text($xcol +6, $xlin +11,  db_formatar(pg_result($this->dados, 0, "k17_data"), 'd'));
-$this->objpdf->text($xcol +164, $xlin +7, 'VALOR');
+$this->objpdf->text($xcol +152, $xlin +7, 'VALOR');
 $this->objpdf->Setfont('Arial', 'B', 11);
-$this->objpdf->text($xcol +168, $xlin +11, 'R$');
-$this->objpdf->text($xcol +172, $xlin +11, db_formatar(pg_result($this->dados, 0, "k17_valor"), 'f'));
+$this->objpdf->text($xcol +156, $xlin +11, 'R$');
+$this->objpdf->text($xcol +158, $xlin +11, db_formatar(pg_result($this->dados, 0, "k17_valor"), 'f'));
 $this->objpdf->Setfont('Arial', 'B', 9);
 
 $this->objpdf->text($xcol +2, $xlin + 18, 'CGM');
@@ -70,27 +70,31 @@ $this->objpdf->text($xcol + 6, $xlin + 60, pg_result($this->dados, 0, "k17_credi
 
 /// retângulo do histórico
 
-$this->objpdf->rect($xcol, $xlin +80, $xcol +198, 60, 10, 'DF', '1234');
+$this->objpdf->rect($xcol, $xlin +80, $xcol +180, 60, 10, 'DF', '1234');
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->text($xcol +2, $xlin +85, 'HISTÓRICO');
 $this->objpdf->Setfont('Arial', '', 9);
 $this->objpdf->text($xcol +6, $xlin +95, pg_result($this->dados, 0, "k17_hist").'  -  '.pg_result($this->dados,0, "descr_hist"));
 
-$this->objpdf->setxy($xcol +6, $xlin +103);
+$this->objpdf->setxy($xcol +2, $xlin +103);
 $this->objpdf->multicell(190, 3, pg_result($this->dados, 0, "k17_texto"), 0, "L");
 $this->objpdf->ln(2);
 if(pg_result($this->dados,0,"k17_situacao") == 3){
   $this->objpdf->Setfont('Arial', 'b', 8);
-  $this->objpdf->multicell(190, 3,"Estornado em ". db_formatar(pg_result($this->dados, 0, "k17_dtestorno"),'d'), 0, "L");
+  $this->objpdf->SetX($this->objpdf->GetX() +5);
+  $this->objpdf->cell(190, 3,"Estornado em ". db_formatar(pg_result($this->dados, 0, "k17_dtestorno"),'d'), 0, "L");
   $this->objpdf->Setfont('Arial', '', 8);
   $motivo = substr((pg_result($this->dados, 0, "k17_motivoestorno")),0,900);
   $this->objpdf->Setfont('Arial', '', 8);
-  $this->objpdf->multicell(190, 3,"Motivo : ".$motivo, 0, "L"); 
+  $this->objpdf->SetX($this->objpdf->GetX() -190);
+  $this->objpdf->cell(190, 3,"Motivo : ".$motivo, 0, "L");
 }else if(pg_result($this->dados,0,"k17_situacao") == 4){
   $this->objpdf->Setfont('Arial', 'b', 8);
-  $this->objpdf->multicell(190, 3,"Anulado em ".db_formatar(pg_result($this->dados, $j, "k17_dtanu"), 'd'), 0, "L");
+  $this->objpdf->SetX($this->objpdf->GetX() +5);
+  $this->objpdf->cell(190, 3,"Anulado em ".db_formatar(pg_result($this->dados, $j, "k17_dtanu"), 'd'), 0, "L");
   $this->objpdf->Setfont('Arial', '', 8);
-  $this->objpdf->multicell(190, 3,"Motivo : ".substr(pg_result($this->dados, $j, "k18_motivo"),0,900), 0, "L");
+  $this->objpdf->SetX($this->objpdf->GetX() -190);
+  $this->objpdf->cell(190, 8,"Motivo : ".substr(pg_result($this->dados, $j, "k18_motivo"),0,900), 0, "L");
 }
 
 
