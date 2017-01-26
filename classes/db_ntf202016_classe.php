@@ -250,7 +250,7 @@ class cl_ntf202016 {
                                ,'$this->si145_nfserie'
                                ,$this->si145_tipodocumento
                                ,'$this->si145_nrodocumento'
-                               ,$this->si145_chaveacesso
+                               ,'$this->si145_chaveacesso'
                                ,".($this->si145_dtemissaonf == "null" || $this->si145_dtemissaonf == ""?"null":"'".$this->si145_dtemissaonf."'")."
                                
                                ,'$this->si145_codunidadesub' 
@@ -363,7 +363,7 @@ class cl_ntf202016 {
         if(trim($this->si145_chaveacesso)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si145_chaveacesso"])){ 
            $this->si145_chaveacesso = "0" ; 
         } 
-       $sql  .= $virgula." si145_chaveacesso = $this->si145_chaveacesso ";
+       $sql  .= $virgula." si145_chaveacesso = '$this->si145_chaveacesso' ";
        $virgula = ",";
      }
      if(trim($this->si145_dtemissaonf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si145_dtemissaonf_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si145_dtemissaonf_dia"] !="") ){ 
