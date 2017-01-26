@@ -44,12 +44,12 @@ class GerarMETAREAL extends GerarAM {
         
         $aCSVMETAREAL10['si171_tiporegistro']                        =   str_pad($aMETAREAL10['si171_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_codorgao']                            =   str_pad($aMETAREAL10['si171_codorgao'], 2, "0", STR_PAD_LEFT);
-        $aCSVMETAREAL10['si171_codunidadesub']                       =   str_pad($aMETAREAL10['si171_codunidadesub'], 8, "0", STR_PAD_LEFT);
+        $aCSVMETAREAL10['si171_codunidadesub']                       =   str_pad($aMETAREAL10['si171_codunidadesub'], 5, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_codfuncao']                           =   str_pad($aMETAREAL10['si171_codfuncao'], 2, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_codsubfuncao']                        =   str_pad($aMETAREAL10['si171_codsubfuncao'], 3, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_codprograma']                         =   str_pad($aMETAREAL10['si171_codprograma'], 4, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_idacao']                              =   str_pad($aMETAREAL10['si171_idacao'], 4, "0", STR_PAD_LEFT);
-        $aCSVMETAREAL10['si171_idsubacao']                           =   $aMETAREAL10['si171_idsubacao'] == 0 ? ' ' : str_pad($aMETAREAL10['si171_idsubacao'], 4, "0", STR_PAD_LEFT);;
+        $aCSVMETAREAL10['si171_idsubacao']                           =   " ";
         $aCSVMETAREAL10['si171_metarealizada']                       =   number_format($aMETAREAL10['si171_metarealizada'], 2, ",", "");
         $aCSVMETAREAL10['si171_justificativa']                       =    substr($aMETAREAL10['si171_justificativa'], 0, 1000);
 

@@ -369,8 +369,12 @@ function getSaldoCTB($iCodCtb, $iAno){
     $sNomeClasseCTB20 = "cl_ctb20{$iAno}";
     $cCtb20 = new $sNomeClasseCTB20;
 
-    $sSql = $cCtb20->sql_query(NULL,"si96_codfontrecursos, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 11 order by 1 ");
+    $sSql = $cCtb20->sql_query(NULL,"si96_codfontrecursos, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 12 order by 1 ");
     $rRes = $cCtb20->sql_record($sSql);
+    if(pg_num_rows($rRes) <= 0){
+        $sSql = $cCtb20->sql_query(NULL,"si96_codfontrecursos, si96_vlsaldofinalfonte", NULL, " si96_codctb = {$iCodCtb} and si96_mes = 11 order by 1 ");
+          $rRes = $cCtb20->sql_record($sSql);
+    }
 
     return db_utils::getCollectionByRecord($rRes);
 }

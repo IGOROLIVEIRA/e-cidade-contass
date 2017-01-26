@@ -193,7 +193,10 @@ switch($oParam->exec) {
 	          
 	        $oArquivo    = new $sNomeClasse;
 	        $oArquivo->setDataInicial($sDataInicial);
-	        $oArquivo->setDataFinal($sDataFinal);
+	        $oArquivo->setDataFinal($sDataFinal);          
+          if ($sArquivo == "MetasFisicasRealizadas"){
+            $oArquivo->setCodigoPespectiva($oParam->pespectivappa);
+          }
 	        $oArquivoCsv = new stdClass();
 	        try {
 	             

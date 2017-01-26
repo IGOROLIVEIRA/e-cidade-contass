@@ -49,9 +49,8 @@ $clrotulo->label("o15_codigo");
           	<fieldset>
           	<table>
           	<tr>
-          	 <td>Mês Referência: </td>
-          	 <td>
-          	 <select id="MesReferencia" class="MesReferencia" >
+          	 <td>Mês Referência: 
+          	 <select id="MesReferencia" class="MesReferencia" onchange="js_mostrameta(this.value)">
           	  <option value="01">Janeiro</option>
           	  <option value="02">Fevereiro</option>
           	  <option value="03">Março</option>
@@ -67,6 +66,18 @@ $clrotulo->label("o15_codigo");
           	 </select>
           	 </td>
           	</tr>
+            <tr id="meta" style="display: none">
+              <td><?
+              db_ancora("<b>Perspectiva PPA:</b>","js_pesquisa_ppa(true);", 1);
+              ?>
+              </td>
+              <td><?
+              db_input('o119_sequencial',10,$Io124_sequencial,true,'text',
+              1," onchange='js_pesquisa_ppa(false);'");
+              db_input('o119_descricao',40,$Io124_descricao,true,'text',3,'')
+               ?>
+              </td>
+            </tr>
           	</table>
           	</fieldset>
           	</td>
@@ -272,6 +283,13 @@ $clrotulo->label("o15_codigo");
 <? db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
 <script type="text/javascript">
 function js_processar() {
+
+  if ($F('o119_sequencial') == '' && $("MesReferencia") == 12) {
+
+    alert("Favor informar a Pespectiva do PPA");
+    js_pesquisa_ppa(true);
+    return false;    
+  }
   
   var aArquivosSelecionados = new Array();
   var aArquivos             = $$("input[type='checkbox']");
@@ -295,6 +313,7 @@ function js_processar() {
   var oParam           = new Object();
   oParam.exec          = "processarSicomMensal";
   oParam.arquivos      = aArquivosSelecionados;
+  oParam.pespectivappa = $F('o119_sequencial');
   oParam.mesReferencia = iMesReferencia.value;
   var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
 		                            {
@@ -435,6 +454,13 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
 	    oCheckbox.checked = false;
 	  }); 
 	}
+  function js_mostrameta(mes){
+    if(mes == 12){
+      $("meta").style.display = "block";
+    }else{
+      $("meta").style.display = "none";
+    }
+  }
 </script>
 <div id='debug'>
 </div>
