@@ -74,11 +74,12 @@ try {
         $oItem->dotacoes       = array();
 
         /**
-         * retornar item com ultimo valor aditado ou do contrato
+         * retornar saldo do item conforme autorizacoes
          */
-        $oItemUltimoValor = $oItemPosicao->getQuantidadeValorAnterior($oParam->iAcordo,$oItem->codigoitem);
-        $oItem->qtdeanterior = $oItemUltimoValor->ac20_quantidade;
-        $oItem->vlunitanterior = $oItemUltimoValor->ac20_valorunitario;
+        $oItemUltimoValor = $oItemPosicao->getSaldos();
+        $oItem->qtdeanterior = $oItemUltimoValor->quantidadeautorizar;
+        $oItem->vlunitanterior = $oItem->valorunitario;
+        $oItem->quantidade = $oItemUltimoValor->quantidadeautorizar;
         
         foreach($oItemPosicao->getDotacoes() as $oDotacao) {
           $oItem->dotacoes[] = (object) array(

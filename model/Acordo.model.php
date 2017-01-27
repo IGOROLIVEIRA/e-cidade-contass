@@ -2357,8 +2357,8 @@ class Acordo
             /**
              * Verifica se houve alteração do período de vigência do contrato
              */
-            $sNovaDtInicial = new DBDate($this->getDataInicial());
-            $sNovaDtFim = new DBDate($this->getDataFinal());
+            $sNovaDtInicial = new DBDate(date("Y-m-d",$this->getDataInicial()));
+            $sNovaDtFim = new DBDate(date("Y-m-d",$this->getDataFinal()));
             if ($sAtualDtInicial->getDate() != $sNovaDtInicial->getDate() || $sAtualDtFim->getDate() != $sNovaDtFim->getDate()) {
                 $aTiposAlteracao[] = 6;
             }
@@ -2370,6 +2370,10 @@ class Acordo
 
             $oNovoItem = new AcordoItem(null);
             $oNovoItem->setCodigoPosicao($oNovaPosicao->getCodigo());
+
+            if (!empty($oItem->tipoalteracaoitem)) {
+                $oNovoItem->setCodigoPosicaoTipo($oItem->tipoalteracaoitem);
+            }
 
             if ($oItemContrato) {
 
@@ -2388,8 +2392,8 @@ class Acordo
                     /**
                      * Verifica se houve alteração do período de execução do ítem.
                      */
-                    $sNovaDtExecucaoInicio = new DBDate($oItem->dtexecucaoinicio);
-                    $sNovaDtExecucaoFim = new DBDate($oItem->dtexecucaofim);
+                    $sNovaDtExecucaoInicio = new DBDate(date("Y-m-d",$oItem->dtexecucaoinicio));
+                    $sNovaDtExecucaoFim = new DBDate(date("Y-m-d",$oItem->dtexecucaofim));
                     if (($sNovaDtExecucaoInicio->getDate() != $aPeriodosItem[0]->dtDataInicial) || ($sNovaDtExecucaoFim->getDate() != $aPeriodosItem[0]->dtDataFinal)) {
                         $aPeriodosItem[0]->dtDataInicial = $sNovaDtExecucaoInicio->getDate();
                         $aPeriodosItem[0]->dtDataFinal = $sNovaDtExecucaoFim->getDate();
@@ -2411,7 +2415,7 @@ class Acordo
                     $oNovoItem->setPeriodos($oItem->aPeriodos);
                 }
             }
-            if (in_array($iTipoAditamento, array(4, 7)) && in_array($oItem->codigoitem, $aSelecionados) ) {
+            if (in_array($iTipoAditamento, array(4, 7)) && in_array($oItem->codigoitem, $aSelecionados) && empty($oItem->tipoalteracaoitem) ) {
                 /**
                  * Verifica se houve alteração de quantidade/valor
                  */

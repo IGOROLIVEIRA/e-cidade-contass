@@ -438,7 +438,10 @@ function js_retornoGetPosicoesAcordo(oAjax) {
       aLinha[3]  = oPosicao.data;
       aLinha[4]  = oPosicao.emergencial.urlDecode();
       oGridPosicoes.addRow(aLinha);
-      oGridPosicoes.aRows[iLinha].sEvents='ondblclick="js_getItensPosicao('+oPosicao.codigo+','+iLinha+')"';
+      if (iLinha == oRetorno.posicoes.length-1) {
+        oGridPosicoes.aRows[iLinha].sEvents='ondblclick="js_getItensPosicao('+oPosicao.codigo+','+iLinha+')"';
+        oGridPosicoes.aRows[iLinha].setClassName('marcado');
+      }
     });
     oGridPosicoes.renderRows();
   }
