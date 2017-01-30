@@ -45,6 +45,7 @@ require_once ("model/CgmJuridico.model.php");
 require_once ("model/CgmFisico.model.php");
 require_once ("model/Dotacao.model.php");
 
+require_once("std/DBDate.php");
 
 db_app::import("CgmFactory");
 db_app::import("MaterialCompras");
@@ -238,6 +239,16 @@ if (isset ($atualizar)) {
 				}
                                 $codigomovimento = $codmov;
 				$data = date("Y-m-d", db_getsession("DB_datausu"));
+
+        if (!empty($data_para_pagamento) && $data_para_pagamento != '//') {
+
+          $dtAuxData = new DBDate($data_para_pagamento);
+          $dtAuxData = $dtAuxData->getDate();
+          $data = $dtAuxData; // aqui ele atribui a data_para_pagamento enviada pelo usuário
+          unset($dtAuxData);
+
+        }
+
 				$ip = db_getsession("DB_ip");
 				$instit = db_getsession("DB_instit");
 

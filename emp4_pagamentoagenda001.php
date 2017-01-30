@@ -385,6 +385,7 @@ function js_pagarEmpenhos() {
   }
   oRequisicao             = new Object();
   oRequisicao.exec            = "pagarMovimento";
+  oRequisicao.dtPagamento     = parent.$F('data_para_pagamento');
   oRequisicao.aMovimentos     = new Array();
   var lMostraMsgErroRetencao  = false;
   var sMsgRetencaoMesAnterior = "Atenção:\n";

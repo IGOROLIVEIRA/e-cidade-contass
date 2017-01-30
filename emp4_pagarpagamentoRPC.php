@@ -105,7 +105,7 @@ switch ($oParam->exec) {
     } else if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim != "") {
       $sWhere .= " and e50_codord between  {$oParam->params[0]->iOrdemIni} and {$oParam->params[0]->iOrdemFim}";
     }
-    
+
     if (isset($oParam->params[0]->iOrdemBanc) && $oParam->params[0]->iOrdemBanc != '') {
       $sSqlOrdem = "select k00_codord from ordembancariapagamento where k00_codordembancaria = {$oParam->params[0]->iOrdemBanc}";
       $rsResultOrdem = db_query($sSqlOrdem);
@@ -229,6 +229,16 @@ switch ($oParam->exec) {
         foreach ($oParam->aMovimentos as $oMovimento) {
 
           $oOrdemPagamento = new ordemPagamento($oMovimento->iNotaLiq);
+
+          if (!empty($oParam->dtPagamento) && $oParam->dtPagamento != '//') {
+
+            $dtAuxData = new DBDate($oParam->dtPagamento);
+            $dtAuxData = $dtAuxData->getDate();
+            $oOrdemPagamento->setDataUsu($dtAuxData);
+            unset($dtAuxData);
+
+          }
+
           $oOrdemPagamento->setCheque($oMovimento->iCheque);
           $oOrdemPagamento->setChequeAgenda($oMovimento->iCodCheque);
           $oOrdemPagamento->setConta($oMovimento->iConta);
