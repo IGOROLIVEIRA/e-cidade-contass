@@ -26,7 +26,7 @@ class GerarMETAREAL extends GerarAM {
     $rsMETAREAL10    = db_query($sSql);
 
 
-  if (pg_num_rows($rsMETAREAL10) == 0) {
+  if (pg_num_rows($rsMETAREAL10) == 0 || InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'))->getTipoInstit() != Instituicao::TIPO_INSTIT_PREFEITURA) {
 
       $aCSV['tiporegistro']       =   '99';
       $this->sLinha = $aCSV;
