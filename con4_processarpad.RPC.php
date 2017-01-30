@@ -109,9 +109,11 @@ switch($oParam->exec) {
        */
       foreach ($oParam->arquivos as $sArquivo) {
         
-        if (file_exists("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/SicomArquivo{$sArquivo}.model.php")) {
+        $sArquivoPath = "model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/SicomArquivo{$sArquivo}.model.php";
+        
+        if (file_exists($sArquivoPath)) {
           
-          require_once("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/SicomArquivo{$sArquivo}.model.php");
+          require_once($sArquivoPath);
           
           $sNomeClasse = "SicomArquivo{$sArquivo}"; 
           
@@ -119,11 +121,12 @@ switch($oParam->exec) {
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
           $oArquivo->setCodigoPespectiva($oParam->pespectivappa);
+
           try {
-            
-            
+
             $oArquivo->gerarDados();
             $oEscritorCSV->adicionarArquivo($oEscritorCSV->criarArquivo($oArquivo), $oArquivo->getNomeArquivo());
+
           } catch (Exception $eErro) {
           	
             $oRetorno->status  = 2;

@@ -82,7 +82,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
      * selecionar informacoes registro 10
      */
 
-        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{$this->sDataFinal['6']}' and si170_instit = ". db_getsession("DB_instit");
+        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{$this->sDataFinal['5']}{$this->sDataFinal['6']}' and si170_instit = ". db_getsession("DB_instit");
 
         $rsResult10 = db_query($sSql);
 
@@ -125,7 +125,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
     $oGerarDCLRF = new GerarDCLRF();
     $oGerarDCLRF->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
     $oGerarDCLRF->gerarDados();
-    
+
   }
 
 }

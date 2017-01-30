@@ -11,23 +11,27 @@ $cldividaconsolidada = new cl_dividaconsolidada;
 $clcgm               = new cl_cgm;
 $db_opcao = 1;
 $db_botao = true;
-if(isset($incluir)){
+if(isset($incluir)) {
+
   db_inicio_transacao();
   $cldividaconsolidada->si167_numcgm = $z01_numcgm;
   $cldividaconsolidada->si167_justificativacancelamento = $si167_justificativacancelamento;
   $cldividaconsolidada->incluir(null);
   db_fim_transacao();
-} else if(isset($chavepesquisaimporta)){
-	$campos = "si167_nroleiautorizacao,si167_dtleiautorizacao,si167_dtpublicacaoleiautorizacao,si167_nrocontratodivida,si167_dtassinatura,si167_tipodocumentocredor,
-	si167_nrodocumentocredor,si167_vlsaldoatual as si167_vlsaldoanterior,0 as si167_vlcontratacao,0 as si167_vlamortizacao,0 as si167_vlcancelamento,0 as si167_vlencampacao,
-	0 as si167_vlatualizacao,0 as si167_vlsaldoatual,si167_contratodeclei,si167_objetocontratodivida,si167_especificacaocontratodivida,si167_tipolancamento,
-	si167_numcgm as z01_numcgm,(select z01_nome from cgm where z01_numcgm = si167_numcgm) as z01_nome";
-	 $where  = "si167_nroleiautorizacao = '".$chavepesquisaimporta["si167_nroleiautorizacao"]."'";
-	 $where .= " and si167_nrocontratodivida = '".$chavepesquisaimporta["si167_nrocontratodivida"]."'";
-	 $where .= " and si167_anoreferencia = ".$chavepesquisaimporta["si167_anoreferencia"];
-	 $where .= " and si167_mesreferencia = ".$chavepesquisaimporta["si167_mesreferencia"];
-   $result = $cldividaconsolidada->sql_record($cldividaconsolidada->sql_query(null,$campos,null,$where)); 
-   db_fieldsmemory($result,0);
+
+} else if (isset($chavepesquisaimporta)) {
+
+  $campos = "si167_nroleiautorizacao,si167_dtleiautorizacao,si167_dtpublicacaoleiautorizacao,si167_nrocontratodivida,si167_dtassinatura,si167_tipodocumentocredor,
+  si167_nrodocumentocredor,si167_vlsaldoatual as si167_vlsaldoanterior,0 as si167_vlcontratacao,0 as si167_vlamortizacao,0 as si167_vlcancelamento,0 as si167_vlencampacao,
+  0 as si167_vlatualizacao,0 as si167_vlsaldoatual,si167_contratodeclei,si167_objetocontratodivida,si167_especificacaocontratodivida,si167_tipolancamento,si167_subtipo
+  si167_numcgm as z01_numcgm,(select z01_nome from cgm where z01_numcgm = si167_numcgm) as z01_nome";
+  $where = "si167_nroleiautorizacao = '" . $chavepesquisaimporta["si167_nroleiautorizacao"] . "'";
+  $where .= " and si167_nrocontratodivida = '" . $chavepesquisaimporta["si167_nrocontratodivida"] . "'";
+  $where .= " and si167_anoreferencia = " . $chavepesquisaimporta["si167_anoreferencia"];
+  $where .= " and si167_mesreferencia = " . $chavepesquisaimporta["si167_mesreferencia"];
+  $result = $cldividaconsolidada->sql_record($cldividaconsolidada->sql_query(null, $campos, null, $where));
+  db_fieldsmemory($result, 0);
+
 }
 ?>
 <html>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.php");
 
@@ -11,12 +11,12 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
 class GerarMETAREAL extends GerarAM {
 
    /**
-  * 
+  *
   * Mes de referência
   * @var Integer
   */
   public $iMes;
-  
+
   public function gerarDados() {
 
     $this->sArquivo = "METAREAL";
@@ -41,7 +41,7 @@ class GerarMETAREAL extends GerarAM {
       for ($iCont = 0;$iCont < pg_num_rows($rsMETAREAL10); $iCont++) {
 
         $aMETAREAL10  = pg_fetch_array($rsMETAREAL10,$iCont);
-        
+
         $aCSVMETAREAL10['si171_tiporegistro']                        =   str_pad($aMETAREAL10['si171_tiporegistro'], 2, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_codorgao']                            =   str_pad($aMETAREAL10['si171_codorgao'], 2, "0", STR_PAD_LEFT);
         $aCSVMETAREAL10['si171_codunidadesub']                       =   str_pad($aMETAREAL10['si171_codunidadesub'], 5, "0", STR_PAD_LEFT);
@@ -53,7 +53,7 @@ class GerarMETAREAL extends GerarAM {
         $aCSVMETAREAL10['si171_metarealizada']                       =   number_format($aMETAREAL10['si171_metarealizada'], 2, ",", "");
         $aCSVMETAREAL10['si171_justificativa']                       =    substr($aMETAREAL10['si171_justificativa'], 0, 1000);
 
-        
+
         $this->sLinha = $aCSVMETAREAL10;
         $this->adicionaLinha();
 
@@ -63,6 +63,6 @@ class GerarMETAREAL extends GerarAM {
 
     }
 
-  } 
+  }
 
 }

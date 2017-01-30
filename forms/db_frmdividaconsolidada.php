@@ -120,19 +120,53 @@ db_select('si167_contratodeclei',$x,true,$db_opcao,"");
        <?=@$Lsi167_tipolancamento?>
     </td>
     <td> 
-<?
-$x = array("1"=>"Dívida Mobiliária","2"=>"Dívida Contratual de PPP","3"=>"Demais Dívidas Contratuais Internas",
-  "4"=>"Dívidas Contratuais Externas","5"=>"Precatórios Posteriores a 05/05/2000 (inclusive) - Vencidos e não Pagos",
-  "6"=>"Parcelamento de Dívidas de Tributos","7"=>"Parcelamento de Dívidas Previdenciárias","8"=>"Parcelamento de Dívidas das Demais Contribuições 
-Sociais","9"=>"Parcelamento de Dívidas do FGTS","10"=>"Outras Dívidas","11"=>"Passivos Reconhecidos",
-  "12"=>"Outras Dívidas não Sujeitas ao Limite de Contratação de Operação de Crédito",
-    "13"=>"Parcelamento de Dívida com Instituição não Financeira; (Vide Manual de Demonstrativos Fiscais. Ex.: Cemig, Copasa, etc.)",
-    "14"=>"Passivo Atuarial; (Vide Manual de Demonstrativos Fiscais)");
-db_select('si167_tipolancamento',$x,true,$db_opcao,"");
-//db_input('si167_tipolancamento',2,$Isi167_tipolancamento,true,'text',$db_opcao,"")
-?>
+      <?
+      $x = array(
+        "01" => "Dívida Mobiliária",
+        "02" => "Dívida Contratual de PPP",
+        "03" => "Dívida Contratual de Empréstimos",
+        "04" => "Dívida Contratual de Financiamentos",
+        "05" => "Dívida Contratual de Antecipação de Receita pela Venda a Termo de Bens e Serviços",
+        "06" => "Dívida Contratual de Assunção, Reconhecimento e Confissão de Dívidas (LRF, art.29, § 1º)",
+        "07" => "Dívida Contratual de Operações de crédito previstas no art. 7º § 3º da RSF nº 43/2001",
+        "08" => "Dívida Contratual de Parcelamento e Renegociação de Dívidas de Tributos",
+        "09" => "Dívida Contratual de Parcelamento e Renegociação de Dívidas de Contribuições Sociais Previdenciárias",
+        "10" => "Dívida Contratual de Parcelamento e Renegociação de Dívidas de Outras Contribuições Sociais",
+        "11" => "Dívida Contratual de Parcelamento e Renegociação de Dívidas do FGTS",
+        "12" => "Dívida Contratual de Parcelamento e Renegociação de Dívida com Instituição não Financeira",
+        "13" => "Dívida Contratual com Instituição Financeira",
+        "14" => "Demais Dívidas Contratuais",
+        "15" => "Outras Operações de Crédito sujeitas ao limite",
+        "16" => "Precatórios Posteriores a 05/05/2000 (inclusive) - Vencidos e não Pagos",
+        "17" => "Reestruturação Fiscal dos Municípios",
+        "18" => "Outras Dívidas",
+        "19" => "Outras Operações de Crédito não Sujeitas ao Limite (Exemplo: Programa de Iluminação Pública ? RELUZ. Conforme MDF.)",
+        "20" => "Operações de Crédito Vedadas",
+        "21" => "Precatórios Anteriores a 05/05/2000",
+        "22" => "Passivos Reconhecidos"
+      );
+      db_select('si167_tipolancamento', $x, true, $db_opcao, " onchange='verificaTipoLancamento(this);' ");
+      ?>
     </td>
   </tr>
+
+  <tr>
+    <td nowrap title="Subtipo do Lançamento:">
+      <strong>Subtipo do Lançamento:</strong>
+    </td>
+    <td>
+      <?
+      $x = array(
+        '0' => "",
+        '1' => "Interno",
+        '2' => "Externo"
+      );
+      db_select('si167_subtipo', $x, true, $db_opcao, "");
+      ?>
+    </td>
+  </tr>
+
+
   <tr>
     <td nowrap title="<?=@$Tsi167_objetocontratodivida?>" colspan="2">
     <fieldset><legend><?=@$Lsi167_objetocontratodivida?></legend>
@@ -265,6 +299,31 @@ db_select('si167_mesreferencia',$x,true,$db_opcao,"");
 <input name="importar" type="button" id="importar" value="Importar" onclick="js_importar();" <?=($db_opcao!=1?"disabled":"") ?>>
 </form>
 <script>
+
+function verificaTipoLancamento(select) {
+  var nTipoLancamento = parseInt(select.value);
+  var si167_subtipo   = document.getElementById('si167_subtipo');
+
+  si167_subtipo.innerHTML = "";
+  var sOptions = "";
+
+  sOptions += "<option value='' disabled></option>";
+  sOptions += "<option value='1'>Interno</option>";
+  sOptions += "<option value='2'>Externo</option>";
+
+  si167_subtipo.innerHTML = sOptions;
+
+  if( !((nTipoLancamento >= 1) && (nTipoLancamento <= 14)) ) {
+    si167_subtipo.value = '';
+    si167_subtipo.setAttribute('disabled',true);
+  } else {
+    si167_subtipo.value = 1;
+    si167_subtipo.removeAttribute('disabled');
+  }
+
+}
+
+
 function js_pesquisa(){
   js_OpenJanelaIframe('top.corpo','db_iframe_dividaconsolidada','func_dividaconsolidada.php?funcao_js=parent.js_preenchepesquisa|si167_sequencial','Pesquisa',true);
 }

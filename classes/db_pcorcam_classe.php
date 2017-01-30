@@ -52,6 +52,7 @@ class cl_pcorcam {
    var $pc20_prazoentrega = 0;
    var $pc20_validadeorcamento = 0;
    var $pc20_cotacaoprevia = 0;
+   var $pc20_criterioadjudicacao = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc20_codorc = int4 = Código do orçamento
@@ -61,6 +62,7 @@ class cl_pcorcam {
                  pc20_prazoentrega = int4 = Prazo de Entrega de Produto
                  pc20_validadeorcamento = int4 = Validade do Orcamento
                  pc20_cotacaoprevia = int4 = Cotação Prévia
+                 pc20_criterioadjudicacao = int4 = Critério de Adjudicação
                  ";
    //funcao construtor da classe
    function cl_pcorcam() {
@@ -94,6 +96,7 @@ class cl_pcorcam {
        $this->pc20_prazoentrega = ($this->pc20_prazoentrega == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_prazoentrega"]:$this->pc20_prazoentrega);
        $this->pc20_validadeorcamento = ($this->pc20_validadeorcamento == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_validadeorcamento"]:$this->pc20_validadeorcamento);
        $this->pc20_cotacaoprevia = ($this->pc20_cotacaoprevia == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_cotacaoprevia"]:$this->pc20_cotacaoprevia);
+       $this->pc20_criterioadjudicacao = ($this->pc20_criterioadjudicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_criterioadjudicacao"]:$this->pc20_criterioadjudicacao);
      }else{
        $this->pc20_codorc = ($this->pc20_codorc == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_codorc"]:$this->pc20_codorc);
      }
@@ -127,6 +130,9 @@ class cl_pcorcam {
      }
      if($this->pc20_cotacaoprevia == null ){
        $this->pc20_cotacaoprevia = "0";
+     }
+     if($this->pc20_criterioadjudicacao == "0" ){
+       $this->pc20_criterioadjudicacao = 'null';
      }
      if($pc20_codorc == "" || $pc20_codorc == null ){
        $result = db_query("select nextval('pcorcam_pc20_codorc_seq')");
@@ -168,6 +174,7 @@ class cl_pcorcam {
                                       ,pc20_prazoentrega
                                       ,pc20_validadeorcamento
                                       ,pc20_cotacaoprevia
+                                      ,pc20_criterioadjudicacao
                        )
                 values (
                                 $this->pc20_codorc
@@ -177,6 +184,7 @@ class cl_pcorcam {
                                ,$this->pc20_prazoentrega
                                ,$this->pc20_validadeorcamento
                                ,$this->pc20_cotacaoprevia
+                               ,$this->pc20_criterioadjudicacao
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -299,6 +307,13 @@ class cl_pcorcam {
            $this->pc20_cotacaoprevia = "0" ;
         }
        $sql  .= $virgula." pc20_cotacaoprevia = $this->pc20_cotacaoprevia ";
+       $virgula = ",";
+     }
+     if(trim($this->pc20_criterioadjudicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc20_criterioadjudicacao"])){
+        if(trim($this->pc20_criterioadjudicacao)=="" && isset($GLOBALS["HTTP_POST_VARS"]["pc20_criterioadjudicacao"])){
+           $this->pc20_criterioadjudicacao = null;
+        }
+       $sql  .= $virgula." pc20_criterioadjudicacao = $this->pc20_criterioadjudicacao ";
        $virgula = ",";
      }
      $sql .= " where ";
