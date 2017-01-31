@@ -173,7 +173,6 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
               $campos  = "distinct acordo.ac16_sequencial, ";
               $campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
-              $campos .= "ac10_datamovimento, ";
               $campos .= "acordo.ac16_contratado, cgm.z01_nome,";
               $campos .= "acordo.ac16_valor,";
               $campos .= "acordo.ac16_datapublicacao,";
