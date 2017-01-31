@@ -2485,7 +2485,7 @@ class Acordo
                                                    ac10_hora as hora,
                                                    ac10_datamovimento,
                                                    ac10_obs as observacao",
-            "ac10_datamovimento",
+            "ac10_sequencial",
             "ac10_acordo = {$this->getCodigoAcordo()}"
         );
         $rsMovimentos = $oDaoAcordoMovimentacao->sql_record($sSqlMov);

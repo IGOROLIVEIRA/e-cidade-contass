@@ -173,6 +173,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
               $campos  = "distinct acordo.ac16_sequencial, ";
               $campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
+              $campos .= "ac16_dataassinatura, ";
               $campos .= "acordo.ac16_contratado, cgm.z01_nome,";
               $campos .= "acordo.ac16_valor,";
               $campos .= "acordo.ac16_datainicio, ";
@@ -234,7 +235,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
               db_fieldsmemory($result,0);
               if (isset($descricao) && $descricao == 'true') {
-                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac10_datamovimento',false);</script>";
+                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac16_dataassinatura',false);</script>";
               } else {
                 echo "<script>".$funcao_js."('$ac16_sequencial',false);</script>";
               }

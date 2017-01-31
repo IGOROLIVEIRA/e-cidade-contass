@@ -170,7 +170,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         if (lMostrar == true) {
 
-            var sUrl = 'func_acordonovo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac10_datamovimento&iTipoFiltro=4';
+            var sUrl = 'func_acordonovo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura&iTipoFiltro=4';
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_acordo',
                 sUrl,
@@ -209,7 +209,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             $('ac16_sequencial').value   = chave1;
             $('ac16_resumoobjeto').value = chave2;
-            $('si03_dataassinacontrato').value = new Date(chave3).toLocaleDateString();
+            $('si03_dataassinacontrato').value = chave3.substr(8, 2)+'/'+chave3.substr(5, 2)+'/'+chave3.substr(0, 4);
         }
     }
 
@@ -219,8 +219,7 @@ $clrotulo->label("ac16_resumoobjeto");
     function js_mostraacordo1(chave1,chave2,chave3) {
         $('ac16_sequencial').value    = chave1;
         $('ac16_resumoobjeto').value  = chave2;
-        alert(chave3);
-        $('si03_dataassinacontrato').value  = new Date(chave3).toLocaleDateString();
+        $('si03_dataassinacontrato').value  = chave3.substr(8, 2)+'/'+chave3.substr(5, 2)+'/'+chave3.substr(0, 4);
         db_iframe_acordo.hide();
     }
 </script>

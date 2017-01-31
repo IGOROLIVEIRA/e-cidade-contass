@@ -129,11 +129,11 @@ $sAnd   = "";
       	
         if (isset($oGet->movimento) && !empty($oGet->movimento)) {
         	
-        	$campos  = "acordomovimentacao.ac10_sequencial,                           ";
+        	$campos  = "acordomovimentacao.ac10_acordo,                           ";
         	$campos .= "acordomovimentacao.ac10_acordomovimentacaotipo,               ";
         	$campos .= "acordomovimentacaotipo.ac09_descricao,                        ";
 //        	$campos .= "acordomovimentacaocancela.ac25_acordomovimentacaocancela,     ";
-        	$campos .= "acordomovimentacao.ac10_acordo,                               ";
+        	$campos .= "acordomovimentacao.ac10_sequencial,                               ";
         	$campos .= "acordomovimentacao.ac10_id_usuario,                           ";
         	$campos .= "acordomovimentacao.ac10_datamovimento,                        ";
         	$campos .= "acordomovimentacao.ac10_hora,                                 ";
