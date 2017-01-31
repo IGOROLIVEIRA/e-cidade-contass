@@ -175,7 +175,6 @@ $iInstituicaoSessao = db_getsession('DB_instit');
               $campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
               $campos .= "acordo.ac16_contratado, cgm.z01_nome,";
               $campos .= "acordo.ac16_valor,";
-              $campos .= "acordo.ac16_datapublicacao,";
               $campos .= "acordo.ac16_datainicio, ";
               $campos .= "acordo.ac16_datafim,ac16_resumoobjeto";
 
