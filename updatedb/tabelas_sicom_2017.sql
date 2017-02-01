@@ -4600,6 +4600,24 @@ DROP TABLE IF EXISTS balancete192017 CASCADE;
 DROP TABLE IF EXISTS balancete202017 CASCADE;
 DROP TABLE IF EXISTS balancete212017 CASCADE;
 DROP TABLE IF EXISTS balancete222017 CASCADE;
+DROP TABLE IF EXISTS balancete232017 CASCADE;
+DROP TABLE IF EXISTS balancete242017 CASCADE;
+DROP SEQUENCE IF EXISTS balancete102017_si177_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete112017_si178_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete122017_si179_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete132017_si180_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete142017_si181_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete152017_si182_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete162017_si183_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete172017_si184_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete182017_si185_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete192017_si186_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete202017_si187_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete212017_si188_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete222017_si189_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete232017_si190_sequencial_seq;
+DROP SEQUENCE IF EXISTS balancete242017_si191_sequencial_seq;
+
 --Criando drop sequences
 
 
@@ -4611,7 +4629,7 @@ CREATE TABLE balancete102017(
 si177_sequencial		int8 NOT NULL default 0,
 si177_tiporegistro		int8 NOT NULL default 0,
 si177_contacontaabil		int8 NOT NULL default 0,
-si177_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si177_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si177_saldoinicial		float8 NOT NULL default 0,
 si177_naturezasaldoinicial		varchar(1) NOT NULL ,
 si177_totaldebitos		float8 NOT NULL default 0,
@@ -4628,7 +4646,7 @@ CREATE TABLE balancete112017(
 si178_sequencial		int8 NOT NULL default 0,
 si178_tiporegistro		int8 NOT NULL default 0,
 si178_contacontaabil		int8 NOT NULL default 0,
-si178_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si178_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si178_codorgao		varchar(2) NOT NULL ,
 si178_codunidadesub		varchar(8) NOT NULL ,
 si178_codfuncao		varchar(2) NOT NULL ,
@@ -4655,7 +4673,7 @@ CREATE TABLE balancete122017(
 si179_sequencial		int8 NOT NULL default 0,
 si179_tiporegistro		int8 NOT NULL default 0,
 si179_contacontabil		int8 NOT NULL default 0,
-si179_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si179_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si179_naturezareceita		int8 NOT NULL default 0,
 si179_codfontrecursos		int8 NOT NULL default 0,
 si179_saldoinicialcr		float8 NOT NULL default 0,
@@ -4674,7 +4692,7 @@ CREATE TABLE balancete132017(
 si180_sequencial		int8 NOT NULL default 0,
 si180_tiporegistro		int8 NOT NULL default 0,
 si180_contacontabil		int8 NOT NULL default 0,
-si180_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si180_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si180_codprograma		varchar(4) NOT NULL ,
 si180_idacao		text NOT NULL ,
 si180_idsubacao		varchar(4)  ,
@@ -4694,7 +4712,7 @@ CREATE TABLE balancete142017(
 si181_sequencial		int8 NOT NULL default 0,
 si181_tiporegistro		int8 NOT NULL default 0,
 si181_contacontabil		int8 NOT NULL default 0,
-si181_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si181_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si181_codorgao		varchar(2) NOT NULL ,
 si181_codunidadesub		varchar(8) NOT NULL ,
 si181_codunidadesuborig		varchar(8) NOT NULL ,
@@ -4724,7 +4742,7 @@ CREATE TABLE balancete152017(
 si182_sequencial		int8 NOT NULL default 0,
 si182_tiporegistro		int8 NOT NULL default 0,
 si182_contacontabil		int8 NOT NULL default 0,
-si182_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si182_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si182_atributosf		varchar(1) NOT NULL ,
 si182_saldoinicialsf		float8 NOT NULL default 0,
 si182_naturezasaldoinicialsf		varchar(1) NOT NULL ,
@@ -4742,7 +4760,7 @@ CREATE TABLE balancete162017(
 si183_sequencial		int8 NOT NULL default 0,
 si183_tiporegistro		int8 NOT NULL default 0,
 si183_contacontabil		int8 NOT NULL default 0,
-si183_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si183_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si183_atributosf		varchar(1) NOT NULL ,
 si183_codfontrecursos		int8 NOT NULL default 0,
 si183_saldoinicialfontsf		float8 NOT NULL default 0,
@@ -4761,7 +4779,7 @@ CREATE TABLE balancete172017(
 si184_sequencial		int8 NOT NULL default 0,
 si184_tiporegistro		int8 NOT NULL default 0,
 si184_contacontabil		int8 NOT NULL default 0,
-si184_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si184_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si184_atributosf		varchar(1) NOT NULL ,
 si184_codctb		int8 NOT NULL default 0,
 si184_codfontrecursos		int8 NOT NULL default 0,
@@ -4781,7 +4799,7 @@ CREATE TABLE balancete182017(
 si185_sequencial		int8 NOT NULL default 0,
 si185_tiporegistro		int8 NOT NULL default 0,
 si185_contacontabil		int8 NOT NULL default 0,
-si185_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si185_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si185_codfontrecursos		int8 NOT NULL default 0,
 si185_saldoinicialfr		float8 NOT NULL default 0,
 si185_naturezasaldoinicialfr		varchar(1) NOT NULL ,
@@ -4799,7 +4817,7 @@ CREATE TABLE balancete192017(
 si186_sequencial		int8 NOT NULL default 0,
 si186_tiporegistro		int8 NOT NULL default 0,
 si186_contacontabil		int8 NOT NULL default 0,
-si186_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si186_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si186_cnpjconsorcio		int8 NOT NULL default 0,
 si186_saldoinicialconsor		float8 NOT NULL default 0,
 si186_naturezasaldoinicialconsor		varchar(1) NOT NULL ,
@@ -4817,7 +4835,7 @@ CREATE TABLE balancete202017(
 si187_sequencial		int8 NOT NULL default 0,
 si187_tiporegistro		int8 NOT NULL default 0,
 si187_contacontabil		int8 NOT NULL default 0,
-si187_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si187_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si187_cnpjconsorcio		int8 NOT NULL default 0,
 si187_tiporecurso		int4 NOT NULL default 0,
 si187_codfuncao		varchar(2) NOT NULL ,
@@ -4841,7 +4859,7 @@ CREATE TABLE balancete212017(
 si188_sequencial		int8 NOT NULL default 0,
 si188_tiporegistro		int8 NOT NULL default 0,
 si188_contacontabil		int8 NOT NULL default 0,
-si188_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si188_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si188_cnpjconsorcio		int8 NOT NULL default 0,
 si188_codfontrecursos		int8 NOT NULL default 0,
 si188_saldoinicialconsorfr		float8 NOT NULL default 0,
@@ -4860,7 +4878,7 @@ CREATE TABLE balancete222017(
 si189_sequencial		int8 NOT NULL default 0,
 si189_tiporegistro		int8 NOT NULL default 0,
 si189_contacontabil		int8 NOT NULL default 0,
-si189_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si189_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si189_atributosf		varchar(1) NOT NULL ,
 si189_codctb		int8 NOT NULL default 0,
 si189_saldoInicialctbsf		float8 NOT NULL default 0,
@@ -4878,7 +4896,7 @@ CREATE TABLE balancete232017(
 si190_sequencial		int8 NOT NULL default 0,
 si190_tiporegistro		int8 NOT NULL default 0,
 si190_contacontabil		int8 NOT NULL default 0,
-si190_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si190_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si190_naturezareceita		int8 NOT NULL default 0,
 si190_saldoinicialnatreceita		float8 NOT NULL default 0,
 si190_naturezasaldoinicialnatreceita		varchar(1) NOT NULL,
@@ -4895,7 +4913,7 @@ CREATE TABLE balancete242017(
 si191_sequencial		int8 NOT NULL default 0,
 si191_tiporegistro		int8 NOT NULL default 0,
 si191_contacontabil		int8 NOT NULL default 0,
-si191_codfundo      varchar(8) NOT NULL DEFAULT "00000000",
+si191_codfundo      varchar(8) NOT NULL DEFAULT '00000000',
 si191_codorgao		int8 NOT NULL default 0,
 si191_codunidadesub      varchar(8) NOT NULL,
 si191_saldoinicialorgao		float8 NOT NULL default 0,
