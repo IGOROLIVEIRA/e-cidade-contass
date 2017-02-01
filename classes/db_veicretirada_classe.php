@@ -96,7 +96,7 @@ class cl_veicretirada {
       $this->ve60_codigo = ($this->ve60_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_codigo"]:$this->ve60_codigo);
       $this->ve60_veiculo = ($this->ve60_veiculo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_veiculo"]:$this->ve60_veiculo);
       $this->ve60_veicmotoristas = ($this->ve60_veicmotoristas == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_veicmotoristas"]:$this->ve60_veicmotoristas);
-      $this->ve60_destinonovo = ($this->ve60_destinonovo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve75_sequencial"]:$this->ve60_destinonovo);
+      $this->ve60_destinonovo = ($this->ve60_destinonovo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_destinonovo"]:$this->ve60_destinonovo);
       if($this->ve60_datasaida == ""){
         $this->ve60_datasaida_dia = ($this->ve60_datasaida_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_datasaida_dia"]:$this->ve60_datasaida_dia);
         $this->ve60_datasaida_mes = ($this->ve60_datasaida_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["ve60_datasaida_mes"]:$this->ve60_datasaida_mes);
