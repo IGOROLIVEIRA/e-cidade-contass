@@ -1150,7 +1150,7 @@ class cl_tabrec {
       $sql = " select tt.k02_codigo as k02_codigo, k02_descr, o70_codigo " ;
       $sql .= "  from tabrec tt inner join taborc ttor on tt.k02_codigo = ttor.k02_codigo ";
       $sql .= " inner join orcreceita on ttor.k02_codrec = o70_codrec and ttor.k02_anousu = o70_anousu ";
-      $sql .= " where ttor.k02_anousu = ".db_getsession("DB_anousu")."  and ttor.k02_estorc = (select '495'||substr(tor.k02_estorc,2,8)||'0000' ";
+      $sql .= " where ttor.k02_anousu = ".db_getsession("DB_anousu")."  and ttor.k02_estorc like (select '495'||substr(tor.k02_estorc,2,6)||'%' ";
       $sql .= "    from tabrec t inner join taborc tor on t.k02_codigo = tor.k02_codigo ";
       $sql .= "    where tor.k02_anousu = ".db_getsession("DB_anousu")."  and t.k02_codigo = {$k02_codigo} ) limit 1 ";
       return $sql;
