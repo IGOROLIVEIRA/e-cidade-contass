@@ -60,8 +60,8 @@ db_postmemory($HTTP_POST_VARS);
 
 $sair = true;
 if(isset($pc10_numero) && trim($pc10_numero)!=""){
-  $where_depart = " pc10_instit = " . db_getsession("DB_instit");
-  $result_solicita = $clsolicita->sql_record($clsolicita->sql_query_tipo($pc10_numero,"pc10_instit,pc52_descricao,
+  $where_depart = "pc10_numero = {$pc10_numero} and pc10_instit = " . db_getsession("DB_instit");
+  $result_solicita = $clsolicita->sql_record($clsolicita->sql_query_tipo(null,"pc10_instit,pc52_descricao,
                                                                          pc12_tipo,
                                                                          pc10_solicitacaotipo,
                                                                          pc50_descr,
