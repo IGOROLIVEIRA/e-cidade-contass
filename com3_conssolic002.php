@@ -60,11 +60,12 @@ db_postmemory($HTTP_POST_VARS);
 
 $sair = true;
 if(isset($pc10_numero) && trim($pc10_numero)!=""){
+  $where_depart = " pc10_instit = " . db_getsession("DB_instit");
   $result_solicita = $clsolicita->sql_record($clsolicita->sql_query_tipo($pc10_numero,"pc10_instit,pc52_descricao,
                                                                          pc12_tipo,
                                                                          pc10_solicitacaotipo,
                                                                          pc50_descr,
-                                                                         coddepto,descrdepto,id_usuario,nome,pc10_data,pc12_vlrap"));
+                                                                         coddepto,descrdepto,id_usuario,nome,pc10_data,pc12_vlrap",null,$where_depart));
   if($clsolicita->numrows>0){
     db_fieldsmemory($result_solicita,0);
     $sair = false;
