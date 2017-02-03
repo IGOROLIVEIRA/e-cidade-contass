@@ -92,7 +92,7 @@ $clissgruposervico->rotulo->label("q126_sequencial");
         
         $sWhere = " db121_tipoconta = 2 ";
 
-        $campos = "issgruposervico.q126_sequencial, db_estruturavalor.db121_estrutural, db_estruturavalor.db121_descricao::varchar(90), q136_exercicio";
+        $campos = "issgruposervico.q126_sequencial, db_estruturavalor.db121_estrutural, db_estruturavalor.db121_descricao, q136_exercicio";
         if(isset($chave_q126_sequencial) && (trim($chave_q126_sequencial)!="") ){
 
            $sWhere .= " and issgruposervico.q126_sequencial = {$chave_q126_sequencial} ";

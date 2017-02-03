@@ -48,8 +48,8 @@ $sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
 					<strong>Grupo de serviço:</strong>
 				</td>
 				<td>
-					<?php db_input('iCodigoGrupoServico', 10, $Iq136_issgruposervico, true, 'text', 3); ?>
-					<?php db_input('sDescricaoGrupoServico', 50, null, true, 'text', 3); ?>
+					<?php db_input('iCodigoGrupoServico', 10, $Iq136_issgruposervico, true, 'text', $db_opcao); ?>
+					<?php db_input('sDescricaoGrupoServico', 50, null, true, 'text', $db_opcao); ?>
 					<?php db_input('q136_sequencial', 10, null, true, 'hidden', 3); ?>
 					<?php db_input('q136_issgruposervico', 10, null, true, 'hidden', 3); ?>
 				</td>
@@ -60,7 +60,7 @@ $sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
 					 <?php echo $Lq136_exercicio; ?>
 				</td>
 				<td>
-					<?php db_input('q136_exercicio', 10, $Iq136_exercicio, true, 'text', 22, "") ?>
+					<?php $q136_exercicio = db_getsession('DB_anousu'); db_input('q136_exercicio', 10, $Iq136_exercicio, true, 'text', 22, ""); ?>
 					<input type="hidden" id="exercicio_atual" value="<?php echo db_getsession('DB_anousu'); ?>" />
 				</td>
 			</tr>

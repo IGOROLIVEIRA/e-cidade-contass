@@ -32,14 +32,13 @@ if ( isset($oPost->incluir) ) {
 <meta http-equiv="Expires" CONTENT="0">
 <?php db_app::load("estilos.css, grid.style.css, scripts.js, strings.js, prototype.js"); ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-
-	<center>
+<body class="body-default">
+<div class="container">
 		<?php include 'forms/db_frmissconfiguracaogruposervico.php'; ?>
 	</center>
 
 	<?php db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit")); ?>
-
+</div>
 <script>
 js_tabulacaoforms("form1", "q136_issgruposervico", true, 1, "q136_issgruposervico", true);
 </script>
