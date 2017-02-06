@@ -94,6 +94,7 @@ $cltipoproc->rotulo->label("p51_descr");
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            $campos = "tipoproc.*";
+$campos = "distinct {$campos}";
         }
         if(isset($chave_p51_codigo) && (trim($chave_p51_codigo)!="") ){
 	         $sql = $cltipoproc->sql_query(null,$campos,"p51_dtlimite DESC","p51_codigo=$chave_p51_codigo  and $where");
