@@ -736,7 +736,7 @@ class AcordoItem {
    *
    * @return AcordoItem
    */
-  public function save($lReservarSaldo = true) {
+  public function save($lReservarSaldo = false) {
 
     if ($this->getCodigo() == "") {
     	$this->setOrdem($this->getProximaPosicao());
