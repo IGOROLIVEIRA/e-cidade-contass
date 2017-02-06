@@ -1,0 +1,14 @@
+begin;
+CREATE TABLE conlancaminscrestosapagaremliquidacao(
+c210_sequencial		int8 NOT NULL default 0,
+c210_codlan		int8 NOT NULL default 0,
+c210_inscricaorestosapagaremliquidacao		int8 default 0,
+CONSTRAINT conlancaminscrestosapagaremliquidacao_sequ_pk PRIMARY KEY (c210_sequencial));
+ALTER TABLE conlancaminscrestosapagaremliquidacao
+ADD CONSTRAINT conlancaminscrestosapagaremliquidacao_inscricaorestosapagaremliquidacao_fk FOREIGN KEY (c210_inscricaorestosapagaremliquidacao)
+REFERENCES inscricaorestosapagaremliquidacao;
+ALTER TABLE conlancaminscrestosapagaremliquidacao
+ADD CONSTRAINT conlancaminscrestosapagaremliquidacao_codlan_fk FOREIGN KEY (c210_codlan)
+REFERENCES conlancam;
+CREATE SEQUENCE conlancaminscricaorestosapagaremliquidacao_c210_sequencial_seq start 1;
+commit;
