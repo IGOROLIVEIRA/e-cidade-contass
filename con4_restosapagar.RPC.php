@@ -1,4 +1,6 @@
 <?php
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2013  DBselller Servicos de Informatica             
@@ -33,6 +35,8 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("libs/JSON.php");
 require_once('model/contabilidade/lancamento/LancamentoAuxiliarInscricaoRestosAPagarProcessados.model.php');
+require_once('model/contabilidade/lancamento/LancamentoAuxiliarInscricaoRestosAPagarEmLiquidacao.model.php');
+
 
 require_once("dbforms/db_funcoes.php");
 
@@ -76,7 +80,8 @@ try {
 			$oRetorno->lBloquearTela = false;
 
 			if ((EscrituracaoRestosAPagarNaoProcessados::existeLancamentoPeriodo($iAnoSessao, $iInstituicao, $oParam->lProcessados)) &&
-				(EscrituracaoRestosAPagarProcessados::existeLancamentoPeriodo($iAnoSessao, $iInstituicao, $oParam->lProcessados))
+				(EscrituracaoRestosAPagarProcessados::existeLancamentoPeriodo($iAnoSessao, $iInstituicao, $oParam->lProcessados)) &&
+				(EscrituracaoRestosAPagarEmLiquidacao::existeLancamentoPeriodo($iAnoSessao, $iInstituicao, $oParam->lProcessados))
 			) {
 				$oRetorno->lBloquearTela = true;
 			}
@@ -88,7 +93,17 @@ try {
 				$oParam->lProcessados);
 
 			if ($nValorNp == 0) {
-				$nValorNp = RestosAPagar::getValorNaoProcessadoAno($iAnoSessao, $iInstituicao);
+				$nValorNp = RestosAPagar::getValorRpNpAno($iAnoSessao, $iInstituicao);
+			}
+
+			// Em liquidacao
+
+			$nValorEmLqd = EscrituracaoRestosAPagarEmLiquidacao::getValorLancamento($iAnoSessao,
+				$iInstituicao,
+				$oParam->lProcessados);
+
+			if ($nValorEmLqd == 0) {
+				$nValorEmLqd = RestosAPagar::getValorRpEmLiquidacaoAno($iAnoSessao, $iInstituicao);
 			}
 
 			//Processados
@@ -103,6 +118,7 @@ try {
 
 			$oRetorno->nValorNp = $nValorNp;
 			$oRetorno->nValorP = $nValorP;
+			$oRetorno->nValorEmLqd = $nValorEmLqd;
 
 			break;
 
@@ -130,56 +146,73 @@ try {
 				$iCodigoEscrituracao = $oEscrituracao->cancelarEscrituracao();
 			}
 
-			$rsSqlEmpresto = RestosAPagar::getValorNaoProcessadoAnalitico($iAnoSessao, $iInstituicao);
+			$rsSqlEmpresto = RestosAPagar::getValorRpAnalitico($iAnoSessao, $iInstituicao);
 
 			for ($iContRP = 0; $iContRP < pg_num_rows($rsSqlEmpresto); $iContRP++) {
 
 				$oEmpresto = db_utils::fieldsMemory($rsSqlEmpresto, $iContRP);
 
 				$oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpresto->e91_numemp);
-
-				if ($oEmpenhoFinanceiro->getAnoUso() == db_getsession('DB_anousu') - 1) {
-
-					if ($oParam->exec == 'processar') {
-
-						// Documento 2005: INSCRIÇÃO DE RESTOS A PAGAR NÃO PROCESSADOS
-						$iCodigoDocumento = 2005;
-
-					} else {
-
-						// Documento 2006:	ESTORNO DE INSCR. DE RP NÃO PROCESSADOS
-						$iCodigoDocumento = 2006;
-					}
-				} else {
-					if(db_getsession('DB_anousu') == 2015) {
-
-						if ($oParam->exec == 'processar') {
-
-							// Documento 2009: INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
-							$iCodigoDocumento = 2009;
-
-						} else {
-
-							// Documento 2010:	ESTORNO INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
-							$iCodigoDocumento = 2010;
-
-						}
-					}else{
-						continue;
-					}
-
+				
+				if ($oParam->exec == 'processar') {
+					// Documento 2005: INSCRIÇÃO DE RESTOS A PAGAR NÃO PROCESSADOS
+					$iCodigoDocumento = 2005;
 				}
 
-				$oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
-				$oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
-				$oLancamentoAuxiliar = new LancamentoAuxiliarInscricaoRestosAPagarNaoProcessado();
-				$oLancamentoAuxiliar->setValorTotal($oEmpresto->valor);
-				$oLancamentoAuxiliar->setObservacaoHistorico($sObservacao);
-				$oLancamentoAuxiliar->setInscricaoRestosAPagarNaoProcessados($iCodigoEscrituracao);
-				$oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+			    if($oEmpresto->valor_nao_processado > 0){
+			    	$oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+				    $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
+				    $oLancamentoAuxiliar = new LancamentoAuxiliarInscricaoRestosAPagarNaoProcessado();
+				    $oLancamentoAuxiliar->setValorTotal($oEmpresto->valor_nao_processado);
+				    $oLancamentoAuxiliar->setObservacaoHistorico($sObservacao);
+				    $oLancamentoAuxiliar->setInscricaoRestosAPagarNaoProcessados($iCodigoEscrituracao);
+				    $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
 
-				$oEscrituracao->processarLancamentosContabeis($oLancamentoAuxiliar, $iCodigoDocumento);
+				    $oEscrituracao->processarLancamentosContabeis($oLancamentoAuxiliar, $iCodigoDocumento);
+			    }
+				
+			}
 
+			/*
+             * Resto A Pagar Em Liquidacao
+             *
+             */
+
+			$oEscrituracao = new EscrituracaoRestosAPagarEmLiquidacao($iAnoSessao, $iInstituicao);
+
+			$iCodigoEscrituracao = null;
+			$iCodigoDocumento = null;
+			$sObservacao = db_stdClass::normalizeStringJson($oParam->sObservacao);
+
+			if ($oParam->exec == 'processar') {
+
+				$iCodigoEscrituracao = $oEscrituracao->escriturar();
+
+			} 
+
+			$rsSqlEmpresto = RestosAPagar::getValorRpAnalitico($iAnoSessao, $iInstituicao);
+
+			for ($iContRP = 0; $iContRP < pg_num_rows($rsSqlEmpresto); $iContRP++) {
+
+				$oEmpresto = db_utils::fieldsMemory($rsSqlEmpresto, $iContRP);
+
+				$oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpresto->e91_numemp);
+				
+				if ($oParam->exec == 'processar') {
+					// Documento 2005: INSCRIÇÃO DE RESTOS A PAGAR EM LIQUIDAÇÃO
+					$iCodigoDocumento = 2021;
+				} 
+			    if($oEmpresto->valor_em_liquidacao > 0){
+					$oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
+					$oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
+					$oLancamentoAuxiliar = new LancamentoAuxiliarInscricaoRestosAPagarEmLiquidacao();
+					$oLancamentoAuxiliar->setValorTotal($oEmpresto->valor_em_liquidacao);
+					$oLancamentoAuxiliar->setObservacaoHistorico($sObservacao);
+					$oLancamentoAuxiliar->setInscricaoRestosAPagarEmLiquidacao($iCodigoEscrituracao);
+					$oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+
+					$oEscrituracao->processarLancamentosContabeis($oLancamentoAuxiliar, $iCodigoDocumento);
+				}
 			}
 
 			/*
@@ -272,7 +305,13 @@ try {
                                 FROM conlancaminscrestosapagarprocessados
                                 inner join conlancam on c108_codlan = c70_codlan
                                 inner join conlancaminstit on c02_codlan = c70_codlan and c02_instit = ".db_getsession('DB_instit')."
-                                WHERE c70_anousu = " . db_getsession('DB_anousu'));
+                                WHERE c70_anousu = " . db_getsession('DB_anousu')."
+                                UNION ALL
+                                SELECT DISTINCT c210_codlan c70_codlan
+                                FROM conlancaminscrestosapagaremliquidacao
+                                inner join conlancam on c210_codlan = c70_codlan
+                                inner join conlancaminstit on c02_codlan = c70_codlan and c02_instit = ".db_getsession('DB_instit')."
+                                WHERE c70_anousu = " . db_getsession('DB_anousu') );
 
 			if (!$rsTabelaLancamentos) {
 				throw new Exception('Não foi possivel criar tabela para exclusão de lançamentos');
@@ -459,6 +498,11 @@ try {
 			if (!$rsDeleteconlancaminscrestosapagarprocessados) {
 				throw new Exception('Não foi possivel excluir dados da tabela conlancaminscrestosapagarprocessados');
 			}
+			$rsDeleteconlancaminscrestosapagaremliquidacao = db_query("delete from conlancaminscrestosapagaremliquidacao where c210_codlan in (select c70_codlan from w_conlancam)");
+
+			if (!$rsDeleteconlancaminscrestosapagaremliquidacao) {
+				throw new Exception('Não foi possivel excluir dados da tabela conlancaminscrestosapagaremliquidacao');
+			}
 
 			$rsDeleteConlancam = db_query("delete from conlancam where c70_codlan in (select c70_codlan from w_conlancam)");
 			if (!$rsDeleteConlancam) {
@@ -475,6 +519,10 @@ try {
 				throw new Exception('Não foi possivel excluir dados da tabela inscricaorestosapagarnaoprocessados');
 			}
 
+			$rsDeleteInscricaorestosapagaremliquidacao = db_query("delete from inscricaorestosapagaremliquidacao where c107_instit = ".db_getsession('DB_instit')." and c107_ano = ".db_getsession('DB_anousu'));
+			if (!$rsDeleteInscricaorestosapagaremliquidacao) {
+				throw new Exception('Não foi possivel excluir dados da tabela inscricaorestosapagaremliquidacao');
+			}
 			db_fim_transacao(false);
 			break;
 
