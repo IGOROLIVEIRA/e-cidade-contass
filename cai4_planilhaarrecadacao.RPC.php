@@ -325,13 +325,13 @@ switch ($oParam->exec) {
    case 'excluirAutenticacaoPlanilha':
      
     $iPlanilha       = $oParam->iPlanilha;
-
+    
     
     try {
       
       db_inicio_transacao();
 
-      $oPlanilha = new PlanilhaArrecadacao($iCodigoPlanilha);
+      $oPlanilha = new PlanilhaArrecadacao($iPlanilha);
       $oPlanilha->excluirAutenticacao();
 
       db_fim_transacao(false);
