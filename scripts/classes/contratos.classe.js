@@ -174,12 +174,12 @@ contrato = function () {
 	  aItensSelecionados.each(function(oLinha, id) {
 
       if (oLinha.aCells[3].getContent() != "&nbsp;") {
-	      sDescricao += oLinha.aCells[3].getContent().trim()+"\n"
+	      sDescricao += oLinha.aCells[3].getContent().trim()+". ";
 	    }
      oParam.itens.push(oLinha.aCells[1].getValue());
 
 	  });
-	  $('ac16_objeto').value       = sDescricao;
+	  $('ac16_objeto').value       = sDescricao.trim();
 
 	  var oAjax   = new Ajax.Request(
 	                         sURL,

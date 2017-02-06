@@ -319,6 +319,7 @@ class AcordoItem {
       $sCamposItens.= "case                                                      ";
       $sCamposItens.= "  when solicitem_licitacao.pc11_servicoquantidade is null ";
       $sCamposItens.= "	   then solicitem_compras.pc11_servicoquantidade         ";
+      $sCamposItens.= "    else solicitem_licitacao.pc11_servicoquantidade       ";
       $sCamposItens.= "end  as pc11_servicoquantidade                            ";
 
       $sSqlAcordoitem = $oDaoAcordoItem->sql_query_completo(null, $sCamposItens, null, "ac20_sequencial = $iCodigoItem");

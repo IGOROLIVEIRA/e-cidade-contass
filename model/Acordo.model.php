@@ -1703,12 +1703,14 @@ class Acordo
 
                     } else if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getControlaQuantidade() == 't') {
 
-                        $oItemAut->quantidade = round(($oItem->quantidade * $oDotacao->valorexecutar) / $oItemAut->valor, 2);
+                        //$oItemAut->quantidade = round(($oItem->quantidade * $oDotacao->valorexecutar) / $oItemAut->valor, 2);
+                        $oItemAut->quantidade = $oDotacao->quantidade;
                         $oItemAut->valorunitario = $oItemContrato->getValorUnitario();
 
                     } else {
 
-                        $oItemAut->quantidade = round(($oItem->quantidade * $oDotacao->valorexecutar) / $oItem->valor, 2);
+                        //$oItemAut->quantidade = round(($oItem->quantidade * $oDotacao->valorexecutar) / $oItem->valor, 2);
+                        $oItemAut->quantidade = $oDotacao->quantidade;
                         $oItemAut->valorunitario = $oItemContrato->getValorUnitario();
                     }
 
@@ -1737,11 +1739,13 @@ class Acordo
                         $oItemAut->valorunitario = $oDotacao->valorexecutar;
                     } else if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getControlaQuantidade() == 't') {
 
-                        $oItemAut->quantidade = round(($oItem->quantidade * $oDotacao->valorexecutar) / $oItem->valor, 2);
+                        //$oItemAut->quantidade = round(($oItem->quantidade * $oDotacao->valorexecutar) / $oItem->valor, 2);
+                        $oItemAut->quantidade = $oDotacao->quantidade;
                         $oItemAut->valorunitario = $oItemContrato->getValorUnitario();
                     } else {
 
-                        $oItemAut->quantidade = round(($oItem->quantidade * $oDotacao->valorexecutar) / $oItem->valor, 2);
+                        //$oItemAut->quantidade = round(($oItem->quantidade * $oDotacao->valorexecutar) / $oItem->valor, 2);
+                        $oItemAut->quantidade = $oDotacao->quantidade;
                         $oItemAut->valorunitario = $oItemContrato->getValorUnitario();
                     }
                     $aAutorizacoes[$oDotacao->dotacao . $oItemContrato->getElemento()]->aItens[] = $oItemAut;
@@ -1757,7 +1761,7 @@ class Acordo
 
                 foreach ($oStdItem->dotacoes as $oStdDotacaoItem) {
 
-                    if ($oItemAut->reserva != "") {
+                    if ($oStdDotacaoItem->reserva != "") {
 
                         $oDaoOrcReserva = db_utils::getDao("orcreserva");
                         $sSqlDadosReserva = $oDaoOrcReserva->sql_query_file($oStdDotacaoItem->reserva);

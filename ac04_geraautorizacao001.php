@@ -387,12 +387,12 @@ function js_main() {
    oGridItens.nameInstance = "oGridItens";
    oGridItens.setCheckbox(0);
    //oGridItens.allowSelectColumns(true);
-   oGridItens.setCellWidth(new Array('10%', '40%',  "20%", "20%","20%", "20%", "20%"));
+   oGridItens.setCellWidth(new Array('10%', '40%',  "15%", "15%","15%", "15%", "15%","15%"));
    oGridItens.setHeader(new Array("Código", "Material", "Quantidade", "Val. Unitário",
                                   "Valor Total", "Qtde Autorizar", "Valor Autorizar", "Dotacoes", "iSeq"));
    oGridItens.aHeaders[4].lDisplayed = false;
    oGridItens.aHeaders[9].lDisplayed = false;
-   oGridItens.aHeaders[8].lDisplayed = false;
+   //oGridItens.aHeaders[8].lDisplayed = false;
    oGridItens.setHeight(160);
    oGridItens.show($('ctnGridItens'));
    $('btnPesquisarPosicoes').onclick = js_pesquisarPosicoesContrato;
@@ -473,6 +473,10 @@ function js_retornoGetItensPosicao(oAjax) {
   aItensPosicao = oRetorno.itens;
   oGridItens.clearAll(true);
   aItensPosicao.each(function (oItem, iSeq) {
+    oItem.dotacoes.each( function (oDotItem) {
+       oDotItem.quantidade -= (oDotItem.executado/oItem.valorunitario);
+       oDotItem.quantdot = oDotItem.quantidade;
+     });
 
      var nQtdeAut  = oItem.saldos.quantidadeautorizar;
      var nValorAut = js_formatar(oItem.saldos.valorautorizar, "f");
@@ -496,7 +500,7 @@ function js_retornoGetItensPosicao(oAjax) {
      aLinha[5].addStyle("border","1px solid transparent;");
      aLinha[5].addEvent("onBlur","js_bloqueiaDigitacao(this, false);");
      aLinha[5].addEvent("onBlur","qtditem"+iSeq+".sValue=this.value;");
-     aLinha[5].addEvent("onBlur","js_calculaValor(this,"+iSeq+", false);");
+     aLinha[5].addEvent("onBlur","js_calculaValor(this,"+iSeq+", true);");
      aLinha[5].addEvent("onFocus","js_liberaDigitacao(this, false);");
      //aLinha[5].addEvent("onKeyPress","return js_mask(event,\"0-9|.|-\")");
      aLinha[5].addEvent("onKeyPress","return js_teclas(event,this);");
@@ -587,7 +591,7 @@ function js_verifica(object,event,lFormata) {
   }
 }
 
-function js_calculaValor(obj, iLinha) {
+function js_calculaValor(obj, iLinha, lVerificaDot) {
 
   var aLinha = oGridItens.aRows[iLinha];
   if (aLinha.aCells[6].getValue() > aItensPosicao[iLinha].saldos.quantidadeautorizar || aLinha.aCells[6].getValue() == 0) {
@@ -601,7 +605,7 @@ function js_calculaValor(obj, iLinha) {
     aLinha.aCells[7].content.setValue(js_formatar(new String(nValorTotal), "f"));
     $("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f");
   }
-  js_salvarInfoDotacoes(iLinha, false);
+  js_salvarInfoDotacoes(iLinha, lVerificaDot);
 }
 
 function js_ajusteDotacao(iLinha) {
@@ -648,6 +652,9 @@ function js_ajusteDotacao(iLinha) {
 
         var nValue = js_strToFloat(oGridDotacoes.aRows[iDot].aCells[3].getValue());
         oDotacao.valorexecutar = nValue;
+
+        var nQuant = js_strToFloat(oGridDotacoes.aRows[iDot].aCells[2].getValue());
+        oDotacao.quantidade = nQuant;
      });
      oGridItens.aRows[iLinha].select(true);
      windowDotacaoItem.destroy();
@@ -655,8 +662,8 @@ function js_ajusteDotacao(iLinha) {
   oMessageBoard.show();
   oGridDotacoes              = new DBGrid('gridDotacoes');
   oGridDotacoes.nameInstance = 'oGridDotacoes';
-  oGridDotacoes.setCellWidth(new Array('30%', '30%', '30%', '10%'));
-  oGridDotacoes.setHeader(new Array("Dotação", "Saldo", "Valor Aut.", "valor"));
+  oGridDotacoes.setCellWidth(new Array('5%', '15%', '15%', '15%'));
+  oGridDotacoes.setHeader(new Array("Dotação", "Saldo", "Quant. Aut.", "valor"));
   oGridDotacoes.setHeight(iHeight/3);
   oGridDotacoes.setCellAlign(new Array("center", "right", "right", "Center"));
   oGridDotacoes.show($('cntgridDotacoes'));
@@ -670,7 +677,19 @@ function js_ajusteDotacao(iLinha) {
      aLinha    = new Array();
      aLinha[0] = "<a href='#' onclick='js_mostraSaldo("+oDotacao.dotacao+");return false'>"+oDotacao.dotacao+"</a>";
      aLinha[1] = js_formatar(oDotacao.saldodotacao, "f");
-     aLinha[2] = oDotacao.valor;
+     
+     aLinha[2] = eval("quantdot"+iDot+" = new DBTextField('quantdot"+iDot+"','quantdot"+iDot+"','"+oDotacao.quantidade+"')");
+     aLinha[2].addStyle("text-align","right");
+     aLinha[2].addStyle("height","100%");
+     aLinha[2].addStyle("width","100px");
+     aLinha[2].addStyle("border","1px solid transparent;");
+     aLinha[2].addEvent("onBlur","quantdot"+iDot+".sValue=this.value;");
+     aLinha[2].addEvent("onBlur","js_ajustaQuantDot(this,"+iDot+","+iLinha+");");
+     aLinha[2].addEvent("onBlur","js_bloqueiaDigitacao(this, true);");
+     aLinha[2].addEvent("onFocus","js_liberaDigitacao(this, true);");
+     aLinha[2].addEvent("onKeyPress","return js_mask(event,\"0-9|.|-\")");
+     aLinha[2].addEvent("onKeyDown","return js_verifica(this,event,true)");
+
      aLinha[3] = eval("valordot"+iDot+" = new DBTextField('valordot"+iDot+"','valordot"+iDot+"','"+nValorDotacao+"')");
      aLinha[3].addStyle("text-align","right");
      aLinha[3].addStyle("height","100%");
@@ -681,7 +700,7 @@ function js_ajusteDotacao(iLinha) {
      aLinha[3].addEvent("onBlur","js_bloqueiaDigitacao(this, true);");
      aLinha[3].addEvent("onFocus","js_liberaDigitacao(this, true);");
      aLinha[3].addEvent("onKeyPress","return js_mask(event,\"0-9|.|-\")");
-     aLinha[3].addEvent("onKeyDown","return js_verifica(this,event,true)")
+     aLinha[3].addEvent("onKeyDown","return js_verifica(this,event,true)");
      oGridDotacoes.addRow(aLinha);
   });
   windowDotacaoItem.show();
@@ -696,23 +715,29 @@ function js_ajusteDotacao(iLinha) {
  de virgula por ponto.
  */
 
-function js_salvarInfoDotacoes(iLinha, lReplace) {
+function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
 
   var oDadosItem      =  oGridItens.aRows[iLinha];
-
-  if (lReplace == true) {
-
-    var nValor =  oDadosItem.aCells[7].getValue();
-  } else {
-    var nValor =  js_strToFloat(oDadosItem.aCells[7].getValue());
+  if (aItensPosicao[iLinha].dotacoes.length > 1 && lAjustaDot) {
+    js_ajusteDotacao(iLinha);
+    return;
   }
 
+  var nValor =  js_strToFloat(oDadosItem.aCells[7].getValue());
   var nValorTotalItem = js_strToFloat(oDadosItem.aCells[5].getValue());
   var nValorTotal     = nValor;
+  var nQuantAutorizar = js_strToFloat(oDadosItem.aCells[6].getValue());
+  var nValorUnit = Number(oDadosItem.aCells[4].getValue());
 
   aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
-    var nPercentual    = (new Number(oDotacao.valor) * 100)/nValorTotalItem;
+    if (aItensPosicao[iLinha].dotacoes.length > 1 && lAjustaDot==false) {
+      var nQuantDot  = aItensPosicao[iLinha].dotacoes[iDot].quantidade;
+      aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorUnit*nQuantDot,2);
+      return;
+    }
+
+    var nPercentual    = (new Number(oDotacao.quantidade) * 100)/nValorTotalItem;
     var nValorDotacao  = js_round((nValor * nPercentual)/100,2);
 
     nValorTotal        -= nValorDotacao;
@@ -723,6 +748,10 @@ function js_salvarInfoDotacoes(iLinha, lReplace) {
       }
     }
      aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorDotacao,2);
+
+     if (aItensPosicao[iLinha].dotacoes.length == 1) {
+       oDotacao.quantidade = nQuantAutorizar;
+     }
   });
 
 }
@@ -737,8 +766,24 @@ function js_ajustaValorDot(Obj, iDot) {
   var nValorAut      = js_strToFloat(oDadosItem.aCells[7].getValue());
   if (nValor > nValorAut) {
     oGridDotacoes.aRows[iDot].aCells[3].content.setValue(nValorObjeto);
+    Obj.value = nValorObjeto;
   } else if (nTotalDotacoes > nValorAut) {
     oGridDotacoes.aRows[iDot].aCells[3].content.setValue(nValorObjeto);
+    Obj.value = nValorObjeto;
+  }
+}
+
+function js_ajustaQuantDot(Obj, iDot, iLinha) {
+
+  var nQuant         = Number(Obj.value);
+  var nQuantDot      = Number(aItensPosicao[iLinha].dotacoes[iDot].quantdot);
+
+  if (nQuant > nQuantDot) {
+    oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
+    Obj.value = nValorObjeto;
+  } else {
+    oGridDotacoes.aRows[iDot].aCells[3].content.setValue(nQuant*Number(oDadosItem.aCells[4].getValue()));
+    $("valordot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[3].getValue();
   }
 }
 /**
@@ -944,7 +989,7 @@ function js_processarAutorizacoes(lProcessar) {
       nValorDotacao =  js_formatar(nValorDotacao, 'f' );
       nTotal        =  js_formatar(nTotal, 'f' );
 
-      if (nTotal.getNumber() > nValorDotacao.getNumber()  ) {
+      if (nTotal.getNumber().valueOf() != nValorDotacao.getNumber().valueOf()) {
 
         alert('Valor da (s) dotação(ões) diferente do valor do item.\nCorrija o valor das dotações.');
         js_removeObj('msgbox');

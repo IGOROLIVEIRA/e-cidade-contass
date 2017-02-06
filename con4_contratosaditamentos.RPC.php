@@ -84,7 +84,7 @@ try {
         foreach($oItemPosicao->getDotacoes() as $oDotacao) {
           $oItem->dotacoes[] = (object) array(
               'dotacao' => $oDotacao->dotacao,
-              'quantidade' => $oDotacao->quantidade,
+              'quantidade' => $oDotacao->quantidade-($oDotacao->executado/$oItem->valorunitario),
               'valor' => $oDotacao->valor,
               'valororiginal' => $oDotacao->valor
             );
