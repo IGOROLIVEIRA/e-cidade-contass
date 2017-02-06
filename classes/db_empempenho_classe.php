@@ -1634,15 +1634,22 @@ class cl_empempenho {
 
         $sql = "select * from (select
                        e60_numemp,
-                       (vlremp - vlranu - vlrliq) as valor_nao_processado,
-                       (vlrliq - vlrpag) as valor_processado
+                       (vlremp - vlranu - (vlrliq  + vlremliqliquidado) - (vlremliq - vlremliqliquidado)) as valor_nao_processado,
+                       (vlremliq - vlremliqliquidado) as valor_em_liquidacao,
+                       (vlremliqliquidado + vlrliq - vlrpag) as valor_processado
                  from (select
                         e60_numemp,
                         sum(case when c71_coddoc IN (select c53_coddoc from conhistdoc where c53_tipo = 10) then round(c70_valor,2) else 0 end) as vlremp,
                         sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 11) then round(c70_valor,2) else 0 end) as vlranu,
-                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 20) then round(c70_valor,2)
-                        when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 21) then round(c70_valor,2) *-1
+                        sum(case when c71_coddoc in (502,412,84,310,506,306,23,3) then round(c70_valor,2)
+                        when c71_coddoc in (4,24,85,307,311,413,503,507) then round(c70_valor,2) *-1
                         else 0 end) as vlrliq,
+                        sum(case when c71_coddoc in (208,210,212,200) then round(c70_valor,2)
+                        when c71_coddoc in (209,211,213,201) then round(c70_valor,2) *-1
+                        else 0 end) as vlremliq,
+                        sum(case when c71_coddoc in (202,204,206) then round(c70_valor,2)
+                        when c71_coddoc in (203,205,207) then round(c70_valor,2) *-1
+                        else 0 end) as vlremliqliquidado,
                         sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 30) then round(c70_valor,2)
                         when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 31) then round(c70_valor,2) *-1
                         else 0 end) as vlrpag
@@ -1665,7 +1672,7 @@ class cl_empempenho {
                             and c70_data between '".db_getsession("DB_anousu")."-01-01' and '".db_getsession("DB_anousu")."-12-31'
                      group by   e60_numemp
                                 ) as restos) as x
-                                where valor_nao_processado > 0 or valor_processado > 0";
+                                where valor_nao_processado > 0 or valor_processado > 0 or valor_em_liquidacao > 0";
 
         return $sql;
     }

@@ -169,6 +169,7 @@ class RegraLancamentoContabilFactory {
     ,2017 => "RegraLancamentoAberturaExercicio"
     ,2018 => "RegraLancamentoAberturaExercicio"
     ,2019 => "RegraLancamentoAberturaExercicio"
+    ,2021 => "RegraLancamentoAberturaExercicio"
     ,2020 => "RegraLancamentoAberturaExercicio"
     ,2005 => "RegraLancamentoRestosAPagar"
     ,2006 => "RegraLancamentoRestosAPagar"
@@ -182,6 +183,7 @@ class RegraLancamentoContabilFactory {
     ,1008 => "RegraLancamentoEncerramentoRP"
     ,1009 => "RegraLancamentoEncerramentoVariacoesPatrimoniais"
     ,1010 => "RegraLancamentoEncerramentoVariacoesPatrimoniais"
+    ,1011 => "RegraLancamentoEncerramentoRP"
     );
 
     if (! array_key_exists($iDocumento, $aRegras) ) {

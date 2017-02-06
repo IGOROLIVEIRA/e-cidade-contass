@@ -88,6 +88,16 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
           	</td>
           </tr>
           <tr>
+            <td nowrap="nowrap">
+              <b>Valor Em Liquidação:</b>
+            </td>
+            <td nowrap="nowrap">
+              <?php 
+                db_input("nValorEmLqd", 10, null, true, "text", 3);
+              ?>
+            </td>
+          </tr>
+          <tr>
             <td nowrap="nowrap" colspan="2">
               <fieldset>
                 <legend><b>Observações</b></legend>
@@ -139,6 +149,7 @@ function js_retornoValorRestoAPagar(oAjax) {
   
   $('nValorNp').value = js_formatar(oRetorno.nValorNp, 'f');
   $('nValorP').value  = js_formatar(oRetorno.nValorP, 'f');
+  $('nValorEmLqd').value  = js_formatar(oRetorno.nValorEmLqd, 'f');
 
   if ( oRetorno.lBloquearTela ) {
 	  
@@ -178,6 +189,7 @@ $('btnProcessar').observe('click', function() {
   oObject.sObservacao   = encodeURIComponent(tagString($F('sObservacao')));
   oObject.nValorNp      = js_strToFloat($F('nValorNp')).valueOf();
   oObject.nValor        = js_strToFloat($F('nValorP')).valueOf();
+  oObject.nValorEmLqd   = js_strToFloat($F('nValorEmLqd')).valueOf();
 
   js_divCarregando("Aguarde, processando ...", "msgBox");
   

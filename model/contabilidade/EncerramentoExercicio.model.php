@@ -301,7 +301,7 @@ class EncerramentoExercicio {
     */
     $sSqlEmpenho    = $oDaoEmpempenho->sql_query_saldo_encerramento_rp();
     $rsLancamentos = $oDaoEmpempenho->sql_record($sSqlEmpenho);
-
+    
     if ($oDaoEmpempenho->numrows == 0) {
       $this->desabiliarContaCorrente();
       return true;
@@ -317,6 +317,9 @@ class EncerramentoExercicio {
       }
       if ($oDadoEmpenho->valor_nao_processado > 0) {
         $this->executarLancamentoRestos($oEmpenho, 1007, $oDadoEmpenho->valor_nao_processado);
+      }
+      if ($oDadoEmpenho->valor_em_liquidacao > 0) {
+        $this->executarLancamentoRestos($oEmpenho, 1011, $oDadoEmpenho->valor_em_liquidacao);
       }
       unset($oEmpenho);
       unset($oDadoEmpenho);

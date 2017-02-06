@@ -1113,4 +1113,108 @@ $order
 
     return $sSql;
   }
+
+
+   /**
+    * Busca restos a pagar para abertura do exercicio
+    *
+    * @param integer $iAnoUsu
+    * @param string $sDataInicial
+    * @param string $sDataFinal
+    * @param string $sInstituicoes
+    * @param string $sCampos
+    * @param string $sWhere
+    * @param string $sOrder
+    * @return string
+    */
+   public function sql_query_restosPagarInscricaoAbertura($iAnoUsu, $sInstituicoes){
+      $sql = "select * from (select
+                       e60_numemp as e91_numemp,
+                       (vlremp - vlranu - (vlrliq  + vlremliqliquidado) - (vlremliq - vlremliqliquidado)) as valor_nao_processado,
+                       (vlremliq - vlremliqliquidado) as valor_em_liquidacao,
+                       (vlremliqliquidado + vlrliq - vlrpag) as valor_processado
+                 from (select
+                        e60_numemp,
+                        sum(case when c71_coddoc IN (select c53_coddoc from conhistdoc where c53_tipo = 10) then round(c70_valor,2) else 0 end) as vlremp,
+                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 11) then round(c70_valor,2) else 0 end) as vlranu,
+                        sum(case when c71_coddoc in (502,412,84,310,506,306,23,3,39,33) then round(c70_valor,2)
+                        when c71_coddoc in (4,24,85,307,311,413,503,507,34,40) then round(c70_valor,2) *-1
+                        else 0 end) as vlrliq,
+                        sum(case when c71_coddoc in (208,210,212,200) then round(c70_valor,2)
+                        when c71_coddoc in (209,211,213,201) then round(c70_valor,2) *-1
+                        else 0 end) as vlremliq,
+                        sum(case when c71_coddoc in (202,204,206) then round(c70_valor,2)
+                        when c71_coddoc in (203,205,207) then round(c70_valor,2) *-1
+                        else 0 end) as vlremliqliquidado,
+                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 30) then round(c70_valor,2)
+                        when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 31) then round(c70_valor,2) *-1
+                        else 0 end) as vlrpag
+                       from     empempenho
+                                inner join conlancamemp on e60_numemp = c75_numemp
+                                inner join conlancamcgm on c75_codlan = c76_codlan
+                                inner join cgm          on c76_numcgm = z01_numcgm
+                                inner join conlancamdoc on c75_codlan = c71_codlan
+                                inner join conlancam    on c75_codlan = c70_codlan
+                                inner join orcdotacao   on e60_coddot = o58_coddot
+                                                       and e60_anousu = o58_anousu
+                                inner join orcelemento  on o58_codele = o56_codele
+                                                       and o58_anousu = o56_anousu
+                                inner join orctiporec on o58_codigo = o15_codigo
+                                inner join db_config on codigo = e60_instit
+                                inner join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o41_anousu = o58_anousu
+                                inner JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                                left join infocomplementaresinstit on codigo = si09_instit
+                       where    e60_anousu = ". $iAnoUsu ." and e60_instit = ".$sInstituicoes." 
+                            and c70_data between '".$iAnoUsu."-01-01' and '".$iAnoUsu."-12-31'
+                     group by   e60_numemp
+                                ) as restos) as x
+                                where valor_nao_processado > 0 or valor_processado > 0 or valor_em_liquidacao > 0";
+
+        return $sql;
+   }
+   public function sql_query_restosPagarInscricaoAberturaAno($iAnoUsu, $sInstituicoes){
+      $sql = "select sum(valor_nao_processado) as vlrrnpano, sum(valor_em_liquidacao) as vlrrpemlqdano, sum(valor_processado) as vlrrppano from (select
+                       e60_numemp as e91_numemp,
+                       (vlremp - vlranu - (vlrliq  + vlremliqliquidado) - (vlremliq - vlremliqliquidado)) as valor_nao_processado,
+                       (vlremliq - vlremliqliquidado) as valor_em_liquidacao,
+                       (vlremliqliquidado + vlrliq - vlrpag) as valor_processado
+                 from (select
+                        e60_numemp,
+                        sum(case when c71_coddoc IN (select c53_coddoc from conhistdoc where c53_tipo = 10) then round(c70_valor,2) else 0 end) as vlremp,
+                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 11) then round(c70_valor,2) else 0 end) as vlranu,
+                        sum(case when c71_coddoc in (502,412,84,310,506,306,23,3,39,33) then round(c70_valor,2)
+                        when c71_coddoc in (4,24,85,307,311,413,503,507,34,40) then round(c70_valor,2) *-1
+                        else 0 end) as vlrliq,
+                        sum(case when c71_coddoc in (208,210,212,200) then round(c70_valor,2)
+                        when c71_coddoc in (209,211,213,201) then round(c70_valor,2) *-1
+                        else 0 end) as vlremliq,
+                        sum(case when c71_coddoc in (202,204,206) then round(c70_valor,2)
+                        when c71_coddoc in (203,205,207) then round(c70_valor,2) *-1
+                        else 0 end) as vlremliqliquidado,
+                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 30) then round(c70_valor,2)
+                        when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 31) then round(c70_valor,2) *-1
+                        else 0 end) as vlrpag
+                       from     empempenho
+                                inner join conlancamemp on e60_numemp = c75_numemp
+                                inner join conlancamcgm on c75_codlan = c76_codlan
+                                inner join cgm          on c76_numcgm = z01_numcgm
+                                inner join conlancamdoc on c75_codlan = c71_codlan
+                                inner join conlancam    on c75_codlan = c70_codlan
+                                inner join orcdotacao   on e60_coddot = o58_coddot
+                                                       and e60_anousu = o58_anousu
+                                inner join orcelemento  on o58_codele = o56_codele
+                                                       and o58_anousu = o56_anousu
+                                inner join orctiporec on o58_codigo = o15_codigo
+                                inner join db_config on codigo = e60_instit
+                                inner join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o41_anousu = o58_anousu
+                                inner JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                                left join infocomplementaresinstit on codigo = si09_instit
+                       where    e60_anousu = ". $iAnoUsu ." and e60_instit = ".$sInstituicoes." 
+                            and c70_data between '".$iAnoUsu."-01-01' and '".$iAnoUsu."-12-31'
+                     group by   e60_numemp
+                                ) as restos) as x
+                                where valor_nao_processado > 0 or valor_processado > 0 or valor_em_liquidacao > 0";
+
+        return $sql;
+   }
 }
