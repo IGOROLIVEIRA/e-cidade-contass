@@ -260,6 +260,30 @@ try {
       }
 
       break;
+    case "importarRegra":
+
+      $oDaoRegrasEncerramento = new cl_regraencerramentonaturezaorcamentaria();
+
+      $oDaoRegrasEncerramento->excluir( null,
+          " c117_anousu = " . db_getsession("DB_anousu")
+          . " and c117_instit = " . db_getsession("DB_instit") );
+
+      $iAno = db_getsession("DB_anousu")-1;
+
+      $sSqlImportarRegras  = " INSERT INTO regraencerramentonaturezaorcamentaria ";
+      $sSqlImportarRegras .= "SELECT nextval('regraencerramentonaturezaorcamentaria_c117_sequencial_seq') AS ";
+      $sSqlImportarRegras .= "       c117_sequencial, ";
+      $sSqlImportarRegras .= db_getsession("DB_anousu")."       as c117_anousu, ";
+      $sSqlImportarRegras .= "       c117_instit, ";
+      $sSqlImportarRegras .= "       c117_contadevedora, ";
+      $sSqlImportarRegras .= "       c117_contacredora, ";
+      $sSqlImportarRegras .= "       c117_contareferencia ";
+      $sSqlImportarRegras .= "FROM   regraencerramentonaturezaorcamentaria WHERE  c117_anousu = {$iAno}";
+      $sSqlImportarRegras .= "       AND c117_instit = ". db_getsession("DB_instit") ;
+
+      $oDaoRegrasEncerramento->sql_record($sSqlImportarRegras);
+
+      break;
   }
 
   db_fim_transacao(false);

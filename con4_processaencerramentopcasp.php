@@ -147,6 +147,7 @@ require_once ("dbforms/db_funcoes.php");
         <tr>
           <td class="text-center">
             <input name="incluir_regra" type="button" id="incluir_regra" value="Incluir"/>
+            <input name="importar_regra" type="button" id="importar_regra" value="Importar"/>
           </td>
         </tr>
 
@@ -194,7 +195,8 @@ require_once ("dbforms/db_funcoes.php");
           salvar : $('incluir_regra'),
           contacredora : $('contacredora'),
           contadevedora : $('contadevedora'),
-          contareferencia : $('c117_contareferencia')
+          contareferencia : $('c117_contareferencia'),
+          importar: $('importar_regra')
         },
         oData = $('data'),
         oEncerramentos = {
@@ -452,6 +454,33 @@ require_once ("dbforms/db_funcoes.php");
 
         carregarRegras();
       }).setMessage("Aguarde, salvando regra...").execute();
+    });
+
+    /**
+     * Importar regras do exercício anterior
+     */
+
+    oRegra.importar.observe('click', function() {
+
+      var resp = confirm("Ao importar as regras do exercício anterior, as atuais serão apagadas. Deseja Continuar?");
+
+      if(resp == true) {
+        var oParametros = {
+          sExecucao: "importarRegra"
+        }
+
+        new AjaxRequest(RPC, oParametros, function (oRetorno, lErro) {
+
+          if (lErro) {
+            alert(oRetorno.sMessage.urlDecode());
+            return false;
+          }
+
+          alert("Importação realizada com sucesso!");
+
+          carregarRegras();
+        }).setMessage("Aguarde, importando regras...").execute();
+      }
     });
 
     verificarEncerramentos();
