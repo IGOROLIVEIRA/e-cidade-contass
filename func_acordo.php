@@ -148,9 +148,9 @@ $iInstituicaoSessao = db_getsession('DB_instit');
           if (isset($lAtivo)) {
 
             if ($lAtivo == 1) {
-              $sWhere .= " and ac17_ativo is true";
+              $sWhere .= " and ac16_acordosituacao = 1";
             } else if ($lAtivo == 2) {
-              $sWhere .= " and ac17_ativo is false";
+              $sWhere .= " and ac16_acordosituacao != 1";
             }
           }
 
