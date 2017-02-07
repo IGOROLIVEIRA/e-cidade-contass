@@ -1,4 +1,6 @@
 <?php
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -215,7 +217,7 @@ class empenho {
     $isPrecatoria        = $oEmpenhoFinanceiro->isPrecatoria();
 
     $iAnoSessao          = db_getsession("DB_anousu");
-
+ 
     if ($e60_anousu < db_getsession("DB_anousu")){
 
       $codteste    = "33";
@@ -223,7 +225,15 @@ class empenho {
       if ( $lRestoPagar ) {
         $codteste = "39";
       }
-
+      /**
+      * feito por @igor
+      * caso o restos a pagar tenha passado como despesa em liquidação
+      */
+      $lPossuiControleEmLiqudacao = self::possuiLancamentoDeControle($numemp, $oEmpenhoFinanceiro->getAnoUso(), array(200,208, 210));
+      if ($lPossuiControleEmLiqudacao ) {
+        $codteste = "39";
+      }
+          
     } else {
 
       $codteste = "3";
@@ -447,6 +457,15 @@ class empenho {
 
         $lRestoPagar = $oEmpenhoFinanceiro->empenhoRestosPagarPorDocumento(212, db_getsession('DB_anousu'));
         if ( $lRestoPagar ) {
+          $documento = 39;
+        }
+
+        /**
+          * @autor igor
+          * caso o restos a pagar tenha passado como despesa em liquidação
+          */
+        $lPossuiControleEmLiqudacao = self::possuiLancamentoDeControle($numemp, $oEmpenhoFinanceiro->getAnoUso(), array(200,208, 210));
+        if ($lPossuiControleEmLiqudacao ) {
           $documento = 39;
         }
 
@@ -5716,7 +5735,7 @@ class empenho {
     $sOrdem = " c70_codlan desc limit 1 ";
 
     $oDaoConlancam      = new cl_conlancamemp();
-    $sSqlBuscaDocumento = $oDaoConlancam->sql_query_documentos(null, "conhistdoc.*", $sOrdem, $sWhere);
+    $sSqlBuscaDocumento = $oDaoConlancam->sql_query_documentos(null, "conhistdoc.*", $sOrdem, $sWhere);   
     $rsBuscaDocumento   = $oDaoConlancam->sql_record($sSqlBuscaDocumento);
     if ($oDaoConlancam->numrows == 0) {
       return false;

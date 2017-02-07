@@ -155,4 +155,70 @@ class RestosAPagar extends EmpenhoFinanceiro {
     return $rsSqlEmpresto;
   }
 
+  /**
+   * Retorna o sql do valor processado detalhado por empenho
+   * @param integer $iAno
+   * @param integer $iInstituicao
+   */
+  public static function getValorRpAnalitico($iAno, $iInstituicao) {
+    try {
+
+      $oDaoEmpresto = db_utils::getDao("empresto");
+      $iAnoEmp = $iAno - 1;
+      $sSqlEmpresto = $oDaoEmpresto->sql_query_restosPagarInscricaoAbertura($iAnoEmp, $iInstituicao);
+      $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+
+    } catch (Exception $ex){
+      throw new Exception('Erro técnico: erro ao buscar valor de restos a pagar em liquidacao.');
+    }
+
+    return $rsSqlEmpresto;
+  }
+
+  /**
+   * Retorna o sql do valor processado detalhado por empenho
+   * @param integer $iAno
+   * @param integer $iInstituicao
+   */
+  public static function getValorRpEmLiquidacaoAno($iAno, $iInstituicao) {
+    try {
+
+      $oDaoEmpresto = db_utils::getDao("empresto");
+      $iAnoEmp = $iAno - 1;
+      $sSqlEmpresto = $oDaoEmpresto->sql_query_restosPagarInscricaoAberturaAno($iAnoEmp, $iInstituicao);
+      $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+
+      $nValor = db_utils::fieldsMemory($rsSqlEmpresto, 0)->vlrrpemlqdano;
+      return (float) $nValor;
+    } catch (Exception $ex){
+      throw new Exception('Erro técnico: erro ao buscar valor de restos a pagar.');
+    }
+
+    return $rsSqlEmpresto;
+  }
+
+  /**
+   * Retorna o sql do valor processado detalhado por empenho
+   * @param integer $iAno
+   * @param integer $iInstituicao
+   */
+  public static function getValorRpNpAno($iAno, $iInstituicao) {
+    try {
+
+      $oDaoEmpresto = db_utils::getDao("empresto");
+      $iAnoEmp = $iAno - 1;
+      $sSqlEmpresto = $oDaoEmpresto->sql_query_restosPagarInscricaoAberturaAno($iAnoEmp, $iInstituicao);
+      $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+
+      $nValor = db_utils::fieldsMemory($rsSqlEmpresto, 0)->vlrrnpano;
+      
+      return (float) $nValor;
+
+    } catch (Exception $ex){
+      throw new Exception('Erro técnico: erro ao buscar valor de restos a pagar.');
+    }
+
+    return $rsSqlEmpresto;
+  }
+
 }
