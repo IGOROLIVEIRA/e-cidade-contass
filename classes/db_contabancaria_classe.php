@@ -195,7 +195,7 @@ class cl_contabancaria {
        return false;
      }
        $result = db_query("select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit") );
-       if (pg_result($result,0,0) == 5 && ($this->db83_tipoaplicacao == null || $this->db83_tipoaplicacao == 0)) {
+       if (pg_result($result,0,0) == 5 && $this->db83_tipoconta == 3 && ($this->db83_tipoaplicacao == null || $this->db83_tipoaplicacao == 0)) {
            $this->erro_sql = " Campo Tipo Aplicação nao Informado.";
            $this->erro_campo = "db83_tipoaplicacao";
            $this->erro_banco = "";
@@ -204,7 +204,7 @@ class cl_contabancaria {
            $this->erro_status = "0";
            return false;
        }
-       if (pg_result($result,0,0) == 5 && ($this->db83_nroseqaplicacao == null || $this->db83_nroseqaplicacao == 0)) {
+       if (pg_result($result,0,0) == 5 && $this->db83_tipoconta == 3 && ($this->db83_nroseqaplicacao == null || $this->db83_nroseqaplicacao == 0)) {
            $this->erro_sql = " Campo Número sequencial da aplicação nao Informado.";
            $this->erro_campo = "db83_nroseqaplicacao";
            $this->erro_banco = "";
@@ -436,7 +436,7 @@ class cl_contabancaria {
      if(trim($this->db83_tipoaplicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoaplicacao"])){ 
        $sql  .= $virgula." db83_tipoaplicacao = $this->db83_tipoaplicacao ";
        $virgula = ",";
-         if (pg_result($result,0,0) == 5 && ($this->db83_tipoaplicacao == null || $this->db83_tipoaplicacao == 0)) {
+         if (pg_result($result,0,0) == 5 && $this->db83_tipoconta == 3 && ($this->db83_tipoaplicacao == null || $this->db83_tipoaplicacao == 0)) {
              $this->erro_sql = " Campo Tipo Aplicação nao Informado.";
              $this->erro_campo = "db83_tipoaplicacao";
              $this->erro_banco = "";
@@ -449,7 +449,7 @@ class cl_contabancaria {
        if(trim($this->db83_nroseqaplicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_nroseqaplicacao"])){
            $sql  .= $virgula." db83_nroseqaplicacao = ".($this->db83_nroseqaplicacao == null ? 'null' : $this->db83_nroseqaplicacao);
            $virgula = ",";
-           if (pg_result($result,0,0) == 5 && ($this->db83_nroseqaplicacao == null || $this->db83_nroseqaplicacao == 0)) {
+           if (pg_result($result,0,0) == 5 && $this->db83_tipoconta == 3 && ($this->db83_nroseqaplicacao == null || $this->db83_nroseqaplicacao == 0)) {
                $this->erro_sql = " Campo Número sequencial da aplicação nao Informado.";
                $this->erro_campo = "db83_nroseqaplicacao";
                $this->erro_banco = "";
