@@ -328,6 +328,19 @@ class AcordoItem {
 
         $oDadosItem = db_utils::fieldsMemory($rsAcordoItem, 0, false, false, true);
 
+        /**
+         * Para o tipo origem 3-Manual, o controle quantidade deve ser habilitado
+         */
+        if ($oDadosItem->pc11_servicoquantidade == '') {
+
+          $oDaoAcordo  = db_utils::getDao("acordo");
+          $sSqlAcordo  = $oDaoAcordo->sql_query_file(null,"ac16_origem","","ac16_sequencial = (select ac26_acordo from acordoposicao where ac26_sequencial = {$oDadosItem->ac20_acordoposicao})");
+          $iTipoOrigem = db_utils::fieldsMemory($oDaoAcordo->sql_record($sSqlAcordo), 0)->ac16_origem;
+          if ($iTipoOrigem == 3) {
+            $oDadosItem->pc11_servicoquantidade = 't';
+          }
+        }
+
         $this->setCodigo($oDadosItem->ac20_sequencial)
               ->setMaterial(new MaterialCompras($oDadosItem->ac20_pcmater))
               ->setElemento($oDadosItem->ac20_elemento)
