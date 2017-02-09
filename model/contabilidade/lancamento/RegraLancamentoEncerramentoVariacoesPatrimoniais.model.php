@@ -39,7 +39,7 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
 
     $oEventoContabil           = EventoContabilRepository::getEventoContabilByCodigo($iCodigoDocumento, db_getsession("DB_anousu"));
     $oLancamentoEventoContabil = $oEventoContabil->getEventoContabilLancamentoPorCodigo($iCodigoLancamento);
-
+    $iContaEvento = '0';
     if (!$oLancamentoEventoContabil || count($oLancamentoEventoContabil->getRegrasLancamento()) == 0) {
       return false;
     }
@@ -70,22 +70,22 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
     $sContaSuperDefitInterOFSSMunicipio = '237150101';
     $sComplemnto = '0101';
 
-    if($oInst == '1'){
+    if($oInst == '1'){//prefeitura
       $sComplemnto = '02'.$sComplemnto;
-    }else if($oInst == '2' ){
+    }else if($oInst == '2' ){//camara
       $sComplemnto = '01'.$sComplemnto;
-    }else if($oInst == '5'){
+    }else if($oInst == '5'){ // previdencia
       $sComplemnto = '03'.$sComplemnto;
-    }else {
+    }else { // outros
       $sComplemnto = '04'.$sComplemnto;
     }    
 
     $oDaoConPlano  = db_utils::getDao("conplano");
     $sWhere        = " c61_reduz = {$oMovimentoConta->getConta()} ";
-    $sSqlConplano  = $oDaoConPlano->sql_query_reduz(null, " substr(c60_estrut,1,1) as classe, substr(c60_estrut,5,1) as subtitulo ", null, $sWhere);
-    $rsConplano    = $oDaoConPlano->sql_record($rsConplano);
-    $sConPlanoSubTitulo  = db_utils::fieldsMemory($rsConplano)->subtitulo;
+    $sSqlConplano  = $oDaoConPlano->sql_query_reduz(null, " substr(c60_estrut,5,1) as subtitulo ", null, $sWhere);
+    $rsConplano    = $oDaoConPlano->sql_record($sSqlConplano);
 
+    $sConPlanoSubTitulo  = db_utils::fieldsMemory($rsConplano)->subtitulo;
 
     $oDaoConPlanoRef  = db_utils::getDao("conplano");
     
@@ -115,7 +115,7 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
         $rsConplanoRef    = $oDaoConPlanoRef->sql_record($sSqlConplanoRef);
         $iContaEvento  = db_utils::fieldsMemory($rsConplanoRef)->c61_reduz;      
     }
-    //echo $sSqlConplanoRef." Conta Debito: ".$iContaEvento;
+
     switch ($oMovimentoConta->getTipoSaldo()) {
 
       case 'D':
