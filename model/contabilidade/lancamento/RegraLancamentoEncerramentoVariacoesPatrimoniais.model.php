@@ -1,5 +1,6 @@
 <?php
-
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 require_once("interfaces/IRegraLancamentoContabil.interface.php");
 /**
  * E-cidade Software Publico para Gestão Municipal
@@ -50,10 +51,71 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
 
     $oRegraLancamento = $aRegrasDoLancamento[0];
     $oMovimentoConta  = $oLancamentoAuxiliar->getMovimentacaoContabil();
+    
+    /*  A conta referência não deverá vir mais da transação será de acordo com o PRIMEIRO e QUINTO nivel da conta do movimento
+        obedecendo as regras do TCE-MG
     $iContaEvento     = $oRegraLancamento->getContaDebito();
     if ($oLancamentoAuxiliar->getContaReferencia() != "") {
       $iContaEvento = $oLancamentoAuxiliar->getContaReferencia();
+    }*/
+    $sSql  = "SELECT si09_codorgaotce FROM db_config join infocomplementaresinstit on si09_instit = codigo ";
+    $sSql .= "  WHERE codigo = ".db_getsession("DB_instit");  
+    $rsInst = db_query($sSql);      
+    $oInst  = db_utils::fieldsMemory($rsInst, 0)->si09_codorgaotce;
+
+    $sContaSuperDefitConsolidadacao     = '237110101';
+    $sContaSuperDefitIntraOFSS          = '237120101';
+    $sContaSuperDefitInterOFSSUniao     = '237130101';
+    $sContaSuperDefitInterOFSSEstado    = '237140101';
+    $sContaSuperDefitInterOFSSMunicipio = '237150101';
+    $sComplemnto = '0101';
+
+    if($oInst == '1'){
+      $sComplemnto = '02'.$sComplemnto;
+    }else if($oInst == '2' ){
+      $sComplemnto = '01'.$sComplemnto;
+    }else if($oInst == '5'){
+      $sComplemnto = '03'.$sComplemnto;
+    }else {
+      $sComplemnto = '04'.$sComplemnto;
+    }    
+
+    $oDaoConPlano  = db_utils::getDao("conplano");
+    $sWhere        = " c61_reduz = {$oMovimentoConta->getConta()} ";
+    $sSqlConplano  = $oDaoConPlano->sql_query_reduz(null, " substr(c60_estrut,1,1) as classe, substr(c60_estrut,5,1) as subtitulo ", null, $sWhere);
+    $rsConplano    = $oDaoConPlano->sql_record($rsConplano);
+    $sConPlanoSubTitulo  = db_utils::fieldsMemory($rsConplano)->subtitulo;
+
+
+    $oDaoConPlanoRef  = db_utils::getDao("conplano");
+    
+    if($sConPlanoSubTitulo == '5'){// InterOFSSMunicipio 
+        $sWhere        = " c60_estrut = '{$sContaSuperDefitInterOFSSMunicipio}{$sComplemnto}' ";
+        $sSqlConplanoRef  = $oDaoConPlanoRef->sql_query_reduz(null, " c61_reduz ", null, $sWhere);
+        $rsConplanoRef    = $oDaoConPlanoRef->sql_record($sSqlConplanoRef);
+        $iContaEvento  = db_utils::fieldsMemory($rsConplanoRef)->c61_reduz;
+    }else if($sConPlanoSubTitulo == '2'){// IntraOFSS
+      $sWhere        = " c60_estrut = '{$sContaSuperDefitIntraOFSS}{$sComplemnto}' ";
+        $sSqlConplanoRef  = $oDaoConPlanoRef->sql_query_reduz(null, " c61_reduz ", null, $sWhere);
+        $rsConplanoRef    = $oDaoConPlanoRef->sql_record($sSqlConplanoRef);
+        $iContaEvento  = db_utils::fieldsMemory($rsConplanoRef)->c61_reduz;
+    }else if($sConPlanoSubTitulo == '3'){// InterOFSSUniao
+      $sWhere        = " c60_estrut = '{$sContaSuperDefitInterOFSSUniao}{$sComplemnto}' ";
+        $sSqlConplanoRef  = $oDaoConPlanoRef->sql_query_reduz(null, " c61_reduz ", null, $sWhere);
+        $rsConplanoRef    = $oDaoConPlanoRef->sql_record($sSqlConplanoRef);
+        $iContaEvento  = db_utils::fieldsMemory($rsConplanoRef)->c61_reduz;      
+    }else if($sConPlanoSubTitulo == '4'){// InterOFSSEstado
+      $sWhere        = " c60_estrut = '{$sContaSuperDefitInterOFSSEstado}{$sComplemnto}' ";
+        $sSqlConplanoRef  = $oDaoConPlanoRef->sql_query_reduz(null, " c61_reduz ", null, $sWhere);
+        $rsConplanoRef    = $oDaoConPlanoRef->sql_record($sSqlConplanoRef);
+        $iContaEvento  = db_utils::fieldsMemory($rsConplanoRef)->c61_reduz;      
+    }else {// 1 - Consolidadacao
+        $sWhere        = " c60_estrut = '{$sContaSuperDefitConsolidadacao}{$sComplemnto}' ";
+        $sSqlConplanoRef  = $oDaoConPlanoRef->sql_query_reduz(null, " c61_reduz ", null, $sWhere);
+        $rsConplanoRef    = $oDaoConPlanoRef->sql_record($sSqlConplanoRef);
+        $iContaEvento  = db_utils::fieldsMemory($rsConplanoRef)->c61_reduz;      
     }
+    //echo $sSqlConplanoRef." Conta Debito: ".$iContaEvento;
     switch ($oMovimentoConta->getTipoSaldo()) {
 
       case 'D':
