@@ -439,17 +439,33 @@ class AcordoItem {
       $this->aDotacoes = array();
     } else {
 
-      $iChaveExcluir = null;
-      foreach ($this->aDotacoes as $iKey => $oDotacao) {
+      $oDaoAcordoItemDotacaoReserva = db_utils::getDao("orcreservaacordoitemdotacao");
+      $oDaoReserva                  = db_utils::getDao("orcreserva");
+      $oDaoAcordoItemDotacao = db_utils::getDao("acordoitemdotacao");
+      $sSqlDotacoes          = $oDaoAcordoItemDotacao->sql_query_file(null,"*",
+        null,
+        "ac22_acordoitem={$this->getCodigo()} and ac22_coddot = {$iDotacao}"
+        );
 
-        if ($oDotacao->dotacao == $iDotacao) {
+      $rsDotacoes           = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
+      $iNumRowsDotacao      = $oDaoAcordoItemDotacao->numrows;
+      $oDotacaoCadastrada = db_utils::fieldsMemory($rsDotacoes,0);
 
-          $iChaveExcluir = $iKey;
-        }
+      $sSqlReserva = $oDaoAcordoItemDotacaoReserva->sql_query_file(null,
+       "*",
+       null,
+       "o84_acordoitemdotacao =
+       {$oDotacaoCadastrada->ac22_sequencial}"
+       );
+      $rsReservaItem = $oDaoAcordoItemDotacaoReserva->sql_record($sSqlReserva);
+      if ($oDaoAcordoItemDotacaoReserva->numrows > 0) {
+
+        $oDadosReserva = db_utils::fieldsMemory($rsReservaItem, 0);
+        $oDaoAcordoItemDotacaoReserva->excluir($oDadosReserva->o84_sequencial);
+        $oDaoReserva->excluir($oDadosReserva->o84_orcreserva);
       }
-      if ($iChaveExcluir != null || $iChaveExcluir == 0) {
-        $aTeste = array_splice($this->aDotacoes, $iChaveExcluir, 1);
-      }
+      $oDaoAcordoItemDotacao->excluir($oDotacaoCadastrada->ac22_sequencial);
+
     }
   }
 
@@ -908,8 +924,8 @@ class AcordoItem {
         $oDadosReserva = db_utils::fieldsMemory($rsReservaItem, 0);
         $oDaoAcordoItemDotacaoReserva->excluir($oDadosReserva->o84_sequencial);
         $oDaoReserva->excluir($oDadosReserva->o84_orcreserva);
-        $oDaoAcordoItemDotacao->excluir($oDotacaoCadastrada->ac22_sequencial);
       }
+      $oDaoAcordoItemDotacao->excluir($oDotacaoCadastrada->ac22_sequencial);
     }
 
     /**

@@ -442,13 +442,18 @@ db_app::load("estilos.css, grid.style.css");
     oGridItens = new DBGrid('gridItens');
     oGridItens.nameInstance = 'oGridItens';
     oGridItens.setCellAlign(new Array("center", "center", "left", 'right', 'right', 'right', "left", "center", "center", "center"));
-    oGridItens.setCellWidth(new Array("5%", "10%", "10%", '5%', '5%', '5%', "30%", "7%", "8%", "10%"));
+    oGridItens.setCellWidth(new Array("5%", "5%", "20%", '6%', '5%', '5%', "30%", "5%", "6%", "10%"));
     oGridItens.setHeader(new Array("Ordem", "Código", "Material", "Quantidade",
       "Vlr Un", "Total", "Elemento", "Períodos", "Dotações", "Ação"
       )
     );
     oGridItens.hasTotalizador = true;
     oGridItens.show($('cntgriditens'));
+
+    var width =  $('cntgriditens').scrollWidth - 30;
+    $("table"+oGridItens.sName+"header").style.width = width;
+    $(oGridItens.sName+"body").style.width           = width;
+    $("table"+oGridItens.sName+"footer").style.width = width;
   }
   
   
@@ -521,9 +526,9 @@ db_app::load("estilos.css, grid.style.css");
         
         with (oLinha) {
           
-          var sCor = 'red';
+          var sCor = 'background-color:red;';
           if (valortotal == totaldotacoes) {
-            var sCor = 'green';
+            var sCor = '';
           }
           var aLinha = new Array();
           aLinha[0] = ordem;
@@ -546,7 +551,7 @@ db_app::load("estilos.css, grid.style.css");
           
           nTotal = nTotal + parseFloat(valortotal);
           oGridItens.addRow(aLinha);
-          oGridItens.aRows[id].sStyle += ';padding:1px;';
+          oGridItens.aRows[id].sStyle += ';padding:1px;'+sCor;
         }
       });
       
@@ -1083,6 +1088,7 @@ db_app::load("estilos.css, grid.style.css");
       oTxtQuantidadeDotacao.setValue('');
       oTxtDotacao.setValue('');
       oTxtSaldoDotacao.setValue('');
+      js_getItens();
       js_preencheDotacoes(oRetorno.dotacoes);
     } else {
       alert(oRetorno.message.urlDecode());
@@ -1106,10 +1112,10 @@ db_app::load("estilos.css, grid.style.css");
     );
   }
   function js_excluirSaveDotacoes(oAjax) {
-    
     js_removeObj('msgBox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
+      js_getItens();
       js_preencheDotacoes(oRetorno.dotacoes);
     } else {
       alert(oRetorno.message.urlDecode());
