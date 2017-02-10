@@ -262,6 +262,7 @@ db_app::load("estilos.css, grid.style.css");
     </table>
     <fieldset>
       <legend><b>Itens</b></legend>
+      <b>Se após vincular a dotação a linha permanecer em vermelho, a quantidade do item difere da quantidade da dotação.</b>
       <div id='cntgriditens'></div>
     </fieldset>
     <?php
