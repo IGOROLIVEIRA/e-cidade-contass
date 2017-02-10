@@ -1,5 +1,5 @@
 begin;
-CREATE TABLE updatedb
+CREATE TABLE IF NOT EXISTS updatedb 
 (
   codscript SERIAL,
   nomescript varchar(250) not null,
