@@ -808,7 +808,7 @@ class EncerramentoExercicio {
                                      FROM contacorrente
                                      INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                      INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                     AND contacorrentesaldo.c29_mesusu = 0
+                                     AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
                                      WHERE contacorrentedetalhe.c19_sequencial = {$nContaCorrenteDetalhe}
                                      AND c17_sequencial = {$nContaCorrente}) AS saldoimplantado,
 
