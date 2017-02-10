@@ -1185,6 +1185,22 @@ class AcordoPosicao {
       unset($oAcordo);
       $oItem->setPeriodosExecucao($this->iAcordo, $lPeriodoComercial);
 
+      /**
+       * pesquisamos a dotacao do empenho para adicionar ao item,
+       * pois estava causando problema ao fazer aditivo, por nao ter dotacao
+       */
+      $oDaoEmpenho    = db_utils::getDao("empempenho");
+      $sSqlDotacaoEmp = $oDaoEmpenho->sql_query_file($oItemEmpenho->e62_numemp,"e60_coddot,e60_anousu");
+      $rsDotacaoEmp   = db_query($sSqlDotacaoEmp);
+      $oDotacaoEmp    = db_utils::fieldsMemory($rsDotacaoEmp,0);
+
+      $oDotacao = new stdClass();
+      $oDotacao->valor      = $oItemEmpenho->e62_vltot;
+      $oDotacao->ano        = $oDotacaoEmp->e60_anousu;
+      $oDotacao->dotacao    = $oDotacaoEmp->e60_coddot;
+      $oDotacao->quantidade = $oItemEmpenho->e62_quant;
+      $oItem->adicionarDotacoes($oDotacao);
+
       $oItem->save();
       $this->adicionarItens($oItem);
     }
