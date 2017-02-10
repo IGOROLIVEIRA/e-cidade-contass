@@ -182,7 +182,7 @@ class RegraLancamentoContabilFactory {
     ,1007 => "RegraLancamentoEncerramentoRP"
     ,1008 => "RegraLancamentoEncerramentoRP"
     ,1009 => "RegraLancamentoEncerramentoVariacoesPatrimoniais"
-    ,1010 => "RegraLancamentoEncerramentoVariacoesPatrimoniais"
+    ,1010 => "RegraLancamentoEncerramentoNaturezaOrcamentariaControle"
     ,1011 => "RegraLancamentoEncerramentoRP"
     );
 
