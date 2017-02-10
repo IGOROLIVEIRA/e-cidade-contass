@@ -96,6 +96,7 @@ try {
       $oDaAcordoItemPrevisao    = db_utils::getDao("acordoitemprevisao");
       $oDaoAcordoItemPeriodo    = db_utils::getDao("acordoitemperiodo");
       $oDaoAcordoItem           = db_utils::getDao("acordoitem");
+      $oDaoAcordoItemDotacao    = db_utils::getDao("acordoitemdotacao");
 
       // verificamos os empenho que estao vinculados com a lista que esta vindo
       // para ver quais devemos desvincular.
@@ -169,6 +170,14 @@ try {
                 $oErro->erro_msg = $oDaoAcordoItemPeriodo->erro_msg;
                 throw new Exception(_M($sCaminhoMensagens."acordo_item_periodo_excluir", $oErro));
               }
+              // excluimos da AcodoItemDotacao
+              $oDaoAcordoItemDotacao->excluir(null, "ac22_acordoitem = {$oDesvincular->acordoitem}");
+              if ($oDaoAcordoItemDotacao->erro_status == "0") {
+
+                $oErro->erro_msg = $oDaoAcordoItemDotacao->erro_msg;
+                throw new Exception($oErro->erro_msg);
+              }
+
               // excluimos da acordoitem
               $oDaoAcordoItem->excluir(null, "ac20_sequencial = {$oDesvincular->acordoitem}");
               if ($oDaoAcordoItem->erro_status == "0") {
