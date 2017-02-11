@@ -58,7 +58,7 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
     if ($oLancamentoAuxiliar->getContaReferencia() != "") {
       $iContaEvento = $oLancamentoAuxiliar->getContaReferencia();
     }*/
-    $sSql  = "SELECT si09_codorgaotce FROM db_config join infocomplementaresinstit on si09_instit = codigo ";
+    $sSql  = "SELECT si09_tipoinstit FROM db_config join infocomplementaresinstit on si09_instit = codigo ";
     $sSql .= "  WHERE codigo = ".db_getsession("DB_instit");  
     $rsInst = db_query($sSql);      
     $oInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
@@ -79,7 +79,7 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
     }else { // outros
       $sComplemnto = '04'.$sComplemnto;
     }    
-    echo "conta ".$sContaSuperDefitInterOFSSMunicipio.$sComplemnto;
+   // echo $oInst." conta ".$sContaSuperDefitInterOFSSMunicipio.$sComplemnto;
     $oDaoConPlano  = db_utils::getDao("conplano");
     $sWhere        = " c61_reduz = {$oMovimentoConta->getConta()} ";
     $sSqlConplano  = $oDaoConPlano->sql_query_reduz(null, " substr(c60_estrut,5,1) as subtitulo ", null, $sWhere);
