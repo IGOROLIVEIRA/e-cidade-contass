@@ -61,7 +61,7 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
     $sSql  = "SELECT si09_codorgaotce FROM db_config join infocomplementaresinstit on si09_instit = codigo ";
     $sSql .= "  WHERE codigo = ".db_getsession("DB_instit");  
     $rsInst = db_query($sSql);      
-    $oInst  = db_utils::fieldsMemory($rsInst, 0)->si09_codorgaotce;
+    $oInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
 
     $sContaSuperDefitConsolidadacao     = '237110101';
     $sContaSuperDefitIntraOFSS          = '237120101';
