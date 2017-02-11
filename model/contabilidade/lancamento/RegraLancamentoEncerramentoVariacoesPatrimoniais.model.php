@@ -70,16 +70,16 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
     $sContaSuperDefitInterOFSSMunicipio = '237150101';
     $sComplemnto = '0101';
 
-    if($oInst == '1'){//prefeitura
+    if($oInst == '1'){//camara
       $sComplemnto = '02'.$sComplemnto;
-    }else if($oInst == '2' ){//camara
+    }else if($oInst == '2' ){//prefeitura
       $sComplemnto = '01'.$sComplemnto;
     }else if($oInst == '5'){ // previdencia
       $sComplemnto = '03'.$sComplemnto;
     }else { // outros
       $sComplemnto = '04'.$sComplemnto;
     }    
-
+    echo "conta ".$sContaSuperDefitInterOFSSMunicipio.$sComplemnto;
     $oDaoConPlano  = db_utils::getDao("conplano");
     $sWhere        = " c61_reduz = {$oMovimentoConta->getConta()} ";
     $sSqlConplano  = $oDaoConPlano->sql_query_reduz(null, " substr(c60_estrut,5,1) as subtitulo ", null, $sWhere);
