@@ -76,6 +76,8 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
       $sComplemnto = '01'.$sComplemnto;
     }else if($oInst == '5'){ // previdencia
       $sComplemnto = '03'.$sComplemnto;
+    }else if($oInst == '51'){ // previdencia
+      $sComplemnto = '50'.$sComplemnto;
     }else { // outros
       $sComplemnto = '04'.$sComplemnto;
     }    
