@@ -609,7 +609,7 @@ try {
                                     inner join empelemento on e64_numemp = e60_numemp
                                     inner join empresto on e91_numemp = e60_numemp
                         where c19_contacorrente = {$iCorrente}
-                            and c19_reduz = {$iReduzido}
+                            and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu') . "
                             and c19_instit = " . db_getsession('DB_instit') . "
                             and DATE_PART('YEAR',c69_data) = {$iAnousuEmp} and DATE_PART('MONTH',c69_data) <= {$nMes}
                             union
@@ -621,7 +621,7 @@ try {
                             FROM contacorrentedetalhe
                             INNER JOIN contacorrente ON c19_contacorrente = c17_sequencial
                             INNER JOIN empempenho ON e60_numemp = c19_numemp
-                            WHERE c19_numemp = 3853 and c19_reduz = {$iReduzido}";
+                            WHERE c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu');
                         $rsLancamentos = db_query($sSqlLancamentos);
                         $aLancamento = db_utils::getColectionByRecord($rsLancamentos);
                         $aDadosAgrupados = array();
