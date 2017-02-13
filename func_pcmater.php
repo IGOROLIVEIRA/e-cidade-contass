@@ -156,7 +156,7 @@ $clpcmater->rotulo->label("pc01_descrmater");
           $result = $clpcmater->sql_record($clpcmater->sql_query(null,"pc01_descrmater","","pc01_codmater=$pesquisa_chave $where_ativo"));
           if($clpcmater->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$pc01_descrmater',false);</script>";
+            echo "<script>".$funcao_js."('$pc01_descrmater','$pc01_servico',false);</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

@@ -44,10 +44,14 @@ class cl_empprestaitem {
    // cria variaveis do arquivo 
    var $e46_codigo = 0; 
    var $e46_numemp = 0; 
-   var $e46_nota = null; 
+   var $e46_codmater = 0;
+   var $e46_nota = null;
    var $e46_valor = 0; 
-   var $e46_descr = null; 
-   var $e46_id_usuario = 0; 
+   var $e46_valorunit = 0;
+   var $e46_quantidade = 0;
+   var $e46_descr = null;
+   var $e46_obs = null;
+   var $e46_id_usuario = 0;
    var $e46_cnpj = null; 
    var $e46_cpf = null; 
    var $e46_nome = null; 
@@ -56,10 +60,14 @@ class cl_empprestaitem {
    var $campos = "
                  e46_codigo = int4 = Código 
                  e46_numemp = int4 = Número 
-                 e46_nota = varchar(20) = Nota fiscal 
+                 e46_codmater = int8 = Cód. Item
+                 e46_nota = varchar(20) = Nota fiscal
                  e46_valor = float4 = Valor 
-                 e46_descr = text = Descrição 
-                 e46_id_usuario = int4 = Cod. Usuário 
+                 e46_valorunit = float8 = Valor Unit.
+                 e46_quantidade = float8 = Quantidade
+                 e46_descr = text = Descrição
+                 e46_obs = text = Observação
+                 e46_id_usuario = int4 = Cod. Usuário
                  e46_cnpj = varchar(14) = CNPJ 
                  e46_cpf = varchar(11) = CPF 
                  e46_nome = varchar(80) = Nome 
@@ -85,12 +93,17 @@ class cl_empprestaitem {
      if($exclusao==false){
        $this->e46_codigo = ($this->e46_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_codigo"]:$this->e46_codigo);
        $this->e46_numemp = ($this->e46_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_numemp"]:$this->e46_numemp);
+       $this->e46_codmater = ($this->e46_codmater == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_codmater"]:$this->e46_codmater);
        $this->e46_nota = ($this->e46_nota == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_nota"]:$this->e46_nota);
-       $this->e46_valor = ($this->e46_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_valor"]:$this->e46_valor);
+       $this->e46_valorunit = ($this->e46_valorunit == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_valorunit"]:$this->e46_valorunit);
+       $this->e46_quantidade = ($this->e46_quantidade == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_quantidade"]:$this->e46_quantidade);
+       $this->e46_quantidade = ($this->getServicoByItem($this->e46_codmater) == "t" ? 1 : $this->e46_quantidade);
+       $this->e46_valor = ($this->e46_valorunit*$this->e46_quantidade);
        $this->e46_descr = ($this->e46_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_descr"]:$this->e46_descr);
+       $this->e46_obs = ($this->e46_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_obs"]:$this->e46_obs);
        $this->e46_id_usuario = ($this->e46_id_usuario == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_id_usuario"]:$this->e46_id_usuario);
-       $this->e46_cnpj = ($this->e46_cnpj == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_cnpj"]:$this->e46_cnpj);
-       $this->e46_cpf = ($this->e46_cpf == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_cpf"]:$this->e46_cpf);
+       $this->e46_cnpj = preg_replace("/[^0-9\s]/", "",$this->e46_cnpj == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_cnpj"]:$this->e46_cnpj);
+       $this->e46_cpf = preg_replace("/[^0-9\s]/", "",$this->e46_cpf == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_cpf"]:$this->e46_cpf);
        $this->e46_nome = ($this->e46_nome == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_nome"]:$this->e46_nome);
        $this->e46_emppresta = ($this->e46_emppresta == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_emppresta"]:$this->e46_emppresta);
      }else{
@@ -109,6 +122,15 @@ class cl_empprestaitem {
        $this->erro_status = "0";
        return false;
      }
+     if($this->e46_codmater == null ){
+       $this->erro_sql = " Campo Cód. Item não informado.";
+       $this->erro_campo = "e46_codmater";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($this->e46_nota == null ){ 
        $this->erro_sql = " Campo Nota fiscal não informado.";
        $this->erro_campo = "e46_nota";
@@ -118,9 +140,21 @@ class cl_empprestaitem {
        $this->erro_status = "0";
        return false;
      }
-     if($this->e46_valor == null ){ 
-       $this->erro_sql = " Campo Valor não informado.";
-       $this->erro_campo = "e46_valor";
+     if($this->e46_valor == null ){
+       $this->e46_valor = 0;
+     }
+     if($this->e46_valorunit == null ){
+       $this->erro_sql = " Campo Valor Unit. não informado.";
+       $this->erro_campo = "e46_valorunit";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->e46_quantidade == null ){
+       $this->erro_sql = " Campo Quantidade não informado.";
+       $this->erro_campo = "e46_quantidade";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -195,13 +229,18 @@ class cl_empprestaitem {
        $this->erro_status = "0";
        return false;
      }
+
      $sql = "insert into empprestaitem(
                                        e46_codigo 
                                       ,e46_numemp 
-                                      ,e46_nota 
+                                      ,e46_codmater
+                                      ,e46_nota
                                       ,e46_valor 
-                                      ,e46_descr 
-                                      ,e46_id_usuario 
+                                      ,e46_valorunit
+                                      ,e46_quantidade
+                                      ,e46_descr
+                                      ,e46_obs
+                                      ,e46_id_usuario
                                       ,e46_cnpj 
                                       ,e46_cpf 
                                       ,e46_nome 
@@ -210,10 +249,14 @@ class cl_empprestaitem {
                 values (
                                 $this->e46_codigo 
                                ,$this->e46_numemp 
-                               ,'$this->e46_nota' 
-                               ,$this->e46_valor 
-                               ,'$this->e46_descr' 
-                               ,$this->e46_id_usuario 
+                               ,$this->e46_codmater
+                               ,'$this->e46_nota'
+                               ,$this->e46_valor
+                               ,$this->e46_valorunit
+                               ,$this->e46_quantidade
+                               ,'$this->e46_descr'
+                               ,'$this->e46_obs'
+                               ,$this->e46_id_usuario
                                ,'$this->e46_cnpj' 
                                ,'$this->e46_cpf' 
                                ,'$this->e46_nome' 
@@ -264,6 +307,10 @@ class cl_empprestaitem {
          $resac = db_query("insert into db_acount values($acount,1037,6353,'','".AddSlashes(pg_result($resaco,0,'e46_cpf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1037,6354,'','".AddSlashes(pg_result($resaco,0,'e46_nome'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1037,20272,'','".AddSlashes(pg_result($resaco,0,'e46_emppresta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1037,20273,'','".AddSlashes(pg_result($resaco,0,'e46_obs'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1037,20274,'','".AddSlashes(pg_result($resaco,0,'e46_codmater'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1037,20275,'','".AddSlashes(pg_result($resaco,0,'e46_valorunit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1037,20276,'','".AddSlashes(pg_result($resaco,0,'e46_quantidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      return true;
@@ -299,6 +346,19 @@ class cl_empprestaitem {
          return false;
        }
      }
+     if(trim($this->e46_codmater)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_codmater"])){
+       $sql  .= $virgula." e46_codmater = $this->e46_codmater ";
+       $virgula = ",";
+       if(trim($this->e46_codmater) == null ){
+         $this->erro_sql = " Campo Cód. Item não informado.";
+         $this->erro_campo = "e46_codmater";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
      if(trim($this->e46_nota)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_nota"])){ 
        $sql  .= $virgula." e46_nota = '$this->e46_nota' ";
        $virgula = ",";
@@ -315,9 +375,29 @@ class cl_empprestaitem {
      if(trim($this->e46_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_valor"])){ 
        $sql  .= $virgula." e46_valor = $this->e46_valor ";
        $virgula = ",";
-       if(trim($this->e46_valor) == null ){ 
-         $this->erro_sql = " Campo Valor não informado.";
-         $this->erro_campo = "e46_valor";
+       if(trim($this->e46_valor) == null ){
+         $this->e46_valor = 0;
+       }
+     }
+     if(trim($this->e46_valorunit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_valorunit"])){
+       $sql  .= $virgula." e46_valorunit = $this->e46_valorunit ";
+       $virgula = ",";
+       if(trim($this->e46_valorunit) == null ){
+         $this->erro_sql = " Campo Valor Unit. não informado.";
+         $this->erro_campo = "e46_valorunit";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->e46_quantidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_quantidade"])){
+       $sql  .= $virgula." e46_quantidade = $this->e46_quantidade ";
+       $virgula = ",";
+       if(trim($this->e46_quantidade) == null ){
+         $this->erro_sql = " Campo Quantidade não informado.";
+         $this->erro_campo = "e46_quantidade";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -351,12 +431,16 @@ class cl_empprestaitem {
          return false;
        }
      }
-     if(trim($this->e46_cnpj)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_cnpj"])){ 
+     if(trim($this->e46_cnpj)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_cnpj"])){
        $sql  .= $virgula." e46_cnpj = '$this->e46_cnpj' ";
        $virgula = ",";
      }
      if(trim($this->e46_cpf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_cpf"])){ 
        $sql  .= $virgula." e46_cpf = '$this->e46_cpf' ";
+       $virgula = ",";
+     }
+     if(trim($this->e46_obs)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_obs"])){
+       $sql  .= $virgula." e46_obs = '$this->e46_obs' ";
        $virgula = ",";
      }
      if(trim($this->e46_nome)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_nome"])){ 
@@ -422,6 +506,14 @@ class cl_empprestaitem {
              $resac = db_query("insert into db_acount values($acount,1037,6354,'".AddSlashes(pg_result($resaco,$conresaco,'e46_nome'))."','$this->e46_nome',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["e46_emppresta"]) || $this->e46_emppresta != "")
              $resac = db_query("insert into db_acount values($acount,1037,20272,'".AddSlashes(pg_result($resaco,$conresaco,'e46_emppresta'))."','$this->e46_emppresta',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if(isset($GLOBALS["HTTP_POST_VARS"]["e46_obs"]) || $this->e46_obs != "")
+             $resac = db_query("insert into db_acount values($acount,1037,20273,'".AddSlashes(pg_result($resaco,$conresaco,'e46_obs'))."','$this->e46_obs',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if(isset($GLOBALS["HTTP_POST_VARS"]["e46_codmater"]) || $this->e46_codmater != "")
+             $resac = db_query("insert into db_acount values($acount,1037,20274,'".AddSlashes(pg_result($resaco,$conresaco,'e46_codmater'))."','$this->e46_codmater',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if(isset($GLOBALS["HTTP_POST_VARS"]["e46_valorunit"]) || $this->e46_valorunit != "")
+             $resac = db_query("insert into db_acount values($acount,1037,20275,'".AddSlashes(pg_result($resaco,$conresaco,'e46_valorunit'))."','$this->e46_valorunit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if(isset($GLOBALS["HTTP_POST_VARS"]["e46_quantidade"]) || $this->e46_quantidade != "")
+             $resac = db_query("insert into db_acount values($acount,1037,20276,'".AddSlashes(pg_result($resaco,$conresaco,'e46_quantidade'))."','$this->e46_quantidade',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }
@@ -488,6 +580,10 @@ class cl_empprestaitem {
            $resac  = db_query("insert into db_acount values($acount,1037,6353,'','".AddSlashes(pg_result($resaco,$iresaco,'e46_cpf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1037,6354,'','".AddSlashes(pg_result($resaco,$iresaco,'e46_nome'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1037,20272,'','".AddSlashes(pg_result($resaco,$iresaco,'e46_emppresta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1037,20273,'','".AddSlashes(pg_result($resaco,$iresaco,'e46_obs'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1037,20274,'','".AddSlashes(pg_result($resaco,$iresaco,'e46_codmater'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1037,20275,'','".AddSlashes(pg_result($resaco,$iresaco,'e46_valorunit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1037,20276,'','".AddSlashes(pg_result($resaco,$iresaco,'e46_quantidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }
@@ -582,6 +678,7 @@ class cl_empprestaitem {
      $sql .= "      inner join pctipocompra  on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
      $sql .= "      inner join emptipo  on  emptipo.e41_codtipo = empempenho.e60_codtipo";
      $sql .= "      inner join empprestatip  on  empprestatip.e44_tipo = emppresta.e45_tipo";
+     $sql .= "      left join pcmater  on  pcmater.pc01_codmater = empprestaitem.e46_codmater";
      $sql2 = "";
      if($dbwhere==""){
        if($e46_codigo!=null ){
@@ -654,6 +751,7 @@ class cl_empprestaitem {
      $sql .= "      inner join emppresta  on  emppresta.e45_numemp = empprestaitem.e46_numemp";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
      $sql .= "      inner join empprestatip  on  empprestatip.e44_tipo = emppresta.e45_tipo";
+     $sql .= "      left join pcmater  on  pcmater.pc01_codmater = empprestaitem.e46_codmater";
      $sql2 = "";
      if($dbwhere==""){
        if($e46_numemp!=null ){
@@ -681,6 +779,21 @@ class cl_empprestaitem {
        }
      }
      return $sql;
+  }
+
+  public function getServicoByItem($coditem){
+    if($coditem == null ){
+      $this->erro_sql = " Campo Quantidade não informado.";
+      $this->erro_campo = "e46_quantidade";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    $sSql = "select pc01_servico from pcmater where pc01_codmater = $coditem";
+    $resSsql = db_query($sSql) or die(pg_last_error());
+    return db_utils::fieldsMemory($resSsql, 0)->pc01_servico;
   }
 }
 ?>

@@ -32,6 +32,7 @@ require_once("libs/db_usuariosonline.php");
 require_once("classes/db_empprestaitem_classe.php");
 require_once("classes/db_emppresta_classe.php");
 require_once("classes/db_empempenho_classe.php");
+require_once("classes/db_pcmater_classe.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_empprestaitemempagemov_classe.php");
 require_once("libs/db_utils.php");
@@ -45,6 +46,7 @@ $clempprestaitem          = new cl_empprestaitem;
 $clemppresta              = new cl_emppresta;
 $clempempenho             = new cl_empempenho;
 $clempprestaitemempagemov = new cl_empprestaitemempagemov;
+$clpcmater                = new cl_pcmater;
 
 $db_opcao = 22;
 $db_botao = false;

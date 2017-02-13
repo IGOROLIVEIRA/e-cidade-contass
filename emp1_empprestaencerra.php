@@ -54,15 +54,23 @@ if (isset($atualizar) ) {
     $sqlerro = true;
     $erro_msg = "Nenhum item lançado na prestação de contas.";
   } else {
+    foreach ($oPrestacaoContas->getItens() as $oItem) {
+      if ($oItem->e46_obs != '') {
+        $sqlerro = true;
+        $erro_msg = "Prestação de contas com observação no item {$oItem->e46_codigo}. Encerramento abortado.";
+        break;
+      }
+    }
+    if ($sqlerro != true) {
+      $clemppresta->e45_numemp = $e60_numemp;
+      $clemppresta->e45_sequencial = $oGet->e45_sequencial;
+      $clemppresta->alterar($oGet->e45_sequencial);
 
-    $clemppresta->e45_numemp     = $e60_numemp;
-    $clemppresta->e45_sequencial = $oGet->e45_sequencial;
-    $clemppresta->alterar($oGet->e45_sequencial);
+      $erro_msg = $clemppresta->erro_msg;
 
-    $erro_msg = $clemppresta->erro_msg;
-
-    if($clemppresta->erro_status==0){
-      $sqlerro=true;
+      if ($clemppresta->erro_status == 0) {
+        $sqlerro = true;
+      }
     }
   }
   db_fim_transacao($sqlerro);
