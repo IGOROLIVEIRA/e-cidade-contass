@@ -19,6 +19,7 @@ var DBViewNovoDetalhamento = function(sInstance) {
 	$('ctnOrgao')          . style.display = 'none';
 	$('ctnUnidade')        . style.display = 'none';
 	$('ctnAcordo')         . style.display = 'none';
+	$('ctnFonte')          . style.display = 'none';
 	
     switch (iCodigoContaCorrente) {
     
@@ -97,6 +98,18 @@ var DBViewNovoDetalhamento = function(sInstance) {
 	    	 */
 	    	$('ctnNome')           . style.display = 'table-row';
 	    	$('ctnAcordo')         . style.display = 'table-row';
+	    break;
+
+	    case '103':
+			
+	    	/*
+	    	 *  c19_contacorrente       
+				c19_instit              
+				c19_reduz               
+				c19_conplanoreduzanousu 
+				c19_orctiporec              
+	    	 */
+	    	$('ctnFonte')           . style.display = 'table-row';
 	    break;	
 
     }  
@@ -199,6 +212,15 @@ var DBViewNovoDetalhamento = function(sInstance) {
         sConteudoNovo += "        </td>  ";
         sConteudoNovo += "        <td id='inputAcordo'>   ";
         sConteudoNovo += "          <input type='text' id='iAcordo' onChange='js_pesquisaAcordo(false);'class='iNovoDetalhe' onKeyup='js_ValidaCampos(this,1,\"\",\"\",\"\",event);' />  ";
+        sConteudoNovo += "        </td>  ";
+        sConteudoNovo += "      </tr>    "; 
+
+        sConteudoNovo += "      <tr nowrap id='ctnFonte'>     ";
+        sConteudoNovo += "        <td>   ";
+        sConteudoNovo += "         <a class='dbancora'  onclick='js_pesquisaFonte(true);' style='text-decoration:underline;' href='#'>Fonte: </a>  ";
+        sConteudoNovo += "        </td>  ";
+        sConteudoNovo += "        <td id='inputFonte'>   ";
+        sConteudoNovo += "          <input type='text' id='iAcordo' onChange='js_pesquisaFonte(false);'class='iNovoDetalhe' onKeyup='js_ValidaCampos(this,1,\"\",\"\",\"\",event);' />  ";
         sConteudoNovo += "        </td>  ";
         sConteudoNovo += "      </tr>    "; 
         
