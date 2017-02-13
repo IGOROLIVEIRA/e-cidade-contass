@@ -784,7 +784,7 @@ try {
                         $sCamposDetalhe .= "e60_codemp,        ";
                         $sCamposDetalhe .= "e60_anousu         ";
                         $iAnousuEmp = db_getsession('DB_anousu');
-                        $sWhereDetalhes = "c19_reduz = {$iReduzido} and c69_anousu = {$iAnousuEmp} and e60_anousu < {$iAnousuEmp} group by c19_sequencial,
+                        $sWhereDetalhes = "c19_reduz = {$iReduzido} and c69_anousu = {$iAnousuEmp} and e60_anousu < {$iAnousuEmp} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu') . " group by c19_sequencial,
 								c17_sequencial,
 								c17_contacorrente,
 								c17_descricao,
@@ -818,7 +818,7 @@ try {
                                 o15_codtri
                                 FROM orctiporec
                                 INNER JOIN contacorrentedetalhe ON c19_orctiporec = o15_codigo and c19_contacorrente = {$iCorrente} and c19_reduz = {$iReduzido}
-                                INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
+                                INNER JOIN contacorrente on c19_contacorrente = c17_sequencial and c19_conplanoreduzanousu = " . db_getsession('DB_anousu') . "
                                 WHERE o15_codtri IS NOT NULL ";
                     $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
 
