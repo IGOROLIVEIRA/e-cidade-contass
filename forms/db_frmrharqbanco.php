@@ -275,13 +275,17 @@ function js_submit() {
 		 $('rh34_conta').value = '';
 	   return false;
 	 }
-	 
-	 if ( $F('rh34_dvconta') != "" && !oRegex.test( $F('rh34_dvconta') ) ) {
+	 /**
+      * Validação removida
+      * Solicitado por Lukas@contass devido ao fato de que foi identificado contas com digito X em São Romão
+      * 07/02/2017
+      * Feito por Rodrigo@contass
+	  *if ( $F('rh34_dvconta') != "" && !oRegex.test( $F('rh34_dvconta') ) ) {
 		 alert( _M( MENSAGEM + 'somente_numeros', {sCampo: '<?=@$LSrh34_dvconta?>'}) );
 		 $('rh34_dvconta').value = '';
 		 $('rh34_dvconta').focus();
 		 return false;
-	 }
+	 }*/
 	 
 	 if ( $F('rh34_convenio') != "" && !oRegex.test( $F('rh34_convenio') ) ) {
 		 alert( _M( MENSAGEM + 'somente_numeros', {sCampo: '<?=@$LSrh34_convenio?>'}) );
