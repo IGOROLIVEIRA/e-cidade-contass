@@ -85,7 +85,7 @@ db_postmemory($HTTP_POST_VARS);
                          echo "js_emite();";
               ?>
         }
-        function js_mostraempempenhotesta(chave, chave2, chave3, chave4, erro) {
+        function js_mostraempempenhotesta(chave, erro) {
             if (erro == true) {
                 alert("Nº do empenho não existe!!");
                 document.form1.e60_numemp.value = '';
