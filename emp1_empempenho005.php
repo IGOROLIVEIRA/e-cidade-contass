@@ -96,6 +96,15 @@ if(isset($alterar)){
     $erro_msg = $clempempenho->erro_msg;
   }
 
+  if (isset($e54_gestaut) && isset($e54_autori) && !empty($e54_gestaut)) {
+
+    // atualiza o campo do gestor do empenho
+    $sSql = " UPDATE empautoriza SET e54_gestaut = '{$e54_gestaut}' "
+           ." WHERE e54_autori={$e54_autori} AND e54_numcgm={$e60_numcgm} ";
+    db_query($sSql);
+
+  }
+
   /**
    * Manutenção da tabela emppresta
    */

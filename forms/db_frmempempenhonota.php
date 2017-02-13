@@ -43,6 +43,8 @@ $clrotulo->label("e50_obs");
 $clrotulo->label("e60_convenio");
 $clrotulo->label("e60_numconvenio");
 $clrotulo->label("e60_dataconvenio");
+$clrotulo->label("e54_gestaut");
+
 if ($db_opcao == 1) {
     $ac = "emp4_empempenho004.php";
 } else if ($db_opcao == 2 || $db_opcao == 22) {
@@ -348,6 +350,25 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         ?>
                     </td>
                 </tr>
+
+
+                <tr>
+                    <td nowrap title="Gestor do Empenho">
+                      <?php
+                        db_ancora('Gestor do Empenho:', "js_pesquisae54_gestaut(true);", $db_opcao);
+                      ?>
+                    </td>
+                    <td>
+                      <?php
+                      db_input("e54_gestaut", 10, $Ie54_gestaut, true, "text", 3);
+                      db_input("e54_nomedodepartamento", 50, 0, true, "text", 3);
+
+                      $iCodDepartamentoAtual = empty($e54_gestaut) ? db_getsession('DB_coddepto') : $e54_gestaut;
+                      $sNomDepartamentoAtual = db_utils::fieldsMemory(db_query(" SELECT descrdepto FROM db_depart WHERE coddepto = {$iCodDepartamentoAtual} "), 0)->descrdepto;
+                      ?>
+                    </td>
+                </tr>
+
                 <tr>
                     <td nowrap title="<?= @$Te54_resumo ?>" valign='top' colspan="2">
 
@@ -487,6 +508,44 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 </div>
 
 <script>
+
+  /*===========================================
+  =            pesquisa 54_gestaut            =
+  ===========================================*/
+
+  function js_pesquisae54_gestaut() {
+    js_OpenJanelaIframe(
+      'top.corpo.iframe_empempenho',
+      'db_iframe_db_depart',
+      'func_db_depart.php?funcao_js=parent.js_preenchepesquisae54_gestaut|coddepto|descrdepto',
+      'Pesquisa',
+      true,
+      '0',
+      '1'
+    );
+  }
+
+  function js_preenchepesquisae54_gestaut(codigo, descricao) {
+
+    if (codigo == '' || descricao == '') {
+      document.form1.e54_gestaut.value = '';
+      document.form1.e54_gestaut.value.focus();
+      return;
+    }
+
+    document.form1.e54_gestaut.value = codigo;
+    document.form1.e54_nomedodepartamento.value = descricao;
+
+    db_iframe_db_depart.hide();
+
+  }
+
+  // executar a primeira vez
+  document.form1.e54_gestaut.value = '<?= $iCodDepartamentoAtual ?>';
+  document.form1.e54_nomedodepartamento.value = '<?= $sNomDepartamentoAtual ?>';
+
+  /*=====  End of pesquisa 54_gestaut  ======*/
+
 
     function manutencaoCotasMensais() {
 

@@ -71,6 +71,7 @@
        var $e54_instit = 0;
        var $e54_depto = 0;
        var $e54_concarpeculiar = null;
+       var $e54_gestaut = 0;
        // cria propriedade com as variaveis do arquivo
        var $campos = "
                      e54_autori = int4 = Autorização
@@ -96,6 +97,7 @@
                      e54_instit = int4 = codigo da instituicao
                      e54_depto = int4 = Depart.
                      e54_concarpeculiar = varchar(100) = Caracteristica Peculiar
+                     e54_gestaut = int4 = Gestor do Empenho
                      e54_tipodespesa = int4 = Tipos de empenhos do RPPS
                      ";
        //funcao construtor da classe
@@ -153,6 +155,7 @@
            $this->e54_instit = ($this->e54_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_instit"]:$this->e54_instit);
            $this->e54_depto = ($this->e54_depto == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_depto"]:$this->e54_depto);
            $this->e54_concarpeculiar = ($this->e54_concarpeculiar == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_concarpeculiar"]:$this->e54_concarpeculiar);
+           $this->e54_gestaut = ($this->e54_gestaut == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_gestaut"]:$this->e54_gestaut);
          }else{
            $this->e54_autori = ($this->e54_autori == ""?@$GLOBALS["HTTP_POST_VARS"]["e54_autori"]:$this->e54_autori);
          }
@@ -261,6 +264,9 @@
            $this->erro_status = "0";
            return false;
          }
+         if($this->e54_gestaut == "" || $this->e54_gestaut == null ){
+          $this->e54_gestaut = 0;
+         }
          if($e54_autori == "" || $e54_autori == null ){
            $result = db_query("select nextval('empautoriza_e54_autori_seq')");
            if($result==false){
@@ -317,6 +323,7 @@
                                           ,e54_instit
                                           ,e54_depto
                                           ,e54_concarpeculiar
+                                          ,e54_gestaut
                                           ,e54_tipodespesa
                            )
                     values (
@@ -343,6 +350,7 @@
                                    ,$this->e54_instit
                                    ,$this->e54_depto
                                    ,'$this->e54_concarpeculiar'
+                                   ,'$this->e54_gestaut'
                                    ,".($this->e54_tipodespesa == "null" || $this->e54_tipodespesa == ""?"null":"'".$this->e54_tipodespesa."'")."
                           )";
          $result = db_query($sql);
@@ -595,6 +603,19 @@
              return false;
            }
          }
+         if(trim($this->e54_gestaut)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e54_gestaut"])){
+           $sql  .= $virgula." e54_gestaut = '$this->e54_gestaut' ";
+           $virgula = ",";
+           if(trim($this->e54_gestaut) == null ){
+             $this->erro_sql = " Campo Gestor do Empenho nao Informado.";
+             $this->erro_campo = "e54_gestaut";
+             $this->erro_banco = "";
+             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+             $this->erro_status = "0";
+             return false;
+           }
+         }
          if(trim($this->e54_tipodespesa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e54_tipodespesa"])){
 
                if(trim($this->e54_tipodespesa) == null ){
@@ -805,7 +826,7 @@
        function sql_query ( $e54_autori=null,$campos="*",$ordem=null,$dbwhere=""){
          $sql = "select ";
          if($campos != "*" ){
-           $campos_sql = split("#",$campos);
+           $campos_sql = explode("#",$campos);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -837,7 +858,7 @@
          $sql .= $sql2;
          if($ordem != null ){
            $sql .= " order by ";
-           $campos_sql = split("#",$ordem);
+           $campos_sql = explode("#",$ordem);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -873,7 +894,7 @@
        function sql_query_depto ( $e54_autori=null,$campos="*",$ordem=null,$dbwhere=""){
          $sql = "select ";
          if($campos != "*" ){
-           $campos_sql = split("#",$campos);
+           $campos_sql = explode("#",$campos);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -908,7 +929,7 @@
          $sql .= $sql2;
     if($ordem != null ){
            $sql .= " order by ";
-           $campos_sql = split("#",$ordem);
+           $campos_sql = explode("#",$ordem);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -921,7 +942,7 @@
 
          $sql = "select ";
          if($campos != "*" ){
-           $campos_sql = split("#",$campos);
+           $campos_sql = explode("#",$campos);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -958,7 +979,7 @@
          $sql .= $sql2;
          if($ordem != null ){
            $sql .= " order by ";
-           $campos_sql = split("#",$ordem);
+           $campos_sql = explode("#",$ordem);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -970,7 +991,7 @@
        function sql_query_elementomaterial ( $e54_autori=null,$campos="*",$ordem=null,$dbwhere=""){
          $sql = "select ";
          if($campos != "*" ){
-           $campos_sql = split("#",$campos);
+           $campos_sql = explode("#",$campos);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -1008,7 +1029,7 @@
          $sql .= $sql2;
          if($ordem != null ){
            $sql .= " order by ";
-           $campos_sql = split("#",$ordem);
+           $campos_sql = explode("#",$ordem);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -1020,7 +1041,7 @@
        function sql_query_file ( $e54_autori=null,$campos="*",$ordem=null,$dbwhere=""){
          $sql = "select ";
          if($campos != "*" ){
-           $campos_sql = split("#",$campos);
+           $campos_sql = explode("#",$campos);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -1041,7 +1062,7 @@
          $sql .= $sql2;
          if($ordem != null ){
            $sql .= " order by ";
-           $campos_sql = split("#",$ordem);
+           $campos_sql = explode("#",$ordem);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -1053,7 +1074,7 @@
        function sql_query_itemmaterial ( $e54_autori=null,$campos="*",$ordem=null,$dbwhere=""){
          $sql = "select ";
          if($campos != "*" ){
-           $campos_sql = split("#",$campos);
+           $campos_sql = explode("#",$campos);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -1080,7 +1101,7 @@
          $sql .= $sql2;
          if($ordem != null ){
            $sql .= " order by ";
-           $campos_sql = split("#",$ordem);
+           $campos_sql = explode("#",$ordem);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -1092,7 +1113,7 @@
        function sql_query_solicita ( $e54_autori=null,$campos="*",$ordem=null,$dbwhere=""){
          $sql = "select ";
          if($campos != "*" ){
-           $campos_sql = split("#",$campos);
+           $campos_sql = explode("#",$campos);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -1122,7 +1143,7 @@
          $sql .= $sql2;
          if($ordem != null ){
            $sql .= " order by ";
-           $campos_sql = split("#",$ordem);
+           $campos_sql = explode("#",$ordem);
            $virgula = "";
            for($i=0;$i<sizeof($campos_sql);$i++){
              $sql .= $virgula.$campos_sql[$i];
@@ -1601,7 +1622,7 @@
          function sql_query_empenho( $e54_autori=null,$campos="*",$ordem=null,$dbwhere=""){
              $sql = "select ";
              if($campos != "*" ){
-               $campos_sql = split("#",$campos);
+               $campos_sql = explode("#",$campos);
                $virgula = "";
                for($i=0;$i<sizeof($campos_sql);$i++){
                  $sql .= $virgula.$campos_sql[$i];
@@ -1634,7 +1655,7 @@
              $sql .= $sql2;
              if($ordem != null ){
                $sql .= " order by ";
-               $campos_sql = split("#",$ordem);
+               $campos_sql = explode("#",$ordem);
                $virgula = "";
                for($i=0;$i<sizeof($campos_sql);$i++){
                  $sql .= $virgula.$campos_sql[$i];

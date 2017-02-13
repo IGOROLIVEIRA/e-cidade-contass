@@ -99,7 +99,7 @@ class cl_empempenho {
                  e60_concarpeculiar = varchar(100) = Caracteristica Peculiar
                  e60_convenio = int8 = Convênio
                  e60_numconvenio = int8 = Número Convênio
-                 e60_dataconvenio = date = Data Convênio 
+                 e60_dataconvenio = date = Data Convênio
                  ";
     //funcao construtor da classe
     function cl_empempenho() {
@@ -385,7 +385,7 @@ class cl_empempenho {
                                       ,e60_concarpeculiar
                                       ,e60_convenio
                                       ,e60_numconvenio
-                                      ,e60_dataconvenio 
+                                      ,e60_dataconvenio
                        )
                 values (
                                 $this->e60_numemp
@@ -412,7 +412,7 @@ class cl_empempenho {
                                ,'$this->e60_concarpeculiar'
                                ,".($this->e60_convenio == ""? "2" : $this->e60_convenio)."
                                ,".($this->e60_numconvenio == ""? "null" : $this->e60_numconvenio)."
-                               ,".($this->e60_dataconvenio == "null" || $this->e60_dataconvenio == ""?"null":"'".$this->e60_dataconvenio."'")." 
+                               ,".($this->e60_dataconvenio == "null" || $this->e60_dataconvenio == ""?"null":"'".$this->e60_dataconvenio."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -1011,6 +1011,11 @@ class cl_empempenho {
         $sql .= "      left  join empcontratos on si173_empenho::varchar = e60_codemp and e60_anousu = si173_anoempenho";
         $sql .= "      left join contratos on si173_codcontrato = si172_sequencial";
         $sql .= "      LEFT JOIN aditivoscontratos on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and (si174_nrocontrato = si172_nrocontrato)";
+
+        $sql .= "       left join empempaut            on empempenho.e60_numemp  = empempaut.e61_numemp   ";
+        $sql .= "       left join empautoriza          on empempaut.e61_autori   = empautoriza.e54_autori ";
+        $sql .= "       left join db_depart            on empautoriza.e54_autori = db_depart.coddepto ";
+
         $sql2 = "";
         if($dbwhere==""){
             if($e60_numemp!=null ){
@@ -1491,7 +1496,7 @@ class cl_empempenho {
 
         return $sSql;
     }
-    function sql_query_relatorio ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_relatorio ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){//aqui
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -1534,6 +1539,12 @@ class cl_empempenho {
 				      AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar
 				      AND l03_codigo = l20_codtipocom
                   ";
+
+        $sql .= " INNER JOIN empempaut ON e61_numemp = e60_numemp ";
+        $sql .= " INNER JOIN empautoriza ON e54_autori = e61_autori ";
+        $sql .= " INNER JOIN db_depart ON e54_gestaut = coddepto ";
+
+
         $sql2 = "";
         if($dbwhere==""){
             if($e60_numemp!=null ){

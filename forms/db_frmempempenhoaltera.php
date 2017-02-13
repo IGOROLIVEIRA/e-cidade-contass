@@ -256,6 +256,27 @@ $clrotulo->label("e60_dataconvenio");
           ?>
         </td>
       </tr>
+
+
+      <tr>
+        <td nowrap title="Gestor do Empenho">
+          <?php
+            db_ancora('Gestor do Empenho:', "js_pesquisae54_gestaut(true);", $db_opcao);
+          ?>
+        </td>
+        <td>
+          <?php
+          db_input("e54_gestaut", 10, $Ie54_gestaut, true, "text", 3);
+          db_input("e54_autori", 10, $Ie54_autori, true, "hidden", 3);
+          db_input("e54_nomedodepartamento", 50, 0, true, "text", 3);
+
+          $iCodDepartamentoAtual = empty($e54_gestaut) ? db_getsession('DB_coddepto') : $e54_gestaut;
+          $sNomDepartamentoAtual = db_utils::fieldsMemory(db_query(" SELECT descrdepto FROM db_depart WHERE coddepto = {$iCodDepartamentoAtual} "), 0)->descrdepto;
+          ?>
+        </td>
+      </tr>
+
+
       <tr>
         <td nowrap title="<?=@$Te60_resumo?>" colspan="2">
           <fieldset>
@@ -313,30 +334,30 @@ $clrotulo->label("e60_dataconvenio");
 	    <td nowrap title="<?=@$Te60_convenio?>">
 	      <?=@$Le60_convenio?>
 	    </td>
-	    <td> 
+	    <td>
 				<?
 				  $aConvenio = array('2' => 'Não','1' => 'Sim');
 				  db_select('e60_convenio', $aConvenio, true, $db_opcao,"");
 				?>
 	    </td>
 	  </tr>
-	  
+
 	  <tr>
 	    <td nowrap title="<?=@$Te60_numconvenio?>">
 	      <?=@$Le60_numconvenio?>
 	    </td>
-	    <td> 
+	    <td>
 				<?
 				  db_input('e60_numconvenio',11,$Ie60_numconvenio,true,'text',$db_opcao);
 				?>
 	    </td>
 	  </tr>
-	  
+
 	  <tr>
 	    <td nowrap title="<?=@$Te60_dataconvenio?>">
 	      <?=@$Le60_dataconvenio?>
 	    </td>
-	    <td> 
+	    <td>
 				<?
 				  db_inputData('e60_dataconvenio',@$e60_dataconvenio_dia, @$e60_dataconvenio_mes,@$e60_dataconvenio_ano, true, 'text', $db_opcao);
 				?>
@@ -354,6 +375,44 @@ $clrotulo->label("e60_dataconvenio");
 
 
 <script>
+
+  /*===========================================
+  =            pesquisa 54_gestaut            =
+  ===========================================*/
+
+  function js_pesquisae54_gestaut() {
+    js_OpenJanelaIframe(
+      'top.corpo',
+      'db_iframe_db_depart',
+      'func_db_depart.php?funcao_js=parent.js_preenchepesquisae54_gestaut|coddepto|descrdepto',
+      'Pesquisa',
+      true,
+      '0',
+      '1'
+    );
+  }
+
+  function js_preenchepesquisae54_gestaut(codigo, descricao) {
+
+    if (codigo == '' || descricao == '') {
+      document.form1.e54_gestaut.value = '';
+      document.form1.e54_gestaut.value.focus();
+      return;
+    }
+
+    document.form1.e54_gestaut.value = codigo;
+    document.form1.e54_nomedodepartamento.value = descricao;
+
+    db_iframe_db_depart.hide();
+
+  }
+
+  // executar a primeira vez
+  document.form1.e54_gestaut.value = '<?= $iCodDepartamentoAtual ?>';
+  document.form1.e54_nomedodepartamento.value = '<?= $sNomDepartamentoAtual ?>';
+
+  /*=====  End of pesquisa 54_gestaut  ======*/
+
 
   function manutencaoCotasMensais () {
 

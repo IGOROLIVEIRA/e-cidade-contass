@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -90,7 +90,8 @@ select {
 	  	 * Campos HIDDEN
 	  	 */
 		  db_input('testdt',10,"",true,"hidden",1);
-		  db_input('listacredor',10,"",true,"hidden",1);
+      db_input('listacredor',10,"",true,"hidden",1);
+		  db_input('listagestor',10,"",true,"hidden",1);
 		  db_input('listahist',10,"",true,"hidden",1);
 		  db_input('listaevento',10,"",true,"hidden",1);
 		  db_input('listaitem',10,"",true,"hidden",1);
@@ -121,7 +122,7 @@ select {
 				<td colspan="4" align="center">
 					<fieldset style="width: 98%; border-left: none; border-bottom: none; border-right: none;">
 						<legend><b>Instituições</b></legend>
-						<?php 
+						<?php
 							db_selinstit('', 500, 130);
 						?>
 					</fieldset>
@@ -132,7 +133,7 @@ select {
     			<b>Data de Emissão:</b>
     		</td>
     		<td colspan="3">
-    			<?php 
+    			<?php
 	    			$resultmin = pg_exec("select e60_emiss from empempenho order by e60_emiss limit 1");
 	    			db_fieldsmemory($resultmin,0);
 	    			$dia=substr($e60_emiss,8,2);
@@ -153,7 +154,7 @@ select {
     	<tr>
     		<td><b>Processar:</b></td>
     		<td colspan="3">
-    			<?php 
+    			<?php
     				$aProcessar = array("a"=>"Posição atual","e"=>"Período de Lançamentos");
     				db_select('processar', $aProcessar, true, 1, "onchange='js_testadata(this.value);'");
     			?>
@@ -176,7 +177,7 @@ select {
     	<tr>
     		<td><b>Filtro de Listagem:</b></td>
     		<td colspan="3">
-    		  <?php 
+    		  <?php
     		  	$aFiltroListagem = array("todos"       => "Todos",
     		  			                     "somemp"      => "Somente Empenhado",
     		  													 "saldo"       => "Com Saldo a Pagar Geral",
@@ -198,18 +199,19 @@ select {
     	<tr>
     		<td><b>Agrupar Por:</b></td>
     		<td>
-    			<?php 
+    			<?php
     				$aAgruparPor = array("oo"    => "Não Agrupar",
     						                 "a"     => "Fornecedor",
     						                 "orgao" => "Orgão",
-    						                 "r"     => "Recurso",
+                                 "r"     => "Recurso",
+    						                 "gest"  => "Gestor",
     						                 "d"     => "Desdobramento");
     				db_select("agrupar", $aAgruparPor, true, 1);
     			?>
     		</td>
     		<td><b>Mostrar:</b></td>
     		<td>
-    			<?php 
+    			<?php
     				$aMostrar = array("r" => "Recurso",
     						              "t" => "Tipo de Compra");
     				db_select("mostrar", $aMostrar, true, 1);
@@ -219,24 +221,24 @@ select {
     	<tr>
     		<td><b>Trazer Valor Em Ordem:</b></td>
     		<td>
-    			<?php 
+    			<?php
             $aValorEmOrdem = array("0" => "Selecione", "E" => "Empenhado", "L" => "Liquidado", "P" => "Pago");
 					  db_select("chk_ordem",$aValorEmOrdem,true,2);
     			?>
     		</td>
     		<td><b>Mostrar Empenho:</b></td>
     		<td>
-    			<?php 
+    			<?php
             $aMostrarEmpenho = array("n" => "Sim", "s" => "Não");
 					  db_select("sememp",$aMostrarEmpenho,true,2);
     			?>
     		</td>
     	</tr>
-    	
+
       <tr>
     		<td><b>Valor Empenho:</b></td>
     		<td colspan="3">
-    			<?php 
+    			<?php
     				db_input("nValorEmpenhoInicial", 10, false, true, 'text', 1, "onkeypress='return js_mask(event,\"0-9|,|-\");'");
     				echo " <b>até</b> ";
     				db_input("nValorEmpenhoFinal", 10, false,   true, 'text', 1, "onkeypress='return js_mask(event,\"0-9|,|-\");'");
@@ -247,12 +249,12 @@ select {
       <tr>
         <td><b>Tipo Empenho:</b></td>
         <td>
-          <?php 
+          <?php
             $aTipoEmpenho = array("0"=>"TODOS", "1" => "ORDINARIO", "2" => "GLOBAL", "3" => "ESTIMATIVA");
             db_select("emptipo",$aTipoEmpenho,true,1);
           ?>
         </td>
-      </tr>  
+      </tr>
 
     	<tr>
     		<td><b>Opções:</b></td>
@@ -270,6 +272,17 @@ select {
   </center>
 </form>
 <script>
+
+var agrupaSelect = document.querySelector('select#agrupar');
+agrupaSelect.addEventListener('change', function(e) {
+  if (this.value === 'gest') {
+    parent.iframe_g2.document.getElementById('filtro_gestores').style.display = 'block';
+  } else {
+    parent.iframe_g2.document.getElementById('filtro_gestores').style.display = 'none';
+    parent.iframe_g2.document.form1.e54_gestaut.innerHTML = '';
+  }
+});
+
 
 tr = document.getElementById("dataespec");
 tr.style.display = "none";
@@ -318,7 +331,13 @@ function js_emite(anousu){
   listacredor+=vir+parent.iframe_g2.document.form1.credor.options[x].value;
   vir=",";
  }
- 
+
+  // gera um array com os valores dos <option>s e depois join()
+  var listaGestores = parent.iframe_g2.document.form1.e54_gestaut.options;
+  listaGestores = Array.prototype.map.call(listaGestores, function(o) {
+    return o.value;
+  }).join(',');
+
  vir="";
  listahist="";
  for(x=0;x<parent.iframe_g3.document.form1.historico.length;x++){
@@ -384,8 +403,9 @@ function js_emite(anousu){
  document.form1.dataesp22.value=document.form1.dataesp2_ano.value+'-'+document.form1.dataesp2_mes.value+'-'+document.form1.dataesp2_dia.value;
 
  document.form1.hist=document.form1.hist.checked;
- 
+
  document.form1.listacredor.value = listacredor;
+ document.form1.listagestor.value = listaGestores;
  document.form1.listahist.value   = listahist;
  document.form1.listaevento.value = listaevento;
 
@@ -410,8 +430,8 @@ function js_emite(anousu){
     // alert('achamos');
  } else {
     alert('Na aba de Filtro selecione ao menos um Orgão para processar a pesquisa');
-    return false;   
- }  
+    return false;
+ }
 
 
 
@@ -430,6 +450,7 @@ function js_mandadados(){
 ?>
  jan = window.open('emp2_relempenho002.php?tipoemp='+tipoemp
                      +'&listacredor='+listacredor
+                     +'&listagestor='+listagestor
                      +'&emptipo='+emptipo
 		     +'&listahist='+listahist
          +'&listaevento='+listaevento
@@ -452,6 +473,7 @@ function js_mandadados(){
 ?>
  jan = window.open('emp2_relempenho002.php?tipoemp='+tipoemp
                     +'&listacredor='+listacredor
+                    +'&listagestor='+listagestor
                     +'&emptipo='+emptipo
 		    +'&listahist='+listahist
         +'&listaevento='+listaevento

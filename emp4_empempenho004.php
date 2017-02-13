@@ -283,6 +283,12 @@ if(isset($incluir)) {
   db_inicio_transacao();
 
 
+  // atualiza o campo do gestor do empenho
+  $sSql = " UPDATE empautoriza SET e54_gestaut = '{$e54_gestaut}' "
+        . " WHERE e54_autori={$e54_autori} AND e54_numcgm={$e54_numcgm} ";
+  db_query($sSql);
+
+
   //////////////////////////////Controle Andamento da SOlicitação de Compras/////////////////////
   //----------------------------REcebe processo se existe tranferencia -------------
   $result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_gerareserva,pc30_contrandsol"));
