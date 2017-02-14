@@ -515,7 +515,7 @@ class EncerramentoExercicio {
     $oDaoRegrasEncerramento = new cl_regraencerramentonaturezaorcamentaria();
     $sSqlRegrasEncerramento = $oDaoRegrasEncerramento->sql_query( null,
         "*",
-        null,
+        " c117_sequencial ",
         "c117_anousu = {$this->iAno}"
         . " and c117_instit = {$this->oInstituicao->getCodigo()}" );
     $rsRegrasEncerramento   = $oDaoRegrasEncerramento->sql_record( $sSqlRegrasEncerramento );
@@ -902,17 +902,21 @@ class EncerramentoExercicio {
 
     $sCampos  = " distinct c19_sequencial  ";
 
-
-    $sSqlLancamentos  = " select {$sCampos}      ";
+    $sSqlLancamentos  = " select distinct c19_sequencial  from (  ";
+    $sSqlLancamentos .= " select {$sCampos}      ";
     $sSqlLancamentos .= "   from conlancamval " ;
-    $sSqlLancamentos .= "        inner join contacorrentedetalheconlancamval on contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen ";
-    $sSqlLancamentos .= "        inner join contacorrentedetalhe on contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe";
+    $sSqlLancamentos .= " inner join contacorrentedetalheconlancamval on contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen ";
+    $sSqlLancamentos .= " inner join contacorrentedetalhe on contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe";
     $sSqlLancamentos .= "  where c69_data between '".db_getsession('DB_anousu')."-01-01' and '".db_getsession('DB_anousu')."-12-31' ";
     $sSqlLancamentos .= "    and c19_contacorrente = {$iFiltroContaCorrente} ";
     $sSqlLancamentos .= "    and c19_reduz = {$iReduzido} ";
     $sSqlLancamentos .= "    and c19_instit = " . db_getsession("DB_instit");
-    $sSqlLancamentos .= " order by 1";
-
+    $sSqlLancamentos .= " union all ";
+    $sSqlLancamentos .= " select distinct c29_contacorrentedetalhe as c19_sequencial from contacorrentesaldo  ";
+    $sSqlLancamentos .= "  where c29_contacorrentedetalhe in (select c19_sequencial from contacorrentedetalhe ";
+    $sSqlLancamentos .= " where c19_conplanoreduzanousu = ".db_getsession('DB_anousu')." and c19_reduz = {$iReduzido} ) ";
+    $sSqlLancamentos .= " and c29_anousu = ".db_getsession('DB_anousu')." and c29_mesusu =0 ) as xx";
+    
     $rsLancamentos    = db_query($sSqlLancamentos) or die($sSqlLancamentos);
     $aLancamento      = db_utils::getColectionByRecord($rsLancamentos);
 
