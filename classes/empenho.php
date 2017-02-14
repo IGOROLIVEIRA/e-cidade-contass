@@ -1441,6 +1441,20 @@ class empenho {
           $strJson["e60_resumo"] = $this->dadosEmpenho->e60_resumo;
         }
       }
+
+      /**
+       * Query para verificar se o empenho tem contrato vinculado
+       */
+      $oDaoEmpEmpenhoContrato      = db_utils::getDao('empempenhocontrato');
+      $sWhereEmpEmpenhoContrato    = "e100_numemp = {$this->dadosEmpenho->e60_numemp}";
+      $sSqlEmpEmpenhoContrato      = $oDaoEmpEmpenhoContrato->sql_query_file(null, "*", null, $sWhereEmpEmpenhoContrato);
+      $rsEmpEmpenhoContrato   = $oDaoEmpEmpenhoContrato->sql_record($sSqlEmpEmpenhoContrato);
+      if ($oDaoEmpEmpenhoContrato->numrows  > 0) {
+        $strJson["validaContrato"] = "t";
+      } else {
+        $strJson["validaContrato"] = "f";
+      }
+
       $strJson["z01_nome"]   = $this->dadosEmpenho->z01_nome;
       $strJson["o58_codigo"] = $this->dadosEmpenho->o58_codigo;
       $strJson["o15_descr"]  = trim($this->dadosEmpenho->o15_descr);

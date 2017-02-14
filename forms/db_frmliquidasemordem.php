@@ -670,6 +670,13 @@ function js_saida(oAjax) {
       js_setValorTotal();
     }
 
+    if (obj.validaContrato == 'f') {
+      var respContrato = confirm("Empenho sem contrato vinculado. Deseja continuar mesmo assim?");
+      if (respContrato == false) {
+        location.href = 'emp4_liquidarsemordem001.php';
+      }
+    }
+
     /**
      * Obj nao possui propriedade empenho, cria com valor da proprieade e60_numemp
      */

@@ -376,6 +376,12 @@ function js_saida(oAjax){
       alert("Empenho sem notas lançadas ou pendentes de inclusão no módulo patrimonial.");
       $('confirmar').disabled = true;
     }
+    if (obj.validaContrato == 'f') {
+      var respContrato = confirm("Empenho sem contrato vinculado. Deseja continuar mesmo assim?");
+      if (respContrato == false) {
+        location.href = 'emp1_empliquida001.php';
+      }
+    }
     saida += "<tr style='height:auto'><td colspan='10'>&nbsp;</td></tr>";
     $('dados').innerHTML  = saida;
     if (iTotNotas  == 0) {

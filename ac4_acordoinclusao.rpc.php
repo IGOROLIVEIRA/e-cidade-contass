@@ -198,7 +198,7 @@ try {
         }
       }
       // percorremos os empenhos selecionados,
-      // verificamos se ele ja nao estÃ¡ no vinculo
+      // verificamos se ele ja nao está no vinculo
 
       /**
        *   aqui devemos tambem a cada passada dos empenhos acumular o valor total
@@ -217,6 +217,13 @@ try {
         $rsVerificaVinculados = $oDaoEmpenhoContrato->sql_record($sSqlVerificaVinculo);
 
         if ($oDaoEmpenhoContrato->numrows == 0) {
+
+          $oDaoEmpenho = db_utils::getDao("empempenho");
+          $sSqlEmpenho = $oDaoEmpenho->sql_query_file($oEmpenhosVincular,"e60_vlrliq");
+          $rsEmpenho   = db_query($sSqlEmpenho);
+          if (db_utils::fieldsMemory($rsEmpenho,0)->e60_vlrliq > 0) {
+            throw new Exception("Já existe Liquidação para o Empenho: {$oEmpenhosVincular}.");
+          }
 
           $oDaoEmpenhoContrato->e100_numemp = $oEmpenhosVincular;
           $oDaoEmpenhoContrato->e100_acordo = $iAcordo;
@@ -537,7 +544,7 @@ try {
 
       /**
        * Pegar todos os itens de empenho, dos empenhos vinculados ao acordo x
-       * Buscar todos itens de empenho que nÃ£o estÃ£o na acordoitem ainda
+       * Buscar todos itens de empenho que não estão na acordoitem ainda
        */
 
       $iAcordo             = $oParam->iAcordo;
@@ -593,7 +600,7 @@ try {
       $dtDataFinalPosicao   = db_formatar($oContrato->getDataFinal(), "d");
 
       /**
-       * Inclui itens de empenho ainda nÃ£o vinculados ao acordo
+       * Inclui itens de empenho ainda não vinculados ao acordo
        */
       foreach ($oParam->aItens as $oStdItem) {
 
@@ -624,7 +631,7 @@ try {
     break;
 
     default:
-      throw new ParameterException("Nenhuma OpÃ§Ã£o Definida");
+      throw new ParameterException("Nenhuma Opção Definida");
     break;
   }
 
