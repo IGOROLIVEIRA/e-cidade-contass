@@ -121,10 +121,10 @@ db_app::load("estilos.css, grid.style.css,tab.style.css");
           <?php echo $clAcordo->getNumeroAcordo() . '/' . $clAcordo->getAno(); ?>
         </td>
         <td class="tdWidth">
-          <b>Número:</b>
+          <b>Lei:</b>
         </td>
         <td class="tdBgColor">
-          <?php echo $clAcordo->getNumero() . '/' . $clAcordo->getAno(); ?>
+          <?php echo $clAcordo->getLei() . ' - ' .$clAcordo->getDescricaoLei(); ?>
         </td>
       </tr>
 

@@ -51,6 +51,10 @@ class cl_acordo {
    var $ac16_dataassinatura_mes = null;
    var $ac16_dataassinatura_ano = null;
    var $ac16_dataassinatura = null;
+   var $ac16_datapublicacao_dia = null;
+   var $ac16_datapublicacao_mes = null;
+   var $ac16_datapublicacao_ano = null;
+   var $ac16_datapublicacao = null;
    var $ac16_contratado = 0;
    var $ac16_datainicio_dia = null;
    var $ac16_datainicio_mes = null;
@@ -90,6 +94,7 @@ class cl_acordo {
                  ac16_numero = varchar(60) = Número
                  ac16_anousu = int4 = Ano Exercício
                  ac16_dataassinatura = date = Data da Assinatura
+                 ac16_datapublicacao = date = Data Publicação
                  ac16_contratado = int4 = Contratado
                  ac16_datainicio = date = Data de Início
                  ac16_datafim = date = Data de Fim
@@ -144,6 +149,14 @@ class cl_acordo {
          $this->ac16_dataassinatura_ano = ($this->ac16_dataassinatura_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_ano"]:$this->ac16_dataassinatura_ano);
          if($this->ac16_dataassinatura_dia != ""){
             $this->ac16_dataassinatura = $this->ac16_dataassinatura_ano."-".$this->ac16_dataassinatura_mes."-".$this->ac16_dataassinatura_dia;
+         }
+       }
+       if($this->ac16_datapublicacao == ""){
+         $this->ac16_datapublicacao_dia = ($this->ac16_datapublicacao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"]:$this->ac16_datapublicacao_dia);
+         $this->ac16_datapublicacao_mes = ($this->ac16_datapublicacao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_mes"]:$this->ac16_datapublicacao_mes);
+         $this->ac16_datapublicacao_ano = ($this->ac16_datapublicacao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_ano"]:$this->ac16_datapublicacao_ano);
+         if($this->ac16_datapublicacao_dia != ""){
+            $this->ac16_datapublicacao = $this->ac16_datapublicacao_ano."-".$this->ac16_datapublicacao_mes."-".$this->ac16_datapublicacao_dia;
          }
        }
        $this->ac16_contratado = ($this->ac16_contratado == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_contratado"]:$this->ac16_contratado);
@@ -634,8 +647,17 @@ class cl_acordo {
        $sql  .= $virgula." ac16_dataassinatura = '$this->ac16_dataassinatura' ";
        $virgula = ",";
      }     else{
-       if(isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"])){
+       if(isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) || $this->ac16_acordosituacao){
          $sql  .= $virgula." ac16_dataassinatura = null ";
+         $virgula = ",";
+       }
+     }
+     if(trim($this->ac16_datapublicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"] !="") ){
+       $sql  .= $virgula." ac16_datapublicacao = '$this->ac16_datapublicacao' ";
+       $virgula = ",";
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"])){
+         $sql  .= $virgula." ac16_datapublicacao = null ";
          $virgula = ",";
        }
      }
@@ -1259,6 +1281,7 @@ class cl_acordo {
      $sql .= "      inner join acordonatureza on acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza";
      $sql .= "      inner join acordotipo     on acordotipo.ac04_sequencial     = acordogrupo.ac02_acordotipo";
      $sql .= "      inner join acordoorigem   on acordoorigem.ac28_sequencial   = acordo.ac16_origem";
+     $sql .= "      left  join acordoleis   on acordo.ac16_lei   = acordoleis.ac54_sequencial";
      $sql2 = "";
      if($dbwhere==""){
        if($ac16_sequencial!=null ){

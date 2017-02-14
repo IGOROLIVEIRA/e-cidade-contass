@@ -146,7 +146,7 @@ db_app::load("estilos.css, grid.style.css");
           $aWhereAdicional[] = "ac16_anousu = $iAno";
         }
 
-        $sql = $clacordo->sql_query("",$campos,"ac16_sequencial", implode(" and ", $aWhereAdicional));
+        $sql = $clacordo->sql_query("",$campos,"ac16_sequencial desc", implode(" and ", $aWhereAdicional));
 
         $repassa = array();
         if (isset($chave_ac16_sequencial)) {

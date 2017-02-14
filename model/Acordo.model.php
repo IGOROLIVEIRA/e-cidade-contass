@@ -200,6 +200,13 @@ class Acordo
     protected $sLei;
 
     /**
+     * numero da lei
+     *
+     * @var string
+     */
+    protected $sDescricaoLei;
+
+    /**
      * número do processo
      *
      * @var string
@@ -386,7 +393,7 @@ class Acordo
             $this->iCodigoAcordo = $iCodigoAcordo;
             db_utils::getDao("acordo", false);
             $oDaoAcordo = new cl_acordo;
-            $sSqlAcordo = $oDaoAcordo->sql_query_completo($iCodigoAcordo, "acordo.*, ac02_descricao");
+            $sSqlAcordo = $oDaoAcordo->sql_query_completo($iCodigoAcordo, "acordo.*, ac02_descricao,ac54_descricao");
             $rsAcordo = $oDaoAcordo->sql_record($sSqlAcordo);
 
             if ($oDaoAcordo->numrows > 0) {
@@ -411,6 +418,7 @@ class Acordo
                 $this->setDataFinal(db_formatar($oDadosAcordo->ac16_datafim, "d"));
                 $this->setDepartamento($oDadosAcordo->ac16_coddepto);
                 $this->setLei($oDadosAcordo->ac16_lei);
+                $this->setDescricaoLei($oDadosAcordo->ac54_descricao);
                 $this->setObjeto($oDadosAcordo->ac16_objeto);
                 $this->setResumoObjeto($oDadosAcordo->ac16_resumoobjeto);
                 $this->setSituacao($oDadosAcordo->ac16_acordosituacao);
@@ -849,6 +857,28 @@ class Acordo
     {
 
         $this->sLei = $sLei;
+        return $this;
+    }
+
+    /**
+     * retorna a descricao lei do contrato
+     * @return string
+     */
+    public function getDescricaoLei()
+    {
+
+        return $this->sDescricaoLei;
+    }
+
+    /**
+     * define a descricao da lei do contrato
+     * @param string $sDescricaoLei
+     * @return Acordo
+     */
+    public function setDescricaoLei($sDescricaoLei)
+    {
+
+        $this->sDescricaoLei = $sDescricaoLei;
         return $this;
     }
 

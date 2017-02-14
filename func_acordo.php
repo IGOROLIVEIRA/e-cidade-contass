@@ -148,9 +148,9 @@ $iInstituicaoSessao = db_getsession('DB_instit');
           if (isset($lAtivo)) {
 
             if ($lAtivo == 1) {
-              $sWhere .= " and ac16_acordosituacao = 1";
+              $sWhere .= " and (ac16_acordosituacao = 1 OR ac16_origem = 6)";
             } else if ($lAtivo == 2) {
-              $sWhere .= " and ac16_acordosituacao != 1";
+              $sWhere .= " and (ac16_acordosituacao != 1 OR ac16_origem = 6)";
             }
           }
 
@@ -174,18 +174,18 @@ $iInstituicaoSessao = db_getsession('DB_instit');
               $campos  = "distinct acordo.ac16_sequencial, ";
               $campos .= "(ac16_numeroacordo || '/' || ac16_anousu)::varchar as ac16_numeroacordo, ";
               $campos .= "ac17_descricao as dl_Situação, ";
-              $campos .= "acordo.ac16_coddepto, ";
-              $campos .= "descrdepto, ";
+              $campos .= "acordo.ac16_contratado, ";
+              $campos .= "cgm.z01_nome, ";
+              $campos .= "acordo.ac16_resumoobjeto::text, ";
               //$campos .= "codigo, ";
               //$campos .= "nomeinst, ";
               //$campos .= "acordo.ac16_numero, ";
               $campos .= "acordo.ac16_dataassinatura, ";
-              $campos .= "acordo.ac16_contratado, ";
-              $campos .= "cgm.z01_nome, ";
               $campos .= "acordo.ac16_datainicio, ";
               $campos .= "acordo.ac16_datafim, ";
-              $campos .= "acordo.ac16_resumoobjeto::text, ";
-              $campos .= "ac28_descricao as dl_Origem";
+              $campos .= "ac28_descricao as dl_Origem,";
+              $campos .= "acordo.ac16_coddepto, ";
+              $campos .= "descrdepto ";
 
             } else {
               $campos = "acordo.*";
@@ -205,15 +205,15 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
           if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial)!="")) {
 
-            $sql = $clacordo->sql_query_acordoitemexecutado(null, $campos,"ac16_sequencial",
+            $sql = $clacordo->sql_query_acordoitemexecutado(null, $campos,"ac16_sequencial desc",
                                                             "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao}");
 
           } else if (isset($ac16_acordogrupo) && (trim($ac16_acordogrupo)!="")) {
 
-            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial",
+            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc",
                                                             "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}");
           } else {
-            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial", $sWhere . " and ac16_instit = {$iInstituicaoSessao} " );
+            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc", $sWhere . " and ac16_instit = {$iInstituicaoSessao} " );
           }
 
           $repassa = array();
