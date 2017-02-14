@@ -70,7 +70,7 @@ CASE WHEN l20_usaregistropreco=TRUE THEN 'SIM' ELSE 'NAO' end as usaregistroprec
 CASE WHEN l20_descontotab=1 THEN 'SIM' ELSE 'NAO' end as descontotabela,
 l20_datacria as abertura,
 l20_objeto as objeto ";
-$sWhere .= $sAnd . " l20_licsituacao = 10 and l20_instit = " . db_getsession("DB_instit");
+$sWhere .= $sAnd . " l20_instit = " . db_getsession("DB_instit");
 $sSqlLicLicita = $clliclicita->sql_query(null, $sCampos, "4,2", $sWhere);
 $result = $clliclicita->sql_record($sSqlLicLicita);
 $numrows = $clliclicita->numrows;
