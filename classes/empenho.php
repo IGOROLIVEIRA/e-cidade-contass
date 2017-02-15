@@ -1449,7 +1449,15 @@ class empenho {
       $sWhereEmpEmpenhoContrato    = "e100_numemp = {$this->dadosEmpenho->e60_numemp}";
       $sSqlEmpEmpenhoContrato      = $oDaoEmpEmpenhoContrato->sql_query_file(null, "*", null, $sWhereEmpEmpenhoContrato);
       $rsEmpEmpenhoContrato   = $oDaoEmpEmpenhoContrato->sql_record($sSqlEmpEmpenhoContrato);
-      if ($oDaoEmpEmpenhoContrato->numrows  > 0) {
+
+      $oDaoTipoEmpenho = db_utils::getDao('empempenho');
+      $sWhere          = "e60_numemp = {$this->dadosEmpenho->e60_numemp}";
+      $sCampos         = "(select l44_codigotribunal from pctipocompratribunal 
+                          join pctipocompra on l44_sequencial = pc50_pctipocompratribunal
+                          where l44_uf = 'MG' and pc50_codcom = empempenho.e60_codcom limit 1) as tipocompratribunal";
+      $sSqlTipoEmpenho = $oDaoTipoEmpenho->sql_query_file(null,$sCampos, null, $sWhere);
+      $iTipoCompraTribunal = db_utils::fieldsMemory($oDaoTipoEmpenho->sql_record($sSqlTipoEmpenho), 0)->tipocompratribunal;
+      if ($oDaoEmpEmpenhoContrato->numrows  > 0 || $iTipoCompraTribunal == '00') {
         $strJson["validaContrato"] = "t";
       } else {
         $strJson["validaContrato"] = "f";
