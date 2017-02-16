@@ -2471,8 +2471,10 @@ class Acordo
                 $oDotacao->ano = db_getsession("DB_anousu");
                 $oNovoItem->adicionarDotacoes($oDotacao);
             }
-
-            $oNovoItem->save($oNovoItem->getValorTotal() != 0);
+            /*
+             * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario 
+             */
+            $oNovoItem->save(false);
         }
 
         if (count(array_unique($aTiposAlteracao)) > 1) {
