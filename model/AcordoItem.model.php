@@ -307,7 +307,6 @@ class AcordoItem {
       $sCamposItens .= "ac20_ordem,                                              ";
       $sCamposItens .= "m61_descr,                                               ";
       $sCamposItens .= "o56_elemento,                                            ";
-      $sCamposItens .= "o56_elemento,                                            ";
       $sCamposItens .= "o56_descr,                                               ";
       $sCamposItens .= "ac33_acordoitempai,                                      ";
       $sCamposItens .= "ac23_pcprocitem,                                         ";
@@ -357,6 +356,7 @@ class AcordoItem {
               ->setDescEstruturalElemento($oDadosItem->o56_descr)
               ->setControlaQuantidade($oDadosItem->pc11_servicoquantidade == ''? 'f':$oDadosItem->pc11_servicoquantidade)
               ->setOrdem($oDadosItem->ac20_ordem);
+              $this->sDescricaoElemento = $oDadosItem->o56_descr;
 
 
         $sSqlItemPeriodo = $oDaoAcordoItem->sql_query_periodo($iCodigoItem);

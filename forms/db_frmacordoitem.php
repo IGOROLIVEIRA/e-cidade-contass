@@ -542,7 +542,7 @@ db_app::load("estilos.css, grid.style.css");
           }
           aLinha[4] = js_formatar(valorunitario, 'f', iCasas);
           aLinha[5] = js_formatar(valortotal, 'f');
-          aLinha[6] = elementocodigo + ' - ' + elementodescricao;
+          aLinha[6] = elementocodigo + ' - ' + elementodescricao.urlDecode();
           aLinha[7] = "<input type='button' value='Ver' id='Periodos' onclick='js_mostraPeriodos(" + codigo + ");'>";
           aLinha[8] = "<input type='button' value='Dotações' id='Dotacoes' onclick='js_adicionarDotacao(" + elementocodigo + "," + (ordem - 1) + "," + codigo + ");'>";
           aLinha[9] = "<input type='button' style='width:50%' value='A' onclick='js_editar(" + codigo + ", " + oRetorno.iTipoContrato + ")'>";

@@ -854,7 +854,7 @@ switch($oParam->exec) {
         $oItem->quantidade            = $oItemContrato->getQuantidade();
         $oItem->elemento              = $oItemContrato->getElemento();
         $oItem->elementocodigo        = $oItemContrato->getDesdobramento();
-        $oItem->elementodescricao     = $oItemContrato->getDescricaoElemento();
+        $oItem->elementodescricao     = urlencode(str_replace("\\n", "\n",urldecode($oItemContrato->getDescricaoElemento())));
         $oItem->unidade               = $oItemContrato->getUnidade();
         $oItem->resumo                = urlencode(str_replace("\\n", "\n",urldecode($oItemContrato->getResumo())));
         $oItem->tipocontrole          = $oItemContrato->getTipocontrole();
@@ -1076,6 +1076,15 @@ switch($oParam->exec) {
 
       $oDataFinalAcordo         = new DBDate($oContrato->getDataFinal());
       $oRetorno->dtFinalAcordo  = $oDataFinalAcordo->convertTo(DBDate::DATA_PTBR);
+      
+      /**
+       * Quando o usuario fecha o sistema sem incluir os itens, eles deixavam de aparecer, pois 
+       * dadosSelecaoAcordo deixava de existir na sessao, entao foi adicionado essa condicao para resolver este problema
+       */
+      if(!isset($_SESSION["dadosSelecaoAcordo"]) || count($_SESSION["dadosSelecaoAcordo"]) == 0) {
+        $oLicitacao = licitacao::getLicitacoesByFornecedor($oContrato->getContratado()->getCodigo(), true, true);
+        $_SESSION["dadosSelecaoAcordo"][] = $oLicitacao[0]->licitacao;
+      }
 
       if ($oContrato->getOrigem() == 2) {
 
