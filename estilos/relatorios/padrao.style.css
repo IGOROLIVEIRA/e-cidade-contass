@@ -1,0 +1,62 @@
+/* pré-sets */
+body {
+  top: 0;
+  left: 0;
+  position: fixed;
+  font-size: 12px;
+  font-family: 'garuda', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+/* background */
+.bg_eb {
+  background-color: #ebebeb;
+}
+
+/* float & clear */
+.both {
+  clear: both;
+}
+
+
+/* alinhamento */
+.align-left   { text-align: left; }
+.align-right  { text-align: right; }
+.align-center { text-align: center; }
+.align-justify { text-align: justify; }
+
+
+/* tabelas */
+.table {
+  float: left;
+  width: 100%;
+  border: 1px solid #000;
+  border-collapse: collapse;
+}
+
+.table .tr {
+  float: left;
+  width: 100%;
+  border-bottom: 1px solid #000;
+}
+
+.table .th {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.table .td,
+.table .th {
+  float: left;
+  padding: 3px;
+}

@@ -1,0 +1,16 @@
+.rodape .db-base {
+  font-size: 7px;
+}
+
+.rodape .info {
+  font-size: 8px;
+}
+
+.rodape .info .rotina {
+  width: 650px;
+}
+
+.rodape .info .paginacao {
+  width: 55px;
+}
+

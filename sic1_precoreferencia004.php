@@ -1,5 +1,7 @@
-<?
-include("fpdf151/pdf.php");
+<?php
+require_once 'model/relatorios/Relatorio.php';
+
+// include("fpdf151/pdf.php");
 require("libs/db_utils.php");
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -52,10 +54,10 @@ LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
 WHERE pc81_codproc = $codigo_preco
   AND pc10_instit = " . db_getsession("DB_instit") . "
-ORDER BY pc11_seq) as x GROUP BY 
+ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
                 pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
-(SELECT DISTINCT 
+(SELECT DISTINCT
                 pc11_seq,
                 round(si02_vlprecoreferencia,2) as si02_vlprecoreferencia,
                 pc01_codmater,
@@ -70,106 +72,167 @@ JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = $codigo_preco 
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
+WHERE pc80_codproc = $codigo_preco
+ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
+;
 
 $rsResult = db_query($sSql) or die(pg_last_error());//db_criatabela($rsResult);exit;
 
 $head3 = "Preço de Referência";
 $head5 = "Processo de Compra: $codigo_preco";
-
-//$head5= "Mês de Referência: $sMes";
-
-//$head7 = "Nº: {$oResult0->k00_codigo}";
 $head8 = "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResult, 0)->si01_datacotacao)));
 
-$pdf = new PDF('Landscape', 'mm', 'A4'); // abre a classe
+$mPDF = new Relatorio('', 'A4-L');
 
-$pdf->Open(); // abre o relatorio
-$pdf->AliasNbPages(); // gera alias para as paginas
+$mPDF
+  ->addInfo($head3, 2)
+  ->addInfo($head5, 4)
+  ->addInfo($head8, 7);
 
-$pdf->AddPage('L'); // adiciona uma pagina
-$pdf->SetTextColor(0, 0, 0);
-$pdf->SetFillColor(235);
-$tam = '04';
+ob_start();
 
-$pdf->SetFont("", "B", "");
+?>
 
-//$pdf->Cell(250,$tam,"Nº: ".$oResult0->k00_codigo,1,1,"R",1);
-//$pdf->Cell(250,$tam,"DATA: ".$oResult->k00_dtpagamento,1,1,"R",1);
-
-$pdf->Cell(13, $tam, "ITEM", 1, 0, "C", 1);
-$pdf->Cell(180, $tam, "DESCRIÇÃO DO ITEM", 1, 0, "C", 1);
-$pdf->Cell(25, $tam, "VALOR UN", 1, 0, "C", 1);
-$pdf->Cell(15, $tam, "QUANT", 1, 0, "C", 1);
-$pdf->Cell(20, $tam, "UN", 1, 0, "C", 1);
-$pdf->Cell(25, $tam, "TOTAL", 1, 1, "C", 1);
-$pdf->SetFont("", "", "");
-$nTotalItens = 0;
-$iContItem = 1;
-
-
-
-for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-
-    $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-
-    if (strlen($oResult->pc01_descrmater) > 120) {
-        $aDescmater = quebrar_texto($oResult->pc01_descrmater, 120);
-        $alt_novo = count($aDescmater);
-    } else {
-        $alt_novo = 1;
-    }
-
-    $pdf->Cell(13, $tam * $alt_novo, $iContItem, 1, 0, "C", 0);
-
-    if (strlen($oResult->pc01_descrmater) > 120) {
-
-        $pos_x = $pdf->x;
-        $pos_y = $pdf->y;
-        $pdf->Cell(180, $tam * $alt_novo, "", 1, 0, "L", 0);
-        $pdf->x = $pos_x;
-        $pdf->y = $pos_y;
-        foreach ($aDescmater as $oDescmater) {
-            $pdf->cell(180, ($tam), $oDescmater, 0, 1, "L", 0);
-            $pdf->x = $pos_x;
-        }
-        $pdf->x = $pos_x + 180;
-        $pdf->y = $pos_y;
-
-    } else {
-        $pdf->Cell(180, $tam*$alt_novo, $oResult->pc01_descrmater, 1, 0, "L", 0);
-    }
-    $pdf->Cell(25, $tam*$alt_novo, "R$" . number_format($oResult->si02_vlprecoreferencia, 2, ",", "."), 1, 0, "R", 0);
-    $pdf->Cell(15, $tam*$alt_novo, $oResult->pc11_quant, 1, 0, "C", 0);
-    $pdf->Cell(20, $tam*$alt_novo, $oResult->m61_abrev, 1, 0, "C", 0);
-    $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
-    $pdf->Cell(25, $tam*$alt_novo, "R$" . number_format($lTotal, 2, ",", "."), 1, 1, "R", 0);
-    $nTotalItens += $lTotal;
-    $iContItem++;
-
+<!DOCTYPE html>
+<html>
+<head>
+<title>Relatório</title>
+<link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
+<style type="text/css">
+.content {
+  width: 1070px;
 }
-$pdf->Cell(253, $tam, "VALOR TOTAL DOS ITENS", 1, 0, "C", 1);
-$pdf->Cell(25, $tam, "R$" . number_format($nTotalItens, 2, ",", "."), 1, 1, "R", 1);
-$pdf->output();
 
-function quebrar_texto($texto, $tamanho)
-{
-
-    $aTexto = explode(" ", $texto);
-    $string_atual = "";
-    foreach ($aTexto as $word) {
-        $string_ant = $string_atual;
-        $string_atual .= " " . $word;
-        if (strlen($string_atual) > $tamanho) {
-            $aTextoNovo[] = trim($string_ant);
-            $string_ant = "";
-            $string_atual = $word;
-        }
-    }
-    $aTextoNovo[] = trim($string_atual);
-    return $aTextoNovo;
-
+.table {
+  font-size: 10px;
+  background: url("imagens/px_preto.jpg") repeat center;
+  background-repeat: repeat-y;
+  background-position: 0 50px;
 }
+
+.table .tr {
+}
+.col-valor_total-valor,
+.col-valor_total-text {
+}
+
+.col-item { width: 45px; }
+.col-descricao_item {
+  width: 695px;
+}
+.col-valor_un {
+  width: 80px;
+  padding-right: 5px;
+}
+.col-quant {
+  width: 60px;
+}
+.col-un {
+  width: 45px;
+}
+.col-total {
+  width: 95px;
+  padding-left: 5px;
+}
+.col-valor_total-text {
+  width: 925px;
+  padding-left: 5px;
+}
+.col-valor_total-valor {
+  width: 120px;
+  padding-right: 5px;
+}
+
+.row .col-un,
+.row .col-total,
+.row .col-quant,
+.row .col-valor_un,
+.row .col-valor_un {
+}
+
+</style>
+</head>
+<body>
+
+<div class="content">
+
+  <div class="table" autosize="1">
+    <div class="tr bg_eb">
+      <div class="th col-item align-center">ITEM</div>
+      <div class="th col-descricao_item align-center">DESCRIÇÃO DO ITEM</div>
+      <div class="th col-valor_un align-right">VALOR UN</div>
+      <div class="th col-quant align-center">QUANT</div>
+      <div class="th col-un align-center">UN</div>
+      <div class="th col-total align-right">TOTAL</div>
+    </div>
+
+    <?php
+
+    $nTotalItens = 0;
+
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+      $oResult = db_utils::fieldsMemory($rsResult, $iCont);
+      $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
+      $nTotalItens += $lTotal;
+
+      $oDadosDaLinha = new stdClass();
+      $oDadosDaLinha->item = $iCont + 1;
+      $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
+      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 2, ",", ".");
+      $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+      $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
+      $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");;
+
+      echo <<<HTML
+        <div class="tr row">
+          <div class="td col-item align-center">
+            {$oDadosDaLinha->item}
+          </div>
+          <div class="td col-descricao_item align-justify">
+            {$oDadosDaLinha->descricao}
+          </div>
+          <div class="td col-valor_un align-right">
+            R$ {$oDadosDaLinha->valorUnitario}
+          </div>
+          <div class="td col-quant align-center">
+            {$oDadosDaLinha->quantidade}
+          </div>
+          <div class="td col-un align-center">
+            {$oDadosDaLinha->unidadeDeMedida}
+          </div>
+          <div class="td col-total align-right">
+            R$ {$oDadosDaLinha->total}
+          </div>
+        </div>
+HTML;
+
+
+    }
+
+    ?>
+
+    <div class="tr bg_eb">
+      <div class="th col-valor_total-text align-left">
+        VALOR TOTAL DOS ITENS
+      </div>
+      <div class="th col-valor_total-valor align-right">
+        <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
+
+<?php
+
+$html = ob_get_contents();
+
+ob_end_clean();
+
+$mPDF->WriteHTML(utf8_encode($html));
+$mPDF->Output();
 
 ?>

@@ -1,0 +1,50 @@
+.cabecalho {
+  width: auto;
+  border: 0;
+  height: 120px;
+  margin: 0 0px;
+  font-size: 11px;
+  border-bottom: 1px solid #000;
+}
+
+.cabecalho .logo {
+  float: left;
+  height: 120px;
+  overflow: hidden;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.cabecalho .cliente {
+  float: left;
+  height: 120px;
+  margin-left: 15px;
+  font-style: oblique;
+}
+
+.cabecalho .cliente h1 {
+  font-size: 12px;
+  font-family: 'arialblack';
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.cabecalho .cliente p {
+  margin-top: 2px;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.cabecalho .info {
+  float: right;
+  height: 104px;
+  border: 1px solid #222;
+  padding: 8px 12px;
+  font-size: 10px;
+  line-height: 1.09;
+  border-radius: 10px;
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
