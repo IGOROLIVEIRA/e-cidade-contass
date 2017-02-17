@@ -626,7 +626,7 @@ class EncerramentoExercicio {
 
             $oLancamento = new LancamentoAuxiliarEncerramentoExercicio();
             $oLancamento->setValorTotal($oMovimentacaoContabil->getSaldoFinal());
-            $oLancamento->setObservacaoHistorico("Inscrição no valor de " . trim(db_formatar($oConta->saldo_final, "f")));
+            $oLancamento->setObservacaoHistorico("Inscrição no valor de " . trim(db_formatar($nValorFinal, "f")));
             $oLancamento->setMovimentacaoContabil($oMovimentacaoContabil);
             $oLancamento->setContaReferencia($iContaReferencia);
             $oLancamento->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
