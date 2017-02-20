@@ -106,38 +106,41 @@ $oGet = db_utils::postMemory($_GET);
       oDBGridSLIP.aHeaders[7].lDisplayed = false;
       oDBGridSLIP.aHeaders[8].lDisplayed = false;
      	            
-     	oDBGridSLIP.hasTotalizador = true;                                     
-     	                                     
-	    oDBGridSLIP.show($('listaSLIP'));
-
+     	oDBGridSLIP.hasTotalizador = true;
 
   function js_processar(){
-    
-    js_divCarregando('Aguarde...','msgBox');
-     
-    var aObjSlips = new Array();                       
-    var aSlips    = oDBGridSLIP.getSelection();
-    
-        aSlips.each( function ( aRow, iId ){
+
+      js_divCarregando('Aguarde...','msgBox');
+
+      var aObjSlips = new Array();
+      var aSlips    = oDBGridSLIP.getSelection();
+
+      aSlips.each( function ( aRow, iId ){
           aRow[4] =  js_strToFloat(aRow[4]).valueOf();
           aRow[6] =  new String(aRow[6]).trim();
-        });
-        
-    var sQuery  = 'sMethod=geraSLIP';
-        sQuery += '&iAnoFolha='+iAnoFolha;
-        sQuery += '&iMesFolha='+iMesFolha;
-        sQuery += '&sSigla='+sSigla;
-        sQuery += '&sSemestre='+sSemestre;
-        sQuery += '&aSlips='+Object.toJSON(aSlips);
-    var oAjax   = new Ajax.Request( sUrl, {
-                                            method: 'post', 
-                                            parameters: sQuery, 
-                                            onComplete: js_retornoProcessaSLIP
-                                          }
-                                  );    
-    
-    
+      });
+
+      var sObjectJSON = JSON.stringify(aSlips).replace('%','');
+      console.log(sObjectJSON);
+
+      var sQuery  = 'sMethod=geraSLIP';
+      sQuery += '&iAnoFolha='+iAnoFolha;
+      sQuery += '&iMesFolha='+iMesFolha;
+      sQuery += '&sSigla='+sSigla;
+      sQuery += '&sSemestre='+sSemestre;
+      sQuery += '&aSlips='+sObjectJSON;
+      var oAjax   = new Ajax.Request( sUrl, {
+              method: 'post',
+              parameters: sQuery,
+              onComplete: js_retornoProcessaSLIP
+          }
+      );
+
+
   }
+
+
+	    oDBGridSLIP.show($('listaSLIP'));
 
   function js_retornoProcessaSLIP(oAjax){
 
