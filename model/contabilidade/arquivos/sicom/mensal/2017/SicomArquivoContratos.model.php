@@ -19,7 +19,7 @@ require_once("model/AcordoPosicao.model.php");
  * @author marcelo
  * @package Contabilidade
  */
-class SicomArquivoContratosNovo extends SicomArquivoBase implements iPadArquivoBaseCSV
+class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
     /**
