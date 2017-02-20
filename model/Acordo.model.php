@@ -2137,7 +2137,7 @@ class Acordo
     {
 
         $oDaoAcordo = db_utils::getDao("acordo");
-        $sCamposEmpenho = " distinct e61_numemp ";
+        $sCamposEmpenho = " distinct e60_numemp ";
         $sSqlEmpenhosVinculados = $oDaoAcordo->sql_queryEmpenhosVinculadosContrato($this->iCodigoAcordo, $sCamposEmpenho);
         $rsEmpenhosVinculados = $oDaoAcordo->sql_record($sSqlEmpenhosVinculados);
 
