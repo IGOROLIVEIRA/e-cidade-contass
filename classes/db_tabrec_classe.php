@@ -1146,18 +1146,40 @@ class cl_tabrec {
   }  
   
   function sql_query_rec_deducao($k02_codigo=null){
-    if($k02_codigo != "" && $k02_codigo != null ){
-      $sql = " select tt.k02_codigo as k02_codigo, k02_descr, o70_codigo " ;
-      $sql .= "  from tabrec tt inner join taborc ttor on tt.k02_codigo = ttor.k02_codigo ";
-      $sql .= " inner join orcreceita on ttor.k02_codrec = o70_codrec and ttor.k02_anousu = o70_anousu ";
-      $sql .= " where ttor.k02_anousu = ".db_getsession("DB_anousu")."  and ttor.k02_estorc like (select '495'||substr(tor.k02_estorc,2,6)||'%' ";
-      $sql .= "    from tabrec t inner join taborc tor on t.k02_codigo = tor.k02_codigo ";
-      $sql .= "    where tor.k02_anousu = ".db_getsession("DB_anousu")."  and t.k02_codigo = {$k02_codigo} ) limit 1 ";
+
+    if($k02_codigo != "" && $k02_codigo != NULL){
+      $sql = "  SELECT tt.k02_codigo AS k02_codigo,								                        ";
+      $sql .= "        k02_descr,												                        ";
+      $sql .= "        o70_codigo 												                        ";
+      $sql .= " FROM tabrec tt													                        ";
+      $sql .= " INNER JOIN taborc ttor ON tt.k02_codigo = ttor.k02_codigo 		                        ";
+      $sql .= " INNER JOIN orcreceita ON ttor.k02_codrec = o70_codrec AND ttor.k02_anousu = o70_anousu  ";
+      $sql .= " WHERE ttor.k02_anousu = ".db_getsession("DB_anousu")." 			                        ";
+      $sql .= "     AND ttor.k02_estorc LIKE 									                        ";
+      $sql .= "                         (SELECT 														";
+      $sql .= "                         	CASE 														";
+      $sql .= "                         	 WHEN substr(tor.k02_estorc,2,6) = '172136'					";
+      $sql .= "                         	 	THEN '495'||substr(tor.k02_estorc,2,6)||'%'				";
+      $sql .= "                         	 ELSE '495'||substr(tor.k02_estorc,2,8)||'%'				";
+      $sql .= "                         	END 														";
+      $sql .= "                          FROM tabrec t 													";
+      $sql .= "                          INNER JOIN taborc tor ON t.k02_codigo = tor.k02_codigo 		";
+      $sql .= "                          WHERE tor.k02_anousu = ".db_getsession("DB_anousu")."			";
+      $sql .= "                              AND t.k02_codigo = {$k02_codigo}) LIMIT 1 					";
+
+//      Consulta antiga, substituida pela consulta atual (ver acima)
+//      $sql = " select tt.k02_codigo as k02_codigo, k02_descr, o70_codigo " ;
+//      $sql .= "  from tabrec tt inner join taborc ttor on tt.k02_codigo = ttor.k02_codigo ";
+//      $sql .= " inner join orcreceita on ttor.k02_codrec = o70_codrec and ttor.k02_anousu = o70_anousu ";
+//      $sql .= " where ttor.k02_anousu = ".db_getsession("DB_anousu")."  and ttor.k02_estorc like (select '495'||substr(tor.k02_estorc,2,6)||'%' ";
+//      $sql .= "    from tabrec t inner join taborc tor on t.k02_codigo = tor.k02_codigo ";
+//      $sql .= "    where tor.k02_anousu = ".db_getsession("DB_anousu")."  and t.k02_codigo = {$k02_codigo} ) limit 1 ";
+
       return $sql;
     }
     return "";
   }
-  
+
 
 }
 ?>
