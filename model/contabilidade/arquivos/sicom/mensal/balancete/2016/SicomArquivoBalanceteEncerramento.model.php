@@ -1220,9 +1220,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
                                     o58_orgao,o58_unidade
-                                    from conlancamval
-                                    inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
-                                    inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
+                                    from  contacorrentedetalhe 
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
                                     inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
@@ -1233,8 +1231,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
                                     inner JOIN orctiporec ON o58_codigo = o15_codigo
                                     left join infocomplementaresinstit on  o58_instit = si09_instit
-                                    where (c69_credito IN (" . implode(',', $oContas10->contas) . ") OR c69_debito IN (" . implode(',', $oContas10->contas) . "))
-                                    and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
+                                    where c19_reduz IN (" . implode(',', $oContas10->contas) . " )
+                                    and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") ;
 
                 $rsRestos = db_query($sSqlRestos) or die($sSqlRestos);
 

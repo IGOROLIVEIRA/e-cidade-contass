@@ -1,4 +1,6 @@
 <?php
+// ini_set('display_errors','On');
+// error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2013  DBselller Servicos de Informatica             
@@ -549,7 +551,7 @@ try {
                 $sErroMessage = "ERRO [ 2 ] - Conta sem saldo a ser distribuído.";
                 throw new BusinessException($sErroMessage);
             }
-
+           
             /*
              * buscamos os detalhes das contas pelo estrutural
              * deve retornar as contas que ainda não foram incluidas na
@@ -591,6 +593,8 @@ try {
             $iTroca = 0;
             switch ($iCorrente) {
                 case 106:
+                    db_inicio_transacao();
+                    
                     if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321") {
                         $iTroca = 1;
                         $iAnousuEmp = db_getsession('DB_anousu') - 1;
@@ -600,19 +604,21 @@ try {
                                             c17_descricao,
                                             e60_numemp,
                                             e60_codemp,
-                                            e60_anousu
-                         from conlancamval
-                                    inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
-                                    inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
+                                            e60_anousu,
+                                            c19_estrutural,
+                                            c19_orcdotacao,
+                                            c19_orcdotacaoanousu
+                         from contacorrentedetalhe 
                                     inner join contacorrente on c19_contacorrente = c17_sequencial
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join empelemento on e64_numemp = e60_numemp
                                     inner join empresto on e91_numemp = e60_numemp
                         where c19_contacorrente = {$iCorrente}
-                            and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu') . "
+                            and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = {$iAnousuEmp}
                             and c19_instit = " . db_getsession('DB_instit') . "
-                            and DATE_PART('YEAR',c69_data) = {$iAnousuEmp} and DATE_PART('MONTH',c69_data) <= {$nMes}
-                            union
+                           
+                            ";
+                        /*   union
                             SELECT c19_sequencial,
                                    c17_descricao,
                                    e60_numemp,
@@ -621,8 +627,9 @@ try {
                             FROM contacorrentedetalhe
                             INNER JOIN contacorrente ON c19_contacorrente = c17_sequencial
                             INNER JOIN empempenho ON e60_numemp = c19_numemp
-                            WHERE c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu');
+                            WHERE c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu')*/
                         $rsLancamentos = db_query($sSqlLancamentos);
+                        //db_criatabela($rsLancamentos);
                         $aLancamento = db_utils::getColectionByRecord($rsLancamentos);
                         $aDadosAgrupados = array();
                         foreach ($aLancamento as $oLancamentos) {
@@ -756,14 +763,49 @@ try {
 
                             $nSaldoInicial = $saldoanterior + $debitos - $creditos;
                             $nSaldoFinal = $nSaldoInicial + $debitosencerramento - $creditosencerramento;//saldo a ser implantado
+                            $iContaCorrenteDetalhe = 0;
+                            $oDaoCCDetalhe = db_utils::getDao("contacorrentedetalhe");
+                            $sWhereCCDetalhe  = " c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . " and c19_reduz = {$iReduzido} ";
+                            $sWhereCCDetalhe .= " and c19_contacorrente = {$iCorrente} and c19_numemp = {$oLancamentos->e60_numemp} ";
+                            $sSqlCCDetalhe = $oDaoCCDetalhe->sql_query_file(null, " c19_sequencial ",null, $sWhereCCDetalhe);
+                            
+                            $rsCCDetalhe = $oDaoCCDetalhe->sql_record($sSqlCCDetalhe);
+                            $iContaCorrenteDetalhe = db_utils::fieldsMemory($rsCCDetalhe, 0)->c19_sequencial;
+                              
+                            //verifica se existe ccdetalhe para o anouso se não existir cria um novo.
+                            if($iContaCorrenteDetalhe == null || $iContaCorrenteDetalhe == '0'){                               
 
-                            $hash = $oLancamentos->c19_sequencial;
+                                //$oDaoCCDetalhe->c19_sequencial          =;
+                                $oDaoCCDetalhe->c19_contacorrente       = $iCorrente;
+                                $oDaoCCDetalhe->c19_instit              = db_getsession("DB_instit");
+                                $oDaoCCDetalhe->c19_reduz               = $iReduzido;
+                                $oDaoCCDetalhe->c19_numemp              = $oLancamentos->e60_numemp;
+                                $oDaoCCDetalhe->c19_conplanoreduzanousu = db_getsession("DB_anousu");
+                                $oDaoCCDetalhe->c19_estrutural          = $oLancamentos->c19_estrutural;
+                                $oDaoCCDetalhe->c19_orcdotacao          = $oLancamentos->c19_orcdotacao;
+                                $oDaoCCDetalhe->c19_orcdotacaoanousu    = $oLancamentos->c19_orcdotacaoanousu;
+
+                                $oDaoCCDetalhe->incluir(null);
+                                if ($oDaoCCDetalhe->erro_status == 0 || $oDaoCCDetalhe->erro_status == '0') {
+                                    throw new DBException('ERRO - [ 1 ] - Incluindo Detalhe de Conta Corrente : ' . $oDaoCCDetalhe->erro_msg);
+                                }
+
+                                $oDaoCCDetalhe = db_utils::getDao("contacorrentedetalhe");
+                                $sWhereCCDetalhe  = " c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . " and c19_reduz = {$iReduzido} ";
+                                $sWhereCCDetalhe .= " and c19_contacorrente = {$iCorrente} and c19_numemp = {$oLancamentos->e60_numemp} ";
+                                $sSqlCCDetalhe = $oDaoCCDetalhe->sql_query_file(null, " c19_sequencial ",null, $sWhereCCDetalhe);
+                                $rsCCDetalhe = $oDaoCCDetalhe->sql_record($sSqlCCDetalhe);
+                                $iContaCorrenteDetalhe = db_utils::fieldsMemory($rsCCDetalhe, 0)->c19_sequencial;
+                                
+                            }
+                           
+                            $hash = $iContaCorrenteDetalhe;
 
                             if (!isset($aDadosAgrupados[$hash])) {
 
                                 $oMovimento = new stdClass();
 
-                                $oMovimento->c19_sequencial = $oLancamentos->c19_sequencial;
+                                $oMovimento->c19_sequencial = $iContaCorrenteDetalhe;
                                 $oMovimento->c17_descricao = $oLancamentos->c17_descricao;
                                 $oMovimento->e60_codemp = $oLancamentos->e60_codemp;
                                 $oMovimento->e60_anousu = $oLancamentos->e60_anousu;
@@ -773,7 +815,7 @@ try {
                             }
 
                         }
-
+                        //echo "<pre>";print_r($aDadosAgrupados);exit;
                         db_query('drop table if exists omov; create table omov ( c19_sequencial integer, c17_sequencial integer, c17_contacorrente varchar,c17_descricao varchar, e60_codemp integer, e60_anousu integer, c69_valor float);') or die(pg_last_error());
                         foreach ($aDadosAgrupados as $oMov) {
                             db_query("insert into omov values ({$oMov->c19_sequencial},106,'CC 106','{$oMov->c17_descricao}',{$oMov->e60_codemp},{$oMov->e60_anousu}, {$oMov->c69_valor});") or die(pg_last_error());
@@ -799,7 +841,9 @@ try {
 								e60_codemp,
 								e60_anousu ";
                     }
+                    db_fim_transacao(false);
                     break;
+                    
                 case 103:
 
                     $iTroca = 1;
