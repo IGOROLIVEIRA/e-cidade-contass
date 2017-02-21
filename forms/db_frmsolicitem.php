@@ -523,7 +523,13 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
               <td><strong>Serviço Controlado por Quantidades: </strong></td>
               <td>
                 <?php
-                  $aOpcoes = array("false"=>"NÃO","true"=>"SIM");
+
+                 if(substr($o56_elemento,0,7) == '3449052'){
+                     $aOpcoes = array("true"=>"SIM");
+                 }else{
+                     $aOpcoes = array("false"=>"NÃO","true"=>"SIM");
+                 }
+
                   db_select('pc11_servicoquantidade',$aOpcoes,true, $db_opcao,"onchange='js_habilitaCamposServico(this.value);'");
                 ?>
               </td>
@@ -1279,30 +1285,50 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 
     $pc11_servicoquantidade = db_utils::fieldsMemory($rsServicoQuantidade, 0)->pc11_servicoquantidade;
 
-    if ($pc11_servicoquantidade == 't') {
+    if(substr($o56_elemento,0,7) == '3449052'){
 
-      echo "<script>                                                                   ";
-      echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
-      echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
-      echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
-      echo "  $('pc17_unid') .style.visibility           = 'visible';                  ";
-      //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
+        echo "<script>                                                                   ";
+        echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
+        echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
+        echo "  $('pc17_unid') .style.visibility           = 'visible';                  ";
+        //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
 
-      echo "  if (document.form1.pc11_servicoquantidade.value == 'true') {  ";
-      echo "     document.form1.pc11_quant.readOnly=false;                  ";
-      echo "     document.form1.pc11_quant.style.backgroundColor='#FFFFFF'; ";
-      echo "  }                                                             ";
+        echo "  if (document.form1.pc11_servicoquantidade.value == 'true') {  ";
+        echo "     document.form1.pc11_quant.readOnly=false;                  ";
+        echo "     document.form1.pc11_quant.style.backgroundColor='#FFFFFF'; ";
+        echo "  }                                                             ";
 
-      echo "</script>                                                                  ";
+        echo "</script>                                                                  ";
 
-    } else {
 
-      echo "<script>                                                                   ";
-      echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
-      echo "  $('pc11_servicoquantidade').options[0]     = new Option('NÃO', 'false'); ";
-      echo "  $('pc11_servicoquantidade').options[1]     = new Option('SIM', 'true');  ";
-      //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
-      echo "</script>                                                                  ";
+    }else{
+
+        if ($pc11_servicoquantidade == 't') {
+
+          echo "<script>                                                                   ";
+          echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
+          echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
+          echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
+          echo "  $('pc17_unid') .style.visibility           = 'visible';                  ";
+          //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
+
+          echo "  if (document.form1.pc11_servicoquantidade.value == 'true') {  ";
+          echo "     document.form1.pc11_quant.readOnly=false;                  ";
+          echo "     document.form1.pc11_quant.style.backgroundColor='#FFFFFF'; ";
+          echo "  }                                                             ";
+
+          echo "</script>                                                                  ";
+
+        } else {
+
+          echo "<script>                                                                   ";
+          echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
+          echo "  $('pc11_servicoquantidade').options[0]     = new Option('NÃO', 'false'); ";
+          echo "  $('pc11_servicoquantidade').options[1]     = new Option('SIM', 'true');  ";
+          //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
+          echo "</script>                                                                  ";
+        }
+
     }
 
   }
