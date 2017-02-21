@@ -123,7 +123,7 @@ class cl_pessoaflpgo102017 {
       $this->erro_status = "0";
       return false;
     }
-    if($this->si193_indsexo == null ){
+    if(trim($this->si193_indsexo) == null && strlen($this->si193_nrodocumento) == 11){
       $this->erro_sql = " Campo Indica o sexo não informado.". $this->si193_nrodocumento;
       $this->erro_campo = "si193_indsexo";
       $this->erro_banco = "";
@@ -132,7 +132,7 @@ class cl_pessoaflpgo102017 {
       $this->erro_status = "0";
       return false;
     }
-    if($this->si193_datanascimento == null ){
+    if($this->si193_datanascimento == null && strlen($this->si193_nrodocumento) == 11){
       $this->erro_sql = " Campo Data de nascimento não informado.";
       $this->erro_campo = "si193_datanascimento_dia";
       $this->erro_banco = "";
@@ -218,8 +218,8 @@ class cl_pessoaflpgo102017 {
                                ,$this->si193_tiporegistro 
                                ,$this->si193_tipodocumento 
                                ,'$this->si193_nrodocumento' 
-                               ,'$this->si193_nome' 
-                               ,'$this->si193_indsexo' 
+                               ,'$this->si193_nome'
+                               ,".($this->si193_indsexo == "null" || $this->si193_indsexo == ""?"null":"'".$this->si193_indsexo."'")."
                                ,".($this->si193_datanascimento == "null" || $this->si193_datanascimento == ""?"null":"'".$this->si193_datanascimento."'")." 
                                ,$this->si193_tipocadastro 
                                ,'$this->si193_justalteracao' 
@@ -350,7 +350,7 @@ class cl_pessoaflpgo102017 {
     if(trim($this->si193_indsexo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si193_indsexo"])){
       $sql  .= $virgula." si193_indsexo = '$this->si193_indsexo' ";
       $virgula = ",";
-      if(trim($this->si193_indsexo) == null ){
+      if(trim($this->si193_indsexo) == null && strlen($this->si193_nrodocumento) == 11){
         $this->erro_sql = " Campo Indica o sexo não informado.";
         $this->erro_campo = "si193_indsexo";
         $this->erro_banco = "";
