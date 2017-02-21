@@ -5,7 +5,7 @@ require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_lqd102017_classe.php");
 require_once("classes/db_lqd112017_classe.php");
 require_once("classes/db_lqd122017_classe.php");
-require_once("");
+require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarLQD.model.php");
 
 /**
  * Detalhamento da liquidação da despesa Sicom Acompanhamento Mensal

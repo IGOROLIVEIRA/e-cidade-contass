@@ -56,10 +56,10 @@ class GerarALQ extends GerarAM
         $aCSVALQ10['si121_codorgao']              = $this->padLeftZero($aALQ10['si121_codorgao'], 2);
         $aCSVALQ10['si121_codunidadesub']         = $this->padLeftZero($aALQ10['si121_codunidadesub'], 5);
         $aCSVALQ10['si121_nroempenho']            = substr($aALQ10['si121_nroempenho'], 0, 22);
-        $aCSVALQ10['si121_dtempenho']             = $this->sicomDate($aALQ10['si121_dtempenho');
-        $aCSVALQ10['si121_dtliquidacao']          = $this->sicomDate($aALQ10['si121_dtliquidacao');
+        $aCSVALQ10['si121_dtempenho']             = $this->sicomDate($aALQ10['si121_dtempenho']);
+        $aCSVALQ10['si121_dtliquidacao']          = $this->sicomDate($aALQ10['si121_dtliquidacao']);
         $aCSVALQ10['si121_nroliquidacao']         = substr($aALQ10['si121_nroliquidacao'], 0, 22);
-        $aCSVALQ10['si121_dtanulacaoliq']         = $this->sicomDate($aALQ10['si121_dtanulacaoliq');
+        $aCSVALQ10['si121_dtanulacaoliq']         = $this->sicomDate($aALQ10['si121_dtanulacaoliq']);
         $aCSVALQ10['si121_nroliquidacaoanl']      = substr($aALQ10['si121_nroliquidacao'], 0, 22);
         $aCSVALQ10['si121_tpliquidacao']          = $this->padLeftZero($aALQ10['si121_tpliquidacao'], 1);
         $aCSVALQ10['si121_justificativaanulacao'] = substr($aALQ10['si121_justificativaanulacao'], 0, 500);
