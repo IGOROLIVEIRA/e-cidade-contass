@@ -284,6 +284,7 @@ db_app::load("estilos.css, grid.style.css");
   iElementoDotacao = '';
   iCasasDecimais = <?=$iCasasDecimais?>;
   sTipoOrigem = null;
+  desabilitaDotacao = false;
   
   function js_pesquisaac20_acordo(mostra) {
     
@@ -902,7 +903,7 @@ db_app::load("estilos.css, grid.style.css");
     sContent += "    </tr>";
     sContent += "    <tr>";
     sContent += "     <td colspan='4' style='text-align:center'>";
-    sContent += "       <input type='button' value='Salvar' id='btnSalvarDotacao'>";
+    sContent += "       <input type='button' value='Salvar' id='btnSalvarDotacao' "+(desabilitaDotacao==true?"disabled='disabled'":"")+">";
     sContent += "     </td>";
     sContent += "    </tr>";
     sContent += "  </table>";
@@ -1028,7 +1029,7 @@ db_app::load("estilos.css, grid.style.css");
       aLinha[0] = oRow.dotacao;
       aLinha[1] = oRow.quantidade;
       aLinha[2] = js_formatar(oRow.valor, 'f');
-      aLinha[3] = "<input type='button' value='E' onclick='js_excluirDotacao(" + oRow.dotacao + ")' style='width:100%'>";
+      aLinha[3] = "<input type='button' value='E' onclick='js_excluirDotacao(" + oRow.dotacao + ")' "+(desabilitaDotacao==true?"disabled='disabled'":"")+" style='width:100%'>";
       oGridDotacoes.addRow(aLinha);
     });
     oGridDotacoes.renderRows();
@@ -2092,7 +2093,12 @@ db_app::load("estilos.css, grid.style.css");
       alert(oRetorno.message.urlDecode());
       return false;
     }
-    
+    /**
+     * Se for Origem Licitacao, os botoes excluir e salvar da Dotacao devem estar desabilitados
+     */
+    if (oRetorno.iTipoAcordo == 2) {
+      desabilitaDotacao = true;
+    }
     //Caso Tipo Empenho, verificar os itens ainda não vinculados ao contrato
     if (oRetorno.iTipoAcordo == 6) {
       js_carregaItensEmpenho();

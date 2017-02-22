@@ -405,6 +405,8 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 
    if (sizeof($arr_numerl) > 1) {
         $numerl = db_formatar($arr_numerl[0],"s","0",strlen($arr_numerl[0])+1,"e",0)."/".$arr_numerl[1];
+        $pdf1->edital_licitacao = $arr_numerl[0];
+        $pdf1->ano_licitacao    = $arr_numerl[1];
    } else {
         if (sizeof($arr_numerl) == 1){
 	     $numerl = $arr_numerl[0];
@@ -413,7 +415,7 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 	}
    }
 
-   $pdf1->num_licitacao    = $numerl;
+   //$pdf1->num_licitacao    = $l03_codcom." - ".$l03_descr;
    $pdf1->descr_tipocompra = $pc50_descr;
    $pdf1->orgao            = $o58_orgao;
    $pdf1->descr_orgao      = $o40_descr;
@@ -424,8 +426,8 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
    $pdf1->dataatual        = db_dataextenso(db_strtotime(db_getsession("DB_datausu")));
    $pdf1->resumo_item      = "e55_descr";
 
-   $pdf1->edital_licitacao     = '';
-   $pdf1->ano_licitacao        = '';
+   // $pdf1->edital_licitacao     = '';
+   // $pdf1->ano_licitacao        = '';
    $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct l20_edital, l20_anousu, l20_objeto,l03_descr",null,"e55_autori = $e54_autori "));
    if ($clempautitem->numrows>0){
       db_fieldsmemory($result_licita,0);
@@ -469,9 +471,10 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
    } else {
         // autorização manual
 	// seleciona o tipo de licitação
-	$rpc = db_query("select l03_descr from cflicita where l03_codcom=$e54_codcom and l03_tipo='$e54_tipol'");
+	$rpc = db_query("select l03_codigo,l03_descr from cflicita where l03_codcom=$e54_codcom and l03_tipo='$e54_tipol'");
 	if (pg_numrows($rpc) > 0 ){
-           $pdf1->descr_licitacao = pg_result($rpc,0,0);
+           $pdf1->num_licitacao   = pg_result($rpc,0,0);
+           $pdf1->descr_licitacao = pg_result($rpc,0,1);
 
 	} else {
      	   $pdf1->descr_licitacao = $pc50_descr;

@@ -279,6 +279,16 @@ var sUrlRpc = 'con4_contratosmovimentacoesfinanceiras.RPC.php';
  */
 var iPosicaoAtual = 0;
 
+/**
+ * Quantidade de casas decimais para tratar
+ */
+ var iCasasDecimais = 2;
+
+/**
+ * verificar se o contrato vem de licitacao
+ */
+var VerificaLicitacao = false;
+
 function js_pesquisaCaracteristicaPeculiar(lMostra) {
 
   if (lMostra == true) {
@@ -470,23 +480,35 @@ function js_retornoGetItensPosicao(oAjax) {
 
   js_removeObj("msgbox");
   var oRetorno  = eval("("+oAjax.responseText+")");
+  
+  if (oRetorno.iOrigemContrato == 2) { 
+    verificaLicitacao = true;
+    $('e54_codcom').value      = oRetorno.pc50_codcom;
+    $('e54_codcomdescr').value = oRetorno.pc50_codcom;
+    tipoLic  = oRetorno.l03_tipo;
+    $('e54_numerl').value = oRetorno.iEdital+'/'+oRetorno.iAnoLicitacao;
+    js_buscarTipoLicitacao(oRetorno.pc50_codcom);
+  }
+  iCasasDecimais = oRetorno.iCasasDecimais;
+
   aItensPosicao = oRetorno.itens;
   oGridItens.clearAll(true);
   aItensPosicao.each(function (oItem, iSeq) {
+
     oItem.dotacoes.each( function (oDotItem) {
-       oDotItem.quantidade -= (oDotItem.executado/oItem.valorunitario);
+       oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,iCasasDecimais);
        oDotItem.quantdot = oDotItem.quantidade;
      });
 
      var nQtdeAut  = oItem.saldos.quantidadeautorizar;
-     var nValorAut = js_formatar(oItem.saldos.valorautorizar, "f");
+     var nValorAut = js_formatar(oItem.saldos.valorautorizar, "f",iCasasDecimais);
 
      aLinha    = new Array();
      aLinha[0] = oItem.codigomaterial;
      aLinha[1] = oItem.material.urlDecode();
-     aLinha[2] = js_formatar(oItem.quantidade, 'f');
+     aLinha[2] = js_formatar(oItem.quantidade, 'f',iCasasDecimais);
      aLinha[3] = oItem.valorunitario;
-     aLinha[4] = js_formatar(oItem.valortotal, 'f');
+     aLinha[4] = js_formatar(oItem.valortotal, 'f',iCasasDecimais);
      /**
        * Caso for serviço e o mesmo não for controlado por quantidade, setamos a sua quantidade para 1
       */
@@ -555,7 +577,7 @@ function js_bloqueiaDigitacao(object, lFormata) {
   object.style.border     ='1px';
   object.style.fontWeight = "normal";
   if (lFormata) {
-    object.value            = js_formatar(object.value,'f');
+    object.value            = js_formatar(object.value,'f',iCasasDecimais);
   }
 
 }
@@ -602,8 +624,8 @@ function js_calculaValor(obj, iLinha, lVerificaDot) {
   } else {
 
     var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue());
-    aLinha.aCells[7].content.setValue(js_formatar(new String(nValorTotal), "f"));
-    $("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f");
+    aLinha.aCells[7].content.setValue(js_formatar(new String(nValorTotal), "f",iCasasDecimais));
+    $("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
   }
   js_salvarInfoDotacoes(iLinha, lVerificaDot);
 }
@@ -643,17 +665,16 @@ function js_ajusteDotacao(iLinha) {
   $('btnSalvarInfoDot').observe("click", function() {
 
      var nTotalDotacoes = oGridDotacoes.sum(3, false);
-     if (nTotalDotacoes != js_strToFloat(oDadosItem.aCells[7].getValue())) {
-
+     if (js_round(nTotalDotacoes, iCasasDecimais) != js_strToFloat(oDadosItem.aCells[7].getValue())) {
        alert('o Valor Total das Dotações não conferem com o total que está sendo autorizado no item!');
        return false;
      }
      aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
-        var nValue = js_strToFloat(oGridDotacoes.aRows[iDot].aCells[3].getValue());
+        var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(),"f",iCasasDecimais));
         oDotacao.valorexecutar = nValue;
 
-        var nQuant = js_strToFloat(oGridDotacoes.aRows[iDot].aCells[2].getValue());
+        var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(),"f",iCasasDecimais));
         oDotacao.quantidade = nQuant;
      });
      oGridItens.aRows[iLinha].select(true);
@@ -673,10 +694,10 @@ function js_ajusteDotacao(iLinha) {
   var nValorTotal     = nValor;
   aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
-     nValorDotacao = js_formatar(oDotacao.valorexecutar, "f");
+     nValorDotacao = js_formatar(oDotacao.valorexecutar, "f",iCasasDecimais);
      aLinha    = new Array();
      aLinha[0] = "<a href='#' onclick='js_mostraSaldo("+oDotacao.dotacao+");return false'>"+oDotacao.dotacao+"</a>";
-     aLinha[1] = js_formatar(oDotacao.saldodotacao, "f");
+     aLinha[1] = js_formatar(oDotacao.saldodotacao, "f",iCasasDecimais);
      
      aLinha[2] = eval("quantdot"+iDot+" = new DBTextField('quantdot"+iDot+"','quantdot"+iDot+"','"+oDotacao.quantidade+"')");
      aLinha[2].addStyle("text-align","right");
@@ -733,12 +754,12 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
 
     if (aItensPosicao[iLinha].dotacoes.length > 1 && lAjustaDot==false) {
       var nQuantDot  = aItensPosicao[iLinha].dotacoes[iDot].quantidade;
-      aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorUnit*nQuantDot,2);
+      aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorUnit*nQuantDot,iCasasDecimais);
       return;
     }
 
     var nPercentual    = (new Number(oDotacao.quantidade) * 100)/nValorTotalItem;
-    var nValorDotacao  = js_round((nValor * nPercentual)/100,2);
+    var nValorDotacao  = js_round((nValor * nPercentual)/100,iCasasDecimais);
 
     nValorTotal        -= nValorDotacao;
     if (iDot == aItensPosicao[iLinha].dotacoes.length -1) {
@@ -747,7 +768,7 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
         nValorDotacao += nValorTotal;
       }
     }
-     aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorDotacao,2);
+     aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorDotacao,iCasasDecimais);
 
      if (aItensPosicao[iLinha].dotacoes.length == 1) {
        oDotacao.quantidade = nQuantAutorizar;
@@ -782,7 +803,7 @@ function js_ajustaQuantDot(Obj, iDot, iLinha) {
     oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
     Obj.value = nValorObjeto;
   } else {
-    oGridDotacoes.aRows[iDot].aCells[3].content.setValue(nQuant*Number(oDadosItem.aCells[4].getValue()));
+    oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_round(nQuant*Number(oDadosItem.aCells[4].getValue()),iCasasDecimais));
     $("valordot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[3].getValue();
   }
 }
@@ -914,9 +935,9 @@ function js_visualizarAutorizacoes(oAjax) {
         aLinha    = new Array();
         aLinha[0] = oItem.codigo;
         aLinha[1] = sImg+oItem.descricao.urlDecode();
-        aLinha[2] = js_formatar(oItem.quantidade, "f");
-        aLinha[3] = js_formatar(oItem.valorunitario, "f");
-        aLinha[4] = js_formatar(oItem.valor, "f");
+        aLinha[2] = js_formatar(oItem.quantidade, "f",iCasasDecimais);
+        aLinha[3] = js_formatar(oItem.valorunitario, "f",iCasasDecimais);
+        aLinha[4] = js_formatar(oItem.valor, "f",iCasasDecimais);
         oGridAutorizacoes.addRow(aLinha);
         iLinha++;
       });
@@ -985,9 +1006,9 @@ function js_processarAutorizacoes(lProcessar) {
        nValorDotacao += oDotacao.valorexecutar;
      });
 
-      oItem.valor   =  js_formatar(oItem.valor , 'f');
-      nValorDotacao =  js_formatar(nValorDotacao, 'f' );
-      nTotal        =  js_formatar(nTotal, 'f' );
+      oItem.valor   =  js_formatar(oItem.valor , 'f',iCasasDecimais);
+      nValorDotacao =  js_formatar(nValorDotacao, 'f',iCasasDecimais);
+      nTotal        =  js_formatar(nTotal, 'f',iCasasDecimais);
 
       if (nTotal.getNumber().valueOf() != nValorDotacao.getNumber().valueOf()) {
 
@@ -1106,7 +1127,12 @@ function js_preencheTipoLicitacao(oAjax) {
 
             $('e54_tipol').innerHTML        += "<option value='" + oItem.l03_tipo + "'>" + oItem.l03_tipo + "</option>";
             $('e54_tipoldescr').innerHTML   += "<option value='" + oItem.l03_tipo + "'>" + oItem.l03_descr + "</option>";
-
+            
+            if(verificaLicitacao == true) {
+              $('e54_tipol').value = tipoLic;
+              $('e54_tipoldescr').value = tipoLic;
+              js_desabilitaCamposLicitacao();
+            }
         });
     } else {
 
@@ -1119,6 +1145,20 @@ function js_preencheTipoLicitacao(oAjax) {
         $('e54_numerl').value  = "";
         //me.oTipoLicitacao.setDisable();
     }
+}
+
+function js_desabilitaCamposLicitacao() {
+
+  $('e54_numerl').setAttribute('readOnly',true);
+  $('e54_tipol').setAttribute('disabled',true);
+  $('e54_tipoldescr').setAttribute('disabled',true);
+  $('e54_codcom').setAttribute('disabled',true);
+  $('e54_codcomdescr').setAttribute('disabled',true);
+  $('e54_numerl').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+  $('e54_tipol').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+  $('e54_tipoldescr').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+  $('e54_codcom').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+  $('e54_codcomdescr').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
 }
 
 js_main();

@@ -160,6 +160,20 @@ switch($oParam->exec) {
 
       $oContrato = $_SESSION["oContrato"];
       $aItens    = array();
+      
+      $oRetorno->iCasasDecimais = 2;
+      $oRetorno->iOrigemContrato      = $oContrato->getOrigem();
+      if ($oRetorno->iOrigemContrato == 2) {
+        $aLicitacoesVinculadas = $oContrato->getLicitacoes();
+        $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+        $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
+        $oRetorno->iEdital              = $oStdDados->l20_edital;
+        $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
+        $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+        $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
+        $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+      }
+
       foreach ($oContrato->getPosicoes() as $oPosicaoContrato) {
 
         if ($oPosicaoContrato->getCodigo() == $oParam->iPosicao) {
@@ -176,6 +190,11 @@ switch($oParam->exec) {
               $oItemRetorno->valortotal          = $oItem->getValorTotal();
               $oItemRetorno->quantidade          = $oItem->getQuantidade();
               $oItemRetorno->lControlaQuantidade = $oItem->getControlaQuantidade();
+
+              $aCasasDecimais = explode(".", $oItemRetorno->valorunitario);
+              if (count($aCasasDecimais) > 1 && strlen($aCasasDecimais[1]) > 2) {
+                $oRetorno->iCasasDecimais = 3;
+              }
 
               foreach ($oItem->getDotacoes() as $oDotacao) {
 
