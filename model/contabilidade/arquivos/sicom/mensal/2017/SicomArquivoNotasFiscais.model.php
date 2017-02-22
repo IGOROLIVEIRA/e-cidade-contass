@@ -177,7 +177,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-      $sHash10 = $oDados10->codorgao . ltrim($oDados10->nfnumero, "0") . $oDados10->nfserie . $oDados10->tipodocumento . $oDados10->nrodocumento;
+      $sHash10 = $oDados10->codorgao . ltrim($oDados10->nfnumero, "0") . $this->removeCaracteres($oDados10->nfserie) . $oDados10->tipodocumento . $oDados10->nrodocumento;
       $sHash10 .= $oDados10->chaveacesso . $oDados10->dtemissaonf;
       
       if (!$aDadosAgrupados[$sHash10]) {
@@ -195,7 +195,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
           $clntf10->si143_nfnumero = $oDados10->nfnumero;
         }
 
-        $clntf10->si143_nfserie = $oDados10->nfserie;
+        $clntf10->si143_nfserie = $this->removeCaracteres($oDados10->nfserie);
         $clntf10->si143_tipodocumento = $oDados10->tipodocumento;
         $clntf10->si143_nrodocumento = $oDados10->nrodocumento;
         $clntf10->si143_nroinscestadual = preg_replace("/[^0-9]/", "", $oDados10->nroinscestadual);//is_int($oDados10->nroinsdestadual)== true? $oDados10->nroinsdestadual:' ';
@@ -333,9 +333,9 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       //orcdotacao pegar orgão e unidade
       $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);echo $sSql;echo pg_last_error();
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
-        
+
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-        $sHash20 = $oDados20->nfnumero . $oDados20->nfserie . $oDados20->tipodocumento . $oDados20->nrodocumento . $oDados20->chaveacesso . $oDados20->dtemissaonf;
+        $sHash20 = $oDados20->nfnumero . $this->removeCaracteres($oDados20->nfserie) . $oDados20->tipodocumento . $oDados20->nrodocumento . $oDados20->chaveacesso . $oDados20->dtemissaonf;
         $sHash20 .= $oDados20->codunidadesub . $oDados20->dtempenho . $oDados20->nroempenho . $oDados20->dtliquidacao . $oDados20->nroliquidacao;
         
         if (!$aDadosAgrupados[$sHash10]->reg20[$sHash20]) {
@@ -350,7 +350,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
           } else {
             $clntf20->si145_nfnumero = $oDados20->nfnumero;
           }
-          $clntf20->si145_nfserie = $oDados20->nfserie;
+          $clntf20->si145_nfserie = $this->removeCaracteres($oDados20->nfserie);
           $clntf20->si145_tipodocumento = $oDados20->tipodocumento;
           $clntf20->si145_nrodocumento = $oDados20->nrodocumento;
           $clntf20->si145_chaveacesso = $oDados20->chaveacesso;

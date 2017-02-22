@@ -206,7 +206,7 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
       $oDadosEmpenhoAnulado->si110_dtanulacao = $oEmpenhoAnulado->c70_data;
       $oDadosEmpenhoAnulado->si110_nroanulacao = $oEmpenhoAnulado->c70_codlan;
       $oDadosEmpenhoAnulado->si110_tipoanulacao = $oEmpenhoAnulado->tipoanulacao;
-      $oDadosEmpenhoAnulado->si110_especanulacaoempenho = utf8_decode(substr($oEmpenhoAnulado->c72_complem, 0, 200));
+      $oDadosEmpenhoAnulado->si110_especanulacaoempenho = utf8_decode(substr($this->removeCaracteres($oEmpenhoAnulado->c72_complem), 0, 200));
       $oDadosEmpenhoAnulado->si110_vlanulacao = $oEmpenhoAnulado->c70_valor;
       $oDadosEmpenhoAnulado->si110_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $oDadosEmpenhoAnulado->si110_instit = db_getsession("DB_instit");
