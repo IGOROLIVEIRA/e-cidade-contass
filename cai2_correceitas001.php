@@ -74,10 +74,11 @@ function js_emite(){
     cods += vir + var_if;
     vir = ",";
   }
+  vir = "";
   sReduzidos = "";
   oReduzidos = document.getElementById('contas').length;
   for(z=0;z<oReduzidos;z++){
-      sReduzido = document.getElementById('contas').options[y].value;
+      sReduzido = document.getElementById('contas').options[z].value;
       sReduzidos += vir + sReduzido;
       vir = ",";
   }
