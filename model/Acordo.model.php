@@ -1411,13 +1411,14 @@ class Acordo
             $oDaoAcordo->ac16_anousu = $this->getAno();
             /**
              * validamos a númeracao do acordo.
-             * não podera ser um numero menor ou igual ao maior numero de contrato do grupo,
+             * não podera ser um numero menor ou igual ao maior numero de contrato do grupo e do Tipo instrumento,
              * dentro da instiuição.
              */
             $sWhereNumeracao = "cast(ac16_numero as integer) = {$this->getNumero()} ";
             $sWhereNumeracao .= " and ac16_acordogrupo  = {$this->getGrupo()}  ";
             $sWhereNumeracao .= " and ac16_instit       = {$this->getInstit()} ";
             $sWhereNumeracao .= " and ac16_anousu       = {$this->getAno()} ";
+            $sWhereNumeracao .= " and ac16_acordocategoria = {$this->getCategoriaAcordo()} ";
             $sSqlValidaNumero = $oDaoAcordo->sql_query_file(null,
                 "ac16_numero,
                                                       ac16_sequencial",
