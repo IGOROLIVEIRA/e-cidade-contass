@@ -77,7 +77,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
       }
     }
 
-    if ($this->sDataFinal['5'] . $this->sDataFinal['6'] != 01) {
+//    if ($this->sDataFinal['5'] . $this->sDataFinal['6'] != 01) {
 
       $sSql = "select distinct case when length(z01_cgccpf) < 11 then lpad(z01_cgccpf, 11, '0') else z01_cgccpf end as z01_cgccpf,
                  z01_nome,
@@ -90,15 +90,15 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV
            and ( (z01_cadast between '{$this->sDataInicial}' and '{$this->sDataFinal}')
            or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') ) ";
 
-    } else {
-      $sSql = "select z01_cgccpf,
-           z01_nome,
-           z01_ultalt,
-           z01_obs,
-           z01_cadast
-          from cgm where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-          and (z01_cgccpf != '' and z01_cgccpf is not null)";
-    }
+//    } else {
+//      $sSql = "select z01_cgccpf,
+//           z01_nome,
+//           z01_ultalt,
+//           z01_obs,
+//           z01_cadast
+//          from cgm where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
+//          and (z01_cgccpf != '' and z01_cgccpf is not null)";
+//    }
 
     $rsResult = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
     $aPessoas = array();
