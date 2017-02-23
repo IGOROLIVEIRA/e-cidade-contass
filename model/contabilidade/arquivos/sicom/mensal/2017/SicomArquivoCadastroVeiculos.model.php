@@ -151,7 +151,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = " . db_getsession("DB_anousu") . "
                     INNER JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
                     LEFT JOIN infocomplementaresinstit ON si09_instit = db_depart.instit
-                    INNER JOIN cgm ON tipoveiculos.si04_numcgm = cgm.z01_numcgm
+                    LEFT JOIN cgm ON tipoveiculos.si04_numcgm = cgm.z01_numcgm
                     WHERE db_config.codigo =  " . db_getsession("DB_instit") . "
                     AND  DATE_PART('YEAR',veiculos.ve01_dtaquis) = " . db_getsession("DB_anousu") . "
                     AND  DATE_PART('MONTH',veiculos.ve01_dtaquis) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -186,7 +186,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
           }
           $nrodocumento = $oDados10->nrodocumento;
         } else {
-          $tipodocumento = ' ';
+          $tipodocumento = NULL;
           $nrodocumento = ' ';
         }
 

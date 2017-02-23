@@ -227,13 +227,13 @@ class cl_cvc102017
                                ,$this->si146_numerorenavam 
                                ,'$this->si146_nroserie' 
                                ,'$this->si146_situacao' 
-                               ,$this->si146_tipodocumento
+                               ,".($this->si146_tipodocumento == NULL ? 'NULL' : $this->si146_tipodocumento)."
                                ,'$this->si146_nrodocumento'
                                ,'$this->si146_tpdeslocamento' 
                                ,$this->si146_mes 
                                ,$this->si146_instit 
                       )";
-    $result = db_query($sql);
+    $result = db_query($sql) or die($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
