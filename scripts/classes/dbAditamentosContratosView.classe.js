@@ -845,6 +845,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             oItemAdicionar.quantidade = oItem.quantidade;
             oItemAdicionar.valorunitario = oItem.valorunitario;
             oItemAdicionar.valor = oItem.valor;
+            oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
+            oItemAdicionar.dtexecucaofim = oItem.periodofim;
 
             if (oSelecionados[iIndice] != undefined) {
 

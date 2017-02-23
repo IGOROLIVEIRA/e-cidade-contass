@@ -2426,8 +2426,8 @@ class Acordo
                     /**
                      * Verifica se houve alteração do período de execução do ítem.
                      */
-                    $sNovaDtExecucaoInicio = new DBDate(date("Y-m-d",$oItem->dtexecucaoinicio));
-                    $sNovaDtExecucaoFim = new DBDate(date("Y-m-d",$oItem->dtexecucaofim));
+                    $sNovaDtExecucaoInicio = new DBDate($oItem->dtexecucaoinicio);
+                    $sNovaDtExecucaoFim = new DBDate($oItem->dtexecucaofim);
                     if (($sNovaDtExecucaoInicio->getDate() != $aPeriodosItem[0]->dtDataInicial) || ($sNovaDtExecucaoFim->getDate() != $aPeriodosItem[0]->dtDataFinal)) {
                         $aPeriodosItem[0]->dtDataInicial = $sNovaDtExecucaoInicio->getDate();
                         $aPeriodosItem[0]->dtDataFinal = $sNovaDtExecucaoFim->getDate();
