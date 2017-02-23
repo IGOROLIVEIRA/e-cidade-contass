@@ -94,6 +94,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013)
+					 and z01_cadast >= '2013-01-01'
 
 					 union
 
@@ -115,6 +116,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013)
 					 and prefeitura = 't'
+					 and z01_cadast >= '2013-01-01'
 					 ";
 
     } else {
@@ -137,6 +139,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013)
+			  and z01_cadast >= '2013-01-01'
 
 		      UNION
 
@@ -145,7 +148,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		       ' ' as z01_sexo,
                z01_nasc,
 		       z01_ultalt,
-		       z01_obs,
+		       z01_obs,n
 		       z01_cadast
 		      from cgm
 		      inner join db_config on db_config.numcgm = z01_numcgm
@@ -154,13 +157,14 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102015)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102014)
 					 and z01_cgccpf not in (select si193_nrodocumento from pessoaflpgo102013)
+					 and z01_cadast >= '2013-01-01'
 		      ";
     }
 
     $rsResult  = db_query($sSql);//echo $sSql; db_criatabela($rsResult);exit;
     $aPessoas    =  array();
     $aCpfPessoas = array("00000000000","00000000000000","11111111111","11111111111111","22222222222","22222222222222","33333333333","33333333333333",
-        "44444444444","44444444444444","55555555555","55555555555555","66666666666","66666666666666","77777777777","77777777777777","88888888888","88888888888888",
+        "44444444444","4n4444444444444","55555555555","55555555555555","66666666666","66666666666666","77777777777","77777777777777","88888888888","88888888888888",
         "99999999999","99999999999999");
     $what = array("'","°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
 
