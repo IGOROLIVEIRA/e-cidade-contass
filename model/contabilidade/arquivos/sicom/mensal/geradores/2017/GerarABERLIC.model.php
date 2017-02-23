@@ -16,13 +16,13 @@ class GerarABERLIC extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "ABERLIC";
     $this->abreArquivo();
-    
+
     $sSql = "select * from aberlic102017 where si46_mes = " . $this->iMes . " and si46_instit=" . db_getsession("DB_instit");
     $rsABERLIC10 = db_query($sSql);
 
@@ -92,14 +92,14 @@ class GerarABERLIC extends GerarAM
         $aCSVABERLIC10['si46_destinacaoexclusiva']        = $this->padLeftZero($aABERLIC10['si46_destinacaoexclusiva'], 1);
         $aCSVABERLIC10['si46_subcontratacao']             = $this->padLeftZero($aABERLIC10['si46_subcontratacao'], 1);
         $aCSVABERLIC10['si46_limitecontratacao']          = $this->padLeftZero($aABERLIC10['si46_limitecontratacao'], 1);
-        
+
         $this->sLinha = $aCSVABERLIC10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsABERLIC11); $iCont2++) {
 
           $aABERLIC11 = pg_fetch_array($rsABERLIC11, $iCont2);
-          
+
           if ($aABERLIC10['si46_sequencial'] == $aABERLIC11['si47_reg10']) {
 
             $aCSVABERLIC11['si47_tiporegistro']           = $this->padLeftZero($aABERLIC11['si47_tiporegistro'], 2);
@@ -119,7 +119,7 @@ class GerarABERLIC extends GerarAM
         for ($iCont3 = 0; $iCont3 < pg_num_rows($rsABERLIC12); $iCont3++) {
 
           $aABERLIC12 = pg_fetch_array($rsABERLIC12, $iCont3);
-          
+
           if ($aABERLIC10['si46_sequencial'] == $aABERLIC12['si48_reg10']) {
 
             $aCSVABERLIC12['si48_tiporegistro']           = $this->padLeftZero($aABERLIC12['si48_tiporegistro'], 2);
@@ -129,7 +129,7 @@ class GerarABERLIC extends GerarAM
             $aCSVABERLIC12['si48_nroprocessolicitatorio'] = substr($aABERLIC12['si48_nroprocessolicitatorio'], 0, 12);
             $aCSVABERLIC12['si48_coditem']                = substr($aABERLIC12['si48_coditem'], 0, 15);
             $aCSVABERLIC12['si48_nroitem']                = substr($aABERLIC12['si48_nroitem'], -5);
-            
+
             $this->sLinha = $aCSVABERLIC12;
             $this->adicionaLinha();
 
@@ -140,7 +140,7 @@ class GerarABERLIC extends GerarAM
         for ($iCont4 = 0; $iCont4 < pg_num_rows($rsABERLIC13); $iCont4++) {
 
           $aABERLIC13 = pg_fetch_array($rsABERLIC13, $iCont4);
-          
+
           if ($aABERLIC10['si46_sequencial'] == $aABERLIC13['si49_reg10']) {
 
             $aCSVABERLIC13['si49_tiporegistro']           = $this->padLeftZero($aABERLIC13['si49_tiporegistro'], 2);
@@ -150,7 +150,7 @@ class GerarABERLIC extends GerarAM
             $aCSVABERLIC13['si49_nroprocessolicitatorio'] = substr($aABERLIC13['si49_nroprocessolicitatorio'], 0, 12);
             $aCSVABERLIC13['si49_nrolote']                = substr($aABERLIC13['si49_nrolote'], 0, 4);
             $aCSVABERLIC13['si49_coditem']                = substr($aABERLIC13['si49_coditem'], 0, 15);
-            
+
             $this->sLinha = $aCSVABERLIC13;
             $this->adicionaLinha();
 
@@ -161,7 +161,7 @@ class GerarABERLIC extends GerarAM
         for ($iCont5 = 0; $iCont5 < pg_num_rows($rsABERLIC14); $iCont5++) {
 
           $aABERLIC14 = pg_fetch_array($rsABERLIC14, $iCont5);
-          
+
           if ($aABERLIC10['si46_sequencial'] == $aABERLIC14['si50_reg10']) {
 
             $aCSVABERLIC14['si50_tiporegistro']           = $this->padLeftZero($aABERLIC14['si50_tiporegistro'], 2);
@@ -172,11 +172,12 @@ class GerarABERLIC extends GerarAM
             $aCSVABERLIC14['si50_nrolote']                = $aABERLIC14['si50_nrolote'] == 0 ? ' ' : substr($aABERLIC14['si50_nrolote'], 0, 4);
             $aCSVABERLIC14['si50_coditem']                = substr($aABERLIC14['si50_coditem'], 0, 15);
             $aCSVABERLIC14['si50_dtcotacao']              = $this->sicomDate($aABERLIC14['si50_dtcotacao']);
+            $aCSVABERLIC14['si50_vlrefpercentual']        = $this->sicomNumberReal($aABERLIC14['si50_vlrefpercentual'], 2);
             $aCSVABERLIC14['si50_vlcotprecosunitario']    = $this->sicomNumberReal($aABERLIC14['si50_vlcotprecosunitario'], 4);
             $aCSVABERLIC14['si50_quantidade']             = $this->sicomNumberReal($aABERLIC14['si50_quantidade'], 4);
             $aCSVABERLIC14['si50_vlminalienbens']         = $this->sicomNumberReal($aABERLIC14['si50_vlminalienbens'], 2);
 
-            
+
             $this->sLinha = $aCSVABERLIC14;
             $this->adicionaLinha();
           }
@@ -186,7 +187,7 @@ class GerarABERLIC extends GerarAM
         for ($iCont6 = 0; $iCont6 < pg_num_rows($rsABERLIC15); $iCont6++) {
 
           $aABERLIC15 = pg_fetch_array($rsABERLIC15, $iCont6);
-          
+
           if ($aABERLIC10['si46_sequencial'] == $aABERLIC15['si51_reg10']) {
 
             $aCSVABERLIC15['si51_tiporegistro']           = $this->padLeftZero($aABERLIC15['si51_tiporegistro'], 2);
@@ -197,7 +198,7 @@ class GerarABERLIC extends GerarAM
             $aCSVABERLIC15['si51_nrolote']                = substr($aABERLIC15['si51_nrolote'], 0, 4);
             $aCSVABERLIC15['si51_coditem']                = substr($aABERLIC15['si51_coditem'], 0, 15);
             $aCSVABERLIC15['si51_vlitem']                 = $this->sicomNumberReal($aABERLIC15['si51_vlitem'], 4);
-            
+
             $this->sLinha = $aCSVABERLIC15;
             $this->adicionaLinha();
           }
@@ -207,7 +208,7 @@ class GerarABERLIC extends GerarAM
         for ($iCont7 = 0; $iCont7 < pg_num_rows($rsABERLIC16); $iCont7++) {
 
           $aABERLIC16 = pg_fetch_array($rsABERLIC16, $iCont7);
-          
+
           if ($aABERLIC10['si46_sequencial'] == $aABERLIC16['si52_reg10']) {
 
             $aCSVABERLIC16['si52_tiporegistro']           = $this->padLeftZero($aABERLIC16['si52_tiporegistro'], 2);

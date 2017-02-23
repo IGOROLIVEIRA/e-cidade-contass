@@ -2,6 +2,7 @@
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_dclrf102017_classe.php");
+require_once ("classes/db_dclrf302017_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarDCLRF.model.php");
 
  /**
@@ -55,7 +56,8 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
    */
   public function gerarDados() {
 
-  	$cldclrf10 = new cl_dclrf102017();
+    $cldclrf10 = new cl_dclrf102017();
+  	$cldclrf30 = new cl_dclrf302017();
 
     db_inicio_transacao();
 
@@ -70,6 +72,16 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
       }
     }
 
+    /*
+     * excluir informacoes do mes selecionado registro 30
+     */
+    $result = $cldclrf30->sql_record($cldclrf30->sql_query(NULL,"*",NULL,"si178_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si178_instit = ".db_getsession("DB_instit") ));
+    if (pg_num_rows($result) > 0) {
+      $cldclrf30->excluir(NULL,"si178_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si178_instit = ".db_getsession("DB_instit"));
+      if ($cldclrf30->erro_status == 0) {
+        throw new Exception($cldclrf30->erro_msg);
+      }
+    }
 
     $sSql  = "SELECT si09_codorgaotce AS codorgao, si09_tipoinstit AS tipoinstit
               FROM infocomplementaresinstit
@@ -119,6 +131,35 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
           }
 
         }
+
+
+        // Registro 30
+
+        // @TODO
+        // configurar o SELECT corretamente
+        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{$this->sDataFinal['6']}' and si170_instit = ". db_getsession("DB_instit");
+
+        $rsResult30 = db_query($sSql);
+
+        for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
+
+          $cldclrf30 = new cl_dclrf102017();
+          $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
+
+          $cldclrf30->si178_tiporegistro              = 30;
+          $cldclrf30->si178_publiclrf                 = 0;
+          $cldclrf30->si178_dtpublicacaorelatoriolrf  = '0000-00-00';
+          $cldclrf30->si178_localpublicacao           = '';
+          $cldclrf30->si178_tpbimestre                = 0;
+          $cldclrf30->si178_mes                       = $this->sDataFinal['5'].$this->sDataFinal['6'];
+          $cldclrf30->si178_instit                    = db_getsession("DB_instit");
+          $cldclrf30->incluir(null);
+          if ($cldclrf30->erro_status == 0) {
+            throw new Exception($cldclrf30->erro_msg);
+          }
+
+        }
+
 
     db_fim_transacao();
 

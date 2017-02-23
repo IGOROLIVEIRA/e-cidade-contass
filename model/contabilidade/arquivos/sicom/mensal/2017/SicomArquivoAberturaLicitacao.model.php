@@ -157,7 +157,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
      * excluir informacoes do mes selecioado para evitar duplicacao de registros
      */
     db_inicio_transacao();
-    
+
     /**
      * registro 16
      */
@@ -282,7 +282,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        liclicita.l20_condicoespag AS formaPagamento,
        liclicita.l20_aceitabilidade AS criterioAceitabilidade,
        liclicita.l20_descontotab AS descontoTabela,
-       	(CASE liclicita.l20_tipojulg 
+       	(CASE liclicita.l20_tipojulg
     WHEN 3 THEN 1
     ELSE 2
       END) as processoPorLote,
@@ -311,7 +311,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
      * registro 10
      */
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
+
       $claberlic10 = new cl_aberlic102017();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
@@ -667,6 +667,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
           $oDados14->si50_reg10 = $claberlic10->si46_sequencial;// chave estrangeira
           $oDados14->si50_coditem = $oResult14->coditem;
           $oDados14->si50_dtcotacao = $oResult14->dtcotacao;
+          $oDados14->si50_vlrefpercentual = 0;
           $oDados14->si50_vlcotprecosunitario = $oResult14->vlcotprecosunitario;
           $oDados14->si50_quantidade = $oResult14->quantidade;
           $oDados14->si50_vlminalienbens = $oResult14->vlminalienbens;
@@ -694,6 +695,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
         $claberlic14->si50_reg10 = $oDadosAgrupados14->si50_reg10;// chave estrangeira
         $claberlic14->si50_coditem = $oDadosAgrupados14->si50_coditem;
         $claberlic14->si50_dtcotacao = $oDadosAgrupados14->si50_dtcotacao;
+        $claberlic14->si50_vlrefpercentual = $oDadosAgrupados14->si50_vlrefpercentual;
         $claberlic14->si50_vlcotprecosunitario = $oDadosAgrupados14->si50_vlcotprecosunitario;
         $claberlic14->si50_quantidade = $oDadosAgrupados14->si50_quantidade;
         $claberlic14->si50_vlminalienbens = $oDadosAgrupados14->si50_vlminalienbens;
@@ -874,7 +876,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
 
     db_fim_transacao();
-    
+
     $oGerarABERLIC = new GerarABERLIC();
     $oGerarABERLIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarABERLIC->gerarDados();

@@ -29,6 +29,7 @@ class cl_aberlic142017
   var $si50_dtcotacao_mes = null;
   var $si50_dtcotacao_ano = null;
   var $si50_dtcotacao = null;
+  var $si50_vlrefpercentual = 0;
   var $si50_vlcotprecosunitario = 0;
   var $si50_quantidade = 0;
   var $si50_vlminalienbens = 0;
@@ -37,21 +38,22 @@ class cl_aberlic142017
   var $si50_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si50_sequencial = int8 = sequencial 
-                 si50_tiporegistro = int8 = Tipo do  registro 
-                 si50_codorgaoresp = varchar(2) = Código do órgão responsável 
-                 si50_codunidadesubresp = varchar(8) = Código da unidade 
-                 si50_exerciciolicitacao = int8 = Exercício em que   foi instaurado 
-                 si50_nroprocessolicitatorio = varchar(12) = Número sequencial   do processo 
-                 si50_nrolote = int8 = Número do Lote 
-                 si50_coditem = int8 = Código do Item 
-                 si50_dtcotacao = date = Data da cotação 
-                 si50_vlcotprecosunitario = float8 = Valor de referência para a licitação 
-                 si50_quantidade = float8 = Quantidade do item 
-                 si50_vlminalienbens = float8 = Valor mínimo global 
-                 si50_mes = int8 = Mês 
-                 si50_reg10 = int8 = reg10 
-                 si50_instit = int8 = Instituição 
+                 si50_sequencial = int8 = sequencial
+                 si50_tiporegistro = int8 = Tipo do  registro
+                 si50_codorgaoresp = varchar(2) = Código do órgão responsável
+                 si50_codunidadesubresp = varchar(8) = Código da unidade
+                 si50_exerciciolicitacao = int8 = Exercício em que   foi instaurado
+                 si50_nroprocessolicitatorio = varchar(12) = Número sequencial   do processo
+                 si50_nrolote = int8 = Número do Lote
+                 si50_coditem = int8 = Código do Item
+                 si50_dtcotacao = date = Data da cotação
+                 si50_vlrefpercentual = float4 = Valor de referência, em percentual, para a licitação
+                 si50_vlcotprecosunitario = float8 = Valor de referência para a licitação
+                 si50_quantidade = float8 = Quantidade do item
+                 si50_vlminalienbens = float8 = Valor mínimo global
+                 si50_mes = int8 = Mês
+                 si50_reg10 = int8 = reg10
+                 si50_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -93,6 +95,7 @@ class cl_aberlic142017
           $this->si50_dtcotacao = $this->si50_dtcotacao_ano . "-" . $this->si50_dtcotacao_mes . "-" . $this->si50_dtcotacao_dia;
         }
       }
+      $this->si50_vlrefpercentual = ($this->si50_vlrefpercentual == "" ? @$GLOBALS["HTTP_POST_VARS"]["si50_vlrefpercentual"] : $this->si50_vlrefpercentual);
       $this->si50_vlcotprecosunitario = ($this->si50_vlcotprecosunitario == "" ? @$GLOBALS["HTTP_POST_VARS"]["si50_vlcotprecosunitario"] : $this->si50_vlcotprecosunitario);
       $this->si50_quantidade = ($this->si50_quantidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["si50_quantidade"] : $this->si50_quantidade);
       $this->si50_vlminalienbens = ($this->si50_vlminalienbens == "" ? @$GLOBALS["HTTP_POST_VARS"]["si50_vlminalienbens"] : $this->si50_vlminalienbens);
@@ -129,6 +132,9 @@ class cl_aberlic142017
     }
     if ($this->si50_dtcotacao == null) {
       $this->si50_dtcotacao = "null";
+    }
+    if ($this->si50_vlrefpercentual == null) {
+      $this->si50_vlrefpercentual = "0";
     }
     if ($this->si50_vlcotprecosunitario == null) {
       $this->si50_vlcotprecosunitario = "0";
@@ -198,38 +204,40 @@ class cl_aberlic142017
       return false;
     }
     $sql = "insert into aberlic142017(
-                                       si50_sequencial 
-                                      ,si50_tiporegistro 
-                                      ,si50_codorgaoresp 
-                                      ,si50_codunidadesubresp 
-                                      ,si50_exerciciolicitacao 
-                                      ,si50_nroprocessolicitatorio 
-                                      ,si50_nrolote 
-                                      ,si50_coditem 
-                                      ,si50_dtcotacao 
-                                      ,si50_vlcotprecosunitario 
-                                      ,si50_quantidade 
-                                      ,si50_vlminalienbens 
-                                      ,si50_mes 
-                                      ,si50_reg10 
-                                      ,si50_instit 
+                                       si50_sequencial
+                                      ,si50_tiporegistro
+                                      ,si50_codorgaoresp
+                                      ,si50_codunidadesubresp
+                                      ,si50_exerciciolicitacao
+                                      ,si50_nroprocessolicitatorio
+                                      ,si50_nrolote
+                                      ,si50_coditem
+                                      ,si50_dtcotacao
+                                      ,si50_vlrefpercentual
+                                      ,si50_vlcotprecosunitario
+                                      ,si50_quantidade
+                                      ,si50_vlminalienbens
+                                      ,si50_mes
+                                      ,si50_reg10
+                                      ,si50_instit
                        )
                 values (
-                                $this->si50_sequencial 
-                               ,$this->si50_tiporegistro 
-                               ,'$this->si50_codorgaoresp' 
-                               ,'$this->si50_codunidadesubresp' 
-                               ,$this->si50_exerciciolicitacao 
-                               ,'$this->si50_nroprocessolicitatorio' 
-                               ,$this->si50_nrolote 
-                               ,$this->si50_coditem 
+                                $this->si50_sequencial
+                               ,$this->si50_tiporegistro
+                               ,'$this->si50_codorgaoresp'
+                               ,'$this->si50_codunidadesubresp'
+                               ,$this->si50_exerciciolicitacao
+                               ,'$this->si50_nroprocessolicitatorio'
+                               ,$this->si50_nrolote
+                               ,$this->si50_coditem
                                ," . ($this->si50_dtcotacao == "null" || $this->si50_dtcotacao == "" ? "null" : "'" . $this->si50_dtcotacao . "'") . "
-                               ,$this->si50_vlcotprecosunitario 
-                               ,$this->si50_quantidade 
-                               ,$this->si50_vlminalienbens 
-                               ,$this->si50_mes 
-                               ,$this->si50_reg10 
-                               ,$this->si50_instit 
+                               ,$this->si50_vlrefpercentual
+                               ,$this->si50_vlcotprecosunitario
+                               ,$this->si50_quantidade
+                               ,$this->si50_vlminalienbens
+                               ,$this->si50_mes
+                               ,$this->si50_reg10
+                               ,$this->si50_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -351,6 +359,15 @@ class cl_aberlic142017
         $virgula = ",";
       }
     }
+
+    if (trim($this->si50_vlrefpercentual) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si50_vlrefpercentual"])) {
+      if (trim($this->si50_vlrefpercentual) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si50_vlrefpercentual"])) {
+        $this->si50_vlrefpercentual = "0";
+      }
+      $sql .= $virgula . " si50_vlrefpercentual = $this->si50_vlrefpercentual ";
+      $virgula = ",";
+    }
+
     if (trim($this->si50_vlcotprecosunitario) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si50_vlcotprecosunitario"])) {
       if (trim($this->si50_vlcotprecosunitario) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si50_vlcotprecosunitario"])) {
         $this->si50_vlcotprecosunitario = "0";
