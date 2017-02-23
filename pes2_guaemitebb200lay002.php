@@ -163,12 +163,14 @@ if($sqlerro == false){
                r38_liq as valorori      
            from ($sql) as x 
            order by r38_banco,r38_agenc, r38_conta ";
-    $result  = $clfolha->sql_record($sql1);
-    $numrows =  $clfolha->numrows;
+    $result = $clfolha->sql_record($sql1);
+
+    $numrows =  pg_num_rows($result);
 
     if($numrows > 0){
 
       $registro = 2;
+
       db_fieldsmemory($result,0);
 
       if(!is_writable("/tmp/")){
@@ -197,7 +199,7 @@ if($sqlerro == false){
       $quant_recurso = 0;
 
       for($i=0;$i<$numrows;$i++){
-	db_fieldsmemory($result,$i);
+	      db_fieldsmemory($result,$i);
 
 //        $rh34_codban    = $banco;
 //        $rh34_agencia   = $agenc;
@@ -211,37 +213,37 @@ if($sqlerro == false){
         }
 
         if($entrar == true || $pdf->gety() > $pdf->h - 30){
-          $pdf->addpage();
-   
+          //$pdf1->addpage();
+            //echo 'teste';exit;
           $head3 = "ARQUIVO PAGAMENTO FOLHA";
           $head5 = "SEQUENCIAL DO ARQUIVO  :  ".$sequenciaarqui;
           $head6 = "GERAÇÃO  :  ".db_formatar($datagera,"d").' AS '.$ahoradegeracao.' HS';
           $head7 = "PAGAMENTO:  ".db_formatar($datadeposit,"d");
           $head8 = 'BANCO : '.$rh34_codban.' - '.$db90_descr;
 
-          $pdf->setfont('arial','b',8);
-          $pdf->cell(15,$alt,$RLrh01_regist,1,0,"C",1);
-          $pdf->cell(15,$alt,$RLz01_numcgm,1,0,"C",1);
-          $pdf->cell(70,$alt,$RLz01_nome,1,0,"C",1);
-          $pdf->cell(20,$alt,$RLz01_cgccpf,1,0,"C",1);
-          $pdf->cell(20,$alt,$RLr38_liq,1,0,"C",1);
-          $pdf->cell(15,$alt,$RLr38_banco,1,0,"C",1);
-          $pdf->cell(15,$alt,$RLr38_agenc,1,0,"C",1);
-          $pdf->cell(20,$alt,$RLr38_conta,1,1,"C",1);
+          $pdf1->setfont('arial','b',8);
+          $pdf1->cell(15,$alt,$RLrh01_regist,1,0,"C",1);
+          $pdf1->cell(15,$alt,$RLz01_numcgm,1,0,"C",1);
+          $pdf1->cell(70,$alt,$RLz01_nome,1,0,"C",1);
+          $pdf1->cell(20,$alt,$RLz01_cgccpf,1,0,"C",1);
+          $pdf1->cell(20,$alt,$RLr38_liq,1,0,"C",1);
+          $pdf1->cell(15,$alt,$RLr38_banco,1,0,"C",1);
+          $pdf1->cell(15,$alt,$RLr38_agenc,1,0,"C",1);
+          $pdf1->cell(20,$alt,$RLr38_conta,1,1,"C",1);
           $entrar = false;
-          $pdf->ln(1);
+          $pdf1->ln(1);
         }
 
 
-        $pdf->setfont('arial','',7);
-        $pdf->cell(15,$alt,$r38_regist,1,0,"C",0);
-        $pdf->cell(15,$alt,$z01_numcgm,1,0,"C",0);
-        $pdf->cell(70,$alt,$z01_nome,1,0,"L",0);
-        $pdf->cell(20,$alt,$z01_cgccpf,1,0,"R",0);
-        $pdf->cell(20,$alt,db_formatar($r38_liq,'f'),1,0,"R",0);
-        $pdf->cell(15,$alt,$r38_banco,1,0,"C",0);
-        $pdf->cell(15,$alt,$r38_agenc,1,0,"R",0);
-        $pdf->cell(20,$alt,$r38_conta,1,1,"R",0);
+        $pdf1->setfont('arial','',7);
+        $pdf1->cell(15,$alt,$r38_regist,1,0,"C",0);
+        $pdf1->cell(15,$alt,$z01_numcgm,1,0,"C",0);
+        $pdf1->cell(70,$alt,$z01_nome,1,0,"L",0);
+        $pdf1->cell(20,$alt,$z01_cgccpf,1,0,"R",0);
+        $pdf1->cell(20,$alt,db_formatar($r38_liq,'f'),1,0,"R",0);
+        $pdf1->cell(15,$alt,$r38_banco,1,0,"C",0);
+        $pdf1->cell(15,$alt,substr($r38_agenc,0,strlen($r38_agenc)-1) .'-'. substr($r38_agenc,-1),1,0,"R",0);
+          $pdf1->cell(20,$alt,substr($r38_conta,0,strlen($r38_conta)-1) .'-'. substr($r38_conta,-1),1,1,"R",0);
 
         $totalquant ++;
        	$totalvalor += $r38_liq;
@@ -259,11 +261,11 @@ if($sqlerro == false){
       $sequencialbr120 ++;
       $pdf->setfont('arial','',7);
 
-      $pdf->setfont('arial','b',8);
-      $pdf->cell(100,$alt,'Totalização geral',"LTB",0,"R",1);
-      $pdf->cell(20,$alt,$totalquant,"TB",0,"R",1);
-      $pdf->cell(20,$alt,db_formatar($totalvalor,"f"),"TB",0,"C",1);
-      $pdf->cell(50,$alt,"","RTB",1,"C",1);
+      $pdf1->setfont('arial','b',8);
+      $pdf1->cell(100,$alt,'Totalização geral',"LTB",0,"R",1);
+      $pdf1->cell(20,$alt,$totalquant,"TB",0,"R",1);
+      $pdf1->cell(20,$alt,db_formatar($totalvalor,"f"),"TB",0,"C",1);
+      $pdf1->cell(50,$alt,"","RTB",1,"C",1);
       
     $pdf1->cell(80,$alt,"Credor",1,0,"C",1);
     $pdf1->cell(30, $alt, "Número de funcionários",1,0,"C",1);
