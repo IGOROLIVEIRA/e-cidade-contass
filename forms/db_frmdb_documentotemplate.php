@@ -99,10 +99,9 @@ if (isset($db82_arquivo)) {
 		    <td nowrap title="<?=@$Tdb82_arquivo?>">
 		       <?=@$Ldb82_arquivo?>
 		    </td>
-		    <td id="arquivo"> 
-				<?
-				db_input('db82_arquivo',40,$Idb82_arquivo,true,'file',$db_opcao,"")
-				?>
+		    <td id="arquivo">
+				<input title="Arquivo
+				Campo:db82_arquivo" name="db82_arquivo" id="db82_arquivo" value="" size="40" maxlength="1" onkeydown="return js_controla_tecla_enter(this,event);" type="file">
 				<input type="hidden" name="db82_arquivo1" id="db82_arquivo1" style="background-color: #DEB887" size="53" readonly="readonly">
 				</td>
 		  </tr>
