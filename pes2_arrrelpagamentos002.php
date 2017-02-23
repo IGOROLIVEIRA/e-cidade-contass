@@ -56,13 +56,13 @@ $sql = "
 								r38_conta,
 								r38_nome,
 								r38_liq 
-				 from folha 
+				 from folha
 				      inner join rhlota on to_number(r38_lotac,'9999') = r70_codigo
 							                 and r70_instit = ".db_getsession("DB_instit")."
 							left  join db_bancos on r38_banco = db90_codban 
 				 $where
 				 order by $ordem
-"; 
+";
 $result = pg_exec($sql);
 $xxnum = pg_numrows($result);
 if($xxnum == 0){
@@ -87,9 +87,9 @@ $pdf->setfillcolor(235);
 
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
-     if($xlota != $r38_banco.$r38_agenc){
+     if($xlota != $r38_banco.$r38_agenc.$r70_estrut){
 	     $troca = 1;
-       $xlota = $r38_banco.$r38_agenc;
+       $xlota = $r38_banco.$r38_agenc.$r70_estrut;
        $pdf->cell(125,$alt,'','T',0,"C",0);
        $pdf->cell(15,$alt,'TOTAL DO BANCO','T',0,"R",0);
        $pdf->cell(20,$alt,db_formatar($tot_age,'f'),'T',1,"R",0);
@@ -102,10 +102,10 @@ for($x = 0; $x < pg_numrows($result);$x++){
    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage();
       $pdf->setfont('arial','b',10);
-			if($lotacao == 's'){
+	  if($lotacao == 's'){
         $pdf->cell(15,$alt,$r70_estrut,0,0,"R",0);
         $pdf->cell(75,$alt,$r70_descr,0,1,"L",0);
-		  }
+	  }
       $pdf->cell(15,$alt,'BANCO',0,0,"R",0);
       $pdf->cell(15,$alt,$r38_banco,0,0,"C",0);
       $pdf->cell(75,$alt,$db90_descr,0,1,"L",0);
