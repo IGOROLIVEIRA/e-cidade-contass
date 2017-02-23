@@ -162,11 +162,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit
-				    where (k13_limite is null 
+				    where  (k13_limite is null 
 				    or k13_limite >= '" . $this->sDataFinal . "') 
 				    and (date_part('MONTH',k13_dtimplantacao) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
-    //echo $sSqlGeral;
+    //echo $sSqlGeral k13_reduz in (4190,4208) and;
     $rsContas = db_query($sSqlGeral);//db_criatabela($rsContas);
 
     $aBancosAgrupados = array();
@@ -223,6 +223,9 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta'
           AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'
           AND si95_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " UNION SELECT * FROM ctb102016 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
+          AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta'
+          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'" . " and si95_instit = " . db_getsession('DB_instit');
           $sSqlVerifica .= " UNION SELECT * FROM ctb102015 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
           AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta'
           AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'" . " and si95_instit = " . db_getsession('DB_instit');
@@ -326,6 +329,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								 where DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
 								   and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 								   and conlancamval.c69_debito in ({$nConta})
+                union all 
+              select ces02_reduz,ces02_fonte::varchar from conctbsaldo where ces02_reduz in ({$nConta}) and ces02_anousu = " . db_getsession("DB_anousu") . "
 							) as xx";
         $rsReg20Fonte = db_query($sSql20Fonte) or die($sSql20Fonte);//db_criatabela($rsReg20Fonte);
 
@@ -346,6 +351,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
           //db_criatabela($rsTotalMov);
           //echo $sSqlMov;
           $oTotalMov = db_utils::fieldsMemory($rsTotalMov);
+
 
 
           $sHash20 = $oContaAgrupada->si95_codctb . $iFonte;
