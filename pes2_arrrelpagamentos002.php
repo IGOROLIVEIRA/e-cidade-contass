@@ -87,18 +87,33 @@ $pdf->setfillcolor(235);
 
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
-     if($xlota != $r38_banco.$r38_agenc.$r70_estrut){
-	     $troca = 1;
-       $xlota = $r38_banco.$r38_agenc.$r70_estrut;
-       $pdf->cell(125,$alt,'','T',0,"C",0);
-       $pdf->cell(15,$alt,'TOTAL DO BANCO','T',0,"R",0);
-       $pdf->cell(20,$alt,db_formatar($tot_age,'f'),'T',1,"R",0);
-       $pdf->cell(125,$alt,'',0,0,"C",0);
-       $pdf->cell(15,$alt,'TOTAL DE FUNC.',0,0,"R",0);
-       $pdf->cell(20,$alt,$tot_func,0,1,"R",0);
-			 $tot_age = 0;
-			 $tot_func= 0;
-     }
+    if($lotacao == 's') {
+        if ($xlota != $r38_banco . $r38_agenc . $r70_estrut) {
+            $troca = 1;
+            $xlota = $r38_banco . $r38_agenc . $r70_estrut;
+            $pdf->cell(125, $alt, '', 'T', 0, "C", 0);
+            $pdf->cell(15, $alt, 'TOTAL DO BANCO', 'T', 0, "R", 0);
+            $pdf->cell(20, $alt, db_formatar($tot_age, 'f'), 'T', 1, "R", 0);
+            $pdf->cell(125, $alt, '', 0, 0, "C", 0);
+            $pdf->cell(15, $alt, 'TOTAL DE FUNC.', 0, 0, "R", 0);
+            $pdf->cell(20, $alt, $tot_func, 0, 1, "R", 0);
+            $tot_age = 0;
+            $tot_func = 0;
+        }
+    }else{
+        if ($xlota != $r38_banco . $r38_agenc) {
+            $troca = 1;
+            $xlota = $r38_banco . $r38_agenc;
+            $pdf->cell(125, $alt, '', 'T', 0, "C", 0);
+            $pdf->cell(15, $alt, 'TOTAL DO BANCO', 'T', 0, "R", 0);
+            $pdf->cell(20, $alt, db_formatar($tot_age, 'f'), 'T', 1, "R", 0);
+            $pdf->cell(125, $alt, '', 0, 0, "C", 0);
+            $pdf->cell(15, $alt, 'TOTAL DE FUNC.', 0, 0, "R", 0);
+            $pdf->cell(20, $alt, $tot_func, 0, 1, "R", 0);
+            $tot_age = 0;
+            $tot_func = 0;
+        }
+    }
    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage();
       $pdf->setfont('arial','b',10);
