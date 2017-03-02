@@ -91,7 +91,7 @@ $cldb_depart->rotulo->label("descrdepto");
       }      
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
-           $campos = "distinct db_depart.*, db_config.nomeinst";
+           $campos = "distinct db_depart.coddepto,db_depart.descrdepto,pessoa.z01_nome,db_depart.emailresponsavel,db_depart.limite,db_depart.fonedepto,db_depart.emaildepto,db_depart.faxdepto,db_depart.ramaldepto,db_depart.instit, db_config.nomeinst";
         }
         if(isset($chave_coddepto) && trim($chave_coddepto)!=""){
 	         $sql = $cldb_depart->sql_query_div(null,$campos,"coddepto"," coddepto = $chave_coddepto $param");

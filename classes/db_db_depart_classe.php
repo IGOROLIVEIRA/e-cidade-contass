@@ -509,6 +509,7 @@ class cl_db_depart {
 //     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = db_depart.id_usuarioresp";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
+     $sql .= "      left join cgm pessoa  on  pessoa.z01_numcgm = db_depart.numcgm";
      $sql2 = "";
      if (empty($dbwhere)) {
        if (!empty($coddepto)) {

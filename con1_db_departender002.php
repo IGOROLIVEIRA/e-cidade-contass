@@ -57,7 +57,7 @@ if(isset($alterar)){
   $db_botao = true;
   $db_opcao = 2;
 }else if(isset($chavepesquisa) ){
-	
+
    $result = $cldb_departender->sql_record($cldb_departender->sql_query($chavepesquisa)); 
    if ($cldb_departender->numrows!=0){
      db_fieldsmemory($result,0);
