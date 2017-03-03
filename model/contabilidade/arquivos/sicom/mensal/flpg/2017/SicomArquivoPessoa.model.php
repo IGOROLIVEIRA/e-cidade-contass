@@ -161,7 +161,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      ";
     }
 
-    $rsResult  = db_query($sSql);//echo $sSql; db_criatabela($rsResult);exit;
+    $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
     $aPessoas    =  array();
     $aCpfPessoas = array("00000000000","00000000000000","11111111111","11111111111111","22222222222","22222222222222","33333333333","33333333333333",
         "44444444444","4n4444444444444","55555555555","55555555555555","66666666666","66666666666666","77777777777","77777777777777","88888888888","88888888888888",
