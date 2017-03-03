@@ -148,7 +148,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		       ' ' as z01_sexo,
                z01_nasc,
 		       z01_ultalt,
-		       z01_obs,n
+		       z01_obs,
 		       z01_cadast
 		      from cgm
 		      inner join db_config on db_config.numcgm = z01_numcgm
