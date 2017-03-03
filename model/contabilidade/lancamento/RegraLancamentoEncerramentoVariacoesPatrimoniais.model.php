@@ -52,14 +52,18 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
     $oRegraLancamento = $aRegrasDoLancamento[0];
     $oMovimentoConta  = $oLancamentoAuxiliar->getMovimentacaoContabil();
     
-    /*  A conta referência não deverá vir mais da transação será de acordo com o PRIMEIRO e QUINTO nivel da conta do movimento
-        obedecendo as regras do TCE-MG
+    /*  A conta referência não deverá mais vir da transação.
+        Será de acordo com o PRIMEIRO e QUINTO nível da conta do movimento, obedecendo as regras do TCE-MG.
+
     $iContaEvento     = $oRegraLancamento->getContaDebito();
     if ($oLancamentoAuxiliar->getContaReferencia() != "") {
       $iContaEvento = $oLancamentoAuxiliar->getContaReferencia();
     }*/
-    $sSql  = "SELECT si09_tipoinstit FROM db_config join infocomplementaresinstit on si09_instit = codigo ";
-    $sSql .= "  WHERE codigo = ".db_getsession("DB_instit");  
+
+    $sSql  = "SELECT si09_tipoinstit FROM db_config
+              JOIN infocomplementaresinstit ON si09_instit = codigo
+              WHERE codigo = ".db_getsession("DB_instit");
+
     $rsInst = db_query($sSql);      
     $oInst  = db_utils::fieldsMemory($rsInst, 0)->si09_tipoinstit;
 
@@ -70,15 +74,15 @@ class RegraLancamentoEncerramentoVariacoesPatrimoniais implements IRegraLancamen
     $sContaSuperDefitInterOFSSMunicipio = '237150101';
     $sComplemnto = '0101';
 
-    if($oInst == '1'){//camara
+    if($oInst == '1'){ // Câmaras
       $sComplemnto = '02'.$sComplemnto;
-    }else if($oInst == '2' ){//prefeitura
+    }else if($oInst == '2' ){ // Prefeituras
       $sComplemnto = '01'.$sComplemnto;
-    }else if($oInst == '5'){ // previdencia
+    }else if($oInst == '5'){ // Previdências
       $sComplemnto = '03'.$sComplemnto;
-    }else if($oInst == '51'){ // previdencia
+    }else if($oInst == '51'){ // Consórcios
       $sComplemnto = '50'.$sComplemnto;
-    }else { // outros
+    }else { // Outros
       $sComplemnto = '04'.$sComplemnto;
     }    
    // echo $oInst." conta ".$sContaSuperDefitInterOFSSMunicipio.$sComplemnto;
