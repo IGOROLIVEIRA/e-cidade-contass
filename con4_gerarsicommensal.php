@@ -211,10 +211,12 @@ $clrotulo->label("o15_codigo");
                 
                 <input type="checkbox" value="ProjecaoAtuarial" id="ProjecaoAtuarial" /> 
                 <label for="ProjecaoAtuarial">Projeção Atuarial do RPPS</label><br>
-                
+
+                <? if (db_getsession("DB_anousu") < 2017) {?>
                 <input type="checkbox" value="DadosComplementares" id="DadosComplementares" /> 
                 <label for="DadosComplementares">Dados Complementares à LRF</label><br>
-                
+                <? } ?>
+
                 <? if (db_getsession("DB_anousu") >= 2014) {?>
                 <input type="checkbox" value="Item" id="Item" /> 
                 <label for="Item">Item</label><br>

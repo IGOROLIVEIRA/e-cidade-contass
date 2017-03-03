@@ -177,7 +177,6 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
        from     empempenho
                 inner join empresto     on e60_numemp = e91_numemp and e91_anousu = " . db_getsession("DB_anousu") . " 
                 inner join conlancamemp on e60_numemp = c75_numemp
-                inner join conlancamcgm on c75_codlan = c76_codlan
                 inner join cgm          on e60_numcgm = z01_numcgm
                 inner join conlancamdoc on c75_codlan = c71_codlan
                 inner join conlancam    on c75_codlan = c70_codlan
@@ -232,6 +231,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         * */
         $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oDados10->codreduzidorsp}";
         $iFonteAlterada = '0';
+        //db_criatabela(db_query($sSqlDotacaoRpSicom));
         if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
           
           $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
@@ -245,7 +245,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
             $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_codsubfuncao, 3, "0", STR_PAD_LEFT);
             $sDotacaoOrig .= str_pad(trim($aDotacaoRpSicom[0]->si177_codprograma), 4, "0", STR_PAD_LEFT);
             $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_idacao, 4, "0", STR_PAD_LEFT);
-            $sDotacaoOrig .= $aDotacaoRpSicom[0]->si177_naturezadespesa;
+            $sDotacaoOrig .= substr($aDotacaoRpSicom[0]->si177_naturezadespesa,0,5);
             $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_subelemento, 2, "0", STR_PAD_LEFT);
             $clrsp10->si112_dotorig = $sDotacaoOrig;
           } else {
@@ -253,11 +253,12 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
           }
           $teste = 1;
         } else {
-          $clrsp10->si112_codorgao = $oDados10->codorgao;
+          
           $clrsp10->si112_codunidadesub = $oDados10->codunidadesub;
           $clrsp10->si112_dotorig = $oDados10->dotorig;
           $clrsp10->si112_codunidadesuborig = $oDados10->codunidadesub;
         }
+        $clrsp10->si112_codorgao = $oDados10->codorgao;
         $clrsp10->si112_nroempenho = $oDados10->nroempenho;
         $clrsp10->si112_exercicioempenho = $oDados10->exercicioempenho;
         $clrsp10->si112_dtempenho = $oDados10->dtempenho;
@@ -275,6 +276,8 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         $clrsp10->incluir(null);
         
         if ($clrsp10->erro_status == 0) {
+          echo "<pre>";
+        print_r($clrsp10);
           throw new Exception($clrsp10->erro_msg);
         }
         

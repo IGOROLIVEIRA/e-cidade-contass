@@ -60,8 +60,9 @@ class GerarRSP extends GerarAM
         $aCSVRSP10['si112_tiporegistro']      = $this->padLeftZero($aRSP10['si112_tiporegistro'], 2);
         $aCSVRSP10['si112_codreduzidorsp']    = substr($aRSP10['si112_codreduzidorsp'], 0, 15);
         $aCSVRSP10['si112_codorgao']          = $this->padLeftZero($aRSP10['si112_codorgao'], 2);
-        $aCSVRSP10['si112_codunidadesub']     = $this->padLeftZero($aRSP10['si112_codunidadesub'], 5);
-        $aCSVRSP10['si112_codunidadesuborig'] = $this->padLeftZero($aRSP10['si112_codunidadesub'], 5);
+        $aCSVRSP10['si112_codunidadesub']     = $this->padLeftZero($aRSP10['si112_codunidadesub'], 5);        
+        $aCSVRSP10['si112_codunidadesuborig'] = strcasecmp($aRSP10['si112_codunidadesuborig']) <= 5 ? $this->padLeftZero($aRSP10['si112_codunidadesuborig'], 5)
+        :$this->padLeftZero($aRSP10['si112_codunidadesuborig'], 8);
         $aCSVRSP10['si112_nroempenho']        = substr($aRSP10['si112_nroempenho'], 0, 22);
         $aCSVRSP10['si112_exercicioempenho']  = $this->padLeftZero($aRSP10['si112_exercicioempenho'], 4);
         $aCSVRSP10['si112_dtempenho']         = $this->sicomDate($aRSP10['si112_dtempenho']);

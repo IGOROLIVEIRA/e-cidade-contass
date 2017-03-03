@@ -22,6 +22,7 @@ class cl_rsp102017
   var $si112_codreduzidorsp = 0;
   var $si112_codorgao = null;
   var $si112_codunidadesub = null;
+  var $si112_codunidadesuborig = null;
   var $si112_nroempenho = 0;
   var $si112_exercicioempenho = 0;
   var $si112_dtempenho_dia = null;
@@ -41,6 +42,7 @@ class cl_rsp102017
                  si112_codreduzidorsp = int8 = Código Identificador do resto a pagar 
                  si112_codorgao = varchar(2) = Código do órgão 
                  si112_codunidadesub = varchar(8) = Código da  unidade 
+                 si112_codunidadesuborig = varchar(8) = Código da  unidade 
                  si112_nroempenho = int8 = Número do  empenho 
                  si112_exercicioempenho = int8 = Exercício do  empenho 
                  si112_dtempenho = date = Data do empenho 
@@ -80,6 +82,7 @@ class cl_rsp102017
       $this->si112_codreduzidorsp = ($this->si112_codreduzidorsp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si112_codreduzidorsp"] : $this->si112_codreduzidorsp);
       $this->si112_codorgao = ($this->si112_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si112_codorgao"] : $this->si112_codorgao);
       $this->si112_codunidadesub = ($this->si112_codunidadesub == "" ? @$GLOBALS["HTTP_POST_VARS"]["si112_codunidadesub"] : $this->si112_codunidadesub);
+      $this->si112_codunidadesuborig = ($this->si112_codunidadesuborig == "" ? @$GLOBALS["HTTP_POST_VARS"]["si112_codunidadesuborig"] : $this->si112_codunidadesuborig);
       $this->si112_nroempenho = ($this->si112_nroempenho == "" ? @$GLOBALS["HTTP_POST_VARS"]["si112_nroempenho"] : $this->si112_nroempenho);
       $this->si112_exercicioempenho = ($this->si112_exercicioempenho == "" ? @$GLOBALS["HTTP_POST_VARS"]["si112_exercicioempenho"] : $this->si112_exercicioempenho);
       if ($this->si112_dtempenho == "") {
@@ -206,6 +209,7 @@ class cl_rsp102017
                                       ,si112_vlsaldoantnaoproc 
                                       ,si112_mes 
                                       ,si112_instit 
+                                      ,si112_codunidadesuborig
                        )
                 values (
                                 $this->si112_sequencial 
@@ -221,7 +225,8 @@ class cl_rsp102017
                                ,$this->si112_vlsaldoantproce 
                                ,$this->si112_vlsaldoantnaoproc 
                                ,$this->si112_mes 
-                               ,$this->si112_instit 
+                               ,$this->si112_instit
+                               ,'$this->si112_codunidadesuborig' 
                       )";
     $result = db_query($sql);
     if ($result == false) {

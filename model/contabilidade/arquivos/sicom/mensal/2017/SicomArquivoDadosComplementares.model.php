@@ -94,7 +94,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
      * selecionar informacoes registro 10
      */
 
-        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{$this->sDataFinal['6']}' and si170_instit = ". db_getsession("DB_instit");
+        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{ $this->sDataFinal['5'].$this->sDataFinal['6'] }' and si170_instit = ". db_getsession("DB_instit");
 
         $rsResult10 = db_query($sSql);
 
@@ -137,7 +137,7 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
 
         // @TODO
         // configurar o SELECT corretamente
-        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{$this->sDataFinal['6']}' and si170_instit = ". db_getsession("DB_instit");
+        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{ $this->sDataFinal['5'].$this->sDataFinal['6'] }' and si170_instit = ". db_getsession("DB_instit");
 
         $rsResult30 = db_query($sSql);
 
@@ -147,10 +147,10 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
           $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
           $cldclrf30->si178_tiporegistro              = 30;
-          $cldclrf30->si178_publiclrf                 = 0;
-          $cldclrf30->si178_dtpublicacaorelatoriolrf  = '0000-00-00';
-          $cldclrf30->si178_localpublicacao           = '';
-          $cldclrf30->si178_tpbimestre                = 0;
+          $cldclrf30->si178_publiclrf                 = $oDados30->si170_publiclrf;
+          $cldclrf30->si178_dtpublicacaorelatoriolrf  = $oDados30->si170_dtpublicacaorelatoriolrf;
+          $cldclrf30->si178_localpublicacao           = 'SITE OFICIAL DO MUNICIPIO';
+          $cldclrf30->si178_tpbimestre                = $oDados30->si170_tpbimestre;
           $cldclrf30->si178_mes                       = $this->sDataFinal['5'].$this->sDataFinal['6'];
           $cldclrf30->si178_instit                    = db_getsession("DB_instit");
           $cldclrf30->incluir(null);
