@@ -869,6 +869,7 @@ try {
                     $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
 
                     $aDadosAgrupados = array();
+                    
                     for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
 
                         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
