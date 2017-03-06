@@ -884,7 +884,7 @@ try {
                                                      INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
                                                      AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = {$iAnousuEmp}
                                                      WHERE c19_reduz = {$iReduzido}
-                                                       AND c17_sequencial = {$iCorrente}
+                                                      
                                                        AND c19_orctiporec = {$objContasfr->o15_codigo}) as x) AS saldoimplantado,
 
                                                 (SELECT sum(c69_valor) AS debito
