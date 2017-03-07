@@ -646,12 +646,8 @@ class cl_acordo {
      if(trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="") ){
        $sql  .= $virgula." ac16_dataassinatura = '$this->ac16_dataassinatura' ";
        $virgula = ",";
-     }     else{
-       if(isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) || $this->ac16_acordosituacao){
-         $sql  .= $virgula." ac16_dataassinatura = null ";
-         $virgula = ",";
-       }
      }
+
      if(trim($this->ac16_datapublicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"] !="") ){
        $sql  .= $virgula." ac16_datapublicacao = '$this->ac16_datapublicacao' ";
        $virgula = ",";
