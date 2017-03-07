@@ -281,7 +281,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        liclicita.l20_execucaoentrega AS prazoExecucao,
        liclicita.l20_condicoespag AS formaPagamento,
        liclicita.l20_aceitabilidade AS criterioAceitabilidade,
-       liclicita.l20_descontotab AS descontoTabela,
+       case when liclicita.l20_descontotab = 2 then 3 else liclicita.l20_descontotab end AS descontoTabela,
        	(CASE liclicita.l20_tipojulg
     WHEN 3 THEN 1
     ELSE 2
