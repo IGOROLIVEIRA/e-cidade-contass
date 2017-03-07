@@ -57,7 +57,7 @@ class GerarFLPGO extends GerarAM {
 				$aCSVFLPGO10['si195_dscsituacao']                         =   substr($aFLPGO10['si195_dscsituacao'], 0, 150);
 
 
-				if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I' || $aFLPGO10['si195_indsituacaoservidorpensionista'] == 'P'){
+				if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'P'){
 
 					$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datconcessaoaposentadoriapensao'])));
 
