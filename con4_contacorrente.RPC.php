@@ -594,8 +594,9 @@ try {
             switch ($iCorrente) {
                 case 106:
                     db_inicio_transacao();
-                    
-                    if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321") {
+                    //echo $sEstrutural;exit;
+                    if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321" || $sEstrutural == "5317"
+                        || $sEstrutural == "5327" || $sEstrutural == "6327" || $sEstrutural == "6317") {
                         $iTroca = 1;
                         $iAnousuEmp = db_getsession('DB_anousu') - 1;
                         $nMes = 12;
