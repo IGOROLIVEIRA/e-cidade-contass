@@ -88,7 +88,11 @@ class GerarFLPGO extends GerarAM {
 
 				}else {
 
-					$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao']     =   ' ';
+					if($aFLPGO10['si195_indsituacaoservidorpensionista'] == 'I') {
+						$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao'] = implode("", array_reverse(explode("-", $aFLPGO10['si195_datconcessaoaposentadoriapensao'])));
+					}else{
+						$aCSVFLPGO10['si195_datconcessaoaposentadoriapensao'] = ' ';
+					}
 					$aCSVFLPGO10['si195_dsccargo'] = substr($aFLPGO10['si195_dsccargo'], 0, 120);
 					$aCSVFLPGO10['si195_sglcargo'] = str_pad($aFLPGO10['si195_sglcargo'], 3, "0", STR_PAD_LEFT);
 					if($aCSVFLPGO10['si195_sglcargo'] == 'OTC')
