@@ -10,16 +10,19 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.
 class GerarBF extends GerarAM
 {
 
+  public $iAno;
+  public $iPeriodo;
+
   public function gerarDados()
   {
 
     $this->sArquivo = "BF";
     $this->abreArquivo();
 
-    $sSql = "select * from bfdcasp102017 where 1 = 1";
+    $sSql = "select * from bfdcasp102017 where si206_ano = {$this->iAno} AND si206_periodo = {$this->iPeriodo} AND si206_institu = " . db_getsession("DB_instit");
     $rsBF10 = db_query($sSql);
 
-    $sSql = "select * from bfdcasp202017 where 1 = 1";
+    $sSql = "select * from bfdcasp202017 where si207_ano = {$this->iAno} AND si207_periodo = {$this->iPeriodo} AND si207_institu = " . db_getsession("DB_instit");
     $rsBF20 = db_query($sSql);
 
     if (pg_num_rows($rsBF10) == 0

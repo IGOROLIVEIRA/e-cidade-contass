@@ -2,6 +2,19 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
+require_once('model/contabilidade/relatorios/dcasp/BalancoFinanceiroDCASP2015.model.php');
+require_once('libs/db_stdlib.php');
+require_once('libs/db_conecta.php');
+require_once('libs/db_sessoes.php');
+require_once('libs/db_usuariosonline.php');
+require_once('fpdf151/assinatura.php');
+require_once('libs/db_utils.php');
+require_once('libs/db_app.utils.php');
+require_once('dbforms/db_funcoes.php');
+require_once('libs/db_libcontabilidade.php');
+require_once('libs/db_liborcamento.php');
+require_once('fpdf151/PDFDocument.php');
+
 require_once("classes/db_bfdcasp102017_classe.php");
 require_once("classes/db_bfdcasp202017_classe.php");
 
@@ -12,8 +25,23 @@ require_once("model/contabilidade/arquivos/sicom/2017/dcasp/geradores/GerarBF.mo
  * @author gabriel
  * @package Contabilidade
  */
-class SicomArquivoBalancoFinanceiro extends SicomArquivoBase implements iPadArquivoBaseCSV
+class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
+  protected $iCodigoLayout = 152; // Código do relatório
+
+  protected $sNomeArquivo = 'BF';
+
+  public function getCodigoLayout(){
+    return $this->iCodigoLayout;
+  }
+
+  public function getNomeArquivo(){
+    return $this->sNomeArquivo;
+  }
+
+  public function getCampos() {
+    return array();
+  }
 
 
   /**
@@ -27,6 +55,11 @@ class SicomArquivoBalancoFinanceiro extends SicomArquivoBase implements iPadArqu
    */
   public function gerarDados()
   {
+    $iAnoUsu            = db_getsession("DB_anousu");
+    $sTipoImpressao     = 'A';
+    $iCodigoPeriodo     = date('m', strtotime($this->sDataFinal)) + 16;
+    $iCodigoRelatorio   = $this->iCodigoLayout;
+    $sListaInstituicoes = db_getsession("DB_instit");
 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
@@ -41,20 +74,22 @@ class SicomArquivoBalancoFinanceiro extends SicomArquivoBase implements iPadArqu
     db_inicio_transacao();
 
     /** BFDCASP10 */
-    $sSQL   = $clbfdcasp10->sql_query(); // configurar os parâmetros corretos
+    $sWhereSelectDelete = "si206_ano = {$iAnoUsu} AND si206_periodo = {$iCodigoPeriodo} AND si206_institu = '{$sListaInstituicoes}' ";
+    $sSQL   = $clbfdcasp10->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $clbfdcasp10->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
-      $clbfdcasp10->excluir(null, ""); // configurar o WHERE correto
+      $clbfdcasp10->excluir(null, $sWhereSelectDelete);
       if ($clbfdcasp10->erro_status == 0) {
         throw new Exception($clbfdcasp10->erro_msg);
       }
     }
 
     /** BFDCASP20 */
-    $sSQL   = $clbfdcasp20->sql_query(); // configurar os parâmetros corretos
+    $sWhereSelectDelete = "si207_ano = {$iAnoUsu} AND si207_periodo = {$iCodigoPeriodo} AND si207_institu = '{$sListaInstituicoes}' ";
+    $sSQL   = $clbfdcasp20->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $clbfdcasp20->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
-      $clbfdcasp20->excluir(null, ""); // configurar o WHERE correto
+      $clbfdcasp20->excluir(null, $sWhereSelectDelete);
       if ($clbfdcasp20->erro_status == 0) {
         throw new Exception($clbfdcasp20->erro_msg);
       }
@@ -63,36 +98,54 @@ class SicomArquivoBalancoFinanceiro extends SicomArquivoBase implements iPadArqu
     /*------------------------------------------------------------------------*/
 
 
+    /**
+     * O método `getDados()`, da classe `BalancoFinanceiroDCASP2015()`,
+     * retorna um array enorme. Para pegar os dados necessários para cada
+     * registro do SICOM DCASP, estamos passando os índices exatos do array.
+     * Se eles forem alterados (nas configurações dos relatórios), devem
+     * ser alterados aqui também.
+    */
+
+    $oBalancoFinanceiro = new BalancoFinanceiroDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
+    $oBalancoFinanceiro->setInstituicoes($sListaInstituicoes);
+    $oBalancoFinanceiro->setExibirExercicioAnterior(true);
+    $oBalancoFinanceiro->setTipo($sTipoImpressao);
+
+    $oRetornoBF = $oBalancoFinanceiro->getDados();
+
+
     /** BFDCASP102017 */
-    $sSQL = " SELECT * "
-          . " FROM bfdcasp102017 "
-          . " WHERE 1 = 1 ";
+    $aExercicios = array(
+      1 => 'vlrexatual',
+      2 => 'vlrexanter'
+    );
 
-    $rsResult10 = db_query($sSQL);
 
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult10); $iCont++) {
+    foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $oDadosBF10   = db_utils::fieldsMemory($rsResult10, $iCont);
       $clbfdcasp10  = new cl_bfdcasp102017();
 
+      $clbfdcasp10->si206_ano                               = $iAnoUsu;
+      $clbfdcasp10->si206_periodo                           = $iCodigoPeriodo;
+      $clbfdcasp10->si206_institu                           = $sListaInstituicoes;
       $clbfdcasp10->si206_tiporegistro                      = 10;
-      $clbfdcasp10->si206_exercicio                         = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlrecorcamenrecurord              = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlrecorcamenrecinceduc            = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlrecorcamenrecurvincusaude       = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlrecorcamenrecurvincurpps        = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlrecorcamenrecurvincuassistsoc   = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlrecorcamenoutrasdestrecursos    = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vltransfinanexecuorcamentaria     = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vltransfinanindepenexecuorc       = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vltransfinanreceaportesrpps       = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlincrirspnaoprocessado           = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlincrirspprocessado              = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vldeporestituvinculados           = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vloutrosrecextraorcamentario      = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlsaldoexeranteriorcaixaequicaixa = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vlsaldoexerantdeporestvinc        = $oDadosBF10->__algumAtributo;
-      $clbfdcasp10->si206_vltotalingresso                   = $oDadosBF10->__algumAtributo;
+      $clbfdcasp10->si206_exercicio                         = $iValorNumerico;
+      $clbfdcasp10->si206_vlrecorcamenrecurord              = $oRetornoBF[2]->$sChave;
+      $clbfdcasp10->si206_vlrecorcamenrecinceduc            = $oRetornoBF[4]->$sChave;
+      $clbfdcasp10->si206_vlrecorcamenrecurvincusaude       = $oRetornoBF[5]->$sChave;
+      $clbfdcasp10->si206_vlrecorcamenrecurvincurpps        = $oRetornoBF[6]->$sChave;
+      $clbfdcasp10->si206_vlrecorcamenrecurvincuassistsoc   = $oRetornoBF[8]->$sChave;
+      $clbfdcasp10->si206_vlrecorcamenoutrasdestrecursos    = $oRetornoBF[9]->$sChave;
+      $clbfdcasp10->si206_vltransfinanexecuorcamentaria     = $oRetornoBF[11]->$sChave;
+      $clbfdcasp10->si206_vltransfinanindepenexecuorc       = $oRetornoBF[12]->$sChave;
+      $clbfdcasp10->si206_vltransfinanreceaportesrpps       = $oRetornoBF[13]->$sChave;
+      $clbfdcasp10->si206_vlincrirspnaoprocessado           = $oRetornoBF[16]->$sChave;
+      $clbfdcasp10->si206_vlincrirspprocessado              = $oRetornoBF[17]->$sChave;
+      $clbfdcasp10->si206_vldeporestituvinculados           = $oRetornoBF[18]->$sChave;
+      $clbfdcasp10->si206_vloutrosrecextraorcamentario      = $oRetornoBF[19]->$sChave;
+      $clbfdcasp10->si206_vlsaldoexeranteriorcaixaequicaixa = $oRetornoBF[21]->$sChave;
+      $clbfdcasp10->si206_vlsaldoexerantdeporestvinc        = $oRetornoBF[22]->$sChave;
+      $clbfdcasp10->si206_vltotalingresso                   = $oRetornoBF[23]->$sChave;
 
       $clbfdcasp10->incluir(null);
       if ($clbfdcasp10->erro_status == 0) {
@@ -103,35 +156,36 @@ class SicomArquivoBalancoFinanceiro extends SicomArquivoBase implements iPadArqu
 
 
     /** BFDCASP202017 */
-    $sSQL = " SELECT * "
-          . " FROM bfdcasp202017 "
-          . " WHERE 1 = 1 ";
+    $aExercicios = array(
+      1 => 'vlrexatual',
+      2 => 'vlrexanter'
+    );
 
-    $rsResult20 = db_query($sSQL);
+    foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult20); $iCont++) {
-
-      $oDadosBF20   = db_utils::fieldsMemory($rsResult20, $iCont);
       $clbfdcasp20  = new cl_bfdcasp202017();
 
+      $clbfdcasp20->si207_ano                               = $iAnoUsu;
+      $clbfdcasp20->si207_periodo                           = $iCodigoPeriodo;
+      $clbfdcasp20->si207_institu                           = $sListaInstituicoes;
       $clbfdcasp20->si207_tiporegistro                      = 20;
-      $clbfdcasp20->si207_exercicio                         = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vldesporcamenrecurordinarios      = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vldesporcamenrecurvincueducacao   = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vldesporcamenrecurvincusaude      = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vldesporcamenrecurvincurpps       = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vldesporcamenrecurvincuassistsoc  = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vloutrasdesporcamendestrecursos   = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vltransfinanconcexecorcamentaria  = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vltransfinanconcindepenexecorc    = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vltransfinanconcaportesrecurpps   = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vlpagrspnaoprocessado             = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vlpagrspprocessado                = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vldeposrestvinculados             = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vloutrospagextraorcamentarios     = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vlsaldoexeratualcaixaequicaixa    = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vlsaldoexeratualdeporestvinc      = $oDadosBF20->__algumAtributo;
-      $clbfdcasp20->si207_vltotaldispendios                 = $oDadosBF20->__algumAtributo;
+      $clbfdcasp20->si207_exercicio                         = $iValorNumerico;
+      $clbfdcasp20->si207_vldesporcamenrecurordinarios      = $oRetornoBF[25]->$sChave;
+      $clbfdcasp20->si207_vldesporcamenrecurvincueducacao   = $oRetornoBF[27]->$sChave;
+      $clbfdcasp20->si207_vldesporcamenrecurvincusaude      = $oRetornoBF[28]->$sChave;
+      $clbfdcasp20->si207_vldesporcamenrecurvincurpps       = $oRetornoBF[29]->$sChave;
+      $clbfdcasp20->si207_vldesporcamenrecurvincuassistsoc  = $oRetornoBF[31]->$sChave;
+      $clbfdcasp20->si207_vloutrasdesporcamendestrecursos   = $oRetornoBF[32]->$sChave;
+      $clbfdcasp20->si207_vltransfinanconcexecorcamentaria  = $oRetornoBF[34]->$sChave;
+      $clbfdcasp20->si207_vltransfinanconcindepenexecorc    = $oRetornoBF[35]->$sChave;
+      $clbfdcasp20->si207_vltransfinanconcaportesrecurpps   = $oRetornoBF[36]->$sChave;
+      $clbfdcasp20->si207_vlpagrspnaoprocessado             = $oRetornoBF[39]->$sChave;
+      $clbfdcasp20->si207_vlpagrspprocessado                = $oRetornoBF[40]->$sChave;
+      $clbfdcasp20->si207_vldeposrestvinculados             = $oRetornoBF[41]->$sChave;
+      $clbfdcasp20->si207_vloutrospagextraorcamentarios     = $oRetornoBF[42]->$sChave;
+      $clbfdcasp20->si207_vlsaldoexeratualcaixaequicaixa    = $oRetornoBF[44]->$sChave;
+      $clbfdcasp20->si207_vlsaldoexeratualdeporestvinc      = $oRetornoBF[45]->$sChave;
+      $clbfdcasp20->si207_vltotaldispendios                 = $oRetornoBF[46]->$sChave;
 
       $clbfdcasp20->incluir(null);
       if ($clbfdcasp20->erro_status == 0) {
@@ -144,6 +198,8 @@ class SicomArquivoBalancoFinanceiro extends SicomArquivoBase implements iPadArqu
     db_fim_transacao();
 
     $oGerarBF = new GerarBF();
+    $oGerarBF->iAno = $iAnoUsu;
+    $oGerarBF->iPeriodo = $iCodigoPeriodo;
     $oGerarBF->gerarDados();
 
   }
