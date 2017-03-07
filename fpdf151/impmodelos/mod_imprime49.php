@@ -3,7 +3,7 @@
 $confNumRows = pg_num_rows($this->rsConfig);
 for ($j = 0;$j < $confNumRows;$j++){
 
-    $oConf            = db_utils::fieldsmemory($this->rsConfig ,$j);  
+    $oConf            = db_utils::fieldsmemory($this->rsConfig ,$j);
     $xlin             = 20;
     $xcol             = 4;
     $this->fTotaliUni = 0;
@@ -78,7 +78,7 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->objpdf->Setfont('Arial','',7 );
     $this->objpdf->text($xcol+164,$xlin+24,$this->dadosPrestador->z01_telef);
    // $this->objpdf->line($xcol+100,$xlin+20,$xcol+100,$xlin+25);
-    
+
     $this->objpdf->line(10,$xlin+25,200,$xlin+25);
     //Email
     $this->objpdf->Setfont('Arial', 'B', 5);
@@ -158,7 +158,7 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->objpdf->Setfont('Arial', 'B', 5);
     $this->objpdf->text($xcol+52,$xlin+27,'COD. ATIVIDADE');
     $this->objpdf->Setfont('Arial', '',7 );
-  
+
     $this->objpdf->line(10,$xlin+30,200,$xlin+30);
     //Email
     $this->objpdf->Setfont('Arial', 'B', 5);
@@ -185,16 +185,16 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->objpdf->cell(30,5,"VALOR TOTAL",1,1,"C");
     /*
      ** Dados do Servico; 
-    */ 
+    */
     $iYinicio = $this->objpdf->getY();
     $cellYnew = $this->objpdf->getY();
     $this->objpdf->line(10,$iYinicio,200,$iYinicio);
     $totlinha = 0;
     for ($i = 0; $i < pg_num_rows($this->rsServico); $i++){
- 
+
         $this->objpdf->sety($cellYnew);
         $oItensServico     = db_utils::fieldsmemory($this->rsServico,$i);
-        $totalLinha        = ($oItensServico->q62_qtd*$oItensServico->q62_vlruni);  
+        $totalLinha        = ($oItensServico->q62_qtd*$oItensServico->q62_vlruni);
         $this->fTotaliUni += $totalLinha;
         $this->fTotal     += $this->fTotaliUni;
         $this->fvlrIssqn  += $oItensServico->q62_vlrissqn;
@@ -255,8 +255,8 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->objpdf->cell(35,5,"R$ ".number_format(($this->fTotaliUni-$this->fvlrIssqn),2,",","."),1,1,"R");
     $this->objpdf->setDash(true,true);
     $this->objpdf->line(10,$this->yOld+35,200,$this->yOld+35);
-    $this->objpdf->setDash(false,false); 
-    
+    $this->objpdf->setDash(false,false);
+
     //Guia destacavel
 
     $this->objpdf->rect(10,$this->yOld+45,190,20);
