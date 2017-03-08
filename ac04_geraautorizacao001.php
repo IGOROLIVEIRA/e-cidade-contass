@@ -639,7 +639,7 @@ function js_ajusteDotacao(iLinha) {
   var iHeight = js_round((screen.availHeight/1.3), 0);
   var iWidth  = screen.availWidth/2;
   windowDotacaoItem = new windowAux('wndDotacoesItem',
-                                    'Dotações Item '+oDadosItem.aCells[2].getValue(),
+                                    'Dotações Item '+oDadosItem.aCells[2].getValue().substr(0,67),
                                     iWidth,
                                     iHeight
                                    );
@@ -747,7 +747,7 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
   var nValor =  js_strToFloat(oDadosItem.aCells[7].getValue());
   var nValorTotalItem = js_strToFloat(oDadosItem.aCells[5].getValue());
   var nValorTotal     = nValor;
-  var nQuantAutorizar = js_strToFloat(oDadosItem.aCells[6].getValue());
+  var nQuantAutorizar = Number(oDadosItem.aCells[6].getValue());
   var nValorUnit = Number(oDadosItem.aCells[4].getValue());
 
   aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
