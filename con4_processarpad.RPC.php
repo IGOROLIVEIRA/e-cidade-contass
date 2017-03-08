@@ -161,7 +161,7 @@ switch($oParam->exec) {
 
     	$rsInst = db_query($sSql);
     	$sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
-      $sInstCgc  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_cgc, 5, "0", STR_PAD_LEFT);
+      $sInstCgc  = str_pad(db_utils::fieldsMemory($rsInst, 0)->cgc, 5, "0", STR_PAD_LEFT);
                                           //pmluislandia    pmsaoromao       pmvarzelandia   pmclarodospocoes  pmverdelandia
       $aCgcExtFonte = $arrayName = array('01612887000131', '24891418000102','18017467000100','21498274000122','01612505000170');
       $iAnoReferencia = db_getsession('DB_anousu');
@@ -189,9 +189,11 @@ switch($oParam->exec) {
        * instanciar cada arqivo selecionado e gerar o CSV correspondente
        */
       $aArrayArquivos = array();
+      
       foreach ($oParam->arquivos as $sArquivo) {
 
          if ($sArquivo == 'DetalhamentoExtraOrcamentarias' && in_array($sInstCgc, $aCgcExtFonte)   ){
+            
             $sArquivo = "DetalhamentoExtraOrcamentariasPorFonte";
          }
          if ($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && in_array($sInstCgc, $aCgcExtFonte)   ){
