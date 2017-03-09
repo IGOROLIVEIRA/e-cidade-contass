@@ -320,7 +320,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
          */
 
         $sSql =     "select distinct acordo.*,liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
-                    case when l20_codtipocom = 52 then 1 when l20_codtipocom = 53 then 2 else 0 end as tipoprocesso,
+                    case when l20_codtipocom = 100 then 2 when l20_codtipocom = 101 then 1 when l20_codtipocom = 102 then 3 when l20_codtipocom = 103 then 4 else 0 end as tipoprocesso,
                     ac16_tipoorigem as contdeclicitacao,ac16_origem,
                     (CASE
                     WHEN o41_subunidade != 0
