@@ -112,14 +112,17 @@
             /**
              * SQL alterado para buscar apenas os processos que, também, não sejam secumdários a nenhum outro quando apensados.
              * Ajustado SQL alterado para não permite arquivar um processo em transferencia. (Veja ocorrência 575)
-             * @see ocorrências 2315, 2736
+             * Na OC 3360 foi solicitado o mesmo que a OC 2736. Aparentemente o que foi tratado na OC 2736 nao atendeu complentamento o solicitado.
+             * @see ocorrências 2315, 2736, 3360
              */
+            $sWhere .= " and p61_coddepto = ".db_getsession('DB_coddepto');
           $sql = "(SELECT p58_numeracao as dl_Numero_processo,
           p51_descr,
           p58_numero,
           p58_requer,
           p63_codtran,
-          p58_codproc
+          p58_codproc,
+          p61_coddepto
           FROM
           (SELECT distinct  
                                Z.p58_codproc
@@ -130,6 +133,7 @@
                               ,Z.p51_descr
                               ,Z.p78_transint
                               ,Z.p63_codtran
+                              ,Z.p61_coddepto
   from (SELECT p58_codproc,
          cast(p58_numero||'/'||p58_ano AS varchar) AS p58_numero,
          p58_numeracao,
@@ -137,7 +141,8 @@
          p58_coddepto,
          p51_descr,
          p78_transint,
-         p63_codtran
+         p63_codtran,
+         case when p61_coddepto is null then p58_coddepto else p61_coddepto end as p61_coddepto
   FROM protprocesso
   INNER JOIN tipoproc ON p58_codigo = p51_codigo
   LEFT JOIN procandam ON p58_codandam = p61_codandam
@@ -157,7 +162,7 @@
   where not exists (SELECT 1
                 from proctransferproc left join proctransand on p64_codtran = p63_codtran where p63_codproc = p58_codproc and p64_codtran is null)
   ) AS X)";
-
+//db_criatabela(db_query($sql));die($sql);
         db_lovrot($sql,15,"()","",$funcao_js);
         }else{
           if($pesquisa_chave!=null && $pesquisa_chave!=""){
@@ -167,7 +172,8 @@
           p58_numero,
           p58_requer,
           p63_codtran,
-          p58_codproc
+          p58_codproc,
+          p61_coddepto
           FROM
           (SELECT distinct
                                Z.p58_codproc
@@ -178,6 +184,7 @@
                               ,Z.p51_descr
                               ,Z.p78_transint
                               ,Z.p63_codtran
+                              ,Z.p61_coddepto
   from (SELECT p58_codproc,
          cast(p58_numero||'/'||p58_ano AS varchar) AS p58_numero,
          p58_numeracao,
@@ -185,7 +192,8 @@
          p58_coddepto,
          p51_descr,
          p78_transint,
-         p63_codtran
+         p63_codtran,
+         case when p61_coddepto is null then p58_coddepto else p61_coddepto end as p61_coddepto
   FROM protprocesso
   INNER JOIN tipoproc ON p58_codigo = p51_codigo
   LEFT JOIN procandam ON p58_codandam = p61_codandam
