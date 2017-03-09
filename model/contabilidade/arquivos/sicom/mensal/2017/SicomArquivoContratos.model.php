@@ -174,6 +174,27 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
     }
 
     /**
+     * Funcao usada para retornar licitacao de contratos de origem empenho
+     * @param int $iCodContrato
+     * @return Object
+     */
+    public function getLicitacaoByContrato($iCodContrato) {
+
+        $sSql = "select liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
+                    case when l20_codtipocom = 52 then 1 when l20_codtipocom = 53 then 2 else 0 end as tipoprocesso from acordo
+inner join empempenhocontrato on acordo.ac16_sequencial = empempenhocontrato.e100_acordo
+inner join empempenho         on empempenho.e60_numemp = empempenhocontrato.e100_numemp
+inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_numero::varchar
+              and l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar
+              where ac16_sequencial = {$iCodContrato} order by e100_sequencial limit 1";
+
+        $oLicitacao = db_utils::fieldsMemory(db_query($sSql), 0);
+
+        return $oLicitacao;
+
+    }
+
+    /**
      * selecionar os dados de Leis de Alteração
      *
      */
@@ -298,18 +319,9 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
          * selecionar informacoes registro 10
          */
 
-        $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
-        /*if (!file_exists($sArquivo)) {
-         throw new Exception("Arquivo de dados compl licitacao inexistente!");
-         }*/
-        $sTextoXml = file_get_contents($sArquivo);
-        $oDOMDocument = new DOMDocument();
-        $oDOMDocument->loadXML($sTextoXml);
-        $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
-
         $sSql =     "select distinct acordo.*,liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
                     case when l20_codtipocom = 52 then 1 when l20_codtipocom = 53 then 2 else 0 end as tipoprocesso,
-                    ac16_tipoorigem as contdeclicitacao,
+                    ac16_tipoorigem as contdeclicitacao,ac16_origem,
                     (CASE
                     WHEN o41_subunidade != 0
                     OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -362,6 +374,19 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
                 $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
             }
 
+            /*
+             * Verificar se o contrato vem de licitacao mas foi vinculado apenas ao empenho 
+             * por ser Origem empenho
+             */
+            if ($oDados10->ac16_origem == 6 && in_array($oDados10->contdeclicitacao, array(2, 3))) {
+                $oLicitacao = $this->getLicitacaoByContrato($oDados10->ac16_sequencial);
+                $oDados10->l20_edital         = $oLicitacao->l20_edital;
+                $oDados10->l20_anousu         = $oLicitacao->l20_anousu;
+                $oDados10->l20_naturezaobjeto = $oLicitacao->l20_naturezaobjeto;
+                $oDados10->tipoprocesso       = $oLicitacao->tipoprocesso;
+                $oDados10->l20_codigo         = $oLicitacao->l20_codigo;
+            }
+
             $clcontratos10->si83_tiporegistro = 10;
             $clcontratos10->si83_codcontrato = $oDados10->ac16_sequencial;
             $clcontratos10->si83_codorgao = $sCodorgao;
@@ -377,7 +402,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
                 $clcontratos10->si83_codunidadesubresp = $this->getCodunidadesubrespAdesao($oDados10->ac16_sequencial);
             else
                 $clcontratos10->si83_codunidadesubresp = $oDados10->codunidadesubresp;
-            $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_codigo : ' ';
+            $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
             $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' ';
             $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
             $clcontratos10->si83_naturezaobjeto = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_naturezaobjeto : $oDados10->ac16_acordogrupo;
@@ -483,7 +508,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
                 foreach ($oAcordo->getEmpenhosAcordo() as $oDados12) {
 
                     //Se a origem for licitação
-                    if (in_array($oDados10->contdeclicitacao, array(2, 3))) {
+                    if (in_array($oDados10->contdeclicitacao, array(2, 3)) && $oDados10->l20_codigo != '') {
                         $sSql = "SELECT distinct on (o58_coddot)
                                 o58_coddot,
                                 CASE WHEN o40_codtri = '0'
