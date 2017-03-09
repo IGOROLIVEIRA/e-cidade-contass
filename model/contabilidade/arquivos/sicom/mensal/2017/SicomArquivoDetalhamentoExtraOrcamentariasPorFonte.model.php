@@ -464,6 +464,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 														             and c61_anousu = " . db_getsession("DB_anousu") . "
 														             and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 									$rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont);
+									//echo $sSqlContaPagFont;exit;
 									//db_criatabela($rsResultContaPag);
 									if(pg_num_rows($rsResultContaPag) == 0) {
 										$sSqlContaPagFont = "select distinct si95_codctb  as conta, si96_codfontrecursos as fonte from conplanoconta
@@ -499,7 +500,67 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                          and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont);
                   }
-
+                  if(pg_num_rows($rsResultContaPag) == 0) {
+                    $sSqlContaPagFont = "select distinct conta,fonte from ( 
+																				select si95_codctb as conta, si96_codfontrecursos as fonte 
+																			  from conplanoconta 
+																			  inner join conplanoreduz on c61_codcon = c63_codcon 
+																			  and c61_anousu = c63_anousu 
+																			  inner join ctb102014 on si95_banco = c63_banco 
+																			  and si95_agencia = c63_agencia and si95_digitoverificadoragencia = c63_dvagencia 
+																			  and si95_contabancaria = c63_conta::int8 
+																			  and si95_digitoverificadorcontabancaria = c63_dvconta 
+																			  and si95_tipoconta::int8 = c63_tipoconta 
+																			  inner join ctb202014 on si96_codctb = si95_codctb 
+																			  and si96_mes = si95_mes 
+																			  and si96_codfontrecursos = {$oExt30->fontepagadora} 
+																			  where c61_reduz = {$oExt30->contapagadora} and c61_anousu = " . db_getsession("DB_anousu") . " 
+																			  union all
+																			  select si95_codctb as conta, si96_codfontrecursos as fonte 
+																			  from conplanoconta 
+																			  inner join conplanoreduz on c61_codcon = c63_codcon 
+																			  and c61_anousu = c63_anousu 
+																			  inner join ctb102015 on si95_banco = c63_banco 
+																			  and si95_agencia = c63_agencia and si95_digitoverificadoragencia = c63_dvagencia 
+																			  and si95_contabancaria = c63_conta::int8 
+																			  and si95_digitoverificadorcontabancaria = c63_dvconta 
+																			  and si95_tipoconta::int8 = c63_tipoconta 
+																			  inner join ctb202015 on si96_codctb = si95_codctb 
+																			  and si96_mes = si95_mes 
+																			  and si96_codfontrecursos = {$oExt30->fontepagadora} 
+																			  where c61_reduz = {$oExt30->contapagadora} and c61_anousu = " . db_getsession("DB_anousu") . " 
+																			  union all
+																			  select si95_codctb as conta, si96_codfontrecursos as fonte 
+																			  from conplanoconta 
+																			  inner join conplanoreduz on c61_codcon = c63_codcon 
+																			  and c61_anousu = c63_anousu 
+																			  inner join ctb102016 on si95_banco = c63_banco 
+																			  and si95_agencia = c63_agencia and si95_digitoverificadoragencia = c63_dvagencia 
+																			  and si95_contabancaria = c63_conta::int8 
+																			  and si95_digitoverificadorcontabancaria = c63_dvconta 
+																			  and si95_tipoconta::int8 = c63_tipoconta 
+																			  inner join ctb202016 on si96_codctb = si95_codctb 
+																			  and si96_mes = si95_mes 
+																			  and si96_codfontrecursos = {$oExt30->fontepagadora} 
+																			  where c61_reduz = {$oExt30->contapagadora} and c61_anousu = " . db_getsession("DB_anousu") . " 
+																			  union all
+																			  select si95_codctb as conta, si96_codfontrecursos as fonte 
+																			  from conplanoconta 
+																			  inner join conplanoreduz on c61_codcon = c63_codcon 
+																			  and c61_anousu = c63_anousu 
+																			  inner join ctb102017 on si95_banco = c63_banco 
+																			  and si95_agencia = c63_agencia and si95_digitoverificadoragencia = c63_dvagencia 
+																			  and si95_contabancaria = c63_conta::int8 
+																			  and si95_digitoverificadorcontabancaria = c63_dvconta 
+																			  and si95_tipoconta::int8 = c63_tipoconta 
+																			  inner join ctb202017 on si96_codctb = si95_codctb 
+																			  and si96_mes = si95_mes 
+																			  and si96_codfontrecursos = {$oExt30->fontepagadora} 
+																			  where c61_reduz = {$oExt30->contapagadora} and c61_anousu = " . db_getsession("DB_anousu") . " 
+																			  and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
+																			  ) as cb"; 
+																			  $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont);
+                  }
 									if(pg_num_rows($rsResultContaPag) > 0){
 
 										$oConta = db_utils::fieldsMemory($rsResultContaPag, 0);
