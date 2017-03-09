@@ -94,16 +94,16 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
     /**
      * Tipo de Termo de Aditivo:
      *   04 ? Reajuste;
-     *   05 ? Recomposição (Equilíbrio Financeiro);
+     *   05 ? Recomposiï¿½ï¿½o (Equilï¿½brio Financeiro);
      *   06 ? Outros.
-     *   07 ? Alteração de Prazo de Vigência;
-     *   08 ? Alteração de Prazo de Execução;
-     *   09 ? Acréscimo de Item(ns);
-     *   10 ? Decréscimo de Item(ns);
-     *   11 ? Acréscimo e Decréscimo de Item(ns);
-     *   12 ? Alteração de Projeto/Especificação
-     *   13 ? Alteração de Prazo de vigência e Prazo de Execução;
-     *   14 ? Acréscimo/Decréscimo de item(ns) conjugado com
+     *   07 ? Alteraï¿½ï¿½o de Prazo de Vigï¿½ncia;
+     *   08 ? Alteraï¿½ï¿½o de Prazo de Execuï¿½ï¿½o;
+     *   09 ? Acrï¿½scimo de Item(ns);
+     *   10 ? Decrï¿½scimo de Item(ns);
+     *   11 ? Acrï¿½scimo e Decrï¿½scimo de Item(ns);
+     *   12 ? Alteraï¿½ï¿½o de Projeto/Especificaï¿½ï¿½o
+     *   13 ? Alteraï¿½ï¿½o de Prazo de vigï¿½ncia e Prazo de Execuï¿½ï¿½o;
+     *   14 ? Acrï¿½scimo/Decrï¿½scimo de item(ns) conjugado com
      *        outros tipos de termos aditivos;
      * @param AcordoPosicao $oAcordoPosicao
      * @return int
@@ -195,7 +195,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
     }
 
     /**
-     * selecionar os dados de Leis de Alteração
+     * selecionar os dados de Leis de Alteraï¿½ï¿½o
      *
      */
     public function gerarDados()
@@ -212,9 +212,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
         db_inicio_transacao();
         // matriz de entrada
-        $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+        $what = array("ï¿½", chr(13), chr(10), 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', 'ï¿½', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ï¿½', 'ï¿½');
 
-        // matriz de saída
+        // matriz de saï¿½da
         $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
         /*
@@ -320,7 +320,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
          */
 
         $sSql =     "select distinct acordo.*,liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
-                    case when l20_codtipocom = 100 then 2 when l20_codtipocom = 101 then 1 when l20_codtipocom = 102 then 3 when l20_codtipocom = 103 then 4 else 0 end as tipoprocesso,
+                    case when pc50_pctipocompratribunal = 100 then 2 when pc50_pctipocompratribunal = 101 then 1 when pc50_pctipocompratribunal = 102 then 3 when pc50_pctipocompratribunal = 103 then 4 else 0 end as tipoprocesso,
                     ac16_tipoorigem as contdeclicitacao,ac16_origem,
                     (CASE
                     WHEN o41_subunidade != 0
@@ -341,6 +341,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     left join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade and db01_anousu = o41_anousu and o41_anousu = " . db_getsession("DB_anousu") . "
                     left join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                     left join cflicita on l20_codtipocom = l03_codigo
+                    inner join pctipocompra ON pc50_codcom = l03_codcom
                     where ac16_dataassinatura <= '{$this->sDataFinal}'
                     and ac16_dataassinatura >= '{$this->sDataInicial}'
                     and ac16_instit = " . db_getsession("DB_instit");
@@ -414,7 +415,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_vlcontrato = $oAcordo->getValoresItens()->valoratual;
             $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento);
             $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento);
-            $sTipoUnidade = $oDados10->ac16_tipounidtempoperiodo == 1 ? ' Mês(s)' : ' Dia(s)';
+            $sTipoUnidade = $oDados10->ac16_tipounidtempoperiodo == 1 ? ' Mï¿½s(s)' : ' Dia(s)';
             $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo . $sTipoUnidade;
             $clcontratos10->si83_multarescisoria = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 1)), 0, 99);
             $clcontratos10->si83_multainadimplemento = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 2)), 0, 99);
@@ -507,7 +508,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             if ($oDados10->ac16_acordoclassificacao != 4 || $oDados10->ac16_acordoclassificacao != 5) {
                 foreach ($oAcordo->getEmpenhosAcordo() as $oDados12) {
 
-                    //Se a origem for licitação
+                    //Se a origem for licitaï¿½ï¿½o
                     if (in_array($oDados10->contdeclicitacao, array(2, 3)) && $oDados10->l20_codigo != '') {
                         $sSql = "SELECT distinct on (o58_coddot)
                                 o58_coddot,
