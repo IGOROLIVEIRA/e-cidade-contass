@@ -316,7 +316,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;
 
         /*
-         * selecionar informacoes registro 10-2
+         * selecionar informacoes registro 10
          */
 
         $sSql =     "select distinct acordo.*,liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
