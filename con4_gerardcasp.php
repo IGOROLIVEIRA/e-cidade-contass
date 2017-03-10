@@ -45,7 +45,7 @@ $clrotulo->label("o15_codigo");
                 </legend>
                 <table style='empty-cells: show; border-collapse: collapse;'>
                     <tr>
-                        <td colspan="2" align="center">Dados Mensais</td>
+                        <td colspan="2" align="center">Dados</td>
                         <td>Arquivos Gerados</td>
                     </tr>
                     <tr>
