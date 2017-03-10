@@ -43,7 +43,10 @@ class cl_bpdcasp202017 {
    var $si209_vlpatriliquidresultacumexeranteri = 0; 
    var $si209_vlpatriliquidoacoescotas = 0; 
    var $si209_vltotalpassivo = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si209_ano = 0;
+   var $si209_periodo = 0;
+   var $si209_institu = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si209_sequencial = int4 = si209_sequencial 
                  si209_tiporegistro = int4 = si209_tiporegistro 
@@ -118,6 +121,9 @@ class cl_bpdcasp202017 {
        $this->si209_vlpatriliquidresultacumexeranteri = ($this->si209_vlpatriliquidresultacumexeranteri == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpatriliquidresultacumexeranteri"]:$this->si209_vlpatriliquidresultacumexeranteri);
        $this->si209_vlpatriliquidoacoescotas = ($this->si209_vlpatriliquidoacoescotas == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpatriliquidoacoescotas"]:$this->si209_vlpatriliquidoacoescotas);
        $this->si209_vltotalpassivo = ($this->si209_vltotalpassivo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vltotalpassivo"]:$this->si209_vltotalpassivo);
+       $this->si209_ano = ($this->si209_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_ano"]:$this->si209_ano);
+       $this->si209_periodo = ($this->si209_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_periodo"]:$this->si209_periodo);
+       $this->si209_institu = ($this->si209_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_institu"]:$this->si209_institu);
      }else{
        $this->si209_sequencial = ($this->si209_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_sequencial"]:$this->si209_sequencial);
      }
@@ -125,7 +131,7 @@ class cl_bpdcasp202017 {
    // funcao para inclusao
    function incluir ($si209_sequencial){ 
       $this->atualizacampos();
-     if($this->si209_tiporegistro == null ){ 
+     if($this->si209_tiporegistro == null ){
        $this->erro_sql = " Campo si209_tiporegistro não informado.";
        $this->erro_campo = "si209_tiporegistro";
        $this->erro_banco = "";
@@ -134,7 +140,7 @@ class cl_bpdcasp202017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si209_exercicio == null ){ 
+     if($this->si209_exercicio == null ){
        $this->erro_sql = " Campo si209_exercicio não informado.";
        $this->erro_campo = "si209_exercicio";
        $this->erro_banco = "";
@@ -143,231 +149,79 @@ class cl_bpdcasp202017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si209_vlpassivcircultrabprevicurtoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassivcircultrabprevicurtoprazo não informado.";
-       $this->erro_campo = "si209_vlpassivcircultrabprevicurtoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassivcircultrabprevicurtoprazo == null ){
+         $this->si209_vlpassivcircultrabprevicurtoprazo = 0;
      }
-     if($this->si209_vlpassivcirculemprefinancurtoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassivcirculemprefinancurtoprazo não informado.";
-       $this->erro_campo = "si209_vlpassivcirculemprefinancurtoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassivcirculemprefinancurtoprazo == null ){
+         $this->si209_vlpassivcirculemprefinancurtoprazo = 0;
      }
-     if($this->si209_vlpassivocirculafornecedcurtoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassivocirculafornecedcurtoprazo não informado.";
-       $this->erro_campo = "si209_vlpassivocirculafornecedcurtoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassivocirculafornecedcurtoprazo == null ){
+         $this->si209_vlpassivocirculafornecedcurtoprazo = 0;
      }
-     if($this->si209_vlpassicircuobrigfiscacurtoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassicircuobrigfiscacurtoprazo não informado.";
-       $this->erro_campo = "si209_vlpassicircuobrigfiscacurtoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassicircuobrigfiscacurtoprazo == null ){
+         $this->si209_vlpassicircuobrigfiscacurtoprazo = 0;
      }
-     if($this->si209_vlpassivocirculaobrigacoutrosentes == null ){ 
-       $this->erro_sql = " Campo si209_vlpassivocirculaobrigacoutrosentes não informado.";
-       $this->erro_campo = "si209_vlpassivocirculaobrigacoutrosentes";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassivocirculaobrigacoutrosentes == null ){
+         $this->si209_vlpassivocirculaobrigacoutrosentes = 0;
      }
-     if($this->si209_vlpassivocirculaprovisoecurtoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassivocirculaprovisoecurtoprazo não informado.";
-       $this->erro_campo = "si209_vlpassivocirculaprovisoecurtoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassivocirculaprovisoecurtoprazo == null ){
+         $this->si209_vlpassivocirculaprovisoecurtoprazo = 0;
      }
-     if($this->si209_vlpassicircudemaiobrigcurtoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassicircudemaiobrigcurtoprazo não informado.";
-       $this->erro_campo = "si209_vlpassicircudemaiobrigcurtoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassicircudemaiobrigcurtoprazo == null ){
+         $this->si209_vlpassicircudemaiobrigcurtoprazo = 0;
      }
-     if($this->si209_vlpassinaocircutrabprevilongoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassinaocircutrabprevilongoprazo não informado.";
-       $this->erro_campo = "si209_vlpassinaocircutrabprevilongoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassinaocircutrabprevilongoprazo == null ){
+         $this->si209_vlpassinaocircutrabprevilongoprazo = 0;
      }
-     if($this->si209_vlpassnaocircemprfinalongpraz == null ){ 
-       $this->erro_sql = " Campo si209_vlpassnaocircemprfinalongpraz não informado.";
-       $this->erro_campo = "si209_vlpassnaocircemprfinalongpraz";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassnaocircemprfinalongpraz == null ){
+         $this->si209_vlpassnaocircemprfinalongpraz = 0;
      }
-     if($this->si209_vlpassivnaocirculforneclongoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassivnaocirculforneclongoprazo não informado.";
-       $this->erro_campo = "si209_vlpassivnaocirculforneclongoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassivnaocirculforneclongoprazo == null ){
+         $this->si209_vlpassivnaocirculforneclongoprazo = 0;
      }
-     if($this->si209_vlpassnaocircobrifisclongpraz == null ){ 
-       $this->erro_sql = " Campo si209_vlpassnaocircobrifisclongpraz não informado.";
-       $this->erro_campo = "si209_vlpassnaocircobrifisclongpraz";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassnaocircobrifisclongpraz == null ){
+         $this->si209_vlpassnaocircobrifisclongpraz = 0;
      }
-     if($this->si209_vlpassivnaocirculprovislongoprazo == null ){ 
-       $this->erro_sql = " Campo si209_vlpassivnaocirculprovislongoprazo não informado.";
-       $this->erro_campo = "si209_vlpassivnaocirculprovislongoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassivnaocirculprovislongoprazo == null ){
+         $this->si209_vlpassivnaocirculprovislongoprazo = 0;
      }
-     if($this->si209_vlpassnaocircdemaobrilongpraz == null ){ 
-       $this->erro_sql = " Campo si209_vlpassnaocircdemaobrilongpraz não informado.";
-       $this->erro_campo = "si209_vlpassnaocircdemaobrilongpraz";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassnaocircdemaobrilongpraz == null ){
+         $this->si209_vlpassnaocircdemaobrilongpraz = 0;
      }
-     if($this->si209_vlpassivonaocircularesuldiferido == null ){ 
-       $this->erro_sql = " Campo si209_vlpassivonaocircularesuldiferido não informado.";
-       $this->erro_campo = "si209_vlpassivonaocircularesuldiferido";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpassivonaocircularesuldiferido == null ){
+         $this->si209_vlpassivonaocircularesuldiferido = 0;
      }
-     if($this->si209_vlpatriliquidocapitalsocial == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidocapitalsocial não informado.";
-       $this->erro_campo = "si209_vlpatriliquidocapitalsocial";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidocapitalsocial == null ){
+         $this->si209_vlpatriliquidocapitalsocial = 0;
      }
-     if($this->si209_vlpatriliquidoadianfuturocapital == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidoadianfuturocapital não informado.";
-       $this->erro_campo = "si209_vlpatriliquidoadianfuturocapital";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidoadianfuturocapital == null ){
+         $this->si209_vlpatriliquidoadianfuturocapital = 0;
      }
-     if($this->si209_vlpatriliquidoreservacapital == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidoreservacapital não informado.";
-       $this->erro_campo = "si209_vlpatriliquidoreservacapital";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidoreservacapital == null ){
+         $this->si209_vlpatriliquidoreservacapital = 0;
      }
-     if($this->si209_vlpatriliquidoajustavaliacao == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidoajustavaliacao não informado.";
-       $this->erro_campo = "si209_vlpatriliquidoajustavaliacao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidoajustavaliacao == null ){
+         $this->si209_vlpatriliquidoajustavaliacao = 0;
      }
-     if($this->si209_vlpatriliquidoreservalucros == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidoreservalucros não informado.";
-       $this->erro_campo = "si209_vlpatriliquidoreservalucros";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidoreservalucros == null ){
+         $this->si209_vlpatriliquidoreservalucros = 0;
      }
-     if($this->si209_vlpatriliquidodemaisreservas == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidodemaisreservas não informado.";
-       $this->erro_campo = "si209_vlpatriliquidodemaisreservas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidodemaisreservas == null ){
+         $this->si209_vlpatriliquidodemaisreservas = 0;
      }
-     if($this->si209_vlpatriliquidoresultexercicio == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidoresultexercicio não informado.";
-       $this->erro_campo = "si209_vlpatriliquidoresultexercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidoresultexercicio == null ){
+         $this->si209_vlpatriliquidoresultexercicio = 0;
      }
-     if($this->si209_vlpatriliquidresultacumexeranteri == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidresultacumexeranteri não informado.";
-       $this->erro_campo = "si209_vlpatriliquidresultacumexeranteri";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidresultacumexeranteri == null ){
+         $this->si209_vlpatriliquidresultacumexeranteri = 0;
      }
-     if($this->si209_vlpatriliquidoacoescotas == null ){ 
-       $this->erro_sql = " Campo si209_vlpatriliquidoacoescotas não informado.";
-       $this->erro_campo = "si209_vlpatriliquidoacoescotas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vlpatriliquidoacoescotas == null ){
+         $this->si209_vlpatriliquidoacoescotas = 0;
      }
-     if($this->si209_vltotalpassivo == null ){ 
-       $this->erro_sql = " Campo si209_vltotalpassivo não informado.";
-       $this->erro_campo = "si209_vltotalpassivo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si209_vltotalpassivo == null ){
+         $this->si209_vltotalpassivo = 0;
      }
-       $this->si209_sequencial = $si209_sequencial; 
-     if(($this->si209_sequencial == null) || ($this->si209_sequencial == "") ){ 
-       $this->erro_sql = " Campo si209_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      $sql = "insert into bpdcasp202017(
                                        si209_sequencial 
                                       ,si209_tiporegistro 
@@ -396,9 +250,12 @@ class cl_bpdcasp202017 {
                                       ,si209_vlpatriliquidresultacumexeranteri 
                                       ,si209_vlpatriliquidoacoescotas 
                                       ,si209_vltotalpassivo 
+                                      ,si209_ano
+                                      ,si209_periodo
+                                      ,si209_institu
                        )
                 values (
-                                $this->si209_sequencial 
+                                (select nextval('bpdcasp202017_si209_sequencial_seq'))
                                ,$this->si209_tiporegistro 
                                ,$this->si209_exercicio 
                                ,$this->si209_vlpassivcircultrabprevicurtoprazo 
@@ -425,8 +282,11 @@ class cl_bpdcasp202017 {
                                ,$this->si209_vlpatriliquidresultacumexeranteri 
                                ,$this->si209_vlpatriliquidoacoescotas 
                                ,$this->si209_vltotalpassivo 
+                               ,$this->si209_ano
+                               ,$this->si209_periodo
+                               ,$this->si209_institu
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -450,46 +310,7 @@ class cl_bpdcasp202017 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
 
-       $resaco = $this->sql_record($this->sql_query_file($this->si209_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
-
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009386,'$this->si209_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009386,'','".AddSlashes(pg_result($resaco,0,'si209_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009388,'','".AddSlashes(pg_result($resaco,0,'si209_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009389,'','".AddSlashes(pg_result($resaco,0,'si209_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009390,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassivcircultrabprevicurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009391,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassivcirculemprefinancurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009392,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassivocirculafornecedcurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009393,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassicircuobrigfiscacurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009394,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassivocirculaobrigacoutrosentes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009395,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassivocirculaprovisoecurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009396,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassicircudemaiobrigcurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009397,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassinaocircutrabprevilongoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009398,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassnaocircemprfinalongpraz'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009399,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassivnaocirculforneclongoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009400,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassnaocircobrifisclongpraz'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009401,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassivnaocirculprovislongoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009402,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassnaocircdemaobrilongpraz'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009403,'','".AddSlashes(pg_result($resaco,0,'si209_vlpassivonaocircularesuldiferido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009404,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidocapitalsocial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009405,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidoadianfuturocapital'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009406,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidoreservacapital'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009407,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidoajustavaliacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009408,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidoreservalucros'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009409,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidodemaisreservas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009410,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidoresultexercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009411,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidresultacumexeranteri'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009412,'','".AddSlashes(pg_result($resaco,0,'si209_vlpatriliquidoacoescotas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010203,1009413,'','".AddSlashes(pg_result($resaco,0,'si209_vltotalpassivo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
      return true;
    } 
    // funcao para alteracao
@@ -957,54 +778,6 @@ class cl_bpdcasp202017 {
    // funcao para exclusao 
    function excluir ($si209_sequencial=null,$dbwhere=null) { 
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($si209_sequencial));
-       } else { 
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,1009386,'$si209_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009386,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009388,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009389,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009390,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassivcircultrabprevicurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009391,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassivcirculemprefinancurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009392,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassivocirculafornecedcurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009393,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassicircuobrigfiscacurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009394,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassivocirculaobrigacoutrosentes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009395,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassivocirculaprovisoecurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009396,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassicircudemaiobrigcurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009397,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassinaocircutrabprevilongoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009398,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassnaocircemprfinalongpraz'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009399,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassivnaocirculforneclongoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009400,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassnaocircobrifisclongpraz'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009401,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassivnaocirculprovislongoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009402,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassnaocircdemaobrilongpraz'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009403,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpassivonaocircularesuldiferido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009404,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidocapitalsocial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009405,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidoadianfuturocapital'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009406,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidoreservacapital'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009407,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidoajustavaliacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009408,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidoreservalucros'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009409,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidodemaisreservas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009410,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidoresultexercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009411,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidresultacumexeranteri'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009412,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vlpatriliquidoacoescotas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010203,1009413,'','".AddSlashes(pg_result($resaco,$iresaco,'si209_vltotalpassivo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
      $sql = " delete from bpdcasp202017
                     where ";
      $sql2 = "";

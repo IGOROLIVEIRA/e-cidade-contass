@@ -27,7 +27,10 @@ class cl_dvpdcasp102017 {
    var $si216_vlvalorizacaoativodesincorpassivo = 0; 
    var $si216_vloutrasvariacoespatriaumentativas = 0; 
    var $si216_vltotalvpaumentativas = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si216_ano = 0;
+   var $si216_periodo = 0;
+   var $si216_institu = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si216_sequencial = int4 = si216_sequencial 
                  si216_tiporegistro = int4 = si216_tiporegistro 
@@ -70,6 +73,9 @@ class cl_dvpdcasp102017 {
        $this->si216_vlvalorizacaoativodesincorpassivo = ($this->si216_vlvalorizacaoativodesincorpassivo == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_vlvalorizacaoativodesincorpassivo"]:$this->si216_vlvalorizacaoativodesincorpassivo);
        $this->si216_vloutrasvariacoespatriaumentativas = ($this->si216_vloutrasvariacoespatriaumentativas == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_vloutrasvariacoespatriaumentativas"]:$this->si216_vloutrasvariacoespatriaumentativas);
        $this->si216_vltotalvpaumentativas = ($this->si216_vltotalvpaumentativas == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_vltotalvpaumentativas"]:$this->si216_vltotalvpaumentativas);
+       $this->si216_ano = ($this->si216_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_ano"]:$this->si216_ano);
+       $this->si216_periodo = ($this->si216_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_periodo"]:$this->si216_periodo);
+       $this->si216_institu = ($this->si216_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_institu"]:$this->si216_institu);
      }else{
        $this->si216_sequencial = ($this->si216_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_sequencial"]:$this->si216_sequencial);
      }
@@ -95,87 +101,31 @@ class cl_dvpdcasp102017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si216_vlimpostos == null ){ 
-       $this->erro_sql = " Campo si216_vlimpostos não informado.";
-       $this->erro_campo = "si216_vlimpostos";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si216_vlimpostos == null ){
+       $this->si216_vlimpostos = 0;
      }
-     if($this->si216_vlcontribuicoes == null ){ 
-       $this->erro_sql = " Campo si216_vlcontribuicoes não informado.";
-       $this->erro_campo = "si216_vlcontribuicoes";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si216_vlcontribuicoes == null ){
+       $this->si216_vlcontribuicoes = 0;
      }
-     if($this->si216_vlexploracovendasdireitos == null ){ 
-       $this->erro_sql = " Campo si216_vlexploracovendasdireitos não informado.";
-       $this->erro_campo = "si216_vlexploracovendasdireitos";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si216_vlexploracovendasdireitos == null ){
+       $this->si216_vlexploracovendasdireitos = 0;
      }
-     if($this->si216_vlvariacoesaumentativasfinanceiras == null ){ 
-       $this->erro_sql = " Campo si216_vlvariacoesaumentativasfinanceiras não informado.";
-       $this->erro_campo = "si216_vlvariacoesaumentativasfinanceiras";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si216_vlvariacoesaumentativasfinanceiras == null ){
+       $this->si216_vlvariacoesaumentativasfinanceiras = 0;
      }
-     if($this->si216_vltransfdelegacoesrecebidas == null ){ 
-       $this->erro_sql = " Campo si216_vltransfdelegacoesrecebidas não informado.";
-       $this->erro_campo = "si216_vltransfdelegacoesrecebidas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si216_vltransfdelegacoesrecebidas == null ){
+       $this->si216_vltransfdelegacoesrecebidas = 0;
      }
-     if($this->si216_vlvalorizacaoativodesincorpassivo == null ){ 
-       $this->erro_sql = " Campo si216_vlvalorizacaoativodesincorpassivo não informado.";
-       $this->erro_campo = "si216_vlvalorizacaoativodesincorpassivo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si216_vlvalorizacaoativodesincorpassivo == null ){
+       $this->si216_vlvalorizacaoativodesincorpassivo = 0;
      }
-     if($this->si216_vloutrasvariacoespatriaumentativas == null ){ 
-       $this->erro_sql = " Campo si216_vloutrasvariacoespatriaumentativas não informado.";
-       $this->erro_campo = "si216_vloutrasvariacoespatriaumentativas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si216_vloutrasvariacoespatriaumentativas == null ){
+       $this->si216_vloutrasvariacoespatriaumentativas = 0;
      }
-     if($this->si216_vltotalvpaumentativas == null ){ 
-       $this->erro_sql = " Campo si216_vltotalvpaumentativas não informado.";
-       $this->erro_campo = "si216_vltotalvpaumentativas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si216_vltotalvpaumentativas == null ){
+       $this->si216_vltotalvpaumentativas = 0;
      }
-       $this->si216_sequencial = $si216_sequencial; 
-     if(($this->si216_sequencial == null) || ($this->si216_sequencial == "") ){ 
-       $this->erro_sql = " Campo si216_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      $sql = "insert into dvpdcasp102017(
                                        si216_sequencial 
                                       ,si216_tiporegistro 
@@ -188,9 +138,12 @@ class cl_dvpdcasp102017 {
                                       ,si216_vlvalorizacaoativodesincorpassivo 
                                       ,si216_vloutrasvariacoespatriaumentativas 
                                       ,si216_vltotalvpaumentativas 
+                                      ,si216_ano
+                                      ,si216_periodo
+                                      ,si216_institu
                        )
                 values (
-                                $this->si216_sequencial 
+                                (select nextval('dvpdcasp102017_si216_sequencial_seq'))
                                ,$this->si216_tiporegistro 
                                ,$this->si216_exercicio 
                                ,$this->si216_vlimpostos 
@@ -201,6 +154,9 @@ class cl_dvpdcasp102017 {
                                ,$this->si216_vlvalorizacaoativodesincorpassivo 
                                ,$this->si216_vloutrasvariacoespatriaumentativas 
                                ,$this->si216_vltotalvpaumentativas 
+                               ,$this->si216_ano
+                               ,$this->si216_periodo
+                               ,$this->si216_institu
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -226,30 +182,6 @@ class cl_dvpdcasp102017 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       $resaco = $this->sql_record($this->sql_query_file($this->si216_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
-
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009450,'$this->si216_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009450,'','".AddSlashes(pg_result($resaco,0,'si216_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009451,'','".AddSlashes(pg_result($resaco,0,'si216_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009452,'','".AddSlashes(pg_result($resaco,0,'si216_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009453,'','".AddSlashes(pg_result($resaco,0,'si216_vlimpostos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009454,'','".AddSlashes(pg_result($resaco,0,'si216_vlcontribuicoes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009455,'','".AddSlashes(pg_result($resaco,0,'si216_vlexploracovendasdireitos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009456,'','".AddSlashes(pg_result($resaco,0,'si216_vlvariacoesaumentativasfinanceiras'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009457,'','".AddSlashes(pg_result($resaco,0,'si216_vltransfdelegacoesrecebidas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009458,'','".AddSlashes(pg_result($resaco,0,'si216_vlvalorizacaoativodesincorpassivo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009459,'','".AddSlashes(pg_result($resaco,0,'si216_vloutrasvariacoespatriaumentativas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010210,1009460,'','".AddSlashes(pg_result($resaco,0,'si216_vltotalvpaumentativas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
      return true;
    } 
    // funcao para alteracao

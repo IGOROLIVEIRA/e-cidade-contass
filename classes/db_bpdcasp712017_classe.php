@@ -21,7 +21,10 @@ class cl_bpdcasp712017 {
    var $si215_exercicio = 0; 
    var $si215_codfontrecursos = 0; 
    var $si215_vlsaldofonte = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si215_ano = 0;
+   var $si215_periodo = 0;
+   var $si215_institu = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si215_sequencial = int4 = si215_sequencial 
                  si215_tiporegistro = int4 = si215_tiporegistro 
@@ -52,6 +55,9 @@ class cl_bpdcasp712017 {
        $this->si215_exercicio = ($this->si215_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_exercicio"]:$this->si215_exercicio);
        $this->si215_codfontrecursos = ($this->si215_codfontrecursos == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos"]:$this->si215_codfontrecursos);
        $this->si215_vlsaldofonte = ($this->si215_vlsaldofonte == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_vlsaldofonte"]:$this->si215_vlsaldofonte);
+       $this->si215_ano = ($this->si215_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_ano"]:$this->si215_ano);
+       $this->si215_periodo = ($this->si215_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_periodo"]:$this->si215_periodo);
+       $this->si215_institu = ($this->si215_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_institu"]:$this->si215_institu);
      }else{
        $this->si215_sequencial = ($this->si215_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_sequencial"]:$this->si215_sequencial);
      }
@@ -59,7 +65,7 @@ class cl_bpdcasp712017 {
    // funcao para inclusao
    function incluir ($si215_sequencial){ 
       $this->atualizacampos();
-     if($this->si215_tiporegistro == null ){ 
+     if($this->si215_tiporegistro == null ){
        $this->erro_sql = " Campo si215_tiporegistro não informado.";
        $this->erro_campo = "si215_tiporegistro";
        $this->erro_banco = "";
@@ -68,7 +74,7 @@ class cl_bpdcasp712017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si215_exercicio == null ){ 
+     if($this->si215_exercicio == null ){
        $this->erro_sql = " Campo si215_exercicio não informado.";
        $this->erro_campo = "si215_exercicio";
        $this->erro_banco = "";
@@ -77,46 +83,32 @@ class cl_bpdcasp712017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si215_codfontrecursos == null ){ 
-       $this->erro_sql = " Campo si215_codfontrecursos não informado.";
-       $this->erro_campo = "si215_codfontrecursos";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si215_codfontrecursos == null ){
+       $this->si215_codfontrecursos = 0;
      }
-     if($this->si215_vlsaldofonte == null ){ 
-       $this->erro_sql = " Campo si215_vlsaldofonte não informado.";
-       $this->erro_campo = "si215_vlsaldofonte";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si215_vlsaldofonte == null ){
+       $this->si215_vlsaldofonte = 0;
      }
-       $this->si215_sequencial = $si215_sequencial; 
-     if(($this->si215_sequencial == null) || ($this->si215_sequencial == "") ){ 
-       $this->erro_sql = " Campo si215_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      $sql = "insert into bpdcasp712017(
                                        si215_sequencial 
                                       ,si215_tiporegistro 
                                       ,si215_exercicio 
                                       ,si215_codfontrecursos 
                                       ,si215_vlsaldofonte 
+                                      ,si215_ano
+                                      ,si215_periodo
+                                      ,si215_institu
                        )
                 values (
-                                $this->si215_sequencial 
+                                (select nextval('bpdcasp712017_si215_sequencial_seq'))
                                ,$this->si215_tiporegistro 
                                ,$this->si215_exercicio 
                                ,$this->si215_codfontrecursos 
                                ,$this->si215_vlsaldofonte 
+                               ,$this->si215_ano
+                               ,$this->si215_periodo
+                               ,$this->si215_institu
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -142,24 +134,6 @@ class cl_bpdcasp712017 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       $resaco = $this->sql_record($this->sql_query_file($this->si215_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
-
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009445,'$this->si215_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010209,1009445,'','".AddSlashes(pg_result($resaco,0,'si215_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010209,1009446,'','".AddSlashes(pg_result($resaco,0,'si215_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010209,1009447,'','".AddSlashes(pg_result($resaco,0,'si215_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010209,1009448,'','".AddSlashes(pg_result($resaco,0,'si215_codfontrecursos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010209,1009449,'','".AddSlashes(pg_result($resaco,0,'si215_vlsaldofonte'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
      return true;
    } 
    // funcao para alteracao
@@ -297,32 +271,6 @@ class cl_bpdcasp712017 {
    // funcao para exclusao 
    function excluir ($si215_sequencial=null,$dbwhere=null) { 
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($si215_sequencial));
-       } else { 
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,1009445,'$si215_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010209,1009445,'','".AddSlashes(pg_result($resaco,$iresaco,'si215_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010209,1009446,'','".AddSlashes(pg_result($resaco,$iresaco,'si215_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010209,1009447,'','".AddSlashes(pg_result($resaco,$iresaco,'si215_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010209,1009448,'','".AddSlashes(pg_result($resaco,$iresaco,'si215_codfontrecursos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010209,1009449,'','".AddSlashes(pg_result($resaco,$iresaco,'si215_vlsaldofonte'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
      $sql = " delete from bpdcasp712017
                     where ";
      $sql2 = "";

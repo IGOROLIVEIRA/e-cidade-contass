@@ -31,8 +31,11 @@ class cl_bpdcasp102017 {
    var $si208_vlativonaocircuinvestimentos = 0; 
    var $si208_vlativonaocircuimobilizado = 0; 
    var $si208_vlativonaocircuintagivel = 0; 
-   var $si208_vltotalativo = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si208_vltotalativo = 0;
+    var $si208_ano = 0;
+    var $si208_periodo = 0;
+    var $si208_institu = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si208_sequencial = int4 = si208_sequencial 
                  si208_tiporegistro = int4 = si208_tiporegistro 
@@ -85,6 +88,9 @@ class cl_bpdcasp102017 {
        $this->si208_vlativonaocircuimobilizado = ($this->si208_vlativonaocircuimobilizado == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircuimobilizado"]:$this->si208_vlativonaocircuimobilizado);
        $this->si208_vlativonaocircuintagivel = ($this->si208_vlativonaocircuintagivel == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativonaocircuintagivel"]:$this->si208_vlativonaocircuintagivel);
        $this->si208_vltotalativo = ($this->si208_vltotalativo == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vltotalativo"]:$this->si208_vltotalativo);
+       $this->si208_ano = ($this->si208_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_ano"]:$this->si208_ano);
+       $this->si208_periodo = ($this->si208_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_periodo"]:$this->si208_periodo);
+       $this->si208_institu = ($this->si208_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_institu"]:$this->si208_institu);
      }else{
        $this->si208_sequencial = ($this->si208_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_sequencial"]:$this->si208_sequencial);
      }
@@ -92,7 +98,7 @@ class cl_bpdcasp102017 {
    // funcao para inclusao
    function incluir ($si208_sequencial){ 
       $this->atualizacampos();
-     if($this->si208_tiporegistro == null ){ 
+     if($this->si208_tiporegistro == null ){
        $this->erro_sql = " Campo si208_tiporegistro não informado.";
        $this->erro_campo = "si208_tiporegistro";
        $this->erro_banco = "";
@@ -101,7 +107,7 @@ class cl_bpdcasp102017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si208_exercicio == null ){ 
+     if($this->si208_exercicio == null ){
        $this->erro_sql = " Campo si208_exercicio não informado.";
        $this->erro_campo = "si208_exercicio";
        $this->erro_banco = "";
@@ -110,132 +116,69 @@ class cl_bpdcasp102017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si208_vlativocircucaixaequicaixa == null ){ 
-       $this->erro_sql = " Campo si208_vlativocircucaixaequicaixa não informado.";
-       $this->erro_campo = "si208_vlativocircucaixaequicaixa";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativocircucaixaequicaixa == null ){
+         $this->si208_vlativocircucaixaequicaixa = 0;
      }
-     if($this->si208_vlativocircucredicurtoprazo == null ){ 
-       $this->erro_sql = " Campo si208_vlativocircucredicurtoprazo não informado.";
-       $this->erro_campo = "si208_vlativocircucredicurtoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativocircucredicurtoprazo == null ){
+         $this->si208_vlativocircucredicurtoprazo = 0;
      }
-     if($this->si208_vlativocircuinvestapliccurtoprazo == null ){ 
-       $this->erro_sql = " Campo si208_vlativocircuinvestapliccurtoprazo não informado.";
-       $this->erro_campo = "si208_vlativocircuinvestapliccurtoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativocircuinvestapliccurtoprazo == null ){
+         $this->si208_vlativocircuinvestapliccurtoprazo = 0;
      }
-     if($this->si208_vlativocircuestoques == null ){ 
-       $this->erro_sql = " Campo si208_vlativocircuestoques não informado.";
-       $this->erro_campo = "si208_vlativocircuestoques";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativocircuestoques == null ){
+         $this->si208_vlativocircuestoques = 0;
      }
-     if($this->si208_vlativocircuvpdantecipada == null ){ 
-       $this->erro_sql = " Campo si208_vlativocircuvpdantecipada não informado.";
-       $this->erro_campo = "si208_vlativocircuvpdantecipada";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativocircuvpdantecipada == null ){
+         $this->si208_vlativocircuvpdantecipada = 0;
      }
-     if($this->si208_vlativonaocircucredilongoprazo == null ){ 
-       $this->erro_sql = " Campo si208_vlativonaocircucredilongoprazo não informado.";
-       $this->erro_campo = "si208_vlativonaocircucredilongoprazo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativonaocircucredilongoprazo == null ){
+         $this->si208_vlativonaocircucredilongoprazo = 0;
      }
-     if($this->si208_vlativonaocircuinvestemplongpraz == null ){ 
-       $this->erro_sql = " Campo si208_vlativonaocircuinvestemplongpraz não informado.";
-       $this->erro_campo = "si208_vlativonaocircuinvestemplongpraz";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativonaocircuinvestemplongpraz == null ){
+         $this->si208_vlativonaocircuinvestemplongpraz = 0;
      }
-     if($this->si208_vlativonaocircuestoques == null ){ 
-       $this->erro_sql = " Campo si208_vlativonaocircuestoques não informado.";
-       $this->erro_campo = "si208_vlativonaocircuestoques";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativonaocircuestoques == null ){
+         $this->si208_vlativonaocircuestoques = 0;
      }
-     if($this->si208_vlativonaocircuvpdantecipada == null ){ 
-       $this->erro_sql = " Campo si208_vlativonaocircuvpdantecipada não informado.";
-       $this->erro_campo = "si208_vlativonaocircuvpdantecipada";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativonaocircuvpdantecipada == null ){
+         $this->si208_vlativonaocircuvpdantecipada = 0;
      }
-     if($this->si208_vlativonaocircuinvestimentos == null ){ 
-       $this->erro_sql = " Campo si208_vlativonaocircuinvestimentos não informado.";
-       $this->erro_campo = "si208_vlativonaocircuinvestimentos";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativonaocircuinvestimentos == null ){
+         $this->si208_vlativonaocircuinvestimentos = 0;
      }
-     if($this->si208_vlativonaocircuimobilizado == null ){ 
-       $this->erro_sql = " Campo si208_vlativonaocircuimobilizado não informado.";
-       $this->erro_campo = "si208_vlativonaocircuimobilizado";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativonaocircuimobilizado == null ){
+         $this->si208_vlativonaocircuimobilizado = 0;
      }
-     if($this->si208_vlativonaocircuintagivel == null ){ 
-       $this->erro_sql = " Campo si208_vlativonaocircuintagivel não informado.";
-       $this->erro_campo = "si208_vlativonaocircuintagivel";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vlativonaocircuintagivel == null ){
+         $this->si208_vlativonaocircuintagivel = 0;
      }
-     if($this->si208_vltotalativo == null ){ 
-       $this->erro_sql = " Campo si208_vltotalativo não informado.";
-       $this->erro_campo = "si208_vltotalativo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si208_vltotalativo == null ){
+         $this->si208_vltotalativo = 0;
      }
-       $this->si208_sequencial = $si208_sequencial; 
-     if(($this->si208_sequencial == null) || ($this->si208_sequencial == "") ){ 
-       $this->erro_sql = " Campo si208_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+   if($si208_sequencial == "" || $si208_sequencial == null ){
+       $result = db_query("select nextval('bpdcasp102017_si208_sequencial_seq')");
+       if($result==false){
+           $this->erro_banco = str_replace("\n","",@pg_last_error());
+           $this->erro_sql   = "Verifique o cadastro da sequencia: bpdcasp102017_si208_sequencial_seq do campo: si208_sequencial";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+       $this->si208_sequencial = pg_result($result,0,0);
+   }else{
+       $result = db_query("select last_value from bpdcasp102017_si208_sequencial_seq");
+       if(($result != false) && (pg_result($result,0,0) < $si208_sequencial)){
+           $this->erro_sql = " Campo si208_sequencial maior que último número da sequencia.";
+           $this->erro_banco = "Sequencia menor que este número.";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }else{
+           $this->si208_sequencial = $si208_sequencial;
+       }
+   }
      $sql = "insert into bpdcasp102017(
                                        si208_sequencial 
                                       ,si208_tiporegistro 
@@ -253,6 +196,9 @@ class cl_bpdcasp102017 {
                                       ,si208_vlativonaocircuimobilizado 
                                       ,si208_vlativonaocircuintagivel 
                                       ,si208_vltotalativo 
+                                      ,si208_ano 
+                                      ,si208_periodo 
+                                      ,si208_institu 
                        )
                 values (
                                 $this->si208_sequencial 
@@ -269,10 +215,13 @@ class cl_bpdcasp102017 {
                                ,$this->si208_vlativonaocircuvpdantecipada 
                                ,$this->si208_vlativonaocircuinvestimentos 
                                ,$this->si208_vlativonaocircuimobilizado 
-                               ,$this->si208_vlativonaocircuintagivel 
-                               ,$this->si208_vltotalativo 
+                               ,$this->si208_vlativonaocircuintagivel
+                               ,$this->si208_vltotalativo
+                               ,$this->si208_ano
+                               ,$this->si208_periodo
+                               ,$this->si208_institu
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -296,35 +245,6 @@ class cl_bpdcasp102017 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       $resaco = $this->sql_record($this->sql_query_file($this->si208_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
-
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009368,'$this->si208_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009368,'','".AddSlashes(pg_result($resaco,0,'si208_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009369,'','".AddSlashes(pg_result($resaco,0,'si208_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009370,'','".AddSlashes(pg_result($resaco,0,'si208_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009371,'','".AddSlashes(pg_result($resaco,0,'si208_vlativocircucaixaequicaixa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009372,'','".AddSlashes(pg_result($resaco,0,'si208_vlativocircucredicurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009373,'','".AddSlashes(pg_result($resaco,0,'si208_vlativocircuinvestapliccurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009374,'','".AddSlashes(pg_result($resaco,0,'si208_vlativocircuestoques'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009375,'','".AddSlashes(pg_result($resaco,0,'si208_vlativocircuvpdantecipada'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009376,'','".AddSlashes(pg_result($resaco,0,'si208_vlativonaocircucredilongoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009377,'','".AddSlashes(pg_result($resaco,0,'si208_vlativonaocircuinvestemplongpraz'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009378,'','".AddSlashes(pg_result($resaco,0,'si208_vlativonaocircuestoques'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009379,'','".AddSlashes(pg_result($resaco,0,'si208_vlativonaocircuvpdantecipada'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009380,'','".AddSlashes(pg_result($resaco,0,'si208_vlativonaocircuinvestimentos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009381,'','".AddSlashes(pg_result($resaco,0,'si208_vlativonaocircuimobilizado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009382,'','".AddSlashes(pg_result($resaco,0,'si208_vlativonaocircuintagivel'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010202,1009383,'','".AddSlashes(pg_result($resaco,0,'si208_vltotalativo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
      return true;
    } 
    // funcao para alteracao
@@ -627,43 +547,6 @@ class cl_bpdcasp102017 {
    // funcao para exclusao 
    function excluir ($si208_sequencial=null,$dbwhere=null) { 
 
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($si208_sequencial));
-       } else { 
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,1009368,'$si208_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009368,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009369,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009370,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009371,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativocircucaixaequicaixa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009372,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativocircucredicurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009373,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativocircuinvestapliccurtoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009374,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativocircuestoques'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009375,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativocircuvpdantecipada'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009376,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativonaocircucredilongoprazo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009377,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativonaocircuinvestemplongpraz'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009378,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativonaocircuestoques'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009379,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativonaocircuvpdantecipada'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009380,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativonaocircuinvestimentos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009381,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativonaocircuimobilizado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009382,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vlativonaocircuintagivel'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010202,1009383,'','".AddSlashes(pg_result($resaco,$iresaco,'si208_vltotalativo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
      $sql = " delete from bpdcasp102017
                     where ";
      $sql2 = "";

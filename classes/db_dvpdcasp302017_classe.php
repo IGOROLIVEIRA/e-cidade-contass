@@ -20,7 +20,10 @@ class cl_dvpdcasp302017 {
    var $si218_tiporegistro = 0; 
    var $si218_exercicio = 0; 
    var $si218_vlresultadopatrimonialperiodo = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si218_ano = 0;
+   var $si218_periodo = 0;
+   var $si218_institu = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si218_sequencial = int4 = si218_sequencial 
                  si218_tiporegistro = int4 = si218_tiporegistro 
@@ -49,6 +52,9 @@ class cl_dvpdcasp302017 {
        $this->si218_tiporegistro = ($this->si218_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_tiporegistro"]:$this->si218_tiporegistro);
        $this->si218_exercicio = ($this->si218_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_exercicio"]:$this->si218_exercicio);
        $this->si218_vlresultadopatrimonialperiodo = ($this->si218_vlresultadopatrimonialperiodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_vlresultadopatrimonialperiodo"]:$this->si218_vlresultadopatrimonialperiodo);
+       $this->si218_ano = ($this->si218_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_ano"]:$this->si218_ano);
+       $this->si218_periodo = ($this->si218_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_periodo"]:$this->si218_periodo);
+       $this->si218_institu = ($this->si218_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_institu"]:$this->si218_institu);
      }else{
        $this->si218_sequencial = ($this->si218_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_sequencial"]:$this->si218_sequencial);
      }
@@ -74,35 +80,27 @@ class cl_dvpdcasp302017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si218_vlresultadopatrimonialperiodo == null ){ 
-       $this->erro_sql = " Campo si218_vlresultadopatrimonialperiodo não informado.";
-       $this->erro_campo = "si218_vlresultadopatrimonialperiodo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si218_vlresultadopatrimonialperiodo == null ){
+       $this->si218_vlresultadopatrimonialperiodo = 0;
      }
-       $this->si218_sequencial = $si218_sequencial; 
-     if(($this->si218_sequencial == null) || ($this->si218_sequencial == "") ){ 
-       $this->erro_sql = " Campo si218_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      $sql = "insert into dvpdcasp302017(
                                        si218_sequencial 
                                       ,si218_tiporegistro 
                                       ,si218_exercicio 
                                       ,si218_vlresultadopatrimonialperiodo 
+                                      ,si218_ano
+                                      ,si218_periodo
+                                      ,si218_institu
                        )
                 values (
-                                $this->si218_sequencial 
+                                (select nextval('dvpdcasp302017_si218_sequencial_seq'))
                                ,$this->si218_tiporegistro 
                                ,$this->si218_exercicio 
                                ,$this->si218_vlresultadopatrimonialperiodo 
+                               ,$this->si218_ano
+                               ,$this->si218_periodo
+                               ,$this->si218_institu
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -128,23 +126,6 @@ class cl_dvpdcasp302017 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       $resaco = $this->sql_record($this->sql_query_file($this->si218_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
-
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009474,'$this->si218_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010212,1009474,'','".AddSlashes(pg_result($resaco,0,'si218_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010212,1009475,'','".AddSlashes(pg_result($resaco,0,'si218_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010212,1009476,'','".AddSlashes(pg_result($resaco,0,'si218_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010212,1009477,'','".AddSlashes(pg_result($resaco,0,'si218_vlresultadopatrimonialperiodo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
      return true;
    } 
    // funcao para alteracao

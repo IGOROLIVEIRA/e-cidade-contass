@@ -2,6 +2,19 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
+require_once('model/contabilidade/relatorios/dcasp/VariacaoPatrimonialDCASP2015.model.php');
+require_once('libs/db_stdlib.php');
+require_once('libs/db_conecta.php');
+require_once('libs/db_sessoes.php');
+require_once('libs/db_usuariosonline.php');
+require_once('fpdf151/assinatura.php');
+require_once('libs/db_utils.php');
+require_once('libs/db_app.utils.php');
+require_once('dbforms/db_funcoes.php');
+require_once('libs/db_libcontabilidade.php');
+require_once('libs/db_liborcamento.php');
+require_once('fpdf151/PDFDocument.php');
+
 require_once("classes/db_dvpdcasp102017_classe.php");
 require_once("classes/db_dvpdcasp202017_classe.php");
 require_once("classes/db_dvpdcasp302017_classe.php");
@@ -13,10 +26,27 @@ require_once("model/contabilidade/arquivos/sicom/2017/dcasp/geradores/GerarDVP.m
  * @author gabriel
  * @package Contabilidade
  */
-class SicomArquivoDemonstracaoVariacoesPatrimoniais extends SicomArquivoBase implements iPadArquivoBaseCSV
+class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
 
 
+  protected $iCodigoLayout = VariacaoPatrimonialDCASP2015::CODIGO_RELATORIO; // Código do relatório
+
+  protected $sNomeArquivo = 'DVP';
+
+  protected $iCodigoPespectiva;
+
+  public function getCampos(){
+
+  }
+
+  public function getCodigoLayout(){
+    return $this->iCodigoLayout;
+  }
+
+  public function getNomeArquivo(){
+    return $this->sNomeArquivo;
+  }
   /**
    * Contrutor da classe
    */
@@ -28,6 +58,11 @@ class SicomArquivoDemonstracaoVariacoesPatrimoniais extends SicomArquivoBase imp
    */
   public function gerarDados()
   {
+
+    $iAnoUsu            = db_getsession("DB_anousu");
+    $iCodigoPeriodo     = date('m', strtotime($this->sDataFinal)) + 16;
+    $iCodigoRelatorio   = $this->iCodigoLayout;
+    $sListaInstituicoes = db_getsession("DB_instit");
 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
@@ -42,30 +77,33 @@ class SicomArquivoDemonstracaoVariacoesPatrimoniais extends SicomArquivoBase imp
     db_inicio_transacao();
 
     /** DVPDCASP10 */
-    $sSQL   = $cldvpdcasp10->sql_query(); // configurar os parâmetros corretos
+    $sWhereSelectDelete = "si216_ano = {$iAnoUsu} AND si216_periodo = {$iCodigoPeriodo} AND si216_institu = '{$sListaInstituicoes}' ";
+    $sSQL   = $cldvpdcasp10->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $cldvpdcasp10->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
-      $cldvpdcasp10->excluir(null, ""); // configurar o WHERE correto
+      $cldvpdcasp10->excluir(null, $sWhereSelectDelete);
       if ($cldvpdcasp10->erro_status == 0) {
         throw new Exception($cldvpdcasp10->erro_msg);
       }
     }
 
     /** DVPDCASP20 */
-    $sSQL   = $cldvpdcasp20->sql_query(); // configurar os parâmetros corretos
+    $sWhereSelectDelete = "si217_ano = {$iAnoUsu} AND si217_periodo = {$iCodigoPeriodo} AND si217_institu = '{$sListaInstituicoes}' ";
+    $sSQL   = $cldvpdcasp20->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $cldvpdcasp20->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
-      $cldvpdcasp20->excluir(null, ""); // configurar o WHERE correto
+      $cldvpdcasp20->excluir(null, $sWhereSelectDelete);
       if ($cldvpdcasp20->erro_status == 0) {
         throw new Exception($cldvpdcasp20->erro_msg);
       }
     }
 
     /** DVPDCASP30 */
-    $sSQL   = $cldvpdcasp30->sql_query(); // configurar os parâmetros corretos
+    $sWhereSelectDelete = "si218_ano = {$iAnoUsu} AND si218_periodo = {$iCodigoPeriodo} AND si218_institu = '{$sListaInstituicoes}' ";
+    $sSQL   = $cldvpdcasp30->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $cldvpdcasp30->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
-      $cldvpdcasp30->excluir(null, ""); // configurar o WHERE correto
+      $cldvpdcasp30->excluir(null, $sWhereSelectDelete);
       if ($cldvpdcasp30->erro_status == 0) {
         throw new Exception($cldvpdcasp30->erro_msg);
       }
@@ -74,95 +112,91 @@ class SicomArquivoDemonstracaoVariacoesPatrimoniais extends SicomArquivoBase imp
 
     /*------------------------------------------------------------------------*/
 
+    $oVariacoesPatrimoniais = new VariacaoPatrimonialDCASP2015(db_getsession('DB_anousu'), $iCodigoRelatorio, $iCodigoPeriodo);
+    $oVariacoesPatrimoniais->setInstituicoes($sListaInstituicoes);
+    $oVariacoesPatrimoniais->setImprimirExercicioAnterior(true);
+    $oVariacoesPatrimoniais->setTipo(VariacaoPatrimonialDCASP2015::TIPO_ANALITICO);
 
-    /** DVPDCASP102017 */
-    $sSQL = " SELECT * "
-          . " FROM dvpdcasp102017 "
-          . " WHERE 1 = 1 ";
+    $oRetornoDVP = $oVariacoesPatrimoniais->getDados();
 
-    $rsResult10 = db_query($sSQL);
+    $aExercicios = array(
+        1 => 'vlrexatual',
+        2 => 'vlrexanter'
+    );
 
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult10); $iCont++) {
+    foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-      $oDadosDVP10   = db_utils::fieldsMemory($rsResult10, $iCont);
       $cldvpdcasp10  = new cl_dvpdcasp102017();
-
+      $cldvpdcasp10->si216_ano                                = $iAnoUsu;
+      $cldvpdcasp10->si216_periodo                            = $iCodigoPeriodo;
+      $cldvpdcasp10->si216_institu                            = $sListaInstituicoes;
       $cldvpdcasp10->si216_tiporegistro                       = 10;
-      $cldvpdcasp10->si216_exercicio                          = $oDadosDVP10->__algumAtributo;
-      $cldvpdcasp10->si216_vlimpostos                         = $oDadosDVP10->__algumAtributo;
-      $cldvpdcasp10->si216_vlcontribuicoes                    = $oDadosDVP10->__algumAtributo;
-      $cldvpdcasp10->si216_vlexploracovendasdireitos          = $oDadosDVP10->__algumAtributo;
-      $cldvpdcasp10->si216_vlvariacoesaumentativasfinanceiras = $oDadosDVP10->__algumAtributo;
-      $cldvpdcasp10->si216_vltransfdelegacoesrecebidas        = $oDadosDVP10->__algumAtributo;
-      $cldvpdcasp10->si216_vlvalorizacaoativodesincorpassivo  = $oDadosDVP10->__algumAtributo;
-      $cldvpdcasp10->si216_vloutrasvariacoespatriaumentativas = $oDadosDVP10->__algumAtributo;
-      $cldvpdcasp10->si216_vltotalvpaumentativas              = $oDadosDVP10->__algumAtributo;
+      $cldvpdcasp10->si216_exercicio                          = $iValorNumerico;
+      $cldvpdcasp10->si216_vlimpostos                         = $oRetornoDVP[2]->$sChave;
+      $cldvpdcasp10->si216_vlcontribuicoes                    = $oRetornoDVP[6]->$sChave;
+      $cldvpdcasp10->si216_vlexploracovendasdireitos          = $oRetornoDVP[11]->$sChave;
+      $cldvpdcasp10->si216_vlvariacoesaumentativasfinanceiras = $oRetornoDVP[15]->$sChave;
+      $cldvpdcasp10->si216_vltransfdelegacoesrecebidas        = $oRetornoDVP[22]->$sChave;
+      $cldvpdcasp10->si216_vlvalorizacaoativodesincorpassivo  = $oRetornoDVP[32]->$sChave;
+      $cldvpdcasp10->si216_vloutrasvariacoespatriaumentativas = $oRetornoDVP[38]->$sChave;
+      $cldvpdcasp10->si216_vltotalvpaumentativas              = $oRetornoDVP[43]->$sChave;
 
       $cldvpdcasp10->incluir(null);
       if ($cldvpdcasp10->erro_status == 0) {
         throw new Exception($cldvpdcasp10->erro_msg);
       }
 
-    } // $rsResult10
+    }
 
-
-    /** DVPDCASP202017 */
-    $sSQL = " SELECT * "
-          . " FROM dvpdcasp202017 "
-          . " WHERE 1 = 1 ";
-
-    $rsResult20 = db_query($sSQL);
-
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult20); $iCont++) {
-
-      $oDadosDVP20   = db_utils::fieldsMemory($rsResult20, $iCont);
+    foreach ($aExercicios as $iValorNumerico => $sChave) {
+      
       $cldvpdcasp20  = new cl_dvpdcasp202017();
-
-      $cldvpdcasp20->si216_tiporegistro                       = 20;
-      $cldvpdcasp20->si216_exercicio                          = $oDadosDVP20->__algumAtributo;
-      $cldvpdcasp20->si216_vlimpostos                         = $oDadosDVP20->__algumAtributo;
-      $cldvpdcasp20->si216_vlcontribuicoes                    = $oDadosDVP20->__algumAtributo;
-      $cldvpdcasp20->si216_vlexploracovendasdireitos          = $oDadosDVP20->__algumAtributo;
-      $cldvpdcasp20->si216_vlvariacoesaumentativasfinanceiras = $oDadosDVP20->__algumAtributo;
-      $cldvpdcasp20->si216_vltransfdelegacoesrecebidas        = $oDadosDVP20->__algumAtributo;
-      $cldvpdcasp20->si216_vlvalorizacaoativodesincorpassivo  = $oDadosDVP20->__algumAtributo;
-      $cldvpdcasp20->si216_vloutrasvariacoespatriaumentativas = $oDadosDVP20->__algumAtributo;
-      $cldvpdcasp20->si216_vltotalvpaumentativas              = $oDadosDVP20->__algumAtributo;
+      
+      $cldvpdcasp20->si217_ano                                = $iAnoUsu;
+      $cldvpdcasp20->si217_periodo                            = $iCodigoPeriodo;
+      $cldvpdcasp20->si217_institu                            = $sListaInstituicoes;
+      $cldvpdcasp20->si217_tiporegistro                       = 20;
+      $cldvpdcasp20->si217_exercicio                          = $iValorNumerico;
+      $cldvpdcasp20->si217_vldiminutivapessoaencargos         = $oRetornoDVP[45]->$sChave;
+      $cldvpdcasp20->si217_vlprevassistenciais                = $oRetornoDVP[50]->$sChave;
+      $cldvpdcasp20->si217_vlservicoscapitalfixo              = $oRetornoDVP[57]->$sChave;
+      $cldvpdcasp20->si217_vldiminutivavariacoesfinanceiras   = $oRetornoDVP[61]->$sChave;
+      $cldvpdcasp20->si217_vltransfconcedidas                 = $oRetornoDVP[67]->$sChave;
+      $cldvpdcasp20->si217_vldesvaloativoincorpopassivo       = $oRetornoDVP[76]->$sChave;
+      $cldvpdcasp20->si217_vltributarias                      = $oRetornoDVP[82]->$sChave;
+      $cldvpdcasp20->si217_vlmercadoriavendidoservicos        = $oRetornoDVP[85]->$sChave;
+      $cldvpdcasp20->si217_vloutrasvariacoespatridiminutivas  = $oRetornoDVP[89]->$sChave;
+      $cldvpdcasp20->si217_vltotalvpdiminutivas               = $oRetornoDVP[97]->$sChave;
 
       $cldvpdcasp20->incluir(null);
       if ($cldvpdcasp20->erro_status == 0) {
         throw new Exception($cldvpdcasp20->erro_msg);
       }
 
-    } // $rsResult20
+    }
 
+    foreach ($aExercicios as $iValorNumerico => $sChave) {
 
-    /** DVPDCASP302017 */
-    $sSQL = " SELECT * "
-          . " FROM dvpdcasp302017 "
-          . " WHERE 1 = 1 ";
-
-    $rsResult30 = db_query($sSQL);
-
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult30); $iCont++) {
-
-      $oDadosDVP30   = db_utils::fieldsMemory($rsResult30, $iCont);
       $cldvpdcasp30  = new cl_dvpdcasp302017();
-
+      $cldvpdcasp30->si218_ano                            = $iAnoUsu;
+      $cldvpdcasp30->si218_periodo                        = $iCodigoPeriodo;
+      $cldvpdcasp30->si218_institu                        = $sListaInstituicoes;
       $cldvpdcasp30->si218_tiporegistro                   = 30;
-      $cldvpdcasp30->si218_exercicio                      = $oDadosDVP30->__algumAtributo;
-      $cldvpdcasp30->si218_vlresultadopatrimonialperiodo  = $oDadosDVP30->__algumAtributo;
+      $cldvpdcasp30->si218_exercicio                      = $iValorNumerico;
+      $cldvpdcasp30->si218_vlresultadopatrimonialperiodo  = $oRetornoDVP[98]->$sChave;
 
       $cldvpdcasp30->incluir(null);
       if ($cldvpdcasp30->erro_status == 0) {
         throw new Exception($cldvpdcasp30->erro_msg);
       }
 
-    } // $rsResult30
+    }
 
     db_fim_transacao();
 
     $oGerarDVP = new GerarDVP();
+    $oGerarDVP->iAno = $iAnoUsu;
+    $oGerarDVP->iPeriodo = $iCodigoPeriodo;
     $oGerarDVP->gerarDados();
 
   }

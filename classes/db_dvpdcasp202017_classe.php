@@ -29,7 +29,10 @@ class cl_dvpdcasp202017 {
    var $si217_vlmercadoriavendidoservicos = 0; 
    var $si217_vloutrasvariacoespatridiminutivas = 0; 
    var $si217_vltotalvpdiminutivas = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si217_ano = 0;
+   var $si217_periodo = 0;
+   var $si217_institu = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si217_sequencial = int4 = si217_sequencial 
                  si217_tiporegistro = int4 = si217_tiporegistro 
@@ -76,6 +79,9 @@ class cl_dvpdcasp202017 {
        $this->si217_vlmercadoriavendidoservicos = ($this->si217_vlmercadoriavendidoservicos == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_vlmercadoriavendidoservicos"]:$this->si217_vlmercadoriavendidoservicos);
        $this->si217_vloutrasvariacoespatridiminutivas = ($this->si217_vloutrasvariacoespatridiminutivas == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_vloutrasvariacoespatridiminutivas"]:$this->si217_vloutrasvariacoespatridiminutivas);
        $this->si217_vltotalvpdiminutivas = ($this->si217_vltotalvpdiminutivas == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_vltotalvpdiminutivas"]:$this->si217_vltotalvpdiminutivas);
+       $this->si217_ano = ($this->si217_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_ano"]:$this->si217_ano);
+       $this->si217_periodo = ($this->si217_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_periodo"]:$this->si217_periodo);
+       $this->si217_institu = ($this->si217_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_institu"]:$this->si217_institu);
      }else{
        $this->si217_sequencial = ($this->si217_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_sequencial"]:$this->si217_sequencial);
      }
@@ -101,105 +107,37 @@ class cl_dvpdcasp202017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si217_vldiminutivapessoaencargos == null ){ 
-       $this->erro_sql = " Campo si217_vldiminutivapessoaencargos não informado.";
-       $this->erro_campo = "si217_vldiminutivapessoaencargos";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vldiminutivapessoaencargos == null ){
+       $this->si217_vldiminutivapessoaencargos = 0;
      }
-     if($this->si217_vlprevassistenciais == null ){ 
-       $this->erro_sql = " Campo si217_vlprevassistenciais não informado.";
-       $this->erro_campo = "si217_vlprevassistenciais";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vlprevassistenciais == null ){
+       $this->si217_vlprevassistenciais = 0;
      }
-     if($this->si217_vlservicoscapitalfixo == null ){ 
-       $this->erro_sql = " Campo si217_vlservicoscapitalfixo não informado.";
-       $this->erro_campo = "si217_vlservicoscapitalfixo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vlservicoscapitalfixo == null ){
+       $this->si217_vlservicoscapitalfixo = 0;
      }
-     if($this->si217_vldiminutivavariacoesfinanceiras == null ){ 
-       $this->erro_sql = " Campo si217_vldiminutivavariacoesfinanceiras não informado.";
-       $this->erro_campo = "si217_vldiminutivavariacoesfinanceiras";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vldiminutivavariacoesfinanceiras == null ){
+       $this->si217_vldiminutivavariacoesfinanceiras = 0;
      }
-     if($this->si217_vltransfconcedidas == null ){ 
-       $this->erro_sql = " Campo si217_vltransfconcedidas não informado.";
-       $this->erro_campo = "si217_vltransfconcedidas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vltransfconcedidas == null ){
+       $this->si217_vltransfconcedidas = 0;
      }
-     if($this->si217_vldesvaloativoincorpopassivo == null ){ 
-       $this->erro_sql = " Campo si217_vldesvaloativoincorpopassivo não informado.";
-       $this->erro_campo = "si217_vldesvaloativoincorpopassivo";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vldesvaloativoincorpopassivo == null ){
+       $this->si217_vldesvaloativoincorpopassivo = 0;
      }
-     if($this->si217_vltributarias == null ){ 
-       $this->erro_sql = " Campo si217_vltributarias não informado.";
-       $this->erro_campo = "si217_vltributarias";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vltributarias == null ){
+       $this->si217_vltributarias = 0;
      }
-     if($this->si217_vlmercadoriavendidoservicos == null ){ 
-       $this->erro_sql = " Campo si217_vlmercadoriavendidoservicos não informado.";
-       $this->erro_campo = "si217_vlmercadoriavendidoservicos";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vlmercadoriavendidoservicos == null ){
+       $this->si217_vlmercadoriavendidoservicos = 0;
      }
-     if($this->si217_vloutrasvariacoespatridiminutivas == null ){ 
-       $this->erro_sql = " Campo si217_vloutrasvariacoespatridiminutivas não informado.";
-       $this->erro_campo = "si217_vloutrasvariacoespatridiminutivas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vloutrasvariacoespatridiminutivas == null ){
+       $this->si217_vloutrasvariacoespatridiminutivas = 0;
      }
-     if($this->si217_vltotalvpdiminutivas == null ){ 
-       $this->erro_sql = " Campo si217_vltotalvpdiminutivas não informado.";
-       $this->erro_campo = "si217_vltotalvpdiminutivas";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si217_vltotalvpdiminutivas == null ){
+       $this->si217_vltotalvpdiminutivas = 0;
      }
-       $this->si217_sequencial = $si217_sequencial; 
-     if(($this->si217_sequencial == null) || ($this->si217_sequencial == "") ){ 
-       $this->erro_sql = " Campo si217_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      $sql = "insert into dvpdcasp202017(
                                        si217_sequencial 
                                       ,si217_tiporegistro 
@@ -214,9 +152,12 @@ class cl_dvpdcasp202017 {
                                       ,si217_vlmercadoriavendidoservicos 
                                       ,si217_vloutrasvariacoespatridiminutivas 
                                       ,si217_vltotalvpdiminutivas 
+                                      ,si217_ano
+                                      ,si217_periodo
+                                      ,si217_institu
                        )
                 values (
-                                $this->si217_sequencial 
+                                (select nextval('dvpdcasp202017_si217_sequencial_seq'))
                                ,$this->si217_tiporegistro 
                                ,$this->si217_exercicio 
                                ,$this->si217_vldiminutivapessoaencargos 
@@ -229,6 +170,9 @@ class cl_dvpdcasp202017 {
                                ,$this->si217_vlmercadoriavendidoservicos 
                                ,$this->si217_vloutrasvariacoespatridiminutivas 
                                ,$this->si217_vltotalvpdiminutivas 
+                               ,$this->si217_ano
+                               ,$this->si217_periodo
+                               ,$this->si217_institu
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -254,32 +198,6 @@ class cl_dvpdcasp202017 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       $resaco = $this->sql_record($this->sql_query_file($this->si217_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
-
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009461,'$this->si217_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009461,'','".AddSlashes(pg_result($resaco,0,'si217_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009462,'','".AddSlashes(pg_result($resaco,0,'si217_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009463,'','".AddSlashes(pg_result($resaco,0,'si217_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009464,'','".AddSlashes(pg_result($resaco,0,'si217_vldiminutivapessoaencargos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009465,'','".AddSlashes(pg_result($resaco,0,'si217_vlprevassistenciais'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009466,'','".AddSlashes(pg_result($resaco,0,'si217_vlservicoscapitalfixo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009467,'','".AddSlashes(pg_result($resaco,0,'si217_vldiminutivavariacoesfinanceiras'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009468,'','".AddSlashes(pg_result($resaco,0,'si217_vltransfconcedidas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009469,'','".AddSlashes(pg_result($resaco,0,'si217_vldesvaloativoincorpopassivo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009470,'','".AddSlashes(pg_result($resaco,0,'si217_vltributarias'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009471,'','".AddSlashes(pg_result($resaco,0,'si217_vlmercadoriavendidoservicos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009472,'','".AddSlashes(pg_result($resaco,0,'si217_vloutrasvariacoespatridiminutivas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010211,1009473,'','".AddSlashes(pg_result($resaco,0,'si217_vltotalvpdiminutivas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
      return true;
    } 
    // funcao para alteracao

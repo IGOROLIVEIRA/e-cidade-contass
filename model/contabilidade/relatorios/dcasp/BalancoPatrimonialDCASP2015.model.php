@@ -498,9 +498,9 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
     $sDataFinal   = "{$iAno}-{$this->oPeriodo->o114_mesfinal}-{$iDiaFinal}";
     $sIntituicoes = $this->getInstituicoes();
 
-    $sCampos = " c61_codigo, o15_descr, k13_conta, c61_instit ";
+    $sCampos = " case when o15_codtri is null then c61_codigo else o15_codtri::integer end as c61_codigo, o15_descr, k13_conta, c61_instit ";
     $sOrdem  = " c61_codigo, k13_conta ";
-    $sGroup  = " c61_codigo, o15_descr, k13_conta, c61_instit ";
+    $sGroup  = " 1, o15_descr, k13_conta, c61_instit ";
     $sWhere  = " c60_codsis in (5,6) and (k13_limite is null or k13_limite >= '{$sDataFinal}')";
 
     $oDaoSaltes = new cl_saltes();
@@ -602,7 +602,7 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
    * Busca os dados de Superavit/Deficit
    * @return stdClass[]
    */
-  private function getSuperavitDeficit() {
+  public function getSuperavitDeficit() {
 
     if (!$this->exibirQuadroRelatorio(self::QUADRO_SUPERAVIT)) return;
 

@@ -22,7 +22,10 @@ class cl_bpdcasp302017 {
    var $si210_vlativofinanceiro = 0; 
    var $si210_vlativopermanente = 0; 
    var $si210_vltotalativofinanceiropermanente = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si210_ano = 0;
+   var $si210_periodo = 0;
+   var $si210_institu = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si210_sequencial = int4 = si210_sequencial 
                  si210_tiporegistro = int4 = si210_tiporegistro 
@@ -55,6 +58,9 @@ class cl_bpdcasp302017 {
        $this->si210_vlativofinanceiro = ($this->si210_vlativofinanceiro == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_vlativofinanceiro"]:$this->si210_vlativofinanceiro);
        $this->si210_vlativopermanente = ($this->si210_vlativopermanente == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_vlativopermanente"]:$this->si210_vlativopermanente);
        $this->si210_vltotalativofinanceiropermanente = ($this->si210_vltotalativofinanceiropermanente == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_vltotalativofinanceiropermanente"]:$this->si210_vltotalativofinanceiropermanente);
+       $this->si210_ano = ($this->si210_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_ano"]:$this->si210_ano);
+       $this->si210_periodo = ($this->si210_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_periodo"]:$this->si210_periodo);
+       $this->si210_institu = ($this->si210_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_institu"]:$this->si210_institu);
      }else{
        $this->si210_sequencial = ($this->si210_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_sequencial"]:$this->si210_sequencial);
      }
@@ -62,7 +68,7 @@ class cl_bpdcasp302017 {
    // funcao para inclusao
    function incluir ($si210_sequencial){ 
       $this->atualizacampos();
-     if($this->si210_tiporegistro == null ){ 
+     if($this->si210_tiporegistro == null ){
        $this->erro_sql = " Campo si210_tiporegistro não informado.";
        $this->erro_campo = "si210_tiporegistro";
        $this->erro_banco = "";
@@ -71,7 +77,7 @@ class cl_bpdcasp302017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si210_exercicio == null ){ 
+     if($this->si210_exercicio == null ){
        $this->erro_sql = " Campo si210_exercicio não informado.";
        $this->erro_campo = "si210_exercicio";
        $this->erro_banco = "";
@@ -80,42 +86,16 @@ class cl_bpdcasp302017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si210_vlativofinanceiro == null ){ 
-       $this->erro_sql = " Campo si210_vlativofinanceiro não informado.";
-       $this->erro_campo = "si210_vlativofinanceiro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si210_vlativofinanceiro == null ){
+       $this->si210_vlativofinanceiro = 0;
      }
-     if($this->si210_vlativopermanente == null ){ 
-       $this->erro_sql = " Campo si210_vlativopermanente não informado.";
-       $this->erro_campo = "si210_vlativopermanente";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si210_vlativopermanente == null ){
+       $this->si210_vlativopermanente = 0;
      }
-     if($this->si210_vltotalativofinanceiropermanente == null ){ 
-       $this->erro_sql = " Campo si210_vltotalativofinanceiropermanente não informado.";
-       $this->erro_campo = "si210_vltotalativofinanceiropermanente";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->si210_vltotalativofinanceiropermanente == null ){
+       $this->si210_vltotalativofinanceiropermanente = 0;
      }
-       $this->si210_sequencial = $si210_sequencial; 
-     if(($this->si210_sequencial == null) || ($this->si210_sequencial == "") ){ 
-       $this->erro_sql = " Campo si210_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      $sql = "insert into bpdcasp302017(
                                        si210_sequencial 
                                       ,si210_tiporegistro 
@@ -123,14 +103,20 @@ class cl_bpdcasp302017 {
                                       ,si210_vlativofinanceiro 
                                       ,si210_vlativopermanente 
                                       ,si210_vltotalativofinanceiropermanente 
+                                      ,si210_ano
+                                      ,si210_periodo
+                                      ,si210_institu
                        )
                 values (
-                                $this->si210_sequencial 
+                                (select nextval('bpdcasp302017_si210_sequencial_seq'))
                                ,$this->si210_tiporegistro 
                                ,$this->si210_exercicio 
                                ,$this->si210_vlativofinanceiro 
                                ,$this->si210_vlativopermanente 
                                ,$this->si210_vltotalativofinanceiropermanente 
+                               ,$this->si210_ano
+                               ,$this->si210_periodo
+                               ,$this->si210_institu
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -156,25 +142,7 @@ class cl_bpdcasp302017 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
 
-       $resaco = $this->sql_record($this->sql_query_file($this->si210_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
-
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009414,'$this->si210_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010204,1009414,'','".AddSlashes(pg_result($resaco,0,'si210_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010204,1009415,'','".AddSlashes(pg_result($resaco,0,'si210_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010204,1009416,'','".AddSlashes(pg_result($resaco,0,'si210_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010204,1009417,'','".AddSlashes(pg_result($resaco,0,'si210_vlativofinanceiro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010204,1009418,'','".AddSlashes(pg_result($resaco,0,'si210_vlativopermanente'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010204,1009419,'','".AddSlashes(pg_result($resaco,0,'si210_vltotalativofinanceiropermanente'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
      return true;
    } 
    // funcao para alteracao
@@ -325,35 +293,7 @@ class cl_bpdcasp302017 {
      } 
    } 
    // funcao para exclusao 
-   function excluir ($si210_sequencial=null,$dbwhere=null) { 
-
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($si210_sequencial));
-       } else { 
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,1009414,'$si210_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010204,1009414,'','".AddSlashes(pg_result($resaco,$iresaco,'si210_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010204,1009415,'','".AddSlashes(pg_result($resaco,$iresaco,'si210_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010204,1009416,'','".AddSlashes(pg_result($resaco,$iresaco,'si210_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010204,1009417,'','".AddSlashes(pg_result($resaco,$iresaco,'si210_vlativofinanceiro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010204,1009418,'','".AddSlashes(pg_result($resaco,$iresaco,'si210_vlativopermanente'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010204,1009419,'','".AddSlashes(pg_result($resaco,$iresaco,'si210_vltotalativofinanceiropermanente'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
+   function excluir ($si210_sequencial=null,$dbwhere=null) {
      $sql = " delete from bpdcasp302017
                     where ";
      $sql2 = "";

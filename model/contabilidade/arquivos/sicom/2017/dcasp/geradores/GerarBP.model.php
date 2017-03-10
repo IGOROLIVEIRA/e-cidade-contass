@@ -9,6 +9,8 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.
  */
 class GerarBP extends GerarAM
 {
+  public $iAno;
+  public $iPeriodo;
 
   public function gerarDados()
   {
@@ -16,28 +18,28 @@ class GerarBP extends GerarAM
     $this->sArquivo = "BP";
     $this->abreArquivo();
 
-    $sSql = "select * from bpdcasp102017 where 1 = 1";
+    $sSql = "select * from bpdcasp102017 where si208_ano = {$this->iAno} AND si208_periodo = {$this->iPeriodo} AND si208_institu = " . db_getsession("DB_instit");
     $rsBP10 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp202017 where 1 = 1";
+    $sSql = "select * from bpdcasp202017 where si209_ano = {$this->iAno} AND si209_periodo = {$this->iPeriodo} AND si209_institu = " . db_getsession("DB_instit");
     $rsBP20 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp302017 where 1 = 1";
+    $sSql = "select * from bpdcasp302017 where si210_ano = {$this->iAno} AND si210_periodo = {$this->iPeriodo} AND si210_institu = " . db_getsession("DB_instit");
     $rsBP30 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp402017 where 1 = 1";
+    $sSql = "select * from bpdcasp402017 where si211_ano = {$this->iAno} AND si211_periodo = {$this->iPeriodo} AND si211_institu = " . db_getsession("DB_instit");
     $rsBP40 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp502017 where 1 = 1";
+    $sSql = "select * from bpdcasp502017 where si212_ano = {$this->iAno} AND si212_periodo = {$this->iPeriodo} AND si212_institu = " . db_getsession("DB_instit");
     $rsBP50 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp602017 where 1 = 1";
+    $sSql = "select * from bpdcasp602017 where si213_ano = {$this->iAno} AND si213_periodo = {$this->iPeriodo} AND si213_institu = " . db_getsession("DB_instit");
     $rsBP60 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp702017 where 1 = 1";
+    $sSql = "select * from bpdcasp702017 where si214_ano = {$this->iAno} AND si214_periodo = {$this->iPeriodo} AND si214_institu = " . db_getsession("DB_instit");
     $rsBP70 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp712017 where 1 = 1";
+    $sSql = "select * from bpdcasp712017 where si215_ano = {$this->iAno} AND si215_periodo = {$this->iPeriodo} AND si215_institu = " . db_getsession("DB_instit");
     $rsBP71 = db_query($sSql);
 
 
