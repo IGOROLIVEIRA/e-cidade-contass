@@ -53,7 +53,8 @@ class cl_acordoposicao {
    var $ac26_data = null; 
    var $ac26_emergencial = 'f'; 
    var $ac26_observacao = null; 
-   var $ac26_numeroaditamento = null; 
+   var $ac26_numeroaditamento = null;
+   var $ac26_numeroapostilamento = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  ac26_sequencial = int4 = Código Sequencial 
@@ -64,7 +65,8 @@ class cl_acordoposicao {
                  ac26_data = date = Data 
                  ac26_emergencial = bool = Posição Emergencial 
                  ac26_observacao = text = Observação 
-                 ac26_numeroaditamento = varchar(20) = Número do aditamento 
+                 ac26_numeroaditamento = varchar(20) = Número do aditamento
+                 ac26_numeroapostilamento = varchar(20) = Número do apostilamento 
                  ";
    //funcao construtor da classe 
    function cl_acordoposicao() { 
@@ -100,6 +102,7 @@ class cl_acordoposicao {
        $this->ac26_emergencial = ($this->ac26_emergencial == "f"?@$GLOBALS["HTTP_POST_VARS"]["ac26_emergencial"]:$this->ac26_emergencial);
        $this->ac26_observacao = ($this->ac26_observacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_observacao"]:$this->ac26_observacao);
        $this->ac26_numeroaditamento = ($this->ac26_numeroaditamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_numeroaditamento"]:$this->ac26_numeroaditamento);
+       $this->ac26_numeroapostilamento = ($this->ac26_numeroapostilamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_numeroapostilamento"]:$this->ac26_numeroapostilamento);
      }else{
        $this->ac26_sequencial = ($this->ac26_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_sequencial"]:$this->ac26_sequencial);
      }
@@ -197,6 +200,7 @@ class cl_acordoposicao {
                                       ,ac26_emergencial 
                                       ,ac26_observacao 
                                       ,ac26_numeroaditamento 
+                                      ,ac26_numeroapostilamento
                        )
                 values (
                                 $this->ac26_sequencial 
@@ -207,7 +211,8 @@ class cl_acordoposicao {
                                ,".($this->ac26_data == "null" || $this->ac26_data == ""?"null":"'".$this->ac26_data."'")." 
                                ,'$this->ac26_emergencial' 
                                ,'$this->ac26_observacao' 
-                               ,'$this->ac26_numeroaditamento' 
+                               ,'$this->ac26_numeroaditamento'
+                               ,'$this->ac26_numeroapostilamento'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -364,6 +369,10 @@ class cl_acordoposicao {
      }
      if(trim($this->ac26_numeroaditamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac26_numeroaditamento"])){ 
        $sql  .= $virgula." ac26_numeroaditamento = '$this->ac26_numeroaditamento' ";
+       $virgula = ",";
+     }
+     if(trim($this->ac26_numeroapostilamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac26_numeroapostilamento"])){ 
+       $sql  .= $virgula." ac26_numeroapostilamento = '$this->ac26_numeroapostilamento' ";
        $virgula = ",";
      }
      $sql .= " where ";

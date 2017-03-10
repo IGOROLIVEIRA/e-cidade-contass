@@ -51,6 +51,9 @@ class AcordoPosicao {
   const TIPO_VIGENCIAEXECUCAO        = 13;
   const TIPO_ACRESCIMODECRESCIMOITEM = 11;
   const TIPO_ACRESCIMODECRESCIMOITEMCONJUGADO = 14;
+  const TIPO_ACRESCIMOVALOR_APOSTILA = 15;
+  const TIPO_DECRESCIMOVALOR_APOSTILA = 16;
+  const TIPO_SEMALTERACAO_APOSTILA = 17;
 
   /**
    * Codigo do acordo
@@ -162,6 +165,14 @@ class AcordoPosicao {
   protected $sNumeroAditamento;
 
   /**
+   * Numero do apostilamento
+   *
+   * @var string
+   * @access protected
+   */
+  protected $sNumeroApostilamento;
+
+  /**
    * Constante do caminho da mensagem do model
    * @var string
    */
@@ -196,6 +207,7 @@ class AcordoPosicao {
       $this->oDadosAnteriores = $oDadosPosicao;
       $this->setObservacao($oDadosPosicao->ac26_observacao);
       $this->setNumeroAditamento($oDadosPosicao->ac26_numeroaditamento);
+      $this->setNumeroApostilamento($oDadosPosicao->ac26_numeroapostilamento);
     }
   }
 
@@ -220,6 +232,30 @@ class AcordoPosicao {
   public function setNumeroAditamento( $sNumeroAditamento ) {
 
     $this->sNumeroAditamento = $sNumeroAditamento;
+    return $this;
+  }
+
+  /**
+   * retorna o numero do apostilamento
+   *
+   * @access public
+   * @return void
+   */
+  public function getNumeroApostilamento() {
+
+    return $this->sNumeroApostilamento;
+  }
+
+  /**
+   * Define numero do apostilamento
+   *
+   * @param string $sNumeroApostilamento
+   * @access public
+   * @return void
+   */
+  public function setNumeroApostilamento( $sNumeroApostilamento ) {
+
+    $this->sNumeroApostilamento = $sNumeroApostilamento;
     return $this;
   }
 
@@ -665,7 +701,7 @@ class AcordoPosicao {
     $oDaoPosicao->ac26_data              = implode("-", array_reverse(explode("/", $this->getData())));
     $oDaoPosicao->ac26_emergencial       = $this->isEmergencial() ? "true" : "false";
     $oDaoPosicao->ac26_observacao        = $this->sObservacao;
-    $oDaoPosicao->ac26_numeroaditamento  = $this->getNumeroAditamento();
+    $oDaoPosicao->ac26_numeroapostilamento = $this->getNumeroApostilamento();
     $iCodigo                             = $this->getCodigo();
 
     if (empty($iCodigo)) {
@@ -1373,6 +1409,15 @@ class AcordoPosicao {
       throw new BusinessException( $oDAoAcordoPosicaoAditamento->erro_msg );
     }
 
+    /**
+     * Remover apostilamento vinculado a posicao
+     */
+    $oDaoApostilamento = db_utils::getDao("apostilamento");
+    $oDaoApostilamento->excluir(null, "si03_acordoposicao = {$this->getCodigo()}");
+    if ( $oDaoApostilamento->erro_status == 0 ) {
+      throw new BusinessException( $oDaoApostilamento->erro_msg );
+    }
+
     $oDaoAcordoPosicaoPeriodo   = new cl_acordoposicaoperiodo();
     $sWhereAcordoPosicaoPeriodo = "ac36_acordoposicao = {$this->getCodigo()}";
     $oDaoAcordoPosicaoPeriodo->excluir( null, $sWhereAcordoPosicaoPeriodo );
@@ -1408,4 +1453,35 @@ class AcordoPosicao {
       throw new BusinessException( $oDaoAcordoPosicao->erro_msg );
     }
   }
+
+  /**
+   * Vincula o apostilamento na posicao
+   *
+   * @param integer $0Apostila
+   * @param Date $dDtAssAcordo
+   */
+  function salvarApostilamento($oApostila, $dDtAssAcordo) {
+
+    if (!empty($this->iCodigo)) {
+
+      $oDaoApostilamento = db_utils::getDao("apostilamento");
+      $oDaoApostilamento->si03_dataassinacontrato = implode("-",array_reverse(explode("/",$dDtAssAcordo)));
+      $oDaoApostilamento->si03_tipoapostila = $oApostila->tipoapostila;
+      $oDaoApostilamento->si03_dataapostila = implode("-",array_reverse(explode("/",$oApostila->dataapostila)));
+      $oDaoApostilamento->si03_descrapostila = $oApostila->descrapostila;
+      $oDaoApostilamento->si03_tipoalteracaoapostila = $oApostila->tipoalteracaoapostila;
+      $oDaoApostilamento->si03_numapostilamento = $oApostila->numapostilamento;
+      $oDaoApostilamento->si03_valorapostila = $oApostila->valorapostila;
+      $oDaoApostilamento->si03_instit = db_getsession("DB_instit");
+      $oDaoApostilamento->si03_acordo = $this->getAcordo();
+      $oDaoApostilamento->si03_acordoposicao = $this->getCodigo();
+      $oDaoApostilamento->si03_numcontrato = "null";
+      $oDaoApostilamento->incluir(null);
+      if ($oDaoApostilamento->erro_status == 0) {
+          throw new Exception("Erro ao salvar apostilamento.\n{$oDaoApostilamento->erro_msg}");
+      }
+
+    }
+  }
+
 }

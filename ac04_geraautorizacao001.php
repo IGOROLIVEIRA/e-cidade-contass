@@ -496,8 +496,12 @@ function js_retornoGetItensPosicao(oAjax) {
   aItensPosicao.each(function (oItem, iSeq) {
 
     oItem.dotacoes.each( function (oDotItem) {
-       oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,iCasasDecimais);
-       oDotItem.quantdot = oDotItem.quantidade;
+      if (oItem.dotacoes.length == 1) {
+        oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,iCasasDecimais);
+        oDotItem.quantdot = oDotItem.quantidade;
+      } else {
+        oDotItem.quantdot = oDotItem.quantidade = 0;
+      }
      });
 
      var nQtdeAut  = oItem.saldos.quantidadeautorizar;
@@ -797,9 +801,10 @@ function js_ajustaValorDot(Obj, iDot) {
 function js_ajustaQuantDot(Obj, iDot, iLinha) {
 
   var nQuant         = Number(Obj.value);
-  var nQuantDot      = Number(aItensPosicao[iLinha].dotacoes[iDot].quantdot);
+  var nTotalDotacoes = oGridDotacoes.sum(2, false);
+  var nQuantAut      = js_strToFloat(oDadosItem.aCells[6].getValue());
 
-  if (nQuant > nQuantDot) {
+  if (nQuant > nQuantAut || nTotalDotacoes > nQuantAut) {
     oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
     Obj.value = nValorObjeto;
   } else {

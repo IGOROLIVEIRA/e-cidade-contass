@@ -123,7 +123,7 @@ switch($oParam->exec) {
      }
      $oContrato              = new Acordo($oParam->iAcordo);
      $_SESSION["oContrato"]  = $oContrato;
-     $aPosicoes              = $oContrato->getPosicoes();
+     $aPosicoes              = $oContrato->getPosicoesAditamentos();
      $oRetorno->posicoes     = array();
      $oRetorno->tipocontrato = $oContrato->getOrigem();
 
@@ -150,6 +150,44 @@ switch($oParam->exec) {
      if(count($oRetorno->posicoes) == 0 ){
          $oRetorno->status   = 2;
          $oRetorno->message  = urlencode('Nenhum aditamento encontrado!');
+     }
+
+    break;
+
+    case "getApostilamentos":
+
+     if (isset ($_SESSION["oContrato"])) {
+       unset($_SESSION["oContrato"]);
+     }
+     $oContrato              = new Acordo($oParam->iAcordo);
+     $_SESSION["oContrato"]  = $oContrato;
+     $aPosicoes              = $oContrato->getPosicoesApostilamentos();
+     $oRetorno->posicoes     = array();
+     $oRetorno->tipocontrato = $oContrato->getOrigem();
+
+     foreach ($aPosicoes as $oPosicaoContrato) {
+
+       $oPosicao        = new stdClass();
+
+       if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_INCLUSAO) {
+         continue;
+       }
+       $iTipoPosicao =  $oPosicaoContrato->getTipo();
+
+       $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
+       $oPosicao->data           = $oPosicaoContrato->getData();
+       $oPosicao->tipo           = $oPosicaoContrato->getTipo();
+       $oPosicao->numerocontrato = $oContrato->getGrupo()." - ".$oContrato->getNumero()."/".$oContrato->getAno();
+       $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
+       $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumero(), "0", 7)."";
+       $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
+       array_push($oRetorno->posicoes, $oPosicao);
+
+     }
+
+     if(count($oRetorno->posicoes) == 0 ){
+         $oRetorno->status   = 2;
+         $oRetorno->message  = urlencode('Nenhum apostilamento encontrado!');
      }
 
     break;
@@ -282,7 +320,7 @@ switch($oParam->exec) {
               $oAcordoPosicao = new AcordoPosicao($oPosicao->codigo);
               $oAcordoPosicao->remover();
           } else {
-              throw new BusinessException( " Não é possível excluir uma aditamente que não seja o último. Para excluir um aditamento, faça a partir do último " ) ;
+              throw new BusinessException( " Não é possível excluir uma aditamento/apostilamento que não seja o último. Para excluir um aditamento/apostilamento, faça a partir do último " ) ;
           }
 
       }

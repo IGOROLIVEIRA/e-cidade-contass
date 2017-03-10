@@ -34,6 +34,7 @@ class cl_apostilamento {
    var $si03_valorapostila = 0; 
    var $si03_instit = 0; 
    var $si03_numcontratoanosanteriores = 0;
+   var $si03_acordoposicao = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si03_sequencial = int8 = Codigo Sequencial 
@@ -48,6 +49,9 @@ class cl_apostilamento {
                  si03_valorapostila = float8 = Valor da Aposlila 
                  si03_instit = int8 = Instituição 
                  si03_numcontratoanosanteriores = int8 = Numero Contrato de Anos Anteriores
+                 si03_acordoposicao = int8 = Acordo Posicao 
+                 si03_acordo = int8 = Acordo 
+
                  ";
    //funcao construtor da classe 
    function cl_apostilamento() { 
@@ -93,6 +97,8 @@ class cl_apostilamento {
        $this->si03_valorapostila = ($this->si03_valorapostila == ""?@$GLOBALS["HTTP_POST_VARS"]["si03_valorapostila"]:$this->si03_valorapostila);
        $this->si03_instit = ($this->si03_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si03_instit"]:$this->si03_instit);
        $this->si03_numcontratoanosanteriores = ($this->si03_numcontratoanosanteriores == ""?@$GLOBALS["HTTP_POST_VARS"]["si03_numcontratoanosanteriores"]:$this->si03_numcontratoanosanteriores);
+       $this->si03_acordoposicao = ($this->si03_acordoposicao == ""?@$GLOBALS["HTTP_POST_VARS"]["si03_acordoposicao"]:$this->si03_acordoposicao);
+       $this->si03_acordo = ($this->si03_acordo == ""?@$GLOBALS["HTTP_POST_VARS"]["si03_acordo"]:$this->si03_acordo);
      }else{
        $this->si03_sequencial = ($this->si03_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si03_sequencial"]:$this->si03_sequencial);
      }
@@ -229,6 +235,8 @@ class cl_apostilamento {
                                       ,si03_valorapostila 
                                       ,si03_instit
                                       ,si03_numcontratoanosanteriores 
+                                      ,si03_acordoposicao
+                                      ,si03_acordo
                        )
                 values (
                                 $this->si03_sequencial 
@@ -243,6 +251,8 @@ class cl_apostilamento {
                                ,$this->si03_valorapostila 
                                ,$this->si03_instit
                                ,".($this->si03_numcontratoanosanteriores==null ? '0' : $this->si03_numcontratoanosanteriores)." 
+                               ,".($this->si03_acordoposicao == null || $this->si03_acordoposicao == ""?"null":$this->si03_acordoposicao)."
+                               ,".($this->si03_acordo == null || $this->si03_acordo == ""?"null":$this->si03_acordo)."
                       )";
      $result = db_query($sql);
      if($result==false){ 
@@ -470,6 +480,14 @@ class cl_apostilamento {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->si03_acordoposicao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si03_acordoposicao"])){ 
+       $sql  .= $virgula." si03_acordoposicao = $this->si03_acordoposicao ";
+       $virgula = ",";
+     }
+     if(trim($this->si03_acordo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si03_acordo"])){ 
+       $sql  .= $virgula." si03_acordo = $this->si03_acordo ";
+       $virgula = ",";
      }
      $sql .= " where ";
      if($si03_sequencial!=null){

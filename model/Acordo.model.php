@@ -1659,6 +1659,58 @@ class Acordo
     }
 
     /**
+     * retorna todas as posicões de Aditamento do acordo
+     * @return AcordoPosicao[]
+     */
+    function getPosicoesAditamentos()
+    {
+
+        $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
+        $sSqlPosicao = $oDaoAcordoPosicao->sql_query_file(null,
+            "ac26_sequencial",
+            'ac26_numero',
+            "ac26_acordo = {$this->getCodigoAcordo()} and ac26_numeroaditamento != '' and ac26_numeroaditamento is not null"
+        );
+
+        $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+        for ($i = 0; $i < $oDaoAcordoPosicao->numrows; $i++) {
+
+            $oPos = db_utils::fieldsMemory($rsPosicao, $i);
+            $oPosicao = new AcordoPosicao($oPos->ac26_sequencial);
+            $this->aPosicoes[] = $oPosicao;
+            unset($oPos);
+        }
+
+        return $this->aPosicoes;
+    }
+
+    /**
+     * retorna todas as posicões de Apostilamento do acordo
+     * @return AcordoPosicao[]
+     */
+    function getPosicoesApostilamentos()
+    {
+
+        $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
+        $sSqlPosicao = $oDaoAcordoPosicao->sql_query_file(null,
+            "ac26_sequencial",
+            'ac26_numero',
+            "ac26_acordo = {$this->getCodigoAcordo()} "
+        );
+
+        $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+        for ($i = 0; $i < $oDaoAcordoPosicao->numrows; $i++) {
+
+            $oPos = db_utils::fieldsMemory($rsPosicao, $i);
+            $oPosicao = new AcordoPosicao($oPos->ac26_sequencial);
+            $this->aPosicoes[] = $oPosicao;
+            unset($oPos);
+        }
+
+        return $this->aPosicoes;
+    }
+
+    /**
      * retorna a posicao pelo codigo de cadastro
      * @return AcordoPosicao
      */
@@ -3063,6 +3115,27 @@ class Acordo
     }
 
     /**
+     * Retorna proxima numeracao do apostilamento
+     * @param $iContrato
+     * @return int
+     * @throws Exception
+     */
+    public function getProximoNumeroApostila($iContrato)
+    {
+        $sSqlNumeroApostilamento = "select max(si03_numapostilamento)+1 proximo
+                          from
+                          apostilamento
+                          where si03_acordo = {$iContrato} and si03_numapostilamento is not null";
+        $rsNumeroApostilamento = db_query($sSqlNumeroApostilamento);
+
+        if (!$rsNumeroApostilamento) {
+            throw new Exception("Erro ao buscar próximo número do apostilamento.");
+        }
+
+        return (int)db_utils::fieldsMemory($rsNumeroApostilamento, 0)->proximo == "" ? 1 : (int)db_utils::fieldsMemory($rsNumeroApostilamento, 0)->proximo;
+    }
+
+    /**
      * Valida se o número do aditivo é válido.
      * Se já existir um numero de aditivo para o contrato o sistema não permite a inclusão do aditamento.
      * @param $iContrato
@@ -3082,6 +3155,30 @@ class Acordo
         }
 
         return $sNumeroAditivo;
+
+    }
+
+    /**
+     * Valida se o número do apostilamento é válido.
+     * Se já existir um numero de apostilamento para o contrato o sistema não permite a inclusão do apostilamento.
+     * @param $iContrato
+     * @param $sNumeroApostilamento
+     * @return $sNumeroApostilamento
+     * @throws Exception
+     */
+
+    public function validaNumeroApostilamento($iContrato, $sNumeroApostilamento)
+    {
+
+        $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
+        $sSql = $oDaoAcordoPosicao->sql_query_file(null,"*","","ac26_acordo = {$iContrato} and ac26_numeroapostilamento = '{$sNumeroApostilamento}'");
+        $rsNumeroApostilamento = db_query($sSql);
+
+        if (pg_num_rows($rsNumeroApostilamento) > 0) {
+            throw new Exception("Já existe uma posição com numeração {$sNumeroApostilamento} e contrato {$iContrato}.");
+        }
+
+        return $sNumeroApostilamento;
 
     }
 
@@ -3152,5 +3249,128 @@ class Acordo
             return false;
         }
         return true;
+    }
+
+        /**
+     * Realiza um aditamento no contrato
+     * Os tipos de aditamento são os listados abaixo:
+     * @param $aItens
+     * @param $oApostila
+     * @param $dtVigenciaInicial
+     * @param $dtVigenciaFinal
+     * @param $dtAssinatura
+     * @param $dtPublicacao
+     * @return $this
+     * @throws Exception
+     */
+    public function apostilar($aItens, $oApostila, $dtVigenciaInicial, $dtVigenciaFinal, $aSelecionados)
+    {
+
+        $nValorItens = 0;
+
+        foreach ($aItens as $oItem) {
+            $nValorItens += round($oItem->valorunitario * $oItem->quantidade, 2);
+        }
+
+
+        /**
+         * cancelamos a ultima posição do acordo.
+         */
+        $this->getUltimaPosicao(true)->setSituacao(3);
+
+        $this->getUltimaPosicao()->save();
+
+        /**
+         * Alterar o valor de Tipo Apostila para valores existentes na acordoposicaotipo
+         */
+        if ($oApostila->tipoalteracaoapostila == 1) {
+            $oApostila->tipoalteracaoapostila = AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA;
+        } else if ($oApostila->tipoalteracaoapostila == 2) {
+            $oApostila->tipoalteracaoapostila = AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA;
+        } else {
+            $oApostila->tipoalteracaoapostila = AcordoPosicao::TIPO_SEMALTERACAO_APOSTILA;
+        }
+
+        $oNovaPosicao = new AcordoPosicao(null);
+        $oNovaPosicao->setData(date("Y-m-d", db_getsession("DB_datausu")));
+        $oNovaPosicao->setAcordo($this->getCodigoAcordo());
+        $oNovaPosicao->setEmergencial(false);
+        $oNovaPosicao->setNumero($this->getUltimaPosicao(true)->getNumero() + 1);
+        $oNovaPosicao->setNumeroApostilamento($this->validaNumeroApostilamento($this->getCodigoAcordo(), $oApostila->numapostilamento));
+        $oNovaPosicao->setSituacao(1);
+        $oNovaPosicao->setTipo($oApostila->tipoalteracaoapostila);
+        $oNovaPosicao->setVigenciaInicial($dtVigenciaInicial);
+        $oNovaPosicao->setVigenciaFinal($dtVigenciaFinal);
+        $oNovaPosicao->setPosicaoPeriodo($dtVigenciaInicial, $dtVigenciaFinal, $this->getPeriodoComercial());
+
+        $oNovaPosicao->save();
+
+        /**
+         * Vincular o acordo com o apostilamento
+         */
+        $oApostila->valorapostila = $nValorItens;
+        $oNovaPosicao->salvarApostilamento($oApostila,$this->getDataAssinatura());
+
+        $sAtualDtInicial = new DBDate($this->getDataInicial());
+        $sAtualDtFim = new DBDate($this->getDataFinal());
+        $this->setDataInicial($dtVigenciaInicial);
+        $this->setDataFinal($dtVigenciaFinal);
+        $this->salvarAlteracoesContrato();
+
+        foreach ($aItens as $oItem) {
+
+            $oItemContrato = $this->getUltimaPosicao(true)->getItemByCodigo($oItem->codigo);
+
+            $oNovoItem = new AcordoItem(null);
+            $oNovoItem->setCodigoPosicao($oNovaPosicao->getCodigo());
+
+            $oNovoItem->setCodigoPosicaoTipo($oApostila->tipoalteracaoapostila);
+
+            if ($oItemContrato) {
+
+                $oOrigemItem = $oItemContrato->getOrigem();
+                $oNovoItem->setElemento($oItemContrato->getElemento());
+                $oNovoItem->setMaterial($oItemContrato->getMaterial());
+                $oNovoItem->setResumo($oItemContrato->getResumo());
+                $oNovoItem->setOrigem($oOrigemItem->codigo, $oOrigemItem->tipo, $oOrigemItem->codigoorigem);
+                $oNovoItem->setUnidade($oItemContrato->getUnidade());
+                $oNovoItem->setTipoControle($oItemContrato->getTipocontrole());
+                $oNovoItem->setItemVinculo($oItemContrato->getCodigo());
+                $oNovoItem->setPeriodos($oItemContrato->getPeriodosItem());
+
+            } else {
+
+                $oNovoItem->setElemento($oItem->codigoelemento);
+                $oNovoItem->setMaterial(new MaterialCompras($oItem->codigoitem));
+                $oNovoItem->setResumo(utf8_decode(db_stdClass::db_stripTagsJson($oItem->resumo)));
+                $oNovoItem->setUnidade($oItem->unidade);
+                $oNovoItem->setTipoControle(AcordoItem::CONTROLE_DIVISAO_QUANTIDADE);
+
+                if (!empty($oItem->aPeriodos)) {
+                    $oNovoItem->setPeriodos($oItem->aPeriodos);
+                }
+            }
+            $oNovoItem->setQuantidade((float)$oItem->quantidade);
+            $oNovoItem->setValorUnitario((float)$oItem->valorunitario);
+            $oNovoItem->setValorTotal(round($oItem->valorunitario * $oItem->quantidade, 2));
+
+            if (($oNovoItem->getValorUnitario() > $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA)
+                || ($oNovoItem->getValorUnitario() < $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA)
+                || ($oNovoItem->getValorUnitario() == $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_SEMALTERACAO_APOSTILA)) {
+                throw new Exception("Valor do item {$oItem->codigoitem} não compatível com o Tipo de alteração Apostila.");
+            }
+
+            foreach ($oItem->dotacoes as $oDotacao) {
+
+                $oDotacao->ano = db_getsession("DB_anousu");
+                $oNovoItem->adicionarDotacoes($oDotacao);
+            }
+            /*
+             * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario 
+             */
+            $oNovoItem->save(false);
+        }
+
+        return $this;
     }
 }

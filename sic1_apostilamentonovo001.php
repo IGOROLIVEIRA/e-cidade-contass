@@ -12,7 +12,9 @@ $db_botao = true;
 if(isset($incluir)){
   $clapostilamento->si03_acordo = $ac16_sequencial;
   db_inicio_transacao();
-  $clapostilamento->incluir($si03_sequencial);
+  $clapostilamento->incluir(null);
+  $si03_sequencial = $clapostilamento->si03_sequencial;
+  $db_opcao = 3;
   db_fim_transacao();
 }
 ?>
@@ -24,25 +26,28 @@ if(isset($incluir)){
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <center>
-<fieldset   style="width: 50%; margin-left:40px; margin-top: 50px;">
-<legend><b>Apostilamento</b></legend>
 	<?
 	include("forms/db_frmapostilamentonovo.php");
 	?>
-   </fieldset>
 </center>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
-<script>
-js_tabulacaoforms("form1","si03_licitacao",true,1,"si03_licitacao",true);
-</script>
+
 <?
 if(isset($incluir)){
   if($clapostilamento->erro_status=="0"){
@@ -54,7 +59,8 @@ if(isset($incluir)){
       echo "<script> document.form1.".$clapostilamento->erro_campo.".focus();</script>";
     }
   }else{
-    $clapostilamento->erro(true,true);
+    //$clapostilamento->erro(true,true);
+    db_msgbox("Inclusao efetuada com Sucesso");
   }
 }
 ?>
