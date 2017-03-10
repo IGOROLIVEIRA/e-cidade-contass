@@ -1,40 +1,46 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE dfcdcasp1002017
-class cl_dfcdcasp1002017 { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $si228_sequencial = 0; 
-   var $si228_tiporegistro = 0; 
-   var $si228_exercicio = 0; 
-   var $si228_vlgeracaoliquidaequivalentecaixa = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_dfcdcasp1002017 {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $si228_anousu  = 0;
+   var $si228_periodo = 0;
+   var $si228_instit  = 0;
+   var $si228_sequencial = 0;
+   var $si228_tiporegistro = 0;
+   var $si228_exercicio = 0;
+   var $si228_vlgeracaoliquidaequivalentecaixa = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si228_sequencial = int4 = si228_sequencial 
-                 si228_tiporegistro = int4 = si228_tiporegistro 
-                 si228_exercicio = int4 = si228_exercicio 
-                 si228_vlgeracaoliquidaequivalentecaixa = float4 = si228_vlgeracaoliquidaequivalentecaixa 
+                 si228_anousu = int4 = si228_anousu
+                 si228_periodo = int4 = si228_periodo
+                 si228_instit = int4 = si228_instit
+                 si228_sequencial = int4 = si228_sequencial
+                 si228_tiporegistro = int4 = si228_tiporegistro
+                 si228_exercicio = int4 = si228_exercicio
+                 si228_vlgeracaoliquidaequivalentecaixa = float8 = si228_vlgeracaoliquidaequivalentecaixa
                  ";
-   //funcao construtor da classe 
-   function cl_dfcdcasp1002017() { 
+   //funcao construtor da classe
+   function cl_dfcdcasp1002017() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("dfcdcasp1002017"); 
+     $this->rotulo = new rotulo("dfcdcasp1002017");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -45,6 +51,9 @@ class cl_dfcdcasp1002017 {
    // funcao para atualizar campos
    function atualizacampos($exclusao=false) {
      if($exclusao==false){
+       $this->si228_anousu = ($this->si228_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["si228_anousu"]:$this->si228_anousu);
+       $this->si228_periodo = ($this->si228_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si228_periodo"]:$this->si228_periodo);
+       $this->si228_instit = ($this->si228_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si228_instit"]:$this->si228_instit);
        $this->si228_sequencial = ($this->si228_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si228_sequencial"]:$this->si228_sequencial);
        $this->si228_tiporegistro = ($this->si228_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si228_tiporegistro"]:$this->si228_tiporegistro);
        $this->si228_exercicio = ($this->si228_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si228_exercicio"]:$this->si228_exercicio);
@@ -54,18 +63,21 @@ class cl_dfcdcasp1002017 {
      }
    }
    // funcao para inclusao
-   function incluir ($si228_sequencial){ 
+   function incluir ($si228_sequencial){
       $this->atualizacampos();
-     if($this->si228_tiporegistro == null ){ 
-       $this->erro_sql = " Campo si228_tiporegistro não informado.";
-       $this->erro_campo = "si228_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if (empty($this->si228_anousu)) {
+       $this->si228_anousu = db_getsession("DB_anousu");
      }
-     if($this->si228_exercicio == null ){ 
+     if (empty($this->si228_periodo)) {
+       $this->si228_periodo = 28;
+     }
+     if (empty($this->si228_instit)) {
+       $this->si228_instit = db_getsession("DB_instit");
+     }
+     if(empty($this->si228_tiporegistro)) {
+        $this->si228_tiporegistro = 100;
+     }
+     if(empty($this->si228_exercicio)) {
        $this->erro_sql = " Campo si228_exercicio não informado.";
        $this->erro_campo = "si228_exercicio";
        $this->erro_banco = "";
@@ -74,38 +86,57 @@ class cl_dfcdcasp1002017 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si228_vlgeracaoliquidaequivalentecaixa == null ){ 
-       $this->erro_sql = " Campo si228_vlgeracaoliquidaequivalentecaixa não informado.";
-       $this->erro_campo = "si228_vlgeracaoliquidaequivalentecaixa";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if(empty($this->si228_vlgeracaoliquidaequivalentecaixa)) {
+        $this->si228_vlgeracaoliquidaequivalentecaixa = 0;
      }
-       $this->si228_sequencial = $si228_sequencial; 
-     if(($this->si228_sequencial == null) || ($this->si228_sequencial == "") ){ 
-       $this->erro_sql = " Campo si228_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+
+
+     if(empty($si228_sequencial)){
+       $result = db_query("select nextval('dfcdcasp1002017_si228_sequencial_seq')");
+       if($result==false){
+         $this->erro_banco = str_replace("\n","",@pg_last_error());
+         $this->erro_sql   = "Verifique o cadastro da sequencia: dfcdcasp1002017_si228_sequencial_seq do campo: si228_sequencial";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+       $this->si228_sequencial = pg_result($result,0,0);
+     }else{
+       $result = db_query("select last_value from dfcdcasp1002017_si228_sequencial_seq");
+       if(($result != false) && (pg_result($result,0,0) < $si228_sequencial)){
+         $this->erro_sql = " Campo si228_sequencial maior que último número da sequencia.";
+         $this->erro_banco = "Sequencia menor que este número.";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }else{
+         $this->si228_sequencial = $si228_sequencial;
+       }
      }
+
+
      $sql = "insert into dfcdcasp1002017(
-                                       si228_sequencial 
-                                      ,si228_tiporegistro 
-                                      ,si228_exercicio 
-                                      ,si228_vlgeracaoliquidaequivalentecaixa 
+                                       si228_anousu
+                                      ,si228_periodo
+                                      ,si228_instit
+                                      ,si228_sequencial
+                                      ,si228_tiporegistro
+                                      ,si228_exercicio
+                                      ,si228_vlgeracaoliquidaequivalentecaixa
                        )
                 values (
-                                $this->si228_sequencial 
-                               ,$this->si228_tiporegistro 
-                               ,$this->si228_exercicio 
-                               ,$this->si228_vlgeracaoliquidaequivalentecaixa 
+                                {$this->si228_anousu}
+                               ,{$this->si228_periodo}
+                               ,{$this->si228_instit}
+                               ,$this->si228_sequencial
+                               ,$this->si228_tiporegistro
+                               ,$this->si228_exercicio
+                               ,$this->si228_vlgeracaoliquidaequivalentecaixa
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "dfcdcasp1002017 ($this->si228_sequencial) nao Incluído. Inclusao Abortada.";
@@ -128,34 +159,18 @@ class cl_dfcdcasp1002017 {
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
 
-       $resaco = $this->sql_record($this->sql_query_file($this->si228_sequencial  ));
-       if(($resaco!=false)||($this->numrows!=0)){
-
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,1009533,'$this->si228_sequencial','I')");
-         $resac = db_query("insert into db_acount values($acount,1010222,1009533,'','".AddSlashes(pg_result($resaco,0,'si228_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010222,1009534,'','".AddSlashes(pg_result($resaco,0,'si228_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010222,1009535,'','".AddSlashes(pg_result($resaco,0,'si228_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010222,1009536,'','".AddSlashes(pg_result($resaco,0,'si228_vlgeracaoliquidaequivalentecaixa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($si228_sequencial=null) { 
+   function alterar ($si228_sequencial=null) {
       $this->atualizacampos();
      $sql = " update dfcdcasp1002017 set ";
      $virgula = "";
-     if(trim($this->si228_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si228_sequencial"])){ 
+     if(trim($this->si228_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si228_sequencial"])){
        $sql  .= $virgula." si228_sequencial = $this->si228_sequencial ";
        $virgula = ",";
-       if(trim($this->si228_sequencial) == null ){ 
+       if(trim($this->si228_sequencial) == null ){
          $this->erro_sql = " Campo si228_sequencial não informado.";
          $this->erro_campo = "si228_sequencial";
          $this->erro_banco = "";
@@ -165,10 +180,10 @@ class cl_dfcdcasp1002017 {
          return false;
        }
      }
-     if(trim($this->si228_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si228_tiporegistro"])){ 
+     if(trim($this->si228_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si228_tiporegistro"])){
        $sql  .= $virgula." si228_tiporegistro = $this->si228_tiporegistro ";
        $virgula = ",";
-       if(trim($this->si228_tiporegistro) == null ){ 
+       if(trim($this->si228_tiporegistro) == null ){
          $this->erro_sql = " Campo si228_tiporegistro não informado.";
          $this->erro_campo = "si228_tiporegistro";
          $this->erro_banco = "";
@@ -178,10 +193,10 @@ class cl_dfcdcasp1002017 {
          return false;
        }
      }
-     if(trim($this->si228_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si228_exercicio"])){ 
+     if(trim($this->si228_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si228_exercicio"])){
        $sql  .= $virgula." si228_exercicio = $this->si228_exercicio ";
        $virgula = ",";
-       if(trim($this->si228_exercicio) == null ){ 
+       if(trim($this->si228_exercicio) == null ){
          $this->erro_sql = " Campo si228_exercicio não informado.";
          $this->erro_campo = "si228_exercicio";
          $this->erro_banco = "";
@@ -191,10 +206,10 @@ class cl_dfcdcasp1002017 {
          return false;
        }
      }
-     if(trim($this->si228_vlgeracaoliquidaequivalentecaixa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si228_vlgeracaoliquidaequivalentecaixa"])){ 
+     if(trim($this->si228_vlgeracaoliquidaequivalentecaixa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si228_vlgeracaoliquidaequivalentecaixa"])){
        $sql  .= $virgula." si228_vlgeracaoliquidaequivalentecaixa = $this->si228_vlgeracaoliquidaequivalentecaixa ";
        $virgula = ",";
-       if(trim($this->si228_vlgeracaoliquidaequivalentecaixa) == null ){ 
+       if(trim($this->si228_vlgeracaoliquidaequivalentecaixa) == null ){
          $this->erro_sql = " Campo si228_vlgeracaoliquidaequivalentecaixa não informado.";
          $this->erro_campo = "si228_vlgeracaoliquidaequivalentecaixa";
          $this->erro_banco = "";
@@ -208,32 +223,9 @@ class cl_dfcdcasp1002017 {
      if($si228_sequencial!=null){
        $sql .= " si228_sequencial = $this->si228_sequencial";
      }
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
 
-       $resaco = $this->sql_record($this->sql_query_file($this->si228_sequencial));
-       if($this->numrows>0){
-
-         for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
-
-           $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac = db_query("insert into db_acountkey values($acount,1009533,'$this->si228_sequencial','A')");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si228_sequencial"]) || $this->si228_sequencial != "")
-             $resac = db_query("insert into db_acount values($acount,1010222,1009533,'".AddSlashes(pg_result($resaco,$conresaco,'si228_sequencial'))."','$this->si228_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si228_tiporegistro"]) || $this->si228_tiporegistro != "")
-             $resac = db_query("insert into db_acount values($acount,1010222,1009534,'".AddSlashes(pg_result($resaco,$conresaco,'si228_tiporegistro'))."','$this->si228_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si228_exercicio"]) || $this->si228_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010222,1009535,'".AddSlashes(pg_result($resaco,$conresaco,'si228_exercicio'))."','$this->si228_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si228_vlgeracaoliquidaequivalentecaixa"]) || $this->si228_vlgeracaoliquidaequivalentecaixa != "")
-             $resac = db_query("insert into db_acount values($acount,1010222,1009536,'".AddSlashes(pg_result($resaco,$conresaco,'si228_vlgeracaoliquidaequivalentecaixa'))."','$this->si228_vlgeracaoliquidaequivalentecaixa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "dfcdcasp1002017 nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->si228_sequencial;
@@ -261,37 +253,12 @@ class cl_dfcdcasp1002017 {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($si228_sequencial=null,$dbwhere=null) { 
-
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($si228_sequencial));
-       } else { 
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,1009533,'$si228_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010222,1009533,'','".AddSlashes(pg_result($resaco,$iresaco,'si228_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010222,1009534,'','".AddSlashes(pg_result($resaco,$iresaco,'si228_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010222,1009535,'','".AddSlashes(pg_result($resaco,$iresaco,'si228_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010222,1009536,'','".AddSlashes(pg_result($resaco,$iresaco,'si228_vlgeracaoliquidaequivalentecaixa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
        }
      }
+   }
+   // funcao para exclusao
+   function excluir ($si228_sequencial=null,$dbwhere=null) {
+
      $sql = " delete from dfcdcasp1002017
                     where ";
      $sql2 = "";
@@ -306,7 +273,7 @@ class cl_dfcdcasp1002017 {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "dfcdcasp1002017 nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$si228_sequencial;
@@ -334,11 +301,11 @@ class cl_dfcdcasp1002017 {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -360,8 +327,8 @@ class cl_dfcdcasp1002017 {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $si228_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $si228_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -377,8 +344,8 @@ class cl_dfcdcasp1002017 {
      $sql2 = "";
      if($dbwhere==""){
        if($si228_sequencial!=null ){
-         $sql2 .= " where dfcdcasp1002017.si228_sequencial = $si228_sequencial "; 
-       } 
+         $sql2 .= " where dfcdcasp1002017.si228_sequencial = $si228_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -394,8 +361,8 @@ class cl_dfcdcasp1002017 {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $si228_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $si228_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -411,8 +378,8 @@ class cl_dfcdcasp1002017 {
      $sql2 = "";
      if($dbwhere==""){
        if($si228_sequencial!=null ){
-         $sql2 .= " where dfcdcasp1002017.si228_sequencial = $si228_sequencial "; 
-       } 
+         $sql2 .= " where dfcdcasp1002017.si228_sequencial = $si228_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }

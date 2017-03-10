@@ -9,6 +9,8 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model.
  */
 class GerarDFC extends GerarAM
 {
+  public $iAno;
+  public $iPeriodo;
 
   public function gerarDados()
   {
@@ -16,37 +18,37 @@ class GerarDFC extends GerarAM
     $this->sArquivo = "DFC";
     $this->abreArquivo();
 
-    $sSql = "select * from bpdcasp102017 where 1 = 1";
+    $sSql = "select * from dfcdcasp102017 where si219_anousu = {$this->iAno} AND si219_periodo = {$this->iPeriodo} AND si219_instit = " . db_getsession("DB_instit");
     $rsDFC10 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp202017 where 1 = 1";
+    $sSql = "select * from dfcdcasp202017 where si220_anousu = {$this->iAno} AND si220_periodo = {$this->iPeriodo} AND si220_instit = " . db_getsession("DB_instit");
     $rsDFC20 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp302017 where 1 = 1";
+    $sSql = "select * from dfcdcasp302017 where si221_anousu = {$this->iAno} AND si221_periodo = {$this->iPeriodo} AND si221_instit = " . db_getsession("DB_instit");
     $rsDFC30 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp402017 where 1 = 1";
+    $sSql = "select * from dfcdcasp402017 where si222_anousu = {$this->iAno} AND si222_periodo = {$this->iPeriodo} AND si222_instit = " . db_getsession("DB_instit");
     $rsDFC40 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp502017 where 1 = 1";
+    $sSql = "select * from dfcdcasp502017 where si223_anousu = {$this->iAno} AND si223_periodo = {$this->iPeriodo} AND si223_instit = " . db_getsession("DB_instit");
     $rsDFC50 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp602017 where 1 = 1";
+    $sSql = "select * from dfcdcasp602017 where si224_anousu = {$this->iAno} AND si224_periodo = {$this->iPeriodo} AND si224_instit = " . db_getsession("DB_instit");
     $rsDFC60 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp702017 where 1 = 1";
+    $sSql = "select * from dfcdcasp702017 where si225_anousu = {$this->iAno} AND si225_periodo = {$this->iPeriodo} AND si225_instit = " . db_getsession("DB_instit");
     $rsDFC70 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp802017 where 1 = 1";
+    $sSql = "select * from dfcdcasp802017 where si226_anousu = {$this->iAno} AND si226_periodo = {$this->iPeriodo} AND si226_instit = " . db_getsession("DB_instit");
     $rsDFC80 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp902017 where 1 = 1";
+    $sSql = "select * from dfcdcasp902017 where si227_anousu = {$this->iAno} AND si227_periodo = {$this->iPeriodo} AND si227_instit = " . db_getsession("DB_instit");
     $rsDFC90 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp1002017 where 1 = 1";
+    $sSql = "select * from dfcdcasp1002017 where si228_anousu = {$this->iAno} AND si228_periodo = {$this->iPeriodo} AND si228_instit = " . db_getsession("DB_instit");
     $rsDFC100 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp1102017 where 1 = 1";
+    $sSql = "select * from dfcdcasp1102017 where si229_anousu = {$this->iAno} AND si229_periodo = {$this->iPeriodo} AND si229_instit = " . db_getsession("DB_instit");
     $rsDFC110 = db_query($sSql);
 
 
@@ -116,7 +118,7 @@ class GerarDFC extends GerarAM
         $aCSVDFC30 = array();
         $aCSVDFC30['si221_tiporegistro']                    = $this->padLeftZero($aDFC30['si221_tiporegistro'], 2);
         $aCSVDFC30['si221_exercicio']                       = $this->padLeftZero($aDFC30['si221_exercicio'], 1);
-        $aCSVDFC30['si221_vlfluxocaixaliquidooperacional']  = $this->padLeftZero($aDFC30['si221_vlfluxocaixaliquidooperacional'], 2);
+        $aCSVDFC30['si221_vlfluxocaixaliquidooperacional']  = $this->sicomNumberReal($aDFC30['si221_vlfluxocaixaliquidooperacional'], 2);
 
         $this->sLinha = $aCSVDFC30;
         $this->adicionaLinha();
