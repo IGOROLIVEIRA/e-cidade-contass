@@ -41,39 +41,11 @@ $clrotulo->label("o15_codigo");
         <div style="display: table">
             <fieldset>
                 <legend>
-                    <b>Gerar Folha</b>
+                    <b>Gerar DCASP</b>
                 </legend>
                 <table style='empty-cells: show; border-collapse: collapse;'>
                     <tr>
-                        <td colspan="4">
-                            <fieldset>
-                                <table>
-                                    <tr>
-                                        <td>Mês Referência: </td>
-                                        <td>
-                                            <select id="MesReferencia" class="MesReferencia" >
-                                                <option value="01">Janeiro</option>
-                                                <option value="02">Fevereiro</option>
-                                                <option value="03">Março</option>
-                                                <option value="04">Abril</option>
-                                                <option value="05">Maio</option>
-                                                <option value="06">Junho</option>
-                                                <option value="07">Julho</option>
-                                                <option value="08">Agosto</option>
-                                                <option value="09">Setembro</option>
-                                                <option value="10">Outubro</option>
-                                                <option value="11">Novembro</option>
-                                                <option value="12">Dezembro</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <tr>
                         <td colspan="2" align="center">Dados Mensais</td>
-                        <td>Inclusão de Programas</td>
                         <td>Arquivos Gerados</td>
                     </tr>
                     <tr>
@@ -96,12 +68,6 @@ $clrotulo->label("o15_codigo");
 
 
                         </td>
-
-                        <td style="border: 2px groove white;" valign="top">
-
-
-                        </td>
-
                         <td style="border: 2px groove white;" valign="top">
                             <div id='retorno'
                                  style="width: 200px; height: 250px; overflow: scroll;">
@@ -129,7 +95,7 @@ $clrotulo->label("o15_codigo");
 
         var aArquivosSelecionados = new Array();
         var aArquivos             = $$("input[type='checkbox']");
-        var iMesReferencia        = $("MesReferencia");
+        var iMesReferencia        = 12;
 
         /*
          * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
