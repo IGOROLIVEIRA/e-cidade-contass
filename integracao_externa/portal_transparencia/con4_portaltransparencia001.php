@@ -2031,8 +2031,6 @@ try {
 ) ";
     $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
 
-  $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
-
   db_query($connOrigem, $sSqlServidores);
 
   $sSqlCreateIndex = "create index dados_servidor_ano_mes_matricula_in on dados_servidor (ano, mes, matricula) ";
