@@ -74,7 +74,6 @@ $clrotulo->label("o15_codigo");
           	</tr>
             <tr>
               <td colspan="2" align="center">Dados Mensais</td>
-              <td>Inclusão de Programas</td>
               <td>Arquivos Gerados</td>
             </tr>
             <tr>
@@ -84,14 +83,12 @@ $clrotulo->label("o15_codigo");
               <input type="checkbox" value="Balancete" id="Balancete" /> 
               <label for="Balancete">Balancete Contábil</label><br>  
               <input type="checkbox" value="Consideracoes" id="Consideracoes" /> 
-              <label for="Consideracoes">Considerações</label><br>  
+              <label for="Consideracoes">Considerações</label><br>
+                  <?php if(db_getsession('DB_anousu') > 2016){ ?>
+              <input type="checkbox" value="Fundos" id="Fundos" />
+              <label for="Fundos">Fundos</label><br>
+                  <?php }?>
               </td>
-              <td style="border: 2px groove white;" valign="top">
-                 
-                
-                
-              </td>
-              
 			<td style="border: 2px groove white;" valign="top">
 			
 			
