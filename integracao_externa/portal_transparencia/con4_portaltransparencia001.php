@@ -2024,7 +2024,7 @@ try {
   $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} ";
     $sSqlServidores .= "AND (
   (select r11_mesusu from cfpess order by r11_anousu desc, r11_mesusu limit 1) = 1
-  and rh02_anousu < (select r11_anousu from cfpess order by r11_anousu desc, r11_mesusu limit 1)
+  and rh02_anousu <= (select r11_anousu from cfpess order by r11_anousu desc, r11_mesusu limit 1)
   OR
   (select r11_mesusu from cfpess order by r11_anousu desc, r11_mesusu limit 1) <> 1
   and rh02_anousu = (select r11_anousu from cfpess order by r11_anousu desc, r11_mesusu limit 1)
