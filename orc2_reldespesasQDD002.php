@@ -911,9 +911,9 @@ if (substr($nivel,1,1) == 'A'){
   		
   	}
     $pdf->setfont('arial','b',7);
-    $pdf->cell(105,$alt,'TOTAL GERAL - SALDOS',"T",0,"C",1);
-    $pdf->cell(30,$alt,'',"TL",0,"C",1);
-    $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoini    ,'f')  ,"TL",1,"R",1);
+    $pdf->cell(105,$alt,'TOTAL GERAL',"",0,"C",1);
+    //$pdf->cell(30,$alt,'',"TL",0,"C",1);
+    $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoini    ,'f')  ,"",0,"R",1);
     
 //    $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoini+$nGeralTotOrgaosup+$nGeralTotOrgaoesp-$nGeralTotOrgaored,'f'),"TL",0,"R",1);
    /* $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoanter  ,'f'),"TL",0,"R",1);
@@ -922,11 +922,13 @@ if (substr($nivel,1,1) == 'A'){
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoresauto,'f')  ,"TL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoreser  ,'f')  ,"TL",0,"R",1);
     $pdf->cell(20,2*$alt,db_formatar($nGeralTotOrgaoatual,'f'),"TLB",1,"R",1);*/
-    $y = $pdf->GetY();
+
+    /*$y = $pdf->GetY();
     $pdf->SetY($y-$alt);
-    $pdf->cell(105,$alt,'TOTAIS DA EXECUÇÃO',"TB",0,"C",1);
+    $pdf->cell(105,$alt,'TOTAIS DA EXECUÇÃO',"",0,"C",1);
     
-    $pdf->cell(30,$alt,db_formatar($nGeralTotOrgaosup,'f')  ,"TBL",1,"R",1);
+    $pdf->cell(30,$alt,db_formatar($nGeralTotOrgaosup,'f')  ,"TBL",1,"R",1);*/
+
 /*    $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoesp,'f')  ,"TBL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaored,'f')  ,"TBL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoemp,'f')  ,"TBL",0,"R",1);
