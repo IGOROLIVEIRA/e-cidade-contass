@@ -201,8 +201,9 @@ class cl_contratos102017 {
      if($this->si83_contdeclicitacao == null ){ 
        $this->si83_contdeclicitacao = "0";
      }
-     if($this->si83_exercicioprocesso == null ){ 
-       $this->si83_exercicioprocesso = "0";
+
+     if($this->si83_exercicioprocesso == null || $this->si83_exercicioprocesso == ' '){
+       $this->si83_exercicioprocesso = 0;
      }
      if($this->si83_tipoprocesso == null ){ 
        $this->si83_tipoprocesso = "0";
