@@ -453,42 +453,7 @@ class cl_dvpdcasp202017 {
      } 
    } 
    // funcao para exclusao 
-   function excluir ($si217_sequencial=null,$dbwhere=null) { 
-
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($si217_sequencial));
-       } else { 
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,1009461,'$si217_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009461,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009462,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009463,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009464,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vldiminutivapessoaencargos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009465,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vlprevassistenciais'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009466,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vlservicoscapitalfixo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009467,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vldiminutivavariacoesfinanceiras'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009468,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vltransfconcedidas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009469,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vldesvaloativoincorpopassivo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009470,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vltributarias'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009471,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vlmercadoriavendidoservicos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009472,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vloutrasvariacoespatridiminutivas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010211,1009473,'','".AddSlashes(pg_result($resaco,$iresaco,'si217_vltotalvpdiminutivas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
+   function excluir ($si217_sequencial=null,$dbwhere=null) {
      $sql = " delete from dvpdcasp202017
                     where ";
      $sql2 = "";

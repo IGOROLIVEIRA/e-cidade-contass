@@ -336,44 +336,6 @@ class cl_dvpdcasp102017 {
      if($si216_sequencial!=null){
        $sql .= " si216_sequencial = $this->si216_sequencial";
      }
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       $resaco = $this->sql_record($this->sql_query_file($this->si216_sequencial));
-       if($this->numrows>0){
-
-         for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
-
-           $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac = db_query("insert into db_acountkey values($acount,1009450,'$this->si216_sequencial','A')");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_sequencial"]) || $this->si216_sequencial != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009450,'".AddSlashes(pg_result($resaco,$conresaco,'si216_sequencial'))."','$this->si216_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_tiporegistro"]) || $this->si216_tiporegistro != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009451,'".AddSlashes(pg_result($resaco,$conresaco,'si216_tiporegistro'))."','$this->si216_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_exercicio"]) || $this->si216_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009452,'".AddSlashes(pg_result($resaco,$conresaco,'si216_exercicio'))."','$this->si216_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_vlimpostos"]) || $this->si216_vlimpostos != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009453,'".AddSlashes(pg_result($resaco,$conresaco,'si216_vlimpostos'))."','$this->si216_vlimpostos',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_vlcontribuicoes"]) || $this->si216_vlcontribuicoes != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009454,'".AddSlashes(pg_result($resaco,$conresaco,'si216_vlcontribuicoes'))."','$this->si216_vlcontribuicoes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_vlexploracovendasdireitos"]) || $this->si216_vlexploracovendasdireitos != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009455,'".AddSlashes(pg_result($resaco,$conresaco,'si216_vlexploracovendasdireitos'))."','$this->si216_vlexploracovendasdireitos',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_vlvariacoesaumentativasfinanceiras"]) || $this->si216_vlvariacoesaumentativasfinanceiras != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009456,'".AddSlashes(pg_result($resaco,$conresaco,'si216_vlvariacoesaumentativasfinanceiras'))."','$this->si216_vlvariacoesaumentativasfinanceiras',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_vltransfdelegacoesrecebidas"]) || $this->si216_vltransfdelegacoesrecebidas != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009457,'".AddSlashes(pg_result($resaco,$conresaco,'si216_vltransfdelegacoesrecebidas'))."','$this->si216_vltransfdelegacoesrecebidas',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_vlvalorizacaoativodesincorpassivo"]) || $this->si216_vlvalorizacaoativodesincorpassivo != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009458,'".AddSlashes(pg_result($resaco,$conresaco,'si216_vlvalorizacaoativodesincorpassivo'))."','$this->si216_vlvalorizacaoativodesincorpassivo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_vloutrasvariacoespatriaumentativas"]) || $this->si216_vloutrasvariacoespatriaumentativas != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009459,'".AddSlashes(pg_result($resaco,$conresaco,'si216_vloutrasvariacoespatriaumentativas'))."','$this->si216_vloutrasvariacoespatriaumentativas',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si216_vltotalvpaumentativas"]) || $this->si216_vltotalvpaumentativas != "")
-             $resac = db_query("insert into db_acount values($acount,1010210,1009460,'".AddSlashes(pg_result($resaco,$conresaco,'si216_vltotalvpaumentativas'))."','$this->si216_vltotalvpaumentativas',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -407,40 +369,7 @@ class cl_dvpdcasp102017 {
      } 
    } 
    // funcao para exclusao 
-   function excluir ($si216_sequencial=null,$dbwhere=null) { 
-
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
-
-       if ($dbwhere==null || $dbwhere=="") {
-
-         $resaco = $this->sql_record($this->sql_query_file($si216_sequencial));
-       } else { 
-         $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
-       }
-       if (($resaco != false) || ($this->numrows!=0)) {
-
-         for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-
-           $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-           $acount = pg_result($resac,0,0);
-           $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-           $resac  = db_query("insert into db_acountkey values($acount,1009450,'$si216_sequencial','E')");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009450,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009451,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009452,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009453,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_vlimpostos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009454,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_vlcontribuicoes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009455,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_vlexploracovendasdireitos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009456,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_vlvariacoesaumentativasfinanceiras'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009457,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_vltransfdelegacoesrecebidas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009458,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_vlvalorizacaoativodesincorpassivo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009459,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_vloutrasvariacoespatriaumentativas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           $resac  = db_query("insert into db_acount values($acount,1010210,1009460,'','".AddSlashes(pg_result($resaco,$iresaco,'si216_vltotalvpaumentativas'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
-       }
-     }
+   function excluir ($si216_sequencial=null,$dbwhere=null) {
      $sql = " delete from dvpdcasp102017
                     where ";
      $sql2 = "";
