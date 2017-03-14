@@ -138,7 +138,7 @@ $aPagoAcumulado = array();
 				<td class="s4 bdleft" colspan="8">FUNDO DE MANUTEN플O E DESENVOLVIMENTO DA EDUCA플O B핿ICA E DE VALORIZA플O</td>
 			</tr>
 			<tr style='height:20px;'>
-				<td class="s4 bdleft" colspan="8">DOS PROFISSIONAIS DA EDUCA플O ? FUNDEB </td>
+				<td class="s4 bdleft" colspan="8">DOS PROFISSIONAIS DA EDUCA플O - FUNDEB </td>
 			</tr>
 			<tr style='height:20px;'>
 				<td class="s5 bdleft" colspan="8">DEMONSTRATIVO DOS RECURSOS RECEBIDOS E SUA APLICA플O </td>
