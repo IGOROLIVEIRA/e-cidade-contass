@@ -218,7 +218,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         
         $clrsp10 = new cl_rsp102017();
         $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-        if ($oDados10->subunidade == 1) {
+        if ($oDados10->subunidade  > 0) {
           $oDados10->codunidadesub .= str_pad($oDados10->subunidade, 3, "0", STR_PAD_LEFT);
         }
         
