@@ -68,7 +68,8 @@ db_textarea('si01_justificativa',7,60,$Isi01_justificativa,true,'text',$db_opcao
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir e Imprimir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 <? if ($db_opcao == 2) { ?>
-<input name="imprimir" type="submit" id="imprimir" value="Imprimir">
+<input name="imprimir" type="submit" id="imprimir" value="Imprimir PDF">
+<input name="imprimircsv" type="submit" id="imprimircsv" value="Imprimir CSV">
 <? } ?>
 </form>
 <script>

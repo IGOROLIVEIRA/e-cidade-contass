@@ -29,6 +29,24 @@ if (isset($imprimir)){
    
  }
 
+if (isset($imprimircsv)){
+
+    if (!isset($si01_processocompra) || $si01_processocompra == '') {
+        echo "<script>alert(\"Nenhum processo foi selecionado\")</script>";
+    } else {
+
+        echo "<script>
+    jan = window.open('sic1_precoreferencia005.php?codigo_preco='+{$si01_processocompra},
+
+	                 '',
+	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+	   jan.moveTo(0,0);
+    </script>";
+
+    }
+
+}
+
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
