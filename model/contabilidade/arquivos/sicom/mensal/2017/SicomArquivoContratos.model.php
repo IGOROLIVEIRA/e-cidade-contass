@@ -178,7 +178,8 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
      * @param int $iCodContrato
      * @return Object
      */
-    public function getLicitacaoByContrato($iCodContrato) {
+    public function getLicitacaoByContrato($iCodContrato)
+    {
 
         $sSql = "select liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
                     case when l20_codtipocom = 52 then 1 when l20_codtipocom = 53 then 2 else 0 end as tipoprocesso from acordo
@@ -319,7 +320,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
          * selecionar informacoes registro 10
          */
 
-        $sSql =     "select distinct acordo.*,liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
+        $sSql = "select distinct acordo.*,liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
                     case when pc50_pctipocompratribunal = 100 then 2 when pc50_pctipocompratribunal = 101 then 1 when pc50_pctipocompratribunal = 102 then 3 when pc50_pctipocompratribunal = 103 then 4 else 0 end as tipoprocesso,
                     ac16_tipoorigem as contdeclicitacao,ac16_origem,
                     (CASE
@@ -341,7 +342,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     left join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade and db01_anousu = o41_anousu and o41_anousu = " . db_getsession("DB_anousu") . "
                     left join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                     left join cflicita on l20_codtipocom = l03_codigo
-                    inner join pctipocompra ON pc50_codcom = l03_codcom
+                    LEFT join pctipocompra ON pc50_codcom = l03_codcom
                     where ac16_dataassinatura <= '{$this->sDataFinal}'
                     and ac16_dataassinatura >= '{$this->sDataInicial}'
                     and ac16_instit = " . db_getsession("DB_instit");
@@ -381,11 +382,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
              */
             if ($oDados10->ac16_origem == 6 && in_array($oDados10->contdeclicitacao, array(2, 3))) {
                 $oLicitacao = $this->getLicitacaoByContrato($oDados10->ac16_sequencial);
-                $oDados10->l20_edital         = $oLicitacao->l20_edital;
-                $oDados10->l20_anousu         = $oLicitacao->l20_anousu;
+                $oDados10->l20_edital = $oLicitacao->l20_edital;
+                $oDados10->l20_anousu = $oLicitacao->l20_anousu;
                 $oDados10->l20_naturezaobjeto = $oLicitacao->l20_naturezaobjeto;
-                $oDados10->tipoprocesso       = $oLicitacao->tipoprocesso;
-                $oDados10->l20_codigo         = $oLicitacao->l20_codigo;
+                $oDados10->tipoprocesso = empty($oLicitacao->tipoprocesso) ? 0 : $oLicitacao->tipoprocesso;
+                $oDados10->l20_codigo = $oLicitacao->l20_codigo;
             }
 
             $clcontratos10->si83_tiporegistro = 10;
@@ -505,8 +506,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
              */
 
             $aDadosAgrupados12 = array();
+
             if ($oDados10->ac16_acordoclassificacao != 4 || $oDados10->ac16_acordoclassificacao != 5) {
-                foreach ($oAcordo->getEmpenhosAcordo() as $oDados12) {
+
+                $oDadosBusca = $oDados10->ac16_origem == 2 ? $oAcordo->getLicitacoes() : $oAcordo->getEmpenhosAcordo();
+
+                foreach ($oDadosBusca as $oDados12) {
 
                     //Se a origem for licitação
                     if (in_array($oDados10->contdeclicitacao, array(2, 3)) && $oDados10->l20_codigo != '') {
@@ -636,6 +641,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     }
 
                 }
+
             }
             //echo "<pre>";print_r($aDadosAgrupados12);
 
