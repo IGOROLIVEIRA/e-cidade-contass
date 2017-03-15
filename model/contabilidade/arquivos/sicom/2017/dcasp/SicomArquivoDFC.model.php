@@ -74,6 +74,22 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iCodigoPeriodo     = date('m', strtotime($this->sDataFinal)) + 16;
     $iCodigoRelatorio   = $this->iCodigoLayout;
     $sListaInstituicoes = db_getsession("DB_instit");
+    $oInstit            = new Instituicao(db_getsession("DB_instit"));
+
+    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+
+      $sSqlInstit = "select codigo from db_config ";
+      $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));
+      $aInstituicoes = array_map(function ($oItem) {
+        return $oItem->codigo;
+      }, $aInstits);
+
+    } else {
+      $aInstituicoes = array(db_getsession("DB_instit"));
+    }
+
+    $sListaInstituicoes = implode(',', $aInstituicoes);
+
 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
@@ -96,7 +112,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     db_inicio_transacao();
 
     /** DFCDCASP10 */
-    $sWhereSelectDelete = "si219_anousu = {$iAnoUsu} AND si219_periodo = {$iCodigoPeriodo} AND si219_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si219_anousu = {$iAnoUsu} AND si219_periodo = {$iCodigoPeriodo} AND si219_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp10->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp10->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -107,7 +123,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP20 */
-    $sWhereSelectDelete = "si220_anousu = {$iAnoUsu} AND si220_periodo = {$iCodigoPeriodo} AND si220_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si220_anousu = {$iAnoUsu} AND si220_periodo = {$iCodigoPeriodo} AND si220_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp20->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp20->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -118,7 +134,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP30 */
-    $sWhereSelectDelete = "si221_anousu = {$iAnoUsu} AND si221_periodo = {$iCodigoPeriodo} AND si221_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si221_anousu = {$iAnoUsu} AND si221_periodo = {$iCodigoPeriodo} AND si221_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp30->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp30->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -129,7 +145,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP40 */
-    $sWhereSelectDelete = "si222_anousu = {$iAnoUsu} AND si222_periodo = {$iCodigoPeriodo} AND si222_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si222_anousu = {$iAnoUsu} AND si222_periodo = {$iCodigoPeriodo} AND si222_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp40->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp40->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -140,7 +156,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP50 */
-    $sWhereSelectDelete = "si223_anousu = {$iAnoUsu} AND si223_periodo = {$iCodigoPeriodo} AND si223_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si223_anousu = {$iAnoUsu} AND si223_periodo = {$iCodigoPeriodo} AND si223_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp50->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp50->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -151,7 +167,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP60 */
-    $sWhereSelectDelete = "si224_anousu = {$iAnoUsu} AND si224_periodo = {$iCodigoPeriodo} AND si224_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si224_anousu = {$iAnoUsu} AND si224_periodo = {$iCodigoPeriodo} AND si224_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp60->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp60->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -162,7 +178,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP70 */
-    $sWhereSelectDelete = "si225_anousu = {$iAnoUsu} AND si225_periodo = {$iCodigoPeriodo} AND si225_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si225_anousu = {$iAnoUsu} AND si225_periodo = {$iCodigoPeriodo} AND si225_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp70->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp70->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -173,7 +189,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP80 */
-    $sWhereSelectDelete = "si226_anousu = {$iAnoUsu} AND si226_periodo = {$iCodigoPeriodo} AND si226_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si226_anousu = {$iAnoUsu} AND si226_periodo = {$iCodigoPeriodo} AND si226_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp80->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp80->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -184,7 +200,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP90 */
-    $sWhereSelectDelete = "si227_anousu = {$iAnoUsu} AND si227_periodo = {$iCodigoPeriodo} AND si227_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si227_anousu = {$iAnoUsu} AND si227_periodo = {$iCodigoPeriodo} AND si227_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp90->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp90->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -195,7 +211,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP100 */
-    $sWhereSelectDelete = "si228_anousu = {$iAnoUsu} AND si228_periodo = {$iCodigoPeriodo} AND si228_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si228_anousu = {$iAnoUsu} AND si228_periodo = {$iCodigoPeriodo} AND si228_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp100->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp100->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -206,7 +222,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DFCDCASP110 */
-    $sWhereSelectDelete = "si229_anousu = {$iAnoUsu} AND si229_periodo = {$iCodigoPeriodo} AND si229_instit = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si229_anousu = {$iAnoUsu} AND si229_periodo = {$iCodigoPeriodo} AND si229_instit IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldfcdcasp110->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $cldfcdcasp110->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {

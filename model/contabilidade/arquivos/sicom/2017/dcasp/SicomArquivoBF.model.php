@@ -59,7 +59,22 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     $sTipoImpressao     = 'A';
     $iCodigoPeriodo     = date('m', strtotime($this->sDataFinal)) + 16;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $sListaInstituicoes = db_getsession("DB_instit");
+    $oInstit            = new Instituicao(db_getsession("DB_instit"));
+
+    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+
+      $sSqlInstit = "select codigo from db_config ";
+      $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));
+      $aInstituicoes = array_map(function ($oItem) {
+        return $oItem->codigo;
+      }, $aInstits);
+
+    } else {
+      $aInstituicoes = array(db_getsession("DB_instit"));
+    }
+
+    $sListaInstituicoes = implode(',', $aInstituicoes);
+
 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
@@ -74,7 +89,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     db_inicio_transacao();
 
     /** BFDCASP10 */
-    $sWhereSelectDelete = "si206_ano = {$iAnoUsu} AND si206_periodo = {$iCodigoPeriodo} AND si206_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si206_ano = {$iAnoUsu} AND si206_periodo = {$iCodigoPeriodo} AND si206_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbfdcasp10->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $clbfdcasp10->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -85,7 +100,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** BFDCASP20 */
-    $sWhereSelectDelete = "si207_ano = {$iAnoUsu} AND si207_periodo = {$iCodigoPeriodo} AND si207_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si207_ano = {$iAnoUsu} AND si207_periodo = {$iCodigoPeriodo} AND si207_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbfdcasp20->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $clbfdcasp20->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {

@@ -65,7 +65,21 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu")-1;
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $sListaInstituicoes = db_getsession("DB_instit");
+    $oInstit            = new Instituicao(db_getsession("DB_instit"));
+
+    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+
+      $sSqlInstit = "select codigo from db_config ";
+      $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));
+      $aInstituicoes = array_map(function ($oItem) {
+        return $oItem->codigo;
+      }, $aInstits);
+
+    } else {
+      $aInstituicoes = array(db_getsession("DB_instit"));
+    }
+
+    $sListaInstituicoes = implode(',', $aInstituicoes);
 
 
     /**
@@ -86,7 +100,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     db_inicio_transacao();
 
     /** BPDCASP10 */
-    $sWhereSelectDelete = "si208_ano = {$iAnoUsu} AND si208_periodo = {$iCodigoPeriodo} AND si208_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si208_ano = {$iAnoUsu} AND si208_periodo = {$iCodigoPeriodo} AND si208_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbpdcasp10->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $clbpdcasp10->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -97,7 +111,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** BPDCASP20 */
-    $sWhereSelectDelete = "si209_ano = {$iAnoUsu} AND si209_periodo = {$iCodigoPeriodo} AND si209_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si209_ano = {$iAnoUsu} AND si209_periodo = {$iCodigoPeriodo} AND si209_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbpdcasp20->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $clbpdcasp20->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -108,7 +122,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** BPDCASP30 */
-    $sWhereSelectDelete = "si210_ano = {$iAnoUsu} AND si210_periodo = {$iCodigoPeriodo} AND si210_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si210_ano = {$iAnoUsu} AND si210_periodo = {$iCodigoPeriodo} AND si210_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbpdcasp30->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $clbpdcasp30->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -119,7 +133,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** BPDCASP40 */
-    $sWhereSelectDelete = "si211_ano = {$iAnoUsu} AND si211_periodo = {$iCodigoPeriodo} AND si211_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si211_ano = {$iAnoUsu} AND si211_periodo = {$iCodigoPeriodo} AND si211_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbpdcasp40->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $clbpdcasp40->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -130,7 +144,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** BPDCASP50 */
-    $sWhereSelectDelete = "si212_ano = {$iAnoUsu} AND si212_periodo = {$iCodigoPeriodo} AND si212_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si212_ano = {$iAnoUsu} AND si212_periodo = {$iCodigoPeriodo} AND si212_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbpdcasp50->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $clbpdcasp50->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -140,7 +154,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       }
     }
     /** BPDCASP60 */
-    $sWhereSelectDelete = "si213_ano = {$iAnoUsu} AND si213_periodo = {$iCodigoPeriodo} AND si213_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si213_ano = {$iAnoUsu} AND si213_periodo = {$iCodigoPeriodo} AND si213_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbpdcasp60->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $clbpdcasp60->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -150,7 +164,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       }
     }
     /** BPDCASP70 */
-    $sWhereSelectDelete = "si214_ano = {$iAnoUsu} AND si214_periodo = {$iCodigoPeriodo} AND si214_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si214_ano = {$iAnoUsu} AND si214_periodo = {$iCodigoPeriodo} AND si214_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbpdcasp70->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $clbpdcasp70->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -160,7 +174,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       }
     }
     /** BPDCASP71 */
-    $sWhereSelectDelete = "si215_ano = {$iAnoUsu} AND si215_periodo = {$iCodigoPeriodo} AND si215_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si215_ano = {$iAnoUsu} AND si215_periodo = {$iCodigoPeriodo} AND si215_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbpdcasp71->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $clbpdcasp71->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -205,7 +219,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     );
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
-      
+
       $clbpdcasp10  = new cl_bpdcasp102017();
 
       $clbpdcasp10->si208_ano                               = $iAnoUsu;
@@ -232,7 +246,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         throw new Exception($clbpdcasp10->erro_msg);
       }
 
-    } 
+    }
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
 
@@ -337,7 +351,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
-      
+
       $clbpdcasp60  = new cl_bpdcasp602017();
 
       $clbpdcasp60->si213_ano                                 = $iAnoUsu;

@@ -50,8 +50,8 @@ $clrotulo->label("o15_codigo");
                     </tr>
                     <tr>
                         <td style="border: 2px groove white;" valign="top">
-                            <input type="checkbox" value="IDE" id="IdenficacaoRemessa" />
-                            <label for="IdenficacaoRemessa">Identificação da Remessa (IDE)</label><br>
+                            <input type="checkbox" value="IDE" id="IDE" />
+                            <label for="IDE">Identificação da Remessa (IDE)</label><br>
                             <input type="checkbox" value="BF" id="BF" />
                             <label for="BF">Balance Financeiro (BF)</label><br>
                             <input type="checkbox" value="BO" id="BO" />

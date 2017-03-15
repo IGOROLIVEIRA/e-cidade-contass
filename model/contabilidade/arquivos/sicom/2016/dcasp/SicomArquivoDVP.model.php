@@ -62,7 +62,22 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $sListaInstituicoes = db_getsession("DB_instit");
+    $oInstit            = new Instituicao(db_getsession("DB_instit"));
+
+    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+
+      $sSqlInstit = "select codigo from db_config ";
+      $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));
+      $aInstituicoes = array_map(function ($oItem) {
+        return $oItem->codigo;
+      }, $aInstits);
+
+    } else {
+      $aInstituicoes = array(db_getsession("DB_instit"));
+    }
+
+    $sListaInstituicoes = implode(',', $aInstituicoes);
+
 
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
@@ -77,7 +92,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
     db_inicio_transacao();
 
     /** DVPDCASP10 */
-    $sWhereSelectDelete = "si216_ano = {$iAnoUsu} AND si216_periodo = {$iCodigoPeriodo} AND si216_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si216_ano = {$iAnoUsu} AND si216_periodo = {$iCodigoPeriodo} AND si216_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldvpdcasp10->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $cldvpdcasp10->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -88,7 +103,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DVPDCASP20 */
-    $sWhereSelectDelete = "si217_ano = {$iAnoUsu} AND si217_periodo = {$iCodigoPeriodo} AND si217_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si217_ano = {$iAnoUsu} AND si217_periodo = {$iCodigoPeriodo} AND si217_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldvpdcasp20->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $cldvpdcasp20->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -99,7 +114,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** DVPDCASP30 */
-    $sWhereSelectDelete = "si218_ano = {$iAnoUsu} AND si218_periodo = {$iCodigoPeriodo} AND si218_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si218_ano = {$iAnoUsu} AND si218_periodo = {$iCodigoPeriodo} AND si218_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $cldvpdcasp30->sql_query(null,"*",null,$sWhereSelectDelete);
     $result = $cldvpdcasp30->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -149,9 +164,9 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
-      
+
       $cldvpdcasp20  = new cl_dvpdcasp202017();
-      
+
       $cldvpdcasp20->si217_ano                                = $iAnoUsu;
       $cldvpdcasp20->si217_periodo                            = $iCodigoPeriodo;
       $cldvpdcasp20->si217_institu                            = $sListaInstituicoes;

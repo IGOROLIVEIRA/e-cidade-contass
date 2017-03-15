@@ -68,7 +68,21 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = date('m', strtotime($this->sDataFinal)) + 16;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $sListaInstituicoes = db_getsession("DB_instit");
+    $oInstit            = new Instituicao(db_getsession("DB_instit"));
+
+    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+
+      $sSqlInstit = "select codigo from db_config ";
+      $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));
+      $aInstituicoes = array_map(function ($oItem) {
+        return $oItem->codigo;
+      }, $aInstits);
+
+    } else {
+      $aInstituicoes = array(db_getsession("DB_instit"));
+    }
+
+    $sListaInstituicoes = implode(',', $aInstituicoes);
 
 
     /**
@@ -87,7 +101,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     db_inicio_transacao();
 
     /** BODCASP10 */
-    $sWhereSelectDelete = "si201_ano = {$iAnoUsu} AND si201_periodo = {$iCodigoPeriodo} AND si201_institu = '{$sListaInstituicoes}' ";
+    $sWhereSelectDelete = "si201_ano = {$iAnoUsu} AND si201_periodo = {$iCodigoPeriodo} AND si201_institu IN ({$sListaInstituicoes}) ";
     $sSQL   = $clbodcasp10->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $clbodcasp10->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -98,7 +112,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** BODCASP40 */
-    $sWhereSelectDelete = "si204_ano = {$iAnoUsu} AND si204_periodo = {$iCodigoPeriodo} AND si204_institu = '{$sListaInstituicoes}'";
+    $sWhereSelectDelete = "si204_ano = {$iAnoUsu} AND si204_periodo = {$iCodigoPeriodo} AND si204_institu IN ({$sListaInstituicoes})";
     $sSQL   = $clbodcasp40->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $clbodcasp40->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
@@ -109,7 +123,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     }
 
     /** BODCASP50 */
-    $sWhereSelectDelete = "si205_ano = {$iAnoUsu} AND si205_periodo = {$iCodigoPeriodo} AND si205_institu = '{$sListaInstituicoes}'";
+    $sWhereSelectDelete = "si205_ano = {$iAnoUsu} AND si205_periodo = {$iCodigoPeriodo} AND si205_institu IN ({$sListaInstituicoes})";
     $sSQL   = $clbodcasp50->sql_query(null, '*', null, $sWhereSelectDelete);
     $result = $clbodcasp50->sql_record($sSQL);
     if (pg_num_rows($result) > 0) {
