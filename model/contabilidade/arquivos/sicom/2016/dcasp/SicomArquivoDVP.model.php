@@ -118,9 +118,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oVariacoesPatrimoniais->setTipo(VariacaoPatrimonialDCASP2015::TIPO_ANALITICO);
 
     $oRetornoDVP = $oVariacoesPatrimoniais->getDados();
-    echo "<pre>";
-    print_r($oRetornoDVP);
-    exit;
+
     $aExercicios = array(
         1 => 'vlrexatual',
         2 => 'vlrexanter'

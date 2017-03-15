@@ -59,7 +59,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
   public function gerarDados()
   {
 
-    $iAnoUsu            = db_getsession("DB_anousu")-1;
+    $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
     $sListaInstituicoes = db_getsession("DB_instit");
@@ -112,7 +112,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     /*------------------------------------------------------------------------*/
 
-    $oVariacoesPatrimoniais = new VariacaoPatrimonialDCASP2015(db_getsession('DB_anousu'), $iCodigoRelatorio, $iCodigoPeriodo);
+    $oVariacoesPatrimoniais = new VariacaoPatrimonialDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oVariacoesPatrimoniais->setInstituicoes($sListaInstituicoes);
     $oVariacoesPatrimoniais->setImprimirExercicioAnterior(true);
     $oVariacoesPatrimoniais->setTipo(VariacaoPatrimonialDCASP2015::TIPO_ANALITICO);
