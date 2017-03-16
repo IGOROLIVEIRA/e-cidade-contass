@@ -2003,7 +2003,11 @@ class Acordo
         }
     }
 
-    public function anularAutorizacao($iAutorizacao)
+    /**
+     * Adicionado $aItensEmpempItem para, quando vier de anulacao de empenho, anular somente
+     * a quantidade especificada na anulacao
+     */
+    public function anularAutorizacao($iAutorizacao, $aItensEmpempItem = array())
     {
 
         if (empty($iAutorizacao)) {
@@ -2031,6 +2035,10 @@ class Acordo
              * incluimos um saldo executado negativo, informando que houve um estorno
              */
             foreach ($aItens as $oItem) {
+                if (isset($aItensEmpempItem[$oItem->ac20_pcmater])) {
+                    $oItem->quantidade = $aItensEmpempItem[$oItem->ac20_pcmater]->quantidade;
+                    $oItem->valor      = $aItensEmpempItem[$oItem->ac20_pcmater]->vlrtot;
+                }
 
                 /**
                  * incluirmos na tabela acordoitemexecutado
@@ -2274,13 +2282,14 @@ class Acordo
     {
 
 
-        $sSqlAutorizacoes = "select  e54_autori as autorizacao,";
+        $sSqlAutorizacoes = "select distinct on (e54_autori,ac29_acordoitem) e54_autori as autorizacao,";
         $sSqlAutorizacoes .= "        ac29_valor as valor,";
         $sSqlAutorizacoes .= "        ac29_acordoitem as codigo,";
         $sSqlAutorizacoes .= "        ac29_quantidade as quantidade,";
         $sSqlAutorizacoes .= "        e56_coddot as dotacao,";
         $sSqlAutorizacoes .= "        e56_anousu as anodotacao,";
-        $sSqlAutorizacoes .= "        e55_sequen as itemautorizacao";
+        $sSqlAutorizacoes .= "        e55_sequen as itemautorizacao,";
+        $sSqlAutorizacoes .= "        ac20_pcmater";
         $sSqlAutorizacoes .= "   from acordoposicao ";
         $sSqlAutorizacoes .= "        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial ";
         $sSqlAutorizacoes .= "        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem ";

@@ -2811,6 +2811,23 @@ class empenho {
 
           $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
 
+          /**
+           * Incluir novamente saldo da quantidade autorizada do acordo
+           */
+          $oDaoEmpempAut   = db_utils::getDao("empempaut");
+          $rsDaoEmpempAut  = $oDaoEmpempAut->sql_record($oDaoEmpempAut->sql_query_file($this->numemp,"distinct e61_autori as autori"));
+          if ($oDaoEmpempAut->numrows > 0){
+            $oDaoEmpempitem  = db_utils::getDao("empempitem");
+            $aItensAcordo = array();
+            foreach ($aItens as $oItem) {
+              $rsEmpempItem = $oDaoEmpempitem->sql_record($oDaoEmpempitem->sql_query_file(null,null,"e62_item",null,"e62_sequencial = {$oItem->e62_sequencial}"));
+              $iCodMaterial = db_utils::fieldsmemory($rsEmpempItem, 0)->e62_item;
+              $aItensAcordo[$iCodMaterial] = clone($oItem);
+              $aItensAcordo[$iCodMaterial]->pc01_codmater = $iCodMaterial;
+            }
+            $oAcordo->anularAutorizacao(db_utils::fieldsMemory($rsDaoEmpempAut,0)->autori, $aItensAcordo);
+
+          }
         } catch (Exception $eErro) {
 
           $this->lSqlErro = true;
