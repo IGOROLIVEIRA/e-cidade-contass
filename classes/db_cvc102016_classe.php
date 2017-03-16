@@ -212,7 +212,7 @@ class cl_cvc102016 {
                                ,$this->si146_numerorenavam 
                                ,'$this->si146_nroserie' 
                                ,'$this->si146_situacao' 
-                               ,$this->si146_tipodocumento
+                               ,".($this->si146_tipodocumento == NULL ? 'NULL' : $this->si146_tipodocumento)."
                                ,'$this->si146_nrodocumento'
                                ,'$this->si146_tpdeslocamento' 
                                ,$this->si146_mes 

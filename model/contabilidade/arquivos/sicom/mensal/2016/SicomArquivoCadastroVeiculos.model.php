@@ -187,7 +187,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     }
                     $nrodocumento = $oDados10->nrodocumento;
                 } else {
-                    $tipodocumento = ' ';
+                    $tipodocumento = NULL;
                     $nrodocumento = ' ';
                 }
 
