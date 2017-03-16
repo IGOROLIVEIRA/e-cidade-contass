@@ -632,7 +632,9 @@ class AcordoPosicao {
         if ($oDotacaoItem->o80_valor > 0) {
           $nDiferenca = (($oDotacaoItem->pc13_valor / ($oItemLicitacao->pc11_vlrun * $oItemLicitacao->pc11_quant)) * $oItem->getValorTotal()) - $oDotacaoItem->o80_valor;
         }
-        $oDotacao->valor = $oDotacaoItem->pc13_valor+($nDiferenca);
+        /* Alterado para que o valor da dotacao seja igual ao do item conforme solicitado por Mario */
+        //$oDotacao->valor      = $oDotacaoItem->pc13_valor+($nDiferenca);
+        $oDotacao->valor      = ($oDotacaoItem->pc13_quant*$oItemLicitacao->pc23_vlrun);
         $oDotacao->ano        = $oDotacaoItem->pc13_anousu;
         $oDotacao->dotacao    = $oDotacaoItem->pc13_coddot;
         $oDotacao->quantidade = $oDotacaoItem->pc13_quant;
