@@ -259,7 +259,7 @@ class cl_ntf102015 {
                                ,$this->si143_tiporegistro 
                                ,$this->si143_codnotafiscal 
                                ,'$this->si143_codorgao' 
-                               ,$this->si143_nfnumero 
+                               ,'$this->si143_nfnumero'
                                ,'$this->si143_nfserie' 
                                ,$this->si143_tipodocumento 
                                ,'$this->si143_nrodocumento' 

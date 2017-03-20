@@ -246,7 +246,7 @@ class cl_ntf202015 {
                                 $this->si145_sequencial 
                                ,$this->si145_tiporegistro 
                                
-                               ,$this->si145_nfnumero
+                               ,'$this->si145_nfnumero'
                                ,'$this->si145_nfserie'
                                ,$this->si145_tipodocumento
                                ,'$this->si145_nrodocumento'
