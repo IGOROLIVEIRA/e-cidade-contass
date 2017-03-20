@@ -17,8 +17,8 @@ require_once('libs/db_liborcamento.php');
 require_once('fpdf151/PDFDocument.php');
 
 require_once("classes/db_bodcasp102017_classe.php");
-// require_once("classes/db_bodcasp202017_classe.php");
-// require_once("classes/db_bodcasp302017_classe.php");
+require_once("classes/db_bodcasp202017_classe.php");
+require_once("classes/db_bodcasp302017_classe.php");
 require_once("classes/db_bodcasp402017_classe.php");
 require_once("classes/db_bodcasp502017_classe.php");
 
@@ -89,8 +89,8 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
     $clbodcasp10 = new cl_bodcasp102017();
-    // $clbodcasp20 = new cl_bodcasp202017();
-    // $clbodcasp30 = new cl_bodcasp302017();
+    $clbodcasp20 = new cl_bodcasp202017();
+    $clbodcasp30 = new cl_bodcasp302017();
     $clbodcasp40 = new cl_bodcasp402017();
     $clbodcasp50 = new cl_bodcasp502017();
 
@@ -108,6 +108,28 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbodcasp10->excluir(null, $sWhereSelectDelete);
       if ($clbodcasp10->erro_status == 0) {
         throw new Exception($clbodcasp10->erro_msg);
+      }
+    }
+
+    /** BODCASP20 */
+    $sWhereSelectDelete = "si202_anousu = {$iAnoUsu} AND si202_periodo = {$iCodigoPeriodo} AND si202_instit IN ({$sListaInstituicoes}) ";
+    $sSQL   = $clbodcasp20->sql_query(null, '*', null, $sWhereSelectDelete);
+    $result = $clbodcasp20->sql_record($sSQL);
+    if (pg_num_rows($result) > 0) {
+      $clbodcasp20->excluir(null, $sWhereSelectDelete);
+      if ($clbodcasp20->erro_status == 0) {
+        throw new Exception($clbodcasp20->erro_msg);
+      }
+    }
+
+    /** BODCASP30 */
+    $sWhereSelectDelete = "si203_anousu = {$iAnoUsu} AND si203_periodo = {$iCodigoPeriodo} AND si203_instit IN ({$sListaInstituicoes}) ";
+    $sSQL   = $clbodcasp30->sql_query(null, '*', null, $sWhereSelectDelete);
+    $result = $clbodcasp30->sql_record($sSQL);
+    if (pg_num_rows($result) > 0) {
+      $clbodcasp30->excluir(null, $sWhereSelectDelete);
+      if ($clbodcasp30->erro_status == 0) {
+        throw new Exception($clbodcasp30->erro_msg);
       }
     }
 
@@ -174,7 +196,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       // $clbodcasp10 = new stdClass();
       $clbodcasp10->si201_ano                   = $iAnoUsu;
       $clbodcasp10->si201_periodo               = $iCodigoPeriodo;
-      $clbodcasp10->si201_institu               = $sListaInstituicoes;
+      $clbodcasp10->si201_institu               = db_getsession("DB_instit");
       $clbodcasp10->si201_tiporegistro          = 10;
       $clbodcasp10->si201_faserecorcamentaria   = $iValorNumerico;
       $clbodcasp10->si201_vlrectributaria       = $oRetornoBO[2]->$sChave;
@@ -206,6 +228,82 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     } // Registo 10
 
 
+    /** BODCASP202017
+     *
+     */
+
+    $aFasesReceitaOrcamentaria = array(
+      2 => 'prevatu',
+      3 => 'recrealiza'
+    );
+
+    foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
+
+      $clbodcasp20 = new cl_bodcasp202017();
+
+      // $clbodcasp20 = new stdClass();
+      $clbodcasp20->si202_anousu                = $iAnoUsu;
+      $clbodcasp20->si202_periodo               = $iCodigoPeriodo;
+      $clbodcasp20->si202_instit                = db_getsession("DB_instit");
+      $clbodcasp20->si202_tiporegistro          = 20;
+      $clbodcasp20->si202_faserecorcamentaria   = $iValorNumerico;
+      $clbodcasp20->si202_vlsaldoexeantsupfin   = $oRetornoBO[29]->$sChave;
+      $clbodcasp20->si202_vlsaldoexeantrecredad = $oRetornoBO[30]->$sChave;
+      $clbodcasp20->si202_vltotalsaldoexeant    = ($oRetornoBO[29]->$sChave + $oRetornoBO[30]->$sChave);
+
+      $clbodcasp20->incluir(null);
+      if ($clbodcasp20->erro_status == 0) {
+        throw new Exception($clbodcasp20->erro_msg);
+      }
+
+    } // Registo 20
+
+
+    /** BODCASP302017
+     *
+     */
+
+    $aFasesReceitaOrcamentaria = array(
+      1 => 'dotini',
+      2 => 'dotatu',
+      3 => 'despemp',
+      4 => 'despliq',
+      5 => 'desppag'
+    );
+
+    foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
+
+      $clbodcasp30 = new cl_bodcasp302017();
+
+      // $clbodcasp30 = new stdClass();
+      $clbodcasp30->si203_anousu                    = $iAnoUsu;
+      $clbodcasp30->si203_periodo                   = $iCodigoPeriodo;
+      $clbodcasp30->si203_instit                    = db_getsession("DB_instit");
+      $clbodcasp30->si203_tiporegistro              = 30;
+      $clbodcasp30->si203_fasedespesaorca           = $iValorNumerico;
+      $clbodcasp30->si203_vlpessoalencarsoci        = $oRetornoBO[32]->$sChave;
+      $clbodcasp30->si203_vljurosencardividas       = $oRetornoBO[33]->$sChave;
+      $clbodcasp30->si203_vloutrasdespcorren        = $oRetornoBO[34]->$sChave;
+      $clbodcasp30->si203_vlinvestimentos           = $oRetornoBO[36]->$sChave;
+      $clbodcasp30->si203_vlinverfinanceira         = $oRetornoBO[37]->$sChave;
+      $clbodcasp30->si203_vlamortizadivida          = $oRetornoBO[38]->$sChave;
+      $clbodcasp30->si203_vlreservacontingen        = $oRetornoBO[39]->$sChave;
+      $clbodcasp30->si203_vlreservarpps             = $oRetornoBO[40]->$sChave;
+      $clbodcasp30->si203_vlamortizadiviintermob    = $oRetornoBO[44]->$sChave;
+      $clbodcasp30->si203_vlamortizaoutrasdivinter  = $oRetornoBO[45]->$sChave;
+      $clbodcasp30->si203_vlamortizadivextmob       = $oRetornoBO[47]->$sChave;
+      $clbodcasp30->si203_vlamortizaoutrasdivext    = $oRetornoBO[48]->$sChave;
+      $clbodcasp30->si203_vlsuperavit               = $oRetornoBO[50]->$sChave;
+      $clbodcasp30->si203_vltotalquadrodespesa      = $oRetornoBO[51]->$sChave;
+
+      $clbodcasp30->incluir(null);
+      if ($clbodcasp30->erro_status == 0) {
+        throw new Exception($clbodcasp30->erro_msg);
+      }
+
+    } // Registo 30
+
+
 
     /** BODCASP402017
      *  Quadro da Execução de Restos a Pagar Não Processados
@@ -225,7 +323,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clbodcasp40->si204_ano                             = $iAnoUsu;
       $clbodcasp40->si204_periodo                         = $iCodigoPeriodo;
-      $clbodcasp40->si204_institu                         = $sListaInstituicoes;
+      $clbodcasp40->si204_institu                         = db_getsession("DB_instit");
       $clbodcasp40->si204_tiporegistro                    = 40;
       $clbodcasp40->si204_faserestospagarnaoproc          = $iValorNumerico;
       $clbodcasp40->si204_vlrspnaoprocpessoalencarsociais = $oRetornoBO[53]->$sChave;
@@ -262,7 +360,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clbodcasp50->si205_ano                             = $iAnoUsu;
       $clbodcasp50->si205_periodo                         = $iCodigoPeriodo;
-      $clbodcasp50->si205_institu                         = $sListaInstituicoes;
+      $clbodcasp50->si205_institu                         = db_getsession("DB_instit");
       $clbodcasp50->si205_tiporegistro                    = 50;
       $clbodcasp50->si205_faserestospagarprocnaoliqui     = $iValorNumerico;
       $clbodcasp50->si205_vlrspprocliqpessoalencarsoc     = $oRetornoBO[62]->$sChave;

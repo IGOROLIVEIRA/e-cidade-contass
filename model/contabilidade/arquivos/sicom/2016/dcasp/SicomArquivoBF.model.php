@@ -142,7 +142,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clbfdcasp10->si206_ano                               = $iAnoUsu;
       $clbfdcasp10->si206_periodo                           = $iCodigoPeriodo;
-      $clbfdcasp10->si206_institu                           = $sListaInstituicoes;
+      $clbfdcasp10->si206_institu                           = db_getsession("DB_instit");
       $clbfdcasp10->si206_tiporegistro                      = 10;
       $clbfdcasp10->si206_exercicio                         = $iValorNumerico;
       $clbfdcasp10->si206_vlrecorcamenrecurord              = $oRetornoBF[2]->$sChave;
@@ -182,7 +182,7 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clbfdcasp20->si207_ano                               = $iAnoUsu;
       $clbfdcasp20->si207_periodo                           = $iCodigoPeriodo;
-      $clbfdcasp20->si207_institu                           = $sListaInstituicoes;
+      $clbfdcasp20->si207_institu                           = db_getsession("DB_instit");
       $clbfdcasp20->si207_tiporegistro                      = 20;
       $clbfdcasp20->si207_exercicio                         = $iValorNumerico;
       $clbfdcasp20->si207_vldesporcamenrecurordinarios      = $oRetornoBF[25]->$sChave;

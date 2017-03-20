@@ -279,7 +279,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp10->si219_anousu                           = $iAnoUsu;
       $cldfcdcasp10->si219_periodo                          = $iCodigoPeriodo;
-      $cldfcdcasp10->si219_instit                           = $sListaInstituicoes;
+      $cldfcdcasp10->si219_instit                           = db_getsession("DB_instit");
       $cldfcdcasp10->si219_tiporegistro                     = 10;
       $cldfcdcasp10->si219_exercicio                        = $iValorNumerico;
       $cldfcdcasp10->si219_vlreceitaderivadaoriginaria      = $aRetornoDFC[3]->$sChave;
@@ -304,7 +304,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp20->si220_anousu                             = $iAnoUsu;
       $cldfcdcasp20->si220_periodo                            = $iCodigoPeriodo;
-      $cldfcdcasp20->si220_instit                             = $sListaInstituicoes;
+      $cldfcdcasp20->si220_instit                             = db_getsession("DB_instit");
       $cldfcdcasp20->si220_tiporegistro                       = 20;
       $cldfcdcasp20->si220_exercicio                          = $iValorNumerico;
       $cldfcdcasp20->si220_vldesembolsopessoaldespesas        = $aRetornoDFC[7]->$sChave;
@@ -331,7 +331,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp30->si221_anousu                         = $iAnoUsu;
       $cldfcdcasp30->si221_periodo                        = $iCodigoPeriodo;
-      $cldfcdcasp30->si221_instit                         = $sListaInstituicoes;
+      $cldfcdcasp30->si221_instit                         = db_getsession("DB_instit");
       $cldfcdcasp30->si221_tiporegistro                   = 30;
       $cldfcdcasp30->si221_exercicio                      = $iValorNumerico;
       $cldfcdcasp30->si221_vlfluxocaixaliquidooperacional = $aRetornoDFC[11]->$sChave;
@@ -354,7 +354,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp40->si222_anousu                             = $iAnoUsu;
       $cldfcdcasp40->si222_periodo                            = $iCodigoPeriodo;
-      $cldfcdcasp40->si222_instit                             = $sListaInstituicoes;
+      $cldfcdcasp40->si222_instit                             = db_getsession("DB_instit");
       $cldfcdcasp40->si222_tiporegistro                       = 40;
       $cldfcdcasp40->si222_exercicio                          = $iValorNumerico;
       $cldfcdcasp40->si222_vlalienacaobens                    = $aRetornoDFC[14]->$sChave;
@@ -380,7 +380,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp50->si223_anousu                             = $iAnoUsu;
       $cldfcdcasp50->si223_periodo                            = $iCodigoPeriodo;
-      $cldfcdcasp50->si223_instit                             = $sListaInstituicoes;
+      $cldfcdcasp50->si223_instit                             = db_getsession("DB_instit");
       $cldfcdcasp50->si223_tiporegistro                       = 50;
       $cldfcdcasp50->si223_exercicio                          = $iValorNumerico;
       $cldfcdcasp50->si223_vlaquisicaoativonaocirculante      = $aRetornoDFC[18]->$sChave;
@@ -406,7 +406,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp60->si224_anousu                           = $iAnoUsu;
       $cldfcdcasp60->si224_periodo                          = $iCodigoPeriodo;
-      $cldfcdcasp60->si224_instit                           = $sListaInstituicoes;
+      $cldfcdcasp60->si224_instit                           = db_getsession("DB_instit");
       $cldfcdcasp60->si224_tiporegistro                     = 60;
       $cldfcdcasp60->si224_exercicio                        = $iValorNumerico;
       $cldfcdcasp60->si224_vlfluxocaixaliquidoinvestimento  = $aRetornoDFC[21]->$sChave;
@@ -429,7 +429,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp70->si225_anousu                             = $iAnoUsu;
       $cldfcdcasp70->si225_periodo                            = $iCodigoPeriodo;
-      $cldfcdcasp70->si225_instit                             = $sListaInstituicoes;
+      $cldfcdcasp70->si225_instit                             = db_getsession("DB_instit");
       $cldfcdcasp70->si225_tiporegistro                       = 70;
       $cldfcdcasp70->si225_exercicio                          = $iValorNumerico;
       $cldfcdcasp70->si225_vloperacoescredito                 = $aRetornoDFC[24]->$sChave;
@@ -456,7 +456,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp80->si226_anousu                             = $iAnoUsu;
       $cldfcdcasp80->si226_periodo                            = $iCodigoPeriodo;
-      $cldfcdcasp80->si226_instit                             = $sListaInstituicoes;
+      $cldfcdcasp80->si226_instit                             = db_getsession("DB_instit");
       $cldfcdcasp80->si226_tiporegistro                       = 80;
       $cldfcdcasp80->si226_exercicio                          = $iValorNumerico;
       $cldfcdcasp80->si226_vlamortizacaorefinanciamento       = $aRetornoDFC[29]->$sChave;
@@ -481,7 +481,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp90->si227_anousu                     = $iAnoUsu;
       $cldfcdcasp90->si227_periodo                    = $iCodigoPeriodo;
-      $cldfcdcasp90->si227_instit                     = $sListaInstituicoes;
+      $cldfcdcasp90->si227_instit                     = db_getsession("DB_instit");
       $cldfcdcasp90->si227_tiporegistro               = 90;
       $cldfcdcasp90->si227_exercicio                  = $iValorNumerico;
       $cldfcdcasp90->si227_vlfluxocaixafinanciamento  = $aRetornoDFC[31]->$sChave;
@@ -504,7 +504,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp100->si228_anousu                            = $iAnoUsu;
       $cldfcdcasp100->si228_periodo                           = $iCodigoPeriodo;
-      $cldfcdcasp100->si228_instit                            = $sListaInstituicoes;
+      $cldfcdcasp100->si228_instit                            = db_getsession("DB_instit");
       $cldfcdcasp100->si228_tiporegistro                      = 100;
       $cldfcdcasp100->si228_exercicio                         = $iValorNumerico;
       $cldfcdcasp100->si228_vlgeracaoliquidaequivalentecaixa  = $aRetornoDFC[32]->$sChave;
@@ -527,7 +527,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldfcdcasp110->si229_anousu                          = $iAnoUsu;
       $cldfcdcasp110->si229_periodo                         = $iCodigoPeriodo;
-      $cldfcdcasp110->si229_instit                          = $sListaInstituicoes;
+      $cldfcdcasp110->si229_instit                          = db_getsession("DB_instit");
       $cldfcdcasp110->si229_tiporegistro                    = 110;
       $cldfcdcasp110->si229_exercicio                       = $iValorNumerico;
       $cldfcdcasp110->si229_vlcaixaequivalentecaixainicial  = $aRetornoDFC[33]->$sChave;

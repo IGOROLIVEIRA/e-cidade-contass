@@ -144,7 +144,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $cldvpdcasp10  = new cl_dvpdcasp102017();
       $cldvpdcasp10->si216_ano                                = $iAnoUsu;
       $cldvpdcasp10->si216_periodo                            = $iCodigoPeriodo;
-      $cldvpdcasp10->si216_institu                            = $sListaInstituicoes;
+      $cldvpdcasp10->si216_institu                            = db_getsession("DB_instit");
       $cldvpdcasp10->si216_tiporegistro                       = 10;
       $cldvpdcasp10->si216_exercicio                          = $iValorNumerico;
       $cldvpdcasp10->si216_vlimpostos                         = $oRetornoDVP[2]->$sChave;
@@ -169,7 +169,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $cldvpdcasp20->si217_ano                                = $iAnoUsu;
       $cldvpdcasp20->si217_periodo                            = $iCodigoPeriodo;
-      $cldvpdcasp20->si217_institu                            = $sListaInstituicoes;
+      $cldvpdcasp20->si217_institu                            = db_getsession("DB_instit");
       $cldvpdcasp20->si217_tiporegistro                       = 20;
       $cldvpdcasp20->si217_exercicio                          = $iValorNumerico;
       $cldvpdcasp20->si217_vldiminutivapessoaencargos         = $oRetornoDVP[45]->$sChave;
@@ -195,7 +195,7 @@ class SicomArquivoDVP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $cldvpdcasp30  = new cl_dvpdcasp302017();
       $cldvpdcasp30->si218_ano                            = $iAnoUsu;
       $cldvpdcasp30->si218_periodo                        = $iCodigoPeriodo;
-      $cldvpdcasp30->si218_institu                        = $sListaInstituicoes;
+      $cldvpdcasp30->si218_institu                        = db_getsession("DB_instit");
       $cldvpdcasp30->si218_tiporegistro                   = 30;
       $cldvpdcasp30->si218_exercicio                      = $iValorNumerico;
       $cldvpdcasp30->si218_vlresultadopatrimonialperiodo  = $oRetornoDVP[98]->$sChave;
