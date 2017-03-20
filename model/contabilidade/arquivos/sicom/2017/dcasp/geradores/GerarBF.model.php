@@ -52,7 +52,7 @@ class GerarBF extends GerarAM
         $aCSVBF10['si206_vltransfinanexecuorcamentaria']      = $this->sicomNumberReal($aBF10['si206_vltransfinanexecuorcamentaria'], 2);
         $aCSVBF10['si206_vltransfinanindepenexecuorc']        = $this->sicomNumberReal($aBF10['si206_vltransfinanindepenexecuorc'], 2);
         $aCSVBF10['si206_vltransfinanreceaportesrpps']        = $this->sicomNumberReal($aBF10['si206_vltransfinanreceaportesrpps'], 2);
-        $aCSVBF10['si206_vlincrirspnaoprocessado']            = $this->sicomNumberReal($aBF10['si206_vlincrirspnaoprocessado'], 2);
+        $aCSVBF10['si206_vlincrirspnaoprocessado']            = $this->sicomNumberReal(abs($aBF10['si206_vlincrirspnaoprocessado']), 2);
         $aCSVBF10['si206_vlincrirspprocessado']               = $this->sicomNumberReal($aBF10['si206_vlincrirspprocessado'], 2);
         $aCSVBF10['si206_vldeporestituvinculados']            = $this->sicomNumberReal($aBF10['si206_vldeporestituvinculados'], 2);
         $aCSVBF10['si206_vloutrosrecextraorcamentario']       = $this->sicomNumberReal($aBF10['si206_vloutrosrecextraorcamentario'], 2);
