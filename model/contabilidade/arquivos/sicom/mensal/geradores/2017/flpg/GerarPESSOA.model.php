@@ -45,7 +45,11 @@ class GerarPESSOA extends GerarAM {
 				$aCSVPESSOA10['si193_tipodocumento']            =  str_pad($aPESSOA10['si193_tipodocumento'], 1, "0", STR_PAD_LEFT);
 				$aCSVPESSOA10['si193_nrodocumento']             =  substr($aPESSOA10['si193_nrodocumento'], 0,14);
 				$aCSVPESSOA10['si193_nome']                     =  substr($aPESSOA10['si193_nome'], 0,120);
-				$aCSVPESSOA10['si193_indsexo']                  =  str_pad($aPESSOA10['si193_indsexo'], 1, "0", STR_PAD_LEFT);
+				if(!empty($aPESSOA10['si193_indsexo'])){
+					$aCSVPESSOA10['si193_indsexo']                  =  str_pad($aPESSOA10['si193_indsexo'], 1, "0", STR_PAD_LEFT);
+				}else{
+					$aCSVPESSOA10['si193_indsexo']                  =  ' ';
+				}
 				$aCSVPESSOA10['si193_datanascimento']           =  implode("", array_reverse(explode("-", $aPESSOA10['si193_datanascimento'])));
 				$aCSVPESSOA10['si193_tipocadastro']             =  str_pad($aPESSOA10['si193_tipocadastro'], 1, "0", STR_PAD_LEFT);
 				$aCSVPESSOA10['si193_justalteracao']            =  substr($aPESSOA10['si193_justalteracao'], 0,100);
