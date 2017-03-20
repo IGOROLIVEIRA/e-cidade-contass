@@ -124,6 +124,15 @@ $sAnd   = "";
         $sWhere .= "{$sAnd} ac10_acordomovimentacaotipo = {$oGet->tipo} ";
         $sAnd    = " and ";
       }
+
+      /**
+       * Pesquisa ou nao, contratos com autorizacao de empenho
+       */
+      if ($oGet->autorizacao == 'false') {
+        
+        $sWhere .= "{$sAnd} not exists (select 1 from acordoempautoriza where ac45_acordo = ac16_sequencial) ";
+        $sAnd    = " and ";
+      }
       
       if (!isset($pesquisa_chave)) {
       	

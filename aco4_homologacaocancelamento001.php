@@ -150,7 +150,7 @@ var sUrl = 'con4_contratosmovimento.RPC.php';
 function js_pesquisarHomologacao() {
 
   $('cancelar').disabled  = true;
-  var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=11';
+  var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=11&autorizacao=false';
       sUrl += '&funcao_js=parent.js_mostrarpesquisahomologacao|ac10_sequencial';
       
   js_OpenJanelaIframe('top.corpo', 

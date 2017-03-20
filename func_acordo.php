@@ -162,6 +162,12 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             $sWhere .= " and ac16_origem in({$sListaOrigens}) ";
           }
 
+          /**
+           * Pesquisa por tipo de movimento
+           */
+          if (isset($iTipo) && !empty($iTipo)) {
+            $sWhere .= " and ac10_acordomovimentacaotipo = {$iTipo} ";
+          }
 
         }
 
