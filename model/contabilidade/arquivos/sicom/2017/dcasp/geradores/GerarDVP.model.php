@@ -78,7 +78,7 @@ class GerarDVP extends GerarAM
         $aCSVDVP20['si217_vltributarias']                     = $this->sicomNumberReal($aDVP20['si217_vltributarias'], 2);
         $aCSVDVP20['si217_vlmercadoriavendidoservicos']       = $this->sicomNumberReal($aDVP20['si217_vlmercadoriavendidoservicos'], 2);
         $aCSVDVP20['si217_vloutrasvariacoespatridiminutivas'] = $this->sicomNumberReal($aDVP20['si217_vloutrasvariacoespatridiminutivas'], 2);
-        $aCSVDVP20['si217_vltotalvpdiminutivas']              = $this->sicomNumberReal($aDVP20['si217_vlmercadoriavendidoservicos'], 2);
+        $aCSVDVP20['si217_vltotalvpdiminutivas']              = $this->sicomNumberReal($aDVP20['si217_vltotalvpdiminutivas'], 2);
 
         $this->sLinha = $aCSVDVP20;
         $this->adicionaLinha();
