@@ -188,6 +188,27 @@ switch($oParam->exec) {
             $lAcordoValido = false;
             throw new Exception("A data de assinatura do acordo {$oParam->dtmovimentacao} não pode ser posterior ao período de vigência do contrato {$oAcordo->getDataFinal()}.");
         }
+
+        /**
+         * Validação solicitada: não seja possível incluir assinatura de acordos que não tenha as penalidades e garantias cadastradas.?
+         * @see OC 3495
+         */
+
+        if(count($oAcordo->getPenalidades()) == 0 || count($oAcordo->getGarantias()) == 0){
+            $lAcordoValido = false;
+            throw new Exception("Não é permitido assinar um acordos que não tenha as penalidades e garantias cadastradas.");
+        }
+
+          /**
+           * Validação soliciatada: Validar o sistema para que não seja possível assinar acordos de origem Manual que não tenha itens vinculados.
+           * @see OC 3499
+           */
+
+          if($oAcordo->getOrigem() == Acordo::ORIGEM_MANUAL && count($oAcordo->getItens()) == 0){
+              $lAcordoValido = false;
+              throw new Exception("Acordo sem itens Cadastrados.");
+          }
+
       	$oAssinatura->save();
       	
         db_fim_transacao(false);
