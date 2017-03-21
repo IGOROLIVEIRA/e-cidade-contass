@@ -190,10 +190,11 @@ ob_start();
         $fTotalLiquidado = 0;
         $aDespesas = getSaldoDespesa(null,"o58_elemento, o56_descr,sum(liquidado) as liquidado",null,"o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
         foreach($aDespesas as $oDespesa){
-          $fTotalLiquidado += $oDespesa->liquidado;
+
           if($oDespesa->o58_elemento == '3317170000000'){
             $oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni,$oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni,$oDataFim);
           }
+          $fTotalLiquidado += $oDespesa->liquidado;
           ?>
           <tr style='height:19px;'>
             <td class="s3 bdleft" colspan="2">
