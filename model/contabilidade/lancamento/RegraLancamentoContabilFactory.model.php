@@ -171,6 +171,7 @@ class RegraLancamentoContabilFactory {
     ,2019 => "RegraLancamentoAberturaExercicio"
     ,2021 => "RegraLancamentoAberturaExercicio"
     ,2020 => "RegraLancamentoAberturaExercicio"
+    ,2023 => "RegraLancamentoAberturaPorRegras"
     ,2005 => "RegraLancamentoRestosAPagar"
     ,2006 => "RegraLancamentoRestosAPagar"
     ,2007 => "RegraLancamentoRestosAPagar"

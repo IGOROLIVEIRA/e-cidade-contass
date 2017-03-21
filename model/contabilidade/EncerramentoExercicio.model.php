@@ -715,7 +715,7 @@ class EncerramentoExercicio {
    * @return resource|string
    * @throws DBException
    */
-  protected function exececutarBalanceteVerificacao($sWhere ) {
+  public function exececutarBalanceteVerificacao($sWhere ) {
 
     $sDataInicial           = "{$this->iAno}-01-1";
     $sDataFim               = "{$this->iAno}-12-31";
@@ -916,7 +916,7 @@ class EncerramentoExercicio {
     $sSqlLancamentos .= "  where c29_contacorrentedetalhe in (select c19_sequencial from contacorrentedetalhe ";
     $sSqlLancamentos .= " where c19_conplanoreduzanousu = ".db_getsession('DB_anousu')." and c19_reduz = {$iReduzido} ) ";
     $sSqlLancamentos .= " and c29_anousu = ".db_getsession('DB_anousu')." and c29_mesusu =0 ) as xx";
-    
+
     $rsLancamentos    = db_query($sSqlLancamentos) or die($sSqlLancamentos);
     $aLancamento      = db_utils::getColectionByRecord($rsLancamentos);
 

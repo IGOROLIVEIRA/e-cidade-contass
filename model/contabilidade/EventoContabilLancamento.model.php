@@ -459,7 +459,7 @@ class EventoContabilLancamento {
       if ($this->lObrigatorio === true) {
     	  throw new BusinessException(_M( EventoContabilLancamento::CAMINHO_MENSAGEM . "sem_regra", $oStdMensagem));
       }
-      
+
       /**
        * Caso a regra retorne false e o lançamento não seja obrigatório, apenas return true;
        */

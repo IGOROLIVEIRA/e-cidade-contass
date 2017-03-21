@@ -43,6 +43,9 @@ require_once("model/contabilidade/planoconta/SistemaConta.model.php");
 require_once("model/contabilidade/planoconta/ClassificacaoConta.model.php");
 require_once("model/contabilidade/planoconta/SubSistemaConta.model.php");
 require_once("model/contabilidade/lancamento/LancamentoAuxiliarBase.model.php");
+require_once("classes/db_regraaberturaexercicio_classe.php");
+require_once("classes/db_conplano_classe.php");
+require_once("model/contabilidade/EncerramentoExercicio.model.php");
 
 db_app::import("exceptions.*");
 db_app::import("contabilidade.lancamento.*");
@@ -59,6 +62,7 @@ $oParam            = $oJson->decode(str_replace("\\","",$_POST["json"]));
 $oRetorno          = new db_stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = '';
+$oRetorno->erro    = false;
 
 $iInstituicao = db_getsession("DB_instit");
 $iAnoSessao   = db_getsession("DB_anousu");
@@ -134,53 +138,178 @@ try {
         throw new BusinessException("Erro técnico: Não foi possível realizar lançamentos !");
       }
 
-      $iSequencialAberturaExercicio = $oDaoAberturaexercicioorcamento->c104_sequencial;
-      $sObservacao                  = $oParam->sObservacao;
+//      $iSequencialAberturaExercicio = $oDaoAberturaexercicioorcamento->c104_sequencial;
+//      $sObservacao                  = $oParam->sObservacao;
+//
+//      /**
+//	   * Receita - Lancamento contabil para abertura de exercicio
+//	   */
+//      $iTipoDocumento = 2003;
+//  	  //$nValorReceita  = ReceitaContabil::getValorPrevistoAno( $iAnoSessao, $iInstituicao );
+//
+//	  $sSqlOrcreceita  = "SELECT DISTINCT o70_codigo, o70_anousu, o70_valor, o57_fonte FROM orcreceita
+//	   						inner join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
+//	   						inner join orctiporec on o70_codigo = o15_codigo
+//	  						 where o70_instit = {$iInstituicao} and o70_anousu= {$iAnoSessao}";
+//	  $rsSqlOrcreceita = db_query($sSqlOrcreceita) or die($sSqlOrcreceita);
+//
+//	  for ($iContRec = 0; $iContRec < pg_num_rows($rsSqlOrcreceita); $iContRec++) {
+//
+//		  $oReceita = db_utils::fieldsMemory($rsSqlOrcreceita, $iContRec);
+//
+//		  if($oReceita->o70_valor > 0){
+//			  executaLancamento($iTipoDocumento, $oReceita->o70_valor, $iSequencialAberturaExercicio, $sObservacao, null, null, $oReceita->o70_codigo, $oReceita->o57_fonte);
+//		  }
+//
+//	  }
+//
+//	  /**
+//	   * Despesa - Lancamento contabil para abertura de exercicio
+//	   */
+//	  $iTipoDocumento = 2001;
+//  	  //$nValorDespesa  = Dotacao::getValorPrevistoNoAno( $iAnoSessao, $iInstituicao );
+//      $oDaoOrcDotacao = db_utils::getDao("orcdotacao");
+//      $sWhere         = "o58_anousu = {$iAnoSessao} and o58_instit = {$iInstituicao}";
+//      $sSqlDotacao    = $oDaoOrcDotacao->sql_query_file(null,
+//          null,
+//          "DISTINCT o58_coddot, o58_anousu, o58_valor",
+//          null,
+//          $sWhere
+//      );
+//
+//      $rsDotacao = $oDaoOrcDotacao->sql_record($sSqlDotacao);
+//
+//      for ($iContDot = 0; $iContDot < pg_num_rows($rsDotacao); $iContDot++) {
+//        $oDotacao = db_utils::fieldsMemory($rsDotacao, $iContDot);
+//    	  if ($oDotacao->o58_valor > 0) {
+//    	  	executaLancamento($iTipoDocumento, $oDotacao->o58_valor, $iSequencialAberturaExercicio, $sObservacao, $oDotacao->o58_coddot, $oDotacao->o58_anousu);
+//    	  }
+//      }
 
-      /**
-	   * Receita - Lancamento contabil para abertura de exercicio
-	   */
-      $iTipoDocumento = 2003;
-  	  //$nValorReceita  = ReceitaContabil::getValorPrevistoAno( $iAnoSessao, $iInstituicao );
+		/**
+		 * Abertura pelas regras
+		 * documento 2023
+		 */
+		$aRegras = getRegrasAberturaExercicio($iAnoSessao,$iInstituicao);
 
-	  $sSqlOrcreceita  = "SELECT DISTINCT o70_codigo, o70_anousu, o70_valor, o57_fonte FROM orcreceita
-	   						inner join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
-	   						inner join orctiporec on o70_codigo = o15_codigo
-	  						 where o70_instit = {$iInstituicao} and o70_anousu= {$iAnoSessao}";
-	  $rsSqlOrcreceita = db_query($sSqlOrcreceita) or die($sSqlOrcreceita);
+		if (count($aRegras) == 0) {
+			$oRetorno->message = "Não é possível executar o encerramento pois não existem regras configuradas para Abertura de Exercício";
+			$oRetorno->erro = true;
+			break;
+		}
 
-	  for ($iContRec = 0; $iContRec < pg_num_rows($rsSqlOrcreceita); $iContRec++) {
+		$oDaoConPlano = new cl_conplano();
+	    $oEncerramentoExercicio = new EncerramentoExercicio(new Instituicao($iInstituicao),$iAnoSessao);
 
-		  $oReceita = db_utils::fieldsMemory($rsSqlOrcreceita, $iContRec);
+		foreach ($aRegras as $oRegra) {
 
-		  if($oReceita->o70_valor > 0){
-			  executaLancamento($iTipoDocumento, $oReceita->o70_valor, $iSequencialAberturaExercicio, $sObservacao, null, null, $oReceita->o70_codigo, $oReceita->o57_fonte);
-		  }
+			/**
+			 * A conta usada como referência para os lançamentos é aquela indicada na tela de cadastro das regras.
+			 * @contareferencia: $sContaReferencia
+			 */
 
-	  }
+			$sContaReferencia = ($oRegra->c217_contareferencia == "C" ? $oRegra->c217_contacredora : $oRegra->c217_contadevedora);
+			$sWhereContaReferencia = "c61_instit = {$iInstituicao} ";
+			$sWhereContaReferencia .= "and c60_estrut like '{$sContaReferencia}%' ";
+			$sWhereContaReferencia .= "and c61_anousu = {$iAnoSessao}";
+			$sSqlContaReferencia = $oDaoConPlano->sql_query_reduz(null, 'c61_reduz, c60_estrut', 'c60_estrut limit 1', $sWhereContaReferencia);
+			$rsContaReferencia   = $oDaoConPlano->sql_record($sSqlContaReferencia);
 
-	  /**
-	   * Despesa - Lancamento contabil para abertura de exercicio
-	   */
-	  $iTipoDocumento = 2001;
-  	  //$nValorDespesa  = Dotacao::getValorPrevistoNoAno( $iAnoSessao, $iInstituicao );
-      $oDaoOrcDotacao = db_utils::getDao("orcdotacao");
-      $sWhere         = "o58_anousu = {$iAnoSessao} and o58_instit = {$iInstituicao}";
-      $sSqlDotacao    = $oDaoOrcDotacao->sql_query_file(null,
-          null,
-          "DISTINCT o58_coddot, o58_anousu, o58_valor",
-          null,
-          $sWhere
-      );
-      
-      $rsDotacao = $oDaoOrcDotacao->sql_record($sSqlDotacao);
-      
-      for ($iContDot = 0; $iContDot < pg_num_rows($rsDotacao); $iContDot++) {
-        $oDotacao = db_utils::fieldsMemory($rsDotacao, $iContDot);
-    	  if ($oDotacao->o58_valor > 0) {
-    	  	executaLancamento($iTipoDocumento, $oDotacao->o58_valor, $iSequencialAberturaExercicio, $sObservacao, $oDotacao->o58_coddot, $oDotacao->o58_anousu);
-    	  }
-      }
+			if ($oDaoConPlano->numrows == 0) {
+				throw new BusinessException("Não foram encontradas contas analiticas com a regra {$sContaReferencia}.");
+			}
+
+			$iContaReferencia = db_utils::fieldsMemory($rsContaReferencia, 0)->c61_reduz;
+
+			$iTamanhoEstruturalDevedor = strlen($oRegra->c217_contadevedora);
+			$iTamanhoEstruturalCredor  = strlen($oRegra->c217_contacredora);
+
+			$sWhereBalancete  = "(substr(c60_estrut, 1, {$iTamanhoEstruturalDevedor}) = '{$oRegra->c217_contadevedora}'  ";
+			$sWhereBalancete .= "or substr(c60_estrut, 1, {$iTamanhoEstruturalCredor}) = '{$oRegra->c217_contacredora}' )";
+			$sWhereBalancete .= " and c61_reduz <> {$iContaReferencia}";
+			$rsBalancete      = $oEncerramentoExercicio->exececutarBalanceteVerificacao($sWhereBalancete);
+
+			$iTotalLinhas     = pg_num_rows($rsBalancete);
+
+			for ($iConta = 0; $iConta < $iTotalLinhas; $iConta++) {
+
+				$oConta = db_utils::fieldsMemory($rsBalancete, $iConta);
+
+				/**
+				 * Contas sinteticas, nao devemos encerrar
+				 */
+				if (empty($oConta->c61_reduz)) {
+					continue;
+				}
+				/**
+				 *
+				 * 1. Buscar o cc do reduzido.
+				 * 2. Apurar o saldo do contacorrente atravez do reduzido na conlancamval
+				 * 3. Gravar na contacorrentedetalhe
+				 *
+				 */
+
+				$iContaCorrente = getContaCorrenteByReduz($iContaReferencia);
+
+				if ($iContaCorrente != "") {
+
+					foreach (getContaCorrenteDetalheByReduz($iContaReferencia,$iContaCorrente) as $oContaCorrente) {
+
+						$oContaCorrenteDetalhe = new ContaCorrenteDetalhe($oContaCorrente->c19_sequencial);
+						$aSaldo = getSaldoContaCorrente($oContaCorrente->c19_sequencial, $iContaCorrente);
+						$nValorFinal = $aSaldo[0]->saldoimplantado == "" ? 0 : $aSaldo[0]->saldoimplantado;
+
+						/**
+						 * Inverção do saldo da conta referência para o lançamento correto na conta credora.
+						 */
+						$sSinalFinal = ($nValorFinal >= 0 ? 'C' : 'D');
+
+						if($nValorFinal == 0){
+
+							continue;
+						}
+
+						$oMovimentacaoContabil = new MovimentacaoContabil();
+						$oMovimentacaoContabil->setConta($oConta->c61_reduz);
+						$oMovimentacaoContabil->setSaldoFinal(abs($nValorFinal));
+						$oMovimentacaoContabil->setTipoSaldo($sSinalFinal);
+						$oContaCorrenteDetalhe->setRecurso(new Recurso($oContaCorrente->c19_orctiporec));
+						$oLancamento = new LancamentoAuxiliarAberturaExercicio();
+						$oLancamento->setValorTotal($oMovimentacaoContabil->getSaldoFinal());
+						$oLancamento->setObservacaoHistorico("Inscrição no valor de " . trim(db_formatar($nValorFinal, "f")));
+						$oLancamento->setMovimentacaoContabil($oMovimentacaoContabil);
+						$oLancamento->setContaReferencia($iContaReferencia);
+						$oLancamento->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+
+						$oEvento           = new EventoContabil(2023, $iAnoSessao);
+
+						$iCodigoLancamento = $oEvento->executaLancamento($oLancamento);
+
+						unset($oMovimentacaoContabil);
+						unset($oLancamento);
+
+					}
+
+				} else {
+
+					$oMovimentacaoContabil = new MovimentacaoContabil();
+					$oMovimentacaoContabil->setConta($oConta->c61_reduz);
+					$oMovimentacaoContabil->setSaldoFinal($oConta->saldo_final);
+					$oMovimentacaoContabil->setTipoSaldo($oConta->sinal_final);
+
+					$oLancamento = new LancamentoAuxiliarAberturaExercicio();
+					$oLancamento->setValorTotal($oMovimentacaoContabil->getSaldoFinal());
+					$oLancamento->setObservacaoHistorico("Inscrição no valor de " . trim(db_formatar($oConta->saldo_final, "f")));
+					$oLancamento->setMovimentacaoContabil($oMovimentacaoContabil);
+					$oLancamento->setContaReferencia($iContaReferencia);
+					$oEvento           = new EventoContabil(2023, $iAnoSessao);
+					$iCodigoLancamento = $oEvento->executaLancamento($oLancamento);
+					unset($oMovimentacaoContabil);
+					unset($oLancamento);
+
+				}
+			}
+		}
 
   	  $oRetorno->message = 'Lançamentos processados com sucesso.';
 
@@ -224,51 +353,12 @@ try {
   		$iSequencialAberturaExercicio = $oDaoAberturaexercicioorcamento->c104_sequencial;
   		$sObservacao                  = $oParam->sObservacao;
 
-  		/**
-  		 * Receita - Lancamento contabil para abertura de exercicio
-		 * Removido estorno da operação. Os lançamentos serão excluídos.
-
-  		$iTipoDocumento = 2004;
-  		$nValorReceita  = ReceitaContabil::getValorPrevistoAno($iAnoSessao, $iInstituicao);
-
-  		if ($nValorReceita > 0) {
-    		executaLancamento($iTipoDocumento, $nValorReceita, $iSequencialAberturaExercicio, $sObservacao);
-  		}
-		 *
-		 * */
-
-  		/**
-  		 * Despesa - Lancamento contabil para abertura de exercicio
-  		 * Removido estorno da operação. Os lançamentos serão excluídos.
-  		$iTipoDocumento = 2002;
-  		//$nValorDespesa  = Dotacao::getValorPrevistoNoAno($iAnoSessao, $iInstituicao);
-      $oDaoOrcDotacao = db_utils::getDao("orcdotacao");
-      $sWhere         = "o58_anousu = {$iAnoSessao} and o58_instit = {$iInstituicao}";
-      $sSqlDotacao    = $oDaoOrcDotacao->sql_query_file(null,
-          null,
-          "DISTINCT o58_coddot, o58_anousu, o58_valor",
-          null,
-          $sWhere
-      );
-
-      $rsDotacao = $oDaoOrcDotacao->sql_record($sSqlDotacao);
-      
-      for ($iContDot = 0; $iContDot < pg_num_rows($rsDotacao); $iContDot++) {
-        $oDotacao = db_utils::fieldsMemory($rsDotacao, $iContDot);
-        if ($oDotacao->o58_valor > 0) {
-          executaLancamento($iTipoDocumento, $oDotacao->o58_valor, $iSequencialAberturaExercicio, $sObservacao, $oDotacao->o58_coddot, $oDotacao->o58_anousu);
-        }
-      }
-
-  		if ($nValorDespesa > 0 ) {
-    		executaLancamento($iTipoDocumento, $nValorDespesa, $iSequencialAberturaExercicio, $sObservacao);
-  		}
-		 */
 		$rsTabelaLancamentos = db_query("create temp table w_conlancam as
                                       select distinct c105_codlan as c70_codlan
                                       from conlancamaberturaexercicioorcamento
                                       inner join aberturaexercicioorcamento on c105_aberturaexercicioorcamento = c104_sequencial
                                       where c104_instit = ".db_getsession('DB_instit')." and c104_ano = ".db_getsession('DB_anousu'));
+	    $rsTabelaLancamentos = db_query(" insert into w_conlancam select c71_codlan from conlancamdoc where c71_coddoc = 2023 ");
 
 		if (!$rsTabelaLancamentos) {
 			throw new Exception('Não foi possivel criar tabela para exclusão de lançamentos');
@@ -461,7 +551,93 @@ try {
 
   		db_fim_transacao(false); // @todo
 
-  	break;
+		break;
+	  case "buscarRegras":
+
+		  $oRetorno->aRegras = getRegrasAberturaExercicio($iAnoSessao,$iInstituicao);
+		  break;
+
+	  case "salvarRegra":
+
+		  if (empty($oParam->contadevedora)) {
+			  throw new Exception("Conta Devedora não informada.");
+		  }
+
+		  if (empty($oParam->contacredora)) {
+			  throw new Exception("Conta Credora não informada.");
+		  }
+
+		  $oDaoRegrasAbertura = new cl_regraaberturaexercicio();
+
+		  $oDaoRegrasAbertura->c217_sequencial = null;
+		  $oDaoRegrasAbertura->c217_anousu = db_getsession("DB_anousu");
+		  $oDaoRegrasAbertura->c217_instit = db_getsession("DB_instit");
+		  $oDaoRegrasAbertura->c217_contadevedora = $oParam->contadevedora;
+		  $oDaoRegrasAbertura->c217_contacredora = $oParam->contacredora;
+		  $oDaoRegrasAbertura->c217_contareferencia = $oParam->contareferencia;
+
+		  $oDaoRegrasAbertura->incluir(null);
+
+		  if ($oDaoRegrasAbertura->erro_status == 0) {
+			  throw new Exception($oDaoRegrasAbertura->erro_msg);
+		  }
+
+		  break;
+
+	  case "removerRegra":
+
+		  if (empty($oParam->iCodigoRegra)) {
+			  throw new Exception("Código da Regra não informado.");
+		  }
+
+		  $oDaoRegrasAbertura = new cl_regraaberturaexercicio();
+
+		  $oDaoRegrasAbertura->excluir(null,
+			  "c217_sequencial = {$oParam->iCodigoRegra} "
+			  . "and c217_anousu = " . db_getsession("DB_anousu")
+			  . " and c217_instit = " . db_getsession("DB_instit"));
+		  if ($oDaoRegrasAbertura->erro_status == 0) {
+			  $oRetorno->message = $oDaoRegrasAbertura->erro_msg;
+		  }
+		  $oRetorno->message = 'Regra Excluída com sucesso!.';
+		  break;
+	  case "importarRegra":
+
+		  $oDaoRegrasAbertura = new cl_regraaberturaexercicio();
+
+		  $sSqlVerifica = "SELECT ";
+		  $sSqlVerifica .= db_getsession("DB_anousu") . "       as c217_anousu, ";
+		  $sSqlVerifica .= "       c217_instit, ";
+		  $sSqlVerifica .= "       c217_contadevedora, ";
+		  $sSqlVerifica .= "       c217_contacredora, ";
+		  $sSqlVerifica .= "       c217_contareferencia ";
+		  $sSqlVerifica .= "FROM   regraaberturaexercicio WHERE  c217_anousu = {$iAno}";
+		  $sSqlVerifica .= "       AND c217_instit = " . db_getsession("DB_instit");
+
+		  if(pg_num_rows(db_query($sSqlVerifica)) > 0) {
+
+
+			  $oDaoRegrasAbertura->excluir(null,
+				  " c217_anousu = " . db_getsession("DB_anousu")
+				  . " and c217_instit = " . db_getsession("DB_instit"));
+
+			  $iAno = db_getsession("DB_anousu") - 1;
+
+			  $sSqlImportarRegras = " INSERT INTO regraaberturaexercicio ";
+			  $sSqlImportarRegras .= "SELECT nextval('regraaberturaexercicio_c217_sequencial_seq') AS ";
+			  $sSqlImportarRegras .= "       c217_sequencial, ";
+			  $sSqlImportarRegras .= db_getsession("DB_anousu") . "       as c217_anousu, ";
+			  $sSqlImportarRegras .= "       c217_instit, ";
+			  $sSqlImportarRegras .= "       c217_contadevedora, ";
+			  $sSqlImportarRegras .= "       c217_contacredora, ";
+			  $sSqlImportarRegras .= "       c217_contareferencia ";
+			  $sSqlImportarRegras .= "FROM   regraaberturaexercicio WHERE  c217_anousu = {$iAno}";
+			  $sSqlImportarRegras .= "       AND c217_instit = " . db_getsession("DB_instit");
+
+			  $oDaoRegrasAbertura->sql_record($sSqlImportarRegras);
+
+		  }
+		  break;
 
   }
 
@@ -541,4 +717,94 @@ function executaLancamento($iCodigoDocumento, $nValorLancamento, $iSequencialAbe
 	$oEventoContabil->executaLancamento($oLancamentoAuxiliarAberturaExercicio);
 
 	return true;
+}
+
+/**
+ * Retorna as regras da natureza orçamnetária
+ * @throws Exception
+ * @return array
+ */
+function getRegrasAberturaExercicio($iAno, $iInstit) {
+
+	$oDaoRegrasAbertura = new cl_regraaberturaexercicio();
+	$sSqlRegrasAbertura = $oDaoRegrasAbertura->sql_query( null,
+		"*",
+		" c217_sequencial ",
+		"c217_anousu = {$iAno}"
+		. " and c217_instit = {$iInstit}" );
+	$rsRegrasAbertura   = $oDaoRegrasAbertura->sql_record( $sSqlRegrasAbertura );
+
+	$aRegras = array();
+
+	if ($oDaoRegrasAbertura->numrows > 0) {
+		$aRegras = db_utils::getCollectionByRecord($rsRegrasAbertura);
+	}
+
+	return $aRegras;
+}
+
+/**
+ * Busca o saldo implantado
+ * @param $iReduz
+ * @param $iContaCorrente
+ */
+function getSaldoImplantado($iReduz, $iContaCorrente){
+	$sSql = "SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+			 FROM contacorrente
+			 INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+			 INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+			 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
+			 WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+			   AND c17_sequencial = {$nContaCorrente}
+			   AND c19_orcdotacao = {$oReg11->c73_coddot}";
+}
+
+function getContaCorrenteByReduz($iReduz){
+
+	$oDaoConplanoContaCorrente = new cl_conplanocontacorrente();
+	$sWhere = " c61_reduz = {$iReduz} and c61_anousu = ".db_getsession("DB_anousu")." and c61_instit = ".db_getsession("DB_instit");
+	$sSqlConplanoContaCorrente = $oDaoConplanoContaCorrente->sql_query_conplano_contacorrente(null,"DISTINCT c17_sequencial",null,$sWhere);
+	$iContacorrente = db_utils::fieldsMemory(db_query($sSqlConplanoContaCorrente), 0)->c17_sequencial;
+
+	return $iContacorrente;
+
+}
+
+function getContaCorrenteDetalheByReduz($iReduzido, $iFiltroContaCorrente){
+
+	$sSqlLancamentos = " select distinct c19_sequencial,c19_orctiporec from contacorrentesaldo  ";
+	$sSqlLancamentos .= " inner join contacorrentedetalhe on c29_contacorrentedetalhe = c19_sequencial ";
+	$sSqlLancamentos .= " where c19_conplanoreduzanousu = ".db_getsession('DB_anousu')." and c19_reduz = {$iReduzido} ";
+	$sSqlLancamentos .= " and c29_anousu = ".db_getsession('DB_anousu')." and c29_mesusu =0 AND c19_contacorrente = {$iFiltroContaCorrente} AND c19_orctiporec IS NOT NULL";
+
+	$rsLancamentos    = db_query($sSqlLancamentos) or die($sSqlLancamentos);
+	$aLancamento      = db_utils::getColectionByRecord($rsLancamentos);
+
+	return $aLancamento;
+
+}
+
+function getSaldoContaCorrente($nContaCorrenteDetalhe, $nContaCorrente){
+
+	$sSqlSaldos = "SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoimplantado
+                                     FROM contacorrente
+                                     INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                     INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+                                     AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
+                                     WHERE contacorrentedetalhe.c19_sequencial = {$nContaCorrenteDetalhe}
+                                     AND c17_sequencial = {$nContaCorrente}";
+	try{
+
+		$rsSaldos         = db_query($sSqlSaldos) or die($sSqlSaldos." Erro: ".pg_last_error());
+		$aSaldos          = db_utils::getColectionByRecord($rsSaldos);
+
+		return $aSaldos;
+
+	} catch (Exception $ex){
+
+		throw new Exception("Erro ao executar o SQL getSaldoContaCorrente. Erro: ".$ex->getMessage());
+
+	}
+
+
 }

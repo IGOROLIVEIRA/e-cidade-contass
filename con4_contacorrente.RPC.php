@@ -853,6 +853,7 @@ try {
 
                     /*
                      * Busca tas as fontes de recurso.
+                     * Aqui temos os dois SQL para buscar os dados no ano atual. Caso nao encontre, busca no ano anterior e duplica para o ano atual.
                      * */
 
                     $sSqlfr = " SELECT DISTINCT
@@ -862,12 +863,27 @@ try {
                                 o15_descr,
                                 o15_codtri
                                 FROM orctiporec
-                                INNER JOIN contacorrentedetalhe ON c19_orctiporec = o15_codigo 
+                                INNER JOIN contacorrentedetalhe ON c19_orctiporec = o15_codigo
                                        and c19_contacorrente = {$iCorrente} and c19_reduz = {$iReduzido}
-                                       and c19_conplanoreduzanousu = ". db_getsession('DB_anousu') ."
-                                INNER JOIN contacorrente on c19_contacorrente = c17_sequencial 
+                                       and c19_conplanoreduzanousu = ".db_getsession('DB_anousu')."
+                                INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
                                 WHERE o15_codtri IS NOT NULL ";
                     $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
+                    if(pg_num_rows($rsSqlfr) == 0 ){
+                        $sSqlfr = " SELECT DISTINCT
+                                c19_sequencial,
+                                c17_descricao,
+                                o15_codigo,
+                                o15_descr,
+                                o15_codtri
+                                FROM orctiporec
+                                INNER JOIN contacorrentedetalhe ON c19_orctiporec = o15_codigo
+                                       and c19_contacorrente = {$iCorrente} and c19_reduz = {$iReduzido}
+                                       and c19_conplanoreduzanousu = {$iAnousuEmp}
+                                INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
+                                WHERE o15_codtri IS NOT NULL ";
+                        $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
+                    }
 
                     $aDadosAgrupados = array();
                     
@@ -999,6 +1015,32 @@ try {
 
                         $nSaldoInicial = $saldoanterior + $debitos - $creditos;
                         $nSaldoFinal = $nSaldoInicial + $debitosencerramento - $creditosencerramento;//saldo a ser implantado
+
+                        $iContaCorrenteDetalhe = 0;
+                        $oDaoCCDetalhe = db_utils::getDao("contacorrentedetalhe");
+                        $sWhereCCDetalhe  = " c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . " and c19_reduz = {$iReduzido} ";
+                        $sWhereCCDetalhe .= " and c19_contacorrente = {$iCorrente} and c19_orctiporec = {$objContasfr->o15_codigo} ";
+                        $sSqlCCDetalhe = $oDaoCCDetalhe->sql_query_file(null, " c19_sequencial ",null, $sWhereCCDetalhe);
+
+                        $rsCCDetalhe = $oDaoCCDetalhe->sql_record($sSqlCCDetalhe);
+                        $iContaCorrenteDetalhe = db_utils::fieldsMemory($rsCCDetalhe, 0)->c19_sequencial;
+
+                        //verifica se existe ccdetalhe para o anouso se não existir cria um novo.
+                        if($iContaCorrenteDetalhe == null || $iContaCorrenteDetalhe == '0'){
+
+                            $oDaoCCDetalhe->c19_contacorrente       = $iCorrente;
+                            $oDaoCCDetalhe->c19_instit              = db_getsession("DB_instit");
+                            $oDaoCCDetalhe->c19_reduz               = $iReduzido;
+                            $oDaoCCDetalhe->c19_conplanoreduzanousu = db_getsession("DB_anousu");
+                            $oDaoCCDetalhe->c19_orctiporec          = $objContasfr->o15_codigo;
+
+                            $oDaoCCDetalhe->incluir(null);
+                            if ($oDaoCCDetalhe->erro_status == 0 || $oDaoCCDetalhe->erro_status == '0') {
+                                throw new DBException('ERRO - [ 1 ] - Incluindo Detalhe de Conta Corrente : ' . $oDaoCCDetalhe->erro_msg);
+                            }
+
+                            $objContasfr->c19_sequencial = $oDaoCCDetalhe->c19_sequencial;
+                        }
 
                         $hash = $objContasfr->o15_codigo;
 

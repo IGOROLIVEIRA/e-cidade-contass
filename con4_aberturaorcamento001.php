@@ -52,6 +52,10 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
     db_app::load("scripts.js");
     db_app::load("strings.js, prototype.js, estilos.css, ");
   ?>
+  <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
 </head>
 <body bgcolor="#CCCCCC" style="margin-top:30px;">
   <center>
@@ -88,6 +92,14 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
           	</td>
           </tr>
           <tr>
+          	<td nowrap="nowrap">
+          		<b>Regras:</b>
+          	</td>
+          	<td nowrap="nowrap">
+              <input name="regras_natureza" type="button" id="regras_natureza" value="Regras"/>
+          	</td>
+          </tr>
+          <tr>
             <td nowrap="nowrap" colspan="2">
               <fieldset>
                 <legend><b>Observações</b></legend>
@@ -98,6 +110,68 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
         </table>
       </fieldset>
       <input type="button" name="btnProcessar" id="btnProcessar" value="Processar" disabled="disabled"/>
+      <div id="contentRegras">
+        <table style="width: 650px; margin: 0 auto;">
+          <tr>
+            <td>
+              <fieldset>
+                <legend>Regras de Abertura de Exercício</legend>
+                <table>
+                  <tr>
+                    <td>
+                      <label class="bold" for="contadevedora" id="lbl_contadevedora">Conta Devedora:</label>
+                    </td>
+                    <td>
+                      <?php
+                      $Scontadevedora = "Conta Devedora";
+                      db_input('contadevedora', 15, 1, true, "text", 1, '', '', '', '', 15);
+                      ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="bold" for="contacredora" id="lbl_contacredora">Conta Credora:</label>
+                    </td>
+                    <td>
+                      <?php
+                      $Scontacredora = "Conta Credora";
+                      db_input('contacredora', 15, 1, true, "text", 1, '', '', '', '', 15);
+                      ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <label class="bold" for="c217_contareferencia" id="lbl_c217_contareferenciaa">Conta Referência:</label>
+                    </td>
+                    <td>
+                      <?php
+                      $x = array("D" => "Devedora", "C" => "Credora");
+                      db_select('c217_contareferencia',$x,'','','','c217_contareferencia');
+                      ?>
+                    </td>
+                  </tr>
+                </table>
+              </fieldset>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="text-center">
+              <input name="incluir_regra" type="button" id="incluir_regra" value="Incluir"/>
+              <input name="importar_regra" type="button" id="importar_regra" value="Importar"/>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <fieldset>
+                <legend>Regras de Abertura Cadastradas</legend>
+                <div id="gridRegras"></div>
+              </fieldset>
+            </td>
+          </tr>
+        </table>
+      </div>
     </form>
   </center>
  </body>
@@ -109,6 +183,7 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
 
 var oGet          = js_urlToObject();
 var sUrlRpc       = 'con4_aberturaexercicio.RPC.php';
+var MENSAGEM      = "financeiro.contabilidade.con4_processaencerramentopcasp.";
 
 /**
  * Busca o valor dos RPs nao processados para o ano da sessao
@@ -198,4 +273,157 @@ function js_retornoProcessamento(oAjax) {
   
   alert(oRetorno.message.urlDecode());
 }
+
+var oButtons = {
+
+      Natureza: {
+        processar: $('processar_natureza'),
+        desprocessar: $('desprocessar_natureza'),
+        regras: $('regras_natureza')
+      }
+    },
+    oRegra = {
+      salvar: $('incluir_regra'),
+      contacredora: $('contacredora'),
+      contadevedora: $('contadevedora'),
+      contareferencia: $('c217_contareferencia'),
+      importar: $('importar_regra')
+    },
+    oData = $('data');
+var oGridRegras = new DBGrid("gridRegras");
+oGridRegras.nameInstance = "oGridRegras";
+oGridRegras.setCellWidth(["40%", "40%", "20%", "20%"]);
+oGridRegras.setCellAlign(["left", "left", "center", "center"]);
+oGridRegras.setHeader(["Devedora", "Credora", "Referência", "Ação"]);
+oGridRegras.show($('gridRegras'));
+
+var oWindowRegras = new windowAux('windowRegras', 'Regras para Abertura do Exercício', 700, 420);
+oMessageBoard = new DBMessageBoard("messageboard", "Regras", "Configurar regras para a abertura do exercício", $('contentRegras'));
+oMessageBoard.show();
+oWindowRegras.setContent($('contentRegras'));
+
+function removerRegra(iRegra) {
+
+  if (!confirm( 'Tem certeza que deseja excluir essa regra?' )) {
+    return false;
+  }
+
+  var oParametros = {
+    exec : "removerRegra",
+    iCodigoRegra : iRegra
+  }
+
+  new AjaxRequest(sUrlRpc, oParametros, function(oRetorno, lErro) {
+
+    if (lErro) {
+      alert(oRetorno.sMessage.urlDecode());
+      return false;
+    }
+
+    alert(oRetorno.message.urlDecode());
+    carregarRegras();
+
+  }).setMessage("Aguarde, excluindo regra...")
+      .execute();
+}
+
+function carregarRegras() {
+
+  var oParametros = {
+    exec: "buscarRegras"
+  }
+
+  oGridRegras.clearAll(true);
+
+  new AjaxRequest(sUrlRpc, oParametros, function (oRetorno, lErro) {
+    if (lErro) {
+      alert(oRetorno.sMessage.urlDecode());
+      return false;
+    }
+
+    oRetorno.aRegras.each(function (oItem) {
+      oGridRegras.addRow([oItem.c217_contadevedora,
+        oItem.c217_contacredora, oItem.c217_contareferencia,
+        '<input type="button" name="remover' + oItem.c217_sequencial + '" id="remover' + oItem.c217_sequencial
+        + '" onclick="removerRegra(' + oItem.c217_sequencial + ')" value="E" title="Excluir"/>']);
+    });
+
+    oGridRegras.renderRows();
+
+  }).setMessage("Aguarde, Carregando regras...")
+      .execute();
+}
+
+/**
+ * Abre a janela das regras
+ */
+oButtons.Natureza.regras.observe('click', function () {
+  oWindowRegras.show();
+  carregarRegras();
+});
+
+/**
+ * Salva as regras
+ */
+oRegra.salvar.observe('click', function () {
+
+  if (empty(oRegra.contadevedora.value)) {
+    alert("Campo obrigatório: Conta Devedora");
+    return false;
+  }
+
+  if (empty(oRegra.contacredora.value)) {
+    alert("Campo obrigatório: Conta Credora");
+    return false;
+  }
+
+  var oParametros = {
+    exec: "salvarRegra",
+    contacredora: oRegra.contacredora.value,
+    contadevedora: oRegra.contadevedora.value,
+    contareferencia: oRegra.contareferencia.value
+  }
+
+  new AjaxRequest(sUrlRpc, oParametros, function (oRetorno, lErro) {
+
+    if (lErro) {
+      alert(oRetorno.sMessage.urlDecode());
+      return false;
+    }
+
+    alert('Salvo com Sucesso!');
+
+    oRegra.contacredora.value = '';
+    oRegra.contadevedora.value = '';
+
+    carregarRegras();
+  }).setMessage("Aguarde, salvando regra...").execute();
+});
+
+/**
+ * Importar regras do exercício anterior
+ */
+
+oRegra.importar.observe('click', function() {
+
+  var resp = confirm("Ao importar as regras do exercício anterior, as atuais serão apagadas. Deseja Continuar?");
+
+  if(resp == true) {
+    var oParametros = {
+      exec: "importarRegra"
+    }
+
+    new AjaxRequest(sUrlRpc, oParametros, function (oRetorno, lErro) {
+
+      if (lErro) {
+        alert(oRetorno.sMessage.urlDecode());
+        return false;
+      }
+
+      alert("Importação realizada com sucesso!");
+
+      carregarRegras();
+    }).setMessage("Aguarde, importando regras...").execute();
+  }
+});
 </script>
