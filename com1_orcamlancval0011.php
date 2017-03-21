@@ -345,7 +345,7 @@ function js_somavalor(){
  
       echo "
               <tr class='bordas_corp' width='15%'>
-								<td align='center'  class='bordas_corp' width='15%'>$pc22_orcamitem</td>
+								<td align='center'  class='bordas_corp' width='15%'>$pc11_seq</td>
 								<td align='left'    class='bordas_corp' width='55%'>$pc01_descrmater</td>
 								<td align='left'    class='bordas_corp' width='70%'>".stripslashes($pc11_resum)."</td>
 								<td align='center'  class='bordas_corp'>";
