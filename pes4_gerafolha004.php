@@ -1260,7 +1260,7 @@ function le_salfamilia($salario,$r01_regime,$r01_tbprev){
      //echo "<BR> le_salariofamilia D914 1 --> $D914";     
      //echo "<BR> le_salariofamilia D916 1 --> $D916";     
       //echo "<BR> le_salariofamilia D917 1 --> $D917";    
-     if( $r01_regime == 1 || $r01_regime == 3 ){
+     if( $r01_regime == 1){
         //  estatutario e estatutario em extinsao;
         //  D903 - salario familia para estes regime;
         //  D914 VALOR MAXIMO SALARIO FAM.ESTAT
@@ -7600,8 +7600,7 @@ function carrega_r9xx($area, $sigla, $sigla2, $nro_do_registro,$opcao_tipo) {
 
         // TIPOS DE REGIME : 1 - ESTATUTARIO OU  3 - EXTRA QUADRO
 
-        if (($pessoal[$Ipessoal]["r01_regime"] == 1
-        || $pessoal[$Ipessoal]["r01_regime"] == 3 )
+        if (($pessoal[$Ipessoal]["r01_regime"] == 1 )
         && $pessoal[$Ipessoal]["r01_tbprev"] == $cfpess[0]["r11_tbprev"]
         && $r14_valor > 0) {
           
