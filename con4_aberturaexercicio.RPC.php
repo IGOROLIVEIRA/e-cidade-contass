@@ -292,6 +292,10 @@ try {
 
 				} else {
 
+					if($oConta->saldo_final == 0){
+						continue;
+					}
+
 					$oMovimentacaoContabil = new MovimentacaoContabil();
 					$oMovimentacaoContabil->setConta($oConta->c61_reduz);
 					$oMovimentacaoContabil->setSaldoFinal($oConta->saldo_final);

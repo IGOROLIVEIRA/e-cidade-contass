@@ -39,7 +39,7 @@ $iAnoSessao = db_getsession("DB_anousu");
 
 $sLegend = "Processar Abertura do Exercício";
 if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
-	$sLegend = "Desprocessar Abertura do Exercício";	
+	$sLegend = "Desprocessar Abertura do Exercício";
 }
 
 ?>
@@ -91,6 +91,7 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
           		?>
           	</td>
           </tr>
+          <?php if (!isset($oGet->lDesprocessar)) { ?>
           <tr>
           	<td nowrap="nowrap">
           		<b>Regras:</b>
@@ -99,6 +100,7 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
               <input name="regras_natureza" type="button" id="regras_natureza" value="Regras"/>
           	</td>
           </tr>
+          <?php } ?>
           <tr>
             <td nowrap="nowrap" colspan="2">
               <fieldset>
