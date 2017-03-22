@@ -82,7 +82,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $sListaInstituicoes = implode(',', $aInstituicoes);
 
 
-
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
@@ -278,8 +277,26 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp20->si209_vlpatriliquidoajustavaliacao        = $oRetornoBP[42]->$sChave;
       $clbpdcasp20->si209_vlpatriliquidoreservalucros         = $oRetornoBP[43]->$sChave;
       $clbpdcasp20->si209_vlpatriliquidodemaisreservas        = $oRetornoBP[44]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidoresultexercicio       = $oRetornoBP[38]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidresultacumexeranteri   = $oRetornoBP[45]->$sChave;
+      
+      //para pegar o superavit do exercicio atual e anterior é necessário alterar o anousu
+      $iAno = db_getsession("DB_anousu");
+      if($iValorNumerico == 2){
+        $iAno = $iAno-1;
+      }
+      
+      $nValorResultadoExecAnterior = db_utils::fieldsMemory(db_query($clbpdcasp20->sql_query_vlpatriliquidresultacumexeranteri($sListaInstituicoes,$iAno)))->resultacumexeranteri;
+      
+      //no arquivo o sinal deve ser negativo para saldo credor e positivo para saldo devedor.
+      $nValorResultadoExecAnterior = $nValorResultadoExecAnterior*-1;
+
+      $nValorResultadoExec= db_utils::fieldsMemory(db_query($clbpdcasp20->sql_query_vlpatriliquidresultacumexer($sListaInstituicoes,$iAno)))->resultacumexeranteri;
+      
+      //no arquivo o sinal deve ser negativo para saldo credor e positivo para saldo devedor.
+      $nValorResultadoExec = $nValorResultadoExec*-1;
+
+      $clbpdcasp20->si209_vlpatriliquidoresultexercicio       = $nValorResultadoExec;
+      $clbpdcasp20->si209_vlpatriliquidresultacumexeranteri   = $nValorResultadoExecAnterior;//$oRetornoBP[45]->$sChave;
+      
       $clbpdcasp20->si209_vlpatriliquidoacoescotas            = $oRetornoBP[46]->$sChave;
       $clbpdcasp20->si209_vltotalpassivo                      = $oRetornoBP[48]->$sChave;
 
@@ -376,32 +393,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     } // $rsResult60
 
-    $sSQL = " SELECT * "
-          . " FROM bpdcasp702017 "
-          . " WHERE 1 = 1 ";
-
-    $rsResult70 = db_query($sSQL);
-
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult70); $iCont++) {
-
-      $oDadosBP70   = db_utils::fieldsMemory($rsResult70, $iCont);
-      $clbpdcasp70  = new cl_bpdcasp702017();
-
-      $clbpdcasp70->si214_ano           = $iAnoUsu;
-      $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
-      $clbpdcasp70->si214_institu       = db_getsession("DB_instit");
-      $clbpdcasp70->si214_tiporegistro  = 70;
-      $clbpdcasp70->si214_exercicio     = $oDadosBP70->$sChave;
-      $clbpdcasp70->si214_vltotalsupdef = $oDadosBP70->$sChave;
-
-
-      $clbpdcasp70->incluir(null);
-      if ($clbpdcasp70->erro_status == 0) {
-        throw new Exception($clbpdcasp70->erro_msg);
-      }
-
-    } // $rsResult70
-
     /**
      * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2015.model.php
      */
@@ -409,12 +400,13 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $aDadosSuperavitFontes = $oBalancoPatrimonial->getSuperavitDeficit();
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
+      $nVltotalsupdef =0;
       foreach($aDadosSuperavitFontes as $oDadosBP71) {
         if (isset($oDadosBP71->codigo)) {
           $clbpdcasp71 = new cl_bpdcasp712017();
           $clbpdcasp71->si215_ano = $iAnoUsu;
           $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
-          $clbpdcasp71->si215_institu = db_getsession("DB_instit");
+          $clbpdcasp71->si215_institu = $sListaInstituicoes;
           $clbpdcasp71->si215_tiporegistro = 71;
           $clbpdcasp71->si215_exercicio = $iValorNumerico;
           $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->codigo;
@@ -424,7 +416,23 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
           if ($clbpdcasp71->erro_status == 0) {
             throw new Exception($clbpdcasp71->erro_msg);
           }
+          $nVltotalsupdef =  $nVltotalsupdef + $oDadosBP71->$sChave;
         }
+      }
+      /**
+       * o registro 70 é o total do registro 71
+       */
+      $clbpdcasp70  = new cl_bpdcasp702017();
+
+      $clbpdcasp70->si214_ano           = $iAnoUsu;
+      $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
+      $clbpdcasp70->si214_institu       = $sListaInstituicoes;
+      $clbpdcasp70->si214_tiporegistro  = 70;
+      $clbpdcasp70->si214_exercicio     =  $iValorNumerico;
+      $clbpdcasp70->si214_vltotalsupdef = $nVltotalsupdef;
+      $clbpdcasp70->incluir(null);
+      if ($clbpdcasp70->erro_status == 0) {
+        throw new Exception($clbpdcasp70->erro_msg);
       }
     } // $rsResult71
 

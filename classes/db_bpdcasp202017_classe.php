@@ -914,5 +914,70 @@ class cl_bpdcasp202017 {
      }
      return $sql;
   }
+  function sql_query_vlpatriliquidresultacumexeranteri($iInstit = "", $nAnoUsu=""){
+
+   $nExercicio = db_getsession('DB_anousu');
+   if($nAnoUsu != ""){
+      $nExercicio =$nAnoUsu;
+   }
+   if($iInstit == ""){
+      $iInstit = db_getsession('DB_instit');
+   }
+
+   $sSql = "select saldoanterior+debito-credito as resultacumexeranteri from 
+            (select (select sum(case when c62_vlrcre != 0 then c62_vlrcre*-1 else c62_vlrdeb end) saldoanterior 
+              from conplanoexe 
+               where c62_reduz in (select c61_reduz 
+              from conplano 
+            inner join conplanoreduz on c61_anousu=c60_anousu and c61_codcon=c60_codcon 
+            where c60_anousu={$nExercicio} and substr(c60_estrut,1,4) = '2371' and substr(c60_estrut,6,2) = '02' and c61_instit in ({$iInstit})) and c62_anousu={$nExercicio}) as saldoanterior,
+            ( coalesce((select sum(c69_valor) debito 
+              from conlancamval 
+               where c69_anousu={$nExercicio} and c69_debito in (select c61_reduz 
+              from conplano 
+            inner join conplanoreduz on c61_anousu=c60_anousu and c61_codcon=c60_codcon 
+            where c60_anousu={$nExercicio} and substr(c60_estrut,1,4) = '2371' and substr(c60_estrut,6,2) = '02' and c61_instit in ({$iInstit}))),0)) as debito,
+            ( coalesce((select sum(c69_valor) credito 
+              from conlancamval 
+              where c69_anousu={$nExercicio} and c69_credito in (select c61_reduz 
+              from conplano 
+            inner join conplanoreduz on c61_anousu=c60_anousu and c61_codcon=c60_codcon 
+            where c60_anousu={$nExercicio} and substr(c60_estrut,1,4) = '2371' and substr(c60_estrut,6,2) = '02' and c61_instit in ({$iInstit}))),0 )) as credito) as movimento;
+            ";
+   return $sSql;
+  }
+
+  function sql_query_vlpatriliquidresultacumexer($iInstit = "", $nAnoUsu=""){
+
+   $nExercicio = db_getsession('DB_anousu');
+   if($nAnoUsu != ""){
+      $nExercicio =$nAnoUsu;
+   }
+   if($iInstit == ""){
+      $iInstit = db_getsession('DB_instit');
+   }
+
+   $sSql = "select saldoanterior+debito-credito as resultacumexeranteri from 
+            (select (select sum(case when c62_vlrcre != 0 then c62_vlrcre*-1 else c62_vlrdeb end) saldoanterior 
+              from conplanoexe 
+               where c62_reduz in (select c61_reduz 
+              from conplano 
+            inner join conplanoreduz on c61_anousu=c60_anousu and c61_codcon=c60_codcon 
+            where c60_anousu={$nExercicio} and substr(c60_estrut,1,4) = '2371' and substr(c60_estrut,6,2) = '01' and c61_instit in ({$iInstit})) and c62_anousu={$nExercicio}) as saldoanterior,
+            ( coalesce((select sum(c69_valor) debito 
+              from conlancamval 
+               where c69_anousu={$nExercicio} and c69_debito in (select c61_reduz 
+              from conplano 
+            inner join conplanoreduz on c61_anousu=c60_anousu and c61_codcon=c60_codcon 
+            where c60_anousu={$nExercicio} and substr(c60_estrut,1,4) = '2371' and substr(c60_estrut,6,2) = '01' and c61_instit in ({$iInstit}))),0)) as debito,
+            ( coalesce((select sum(c69_valor) credito 
+              from conlancamval 
+              where c69_anousu={$nExercicio} and c69_credito in (select c61_reduz 
+              from conplano 
+            inner join conplanoreduz on c61_anousu=c60_anousu and c61_codcon=c60_codcon 
+            where c60_anousu={$nExercicio} and substr(c60_estrut,1,4) = '2371' and substr(c60_estrut,6,2) = '01' and c61_instit in ({$iInstit}))),0 )) as credito) as movimento;
+            ";
+   return $sSql;
+  }
 }
 ?>
