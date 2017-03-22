@@ -64,7 +64,7 @@ if (isset($oGet->numero) &&  !empty($oGet->numero) ) {
 }
 
 //Verifica que ele está apensado a outro processo
-$sSqlProcessoApensado     = "(select p2.p58_numero from protprocesso p2
+$sSqlProcessoApensado     = "(select p2.p58_numero||'/'||p2.p58_ano from protprocesso p2
 where p2.p58_codproc in (select p30_procprincipal from processosapensados where p30_procapensado = {$oGet->codproc} limit 1) ) as processo_principal";
 $sSqlBuscaCodigoProcesso = $oDaoProcesso->sql_query(null, "*, {$sSqlProcessoApensado}", " 1 desc", $sWhere);
 //Verifica se possui processos apensados a ele
