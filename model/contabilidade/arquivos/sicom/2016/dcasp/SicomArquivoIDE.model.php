@@ -72,7 +72,7 @@ class SicomArquivoIDE extends SicomArquivoBase implements iPadArquivoBaseCSV
     $sSql  = "SELECT db21_codigomunicipoestado AS codmunicipio,
                 case when si09_tipoinstit::varchar = '2' then cgc::varchar else si09_cnpjprefeitura::varchar end AS cnpjmunicipio,
                 si09_tipoinstit AS tipoorgao,
-                si09_codorgaotce AS codorgao,
+                si09_codorgaotce AS codorgao,cgc AS cnpjorgao,
                 prefeitura
               FROM db_config
               LEFT JOIN infocomplementaresinstit ON si09_instit = ".db_getsession("DB_instit")."
@@ -88,7 +88,7 @@ class SicomArquivoIDE extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clidedcasp->si200_anousu              = $iAnousu;
       $clidedcasp->si200_instit              = $iCodInstit;
       $clidedcasp->si200_codmunicipio        = $oDadosIde->codmunicipio;
-      $clidedcasp->si200_cnpjorgao           = $oDadosIde->cnpjmunicipio;
+      $clidedcasp->si200_cnpjorgao           = $oDadosIde->cnpjorgao;
       $clidedcasp->si200_codorgao            = $oDadosIde->codorgao;
       $clidedcasp->si200_tipoorgao           = $oDadosIde->tipoorgao;
       $clidedcasp->si200_tipodemcontabil     = $oDadosIde->tipoorgao == '2' ? 2 : 1;

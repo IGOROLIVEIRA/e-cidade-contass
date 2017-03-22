@@ -213,30 +213,30 @@ class GerarBP extends GerarAM
 
         $this->sLinha = $aCSVBP70;
         $this->adicionaLinha();
+        
+          /** Registro 71 */
+          for ($iCont1 = 0; $iCont1 < pg_num_rows($rsBP71); $iCont1++) {
 
-      }
+            $aBP71 = pg_fetch_array($rsBP71, $iCont1, PGSQL_ASSOC);
+            if($aBP71['si215_exercicio'] == $aBP70['si214_exercicio']){
+              $aCSVBP71 = array();
+              $aCSVBP71['si215_tiporegistro']     = $this->padLeftZero($aBP71['si215_tiporegistro'], 2);
+              $aCSVBP71['si215_exercicio']        = $this->padLeftZero($aBP71['si215_exercicio'], 1);
+              $aCSVBP71['si215_codfontrecursos']  = $this->padLeftZero($aBP71['si215_codfontrecursos'], 3);
+              $aCSVBP71['si215_vlsaldofonte']     = $this->sicomNumberReal($aBP71['si215_vlsaldofonte'], 2);
 
+              $this->sLinha = $aCSVBP71;
+              $this->adicionaLinha();
+            }
 
-      /** Registro 71 */
-      for ($iCont = 0; $iCont < pg_num_rows($rsBP71); $iCont++) {
+          }
 
-        $aBP71 = pg_fetch_array($rsBP71, $iCont, PGSQL_ASSOC);
-
-        $aCSVBP71 = array();
-        $aCSVBP71['si215_tiporegistro']     = $this->padLeftZero($aBP71['si215_tiporegistro'], 2);
-        $aCSVBP71['si215_exercicio']        = $this->padLeftZero($aBP71['si215_exercicio'], 1);
-        $aCSVBP71['si215_codfontrecursos']  = $this->padLeftZero($aBP71['si215_codfontrecursos'], 3);
-        $aCSVBP71['si215_vlsaldofonte']     = $this->sicomNumberReal($aBP71['si215_vlsaldofonte'], 2);
-
-        $this->sLinha = $aCSVBP71;
-        $this->adicionaLinha();
-
-      }
-
-      $this->fechaArquivo();
+          
+        }
+      
 
     }
-
+    $this->fechaArquivo();
   }
 
 }
