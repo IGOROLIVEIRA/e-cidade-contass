@@ -191,7 +191,9 @@ switch($oParam->exec) {
       $aArrayArquivos = array();
       
       foreach ($oParam->arquivos as $sArquivo) {
-
+        if (db_getsession("DB_anousu") > 2016 && $sArquivo == "SuperavitFinanceiro") {
+          continue;
+        }
          if ($sArquivo == 'DetalhamentoExtraOrcamentarias' && in_array($sInstCgc, $aCgcExtFonte)   ){
             
             $sArquivo = "DetalhamentoExtraOrcamentariasPorFonte";
@@ -677,13 +679,10 @@ switch($oParam->exec) {
   case "processarDCASP" :
     /*
      * Definindo o periodo em que serao selecionado os dados
-     * Parametro de encerramento de exercicio.
+     * Sempre em dezembro
      */
-    $bEncerramento = false;
-    if($oParam->mesReferencia == 13){
-      $oParam->mesReferencia = 12;
-      $bEncerramento = true;
-    }
+    $oParam->mesReferencia = 12;
+
     $iUltimoDiaMes = date("d", mktime(0,0,0,$oParam->mesReferencia+1,0,db_getsession("DB_anousu")));
     $sDataInicial = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-01";
     $sDataFinal   = db_getsession("DB_anousu")."-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
@@ -714,13 +713,12 @@ switch($oParam->exec) {
       $aArrayArquivos = array();
 
       foreach ($oParam->arquivos as $sArquivo) {
-        if (file_exists("model/contabilidade/arquivos/sicom/2017/dcasp/SicomArquivo{$sArquivo}.model.php")) {
-          require_once("model/contabilidade/arquivos/sicom/2017/dcasp/SicomArquivo{$sArquivo}.model.php");
+        if (file_exists("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php")) {
+          require_once("model/contabilidade/arquivos/sicom/".db_getsession('DB_anousu')."/dcasp/SicomArquivo{$sArquivo}.model.php");
           $sNomeClasse = "SicomArquivo{$sArquivo}";
           $oArquivo    = new $sNomeClasse;
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
-          $oArquivo->setEncerramento($bEncerramento);
 
           $oArquivoCsv = new stdClass();
           try {
@@ -739,12 +737,13 @@ switch($oParam->exec) {
       foreach ($aArrayArquivos as $oArquivo){
         $aListaArquivos .= " ".$oArquivo->caminho;
       }
-      //print_r($aListaArquivos);
-      system("rm -f DCASP_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
-      system("bin/zip -q DCASP_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip $aListaArquivos");
+      $oInstit = new Instituicao(db_getsession('DB_instit'));
+      $sTipoEnvio = $oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA ? 'CONSOLIDADO' : 'ISOLADO';
+      system("rm -f DCASP_{$sTipoEnvio}_{$sOrgao}_{$iAnoReferencia}.zip");
+      system("bin/zip -q DCASP_{$sTipoEnvio}_{$sOrgao}_{$iAnoReferencia}.zip $aListaArquivos");
       $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "DCASP_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "DCASP_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip";
+      $oArquivoZip->nome    = "DCASP_{$sTipoEnvio}_{$sOrgao}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "DCASP_{$sTipoEnvio}_{$sOrgao}_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
       $oRetorno->itens  = $aArrayArquivos;
     }
