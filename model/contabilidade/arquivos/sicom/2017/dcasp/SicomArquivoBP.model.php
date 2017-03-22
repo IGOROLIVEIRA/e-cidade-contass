@@ -62,7 +62,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
    */
   public function gerarDados()
   {
-    $iAnoUsu            = db_getsession("DB_anousu")-1;
+    $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
     $oInstit            = new Instituicao(db_getsession("DB_instit"));
