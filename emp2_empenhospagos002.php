@@ -43,22 +43,68 @@ $oGet               = db_utils::postMemory($_GET);
 $dtDataInicialBanco = implode("-", array_reverse(explode("/", $oGet->dtDataInicial)));
 $dtDataFinalBanco   = implode("-", array_reverse(explode("/", $oGet->dtDataFinal)));
 $oGet->lQuebraConta == "t" ? $oGet->lQuebraConta = true : $oGet->lQuebraConta = false;
+$oGet->lQuebraCredor == "t" ? $oGet->lQuebraCredor = true : $oGet->lQuebraCredor = false;
 
 $aOrderBy    = array();
+$aGroup_by   = array();
 $aWhere      = array();
 $aWhereConta = array();
 
 if ($oGet->sTipoOrdem == "empenho") {
-	if ($oGet->lQuebraConta) {
-		$aOrderBy[] = "tipo, k13_conta, k12_data, e60_codemp ";
+	if (($oGet->lQuebraConta) && ($oGet->lQuebraCredor)) {
+      $aGroup_by[] = " GROUP BY e60_numcgm,
+                               todo.z01_nome,
+                               k13_conta,
+                               tipo,
+                               e60_numemp,
+                               todo.k12_empen,
+                               todo.e60_codemp,
+                               todo.e60_anousu,
+                               todo.e50_codord,
+                               todo.k12_valor,
+                               todo.k12_cheque,
+                               todo.k12_autent,
+                               todo.k12_data,
+                               todo.o15_codtri,
+                               todo.k13_descr,
+                               todo.k106_sequencial ";
+        $aOrderBy[] = "ORDER BY k12_data,
+                                e60_numcgm,
+                                tipo,
+                                k13_conta,
+                                e60_codemp ";
+	}else if ($oGet->lQuebraCredor) {
+      $aGroup_by[] = "GROUP BY e60_numcgm,
+                               todo.z01_nome,
+                               k13_conta,
+                               tipo,
+                               e60_numemp,
+                               todo.k12_empen,
+                               todo.e60_codemp,
+                               todo.e60_anousu,
+                               todo.e50_codord,
+                               todo.k12_valor,
+                               todo.k12_cheque,
+                               todo.k12_autent,
+                               todo.k12_data,
+                               todo.o15_codtri,
+                               todo.k13_descr,
+                               todo.k106_sequencial ";
 	} else {
-		$aOrderBy[] = "tipo, k12_data, e60_codemp ";
+		$aOrderBy[] = "ORDER BY k12_data,
+		                        tipo,
+		                        e60_codemp ";
 	}
 } else {
 	if ($oGet->lQuebraConta) {
-		$aOrderBy[] = "tipo, k13_conta, k12_data, k12_autent ";
+		$aOrderBy[] = "ORDER BY k13_conta,
+		                        k12_data,
+		                        tipo,
+		                        k12_autent ";
 	} else {
-		$aOrderBy[] = "tipo, k12_data, k12_autent";
+		$aOrderBy[] = "ORDER BY k12_data,
+		                        tipo,
+		                        k12_autent";
 	}
 }
 
@@ -115,7 +161,7 @@ if ($oGet->iListaEmpenho == 0) {
   if ($oGet->iListaEmpenho == 1) {
     $sWhereEmpenho = "tipo = 'Emp'";
   }elseif($oGet->iListaEmpenho == 3){
-    $sWhereEmpenho = "tipo = 'ext'";
+    $sWhereEmpenho = "tipo = 'EXT'";
   }
   else {
     $sWhereEmpenho = "tipo = 'RP'";
@@ -128,182 +174,169 @@ if (!empty($oGet->iTipoBaixa) && $oGet->iTipoBaixa == 2) {
   $aWhere[] = "k106_sequencial = 2";
 }
 
-$sImplodeWhere     = implode(" and ", $aWhere);                                                                    
-$sImplodeOrderBy   = implode(", ", $aOrderBy);                                                                     
-$sSqlBuscaEmpenhos  = "  select *                                                                                  ";
-$sSqlBuscaEmpenhos .= "   from ( select coremp.k12_empen,                                                          ";
-$sSqlBuscaEmpenhos .= "                e60_numemp,                                                                 ";
-$sSqlBuscaEmpenhos .= "                e60_codemp,                                                                 ";
-$sSqlBuscaEmpenhos .= "                case when e49_numcgm is null                                                ";
-$sSqlBuscaEmpenhos .= "                  then e60_numcgm                                                           ";
-$sSqlBuscaEmpenhos .= "                    else e49_numcgm                                                         ";
-$sSqlBuscaEmpenhos .= "                  end as e60_numcgm,                                                        ";
-$sSqlBuscaEmpenhos .= "                k12_codord as e50_codord,                                                   ";
-$sSqlBuscaEmpenhos .= "                case when e49_numcgm is null                                                ";
-$sSqlBuscaEmpenhos .= "                  then cgm.z01_nome                                                         ";
-$sSqlBuscaEmpenhos .= "                    else cgmordem.z01_nome                                                  ";
-$sSqlBuscaEmpenhos .= "                  end as z01_nome,                                                          ";
-$sSqlBuscaEmpenhos .= "                k12_valor,                                                                  ";
-$sSqlBuscaEmpenhos .= "                k12_cheque,                                                                 ";
-$sSqlBuscaEmpenhos .= "                e60_anousu,                                                                 ";
-$sSqlBuscaEmpenhos .= "                coremp.k12_autent,                                                          ";
-$sSqlBuscaEmpenhos .= "                coremp.k12_data,                                                            ";
-$sSqlBuscaEmpenhos .= "                k13_conta, o15_codtri,                                                      ";
-$sSqlBuscaEmpenhos .= "                k13_descr,                                                                  ";
-$sSqlBuscaEmpenhos .= "                case when e60_anousu < {$iAnoUsoSessao} then 'RP' else 'Emp' end as tipo,   ";
-$sSqlBuscaEmpenhos .= "                k106_sequencial                                                             ";
-$sSqlBuscaEmpenhos .= "           from coremp                                                                      ";
-$sSqlBuscaEmpenhos .= "                inner join empempenho        on e60_numemp          = k12_empen             ";
-$sSqlBuscaEmpenhos .= "                                            and e60_instit          = {$iInstituicaoSessao} ";
-$sSqlBuscaEmpenhos .= "                inner join orcdotacao        on e60_coddot = o58_coddot and e60_anousu = o58_anousu ";
-$sSqlBuscaEmpenhos .= "                inner join orctiporec        on o58_codigo = o15_codigo                     ";
-$sSqlBuscaEmpenhos .= "                inner join pagordem          on e50_codord          = k12_codord            ";
-$sSqlBuscaEmpenhos .= "                left  join pagordemconta     on e50_codord          = e49_codord            ";
-$sSqlBuscaEmpenhos .= "                inner join corrente          on corrente.k12_id     = coremp.k12_id         ";
-$sSqlBuscaEmpenhos .= "                                            and corrente.k12_data   = coremp.k12_data       ";
-$sSqlBuscaEmpenhos .= "                                            and corrente.k12_autent = coremp.k12_autent     ";
-$sSqlBuscaEmpenhos .= "                inner join cgm               on cgm.z01_numcgm      = e60_numcgm            ";
-$sSqlBuscaEmpenhos .= "                left  join cgm cgmordem      on cgmordem.z01_numcgm = e49_numcgm            ";
-$sSqlBuscaEmpenhos .= "                inner join saltes            on saltes.k13_conta    = corrente.k12_conta    ";
-$sSqlBuscaEmpenhos .= "                left  join corgrupocorrente  on k105_id             = corrente.k12_id       ";
-$sSqlBuscaEmpenhos .= "                                            and k105_data           = corrente.k12_data     ";
-$sSqlBuscaEmpenhos .= "                                            and k105_autent         = corrente.k12_autent   ";
-$sSqlBuscaEmpenhos .= "                left  join corgrupotipo      on k106_sequencial     = k105_corgrupotipo     ";
-$sSqlBuscaEmpenhos .= " union ";
-$sSqlBuscaEmpenhos .= "select ";
-$sSqlBuscaEmpenhos .= "k12_empen, ";
-$sSqlBuscaEmpenhos .= "k12_empen as e60_numemp, ";
-$sSqlBuscaEmpenhos .= "k17_codigo::varchar as e60_codemp, ";
-$sSqlBuscaEmpenhos .= "k17_numcgm as e60_numcgm, ";
-$sSqlBuscaEmpenhos .= "k12_codord, ";
-$sSqlBuscaEmpenhos .= "z01_nome, ";
-$sSqlBuscaEmpenhos .= "k12_valor, ";
-$sSqlBuscaEmpenhos .= "e91_cheque::integer as k12_cheque, ";
-$sSqlBuscaEmpenhos .= "e60_anousu, ";
-$sSqlBuscaEmpenhos .= "k12_autent, ";
-$sSqlBuscaEmpenhos .= "k12_data, ";
-$sSqlBuscaEmpenhos .= "credito as k13_conta, ";
-$sSqlBuscaEmpenhos .= "o15_codtri, ";
-$sSqlBuscaEmpenhos .= "descr_credito as k13_descr, ";
-$sSqlBuscaEmpenhos .= "tipo, ";
-$sSqlBuscaEmpenhos .= "0 as k106_sequencial ";
-$sSqlBuscaEmpenhos .= "from ( ";
-$sSqlBuscaEmpenhos .= "SELECT k12_id, ";
-$sSqlBuscaEmpenhos .= "k12_autent, ";
-$sSqlBuscaEmpenhos .= "k12_data, ";
-$sSqlBuscaEmpenhos .= "k12_valor, ";
-$sSqlBuscaEmpenhos .= "CASE ";
-$sSqlBuscaEmpenhos .= "   WHEN (h.c60_codsis = 6 ";
-$sSqlBuscaEmpenhos .= "         AND f.c60_codsis = 6) THEN 'tran' ";
-$sSqlBuscaEmpenhos .= "   WHEN (h.c60_codsis = 6 ";
-$sSqlBuscaEmpenhos .= "         AND f.c60_codsis = 5) THEN 'tran' ";
-$sSqlBuscaEmpenhos .= "   WHEN (h.c60_codsis = 5 ";
-$sSqlBuscaEmpenhos .= "         AND f.c60_codsis = 6) THEN 'tran' ";
-$sSqlBuscaEmpenhos .= "   ELSE 'ext' ";
-$sSqlBuscaEmpenhos .= "END AS tipo, ";
-$sSqlBuscaEmpenhos .= "k12_empen, ";
-$sSqlBuscaEmpenhos .= "e60_codemp, ";
-$sSqlBuscaEmpenhos .= "e60_anousu, ";
-$sSqlBuscaEmpenhos .= "k12_codord, ";
-$sSqlBuscaEmpenhos .= "k12_cheque, ";
-$sSqlBuscaEmpenhos .= "entrou AS debito, ";
-$sSqlBuscaEmpenhos .= "f.c60_descr AS descr_debito, ";
-$sSqlBuscaEmpenhos .= "f.c60_codsis AS sis_debito, ";
-$sSqlBuscaEmpenhos .= "saiu AS credito, ";
-$sSqlBuscaEmpenhos .= "o15_codtri, ";
-$sSqlBuscaEmpenhos .= "h.c60_descr AS descr_credito, ";
-$sSqlBuscaEmpenhos .= "h.c60_codsis AS sis_credito, ";
-$sSqlBuscaEmpenhos .= "sl AS k17_codigo, ";
-$sSqlBuscaEmpenhos .= "k17_numcgm, ";
-$sSqlBuscaEmpenhos .= "z01_nome, ";
-$sSqlBuscaEmpenhos .= "corhi AS k12_histcor, ";
-$sSqlBuscaEmpenhos .= "sl_txt AS k17_texto,e91_cheque ";
-$sSqlBuscaEmpenhos .= "FROM ";
-$sSqlBuscaEmpenhos .= "(SELECT k12_id, ";
-$sSqlBuscaEmpenhos .= "  k12_autent, ";
-$sSqlBuscaEmpenhos .= "  k12_data, ";
-$sSqlBuscaEmpenhos .= "  k12_valor, ";
-$sSqlBuscaEmpenhos .= "  tipo, ";
-$sSqlBuscaEmpenhos .= "  k12_empen, ";
-$sSqlBuscaEmpenhos .= "  e60_codemp, ";
-$sSqlBuscaEmpenhos .= "  e60_anousu, ";
-$sSqlBuscaEmpenhos .= "  k12_codord, ";
-$sSqlBuscaEmpenhos .= "  k12_cheque, ";
-$sSqlBuscaEmpenhos .= "  corlanc AS entrou, ";
-$sSqlBuscaEmpenhos .= "  corrente AS saiu, ";
-$sSqlBuscaEmpenhos .= "  slp AS sl, ";
-$sSqlBuscaEmpenhos .= "  k17_numcgm, ";
-$sSqlBuscaEmpenhos .= "  z01_nome, ";
-$sSqlBuscaEmpenhos .= "  corh AS corhi, ";
-$sSqlBuscaEmpenhos .= "  slp_txt AS sl_txt,e91_cheque ";
-$sSqlBuscaEmpenhos .= "FROM ";
-$sSqlBuscaEmpenhos .= "(SELECT *, ";
-$sSqlBuscaEmpenhos .= "     CASE ";
-$sSqlBuscaEmpenhos .= "         WHEN coalesce(corl_saltes,0) = 0 THEN 'ext' ";
-$sSqlBuscaEmpenhos .= "         ELSE 'tran' ";
-$sSqlBuscaEmpenhos .= "     END AS tipo ";
-$sSqlBuscaEmpenhos .= "FROM ";
-$sSqlBuscaEmpenhos .= "(SELECT corrente.k12_id, ";
-$sSqlBuscaEmpenhos .= "        corrente.k12_autent, ";
-$sSqlBuscaEmpenhos .= "        corrente.k12_data, ";
-$sSqlBuscaEmpenhos .= "        corrente.k12_valor, ";
-$sSqlBuscaEmpenhos .= "        corrente.k12_conta AS corrente, ";
-$sSqlBuscaEmpenhos .= "        c.k13_conta AS corr_saltes, ";
-$sSqlBuscaEmpenhos .= "        b.k12_conta AS corlanc, ";
-$sSqlBuscaEmpenhos .= "        d.k13_conta AS corl_saltes, ";
-$sSqlBuscaEmpenhos .= "        p.k12_empen, ";
-$sSqlBuscaEmpenhos .= "        e60_codemp, ";
-$sSqlBuscaEmpenhos .= "        e60_anousu, ";
-$sSqlBuscaEmpenhos .= "        p.k12_codord, ";
-$sSqlBuscaEmpenhos .= "        p.k12_cheque, ";
-$sSqlBuscaEmpenhos .= "        slip.k17_codigo AS slp, ";
-$sSqlBuscaEmpenhos .= "        slipnum.k17_numcgm, ";
-$sSqlBuscaEmpenhos .= "        cgm.z01_nome, ";
-$sSqlBuscaEmpenhos .= "        corhist.k12_histcor AS corh, ";
-$sSqlBuscaEmpenhos .= "        slip.k17_texto AS slp_txt ,e91_cheque";
-$sSqlBuscaEmpenhos .= " FROM corrente ";
-$sSqlBuscaEmpenhos .= " INNER JOIN corlanc b ON corrente.k12_id = b.k12_id ";
-$sSqlBuscaEmpenhos .= " AND corrente.k12_autent = b.k12_autent ";
-$sSqlBuscaEmpenhos .= " AND corrente.k12_data = b.k12_data ";
-$sSqlBuscaEmpenhos .= " left join corconf on corconf.k12_id = corrente.k12_id  ";
-$sSqlBuscaEmpenhos .= " and corconf.k12_data = corrente.k12_data ";
-$sSqlBuscaEmpenhos .= " and corconf.k12_autent = corrente.k12_autent ";
-$sSqlBuscaEmpenhos .= " left join empageconfche on corconf.k12_codmov = empageconfche.e91_codcheque ";
-$sSqlBuscaEmpenhos .= " INNER JOIN slip ON slip.k17_codigo = b.k12_codigo ";
-$sSqlBuscaEmpenhos .= " INNER JOIN slipnum on slip.k17_codigo = slipnum.k17_codigo ";
-$sSqlBuscaEmpenhos .= " INNER JOIN cgm on slipnum.k17_numcgm = cgm.z01_numcgm ";
-$sSqlBuscaEmpenhos .= " LEFT JOIN corhist ON corhist.k12_id = b.k12_id ";
-$sSqlBuscaEmpenhos .= " AND corhist.k12_data = b.k12_data ";
-$sSqlBuscaEmpenhos .= " AND corhist.k12_autent = b.k12_autent ";
-$sSqlBuscaEmpenhos .= " LEFT JOIN coremp p ON corrente.k12_id = p.k12_id ";
-$sSqlBuscaEmpenhos .= " AND corrente.k12_autent=p.k12_autent ";
-$sSqlBuscaEmpenhos .= " AND corrente.k12_data = p.k12_data ";
-$sSqlBuscaEmpenhos .= " LEFT JOIN empempenho ON e60_numemp = k12_empen ";
-$sSqlBuscaEmpenhos .= "   AND e60_instit = {$iInstituicaoSessao} ";
-$sSqlBuscaEmpenhos .= " LEFT JOIN saltes c ON c.k13_conta = corrente.k12_conta ";
-$sSqlBuscaEmpenhos .= " LEFT JOIN saltes d ON d.k13_conta = b.k12_conta ";
-$sSqlBuscaEmpenhos .= " WHERE corrente.k12_instit = {$iInstituicaoSessao} ";
-$sSqlBuscaEmpenhos .= "   AND corrente.k12_instit = {$iInstituicaoSessao}) AS x) AS xx) AS xxx ";
-$sSqlBuscaEmpenhos .= "INNER JOIN conplanoexe e ON entrou = e.c62_reduz ";
-$sSqlBuscaEmpenhos .= "AND e.c62_anousu = {$iAnoUsoSessao} ";
-$sSqlBuscaEmpenhos .= "INNER JOIN conplanoreduz i ON e.c62_reduz = i.c61_reduz ";
-$sSqlBuscaEmpenhos .= "AND i.c61_anousu = {$iAnoUsoSessao} ";
-$sSqlBuscaEmpenhos .= "AND i.c61_instit = {$iInstituicaoSessao} ";
-$sSqlBuscaEmpenhos .= "INNER JOIN conplano f ON i.c61_codcon = f.c60_codcon ";
-$sSqlBuscaEmpenhos .= "AND i.c61_anousu = f.c60_anousu ";
-$sSqlBuscaEmpenhos .= "INNER JOIN conplanoexe g ON saiu = g.c62_reduz ";
-$sSqlBuscaEmpenhos .= "AND g.c62_anousu = {$iAnoUsoSessao} ";
-$sSqlBuscaEmpenhos .= "INNER JOIN conplanoreduz j ON g.c62_reduz = j.c61_reduz ";
-$sSqlBuscaEmpenhos .= "AND j.c61_anousu = {$iAnoUsoSessao} ";
-$sSqlBuscaEmpenhos .= "inner join orctiporec  l on j.c61_codigo = l.o15_codigo ";
-$sSqlBuscaEmpenhos .= "INNER JOIN conplano h ON j.c61_codcon = h.c60_codcon ";
-$sSqlBuscaEmpenhos .= "AND j.c61_anousu = h.c60_anousu ";
-$sSqlBuscaEmpenhos .= "ORDER BY tipo, ";
-$sSqlBuscaEmpenhos .= " credito, ";
-$sSqlBuscaEmpenhos .= " k12_data, ";
-$sSqlBuscaEmpenhos .= " k12_autent) as y where tipo = 'ext') as todo" ;
-$sSqlBuscaEmpenhos .= "          where {$sWhereEmpenho} and {$sImplodeWhere}                                                            ";
-$sSqlBuscaEmpenhos .= "          order by {$sImplodeOrderBy}                                                       ";
+$sImplodeWhere     = implode(" AND ", $aWhere);
+$sImplodeOrderBy   = implode(", ", $aOrderBy);
+$sImplodeGroupBy   = implode(", ", $aGroup_by);
+$sSqlBuscaEmpenhos  = "  SELECT * FROM                                                                                                                                                      ";
+$sSqlBuscaEmpenhos .= "    (SELECT coremp.k12_empen,                                                          																				";
+$sSqlBuscaEmpenhos .= "            e60_numemp,                                                          																					";
+$sSqlBuscaEmpenhos .= "            e60_codemp,                                                          																					";
+$sSqlBuscaEmpenhos .= "            CASE                                                          																							";
+$sSqlBuscaEmpenhos .= "                WHEN e49_numcgm IS NULL THEN e60_numcgm                                                          													";
+$sSqlBuscaEmpenhos .= "                ELSE e49_numcgm                                                          																			";
+$sSqlBuscaEmpenhos .= "            END AS e60_numcgm,                                                          																				";
+$sSqlBuscaEmpenhos .= "            k12_codord AS e50_codord,                                                          																		";
+$sSqlBuscaEmpenhos .= "            CASE                                                          																							";
+$sSqlBuscaEmpenhos .= "                WHEN e49_numcgm IS NULL THEN cgm.z01_nome                                                          													";
+$sSqlBuscaEmpenhos .= "                ELSE cgmordem.z01_nome                                                          																		";
+$sSqlBuscaEmpenhos .= "            END AS z01_nome,                                                          																				";
+$sSqlBuscaEmpenhos .= "            k12_valor,                                                          																						";
+$sSqlBuscaEmpenhos .= "            k12_cheque,                                                          																					";
+$sSqlBuscaEmpenhos .= "            e60_anousu,                                                          																					";
+$sSqlBuscaEmpenhos .= "            coremp.k12_autent,                                                          																				";
+$sSqlBuscaEmpenhos .= "            coremp.k12_data,                                                          																				";
+$sSqlBuscaEmpenhos .= "            k13_conta,                                                          																						";
+$sSqlBuscaEmpenhos .= "            o15_codtri,                                                          																					";
+$sSqlBuscaEmpenhos .= "            k13_descr,                                                          																						";
+$sSqlBuscaEmpenhos .= "            CASE                                                          																							";
+$sSqlBuscaEmpenhos .= "                WHEN e60_anousu < {$iAnoUsoSessao} THEN 'RP'                                                          												";
+$sSqlBuscaEmpenhos .= "                ELSE 'Emp'                                                          																					";
+$sSqlBuscaEmpenhos .= "            END AS tipo,                                                          																					";
+$sSqlBuscaEmpenhos .= "            k106_sequencial                                                          																				";
+$sSqlBuscaEmpenhos .= "     FROM coremp                                                          																							";
+$sSqlBuscaEmpenhos .= "     INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = {$iInstituicaoSessao}                                                      					";
+$sSqlBuscaEmpenhos .= "     INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu                                                          							";
+$sSqlBuscaEmpenhos .= "     INNER JOIN orctiporec ON o58_codigo = o15_codigo                                                          														";
+$sSqlBuscaEmpenhos .= "     INNER JOIN pagordem ON e50_codord = k12_codord                                                          														";
+$sSqlBuscaEmpenhos .= "     LEFT  JOIN pagordemconta ON e50_codord = e49_codord                                                          													";
+$sSqlBuscaEmpenhos .= "     INNER JOIN corrente ON corrente.k12_id = coremp.k12_id AND corrente.k12_data = coremp.k12_data AND corrente.k12_autent = coremp.k12_autent  					";
+$sSqlBuscaEmpenhos .= "     INNER JOIN cgm ON cgm.z01_numcgm = e60_numcgm                                                          															";
+$sSqlBuscaEmpenhos .= "     LEFT  JOIN cgm cgmordem ON cgmordem.z01_numcgm = e49_numcgm                                                          											";
+$sSqlBuscaEmpenhos .= "     INNER JOIN saltes ON saltes.k13_conta = corrente.k12_conta                                                          											";
+$sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupocorrente ON k105_id = corrente.k12_id AND k105_data = corrente.k12_data AND k105_autent = corrente.k12_autent            					";
+$sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupotipo ON k106_sequencial = k105_corgrupotipo                                                          										";
+$sSqlBuscaEmpenhos .= "     UNION                                                          																									";
+$sSqlBuscaEmpenhos .= "     SELECT k12_empen,                                                          																						";
+$sSqlBuscaEmpenhos .= "                  k12_empen AS e60_numemp,                                                          																	";
+$sSqlBuscaEmpenhos .= "                  k17_codigo::varchar AS e60_codemp,                                                          														";
+$sSqlBuscaEmpenhos .= "                  k17_numcgm AS e60_numcgm,                                                          																";
+$sSqlBuscaEmpenhos .= "                  k12_codord,                                                          																				";
+$sSqlBuscaEmpenhos .= "                  z01_nome,                                                          																				";
+$sSqlBuscaEmpenhos .= "                  k12_valor,                                                          																				";
+$sSqlBuscaEmpenhos .= "                  e91_cheque::integer AS k12_cheque,                                                          														";
+$sSqlBuscaEmpenhos .= "                  e60_anousu,                                                          																				";
+$sSqlBuscaEmpenhos .= "                  k12_autent,                                                          																				";
+$sSqlBuscaEmpenhos .= "                  k12_data,                                                          																				";
+$sSqlBuscaEmpenhos .= "                  credito AS k13_conta,                                                          																	";
+$sSqlBuscaEmpenhos .= "                  o15_codtri,                                                          																				";
+$sSqlBuscaEmpenhos .= "                  descr_credito AS k13_descr,                                                          																";
+$sSqlBuscaEmpenhos .= "                  tipo,                                                          																					";
+$sSqlBuscaEmpenhos .= "                  0 AS k106_sequencial                                                          																		";
+$sSqlBuscaEmpenhos .= "     FROM                                                          																									";
+$sSqlBuscaEmpenhos .= "         (SELECT k12_id,                                                          																					";
+$sSqlBuscaEmpenhos .= "                 k12_autent,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 k12_data,                                                          																					";
+$sSqlBuscaEmpenhos .= "                 k12_valor,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 CASE                                                          																						";
+$sSqlBuscaEmpenhos .= "                     WHEN (h.c60_codsis = 6                                                          																";
+$sSqlBuscaEmpenhos .= "                           AND f.c60_codsis = 6) THEN 'tran'                                                          												";
+$sSqlBuscaEmpenhos .= "                     WHEN (h.c60_codsis = 6                                                          																";
+$sSqlBuscaEmpenhos .= "                           AND f.c60_codsis = 5) THEN 'tran'                                                          												";
+$sSqlBuscaEmpenhos .= "                     WHEN (h.c60_codsis = 5                                                          																";
+$sSqlBuscaEmpenhos .= "                           AND f.c60_codsis = 6) THEN 'tran'                                                          												";
+$sSqlBuscaEmpenhos .= "                     ELSE 'EXT'                                                          																			";
+$sSqlBuscaEmpenhos .= "                 END AS tipo,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 k12_empen,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 e60_codemp,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 e60_anousu,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 k12_codord,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 k12_cheque,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 entrou AS debito,                                                          																			";
+$sSqlBuscaEmpenhos .= "                 f.c60_descr AS descr_debito,                                                          																";
+$sSqlBuscaEmpenhos .= "                 f.c60_codsis AS sis_debito,                                                          																";
+$sSqlBuscaEmpenhos .= "                 saiu AS credito,                                                          																			";
+$sSqlBuscaEmpenhos .= "                 o15_codtri,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 h.c60_descr AS descr_credito,                                                          																";
+$sSqlBuscaEmpenhos .= "                 h.c60_codsis AS sis_credito,                                                          																";
+$sSqlBuscaEmpenhos .= "                 sl AS k17_codigo,                                                          																			";
+$sSqlBuscaEmpenhos .= "                 k17_numcgm,                                                          																				";
+$sSqlBuscaEmpenhos .= "                 z01_nome,                                                          																					";
+$sSqlBuscaEmpenhos .= "                 corhi AS k12_histcor,                                                          																		";
+$sSqlBuscaEmpenhos .= "                 sl_txt AS k17_texto,                                                          																		";
+$sSqlBuscaEmpenhos .= "                 e91_cheque                                                          																				";
+$sSqlBuscaEmpenhos .= "          FROM                                                          																								";
+$sSqlBuscaEmpenhos .= "              (SELECT k12_id,                                                          																				";
+$sSqlBuscaEmpenhos .= "                      k12_autent,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      k12_data,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      k12_valor,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      tipo,                                                          																				";
+$sSqlBuscaEmpenhos .= "                      k12_empen,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      e60_codemp,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      e60_anousu,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      k12_codord,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      k12_cheque,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      corlanc AS entrou,                                                          																	";
+$sSqlBuscaEmpenhos .= "                      corrente AS saiu,                                                          																	";
+$sSqlBuscaEmpenhos .= "                      slp AS sl,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      k17_numcgm,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      z01_nome,                                                          																			";
+$sSqlBuscaEmpenhos .= "                      corh AS corhi,                                                          																		";
+$sSqlBuscaEmpenhos .= "                      slp_txt AS sl_txt,                                                          																	";
+$sSqlBuscaEmpenhos .= "                      e91_cheque                                                          																			";
+$sSqlBuscaEmpenhos .= "               FROM                                                          																						";
+$sSqlBuscaEmpenhos .= "                   (SELECT *,                                                          																				";
+$sSqlBuscaEmpenhos .= "                           CASE                                                          																			";
+$sSqlBuscaEmpenhos .= "                               WHEN coalesce(corl_saltes,0) = 0 THEN 'EXT'                                                          									";
+$sSqlBuscaEmpenhos .= "                               ELSE 'tran'                                                          																	";
+$sSqlBuscaEmpenhos .= "                           END AS tipo                                                          																		";
+$sSqlBuscaEmpenhos .= "                    FROM                                                          																					";
+$sSqlBuscaEmpenhos .= "                        (SELECT corrente.k12_id,                                                          															";
+$sSqlBuscaEmpenhos .= "                                corrente.k12_autent,                                                          														";
+$sSqlBuscaEmpenhos .= "                                corrente.k12_data,                                                          															";
+$sSqlBuscaEmpenhos .= "                                corrente.k12_valor,                                                          														";
+$sSqlBuscaEmpenhos .= "                                corrente.k12_conta AS corrente,                                                          											";
+$sSqlBuscaEmpenhos .= "                                c.k13_conta AS corr_saltes,                                                          												";
+$sSqlBuscaEmpenhos .= "                                b.k12_conta AS corlanc,                                                          													";
+$sSqlBuscaEmpenhos .= "                                d.k13_conta AS corl_saltes,                                                          												";
+$sSqlBuscaEmpenhos .= "                                p.k12_empen,                                                          																";
+$sSqlBuscaEmpenhos .= "                                e60_codemp,                                                          																";
+$sSqlBuscaEmpenhos .= "                                e60_anousu,                                                          																";
+$sSqlBuscaEmpenhos .= "                                p.k12_codord,                                                          																";
+$sSqlBuscaEmpenhos .= "                                p.k12_cheque,                                                          																";
+$sSqlBuscaEmpenhos .= "                                slip.k17_codigo AS slp,                                                          													";
+$sSqlBuscaEmpenhos .= "                                slipnum.k17_numcgm,                                                          														";
+$sSqlBuscaEmpenhos .= "                                cgm.z01_nome,                                                          																";
+$sSqlBuscaEmpenhos .= "                                corhist.k12_histcor AS corh,                                                          												";
+$sSqlBuscaEmpenhos .= "                                slip.k17_texto AS slp_txt,                                                          													";
+$sSqlBuscaEmpenhos .= "                                e91_cheque                                                          																	";
+$sSqlBuscaEmpenhos .= "                         FROM corrente                                                          																		";
+$sSqlBuscaEmpenhos .= "                         INNER JOIN corlanc b ON corrente.k12_id = b.k12_id AND corrente.k12_autent = b.k12_autent AND corrente.k12_data = b.k12_data                ";
+$sSqlBuscaEmpenhos .= "                         LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id AND corconf.k12_data = corrente.k12_data AND corconf.k12_autent = corrente.k12_autent ";
+$sSqlBuscaEmpenhos .= "                         LEFT JOIN empageconfche ON corconf.k12_codmov = empageconfche.e91_codcheque                                                          		";
+$sSqlBuscaEmpenhos .= "                         INNER JOIN slip ON slip.k17_codigo = b.k12_codigo                                                          									";
+$sSqlBuscaEmpenhos .= "                         INNER JOIN slipnum ON slip.k17_codigo = slipnum.k17_codigo                                                          						";
+$sSqlBuscaEmpenhos .= "                         INNER JOIN cgm ON slipnum.k17_numcgm = cgm.z01_numcgm                                                          								";
+$sSqlBuscaEmpenhos .= "                         LEFT JOIN corhist ON corhist.k12_id = b.k12_id AND corhist.k12_data = b.k12_data AND corhist.k12_autent = b.k12_autent                      ";
+$sSqlBuscaEmpenhos .= "                         LEFT JOIN coremp p ON corrente.k12_id = p.k12_id AND corrente.k12_autent=p.k12_autent AND corrente.k12_data = p.k12_data                    ";
+$sSqlBuscaEmpenhos .= "                         LEFT JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = {$iInstituicaoSessao}                                                       ";
+$sSqlBuscaEmpenhos .= "                         LEFT JOIN saltes c ON c.k13_conta = corrente.k12_conta                                                          							";
+$sSqlBuscaEmpenhos .= "                         LEFT JOIN saltes d ON d.k13_conta = b.k12_conta                                                          									";
+$sSqlBuscaEmpenhos .= "                         WHERE corrente.k12_instit = {$iInstituicaoSessao}                                                          									";
+$sSqlBuscaEmpenhos .= "                             AND corrente.k12_instit = {$iInstituicaoSessao}) AS x) AS xx) AS xxx                                                          			";
+$sSqlBuscaEmpenhos .= "          INNER JOIN conplanoexe e ON entrou = e.c62_reduz AND e.c62_anousu = {$iAnoUsoSessao}                                                          				";
+$sSqlBuscaEmpenhos .= "          INNER JOIN conplanoreduz i ON e.c62_reduz = i.c61_reduz AND i.c61_anousu = {$iAnoUsoSessao} AND i.c61_instit = {$iInstituicaoSessao}                       ";
+$sSqlBuscaEmpenhos .= "          INNER JOIN conplano f ON i.c61_codcon = f.c60_codcon AND i.c61_anousu = f.c60_anousu                                                          				";
+$sSqlBuscaEmpenhos .= "          INNER JOIN conplanoexe g ON saiu = g.c62_reduz AND g.c62_anousu = {$iAnoUsoSessao}                                                          				";
+$sSqlBuscaEmpenhos .= "          INNER JOIN conplanoreduz j ON g.c62_reduz = j.c61_reduz AND j.c61_anousu = {$iAnoUsoSessao}                                                          		";
+$sSqlBuscaEmpenhos .= "          INNER JOIN orctiporec l ON j.c61_codigo = l.o15_codigo                                                          											";
+$sSqlBuscaEmpenhos .= "          INNER JOIN conplano h ON j.c61_codcon = h.c60_codcon AND j.c61_anousu = h.c60_anousu                                                          				";
+$sSqlBuscaEmpenhos .= "          ORDER BY tipo,                                                          																					";
+$sSqlBuscaEmpenhos .= "                   credito,                                                          																				";
+$sSqlBuscaEmpenhos .= "                   k12_data,                                                          																				";
+$sSqlBuscaEmpenhos .= "                   k12_autent) AS y                                                          																		";
+$sSqlBuscaEmpenhos .= "     WHERE tipo = 'ext') AS todo                                                          																			";
+$sSqlBuscaEmpenhos .= " WHERE {$sWhereEmpenho}                                                          																					";
+$sSqlBuscaEmpenhos .= "   AND {$sImplodeWhere} {$sImplodeGroupBy} {$sImplodeOrderBy}                                                          												";
 
 $rsExecutaBuscaEmpenho = db_query($sSqlBuscaEmpenhos);
 $iLinhasRetornadasBuscaEmpenho = pg_num_rows($rsExecutaBuscaEmpenho);
@@ -364,10 +397,20 @@ $sTipoEmpenho = $aDadosImprimir[0]->tipo;
 $iCodigoBanco = $aDadosImprimir[0]->k13_conta;
 $iQuantBanco  = 0;
 
+// OC 3468
+// Incluído quebra de página diversas por seleção dos filtros.
+// Esse filtro não funcionava anteriormente!
+
 foreach ($aDadosImprimir as $iIndice => $oDadoEmpenho) {
 
-  $oDadosAgrupados = new stdClass();
-  $aDadosAgrupados[$oDadoEmpenho->k12_data][] = $oDadoEmpenho;
+    $oDadosAgrupados = new stdClass();
+    if (($oGet->lQuebraConta) && ($oGet->lQuebraCredor)) {
+        $aDadosAgrupados[$oDadoEmpenho->e60_numcgm][] = $oDadoEmpenho;
+    } else if ($oGet->lQuebraCredor) {
+        $aDadosAgrupados[$oDadoEmpenho->e60_numcgm][] = $oDadoEmpenho;
+    } else if ($oGet->lQuebraConta) {
+        $aDadosAgrupados[$oDadoEmpenho->k13_conta][] = $oDadoEmpenho;
+    } else $aDadosAgrupados[$oDadoEmpenho->k12_data][] = $oDadoEmpenho;
 }
 
 foreach ($aDadosAgrupados as $aDadoEmpenhos) {
@@ -410,12 +453,12 @@ foreach ($aDadosAgrupados as $aDadoEmpenhos) {
   }
   $total_geral += $total_nadata;
   $oPdf->setfont('arial', 'B', 7);
-  $oPdf->cell(226, 4, "SubTotal:", 1, 0, "R", 1);
+  $oPdf->cell(226, 4, "SubTotal :", 1, 0, "R", 1);
   $oPdf->cell(20, 4, db_formatar($total_nadata, 'f'), 1, 0, "R", 1);
   $oPdf->cell(35, 4, "", 1, 1, "R", 1);
   $oPdf->ln(3);
 }
-$oPdf->cell(226, 4, "Total Geral....:", 1, 0, "R", 1);
+$oPdf->cell(226, 4, "Total Geral :", 1, 0, "R", 1);
 $oPdf->cell(20, 4, db_formatar($total_geral, 'f'), 1, 0, "R", 1);
 $oPdf->cell(35, 4, "", 1, 1, "R", 1);
 $oPdf->ln(3);

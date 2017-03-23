@@ -133,6 +133,15 @@ $oRotuloSaltes->label();
             </td>
           </tr>
           <tr>
+            <td><b>Quebra por Credor:</b></td>
+            <td>
+              <?php
+                $aQuebraCredor = array("t" => "Sim", "f" => "Não");
+                db_select("lQuebraCredor", $aQuebraCredor, true, 1);
+              ?>
+            </td>
+          </tr>
+          <tr>
             <td><b>Lista:</b></td>
             <td>
               <?php 
@@ -191,6 +200,7 @@ $oRotuloSaltes->label();
     sQueryLocation     += "&dtDataFinal="+$F('dtDataFinal');
     sQueryLocation     += "&sTipoOrdem="+$F('sTipoOrdem');
     sQueryLocation     += "&lQuebraConta="+$F('lQuebraConta');
+    sQueryLocation     += "&lQuebraCredor="+$F('lQuebraCredor');
     sQueryLocation     += "&iListaEmpenho="+$F('iListaEmpenho');
     sQueryLocation     += "&iTipoBaixa="+$F('iTipoBaixa');
 
