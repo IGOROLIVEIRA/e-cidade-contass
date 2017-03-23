@@ -121,7 +121,7 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
                 <table>
                   <tr>
                     <td>
-                      <label class="bold" for="contadevedora" id="lbl_contadevedora">Conta Devedora:</label>
+                      <label class="bold" for="contadevedora" id="lbl_contadevedora">Conta a Debitar:</label>
                     </td>
                     <td>
                       <?php
@@ -132,7 +132,7 @@ if (isset($oGet->lDesprocessar) && $oGet->lDesprocessar == "true") {
                   </tr>
                   <tr>
                     <td>
-                      <label class="bold" for="contacredora" id="lbl_contacredora">Conta Credora:</label>
+                      <label class="bold" for="contacredora" id="lbl_contacredora">Conta a Creditar:</label>
                     </td>
                     <td>
                       <?php
@@ -370,12 +370,12 @@ oButtons.Natureza.regras.observe('click', function () {
 oRegra.salvar.observe('click', function () {
 
   if (empty(oRegra.contadevedora.value)) {
-    alert("Campo obrigatório: Conta Devedora");
+    alert("Campo obrigatório: Conta a Debitar");
     return false;
   }
 
   if (empty(oRegra.contacredora.value)) {
-    alert("Campo obrigatório: Conta Credora");
+    alert("Campo obrigatório: Conta a Creditar");
     return false;
   }
 
