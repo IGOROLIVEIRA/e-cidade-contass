@@ -1,5 +1,4 @@
 <?php
-
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("libs/db_stdlib.php");
@@ -719,6 +718,7 @@ switch($oParam->exec) {
           $oArquivo    = new $sNomeClasse;
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
+          $oArquivo->setTipoGeracao($oParam->tipoGeracao);
 
           $oArquivoCsv = new stdClass();
           try {
@@ -737,13 +737,11 @@ switch($oParam->exec) {
       foreach ($aArrayArquivos as $oArquivo){
         $aListaArquivos .= " ".$oArquivo->caminho;
       }
-      $oInstit = new Instituicao(db_getsession('DB_instit'));
-      $sTipoEnvio = $oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA ? 'CONSOLIDADO' : 'ISOLADO';
-      system("rm -f DCASP_{$sTipoEnvio}_{$sOrgao}_{$iAnoReferencia}.zip");
-      system("bin/zip -q DCASP_{$sTipoEnvio}_{$sOrgao}_{$iAnoReferencia}.zip $aListaArquivos");
+      system("rm -f DCASP_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip");
+      system("bin/zip -q DCASP_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip $aListaArquivos");
       $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "DCASP_{$sTipoEnvio}_{$sOrgao}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "DCASP_{$sTipoEnvio}_{$sOrgao}_{$iAnoReferencia}.zip";
+      $oArquivoZip->nome    = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
       $oRetorno->itens  = $aArrayArquivos;
     }

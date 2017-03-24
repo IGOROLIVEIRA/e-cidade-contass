@@ -46,6 +46,24 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
 
   protected $iCodigoPespectiva;
 
+  protected $sTipoGeracao;
+
+  /**
+   * @return mixed
+   */
+  public function getTipoGeracao()
+  {
+    return $this->sTipoGeracao;
+  }
+
+  /**
+   * @param mixed $sTipoGeracao
+   */
+  public function setTipoGeracao($sTipoGeracao)
+  {
+    $this->sTipoGeracao = $sTipoGeracao;
+  }
+
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
@@ -73,10 +91,8 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = date('m', strtotime($this->sDataFinal)) + 16;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $sListaInstituicoes = db_getsession("DB_instit");
-    $oInstit            = new Instituicao(db_getsession("DB_instit"));
 
-    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+    if ($this->getTipoGeracao() == 'CONSOLIDADO') {
 
       $sSqlInstit = "select codigo from db_config ";
       $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));
@@ -241,7 +257,7 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
      * registro do SICOM DCASP, estamos passando os índices exatos do array.
      * Se eles forem alterados (nas configurações dos relatórios), devem
      * ser alterados aqui também.
-    */
+     */
 
     $oFluxoCaixa = new FluxoCaixaDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
 
@@ -265,8 +281,8 @@ class SicomArquivoDFC extends SicomArquivoBase implements iPadArquivoBaseCSV
     /*------------------------------------------------------------------------*/
 
     $aExercicios = array(
-      1 => 'vlrexatual',
-      2 => 'vlrexanter'
+        1 => 'vlrexatual',
+        2 => 'vlrexanter'
     );
 
 

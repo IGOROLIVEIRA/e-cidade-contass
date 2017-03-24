@@ -31,6 +31,8 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
   protected $sNomeArquivo = 'BF';
 
+  protected $sTipoGeracao;
+
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
@@ -43,6 +45,21 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     return array();
   }
 
+  /**
+   * @return mixed
+   */
+  public function getTipoGeracao()
+  {
+    return $this->sTipoGeracao;
+  }
+
+  /**
+   * @param mixed $sTipoGeracao
+   */
+  public function setTipoGeracao($sTipoGeracao)
+  {
+    $this->sTipoGeracao = $sTipoGeracao;
+  }
 
   /**
    * Contrutor da classe
@@ -59,9 +76,12 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
     $sTipoImpressao     = 'A';
     $iCodigoPeriodo     = date('m', strtotime($this->sDataFinal)) + 16;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $oInstit            = new Instituicao(db_getsession("DB_instit"));
 
-    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+    /**
+     * Se o tipo da geração for consolidado, busca todas as instituições do sistema. Se não, pega a instituição da sessão
+     */
+
+    if ($this->getTipoGeracao() == 'CONSOLIDADO') {
 
       $sSqlInstit = "select codigo from db_config ";
       $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));

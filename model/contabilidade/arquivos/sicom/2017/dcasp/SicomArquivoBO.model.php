@@ -37,12 +37,30 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
 
   protected $iCodigoPespectiva;
 
+  protected $sTipoGeracao;
+
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
 
   public function getNomeArquivo(){
     return $this->sNomeArquivo;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getTipoGeracao()
+  {
+    return $this->sTipoGeracao;
+  }
+
+  /**
+   * @param mixed $sTipoGeracao
+   */
+  public function setTipoGeracao($sTipoGeracao)
+  {
+    $this->sTipoGeracao = $sTipoGeracao;
   }
 
   /**
@@ -68,9 +86,8 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = date('m', strtotime($this->sDataFinal)) + 16;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $oInstit            = new Instituicao(db_getsession("DB_instit"));
 
-    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+    if ($this->getTipoGeracao() == 'CONSOLIDADO') {
 
       $sSqlInstit = "select codigo from db_config ";
       $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));
@@ -164,7 +181,7 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      * registro do SICOM DCASP, estamos passando os índices exatos do array.
      * Se eles forem alterados (nas configurações dos relatórios), devem
      * ser alterados aqui também.
-    */
+     */
 
     $oBalancoOrcamentario = new BalancoOrcamentarioDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
     $oBalancoOrcamentario->setInstituicoes($sListaInstituicoes);
@@ -184,9 +201,9 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $aFasesReceitaOrcamentaria = array(
-      1 => 'previni',
-      2 => 'prevatu',
-      3 => 'recrealiza'
+        1 => 'previni',
+        2 => 'prevatu',
+        3 => 'recrealiza'
     );
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
@@ -233,8 +250,8 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $aFasesReceitaOrcamentaria = array(
-      2 => 'prevatu',
-      3 => 'recrealiza'
+        2 => 'prevatu',
+        3 => 'recrealiza'
     );
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
@@ -264,11 +281,11 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $aFasesReceitaOrcamentaria = array(
-      1 => 'dotini',
-      2 => 'dotatu',
-      3 => 'despemp',
-      4 => 'despliq',
-      5 => 'desppag'
+        1 => 'dotini',
+        2 => 'dotatu',
+        3 => 'despemp',
+        4 => 'despliq',
+        5 => 'desppag'
     );
 
     foreach ($aFasesReceitaOrcamentaria as $iValorNumerico => $sChave) {
@@ -310,11 +327,11 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $faseRestosPagarNaoProcessados = array(
-      1 => 'exanterior',
-      2 => 'exanterior3112',
-      3 => 'liquidados',
-      4 => 'pagos',
-      5 => 'cancelados'
+        1 => 'exanterior',
+        2 => 'exanterior3112',
+        3 => 'liquidados',
+        4 => 'pagos',
+        5 => 'cancelados'
     );
 
     foreach ($faseRestosPagarNaoProcessados as $iValorNumerico => $sChave) {
@@ -348,10 +365,10 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
      */
 
     $RestosPagarProcessadosNaoProcessadosLiquidados = array(
-      1 => 'exanterior',
-      2 => 'exanterior3112',
-      4 => 'pagos',
-      5 => 'cancelados'
+        1 => 'exanterior',
+        2 => 'exanterior3112',
+        4 => 'pagos',
+        5 => 'cancelados'
     );
 
     foreach ($RestosPagarProcessadosNaoProcessadosLiquidados as $iValorNumerico => $sChave) {

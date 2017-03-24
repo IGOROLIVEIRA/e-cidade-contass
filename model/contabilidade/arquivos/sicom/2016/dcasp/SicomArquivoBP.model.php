@@ -40,6 +40,24 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
   protected $iCodigoPespectiva;
 
+  protected $sTipoGeracao;
+
+  /**
+   * @return mixed
+   */
+  public function getTipoGeracao()
+  {
+    return $this->sTipoGeracao;
+  }
+
+  /**
+   * @param mixed $sTipoGeracao
+   */
+  public function setTipoGeracao($sTipoGeracao)
+  {
+    $this->sTipoGeracao = $sTipoGeracao;
+  }
+
   public function getCampos(){
 
   }
@@ -65,9 +83,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $oInstit            = new Instituicao(db_getsession("DB_instit"));
 
-    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+    if ($this->getTipoGeracao() == 'CONSOLIDADO') {
 
       $sSqlInstit = "select codigo from db_config ";
       $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));

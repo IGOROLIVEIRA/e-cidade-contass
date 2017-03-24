@@ -44,6 +44,28 @@ $clrotulo->label("o15_codigo");
                     <b>Gerar DCASP</b>
                 </legend>
                 <table style='empty-cells: show; border-collapse: collapse;'>
+                    <?php
+                    $oInstit = new Instituicao(db_getsession('DB_instit'));
+                    if($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA){
+                    ?>
+                    <tr>
+                        <td colspan="4">
+                            <fieldset>
+                                <table>
+                                    <tr>
+                                        <td>Tipo da Geração: </td>
+                                        <td>
+                                            <select id="TipoGeracao" class="TipoGeracao">
+                                                <option value="CONSOLIDADO">CONSOLIDADO</option>
+                                                <option value="ISOLADO">ISOLADO</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </td>
+                    </tr>
+                    <?php } ?>
                     <tr>
                         <td colspan="2" align="center">Dados</td>
                         <td>Arquivos Gerados</td>
@@ -96,7 +118,7 @@ $clrotulo->label("o15_codigo");
         var aArquivosSelecionados = new Array();
         var aArquivos             = $$("input[type='checkbox']");
         var iMesReferencia        = 12;
-
+        var sTipoGeracao          = $("TipoGeracao");
         /*
          * iterando sobre o array de arquivos com uma função anônima para pegar os arquivos selecionados pelo usuário
          */
@@ -112,10 +134,12 @@ $clrotulo->label("o15_codigo");
             return false;
         }
         js_divCarregando('Aguarde, processando arquivos','msgBox');
+
         var oParam           = new Object();
         oParam.exec          = "processarDCASP";
         oParam.arquivos      = aArquivosSelecionados;
         oParam.mesReferencia = iMesReferencia.value;
+        oParam.tipoGeracao   = sTipoGeracao == null ? 'ISOLADO' : sTipoGeracao.value;
         var oAjax = new Ajax.Request("con4_processarpad.RPC.php",
             {
                 method:'post',

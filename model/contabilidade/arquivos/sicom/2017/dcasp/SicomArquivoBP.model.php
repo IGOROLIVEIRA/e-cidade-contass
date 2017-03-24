@@ -24,7 +24,7 @@ require_once("classes/db_bpdcasp602017_classe.php");
 require_once("classes/db_bpdcasp702017_classe.php");
 require_once("classes/db_bpdcasp712017_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/2017/dcasp/geradores/GerarBP.model.php");
+require_once("model/contabilidade/arquivos/sicom/2016/dcasp/geradores/GerarBP.model.php");
 
 /**
  * gerar arquivo de Balanço Patrimonial
@@ -39,6 +39,24 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
   protected $sNomeArquivo = 'BP';
 
   protected $iCodigoPespectiva;
+
+  protected $sTipoGeracao;
+
+  /**
+   * @return mixed
+   */
+  public function getTipoGeracao()
+  {
+    return $this->sTipoGeracao;
+  }
+
+  /**
+   * @param mixed $sTipoGeracao
+   */
+  public function setTipoGeracao($sTipoGeracao)
+  {
+    $this->sTipoGeracao = $sTipoGeracao;
+  }
 
   public function getCampos(){
 
@@ -65,9 +83,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
-    $oInstit            = new Instituicao(db_getsession("DB_instit"));
 
-    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+    if ($this->getTipoGeracao() == 'CONSOLIDADO') {
 
       $sSqlInstit = "select codigo from db_config ";
       $aInstits   = db_utils::getColectionByRecord(db_query($sSqlInstit));
@@ -277,8 +294,26 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp20->si209_vlpatriliquidoajustavaliacao        = $oRetornoBP[42]->$sChave;
       $clbpdcasp20->si209_vlpatriliquidoreservalucros         = $oRetornoBP[43]->$sChave;
       $clbpdcasp20->si209_vlpatriliquidodemaisreservas        = $oRetornoBP[44]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidoresultexercicio       = $oRetornoBP[38]->$sChave;
-      $clbpdcasp20->si209_vlpatriliquidresultacumexeranteri   = $oRetornoBP[45]->$sChave;
+
+      //para pegar o superavit do exercicio atual e anterior é necessário alterar o anousu
+      $iAno = db_getsession("DB_anousu");
+      if($iValorNumerico == 2){
+        $iAno = $iAno-1;
+      }
+
+      $nValorResultadoExecAnterior = db_utils::fieldsMemory(db_query($clbpdcasp20->sql_query_vlpatriliquidresultacumexeranteri($sListaInstituicoes,$iAno)))->resultacumexeranteri;
+
+      //no arquivo o sinal deve ser negativo para saldo credor e positivo para saldo devedor.
+      $nValorResultadoExecAnterior = $nValorResultadoExecAnterior*-1;
+
+      $nValorResultadoExec= db_utils::fieldsMemory(db_query($clbpdcasp20->sql_query_vlpatriliquidresultacumexer($sListaInstituicoes,$iAno)))->resultacumexeranteri;
+
+      //no arquivo o sinal deve ser negativo para saldo credor e positivo para saldo devedor.
+      $nValorResultadoExec = $nValorResultadoExec*-1;
+
+      $clbpdcasp20->si209_vlpatriliquidoresultexercicio       = $nValorResultadoExec;
+      $clbpdcasp20->si209_vlpatriliquidresultacumexeranteri   = $nValorResultadoExecAnterior;
+
       $clbpdcasp20->si209_vlpatriliquidoacoescotas            = $oRetornoBP[46]->$sChave;
       $clbpdcasp20->si209_vltotalpassivo                      = $oRetornoBP[48]->$sChave;
 
@@ -375,55 +410,96 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     } // $rsResult60
 
-    $sSQL = " SELECT * "
-          . " FROM bpdcasp702017 "
-          . " WHERE 1 = 1 ";
-
-    $rsResult70 = db_query($sSQL);
-
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult70); $iCont++) {
-
-      $oDadosBP70   = db_utils::fieldsMemory($rsResult70, $iCont);
-      $clbpdcasp70  = new cl_bpdcasp702017();
-
-      $clbpdcasp70->si214_ano           = $iAnoUsu;
-      $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
-      $clbpdcasp70->si214_institu       = db_getsession("DB_instit");
-      $clbpdcasp70->si214_tiporegistro  = 70;
-      $clbpdcasp70->si214_exercicio     = $oDadosBP70->$sChave;
-      $clbpdcasp70->si214_vltotalsupdef = $oDadosBP70->$sChave;
-
-
-      $clbpdcasp70->incluir(null);
-      if ($clbpdcasp70->erro_status == 0) {
-        throw new Exception($clbpdcasp70->erro_msg);
-      }
-
-    } // $rsResult70
-
     /**
      * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2015.model.php
      */
 
-    $aDadosSuperavitFontes = $oBalancoPatrimonial->getSuperavitDeficit();
+
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
+      // ini_set('display_errors','On');
+      // error_reporting(E_ALL);
+      $aDadosSuperavitFontes = array();
+      /*
+       * Busca tas as fontes de recurso.
+       * */
+
+      $sSqlfr = " select DISTINCT o15_codigo, o15_codtri FROM orctiporec where o15_codtri is not null";
+
+      $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
+
+      echo pg_last_error();
+      /*
+       * Constante da contacorrente que indica o superavit financeiro
+       *
+       */
+      $nContaCorrente = 103;
+
+      for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
+
+        $clbpdcasp71 = new cl_bpdcasp712017();
+        $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
+        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
+        //db_criatabela($rsSaldoFontes);
+        $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
+        //echo "<pre>";print_r($oSaldoFontes);
+        $nHash = $objContasfr->o15_codtri;
+        $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
+        if(!isset($aDadosSuperavitFontes[$nHash])){
+          $oDadosSuperavitFonte = new stdClass();
+          $oDadosSuperavitFonte->si215_exercicio = $iValorNumerico;
+          $oDadosSuperavitFonte->si215_codfontrecursos = $objContasfr->o15_codtri;
+          if($iValorNumerico == 2){
+            $oDadosSuperavitFonte->si215_vlsaldofonte = $oSaldoFontes->saldoanterior;
+          }else{
+            $oDadosSuperavitFonte->si215_vlsaldofonte = $nSaldoFinal;
+          }
+          $aDadosSuperavitFontes[$nHash] = $oDadosSuperavitFonte;
+        }else{
+          if($iValorNumerico == 2){
+            $aDadosSuperavitFontes[$nHash]->si215_vlsaldofonte += $oSaldoFontes->saldoanterior;
+          }else{
+            $aDadosSuperavitFontes[$nHash]->si215_vlsaldofonte += $nSaldoFinal;
+          }
+        }
+      }
+      //echo "<pre>";print_r($aDadosSuperavitFontes);exit;
+
+      $nVltotalsupdef =0;
       foreach($aDadosSuperavitFontes as $oDadosBP71) {
-        if (isset($oDadosBP71->codigo)) {
+        if($oDadosBP71->si215_vlsaldofonte != 0){
+
           $clbpdcasp71 = new cl_bpdcasp712017();
           $clbpdcasp71->si215_ano = $iAnoUsu;
           $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
           $clbpdcasp71->si215_institu = db_getsession("DB_instit");
           $clbpdcasp71->si215_tiporegistro = 71;
           $clbpdcasp71->si215_exercicio = $iValorNumerico;
-          $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->codigo;
-          $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->$sChave;
+          $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
+          $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte;
 
           $clbpdcasp71->incluir(null);
           if ($clbpdcasp71->erro_status == 0) {
             throw new Exception($clbpdcasp71->erro_msg);
           }
+          $nVltotalsupdef += $oDadosBP71->si215_vlsaldofonte;
+
         }
+      }
+      /**
+       * o registro 70 é o total do registro 71
+       */
+      $clbpdcasp70  = new cl_bpdcasp702017();
+
+      $clbpdcasp70->si214_ano           = $iAnoUsu;
+      $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
+      $clbpdcasp70->si214_institu       = db_getsession("DB_instit");
+      $clbpdcasp70->si214_tiporegistro  = 70;
+      $clbpdcasp70->si214_exercicio     =  $iValorNumerico;
+      $clbpdcasp70->si214_vltotalsupdef = $nVltotalsupdef;
+      $clbpdcasp70->incluir(null);
+      if ($clbpdcasp70->erro_status == 0) {
+        throw new Exception($clbpdcasp70->erro_msg);
       }
     } // $rsResult71
 
