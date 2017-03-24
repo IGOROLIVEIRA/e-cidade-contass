@@ -718,7 +718,9 @@ switch($oParam->exec) {
           $oArquivo    = new $sNomeClasse;
           $oArquivo->setDataInicial($sDataInicial);
           $oArquivo->setDataFinal($sDataFinal);
-          $oArquivo->setTipoGeracao($oParam->tipoGeracao);
+          if($sArquivo != "IDE") {
+            $oArquivo->setTipoGeracao($oParam->tipoGeracao);
+          }
 
           $oArquivoCsv = new stdClass();
           try {
