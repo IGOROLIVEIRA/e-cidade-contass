@@ -295,7 +295,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $nValorResultadoExec = $nValorResultadoExec*-1;
 
       $clbpdcasp20->si209_vlpatriliquidoresultexercicio       = $nValorResultadoExec;
-      $clbpdcasp20->si209_vlpatriliquidresultacumexeranteri   = $nValorResultadoExecAnterior;//$oRetornoBP[45]->$sChave;
+      $clbpdcasp20->si209_vlpatriliquidresultacumexeranteri   = $nValorResultadoExecAnterior;
       
       $clbpdcasp20->si209_vlpatriliquidoacoescotas            = $oRetornoBP[46]->$sChave;
       $clbpdcasp20->si209_vltotalpassivo                      = $oRetornoBP[48]->$sChave;
@@ -397,27 +397,77 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
      * @see funcao getSuperavitDeficit em BalancoPatrimonialDCASP2015.model.php
      */
 
-    $aDadosSuperavitFontes = $oBalancoPatrimonial->getSuperavitDeficit();
+    
 
     foreach ($aExercicios as $iValorNumerico => $sChave) {
+        // ini_set('display_errors','On');
+        // error_reporting(E_ALL);
+        $aDadosSuperavitFontes = array();
+        /*
+         * Busca tas as fontes de recurso.
+         * */
+        
+        $sSqlfr = " select DISTINCT o15_codigo, o15_codtri FROM orctiporec where o15_codtri is not null";
+        
+        $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
+        
+        echo pg_last_error();
+        /*
+         * Constante da contacorrente que indica o superavit financeiro
+         *
+         */
+        $nContaCorrente = 103;
+        
+        for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
+          
+          $clbpdcasp71 = new cl_bpdcasp712017();
+          $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
+          $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
+          //db_criatabela($rsSaldoFontes);
+          $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
+          //echo "<pre>";print_r($oSaldoFontes);
+          $nHash = $objContasfr->o15_codtri;
+          $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
+          if(!isset($aDadosSuperavitFontes[$nHash])){
+            $oDadosSuperavitFonte = new stdClass();    
+            $oDadosSuperavitFonte->si215_exercicio = $iValorNumerico;
+            $oDadosSuperavitFonte->si215_codfontrecursos = $objContasfr->o15_codtri;            
+            if($iValorNumerico == 2){
+              $oDadosSuperavitFonte->si215_vlsaldofonte = $oSaldoFontes->saldoanterior;
+            }else{
+              $oDadosSuperavitFonte->si215_vlsaldofonte = $nSaldoFinal;
+            }
+            $aDadosSuperavitFontes[$nHash] = $oDadosSuperavitFonte;
+          }else{
+            if($iValorNumerico == 2){
+              $aDadosSuperavitFontes[$nHash]->si215_vlsaldofonte += $oSaldoFontes->saldoanterior;
+            }else{
+              $aDadosSuperavitFontes[$nHash]->si215_vlsaldofonte += $nSaldoFinal;
+            }
+          }
+        }
+       //echo "<pre>";print_r($aDadosSuperavitFontes);exit;
+       
       $nVltotalsupdef =0;
       foreach($aDadosSuperavitFontes as $oDadosBP71) {
-        if (isset($oDadosBP71->codigo)) {
-          $clbpdcasp71 = new cl_bpdcasp712017();
-          $clbpdcasp71->si215_ano = $iAnoUsu;
-          $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
-          $clbpdcasp71->si215_institu = $sListaInstituicoes;
-          $clbpdcasp71->si215_tiporegistro = 71;
-          $clbpdcasp71->si215_exercicio = $iValorNumerico;
-          $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->codigo;
-          $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->$sChave;
+        if($oDadosBP71->si215_vlsaldofonte != 0){
+          
+            $clbpdcasp71 = new cl_bpdcasp712017();
+            $clbpdcasp71->si215_ano = $iAnoUsu;
+            $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
+            $clbpdcasp71->si215_institu = db_getsession("DB_instit");
+            $clbpdcasp71->si215_tiporegistro = 71;
+            $clbpdcasp71->si215_exercicio = $iValorNumerico;
+            $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
+            $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte;
 
-          $clbpdcasp71->incluir(null);
-          if ($clbpdcasp71->erro_status == 0) {
-            throw new Exception($clbpdcasp71->erro_msg);
-          }
-          $nVltotalsupdef =  $nVltotalsupdef + $oDadosBP71->$sChave;
-        }
+            $clbpdcasp71->incluir(null);
+            if ($clbpdcasp71->erro_status == 0) {
+              throw new Exception($clbpdcasp71->erro_msg);
+            }
+            $nVltotalsupdef += $oDadosBP71->si215_vlsaldofonte;
+          
+        }        
       }
       /**
        * o registro 70 é o total do registro 71
@@ -426,7 +476,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clbpdcasp70->si214_ano           = $iAnoUsu;
       $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
-      $clbpdcasp70->si214_institu       = $sListaInstituicoes;
+      $clbpdcasp70->si214_institu       = db_getsession("DB_instit");
       $clbpdcasp70->si214_tiporegistro  = 70;
       $clbpdcasp70->si214_exercicio     =  $iValorNumerico;
       $clbpdcasp70->si214_vltotalsupdef = $nVltotalsupdef;
