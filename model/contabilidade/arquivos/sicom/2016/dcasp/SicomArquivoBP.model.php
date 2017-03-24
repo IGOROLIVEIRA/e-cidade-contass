@@ -80,6 +80,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
    */
   public function gerarDados()
   {
+    $iConsolidado = false;
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
@@ -91,7 +92,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $aInstituicoes = array_map(function ($oItem) {
         return $oItem->codigo;
       }, $aInstits);
-
+      $iConsolidado = true;
     } else {
       $aInstituicoes = array(db_getsession("DB_instit"));
     }
@@ -439,7 +440,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
           
           $clbpdcasp71 = new cl_bpdcasp712017();
           $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
-          $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente(false,$objContasfr->o15_codigo)) ;
+          $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($iConsolidado,$objContasfr->o15_codigo)) ;
           //db_criatabela($rsSaldoFontes);
           $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
           //echo "<pre>";print_r($oSaldoFontes);
