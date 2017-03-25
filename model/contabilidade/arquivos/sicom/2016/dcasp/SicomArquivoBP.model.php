@@ -425,7 +425,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
          * Busca tas as fontes de recurso.
          * */
         
-        $sSqlfr = " select DISTINCT o15_codigo, o15_codtri FROM orctiporec where o15_codtri is not null";
+        $sSqlfr = " select DISTINCT o15_codigo, o15_codtri FROM orctiporec where o15_codtri is not null
+        ";
         
         $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
         
@@ -441,6 +442,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
           $clbpdcasp71 = new cl_bpdcasp712017();
           $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
           $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($iConsolidado,$objContasfr->o15_codigo)) ;
+          //echo $clbpdcasp71->sql_query_saldoInicialContaCorrente($iConsolidado,$objContasfr->o15_codigo);
           //db_criatabela($rsSaldoFontes);
           $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
           //echo "<pre>";print_r($oSaldoFontes);
@@ -464,44 +466,44 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
             }
           }
         }
-       //echo "<pre>";print_r($aDadosSuperavitFontes);exit;
+        //echo "<pre>";print_r($aDadosSuperavitFontes);
        
-      $nVltotalsupdef =0;
-      foreach($aDadosSuperavitFontes as $oDadosBP71) {
-        if($oDadosBP71->si215_vlsaldofonte != 0){
-          
-            $clbpdcasp71 = new cl_bpdcasp712017();
-            $clbpdcasp71->si215_ano = $iAnoUsu;
-            $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
-            $clbpdcasp71->si215_institu = db_getsession("DB_instit");
-            $clbpdcasp71->si215_tiporegistro = 71;
-            $clbpdcasp71->si215_exercicio = $iValorNumerico;
-            $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
-            $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte > 0? $oDadosBP71->si215_vlsaldofonte*-1 : $oDadosBP71->si215_vlsaldofonte ;
+        $nVltotalsupdef =0;
+        foreach($aDadosSuperavitFontes as $oDadosBP71) {
+          if($oDadosBP71->si215_vlsaldofonte != 0){
+            
+              $clbpdcasp71 = new cl_bpdcasp712017();
+              $clbpdcasp71->si215_ano = $iAnoUsu;
+              $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
+              $clbpdcasp71->si215_institu = db_getsession("DB_instit");
+              $clbpdcasp71->si215_tiporegistro = 71;
+              $clbpdcasp71->si215_exercicio = $iValorNumerico;
+              $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
+              $clbpdcasp71->si215_vlsaldofonte =  $oDadosBP71->si215_vlsaldofonte * -1 ;
 
-            $clbpdcasp71->incluir(null);
-            if ($clbpdcasp71->erro_status == 0) {
-              throw new Exception($clbpdcasp71->erro_msg);
-            }
-            $nVltotalsupdef += $oDadosBP71->si215_vlsaldofonte > 0? $oDadosBP71->si215_vlsaldofonte*-1 : $oDadosBP71->si215_vlsaldofonte ;
-          
-        }        
-      }
-      /**
-       * o registro 70 é o total do registro 71
-       */
-      $clbpdcasp70  = new cl_bpdcasp702017();
+              $clbpdcasp71->incluir(null);
+              if ($clbpdcasp71->erro_status == 0) {
+                throw new Exception($clbpdcasp71->erro_msg);
+              }
+              $nVltotalsupdef += $oDadosBP71->si215_vlsaldofonte ;
+            
+          }        
+        }
+        /**
+         * o registro 70 é o total do registro 71
+         */
+        $clbpdcasp70  = new cl_bpdcasp702017();
 
-      $clbpdcasp70->si214_ano           = $iAnoUsu;
-      $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
-      $clbpdcasp70->si214_institu       = db_getsession("DB_instit");
-      $clbpdcasp70->si214_tiporegistro  = 70;
-      $clbpdcasp70->si214_exercicio     =  $iValorNumerico;
-      $clbpdcasp70->si214_vltotalsupdef = $nVltotalsupdef;
-      $clbpdcasp70->incluir(null);
-      if ($clbpdcasp70->erro_status == 0) {
-        throw new Exception($clbpdcasp70->erro_msg);
-      }
+        $clbpdcasp70->si214_ano           = $iAnoUsu;
+        $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
+        $clbpdcasp70->si214_institu       = db_getsession("DB_instit");
+        $clbpdcasp70->si214_tiporegistro  = 70;
+        $clbpdcasp70->si214_exercicio     =  $iValorNumerico;
+        $clbpdcasp70->si214_vltotalsupdef = $nVltotalsupdef  * -1;
+        $clbpdcasp70->incluir(null);
+        if ($clbpdcasp70->erro_status == 0) {
+          throw new Exception($clbpdcasp70->erro_msg);
+        }
     } // $rsResult71
 
 

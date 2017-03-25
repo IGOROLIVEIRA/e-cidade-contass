@@ -411,25 +411,26 @@ class cl_bpdcasp712017 {
   function sql_query_saldoInicialContaCorrente ($iInstit=false,$iFonte=null){ 
 
       $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
-                             where substr(c60_estrut,1,5)='82111' and c60_anousu=" . db_getsession("DB_anousu");
+                             where substr(c60_estrut,1,5)='82111' and c60_anousu=" . db_getsession("DB_anousu") ." and c61_anousu=" . db_getsession("DB_anousu");
 
       if($iInstit==false){
        $sSqlReduzSuperavit = $sSqlReduzSuperavit." and c61_instit in (".db_getsession('DB_instit').")";
       }
       
-      $sSqlSaldos = " SELECT saldoanteriores.saldoanterior , debitos.debito , creditos.credito
+      $sSqlSaldos = " SELECT saldoanterior , debito , credito
                                         FROM
-                                          (SELECT SUM(saldoanterior) AS saldoanterior FROM
+                                          (select coalesce((SELECT SUM(saldoanterior) AS saldoanterior FROM
                                                     (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
                                                      FROM contacorrente
                                                      INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                      INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                     AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
+                                                     AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = c19_conplanoreduzanousu
                                                      WHERE c19_reduz IN ( $sSqlReduzSuperavit )
+                                                       AND c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                        AND c17_sequencial = 103
-                                                       AND c19_orctiporec = {$iFonte}) as x) AS saldoanteriores,
+                                                       AND c19_orctiporec = {$iFonte}) as x),0) saldoanterior) AS saldoanteriores,
 
-                                            (SELECT sum(c69_valor) as credito
+                                            (select coalesce((SELECT sum(c69_valor) as credito
                                              FROM conlancamval
                                              INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
                                              AND conlancam.c70_anousu = conlancamval.c69_anousu
@@ -437,16 +438,17 @@ class cl_bpdcasp712017 {
                                              INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
                                              INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
                                              INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                             INNER JOIN contacorrente ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                              WHERE c28_tipo = 'C'
-                                               AND DATE_PART('MONTH',c69_data) <= 12
                                                AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
-                                               AND c19_contacorrente = 103
+                                               AND c17_sequencial = 103
                                                AND c19_reduz IN (  $sSqlReduzSuperavit  )
+                                               AND c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                AND c19_orctiporec = {$iFonte}
                                                AND conhistdoc.c53_tipo not in (1000) 
-                                             GROUP BY c28_tipo) AS creditos,
+                                             GROUP BY c28_tipo),0) as credito) AS creditos,
 
-                                            (SELECT sum(c69_valor) as debito
+                                            (select coalesce((SELECT sum(c69_valor) as debito
                                              FROM conlancamval
                                              INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
                                              AND conlancam.c70_anousu = conlancamval.c69_anousu
@@ -454,14 +456,15 @@ class cl_bpdcasp712017 {
                                              INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
                                              INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
                                              INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                             INNER JOIN contacorrente  ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                              WHERE c28_tipo = 'D'
-                                               AND DATE_PART('MONTH',c69_data) <= 12
                                                AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
-                                               AND c19_contacorrente = 103
+                                               AND c17_sequencial = 103
                                                AND c19_reduz IN ( $sSqlReduzSuperavit )
+                                               AND c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                AND c19_orctiporec = {$iFonte} 
                                                AND conhistdoc.c53_tipo not in (1000)                                               
-                                             GROUP BY c28_tipo) AS debitos";          
+                                             GROUP BY c28_tipo),0) as debito) AS debitos";          
           return $sSqlSaldos;
       
   }
