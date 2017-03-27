@@ -310,7 +310,8 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 		                                             pc11_pgto,
 		                                             pc11_resum,
 		                                             pc11_just,
-		                                             pc11_liberado",
+		                                             pc11_liberado,
+		                                             pc11_servicoquantidade",
 		                                            "pc11_seq",
 		                                            " pc11_numero=".$importar." {$sWhereItens}");
 	  //die($sSqlItem);
@@ -348,14 +349,15 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 
 			  $iCodigoSolicitemImportado = $codigo;
 
-				$clsolicitem->pc11_numero = $pc10_numero;
-				$clsolicitem->pc11_seq = $sequencia;
-				$clsolicitem->pc11_quant = $pc11_quant;
-				$clsolicitem->pc11_vlrun = $pc11_vlrun;
-				$clsolicitem->pc11_prazo = addslashes(stripslashes(chop($pc11_prazo)));
-				$clsolicitem->pc11_pgto  = addslashes(stripslashes(chop($pc11_pgto)));
-				$clsolicitem->pc11_resum = addslashes(stripslashes(chop($pc11_resum)));
-				$clsolicitem->pc11_just  = addslashes(stripslashes(chop($pc11_just)));
+				$clsolicitem->pc11_numero             = $pc10_numero;
+				$clsolicitem->pc11_seq                = $sequencia;
+				$clsolicitem->pc11_quant              = $pc11_quant;
+				$clsolicitem->pc11_vlrun              = $pc11_vlrun;
+				$clsolicitem->pc11_prazo              = addslashes(stripslashes(chop($pc11_prazo)));
+				$clsolicitem->pc11_pgto               = addslashes(stripslashes(chop($pc11_pgto)));
+				$clsolicitem->pc11_resum              = addslashes(stripslashes(chop($pc11_resum)));
+				$clsolicitem->pc11_just               = addslashes(stripslashes(chop($pc11_just)));
+				$clsolicitem->pc11_servicoquantidade  = $pc11_servicoquantidade;
 
         if (isset($param) && trim($param) != ""){
 				  $liberado = "true";
