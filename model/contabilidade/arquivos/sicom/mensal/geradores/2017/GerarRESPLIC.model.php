@@ -47,7 +47,7 @@ class GerarRESPLIC extends GerarAM
         
         $aCSVRESPLIC10['si55_tiporegistro']           = $this->padLeftZero($aRESPLIC10['si55_tiporegistro'], 2);
         $aCSVRESPLIC10['si55_codorgao']               = $this->padLeftZero($aRESPLIC10['si55_codorgao'], 2);
-        $aCSVRESPLIC10['si55_codunidadesub']          = substr($aRESPLIC10['si55_codunidadesub'], 0, 5);
+        $aCSVRESPLIC10['si55_codunidadesub']          =   substr($aRESPLIC10['si55_codunidadesub'], 0, 8);
         $aCSVRESPLIC10['si55_exerciciolicitacao']     = $this->padLeftZero($aRESPLIC10['si55_exerciciolicitacao'], 4);
         $aCSVRESPLIC10['si55_nroprocessolicitatorio'] = substr($aRESPLIC10['si55_nroprocessolicitatorio'], 0, 12);
         $aCSVRESPLIC10['si55_tiporesp']               = substr($aRESPLIC10['si55_tiporesp'], 0, 1);
@@ -68,7 +68,7 @@ class GerarRESPLIC extends GerarAM
         
         $aCSVRESPLIC20['si56_tiporegistro']           = $this->padLeftZero($aRESPLIC20['si56_tiporegistro'], 2);
         $aCSVRESPLIC20['si56_codorgao']               = $this->padLeftZero($aRESPLIC20['si56_codorgao'], 2);
-        $aCSVRESPLIC20['si56_codunidadesub']          = substr($aRESPLIC20['si56_codunidadesub'], 0, 5);
+        $aCSVRESPLIC20['si56_codunidadesub']          = substr($aRESPLIC20['si56_codunidadesub'], 0, 8);
         $aCSVRESPLIC20['si56_exerciciolicitacao']     = $this->padLeftZero($aRESPLIC20['si56_exerciciolicitacao'], 4);
         $aCSVRESPLIC20['si56_nroprocessolicitatorio'] = substr($aRESPLIC20['si56_nroprocessolicitatorio'], 0, 12);
         $aCSVRESPLIC20['si56_codtipocomissao']        = $this->padLeftZero($aRESPLIC20['si56_codtipocomissao'], 1);
