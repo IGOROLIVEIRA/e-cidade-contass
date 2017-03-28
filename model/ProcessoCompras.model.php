@@ -1069,6 +1069,14 @@ class ProcessoCompras {
       $oOrcamento->remover();
     }
 
+    $oDaoAdesao       = db_utils::getDao("adesaoregprecos");
+    $sSqlAdesao       = $oDaoAdesao->sql_query_file('','*','',"si06_processocompra = {$this->getCodigo()}");
+    $oDaoAdesao->sql_record($sSqlAdesao);
+
+    if($oDaoAdesao->numrows > 0){
+        throw new DBException("Processo de compras em Adesão de registro de preço");
+    }
+
     /**
      * Deletamos o todos os vinculos do Processo de compras com as autorizacoes Geradas
      */
@@ -1080,7 +1088,7 @@ class ProcessoCompras {
     $sWhereEmpautitem .= "                   )";
     $oDaoEmpautitemPcProc->excluir(null, $sWhereEmpautitem);
 
-    $oDaoPcProcItem = new cl_pcprocitem();
+    $oDaoPcProcItem    = new cl_pcprocitem();
     $oDaoPcProcItem->excluir(null, "pc81_codproc = {$this->getCodigo()}");
 
     if ($oDaoPcProcItem->erro_status == "0") {
