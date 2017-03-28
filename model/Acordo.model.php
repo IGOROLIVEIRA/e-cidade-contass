@@ -2206,7 +2206,7 @@ class Acordo
 
             for ($iEmpenho = 0; $iEmpenho < $oDaoAcordo->numrows; $iEmpenho++) {
 
-                $iNumeroEmpenho = db_utils::fieldsMemory($rsEmpenhosVinculados, $iEmpenho)->e61_numemp;
+                $iNumeroEmpenho = db_utils::fieldsMemory($rsEmpenhosVinculados, $iEmpenho)->e60_numemp;
                 $this->aEmpenhos[] = new EmpenhoFinanceiro($iNumeroEmpenho);
             }
         }

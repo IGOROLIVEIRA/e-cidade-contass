@@ -507,7 +507,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             $aDadosAgrupados12 = array();
 
-            if ($oDados10->ac16_acordoclassificacao != 4 || $oDados10->ac16_acordoclassificacao != 5) {
+            if ($clcontratos10->si83_naturezaobjeto != 4 || $clcontratos10->si83_naturezaobjeto != 5) {
 
                 $oDadosBusca = $oDados10->ac16_origem == 2 ? $oAcordo->getLicitacoes() : $oAcordo->getEmpenhosAcordo();
 
