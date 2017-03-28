@@ -93,19 +93,20 @@ $nTotalItens = 0;
       $oDadosDaLinha = new stdClass();
       $oDadosDaLinha->item = $iCont + 1;
       $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
-      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 2, ",", ".");
+      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia,2, ",", ".");
       $oDadosDaLinha->quantidade = $oResult->pc11_quant;
       $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-      $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+      $oDadosDaLinha->total = number_format($lTotal, 1, ",", ".");
+
 
       echo "$oDadosDaLinha->item;";
       echo "$oDadosDaLinha->descricao;";
-      echo "R$ $oDadosDaLinha->valorUnitario";
+      echo "R$ $oDadosDaLinha->valorUnitario;";
       echo "$oDadosDaLinha->quantidade;";
       echo "$oDadosDaLinha->unidadeDeMedida;";
       echo "R$ $oDadosDaLinha->total;\n";
 
     }
 
-    echo "VALOR TOTAL DOS ITENS;";
-    echo "R$" . number_format($nTotalItens, 2, ",", ".").";";
+//    echo "VALOR TOTAL DOS ITENS;";
+//    echo "R$" . number_format($nTotalItens, 2, ",", ".").";";
