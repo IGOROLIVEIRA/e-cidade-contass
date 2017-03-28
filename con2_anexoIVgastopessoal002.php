@@ -339,7 +339,11 @@ ob_start();
                 foreach ($aDespesas as $oDespesa) {
 
                     if ($oDespesa->o58_elemento == '3317170000000') {
-                        $oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
+                        /**
+                         * Solicitado por Wesley@contass em 28/03/2017
+                         */
+                        //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
+                        $oDespesa->liquidado = $oDespesa->liquidado;
                     }
                     $fTotalLiquidado += $oDespesa->liquidado;
                     ?>
