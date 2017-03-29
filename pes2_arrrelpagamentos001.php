@@ -51,6 +51,11 @@ function js_emite(){
   jan = window.open('pes2_arrrelpagamentos002.php?matricula='+document.form1.matricula.value+'&lotacao='+document.form1.lotacao.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
+function js_emitecsv(){
+  var matriculas = document.form1.matricula.value == "" ? null : document.form1.matricula.value;
+  jan = window.open('pes2_arrrelpagamentos003.php?matricula='+matriculas+'&lotacao='+document.form1.lotacao.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+  jan.moveTo(0,0);
+}
 </script>  
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
@@ -96,6 +101,7 @@ function js_emite(){
       <tr>
         <td colspan="2" align = "center"> 
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
+          <input  name="emite2" id="emite2" type="button" value="Imprimir CSV" onclick="js_emitecsv();" >
         </td>
       </tr>
 
