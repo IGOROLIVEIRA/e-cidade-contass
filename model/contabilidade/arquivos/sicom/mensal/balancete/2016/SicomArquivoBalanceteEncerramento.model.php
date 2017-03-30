@@ -533,7 +533,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                  FROM contacorrente
                                                  INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                  INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
+                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                  WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ") " . $sWhere . "
                                                    AND c17_sequencial = {$nContaCorrente}
                                                    AND c19_orcdotacao = {$oReg11->c73_coddot}) AS saldoimplantado,
@@ -786,7 +786,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                  FROM contacorrente
                                                  INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                  INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
+                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                  WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                    AND c17_sequencial = {$nContaCorrente}
                                                    AND c19_estrutural = '{$objContas->c60_estrut}') AS saldoimplantado,
@@ -1026,7 +1026,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                  FROM contacorrente
                                                  INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                  INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
+                                                 AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                  WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                    AND c17_sequencial = {$nContaCorrente}
                                                    AND c19_orcdotacao = {$oReg13->o58_coddot}) AS saldoimplantado,
@@ -1252,7 +1252,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                              FROM contacorrente
                                              INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                              INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                             AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
+                                             AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                              WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                AND c17_sequencial = {$nContaCorrente}
                                                AND c19_numemp = {$oReg14->numemp}) AS saldoimplantado,
@@ -2101,7 +2101,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                      FROM contacorrente
                                                      INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                      INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
-                                                     AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . "
+                                                     AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                      WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                        AND c17_sequencial = {$nContaCorrente}
                                                        AND c19_orctiporec = {$objContasfr->o15_codigo}) as x) AS saldoimplantado,
