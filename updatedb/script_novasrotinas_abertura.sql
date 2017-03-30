@@ -1,20 +1,20 @@
 begin; 
 -------1 Criar os documentos e seus estornos e vinculoar um ao outro
-	insert into conhistdoc
-		select 2023,'ABERTURA POR REGRAS',2000;
-	insert into conhistdoc
-		select 2024,'ESTORNO ABERTURA POR REGRAS',2001;
+insert into conhistdoc
+select 2023,'ABERTURA POR REGRAS',2000;
+insert into conhistdoc
+select 2024,'ESTORNO ABERTURA POR REGRAS',2001;
 
-	select setval('contabilidade.vinculoeventoscontabeis_c115_sequencial_seq', (select max(c115_sequencial) from vinculoeventoscontabeis));
-	insert into vinculoeventoscontabeis 
-		select nextval('contabilidade.vinculoeventoscontabeis_c115_sequencial_seq') ,2023,2024;
+select setval('contabilidade.vinculoeventoscontabeis_c115_sequencial_seq', (select max(c115_sequencial) from vinculoeventoscontabeis));
+insert into vinculoeventoscontabeis
+select nextval('contabilidade.vinculoeventoscontabeis_c115_sequencial_seq') ,2023,2024;
 ---------2 Cria a transacao de cada documento
-		insert into contrans
-			select nextval('contabilidade.contrans_c45_seqtrans_seq'), 2017, 2023,1;
-		insert into contranslan
-			values(nextval('contabilidade.contranslan_c46_seqtranslan_seq'),
-		(select c45_seqtrans from contrans where c45_coddoc = 2023 and c45_anousu = 2017 limit 1),
-		2001,'PRIMEIRO LANCAMENTO',0,false,0,'PRIMEIRO LANCAMENTO',1);
+insert into contrans
+select nextval('contabilidade.contrans_c45_seqtrans_seq'), 2017, 2023,1;
+insert into contranslan
+values(nextval('contabilidade.contranslan_c46_seqtranslan_seq'),
+(select c45_seqtrans from contrans where c45_coddoc = 2023 and c45_anousu = 2017 limit 1),
+2001,'PRIMEIRO LANCAMENTO',0,false,0,'PRIMEIRO LANCAMENTO',1);
 commit;
 
 BEGIN;
