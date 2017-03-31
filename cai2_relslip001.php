@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -45,6 +45,7 @@ $clrotulo->label('c60_descr');
 $clrotulo->label("k17_codigo");
 $clrotulo->label("c50_descr");
 $clrotulo->label("k17_hist");
+$clrotulo->label("c61_reduz");
 
 
 $db_opcao = 1;
@@ -62,18 +63,18 @@ function js_emite(){
   var vir         = "";
   var selinstit   = document.form1.db_selinstit.value;
   var sel_instit  = new Number(selinstit);
-  
+
   if(sel_instit == 0){
     alert('Você não escolheu nenhuma Instituição. Verifique!');
     return false;
   }
-  
+
   for(y=0;y<var_obj;y++){
     var_if = parseInt(document.getElementById('cgm').options[y].value)
     cods += vir + var_if;
     vir = ",";
   }
-  
+
   qry = 'codigos='+cods;
   qry+= '&situac='+document.form1.situacao.value;
   qry+= '&data='+document.form1.data_ano.value+'-'+document.form1.data_mes.value+'-'+document.form1.data_dia.value;
@@ -85,11 +86,12 @@ function js_emite(){
   qry+= '&hist='+document.form1.k17_hist.value;
   qry+= '&k145_numeroprocesso='+document.form1.k145_numeroprocesso.value;
   qry+= '&db_selinstit='+selinstit;
+  qry+= '&codconta='+document.form1.c61_reduz.value;
   jan = window.open('cai2_relslip002.php?'+qry,'',
                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -108,11 +110,11 @@ function js_emite(){
       <tr>
 	<td nowrap title="<?=@$Tk17_codigo?>" align='left'>
 	   <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",$db_opcao);  ?>
-	 </td><td>  
+	 </td><td>
 	   <? db_input('k17_codigo',16,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false);'")  ?>
 		 </td><td>
            <? db_ancora("<b>até</b>","js_pesquisak17_codigo02(true);",$db_opcao);  ?>
-			</td><td>		 
+			</td><td>
 	   <? db_input('k17_codigo',16,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo02(false);'","k17_codigo02")?>
 	</td>
       </tr>
@@ -133,7 +135,20 @@ function js_emite(){
                   db_input('c50_descr',30,$Ic50_descr,true,'text',3);
             ?>
     </td>
-      <tr>
+    </tr>
+
+    <tr>
+      <td align="left">
+        <?php db_ancora('Codigo da Conta:',"js_pesquisac61_reduz(true);",1); ?>
+      </td>
+      <td colspan="4">
+        <?php
+          db_input('c61_reduz',10,$Ic61_reduz,true,'text',3,'');
+          db_input('c60_descr',30,$Ic60_descr,true,'text',3,'');
+        ?>
+      </td>
+    </tr>
+
       <tr>
         <td><strong>Recurso:</strong></td>
 				<td colspan='5'>
@@ -147,7 +162,7 @@ function js_emite(){
 
       <tr>
 	<td align=left><strong>Situacao :&nbsp;&nbsp;</strong></td><td colspan=3>
-	  <? 
+	  <?
 	  $tipo_ordem = array("A"=>"Todas","1"=>"Não Autenticado","2"=>"Autenticado","3"=>"Estornado","4"=>"Cancelado");
 	  db_select("situacao",$tipo_ordem,true,2); ?>
 		<script>
@@ -155,19 +170,19 @@ function js_emite(){
 		</script>
         </td>
       </tr>
-      
+
       <tr>
         <td nowrap="nowrap">
           <strong>Processo Administrativo:</strong>
         </td>
-        
+
         <td colspan="3">
           <?php db_input('k145_numeroprocesso',10, null,true,'text',1, null,null,null,null,15);?>
         </td>
-      
+
       </tr>
-      
-      
+
+
       <tr>
         <td></td>
         <td colspan=3>
@@ -176,7 +191,7 @@ function js_emite(){
          ?>
         </td>
       </tr>
-      
+
 			</table></fieldset></tr></td>
       <tr>
         <td colspan="6">
@@ -242,9 +257,9 @@ function js_pesquisak17_codigo(mostra){
 		?>
 		sFuncao += 'modulo=pessoal&';
 		<?php
-	} 
+	}
 	?>
-	
+
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_slip',sFuncao+'funcao_js=parent.js_mostraslip1|k17_codigo','Pesquisa',true);
   }else{
@@ -253,13 +268,13 @@ function js_pesquisak17_codigo(mostra){
        js_OpenJanelaIframe('top.corpo','db_iframe_slip',sFuncao+'pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip','Pesquisa',false);
     }else{
         document.form1.k17_codigo.value='';
-    }   
+    }
   }
 }
 function js_mostraslip(chave,erro){
-  if(erro==true){ 
-    document.form1.k17_codigo.focus(); 
-    document.form1.k17_codigo.value = ''; 
+  if(erro==true){
+    document.form1.k17_codigo.focus();
+    document.form1.k17_codigo.value = '';
   }
 }
 function js_mostraslip1(chave1,chave2){
@@ -276,7 +291,7 @@ function js_pesquisak17_codigo02(mostra){
 		?>
 		sFuncao += 'modulo=pessoal&';
 		<?php
-	} 
+	}
 	?>
 
   if(mostra==true){
@@ -287,13 +302,13 @@ function js_pesquisak17_codigo02(mostra){
        js_OpenJanelaIframe('top.corpo','db_iframe_slip',sFuncao+'pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip2','Pesquisa',false);
     }else{
         document.form1.k17_codigo02.value='';
-    }   
+    }
   }
 }
 function js_mostraslip2(chave,erro){
-  if(erro==true){ 
-    document.form1.k17_codigo02.focus(); 
-    document.form1.k17_codigo02.value = ''; 
+  if(erro==true){
+    document.form1.k17_codigo02.focus();
+    document.form1.k17_codigo02.value = '';
   }
 }
 function js_mostraslip12(chave1,chave2){
@@ -319,4 +334,37 @@ function js_mostrahist1(chave1,chave2){
   document.form1.c50_descr.value = chave2;
   db_iframe.hide();
 }
+
+
+/*=============================================
+=            Busca Código da Conta            =
+=============================================*/
+
+function js_pesquisac61_reduz(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_conplano.php?funcao_js=parent.js_mostrasaltes1|c61_reduz|c60_descr','Pesquisa',true);
+  }else{
+     if(document.form1.c61_reduz.value != ''){
+       js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_conplano.php?pesquisa_chave='+document.form1.c61_reduz.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
+     }else{
+       document.form1.c61_reduz.value = '';
+     }
+  }
+}
+function js_mostrasaltes(chave,erro){
+  document.form1.c60_descr.value = chave;
+  if(erro==true){
+    document.form1.c61_reduz.focus();
+    document.form1.c61_reduz = '';
+  }
+}
+function js_mostrasaltes1(chave1,chave2){
+  document.form1.c61_reduz.value = chave1;
+  document.form1.c60_descr.value = chave2;
+  db_iframe_saltes.hide();
+}
+
+/*=====  End of Busca Código da Conta  ======*/
+
 </script>
+

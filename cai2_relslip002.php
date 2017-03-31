@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -53,11 +53,11 @@ $iAnoUsu   = db_getsession("DB_anousu");
 $sWhere = "";
 $where1 = "";
 $sAnd   = "";
-$info   = "";				    
+$info   = "";
 
 if (isset($db_selinstit) && $db_selinstit != "") {
   $sWhere .= "{$sAnd} k17_instit in ({$sDbInstit}) ";
-  $sAnd   = " and ";  
+  $sAnd   = " and ";
 }
 
 if (($data != "--") && ($data1 != "--")) {
@@ -71,6 +71,15 @@ if (($data != "--") && ($data1 != "--")) {
    $sAnd   = " and ";
 }
 
+// Filtro em conta espe
+$codconta = isset($codconta) ? intval($codconta) : '';
+
+if (!empty($codconta)) {
+
+  $sWhere .= " AND ( (k17_debito = {$codconta}) OR (k17_credito = {$codconta}) ) ";
+
+}
+
 if ($situac=="A"){
    $where1 = "";
 	 $info   = "SITUAÇÂO: Todas ";
@@ -79,16 +88,16 @@ if ($situac=="A"){
 	 switch ($situac){
       case 1:
 			   $tipo = " Não Autenticadas";
-			break;	 
+			break;
       case 2:
 			   $tipo = " Autenticadas";
-			break;	 
+			break;
       case 3:
 			   $tipo = " Revogadas";
-			break;	 
+			break;
       case 4:
 			   $tipo = " Canceladas";
-			break;	 
+			break;
 	 }
 	 $info = "SITUAÇÂO: $tipo";
 }
@@ -144,7 +153,7 @@ if ($iInstit > 0) {
 	  } else {
 	       $sDescrInst .= $sVirg."($oDescrInst->codigo)".$oDescrInst->nomeinst;
 	  }
-	
+
 	  $sVirg = ', ';
 	}
 }
@@ -157,7 +166,7 @@ if ($bFlagAbrev == false){
 
 $sCampoProcesso = '';
 if  ( isset($k145_numeroprocesso) && !empty($k145_numeroprocesso)) {
-  
+
   $sCampoProcesso = ' , k145_numeroprocesso as sprocesso ';
   $sWhere .= " and k145_numeroprocesso = '{$k145_numeroprocesso}'";
 }
@@ -188,10 +197,10 @@ $sql = "         select slip.k17_codigo {$sCampoProcesso},
 						     z01_nome
                       from slip
 	                     inner join conplanoreduz r1 on r1.c61_reduz = k17_debito and r1.c61_anousu=".$iAnoUsu."
-	                     inner join conplano c1 on c1.c60_codcon = r1.c61_codcon and c1.c60_anousu = r1.c61_anousu 
+	                     inner join conplano c1 on c1.c60_codcon = r1.c61_codcon and c1.c60_anousu = r1.c61_anousu
 
 	                     inner join conplanoreduz r2 on r2.c61_reduz = k17_credito and r2.c61_anousu=".$iAnoUsu."
-		             inner join conplano c2 on c2.c60_codcon = r2.c61_codcon and c2.c60_anousu = r2.c61_anousu 
+		             inner join conplano c2 on c2.c60_codcon = r2.c61_codcon and c2.c60_anousu = r2.c61_anousu
 
 		             left  join slipnum on slipnum.k17_codigo = slip.k17_codigo
 		             left  join cgm on cgm.z01_numcgm = slipnum.k17_numcgm
@@ -208,9 +217,9 @@ if (pg_numrows($result) == 0){
 
 }
 
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',8);
 $troca = 1;
@@ -221,29 +230,29 @@ $total_valor = 0;
 
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
-   
+
    if ( isset($sprocesso) && !empty($sprocesso)) {
-     
-     $head7 = "PROCESSO ADMINISTRATIVO: {$sprocesso}";   
+
+     $head7 = "PROCESSO ADMINISTRATIVO: {$sprocesso}";
    }
-   
+
    if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage("L");
       $pdf->setfont('arial','b',8);
       $pdf->cell(20,$alt+4,$RLk17_codigo,1,0,"C",1);
 			$y  = $pdf->getY();
-      $pdf->cell(30,$alt,"Datas",1,1,"C",1); 
+      $pdf->cell(30,$alt,"Datas",1,1,"C",1);
 			$pdf->setx(30);
-      $pdf->cell(15,$alt,'Emissão',1,0,"C",1); 
-      $pdf->cell(15,$alt,'Autentic',1,0,"R",1); 
-      $pdf->setxy(60,$y);			
-      $pdf->cell(15,$alt+4,"C. Débito",1,0,"C",1); 
-      $pdf->cell(65,$alt+4,$RLc60_descr,1,0,"C",1); 
-      $pdf->cell(15,$alt+4,"C. Crédito",1,0,"C",1); 
-      $pdf->cell(65,$alt+4,$RLc60_descr,1,0,"C",1); 
-      $pdf->cell(40,$alt+4,"Situação",1,0,"C",1); 
-      $pdf->cell(30,$alt+4,$RLk17_valor,1,1,"C",1); 
-      $pdf->cell(65,$alt,$RLz01_nome,1,0,"C",1); 
+      $pdf->cell(15,$alt,'Emissão',1,0,"C",1);
+      $pdf->cell(15,$alt,'Autentic',1,0,"R",1);
+      $pdf->setxy(60,$y);
+      $pdf->cell(15,$alt+4,"C. Débito",1,0,"C",1);
+      $pdf->cell(65,$alt+4,$RLc60_descr,1,0,"C",1);
+      $pdf->cell(15,$alt+4,"C. Crédito",1,0,"C",1);
+      $pdf->cell(65,$alt+4,$RLc60_descr,1,0,"C",1);
+      $pdf->cell(40,$alt+4,"Situação",1,0,"C",1);
+      $pdf->cell(30,$alt+4,$RLk17_valor,1,1,"C",1);
+      $pdf->cell(65,$alt,$RLz01_nome,1,0,"C",1);
       $pdf->cell(215,$alt,$RLk17_texto,1,1,"C",1);
 
       $troca = 0;
@@ -256,16 +265,16 @@ for($x = 0; $x < pg_numrows($result);$x++){
 
    $pdf->setfont('arial','',7);
    $pdf->cell(20,$alt,$k17_codigo,0,0,"C",$prenc);
-   $pdf->cell(15,$alt,db_formatar($k17_data,'d'),0,0,"C",$prenc); 
-   $pdf->cell(15,$alt,db_formatar($k17_dtaut,'d'),0,0,"C",$prenc); 
-   $pdf->cell(15,$alt,$k17_debito,0,0,"C",$prenc); 
-   $pdf->cell(65,$alt,substr($debito_descr,0,44),0,0,"L",$prenc); 
-   $pdf->cell(15,$alt,$k17_credito,0,0,"C",$prenc); 
-   $pdf->cell(65,$alt,substr($credito_descr,0,44),0,0,"L",$prenc); 
-   $pdf->cell(40,$alt,$k17_situacao,0,0,"C",$prenc); 
-   $pdf->cell(30,$alt,db_formatar($k17_valor,'f'),0,1,"R",$prenc); 
-   $pdf->cell(65,$alt,substr($z01_nome,0,35),0,0,"L",$prenc); 
-   $pdf->multicell(200,$alt,$k17_texto,0,"L",$prenc); 
+   $pdf->cell(15,$alt,db_formatar($k17_data,'d'),0,0,"C",$prenc);
+   $pdf->cell(15,$alt,db_formatar($k17_dtaut,'d'),0,0,"C",$prenc);
+   $pdf->cell(15,$alt,$k17_debito,0,0,"C",$prenc);
+   $pdf->cell(65,$alt,substr($debito_descr,0,44),0,0,"L",$prenc);
+   $pdf->cell(15,$alt,$k17_credito,0,0,"C",$prenc);
+   $pdf->cell(65,$alt,substr($credito_descr,0,44),0,0,"L",$prenc);
+   $pdf->cell(40,$alt,$k17_situacao,0,0,"C",$prenc);
+   $pdf->cell(30,$alt,db_formatar($k17_valor,'f'),0,1,"R",$prenc);
+   $pdf->cell(65,$alt,substr($z01_nome,0,35),0,0,"L",$prenc);
+   $pdf->multicell(200,$alt,$k17_texto,0,"L",$prenc);
    $total++;
    $total_valor += $k17_valor;
 
