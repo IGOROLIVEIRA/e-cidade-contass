@@ -197,12 +197,12 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
       //$sSqlitem="select si43_coditem,si43_unidademedida from item102017  where si43_coditem=".$oDados10->coditem." and si43_unidademedida='{$oDados10->unidademedida}'";
       $sSqlitem = "select si43_coditem,si43_unidademedida from item102017  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $sSqlitem .= " union
-    	select si43_coditem,si43_unidademedida from item102016  where si43_instit = ".db_getsession('DB_instit')." si43_coditem=" . $oDados10->coditem;
+    	select si43_coditem,si43_unidademedida from item102016  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem;
       $sSqlitem .= " union
-    	select si43_coditem,si43_unidademedida from item102015  where si43_instit = ".db_getsession('DB_instit')." si43_coditem=" . $oDados10->coditem;
+    	select si43_coditem,si43_unidademedida from item102015  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem;
       $sSqlitem .= " union
-    	select si43_coditem,si43_unidademedida from item102014  where si43_instit = ".db_getsession('DB_instit')." si43_coditem=" . $oDados10->coditem;
-      $rsResultitem = db_query($sSqlitem);//db_criatabela($rsResultitem);echo $sSqlitem;
+    	select si43_coditem,si43_unidademedida from item102014  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem;
+      $rsResultitem = db_query($sSqlitem);db_criatabela($rsResultitem);echo $sSqlitem;exit;
       /**
        * verifica se já nao existe o registro  na base de dados do sicom
        */
