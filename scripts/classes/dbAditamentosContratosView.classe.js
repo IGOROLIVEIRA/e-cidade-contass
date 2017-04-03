@@ -1398,6 +1398,16 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                 }
             }
 
+            /**
+             * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
+             */
+             if (oItem.servico && oItem.controlaquantidade == "f") {
+                aLinha[2] = js_formatar(1, 'f', 2);
+                oInputQuantidade.setReadOnly(true);
+                oInputQuantidade.setValue( js_formatar(1, "f", 3));
+                aLinha[4] = oInputQuantidade.toInnerHtml();
+             }
+
 
             me.oGridItens.addRow(aLinha, false, me.lBloqueiaItem, (me.lBloqueiaItem || iTipoAditamento == 5 || oItem.novo));
 

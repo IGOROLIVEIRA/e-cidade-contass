@@ -518,6 +518,7 @@ function js_retornoGetItensPosicao(oAjax) {
       */
      if (oItem.servico && (oItem.lControlaQuantidade == "" || oItem.lControlaQuantidade == "f")) {
        nQtdeAut = 1;
+       oItem.saldos.quantidadeautorizar = 1;
      }
      aLinha[5] = eval("qtditem"+iSeq+" = new DBTextField('qtditem"+iSeq+"','qtditem"+iSeq+"','"+nQtdeAut+"')");
      aLinha[5].addStyle("text-align","right");
@@ -785,7 +786,7 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
 
 
 function js_ajustaValorDot(Obj, iDot) {
-
+  
   var nValor         = new Number(Obj.value);
   var nTotalDotacoes = oGridDotacoes.sum(3, false);
   var nValorAut      = js_strToFloat(oDadosItem.aCells[7].getValue());
@@ -795,6 +796,10 @@ function js_ajustaValorDot(Obj, iDot) {
   } else if (nTotalDotacoes > nValorAut) {
     oGridDotacoes.aRows[iDot].aCells[3].content.setValue(nValorObjeto);
     Obj.value = nValorObjeto;
+  } else {
+    var nNovaQuantDot = (nValor*Number(oDadosItem.aCells[6].getValue()))/js_strToFloat(oDadosItem.aCells[7].getValue());
+    oGridDotacoes.aRows[iDot].aCells[2].content.setValue(js_round(nNovaQuantDot,iCasasDecimais));
+    $("quantdot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[2].getValue();
   }
 }
 

@@ -809,6 +809,7 @@ switch($oParam->exec) {
       $oItemContrato->setResumo(addslashes(db_stdClass::normalizeStringJson($oParam->material->sResumo)));
       $oItemContrato->setMaterial(new MaterialCompras($oParam->material->iMaterial));
       $oItemContrato->setTipoControle($oParam->material->iTipoControle);
+      $oItemContrato->setServicoQuantidade($oParam->material->iServicoQuantidade);
       $oItemContrato->setPeriodos($oParam->material->aPeriodo);
       $oItemContrato->setPeriodosExecucao($oContrato->getCodigoAcordo(), $oContrato->getPeriodoComercial());
       $oItemContrato->save();
@@ -858,6 +859,8 @@ switch($oParam->exec) {
         $oItem->unidade               = $oItemContrato->getUnidade();
         $oItem->resumo                = urlencode(str_replace("\\n", "\n",urldecode($oItemContrato->getResumo())));
         $oItem->tipocontrole          = $oItemContrato->getTipocontrole();
+        $oItem->servicoquantidade     = $oItemContrato->getServicoQuantidade();
+        $oItem->servico               = $oItemContrato->getMaterial()->isServico();
 
         /**
          * Percorremos os periodos do ITEM formatando eles para o formado brasileiro: DD/MM/YYYY
@@ -923,6 +926,7 @@ switch($oParam->exec) {
             //->setResumo(utf8_decode($oParam->material->sResumo))
             ->setResumo(addslashes(db_stdClass::normalizeStringJson($oParam->material->sResumo)))
             ->setTipoControle($oParam->material->iTipoControle)
+            ->setServicoQuantidade($oParam->material->iServicoQuantidade)
             ->setPeriodos($oParam->material->aPeriodo)
             ->setPeriodosExecucao($oContrato->getCodigoAcordo(), $oContrato->getPeriodoComercial());
             $oItemContrato->setMaterial(new MaterialCompras($oParam->material->iMaterial));
@@ -971,6 +975,8 @@ switch($oParam->exec) {
 
         $oRetorno->dotacoes         = $oItem->getDotacoes();
         $oRetorno->iElementoDotacao = $oItem->getDesdobramento();
+        $oRetorno->servico          = $oItem->getMaterial()->isServico();
+        $oRetorno->servicoquantidade = $oItem->getServicoQuantidade();
       } else {
 
         $oRetorno->status = 2;

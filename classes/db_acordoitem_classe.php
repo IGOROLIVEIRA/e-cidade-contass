@@ -53,6 +53,7 @@ class cl_acordoitem {
    var $ac20_matunid = 0;
    var $ac20_resumo = null;
    var $ac20_tipocontrole = 0;
+   var $ac20_servicoquantidade = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac20_sequencial = int4 = Sequencial
@@ -67,6 +68,7 @@ class cl_acordoitem {
                  ac20_resumo = text = Resumo
                  ac20_tipocontrole = int4 = Forma de Controle
                  ac20_acordoposicaotipo = int8 = Tipo Alteracao Item
+                 ac20_servicoquantidade = boolean = Controla Servico Quantidade
                  ";
    //funcao construtor da classe
    function cl_acordoitem() {
@@ -98,6 +100,7 @@ class cl_acordoitem {
        $this->ac20_resumo = ($this->ac20_resumo == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_resumo"]:$this->ac20_resumo);
        $this->ac20_tipocontrole = ($this->ac20_tipocontrole == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_tipocontrole"]:$this->ac20_tipocontrole);
        $this->ac20_acordoposicaotipo = ($this->ac20_acordoposicaotipo == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_acordoposicaotipo"]:$this->ac20_acordoposicaotipo);
+       $this->ac20_servicoquantidade = ($this->ac20_servicoquantidade == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_servicoquantidade"]:$this->ac20_servicoquantidade);
      }else{
        $this->ac20_sequencial = ($this->ac20_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_sequencial"]:$this->ac20_sequencial);
      }
@@ -231,6 +234,7 @@ class cl_acordoitem {
                                       ,ac20_resumo
                                       ,ac20_tipocontrole
                                       ,ac20_acordoposicaotipo
+                                      ,ac20_servicoquantidade
                        )
                 values (
                                 $this->ac20_sequencial
@@ -245,6 +249,7 @@ class cl_acordoitem {
                                ,'$this->ac20_resumo'
                                ,$this->ac20_tipocontrole
                                ,".($this->ac20_acordoposicaotipo == 0 || $this->ac20_acordoposicaotipo == null ? 'null' : $this->ac20_acordoposicaotipo)."
+                               ,'$this->ac20_servicoquantidade'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -431,6 +436,10 @@ class cl_acordoitem {
      }
      if(trim($this->ac20_acordoposicaotipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac20_acordoposicaotipo"])){
        $sql  .= $virgula." ac20_acordoposicaotipo = ".($this->ac20_acordoposicaotipo == 0 || $this->ac20_acordoposicaotipo == null ? 'null' : $this->ac20_acordoposicaotipo);
+       $virgula = ",";
+     }
+     if(trim($this->ac20_servicoquantidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac20_servicoquantidade"])){
+       $sql  .= $virgula." ac20_servicoquantidade = ".($this->ac20_servicoquantidade == null ? 'null' : "'{$this->ac20_servicoquantidade}'");
        $virgula = ",";
      }
      $sql .= " where ";

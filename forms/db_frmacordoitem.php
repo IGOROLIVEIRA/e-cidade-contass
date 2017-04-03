@@ -179,9 +179,18 @@ db_app::load("estilos.css, grid.style.css");
                 <td nowrap title="<?= @$Tac20_valorunitario ?>">
                   <?= @$Lac20_valorunitario ?>
                 </td>
-                <td colspan="3">
+                <td>
                   <?
                   db_input('ac20_valorunitario', 10, $Iac20_valorunitario, true, 'text', $db_opcao, "")
+                  ?>
+                </td>
+              
+                <td>
+                  <b>Serviço Controlado por Quantidades:</b>
+                </td>
+                <td>
+                  <?
+                  db_select("ac20_servicoquantidade", array("f" => "NÂO", "t" => "SIM"), true, $db_opcao, "onChange='js_verificaServico();'");
                   ?>
                 </td>
               </tr>
@@ -285,6 +294,7 @@ db_app::load("estilos.css, grid.style.css");
   iCasasDecimais = <?=$iCasasDecimais?>;
   sTipoOrigem = null;
   desabilitaDotacao = false;
+  isServico = 'f';
   
   function js_pesquisaac20_acordo(mostra) {
     
@@ -323,12 +333,11 @@ db_app::load("estilos.css, grid.style.css");
       
       js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
         'db_iframe_pcmater',
-        'func_pcmatercontratos.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater',
+        'func_pcmatercontratos.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc01_servico',
         'Pesquisar Materiais',
         true, '0'
       );
     } else {
-      
       if (document.form1.ac20_pcmater.value != '') {
         js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
           'db_iframe_pcmater',
@@ -350,11 +359,12 @@ db_app::load("estilos.css, grid.style.css");
       js_getElementosMateriais();
     }
   }
-  function js_mostrapcmater1(chave1, chave2) {
-    
+  function js_mostrapcmater1(chave1, chave2, chave3) {
     document.form1.ac20_pcmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
     db_iframe_pcmater.hide();
+    isServico = chave3;
+    js_verificaServico();
     js_getElementosMateriais();
     
   }
@@ -363,7 +373,7 @@ db_app::load("estilos.css, grid.style.css");
       
       js_OpenJanelaIframe('top.corpo.iframe_acordoitem',
         'db_iframe_pcmater',
-        'func_pcmater.php?funcao_js=parent.js_mostraMaterial|pc01_codmater|pc01_descrmater',
+        'func_pcmater.php?funcao_js=parent.js_mostraMaterial|pc01_codmater|pc01_descrmater|pc01_servico',
         'Pesquisar Materiais',
         true, '0'
       );
@@ -381,20 +391,24 @@ db_app::load("estilos.css, grid.style.css");
       }
     }
   }
-  function js_mostrapcmater(chave, erro) {
+  function js_mostrapcmater(chave, erro, chave2) {
     document.form1.pc01_descrmater.value = chave;
     if (erro == true) {
       document.form1.ac20_pcmater.focus();
       document.form1.ac20_pcmater.value = '';
     } else {
+      isServico = chave2;
+      js_verificaServico();
       js_getElementosMateriais();
     }
   }
   
-  function js_mostraMaterial(chave1, chave2) {
+  function js_mostraMaterial(chave1, chave2, chave3) {
     
     oTxtMaterial.setValue(chave1);
     oTxtDescrMaterial.setValue(chave2);
+    isServico = chave3;
+    js_verificaServico();
     db_iframe_pcmater.hide();
   }
   
@@ -573,6 +587,7 @@ db_app::load("estilos.css, grid.style.css");
     var sResumo = $F('ac20_resumo');
     var iElemento = $F('ac20_elemento');
     var iUnidade = $F('ac20_matunid');
+    var iServicoQuantidade = $F('ac20_servicoquantidade');
     var iTipoControle = 1;
     
     aGridPeriodosRows.each(function (oPeriodos, iLinha) {
@@ -635,6 +650,7 @@ db_app::load("estilos.css, grid.style.css");
     oParam.material.sResumo = encodeURIComponent(tagString(sResumo));
     oParam.material.aPeriodo = aPeriodo;
     oParam.material.iTipoControle = iTipoControle;
+    oParam.material.iServicoQuantidade = iServicoQuantidade;
     
     js_divCarregando('Aguarde, salvando itens', 'msgBox');
     var oAjax = new Ajax.Request(
@@ -763,6 +779,7 @@ db_app::load("estilos.css, grid.style.css");
     $('ac20_resumo').value = '';
     $('db_opcao').value = 'Incluir';
     $('cancelar').style.display = 'none';
+    $('ac20_servicoquantidade').value = 'f';
     aPeriodoItem = new Array();
     oGridItens.clearAll(true);
     
@@ -801,6 +818,9 @@ db_app::load("estilos.css, grid.style.css");
       $('ac20_valorunitario').readOnly = true;
       $('ac20_valorunitario').style.background = '#DEB887';
       
+      $('ac20_servicoquantidade').disabled = true;
+      $('ac20_servicoquantidade').style.background = '#DEB887';
+
       $('ac20_elemento').disabled = true;
       $('ac20_elemento').style.background = '#DEB887';
       
@@ -856,10 +876,13 @@ db_app::load("estilos.css, grid.style.css");
         $('ac20_matunid').value = unidade;
         $('ac20_resumo').value = resumo.urlDecode();
         $('ac20_tipocontrole').value = tipocontrole;
+        $('ac20_servicoquantidade').value = servicoquantidade;
+        isServico = servico?'t':'f';
         
         $('db_opcao').value = 'Alterar';
         js_getElementosMateriais(elemento);
         js_desabilitaItemSelecionar();
+        js_verificaServico();
       }
       aPeriodoItem = oRetorno.item.aPeriodosItem;
       oGridPeriodos.clearAll(true);
@@ -1015,6 +1038,15 @@ db_app::load("estilos.css, grid.style.css");
     var oRetorno = eval("(" + oAjax.responseText + ")");
     js_removeObj('msgBox');
     js_preencheDotacoes(oRetorno.dotacoes);
+    if (oRetorno.servicoquantidade == 'f' && oRetorno.servico) {
+      oTxtValorDotacao.setReadOnly(false);
+      oTxtQuantidadeDotacao.setReadOnly(true);
+      oTxtQuantidadeDotacao.setValue(1);
+    } else if (oRetorno.servicoquantidade == 't' && oRetorno.servico) {
+      oTxtValorDotacao.setReadOnly(true);
+    } else {
+      oTxtValorDotacao.setReadOnly(true);
+    }
     windowDotacaoItem.show();
     iElementoDotacao = oRetorno.iElementoDotacao;
     
@@ -1063,6 +1095,22 @@ db_app::load("estilos.css, grid.style.css");
       $('oTxtQuantidadeDotacao').focus();
       return false;
     }
+    if (((oGridDotacoes.sum(1, false)+Number(oTxtQuantidadeDotacao.getValue())) > oDadosItem.aCells[3].getValue()) && oTxtQuantidadeDotacao.lReadOnly == false) {
+      alert('Quantidade Dotação maior que quantidade do item!');
+      $('oTxtQuantidadeDotacao').focus();
+      return false;
+    }
+    if ((oGridDotacoes.sum(2, false)+js_strToFloat(oTxtValorDotacao.getValue())) > js_strToFloat(oDadosItem.aCells[5].getValue())) {
+      alert('Valor Dotação maior que Valor Total do item!');
+      $('oTxtValorDotacao').focus();
+      return false;
+    }
+    for (var i = 0; i < oGridDotacoes.aRows.length; i++) {
+      if(oGridDotacoes.aRows[i].aCells[0].getValue() == oTxtDotacao.getValue()) {
+        alert('Dotação já existe para este item!');
+        return false;
+      }
+    }    
     var oParam = new Object();
     oParam.exec = "saveDotacaoItens";
     oParam.iCodigoItem = oDadosItem.aCells[1].getValue();
@@ -1090,6 +1138,11 @@ db_app::load("estilos.css, grid.style.css");
       oTxtQuantidadeDotacao.setValue('');
       oTxtDotacao.setValue('');
       oTxtSaldoDotacao.setValue('');
+      if (oTxtQuantidadeDotacao.lReadOnly == true) {
+        oTxtQuantidadeDotacao.setReadOnly(true);
+        oTxtQuantidadeDotacao.setValue(1);
+      }
+
       js_getItens();
       js_preencheDotacoes(oRetorno.dotacoes);
     } else {
@@ -2173,6 +2226,31 @@ db_app::load("estilos.css, grid.style.css");
       $('oDBTextFieldDataInicial'+iIndice).value = $('oDBTextFieldDataInicialGeral').value;
       $('oDBTextFieldDataFinal'+iIndice).value = $('oDBTextFieldDataFinalGeral').value;
     });
+  }
+
+  function js_verificaServico() {
+
+    var servicoquantidade = $('ac20_servicoquantidade').value;
+    if (servicoquantidade == 'f' && isServico == "t") {
+      $('ac20_quantidade').disabled = true;
+      $('ac20_quantidade').readOnly = true;
+      $('ac20_quantidade').style.backgroundColor = 'rgb(222, 184, 135)';
+      $('ac20_quantidade').value = 1;
+    } else if (servicoquantidade == 't' && isServico == "t") {
+      $('ac20_quantidade').disabled = false;
+      $('ac20_quantidade').readOnly = false;
+      $('ac20_quantidade').style.backgroundColor = '#FFF';
+    } else {
+      $('ac20_quantidade').disabled = false;
+      $('ac20_quantidade').readOnly = false;
+      $('ac20_quantidade').style.backgroundColor = '#FFF';
+    }
+
+    if (isServico == "f") {
+      $('ac20_servicoquantidade').options[1].disabled = true;
+    } else {
+      $('ac20_servicoquantidade').options[1].disabled = false;
+    }
   }
   
   js_showGrid();

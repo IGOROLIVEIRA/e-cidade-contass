@@ -142,7 +142,7 @@ $clpcmater->rotulo->label("pc01_descrmater");
 	           pcmater.pc01_descrmater,
 		   pcmater.pc01_complmater,
 		   pcmater.pc01_codsubgrupo,
-		   pcsubgrupo.pc04_descrsubgrupo";
+		   pcsubgrupo.pc04_descrsubgrupo,pcmater.pc01_servico";
 
         if(isset($chave_pc01_codmater) && (trim($chave_pc01_codmater)!="") ){
 	         $sql = $clpcmater->sql_query_desdobra(null,$campos,"pc01_codmater","pc01_codmater=$chave_pc01_codmater $where_ativo");
@@ -164,10 +164,10 @@ $clpcmater->rotulo->label("pc01_descrmater");
 	}
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null,"distinct pc01_descrmater","","pc01_codmater=$pesquisa_chave $where_ativo"));
+          $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null,"distinct pc01_descrmater,pc01_servico","","pc01_codmater=$pesquisa_chave $where_ativo"));
           if($clpcmater->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$pc01_descrmater',false);</script>";
+            echo "<script>".$funcao_js."('$pc01_descrmater',false,'$pc01_servico');</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

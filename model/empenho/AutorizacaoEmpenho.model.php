@@ -713,9 +713,10 @@ class AutorizacaoEmpenho {
         }
       }
       if (!isset($oItem->solicitem)) {
-        $oItem->solicitem = '';
+        $lServicoQuantidade = $oItem->controlaquantidade;
+      } else {
+        $lServicoQuantidade = AutorizacaoEmpenho::getServicoControladoQuantidade($oItem->solicitem);
       }
-      $lServicoQuantidade = AutorizacaoEmpenho::getServicoControladoQuantidade($oItem->solicitem);
 
       $oDaoEmpAutItem->e55_autori = $this->getAutorizacao();
       $oDaoEmpAutItem->e55_item   = $oItem->codigomaterial;

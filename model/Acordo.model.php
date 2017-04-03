@@ -1779,6 +1779,7 @@ class Acordo
                     $oItemAut->iCodigoItemProcesso = $oItemContrato->getCodigoItemProcessoCompras();
                     $oItemAut->iCodigoItemEmpenho = $oItemContrato->getCodigoItemEmpenho();
 
+                    $oItemAut->controlaquantidade = $oItemContrato->getControlaQuantidade();
                     if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getControlaQuantidade() == 'f') {
 
                         $oItemAut->quantidade = 1;
@@ -1815,7 +1816,7 @@ class Acordo
                     $oItemAut->iCodigoItemProcesso = $oItemContrato->getCodigoItemProcessoCompras();
                     $oItemAut->iCodigoItemEmpenho = $oItemContrato->getCodigoItemEmpenho();
 
-
+                    $oItemAut->controlaquantidade = $oItemContrato->getControlaQuantidade();
                     if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getControlaQuantidade() == 'f') {
 
                         $oItemAut->quantidade = 1;
@@ -1921,6 +1922,7 @@ class Acordo
                     $oItem->empempitem = $oStdItemAutorizacao->iCodigoItemEmpenho;
                     $oItem->pcprocitem = $oStdItemAutorizacao->iCodigoItemProcesso;
                     $oItem->reserva = $oStdItemAutorizacao->reserva;
+                    $oItem->controlaquantidade = $oStdItemAutorizacao->controlaquantidade;
 
                     $oAutorizacaoEmpenho->addItem($oItem);
                 }
@@ -2481,6 +2483,7 @@ class Acordo
                 $oNovoItem->setUnidade($oItemContrato->getUnidade());
                 $oNovoItem->setTipoControle($oItemContrato->getTipocontrole());
                 $oNovoItem->setItemVinculo($oItemContrato->getCodigo());
+                $oNovoItem->setServicoQuantidade($oItemContrato->getServicoQuantidade());
 
                 $aPeriodosItem = $oItemContrato->getPeriodosItem();
 
@@ -3346,6 +3349,7 @@ class Acordo
                 $oNovoItem->setTipoControle($oItemContrato->getTipocontrole());
                 $oNovoItem->setItemVinculo($oItemContrato->getCodigo());
                 $oNovoItem->setPeriodos($oItemContrato->getPeriodosItem());
+                $oNovoItem->setServicoQuantidade($oItemContrato->getServicoQuantidade());
 
             } else {
 
@@ -3354,6 +3358,7 @@ class Acordo
                 $oNovoItem->setResumo(utf8_decode(db_stdClass::db_stripTagsJson($oItem->resumo)));
                 $oNovoItem->setUnidade($oItem->unidade);
                 $oNovoItem->setTipoControle(AcordoItem::CONTROLE_DIVISAO_QUANTIDADE);
+                $oNovoItem->setServicoQuantidade("f");
 
                 if (!empty($oItem->aPeriodos)) {
                     $oNovoItem->setPeriodos($oItem->aPeriodos);

@@ -522,6 +522,7 @@ class AcordoPosicao {
       $oItem->setOrigem($oItemLicitacao->l21_codigo, 2);
       $oItem->setValorTotal($oItemLicitacao->pc23_quant*$oItemLicitacao->pc23_vlrun);
       $oItem->setResumo($oItemLicitacao->pc11_resum);
+      $oItem->setServicoQuantidade($oItemLicitacao->pc11_servicoquantidade);
       /**
        * pesquisamos as dotacoes do item
        */
@@ -612,6 +613,7 @@ class AcordoPosicao {
       $oItem->setOrigem($oItemLicitacao->pc81_codprocitem, 1);
       $oItem->setValorTotal($oItemLicitacao->pc23_quant*$oItemLicitacao->pc23_vlrun);
       $oItem->setResumo($oItemLicitacao->pc11_resum);
+      $oItem->setServicoQuantidade($oItemLicitacao->pc11_servicoquantidade);
 
       /**
        * pesquisamos as dotacoes do item
@@ -1187,7 +1189,12 @@ class AcordoPosicao {
 
     $oDAOEmpempitem = db_utils::getDao("empempitem");
     $sWhere         = "e62_sequencial = {$iPKEmpempitem}";
-    $sSqlDadosItem  = $oDAOEmpempitem->sql_query_file(null, null, "*", null, $sWhere);
+    $sCampos  = "*";
+    $sCampos .= ",(select e55_unid from empautitem 
+    join empempaut on e55_autori = e61_autori 
+    join empempitem item on e61_numemp = e62_numemp and e55_item = e62_item
+    where item.e62_sequencial=empempitem.e62_sequencial) as e55_unid";
+    $sSqlDadosItem  = $oDAOEmpempitem->sql_query_file(null, null, $sCampos, null, $sWhere);
     $rsDadosItem    = $oDAOEmpempitem->sql_record($sSqlDadosItem);
 
     if ($oDAOEmpempitem->numrows == 1) {
@@ -1199,7 +1206,7 @@ class AcordoPosicao {
       $oItem->setElemento($oItemEmpenho->e62_codele);
       $oItem->setQuantidade($oItemEmpenho->e62_quant);
       $oItem->setValorUnitario($oItemEmpenho->e62_vlrun);
-      $oItem->setUnidade(1);
+      $oItem->setUnidade($oItemEmpenho->e55_unid);
 
       $oItem->setResumo($oItemEmpenho->e62_descr);
       $oItem->setTipoControle($oStdItemContrato->iTipoControle);
@@ -1207,6 +1214,7 @@ class AcordoPosicao {
       $oItem->setOrigem($oItemEmpenho->e62_sequencial, 6);
       $oItem->setValorTotal($oItemEmpenho->e62_vltot);
       $oItem->setCodigoPosicao($this->getCodigo());
+      $oItem->setServicoQuantidade($oItemEmpenho->e62_servicoquantidade);
 
       $aPeriodos = array();
       $oPeriodos = new stdClass();
@@ -1470,7 +1478,7 @@ class AcordoPosicao {
       $oDaoApostilamento->si03_dataassinacontrato = implode("-",array_reverse(explode("/",$dDtAssAcordo)));
       $oDaoApostilamento->si03_tipoapostila = $oApostila->tipoapostila;
       $oDaoApostilamento->si03_dataapostila = implode("-",array_reverse(explode("/",$oApostila->dataapostila)));
-      $oDaoApostilamento->si03_descrapostila = $oApostila->descrapostila;
+      $oDaoApostilamento->si03_descrapostila = utf8_decode(db_stdClass::db_stripTagsJson($oApostila->descrapostila));
       $oDaoApostilamento->si03_tipoalteracaoapostila = $oApostila->tipoalteracaoapostila;
       $oDaoApostilamento->si03_numapostilamento = $oApostila->numapostilamento;
       $oDaoApostilamento->si03_valorapostila = $oApostila->valorapostila;

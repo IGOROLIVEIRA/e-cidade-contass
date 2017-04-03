@@ -166,6 +166,13 @@ class AcordoItem {
    * @var integer
    */
   protected $iTipoControle;
+  
+  /**
+   * Controla Quantidade Servico
+   * true / false
+   * @var boolean
+   */
+  protected $iServicoQuantidade;
 
   /**
    * Array de períodos de execução de um item do acordo
@@ -304,6 +311,7 @@ class AcordoItem {
       $sCamposItens .= "ac20_acordoposicaotipo,                                  ";
       $sCamposItens .= "ac20_resumo,                                             ";
       $sCamposItens .= "ac20_tipocontrole,                                       ";
+      $sCamposItens .= "ac20_servicoquantidade,                                  ";
       $sCamposItens .= "ac20_ordem,                                              ";
       $sCamposItens .= "m61_descr,                                               ";
       $sCamposItens .= "o56_elemento,                                            ";
@@ -355,8 +363,13 @@ class AcordoItem {
               ->setEstruturalElemento($oDadosItem->o56_elemento)
               ->setDescEstruturalElemento($oDadosItem->o56_descr)
               ->setControlaQuantidade($oDadosItem->pc11_servicoquantidade == ''? 'f':$oDadosItem->pc11_servicoquantidade)
+              ->setServicoQuantidade($oDadosItem->ac20_servicoquantidade == ''? $this->getControlaQuantidade() : $oDadosItem->ac20_servicoquantidade)
               ->setOrdem($oDadosItem->ac20_ordem);
               $this->sDescricaoElemento = $oDadosItem->o56_descr;
+              /**
+               * Caso estejam diferentes, manter o valor de ac20_servicoquantidade
+               */
+              $this->setControlaQuantidade($this->getServicoQuantidade());
 
 
         $sSqlItemPeriodo = $oDaoAcordoItem->sql_query_periodo($iCodigoItem);
@@ -388,6 +401,7 @@ class AcordoItem {
           $this->setOrigem($oDadosItem->ac44_empempitem, 6);
         }
         unset($oDadosItem);
+        $this->getDotacoes();
       }
     }
   }
@@ -478,6 +492,8 @@ class AcordoItem {
         $oDaoReserva->excluir($oDadosReserva->o84_orcreserva);
       }
       $oDaoAcordoItemDotacao->excluir($oDotacaoCadastrada->ac22_sequencial);
+      $this->aDotacoes = array();
+      $this->getDotacoes();
 
     }
   }
@@ -750,13 +766,30 @@ class AcordoItem {
    */
   public function setTipoControle($iTipocontrole){
 
-  	$this->iTipoControle = $iTipocontrole;
-  	return $this;
+    $this->iTipoControle = $iTipocontrole;
+    return $this;
   }
 
   public function getTipocontrole(){
 
-  	return $this->iTipoControle;
+    return $this->iTipoControle;
+
+  }
+
+  /**
+   * Define se controla quantidade em servico
+   * @param boolean $sTipoControle
+   * @return AcordoItem
+   */
+  public function setServicoQuantidade($iServicoQuantidade){
+
+  	$this->iServicoQuantidade = $iServicoQuantidade;
+  	return $this;
+  }
+
+  public function getServicoQuantidade(){
+
+  	return $this->iServicoQuantidade;
 
   }
 
@@ -786,6 +819,7 @@ class AcordoItem {
     $oDaoAcordoItem->ac20_ordem             = $this->getOrdem();
     $oDaoAcordoItem->ac20_resumo            = addslashes($this->getResumo());
     $oDaoAcordoItem->ac20_tipocontrole      = $this->getTipocontrole();
+    $oDaoAcordoItem->ac20_servicoquantidade = $this->getServicoQuantidade();
 
     /**
      * Define se será alterado o contrato ou incluído um novo
