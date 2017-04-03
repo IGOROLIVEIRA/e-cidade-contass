@@ -387,7 +387,7 @@ function preencheItens(aItens) {
 function calculaValorTotal(iLinha) {
 
     var aLinha = oGridItens.aRows[iLinha],
-        nQuantidade = aLinha.aCells[5].getValue().getNumber(),
+        nQuantidade = aLinha.aCells[5].getValue().getNumber();
         nUnitario = aLinha.aCells[6].getValue().getNumber();
 
     aItensPosicao[iLinha].novaquantidade = nQuantidade;
@@ -559,7 +559,7 @@ function saveDotacao(iLinha) {
         return false;
     }
 
-    var nValor = oTxtValorDotacao.getValue().getNumber();
+    var nValor = js_strToFloat(oTxtValorDotacao.getValue());
 
     if (nValor == 0) {
 
@@ -589,6 +589,9 @@ function saveDotacao(iLinha) {
     }
 
     aItensPosicao[iLinha].dotacoes.push(oDotacao);
+    oTxtDotacao.setValue("");
+    oTxtSaldoDotacao.setValue("");
+    oTxtValorDotacao.setValue("0,00");
     preencheGridDotacoes(iLinha);
 }
 
@@ -743,7 +746,7 @@ function apostilar() {
     var oApostila = new Object();
     oApostila.dataapostila          = $("si03_dataapostila").value;
     oApostila.tipoapostila          = $("si03_tipoapostila").value;
-    oApostila.descrapostila         = $("si03_descrapostila").value;
+    oApostila.descrapostila         = encodeURIComponent(tagString($("si03_descrapostila").value));
     oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
     oApostila.numapostilamento      = $("si03_numapostilamento").value;
 
@@ -779,8 +782,8 @@ function apostilar() {
 
         if (oSelecionados[iIndice] != undefined) {
 
-            oItemAdicionar.quantidade = oSelecionados[iIndice].aCells[5].getValue().getNumber();
-            oItemAdicionar.valorunitario = oSelecionados[iIndice].aCells[6].getValue().getNumber();
+            oItemAdicionar.quantidade = js_strToFloat(oSelecionados[iIndice].aCells[5].getValue());
+            oItemAdicionar.valorunitario = js_strToFloat(oSelecionados[iIndice].aCells[6].getValue());
             oItemAdicionar.valor = oItemAdicionar.quantidade * oItemAdicionar.valorunitario;
             oItemAdicionar.dtexecucaoinicio = oSelecionados[iIndice].aCells[10].getValue();
             oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[11].getValue();
