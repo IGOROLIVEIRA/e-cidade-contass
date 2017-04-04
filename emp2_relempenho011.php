@@ -267,8 +267,10 @@ select {
     	</tr>
     </table>
   </fieldset>
+  <input type="hidden" name="banco"	value="<?php echo db_getsession("DB_NBASE")?>">
   <br>
-  <input type="button" value="Relatório" onClick="js_emite(<?=$anousu?>)">
+  <input type="button" value="Relatório" onClick="js_emite(<?=$anousu?>,0)">
+  <input type="button" value="Relatório .csv" onClick="js_emite(<?=$anousu?>,1)">
   </center>
 </form>
 <script>
@@ -323,7 +325,8 @@ function js_testadata(valor){
 
 variavel = 1;
 
-function js_emite(anousu){
+function js_emite(anousu,tipo){
+
 
  vir="";
  listacredor="";
@@ -433,11 +436,15 @@ function js_emite(anousu){
     return false;
  }
 
+	if(tipo == 1){
+ 		document.form1.action = 'emp2_relempenho003.php';
+	}else{
+		jan = window.open('','safo' + variavel,'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+		document.form1.target = 'safo' + variavel++;
+		document.form1.action = 'emp2_relempenho002.php';
+	}
 
-
- jan = window.open('','safo' + variavel,'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
- document.form1.target = 'safo' + variavel++;
- setTimeout("document.form1.submit()",1000);
+	setTimeout("document.form1.submit()",1000);
  return true;
 }
 
@@ -448,6 +455,7 @@ function js_mandadados(){
 <?
   if ($testdt=='com'){
 ?>
+
  jan = window.open('emp2_relempenho002.php?tipoemp='+tipoemp
                      +'&listacredor='+listacredor
                      +'&listagestor='+listagestor
@@ -467,6 +475,7 @@ function js_mandadados(){
 		     +'&mostrar='+document.form1.mostrar.value
 		     +'&tipo='+document.form1.tipo.value
 		     +'&hist='+document.form1.hist.checked
+	         +'&banco='+document.form1.banco.value
 		     +'&mostraritem='+document.form1.mostraritem.checked,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 <?
   }else{
@@ -488,6 +497,7 @@ function js_mandadados(){
 		    +'&mostrar='+document.form1.mostrar.value
 		    +'&tipo='+document.form1.tipo.value
 		    +'&hist='+document.form1.hist.checked
+	 		+'&banco='+document.form1.banco.value
 		    +'&mostraritem='+document.form1.mostraritem.checked,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 <?
   }
