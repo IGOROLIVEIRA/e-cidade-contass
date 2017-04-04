@@ -367,9 +367,9 @@ class AcordoItem {
               ->setOrdem($oDadosItem->ac20_ordem);
               $this->sDescricaoElemento = $oDadosItem->o56_descr;
               /**
-               * Caso estejam diferentes, manter o valor de ac20_servicoquantidade
+               * Caso estejam diferentes, manter o valor de pc11_servicoquantidade
                */
-              $this->setControlaQuantidade($this->getServicoQuantidade());
+              $this->setServicoQuantidade($this->getControlaQuantidade());
 
 
         $sSqlItemPeriodo = $oDaoAcordoItem->sql_query_periodo($iCodigoItem);
