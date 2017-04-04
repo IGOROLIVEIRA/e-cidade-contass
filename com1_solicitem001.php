@@ -1812,7 +1812,7 @@ function  js_calculaMedia() {
     oOrcamento.getOrcamentos();
     oOrcamento.onMediaCalculada = function() {
 
-      $('pc11_vlrun').value = oOrcamento.getMediaPrecos();
+      //$('pc11_vlrun').value = oOrcamento.getMediaPrecos();
       oOrcamento.window.destroy();
     }
 
