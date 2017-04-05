@@ -595,6 +595,22 @@ class AutorizacaoEmpenho {
 
   }
 
+  public static function getUnidadeItemSolicitacao($iSolicitem) {
+
+    if (empty($iSolicitem)) {
+      return 0;
+    }
+
+    $oDaoSolicitemUnid = db_utils::getDao("solicitemunid");
+
+    $sSqlUnidade = $oDaoSolicitemUnid->sql_query_file(null, "pc17_unid", null, "pc17_codigo = {$iSolicitem}");
+    $rsUnidade = $oDaoSolicitemUnid->sql_record($sSqlUnidade);
+    $iUnidade = db_utils::fieldsMemory($rsUnidade, 0)->pc17_unid;
+
+    return $iUnidade;
+
+  }
+
   /**
    * Salva os dados de uma autorização
    */
@@ -714,8 +730,10 @@ class AutorizacaoEmpenho {
       }
       if (!isset($oItem->solicitem)) {
         $lServicoQuantidade = $oItem->controlaquantidade;
+        $iUnidade           = $oItem->unidade;
       } else {
         $lServicoQuantidade = AutorizacaoEmpenho::getServicoControladoQuantidade($oItem->solicitem);
+        $iUnidade           = AutorizacaoEmpenho::getUnidadeItemSolicitacao($oItem->solicitem);
       }
 
       $oDaoEmpAutItem->e55_autori = $this->getAutorizacao();
@@ -727,6 +745,7 @@ class AutorizacaoEmpenho {
       $oDaoEmpAutItem->e55_codele = $oItem->codigoelemento;
       $oDaoEmpAutItem->e55_vlrun  = $oItem->valorunitario;
       $oDaoEmpAutItem->e55_servicoquantidade = $lServicoQuantidade;
+      $oDaoEmpAutItem->e55_unid   = $iUnidade;
 
       $oItem->sequencial = $iContaAutItem;
       $oDaoEmpAutItem->incluir($this->getAutorizacao(), $iContaAutItem);

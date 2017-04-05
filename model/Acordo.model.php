@@ -1778,6 +1778,7 @@ class Acordo
                     $oItemAut->iCodigoItemLicitacao = $oItemContrato->getCodigoItemLicitacao();
                     $oItemAut->iCodigoItemProcesso = $oItemContrato->getCodigoItemProcessoCompras();
                     $oItemAut->iCodigoItemEmpenho = $oItemContrato->getCodigoItemEmpenho();
+                    $oItemAut->unidade = $oItemContrato->getUnidade();
 
                     $oItemAut->controlaquantidade = $oItemContrato->getControlaQuantidade();
                     if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getControlaQuantidade() == 'f') {
@@ -1815,6 +1816,7 @@ class Acordo
                     $oItemAut->iCodigoItemLicitacao = $oItemContrato->getCodigoItemLicitacao();
                     $oItemAut->iCodigoItemProcesso = $oItemContrato->getCodigoItemProcessoCompras();
                     $oItemAut->iCodigoItemEmpenho = $oItemContrato->getCodigoItemEmpenho();
+                    $oItemAut->unidade = $oItemContrato->getUnidade();
 
                     $oItemAut->controlaquantidade = $oItemContrato->getControlaQuantidade();
                     if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getControlaQuantidade() == 'f') {
@@ -1923,6 +1925,7 @@ class Acordo
                     $oItem->pcprocitem = $oStdItemAutorizacao->iCodigoItemProcesso;
                     $oItem->reserva = $oStdItemAutorizacao->reserva;
                     $oItem->controlaquantidade = $oStdItemAutorizacao->controlaquantidade;
+                    $oItem->unidade = $oStdItemAutorizacao->unidade;
 
                     $oAutorizacaoEmpenho->addItem($oItem);
                 }
@@ -3368,9 +3371,9 @@ class Acordo
             $oNovoItem->setValorUnitario((float)$oItem->valorunitario);
             $oNovoItem->setValorTotal(round($oItem->valorunitario * $oItem->quantidade, 2));
 
-            if (($oNovoItem->getValorUnitario() > $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA)
+            if ( (($oNovoItem->getValorUnitario() > $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA)
                 || ($oNovoItem->getValorUnitario() < $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA)
-                || ($oNovoItem->getValorUnitario() == $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_SEMALTERACAO_APOSTILA)) {
+                || ($oNovoItem->getValorUnitario() == $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_SEMALTERACAO_APOSTILA)) &&  in_array($oItem->codigoitem, $aSelecionados) ) {
                 throw new Exception("Valor do item {$oItem->codigoitem} não compatível com o Tipo de alteração Apostila.");
             }
 
