@@ -105,7 +105,7 @@ class EmissaoBoletoWebService extends EmissaoBoleto{
        * Erro ao buscar informacoes do debito 
        */
       if ( $oDadosRecibopagaboleto->erro_status == "0" ) {
-        throw new Exception($oDadosRecibopagaboleto->erro_msg);
+        throw new Exception($oDadosRecibopagaboleto->erro_msg.$sSqlDadosDebito);
       }
 
       $oDebito = db_utils::fieldsMemory($rsDadosDebito, 0);
