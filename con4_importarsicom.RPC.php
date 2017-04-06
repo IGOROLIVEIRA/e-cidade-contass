@@ -59,7 +59,7 @@ switch ($oParam->exec) {
 
         while ($arquivo = $diretorio->read()) {
 
-            if (substr($arquivo, -3) == 'csv') {
+            if (substr($arquivo, -3) == 'csv' || substr($arquivo, -3) == 'CSV') {
 
                 if (($handle = fopen($path . $arquivo, "r")) !== FALSE) {
 
