@@ -72,10 +72,12 @@ switch ($oParam->exec) {
                         $num = count($data);
                         $aArquivoCSV = explode(".", $arquivo);
 
+                        
+
                         if ($data[0] != 99 &&
                             $aArquivoCSV[0] == 'EMP' || $aArquivoCSV[0] == 'ANL' || $aArquivoCSV[0] == 'LQD' || $aArquivoCSV[0] == 'ALQ' ||
                             $aArquivoCSV[0] == 'OPS' || $aArquivoCSV[0] == 'AOP' || $aArquivoCSV[0] == 'EXT' || $aArquivoCSV[0] == 'CTB' ||
-                            $aArquivoCSV[0] == 'RSP'
+                            $aArquivoCSV[0] == 'RSP' || $aArquivoCSV[0] == 'BALANCETE' || $aArquivoCSV[0] == 'CVC'
                         ) {
                             if ($data[0] == 99) {
                                 continue;
