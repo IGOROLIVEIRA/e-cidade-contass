@@ -48,7 +48,7 @@ if ( isset($oPost->salvar) ) {
   db_inicio_transacao();
 
 	$oDaoConfiguracaoGrupo->q136_sequencial      = $oPost->q136_sequencial;
-	$oDaoConfiguracaoGrupo->issgruposervico      = $oPost->q136_issgruposervico;
+	$oDaoConfiguracaoGrupo->q136_issgruposervico = $oPost->iCodigoGrupoServico;
 	$oDaoConfiguracaoGrupo->q136_exercicio       = $oPost->q136_exercicio;
 	$oDaoConfiguracaoGrupo->q136_tipotributacao  = $oPost->q136_tipotributacao;
 	$oDaoConfiguracaoGrupo->q136_valor           = $oPost->q136_valor;
