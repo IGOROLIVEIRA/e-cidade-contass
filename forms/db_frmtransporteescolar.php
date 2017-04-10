@@ -87,7 +87,7 @@ $clrotulo->label("ve01_codigo");
                 </td>
                 <td>
                     <?
-                    $Iv200_turno = array("01" => "Manh&atilde;", "02" => "Tarde", "03" => "Noite", "04" => "Manh&atilde; e Tarde", "05" => "Manh&atilde; e Noite", "06" => "Tarde e Noite", "06" => "Manh&atilde;, Tarde e Noite");
+                    $Iv200_turno = array("01" => "Manh&atilde;", "02" => "Tarde", "03" => "Noite", "04" => "Manh&atilde; e Tarde", "05" => "Manh&atilde; e Noite", "06" => "Tarde e Noite", "07" => "Manh&atilde;, Tarde e Noite");
                     db_select("v200_turno", $Iv200_turno, true, 1, "style='width:153'");
                     ?>
                 </td>
