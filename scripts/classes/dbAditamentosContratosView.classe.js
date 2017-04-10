@@ -851,7 +851,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             if (oSelecionados[iIndice] != undefined) {
 
                 oItemAdicionar.quantidade = oSelecionados[iIndice].aCells[5].getValue().getNumber();
-                oItemAdicionar.valorunitario = oSelecionados[iIndice].aCells[6].getValue().getNumber();
+                oItemAdicionar.valorunitario = js_strToFloat(oSelecionados[iIndice].aCells[6].getValue());
                 oItemAdicionar.valor = oItemAdicionar.quantidade * oItemAdicionar.valorunitario;
                 oItemAdicionar.dtexecucaoinicio = oSelecionados[iIndice].aCells[10].getValue();
                 oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[11].getValue();
