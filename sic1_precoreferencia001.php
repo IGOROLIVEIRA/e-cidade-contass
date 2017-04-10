@@ -27,7 +27,7 @@ if(isset($incluir)){
      	$sFuncao = "min";
      }
      
-     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),2) as valor from pcproc 
+     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),3) as valor from pcproc
 join pcprocitem on pc80_codproc = pc81_codproc 
 join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
 join pcorcamitem on pc31_orcamitem = pc22_orcamitem
