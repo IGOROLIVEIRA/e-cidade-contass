@@ -1011,10 +1011,11 @@ class cl_empempenho {
         $sql .= "      left  join empcontratos on si173_empenho::varchar = e60_codemp and e60_anousu = si173_anoempenho";
         $sql .= "      left join contratos on si173_codcontrato = si172_sequencial";
         $sql .= "      LEFT JOIN aditivoscontratos on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and (si174_nrocontrato = si172_nrocontrato)";
-
         $sql .= "       left join empempaut            on empempenho.e60_numemp  = empempaut.e61_numemp   ";
         $sql .= "       left join empautoriza          on empempaut.e61_autori   = empautoriza.e54_autori ";
         $sql .= "       left join db_depart            on empautoriza.e54_autori = db_depart.coddepto ";
+        $sql .= "       left join empempenhocontrato   on empempenho.e60_numemp = empempenhocontrato.e100_numemp ";
+        $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
 
         $sql2 = "";
         if($dbwhere==""){
