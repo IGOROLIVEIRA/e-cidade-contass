@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("libs/db_liborcamento.php");
@@ -42,8 +42,8 @@ $tipo_mesfim = 1;
 // 2 = subfuncao
 // 3 = programa
 // 4 = projeto/atividade
-// 5 = elemento 
-// 6 = recurso 
+// 5 = elemento
+// 6 = recurso
 $tipo_agrupa = 3;
 $tipo_nivel = 6;
 
@@ -65,13 +65,15 @@ $datafin = $data_fin_ano.'-'.$data_fin_mes.'-'.$data_fin_dia;
 $data_ini_exibida = $data_ini_dia.'/'.$data_ini_mes.'/'.$data_ini_ano;
 $data_fin_exibida = $data_fin_dia.'/'.$data_fin_mes.'/'.$data_fin_ano;
 
-//---------------------------------------------------------------  
+//---------------------------------------------------------------
 $clselorcdotacao = new cl_selorcdotacao();
 $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
-$instits= $clselorcdotacao->getInstit();
+$instits = (isset($instituicao) && !empty($instituicao))
+  ? implode(', ', explode('-', $instituicao))
+  : $clselorcdotacao->getInstit();
 
 if (trim(@$instits) == ""){
-     $instits = db_getsession("DB_instit");
+    $instits = db_getsession("DB_instit");
 }
 
 /*
@@ -82,7 +84,7 @@ if (trim(@$instits) == ""){
 */
 
 //@ recupera as informações fornecidas para gerar os dados
-//---------------------------------------------------------------  
+//---------------------------------------------------------------
 
 $head1 = "DEMONSTRATIVO DA DESPESA";
 $head2 = "EXERCÍCIO: ".db_getsession("DB_anousu");
@@ -91,10 +93,10 @@ $resultinst = pg_exec("select codigo,nomeinst from db_config where codigo in ($i
 $descr_inst = '';
 $xvirg = '';
 for($xins = 0; $xins < pg_numrows($resultinst); $xins++){
-	
+
   db_fieldsmemory($resultinst,$xins);
-  
-  $descr_inst .= $xvirg.$nomeinst ; 
+
+  $descr_inst .= $xvirg.$nomeinst ;
   $xvirg = ', ';
 }
 $head3 = "INSTITUIÇÕES : ".$descr_inst;
@@ -103,7 +105,7 @@ $head5 = "Período : ".$data_ini_exibida."   à  ".$data_fin_exibida;
 
 $sele_work = $clselorcdotacao->getDados()." and w.o58_instit in ($instits)";
 
- //Filtro abaixo é incluido com o sql dinamico para as colunas 
+ //Filtro abaixo é incluido com o sql dinamico para as colunas
  //comprometido e automatico.
  $filtro = str_replace("1=1","",$sele_work);
  $filtro = " ".str_replace("w.","",$filtro);
@@ -118,12 +120,12 @@ if (substr($nivel,1,1) == 'A'){
   //db_criatabela(pg_exec("select * from t"));
   $result = db_dotacaosaldo($nivela,1,2,true,$sele_work,$anousu,$dataini,$datafin);
   //db_criatabela($result);exit;
- 
+
   pg_exec("commit");
 
-  $pdf = new PDF(); 
-  $pdf->Open(); 
-  $pdf->AliasNbPages(); 
+  $pdf = new PDF();
+  $pdf->Open();
+  $pdf->AliasNbPages();
   $total = 0;
   $pdf->setfillcolor(235);
   $pdf->setfont('arial','b',7);
@@ -140,7 +142,7 @@ if (substr($nivel,1,1) == 'A'){
   $xprograma     = 0;
   $xprojativ     = 0;
   $xelemento     = 0;
-  
+
   $totorgaoini   = 0;
   $totorgaosup   = 0;
   $totorgaoesp   = 0;
@@ -154,7 +156,7 @@ if (substr($nivel,1,1) == 'A'){
   $totorgaoatual   = 0;
   $totorgaocomp    = 0;
   $totorgaoresauto = 0;
-  
+
   $totunidaini   = 0;
   $totunidasup   = 0;
   $totunidaesp   = 0;
@@ -162,7 +164,7 @@ if (substr($nivel,1,1) == 'A'){
   $totunidaemp   = 0;
   $totunidaliq   = 0;
   $totunidapag   = 0;
- 
+
   $totunidaanter   = 0;
   $totunidareser   = 0;
   $totunidaatual   = 0;
@@ -181,34 +183,34 @@ if (substr($nivel,1,1) == 'A'){
   $nGeralTotOrgaocomp    = 0;
   $nGeralTotOrgaoresauto = 0;
   $nGeralTotOrgaoatual   = 0;
-          
+
   $pagina        = 1;
 
   for($i=0;$i<pg_numrows($result);$i++){
     $automatico = 0;
-    
+
     db_fieldsmemory($result,$i);
-    
+
     $oRelatorio = db_utils::fieldsMemory($result,$i);
-    
+
     $sQuery = retornaSqlReservado($oRelatorio,$nivela,$anousu,$dataini,$datafin);
-    
+
     $rsQuery = db_query($sQuery);
-    
+
     if($rsQuery !== false){
-    	
+
     	$oQuery = db_utils::fieldsMemory($rsQuery,0);
-    	
+
     }
-    
+
     $nResevaAutomatica = $oQuery->total;
-    
+
     if($xorgao.$xunidade != $o58_orgao.$o58_unidade && $quebra_unidade == 'S' && $pagina != 1 && $totunidaanter != 0){
       $pdf->setfont('arial','b',7);
       $pagina = 1;
       $pdf->ln(3);
 
-      if($completo==false){  
+      if($completo==false){
 				$pdf->setfont('arial','b',7);
 				$pdf->ln(3);
 				$pdf->cell(50,$alt,''                               ,"TB" ,0,"L",1);
@@ -239,7 +241,7 @@ if (substr($nivel,1,1) == 'A'){
 	      $pdf->cell(25,$alt,db_formatar($totunidaliq,'f'),1   ,0,"R",1);
 	      $pdf->cell(25,$alt,db_formatar($totunidapag,'f'),1   ,0,"R",1);
 	      $pdf->ln(2);
-				
+
       }
       $pdf->setfont('arial','',7);
       $totunidaini   = 0;
@@ -252,18 +254,18 @@ if (substr($nivel,1,1) == 'A'){
       $totunidaemp   = 0;
       $totunidaliq   = 0;
       $totunidapag   = 0;
- 
+
     }
-    
+
     if($xorgao != $o58_orgao && $quebra_orgao =='S' ){
       $pdf->setfont('arial','b',7);
       $pagina = 1;
       $pdf->ln(3);
 
-      if ($completo==false){  
+      if ($completo==false){
       	$pdf->cell(50,$alt,''                                ,"TB",0,"L",1);
       	$pdf->cell(85,$alt,'TOTAL DO ORGÃO '                 ,"TB",0,"L",1);
-      
+
       	$pdf->cell(25,$alt,db_formatar($totorgaoini,'f')     ,"TBL",0,"R",1);
       	$pdf->cell(25,$alt,db_formatar($totorgaoanter,'f')   ,"TBL",0,"R",1);
       	$pdf->cell(25,$alt,db_formatar($totorgaocomp,'f')    ,"TBL",0,"R",1);
@@ -292,12 +294,12 @@ if (substr($nivel,1,1) == 'A'){
         $pdf->cell(25,$alt,db_formatar($totorgaoemp,'f'),1   ,0,"R",1);
         $pdf->cell(25,$alt,db_formatar($totorgaoliq,'f'),1   ,0,"R",1);
         $pdf->cell(25,$alt,db_formatar($totorgaopag,'f'),1   ,0,"R",1);
-        
+
       }
 
-      
+
       $pdf->setfont('arial','',7);
-            
+
       $nGeralTotOrgaoini   += $totorgaoini;
       $nGeralTotOrgaosup   += $totorgaosup;
       $nGeralTotOrgaoesp   += $totorgaoesp;
@@ -308,8 +310,8 @@ if (substr($nivel,1,1) == 'A'){
       $nGeralTotOrgaoanter += $totorgaoanter;
       $nGeralTotOrgaoreser += $totorgaoreser;
       $nGeralTotOrgaoatual += $totorgaoatual;
-      
-      
+
+
       $totorgaoini   = 0;
       $totorgaoanter = 0;
       $totorgaoreser = 0;
@@ -323,7 +325,7 @@ if (substr($nivel,1,1) == 'A'){
 
 
     }
-    
+
     if ($pdf->gety()>$pdf->h-30 || $pagina == 1) {
       //Novo cabeçalho
       $pagina = 0;
@@ -331,10 +333,10 @@ if (substr($nivel,1,1) == 'A'){
       $pdf->addpage("L");
       $pdf->setfont('arial','b',7);
       $pdf->ln(2);
-      
-            
+
+
       if($completo==false) {
-      	
+
 	      $pdf->cell(120,10,"DADOS DA DESPESA","TBR",0,"C",1);
 	      //$pdf->cell(60,$alt,"RECURSO",0,0,"L",0);
 	      $pdf->cell(15,10,"REDUZ"            ,"TLBR",0,"C",1);
@@ -343,16 +345,16 @@ if (substr($nivel,1,1) == 'A'){
 	      $pdf->cell(50,5,"SALDO ORÇAMENTÁRIO","TLBR",0,"C",1);
 	      $pdf->cell(75,5,"SALDO RESERVADO"   ,"TLBR",0,"C",1);
 	      $pdf->cell(20,10,"SALDO ATUAL"      ,"TLB" ,0,"C",1);
-      	
+
         $pdf->SetXY($x,$y+5);
         $pdf->cell(25,5,"INICIAL"           ,"TLBR" ,0,"C",1);
         $pdf->cell(25,5,"DISPONÍVEL"        ,"TLBR" ,0,"C",1);
         $pdf->cell(25,5,"COMPROMETIDO"      ,"TLBR" ,0,"C",1);
         $pdf->cell(25,5,"AUTOMÁTICO"        ,"TLBR" ,0,"C",1);
         $pdf->cell(25,5,"TOTAL"             ,"TLBR" ,1,"C",1);
-        
+
       } else {
-      	
+
       	$pdf->cell(90,10,"DADOS DA DESPESA","TBR" ,0,"C",1);
         $pdf->cell(15,15,"RECURSO"         ,"TLBR" ,0,"C",1);
 	      $pdf->cell(30,10,"REDUZ"           ,"TLBR" ,0,"C",1);
@@ -361,17 +363,17 @@ if (substr($nivel,1,1) == 'A'){
 	      $pdf->cell(50,5,"SALDO ORÇAMENTÁRIO","TLBR",0,"C",1);
 	      $pdf->cell(75,5,"SALDO RESERVADO"   ,"TLBR",0,"C",1);
 	      $pdf->cell(20,15,"SALDO ATUAL"      ,"TLB" ,0,"C",1);
-      	
+
         $pdf->SetXY($x,$y+5);
-                
+
         $pdf->cell(25,5,"INICIAL"      ,"TLBR",0,"C",1);
         $pdf->cell(25,5,"DISPONÍVEL"   ,"TLBR",0,"C",1);
         $pdf->cell(25,5,"COMPROMETIDO" ,"TLBR",0,"C",1);
         $pdf->cell(25,5,"AUTOMÁTICO"   ,"TLBR",0,"C",1);
         $pdf->cell(25,5,"TOTAL"        ,"TLBR",0,"C",1);
-        
+
         $pdf->SetXY($x-135,$y+10);
-        
+
         $pdf->cell(90,5,"DETALHAMENTO DA EXECUÇÃO DA DESPESA","BTR",0,"C",1);
         $pdf->SetX($pdf->GetX()+15);
         $pdf->cell(30,5,"CRED. SUPLEM." ,"TLBR",0,"C",1);
@@ -380,14 +382,14 @@ if (substr($nivel,1,1) == 'A'){
         $pdf->cell(25,5,"EMPENHADO"     ,"TLBR",0,"C",1);
         $pdf->cell(25,5,"LIQUIDADO"     ,"TLBR",0,"C",1);
         $pdf->cell(25,5,"PAGO"          ,"TLBR",1,"C",1);
-        
+
 
       }
       //Fim do novo cabeçalho
-            
+
       $pdf->cell(0,$alt,'',"T",1,"C",0);
       $pdf->setfont('arial','',7);
-      
+
     }
 
     if($xorgao != $o58_orgao && $o58_orgao != 0){
@@ -398,7 +400,7 @@ if (substr($nivel,1,1) == 'A'){
 				$pdf->cell(48,$alt,''                                 ,0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f')          ,0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f')            ,0,0,"R",0);
-				$nComprometido = $reservado - $nResevaAutomatica; 
+				$nComprometido = $reservado - $nResevaAutomatica;
 				$pdf->cell(25,$alt,db_formatar($nComprometido,'f')    ,0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f')        ,0,0,"R",0);
@@ -411,14 +413,14 @@ if (substr($nivel,1,1) == 'A'){
 				$totorgaoresauto  += $nResevaAutomatica;
 				$totorgaoreser    += $reservado;
 				$totorgaoatual    += $atual_menos_reservado;
-				//Totalizador da unidade				
+				//Totalizador da unidade
 				$totunidaini     += $dot_ini;
 				$totunidaanter   += $atual;
 				$totunidacomp    += $nComprometido;
         $totunidaresauto += $nResevaAutomatica;
         $totunidareser   += $reservado;
 				$totunidaatual   += $atual_menos_reservado;
-								
+
       }else{
 				$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao'),0,0,"L",0);
 				$pdf->cell(60,$alt,substr($o40_descr,0,33),0,1,"L",0);
@@ -433,7 +435,7 @@ if (substr($nivel,1,1) == 'A'){
 				$pdf->cell(48,$alt,''                                 ,0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f')          ,0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f')            ,0,0,"R",0);
-				$nComprometido = $reservado - $nResevaAutomatica; 
+				$nComprometido = $reservado - $nResevaAutomatica;
 				$pdf->cell(25,$alt,db_formatar($nComprometido,'f')    ,0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f')        ,0,0,"R",0);
@@ -446,7 +448,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -458,7 +460,7 @@ if (substr($nivel,1,1) == 'A'){
 				$pdf->cell(60,$alt,substr($o41_descr,0,33),0,1,"L",0);
       }
     }
-    
+
     if("$o58_orgao.$o58_unidade.$o58_funcao" != "$xfuncao" && $o58_funcao != 0 ){
       $xfuncao = "$o58_orgao.$o58_unidade.$o58_funcao";
       $descr = $o52_descr;
@@ -468,7 +470,7 @@ if (substr($nivel,1,1) == 'A'){
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-				$nComprometido = $reservado - $nResevaAutomatica; 
+				$nComprometido = $reservado - $nResevaAutomatica;
 				$pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -481,7 +483,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -502,7 +504,7 @@ if (substr($nivel,1,1) == 'A'){
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-				$nComprometido = $reservado - $nResevaAutomatica; 
+				$nComprometido = $reservado - $nResevaAutomatica;
 				$pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -515,7 +517,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -536,7 +538,7 @@ if (substr($nivel,1,1) == 'A'){
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-				$nComprometido = $reservado - $nResevaAutomatica; 
+				$nComprometido = $reservado - $nResevaAutomatica;
 				$pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -549,7 +551,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -570,7 +572,7 @@ if (substr($nivel,1,1) == 'A'){
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-				$nComprometido = $reservado - $nResevaAutomatica; 
+				$nComprometido = $reservado - $nResevaAutomatica;
 				$pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -584,7 +586,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -593,7 +595,7 @@ if (substr($nivel,1,1) == 'A'){
         $totunidaatual   += $atual_menos_reservado;
 				}
       }else{
-      	
+
       	//echo "<br>aqui<br>";
       	//echo $sQuery."<br>";
 //      	echo "<br>$reservado<br>";
@@ -604,7 +606,7 @@ if (substr($nivel,1,1) == 'A'){
 				if($completo==false){
 			  	$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				  $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-				  $comprometido = $reservado - $nResevaAutomatica; 
+				  $comprometido = $reservado - $nResevaAutomatica;
 				  $pdf->cell(25,$alt,db_formatar($comprometido,'f'),0,0,"R",0);
 				  $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
 				  $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -613,21 +615,21 @@ if (substr($nivel,1,1) == 'A'){
 				  $pdf->cell(25,$alt,'',0,1,"R",0);
 				}
 				$pdf->setfont('arial','',7);
-				
+
      }
    }
     if("$o58_orgao.$o58_unidade.$o58_funcao.$o58_subfuncao.$o58_programa.$o58_projativ.$o58_elemento" != "$xelemento" && $o58_elemento  != 0){
       $xelemento = "$o58_orgao.$o58_unidade.$o58_funcao.$o58_subfuncao.$o58_programa.$o58_projativ.$o58_elemento";
       $descr = $o56_descr;
-      
+
       if($nivela == 7){
-      	
+
 				$pdf->cell(27,$alt,db_formatar($o58_elemento,'elemento'),0,0,"L",0);
 				$pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
 				$pdf->cell(48,$alt,'',0,0,"L",0);
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-				$nComprometido = $reservado - $nResevaAutomatica; 
+				$nComprometido = $reservado - $nResevaAutomatica;
 				$pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -640,7 +642,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -654,7 +656,7 @@ if (substr($nivel,1,1) == 'A'){
     }
     if($o58_codigo > 0){
       $descr = $o56_descr;
-     
+
       if($completo == false){
       	$pdf->cell(27,$alt,$o58_elemento,0,0,"L",0);
         $pdf->cell(53,$alt,substr($descr,0,30),0,0,"L",0);
@@ -662,15 +664,15 @@ if (substr($nivel,1,1) == 'A'){
 	      if ($nivela == 8) {
 	       $pdf->cell(30,$alt,substr($o15_descr,0,20),0,0,"L",0);
 		    } else{
-	        $pdf->cell(30,$alt,substr($o15_descr,0,20),0,0,"L",0);	  	
+	        $pdf->cell(30,$alt,substr($o15_descr,0,20),0,0,"L",0);
 		    }
 		    $pdf->cell(15,$alt,$o58_coddot."-".db_CalculaDV($o58_coddot),0,0,"R",0);
       }
-      
+
       if($completo==false){
 				$pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
 				$pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-				$nComprometido = $reservado - $nResevaAutomatica; 
+				$nComprometido = $reservado - $nResevaAutomatica;
 				$pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -683,7 +685,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -702,18 +704,18 @@ if (substr($nivel,1,1) == 'A'){
         //Disponivel
         $pdf->cell(25,$alt,db_formatar($dot_ini+$suplemen_acumulado+$especial_acumulado-$reduzido_acumulado,'f'),0,0,"R",0);
         //Comprometido
-        $nComprometido = $reservado - $nResevaAutomatica; 
+        $nComprometido = $reservado - $nResevaAutomatica;
         $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
         $atual_menos_reservado = $atual - $reservado;
         $pdf->cell(20,$alt,db_formatar($atual_menos_reservado,'f'),0,1,"R",0);
-        
+
         $pdf->setfont('arial','',6);
         $pdf->SetX($pdf->GetX()+110);
         //cred suplemetar
         $pdf->cell(25,$alt,db_formatar($suplemen_acumulado,'f'),0,0,"R",0);
-     
+
         $pdf->cell(25,$alt,db_formatar($especial_acumulado,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reduzido_acumulado,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($empenhado-$anulado,'f'),0,0,"R",0);
@@ -728,11 +730,11 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaored     += $reduzido_acumulado;
         $totorgaoemp     += $empenhado-$anulado;
         $totorgaoliq     += $liquidado;
-        $totorgaopag     += $pago;                         
+        $totorgaopag     += $pago;
         $totorgaoanter   += $atual;
         $totorgaoreser   += $reservado;
         $totorgaoatual   += $atual_menos_reservado;
-      
+
         $totunidaini     += $dot_ini;
         $totunidacomp    += $nComprometido;
         $totunidaresauto += $nResevaAutomatica;
@@ -746,15 +748,15 @@ if (substr($nivel,1,1) == 'A'){
         $totunidareser   += $reservado;
         $totunidaatual   += $atual_menos_reservado;
 
-	
+
       }
 
-      
+
       if($lista_subeleme=='S'){
 
-				$sql = "select * 
-					from orcelemento 
-					where substr(o56_elemento,1,7) = '".str_replace('.','',substr($o58_elemento,0,7))."' and 
+				$sql = "select *
+					from orcelemento
+					where substr(o56_elemento,1,7) = '".str_replace('.','',substr($o58_elemento,0,7))."' and
 					      substr(o56_elemento,8,5) != '00000' and o56_anousu = ".db_getsession("DB_anousu")." and
 					      o56_orcado is true";
 				$res = pg_exec($sql);
@@ -764,12 +766,12 @@ if (substr($nivel,1,1) == 'A'){
 				  $pdf->cell(80,$alt,$o56_descr,0,0,"L",0);
 				  $pdf->cell(125,$alt,$o56_finali,0,1,"L",0);
 				}
-				
+
       }
     }
   }
-  
-        
+
+
   $nGeralTotOrgaoini     += $totorgaoini;
   $nGeralTotOrgaosup     += $totorgaosup;
   $nGeralTotOrgaoesp     += $totorgaoesp;
@@ -782,9 +784,9 @@ if (substr($nivel,1,1) == 'A'){
   $nGeralTotOrgaoresauto += $totorgaoresauto;
   $nGeralTotOrgaoreser   += $totorgaoreser;
   $nGeralTotOrgaoatual   += $totorgaoatual;
-  
-  if($quebra_unidade == 'S'){ 
-    if($completo==false){  
+
+  if($quebra_unidade == 'S'){
+    if($completo==false){
       $pdf->setfont('arial','b',7);
       $pdf->ln(3);
       $pdf->cell(50,$alt,''                               ,"TB",0,"L",1);
@@ -795,7 +797,7 @@ if (substr($nivel,1,1) == 'A'){
       $pdf->cell(25,$alt,db_formatar($totunidaresauto,'f'),"TBL",0,"R",1);
       $pdf->cell(25,$alt,db_formatar($totunidareser,'f')  ,"TBL",0,"R",1);
       $pdf->cell(20,$alt,db_formatar($totunidaatual,'f')  ,"TBL",1,"R",1);
-      
+
     }else{
     	$pdf->setfont('arial','b',7);
       $pdf->cell(105,$alt,'TOTAL DA UNIDADE - SALDOS',"T",0,"C",1);
@@ -832,12 +834,12 @@ if (substr($nivel,1,1) == 'A'){
       $pdf->cell(25, $alt, db_formatar($totorgaoresauto,'f'), "TBL", 0, "R", 1);
       $pdf->cell(25, $alt, db_formatar($totorgaoreser,  'f'), "TBL", 0, "R", 1);
       $pdf->cell(20, $alt, db_formatar($totorgaoatual,  'f'), "TBL", 1, "R", 1);
-      
+
   	}
-  	$pdf->setfont('arial','b',7);	
+  	$pdf->setfont('arial','b',7);
     $pdf->cell(50, $alt, ''			                                 , "TB", 0, "L", 1);
     $pdf->cell(85, $alt, 'TOTAL GERAL '                          , "TB", 0, "L", 1);
-      
+
     $pdf->cell(25, $alt, db_formatar($nGeralTotOrgaoini    , 'f'), "TBL", 0, "R", 1);
     $pdf->cell(25, $alt, db_formatar($nGeralTotOrgaoanter  , 'f'), "TBL", 0, "R", 1);
     $pdf->cell(25, $alt, db_formatar($nGeralTotOrgaocomp   , 'f'), "TBL", 0, "R", 1);
@@ -846,7 +848,7 @@ if (substr($nivel,1,1) == 'A'){
     $pdf->cell(20, $alt, db_formatar($nGeralTotOrgaoatual  , 'f'), "TBL", 1, "R", 1);
 
   }else{
-  	
+
   	if ($quebra_orgao == "S" || $quebra_unidade == "S") {
   		$pdf->setfont('arial','b',7);
   		$pdf->cell(105,$alt ,'TOTAL DO ORGÃO - SALDOS',"T",0,"C",1);
@@ -867,17 +869,17 @@ if (substr($nivel,1,1) == 'A'){
       $pdf->cell(25,$alt,db_formatar($totorgaoemp,'f'),1   ,0,"R",1);
       $pdf->cell(25,$alt,db_formatar($totorgaoliq,'f'),1   ,0,"R",1);
       $pdf->cell(25,$alt,db_formatar($totorgaopag,'f'),1   ,1,"R",1);
-        
-  		
+
+
   	}
     $pdf->setfont('arial','b',7);
     $pdf->cell(105,$alt,'TOTAL GERAL - SALDOS',"T",0,"C",1);
     $pdf->cell(30,$alt,'',"TL",0,"C",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoini    ,'f')  ,"TL",0,"R",1);
-    
+
 //    $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoini+$nGeralTotOrgaosup+$nGeralTotOrgaoesp-$nGeralTotOrgaored,'f'),"TL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoanter  ,'f'),"TL",0,"R",1);
-    
+
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaocomp   ,'f')  ,"TL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoresauto,'f')  ,"TL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoreser  ,'f')  ,"TL",0,"R",1);
@@ -885,20 +887,20 @@ if (substr($nivel,1,1) == 'A'){
     $y = $pdf->GetY();
     $pdf->SetY($y-$alt);
     $pdf->cell(105,$alt,'TOTAIS DA EXECUÇÃO',"TB",0,"C",1);
-    
+
     $pdf->cell(30,$alt,db_formatar($nGeralTotOrgaosup,'f')  ,"TBL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoesp,'f')  ,"TBL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaored,'f')  ,"TBL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoemp,'f')  ,"TBL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaoliq,'f')  ,"TBL",0,"R",1);
     $pdf->cell(25,$alt,db_formatar($nGeralTotOrgaopag,'f')  ,"TBRL",0,"R",1);
-  	
+
   }
 
 }else{
-  
+
   $nivela = substr($nivel,0,1);
-    
+
   $anousu  = db_getsession("DB_anousu");
   //$dataini = db_getsession("DB_anousu")."-01-01";
   //$datafin = date("Y-m-d",db_getsession("DB_datausu"));
@@ -909,9 +911,9 @@ if (substr($nivel,1,1) == 'A'){
   //db_criatabela(pg_exec("select * from work w inner join temporario t on $sele_work "));exit;
 
 
-  $pdf = new PDF(); 
-  $pdf->Open(); 
-  $pdf->AliasNbPages(); 
+  $pdf = new PDF();
+  $pdf->Open();
+  $pdf->AliasNbPages();
   $total = 0;
   $pdf->setfillcolor(235);
   $pdf->setfont('arial','b',7);
@@ -955,11 +957,11 @@ if (substr($nivel,1,1) == 'A'){
 //    echo $sQuery."<br><br>";
     $rsQuery = db_query($sQuery.$filtro);
     if($rsQuery !== false){
-      
+
       $oQuery = db_utils::fieldsMemory($rsQuery,0);
-      
+
     }
-    
+
     $nResevaAutomatica = $oQuery->total;
 //    echo "<pre>";
 //    var_dump($oRelatorio);
@@ -968,7 +970,7 @@ if (substr($nivel,1,1) == 'A'){
     db_fieldsmemory($result, $iLinha);
     $k = $iLinha;
     if($pdf->gety()>$pdf->h-30 || $pagina == 1){
-      
+
     	$pagina = 0;
       $qualou = $o58_orgao.$o58_unidade;
       $pdf->addpage("L");
@@ -982,14 +984,14 @@ if (substr($nivel,1,1) == 'A'){
       $pdf->cell(50,5,"SALDO ORÇAMENTÁRIO","TLBR",0,"C",1);
       $pdf->cell(75,5,"SALDO RESERVADO"   ,"TLBR",0,"C",1);
       $pdf->cell(20,10,"SALDO ATUAL"      ,"TLB" ,0,"C",1);
-        
+
       $pdf->SetXY($x,$y+5);
       $pdf->cell(25,5,"INICIAL"           ,"TLBR" ,0,"C",1);
       $pdf->cell(25,5,"DISPONÍVEL"        ,"TLBR" ,0,"C",1);
       $pdf->cell(25,5,"COMPROMETIDO"      ,"TLBR" ,0,"C",1);
       $pdf->cell(25,5,"AUTOMÁTICO"        ,"TLBR" ,0,"C",1);
       $pdf->cell(25,5,"TOTAL"             ,"TLBR" ,1,"C",1);
-      
+
       $pdf->setfont('arial','',7);
     }
     if ($nivela == 1) {
@@ -998,7 +1000,7 @@ if (substr($nivel,1,1) == 'A'){
       $pdf->cell(48,$alt,'',0,0,"L",0);
       $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
       $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-      $nComprometido = $reservado - $nResevaAutomatica; 
+      $nComprometido = $reservado - $nResevaAutomatica;
       $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
       $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
       $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -1011,7 +1013,7 @@ if (substr($nivel,1,1) == 'A'){
       $totorgaoresauto  += $nResevaAutomatica;
       $totorgaoreser    += $reservado;
       $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
       $totunidaini     += $dot_ini;
       $totunidaanter   += $atual;
       $totunidacomp    += $nComprometido;
@@ -1019,14 +1021,14 @@ if (substr($nivel,1,1) == 'A'){
       $totunidareser   += $reservado;
       $totunidaatual   += $atual_menos_reservado;
     }
-    
+
     if ($nivela == 2) {
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade'),0,0,"L",0);
         $pdf->cell(60,$alt,substr($o41_descr,0,33),0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-        $nComprometido = $reservado - $nResevaAutomatica; 
+        $nComprometido = $reservado - $nResevaAutomatica;
         $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -1039,7 +1041,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -1048,14 +1050,14 @@ if (substr($nivel,1,1) == 'A'){
         $totunidaatual   += $atual_menos_reservado;
       }
       $descr = $o52_descr;
-      
+
       if($nivela == 3){
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao'),0,0,"L",0);
         $pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-        $nComprometido = $reservado - $nResevaAutomatica; 
+        $nComprometido = $reservado - $nResevaAutomatica;
         $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -1068,7 +1070,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -1076,7 +1078,7 @@ if (substr($nivel,1,1) == 'A'){
         $totunidareser   += $reservado;
         $totunidaatual   += $atual_menos_reservado;
       }
-      
+
       $descr = $o53_descr;
       if($nivela == 4){
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'orgao').".".db_formatar($o58_subfuncao,'subfuncao'),0,0,"L",0);
@@ -1084,7 +1086,7 @@ if (substr($nivel,1,1) == 'A'){
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-        $nComprometido = $reservado - $nResevaAutomatica; 
+        $nComprometido = $reservado - $nResevaAutomatica;
         $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -1097,7 +1099,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -1105,7 +1107,7 @@ if (substr($nivel,1,1) == 'A'){
         $totunidareser   += $reservado;
         $totunidaatual   += $atual_menos_reservado;
 			}
-			
+
       $descr = $o54_descr;
       if($nivela == 5){
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'funcao').".".db_formatar($o58_subfuncao,'s','0',3,'e').".".db_formatar($o58_programa,'programa'),0,0,"L",0);
@@ -1113,7 +1115,7 @@ if (substr($nivel,1,1) == 'A'){
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-        $nComprometido = $reservado - $nResevaAutomatica; 
+        $nComprometido = $reservado - $nResevaAutomatica;
         $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -1126,7 +1128,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -1135,20 +1137,20 @@ if (substr($nivel,1,1) == 'A'){
         $totunidaatual   += $atual_menos_reservado;
       }
       $descr = $o55_descr;
-      
+
       if($nivela == 6){
       	$pdf->cell(27,$alt,db_formatar($o58_orgao,'orgao').db_formatar($o58_unidade,'unidade').db_formatar($o58_funcao,'orgao').".".db_formatar($o58_subfuncao,'s','0',3,'e').".".db_formatar($o58_programa,'programa').".".db_formatar($o58_projativ,'projativ'),0,0,"L",0);
         $pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-        $nComprometido = $reservado - $nResevaAutomatica; 
+        $nComprometido = $reservado - $nResevaAutomatica;
         $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
         $atual_menos_reservado = $atual - $reservado;
         $pdf->cell(20,$alt,db_formatar($atual_menos_reservado,'f'),0,1,"R",0);
-        
+
           //Totalizador do orgao
         $totorgaoini      += $dot_ini;
         $totorgaoanter    += $atual;
@@ -1156,7 +1158,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -1165,14 +1167,14 @@ if (substr($nivel,1,1) == 'A'){
         $totunidaatual   += $atual_menos_reservado;
       }
       $descr = $o56_descr;
-      
+
       if($nivela == 7){
 				$pdf->cell(27,$alt,db_formatar($o58_elemento,'elemento'),0,0,"L",0);
         $pdf->cell(60,$alt,substr($descr,0,33),0,0,"L",0);
         $pdf->cell(48,$alt,'',0,0,"L",0);
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-        $nComprometido = $reservado - $nResevaAutomatica; 
+        $nComprometido = $reservado - $nResevaAutomatica;
         $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -1185,7 +1187,7 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-        //Totalizador da unidade        
+        //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
@@ -1193,23 +1195,23 @@ if (substr($nivel,1,1) == 'A'){
         $totunidareser   += $reservado;
         $totunidaatual   += $atual_menos_reservado;
       }
-     
+
       if ($nivela == 8) {
-          
-      	$descr = $o56_descr;	
-      
+
+      	$descr = $o56_descr;
+
        // $pdf->cell(27,$alt,$o58_elemento,0,0,"L",0);
         //$pdf->cell(53,$alt,substr($descr,0,30),0,0,"L",0);
         $pdf->cell(10,$alt,db_formatar($o58_codigo,'s','0',4,'e'),0,0,"C",0);
-    
+
         $pdf->cell(110,$alt,substr($o15_descr,0,25),0,0,"L",0);
         $pdf->cell(15,$alt,$o58_coddot."-".db_CalculaDV($o58_coddot),0,0,"R",0);
-        
-      
-        
+
+
+
         $pdf->cell(25,$alt,db_formatar($dot_ini,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($atual,'f'),0,0,"R",0);
-        $nComprometido = $reservado - $nResevaAutomatica; 
+        $nComprometido = $reservado - $nResevaAutomatica;
         $pdf->cell(25,$alt,db_formatar($nComprometido,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($nResevaAutomatica,'f'),0,0,"R",0);
         $pdf->cell(25,$alt,db_formatar($reservado,'f'),0,0,"R",0);
@@ -1222,14 +1224,14 @@ if (substr($nivel,1,1) == 'A'){
         $totorgaoresauto  += $nResevaAutomatica;
         $totorgaoreser    += $reservado;
         $totorgaoatual    += $atual_menos_reservado;
-          //Totalizador da unidade        
+          //Totalizador da unidade
         $totunidaini     += $dot_ini;
         $totunidaanter   += $atual;
         $totunidacomp    += $nComprometido;
         $totunidaresauto += $nResevaAutomatica;
         $totunidareser   += $reservado;
         $totunidaatual   += $atual_menos_reservado;
-      }      
+      }
   }
 
   $nGeralTotOrgaoanter   += $totorgaoanter;
@@ -1238,42 +1240,42 @@ if (substr($nivel,1,1) == 'A'){
   $nGeralTotOrgaoresauto += $totorgaoresauto;
   $nGeralTotOrgaoreser   += $totorgaoreser;
   $nGeralTotOrgaoini     += $totorgaoini;
-  
-  
+
+
   $pdf->ln(3);
   $pdf->setfont('arial','b',7);
   $pdf->cell(50, $alt, ''        , "TB", 0, "L", 1);
   $pdf->cell(85, $alt, 'TOTAL GERAL ', "TB", 0, "L", 1);
-      
+
   $pdf->cell(25, $alt, db_formatar($nGeralTotOrgaoini    , 'f'), "TBL", 0, "R", 1);
   $pdf->cell(25, $alt, db_formatar($nGeralTotOrgaoanter  , 'f'), "TBL", 0, "R", 1);
   $pdf->cell(25, $alt, db_formatar($nGeralTotOrgaocomp   , 'f'), "TBL", 0, "R", 1);
   $pdf->cell(25, $alt, db_formatar($nGeralTotOrgaoresauto, 'f'), "TBL", 0, "R", 1);
   $pdf->cell(25, $alt, db_formatar($nGeralTotOrgaoreser  , 'f'), "TBL", 0, "R", 1);
   $pdf->cell(20, $alt, db_formatar($nGeralTotOrgaoatual  , 'f'), "TBL", 1, "R", 1);
-  
-  
+
+
 }
 $pdf->Output();
 
 pg_exec("commit");
 /**
- * Função para retornar um sql dinamico 
- * conforme os nivel em execução 
+ * Função para retornar um sql dinamico
+ * conforme os nivel em execução
  *
  * @param object $oData
  * @param integer $iNivel
  * @param integer $iAnousu
  */
 function retornaSqlReservado($oData,$iNivel,$iAnousu,$dataini,$datafin){
-	
+
 	$sSqlWhere  = " and o58_orgao     = ".$oData->o58_orgao     ;
-	
+
 	if (!empty($oData->o58_unidade)) {
     $sSqlWhere .= " and o58_unidade   = ".$oData->o58_unidade   ;
 	}
 	if (!empty($oData->o58_funcao)) {
-    $sSqlWhere .= " and o58_funcao    = ".$oData->o58_funcao    ;	
+    $sSqlWhere .= " and o58_funcao    = ".$oData->o58_funcao    ;
 	}
   if (!empty($oData->o58_subfuncao)) {
 	  $sSqlWhere .= " and o58_subfuncao = ".$oData->o58_subfuncao ;
@@ -1337,37 +1339,37 @@ function retornaSqlReservado($oData,$iNivel,$iAnousu,$dataini,$datafin){
             $sSqlWhere .= " and o58_codigo    = ".$oData->o58_codigo    ;
       break;
       default: $sSqlWhere = "";
-          
+
 	}
 	*/
 	$sSql = "select coalesce(sum(o80_valor),0) as total
-	           from orcreservager 
-	                inner join orcreserva on o84_codres = o80_codres 
+	           from orcreservager
+	                inner join orcreserva on o84_codres = o80_codres
 	                inner join orcdotacao on o58_coddot = o80_coddot
 	                                     and o80_anousu = o58_anousu
 	                inner join orcelemento on o58_codele = o56_codele
-	                                      and o58_anousu = o56_anousu 
-	             
-	          where o80_anousu = $iAnousu 
-	            and o84_data between '$dataini' and '$datafin'  
+	                                      and o58_anousu = o56_anousu
+
+	          where o80_anousu = $iAnousu
+	            and o84_data between '$dataini' and '$datafin'
 	             ";
-  	          
+
 	$sSql .= $sSqlWhere;
-	
+
 	return $sSql;
-	
+
 }
 
 /**
- * Função para retornar um sql dinamico 
- * conforme os nivel em execução 
+ * Função para retornar um sql dinamico
+ * conforme os nivel em execução
  *
  * @param object $oData
  * @param integer $iNivel
  * @param integer $iAnousu
  */
 function retornaSqlReservadoSoNivel($oData,$iNivel,$iAnousu,$dataini,$datafin){
-  
+
   switch ($iNivel){
     case 1: $sSqlWhere  = " and o58_orgao = ".$oData->o58_orgao         ;
       break;
@@ -1387,25 +1389,25 @@ function retornaSqlReservadoSoNivel($oData,$iNivel,$iAnousu,$dataini,$datafin){
      case 8:$sSqlWhere = " and o58_codigo    = ".$oData->o58_codigo    ;
       break;
       default: $sSqlWhere = "";
-          
+
   }
-  
+
   $sSql = "select coalesce(sum(o80_valor),0) as total
-             from orcreservager 
-                  inner join orcreserva on o84_codres = o80_codres 
+             from orcreservager
+                  inner join orcreserva on o84_codres = o80_codres
                   inner join orcdotacao on o58_coddot = o80_coddot
                                        and o80_anousu = o58_anousu
                   inner join orcelemento on o58_codele = o56_codele
-                                        and o58_anousu = o56_anousu 
-               
-            where o80_anousu = $iAnousu 
-              and o84_data between '$dataini' and '$datafin'  
+                                        and o58_anousu = o56_anousu
+
+            where o80_anousu = $iAnousu
+              and o84_data between '$dataini' and '$datafin'
                ";
-              
+
   $sSql .= $sSqlWhere;
-  
+
   return $sSql;
-  
+
 }
 
 ?>
