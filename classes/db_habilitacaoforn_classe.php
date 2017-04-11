@@ -585,7 +585,7 @@ class cl_habilitacaoforn {
          }
        }
      }
-     if($this->l206_datavalidadeinss < $this->l206_datahab){
+     if($this->l206_datavalidadeinss < $this->l206_datahab && $this->fisica_juridica == 'j') {
        $this->erro_sql = " Campo Data de Validade deve ser maior ou igual a Data Habilitação.";
        $this->erro_campo = "l206_datavalidadeinss_dia";
        $this->erro_banco = "";
@@ -661,7 +661,7 @@ class cl_habilitacaoforn {
          }
        }
      }
-     if($this->l206_datavalidadefgts < $this->l206_datahab){
+     if($this->l206_datavalidadefgts < $this->l206_datahab && $this->fisica_juridica == 'j'){
        $this->erro_sql = " Campo Data de Validade deve ser maior ou igual a Data Habilitação.";
        $this->erro_campo = "l206_datavalidadefgts_dia";
        $this->erro_banco = "";
@@ -737,7 +737,7 @@ class cl_habilitacaoforn {
          }
        }
      }
-   if($this->l206_datavalidadecndt < $this->l206_datahab){
+   if($this->l206_datavalidadecndt < $this->l206_datahab && $this->fisica_juridica == 'j'){
        $this->erro_sql = " Campo Data de Validade deve ser maior ou igual a Data Habilitação.";
        $this->erro_campo = "l206_datavalidadecndt_dia";
        $this->erro_banco = "";
