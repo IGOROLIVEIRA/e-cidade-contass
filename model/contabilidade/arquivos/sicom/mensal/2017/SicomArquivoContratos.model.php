@@ -482,7 +482,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos11->si84_codcontrato = $oDadosReg11->si84_codcontrato;
                 $clcontratos11->si84_coditem = $oDadosReg11->si84_coditem;
                 $clcontratos11->si84_quantidadeitem = $oDadosReg11->si84_quantidadeitem;
-                $clcontratos11->si84_valorunitarioitem = $oDadosReg11->si84_valorunitarioitem / $oDadosReg11->si84_quantidadeitem;
+                $clcontratos11->si84_valorunitarioitem = $oDadosReg11->si84_valorunitarioitem;
                 $clcontratos11->si84_mes = $oDadosReg11->si84_mes;
                 $clcontratos11->si84_instit = $oDadosReg11->si84_instit;
 
