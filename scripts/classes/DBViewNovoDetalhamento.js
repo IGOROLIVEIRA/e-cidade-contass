@@ -109,7 +109,7 @@ var DBViewNovoDetalhamento = function(sInstance) {
 				c19_conplanoreduzanousu 
 				c19_orctiporec              
 	    	 */
-	    	$('ctnFonte')           . style.display = 'table-row';
+			$('ctnTipoReceita')    . style.display = 'table-row';
 	    break;	
 
     }  

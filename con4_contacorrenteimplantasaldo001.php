@@ -168,9 +168,9 @@ db_app::load("widgets/DBAncora.widget.js");
             </fieldset>
 
             <div style="margin-top: 10px;">
-                <input name="processar" type="button" id="processar" value="Processar" disabled="disabled"
-                       onclick="js_processar();">
+                <input name="processar" type="button" id="processar" value="Processar" disabled="disabled" onclick="js_processar();">
                 <input name="novo" type="button" id="novo" value="Novo Detalhamento" onclick="js_NovoDetalhamento();">
+                <input name="importar" type="button" id="importar" value="Importar do Sicom Balancete" disabled="disabled" onclick="js_importar();">
 
             </div>
 
@@ -250,6 +250,15 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
                     alert('Necessário preenchimento de todos campos.');
                     return false;
                 }
+                break;
+
+            case '103':
+
+                if (iTipoReceita == '') {
+                    alert('Necessário preenchimento de todos campos.');
+                    return false;
+                }
+
                 break;
 
         }
@@ -913,10 +922,17 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         }
     }
 
+    function js_importar(){
+        var res = confirm('Para realizar este procedimento, é necessário que o arquivo do Sicom Balancete Encerramento do exercício anterior, esteja importado. Deseja continuar?');
+        if(res) {
+            js_getDetalhamento(true);
+        }
+    }
+
     /*
      * funcao responsavel pelo preenchimento da grid
      */
-    function js_getDetalhamento() {
+    function js_getDetalhamento(iImportar) {
 
         var iCodigoReduzido = $F('iReduzido');
         var msgDiv = "Buscando Detalhamentos \nAguarde ...";
@@ -924,6 +940,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
         oParametros.exec = 'getDetalhamento';
         oParametros.iCodigoReduzido = iCodigoReduzido;
+        oParametros.iImportar = iImportar;
 
 
         js_divCarregando(msgDiv, 'msgBox');
@@ -946,7 +963,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
      */
 
     function js_retornoDetalhamento(oAjax) {
-        console.log(oAjax);
+        $('importar').disabled = true;
         js_removeObj('msgBox');
         var oRetorno = eval("(" + oAjax.responseText + ")");
 
@@ -979,6 +996,9 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
         $('iCodigoDescricao').value = oRetorno.iCodigoDescricao;
         $('sDescricaoConta').value = oRetorno.sDescricaoContaCorrente.urlDecode();
 
+        if($('iCodigoDescricao').value == 101){
+            $('importar').disabled = false;
+        }
         if (oRetorno.aDados.length > 0) {
 
             oRetorno.aDados.each(function (oDado, iInd) {

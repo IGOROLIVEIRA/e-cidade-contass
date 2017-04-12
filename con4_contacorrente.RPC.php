@@ -209,6 +209,29 @@ try {
                     $oDaoContaCorrenteDetalhe->c19_numcgm = $iNome;
 
                     break;
+                case 103:  //Fonte de Recurso
+
+                    $sWhereVerificacao = "     c19_contacorrente       = {$iContaCorrente}    ";
+                    $sWhereVerificacao .= " and c19_orctiporec          = {$iTipoReceita}      ";
+                    $sWhereVerificacao .= " and c19_instit              = {$iInstituicao}      ";
+                    $sWhereVerificacao .= " and c19_reduz               = {$iReduzido}         ";
+                    $sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}           ";
+
+                    $sSqlVerificaDetalhe = $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);
+                    $rsVerificacao = $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);db_criatabela($rsVerificacao);echo $sSqlVerificaDetalhe;exit;
+
+                    if ($oDaoVerificaDetalhe->numrows > 0) {
+                        $sDescricaoContaCorrenteErro = "103 - Fonte de Recurso";
+                    }
+
+                    $oDaoContaCorrenteDetalhe->c19_contacorrente = $iContaCorrente;
+                    $oDaoContaCorrenteDetalhe->c19_orctiporec = $iTipoReceita;
+                    $oDaoContaCorrenteDetalhe->c19_instit = $iInstituicao;
+                    $oDaoContaCorrenteDetalhe->c19_reduz = $iReduzido;
+                    $oDaoContaCorrenteDetalhe->c19_conplanoreduzanousu = $iAnoUsu;
+
+
+                    break;
 
             }
 
@@ -589,7 +612,9 @@ try {
             $sCamposDetalhe .= "db83_conta,        ";
             $sCamposDetalhe .= "db83_dvconta,      "; // CC2 - Domicilio Bancario
             $sCamposDetalhe .= "cgm.z01_nome,      ";
-            $sCamposDetalhe .= "c58_descr         ";
+            $sCamposDetalhe .= "c58_descr,         ";
+            $sCamposDetalhe .= "c19_programa,       "; //CC 101
+            $sCamposDetalhe .= "c19_projativ       "; //CC 101
             $iTroca = 0;
             switch ($iCorrente) {
                 case 106:
@@ -616,11 +641,13 @@ try {
                                     inner join empresto on e91_numemp = e60_numemp
                         where c19_contacorrente = {$iCorrente}
                             and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = {$iAnousuEmp}
-                            and c19_instit = " . db_getsession('DB_instit') . "
-                           
-                            ";
-                        /*   union
-                            SELECT c19_sequencial,
+                            and c19_instit = " . db_getsession('DB_instit');
+
+                        $rsLancamentos = db_query($sSqlLancamentos);
+
+                        if(pg_num_rows($rsLancamentos) == 0){
+
+                            $sSqlLancamentos = "SELECT c19_sequencial,
                                    c17_descricao,
                                    e60_numemp,
                                    e60_codemp,
@@ -628,9 +655,9 @@ try {
                             FROM contacorrentedetalhe
                             INNER JOIN contacorrente ON c19_contacorrente = c17_sequencial
                             INNER JOIN empempenho ON e60_numemp = c19_numemp
-                            WHERE c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu')*/
-                        $rsLancamentos = db_query($sSqlLancamentos);
-                        //db_criatabela($rsLancamentos);
+                            WHERE c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu');
+                            $rsLancamentos = db_query($sSqlLancamentos);
+                        }
                         $aLancamento = db_utils::getColectionByRecord($rsLancamentos);
                         $aDadosAgrupados = array();
                         foreach ($aLancamento as $oLancamentos) {
@@ -1066,10 +1093,129 @@ try {
 
                     break;
                 default:
+
+                    /**
+                     * Importação dos dados para implantação do saldo do cc
+                     * Esta funcionalidade é para as contas do CC 101 que não tiveram movimentação em períodos anteriores,
+                     * mas que necessitam de implantar saldo.
+                     *
+                     * Funcionamento:
+                     * 1. Quando a conta já possui movimentações em anos anterioes, o fluxo segue pelo getDetalhamento
+                     * normalmente, porém, o parametro iImportar é diferente de 1. Assim busca a movimentação normal do
+                     * CC Detalhe.
+                     * 2. Quando não existe movimentações em anos anteriores, é possível realizar a importação das
+                     * informações do SICOM Balancete Encerramento do exercício anterior ao da implantação do saldo.
+                     * Para que seja possível realizar essa importação, antes é preciso fazer a importação do arquivo
+                     * do Sicom Balancete Encerramento na área TCEMG, módulo Sicom, menu Procedimentos->Importar Sicom.
+                     * 3. No processamento da rotina, é criado os contacorrente detalhes de cada registro importado
+                     * no detalhamento 13.
+                     * 4. É exibido na tela os CC criados para implantação do saldo.
+                     *
+                     */
+                    if($oParam->iImportar == 1){
+                        db_inicio_transacao();
+                        /*
+                         * Cria a tabela auxiliar que irá armezenar os dados que serão listados na tela
+                         */
+                        db_query('drop table if exists omov; create table omov ( c19_sequencial integer, c17_sequencial integer, c17_contacorrente varchar,c17_descricao varchar, c19_programa varchar, c19_projativ varchar, c69_valor float);') or die(pg_last_error());
+                        /*
+                         * Obtem a conta pelo reduzido
+                         */
+                        $oContaContabil = new ContaPlanoPCASP(null,db_getsession('DB_anousu'),$oParam->iCodigoReduzido,db_getsession('DB_instit'));
+
+                        /**
+                         * Busca os dados importados atraves do conta
+                         *
+                         */
+                        $sNomeClasse = 'cl_balancete13'.($iAnoUsu-1);
+                        $oBalancete13 = new $sNomeClasse;
+                        $sWhere = "si180_mes = ".$oBalancete13::PERIODO_ENCERRAMENTO." and si180_instit = ".db_getsession('DB_instit')." and si180_contacontabil = '".str_replace('.','',$oContaContabil->getEstruturaAteNivel($oContaContabil->getEstruturalComMascara(),7))."'";
+                        $oDadosImportados = db_utils::getCollectionByRecord($oBalancete13->sql_record($oBalancete13->sql_query_file(null,"distinct si180_codprograma,si180_idacao,case when si180_naturezasaldofinaipa = 'C' then si180_saldofinaipa*-1 else si180_saldofinaipa end as si180_saldofinaipa",null,$sWhere)));
+                        if(count($oDadosImportados) == 0){
+                            $sMsgErro = "Não foram encontradas informações sobre o balancete de encerramento do sicom do exercicio anterior. Por favor, faça a importação em: TCE->SICOM->Procedimentos->Importar SICOM.";
+                            throw new BusinessException($sMsgErro);
+                        }
+                        /*
+                         * Como não existe os dados da dotação e é uma chave obrigatória para o cc 101, utiliza-se a primeira dotação do ano
+                         */
+                        $oDotacao = new cl_orcdotacao();
+                        $sWhereDotacao = " o58_instit = " . db_getsession('DB_instit') . " and o58_anousu = " . db_getsession('DB_anousu') . " order by 1 limit 1 ";
+                        $oDadosDotacao = db_utils::getCollectionByRecord($oDotacao->sql_record($oDotacao->sql_query_file(null, null, "o58_coddot,o58_anousu", null, $sWhereDotacao)));
+                        $oDotacao = new Dotacao($oDadosDotacao[0]->o58_coddot,$oDadosDotacao[0]->o58_anousu);
+                        foreach ($oDadosImportados as $oDadoImportado) {
+
+                            try {
+
+                                /*
+                                 * Cria o contacorrente detalhe para ser exibido na tela
+                                 */
+
+                                $oContaCorreteDetalhe = new cl_contacorrentedetalhe();
+
+                                $oContaCorreteDetalhe->c19_contacorrente = $oContaContabil->getContaCorrente()->getCodigo();
+                                $oContaCorreteDetalhe->c19_orctiporec = $oContaContabil->getRecurso();
+                                $oContaCorreteDetalhe->c19_instit = db_getsession('DB_instit');
+                                $oContaCorreteDetalhe->c19_reduz = $oContaContabil->getReduzido();
+                                $oContaCorreteDetalhe->c19_conplanoreduzanousu = $oContaContabil->getAno();
+                                $oContaCorreteDetalhe->c19_estrutural = $oDotacao->getElemento();
+                                $oContaCorreteDetalhe->c19_orcdotacao = $oDotacao->getCodigo();
+                                $oContaCorreteDetalhe->c19_orcdotacaoanousu = $oDotacao->getAno();
+                                $oContaCorreteDetalhe->c19_programa = $oDadoImportado->si180_codprograma;
+                                $oContaCorreteDetalhe->c19_projativ = $oDadoImportado->si180_idacao;
+
+                                /*
+                                 * Verifica se existe contacorrentedetalhe para não duplicar a importação
+                                 */
+                                $sSqlDelete = " select c19_sequencial from
+                                                    contacorrentedetalhe
+                                                    where c19_programa = '{$oContaCorreteDetalhe->c19_programa}'
+                                                    and c19_projativ = '{$oContaCorreteDetalhe->c19_projativ}'
+                                                    and c19_orcdotacao = {$oContaCorreteDetalhe->c19_orcdotacao}
+                                                    and c19_orcdotacaoanousu = {$oContaCorreteDetalhe->c19_orcdotacaoanousu}
+                                                    and c19_estrutural = '{$oContaCorreteDetalhe->c19_estrutural}'
+                                                    and c19_conplanoreduzanousu = '{$oContaCorreteDetalhe->c19_conplanoreduzanousu}'
+                                                    and c19_reduz = {$oContaCorreteDetalhe->c19_reduz}
+                                                    and c19_instit = {$oContaCorreteDetalhe->c19_instit}
+                                                    and c19_orctiporec = {$oContaCorreteDetalhe->c19_orctiporec}
+                                                    and c19_contacorrente = {$oContaCorreteDetalhe->c19_contacorrente}
+                                                    ";
+                                if(pg_num_rows(db_query($sSqlDelete)) > 0 ){
+                                    $sSqlDeleteSaldo = "delete from contacorrentesaldo where c29_contacorrentedetalhe = ".db_utils::fieldsMemory(db_query($sSqlDelete),0)->c19_sequencial." and c29_mesusu = 0 and c29_anousu = ".db_getsession('DB_anousu');
+                                    $sSqlDelete = " delete from
+                                                    contacorrentedetalhe
+                                                    where c19_programa = '{$oContaCorreteDetalhe->c19_programa}'
+                                                    and c19_projativ = '{$oContaCorreteDetalhe->c19_projativ}'
+                                                    and c19_orcdotacao = {$oContaCorreteDetalhe->c19_orcdotacao}
+                                                    and c19_orcdotacaoanousu = {$oContaCorreteDetalhe->c19_orcdotacaoanousu}
+                                                    and c19_estrutural = '{$oContaCorreteDetalhe->c19_estrutural}'
+                                                    and c19_conplanoreduzanousu = '{$oContaCorreteDetalhe->c19_conplanoreduzanousu}'
+                                                    and c19_reduz = {$oContaCorreteDetalhe->c19_reduz}
+                                                    and c19_instit = {$oContaCorreteDetalhe->c19_instit}
+                                                    and c19_orctiporec = {$oContaCorreteDetalhe->c19_orctiporec}
+                                                    and c19_contacorrente = {$oContaCorreteDetalhe->c19_contacorrente}
+                                                    ";
+                                    db_query($sSqlDeleteSaldo) or die(pg_last_error());
+                                    db_query($sSqlDelete) or die(pg_last_error());
+                                }
+
+                                $oContaCorreteDetalhe->incluir(null);
+
+                                /*
+                                 * Povoa a tabela auxiliar que armazena os dados que serão exibidos na tela
+                                 */
+                                db_query("insert into omov values ({$oContaCorreteDetalhe->c19_sequencial},{$oContaCorreteDetalhe->c19_contacorrente},'CC {$oContaCorreteDetalhe->c19_contacorrente}','{$oContaContabil->getContaCorrente()->getDescricao()}','{$oContaCorreteDetalhe->c19_programa}','{$oContaCorreteDetalhe->c19_projativ}', {$oDadoImportado->si180_saldofinaipa})") or die(pg_last_error());
+
+                            }catch (Exception $ex){
+                                throw new Exception($ex->getMessage());
+                            }
+                        }
+                        db_fim_transacao(false);
+                        $iTroca = 1;
+                    }
                     $sWhereDetalhes = "c19_reduz = {$iReduzido}";
             }
 
-            $sSqlDetalhe = $iTroca == 0 ? $oDaoContaCorrenteDetalhe->sql_query_fileAtributos(null, $sCamposDetalhe, null, $sWhereDetalhes) : "select * from omov where c69_valor <> 0";
+            $sSqlDetalhe = $iTroca == 0 ? $oDaoContaCorrenteDetalhe->sql_query_fileAtributos(null, $sCamposDetalhe, null, $sWhereDetalhes."order by 1") : "select * from omov order by 1";
             $rsDetalhes = $oDaoContaCorrenteDetalhe->sql_record($sSqlDetalhe);
 
             if ($oDaoContaCorrenteDetalhe->numrows > 0) {
@@ -1121,9 +1267,13 @@ try {
                             $sDescricao = "Empenho: " . $oValores->e60_codemp . "/" . $oValores->e60_anousu;
                             $oDadosDetalhes->nValor = $oValores->c69_valor;
                             break;
-
+                        case 101:
+                            $sDescricao = "Programa: $oValores->c19_programa - Ação: $oValores->c19_projativ";
+                            $oDadosDetalhes->nValor = empty($oValores->c69_valor) ? 0 : $oValores->c69_valor;
+                            break;
                         default:
                             $sDescricao = $oValores->o15_descr;
+                            $oDadosDetalhes->nValor = empty($oValores->c69_valor) ? 0 : $oValores->c69_valor;
 
                     }
                     // setamoso sequencial dos detalhes e a descrição que irá na grid

@@ -59,7 +59,7 @@ switch ($oParam->exec) {
 
         while ($arquivo = $diretorio->read()) {
 
-            if (substr($arquivo, -3) == 'csv' || substr($arquivo, -3) == 'CSV') {
+            if (strtoupper(substr($arquivo, -3)) == 'CSV') {
 
                 if (($handle = fopen($path . $arquivo, "r")) !== FALSE) {
 
@@ -142,7 +142,7 @@ switch ($oParam->exec) {
                                 } elseif ($aux[1] == "mes") {
                                     $oClasse->$sColuna = $mes;
                                 } elseif ($aux[1] == "instit") {
-                                    $oClasse->$sColuna = 1;
+                                    $oClasse->$sColuna = db_getsession('DB_instit');
                                 } elseif (substr($aux[1], 0, 3) == "reg") {
 
                                     $sTabelaAnterior = strtolower($aArquivoCSV[0]) . substr($aux[1], -2) . $ano;

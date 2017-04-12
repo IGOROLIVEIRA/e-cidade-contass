@@ -61,6 +61,8 @@ class cl_contacorrentedetalhe {
    var $c19_estrutural = null;
    var $c19_orcdotacao = 0;
    var $c19_orcdotacaoanousu = 0;
+   var $c19_programa = 0;
+   var $c19_projativ = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  c19_sequencial = int4 = Sequencial
@@ -82,6 +84,8 @@ class cl_contacorrentedetalhe {
                  c19_estrutural = varchar(15) = Estrutural
                  c19_orcdotacao = int4 = Orcdotação
                  c19_orcdotacaoanousu = int4 = Orcdotação Ano
+                 c19_programa = varchar(4) = Código do Programa
+                 c19_projativ = varchar(4) = Código da Ação
                  ";
    //funcao construtor da classe
    function cl_contacorrentedetalhe() {
@@ -120,6 +124,8 @@ class cl_contacorrentedetalhe {
        $this->c19_estrutural = ($this->c19_estrutural == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_estrutural"]:$this->c19_estrutural);
        $this->c19_orcdotacao = ($this->c19_orcdotacao == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_orcdotacao"]:$this->c19_orcdotacao);
        $this->c19_orcdotacaoanousu = ($this->c19_orcdotacaoanousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_orcdotacaoanousu"]:$this->c19_orcdotacaoanousu);
+       $this->c19_programa = ($this->c19_programa == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_programa"]:$this->c19_programa);
+       $this->c19_projativ = ($this->c19_projativ == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_projativ"]:$this->c19_projativ);
      }else{
        $this->c19_sequencial = ($this->c19_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["c19_sequencial"]:$this->c19_sequencial);
      }
@@ -181,6 +187,12 @@ class cl_contacorrentedetalhe {
      if($this->c19_orcdotacaoanousu == null ){
        $this->c19_orcdotacaoanousu = "null";
      }
+     if($this->c19_programa == null ){
+       $this->c19_programa = "null";
+     }
+     if($this->c19_projativ == null ){
+       $this->c19_projativ = "null";
+     }
      if($c19_sequencial == "" || $c19_sequencial == null ){
        $result = db_query("select nextval('contacorrentedetalhe_c19_sequencial_seq')");
        if($result==false){
@@ -233,6 +245,8 @@ class cl_contacorrentedetalhe {
                                       ,c19_estrutural
                                       ,c19_orcdotacao
                                       ,c19_orcdotacaoanousu
+                                      ,c19_programa
+                                      ,c19_projativ
                        )
                 values (
                                 $this->c19_sequencial
@@ -251,9 +265,11 @@ class cl_contacorrentedetalhe {
                                ,$this->c19_orcorgaoorgao
                                ,$this->c19_conplanoreduzanousu
                                ,$this->c19_acordo
-                               ,$this->c19_estrutural
+                               ,'$this->c19_estrutural'
                                ,$this->c19_orcdotacao
                                ,$this->c19_orcdotacaoanousu
+                               ,'$this->c19_programa'
+                               ,'$this->c19_projativ'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -449,6 +465,20 @@ class cl_contacorrentedetalhe {
            $this->c19_orcdotacaoanousu = "0" ;
         }
        $sql  .= $virgula." c19_orcdotacaoanousu = $this->c19_orcdotacaoanousu ";
+       $virgula = ",";
+     }
+     if(trim($this->c19_programa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c19_programa"])){
+        if(trim($this->c19_programa)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c19_programa"])){
+           $this->c19_programa = "''" ;
+        }
+       $sql  .= $virgula." c19_programa = '$this->c19_programa'";
+       $virgula = ",";
+     }
+     if(trim($this->c19_projativ)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c19_projativ"])){
+        if(trim($this->c19_projativ)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c19_projativ"])){
+           $this->c19_projativ = "''" ;
+        }
+       $sql  .= $virgula." c19_projativ = '$this->c19_projativ'";
        $virgula = ",";
      }
      $sql .= " where ";
