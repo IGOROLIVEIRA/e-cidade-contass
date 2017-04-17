@@ -265,7 +265,7 @@ class cl_contacorrentedetalhe {
                                ,$this->c19_orcorgaoorgao
                                ,$this->c19_conplanoreduzanousu
                                ,$this->c19_acordo
-                               ,'$this->c19_estrutural'
+                               ,$this->c19_estrutural
                                ,$this->c19_orcdotacao
                                ,$this->c19_orcdotacaoanousu
                                ,'$this->c19_programa'
