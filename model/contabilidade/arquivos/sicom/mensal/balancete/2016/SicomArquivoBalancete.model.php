@@ -1294,7 +1294,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                         $oReg14Saldo = db_utils::fieldsMemory($rsReg14saldos, $iContSaldo14);
 
-                        if (!(($oReg14Saldo->saldoanterior == "" || $oReg14Saldo->saldoanterior == 0) && $oReg14Saldo->debitos == "" && $oReg14Saldo->creditos == "")) {
+                        if (!($oReg14Saldo->saldoanterior == "" || $oReg14Saldo->saldoanterior == 0)) {
 
                             $sElemento = $oReg14->naturezadadespesa;
                             $sSubElemento = $oReg14->subelemento;
