@@ -21,27 +21,27 @@ class GerarREGADESAO extends GerarAM {
 
     $this->sArquivo = "REGADESAO";
     $this->abreArquivo();
-    
-    $sSql = "select * from regadesao102016 where si67_mes = ". $this->iMes;
-    $rsREGADESAO10    = db_query($sSql);
 
-    $sSql2 = "select * from regadesao112016 where si68_mes = ". $this->iMes;
-    $rsREGADESAO11    = db_query($sSql2);
+    $sSql = "select * from regadesao102016 where si67_mes = " . $this->iMes. " and si67_instit=" . db_getsession("DB_instit");
+    $rsREGADESAO10 = db_query($sSql);
 
-    $sSql3 = "select * from regadesao122016 where si69_mes = ". $this->iMes;
-    $rsREGADESAO12    = db_query($sSql3);
+    $sSql2 = "select * from regadesao112016 where si68_mes = " . $this->iMes. " and si68_instit=" . db_getsession("DB_instit");
+    $rsREGADESAO11 = db_query($sSql2);
 
-    $sSql4 = "select * from regadesao132016 where si70_mes = ". $this->iMes;
-    $rsREGADESAO13    = db_query($sSql4);
+    $sSql3 = "select * from regadesao122016 where si69_mes = " . $this->iMes. " and si69_instit=" . db_getsession("DB_instit");
+    $rsREGADESAO12 = db_query($sSql3);
 
-    $sSql5 = "select * from regadesao142016 where si71_mes = ". $this->iMes;
-    $rsREGADESAO14    = db_query($sSql5);
+    $sSql4 = "select * from regadesao132016 where si70_mes = " . $this->iMes. " and si70_instit=" . db_getsession("DB_instit");
+    $rsREGADESAO13 = db_query($sSql4);
 
-    $sSql6 = "select * from regadesao152016 where si72_mes = ". $this->iMes;
-    $rsREGADESAO15    = db_query($sSql6);
+    $sSql5 = "select * from regadesao142016 where si71_mes = " . $this->iMes. " and si71_instit=" . db_getsession("DB_instit");
+    $rsREGADESAO14 = db_query($sSql5);
 
-    $sSql7 = "select * from regadesao202016 where si73_mes = ". $this->iMes;
-    $rsREGADESAO20    = db_query($sSql7);
+    $sSql6 = "select * from regadesao152016 where si72_mes = " . $this->iMes. " and si72_instit=" . db_getsession("DB_instit");
+    $rsREGADESAO15 = db_query($sSql6);
+
+    $sSql7 = "select * from regadesao202016 where si73_mes = " . $this->iMes. " and si73_instit=" . db_getsession("DB_instit");
+    $rsREGADESAO20 = db_query($sSql7);
 
   if (pg_num_rows($rsREGADESAO10) == 0 && pg_num_rows($rsREGADESAO20) == 0) {
 
