@@ -215,7 +215,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
         LEFT JOIN aditivoscontratos on si174_nrocontrato = si173_codcontrato
         LEFT JOIN rescisaocontrato on si176_nrocontrato = si173_codcontrato
-        LEFT JOIN liclicita ON ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_numero::varchar
+        LEFT JOIN liclicita ON ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_edital::varchar
               AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar
               AND l03_codigo = l20_codtipocom
         LEFT JOIN orcunidade on o58_anousu = orcunidade.o41_anousu and o58_orgao = orcunidade.o41_orgao and o58_unidade = orcunidade.o41_unidade
