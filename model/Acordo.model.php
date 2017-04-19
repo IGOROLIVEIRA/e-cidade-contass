@@ -1937,7 +1937,7 @@ class Acordo
                  */
                 foreach ($oAutorizacaoEmpenho->getItens() as $oItemAutorizacao) {
 
-                    $iCodigoItem = $oItem->sequencial;
+                    $iCodigoItem = $oItemAutorizacao->sequencial;
 
                     /**
                      * incluirmos na tabela acordoitemexecutado

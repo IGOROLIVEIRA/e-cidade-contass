@@ -236,7 +236,7 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 	  }
 
     $obsitem  = pg_result($this->recorddositens,$ii,$this->observacaoitem);
-	  $obsitem .= pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
+	  $obsitem .= "\n\n".'Marca: '.pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
     $sObsItem = $obsitem;
 
     //// troca de pagina

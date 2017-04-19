@@ -148,8 +148,8 @@ for($i = 0;$i < $num;$i++){
                                                          case when solrp.pc11_numero is not null then solrp.pc11_numero
                                                               else  solicitem.pc11_numero end as pc11_numero,
                                                          case when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '')
-                                                              when  pcorcamval.pc23_obs is null then coalesce(trim(pcorcamvalsl.pc23_obs), '')
-                                                              else  coalesce(trim(pcorcamval.pc23_obs), '') end as pc23_obs,
+                                                              when  pcorcamval.pc23_obs is null then coalesce(trim(pcorcamvalsl.pc23_obs),trim(pcorcamvalac.pc23_obs), '')
+                                                              else  coalesce(trim(pcorcamval.pc23_obs),trim(pcorcamvalac.pc23_obs), '') end as pc23_obs,
 	                                                       pc50_descr",
                                                          "m52_numemp, m52_sequen",
                                                          "m52_codordem = $m51_codordem");

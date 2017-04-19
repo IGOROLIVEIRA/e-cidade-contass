@@ -817,6 +817,26 @@ and pcorcamvalsl.pc23_orcamforne = julgsl.pc24_orcamforne";
      $sql .="       left join matunid matunidaut               on empautitem.e55_unid                = matunidaut.m61_codmatunid" ;
      $sql .="       left join matunid matunidsol               on solicitemunid.pc17_unid                = matunidsol.m61_codmatunid" ;
 
+/**
+ * Adicionado para buscar Marca do processo de compra seguindo pelo acordo
+ */
+$sql .="       LEFT JOIN acordoitemexecutadoempautitem ON acordoitemexecutadoempautitem.ac19_autori = empautitem.e55_autori";
+$sql .="       AND acordoitemexecutadoempautitem.ac19_sequen = empautitem.e55_sequen";
+$sql .="       LEFT JOIN acordoitemexecutado ON acordoitemexecutadoempautitem.ac19_acordoitemexecutado = acordoitemexecutado.ac29_sequencial";
+
+$sql .="       LEFT JOIN acordoempempitem ON acordoempempitem.ac44_empempitem = empempitem.e62_sequencial";
+$sql .="       LEFT JOIN acordoitem ON acordoitem.ac20_sequencial = acordoitemexecutado.ac29_acordoitem ";
+$sql .="       AND acordoitem.ac20_pcmater = pcmater.pc01_codmater";
+$sql .="       LEFT JOIN acordoliclicitem ON acordoliclicitem.ac24_acordoitem=acordoitem.ac20_sequencial";
+$sql .="       LEFT JOIN liclicitem licitaac ON licitaac.l21_codigo = acordoliclicitem.ac24_liclicitem";
+$sql .="       LEFT JOIN pcorcamitemlic pcitemac ON pcitemac.pc26_liclicitem=licitaac.l21_codigo";
+$sql .="       LEFT JOIN pcorcamitem pcorcamitemac ON pcorcamitemac.pc22_orcamitem=pcitemac.pc26_orcamitem";
+
+$sql .="       LEFT JOIN pcorcamjulg pcorcamjulgac ON pcorcamjulgac.pc24_orcamitem=pcorcamitemac.pc22_orcamitem";
+$sql .="       LEFT JOIN pcorcamval pcorcamvalac ON pcorcamvalac.pc23_orcamitem=pcorcamjulgac.pc24_orcamitem";
+$sql .="       AND pcorcamvalac.pc23_orcamforne = pcorcamjulgac.pc24_orcamforne";
+$sql .="       AND pcorcamjulgac.pc24_pontuacao = 1";
+
      $sql2 = "";
      if($dbwhere==""){
        if($m52_codlanc!=null ){
