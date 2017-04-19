@@ -872,7 +872,7 @@ function js_mostradb_depart(chave,erro){
 function js_verquant(campo) {
 
 
-  max   = parseFloat(parent.document.form1.quant_rest.value);
+  max   = parseFloat(parent.document.form1.pc11_quant.value);
 
 
   if(campo.indexOf(',') != -1) {
