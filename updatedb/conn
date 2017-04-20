@@ -8,7 +8,6 @@ e-cidade	5432	cmcapitaoeneas
 e-cidade	5432	cmmoc
 cmnavarro	5432	cmnavarro
 e-cidade	5432	fumasa
-e-cidade	5432	pmbotumirim
 e-cidade	5432	pmcristalia
 e-cidade	5433	pmibiracatu
 e-cidade        5432    pmjanuaria
@@ -50,7 +49,6 @@ cmfranciscodumont       5432    cmnavarro
 e-cidade	5432	pmverdelandia
 consorcio_modelo-v.39    5432    teste
 codanorte        5433   e-cidade
-pmbotumirim      5433   e-cidade
 e-cidade	 5432   cisaje
 e-cidade         5432   prevmoc
 CIMAMS           5433   e-cidade
@@ -69,3 +67,4 @@ pmubai          5432    manutencao
 cmmonteazul     5433    e-cidade
 cmmatiascardozo 5433	e-cidade
 pirapora_teste_mario 5432 teste
+pmbotumirim     5432    manutencao
