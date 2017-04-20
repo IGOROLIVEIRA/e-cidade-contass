@@ -168,21 +168,17 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
        '' AS justificativaAlteracao
-      from aditivoscontratos 
-      INNER JOIN itensaditivados on si174_sequencial = si175_codaditivo
-      INNER JOIN pcmater on pc01_codmater = si175_coditem
-      LEFT JOIN contratos  on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and si174_nrocontrato = si172_nrocontrato
-      LEFT JOIN empcontratos ON si173_codcontrato = si172_sequencial 
-      LEFT JOIN empempenho ON empempenho.e60_codemp = empcontratos.si173_empenho::varchar
-      LEFT JOIN empempaut ON e60_numemp=e61_numemp
-      LEFT JOIN empautoriza ON e61_autori = e54_autori
-      LEFT JOIN empautitem ON e54_autori = e55_autori
-      LEFT JOIN matunid ON empautitem.e55_unid = matunid.m61_codmatunid
-      and si174_dataassinaturatermoaditivo <= '{$this->sDataFinal}' 
-      and si174_dataassinaturatermoaditivo >= '{$this->sDataInicial}'
-      and si174_instit = " . db_getsession("DB_instit");
+      from acordoitem
+      INNER JOIN acordoposicao ap1 on ap1.ac26_sequencial = ac20_acordoposicao
+      INNER JOIN acordo on ac16_sequencial = ap1.ac26_acordo
+      INNER JOIN pcmater on pc01_codmater = ac20_pcmater
+      inner join matunid on m61_codmatunid = ac20_matunid
+      where ap1.ac26_sequencial in (select max(ap2.ac26_sequencial) from acordoposicao ap2 where ap2.ac26_acordo = ap1.ac26_acordo)
+      and ac26_data <= '{$this->sDataFinal}'
+      and ac26_data >= '{$this->sDataInicial}'
+      and ac16_instit = " . db_getsession("DB_instit");
 
-    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
+    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
     //$aCaracteres = array("/","\\","'","\"","°","ª","º","§");
     // matriz de entrada
     $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
@@ -202,7 +198,7 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
     	select si43_coditem,si43_unidademedida from item102015  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem;
       $sSqlitem .= " union
     	select si43_coditem,si43_unidademedida from item102014  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem;
-      $rsResultitem = db_query($sSqlitem);//db_criatabela($rsResultitem);echo $sSqlitem;exit;
+      $rsResultitem = db_query($sSqlitem);//    db_criatabela($rsResultitem);echo $sSqlitem;exit;
       /**
        * verifica se já nao existe o registro  na base de dados do sicom
        */
