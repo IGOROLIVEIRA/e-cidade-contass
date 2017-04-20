@@ -916,7 +916,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
          * selecionar informacoes registro 30
          */
         $sSql = "select * from apostilamento
-    left join contratos on si03_numcontrato=si172_sequencial
+    inner join acordo on si03_acordo=ac16_sequencial
     where si03_dataapostila <= '{$this->sDataFinal}'
     and si03_dataapostila >= '{$this->sDataInicial}'
     and si03_instit = " . db_getsession("DB_instit");
@@ -941,9 +941,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                  where db01_anousu = " . $aAnoContrato[0] . " and db01_coddepto =
-                  (select si172_codunidadesubresp::integer from contratos where si172_sequencial = {$oDados30->si03_numcontrato})";
-                $result = db_query($sSql);//db_criatabela($result);echo $sSql;echo pg_last_error();
+                  where db01_anousu = " . $aAnoContrato[0] . " and db01_coddepto ={$oDados30->ac16_coddepto}";
+                $result = db_query($sSql);
                 $sCodUnidadeSub = db_utils::fieldsMemory($result, 0)->codunidadesub;
             } else {
                 $sCodUnidadeSub = ' ';
@@ -954,7 +953,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos30->si89_tiporegistro = 30;
             $clcontratos30->si89_codorgao = $sCodorgao;
             $clcontratos30->si89_codunidadesub = $sCodUnidadeSub;
-            $clcontratos30->si89_nrocontrato = $oDados30->si172_nrocontrato == '' ? $oDados30->si03_numcontratoanosanteriores : $oDados30->si172_nrocontrato;
+            $clcontratos30->si89_nrocontrato = $oDados30->ac16_numeroacordo;
             $clcontratos30->si89_dtassinaturacontoriginal = $oDados30->si03_dataassinacontrato;
             $clcontratos30->si89_tipoapostila = $oDados30->si03_tipoapostila;
             $clcontratos30->si89_nroseqapostila = $oDados30->si03_numapostilamento;
