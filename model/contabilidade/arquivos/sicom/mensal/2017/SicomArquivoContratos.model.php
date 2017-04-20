@@ -185,7 +185,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
                     case when l20_codtipocom = 52 then 1 when l20_codtipocom = 53 then 2 else 0 end as tipoprocesso from acordo
 inner join empempenhocontrato on acordo.ac16_sequencial = empempenhocontrato.e100_acordo
 inner join empempenho         on empempenho.e60_numemp = empempenhocontrato.e100_numemp
-inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_numero::varchar
+inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_edital::varchar
               and l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar
               where ac16_sequencial = {$iCodContrato} order by e100_sequencial limit 1";
 
