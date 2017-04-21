@@ -2549,11 +2549,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
               $obalreg13->si180_idacao = $reg13->si180_idacao;
               $obalreg13->si180_idsubacao = $reg13->si180_idsubacao;
               $obalreg13->si180_saldoIniciaipa = number_format(abs($reg13->si180_saldoinicialpa == '' ? 0 : $reg13->si180_saldoinicialpa), 2, ".", "");
-              $obalreg13->si180_naturezasaldoIniciaipa = $reg13->si180_saldoinicialpa == 0 ? $oDado10->naturezasaldo : ($reg13->si180_saldoinicialpa > 0 ? 'D' : 'C');
+              $obalreg13->si180_naturezasaldoIniciaipa = $reg13->si180_naturezasaldoinicialpa;
               $obalreg13->si180_totaldebitospa = number_format(abs($reg13->si180_totaldebitospa), 2, ".", "");
               $obalreg13->si180_totalcreditospa = number_format(abs($reg13->si180_totalcreditospa), 2, ".", "");
               $obalreg13->si180_saldofinaipa = number_format(abs($reg13->si180_saldofinalpa == '' ? 0 : $reg13->si180_saldofinalpa), 2, ".", "");
-              $obalreg13->si180_naturezasaldofinaipa = $obalreg13->si180_saldofinaipa == 0 ? $obalreg13->si180_naturezasaldoIniciaipa : ($obalreg13->si180_saldofinaipa > 0 ? 'D' : 'C');
+              $obalreg13->si180_naturezasaldofinaipa = $reg13->si180_naturezasaldofinalpa;
 
           } else {
 
