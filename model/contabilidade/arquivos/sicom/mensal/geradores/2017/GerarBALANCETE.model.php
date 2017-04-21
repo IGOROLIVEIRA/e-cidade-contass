@@ -147,7 +147,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE13['si180_tiporegistro']            = $this->padLeftZero($aBALACETE13['si180_tiporegistro'], 2);
                         $aCSVBALANCETE13['si180_contacontabil']           = $this->padLeftZero($aBALACETE13['si180_contacontabil'], 9);
                         $aCSVBALANCETE13['si180_codfundo']                = "00000000";
-                        $aCSVBALANCETE13['si180_codprograma']             = $this->padLeftZero($aBALACETE13['si180_codprograma'], 6);
+                        $aCSVBALANCETE13['si180_codprograma']             = $this->padLeftZero($aBALACETE13['si180_codprograma'], 4);
                         $aCSVBALANCETE13['si180_idacao']                  = $this->padLeftZero($aBALACETE13['si180_idacao'], 3);
                         $aCSVBALANCETE13['si180_idsubacao']               = $aBALACETE13['si180_idsubacao'] == 0 ? ' ' : $this->padLeftZero($aBALACETE13['si180_idacao'], 4);
                         $aCSVBALANCETE13['si180_saldoinicialpa']          = $this->sicomNumberReal($aBALACETE13['si180_saldoiniciaipa'], 2);
