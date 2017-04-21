@@ -413,7 +413,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_datainiciovigencia = $oDados10->ac16_datainicio;
             $clcontratos10->si83_datafinalvigencia = $oDados10->ac16_datafim;
             $oAcordo = new Acordo($oDados10->ac16_sequencial);
-            $clcontratos10->si83_vlcontrato = $oAcordo->getValoresItens()->valoratual;
+            $clcontratos10->si83_vlcontrato = $oAcordo->getValorContrato();
             $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento);
             $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento);
             $sTipoUnidade = $oDados10->ac16_tipounidtempoperiodo == 1 ? ' Mês(s)' : ' Dia(s)';
