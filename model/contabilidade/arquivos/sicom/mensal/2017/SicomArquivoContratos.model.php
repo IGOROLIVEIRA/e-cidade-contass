@@ -519,7 +519,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     foreach ($oDadosBusca as $oDados12) {
 
                         //Se a origem for licitação
-                        if (in_array($oDados10->contdeclicitacao, array(2, 3)) && $oDados10->l20_codigo != '') {
+                        if ($oDados10->ac16_origem == 2 && $oDados10->l20_codigo != '') {
                             $sSql = "SELECT distinct on (o58_coddot)
                                 o58_coddot,
                                 CASE WHEN o40_codtri = '0'
