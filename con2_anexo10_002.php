@@ -30,7 +30,7 @@ include("fpdf151/assinatura.php");
 include("libs/db_sql.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
-include("dbforms/db_funcoes.php");
+include_once("dbforms/db_funcoes.php");
 
 $classinatura = new cl_assinatura;
 
