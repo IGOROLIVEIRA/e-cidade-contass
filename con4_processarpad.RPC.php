@@ -161,8 +161,8 @@ switch($oParam->exec) {
     	$rsInst = db_query($sSql);
     	$sInst  = str_pad(db_utils::fieldsMemory($rsInst, 0)->db21_codigomunicipoestado, 5, "0", STR_PAD_LEFT);
       $sInstCgc  = str_pad(db_utils::fieldsMemory($rsInst, 0)->cgc, 5, "0", STR_PAD_LEFT);
-                                          //pmluislandia    pmsaoromao       pmvarzelandia   pmclarodospocoes  pmverdelandia
-      $aCgcExtFonte = $arrayName = array('01612887000131', '24891418000102','18017467000100','21498274000122','01612505000170');
+                                          //pmluislandia    pmsaoromao       prev. sao romao    pmvarzelandia   pmclarodospocoes  pmverdelandia
+      $aCgcExtFonte = $arrayName = array('01612887000131', '24891418000102','06263590000121', '18017467000100','21498274000122','01612505000170');
       $iAnoReferencia = db_getsession('DB_anousu');
 
       $sSql  = "SELECT si09_codorgaotce AS codorgao
