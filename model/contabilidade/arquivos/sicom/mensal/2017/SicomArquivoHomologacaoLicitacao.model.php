@@ -197,6 +197,7 @@ class SicomArquivoHomologacaoLicitacao extends SicomArquivoBase implements iPadA
 	WHERE db_config.codigo =" . db_getsession("DB_instit") . "
 	AND DATE_PART('YEAR',homologacaoadjudica.l202_datahomologacao) =" . db_getsession("DB_anousu") . "
 	AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao) =" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+	AND pc24_pontuacao = 1
 	AND pctipocompratribunal.l44_sequencial IN ('48',
 		                                                  '49',
 		                                                  '50',
