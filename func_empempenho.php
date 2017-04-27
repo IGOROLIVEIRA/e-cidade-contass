@@ -305,13 +305,16 @@ $rotulo->label("z01_cgccpf");
               	echo "<script>" . $funcao_js . "('{$e60_numemp}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
               }
               else {
-
-                echo "<script>" . $funcao_js . "('" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
+                if($funcao_js == 'parent.js_mostraempempenhotesta'){
+                  echo "<script>" . $funcao_js . "('{$e60_codemp} / {$e60_anousu}', false);</script>";
+                } else {
+                  echo "<script>" . $funcao_js . "('" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}',false);</script>";
+                }
               }
               
               
             }
-            else {
+            else { echo '5'; exit;
               echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado', true);</script>";
             }
           }
