@@ -9,6 +9,7 @@ require_once("classes/db_empautitem_classe.php");
 require_once("classes/db_pcorcamjulg_classe.php");
 require_once("classes/db_pcprocitem_classe.php");
 require_once("model/licitacao.model.php");
+require_once("model/licitacao/SituacaoLicitacao.model.php");
 
 $clliclicita = new cl_liclicita;
 $clliclicitasituacao = new cl_liclicitasituacao;
@@ -188,6 +189,13 @@ si172_licitacao = {$l20_codigo} order by 2";
 
         }
     }
+    /**
+     * Status da Licitação
+     * @see OC 3153
+     */
+    $oLicitacao = new licitacao($l20_codigo);
+    $pdf->setfont('arial', 'b', 7);
+    $pdf->cell(277, $alt, "Status: {$oLicitacao->getSituacao()->getSDescricao()}", 1, 1, "L", 1);
     $pdf->ln();
 }
 $pdf->Output();
