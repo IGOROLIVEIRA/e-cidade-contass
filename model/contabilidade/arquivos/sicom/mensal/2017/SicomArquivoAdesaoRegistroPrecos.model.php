@@ -223,7 +223,8 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                  JOIN orcunidade ON db01_orgao=o41_orgao
                  AND db01_unidade=o41_unidade
                  AND db01_anousu = o41_anousu
-                 JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                 AND o41_instit = " . db_getsession("DB_instit") . "
+                 JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu and o40_instit = " . db_getsession("DB_instit") . "
                  WHERE db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codunidadesub
                 from adesaoregprecos
                 join cgm orgaogerenciador on si06_orgaogerenciador = orgaogerenciador.z01_numcgm
@@ -231,7 +232,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                 LEFT JOIN infocomplementaresinstit on adesaoregprecos.si06_instit = infocomplementaresinstit.si09_instit
                 where si06_instit= " . db_getsession("DB_instit") . " and date_part('month',si06_dataadesao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                 and date_part('year',si06_dataadesao) = " . db_getsession("DB_anousu");
-    
+                
     $rsResult10 = db_query($sSql);
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
