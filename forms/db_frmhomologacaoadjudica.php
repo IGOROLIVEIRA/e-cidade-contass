@@ -124,14 +124,19 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
 <? } ?>
   <center>
     <table>
-            <?
+            <?php
+            /**
+             * Na fase de homologação só podem ser listados itens que possuem fornecedores ganhadores.
+             * @see OC 3714
+             */
+            $sWhere = " liclicitem.l21_codliclicita = {$l202_licitacao} and pc24_pontuacao = 1 ";
             if(!empty($l202_licitacao)){
 
                 $result=$clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query(null,"*",null,"l202_licitacao=$l202_licitacao"));
                 
                 if ($clhomologacaoadjudica->numrows>0){
 
-                  $sql = $clhomologacaoadjudica->sql_query_itens($l202_licitacao,
+                  $sql = $clhomologacaoadjudica->sql_query_itens(null,
                                                       "distinct 
                                                        pc81_codprocitem,
                                                        pc11_seq,
@@ -142,7 +147,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
                                                        pc01_codmater,
                                                        pc01_descrmater,
                                                        pc11_resum",
-                                                      "pc11_seq"
+                                                      "pc11_seq",$sWhere
                                                       );
                   if($db_opcao == 1) { 
 
@@ -153,7 +158,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
                     document.getElementById('l202_licitacao').readOnly = true;
                     </script>";
 
-                    $sql_disabled = $clhomologacaoadjudica->sql_query_itens($l202_licitacao,
+                    $sql_disabled = $clhomologacaoadjudica->sql_query_itens(null,
                                                       "distinct 
                                                        pc81_codprocitem,
                                                        pc11_seq,
@@ -164,7 +169,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
                                                        pc01_codmater,
                                                        pc01_descrmater,
                                                        pc11_resum",
-                                                      "pc11_seq"
+                                                      "pc11_seq",$sWhere
                                                       );
                   }
                   if($db_opcao == 2) {
@@ -181,7 +186,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
                   }
 
                   if($db_opcao == 1 || $db_opcao == 3 || $db_opcao == 33){
-                    $sql_disabled = $clhomologacaoadjudica->sql_query_itens($l202_licitacao,
+                    $sql_disabled = $clhomologacaoadjudica->sql_query_itens(null,
                                                       "distinct 
                                                        pc81_codprocitem,
                                                        pc11_seq,
@@ -192,7 +197,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
                                                        pc01_codmater,
                                                        pc01_descrmater,
                                                        pc11_resum",
-                                                      "pc11_seq"
+                                                      "pc11_seq",$sWhere
                                                       );
                   }
 
@@ -206,7 +211,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
                       document.getElementById('l202_licitacao').readOnly = true;
                       </script>";
                    }
-                   $sql = $clhomologacaoadjudica->sql_query_itens($l202_licitacao,
+                   $sql = $clhomologacaoadjudica->sql_query_itens(null,
                                                         "distinct 
                                                          pc81_codprocitem,
                                                          pc11_seq,
@@ -217,7 +222,7 @@ db_inputdata('l202_dataadjudicacao',@$l202_dataadjudicacao_dia,@$l202_dataadjudi
                                                          pc01_codmater,
                                                          pc01_descrmater,
                                                          pc11_resum",
-                                                        "pc11_seq"
+                                                        "pc11_seq",$sWhere
                                                         );
 
 
