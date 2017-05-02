@@ -144,7 +144,7 @@ $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracao
           <td colspan="6">
 	          <?php
 	          	//db_input('t52_descr',81,$It52_descr,true,'text',$db_opcao);
-              db_textarea('t52_descr', 5, 78, "", true, "text", $db_opcao);
+              db_textarea('t52_descr', 5, 78, "", true, "text", $db_opcao,"onkeyup='limitaTextarea(this);'");
 	          ?>
           </td>
         </tr>
@@ -1295,6 +1295,23 @@ function SomenteNumero(e){
  else  return false;
  }
 }
+
+/*Função para limitar texaarea*/
+ //"onkeyup='limitaTextarea(this.value);'");
+ function limitaTextarea(valor){ 
+  
+   var qnt = valor.value;
+    quantidade = 250;
+    total = qnt.length;
+
+    if(total <= quantidade) {
+      resto = quantidade- total;
+      document.getElementById('contador').innerHTML = resto;
+    } else {
+      document.getElementById(valor.name).value = qnt.substr(0, quantidade);
+      alert("O campo deve conter até 250 caracteres");
+    }
+  }
 
 // Configura Form
 var oOutrosDados                     = new DBToogle($('outros-dados'), true);
