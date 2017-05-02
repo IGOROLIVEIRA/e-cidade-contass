@@ -625,37 +625,60 @@ try {
                         $iTroca = 1;
                         $iAnousuEmp = db_getsession('DB_anousu') - 1;
                         $nMes = 12;
-                        $sSqlLancamentos = "
-                        select distinct c19_sequencial,
-                                            c17_descricao,
-                                            e60_numemp,
-                                            e60_codemp,
-                                            e60_anousu,
-                                            c19_estrutural,
-                                            c19_orcdotacao,
-                                            c19_orcdotacaoanousu
-                         from contacorrentedetalhe 
-                                    inner join contacorrente on c19_contacorrente = c17_sequencial
-                                    inner join empempenho on e60_numemp = c19_numemp
-                                    inner join empelemento on e64_numemp = e60_numemp
-                                    inner join empresto on e91_numemp = e60_numemp
-                        where c19_contacorrente = {$iCorrente}
-                            and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = {$iAnousuEmp}
-                            and c19_instit = " . db_getsession('DB_instit');
+//                        $sSqlLancamentos = "
+//                        select distinct c19_sequencial,
+//                                            c17_descricao,
+//                                            e60_numemp,
+//                                            e60_codemp,
+//                                            e60_anousu,
+//                                            c19_estrutural,
+//                                            c19_orcdotacao,
+//                                            c19_orcdotacaoanousu
+//                         from contacorrentedetalhe
+//                                    inner join contacorrente on c19_contacorrente = c17_sequencial
+//                                    inner join empempenho on e60_numemp = c19_numemp
+//                                    inner join empelemento on e64_numemp = e60_numemp
+//                                    inner join empresto on e91_numemp = e60_numemp
+//                        where c19_contacorrente = {$iCorrente}
+//                            and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = {$iAnousuEmp}
+//                            and c19_instit = " . db_getsession('DB_instit');
+//
+//                        $rsLancamentos = db_query($sSqlLancamentos);
+//
+//                        if(pg_num_rows($rsLancamentos) == 0){
+//
+//                            $sSqlLancamentos = "SELECT c19_sequencial,
+//                                   c17_descricao,
+//                                   e60_numemp,
+//                                   e60_codemp,
+//                                   e60_anousu
+//                            FROM contacorrentedetalhe
+//                            INNER JOIN contacorrente ON c19_contacorrente = c17_sequencial
+//                            INNER JOIN empempenho ON e60_numemp = c19_numemp
+//                            WHERE c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu');
+//                            $rsLancamentos = db_query($sSqlLancamentos);
+//                        }
 
-                        $rsLancamentos = db_query($sSqlLancamentos);
-
+                        /**
+                         * Busca a movimentação dos empenhos quando não há encerramento ou movimentação de abertura em exercicios anteriores
+                         * Condição incluida para clientes novos
+                         */
                         if(pg_num_rows($rsLancamentos) == 0){
-
-                            $sSqlLancamentos = "SELECT c19_sequencial,
-                                   c17_descricao,
-                                   e60_numemp,
-                                   e60_codemp,
-                                   e60_anousu
-                            FROM contacorrentedetalhe
-                            INNER JOIN contacorrente ON c19_contacorrente = c17_sequencial
-                            INNER JOIN empempenho ON e60_numemp = c19_numemp
-                            WHERE c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = " . db_getsession('DB_anousu');
+                            $sSqlLancamentos = "select
+                                                DISTINCT
+                                                'RESTOS A PAGAR' as c17_descricao,
+                                                e60_numemp,
+                                                e60_codemp,
+                                                e60_anousu,
+                                                o56_elemento as c19_estrutural,
+                                                e60_coddot as c19_orcdotacao,
+                                                e60_anousu as c19_orcdotacaoanousu
+                                                from empresto
+                                                inner join empempenho on e60_numemp = e91_numemp
+                                                inner join empelemento on e60_numemp  = e64_numemp
+                                                inner join orcelemento on e64_codele = o56_codele and o56_anousu = e60_anousu
+                                                where e60_anousu < {$iAnousuEmp}
+                                                ";
                             $rsLancamentos = db_query($sSqlLancamentos);
                         }
                         $aLancamento = db_utils::getColectionByRecord($rsLancamentos);
