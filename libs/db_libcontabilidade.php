@@ -1972,21 +1972,27 @@ class cl_translan extends cl_contranslan {
         /**
          * verifica se tem lancamento de controle de liquidacao e busca conta credito do controle
          */
-        if ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, db_getsession("DB_anousu"), array(212))) {
+          IF ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, db_getsession("DB_anousu"), array(212))) {
           $c47_debito = self::getContaCreditoLiquidacao($numemp, array(212), db_getsession("DB_anousu"));
-        } else {
 
-          $sSqlContaCredito = " select c69_credito
-                                  from conlancamemp
-                                       inner join conlancamdoc  on conlancamemp.c75_codlan = conlancamdoc.c71_codlan
-                                       inner join conlancamval  on conlancamdoc.c71_codlan = conlancamval.c69_codlan
-                                       inner join conlancam     on conlancamval.c69_codlan = conlancam.c70_codlan
-                                 where c75_numemp = {$numemp}
-                                   and c71_coddoc = 33
-                                   and c70_anousu = ".db_getsession("DB_anousu")."
-                                 order by c69_sequen
-                                 limit 1";
+          } ELSEIF ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, $anousu, array(208))) {
+          $c47_debito = self::getContaCreditoLiquidacao($numemp, array(208), $anousu);
+
+          } ELSE {
+
+              $sSqlContaCredito = " SELECT c69_credito
+                                    FROM conlancamemp
+                                    INNER JOIN conlancamdoc ON conlancamemp.c75_codlan = conlancamdoc.c71_codlan
+                                    INNER JOIN conlancamval ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                    INNER JOIN conlancam ON conlancamval.c69_codlan = conlancam.c70_codlan
+                                    WHERE c75_numemp = {$numemp}
+                                      AND c71_coddoc = 33
+                                      AND c70_anousu = ".db_getsession("DB_anousu")."
+                                    ORDER BY c69_sequen
+                                    LIMIT 1 ";
+
           $rsBuscaContaCredito = db_query($sSqlContaCredito);
+
           if (pg_num_rows($rsBuscaContaCredito) == 0) {
 
             $this->sqlerro  = true;
