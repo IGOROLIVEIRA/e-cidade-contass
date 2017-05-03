@@ -3043,6 +3043,55 @@ class cl_liclicita
     }
 
 
+    function sql_query_comissao_pregao($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
+
+
+        $sCampo = "";
+
+        $sql = "select ";
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+
+        $sql .= $sCampo;
+
+        $sql .= " from liclicita ";
+        $sql .= "      inner join db_config on l20_instit = codigo";
+        $sql .= "      inner join cflicita      on cflicita.l03_codigo = liclicita.l20_codtipocom";
+        $sql .= "      inner join licpregao on l45_sequencial = l20_equipepregao";
+        $sql .= "      inner join licpregaocgm on l46_licpregao = l45_sequencial";
+        $sql .= "      inner join cgm on z01_numcgm = l46_numcgm";
+
+        $sql2 = "";
+        if ($dbwhere == "") {
+            if ($l20_codigo != null) {
+                $sql2 .= " where liclicita.l20_codigo = $l20_codigo ";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null) {
+            $sql .= " order by ";
+            $campos_sql = split("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
+
 }
 
 ?>

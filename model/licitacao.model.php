@@ -45,6 +45,25 @@ class licitacao {
   protected $iNumeroEdital;
   protected $iNumeroLicitacal;
   protected $iAno;
+  protected $sObjeto;
+
+  /**
+   * @return mixed
+   */
+  public function getObjeto()
+  {
+    return $this->sObjeto;
+  }
+
+  /**
+   * @param mixed $sObjeto
+   * @return licitacao
+   */
+  public function setObjeto($sObjeto)
+  {
+    $this->sObjeto = $sObjeto;
+    return $this;
+  }
   /**
    * objeto processoProtocolo
    * @var object
@@ -79,13 +98,16 @@ class licitacao {
       $oDaoLicitacao = db_utils::getDao("liclicita");
       $sSqlBuscaLicitacao = $oDaoLicitacao->sql_query_file($iCodLicitacao);
       $rsBuscaLicitacao   = $oDaoLicitacao->sql_record($sSqlBuscaLicitacao);
-
+      /**
+       * @todo está invertido o edital e o numero da licitação??
+       */
       $oDadoLicitacao = db_utils::fieldsMemory($rsBuscaLicitacao, 0);
       $this->iNumeroEdital     = $oDadoLicitacao->l20_numero     ;
       $this->iCodigoSituacao   = $oDadoLicitacao->l20_licsituacao;
       $this->iNumeroLicitacal  = $oDadoLicitacao->l20_edital     ;
       $this->iAno              = $oDadoLicitacao->l20_anousu;
       $this->iCodigoModalidade = $oDadoLicitacao->l20_codtipocom;
+      $this->sObjeto           = $oDadoLicitacao->l20_objeto;
       unset($oDadoLicitacao);
     }
     $this->oDaoLicita  = db_utils::getDao("liclicita");
@@ -1563,5 +1585,41 @@ class licitacao {
       $this->oSituacaoLicitacao = new SituacaoLicitacao($this->iCodigoSituacao);
     }
     return $this->oSituacaoLicitacao;
+  }
+
+  public function getComissao() {
+
+    $aComissao = array();
+    if ($this->iCodLicitacao == null) {
+
+      throw new exception("Código da licitacao nulo");
+      return false;
+
+    }
+    $oDaoLiclicita  = db_utils::getDao("liclicita");
+    $sCampos = " l20_instit||'-'||nomeinst as instit,
+      ender,
+       l20_edital||'/'||l20_anousu AS processo,
+       l03_descr||' Nº:'||l20_numero as modalidade,
+       l20_objeto,
+       z01_nome,
+       case l46_tipo
+       when 1 then 'Leiloeiro'
+       when 2 then 'Membro/Equipe de Apoio'
+       when 3 then 'Presidente'
+       when 4 then 'Secretario'
+       when 5 then 'Servidor Designado'
+       when 6 then 'Pregoeiro'
+       end as l46_tipo";
+
+    $rsMembros  = $oDaoLiclicita->sql_record($oDaoLiclicita->sql_query_comissao_pregao($this->iCodLicitacao,$sCampos));
+    if ($oDaoLiclicita->numrows > 0) {
+
+      for ($iInd = 0; $iInd < $oDaoLiclicita->numrows; $iInd++) {
+
+        $aComissao[] = db_utils::fieldsMemory($rsMembros, $iInd);
+      }
+    }
+    return $aComissao;
   }
 }
