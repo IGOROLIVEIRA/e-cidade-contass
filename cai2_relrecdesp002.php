@@ -239,20 +239,26 @@ $sqlRec = "select    distinct   o15_codigo as cod_rec,
 
         $receita_arre[$mes] = 0; 
 
-        $imprimecel = false;
+        $imprimecel = true;
 
-        //      db_criatabela($result); exit;
+//              db_criatabela($result); exit;
+        $valor_arrecadado += db_utils::fieldsMemory($result,0)->saldo_arrecadado;
+        $receita_arre[$mes] = db_utils::fieldsMemory($result,0)->saldo_arrecadado;
 
+        /**
+         * Durante o atendimento da OC 3783 me deparei com o trecho abaixo que já havia sido tratado anteriormente.
+         * Entretanto, não consegui entender sua utilidade, uma vez que a funcao db_conplano_grupo sempre retorna false,
+         * fazendo com que os valores fossem mostrados zerados na tela. Ao que tudo indica, este relatorio nao estava
+         * preparado para ignorar a primeira linha do db_receitasaldo, que já traz o valor arrecadado. O trecho abaixo
+         * tenta calcular este valor, somando todas as linhas, ou seja, todas as receitas, mas não ignora os totalizadores.
+         */
         for($i=0;$i<pg_numrows($result);$i++) {
           db_fieldsmemory($result,$i);
-          /*
-           * condição comentada pois a verificação estava fazendo os valores de receita sempre ir zerado para o relatório
-           */
-          //if (db_conplano_grupo($anousu,$o57_fonte,9004) == true){
-            $valor_arrecadado   += $saldo_arrecadado < 0 ? 0 : $saldo_arrecadado; //condição adicionada para não considerar valores negativos no relatório
-            $receita_arre[$mes] += $saldo_arrecadado < 0 ? 0 : $saldo_arrecadado; //condição adicionada para não considerar valores negativos no relatório
+          if (db_conplano_grupo($anousu,$o57_fonte,9004) == true){
+            $valor_arrecadado   += $saldo_arrecadado;
+            $receita_arre[$mes] += $saldo_arrecadado;
             $imprimecel = true;
-          //}
+          }
         }
         if($imprimecel == false){
           $pdf->cell(22,$alt,db_formatar(0,'f'),1,0,"R",0);
