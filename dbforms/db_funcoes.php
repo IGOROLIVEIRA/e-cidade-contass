@@ -991,46 +991,45 @@ function db_selectmultiple($nome, $record, $size, $db_opcao = 3, $js_script = ""
 function db_select($nome, $db_matriz, $dbcadastro, $db_opcao = 3, $js_script = "", $nomevar = "", $bgcolor = "") {
 
   if ($db_opcao != 3 && $db_opcao != 5 && $db_opcao != 22 && $db_opcao != 33) {
-?>
-    <select name="<?=$nome?>" id="<?=$nome?>"
-<?
 
+    $sReadonly = '';
+    $sDisabled = '';
 
     if ($dbcadastro == true) {
+
       if ($db_opcao == 3 || $db_opcao == 22) {
-        echo " readonly ";
-        if ($bgcolor == "")
+
+        $sReadonly = 'readonly';
+
+        if ($bgcolor == "") {
           $bgcolor = "#DEB887";
+        }
+
       }
+
       if ($db_opcao == 5) {
-        echo " disabled ";
+        $sDisabled = 'disabled';
       }
+
     }
-    echo $js_script;
-?>
-     >
-<?
+
+
+    echo "<select name='{$nome}' id='{$nome}' {$sReadonly} {$sDisabled} {$js_script}>";
 
     $nomevar = $nomevar == "" ? $nome : $nomevar;
 
-    //x = array("a"=>"1","2")
-    reset($db_matriz);
-    for ($i = 0; $i < sizeof($db_matriz); $i ++) {
-?>
-      <option value="<?=key($db_matriz)?>" <?=(@$GLOBALS[$nomevar]==key($db_matriz)?"selected":"")?>><?=$db_matriz[key($db_matriz)]?></option>
-<?
+    foreach ($db_matriz as $chave => $valor) {
 
+      $sSelected = (@$GLOBALS[$nomevar] == $chave) ? 'selected' : '';
+      echo "<option value='{$chave}' {$sSelected}>{$valor}</option>";
 
-
-      next($db_matriz);
     }
-?>
-    </select>
-<?
 
+    echo "</select>";
 
 
   } else {
+
     $nome_select_descr = $nome."_select_descr";
     global $$nome_select_descr, $$nome;
     $$nome = $GLOBALS[$nome];
@@ -1338,7 +1337,7 @@ function data_periodo($anousu,$tipo='1B'){
       $texto = 'ANUAL';
       $abrev = 'Anual';
 
-   } 
+   }
    elseif ($tipo == 'JAN') {
 
      $mes_ini = 1;

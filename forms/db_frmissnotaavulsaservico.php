@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: issqn
@@ -40,7 +40,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -54,8 +54,14 @@ if(isset($db_opcaoal)){
      $q62_vlrbasecalc = "";
      $q62_vlrissqn = "";
      $q62_obs = "";
+      $q62_vlrirrf = '';
+      $q62_vlrinss = '';
+      $q62_tiporetirrf = '';
+      $q62_tiporetinss = '';
+      $q62_deducaoinss = '';
+      $q62_qtddepend = '';
    }
-} 
+}
 $SQLTotLinhas  = "select q62_discriminacao";
 $SQLTotLinhas .= "  from issnotaavulsaservico ";
 $SQLTotLinhas .= " where q62_issnotaavulsa = {$get->q51_sequencial}";
@@ -64,14 +70,92 @@ $totlinhas    = 0;
 if (pg_num_rows($rsTotLInhas) > 0){
 
   for ($i = 0; $i < pg_num_rows($rsTotLInhas); $i++){
-    
+
     $oLinha     = db_utils::fieldsMemory($rsTotLInhas,$i);
     $totlinhas += db_calculaLinhasTexto22($oLinha->q62_discriminacao);
 
   }
 
 }
+
+
+$iCodInstit = intval(db_getsession('DB_instit'));
+$iCodAnousu = intval(db_getsession('DB_anousu'));
+
+$sSQLTabelaIRRF = "
+SELECT r33_inic, r33_fim, r33_perc, r33_deduzi
+FROM inssirf
+WHERE r33_instit = {$iCodInstit}
+    AND r33_anousu = {$iCodAnousu}
+    AND r33_mesusu = (
+      SELECT MAX(r33_mesusu)
+      FROM inssirf
+      WHERE r33_anousu = {$iCodAnousu}
+          AND r33_instit = {$iCodInstit}
+          AND r33_codtab = '1'
+    )
+    AND r33_codtab = '1'
+ORDER BY r33_anousu DESC,
+         r33_mesusu DESC,
+         r33_inic ASC";
+
+$sSQLValorDependente = "SELECT r07_valor
+FROM pesdiver
+WHERE r07_anousu = {$iCodAnousu}
+  AND r07_instit = {$iCodInstit}
+  AND r07_mesusu = (
+      SELECT MAX(r07_mesusu)
+      FROM pesdiver
+      WHERE r07_anousu = {$iCodAnousu} AND r07_instit = {$iCodInstit}
+    )
+    AND r07_codigo = 'D901'
+ORDER BY r07_anousu DESC,
+         r07_mesusu DESC
+LIMIT 1";
+
+$aValoresTabela = db_utils::getCollectionByRecord(db_query($sSQLTabelaIRRF));
+$oValorDependente = db_utils::fieldsMemory(db_query($sSQLValorDependente), 0);
+
+
+$aTiposRetencoesIRRF = array(
+  'nada'        => 'Selecione um tipo',
+  'passageiros' => 'IRRF Transporte de Passageiros',
+  'material'    => 'IRRF Transporte de Material',
+  'outros'      => 'IRRF Outros'
+);
+
+$aTiposRetencoesINSS = array(
+  'nada'        => 'Selecione um tipo',
+  'passageiros' => 'INSS Transporte de Passageiros',
+  'material'    => 'INSS Transporte de Material',
+  'outros'      => 'INSS Outros'
+);
+
+
 ?>
+
+<style type="text/css">
+
+.margin-v10 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.td-retencao {
+  width: 127px;
+  font-weight: bold;
+}
+
+.td-retencao-campos {
+  width: 130px;
+}
+
+</style>
+
 <form name="form1" method="post" action="">
 <center>
 <table border="0">
@@ -87,7 +171,7 @@ db_input('q62_sequencial',10,$Iq62_sequencial,true,'hidden',$db_opcao,"");
     <td nowrap title="<?=@$Tq62_qtd?>">
        <?=@$Lq62_qtd?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q62_qtd',10,$Iq62_qtd,true,'text',$db_opcao,"")
 ?>
@@ -97,7 +181,7 @@ db_input('q62_qtd',10,$Iq62_qtd,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tq62_discriminacao?>">
        <?=@$Lq62_discriminacao?>
     </td>
-    <td colspan='3'> 
+    <td colspan='3'>
 <?
 db_textarea('q62_discriminacao',2,57,$Iq62_discriminacao,true,'text',$db_opcao,"onkeyup=''");
 
@@ -108,7 +192,7 @@ db_textarea('q62_discriminacao',2,57,$Iq62_discriminacao,true,'text',$db_opcao,"
     <td nowrap title="<?=@$Tq62_vlruni?>">
        <?=@$Lq62_vlruni?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q62_vlruni',12,$Iq62_vlruni,true,'text',$db_opcao,"onblur='js_calcula()'");
 ?>
@@ -116,7 +200,7 @@ db_input('q62_vlruni',12,$Iq62_vlruni,true,'text',$db_opcao,"onblur='js_calcula(
     <td nowrap title="<?=@$Tq62_vlrtotal?>">
        <?=@$Lq62_vlrtotal?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q62_vlrtotal',15,$Iq62_vlrtotal,true,'text',3,"")
 ?>
@@ -124,45 +208,110 @@ db_input('q62_vlrtotal',15,$Iq62_vlrtotal,true,'text',3,"")
   </tr>
   <tr>
     <td nowrap title="<?=@$Tq62_vlrdeducao?>">
-       <?=@$Lq62_vlrdeducao?>
+      &nbsp;
+      <?php //=@$Lq62_vlrdeducao ?>
     </td>
-    <td> 
-<?
-db_input('q62_vlrdeducao',12,$Iq62_vlrdeducao,true,'text',$db_opcao, "onblur=\"js_calcula();\"")
-?>
+    <td>
+      &nbsp;
+      <?php db_input('q62_vlrdeducao',12,$Iq62_vlrdeducao,true,'hidden',$db_opcao, "onblur=\"js_calcula();\"") ?>
     </td>
     <td nowrap title="<?=@$Tq62_vlrbasecalc?>">
-       <?=@$Lq62_vlrbasecalc?>
+      <?=@$Lq62_vlrbasecalc?>
     </td>
-    <td> 
-<?
-db_input('q62_vlrbasecalc',15,$Iq62_vlrbasecalc,true,'text',3,"")
-?>
+    <td>
+      <?php db_input('q62_vlrbasecalc',15,$Iq62_vlrbasecalc,true,'text',3,"") ?>
     </td>
   </tr>
+
   <tr>
     <td nowrap title="<?=@$Tq62_aliquota?>">
-       <?=@$Lq62_aliquota."%"?>
+      <b><?= @$Lq62_aliquota ?> <b>ISSQN %</b>
     </td>
-    <td> 
-<?
-db_input('q62_aliquota',12,$Iq62_aliquota,true,'text',$db_opcao,"onBlur='js_calcula()'")
-?>
+    <td>
+      <?php db_input('q62_aliquota',12,$Iq62_aliquota,true,'text',$db_opcao,"onBlur='js_calcula()'") ?>
     </td>
     <td nowrap title="<?=@$Tq62_vlrissqn?>">
-       <?=@$Lq62_vlrissqn?>
+      <?=@$Lq62_vlrissqn?>
     </td>
-    <td> 
-<?
-db_input('q62_vlrissqn',15,$Iq62_vlrissqn,true,'text',3,"")
-?>
+    <td>
+      <?php db_input('q62_vlrissqn',15,$Iq62_vlrissqn,true,'text',3,"") ?>
     </td>
   </tr>
+
+  <!-- INSS -->
+  <tr>
+    <td colspan="4">
+      <fieldset class="margin-v10">
+        <legend>INSS</legend>
+
+        <table>
+          <tr>
+            <td class="td-retencao" nowrap title="<?=@$Tq62_deducaoinss?>">
+              <?=@$Lq62_deducaoinss?>
+            </td>
+            <td class="td-retencao-campos">
+              <?php db_input('q62_deducaoinss',15,$Iq62_deducaoinss,true,'text',$db_opcao,"") ?>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-retencao">Tipo de retenção:</td>
+            <td colspan="3">
+              <?php db_select('q62_tiporetinss', $aTiposRetencoesINSS, true, 2, "onchange='js_RetencaoINSS();'"); ?>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-retencao" nowrap title="<?=@$Tq62_vlrinss?>">
+              <?=@$Lq62_vlrinss?>
+            </td>
+            <td class="td-retencao-campos" colspan="3">
+              <?php db_input('q62_vlrinss',15,$Iq62_vlrinss,true,'text',3,"") ?>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+    </td>
+  </tr>
+
+  <!-- IRRF -->
+  <tr>
+    <td colspan="4">
+      <fieldset class="margin-v10">
+        <legend>IRRF</legend>
+
+        <table>
+          <tr>
+            <td class="td-retencao" nowrap title="<?=@$Tq62_qtddepend?>">
+              <?=@$Lq62_qtddepend?>
+            </td>
+            <td class="td-retencao-campos">
+              <?php db_input('q62_qtddepend',15,$Iq62_qtddepend,true,'text',$db_opcao,"") ?>
+            </td>
+          </tr>
+
+          <tr>
+            <td class="td-retencao">Tipo de retenção:</td>
+            <td colspan="3">
+              <?php db_select('q62_tiporetirrf', $aTiposRetencoesIRRF, true, 2, "onchange='js_RetencaoIRRF();'"); ?>
+            </td>
+          </tr>
+          <tr>
+            <td class="td-retencao" nowrap title="<?=@$Tq62_vlrirrf?>">
+              <?=@$Lq62_vlrirrf?>
+            </td>
+            <td class="td-retencao-campos" colspan="3">
+              <?php db_input('q62_vlrirrf',15,$Iq62_vlrirrf,true,'text',3,"") ?>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+    </td>
+  </tr>
+
   <tr>
     <td nowrap title="<?=@$Tq62_obs?>">
        <?=@$Lq62_obs?>
     </td>
-    <td colspan='3'> 
+    <td colspan='3'>
 <?
 db_textarea('q62_obs',0,57,$Iq62_obs,true,'text',$db_opcao,"onkeyup='js_controlatextarea(this.name,200);'");
 ?>
@@ -176,7 +325,7 @@ db_textarea('q62_obs',0,57,$Iq62_obs,true,'text',$db_opcao,"onkeyup='js_controla
     <input type='hidden' id='totlinhas' readonly name='totlinhas' value="<?=$totlinhas;?>">
  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
  <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
-  <input name="recibo" type="submit"  onclick='return js_emiteRecibo(<?=$oPar->q60_notaavulsavlrmin;?>)' id="recibo" value="Emitir Recibo" > 
+  <input name="recibo" type="submit"  onclick='return js_emiteRecibo(<?=$oPar->q60_notaavulsavlrmin;?>)' id="recibo" value="Emitir Recibo" >
 	 <?
       $fTotal    = 0;
 			$sql       = "select sum(q62_vlrissqn) as totalissqn,";
@@ -186,7 +335,7 @@ db_textarea('q62_obs',0,57,$Iq62_obs,true,'text',$db_opcao,"onkeyup='js_controla
       $sql .= "sum(q62_vlrbasecalc) as q62_vlrbasecalc";
 			$sql .= " from issnotaavulsaservico
  									where q62_issnotaavulsa = ".$q62_issnotaavulsa;
-      $oTotal = db_utils::fieldsMemory(pg_query($sql),0);            
+      $oTotal = db_utils::fieldsMemory(pg_query($sql),0);
       $totalissqn = $oTotal->totalissqn;
       if (($lGeraNota and $emitenota) or ($oPar->q60_notaavulsavlrmin > $totalissqn )){
 
@@ -200,13 +349,13 @@ db_textarea('q62_obs',0,57,$Iq62_obs,true,'text',$db_opcao,"onkeyup='js_controla
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("q62_sequencial"=>$get->q51_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
 	 $cliframe_alterar_excluir->sql     = $clissnotaavulsaservico->sql_query_file(null,"*","q62_sequencial"
 	                                     ,"q62_issnotaavulsa=".$get->q51_sequencial);
-	 $cliframe_alterar_excluir->campos  ="q62_sequencial,q62_issnotaavulsa,q62_qtd,q62_discriminacao,q62_vlruni,q62_aliquota,q62_vlrdeducao,q62_vlrtotal,q62_vlrbasecalc,q62_vlrissqn";
+	 $cliframe_alterar_excluir->campos  ="q62_sequencial,q62_issnotaavulsa,q62_qtd,q62_discriminacao,q62_vlruni,q62_aliquota,q62_vlrdeducao,q62_vlrtotal,q62_vlrbasecalc,q62_vlrissqn, q62_vlrirrf, q62_vlrinss";
 	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
 	 $cliframe_alterar_excluir->iframe_width ="700";
@@ -240,13 +389,14 @@ db_textarea('q62_obs',0,57,$Iq62_obs,true,'text',$db_opcao,"onkeyup='js_controla
       <?=number_format($oTotal->q62_vlrbasecalc,2,",",".")?>
       </td>
       <td>
-		   <input type='' id='vlrrectotal' 
+		   <input type='' id='vlrrectotal'
          readonly style='border:0;background:transparent'value='<?=number_format($totalissqn,2,',','.');?>'name='vlrrectotal'>
 	 </td>
 	 </tr>
  </table>
   </center>
 </form>
+<script type="text/javascript" src="scripts/strings.js"></script>
 <script>
 function js_cancelar(){
   var opcao = document.createElement("input");
@@ -260,18 +410,18 @@ function js_pesquisaq62_issnotaavulsa(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo.iframe_issnotaavulsaservico','db_iframe_issnotaavulsa','func_issnotaavulsa.php?funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|q51_sequencial','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.q62_issnotaavulsa.value != ''){ 
+     if(document.form1.q62_issnotaavulsa.value != ''){
         js_OpenJanelaIframe('top.corpo.iframe_issnotaavulsaservico','db_iframe_issnotaavulsa','func_issnotaavulsa.php?pesquisa_chave='+document.form1.q62_issnotaavulsa.value+'&funcao_js=parent.js_mostraissnotaavulsa','Pesquisa',false);
      }else{
-       document.form1.q51_sequencial.value = ''; 
+       document.form1.q51_sequencial.value = '';
      }
   }
 }
 function js_mostraissnotaavulsa(chave,erro){
-  document.form1.q51_sequencial.value = chave; 
-  if(erro==true){ 
-    document.form1.q62_issnotaavulsa.focus(); 
-    document.form1.q62_issnotaavulsa.value = ''; 
+  document.form1.q51_sequencial.value = chave;
+  if(erro==true){
+    document.form1.q62_issnotaavulsa.focus();
+    document.form1.q62_issnotaavulsa.value = '';
   }
 }
 function js_mostraissnotaavulsa1(chave1,chave2){
@@ -281,7 +431,7 @@ function js_mostraissnotaavulsa1(chave1,chave2){
 }
 
 function js_setValorTotal(){
- 
+
    iQtde  =  new Number(document.getElementById('q62_qtd').value);
    dVlUni =  new Number(document.getElementById('q62_vlruni').value);
    dTotal = (iQtde*dVlUni);
@@ -309,7 +459,7 @@ function js_setValorBaseCalculo(){
 function js_testaDeducao(){
 
   dDeducao = new Number(document.getElementById('q62_vlrdeducao').value);
-  dVlTotal =  new Number(document.getElementById('q62_vlrtotal').value); 
+  dVlTotal =  new Number(document.getElementById('q62_vlrtotal').value);
   if (dDeducao != 0 && (dDeducao > dVlTotal)){
 
      document.getElementById('q62_vlrdeducao').value = '';
@@ -319,17 +469,17 @@ function js_testaDeducao(){
 }
 
 function js_calcula(){
- 
+
    js_setValorTotal();
    js_testaDeducao();
 	 js_setValorBaseCalculo();
 	 js_setValorIssqn();
 
-} 
+}
 function js_emiteRecibo(valMin){
 
-   valNota = $F('vlrrectotal').replace(".",''); 
-   valNota = valNota.replace(",",'.'); 
+   valNota = $F('vlrrectotal').replace(".",'');
+   valNota = valNota.replace(",",'.');
    valNota = new Number(valNota);
    valMin  = new Number(valMin);
 
@@ -345,13 +495,13 @@ function js_emiteRecibo(valMin){
 
    	   parent.iframe_issnotaavulsatomador.document.getElementById('db_opcao').disabled 	  = true;
    	   parent.iframe_issnotaavulsatomador.js_controlaAncora(false);
- 	      	      	   
+
        return true;
    }else{
       alert('Recibo não pode ser emitido.\nValor do imposto menor que o  valor configurado R$'+valMin);
       return false;
    }
-   
+
 }
 function js_verificaNota(){
 
@@ -373,6 +523,186 @@ function js_controlatextarea(objt,max){
   }
 }
 
+// -------------------
+
+function calculaValorDePorcentagem(base, percent) {
+  return Number((base * percent) / 100).toFixed(2);
+}
+
+
+function calculaPorcentagemDeValor(base, valor) {
+  return Number(valor * 100 / base).toFixed(2);
+}
+
+
+function getValorINSS() {
+  return parseFloat(document.getElementById('q62_vlrinss').value);
+}
+
+
+function calculoRetencaoINSS(info, percentual) {
+
+  var outrasRetencoes = parseFloat(info.retencoesAntigas.value) || 0;
+  var novaRetencao    = calculaValorDePorcentagem(info.baseCalculo, percentual);
+  var somaAntigaNova  = (outrasRetencoes + novaRetencao);
+
+  if (outrasRetencoes > 0) {
+    if (somaAntigaNova >= info.limiteINSS) {
+      novaRetencao = info.limiteINSS - outrasRetencoes;
+    }
+  } else if (novaRetencao >= info.limiteINSS) {
+    novaRetencao = info.limiteINSS;
+  }
+
+  return novaRetencao;
+
+}
+
+
+function getValoresTabelasIRRF() {
+  return {
+    valorDependente: <?= floatval($oValorDependente->r07_valor) ?>,
+    tabelas: <?= json_encode($aValoresTabela) ?>
+  };
+}
+
+
+function decideDeducaoIRRF(valorBase) {
+
+  valorBase = valorBase < 0 ? 1 : valorBase;
+  var jsonValoresIRRF = getValoresTabelasIRRF().tabelas;
+
+  if (!jsonValoresIRRF.length) {
+    alert('Impossível realizar cálculo sem tabelas do IRRF.');
+    return null;
+  }
+
+  return jsonValoresIRRF.filter(function(obj) {
+
+    var valorIni = Number(obj.r33_inic);
+    var valorFim = Number(obj.r33_fim);
+
+    return ((valorBase >= valorIni) && (valorBase <= valorFim));
+
+  }).shift();
+
+}
+
+
+function calculoRetencaoIRRF(info) {
+
+  var valoresIRRF = getValoresTabelasIRRF();
+
+  var baseIRRF = info.baseIRRF - info.valorINSS;
+  baseIRRF -= (valoresIRRF.valorDependente * info.qtdDependentes);
+  baseIRRF  = baseIRRF.toFixed(2);
+
+  var deducaoIRRF = decideDeducaoIRRF(baseIRRF);
+
+  var valorFinal = calculaValorDePorcentagem(baseIRRF, Number(deducaoIRRF.r33_perc));
+  valorFinal -= Number(deducaoIRRF.r33_deduzi).toFixed(2);
+
+  console.log(valoresIRRF);
+  console.log(info);
+  console.log(baseIRRF);
+  console.log(deducaoIRRF);
+
+  return valorFinal;
+
+}
+
+// -----------
+
+function js_RetencaoINSS() {
+
+  var select = document.getElementById('q62_tiporetinss');
+
+  var info = {
+    limiteINSS: 608.44,
+    baseCalculo: parseFloat(document.getElementById('q62_vlrtotal').value),
+    retencoesAntigas: document.getElementById('q62_deducaoinss')
+  };
+
+  var campos = {
+    valorFinal: document.getElementById('q62_vlrinss')
+  };
+
+  if (!select.value) {
+    campos.valorFinal.value = '';
+    return;
+  }
+
+  if (isNaN(info.baseCalculo)) {
+    alert('Defina um valor para a base de cálculo antes de prosseguir.');
+    campos.valorFinal.value = '';
+    select.value = 'nada';
+    return;
+  }
+
+  var retencoes = {
+    passageiros: calculoRetencaoINSS.bind(null, info, 4.7),
+    material: calculoRetencaoINSS.bind(null, info, 3.6),
+    outros: calculoRetencaoINSS.bind(null, info, 11),
+    nada: function() { return 0; },
+  };
+
+  if (retencoes[select.value]) {
+
+    var calculo = retencoes[select.value]();
+    campos.valorFinal.value = Number(calculo).toFixed(2);
+
+  } else {
+    select.value = '';
+  }
+
+  js_RetencaoIRRF();
+}
+
+
+function js_RetencaoIRRF() {
+
+  var select = document.getElementById('q62_tiporetirrf');
+
+  var retencoes = {
+    passageiros: 60,
+    material: 10,
+    outros: 0
+  };
+
+  if (!select.value || (retencoes[select.value] == undefined)) {
+    return;
+  }
+
+  var info = {};
+  info.valorNota      = parseFloat(document.getElementById('q62_vlrtotal').value);
+  info.baseIRRF       = calculaValorDePorcentagem(info.valorNota, retencoes[select.value]);
+  info.valorINSS      = getValorINSS();
+  info.qtdDependentes = parseInt(document.getElementById('q62_qtddepend').value);
+
+  var campos = {
+    valorFinal: document.getElementById('q62_vlrirrf')
+  };
+
+  if (isNaN(info.valorINSS)) {
+    alert('Defina um valor das retenções de INSS');
+    campos.valorFinal.value = '';
+    select.value = 'nada';
+    return;
+  }
+
+  if (isNaN(info.qtdDependentes)) {
+    alert('Defina o número de dependentes.');
+    campos.valorFinal.value = '';
+    select.value = 'nada';
+    return;
+  }
+
+  var valoresIRRF = calculoRetencaoIRRF(info);
+  campos.valorFinal.value = Number(valoresIRRF).toFixed(2);
+
+}
+
+document.getElementById('q62_deducaoinss').addEventListener('change', js_RetencaoINSS);
+document.getElementById('q62_qtddepend').addEventListener('change', js_RetencaoIRRF);
+
 </script>
-<?
-?>

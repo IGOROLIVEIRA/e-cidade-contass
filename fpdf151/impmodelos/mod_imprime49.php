@@ -1,7 +1,13 @@
 <?
-##Modelo de nota Fiscal 
+
+$sSQLTomadorDBConfig  = "SELECT numcgm FROM db_config WHERE numcgm = {$this->dadosTomador->q61_numcgm}";
+$rsTomadorDBConfig    = db_query($sSQLTomadorDBConfig);
+$lTomadorEhPrefeitura = !!pg_num_rows($rsTomadorDBConfig);
+
+##Modelo de nota Fiscal
 $confNumRows = pg_num_rows($this->rsConfig);
 for ($j = 0;$j < $confNumRows;$j++){
+
 
     $oConf            = db_utils::fieldsmemory($this->rsConfig ,$j);
     $xlin             = 20;
@@ -9,6 +15,8 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->fTotaliUni = 0;
     $this->fTotal     = 0;
     $this->fvlrIssqn  = 0;
+    $this->fvlrInss   = 0;
+    $this->fvlrIrrf   = 0;
     $this->objpdf->AliasNbPages();
     $this->objpdf->AddPage();
     $this->objpdf->settopmargin(1);
@@ -184,7 +192,7 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->objpdf->cell(15,5,"ALIQ",1,0,"C");
     $this->objpdf->cell(30,5,"VALOR TOTAL",1,1,"C");
     /*
-     ** Dados do Servico; 
+     ** Dados do Servico;
     */
     $iYinicio = $this->objpdf->getY();
     $cellYnew = $this->objpdf->getY();
@@ -198,6 +206,8 @@ for ($j = 0;$j < $confNumRows;$j++){
         $this->fTotaliUni += $totalLinha;
         $this->fTotal     += $this->fTotaliUni;
         $this->fvlrIssqn  += $oItensServico->q62_vlrissqn;
+        $this->fvlrInss   += $oItensServico->q62_vlrinss;
+        $this->fvlrIrrf   += $oItensServico->q62_vlrirrf;
         $this->objpdf->cell(15,3,$oItensServico->q62_qtd,"LR",0,"R");
         $cellYold = $this->objpdf->getY();
         $this->objpdf->multiCell(100,3,$oItensServico->q62_discriminacao,"LR","L");
@@ -215,7 +225,7 @@ for ($j = 0;$j < $confNumRows;$j++){
     }
     //echo $totalLetras
     $this->objpdf->sety(220);
-    $iYFinal = $this->objpdf->getY();
+    $iYFinal = $this->objpdf->getY() - 10;
 
     $this->objpdf->line(10,$iYinicio,10,$iYFinal);
     $this->objpdf->line(25,$iYinicio,25,$iYFinal);
@@ -225,9 +235,9 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->objpdf->line(200,$iYinicio,200,$iYFinal);
 
     //$this->objpdf->line($,$iYinicio,200,$iYinicio);
-    //box com o total devido de imposto 
-    $this->yOld = $this->objpdf->getY();
-    $this->objpdf->rect(10,$this->yOld,115,15);
+    //box com o total devido de imposto
+    $this->yOld = $this->objpdf->getY() - 10;
+    $this->objpdf->rect(10,$this->yOld,115,25);
     $this->objpdf->Setfont('Arial', '', 10);
 
     $this->objpdf->sety($this->yOld+2);
@@ -249,11 +259,28 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->objpdf->setX(125);
     $this->objpdf->cell(40,5,"Valor ISSQN",1,0);
     $this->objpdf->cell(35,5,"R$ ".number_format($this->fvlrIssqn,2,",","."),1,1,"R");
+
+    $this->objpdf->setX(125);
+    $this->objpdf->cell(40,5,"Valor INSS",1,0);
+    $this->objpdf->cell(35,5,"R$ ".number_format($this->fvlrInss,2,",","."),1,1,"R");
+
+    $this->objpdf->setX(125);
+    $this->objpdf->cell(40,5,"Valor IRRF",1,0);
+    $this->objpdf->cell(35,5,"R$ ".number_format($this->fvlrIrrf,2,",","."),1,1,"R");
+
+    $fTotalNota = $this->fTotaliUni;
+
+    // valor total da nota
+    if ($lTomadorEhPrefeitura) {
+      $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
+    }
+
     $this->objpdf->setX(125);
     $this->objpdf->cell(40,5,"Valor Total da Nota",1,0);
     $this->objpdf->Setfont('Arial', '', 10);
-    $this->objpdf->cell(35,5,"R$ ".number_format(($this->fTotaliUni),2,",","."),1,1,"R");
+    $this->objpdf->cell(35,5,"R$ ".number_format(($fTotalNota),2,",","."),1,1,"R");
     $this->objpdf->setDash(true,true);
+    $this->yOld = $this->yOld + 10;
     $this->objpdf->line(10,$this->yOld+35,200,$this->yOld+35);
     $this->objpdf->setDash(false,false);
 
