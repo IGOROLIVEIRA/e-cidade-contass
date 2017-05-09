@@ -593,7 +593,7 @@ function calculoRetencaoIRRF(info) {
 
   var valoresIRRF = getValoresTabelasIRRF();
 
-  var baseIRRF = info.baseIRRF - info.valorINSS;
+  var baseIRRF = info.valorNota - info.baseIRRF - info.valorINSS;
   baseIRRF -= (valoresIRRF.valorDependente * info.qtdDependentes);
   baseIRRF  = baseIRRF.toFixed(2);
 
