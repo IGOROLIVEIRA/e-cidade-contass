@@ -178,7 +178,7 @@ switch ($oParam->exec) {
                                             $c++;
                                         }
                                     } else {
-                                        $oClasse->$sColuna = $data[$c];
+                                        $oClasse->$sColuna = str_replace("'","",$data[$c]);
                                         $c++;
                                     }
                                 }
@@ -186,6 +186,9 @@ switch ($oParam->exec) {
 
                             try {
                                 $oClasse->incluir(null);
+                                if($oClasse->erro_status == 0) {
+                                    die("Erro importacao. {$oClasse->erro_msg}");
+                                }
                                 if ($iCtrListaArquivos == 0) {
                                     $oArquivoImportado->nome = $aArquivoCSV[0];
                                     $aListaArquivos[] = $aArquivoCSV[0];

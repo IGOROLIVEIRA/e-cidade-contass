@@ -230,15 +230,6 @@ class cl_emp102016 {
      if($this->si106_tipoprocesso == null ){
        $this->si106_tipoprocesso = "0";
      }
-     if($this->si106_tipodespesaemprpps == null ){
-       $this->erro_sql = " Campo Tipos de empenhos do RPPS nao Informado.";
-       $this->erro_campo = "si106_tipodespesaemprpps";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->si106_mes == null ){
        $this->erro_sql = " Campo Mês nao Informado.";
        $this->erro_campo = "si106_mes";
@@ -361,7 +352,7 @@ class cl_emp102016 {
                                ,$this->si106_exercicioprocessolicitatorio
                                ,$this->si106_tipoprocesso
                                ,'$this->si106_cpfordenador'
-                               ,$this->si106_tipodespesaemprpps
+                               ,".($this->si106_tipodespesaemprpps==''||$this->si106_tipodespesaemprpps==0?'NULL':$this->si106_tipodespesaemprpps)."
                                ,$this->si106_mes
                                ,$this->si106_instit
                       )";
