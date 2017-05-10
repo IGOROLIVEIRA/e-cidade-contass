@@ -333,6 +333,7 @@ if ( isset($oPost->gerar) ) {
         if ($oSefip->erro_status == 0) {
           throw new Exception("Erro ao Gerar Sefip:{$oSefip->erro_msg}");
         }
+        system('rm /tmp/SEFIP.RE');
         $cllayout_SEFIP->nomearq = "/tmp/SEFIP.RE";
           
         $clgera_sql_folha->inicio_rh = false;
