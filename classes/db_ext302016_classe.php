@@ -553,8 +553,8 @@ class cl_ext302016 {
        $sql .= $campos;
      }
      $sql .= " from ext302016 ";
-     $sql .= "      left  join ext212016  on  ext212016.si125_sequencial = ext302016.si126_reg21";
-     $sql .= "      left  join ext202016  on  ext202016.si165_sequencial = ext212016.si125_reg20";
+     //$sql .= "      left  join ext212016  on  ext212016.si125_sequencial = ext302016.si126_reg21";
+     //$sql .= "      left  join ext202016  on  ext202016.si165_sequencial = ext212016.si125_reg20";
      $sql2 = "";
      if($dbwhere==""){
        if($si126_sequencial!=null ){
