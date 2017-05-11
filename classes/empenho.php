@@ -155,11 +155,9 @@ class empenho {
     }
 
     $oDaoEmpNotaItem = db_utils::getDao("empnotaitem");
-    $sCampos  = " exists ( select 1 from bensdispensatombamento where e139_empnotaitem = e72_sequencial ) as tem_dispensa, ";
+    $sCampos  = " case when e139_codcla is null then 'f' else 't' end as tem_dispensa, e139_codcla,";
     $sCampos .= " exists ( select 1 from empnotaitembenspendente where e137_empnotaitem = e72_sequencial ) as tem_pendente   ";
     $sWhere   = " e72_codnota = {$codnota} ";
-
-    //die($oDaoEmpNotaItem->sql_query_file(null,$sCampos,null,$sWhere));
 
     $rsEmpNotaItem = db_query($oDaoEmpNotaItem->sql_query_file(null,$sCampos,null,$sWhere));
     if ( ! $rsEmpNotaItem || pg_num_rows($rsEmpNotaItem) == 0 ) {
@@ -275,7 +273,7 @@ class empenho {
 
               $codteste = 206;
               if (!empty($oDadosEmpNotaItem) && $oDadosEmpNotaItem->tem_dispensa == 't') {
-                $codteste = 204;
+                $codteste = 206;
               }
               break;
           }
@@ -415,7 +413,7 @@ class empenho {
               case 9 :
                 $documento = 206;
                 if (!empty($oDadosEmpNotaItem) && $oDadosEmpNotaItem->tem_dispensa == 't') {
-                  $documento = 204;
+                  $documento = 206;
                 }
                 break;
               default:
@@ -484,12 +482,24 @@ class empenho {
           $oPlanoConta = new ContaPlanoPCASP($e64_codele, $iAnoSessao, null, db_getsession("DB_instit"));
         }
 
+        /**
+         * @todo tratar aqui para fazer o lançamento das dispensas de tombamento pelo LancamentoAuxiliarEmLiquidacaoMaterialPermanente
+         */
+
         $oEventoContabil         = new EventoContabil($documento, $iAnoSessao);
         $aLancamentosCadastrados = $oEventoContabil->getEventoContabilLancamento();
         $oLancamentoAuxiliar     = new LancamentoAuxiliarEmpenhoLiquidacao();
+        if($documento == 206 ){
+          $oLancamentoAuxiliar     = new LancamentoAuxiliarEmLiquidacaoMaterialPermanente();
+          $oLancamentoAuxiliar->setClassificacao(new BemClassificacao($oDadosEmpNotaItem->e139_codcla));
+        } else {
+          $oLancamentoAuxiliar->setEmpenhoFinanceiro($oEmpenhoFinanceiro);
+          $oLancamentoAuxiliar->setCodigoContaPlano($oPlanoConta->getReduzido());
+          $oLancamentoAuxiliar->setCaracteristicaPeculiarCredito($oEmpenhoFinanceiro->getCaracteristicaPeculiar());
+          $oLancamentoAuxiliar->setCaracteristicaPeculiarDebito($oEmpenhoFinanceiro->getCaracteristicaPeculiar());
+        }
         $oLancamentoAuxiliar->setObservacaoHistorico($sHistoricoOrdem);
         $oLancamentoAuxiliar->setCodigoElemento($e64_codele);
-        $oLancamentoAuxiliar->setCodigoContaPlano($oPlanoConta->getReduzido());
         $oLancamentoAuxiliar->setCodigoNotaLiquidacao($codnota);
         $oLancamentoAuxiliar->setCodigoDotacao($oEmpenhoFinanceiro->getDotacao()->getCodigo());
         $oLancamentoAuxiliar->setFavorecido($oEmpenhoFinanceiro->getCgm()->getCodigo());
@@ -497,10 +507,6 @@ class empenho {
         $oLancamentoAuxiliar->setHistorico($aLancamentosCadastrados[0]->getHistorico());
         $oLancamentoAuxiliar->setCodigoOrdemPagamento($this->iPagOrdem);
         $oLancamentoAuxiliar->setNumeroEmpenho($oEmpenhoFinanceiro->getNumero());
-        $oLancamentoAuxiliar->setEmpenhoFinanceiro($oEmpenhoFinanceiro);
-
-        $oLancamentoAuxiliar->setCaracteristicaPeculiarCredito($oEmpenhoFinanceiro->getCaracteristicaPeculiar());
-        $oLancamentoAuxiliar->setCaracteristicaPeculiarDebito ($oEmpenhoFinanceiro->getCaracteristicaPeculiar());
 
         $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
         $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
@@ -585,7 +591,7 @@ class empenho {
     }
 
     $oDaoEmpNotaItem = db_utils::getDao("empnotaitem");
-    $sCampos  = " exists ( select 1 from bensdispensatombamento where e139_empnotaitem = e72_sequencial ) as tem_dispensa, ";
+    $sCampos  = " case when e139_codcla is null then 'f' else 't' end as tem_dispensa, e139_codcla,";
     $sCampos .= " exists ( select 1 from empnotaitembenspendente where e137_empnotaitem = e72_sequencial ) as tem_pendente   ";
     $sWhere   = " e72_codnota = {$codnota} ";
 
@@ -686,7 +692,7 @@ class empenho {
           case 9 :
             $codteste = 207;
             if (!empty($oDadosEmpNotaItem) && $oDadosEmpNotaItem->tem_dispensa == 't') {
-              $codteste = 205;
+              $codteste = 207;
             }
             break;
           default:
@@ -862,7 +868,7 @@ class empenho {
             case 9 :
               $documento = 207;
               if (!empty($oDadosEmpNotaItem) && $oDadosEmpNotaItem->tem_dispensa == 't') {
-                $documento = 205;
+                $documento = 207;
               }
               break;
             default:
@@ -961,20 +967,24 @@ class empenho {
       $oEventoContabil         = new EventoContabil($documento, $iAnoSessao);
       $aLancamentosCadastrados = $oEventoContabil->getEventoContabilLancamento();
       $oLancamentoAuxiliar     = new LancamentoAuxiliarEmpenhoLiquidacao();
+      if($documento == 207 ){
+        $oLancamentoAuxiliar     = new LancamentoAuxiliarEmLiquidacaoMaterialPermanente();
+        $oLancamentoAuxiliar->setClassificacao(new BemClassificacao($oDadosEmpNotaItem->e139_codcla));
+      } else {
+        $oLancamentoAuxiliar->setEmpenhoFinanceiro($oEmpenhoFinanceiro);
+        $oLancamentoAuxiliar->setCodigoContaPlano($oPlanoConta->getReduzido());
+        $oLancamentoAuxiliar->setCaracteristicaPeculiarCredito($oEmpenhoFinanceiro->getCaracteristicaPeculiar());
+        $oLancamentoAuxiliar->setCaracteristicaPeculiarDebito($oEmpenhoFinanceiro->getCaracteristicaPeculiar());
+      }
       $oLancamentoAuxiliar->setObservacaoHistorico($historico);
       $oLancamentoAuxiliar->setCodigoElemento($e64_codele);
-      $oLancamentoAuxiliar->setCodigoContaPlano($oPlanoConta->getReduzido());
       $oLancamentoAuxiliar->setCodigoNotaLiquidacao($codnota);
       $oLancamentoAuxiliar->setCodigoDotacao($oEmpenhoFinanceiro->getDotacao()->getCodigo());
       $oLancamentoAuxiliar->setFavorecido($oEmpenhoFinanceiro->getCgm()->getCodigo());
       $oLancamentoAuxiliar->setValorTotal($valor);
       $oLancamentoAuxiliar->setHistorico($aLancamentosCadastrados[0]->getHistorico());
-      $oLancamentoAuxiliar->setEmpenhoFinanceiro($oEmpenhoFinanceiro);
       $oLancamentoAuxiliar->setCodigoOrdemPagamento($oNota->e50_codord);
       $oLancamentoAuxiliar->setNumeroEmpenho($oEmpenhoFinanceiro->getNumero());
-      $oLancamentoAuxiliar->setEmpenhoFinanceiro($oEmpenhoFinanceiro);
-      $oLancamentoAuxiliar->setCaracteristicaPeculiarCredito($oEmpenhoFinanceiro->getCaracteristicaPeculiar());
-      $oLancamentoAuxiliar->setCaracteristicaPeculiarDebito ($oEmpenhoFinanceiro->getCaracteristicaPeculiar());
 
       $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
       $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);

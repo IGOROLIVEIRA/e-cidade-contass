@@ -28,6 +28,8 @@
 $campos  = "distinct ";
 $campos .= "e139_sequencial,     ";
 $campos .= "m52_codordem,        ";
+$campos .= "t64_class,           ";
+$campos .= "t64_descr,           ";
 $campos .= "e69_numemp,          ";
 $campos .= "e139_empnotaitem,    ";
 $campos .= "e72_valor,           ";
@@ -35,5 +37,6 @@ $campos .= "e72_vlrliq,          ";
 $campos .= "e72_codnota,         ";
 $campos .= "e139_matestoqueitem, ";
 $campos .= "pc01_descrmater,     ";
-$campos .= "e139_justificativa   ";
+$campos .= "e139_justificativa,  ";
+$campos .= "t64_codcla           ";
 ?>

@@ -484,6 +484,7 @@ class cl_empnotaitem {
        $sql .= $campos;
      }
      $sql .= " from empnotaitem ";
+     $sql .= " left join bensdispensatombamento on e139_empnotaitem = e72_sequencial ";
      $sql2 = "";
      if($dbwhere==""){
        if($e72_sequencial!=null ){

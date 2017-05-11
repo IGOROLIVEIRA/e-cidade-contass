@@ -57,7 +57,7 @@ try {
 
     /**
      * Estonar
-     * - documento 210
+     * - documento 208
      */
     case 'processar':
 
@@ -81,6 +81,7 @@ try {
       $oDaoBensDispensaTombamento->e139_empnotaitem    = $oDadosEmpnotaitem->e137_empnotaitem;
       $oDaoBensDispensaTombamento->e139_matestoqueitem = $oDadosEmpnotaitem->e137_matestoqueitem;
       $oDaoBensDispensaTombamento->e139_justificativa  = $oParametros->sJustificativa;
+      $oDaoBensDispensaTombamento->e139_codcla         = $oParametros->iClassificacao;
       $oDaoBensDispensaTombamento->incluir(null);
 
       if ($oDaoBensDispensaTombamento->erro_status == "0") {
@@ -89,14 +90,14 @@ try {
         throw new Exception (_M(MENSAGENS."dispensa_tombamento_nao_incluido", $oDadosErro));
       }
 
-      processarLancamento(210, $oDadosEmpnotaitem->e137_matestoqueitem, $oDadosEmpnotaitem->e137_empnotaitem, $oParametros);
+      processarLancamento(208, $oDadosEmpnotaitem->e137_matestoqueitem, $oDadosEmpnotaitem->e137_empnotaitem, $oParametros);
 
       $oRetorno->sMensagem = _M(MENSAGENS . 'processamento_efetuado_sucesso');
     break;
 
     /**
      * Estonar
-     * - documento 211
+     * - documento 209
      */
     case 'estornar':
 
@@ -130,7 +131,7 @@ try {
         throw new Exception (_M(MENSAGENS . "nota_item_nao_incluido", $oDadosErro));
       }
 
-      processarLancamento(211, $oDadosTombamento->e139_matestoqueitem, $oDadosTombamento->e139_empnotaitem, $oParametros);
+      processarLancamento(209, $oDadosTombamento->e139_matestoqueitem, $oDadosTombamento->e139_empnotaitem, $oParametros);
       $oRetorno->sMensagem = _M(MENSAGENS . 'estorno_efetuado_sucesso');
 
       break;
@@ -221,8 +222,8 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $oContaCorrenteDetalhe->setDotacao($oEmpenhoFinanceiro->getDotacao());
   $oRecurso = new Recurso($oEmpenhoFinanceiro->getDotacao()->getRecurso());
   $oContaCorrenteDetalhe->setRecurso($oRecurso);
-  $oLancamentoAuxiliarEmLiquidacao = new LancamentoAuxiliarEmpenhoEmLiquidacaoMaterialAlmoxarifado();
-  $oLancamentoAuxiliarEmLiquidacao->setGrupoMaterial(new MaterialGrupo($iCodigoGrupo));
+  $oLancamentoAuxiliarEmLiquidacao = new LancamentoAuxiliarEmLiquidacaoMaterialPermanente();
+  $oLancamentoAuxiliarEmLiquidacao->setClassificacao(new BemClassificacao($oParametros->iClassificacao));
   $oLancamentoAuxiliarEmLiquidacao->setObservacaoHistorico($oParametros->sJustificativa);
   $oLancamentoAuxiliarEmLiquidacao->setFavorecido($oEmpenhoFinanceiro->getFornecedor()->getCodigo());
   $oLancamentoAuxiliarEmLiquidacao->setCodigoElemento($aItensEmpenho[0]->getCodigoElemento());
@@ -231,7 +232,6 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $oLancamentoAuxiliarEmLiquidacao->setCodigoNotaLiquidacao($iCodigoNotaLiquidacao);
   $oLancamentoAuxiliarEmLiquidacao->setValorTotal($nValorNota);
   $oLancamentoAuxiliarEmLiquidacao->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-  $oLancamentoAuxiliarEmLiquidacao->setSaida( ( $iCodigoDocumento == 211 ? true : false) );
 
   $oEventoContabil->executaLancamento($oLancamentoAuxiliarEmLiquidacao);
 

@@ -45,13 +45,15 @@ class cl_bensdispensatombamento {
    var $e139_sequencial = 0; 
    var $e139_empnotaitem = 0; 
    var $e139_matestoqueitem = 0; 
-   var $e139_justificativa = null; 
+   var $e139_codcla = 0;
+   var $e139_justificativa = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  e139_sequencial = int4 = Codigo sequencial 
                  e139_empnotaitem = int4 = Item nota de empenho 
                  e139_matestoqueitem = int8 = Item da entrada da ordem de compra 
-                 e139_justificativa = text = Justificativa 
+                 e139_justificativa = text = Justificativa
+                 e139_codcla = int8 = Codigo da Classificacao
                  ";
    //funcao construtor da classe 
    function cl_bensdispensatombamento() { 
@@ -74,6 +76,7 @@ class cl_bensdispensatombamento {
        $this->e139_sequencial = ($this->e139_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_sequencial"]:$this->e139_sequencial);
        $this->e139_empnotaitem = ($this->e139_empnotaitem == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_empnotaitem"]:$this->e139_empnotaitem);
        $this->e139_matestoqueitem = ($this->e139_matestoqueitem == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_matestoqueitem"]:$this->e139_matestoqueitem);
+       $this->e139_codcla = ($this->e139_codcla == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_codcla"]:$this->e139_codcla);
        $this->e139_justificativa = ($this->e139_justificativa == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_justificativa"]:$this->e139_justificativa);
      }else{
        $this->e139_sequencial = ($this->e139_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_sequencial"]:$this->e139_sequencial);
@@ -91,9 +94,9 @@ class cl_bensdispensatombamento {
        $this->erro_status = "0";
        return false;
      }
-     if($this->e139_matestoqueitem == null ){ 
-       $this->erro_sql = " Campo Item da entrada da ordem de compra não informado.";
-       $this->erro_campo = "e139_matestoqueitem";
+     if($this->e139_codcla == null ){
+       $this->erro_sql = " Campo Codigo da Classificacao não informado.";
+       $this->erro_campo = "e139_codcla";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -146,12 +149,14 @@ class cl_bensdispensatombamento {
                                       ,e139_empnotaitem 
                                       ,e139_matestoqueitem 
                                       ,e139_justificativa 
+                                      ,e139_codcla
                        )
                 values (
                                 $this->e139_sequencial 
                                ,$this->e139_empnotaitem 
                                ,$this->e139_matestoqueitem 
                                ,'$this->e139_justificativa' 
+                               ,$this->e139_codcla
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -227,12 +232,25 @@ class cl_bensdispensatombamento {
          return false;
        }
      }
-     if(trim($this->e139_matestoqueitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_matestoqueitem"])){ 
+     if(trim($this->e139_matestoqueitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_matestoqueitem"])){
        $sql  .= $virgula." e139_matestoqueitem = $this->e139_matestoqueitem ";
        $virgula = ",";
        if(trim($this->e139_matestoqueitem) == null ){ 
          $this->erro_sql = " Campo Item da entrada da ordem de compra não informado.";
          $this->erro_campo = "e139_matestoqueitem";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->e139_codcla)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_codcla"])){
+       $sql  .= $virgula." e139_codcla = $this->e139_codcla ";
+       $virgula = ",";
+       if(trim($this->e139_codcla) == null ){
+         $this->erro_sql = " Campo Codigo da classificacao não informado.";
+         $this->erro_campo = "e139_codcla";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -428,6 +446,7 @@ class cl_bensdispensatombamento {
      $sql .= "      inner join matestoque  on  matestoque.m70_codigo = matestoqueitem.m71_codmatestoque";
      $sql .= "      inner join empempitem  on  empempitem.e62_sequencial = empnotaitem.e72_empempitem";
      $sql .= "      inner join empnota  as a on   a.e69_codnota = empnotaitem.e72_codnota";
+     $sql .= "      left join clabens  on clabens.t64_codcla               = bensdispensatombamento.e139_codcla  ";
      $sql2 = "";
      if($dbwhere==""){
        if($e139_sequencial!=null ){
@@ -505,6 +524,7 @@ class cl_bensdispensatombamento {
     $sSql .= "      inner join empempenho      on  empempenho.e60_numemp            = empnota.e69_numemp";
     $sSql .= "      left  join empnotaord      on  empnotaord.m72_codnota           = empnota.e69_codnota ";
     $sSql .= "      left  join matordemitem    on  matordemitem.m52_codordem        = empnotaord.m72_codordem ";
+    $sSql .= "      left  join clabens         on  clabens.t64_codcla               = bensdispensatombamento.e139_codcla";
 
     if ( !empty($iCodigoDispensaTombamento) ) {
       $sSql .= " where e139_sequencial = $iCodigoDispensaTombamento";

@@ -41,12 +41,17 @@ $clbensdispensatombamento->rotulo->tlabel();
 $clrotulo = new rotulocampo;
 $clrotulo->label("pc01_descrmater");
 $clrotulo->label("m71_codmatestoque");
+$clrotulo->label("t64_descr");
+$clrotulo->label("t64_class");
+$clrotulo->label("t64_codcla");
 
 $iOpcaoAncora = 1;
 $lEstorno     = false;
 $sLabelBotao  = "Processar";
 $oGet         = db_utils::postMemory($_GET);
-
+$oDataAtual   = new DBDate(date("d/m/Y", db_getsession("DB_datausu")));
+$oInstituicao = new Instituicao(db_getsession("DB_instit"));
+$lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataAtual, $oInstituicao);
 /**
  * Estorno true/false 
  */
@@ -78,7 +83,7 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
 
     <fieldset class='container' style="width:500px;">
 
-      <legend>Dispensa de Tombamento</legend>
+      <legend><?=$lEstorno ? "Estorno de " : "Inclusão de " ?>Dispensa de Tombamento</legend>
 
       <table border="0" class='form-container'>
 
@@ -91,6 +96,21 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
               db_input('e139_empnotaitem', 10, 0, true, 'text', 3);
               db_input('pc01_descrmater', 50, 0, true, 'text', 3, '')
              ?>
+          </td>
+        </tr>
+
+        <tr>
+          <td nowrap="nowrap" title="<?php echo @$Tt64_class;?>">
+            <?php
+            db_ancora(@$Lt64_class,"js_pesquisaClasse(true);", (($db_opcao == 2 && $lPossuiIntegracaoPatrimonial) || $lEstorno ? 3 : $db_opcao));
+            ?>
+          </td>
+          <td>
+            <?php
+            db_input('t64_codcla',10,"",true,'hidden',$db_opcao);
+            db_input('t64_class',10,$It64_class,true,'text',(($db_opcao == 2 && $lPossuiIntegracaoPatrimonial) || $lEstorno ? 3 : $db_opcao),"onchange='js_pesquisaClasse(false);'");
+            db_input('t64_descr',67,$It64_descr,true,'text',3,'');
+            ?>
           </td>
         </tr>
 
@@ -232,7 +252,17 @@ function js_processar() {
     return false;
   }
 
-  js_divCarregando(_M(MENSAGENS + 'processando'), 'msgBox');
+  /**
+   * Classificação
+   * Só valida se for processamento
+   */
+  if ( empty($('t64_codcla').value) && !lEstorno ) {
+
+    alert('Classificação não informada');
+    return false;
+  }
+
+  js_divCarregando('Processando...', 'msgBox');
 
   var oParametros = new Object();
 
@@ -247,6 +277,7 @@ function js_processar() {
   oParametros.nValorNota         = js_formatar($F('nValorNota'), 'f');
   oParametros.iCodigoNota        = $F('iCodigoNota');
   oParametros.sJustificativa     = encodeURIComponent(tagString($F('e139_justificativa')));
+  oParametros.iClassificacao     = $F('t64_codcla');
 
   var oAjax = new Ajax.Request(sRPC, {
                                method     : "post",
@@ -284,7 +315,7 @@ function js_retornoProcessar(oAjax) {
     sEstorno = "false";
   }
     
-  js_divCarregando(_M(MENSAGENS + 'processando'), 'msgBox');
+  js_divCarregando('Processando...', 'msgBox');
   document.location.href = 'pat1_bensdispensatombamento001.php?lEstorno='+lEstorno;
 }
 
@@ -299,7 +330,7 @@ function js_pesquisa() {
   
   js_OpenJanelaIframe('top.corpo',
                       'db_iframe_bensdispensatombamento',
-                      'func_bensdispensatombamento.php?funcao_js=parent.js_preenchePesquisa|e139_empnotaitem|pc01_descrmater|e69_numemp|e72_valor|e72_codnota',
+                      'func_bensdispensatombamento.php?funcao_js=parent.js_preenchePesquisa|e139_empnotaitem|pc01_descrmater|e69_numemp|e72_valor|e72_codnota|t64_codcla|t64_class|t64_descr',
                       'Pesquisa',
                       true);
 }
@@ -311,17 +342,75 @@ function js_pesquisa() {
  * @param string  sDescricaoItem 
  * @param integer iNumeroEmpenho 
  * @param Numeric nValorItemNota 
+ * @param integer iCodCla
+ * @param string sClassific
+ * @param string sDescrClass
  * @access public
  * @return void
  */
-function js_preenchePesquisa(iCodigoEmpNotaItem, sDescricaoItem, iNumeroEmpenho, nValorItemNota, iCodigoNota) {
+function js_preenchePesquisa(iCodigoEmpNotaItem, sDescricaoItem, iNumeroEmpenho, nValorItemNota, iCodigoNota, iCodCla, sClassific, sDescrClass) {
 
   $('iNumeroEmpenho').value      = iNumeroEmpenho;
   $('e139_empnotaitem').value    = iCodigoEmpNotaItem;
   $('pc01_descrmater').value     = sDescricaoItem;
   $('nValorNota').value          = nValorItemNota;
   $('iCodigoNota').value         = iCodigoNota;
+  $('t64_codcla').value          = iCodCla;
+  $('t64_class').value           = sClassific;
+  $('t64_descr').value           = sDescrClass;
   db_iframe_bensdispensatombamento.hide();
+}
+
+function js_pesquisaClasse(mostra) {
+
+  if (mostra) {
+    js_OpenJanelaIframe('top.corpo','db_iframe_clabens',
+        'func_clabens.php?funcao_js=parent.js_mostraclabens1|t64_class|t64_descr|'+
+        't64_codcla|t64_benstipodepreciacao|t46_descricao|t64_vidautil&analitica=true',
+        'Pesquisa',true);
+  } else {
+
+    testa = new String($F("t64_class"));
+
+    if (testa != '' && testa != 0) {
+
+      i = 0;
+      for (i = 0; i < $("t64_class").value.length; i++){
+        testa = testa.replace('.','');
+      }
+      js_OpenJanelaIframe('top.corpo','db_iframe_clabens',
+          'func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens&analitica=true',
+          'Pesquisa',false);
+    } else {
+
+      if (iParametro == 2 && dbOpcao == 1) {
+        $("t64_class").value = "";
+      }
+      $("t64_descr").value = '';
+    }
+  }
+}
+
+function js_mostraclabens(chave, erro, chave2) {
+
+  $("t64_descr").value  = chave;
+  $("t64_codcla").value = chave2;
+  if(erro) {
+
+    $("t64_class").value = "";
+    $("t64_class").focus();
+    $("t64_codcla").value = "";
+  }
+}
+
+function js_mostraclabens1(chave1, chave2, chave3) {
+
+  $("t64_class").value       = chave1;
+  $("t64_descr").value       = chave2;
+  $("t64_codcla").value      = chave3;
+
+  db_iframe_clabens.hide();
+
 }
 
 js_tabulacaoforms("form1","e139_empnotaitem",true,1,"e139_empnotaitem",true);
