@@ -376,13 +376,13 @@ if (isset($e60_numemp) and $e60_numemp != "") {
     <?
     $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(
                                                 null,
-                                                null,"distinct l20_codigo,l20_dtpublic,l20_numero,l03_codcom,l03_descr",
+                                                null,"distinct l20_codigo,l20_anousu,l20_numero,l03_codcom,l03_descr",
                                                 null,
                                                 "e55_autori = ". @$e61_autori));
     if ($clempautitem->numrows > 0) {
 
       db_fieldsmemory($result_licita,0);
-      $arr_data  = split("-",$l20_dtpublic);
+      $arr_data  = split("-",$l20_anousu);
       $ano_lic   = $arr_data[0];
       $numerolic = $l20_numero."/".$ano_lic;
       db_input("l20_codigo",10,"",true,"hidden",3);
