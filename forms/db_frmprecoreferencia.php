@@ -75,10 +75,10 @@ db_textarea('si01_justificativa',7,60,$Isi01_justificativa,true,'text',$db_opcao
 <script>
 function js_pesquisasi01_processocompra(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcprocnovo.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
   }else{
      if(document.form1.si01_processocompra.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?pesquisa_chave='+document.form1.si01_processocompra.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcprocnovo.php?pesquisa_chave='+document.form1.si01_processocompra.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
      }
   }
 }
