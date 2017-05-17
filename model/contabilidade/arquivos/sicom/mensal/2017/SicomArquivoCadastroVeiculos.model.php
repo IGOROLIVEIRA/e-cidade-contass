@@ -235,7 +235,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                                 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                           ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
                       END AS codunidadesub,
-                     veiculos.ve01_codigo AS codVeiculo,
+                     case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = 0 then veiculos.ve01_codigo else veiculos.ve01_codigoant end AS codVeiculo,
                      veiculos.ve01_codunidadesub,
                      ve62_origemgasto AS origemGasto,
                      CASE
