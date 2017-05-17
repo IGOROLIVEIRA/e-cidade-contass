@@ -331,7 +331,7 @@ for ($x = 0; $x < $numrows; $x++) {
 
     $sSql = "select (e60_codemp || '/' || e60_anousu) as e60_codemp from bensmater join empempenho on e60_numemp=t53_empen where t53_codbem = $t52_bem ";
     if ($t53_empen != "") {
-        $sSql .= " and e60_codemp = '" . $t53_empen . "'";
+        $sSql .= " and e60_numemp = '" . $t53_empen . "'";
     }
     $rsNumemp = db_query($sSql);
     if (pg_num_rows($rsNumemp) == 0 && $t53_empen != "") {

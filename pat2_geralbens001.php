@@ -405,7 +405,7 @@ function js_limpa_notafiscal () {
 
     function js_pesquisat53_empen(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_codemp|z01_nome', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp|z01_nome', 'Pesquisa', true);
         } else {
             if (document.form1.t53_empen.value != '') {
                 js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empenhogeral.php?pesquisa_chave=' + document.form1.t53_empen.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);

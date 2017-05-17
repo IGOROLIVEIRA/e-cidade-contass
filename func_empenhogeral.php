@@ -123,7 +123,7 @@ $rotulo->label("z01_cgccpf");
 
         if($pesquisa_chave != null && $pesquisa_chave != ""){
 
-          $dbwhere .= "e60_anousu = ".db_getsession("DB_anousu")." and e60_codemp = '".$pesquisa_chave ."'";
+          $dbwhere .= " e60_numemp = '".$pesquisa_chave ."'";
 
           $sSql   = $clempempenho->sql_query_buscaempenhos($pesquisa_chave,"*",null,$dbwhere);
           
