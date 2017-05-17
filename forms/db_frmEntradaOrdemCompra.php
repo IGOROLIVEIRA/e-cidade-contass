@@ -1500,16 +1500,16 @@ function js_confirmaEntrada() {
           /**
            *
            * Procuramos o saldo do indice pai.ele deve estar com o saldo zerado.
-           * Isto é, estar totalmente fracionado, caso nao esteje, avisamos o usuário e cancelamos a
+           * Isto é, estar totalmente fracionado, caso nao esteja, avisamos o usuário e cancelamos a
            * operacao
            */
-           /*
+
            var sItemFracionado    = $('descrmater'+aItens[i].value+"_0").innerHTML;
            var sMsgFracionamento  = 'Fracionamento do Item ('+sItemFracionado+') é inválido.\n';
            sMsgFracionamento     += 'Fracionamento parcial não permitido.';
            alert(sMsgFracionamento);
            return false;
-           */
+
         }
       }
       sJsonItens += sVirgula+'{"iCodLanc":'+aItens[i].value+',"iIndiceEntrada":'+iIndice[1]+'}';
