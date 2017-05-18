@@ -561,12 +561,15 @@ function saveDotacao(iLinha) {
 
     var nValor = js_strToFloat(oTxtValorDotacao.getValue());
 
-    if (nValor == 0) {
+    /**
+      * Removido validacao de inclusao de dotacao zerada conforme solicitado na OC 3855
+      */
+    /*if (nValor == 0) {
 
         alert('Campo Valor é de preenchimento obrigatório.');
         $('oTxtValorDotacao').focus();
         return false;
-    }
+    }*/
 
     var oDotacao = {
         dotacao: oTxtDotacao.getValue(),
@@ -794,11 +797,14 @@ function apostilar() {
             var nValorDotacao = Number(0);
             oItem.dotacoes.forEach(function (oDotacao) {
 
-                if (oDotacao.valor == 0) {
+                /**
+                 * Removido validacao de inclusao de dotacao zerada conforme solicitado na OC 3855
+                 */
+                /*if (oDotacao.valor == 0) {
 
                     lAditar = false;
                     return alert("Os Valores das dotações para o item " + oItem.descricaoitem.urlDecode() + " não podem estar zeradas.");
-                }
+                }*/
 
                 nValorDotacao += Number(oDotacao.valor);
             });

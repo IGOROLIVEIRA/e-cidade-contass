@@ -115,7 +115,10 @@ class cl_acordoitemdotacao {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ac22_valor == null ){ 
+     /**
+       * Removido validacao de inclusao de dotacao zerada conforme solicitado na OC 3855
+       */
+     /*if($this->ac22_valor == null ){ 
        $this->erro_sql = " Campo Valor nao Informado.";
        $this->erro_campo = "ac22_valor";
        $this->erro_banco = "";
@@ -123,7 +126,7 @@ class cl_acordoitemdotacao {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->ac22_quantidade == null ){ 
        $this->erro_sql = " Campo Quantidade nao Informado.";
        $this->erro_campo = "ac22_quantidade";
@@ -178,7 +181,7 @@ class cl_acordoitemdotacao {
                                ,$this->ac22_coddot 
                                ,$this->ac22_anousu 
                                ,$this->ac22_acordoitem 
-                               ,$this->ac22_valor 
+                               ,".($this->ac22_valor==null ? 'null' : $this->ac22_valor)."
                                ,$this->ac22_quantidade 
                       )";
      $result = db_query($sql); 
