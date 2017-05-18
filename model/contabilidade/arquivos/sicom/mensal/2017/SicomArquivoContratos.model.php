@@ -158,13 +158,13 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
       case when o41_subunidade != 0 or not null then
                                     lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
                                     else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesubresp
-                        from empcontratos
-                      inner join empempenho on e60_codemp = si173_empenho::varchar and e60_anousu = si173_anoempenho
+                        from empempenhocontrato
+                      inner join empempenho on e60_numemp = e100_numemp
 					  join empelemento on e64_numemp = e60_numemp
 					  join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
 					  join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
 					  join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-					  where si173_codcontrato = {$iCodContratos}
+					  where e100_acordo = {$iCodContratos}
       ";
 
         $sCodunidadesubresp = db_utils::fieldsMemory(db_query($sSql), 0)->codunidadesubresp;
@@ -192,6 +192,15 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $oLicitacao = db_utils::fieldsMemory(db_query($sSql), 0);
 
         return $oLicitacao;
+
+    }
+
+    /**
+     * Quando um contrato é de origem manual mas o tipo origem é adesão à ata de registro de preço,
+     * busca-se os dados do processo licitatório em: compras>>procedimentos>adesão de registro de preço
+     * @param $param
+     */
+    public function getDadosLicitacaoAdesao($param){
 
     }
 
