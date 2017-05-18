@@ -45,6 +45,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text($xcol+2,$xlin+27,'Elemento');
   $this->objpdf->text($xcol+2,$xlin+34,'Recurso');
   $this->objpdf->text($xcol+2,$xlin+38,'Processo');
+  $this->objpdf->text($xcol+70,$xlin+38,'Reduzido:');
   $this->objpdf->Setfont('Arial','',8);
   $this->objpdf->text($xcol+17,$xlin+7,':  '.db_formatar($this->orgao,'orgao').' - '.substr($this->descr_orgao,0,46));
   $this->objpdf->text($xcol+17,$xlin+11,':  '.db_formatar($this->unidade,'unidade').' - '.$this->descr_unidade);
@@ -56,7 +57,8 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text($xcol+17,$xlin+30,'   '.$this->descr_elemento);
   $this->objpdf->text($xcol+17,$xlin+34,':  '.$this->recurso.' - '.$this->descr_recurso);
   $this->objpdf->text($xcol+17,$xlin+38,':  '.$this->processo);
-  
+  $this->objpdf->text($xcol+85,$xlin+38,$this->coddot);
+
   if ($ano < db_getsession("DB_anousu")) {
     $this->objpdf->text($xcol+19,$xlin+38,'RESTOS A PAGAR ');
   }
