@@ -241,7 +241,7 @@ class cl_apostilamento {
                 values (
                                 $this->si03_sequencial 
                                ,".($this->si03_licitacao==0 ? 'null' : $this->si03_licitacao)." 
-                               ,".($this->si03_numcontrato==null ? 'null' : $this->si03_numcontrato)." 
+                               ,".($this->si03_numcontrato=="null" ? 'null' : $this->si03_numcontrato)."
                                ,".($this->si03_dataassinacontrato == "null" || $this->si03_dataassinacontrato == ""?"null":"'".$this->si03_dataassinacontrato."'")." 
                                ,$this->si03_tipoapostila 
                                ,".($this->si03_dataapostila == "null" || $this->si03_dataapostila == ""?"null":"'".$this->si03_dataapostila."'")." 
