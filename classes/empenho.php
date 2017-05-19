@@ -155,7 +155,7 @@ class empenho {
     }
 
     $oDaoEmpNotaItem = db_utils::getDao("empnotaitem");
-    $sCampos  = " case when e139_codcla is null then 'f' else 't' end as tem_dispensa, e139_codcla,";
+    $sCampos  = " case when e139_codcla is null then 'f' else 't' end as tem_dispensa, coalesce(e139_codcla,t52_codcla) as e139_codcla,";
     $sCampos .= " exists ( select 1 from empnotaitembenspendente where e137_empnotaitem = e72_sequencial ) as tem_pendente   ";
     $sWhere   = " e72_codnota = {$codnota} ";
 
@@ -591,7 +591,7 @@ class empenho {
     }
 
     $oDaoEmpNotaItem = db_utils::getDao("empnotaitem");
-    $sCampos  = " case when e139_codcla is null then 'f' else 't' end as tem_dispensa, e139_codcla,";
+    $sCampos  = " case when e139_codcla is null then 'f' else 't' end as tem_dispensa, coalesce(e139_codcla,t52_codcla) as e139_codcla,";
     $sCampos .= " exists ( select 1 from empnotaitembenspendente where e137_empnotaitem = e72_sequencial ) as tem_pendente   ";
     $sWhere   = " e72_codnota = {$codnota} ";
 
