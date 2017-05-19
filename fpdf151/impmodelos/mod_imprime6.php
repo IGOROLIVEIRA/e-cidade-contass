@@ -99,8 +99,8 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
     $this->objpdf->text($xcol +35, $xlin +40.5, ':'.$this->contrapartida);
   }
 
-  $this->objpdf->text($xcol +17, $xlin +43, ':  '. ($this->edital_licitacao != null ? $this->edital_licitacao.'/' : '').$this->ano_licitacao);
-  $this->objpdf->text($xcol +48, $xlin +43, ':  '. ($this->num_licitacao != null ? $this->num_licitacao.' - ' : '').$this->descr_licitacao);
+  $this->objpdf->text($xcol +17, $xlin +43, ':  '. ($this->num_licitacao != null ? $this->num_licitacao.'' : '').$this->ano_licitacao);
+  $this->objpdf->text($xcol +48, $xlin +43, ':  '. ($this->edital_licitacao != null ? $this->edital_licitacao.' - ' : '').$this->descr_licitacao);
   
   if ($this->prazo_ent != "") {
   	$this->objpdf->text($xcol +22, $xlin +47, ':  '.$this->prazo_ent);
