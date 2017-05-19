@@ -833,9 +833,9 @@ $sql .="       LEFT JOIN pcorcamitemlic pcitemac ON pcitemac.pc26_liclicitem=lic
 $sql .="       LEFT JOIN pcorcamitem pcorcamitemac ON pcorcamitemac.pc22_orcamitem=pcitemac.pc26_orcamitem";
 
 $sql .="       LEFT JOIN pcorcamjulg pcorcamjulgac ON pcorcamjulgac.pc24_orcamitem=pcorcamitemac.pc22_orcamitem";
+$sql .="       AND pcorcamjulgac.pc24_pontuacao = 1";
 $sql .="       LEFT JOIN pcorcamval pcorcamvalac ON pcorcamvalac.pc23_orcamitem=pcorcamjulgac.pc24_orcamitem";
 $sql .="       AND pcorcamvalac.pc23_orcamforne = pcorcamjulgac.pc24_orcamforne";
-$sql .="       AND pcorcamjulgac.pc24_pontuacao = 1";
 
      $sql2 = "";
      if($dbwhere==""){
