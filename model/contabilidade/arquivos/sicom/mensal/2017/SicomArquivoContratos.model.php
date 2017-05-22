@@ -924,11 +924,30 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         /*
          * selecionar informacoes registro 30
          */
-        $sSql = "select * from apostilamento
-    inner join acordo on si03_acordo=ac16_sequencial
-    where si03_dataapostila <= '{$this->sDataFinal}'
-    and si03_dataapostila >= '{$this->sDataInicial}'
-    and si03_instit = " . db_getsession("DB_instit");
+        $sSql = "SELECT acordo.*,
+       CASE si03_tipoalteracaoapostila
+           WHEN 15 THEN '1'
+           WHEN 16 THEN '2'
+           WHEN 17 THEN '3'
+       END AS tipoalteracaoapostila,
+       si03_sequencial,
+       si03_licitacao,
+       si03_numcontrato,
+       si03_dataassinacontrato,
+       si03_tipoapostila,
+       si03_dataapostila,
+       si03_descrapostila,
+       si03_numapostilamento,
+       si03_valorapostila,
+       si03_instit,
+       si03_numcontratoanosanteriores,
+       si03_acordo,
+       si03_acordoposicao
+FROM apostilamento
+INNER JOIN acordo ON si03_acordo=ac16_sequencial
+WHERE si03_dataapostila <='{$this->sDataFinal}'
+    AND si03_dataapostila >= '{$this->sDataInicial}'
+    AND si03_instit = " . db_getsession("DB_instit");
 
         $rsResult30 = db_query($sSql);
 
