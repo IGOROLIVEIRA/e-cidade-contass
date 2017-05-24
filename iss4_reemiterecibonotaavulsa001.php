@@ -62,7 +62,7 @@ if (isset($post->reemite)){
             $url   = "iss1_issnotaavulsarecibo.php?numpre=".$oNumpre->q52_numnov."&tipo=".$oPar->q60_tipo."&ver_inscr=".$oNumpre->q02_inscr;
 			      $url  .= "&numcgm=".$oNumpre->q02_numcgm."&emrec=t&CHECK10=&tipo_debito=".$oPar->q60_tipo; 
             $url  .= "&k03_tipo=".$oPar->q60_tipo."&k03_parcelamento=f&k03_perparc=f&ver_numcgm=".$oNumpre->q02_numcgm;
-            $url  .= "&totregistros=1&reemite_recibo=1&k03_numpre=".$oNumpre->q52_numnov."&k00_histtxt=";
+            $url  .= "&totregistros=1&reemite_recibo=1&k03_numpre=".$oNumpre->q52_numnov."&k03_numnov=".$oNumpre->q52_numpre."&k00_histtxt=";
             echo "<script>\n";
             echo "if (confirm('Reeemitir Recibo?')){\n";
             echo "   window.open('$url','','location=0');";    

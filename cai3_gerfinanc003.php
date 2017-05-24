@@ -1565,7 +1565,7 @@ if (pg_num_rows($rsReEmiteRecibo) > 0){
 } else {
   
   if (isset($_SESSION["DB_obsrecibo"])) {
-    $historico = db_getsession("DB_obsrecibo");
+    $historico = db_getsession("DB_obsrecibo")."\n".$k00_msgrecibo;
   } else {
     $historico = $tipoidentificacao." ".$numero." ".($pql_localizacao!=""?"PQL: $pql_localizacao":"")." \n".$historico."\n".$k00_msgrecibo;
   }
