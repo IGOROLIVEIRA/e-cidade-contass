@@ -63,6 +63,14 @@ if(isset($incluir)){
 
         $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 10);
 
+        $oDaolicSituacao = db_utils::getDao("liclicitasituacao");
+        $oDaolicSituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaolicSituacao->l11_hora        = db_hora();
+        $oDaolicSituacao->l11_licsituacao = 10;
+        $oDaolicSituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
+        $oDaolicSituacao->l11_liclicita   = $l202_licitacao;
+        $oDaolicSituacao->incluir(null);
+
         db_fim_transacao();
 
       }else{
