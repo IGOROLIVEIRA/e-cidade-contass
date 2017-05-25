@@ -186,18 +186,29 @@ class IntegracaoLicitacao extends IntegracaoBase implements IItemIntegracao {
     );
 
     $aListaArquivos  = array();
+//    $database = pg_connect("host=localhost port=5432 dbname=e-cidade");
     for ($iDocumento = 0 ; $iDocumento < $iTotalDocumentos; $iDocumento++) {
 
       $oDocumento = db_utils::fieldsMemory($rsDocumentosLicitacao, $iDocumento);
-      $lExport = pg_lo_export($oDocumento->documento, $oDocumento->nome_arquivo_importacao, $this->rsConexaoOrigem);
+/*pg_query($database, "begin");
+      $lExport = pg_lo_export($database, $oDocumento->documento, $oDocumento->nome_arquivo_importacao);
+pg_query($database, "commit");	*/
+$lExport = pg_lo_export($this->rsConexaoOrigem, $oDocumento->documento, $oDocumento->nome_arquivo_importacao);
+
       $aListaArquivos[$oDocumento->documento] = $oDocumento->nome_arquivo_importacao;
       $this->inserirDadosPortalTransparencia($oDocumento, $oTableManagerLicitacoesDocumentos);
     }
-
+    
     $this->persistirDadosPortalTransparencia($oTableManagerLicitacoesDocumentos);
+$database = pg_connect("host=localhost port=5432 dbname=portal_transparencia");
     foreach ($aListaArquivos as $iOId => $sArquivo) {
 
-      $iOidNovo          = pg_lo_import($this->rsConexaoDestino, $sArquivo);
+
+pg_query($database, "begin");
+$iOidNovo=pg_lo_import($database,$sArquivo);
+pg_query($database, "commit");
+// $iOidNovo=pg_lo_import($this->rsConexaoDestino,$sArquivo);
+ 
       $sUpdateAcertoOID  = "UPDATE licitacoes_documentos ";
       $sUpdateAcertoOID .= "   SET documento = {$iOidNovo}";
       $sUpdateAcertoOID .= " where documento = {$iOId}";
