@@ -561,7 +561,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 																			  ) as cb"; 
 																			  $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont);
                   }	
-                  echo $sSqlContaPagFont;exit;
+                  
 									if(pg_num_rows($rsResultContaPag) > 0){
 
 										$oConta = db_utils::fieldsMemory($rsResultContaPag, 0);
