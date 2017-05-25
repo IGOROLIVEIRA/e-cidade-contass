@@ -378,7 +378,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 												   AND c86_autent = corrente.k12_autent) as codreduzidomov,
 											   (slip.k17_codigo||slip.k17_debito)::int8 as codreduzidoop,
 											   (slip.k17_codigo||slip.K17_debito)::int8 as nroop,
-										   case when length(cc.z01_cgccpf::char) = 11 then 1 else 2 end as tipodocumentocredor,
+										   case when length(cc.z01_cgccpf::varchar) = 11 then 1 else 2 end as tipodocumentocredor,
 										   cc.z01_cgccpf as nrodocumentocredor,
 										   k17_valor as vlop,
 										   k17_texto as especificacaoop,
@@ -560,7 +560,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 																			  and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
 																			  ) as cb"; 
 																			  $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont);
-                  }
+                  }	
+                  echo $sSqlContaPagFont;exit;
 									if(pg_num_rows($rsResultContaPag) > 0){
 
 										$oConta = db_utils::fieldsMemory($rsResultContaPag, 0);
