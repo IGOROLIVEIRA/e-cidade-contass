@@ -265,6 +265,21 @@ if($tipo == "m"){
     $head5.= " SELECIONADOS";
   }
 
+}else if($tipo == "s"){
+    // Se for escolhida alguma Lotação
+  $lotacao = false;
+
+  $head5 = "RECURSOS";
+  $orderBY= " o15_codigo,o15_descr";
+  $camposFiltrar .= ", o15_codigo as codigofiltro, o15_descr as descrifiltro, r70_estrut as estrutfiltro ";
+
+  // Se for por intervalos e vier lotação inicial e final
+  $whereRESC.= $andwhere." r70_estrut between '0' and '9999'";
+  $aWhere[] = " r70_estrut between '0' and '9999'";
+  $andwhere = " and ";
+
+  $head5.= " SELECIONADAS";
+
 }
 
 if ($reg != 0) {
@@ -316,7 +331,9 @@ $camposSQL = "
                                 when 'P' then 'Pensionista'
                                 else          'Inativo'
                                 end as rh30_vinculo,
-              r02_descr
+              r02_descr,
+              o15_codigo,
+              o15_descr
               $camposFiltrar1
              ";
 
@@ -369,7 +386,9 @@ $sql_dados1 = "select distinct
                          group by r45_regist, r45_dtreto, r45_situac
                          order by r45_dtreto limit 1
                       ) as situacao_funcionario,
-                      r02_descr
+                      r02_descr,
+                      o15_codigo,
+                      o15_descr
                       $camposFiltrar
                  from ($sql_dados) as x ";
 if ($afastado == 'n') {
@@ -385,6 +404,7 @@ if ($afastado == 'n') {
                                      ) ";
 }
 $sql_dados1 .= " order by $orderBY";
+
 $result_dados = db_query($sql_dados1);
 $numrows_dados = pg_numrows($result_dados);
 

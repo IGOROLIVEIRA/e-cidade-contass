@@ -102,7 +102,7 @@ db_postmemory($HTTP_POST_VARS);
   $geraform->resumopadrao = "l";                  // NOME DO DAS LOTAÇÕES SELECIONADAS
   $geraform->filtropadrao = "i";                  // NOME DO DAS LOTAÇÕES SELECIONADAS
 
-  $geraform->strngtipores = "glomt";              // OPÇÕES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
+  $geraform->strngtipores = "glomts";              // OPÇÕES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
                                                   //                                       l - lotação,
                                                   //                                       o - órgão,
                                                   //                                       m - matrícula,
