@@ -1201,6 +1201,41 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     left join infocomplementaresinstit on  o58_instit = si09_instit
                                     where (c69_credito IN (" . implode(',', $oContas10->contas) . ") OR c69_debito IN (" . implode(',', $oContas10->contas) . "))
                                     and DATE_PART('YEAR',c69_data) < " . db_getsession("DB_anousu");
+            /**
+             * SQL que busca os restos sem movimentação anterior
+             * Clientes novos
+             */
+            $sSqlRestos .= " union select distinct
+                                    e60_coddot,
+                                    si09_codorgaotce as codorgao,
+                                    case when o41_subunidade != 0 or not null then
+                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
+                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
+                                    o58_funcao as codfuncao,
+                                    o58_subfuncao as codsubfuncao,
+                                    o58_programa as codprograma,
+                                    o58_projativ as idacao,
+                                    o55_origemacao as idsubacao,
+                                    substr(o56_elemento,2,6) as naturezadadespesa,
+                                    substr(o56_elemento,8,2) as subelemento,
+                                    o15_codtri as codfontrecursos,
+                                    e60_codemp nroempenho,
+                                    e60_numemp numemp,
+                                    e60_anousu anoinscricao,
+                                    o58_orgao,o58_unidade
+                                    from contacorrentedetalhe
+                                    inner join empempenho on e60_numemp = c19_numemp
+                                    inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
+                                    inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
+                                    inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                                    inner join empelemento on e64_numemp = e60_numemp
+                                    inner join empresto on e91_numemp = e60_numemp
+                                    inner join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
+                                    inner JOIN orctiporec ON o58_codigo = o15_codigo
+                                    left join infocomplementaresinstit on  o58_instit = si09_instit
+                                    where c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+                                    and c19_conplanoreduzanousu = " . db_getsession("DB_anousu");
         }
         
         if (pg_num_rows(pg_query($sSqlRestos)) == 0) {
@@ -1240,46 +1275,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     and DATE_PART('YEAR',c69_data) < " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
           
         }
-          /**
-           * SQL que busca os restos sem movimentação anterior
-           * Clientes novos
-           */
-          if (pg_num_rows(pg_query($sSqlRestos)) == 0) {
 
-              $sSqlRestos = "select distinct
-                                    e60_coddot,
-                                    si09_codorgaotce as codorgao,
-                                    case when o41_subunidade != 0 or not null then
-                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
-                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub,
-                                    o58_funcao as codfuncao,
-                                    o58_subfuncao as codsubfuncao,
-                                    o58_programa as codprograma,
-                                    o58_projativ as idacao,
-                                    o55_origemacao as idsubacao,
-                                    substr(o56_elemento,2,6) as naturezadadespesa,
-                                    substr(o56_elemento,8,2) as subelemento,
-                                    o15_codtri as codfontrecursos,
-                                    e60_codemp nroempenho,
-                                    e60_numemp numemp,
-                                    e60_anousu anoinscricao,
-                                    o58_orgao,o58_unidade
-                                    from contacorrentedetalhe
-                                    inner join empempenho on e60_numemp = c19_numemp
-                                    inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
-                                    inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
-                                    inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                                    inner join empelemento on e64_numemp = e60_numemp
-                                    inner join empresto on e91_numemp = e60_numemp
-                                    inner join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
-                                    inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
-                                    inner JOIN orctiporec ON o58_codigo = o15_codigo
-                                    left join infocomplementaresinstit on  o58_instit = si09_instit
-                                    where c19_reduz IN (" . implode(',', $oContas10->contas) . ")
-                                    and c19_conplanoreduzanousu = " . db_getsession("DB_anousu");
-
-          }
-        
         $rsRestos = db_query($sSqlRestos) or die($sSqlRestos);
 
         //Constante da contacorrente orçamentária
