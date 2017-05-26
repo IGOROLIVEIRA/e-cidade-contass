@@ -386,10 +386,10 @@ try {
                                       from conlancamaberturaexercicioorcamento
                                       inner join aberturaexercicioorcamento on c105_aberturaexercicioorcamento = c104_sequencial
                                       where c104_instit = ".db_getsession('DB_instit')." and c104_ano = ".db_getsession('DB_anousu'));
-	    $rsTabelaLancamentos = db_query(" insert into w_conlancam select c71_codlan from conlancamdoc inner join conlancaminstit on c71_codlan = c02_codlan where c71_coddoc = 2023 and c02_instit = ".db_getsession("DB_instit"));
+	    $rsTabelaLancamentos = db_query(" insert into w_conlancam select c71_codlan from conlancamdoc inner join conlancam on c71_codlan = c70_codlan inner join conlancaminstit on c71_codlan = c02_codlan where c71_coddoc = 2023 and c70_anousu = ".db_getsession('DB_anousu')." and c02_instit = ".db_getsession("DB_instit"));
 
 		if (!$rsTabelaLancamentos) {
-			throw new Exception('Não foi possivel criar tabela para exclusão de lançamentos');
+			throw new Exception('Não foi possivel criar tabela para exclusão de lançamentos'.pg_last_error());
 		}
 
 		$rsConlancamemp = db_query("DELETE FROM conlancamemp
