@@ -620,11 +620,15 @@ try {
                 case 106:
                     db_inicio_transacao();
                     //echo $sEstrutural;exit;
+                    /**
+                     * @todo sera nacessário tratar as consultas para cada estrutural
+                     */
                     if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321" || $sEstrutural == "5317"
                         || $sEstrutural == "5327" || $sEstrutural == "6327" || $sEstrutural == "6317") {
                         $iTroca = 1;
                         $iAnousuEmp = db_getsession('DB_anousu') - 1;
                         $nMes = 12;
+
                         $sSqlLancamentos = "
                         select distinct c19_sequencial,
                                             c17_descricao,
@@ -640,7 +644,7 @@ try {
                                     inner join empelemento on e64_numemp = e60_numemp
                                     inner join empresto on e91_numemp = e60_numemp
                         where c19_contacorrente = {$iCorrente}
-                            and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = {$iAnousuEmp}
+                            and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = {$iAnousuEmp} and e60_anousu = {$iAnousuEmp}
                             and c19_instit = " . db_getsession('DB_instit');
 
                         $rsLancamentos = db_query($sSqlLancamentos);
@@ -918,9 +922,7 @@ try {
                                        and c19_conplanoreduzanousu = ".db_getsession('DB_anousu')."
                                 INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
                                 WHERE o15_codtri IS NOT NULL ";
-                    $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
-                    if(pg_num_rows($rsSqlfr) == 0 ){
-                        $sSqlfr = " SELECT DISTINCT
+                    $sSqlfr .= " union SELECT DISTINCT
                                 c19_sequencial,
                                 c17_descricao,
                                 o15_codigo,
@@ -932,9 +934,7 @@ try {
                                        and c19_conplanoreduzanousu = {$iAnousuEmp}
                                 INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
                                 WHERE o15_codtri IS NOT NULL ";
-                        $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
-                    }
-
+                    $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
                     $aDadosAgrupados = array();
                     
                     for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
