@@ -2047,7 +2047,7 @@ class cl_gera_sql_folha {
                                              rh25_projativ,
                                              rh25_recurso
                              FROM rhlotavinc
-                             WHERE rh25_anousu = 2016 ) AS rhlotavinc ON rh25_codigo = r70_codigo
+                             WHERE rh25_anousu = 2016 ) AS rhlotavinc2 ON rh25_codigo = r70_codigo
                             LEFT JOIN orcprojativ ON o55_anousu = 2016
                           AND o55_projativ = rh25_projativ
 
