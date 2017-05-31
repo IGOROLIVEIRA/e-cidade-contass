@@ -1732,7 +1732,13 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'
                                       AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+          $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2016 as ano FROM ctb102016 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                                      AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
           $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2015 as ano FROM ctb102015 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                                      AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
+          $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2014 as ano FROM ctb102014 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta') as x order by 2 DESC limit 1";
           
