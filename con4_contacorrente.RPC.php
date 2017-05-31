@@ -922,7 +922,9 @@ try {
                                        and c19_conplanoreduzanousu = ".db_getsession('DB_anousu')."
                                 INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
                                 WHERE o15_codtri IS NOT NULL ";
-                    $sSqlfr .= " union SELECT DISTINCT
+                    $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
+                    if(pg_num_rows($rsSqlfr) == 0 ){
+                        $sSqlfr = " SELECT DISTINCT
                                 c19_sequencial,
                                 c17_descricao,
                                 o15_codigo,
@@ -934,7 +936,9 @@ try {
                                        and c19_conplanoreduzanousu = {$iAnousuEmp}
                                 INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
                                 WHERE o15_codtri IS NOT NULL ";
-                    $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
+                        $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
+                    }
+
                     $aDadosAgrupados = array();
                     
                     for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
