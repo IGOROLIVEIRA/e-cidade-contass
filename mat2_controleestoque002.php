@@ -462,8 +462,8 @@ function linhaConferencia(StdClass $oDados) {
   $sMaterial = $oDados->iMaterial . ' - ' . $oDados->sMaterial;
   $sAlmoxarifado = $oDados->iAlmoxarifado . ' - ' . $oDados->sAlmoxarifado;
 
-  if (strlen($sMaterial) > 57) {
-    $sMaterial = substr($oDados->sMaterial, 0, 57) . '...';
+  if (strlen($sMaterial) > 100) {
+    $sMaterial = substr($sMaterial, 0, 100) . '...';
   }
 
   if ($oDados->lQuebraPorAlmoxarifado) {
