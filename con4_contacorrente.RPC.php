@@ -1078,7 +1078,7 @@ try {
                         $rsCCDetalhe = $oDaoCCDetalhe->sql_record($sSqlCCDetalhe);
                         $iContaCorrenteDetalhe = db_utils::fieldsMemory($rsCCDetalhe, 0)->c19_sequencial;
 
-                        //verifica se existe ccdetalhe para o anouso se não existir cria um novo.
+                        //verifica se existe ccdetalhe para o anouso se não existir cria um novo. Se não, usa oq eu foi buscado.
                         if($iContaCorrenteDetalhe == null || $iContaCorrenteDetalhe == '0'){
 
                             $oDaoCCDetalhe->c19_contacorrente       = $iCorrente;
@@ -1093,6 +1093,8 @@ try {
                             }
 
                             $objContasfr->c19_sequencial = $oDaoCCDetalhe->c19_sequencial;
+                        }else{
+                            $objContasfr->c19_sequencial = $iContaCorrenteDetalhe;
                         }
 
                         $hash = $objContasfr->o15_codigo;
