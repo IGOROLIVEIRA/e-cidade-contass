@@ -1651,8 +1651,8 @@ class cl_gera_sql_folha {
   var $usar_tra = false; // Se usar� inner ou left join com a tabela rhpeslocaltrab.
   var $usar_car = false; // Se usar� inner ou left join com a tabela rhpescargo.
   var $usar_ban = false; // Se usar� inner ou left join com a tabela rhpesbanco.
-  var $usar_pro = false; // Se usar� inner ou left join com a tabela orcprojativ.
-  var $usar_rec = false; // Se usar� inner ou left join com a tabela orctiporec.
+  var $usar_pro = true; // Se usar� inner ou left join com a tabela orcprojativ.
+  var $usar_rec = true; // Se usar� inner ou left join com a tabela orctiporec.
   var $usar_afa = false; // Se usar� inner ou left join com a tabela afasta.
   var $usar_inf = false; // Se usar� inner ou left join com a tabela infla;
 
@@ -1692,6 +1692,7 @@ class cl_gera_sql_folha {
   // where rh02_anousu = 2005 and rh02_mesusu = 11 and rh02_regist = 2870 and rh05_seqpes is null
 
   function gerador_sql($sigla,$ano=null,$mes=null,$regist=null,$rubric=null,$campos=" * ",$order="",$where="",$instit=null, $sWhereSup = '',$iVinc=0){
+
     if($sigla == 'r14'){
       $arquivo = ' gerfsal';
       $iTipoFolha = 1;
@@ -2042,17 +2043,6 @@ class cl_gera_sql_folha {
       }
       $sql.=       $inner." rhlota on rhlota.r70_codigo = rhpessoalmov.rh02_lota ";
       $sql.=              "       and rhlota.r70_instit = rhpessoalmov.rh02_instit ";
-
-      $sql.=       "left join (SELECT DISTINCT rh25_codigo,
-                                             rh25_projativ,
-                                             rh25_recurso
-                             FROM rhlotavinc
-                             WHERE rh25_anousu = 2016 ) AS rhlotavinc2 ON rh25_codigo = r70_codigo
-                            LEFT JOIN orcprojativ ON o55_anousu = 2016
-                          AND o55_projativ = rh25_projativ
-
-                          LEFT JOIN orctiporec ON o15_codigo = rh25_recurso";
-      
     }
     if($this->usar_atv == true){
       $inner = " inner join ";
