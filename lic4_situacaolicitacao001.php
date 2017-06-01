@@ -179,7 +179,7 @@ var sUrlRPC       = "lic4_situacaolicitacao.RPC.php";
 if (iOpcao > 1) {
 
   sPesquisaTipo     = "situacao="+iTipoSituacao+"&";
-  var sUrlLicitacao = "func_liclicita.php?"+sPesquisaTipo+"funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
+  var sUrlLicitacao = "func_liclicitaanulacao.php?"+sPesquisaTipo+"funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
   js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicitasituacao', sUrlLicitacao, 'Pesquisa Licitações', true);
 }
 
@@ -221,12 +221,12 @@ function js_pequisaLicitacao(iOpcao) {
   if (iOpcao > 1) {
     
     sPesquisaTipo     = "situacao="+iTipoSituacao+"&";
-    var sUrlLicitacao = "func_liclicita.php?"+sPesquisaTipo+"funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
+    var sUrlLicitacao = "func_liclicitaanulacao.php?"+sPesquisaTipo+"funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
     js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicitasituacao', sUrlLicitacao, 'Pesquisa Licitações', true);
     
   } else {
 
-  var sUrlLicitacao = "func_liclicita.php?"+sPesquisaTipo+"funcao_js=parent.js_preencheDados|l20_codigo|l20_edital"
+  var sUrlLicitacao = "func_liclicitaanulacao.php?"+sPesquisaTipo+"funcao_js=parent.js_preencheDados|l20_codigo|l20_edital"
   js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', sUrlLicitacao, 'Pesquisa Licitações', true);
   }
 }

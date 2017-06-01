@@ -135,15 +135,23 @@ switch ($oParam->exec) {
     try {
       
       $iCodigoLicitacao    = $oParam->iCodigoLicitacao;
+
       $sObservacao         = '';
-      
+
+      $iSituacao           = $oParam->iTipoSituacao;
       
       if (isset($sObservacao)) {
         $sObservacao       = $oParam->sObservacao;
       }
       
       $oLicitacao = new licitacao($iCodigoLicitacao);
-      $oLicitacao->alterarSituacao(0,$sObservacao);
+
+      if($iSituacao <> 12){
+        $oLicitacao->alterarSituacao(0,$sObservacao);  
+      }else{
+        $oLicitacao->alterarSituacao($iSituacao,$sObservacao);  
+      }
+
       $oRetorno->message = urlencode("Situação cancelada com sucesso.");
   
     } catch (Exception $eErro) {
@@ -151,12 +159,10 @@ switch ($oParam->exec) {
       $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
       $oRetorno->status  = 1;
       db_fim_transacao(true);
+
     }
   
     break;
-    
-  
-  
   
 }
 db_fim_transacao(false);

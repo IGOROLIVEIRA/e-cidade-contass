@@ -341,7 +341,7 @@ class licitacao {
 
       case 0:
 
-        $this->retornaAndamento($sObservacao);
+        $this->retornaAndamento($sObservacao,$this->iCodigoSituacao);
         return true;
         break;
 
@@ -355,70 +355,72 @@ class licitacao {
 
     }
 
+    
+    if($iCodigoSituacao <> 12){
 
 
-    /**
-     * incluimos o log dos itens da licitacap
-     */
-    $sXMl                        = $this->itensToXml();
-    $oDaoitensLog                = db_utils::getDao("liclicitaitemlog");
-    $oDaoitensLog->l14_liclicita = $this->iCodLicitacao;
-    $oDaoitensLog->l14_xml       = $sXMl;
-    $oDaoitensLog->incluir($this->iCodLicitacao);
+		/**
+		 * incluimos o log dos itens da licitacap
+		 */
+		$sXMl                        = $this->itensToXml();
+		$oDaoitensLog                = db_utils::getDao("liclicitaitemlog");
+		$oDaoitensLog->l14_liclicita = $this->iCodLicitacao;
+		$oDaoitensLog->l14_xml       = $sXMl;
+		$oDaoitensLog->incluir($this->iCodLicitacao);
 
-    if ($oDaoitensLog->erro_status == 0) {
+		if ($oDaoitensLog->erro_status == 0) {
 
-      $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro ao incluir log dos itens /{$oDaoitensLog->erro_msg}";
-      throw new Exception($sErro, 1);
-    }
+		  $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro ao incluir log dos itens /{$oDaoitensLog->erro_msg}";
+		  throw new Exception($sErro, 1);
+		}
 
-    /**
-     * Percorremos todos os itens da licitacao e o excluimos.
-     */
-    $oDaoLicitaItens     = db_utils::getDao("liclicitem");
-    $oDaoLicitaItensLote = db_utils::getDao("liclicitemlote");
-    $sSqlItens           = $oDaoLicitaItens->sql_query_file(null,
-      "distinct *",
-      "l21_codigo",
-      "l21_codliclicita={$this->iCodLicitacao}");
+		/**
+		 * Percorremos todos os itens da licitacao e o excluimos.
+		 */
+		$oDaoLicitaItens     = db_utils::getDao("liclicitem");
+		$oDaoLicitaItensLote = db_utils::getDao("liclicitemlote");
+		$sSqlItens           = $oDaoLicitaItens->sql_query_file(null,
+		  "distinct *",
+		  "l21_codigo",
+		  "l21_codliclicita={$this->iCodLicitacao}");
 
-    $rsItens = $oDaoLicitaItens->sql_record($sSqlItens);
-    $aItens  = db_utils::getCollectionByRecord($rsItens);
+		$rsItens = $oDaoLicitaItens->sql_record($sSqlItens);
+		$aItens  = db_utils::getCollectionByRecord($rsItens);
 
-    foreach ($aItens as $oItem) {
+		foreach ($aItens as $oItem) {
 
-      /**
-       * Excluimos os lotes
-       */
-      $oDaoLicitaItensLote->excluir(null,"l04_liclicitem={$oItem->l21_codigo}");
+		  /**
+		   * Excluimos os lotes
+		   */
+		  $oDaoLicitaItensLote->excluir(null,"l04_liclicitem={$oItem->l21_codigo}");
 
-      if ($oDaoLicitaItensLote->erro_status == 0) {
+		  if ($oDaoLicitaItensLote->erro_status == 0) {
 
-        $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro ao excluir lotes /{$oDaoLicitaItensLote->erro_msg}";
-        throw new Exception($sErro, 2);
+		    $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro ao excluir lotes /{$oDaoLicitaItensLote->erro_msg}";
+		    throw new Exception($sErro, 2);
+		  }
+
+		  /**
+		   * Excluimos o item na tabela liclicitemanu 23/07/2015
+		   */
+		  $oDaoLiclicitemanu              = db_utils::getDao("liclicitemanu");
+		  $oDaoLiclicitemanu->excluir('',"l07_liclicitem = ".$oItem->l21_codigo);     
+		  if ($oDaoLiclicitemanu->erro_status == 0) {
+		    $sErro = "Erro ao excluir item da tabela liclicitemanu:\n\n Erro técnico: erro ao excluir item /{$oDaoLiclicitemanu->erro_msg}";
+		    throw new Exception($sErro, 3);
+		  }
+
+		  /**
+		   * Excluimos o item
+		   */
+		  $oDaoLicitaItens->excluir($oItem->l21_codigo);
+		  if ($oDaoLicitaItens->erro_status == 0) {
+
+		    $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro ao excluir item /{$oDaoLicitaItens->erro_msg}";
+		    throw new Exception($sErro, 3);
+		  }
       }
-
-      /**
-       * Excluimos o item na tabela liclicitemanu 23/07/2015
-       */
-      $oDaoLiclicitemanu              = db_utils::getDao("liclicitemanu");
-      $oDaoLiclicitemanu->excluir('',"l07_liclicitem = ".$oItem->l21_codigo);     
-      if ($oDaoLiclicitemanu->erro_status == 0) {
-        $sErro = "Erro ao excluir item da tabela liclicitemanu:\n\n Erro técnico: erro ao excluir item /{$oDaoLiclicitemanu->erro_msg}";
-        throw new Exception($sErro, 3);
-      }
-
-      /**
-       * Excluimos o item
-       */
-      $oDaoLicitaItens->excluir($oItem->l21_codigo);
-      if ($oDaoLicitaItens->erro_status == 0) {
-
-        $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro ao excluir item /{$oDaoLicitaItens->erro_msg}";
-        throw new Exception($sErro, 3);
-      }
-    }
-
+	}
     /**
      * Incluimos a situacao  para licitacao
      */
@@ -426,9 +428,7 @@ class licitacao {
     $oDaoLiclicita->l20_codigo      = $this->iCodLicitacao;
     $oDaoLiclicita->l20_licsituacao = $iCodigoSituacao;
     $oDaoLiclicita->alterar_situacao($this->iCodLicitacao);
-
     if ($oDaoLiclicita->erro_status == 0) {
-
       $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro na alteração de status /{$oDaoLiclicita->erro_msg}";
       throw new Exception($sErro, 4);
     }
@@ -457,7 +457,7 @@ class licitacao {
   /*
    * Cancela uma licitacao deserta
    */
-  public function retornaAndamento($sObservacao = "") {
+  public function retornaAndamento($sObservacao = "",$iCodigoSituacao = "") {
 
     /**
      * Buscamos as informacoes dos itens na tabela liclicitem log e
@@ -496,6 +496,10 @@ class licitacao {
         throw new Exception($sMsg, 5);
 
       }
+
+	
+	  if($iCodigoSituacao <> 12){
+	
       /*
        * Verificamos se as itens da licitação ja esta incluso em outra licitacao
        * caso esse orçamento já exista, não podemos incluir esse solicitação como deserta.
@@ -624,6 +628,8 @@ class licitacao {
         throw new Exception($sErro, 4);
 
       }
+
+    }  
       /*
        * incluimos a situação
        */
@@ -645,6 +651,7 @@ class licitacao {
     } else {
       throw new Exception("Licitação sem Log gerado!",1);
     }
+
   }
 
   public function getInfoLog() {

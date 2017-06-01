@@ -282,7 +282,7 @@ function js_mostracgm1(chave1,chave2){
   func_nome.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?tipo=1&situacao=0&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicitanovo.php?tipo=1&situacao=0&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_liclicita.hide();
