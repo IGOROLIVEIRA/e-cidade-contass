@@ -845,8 +845,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                   acordoposicaoaditamento
                   inner join acordoposicao on ac26_sequencial = ac35_acordoposicao
                   inner join acordo on ac26_acordo = ac16_sequencial
-                  where ac16_acordoclassificacao not in (4,5)
-                  and ac35_dataassinaturatermoaditivo between '{$this->sDataInicial}' and '{$this->sDataFinal}'
+                  where  ac35_dataassinaturatermoaditivo between '{$this->sDataInicial}' and '{$this->sDataFinal}'
                   and ac16_instit = " . db_getsession("DB_instit");
 
         $rsResult20 = db_query($sSql);
