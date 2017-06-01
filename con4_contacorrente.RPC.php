@@ -922,22 +922,21 @@ try {
                                        and c19_conplanoreduzanousu = ".db_getsession('DB_anousu')."
                                 INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
                                 WHERE o15_codtri IS NOT NULL ";
+
+                    $sSqlfr .= " union SELECT DISTINCT
+                            c19_sequencial,
+                            c17_descricao,
+                            o15_codigo,
+                            o15_descr,
+                            o15_codtri
+                            FROM orctiporec
+                            INNER JOIN contacorrentedetalhe ON c19_orctiporec = o15_codigo
+                                   and c19_contacorrente = {$iCorrente} and c19_reduz = {$iReduzido}
+                                   and c19_conplanoreduzanousu = {$iAnousuEmp}
+                            INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
+                            WHERE o15_codtri IS NOT NULL ";
                     $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
-                    if(pg_num_rows($rsSqlfr) == 0 ){
-                        $sSqlfr = " SELECT DISTINCT
-                                c19_sequencial,
-                                c17_descricao,
-                                o15_codigo,
-                                o15_descr,
-                                o15_codtri
-                                FROM orctiporec
-                                INNER JOIN contacorrentedetalhe ON c19_orctiporec = o15_codigo
-                                       and c19_contacorrente = {$iCorrente} and c19_reduz = {$iReduzido}
-                                       and c19_conplanoreduzanousu = {$iAnousuEmp}
-                                INNER JOIN contacorrente on c19_contacorrente = c17_sequencial
-                                WHERE o15_codtri IS NOT NULL ";
-                        $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
-                    }
+
 
                     $aDadosAgrupados = array();
                     
