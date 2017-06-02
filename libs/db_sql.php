@@ -2155,19 +2155,7 @@ class cl_gera_sql_folha {
       $sql.= "                     and padroes.r02_regime = rhpespadrao.rh03_regime ";
       $sql.= "                     and padroes.r02_codigo = rhpespadrao.rh03_padrao ";
       $sql.= "                     and padroes.r02_instit = ".db_getsession("DB_instit")." ";
-      if($iVinc != 0) {
-        $sql.= "                     
-		left join  rhlotaexe on rhlotaexe.rh26_anousu =
- rhpessoalmov.rh02_anousu
-                                     and rhlotaexe.rh26_codigo = 
-rhlota.r70_codigo  left join  rhlotavinc on rhlotavinc.rh25_codigo  = 
-rhlotaexe.rh26_codigo 
-                                         and rhlotavinc.rh25_anousu  = 
-rhpessoalmov.rh02_anousu
-                                         and rhlotavinc.rh25_vinculo = 
-rhregime.rh30_vinculo
-	";
-      }
+      
     }
     if($this->usar_ins == true){
       $inner = " inner join ";
