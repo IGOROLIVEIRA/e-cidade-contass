@@ -173,7 +173,7 @@ switch ($iOpcao) {
 var oGet          = js_urlToObject(window.location.search);
 var iTipoSituacao = oGet.iCodigoTipoSituacao;
 var iOpcao        = oGet.iOpcao;
-var sPesquisaTipo = "situacao=0&";
+var sPesquisaTipo = "";
 var sUrlRPC       = "lic4_situacaolicitacao.RPC.php";
 
 if (iOpcao > 1) {

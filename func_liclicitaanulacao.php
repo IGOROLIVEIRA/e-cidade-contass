@@ -157,7 +157,7 @@ $sWhereContratos = " and 1 = 1 ";
     <td align="center" valign="top">
       <?
       $and            = "and ";
-      $dbwhere        = "";
+      $dbwhere        = " l20_licsituacao <> 12 and ";
      /* if (isset($tipo) && trim($tipo)!=""){
         $dbwhere   = "l08_altera is true and";
       }*/
@@ -238,7 +238,7 @@ $sWhereContratos = " and 1 = 1 ";
            }
 	      }
        // db_lovrot($sql.' desc ',15,"()","",$funcao_js);
-
+        
         $aRepassa = array();
         db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
