@@ -157,8 +157,8 @@ $sWhereContratos = " and 1 = 1 ";
     <td align="center" valign="top">
       <?
       $and            = "and ";
-      $dbwhere        = "l20_licsituacao <> 12 and";
-     /* if (isset($tipo) && trim($tipo)!=""){
+	$dbwhere        = "l20_licsituacao = 0 and ";     
+/* if (isset($tipo) && trim($tipo)!=""){
         $dbwhere   = "l08_altera is true and";
       }*/
 
