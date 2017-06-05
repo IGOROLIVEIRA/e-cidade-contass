@@ -259,9 +259,6 @@ if (empty ($e60_numemp)) {
   function js_saida(oAjax){
 
     obj                             = eval("("+oAjax.responseText+")");
-
-    console.log(obj);
-
     $('e60_codemp').value           = obj.e60_codemp;
     $('e60_numemp').value           = obj.e60_numemp;
     $('e60_coddot').value           = obj.e60_coddot;
@@ -288,7 +285,6 @@ if (empty ($e60_numemp)) {
     } else {
       lDisabled = "disabled";
     }
-    console.log(obj.data[1]);
     //alert(obj.numnotas);
     if (obj.numnotas > 0){
       for (var i = 0; i < obj.data.length;i++){
@@ -351,36 +347,11 @@ if (empty ($e60_numemp)) {
         saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
 
         saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
+        saida += " value='"+sQuantidadeTotal+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1)'></td>";
 
-        if(obj.data[i].pc01_servico=='t' && obj.data[i].servicoquantidade=='f'){
-          saida += " value='1' readonly ";  
-        
-          //saida += "  style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1)'></td>";
-
-          saida += "  style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\"></td>";
-
-          saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-          saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-          
-          //saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2)'></td></tr>";
-          saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" ></td></tr>";
-
-        }
-
-        if(obj.data[i].pc01_servico=='t' && obj.data[i].servicoquantidade=='t'){
-          saida += " value='"+sQuantidadeTotal+"' ";  
-
-
-          saida += "  style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1)'></td>";
-          
-          saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-          saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-
-          saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2)'></td></tr>";
-
-        }
-
-        
+        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+        saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+        saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2)'></td></tr>";
       }
       $('confirmar').disabled = true;
     }
