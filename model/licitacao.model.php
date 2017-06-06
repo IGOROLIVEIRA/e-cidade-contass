@@ -353,11 +353,17 @@ class licitacao {
 
         break;
 
+        case 12:
+
+        if (in_array($this->iCodigoSituacao, array(12))) {
+          $this->retornaSituacao();
+          return true;
+        }
+        break;
+
     }
 
-    
     if($iCodigoSituacao <> 12){
-
 
 		/**
 		 * incluimos o log dos itens da licitacap
@@ -1593,6 +1599,38 @@ class licitacao {
     }
     return $this->oSituacaoLicitacao;
   }
+
+   public function retornaSituacao(){
+
+
+
+    $oDaolicSituacao = db_utils::getDao("liclicitasituacao");
+    $sSqlLiclicitasituacao            = $oDaolicSituacao->sql_query_file('','*','',"l11_liclicita=$this->iCodLicitacao and l11_sequencial <> (select l11_sequencial from liclicitasituacao where l11_liclicita=$this->iCodLicitacao order by l11_sequencial desc
+ limit 1) limit 1 ");
+    
+    $rsLiclicitasituacao              = $oDaolicSituacao->sql_record($sSqlLiclicitasituacao);
+    $oDadoLiclicitasituacao           = db_utils::fieldsMemory($rsLiclicitasituacao, 0);
+
+    $oDaolicSituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
+    $oDaolicSituacao->l11_hora        = db_hora();
+    $oDaolicSituacao->l11_licsituacao = $oDadoLiclicitasituacao->l11_licsituacao;
+    $oDaolicSituacao->l11_obs         = $oDadoLiclicitasituacao->l11_obs;
+    $oDaolicSituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
+    $oDaolicSituacao->l11_liclicita   = $this->iCodLicitacao;
+    $oDaolicSituacao->incluir(null);
+
+    $oDaoLiclicita                    = db_utils::getDao("liclicita");
+    $oDaoLiclicita->l20_codigo        = $this->iCodLicitacao;
+    $oDaoLiclicita->l20_licsituacao   = $oDadoLiclicitasituacao->l11_licsituacao;
+    $oDaoLiclicita->alterar_situacao($this->iCodLicitacao);
+
+    if ($oDaoLiclicita->erro_status == 0) {
+      $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro na alteração de status /{$oDaoLiclicita->erro_msg}";
+      throw new Exception($sErro, 4);
+    }
+
+  }
+
 
   public function getComissao() {
 
