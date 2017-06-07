@@ -835,6 +835,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                   distinct ac26_sequencial,
                   ac16_sequencial,
                   ac16_dataassinatura,
+                  ac16_numero,
                   ac26_numeroaditamento,
                   ac35_dataassinaturatermoaditivo,
                   ac35_descricaoalteracao,
@@ -875,7 +876,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos20->si87_codaditivo = $oDados20->ac26_sequencial;
             $clcontratos20->si87_codorgao = $sCodorgao;
             $clcontratos20->si87_codunidadesub = $sCodUnidade;
-            $clcontratos20->si87_nrocontrato = $oDados20->ac16_sequencial;
+            $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero;
             $clcontratos20->si87_dataassinaturacontoriginal = $oDados20->ac16_dataassinatura;
             $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento;
             $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo;
@@ -893,7 +894,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao);
             $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
             $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal());
-            $clcontratos20->si87_novadatatermino = in_array($oAcordoPosicao->getTipo(), array(4, 7, 13)) ? $oDataTermino->getDate() : "";
+            $clcontratos20->si87_novadatatermino = in_array($oAcordoPosicao->getTipo(), array(6, 13, 14)) ? $oDataTermino->getDate() : "";
             $clcontratos20->si87_valoraditivo = ($iTipoAlteracaoValor == 3 ? 0 : $oAcordoPosicao->getValorAditado());
             $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao;
             $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao);
