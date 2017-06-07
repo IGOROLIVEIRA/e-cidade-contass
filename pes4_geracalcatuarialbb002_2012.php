@@ -642,25 +642,34 @@ if (db_getsession('DB_anousu') < 2017) {
     $sql = "
       select rh01_regist as matricula,
          lpad(rh01_regist,9,0)
+
          $xseparador
          ||coalesce(z01_cgccpf,'0')
+
          $xseparador
          ||to_char(rh01_nasc,'dd/mm/YYYY')
+
          $xseparador
          ||case when rh01_sexo = 'M' 
               then 1 
               else 2 
            end 
+
          $xseparador
          ||rh01_estciv
+
          $xseparador
          ||coalesce((select to_char(rh31_dtnasc,'dd/mm/YYYY') from rhdepend where rh31_regist = rh01_regist and rh31_gparen = 'C' limit 1),'')
+
          $xseparador
          ||(select count(*) from rhdepend where rh31_regist = rh01_regist)
+
          $xseparador
          ||coalesce((select to_char(rh31_dtnasc,'dd/mm/YYYY') from rhdepend where rh31_regist = rh01_regist order by rh31_dtnasc desc limit 1),'')
+
          $xseparador
-         || ('".date("Y-m-d", db_getsession('DB_datausu'))."' - rh01_admiss)
+         
+
          $xseparador 
 
          $xseparador
@@ -715,6 +724,7 @@ if (db_getsession('DB_anousu') < 2017) {
                           round(sum(case when r14_rubric = 'R992' then r14_valor else 0 end ),2) as base2013 
                    from gerfsal 
                    where r14_anousu = 2013
+                   and r14_mesusu = $mes
                    and r14_instit = ".db_getsession('DB_instit')."
                    group by r14_regist ) as sal2013 on r14_regist = rh01_regist 
 
@@ -724,6 +734,7 @@ if (db_getsession('DB_anousu') < 2017) {
                           round(sum(case when r14_rubric = 'R992' then r14_valor else 0 end ),2) as base2014 
                    from gerfsal 
                    where r14_anousu = 2014
+                   and r14_mesusu = $mes
                    and r14_instit = ".db_getsession('DB_instit')."
                    group by r14_regist ) as sal2014 on sal2014.r14_regist = rh01_regist 
 
@@ -733,6 +744,7 @@ if (db_getsession('DB_anousu') < 2017) {
                           round(sum(case when r14_rubric = 'R992' then r14_valor else 0 end ),2) as base2015
                    from gerfsal 
                    where r14_anousu = 2015
+                   and r14_mesusu = $mes
                    and r14_instit = ".db_getsession('DB_instit')."
                    group by r14_regist ) as sal2015 on sal2015.r14_regist = rh01_regist 
 
@@ -742,6 +754,7 @@ if (db_getsession('DB_anousu') < 2017) {
                           round(sum(case when r14_rubric = 'R992' then r14_valor else 0 end ),2) as base2016
                    from gerfsal 
                    where r14_anousu = 2016
+                   and r14_mesusu = $mes
                    and r14_instit = ".db_getsession('DB_instit')."
                    group by r14_regist ) as sal2016 on sal2016.r14_regist = rh01_regist                                        
 
