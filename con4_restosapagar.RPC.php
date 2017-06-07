@@ -153,10 +153,33 @@ try {
 				$oEmpresto = db_utils::fieldsMemory($rsSqlEmpresto, $iContRP);
 
 				$oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpresto->e91_numemp);
-				
-				if ($oParam->exec == 'processar') {
-					// Documento 2005: INSCRIÇÃO DE RESTOS A PAGAR NÃO PROCESSADOS
-					$iCodigoDocumento = 2005;
+
+				if ($oEmpenhoFinanceiro->getAnoUso() == db_getsession('DB_anousu') - 1) {
+
+					if ($oParam->exec == 'processar') {
+
+						// Documento 2005: INSCRIÇÃO DE RESTOS A PAGAR NÃO PROCESSADOS
+						$iCodigoDocumento = 2005;
+
+					} else {
+
+						// Documento 2006:	ESTORNO DE INSCR. DE RP NÃO PROCESSADOS
+						$iCodigoDocumento = 2006;
+					}
+				} else {
+
+					if ($oParam->exec == 'processar') {
+
+						// Documento 2009: INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
+						$iCodigoDocumento = 2009;
+
+					} else {
+
+						// Documento 2010:	ESTORNO INSCRIÇÃO DE RP NÃO PROCESSADOS - EXERCÍCIOS ANTERIORES
+						$iCodigoDocumento = 2010;
+
+					}
+
 				}
 
 			    if($oEmpresto->valor_nao_processado > 0){
@@ -258,20 +281,17 @@ try {
 
 					}
 				} else {
-					if(db_getsession('DB_anousu') == 2015) {
-						if ($oParam->exec == 'processar') {
 
-							// Documento 2011: INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
-							$iCodigoDocumento = 2011;
+					if ($oParam->exec == 'processar') {
 
-						} else {
+						// Documento 2011: INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
+						$iCodigoDocumento = 2011;
 
-							// Documento 2012:	ESTORNO INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
-							$iCodigoDocumento = 2012;
+					} else {
 
-						}
-					}else{
-						continue;
+						// Documento 2012:	ESTORNO INSCRIÇÃO DE RP PROCESSADOS - EXERC. ANTER.
+						$iCodigoDocumento = 2012;
+
 					}
 				}
 
