@@ -237,13 +237,20 @@ select {
 
       <tr>
     		<td><b>Valor Empenho:</b></td>
-    		<td colspan="3">
+    		<td >
     			<?php
     				db_input("nValorEmpenhoInicial", 10, false, true, 'text', 1, "onkeypress='return js_mask(event,\"0-9|,|-\");'");
     				echo " <b>até</b> ";
     				db_input("nValorEmpenhoFinal", 10, false,   true, 'text', 1, "onkeypress='return js_mask(event,\"0-9|,|-\");'");
     			?>
     		</td>
+        <td><b>Saldo a Pagar:</b></td>
+        <td>
+          <?php
+            $aSaldoPagar = array("s" => "Sim", "n" => "Não");
+            db_select("saldopagar",$aSaldoPagar,true,2);
+          ?>
+        </td>
     	</tr>
 
       <tr>
@@ -429,12 +436,15 @@ function js_emite(anousu,tipo){
  document.form1.filtra_despesa.value = parent.iframe_filtro.js_atualiza_variavel_retorno();
 
  // procura pela string orgao, se nao localizar, eh porque nao foi selecionado orgao na aba de filtro
- if (document.form1.filtra_despesa.value.search('orgao') !=-1) {
+ /**
+  * Removido validacao para nao obrigar o usuario acessar a aba Filtro
+  */
+/* if (document.form1.filtra_despesa.value.search('orgao') !=-1) {
     // alert('achamos');
  } else {
     alert('Na aba de Filtro selecione ao menos um Orgão para processar a pesquisa');
     return false;
- }
+ }*/
 
 	if(tipo == 1){
  		document.form1.action = 'emp2_relempenho003.php';

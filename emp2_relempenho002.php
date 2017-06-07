@@ -542,7 +542,7 @@ if ($lSepararGestor) {
 					  inner join orcelemento 		on  orcelemento.o56_codele = orcdotacao.o58_codele
 									       and  orcelemento.o56_anousu = orcdotacao.o58_anousu
 					      inner join conlancamemp 	on c75_numemp = xxx.e60_numemp
-					      inner join conlancam	    on c70_codlan = c75_codlan and c70_data between '$dataesp11' and '$dataesp22'
+					      inner join conlancam	    on c70_codlan = c75_codlan 
 					      inner join conlancamdoc 	on c71_codlan = c70_codlan
 					      inner join conhistdoc 	on c53_coddoc = c71_coddoc and c53_tipo in (10,11,20,21,30,31)
 					      inner join conlancamdot   on c73_codlan = c75_codlan
@@ -1108,9 +1108,13 @@ if ($tipo == "a" or 1 == 1) {
 					$pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
 					$pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
 					$pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
-					$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
-					$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
-					$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					if ($saldopagar == "s") {
+						$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					} else {
+						$pdf->Ln();
+					}
 					$pdf->SetFont('Arial', '', 7);
 				}
 			}
@@ -1175,9 +1179,13 @@ if ($tipo == "a" or 1 == 1) {
 					$pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
 					$pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
 					$pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
-					$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
-					$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
-					$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					if ($saldopagar == "s") {
+						$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					} else {
+						$pdf->Ln();
+					}
 					$pdf->SetFont('Arial', '', 7);
 				}
 			}
@@ -1220,9 +1228,13 @@ if ($tipo == "a" or 1 == 1) {
 					$pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
 					$pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
 					$pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
-					$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
-					$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
-					$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					if ($saldopagar == "s") {
+						$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					} else {
+						$pdf->Ln();
+					}
 					$pdf->SetFont('Arial', '', 7);
 				}
 			}
@@ -1287,9 +1299,13 @@ if ($tipo == "a" or 1 == 1) {
 					$pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
 					$pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
 					$pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
-					$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
-					$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
-					$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					if ($saldopagar == "s") {
+						$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					} else {
+						$pdf->Ln();
+					}
 					$pdf->SetFont('Arial', '', 7);
 				}
 			}
@@ -1369,9 +1385,13 @@ if ($tipo == "a" or 1 == 1) {
           $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
           $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
           $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
-          $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
-          $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
-          $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+          if ($saldopagar == "s") {
+						$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+						$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+					} else {
+						$pdf->Ln();
+					}
           $pdf->SetFont('Arial', '', 7);
         }
       }
@@ -1511,9 +1531,17 @@ if ($tipo == "a" or 1 == 1) {
 
 
 			if (1 == 1) {
-
+//die($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$dataesp11' and '$dataesp22'")));
 				$reslancam = $clconlancamemp->sql_record($clconlancamemp->sql_query("", "*", "c75_codlan", " c75_numemp = $e60_numemp ". ($processar == "a" ? "" : " and c75_data between '$dataesp11' and '$dataesp22'")));
 				$rows_lancamemp = $clconlancamemp->numrows;
+
+				$totemp = 0;
+				$totanuemp = 0;
+				$totliq = 0;
+				$totanuliq = 0;
+				$totpag = 0;
+				$totanupag = 0;
+
 				for ($lancemp = 0; $lancemp < $rows_lancamemp; $lancemp ++) {
 					db_fieldsmemory($reslancam, $lancemp, true);
 					$reslancamdoc = $clconlancamdoc->sql_record($clconlancamdoc->sql_query($c70_codlan, "*"));
@@ -1523,30 +1551,50 @@ if ($tipo == "a" or 1 == 1) {
 						$pdf->Cell(40, $tam, "", $iBorda, 0, "R", $preenche);
 						$pdf->Cell(20, $tam, $c70_data, $iBorda, 0, "C", $preenche);
 						$pdf->Cell(25, $tam, $c70_codlan, $iBorda, 0, "R", $preenche);
-						$pdf->Cell(25, $tam, $c53_descr, $iBorda, 0, "L", $preenche);
+						$pdf->Cell(25, $tam, substr($c53_descr,0,22), $iBorda, 0, "L", $preenche);
 						$pdf->Cell(25, $tam, db_formatar($c70_valor, 'f'), $iBorda, 1, "R", $preenche);
 					}
 
 					if ($c53_tipo == 10) {
 						$lanctotemp += $c70_valor;
+						$totemp  += $c70_valor;
 					}
 					elseif ($c53_tipo == 11) {
 						$lanctotanuemp += $c70_valor;
+						$totanuemp  += $c70_valor;
 					}
 					elseif ($c53_tipo == 20) {
 						$lanctotliq += $c70_valor;
+						$totliq  += $c70_valor;
 					}
 					elseif ($c53_tipo == 21) {
 						$lanctotanuliq += $c70_valor;
+						$totanuliq     += $c70_valor;
 					}
 					elseif ($c53_tipo == 30) {
 						$lanctotpag += $c70_valor;
+						$totpag     += $c70_valor;
 					}
 					elseif ($c53_tipo == 31) {
 						$lanctotanupag += $c70_valor;
+						$totanupag     += $c70_valor;
 					}
 
 				}
+
+				if ($processar == "e") {
+					  $preenche = 0;
+						$pdf->Cell(105, $tam, '', "B", 0, "R", $preenche);
+						$pdf->Cell(60, $tam, "Movimentação do Empenho no Período", "B", 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($totemp, 'f'), "B", 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($totanuemp, 'f'), "B", 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($totliq - $totanuliq, 'f'), "B", 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar($totpag - $totanupag, 'f'), "B", 0, "R", $preenche);
+						$pdf->Cell(18, $tam, db_formatar(($totliq - $totanuliq) - ($totpag - $totanupag), 'f'), "B", 0, "R", $preenche);
+					  $pdf->Cell(18, $tam, db_formatar(($totemp - ($totanuemp + ($totpag - $totanupag))) - (($totliq - $totanuliq) - ($totpag - $totanupag)), 'f'), "B", 0, "R", $preenche); //quebra linha
+					  $pdf->Cell(18, $tam, db_formatar($totemp - ($totanuemp + ($totpag - $totanupag)), 'f'), "B", 1, "R", $preenche); //quebra linha
+					  $pdf->SetFont('Arial', '', 7);
+					}
 			}
 
 			if ($mostraritem == "m") {
@@ -1572,6 +1620,7 @@ if ($tipo == "a" or 1 == 1) {
 					$pdf->Cell(20, $tam, db_formatar($e62_vltot, 'f'), $iBorda, 0, "R", $preenche);
 					$pdf->Cell(80, $tam, substr($e62_descr, 0, 100), $iBorda, 1, "L", $preenche);
 					$pdf->Cell(20, $tam, "", 0, 1, "R", $preenche);
+
 				}
 			}
 
@@ -1620,9 +1669,13 @@ if ($tipo == "a" or 1 == 1) {
 			$pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
 			$pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
 			$pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
-			$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
-			$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
-			$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+			if ($saldopagar == "s") {
+				$pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+				$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+				$pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+			} else {
+			  $pdf->Ln();
+			}
 			$pdf->Ln();
 			$pdf->Ln();
 			$pdf->Cell(60, $tam, "TOTAL DE EMPENHOS: ".db_formatar($rows, "s"), "T", 0, "L", 1);
@@ -1636,35 +1689,31 @@ if ($tipo == "a" or 1 == 1) {
 			$pdf->Cell(18, $tam, db_formatar($g_anu, 'f'), "T", 0, "R", 1);
 			$pdf->Cell(18, $tam, db_formatar($g_liq, 'f'), "T", 0, "R", 1);
 			$pdf->Cell(18, $tam, db_formatar($g_pag, 'f'), "T", 0, "R", 1);
-			$pdf->Cell(18, $tam, db_formatar($g_liq - $g_pag, 'f'), "T", 0, "R", 1);
-			$pdf->Cell(18, $tam, db_formatar($g_emp - $g_anu - $g_liq, 'f'), "T", 0, "R", 1); //quebra linha
-			$pdf->Cell(18, $tam, db_formatar($g_emp - $g_anu - $g_pag, 'f'), "T", 1, "R", 1); //quebra linha
-
-			if ($processar == "a") {
+			if ($saldopagar == "s") {
+				$pdf->Cell(18, $tam, db_formatar($g_liq - $g_pag, 'f'), "T", 0, "R", 1);
+				$pdf->Cell(18, $tam, db_formatar($g_emp - $g_anu - $g_liq, 'f'), "T", 0, "R", 1); //quebra linha
+				$pdf->Cell(18, $tam, db_formatar($g_emp - $g_anu - $g_pag, 'f'), "T", 1, "R", 1); //quebra linha
+			} else {
 				$pdf->Ln();
-		    	$iTam = $sememp == "n"?165:150;
-				$pdf->Cell($iTam, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
-				$pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
-				$pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
-				$pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
-				$pdf->Cell(18, $tam, db_formatar($lanctotpag - $lanctotanupag, 'f'), "T", 0, "R", 1);
+			}
+
+
+			$pdf->Ln();
+	    	$iTam = $sememp == "n"?165:150;
+			$pdf->Cell($iTam, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
+			$pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
+			$pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
+			$pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
+			$pdf->Cell(18, $tam, db_formatar($lanctotpag - $lanctotanupag, 'f'), "T", 0, "R", 1);
+			if ($saldopagar == "s") {
 				$pdf->Cell(18, $tam, db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'f'), "T", 0, "R", 1);
 				$pdf->Cell(18, $tam, db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'f'), "T", 0, "R", 1);
 				$pdf->Cell(18, $tam, db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'f'), "T", 1, "R", 1);
-				$pdf->SetFont('Arial', '', 7);
-			}else{
+			} else {
 				$pdf->Ln();
-		    	$iTam = $sememp == "n"?165:150;
-				$pdf->Cell($iTam, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
-				$pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
-				$pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
-				$pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
-				$pdf->Cell(18, $tam, db_formatar($lanctotpag - $lanctotanupag, 'f'), "T", 0, "R", 1);
-				/*$pdf->Cell(18, $tam, db_formatar(($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag), 'f'), "T", 0, "R", 1);
-				$pdf->Cell(18, $tam, db_formatar(($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag))) - (($lanctotliq - $lanctotanuliq) - ($lanctotpag - $lanctotanupag)), 'f'), "T", 0, "R", 1);
-				$pdf->Cell(18, $tam, db_formatar($lanctotemp - ($lanctotanuemp + ($lanctotpag - $lanctotanupag)), 'f'), "T", 1, "R", 1);*/
-				$pdf->SetFont('Arial', '', 7);
 			}
+			$pdf->SetFont('Arial', '', 7);
+
 		}
 	}
 }
