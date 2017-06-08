@@ -123,7 +123,7 @@ db_input('m40_hora',5,$Im40_hora,true,'text',3,"")
 	                                                                             db_depart.descrdepto", 
 	                                                                           null, 
 	                                                                           "     db_depusu.id_usuario = " . db_getsession("DB_id_usuario") . 
-	                                                                           " and db_depart.instit = ".db_getsession("DB_instit") ) );
+	                                                                           " and db_depart.instit = ".db_getsession("DB_instit") . " order by almoxarifado") );
 	if ($cldb_depusu->numrows>0){
 		db_selectrecord('m40_almox',$result_depusu,true,($db_opcao == 1?1:3));
 	} else {
