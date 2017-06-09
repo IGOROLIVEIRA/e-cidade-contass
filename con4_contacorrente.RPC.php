@@ -637,7 +637,7 @@ try {
                         /**
                          * AS CONTAS 6327, 6321, 63171, 6311, 5327, 5317 TEM EMPENHOS DE RP TODOS OS EXERCÍCIOS. O ANO DO EMPENHO É ANTERIOR AO ANO DA SESSAO MAS ESTAO NA EMPRESTO EM 2017
                          */
-                        if (in_array($sEstrutural, array("6327", "6321", "63171", "6311", "5327", "5317"))) {
+                        if (in_array($sEstrutural, array("6327", "6321", "6317", "6311", "5327", "5317"))) {
 
                             $sSqlLancamentos = "
                             select distinct c19_sequencial,
@@ -750,7 +750,7 @@ try {
                                       (SELECT round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) AS saldoinicial
                                        FROM
                                          (SELECT
-                                            (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                                            (SELECT distinct CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
                                              FROM contacorrente
                                              INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                              INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
