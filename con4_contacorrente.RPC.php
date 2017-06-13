@@ -43,8 +43,7 @@ db_app::import("contabilidade.planoconta.*");
 db_app::import("financeiro.*");
 db_app::import("exceptions.*");
 
-$oJson = new services_json();
-$oParam = $oJson->decode(str_replace("\\", "", $_POST["json"]));
+$oParam = json_decode(str_replace("\\", "", $_POST["json"]));
 $iAnoSessao = db_getsession("DB_anousu");
 $oRetorno = new stdClass();
 $oRetorno->status = 1;
@@ -630,7 +629,7 @@ try {
                      *  6327 - 6321												63171 - 6311
                      */
                     if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321" || $sEstrutural == "5317"
-                        || $sEstrutural == "5327" || $sEstrutural == "6327" || $sEstrutural == "6317") {
+                        || $sEstrutural == "5327" || $sEstrutural == "6327" || $sEstrutural == "6317" || $sEstrutural == "6313") {
                         $iTroca = 1;
                         $iAnousuEmp = db_getsession('DB_anousu') - 1;
                         $nMes = 12;
@@ -1500,5 +1499,5 @@ try {
     db_fim_transacao(true);
 }
 
-echo $oJson->encode($oRetorno);
+echo json_encode($oRetorno);
 ?>
