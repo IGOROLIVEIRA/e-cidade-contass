@@ -102,12 +102,10 @@ class DebitoIssContribuinte {
     }
 
     $oPlanilhaRetencao = new PlanilhaRetencaoWebService();
-    if (isset($oPlanilha->cpf) && !empty($oPlanilha->cpf)) {
-      $oPlanilhaRetencao->setCpf($oPlanilha->cpf);
-    }
-
-    if (isset($oPlanilha->cnpj) && !empty($oPlanilha->cnpj)) {
-      $oPlanilhaRetencao->setCnpj($oPlanilha->cnpj);
+    if (isset($oPlanilha->cpf_cnpj) && !empty($oPlanilha->cpf_cnpj) && strlen($oPlanilha->cpf_cnpj) < 14) {
+      $oPlanilhaRetencao->setCpf($oPlanilha->cpf_cnpj);
+    }else{
+      $oPlanilhaRetencao->setCnpj($oPlanilha->cpf_cnpj);
     }
 
     // Verifica se foi informado uma inscrição municipal

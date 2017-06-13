@@ -117,7 +117,7 @@ class PlanilhaRetencaoWebService extends planilhaRetencao {
         }
 
         if (!$oCGM) {
-          throw new BusinessException("CPF ou CNPJ nao cadastrados");
+          throw new BusinessException("CPF ou CNPJ nao cadastrados: {$this->sCnpj}");
         }
       } else {
 
