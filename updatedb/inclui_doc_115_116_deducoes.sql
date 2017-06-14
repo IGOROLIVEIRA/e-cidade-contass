@@ -181,4 +181,13 @@ WHERE c45_coddoc = 101
   AND c45_anousu = 2017
   LIMIT 1;
 
+UPDATE conplanoorcamentogrupo
+SET c21_congrupo = 6
+WHERE c21_codcon IN
+        (SELECT c60_codcon
+         FROM conplanoorcamento
+         WHERE substr(c60_estrut,1,5) = '49517'
+             AND c60_anousu >= 2017)
+AND c21_anousu >= 2017;
+
 COMMIT;
