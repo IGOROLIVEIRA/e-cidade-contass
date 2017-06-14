@@ -468,7 +468,7 @@ class ReceitaContabil {
         /**
          * Identificamos se a receita é uma receita de dedução
          */
-        if (substr($this->getContaOrcamento()->getEstrutural(), 0, 1) == 9 && !empty($iCodigoPlanilha)) {
+        if (substr($this->getContaOrcamento()->getEstrutural(), 0, 2) == 49 && !empty($iCodigoPlanilha)) {
 
           $oLancamentoAuxiliar->setContaCredito($iContaDebito);
           $oLancamentoAuxiliar->setContaDebito($iCodigoContaCreditoPcasp);

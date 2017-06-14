@@ -381,7 +381,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 									   contacredito.c61_reduz  as codctb,
 									   contacreditofonte.o15_codtri as codfontrecurso,
 									   2 as tipomovimentacao,
-									   case when c71_coddoc = 101 and substr(o57_fonte,0,3) = '49' then 2
+									   case when c71_coddoc  in (101,116) and substr(o57_fonte,0,3) = '49' then 2 /*anteriormente estava c71_coddoc = 101*/
 											when c71_coddoc = 101 then 3
 											when c71_coddoc in (5,35,37) and
 											(select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor
