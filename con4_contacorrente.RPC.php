@@ -217,7 +217,7 @@ try {
                     $sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}           ";
 
                     $sSqlVerificaDetalhe = $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);
-                    $rsVerificacao = $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);db_criatabela($rsVerificacao);echo $sSqlVerificaDetalhe;exit;
+                    $rsVerificacao = $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);
 
                     if ($oDaoVerificaDetalhe->numrows > 0) {
                         $sDescricaoContaCorrenteErro = "103 - Fonte de Recurso";

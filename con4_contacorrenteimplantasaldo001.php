@@ -850,15 +850,15 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
             nValorLinha = parseFloat(oGridDetalhamento.aRows[iLinha].aCells[3].getValue());
             iSequencial = oGridDetalhamento.aRows[iLinha].aCells[0].getValue();
 
-            if (!empty(nValorLinha) && nValorLinha != 0) {
+//            if (!empty(nValorLinha)) {
 
                 var oValores = new Object();
                 oValores.iSequencial = iSequencial;
-                oValores.nValor = nValorLinha;
+                oValores.nValor = empty(nValorLinha) ? 0 : nValorLinha;
 
                 aValores[iPosicaoValor] = oValores;
                 iPosicaoValor++;
-            }
+//            }
         }
         return aValores;
     }
