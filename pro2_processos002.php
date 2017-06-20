@@ -222,7 +222,7 @@ $sSqlProcessos = "p58_codproc,
                   b.descrdepto as deptoandam";
 
 $sProcessaSql = $cl_processos->sql_query_deptarq("", $sSqlProcessos, $ordenacao, $db_where);
-echo "<pre>";
+
 $result = $cl_processos->sql_record($sProcessaSql);
 //db_criatabela($result);
 
@@ -350,12 +350,16 @@ for ($x = 0; $x < $cl_processos->numrows; $x++) {
   $pdf->y = $pos_y;
   $pdf->multicell(43, ($altMCell / $nQtdRowsDA), $sDeptoAtual, 0, "L", $p);
 
+  if ($Observacao == '1') {
+    $pdf->y = $pdf->y + 0.5;
+    $pdf->multicell(279, $alt, $p58_obs, 0, "L", $p);
+  }
   /**
    * listar apensados
    */
   $aProcApensados = $cl_processos->getProcessosApensados($p58_codproc, $sCampos);
 
-  if ($aProcApensados) {
+  if ($aProcApensados && $listaApensados == 's') {
 
     $pdf->multicell(279, $nAltDefault, " APENSADOS (" . count($aProcApensados) . ")", 1, "L", $p);
 
@@ -438,12 +442,6 @@ for ($x = 0; $x < $cl_processos->numrows; $x++) {
     }
 
   }
-
-  if ($Observacao == '1') {
-    $pdf->y = $pdf->y + 0.5;
-    $pdf->multicell(279, $alt, $p58_obs, 0, "L", $p);
-  }
-
 
   if ($p == 0) {
     $p = 1;
