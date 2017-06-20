@@ -97,6 +97,9 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
 					 AND DATE_PART('YEAR',rh01_admiss) >= 2013
+					AND (DATE_PART('MONTH',rh01_admiss) = " .$this->sDataFinal['5'].$this->sDataFinal['6']."
+					    and DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")."
+					)
 
 					 union
 
@@ -144,7 +147,10 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
 			  AND DATE_PART('YEAR',rh01_admiss) >= 2013
-
+			AND (DATE_PART('MONTH',rh01_admiss) = " .$this->sDataFinal['5'].$this->sDataFinal['6']."
+                                            and DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")."
+                                        )			
+	
 		      UNION
 
 		      select z01_cgccpf,
