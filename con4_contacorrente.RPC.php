@@ -874,6 +874,39 @@ try {
 
                             $nSaldoInicial = $saldoanterior + $debitos - $creditos;
                             $nSaldoFinal = $nSaldoInicial + $debitosencerramento - $creditosencerramento;//saldo a ser implantado
+
+                            /**
+                             * Caso o saldo a implantar seja zero, busca-se o saldo do empenho
+                             *  RP PROCESSADO EXERCICIO ATUAL							RP NAO PROCESSADO EXERCICIO ATUAL
+                             *  5321 - 5327												5311 - 5317
+                             *  6327 - 6321												63171 - 6311
+                             *
+                             *  RP PROCESSADO EXERCICIO ANTERIOR						RP NAO PROCESSADO EXERCICIOS ANTERIORES
+                             *  5322 - 5327												5312 - 5317
+                             *  6327 - 6321												63171 - 6311
+                             */
+
+                            if ($nSaldoFinal == 0) {
+                                $oDaoEmpresto = db_utils::getDao("empresto");
+                                $WhereEmpresto = "e91_anousu = {$iAnoSessao}";
+                                /*
+                                 * Processados
+                                 * else
+                                 * Não processados
+                                 */
+                                if ($sEstrutural == "5321" || $sEstrutural == "5327" || $sEstrutural == "6327" || $sEstrutural == "6321" || $sEstrutural == "5322" ) {
+                                    $WhereEmpresto .= " and e60_numemp = {$oLancamentos->e60_numemp} and e60_instit = ".db_getsession('DB_instit')." group by 1 having round(sum(e91_vlrliq - e91_vlrpag),4) > 0";
+                                    $sCampos = "e91_numemp, round(sum(e91_vlrliq - e91_vlrpag),4) as valor";
+
+                                } else {
+                                    $WhereEmpresto .= " and e60_numemp = {$oLancamentos->e60_numemp} and e60_instit = ".db_getsession('DB_instit')." group by 1 having round(coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0),4) > 0";
+                                    $sCampos = "e91_numemp, round(sum(e91_vlremp - e91_vlranu - e91_vlrliq),4) as valor";
+                                }
+                                $sSqlEmpresto = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null, $WhereEmpresto);
+                                $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+                                $nSaldoFinal = db_utils::fieldsMemory($rsSqlEmpresto,0)->valor;
+                            }
+
                             $iContaCorrenteDetalhe = 0;
                             $oDaoCCDetalhe = db_utils::getDao("contacorrentedetalhe");
                             $sWhereCCDetalhe  = " c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . " and c19_reduz = {$iReduzido} ";
