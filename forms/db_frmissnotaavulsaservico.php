@@ -640,8 +640,8 @@ function js_RetencaoINSS() {
   }
 
   var retencoes = {
-    passageiros: calculoRetencaoINSS.bind(null, info, 4.7),
-    material: calculoRetencaoINSS.bind(null, info, 3.6),
+    passageiros: calculoRetencaoINSS.bind(null, info, 2.2),
+    material: calculoRetencaoINSS.bind(null, info, 1.1),
     outros: calculoRetencaoINSS.bind(null, info, 11),
     nada: function() { return 0; },
   };
