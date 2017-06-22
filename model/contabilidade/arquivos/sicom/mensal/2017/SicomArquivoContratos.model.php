@@ -958,7 +958,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
          * selecionar informacoes registro 30
          */
         $sSql = "SELECT acordo.*,
-       si03_tipoalteracaoapostila,
+       CASE si03_tipoalteracaoapostila
+           WHEN 15 THEN '1'
+           WHEN 16 THEN '2'
+           WHEN 17 THEN '3'
+       END AS tipoalteracaoapostila,
        si03_sequencial,
        si03_licitacao,
        si03_numcontrato,
@@ -1016,7 +1020,7 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
             $clcontratos30->si89_tipoapostila = $oDados30->si03_tipoapostila;
             $clcontratos30->si89_nroseqapostila = $oDados30->si03_numapostilamento;
             $clcontratos30->si89_dataapostila = $oDados30->si03_dataapostila;
-            $clcontratos30->si89_tipoalteracaoapostila = $oDados30->si03_tipoalteracaoapostila;
+            $clcontratos30->si89_tipoalteracaoapostila = $oDados30->tipoalteracaoapostila;
             $clcontratos30->si89_dscalteracao = substr($this->removeCaracteres($oDados30->si03_descrapostila), 0, 250);
             $clcontratos30->si89_valorapostila = $oDados30->tipoalteracaoapostila == 3 ? 0 : $oDados30->si89_valorapostila;
             $clcontratos30->si89_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
