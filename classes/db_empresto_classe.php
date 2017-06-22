@@ -1151,8 +1151,8 @@ $order
                         else 0 end) as vlrpag
                        from     empempenho
                                 inner join conlancamemp on e60_numemp = c75_numemp
-                                inner join conlancamcgm on c75_codlan = c76_codlan
-                                inner join cgm          on c76_numcgm = z01_numcgm
+                                left join conlancamcgm on c75_codlan = c76_codlan
+                                left join cgm          on c76_numcgm = z01_numcgm
                                 inner join conlancamdoc on c75_codlan = c71_codlan
                                 inner join conlancam    on c75_codlan = c70_codlan
                                 inner join orcdotacao   on e60_coddot = o58_coddot
@@ -1196,8 +1196,8 @@ $order
                         else 0 end) as vlrpag
                        from     empempenho
                                 inner join conlancamemp on e60_numemp = c75_numemp
-                                inner join conlancamcgm on c75_codlan = c76_codlan
-                                inner join cgm          on c76_numcgm = z01_numcgm
+                                LEFT join conlancamcgm on c75_codlan = c76_codlan
+                                LEFT join cgm          on c76_numcgm = z01_numcgm
                                 inner join conlancamdoc on c75_codlan = c71_codlan
                                 inner join conlancam    on c75_codlan = c70_codlan
                                 inner join orcdotacao   on e60_coddot = o58_coddot
