@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
@@ -334,7 +334,7 @@ class slip {
         /**
          * verificamos na empagemovforma, se possui movimentos atualizado para o slip
          * se houver, o slip deve antes ser reconfigurado na agenda, para NDA, e depois sim ser alterado
-         * 
+         *
          */
         $oDaoEmpAgeMovForma = db_utils::getDao("empagemovforma");
         $sSqlEmpAgeMovForma = $oDaoEmpAgeMovForma->sql_query_file($oMovimentoSlip->e89_codmov);
@@ -343,7 +343,7 @@ class slip {
         if ( $oDaoEmpAgeMovForma->numrows > 0 ) {
 
           $sMensagemErroSlip  = "O Slip possui movimentação atualizada na agenda de pagamentos.";
-          $sMensagemErroSlip .= "\nDeve ser alterado a forma de pagamento para NDA, para alteração do Slip"; 
+          $sMensagemErroSlip .= "\nDeve ser alterado a forma de pagamento para NDA, para alteração do Slip";
           throw new Exception($sMensagemErroSlip);
         }
 
@@ -482,7 +482,7 @@ class slip {
         }
       }
       $this->iMovimento =  $oAgendaPagamento->addMovimentoAgenda(2, $oSlipAgenda);
-      
+
     }
 
     if ($this->getNumCgm() != "") {
@@ -1091,5 +1091,76 @@ class slip {
   public function setMovimento($iCodigoMovimento) {
     $this->iMovimento = $iCodigoMovimento;
   }
+
+
+
+  /**
+   * Retorna conjunto de lançamentos data uma conta e um período de datas
+   * @param integer $iConta
+   * @param object $oData
+   * @return object
+   */
+  public static function getLancamentos($iConta, $oData)
+  {
+    $sWhereDatas = '';
+
+    $aData = (array) $oData;
+    if (!empty($aData)) {
+      $aData = explode('-', $oData->inicio);
+      $iAno = $aData[0];
+      $iMes = $aData[1];
+
+      $sWhereDatas = "
+        AND (DATE_PART('MONTH', k17_data) = '{$iMes}')
+        AND (DATE_PART('YEAR', k17_data) = '{$iAno}')
+      ";
+    }
+
+    $iInstituicao = db_getsession('DB_instit');
+
+    $sSQLEstornosDevolucoes = "
+      SELECT k17_codigo
+      FROM slip
+      JOIN conlancamslip ON c84_slip = k17_codigo
+      JOIN conlancam ON c70_codlan = c84_conlancam
+      JOIN contabilidade.conlancamdoc ON c71_codlan = c70_codlan
+      WHERE c71_coddoc IN (101, 131, 141, 151, 161) {$sWhereDatas}";
+
+    $sSQLSlipsDeRecebimentos = "
+      SELECT c84_conlancam AS lancamento,
+          k17_codigo AS cod_slip,
+          c70_data AS data_recebimento,
+          c71_coddoc,
+          k17_credito,
+          c70_valor AS valor_recebido,
+          k17_instit
+      FROM slip
+      JOIN conlancamslip ON c84_slip = k17_codigo
+      JOIN conlancam ON c70_codlan = c84_conlancam
+      JOIN contabilidade.conlancamdoc ON c71_codlan = c70_codlan
+      WHERE c71_coddoc IN (100, 130, 140, 150, 160) {$sWhereDatas}
+          AND k17_codigo NOT IN ( {$sSQLEstornosDevolucoes} )";
+
+    $sSQLGeral = "
+      SELECT slipsNaoEstornados.lancamento,
+          slipsNaoEstornados.cod_slip,
+          slipsNaoEstornados.data_recebimento,
+          k17_credito AS conta_banc,
+          slipsNaoEstornados.valor_recebido,
+          k17_instit
+      FROM ( {$sSQLSlipsDeRecebimentos} ) slipsNaoEstornados
+      WHERE k17_credito IN
+          (SELECT c61_reduz FROM contabilidade.conplanoreduz
+          JOIN conplano ON c60_codcon = c61_codcon
+          WHERE c61_codcon = {$iConta})
+          AND k17_instit = {$iInstituicao}
+      ORDER BY slipsNaoEstornados.data_recebimento;";
+
+    $oResource = db_query($sSQLGeral);
+
+    return db_utils::getColectionByRecord($oResource);
+
+  }
+
 }
 ?>

@@ -953,7 +953,15 @@ function js_maxlenghttextarea(elem, event, iLimite){
           strAux  = '';
         }
       }
-      campo.value = js_colocaBarras(campo,strAux,false);
+      var dataFinal = js_colocaBarras(campo,strAux,false);
+
+      campo.value = dataFinal;
+
+      var matched = dataFinal.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      if (matched) {
+        js_setDiaMesAno(campo, matched[1], matched[2], matched[3]);
+      }
+
       return true;
     }
   }
