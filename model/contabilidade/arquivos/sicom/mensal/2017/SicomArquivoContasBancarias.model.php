@@ -417,7 +417,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 									   c71_coddoc,
 									   c71_codlan,
 									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codtri
-											when c71_coddoc in (100,101) then fontereceita.o15_codtri
+											when c71_coddoc in (100,101,115,116) then fontereceita.o15_codtri
 											else  contacreditofonte.o15_codtri
 										end as fontemovimento,
 										case when c72_complem ilike 'Referente%' and c71_coddoc in (5,35,37) then 1 else 0 end as retencao

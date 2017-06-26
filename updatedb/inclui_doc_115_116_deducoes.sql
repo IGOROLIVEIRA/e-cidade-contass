@@ -102,7 +102,7 @@ SELECT nextval('contranslr_c47_seqtranslr_seq'),
      JOIN contrans ON c46_seqtrans = c45_seqtrans
      WHERE c45_coddoc = 115
          AND c45_anousu = 2017
-         AND c46_ordem = 1
+         AND c46_ordem = 2
          LIMIT 1) AS c47_seqtranslan,
        (SELECT c61_reduz FROM conplanoreduz
         JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = 2017
@@ -156,7 +156,7 @@ SELECT nextval('contranslr_c47_seqtranslr_seq'),
      JOIN contrans ON c46_seqtrans = c45_seqtrans
      WHERE c45_coddoc = 116
          AND c45_anousu = 2017
-         AND c46_ordem = 1
+         AND c46_ordem = 2
          LIMIT 1) AS c47_seqtranslan,
        (SELECT c61_reduz FROM conplanoreduz
         JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = 2017
@@ -179,6 +179,96 @@ JOIN contranslan ON c45_seqtrans = c46_seqtrans AND c46_ordem = 1
 JOIN contranslr ON c46_seqtranslan = c47_seqtranslan
 WHERE c45_coddoc = 101
   AND c45_anousu = 2017
+  LIMIT 1;
+
+INSERT INTO contranslan
+VALUES(nextval('contabilidade.contranslan_c46_seqtranslan_seq'),
+       (SELECT c45_seqtrans
+        FROM contrans
+        WHERE c45_coddoc = 115
+              AND c45_anousu = 2017
+        LIMIT 1), 100,
+       'TERCEIRO LANCAMENTO',
+       0,
+       FALSE,
+       0,
+       'TERCEIRO LANCAMENTO',
+       3);
+
+INSERT INTO contranslan
+VALUES(nextval('contabilidade.contranslan_c46_seqtranslan_seq'),
+       (SELECT c45_seqtrans
+        FROM contrans
+        WHERE c45_coddoc = 116
+              AND c45_anousu = 2017
+        LIMIT 1), 101,
+       'TERCEIRO LANCAMENTO',
+       0,
+       FALSE,
+       0,
+       'TERCEIRO LANCAMENTO',
+       3);
+
+INSERT INTO contranslr
+  SELECT nextval('contranslr_c47_seqtranslr_seq'),
+    (SELECT max(c46_seqtranslan) FROM contranslan
+      JOIN contrans ON c46_seqtrans = c45_seqtrans
+    WHERE c45_coddoc = 115
+          AND c45_anousu = 2017
+          AND c46_ordem = 3
+     LIMIT 1) AS c47_seqtranslan,
+    (SELECT c61_reduz FROM conplanoreduz
+      JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = 2017
+    WHERE c60_estrut = '721110000000000'
+          AND c61_instit = 1
+          AND c61_anousu = 2017) AS c47_debito,
+    (SELECT c61_reduz FROM conplanoreduz
+      JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = 2017
+    WHERE c60_estrut = '821110100000000'
+          AND c61_instit = 1
+          AND c61_anousu = 2017) AS c47_credito,
+    c47_obs,
+    c47_ref,
+    2017 AS c47_anousu,
+    c47_instit,
+    c47_compara,
+    c47_tiporesto
+  FROM contrans
+    JOIN contranslan ON c45_seqtrans = c46_seqtrans AND c46_ordem = 1
+    JOIN contranslr ON c46_seqtranslan = c47_seqtranslan
+  WHERE c45_coddoc = 100
+        AND c45_anousu = 2017
+  LIMIT 1;
+
+INSERT INTO contranslr
+  SELECT nextval('contranslr_c47_seqtranslr_seq'),
+    (SELECT max(c46_seqtranslan) FROM contranslan
+      JOIN contrans ON c46_seqtrans = c45_seqtrans
+    WHERE c45_coddoc = 116
+          AND c45_anousu = 2017
+          AND c46_ordem = 3
+     LIMIT 1) AS c47_seqtranslan,
+    (SELECT c61_reduz FROM conplanoreduz
+      JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = 2017
+    WHERE c60_estrut = '821110100000000'
+          AND c61_instit = 1
+          AND c61_anousu = 2017) AS c47_debito,
+    (SELECT c61_reduz FROM conplanoreduz
+      JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = 2017
+    WHERE c60_estrut = '721110000000000'
+          AND c61_instit = 1
+          AND c61_anousu = 2017) AS c47_credito,
+    c47_obs,
+    c47_ref,
+    2017 AS c47_anousu,
+    c47_instit,
+    c47_compara,
+    c47_tiporesto
+  FROM contrans
+    JOIN contranslan ON c45_seqtrans = c46_seqtrans AND c46_ordem = 1
+    JOIN contranslr ON c46_seqtranslan = c47_seqtranslan
+  WHERE c45_coddoc = 101
+        AND c45_anousu = 2017
   LIMIT 1;
 
 UPDATE conplanoorcamentogrupo
