@@ -174,8 +174,6 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
       INNER JOIN pcmater on pc01_codmater = ac20_pcmater
       inner join matunid on m61_codmatunid = ac20_matunid
       where ap1.ac26_sequencial in (select max(ap2.ac26_sequencial) from acordoposicao ap2 where ap2.ac26_acordo = ap1.ac26_acordo)
-      and ac26_data <= '{$this->sDataFinal}'
-      and ac26_data >= '{$this->sDataInicial}'
       and ac16_instit = " . db_getsession("DB_instit");
 
     $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
