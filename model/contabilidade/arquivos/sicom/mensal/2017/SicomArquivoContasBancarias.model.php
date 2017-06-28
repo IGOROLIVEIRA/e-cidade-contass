@@ -284,7 +284,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								 union all
 								select contacredito.c61_reduz as codctb,
 									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codtri
-											when c71_coddoc in (100,101) then fontereceita.o15_codtri
+											when c71_coddoc in (100,101,115,116) then fontereceita.o15_codtri
 											when c71_coddoc in (140,141) then contadebitofonte.o15_codtri
 											else  contacreditofonte.o15_codtri
 										end as fontemovimento
@@ -308,7 +308,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 							 union all
 								select contadebito.c61_reduz as codctb,
 									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codtri
-											when c71_coddoc in (100,101) then fontereceita.o15_codtri
+											when c71_coddoc in (100,101,115,116) then fontereceita.o15_codtri
 											when c71_coddoc in (140,141) then contacreditofonte.o15_codtri
 											else  contadebitofonte.o15_codtri
 									   end as fontemovimento
@@ -445,7 +445,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 									   contadebito.c61_reduz as codctb,
 									   contadebitofonte.o15_codtri as codfontrecurso,
 									   1	as tipomovimentacao,
-									   case when c71_coddoc = 100 and substr(o57_fonte,0,3) = '49' then 16
+									   case when c71_coddoc in (100,115) and substr(o57_fonte,0,3) = '49' then 16 /*anteriormente estava c71_coddoc = 100*/
 											when c71_coddoc = 100 then 1
 											when c71_coddoc in (6,36,38,162) then 17
 											when c71_coddoc in (153) then 10
@@ -462,7 +462,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 									   c71_coddoc,
 									   c71_codlan,
 									   case when c71_coddoc in (5,35,37,6,36,38) then fontempenho.o15_codtri
-											when c71_coddoc in (100,101) then fontereceita.o15_codtri
+											when c71_coddoc in (100,101,115,116) then fontereceita.o15_codtri
 											when c71_coddoc in (140,141) then contacreditofonte.o15_codtri
 											else  contadebitofonte.o15_codtri
 										end as fontemovimento,
