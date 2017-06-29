@@ -27,7 +27,7 @@
 
 
 /**
- * Alterado memÛria do PHP on the fly, para n„o estourar a carga dos dados do servidor
+ * Alterado mem√≥ria do PHP on the fly, para n√£o estourar a carga dos dados do servidor
  */
 ini_set("memory_limit", '-1');
 
@@ -43,15 +43,15 @@ $HTTP_SESSION_VARS['DB_traceLogAcount'] = false;
  * Adicioando debug no script pelo tracelog, basta informar o parametro debug no momento de executar o script
  * php con4_portaltransparencia001.php debug
  *
- * ATEN«√O:
- * Ser· executado o script normalmente, se n„o ocorrer erro: COMMIT!
+ * ATEN√á√ÉO:
+ * Ser√° executado o script normalmente, se n√£o ocorrer erro: COMMIT!
  */
 if (isset($argv[1]) && $argv[1] == "debug") {
   $HTTP_SESSION_VARS['DB_traceLogAcount'] = true;
 }
 
 /**
- *  N˙mero de bases antigas que o script ir· manter autom·ticamente
+ *  N√∫mero de bases antigas que o script ir√° manter autom√°ticamente
  */
 $iNroBasesAntigas = 2;
 
@@ -62,7 +62,7 @@ $sSchema    = "transparencia";
 $sBkpSchema = "bkp_transparencia_".date("Ymd_His");
 
 /**
- *  A vari·vel iParamLog define o tipo de log que deve ser gerado :
+ *  A vari√°vel iParamLog define o tipo de log que deve ser gerado :
  *  0 - Imprime log na tela e no arquivo
  *  1 - Imprime log somente da tela
  *  2 - Imprime log somente no arquivo
@@ -94,8 +94,8 @@ require_once(DB_LIBS ."libs/db_sql.php");
 require_once(DB_MODEL."model/dataManager.php");
 
 /**
- *  ExercÌcio que ser· utilizado como base para migraÁ„o, ou seja ser„o consultados apenas
- *  dados apartir do exercÌcio informado.
+ *  Exerc√≠cio que ser√° utilizado como base para migra√ß√£o, ou seja ser√£o consultados apenas
+ *  dados apartir do exerc√≠cio informado.
  */
 $iExercicioBase = EXERCICIO_BASE;
 $aIntegracoesRealizar = array();
@@ -104,7 +104,7 @@ if (defined("INTEGRACOES_TRANSPARENCIA")) {
 }
 
 /**
- * Adicionado verificaÁ„o para configurar a constant caso o cliente use PCASP
+ * Adicionado verifica√ß√£o para configurar a constant caso o cliente use PCASP
  */
 $lUsarPcasp         = false;
 $sSqlConParametro   = " select c90_usapcasp ";
@@ -143,7 +143,7 @@ if ($lParametroUsaPCASP == 't') {
 
       /**
        * Usar PCASP:
-       * - Ano do servidor e ano de implantaÁ„o do PCASP tem que ser maior ou igual a 2013
+       * - Ano do servidor e ano de implanta√ß√£o do PCASP tem que ser maior ou igual a 2013
        */
       if ($iAnoServidor >= $iAnoImplantacaoPCASP && $iAnoImplantacaoPCASP >= 2013) {
         $lUsarPcasp = true;
@@ -165,8 +165,8 @@ if ( isset($argv[1])) {
 }
 
 /**
- *  Caso o par‚metro seja passado como true ent„o ser„o processados
- *  todas empresas cadastradas, caso contr·rio ser„o processadas apenas
+ *  Caso o par√¢metro seja passado como true ent√£o ser√£o processados
+ *  todas empresas cadastradas, caso contr√°rio ser√£o processadas apenas
  *  as empresas cadastradas ou alteradas no dia
  */
 
@@ -176,13 +176,13 @@ $iAnoUsu    = date("Y");
 $sHoraHoje  = date('H:i');
 
 /**
- *  Inicia sess„o e transaÁ„o
+ *  Inicia sess√£o e transa√ß√£o
  */
 db_query($connOrigem ,"select fc_startsession();");
 db_query($connDestino,"BEGIN;");
 
 /**
- *  Verifica se existem atualizaÁıes de base de dados
+ *  Verifica se existem atualiza√ß√µes de base de dados
  *  e as aplica na mesma
  */
 
@@ -240,7 +240,7 @@ try {
 
 
   /**
-   *  O script abaixo corrige possÌveis erros de base na tabela conplano, sendo elas podendo ser origin·rias
+   *  O script abaixo corrige poss√≠veis erros de base na tabela conplano, sendo elas podendo ser origin√°rias
    *  da tabela orcdotacao ou orcreceita
    */
   $sSqlCorrigeConplano = " select distinct
@@ -271,8 +271,8 @@ try {
 
 
     /**
-     *  Caso exista registros na orcelemento, ent„o ser· inserido um registro na conplano com base nesse registro
-     *  caso contr·rio ser· procurado na conplano algum registro da mesma conta em outro exercÌcio.
+     *  Caso exista registros na orcelemento, ent√£o ser√° inserido um registro na conplano com base nesse registro
+     *  caso contr√°rio ser√° procurado na conplano algum registro da mesma conta em outro exerc√≠cio.
      */
     if ( $iLinhasOrcElemento > 0 ) {
 
@@ -351,14 +351,14 @@ try {
         */
 
       } else {
-        throw new Exception("ERRO-0: Erro na correÁ„o da tabela conplano ");
+        throw new Exception("ERRO-0: Erro na corre√ß√£o da tabela conplano ");
       }
     }
   }
 
 
   /**
-   *  Consulta os registros da orcreceita com possÌveis erros de base
+   *  Consulta os registros da orcreceita com poss√≠veis erros de base
    */
   $sSqlCorrigeConplano = " select distinct
                                   o70_anousu,
@@ -390,8 +390,8 @@ try {
 
 
     /**
-     *  Caso exista registros na orcfontes, ent„o ser· inserido um registro na conplano com base nesse registro
-     *  caso contr·rio ser· procurado na conplano algum registro da mesma conta em outro exercÌcio.
+     *  Caso exista registros na orcfontes, ent√£o ser√° inserido um registro na conplano com base nesse registro
+     *  caso contr√°rio ser√° procurado na conplano algum registro da mesma conta em outro exerc√≠cio.
      */
 
     if ( $iLinhasOrcFontes > 0 ) {
@@ -470,7 +470,7 @@ try {
         }
         */
       } else {
-        throw new Exception("ERRO-0: 1 - Erro na correÁ„o da tabela conplano ");
+        throw new Exception("ERRO-0: 1 - Erro na corre√ß√£o da tabela conplano ");
       }
     }
   }
@@ -503,7 +503,7 @@ try {
 
 
   /**
-   *  Arrays utiliz ados  para  referenciar os respectivos cÛdigos de origem aos IDs novos gerados.
+   *  Arrays utiliz ados  para  referenciar os respectivos c√≥digos de origem aos IDs novos gerados.
    */
   $aListaInstit                  = array();
   $aListaOrgao                   = array();
@@ -520,9 +520,9 @@ try {
   $aMatrizMovimentacaoServidor   = array();
 
 
-  // TABELA DE IMPORT«OES *******************************************************************************************//
+  // TABELA DE IMPORT√áOES *******************************************************************************************//
 
-  db_logTitulo(" CONFIGURA TABELA DE IMPORTA«√O",$sArquivoLog,$iParamLog);
+  db_logTitulo(" CONFIGURA TABELA DE IMPORTA√á√ÉO",$sArquivoLog,$iParamLog);
 
   $sSqlInsereImportacoes = " INSERT INTO importacoes (data,hora)
                                               VALUES ('{$dtDataHoje}',
@@ -531,17 +531,17 @@ try {
   $rsInsereImportacoes   = db_query($connDestino,$sSqlInsereImportacoes);
 
   if ( !$rsInsereImportacoes ) {
-    throw new Exception("ERRO-0: Erro ao inserir tabela de importaÁıes!");
+    throw new Exception("ERRO-0: Erro ao inserir tabela de importa√ß√µes!");
   }
 
-  // FIM TABELA DE IMPORT«OES ***************************************************************************************//
+  // FIM TABELA DE IMPORT√áOES ***************************************************************************************//
 
-  // INSTITUI«’ES **************************************************************************************************//
+  // INSTITUI√á√ïES **************************************************************************************************//
 
-  db_logTitulo(" IMPORTA INSTITUI«’ES",$sArquivoLog,$iParamLog);
+  db_logTitulo(" IMPORTA INSTITUI√á√ïES",$sArquivoLog,$iParamLog);
 
   /**
-   * Consulta InstituiÁıes na base de origem
+   * Consulta Institui√ß√µes na base de origem
    */
   $sSqlInstit  = " select db_config.codigo   as codinstit, ";
   $sSqlInstit .= "        db_config.nomeinst as descricao  ";
@@ -551,15 +551,15 @@ try {
   $iRowsInstit = pg_num_rows($rsInstit);
 
   if ( $iRowsInstit ==  0 ) {
-    throw new Exception('Nenhuma instituiÁ„o encontrada!');
+    throw new Exception('Nenhuma institui√ß√£o encontrada!');
   }
 
   db_logNumReg($iRowsInstit,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsInstit; $iInd++ ) {
 
@@ -578,8 +578,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBInstituicoes->persist();
@@ -589,9 +589,9 @@ try {
 
 
   /**
-   *  … consultado as instituiÁıes cadastradas na base de destino para que seja populado o array $aListaInstit
-   *  com as instituiÁıes cadastradas sendo a vari·vel indexada pelo cÛdigo da instituiÁ„o da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo da instituiÁ„o de origem.
+   *  √â consultado as institui√ß√µes cadastradas na base de destino para que seja populado o array $aListaInstit
+   *  com as institui√ß√µes cadastradas sendo a vari√°vel indexada pelo c√≥digo da institui√ß√£o da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo da institui√ß√£o de origem.
    */
   $sSqlListaInstitDestino  = " select *           ";
   $sSqlListaInstitDestino .= "  from instituicoes ";
@@ -611,15 +611,15 @@ try {
 
   }
 
-  // FIM INSTITUI«’ES ***********************************************************************************************//
+  // FIM INSTITUI√á√ïES ***********************************************************************************************//
 
-  // ORG√OS *********************************************************************************************************//
+  // ORG√ÉOS *********************************************************************************************************//
 
 
-  db_logTitulo(" IMPORTA ORG√OS",$sArquivoLog,$iParamLog);
+  db_logTitulo(" IMPORTA ORG√ÉOS",$sArquivoLog,$iParamLog);
 
   /**
-   * Consulta Org„os na base de origem
+   * Consulta Org√£os na base de origem
    */
   $sSqlOrgao  = " select o40_instit as codinstit,        ";
   $sSqlOrgao .= "        o40_orgao  as codorgao,         ";
@@ -631,15 +631,15 @@ try {
   $iRowsOrgao = pg_num_rows($rsOrgao);
 
   if ( $iRowsOrgao ==  0 ) {
-    throw new Exception('Nenhum org„o encontrado!');
+    throw new Exception('Nenhum org√£o encontrado!');
   }
 
   db_logNumReg($iRowsOrgao,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsOrgao; $iInd++ ) {
 
@@ -659,8 +659,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBOrgaos->persist();
@@ -671,9 +671,9 @@ try {
 
 
   /**
-   *  … consultado os org„os cadastrados na base de destino para que seja populado o array $aListaOrgao
-   *  com os org„os cadastrados sendo a vari·vel indexada pelo cÛdigo do org„o da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo do org„o de origem.
+   *  √â consultado os org√£os cadastrados na base de destino para que seja populado o array $aListaOrgao
+   *  com os org√£os cadastrados sendo a vari√°vel indexada pelo c√≥digo do org√£o da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo do org√£o de origem.
    */
   $sSqlListaOrgaoDestino  = " select *      ";
   $sSqlListaOrgaoDestino .= "   from orgaos ";
@@ -692,7 +692,7 @@ try {
 
   }
 
-  // FIM ORG√OS *****************************************************************************************************//
+  // FIM ORG√ÉOS *****************************************************************************************************//
 
 
   // UNIDADES *******************************************************************************************************//
@@ -720,9 +720,9 @@ try {
   db_logNumReg($iRowsUnidade,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsUnidade; $iInd++ ) {
 
@@ -744,8 +744,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBUnidades->persist();
@@ -755,9 +755,9 @@ try {
 
 
   /**
-   *  … consultado as unidades cadastradas na base de destino para que seja populado o array $aListaUnidade
-   *  com as unidades cadastradas sendo a vari·vel indexada pelo cÛdigo da unidade da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo da unidade de origem.
+   *  √â consultado as unidades cadastradas na base de destino para que seja populado o array $aListaUnidade
+   *  com as unidades cadastradas sendo a vari√°vel indexada pelo c√≥digo da unidade da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo da unidade de origem.
    */
   $sSqlListaUnidadeDestino  = " select *        ";
   $sSqlListaUnidadeDestino .= "   from unidades ";
@@ -804,9 +804,9 @@ try {
   db_logNumReg($iRowsProjeto,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsProjeto; $iInd++ ) {
 
@@ -826,8 +826,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBProjetos->persist();
@@ -837,9 +837,9 @@ try {
 
 
   /**
-   *  … consultado os projetos cadastrados na base de destino para que seja populado o array $aListaProjeto
-   *  com os projetos cadastrados sendo a vari·vel indexada pelo cÛdigo do projeto da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo do projeto de origem.
+   *  √â consultado os projetos cadastrados na base de destino para que seja populado o array $aListaProjeto
+   *  com os projetos cadastrados sendo a vari√°vel indexada pelo c√≥digo do projeto da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo do projeto de origem.
    */
   $sSqlListaProjetoDestino  = " select *        ";
   $sSqlListaProjetoDestino .= "   from projetos ";
@@ -861,12 +861,12 @@ try {
   // FIM PROJETOS ***************************************************************************************************//
 
 
-  // FUN«’ES ********************************************************************************************************//
+  // FUN√á√ïES ********************************************************************************************************//
 
-  db_logTitulo(" IMPORTA FUN«’ES",$sArquivoLog,$iParamLog);
+  db_logTitulo(" IMPORTA FUN√á√ïES",$sArquivoLog,$iParamLog);
 
   /**
-   * Consulta FunÁıes na base de origem
+   * Consulta Fun√ß√µes na base de origem
    */
   $sSqlFuncao  = " select o52_funcao as codfuncao, ";
   $sSqlFuncao .= "        o52_descr  as descricao  ";
@@ -876,15 +876,15 @@ try {
   $iRowsFuncao = pg_num_rows($rsFuncao);
 
   if ( $iRowsFuncao ==  0 ) {
-    throw new Exception('Nenhuma funÁ„o encontrada!');
+    throw new Exception('Nenhuma fun√ß√£o encontrada!');
   }
 
   db_logNumReg($iRowsFuncao,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsFuncao; $iInd++ ) {
 
@@ -903,8 +903,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBFuncoes->persist();
@@ -914,9 +914,9 @@ try {
 
 
   /**
-   *  … consultado as funÁıes cadastradas na base de destino para que seja populado o array $aListaFuncao
-   *  com as funÁıes cadastradas sendo a vari·vel indexada pelo cÛdigo da funÁ„o da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo da funÁ„o de origem.
+   *  √â consultado as fun√ß√µes cadastradas na base de destino para que seja populado o array $aListaFuncao
+   *  com as fun√ß√µes cadastradas sendo a vari√°vel indexada pelo c√≥digo da fun√ß√£o da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo da fun√ß√£o de origem.
    */
   $sSqlListaFuncaoDestino  = " select *        ";
   $sSqlListaFuncaoDestino .= "   from funcoes  ";
@@ -935,16 +935,16 @@ try {
 
   }
 
-  // FIM FUN«’ES ****************************************************************************************************//
+  // FIM FUN√á√ïES ****************************************************************************************************//
 
 
 
-  // SUBFUN«’ES *****************************************************************************************************//
+  // SUBFUN√á√ïES *****************************************************************************************************//
 
-  db_logTitulo(" IMPORTA SUBFUN«’ES",$sArquivoLog,$iParamLog);
+  db_logTitulo(" IMPORTA SUBFUN√á√ïES",$sArquivoLog,$iParamLog);
 
   /**
-   * Consulta FunÁıes na base de origem
+   * Consulta Fun√ß√µes na base de origem
    */
   $sSqlSubFuncao  = " select o53_subfuncao as codsubfuncao, ";
   $sSqlSubFuncao .= "        o53_descr     as descricao     ";
@@ -954,15 +954,15 @@ try {
   $iRowsSubFuncao = pg_num_rows($rsSubFuncao);
 
   if ( $iRowsSubFuncao ==  0 ) {
-    throw new Exception('Nenhuma SubFunÁ„o encontrada!');
+    throw new Exception('Nenhuma SubFun√ß√£o encontrada!');
   }
 
   db_logNumReg($iRowsSubFuncao,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsSubFuncao; $iInd++ ) {
 
@@ -981,8 +981,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBSubFuncoes->persist();
@@ -992,9 +992,9 @@ try {
 
 
   /**
-   *  … consultado as subfunÁıes cadastradas na base de destino para que seja populado o array $aListaSubFuncao
-   *  com as subfunÁıes cadastradas sendo a vari·vel indexada pelo cÛdigo da subfunÁ„o da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo da subfunÁ„o de origem.
+   *  √â consultado as subfun√ß√µes cadastradas na base de destino para que seja populado o array $aListaSubFuncao
+   *  com as subfun√ß√µes cadastradas sendo a vari√°vel indexada pelo c√≥digo da subfun√ß√£o da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo da subfun√ß√£o de origem.
    */
   $sSqlListaSubFuncaoDestino  = " select *           ";
   $sSqlListaSubFuncaoDestino .= "   from subfuncoes  ";
@@ -1013,7 +1013,7 @@ try {
 
   }
 
-  // FIM SUBFUN«’ES *************************************************************************************************//
+  // FIM SUBFUN√á√ïES *************************************************************************************************//
 
 
 
@@ -1040,9 +1040,9 @@ try {
   db_logNumReg($iRowsPrograma,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsPrograma; $iInd++ ) {
 
@@ -1061,8 +1061,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBProgramas->persist();
@@ -1072,9 +1072,9 @@ try {
 
 
   /**
-   *  … consultado os programas cadastrados na base de destino para que seja populado o array $aListaPrograma
-   *  com os programas cadastrados sendo a vari·vel indexada pelo cÛdigo do programa da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo do programa de origem.
+   *  √â consultado os programas cadastrados na base de destino para que seja populado o array $aListaPrograma
+   *  com os programas cadastrados sendo a vari√°vel indexada pelo c√≥digo do programa da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo do programa de origem.
    */
   $sSqlListaProgramaDestino  = " select *         ";
   $sSqlListaProgramaDestino .= "   from programas ";
@@ -1117,9 +1117,9 @@ try {
   db_logNumReg($iRowsRecurso,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsRecurso; $iInd++ ) {
 
@@ -1138,8 +1138,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBRecursos->persist();
@@ -1149,9 +1149,9 @@ try {
 
 
   /**
-   *  … consultado os recursos cadastrados na base de destino para que seja populado o array $aListaRecurso
-   *  com os recursos cadastrados sendo a vari·vel indexada pelo cÛdigo do recurso da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo do recurso de origem.
+   *  √â consultado os recursos cadastrados na base de destino para que seja populado o array $aListaRecurso
+   *  com os recursos cadastrados sendo a vari√°vel indexada pelo c√≥digo do recurso da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo do recurso de origem.
    */
   $sSqlListaRecursoDestino  = " select *         ";
   $sSqlListaRecursoDestino .= "   from recursos ";
@@ -1195,7 +1195,8 @@ try {
     $sSqlPlanoConta .= "        conplano.c60_estrut as estrutural,                                                ";
     $sSqlPlanoConta .= "        conplano.c60_descr  as descricao,                                                 ";
     $sSqlPlanoConta .= "        conplano.c60_anousu as exercicio                                                  ";
-    $sSqlPlanoConta .= "   from conplano where c60_anousu <= " . ANO_ANTERIOR_IMPLANTACAO_PCASP . " union         ";
+    $sSqlPlanoConta .= "   from conplano where c60_anousu <= " . ANO_ANTERIOR_IMPLANTACAO_PCASP . "               ";
+    $sSqlPlanoConta .= " union                                                                                    ";
     $sSqlPlanoConta .= " select conplanoorcamento.c60_codcon as codcon,                                           ";
     $sSqlPlanoConta .= "        conplanoorcamento.c60_estrut as estrutural,                                       ";
     $sSqlPlanoConta .= "        conplanoorcamento.c60_descr  as descricao,                                        ";
@@ -1214,9 +1215,9 @@ try {
   db_logNumReg($iRowsPlanoConta,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsPlanoConta; $iInd++ ) {
 
@@ -1235,8 +1236,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBPlanoContas->persist();
@@ -1246,9 +1247,9 @@ try {
 
 
   /**
-   *  … consultado os planocontas cadastrados na base de destino para que seja populado o array $aListaPlanoConta
-   *  com os planocontas cadastrados sendo a vari·vel indexada pelo cÛdigo do planoconta da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo do planoconta de origem.
+   *  √â consultado os planocontas cadastrados na base de destino para que seja populado o array $aListaPlanoConta
+   *  com os planocontas cadastrados sendo a vari√°vel indexada pelo c√≥digo do planoconta da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo do planoconta de origem.
    */
   $sSqlListaPlanoContaDestino  = " select *           ";
   $sSqlListaPlanoContaDestino .= "   from planocontas ";
@@ -1276,14 +1277,15 @@ try {
   /**
    * Consulta Receitas na base de origem
    */
-  $sSqlReceita  = " select o70_codrec as codreceita,       ";
-  $sSqlReceita .= "        o70_codfon as codcon,           ";
-  $sSqlReceita .= "        o70_anousu as exercicio,        ";
-  $sSqlReceita .= "        o70_codigo as codrecurso,       ";
-  $sSqlReceita .= "        o70_instit as codinstit,        ";
-  $sSqlReceita .= "        o70_valor  as previsaoinicial   ";
-  $sSqlReceita .= "   from orcreceita                      ";
-  $sSqlReceita .= "   where o70_anousu >= 2013";
+    $sSqlReceita  = " select o70_codrec as codreceita,       ";
+    $sSqlReceita .= "        o70_codfon as codcon,           ";
+    $sSqlReceita .= "        o70_anousu as exercicio,        ";
+    $sSqlReceita .= "        o70_codigo as codrecurso,       ";
+    $sSqlReceita .= "        o70_instit as codinstit,        ";
+    $sSqlReceita .= "        o70_valor  as previsaoinicial   ";
+    $sSqlReceita .= "   from orcreceita                      ";
+
+//    echo $sSqlReceita; exit;
 
   $rsReceita    = db_query($connOrigem,$sSqlReceita);
   $iRowsReceita = pg_num_rows($rsReceita);
@@ -1295,9 +1297,9 @@ try {
   db_logNumReg($iRowsReceita,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsReceita; $iInd++ ) {
 
@@ -1306,7 +1308,7 @@ try {
     logProcessamento($iInd,$iRowsReceita,$iParamLog);
 
     if ( !isset($aListaPlanoConta[$oReceita->codcon][$oReceita->exercicio]) ) {
-      throw new Exception("ERRO-0: Plano de Contas n„o encontrado CODCON: $oReceita->codcon  EXERCICIO: $oReceita->exercicio RECEITA: $oReceita->codreceita");
+      throw new Exception("ERRO-0: Plano de Contas n√£o encontrado CODCON: $oReceita->codcon  EXERCICIO: $oReceita->exercicio RECEITA: $oReceita->codreceita");
     }
 
     $oReceita->recurso_id     = $aListaRecurso[$oReceita->codrecurso];
@@ -1324,8 +1326,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBReceitas->persist();
@@ -1335,9 +1337,9 @@ try {
 
 
   /**
-   *  … consultado as receitas cadastradas na base de destino para que seja populado o array $aListaReceita
-   *  com as receitas cadastradas sendo a vari·vel indexada pelo cÛdigo do receita da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo da receita de origem.
+   *  √â consultado as receitas cadastradas na base de destino para que seja populado o array $aListaReceita
+   *  com as receitas cadastradas sendo a vari√°vel indexada pelo c√≥digo do receita da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo da receita de origem.
    */
   $sSqlListaReceitaDestino  = " select *        ";
   $sSqlListaReceitaDestino .= "   from receitas ";
@@ -1358,16 +1360,16 @@ try {
   // FIM RECEITAS ***************************************************************************************************//
 
 
-  // MOVIMENTA«’ES RECEITAS *****************************************************************************************//
+  // MOVIMENTA√á√ïES RECEITAS *****************************************************************************************//
 
-  db_logTitulo(" IMPORTA MOVIMENTA«’ES DAS RECEITAS",$sArquivoLog,$iParamLog);
+  db_logTitulo(" IMPORTA MOVIMENTA√á√ïES DAS RECEITAS",$sArquivoLog,$iParamLog);
 
   /**
-   * Consulta Preparada para execuÁ„o da funÁ„o fc_receitasaldo na base de origem
+   * Consulta Preparada para execu√ß√£o da fun√ß√£o fc_receitasaldo na base de origem
    */
 
   $sSqlReceitaMovimentacao  = " prepare stmt_receitasaldo(integer, integer) as ";
-  $sSqlReceitaMovimentacao .= " select cast(                                                                            ";
+  $sSqlReceitaMovimentacao .= " select cast(                                                                               ";
   $sSqlReceitaMovimentacao .= "           substr(                                                                          ";
   $sSqlReceitaMovimentacao .= "           fc_receitasaldo($1,                                                              ";
   $sSqlReceitaMovimentacao .= "                           $2,                                                              ";
@@ -1417,8 +1419,8 @@ try {
   $sSqlReceitaMovimentacao .= "       inner join conlancamdoc   on conlancamdoc.c71_codlan = conlancam.c70_codlan          ";
   $sSqlReceitaMovimentacao .= "       inner join conhistdoc     on conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc         ";
   $sSqlReceitaMovimentacao .= "       inner join conhistdoctipo on conhistdoc.c53_tipo     = conhistdoctipo.c57_sequencial ";
-  $sSqlReceitaMovimentacao .= "       where o70_anousu >= 2013                                                              ";
   $sSqlReceitaMovimentacao .= " group by o70_codrec,o70_anousu,c70_data                                                    ";
+
 
   $rsReceitaMovimentacao    = db_query($connOrigem,$sSqlReceitaMovimentacao);
   $iRowsReceitaMovimentacao = pg_num_rows($rsReceitaMovimentacao);
@@ -1430,9 +1432,9 @@ try {
   db_logNumReg($iRowsReceitaMovimentacao,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsReceitaMovimentacao; $iInd++ ) {
 
@@ -1464,8 +1466,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBReceitasMovimentacoes->persist();
@@ -1493,30 +1495,70 @@ try {
   // ****************************************************************************************************************//
 
 
-  // FIM MOVIMENTA«’ES RECEITAS *************************************************************************************//
+  // FIM MOVIMENTA√á√ïES RECEITAS *************************************************************************************//
 
 
-  // DOTA«’ES *******************************************************************************************************//
+  // DOTA√á√ïES *******************************************************************************************************//
 
 
-  db_logTitulo(" IMPORTA DOTA«’ES",$sArquivoLog,$iParamLog);
+  db_logTitulo(" IMPORTA DOTACOES",$sArquivoLog,$iParamLog);
 
   /**
-   * Consulta Dotacaos na base de origem
+   * Consulta Dotacoes na base de origem
    */
-  $sSqlDotacao  = " select o58_coddot    as coddotacao,    ";
-  $sSqlDotacao .= "        o58_orgao     as codorgao,      ";
-  $sSqlDotacao .= "        o58_unidade   as codunidade,    ";
-  $sSqlDotacao .= "        o58_funcao    as codfuncao,     ";
-  $sSqlDotacao .= "        o58_subfuncao as codsubfuncao,  ";
-  $sSqlDotacao .= "        o58_programa  as codprograma,   ";
-  $sSqlDotacao .= "        o58_projativ  as codprojeto,    ";
-  $sSqlDotacao .= "        o58_codigo    as codrecurso,    ";
-  $sSqlDotacao .= "        o58_instit    as codinstit,     ";
-  $sSqlDotacao .= "        o58_anousu    as exercicio,     ";
-  $sSqlDotacao .= "        o58_codigo    as recurso,       ";
-  $sSqlDotacao .= "        o58_codele    as codcon         ";
-  $sSqlDotacao .= "   from orcdotacao                      ";
+    
+
+
+    $sSqlDotacao  = " SELECT DISTINCT ON (o58_coddot, o58_anousu) ";
+    $sSqlDotacao .= "                    o58_coddot AS coddotacao,  ";
+    $sSqlDotacao .= "                    o58_orgao AS codorgao, ";
+    $sSqlDotacao .= "                    o58_unidade AS codunidade, ";
+    $sSqlDotacao .= "                    o58_funcao AS codfuncao, ";
+    $sSqlDotacao .= "                    o58_subfuncao AS codsubfuncao, ";
+    $sSqlDotacao .= "                    o58_programa AS codprograma, ";
+    $sSqlDotacao .= "                    o58_projativ AS codprojeto,  ";
+    $sSqlDotacao .= "                    o58_codigo AS codrecurso,  ";
+    $sSqlDotacao .= "                    o58_instit AS codinstit, ";
+    $sSqlDotacao .= "                    o58_anousu AS exercicio, ";
+    $sSqlDotacao .= "                    o58_codigo AS recurso, ";
+    $sSqlDotacao .= "                    codcon ";
+    $sSqlDotacao .= " FROM  ";
+    $sSqlDotacao .= " (SELECT DISTINCT ON (o58_coddot, o58_anousu)  ";
+    $sSqlDotacao .= "                    o58_coddot,  ";
+    $sSqlDotacao .= "                    o58_orgao, ";
+    $sSqlDotacao .= "                    o58_unidade, ";
+    $sSqlDotacao .= "                    o58_funcao,  ";
+    $sSqlDotacao .= "                    o58_subfuncao, ";
+    $sSqlDotacao .= "                    o58_programa,  ";
+    $sSqlDotacao .= "                    o58_projativ,  ";
+    $sSqlDotacao .= "                    o58_codigo as recurso1,  ";
+    $sSqlDotacao .= "                    o58_instit,  ";
+    $sSqlDotacao .= "                    o58_anousu,  ";
+    $sSqlDotacao .= "                    o58_codigo,  ";
+    $sSqlDotacao .= "                    CASE ";
+    $sSqlDotacao .= "                      WHEN o58_anousu < 2013 AND o56_elemento = substr(c60_estrut,1,13)  ";
+    $sSqlDotacao .= "                       THEN c60_codcon ";
+    $sSqlDotacao .= "                     ELSE o58_codele ";
+    $sSqlDotacao .= "                    END codcon ";
+    $sSqlDotacao .= " FROM orcdotacao ";
+    $sSqlDotacao .= " JOIN orcelemento ON o56_codele = o58_codele AND o58_anousu = o56_anousu ";
+    $sSqlDotacao .= " JOIN conplano ON o56_elemento = substr(c60_estrut,1,13) AND o56_anousu = c60_anousu ";
+    $sSqlDotacao .= " UNION ";
+    $sSqlDotacao .= " SELECT o58_coddot,  ";
+    $sSqlDotacao .= "        o58_orgao, ";
+    $sSqlDotacao .= "        o58_unidade, ";
+    $sSqlDotacao .= "        o58_funcao,  ";
+    $sSqlDotacao .= "        o58_subfuncao, ";
+    $sSqlDotacao .= "        o58_programa,  ";
+    $sSqlDotacao .= "        o58_projativ,  ";
+    $sSqlDotacao .= "        o58_codigo as recurso2,  ";
+    $sSqlDotacao .= "        o58_instit,  ";
+    $sSqlDotacao .= "        o58_anousu,  ";
+    $sSqlDotacao .= "        o58_codigo,  ";
+    $sSqlDotacao .= "        o58_codele ";
+    $sSqlDotacao .= " FROM orcdotacao ";
+    $sSqlDotacao .= " WHERE o58_anousu >= 2013) as x  ";
+
 
   $rsDotacao    = db_query($connOrigem,$sSqlDotacao);
   $iRowsDotacao = pg_num_rows($rsDotacao);
@@ -1528,9 +1570,9 @@ try {
   db_logNumReg($iRowsDotacao,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsDotacao; $iInd++ ) {
 
@@ -1539,14 +1581,14 @@ try {
     logProcessamento($iInd,$iRowsDotacao,$iParamLog);
 
     if ( !isset($aListaProjeto[$oDotacao->codprojeto][$oDotacao->exercicio]) ) {
-      $sMsg  = "ERRO-0: Projeto n„o encontrado PROJETO: $oDotacao->codprojeto  EXERCICIO: $oDotacao->exercicio ";
-      $sMsg .= "DOTA«√O: $oDotacao->coddotacao ";
+      $sMsg  = "ERRO-0: Projeto n√£o encontrado PROJETO: $oDotacao->codprojeto  EXERCICIO: $oDotacao->exercicio ";
+      $sMsg .= "DOTACAO: $oDotacao->coddotacao ";
       throw new Exception($sMsg);
     }
 
     if ( !isset($aListaPlanoConta[$oDotacao->codcon][$oDotacao->exercicio]) ) {
-      $sMsg  = "ERRO-0: Plano de Conta n„o encontrado CODCON: $oDotacao->codcon EXERCICIO: $oDotacao->exercicio ";
-      $sMsg .= "DOTA«√O: $oDotacao->coddotacao ";
+      $sMsg  = "ERRO-0: Plano de Contas n√£o encontrado CODCON: $oDotacao->codcon EXERCICIO: $oDotacao->exercicio ";
+      $sMsg .= "DOTA√á√ÉO: $oDotacao->coddotacao ";
       throw new Exception($sMsg);
     }
 
@@ -1571,8 +1613,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBDotacoes->persist();
@@ -1582,9 +1624,9 @@ try {
 
 
   /**
-   *  … consultado as dotacoes cadastradas na base de destino para que seja populado o array $aListaDotacao
-   *  com as dotacoes cadastradas sendo a vari·vel indexada pelo cÛdigo do receita da base de origem.
-   *  Essa vari·vel ser· utilizada por todo o fonte para identificar o cÛdigo da dotacao de origem.
+   *  √â consultado as dotacoes cadastradas na base de destino para que seja populado o array $aListaDotacao
+   *  com as dotacoes cadastradas sendo a vari√°vel indexada pelo c√≥digo do receita da base de origem.
+   *  Essa vari√°vel ser√° utilizada por todo o fonte para identificar o c√≥digo da dotacao de origem.
    */
   $sSqlListaDotacaoDestino  = " select *        ";
   $sSqlListaDotacaoDestino .= "   from dotacoes ";
@@ -1602,7 +1644,7 @@ try {
     $aListaDotacao[$oDotacaoDestino->coddotacao][$oDotacaoDestino->exercicio] = $oDotacaoDestino->id;
   }
 
-  // FIM DOTA«’ES ***************************************************************************************************//
+  // FIM DOTA√á√ïES ***************************************************************************************************//
 
 
   unset($aListaOrgao);
@@ -1653,8 +1695,8 @@ try {
   $sSqlEmpenho .= "                       from empelemento e                                                       ";
   $sSqlEmpenho .= "                   order by e.e64_numemp, e.e64_codele ) as x                                   ";
   $sSqlEmpenho .= "                                on x.e64_numemp           = empempenho.e60_numemp               ";
-  $sSqlEmpenho .= "        left join conplanoorcamento      on conplanoorcamento.c60_codcon    = x.e64_codele                        ";
-  $sSqlEmpenho .= "                               and conplanoorcamento.c60_anousu    = empempenho.e60_anousu               ";
+  $sSqlEmpenho .= "        left join conplanoorcamento      on conplanoorcamento.c60_codcon    = x.e64_codele      ";
+  $sSqlEmpenho .= "                               and conplanoorcamento.c60_anousu    = empempenho.e60_anousu      ";
   $sSqlEmpenho .= "        left join empempaut     on empempaut.e61_numemp   = empempenho.e60_numemp               ";
   $sSqlEmpenho .= "  where exists (  select 1                                                                      ";
   $sSqlEmpenho .= "                    from conlancamemp                                                           ";
@@ -1675,9 +1717,9 @@ try {
   db_logNumReg($iRowsEmpenho,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsEmpenho; $iInd++ ) {
 
@@ -1712,13 +1754,13 @@ try {
     }
 
     if ( !isset($aListaDotacao[$oEmpenho->coddotacao][$oEmpenho->exercicio]) ) {
-      $sMsg  = "ERRO-0: DotaÁ„o n„o encontrada DOTA«√O: $oEmpenho->coddotacao  EXERCICIO: $oEmpenho->exercicio ";
+      $sMsg  = "ERRO-0: Dota√ß√£o n√£o encontrada DOTA√á√ÉO: $oEmpenho->coddotacao  EXERCICIO: $oEmpenho->exercicio ";
       $sMsg .= "NUMEMP  $oEmpenho->codempenho ";
       throw new Exception($sMsg);
     }
 
     if ( !isset($aListaPlanoConta[$oEmpenho->codcon][$oEmpenho->exercicio]) ) {
-      $sMsg  = "ERRO-0: Plano de Conta n„o encontrado CODCON: $oEmpenho->codcon EXERCICIO: $oEmpenho->exercicio ";
+      $sMsg  = "ERRO-0: Plano de Conta n√£o encontrado CODCON: $oEmpenho->codcon EXERCICIO: $oEmpenho->exercicio ";
       $sMsg .= "NUMEMP: $oEmpenho->codempenho ";
       throw new Exception($sMsg);
     }
@@ -1746,7 +1788,7 @@ try {
         $aData       = explode("-",$oLicita->l20_dtpublic);
         $iAnoLic     = $aData[0];
         $sNumeroLic  = $oLicita->l20_numero."/".$iAnoLic;
-        $sTipoCompra = $oLicita->l03_descr." Numero LicitaÁ„o : {$sNumeroLic}";
+        $sTipoCompra = $oLicita->l03_descr." Numero Licita√ß√£o : {$sNumeroLic}";
 
       }
 
@@ -1757,7 +1799,7 @@ try {
       $sTipoCompra = $oEmpenho->descrtipocompra;
 
       if ( trim($oEmpenho->numero_licitacao) != '' ) {
-        $sTipoCompra .= " Numero LicitaÁ„o : {$oEmpenho->numero_licitacao}";
+        $sTipoCompra .= " Numero Licita√ß√£o : {$oEmpenho->numero_licitacao}";
       }
     }
 
@@ -1779,8 +1821,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBEmpenhos->persist();
@@ -1814,13 +1856,15 @@ try {
 
     logProcessamento($iInd,$iLinhasEmpenhosDestino,$iParamLog);
 
-    $sSqlItensEmpenho    = " select trim(replace(pc01_descrmater, '\r\n', ' ')) as descricao,     ";
-    $sSqlItensEmpenho   .= "        e62_quant                                   as quantidade,    ";
-    $sSqlItensEmpenho   .= "        e62_vlrun                                   as valor_unitario,";
-    $sSqlItensEmpenho   .= "        e62_vltot                                   as valor_total    ";
-    $sSqlItensEmpenho   .= "   from empempitem                                                    ";
-    $sSqlItensEmpenho   .= "        inner join pcmater on pc01_codmater = e62_item                ";
-    $sSqlItensEmpenho   .= "  where e62_numemp = {$oEmpenhoDestino->codempenho}                   ";
+
+      $sSqlItensEmpenho    = " SELECT trim(replace(pc01_descrmater, '\r\n', ' ')) AS descricao, ";
+      $sSqlItensEmpenho   .= "        e62_quant AS quantidade,                                  ";
+      $sSqlItensEmpenho   .= "        e62_vlrun AS valor_unitario,                              ";
+      $sSqlItensEmpenho   .= "        e62_vltot AS valor_total                                  ";
+      $sSqlItensEmpenho   .= " FROM empempitem                                                  ";
+      $sSqlItensEmpenho   .= " INNER JOIN pcmater ON pc01_codmater = e62_item                   ";
+      $sSqlItensEmpenho   .= " INNER JOIN empempenho ON e60_numemp = e62_numemp                 ";
+      $sSqlItensEmpenho   .= " WHERE e62_numemp = {$oEmpenhoDestino->codempenho}                ";
 
     $rsDadosItensEmpenho = db_query($connOrigem,$sSqlItensEmpenho);
     $iLinhasItensEmpenho = pg_num_rows($rsDadosItensEmpenho);
@@ -1832,7 +1876,7 @@ try {
         $oItemEmpenho = db_utils::fieldsMemory($rsDadosItensEmpenho,$iIndItem);
 
         if ( $oItemEmpenho->descricao == '' ) {
-          $oItemEmpenho->descricao = 'DESCRI«√O N√O ESPECIFICADA';
+          $oItemEmpenho->descricao = 'DESCRI√á√ÉO N√ÉO ESPECIFICADA';
         }
 
         $oItemEmpenho->empenho_id = $oEmpenhoDestino->id;
@@ -1900,34 +1944,36 @@ try {
   /**
    * Consulta EmpenhosMovimentacoes na base de origem
    */
-  $sSqlEmpenhoMovimentacao  = " select conhistdoc.c53_coddoc   as codtipo,                                               ";
-  $sSqlEmpenhoMovimentacao .= "        conhistdoc.c53_tipo     as codgrupo,                                              ";
-  $sSqlEmpenhoMovimentacao .= "        conhistdoc.c53_descr    as descrtipo,                                             ";
-  $sSqlEmpenhoMovimentacao .= "        conlancamemp.c75_numemp as codempenho,                                            ";
-  $sSqlEmpenhoMovimentacao .= "        c70_data                as data,                                                  ";
-  $sSqlEmpenhoMovimentacao .= "        c70_valor               as valor,                                                 ";
-  $sSqlEmpenhoMovimentacao .= "        c72_complem             as historico                                              ";
-  $sSqlEmpenhoMovimentacao .= "   from conlancamemp                                                                      ";
-  $sSqlEmpenhoMovimentacao .= "        inner join conlancam      on conlancam.c70_codlan      = conlancamemp.c75_codlan  ";
-  $sSqlEmpenhoMovimentacao .= "        inner join conlancamdoc   on conlancamdoc.c71_codlan   = conlancamemp.c75_codlan  ";
-  $sSqlEmpenhoMovimentacao .= "        inner join conhistdoc     on conhistdoc.c53_coddoc     = conlancamdoc.c71_coddoc  ";
-  $sSqlEmpenhoMovimentacao .= "        left  join conlancamcompl on conlancamcompl.c72_codlan = conlancamemp.c75_codlan  ";
-  $sSqlEmpenhoMovimentacao .= "  where c70_data >= '{$iExercicioBase}-01-01'::date                                       ";
-  $sSqlEmpenhoMovimentacao .= "    and exists ( select * from empempitem where empempitem.e62_numemp = conlancamemp.c75_numemp )";
 
-  $rsEmpenhoMovimentacao    = db_query($connOrigem,$sSqlEmpenhoMovimentacao);
+    $sSqlEmpenhoMovimentacao  = " SELECT conhistdoc.c53_coddoc AS codtipo,                                          ";
+    $sSqlEmpenhoMovimentacao .= "        conhistdoc.c53_tipo AS codgrupo,                                           ";
+    $sSqlEmpenhoMovimentacao .= "        conhistdoc.c53_descr AS descrtipo,                                         ";
+    $sSqlEmpenhoMovimentacao .= "        conlancamemp.c75_numemp AS codempenho,                                     ";
+    $sSqlEmpenhoMovimentacao .= "        c70_data AS DATA,                                                          ";
+    $sSqlEmpenhoMovimentacao .= "        c70_valor AS valor,                                                        ";
+    $sSqlEmpenhoMovimentacao .= "        c72_complem AS historico                                                   ";
+    $sSqlEmpenhoMovimentacao .= " FROM conlancamemp                                                                 ";
+    $sSqlEmpenhoMovimentacao .= " INNER JOIN conlancam ON conlancam.c70_codlan = conlancamemp.c75_codlan            ";
+    $sSqlEmpenhoMovimentacao .= " INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamemp.c75_codlan      ";
+    $sSqlEmpenhoMovimentacao .= " INNER JOIN conhistdoc ON conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc          ";
+    $sSqlEmpenhoMovimentacao .= " LEFT  JOIN conlancamcompl ON conlancamcompl.c72_codlan = conlancamemp.c75_codlan  ";
+    $sSqlEmpenhoMovimentacao .= " WHERE EXISTS ( SELECT * FROM empempitem JOIN empempenho ON e62_numemp = e60_numemp  ";
+    $sSqlEmpenhoMovimentacao .= " WHERE empempitem.e62_numemp = conlancamemp.c75_numemp)                             ";
+
+
+    $rsEmpenhoMovimentacao    = db_query($connOrigem,$sSqlEmpenhoMovimentacao);
   $iRowsEmpenhoMovimentacao = pg_num_rows($rsEmpenhoMovimentacao);
 
   if ( $iRowsEmpenhoMovimentacao ==  0 ) {
-    throw new Exception('Nenhuma movimentaÁ„o encontrada!');
+    throw new Exception('Nenhuma movimenta√ß√£o encontrada!');
   }
 
   db_logNumReg($iRowsEmpenhoMovimentacao,$sArquivoLog,$iParamLog);
 
   /**
-   *  Insere os registros na base de destino atravÈs do mÈtodo insertValue da classe TableDataManager que quando
-   *  atinge o n˙mero determinado de registros ( informado na assinatura da classe ) È executado autom·ticamente
-   *  o mÈtodo persist que insere fisicamente os registros na base de dados atravÈs do COPY.
+   *  Insere os registros na base de destino atrav√©s do m√©todo insertValue da classe TableDataManager que quando
+   *  atinge o n√∫mero determinado de registros ( informado na assinatura da classe ) √© executado autom√°ticamente
+   *  o m√©todo persist que insere fisicamente os registros na base de dados atrav√©s do COPY.
    */
   for ( $iInd=0; $iInd < $iRowsEmpenhoMovimentacao; $iInd++ ) {
 
@@ -1963,7 +2009,7 @@ try {
     if ( pg_num_rows($rsEmpenhoDestino) > 0 ) {
       $iIdEmpenho = db_utils::fieldsMemory($rsEmpenhoDestino,0)->id ;
     } else {
-      throw new Exception("ERRO-0: Empenho n„o encontrado!$oEmpenhoMovimentacao->codempenho  ");
+      throw new Exception("ERRO-0: Empenho n√£o encontrado!$oEmpenhoMovimentacao->codempenho  ");
     }
 
     $oEmpenhoMovimentacao->empenho_id                   = $iIdEmpenho;
@@ -1980,8 +2026,8 @@ try {
   }
 
   /**
-   *  ApÛs o loop È executado manualmente o mÈtodo persist para que sejam inserido os registros restantes
-   *  ( mesmo que n„o tenha atingido o n˙mero m·ximo do bloco de registros )
+   *  Ap√≥s o loop √© executado manualmente o m√©todo persist para que sejam inserido os registros restantes
+   *  ( mesmo que n√£o tenha atingido o n√∫mero m√°ximo do bloco de registros )
    */
   try {
     $oTBEmpenhosMovimentacoes->persist();
@@ -1989,7 +2035,7 @@ try {
     throw new Exception("ERRO-0: {$eException->getMessage()}");
   }
 
-  // FIM MOVIMENTA«’ES EMPENHOS *************************************************************************************//
+  // FIM MOVIMENTA√á√ïES EMPENHOS *************************************************************************************//
 
   // SERVIDORES *********************************** //
 
@@ -2138,8 +2184,8 @@ try {
   }
 
   /**
-   * Pega todas as movimentacoes dos servidores e monta uma matriz para pegar a movimentaÁ„o correspondente
-   * a competÍncia. a matriz $aMatrizMovimentacaoServidor ser· usada ao inserir os dados financeiros.
+   * Pega todas as movimentacoes dos servidores e monta uma matriz para pegar a movimenta√ß√£o correspondente
+   * a compet√™ncia. a matriz $aMatrizMovimentacaoServidor ser√° usada ao inserir os dados financeiros.
    */
   $sSqlMatrizServidorMovimentacao  = " select id, servidor_id, mes, ano         ";
   $sSqlMatrizServidorMovimentacao .= "   from {$sSchema}.servidor_movimentacoes ";
@@ -2329,7 +2375,7 @@ try {
     $sSqlFolhaPagamento .= "          case when rh27_descr is not null then rh27_descr                                                                                        ";
     $sSqlFolhaPagamento .= "               when rubrica = 'Z999' then 'Total Bruto'                                                                                           ";
     $sSqlFolhaPagamento .= "               when rubrica = 'Z888' then 'Total Descontos'                                                                                       ";
-    $sSqlFolhaPagamento .= "               when rubrica = 'Z777' then 'Descontos ObrigatÛrios'                                                                                ";
+    $sSqlFolhaPagamento .= "               when rubrica = 'Z777' then 'Descontos Obrigat√≥rios'                                                                                ";
     $sSqlFolhaPagamento .= "          end as descr_rubrica,                                                                                                                   ";
     $sSqlFolhaPagamento .= "          valor,                                                                                                                                  ";
     $sSqlFolhaPagamento .= "          quantidade,                                                                                                                             ";
@@ -2414,7 +2460,7 @@ try {
         logProcessamento($iInd, $iRowsFolhaPagamento, $iParamLog);
       } else {
 
-        $sMensagemSemMovimentacao = "Dados Financeiros: {$oFolhaPagamentoRow->matricula} - {$oFolhaPagamentoRow->ano}/{$oFolhaPagamentoRow->mes}  sem movimentaÁıes.";
+        $sMensagemSemMovimentacao = "Dados Financeiros: {$oFolhaPagamentoRow->matricula} - {$oFolhaPagamentoRow->ano}/{$oFolhaPagamentoRow->mes}  sem movimenta√ß√µes.";
         db_log($sMensagemSemMovimentacao, $sArquivoLog, $iParamLog);
       }
 
@@ -2530,7 +2576,7 @@ try {
     }
   }
 
-  // EXCLUS√O DE SCHEMAS ANTIGOS ************************************************************************************//
+  // EXCLUS√ÉO DE SCHEMAS ANTIGOS ************************************************************************************//
 
   $sSqlConsultaSchemasAntigos = "select distinct schema_name
                                    from information_schema.schemata
@@ -2553,7 +2599,7 @@ try {
 
   }
 
-  // FIM DA EXCLUS√O DE SCHEMAS ANTIGOS *****************************************************************************//
+  // FIM DA EXCLUS√ÉO DE SCHEMAS ANTIGOS *****************************************************************************//
 
 
   if ( $iLinhasSchemasAtual > 0 ) {
@@ -2699,12 +2745,12 @@ function db_log($sLog = "", $sArquivo = "", $iTipo = 0, $lLogDataHora = true, $l
 
 
 /**
- * FunÁ„o que exibe na tela a quantidade de registros processados
- * e a quandidade de memÛria utilizada
+ * Fun√ß√£o que exibe na tela a quantidade de registros processados
+ * e a quandidade de mem√≥ria utilizada
  *
- * @param integer $iInd      Indice da linha que est· sendo processada
+ * @param integer $iInd      Indice da linha que est√° sendo processada
  * @param integer $iTotalLinhas  Total de linhas a processar
- * @param integer $iParamLog     Caso seja passado true È exibido na tela
+ * @param integer $iParamLog     Caso seja passado true √© exibido na tela
  */
 function logProcessamento($iInd,$iTotalLinhas,$iParamLog) {
 
@@ -2719,10 +2765,10 @@ function logProcessamento($iInd,$iTotalLinhas,$iParamLog) {
 
 
 /**
- * Imprime o tÌtulo do log
+ * Imprime o t√≠tulo do log
  *
  * @param string  $sTitulo
- * @param boolean $iParamLog  Caso seja passado true È exibido na tela
+ * @param boolean $iParamLog  Caso seja passado true √© exibido na tela
  */
 function db_logTitulo($sTitulo="",$sArquivoLog="",$iParamLog=0) {
 
