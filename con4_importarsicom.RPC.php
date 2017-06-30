@@ -178,7 +178,7 @@ switch ($oParam->exec) {
                                             $c++;
                                         }
                                     } else {
-                                        $oClasse->$sColuna = str_replace("'","",$data[$c]);
+                                        $oClasse->$sColuna = str_replace("'","",trim($data[$c]));
                                         $c++;
                                     }
                                 }
