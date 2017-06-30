@@ -67,7 +67,7 @@ try{
             $nSeqEstrut = 1;
             $nNivel = 3;
         }*/
-            
+
         if($aDadosSicom[$i]->si95_banco == '001'){                    
             if($nSeqEstrutBB > 99 && $nNivelBB==1){
                 $nSeqEstrutBB = 1;
@@ -75,10 +75,24 @@ try{
             }else if($nSeqEstrutBB > 99 && $nNivelBB==2){
                 $nSeqEstrutBB = 1;
                 $nNivelBB = 3;
+            }else if($nSeqEstrutBB > 99 && $nNivelBB==3){
+                $nSeqEstrutBB = 1;
+                $nNivelBB = 4;
+            }else if($nSeqEstrutBB > 99 && $nNivelBB==4){
+                $nSeqEstrutBB = 1;
+                $nNivelBB = 5;
             }
+
             salvar($aDadosSicom[$i], $nNivelBB, $nSeqEstrutBB);    
             $nSeqEstrutBB++;      
         }else if($aDadosSicom[$i]->si95_banco == 104){
+			if($nSeqEstrutCAIXA > 99 && $nNivelCAIXA==1){
+				$nSeqEstrutCAIXA = 1;
+				$nNivelCAIXA = 2;
+			}else if($nSeqEstrutCAIXA > 99 && $nNivelCAIXA==2){
+				$nSeqEstrutCAIXA = 1;
+				$nNivelCAIXA = 3;
+			}
             salvar($aDadosSicom[$i], $nNivelCAIXA, $nSeqEstrutCAIXA);
             $nSeqEstrutCAIXA++;            
         }else if($aDadosSicom[$i]->si95_banco == 237){
@@ -139,11 +153,19 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 					$sEstrutualBaseCCNaoVinculadoBB2 = "010107";
 					$sEstrutualFinal                .= $sEstrutualBaseCCNaoVinculadoBB2;
 					$sEstrutualFinal                .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-				}else{
+				}elseif($nNivel ==3){
 					$sEstrutualBaseCCNaoVinculadoBB3  = "010108";
 					$sEstrutualFinal                 .= $sEstrutualBaseCCNaoVinculadoBB3;
 					$sEstrutualFinal                 .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
-				}								
+				}elseif($nNivel ==4){
+					$sEstrutualBaseCCNaoVinculadoBB4  = "010109";
+					$sEstrutualFinal                 .= $sEstrutualBaseCCNaoVinculadoBB4;
+					$sEstrutualFinal                 .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}else{
+					$sEstrutualBaseCCNaoVinculadoBB5  = "010110";
+					$sEstrutualFinal                 .= $sEstrutualBaseCCNaoVinculadoBB5;
+					$sEstrutualFinal                 .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}
 			}elseif($oContaBancaria->getTipoConta() == 1){
 				if($nNivel ==1){
 					$sEstrutualBaseCCVinculadoBB  = "020101";
@@ -153,8 +175,12 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 					$sEstrutualBaseCCVinculadoBB2  = "020107";
 					$sEstrutualFinal              .= $sEstrutualBaseCCVinculadoBB2;
 					$sEstrutualFinal              .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==3){
+					$sEstrutualBaseCCVinculadoBB2  = "020108";
+					$sEstrutualFinal              .= $sEstrutualBaseCCVinculadoBB2;
+					$sEstrutualFinal              .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
 				}else{
-					$sEstrutualBaseCCVinculadoBB3  = "020108";
+					$sEstrutualBaseCCVinculadoBB3  = "020109";
 					$sEstrutualFinal              .= $sEstrutualBaseCCVinculadoBB3;
 					$sEstrutualFinal              .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
 				}				
@@ -187,8 +213,12 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 				$sEstrutualBaseCCVinculadoCAIXA        = "020102";
 				$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+			}elseif($oContaBancaria->getTipoConta() == 2){
+				$sEstrutualBaseCCVinculadoCAIXA        = "020103";
+				$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA;
+				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
 			}else{
-				$sEstrutualBaseCCAplicCAIXA            = "010102";
+				$sEstrutualBaseCCAplicCAIXA            = "010104";
 				$sEstrutualFinal .= $sEstrutualBaseCCAplicCAIXA;
 				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
 			}
@@ -251,7 +281,7 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
           $iReduzido = 	1;		
         }
 		$oPlanoPCASP->setAno(db_getsession("DB_anousu"));
-		$oPlanoPCASP->setEstrutural($sEstrutualFinal);		
+		$oPlanoPCASP->setEstrutural($sEstrutualFinal);
 		$oPlanoPCASP->setNRegObrig(17);
 		$oPlanoPCASP->setFuncao($oContaSicom->si95_contabancaria."-".$oContaSicom->si95_digitoverificadorcontabancaria." ".$oContaSicom->si95_desccontabancaria);
 		$oPlanoPCASP->setFinalidade($oContaSicom->si95_contabancaria."-".$oContaSicom->si95_digitoverificadorcontabancaria." ".$oContaSicom->si95_desccontabancaria);
@@ -264,9 +294,9 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 		$oPlanoPCASP->setSistemaConta(new SistemaConta(6));
 		$oPlanoPCASP->setSubSistema(new SubSistemaConta(2));
 		$oPlanoPCASP->setContaBancaria($oContaBancaria);
-		$oPlanoPCASP->setTipo(2);				
-	    $oPlanoPCASP->salvar();	
-	    
+		$oPlanoPCASP->setTipo(2);
+	    $oPlanoPCASP->salvar();
+
 		//if($iReduzido == 1){
             $oPlanoPCASP->setInstituicao($iInstituicao);
             $oPlanoPCASP->setRecurso($oContaSicom->aSaldos[0]->si96_codfontrecursos);
