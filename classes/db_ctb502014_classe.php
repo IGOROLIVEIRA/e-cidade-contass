@@ -1,49 +1,49 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE ctb502014
-class cl_ctb502014 { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $si102_sequencial = 0; 
-   var $si102_tiporegistro = 0; 
-   var $si102_codorgao = null; 
-   var $si102_codctb = 0; 
-   var $si102_dataencerramento_dia = null; 
-   var $si102_dataencerramento_mes = null; 
-   var $si102_dataencerramento_ano = null; 
-   var $si102_dataencerramento = null; 
-   var $si102_mes = 0; 
-   var $si102_instit = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_ctb502014 {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $si102_sequencial = 0;
+   var $si102_tiporegistro = 0;
+   var $si102_codorgao = null;
+   var $si102_codctb = 0;
+   var $si102_dataencerramento_dia = null;
+   var $si102_dataencerramento_mes = null;
+   var $si102_dataencerramento_ano = null;
+   var $si102_dataencerramento = null;
+   var $si102_mes = 0;
+   var $si102_instit = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si102_sequencial = int8 = sequencial 
-                 si102_tiporegistro = int8 = Tipo do registro 
-                 si102_codorgao = varchar(2) = Código do órgão 
-                 si102_codctb = int8 = Código Identificador da Conta Bancária 
-                 si102_dataencerramento = date = Data do encerramento 
-                 si102_mes = int8 = Mês 
-                 si102_instit = int8 = Instituição 
+                 si102_sequencial = int8 = sequencial
+                 si102_tiporegistro = int8 = Tipo do registro
+                 si102_codorgao = varchar(2) = Código do órgão
+                 si102_codctb = int8 = Código Identificador da Conta Bancária
+                 si102_dataencerramento = date = Data do encerramento
+                 si102_mes = int8 = Mês
+                 si102_instit = int8 = Instituição
                  ";
-   //funcao construtor da classe 
-   function cl_ctb502014() { 
+   //funcao construtor da classe
+   function cl_ctb502014() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("ctb502014"); 
+     $this->rotulo = new rotulo("ctb502014");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -73,9 +73,9 @@ class cl_ctb502014 {
      }
    }
    // funcao para inclusao
-   function incluir ($si102_sequencial){ 
+   function incluir ($si102_sequencial){
       $this->atualizacampos();
-     if($this->si102_tiporegistro == null ){ 
+     if($this->si102_tiporegistro == null ){
        $this->erro_sql = " Campo Tipo do registro nao Informado.";
        $this->erro_campo = "si102_tiporegistro";
        $this->erro_banco = "";
@@ -84,13 +84,13 @@ class cl_ctb502014 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si102_codctb == null ){ 
+     if($this->si102_codctb == null ){
        $this->si102_codctb = "0";
      }
-     if($this->si102_dataencerramento == null ){ 
+     if($this->si102_dataencerramento == null ){
        $this->si102_dataencerramento = "null";
      }
-     if($this->si102_mes == null ){ 
+     if($this->si102_mes == null ){
        $this->erro_sql = " Campo Mês nao Informado.";
        $this->erro_campo = "si102_mes";
        $this->erro_banco = "";
@@ -99,7 +99,7 @@ class cl_ctb502014 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si102_instit == null ){ 
+     if($this->si102_instit == null ){
        $this->erro_sql = " Campo Instituição nao Informado.";
        $this->erro_campo = "si102_instit";
        $this->erro_banco = "";
@@ -109,16 +109,16 @@ class cl_ctb502014 {
        return false;
      }
      if($si102_sequencial == "" || $si102_sequencial == null ){
-       $result = db_query("select nextval('ctb502014_si102_sequencial_seq')"); 
+       $result = db_query("select nextval('ctb502014_si102_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: ctb502014_si102_sequencial_seq do campo: si102_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: ctb502014_si102_sequencial_seq do campo: si102_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->si102_sequencial = pg_result($result,0,0); 
+       $this->si102_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from ctb502014_si102_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si102_sequencial)){
@@ -129,10 +129,10 @@ class cl_ctb502014 {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->si102_sequencial = $si102_sequencial; 
+         $this->si102_sequencial = $si102_sequencial;
        }
      }
-     if(($this->si102_sequencial == null) || ($this->si102_sequencial == "") ){ 
+     if(($this->si102_sequencial == null) || ($this->si102_sequencial == "") ){
        $this->erro_sql = " Campo si102_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -141,25 +141,25 @@ class cl_ctb502014 {
        return false;
      }
      $sql = "insert into ctb502014(
-                                       si102_sequencial 
-                                      ,si102_tiporegistro 
-                                      ,si102_codorgao 
-                                      ,si102_codctb 
-                                      ,si102_dataencerramento 
-                                      ,si102_mes 
-                                      ,si102_instit 
+                                       si102_sequencial
+                                      ,si102_tiporegistro
+                                      ,si102_codorgao
+                                      ,si102_codctb
+                                      ,si102_dataencerramento
+                                      ,si102_mes
+                                      ,si102_instit
                        )
                 values (
-                                $this->si102_sequencial 
-                               ,$this->si102_tiporegistro 
-                               ,'$this->si102_codorgao' 
-                               ,$this->si102_codctb 
-                               ,".($this->si102_dataencerramento == "null" || $this->si102_dataencerramento == ""?"null":"'".$this->si102_dataencerramento."'")." 
-                               ,$this->si102_mes 
-                               ,$this->si102_instit 
+                                $this->si102_sequencial
+                               ,$this->si102_tiporegistro
+                               ,'$this->si102_codorgao'
+                               ,$this->si102_codctb
+                               ,".($this->si102_dataencerramento == "null" || $this->si102_dataencerramento == ""?"null":"'".$this->si102_dataencerramento."'")."
+                               ,$this->si102_mes
+                               ,$this->si102_instit
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "ctb502014 ($this->si102_sequencial) nao Incluído. Inclusao Abortada.";
@@ -197,23 +197,23 @@ class cl_ctb502014 {
        $resac = db_query("insert into db_acount values($acount,2010331,2011615,'','".AddSlashes(pg_result($resaco,0,'si102_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($si102_sequencial=null) { 
+   function alterar ($si102_sequencial=null) {
       $this->atualizacampos();
      $sql = " update ctb502014 set ";
      $virgula = "";
-     if(trim($this->si102_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_sequencial"])){ 
-        if(trim($this->si102_sequencial)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si102_sequencial"])){ 
-           $this->si102_sequencial = "0" ; 
-        } 
+     if(trim($this->si102_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_sequencial"])){
+        if(trim($this->si102_sequencial)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si102_sequencial"])){
+           $this->si102_sequencial = "0" ;
+        }
        $sql  .= $virgula." si102_sequencial = $this->si102_sequencial ";
        $virgula = ",";
      }
-     if(trim($this->si102_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_tiporegistro"])){ 
+     if(trim($this->si102_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_tiporegistro"])){
        $sql  .= $virgula." si102_tiporegistro = $this->si102_tiporegistro ";
        $virgula = ",";
-       if(trim($this->si102_tiporegistro) == null ){ 
+       if(trim($this->si102_tiporegistro) == null ){
          $this->erro_sql = " Campo Tipo do registro nao Informado.";
          $this->erro_campo = "si102_tiporegistro";
          $this->erro_banco = "";
@@ -223,30 +223,30 @@ class cl_ctb502014 {
          return false;
        }
      }
-     if(trim($this->si102_codorgao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_codorgao"])){ 
+     if(trim($this->si102_codorgao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_codorgao"])){
        $sql  .= $virgula." si102_codorgao = '$this->si102_codorgao' ";
        $virgula = ",";
      }
-     if(trim($this->si102_codctb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_codctb"])){ 
-        if(trim($this->si102_codctb)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si102_codctb"])){ 
-           $this->si102_codctb = "0" ; 
-        } 
+     if(trim($this->si102_codctb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_codctb"])){
+        if(trim($this->si102_codctb)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si102_codctb"])){
+           $this->si102_codctb = "0" ;
+        }
        $sql  .= $virgula." si102_codctb = $this->si102_codctb ";
        $virgula = ",";
      }
-     if(trim($this->si102_dataencerramento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_dataencerramento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si102_dataencerramento_dia"] !="") ){ 
+     if(trim($this->si102_dataencerramento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_dataencerramento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si102_dataencerramento_dia"] !="") ){
        $sql  .= $virgula." si102_dataencerramento = '$this->si102_dataencerramento' ";
        $virgula = ",";
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["si102_dataencerramento_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["si102_dataencerramento_dia"])){
          $sql  .= $virgula." si102_dataencerramento = null ";
          $virgula = ",";
        }
      }
-     if(trim($this->si102_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_mes"])){ 
+     if(trim($this->si102_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_mes"])){
        $sql  .= $virgula." si102_mes = $this->si102_mes ";
        $virgula = ",";
-       if(trim($this->si102_mes) == null ){ 
+       if(trim($this->si102_mes) == null ){
          $this->erro_sql = " Campo Mês nao Informado.";
          $this->erro_campo = "si102_mes";
          $this->erro_banco = "";
@@ -256,10 +256,10 @@ class cl_ctb502014 {
          return false;
        }
      }
-     if(trim($this->si102_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_instit"])){ 
+     if(trim($this->si102_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si102_instit"])){
        $sql  .= $virgula." si102_instit = $this->si102_instit ";
        $virgula = ",";
-       if(trim($this->si102_instit) == null ){ 
+       if(trim($this->si102_instit) == null ){
          $this->erro_sql = " Campo Instituição nao Informado.";
          $this->erro_campo = "si102_instit";
          $this->erro_banco = "";
@@ -297,7 +297,7 @@ class cl_ctb502014 {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "ctb502014 nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->si102_sequencial;
@@ -325,14 +325,14 @@ class cl_ctb502014 {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($si102_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($si102_sequencial=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($si102_sequencial));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -364,7 +364,7 @@ class cl_ctb502014 {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "ctb502014 nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$si102_sequencial;
@@ -392,11 +392,11 @@ class cl_ctb502014 {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -418,8 +418,8 @@ class cl_ctb502014 {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $si102_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $si102_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -435,8 +435,8 @@ class cl_ctb502014 {
      $sql2 = "";
      if($dbwhere==""){
        if($si102_sequencial!=null ){
-         $sql2 .= " where ctb502014.si102_sequencial = $si102_sequencial "; 
-       } 
+         $sql2 .= " where ctb502014.si102_sequencial = $si102_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -452,8 +452,8 @@ class cl_ctb502014 {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $si102_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $si102_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -469,8 +469,8 @@ class cl_ctb502014 {
      $sql2 = "";
      if($dbwhere==""){
        if($si102_sequencial!=null ){
-         $sql2 .= " where ctb502014.si102_sequencial = $si102_sequencial "; 
-       } 
+         $sql2 .= " where ctb502014.si102_sequencial = $si102_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
