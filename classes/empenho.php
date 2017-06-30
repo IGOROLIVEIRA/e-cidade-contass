@@ -1012,19 +1012,44 @@ class empenho {
     if (USE_PCASP && ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
 
       $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
-      $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null,
-        "e100_acordo",
-        null,
-        "e100_numemp = {$oEmpenho->e60_numemp}" );
+      $sSqlContrato = $oDaoEmpenhoContrato->sql_query_file(null,
+          "e100_acordo",
+          null,
+          "e100_numemp = {$oEmpenho->e60_numemp}");
 
-      $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+      $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+
+      //  Query para verificar se existe lançamento de Registro do Contrato.
+      //  Caso não exista, não deverá processar qualquer lançamento de execução dos contratos (docs. 901,904,903).
+
+      $sql = "SELECT DISTINCT ac16_sequencial FROM acordo
+              JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+              JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+              JOIN acordoempempitem ON ac44_acordoitem = ac20_sequencial
+              JOIN empempitem ON e62_sequencial = ac44_empempitem
+              JOIN conlancamemp ON c75_numemp = e62_numemp
+              RIGHT JOIN conlancamdoc ON c71_codlan = c75_codlan
+              WHERE c71_coddoc = 900
+              UNION
+              SELECT DISTINCT ac16_sequencial FROM acordo
+              JOIN acordoempautoriza on ac45_acordo = ac16_sequencial
+              JOIN empautoriza on ac45_empautoriza = e54_autori
+              JOIN empempaut on e61_autori = e54_autori
+              JOIN empempenho on e61_numemp = e60_numemp
+              JOIN conlancamemp ON c75_numemp = e60_numemp
+              JOIN conlancamdoc ON c71_codlan = c75_codlan
+              WHERE c71_coddoc = 900 ";
+
+      $result = db_query($sql);
 
       if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
 
+        if ((pg_num_rows($result) != 0) or (pg_num_rows($result) != "")) {
+
         try {
 
-          $oAcordo                   = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
-          $oEventoContabilAcordo     = new EventoContabil(904, $iAnoSessao);
+          $oAcordo = new Acordo(db_utils::fieldsMemory($rsContrato, 0)->e100_acordo);
+          $oEventoContabilAcordo = new EventoContabil(904, $iAnoSessao);
           $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
           $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
           $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
@@ -1041,10 +1066,11 @@ class empenho {
         } catch (Exception $e) {
 
           $this->erro_status = '0';
-          $this->erro_msg    = $e->getMessage();
+          $this->erro_msg = $e->getMessage();
           return false;
         }
       }
+     }
     }
     return true;
   }

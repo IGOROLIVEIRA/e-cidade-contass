@@ -67,17 +67,49 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
    * @param integer $iCodigoLancamento - Código do Lancamento (conlancam)
    * @param date    $dtLancamento      - data do lancamento
    */
+
   public function executaLancamentoAuxiliar($iCodigoLancamento, $dtLancamento)  {
 
-    $this->setCodigoLancamento($iCodigoLancamento);
-    $this->setDataLancamento($dtLancamento);
-    $this->setNumeroEmpenho($this->getEmpenho()->getNumero());
-    $this->salvarVinculoAcordo();
-    $this->salvarVinculoEmpenho();
-    if ($this->getCodigoNotaLiquidacao() != "") {
-      $this->salvarVinculoNotaDeLiquidacao();
+    //  Query para verificar se existe lançamento de Registro do Contrato.
+    //  Caso não exista, não deverá processar qualquer lançamento de execução dos contratos (docs. 901,904,903).
+
+    $sql = "SELECT DISTINCT ac16_sequencial FROM acordo
+            JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+            JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+            JOIN acordoempempitem ON ac44_acordoitem = ac20_sequencial
+            JOIN empempitem ON e62_sequencial = ac44_empempitem
+            JOIN conlancamemp ON c75_numemp = e62_numemp
+            RIGHT JOIN conlancamdoc ON c71_codlan = c75_codlan
+            WHERE c71_coddoc = 900
+            UNION
+            SELECT DISTINCT ac16_sequencial FROM acordo
+            JOIN acordoempautoriza on ac45_acordo = ac16_sequencial
+            JOIN empautoriza on ac45_empautoriza = e54_autori
+            JOIN empempaut on e61_autori = e54_autori
+            JOIN empempenho on e61_numemp = e60_numemp
+            JOIN conlancamemp ON c75_numemp = e60_numemp
+            JOIN conlancamdoc ON c71_codlan = c75_codlan
+            WHERE c71_coddoc = 900 ";
+
+    $result = db_query($sql);
+
+    if ((pg_num_rows($result) != 0) or (pg_num_rows($result) != "")) {
+
+
+      $this->setCodigoLancamento($iCodigoLancamento);
+      $this->setDataLancamento($dtLancamento);
+      $this->setNumeroEmpenho($this->getEmpenho()->getNumero());
+      $this->salvarVinculoAcordo();
+      $this->salvarVinculoEmpenho();
+      if ($this->getCodigoNotaLiquidacao() != "") {
+        $this->salvarVinculoNotaDeLiquidacao();
+      }
+      return true;
     }
-    return true;
+
+    else {
+      $sMsgErro = "Não foi possível salvar o vínculo do acordo {$this->getAcordo()->getCodigoAcordo()} com o contrato.";
+    }
   }
 
   /**
