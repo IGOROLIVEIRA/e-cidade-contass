@@ -92,6 +92,7 @@ if ( isset($oPost->salvar) ) {
 
 	if ( empty($q136_exercicio) ) {
 		$q136_exercicio = db_getsession('DB_anousu');
+		$q136_issgruposervico = $oGet->iCodigoGrupoServico;
 	}
 }
 ?>

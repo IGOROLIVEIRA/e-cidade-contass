@@ -34,6 +34,7 @@ $aLocalPagamento = array(1 => 'Local de prestação', 2 => 'Sede Prestador', 3 => 
 $aTipoTributacao = array(1 => 'Fixo', 2 => 'Variável', 3 => 'Não Incide');
 
 $sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
+var_dump($q136_issgruposervico);
 ?>
 <form name="form1" method="post" action="">
 
@@ -151,11 +152,11 @@ function js_tipoTributacao(oElemento) {
 }
 
 function js_pesquisa() {
-	js_OpenJanelaIframe('top.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_preenchePesquisa|q126_sequencial', 'Pesquisa', true);
+	js_OpenJanelaIframe('top.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_preenchePesquisa|q126_sequencial|db121_descricao|db121_estrutural', 'Pesquisa', true);
 }
 
-function js_preenchePesquisa(iCodigoGrupoServico, sDescricao) {
-
+function js_preenchePesquisa(iCodigoGrupoServico, sDescricao, sEstrutural) {
+  $('sDescricaoGrupoServico').value = sDescricao;
   js_divCarregando('Buscando dados do grupo de serviço', 'msgBox');
   db_iframe_issgruposervico.hide();
   location.href = 'iss1_issconfiguracaogruposervico002.php?iCodigoGrupoServico=' + iCodigoGrupoServico;
