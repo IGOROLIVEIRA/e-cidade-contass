@@ -2500,8 +2500,8 @@ class Acordo
                         $aPeriodosItem[0]->dtDataInicial = $sNovaDtExecucaoInicio->getDate();
                         $aPeriodosItem[0]->dtDataFinal = $sNovaDtExecucaoFim->getDate();
                         $aTiposAlteracao[] = 8;
-                    }  
-                } 
+                    }
+                }
                 if (!empty($aPeriodosItem)) {
                     $oNovoItem->setPeriodos($aPeriodosItem);
                 }
@@ -2540,7 +2540,7 @@ class Acordo
                 $oNovoItem->adicionarDotacoes($oDotacao);
             }
             /*
-             * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario 
+             * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario
              */
             $oNovoItem->save(false);
         }
@@ -2788,6 +2788,7 @@ class Acordo
      */
     public function remover()
     {
+        $oDaoAcordo = new cl_acordo();
 
         if (!db_utils::inTransaction()) {
             throw new DBException(_M(self::MENSAGENS . "sem_transacao_ativa"));
@@ -2802,6 +2803,10 @@ class Acordo
          */
         if ($this->getSituacao() != 1) {
             throw new BusinessException(_M(self::MENSAGENS . "contrato_homologado"));
+        }
+
+        if (!$oDaoAcordo->apagaDependencias($this->getCodigoAcordo())) {
+          throw new BusinessException("Não foi possível apagar as dependências do acordo {$this->getCodigo()}.");
         }
 
         if ($this->possuiLancamentoContabil()) {
@@ -2903,10 +2908,10 @@ class Acordo
         if ($oDaoEmpenhoContrato->erro_status == 0) {
             throw new BusinessException($oDaoEmpenhoContrato->erro_msg);
         }
+
         /**
          * Remove o acordo
          */
-        $oDaoAcordo = new cl_acordo();
         $oDaoAcordo->excluir($this->getCodigoAcordo());
 
         if ($oDaoAcordo->erro_status == 0) {
@@ -3383,7 +3388,7 @@ class Acordo
                 $oNovoItem->adicionarDotacoes($oDotacao);
             }
             /*
-             * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario 
+             * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario
              */
             $oNovoItem->save(false);
         }

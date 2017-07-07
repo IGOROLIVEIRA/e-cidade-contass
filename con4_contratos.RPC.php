@@ -739,7 +739,7 @@ switch($oParam->exec) {
       $iDepartamentoResponsavel = $oContrato->getDepartamentoResponsavel();
       $oDepartamento            = new DBDepartamento($iDepartamentoResponsavel);
       $_SESSION["oContrato"]    = $oContrato;
-      
+
       $oDadosContrato = new stdClass();
       $oDadosContrato->iSequencial                  = $oContrato->getCodigoAcordo();
       $oDadosContrato->dtInclusao                   = $oContrato->getDataInclusao();
@@ -1082,9 +1082,9 @@ switch($oParam->exec) {
 
       $oDataFinalAcordo         = new DBDate($oContrato->getDataFinal());
       $oRetorno->dtFinalAcordo  = $oDataFinalAcordo->convertTo(DBDate::DATA_PTBR);
-      
+
       /**
-       * Quando o usuario fecha o sistema sem incluir os itens, eles deixavam de aparecer, pois 
+       * Quando o usuario fecha o sistema sem incluir os itens, eles deixavam de aparecer, pois
        * dadosSelecaoAcordo deixava de existir na sessao, entao foi adicionado essa condicao para resolver este problema
        */
       if(!isset($_SESSION["dadosSelecaoAcordo"]) || count($_SESSION["dadosSelecaoAcordo"]) == 0) {

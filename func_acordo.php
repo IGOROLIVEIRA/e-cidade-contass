@@ -128,6 +128,27 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             $sWhere .= " and ac16_acordosituacao in ({$iTipoFiltro})";
           }
 
+          if (isset($lParaExcluir) && $lParaExcluir == true) {
+            $sWhere .= "
+              AND NOT EXISTS
+                (SELECT
+                    acordo_sub.ac16_sequencial,
+                    empautoriza.e54_autori,
+                    empautoriza.e54_anulad
+                  FROM acordo acordo_sub
+                  INNER JOIN acordoposicao                  ON acordoposicao.ac26_acordo = acordo_sub.ac16_sequencial
+                  INNER JOIN acordoitem                     ON acordoitem.ac20_acordoposicao = acordoposicao.ac26_sequencial
+                  INNER JOIN acordoitemexecutado            ON acordoitemexecutado.ac29_acordoitem = acordoitem.ac20_sequencial
+                  INNER JOIN acordoitemexecutadoempautitem  ON acordoitemexecutadoempautitem.ac19_acordoitemexecutado = acordoitemexecutado.ac29_sequencial
+                  INNER JOIN empautitem                     ON empautitem.e55_autori = acordoitemexecutadoempautitem.ac19_autori AND empautitem.e55_sequen = acordoitemexecutadoempautitem.ac19_sequen
+                  INNER JOIN empautoriza                    ON empautoriza.e54_autori = empautitem.e55_autori
+                  WHERE
+                    ac16_sequencial = acordo.ac16_sequencial
+                    AND e54_anulad IS NULL
+                  )
+            ";
+          }
+
           if ( !empty($lLancamento) ) {
             $sWhere .= " and exists (select 1 from conlancamacordo where c87_acordo = ac16_sequencial limit 1) ";
           }

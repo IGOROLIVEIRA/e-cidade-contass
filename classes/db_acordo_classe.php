@@ -1866,5 +1866,85 @@ class cl_acordo {
 
     return $sSql;
   }
+
+
+
+  /**
+   * Apaga dependências para apagar o acordo.
+   * Tabelas relacionadas:
+   * - orcreservaaut
+   * - empautorizaprocesso
+   * - empautidot
+   * - empautitempcprocitem
+   * - acordoitemexecutadoempautitem
+   * - empautitem
+   * - empempaut
+   * - acordoempautoriza
+   * - empautoriza
+   * - acordoitemexecutado
+   * - acordoitemexecutadodotacao
+   *
+   * @param int $iAcordo
+   */
+  public function apagaDependencias($iAcordo = 0)
+  {
+    if (empty($iAcordo)) {
+      throw new BusinessException("Acordo inexistente");
+    }
+
+    $sSql = "
+      CREATE TEMP TABLE contratos_excluir ON COMMIT DROP AS
+      SELECT acordoempautoriza.ac45_acordo AS contrato,
+      acordoempautoriza.ac45_empautoriza AS autorizacao,
+      acordoitemexecutado.ac29_acordoitem AS itens_contrato
+      FROM acordo
+      JOIN acordoempautoriza ON ac45_acordo = ac16_sequencial
+      JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+      JOIN acordoitem ON ac26_sequencial = ac20_acordoposicao
+      JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
+      WHERE acordoempautoriza.ac45_acordo IN ({$iAcordo});
+
+      DELETE FROM orcreservaaut
+      WHERE o83_autori IN
+      (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM empautorizaprocesso
+      WHERE e150_empautoriza IN (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM empautidot
+      WHERE e56_autori IN (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM empautitempcprocitem
+      WHERE e73_autori IN (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM acordoitemexecutadoempautitem
+      WHERE ac19_autori IN (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM empautitem
+      WHERE e55_autori IN (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM empempaut
+      WHERE e61_autori IN (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM acordoempautoriza
+      WHERE ac45_empautoriza IN (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM empautoriza
+      WHERE e54_autori IN (SELECT autorizacao FROM contratos_excluir);
+
+      DELETE FROM acordoitemexecutado
+      WHERE ac29_acordoitem IN (SELECT itens_contrato FROM contratos_excluir);
+
+      DELETE FROM acordoitemexecutadodotacao
+      WHERE ac32_acordoitem IN (SELECT itens_contrato FROM contratos_excluir);
+    ";
+
+    $rsExec = db_query($sSql);
+
+    return $rsExec == false ? false : true;
+
+  }
+
+
 }
 ?>

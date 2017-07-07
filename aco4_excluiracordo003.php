@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -409,7 +409,7 @@ $('btnExcluir').observe("click", function() {
  */
 function pesquisaAcordos() {
 
-  var sUrl = 'func_acordo.php?funcao_js=parent.buscaDadosAcordo|ac16_sequencial&iTipoFiltro=1,4&lAtivo=1&lComExecucao=false';
+  var sUrl = 'func_acordo.php?funcao_js=parent.buscaDadosAcordo|ac16_sequencial&lParaExcluir=true&iTipoFiltro=1&lAtivo=1&lComExecucao=false';
   js_OpenJanelaIframe(
                        '',
                        'db_iframe_acordo',
@@ -429,7 +429,7 @@ function buscaDadosAcordo( iAcordo ) {
 
   db_iframe_acordo.hide();
   limpaCampos();
-  
+
   var oParametro           = new Object();
       oParametro.exec      = 'getDadosAcordo';
       oParametro.iContrato = iAcordo;
@@ -495,7 +495,7 @@ function retornoBuscaDadosAcordo( oResponse ) {
   if ( oRetorno.contrato.lEmergencial ) {
     $("ac26_emergencial_select_descr").value = 'Sim';
   }
-  
+
   $("ac16_dataassinatura").value                = oRetorno.contrato.dtAssinatura.urlDecode();
   $("ac16_datapublicacao").value                = oRetorno.contrato.dtPublicacao.urlDecode();
   $("ac16_periodocomercial_select_descr").value = 'Não';
@@ -503,7 +503,7 @@ function retornoBuscaDadosAcordo( oResponse ) {
   if ( oRetorno.contrato.lPeriodoComercial ) {
     $("ac16_periodocomercial_select_descr").value = 'Sim';
   }
-  
+
   $("ac50_sequencial").value           = oRetorno.contrato.iCategoriaAcordo;
   $("ac16_datainicio").value           = oRetorno.contrato.dtInicio.urlDecode();
   $("ac16_datafim").value              = oRetorno.contrato.dtTermino.urlDecode();
@@ -518,8 +518,8 @@ function retornoBuscaDadosAcordo( oResponse ) {
                             pesquisaCategoria( oRetorno.contrato.iCategoriaAcordo );
                             $('diasvigencia').value = js_somarDiasVigencia( $("ac16_datainicio").value, $("ac16_datafim").value );
                          }, 300 );
-  
-  
+
+
   $('btnExcluir').disabled = false;
 }
 
@@ -531,7 +531,7 @@ function removerAcordo() {
   var oVariaveisACordo            = new Object();
       oVariaveisACordo.iAcordo    = $("ac16_sequencial").value;
       oVariaveisACordo.sDescricao = $("ac02_descricao").value;
-  
+
   if ( confirm( _M( sCaminhoMensagens+'confirma_exclusao', oVariaveisACordo ) ) ) {
 
     var oParametro         = new Object();
@@ -559,7 +559,7 @@ function retornoRemoverAcordo( oResponse ) {
   alert( oRetorno.message.urlDecode() );
 
   if ( oRetorno.status == 1 ) {
-    
+
     limpaCampos();
     $('btnExcluir').disabled = true;
   }
