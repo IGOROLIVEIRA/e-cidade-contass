@@ -28,17 +28,29 @@ do
 
    cat $CAMINHO/scripts_nao_executados.sh | while read SCRIPT
    do
-cat <<EOF>> $CAMINHO/$SCRIPT
+	if [ -f "$CAMINHO/$SCRIPT" ]
+	then
+cat <<EOF> "$CAMINHO/${SCRIPT}_exec"
 begin;
 INSERT INTO updatedb (nomescript,dataexec) VALUES ('$SCRIPT','`date +%Y-%m-%d`') ;
 commit;
 EOF
+	else
+cat <<EOF> "$CAMINHO/${SCRIPT}_exec"
+begin;
+DELETE FROM updatedb WHERE nomescript = '$SCRIPT' ;
+commit;
+EOF
+	fi
+
 echo "$CAMINHO/$SCRIPT"
+
 	psql -U dbportal -p $PORTA $BANCO -f "$CAMINHO/$SCRIPT" &> $CAMINHO/log/`date +%Y-%m-%d_%H:%M:%S`_`echo $BANCO`_`echo $SCRIPT | cut -d"/" -f6`.log
+	psql -U dbportal -p $PORTA $BANCO -f "$CAMINHO/${SCRIPT}_exec" &> $CAMINHO/log/`date +%Y-%m-%d_%H:%M:%S`_`echo $BANCO`_`echo $SCRIPT | cut -d"/" -f6`.log
    done
 
 done
 
 #rm $EXECUTADOS
-rm $CAMINHO/*.sql $CAMINHO/*.sh $CAMINHO/conn $CAMINHO/*.csv
+rm $CAMINHO/*.sql $CAMINHO/*.sh $CAMINHO/conn $CAMINHO/*.csv $CAMINHO/*_exec
 
