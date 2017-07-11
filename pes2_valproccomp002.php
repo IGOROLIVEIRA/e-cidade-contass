@@ -76,6 +76,7 @@ $iAlt      = 5;
 $iPreenche = 1;
 
 imprimeCab($oPdf,$iAlt,$iFonte,true);
+//ini_set('display_errors', 'On');
 
 for ( $iInd=0; $iInd < $iLinhasArquivo; $iInd++ ) {
   
@@ -99,8 +100,21 @@ for ( $iInd=0; $iInd < $iLinhasArquivo; $iInd++ ) {
 	$oPdf->Cell(30 ,$iAlt,db_formatar($oDadosGerados->data_liquidacao,'d')           ,0,0,'C',$iPreenche);
 	$oPdf->Cell(30 ,$iAlt,$oDadosGerados->enviado_sefip                              ,0,1,'C',$iPreenche);
 	
-	
+	$iTotalValorServico +=  $oDadosGerados->valor_servico;
+	$iTotalValorInss    +=  $oDadosGerados->valor_inss;
 }
+
+$oPdf->Cell(30 ,$iAlt, '' ,0,1,'C');
+
+$oPdf->Cell(20 ,$iAlt, 'Total' ,1,0,'C',$iPreenche);
+$oPdf->Cell(20 ,$iAlt, '' ,1,0,'C',$iPreenche);
+$oPdf->Cell(70 ,$iAlt, '' ,1,0,'L',$iPreenche);
+$oPdf->Cell(25 ,$iAlt,db_formatar($iTotalValorServico,'f')             ,1,0,'R',$iPreenche);
+$oPdf->Cell(30 ,$iAlt,db_formatar($iTotalValorInss,'f')                ,1,0,'R',$iPreenche);
+$oPdf->Cell(30 ,$iAlt, '' ,1,0,'C',$iPreenche);
+$oPdf->Cell(25 ,$iAlt, '' ,1,0,'C',$iPreenche);
+$oPdf->Cell(30 ,$iAlt, '' ,1,0,'C',$iPreenche);
+$oPdf->Cell(30 ,$iAlt, '' ,1,1,'C',$iPreenche);
 
 $oPdf->Output();
 
