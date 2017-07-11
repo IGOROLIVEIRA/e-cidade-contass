@@ -16,27 +16,26 @@ cat $CAMINHO/scripts_disponiveis.sh | sort | uniq > $CAMINHO/scripts_disponiveis
 cat $CAMINHO/conn | while read BANCO PORTA CLIENTE
 do
 
-   if [ $HOSTNAME == $CLIENTE ]; then
-        psql -U dbportal -p $PORTA $BANCO -f $CAMINHO/update_table.sh
+   if [ $HOSTNAME != $CLIENTE ]; then
+	continue
    fi
 
+   psql -U dbportal -p $PORTA $BANCO -f $CAMINHO/update_table.sh
+   
    cat $EXECUTADOS | sort | uniq > $CAMINHO/scripts_executados_ordenado.sh
 
    diff --side-by-side --suppress-common-lines $CAMINHO/scripts_disponiveis_ordenado.sh  $CAMINHO/scripts_executados_ordenado.sh | cut -d" " -f1 | grep '[a-zA-Z]' > $CAMINHO/scripts_nao_executados.sh
 
-   if [ $HOSTNAME == $CLIENTE ]; then
-
-	cat $CAMINHO/scripts_nao_executados.sh | while read SCRIPT
-	do
+   cat $CAMINHO/scripts_nao_executados.sh | while read SCRIPT
+   do
 cat <<EOF>> $CAMINHO/$SCRIPT
 begin;
 INSERT INTO updatedb (nomescript,dataexec) VALUES ('$SCRIPT','`date +%Y-%m-%d`') ;
 commit;
 EOF
 echo "$CAMINHO/$SCRIPT"
-        psql -U dbportal -p $PORTA $BANCO -f "$CAMINHO/$SCRIPT" &> $CAMINHO/log/`date +%Y-%m-%d_%H:%M:%S`_`echo $BANCO`_`echo $SCRIPT | cut -d"/" -f6`.log
-   	done
-   fi
+	psql -U dbportal -p $PORTA $BANCO -f "$CAMINHO/$SCRIPT" &> $CAMINHO/log/`date +%Y-%m-%d_%H:%M:%S`_`echo $BANCO`_`echo $SCRIPT | cut -d"/" -f6`.log
+   done
 
 done
 
