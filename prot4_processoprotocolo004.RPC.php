@@ -73,10 +73,14 @@ try {
         case 'getMovimentacoesProcesso' :
 
             require_once 'model/protocolo/RefactorConsultaProcessoProtocolo.model.php';
+            require_once 'classes/db_protprocesso_classe.php';
 
             $oRefactorProcessoProtocolo = new RefactorConsultaProcessoProtocolo($oParametro->iCodigoProcesso);
             $aMovimentacoes = $oRefactorProcessoProtocolo->getMovimentacoes();
             $oRetorno->aMovimentacoes = array();
+
+            $oProcessoProtocolo = new cl_protprocesso();
+            $oProcessoPrincipal = $oProcessoProtocolo->getPrincipal($oParametro->iCodigoProcesso);
 
             /**
              * Passa urlEncode() em todas as propriedades dos movimentos
@@ -91,6 +95,27 @@ try {
 
                     $oRetorno->aMovimentacoes[] = $oDadosMovimentacao;
                 }
+            }
+
+            if ($oProcessoPrincipal) {
+
+              $oRetorno->lTemProcessoPrincipal = true;
+
+              $oRefactorProcessoPrincipal = new RefactorConsultaProcessoProtocolo($oProcessoPrincipal->p30_procprincipal);
+              $aMovimentacoesPrincipal    = $oRefactorProcessoPrincipal->getMovimentacoes();
+
+              if (!empty($aMovimentacoesPrincipal)) {
+
+                $oUltimaMovimentacao = end($aMovimentacoesPrincipal);
+
+                foreach ($oUltimaMovimentacao as $sPropridade => $sValor) {
+                  $oUltimaMovimentacao->$sPropridade = urlEncode($sValor);
+                }
+
+                $oRetorno->aMovimentacoes[] = $oUltimaMovimentacao;
+
+              }
+
             }
 
             break;

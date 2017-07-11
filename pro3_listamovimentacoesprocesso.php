@@ -45,6 +45,11 @@ $oGet = db_utils::postMemory($_GET);
      db_app::load('scripts.js, prototype.js, strings.js, datagrid.widget.js, DBHint.widget.js');
      db_app::load('estilos.css, grid.style.css');
     ?>
+    <style type="text/css">
+      .ultimaLinhaApensado {
+        background-color: #bfbfbf;
+      }
+    </style>
   </head>
   <body style='background-color: #cccccc'>
     <div>
@@ -122,7 +127,15 @@ function js_buscarMovimentacoes() {
       oDataGridMovimentacoes.aRows[iSeq].aCells[4].sEvents += " onmouseout='js_displayAjuda(\"\", false)'";
     });
 
-    oDataGridMovimentacoes.renderRows(); 
+    oDataGridMovimentacoes.renderRows();
+
+    if (oRetorno.lTemProcessoPrincipal) {
+
+      var dGrid = document.querySelectorAll('#gridMovimentacoesbody .normal');
+      dGrid[dGrid.length - 1].classList.add('ultimaLinhaApensado');
+
+    }
+
   }});
 
 }
