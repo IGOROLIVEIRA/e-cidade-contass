@@ -627,8 +627,9 @@ class ordemCompra {
 
       /**
        * Acerta os saldos dos itens
+       * Comentado parte do codigo para corrigir roblema OC 4003
        */
-      foreach ($aItensVerificar as $oItemVerificar) {
+      /*foreach ($aItensVerificar as $oItemVerificar) {
 
         if ($oItemVerificar->nSaldoItemEstoque > $oItemVerificar->nSaldoAtendido) {
 
@@ -685,7 +686,7 @@ class ordemCompra {
           }
 
         }
-      }
+      }*/
 
       $dtAtual          = date("Y-m-d", db_getsession( 'DB_datausu' ));
       $oDataImplantacao = new DBDate($dtAtual);
