@@ -509,8 +509,9 @@ class cl_acordo {
                                ,".($this->ac16_tipoorigem == "null" || $this->ac16_tipoorigem == ""?'null':$this->ac16_tipoorigem)."
                                ,'$this->ac16_formafornecimento'
                                ,'$this->ac16_formapagamento'
-                               ,$this->ac16_licitacao
+                               ,".($this->ac16_licitacao == "null" || $this->ac16_licitacao == ""?'null':$this->ac16_licitacao)."
                       )";
+
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
