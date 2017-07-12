@@ -240,6 +240,7 @@ $sWhereContratos = " and 1 = 1 ";
        // db_lovrot($sql.' desc ',15,"()","",$funcao_js);
 
         $aRepassa = array();
+
         db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
 
 

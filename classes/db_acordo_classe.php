@@ -85,6 +85,7 @@ class cl_acordo {
    var $ac16_tipoorigem = 0;
    var $ac16_formafornecimento = null;
    var $ac16_formapagamento = null;
+    var $ac16_licitacao = null;
 
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -197,6 +198,7 @@ class cl_acordo {
        $this->ac16_tipoorigem = ($this->ac16_tipoorigem == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_tipoorigem"]:$this->ac16_tipoorigem);
        $this->ac16_formafornecimento = ($this->ac16_formafornecimento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_formafornecimento"]:$this->ac16_formafornecimento);
        $this->ac16_formapagamento = ($this->ac16_formapagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_formapagamento"]:$this->ac16_formapagamento);
+       $this->ac16_licitacao = ($this->ac16_licitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"]:$this->ac16_licitacao);
      }else{
        $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
      }
@@ -474,6 +476,7 @@ class cl_acordo {
                                       ,ac16_tipoorigem
                                       ,ac16_formafornecimento
                                       ,ac16_formapagamento
+                                      ,ac16_licitacao
                        )
                 values (
                                 $this->ac16_sequencial
@@ -506,6 +509,7 @@ class cl_acordo {
                                ,".($this->ac16_tipoorigem == "null" || $this->ac16_tipoorigem == ""?'null':$this->ac16_tipoorigem)."
                                ,'$this->ac16_formafornecimento'
                                ,'$this->ac16_formapagamento'
+                               ,$this->ac16_licitacao
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -931,6 +935,10 @@ class cl_acordo {
          return false;
        }
      }
+
+       if(trim($this->ac16_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])){
+       $sql  .= $virgula." ac16_licitacao = $this->ac16_licitacao ";
+        }
      $sql .= " where ";
      if($ac16_sequencial!=null){
        $sql .= " ac16_sequencial = $this->ac16_sequencial";

@@ -299,6 +299,7 @@ contrato = function () {
 	  var iQtdPeriodoVigencia       = $F('ac16_qtdperiodo');
 	  //var iClassificacao            = $F('ac16_acordoclassificacao');
 	  var nValorContrato            = $F('ac16_valor');
+	  var iLicitacao                = $F('ac16_licitacao');
 
 	   if (iOrigem == "0") {
 
@@ -403,7 +404,7 @@ contrato = function () {
 
     if (iOrigem == 6 && empty(nValorContrato)) {
 
-      alert('Informe o valor do contrato.');
+       alert('Informe o valor do contrato.');
       $('ac16_valor').focus();
       return false;
     }
@@ -439,6 +440,7 @@ contrato = function () {
     oParam.contrato.iQtdPeriodoVigencia       = iQtdPeriodoVigencia;
     //oParam.contrato.iClassificacao            = iClassificacao;
     oParam.contrato.nValorContrato            = nValorContrato;
+    oParam.contrato.iLicitacao                = iLicitacao;
 	  js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
 	  var oAjax   = new Ajax.Request(
 	                         sURL,

@@ -43,8 +43,9 @@ $oGet                = db_utils::postMemory($_GET);
 
 $campos = "cgm.z01_numcgm,cgm.z01_nome,l206_datahab,l206_numcertidaoinss,l206_numcertidaofgts,l206_numcertidaocndt";
 $sql = $clhabilitacao->sql_query(null,$campos,"","l206_licitacao = {$oGet->l20_codigo}");
-//$result = db_query($sql);
-//db_fieldsmemory($result, 0);
+
+$sFuncaoJS = isset($oGet->funcao_js) ? $oGet->funcao_js : "";
+
 ?>
 <html>
   <head>
@@ -70,7 +71,7 @@ $sql = $clhabilitacao->sql_query(null,$campos,"","l206_licitacao = {$oGet->l20_c
             <legend><b>Fornecedores Habilitados</b></legend>
 
           <?
-           db_lovrot($sql, 15, "()", "");
+           db_lovrot($sql, 15, "()", "", $sFuncaoJS);
           ?>
           </fieldset>
         </div>

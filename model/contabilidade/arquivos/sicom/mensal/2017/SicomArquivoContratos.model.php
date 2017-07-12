@@ -355,33 +355,70 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         /*
          * selecionar informacoes registro 10
          */
+//        ini_set("display_errors","on");
 
-        $sSql = "select distinct acordo.*,liclicita.l20_codigo,liclicita.l20_edital,liclicita.l20_anousu,l20_codepartamento,l20_naturezaobjeto,
-                    case when pc50_pctipocompratribunal = 100 then 2 when pc50_pctipocompratribunal = 101 then 1 when pc50_pctipocompratribunal = 102 then 3 when pc50_pctipocompratribunal = 103 then 4 else 0 end as tipoprocesso,
-                    ac16_tipoorigem as contdeclicitacao,ac16_origem,
-                    (CASE
-                    WHEN o41_subunidade != 0
-                    OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
-                    OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                    OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
-                    ELSE lpad((CASE WHEN o40_codtri = '0'
-                    OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                    OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-                    END) as codunidadesubresp
-                    from acordoitem
-                    inner join acordoposicao on ac20_acordoposicao = ac26_sequencial
-                    inner join acordo on ac16_sequencial = ac26_acordo
-                    left join acordoliclicitem on ac24_acordoitem = ac20_sequencial
-                    left join liclicitem on l21_codigo = ac24_liclicitem
-                    left join liclicita on l21_codliclicita = l20_codigo
-                    left join db_departorg on l20_codepartamento = db01_coddepto and db01_anousu = " . db_getsession("DB_anousu") . "
-                    left join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade and db01_anousu = o41_anousu and o41_anousu = " . db_getsession("DB_anousu") . "
-                    left join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                    left join cflicita on l20_codtipocom = l03_codigo
-                    LEFT join pctipocompra ON pc50_codcom = l03_codcom
-                    where ac16_dataassinatura <= '{$this->sDataFinal}'
-                    and ac16_dataassinatura >= '{$this->sDataInicial}'
-                    and ac16_instit = " . db_getsession("DB_instit");
+        $sSql = "SELECT DISTINCT acordo.*,
+                    liclicita.l20_codigo,
+                    liclicita.l20_edital,
+                    liclicita.l20_anousu,
+                    liclicita.l20_codepartamento,
+                    liclicita.l20_naturezaobjeto,
+                CASE
+                    WHEN pc50_pctipocompratribunal = 100 THEN 2
+                    WHEN pc50_pctipocompratribunal = 101 THEN 1
+                    WHEN pc50_pctipocompratribunal = 102 THEN 3
+                    WHEN pc50_pctipocompratribunal = 103 THEN 4
+                    ELSE 0
+                END AS tipoprocesso,
+                    ac16_tipoorigem AS contdeclicitacao,
+                    ac16_origem,
+                (CASE
+                     WHEN o41_subunidade != 0
+                          OR NOT NULL THEN lpad((CASE
+                                                     WHEN o40_codtri = '0'
+                                                          OR NULL THEN o40_orgao::varchar
+                                                     ELSE o40_codtri
+                                                 END),2,0)||lpad((CASE
+                                                                      WHEN o41_codtri = '0'
+                                                                           OR NULL THEN o41_unidade::varchar
+                                                                      ELSE o41_codtri
+                                                                  END),3,0)||lpad(o41_subunidade::integer,3,0)
+                     ELSE lpad((CASE
+                                    WHEN o40_codtri = '0'
+                                         OR NULL THEN o40_orgao::varchar
+                                    ELSE o40_codtri
+                                END),2,0)||lpad((CASE
+                                                     WHEN o41_codtri = '0'
+                                                          OR NULL THEN o41_unidade::varchar
+                                                     ELSE o41_codtri
+                                                 END),3,0)
+                 END) AS codunidadesubresp,
+                      l2.l20_edital AS editalmanual,
+                      l2.l20_codigo AS codlicmanual,
+                      l2.l20_anousu AS anousumanual,
+                      l2.l20_codepartamento AS departmanual,
+                      l2.l20_naturezaobjeto AS naturezamanual,
+                      ac16_veiculodivulgacao
+                FROM acordoitem
+                INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+                INNER JOIN acordo ON ac16_sequencial = ac26_acordo
+                LEFT JOIN acordoliclicitem ON ac24_acordoitem = ac20_sequencial
+                LEFT JOIN liclicitem ON l21_codigo = ac24_liclicitem
+                LEFT JOIN liclicita ON l21_codliclicita = l20_codigo
+                LEFT JOIN db_departorg ON l20_codepartamento = db01_coddepto
+                AND db01_anousu = " . db_getsession("DB_anousu") . "
+                LEFT JOIN orcunidade ON db01_orgao = o41_orgao
+                AND db01_unidade = o41_unidade
+                AND db01_anousu = o41_anousu
+                AND o41_anousu = " . db_getsession("DB_anousu") . "
+                LEFT JOIN orcorgao ON o40_orgao = o41_orgao
+                AND o40_anousu = o41_anousu
+                LEFT JOIN cflicita ON l20_codtipocom = l03_codigo
+                LEFT JOIN pctipocompra ON pc50_codcom = l03_codcom
+                LEFT JOIN liclicita l2 ON l2.l20_codigo = acordo.ac16_licitacao
+                WHERE ac16_dataassinatura <= '{$this->sDataFinal}'
+                AND ac16_dataassinatura >= '{$this->sDataInicial}'
+                AND ac16_instit = " . db_getsession("DB_instit");
 
         $rsResult10 = db_query($sSql);
         db_inicio_transacao();
@@ -416,13 +453,24 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
              * Verificar se o contrato vem de licitacao mas foi vinculado apenas ao empenho 
              * por ser Origem empenho
              */
-            if ($oDados10->ac16_origem == 6 && in_array($oDados10->contdeclicitacao, array(2, 3))) {
+            if ($oDados10->ac16_origem == self::ORIGEM_EMPENHO && in_array($oDados10->contdeclicitacao, array(2, 3))) {
                 $oLicitacao = $this->getLicitacaoByContrato($oDados10->ac16_sequencial);
                 $oDados10->l20_edital = $oLicitacao->l20_edital;
                 $oDados10->l20_anousu = $oLicitacao->l20_anousu;
                 $oDados10->l20_naturezaobjeto = $oLicitacao->l20_naturezaobjeto;
                 $oDados10->tipoprocesso = empty($oLicitacao->tipoprocesso) ? 0 : $oLicitacao->tipoprocesso;
                 $oDados10->l20_codigo = $oLicitacao->l20_codigo;
+            }
+            /*
+             * verificar se o contrato e licitacao e foi vinculado a licitacao
+             * por ser origem Manual
+             */
+            if($oDados10->ac16_origem == self::ORIGEM_MANUAL && in_array($oDados10->contdeclicitacao, array(2, 3))) {
+                $oDados10->l20_edital = $oDados10->editalmanual;
+                $oDados10->l20_anousu = $oDados10->anousumanual;
+                $oDados10->l20_naturezaobjeto = $oDados10->naturezamanual;
+                $oDados10->l20_codigo = $oDados10->codlicmanual;
+                $oDados10->l20_codepartamento = $oDados10->departmanual;
             }
 
             $clcontratos10->si83_tiporegistro = 10;

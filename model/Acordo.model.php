@@ -382,6 +382,30 @@ class Acordo
     private $nValorContrato;
 
     /**
+     * licitacao para origem manual
+     * @var
+     */
+
+    protected $iLicitacao;
+
+    /**
+     * @return mixed
+     */
+    public function getLicitacao()
+    {
+        return $this->iLicitacao;
+    }
+
+    /**
+     * @param mixed $iLicitacao
+     */
+    public function setLicitacao($iLicitacao)
+    {
+        $this->iLicitacao = $iLicitacao;
+        return $this;
+    }
+
+    /**
      * Construtor
      * @param integer $iCodigoAcordo
      */
@@ -430,6 +454,7 @@ class Acordo
                 $this->setQuantidadeRenovacao($oDadosAcordo->ac16_qtdrenovacao);
                 $this->setTipoRenovacao($oDadosAcordo->ac16_tipounidtempo);
                 $this->setValorContrato($oDadosAcordo->ac16_valor);
+                $this->setLicitacao($oDadosAcordo->ac16_licitacao);
 
                 $this->iQtdPeriodoVigencia = $oDadosAcordo->ac16_qtdperiodo;
                 $this->iTipoUnidadeTempoVigencia = $oDadosAcordo->ac16_tipounidtempoperiodo;
@@ -1387,6 +1412,7 @@ class Acordo
         $oDaoAcordo->ac16_acordoclassificacao = $this->getClassificacao()->getCodigo();
         $oDaoAcordo->ac16_valor = $this->getValorContrato();
         $oDaoAcordo->ac16_numeroacordo = $this->getNumeroAcordo();
+        $oDaoAcordo->ac16_licitacao = $this->getLicitacao();
         $iCodigoAcordo = $this->getCodigoAcordo();
 
         /**
@@ -3227,7 +3253,7 @@ class Acordo
 
         $aItens = array();
         $oDaoAcordoitem = new cl_acordoitem;
-        $sCampos = "ac20_ordem, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
+         $sCampos = "ac20_ordem, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
         $sCampos .= "sum(ac20_valortotal) as valortotal, ";
         $sCampos .= "pc01_descrmater, pc01_codmater, max(ac20_sequencial) as codigo, max(ac20_acordoposicao) as posicao, ";
         $sCampos .= "m61_codmatunid, m61_abrev ";

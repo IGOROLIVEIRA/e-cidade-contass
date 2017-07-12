@@ -37,6 +37,8 @@ $clrotulo->label("ac02_sequencial");
 $clrotulo->label("ac08_descricao");
 $clrotulo->label("ac50_descricao");
 $clrotulo->label("z01_nome");
+$clrotulo->label("ac16_licitacao");
+$clrotulo->label("l20_objeto");
 
 if ($db_opcao == 1) {
     $db_action = "aco1_acordo004.php";
@@ -163,9 +165,22 @@ db_app::load("dbtextFieldData.widget.js");
                                                         3 => 'Manual',
                                                         6 => 'Empenho'
                                                     );
+                                                    // js_validaCampoValor();
                                                     db_select('ac16_origem', $aValores, true, $db_opcao,
-                                                        " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_validaCampoValor();' style='width:100%;'");
+                                                        " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_verificaOrigem(this.value);js_validaCampoValor();' style='width:100%;'");
 
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <tr id="trLicitacao" style="display:none;">
+                                                <td nowrap>
+                                                    <?
+                                                    db_ancora('Licitação:',"js_pesquisa_liclicita(true);",1);?>
+                                                </td>
+                                                <td>
+                                                    <?
+                                                    db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",3,'');
+                                                    db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
                                                     ?>
                                                 </td>
                                             </tr>
@@ -222,7 +237,7 @@ db_app::load("dbtextFieldData.widget.js");
                                             <tr>
                                                 <td nowrap title="<?= @$Tac16_contratado ?>">
                                                     <?
-                                                    db_ancora(@$Lac16_contratado, "js_pesquisaac16_contratado(true);", $db_opcao);
+                                                    db_ancora(@$Lac16_contratado, "jsPesquisaContratadoHabilitado();", $db_opcao);
                                                     ?>
                                                 </td>
                                                 <td>
@@ -508,6 +523,16 @@ db_app::load("dbtextFieldData.widget.js");
 
     }
 
+    function js_validaCampoLicitacao() {
+
+        var iOrigem = $('ac16_origem').value;
+        if (iOrigem == 3) {
+
+            $('tdLicitacao').style.display = 'block';
+        }
+
+    }
+
     /**
      * valida antes de colar no campo valor
      */
@@ -516,7 +541,53 @@ db_app::load("dbtextFieldData.widget.js");
     }
 
 
-    /*
+    /**
+     * funcao para retornar licitacao
+     */
+    function js_pesquisa_liclicita(mostra){
+        if(mostra==true){
+
+            js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                'db_iframe_liclicita',
+                'func_liclicita.php?situacao=10&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto',
+                'Pesquisa Licitações',true);
+        }else{
+
+            if(document.form1.ac16_licitacao.value != ''){
+
+                js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                    'db_iframe_liclicita',
+                    'func_liclicita.php?situacao=10&pesquisa_chave='+
+                    document.form1.ac16_licitacao.value+'&funcao_js=parent.js_mostraliclicita',
+                    'Pesquisa',false);
+            }else{
+                document.form1.ac16_licitacao.value = '';
+            }
+        }
+    }
+    /**
+     * funcao para preencher licitacao  da ancora
+     */
+    function js_preencheLicitacao(codigo,objeto)
+    {
+        document.form1.ac16_licitacao.value = codigo;
+        document.form1.l20_objeto.value = objeto;
+        db_iframe_liclicita.hide();
+    }
+
+    /**
+     * funcao para verificar origem do acordo para listar ancora da licitacao
+     */
+    function js_verificaOrigem(iValor)
+    {
+        if (iValor == 3) {
+            $("trLicitacao").style.display = "";
+        } else {
+            $("trLicitacao").style.display = "none";
+        }
+    }
+
+    /**
      * funcao que ira realizar vinculo dos empenhos selecionados
      */
     function js_vincularEmpenhos(iNumCgm) {
@@ -1042,6 +1113,31 @@ db_app::load("dbtextFieldData.widget.js");
           }
         ?>
 
+    }
+
+    /**
+     * funcao para mostrar fornecedores habilitados quando origem do acordo for manual
+     */
+
+    function jsPesquisaContratadoHabilitado() {
+
+        if ($('ac16_origem').value == 3) {
+            var nLicitacao = $('ac16_licitacao').value;
+
+            if (nLicitacao == '') {
+                js_pesquisaac16_contratado(true);
+            }else{
+                js_OpenJanelaIframe('top.corpo.iframe_acordo',
+                    'db_iframe_contratado',
+                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm',
+                    'CGM Contratado',
+                    true,
+                    '0');
+            }
+        }else {
+            nLicitacao == '';
+            js_pesquisaac16_contratado(true);
+        }
     }
 
     function js_pesquisaac16_contratado(mostra) {
