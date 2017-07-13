@@ -966,6 +966,7 @@ db_app::load("estilos.css, grid.style.css");
     oTxtDotacao.setReadOnly(true);
 
     oTxtValorDotacao = new DBTextField('oTxtValorDotacao', 'oTxtValorDotacao', '', 10);
+    oTxtValorDotacao.addEvent("onKeyPress","return js_mask(event,\"0-9|,\")");
     oTxtValorDotacao.show($('inputvalordotacao'));
     oTxtValorDotacao.setReadOnly(true);
 
@@ -974,6 +975,7 @@ db_app::load("estilos.css, grid.style.css");
     var nValorUnitario = js_strToFloat(oDadosItem.aCells[4].getValue()).valueOf();
     var sEvent = ";js_validaValorDotacao(this," + nValorMaximo + "," + nValorUnitario + ",\"oTxtValorDotacao\");";
     oTxtQuantidadeDotacao.addEvent("onChange", sEvent);
+    oTxtQuantidadeDotacao.addEvent("onKeyPress","return js_mask(event,\"0-9|,\")");
     oTxtQuantidadeDotacao.show($('inputquantidadedotacao'));
 
     oTxtSaldoDotacao = new DBTextField('oTxtSaldoDotacao', 'oTxtSaldoDotacao', '', 10);
@@ -1069,13 +1071,13 @@ db_app::load("estilos.css, grid.style.css");
   
   function js_validaValorDotacao(obj, iQuantMax, nValUnitario, oValorTotal) {
     
-    if (new Number(obj.value) > iQuantMax) {
+    if (js_strToFloat(obj.value) > iQuantMax) {
       obj.value = iQuantMax;
     } else if (obj.value == 0) {
       obj.value = iQuantMax;
     }
     
-    var nValorTotal = obj.value * nValUnitario;
+    var nValorTotal = js_strToFloat(obj.value) * nValUnitario;
     $(oValorTotal).value = js_formatar(nValorTotal, 'f');
   }
   
@@ -1089,18 +1091,18 @@ db_app::load("estilos.css, grid.style.css");
       return false;
       
     }
-    if (new Number(oTxtQuantidadeDotacao.getValue()) == 0) {
+    if (js_strToFloat(oTxtQuantidadeDotacao.getValue()) == 0) {
       
       alert('Informe uma quantidade para o item!');
       $('oTxtQuantidadeDotacao').focus();
       return false;
     }
-    if (((oGridDotacoes.sum(1, false)+Number(oTxtQuantidadeDotacao.getValue())) > oDadosItem.aCells[3].getValue()) && oTxtQuantidadeDotacao.lReadOnly == false) {
+    if (((js_round(oGridDotacoes.sum(1, false),2)+js_strToFloat(oTxtQuantidadeDotacao.getValue())) > oDadosItem.aCells[3].getValue()) && oTxtQuantidadeDotacao.lReadOnly == false) {
       alert('Quantidade Dotação maior que quantidade do item!');
       $('oTxtQuantidadeDotacao').focus();
       return false;
     }
-    if ((oGridDotacoes.sum(2, false)+js_strToFloat(oTxtValorDotacao.getValue())) > js_strToFloat(oDadosItem.aCells[5].getValue())) {
+    if ((js_round(oGridDotacoes.sum(2, false),2)+js_strToFloat(oTxtValorDotacao.getValue())) > js_strToFloat(oDadosItem.aCells[5].getValue())) {
       alert('Valor Dotação maior que Valor Total do item!');
       $('oTxtValorDotacao').focus();
       return false;

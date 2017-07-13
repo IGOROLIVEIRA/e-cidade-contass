@@ -2547,10 +2547,10 @@ class Acordo
                 /**
                  * Verifica se houve alteração de quantidade/valor
                  */
-                if ($oItem->quantidade > $oItemContrato->getQuantidadeAtualizada()) {
+                if ($oItem->quantidade > $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario > $oItemContrato->getValorUnitario()) {
                     $aTiposAlteracao[] = AcordoPosicao::TIPO_ACRESCIMOITEM;
                     $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_ACRESCIMOITEM);
-                } elseif ($oItem->quantidade < $oItemContrato->getQuantidadeAtualizada()) {
+                } elseif ($oItem->quantidade < $oItemContrato->getQuantidadeAtualizada() || $oItem->valorunitario < $oItemContrato->getValorUnitario()) {
                     $aTiposAlteracao[] = AcordoPosicao::TIPO_DECRESCIMOITEM;
                     $oNovoItem->setCodigoPosicaoTipo(AcordoPosicao::TIPO_DECRESCIMOITEM);
                 }
@@ -3402,9 +3402,21 @@ class Acordo
             $oNovoItem->setValorUnitario((float)$oItem->valorunitario);
             $oNovoItem->setValorTotal(round($oItem->valorunitario * $oItem->quantidade, 2));
 
-            if ( (($oNovoItem->getValorUnitario() > $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA)
-                || ($oNovoItem->getValorUnitario() < $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA)
-                || ($oNovoItem->getValorUnitario() == $oItemContrato->getValorUnitario() && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_SEMALTERACAO_APOSTILA)) &&  in_array($oItem->codigoitem, $aSelecionados) ) {
+            /**
+             * Caso seja servico e nao controlar quantidade, 
+             * o valor anterior a comparar sera o saldo a executar
+             */
+            if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getServicoQuantidade() == "f") {
+                $oItemSaldo     = $oItemContrato->getSaldos();
+                $nValorComparar = $oItemSaldo->valorautorizar;
+            } else {
+                $nValorComparar = $oItemContrato->getValorUnitario();
+            }
+            
+
+            if ( (($oNovoItem->getValorUnitario() > $nValorComparar && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA)
+                || ($oNovoItem->getValorUnitario() < $nValorComparar && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA)
+                || ($oNovoItem->getValorUnitario() == $nValorComparar && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_SEMALTERACAO_APOSTILA)) &&  in_array($oItem->codigoitem, $aSelecionados) ) {
                 throw new Exception("Valor do item {$oItem->codigoitem} não compatível com o Tipo de alteração Apostila.");
             }
 
