@@ -320,8 +320,8 @@ function preencheItens(aItens) {
         aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
         aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
 
-        var nQuantidade = oItem.novaquantidade || oItem.quantidade,
-            nUnitario = oItem.novounitario || oItem.valorunitario;
+        var nQuantidade = oItem.quantidade || oItem.qtdeanterior,
+            nUnitario = oItem.valorunitario || oItem.vlunitanterior;
 
         oInputQuantidade = new DBTextField('quantidade' + iSeq, 'quantidade' + iSeq, js_formatar(nQuantidade, 'f', 3));
         oInputQuantidade.addStyle("width", "100%");
@@ -390,8 +390,8 @@ function calculaValorTotal(iLinha) {
         nQuantidade = aLinha.aCells[5].getValue().getNumber();
         nUnitario = aLinha.aCells[6].getValue().getNumber();
 
-    aItensPosicao[iLinha].novaquantidade = nQuantidade;
-    aItensPosicao[iLinha].novounitario = nUnitario;
+    aItensPosicao[iLinha].quantidade = nQuantidade;
+    aItensPosicao[iLinha].valorunitario = nUnitario;
 
     aLinha.aCells[7].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
 
@@ -529,11 +529,18 @@ function preencheGridDotacoes(iLinha) {
 function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
     aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor.value.getNumber();
+    aItensPosicao[iLinha].dotacoes[iDotacao].quantidade = js_round((oValor.value.getNumber()/aItensPosicao[iLinha].valorunitario), 2);
 
     nValorTotal = 0;
+    var nQuantTotal = 0;
     aItensPosicao[iLinha].dotacoes.each(function (oDotacao) {
         nValorTotal += oDotacao.valor;
+        nQuantTotal += oDotacao.quantidade;
     });
+
+    if (nQuantTotal > aItensPosicao[iLinha].quantidade) {
+        aItensPosicao[iLinha].dotacoes[iDotacao].quantidade -= (nQuantTotal - aItensPosicao[iLinha].quantidade) ;
+    }
 
     $('TotalForCol1').innerHTML = js_formatar(nValorTotal, 'f');
 }
@@ -577,6 +584,23 @@ function saveDotacao(iLinha) {
         valor: nValor,
         valororiginal: nValor
     };
+
+    oDotacao.quantidade = js_round((nValor/aItensPosicao[iLinha].valorunitario), 2);
+    nValorTotal = nValor;
+    var nQuantTotal = 0;
+    aItensPosicao[iLinha].dotacoes.each(function (oDotacao) {
+        nValorTotal += oDotacao.valor;
+        nQuantTotal += oDotacao.quantidade;
+    });
+
+    if (nValorTotal > (aItensPosicao[iLinha].quantidade*aItensPosicao[iLinha].valorunitario)) {
+        alert("Valor Dotações maior que valor do item.");
+        return false;
+    }
+
+    if (nQuantTotal > aItensPosicao[iLinha].quantidade) {
+        oDotacao.quantidade -= (nQuantTotal - aItensPosicao[iLinha].quantidade) ;
+    }
 
     var lInserir = true;
     aItensPosicao[iLinha].dotacoes.forEach(function (oDotacaoItem) {
@@ -636,10 +660,11 @@ function salvarInfoDotacoes(iLinha) {
 
     var oItem = aItensPosicao[iLinha];
 
-    var nQuantidade = oItem.novaquantidade || oItem.quantidade,
-        nUnitario = oItem.novounitario || oItem.valorunitario,
+    var nQuantidade = oItem.qtdeanterior || oItem.quantidade,
+        nUnitario = oItem.valorunitario || oItem.vlunitanterior,
         nValorTotal = (+nQuantidade) * (+nUnitario),
         nValorTotalItem = nValorTotal,
+        nQuantTotalItem = nQuantidade,
         nValorTotalAnterior = 0;
 
     /**
@@ -653,20 +678,29 @@ function salvarInfoDotacoes(iLinha) {
 
         var nPercentual = (nValorTotalAnterior == 0) ? 0 : (new Number(oDotacao.valororiginal) * 100) / nValorTotalAnterior;
         var nValorDotacao = js_round((nValorTotalItem * nPercentual) / 100, 2);
+        var nQuantDotacao = js_round((nQuantTotalItem * nPercentual) / 100, 2);
 
         nValorTotal -= nValorDotacao;
+        nQuantidade -= nQuantDotacao;
         if (iDot == aItensPosicao[iLinha].dotacoes.length - 1) {
 
             if (nValorTotal != nValorTotalItem) {
                 nValorDotacao += nValorTotal;
+            }
+            if (nQuantidade != nQuantTotalItem) {
+                nQuantDotacao += nQuantidade;
             }
         }
 
         if (nValorDotacao < 0) {
             nValorDotacao = 0;
         }
+        if (nQuantDotacao < 0) {
+            nQuantDotacao = 0;
+        }
 
         aItensPosicao[iLinha].dotacoes[iDot].valor = js_round(nValorDotacao, 2);
+        aItensPosicao[iLinha].dotacoes[iDot].quantidade = js_round(nQuantDotacao, 2);
     });
 }
 
@@ -818,6 +852,8 @@ function apostilar() {
             oItemAdicionar.dotacoes = oItem.dotacoes;
  
 
+        } else {
+            oItemAdicionar.dotacoes = oItem.dotacoesoriginal;
         }
 
         oParam.aItens.push(oItemAdicionar);

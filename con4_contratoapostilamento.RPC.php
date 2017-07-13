@@ -45,6 +45,8 @@ try {
         $aItemPosicao = $oItemPosicao->getPeriodosItem();
         $oItem->periodoini     = $aItemPosicao[0]->dtDataInicial;
         $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
+        $oItem->servico        = $oItemPosicao->getMaterial()->isServico();
+        $oItem->controlaquantidade = $oItemPosicao->getServicoQuantidade();
         $oItem->dotacoes       = array();
 
         /**
@@ -54,13 +56,32 @@ try {
         $oItem->qtdeanterior = $oItemUltimoValor->quantidadeautorizar;
         $oItem->vlunitanterior = $oItem->valorunitario;
         $oItem->quantidade = $oItemUltimoValor->quantidadeautorizar;
+
+        /**
+         * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
+         * e o valor sera o saldo a executar
+         */
+        if ($oItem->servico && $oItem->controlaquantidade == "f") {
+          $oItem->quantidade     = 1;
+          $oItem->qtdeanterior   = 1;
+          $oItem->valor          = $oItemUltimoValor->valorautorizar;
+          $oItem->vlunitanterior = $oItemUltimoValor->valorautorizar;
+          $oItem->valorunitario  = $oItemUltimoValor->valorautorizar;
+        }
         
         foreach($oItemPosicao->getDotacoes() as $oDotacao) {
+          if ($oItem->servico && $oItem->controlaquantidade == "f") {
+            $iQuantDot =  1;
+            $nValorDot = $oDotacao->valor-$oDotacao->executado;
+          } else {
+            $iQuantDot = $oDotacao->quantidade-($oDotacao->executado/$oItem->valorunitario);
+            $nValorDot = $oDotacao->valor;
+          }
           $oItem->dotacoes[] = (object) array(
               'dotacao' => $oDotacao->dotacao,
-              'quantidade' => $oDotacao->quantidade-($oDotacao->executado/$oItem->valorunitario),
-              'valor' => $oDotacao->valor,
-              'valororiginal' => $oDotacao->valor
+              'quantidade' => $iQuantDot,
+              'valor' => $nValorDot,
+              'valororiginal' => $nValorDot
             );
         }
 
