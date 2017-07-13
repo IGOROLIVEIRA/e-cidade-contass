@@ -504,6 +504,9 @@ function js_retornoGetItensPosicao(oAjax) {
       } else {
         oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,iCasasDecimais);
         oDotItem.quantdot    = oDotItem.quantidade;
+        if (oDotItem.quantidade < 0) {
+          oDotItem.quantdot    = oDotItem.quantidade = 0;
+        }
       }
 
     });
