@@ -531,7 +531,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
         sContent += "    </tr>";
         sContent += "  </table>";
         sContent += "</fieldset>";
-        sContent += "  <input type='button' value='Adicionar' id='btnSalvarDotacao'>";
+        sContent += "  <input type='button' disabled='disabled' value='Adicionar' id='btnSalvarDotacao'>";
         ;
         sContent += "  <fieldset style=\"margin-top: 5px;\">";
         sContent += "    <div id='cntgridDotacoes'></div>";
@@ -603,6 +603,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             oBotaoRemover.id = "btnexcluidotacao" + iDot;
             oBotaoRemover.value = "E";
             oBotaoRemover.setAttribute("onclick", me.sInstance + ".removerDotacao(" + iLinha + ", " + iDot + ")");
+            oBotaoRemover.setAttribute("disabled","disabled");
 
             aLinha = new Array();
             aLinha[0] = "<a href='javascript:;' onclick='" + me.sInstance + ".mostraSaldo(" + oDotacao.dotacao + ");'>" + oDotacao.dotacao + "</a>";
@@ -624,12 +625,25 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
      */
     this.atualizarItemDotacao = function (iLinha, iDotacao, oValor) {
 
-        aItensPosicao[iLinha].dotacoes[iDotacao].valor = oValor.value.getNumber();
+        var oItem = aItensPosicao[iLinha];
+
+        oItem.dotacoes[iDotacao].valor = oValor.value.getNumber();
+        if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+            oItem.dotacoes[iDotacao].quantidade = 1;
+        } else {
+            oItem.dotacoes[iDotacao].quantidade = js_round((oValor.value.getNumber()/oItem.novounitario), 2);
+        }
 
         nValorTotal = 0;
-        aItensPosicao[iLinha].dotacoes.each(function (oDotacao) {
+        var nQuantTotal = 0;
+        oItem.dotacoes.each(function (oDotacao) {
             nValorTotal += oDotacao.valor;
+            nQuantTotal += oDotacao.quantidade;
         });
+
+        if (nQuantTotal > oItem.novaquantidade) {
+           oItem.dotacoes[iDotacao].quantidade -= (nQuantTotal - oItem.novaquantidade) ;
+        }
 
         $('TotalForCol1').innerHTML = js_formatar(nValorTotal, 'f');
     }
@@ -725,11 +739,18 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
     this.salvarInfoDotacoes = function (iLinha) {
 
         var oItem = aItensPosicao[iLinha];
+        /**
+         * Caso for servico e nao controlar quantidade, nao precisa redistribuir dotacoes
+         */
+        if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+            return;
+        }
 
         var nQuantidade = oItem.novaquantidade || oItem.quantidade,
             nUnitario = oItem.novounitario || oItem.valorunitario,
             nValorTotal = (+nQuantidade) * (+nUnitario),
             nValorTotalItem = nValorTotal,
+            nQuantTotalItem = nQuantidade,
             nValorTotalAnterior = 0;
 
         /**
@@ -743,20 +764,29 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
 
             var nPercentual = (nValorTotalAnterior == 0) ? 0 : (new Number(oDotacao.valororiginal) * 100) / nValorTotalAnterior;
             var nValorDotacao = js_round((nValorTotalItem * nPercentual) / 100, 2);
+            var nQuantDotacao = js_round((nQuantTotalItem * nPercentual) / 100, 2);
 
             nValorTotal -= nValorDotacao;
+            nQuantidade -= nQuantDotacao;
             if (iDot == aItensPosicao[iLinha].dotacoes.length - 1) {
 
                 if (nValorTotal != nValorTotalItem) {
                     nValorDotacao += nValorTotal;
+                }
+                if (nQuantidade != nQuantTotalItem) {
+                    nQuantDotacao += nQuantidade;
                 }
             }
 
             if (nValorDotacao < 0) {
                 nValorDotacao = 0;
             }
+            if (nQuantDotacao < 0) {
+                nQuantDotacao = 0;
+            }
 
             aItensPosicao[iLinha].dotacoes[iDot].valor = js_round(nValorDotacao, 2);
+            aItensPosicao[iLinha].dotacoes[iDot].quantidade = js_round(nQuantDotacao, 2);
         });
     }
 
@@ -871,17 +901,21 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
 
                 /**
                  * Validamos o total do item com as dotacoes quando não for aditamento de prazo
+                 * ou for um servico nao controlado por quantidade
                  */
-                if (iTipoAditamento != 6) {
+                if (iTipoAditamento != 6 || (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == ""))) {
 
                     var nValorDotacao = 0;
                     oItem.dotacoes.forEach(function (oDotacao) {
 
-                        if (oDotacao.valor == 0) {
+                        /**
+                         * Comentado para permitir dotacao com valor zero conforme solicitado por Danilo
+                         */
+                        /*if (oDotacao.valor == 0) {
 
                             lAditar = false;
                             return alert("Os Valores das dotações para o item " + oItem.descricaoitem.urlDecode() + " não podem estar zeradas.");
-                        }
+                        }*/
 
                         nValorDotacao += oDotacao.valor;
                     });
@@ -1349,9 +1383,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                 if ($('oCboTipoAditivo').value == 5 || $('oCboTipoAditivo').value == 2) {
                     oInputQuantidade.setReadOnly(true);
                     //oInputQuantidade.setValue( js_formatar(0, "f", 3));
-                    oBotaoDotacao.disabled = true;
                     aLinha[4] = oInputQuantidade.toInnerHtml();
-                    aLinha[7] = oBotaoDotacao.outerHTML;
                     aLinha[9] = js_formatar(oItem.periodoini, 'd');
                     aLinha[10] = js_formatar(oItem.periodofim, 'd');
                     aLinha[11].setDisable(true);
@@ -1360,38 +1392,42 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                     //InputQuantidade.setValue( js_formatar(0, "f", 3));
                     oInputUnitario.setReadOnly(true);
                     //oInputUnitario.setValue( js_formatar(0, "f", 3));
-                    oBotaoDotacao.disabled = true;
                     aLinha[4] = oInputQuantidade.toInnerHtml();
                     aLinha[5] = oInputUnitario.toInnerHtml();
-                    aLinha[7] = oBotaoDotacao.outerHTML;
                     aLinha[11].setDisable(true);
                     if ( $('oCboTipoAditivo').value == 6) {
                         aLinha[9] = js_formatar(oItem.periodoini, 'd');
                         aLinha[10] = js_formatar(oItem.periodofim, 'd');
                     }
                 } else if ($('oCboTipoAditivo').value == 9) {
-                    oInputUnitario.setReadOnly(true);
-                    oBotaoDotacao.disabled = true;
+                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                        oInputUnitario.setReadOnly(false);
+                    } else {
+                        oInputUnitario.setReadOnly(true);
+                    }
                     aLinha[5] = oInputUnitario.toInnerHtml();
-                    aLinha[7] = oBotaoDotacao.outerHTML;
                     aLinha[9] = js_formatar(oItem.periodoini, 'd');
                     aLinha[10] = js_formatar(oItem.periodofim, 'd');
                     aLinha[11].setValue(1);
                     aLinha[11].setDisable(true);
                 } else if ($('oCboTipoAditivo').value == 10) {
-                    oInputUnitario.setReadOnly(true);
-                    oBotaoDotacao.disabled = true;
+                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                        oInputUnitario.setReadOnly(false);
+                    } else {
+                        oInputUnitario.setReadOnly(true);
+                    }
                     aLinha[5] = oInputUnitario.toInnerHtml();
-                    aLinha[7] = oBotaoDotacao.outerHTML;
                     aLinha[9] = js_formatar(oItem.periodoini, 'd');
                     aLinha[10] = js_formatar(oItem.periodofim, 'd');
                     aLinha[11].setValue(2);
                     aLinha[11].setDisable(true);
                 } else if ($('oCboTipoAditivo').value == 11) {
-                    oInputUnitario.setReadOnly(true);
-                    oBotaoDotacao.disabled = true;
+                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                        oInputUnitario.setReadOnly(false);
+                    } else {
+                        oInputUnitario.setReadOnly(true);
+                    }
                     aLinha[5] = oInputUnitario.toInnerHtml();
-                    aLinha[7] = oBotaoDotacao.outerHTML;
                     aLinha[9] = js_formatar(oItem.periodoini, 'd');
                     aLinha[10] = js_formatar(oItem.periodofim, 'd');
                     aLinha[11].setValue(0);
@@ -1401,11 +1437,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             /**
              * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
              */
-             if (oItem.servico && oItem.controlaquantidade == "f") {
+             if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
                 aLinha[2] = js_formatar(1, 'f', 2);
                 oInputQuantidade.setReadOnly(true);
                 oInputQuantidade.setValue( js_formatar(1, "f", 3));
                 aLinha[4] = oInputQuantidade.toInnerHtml();
+
              }
 
 
@@ -1416,6 +1453,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                 oItem.dotacoesoriginal = new Array();
 
                 oItem.dotacoes.forEach(function (oDotacaoOriginal) {
+                    var oDotacao = new Object();
+                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+                        oDotacao.dotacao = oDotacaoOriginal.dotacao;
+                        oDotacaoOriginal.quantidade = 1;
+                        oDotacaoOriginal.valor = 0;
+                        oDotacaoOriginal.valororiginal = 0;
+                    }
                     oItem.dotacoesoriginal.push({
                         dotacao: oDotacaoOriginal.dotacao,
                         quantidade: oDotacaoOriginal.quantidade,
