@@ -534,13 +534,25 @@ class AcordoPosicao {
       foreach ($aDotacoes as $oDotacaoItem) {
 
         $oDotacao    = new stdClass();
-        $nValorTotal = ($oItemLicitacao->pc23_vlrun*$oDotacaoItem->pc13_quant);
-        if ($oDotacaoItem->o80_valor > 0) {
-          $nDiferenca = (($oDotacaoItem->pc13_valor / ($oItemLicitacao->pc11_vlrun * $oItemLicitacao->pc11_quant)) * $nValorTotal) - $oDotacaoItem->o80_valor;
+
+        /*
+         * A formula de calculo do valor da Dotacao foi alterado para dividir 
+         * o valor entre as dotacoes conforme acontece em Gerar Autorizacao do Mod. Compras
+         * solicitado por Danilo
+         */
+
+        /*
+         * calcula o percentual da dotação em relacao ao valor total
+         */
+        $nPercentualDotacao = 100;
+        if ( $oDotacaoItem->pc11_vlrun > 0 ) {
+          $nPercentualDotacao = ($oDotacaoItem->pc13_valor*100)/($oDotacaoItem->pc11_quant*$oDotacaoItem->pc11_vlrun);
         }
-        /* Alterado para que o valor da dotação seja igual ao do item conforme solicitado por Danilo */
-        //$oDotacao->valor      = $oDotacaoItem->pc13_valor+($nDiferenca);
-        $oDotacao->valor      = $nValorTotal;
+        /**
+         * retorna o valor novo da dotacao; (pode ter um aumento/diminuicao do valor)
+         */
+        $oDotacao->valor      = round(($oItemLicitacao->pc23_valor * $nPercentualDotacao)/100, 2);
+        
         $oDotacao->ano        = $oDotacaoItem->pc13_anousu;
         $oDotacao->dotacao    = $oDotacaoItem->pc13_coddot;
         $oDotacao->quantidade = $oDotacaoItem->pc13_quant;
@@ -622,7 +634,7 @@ class AcordoPosicao {
       $sSqlDotacoes     = $oDaoDotacoesItem->sql_query_dotreserva($oItemLicitacao->pc11_codigo,
                                                                   null,
                                                                   null,
-                                                                  "pcdotac.*, orcreserva.*");
+                                                                  "solicitem.*,pcdotac.*, orcreserva.*");
       $rsDotacoes       = db_query($sSqlDotacoes);
       $aDotacoes        = db_utils::getCollectionByRecord($rsDotacoes);
 
@@ -630,13 +642,24 @@ class AcordoPosicao {
 
 
         $oDotacao   = new stdClass();
-        $nDiferenca = 0;
-        if ($oDotacaoItem->o80_valor > 0) {
-          $nDiferenca = (($oDotacaoItem->pc13_valor / ($oItemLicitacao->pc11_vlrun * $oItemLicitacao->pc11_quant)) * $oItem->getValorTotal()) - $oDotacaoItem->o80_valor;
+         /*
+         * A formula de calculo do valor da Dotacao foi alterado para dividir 
+         * o valor entre as dotacoes conforme acontece em Gerar Autorizacao do Mod. Compras
+         * solicitado por Danilo
+         */
+
+        /*
+         * calcula o percentual da dotação em relacao ao valor total
+         */
+        $nPercentualDotacao = 100;
+        if ( $oDotacaoItem->pc11_vlrun > 0 ) {
+          $nPercentualDotacao = ($oDotacaoItem->pc13_valor*100)/($oDotacaoItem->pc11_quant*$oDotacaoItem->pc11_vlrun);
         }
-        /* Alterado para que o valor da dotacao seja igual ao do item conforme solicitado por Mario */
-        //$oDotacao->valor      = $oDotacaoItem->pc13_valor+($nDiferenca);
-        $oDotacao->valor      = ($oDotacaoItem->pc13_quant*$oItemLicitacao->pc23_vlrun);
+        /**
+         * retorna o valor novo da dotacao; (pode ter um aumento/diminuicao do valor)
+         */
+        $oDotacao->valor      = round(($oItemLicitacao->pc23_valor * $nPercentualDotacao)/100, 2);
+
         $oDotacao->ano        = $oDotacaoItem->pc13_anousu;
         $oDotacao->dotacao    = $oDotacaoItem->pc13_coddot;
         $oDotacao->quantidade = $oDotacaoItem->pc13_quant;

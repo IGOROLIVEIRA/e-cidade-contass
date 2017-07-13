@@ -237,9 +237,11 @@ switch($oParam->exec) {
               foreach ($oItem->getDotacoes() as $oDotacao) {
 
                 $oDotacaoSaldo = new Dotacao($oDotacao->dotacao, $oDotacao->ano);
-                $oDotacao->saldoexecutado = 0;;
+                $oDotacao->saldoexecutado = 0;
                 $oDotacao->valorexecutar  = 0;
                 $oDotacao->saldodotacao   = $oDotacaoSaldo->getSaldoFinal();
+
+                $oDotacao->valor -= $oDotacao->executado;
 
               }
               $oItemRetorno->dotacoes       = $oItem->getDotacoes();
