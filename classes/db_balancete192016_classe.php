@@ -180,7 +180,30 @@ class cl_balancete192016 {
        $this->erro_status = "0";
        return false;
      }
-       $this->si186_sequencial = $si186_sequencial; 
+     if($si186_sequencial == "" || $si186_sequencial == null ){
+       $result = db_query("select nextval('balancete182016_si186_sequencial_seq')");
+       if($result==false){
+         $this->erro_banco = str_replace("\n","",@pg_last_error());
+         $this->erro_sql   = "Verifique o cadastro da sequencia: balancete182016_si186_sequencial_seq do campo: si186_sequencial";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+       $this->si186_sequencial = pg_result($result,0,0);
+     }else{
+       $result = db_query("select last_value from balancete182016_si186_sequencial_seq");
+       if(($result != false) && (pg_result($result,0,0) < $si186_sequencial)){
+         $this->erro_sql = " Campo si186_sequencial maior que último número da sequencia.";
+         $this->erro_banco = "Sequencia menor que este número.";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }else{
+         $this->si186_sequencial = $si186_sequencial;
+       }
+     } 
      if(($this->si186_sequencial == null) || ($this->si186_sequencial == "") ){ 
        $this->erro_sql = " Campo si186_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
