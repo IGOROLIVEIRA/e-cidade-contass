@@ -8,4 +8,11 @@ CREATE TABLE IF NOT EXISTS updatedb
 );
 
 commit;
+
+begin;
+
+DELETE FROM updatedb WHERE codscript NOT IN (SELECT MAX(codscript) As IdMaximo FROM updatedb GROUP BY nomescript);
+
+commit;
+
 copy (select nomescript from updatedb) to '/tmp/scripts_executados.sh'
