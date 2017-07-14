@@ -576,14 +576,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 }
 
             }
-
-            //Calculo para achar o valor do contrato
-            if (count($aDadosAgrupados) > 0) {
-                $sSql = "UPDATE contratos102017 set si83_vlcontrato = (
-                        SELECT SUM(si84_valorunitarioitem*si84_quantidadeitem)
-                        FROM contratos112017 WHERE si84_reg10 = {$clcontratos10->si83_sequencial}) WHERE si83_sequencial = {$clcontratos10->si83_sequencial}";
-                $result = db_query($sSql);
-            }
             /*
              * selecionar informacoes registro 12
              */

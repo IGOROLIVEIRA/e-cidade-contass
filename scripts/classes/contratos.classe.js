@@ -490,7 +490,7 @@ contrato = function () {
     for (var iAncora = 0; iAncora < aAncoras.length; iAncora++) {
 
       //iAncora 4 é referente a âncora Categoria.
-      if (iAncora != 4) {
+      if (iAncora != 0) {
 
         aAncoras[iAncora].setAttribute("onclick", "");
         aAncoras[iAncora].setAttribute("style", "text-decoration: none; color: #000;");
@@ -574,6 +574,7 @@ contrato = function () {
 	    }
 		//alert(oRetorno.contrato.sNumeroProcesso.urlDecode());
 	    $('ac16_acordogrupo').value           = oRetorno.contrato.iGrupo;
+	    $('ac16_licitacao').value             = oRetorno.contrato.iLicitacao;
 	    $('ac16_numeroacordo').value                = oRetorno.contrato.iNumero;
 	    $('ac16_contratado').value            = oRetorno.contrato.iContratado;
 	    $('nomecontratado').value             = oRetorno.contrato.sNomeContratado.urlDecode();
