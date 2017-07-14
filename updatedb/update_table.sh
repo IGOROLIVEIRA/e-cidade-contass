@@ -15,4 +15,10 @@ DELETE FROM updatedb WHERE codscript NOT IN (SELECT MAX(codscript) As IdMaximo F
 
 commit;
 
+begin; 
+
+select setval('db_itensmenu_id_item_seq', (select max(id_item) from db_itensmenu) );
+
+commit;
+
 copy (select nomescript from updatedb) to '/tmp/scripts_executados.sh'
