@@ -1329,7 +1329,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             if (iTipoAditamento != 6) {
 
                 oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
-                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3)");
+                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
                 oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
 
@@ -1343,7 +1343,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             if (iTipoAditamento != 6) {
 
                 oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
-                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3)");
+                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
                 oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
 
