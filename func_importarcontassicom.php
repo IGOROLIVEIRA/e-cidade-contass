@@ -206,17 +206,59 @@ function salvar($oContaSicom, $nNivel, $nSeqEstrut){
 			
 			//banco cef
 			if($oContaSicom->aSaldos[0]->si96_codfontrecursos == 100 && $oContaBancaria->getTipoConta() == 1){
-				$sEstrutualBaseCCNaoVinculadoCAIXA     = "010102";
-				$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculadoCAIXA;
-				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				if($nNivel ==1) {
+					$sEstrutualBaseCCNaoVinculadoCAIXA = "010102";
+					$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculadoCAIXA;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==2){
+					$sEstrutualBaseCCNaoVinculadoCAIXA2 = "010107";
+					$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculadoCAIXA2;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==3){
+					$sEstrutualBaseCCNaoVinculadoCAIXA3 = "010108";
+					$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculadoCAIXA3;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==4){
+					$sEstrutualBaseCCNaoVinculadoCAIXA4 = "010109";
+					$sEstrutualFinal .= $sEstrutualBaseCCNaoVinculadoCAIXA4;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}
 			}elseif($oContaBancaria->getTipoConta() == 1){
-				$sEstrutualBaseCCVinculadoCAIXA        = "020102";
-				$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA;
-				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				if($nNivel ==1) {
+					$sEstrutualBaseCCVinculadoCAIXA = "020102";
+					$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==2){
+					$sEstrutualBaseCCVinculadoCAIXA2 = "020107";
+					$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA2;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==3){
+					$sEstrutualBaseCCVinculadoCAIXA3 = "020108";
+					$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA3;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==4){
+					$sEstrutualBaseCCVinculadoCAIXA4 = "020109";
+					$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA4;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}
 			}elseif($oContaBancaria->getTipoConta() == 2){
-				$sEstrutualBaseCCVinculadoCAIXA        = "020103";
-				$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA;
-				$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				if($nNivel == 1) {
+					$sEstrutualBaseCCVinculadoCAIXA = "020103";
+					$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==2){
+					$sEstrutualBaseCCVinculadoCAIXA2 = "020107";
+					$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA2;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==3){
+					$sEstrutualBaseCCVinculadoCAIXA3 = "020108";
+					$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA3;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}elseif($nNivel ==4){
+					$sEstrutualBaseCCVinculadoCAIXA4 = "020109";
+					$sEstrutualFinal .= $sEstrutualBaseCCVinculadoCAIXA4;
+					$sEstrutualFinal .= str_pad($nSeqEstrut, 2, "0", STR_PAD_LEFT);
+				}
 			}else{
 				$sEstrutualBaseCCAplicCAIXA            = "010104";
 				$sEstrutualFinal .= $sEstrutualBaseCCAplicCAIXA;
