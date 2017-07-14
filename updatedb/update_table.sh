@@ -17,7 +17,7 @@ commit;
 
 begin; 
 
-select setval('db_itensmenu_id_item_seq', (select max(id_item) from db_itensmenu) );
+select setval('db_itensmenu_id_item_seq', (select max(id_item) from configuracoes.db_itensmenu) );
 
 commit;
 
