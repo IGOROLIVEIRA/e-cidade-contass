@@ -252,15 +252,30 @@ class cl_balancete202015 {
        $this->erro_status = "0";
        return false;
      }
-       $this->si187_sequencial = $si187_sequencial; 
-     if(($this->si187_sequencial == null) || ($this->si187_sequencial == "") ){ 
-       $this->erro_sql = " Campo si187_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+       if($si187_sequencial == "" || $si187_sequencial == null ){
+           $result = db_query("select nextval('balancete202015_si187_sequencial_seq')");
+           if($result==false){
+               $this->erro_banco = str_replace("\n","",@pg_last_error());
+               $this->erro_sql   = "Verifique o cadastro da sequencia: balancete202015_si187_sequencial_seq do campo: si187_sequencial";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+           $this->si187_sequencial = pg_result($result,0,0);
+       }else{
+           $result = db_query("select last_value from balancete202015_si187_sequencial_seq");
+           if(($result != false) && (pg_result($result,0,0) < $si187_sequencial)){
+               $this->erro_sql = " Campo si187_sequencial maior que último número da sequencia.";
+               $this->erro_banco = "Sequencia menor que este número.";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }else{
+               $this->si187_sequencial = $si187_sequencial;
+           }
+       }
      $sql = "insert into balancete202015(
                                        si187_sequencial 
                                       ,si187_tiporegistro 
