@@ -202,6 +202,7 @@ $cldb_config = new cl_db_config;
 	  $iAlturaBox = $yyy - $iAlturaBox;
 	  $this->objpdf->roundedrect($coluna-2,$pos+1,187,$iAlturaBox+3,2,'1234');
 	  $iPos = $this->objpdf->gety();
+
 //========================= ATIVIDADE SECUNDARIAS ========================================================================================
 		$this->objpdf->setx(15);
 	  $yyy = $this->objpdf->gety();
@@ -212,6 +213,7 @@ $cldb_config = new cl_db_config;
 		$y=$linha+1;
 		$ativs = 0;
 //========================================================================================================================================================================
+$iAlturaBox = $this->objpdf->gety();
 	    if ($num_outras >0) {
            $x=$x+4;
 	       reset($this->outrasativs);
@@ -318,7 +320,6 @@ $cldb_config = new cl_db_config;
 				      $ativs++;
 		       }
 
-				 $iAlturaBox = $yyy - $iAlturaBox;
 				 $this->objpdf->sety( $iAlturaNova );
 		     if ($this->impobsativ == 't'){
 		       $linhasec = $linhasec +1;
@@ -344,16 +345,17 @@ $cldb_config = new cl_db_config;
 			     if  ($yyyatual >= 200){
 			         break;
 			     }
-
+//		   $yyy = $this->objpdf->gety();
+		   $iAlturaBox = $yyy - $iAlturaBox;
 		   }
 
 //=====================================================================================================================================================
 
-    $this->objpdf->roundedrect($coluna-2,$y,187,35,2,'1234'); // descricao da atividade secundaria
+    $this->objpdf->roundedrect($coluna-2,$y,187,$iAlturaBox*($num_outras-3),2,'1234'); // descricao da atividade secundaria
  	}
-
+	$iPos = $this->objpdf->gety();
  	$x=64;
- 	$this->objpdf->setxy(14,$iPos+40);
+ 	$this->objpdf->setxy(14,$iPos+10);
 
 	$this->objpdf->SetFont('Arial','',14);
 	$this->objpdf->Multicell(0,6,$this->obs); // observação
