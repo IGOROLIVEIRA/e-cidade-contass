@@ -38,7 +38,7 @@ $_POST["ver_inscr"]     = $_GET["ver_inscr"];
 $_POST["ver_numcgm"]    = $_GET["ver_numcgm"];
 
 if(isset($reemite_recibo) && $reemite_recibo == 1) {
-	$iModeloRecibo = 15;
+	$iModeloRecibo = 14;
 } else {
 	$iModeloRecibo = 14;
 }
