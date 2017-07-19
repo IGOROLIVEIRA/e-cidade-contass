@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("fpdf151/pdf.php");
@@ -370,6 +370,9 @@ $head5 = $sInformacaoMaterial;
 $head6 = $sInformacaoData;
 $head7 = "Somente Materiais";
 
+if ($oGet->totalizador == 'sim') {
+  $head8 = "Com totalizador";
+}
 
 /**
  * Variável de Configuração do Relatório
@@ -402,7 +405,7 @@ if (isset($oGet->quebrapordepartamento) && $oGet->quebrapordepartamento == "S") 
         $oTotalEstoqueSintetico->valorTotal = 0;
         $oTotalEstoqueSintetico->quant             = 0;
         //echo count($aDepartamento);exit;
-        
+
         foreach ($aDepartamento as $oMovimentos) {
 
           if ($oPdf->gety() > $oPdf->h - 30 || $lPrimeiraCelula ) {
@@ -411,9 +414,9 @@ if (isset($oGet->quebrapordepartamento) && $oGet->quebrapordepartamento == "S") 
           }
 
           getDadosSinteticoQuebra($oPdf, $oMovimentos, $oTotalEstoqueSintetico, $oGet, true);
-          
+
           $lPrimeiraCelula = false;
-          
+
         }
         $oTotalEstoqueSintetico->iNumero +=  $oTotalEstoqueSintetico->iTotalIteracao;
         if($oTotalEstoqueSintetico->iTotalIteracao != 0){
@@ -482,29 +485,39 @@ if (isset($oGet->quebrapordepartamento) && $oGet->quebrapordepartamento == "S") 
 	switch ($oGet->tipoimpressao) {
 
 		case "S": // Sintético
-			//echo "Sintético";exit;
+
 			$iContador = 0;
-			foreach ($aEstoques as $oMovimentos) {
+      $aItens = array();
 
-				if ($oPdf->gety() > $oPdf->h - 30 || $lPrimeiraCelula) {
+      foreach ($aEstoques as $oMovimentos) {
 
-					$oPdf->addPage('L');
-					setHeaderSintetico($oPdf);
-				}
-				$iPreenche = 0;
+        $aItens[] = $oMovimentos;
 
-				if ($iContador % 2 != 0){
-					$iPreenche = 1;
-				}
-				//$oPdf, $oMovimentos, $oGet, $lSintetico = true, $iPreenche = 0, $lAnalitico = false,$posicao) {
-				//$oPdf->setfont('arial', '', 7);
-				$lImprime = getDadosSintetico($oPdf, $oMovimentos, $oGet, true,$iPreenche,false,55,35);
-				//				$lImprime = getDadosSintetico($oPdf, $oMovimentos, $oGet, true,$iPreenche,false,55,40);
-				if ($lImprime) {
-					$iContador++;
-				}
-				$lPrimeiraCelula = false;
-			}
+        if ($oPdf->gety() > $oPdf->h - 30 || $lPrimeiraCelula) {
+
+          $oPdf->addPage('L');
+          setHeaderSintetico($oPdf);
+        }
+        $iPreenche = 0;
+
+        if ($iContador % 2 != 0){
+          $iPreenche = 1;
+        }
+
+        $lImprime = getDadosSintetico($oPdf, $oMovimentos, $oGet, true,$iPreenche,false,55,35);
+
+        if ($lImprime) {
+          $iContador++;
+        }
+        $lPrimeiraCelula = false;
+
+      }
+
+      if ($oGet->totalizador == 'sim') {
+
+        getTotalGeralSintetico($oPdf, $aItens);
+
+      }
 
 			break;
 		case "A": // Analítica
@@ -535,7 +548,7 @@ if (isset($oGet->quebrapordepartamento) && $oGet->quebrapordepartamento == "S") 
 			break;
 		case "C": // Conferência
 			//echo "Conferência";exit;
-				
+
 			$iContador = 0;
 			foreach ($aEstoques as $oMovimentos) {
 
@@ -546,13 +559,13 @@ if (isset($oGet->quebrapordepartamento) && $oGet->quebrapordepartamento == "S") 
 				}
 				$iPreenche = 0;
 				$espessura=$oPdf->LineWidth;
-				
+
 				if ($iContador % 2 != 0) {
 					$iPreenche = 1;//echo "passou";exit;
 					//$oPdf->Line(230,65,260,65);
-				  $oPdf->SetLineWidth(0.3);	
+				  $oPdf->SetLineWidth(0.3);
 				}else{
-				$oPdf->SetLineWidth(0.4);	
+				$oPdf->SetLineWidth(0.4);
 				}
 				$oPdf->LineWidth=$espessura;
 				//$oPdf->Line(230,75,260,75);
@@ -686,7 +699,7 @@ function getDadosSintetico($oPdf, $oMovimentos, $oGet, $lSintetico = true, $iPre
 
 
 	if (strlen($sDescricaoItem) > 60){
-			
+
 		$pos_x = $oPdf->x;
 		$pos_y =$oPdf->y;
 		foreach ($descrItem as $descr_nova){
@@ -696,7 +709,7 @@ function getDadosSintetico($oPdf, $oMovimentos, $oGet, $lSintetico = true, $iPre
 		}
 		$oPdf->x = $pos_x+100;
 		$oPdf->y = $pos_y;
-			
+
 	}else{
 		$oPdf->cell(100,10,substr($sDescricaoItem,0,60),"", 0, "L", $iPreenche);// verificar
 		//		$oPdf->cell(100,10,substr($sDescricaoItem,0,60),"", 0, "L", $iPreenche);// verificar
@@ -705,7 +718,7 @@ function getDadosSintetico($oPdf, $oMovimentos, $oGet, $lSintetico = true, $iPre
 	/*almoxarifado */
 
 	if (strlen($sAlmoxarifado) > 60){
-			
+
 		$pos_x = $oPdf->x;
 		$pos_y =$oPdf->y;
 		foreach ($sAlmoxarifado as $sAlmox) {
@@ -715,7 +728,7 @@ function getDadosSintetico($oPdf, $oMovimentos, $oGet, $lSintetico = true, $iPre
 		}
 		$oPdf->x = $pos_x+100;
 		$oPdf->y = $pos_y;
-			
+
 	} else{
 		$oPdf->cell(60, 10,substr($sAlmoxarifado,0,40),"", 0, "L", $iPreenche);
 	}
@@ -814,7 +827,7 @@ function getDadosSinteticoQuebra($oPdf, $oMovimentos, $oTotalEstoqueSintetico, $
   $iCodigoAlmoxarifado = str_pad($oMovimentos->iCodigoAlmoxarifado, 3, " ", STR_PAD_RIGHT);
   $sAlmoxarifado       = "{$iCodigoAlmoxarifado} - $oMovimentos->sDescricaoAlmoxarifado";
   $nValorEstoque       = $oMovimentos->nQuantidadeEstoque * $oMovimentos->nPrecoMedio;
-  
+
   $oTotalEstoqueSintetico->iTotalEstoque += $oMovimentos->nQuantidadeEstoque;
   $oTotalEstoqueSintetico->iTotal        += $nValorEstoque;
 
@@ -828,9 +841,9 @@ function getDadosSinteticoQuebra($oPdf, $oMovimentos, $oTotalEstoqueSintetico, $
   $sDescricaoItem      = substr($oMovimentos->sDescricaoItem, 0, 65);
 
   $oMaterial     = new MaterialEstoque($oMovimentos->iCodigoItem);
- 
+
  // $nValorEstoque = number_format($oMaterial->getPrecoMedio() * $oMovimentos->nQuantidadeEstoque, 2);
- 
+
   $oPdf->cell(30,                   $iAlturaLinha, $oMovimentos->iCodigoItem,        $iBorda, 0, "R", $iPreenche);
   $oPdf->cell(100,                  $iAlturaLinha, $sDescricaoItem,                  $iBorda, 0, "L", $iPreenche);
   $oPdf->cell(70 - $iLarguraLinha,  $iAlturaLinha, $sAlmoxarifado,                   $iBorda, 0, "L", $iPreenche);
@@ -865,11 +878,10 @@ function getTotalizadorSinteticoPorDepart($oPdf, $oTotalRegistros,$nEstoque, $va
 }
 
 /**
- * Insere totalizados para relatório do tipo:
- * Sintetico
- * @param  Object  $oPdf                   
- * @param  Object  $oTotalEstoqueSintetico 
- * @param  boolean $lSintetico             
+ * Insere totalizados para relatório do tipo "Sintetico" quando agrupado por departamentos
+ * @param  Object  $oPdf
+ * @param  Object  $oTotalEstoqueSintetico
+ * @param  boolean $lSintetico
  */
 function getTotalizadorSintetico($oPdf, $oTotalEstoqueSintetico, $lSintetico = true) {
 
@@ -887,6 +899,38 @@ function getTotalizadorSintetico($oPdf, $oTotalEstoqueSintetico, $lSintetico = t
     $oPdf->cell(40 - $iLarguraLinha, 4, "", 'TB', 0, "R", 0);
   }
   $oPdf->cell(40 - $iLarguraLinha,  4, number_format($oTotalEstoqueSintetico->iTotal,2), 1, 1, "R", 0);
+
+}
+
+
+/**
+ * Insere totalizados para relatório do tipo:
+ * Sintetico
+ * @param  Object   $oPdf
+ * @param  Array    $aItens
+ */
+function getTotalGeralSintetico($oPdf, $aItens) {
+
+  $oTotal = new stdClass();
+  $oTotal->qtdEstoque = 0;
+  $oTotal->vlrEstoque = 0;
+
+  foreach ($aItens as $oMovimentos) {
+
+    $oMaterial     = new MaterialEstoque($oMovimentos->iCodigoItem);
+    $nValorEstoque = $oMaterial->getPrecoMedio() * $oMovimentos->nQuantidadeEstoque;
+
+    $oTotal->qtdEstoque += $oMovimentos->nQuantidadeEstoque;
+    $oTotal->vlrEstoque += $nValorEstoque;
+
+  }
+
+  $oPdf->ln(2);
+  $oPdf->setfont('arial', 'B', 7);
+
+  $oPdf->cell(200 - $iLarguraLinha, 4, 'Total:', 'LTB', 0, "L", 0);
+  $oPdf->cell(40 - $iLarguraLinha,  4, $oTotal->qtdEstoque, 1, 0, "C", 0);
+  $oPdf->cell(40 - $iLarguraLinha,  4, number_format($oTotal->vlrEstoque, 2), 1, 1, "C", 0);
 
 }
 
