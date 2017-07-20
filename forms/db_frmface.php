@@ -173,17 +173,12 @@ function js_confirma(numerotestadas){
 }
 
 function testacar(){
-  if(document.form1.caracteristica.value == ""){
-    alert('Preencha as características da face!');
-    return false
-  }else{
     <?if ($db_opcao== 2 || $db_opcao== 22){?>
   	  var face = document.form1.j37_face.value;
 	  js_OpenJanelaIframe('','db_iframe_facerua','cad1_face007.php?face='+face,'Pesquisa',false);
    <?}else{?>
     return true;
     <?}?>
-  }
   return false
 }
 
