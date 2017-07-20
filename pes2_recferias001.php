@@ -117,14 +117,11 @@ db_postmemory($HTTP_POST_VARS);
                                                   //                                       t - local de trabalho
                                                   //                                       s - recurso          
 
-  $geraform->tipofol = false;                      // MOSTRAR DO CAMPO PARA TIPO DE FOLHA
+  $geraform->tipofol = true;                      // MOSTRAR DO CAMPO PARA TIPO DE FOLHA
 
   $geraform->arr_tipofol = array(
                                  "r14"=>"Salário",
-                                 "r48"=>"Complementar",
-                                 "r20"=>"Rescisão",
-                                 "r35"=>"13o. Salário",
-                                 "r22"=>"Adiantamento"
+                                 "r31"=>"Férias"
                                 );
   $geraform->complementar = "r48";                // VALUE DA COMPLEMENTAR PARA BUSCAR SEMEST 
 
@@ -138,7 +135,7 @@ db_postmemory($HTTP_POST_VARS);
   $geraform->mostnal   = false;                    // TIPO DE ORDEM ALF./NUM      
   $geraform->selecao   = false;                    // CAMPO PARA ESCOLHA DA SELEÇÃO
   $geraform->selregime = false;                    // CAMPO PARA ESCOLHA DO REGIME
-  $geraform->atinpen   = false;                    // CAMPO PARA ESCOLHA DO REGIME
+  $geraform->atinpen   = false;                    // CAMPO PARA ESCOLHA DO REGIME                    
 
   $geraform->onchpad   = true;                    // MUDAR AS OPÇÕES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
   $geraform->gera_form($anofolha,$mesfolha);
@@ -161,6 +158,7 @@ function js_emite(){
   qry= "?tipo="+document.form1.tipo.value;
   qry+= "&ano="+document.form1.anofolha.value;
   qry+= "&mes="+document.form1.mesfolha.value;
+  qry+= "&tipofolha="+document.form1.tipofol.value;
   
   if(document.form1.selreg){
     if(document.form1.selreg.length > 0){
@@ -196,9 +194,14 @@ function js_emite(){
     qry+= "&lci="+locini;
     qry+= "&lcf="+locfim;
   }
-   
-  jan = window.open('pes2_recferias002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-  jan.moveTo(0,0);
+
+  if(document.form1.tipofol.value == 'r31'){
+    jan = window.open('pes2_recferias002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+  }else{
+    jan = window.open('pes2_recferias003.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+  }
 	
 }
 </script>
