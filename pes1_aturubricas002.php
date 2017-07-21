@@ -487,7 +487,7 @@ try {
 				$sWhere .= " and r90_rubric = '".$rh27_rubric."'";
 				$sWhere .= " and r90_instit = ".db_getsession("DB_instit");
 				$sWhere .= " and $whereatualizaFX";
-				$sWhere .= " and $r44_where";
+				//$sWhere .= " and $r44_where";
 				$result_PTFXtest = $clpontofx->sql_record($clpontofx->sql_query_seleciona(null,
 						                                                                      null,
 						                                                                      null,
