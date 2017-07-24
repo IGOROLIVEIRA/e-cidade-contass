@@ -123,18 +123,45 @@ function processarRateio(form) {
     dotacoes: []
   };
 
-  form.elements['entes[]'].forEach(function (item) {
-    params.entes.push({
-      id: item.dataset.ente,
-      percentual: item.value
-    });
-  });
+  var entes = form.elements['entes[]'];
+  if (entes) {
+    if (entes['forEach']) {
 
-  form.elements['dotacoes[]'].forEach(function (item) {
-    if (item.checked) {
-      params.dotacoes.push(item.value);
+      entes.forEach(function (item) {
+        params.entes.push({
+          id: item.dataset.ente,
+          percentual: item.value
+        });
+      });
+
+    } else {
+
+      params.entes.push({
+        id: entes.dataset.ente,
+        percentual: entes.value
+      });
+
     }
-  });
+  }
+
+  var dotacoes = form.elements['dotacoes[]'];
+  if (dotacoes) {
+    if (dotacoes['forEach']) {
+
+      dotacoes.forEach(function (item) {
+        if (item.checked) {
+          params.dotacoes.push(item.value);
+        }
+      });
+
+    } else {
+
+      if (dotacoes.checked) {
+        params.dotacoes.push(dotacoes.value);
+      }
+
+    }
+  }
 
   js_divCarregando('Aguarde', 'div_aguarde');
 
@@ -262,9 +289,20 @@ function carregarDotacoesParaRateio(mes) {
 }
 
 function checkDotacoes(valor) {
-  document.form1.elements['dotacoes[]'].forEach(function(x) {
-    x.checked = !!valor;
-  });
+
+  var dotacoes = document.form1.elements['dotacoes[]'];
+  if (dotacoes) {
+    if (dotacoes['forEach']) {
+
+      dotacoes.forEach(function (item) {
+        item.checked = !!valor;
+      });
+
+    } else {
+      dotacoes.checked = !!valor;
+    }
+  }
+
 }
 
 carregaEntesDotacoes('01');
