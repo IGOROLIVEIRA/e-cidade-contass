@@ -38,13 +38,13 @@ $clentesconsorciados = new cl_entesconsorciados;
 
         if (isset($codente)) {
 
-          $sSQL = $clentesconsorciados->sql_query(null, 'z01_nome', null, " c215_cgm = {$codente} ");
+          $sSQL = $clentesconsorciados->sql_query(null, 'z01_nome,c215_sequencial', null, " c215_cgm = {$codente} ");
           $result = $clentesconsorciados->sql_record($sSQL);
           if ($clentesconsorciados->numrows!=0) {
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('{$z01_nome}',false);</script>";
+            echo "<script>".$funcao_js."('{$z01_nome}', '{$c215_sequencial}',false);</script>";
           } else {
-            echo "<script>".$funcao_js."('Chave(".$codente.") não Encontrado',true);</script>";
+            echo "<script>".$funcao_js."('Chave(".$codente.") não Encontrado', null, true);</script>";
           }
 
         } else {
@@ -63,12 +63,12 @@ $clentesconsorciados = new cl_entesconsorciados;
           $result = $clentesconsorciados->sql_record($sSQL);
           if($clentesconsorciados->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$oid',false);</script>";
+            echo "<script>".$funcao_js."('{$z01_nome}', '{$c215_sequencial}',false);</script>";
           }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+	         echo "<script>".$funcao_js."('Chave({$pesquisa_chave}) não Encontrado', null,true);</script>";
           }
         }else{
-	       echo "<script>".$funcao_js."('',false);</script>";
+	       echo "<script>".$funcao_js."('','',false);</script>";
         }
       }
       ?>

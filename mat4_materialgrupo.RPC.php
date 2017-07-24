@@ -74,6 +74,12 @@ switch ($oParam->exec) {
                      ->setAtivo($oParam->oGrupo->lAtivo == 1?true:false)
                      ->setConta($oParam->oGrupo->iConta)
                      ->setCodigoContaVPD($oParam->oGrupo->iContaVPD)
+                      ->setCodigoContaTransf($oParam->oGrupo->iContaTransferencia)
+                      ->setCodigoContaTransfVPD($oParam->oGrupo->iContaTransferenciaVPD)
+                      ->setCodigoContaDoacao($oParam->oGrupo->iContaDoacao)
+                      ->setCodigoContaDoacaoVPD($oParam->oGrupo->iContaDoacaoVPD)
+                      ->setCodigoContaPerdaAtivo($oParam->oGrupo->iContaPerdaAtivo)
+                      ->setCodigoContaPerdaAtivoVPD($oParam->oGrupo->iContaPerdaAtivoVPD)
                      ->salvar();
 
       db_fim_transacao(false);
@@ -99,6 +105,12 @@ switch ($oParam->exec) {
     $oRetorno->codigogrupo       = $oMaterialGrupo->getCodigo();
     $oRetorno->descricaoconta    = urlencode($oMaterialGrupo->getDescricaoConta());
     $oRetorno->descricaocontaVPD = "";
+    $oRetorno->codigocontatransf        = $oMaterialGrupo->getCodigoContaTransf();
+    $oRetorno->codigocontatransfVPD     = $oMaterialGrupo->getCodigoContaTransfVPD();
+    $oRetorno->codigocontadoacao        = $oMaterialGrupo->getCodigoContaDoacao();
+    $oRetorno->codigocontadoacaoVPD     = $oMaterialGrupo->getCodigoContaDoacaoVPD();
+    $oRetorno->codigocontaperdaativo    = $oMaterialGrupo->getCodigoContaPerdaAtivo();
+    $oRetorno->codigocontaperdaativoVPD = $oMaterialGrupo->getCodigoContaPerdaAtivoVPD();
     if ($oMaterialGrupo->getContaVPD() != "") {
       $oRetorno->descricaocontaVPD = urlencode($oMaterialGrupo->getContaVPD()->getDescricao());
     }

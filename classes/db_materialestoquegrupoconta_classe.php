@@ -1,68 +1,80 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: material
 //CLASSE DA ENTIDADE materialestoquegrupoconta
-class cl_materialestoquegrupoconta { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $m66_sequencial = 0; 
-   var $m66_materialestoquegrupo = 0; 
-   var $m66_codcon = 0; 
-   var $m66_anousu = 0; 
-   var $m66_codconvpd = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_materialestoquegrupoconta {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $m66_sequencial = 0;
+   var $m66_materialestoquegrupo = 0;
+   var $m66_codcon = 0;
+   var $m66_anousu = 0;
+   var $m66_codconvpd = 0;
+    var $m66_codcontransf = null;
+    var $m66_codcontransfvpd = null;
+    var $m66_codcondoacao = null;
+    var $m66_codcondoacaovpd = null;
+    var $m66_codconperdaativo = null;
+    var $m66_codconperdaativovpd = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 m66_sequencial = int4 = Código Sequencial 
-                 m66_materialestoquegrupo = int4 = Código do Grupo 
-                 m66_codcon = int4 = Código da conta do plano de contas 
-                 m66_anousu = int4 = Ano da Conta 
-                 m66_codconvpd = int4 = Conta VPD 
+                 m66_sequencial = int4 = Código Sequencial
+                 m66_materialestoquegrupo = int4 = Código do Grupo
+                 m66_codcon = int4 = Código da conta do plano de contas
+                 m66_anousu = int4 = Ano da Conta
+                 m66_codconvpd = int4 = Conta VPD
+                  m66_codcontransf = int4 = Código da conta Transferência
+                  m66_codcontransfvpd = int4 = Código da conta  Transferência VPD
+                  m66_codcondoacao = int4 = Código da conta Doação
+                  m66_codcondoacaovpd = int4 = Código da conta Doação VPD
+                  m66_codconperdaativo = int4 = Código da conta Perda Ativo
+                  m66_codconperdaativovpd = int4 = Código da conta Perda Ativo VPD
                  ";
-   //funcao construtor da classe 
-   function cl_materialestoquegrupoconta() { 
+   //funcao construtor da classe
+   function cl_materialestoquegrupoconta() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("materialestoquegrupoconta"); 
+     $this->rotulo = new rotulo("materialestoquegrupoconta");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -78,14 +90,20 @@ class cl_materialestoquegrupoconta {
        $this->m66_codcon = ($this->m66_codcon == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_codcon"]:$this->m66_codcon);
        $this->m66_anousu = ($this->m66_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_anousu"]:$this->m66_anousu);
        $this->m66_codconvpd = ($this->m66_codconvpd == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_codconvpd"]:$this->m66_codconvpd);
+       $this->m66_codcontransf = ($this->m66_codcontransf == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_codcontransf"]:$this->m66_codcontransf);
+       $this->m66_codcontransfvpd = ($this->m66_codcontransfvpd == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_codcontransfvpd"]:$this->m66_codcontransfvpd);
+       $this->m66_codcondoacao = ($this->m66_codcondoacao == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_codcondoacao"]:$this->m66_codcondoacao);
+       $this->m66_codcondoacaovpd = ($this->m66_codcondoacaovpd == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_codcondoacaovpd"]:$this->m66_codcondoacaovpd);
+       $this->m66_codconperdaativo = ($this->m66_codconperdaativo == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_codconperdaativo"]:$this->m66_codconperdaativo);
+       $this->m66_codconperdaativovpd = ($this->m66_codconperdaativovpd == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_codconperdaativovpd"]:$this->m66_codconperdaativovpd);
      }else{
        $this->m66_sequencial = ($this->m66_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["m66_sequencial"]:$this->m66_sequencial);
      }
    }
    // funcao para inclusao
-   function incluir ($m66_sequencial){ 
+   function incluir ($m66_sequencial){
       $this->atualizacampos();
-     if($this->m66_materialestoquegrupo == null ){ 
+     if($this->m66_materialestoquegrupo == null ){
        $this->erro_sql = " Campo Código do Grupo nao Informado.";
        $this->erro_campo = "m66_materialestoquegrupo";
        $this->erro_banco = "";
@@ -94,7 +112,7 @@ class cl_materialestoquegrupoconta {
        $this->erro_status = "0";
        return false;
      }
-     if($this->m66_codcon == null ){ 
+     if($this->m66_codcon == null ){
        $this->erro_sql = " Campo Código da conta do plano de contas nao Informado.";
        $this->erro_campo = "m66_codcon";
        $this->erro_banco = "";
@@ -103,7 +121,7 @@ class cl_materialestoquegrupoconta {
        $this->erro_status = "0";
        return false;
      }
-     if($this->m66_anousu == null ){ 
+     if($this->m66_anousu == null ){
        $this->erro_sql = " Campo Ano da Conta nao Informado.";
        $this->erro_campo = "m66_anousu";
        $this->erro_banco = "";
@@ -112,7 +130,7 @@ class cl_materialestoquegrupoconta {
        $this->erro_status = "0";
        return false;
      }
-     if($this->m66_codconvpd == null ){ 
+     if($this->m66_codconvpd == null ){
        $this->erro_sql = " Campo Conta VPD nao Informado.";
        $this->erro_campo = "m66_codconvpd";
        $this->erro_banco = "";
@@ -121,17 +139,37 @@ class cl_materialestoquegrupoconta {
        $this->erro_status = "0";
        return false;
      }
+
+      if ($this->m66_codcontransf == null) {
+        $this->m66_codcontransf = 'null';
+      }
+      if ($this->m66_codcontransfvpd == null) {
+        $this->m66_codcontransfvpd = 'null';
+      }
+      if ($this->m66_codcondoacao == null) {
+        $this->m66_codcondoacao = 'null';
+      }
+      if ($this->m66_codcondoacaovpd == null) {
+        $this->m66_codcondoacaovpd = 'null';
+      }
+      if ($this->m66_codconperdaativo == null) {
+        $this->m66_codconperdaativo = 'null';
+      }
+      if ($this->m66_codconperdaativovpd == null) {
+        $this->m66_codconperdaativovpd = 'null';
+      }
+
      if($m66_sequencial == "" || $m66_sequencial == null ){
-       $result = db_query("select nextval('materialestoquegrupoconta_m66_sequencial_seq')"); 
+       $result = db_query("select nextval('materialestoquegrupoconta_m66_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: materialestoquegrupoconta_m66_sequencial_seq do campo: m66_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: materialestoquegrupoconta_m66_sequencial_seq do campo: m66_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->m66_sequencial = pg_result($result,0,0); 
+       $this->m66_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from materialestoquegrupoconta_m66_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $m66_sequencial)){
@@ -142,10 +180,10 @@ class cl_materialestoquegrupoconta {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->m66_sequencial = $m66_sequencial; 
+         $this->m66_sequencial = $m66_sequencial;
        }
      }
-     if(($this->m66_sequencial == null) || ($this->m66_sequencial == "") ){ 
+     if(($this->m66_sequencial == null) || ($this->m66_sequencial == "") ){
        $this->erro_sql = " Campo m66_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -154,21 +192,33 @@ class cl_materialestoquegrupoconta {
        return false;
      }
      $sql = "insert into materialestoquegrupoconta(
-                                       m66_sequencial 
-                                      ,m66_materialestoquegrupo 
-                                      ,m66_codcon 
-                                      ,m66_anousu 
-                                      ,m66_codconvpd 
+                                       m66_sequencial
+                                      ,m66_materialestoquegrupo
+                                      ,m66_codcon
+                                      ,m66_anousu
+                                      ,m66_codconvpd
+                                      ,m66_codcontransf
+                                      ,m66_codcontransfvpd
+                                      ,m66_codcondoacao
+                                      ,m66_codcondoacaovpd
+                                      ,m66_codconperdaativo
+                                      ,m66_codconperdaativovpd
                        )
                 values (
-                                $this->m66_sequencial 
-                               ,$this->m66_materialestoquegrupo 
-                               ,$this->m66_codcon 
-                               ,$this->m66_anousu 
-                               ,$this->m66_codconvpd 
+                                {$this->m66_sequencial}
+                               ,{$this->m66_materialestoquegrupo}
+                               ,{$this->m66_codcon}
+                               ,{$this->m66_anousu}
+                               ,{$this->m66_codconvpd}
+                                ,{$this->m66_codcontransf}
+                                ,{$this->m66_codcontransfvpd}
+                                ,{$this->m66_codcondoacao}
+                                ,{$this->m66_codcondoacaovpd}
+                                ,{$this->m66_codconperdaativo}
+                                ,{$this->m66_codconperdaativovpd}
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Conta Contabil do Grupo do material ($this->m66_sequencial) nao Incluído. Inclusao Abortada.";
@@ -210,16 +260,16 @@ class cl_materialestoquegrupoconta {
        }
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($m66_sequencial=null) { 
+   function alterar ($m66_sequencial=null) {
       $this->atualizacampos();
      $sql = " update materialestoquegrupoconta set ";
      $virgula = "";
-     if(trim($this->m66_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_sequencial"])){ 
+     if(trim($this->m66_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_sequencial"])){
        $sql  .= $virgula." m66_sequencial = $this->m66_sequencial ";
        $virgula = ",";
-       if(trim($this->m66_sequencial) == null ){ 
+       if(trim($this->m66_sequencial) == null ){
          $this->erro_sql = " Campo Código Sequencial nao Informado.";
          $this->erro_campo = "m66_sequencial";
          $this->erro_banco = "";
@@ -229,10 +279,10 @@ class cl_materialestoquegrupoconta {
          return false;
        }
      }
-     if(trim($this->m66_materialestoquegrupo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_materialestoquegrupo"])){ 
+     if(trim($this->m66_materialestoquegrupo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_materialestoquegrupo"])){
        $sql  .= $virgula." m66_materialestoquegrupo = $this->m66_materialestoquegrupo ";
        $virgula = ",";
-       if(trim($this->m66_materialestoquegrupo) == null ){ 
+       if(trim($this->m66_materialestoquegrupo) == null ){
          $this->erro_sql = " Campo Código do Grupo nao Informado.";
          $this->erro_campo = "m66_materialestoquegrupo";
          $this->erro_banco = "";
@@ -242,10 +292,10 @@ class cl_materialestoquegrupoconta {
          return false;
        }
      }
-     if(trim($this->m66_codcon)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_codcon"])){ 
+     if(trim($this->m66_codcon)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_codcon"])){
        $sql  .= $virgula." m66_codcon = $this->m66_codcon ";
        $virgula = ",";
-       if(trim($this->m66_codcon) == null ){ 
+       if(trim($this->m66_codcon) == null ){
          $this->erro_sql = " Campo Código da conta do plano de contas nao Informado.";
          $this->erro_campo = "m66_codcon";
          $this->erro_banco = "";
@@ -255,10 +305,10 @@ class cl_materialestoquegrupoconta {
          return false;
        }
      }
-     if(trim($this->m66_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_anousu"])){ 
+     if(trim($this->m66_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_anousu"])){
        $sql  .= $virgula." m66_anousu = $this->m66_anousu ";
        $virgula = ",";
-       if(trim($this->m66_anousu) == null ){ 
+       if(trim($this->m66_anousu) == null ){
          $this->erro_sql = " Campo Ano da Conta nao Informado.";
          $this->erro_campo = "m66_anousu";
          $this->erro_banco = "";
@@ -268,10 +318,10 @@ class cl_materialestoquegrupoconta {
          return false;
        }
      }
-     if(trim($this->m66_codconvpd)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_codconvpd"])){ 
+     if(trim($this->m66_codconvpd)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_codconvpd"])){
        $sql  .= $virgula." m66_codconvpd = $this->m66_codconvpd ";
        $virgula = ",";
-       if(trim($this->m66_codconvpd) == null ){ 
+       if(trim($this->m66_codconvpd) == null ){
          $this->erro_sql = " Campo Conta VPD nao Informado.";
          $this->erro_campo = "m66_codconvpd";
          $this->erro_banco = "";
@@ -281,6 +331,46 @@ class cl_materialestoquegrupoconta {
          return false;
        }
      }
+
+      if (trim($this->m66_codcontransf) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codcontransf'])) {
+        $sql .= $virgula . " m66_codcontransf = {$this->m66_codcontransf} ";
+        $virgula = ',';
+      }
+      if (trim($this->m66_codcontransfvpd) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codcontransfvpd'])) {
+        $sql .= $virgula . " m66_codcontransfvpd = {$this->m66_codcontransfvpd} ";
+        $virgula = ',';
+      }
+      if (trim($this->m66_codcondoacao) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codcondoacao'])) {
+        $sql .= $virgula . " m66_codcondoacao = {$this->m66_codcondoacao} ";
+        $virgula = ',';
+      }
+      if (trim($this->m66_codcondoacaovpd) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codcondoacaovpd'])) {
+        $sql .= $virgula . " m66_codcondoacaovpd = {$this->m66_codcondoacaovpd} ";
+        $virgula = ',';
+      }
+      if (trim($this->m66_codconperdaativo) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codconperdaativo'])) {
+        $sql .= $virgula . " m66_codconperdaativo = {$this->m66_codconperdaativo} ";
+        $virgula = ',';
+      }
+      if (trim($this->m66_codconperdaativovpd) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codconperdaativovpd'])) {
+        $sql .= $virgula . " m66_codconperdaativovpd = {$this->m66_codconperdaativovpd} ";
+        $virgula = ',';
+      }
+
+     if(trim($this->m66_codconvpd)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m66_codconvpd"])){
+       $sql  .= $virgula." m66_codconvpd = $this->m66_codconvpd ";
+       $virgula = ",";
+       if(trim($this->m66_codconvpd) == null ){
+         $this->erro_sql = " Campo Conta VPD nao Informado.";
+         $this->erro_campo = "m66_codconvpd";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
      $sql .= " where ";
      if($m66_sequencial!=null){
        $sql .= " m66_sequencial = $this->m66_sequencial";
@@ -312,7 +402,7 @@ class cl_materialestoquegrupoconta {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Conta Contabil do Grupo do material nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->m66_sequencial;
@@ -340,11 +430,11 @@ class cl_materialestoquegrupoconta {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($m66_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($m66_sequencial=null,$dbwhere=null) {
 
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
@@ -353,7 +443,7 @@ class cl_materialestoquegrupoconta {
        if ($dbwhere==null || $dbwhere=="") {
 
          $resaco = $this->sql_record($this->sql_query_file($m66_sequencial));
-       } else { 
+       } else {
          $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
        }
        if (($resaco != false) || ($this->numrows!=0)) {
@@ -386,7 +476,7 @@ class cl_materialestoquegrupoconta {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Conta Contabil do Grupo do material nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$m66_sequencial;
@@ -414,11 +504,11 @@ class cl_materialestoquegrupoconta {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -440,8 +530,8 @@ class cl_materialestoquegrupoconta {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $m66_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $m66_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -463,8 +553,8 @@ class cl_materialestoquegrupoconta {
      $sql2 = "";
      if($dbwhere==""){
        if($m66_sequencial!=null ){
-         $sql2 .= " where materialestoquegrupoconta.m66_sequencial = $m66_sequencial "; 
-       } 
+         $sql2 .= " where materialestoquegrupoconta.m66_sequencial = $m66_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -480,8 +570,8 @@ class cl_materialestoquegrupoconta {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $m66_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $m66_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -497,8 +587,8 @@ class cl_materialestoquegrupoconta {
      $sql2 = "";
      if($dbwhere==""){
        if($m66_sequencial!=null ){
-         $sql2 .= " where materialestoquegrupoconta.m66_sequencial = $m66_sequencial "; 
-       } 
+         $sql2 .= " where materialestoquegrupoconta.m66_sequencial = $m66_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
