@@ -1,0 +1,264 @@
+<?php
+
+require_once("std/db_stdClass.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_funcoes.php");
+require_once("libs/JSON.php");
+
+db_postmemory($_POST);
+
+$oJson             = new services_json();
+$oParam            = $oJson->decode(str_replace("\\","",$_POST["json"]));
+
+$oRetorno          = new stdClass();
+$oRetorno->status  = 1;
+
+$nAnoUsu = db_getsession('DB_anousu');
+$nInstit = db_getsession('DB_instit');
+
+switch ($oParam->exec){
+
+  case "buscaEntesConsorcionados":
+
+    require_once("classes/db_entesconsorciados_classe.php");
+
+    try {
+
+      $oEntes = new cl_entesconsorciados();
+
+      $sDataIni = "{$nAnoUsu}-{$oParam->mes}-01";
+      $sDataFim = date('Y-m-t', mktime(0, 0, 0, $oParam->mes, 1, $nAnoUsu));
+
+      $sWhere = "
+        c215_datainicioparticipacao <= '{$sDataFim}'
+        AND (
+          (c215_datafimparticipacao >= '{$sDataIni}')
+          OR
+          (c215_datafimparticipacao IS NULL)
+        )
+      ";
+
+      $sCampos = implode(', ', array(
+        'c215_sequencial',
+        'c215_cgm',
+        'c215_percentualrateio',
+        'z01_nome'
+      ));
+
+      $sSql = $oEntes->sql_query(null, $sCampos, null, $sWhere);
+
+      $rsEntes = $oEntes->sql_record($sSql);
+
+      $aEntes = db_utils::getCollectionByRecord($rsEntes);
+
+      $oRetorno->entes = array();
+
+      foreach ($aEntes as $oEnte) {
+
+        $oNovoEnte = new stdClass();
+        $oNovoEnte->sequencial   = $oEnte->c215_sequencial;
+        $oNovoEnte->percentual   = $oEnte->c215_percentualrateio;
+        $oNovoEnte->cgm          = $oEnte->c215_cgm;
+        $oNovoEnte->nome         = $oEnte->z01_nome;
+
+        $oRetorno->entes[] = $oNovoEnte;
+
+      }
+
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+    }
+
+  break; // buscaEntesConsorcionados
+
+
+  case "buscaDotacoes":
+
+    require_once("classes/db_orcdotacao_classe.php");
+
+    try {
+
+      $oDotacoes = new cl_orcdotacao();
+
+      $sCampos = implode(', ', array(
+        'o58_coddot',
+        'o58_orgao',
+        'o58_unidade',
+        'o58_funcao',
+        'o58_subfuncao',
+        'o58_programa',
+        'o58_projativ',
+        'o56_elemento',
+        'o56_descr'
+      ));
+
+      $sWhere = "o58_anousu = {$nAnoUsu} AND o58_instit = {$nInstit}";
+
+      $sSql = $oDotacoes->sql_query(null, null, $sCampos, 'o58_coddot', $sWhere);
+
+      $rsDotacoes = $oDotacoes->sql_record($sSql);
+
+      $aDotacoes = db_utils::getCollectionByRecord($rsDotacoes);
+
+      $oRetorno->dotacoes = array();
+
+      foreach ($aDotacoes as $oDotacao) {
+
+        $oNovaDotacao = new stdClass();
+
+        $oNovaDotacao->codigo     = $oDotacao->o58_coddot;
+        $oNovaDotacao->orgao      = str_pad($oDotacao->o58_orgao, 2, '0', STR_PAD_LEFT);
+        $oNovaDotacao->unidade    = str_pad($oDotacao->o58_unidade, 2, '0', STR_PAD_LEFT);
+        $oNovaDotacao->funcao     = str_pad($oDotacao->o58_funcao, 2, '0', STR_PAD_LEFT);
+        $oNovaDotacao->subfuncao  = str_pad($oDotacao->o58_subfuncao, 3, '0', STR_PAD_LEFT);
+        $oNovaDotacao->programa   = str_pad($oDotacao->o58_programa, 4, '0', STR_PAD_LEFT);
+        $oNovaDotacao->projativ   = str_pad($oDotacao->o58_projativ, 4, '0', STR_PAD_LEFT);
+        $oNovaDotacao->elemento   = $oDotacao->o56_elemento;
+        $oNovaDotacao->descricao  = $oDotacao->o56_descr;
+
+        $oRetorno->dotacoes[] = $oNovaDotacao;
+
+      }
+
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+    }
+
+  break; // buscaDotacoes
+
+
+  case 'processarRateio':
+
+    require_once('classes/db_conlancamdoc_classe.php');
+    require_once('classes/db_despesarateioconsorcio_classe.php');
+    require_once('classes/db_entesconsorciados_classe.php');
+
+    $oConLancamDoc = new cl_conlancamdoc();
+
+    try {
+
+      if (empty($oParam->dotacoes)) {
+        throw new Exception("Selecione pelo menos uma dotação", 1);
+      }
+      if (empty($oParam->entes)) {
+        throw new Exception("Erro ao processar os entes: nenhum ente encontrado", 1);
+      }
+      if (empty($oParam->mes)) {
+        throw new Exception("Mês inválido", 1);
+      }
+
+      $aEntes = array();
+
+      $aRetornoFinal = array();
+
+      foreach ($oParam->entes as $oEnte) {
+        $aEntes[$oEnte->id] = $oEnte->percentual;
+      }
+
+      $sDotacoes = implode(', ', $oParam->dotacoes);
+
+      $aClassificacao = $oConLancamDoc->classificacao($oParam->mes, $sDotacoes);
+
+      $aPercenteAplicado = $oConLancamDoc->aplicaPercentDotacoes($aClassificacao, $aEntes);
+
+      $aRetornoFinal = $aPercenteAplicado;
+
+      if (intval($oParam->mes) >= 12) {
+
+        $aClassificacaoDezembro = $oConLancamDoc->classificacaoAteDezembro($sDotacoes);
+
+        $aPercenteAplicadoDezmb = $oConLancamDoc->aplicaPercentDotacoes($aClassificacaoDezembro, $aEntes);
+
+        foreach ($aPercenteAplicadoDezmb as $nIdEnte => $oInfoEnte) {
+
+          foreach ($oInfoEnte->dotacoes as $sHash => $oDotacao) {
+
+            if (!isset($aRetornoFinal[$nIdEnte])) {
+              $aRetornoFinal[$nIdEnte] = $oInfoEnte;
+            }
+
+            if (isset($aRetornoFinal[$nIdEnte]->dotacoes[$sHash])) {
+
+              $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorempenhado  += $oDotacao->valorempenhado;
+              $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorliquidado  += $oDotacao->valorliquidado;
+              $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorpago       += $oDotacao->valorpago;
+
+            } else {
+              $aRetornoFinal[$nIdEnte]->dotacoes[$sHash] = $oDotacao;
+            }
+
+          }
+
+        }
+
+      } // mês 12
+
+      foreach ($aRetornoFinal as $nIdEnte => $oInfoEnte) {
+        foreach ($oInfoEnte->dotacoes as $sHash => $oDotacao) {
+
+          $oDespesaRateioConsorcio  = new cl_despesarateioconsorcio();
+          $oEntesConsorciados       = new cl_entesconsorciados();
+
+          $oEntesConsorciados->c215_sequencial        = $oInfoEnte->enteconsorciado;
+          $oEntesConsorciados->c215_percentualrateio  = $oInfoEnte->percentualrateio;
+          $oEntesConsorciados->alterar($oInfoEnte->enteconsorciado);
+
+          $sWhereExcluir = "
+                c217_enteconsorciado  = " . intval($oInfoEnte->enteconsorciado) . "
+            AND c217_funcao           = " . intval($oDotacao->funcao) . "
+            AND c217_subfuncao        = " . intval($oDotacao->subfuncao) . "
+            AND c217_natureza         = '{$oDotacao->natureza}'
+            AND c217_subelemento      = '{$oDotacao->subelemento}'
+            AND c217_fonte            = " . intval($oDotacao->fonte) . "
+            AND c217_mes              = " . $oParam->mes . "
+            AND c217_anousu           = {$nAnoUsu}
+          ";
+          $oDespesaRateioConsorcio->excluir(null, $sWhereExcluir);
+
+          $oDespesaRateioConsorcio->c217_enteconsorciado        = $oInfoEnte->enteconsorciado;
+          $oDespesaRateioConsorcio->c217_percentualrateio       = $oInfoEnte->percentualrateio;
+          $oDespesaRateioConsorcio->c217_funcao                 = $oDotacao->funcao;
+          $oDespesaRateioConsorcio->c217_subfuncao              = $oDotacao->subfuncao;
+          $oDespesaRateioConsorcio->c217_natureza               = $oDotacao->natureza;
+          $oDespesaRateioConsorcio->c217_subelemento            = $oDotacao->subelemento;
+          $oDespesaRateioConsorcio->c217_fonte                  = $oDotacao->fonte;
+          $oDespesaRateioConsorcio->c217_valorempenhado         = $oDotacao->valorempenhado;
+          $oDespesaRateioConsorcio->c217_valorempenhadoanulado  = $oDotacao->valorempenhadoanulado;
+          $oDespesaRateioConsorcio->c217_valorliquidado         = $oDotacao->valorliquidado;
+          $oDespesaRateioConsorcio->c217_valorliquidadoanulado  = $oDotacao->valorliquidadoanulado;
+          $oDespesaRateioConsorcio->c217_valorpago              = $oDotacao->valorpago;
+          $oDespesaRateioConsorcio->c217_valorpagoanulado       = $oDotacao->valorpagoanulado;
+          $oDespesaRateioConsorcio->c217_mes                    = $oParam->mes;
+          $oDespesaRateioConsorcio->c217_anousu                 = $nAnoUsu;
+
+          $oDespesaRateioConsorcio->incluir();
+
+          if (!in_array($oDespesaRateioConsorcio->erro_status, array(1, null))) {
+            throw new Exception("{$nIdEnte} :: $sHash | " . $oDespesaRateioConsorcio->erro_msg, 1);
+          }
+
+        }
+      }
+
+      $oRetorno->classificacao = $aRetornoFinal;
+
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+    }
+
+    $oRetorno->sucesso = utf8_encode("Geração realizada.");
+
+  break;
+
+}
+
+if (isset($oRetorno->erro)) {
+  $oRetorno->erro = utf8_encode($oRetorno->erro);
+}
+
+echo $oJson->encode($oRetorno);
+?>

@@ -2915,7 +2915,7 @@ function js_divCarregando(mensagem,id, lBloqueia){
    var camada = document.createElement("DIV");
    camada.setAttribute("id",id);
    camada.setAttribute("align","center");
-   camada.style.position        = "absolute";
+   camada.style.position        = "fixed";
    // mensagem no meio da tela
    camada.style.left       = ((document.body.clientWidth / 2 ) - 100 )+'px';
    camada.style.top        = ((screen.availHeight-450)/2)+'px';
@@ -2940,7 +2940,7 @@ function js_divCarregando(mensagem,id, lBloqueia){
      oDisableBody.style.left            = "0";
      oDisableBody.style.width           = "99%";
      oDisableBody.style.height          = "100%";
-     oDisableBody.style.position        = 'absolute';
+     oDisableBody.style.position        = 'fixed';
      oDisableBody.style.zIndex          = '99999999';
      oDisableBody.style.opacity         = '0.0';
      top.corpo.document.body.appendChild(oDisableBody);
