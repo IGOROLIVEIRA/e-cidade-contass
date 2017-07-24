@@ -191,6 +191,12 @@ try {
 
       break;
 
+    case 'csv':
+
+      require_once('con2_relatoriorateio002_csv.php');
+
+      break;
+
     default:
       throw new Exception("Tipo de arquivo não suportado", 1);
       break;
