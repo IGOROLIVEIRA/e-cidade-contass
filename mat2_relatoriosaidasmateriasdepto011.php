@@ -63,18 +63,18 @@ if($clparcustos->numrows > 0){
                   estilos.css,
                   grid.style.css
                  ");
-    
+
     db_app::load("widgets/windowAux.widget.js,
     		          widgets/dbtextField.widget.js,
     		          dbmessageBoard.widget.js,
     		          dbcomboBox.widget.js,
     		          prototype.maskedinput.js,
     	 	          DBTreeView.widget.js,
-    		          arrays.js");    
-    
-    
+    		          arrays.js");
+
+
   ?>
-  
+
 
 <style >
 
@@ -134,7 +134,7 @@ if($clparcustos->numrows > 0){
 	        </td>
 	      </tr>
 
-      
+
 	      <tr id='data' style='display:""'>
 	        <td>
 	          <b>Período: </b>
@@ -153,17 +153,28 @@ if($clparcustos->numrows > 0){
 	        </td>
 	        <td>
 		       <?
-		       $tipo_ordem = array("a" => "Codigo",
-		                           "b" => "Departamento",
-		                           "c" => "Alfabética",
-		                           "d" => "Data"
-		                          );
+		       $tipo_ordem = array(
+              "c" => "Alfabética",
+              "a" => "Codigo",
+              "b" => "Departamento",
+              "d" => "Data"
+            );
 		       db_select("ordem",$tipo_ordem,true,2); ?>
 	   	    </td>
 		    </tr>
-	    
-	    
-	    
+
+        <tr>
+          <td><strong>Agrupar por departamento:</strong></td>
+          <td>
+            <select name="agrupar_dpto">
+              <option value="nao" selected>Não</option>
+              <option value="sim">Sim</option>
+            </select>
+          </td>
+        </tr>
+
+
+
       <tr>
         <td colspan="2" align = "center"><br>
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_mandadados();" >
@@ -209,9 +220,9 @@ var windowGrupo = '';
 var oTreeViewGrupos = new DBTreeView('treeViewGrupo');
 
 function js_escolheGrupoSubgrupo() {
- 
-  if ( !(windowGrupo instanceof windowAux) ) { 
-    
+
+  if ( !(windowGrupo instanceof windowAux) ) {
+
     var iTamWidth          = screen.availWidth / 2;
     var iTamHeight         = screen.availHeight / 2;
     var iTamHeightFieldset = iTamHeight - 150;
@@ -231,7 +242,7 @@ function js_escolheGrupoSubgrupo() {
         sContent += "    </center>";
         sContent += "  </div>";
         sContent += "</div>";
-    
+
     windowGrupo.setContent(sContent);
     windowGrupo.setShutDownFunction(function() {
       windowGrupo.hide();
@@ -241,18 +252,18 @@ function js_escolheGrupoSubgrupo() {
     js_divCarregando("Aguarde, buscando registros","msgBox");
     var sRPCArq = 'mat4_materialgrupo.RPC.php';
     var oParam  = new Object();
-    oParam.exec = 'getGrupos'; 
+    oParam.exec = 'getGrupos';
     var oAjax   = new Ajax.Request(sRPCArq,
                                    {method: 'post',
                                     asynchronous: false,
-                                    parameters: 'json='+Object.toJSON(oParam), 
+                                    parameters: 'json='+Object.toJSON(oParam),
                                     onComplete: js_retornoWindowGrupo
                                    }) ;
-    
-    
+
+
     oTreeViewGrupos.allowFind(true);
     oTreeViewGrupos.setFindOptions('matchedonly');
-    
+
     /**
      *  Configurações do componente Message Board
      */
@@ -260,42 +271,42 @@ function js_escolheGrupoSubgrupo() {
     var sTitleMsgBoard    = "Escolha de Grupos / Subgrupos";
     var sHelpMsgBoard     = "Escolha os grupos/subgrupos para adicionar ao filtro.";
     var oWhereAddMsgBoard = "escolheGrupo";
-    var ajudaWindowGrupo  = new DBMessageBoard(sIdMsgBoard, sTitleMsgBoard, sHelpMsgBoard, 
+    var ajudaWindowGrupo  = new DBMessageBoard(sIdMsgBoard, sTitleMsgBoard, sHelpMsgBoard,
                                                windowGrupo.getContentContainer());
-      
-      
+
+
   }
-  windowGrupo.show();  
+  windowGrupo.show();
 }
 
 function js_retornoWindowGrupo (oAjax) {
-  
+
   js_removeObj("msgBox");
   var oRetorno      = eval("(" + oAjax.responseText + ")");
   var iTotalRetorno = oRetorno.aGrupos.length;
   var sRetornoInfo  = oRetorno.aGrupos;
-  
+
   for (var i = 0; i < iTotalRetorno; i++) {
-  
-  
+
+
     with(oRetorno.aGrupos[i]) {
-    
+
       var iRetNivel      = nivel;
       var sRetLabel      = estrutural+" - "+descricaogrupo.urlDecode();
       var sRetParentNode = conta_pai;
       oCheck = function (oNode, event) {
-                   
+
        if (oNode.checkbox.checked) {
-           oNode.checkAll(event);       
+           oNode.checkAll(event);
         } else {
            oNode.uncheckAll(event);
         }
       }
-      oTreeViewGrupos.addNode(codigogrupo, 
-                              sRetLabel, 
+      oTreeViewGrupos.addNode(codigogrupo,
+                              sRetLabel,
                               sRetParentNode,
-                              null, 
-                              null, 
+                              null,
+                              null,
                               {checked:false,
                                onClick:oCheck
                               }
@@ -306,6 +317,14 @@ function js_retornoWindowGrupo (oAjax) {
 }
 
 function js_mandadados(){
+
+  var urls = {
+    padrao: 'mat2_relatoriosaidasmateriasdepto002.php',
+    separaDepartamentos: 'mat2_relatoriosaidasmateriasdepto002_deptos.php'
+  };
+
+
+
 
  query       = "";
  vir         = "";
@@ -359,6 +378,7 @@ function js_mandadados(){
  vir        = "";
  listaorgao = "";
  obj        = parent.iframe_g4.db_iframe_orgao.document.getElementsByTagName("input");
+ console.log(obj);
  nObj       = obj.length;
 
  for (x=0 ; x < nObj;x++){
@@ -388,15 +408,15 @@ function js_mandadados(){
 
  var aLinhas = oTreeViewGrupos.getNodesChecked();
  var aContas = new Array();
- 
- aLinhas.each ( 
+
+ aLinhas.each (
    function(oRetornoCheck) {
-   
+
      aContas.push(oRetornoCheck.value);
    }
  );
 
- 
+
  query+='&listadepart=' + listadepartOrigem;
  query+='&verdepart='   + document.form1.ver.value;
  query+='&listamat='    + listamat;
@@ -409,10 +429,14 @@ function js_mandadados(){
  query+='&ordem='               + document.form1.ordem.value;
  query+='&listaorgao='          + listaorgao;
  query+='&listamatestoquetipo=' +listamatestoquetipo;
- 
+ query+='&separaDepartamentos=' + document.form1.agrupar_dpto.value;
+
  query+= '&grupos=' + aContas.implode(',');
- 
- jan = window.open('mat2_relatoriosaidasmateriasdepto002.php?'+query,'',
+
+
+ var URL = document.form1.agrupar_dpto.value == 'sim' ? 'separaDepartamentos' : 'padrao';
+
+ jan = window.open( urls[URL] + '?' + query,'',
                    'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
  jan.moveTo(0,0);
 
