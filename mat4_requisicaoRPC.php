@@ -238,11 +238,3 @@ if ($oParam->exec == "getDados"){
   echo $oJson->encode(array("status" => 1, "message"=> "Inclusão efetuada com Sucesso"));
 }
 ?>
---- Changelist 'OC4038':
-M       classes/db_materialestoquegrupoconta_classe.php
-M       forms/db_frmmatestoquesaiinc.php
-M       mat4_materialgrupo.RPC.php
-M       mat4_requisicaoRPC.php
-M       model/estoque/MaterialGrupo.model.php
-M       scripts/classes/DBViewMaterialGrupo.js
-A       updatedb/script_oc4038.sql
