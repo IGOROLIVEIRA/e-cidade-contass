@@ -27,7 +27,8 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
              AND desatemes.c217_mes = {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS empenhomes,
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS empenhomes,
 
         (SELECT sum(desatemes.c217_valorempenhado)
          FROM despesarateioconsorcio desatemes
@@ -36,8 +37,9 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_natureza=desatemes.c217_natureza
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
-             AND desatemes.c217_mes < {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS empenhoatemes,
+             AND desatemes.c217_mes <= {$nMes}
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS empenhoatemes,
 
         (SELECT sum(desatemes.c217_valorempenhadoanulado)
          FROM despesarateioconsorcio desatemes
@@ -47,7 +49,8 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
              AND desatemes.c217_mes = {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS anuladomes,
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS anuladomes,
 
         (SELECT sum(desatemes.c217_valorempenhadoanulado)
          FROM despesarateioconsorcio desatemes
@@ -56,8 +59,9 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_natureza=desatemes.c217_natureza
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
-             AND desatemes.c217_mes < {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS anuladoatemes,
+             AND desatemes.c217_mes <= {$nMes}
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS anuladoatemes,
 
         (SELECT sum(desatemes.c217_valorliquidado)
          FROM despesarateioconsorcio desatemes
@@ -67,7 +71,8 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
              AND desatemes.c217_mes = {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS liquidadomes,
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS liquidadomes,
 
         (SELECT sum(desatemes.c217_valorliquidado)
          FROM despesarateioconsorcio desatemes
@@ -76,8 +81,9 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_natureza=desatemes.c217_natureza
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
-             AND desatemes.c217_mes < {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS liquidadoatemes,
+             AND desatemes.c217_mes <= {$nMes}
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS liquidadoatemes,
 
         (SELECT sum(desatemes.c217_valorliquidadoanulado)
          FROM despesarateioconsorcio desatemes
@@ -87,7 +93,8 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
              AND desatemes.c217_mes = {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS liquidadoanualdomes,
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS liquidadoanualdomes,
 
         (SELECT sum(desatemes.c217_valorliquidadoanulado)
          FROM despesarateioconsorcio desatemes
@@ -96,8 +103,9 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_natureza=desatemes.c217_natureza
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
-             AND desatemes.c217_mes < {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS liquidadoanualdoatemes,
+             AND desatemes.c217_mes <= {$nMes}
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS liquidadoanualdoatemes,
 
         (SELECT sum(desatemes.c217_valorpago)
          FROM despesarateioconsorcio desatemes
@@ -107,7 +115,8 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
              AND desatemes.c217_mes = {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS pagomes,
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS pagomes,
 
         (SELECT sum(desatemes.c217_valorpago)
          FROM despesarateioconsorcio desatemes
@@ -116,8 +125,9 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_natureza=desatemes.c217_natureza
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
-             AND desatemes.c217_mes < {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS pagoatemes,
+             AND desatemes.c217_mes <= {$nMes}
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS pagoatemes,
 
         (SELECT sum(desatemes.c217_valorpagoanulado)
          FROM despesarateioconsorcio desatemes
@@ -127,7 +137,8 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
              AND desatemes.c217_mes = {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS pagoanuladomes,
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS pagoanuladomes,
 
         (SELECT sum(desatemes.c217_valorpagoanulado)
          FROM despesarateioconsorcio desatemes
@@ -136,8 +147,9 @@ function gerarSQL($sMes, $sEnte) {
              AND desmes.c217_natureza=desatemes.c217_natureza
              AND desmes.c217_subelemento =desatemes.c217_subelemento
              AND desmes.c217_fonte =desatemes.c217_fonte
-             AND desatemes.c217_mes < {$nMes}
-             AND desmes.c217_anousu = desatemes.c217_anousu) AS pagoanuladoatemes
+             AND desatemes.c217_mes <= {$nMes}
+             AND desmes.c217_anousu = desatemes.c217_anousu
+             AND desatemes.c217_enteconsorciado = desmes.c217_enteconsorciado) AS pagoanuladoatemes
     FROM despesarateioconsorcio desmes
     WHERE desmes.c217_anousu = {$nAno}
         AND desmes.c217_enteconsorciado = {$nEnte}
@@ -171,7 +183,30 @@ try {
   $rsRelatorio = db_query(gerarSQL($_GET['mes'], $_GET['c215_sequencial']));
 
   $oInfoRelatorio = new stdClass();
-  $oInfoRelatorio->aDados = db_utils::getCollectionByRecord($rsRelatorio);
+  $aDadosConsulta = db_utils::getCollectionByRecord($rsRelatorio);
+
+  $oInfoRelatorio->aDados = array();
+
+  foreach ($aDadosConsulta as $key => $oRow) {
+
+    $nSomaLinha = $oRow->empenhomes
+                + $oRow->empenhoatemes
+                + $oRow->anuladomes
+                + $oRow->anuladoatemes
+                + $oRow->liquidadomes
+                + $oRow->liquidadoatemes
+                + $oRow->liquidadoanualdomes
+                + $oRow->liquidadoanualdoatemes
+                + $oRow->pagomes
+                + $oRow->pagoatemes
+                + $oRow->pagoanuladomes
+                + $oRow->pagoanuladoatemes;
+
+    if ($nSomaLinha != 0) {
+      $oInfoRelatorio->aDados[] = $oRow;
+    }
+
+  }
 
   switch ($_GET['tipoarquivo']) {
     case 'pdf':

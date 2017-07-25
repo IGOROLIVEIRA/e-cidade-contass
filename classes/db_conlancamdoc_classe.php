@@ -577,7 +577,7 @@ if($dbwhere==""){
       SELECT lpad(o58_funcao,2,'0') AS funcao,
              lpad(o58_subfuncao,3,'0') AS subfuncao,
              substring(o56_elemento,2,6) AS natureza,
-             substring(o56_elemento,7,2) AS subelemento,
+             substring(o56_elemento,8,2) AS subelemento,
              o15_codtri AS fonte,
              sum(CASE
                      WHEN c71_coddoc = 6 THEN c70_valor*-1
@@ -658,7 +658,7 @@ if($dbwhere==""){
       SELECT lpad(o58_funcao,2,'0') AS funcao,
              lpad(o58_subfuncao,3,'0') AS subfuncao,
              substring(o56_elemento,2,6) AS natureza,
-             substring(o56_elemento,7,2) AS subelemento,
+             substring(o56_elemento,8,2) AS subelemento,
              o15_codtri AS fonte,
              sum(CASE
                      WHEN c53_tipo = 10 THEN c70_valor

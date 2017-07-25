@@ -192,19 +192,6 @@ class cl_entesconsorciados {
       $this->atualizacampos();
      $sql = " update entesconsorciados set ";
      $virgula = "";
-     if (trim($this->c215_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c215_sequencial"])) {
-       $sql  .= $virgula." c215_sequencial = $this->c215_sequencial ";
-       $virgula = ",";
-       if (trim($this->c215_sequencial) == null ) {
-         $this->erro_sql = " Campo  não informado.";
-         $this->erro_campo = "c215_sequencial";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
      if (trim($this->c215_cgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c215_cgm"])) {
        $sql  .= $virgula." c215_cgm = $this->c215_cgm ";
        $virgula = ",";
@@ -218,18 +205,9 @@ class cl_entesconsorciados {
          return false;
        }
      }
-     if (trim($this->c215_percentualrateio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c215_percentualrateio"])) {
-       $sql  .= $virgula." c215_percentualrateio = $this->c215_percentualrateio ";
+     if (trim($this->c215_percentualrateio) != '') {
+       $sql  .= $virgula." c215_percentualrateio = " . floatval($this->c215_percentualrateio) . " ";
        $virgula = ",";
-       if (trim($this->c215_percentualrateio) == null ) {
-         $this->erro_sql = " Campo Percentual  Rateio não informado.";
-         $this->erro_campo = "c215_percentualrateio";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
      if (trim($this->c215_datainicioparticipacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c215_datainicioparticipacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["c215_datainicioparticipacao_dia"] !="") ) {
        $sql  .= $virgula." c215_datainicioparticipacao = '$this->c215_datainicioparticipacao' ";

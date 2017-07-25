@@ -187,13 +187,7 @@ class cl_despesarateioconsorcio {
         $this->c217_valorpagoanulado = 0;
      }
      if ($this->c217_percentualrateio == null ) {
-       $this->erro_sql = " Campo Percentual Rateio não informado.";
-       $this->erro_campo = "c217_percentualrateio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+        $this->c217_percentualrateio = 0;
      }
      if ($c217_sequencial == "" || $c217_sequencial == null ) {
        $result = db_query("select nextval('despesarateioconsorcio_c217_sequencial_seq')");
@@ -558,6 +552,7 @@ class cl_despesarateioconsorcio {
      } else {
        $sql2 = $dbwhere;
      }
+
      $result = db_query($sql.$sql2);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());

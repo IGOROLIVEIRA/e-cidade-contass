@@ -63,7 +63,7 @@ switch ($oParam->exec){
         $oNovoEnte->sequencial   = $oEnte->c215_sequencial;
         $oNovoEnte->percentual   = $oEnte->c215_percentualrateio;
         $oNovoEnte->cgm          = $oEnte->c215_cgm;
-        $oNovoEnte->nome         = $oEnte->z01_nome;
+        $oNovoEnte->nome         = utf8_encode($oEnte->z01_nome);
 
         $oRetorno->entes[] = $oNovoEnte;
 
@@ -118,7 +118,7 @@ switch ($oParam->exec){
         $oNovaDotacao->programa   = str_pad($oDotacao->o58_programa, 4, '0', STR_PAD_LEFT);
         $oNovaDotacao->projativ   = str_pad($oDotacao->o58_projativ, 4, '0', STR_PAD_LEFT);
         $oNovaDotacao->elemento   = $oDotacao->o56_elemento;
-        $oNovaDotacao->descricao  = $oDotacao->o56_descr;
+        $oNovaDotacao->descricao  = utf8_encode($oDotacao->o56_descr);
 
         $oRetorno->dotacoes[] = $oNovaDotacao;
 
@@ -197,42 +197,39 @@ switch ($oParam->exec){
 
       } // mês 12
 
+      $oDespesaRateioConsorcio  = new cl_despesarateioconsorcio();
+      $sWhereExcluir = ''
+        . ' c217_mes = ' . intval($oParam->mes)
+        . ' AND c217_anousu = ' . intval($nAnoUsu)
+      ;
+      $oDespesaRateioConsorcio->excluir(null, $sWhereExcluir);
+
       foreach ($aRetornoFinal as $nIdEnte => $oInfoEnte) {
+
+        $oEntesConsorciados = new cl_entesconsorciados();
+
+        $oEntesConsorciados->c215_sequencial        = $oInfoEnte->enteconsorciado;
+        $oEntesConsorciados->c215_percentualrateio  = floatval($oInfoEnte->percentualrateio);
+        $oEntesConsorciados->alterar($oInfoEnte->enteconsorciado);
+
         foreach ($oInfoEnte->dotacoes as $sHash => $oDotacao) {
 
           $oDespesaRateioConsorcio  = new cl_despesarateioconsorcio();
-          $oEntesConsorciados       = new cl_entesconsorciados();
-
-          $oEntesConsorciados->c215_sequencial        = $oInfoEnte->enteconsorciado;
-          $oEntesConsorciados->c215_percentualrateio  = $oInfoEnte->percentualrateio;
-          $oEntesConsorciados->alterar($oInfoEnte->enteconsorciado);
-
-          $sWhereExcluir = "
-                c217_enteconsorciado  = " . intval($oInfoEnte->enteconsorciado) . "
-            AND c217_funcao           = " . intval($oDotacao->funcao) . "
-            AND c217_subfuncao        = " . intval($oDotacao->subfuncao) . "
-            AND c217_natureza         = '{$oDotacao->natureza}'
-            AND c217_subelemento      = '{$oDotacao->subelemento}'
-            AND c217_fonte            = " . intval($oDotacao->fonte) . "
-            AND c217_mes              = " . $oParam->mes . "
-            AND c217_anousu           = {$nAnoUsu}
-          ";
-          $oDespesaRateioConsorcio->excluir(null, $sWhereExcluir);
 
           $oDespesaRateioConsorcio->c217_enteconsorciado        = $oInfoEnte->enteconsorciado;
-          $oDespesaRateioConsorcio->c217_percentualrateio       = $oInfoEnte->percentualrateio;
-          $oDespesaRateioConsorcio->c217_funcao                 = $oDotacao->funcao;
-          $oDespesaRateioConsorcio->c217_subfuncao              = $oDotacao->subfuncao;
+          $oDespesaRateioConsorcio->c217_percentualrateio       = floatval($oInfoEnte->percentualrateio);
+          $oDespesaRateioConsorcio->c217_funcao                 = intval($oDotacao->funcao);
+          $oDespesaRateioConsorcio->c217_subfuncao              = intval($oDotacao->subfuncao);
           $oDespesaRateioConsorcio->c217_natureza               = $oDotacao->natureza;
           $oDespesaRateioConsorcio->c217_subelemento            = $oDotacao->subelemento;
-          $oDespesaRateioConsorcio->c217_fonte                  = $oDotacao->fonte;
-          $oDespesaRateioConsorcio->c217_valorempenhado         = $oDotacao->valorempenhado;
-          $oDespesaRateioConsorcio->c217_valorempenhadoanulado  = $oDotacao->valorempenhadoanulado;
-          $oDespesaRateioConsorcio->c217_valorliquidado         = $oDotacao->valorliquidado;
-          $oDespesaRateioConsorcio->c217_valorliquidadoanulado  = $oDotacao->valorliquidadoanulado;
-          $oDespesaRateioConsorcio->c217_valorpago              = $oDotacao->valorpago;
-          $oDespesaRateioConsorcio->c217_valorpagoanulado       = $oDotacao->valorpagoanulado;
-          $oDespesaRateioConsorcio->c217_mes                    = $oParam->mes;
+          $oDespesaRateioConsorcio->c217_fonte                  = intval($oDotacao->fonte);
+          $oDespesaRateioConsorcio->c217_valorempenhado         = floatval($oDotacao->valorempenhado);
+          $oDespesaRateioConsorcio->c217_valorempenhadoanulado  = floatval($oDotacao->valorempenhadoanulado);
+          $oDespesaRateioConsorcio->c217_valorliquidado         = floatval($oDotacao->valorliquidado);
+          $oDespesaRateioConsorcio->c217_valorliquidadoanulado  = floatval($oDotacao->valorliquidadoanulado);
+          $oDespesaRateioConsorcio->c217_valorpago              = floatval($oDotacao->valorpago);
+          $oDespesaRateioConsorcio->c217_valorpagoanulado       = floatval($oDotacao->valorpagoanulado);
+          $oDespesaRateioConsorcio->c217_mes                    = intval($oParam->mes);
           $oDespesaRateioConsorcio->c217_anousu                 = $nAnoUsu;
 
           $oDespesaRateioConsorcio->incluir();
