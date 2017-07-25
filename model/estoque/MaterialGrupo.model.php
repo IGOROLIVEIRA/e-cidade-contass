@@ -89,44 +89,6 @@ class MaterialGrupo extends DBEstruturaValor  {
   protected $oPlanoContaAtivo;
 
   /**
-   * Código da conta referente a Transferência
-   * @var integer
-   */
-  protected $iCodigoContaTransf;
-
-  /**
-   * Código da conta referente a Transferência VPD
-   * @var integer
-   */
-  protected $iCodigoContaTransfVPD;
-
-  /**
-   * Código da conta referente a Doação
-   * @var integer
-   */
-  protected $iCodigoContaDoacao;
-
-  /**
-   * Código da conta referente a Doação VPD
-   * @var integer
-   */
-  protected $iCodigoContaDoacaoVPD;
-
-  /**
-   * Código da conta referente a Perda de Ativo
-   * @var integer
-   */
-  protected $iCodigoContaPerdaAtivo;
-
-  /**
-   * Código da conta referente a Perda de Ativo VPD
-   * @var integer
-   */
-  protected $iCodigoContaPerdaAtivoVPD;
-
-
-
-  /**
    * Código sequencial do grupo do material
    * @param $iCodigoGrupo
    */
@@ -148,14 +110,6 @@ class MaterialGrupo extends DBEstruturaValor  {
         $this->iConta          = $oDadosGrupo->m66_codcon;
         $this->sDescricaoConta = $oDadosGrupo->c60_descr;
         $this->iCodigoContaVPD = $oDadosGrupo->m66_codconvpd;
-
-        $this->iCodigoContaTransf         = $oDadosGrupo->m66_codcontransf;
-        $this->iCodigoContaTransfVPD      = $oDadosGrupo->m66_codcontransfvpd;
-        $this->iCodigoContaDoacao         = $oDadosGrupo->m66_codcondoacao;
-        $this->iCodigoContaDoacaoVPD      = $oDadosGrupo->m66_codcondoacaovpd;
-        $this->iCodigoContaPerdaAtivo     = $oDadosGrupo->m66_codconperdaativo;
-        $this->iCodigoContaPerdaAtivoVPD  = $oDadosGrupo->m66_codconperdaativovpd;
-
         $this->iAnoUsu         = $oDadosGrupo->m66_anousu;
         parent::__construct($oDadosGrupo->m65_db_estruturavalor);
         unset($oDadosGrupo);
@@ -202,12 +156,6 @@ class MaterialGrupo extends DBEstruturaValor  {
       $oDaoGrupoMaterialConta->m66_codcon               = $this->getConta();
       $oDaoGrupoMaterialConta->m66_materialestoquegrupo = $this->getCodigo();
       $oDaoGrupoMaterialConta->m66_codconvpd            = $this->iCodigoContaVPD;
-      $oDaoGrupoMaterialConta->m66_codcontransf         = $this->iCodigoContaTransf;
-      $oDaoGrupoMaterialConta->m66_codcontransfvpd      = $this->iCodigoContaTransfVPD;
-      $oDaoGrupoMaterialConta->m66_codcondoacao         = $this->iCodigoContaDoacao;
-      $oDaoGrupoMaterialConta->m66_codcondoacaovpd      = $this->iCodigoContaDoacaoVPD;
-      $oDaoGrupoMaterialConta->m66_codconperdaativo     = $this->iCodigoContaPerdaAtivo;
-      $oDaoGrupoMaterialConta->m66_codconperdaativovpd  = $this->iCodigoContaPerdaAtivoVPD;
 
       if ($oDaoGrupoMaterialConta->numrows == 0) {
         $oDaoGrupoMaterialConta->incluir(null);
@@ -256,10 +204,10 @@ class MaterialGrupo extends DBEstruturaValor  {
     $iCodigoGrupo       = null;
     $oDaoGrupoMaterial  = db_utils::getDao("materialestoquegrupo");
     $sSqlCodigo         = $oDaoGrupoMaterial->sql_query_file(null,
-                                                            'm65_sequencial',
-                                                             null,
-                                                             "m65_db_estruturavalor={$iCodigoEstrutura}"
-                                                             );
+      'm65_sequencial',
+      null,
+      "m65_db_estruturavalor={$iCodigoEstrutura}"
+    );
 
     $rsCodigo  = $oDaoGrupoMaterial->sql_record($sSqlCodigo);
     if ($oDaoGrupoMaterial->numrows > 0) {
@@ -295,7 +243,7 @@ class MaterialGrupo extends DBEstruturaValor  {
   public function getCodigo() {
     return $this->iCodigoGrupo;
   }
-/**
+  /**
    * Retorna o codigo do Grupo
    *
    * @return integer
@@ -317,7 +265,7 @@ class MaterialGrupo extends DBEstruturaValor  {
    * @return integer
    */
   public function getCodigoContaVPD() {
-  	return $this->iCodigoContaVPD;
+    return $this->iCodigoContaVPD;
   }
 
   /**
@@ -326,108 +274,6 @@ class MaterialGrupo extends DBEstruturaValor  {
    */
   public function setCodigoContaVPD($iCodigoContaVPD) {
     $this->iCodigoContaVPD = $iCodigoContaVPD;
-    return $this;
-  }
-
-  /**
-   * Retorna o código da conta Transferência
-   * @return integer
-   */
-  public function getCodigoContaTransf() {
-    return $this->iCodigoContaTransf;
-  }
-
-  /**
-   * Retorna o código da conta Transferência
-   * @return object
-   */
-  public function setCodigoContaTransf($iCodigoConta) {
-    $this->iCodigoContaTransf = $iCodigoConta;
-    return $this;
-  }
-
-  /**
-   * Retorna o código da conta Transferência VPD
-   * @return integer
-   */
-  public function getCodigoContaTransfVPD() {
-    return $this->iCodigoContaTransfVPD;
-  }
-
-  /**
-   * Retorna o código da conta Transferência VPD
-   * @return object
-   */
-  public function setCodigoContaTransfVPD($iCodigoConta) {
-    $this->iCodigoContaTransfVPD = $iCodigoConta;
-    return $this;
-  }
-
-  /**
-   * Retorna o código da conta Doação
-   * @return integer
-   */
-  public function getCodigoContaDoacao() {
-    return $this->iCodigoContaDoacao;
-  }
-
-  /**
-   * Retorna o código da conta Doação
-   * @return object
-   */
-  public function setCodigoContaDoacao($iCodigoConta) {
-    $this->iCodigoContaDoacao = $iCodigoConta;
-    return $this;
-  }
-
-  /**
-   * Retorna o código da conta Doação VPD
-   * @return integer
-   */
-  public function getCodigoContaDoacaoVPD() {
-    return $this->iCodigoContaDoacaoVPD;
-  }
-
-  /**
-   * Retorna o código da conta Doação VPD
-   * @return object
-   */
-  public function setCodigoContaDoacaoVPD($iCodigoConta) {
-    $this->iCodigoContaDoacaoVPD = $iCodigoConta;
-    return $this;
-  }
-
-  /**
-   * Retorna o código da conta Perda Ativo
-   * @return integer
-   */
-  public function getCodigoContaPerdaAtivo() {
-    return $this->iCodigoContaPerdaAtivo;
-  }
-
-  /**
-   * Retorna o código da conta Perda Ativo
-   * @return object
-   */
-  public function setCodigoContaPerdaAtivo($iCodigoConta) {
-    $this->iCodigoContaPerdaAtivo = $iCodigoConta;
-    return $this;
-  }
-
-  /**
-   * Retorna o código da conta Perda Ativo VPD
-   * @return integer
-   */
-  public function getCodigoContaPerdaAtivoVPD() {
-    return $this->iCodigoContaPerdaAtivoVPD;
-  }
-
-  /**
-   * Retorna o código da conta Perda Ativo VPD
-   * @return object
-   */
-  public function setCodigoContaPerdaAtivoVPD($iCodigoConta) {
-    $this->iCodigoContaPerdaAtivoVPD = $iCodigoConta;
     return $this;
   }
 
