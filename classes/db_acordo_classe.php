@@ -1954,6 +1954,23 @@ class cl_acordo {
 
   }
 
+  function sql_query_lancamentos_empenhocontrato($sCampos = "*", $sEmpenho = null) {
+
+    $sWhere = " WHERE 1 = 1 ";
+
+    if (!empty($sEmpenho)) {
+      $sWhere .= " AND c75_numemp = {$sEmpenho} ";
+    }
+
+  $sSql = " SELECT DISTINCT {$sCampos}
+            FROM empempenho
+            JOIN conlancamemp ON c75_numemp = e60_numemp
+            JOIN conlancamdoc ON c71_codlan = c75_codlan
+            {$sWhere} ";
+
+  return $sSql;
+
+  }
 
 }
 ?>

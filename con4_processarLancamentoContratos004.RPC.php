@@ -141,6 +141,7 @@ switch ($oParam->exec) {
           $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
           $oLancamentoAuxiliarAcordo->setHistorico($aLancamentosCadastrados[0]->getHistorico());
           $oLancamentoAuxiliarAcordo->setCodigoNotaLiquidacao($oStdDados->c66_codnota);
+          $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabil->getCodigoDocumento());
 
 
           $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
@@ -276,6 +277,7 @@ switch ($oParam->exec) {
         $oContaCorrenteDetalhe->setAcordo($oAcordo);
         $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
         $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
+        $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabil->getCodigoDocumento());
 
         $oEventoContabil->executaLancamento($oLancamentoAuxiliarAcordo);
         $iTotalRegistrosAlterados++;

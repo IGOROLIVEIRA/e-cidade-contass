@@ -221,9 +221,11 @@ try {
           $oDaoEmpenho = db_utils::getDao("empempenho");
           $sSqlEmpenho = $oDaoEmpenho->sql_query_file($oEmpenhosVincular,"e60_vlrliq");
           $rsEmpenho   = db_query($sSqlEmpenho);
-          if (db_utils::fieldsMemory($rsEmpenho,0)->e60_vlrliq > 0) {
-            throw new Exception("Já existe Liquidação para o Empenho: {$oEmpenhosVincular}.");
-          }
+//          if (db_utils::fieldsMemory($rsEmpenho,0)->e60_vlrliq > 0) {
+//            throw new Exception("Já existe Liquidação para o Empenho: {$oEmpenhosVincular}.");
+//          }
+
+//          OC 3982 - Comentado em atendimento a demanda.
 
           $oDaoEmpenhoContrato->e100_numemp = $oEmpenhosVincular;
           $oDaoEmpenhoContrato->e100_acordo = $iAcordo;
@@ -233,15 +235,34 @@ try {
             $oErro->erro_msg = $oDaoEmpenhoContrato->erro_msg;
             throw new Exception(_M($sCaminhoMensagens."erro_vincular_empenho_contrato", $oErro));
           }
+
+          $oDaoAcordo = db_utils::getDao('acordo');
+
+          $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $oEmpenhosVincular);
+
+          $result = db_query($sql);
+
+          $aDocumentos = array();
+
+          for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) {
+            $aDocumentos[] =  db_utils::fieldsMemory($result,$iCont)->c71_coddoc;
+          }
+
+          $acordoLancamento = true;
+
+          if ((in_array(2,$aDocumentos) || in_array(3,$aDocumentos) || in_array(204,$aDocumentos) || in_array(206,$aDocumentos))) {
+            $acordoLancamento = false;
+          }
+
           /**
           * Criar lancamento contabil para o vinculo do contrato com o empenho
           */
           $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
           $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
-          if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
+          if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao) && $acordoLancamento == true) {
 
             if ($oDaoEmpenhoContrato->erro_status != 0) {
-              
+
               $oEventoContabilAcordo = new EventoContabil(900, db_getsession('DB_anousu'));
 
               $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
@@ -249,6 +270,7 @@ try {
               $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
               $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
               $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
+              $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
               $oContaCorrente = new ContaCorrenteDetalhe();
               $oContaCorrente->setAcordo($oAcordo);

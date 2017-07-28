@@ -62,6 +62,12 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
   private $oEmpenhoFinanceiro;
 
   /**
+   * Codigo do Documento do Lançamento
+   * @var iDocumento
+   */
+  private $iDocumento;
+
+  /**
    * Executa os lançamentos auxiliares dos Movimentos de uma liquidacao
    * @see ILancamentoAuxiliar::executaLancamentoAuxiliar()
    * @param integer $iCodigoLancamento - Código do Lancamento (conlancam)
@@ -70,30 +76,25 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
 
   public function executaLancamentoAuxiliar($iCodigoLancamento, $dtLancamento)  {
 
-    //  Query para verificar se existe lançamento de Registro do Contrato.
-    //  Caso não exista, não deverá processar qualquer lançamento de execução dos contratos (docs. 901,904,903).
+    $oDaoAcordo = db_utils::getDao('acordo');
 
-    $sql = "SELECT DISTINCT ac16_sequencial FROM acordo
-            JOIN acordoposicao ON ac26_acordo = ac16_sequencial
-            JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
-            JOIN acordoempempitem ON ac44_acordoitem = ac20_sequencial
-            JOIN empempitem ON e62_sequencial = ac44_empempitem
-            JOIN conlancamemp ON c75_numemp = e62_numemp
-            RIGHT JOIN conlancamdoc ON c71_codlan = c75_codlan
-            WHERE c71_coddoc = 900
-            UNION
-            SELECT DISTINCT ac16_sequencial FROM acordo
-            JOIN acordoempautoriza on ac45_acordo = ac16_sequencial
-            JOIN empautoriza on ac45_empautoriza = e54_autori
-            JOIN empempaut on e61_autori = e54_autori
-            JOIN empempenho on e61_numemp = e60_numemp
-            JOIN conlancamemp ON c75_numemp = e60_numemp
-            JOIN conlancamdoc ON c71_codlan = c75_codlan
-            WHERE c71_coddoc = 900 ";
+    $sql = $oDaoAcordo->sql_query_lancamentos_empenhocontrato("c71_coddoc", $this->getEmpenho()->getNumero());
 
     $result = db_query($sql);
 
-    if ((pg_num_rows($result) != 0) or (pg_num_rows($result) != "")) {
+    $aDocumentos = array();
+    for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) { 
+      $aDocumentos[] =  db_utils::fieldsMemory($result,$iCont)->c71_coddoc;
+    }
+
+    if ($this->iDocumento == 900
+        && (in_array(2,$aDocumentos) || in_array(3,$aDocumentos) || in_array(204,$aDocumentos) || in_array(206,$aDocumentos))) {
+      return;
+    }
+
+    if (in_array($this->iDocumento,array(901,903,904)) && !in_array(900,$aDocumentos)) {
+      return;
+    }
 
 
       $this->setCodigoLancamento($iCodigoLancamento);
@@ -105,11 +106,7 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
         $this->salvarVinculoNotaDeLiquidacao();
       }
       return true;
-    }
 
-    else {
-      $sMsgErro = "Não foi possível salvar o vínculo do acordo {$this->getAcordo()->getCodigoAcordo()} com o contrato.";
-    }
   }
 
   /**
@@ -191,6 +188,22 @@ class LancamentoAuxiliarAcordo extends LancamentoAuxiliarBase implements ILancam
    */
   public function getEmpenho() {
     return $this->oEmpenhoFinanceiro;
+  } 
+
+  /**
+   * Seta o Documento
+   * @param Integer $iDocumento
+   */
+  public function setDocumento($iDocumento) {
+    $this->iDocumento = $iDocumento;
+  }
+
+  /**
+   * Retorna o Documento
+   * @return iDocumento
+   */
+  public function getDocumento() {
+    return $this->iDocumento;
   }
   
   /**

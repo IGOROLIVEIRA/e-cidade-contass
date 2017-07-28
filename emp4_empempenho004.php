@@ -881,6 +881,7 @@ if(isset($incluir)) {
             $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
             $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
             $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
+            $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
             $oContaCorrente = new ContaCorrenteDetalhe();
             $oContaCorrente->setAcordo($oAcordo);
