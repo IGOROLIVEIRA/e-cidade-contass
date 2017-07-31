@@ -1321,8 +1321,8 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
 
           //      if($emrec == "t")
           echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$i\" nowrap>".
-              ($tipo==3?	 "<input type=\"submit\" name=\"calculavalor\" id=\"calculavalor$i\" value=\"Calcular\">":"")
-              ."<input class='{$sClassVenc}' style=\"visibility:'visible'\" type=\"".($tipo==3?"hidden":"checkbox")."\" value=\"".$numpres."\" onclick=\"js_soma(2)\" id=\"CHECK$i\" name=\"CHECK$i\" ".((abs($REGISTRO[$i]["k00_valor"])!=0 && $tipo==3)?"disabled":"").">
+              ""
+              ."<input class='{$sClassVenc}' style=\"visibility:'visible'\" type=\""."checkbox"."\" value=\"".$numpres."\" onclick=\"js_soma(2)\" id=\"CHECK$i\" name=\"CHECK$i\" ".((abs($REGISTRO[$i]["k00_valor"])!=0 && $tipo==3)?"":"").">
         <input style=\"visibility:'visible'\" type=\""."hidden"."\" value=\"".$numpres_valores."\" id=\"_VALORES$i\" name=\"_VALORES$i\">
         </td>\n";
 
@@ -1609,7 +1609,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
             echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"multa$ContadorUnico\" value=\"".$multa."\">".db_formatar($multa,"f")."</td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"desconto$ContadorUnico\" value=\"" . $desconto . "\">" . db_formatar($desconto, "f") . "</td>\n";
               echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"total$ContadorUnico\" value=\"" . $total . "\">" . db_formatar($total, "f") . "</td>\n";
-            echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$ContadorUnico\" nowrap>".($tipo==3?"<input type=\"submit\" name=\"calculavalor\" id=\"calculavalor$ContadorUnico\" value=\"Calcular\">":"")."<input class='{$sClassVenc}' style=\"visibility:'visible'\" type=\"".($tipo==3?"hidden":"checkbox")."\" value=\"".$numpres."\" onclick=\"js_soma(2)\" id=\"CHECK$ContadorUnico\" name=\"CHECK".$ContadorUnico++."\" ".((abs($REGISTRO[$i]["k00_valor"])!=0 && $tipo==3)?"disabled":"").">
+            echo "<td class=\"borda\" style=\"font-size:11px\" id=\"coluna$ContadorUnico\" nowrap>".""."<input class='{$sClassVenc}' style=\"visibility:'visible'\" type=\"".($tipo==3?"checkbox":"checkbox")."\" value=\"".$numpres."\" onclick=\"js_soma(2)\" id=\"CHECK$ContadorUnico\" name=\"CHECK".$ContadorUnico++."\" ".((abs($REGISTRO[$i]["k00_valor"])!=0 && $tipo==3)?"":"").">
           <input style=\"visibility:'visible'\" type=\"hidden\" value=\"".$numpres_valores."\" id=\"_VALORES$ContadorUnico\" name=\"_VALORES".$ContadorUnico++."\">
           </td>\n";
             /*
