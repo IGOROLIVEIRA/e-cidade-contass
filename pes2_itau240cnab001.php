@@ -109,6 +109,21 @@ function js_emite(){
   js_OpenJanelaIframe('top.corpo','db_iframe_geraarqbanco','pes2_itau240cnab002.php?'+qry,'Gerando Arquivo',false);
 }
 
+function js_emite_novo(){
+  js_controlarodape(true);
+  qry  = 'rh34_codarq='+document.form1.rh34_codarq.value;
+  qry += '&datadeposit='+document.form1.datadeposit_ano.value+'-'+document.form1.datadeposit_mes.value+'-'+document.form1.datadeposit_dia.value;
+  qry += '&datagera='+document.form1.datagera_ano.value+'-'+document.form1.datagera_mes.value+'-'+document.form1.datagera_dia.value;
+  qry += '&codban='+document.form1.rh34_codban.value;
+  qry += '&tiparq='+document.form1.tiparq.value;
+  qry += '&qfolha='+document.form1.qfolha.value;
+  qry += '&iRecurso='+document.form1.iRecurso.value;
+  if(document.form1.layout){
+    qry += '&layout='+document.form1.layout.value;
+  }
+  js_OpenJanelaIframe('','db_iframe_geraarqbanco','pes2_itau240cnab003.php?'+qry,'Gerando Arquivo',false);
+}
+
 function js_detectaarquivo(arquivo,pdf){
   js_controlarodape(false);
   top.corpo.db_iframe_geraarqbanco.hide();
@@ -309,6 +324,7 @@ function js_controlarodape(mostra){
   		</table>
   	</fieldset>
   	<input name="emite2" id="emite2" type="submit" value="Processar" onclick="return js_valores()" />
+  	<input name="emite3" id="emite3" type="submit" value="Processar 2" onclick="return js_valores()" />
 </form>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
@@ -399,6 +415,19 @@ if(isset($emite2)){
     };
   }else{
     echo "<script>js_emite();</script>";
+  };
+};
+
+if(isset($emite3)){
+  if($clrharqbanco->erro_status=="0"){
+    $clrharqbanco->erro(true,false);
+    $db_botao=true;
+    if($clrharqbanco->erro_campo!=""){
+      echo "<script> document.form1.".$clrharqbanco->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$clrharqbanco->erro_campo.".focus();</script>";
+    };
+  }else{
+    echo "<script>js_emite_novo();</script>";
   };
 };
 ?>

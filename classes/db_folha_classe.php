@@ -1015,5 +1015,50 @@ class cl_folha {
   		}
   			return $sql;
   			}
+
+    function sql_query_gerarq_itau ( $r38_regist=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+
+    $sql .= " from folha ";
+    $sql .= "      inner join cgm on cgm.z01_numcgm = folha.r38_numcgm ";
+    $sql .= "      inner join rhlota on r70_codigo = to_number(r38_lotac,'9999') ";
+    $sql .= "                       and r70_instit = ".db_getsession("DB_instit");
+    $sql .= "      inner join rhlotavinc   on rhlotavinc.rh25_codigo   = rhlota.r70_codigo";
+    $sql .= "      inner join rhpessoalmov on rhpessoalmov.rh02_regist = folha.r38_regist";
+    $sql .= "                             and rh02_anousu = ".db_anofolha();
+    $sql .= "                             and rh02_mesusu = ".db_mesfolha();
+    $sql .= "                             and rh02_instit = ".db_getsession("DB_instit");  
+    $sql .= "      left join rhfuncao on rhpessoalmov.rh02_funcao = rhfuncao.rh37_funcao";
+    $sql .= "                             and rhfuncao.rh37_instit = ".db_getsession("DB_instit");  
+    $sql2 = "";
+    if($dbwhere==""){
+      if($r38_regist!=null ){
+        $sql2 .= " where folha.r38_regist = $r38_regist ";
+      }
+      }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+      }
+      $sql .= $sql2;
+      if($ordem != null ){
+        $sql .= " order by ";
+        $campos_sql = split("#",$ordem);
+        $virgula = "";
+        for($i=0;$i<sizeof($campos_sql);$i++){
+          $sql .= $virgula.$campos_sql[$i];
+          $virgula = ",";
+        }
+      }
+        return $sql;
+        }
 }
 ?>
