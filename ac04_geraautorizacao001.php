@@ -480,8 +480,8 @@ function js_retornoGetItensPosicao(oAjax) {
 
   js_removeObj("msgbox");
   var oRetorno  = eval("("+oAjax.responseText+")");
-  
-  if (oRetorno.iOrigemContrato == 2) { 
+
+  if (oRetorno.iOrigemContrato == 2) {
     verificaLicitacao = true;
     $('e54_codcom').value      = oRetorno.pc50_codcom;
     $('e54_codcomdescr').value = oRetorno.pc50_codcom;
@@ -708,7 +708,7 @@ function js_ajusteDotacao(iLinha) {
      aLinha    = new Array();
      aLinha[0] = "<a href='#' onclick='js_mostraSaldo("+oDotacao.dotacao+");return false'>"+oDotacao.dotacao+"</a>";
      aLinha[1] = js_formatar(oDotacao.saldodotacao, "f",iCasasDecimais);
-     
+
      aLinha[2] = eval("quantdot"+iDot+" = new DBTextField('quantdot"+iDot+"','quantdot"+iDot+"','"+oDotacao.quantidade+"')");
      aLinha[2].addStyle("text-align","right");
      aLinha[2].addStyle("height","100%");
@@ -799,7 +799,7 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
 
 
 
-function js_ajustaValorDot(Obj, iDot, iLinha) {
+function js_ajustaValorDot(Obj, iDot) {
 
   var nValor         = new Number(Obj.value);
   var nTotalDotacoes = oGridDotacoes.sum(3, false);
@@ -1161,7 +1161,7 @@ function js_preencheTipoLicitacao(oAjax) {
 
             $('e54_tipol').innerHTML        += "<option value='" + oItem.l03_tipo + "'>" + oItem.l03_tipo + "</option>";
             $('e54_tipoldescr').innerHTML   += "<option value='" + oItem.l03_tipo + "'>" + oItem.l03_descr + "</option>";
-            
+
             if(verificaLicitacao == true) {
               $('e54_tipol').value = tipoLic;
               $('e54_tipoldescr').value = tipoLic;
@@ -1208,4 +1208,6 @@ function js_stringToFloat(sValor) {
 </script>
 <?php
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+
+  // arquivo revertido
 ?>
