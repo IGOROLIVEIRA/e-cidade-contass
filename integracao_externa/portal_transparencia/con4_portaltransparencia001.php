@@ -1452,7 +1452,7 @@ try {
     } else {
       $oReceitaMovimentacao->valor_previsao_atualizada = pg_result($rsReceitaSaldo, 0, 0);
     }
-    
+
     $oReceitaMovimentacao->receita_id = $aListaReceita[$oReceitaMovimentacao->codreceita][$oReceitaMovimentacao->exercicio];
 
     $oTBReceitasMovimentacoes->setByLineOfDBUtils($oReceitaMovimentacao);
@@ -1506,7 +1506,7 @@ try {
   /**
    * Consulta Dotacoes na base de origem
    */
-    
+
 
 
     $sSqlDotacao  = " SELECT DISTINCT ON (o58_coddot, o58_anousu) ";
@@ -1957,8 +1957,10 @@ try {
     $sSqlEmpenhoMovimentacao .= " INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamemp.c75_codlan      ";
     $sSqlEmpenhoMovimentacao .= " INNER JOIN conhistdoc ON conhistdoc.c53_coddoc = conlancamdoc.c71_coddoc          ";
     $sSqlEmpenhoMovimentacao .= " LEFT  JOIN conlancamcompl ON conlancamcompl.c72_codlan = conlancamemp.c75_codlan  ";
-    $sSqlEmpenhoMovimentacao .= " WHERE EXISTS ( SELECT * FROM empempitem JOIN empempenho ON e62_numemp = e60_numemp  ";
-    $sSqlEmpenhoMovimentacao .= " WHERE empempitem.e62_numemp = conlancamemp.c75_numemp)                             ";
+    $sSqlEmpenhoMovimentacao .= " WHERE EXISTS ( SELECT * FROM empempitem JOIN empempenho ON e62_numemp = e60_numemp";
+    $sSqlEmpenhoMovimentacao .= " WHERE empempitem.e62_numemp = conlancamemp.c75_numemp                             ";
+    $sSqlEmpenhoMovimentacao .= " AND empempenho.e60_emiss >= '{$iExercicioBase}-01-01'::date)                      ";
+    $sSqlEmpenhoMovimentacao .= " AND c70_data >= '{$iExercicioBase}-01-01'::date                                   ";
 
 
     $rsEmpenhoMovimentacao    = db_query($connOrigem,$sSqlEmpenhoMovimentacao);
@@ -2072,7 +2074,7 @@ try {
            ((SELECT r11_mesusu
                 FROM cfpess
                 ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1) = 1
-           
+
             AND rh02_anousu < (SELECT r11_anousu
                 FROM cfpess
                 ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1)
@@ -2086,7 +2088,7 @@ try {
                (SELECT r11_mesusu
                 FROM cfpess
                 ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1) <> 1
-           
+
               AND rh02_anousu <= (SELECT r11_anousu
                 FROM cfpess
                 ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1)
@@ -2094,12 +2096,12 @@ try {
                 AND rh02_mesusu < (SELECT r11_mesusu
                 FROM cfpess
                 ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1)
-             
+
              )
 
         )";
   $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
-  
+
   db_query($connOrigem, $sSqlServidores);
 
   $sSqlCreateIndex = "create index dados_servidor_ano_mes_matricula_in on dados_servidor (ano, mes, matricula) ";
