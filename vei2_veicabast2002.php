@@ -135,10 +135,10 @@ switch ($situacao) {
         $dbwhere .= " ve70_ativo = 0 ";
         break;
 }
-if ($dbwhere != "") {
+/**if ($dbwhere != "") {
     $dbwhere .= $and;
 }
-$dbwhere .= " ve01_veictipoabast = 1 ";
+$dbwhere .= " ve01_veictipoabast = 1 ";*/
 $sCampos = " distinct
 	      coddepto,
 	      descrdepto,
