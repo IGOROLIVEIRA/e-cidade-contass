@@ -893,7 +893,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                     return alert("A Quantidade informada para o item " + oItem.descricaoitem.urlDecode() + " deve ser menor ou igual a quantidade original do item.");
                 }
 
-                if (oItemAdicionar.quantidade == 0 || oItemAdicionar.valorunitario == 0) {
+                if ((oItemAdicionar.quantidade == 0 || oItemAdicionar.valorunitario == 0)
+                    && ([6, 8, 13].indexOf(parseInt(oParam.tipoalteracaoaditivo)) === -1)) {
 
                     lAditar = false;
                     return alert("Os itens marcados para aditamento devem possuir quantidade e valor unitário.");
@@ -1362,7 +1363,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
 
             oInputPeriodoIni = new DBTextFieldData('periodoini' + iSeq, 'periodoini' + iSeq, js_formatar(oItem.periodoini, 'd'));
             oInputPeriodoFim = new DBTextFieldData('periodofim' + iSeq, 'periodofim' + iSeq, js_formatar(oItem.periodofim, 'd'));
-            
+
             if(iTipoAditamento == 6 || iTipoAditamento == 7){
                 aLinha[9] = oInputPeriodoIni.toInnerHtml().replace("size    = '10'","size    = '8'");
                 aLinha[10] = oInputPeriodoFim.toInnerHtml().replace("size    = '10'","size    = '8'");
@@ -1377,7 +1378,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                 aLinha[11].addItem('1', 'Acréscimo Item');
                 aLinha[11].addItem('2', 'Decréscimo Item');
                 /*
-                 * Condicoes adicionadas para bloquear os campos conforme 
+                 * Condicoes adicionadas para bloquear os campos conforme
                  * tipo de Aditivo selecionado na tela
                  */
                 if ($('oCboTipoAditivo').value == 5 || $('oCboTipoAditivo').value == 2) {
@@ -1553,7 +1554,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
         $('oTxtDataInicial').style.backgroundColor= 'rgb(222, 184, 135)';
         $('oTxtDataFinal').readOnly = true;
         $('oTxtDataFinal').style.backgroundColor= 'rgb(222, 184, 135)';
-        
+
         if ($('oCboTipoAditivo').value == 7 || $('oCboTipoAditivo').value == 14) {
             $('oTextAreaDescricaoAlteracao').removeClassName('readonly');
             $('oTextAreaDescricaoAlteracao').readOnly = false;
