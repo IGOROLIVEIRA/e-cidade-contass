@@ -2070,38 +2070,37 @@ try {
   $sSqlServidores .= "       left join rhpesrescisao on rh05_seqpes = rh02_seqpes  ";
 
   $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} ";
-    $sSqlServidores .= "AND (
-           ((SELECT r11_mesusu
+    $sSqlServidores .= "
+
+	AND   
+            (
+               rh02_anousu <    
+               (SELECT r11_anousu
                 FROM cfpess
-                ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1) = 1
+                ORDER BY r11_anousu DESC, r11_mesusu DESC
+                LIMIT 1)
+               AND rh02_mesusu <= 12
+            )   
+        
+    OR 
+            (
+                  rh02_anousu =
+                  (SELECT r11_anousu
+                  FROM cfpess
+                  ORDER BY r11_anousu DESC, r11_mesusu DESC
+                  LIMIT 1)
+                  
+                  AND rh02_mesusu <
+                  (SELECT r11_mesusu
+                  FROM cfpess
+                  ORDER BY r11_anousu DESC, r11_mesusu DESC
+                  LIMIT 1) 
+            ) 
 
-            AND rh02_anousu < (SELECT r11_anousu
-                FROM cfpess
-                ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1)
 
-              AND rh02_mesusu < 12
-
-             )
-         OR
-             (
-
-               (SELECT r11_mesusu
-                FROM cfpess
-                ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1) <> 1
-
-              AND rh02_anousu <= (SELECT r11_anousu
-                FROM cfpess
-                ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1)
-
-                AND rh02_mesusu < (SELECT r11_mesusu
-                FROM cfpess
-                ORDER BY r11_anousu DESC, r11_mesusu DESC LIMIT 1)
-
-             )
-
-        )";
+";
   $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
-
+  //echo $sSqlServidores;exit;
   db_query($connOrigem, $sSqlServidores);
 
   $sSqlCreateIndex = "create index dados_servidor_ano_mes_matricula_in on dados_servidor (ano, mes, matricula) ";
