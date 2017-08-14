@@ -81,7 +81,7 @@ class manad {
                         or rhpesrescisao.rh05_recis >= '{$iAnoUsuFim}-{$iMesUsuIni}-{$iDiaUsuIni}' 
                         or rh02_regist in (select distinct r20_regist from gerfres where (r20_anousu >= {$iAnoUsuIni} and r20_mesusu >= {$iMesUsuIni} ) and (r20_anousu <= {$iAnoUsuFim} and r20_mesusu <= {$iMesUsuFim} ) )
                     ) ";
-                $sSqlK050 .= "   and rhpessoalmov.rh02_instit = {$iInstit} ";
+                $sSqlK050 .= "   and rhpessoalmov.rh02_instit = {$iInstit}  and rh30_vinculo = 'A'";
 //echo $sSqlK050;exit;
 		return $sSqlK050;   	
   	
