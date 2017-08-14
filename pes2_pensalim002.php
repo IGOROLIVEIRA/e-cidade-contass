@@ -98,7 +98,7 @@ if ($oPost->ordem == 'n') {
   }
 }
 
-$sGroup = 'descricao_banco, codigo_banco, codigo_agencia, r52_dvagencia, conta, r52_dvconta, cgm_beneficiario, nome_beneficiario, rh01_regist, x.z01_nome, x.w01_work05';
+$sGroup = 'descricao_banco, codigo_banco, codigo_agencia, r52_dvagencia, conta, r52_dvconta, cgm_beneficiario, nome_beneficiario, rh01_regist, x.z01_nome, x.w01_work05,x.z01_cgccpf';
 
 if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) {
 
@@ -180,7 +180,8 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) 
                cgm.z01_nome            AS nome_beneficiario,
                  a.z01_nome,
                rh01_regist,
-               {$sValor}               AS w01_work05
+               {$sValor}               AS w01_work05,
+               cgm.z01_cgccpf
           FROM pensao
             INNER JOIN cgm          ON   r52_numcgm              =  z01_numcgm
             INNER JOIN rhpessoal    ON  rh01_regist              =  r52_regist
@@ -262,7 +263,8 @@ if($oPost->func != 's'){
           $oPDF->cell(80,$alt,$descricao_banco,0,1,"L",0);
         }
         $oPDF->ln(3);
-        $oPDF->cell(122,$alt,'Nome do Beneficiário',1,0,"C",1);
+        $oPDF->cell(102,$alt,'Nome do Beneficiário',1,0,"C",1);
+        $oPDF->cell(20,$alt,'CPF',1,0,"C",1);
         $oPDF->cell(20,$alt,'Agência',1,0,"C",1);
         $oPDF->cell(20,$alt,'Conta',1,0,"C",1);
         $oPDF->cell(30,$alt,'Valor',1,1,"C",1);
@@ -270,7 +272,10 @@ if($oPost->func != 's'){
      }
 
      $oPDF->setfont('arial','',7);
-     $oPDF->cell(122, $alt, $nome_beneficiario,0,0,"l",0);
+     $oPDF->cell(102, $alt, $nome_beneficiario,0,0,"l",0);
+
+     $oPDF->cell(20, $alt, $z01_cgccpf, 0, 0, "R", 0);
+
      $oPDF->cell(20, $alt, $codigo_agencia.$r52_dvagencia, 0, 0, "R", 0);
      $oPDF->cell(20, $alt, $conta.$r52_dvconta, 0, 0, "R", 0);
      $oPDF->cell(30, $alt, db_formatar($w01_work05,'f'), 0, 1, "R", 0);
