@@ -26,16 +26,16 @@
  */
 
 require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
+require_once("libs/db_conecta.php");
 require("std/db_stdClass.php");
-include("libs/db_sessoes.php");
+include_once("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("libs/db_utils.php");
 require_once("libs/db_libcontabilidade.php");
 require_once("libs/db_liborcamento.php");
 require_once("libs/db_libpostgres.php");
 include("libs/JSON.php");
-include("dbforms/db_funcoes.php");
+include_once("dbforms/db_funcoes.php");
 include("dbforms/db_layouttxt.php");
 include("model/manad.model.php");
 
