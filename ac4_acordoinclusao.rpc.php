@@ -437,7 +437,7 @@ try {
             }
           }
         }
-      $sWhere  = "e60_numcgm = {$iNumCgm} ";
+      $sWhere  = "e60_numcgm = {$iNumCgm}  AND e60_instit = ".db_getsession("DB_instit");
 
       /*
        * aqui verificamos se os empenhos selecionados para o acordo a ser alterado
@@ -527,17 +527,17 @@ try {
         $sWhere .= "and e60_emiss between  '{$dtInicial}' and '{$dtFinal}' ";
       }
 
-      $sCamposEmpenhos  = " distinct e60_numemp,";
+      $sCamposEmpenhos  = " DISTINCT e60_numemp,";
       $sCamposEmpenhos .= " e60_codemp,";
       $sCamposEmpenhos .= " e60_emiss,";
       $sCamposEmpenhos .= " e60_vlremp,";
       $sCamposEmpenhos .= " e60_resumo,";
-      $sCamposEmpenhos .= " case";
-      $sCamposEmpenhos .= "   when e100_numemp is null";
-      $sCamposEmpenhos .= "     then 'false'";
-      $sCamposEmpenhos .= "   else 'true'";
-      $sCamposEmpenhos .= " end   as  lVinculado";
-      $sOrderEmpenhos   = " lVinculado desc, e60_numemp asc";
+      $sCamposEmpenhos .= " CASE";
+      $sCamposEmpenhos .= "   WHEN e100_numemp IS NULL";
+      $sCamposEmpenhos .= "     THEN 'FALSE'";
+      $sCamposEmpenhos .= "   ELSE 'TRUE'";
+      $sCamposEmpenhos .= " END AS lVinculado";
+      $sOrderEmpenhos   = " lVinculado DESC, e60_numemp ASC";
 
       $sSqlEmpenho = $oDaoEmpenho->sql_query_empenhocontrato(null, "{$sCamposEmpenhos}", $sOrderEmpenhos, $sWhere);
       $rsEmpenho   = $oDaoEmpenho->sql_record($sSqlEmpenho);
