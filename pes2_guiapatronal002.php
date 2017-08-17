@@ -43,6 +43,10 @@ $result_inst = db_query($sql_inst);
 
 db_fieldsmemory($result_inst,0);
 
+if(empty($campoextra)) {
+  $campoextra = 0;
+}
+
 $where = " ";
 if(trim($selecao) != ""){
   $result_selecao = $clselecao->sql_record($clselecao->sql_query_file($selecao,db_getsession("DB_instit")));
@@ -155,6 +159,8 @@ $dev      = 0;
 $desco    = 0;
 $patronal = 0;
 
+
+
 for($inome=0;$inome<pg_numrows($res_nome);$inome++){
     db_fieldsmemory($res_nome,$inome);
     if($tipo == 's'){
@@ -165,7 +171,8 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            round(sum(ded),2)                  as ded1,
            round(sum(dev),2)                  as dev1,
            round(sum(desco),2)                as desco1,
-           round(sum(parcela_patronal),2)     as patronal1
+           round(sum(parcela_patronal),2)     as patronal1,
+           round(sum(campoextra),2) AS campoextra1
     from 
     (
     select r01_regist                           as soma,
@@ -173,7 +180,8 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            sum(ded)                             as ded,
            sum(dev)                             as dev,
            sum(desco)                           as desco,
-           round(sum(base)/100*$r33_ppatro,2)   as parcela_patronal
+           sum(base)/100*$r33_ppatro   as parcela_patronal,
+           sum(base)/100* ".$campoextra." AS campoextra
     from 
     (
     select 
@@ -192,6 +200,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
                                 and rh02_instit = r14_instit
          inner join rhlota       on r70_codigo  = rh02_lota
                                 and r70_instit  = rh02_instit
+                                left  join rhlotavinc  on rh25_codigo = r70_codigo 
          inner join rhregime     on rh02_codreg = rh30_codreg
                                 and rh02_instit = rh30_instit
          inner join rhpessoal    on rh01_regist = r14_regist 
@@ -229,6 +238,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
                                 and rh02_instit = r48_instit
          inner join rhlota       on r70_codigo  = rh02_lota
                                 and r70_instit  = rh02_instit
+                                left  join rhlotavinc  on rh25_codigo = r70_codigo 
          inner join rhregime     on rh02_codreg = rh30_codreg
                                 and rh02_instit = rh30_instit
          inner join rhpessoal    on rh01_regist = r48_regist 
@@ -266,6 +276,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
                                 and rh02_instit = r20_instit
          inner join rhlota       on r70_codigo  = rh02_lota
                                 and r70_instit  = rh02_instit
+                                left  join rhlotavinc  on rh25_codigo = r70_codigo 
          inner join rhregime     on rh02_codreg = rh30_codreg
                                 and rh02_instit = rh30_instit
          inner join rhpessoal    on rh01_regist = r20_regist 
@@ -322,6 +333,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
                                 and rh02_instit = r35_instit
          inner join rhlota       on r70_codigo  = rh02_lota
                                 and r70_instit  = rh02_instit
+         left  join rhlotavinc  on rh25_codigo = r70_codigo 
          inner join rhregime     on rh02_codreg = rh30_codreg
                                 and rh02_instit = rh30_instit
          inner join rhpessoal    on rh01_regist = r35_regist 
@@ -343,7 +355,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            ";
     }
     $result = db_query($sql);
-// echo $sql;exit;
+  //echo $sql;exit;
   //db_criatabela($result);exit;
     $xxnum = pg_numrows($result);
     if ($xxnum == 0){
@@ -357,6 +369,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
     $dev      += $dev1;
     $desco    += $desco1;
     $patronal += $patronal1;
+    $cmpextra += $campoextra1;
 }
 //echo $sql ; exit;
 
@@ -382,6 +395,7 @@ $pdf1->base             = $base;
 $pdf1->deducao          = $ded;
 $pdf1->desconto         = $desco - $dev;
 $pdf1->patronal         = $patronal;
+$pdf1->campoextra       = $cmpextra;
 $pdf1->cod_pagto        = $cod_pagto;
 $pdf1->terceiros        = 0;
 $pdf1->atu_monetaria    = 0;

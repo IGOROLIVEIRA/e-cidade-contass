@@ -157,13 +157,22 @@
 		$this->objpdf->rect($xcol+150,$xlin+57,50,$alt);
 
 		$this->objpdf->Setfont('Arial','',8);
-		$this->objpdf->text($xcol+116,$xlin+68.5,'18 - TOTAL');
+		$this->objpdf->text($xcol+116,$xlin+68.5,'18 - CAMPO EXTRA');
 		$this->objpdf->Setfont('Arial','B',10);
-                $this->objpdf->text($xcol+155,$xlin+68.5,'R$'.db_formatar($liquido,'f'));
+                $this->objpdf->text($xcol+155,$xlin+68.5,'R$'.db_formatar($this->campoextra,'f'));
 		$this->objpdf->rect($xcol+115,$xlin+64,35,$alt);
 		$this->objpdf->rect($xcol+150,$xlin+64,50,$alt);
+
+		$liquido += $this->liquido + $this->campoextra;
+
+		$this->objpdf->Setfont('Arial','',8);
+		$this->objpdf->text($xcol+116,$xlin+75.5,'19 - TOTAL');
+		$this->objpdf->Setfont('Arial','B',10);
+                $this->objpdf->text($xcol+155,$xlin+75.5,'R$'.db_formatar($liquido,'f'));
+		$this->objpdf->rect($xcol+115,$xlin+78,35,$alt);
+		$this->objpdf->rect($xcol+150,$xlin+78,50,$alt);
 		
-		$this->objpdf->rect($xcol+115,$xlin+77,85,45);
+		$this->objpdf->rect($xcol+115,$xlin+78,85,45);
 
 		
 		$this->objpdf->Setfont('Arial','B',11);

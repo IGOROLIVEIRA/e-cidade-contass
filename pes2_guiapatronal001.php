@@ -78,6 +78,7 @@ function js_emite(){
   qry += "&tipo="+document.form1.tipo.value;
   qry += "&cod_pagto="+document.form1.cod_pagto.value;
   qry += "&previdencia="+ selecionados;
+  qry += "&campoextra="+document.form1.campoextra.value;
   jan = window.open('pes2_guiapatronal002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
@@ -131,6 +132,16 @@ function js_emite(){
           <?
           $cod_pagto = '2402';
           db_input('cod_pagto',4,'2402',true,'text',2,'');
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td align="right">
+           <strong>Campo extra %:</strong>
+        </td>
+        <td align="left" >
+          <?
+          db_input('campoextra',4,'',true,'text',2,'');
           ?>
         </td>
       </tr>
