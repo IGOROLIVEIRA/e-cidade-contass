@@ -141,7 +141,7 @@ $iAlturaLinha = 5;
 $oPdf->AddPage();
 $oPdf->SetFont('arial', '', 7);
 
-$rsMateriais = buscaMateriais($dtInicial, $dtFinal, $iInstituicao, $sOrder, $oGet->sAlmoxarifados);
+$rsMateriais = buscaMateriais($dtInicial, $dtFinal, $iInstituicao, $sOrder, $oGet->sAlmoxarifados,$oGet->ativos);
 $aItens      = contabilizaMateriais($rsMateriais, $dtInicial, $sAgrupamento);
 
 if (isset($sFuncaoImpressao)) {
@@ -162,7 +162,7 @@ if (isset($sFuncaoImpressao)) {
  * @param integer  $iInstituicao - código da instituição
  * @param string   $sAlmoxarifados - lista de almoxarifados selecionados pelo usuário
  */
-function buscaMateriais($dtInicial, $dtFinal, $iInstituicao, $sOrder, $sAlmoxarifados) {
+function buscaMateriais($dtInicial, $dtFinal, $iInstituicao, $sOrder, $sAlmoxarifados, $ativos) {
 
   if ($dtInicial == '') {
     $dtInicial = '1960-01-01';
@@ -326,6 +326,10 @@ function buscaMateriais($dtInicial, $dtFinal, $iInstituicao, $sOrder, $sAlmoxari
   $sSql .= " where	instit = {$iInstituicao}                                				                                      ";
   if (!empty($sAlmoxarifados)) {
     $sSql .= "		  and db_almox.m91_codigo in ({$sAlmoxarifados})                                                                              ";
+  }
+
+  if (!empty($ativos) && $ativos != 'i') {
+    $sSql .= " and m60_ativo = '{$ativos}' ";
   }
   /*
   $sSql .= " 		  and not exists (						                                                              ";

@@ -106,6 +106,17 @@ $iAnoPeriodoFinal = date('Y', $iPeriodoFinal);
             </td>
           </tr>
 
+          <tr>                           
+            <td><strong>Seleção por:</strong></td>
+            <td>
+              <select id="ativos">
+                <option value="t">Ativos</option>
+                <option value="f">Inativos</option>
+                <option value="i">Todos</option>
+              </select>
+            </td>
+          </tr>
+
           <tr>
             <td colspan="2">
               <div id="ctnAlmoxarifado"></div>
@@ -210,6 +221,7 @@ function js_imprimir() {
   sParametros += '&tipoImpressao=' + $('tipoImpressao').value;
   sParametros += '&sAlmoxarifados=' + sAlmoxarifados;
   sParametros += '&sMateriais=' + sMateriais;
+  sParametros += '&ativos=' + $('ativos').value;
 
   var janela = window.open('mat2_controleestoque002.php?' + sParametros,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   janela.moveTo(0,0);

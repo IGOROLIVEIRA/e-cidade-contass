@@ -125,6 +125,9 @@ try {
 
     $oDaoMatestoque = new cl_matestoque();
     $sWhereItens    = 'm70_coddepto in('. implode(',', $aCodigosAlmoxarifados) .')';
+    if (!empty($oGet->ativos) && $oGet->ativos != 'i') {
+      $sWhereItens .= " and (SELECT m60_ativo FROM matmater WHERE m60_codmater = m70_codmatmater) = '{$oGet->ativos}' ";
+    }
     $sSqlItens      = $oDaoMatestoque->sql_query_almoxarifado('m70_codmatmater', null, $sWhereItens);
     $rsItens        = $oDaoMatestoque->sql_record($sSqlItens);
 

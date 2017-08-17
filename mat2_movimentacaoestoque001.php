@@ -140,6 +140,17 @@ $oRotuloTipoGrupo->label();
               ?>
             </td>
 
+          <tr id="trAtivos">
+            <td nowrap="nowrap">
+              <b>Seleção por:</b>
+            </td>
+            <td>
+              <?php
+                $aAtivos= array("t"=>"Ativos","f"=>"Inativos","i"=>"Todos");
+                db_select("ativos",$aAtivos,true,1, "class='select'");
+              ?>
+            </td>
+
             <tr class="conta">
               <td nowrap="nowrap"><?db_ancora('<b>Conta:</b>', 'js_pesquisaContaPCASP(true);', 1)?></td>
               <td nowrap="nowrap">
@@ -276,6 +287,7 @@ function js_processar() {
   var iTipoImpressao    = $F("iTipoImpressao");
   var iAgrupamento      = $F("iAgrupamento");
   var iOrdenacao        = $F("iOrdem");
+  var ativos            = $F("ativos");
 
   var sQuery  = "sContas=" + sContas;
       sQuery += "&dtInicial="+dtInicial;
@@ -284,6 +296,7 @@ function js_processar() {
       sQuery += "&iTipoImpressao="+iTipoImpressao;
       sQuery += "&iOrdenacao="+iOrdenacao;
       sQuery += "&sAlmoxarifados="+sAlmoxarifados;
+      sQuery += "&ativos="+ativos;
 
   oJanela = window.open('mat2_movimentacaoestoque002.php?'+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   oJanela.moveTo(0,0);
