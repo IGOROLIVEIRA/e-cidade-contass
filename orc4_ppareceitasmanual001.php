@@ -37,7 +37,7 @@ $oPost = db_utils::postMemory($_POST);
 $clppaestimativareceita = new cl_ppaestimativareceita;
 $db_opcao = 1;
 $db_botao = true;
-if (isset($oPost->o05_ppaversao)) {
+if (isset($oPost->o05_ppalei)) {
  
   $oDaoPPALei = db_utils::getDao("ppalei");
   $sSqlLei    = $oDaoPPALei->sql_query($oPost->o05_ppalei);

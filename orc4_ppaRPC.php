@@ -118,7 +118,7 @@ if ($oParam->exec == "getParametros") {
                                               null,
                                               "o57_codfon as codigo_conplano",
                                               null,
-                                              "o57_anousu = ".db_getsession("DB_anousu")."
+                                              "o57_anousu = ".(db_getsession("DB_anousu")+1)."
                                               and o57_fonte like '".ppa::criaContaMae($oParam->iEstrutural)."%'	"
                                               );
 
