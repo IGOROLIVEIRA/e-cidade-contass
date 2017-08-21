@@ -68,7 +68,7 @@ $db_erro = false;
 if($banco == 1){
 $erro_msg = calcatua_bb($anofolha,$mesfolha,$where);
 }else{
-$erro_msg = calcatua_cef($anofolha,$mesfolha,$where);
+$erro_msg = calcatua_cef($mesfolha,$anofolha,$where);
 }
 
 if(empty($erro_msg)){
@@ -269,68 +269,8 @@ where rh30_vinculo = 'I'
    db_atutermometro($x,$num,'calculo_folha1',1);
 
     $matric = pg_result($result,$x,'matricula');
-    
-    ////  verifica se tem conjuge
-    
-    $sql1 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'YYYY') as nasc
-             from rhdepend
-	     where rh31_gparen = 'C' 
-	       and rh31_regist = $matric 
-	     limit 1";
-				 
-    $res1 = pg_query($sql1);
-    
-    if(pg_numrows($res1) > 0){
-      $dtconj  = pg_result($res1,0,'nasc');
-      $temconj = 'S'; 
-    }else{
-      $dtconj = '0000';
-      $temconj = 'N'; 
-    }
-    
-    ////  verifica numero de filhos
-    
-    $sql2 = "select count(*) as soma_filhos
-             from rhdepend
-             where rh31_gparen = 'F' 
-	             and rh31_regist = $matric 
-	          ";
-				 
-    $res2 = pg_query($sql2);
-    
-    if(pg_numrows($res2) > 0){
-      $numfilhos = pg_result($res2,0,'soma_filhos');
-    }else{
-      $numfilhos = '0';
-    }
-    
-    ////  verifica ano de nasc do filho cacula
-    
-    $sql3 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res3 = pg_query($sql3);
-    
-    if(pg_numrows($res3) > 0){
-      $cacula = pg_result($res3,0,'nasc');
-    }else{
-      $cacula = '0000';
-    }
-
-    $mesfolhaes_inss     = "000";
-		$tipo_apos  = "1";
-		$mesfolhaes_anterior = "000";
-		$valor_prov_inicial = "00000000";
-		$tempo_contrib = "000";
-		$tempo_total_contrib = "000";
 		
-  fputs($arquivo,pg_result($result,$x,'todo')."#".$dtconj."#".$numfilhos."#".$cacula."#".$tipo_apos."#".$mesfolhaes_anterior."#".$valor_prov_inicial."#".$tempo_contrib."#".$tempo_total_contrib."\r\n");
+  fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
   }
   fclose($arquivo);
 
@@ -388,7 +328,7 @@ from rhpessoal
      inner join (select r14_regist,
                         sum(case when r14_pd != 3 and r14_pd = 1 then r14_valor else 0 end) as prov,
 			                  sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
-            			      sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base 
+            			      sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base
                  from gerfsal 
 		             where r14_anousu = $anofolha 
 		             and r14_mesusu = $mesfolha
@@ -474,34 +414,44 @@ function calcatua_cef($mesfolha,$anofolha,$where){
   $arquivo = fopen($arq,'w'); 
 
 $sql = "
-select rh01_regist as matricula,
-       trim(substr(z01_nome,1,40))
-       ||'#'
-       ||trim(substr(z01_cgccpf,1,11))
-       ||'#'
-       ||'PREF. MUN. DE BAGE  '
-       ||'#'
-       ||trim(to_char(rh01_regist,'999999'))
-       ||'#'
-       ||trim(to_char(rh30_regime,'9'))
-       ||'#'
-       ||case when rh30_regime = 1 then 'S' else 'N' end 
-       ||'#'
-       ||rh01_sexo
-       ||'#'
-       ||to_char(rh01_nasc,'DD/MM/YYYY') 
-       ||'#'
-       ||to_char(rh01_admiss,'DD/MM/YYYY')
-       ||'#'
-       ||to_char(rh01_admiss,'DD/MM/YYYY')
-       ||'#'
-       ||trim(translate(to_char(round(base,2),'99999999,99'),',',''))
-       ||'#'
-       ||trim(translate(to_char(round(prov-desco,2),'99999999,99'),',',''))
-       ||'#'
-       ||case when r70_codigo in (802,804,805) then '2' else '4' end
-       ||'#'
-       ||'0' as todo
+SELECT rh01_regist AS matricula,
+     trim(substr(r70_descr,1,20)) ||'#' || trim(substr(rh01_regist,1,40)) ||'#' || '1' ||'#' ||'S' ||'#' ||trim(rh01_sexo) ||'#' ||to_char(rh01_nasc,'DD/MM/YYYY') ||'#' ||
+to_char(rh01_admiss,'DD/MM/YYYY') ||'#' ||
+to_char(rh01_admiss,'DD/MM/YYYY') ||'#' ||
+trim(translate(to_char(round(base,2),'99999999,99'),',','')) ||'#' ||
+case
+   when rh37_funcaogrupo in (0) then 4
+   else rh37_funcaogrupo
+end
+||'#' ||
+' '
+||'#' ||
+' '
+||'#' ||
+case
+when (select rh31_gparen from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_gparen = 'C' limit 1)  is not null then 'S'
+else 'N'
+end
+||'#' ||
+case
+when (select rh31_gparen from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_gparen = 'C' limit 1)  is not null then
+(select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_gparen = 'C' limit 1)
+else ' '
+end
+||'#' ||
+case
+when (select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi <> 'N' order by rh31_dtnasc desc  limit 1)  is not null then
+(select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi <> 'N' order by rh31_dtnasc desc  limit 1)
+else ' '
+end
+||'#' ||
+case
+when (select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi = 'N' order by rh31_dtnasc desc  limit 1)  is not null then
+(select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi = 'N' order by rh31_dtnasc desc  limit 1)
+else ' '
+end
+||'#' ||
+' ' as todo
        
 from rhpessoal 
      inner join cgm          on rh01_numcgm = z01_numcgm 
@@ -515,7 +465,7 @@ from rhpessoal
      inner join (select r14_regist,
                         sum(case when r14_pd != 3 and r14_pd = 1 then r14_valor else 0 end) as prov,
 			                  sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
-                   			sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base 
+                   			sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base
                  from gerfsal 
 		 where r14_anousu = $anofolha 
 		   and r14_mesusu = $mesfolha
@@ -525,7 +475,7 @@ where rh30_vinculo = 'A'
   $where
 ";
 
-//  echo $sql;
+  //echo $sql;exit;
   $result = pg_query($sql);
   $num = pg_numrows($result);
   for($x = 0;$x < pg_numrows($result);$x++){
@@ -535,63 +485,8 @@ where rh30_vinculo = 'A'
     
     $matric = pg_result($result,$x,'matricula');
     
-    ////  verifica se tem conjuge
-    
-    $sql1 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-	     where rh31_gparen = 'C' 
-	       and rh31_regist = $matric 
-	     limit 1";
-				 
-    $res1 = pg_query($sql1);
-    
-    if(pg_numrows($res1) > 0){
-      $dtconj  = pg_result($res1,0,'nasc');
-      $temconj = 'S'; 
-    }else{
-      $dtconj = '';
-      $temconj = 'N'; 
-    }
-    
-    ////  verifica se tem filhos especiais
-    
-    $sql2 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_depend = 'S'
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res2 = pg_query($sql2);
-    
-    if(pg_numrows($res2) > 0){
-      $dtespec = pg_result($res2,0,'nasc');
-    }else{
-      $dtespec = '';
-    }
-    
-    ////  verifica se tem filhos nao especiais
-    
-    $sql3 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_depend <> 'S'
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res3 = pg_query($sql3);
-    
-    if(pg_numrows($res3) > 0){
-      $dtnespec = pg_result($res3,0,'nasc');
-    }else{
-      $dtnespec = '';
-    }
-  fputs($arquivo,pg_result($result,$x,'todo')."#".$temconj."#".$dtconj."#".$dtespec."#".$dtnespec."#".chr(13)."\r\n");
+
+  fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
   }
   fclose($arquivo);
 
@@ -600,25 +495,54 @@ where rh30_vinculo = 'A'
 
   $arquivo = fopen($arq1,'w');  
 $sql = "
-select rh01_regist as matricula,
-       trim(substr(z01_nome,1,40))
-       ||'#'
-       ||trim(substr(z01_cgccpf,1,11))
-       ||'#'
-       ||trim(to_char(rh01_regist,'999999'))
-       ||'#'
-       ||rh01_sexo
-       ||'#'
-       ||to_char(rh01_nasc,'DD/MM/YYYY') 
-       ||'#'
-       ||trim(translate(to_char(round(prov,2),'99999999,99'),',',''))
-       ||'#'
-       ||trim(translate(to_char(round(prov-desco,2),'99999999,99'),',',''))
-       ||'#'
-       ||'2'
-       ||'#'
-       ||to_char(rh01_admiss,'DD/MM/YYYY') as todo
-       
+SELECT rh01_regist AS matricula,
+     trim(substr(r70_descr,1,20)) ||'#' || trim(substr(rh01_regist,1,40)) ||'#' || trim(rh01_sexo) ||'#' ||to_char(rh01_nasc,'DD/MM/YYYY') ||'#' ||
+to_char(rh01_admiss,'DD/MM/YYYY') ||'#' ||
+base ||'#' ||
+case
+   when rh37_funcaogrupo in (0) then 4
+   else rh37_funcaogrupo
+end
+||'#' ||
+case
+   when rh02_rhtipoapos in (4) then 1
+   when rh02_rhtipoapos in (2) then 2
+   when rh02_rhtipoapos in (3) then 3
+   when rh02_rhtipoapos in (5) then 4
+   when rh02_rhtipoapos in (4) then 1
+   when rh02_rhtipoapos in (1,0) then 3
+end
+||'#' ||
+' '
+||'#' ||
+' '
+||'#' ||
+case
+when (select rh31_gparen from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_gparen = 'C' limit 1)  is not null then 'S'
+else 'N'
+end
+||'#' ||
+case
+when (select rh31_gparen from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_gparen = 'C' limit 1)  is not null then
+(select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_gparen = 'C' limit 1)
+else 'N'
+end
+||'#' ||
+case
+when (select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi <> 'N' order by rh31_dtnasc desc  limit 1)  is not null then
+(select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi <> 'N' order by rh31_dtnasc desc  limit 1)
+else ' '
+end
+||'#' ||
+case
+when (select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi = 'N' order by rh31_dtnasc desc  limit 1)  is not null then
+(select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi = 'N' order by rh31_dtnasc desc  limit 1)
+else ' '
+end
+||'#' ||
+' '
+
+AS todo
 from rhpessoal 
      inner join cgm          on rh01_numcgm = z01_numcgm 
      inner join rhpessoalmov on rh02_regist = rh01_regist 
@@ -630,17 +554,18 @@ from rhpessoal
      inner join rhregime on rh30_codreg = rh02_codreg
      inner join (select r14_regist,
                         sum(case when r14_pd != 3 and r14_pd = 1 then r14_valor else 0 end) as prov,
-			sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
-			sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base 
-                 from gerfsal 
+			                  sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
+                   			sum(case when r14_rubric = 'R981' then r14_valor else 0 end ) as base
+                 from gerfsal
 		 where r14_anousu = $anofolha
 		   and r14_mesusu = $mesfolha
-		   group by r14_regist ) as sal on r14_regist = rh01_regist 
+		   group by r14_regist ) as sal on r14_regist = rh01_regist
 where rh30_vinculo = 'I'
+  and rh30_regime = 1
   $where
 ";
   
-//  echo $sql;
+    //echo $sql;exit;
   $result = pg_query($sql);
   $num = pg_numrows($result);
   for($x = 0;$x < pg_numrows($result);$x++){
@@ -650,63 +575,8 @@ where rh30_vinculo = 'I'
 
     $matric = pg_result($result,$x,'matricula');
     
-    ////  verifica se tem conjuge
-    
-    $sql1 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-	     where rh31_gparen = 'C' 
-	       and rh31_regist = $matric 
-	     limit 1";
-				 
-    $res1 = pg_query($sql1);
-    
-    if(pg_numrows($res1) > 0){
-      $dtconj  = pg_result($res1,0,'nasc');
-      $temconj = 'S'; 
-    }else{
-      $dtconj = '';
-      $temconj = 'N'; 
-    }
-    
-    ////  verifica se tem filhos especiais
-    
-    $sql2 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_depend = 'S'
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res2 = pg_query($sql2);
-    
-    if(pg_numrows($res2) > 0){
-      $dtespec = pg_result($res2,0,'nasc');
-    }else{
-      $dtespec = '';
-    }
-    
-    ////  verifica se tem filhos nao especiais
-    
-    $sql3 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_depend <> 'S'
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res3 = pg_query($sql3);
-    
-    if(pg_numrows($res3) > 0){
-      $dtnespec = pg_result($res3,0,'nasc');
-    }else{
-      $dtnespec = '';
-    }
-  fputs($arquivo,pg_result($result,$x,'todo')."#".$temconj."#".$dtconj."#".$dtespec."#".$dtnespec."#".chr(13)."\r\n");
+
+  fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
   }
   fclose($arquivo);
 
@@ -719,50 +589,65 @@ where rh30_vinculo = 'I'
 
   $arquivo = fopen($arq2,'w');  
 $sql = "
-select rh01_regist as matricula,
-       case when c.z01_nome is null then 'NAO CADASTRADO' else trim(substr(c.z01_nome,1,40)) end
-       ||'#'
-       ||lpad(cgm.z01_cgccpf,11,0)
-       ||'#'
-       ||trim(to_char(rh01_regist,'999999'))
-       ||'#'
-       ||trim(translate(to_char(round(prov,2),'99999999,99'),',',''))
-       ||'#'
-       ||trim(translate(to_char(round(prov-desco,2),'99999999,99'),',',''))
-       ||'#'
-       ||'2'
-       ||'#'
-       ||rh01_sexo as todo
-       
+SELECT rh01_regist AS matricula,
+' '
+||'#' ||
+' '
+||'#' ||
+' '
+||'#' ||
+' '
+||'#' ||
+' '
+||'#' ||
+'1'
+||'#' ||
+base
+||'#' ||
+to_char(rh01_admiss,'DD/MM/YYYY')
+||'#' ||
+trim(rh01_sexo)
+||'#' ||
+to_char(rh01_nasc,'DD/MM/YYYY')
+||'#' ||
+case
+when (select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi <> 'N' order by rh31_dtnasc desc  limit 1)  is not null then
+(select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi <> 'N' order by rh31_dtnasc desc  limit 1)
+else ' '
+end
+||'#' ||
+case
+when (select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi = 'N' order by rh31_dtnasc desc  limit 1)  is not null then
+(select to_char(rh31_dtnasc,'DD/MM/YYYY') from rhdepend where rh31_regist = rhpessoal.rh01_regist and rh31_especi = 'N' order by rh31_dtnasc desc  limit 1)
+else ' '
+end
+||'#' ||
+' '
+AS todo
+
 from rhpessoal
-     inner join pessoal p    on p.r01_anousu = $anofolha 
-                            and p.r01_mesusu = $mesfolha
-			    and p.r01_regist = rh01_regist
-     left join  pessoal q    on q.r01_regist = p.r01_origp
-                            and q.r01_anousu = $anofolha
-			                      and q.r01_mesusu = $mesfolha
-     left join  cgm c        on c.z01_numcgm = q.r01_numcgm
-     inner join cgm          on rh01_numcgm = cgm.z01_numcgm 
-     inner join rhpessoalmov on rh02_regist = rh01_regist 
-                            and rh02_anousu = $anofolha 
-			                      and rh02_mesusu = $mesfolha 
-     inner join rhlota       on r70_codigo = rh02_lota 
+     inner join cgm          on rh01_numcgm = z01_numcgm
+     inner join rhpessoalmov on rh02_regist = rh01_regist
+                            and rh02_anousu = $anofolha
+			                      and rh02_mesusu = $mesfolha
+     inner join rhlota       on r70_codigo = rh02_lota
      inner join rhfuncao     on rh37_funcao = rh01_funcao
                             and rh37_instit = rh02_instit
      inner join rhregime on rh30_codreg = rh02_codreg
      inner join (select r14_regist,
                         sum(case when r14_pd != 3 and r14_pd = 1 then r14_valor else 0 end) as prov,
-			sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
-			sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base 
-                 from gerfsal 
-		 where r14_anousu = $anofolha 
+			                  sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
+                   			sum(case when r14_rubric = 'R981' then r14_valor else 0 end ) as base
+                 from gerfsal
+		 where r14_anousu = $anofolha
 		   and r14_mesusu = $mesfolha
-		   group by r14_regist ) as sal on r14_regist = rh01_regist 
-where rh30_vinculo = 'P' 
+		   group by r14_regist ) as sal on r14_regist = rh01_regist
+where rh30_vinculo = 'P'
+  and rh30_regime = 1
   $where
 ";
   
-//  echo $sql;
+  //echo $sql;exit;
   $result = pg_query($sql);
   $num = pg_numrows($result);
   for($x = 0;$x < pg_numrows($result);$x++){
@@ -772,63 +657,8 @@ where rh30_vinculo = 'P'
 
     $matric = pg_result($result,$x,'matricula');
     
-    ////  verifica se tem conjuge
-    
-    $sql1 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-	     where rh31_gparen = 'C' 
-	       and rh31_regist = $matric 
-	     limit 1";
-				 
-    $res1 = pg_query($sql1);
-    
-    if(pg_numrows($res1) > 0){
-      $dtconj  = pg_result($res1,0,'nasc');
-      $temconj = 'S'; 
-    }else{
-      $dtconj = '';
-      $temconj = 'N'; 
-    }
-    
-    ////  verifica se tem filhos especiais
-    
-    $sql2 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_depend = 'S'
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res2 = pg_query($sql2);
-    
-    if(pg_numrows($res2) > 0){
-      $dtespec = pg_result($res2,0,'nasc');
-    }else{
-      $dtespec = '';
-    }
-    
-    ////  verifica se tem filhos nao especiais
-    
-    $sql3 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'DD/MM/YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_depend <> 'S'
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res3 = pg_query($sql3);
-    
-    if(pg_numrows($res3) > 0){
-      $dtnespec = pg_result($res3,0,'nasc');
-    }else{
-      $dtnespec = '';
-    }
-  fputs($arquivo,pg_result($result,$x,'todo')."#"."#".$dtespec."#".$dtnespec."#".chr(13)."\r\n");
+
+  fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
   }
   fclose($arquivo);
 
