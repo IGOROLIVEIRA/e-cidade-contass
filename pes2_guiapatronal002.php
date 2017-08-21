@@ -215,6 +215,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
          or r14_rubric in ".$xdeducao." 
          or r14_rubric in ".$devolucao." 
          or r14_rubric in ".$xbases.")
+      and rh25_anousu = $ano       
       group by 
            rh01_regist,
            z01_nome,
@@ -253,6 +254,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
          or r48_rubric in ".$xdeducao." 
          or r48_rubric in ".$devolucao." 
          or r48_rubric in ".$xbases." )
+      and rh25_anousu = $ano       
       group by 
            rh01_regist,
            z01_nome,
@@ -291,6 +293,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
          or r20_rubric in ".$xdeducao." 
          or r20_rubric in ".$devolucao." 
          or r20_rubric in ".$xbases.")
+      and rh25_anousu = $ano       
       group by 
            rh01_regist,
            z01_nome,
@@ -348,7 +351,7 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
          or r35_rubric in ".$xdeducao." 
          or r35_rubric in ".$devolucao." 
          or r35_rubric in ".$xbases.")
-
+      and rh25_anousu = $ano      
     ) as xx group by rh01_regist
     ) as xxx
                      
