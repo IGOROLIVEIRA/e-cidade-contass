@@ -89,6 +89,17 @@ $clrotulo->label("cc08_descricao");
       db_input('cc08_descricao',30,$Icc08_descricao,true,'text',3,'')
        ?>
     </td>
+    </tr>
+    <tr>
+    <td nowrap title="Inep">
+      <strong>Inep: </strong>
+    </td>
+    <td> 
+      <?
+      db_input('rh55_inep',40,$Irh55_inep,true,'text',$db_opcao,"","","","",8)
+      ?>
+    </td>
+  </tr>
 </table>
 </center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >

@@ -46,12 +46,14 @@ class cl_rhlocaltrab {
    var $rh55_codigo = 0; 
    var $rh55_estrut = null; 
    var $rh55_descr = null; 
+   var $rh55_inep = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  rh55_instit = int4 = Cod. Instituição 
                  rh55_codigo = int4 = Cód. Local 
                  rh55_estrut = varchar(20) = Estrutural 
                  rh55_descr = varchar(40) = Descrição 
+                 rh55_inep = varchar(40) = Inep
                  ";
    //funcao construtor da classe 
    function cl_rhlocaltrab() { 
@@ -75,6 +77,7 @@ class cl_rhlocaltrab {
        $this->rh55_codigo = ($this->rh55_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["rh55_codigo"]:$this->rh55_codigo);
        $this->rh55_estrut = ($this->rh55_estrut == ""?@$GLOBALS["HTTP_POST_VARS"]["rh55_estrut"]:$this->rh55_estrut);
        $this->rh55_descr = ($this->rh55_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["rh55_descr"]:$this->rh55_descr);
+       $this->rh55_inep = ($this->rh55_inep == ""?@$GLOBALS["HTTP_POST_VARS"]["rh55_inep"]:$this->rh55_inep);
      }else{
        $this->rh55_instit = ($this->rh55_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh55_instit"]:$this->rh55_instit);
        $this->rh55_codigo = ($this->rh55_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["rh55_codigo"]:$this->rh55_codigo);
@@ -146,12 +149,14 @@ class cl_rhlocaltrab {
                                       ,rh55_codigo 
                                       ,rh55_estrut 
                                       ,rh55_descr 
+                                      ,rh55_inep 
                        )
                 values (
                                 $this->rh55_instit 
                                ,$this->rh55_codigo 
                                ,'$this->rh55_estrut' 
                                ,'$this->rh55_descr' 
+                               ,'$this->rh55_inep' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -247,6 +252,10 @@ class cl_rhlocaltrab {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->rh55_inep)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh55_inep"])){ 
+       $sql  .= $virgula." rh55_inep = '$this->rh55_inep' ";
+       $virgula = ",";
      }
      $sql .= " where ";
      if($rh55_codigo!=null){
