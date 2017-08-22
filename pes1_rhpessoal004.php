@@ -293,6 +293,7 @@ if (isset($incluir)) {
           $oDaoPesMov->rh02_funcao   = $oMovimento->rh02_funcao;
           $oDaoPesMov->rh02_deficientefisico = str_replace("f","false",$oMovimento->rh02_deficientefisico);
           $oDaoPesMov->rh02_portadormolestia = str_replace("f","false",$oMovimento->rh02_portadormolestia);
+          $oDaoPesMov->rh02_tipcatprof = $oMovimento->rh02_tipcatprof;
           $oDaoPesMov->incluir(null,$oMovimento->rh02_instit);
           if ($oDaoPesMov->erro_status == 0) {
 
