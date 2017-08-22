@@ -102,6 +102,7 @@ if(isset($db_opcaoal)){
 ?>
 <style>
   /* Ajusta o tamanho dos campos do fieldset da aba de movimentações */
+  #rh02_tipcatprof,
   #rh02_salari,
   #rh02_fpagto {
     width: 200px;
@@ -157,6 +158,34 @@ if(isset($db_opcaoal)){
             db_input('rh02_mesusu',2,$Irh02_mesusu,true,'text',3,"")
             ?>
           </td>
+
+            <td nowrap title="Categoria Profissional SIOPE" align="right">
+              <strong>C.P Siope: </strong>
+            </td>
+            <td nowrap title="Cadastrar somente servidores da educação">
+              <?
+              $tipcatprof = array(
+                                  0 => 'Nenhum',
+                                  1 => 'Docente habilitado em curso de nível médio',
+                                  2 => 'Docente habilitado em curso de pedagogia',
+                                  3 => 'Docente habilitado em curso de licenciatura plena',
+                                  4 => 'Docente habilitado em programa especial de formação pedagógica de docentes',
+                                  5 => 'Docente pós-graduado em cursos de especialização para formação de docentes para educação profissional técnica de nível médio',
+                                  6 => 'Docente graduado bacharel e tecnólogo com diploma de mestrado ou doutorado na área do componente curricular da educação profissional técnica de nível médio',
+                                  7 => 'Docente professor indígena sem prévia formação pedagógica',
+                                  8 => 'Docente instrutor, tradutor e intérprete de libras.',
+                                  9 => 'Docente professor de comunidade quilombola',
+                                  10 => 'Profissionais não habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.',
+                                  11 => 'Profissionais graduados, bacharéis e tecnólogos autorizados a atuar como docentes, em caráter precário e provisório, nos anos finais do ensino fundamental e no ensino médio e médio integrado à educação.',
+                                  12 => 'Profissionais experientes, não graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.',
+                                  13 => 'Profissionais em efetivo exercício no âmbito da educação infantil e ensino fundamental.',
+                                  14 => 'Auxiliar/Assistente Educacional',
+                                  15 => 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.',
+                                  16 => 'Profissionais que atuam na realização das atividades requeridos nos ambientes de secretaria, de manutenção em geral.',
+                                 );
+              db_select("rh02_tipcatprof",$tipcatprof,true,$db_opcao);
+              ?>
+            </td>
         </tr>
         <tr>
           <td nowrap title="<?=@$Trh02_regist?>">

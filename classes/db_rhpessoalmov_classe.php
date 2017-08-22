@@ -74,7 +74,8 @@ class cl_rhpessoalmov {
    var $rh02_datalaudomolestia = null; 
    var $rh02_tipodeficiencia = 0; 
    var $rh02_abonopermanencia = 'f'; 
-   var $rh02_diasgozoferias = 0; 
+   var $rh02_diasgozoferias = 0;
+   var $rh02_tipcatprof = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  rh02_instit = int4 = Cod. Instituição 
@@ -104,6 +105,7 @@ class cl_rhpessoalmov {
                  rh02_tipodeficiencia = int4 = Código do tipo de deficiência 
                  rh02_abonopermanencia = bool = Abono Permanência 
                  rh02_diasgozoferias = int4 = Dias padrão a Gozar 
+                 rh02_tipcatprof = int4 = Categoria Profissional SIOPE
                  ";
    //funcao construtor da classe 
    function cl_rhpessoalmov() { 
@@ -123,6 +125,7 @@ class cl_rhpessoalmov {
    // funcao para atualizar campos
    function atualizacampos($exclusao=false) {
      if($exclusao==false){
+       $this->rh02_tipcatprof = ($this->rh02_tipcatprof == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_tipcatprof"]:$this->rh02_tipcatprof);  
        $this->rh02_instit = ($this->rh02_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_instit"]:$this->rh02_instit);
        $this->rh02_seqpes = ($this->rh02_seqpes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"]:$this->rh02_seqpes);
        $this->rh02_anousu = ($this->rh02_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["rh02_anousu"]:$this->rh02_anousu);
@@ -420,6 +423,7 @@ class cl_rhpessoalmov {
                                       ,rh02_tipodeficiencia 
                                       ,rh02_abonopermanencia 
                                       ,rh02_diasgozoferias 
+                                      ,rh02_tipcatprof
                        )
                 values (
                                 $this->rh02_instit 
@@ -449,6 +453,7 @@ class cl_rhpessoalmov {
                                ,$this->rh02_tipodeficiencia 
                                ,'$this->rh02_abonopermanencia' 
 			       ,".($this->rh02_diasgozoferias == "null" || $this->rh02_diasgozoferias == ""?"30":"'".$this->rh02_diasgozoferias."'")."
+             ,'$this->rh02_tipcatprof'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -835,6 +840,12 @@ class cl_rhpessoalmov {
          return false;
        }
      }
+
+     if(trim($this->rh02_tipcatprof)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_tipcatprof"])){ 
+       $sql  .= $virgula." rh02_tipcatprof = $this->rh02_tipcatprof ";
+       $virgula = ",";
+     }
+
      $sql .= " where ";
      if($rh02_seqpes!=null){
        $sql .= " rh02_seqpes = $this->rh02_seqpes";
