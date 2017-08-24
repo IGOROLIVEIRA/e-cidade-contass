@@ -1020,7 +1020,7 @@ function js_processarAutorizacoes(lProcessar) {
       nValorDotacao =  js_formatar(nValorDotacao, 'f',iCasasDecimais);
       nTotal        =  js_formatar(nTotal, 'f',iCasasDecimais);
 
-      if (nTotal.getNumber().valueOf() != nValorDotacao.getNumber().valueOf()) {
+      if (nTotal.valueOf() != nValorDotacao.valueOf()) {
 
         alert('Valor da (s) dotação(ões) diferente do valor do item.\nCorrija o valor das dotações.');
         js_removeObj('msgbox');
