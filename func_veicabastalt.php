@@ -87,7 +87,7 @@ $clveicabast->rotulo->label("ve70_codigo");
       $where="";
       $distinct="distinct on (ve70_codigo)";
       if (isset($anul)&&$anul==true){
-      	$where="ve70_ativo=1";
+      	$where="ve70_ativo=1 and ve01_instit=".db_getsession("DB_instit");
       }
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
