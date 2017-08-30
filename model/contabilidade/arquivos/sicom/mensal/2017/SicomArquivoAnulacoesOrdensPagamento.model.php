@@ -12,30 +12,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarAOP.
  */
 class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 173;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'AOP';
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -45,16 +45,16 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos()
   {
-    
+
 
   }
-  
+
   /**
    * GERAR A ANULACOES DE PAGAMENTO DE EMPENHOS
    * @see iPadArquivoBase::gerarDados()
@@ -65,21 +65,21 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
     $claop10 = new cl_aop102017();
     $claop11 = new cl_aop112017();
-    
-    $sSqlUnidade = "select * from infocomplementares where 
+
+    $sSqlUnidade = "select * from infocomplementares where
   	si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
 
     $rsResultUnidade = db_query($sSqlUnidade);
     $sTipoLiquidante = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tipoliquidante;
-    
-    
-    $sSqlUnidade = "select * from infocomplementares where 
+
+
+    $sSqlUnidade = "select * from infocomplementares where
   	 si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
 
     $rsResultUnidade = db_query($sSqlUnidade);
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
-    
-    
+
+
     /*
      * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
      */
@@ -102,23 +102,23 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				c70_data as dtanulacao,
 				e50_data as dtordem,
 				e50_data as dtliquida,
-				(select c71_codlan as dtpagamento 
-				   from conlancamdoc 
-				  where c71_codlan = (select max(c71_codlan) 
-				  						from conlancamdoc 
-				  						join conlancamord on c80_codlan = c71_codlan 
-									   where c80_codord = e50_codord 
-										 and c71_coddoc in (5,35,37) 
+				(select c71_codlan as dtpagamento
+				   from conlancamdoc
+				  where c71_codlan = (select max(c71_codlan)
+				  						from conlancamdoc
+				  						join conlancamord on c80_codlan = c71_codlan
+									   where c80_codord = e50_codord
+										 and c71_coddoc in (5,35,37)
 										 and c71_codlan < c70_codlan)
 				)||lpad(e50_codord,10,0) as numordem,
 				e50_codord as numLiquida,
 				c70_valor as vlrordem,
-				(select c71_data as dtpagamento 
-				   from conlancamdoc 
-				  where c71_codlan = (select max(c71_codlan) 
-				      					from conlancamdoc 
-				      					join conlancamord on c80_codlan = c71_codlan 
-					 				   where c80_codord = e50_codord 
+				(select c71_data as dtpagamento
+				   from conlancamdoc
+				  where c71_codlan = (select max(c71_codlan)
+				      					from conlancamdoc
+				      					join conlancamord on c80_codlan = c71_codlan
+					 				   where c80_codord = e50_codord
 					   					 and c71_coddoc in (5,35,37) and c71_codlan < c70_codlan)
 			    ) as dtpag,
 				e60_codemp,e60_numemp,
@@ -141,13 +141,13 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
                    (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao,
 				si09_codorgaotce,
-				o41_subunidade as subunidade 
-			from conlancam 
-				join conlancamdoc on c71_codlan = c70_codlan 
-				join conlancamord on c80_codlan = c71_codlan 
-				join pagordem on c80_codord = e50_codord 
+				o41_subunidade as subunidade
+			from conlancam
+				join conlancamdoc on c71_codlan = c70_codlan
+				join conlancamord on c80_codlan = c71_codlan
+				join pagordem on c80_codord = e50_codord
 				join pagordemele on e53_codord = e50_codord
-				join pagordemnota on e71_codord = c80_codord 
+				join pagordemnota on e71_codord = c80_codord
 				join empempenho on e50_numemp = e60_numemp
 				join cgm on e60_numcgm = z01_numcgm
 				join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
@@ -156,7 +156,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 				join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
 				JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
 		   left join  infocomplementaresinstit on e60_instit = si09_instit and si09_instit = " . db_getsession("DB_instit") . "
-			   where c71_coddoc in (6,36,38) 
+			   where c71_coddoc in (6,36,38)
 			     and o41_instit = " . db_getsession("DB_instit") . "
 			     and e60_instit = " . db_getsession("DB_instit") . "
 			     and c71_data between '" . $this->sDataInicial . "'
@@ -170,7 +170,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
     $aAnulacoes = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsAnulacao); $iCont++) {
-      
+
       $oAnulacoes = db_utils::fieldsMemory($rsAnulacao, $iCont);
 
       $itipoOP = 0;
@@ -203,7 +203,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
         $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
 
       }
-      
+
       if ($oAnulacoes->subunidade != '' && $oAnulacoes->subunidade != 0) {
         $sCodUnidade .= str_pad($oAnulacoes->subunidade, 3, "0", STR_PAD_LEFT);
       }
@@ -212,19 +212,19 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
        */
       $sSqlExtornos = "select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor from conlancamdoc join conhistdoc on c53_coddoc = c71_coddoc
     join conlancamord on c71_codlan =  c80_codlan join conlancam on c70_codlan = c71_codlan where c53_tipo in (21,20)
-    and c70_data <= '" . $this->sDataFinal . "' and c80_codord = {$oAnulacoes->e50_codord}";
+    and c80_codord = {$oAnulacoes->e50_codord} and c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
       $rsQuantExtornos = db_query($sSqlExtornos);
 
-      if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor > 0) {
+      if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor <> 0) {
 
 
         $sSqlOp = "select c70_codlan || lpad($oAnulacoes->e50_codord,10,0) as codlan, c70_data as dtpagamento from conlancam
     		             where c70_codlan in (
     					select max(c71_codlan)
-				  						from conlancamdoc 
+				  						from conlancamdoc
 				  						join conlancamord on c80_codlan = c71_codlan join conlancam on c70_codlan = c71_codlan
-									   where c80_codord = {$oAnulacoes->e50_codord} 
-										 and c71_coddoc in (5,35,37) 
+									   where c80_codord = {$oAnulacoes->e50_codord}
+										 and c71_coddoc in (5,35,37)
 										 and c71_codlan < {$oAnulacoes->c71_codlan}
 										 and c70_valor = {$oAnulacoes->vlrordem})";
 
@@ -234,10 +234,10 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
           $sSqlOp = "select c70_codlan || lpad($oAnulacoes->e50_codord,10,0) as codlan, c70_data as dtpagamento from conlancam
     		             where c70_codlan in (
     					select max(c71_codlan)
-				  						from conlancamdoc 
+				  						from conlancamdoc
 				  						join conlancamord on c80_codlan = c71_codlan join conlancam on c70_codlan = c71_codlan
-									   where c80_codord = {$oAnulacoes->e50_codord} 
-										 and c71_coddoc in (5,35,37) 
+									   where c80_codord = {$oAnulacoes->e50_codord}
+										 and c71_coddoc in (5,35,37)
 										 and c71_codlan < {$oAnulacoes->c71_codlan})";
           $rsResultOP = db_query($sSqlOp);
         }
@@ -283,7 +283,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
           $oDadosAnulacao->si137_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
           $oDadosAnulacao->si137_instit = db_getsession("DB_instit");
           $oDadosAnulacao->reg11 = array();
-          
+
 
           /**
            * Registro 11
@@ -314,7 +314,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
       }
     }
-    
+
     foreach ($aAnulacoes as $anulacao) {
 
       $oDadosAnulacao = new cl_aop102017();
@@ -362,7 +362,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
         }
       }
     }
-    
+
     db_fim_transacao();
 
     $oGerarAOP = new GerarAOP();
