@@ -73,114 +73,22 @@ case when x.rh02_tipcatprof = 0 then 'Nenhum'
 || ','
 || 
 
-case when (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) > 0 then  
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118))
-     else 0
-     end       
+          (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118)    
 
 || ','
 || 
 
-case when (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) > 0 then  
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119))
-     else 0
-     end 
+          (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119)
 
 || ','
 || 
-
-case when (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101) > 0 then  
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101))
-     else 0
-     end 
+          (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101)
 
 || ','
 || 
-
-case when   (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) > 0
-        and (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) > 0
-        and (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101) > 0 then   
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118)) +
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119)) +  
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101))
-
-     when   (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) > 0
-        and (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) > 0
-        and (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101) <= 0 then   
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118)) +
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119))
-
-     when   (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) > 0
-        and (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) > 0
-        and (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101) <= 0 then   
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118)) +
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119))       
-
-     when   (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) > 0
-        and (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) <= 0
-        and (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101) > 0 then   
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118)) +
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101))      
-
-     when   (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) > 0
-        and (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) <= 0
-        and (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101) <= 0 then   
-            (((x.base_r14 + x.base_r48 + x.base_r20 + x.base_r35)/100*(select r33_ppatro from inssirf 
-    where  r33_anousu = 2016
-                   and r33_mesusu = 12
-                   and r33_instit = 1 
-                   and r33_codtab = x.rh02_tbprev+2 limit 1)) + (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118))           
-
-     else 0
-     end  
+          (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) +
+          (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) +  
+          (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101)
 
 AS dado
 
