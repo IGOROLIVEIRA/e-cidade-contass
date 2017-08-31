@@ -275,8 +275,9 @@ if($tipo == "m"){
 
   // Se for por intervalos e vier lotação inicial e final
   $whereRESC.= $andwhere." r70_estrut between '0' and '9999'";
-  $aWhere[] = " r70_estrut between '0' and '9999'";
+  $aWhere[] = " r70_estrut between '0' and '9999' and ( o15_codigo in ($selrec))";
   $andwhere = " and ";
+  
 
   $head5.= " SELECIONADAS";
 
@@ -404,6 +405,7 @@ if ($afastado == 'n') {
                                      ) ";
 }
 $sql_dados1 .= " order by $orderBY";
+//echo $sql_dados1;exit;
 
 $result_dados = db_query($sql_dados1);
 $numrows_dados = pg_numrows($result_dados);

@@ -102,6 +102,11 @@ db_postmemory($HTTP_POST_VARS);
   $geraform->resumopadrao = "l";                  // NOME DO DAS LOTAÇÕES SELECIONADAS
   $geraform->filtropadrao = "i";                  // NOME DO DAS LOTAÇÕES SELECIONADAS
 
+  $geraform->rc1nome = "recur1"; // Nome do campo RECURSO 1.
+  $geraform->rc2nome = "recur2"; // Nome do campo RECURSO 2.
+  $geraform->rc3nome = "selrec"; // Nome do objeto de seleção de recurso.
+  $geraform->rc4nome = "Recurso";  // Nome para o Label do resumo , intervalo e selecao.
+
   $geraform->strngtipores = "glomts";              // OPÇÕES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
                                                   //                                       l - lotação,
                                                   //                                       o - órgão,
@@ -180,6 +185,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </html>
 <script>
 function js_emite(){
+
   qry = "?folha="+document.form1.tipofol.value;
   qry+= "&tipo="+document.form1.tipo.value;
   qry+= "&ano="+document.form1.anofolha.value;
@@ -188,6 +194,10 @@ function js_emite(){
   qry+= "&afastado="+document.form1.afastado.value;
   qry+= "&sel="+document.form1.selecao.value;
   qry+= "&reg="+document.form1.regime.value;
+
+  if(document.form1.selrec){
+    qry+= "&selrec="+document.form1.selrec.value;
+  }
 
   if(document.form1.complementar){
     qry+= "&semest="+document.form1.complementar.value;
