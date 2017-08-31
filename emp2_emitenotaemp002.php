@@ -145,8 +145,16 @@ $sqlemp = "
          e56_orctiporec,
          e54_praent,
          e54_codout,
-         e54_conpag
-
+         e54_conpag,
+         ordena.z01_numcgm as cgmordenadespesa,
+         ordena.z01_nome as ordenadesp,
+         liquida.z01_numcgm as cgmliquida, 
+         liquida.z01_nome as liquida, 
+         paga.z01_numcgm as cgmpaga,
+         paga.z01_nome as ordenapaga,
+         contador.z01_nome as contador,
+         contad.si166_crccontador as crc,
+         controleinterno.z01_nome as controleinterno
 	from empempenho
 	     left join pctipocompra	on pc50_codcom = e60_codcom
 	     inner join orcdotacao 	on o58_coddot = e60_coddot
@@ -168,13 +176,20 @@ $sqlemp = "
 	     inner join orctiporec  	on o58_codigo = o15_codigo
 	     inner join cgm 		on z01_numcgm = e60_numcgm
        inner join concarpeculiar on concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar
+       left join cgm as ordena on ordena.z01_numcgm  = o41_orddespesa 
+       left join cgm as paga on paga.z01_numcgm = o41_ordliquidacao  
+       left join cgm as liquida on liquida.z01_numcgm = o41_ordpagamento 
+       left join identificacaoresponsaveis contad on  contad.si166_instit= e60_instit and contad.si166_tiporesponsavel=2
+       left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
+       left join identificacaoresponsaveis controle on  controle.si166_instit= e60_instit and controle.si166_tiporesponsavel=3
+       left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm 
 	     left outer join empempaut	on e60_numemp = e61_numemp
              left join  empautoriza     on e61_autori = e54_autori
 	     left join  empautidot      on e61_autori = e56_autori
 	     left outer join emptipo  	on e60_codtipo= e41_codtipo
 	where  $dbwhere
 	";
-
+//echo $sqlemp;
 $result = db_query($sqlemp);
 //db_criatabela($result);exit;
 if (pg_numrows($result)==0){
@@ -344,6 +359,33 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
      $cgc      = $o41_cnpj;
 
    }
+
+   $sSqlFuncaoOrdenaPagamento  ="select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenapagamento ";
+   $sSqlFuncaoOrdenaPagamento.=" from rhpessoal  ";
+   $sSqlFuncaoOrdenaPagamento.="LEFT join rhpessoalmov on rh02_regist=rh01_regist  ";
+   $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao ";
+   $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes ";
+   $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo  ";
+   $sSqlFuncaoOrdenaPagamento.="where rh01_numcgm = $cgmpaga  order by rh02_seqpes desc limit 1 ";
+   $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
+
+   $sSqlFuncaoOrdenadespesa =" select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenadespesa";
+   $sSqlFuncaoOrdenadespesa.=" from rhpessoal ";
+   $sSqlFuncaoOrdenadespesa.=" LEFT join rhpessoalmov on rh02_regist=rh01_regist ";
+   $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao";
+   $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes";
+   $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo ";
+   $sSqlFuncaoOrdenadespesa.=" where rh01_numcgm = $cgmordenadespesa order by rh02_seqpes desc limit 1";
+   $pdf1->cargoordenadespesa = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenadespesa),0)->cargoordenadespesa;
+
+   //assinaturas
+   $pdf1->ordenadespesa   =  $ordenadesp;
+   $pdf1->liquida         =  $liquida;
+   $pdf1->ordenapagamento =  $ordenapaga;
+   $pdf1->contador        =  $contador;
+   $pdf1->crccontador     =  $crc;
+   $pdf1->controleinterno =  $controleinterno;
+
    $pdf1->emptipo              = $e41_descr;
    $pdf1->prefeitura           = $nomeinst;
    $pdf1->enderpref            = $ender.", ".$numero;
