@@ -21,34 +21,20 @@ $datageracao_ano = date("Y", db_getsession("DB_datausu"));
 $datageracao_mes = date("m", db_getsession("DB_datausu"));
 $datageracao_dia = date("d", db_getsession("DB_datausu"));
 
-$sSql = "SELECT distinct 'H' 
-|| 'QWIA001'
-|| '$datageracao_ano'
-|| '$datageracao_mes'
-|| '$datageracao_dia'
-|| rpad(nomeinst,60,' ')
-|| '$anofolha'
-|| lpad('$mesfolha',2,0)
-|| lpad(nextval('teste_seq'),3,'0') AS dado
-FROM db_config
-WHERE db_config.codigo = 1
-
-union all
-
+$sSql = "
 select 
-'I,'|| x.nextval || ',' || x.rh02_mesusu || ',' || x.z01_cgccpf || ',' 
-|| x.z01_nome || ',' || coalesce(x.rh55_inep,'00000000') || ',' || coalesce(x.rh55_descr,'') || ',' || x.rh02_hrssem || ',' 
+'I;'|| x.nextval || ';' || lpad(x.rh02_mesusu,2,0) || ';' || x.z01_cgccpf || ';' 
+|| x.z01_nome || ';' || coalesce(x.rh55_inep,'00000000') || ';' || coalesce(x.rh55_descr,'') || ';' || x.rh02_hrssem || ';' 
 ||  
 case when x.rh02_tipcatprof in (14,15,16) then 2
      else 1 end 
-|| ',' 
+|| ';' 
 ||
-case when x.rh02_tipcatprof in (14,15,16) then 'Outros profissionais da
-educação'
+case when x.rh02_tipcatprof in (14,15,16) then 'Outros profissionais da educação'
      else 'Profissionais do magistério' end 
-|| ',' 
+|| ';' 
 || x.rh02_tipcatprof
-|| ','
+|| ';'
 || 
 case when x.rh02_tipcatprof = 0 then 'Nenhum'
      when x.rh02_tipcatprof = 1 then 'Docente habilitado em curso de nível médio'
@@ -68,27 +54,31 @@ case when x.rh02_tipcatprof = 0 then 'Nenhum'
      when x.rh02_tipcatprof =  15 then 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.'
      when x.rh02_tipcatprof =  16 then 'Profissionais que atuam na realização das atividades requeridos nos ambientes de secretaria, de manutenção em geral.'
      end 
-|| ','
-|| x.rh02_salari
-|| ','
-|| 
+|| ';'
+|| translate(trim(to_char(round(x.rh02_salari,2),'99999999.99')),'.',',') || ';' 
+                                                                                                                                                                                                                                                                         || 
 
-          (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118)    
+     case when (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) > 0 then  
+            translate(trim(to_char(round(((x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118)),2),'99999999.99')),'.',',')
+     else '0'
+     end        || ';' || 
 
-|| ','
-|| 
+     case when (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) > 0 then  
+          translate(trim(to_char(round(((x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119)),2),'99999999.99')),'.',',')
+     else '0'
+     end 
+     || ';' || 
 
-          (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119)
+     case when (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101) > 0 then  
+         translate(trim(to_char(round(((x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101)),2),'99999999.99')),'.',',')
+     else '0'
+     end 
 
-|| ','
-|| 
-          (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101)
+     || ';' ||
 
-|| ','
-|| 
-          (x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) +
-          (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) +  
-          (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101)
+
+        translate(trim(to_char(round((((x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) + (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) + (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101))),2),'99999999.99')),'.',',')
+
 
 AS dado
 
