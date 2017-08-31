@@ -117,7 +117,7 @@ class manad {
   	
   }
   
-  function getSqlK250($iInstit, $sDataini, $sDatafim){
+  function getSqlK250($iInstit, $sDataini, $sDatafim, $sTabelas){
 
   	list ( $iAnoUsuFim, $iMesUsuFim, $iDiaUsuFim ) = explode("-", $sDatafim);
     list ( $iAnoUsuIni, $iMesUsuIni, $iDiaUsuIni ) = explode("-", $sDataini);
@@ -169,14 +169,14 @@ class manad {
 		$sSqlK250 .= "              lpad(r14_mesusu,2,'0')||r14_anousu            as dt_comp,      ";
 		$sSqlK250 .= "              ndias(r14_anousu,r14_mesusu)||lpad(r14_mesusu,2,'0')||r14_anousu as dt_pgto, "; 
 		$sSqlK250 .= "              rh37_cbo                                      as cod_cbo,      ";
-		$sSqlK250 .= "              rh02_ocorre                                   as cod_ocorr,    ";
+		$sSqlK250 .= "              case when rh02_ocorre in ('1','2','3','4','5') then rh02_ocorre else '00' end AS cod_ocorr,    ";
 		$sSqlK250 .= "              rh37_descr                                    as desc_cargo,   ";
 		$sSqlK250 .= "              r14_mesusu                                    as mesusu,       ";
 		$sSqlK250 .= "              r14_anousu                                    as anousu,       ";
 		$sSqlK250 .= "              gerfsal.r14_instit                            as instit,       ";
 		
 		$sSqlK250 .= "              replace(cast(cast(round((case                                                ";
-		$sSqlK250 .= "                                         when r14_rubric in ('R981','R983') then r14_valor "; 
+		$sSqlK250 .= "                                         when r14_rubric in ('R981','R983','R982') then r14_valor "; 
 		$sSqlK250 .= "                                         else 0                                            "; 
 		$sSqlK250 .= "                                       end),2) as numeric) as text),'.',',') as vl_base_irrf, ";
 		 
@@ -213,7 +213,8 @@ class manad {
                 $sSqlK250 .= "   and cast(rhpessoalmov.rh02_anousu||lpad(rhpessoalmov.rh02_mesusu,2,'0') as integer) 
                                            between cast('$sData1' as integer)
                                                and cast('$sData2' as integer)";    
-                $sSqlK250 .= "   and rhpessoalmov.rh02_instit = {$iInstit} ";
+                $sSqlK250 .= "   and rhpessoalmov.rh02_instit = {$iInstit} 
+                				 and rhpessoalmov.rh02_tbprev in ($sTabelas)	";
 		
                 $sSqlK250 .= "       union ";
 		$sSqlK250 .= "       select 'K250'                                        as reg, "; 
@@ -224,13 +225,13 @@ class manad {
 		$sSqlK250 .= "              '13'||r35_anousu            as dt_comp, "; 
 		$sSqlK250 .= "              ndias(r35_anousu,12)||lpad(12,2,'0')||r35_anousu as dt_pgto, "; 
 		$sSqlK250 .= "              rh37_cbo                                      as cod_cbo, "; 
-		$sSqlK250 .= "              rh02_ocorre                                   as cod_ocorr, "; 
+		$sSqlK250 .= "              case when rh02_ocorre in ('1','2','3','4','5') then rh02_ocorre else '00' end AS cod_ocorr, "; 
 		$sSqlK250 .= "              rh37_descr                                    as desc_cargo, "; 
 		$sSqlK250 .= "              12                                            as mesusu, "; 
 		$sSqlK250 .= "              r35_anousu                                    as anousu, "; 
 		$sSqlK250 .= "              rh02_instit                                   as instit, "; 
 		$sSqlK250 .= "              replace(cast(cast(round((case  "; 
-		$sSqlK250 .= "                                         when r35_rubric in ('R981','R983') then r35_valor "; 
+		$sSqlK250 .= "                                         when r35_rubric in ('R981','R983','R982') then r35_valor "; 
 		$sSqlK250 .= "                                         else 0 "; 
 		$sSqlK250 .= "                                       end),2) as numeric) as text),'.',',') as vl_base_irrf, "; 
 		$sSqlK250 .= "              replace(cast(cast(round((case  "; 
@@ -248,7 +249,8 @@ class manad {
                 $sSqlK250 .= "       where ";
                 $sSqlK250 .= "             rhpessoalmov.rh02_anousu = {$iAnoUsuFim}";
                 $sSqlK250 .= "         and rhpessoalmov.rh02_mesusu = {$iMesUsuFim} ";
-                $sSqlK250 .= "         and rhpessoalmov.rh02_instit = {$iInstit} ";
+                $sSqlK250 .= "         and rhpessoalmov.rh02_instit = {$iInstit} 
+                					   and rhpessoalmov.rh02_tbprev in ($sTabelas)	";
                                       
 		$sSqlK250 .= "       union ";
 		$sSqlK250 .= "       select 'K250'                                        as reg, "; 
@@ -259,13 +261,13 @@ class manad {
 		$sSqlK250 .= "              lpad(r48_mesusu,2,'0')||r48_anousu            as dt_comp, "; 
 		$sSqlK250 .= "              ndias(r48_anousu,r48_mesusu)||lpad(r48_mesusu,2,'0')||r48_anousu as dt_pgto, "; 
 		$sSqlK250 .= "              rh37_cbo                                      as cod_cbo, "; 
-		$sSqlK250 .= "              rh02_ocorre                                   as cod_ocorr, "; 
+		$sSqlK250 .= "              case when rh02_ocorre in ('1','2','3','4','5') then rh02_ocorre else '00' end AS cod_ocorr, "; 
 		$sSqlK250 .= "              rh37_descr                                    as desc_cargo, "; 
 		$sSqlK250 .= "              r48_mesusu                                    as mesusu, "; 
 		$sSqlK250 .= "              r48_anousu                                    as anousu, "; 
 		$sSqlK250 .= "              gerfcom.r48_instit                            as instit, "; 
 		$sSqlK250 .= "              replace(cast(cast(round((case  "; 
-		$sSqlK250 .= "                                         when r48_rubric in ('R981','R983') then r48_valor "; 
+		$sSqlK250 .= "                                         when r48_rubric in ('R981','R983','R982') then r48_valor "; 
 		$sSqlK250 .= "                                         else 0 "; 
 		$sSqlK250 .= "                                       end),2) as numeric) as text),'.',',') as vl_base_irrf, "; 
 		$sSqlK250 .= "              replace(cast(cast(round((case  "; 
@@ -301,7 +303,8 @@ class manad {
                                            between cast('$sData1' as integer)
                                                and cast('$sData2' as integer)";    
 
-                $sSqlK250 .= "   and rhpessoalmov.rh02_instit = {$iInstit} ";
+                $sSqlK250 .= "   and rhpessoalmov.rh02_instit = {$iInstit} 
+                				 and rhpessoalmov.rh02_tbprev in ($sTabelas) ";
 		$sSqlK250 .= "       union ";
 		 
 		$sSqlK250 .= "       select 'K250'                                        as reg, "; 
@@ -312,13 +315,13 @@ class manad {
 		$sSqlK250 .= "              lpad(r20_mesusu,2,'0')||r20_anousu            as dt_comp, "; 
 		$sSqlK250 .= "              ndias(r20_anousu,r20_mesusu)||lpad(r20_mesusu,2,'0')||r20_anousu as dt_pgto, "; 
 		$sSqlK250 .= "              rh37_cbo                                      as cod_cbo, "; 
-		$sSqlK250 .= "              rh02_ocorre                                   as cod_ocorr, "; 
+		$sSqlK250 .= "              case when rh02_ocorre in ('1','2','3','4','5') then rh02_ocorre else '00' end AS cod_ocorr, "; 
 		$sSqlK250 .= "              rh37_descr                                    as desc_cargo, "; 
 		$sSqlK250 .= "              r20_mesusu                                    as mesusu, "; 
 		$sSqlK250 .= "              r20_anousu                                    as anousu, "; 
 		$sSqlK250 .= "              gerfres.r20_instit                            as instit, "; 
 		$sSqlK250 .= "              replace(cast(cast(round((case  "; 
-		$sSqlK250 .= "                                         when r20_rubric in ('R981','R983') then r20_valor "; 
+		$sSqlK250 .= "                                         when r20_rubric in ('R981','R983','R982') then r20_valor "; 
 		$sSqlK250 .= "                                         else 0 "; 
 		$sSqlK250 .= "                                       end),2) as numeric) as text),'.',',') as vl_base_irrf, "; 
 		$sSqlK250 .= "              replace(cast(cast(round((case  "; 
@@ -339,7 +342,8 @@ class manad {
                 $sSqlK250 .= "   and cast(rhpessoalmov.rh02_anousu||lpad(rhpessoalmov.rh02_mesusu,2,'0') as integer) 
                                            between cast('$sData1' as integer)
                                                and cast('$sData2' as integer)";    
-                $sSqlK250 .= "   and rhpessoalmov.rh02_instit = {$iInstit} ";                              
+                $sSqlK250 .= "   and rhpessoalmov.rh02_instit = {$iInstit} 
+                				 and rhpessoalmov.rh02_tbprev in ($sTabelas) ";                              
 		$sSqlK250 .= " ) as x ) as y
 		/* 
 		where (vl_base_irrf != '0,00' and vl_base_ps != '0,00')
@@ -356,11 +360,10 @@ class manad {
                            desc_cargo	";
 		
  //   die($sSqlK250);exit;
-		
 	  return $sSqlK250;
   }
   
-  function getSqlK300($iInstit,$sDataini,$sDatafim){
+  function getSqlK300($iInstit,$sDataini,$sDatafim, $sTabelas){
   	
   	list ( $iAnoUsuFim, $iMesUsuFim, $iDiaUsuFim ) = explode("-", $sDatafim);
     list ( $iAnoUsuIni, $iMesUsuIni, $iDiaUsuIni ) = explode("-", $sDataini);
@@ -447,7 +450,8 @@ class manad {
                 $sSqlK300 .= "   and cast(rhpessoalmov.rh02_anousu||lpad(rhpessoalmov.rh02_mesusu,2,'0') as integer) 
                                            between cast('$sData1' as integer)
                                                and cast('$sData2' as integer)";    
-                $sSqlK300 .= "   and rhpessoalmov.rh02_instit = {$iInstit} ";    
+                $sSqlK300 .= "   and rhpessoalmov.rh02_instit = {$iInstit} 
+                				 and rhpessoalmov.rh02_tbprev in ($sTabelas) ";    
                                   
 		$sSqlK300 .= " union "; 
 		$sSqlK300 .= " select 'K300'                                        as reg, "; 
@@ -502,7 +506,8 @@ class manad {
 		$sSqlK300 .= "  where "; 
                 $sSqlK300 .= "       rhpessoalmov.rh02_anousu  = {$iAnoUsuFim}";
                 $sSqlK300 .= "   and rhpessoalmov.rh02_mesusu  = {$iMesUsuFim} ";
-                $sSqlK300 .= "   and rhpessoalmov.rh02_instit = {$iInstit} ";                              
+                $sSqlK300 .= "   and rhpessoalmov.rh02_instit = {$iInstit} 
+                				 and rhpessoalmov.rh02_tbprev in ($sTabelas) ";                              
 		$sSqlK300 .= " union "; 
 		$sSqlK300 .= " select 'K300'                                        as reg, "; 
 		$sSqlK300 .= "        (select cgc from db_config where codigo =  {$iInstit}) as cnpj, "; 
@@ -559,7 +564,8 @@ class manad {
                 $sSqlK300 .= "   and cast(rhpessoalmov.rh02_anousu||lpad(rhpessoalmov.rh02_mesusu,2,'0') as integer) 
                                            between cast('$sData1' as integer)
                                                and cast('$sData2' as integer)";    
-                $sSqlK300 .= "   and rhpessoalmov.rh02_instit = {$iInstit} ";
+                $sSqlK300 .= "   and rhpessoalmov.rh02_instit = {$iInstit} 
+                                 and rhpessoalmov.rh02_tbprev in ($sTabelas)  ";
                                   
 		$sSqlK300 .= " union "; 
 		$sSqlK300 .= " select 'K300'                                        as reg, "; 
@@ -617,7 +623,8 @@ class manad {
                 $sSqlK300 .= "   and cast(rhpessoalmov.rh02_anousu||lpad(rhpessoalmov.rh02_mesusu,2,'0') as integer) 
                                            between cast('$sData1' as integer)
                                                and cast('$sData2' as integer)";    
-                $sSqlK300 .= "   and rhpessoalmov.rh02_instit = {$iInstit} ";
+                $sSqlK300 .= "   and rhpessoalmov.rh02_instit = {$iInstit} 
+                				 and rhpessoalmov.rh02_tbprev in ($sTabelas) ";
                                               
                 $sSqlK300 .= " ) as x ";
                 $sSqlK300 .= " group by reg, "; 

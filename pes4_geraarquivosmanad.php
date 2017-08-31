@@ -70,6 +70,7 @@ $sDtIni   = str_replace('/','',$oFormDados->sDataini);
 $aDataFim = explode("/", $oFormDados->sDatafim);
 $sDtFim   = str_replace('/','',$oFormDados->sDatafim);
 $iAnoInicio      = $aDataIni[2]; 
+$sTabelas = implode(',', $oFormDados->aTabelas);
 
 $sSqlAnoEmpenho  = "SELECT min(e60_anousu) as ano";
 $sSqlAnoEmpenho .= "  From empresto ";
@@ -132,12 +133,12 @@ $aLinhasArquivo[250]['sql']   = $sSqlK150;
 $aLinhasArquivo[250]['ident'] = "K150";
 $aLinhasArquivo[250]['tipolinha'] = 3;
 
-$sSqlK250 = $oArquivosManad->getSqlK250(db_getsession('DB_instit'),$sDataIniParametro,$sDataFimParametro);
+$sSqlK250 = $oArquivosManad->getSqlK250(db_getsession('DB_instit'),$sDataIniParametro,$sDataFimParametro,$sTabelas);
 $aLinhasArquivo[251]['sql']   = $sSqlK250;
 $aLinhasArquivo[251]['ident'] = "K250";
 $aLinhasArquivo[251]['tipolinha'] = 3;
 			
-$sSqlK300 = $oArquivosManad->getSqlK300(db_getsession('DB_instit'),$sDataIniParametro,$sDataFimParametro);
+$sSqlK300 = $oArquivosManad->getSqlK300(db_getsession('DB_instit'),$sDataIniParametro,$sDataFimParametro,$sTabelas);
 $aLinhasArquivo[252]['sql']   = $sSqlK300;
 $aLinhasArquivo[252]['ident'] = "K300";
 $aLinhasArquivo[252]['tipolinha'] = 3;
@@ -147,8 +148,9 @@ $iTotalizadorGeral = 0;
 $aTotaisPorLinha   = array();
 //$aLinhasArquivo = array();
 foreach ($aLinhasArquivo as $chave => $aValor) {
-	
+	 
 	$sSqlTMP    = $aValor['sql'];
+
 	$sIdent     = $aValor['ident'];
 	$iTipoLinha = $aValor['tipolinha'];
 	$rsTMP      = db_query($sSqlTMP);
