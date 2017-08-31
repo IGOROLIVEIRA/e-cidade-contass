@@ -644,7 +644,7 @@ function js_ajusteDotacao(iLinha) {
   var iHeight = js_round((screen.availHeight/1.3), 0);
   var iWidth  = screen.availWidth/2;
   windowDotacaoItem = new windowAux('wndDotacoesItem',
-                                    'Dotações Item '+oDadosItem.aCells[2].getValue().substr(0,67),
+                                    'Dotações Item '+oDadosItem.aCells[2].getValue().substr(0,50),
                                     iWidth,
                                     iHeight
                                    );
@@ -670,7 +670,7 @@ function js_ajusteDotacao(iLinha) {
   $('btnSalvarInfoDot').observe("click", function() {
 
      var nTotalDotacoes = oGridDotacoes.sum(3, false);
-     if (js_round(nTotalDotacoes, iCasasDecimais) != js_strToFloat(oDadosItem.aCells[7].getValue())) {
+     if (js_round(nTotalDotacoes, iCasasDecimais) != js_round(oDadosItem.aCells[7].getValue(), iCasasDecimais) ) {
        alert('o Valor Total das Dotações não conferem com o total que está sendo autorizado no item!');
        return false;
      }
@@ -749,7 +749,8 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
     return;
   }
 
-  var nValor =  js_strToFloat(oDadosItem.aCells[7].getValue());
+  var nValor = oDadosItem.aCells[7].getValue();
+
   var nValorTotalItem = js_strToFloat(oDadosItem.aCells[5].getValue());
   var nValorTotal     = nValor;
   var nQuantAutorizar = Number(oDadosItem.aCells[6].getValue());
@@ -790,6 +791,12 @@ function js_ajustaValorDot(Obj, iDot) {
   var nValor         = new Number(Obj.value);
   var nTotalDotacoes = oGridDotacoes.sum(3, false);
   var nValorAut      = js_strToFloat(oDadosItem.aCells[7].getValue());
+
+    console.log(Obj);
+
+    console.log(oGridDotacoes);
+  
+  
   if (nValor > nValorAut) {
     oGridDotacoes.aRows[iDot].aCells[3].content.setValue(nValorObjeto);
     Obj.value = nValorObjeto;
@@ -797,7 +804,8 @@ function js_ajustaValorDot(Obj, iDot) {
     oGridDotacoes.aRows[iDot].aCells[3].content.setValue(nValorObjeto);
     Obj.value = nValorObjeto;
   } else {
-    var nNovaQuantDot = (nValor*Number(oDadosItem.aCells[6].getValue()))/js_strToFloat(oDadosItem.aCells[7].getValue());
+    var nNovaQuantDot = (nValor*Number(oDadosItem.aCells[6].getValue()))/oDadosItem.aCells[7].getValue();
+
     oGridDotacoes.aRows[iDot].aCells[2].content.setValue(js_round(nNovaQuantDot,iCasasDecimais));
     $("quantdot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[2].getValue();
   }
