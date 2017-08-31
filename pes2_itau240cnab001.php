@@ -118,10 +118,12 @@ function js_emite_novo(){
   qry += '&tiparq='+document.form1.tiparq.value;
   qry += '&qfolha='+document.form1.qfolha.value;
   qry += '&iRecurso='+document.form1.iRecurso.value;
+  qry += '&iTipoLayout='+document.form1.TipoLayout.value;
   if(document.form1.layout){
     qry += '&layout='+document.form1.layout.value;
   }
-  js_OpenJanelaIframe('','db_iframe_geraarqbanco','pes2_itau240cnab003.php?'+qry,'Gerando Arquivo',false);
+  	js_OpenJanelaIframe('','db_iframe_geraarqbanco','pes2_itau240cnab003.php?'+qry,'Gerando Arquivo',false);
+  
 }
 
 function js_detectaarquivo(arquivo,pdf){
@@ -321,10 +323,23 @@ function js_controlarodape(mostra){
 			  		<?php db_select("iRecurso",$aLotaVinc,true,2,"class='field-size4'"); ?>
 			  	</td>
 			  </tr>
+			  <tr>
+			    <td>
+			      <strong>Tipo Layout:</strong>
+			    </td>
+			  	<td>
+			  		<?php 
+			  		$aTipoLayout = Array(
+                          "1"=>"Cnab240",
+	                      "2"=>"Cnab240 Holerite"
+                         );
+			  		db_select("TipoLayout",$aTipoLayout,true,2,"class='field-size4'"); ?>	
+			  	</td>
+			  </tr>
   		</table>
   	</fieldset>
-  	<input name="emite2" id="emite2" type="submit" value="Processar" onclick="return js_valores()" />
-  	<input name="emite3" id="emite3" type="submit" value="Processar 2" onclick="return js_valores()" />
+  	<!--<input name="emite2" id="emite2" type="submit" value="Processar" onclick="return js_valores()" />-->
+  	<input name="emite3" id="emite3" type="submit" value="Processar" onclick="return js_valores()" />
 </form>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
