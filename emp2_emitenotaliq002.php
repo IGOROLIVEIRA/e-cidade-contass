@@ -179,8 +179,8 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 	           case when e49_numcgm is null then e60_numcgm else e49_numcgm end as _numcgm,
              ordena.z01_numcgm as cgmordenadespesa,
              ordena.z01_nome as ordenadesp,
-             liquida.z01_numcgm as cgmliquida, 
-             liquida.z01_nome as liquida, 
+             liquida.z01_numcgm as cgmliquida,
+             liquida.z01_nome as liquida,
              paga.z01_numcgm as cgmpaga,
              paga.z01_nome as ordenapaga,
              contador.z01_nome as contador,
@@ -188,6 +188,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
              controleinterno.z01_nome as controleinterno
            from pagordem
 				        inner join empempenho 		on empempenho.e60_numemp = pagordem.e50_numemp
+                inner join cgm    on cgm.z01_numcgm = empempenho.e60_numcgm
   			        inner join empnota        on empnota.e69_numemp    = pagordem.e50_numemp
 								inner join db_config 		  on db_config.codigo      = empempenho.e60_instit
 								inner join orcdotacao 		on orcdotacao.o58_anousu = empempenho.e60_anousu
@@ -208,13 +209,13 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 					                               and o58_anousu    = o56_anousu
 				        inner join orctiporec  		on o58_codigo    = o15_codigo
 				        inner join emptipo 		    on emptipo.e41_codtipo = empempenho.e60_codtipo
-                left join cgm as ordena on ordena.z01_numcgm  = o41_orddespesa 
-                left join cgm as paga on paga.z01_numcgm = o41_ordliquidacao  
-                left join cgm as liquida on liquida.z01_numcgm = o41_ordpagamento 
+                left join cgm as ordena on ordena.z01_numcgm  = o41_orddespesa
+                left join cgm as paga on paga.z01_numcgm = o41_ordliquidacao
+                left join cgm as liquida on liquida.z01_numcgm = o41_ordpagamento
                 left join identificacaoresponsaveis contad on  contad.si166_instit= e60_instit and contad.si166_tiporesponsavel=2
                 left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
                 left join identificacaoresponsaveis controle on  controle.si166_instit= e60_instit and controle.si166_tiporesponsavel=3
-                left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm 
+                left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
 					      left  join pagordemconta  on e50_codord          = e49_codord
 					      left  join pagordemprocesso on  pagordem.e50_codord = pagordemprocesso.e03_pagordem
 					where pagordem.e50_codord = {$e50_codord} ) as x
@@ -300,7 +301,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $sSqlFuncaoLiquida.=" LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes";
    $sSqlFuncaoLiquida.=" LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo ";
    $sSqlFuncaoLiquida.=" where rh01_numcgm = $cgmliquida order by rh02_seqpes desc limit 1";
-   
+
    $pdf1->cargoliquida = db_utils::fieldsMemory(db_query($sSqlFuncaoLiquida),0)->cargoliquida;
 
    //assinaturas
