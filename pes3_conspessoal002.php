@@ -151,6 +151,7 @@ $sql = $clrhpessoal->sql_query_pesquisa(
                                          $ano,
                                          $mes
                                        );
+
 //echo $sql;
 $result = $clrhpessoal->sql_record($sql);
 
@@ -188,10 +189,12 @@ if($clrhlotaexe->numrows>0){
   db_fieldsmemory($result_rhlotaexe,0);
 }
 
-$result_rhlotavinc = $clrhlotavinc->sql_record($clrhlotavinc->sql_query($r70_codigo,"*"));
+$result_rhlotavinc = $clrhlotavinc->sql_record($clrhlotavinc->sql_query('',"*",'',"rh25_codigo = $r70_codigo"));
 if($clrhlotavinc->numrows>0){
   db_fieldsmemory($result_rhlotavinc,0);
 }
+echo $r70_codigo;
+echo $rh25_recurso;
 
 $result_orctiporec = $clorctiporec->sql_record($clorctiporec->sql_query($rh25_recurso,"*"));
 if($clorctiporec->numrows>0){
