@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -44,6 +44,10 @@ require_once("classes/db_rhtipoapos_classe.php");
 require_once("classes/db_vtfdias_classe.php");
 require_once("classes/db_afasta_classe.php");
 require_once("classes/db_rhpeslocaltrab_classe.php");
+require_once("classes/db_rhlotaexe_classe.php");
+require_once("classes/db_orcorgao_classe.php");
+require_once("classes/db_rhlotavinc_classe.php");
+require_once("classes/db_orctiporec_classe.php");
 
 $clpessoal        = new cl_pessoal;
 $clrhpessoal      = new cl_rhpessoal;
@@ -58,6 +62,10 @@ $clrhdepend       = new cl_rhdepend;
 $clvtfdias        = new cl_vtfdias;
 $clafasta         = new cl_afasta;
 $clrhpeslocaltrab = new cl_rhpeslocaltrab;
+$clrhlotaexe      = new cl_rhlotaexe;
+$clorcorgao       = new cl_orcorgao;
+$clrhlotavinc     = new cl_rhlotavinc;
+$clorctiporec     = new cl_orctiporec;
 
 $clpessoal->rotulo->label();
 $clrhpessoal->rotulo->label();
@@ -92,6 +100,8 @@ $clrotulo->label('rh30_vinculo');
 $clrotulo->label('r33_nome');
 $clrotulo->label('rh05_recis');
 $clrotulo->label('db90_descr');
+$clrotulo->label('o40_orgao');
+$clrotulo->label('o15_codigo');
 
 $clrotulo->label('rh44_codban');
 $clrotulo->label('rh44_agencia');
@@ -141,7 +151,7 @@ $sql = $clrhpessoal->sql_query_pesquisa(
                                          $ano,
                                          $mes
                                        );
-
+//echo $sql;
 $result = $clrhpessoal->sql_record($sql);
 
 if($clrhpessoal->numrows == 0){
@@ -173,6 +183,21 @@ if ( !empty($rh02_rhtipoapos) ) {
 	}
 }
 
+$result_rhlotaexe = $clrhlotaexe->sql_record($clrhlotaexe->sql_query(db_anofolha(),$r70_codigo,"o40_orgao,o40_descr,o41_unidade,o41_descr"));
+if($clrhlotaexe->numrows>0){
+  db_fieldsmemory($result_rhlotaexe,0);
+}
+
+$result_rhlotavinc = $clrhlotavinc->sql_record($clrhlotavinc->sql_query($r70_codigo,"*"));
+if($clrhlotavinc->numrows>0){
+  db_fieldsmemory($result_rhlotavinc,0);
+}
+
+$result_orctiporec = $clorctiporec->sql_record($clorctiporec->sql_query($rh25_recurso,"*"));
+if($clorctiporec->numrows>0){
+  db_fieldsmemory($result_orctiporec,0);
+}
+
 ?>
 <html>
 <head>
@@ -181,7 +206,7 @@ if ( !empty($rh02_rhtipoapos) ) {
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
-function js_Impressao() { 
+function js_Impressao() {
   window.open('pes3_conspessoal_impressao.php?regist=<?=$regist?>&mes=<?=$mes?>&ano=<?=$ano?>','','location=0');
 }
 function js_Pesquisa(solicitacao) {
@@ -192,7 +217,7 @@ function js_Pesquisa(solicitacao) {
                         'func_pesquisaassentamentos',
                         'rec3_consafastfunc002.php?codAssen=&codMatri=<?=$rh01_regist?>'+
                         '&ano=<?=$ano?>&mes=<?=$mes?>&dataIni=<?=$rh01_admiss?>',
-                        'CONSULTA DE ASSENTAMENTOS',true,'20'); 
+                        'CONSULTA DE ASSENTAMENTOS',true,'20');
   }
 }
 </script>
@@ -253,7 +278,7 @@ function js_Pesquisa(solicitacao) {
           <td align="right" nowrap title="<?=@$Trh01_sexo?>">
             <?=@$Lrh01_sexo?>
           </td>
-          <td align="left" nowrap> 
+          <td align="left" nowrap>
             <?
             $arr_sexo = array('M' => 'Masculino','F'=>'Feminino');
             db_select("rh01_sexo",$arr_sexo,true,3,"");
@@ -436,6 +461,30 @@ function js_Pesquisa(solicitacao) {
           </td>
         </tr>
         <tr>
+          <td align="right" nowrap title="<?=$To15_codigo?>">
+            <?=@$Lo15_codigo?>
+          </td>
+          <td align="left" nowrap colspan="3">
+            <?
+            db_input('o15_codigo',8,$Io15_codigo,true,'text',3)
+            ?>
+            <?
+            db_input('o15_descr',40,$Io15_descr,true,'text',3)
+            ?>
+          </td>
+          <td align="right" nowrap title="<?=$To40_orgao?> teste">
+            <strong>Secretaria</strong>
+          </td>
+          <td align="left" nowrap colspan="3">
+            <?
+            db_input('o40_orgao',8,$Io40_orgao,true,'text',3)
+            ?>
+            <?
+            db_input('o40_descr',40,$Io40_descr,true,'text',3)
+            ?>
+          </td>
+        </tr>
+        <tr>
           <td align="right" nowrap title="<?=$Trh02_tbprev?>">
             <?=@$Lrh02_tbprev?>
           </td>
@@ -480,8 +529,8 @@ function js_Pesquisa(solicitacao) {
                 <?php db_inputdata('rh02_validadepensao',$rh02_validadepensao_dia,$rh02_validadepensao_mes,$rh02_validadepensao_ano,true,'text',3); ?>
               </td>
             <?php } ?>
-          </tr>  
-        <?php } ?> 
+          </tr>
+        <?php } ?>
         <tr>
           <td></td>
           <td colspan="3"></td>
@@ -513,7 +562,7 @@ function js_Pesquisa(solicitacao) {
             db_ancora(@$Lrh15_data,"",3);
             ?>
           </td>
-          <td colspan="3" nowrap> 
+          <td colspan="3" nowrap>
             <?
             db_inputdata('rh15_data',@$rh15_data_dia,@$rh15_data_mes,@$rh15_data_ano,true,'text',3,"")
             ?>
@@ -523,7 +572,7 @@ function js_Pesquisa(solicitacao) {
             db_ancora(@$Lrh44_codban,"js_pesquisarh15_banco(true);",3);
             ?>
           </td>
-          <td colspan="3" nowrap> 
+          <td colspan="3" nowrap>
             <?
             db_input('rh44_codban',5,$Irh44_codban,true,'text',3,"onchange='js_pesquisarh15_banco(false);'")
             ?>
@@ -539,7 +588,7 @@ function js_Pesquisa(solicitacao) {
             db_ancora(@$Lrh15_banco,"js_pesquisarh15_banco(true);",3);
             ?>
           </td>
-          <td colspan="3" nowrap> 
+          <td colspan="3" nowrap>
             <?
             db_input('rh15_banco',5,$Irh15_banco,true,'text',3,"onchange='js_pesquisarh15_banco(false);'")
             ?>
@@ -550,7 +599,7 @@ function js_Pesquisa(solicitacao) {
           <td align="right" nowrap title="<?=@$Trh44_agencia?>">
             <?=@$Lrh44_agencia?>
           </td>
-          <td nowrap> 
+          <td nowrap>
             <?
             db_input('rh44_agencia',5,$Irh44_agencia,true,'text',3,"")
             ?>
@@ -568,7 +617,7 @@ function js_Pesquisa(solicitacao) {
           <td align="right" nowrap title="<?=@$Trh15_agencia?>">
             <?=@$Lrh15_agencia?>
           </td>
-          <td nowrap> 
+          <td nowrap>
             <?
             db_input('rh15_agencia',5,$Irh15_agencia,true,'text',3,"")
             ?>
@@ -661,7 +710,7 @@ function js_Pesquisa(solicitacao) {
             <input type="button" name="vars" style="width:130px" value="Variáveis"       onclick="js_Pesquisa('Variaveis');" >
             <input type="button" name="fers" style="width:130px" value="Férias"          onclick="js_Pesquisa('Ferias');"       <?=$ferias?>>
             <input type="button" name="deps" style="width:130px" value="Dependentes"     onclick="js_Pesquisa('Dependentes');"  <?=$depend?>>
-            <input type="button" name="assenta" style="width:130px" 
+            <input type="button" name="assenta" style="width:130px"
                    value="Assentamentos"      onclick="js_Pesquisa('assentamentos');">
           </td>
         </tr>
@@ -670,11 +719,11 @@ function js_Pesquisa(solicitacao) {
             <input type="button" name="vtfs" style="width:130px" value="Vale transporte" onclick="js_Pesquisa('Vale');"         <?=$vtfdia?>>
             <input type="button" name="afas" style="width:130px" value="Afastamento"     onclick="js_Pesquisa('Afastamentos');" <?=$afasta?>>
             <input type="button" name="efes" style="width:130px" value="Local de Trabalho"     onclick="js_Pesquisa('Efetividade');"  <?=$efetiv?>>
-            <input type="button" name="temposervico" style="width:130px" 
+            <input type="button" name="temposervico" style="width:130px"
                    value="Tempo Anterior"      onclick="js_Pesquisa('temposervico');">
             <input type="button" name="impr" style="width:130px" value="Imprimir"        onclick="js_Impressao();"           >
             <input type="button" name="fech" style="width:130px" value="Fechar"          onclick="parent.func_nome.hide();"  >
-            
+
           </td>
         </tr>
       </table>

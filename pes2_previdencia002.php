@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -40,7 +40,7 @@ $clinssirf        = new cl_inssirf();
 $clrhcadrefime    = new cl_rhcadregime();
 $clrhbasesr       = new cl_rhbasesr();
 $clcfpess         = new cl_cfpess();
-$clrhautonomolanc = new cl_rhautonomolanc(); 
+$clrhautonomolanc = new cl_rhautonomolanc();
 
 db_postmemory($HTTP_GET_VARS);
 
@@ -55,6 +55,8 @@ if(trim($selecao) != ""){
     $head8 = "SELEÇÃO: ".$selecao." - ".$r44_descr;
   }
 }
+
+
 
 $lQuebraLote = false;
 
@@ -77,6 +79,8 @@ $gera_sql->inner_ger = false;
 $gera_sql->usar_res  = true;
 $gera_sql->inner_res = false;
 $gera_sql->usar_lot  = true;
+$gera_sql->usar_org  = true;
+//$gera_sql->usar_rec  = true;
 
 $headinfo = "";
 $dborderby = "z01_nome";
@@ -117,6 +121,36 @@ if(isset($calc) && $calc<>2) {
   $dbwhere = " #s#_rubric is null ";
 
 }
+
+  if($selrec) {
+    $lQuebraLote = true;
+    $where .= " and r70_estrut between '0' and '9999' and ( o15_codigo in ($selrec))";
+    $head2.= "RECURSO(s) SELECIONADO(s): $selrec";
+  }
+  if(isset($ori) && trim($ori) != "" && isset($orf) && trim($orf) != ""){
+    // Se for por intervalos e vier órgão inicial e final
+    $lQuebraLote = true;
+    $where = "and  o40_orgao between ".$ori." and ".$orf;
+    $head2.= "ÓRGÃO: DE ".$ori." A ".$orf;
+  }else if(isset($ori) && trim($ori) != ""){
+    // Se for por intervalos e vier somente órgão inicial
+    $lQuebraLote = true;
+    $where = " and o40_orgao >= ".$ori;
+    $head2.= " ÓRGÃO:  SUPERIORES A ".$ori;
+  }else if(isset($orf) && trim($orf) != ""){
+    // Se for por intervalos e vier somente órgão final
+    $lQuebraLote = true;
+    $where = " and o40_orgao <= ".$orf;
+    $head2.= " ÓRGÃO: INFERIORES A ".$orf;
+  }else if(isset($for) && trim($for) != ""){
+    // Se for por selecionados
+    $lQuebraLote = true;
+    $where = " and o40_orgao in (".$for.") ";
+    $head2.= " ÓRGÃO SELECIONADO(s): $for";
+  }
+
+
+
 
 // Tabela de Previdencia
 $dbwhere .= " and rh02_tbprev = ".$prev." ".$where;
@@ -164,7 +198,7 @@ if ($tfol == 'todas') {
   $aFolhas = array ('r14',
                     'r48',
                     'r35',
-                    'r20'  
+                    'r20'
   );
 } else {
   $aFolhas = array ($tfol);
@@ -178,8 +212,8 @@ if ( $tfol == 'r48' && !empty($oGet->complementar) && $oGet->complementar > 0 ) 
 }
 
 if ( $filtro == 0 || $filtro == 1 ) {
-  
-  
+
+
   for ($i = 0; $i < sizeof($aFolhas); $i++) {
 
     $sql = $gera_sql->gerador_sql($aFolhas[$i],
@@ -225,52 +259,53 @@ if ( $filtro == 0 || $filtro == 1 ) {
                                   "
                                  );
 
+    //echo $sql;exit;
     $rsDadosPrev = db_query($sql);
-   
+
     $xxnum = pg_numrows($rsDadosPrev);
-    
-    /* 
+
+    /*
      * T.42515
      * SE A OPCAO DE FOLHA FOR DIF. DE TODAS E NAO ENCONTRAR NADA REDIRECIONA PARA O ERRO DE VAZIO
      * SE FOR TODAS , TESTARA O VALOR DE TODAS OPCOES DE FOLHAS ANTES DE SAIR SEM NENHUM RESULTADO
-     */   
+     */
     if ($tfol != 'todas') {
       if($xxnum == 0){
         db_redireciona('db_erros.php?fechar=true&db_erro=Não existem cálculos para o período de '.$mes.' / '.$ano);
       }
-    } 
-    
-    $iLinhasPrev = pg_num_rows($rsDadosPrev); 
-    
+    }
+
+    $iLinhasPrev = pg_num_rows($rsDadosPrev);
+
     for ( $iInd = 0; $iInd < $iLinhasPrev; $iInd++ ){
-      
+
       $oDadosPrev = db_utils::fieldsMemory($rsDadosPrev,$iInd);
 
       if ($oDadosPrev->r993 == 0) {
         continue;
       }
-      
+
       $oDadosRegist = new stdClass();
-      $oDadosRegist->sNome   = $oDadosPrev->z01_nome; 
+      $oDadosRegist->sNome   = $oDadosPrev->z01_nome;
       $oDadosRegist->iRegime = $oDadosPrev->rh30_regime;
       $oDadosRegist->iFil    = $oDadosPrev->quantsf;
-      
+
       if($oDadosPrev->r990 > 0){
         $nBase = $oDadosPrev->r990;
       } else {
         $nBase = $oDadosPrev->r992;
-      } 
-      
+      }
+
       if ( $lQuebraLote == 'l') {
         $sAgrupa = $oDadosPrev->r70_codigo." - ".$oDadosPrev->r70_descr." (".$oDadosPrev->r70_estrut.")";
       } else {
         $sAgrupa = 0;
       }
-      
-      if ( isset($aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]) && 
-                 $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->iRegime == $oDadosPrev->rh30_regime && 
+
+      if ( isset($aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]) &&
+                 $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->iRegime == $oDadosPrev->rh30_regime &&
                  $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->iFil    == $oDadosPrev->quantsf ) {
-        
+
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nSalarioFamilia     += $oDadosPrev->valsf;
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nSalarioMaternidade += $oDadosPrev->mater;
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nBase               += $nBase;
@@ -278,22 +313,22 @@ if ( $filtro == 0 || $filtro == 1 ) {
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nDeducao            += $oDadosPrev->ded_inss;
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist]->nPatronal           += round($nBase/100*$r33_ppatro, 2);
       } else {
-        
+
         $oDadosRegist->nSalarioFamilia     = $oDadosPrev->valsf;
         $oDadosRegist->nSalarioMaternidade = $oDadosPrev->mater;
         $oDadosRegist->nBase               = $nBase;
         $oDadosRegist->nDesconto           = $oDadosPrev->r993;
         $oDadosRegist->nDeducao            = $oDadosPrev->ded_inss;
         $oDadosRegist->nPatronal           = round($nBase/100*$r33_ppatro, 2);
-        
+
         $aDadosPrev[$sAgrupa][$oDadosPrev->rh01_regist] = $oDadosRegist;
-      } 
+      }
     }
   }
 }
 
 if ( ( $filtro == 0 || $filtro == 2 ) && $tfol == 'r14' ) {
-  
+
   $sWhereAutonomo   = "     rh90_anousu = {$ano} ";
   $sWhereAutonomo  .= " and rh90_mesusu = {$mes} ";
   $sWhereAutonomo  .= " and rh90_ativa is true   ";
@@ -301,42 +336,42 @@ if ( ( $filtro == 0 || $filtro == 2 ) && $tfol == 'r14' ) {
                                                         "rhautonomolanc.*,z01_nome",
                                                         null,
                                                         $sWhereAutonomo);
-  
+
   $rsDadosAutonomos = $clrhautonomolanc->sql_record($sSqlAutonomos);
-  $iLinhasAutonomos = $clrhautonomolanc->numrows;                                                       
-  
-  
+  $iLinhasAutonomos = $clrhautonomolanc->numrows;
+
+
   for ( $iInd = 0; $iInd < $iLinhasAutonomos; $iInd++ ){
-    
+
     $oDadosAutonomo = db_utils::fieldsMemory($rsDadosAutonomos,$iInd);
-    
+
     $oDadosRegist = new stdClass();
-    $oDadosRegist->sNome               = $oDadosAutonomo->z01_nome; 
+    $oDadosRegist->sNome               = $oDadosAutonomo->z01_nome;
     $oDadosRegist->iRegime             = 0;
     $oDadosRegist->iFil                = 0;
     $oDadosRegist->nSalarioFamilia     = 0;
     $oDadosRegist->nSalarioMaternidade = 0;
     $oDadosRegist->nDeducao            = 0;
-    
+
     $sAgrupa = 'Autônomos';
-    
+
     if ( isset($aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm]) ) {
-      
+
       $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm]->nBase     += $oDadosAutonomo->rh89_valorserv;
       $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm]->nDesconto += $oDadosAutonomo->rh89_valorretinss;
       $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm]->nPatronal += ($oDadosAutonomo->rh89_valorserv/100*20);
     } else {
-      
+
       $oDadosRegist->nBase     = $oDadosAutonomo->rh89_valorserv;
       $oDadosRegist->nDesconto = $oDadosAutonomo->rh89_valorretinss;
       $oDadosRegist->nPatronal = ($oDadosAutonomo->rh89_valorserv/100*20);
-      
+
       $aDadosPrev[$sAgrupa][$oDadosAutonomo->rh89_numcgm] = $oDadosRegist;
-    }  
+    }
   }
 }
 
-//if ($tfol != 'todas') { 
+//if ($tfol != 'todas') {
   if ( count($aDadosPrev) == 0 ) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!');
   }
@@ -362,9 +397,9 @@ $head5 = "PATRONAL: ".$r33_ppatro."%";
 $head7 = "PERÍODO: ".$mes." / ".$ano;
 $head8 = $headinfo;
 
-$oPdf = new PDF(); 
-$oPdf->Open(); 
-$oPdf->AliasNbPages(); 
+$oPdf = new PDF();
+$oPdf->Open();
+$oPdf->AliasNbPages();
 $oPdf->setfillcolor(235);
 $oPdf->setfont('arial','b',8);
 
@@ -384,7 +419,7 @@ $lPrimeiro = true;
 
 
 foreach ( $aDadosPrev as $sAgrupa => $aDadosRegist ) {
-  
+
   $aSubTotal['nSalarioFamilia']     = 0;
   $aSubTotal['nSalarioMaternidade'] = 0;
   $aSubTotal['nBase']               = 0;
@@ -393,10 +428,10 @@ foreach ( $aDadosPrev as $sAgrupa => $aDadosRegist ) {
   $aSubTotal['nPatronal']           = 0;
 
   if ( $oPdf->gety() > $oPdf->h - 30 || $lPrimeiro || $quebra_pagina == "s" ) {
-      
+
     $oPdf->addpage();
     $oPdf->setfont('arial','b',8);
-      
+
     $oPdf->cell(15,$iAlt,'MATRIC'             ,1,0,"C",1);
     $oPdf->cell(60,$iAlt,'NOME DO FUNCIONÁRIO',1,0,"C",1);
     $oPdf->cell(10,$iAlt,'REG'                ,1,0,"C",1);
@@ -405,27 +440,27 @@ foreach ( $aDadosPrev as $sAgrupa => $aDadosRegist ) {
     $oPdf->cell(20,$iAlt,'MATERN.'            ,1,0,"C",1);
     $oPdf->cell(20,$iAlt,'BASE'               ,1,0,"C",1);
     $oPdf->cell(20,$iAlt,'DESCONTO'           ,1,1,"C",1);
-     
-      
+
+
     $lPrimeiro = false;
-  }  
-  
+  }
+
   if ( $lQuebraLote == 'l' || $sAgrupa == 'Autônomos' ) {
-    
+
     $oPdf->setfont('arial','b',8);
     $oPdf->ln(3);
     $oPdf->cell(175,$iAlt,$sAgrupa,1,1,"L",1);
     $oPdf->ln(1);
-  }       
-  
+  }
+
   foreach ( $aDadosRegist as $iRegist => $oDadosRegist ) {
-    
-    
+
+
     if ( $oPdf->gety() > $oPdf->h - 30 ) {
-      
+
       $oPdf->addpage();
       $oPdf->setfont('arial','b',8);
-      
+
       $oPdf->cell(15,$iAlt,'MATRIC'             ,1,0,"C",1);
       $oPdf->cell(60,$iAlt,'NOME DO FUNCIONÁRIO',1,0,"C",1);
       $oPdf->cell(10,$iAlt,'REG'                ,1,0,"C",1);
@@ -434,22 +469,22 @@ foreach ( $aDadosPrev as $sAgrupa => $aDadosRegist ) {
       $oPdf->cell(20,$iAlt,'MATERN.'            ,1,0,"C",1);
       $oPdf->cell(20,$iAlt,'BASE'               ,1,0,"C",1);
       $oPdf->cell(20,$iAlt,'DESCONTO'           ,1,1,"C",1);
-      
+
       if ( $lQuebraLote == 'l' || $sAgrupa == 'Autônomos' ) {
         $oPdf->ln(3);
         $oPdf->cell(175,$iAlt,$sAgrupa,1,1,"L",1);
       }
-              
+
     }
-    
+
     if ( $iPre == 0 ) {
       $iPre = 1;
     } else {
       $iPre = 0;
     }
-    
+
     $oPdf->setfont('arial','',7);
-    
+
     $oPdf->cell(15,$iAlt,$iRegist                                           ,0,0,"C",$iPre);
     $oPdf->cell(60,$iAlt,$oDadosRegist->sNome                               ,0,0,"L",$iPre);
     $oPdf->cell(10,$iAlt,$oDadosRegist->iRegime                             ,0,0,"R",$iPre);
@@ -457,41 +492,41 @@ foreach ( $aDadosPrev as $sAgrupa => $aDadosRegist ) {
     $oPdf->cell(20,$iAlt,db_formatar($oDadosRegist->nSalarioFamilia    ,'f'),0,0,"R",$iPre);
     $oPdf->cell(20,$iAlt,db_formatar($oDadosRegist->nSalarioMaternidade,'f'),0,0,"R",$iPre);
     $oPdf->cell(20,$iAlt,db_formatar($oDadosRegist->nBase              ,'f'),0,0,"R",$iPre);
-    $oPdf->cell(20,$iAlt,db_formatar($oDadosRegist->nDesconto          ,'f'),0,1,"R",$iPre);    
-    
+    $oPdf->cell(20,$iAlt,db_formatar($oDadosRegist->nDesconto          ,'f'),0,1,"R",$iPre);
+
     $aSubTotal['nSalarioFamilia']       += $oDadosRegist->nSalarioFamilia;
     $aSubTotal['nSalarioMaternidade']   += $oDadosRegist->nSalarioMaternidade;
     $aSubTotal['nBase']                 += $oDadosRegist->nBase;
     $aSubTotal['nDesconto']             += $oDadosRegist->nDesconto;
     $aSubTotal['nDeducao']              += $oDadosRegist->nDeducao;
     $aSubTotal['nPatronal']             += $oDadosRegist->nPatronal;
-    
+
     $aTotalGeral['nSalarioFamilia']     += $oDadosRegist->nSalarioFamilia;
     $aTotalGeral['nSalarioMaternidade'] += $oDadosRegist->nSalarioMaternidade;
     $aTotalGeral['nBase']               += $oDadosRegist->nBase;
     $aTotalGeral['nDesconto']           += $oDadosRegist->nDesconto;
-    $aTotalGeral['nPatronal']           += $oDadosRegist->nPatronal;    
-    
+    $aTotalGeral['nPatronal']           += $oDadosRegist->nPatronal;
+
   }
 
   $iTotalRegistros += count($aDadosRegist);
-  
+
   if ( $lQuebraLote == 'l' || $sAgrupa == 'Autônomos' ) {
-    
+
     $oPdf->ln(1);
     $oPdf->cell(95,$iAlt,'TOTAL : '.count($aDadosRegist).' FUNCIONÁRIOS '  ,"T",0,"R",0);
     $oPdf->cell(20,$iAlt,db_formatar($aSubTotal['nSalarioFamilia']    ,'f'),"T",0,"R",0);
     $oPdf->cell(20,$iAlt,db_formatar($aSubTotal['nSalarioMaternidade'],'f'),"T",0,"R",0);
     $oPdf->cell(20,$iAlt,db_formatar($aSubTotal['nBase']              ,'f'),"T",0,"R",0);
     $oPdf->cell(20,$iAlt,db_formatar($aSubTotal['nDesconto']          ,'f'),"T",1,"R",0);
-    
+
     $oPdf->ln(3);
     $oPdf->cell(50,6,'DEDUÇÕES .... :  '.db_formatar($aSubTotal['nDeducao'] ,'f'),0,0,"R",0);
     $oPdf->cell(50,6,'BASE BRUTA .. :  '.db_formatar($aSubTotal['nBase']    ,'f'),0,0,"R",0);
     $oPdf->cell(50,6,'PERC.PATRONAL :  '.db_formatar($aSubTotal['nPatronal'],'f'),0,1,"R",0);
-  
+
     $nPatronalIndividualQuebra += round($aSubTotal['nPatronal'],2);
-    
+
     if( $prev != $r11_tbprev ){
       $oPdf->cell(50,6,'',0,0,"R",0);
       $oPdf->cell(50,6,'TX. ADMIN   :  '.db_formatar(($aSubTotal['nBase']/100*$r11_txadm ),'f'),0,0,"R",0);

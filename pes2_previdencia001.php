@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -79,12 +79,22 @@ db_postmemory($HTTP_POST_VARS);
       include("dbforms/db_classesgenericas.php");
       $geraform = new cl_formulario_rel_pes;
 
+
       $geraform->usalota = true;                      // PERMITIR SELEÇÃO DE LOTAÇÕES
-      $geraform->selecao = true;                      // PERMITIR SELEÇÃO DE LOTAÇÕES
+      $geraform->usaorga = true;                      // PERMITIR SELEÇÃO DE ÓRGÃO
+
 
       $geraform->lo1nome = "lotaci";                  // NOME DO CAMPO DA LOTAÇÃO INICIAL
       $geraform->lo2nome = "lotacf";                  // NOME DO CAMPO DA LOTAÇÃO FINAL
       $geraform->lo3nome = "sellot";                  // NOME DO CAMPO DE SELEÇÃO DE LOTAÇÕES
+
+      $geraform->re1nome = "regisi";                  // NOME DO CAMPO DA MATRÍCULA INICIAL
+      $geraform->re2nome = "regisf";                  // NOME DO CAMPO DA MATRÍCULA FINAL
+      $geraform->re3nome = "selreg";                  // NOME DO CAMPO DE SELEÇÃO DE MATRÍCULAS
+
+      $geraform->or1nome = "orgaoi";                  // NOME DO CAMPO DO ÓRGÃO INICIAL
+      $geraform->or2nome = "orgaof";                  // NOME DO CAMPO DO ÓRGÃO FINAL
+      $geraform->or3nome = "selorg";                  // NOME DO CAMPO DE SELEÇÃO DE ÓRGÃOS
 
       $geraform->trenome = "tipo";                    // NOME DO CAMPO TIPO DE RESUMO
       $geraform->tfinome = "filtro";                  // NOME DO CAMPO TIPO DE FILTRO
@@ -92,7 +102,12 @@ db_postmemory($HTTP_POST_VARS);
       $geraform->resumopadrao = "l";                  // DEFAULT DO TIPO DE FOLHA
       $geraform->filtropadrao = "i";                  // DEFAULT DO FILTRO
 
-      $geraform->strngtipores = "gl";                 // OPÇÕES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
+      $geraform->rc1nome = "recur1"; // Nome do campo RECURSO 1.
+      $geraform->rc2nome = "recur2"; // Nome do campo RECURSO 2.
+      $geraform->rc3nome = "selrec"; // Nome do objeto de seleção de recurso.
+      $geraform->rc4nome = "Recurso";  // Nome para o Label do resumo , intervalo e selecao.
+
+      $geraform->strngtipores = "glso";                 // OPÇÕES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
                                                       //                                       l - lotação,
 
       $geraform->tipofol = true;                      // MOSTRAR DO CAMPO PARA TIPO DE FOLHA
@@ -104,11 +119,15 @@ db_postmemory($HTTP_POST_VARS);
                                      "todas"=>"Todas"
                                     );
       $geraform->complementar = "r48";
-                      // VALUE DA COMPLEMENTAR PARA BUSCAR SEMEST 
+                      // VALUE DA COMPLEMENTAR PARA BUSCAR SEMEST
 
       $geraform->campo_auxilio_lota = "faixa_lotac";  // NOME DO DAS LOTAÇÕES SELECIONADAS
+      $geraform->campo_auxilio_orga = "faixa_orgao";  // NOME DO DOS ÓRGÃOS SELECIONADOS
+
+      $geraform->selecao = true;                      // CAMPO PARA ESCOLHA DA SELEÇÃO
 
       $geraform->onchpad = true;                      // MUDAR AS OPÇÕES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
+
       $geraform->gera_form($anofolha,$mesfolha);
       ?>
       <tr>
@@ -139,14 +158,14 @@ db_postmemory($HTTP_POST_VARS);
         </td>
         <td>
           <?
-            $aFiltro = array("0"=>"Todos",  
+            $aFiltro = array("0"=>"Todos",
                              "1"=>"Somente Servidores",
                              "2"=>"Somente Autônomos");
-            
+
             db_select('filtro_rel',$aFiltro,true,4,"");
           ?>
         </td>
-      </tr>  
+      </tr>
       <tr>
         <td nowrap title="Troca de Página">
         <strong>Quebra Página:</strong>
@@ -180,13 +199,13 @@ db_postmemory($HTTP_POST_VARS);
                   if(isset($colunas_sselecionados) && $colunas_sselecionados != ""){
                      $colunas_sselecionados = split(",",$colunas_sselecionados);
                      for($Ic=0;$Ic < count($colunas_sselecionados);$Ic++){
-                        $arr_colunas_final[$colunas_sselecionados[$Ic]] = $arr_colunas[$colunas_sselecionados[$Ic]]; 
+                        $arr_colunas_final[$colunas_sselecionados[$Ic]] = $arr_colunas[$colunas_sselecionados[$Ic]];
                      }
                   }
                   if(isset($colunas_nselecionados) && $colunas_nselecionados != ""){
                      $colunas_nselecionados = split(",",$colunas_nselecionados);
                      for($Ic=0;$Ic < count($colunas_nselecionados);$Ic++){
-                        $arr_colunas_inicial[$colunas_nselecionados[$Ic]] = $arr_colunas[$colunas_nselecionados[$Ic]]; 
+                        $arr_colunas_inicial[$colunas_nselecionados[$Ic]] = $arr_colunas[$colunas_nselecionados[$Ic]];
                      }
                   }
                   if(!isset($colunas_sselecionados) || !isset($colunas_sselecionados) || $colunas_sselecionados == ""){
@@ -282,6 +301,22 @@ function js_emite() {
     }
     if(document.form1.R920 && document.form1.R920.checked){
       qry+= "&R920=true";
+    }
+
+    if(document.form1.selrec){
+      qry+= "&selrec="+document.form1.selrec.value;
+    }
+
+    if(document.form1.selorg){
+      if(document.form1.selorg.length > 0){
+        faixaorg = js_campo_recebe_valores();
+        qry+= "&for="+faixaorg;
+      }
+    }else if(document.form1.orgaoi){
+      orgini = document.form1.orgaoi.value;
+      orgfim = document.form1.orgaof.value;
+      qry+= "&ori="+orgini;
+      qry+= "&orf="+orgfim;
     }
 
     /**
