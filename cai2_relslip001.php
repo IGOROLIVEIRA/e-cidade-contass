@@ -87,6 +87,8 @@ function js_emite(){
   qry+= '&k145_numeroprocesso='+document.form1.k145_numeroprocesso.value;
   qry+= '&db_selinstit='+selinstit;
   qry+= '&codconta='+document.form1.c61_reduz.value;
+  qry+= '&tiposlip='+document.form1.tiposlip.value;
+  qry+= '&movimento='+document.form1.movimento.value;
   jan = window.open('cai2_relslip002.php?'+qry,'',
                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -139,14 +141,22 @@ function js_emite(){
 
     <tr>
       <td align="left">
-        <?php db_ancora('Codigo da Conta:',"js_pesquisac61_reduz(true);",1); ?>
+        <?php db_ancora('Conta Bancária:',"js_pesquisac61_reduz(true);",1); ?>
       </td>
       <td colspan="4">
         <?php
           db_input('c61_reduz',10,$Ic61_reduz,true,'text',3,'');
-          db_input('c60_descr',30,$Ic60_descr,true,'text',3,'');
+          db_input('c60_descr',60,$Ic60_descr,true,'text',3,'');
         ?>
       </td>
+        <td>
+          <? 
+          $movimento = array(
+           "0"=>"Todos",
+           "1"=>"Debito",
+           "2"=>"Credito");
+          db_select("movimento",$movimento,true,2); ?>
+          </td>
     </tr>
 
       <tr>
@@ -170,7 +180,31 @@ function js_emite(){
 		</script>
         </td>
       </tr>
-
+  <tr>   
+         <td align="left" nowrap title="Tipo Slip" >
+          <strong>Tipo Slip:&nbsp;&nbsp;</strong>
+         </td>
+        <td>
+          <? 
+          $tiposlip = array(
+           "0"=>"Todos",
+           "1"=>"Transferência Financeira - Pagamento",
+           "2"=>"Transferência Financeira - Estorno Pagamento",
+           "3"=>"Transferência Financeira - Recebimento",
+           "4"=>"Transferência Financeira - Estorno Recebimento",
+           "5"=>"Transferência Bancária - Inclusão",
+           "6"=>"Transferência Bancária - Estorno",
+           "7"=>"Caução - Recebimento",
+           "8"=>"Caução - Estorno Recebimento",
+           "9"=>"Caução - Devolução",
+           "10"=>"Caução - Estorno Devolução",
+           "11"=>"Depósito de Diversos - Recebimento",
+           "12"=>"Depósito de Diversos - Estorno Recebimento",
+           "13"=>"Depósito de Diversos - Pagamento",
+           "14"=>"Depósito de Diversos - Estorno Pagamento");
+          db_select("tiposlip",$tiposlip,true,2); ?>
+          </td>
+      </tr>
       <tr>
         <td nowrap="nowrap">
           <strong>Processo Administrativo:</strong>
@@ -342,10 +376,10 @@ function js_mostrahist1(chave1,chave2){
 
 function js_pesquisac61_reduz(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_conplano.php?funcao_js=parent.js_mostrasaltes1|c61_reduz|c60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('','db_iframe_saltes','func_conplano.php?funcao_js=parent.js_mostrasaltes1|c61_reduz|c60_descr','Pesquisa',true);
   }else{
      if(document.form1.c61_reduz.value != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframe_saltes','func_conplano.php?pesquisa_chave='+document.form1.c61_reduz.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
+       js_OpenJanelaIframe('','db_iframe_saltes','func_conplano.php?pesquisa_chave='+document.form1.c61_reduz.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
      }else{
        document.form1.c61_reduz.value = '';
      }

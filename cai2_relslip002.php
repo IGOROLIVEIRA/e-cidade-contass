@@ -75,8 +75,13 @@ if (($data != "--") && ($data1 != "--")) {
 $codconta = isset($codconta) ? intval($codconta) : '';
 
 if (!empty($codconta)) {
-
-  $sWhere .= " AND ( (k17_debito = {$codconta}) OR (k17_credito = {$codconta}) ) ";
+  if($movimento==1){//somente conta a debito
+    $sWhere .= " AND (k17_debito = {$codconta}) ";
+  }else if ($movimento==2){//somente conta a credito
+    $sWhere .= " AND (k17_credito = {$codconta}) ";
+  }else{
+    $sWhere .= " AND ( (k17_debito = {$codconta}) OR (k17_credito = {$codconta}) ) ";
+  }
 
 }
 
@@ -101,7 +106,10 @@ if ($situac=="A"){
 	 }
 	 $info = "SITUAÇÂO: $tipo";
 }
-
+if($tiposlip != 0){
+  $sWhere3 .= "{$sAnd} k153_slipoperacaotipo = '$tiposlip'   ";
+   $sAnd   = " and ";
+}
 if(trim($codigos) != ""){
   $sWhere .= "{$sAnd} k17_numcgm ";
   if($parametro=="N"){
@@ -205,7 +213,8 @@ $sql = "         select slip.k17_codigo {$sCampoProcesso},
 		             left  join slipnum on slipnum.k17_codigo = slip.k17_codigo
 		             left  join cgm on cgm.z01_numcgm = slipnum.k17_numcgm
 		             left join slipprocesso on slip.k17_codigo = k145_slip
-           where {$sWhere} {$where1}
+                 left join sliptipooperacaovinculo on slip.k17_codigo = sliptipooperacaovinculo.k153_slip
+           where {$sWhere} {$where1} {$sWhere3}
 		      order by slip.k17_codigo" ;
 
 
@@ -227,7 +236,8 @@ $prenc = 0;
 $alt   = 4;
 $total = 0;
 $total_valor = 0;
-
+$total_credito = 0;
+$total_debito =0;
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x);
 
@@ -277,11 +287,16 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $pdf->multicell(200,$alt,$k17_texto,0,"L",$prenc);
    $total++;
    $total_valor += $k17_valor;
-
+   if($k17_credito==$codconta)
+    $total_credito += $k17_valor;
+   else if($k17_debito==$codconta)
+    $total_debito += $k17_valor;
 }
 
 $pdf->setfont('arial','b',8);
-$pdf->cell(238,$alt,'TOTAL DE REGISTROS:  '.$total,"T",0,"L",0);
+$pdf->cell(117,$alt,'TOTAL DE REGISTROS:  '.$total,"T",0,"L",0);
+$pdf->cell(60,$alt,'TOTAL DEBITO:  '.db_formatar($total_debito,'f'),"T",0,"L",0);
+$pdf->cell(60,$alt,'TOTAL CREDITO:  '.db_formatar($total_credito,'f'),"T",0,"L",0);
 $pdf->cell(41,$alt,'VALOR TOTAL:  '.db_formatar($total_valor,'f'),"T",0,"L",0);
 
 $pdf->Output();
