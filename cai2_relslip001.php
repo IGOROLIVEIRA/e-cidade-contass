@@ -141,11 +141,11 @@ function js_emite(){
 
     <tr>
       <td align="left">
-        <?php db_ancora('Conta Bancária:',"js_pesquisac61_reduz(true);",1); ?>
+        <?php db_ancora('Conta Bancária:',"js_pesquisac61_reduz(true);",$db_opcao); ?>
       </td>
       <td colspan="4">
         <?php
-          db_input('c61_reduz',10,$Ic61_reduz,true,'text',3,'');
+          db_input('c61_reduz',10,$Ic61_reduz,true,'text',$db_opcao,"onchange='js_pesquisac61_reduz(false);'");
           db_input('c60_descr',60,$Ic60_descr,true,'text',3,'');
         ?>
       </td>
@@ -353,7 +353,8 @@ function js_pesquisac50_codhist(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe','func_conhist.php?funcao_js=parent.js_mostrahist1|c50_codhist|c50_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_conhist.php?pesquisa_chave='+document.form1.k17_hist.value+'&funcao_js=parent.js_mostrahist','Pesquisa',false);
+    js_OpenJanelaIframe('top.corpo','db_iframe',
+      'func_conhist.php?pesquisa_chave='+document.form1.k17_hist.value+'&funcao_js=parent.js_mostrahist','Pesquisa',false);
   }
 }
 function js_mostrahist(chave,erro){
@@ -378,11 +379,12 @@ function js_pesquisac61_reduz(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_saltes','func_conplano.php?funcao_js=parent.js_mostrasaltes1|c61_reduz|c60_descr','Pesquisa',true);
   }else{
-     if(document.form1.c61_reduz.value != ''){
-       js_OpenJanelaIframe('','db_iframe_saltes','func_conplano.php?pesquisa_chave='+document.form1.c61_reduz.value+'&funcao_js=parent.js_mostrasaltes','Pesquisa',false);
-     }else{
-       document.form1.c61_reduz.value = '';
-     }
+    // if(document.form1.c61_reduz.value != ''){
+       js_OpenJanelaIframe('','db_iframe_saltes',
+        'func_conplano.php?pesquisa_chave='+document.form1.c61_reduz.value+'&funcao_js=parent.js_mostrasaltes&reduz=true','Pesquisa',false);
+    // }else{
+    //   document.form1.c61_reduz.value = '';
+     //}
   }
 }
 function js_mostrasaltes(chave,erro){
