@@ -151,8 +151,12 @@ $clrotulo->label("c61_reduz");
       } else {
 
         if ($pesquisa_chave != null && $pesquisa_chave != "") {
+          $campo = "c60_codcon";
+          if($reduz==true){
+            $campo="c61_reduz";
+          }
 
-          $sWhere .= " and c60_codcon = $pesquisa_chave and c60_anousu = ".db_getsession("DB_anousu");
+          $sWhere .= " and $campo = $pesquisa_chave and c60_anousu = ".db_getsession("DB_anousu");
           $result  = $clconplano->sql_record($clconplano->sql_query2(null, null, "*", null, $sWhere));
 
           if($clconplano->numrows!=0){
