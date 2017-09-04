@@ -18,7 +18,7 @@ if(isset($incluir)){
   db_inicio_transacao();
   $cladesaoregprecos->incluir(null);
 if($cladesaoregprecos->erro_status=="0"){
-  
+
     $cladesaoregprecos->erro(true,false);
     $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
@@ -27,7 +27,7 @@ if($cladesaoregprecos->erro_status=="0"){
       echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".focus();</script>";
     }
   }else{
-  	
+
   	$sSql = "select * from adesaoregprecos order by si06_sequencial desc limit 1;";
   $rsResult = pg_query($sSql);
   db_fieldsmemory($rsResult,0);
@@ -38,7 +38,7 @@ if($cladesaoregprecos->erro_status=="0"){
     parent.mo_camada('db_itens');
   	top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$si06_sequencial."';
 	</script>";
-   
+
     //$cladesaoregprecos->erro(true,true);
   }
   db_fim_transacao();
@@ -53,18 +53,18 @@ if(isset($alterar)){
     parent.document.formaba.db_itens.disabled=false;
   	top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=".$si06_sequencial."';
 	</script>";
-   
-  
+
+
 }else if(isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])){
    $db_opcao = 2;
    if (!isset($chavepesquisa)) {
    	$chavepesquisa = $_SESSION["codigoAdesao"];
-   } 
+   }
    unset($_SESSION["codigoAdesao"]);
-   $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa)); 
+   $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
    $db_botao = true;
-    
+
 }
 if(isset($excluir)){
   db_inicio_transacao();
@@ -77,7 +77,7 @@ if(isset($excluir)){
    //$db_opcao = 3;
    if (!isset($chavepesquisa)) {
    	$chavepesquisa = $_SESSION["codigoAdesao"];
-   } 
+   }
    unset($_SESSION["codigoAdesao"]);
    echo "<script>
     parent.document.formaba.db_itens.disabled=false;
@@ -86,7 +86,7 @@ if(isset($excluir)){
    $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa,"*,cgm.z01_nome as z01_nomeorg,c.z01_nome as z01_nomeresp"));
    db_fieldsmemory($result,0);
    $db_botao = true;
-   
+
 }
 ?>
 <html>
@@ -98,9 +98,9 @@ if(isset($excluir)){
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 40px;">
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmadesaoregprecos.php");
@@ -117,7 +117,7 @@ if(isset($excluir)){
 <?
 /*if(isset($incluir)){
   if($cladesaoregprecos->erro_status=="0"){
-  
+
     $cladesaoregprecos->erro(true,false);
     $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
@@ -140,7 +140,7 @@ if(isset($alterar)){
     }
   }else{
     $cladesaoregprecos->erro(true,false);
-    $db_opcao=22;    
+    $db_opcao=22;
   }
 }
 if($db_opcao==22){
