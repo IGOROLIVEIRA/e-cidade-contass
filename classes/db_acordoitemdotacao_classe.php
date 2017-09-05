@@ -1,70 +1,70 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Acordos
 //CLASSE DA ENTIDADE acordoitemdotacao
-class cl_acordoitemdotacao { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $ac22_sequencial = 0; 
-   var $ac22_coddot = 0; 
-   var $ac22_anousu = 0; 
-   var $ac22_acordoitem = 0; 
-   var $ac22_valor = 0; 
-   var $ac22_quantidade = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_acordoitemdotacao {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $ac22_sequencial = 0;
+   var $ac22_coddot = 0;
+   var $ac22_anousu = 0;
+   var $ac22_acordoitem = 0;
+   var $ac22_valor = 0;
+   var $ac22_quantidade = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 ac22_sequencial = int4 = Sequencial 
-                 ac22_coddot = int4 = Código Dotação 
-                 ac22_anousu = int4 = Ano Exercício 
-                 ac22_acordoitem = int4 = Acordo Item 
-                 ac22_valor = float8 = Valor 
-                 ac22_quantidade = float8 = Quantidade 
+                 ac22_sequencial = int4 = Sequencial
+                 ac22_coddot = int4 = Código Dotação
+                 ac22_anousu = int4 = Ano Exercício
+                 ac22_acordoitem = int4 = Acordo Item
+                 ac22_valor = float8 = Valor
+                 ac22_quantidade = float8 = Quantidade
                  ";
-   //funcao construtor da classe 
-   function cl_acordoitemdotacao() { 
+   //funcao construtor da classe
+   function cl_acordoitemdotacao() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("acordoitemdotacao"); 
+     $this->rotulo = new rotulo("acordoitemdotacao");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -86,9 +86,9 @@ class cl_acordoitemdotacao {
      }
    }
    // funcao para inclusao
-   function incluir ($ac22_sequencial){ 
+   function incluir ($ac22_sequencial){
       $this->atualizacampos();
-     if($this->ac22_coddot == null ){ 
+     if($this->ac22_coddot == null ){
        $this->erro_sql = " Campo Código Dotação nao Informado.";
        $this->erro_campo = "ac22_coddot";
        $this->erro_banco = "";
@@ -97,7 +97,7 @@ class cl_acordoitemdotacao {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ac22_anousu == null ){ 
+     if($this->ac22_anousu == null ){
        $this->erro_sql = " Campo Ano Exercício nao Informado.";
        $this->erro_campo = "ac22_anousu";
        $this->erro_banco = "";
@@ -106,7 +106,7 @@ class cl_acordoitemdotacao {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ac22_acordoitem == null ){ 
+     if($this->ac22_acordoitem == null ){
        $this->erro_sql = " Campo Acordo Item nao Informado.";
        $this->erro_campo = "ac22_acordoitem";
        $this->erro_banco = "";
@@ -118,7 +118,7 @@ class cl_acordoitemdotacao {
      /**
        * Removido validacao de inclusao de dotacao zerada conforme solicitado na OC 3855
        */
-     /*if($this->ac22_valor == null ){ 
+     /*if($this->ac22_valor == null ){
        $this->erro_sql = " Campo Valor nao Informado.";
        $this->erro_campo = "ac22_valor";
        $this->erro_banco = "";
@@ -127,7 +127,7 @@ class cl_acordoitemdotacao {
        $this->erro_status = "0";
        return false;
      }*/
-     if($this->ac22_quantidade == null ){ 
+     if($this->ac22_quantidade == null ){
        $this->erro_sql = " Campo Quantidade nao Informado.";
        $this->erro_campo = "ac22_quantidade";
        $this->erro_banco = "";
@@ -137,16 +137,16 @@ class cl_acordoitemdotacao {
        return false;
      }
      if($ac22_sequencial == "" || $ac22_sequencial == null ){
-       $result = db_query("select nextval('acordoitemdotacao_ac22_sequencial_seq')"); 
+       $result = db_query("select nextval('acordoitemdotacao_ac22_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: acordoitemdotacao_ac22_sequencial_seq do campo: ac22_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: acordoitemdotacao_ac22_sequencial_seq do campo: ac22_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->ac22_sequencial = pg_result($result,0,0); 
+       $this->ac22_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from acordoitemdotacao_ac22_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $ac22_sequencial)){
@@ -157,10 +157,10 @@ class cl_acordoitemdotacao {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->ac22_sequencial = $ac22_sequencial; 
+         $this->ac22_sequencial = $ac22_sequencial;
        }
      }
-     if(($this->ac22_sequencial == null) || ($this->ac22_sequencial == "") ){ 
+     if(($this->ac22_sequencial == null) || ($this->ac22_sequencial == "") ){
        $this->erro_sql = " Campo ac22_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -169,23 +169,23 @@ class cl_acordoitemdotacao {
        return false;
      }
      $sql = "insert into acordoitemdotacao(
-                                       ac22_sequencial 
-                                      ,ac22_coddot 
-                                      ,ac22_anousu 
-                                      ,ac22_acordoitem 
-                                      ,ac22_valor 
-                                      ,ac22_quantidade 
+                                       ac22_sequencial
+                                      ,ac22_coddot
+                                      ,ac22_anousu
+                                      ,ac22_acordoitem
+                                      ,ac22_valor
+                                      ,ac22_quantidade
                        )
                 values (
-                                $this->ac22_sequencial 
-                               ,$this->ac22_coddot 
-                               ,$this->ac22_anousu 
-                               ,$this->ac22_acordoitem 
+                                $this->ac22_sequencial
+                               ,$this->ac22_coddot
+                               ,$this->ac22_anousu
+                               ,$this->ac22_acordoitem
                                ,".($this->ac22_valor==null ? 'null' : $this->ac22_valor)."
-                               ,$this->ac22_quantidade 
+                               ,$this->ac22_quantidade
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Acordo Item Dotação ($this->ac22_sequencial) nao Incluído. Inclusao Abortada.";
@@ -222,16 +222,16 @@ class cl_acordoitemdotacao {
        $resac = db_query("insert into db_acount values($acount,2840,16623,'','".AddSlashes(pg_result($resaco,0,'ac22_quantidade'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($ac22_sequencial=null) { 
+   function alterar ($ac22_sequencial=null) {
       $this->atualizacampos();
      $sql = " update acordoitemdotacao set ";
      $virgula = "";
-     if(trim($this->ac22_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_sequencial"])){ 
+     if(trim($this->ac22_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_sequencial"])){
        $sql  .= $virgula." ac22_sequencial = $this->ac22_sequencial ";
        $virgula = ",";
-       if(trim($this->ac22_sequencial) == null ){ 
+       if(trim($this->ac22_sequencial) == null ){
          $this->erro_sql = " Campo Sequencial nao Informado.";
          $this->erro_campo = "ac22_sequencial";
          $this->erro_banco = "";
@@ -241,10 +241,10 @@ class cl_acordoitemdotacao {
          return false;
        }
      }
-     if(trim($this->ac22_coddot)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_coddot"])){ 
+     if(trim($this->ac22_coddot)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_coddot"])){
        $sql  .= $virgula." ac22_coddot = $this->ac22_coddot ";
        $virgula = ",";
-       if(trim($this->ac22_coddot) == null ){ 
+       if(trim($this->ac22_coddot) == null ){
          $this->erro_sql = " Campo Código Dotação nao Informado.";
          $this->erro_campo = "ac22_coddot";
          $this->erro_banco = "";
@@ -254,10 +254,10 @@ class cl_acordoitemdotacao {
          return false;
        }
      }
-     if(trim($this->ac22_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_anousu"])){ 
+     if(trim($this->ac22_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_anousu"])){
        $sql  .= $virgula." ac22_anousu = $this->ac22_anousu ";
        $virgula = ",";
-       if(trim($this->ac22_anousu) == null ){ 
+       if(trim($this->ac22_anousu) == null ){
          $this->erro_sql = " Campo Ano Exercício nao Informado.";
          $this->erro_campo = "ac22_anousu";
          $this->erro_banco = "";
@@ -267,10 +267,10 @@ class cl_acordoitemdotacao {
          return false;
        }
      }
-     if(trim($this->ac22_acordoitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_acordoitem"])){ 
+     if(trim($this->ac22_acordoitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_acordoitem"])){
        $sql  .= $virgula." ac22_acordoitem = $this->ac22_acordoitem ";
        $virgula = ",";
-       if(trim($this->ac22_acordoitem) == null ){ 
+       if(trim($this->ac22_acordoitem) == null ){
          $this->erro_sql = " Campo Acordo Item nao Informado.";
          $this->erro_campo = "ac22_acordoitem";
          $this->erro_banco = "";
@@ -280,10 +280,10 @@ class cl_acordoitemdotacao {
          return false;
        }
      }
-     if(trim($this->ac22_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_valor"])){ 
+     if(trim($this->ac22_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_valor"])){
        $sql  .= $virgula." ac22_valor = $this->ac22_valor ";
        $virgula = ",";
-       if(trim($this->ac22_valor) == null ){ 
+       if(trim($this->ac22_valor) == null ){
          $this->erro_sql = " Campo Valor nao Informado.";
          $this->erro_campo = "ac22_valor";
          $this->erro_banco = "";
@@ -293,10 +293,10 @@ class cl_acordoitemdotacao {
          return false;
        }
      }
-     if(trim($this->ac22_quantidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_quantidade"])){ 
+     if(trim($this->ac22_quantidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac22_quantidade"])){
        $sql  .= $virgula." ac22_quantidade = $this->ac22_quantidade ";
        $virgula = ",";
-       if(trim($this->ac22_quantidade) == null ){ 
+       if(trim($this->ac22_quantidade) == null ){
          $this->erro_sql = " Campo Quantidade nao Informado.";
          $this->erro_campo = "ac22_quantidade";
          $this->erro_banco = "";
@@ -332,7 +332,7 @@ class cl_acordoitemdotacao {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Acordo Item Dotação nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->ac22_sequencial;
@@ -360,14 +360,14 @@ class cl_acordoitemdotacao {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($ac22_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($ac22_sequencial=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($ac22_sequencial));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -398,7 +398,7 @@ class cl_acordoitemdotacao {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Acordo Item Dotação nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$ac22_sequencial;
@@ -426,11 +426,11 @@ class cl_acordoitemdotacao {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -452,8 +452,8 @@ class cl_acordoitemdotacao {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $ac22_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $ac22_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -484,8 +484,8 @@ class cl_acordoitemdotacao {
      $sql2 = "";
      if($dbwhere==""){
        if($ac22_sequencial!=null ){
-         $sql2 .= " where acordoitemdotacao.ac22_sequencial = $ac22_sequencial "; 
-       } 
+         $sql2 .= " where acordoitemdotacao.ac22_sequencial = $ac22_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -501,8 +501,8 @@ class cl_acordoitemdotacao {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $ac22_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $ac22_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -518,8 +518,8 @@ class cl_acordoitemdotacao {
      $sql2 = "";
      if($dbwhere==""){
        if($ac22_sequencial!=null ){
-         $sql2 .= " where acordoitemdotacao.ac22_sequencial = $ac22_sequencial "; 
-       } 
+         $sql2 .= " where acordoitemdotacao.ac22_sequencial = $ac22_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -535,9 +535,9 @@ class cl_acordoitemdotacao {
      }
      return $sql;
   }
-  
+
   function sql_query_reserva( $ac22_sequencial=null,$campos="*",$ordem=null,$dbwhere="") {
-     
+
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -555,8 +555,8 @@ class cl_acordoitemdotacao {
      $sql2 = "";
      if($dbwhere==""){
        if($ac22_sequencial!=null ){
-         $sql2 .= " where acordoitemdotacao.ac22_sequencial = $ac22_sequencial "; 
-       } 
+         $sql2 .= " where acordoitemdotacao.ac22_sequencial = $ac22_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }

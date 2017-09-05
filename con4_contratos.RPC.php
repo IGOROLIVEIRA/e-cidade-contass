@@ -1012,7 +1012,7 @@ switch($oParam->exec) {
                     $oDotacao->ano         = db_getsession("DB_anousu");
                     $oDotacao->valor       = $oParam->nValor;
                     $oDotacao->dotacao     = $oParam->iDotacao;
-                    $oDotacao->quantidade  = $oParam->nQuantidade;
+                    $oDotacao->quantidade  = str_replace(',', '.', str_replace('.', '', $oParam->nQuantidade));
                     $oItem->adicionarDotacoes($oDotacao);
                     $oRetorno->dotacoes = $oItem->getDotacoes();
                     $oItem->save();
