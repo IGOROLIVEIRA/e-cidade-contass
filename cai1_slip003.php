@@ -28,6 +28,8 @@
 require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
 require_once("classes/db_saltes_classe.php");
+require_once("fpdf151/assinatura.php");
+
 
 $clsaltes = new cl_saltes;
 
@@ -35,18 +37,22 @@ parse_str(base64_decode($HTTP_SERVER_VARS['QUERY_STRING']));
 
 $motivo = "";
 // Dados
+$classinatura = new cl_assinatura; 
 
 if (USE_PCASP) {
 
   $sql = "select k152_sequencial,
                  upper(k152_descricao) as k152_descricao,
                  slip.*,
-                 z01_numcgm , 
-                 z01_nome , 
+                 cgm.z01_numcgm , 
+                 cgm.z01_nome , 
                  c50_codhist as db_hist, 
                  c50_descr   as descr_hist,
                  k18_motivo,
                  coalesce(k18_codigo,0)  as k18_codigo,
+                 contador.z01_nome as contador,
+                 contad.si166_crccontador as crc,
+                 controleinterno.z01_nome as controleinterno,
                  case when 
                    k153_slipoperacaotipo not in (1, 2, 9, 10, 13, 14) 
                      then 
@@ -79,6 +85,10 @@ if (USE_PCASP) {
                  left join conplano as conta_credito       on reduz_credito.c61_codcon  = conta_credito.c60_codcon 
                                                           and conta_credito.c60_anousu  = ".db_getsession("DB_anousu")."
                  left join saltes saltes_credito           on slip.k17_credito          = saltes_credito.k13_reduz
+                 left join identificacaoresponsaveis contad on  contad.si166_instit= k17_instit and contad.si166_tiporesponsavel=2
+                 left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
+                 left join identificacaoresponsaveis controle on  controle.si166_instit= k17_instit and controle.si166_tiporesponsavel=3
+                 left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm 
            where slip.k17_codigo = $numslip and k17_instit = ".db_getsession('DB_instit');
 } else {
   
@@ -245,6 +255,17 @@ try {
 
     $pdf->oDadosBancarioCredor = $oDadosBancarioCredor;
   }
+
+
+  /**
+  * assinturas
+  */
+  $tes =  "______________________________"."\n"."Secretário de Fazenda";
+  $pdf->tesoureiro      = $classinatura->assinatura(1004,$tes);
+
+  $pdf->contador        = $contador;
+  $pdf->crc             = $crc;
+  $pdf->controleinterno = $controleinterno;
 
   $pdf->logo     = $logo;
   $pdf->nomeinst = $nomeinst;
