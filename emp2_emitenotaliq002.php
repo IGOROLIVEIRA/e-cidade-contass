@@ -210,8 +210,8 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 				        inner join orctiporec  		on o58_codigo    = o15_codigo
 				        inner join emptipo 		    on emptipo.e41_codtipo = empempenho.e60_codtipo
                 left join cgm as ordena on ordena.z01_numcgm  = o41_orddespesa
-                left join cgm as paga on paga.z01_numcgm = o41_ordliquidacao
-                left join cgm as liquida on liquida.z01_numcgm = o41_ordpagamento
+                left join cgm as paga on paga.z01_numcgm = o41_ordpagamento 
+                left join cgm as liquida on liquida.z01_numcgm = o41_ordliquidacao  
                 left join identificacaoresponsaveis contad on  contad.si166_instit= e60_instit and contad.si166_tiporesponsavel=2
                 left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
                 left join identificacaoresponsaveis controle on  controle.si166_instit= e60_instit and controle.si166_tiporesponsavel=3
