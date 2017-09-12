@@ -39,7 +39,7 @@ try {
         $oItemRegPreco->si07_numerolote         = $oItem->si07_numerolote;
         $oItemRegPreco->si07_sequencial         = $oItem->si07_sequencial;
         $oItemRegPreco->si07_descricaolote      = $oItem->si07_descricaolote;
-        $oItemRegPreco->si07_precounitario      = $oItem->si07_precounitario;
+        $oItemRegPreco->si07_precounitario      = str_replace(',', '.', $oItem->si07_precounitario);
         $oItemRegPreco->si07_sequencialadesao   = $oItem->si07_sequencialadesao;
         $oItemRegPreco->si07_quantidadeaderida  = $oItem->si07_quantidadeaderida;
         $oItemRegPreco->si07_quantidadelicitada = $oItem->si07_quantidadelicitada;
