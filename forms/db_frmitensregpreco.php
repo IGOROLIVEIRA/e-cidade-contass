@@ -353,7 +353,6 @@ function validaForm(fORM) {
       var elemento = 'aItensAdesaoRegPreco[' + item.value + ']';
 
       if (item.value == ''
-        || fORM[elemento + "[descricao]"].value == ''
         || fORM[elemento + "[qtdAderida]"].value == ''
         || fORM[elemento + "[qtdLicitada]"].value == ''
         || fORM[elemento + "[codigoUnidade]"].value == ''
@@ -375,7 +374,6 @@ function validaForm(fORM) {
         si07_fornecedor:          fORM[elemento + "[codigoFornecedor]"].value,
         si07_precounitario:       fORM[elemento + "[precoUnitario]"].value,
         si07_descricaolote:       fORM[elemento + "[descricaoLote]"].value,
-        si07_descricaoitem:       fORM[elemento + "[descricao]"].value,
         si07_sequencialadesao:    fORM[elemento + "[sequencialAdesao]"].value,
         si07_quantidadeaderida:   fORM[elemento + "[qtdAderida]"].value,
         si07_quantidadelicitada:  fORM[elemento + "[qtdLicitada]"].value
