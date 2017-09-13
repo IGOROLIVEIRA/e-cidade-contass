@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/impcarne.php");
@@ -116,79 +116,76 @@ if(isset($listacgm) && $listacgm != ''){
         $dbwhere .= "and cgm.z01_numcgm not in ($listacgm)";
 }
 
-$sqlemp = "
-	select empempenho.*,
-	       cgm.* ,
-	       o58_orgao,
-	       o40_descr,
-	       o58_unidade,
-	       o41_descr,
-	       o58_funcao,
-	       o52_descr,
-	       o58_subfuncao,
-	       o53_descr,
-	       o58_programa,
-	       o54_descr,
-	       o58_projativ,
-	       o55_descr,
-	       o58_coddot,
-	       o41_cnpj,
-	       o56_elemento as sintetico,
-	       o56_descr as descr_sintetico,
-	       o58_codigo,
-     	       o15_descr,
-	       e61_autori,
-           pc50_descr,
-	       fc_estruturaldotacao(o58_anousu,o58_coddot) as estrutural,
-	       e41_descr,
-         c58_descr,
-         e56_orctiporec,
-         e54_praent,
-         e54_codout,
-         e54_conpag,
-         ordena.z01_numcgm as cgmordenadespesa,
-         ordena.z01_nome as ordenadesp,
-         liquida.z01_numcgm as cgmliquida, 
-         liquida.z01_nome as liquida, 
-         paga.z01_numcgm as cgmpaga,
-         paga.z01_nome as ordenapaga,
-         contador.z01_nome as contador,
-         contad.si166_crccontador as crc,
-         controleinterno.z01_nome as controleinterno
-	from empempenho
-	     left join pctipocompra	on pc50_codcom = e60_codcom
-	     inner join orcdotacao 	on o58_coddot = e60_coddot
-	                               and o58_instit = ".db_getsession("DB_instit")."
-				       and o58_anousu = e60_anousu
-	     inner join orcorgao   	on o58_orgao = o40_orgao
-	                               and o40_anousu = $anousu
-	     inner join orcunidade 	on o58_unidade = o41_unidade
-	                               and o58_orgao = o41_orgao
-	                               and o41_anousu = o58_anousu
-	     inner join orcfuncao  	on o58_funcao = o52_funcao
-	     inner join orcsubfuncao  	on o58_subfuncao = o53_subfuncao
-	     inner join orcprograma  	on o58_programa = o54_programa
-	                               and o54_anousu = o58_anousu
-	     inner join orcprojativ  	on o58_projativ = o55_projativ
-	                               and o55_anousu = o58_anousu
-	     inner join orcelemento 	on o58_codele = o56_codele
-	                               and o58_anousu = o56_anousu
-	     inner join orctiporec  	on o58_codigo = o15_codigo
-	     inner join cgm 		on z01_numcgm = e60_numcgm
-       inner join concarpeculiar on concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar
-       left join cgm as ordena on ordena.z01_numcgm  = o41_orddespesa 
-       left join cgm as paga on paga.z01_numcgm = o41_ordliquidacao  
-       left join cgm as liquida on liquida.z01_numcgm = o41_ordpagamento 
-       left join identificacaoresponsaveis contad on  contad.si166_instit= e60_instit and contad.si166_tiporesponsavel=2
-       left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
-       left join identificacaoresponsaveis controle on  controle.si166_instit= e60_instit and controle.si166_tiporesponsavel=3
-       left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm 
-	     left outer join empempaut	on e60_numemp = e61_numemp
-             left join  empautoriza     on e61_autori = e54_autori
-	     left join  empautidot      on e61_autori = e56_autori
-	     left outer join emptipo  	on e60_codtipo= e41_codtipo
-	where  $dbwhere
-	";
+$sqlemp  = " SELECT empempenho.*, ";
+$sqlemp .= "        cgm.*, ";
+$sqlemp .= "        o58_orgao, ";
+$sqlemp .= "        o40_descr, ";
+$sqlemp .= "        o58_unidade, ";
+$sqlemp .= "        o41_descr, ";
+$sqlemp .= "        o58_funcao, ";
+$sqlemp .= "        o52_descr, ";
+$sqlemp .= "        o58_subfuncao, ";
+$sqlemp .= "        o53_descr, ";
+$sqlemp .= "        o58_programa, ";
+$sqlemp .= "        o54_descr, ";
+$sqlemp .= "        o58_projativ, ";
+$sqlemp .= "        o55_descr, ";
+$sqlemp .= "        o58_coddot, ";
+$sqlemp .= "        o41_cnpj, ";
+$sqlemp .= "        o56_elemento AS sintetico, ";
+$sqlemp .= "        o56_descr AS descr_sintetico, ";
+$sqlemp .= "        o58_codigo, ";
+$sqlemp .= "        o15_descr, ";
+$sqlemp .= "        e61_autori, ";
+$sqlemp .= "        pc50_descr, ";
+$sqlemp .= "        fc_estruturaldotacao(o58_anousu,o58_coddot) AS estrutural, ";
+$sqlemp .= "        e41_descr, ";
+$sqlemp .= "        c58_descr, ";
+$sqlemp .= "        e56_orctiporec, ";
+$sqlemp .= "        e54_praent, ";
+$sqlemp .= "        e54_codout, ";
+$sqlemp .= "        e54_conpag, ";
+$sqlemp .= "        ordena.z01_numcgm AS cgmordenadespesa, ";
+$sqlemp .= "        ordena.z01_nome AS ordenadesp, ";
+$sqlemp .= "        liquida.z01_numcgm AS cgmliquida, ";
+$sqlemp .= "        liquida.z01_nome AS liquida, ";
+$sqlemp .= "        paga.z01_numcgm AS cgmpaga, ";
+$sqlemp .= "        paga.z01_nome AS ordenapaga, ";
+$sqlemp .= "        contador.z01_nome AS contador, ";
+$sqlemp .= "        contad.si166_crccontador AS crc, ";
+$sqlemp .= "        controleinterno.z01_nome AS controleinterno ";
+$sqlemp .= " FROM empempenho ";
+$sqlemp .= " LEFT JOIN pctipocompra ON pc50_codcom = e60_codcom ";
+$sqlemp .= " INNER JOIN orcdotacao ON o58_coddot = e60_coddot AND o58_instit = ".db_getsession("DB_instit")." AND o58_anousu = e60_anousu ";
+$sqlemp .= " INNER JOIN orcorgao ON o58_orgao = o40_orgao AND o40_anousu = $anousu ";
+$sqlemp .= " INNER JOIN orcunidade ON o58_unidade = o41_unidade AND o58_orgao = o41_orgao AND o41_anousu = o58_anousu ";
+$sqlemp .= " INNER JOIN orcfuncao ON o58_funcao = o52_funcao ";
+$sqlemp .= " INNER JOIN orcsubfuncao ON o58_subfuncao = o53_subfuncao ";
+$sqlemp .= " INNER JOIN orcprograma ON o58_programa = o54_programa AND o54_anousu = o58_anousu ";
+$sqlemp .= " INNER JOIN orcprojativ ON o58_projativ = o55_projativ AND o55_anousu = o58_anousu ";
+$sqlemp .= " INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu ";
+$sqlemp .= " INNER JOIN orctiporec ON o58_codigo = o15_codigo ";
+$sqlemp .= " INNER JOIN cgm ON z01_numcgm = e60_numcgm ";
+$sqlemp .= " INNER JOIN concarpeculiar ON concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar ";
+$sqlemp .= " LEFT JOIN cgm AS ordena ON ordena.z01_numcgm = o41_orddespesa ";
+$sqlemp .= " LEFT JOIN cgm AS paga ON paga.z01_numcgm = o41_ordpagamento ";
+$sqlemp .= " LEFT JOIN cgm AS liquida ON liquida.z01_numcgm = o41_ordliquidacao ";
+$sqlemp .= " LEFT JOIN identificacaoresponsaveis contad ON contad.si166_instit= e60_instit ";
+$sqlemp .= " AND contad.si166_tiporesponsavel=2 ";
+$sqlemp .= " AND date_part('YEAR',contad.si166_dataini)::int4 = e60_anousu ";
+$sqlemp .= " AND date_part('YEAR',contad.si166_datafim)::int4 = e60_anousu ";
+$sqlemp .= " LEFT JOIN cgm AS contador ON contador.z01_numcgm = contad.si166_numcgm ";
+$sqlemp .= " LEFT JOIN identificacaoresponsaveis controle ON controle.si166_instit= e60_instit ";
+$sqlemp .= " AND controle.si166_tiporesponsavel=3 ";
+$sqlemp .= " AND date_part('YEAR',controle.si166_dataini)::int4 = e60_anousu ";
+$sqlemp .= " AND date_part('YEAR',controle.si166_datafim)::int4 = e60_anousu ";
+$sqlemp .= " LEFT JOIN cgm AS controleinterno ON controleinterno.z01_numcgm = controle.si166_numcgm ";
+$sqlemp .= " LEFT OUTER JOIN empempaut ON e60_numemp = e61_numemp ";
+$sqlemp .= " LEFT JOIN empautoriza ON e61_autori = e54_autori ";
+$sqlemp .= " LEFT JOIN empautidot ON e61_autori = e56_autori ";
+$sqlemp .= " LEFT OUTER JOIN emptipo ON e60_codtipo= e41_codtipo ";
+$sqlemp .= " WHERE $dbwhere ";
+
 //echo $sqlemp;
 $result = db_query($sqlemp);
 //db_criatabela($result);exit;
@@ -295,7 +292,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 	$sqlitem .= "        solrp.pc11_codigo, ";
 	$sqlitem .= "        l20_prazoentrega, ";
   $sqlitem .= "        case when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '') ";
-  $sqlitem .= "             else  coalesce(trim(pcorcamval.pc23_obs), '') end as pc23_obs "; 
+  $sqlitem .= "             else  coalesce(trim(pcorcamval.pc23_obs), '') end as pc23_obs ";
 	$sqlitem .= "   from empempitem ";
 	$sqlitem .= "       inner join empempenho           on empempenho.e60_numemp           = empempitem.e62_numemp ";
 	$sqlitem .= "       inner join pcmater              on pcmater.pc01_codmater           = empempitem.e62_item ";
@@ -334,8 +331,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
   $sqlitem .= "                                                     and pcorcamjulg.pc24_pontuacao      = 1 ";
   $sqlitem .= "       left join pcorcamval                           on pcorcamval.pc23_orcamitem       = pcorcamjulg.pc24_orcamitem ";
   $sqlitem .= "                                                     and pcorcamval.pc23_orcamforne      = pcorcamjulg.pc24_orcamforne ";
-  $sqlitem .= "		  left join solicitemunid on solicitem.pc11_codigo = solicitemunid.pc17_codigo";	
-  $sqlitem .= "		  left join matunid on matunid.m61_codmatunid = solicitemunid.pc17_unid or matunid.m61_codmatunid = e55_unid";                                                           
+  $sqlitem .= "		  left join solicitemunid on solicitem.pc11_codigo = solicitemunid.pc17_codigo";
+  $sqlitem .= "		  left join matunid on matunid.m61_codmatunid = solicitemunid.pc17_unid or matunid.m61_codmatunid = e55_unid";
   $sqlitem .= "       left join liclicita on liclicitem.l21_codliclicita = liclicita.l20_codigo ";
 
 	$sqlitem .= "  where e62_numemp = '{$e60_numemp}' ";
@@ -511,13 +508,13 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
    $pdf1->licitacao        = $e60_codtipo;
    $pdf1->recorddositens   = $resultitem;
    $pdf1->linhasdositens   = pg_numrows($resultitem);
-   
+
    if (!empty($e54_praent)) {
      $pdf1->prazo_ent              = $e54_praent;
    }else{
      $pdf1->prazo_ent              = db_utils::fieldsMemory($resultitem, 0)->l20_prazoentrega;
    }
-   
+
    $pdf1->quantitem        = "e62_quant";
    $pdf1->valoritem        = "e62_vltot";
    $pdf1->valor            = "e62_vlrun";
