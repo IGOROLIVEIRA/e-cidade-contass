@@ -11,30 +11,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarITEM
  */
 class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 0;
-  
+
   /**
    *
    * NOme do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'ITEM';
-  
+
   /**
    *
    * Contrutor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -44,7 +44,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
@@ -52,7 +52,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
   {
 
   }
-  
+
   /**
    * selecionar os dados de indentificacao da remessa pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -76,7 +76,7 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
         throw new Exception($clitem10->erro_msg);
       }
     }
-    
+
 
     $sSql = "SELECT distinct  '10' AS tipoRegistro ,
        (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
@@ -174,7 +174,33 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
       INNER JOIN pcmater on pc01_codmater = ac20_pcmater
       inner join matunid on m61_codmatunid = ac20_matunid
       where ap1.ac26_sequencial in (select max(ap2.ac26_sequencial) from acordoposicao ap2 where ap2.ac26_acordo = ap1.ac26_acordo)
-      and ac16_instit = " . db_getsession("DB_instit");
+      and ac16_instit = " . db_getsession("DB_instit") ."
+      UNION
+  SELECT
+'10' AS tipoRegistro,
+                (pcmater.pc01_codmater::varchar || (CASE
+                                                        WHEN m61_codmatunid IS NULL THEN 1
+                                                        ELSE m61_codmatunid
+                                                    END)::varchar) AS coditem,
+                (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
+                (CASE
+                     WHEN m61_abrev IS NULL THEN 'UNIDAD'
+                     ELSE m61_abrev
+                 END) AS unidadeMedida,
+                '1' AS tipoCadastro,
+                '' AS justificativaAlteracao
+from adesaoregprecos
+inner join itensregpreco on si07_sequencialadesao=si06_sequencial
+inner join pcmater on si07_item=pc01_codmater
+inner join pcproc on pc80_codproc=si06_processocompra
+inner join pcprocitem on pc81_codproc=pc80_codproc
+inner join solicitem on pc11_codigo=pc81_solicitem
+inner join solicitempcmater on pc16_solicitem=pc11_codigo and pc16_codmater=si07_item
+inner join solicitemunid on pc17_codigo=pc11_codigo
+inner join matunid on m61_codmatunid=pc17_unid
+where DATE_PART ('MONTH', si06_dataadesao) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+  AND date_part('YEAR',si06_dataadesao) = ".db_getsession("DB_anousu")."
+  AND si06_instit=" . db_getsession("DB_instit");
 
     $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);die($sSql);
     //$aCaracteres = array("/","\\","'","\"","°","ª","º","§");
@@ -184,7 +210,7 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
     // matriz de saída
     $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
+
       $clitem10 = new cl_item102017();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
@@ -220,11 +246,11 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
     }
 
     db_fim_transacao();
-    
+
     $oGerarItem = new GerarITEM();
     $oGerarItem->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarItem->gerarDados();
-    
+
   }
-  
+
 }
