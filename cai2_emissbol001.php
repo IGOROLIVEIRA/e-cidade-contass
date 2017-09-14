@@ -141,7 +141,7 @@ function js_relatorio2() {
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 	<center>
-    <br>
+    <br><br>
     <fieldset style="width: 430px;">
     <legend><b>Boletim por Período</b></legend>
         <form name="form1" method="post" action="">
