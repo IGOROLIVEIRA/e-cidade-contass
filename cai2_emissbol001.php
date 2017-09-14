@@ -61,15 +61,15 @@ if ( $iCaiParametro > 0 ) {
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
 function js_relatorio() {
-
+  
   var obj                  = document.form1;
   var datai                = obj.datai_ano.value+'-'+obj.datai_mes.value+'-'+obj.datai_dia.value;
   var dataf                = obj.dataf_ano.value+'-'+obj.dataf_mes.value+'-'+obj.dataf_dia.value;
   var contasnegativas      = obj.contasnegativas.value;
   var imprimeinterferencia = obj.imprime_interferencia.value;
   var ordemconta           = obj.ordem_conta.value;
-  var caixa                = obj.k11_id.value;
-  var conta                = obj.k13_conta.value;
+  //var caixa                = obj.k11_id.value;
+  //var conta                = obj.k13_conta.value;
   var quebrarpag           = obj.quebrarpag.value;
   var contassemmov         = obj.k29_contassemmovimento.value;
   
@@ -78,8 +78,8 @@ function js_relatorio() {
                                                            +'&ordem_conta='+ordemconta
                                                            +'&datai='+datai
                                                            +'&dataf='+dataf
-                                                           +'&caixa='+caixa
-                                                           +'&conta='+conta
+                                                           //+'&caixa='+caixa
+                                                           //+'&conta='+conta
                                                            +'&quebrarpag='+quebrarpag
                                                            +'&contassemmov='+contassemmov,
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -142,9 +142,10 @@ function js_relatorio2() {
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 	<center>
     <br><br>
-    <fieldset style="width: 430px;">
-    <legend><b>Boletim por Período</b></legend>
+    
         <form name="form1" method="post" action="">
+          <fieldset style="width: 430px;">
+           <legend><b>Boletim por Período</b></legend>
           <table border="0" cellspacing="0" cellpadding="0">
 	    <tr>
                <td width="25">&nbsp;</td>
@@ -253,18 +254,16 @@ function js_relatorio2() {
 	    
             <tr> 
               <td colspan = "2" align="center" > 
-	          <input name="boletim" type="button" id="boletim" onClick="js_relatorio()" value="Boletim"> &nbsp; &nbsp;&nbsp; &nbsp;
+	          <input name="boletim" type="button" id="boletim" onClick="js_relatorio()" value="Boletim" />
 	          <!--<input name="autentica" type="button" id="autentica" onClick="js_relatorio1('c')" value="Autenticação Completo">
 	          <input name="autenticaresum" type="button" id="autenticaresum" onClick="js_relatorio1('r')" value="Autenticação Resumido">
 	          <input name="autent_conta" type="button" id="autent_conta" onClick="js_relatorio2()" value="Autenticação por Conta">-->
-	      <br>
-	      <br>
-	       
 	      </td>
             </tr>
           </table>
+          </fieldset>
         </form>
-      </fieldset>
+      
       </center>
 	</td>
   </tr>
