@@ -1,99 +1,99 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: compras
 //CLASSE DA ENTIDADE pcforne
-class cl_pcforne { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $pc60_numcgm = 0; 
-   var $pc60_dtlanc_dia = null; 
-   var $pc60_dtlanc_mes = null; 
-   var $pc60_dtlanc_ano = null; 
-   var $pc60_dtlanc = null; 
-   var $pc60_obs = null; 
-   var $pc60_bloqueado = 'f'; 
-   var $pc60_hora = null; 
+class cl_pcforne {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $pc60_numcgm = 0;
+   var $pc60_dtlanc_dia = null;
+   var $pc60_dtlanc_mes = null;
+   var $pc60_dtlanc_ano = null;
+   var $pc60_dtlanc = null;
+   var $pc60_obs = null;
+   var $pc60_bloqueado = 'f';
+   var $pc60_hora = null;
    var $pc60_usuario = 0;
    var $fisica_juridica = null;
-   var $pc60_objsocial = null; 
-   var $pc60_orgaoreg = 0; 
-   var $pc60_dtreg_dia = null;     
-   var $pc60_dtreg_mes = null; 
-   var $pc60_dtreg_ano = null; 
-   var $pc60_dtreg = null; 
-   var $pc60_cnpjcpf = 0; 
-   var $pc60_dtreg_cvm_dia = null; 
-   var $pc60_dtreg_cvm_mes = null; 
-   var $pc60_dtreg_cvm_ano = null; 
-   var $pc60_dtreg_cvm = null; 
-   var $pc60_numerocvm = null; 
-   var $pc60_inscriestadual = null; 
-   var $pc60_uf = null; 
+   var $pc60_objsocial = null;
+   var $pc60_orgaoreg = 0;
+   var $pc60_dtreg_dia = null;
+   var $pc60_dtreg_mes = null;
+   var $pc60_dtreg_ano = null;
+   var $pc60_dtreg = null;
+   var $pc60_cnpjcpf = 0;
+   var $pc60_dtreg_cvm_dia = null;
+   var $pc60_dtreg_cvm_mes = null;
+   var $pc60_dtreg_cvm_ano = null;
+   var $pc60_dtreg_cvm = null;
+   var $pc60_numerocvm = null;
+   var $pc60_inscriestadual = null;
+   var $pc60_uf = null;
    var $pc60_numeroregistro = null;
 
-   // cria propriedade com as variaveis do arquivo 
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 pc60_numcgm = int4 = Fornecedor 
-                 pc60_dtlanc = date = Data Lançamento 
-                 pc60_obs = text = Observação 
-                 pc60_bloqueado = bool = Bloqueado 
-                 pc60_hora = char(5) = Hora 
-                 pc60_usuario = int4 = Cod. Usuário 
-                 pc60_objsocial = varchar(100) = Objeto Social 
-                 pc60_orgaoreg = int8 = Órgão Registro 
-                 pc60_dtreg = date = Data do Registro 
-                 pc60_cnpjcpf = int8 = CNPJ/CPF 
-                 pc60_dtreg_cvm = date = Data do Registro 
-                 pc60_numerocvm = varchar(20) = Número CVM 
-                 pc60_inscriestadual = varchar(50) = Inscrição Estadual 
+                 pc60_numcgm = int4 = Fornecedor
+                 pc60_dtlanc = date = Data Lançamento
+                 pc60_obs = text = Observação
+                 pc60_bloqueado = bool = Bloqueado
+                 pc60_hora = char(5) = Hora
+                 pc60_usuario = int4 = Cod. Usuário
+                 pc60_objsocial = varchar(100) = Objeto Social
+                 pc60_orgaoreg = int8 = Órgão Registro
+                 pc60_dtreg = date = Data do Registro
+                 pc60_cnpjcpf = int8 = CNPJ/CPF
+                 pc60_dtreg_cvm = date = Data do Registro
+                 pc60_numerocvm = varchar(20) = Número CVM
+                 pc60_inscriestadual = varchar(50) = Inscrição Estadual
                  pc60_uf = varchar(2) = UF
                  pc60_numeroregistro = varchar(20) = Número Registro
                  ";
-   //funcao construtor da classe 
-   function cl_pcforne() { 
+   //funcao construtor da classe
+   function cl_pcforne() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("pcforne"); 
+     $this->rotulo = new rotulo("pcforne");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -145,10 +145,10 @@ class cl_pcforne {
      }
    }
    // funcao para inclusao
-   function incluir ($pc60_numcgm){ 
+   function incluir ($pc60_numcgm){
       $this->atualizacampos();
       $this->verifica_fisica_juridica($pc60_numcgm);
-     if($this->pc60_dtlanc == null ){ 
+     if($this->pc60_dtlanc == null ){
        $this->erro_sql = " Campo Data Lançamento nao Informado.";
        $this->erro_campo = "pc60_dtlanc_dia";
        $this->erro_banco = "";
@@ -157,7 +157,7 @@ class cl_pcforne {
        $this->erro_status = "0";
        return false;
      }
-     if($this->pc60_bloqueado == null ){ 
+     if($this->pc60_bloqueado == null ){
        $this->erro_sql = " Campo Bloqueado nao Informado.";
        $this->erro_campo = "pc60_bloqueado";
        $this->erro_banco = "";
@@ -166,7 +166,7 @@ class cl_pcforne {
        $this->erro_status = "0";
        return false;
      }
-     if($this->pc60_hora == null ){ 
+     if($this->pc60_hora == null ){
        $this->erro_sql = " Campo Hora nao Informado.";
        $this->erro_campo = "pc60_hora";
        $this->erro_banco = "";
@@ -175,7 +175,7 @@ class cl_pcforne {
        $this->erro_status = "0";
        return false;
      }
-     if($this->pc60_usuario == null ){ 
+     if($this->pc60_usuario == null ){
        $this->erro_sql = " Campo Cod. Usuário nao Informado.";
        $this->erro_campo = "pc60_usuario";
        $this->erro_banco = "";
@@ -184,7 +184,7 @@ class cl_pcforne {
        $this->erro_status = "0";
        return false;
      }
-     if($this->pc60_obs == null && $this->fisica_juridica == 'j'){ 
+     if($this->pc60_obs == null && $this->fisica_juridica == 'j'){
         $this->erro_sql = " Campo Objeto Social nao Informado.";
         $this->erro_campo = "pc60_obs";
         $this->erro_banco = "";
@@ -210,7 +210,7 @@ class cl_pcforne {
         $this->erro_status = "0";
         return false;
       }
-      if($this->pc60_dtreg == null && $this->fisica_juridica == 'j'){ 
+      if($this->pc60_dtreg == null && $this->fisica_juridica == 'j'){
         $this->erro_sql = " Campo Data do Registro nao Informado.";
         $this->erro_campo = "pc60_dtreg";
         $this->erro_banco = "";
@@ -219,7 +219,7 @@ class cl_pcforne {
         $this->erro_status = "0";
         return false;
       }
-      if($this->pc60_cnpjcpf == null && $this->fisica_juridica == 'j'){ 
+      if($this->pc60_cnpjcpf == null && $this->fisica_juridica == 'j'){
         $this->erro_sql = " Campo CNPJ/CPF nao Informado.";
         $this->erro_campo = "pc60_cnpjcpf";
         $this->erro_banco = "";
@@ -250,7 +250,7 @@ class cl_pcforne {
         $this->erro_status = "0";
         return false;
       }*/
-      /*if($this->pc60_inscriestadual == null && $this->fisica_juridica == 'j'){ 
+      /*if($this->pc60_inscriestadual == null && $this->fisica_juridica == 'j'){
         $this->erro_sql = " Campo Inscrição Estadual nao Informado.";
         $this->erro_campo = "pc60_inscriestadual";
         $this->erro_banco = "";
@@ -259,7 +259,7 @@ class cl_pcforne {
         $this->erro_status = "0";
         return false;
       }*/
-      if($this->pc60_uf == null && $this->fisica_juridica == 'j'){ 
+      if($this->pc60_uf == null && $this->fisica_juridica == 'j'){
         $this->erro_sql = " Campo UF nao Informado.";
         $this->erro_campo = "pc60_uf";
         $this->erro_banco = "";
@@ -278,8 +278,8 @@ class cl_pcforne {
         return false;
       }
 
-       $this->pc60_numcgm = $pc60_numcgm; 
-     if(($this->pc60_numcgm == null) || ($this->pc60_numcgm == "") ){ 
+       $this->pc60_numcgm = $pc60_numcgm;
+     if(($this->pc60_numcgm == null) || ($this->pc60_numcgm == "") ){
        $this->erro_sql = " Campo pc60_numcgm nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -288,41 +288,41 @@ class cl_pcforne {
        return false;
      }
      $sql = "insert into pcforne(
-                                       pc60_numcgm 
-                                      ,pc60_dtlanc 
-                                      ,pc60_obs 
-                                      ,pc60_bloqueado 
-                                      ,pc60_hora 
-                                      ,pc60_usuario 
-                                      ,pc60_objsocial 
-                                      ,pc60_orgaoreg 
-                                      ,pc60_dtreg 
-                                      ,pc60_cnpjcpf 
-                                      ,pc60_dtreg_cvm 
-                                      ,pc60_numerocvm 
-                                      ,pc60_inscriestadual 
+                                       pc60_numcgm
+                                      ,pc60_dtlanc
+                                      ,pc60_obs
+                                      ,pc60_bloqueado
+                                      ,pc60_hora
+                                      ,pc60_usuario
+                                      ,pc60_objsocial
+                                      ,pc60_orgaoreg
+                                      ,pc60_dtreg
+                                      ,pc60_cnpjcpf
+                                      ,pc60_dtreg_cvm
+                                      ,pc60_numerocvm
+                                      ,pc60_inscriestadual
                                       ,pc60_uf
                                       ,pc60_numeroregistro
                        )
                 values (
                                 $this->pc60_numcgm
-                               ,".($this->pc60_dtlanc == "null" || $this->pc60_dtlanc == ""?"null":"'".$this->pc60_dtlanc."'")." 
-                               ,'$this->pc60_obs' 
-                               ,'$this->pc60_bloqueado' 
-                               ,'$this->pc60_hora' 
+                               ,".($this->pc60_dtlanc == "null" || $this->pc60_dtlanc == ""?"null":"'".$this->pc60_dtlanc."'")."
+                               ,'$this->pc60_obs'
+                               ,'$this->pc60_bloqueado'
+                               ,'$this->pc60_hora'
                                ,$this->pc60_usuario
-                               ,'$this->pc60_objsocial' 
-                               ,$this->pc60_orgaoreg 
-                               ,".($this->pc60_dtreg == "null" || $this->pc60_dtreg == ""?"null":"'".$this->pc60_dtreg."'")." 
-                               ,$this->pc60_cnpjcpf 
-                               ,".($this->pc60_dtreg_cvm == "null" || $this->pc60_dtreg_cvm == ""?"null":"'".$this->pc60_dtreg_cvm."'")." 
-                               ,'$this->pc60_numerocvm' 
-                               ,'$this->pc60_inscriestadual' 
+                               ,'$this->pc60_objsocial'
+                               ,$this->pc60_orgaoreg
+                               ,".($this->pc60_dtreg == "null" || $this->pc60_dtreg == ""?"null":"'".$this->pc60_dtreg."'")."
+                               ,$this->pc60_cnpjcpf
+                               ,".($this->pc60_dtreg_cvm == "null" || $this->pc60_dtreg_cvm == ""?"null":"'".$this->pc60_dtreg_cvm."'")."
+                               ,'$this->pc60_numerocvm'
+                               ,'$this->pc60_inscriestadual'
                                ,'$this->pc60_uf'
-                               ,'$this->pc60_numeroregistro' 
+                               ,'$this->pc60_numeroregistro'
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Fornecedores ($this->pc60_numcgm) nao Incluído. Inclusao Abortada.";
@@ -359,17 +359,17 @@ class cl_pcforne {
        $resac = db_query("insert into db_acount values($acount,959,7811,'','".AddSlashes(pg_result($resaco,0,'pc60_usuario'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($pc60_numcgm=null) { 
+   function alterar ($pc60_numcgm=null) {
       $this->atualizacampos();
       $this->verifica_fisica_juridica($pc60_numcgm);
      $sql = " update pcforne set ";
      $virgula = "";
-     if(trim($this->pc60_numcgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numcgm"])){ 
+     if(trim($this->pc60_numcgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numcgm"])){
        $sql  .= $virgula." pc60_numcgm = $this->pc60_numcgm ";
        $virgula = ",";
-       if(trim($this->pc60_numcgm) == null ){ 
+       if(trim($this->pc60_numcgm) == null ){
          $this->erro_sql = " Campo Fornecedor nao Informado.";
          $this->erro_campo = "pc60_numcgm";
          $this->erro_banco = "";
@@ -379,10 +379,10 @@ class cl_pcforne {
          return false;
        }
      }
-     if(trim($this->pc60_dtlanc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtlanc_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc60_dtlanc_dia"] !="") ){ 
+     if(trim($this->pc60_dtlanc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtlanc_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc60_dtlanc_dia"] !="") ){
        $sql  .= $virgula." pc60_dtlanc = '$this->pc60_dtlanc' ";
        $virgula = ",";
-       if(trim($this->pc60_dtlanc) == null ){ 
+       if(trim($this->pc60_dtlanc) == null ){
          $this->erro_sql = " Campo Data Lançamento nao Informado.";
          $this->erro_campo = "pc60_dtlanc_dia";
          $this->erro_banco = "";
@@ -391,11 +391,11 @@ class cl_pcforne {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtlanc_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtlanc_dia"])){
          $sql  .= $virgula." pc60_dtlanc = null ";
          $virgula = ",";
-         if(trim($this->pc60_dtlanc) == null ){ 
+         if(trim($this->pc60_dtlanc) == null ){
            $this->erro_sql = " Campo Data Lançamento nao Informado.";
            $this->erro_campo = "pc60_dtlanc_dia";
            $this->erro_banco = "";
@@ -419,10 +419,10 @@ class cl_pcforne {
              return false;
          }
      }
-     if(trim($this->pc60_bloqueado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_bloqueado"])){ 
+     if(trim($this->pc60_bloqueado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_bloqueado"])){
        $sql  .= $virgula." pc60_bloqueado = '$this->pc60_bloqueado' ";
        $virgula = ",";
-       if(trim($this->pc60_bloqueado) == null ){ 
+       if(trim($this->pc60_bloqueado) == null ){
          $this->erro_sql = " Campo Bloqueado nao Informado.";
          $this->erro_campo = "pc60_bloqueado";
          $this->erro_banco = "";
@@ -432,10 +432,10 @@ class cl_pcforne {
          return false;
        }
      }
-     if(trim($this->pc60_hora)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_hora"])){ 
+     if(trim($this->pc60_hora)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_hora"])){
        $sql  .= $virgula." pc60_hora = '$this->pc60_hora' ";
        $virgula = ",";
-       if(trim($this->pc60_hora) == null ){ 
+       if(trim($this->pc60_hora) == null ){
          $this->erro_sql = " Campo Hora nao Informado.";
          $this->erro_campo = "pc60_hora";
          $this->erro_banco = "";
@@ -445,10 +445,10 @@ class cl_pcforne {
          return false;
        }
      }
-     if(trim($this->pc60_usuario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_usuario"])){ 
+     if(trim($this->pc60_usuario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_usuario"])){
        $sql  .= $virgula." pc60_usuario = $this->pc60_usuario ";
        $virgula = ",";
-       if(trim($this->pc60_usuario) == null ){ 
+       if(trim($this->pc60_usuario) == null ){
          $this->erro_sql = " Campo Cod. Usuário nao Informado.";
          $this->erro_campo = "pc60_usuario";
          $this->erro_banco = "";
@@ -461,7 +461,7 @@ class cl_pcforne {
      if(trim($this->pc60_objsocial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_objsocial"])){
         $sql  .= $virgula." pc60_objsocial = '$this->pc60_objsocial' ";
         $virgula = ",";
-        if(trim($this->pc60_objsocial) == null ){ 
+        if(trim($this->pc60_objsocial) == null ){
           $this->erro_sql = " Campo Objeto Social nao Informado.";
           $this->erro_campo = "pc60_objsocial";
           $this->erro_banco = "";
@@ -474,7 +474,7 @@ class cl_pcforne {
       if(trim($this->pc60_orgaoreg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_orgaoreg"])){
         $sql  .= $virgula." pc60_orgaoreg = $this->pc60_orgaoreg ";
         $virgula = ",";
-      if(trim($this->pc60_orgaoreg) == null && $this->fisica_juridica == 'j'){ 
+      if(trim($this->pc60_orgaoreg) == null && $this->fisica_juridica == 'j'){
           $this->erro_sql = " Campo Órgão Registro nao Informado.";
           $this->erro_campo = "pc60_orgaoreg";
           $this->erro_banco = "";
@@ -484,11 +484,11 @@ class cl_pcforne {
           return false;
         }
       }
-      
-    if(trim($this->pc60_dtreg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_dia"] !="") ){ 
+
+    if(trim($this->pc60_dtreg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_dia"] !="") ){
         $sql  .= $virgula." pc60_dtreg = '$this->pc60_dtreg' ";
         $virgula = ",";
-        if(trim($this->pc60_dtreg) == null && $this->fisica_juridica == 'j'){ 
+        if(trim($this->pc60_dtreg) == null && $this->fisica_juridica == 'j'){
           $this->erro_sql = " Campo Data do Registro nao Informado.";
           $this->erro_campo = "pc60_dtreg_dia";
           $this->erro_banco = "";
@@ -497,11 +497,11 @@ class cl_pcforne {
           $this->erro_status = "0";
           return false;
         }
-      }     else{ 
-        if(isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_dia"])){ 
+      }     else{
+        if(isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_dia"])){
           $sql  .= $virgula." pc60_dtreg = null ";
           $virgula = ",";
-          if(trim($this->pc60_dtreg) == null && $this->fisica_juridica == 'j'){ 
+          if(trim($this->pc60_dtreg) == null && $this->fisica_juridica == 'j'){
             $this->erro_sql = " Campo Data do Registro nao Informado.";
             $this->erro_campo = "pc60_dtreg_dia";
             $this->erro_banco = "";
@@ -512,11 +512,11 @@ class cl_pcforne {
           }
         }
       }
-      
-      if(trim($this->pc60_cnpjcpf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_cnpjcpf"])){ 
+
+      if(trim($this->pc60_cnpjcpf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_cnpjcpf"])){
         $sql  .= $virgula." pc60_cnpjcpf = $this->pc60_cnpjcpf ";
         $virgula = ",";
-      if(trim($this->pc60_cnpjcpf) == null && $this->fisica_juridica == 'j'){ 
+      if(trim($this->pc60_cnpjcpf) == null && $this->fisica_juridica == 'j'){
           $this->erro_sql = " Campo CNPJ/CPF nao Informado.";
           $this->erro_campo = "pc60_cnpjcpf";
           $this->erro_banco = "";
@@ -526,8 +526,8 @@ class cl_pcforne {
           return false;
         }
       }
-      
-    if(trim($this->pc60_dtreg_cvm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"] !="") ){ 
+
+    if(trim($this->pc60_dtreg_cvm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["pc60_dtreg_cvm_dia"] !="") ){
         $sql  .= $virgula." pc60_dtreg_cvm = '$this->pc60_dtreg_cvm' ";
         $virgula = ",";
 
@@ -536,8 +536,8 @@ class cl_pcforne {
           $virgula = ",";
 
       }
-      
-      if(trim($this->pc60_numerocvm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numerocvm"])){ 
+
+      if(trim($this->pc60_numerocvm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numerocvm"])){
         $sql  .= $virgula." pc60_numerocvm = '$this->pc60_numerocvm' ";
         $virgula = ",";
 
@@ -545,10 +545,10 @@ class cl_pcforne {
           $sql  .= $virgula." pc60_numerocvm = null ";
           $virgula = ",";
       }
-      if(trim($this->pc60_inscriestadual)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_inscriestadual"])){ 
+      if(trim($this->pc60_inscriestadual)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_inscriestadual"])){
         $sql  .= $virgula." pc60_inscriestadual = '$this->pc60_inscriestadual' ";
         $virgula = ",";
-        /*if(trim($this->pc60_inscriestadual) == null && $this->fisica_juridica == 'j'){ 
+        /*if(trim($this->pc60_inscriestadual) == null && $this->fisica_juridica == 'j'){
           $this->erro_sql = " Campo Inscrição Estadual nao Informado.";
           $this->erro_campo = "pc60_inscriestadual";
           $this->erro_banco = "";
@@ -558,10 +558,10 @@ class cl_pcforne {
           return false;
         }*/
       }
-      if(trim($this->pc60_uf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_uf"])){ 
+      if(trim($this->pc60_uf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_uf"])){
         $sql  .= $virgula." pc60_uf = '$this->pc60_uf' ";
         $virgula = ",";
-      if(trim($this->pc60_uf) == null && $this->fisica_juridica == 'j'){ 
+      if(trim($this->pc60_uf) == null && $this->fisica_juridica == 'j'){
           $this->erro_sql = " Campo UF nao Informado.";
           $this->erro_campo = "pc60_uf";
           $this->erro_banco = "";
@@ -571,8 +571,8 @@ class cl_pcforne {
           return false;
         }
       }
-      
-    if(trim($this->pc60_numeroregistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numeroregistro"])){ 
+
+    if(trim($this->pc60_numeroregistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc60_numeroregistro"])){
         $sql  .= $virgula." pc60_numeroregistro = '$this->pc60_numeroregistro' ";
         $virgula = ",";
       if((trim($this->pc60_numeroregistro) == null || $this->pc60_numeroregistro == 0) && $this->fisica_juridica == 'j' && $this->pc60_orgaoreg != 4){
@@ -611,7 +611,7 @@ class cl_pcforne {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Fornecedores nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->pc60_numcgm;
@@ -639,14 +639,14 @@ class cl_pcforne {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($pc60_numcgm=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($pc60_numcgm=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($pc60_numcgm));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -677,7 +677,7 @@ class cl_pcforne {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Fornecedores nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$pc60_numcgm;
@@ -705,11 +705,11 @@ class cl_pcforne {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -731,7 +731,7 @@ class cl_pcforne {
       }
      return $result;
    }
-   function sql_query ( $pc60_numcgm=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query ( $pc60_numcgm=null,$campos="*",$ordem=null,$dbwhere="", $lRepresentanteLegal = false){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -746,11 +746,14 @@ class cl_pcforne {
      $sql .= " from pcforne ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = pcforne.pc60_numcgm";
      $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcforne.pc60_usuario";
+      if ($lRepresentanteLegal) {
+        $sql .= "      inner join pcfornereprlegal on pcfornereprlegal.pc81_cgmforn = cgm.z01_numcgm";
+      }
      $sql2 = "";
      if($dbwhere==""){
        if($pc60_numcgm!=null ){
-         $sql2 .= " where pcforne.pc60_numcgm = $pc60_numcgm "; 
-       } 
+         $sql2 .= " where pcforne.pc60_numcgm = $pc60_numcgm ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -766,7 +769,7 @@ class cl_pcforne {
      }
      return $sql;
   }
-   function sql_query_conta ( $pc60_numcgm=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_conta ( $pc60_numcgm=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -784,8 +787,8 @@ class cl_pcforne {
      $sql2 = "";
      if($dbwhere==""){
        if($pc60_numcgm!=null ){
-         $sql2 .= " where pcforne.pc60_numcgm = $pc60_numcgm "; 
-       } 
+         $sql2 .= " where pcforne.pc60_numcgm = $pc60_numcgm ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -801,7 +804,7 @@ class cl_pcforne {
      }
      return $sql;
   }
-   function sql_query_file ( $pc60_numcgm=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_file ( $pc60_numcgm=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -817,8 +820,8 @@ class cl_pcforne {
      $sql2 = "";
      if($dbwhere==""){
        if($pc60_numcgm!=null ){
-         $sql2 .= " where pcforne.pc60_numcgm = $pc60_numcgm "; 
-       } 
+         $sql2 .= " where pcforne.pc60_numcgm = $pc60_numcgm ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -841,7 +844,7 @@ class cl_pcforne {
        $this->fisica_juridica = 'f';
      } else {
        $this->fisica_juridica = 'j';
-     } 
+     }
    }
 }
 ?>

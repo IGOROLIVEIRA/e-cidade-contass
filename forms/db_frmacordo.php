@@ -1146,23 +1146,30 @@ db_app::load("dbtextFieldData.widget.js");
 
         if (mostra == true) {
 
-            js_OpenJanelaIframe('top.corpo.iframe_acordo',
-                'db_iframe_contratado',
-                'func_nome.php?funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm',
-                'Pesquisar CGM',
-                true,
-                '0');
+          js_OpenJanelaIframe(
+            'top.corpo.iframe_acordo',
+            'db_iframe_contratado',
+            'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
+            'Pesquisa',
+            true,
+            '0',
+            '1'
+          );
+
         } else {
 
             if ($('ac16_contratado').value != '') {
 
-                js_OpenJanelaIframe('top.corpo.iframe_acordo',
-                    'db_iframe_acordogrupo',
-                    'func_nome.php?pesquisa_chave=' + $F('ac16_contratado') +
-                    '&funcao_js=parent.js_mostracontratado',
-                    'Pesquisa',
-                    false,
-                    '0');
+              js_OpenJanelaIframe(
+                'top.corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
+                'Pesquisa',
+                false,
+                '0',
+                '1'
+              );
+
             } else {
                 $('nomecontratado').value = '';
             }
