@@ -132,7 +132,7 @@ $sql = " select c60_codsis, k12_conta, k12_receit, tabrec.k02_tipo, tabrec.k02_d
       	      inner join conplanoreduz on c62_reduz = c61_reduz and c61_anousu = c62_anousu
 	            inner join conplano      on c60_codcon = c61_codcon and c60_anousu = c61_anousu
          where corrente.k12_instit = ".db_getsession("DB_instit")." and
-	             corrente.k12_data  = '".$datai."' $seleciona_conta $seleciona 
+	             corrente.k12_data  between '".$datai."' and '".$dataf."' $seleciona_conta $seleciona 
          order by k02_tipo";
 $resultorcamentaria = db_query($sql);
 
@@ -177,7 +177,7 @@ $sql_rec_ext = "
                                  left join saltes c   on c.k13_conta = corrente.k12_conta
                                  left join saltes d   on d.k13_conta = b.k12_conta
                      	      where corrente.k12_instit = ".db_getsession("DB_instit")." and 
-                            corrente.k12_data = '$datai' $seleciona_conta $seleciona
+                            corrente.k12_data between '".$datai."' and '".$dataf."' $seleciona_conta $seleciona
                            ) as xx
                      ) as xxx
                           inner join conplanoexe   e on entrou = e.c62_reduz
@@ -256,7 +256,7 @@ from
               left join saltes c   on c.k13_conta = corrente.k12_conta
               left join saltes d   on d.k13_conta = b.k12_conta
 	 where corrente.k12_instit = ".db_getsession("DB_instit")." and 
-	       corrente.k12_data = '$datai' $seleciona_conta $seleciona)	
+	       corrente.k12_data between '".$datai."' and '".$dataf."' $seleciona_conta $seleciona)	
 	as x) as xx) as xxx
           inner join conplanoexe   e on entrou = e.c62_reduz
                               and e.c62_anousu = ".db_getsession('DB_anousu')."
@@ -301,7 +301,7 @@ $sql="select k13_reduz,
 	             c60_estrut,
 		     c60_codsis,
 		     c63_conta,
-	             fc_saltessaldo(k13_reduz,'".$datai."','".$datai."',$ip,".db_getsession("DB_instit").")
+	             fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',$ip,".db_getsession("DB_instit").")
 	      from  saltes
 	             inner join conplanoexe   on k13_reduz = c62_reduz
 		                             and c62_anousu = ".db_getsession('DB_anousu')."
@@ -352,14 +352,14 @@ $sql = "
          where corrente.k12_instit = ".db_getsession("DB_instit")." and 
 	            c.k12_codigo is null and 
 	            e.e60_anousu = ".db_getsession("DB_anousu")." and 
-	            corrente.k12_data = '$datai' $seleciona_conta $seleciona
+	            corrente.k12_data between '".$datai."' and '".$dataf."' $seleciona_conta $seleciona
 	     group by c60_codsis,corrente.k12_conta,c60_descr,k12_estorn
 	     order by c60_codsis,corrente.k12_conta
        ";
 
 //echo $sql;       
 $resultdespesaorca = db_query($sql);
-//db_criatabela($resultdespesaorca);
+//db_criatabela($resultorcamentaria);
 
 $head2 = "BOLETIM DE CAIXA E DE BANCOS";
 //}
@@ -376,23 +376,23 @@ $cai_rec_orc = 0;
 $cai_rec_ext = 0;
 for ($i = 0; $i < $numlin; $i ++) {
 	db_fieldsmemory($resultorcamentaria, $i);
-	if ($c60_codsis == 5) {
+	//if ($c60_codsis == 5) {
 		if ($k02_tipo == 'O') {
 			$cai_rec_orc += $k12_valor;
 		}
 		elseif ($k02_tipo == 'E') {
 			$cai_rec_ext += $k12_valor;
 		}
-	}
+	//}
 }
 
 //RECEITAS EXTRAS RECEBIDAS NO CAIXA
 $numlin = pg_numrows($resultextraorcamentaria);
 for ($i = 0; $i < $numlin; $i ++) {
   db_fieldsmemory($resultextraorcamentaria, $i);
-	if ($sis_debito == 5) {
+	//if ($sis_debito == 5) {
      $cai_rec_ext += $k12_valor;
-	}
+	//}
 }
 
 //DESPESAS ORÇAMENTARIAS PAGAS NO CAIXA
@@ -403,9 +403,9 @@ $cai_ret_bco_orca = 0;
 $cai_dep_bco_orca = 0;
 for ($i = 0; $i < $numlin; $i ++) {
 	db_fieldsmemory($resultdespesaorca, $i);
-	if ($c60_codsis == 5) {
+	//if ($c60_codsis == 5) {
 		$cai_desp_orca += $valor + $estorno;
-	}
+	//}
 }
 
 //DESPESAS EXTRA-ORÇAMENTARIAS PAGAS NO CAIXA
@@ -415,18 +415,18 @@ $cai_ret_bco = 0;
 $cai_dep_bco = 0;
 for ($i = 0; $i < $numlin; $i ++) {
 	db_fieldsmemory($resultdespesaextra, $i);
-	if ($sis_credito == 5 || $sis_debito == 5) {
+	//if ($sis_credito == 5 || $sis_debito == 5) {
 		if ($tipo == 'desp') {
 			$cai_desp_ext += $k12_valor;
 		} else {
-			if ($sis_debito == 5) {
+			//if ($sis_debito == 5) {
 				$cai_ret_bco += $k12_valor;
-			} 
-			if ($sis_credito == 5 || $sis_debito != 5) {
+			//} 
+			//if ($sis_credito == 5 || $sis_debito != 5) {
 				$cai_dep_bco += $k12_valor;
-			}
+			//}
 		}
-	}
+	//}
 }
 
 $cai_tot_entradas = $cai_rec_orc + $cai_rec_ext + $cai_ret_bco;
@@ -439,12 +439,12 @@ $caixa_creditado = 0;
 $caixa_saldo_atual = 0;
 for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 	db_fieldsmemory($resultcontasmovimento, $i);
-	if ($c60_codsis == 5) {
+	//if ($c60_codsis == 5) {
 		$caixa_saldo_anterior += $anterior;
 		$caixa_debitado += $debitado;
 		$caixa_creditado += $creditado;
 		$caixa_saldo_atual += $atual;
-	}
+	//}
 }
 
 $saldo_seguinte = $cai_tot_entradas + $caixa_saldo_anterior - $cai_tot_saidas;
@@ -452,10 +452,10 @@ $alt = 5;
 $pdf->SetFont('Arial', 'B', 12);
 //$pdf->SetTextColor(0,100,255);
 $pdf->Setfillcolor(235);
-$pdf->Cell(190, 5, "BOLETIM DE CAIXA E DE BANCOS DE ".db_formatar($datai, 'd'), 0, 1, "C", 0);
+$pdf->Cell(190, 5, "BOLETIM DE CAIXA E DE BANCOS DE ".db_formatar($datai, 'd')." ATÉ ".db_formatar($dataf,'d'), 0, 1, "C", 0);
 $pdf->SetFont('Arial', 'B', 10);
 $pdf->ln(6);
-$pdf->Cell(192, 6, "MOVIMENTAÇÕES DO CAIXA", 1, 1, "L", 0);
+$pdf->Cell(192, 6, "MOVIMENTAÇÕES DOS CAIXA/BANCOS", 1, 1, "L", 0);
 $pdf->SetFont('Arial', 'B', 8);
 $pdf->cell(48, $alt, 'ENTRADAS (DÉBITO)', 1, 0, 'C', 0);
 $pdf->cell(48, $alt, 'VALORES', 1, 0, 'C', 0);
@@ -502,12 +502,12 @@ $caixa_creditado = 0;
 $caixa_saldo_atual = 0;
 for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 	db_fieldsmemory($resultcontasmovimento, $i);
-	if ($c60_codsis == 5) {
+	//if ($c60_codsis == 5) {
 		$caixa_saldo_anterior += $anterior;
 		$caixa_debitado += $debitado;
 		$caixa_creditado += $creditado;
 		$caixa_saldo_atual += $atual;
-	}
+	//}
 }
 $saldo_seguinte = $cai_tot_entradas + $caixa_saldo_anterior - $cai_tot_saidas;
 $alt = 5;

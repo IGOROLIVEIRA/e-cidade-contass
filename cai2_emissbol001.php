@@ -141,6 +141,9 @@ function js_relatorio2() {
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 	<center>
+    <br>
+    <fieldset style="width: 430px;">
+    <legend><b>Boletim por Período</b></legend>
         <form name="form1" method="post" action="">
           <table border="0" cellspacing="0" cellpadding="0">
 	    <tr>
@@ -168,14 +171,14 @@ function js_relatorio2() {
               <td height="25" nowrap><strong>Data Final:</strong></td>
               <td height="25" nowrap>&nbsp;&nbsp; 
               </td>
-            </tr>-->
+            </tr>
             <tr>
               <td align="right" nowrap title="<?=$Tk11_id?>"><?=$Lk11_id?></td>
               <td align="left"  nowrap>&nbsp; &nbsp;
                 <?
-				$clcfautent = new cl_cfautent;
-				$result = $clcfautent->sql_record($clcfautent->sql_query("","k11_id#k11_local","k11_local")); 
-				db_selectrecord("k11_id",$result,true,2,"","","","0");
+			//	$clcfautent = new cl_cfautent;
+			//	$result = $clcfautent->sql_record($clcfautent->sql_query("","k11_id#k11_local","k11_local")); 
+			//	db_selectrecord("k11_id",$result,true,2,"","","","0");
 				?>
               </td>
             </tr>
@@ -184,13 +187,13 @@ function js_relatorio2() {
               <td align="right" nowrap title="<?=$Tk13_conta?>"><?=$Lk13_conta?></td>
               <td align="left" nowrap>&nbsp; &nbsp;
                 <?
-				$clsaltes = new cl_saltes;
-				$result = $clsaltes->sql_record($clsaltes->sql_query("","saltes.k13_conta#k13_descr","k13_descr")); 
-				db_selectrecord("k13_conta",$result,true,2,"","","","0");
+				//$clsaltes = new cl_saltes;
+				//$result = $clsaltes->sql_record($clsaltes->sql_query("","saltes.k13_conta#k13_descr","k13_descr")); 
+				//db_selectrecord("k13_conta",$result,true,2,"","","","0");
 				?>
               </td>
-            </tr>
-
+            </tr>-->
+<tr></tr>
 		  <tr>
 		    <td align="right" nowrap title="<?=@$Tk29_contassemmovimento?>">
 		       <strong>Traz Contas sem Movimento:</strong>
@@ -204,7 +207,7 @@ function js_relatorio2() {
 		  </tr>
       
      <tr>
-        <td align="right"><strong>Imprimir em cinza as contas negativas:</strong> 
+        <td align="right"><strong>Contas negativas em cinza:</strong> 
 	 </td>
         <td>
 	  &nbsp; &nbsp;
@@ -223,11 +226,6 @@ function js_relatorio2() {
             <option value = 'S'>Sim</option>
         </td>
       </tr>
-     
-     
-      
-      
-      
       <tr>
         <td align="right"><strong>Quebrar páginas:</strong></td>
         <td> &nbsp; &nbsp;
@@ -240,10 +238,11 @@ function js_relatorio2() {
         <td align="right"><strong>Ordem:</strong></td>
         <td> &nbsp; &nbsp;
           <select name="ordem_conta">
-            <option value = '1'>Código Banco/Reduzido</option>
-            <option value = '2'>Nome Banco/Reduzido</option>
+            <option value = '1'>Cód Bco/Reduz</option>
+            <option value = '2'>Nome Bco/Reduz</option>
             <option value = '3'>Estrutural</option>
             <option value = '4'>Descrição</option>
+
         </td>
       </tr>
 
@@ -255,16 +254,17 @@ function js_relatorio2() {
             <tr> 
               <td colspan = "2" align="center" > 
 	          <input name="boletim" type="button" id="boletim" onClick="js_relatorio()" value="Boletim"> &nbsp; &nbsp;&nbsp; &nbsp;
-	          <input name="autentica" type="button" id="autentica" onClick="js_relatorio1('c')" value="Autenticação Completo">
+	          <!--<input name="autentica" type="button" id="autentica" onClick="js_relatorio1('c')" value="Autenticação Completo">
 	          <input name="autenticaresum" type="button" id="autenticaresum" onClick="js_relatorio1('r')" value="Autenticação Resumido">
-	          <input name="autent_conta" type="button" id="autent_conta" onClick="js_relatorio2()" value="Autenticação por Conta">
+	          <input name="autent_conta" type="button" id="autent_conta" onClick="js_relatorio2()" value="Autenticação por Conta">-->
 	      <br>
 	      <br>
-	      * Para emissão do boletim apenas a data inicial é utilizada. Mesmo preenchendo a data final, ela será desconsiderada.
+	       
 	      </td>
             </tr>
           </table>
         </form>
+      </fieldset>
       </center>
 	</td>
   </tr>
