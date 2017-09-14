@@ -78,7 +78,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text($xcol+150,$xlin+27,'Fax');
   $this->objpdf->Setfont('Arial','',8);
   $this->objpdf->text($xcol+122,$xlin+7,': '.$this->numcgm);
-  $this->objpdf->text($xcol+157,$xlin+7,' :  '.$this->cnpj);
+  $this->objpdf->text($xcol+157,$xlin+7,' :  '.(strlen($this->cnpj) == 11 ? db_formatar($this->cnpj, 'cpf') : db_formatar($this->cnpj, 'cnpj')));
   $this->objpdf->text($xcol+122,$xlin+11,': '.$this->nome);
   $this->objpdf->text($xcol+122,$xlin+15,': '.$this->ender.'  '.$this->compl);
   $this->objpdf->text($xcol+122,$xlin+19,': '.$this->munic.'-'.$this->ufFornecedor.'    CEP : '.$this->cep);
