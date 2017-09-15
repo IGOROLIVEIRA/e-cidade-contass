@@ -586,7 +586,7 @@ $wh
        ||COALESCE(lpad(row_number() OVER (PARTITION by rh01_regist order by rh01_regist),2,'0'),'')
        ||COALESCE(rpad(rh31_nome,80),'')
        ||
-       case when rh31_gparen = 'C' then COALESCE(lpad(1,2),'')
+       case when rh31_gparen = 'C' then COALESCE(lpad(1,2,0),'')
                   when rh31_gparen = 'F' and extract(year from age(rh31_dtnasc)) < 21 then COALESCE(lpad(3,2,0),'')
                   when rh31_gparen = 'F' and extract(year from age(rh31_dtnasc)) > 21 then COALESCE(lpad(15,2),'')
                   when rh31_gparen = 'P' then COALESCE(lpad(5,2,0),'')
