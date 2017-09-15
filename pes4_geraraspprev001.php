@@ -78,7 +78,7 @@ if ($_POST["r44_selec"] != ''){
 }
 if ($_POST["vinculo"] == "S"){
 
-    $arq = "SEGURADO.txt";
+    $arq = "tmp/SEGURADO.txt";
 
     $arquivo = fopen($arq,'w');
 
@@ -141,7 +141,7 @@ LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
 } else if ($_POST["vinculo"] == "C"){
 
 
-    $arq = "CARGO.txt";
+    $arq = "tmp/CARGO.txt";
 
 
     $arquivo = fopen($arq,'w');
@@ -212,7 +212,7 @@ LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
 
 }else if ($_POST["vinculo"] == "RB"){
 
-    $arq = "RUBRICABENEFICIO.txt";
+    $arq = "tmp/RUBRICABENEFICIO.txt";
     $arquivo = fopen($arq,'w');
 
     db_query("drop sequence layout_pen_seq");
@@ -272,7 +272,7 @@ SELECT distinct
 
 }else if ($_POST["vinculo"] == "FP"){ /// Tab.Escolaridade
 
-    $arq = "MMAAAA.txt";
+    $arq = "tmp/MMAAAA.txt";
     $arquivo = fopen($arq,'w');
 
     db_query("drop sequence layout_ina_seq");
@@ -387,7 +387,7 @@ LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
 
 }else if ($_POST["vinculo"] == "HS"){ /// Tab.Escolaridade
 
-    $arq = "HISTORICODESALARIO.txt";
+    $arq = "tmp/HISTORICODESALARIO.txt";
     $arquivo = fopen($arq,'w');
 
     db_query("drop sequence layout_ina_seq");
@@ -520,7 +520,7 @@ $wh
 
 }else if ($_POST["vinculo"] == "VO"){ /// Tab.Escolaridade
 
-    $arq = "VERBAORGANIZACAO.txt";
+    $arq = "tmp/VERBAORGANIZACAO.txt";
     $arquivo = fopen($arq,'w');
 
     db_query("drop sequence layout_ina_seq");
@@ -575,7 +575,7 @@ $wh
 
 }else if ($_POST["vinculo"] == "DP"){ /// Tab.Escolaridade
 
-  $arq = "DEPENDENTES.txt";
+  $arq = "tmp/DEPENDENTES.txt";
   $arquivo = fopen($arq,'w');
 
   $sql = "
