@@ -85,25 +85,13 @@ if ($_POST["vinculo"] == "S"){
     db_query("drop sequence layout_ati_seq");
     db_query("create sequence layout_ati_seq");
 
-    $sql = "SELECT lpad(3,3,0) ||lpad(COALESCE(rh01_regist::varchar,''),10,0) ||' ' ||rpad(COALESCE(z01_nome,''),80) ||lpad(' ',80) ||lpad(' ',8) ||lpad(' ',40) ||lpad(' ',50) ||lpad(' ',8) ||to_char(rh01_nasc,'YYYYmmdd') ||lpad(COALESCE(z01_naturalidade,''),20) ||COALESCE(z01_sexo,'') ||lpad(' ',1) ||lpad(' ',40) ||lpad(' ',30) ||rpad(z01_mae,30) ||to_char(rh01_admiss,'YYYYmmdd') || CASE
-WHEN h13_tpcont::integer = 12 THEN lpad(1,3,0)
-WHEN h13_tpcont::integer = 21 THEN lpad(1,3,0)
-WHEN h13_tpcont::integer = 19 THEN lpad(3,3,0)
-WHEN h13_tpcont::integer = 20 THEN lpad(2,3,0)
-END || lpad(' ',20) || lpad(COALESCE(rh02_funcao::varchar,''),3,0) || lpad(' ',20) || lpad(translate(COALESCE(rh02_salari,0.00)::varchar,'.',''),9,0) || lpad(translate(COALESCE(
-                                                                                                                                                                          (SELECT r14_valor
-                                                                                                                                                                           FROM gerfsal
-                                                                                                                                                                           WHERE gerfsal.r14_anousu = 2016
-                                                                                                                                                                             AND gerfsal.r14_mesusu = 04
-                                                                                                                                                                             AND gerfsal.r14_instit = 1
-                                                                                                                                                                             AND gerfsal.r14_rubric = 'R985'
-                                                                                                                                                                             AND gerfsal.r14_regist = rh02_regist))::varchar,'.',''),9,0) || lpad(' ',2) || lpad(' ',2) || lpad(COALESCE(db83_sequencial::varchar,''),3) || lpad(COALESCE(db83_bancoagencia::varchar,''),4) || lpad(COALESCE(db83_conta::varchar,''),9) || lpad(COALESCE(db83_dvconta::varchar,''),1) || CASE
-WHEN rh05_recis IS NOT NULL THEN 'D'
-ELSE '1'
-END || CASE
-           WHEN rh05_recis IS NOT NULL THEN to_char(rh05_recis,'YYYYmmdd')
-           ELSE '00000000'
-       END || lpad(' ',8) || lpad(' ',7) || lpad(COALESCE(z01_cgccpf,''),11) || lpad(' ',11) || lpad(' ',11) || lpad(' ',2) || lpad(' ',4) || lpad(' ',5) || lpad(' ',11) || lpad(' ',6) || lpad('*',1) AS todo
+    $sql = "SELECT lpad(5,3,0) ||lpad(COALESCE(rh01_regist::varchar,''),10,0) ||' ' ||rpad(COALESCE(z01_nome,''),80) ||lpad(' ',80) ||lpad(' ',8) ||lpad(' ',5) ||lpad(' ',40) ||lpad(' ',50) ||lpad(' ',8) ||to_char(rh01_nasc,'YYYYmmdd') ||lpad(COALESCE(z01_naturalidade,''),20) ||COALESCE(z01_sexo,'') ||lpad(' ',1) ||lpad(' ',40) ||lpad(' ',30) ||rpad(z01_mae,30) ||to_char(rh01_admiss,'YYYYmmdd') || CASE
+WHEN h13_tpcont::integer = 12 THEN lpad(1,4,0)
+WHEN h13_tpcont::integer = 21 THEN lpad(1,4,0)
+WHEN h13_tpcont::integer = 19 THEN lpad(3,4,0)
+WHEN h13_tpcont::integer = 20 THEN lpad(2,4,0)
+END || lpad(' ',20) || lpad(COALESCE(db83_sequencial::varchar,''),3) || lpad(COALESCE(db83_bancoagencia::varchar,''),4) || lpad(COALESCE(db83_conta::varchar,''),9) || lpad(COALESCE(db83_dvconta::varchar,''),1) ||
+lpad(' ',8) || lpad(' ',7) || lpad(COALESCE(z01_cgccpf,''),11) || lpad(' ',11) || lpad(' ',11) || lpad(' ',2) || lpad(' ',4) || lpad(' ',5) || lpad(' ',11) || lpad(' ',8) || lpad(' ',6) || lpad('*',1) AS todo
 
   FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
@@ -163,7 +151,7 @@ LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
 
     $sql = "
   SELECT rh01_regist AS matricula,
-       lpad(5,4,0)
+       lpad(5,3,0)
        $xseparador ||
        case when h13_tpcont::integer = 12 then lpad(1,1,0)
 	    when h13_tpcont::integer = 21 then lpad(1,1,0)
@@ -284,99 +272,107 @@ SELECT distinct
 
 }else if ($_POST["vinculo"] == "FP"){ /// Tab.Escolaridade
 
-    $arq = "FPMMAAAA.txt";
+    $arq = "MMAAAA.txt";
     $arquivo = fopen($arq,'w');
 
     db_query("drop sequence layout_ina_seq");
     db_query("create sequence layout_ina_seq");
 
     $sql = "
-  SELECT
-       'FP'||lpad($mes,2,0)||$ano
-       $xseparador ||lpad(rh02_mesusu,2,0)||rh02_anousu
-       $xseparador ||lpad(0,3,0)
-       $xseparador ||lpad(rh01_regist,10,0)
-       $xseparador ||' '
-       $xseparador || lpad(z01_cgccpf,11)
-       $xseparador || rpad(z01_nome,80)
-       $xseparador || lpad(translate( (coalesce(basegerfsal,0.00)+ coalesce(basegerfcom,0.00)+coalesce(basegerfsres,0.00)+coalesce(basegerfs13,0.00))::varchar,'.',''),11,'0')
-       $xseparador || lpad(translate( (coalesce(basegerfsaldesc,0.00) + coalesce(basegerfcomdesc,0.00) + coalesce(basegerfsresdesc,0.00) + coalesce(basegerfs13desc,0.00))::varchar,'.',''),9,0)
-       $xseparador || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0)
-       $xseparador || rpad(0,9,0)
-       $xseparador || rpad(0,9,0)
-       $xseparador || rpad(0,40,0)
-       $xseparador || rpad(0,3,0)
-       $xseparador || rpad(' ',26)
-       $xseparador || rpad('*',1)
+ SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $ano
+AND rh02_mesusu = $mes
+AND rh02_instit = ".db_getsession('DB_instit')."
+INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh02_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN
+    (SELECT r14_regist,
+            round(sum(CASE
+                          WHEN r14_pd = 1 THEN r14_valor
+                          ELSE 0
+                      END),2) AS provgerfsal,
+            round(sum(CASE
+                          WHEN r14_pd = 2 THEN r14_valor
+                          ELSE 0
+                      END),2) AS descogerfsal,
+            round(sum(CASE
+                          WHEN r14_rubric = 'R992' THEN r14_valor
+                          ELSE 0
+                      END),2) AS basegerfsal,
+            round(sum(CASE
+                          WHEN r14_rubric = 'R993' THEN r14_valor
+                          ELSE 0
+                      END),2) AS basegerfsaldesc
+     FROM gerfsal
+     WHERE r14_anousu = $ano
+         AND r14_mesusu = $mes
+         AND r14_instit = ".db_getsession('DB_instit')."
+         AND r14_rubric in ('R993','R992')
+     GROUP BY r14_regist) AS salgerfsal ON r14_regist = rh01_regist
 
-       as todo
 
-  from rhpessoal
-     inner join rhpessoalmov on rh02_regist = rh01_regist
-                            and rh02_anousu = $ano
-                                  and rh02_mesusu = $mes
-                            and rh02_instit = ".db_getsession('DB_instit')."
-     inner join cgm          on z01_numcgm  = rh01_numcgm
-     inner join rhlota       on r70_codigo  = rh02_lota
-                            and r70_instit  = rh02_instit
-     inner join rhregime     on rh30_codreg = rh02_codreg
-                            and rh30_instit = rh02_instit
-     inner join rhfuncao     on rh37_funcao  = rh02_funcao
-                            and rh37_instit  = rh02_instit
+INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
+AND rh138_instit = rh02_instit
+LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
+LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
 
-     INNER JOIN
-  (SELECT r14_regist,
-          round(sum(CASE WHEN r14_pd = 1 THEN r14_valor ELSE 0 END),2) AS provgerfsal,
-          round(sum(CASE WHEN r14_pd = 2 THEN r14_valor ELSE 0 END),2) AS descogerfsal,
-          round(sum(CASE WHEN r14_rubric = 'R992' THEN r14_valor ELSE 0 END),2) AS basegerfsal,
-          round(sum(CASE WHEN r14_rubric = 'R993' THEN r14_valor ELSE 0 END),2) AS basegerfsaldesc
-   FROM gerfsal
-   WHERE r14_anousu = $ano
-     AND r14_mesusu = $mes
-     AND r14_instit = ".db_getsession('DB_instit')."
-   GROUP BY r14_regist) AS salgerfsal ON r14_regist = rh01_regist
-LEFT JOIN
-  (SELECT r48_regist,
-          round(sum(CASE WHEN r48_pd = 1 THEN r48_valor ELSE 0 END),2) AS provgerfcom,
-          round(sum(CASE WHEN r48_pd = 2 THEN r48_valor ELSE 0 END),2) AS descogerfcom,
-          round(sum(CASE WHEN r48_rubric = 'R992' THEN r48_valor ELSE 0 END),2) AS basegerfcom,
-          round(sum(CASE WHEN r48_rubric = 'R993' THEN r48_valor ELSE 0 END),2) AS basegerfcomdesc
-   FROM gerfcom
-   WHERE r48_anousu = $ano
-     AND r48_mesusu = $mes
-     AND r48_instit = ".db_getsession('DB_instit')."
-   GROUP BY r48_regist) AS salgerfcom ON r48_regist = rh01_regist
-LEFT JOIN
-  (SELECT r20_regist,
-          round(sum(CASE WHEN r20_pd = 1 THEN r20_valor ELSE 0 END),2) AS provgerfsres,
-          round(sum(CASE WHEN r20_pd = 2 THEN r20_valor ELSE 0 END),2) AS descogerfsres,
-          round(sum(CASE WHEN r20_rubric = 'R992' THEN r20_valor ELSE 0 END),2) AS basegerfsres,
-          round(sum(CASE WHEN r20_rubric = 'R993' THEN r20_valor ELSE 0 END),2) AS basegerfsresdesc
-   FROM gerfres
-   WHERE r20_anousu = $ano
-     AND r20_mesusu = $mes
-     AND r20_instit = ".db_getsession('DB_instit')."
-   GROUP BY r20_regist) AS salgerfres ON r20_regist = rh01_regist
-LEFT JOIN
-  (SELECT r35_regist,
-          round(sum(CASE WHEN r35_pd = 1 THEN r35_valor ELSE 0 END),2) AS provgerfs13,
-          round(sum(CASE WHEN r35_pd = 2 THEN r35_valor ELSE 0 END),2) AS descogerfs13,
-          round(sum(CASE WHEN r35_rubric = 'R992' THEN r35_valor ELSE 0 END),2) AS basegerfs13,
-          round(sum(CASE WHEN r35_rubric = 'R993' THEN r35_valor ELSE 0 END),2) AS basegerfs13desc
-   FROM gerfs13
-   WHERE r35_anousu = $ano
-     AND r35_mesusu = $mes
-     AND r35_instit = ".db_getsession('DB_instit')."
-   GROUP BY r35_regist) AS salgerfs13 ON r35_regist = rh01_regist
+union
 
-     INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-    LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
-					and rh138_instit = rh02_instit
-    LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
-    LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
-  where 1 = 1
-    $wh
+
+SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'S' || rpad('*',1)  AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $ano
+AND rh02_mesusu = $mes
+AND rh02_instit = ".db_getsession('DB_instit')."
+INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh02_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN
+    (SELECT r35_regist,
+            round(sum(CASE
+                          WHEN r35_pd = 1 THEN r35_valor
+                          ELSE 0
+                      END),2) AS provgerfsal,
+            round(sum(CASE
+                          WHEN r35_pd = 2 THEN r35_valor
+                          ELSE 0
+                      END),2) AS descogerfsal,
+            round(sum(CASE
+                          WHEN r35_rubric = 'R986' THEN r35_valor
+                          ELSE 0
+                      END),2) AS basegerfsal,
+            round(sum(CASE
+                          WHEN r35_rubric = 'R993' THEN r35_valor
+                          ELSE 0
+                      END),2) AS basegerfsaldesc
+     FROM gerfs13
+     WHERE r35_anousu = $ano
+         AND r35_mesusu = $mes
+         AND r35_instit = ".db_getsession('DB_instit')."
+         AND r35_rubric in ('R993','R986')
+     GROUP BY r35_regist) AS salgerfsal ON r35_regist = rh01_regist
+
+
+INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
+AND rh138_instit = rh02_instit
+LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
+LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
 ";
+
     $result = db_query($sql);
     $num = pg_numrows($result);
     for($x = 0;$x < pg_numrows($result);$x++){
@@ -398,14 +394,14 @@ LEFT JOIN
     db_query("create sequence layout_ina_seq");
 
     $sql = "
-           SELECT lpad(5,4,0)
-       $xseparador ||lpad(rh01_regist,8,0)
-       $xseparador ||lpad(0,10,0)
+           SELECT lpad(5,3,0)
+       $xseparador ||lpad(rh01_regist,10,0)
+       $xseparador ||lpad(0,1,0)
        $xseparador ||lpad(replace(r14_rubric,'R','9'),4,0)
-       $xseparador ||lpad($mes,2,0)
        $xseparador ||lpad($ano,4,0)
        $xseparador ||lpad($mes,2,0)
        $xseparador ||lpad($ano,4,0)
+       $xseparador ||lpad($mes,2,0)
        $xseparador ||lpad(".date('Ymd').",8,0)
        $xseparador ||lpad(translate( (coalesce(r14_valor,0.00)+ coalesce(r48_valor,0.00)+coalesce(r20_valor,0.00))::varchar,'.',''),10,'0')
        $xseparador || 'N'
@@ -459,17 +455,18 @@ AND rh30_regime = 1
 AND r14_valor is not null
 $wh
 
-union
-       SELECT lpad(5,4,0)
-       $xseparador ||lpad(rh01_regist,8,0)
-       $xseparador ||lpad(0,10,0)
+union all
+
+      SELECT lpad(5,3,0)
+       $xseparador ||lpad(rh01_regist,10,0)
+       $xseparador ||lpad(0,1,0)
        $xseparador ||lpad(replace(r35_rubric,'R','9'),4,0)
-       $xseparador ||lpad($mes,2,0)
        $xseparador ||lpad($ano,4,0)
        $xseparador ||lpad($mes,2,0)
        $xseparador ||lpad($ano,4,0)
+       $xseparador ||lpad($mes,2,0)
        $xseparador ||lpad(".date('Ymd').",8,0)
-       $xseparador ||lpad(translate(coalesce(r35_valor,0.00)::varchar,'.',''),10,'0')
+       $xseparador ||lpad(translate( (coalesce(r35_valor,0.00))::varchar,'.',''),10,'0')
        $xseparador || 'S'
 
        AS todo
@@ -497,9 +494,9 @@ LEFT JOIN gerfs13 ON gerfs13.r35_anousu = rhpessoalmov.rh02_anousu
 
 
 INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-INNER JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
+LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
  and rh138_instit = rh02_instit
-INNER JOIN contabancaria ON rh138_contabancaria = db83_sequencial
+lEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
  where 1 = 1
 AND rh30_vinculo = 'A'
@@ -575,6 +572,45 @@ $wh
         fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
     }
     fclose($arquivo);
+
+}else if ($_POST["vinculo"] == "DP"){ /// Tab.Escolaridade
+
+  $arq = "DEPENDENTES.txt";
+  $arquivo = fopen($arq,'w');
+
+  $sql = "
+  select distinct x.todo from (
+    SELECT rh01_regist, COALESCE(lpad(5,3,0),'')
+       ||COALESCE(lpad(rh01_regist,10,0),'')
+       ||' '
+       ||COALESCE(lpad(row_number() OVER (PARTITION by rh01_regist),2,'0'),'')
+       ||COALESCE(rpad(rh31_nome,80),'')
+       ||
+       case when rh31_gparen = 'C' then COALESCE(lpad(1,2),'')
+       		when rh31_gparen = 'F' and extract(year from age(rh31_dtnasc)) < 21 then COALESCE(lpad(3,2,0),'')
+       		when rh31_gparen = 'F' and extract(year from age(rh31_dtnasc)) > 21 then COALESCE(lpad(15,2),'')
+       		when rh31_gparen = 'P' then COALESCE(lpad(5,2,0),'')
+       		when rh31_gparen = 'M' then COALESCE(lpad(5,2,0),'')
+       		when rh31_gparen = 'O' then COALESCE(lpad(0,2,0),'')
+       		end
+       ||COALESCE(to_char(rh31_dtnasc,'YYYYmmdd'),'')
+
+       AS todo
+FROM rhpessoal
+join rhdepend on rh31_regist = rh01_regist) as x
+    ";
+
+  $result = db_query($sql);
+  $num = pg_numrows($result);
+  for($x = 0;$x < pg_numrows($result);$x++){
+
+    db_atutermometro($x,$num,'termometro');
+    flush();
+    //$matric = pg_result($result,$x,'matricula');
+
+    fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
+  }
+  fclose($arquivo);
 
 }
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
