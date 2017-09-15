@@ -579,25 +579,25 @@ $wh
   $arquivo = fopen($arq,'w');
 
   $sql = "
-  select distinct x.todo from (
-    SELECT rh01_regist, COALESCE(lpad(5,3,0),'')
+  
+    SELECT COALESCE(lpad(5,3,0),'')
        ||COALESCE(lpad(rh01_regist,10,0),'')
        ||' '
-       ||COALESCE(lpad(row_number() OVER (PARTITION by rh01_regist),2,'0'),'')
+       ||COALESCE(lpad(row_number() OVER (PARTITION by rh01_regist order by rh01_regist),2,'0'),'')
        ||COALESCE(rpad(rh31_nome,80),'')
        ||
        case when rh31_gparen = 'C' then COALESCE(lpad(1,2),'')
-       		when rh31_gparen = 'F' and extract(year from age(rh31_dtnasc)) < 21 then COALESCE(lpad(3,2,0),'')
-       		when rh31_gparen = 'F' and extract(year from age(rh31_dtnasc)) > 21 then COALESCE(lpad(15,2),'')
-       		when rh31_gparen = 'P' then COALESCE(lpad(5,2,0),'')
-       		when rh31_gparen = 'M' then COALESCE(lpad(5,2,0),'')
-       		when rh31_gparen = 'O' then COALESCE(lpad(0,2,0),'')
-       		end
+                  when rh31_gparen = 'F' and extract(year from age(rh31_dtnasc)) < 21 then COALESCE(lpad(3,2,0),'')
+                  when rh31_gparen = 'F' and extract(year from age(rh31_dtnasc)) > 21 then COALESCE(lpad(15,2),'')
+                  when rh31_gparen = 'P' then COALESCE(lpad(5,2,0),'')
+                  when rh31_gparen = 'M' then COALESCE(lpad(5,2,0),'')
+                  when rh31_gparen = 'O' then COALESCE(lpad(0,2,0),'')
+                  else COALESCE(lpad(0,2,0),'')
+                  end
        ||COALESCE(to_char(rh31_dtnasc,'YYYYmmdd'),'')
-
        AS todo
 FROM rhpessoal
-join rhdepend on rh31_regist = rh01_regist) as x
+join rhdepend on rh31_regist = rh01_regist
     ";
 
   $result = db_query($sql);
