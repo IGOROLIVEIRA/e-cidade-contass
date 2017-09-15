@@ -597,7 +597,12 @@ $wh
        ||COALESCE(to_char(rh31_dtnasc,'YYYYmmdd'),'')
        AS todo
 FROM rhpessoal
+LEFT JOIN rhpessoalmov ON rhpessoalmov.rh02_regist = rhpessoal.rh01_regist
+AND rhpessoalmov.rh02_anousu = $anofolha
+AND rhpessoalmov.rh02_mesusu = $mesfolha
 join rhdepend on rh31_regist = rh01_regist
+LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
+where rh05_seqpes IS NULL
     ";
 
   $result = db_query($sql);
