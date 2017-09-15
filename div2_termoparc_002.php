@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -210,7 +210,7 @@ if (pg_numrows($result_reparc) > 0) {
 	$reparcelamento = true;
 
 	// select que tras os reparcelamentos corrigindo os valores com fc_calculaold
-	$sql  =	" select 1 as select,                                                                                     \n"; 
+	$sql  =	" select 1 as select,                                                                                     \n";
 	$sql .= "        debitos_old.v08_parcelorigem,                                                                    \n";
 	$sql .= "        debitos_old.k00_numpar  as v01_exerc,                                                            \n";
 	$sql .= "        debitos_old.k03_tipo,                                                                            \n";
@@ -225,7 +225,7 @@ if (pg_numrows($result_reparc) > 0) {
 	$sql .= "        debitos_old.v07_numpre,                                                                          \n";
 	$sql .= "      	 debitos_old.k00_numpre,                                                                          \n";
 	$sql .= " 	     debitos_old.k00_numpar,                                                                          \n";
-	$sql .= "        (select coalesce(k00_matric, 0)                                                                  \n"; 
+	$sql .= "        (select coalesce(k00_matric, 0)                                                                  \n";
 	$sql .= "           from arrematric                                                                               \n";
 	$sql .= "                inner join termo on v07_numpre = k00_numpre                                              \n";
 	$sql .= "                where v07_parcel = v08_parcelorigem                                                      \n";
@@ -324,7 +324,7 @@ if (pg_numrows($result_reparc) > 0) {
 	$sql .= "        case when b.j01_numcgm is not null then (select z01_nome from cgm where z01_numcgm = b.j01_numcgm) end as nomecontr,  \n";
 	$sql .= "        v03_descr                                                                                        \n";
 	$sql .= "   from termodiv                                                                                         \n";
-	$sql .= "        inner join termo       on v07_parcel            = parcel                                         \n"; 
+	$sql .= "        inner join termo       on v07_parcel            = parcel                                         \n";
 	$sql .= "                              and v07_instit            = ".db_getsession('DB_instit')."                 \n";
 	$sql .= "        inner join	divida	  	on v01_coddiv            = coddiv                                         \n";
 	$sql .= "                              and v01_instit            = ".db_getsession('DB_instit')."                 \n";
@@ -364,10 +364,10 @@ if (pg_numrows($result_reparc) > 0) {
 	$sql .= "        case when b.j01_numcgm is not null then (select z01_nome from cgm where z01_numcgm = b.j01_numcgm) end as nomecontr, \n";
 	$sql .= "        v03_descr                                                                                        \n";
 	$sql .= "   from termoini                                                                                         \n";
-	$sql .= "        inner join termo          on v07_parcel              = parcel                                    \n"; 
+	$sql .= "        inner join termo          on v07_parcel              = parcel                                    \n";
 	$sql .= "                                 and v07_instit              = ".db_getsession('DB_instit')."            \n";
 	$sql .= "        inner join inicialcert    on inicialcert.v51_inicial = termoini.inicial                          \n";
-	$sql .= "        inner join certid         on certid.v13_certid       = inicialcert.v51_certidao                  \n"; 
+	$sql .= "        inner join certid         on certid.v13_certid       = inicialcert.v51_certidao                  \n";
 	$sql .= "                                 and certid.v13_instit       = ".db_getsession('DB_instit')."            \n";
 	$sql .= "        inner join certdiv        on certdiv.v14_certid      = certid.v13_certid                         \n";
 	$sql .= "        inner join	divida	  	   on v01_coddiv              = v14_coddiv                                \n";
@@ -427,7 +427,7 @@ if (pg_numrows($result_reparc) > 0) {
 	$sql2 .= "	    		k00_numpar                \n";
 
   $sql = $sql2;
-  
+
 } else {
 
 	if ( pg_numrows($result) > 0 ) {
@@ -1065,7 +1065,7 @@ foreach ($parag as $chave ) {
 			$pdf->Cell(18,4,number_format($multa,2,",","."),1,0,"R",0);
 			$pdf->Cell(18,4,number_format($juros,2,",","."),1,0,"R",0);
 
-			$pdf->Cell(20,4,number_format($vlrcor+$multa+$juros,2,",","."),1,1,"R",0);
+			$pdf->Cell(20,4,number_format($valor+$vlrcor+$multa+$juros,2,",","."),1,1,"R",0);
 
 			$Tv01_vlrhis += $valor;
 			$Tv01_valor  += $vlrcor;
@@ -1073,7 +1073,7 @@ foreach ($parag as $chave ) {
 			$Tjuros      += $juros;
 			$Tdesconto   += $desconto;
 
-			$Total       += $vlrcor + $multa + $juros;
+			$Total       += $valor + $vlrcor + $multa + $juros;
 
 			if(array_key_exists($k00_descr,$arrTipo)){
 				$arrTipo[$k00_descr]['vlrhist']  += ( (float)$valor );
@@ -1081,14 +1081,14 @@ foreach ($parag as $chave ) {
 				$arrTipo[$k00_descr]['vlrmulta'] += ( (float)$multa);
 				$arrTipo[$k00_descr]['vlrjuros'] += ( (float)$juros);
 				$arrTipo[$k00_descr]['vlrdesc']  += ( (float)$desconto );
-				$arrTipo[$k00_descr]['vlrtotal'] += ( (float)$vlrcor  + (float)$multa + (float)$juros - (float)$desconto );
+				$arrTipo[$k00_descr]['vlrtotal'] += ( (float) $valor + (float)$vlrcor  + (float)$multa + (float)$juros - (float)$desconto );
 			}else{
 				$arrTipo[$k00_descr]['vlrhist']  = ( (float)$valor );
 				$arrTipo[$k00_descr]['vlrcor']   = ( (float)$vlrcor );
 				$arrTipo[$k00_descr]['vlrmulta'] = ( (float)$multa );
 				$arrTipo[$k00_descr]['vlrjuros'] = ( (float)$juros );
 				$arrTipo[$k00_descr]['vlrdesc']  = ( (float)$desconto );
-				$arrTipo[$k00_descr]['vlrtotal'] = ( (float)$vlrcor  + (float)$multa + (float)$juros - (float)$desconto );
+				$arrTipo[$k00_descr]['vlrtotal'] = ( (float) $valor + (float)$vlrcor  + (float)$multa + (float)$juros - (float)$desconto );
 			}
 			/*------------------------------------------------------*/
 		}
@@ -1107,7 +1107,7 @@ foreach ($parag as $chave ) {
 			$pdf->AddPage();
 		}
 	}elseif(strtoupper($chave->db02_descr) == "TABELA_TOTAL"){
-		 
+
 		$pdf->SetFont('Arial','B',9);
 
 		$sqlRegra = " select k40_descr as regra  ";
@@ -1160,8 +1160,8 @@ foreach ($parag as $chave ) {
 		if($pdf->GetY() > ( $pdf->h - 40 )){
 			$pdf->AddPage();
 		}
-		 
-		 
+
+
 	}elseif(strtoupper($chave->db02_descr) == "TABELA_PARCELA"){
 		// terceira tabela
 		$pdf->SetFont('Arial','B',7);
@@ -1171,7 +1171,7 @@ foreach ($parag as $chave ) {
 			$numpar = $numpar-1;
 		}
 		$pdf->SetFont('Arial','',7);
-		 
+
 		$pdf->Cell(50,4,'Vencimento entrada','LRTB',0,"L",0);
 		$pdf->Cell(45,4,db_formatar($vencent,'d'),'LRTB',1,"R",0);
 		$pdf->Cell(50,4,'Número do Parcelamento','LRB',0,"L",0);
@@ -1213,7 +1213,7 @@ foreach ($parag as $chave ) {
 			$linhasdesc = pg_num_rows($resultdesc);
 			if($linhasdesc > 0 and $cgc != "29131075000193"){
 				db_fieldsmemory($resultdesc,0);
-				 
+
 				if($desconto > 0){
 					//com desconto
 					$entradades    = round($entrada -    (($entrada * $desconto)/100),2);
@@ -1253,7 +1253,7 @@ foreach ($parag as $chave ) {
 					$pdf->Cell(45,4,db_formatar($vlrpar,'f'),1,1,"R",0);
 					$pdf->ln(10);
 					//tem q calcular o desconto para cada parcela
-					 
+
 				}
 			}
 		}else{
