@@ -244,7 +244,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                 </td>
                                                 <td>
                                                     <?
-                                                    db_input('ac16_contratado', 10, $Iac16_contratado, true, 'text', $db_opcao,
+                                                    db_input('ac16_contratado', 10, $Iac16_contratado, true, 'text', 3,
                                                         "onchange='js_pesquisaac16_contratado(false);'");
                                                     db_input('nomecontratado', 30, $Iz01_nome, true, 'text', 3);
                                                     ?>
