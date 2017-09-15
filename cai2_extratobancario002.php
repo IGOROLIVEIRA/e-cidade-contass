@@ -676,6 +676,7 @@ select caixa,
 	$sqltotal = $sqlempenho." union all ".$sqlanalitico.$sqlslip;
 	//die($sqltotal);
 	$resmovimentacao = db_query($sqltotal);
+	//db_criatabela($resmovimentacao);exit;
 	$quebra_data = '';
 	$saldo_dia_final   = $anterior;
 
@@ -686,8 +687,15 @@ select caixa,
 	//$lPrimeiroDaConta = true;
 	if (pg_numrows($resmovimentacao)>0){
 		for  ($i=0;$i < pg_numrows($resmovimentacao);$i++){
+			
 			db_fieldsmemory($resmovimentacao,$i);
 
+			//quando agrupar os pagamentos o sistema vai retirar as retenções do relatorio.
+            if($pagempenhos==2){
+				if (  $ordem > 0 and ($k105_corgrupotipo == 5 or $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2)  ) {
+					continue;
+				}	
+			}
 			if (isset($considerar_retencoes) && $considerar_retencoes == "n") {
 				if ( $ordem > 0 and ( $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2 ) ) {
 					continue;
@@ -838,13 +846,17 @@ select caixa,
 			$oMovimentacao->credor = $credor;
 
 			$oMovimentacao->historico = $historico;
-			// soma acumuladores diarios
-			$saldo_dia_debito  += $valor_debito;
-			$saldo_dia_credito += $valor_credito;
 
-			$quebra_data = $data;
+			if($valor_debito != 0 || $valor_credito != 0){
+			  // soma acumuladores diarios
+			  $saldo_dia_debito  += $valor_debito;
+			  $saldo_dia_credito += $valor_credito;
 
-			$aContas[$k13_reduz]->data[$iInd]->movimentacoes[] = $oMovimentacao;
+			  $quebra_data = $data;
+			  
+			  $aContas[$k13_reduz]->data[$iInd]->movimentacoes[] = $oMovimentacao;
+			}
+			
 
 		}
 	}
@@ -878,7 +890,7 @@ select caixa,
 }
 
 //echo "<pre>";
-//echo var_dump($aContas);
+//print_r($aContas);
 //echo "<pre>";
 //exit();
 
@@ -1154,7 +1166,7 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 
 /*
 echo "<pre>";
-echo var_dump($aContas);
+print_r($aContas);
 echo "</pre>";
 exit();
 */

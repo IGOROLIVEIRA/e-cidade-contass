@@ -161,7 +161,10 @@ function js_relatorio2() {
 			<tr>
 				<td align="right" nowrap title="<?="Agrupamentos das receitas"?>"><b>Agrupamento das receitas:</b></td>
 				<td align="left" nowrap><?
-				$x = array(1=>"Analítico",2=>"Pela conta de receita",3=>"Pelos códigos de empenho e receita");
+				$x = array(1=>"Analítico");
+				//autor: igor comentado para usar somente analitico,
+				//2=>"Pela conta de receita",3=>"Pelos códigos de empenho e receita"
+
 				db_select("agrupapor",$x,true,1);
 				?></td>
 			</tr>
@@ -175,7 +178,7 @@ function js_relatorio2() {
 			<tr>
 				<td align="right" nowrap title="<?="Pagamentos de empenhos"?>"><b>Pagamentos de empenhos:</b></td>
 				<td align="left" nowrap><?
-				$x = array(1=>"Detalhar",2=>"Agrupar");
+				$x = array(2=>"Agrupar",1=>"Detalhar");
 				db_select("pagempenhos",$x,true,1);
 				?></td>
 			</tr>
@@ -189,7 +192,7 @@ function js_relatorio2() {
 
 			<tr>
 				<td nowrap align=right><b>Totalizador diário:</b></td>
-				<td><? $matriz = array("s"=>"sim","n"=>"nao");             
+				<td><? $matriz = array("n"=>"nao","s"=>"sim");             
 				db_select("totalizador_diario", $matriz,true,1);
 				?></td>
 			</tr>
@@ -201,7 +204,7 @@ function js_relatorio2() {
 			</tr>
 			<tr>
              <td nowrap align=right><b>Tipo Impressão:</b></td>
-              <td><? $matriz = array("a"=>"Analítico","s"=>"Sintético");             
+              <td><? $matriz = array("s"=>"Sintético","a"=>"Analítico");             
                    db_select("imprime_analitico", $matriz,true,1); 
                    ?> 
               </td>
