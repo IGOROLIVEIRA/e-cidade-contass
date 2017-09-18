@@ -895,7 +895,7 @@ if (count($aParametrosEmpenho) > 0) {
           } else {
             aLinha[9]   = "";
           }
-          aLinha[10]   = "<span id='valor_com_desconto"+e81_codmov+"'>"+js_formatar( (e53_valor-e53_vlranu),"f")+"</span>";
+          aLinha[10]   = js_formatar( (e53_valor),"f");
           aLinha[11]   = "<span id='valoraut"+e81_codmov+"'>"+js_formatar(nValor, "f")+"</span>";
 
           if (lDisabled) {

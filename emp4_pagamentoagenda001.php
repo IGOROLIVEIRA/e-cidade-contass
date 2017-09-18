@@ -170,13 +170,7 @@ function js_init() {
                                     "left",
                                     "left"));
   gridNotas.setHeader(new Array("Mov.", "Cod. Cheque", "Empenho", "Recurso", "Ordem", "Conta Pagadora", "Nome",
-                                "data Pag",
-                                "Valor nota",
-                                "Retenção",
-                                "Pagar",
-                                "Histórico",
-                                "Cheque"
-                                )
+                                "Data Pgto", "Vlr Atual Nota", "Retenção", "Pagar", "Histórico", "Cheque")
                      );
   gridNotas.aHeaders[2].lDisplayed  = false;
   if (iForma != 2) {
@@ -237,7 +231,7 @@ function js_retornoGetNotas(oAjax) {
            if (e81_valor == 0) {
              nValor = valorretencao;
            } else {
-             nValor   =  (e81_valor - valorretencao - e53_vlranu);
+             nValor   =  (e81_valor - valorretencao);
            }
          } else {
            nValor = e91_valor;
