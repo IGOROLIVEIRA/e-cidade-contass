@@ -232,11 +232,18 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     }
     
    if ($ii > 9) {
-      $this->objpdf->setx(115);
-      $this->objpdf->cell(25,4,"Outras Retenções",0,1,"R");
-      $this->objpdf->sety(85);
+      $this->objpdf->setx($xcol+92);
+      $this->objpdf->Setfont('Arial','',7);
+      $this->objpdf->Row(array("",
+                            substr("OUTRAS RETENÇÕES",0,40),
+                            db_formatar($total_ret_outras,'f')),6,
+         false,
+         3);
+      /*$this->objpdf->cell(4,6,"",0,0,"R");
+      $this->objpdf->cell(25,6,"OUTRAS RETENÇÕES",0,0,"R");
+      //$this->objpdf->sety(85);
       $this->objpdf->setx(181);
-      $this->objpdf->cell(25,4,db_formatar($total_ret_outras,'f'),0,1,"R");
+      $this->objpdf->cell(25,6,db_formatar($total_ret_outras,'f'),0,1,"R");*/
    }
     
   }
