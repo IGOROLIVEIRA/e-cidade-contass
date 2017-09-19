@@ -68,7 +68,7 @@ db_app::load("dbcomboBox.widget.js");
 
 	<fieldset >
 	
-	<legend><strong>Excluir AutenticaÃ§Ãµes de SLIP</strong></legend>
+	<legend><strong>Excluir Autenticações de SLIP</strong></legend>
 	
 		<table border="0" align='left'>
 		
@@ -91,7 +91,7 @@ db_app::load("dbcomboBox.widget.js");
 	
 	
 	<div style="margin-top: 10px;">
-	  <input name="processar" type="button" id="processar" disabled="disabled" value="Excluir AutenticaÃ§Ã£o"  onclick="js_processar(1);">
+	  <input name="processar" type="button" id="processar" disabled="disabled" value="Excluir Autenticação"  onclick="js_processar(1);">
 	  <input name="autenticar" id='autenticar' type="button"  value='Autenticar Slip' onclick='location.href="emp4_manutencaoslips001.php"'>
 	</div>
 
@@ -126,12 +126,12 @@ function js_processar(iAcao) {
 	var iCodigoSlip   = $F('iSlip');
 	var sOperacao     = $F('processar');
     var sMsgConfirm   = "Procedimento a ser realizado: " + sOperacao  ;
-    sMsgConfirm  += ".\nConfirma  excluir autenticaÃ§Ã£o de SLIP?";
+    sMsgConfirm  += ".\nConfirma  excluir autenticação de SLIP?";
 
   	
   if (iCodigoSlip == '') {
 
-	  alert('Selecione um slip para excluir autenticaÃ§Ã£o.');
+	  alert('Selecione um slip para excluir autenticação.');
 	  return false;
 	}
 	
@@ -140,7 +140,7 @@ function js_processar(iAcao) {
 	}
 
 	var oParametros              = new Object();
-	var msgDiv                   = "Excluindo AutenticaÃ§Ã£o slip.<br> Aguarde ...";
+	var msgDiv                   = "Excluindo Autenticação slip.<br> Aguarde ...";
 	oParametros.exec             = 'exclurautenticacaoSlip';  
 	oParametros.iCodigoSlip      = iCodigoSlip; 
 	oParametros.iAcao            = iAcao;
