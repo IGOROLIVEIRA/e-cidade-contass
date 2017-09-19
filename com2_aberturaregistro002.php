@@ -155,7 +155,7 @@ for($contador=0;$contador<$numrows_solicita;$contador++) {
                                                                   '' as m61_abrev,
                                                                   '' as pc17_quant,
                                                                   pc01_codmater,
-                                                                  pc01_descrmater,
+                                                                  pc01_descrmater||'-'||pc01_complmater as pc01_descrmater,
                                                                   0 as pc13_valtot,
                                                                   0 as pc11_valtot,
                                                                   0 as m61_usaquant,
