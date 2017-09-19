@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -61,7 +61,7 @@ db_postmemory($HTTP_POST_VARS);
 <table style="margin-top: 10px;">
   <?
   if(!isset($tipo)){
-    $tipo = "l";
+    $tipo = "m";
   }
   if(!isset($filtro)){
     $filtro = "i";
@@ -80,23 +80,23 @@ db_postmemory($HTTP_POST_VARS);
   $geraform->usaorga = false;                      // PERMITIR SELEÇÃO DE ÓRGÃO
   $geraform->usaloca = true;                      // PERMITIR SELEÇÃO DE LOCAL DE TRABALHO
   $geraform->usarecu = false;                      // PERMITIR SELEÇÃO DE RECURSO
-	
-  
+
+
   $geraform->re1nome = "regisi";                  // NOME DO CAMPO DA MATRÍCULA INICIAL
   $geraform->re2nome = "regisf";                  // NOME DO CAMPO DA MATRÍCULA FINAL
   $geraform->re3nome = "selreg";                  // NOME DO CAMPO DE SELEÇÃO DE MATRÍCULAS
-  
+
   $geraform->lo1nome = "lotai";                  // NOME DO CAMPO DA LOTAÇÃO INICIAL
   $geraform->lo2nome = "lotaf";                  // NOME DO CAMPO DA LOTAÇÃO FINAL
   $geraform->lo3nome = "sellot";                  // NOME DO CAMPO DE SELEÇÃO DE LOTAÇÕES
 
   $geraform->or1nome = "orgaoi";                  // NOME DO CAMPO DO ÓRGÃO INICIAL
   $geraform->or2nome = "orgaof";                  // NOME DO CAMPO DO ÓRGÃO FINAL
-  $geraform->or3nome = "selorg";                  // NOME DO CAMPO DE SELEÇÃO DE ÓRGÃOS 
+  $geraform->or3nome = "selorg";                  // NOME DO CAMPO DE SELEÇÃO DE ÓRGÃOS
 
   $geraform->rc1nome = "recuri";                  // NOME DO CAMPO DO RECURSO INICIAL
   $geraform->rc2nome = "recurf";                  // NOME DO CAMPO DO RECURSO FINAL
-  $geraform->rc3nome = "selrec";                  // NOME DO CAMPO DE SELEÇÃO DE RECURSOS 
+  $geraform->rc3nome = "selrec";                  // NOME DO CAMPO DE SELEÇÃO DE RECURSOS
 
   $geraform->tr1nome = "locali";                  // NOME DO CAMPO DO LOCAL INICIAL
   $geraform->tr2nome = "localf";                  // NOME DO CAMPO DO LOCAL FINAL
@@ -105,7 +105,7 @@ db_postmemory($HTTP_POST_VARS);
   $geraform->trenome = "tipo";                    // NOME DO CAMPO TIPO DE RESUMO
   $geraform->tfinome = "filtro";                  // NOME DO CAMPO TIPO DE FILTRO
 
-  $geraform->masnome   = "ordem";                 // NOME DO CAMPO ORDEM 
+  $geraform->masnome   = "ordem";                 // NOME DO CAMPO ORDEM
 
   $geraform->resumopadrao = "g";                  // TIPO DE RESUMO PADRAO
 //  $geraform->valortipores = "g";                // TIPO DE RESUMO PADRAO
@@ -115,15 +115,16 @@ db_postmemory($HTTP_POST_VARS);
                                                   //                                       l - lotação,
                                                   //                                       o - órgão,
                                                   //                                       t - local de trabalho
-                                                  //                                       s - recurso          
+                                                  //                                       s - recurso
 
   $geraform->tipofol = true;                      // MOSTRAR DO CAMPO PARA TIPO DE FOLHA
 
   $geraform->arr_tipofol = array(
                                  "r14"=>"Salário",
-                                 "r31"=>"Férias"
+                                 "r31"=>"Férias",
+                                 "r48"=>"Complementar"
                                 );
-  $geraform->complementar = "r48";                // VALUE DA COMPLEMENTAR PARA BUSCAR SEMEST 
+  $geraform->complementar = "r48";                // VALUE DA COMPLEMENTAR PARA BUSCAR SEMEST
 
   $geraform->campo_auxilio_regi = "faixa_regis";  // NOME DO DAS MATRÍCULAS SELECIONADAS
   $geraform->campo_auxilio_lota = "faixa_lotac";  // NOME DO DAS LOTAÇÕES SELECIONADAS
@@ -131,17 +132,18 @@ db_postmemory($HTTP_POST_VARS);
   $geraform->campo_auxilio_recu = "faixa_recu";  // NOME DO DOS RECURSOS SELECIONADOS
   $geraform->campo_auxilio_loca = "faixa_local";  // NOME DO DOS LOCAIS SELECIONADOS
 
-  $geraform->mostord   = false;                    // CAMPO PARA ESCOLHA DE ORDEM  
-  $geraform->mostnal   = false;                    // TIPO DE ORDEM ALF./NUM      
+  $geraform->mostord   = false;                    // CAMPO PARA ESCOLHA DE ORDEM
+  $geraform->mostnal   = false;                    // TIPO DE ORDEM ALF./NUM
   $geraform->selecao   = false;                    // CAMPO PARA ESCOLHA DA SELEÇÃO
   $geraform->selregime = false;                    // CAMPO PARA ESCOLHA DO REGIME
-  $geraform->atinpen   = false;                    // CAMPO PARA ESCOLHA DO REGIME                    
+  $geraform->atinpen   = false;                    // CAMPO PARA ESCOLHA DO REGIME
 
   $geraform->onchpad   = true;                    // MUDAR AS OPÇÕES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
   $geraform->gera_form($anofolha,$mesfolha);
   ?>
+
   <tr>
-    <td colspan="2" align = "center"> 
+    <td colspan="2" align = "center">
       <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
     </td>
   </tr>
@@ -159,7 +161,7 @@ function js_emite(){
   qry+= "&ano="+document.form1.anofolha.value;
   qry+= "&mes="+document.form1.mesfolha.value;
   qry+= "&tipofolha="+document.form1.tipofol.value;
-  
+
   if(document.form1.selreg){
     if(document.form1.selreg.length > 0){
       faixareg = js_campo_recebe_valores();
@@ -171,7 +173,7 @@ function js_emite(){
     qry+= "&rei="+regini;
     qry+= "&ref="+regfim;
   }
-  
+
   if(document.form1.sellot){
     if(document.form1.sellot.length > 0){
       faixalot = js_campo_recebe_valores();
@@ -198,10 +200,13 @@ function js_emite(){
   if(document.form1.tipofol.value == 'r31'){
     jan = window.open('pes2_recferias002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
-  }else{
+  }else if(document.form1.tipofol.value == 'r14'){
     jan = window.open('pes2_recferias003.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
+  }else if(document.form1.tipofol.value == 'r48'){
+    jan = window.open('pes2_recferias004.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
   }
-	
+
 }
 </script>
