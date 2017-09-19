@@ -255,6 +255,8 @@ $db_opcao = 1;
           <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick='js_configurar()'>
           <input name="emitecheque" id='emitecheque' type="button"  value='Emitir Cheque' onclick='location.href="emp4_empageformache001.php"'>
           <input name="emitetxt" id='emitetxt' type="button"  value='Emitir Arquivo Texto' onclick='location.href="emp4_empageconfgera001.php"'>
+          <input name="excluirautentica" id='excluirautentica' type="button"  value='Excluir Pagamento' onclick='location.href="cai4_excluirautenticaoslip001.php"'>
+
         </td>
       <tr>
         <td colspan='3'>
