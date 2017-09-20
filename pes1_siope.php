@@ -12,7 +12,7 @@ error_reporting(E_ALL);*/
 
 db_postmemory($HTTP_POST_VARS);
 
-if (isset($geratxt)) { 
+if (isset($geratxt)) {
 
   db_query("CREATE SEQUENCE teste_seq");
 //db_query("\o /tmp/qw101_descontos.txt");
@@ -137,7 +137,7 @@ sum( case when r35_rubric = 'R992'  then r35_valor else 0 end ) as base_r35
                         and r35_mesusu = $mesfolha
                         and r35_instit = ".db_getsession("DB_instit")."                                
  
-            where rh25_recurso in (101,118,119) and rh25_anousu = $anofolha
+            where rh25_recurso in (101,118,119,1101,1118,1119) and rh25_anousu = $anofolha
             and rh02_mesusu = $mesfolha and rh02_anousu = $anofolha
             group by 1,2,3,4,5,6,7,8,9
             order by nextval asc
@@ -209,20 +209,20 @@ $result = db_query($sSql);
 
   <fieldset style="margin-top: 50px; width: 40%">
   <legend style="font-weight: bold;">Siope </legend>
-  
-    <table align="left" class='formTable'>  
+
+    <table align="left" class='formTable'>
         <?php
         $geraform = new cl_formulario_rel_pes;
         $geraform->gera_form($anofolha,$mesfolha);
         ?>
-        
+
     </table>
-  
+
   </fieldset>
 
   <table style="margin-top: 10px;">
     <tr>
-      <td colspan="2" align = "center"> 
+      <td colspan="2" align = "center">
         <!-- <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" > -->
         <input  name="geratxt" id="geratxt" type="submit" value="Processar" >
       </td>
