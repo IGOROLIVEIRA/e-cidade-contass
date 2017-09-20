@@ -14,7 +14,7 @@ db_postmemory($HTTP_POST_VARS);
 
 if (isset($geratxt)) {
 
-  db_query("CREATE SEQUENCE teste_seq");
+  db_query("CREATE SEQUENCE teste_seq;");
 //db_query("\o /tmp/qw101_descontos.txt");
 //echo pg_last_error();exit;
 $datageracao_ano = date("Y", db_getsession("DB_datausu"));
@@ -80,8 +80,10 @@ case when x.rh02_tipcatprof = 0 then 'Nenhum'
         translate(trim(to_char(round((((x.proventos_r14_118 + x.proventos_r48_118 + x.proventos_r20_118 + x.proventos_r35_118) + (x.proventos_r14_119 + x.proventos_r48_119 + x.proventos_r20_119 + x.proventos_r35_119) + (x.proventos_r14_101 + x.proventos_r48_101 + x.proventos_r20_101 + x.proventos_r35_101))),2),'99999999.99')),'.',',')
 
 
-AS dado
+AS dado 
 
+
+ 
 from 
 (
     select distinct  
