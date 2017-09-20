@@ -65,7 +65,7 @@ db_app::import("financeiro.*");
 db_app::import("contabilidade.contacorrente.*");
 db_app::import("exceptions.*");
 
-$iAno = 2014;
+$iAno = db_getsession("DB_anousu");
 
 if (!USE_PCASP) {
 
