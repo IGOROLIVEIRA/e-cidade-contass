@@ -263,21 +263,21 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                   INNER JOIN configuracoes.db_depart AS db_depart ON (veicretirada.ve60_coddepto =db_depart.coddepto)
                   INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
                   INNER JOIN veiculos .veicmanut AS veicmanut ON (veiculos. ve01_codigo=veicmanut. ve62_veiculos)
-                  INNER JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
-                  INNER JOIN empenho.empempenho AS empempenho ON (veicmanut.ve62_numemp = empempenho.e60_numemp)
-                  INNER JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
+                  LEFT JOIN veiculos.veicmanutitem AS veicmanutitem ON (veicmanut.ve62_codigo = veicmanutitem.ve63_veicmanut)
+                  LEFT JOIN empenho.empempenho AS empempenho ON (veicmanut.ve62_numemp = empempenho.e60_numemp)
+                  LEFT JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
                                                                     AND empempenho.e60_anousu = orcdotacao.o58_anousu)
-                  INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto
+                  LEFT JOIN db_departorg ON db01_coddepto = db_depart.coddepto
                   AND db01_anousu = " . db_getsession("DB_anousu") . "
-                  INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao
+                  LEFT JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao
                   AND db01_unidade = unveic.o41_unidade
                   AND unveic.o41_anousu = db01_anousu
-                  INNER JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu
+                  LEFT JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu
                   AND o41_orgao = orveic.o40_orgao
-                  INNER JOIN orcunidade unemp ON orcdotacao.o58_orgao = unemp.o41_orgao
+                  LEFT JOIN orcunidade unemp ON orcdotacao.o58_orgao = unemp.o41_orgao
                   AND orcdotacao.o58_unidade = unemp.o41_unidade
                   AND unemp.o41_anousu = orcdotacao.o58_anousu
-                  INNER JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu
+                  LEFT JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu
                   AND unemp.o41_orgao = orcemp.o40_orgao
                   INNER JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
                   WHERE db_config.codigo = " . db_getsession("DB_instit") . "
@@ -342,29 +342,36 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     INNER JOIN configuracoes.db_depart AS db_depart ON (veicretirada.ve60_coddepto =db_depart.coddepto)
                     INNER JOIN configuracoes.db_config AS db_config ON (db_depart.instit=db_config.codigo)
                     INNER JOIN veiculos.veicabast AS veicabast ON (veiculos.ve01_codigo=veicabast.ve70_veiculos)
-                    INNER JOIN empveiculos ON (veicabast.ve70_codigo = empveiculos.si05_codabast)
-                    INNER JOIN empenho.empempenho AS empempenho ON (empveiculos.si05_numemp = empempenho.e60_numemp)
-                    INNER JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
+                    LEFT JOIN empveiculos ON (veicabast.ve70_codigo = empveiculos.si05_codabast)
+                    LEFT JOIN empenho.empempenho AS empempenho ON (empveiculos.si05_numemp = empempenho.e60_numemp)
+                    LEFT JOIN orcamento.orcdotacao AS orcdotacao ON (empempenho.e60_coddot = orcdotacao.o58_coddot
                     AND empempenho.e60_anousu = orcdotacao.o58_anousu)
-                    INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto AND db01_anousu = " . db_getsession("DB_anousu") . "
-                    INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = db01_anousu
-                    INNER JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
-                    INNER JOIN orcunidade unemp ON orcdotacao.o58_orgao = unemp.o41_orgao AND orcdotacao.o58_unidade = unemp.o41_unidade AND unemp.o41_anousu = orcdotacao.o58_anousu
-                    INNER JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu AND unemp.o41_orgao = orcemp.o40_orgao
+                    LEFt JOIN db_departorg ON db01_coddepto = db_depart.coddepto AND db01_anousu = " . db_getsession("DB_anousu") . "
+                    LEFT JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = db01_anousu
+                    LEFt JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
+                    LEFT JOIN orcunidade unemp ON orcdotacao.o58_orgao = unemp.o41_orgao AND orcdotacao.o58_unidade = unemp.o41_unidade AND unemp.o41_anousu = orcdotacao.o58_anousu
+                    LEFT JOIN orcorgao orcemp ON unemp.o41_anousu = orcemp.o40_anousu AND unemp.o41_orgao = orcemp.o40_orgao
                     LEFT JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                    --AND veiculos.ve01_codigo in (17,62)
-                    AND NOT EXISTS (select 1 from veicabastanu where ve74_veicabast = ve70_codigo)
-                    GROUP BY veiculos.ve01_codigo, ve70_veiculoscomb, si05_atestado,
-                    o58_orgao,unemp.o41_codtri,orcemp.o40_codtri,orcemp.o40_orgao,unemp.o41_unidade,
-                    unveic.o41_codtri,orveic.o40_codtri,orveic.o40_orgao,unveic.o41_unidade,si09_codorgaotce,
-                    o58_unidade,
-                    db_config.db21_tipoinstit,
-                    empempenho.e60_codemp,
-                    empempenho.e60_emiss,
-                    db_depart.coddepto,unveic.o41_subunidade) x where vlGasto > 0";
+                    group by 
+		    infocomplementaresinstit.si09_codorgaotce,
+		    unveic.o41_codtri,
+		    orveic.o40_codtri,
+		    orveic.o40_orgao,
+		    unveic.o41_unidade,
+		    veiculos.ve01_codigoant,
+		    veiculos.ve01_codigo,
+		    unemp.o41_codtri,
+		    orcemp.o40_codtri,
+		    orcdotacao.o58_orgao,
+		    orcdotacao.o58_unidade,
+		    empempenho.e60_codemp,
+		    empempenho.e60_emiss,
+		    veicabast.ve70_veiculoscomb,
+		    empveiculos.si05_atestado,
+		    unveic.o41_subunidade) as teste";
 
     //--order by veiculos.ve01_codigo
 
@@ -500,7 +507,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 		INNER JOIN transporteescolar ON ve01_codigo = v200_veiculo		
 		INNER JOIN db_departorg ON db01_coddepto = db_depart.coddepto AND db01_anousu = " . db_getsession("DB_anousu") . "
 		INNER JOIN orcunidade unveic ON db01_orgao = unveic.o41_orgao AND db01_unidade = unveic.o41_unidade AND unveic.o41_anousu = db01_anousu
-		INNER JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
+		LEFT JOIN orcorgao orveic ON o41_anousu = orveic.o40_anousu AND o41_orgao = orveic.o40_orgao
 		INNER JOIN infocomplementaresinstit ON si09_instit = db_config.codigo
 		WHERE v200_anousu = " . db_getsession("DB_anousu") . "
 		AND v200_periodo = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
