@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -56,8 +56,8 @@ $clpcforne       = new cl_pcforne;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
-  $sqlerro=false;	
-  db_inicio_transacao(); 
+  $sqlerro=false;
+  db_inicio_transacao();
 
   if ($sqlerro == false){
     $clveiculos->ve01_ativo = 1;
@@ -108,7 +108,7 @@ if(isset($incluir)){
 
         $inc_comb          = array(array("ve06_veiculos","ve06_veiccadcomb","ve06_padrao"));
         $inc_contador      = 0;
-        
+
         for($x = 0; $x < count($vetor_comb); $x++){
           $inc_comb["ve06_veiculos"][$inc_contador]    = $ve01_codigo;
           $inc_comb["ve06_veiccadcomb"][$inc_contador] = $vetor_comb[$x];
@@ -140,6 +140,8 @@ if(isset($incluir)){
         }
       }
       }
+
+
     }
 
     if ($sqlerro==false){
@@ -149,7 +151,7 @@ if(isset($incluir)){
     		$sqlerro=true;
     		$erro_msg=$clveicresp->erro_msg;
     	}
-    } 
+    }
 /*
     if ($sqlerro==false){
       $clveiccentral->ve40_veiculos       = $clveiculos->ve01_codigo;
@@ -161,18 +163,18 @@ if(isset($incluir)){
         $erro_msg = $clveiccentral->erro_msg;
       }
     }
- */ 
-    
+ */
+
     if ($sqlerro==false){
     	if (isset($ve03_bem)&&$ve03_bem){
     		$clveicpatri->ve03_veiculo=$clveiculos->ve01_codigo;
     		$clveicpatri->incluir(null);
     		if ($clveicresp->erro_status=="0"){
-    		  $sqlerro=true;  		
+    		  $sqlerro=true;
     		  $erro_msg=$clveicresp->erro_msg;
-    		}  		
+    		}
     	}
-    } 
+    }
   }
 
   if ($sqlerro==false) {
@@ -180,11 +182,30 @@ if(isset($incluir)){
     $cltipoveiculos->si04_numcgm = $si04_numcgm;
   	$cltipoveiculos->incluir(null);
     if ($cltipoveiculos->erro_status=="0") {
-      $sqlerro=true;  		
+      $sqlerro=true;
       $erro_msg=$cltipoveiculos->erro_msg;
     }
   }
-  
+
+  if ($sqlerro == false){
+
+  $rsResultado = db_query("
+    select ve36_sequencial
+      from veiccadcentral
+        where ve36_coddepto = ".db_getsession("DB_coddepto")."
+    ");
+
+    $veiccent = db_utils::fieldsMemory($rsResultado, 0);
+    $clveiccentral->ve40_veiccadcentral = $veiccent->ve36_sequencial;
+    $clveiccentral->ve40_veiculos       = $clveiculos->ve01_codigo;
+    $clveiccentral->incluir(null);
+    if ($clveiccentral->erro_status == 0){
+      $sqlerro = true;
+      $erro_msg = $clveiccentral->erro_msg;
+    }
+  }
+
+
   db_fim_transacao($sqlerro);
 }
 
@@ -205,8 +226,8 @@ if (isset($codveictipoabast) && trim($codveictipoabast)!=""){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmveiculos.php");

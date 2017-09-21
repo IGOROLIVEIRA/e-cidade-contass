@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -75,8 +75,6 @@ $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_veictip
     }
 }
 
-
-
 if ($si04_tipoveiculo == 3) {
 	if ($ve01_placa != '') {
     $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"ve01_placa",null,"ve01_codigo != $ve01_codigo and ve01_placa = '$ve01_placa'"));
@@ -86,7 +84,7 @@ if ($si04_tipoveiculo == 3) {
       $clveiculos->erro_campo = "ve01_placa";
     }
 	}
-  
+
   if ($ve01_ranavam != '') {
     $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_codigo != $ve01_codigo and ve01_ranavam = $ve01_ranavam"));
     if ($clveiculos->numrows > 0){
@@ -95,7 +93,7 @@ if ($si04_tipoveiculo == 3) {
       $clveiculos->erro_campo = "ve01_ranavam";
     }
   }
-  
+
   if ($ve01_chassi != '') {
     $result = $clveiculos->sql_record($clveiculos->sql_query_file(null,"*",null,"ve01_codigo != $ve01_codigo and ve01_chassi = '$ve01_chassi'"));
     if ($clveiculos->numrows > 0){
@@ -112,7 +110,7 @@ if ($si04_tipoveiculo == 3) {
     	$sqlerro=true;
     }
   }
-  
+
   /*
    * Altera tipo veiculo para sicom
    */
@@ -149,11 +147,11 @@ if ($si04_tipoveiculo == 3) {
 
        $clveicresp->excluir( null, "ve02_veiculo={$ve01_codigo}");
        if ($clveicresp->erro_status=="0") {
-         
+
          $sqlerro=true;
          $erro_msg=$clveicresp->erro_msg;
         }
-  		
+
      }
  	   if ($ve02_numcgm!= 0 ){
 
@@ -169,10 +167,10 @@ if ($si04_tipoveiculo == 3) {
   }
 
   if ($sqlerro==false) {
-    
+
   	$result_patri = $clveicpatri->sql_record($clveicpatri->sql_query(null,"ve03_codigo",null," ve03_veiculo = $ve01_codigo "));
   	if ($clveicpatri->numrows > 0) {
-  		
+
   	  db_fieldsmemory($result_patri,0);
   	/**
   	 * exclui e incluimos novamente
@@ -180,25 +178,26 @@ if ($si04_tipoveiculo == 3) {
   	  $clveicpatri->excluir(null, "ve03_veiculo = {$ve01_codigo}");
   	  if ($clveicpatri->erro_status == "0") {
 
-        $sqlerro  = true;      
+        $sqlerro  = true;
         $erro_msg = $clveicpatri->erro_msg;
       }
   	}
-  	
+
   	if (isset($ve03_bem)&&$ve03_bem != '') {
-		  
+
   		$clveicpatri->ve03_veiculo=$clveiculos->ve01_codigo;
   		$clveicpatri->incluir(null);
   		if ($clveicpatri->erro_status=="0") {
-  	 		$sqlerro=true;  		
+  	 		$sqlerro=true;
   	 		$erro_msg=$clveicpatri->erro_msg;
-  		}  		
+  		}
   	}
   }
   db_fim_transacao($sqlerro);
-}else if(isset($chavepesquisa)){
+ } else if(isset($chavepesquisa)){
+
    $db_opcao = 2;
-   $result = $clveiculos->sql_record($clveiculos->sql_query($chavepesquisa)); 
+   $result = $clveiculos->sql_record($clveiculos->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 
    $db_botao = true;
@@ -219,7 +218,7 @@ if ($si04_tipoveiculo == 3) {
    if ($clveictipoabast->numrows > 0){
      db_fieldsmemory($result_veictipoabast,0);
    }
-   
+
    //Result para modulo sicom
    $result_tipoveiculos = $cltipoveiculos->sql_record($cltipoveiculos->sql_query(null,"*",null," si04_veiculos = $chavepesquisa"));
    if ($cltipoveiculos->numrows > 0){
@@ -228,23 +227,25 @@ if ($si04_tipoveiculo == 3) {
      db_fieldsmemory($rsCGM,0);
    }
 
-?>
+
+  ?>
     <script>
        parent.document.formaba.veicitensobrig.disabled=false;
        top.corpo.iframe_veicitensobrig.location.href='vei1_veicitensobrig001.php?ve09_veiculos=<?=@$chavepesquisa?>';
        parent.document.formaba.veicutilizacao.disabled=false;
        top.corpo.iframe_veicutilizacao.location.href='vei1_veicutilizacao001.php?ve15_veiculos=<?=@$chavepesquisa?>';
-       parent.document.formaba.veiccentral.disabled=false;
+       parent.document.formaba.veiccentral.disabled=true;
        top.corpo.iframe_veiccentral.location.href='vei1_veiccentralveiculos001.php?ve09_veiculos=<?=@$chavepesquisa?>';
-<?
-   if (isset($liberaaba) && $liberaaba == true){
-?>
+  <?
+    if (isset($liberaaba) && $liberaaba == true){
+  ?>
        parent.mo_camada('veicitensobrig');
-<?
+  <?
    }
-?>
+  ?>
     </script>
-<?         
+  <?
+
 }
 ?>
 <html>
@@ -257,8 +258,8 @@ if ($si04_tipoveiculo == 3) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmveiculos.php");
@@ -272,7 +273,6 @@ if ($si04_tipoveiculo == 3) {
 <?
 if(isset($alterar)){
   if($clveiculos->erro_status=="0"&&$sqlerro==true){
-    //$clveiculos->erro(true,false);
     db_msgbox($erro_msg);
     $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
@@ -303,6 +303,7 @@ if (isset($chavepesquisa)&&isset($ve01_ativo)&&trim($ve01_ativo)=="0"){
 
 if($db_opcao==22){
   echo "<script>document.form1.pesquisar.click();</script>";
+  $db_opcao =2;
 }
 
 ?>
