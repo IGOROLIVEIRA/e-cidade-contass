@@ -1282,20 +1282,21 @@ js_verificaServico();
   $sSqlServicoQuantidade   = $oDaoSolicitem->sql_query_file(null, "pc11_servicoquantidade", null, $sWhereServicoQuantidade);
   $rsServicoQuantidade     = $oDaoSolicitem->sql_record($sSqlServicoQuantidade);
 
-  if ($oDaoSolicitem->numrows > 0) {
+  //if ($oDaoSolicitem->numrows > 0) {
 
     $pc11_servicoquantidade = db_utils::fieldsMemory($rsServicoQuantidade, 0)->pc11_servicoquantidade;
 
-    if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '3449052' && $pc11_servicoquantidade == 'false') {
+    if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '3449052') {
 
       echo "<script>                                                                   ";
       echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
       echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
       echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
+      echo "  $('pc11_servicoquantidade').value = false;";
+
       echo "  $('pc17_unid') .style.visibility           = 'hidden';                  ";
       echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
-      echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'visible'; ";
-      echo "  document.form1.pc11_servicoquantidade.value = false ";
+
 
 
       //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
@@ -1315,7 +1316,7 @@ js_verificaServico();
       echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
       echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
       echo "  $('pc17_quant').style.visibility           = 'visible';                  ";
-      echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'visible'; ";
+      echo "  $('ctnServicoQuantidade').style.display='none'; ";
       //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
 
       echo "  if (document.form1.pc11_servicoquantidade.value == 'true') {  ";
@@ -1344,7 +1345,7 @@ js_verificaServico();
 
     }
 
-  }
+//  }
 
 
 ?>
