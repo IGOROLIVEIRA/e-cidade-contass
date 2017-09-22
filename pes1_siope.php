@@ -113,13 +113,13 @@ sum( case when r35_rubric = 'R992'  then r35_valor else 0 end ) as base_r35
             from rhpessoal 
             join rhpessoalmov on rh02_regist = rh01_regist
             join cgm on z01_numcgm = rh01_numcgm
-            join rhpeslocaltrab on rh02_seqpes = rh56_seqpes
-            join rhlocaltrab on rh55_codigo = rh56_localtrab
-            join rhlota       on r70_codigo  = rh02_lota
+            left join rhpeslocaltrab on rh02_seqpes = rh56_seqpes
+            left join rhlocaltrab on rh55_codigo = rh56_localtrab
+            left join rhlota       on r70_codigo  = rh02_lota
                                 and r70_instit  = rh02_instit
-            join rhlotavinc  on rh25_codigo = r70_codigo 
+            left join rhlotavinc  on rh25_codigo = r70_codigo 
 
-            join gerfsal on r14_regist = rh01_regist    
+            left join gerfsal on r14_regist = rh01_regist    
                         and r14_anousu = $anofolha
                         and r14_mesusu = $mesfolha
                         and r14_instit = ".db_getsession("DB_instit")."
