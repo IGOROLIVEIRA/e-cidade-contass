@@ -139,7 +139,7 @@ sum( case when r35_rubric = 'R992'  then r35_valor else 0 end ) as base_r35
                         and r35_mesusu = $mesfolha
                         and r35_instit = ".db_getsession("DB_instit")."                                
  
-            where rh25_recurso in (101,118,119,1101,1118,1119) and rh25_anousu = $anofolha
+            where rh25_recurso in (118,119,1118,1119) and rh25_anousu = $anofolha
             and rh02_mesusu = $mesfolha and rh02_anousu = $anofolha
             group by 1,2,3,4,5,6,7,8,9
             order by nextval asc
