@@ -285,7 +285,7 @@ if (empty ($e60_numemp)) {
     } else {
       lDisabled = "disabled";
     }
-    //alert(obj.numnotas);
+    //console.log(obj.data);
     if (obj.numnotas > 0){
       for (var i = 0; i < obj.data.length;i++){
 
@@ -344,14 +344,44 @@ if (empty ($e60_numemp)) {
         saida += "<td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrun, 'f')+"</td>";
         saida += "<td class='linhagrid' id='saldo"+obj.data[i].e62_sequen+"'  style='text-align:right'>"+obj.data[i].saldo+"</td>";
         saida += "<td class='linhagrid' id='saldovlr"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrtot, 'f')+"</td>";
-        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
 
-        saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-        saida += " value='"+sQuantidadeTotal+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1)'></td>";
+        console.log(obj.data[i].pc01_servico);
+        console.log(obj.data[i].servicoquantidade);
+        if(obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == 'f'){
 
-        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-        saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-        saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2)'></td></tr>";
+          saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+          saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
+          saida += " value='1' readonly style='text-align:right' size='5' onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)' ></td>";
+
+
+          saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+          saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+          saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)'></td></tr>";
+
+        }else if(obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == 't'){
+
+          saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+          saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
+          saida += " value='"+sQuantidadeTotal+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+
+
+          saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+          saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+          saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+
+        }else if(obj.data[i].pc01_servico == 'f' && obj.data[i].servicoquantidade == 'f'){
+
+          saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+          saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
+          saida += " value='"+sQuantidadeTotal+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+
+
+          saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+          saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+          saida += " value='" + sValorTotal + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+
+        }
+
       }
       $('confirmar').disabled = true;
     }
@@ -445,12 +475,22 @@ if (empty ($e60_numemp)) {
     setTotal();
   }
   //controle dos valores digitados no empenho.
-  function js_calculaValor(id,tipo){
+  function js_calculaValor(id,tipo,tipocalculo){
 
     $('confirmar').disabled = false;
+
     var nVlrUni        = js_strToFloat($('vlruni'+id).innerHTML);
     var nQtde          = $F('qtdesol'+id);
     var nVlrTotal      = $F('vlrtot'+id);
+
+    if (nVlrTotal < 0){
+      alert('Valor negativo não é permitido');
+      $('vlrtot'+id).value = 0
+    }
+    if (nQtde < 0){
+      alert('Valor negativo não é permitido');
+      $F('qtdesol'+id) = 0;
+    }
 
     //consideramos como saldo valido os saldos do empenho menos o saldo solicitado.
     var iSaldoSolic    = 0;
@@ -464,7 +504,7 @@ if (empty ($e60_numemp)) {
     iSaldo         = ((js_strToFloat($('saldo'+id).innerHTML))    - iSaldoSolic);
     iSaldovlr      = ((js_strToFloat($('saldovlr'+id).innerHTML)) - nSaldoVlrSolic);
     if (nQtde > 0){
-      $('vlrtot'+id).disabled = true;
+      //$('vlrtot'+id).disabled = true;
     }else if (nQtde == 0) {
 
       $('vlrtot'+id).disabled = false;
@@ -473,6 +513,7 @@ if (empty ($e60_numemp)) {
       }
 
     }
+
     if (tipo == 1){
 
       nTotal = new Number (nVlrUni*nQtde);
@@ -494,10 +535,12 @@ if (empty ($e60_numemp)) {
     }else if(tipo == 2){
 
       if (nQtde == '' || nQtde == 0) {
+
         nTotal = (nVlrTotal/nVlrUni);
+
         if ((nVlrTotal <= iSaldovlr)){
           if (nTotal > 0){
-            // $('qtdesol'+id).value = nTotal.toFixed(2);
+            $('qtdesol'+id).value = nTotal.toFixed(2);
             $('confirmar').disabled = false;
             if ($('chkmarca'+id).checked == false ){
               $('chkmarca'+id).click();
@@ -506,14 +549,26 @@ if (empty ($e60_numemp)) {
         }else{
 
           alert("Valor total maior que o saldo restante.");
+          $('vlrtot'+id).value = iSaldovlr;
           $('confirmar').disabled = true;
 
         }
       }else{
+
+        nTotal = (nVlrTotal/nVlrUni);
+
         if ((nVlrTotal > iSaldovlr)){
           alert("Valor total maior que o saldo restante.");
+          $('vlrtot'+id).value = iSaldovlr;
           $('confirmar').disabled = true;
+        }else{
+          if(tipocalculo == 1){
+            $('qtdesol'+id).value = 1;
+          }else{
+            $('qtdesol'+id).value = nTotal.toFixed(2);
+          }
         }
+
       }
     }
     setTotal();
