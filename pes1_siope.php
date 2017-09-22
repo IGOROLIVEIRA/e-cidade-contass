@@ -113,8 +113,8 @@ sum( case when r35_rubric = 'R992'  then r35_valor else 0 end ) as base_r35
             from rhpessoal 
             join rhpessoalmov on rh02_regist = rh01_regist
             join cgm on z01_numcgm = rh01_numcgm
-            left join rhpeslocaltrab on rh02_seqpes = rh56_seqpes
-            left join rhlocaltrab on rh55_codigo = rh56_localtrab
+            join rhpeslocaltrab on rh02_seqpes = rh56_seqpes
+            join rhlocaltrab on rh55_codigo = rh56_localtrab
             join rhlota       on r70_codigo  = rh02_lota
                                 and r70_instit  = rh02_instit
             join rhlotavinc  on rh25_codigo = r70_codigo 
