@@ -137,10 +137,12 @@ sum( case when r35_rubric = 'R992'  then r35_valor else 0 end ) as base_r35
             left join gerfs13 on r35_regist = rh01_regist    
                         and r35_anousu = $anofolha
                         and r35_mesusu = $mesfolha
-                        and r35_instit = ".db_getsession("DB_instit")."                                
- 
+                        and r35_instit = ".db_getsession("DB_instit")."                     
+                                   
+            INNER JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+            
             where rh25_recurso in (118,119,1118,1119) and rh25_anousu = $anofolha
-            and rh02_mesusu = $mesfolha and rh02_anousu = $anofolha
+            and rh02_mesusu = $mesfolha and rh02_anousu = $anofolha and rh05_recis is null
             group by 1,2,3,4,5,6,7,8,9
             order by nextval asc
 
