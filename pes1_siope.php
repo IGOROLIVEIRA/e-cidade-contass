@@ -142,7 +142,7 @@ sum( case when r35_rubric = 'R992'  then r35_valor else 0 end ) as base_r35
             INNER JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
             
             where rh25_recurso in (118,119,1118,1119) and rh25_anousu = $anofolha
-            and rh02_mesusu = $mesfolha and rh02_anousu = $anofolha and rh05_recis is null
+            and rh02_mesusu = $mesfolha and rh02_anousu = $anofolha and rh05_seqpes is null
             group by 1,2,3,4,5,6,7,8,9
             order by nextval asc
 
