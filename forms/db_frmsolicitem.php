@@ -1286,7 +1286,7 @@ js_verificaServico();
 
     $pc11_servicoquantidade = db_utils::fieldsMemory($rsServicoQuantidade, 0)->pc11_servicoquantidade;
 
-    if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '3449052') {
+    if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
 
       echo "<script>                                                                   ";
       echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
@@ -1308,7 +1308,7 @@ js_verificaServico();
 
       echo "</script>                                                                  ";
 
-    }else if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) == '3449052') {
+    }else if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) == '34490') {
 
       echo "<script>                                                                   ";
       echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
@@ -1326,7 +1326,7 @@ js_verificaServico();
 
       echo "</script>                                                                  ";
 
-    } else if (substr($o56_elemento, 0, 7) != '3449052' && $pc01_servico == 'f') {
+    } else if (substr($o56_elemento, 0, 7) != '34490' && $pc01_servico == 'f') {
 
       echo "<script>                                                                   ";
 
