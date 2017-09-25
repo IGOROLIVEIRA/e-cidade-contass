@@ -43,7 +43,7 @@ $this->objpdf->text($xcol +156, $xlin +11, 'R$');
 $this->objpdf->text($xcol +158, $xlin +11, db_formatar(pg_result($this->dados, 0, "k17_valor"), 'f'));
 $this->objpdf->Setfont('Arial', 'B', 9);
 
-$this->objpdf->text($xcol +2, $xlin + 18, 'CGM');
+$this->objpdf->text($xcol +2, $xlin + 18, 'FORNECEDOR');
 $this->objpdf->text($xcol +6, $xlin + 22,  pg_result($this->dados, 0, "z01_numcgm"). ' - '. pg_result($this->dados, 0, "z01_nome"));
 
 /**
@@ -51,7 +51,7 @@ $this->objpdf->text($xcol +6, $xlin + 22,  pg_result($this->dados, 0, "z01_numcg
  */
 if ( !empty($this->oDadosBancarioCredor) ) {
 
-  $this->objpdf->text($xcol + 2, $xlin + 30, 'BANCO');
+  $this->objpdf->text($xcol + 2, $xlin + 30, 'CONTA BANCÁRIA FORNECEDOR');
 
   $sTextoDadosBancariosCredor  = $this->oDadosBancarioCredor->iBanco;
   $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->sBanco;

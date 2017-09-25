@@ -75,7 +75,7 @@ for ($j = 0; $j < $iNumRows; $j++) {
     $sTextoDadosBancariosCredor .= '  Conta: '   . $this->oDadosBancarioCredor->iConta;
     $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->iContaDigito;
 
-    $this->objpdf->multicell(0, 5, 'Banco            :   ' . $sTextoDadosBancariosCredor);
+    $this->objpdf->multicell(0, 5, 'Conta Bancária Fornecedor       :   ' . $sTextoDadosBancariosCredor);
   }
 
   if (USE_PCASP) {
