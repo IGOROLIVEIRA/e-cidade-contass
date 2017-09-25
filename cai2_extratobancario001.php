@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -58,25 +58,25 @@ function js_relatorio2() {
   var datai = aData[2]+'-'+aData[1]+'-'+aData[0];
   aData = document.getElementById('dataf').value.split("/");
   var dataf = aData[2]+'-'+aData[1]+'-'+aData[0];
- 
+
   var query = "";
-  
+
   if(document.getElementById('contas')){
 	//Le os itens lançados na combo da conta
 		vir="";
 		listacontas="";
-		 
+
 		for(x=0;x<document.form1.contas.length;x++){
 			listacontas+=vir+document.form1.contas.options[x].value;
 		  vir=",";
 		}
-		if(listacontas!=""){ 	
+		if(listacontas!=""){
 			query +='conta=('+listacontas+')';
 		} else {
 			query +='conta=';
 		}
 	}
-    
+
   query += "&imprime_historico="+F.imprime_historico.value;
   query += "&imprime_analitico="+F.imprime_analitico.value;
   query += "&totalizador_diario="+F.totalizador_diario.value;
@@ -89,7 +89,7 @@ function js_relatorio2() {
   query += "&imprime_pdf="+F.imprime_pdf.value;
   //query += "&conta="+F.k13_conta.value;
   query += "&somente_contas_bancarias="+F.somente_contas_bancarias.value;
-	
+
   jan = window.open('cai2_extratobancario002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
   jan.moveTo(0,0);
 }
@@ -115,10 +115,10 @@ function js_relatorio2() {
 		<center>
 		<fieldset style="width: 430px;">
 		<legend><b>Extrato Bancário</b></legend>
-		
+
 		<form name="form1" method="post" action="">
 		<table border="0" cellspacing="3" cellpadding="0" align=center>
-			
+
 			<tr>
 				<td align="right" nowrap><strong>Data inicial:</strong></td>
 				<td nowrap>
@@ -161,9 +161,7 @@ function js_relatorio2() {
 			<tr>
 				<td align="right" nowrap title="<?="Agrupamentos das receitas"?>"><b>Agrupamento das receitas:</b></td>
 				<td align="left" nowrap><?
-				$x = array(1=>"Analítico");
-				//autor: igor comentado para usar somente analitico,
-				//2=>"Pela conta de receita",3=>"Pelos códigos de empenho e receita"
+				$x = array(1=>"Analítico",2=>"Pela conta de receita",3=>"Pelos códigos de empenho e receita");
 
 				db_select("agrupapor",$x,true,1);
 				?></td>
@@ -184,29 +182,29 @@ function js_relatorio2() {
 			</tr>
 			<tr>
 				<td nowrap align=right><b>Somente contas com movimento:</b></td>
-				<td><? $matriz = array("n"=>"nao","s"=>"sim");     
-				$somente_contas_com_movimento = "s";            
+				<td><? $matriz = array("n"=>"nao","s"=>"sim");
+				$somente_contas_com_movimento = "s";
 				db_select("somente_contas_com_movimento", $matriz,true,1);
 				?></td>
 			</tr>
 
 			<tr>
 				<td nowrap align=right><b>Totalizador diário:</b></td>
-				<td><? $matriz = array("n"=>"nao","s"=>"sim");             
+				<td><? $matriz = array("n"=>"nao","s"=>"sim");
 				db_select("totalizador_diario", $matriz,true,1);
 				?></td>
 			</tr>
 			<tr>
 				<td nowrap align=right><b>Imprime histórico:</b></td>
-				<td><? $matriz = array("s"=>"sim","n"=>"nao");             
+				<td><? $matriz = array("s"=>"sim","n"=>"nao");
 				db_select("imprime_historico", $matriz,true,1);
 				?></td>
 			</tr>
 			<tr>
              <td nowrap align=right><b>Tipo Impressão:</b></td>
-              <td><? $matriz = array("s"=>"Sintético","a"=>"Analítico");             
-                   db_select("imprime_analitico", $matriz,true,1); 
-                   ?> 
+              <td><? $matriz = array("s"=>"Sintético","a"=>"Analítico");
+                   db_select("imprime_analitico", $matriz,true,1);
+                   ?>
               </td>
            </tr>
   			<tr>
@@ -217,14 +215,14 @@ function js_relatorio2() {
                $matriz = array("s"=>"sim","n"=>"nao");
                db_select("somente_contas_bancarias",$matriz,true,1);
         ?></td>
-      </tr>	
+      </tr>
       <tr>
         <td nowrap align="right"><b>Formato do relatório:</b></td>
         <td><?
                $matriz = array("p"=>"pdf","t"=>"csv");
                db_select("imprime_pdf",$matriz,true,1);
         ?></td>
-      </tr>     		
+      </tr>
 		</table>
 		</form>
 			</fieldset>
