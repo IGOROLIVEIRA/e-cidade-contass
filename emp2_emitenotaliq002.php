@@ -264,7 +264,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
    $aRetencoes = $oRetencaoNota->getRetencoesFromDB($e50_codord, false, 0, "","",true);
 
-   $result_pcfornecon = db_query("select *,case when pc63_cnpjcpf is not null and trim(pc63_cnpjcpf) <> '' and pc63_cnpjcpf::text::int8 > 0 then pc63_cnpjcpf else '".$z01_cgccpf."' end as z01_cgccpf from pcfornecon inner join pcforneconpad on pc64_contabanco = pc63_contabanco where pc63_numcgm = ".$z01_numcgm);
+   $result_pcfornecon = db_query("select *,case when pc63_cnpjcpf is not null and trim(pc63_cnpjcpf) <> '' and pc63_cnpjcpf::text::int8 > 0 then pc63_cnpjcpf else '".$z01_cgccpf."' end as z01_cgccpf from pcfornecon inner join pcforneconpad on pc64_contabanco = pc63_contabanco where pc63_cnpjcpf = ".$z01_cgccpf)." limit 1";
    if(pg_numrows($result_pcfornecon) > 0){
      db_fieldsmemory($result_pcfornecon,0);
    }

@@ -45,7 +45,8 @@ if (USE_PCASP) {
                  upper(k152_descricao) as k152_descricao,
                  slip.*,
                  cgm.z01_numcgm , 
-                 cgm.z01_nome , 
+                 cgm.z01_nome ,
+                 cgm.z01_cgccpf, 
                  c50_codhist as db_hist, 
                  c50_descr   as descr_hist,
                  k18_motivo,
@@ -93,6 +94,7 @@ if (USE_PCASP) {
 } else {
   
   $sql = "select slip.*,
+          z01_cgccpf,
           z01_numcgm ,
           z01_nome ,
           c60_descr as descr_debito,
@@ -221,14 +223,13 @@ try {
   /**
    * dados bancarios do credor 
    */
-  $iNumCgmCredor       = $z01_numcgm;
+  $iCpfCnpjCredor       = $z01_cgccpf;
   $oDaoPcfornecon      = db_utils::getDao('pcfornecon');
   $sCamposDadosCredor  = "pc63_banco, pc63_agencia, pc63_agencia_dig, pc63_conta, pc63_conta_dig,";
   $sCamposDadosCredor .= "(select db90_descr from db_bancos where db90_codban = pc63_banco) as descricrao_banco ";
-  $sWhereDadosCredor   = "pc63_numcgm = {$iNumCgmCredor}";
+  $sWhereDadosCredor   = "pc63_cnpjcpf::bigint = {$iCpfCnpjCredor}";
   $sSqlDadosCredor     = $oDaoPcfornecon->sql_query_padrao(null, $sCamposDadosCredor, null, $sWhereDadosCredor);
   $rsDadosCredor       = db_query($sSqlDadosCredor);
-
   /**
    * Erro no sql 
    */

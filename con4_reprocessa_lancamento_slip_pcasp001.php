@@ -131,6 +131,7 @@ if (isset($_POST["processar"])) {
                     where corrente.k12_data between '{$sData}' and '{$sDataFinal}'
                       and corrente.k12_instit = ".db_getsession("DB_instit")."
                       and cls.c84_slip is null
+                      and slip.k17_debito<>slip.k17_credito
                     order by corrente.k12_data,
                              corrente.k12_id,
                              corrente.k12_autent";
@@ -148,7 +149,7 @@ if (isset($_POST["processar"])) {
 
        $lEstorno           = $oDadosAutenticacao->estorno == 't' ? true : false;
 
-       echo "processando {$oDadosAutenticacao->data} - AUT:{$oDadosAutenticacao->codautent} ID:{$oDadosAutenticacao->id}\n";
+       echo "Sli {$oDadosAutenticacao->slip} processando {$oDadosAutenticacao->data} - AUT:{$oDadosAutenticacao->codautent} ID:{$oDadosAutenticacao->id}\n";
        flush();
 
        if ($oDadosAutenticacao->slipoperacaotipo == '' && !in_array($oDadosAutenticacao->slip, $aSlipIncluidosTipo)) {

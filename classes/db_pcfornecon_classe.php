@@ -749,14 +749,14 @@ class cl_pcfornecon {
        $sql .= $campos;
      }
      $sql .= " from pcfornecon ";
-     $sql .= "      inner join pcforneconpad  on  pc63_contabanco = pc64_contabanco";
+     $sql .= "      left join pcforneconpad  on  pc63_contabanco = pc64_contabanco";
      $sql2 = "";
      if($dbwhere==""){
        if($pc63_contabanco!=null ){
          $sql2 .= " where pcfornecon.pc63_contabanco = $pc63_contabanco ";
        }
      }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
+       $sql2 = " where $dbwhere limit 1";
      }
      $sql .= $sql2;
      if($ordem != null ){
