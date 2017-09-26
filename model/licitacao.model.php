@@ -356,13 +356,14 @@ class licitacao {
         case 12:
 
         if (in_array($this->iCodigoSituacao, array(12))) {
+          
           $this->retornaSituacao();
           return true;
         }
         break;
 
     }
-
+    
     if($iCodigoSituacao <> 12){
 
 		/**
@@ -1605,8 +1606,9 @@ class licitacao {
 
 
     $oDaolicSituacao = db_utils::getDao("liclicitasituacao");
-    $sSqlLiclicitasituacao            = $oDaolicSituacao->sql_query_file('','*','',"l11_liclicita=$this->iCodLicitacao and l11_sequencial <> (select l11_sequencial from liclicitasituacao where l11_liclicita=$this->iCodLicitacao order by l11_sequencial desc
- limit 1) limit 1 ");
+    $sSqlLiclicitasituacao            = $oDaolicSituacao->sql_query_file('','*','',"l11_liclicita=$this->iCodLicitacao and l11_licsituacao <> 12
+         ORDER BY l11_sequencial DESC
+LIMIT 1");
     
     $rsLiclicitasituacao              = $oDaolicSituacao->sql_record($sSqlLiclicitasituacao);
     $oDadoLiclicitasituacao           = db_utils::fieldsMemory($rsLiclicitasituacao, 0);
