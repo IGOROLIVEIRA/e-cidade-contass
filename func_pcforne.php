@@ -125,7 +125,7 @@ $lValidaRepr = isset($validaRepresentante);
           $campos = "pc60_numcgm,pc60_dtlanc,z01_nome,z01_cgccpf";
         }
         if ($lValidaRepr) {
-          $campos = ' DISTINCT pc60_numcgm, ' . $campos;
+          $campos = ' DISTINCT ' . $campos;
         }
         if (isset($chave_pc60_numcgm) && (trim($chave_pc60_numcgm)!="") ) {
           $sql = $clpcforne->sql_query($chave_pc60_numcgm,$campos,"pc60_numcgm","", $lValidaRepr);
