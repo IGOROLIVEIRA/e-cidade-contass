@@ -243,14 +243,16 @@ try {
    *  O script abaixo corrige possíveis erros de base na tabela conplano, sendo elas podendo ser originárias
    *  da tabela orcdotacao ou orcreceita
    */
-  $sSqlCorrigeConplano = " select distinct
-                                  o58_codele,
-                                  o58_anousu
-                             from orcdotacao
-                            where not exists ( select *
-                                                 from conplano
-                                               where c60_codcon = o58_codele
-                                                 and c60_anousu = o58_anousu ) ";
+  $sSqlCorrigeConplano  = " SELECT DISTINCT o58_codele, ";
+  $sSqlCorrigeConplano .= "                 o58_anousu ";
+  $sSqlCorrigeConplano .= " FROM orcdotacao ";
+  $sSqlCorrigeConplano .= " WHERE NOT EXISTS ";
+  $sSqlCorrigeConplano .= "       (SELECT * FROM conplano ";
+  $sSqlCorrigeConplano .= "        WHERE c60_codcon = o58_codele ";
+  $sSqlCorrigeConplano .= "          AND c60_anousu = o58_anousu ) ";
+  $sSqlCorrigeConplano .= "   AND EXISTS ";
+  $sSqlCorrigeConplano .= "       (SELECT * FROM empempenho ";
+  $sSqlCorrigeConplano .= "        WHERE e60_anousu = o58_anousu) ";
 
   $rsCorrigeConplano      = db_query($connOrigem,$sSqlCorrigeConplano);
   $iLinhasCorrigeConplano = pg_num_rows($rsCorrigeConplano);
@@ -2072,30 +2074,30 @@ try {
   $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} ";
     $sSqlServidores .= "
 
-	AND   
+	AND
             (
-               rh02_anousu <    
+               rh02_anousu <
                (SELECT r11_anousu
                 FROM cfpess
                 ORDER BY r11_anousu DESC, r11_mesusu DESC
                 LIMIT 1)
                AND rh02_mesusu <= 12
-            )   
-        
-    OR 
+            )
+
+    OR
             (
                   rh02_anousu =
                   (SELECT r11_anousu
                   FROM cfpess
                   ORDER BY r11_anousu DESC, r11_mesusu DESC
                   LIMIT 1)
-                  
+
                   AND rh02_mesusu <
                   (SELECT r11_mesusu
                   FROM cfpess
                   ORDER BY r11_anousu DESC, r11_mesusu DESC
-                  LIMIT 1) 
-            ) 
+                  LIMIT 1)
+            )
 
 
 ";
