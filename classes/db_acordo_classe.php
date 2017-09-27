@@ -86,6 +86,11 @@ class cl_acordo {
    var $ac16_formafornecimento = null;
    var $ac16_formapagamento = null;
     var $ac16_licitacao = null;
+    // var $ac16_tipomodalidade = null;
+    // var $ac16_numodalidade = null;
+    // var $ac16_cpfsignatariocontratante = null;
+    // var $ac16_datainclusao = null;
+    var $ac16_veiculodivulgacao = null;
 
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -120,6 +125,7 @@ class cl_acordo {
                  ac16_tipoorigem = int8 = Tipo de Origem acordo
                  ac16_formafornecimento = Forma de fornecimento acordo
                  ac16_formapagamento = Forma de pagamento acordo
+                 ac16_veiculodivulgacao = varchar(50) = Veículo de divulgação
                  ";
    //funcao construtor da classe
    function cl_acordo() {
@@ -199,6 +205,7 @@ class cl_acordo {
        $this->ac16_formafornecimento = ($this->ac16_formafornecimento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_formafornecimento"]:$this->ac16_formafornecimento);
        $this->ac16_formapagamento = ($this->ac16_formapagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_formapagamento"]:$this->ac16_formapagamento);
        $this->ac16_licitacao = ($this->ac16_licitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"]:$this->ac16_licitacao);
+       $this->ac16_veiculodivulgacao = ($this->ac16_veiculodivulgacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_veiculodivulgacao"]:$this->ac16_veiculodivulgacao);
      }else{
        $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
      }
@@ -936,6 +943,21 @@ class cl_acordo {
          return false;
        }
      }
+
+     if(trim($this->ac16_veiculodivulgacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_veiculodivulgacao"])){
+       $sql  .= $virgula." ac16_veiculodivulgacao = '$this->ac16_veiculodivulgacao' ";
+       $virgula = ",";
+       if(trim($this->ac16_veiculodivulgacao) == null ){
+         $this->erro_sql = " Campo Forma de pagamento do Contrato não informado.";
+         $this->erro_campo = "ac16_veiculodivulgacao";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
 
        if(trim($this->ac16_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])){
        $sql  .= $virgula." ac16_licitacao = $this->ac16_licitacao ";

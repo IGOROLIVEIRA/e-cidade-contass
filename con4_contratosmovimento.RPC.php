@@ -47,6 +47,7 @@ require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoItem.model.php");
 require_once("model/Dotacao.model.php");
 require_once("model/MaterialCompras.model.php");
+require_once("std/DBDate.php");
 
 $oJson    = new services_json();
 $oRetorno = new stdClass();
@@ -158,15 +159,21 @@ switch($oParam->exec) {
 
       try {
 
+        $oDataMovimentacao = new DBDate($oParam->dtmovimentacao);
+        $oDataPublicacao = new DBDate($oParam->dtpublicacao);
+
         db_inicio_transacao();
-      	$oAssinatura = new AcordoAssinatura();
-      	$oAssinatura->setAcordo($oParam->acordo);
-      	$dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
-      	$oAssinatura->setDataMovimento($dtMovimento);
-        $oAssinatura->setDataPublicacao(implode("-", array_reverse(explode("/", $oParam->dtpublicacao))));
+        $oAssinatura = new AcordoAssinatura();
+        $oAssinatura->setAcordo($oParam->acordo);
+        $oAssinatura->setDataMovimento($oDataMovimentacao->getDate());
+        $oAssinatura->setDataPublicacao($oDataPublicacao->getDate());
         $oAssinatura->setVeiculoDivulgacao($oParam->veiculodivulgacao);
       	$oAssinatura->setObservacao($sObservacao);
         $oAcordo = new Acordo($oParam->acordo);
+
+        if ($oDataPublicacao->getTimeStamp() < $oDataMovimentacao->getTimeStamp()) {
+          throw new Exception("A data de assinatura do contrato não pode ser menor que a data de publicação.");
+        }
 
 
       /*
