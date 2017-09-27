@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Acordos
@@ -48,7 +48,7 @@ $db_opcao = 1;
             <td nowrap title="<?=@$Tac12_sequencial?>">
              <?=@$Lac12_sequencial?>
             </td>
-            <td> 
+            <td>
             <?
             db_input('ac12_sequencial',10,$Iac12_sequencial,true,'text',3,"");
             db_input('ac12_acordo',10,$Iac12_acordo,true,'text',$db_opcao," onchange='js_pesquisaac12_acordo(false);'")
@@ -61,7 +61,7 @@ $db_opcao = 1;
                db_ancora(@$Lac12_acordogarantia,"js_pesquisaac12_acordogarantia(true);",$db_opcao);
                ?>
             </td>
-            <td> 
+            <td>
             <?
             db_input('ac12_acordogarantia', 10, $Iac12_acordogarantia,true,'text',
                      $db_opcao," onchange='js_pesquisaac12_acordogarantia(false);'");
@@ -85,9 +85,9 @@ $db_opcao = 1;
        </fieldset>
      </td>
    </tr>
-   <tr> 
+   <tr>
      <td colspan="2" align="center">
-       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
+       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
               type="button" id="db_opcao" value="Incluir">
         <input name="Novo" style="display:none" onclick="js_limpar()"
               type="button" id="btnNovo" value="Novo">
@@ -119,18 +119,18 @@ var sUrlRpc = 'ac4_acordopenalidadesgaratnias.RPC.php';
 function js_pesquisaac12_acordogarantia(mostra){
 
   if (mostra) {
-  
-    js_OpenJanelaIframe('top.corpo.iframe_acordogarantia', 
+
+    js_OpenJanelaIframe('top.corpo.iframe_acordogarantia',
                         'db_iframe_acordogarantia',
                         'func_acordogarantia.php?funcao_js=parent.js_mostraacordogarantia1|'+
-                        'ac11_sequencial|ac11_descricao|ac11_textopadrao', 
-                        'Pesquisar garantias', 
+                        'ac11_sequencial|ac11_descricao|ac11_textopadrao',
+                        'Pesquisar garantias',
                         true
                         );
   } else {
-     
+
      if (document.form1.ac12_acordogarantia.value != '') {
-      
+
         js_OpenJanelaIframe('top.corpo.iframe_acordogarantia',
                             'db_iframe_acordogarantia',
                             'func_acordogarantia.php?pesquisa_chave='+
@@ -140,7 +140,7 @@ function js_pesquisaac12_acordogarantia(mostra){
                             false
                             );
      }else{
-       document.form1.ac11_sequencial.value = ''; 
+       document.form1.ac11_sequencial.value = '';
      }
   }
 }
@@ -148,10 +148,10 @@ function js_pesquisaac12_acordogarantia(mostra){
 function js_mostraacordogarantia(chave,erro) {
 
   if (erro) {
-   
-    document.form1.ac12_acordogarantia.focus(); 
+
+    document.form1.ac12_acordogarantia.focus();
     document.form1.ac12_acordogarantia.value = '';
-     
+
   } else {
     js_getDadosgarantia($F('ac12_acordogarantia'));
   }
@@ -171,7 +171,7 @@ function js_main() {
   oGridGarantias.nameInstance = "oGridgarantias";
   oGridGarantias.setCellWidth(new Array("10%", '75%','15%'));
   oGridGarantias.setHeader(new Array("Código",  "Descrição","Ação"));
-  oGridGarantias.show($('ctnGridgarantia'));  
+  oGridGarantias.show($('ctnGridgarantia'));
   js_getGarantias();
   $('db_opcao').onclick=js_salvarGarantia;
 }
@@ -182,11 +182,11 @@ function js_getDadosgarantia(iGarantia) {
    var oParam     = new Object();
    oParam.iTipo   = 2;
    oParam.exec    = 'getDadosPenalidadeGarantia';
-   oParam.iCodigo = iGarantia; 
+   oParam.iCodigo = iGarantia;
    var oAjax      = new Ajax.Request(sUrlRpc,
                                     {method     : 'post',
                                      parameters :'json='+Object.toJSON(oParam),
-                                     onComplete : js_retornoGetDadosgarantia 
+                                     onComplete : js_retornoGetDadosgarantia
                                     }
                                    )
 }
@@ -198,10 +198,10 @@ function js_retornoGetDadosgarantia(oAjax) {
   js_removeObj('msgBox');
   var oRetorno = eval('('+oAjax.responseText+')');
   if (oRetorno.status  == 1) {
-    
+
     $('ac11_descricao').value = oRetorno.descricao.urlDecode();
     $('ac12_texto').value     = oRetorno.texto.urlDecode();
-  } 
+  }
 }
 
 function js_getGarantias(iGarantia) {
@@ -216,11 +216,12 @@ function js_getGarantias(iGarantia) {
   js_divCarregando('Aguarde, Pesquisando garantias','msgBox');
   var oParam          = new Object();
   oParam.exec         = 'getGarantias';
-  oParam.iGarantia    = iGarantia; 
+  oParam.iGarantia    = iGarantia;
+  oParam.iAcordo      = document.form1.ac12_acordo.value;
   var oAjax           = new Ajax.Request(sUrlRpc,
                                      {method     : 'post',
                                       parameters :'json='+Object.toJSON(oParam),
-                                      onComplete : js_retornoGetgarantias 
+                                      onComplete : js_retornoGetgarantias
                                       }
                                     )
 }
@@ -231,33 +232,33 @@ function js_retornoGetgarantias(oAjax) {
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
-  
+
     if (!oRetorno.isUpdate) {
-    
+
       oGridGarantias.clearAll(true);
       oRetorno.itens.each(function (oRow, id) {
-      
+
         aLinha     = new Array();
         aLinha[0]  = oRow.codigo;
         aLinha[1]  = oRow.descricao.urlDecode();
         aLinha[2]  = "<input type='button' value='A' onclick='js_getGarantias("+oRow.codigo+")'>";
         aLinha[2] += "<input type='button' value='E' onclick='js_excluirGarantia("+oRow.codigo+")'>";
-        
+
         oGridGarantias.addRow(aLinha);
         var sTexto  = oRow.texto.urlDecode().replace(/\"/g,'\\"');
-        
+
         oGridGarantias.aRows[id].sEvents  = "onmouseover=\'js_setAjuda(\""+sTexto+"\",true)'";
         oGridGarantias.aRows[id].sEvents += "onmouseOut='js_setAjuda(null,false)'";
       });
       oGridGarantias.renderRows();
     } else {
-    
+
       $('db_opcao').value        = 'Alterar';
       $('btnNovo').style.display ='';
       $('ac12_acordogarantia').value = oRetorno.itens[0].codigo;
       $('ac11_descricao').value = oRetorno.itens[0].descricao.urlDecode();
       $('ac12_texto').value = oRetorno.itens[0].texto.urlDecode();
-      
+
     }
   } else {
     alert(oRetorno.message.urlDecode());
@@ -270,11 +271,11 @@ function js_salvarGarantia() {
    oParam.iTipo       = 1;
    oParam.exec        = 'salvarGarantia';
    oParam.iGarantia   = $F('ac12_acordogarantia');
-   oParam.sTexto      = encodeURIComponent(tagString($F('ac12_texto'))); 
+   oParam.sTexto      = encodeURIComponent(tagString($F('ac12_texto')));
    var oAjax          = new Ajax.Request(sUrlRpc,
                                     {method     : 'post',
                                      parameters :'json='+Object.toJSON(oParam),
-                                     onComplete : js_retornoSalvar 
+                                     onComplete : js_retornoSalvar
                                     }
                                    )
 }
@@ -284,7 +285,7 @@ function js_retornoSalvar(oAjax) {
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
-    
+
     js_getGarantias();
   } else {
     alert(oRetorno.message.urlDecode());
@@ -292,10 +293,10 @@ function js_retornoSalvar(oAjax) {
 }
 
 function js_excluirGarantia(iGarantia) {
-  
+
   if (!confirm('Confirma a Exclusao da garantia?')) {
     return false;
-  } 
+  }
   js_divCarregando('Aguarde, Excluindo garantia','msgBox');
   var oParam         = new Object();
    oParam.iTipo       = 1;
@@ -304,7 +305,7 @@ function js_excluirGarantia(iGarantia) {
    var oAjax          = new Ajax.Request(sUrlRpc,
                                     {method     : 'post',
                                      parameters :'json='+Object.toJSON(oParam),
-                                     onComplete : js_retornoSalvar 
+                                     onComplete : js_retornoSalvar
                                     }
                                    )
 }
@@ -320,8 +321,8 @@ function js_limpar() {
 function js_setAjuda(sTexto,lShow) {
 
   if (lShow) {
-  
-    el =  $('gridoGridGarantias'); 
+
+    el =  $('gridoGridGarantias');
     var x = 0;
     var y = el.offsetHeight;
     while (el.offsetParent && el.tagName.toUpperCase() != 'BODY') {
@@ -337,7 +338,7 @@ function js_setAjuda(sTexto,lShow) {
    $('ajudaItem').style.display = '';
    $('ajudaItem').style.top     = y+10;
    $('ajudaItem').style.left    = x;
-   
+
   } else {
    $('ajudaItem').style.display = 'none';
   }

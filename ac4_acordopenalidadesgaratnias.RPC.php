@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once('classes/db_acordocomissao_classe.php');
@@ -57,23 +57,28 @@ $oRetorno = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = 1;
 $oRetorno->itens   = array();
+
+if (!isset($_SESSION["oContrato"]) && isset($oParam->iAcordo)) {
+  $_SESSION["oContrato"] = new Acordo($oParam->iAcordo);
+}
+
 switch($oParam->exec) {
 
   case 'getDadosPenalidadeGarantia' :
-      
+
     try {
-      
-      if ($oParam->iTipo == 1) {   
+
+      if ($oParam->iTipo == 1) {
         if (!empty($oParam->iCodigo)) {
-          
+
           $oPenalidade         = new AcordoPenalidade($oParam->iCodigo);
           $oRetorno->descricao = urlencode($oPenalidade->getDescricao());
           $oRetorno->texto     = urlencode($oPenalidade->getTextoPadrao());
         }
-      } else if ($oParam->iTipo == 2) {   
-        
+      } else if ($oParam->iTipo == 2) {
+
         if (!empty($oParam->iCodigo)) {
-          
+
           $oGarantia           = new AcordoGarantia($oParam->iCodigo);
           $oRetorno->descricao = urlencode($oGarantia->getDescricao());
           $oRetorno->texto     = urlencode($oGarantia->getTextoPadrao());
@@ -81,26 +86,25 @@ switch($oParam->exec) {
       }
     }
     catch (Exception $eErro) {
-           
+
        $oRetorno->status = 2;
-       $oRetorno->messag = urlencode($eErro->getMessage()); 
+       $oRetorno->messag = urlencode($eErro->getMessage());
      }
     break;
-    
-  Case "getPenalidades" :
+
+  case "getPenalidades" :
 
     if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-      
-      //oContrato    = new Acordo();
+
       $oContrato    = $_SESSION["oContrato"];
       $aPenalidades = $oContrato->getPenalidades();
       $oRetorno->isUpdate = false;
       foreach ($aPenalidades as $oPenalidade) {
-        
+
         if ($oParam->iPenalidade != '') {
-          
+
           if ($oPenalidade->getCodigo() == $oParam->iPenalidade) {
-            
+
             $oRetorno->isUpdate = true;
             $oPenal  = new stdClass();
             $oPenal->codigo    = $oPenalidade->getCodigo();
@@ -109,75 +113,75 @@ switch($oParam->exec) {
             $oRetorno->itens[] = $oPenal;
           }
         } else {
-          
-        
+
+
           $oPenal  = new stdClass();
           $oPenal->codigo    = $oPenalidade->getCodigo();
           $oPenal->descricao = urlencode($oPenalidade->getDescricao());
           $oPenal->texto     = urlencode(str_replace("\n","<br>",$oPenalidade->getTextoPadrao()));
           $oRetorno->itens[] = $oPenal;
-        
+
         }
       }
     }
-    
+
     break;
-    
+
   case "salvarPenalidade":
 
     if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-      
+
       try {
-        
+
         db_inicio_transacao();
         $oContrato    = $_SESSION["oContrato"];
         $oPenalidade  = new AcordoPenalidade($oParam->iPenalidade);
         $oContrato->adicionarPenalidades($oPenalidade, utf8_decode($oParam->sTexto))
                   ->save();
-        db_fim_transacao(false);                  
+        db_fim_transacao(false);
       } catch (Exception $eErro) {
-        
+
         db_fim_transacao(true);
         $oRetorno->status = 2;
         $oRetorno->message = urlencode($eErro->getMessage());
       }
     }
     break;
-    
+
     case "excluirPenalidade":
 
       if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-        
+
         try {
-          
+
           db_inicio_transacao();
           $oContrato    = $_SESSION["oContrato"];
           $oContrato->removerPenalidade($oParam->iPenalidade)
                     ->save();
-          db_fim_transacao(false);                  
+          db_fim_transacao(false);
         } catch (Exception $eErro) {
-          
+
           db_fim_transacao(true);
           $oRetorno->status = 2;
           $oRetorno->message = urlencode($eErro->getMessage());
         }
       }
       break;
-      
-    Case "getGarantias" :
+
+    case "getGarantias" :
 
     if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-      
+
       //oContrato    = new Acordo();
       $oContrato    = $_SESSION["oContrato"];
       $aGarantias = $oContrato->getGarantias();
       $oRetorno->isUpdate = false;
       foreach ($aGarantias as $oGarantia) {
-        
+
         if ($oParam->iGarantia != '') {
-          
+
           if ($oGarantia->getCodigo() == $oParam->iGarantia) {
-            
+
             $oRetorno->isUpdate = true;
             $oGaran  = new stdClass();
             $oGaran->codigo    = $oGarantia->getCodigo();
@@ -186,34 +190,34 @@ switch($oParam->exec) {
             $oRetorno->itens[] = $oGaran;
           }
         } else {
-          
-        
+
+
           $oGaran  = new stdClass();
           $oGaran->codigo    = $oGarantia->getCodigo();
           $oGaran->descricao = urlencode($oGarantia->getDescricao());
           $oGaran->texto     = urlencode(str_replace("\n","<br>",$oGarantia->getTextoPadrao()));
           $oRetorno->itens[] = $oGaran;
-        
+
         }
       }
     }
-    
+
     break;
-     
+
   case "salvarGarantia":
 
     if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-      
+
       try {
-        
+
         db_inicio_transacao();
         $oContrato    = $_SESSION["oContrato"];
         $oGarantia  = new AcordoGarantia($oParam->iGarantia);
         $oContrato->adicionarGarantias($oGarantia, utf8_decode($oParam->sTexto))
                   ->save();
-        db_fim_transacao(false);                  
+        db_fim_transacao(false);
       } catch (Exception $eErro) {
-        
+
         db_fim_transacao(true);
         $oRetorno->status = 2;
         $oRetorno->message = urlencode($eErro->getMessage());
@@ -224,22 +228,22 @@ switch($oParam->exec) {
    case "excluirGarantia":
 
       if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-        
+
         try {
-          
+
           db_inicio_transacao();
           $oContrato    = $_SESSION["oContrato"];
           $oContrato->removerGarantia($oParam->iGarantia)
                     ->save();
-          db_fim_transacao(false);                  
+          db_fim_transacao(false);
         } catch (Exception $eErro) {
-          
+
           db_fim_transacao(true);
           $oRetorno->status = 2;
           $oRetorno->message = urlencode($eErro->getMessage());
         }
       }
-      break;  
+      break;
 }
-echo $oJson->encode($oRetorno);   
+echo $oJson->encode($oRetorno);
 ?>

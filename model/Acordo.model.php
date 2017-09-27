@@ -1540,6 +1540,7 @@ class Acordo
         /**
          * Salvamos todos as garantias/penalidades vinculadas ao acordo
          */
+        $this->getPenalidades();
         $oDaoAcordoPenalidade = db_utils::getDao("acordoacordopenalidade");
         $oDaoAcordoPenalidade->excluir(null, "ac15_acordo={$this->getCodigoAcordo()}");
         foreach ($this->getPenalidades() as $oPenalidade) {
@@ -1554,6 +1555,7 @@ class Acordo
             }
         }
 
+        $this->getGarantias();
         $oDaoAcordoGarantia = db_utils::getDao("acordoacordogarantia");
         $oDaoAcordoGarantia->excluir(null, "ac12_acordo={$this->getCodigoAcordo()}");
         foreach ($this->getGarantias() as $oGarantia) {
@@ -3403,7 +3405,7 @@ class Acordo
             $oNovoItem->setValorTotal(round($oItem->valorunitario * $oItem->quantidade, 2));
 
             /**
-             * Caso seja servico e nao controlar quantidade, 
+             * Caso seja servico e nao controlar quantidade,
              * o valor anterior a comparar sera o saldo a executar
              */
             if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getServicoQuantidade() == "f") {
@@ -3412,7 +3414,7 @@ class Acordo
             } else {
                 $nValorComparar = $oItemContrato->getValorUnitario();
             }
-            
+
 
             if ( (($oNovoItem->getValorUnitario() > $nValorComparar && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA)
                 || ($oNovoItem->getValorUnitario() < $nValorComparar && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA)
