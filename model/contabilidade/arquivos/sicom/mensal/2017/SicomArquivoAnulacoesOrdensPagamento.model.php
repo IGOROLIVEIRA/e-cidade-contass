@@ -210,9 +210,18 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
       /**
        * pegar quantidade de extornos
        */
-      $sSqlExtornos = "select sum(case when c53_tipo = 21 then -1 * c70_valor else c70_valor end) as valor from conlancamdoc join conhistdoc on c53_coddoc = c71_coddoc
-    join conlancamord on c71_codlan =  c80_codlan join conlancam on c70_codlan = c71_codlan where c53_tipo in (21,20)
-    and c80_codord = {$oAnulacoes->e50_codord} and c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
+      $sSqlExtornos  = " SELECT sum(CASE ";
+      $sSqlExtornos .= "                WHEN c53_tipo = 21 THEN -1 * c70_valor ";
+      $sSqlExtornos .= "                ELSE c70_valor ";
+      $sSqlExtornos .= "            END) AS valor ";
+      $sSqlExtornos .= " FROM conlancamdoc ";
+      $sSqlExtornos .= " JOIN conhistdoc ON c53_coddoc = c71_coddoc ";
+      $sSqlExtornos .= " JOIN conlancamord ON c71_codlan = c80_codlan ";
+      $sSqlExtornos .= " JOIN conlancam ON c70_codlan = c71_codlan ";
+      $sSqlExtornos .= " WHERE c53_tipo IN (21, 20) ";
+      $sSqlExtornos .= "     AND c70_data <= '" . $this->sDataFinal . "' ";
+      $sSqlExtornos .= "     AND c80_codord = {$oAnulacoes->e50_codord} ";
+
       $rsQuantExtornos = db_query($sSqlExtornos);
 
       if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor <> 0) {
