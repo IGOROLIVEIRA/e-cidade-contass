@@ -164,9 +164,9 @@ $sWhereContratos = " and 1 = 1 ";
 
 
 
-	  if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
+      if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1){
 
-          $dbwhere .= "l20_licsituacao in ($situacao,11) or (pc50_pctipocompratribunal in (100,101,102) and l20_licsituacao in ($situacao,1,11)) and ";
+          $dbwhere .= "l20_licsituacao in ($situacao) and ";
       }
 
       if (!empty($oGet->validasaldo)){
@@ -258,7 +258,7 @@ $sWhereContratos = " and 1 = 1 ";
                 db_fieldsmemory($result,0);
                 echo "<script>".$funcao_js."('$l20_objeto',false);</script>";
               }else{
-  	            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n√£o Encontrado',true);</script>";
+  	            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n„o Encontrado',true);</script>";
               }
 	          } else {
                  $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null,"*",null,"$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
@@ -271,7 +271,7 @@ $sWhereContratos = " and 1 = 1 ";
 
                  } else {
 
-	                 echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n√£o Encontrado',true);</script>";
+	                 echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n„o Encontrado',true);</script>";
                  }
 	         }
 
