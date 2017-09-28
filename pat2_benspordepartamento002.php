@@ -288,11 +288,11 @@ $sCamposBens .= "bensmater.*, ";
 $sCamposBens .= "bensimoveis.*, ";
 $sCamposBens .= "bensbaix.*, ";
 $sCamposBens .= "bensdepreciacao.*,";
-$sCamposBens .= "(  select t70_descr ";
+$sCamposBens .= "(  select distinct t70_descr ";
 $sCamposBens .= "     from histbem ";
 $sCamposBens .= "          inner join situabens on t70_situac = t56_situac ";
 $sCamposBens .= "    where t56_codbem = t52_bem ";
-$sCamposBens .= " order by t56_histbem desc limit 1 ) as estadobem";
+$sCamposBens .= "  limit 1 ) as estadobem";
 
 /**
  * Monta o SQL de acordo validando se o usuário selecionou todos departamentos ou não
