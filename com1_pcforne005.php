@@ -106,7 +106,13 @@ if(isset($chavepesquisa)){
          parent.document.formaba.pcforneidentificacaocredor.disabled=false;
      ";
     //Alterado o modulo de 28 para 39 - cod modulo incorreto (Ocorrencia 2213)
-     $permissao=db_permissaomenu(db_getsession("DB_anousu"),39,5002);
+
+    /** Mario Junior
+     *  comentado parte do codigo que impedia usuario comum alterar e incluir contass banco;
+     * $permissao=db_permissaomenu(db_getsession("DB_anousu"),39,5002);
+     */
+
+     $permissao=true;
      if ($permissao=='true'){
      	echo"parent.document.formaba.pcfornecon.disabled=false;
          	 top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
