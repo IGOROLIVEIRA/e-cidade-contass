@@ -163,7 +163,8 @@ for($linha=0;$linha<$numrows;$linha++){
 		    '' as codret,
 			  '' as dtretorno,
 			  '' as arqret,
-			 	'' as dtarquivo
+				'' as dtarquivo,
+			 0 as k153_slipoperacaotipo
  from corrente
       inner join coremp on coremp.k12_id = corrente.k12_id and coremp.k12_data   = corrente.k12_data
                                                            and coremp.k12_autent = corrente.k12_autent
@@ -210,7 +211,8 @@ for($linha=0;$linha<$numrows;$linha++){
 		   '' as codret,
 			 '' as dtretorno,
 			 '' as arqret,
-			 '' as dtarquivo
+			 '' as dtarquivo,
+			 0 as k153_slipoperacaotipo
 	     from (
       	     select
 	                 caixa,
@@ -311,7 +313,8 @@ union all
 		         '' as codret,
 						 '' as dtretorno,
 						 '' as arqret,
-						 '' as dtarquivo
+						 '' as dtarquivo,
+			0 as k153_slipoperacaotipo
 	     from (
 	           select
 	                 caixa,
@@ -406,7 +409,8 @@ union all
 		         codret::text,
 			       dtretorno::text,
 			       arqret::text,
-			       dtarquivo::text
+			     dtarquivo::text,
+			 0 as k153_slipoperacaotipo
      from (
 	         select
 	                caixa,
@@ -525,7 +529,8 @@ union all
        '' as codret,
 			 '' as dtretorno,
 			 '' as arqret,
-			 '' as dtarquivo
+			 '' as dtarquivo,
+	    0 as k153_slipoperacaotipo
 from (
 select caixa,
        data,
@@ -579,7 +584,8 @@ select caixa,
        '' as codret,
 			 '' as dtretorno,
 			 '' as arqret,
-			 '' as dtarquivo
+			 '' as dtarquivo,
+			 sliptipooperacaovinculo.k153_slipoperacaotipo
 	     from corlanc
 	           inner join corrente on corrente.k12_id  = corlanc.k12_id    and
 		                          corrente.k12_data  = corlanc.k12_data  and
@@ -593,7 +599,7 @@ select caixa,
 
 		   left join slipnum on slipnum.k17_codigo = slip.k17_codigo
 		   left join cgm on slipnum.k17_numcgm = z01_numcgm
-
+           left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip=slip.k17_codigo
 
 		   left join corconf on corconf.k12_id = corlanc.k12_id 				and
 		                        corconf.k12_data = corlanc.k12_data 		and
@@ -635,7 +641,8 @@ select caixa,
        '' as codret,
 			 '' as dtretorno,
 			 '' as arqret,
-			 '' as dtarquivo
+			 '' as dtarquivo,
+			 sliptipooperacaovinculo.k153_slipoperacaotipo
 	     from corrente
 	           inner join corlanc on corrente.k12_id     = corlanc.k12_id
                                  and corrente.k12_data   = corlanc.k12_data
@@ -651,6 +658,7 @@ select caixa,
                                 and corconf.k12_data = corlanc.k12_data
                                 and	corconf.k12_autent = corlanc.k12_autent
                                 and corconf.k12_ativo is true
+               left join sliptipooperacaovinculo on sliptipooperacaovinculo.k153_slip=slip.k17_codigo
                left join empageconfche on empageconfche.e91_codcheque = corconf.k12_codmov
                												and	corconf.k12_ativo is true
                												and empageconfche.e91_ativo is true
@@ -691,7 +699,7 @@ select caixa,
 			db_fieldsmemory($resmovimentacao,$i);
 
 			//quando agrupar os pagamentos o sistema vai retirar as retenções do relatorio.
-            if($pagempenhos==2){
+            if($pagempenhos==3){
 				if (  $ordem > 0 and ($k105_corgrupotipo == 5 or $k105_corgrupotipo == 0 or $k105_corgrupotipo == 2)  ) {
 					continue;
 				}	
@@ -1132,7 +1140,92 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 				}else{
 
 					foreach ($aMovimentacao as $key=>$oValor) {
-						if($oValor->ordem == $oMovimento->ordem && $controle == false && $oMovimento->tipo == "empenho" && $oValor->tipo == "empenho")
+						if($oValor->ordem == $oMovimento->ordem && $controle == false 
+							&& $oMovimento->tipo == "empenho" && $oValor->tipo == "empenho")
+						{
+
+							$controle = true;
+							$chave = $key;
+						}
+					}
+					if($controle){
+						$aMovimentacao[$chave]->valor_debito 		+= $oMovimento->valor_debito;
+						$aMovimentacao[$chave]->valor_credito 	+= $oMovimento->valor_credito;
+						if($oMovimento->tipo == "empenho" && $oMovimento->empenho != ""){
+							$oMovimento->contrapartida = $oMovimento->codigocredor." - ".$oMovimento->credor;
+							$aMovimentacao[$chave]->contrapartida = $oMovimento->contrapartida;
+						}
+					}else{
+						if($oMovimento->tipo == "empenho" && $oMovimento->empenho != ""){
+							$oMovimento->contrapartida = $oMovimento->codigocredor." - ".$oMovimento->credor;
+						}
+						$aMovimentacao[] = $oMovimento;
+					}
+
+				}
+
+			}
+			$aContasNovas[$oConta->k13_reduz]->data[$key1]->movimentacoes = $aMovimentacao;
+			$aMovimentacao = array();
+		}
+
+	}
+	$aContas = $aContasNovas;
+}else if ($agrupapor == 1 && $pagempenhos == 3 ){
+	$aMovimentacao = array();
+	$aContasNovas	 = array();
+
+	foreach ($aContas as $key2=>$oConta){
+		$aContasNovas[$key2] = $oConta;
+		foreach ($oConta->data as $key1=>$oData){
+
+			foreach ($oData->movimentacoes as $oMovimento){
+				$controle = false;
+
+				if($oMovimento->tipo != "empenho" && $oMovimento->tipo != "planilha" 
+					&& ($oMovimento->tipo != "slip" && !in_array($oMovimento->slipoperacaotipo, array(5,6) ) ) ) {
+
+					$aMovimentacao[] = $oMovimento;
+
+				}else if($oMovimento->tipo == "planilha"){
+
+					foreach ($aMovimentacao as $key=>$oValor) {
+						if($oValor->receita == $oMovimento->receita && $controle == false 
+							&& $oMovimento->tipo == "planilha" && $oValor->tipo == "planilha")
+						{
+							$controle = true;
+							$chave = $key;
+						}
+					}
+					if($controle){
+						$aMovimentacao[$chave]->valor_debito 		+= $oMovimento->valor_debito;
+						$aMovimentacao[$chave]->valor_credito 	+= $oMovimento->valor_credito;
+					}else{
+						$aMovimentacao[] = $oMovimento;
+					}
+
+				}else if($oMovimento->tipo == "slip" && !in_array($oMovimento->slipoperacaotipo, array(5,6) ) ){
+
+					foreach ($aMovimentacao as $key=>$oValor) {
+						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false 
+							&& $oMovimento->tipo == "slip" && $oValor->tipo == "slip")
+						{
+							$controle = true;
+							$chave = $key;
+						}
+					}
+					if($controle){
+						$aMovimentacao[$chave]->valor_debito 		+= $oMovimento->valor_debito;
+						$aMovimentacao[$chave]->valor_credito 	+= $oMovimento->valor_credito;
+					}else{
+						$aMovimentacao[] = $oMovimento;
+					}
+
+				}else{
+
+					foreach ($aMovimentacao as $key=>$oValor) {
+						if($oValor->codigocredor == $oMovimento->codigocredor && $controle == false 
+							&& $oMovimento->tipo == "empenho" && $oValor->tipo == "empenho")
 						{
 
 							$controle = true;
@@ -1164,12 +1257,12 @@ else if ($agrupapor == 1 && $pagempenhos == 2 ){
 	$aContas = $aContasNovas;
 }
 
-/*
-echo "<pre>";
+
+/*echo "<pre>";
 print_r($aContas);
 echo "</pre>";
-exit();
-*/
+exit();*/
+
 
 if($imprime_pdf == 'p'){
 	$pdf = new PDF();
