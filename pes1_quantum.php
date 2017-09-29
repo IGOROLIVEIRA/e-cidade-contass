@@ -9,7 +9,7 @@ require_once("dbforms/db_classesgenericas.php");
 
 db_postmemory($HTTP_POST_VARS);
 
-if (isset($geratxt)) { 
+if (isset($geratxt)) {
 
 if ($tipo == 'qw101'){
 
@@ -46,7 +46,7 @@ select x.* from
 || lpad(' ',15)
 || '000'
 || '   '
-|| case when rh05_seqpes is not null then lpad('rescisÃ£o',41)
+|| case when rh05_seqpes is not null then lpad('rescisão',41)
     when r45_codigo is not null and rh05_seqpes is null then  lpad('afastamento ',14) || r45_dtafas || ' a ' || r45_dtreto
     else lpad(' ',37)
     end 
@@ -91,7 +91,7 @@ select x.* from
 || lpad(' ',15)
 || '000'
 || '   '
-|| case when rh05_seqpes is not null then lpad('rescisÃ£o',41)
+|| case when rh05_seqpes is not null then lpad('rescisão',41)
     when r45_codigo is not null and rh05_seqpes is null then  lpad('afastamento ',14) || r45_dtafas || ' a ' || r45_dtreto
     else lpad(' ',37)
     end 
@@ -185,7 +185,7 @@ $result = db_query($sSql);
   // Abre o arquivo para leitura e escrita
   $f = fopen("tmp/arqw101s.csv", "x");
 
-  // LÃª o conteÃºdo do arquivo
+  // Lê o conteúdo do arquivo
   $content = "";
   if(filesize("tmp/arqw101s.csv") > 0)
   $content = fread($f, filesize("tmp/arqw101s.csv"));
@@ -314,7 +314,7 @@ $result = db_query($sSql);
   // Abre o arquivo para leitura e escrita
   $f = fopen("tmp/arqw301s.csv", "x");
 
-  // LÃª o conteÃºdo do arquivo
+  // Lê o conteúdo do arquivo
   $content = "";
   if(filesize("tmp/arqw301s.csv") > 0)
   $content = fread($f, filesize("tmp/arqw301s.csv"));
@@ -390,6 +390,67 @@ SELECT x.*
              AND rh02_anousu = $anofolha
              AND rh02_mesusu = $mesfolha) AS x WHERE x.dado IS NOT NULL
 UNION ALL
+
+SELECT x.*
+    FROM
+        (SELECT DISTINCT 'D' 
+          || lpad(rh01_regist, 15,'0') 
+          || lpad(' ',15) 
+          || rh02_anousu 
+          || lpad(rh02_mesusu,2,0)
+          || CASE
+                   WHEN r48_pd = 1 THEN 'P'
+                   WHEN r48_pd = 2 THEN 'D'
+               END 
+            || lpad(r48_rubric,15,'0')
+            || coalesce(lpad(translate(trim(to_char(round(r48_valor,2),'99999999.99')),'.',''),15,'0'),'000000000000000')
+            || lpad(nextval('teste_seq'),6,'0') AS dado
+         FROM rhpessoal
+         INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+         INNER JOIN rhpessoalmov ON rh01_regist = rh02_regist
+         LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
+         LEFT JOIN db_config ON rh02_instit = db_config.codigo
+         LEFT JOIN gerfcom ON r48_regist = rh02_regist
+         AND r48_pd in (1,2)
+         AND r48_anousu = $anofolha
+         AND r48_mesusu = $mesfolha
+         WHERE rh02_instit = ".db_getsession('DB_instit')."
+             AND rh02_codreg NOT IN (0)
+             AND rh02_anousu = $anofolha
+             AND rh02_mesusu = $mesfolha) AS x WHERE x.dado IS NOT NULL
+             
+UNION ALL    
+
+SELECT x.*
+    FROM
+        (SELECT DISTINCT 'D' 
+          || lpad(rh01_regist, 15,'0') 
+          || lpad(' ',15) 
+          || rh02_anousu 
+          || lpad(rh02_mesusu,2,0)
+          || CASE
+                   WHEN r20_pd = 1 THEN 'P'
+                   WHEN r20_pd = 2 THEN 'D'
+               END 
+            || lpad(r20_rubric,15,'0')
+            || coalesce(lpad(translate(trim(to_char(round(r20_valor,2),'99999999.99')),'.',''),15,'0'),'000000000000000')
+            || lpad(nextval('teste_seq'),6,'0') AS dado
+         FROM rhpessoal
+         INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+         INNER JOIN rhpessoalmov ON rh01_regist = rh02_regist
+         LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
+         LEFT JOIN db_config ON rh02_instit = db_config.codigo
+         LEFT JOIN gerfres ON r20_regist = rh02_regist
+         AND r20_pd in (1,2)
+         AND r20_anousu = $anofolha
+         AND r20_mesusu = $mesfolha
+         WHERE rh02_instit = ".db_getsession('DB_instit')."
+             AND rh02_codreg NOT IN (0)
+             AND rh02_anousu = $anofolha
+             AND rh02_mesusu = $mesfolha) AS x WHERE x.dado IS NOT NULL
+             
+UNION ALL
+
 SELECT DISTINCT 'T' 
 || '2017' || '08' || '16' 
 || trim(lpad(count(x.*),6))
@@ -420,12 +481,13 @@ SELECT DISTINCT 'T'
            ) AS x ;
 
 ";
+
 $result = db_query($sSql);
   unlink("arqw601s.csv");
   // Abre o arquivo para leitura e escrita
   $f = fopen("arqw601s.csv", "x");
 
-  // LÃª o conteÃºdo do arquivo
+  // Lê o conteúdo do arquivo
   $content = "";
   if(filesize("arqw601s.csv") > 0)
   $content = fread($f, filesize("arqw601s.csv"));
@@ -532,7 +594,7 @@ $result = db_query($sSql);
   // Abre o arquivo para leitura e escrita
   $f = fopen("margem_mensal.csv", "x");
 
-  // LÃª o conteÃºdo do arquivo
+  // Lê o conteúdo do arquivo
   $content = "";
   if(filesize("margem_mensal.csv") > 0)
   $content = fread($f, filesize("margem_mensal.csv"));
@@ -596,7 +658,7 @@ $result = db_query($sSql);
 // Abre o arquivo para leitura e escrita
   $f = fopen("valores_d.csv", "x");
 
-  // LÃª o conteÃºdo do arquivo
+  // Lê o conteúdo do arquivo
   $content = "";
   if(filesize("valores_d.csv") > 0)
   $content = fread($f, filesize("valores_d.csv"));
@@ -655,8 +717,8 @@ db_query("DROP SEQUENCE teste_seq;");
 
   <fieldset style="margin-top: 50px; width: 40%">
   <legend style="font-weight: bold;">Quantum </legend>
-  
-    <table align="left" class='formTable'>  
+
+    <table align="left" class='formTable'>
         <?php
         $geraform = new cl_formulario_rel_pes;
         ?>
@@ -677,14 +739,14 @@ db_query("DROP SEQUENCE teste_seq;");
         <?php
         $geraform->gera_form($anofolha,$mesfolha);
         ?>
-        
+
     </table>
-  
+
   </fieldset>
 
   <table style="margin-top: 10px;">
     <tr>
-      <td colspan="2" align = "center"> 
+      <td colspan="2" align = "center">
         <!-- <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" > -->
         <input  name="geratxt" id="geratxt" type="submit" value="Processar" >
       </td>
