@@ -5,7 +5,7 @@ then
   echo "
   Modo de usar:
 
-  $ $0 NUMERO
+  $ sh $0 NUMERO
 
   ---
 

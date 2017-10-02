@@ -1,56 +1,110 @@
 #!/bin/bash
 export LC_ALL=pt_BR.ISO-8859-1
 export LANG="$LC_ALL"
-HOSTNAME=`hostname`
-CAMINHO="/var/www/e-cidade/updatedb"
-EXECUTADOS="/tmp/scripts_executados.sh"
-mkdir -p /var/www/e-cidade/updatedb/log/
+
+HOSTNAME=$(hostname)
+CAMINHO="$(pwd)/updatedb"
+
+LOGS="${CAMINHO}/log"
+EXECUTADOS="${CAMINHO}/scripts_executados"
+DISPONIVEIS="${CAMINHO}/scripts_disponiveis"
+BASES_LOCAIS="$(cat ${CAMINHO}/conn | grep -e "$IFS$HOSTNAME$")"
+EXECUTADOS_TMP="/tmp/scripts_executados"
+NAO_EXECUTADOS="${CAMINHO}/scripts_nao_executados"
+
+mkdir -p $LOGS
 
 cd $CAMINHO
-for SCRIPTS in $(ls *.sql);
+
+echo "
+# ${HOSTNAME}
+
+- Rastreando scripts disponíveis..."
+
+ls *.sql > $DISPONIVEIS 2> /dev/null
+
+[ $? != 0 ] && {
+
+  echo "  > Nenhum arquivo encontrado."
+  exit 4
+
+} || {
+
+  count=$(wc -l < $DISPONIVEIS)
+  echo "  > ${count} script(s) disponíveis."
+
+}
+
+echo "$(cat $DISPONIVEIS | sort | uniq)" > $DISPONIVEIS
+
+
+echo "
+- Atualizando bases de dados..."
+
+echo "$BASES_LOCAIS" | while read BANCO PORTA CLIENTE
 do
- echo $SCRIPTS >> $CAMINHO/scripts_disponiveis.sh	
+
+  momentoConsulta=$(date +%Y-%m-%d_%H:%M:%S)
+  logConsulta="${LOGS}/${momentoConsulta}_consulta_updatedb.log"
+
+  echo "  +> ${BANCO}"
+
+  psql -U dbportal -p $PORTA $BANCO -f $CAMINHO/update_table.sh > $logConsulta 2> $logConsulta
+
+  echo "$(cat $EXECUTADOS_TMP | sort | uniq)" > $EXECUTADOS
+
+  diff --side-by-side --suppress-common-lines $DISPONIVEIS $EXECUTADOS | cut -d" " -f1 | grep '[a-zA-Z]' > $NAO_EXECUTADOS
+
+  echo "  ├─ $(wc -l < $NAO_EXECUTADOS) script(s) a serem executados"
+
+  abortou=0
+
+  cat $NAO_EXECUTADOS | while read SCRIPT
+  do
+
+    dataScript=$(date +%Y-%m-%d)
+
+    momentoScript="${dataScript}_$(date +%H:%M:%S)"
+
+    logScript="${LOGS}/${momentoScript}_${BANCO}_${SCRIPT}.log"
+
+    if [ -f "${CAMINHO}/${SCRIPT}" ]
+    then
+
+      psql -U dbportal \
+        -p $PORTA $BANCO \
+        -v ON_ERROR_STOP=on \
+        -f "${CAMINHO}/${SCRIPT}" &> $logScript
+
+      executouScript=$?
+
+      [ $executouScript == 0 ] && {
+
+        sqlUpdate="begin; INSERT INTO updatedb (nomescript,dataexec) VALUES ('${SCRIPT}','${dataScript}'); commit;"
+        psql -U dbportal -p $PORTA $BANCO -c "${sqlUpdate}" &>> $logScript
+
+      }
+
+    else
+      continue
+    fi
+
+    [ $executouScript == 0 ] && {
+      echo "  │  ├─ ${SCRIPT}: [ OK ]"
+    } || {
+
+      echo "  │  ├─ ${SCRIPT}: [ ERRO - consulte o log ]"
+      abortou=1
+      break
+
+    }
+
+  done
+
+  echo "  └─ Procedimento finalizado."
+
+  echo ""
 done
-cat $CAMINHO/scripts_disponiveis.sh | sort | uniq > $CAMINHO/scripts_disponiveis_ordenado.sh
 
-cat $CAMINHO/conn | while read BANCO PORTA CLIENTE
-do
-
-   if [ $HOSTNAME != $CLIENTE ]; then
-	continue
-   fi
-
-   psql -U dbportal -p $PORTA $BANCO -f $CAMINHO/update_table.sh
-   
-   cat $EXECUTADOS | sort | uniq > $CAMINHO/scripts_executados_ordenado.sh
-
-   diff --side-by-side --suppress-common-lines $CAMINHO/scripts_disponiveis_ordenado.sh  $CAMINHO/scripts_executados_ordenado.sh | cut -d" " -f1 | grep '[a-zA-Z]' > $CAMINHO/scripts_nao_executados.sh
-
-   cat $CAMINHO/scripts_nao_executados.sh | while read SCRIPT
-   do
-	if [ -f "$CAMINHO/$SCRIPT" ]
-	then
-cat <<EOF> "$CAMINHO/${SCRIPT}_exec"
-begin;
-INSERT INTO updatedb (nomescript,dataexec) VALUES ('$SCRIPT','`date +%Y-%m-%d`') ;
-commit;
-EOF
-	else
-cat <<EOF> "$CAMINHO/${SCRIPT}_exec"
-begin;
-DELETE FROM updatedb WHERE nomescript = '$SCRIPT' ;
-commit;
-EOF
-	fi
-
-echo "$CAMINHO/$SCRIPT"
-
-	psql -U dbportal -p $PORTA $BANCO -f "$CAMINHO/$SCRIPT" &> $CAMINHO/log/`date +%Y-%m-%d_%H:%M:%S`_`echo $BANCO`_`echo $SCRIPT | cut -d"/" -f6`.log
-	psql -U dbportal -p $PORTA $BANCO -f "$CAMINHO/${SCRIPT}_exec" &> $CAMINHO/log/`date +%Y-%m-%d_%H:%M:%S`_`echo $BANCO`_`echo $SCRIPT | cut -d"/" -f6`.log
-   done
-
-done
-
-#rm $EXECUTADOS
-rm $CAMINHO/*.sql $CAMINHO/*.sh $CAMINHO/conn $CAMINHO/*.csv $CAMINHO/*_exec
+# rm $CAMINHO/conn
 
