@@ -118,9 +118,7 @@ $cldb_config = new cl_db_config;
 	  $quebradatas = 0;
       $quebraobs   = 1;
       $quebradescr = 0;
-      $this->descrativ = substr($this->descrativ,0,80);
       if ($this->impdatas == 't'){
-        $this->descrativ = substr($this->descrativ,0,50);
       	$quebradescr = 0;
       	$quebradatas = 1;
       }
