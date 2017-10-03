@@ -125,7 +125,8 @@ db_postmemory($HTTP_POST_VARS);
 								 WHERE c71_coddoc IN
 									 (SELECT c53_coddoc FROM conhistdoc
 									  WHERE c53_tipo IN (30, 31, 11, 21, 414, 90, 92))
-								   AND c80_codlan NOT IN									/* OC 2672 - Inserida condição para que não se apague os lançamentos dos descontos.*/
+								   AND c80_codlan NOT IN									
+								   /* OC 2672 - Inserida condição para que não se apague os lançamentos dos descontos.*/
 									 (SELECT e33_conlancam FROM pagordemdescontolanc
 									  WHERE e33_pagordemdesconto IN (SELECT e34_sequencial FROM pagordemdesconto
 																	  WHERE e34_codord IN (SELECT e50_codord FROM w_empordem)))
@@ -213,13 +214,6 @@ db_postmemory($HTTP_POST_VARS);
 															  where e23_retencaopagordem in (select e20_sequencial
 																							   from retencaopagordem
 																							  where e20_pagordem in (SELECT e50_codord FROM w_empordem)));
-						 delete from retencaoreceitas
-							  where e23_sequencial in (select e23_sequencial
-														 from retencaoreceitas
-														where e23_retencaopagordem in (select e20_sequencial
-																						 from retencaopagordem
-																						where e20_pagordem in (SELECT e50_codord FROM w_empordem)));
-						 delete from retencaopagordem where e20_pagordem in (SELECT e50_codord FROM w_empordem);
 						 drop table w_lancamentos;
 						 CREATE TEMPORARY TABLE w_lancamentos ON COMMIT DROP AS
 							SELECT c70_codlan AS lancam FROM conlancam
@@ -541,7 +535,6 @@ db_postmemory($HTTP_POST_VARS);
                     //-----------------------------------
                     //inclui contas dos fornecedores tabela empagemovconta
                     if($sqlerro==false){
-//         echo "<BR><BR>".($clpcfornecon->sql_query_empenho(null,"pc64_contabanco","pc64_contabanco","e60_numemp=$emp"));
                         $result_conta = $clpcfornecon->sql_record($clpcfornecon->sql_query_empenho(null,"pc64_contabanco","pc64_contabanco","e60_numemp=$emp"));
                         if($clpcfornecon->numrows>0){
                             db_fieldsmemory($result_conta,0);
@@ -569,14 +562,37 @@ db_postmemory($HTTP_POST_VARS);
 
                     //-----------------------------------
                     db_fim_transacao();
+                    db_inicio_transacao();
+                    $sSqlRetentecao = "SELECT e20_sequencial FROM retencaopagordem WHERE e20_pagordem=".$ord;
+                    $rsRetencao = db_query($sSqlRetentecao);
+                    if(pg_num_rows($rsRetencao) > 0){
+
+                    	$sSqlIncluirAlterarRetencao="UPDATE retencaoreceitas
+													    SET e23_recolhido=false
+													  WHERE e23_retencaopagordem IN
+													        (SELECT (e20_sequencial)
+													         FROM retencaopagordem
+													         WHERE e20_pagordem=".$ord.")";
+						//echo $sSqlIncluirAlterarRetencao;
+						db_query($sSqlIncluirAlterarRetencao);
+                        $sSqlIncluirRetencaoAgenda="insert into retencaoempagemov 
+												  SELECT nextval('retencaoempagemov_e27_sequencial_seq'),
+												  e20_sequencial,(select e82_codmov from empord where e82_codord=".$ord."),true
+												  FROM retencaopagordem
+												INNER JOIN retencaoreceitas on e23_retencaopagordem=e20_sequencial
+												         WHERE e20_pagordem=".$ord;
+						db_query($sSqlIncluirRetencaoAgenda);
+						//echo $sSqlIncluirRetencaoAgenda;exit;
+                    }
+                    db_fim_transacao();
 		  	    	
-					    if ($rsExluirPagOp == false) {
-					    	echo "<script> alert('Houve um erro ao excluir o pagamento!');</script>";
-			          db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
-					    } else {
-			          echo "<script> alert('Pagamento excluído com sucesso!');</script>";
-			          db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
-					    }
+					 if ($rsExluirPagOp == false) {
+					    echo "<script> alert('Houve um erro ao excluir o pagamento!');</script>";
+			            db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
+					 } else {
+			           echo "<script> alert('Pagamento excluído com sucesso!');</script>";
+			           db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
+					 }
 		  	    }
 		        
 	  	    }else{
