@@ -14,7 +14,7 @@
 DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
   var me                 = this;
-  me.iLicitacao          = '';
+  me.iLicitacao          = '1';
   me.iInstit             = '';
   me.sRPC                = "lic4_geraAutorizacoes.RPC.php";
   me.oDestino            = '';
@@ -88,6 +88,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
   /**
    *  Cria os inputs padrões do formulário
    */
+
+
   me.oTxtDestino        = new DBTextField('oTxtDestino'        , me.sInstancia + '.oTxtDestino'     , '', 50);
   me.oPrazoEntrega      = new DBTextField('oCboPrazoEntrega'   , me.sInstancia + '.oPrazoEntrega'   , '', 50);
   me.oCondicaoPagamento = new DBTextField('oTxtCondPagamento'  , me.sInstancia + '.oCondPagamento'  , '', 50);
@@ -140,8 +142,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         sContentForm += "            <td id='td_tipolicitacao_" + me.sInstancia + "'>" + me.oTipoLicitacao.toInnerHtml() + "</td>";
         sContentForm += "          </tr>";
         sContentForm += "          <tr>";
-        sContentForm += "            <td nowrap='nowrap'><b>Número da Licitação:</b></td>";
-        sContentForm += "            <td id='td_numerolicitacao_" + me.sInstancia + "'>" + me.oNumeroLicitacao.toInnerHtml() + "</td>";
+        sContentForm += "            <td title='Neste campo deverá ser informado o Nº do Processo Licitatório e não o da Modalidade.' nowrap='nowrap'><b>Número da Licitação:</b></td>";
+        sContentForm += "            <td title='Neste campo deverá ser informado o Nº do Processo Licitatório e não o da Modalidade.' id='td_numerolicitacao_" + me.sInstancia + "'>" + me.oNumeroLicitacao.toInnerHtml() + "</td>";
         sContentForm += "          </tr>";
         sContentForm += "          <tr>";
         sContentForm += "            <td nowrap='nowrap'><b>Prazo de Entrega:</b></td>";
@@ -205,6 +207,13 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         alert("Informe a característica peculiar.");
         return false;
       }
+
+      /*if ($F('oTxtTipoCompra') in [1,2,3,4,5,6,10] && $F('oTxtNumeroLicitacao') == "" ) {
+
+        alert("Informe a Licitação.");
+        return false;
+      }*/
+
       me.itensAutorizacao();
     });
 
@@ -241,7 +250,46 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
      */
     me.getTipoCompraEmpenho();
     me.getProcessoAdministrativo();
+
+    me.buscaDados();
   };
+
+  this.buscaDados = function () {
+
+      var oParam                   = new Object();
+      oParam.iCodigo           = me.getOrigem();
+      oParam.exec                  = "getDados";
+      var oAjaxTipoCompra          = new Ajax.Request(me.sRPC, 
+                                                      {
+                                                        method: 'post', 
+                                                        parameters:'json='+Object.toJSON(oParam), 
+                                                        onComplete:me.preencheCampos
+                                                      }
+                                                     );
+  }
+
+  /**
+   * Preenche os campos da tela
+   */
+  this.preencheCampos = function(oAjax) {
+    
+    var oRetorno = eval("("+oAjax.responseText+")");
+
+    if(oRetorno.aDados[0].sequenciallicitacao != undefined){
+      $('oTxtNumeroLicitacao').value=oRetorno.aDados[0].numerolicitacao;
+      $('oTxtTipoCompra').value=oRetorno.aDados[0].tipocompra;
+      me.buscarTipoLicitacao(oRetorno.aDados[0].tipocompra);
+    }
+
+    if(oRetorno.aDados[0].l20_usaregistropreco == 't'){
+        $('oTxtNumeroLicitacao').setAttribute('readonly',true);
+        $('oTxtNumeroLicitacao').style.backgroundColor = 'DEB887';
+        $('oCboTipoLicitacao').disabled = true;
+        //$('oCboTipoEmpenho').disabled   = true;
+        $('oTxtTipoCompra').disabled    = true;
+    }
+
+  }
   
   /**
    * retorna o processo cadastrado na solicitação
@@ -350,7 +398,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
       /**
        * Busca os tipos de licitação para o tipo de compra escolhido 
        */
-      me.buscarTipoLicitacao(me.oTipoCompra.getValue());
+      //me.buscarTipoLicitacao(me.oTipoCompra.getValue());
     }
   }
 
@@ -762,7 +810,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     me.oTipoLicitacao.clearItens();
     if (oRetorno.aTiposLicitacao != "") {
 
-      me.oTipoLicitacao.setEnable();
+      //me.oTipoLicitacao.setEnable();
       me.oNumeroLicitacao.setReadOnly(false);
       oRetorno.aTiposLicitacao.each(function (oItem) {
 
@@ -1491,6 +1539,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
       return false;
     }
 
+
+
     oGridSolicitacoes.clearAll(true);
     oRetorno.aSolicitacoes.each( function (oDado, iInd) {
 
@@ -1602,6 +1652,7 @@ DBToolTip = function (sTexto, oSender) {
    }
 
 }
+
 
 var oScriptDBViewAlteracaoDotacao = document.createElement("script");
 oScriptDBViewAlteracaoDotacao.src = "scripts/classes/DBViewSolicitacaoDotacao.classe.js";

@@ -1279,9 +1279,10 @@ class cl_acordo {
      $sSql .= "       from acordo";
      $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
      $sSql .= "            inner join acordoitem       on acordoitem.ac20_acordoposicao    = acordoposicao.ac26_sequencial";
-     $sSql .= "            inner join acordoliclicitem on acordoliclicitem.ac24_acordoitem = acordoitem.ac20_sequencial";
-     $sSql .= "            inner join liclicitem       on liclicitem.l21_codigo            = acordoliclicitem.ac24_liclicitem";
-     $sSql .= "            inner join liclicita        on liclicita.l20_codigo             = liclicitem.l21_codliclicita";
+     $sSql .= "            left join acordoliclicitem on acordoliclicitem.ac24_acordoitem = acordoitem.ac20_sequencial";
+     $sSql .= "            left join liclicitem       on liclicitem.l21_codigo            = acordoliclicitem.ac24_liclicitem";
+     $sSql .= "            inner join liclicita        on liclicita.l20_codigo             = liclicitem.l21_codliclicita
+                               or liclicita.l20_codigo = acordo.ac16_licitacao ";
      $sSql .= "  where 1 = 1 ";
      $sSql .= " {$sWhere} {$sOrder} ";
 

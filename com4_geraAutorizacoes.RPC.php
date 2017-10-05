@@ -143,6 +143,23 @@ switch ($oParam->exec) {
     }
     
   break;
+
+
+  case "getDados":
+    
+    try {
+      
+      $oProcessoCompra  = new ProcessoCompras($oParam->iCodigo);
+
+      $oRetorno->aDados = $oProcessoCompra->getDadosAutorizacao();
+
+    } catch (Exception $eErro) {
+      
+      $oRetorno->status = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+    }
+
+  break;
 }
 
 

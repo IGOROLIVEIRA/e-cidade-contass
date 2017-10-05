@@ -200,7 +200,11 @@ switch($oParam->exec) {
       $aItens    = array();
       
       $oRetorno->iCasasDecimais = 2;
+      //echo 'info contrato ';
+      //print_r($oContrato);
+
       $oRetorno->iOrigemContrato      = $oContrato->getOrigem();
+
       if ($oRetorno->iOrigemContrato == 2) {
         $aLicitacoesVinculadas = $oContrato->getLicitacoes();
         $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
@@ -210,6 +214,30 @@ switch($oParam->exec) {
         $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
         $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
         $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+      }else if ($oRetorno->iOrigemContrato == 3 )  {
+              $aLicitacoesVinculadas = $oContrato->getLicitacoes();
+
+              if(empty($aLicitacoesVinculadas[0])){
+
+                  $oRetorno->iCodigoLicitacao     = '';
+                  $oRetorno->iEdital              = '';
+                  $oRetorno->iAnoLicitacao        = '';
+                  $oRetorno->iModalidadeLicitacao = '';
+                  $oRetorno->pc50_codcom          = '';
+                  $oRetorno->l03_tipo             = '';
+
+              }else{
+
+                  $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+                  $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
+                  $oRetorno->iEdital              = $oStdDados->l20_edital;
+                  $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
+                  $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+                  $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
+                  $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+
+              }
+
       }
 
       foreach ($oContrato->getPosicoes() as $oPosicaoContrato) {

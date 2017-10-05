@@ -704,7 +704,7 @@ class ProcessoCompras {
 
 
 
-/**
+  /**
    * Gera a autorização de empenho para uma solicitação de compras
    * @param array $aDadosAutorizacao
    */
@@ -1103,5 +1103,36 @@ class ProcessoCompras {
     }
 
   }
+
+  public function getDadosAutorizacao () {
+
+    $oDaoPcProc = new cl_pcproc();
+    $sWhere          = "pc80_codproc = {$this->getCodigo()}";
+
+    $sSql            ="select distinct
+    l03_descr as TipoLicitacao,pc50_codcom as tipocompra, l20_edital||'/'||l20_anousu as numerolicitacao, l20_codigo as sequenciallicitacao,
+    l20_usaregistropreco
+    from pcproc
+    inner join pcprocitem on pc81_codproc=pc80_codproc
+    inner join solicitem filho on filho.pc11_codigo=pc81_solicitem
+    inner join solicita solicitaf on solicitaf.pc10_numero=filho.pc11_numero
+    inner join solicitavinculo on pc53_solicitafilho=solicitaf.pc10_numero
+    inner join solicita on solicita.pc10_numero=pc53_solicitapai
+    inner join solicitem on solicitem.pc11_numero=solicita.pc10_numero
+    inner join pcprocitem pcprociteml on pcprociteml.pc81_solicitem=solicitem.pc11_codigo
+    inner join liclicitem on l21_codpcprocitem=pcprociteml.pc81_codprocitem
+    inner join liclicita on l20_codigo=l21_codliclicita
+    inner join cflicita on l03_codigo=l20_codtipocom
+    inner join pctipocompratribunal on l03_pctipocompratribunal=l44_sequencial
+    inner join pctipocompra on pc50_pctipocompratribunal=l44_sequencial and l03_pctipocompratribunal=pc50_pctipocompratribunal
+    where pc80_codproc={$this->getCodigo()}";
+
+    $rsDados         = $oDaoPcProc->sql_record($sSql);
+    
+    $oDados = db_utils::fieldsMemory($rsDados, 0);
+    $aDados[] = $oDados;
+
+    return $aDados;
+  } 
 
 }
