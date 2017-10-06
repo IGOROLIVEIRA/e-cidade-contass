@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -629,210 +629,167 @@ if ($oParam->exec == "isExtra") {
   try {
     db_inicio_transacao();
     $iAnoUsu          = db_getsession("DB_anousu");
-    $sSqlSlip = "create temporary table w_slips_convert ON COMMIT DROP as 
-                  select k17_codigo,
-                         k17_data,
-                         k17_dtaut,
-                         k17_instit,
-                         k17_debito,
-                         c60_estrut,
-                         k17_credito,
-                         k17_valor
-                    from slip 
-                         inner join conplanoreduz           on k17_debito = c61_reduz  
-                                                           and c61_anousu = {$iAnoUsu}
-                         inner join conplano                on c61_anousu = c60_anousu 
-                                                           and c61_codcon = c60_codcon
-                         left  join sliptipooperacaovinculo on k17_codigo = k153_slip
-                         left  join sliptipooperacao        on k153_slipoperacaotipo = k152_sequencial
-                   where k17_codigo in ({$oParam->iCodigoSlip});
-                  create temporary table w_lancamentos on commit drop as 
-                            select c84_conlancam as lancam 
-                              from conlancamslip 
-                             where c84_slip in  (select k17_codigo from w_slips_convert);
-                  CREATE
-                  TEMPORARY TABLE w_corautent_slip AS
-                  SELECT corautent.*
-                  FROM corlanc
-                  INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id
-                  AND corlanc.k12_data = corrente.k12_data
-                  AND corlanc.k12_autent = corrente.k12_autent
-                  INNER JOIN corautent ON corlanc.k12_id = corautent.k12_id
-                  AND corlanc.k12_data = corautent.k12_data
-                  AND corlanc.k12_autent = corautent.k12_autent
-                  LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id
-                  AND corconf.k12_data = corrente.k12_data
-                  AND corconf.k12_autent = corrente.k12_autent
-                  WHERE corlanc.k12_codigo IN
-                          (SELECT k17_codigo
-                           FROM w_slips_convert);
-                  CREATE
-                  TEMPORARY TABLE w_corlanc_slip AS
-                  SELECT corlanc.*
-                  FROM corlanc
-                  INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id
-                  AND corlanc.k12_data = corrente.k12_data
-                  AND corlanc.k12_autent = corrente.k12_autent
-                  INNER JOIN corautent ON corlanc.k12_id = corautent.k12_id
-                  AND corlanc.k12_data = corautent.k12_data
-                  AND corlanc.k12_autent = corautent.k12_autent
-                  LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id
-                  AND corconf.k12_data = corrente.k12_data
-                  AND corconf.k12_autent = corrente.k12_autent
-                  WHERE corlanc.k12_codigo IN
-                          (SELECT k17_codigo
-                           FROM w_slips_convert);
-                  CREATE
-                  TEMPORARY TABLE w_corconf_slip AS
-                  SELECT corconf.*
-                  FROM corlanc
-                  INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id
-                  AND corlanc.k12_data = corrente.k12_data
-                  AND corlanc.k12_autent = corrente.k12_autent
-                  INNER JOIN corautent ON corlanc.k12_id = corautent.k12_id
-                  AND corlanc.k12_data = corautent.k12_data
-                  AND corlanc.k12_autent = corautent.k12_autent
-                  LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id
-                  AND corconf.k12_data = corrente.k12_data
-                  AND corconf.k12_autent = corrente.k12_autent
-                  WHERE corlanc.k12_codigo IN
-                          (SELECT k17_codigo
-                           FROM w_slips_convert);
-                  CREATE
-                  TEMPORARY TABLE w_corrente_slip AS
-                  SELECT corrente.*
-                  FROM corlanc
-                  INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id
-                  AND corlanc.k12_data = corrente.k12_data
-                  AND corlanc.k12_autent = corrente.k12_autent
-                  INNER JOIN corautent ON corlanc.k12_id = corautent.k12_id
-                  AND corlanc.k12_data = corautent.k12_data
-                  AND corlanc.k12_autent = corautent.k12_autent
-                  LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id
-                  AND corconf.k12_data = corrente.k12_data
-                  AND corconf.k12_autent = corrente.k12_autent
-                  WHERE corlanc.k12_codigo IN
-                          (SELECT k17_codigo
-                           FROM w_slips_convert);
-                  delete from corautent
-                        using w_corautent_slip
-                        where corautent.k12_id = w_corautent_slip.k12_id 
-                          and corautent.k12_data = w_corautent_slip.k12_data 
-                          and corautent.k12_autent = w_corautent_slip.k12_autent;
-                  delete from corlanc 
-                        using w_corlanc_slip
-                        where corlanc.k12_id = w_corlanc_slip.k12_id 
-                          and corlanc.k12_data = w_corlanc_slip.k12_data 
-                          and corlanc.k12_autent = w_corlanc_slip.k12_autent;
-                  delete from corconf 
-                        using w_corconf_slip
-                        where corconf.k12_id = w_corconf_slip.k12_id 
-                          and corconf.k12_data = w_corconf_slip.k12_data 
-                          and corconf.k12_autent = w_corconf_slip.k12_autent;
-                  delete from conlancamcorrente 
-                        where c86_conlancam in (select lancam from w_lancamentos);
-                  delete from corrente 
-                        using w_corrente_slip
-                        where corrente.k12_id = w_corrente_slip.k12_id 
-                          and corrente.k12_data = w_corrente_slip.k12_data 
-                          and corrente.k12_autent = w_corrente_slip.k12_autent;
-                  UPDATE slip
-                  SET k17_situacao = 1,
-                      k17_dtaut = NULL,
-                      k17_autent = NULL
-                  WHERE k17_codigo IN
-                          (SELECT k17_codigo
-                           FROM w_slips_convert);
-                  DELETE
-                  FROM conlancamemp
-                  WHERE c75_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancambol
-                  WHERE c77_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamcgm
-                  WHERE c76_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamdig
-                  WHERE c78_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamdoc
-                  WHERE c71_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamdot
-                  WHERE c73_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamord
-                  WHERE c80_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamrec
-                  WHERE c74_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM contacorrentedetalhe
-                  WHERE c19_sequencial IN
-                          (SELECT c28_sequencial
-                           FROM contacorrentedetalheconlancamval
-                           WHERE c28_conlancamval IN
-                                   (SELECT lancam FROM w_lancamentos));
-                  DELETE
-                  FROM contacorrentedetalheconlancamval
-                  WHERE c28_conlancamval IN
-                          (SELECT c69_sequen
-                           FROM conlancamval
-                           WHERE c69_codlan IN
-                                   (SELECT lancam
-                                    FROM w_lancamentos));
-                  DELETE
-                  FROM conlancamval
-                  WHERE c69_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamcompl
-                  WHERE c72_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancampag
-                  WHERE c82_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamslip
-                  WHERE c84_conlancam IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancaminstit
-                  WHERE c02_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancamordem
-                  WHERE c03_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);
-                  DELETE
-                  FROM conlancam
-                  WHERE c70_codlan IN
-                          (SELECT lancam
-                           FROM w_lancamentos);";
+
+    $sSqlSlip  = " CREATE TEMPORARY TABLE w_slips_convert ON COMMIT DROP AS ";
+    $sSqlSlip .= " SELECT k17_codigo, ";
+    $sSqlSlip .= "        k17_data, ";
+    $sSqlSlip .= "        k17_dtaut, ";
+    $sSqlSlip .= "        k17_instit, ";
+    $sSqlSlip .= "        k17_debito, ";
+    $sSqlSlip .= "        c60_estrut, ";
+    $sSqlSlip .= "        k17_credito, ";
+    $sSqlSlip .= "        k17_valor ";
+    $sSqlSlip .= " FROM slip ";
+    $sSqlSlip .= " INNER JOIN conplanoreduz ON k17_debito = c61_reduz ";
+    $sSqlSlip .= " AND c61_anousu = {$iAnoUsu} ";
+    $sSqlSlip .= " INNER JOIN conplano ON c61_anousu = c60_anousu ";
+    $sSqlSlip .= " AND c61_codcon = c60_codcon ";
+    $sSqlSlip .= " LEFT JOIN sliptipooperacaovinculo ON k17_codigo = k153_slip ";
+    $sSqlSlip .= " LEFT JOIN sliptipooperacao ON k153_slipoperacaotipo = k152_sequencial ";
+    $sSqlSlip .= " WHERE k17_codigo IN ({$oParam->iCodigoSlip}); ";
+    $sSqlSlip .= " CREATE TEMPORARY TABLE w_lancamentos ON COMMIT DROP AS ";
+    $sSqlSlip .= " SELECT c84_conlancam AS lancam ";
+    $sSqlSlip .= " FROM conlancamslip ";
+    $sSqlSlip .= " WHERE c84_slip IN ";
+    $sSqlSlip .= "         (SELECT k17_codigo FROM w_slips_convert); ";
+    $sSqlSlip .= " CREATE TEMPORARY TABLE w_corautent_slip ON COMMIT DROP AS  ";
+    $sSqlSlip .= " SELECT corautent.* FROM corlanc ";
+    $sSqlSlip .= " INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id ";
+    $sSqlSlip .= " AND corlanc.k12_data = corrente.k12_data ";
+    $sSqlSlip .= " AND corlanc.k12_autent = corrente.k12_autent ";
+    $sSqlSlip .= " INNER JOIN corautent ON corlanc.k12_id = corautent.k12_id ";
+    $sSqlSlip .= " AND corlanc.k12_data = corautent.k12_data ";
+    $sSqlSlip .= " AND corlanc.k12_autent = corautent.k12_autent ";
+    $sSqlSlip .= " LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id ";
+    $sSqlSlip .= " AND corconf.k12_data = corrente.k12_data ";
+    $sSqlSlip .= " AND corconf.k12_autent = corrente.k12_autent ";
+    $sSqlSlip .= " WHERE corlanc.k12_codigo IN ";
+    $sSqlSlip .= "         (SELECT k17_codigo FROM w_slips_convert); ";
+    $sSqlSlip .= " CREATE TEMPORARY TABLE w_corlanc_slip ON COMMIT DROP AS  ";
+    $sSqlSlip .= " SELECT corlanc.* FROM corlanc ";
+    $sSqlSlip .= " INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id ";
+    $sSqlSlip .= " AND corlanc.k12_data = corrente.k12_data ";
+    $sSqlSlip .= " AND corlanc.k12_autent = corrente.k12_autent ";
+    $sSqlSlip .= " INNER JOIN corautent ON corlanc.k12_id = corautent.k12_id ";
+    $sSqlSlip .= " AND corlanc.k12_data = corautent.k12_data ";
+    $sSqlSlip .= " AND corlanc.k12_autent = corautent.k12_autent ";
+    $sSqlSlip .= " LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id ";
+    $sSqlSlip .= " AND corconf.k12_data = corrente.k12_data ";
+    $sSqlSlip .= " AND corconf.k12_autent = corrente.k12_autent ";
+    $sSqlSlip .= " WHERE corlanc.k12_codigo IN ";
+    $sSqlSlip .= "         (SELECT k17_codigo FROM w_slips_convert); ";
+    $sSqlSlip .= " CREATE TEMPORARY TABLE w_corconf_slip ON COMMIT DROP AS  ";
+    $sSqlSlip .= " SELECT corconf.* FROM corlanc ";
+    $sSqlSlip .= " INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id ";
+    $sSqlSlip .= " AND corlanc.k12_data = corrente.k12_data ";
+    $sSqlSlip .= " AND corlanc.k12_autent = corrente.k12_autent ";
+    $sSqlSlip .= " INNER JOIN corautent ON corlanc.k12_id = corautent.k12_id ";
+    $sSqlSlip .= " AND corlanc.k12_data = corautent.k12_data ";
+    $sSqlSlip .= " AND corlanc.k12_autent = corautent.k12_autent ";
+    $sSqlSlip .= " LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id ";
+    $sSqlSlip .= " AND corconf.k12_data = corrente.k12_data ";
+    $sSqlSlip .= " AND corconf.k12_autent = corrente.k12_autent ";
+    $sSqlSlip .= " WHERE corlanc.k12_codigo IN ";
+    $sSqlSlip .= "         (SELECT k17_codigo FROM w_slips_convert); ";
+    $sSqlSlip .= " CREATE TEMPORARY TABLE w_corrente_slip ON COMMIT DROP AS  ";
+    $sSqlSlip .= " SELECT corrente.* FROM corlanc ";
+    $sSqlSlip .= " INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id ";
+    $sSqlSlip .= " AND corlanc.k12_data = corrente.k12_data ";
+    $sSqlSlip .= " AND corlanc.k12_autent = corrente.k12_autent ";
+    $sSqlSlip .= " INNER JOIN corautent ON corlanc.k12_id = corautent.k12_id ";
+    $sSqlSlip .= " AND corlanc.k12_data = corautent.k12_data ";
+    $sSqlSlip .= " AND corlanc.k12_autent = corautent.k12_autent ";
+    $sSqlSlip .= " LEFT JOIN corconf ON corconf.k12_id = corrente.k12_id ";
+    $sSqlSlip .= " AND corconf.k12_data = corrente.k12_data ";
+    $sSqlSlip .= " AND corconf.k12_autent = corrente.k12_autent ";
+    $sSqlSlip .= " WHERE corlanc.k12_codigo IN ";
+    $sSqlSlip .= "         (SELECT k17_codigo FROM w_slips_convert); ";
+    $sSqlSlip .= " DELETE FROM corautent USING w_corautent_slip ";
+    $sSqlSlip .= " WHERE corautent.k12_id = w_corautent_slip.k12_id ";
+    $sSqlSlip .= "     AND corautent.k12_data = w_corautent_slip.k12_data ";
+    $sSqlSlip .= "     AND corautent.k12_autent = w_corautent_slip.k12_autent; ";
+    $sSqlSlip .= " DELETE FROM corlanc USING w_corlanc_slip ";
+    $sSqlSlip .= " WHERE corlanc.k12_id = w_corlanc_slip.k12_id ";
+    $sSqlSlip .= "     AND corlanc.k12_data = w_corlanc_slip.k12_data ";
+    $sSqlSlip .= "     AND corlanc.k12_autent = w_corlanc_slip.k12_autent; ";
+    $sSqlSlip .= " DELETE FROM corconf USING w_corconf_slip ";
+    $sSqlSlip .= " WHERE corconf.k12_id = w_corconf_slip.k12_id ";
+    $sSqlSlip .= "     AND corconf.k12_data = w_corconf_slip.k12_data ";
+    $sSqlSlip .= "     AND corconf.k12_autent = w_corconf_slip.k12_autent; ";
+    $sSqlSlip .= " DELETE FROM conlancamcorrente ";
+    $sSqlSlip .= " WHERE c86_conlancam IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM corrente USING w_corrente_slip ";
+    $sSqlSlip .= " WHERE corrente.k12_id = w_corrente_slip.k12_id ";
+    $sSqlSlip .= "     AND corrente.k12_data = w_corrente_slip.k12_data ";
+    $sSqlSlip .= "     AND corrente.k12_autent = w_corrente_slip.k12_autent; ";
+    $sSqlSlip .= " UPDATE slip ";
+    $sSqlSlip .= " SET k17_situacao = 1, ";
+    $sSqlSlip .= "     k17_dtaut = NULL, ";
+    $sSqlSlip .= "     k17_autent = NULL, ";
+    $sSqlSlip .= "     k17_dtanu = NULL, ";
+    $sSqlSlip .= "     k17_dtestorno = NULL, ";
+    $sSqlSlip .= "     k17_motivoestorno = '' ";
+    $sSqlSlip .= " WHERE k17_codigo IN ";
+    $sSqlSlip .= "         (SELECT k17_codigo FROM w_slips_convert);  ";
+    $sSqlSlip .= " DELETE FROM conlancamemp ";
+    $sSqlSlip .= " WHERE c75_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancambol ";
+    $sSqlSlip .= " WHERE c77_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamcgm ";
+    $sSqlSlip .= " WHERE c76_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamdig ";
+    $sSqlSlip .= " WHERE c78_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamdoc ";
+    $sSqlSlip .= " WHERE c71_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamdot ";
+    $sSqlSlip .= " WHERE c73_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamord ";
+    $sSqlSlip .= " WHERE c80_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamrec ";
+    $sSqlSlip .= " WHERE c74_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM contacorrentedetalhe ";
+    $sSqlSlip .= " WHERE c19_sequencial IN ";
+    $sSqlSlip .= "         (SELECT c28_sequencial FROM contacorrentedetalheconlancamval ";
+    $sSqlSlip .= "          WHERE c28_conlancamval IN ";
+    $sSqlSlip .= "                  (SELECT lancam FROM w_lancamentos)); ";
+    $sSqlSlip .= " DELETE FROM contacorrentedetalheconlancamval ";
+    $sSqlSlip .= " WHERE c28_conlancamval IN ";
+    $sSqlSlip .= "         (SELECT c69_sequen FROM conlancamval ";
+    $sSqlSlip .= "          WHERE c69_codlan IN ";
+    $sSqlSlip .= "                  (SELECT lancam FROM w_lancamentos)); ";
+    $sSqlSlip .= " DELETE FROM conlancamval ";
+    $sSqlSlip .= " WHERE c69_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamcompl ";
+    $sSqlSlip .= " WHERE c72_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancampag ";
+    $sSqlSlip .= " WHERE c82_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamslip ";
+    $sSqlSlip .= " WHERE c84_conlancam IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancaminstit ";
+    $sSqlSlip .= " WHERE c02_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancamordem ";
+    $sSqlSlip .= " WHERE c03_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM conlancam ";
+    $sSqlSlip .= " WHERE c70_codlan IN ";
+    $sSqlSlip .= "         (SELECT lancam FROM w_lancamentos); ";
+    $sSqlSlip .= " DELETE FROM slipanul ";
+    $sSqlSlip .= " WHERE k18_codigo IN ";
+    $sSqlSlip .= "         (SELECT k17_codigo FROM w_slips_convert); ";
     db_query($sSqlSlip);
     db_fim_transacao(false);
     $oRetorno->message = "Procedimento realizado com sucesso.";
