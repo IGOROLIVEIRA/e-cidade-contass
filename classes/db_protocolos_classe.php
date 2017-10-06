@@ -25,6 +25,7 @@ class cl_protocolos {
   public $p101_dt_protocolo_mes = null;
   public $p101_dt_protocolo_ano = null;
   public $p101_dt_protocolo = null;
+  public $p101_hora = null;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  p101_sequencial = int4 = Protocolo
@@ -33,6 +34,7 @@ class cl_protocolos {
                  p101_coddeptodestino = int4 = Depart. Destino
                  p101_observacao = varchar(200) = Observacao
                  p101_dt_protocolo = date = Data
+                 p101_hora = varchar(5) = Hora
                  ";
 
   //funcao construtor da classe
@@ -68,6 +70,7 @@ class cl_protocolos {
             $this->p101_dt_protocolo = $this->p101_dt_protocolo_ano."-".$this->p101_dt_protocolo_mes."-".$this->p101_dt_protocolo_dia;
          }
        }
+       $this->p101_hora = ($this->p101_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["p101_hora"]:$this->p101_hora);
      } else {
        $this->p101_sequencial = ($this->p101_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["p101_sequencial"]:$this->p101_sequencial);
      }
@@ -121,6 +124,15 @@ class cl_protocolos {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->p101_hora == null ) {
+       $this->erro_sql = " Campo Hora não informado.";
+       $this->erro_campo = "p101_hora";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if ($p101_sequencial == "" || $p101_sequencial == null ) {
        $result = db_query("select nextval('protocolos_p101_sequencial_seq')");
        if ($result==false) {
@@ -160,6 +172,7 @@ class cl_protocolos {
                                       ,p101_coddeptodestino
                                       ,p101_observacao
                                       ,p101_dt_protocolo
+                                      ,p101_hora
                        )
                 values (
                                 $this->p101_sequencial
@@ -168,6 +181,7 @@ class cl_protocolos {
                                ,$this->p101_coddeptodestino
                                ,'$this->p101_observacao'
                                ,".($this->p101_dt_protocolo == "null" || $this->p101_dt_protocolo == ""?"null":"'".$this->p101_dt_protocolo."'")."
+                               ,'$this->p101_hora'
                       )";
      $result = db_query($sql);
      if ($result==false) {
@@ -210,6 +224,7 @@ class cl_protocolos {
          $resac = db_query("insert into db_acount values($acount,1010192,1009253,'','".AddSlashes(pg_result($resaco,0,'p101_coddeptodestino'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010192,1009254,'','".AddSlashes(pg_result($resaco,0,'p101_observacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010192,1009255,'','".AddSlashes(pg_result($resaco,0,'p101_dt_protocolo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010192,1009269,'','".AddSlashes(pg_result($resaco,0,'p101_hora'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
     }
     return true;
@@ -312,6 +327,19 @@ class cl_protocolos {
          }
        }
      }
+     if (trim($this->p101_hora)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p101_hora"])) {
+       $sql  .= $virgula." p101_hora = '$this->p101_hora' ";
+       $virgula = ",";
+       if (trim($this->p101_hora) == null ) {
+         $this->erro_sql = " Campo Hora não informado.";
+         $this->erro_campo = "p101_hora";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
      $sql .= " where ";
      if ($p101_sequencial!=null) {
        $sql .= " p101_sequencial = $this->p101_sequencial";
@@ -341,6 +369,8 @@ class cl_protocolos {
              $resac = db_query("insert into db_acount values($acount,1010192,1009254,'".AddSlashes(pg_result($resaco,$conresaco,'p101_observacao'))."','$this->p101_observacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["p101_dt_protocolo"]) || $this->p101_dt_protocolo != "")
              $resac = db_query("insert into db_acount values($acount,1010192,1009255,'".AddSlashes(pg_result($resaco,$conresaco,'p101_dt_protocolo'))."','$this->p101_dt_protocolo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["p101_hora"]) || $this->p101_hora != "")
+             $resac = db_query("insert into db_acount values($acount,1010192,1009269,'".AddSlashes(pg_result($resaco,$conresaco,'p101_hora'))."','$this->p101_hora',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }
@@ -404,6 +434,7 @@ class cl_protocolos {
            $resac  = db_query("insert into db_acount values($acount,1010192,1009253,'','".AddSlashes(pg_result($resaco,$iresaco,'p101_coddeptodestino'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010192,1009254,'','".AddSlashes(pg_result($resaco,$iresaco,'p101_observacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010192,1009255,'','".AddSlashes(pg_result($resaco,$iresaco,'p101_dt_protocolo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010192,1009269,'','".AddSlashes(pg_result($resaco,$iresaco,'p101_hora'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }
