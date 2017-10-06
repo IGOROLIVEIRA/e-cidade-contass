@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -47,6 +47,7 @@ $ordem = "e50_codord";
 $where = "1=1";
 $where1 = "";
 $where2 = "";
+$where3 = "";
 if (($data!="--")&&($data1!="--")) {
   $where ="    e50_data  between '$data' and '$data1'  ";
 }else if ($data!="--"){
@@ -54,7 +55,6 @@ if (($data!="--")&&($data1!="--")) {
 }else if ($data1!="--"){
   $where="    e50_data <= '$data1'   ";
 }
-
 
 if (($codini!="")&&($codfim!="")) {
   $where1=" and  e50_codord between $codini and $codfim  ";
@@ -65,13 +65,21 @@ if (($codini!="")&&($codfim!="")) {
 }
 
 
-
 if (($numempini!="")&&($numempfim!="")) {
   $where2=" and  e50_numemp  between $numempini and $numempfim  ";
 }else if ($numempini!=""){
   $where2=" and  e50_numemp >= $numempini  ";
 }else if ($numempfim!=""){
   $where2=" and  e50_numemp <= $numempfim   ";
+}
+
+//die($dt_emp_ini);
+if (($dt_emp_ini!="--")&&($dt_emp_fim!="--")) {
+  $where3 =" and e60_emiss  between '$dt_emp_ini' and '$dt_emp_fim'  ";
+}else if ($dt_emp_ini!="--"){
+  $where3=" and e60_emiss >= '$dt_emp_ini'  ";
+}else if ($dt_emp_fim!="--"){
+  $where3=" and e60_emiss <= '$dt_emp_fim'   ";
 }
 
 $head5 = "ORDEM por cod. da Ordem";
@@ -85,8 +93,8 @@ if ((isset($numempini)||isset($numempfim))&&(!isset($codini)&&!isset($codfim))){
 $head3 = "ORDENS DE PAGAMENTO";
 
 
-//die($clpagordem->sql_query_pagordemele(null,"e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome,sum(e53_valor)","e50_codord","  $where $where1 $where2 group by e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome"));
-$result=$clpagordem->sql_record($clpagordem->sql_query_pagordemele(null,"e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome,sum(e53_valor-e53_vlranu) as e53_valor ","$ordem"," e60_instit = " . db_getsession("DB_instit") .  " and $where $where1 $where2 group by e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome"));
+//die($clpagordem->sql_query_pagordemele(null,"e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome,sum(e53_valor)","e50_codord","  $where $where1 $where2 $where3 group by e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome"));
+$result=$clpagordem->sql_record($clpagordem->sql_query_pagordemele(null,"e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome,sum(e53_valor-e53_vlranu) as e53_valor ","$ordem"," e60_instit = " . db_getsession("DB_instit") .  " and $where $where1 $where2 $where3 group by e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome"));
 if($clpagordem->numrows == 0){
   db_redireciona('db_erros.php?fechar=true&db_erro=Ordem de pagamento não Encontrada.');
   exit;
