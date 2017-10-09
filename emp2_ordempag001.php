@@ -54,7 +54,7 @@ function js_emite(){
     'emp2_ordempag002.php?data='+document.form1.data_ano.value+'-'+document.form1.data_mes.value+'-'+document.form1.data_dia.value+
     '&data1='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value+
     '&codini='+document.form1.e50_codordINI.value+'&codfim='+document.form1.e50_codordFIM.value+
-    '&numempini='+document.form1.e50_numempINI.value+'&numempfim='+document.form1.e50_numempFIM.value+
+    '&numempini='+document.form1.e50_numempINI.value+'&numempfim='+document.form1.e50_numempFIM.value+'&e60_numcgm='+document.form1.e60_numcgm.value+
     '&dt_emp_ini='+dtEmpIni+'&dt_emp_fim='+dtEmpFim,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
@@ -96,7 +96,13 @@ function js_testa(campo,valor,nomecampo1,nomecampo2){
          <td >&nbsp;</td>
          <td >&nbsp;</td>
       </tr>
-         <tr>
+
+      <tr>
+        <td align="right"><strong>Credor:</strong></td>
+        <td><? db_input('e60_numcgm',8,1,true,'text',1,"onChange=\"js_testa('i',this.value,'e60_numcgm')\"","e60_numcgm","") ?></td>
+      </tr>
+
+   <tr>
 	 <td align="right"><b>De:</b></td><td><?db_inputdata("data","","","","true","text",2)      ?>      </td>
 	 <td><b>Até:</b>  <?db_inputdata("data1","","","","true","text",2)      ?> </td>
 	 </tr>
@@ -138,7 +144,7 @@ function js_testa(campo,valor,nomecampo1,nomecampo2){
         <td >&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="3" align = "center">
+        <td colspan="4" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();" >
         </td>
       </tr>
