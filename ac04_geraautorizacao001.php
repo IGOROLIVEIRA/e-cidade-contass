@@ -507,7 +507,6 @@ function js_retornoGetItensPosicao(oAjax) {
       js_buscarTipoLicitacao(oRetorno.pc50_codcom);
       js_desabilitaCamposLicitacao();
   }
-
   iCasasDecimais = oRetorno.iCasasDecimais;
 
   aItensPosicao = oRetorno.itens;
@@ -1083,6 +1082,7 @@ function js_processarAutorizacoes(lProcessar) {
       js_removeObj('msgbox');
       return false;
   }
+
   if (lProcessar) {
 
     oParam.dados.destino                 = encodeURIComponent(tagString( $F('e54_destin')));
@@ -1160,6 +1160,7 @@ function js_retornoBuscarInformacoesAutorizacao(oAjax) {
   js_removeObj('msgbox');
   var oRetorno = eval("("+oAjax.responseText+")");
   var sMensagem = oRetorno.message.urlDecode();
+  console.log(oRetorno);
 
   if ( oRetorno.status > 1 ) {
 
@@ -1168,6 +1169,14 @@ function js_retornoBuscarInformacoesAutorizacao(oAjax) {
   }
 
   $('e54_resumo').value = oRetorno.sResumoAcordo.urlDecode();
+
+  if($('e54_numerl').value.length == 0){
+      $('e54_numerl').value = oRetorno.sLicitacao.urlDecode();
+      $('e54_codcom').value = oRetorno.iModalidade.urlDecode();
+      $('e54_codcomdescr').value = oRetorno.iModalidade.urlDecode();
+      $('e54_tipol').value = oRetorno.sTipo.urlDecode();
+  }
+
   setInformacoesAutorizacao();
 }
 
@@ -1203,7 +1212,7 @@ function setInformacoesAutorizacao() {
  * @param {integer} Código do tipo de compra
  */
 function js_buscarTipoLicitacao(iTipoCompra) {
-
+    console.log(iTipoCompra);
     if (iTipoCompra != "" && iTipoCompra != "undefined") {
 
         var oParamTipoCompra         = new Object();
@@ -1225,31 +1234,29 @@ function js_buscarTipoLicitacao(iTipoCompra) {
 function js_preencheTipoLicitacao(oAjax) {
 
     var oRetorno = eval("("+oAjax.responseText+")");
-
+    console.log(oRetorno);
     $('e54_tipol').innerHTML = "";
 
     if (oRetorno.aTiposLicitacao.length > 0) {
 
         oRetorno.aTiposLicitacao.each(function (oItem) {
+            console.log(oItem.l03_descr);
+            console.log(verificaLicitacao);
+            $('e54_tipol').value = oItem.l03_tipo;
+            $('e54_tipoldescr').value = oItem.l03_descr;
 
-            if(verificaLicitacao == true) {
-              $('e54_tipol').value = tipoLic;
-              $('e54_tipoldescr').value = tipoLic;
-            }
 
         });
 
     } else {
-
         if($('e54_codcom').value == 7 || $('e54_codcom').value == 9) {
-
             $('e54_numerl').setAttribute('disabled', true);
             $('e54_tipol').setAttribute('disabled', true);
             $('e54_tipoldescr').setAttribute('disabled', true);
             $('e54_numerl').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
             $('e54_tipol').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
             $('e54_tipoldescr').setAttribute('style', 'width: 68px; background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-            $('e54_numerl').value = "";
+            //$('e54_numerl').value = "";
             //me.oTipoLicitacao.setDisable();
         }else{
 
@@ -1259,7 +1266,7 @@ function js_preencheTipoLicitacao(oAjax) {
             $('e54_numerl').removeAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
             $('e54_tipol').removeAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
             $('e54_tipoldescr').removeAttribute('style', 'width: 68px; background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-            $('e54_numerl').value = "";
+            //$('e54_numerl').value = "";
         }
     }
 }

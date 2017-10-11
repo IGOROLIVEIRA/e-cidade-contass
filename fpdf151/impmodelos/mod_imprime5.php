@@ -556,7 +556,11 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->text($xcol + 2, $xlin + 30.5, 'Outras Condições');
     $this->objpdf->text($xcol + 2, $xlin + 34.5, 'Proc. Administrativo');
     $this->objpdf->Setfont('Arial', '', 8);
-    $this->objpdf->text($xcol + 35, $xlin + 7, ':  ' . $this->edital_licitacao . '/' . $this->ano_licitacao);
+    if(!empty($this->ano_licitacao)) {
+        $this->objpdf->text($xcol + 35, $xlin + 7, ':  ' . $this->edital_licitacao . '/' . $this->ano_licitacao);
+    }else {
+        $this->objpdf->text($xcol + 35, $xlin + 7, ':  ' . $this->edital_licitacao);
+    }
     $this->objpdf->text($xcol + 35, $xlin + 10.5, ':  ' . $this->num_licitacao . '  -  ' . $this->descr_licitacao);
     $this->objpdf->text($xcol + 35, $xlin + 14.5, ':  ' . $this->descr_tipocompra);
     $this->objpdf->text($xcol + 35, $xlin + 18.5, ':  ' . stripslashes($this->prazo_ent));

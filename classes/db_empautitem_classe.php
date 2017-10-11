@@ -977,10 +977,10 @@ class cl_empautitem {
        $sql .= $campos;
      }
      $sql .= " from empautitem ";
-     $sql .= "      inner join empautitempcprocitem on empautitempcprocitem.e73_sequen = empautitem.e55_sequen";
+     $sql .= "      left join empautitempcprocitem on empautitempcprocitem.e73_sequen = empautitem.e55_sequen";
      $sql .= "                                     and empautitempcprocitem.e73_autori = empautitem.e55_autori";
-     $sql .= "      inner join pcprocitem           on pcprocitem.pc81_codprocitem     = empautitempcprocitem.e73_pcprocitem";
-     $sql .= "      inner join empautoriza          on empautoriza.e54_autori          = empautitem.e55_autori";
+     $sql .= "      left join pcprocitem           on pcprocitem.pc81_codprocitem     = empautitempcprocitem.e73_pcprocitem";
+     $sql .= "      left join empautoriza          on empautoriza.e54_autori          = empautitem.e55_autori";
      $sql2 = "";
      if($dbwhere==""){
        if($e55_autori!=null ){

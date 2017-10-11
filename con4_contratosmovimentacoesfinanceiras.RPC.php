@@ -78,8 +78,10 @@ switch($oParam->exec) {
      if (isset ($_SESSION["oContrato"])) {
        unset($_SESSION["oContrato"]);
      }
+
      $oContrato              = new Acordo($oParam->iAcordo);
      $_SESSION["oContrato"]  = $oContrato;
+
      $aPosicoes              = $oContrato->getPosicoes();
      $oRetorno->posicoes     = array();
      $oRetorno->tipocontrato = $oContrato->getOrigem();
@@ -423,7 +425,14 @@ switch($oParam->exec) {
    case 'getDadosAcordo' :
 
      $oAcordo = new Acordo($oParam->iCodigoAcordo);
+
+     $oRetorno->sLicitacao  =    urlencode($oAcordo->getLicitacao());
+     $oRetorno->iModalidade =    urlencode($oAcordo->getModalidade());
+     $oRetorno->sTipo       =    urlencode($oAcordo->getTipo());
+
      $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
+
+
 
    break;
 }

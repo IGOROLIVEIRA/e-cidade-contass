@@ -1310,6 +1310,22 @@ class cl_acordo {
      $sql .= "      inner join acordotipo     on acordotipo.ac04_sequencial     = acordogrupo.ac02_acordotipo";
      $sql .= "      inner join acordoorigem   on acordoorigem.ac28_sequencial   = acordo.ac16_origem";
      $sql .= "      left  join acordoleis   on acordo.ac16_lei   = acordoleis.ac54_sequencial";
+     $sql .= "
+     
+      LEFT JOIN acordoposicao on ac26_acordo=ac16_sequencial
+      LEFT JOIN acordoitem on ac20_acordoposicao=ac26_sequencial 
+      LEFT JOIN acordopcprocitem on ac23_acordoitem=ac20_sequencial
+      LEFT JOIN pcprocitem on pc81_codprocitem=ac23_pcprocitem
+      LEFT JOIN solicitem on pc11_codigo=pc81_solicitem
+      LEFT JOIN solicita on pc10_numero=pc11_numero
+      LEFT JOIN solicitemvinculo on pc55_solicitemfilho=pc11_codigo
+      LEFT JOIN solicitem pai on pai.pc11_numero = pc55_solicitempai
+      LEFT JOIN pcprocitem pclic on pclic.pc81_solicitem=pai.pc11_codigo
+      LEFT JOIN liclicitem on l21_codpcprocitem=pclic.pc81_codprocitem
+      LEFT JOIN liclicita on l20_codigo=l21_codliclicita
+      LEFT JOIN cflicita on l03_codigo=l20_codtipocom
+      LEFT JOIN pctipocompra on pc50_codcom=l03_codcom";
+
      $sql2 = "";
      if($dbwhere==""){
        if($ac16_sequencial!=null ){

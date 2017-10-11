@@ -426,9 +426,11 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
    $pdf1->dataatual        = db_dataextenso(db_strtotime(db_getsession("DB_datausu")));
    $pdf1->resumo_item      = "e55_descr";
 
-   // $pdf1->edital_licitacao     = '';
-   // $pdf1->ano_licitacao        = '';
+
+
+
    $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null,null,"distinct l20_edital, l20_anousu, l20_objeto,l03_descr",null,"e55_autori = $e54_autori "));
+
    if ($clempautitem->numrows>0){
       db_fieldsmemory($result_licita,0);
       //echo " [9] " . db_criatabela($result_licita). "<br>------------------<br>";
@@ -436,8 +438,23 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
       $pdf1->edital_licitacao     = $l20_edital;
       $pdf1->ano_licitacao        = $l20_anousu;
       $resumo_lic                 =$l20_objeto;
-  		$pdf1->observacaoitem       = "pc23_obs";
+  	  $pdf1->observacaoitem       = "pc23_obs";
+   }else{
+
+       $result_empaut = $clempautitem->sql_record($clempautitem->sql_query_processocompras(null,null,"distinct e54_numerl",null,"e55_autori = $e54_autori "));
+       if ($clempautitem->numrows>0) {
+           db_fieldsmemory($result_empaut, 0);
+           $pdf1->edital_licitacao     = '';
+           $pdf1->ano_licitacao        = '';
+           $pdf1->edital_licitacao     = $e54_numerl;
+       }
    }
+
+
+
+
+
+
 
    //echo $e54_resumo . "<br>";
 

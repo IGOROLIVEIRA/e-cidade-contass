@@ -275,19 +275,22 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
     
     var oRetorno = eval("("+oAjax.responseText+")");
 
+    $('oTxtNumeroLicitacao').value=oRetorno.aDados[0].numerolicitacao;
     if(oRetorno.aDados[0].sequenciallicitacao != undefined){
-      $('oTxtNumeroLicitacao').value=oRetorno.aDados[0].numerolicitacao;
       $('oTxtTipoCompra').value=oRetorno.aDados[0].tipocompra;
       me.buscarTipoLicitacao(oRetorno.aDados[0].tipocompra);
     }
-
+    _
     if(oRetorno.aDados[0].l20_usaregistropreco == 't'){
+
         $('oTxtNumeroLicitacao').setAttribute('readonly',true);
         $('oTxtNumeroLicitacao').style.backgroundColor = 'DEB887';
+
         $('oCboTipoLicitacao').disabled = true;
-        //$('oCboTipoEmpenho').disabled   = true;
-        $('oTxtTipoCompra').disabled    = true;
+        $('oCboTipoEmpenho').disabled   = true;
+        //$('oTxtTipoCompra').disabled    = true;
     }
+    console.log($('oTxtNumeroLicitacao').value);
 
   }
   
@@ -785,7 +788,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
    * @param {integer} Código do tipo de compra
    */
   this.buscarTipoLicitacao = function(iTipoCompra) {
-    
+    console.log(me.sRPC);
+    console.log(iTipoCompra);
     if (iTipoCompra != "" && iTipoCompra != "undefined") {
 
       var oParamTipoCompra         = new Object();
@@ -807,21 +811,21 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
   this.preencheTipoLicitacao = function(oAjax) {
 
     var oRetorno = eval("("+oAjax.responseText+")");
-    me.oTipoLicitacao.clearItens();
-    if (oRetorno.aTiposLicitacao != "") {
 
-      //me.oTipoLicitacao.setEnable();
+    me.oTipoLicitacao.clearItens();
+    me.oNumeroLicitacao.setValue($('oTxtNumeroLicitacao').value);
+    if (oRetorno.aTiposLicitacao != "") {
+      me.oTipoLicitacao.setEnable();
       me.oNumeroLicitacao.setReadOnly(false);
       oRetorno.aTiposLicitacao.each(function (oItem) {
-
-        me.oTipoLicitacao.addItem(oItem.l03_tipo, oItem.l03_tipo + " - " + oItem.l03_descr);
+      me.oTipoLicitacao.addItem(oItem.l03_tipo, oItem.l03_tipo + " - " + oItem.l03_descr);
       });
     } else {
-
       me.oNumeroLicitacao.setReadOnly(true);
       me.oNumeroLicitacao.setValue("");
       me.oTipoLicitacao.setDisable();
     }
+
   }
 
   /**

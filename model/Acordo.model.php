@@ -388,6 +388,56 @@ class Acordo
 
     protected $iLicitacao;
 
+
+    /**
+     * Modalidade
+     * @var
+     */
+
+    protected $iModalidade;
+
+    /**
+     * Tipo
+     * @var
+     */
+
+    protected $sTipo;
+
+    /**
+     * @return mixed
+     */
+    public function getTipo()
+    {
+        return $this->sTipo;
+    }
+
+    /**
+     * @param mixed $sTipo
+     */
+    public function setTipo($sTipo)
+    {
+        $this->sTipo = $sTipo;
+        return $this;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getModalidade()
+    {
+        return $this->iModalidade;
+    }
+
+    /**
+     * @param mixed $iModalidade
+     */
+    public function setModalidade($iModalidade)
+    {
+        $this->iModalidade = $iModalidade;
+        return $this;
+    }
+
     /**
      * @return mixed
      */
@@ -417,7 +467,9 @@ class Acordo
             $this->iCodigoAcordo = $iCodigoAcordo;
             db_utils::getDao("acordo", false);
             $oDaoAcordo = new cl_acordo;
-            $sSqlAcordo = $oDaoAcordo->sql_query_completo($iCodigoAcordo, "acordo.*, ac02_descricao,ac54_descricao");
+            $sSqlAcordo = $oDaoAcordo->sql_query_completo($iCodigoAcordo, "acordo.*, ac02_descricao,ac54_descricao,l20_edital||'/'||l20_anousu as e54_numerl,
+	   l03_codcom as modalidade,
+	   l03_tipo as tipo ");
             $rsAcordo = $oDaoAcordo->sql_record($sSqlAcordo);
 
             if ($oDaoAcordo->numrows > 0) {
@@ -454,7 +506,17 @@ class Acordo
                 $this->setQuantidadeRenovacao($oDadosAcordo->ac16_qtdrenovacao);
                 $this->setTipoRenovacao($oDadosAcordo->ac16_tipounidtempo);
                 $this->setValorContrato($oDadosAcordo->ac16_valor);
-                $this->setLicitacao($oDadosAcordo->ac16_licitacao);
+
+
+
+                if(!empty($oDadosAcordo->ac16_licitacao)){
+                    $this->setLicitacao($oDadosAcordo->ac16_licitacao);
+                }else{
+                    $this->setLicitacao($oDadosAcordo->e54_numerl);
+                }
+
+                $this->setModalidade($oDadosAcordo->modalidade);
+                $this->setTipo($oDadosAcordo->tipo);
 
                 $this->iQtdPeriodoVigencia = $oDadosAcordo->ac16_qtdperiodo;
                 $this->iTipoUnidadeTempoVigencia = $oDadosAcordo->ac16_tipounidtempoperiodo;
