@@ -21,7 +21,7 @@ $datageracao_mes = date("m", db_getsession("DB_datausu"));
 $datageracao_dia = date("d", db_getsession("DB_datausu"));
 
 $sSql = "
-SELECT 'I;'|| nextval('teste_seq') || ';' || lpad(x.rh02_mesusu,2,0) || ';' || z01_cgccpf || ';' || z01_nome || ';' || coalesce(rh55_inep,'00000000') || ';' || coalesce(rh55_descr,'') || ';' || x.rh02_hrssem || ';' || CASE
+SELECT 'I;'|| nextval('teste_seq') || ';' || lpad(x.rh02_mesusu,2,0) || ';' || x.z01_cgccpf || ';' || x.z01_nome || ';' || coalesce(x.rh55_inep,'00000000') || ';' || coalesce(x.rh55_descr,'') || ';' || x.rh02_hrssem || ';' || CASE
                                                                                                                                                                                                                            WHEN x.rh02_tipcatprof IN (14,
                                                                                                                                                                                                                                                       15,
                                                                                                                                                                                                                                                       16) THEN 2
@@ -53,42 +53,28 @@ SELECT 'I;'|| nextval('teste_seq') || ';' || lpad(x.rh02_mesusu,2,0) || ';' || z
 
 || 
 translate(trim(to_char(round(x.rh02_salari,2),'99999999.99')),'.',',') || ';' || 
-translate(trim((round(sum( case      when x.r14_pd=2 and rh25_recurso in (118,1118) then -x.valor 
-                   when x.r14_pd=1 and rh25_recurso in (118,1118) then x.valor 
-                   when x.r48_pd=2 and rh25_recurso in (118,1118) then -x.r48_valor 
-                   when x.r48_pd=1 and rh25_recurso in (118,1118) then x.r48_valor  
-                   when x.r20_pd=2 and rh25_recurso in (118,1118) then -x.r20_valor 
-                   when x.r20_pd=1 and rh25_recurso in (118,1118) then x.r20_valor  
-                   when x.r35_pd=2 and rh25_recurso in (118,1118) then -x.r35_valor 
-                   when x.r35_pd=1 and rh25_recurso in (118,1118) then x.r35_valor  
+
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (118,1118) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (118,1118) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
-translate(trim((round(sum( case      when x.r14_pd=2 and rh25_recurso in (119,1119) then -x.valor 
-                   when x.r14_pd=1 and rh25_recurso in (119,1119) then x.valor 
-                   when x.r48_pd=2 and rh25_recurso in (119,1119) then -x.r48_valor 
-                   when x.r48_pd=1 and rh25_recurso in (119,1119) then x.r48_valor  
-                   when x.r20_pd=2 and rh25_recurso in (119,1119) then -x.r20_valor 
-                   when x.r20_pd=1 and rh25_recurso in (119,1119) then x.r20_valor  
-                   when x.r35_pd=2 and rh25_recurso in (119,1119) then -x.r35_valor 
-                   when x.r35_pd=1 and rh25_recurso in (119,1119) then x.r35_valor  
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (119,1119) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
-' '
+'0,00' || ';' ||
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (119,1119,118,1118) then x.valor 
+                   else 0 end ),2))::varchar),'.',',') 
 
 
-AS dado 
-FROM
-    (SELECT r14_rubric,
-            r48_rubric,
-            r20_rubric,
-            r35_rubric,
+AS dado  from
+(SELECT     
+            z01_cgccpf,
+            z01_nome,
+            rh55_inep,
+            rh55_descr,
             r14_instit AS instit,
             round(sum(r14_valor),2) AS valor,
-            round(sum(r48_valor),2) AS r48_valor,
-            round(sum(r20_valor),2) AS r20_valor,
-            round(sum(r35_valor),2) AS r35_valor,
-            r14_pd,
-            r48_pd,
-            r20_pd,
-            r35_pd,
+            r14_pd as pd,
             count(r14_rubric) AS soma,
             round(sum(r14_quant),2) AS quant,
             rh02_mesusu,
@@ -100,6 +86,7 @@ FROM
             rh02_salari,
             rh01_regist,
             rh25_recurso
+
 
      FROM rhpessoal 
      INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
@@ -117,27 +104,234 @@ FROM
      AND r14_anousu = $anofolha
      AND r14_mesusu = $mesfolha
      AND r14_instit = ".db_getsession("DB_instit")."
+     LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+    LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
+    INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+    LEFT JOIN rhrubricas ON r14_rubric=rh27_rubric
+    AND rh27_instit = ".db_getsession("DB_instit")."
+    LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
+    AND rh23_instit = rh27_instit
+    LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
+    AND rh75_instit = rh27_instit
+    LEFT JOIN retencaotiporec ON e21_sequencial = rh75_retencaotiporec
+    LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
+    LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
+    where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
+    and rh25_recurso in (119,118,1119,1118) 
+     GROUP BY z01_cgccpf,
+              z01_nome,
+              rh55_inep,
+              rh55_descr,
+              r14_rubric,
+              r14_instit,
+              r14_pd,
+              rh02_mesusu,
+              rh02_anousu,
+              rh01_numcgm,
+              rh02_seqpes,
+              rh02_hrssem,
+              rh02_tipcatprof,
+              rh02_salari,
+              rh01_regist,
+              rh25_recurso
+
+union all
+
+SELECT     
+            z01_cgccpf,
+            z01_nome,
+            rh55_inep,
+            rh55_descr,
+            r48_instit AS instit,
+            round(sum(r48_valor),2) AS valor,
+            r48_pd as pd,
+            count(r48_rubric) AS soma,
+            round(sum(r48_quant),2) AS quant,
+            rh02_mesusu,
+            rh02_anousu,
+            rh01_numcgm,
+            rh02_seqpes,
+            rh02_hrssem,
+            rh02_tipcatprof,
+            rh02_salari,
+            rh01_regist,
+            rh25_recurso
+            
+     FROM rhpessoal 
+     INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+     AND rh02_anousu = $anofolha
+     AND rh02_mesusu = $mesfolha
+     AND rh02_instit = ".db_getsession("DB_instit")."
+     LEFT JOIN rhpesbanco ON rh44_seqpes = rh02_seqpes
+     INNER JOIN rhregime ON rh02_codreg = rh30_codreg
+     AND rh30_instit = rh02_instit
+     INNER JOIN rhlota ON rh02_lota = r70_codigo
+     AND r70_instit = rh02_instit
+     LEFT JOIN rhlotavinc ON rh25_codigo = r70_codigo
+     AND rh25_anousu = $anofolha
      LEFT JOIN gerfcom ON r48_regist = rh01_regist
      AND r48_anousu = $anofolha
      AND r48_mesusu = $mesfolha
      AND r48_instit = ".db_getsession("DB_instit")."
+     LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+    LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
+    INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+    LEFT JOIN rhrubricas ON r48_rubric=rh27_rubric
+    AND rh27_instit = ".db_getsession("DB_instit")."
+    LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
+    AND rh23_instit = rh27_instit
+    LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
+    AND rh75_instit = rh27_instit
+    LEFT JOIN retencaotiporec ON e21_sequencial = rh75_retencaotiporec
+    LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
+    LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
+    where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
+    and rh25_recurso in (119,118,1119,1118) 
+     GROUP BY z01_cgccpf,
+              z01_nome,
+              rh55_inep,
+              rh55_descr,
+              r48_rubric,
+              r48_instit,
+              r48_pd,
+              rh02_mesusu,
+              rh02_anousu,
+              rh01_numcgm,
+              rh02_seqpes,
+              rh02_hrssem,
+              rh02_tipcatprof,
+              rh02_salari,
+              rh01_regist,
+              rh25_recurso
+
+union all
+
+SELECT     
+            z01_cgccpf,
+            z01_nome,
+            rh55_inep,
+            rh55_descr,
+            r20_instit AS instit,
+            round(sum(r20_valor),2) AS valor,
+            r20_pd as pd,
+            count(r20_rubric) AS soma,
+            round(sum(r20_quant),2) AS quant,
+            rh02_mesusu,
+            rh02_anousu,
+            rh01_numcgm,
+            rh02_seqpes,
+            rh02_hrssem,
+            rh02_tipcatprof,
+            rh02_salari,
+            rh01_regist,
+            rh25_recurso
+            
+     FROM rhpessoal 
+     INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+     AND rh02_anousu = $anofolha
+     AND rh02_mesusu = $mesfolha
+     AND rh02_instit = ".db_getsession("DB_instit")."
+     LEFT JOIN rhpesbanco ON rh44_seqpes = rh02_seqpes
+     INNER JOIN rhregime ON rh02_codreg = rh30_codreg
+     AND rh30_instit = rh02_instit
+     INNER JOIN rhlota ON rh02_lota = r70_codigo
+     AND r70_instit = rh02_instit
+     LEFT JOIN rhlotavinc ON rh25_codigo = r70_codigo
+     AND rh25_anousu = $anofolha
      LEFT JOIN gerfres ON r20_regist = rh01_regist
      AND r20_anousu = $anofolha
      AND r20_mesusu = $mesfolha
      AND r20_instit = ".db_getsession("DB_instit")."
+     LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+    LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
+    INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+    LEFT JOIN rhrubricas ON r20_rubric=rh27_rubric
+    AND rh27_instit = ".db_getsession("DB_instit")."
+    LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
+    AND rh23_instit = rh27_instit
+    LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
+    AND rh75_instit = rh27_instit
+    LEFT JOIN retencaotiporec ON e21_sequencial = rh75_retencaotiporec
+    LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
+    LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
+    where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
+    and rh25_recurso in (119,118,1119,1118) 
+     GROUP BY z01_cgccpf,
+              z01_nome,
+              rh55_inep,
+              rh55_descr,
+              r20_rubric,
+              r20_instit,
+              r20_pd,
+              rh02_mesusu,
+              rh02_anousu,
+              rh01_numcgm,
+              rh02_seqpes,
+              rh02_hrssem,
+              rh02_tipcatprof,
+              rh02_salari,
+              rh01_regist,
+              rh25_recurso
+
+
+  union all
+
+  SELECT     
+            z01_cgccpf,
+            z01_nome,
+            rh55_inep,
+            rh55_descr,
+            r35_instit AS instit,
+            round(sum(r35_valor),2) AS valor,
+            r35_pd as pd,
+            count(r35_rubric) AS soma,
+            round(sum(r35_quant),2) AS quant,
+            rh02_mesusu,
+            rh02_anousu,
+            rh01_numcgm,
+            rh02_seqpes,
+            rh02_hrssem,
+            rh02_tipcatprof,
+            rh02_salari,
+            rh01_regist,
+            rh25_recurso
+            
+     FROM rhpessoal 
+     INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+     AND rh02_anousu = $anofolha
+     AND rh02_mesusu = $mesfolha
+     AND rh02_instit = ".db_getsession("DB_instit")."
+     LEFT JOIN rhpesbanco ON rh44_seqpes = rh02_seqpes
+     INNER JOIN rhregime ON rh02_codreg = rh30_codreg
+     AND rh30_instit = rh02_instit
+     INNER JOIN rhlota ON rh02_lota = r70_codigo
+     AND r70_instit = rh02_instit
+     LEFT JOIN rhlotavinc ON rh25_codigo = r70_codigo
+     AND rh25_anousu = $anofolha
      LEFT JOIN gerfs13 ON r35_regist = rh01_regist
      AND r35_anousu = $anofolha
      AND r35_mesusu = $mesfolha
      AND r35_instit = ".db_getsession("DB_instit")."
-     WHERE rh25_recurso in (119,118,1119,1118)
-     GROUP BY r14_rubric,
-              r48_rubric,
-              r20_rubric,
+     LEFT JOIN rhpeslocaltrab ON rh02_seqpes = rh56_seqpes
+    LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
+    INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+    LEFT JOIN rhrubricas ON r35_rubric=rh27_rubric
+    AND rh27_instit = ".db_getsession("DB_instit")."
+    LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
+    AND rh23_instit = rh27_instit
+    LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
+    AND rh75_instit = rh27_instit
+    LEFT JOIN retencaotiporec ON e21_sequencial = rh75_retencaotiporec
+    LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
+    LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
+    where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
+    and rh25_recurso in (119,118,1119,1118) 
+     GROUP BY z01_cgccpf,
+              z01_nome,
+              rh55_inep,
+              rh55_descr,
               r35_rubric,
-              r14_instit,
-              r14_pd,
-              r48_pd,
-              r20_pd,
+              r35_instit,
               r35_pd,
               rh02_mesusu,
               rh02_anousu,
@@ -147,26 +341,13 @@ FROM
               rh02_tipcatprof,
               rh02_salari,
               rh01_regist,
-              rh25_recurso) AS x
+              rh25_recurso
 
-LEFT JOIN rhpeslocaltrab ON x.rh02_seqpes = rh56_seqpes
-LEFT JOIN rhlocaltrab ON rh55_codigo = rh56_localtrab
-INNER JOIN cgm ON z01_numcgm = x.rh01_numcgm
-LEFT JOIN rhrubricas ON x.r14_rubric=rh27_rubric
-          or x.r48_rubric=rh27_rubric
-          or x.r20_rubric=rh27_rubric
-          or x.r35_rubric=rh27_rubric
-AND rh27_instit = instit
-LEFT JOIN rhrubelemento ON rh23_rubric = rh27_rubric
-AND rh23_instit = rh27_instit
-LEFT JOIN rhrubretencao ON rh75_rubric = rh27_rubric
-AND rh75_instit = rh27_instit
-LEFT JOIN retencaotiporec ON e21_sequencial = rh75_retencaotiporec
-LEFT JOIN retencaotipocalc ON e32_sequencial = e21_retencaotipocalc
-LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
-where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL 
-group by x.rh01_regist,x.rh02_mesusu,cgm.z01_cgccpf,cgm.z01_nome,rhlocaltrab.rh55_inep,rhlocaltrab.rh55_descr,x.rh02_hrssem,x.rh02_tipcatprof,x.rh02_salari
-ORDER BY rh01_regist;
+
+              ) as x
+
+
+group by x.rh02_mesusu,x.z01_cgccpf,x.z01_nome,x.rh55_inep,x.rh55_descr,x.rh02_hrssem,x.rh02_tipcatprof,x.rh02_salari;
 
 ";
 $result = db_query($sSql);
