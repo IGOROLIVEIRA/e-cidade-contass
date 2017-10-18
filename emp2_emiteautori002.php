@@ -488,7 +488,7 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
    } else {
         // autorização manual
 	// seleciona o tipo de licitação
-	$rpc = db_query("select l03_codigo,l03_descr from cflicita where l03_codcom=$e54_codcom and l03_tipo='$e54_tipol'");
+	$rpc = db_query("select l03_descr||' Nº '||l20_numero as l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e54_codcom and l03_tipo='$e54_tipol'");
 	if (pg_numrows($rpc) > 0 ){
            $pdf1->num_licitacao   = pg_result($rpc,0,0);
            $pdf1->descr_licitacao = pg_result($rpc,0,1);
