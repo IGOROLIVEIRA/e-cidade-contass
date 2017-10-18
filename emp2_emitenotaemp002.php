@@ -487,7 +487,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
    if (isset($l03_descr)&&($l03_descr!="")){
    		$pdf1->descr_licitacao = $l03_descr;
    } else {
-     	$sqllic = "select l03_descr from cflicita where l03_codcom=$e60_codcom and l03_tipo='$e60_tipol'";
+     	$sqllic = "select l03_descr||' - '||l20_numero as l03_descr from cflicita inner join liclicita on l20_codtipocom=l03_codigo where l03_codcom=$e60_codcom and l03_tipo='$e60_tipol'";
      	$rpc    = db_query($sqllic);
 
     //  system("echo '".$sqllic."\n' >> tmp/logsql.txt");
