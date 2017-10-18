@@ -480,6 +480,8 @@ function js_retornoGetItensPosicao(oAjax) {
 
   js_removeObj("msgbox");
   var oRetorno = JSON.parse(oAjax.responseText);
+  console.log('origem: ');
+  console.log(oRetorno.iOrigemContrato);
 
   if (oRetorno.iOrigemContrato == 2) {
     verificaLicitacao = true;
@@ -506,6 +508,12 @@ function js_retornoGetItensPosicao(oAjax) {
       $('e54_numerl').value = oRetorno.iEdital+'/'+oRetorno.iAnoLicitacao;
       js_buscarTipoLicitacao(oRetorno.pc50_codcom);
       js_desabilitaCamposLicitacao();
+  }else if (oRetorno.iOrigemContrato == 6) {
+      $('e54_codcom').value      = '';
+      $('e54_codcomdescr').value = '';
+      $('e54_numerl').value = '';
+      $('e54_tipol').value = '';
+      js_habilitaCamposLicitacao();
   }
   iCasasDecimais = oRetorno.iCasasDecimais;
 
@@ -1259,7 +1267,6 @@ function js_preencheTipoLicitacao(oAjax) {
             //$('e54_numerl').value = "";
             //me.oTipoLicitacao.setDisable();
         }else{
-
             $('e54_numerl').removeAttribute('disabled', true);
             $('e54_tipol').removeAttribute('disabled', true);
             $('e54_tipoldescr').removeAttribute('disabled', true);
