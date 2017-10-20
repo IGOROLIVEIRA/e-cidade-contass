@@ -67,6 +67,7 @@ function js_relatorio() {
   var dataf                = obj.dataf_ano.value+'-'+obj.dataf_mes.value+'-'+obj.dataf_dia.value;
   var contasnegativas      = obj.contasnegativas.value;
   var imprimeinterferencia = obj.imprime_interferencia.value;
+  var agrupar              = obj.agrupar.value;
   var ordemconta           = obj.ordem_conta.value;
   //var caixa                = obj.k11_id.value;
   //var conta                = obj.k13_conta.value;
@@ -78,7 +79,7 @@ function js_relatorio() {
                                                            +'&ordem_conta='+ordemconta
                                                            +'&datai='+datai
                                                            +'&dataf='+dataf
-                                                           //+'&caixa='+caixa
+                                                           +'&agrupar='+agrupar
                                                            //+'&conta='+conta
                                                            +'&quebrarpag='+quebrarpag
                                                            +'&contassemmov='+contassemmov,
@@ -94,6 +95,7 @@ function js_relatorio1(tipo) {
   var dataf        = obj.dataf_ano.value+'-'+obj.dataf_mes.value+'-'+obj.dataf_dia.value;
   var caixa        = obj.k11_id.value;
   var conta        = obj.k13_conta.value;
+  var agrupar      = obj.agrupar.value;
   var quebrarpag   = obj.quebrarpag.value;
   var contassemmov = obj.k29_contassemmovimento.value;
   
@@ -101,6 +103,7 @@ function js_relatorio1(tipo) {
                                                  +'&dataf='+dataf
                                                  +'&caixa='+caixa
                                                  +'&conta='+conta
+                                                 +'&agrupar='+agrupar
                                                  +'&quebrarpag='+quebrarpag
                                                  +'&contassemmov='+contassemmov
                                                  +'&tiporel='+tipo,
@@ -114,12 +117,14 @@ function js_relatorio2() {
   var caixa        = obj.k11_id.value;
   var conta        = obj.k13_conta.value;
   var quebrarpag   = obj.quebrarpag.value;
+  var agrupar      = obj.agrupar.value;
   var contassemmov = obj.k29_contassemmovimento.value;
   
   jan = window.open('cai2_emissbol004.php?datai='+datai
                                                  +'&dataf='+dataf
                                                  +'&caixa='+caixa
                                                  +'&conta='+conta
+                                                 +'&agrupar='+agrupar
                                                  +'&quebrarpag='+quebrarpag
                                                  +'&contassemmov='+contassemmov,
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -215,6 +220,16 @@ function js_relatorio2() {
           <select name="contasnegativas">
             <option value = 'S'>Sim</option>
             <option value = 'N'>Não</option>
+        </td>
+      </tr>
+      <tr>
+        <td align="right"><strong>Agrupar Contas:</strong> 
+   </td>
+        <td>
+    &nbsp; &nbsp;
+          <select name="agrupar">
+            <option value = 'N'>Não</option>
+            <option value = 'S'>Sim</option>
         </td>
       </tr>
      <tr>

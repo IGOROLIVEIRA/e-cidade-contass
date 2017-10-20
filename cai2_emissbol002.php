@@ -290,7 +290,8 @@ $sql="select k13_reduz,
                k13_descr,
                c60_estrut,
                c60_codsis,
-	       c63_conta,
+         c63_banco,c63_agencia,c63_conta,c63_dvconta,c63_dvagencia,c63_tipoconta,
+         hashconta,
 	       substr(fc_saltessaldo,2,13)::float8 as anterior,
 	       substr(fc_saltessaldo,15,13)::float8 as debitado ,
 	       substr(fc_saltessaldo,28,13)::float8 as creditado,
@@ -300,7 +301,8 @@ $sql="select k13_reduz,
  	             k13_descr,
 	             c60_estrut,
 		     c60_codsis,
-		     c63_conta,
+         c63_banco,c63_agencia,c63_conta,c63_dvconta,c63_dvagencia,c63_tipoconta,
+         c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia as hashconta,
 	             fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',$ip,".db_getsession("DB_instit").")
 	      from  saltes
 	             inner join conplanoexe   on k13_reduz = c62_reduz
@@ -311,13 +313,13 @@ $sql="select k13_reduz,
 	             inner join conplano      on c60_codcon = c61_codcon and c60_anousu=c61_anousu
 	             left  join conplanoconta on c60_codcon = c63_codcon and c63_anousu=c60_anousu
   where (k13_limite is null or k13_limite >= '$dataatual' )
- 	order by $ordem_conta
+ 	order by c63_banco,lpad(c63_agencia,4,0),c63_dvagencia,c63_conta,c63_dvconta,c63_tipoconta
 
           ) as x         
 	      ";
 //echo $sql;exit;
 $resultcontasmovimento = db_query($sql);
-//db_criatabela($resultcontasmovimento);exit;
+//db_criatabela($resultcontasmovimento);echo pg_last_error();exit;
 
 /*
 echo ' Contas Movimento  '."<br><br>";
@@ -516,13 +518,13 @@ $pdf->Cell(192, 6, "MOVIMENTAÇÕES DOS CAIXAS/BANCOS", 1, 1, "L", 0);
 $pdf->SetFont('Arial', 'B', 7);
 $pdf->cell(96, $alt, 'CAIXA', "LRT", 0, 'C', 0);
 $pdf->cell(24, $alt, 'SALDO', "LRT", 0, 'C', 0);
-$pdf->cell(24, $alt, 'DÉBITOS', "LRT", 0, 'C', 0);
-$pdf->cell(24, $alt, 'CRÉDITOS', "LRT", 0, 'C', 0);
+$pdf->cell(24, $alt, 'DEPÓSITOS', "LRT", 0, 'C', 0);
+$pdf->cell(24, $alt, 'RETIRADAS', "LRT", 0, 'C', 0);
 $pdf->cell(24, $alt, 'SALDO', "LRT", 1, 'C', 0);
 $pdf->cell(96, $alt, '', "LRB", 0, 'C', 0);
 $pdf->cell(24, $alt, 'ANTERIOR', "LRB", 0, 'C', 0);
-$pdf->cell(24, $alt, 'DEPÓSITOS', "LRB", 0, 'C', 0);
-$pdf->cell(24, $alt, 'RETIRADAS', "LRB", 0, 'C', 0);
+$pdf->cell(24, $alt, '', "LRB", 0, 'C', 0);
+$pdf->cell(24, $alt, '', "LRB", 0, 'C', 0);
 $pdf->cell(24, $alt, 'ATUAL', "LRB", 1, 'C', 0);
 $pdf->SetTextColor(0);
 $saldoc_anterior = 0;
@@ -540,13 +542,13 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 		$pdf->SetFont('Arial', 'B', 7);
 		$pdf->cell(96, $alt, 'CAIXA', "LRT", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'SALDO', "LRT", 0, 'C', 0);
-		$pdf->cell(24, $alt, 'DÉBITOS', "LRT", 0, 'C', 0);
-		$pdf->cell(24, $alt, 'CRÉDITOS', "LRT", 0, 'C', 0);
+		$pdf->cell(24, $alt, 'DEPÓSITOS', "LRT", 0, 'C', 0);
+		$pdf->cell(24, $alt, 'RETIRADAS', "LRT", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'SALDO', "LRT", 1, 'C', 0);
 		$pdf->cell(96, $alt, '', "LRB", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'ANTERIOR', "LRB", 0, 'C', 0);
-		$pdf->cell(24, $alt, 'DEPÓSITOS', "LRB", 0, 'C', 0);
-		$pdf->cell(24, $alt, 'RETIRADAS', "LRB", 0, 'C', 0);
+		$pdf->cell(24, $alt, '', "LRB", 0, 'C', 0);
+		$pdf->cell(24, $alt, '', "LRB", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'ATUAL', "LRB", 1, 'C', 0);
 		$pdf->SetFont('Arial', '', 6);
 	}
@@ -591,13 +593,13 @@ if ($imprime_interferencia == 'S') {
 	$pdf->SetFont('Arial', 'B', 7);
 	$pdf->cell(96, $alt, 'INTERFERÊNCIA', "LRT", 0, 'C', 0);
 	$pdf->cell(24, $alt, 'SALDO', "LRT", 0, 'C', 0);
-	$pdf->cell(24, $alt, 'DÉBITOS', "LRT", 0, 'C', 0);
-	$pdf->cell(24, $alt, 'CRÉDITOS', "LRT", 0, 'C', 0);
+	$pdf->cell(24, $alt, 'DEPÓSITOS', "LRT", 0, 'C', 0);
+	$pdf->cell(24, $alt, 'RETIRADAS', "LRT", 0, 'C', 0);
 	$pdf->cell(24, $alt, 'SALDO', "LRT", 1, 'C', 0);
 	$pdf->cell(96, $alt, '', "LRB", 0, 'C', 0);
 	$pdf->cell(24, $alt, 'ANTERIOR', "LRB", 0, 'C', 0);
-	$pdf->cell(24, $alt, 'DEPÓSITOS', "LRB", 0, 'C', 0);
-	$pdf->cell(24, $alt, 'RETIRADAS', "LRB", 0, 'C', 0);
+	$pdf->cell(24, $alt, '', "LRB", 0, 'C', 0);
+	$pdf->cell(24, $alt, '', "LRB", 0, 'C', 0);
 	$pdf->cell(24, $alt, 'ATUAL', "LRB", 1, 'C', 0);
 	$pdf->SetTextColor(0);
 	$saldoi_anterior = 0;
@@ -616,13 +618,13 @@ if ($imprime_interferencia == 'S') {
 			$pdf->SetFont('Arial', 'B', 7);
 			$pdf->cell(96, $alt, 'INTERFERÊNCIA', "LRT", 0, 'C', 0);
 			$pdf->cell(24, $alt, 'SALDO', "LRT", 0, 'C', 0);
-			$pdf->cell(24, $alt, 'DÉBITOS', "LRT", 0, 'C', 0);
-			$pdf->cell(24, $alt, 'CRÉDITOS', "LRT", 0, 'C', 0);
+			$pdf->cell(24, $alt, 'DEPÓSITOS', "LRT", 0, 'C', 0);
+			$pdf->cell(24, $alt, 'RETIRADAS', "LRT", 0, 'C', 0);
 			$pdf->cell(24, $alt, 'SALDO', "LRT", 1, 'C', 0);
 			$pdf->cell(96, $alt, '', "LRB", 0, 'C', 0);
 			$pdf->cell(24, $alt, 'ANTERIOR', "LRB", 0, 'C', 0);
-			$pdf->cell(24, $alt, 'DEPÓSITOS', "LRB", 0, 'C', 0);
-			$pdf->cell(24, $alt, 'CREDITOS', "LRB", 0, 'C', 0);
+			$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
+			$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
 			$pdf->cell(24, $alt, 'ATUAL', "LRB", 1, 'C', 0);
 			$pdf->SetFont('Arial', '', 6);
 		}
@@ -653,13 +655,13 @@ if ($imprime_interferencia == 'S') {
 $pdf->SetFont('Arial', 'B', 7);
 $pdf->cell(96, $alt, 'BANCOS', "LRT", 0, 'C', 0);
 $pdf->cell(24, $alt, 'SALDO', "LRT", 0, 'C', 0);
-$pdf->cell(24, $alt, 'DÉBITOS', "LRT", 0, 'C', 0);
-$pdf->cell(24, $alt, 'CRÉDITOS', "LRT", 0, 'C', 0);
+$pdf->cell(24, $alt, 'DEPÓSITOS', "LRT", 0, 'C', 0);
+$pdf->cell(24, $alt, 'RETIRADAS', "LRT", 0, 'C', 0);
 $pdf->cell(24, $alt, 'SALDO', "LRT", 1, 'C', 0);
 $pdf->cell(96, $alt, '', "LRB", 0, 'C', 0);
 $pdf->cell(24, $alt, 'ANTERIOR', "LRB", 0, 'C', 0);
-$pdf->cell(24, $alt, 'DEPÓSITOS', "LRB", 0, 'C', 0);
-$pdf->cell(24, $alt, 'RETIRADAS', "LRB", 0, 'C', 0);
+$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
+$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
 $pdf->cell(24, $alt, 'ATUAL', "LRB", 1, 'C', 0);
 $pdf->SetTextColor(0);
 $saldo_anterior = 0;
@@ -668,11 +670,44 @@ $saldo_creditado = 0;
 $saldo_atual = 0;
 $pdf->SetTextColor(0);
 $pdf->SetFont('Arial', '', 8);
+//db_criatabela($resultcontasmovimento);exit;
+$aContasMovs = array();
 for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
-	db_fieldsmemory($resultcontasmovimento, $i);
-	if ($contassemmov == "f" and $debitado == 0 and $creditado == 0 and $anterior==0 and $atual ==0) {
-		continue;
-	}
+  db_fieldsmemory($resultcontasmovimento, $i);
+  
+  if ($c60_codsis == 6) {
+    if($agrupar=='S'){
+      $sHash = $hashconta;
+    }else{
+      $sHash = $k13_reduz;
+    }
+    
+    if( !isset($aContasMovs[$sHash]) ){
+      $oConta = new stdClass();
+      if($agrupar=='S'){
+        $oConta->c63_conta = "-";
+        $oConta->descr = $k13_descr;
+      }else{
+        $oConta->descr = $k13_reduz.' - '.$k13_descr;
+        $oConta->c63_conta = $c63_conta;
+      }
+      $oConta->anterior = $anterior;
+      $oConta->debitado = $debitado;
+      $oConta->creditado = $creditado;
+      $oConta->atual     = $atual;
+      $aContasMovs[$sHash] = $oConta;
+    }else{
+      $aContasMovs[$sHash]->anterior += $anterior;
+      $aContasMovs[$sHash]->debitado += $debitado;
+      $aContasMovs[$sHash]->creditado += $creditado;
+      $aContasMovs[$sHash]->atual     += $atual;
+    }
+  }
+}
+foreach ($aContasMovs as $oConta) {
+	if ($contassemmov == "f" and $oConta->debitado == 0 and $oConta->creditado == 0 and $oConta->anterior==0 and $oConta->atual ==0) {
+    continue;
+  }
 	if ($pdf->gety() > ($pdf->h - 30)) {
 		$pdf->addpage();
 		$pdf->SetFont('Arial', 'B', 10);
@@ -680,41 +715,39 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 		$pdf->SetFont('Arial', 'B', 7);
 		$pdf->cell(96, $alt, 'BANCOS', "LRT", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'SALDO', "LRT", 0, 'C', 0);
-		$pdf->cell(24, $alt, 'DÉBITOS', "LRT", 0, 'C', 0);
-		$pdf->cell(24, $alt, 'CRÉDITOS', "LRT", 0, 'C', 0);
+		$pdf->cell(24, $alt, 'DEPÓSITOS', "LRT", 0, 'C', 0);
+		$pdf->cell(24, $alt, 'RETIRADAS', "LRT", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'SALDO', "LRT", 1, 'C', 0);
 		$pdf->cell(96, $alt, '', "LRB", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'ANTERIOR', "LRB", 0, 'C', 0);
-		$pdf->cell(24, $alt, 'DEPÓSITOS', "LRB", 0, 'C', 0);
-		$pdf->cell(24, $alt, 'RETIRADAS', "LRB", 0, 'C', 0);
+		$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
+		$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'ATUAL', "LRB", 1, 'C', 0);
 		$pdf->SetFont('Arial', '', 8);
 
 	}
 
-        $pre = 0;
-        if($contasnegativas == 'S' && $atual < 0){
-             $pre = 1;
-             $pdf->Setfillcolor(220);
-        }
-				       
+  $pre = 0;
+  if($contasnegativas == 'S' && $oConta->$atual < 0){
+    $pre = 1;
+    $pdf->Setfillcolor(220);
+  }
 
-	
 	if ($c60_codsis == 6) {
-		$pdf->cell(80, $alt, $k13_reduz.' - '.$k13_descr, "LTB", 0, 'L', $pre);
+		$pdf->cell(80, $alt, $oConta->descr, "LTB", 0, 'L', $pre);
 
 		$pdf->SetFont('Arial', '', 6);
-		$pdf->cell(16, $alt, $c63_conta, "RTB", 0, 'L', $pre);
+		$pdf->cell(16, $alt, $oConta->c63_conta, "RTB", 0, 'L', $pre);
 
 		$pdf->SetFont('Arial', '', 8);
-		$pdf->cell(24, $alt, db_formatar($anterior, 'f'), 1, 0, 'R', $pre);
-		$pdf->cell(24, $alt, db_formatar($debitado, 'f'), 1, 0, 'R', $pre);
-		$pdf->cell(24, $alt, db_formatar($creditado, 'f'), 1, 0, 'R', $pre);
-		$pdf->cell(24, $alt, db_formatar($atual, 'f'), 1, 1, 'R', $pre);
-		$saldo_anterior += $anterior;
-		$saldo_debitado += $debitado;
-		$saldo_creditado += $creditado;
-		$saldo_atual += $atual;
+		$pdf->cell(24, $alt, db_formatar($oConta->anterior, 'f'), 1, 0, 'R', $pre);
+		$pdf->cell(24, $alt, db_formatar($oConta->debitado, 'f'), 1, 0, 'R', $pre);
+		$pdf->cell(24, $alt, db_formatar($oConta->creditado, 'f'), 1, 0, 'R', $pre);
+		$pdf->cell(24, $alt, db_formatar($oConta->atual, 'f'), 1, 1, 'R', $pre);
+		$saldo_anterior += $oConta->anterior;
+		$saldo_debitado += $oConta->debitado;
+		$saldo_creditado += $oConta->creditado;
+		$saldo_atual += $oConta->atual;
 	}
 }
 $pdf->SetFont('Arial', 'B', 8);
