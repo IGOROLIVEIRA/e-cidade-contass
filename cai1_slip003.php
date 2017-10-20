@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/scpdf.php");
@@ -37,33 +37,33 @@ parse_str(base64_decode($HTTP_SERVER_VARS['QUERY_STRING']));
 
 $motivo = "";
 // Dados
-$classinatura = new cl_assinatura; 
+$classinatura = new cl_assinatura;
 
 if (USE_PCASP) {
 
   $sql = "select k152_sequencial,
                  upper(k152_descricao) as k152_descricao,
                  slip.*,
-                 cgm.z01_numcgm , 
+                 cgm.z01_numcgm ,
                  cgm.z01_nome ,
-                 cgm.z01_cgccpf, 
-                 c50_codhist as db_hist, 
+                 cgm.z01_cgccpf,
+                 c50_codhist as db_hist,
                  c50_descr   as descr_hist,
                  k18_motivo,
                  coalesce(k18_codigo,0)  as k18_codigo,
                  contador.z01_nome as contador,
                  contad.si166_crccontador as crc,
                  controleinterno.z01_nome as controleinterno,
-                 case when 
-                   k153_slipoperacaotipo not in (1, 2, 9, 10, 13, 14) 
-                     then 
-                       case when 
-                         k153_slipoperacaotipo in (5, 6) 
+                 case when
+                   k153_slipoperacaotipo not in (1, 2, 9, 10, 13, 14)
+                     then
+                       case when
+                         k153_slipoperacaotipo in (5, 6)
                            then saltes_debito.k13_descr
                          else conta_debito.c60_descr end
                    else conta_debito.c60_descr end as descr_debito,
-                 case when 
-                   k153_slipoperacaotipo in (1, 2, 5, 6, 9, 10, 13, 14) 
+                 case when
+                   k153_slipoperacaotipo in (1, 2, 5, 6, 9, 10, 13, 14)
                      then saltes_credito.k13_descr
                    else conta_credito.c60_descr end as descr_credito
             from slip
@@ -73,26 +73,26 @@ if (USE_PCASP) {
                  left join slipnum                         on slip.k17_codigo          = slipnum.k17_codigo
                  left join cgm                             on slipnum.k17_numcgm       = cgm.z01_numcgm
                  left join conhist                         on slip.k17_hist             = conhist.c50_codhist
-                 
-                 left join conplanoreduz as reduz_debito   on slip.k17_debito          = reduz_debito.c61_reduz 
+
+                 left join conplanoreduz as reduz_debito   on slip.k17_debito          = reduz_debito.c61_reduz
                                                           and reduz_debito.c61_instit  = ".db_getsession('DB_instit')."
                                                           and reduz_debito.c61_anousu  = ".db_getsession("DB_anousu")."
-                 left join conplano as conta_debito        on reduz_debito.c61_codcon  = conta_debito.c60_codcon 
+                 left join conplano as conta_debito        on reduz_debito.c61_codcon  = conta_debito.c60_codcon
                                                           and conta_debito.c60_anousu  = ".db_getsession("DB_anousu")."
                  left join saltes saltes_debito            on slip.k17_debito          = saltes_debito.k13_reduz
-                 left join conplanoreduz as reduz_credito  on slip.k17_credito           = reduz_credito.c61_reduz 
-                                                          and reduz_credito.c61_instit  = ".db_getsession('DB_instit')." 
+                 left join conplanoreduz as reduz_credito  on slip.k17_credito           = reduz_credito.c61_reduz
+                                                          and reduz_credito.c61_instit  = ".db_getsession('DB_instit')."
                                                           and reduz_credito.c61_anousu  = ".db_getsession("DB_anousu")."
-                 left join conplano as conta_credito       on reduz_credito.c61_codcon  = conta_credito.c60_codcon 
+                 left join conplano as conta_credito       on reduz_credito.c61_codcon  = conta_credito.c60_codcon
                                                           and conta_credito.c60_anousu  = ".db_getsession("DB_anousu")."
                  left join saltes saltes_credito           on slip.k17_credito          = saltes_credito.k13_reduz
                  left join identificacaoresponsaveis contad on  contad.si166_instit= k17_instit and contad.si166_tiporesponsavel=2
                  left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
                  left join identificacaoresponsaveis controle on  controle.si166_instit= k17_instit and controle.si166_tiporesponsavel=3
-                 left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm 
+                 left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
            where slip.k17_codigo = $numslip and k17_instit = ".db_getsession('DB_instit');
 } else {
-  
+
   $sql = "select slip.*,
           z01_cgccpf,
           z01_numcgm ,
@@ -123,11 +123,11 @@ try {
   $sEvento = "";
 
   if (pg_numrows($dados) > 0){
-    
+
     $aMotivo = db_fieldsMemory($dados,0);
     $motivo  = $k18_motivo;
     if (USE_PCASP) {
-     
+
       $sEvento = $k152_sequencial . " - " . $k152_descricao;
     }
   }
@@ -139,14 +139,14 @@ try {
                  k29_valor
           from sliprecurso
         inner join orctiporec on o15_codigo = k29_recurso
-    where k29_slip= $numslip 
+    where k29_slip= $numslip
     order by k29_recurso
          ";
-  $recursos  = db_query($sql);       
+  $recursos  = db_query($sql);
   // se houverem registros, monta um array
   $array_recursos =  array();
   if (pg_numrows($recursos)>0){
-      for($x=0;$x < pg_numrows($recursos);$x++){ 
+      for($x=0;$x < pg_numrows($recursos);$x++){
       db_fieldsmemory($recursos,$x);
           $array_recursos[] = "$k29_recurso#$o15_descr#$k29_valor";
       }
@@ -178,13 +178,13 @@ try {
 
   $quantdeb = 0;
   if ($k17_debito > 0) {
-    $clsaltes->sql_record($clsaltes->sql_query_file($k17_debito)); 
+    $clsaltes->sql_record($clsaltes->sql_query_file($k17_debito));
     $quantdeb = $clsaltes->numrows;
   }
 
   $quantcre = 0;
   if ($k17_credito > 0) {
-    $clsaltes->sql_record($clsaltes->sql_query_file($k17_credito)); 
+    $clsaltes->sql_record($clsaltes->sql_query_file($k17_credito));
     $quantcre = $clsaltes->numrows;
   }
 
@@ -221,23 +221,23 @@ try {
   $pdf->recursos = $array_recursos;
 
   /**
-   * dados bancarios do credor 
+   * dados bancarios do credor
    */
   $iCpfCnpjCredor       = $z01_cgccpf;
   $oDaoPcfornecon      = db_utils::getDao('pcfornecon');
   $sCamposDadosCredor  = "pc63_banco, pc63_agencia, pc63_agencia_dig, pc63_conta, pc63_conta_dig,";
   $sCamposDadosCredor .= "(select db90_descr from db_bancos where db90_codban = pc63_banco) as descricrao_banco ";
-  $sWhereDadosCredor   = "pc63_cnpjcpf::bigint = {$iCpfCnpjCredor}";
+  $sWhereDadosCredor   = "pc63_cnpjcpf = '{$iCpfCnpjCredor}'";
   $sSqlDadosCredor     = $oDaoPcfornecon->sql_query_padrao(null, $sCamposDadosCredor, null, $sWhereDadosCredor);
   $rsDadosCredor       = db_query($sSqlDadosCredor);
   /**
-   * Erro no sql 
+   * Erro no sql
    */
   if ( !$rsDadosCredor ) {
 
     $sMensagemErro = "Erro ao buscar dados do credor.\n\n" . pg_last_error();
     throw new Exception($sMensagemErro);
-  } 
+  }
 
   /**
    * Dados bancarios da conta padrao
