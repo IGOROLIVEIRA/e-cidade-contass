@@ -338,7 +338,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao13->si70_instit = db_getsession("DB_instit");
         $regadesao13->si70_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $regadesao13->si70_reg10 = $regadesao10->si67_sequencial;
-        
+
         $regadesao13->incluir(null);
         if ($regadesao13->erro_status == 0) {
           throw new Exception($regadesao13->erro_msg);
@@ -380,7 +380,7 @@ LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
 LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
 LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-WHERE pc81_codproc = $codigo_preco
+WHERE pc81_codproc = $oDados10->si06_processocompra
   AND pc10_instit = " . db_getsession("DB_instit") . "
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
@@ -403,7 +403,7 @@ JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 JOIN itensregpreco ON si07_item = pc01_codmater AND si07_sequencialadesao = $oDados10->si06_sequencial
-WHERE pc80_codproc = $codigo_preco
+WHERE pc80_codproc = $oDados10->si06_processocompra
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq";
       $rsResult14 = db_query($sSql);
       for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
@@ -417,7 +417,7 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
         $regadesao14->si71_exercicioadesao = $oDados10->exercicioadesao;
         $regadesao14->si71_nrolote = $oDados14->si07_numerolote;
         $regadesao14->si71_coditem = $oDados14->coditem;
-        $regadesao14->si71_dtcotacao = $oDados10->pc11_quant;
+        $regadesao14->si71_dtcotacao = $oDados14->si01_datacotacao;
         $regadesao14->si71_vlcotprecosunitario = $oDados14->si02_vlprecoreferencia;
         $regadesao14->si71_quantidade = $oDados14->pc11_quant;
         $regadesao14->si71_instit = db_getsession("DB_instit");
