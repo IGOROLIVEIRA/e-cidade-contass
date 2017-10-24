@@ -847,6 +847,7 @@
          $sql .= "      left  join empautidot     on e56_autori = empautoriza.e54_autori and e56_anousu=e54_anousu ";
          $sql .= "      left join orcdotacao      on e56_Coddot = o58_coddot and e56_anousu = o58_anousu";
 
+
          $sql2 = "";
          if($dbwhere==""){
            if($e54_autori!=null ){

@@ -106,15 +106,6 @@ class cl_protocolos {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->p101_observacao == null ) {
-       $this->erro_sql = " Campo Observacao não informado.";
-       $this->erro_campo = "p101_observacao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if ($this->p101_dt_protocolo == null ) {
        $this->erro_sql = " Campo Data não informado.";
        $this->erro_campo = "p101_dt_protocolo_dia";
@@ -287,7 +278,7 @@ class cl_protocolos {
          return false;
        }
      }
-     if (trim($this->p101_observacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p101_observacao"])) {
+     /*if (trim($this->p101_observacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p101_observacao"])) {
        $sql  .= $virgula." p101_observacao = '$this->p101_observacao' ";
        $virgula = ",";
        if (trim($this->p101_observacao) == null ) {
@@ -299,7 +290,7 @@ class cl_protocolos {
          $this->erro_status = "0";
          return false;
        }
-     }
+     }*/
      if (trim($this->p101_dt_protocolo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p101_dt_protocolo_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["p101_dt_protocolo_dia"] !="") ) {
        $sql  .= $virgula." p101_dt_protocolo = '$this->p101_dt_protocolo' ";
        $virgula = ",";
@@ -577,6 +568,50 @@ class cl_protocolos {
          $sql .= $virgula.$campos_sql[$i];
          $virgula = ",";
       }
+    }
+    return $sql;
+  }
+
+  function sql_consulta_protocolo( $p101_sequencial=null,$campos="*",$ordem=null,$dbwhere="") {
+    $sql = "select ";
+    if ($campos != "*" ) {
+      $campos_sql = explode("#", $campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+
+    $sql .= " from protocolos ";
+    $sql .= " inner join db_depart a ON a.coddepto = protocolos.p101_coddeptoorigem";
+    $sql .= " inner join db_depart b ON b.coddepto = protocolos.p101_coddeptodestino";
+    $sql .= " left join protpagordem on p105_protocolo = p101_sequencial";
+    $sql .= " left join protempautoriza on p102_protocolo = p101_sequencial";
+    $sql .= " left join protmatordem on p104_protocolo = p101_sequencial";
+    $sql .= " left join protempenhos on p103_protocolo = p101_sequencial";
+
+    $sql2 = "";
+    if ($dbwhere=="") {
+      if ($p101_sequencial!=null ) {
+      $sql2 .= " where protocolos.p101_sequencial = $p101_sequencial ";
+      }
+    }
+    else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+
+    $sql .= $sql2;
+      if ($ordem != null ) {
+        $sql .= " order by ";
+        $campos_sql = explode("#", $ordem);
+        $virgula = "";
+        for($i=0;$i<sizeof($campos_sql);$i++) {
+          $sql .= $virgula.$campos_sql[$i];
+          $virgula = ",";
+        }
     }
     return $sql;
   }

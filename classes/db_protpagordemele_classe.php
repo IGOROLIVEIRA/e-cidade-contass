@@ -1,7 +1,7 @@
 <?php
 //MODULO: protocolo
-//CLASSE DA ENTIDADE protpagordem
-class cl_protpagordem {
+//CLASSE DA ENTIDADE protpagordemele
+class cl_protpagordemele {
   // cria variaveis de erro
   public $rotulo     = null;
   public $query_sql  = null;
@@ -19,17 +19,19 @@ class cl_protpagordem {
   public $p105_sequencial = 0;
   public $p105_codord = 0;
   public $p105_protocolo = 0;
+  public $p105_codele = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  p105_sequencial = int4 = Prot. Ord. Pagamento
                  p105_codord = int4 = Ordem
                  p105_protocolo = int4 = Protocolos
+                 p105_codele = int4 = Codigo
                  ";
 
   //funcao construtor da classe
   function __construct() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("protpagordem");
+    $this->rotulo = new rotulo("protpagordemele");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
@@ -49,6 +51,7 @@ class cl_protpagordem {
        $this->p105_sequencial = ($this->p105_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["p105_sequencial"]:$this->p105_sequencial);
        $this->p105_codord = ($this->p105_codord == ""?@$GLOBALS["HTTP_POST_VARS"]["p105_codord"]:$this->p105_codord);
        $this->p105_protocolo = ($this->p105_protocolo == ""?@$GLOBALS["HTTP_POST_VARS"]["p105_protocolo"]:$this->p105_protocolo);
+       $this->p105_codele = ($this->p105_codele == ""?@$GLOBALS["HTTP_POST_VARS"]["p105_codele"]:$this->p105_codele);
      } else {
        $this->p105_sequencial = ($this->p105_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["p105_sequencial"]:$this->p105_sequencial);
      }
@@ -75,11 +78,20 @@ class cl_protpagordem {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->p105_codele == null ) {
+       $this->erro_sql = " Campo Codigo não informado.";
+       $this->erro_campo = "p105_codele";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if ($p105_sequencial == "" || $p105_sequencial == null ) {
-       $result = db_query("select nextval('protpagordem_p105_sequencial_seq')");
+       $result = db_query("select nextval('protpagordemele_p105_sequencial_seq')");
        if ($result==false) {
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: protpagordem_p105_sequencial_seq do campo: p105_sequencial";
+         $this->erro_sql   = "Verifique o cadastro da sequencia: protpagordemele_p105_sequencial_seq do campo: p105_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
@@ -87,7 +99,7 @@ class cl_protpagordem {
        }
        $this->p105_sequencial = pg_result($result,0,0);
      } else {
-       $result = db_query("select last_value from protpagordem_p105_sequencial_seq");
+       $result = db_query("select last_value from protpagordemele_p105_sequencial_seq");
        if (($result != false) && (pg_result($result,0,0) < $p105_sequencial)) {
          $this->erro_sql = " Campo p105_sequencial maior que último número da sequencia.";
          $this->erro_banco = "Sequencia menor que este número.";
@@ -107,26 +119,28 @@ class cl_protpagordem {
        $this->erro_status = "0";
        return false;
      }
-     $sql = "insert into protpagordem(
+     $sql = "insert into protpagordemele(
                                        p105_sequencial
                                       ,p105_codord
                                       ,p105_protocolo
+                                      ,p105_codele
                        )
                 values (
                                 $this->p105_sequencial
                                ,$this->p105_codord
                                ,$this->p105_protocolo
+                               ,$this->p105_codele
                       )";
      $result = db_query($sql);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
-         $this->erro_sql   = "protpagordem ($this->p105_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "protpagordemele ($this->p105_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "protpagordem já Cadastrado";
+         $this->erro_banco = "protpagordemele já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        } else {
-         $this->erro_sql   = "protpagordem ($this->p105_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "protpagordemele ($this->p105_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
@@ -155,6 +169,7 @@ class cl_protpagordem {
          $resac = db_query("insert into db_acount values($acount,1010196,1009265,'','".AddSlashes(pg_result($resaco,0,'p105_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010196,1009266,'','".AddSlashes(pg_result($resaco,0,'p105_codord'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010196,1009267,'','".AddSlashes(pg_result($resaco,0,'p105_protocolo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010196,1009268,'','".AddSlashes(pg_result($resaco,0,'p105_codele'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
     }
     return true;
@@ -163,7 +178,7 @@ class cl_protpagordem {
   // funcao para alteracao
   function alterar ($p105_sequencial=null) {
       $this->atualizacampos();
-     $sql = " update protpagordem set ";
+     $sql = " update protpagordemele set ";
      $virgula = "";
      if (trim($this->p105_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p105_sequencial"])) {
        $sql  .= $virgula." p105_sequencial = $this->p105_sequencial ";
@@ -204,6 +219,19 @@ class cl_protpagordem {
          return false;
        }
      }
+     if (trim($this->p105_codele)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p105_codele"])) {
+       $sql  .= $virgula." p105_codele = $this->p105_codele ";
+       $virgula = ",";
+       if (trim($this->p105_codele) == null ) {
+         $this->erro_sql = " Campo Codigo não informado.";
+         $this->erro_campo = "p105_codele";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
      $sql .= " where ";
      if ($p105_sequencial!=null) {
        $sql .= " p105_sequencial = $this->p105_sequencial";
@@ -227,13 +255,15 @@ class cl_protpagordem {
              $resac = db_query("insert into db_acount values($acount,1010196,1009266,'".AddSlashes(pg_result($resaco,$conresaco,'p105_codord'))."','$this->p105_codord',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if (isset($GLOBALS["HTTP_POST_VARS"]["p105_protocolo"]) || $this->p105_protocolo != "")
              $resac = db_query("insert into db_acount values($acount,1010196,1009267,'".AddSlashes(pg_result($resaco,$conresaco,'p105_protocolo'))."','$this->p105_protocolo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if (isset($GLOBALS["HTTP_POST_VARS"]["p105_codele"]) || $this->p105_codele != "")
+             $resac = db_query("insert into db_acount values($acount,1010196,1009268,'".AddSlashes(pg_result($resaco,$conresaco,'p105_codele'))."','$this->p105_codele',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }
      $result = db_query($sql);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "protpagordem nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql   = "protpagordemele nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->p105_sequencial;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -243,7 +273,7 @@ class cl_protpagordem {
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "protpagordem nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql = "protpagordemele nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_sql .= "Valores : ".$this->p105_sequencial;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -287,10 +317,11 @@ class cl_protpagordem {
            $resac  = db_query("insert into db_acount values($acount,1010196,1009265,'','".AddSlashes(pg_result($resaco,$iresaco,'p105_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010196,1009266,'','".AddSlashes(pg_result($resaco,$iresaco,'p105_codord'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010196,1009267,'','".AddSlashes(pg_result($resaco,$iresaco,'p105_protocolo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,1010196,1009268,'','".AddSlashes(pg_result($resaco,$iresaco,'p105_codele'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }
-     $sql = " delete from protpagordem
+     $sql = " delete from protpagordemele
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
@@ -306,7 +337,7 @@ class cl_protpagordem {
      $result = db_query($sql.$sql2);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "protpagordem nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "protpagordemele nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$p105_sequencial;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -316,7 +347,7 @@ class cl_protpagordem {
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "protpagordem nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "protpagordemele nao Encontrado. Exclusão não Efetuada.\\n";
          $this->erro_sql .= "Valores : ".$p105_sequencial;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -351,7 +382,7 @@ class cl_protpagordem {
      $this->numrows = pg_numrows($result);
       if ($this->numrows==0) {
         $this->erro_banco = "";
-        $this->erro_sql   = "Record Vazio na Tabela:protpagordem";
+        $this->erro_sql   = "Record Vazio na Tabela:protpagordemele";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
@@ -373,19 +404,16 @@ class cl_protpagordem {
      } else {
        $sql .= $campos;
      }
-     $sql .= " from protpagordem ";
-     $sql .= "      inner join pagordem  on  pagordem.e50_codord = protpagordem.p105_codord";
-     $sql .= "      inner join pagordemele  on  pagordemele.e53_codord = protpagordem.p105_codord and  pagordemele.e53_codele = protpagordem.p105_codele";
-     $sql .= "      inner join protocolos  on  protocolos.p101_sequencial = protpagordem.p105_protocolo";
-     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pagordem.e50_id_usuario";
-     $sql .= "      inner join empempenho  on  empempenho.e60_numemp = pagordem.e50_numemp";
+     $sql .= " from protpagordemele ";
+     $sql .= "      inner join pagordemele  on  pagordemele.e53_codord = protpagordemele.p105_codord and  pagordemele.e53_codele = protpagordemele.p105_codele";
+     $sql .= "      inner join protocolos  on  protocolos.p101_sequencial = protpagordemele.p105_protocolo";
      $sql .= "      inner join pagordem  on  pagordem.e50_codord = pagordemele.e53_codord";
-     $sql .= "      inner join db_usuarios  as a on   a.id_usuario = protocolos.p101_id_usuario";
+     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = protocolos.p101_id_usuario";
      $sql .= "      inner join db_depart  on  db_depart.coddepto = protocolos.p101_coddeptoorigem and  db_depart.coddepto = protocolos.p101_coddeptodestino";
      $sql2 = "";
      if ($dbwhere=="") {
        if ($p105_sequencial!=null ) {
-         $sql2 .= " where protpagordem.p105_sequencial = $p105_sequencial ";
+         $sql2 .= " where protpagordemele.p105_sequencial = $p105_sequencial ";
        }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
@@ -416,11 +444,11 @@ class cl_protpagordem {
      } else {
        $sql .= $campos;
      }
-     $sql .= " from protpagordem ";
+     $sql .= " from protpagordemele ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ($p105_sequencial!=null ) {
-         $sql2 .= " where protpagordem.p105_sequencial = $p105_sequencial ";
+         $sql2 .= " where protpagordemele.p105_sequencial = $p105_sequencial ";
        }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
