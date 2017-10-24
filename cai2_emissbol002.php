@@ -728,7 +728,7 @@ foreach ($aContasMovs as $oConta) {
 	}
 
   $pre = 0;
-  if($contasnegativas == 'S' && $oConta->$atual < 0){
+  if($contasnegativas == 'S' && $oConta->atual < 0){
     $pre = 1;
     $pdf->Setfillcolor(220);
   }
