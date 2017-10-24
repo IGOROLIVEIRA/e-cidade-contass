@@ -69,6 +69,7 @@ function js_relatorio() {
   var imprimeinterferencia = obj.imprime_interferencia.value;
   var agrupar              = obj.agrupar.value;
   var ordemconta           = obj.ordem_conta.value;
+  var caixabanco           = obj.caixabanco.value;
   //var caixa                = obj.k11_id.value;
   //var conta                = obj.k13_conta.value;
   var quebrarpag           = obj.quebrarpag.value;
@@ -80,6 +81,7 @@ function js_relatorio() {
                                                            +'&datai='+datai
                                                            +'&dataf='+dataf
                                                            +'&agrupar='+agrupar
+                                                           +'&caixabanco='+caixabanco
                                                            //+'&conta='+conta
                                                            +'&quebrarpag='+quebrarpag
                                                            +'&contassemmov='+contassemmov,
@@ -98,6 +100,7 @@ function js_relatorio1(tipo) {
   var agrupar      = obj.agrupar.value;
   var quebrarpag   = obj.quebrarpag.value;
   var contassemmov = obj.k29_contassemmovimento.value;
+  var caixabanco   = obj.caixabanco.value;
   
   jan = window.open('cai2_emissbol003.php?datai='+datai
                                                  +'&dataf='+dataf
@@ -106,6 +109,7 @@ function js_relatorio1(tipo) {
                                                  +'&agrupar='+agrupar
                                                  +'&quebrarpag='+quebrarpag
                                                  +'&contassemmov='+contassemmov
+                                                 +'&caixabanco='+caixabanco
                                                  +'&tiporel='+tipo,
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -119,6 +123,7 @@ function js_relatorio2() {
   var quebrarpag   = obj.quebrarpag.value;
   var agrupar      = obj.agrupar.value;
   var contassemmov = obj.k29_contassemmovimento.value;
+  var caixabanco   = obj.caixabanco.value;
   
   jan = window.open('cai2_emissbol004.php?datai='+datai
                                                  +'&dataf='+dataf
@@ -126,6 +131,7 @@ function js_relatorio2() {
                                                  +'&conta='+conta
                                                  +'&agrupar='+agrupar
                                                  +'&quebrarpag='+quebrarpag
+                                                 +'&caixabanco='+caixabanco
                                                  +'&contassemmov='+contassemmov,
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -249,7 +255,15 @@ function js_relatorio2() {
             <option value = 'S'>Sim</option>
             <option value = 'N'>Não</option>
         </td>
-      </tr>	    
+      </tr>
+      <tr>
+        <td align="right"><strong>Só Caixa/Banco:</strong></td>
+        <td> &nbsp; &nbsp;
+          <select name="caixabanco">
+            <option value = 'S'>Sim</option>
+            <option value = 'N'>Não</option>
+        </td>
+      </tr>  	    
      <tr>
         <td align="right"><strong>Ordem:</strong></td>
         <td> &nbsp; &nbsp;

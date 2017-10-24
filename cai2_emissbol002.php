@@ -884,589 +884,590 @@ order by corrente.k12_conta,
 //echo $sql;exit;
 $resultdespesaextra = db_query($sql);
 //db_criatabela($resultdespesaextra);
+if($caixabanco=='N'){
+  $pdf->SetFont('Arial', 'B', 10);
+  $pdf->Cell(192, 6, "", 0, 1, "L", 0);
+  $pdf->Cell(192, 6, "TRANSFERÊNCIAS BANCÁRIAS", 1, 1, "L", 0);
+  $pdf->SetFont('Arial', 'B', 7);
+  $pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'BANCO', 1, 1, 'C', 0);
+  $pdf->SetTextColor(0);
+  $saldo_anterior = 0;
+  $saldo_debitado = 0;
+  $saldo_creditado = 0;
+  $saldo_atual = 0;
+  $pdf->SetFont('Arial', '', 6);
 
-$pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(192, 6, "", 0, 1, "L", 0);
-$pdf->Cell(192, 6, "TRANSFERÊNCIAS BANCÁRIAS", 1, 1, "L", 0);
-$pdf->SetFont('Arial', 'B', 7);
-$pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'BANCO', 1, 1, 'C', 0);
-$pdf->SetTextColor(0);
-$saldo_anterior = 0;
-$saldo_debitado = 0;
-$saldo_creditado = 0;
-$saldo_atual = 0;
-$pdf->SetFont('Arial', '', 6);
+  // TRANSFERENCIAS
 
-// TRANSFERENCIAS
+  $numlin = pg_numrows($resultdespesaextra);
+  $total_valor = 0;
+  $total_estorno = 0;
+  $total_banco = 0;
+  $quebra = 0;
 
-$numlin = pg_numrows($resultdespesaextra);
-$total_valor = 0;
-$total_estorno = 0;
-$total_banco = 0;
-$quebra = 0;
+  for ($i = 0; $i < $numlin; $i ++) {
+  	db_fieldsmemory($resultdespesaextra, $i);
+      if ($tipo == "desp") {
+        
+        continue;
+      }
+  	$sql = "select k13_conta
+  	           from saltes
+  	             inner join conplanoexe on c62_reduz = k13_reduz and 
+  		                              c62_anousu = ".db_getsession('DB_anousu')."
+  	             inner join conplanoreduz on c61_reduz = c62_reduz and 
+  		                                c61_anousu = c62_anousu and
+  		                                c61_instit = ".db_getsession('DB_instit')."
+  	           where k13_conta = $corr_saltes
+  	 	   union all
+  		   select k13_conta
+  		   from saltes 
+  	             inner join conplanoexe on c62_reduz = k13_reduz and 
+  		                              c62_anousu = ".db_getsession('DB_anousu')."
+  	             inner join conplanoreduz on c62_reduz = c61_reduz and 
+  	                                        c61_anousu = c62_anousu and
+  		                                c61_instit = ".db_getsession('DB_instit')."
+  		   where k13_conta = $corl_saltes
+           and (k13_limite is null or k13_limite >= '$dataatual' )";
+    $result = db_query($sql);
 
-for ($i = 0; $i < $numlin; $i ++) {
-	db_fieldsmemory($resultdespesaextra, $i);
-    if ($tipo == "desp") {
-      
-      continue;
-    }
-	$sql = "select k13_conta
-	           from saltes
-	             inner join conplanoexe on c62_reduz = k13_reduz and 
-		                              c62_anousu = ".db_getsession('DB_anousu')."
-	             inner join conplanoreduz on c61_reduz = c62_reduz and 
-		                                c61_anousu = c62_anousu and
-		                                c61_instit = ".db_getsession('DB_instit')."
-	           where k13_conta = $corr_saltes
-	 	   union all
-		   select k13_conta
-		   from saltes 
-	             inner join conplanoexe on c62_reduz = k13_reduz and 
-		                              c62_anousu = ".db_getsession('DB_anousu')."
-	             inner join conplanoreduz on c62_reduz = c61_reduz and 
-	                                        c61_anousu = c62_anousu and
-		                                c61_instit = ".db_getsession('DB_instit')."
-		   where k13_conta = $corl_saltes
-         and (k13_limite is null or k13_limite >= '$dataatual' )";
-  $result = db_query($sql);
+  	if ($result == false || pg_numrows($result) != 2)
+  		continue;
 
-	if ($result == false || pg_numrows($result) != 2)
-		continue;
+  	if ($quebra != $corrente) {
+  		$pdf->SetFont('Arial', 'B', 8);
+  		$pdf->cell(10, $alt, $corrente, "LTB", 0, "R", 0);
+  		$pdf->cell(102, $alt, '- '.$descr_conta, "RTB", 0, "L", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 1, "R", 0);
+  		$quebra = $corrente;
+  		$pdf->SetFont('Arial', '', 6);
+  	}
+  	$pdf->cell(10, $alt, $corlanc, "LTB", 0, "R", 0);
+  	$pdf->cell(102, $alt, '- '.$descr_receita, "RTB", 0, "L", 0);
+  	$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
+  	$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
+  	$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
+  	$total_banco += $valor + $estorno;
+  	if ($i +1 == $numlin) {
+  	        // ultima linha
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  		$total_banco = 0;
+  	}
+  	elseif ($quebra != pg_result($resultdespesaextra, $i +1, "corrente")) {
+  	        
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  		$total_banco = 0;
+  	} else {
+  	        
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  	}
+  	$total_valor += $valor;
+  	$total_estorno += $estorno;
+  }
 
-	if ($quebra != $corrente) {
-		$pdf->SetFont('Arial', 'B', 8);
-		$pdf->cell(10, $alt, $corrente, "LTB", 0, "R", 0);
-		$pdf->cell(102, $alt, '- '.$descr_conta, "RTB", 0, "L", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 1, "R", 0);
-		$quebra = $corrente;
-		$pdf->SetFont('Arial', '', 6);
-	}
-	$pdf->cell(10, $alt, $corlanc, "LTB", 0, "R", 0);
-	$pdf->cell(102, $alt, '- '.$descr_receita, "RTB", 0, "L", 0);
-	$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
-	$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
-	$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
-	$total_banco += $valor + $estorno;
-	if ($i +1 == $numlin) {
-	        // ultima linha
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-		$total_banco = 0;
-	}
-	elseif ($quebra != pg_result($resultdespesaextra, $i +1, "corrente")) {
-	        
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-		$total_banco = 0;
-	} else {
-	        
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-	}
-	$total_valor += $valor;
-	$total_estorno += $estorno;
-}
+  $pdf->SetFont('Arial', 'B', 6);
+  //$pdf->SetTextColor(0,100,255);
+  $pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 1, 'R', 0);
+  $pdf->SetTextColor(0);
 
-$pdf->SetFont('Arial', 'B', 6);
-//$pdf->SetTextColor(0,100,255);
-$pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 1, 'R', 0);
-$pdf->SetTextColor(0);
+  //RECEITAS ORÇAMENTÁRIAS
+  $pdf->SetTextColor(0);
+  if ($quebrarpag == 'N') {
+  	$pdf->ln();
+  } else {
+  	$pdf->addpage();
+  }
+  //$pdf->SetTextColor(0,100,255);
+  $pdf->SetFont('Arial', 'B', 10);
+  $pdf->Cell(192, 6, "RECEITAS ORÇAMENTÁRIAS", 1, 1, "L", 0);
+  $pdf->SetFont('Arial', 'B', 7);
+  $pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'TOTAL CONTA', 1, 1, 'C', 0);
+  $pdf->SetTextColor(0);
+  $saldo_anterior = 0;
+  $saldo_debitado = 0;
+  $saldo_creditado = 0;
+  $saldo_atual = 0;
+  $pdf->SetTextColor(0);
+  $pdf->SetFont('Arial', 'b', 6);
 
-//RECEITAS ORÇAMENTÁRIAS
-$pdf->SetTextColor(0);
-if ($quebrarpag == 'N') {
-	$pdf->ln();
-} else {
-	$pdf->addpage();
-}
-//$pdf->SetTextColor(0,100,255);
-$pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(192, 6, "RECEITAS ORÇAMENTÁRIAS", 1, 1, "L", 0);
-$pdf->SetFont('Arial', 'B', 7);
-$pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'TOTAL CONTA', 1, 1, 'C', 0);
-$pdf->SetTextColor(0);
-$saldo_anterior = 0;
-$saldo_debitado = 0;
-$saldo_creditado = 0;
-$saldo_atual = 0;
-$pdf->SetTextColor(0);
-$pdf->SetFont('Arial', 'b', 6);
+  /*
+    Incluído as receitas extras de slips
+  */
+  $sql_rec_ext = "
+                  select
+                         k12_conta,
+                         k12_dconta,
+                         sum(case when k12_estorn = 'f' then round(valor,2) else 0 end) as valor,
+                         sum(case when k12_estorn = 't' then round(valor,2) else 0 end) as estorno,
+                         ctarec,
+                         descr_ctarec
+                  from (
+                        select  
+                               entrou as debito,
+                               max(f.c60_descr) as descr_debito,
+                               saiu as credito,
+                               max(h.c60_descr) as descr_credito,
+                               sum(round(valor,2)) as valor,
+                               case when k12_estorn = 'f' then entrou else saiu end as k12_conta,
+                               case when k12_estorn = 'f' then max(f.c60_descr) else max(h.c60_descr) end as k12_dconta,
+                               case when k12_estorn = 'f' then entrou else saiu end as ctarec,
+                               case when k12_estorn = 'f' then max(h.c60_descr) else max(f.c60_descr) end as descr_ctarec,
+                               k12_estorn
+                        from 
+                             (select 
+                                     k12_id,
+                                     k12_autent,
+                                     k12_data,
+                                     k12_valor as valor,
+                                     corlanc as entrou,
+                                     corrente as saiu,
+                                     k12_estorn
+                              from 
+                                   (select corrente.k12_id,
+                                           corrente.k12_autent,
+                                           corrente.k12_data,
+                                           corrente.k12_valor,
+                                           corrente.k12_conta as corrente,
+                                           coalesce(c.k13_conta,0) as corr_saltes,
+                                           b.k12_conta as corlanc,
+                                           coalesce(d.k13_conta,0) as corl_saltes,
+                                           corrente.k12_estorn
+                                    from corrente 
+                                         inner join corlanc b on corrente.k12_id = b.k12_id 
+                                                             and corrente.k12_autent=b.k12_autent 
+                                                             and corrente.k12_data = b.k12_data
+                                         inner join sliptipooperacaovinculo on b.k12_codigo = k153_slip
+                                                                           and k153_slipoperacaotipo not in (1,2,5,6,9,10,13,14)
+                                         left join saltes c   on c.k13_conta = corrente.k12_conta
+                                         left join saltes d   on d.k13_conta = b.k12_conta
+                             	      where corrente.k12_instit = ".db_getsession("DB_instit")." and 
+                                    corrente.k12_data = '$datai' $seleciona_conta $seleciona
+                                   ) as xx
+                             ) as xxx
+                                  inner join conplanoexe   e on entrou = e.c62_reduz
+                                                      and e.c62_anousu = ".db_getsession('DB_anousu')."
+                                  inner join conplanoreduz i on e.c62_reduz  = i.c61_reduz and 
+                        	                                e.c62_anousu = i.c61_anousu
+                                  inner join conplano      f on i.c61_codcon = f.c60_codcon and
+                                                                i.c61_anousu = f.c60_anousu and 
+                                                                i.c61_instit = ".db_getsession("DB_instit")."
+                                  inner join conplanoexe   g on saiu = g.c62_reduz and
+                                                        g.c62_anousu = ".db_getsession('DB_anousu')."
+                                  inner join conplanoreduz j on g.c62_reduz  = j.c61_reduz  and 
+                                                                g.c62_anousu = j.c61_anousu
+                                  inner join conplano      h on j.c61_codcon = h.c60_codcon and 
+                                                                j.c61_anousu = h.c60_anousu
+                                                                and j.c61_instit = ".db_getsession("DB_instit")."
+                        group by entrou, saiu, k12_estorn
+                       ) as x
+                  group by k12_conta, k12_dconta, ctarec, descr_ctarec
+                 ";
 
-/*
-  Incluído as receitas extras de slips
-*/
-$sql_rec_ext = "
-                select
-                       k12_conta,
-                       k12_dconta,
-                       sum(case when k12_estorn = 'f' then round(valor,2) else 0 end) as valor,
-                       sum(case when k12_estorn = 't' then round(valor,2) else 0 end) as estorno,
-                       ctarec,
-                       descr_ctarec
-                from (
-                      select  
-                             entrou as debito,
-                             max(f.c60_descr) as descr_debito,
-                             saiu as credito,
-                             max(h.c60_descr) as descr_credito,
-                             sum(round(valor,2)) as valor,
-                             case when k12_estorn = 'f' then entrou else saiu end as k12_conta,
-                             case when k12_estorn = 'f' then max(f.c60_descr) else max(h.c60_descr) end as k12_dconta,
-                             case when k12_estorn = 'f' then entrou else saiu end as ctarec,
-                             case when k12_estorn = 'f' then max(h.c60_descr) else max(f.c60_descr) end as descr_ctarec,
-                             k12_estorn
-                      from 
-                           (select 
-                                   k12_id,
-                                   k12_autent,
-                                   k12_data,
-                                   k12_valor as valor,
-                                   corlanc as entrou,
-                                   corrente as saiu,
-                                   k12_estorn
-                            from 
-                                 (select corrente.k12_id,
-                                         corrente.k12_autent,
-                                         corrente.k12_data,
-                                         corrente.k12_valor,
-                                         corrente.k12_conta as corrente,
-                                         coalesce(c.k13_conta,0) as corr_saltes,
-                                         b.k12_conta as corlanc,
-                                         coalesce(d.k13_conta,0) as corl_saltes,
-                                         corrente.k12_estorn
-                                  from corrente 
-                                       inner join corlanc b on corrente.k12_id = b.k12_id 
-                                                           and corrente.k12_autent=b.k12_autent 
-                                                           and corrente.k12_data = b.k12_data
-                                       inner join sliptipooperacaovinculo on b.k12_codigo = k153_slip
-                                                                         and k153_slipoperacaotipo not in (1,2,5,6,9,10,13,14)
-                                       left join saltes c   on c.k13_conta = corrente.k12_conta
-                                       left join saltes d   on d.k13_conta = b.k12_conta
-                           	      where corrente.k12_instit = ".db_getsession("DB_instit")." and 
-                                  corrente.k12_data = '$datai' $seleciona_conta $seleciona
-                                 ) as xx
-                           ) as xxx
-                                inner join conplanoexe   e on entrou = e.c62_reduz
-                                                    and e.c62_anousu = ".db_getsession('DB_anousu')."
-                                inner join conplanoreduz i on e.c62_reduz  = i.c61_reduz and 
-                      	                                e.c62_anousu = i.c61_anousu
-                                inner join conplano      f on i.c61_codcon = f.c60_codcon and
-                                                              i.c61_anousu = f.c60_anousu and 
-                                                              i.c61_instit = ".db_getsession("DB_instit")."
-                                inner join conplanoexe   g on saiu = g.c62_reduz and
-                                                      g.c62_anousu = ".db_getsession('DB_anousu')."
-                                inner join conplanoreduz j on g.c62_reduz  = j.c61_reduz  and 
-                                                              g.c62_anousu = j.c61_anousu
-                                inner join conplano      h on j.c61_codcon = h.c60_codcon and 
-                                                              j.c61_anousu = h.c60_anousu
-                                                              and j.c61_instit = ".db_getsession("DB_instit")."
-                      group by entrou, saiu, k12_estorn
-                     ) as x
-                group by k12_conta, k12_dconta, ctarec, descr_ctarec
-               ";
+  $resultextraorcamentaria = db_query($sql_rec_ext);
 
-$resultextraorcamentaria = db_query($sql_rec_ext);
+  $sql = "
 
-$sql = "
-
-select k12_conta,
-       c60_descr,
-       k12_receit,
-       k02_tipo,
-       k02_drecei,
-       sum(case when k12_estorn = 'f' then round(valor,2) else 0 end) as valor,
-       sum(case when k12_estorn = 't' then round(valor,2) else 0 end) as estorno
-from 
-(select c60_codsis, 
-       k12_estorn,
-       k12_conta,
-       c60_descr,
-       k12_receit,
-       tabrec.k02_tipo,
-       tabrec.k02_drecei,
-       sum(round(cornump.k12_valor,2)) as valor
-from corrente
-              inner join cornump  on corrente.k12_id      = cornump.k12_id     
-				 and corrente.k12_data   = cornump.k12_data   
-				 and corrente.k12_autent = cornump.k12_autent 
-              inner join tabrec  on k12_receit = k02_codigo 
-	      inner join conplanoexe on k12_conta = c62_reduz
-	                            and c62_anousu = ".db_getsession('DB_anousu')."
-	      inner join conplanoreduz on c62_reduz = c61_reduz and c61_anousu=c62_anousu
-	      inner join conplano on c60_codcon = c61_codcon and c60_anousu=c61_anousu
-         where corrente.k12_instit = ".db_getsession('DB_instit')." and 
-	       corrente.k12_data  = '".$datai."' $seleciona_conta $seleciona 
-group by c60_codsis,
-         k12_estorn,
-         k12_conta,
-      	 c60_descr,
-         k12_receit,
-         tabrec.k02_tipo,
-         tabrec.k02_drecei) as x
-group by k12_conta,
+  select k12_conta,
          c60_descr,
          k12_receit,
          k02_tipo,
-         k02_drecei
-order by k02_tipo,k12_conta,c60_descr,k12_receit;
+         k02_drecei,
+         sum(case when k12_estorn = 'f' then round(valor,2) else 0 end) as valor,
+         sum(case when k12_estorn = 't' then round(valor,2) else 0 end) as estorno
+  from 
+  (select c60_codsis, 
+         k12_estorn,
+         k12_conta,
+         c60_descr,
+         k12_receit,
+         tabrec.k02_tipo,
+         tabrec.k02_drecei,
+         sum(round(cornump.k12_valor,2)) as valor
+  from corrente
+                inner join cornump  on corrente.k12_id      = cornump.k12_id     
+  				 and corrente.k12_data   = cornump.k12_data   
+  				 and corrente.k12_autent = cornump.k12_autent 
+                inner join tabrec  on k12_receit = k02_codigo 
+  	      inner join conplanoexe on k12_conta = c62_reduz
+  	                            and c62_anousu = ".db_getsession('DB_anousu')."
+  	      inner join conplanoreduz on c62_reduz = c61_reduz and c61_anousu=c62_anousu
+  	      inner join conplano on c60_codcon = c61_codcon and c60_anousu=c61_anousu
+           where corrente.k12_instit = ".db_getsession('DB_instit')." and 
+  	       corrente.k12_data  = '".$datai."' $seleciona_conta $seleciona 
+  group by c60_codsis,
+           k12_estorn,
+           k12_conta,
+        	 c60_descr,
+           k12_receit,
+           tabrec.k02_tipo,
+           tabrec.k02_drecei) as x
+  group by k12_conta,
+           c60_descr,
+           k12_receit,
+           k02_tipo,
+           k02_drecei
+  order by k02_tipo,k12_conta,c60_descr,k12_receit;
 
-";
+  ";
 
-$resultreceitas = db_query($sql);
+  $resultreceitas = db_query($sql);
 
-$numlin = pg_numrows($resultreceitas);
-$total_valor = 0;
-$total_estorno = 0;
-$quebra = 0;
-$total_banco = 0;
-$total_geral = 0;
-for ($i = 0; $i < $numlin; $i ++) {
-	db_fieldsmemory($resultreceitas, $i);
-	if ($k02_tipo == 'O') {
-		if ($quebra != $k12_conta) {
-			$pdf->SetFont('Arial', 'B', 8);
-			$pdf->cell(10, $alt, $k12_conta, "LTB", 0, "R", 0);
-			$pdf->cell(102, $alt, '- '.$c60_descr, "RTB", 0, "L", 0);
-			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-			$pdf->cell(20, $alt, '', 1, 1, "R", 0);
-			$quebra = $k12_conta;
-			$pdf->SetFont('Arial', '', 6);
-		}
+  $numlin = pg_numrows($resultreceitas);
+  $total_valor = 0;
+  $total_estorno = 0;
+  $quebra = 0;
+  $total_banco = 0;
+  $total_geral = 0;
+  for ($i = 0; $i < $numlin; $i ++) {
+  	db_fieldsmemory($resultreceitas, $i);
+  	if ($k02_tipo == 'O') {
+  		if ($quebra != $k12_conta) {
+  			$pdf->SetFont('Arial', 'B', 8);
+  			$pdf->cell(10, $alt, $k12_conta, "LTB", 0, "R", 0);
+  			$pdf->cell(102, $alt, '- '.$c60_descr, "RTB", 0, "L", 0);
+  			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  			$pdf->cell(20, $alt, '', 1, 1, "R", 0);
+  			$quebra = $k12_conta;
+  			$pdf->SetFont('Arial', '', 6);
+  		}
 
-		$pdf->cell(10, $alt, $k12_receit, "LTB", 0, "R", 0);
-		$pdf->cell(102, $alt, '- '.$k02_drecei, "RTB", 0, "L", 0);
-		$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
-		$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
-		$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
-		$total_valor += $valor;
-		$total_estorno += $estorno;
-		$total_banco += $valor + $estorno;
-		$total_geral += $valor + $estorno;
-		if ($i +1 == $numlin) {
-			$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-			$total_banco = 0;
-		}
-		elseif ($quebra != pg_result($resultreceitas, $i +1, "k12_conta")) {
-			$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-			$total_banco = 0;
-		} else {
-			$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
-		}
-	}
+  		$pdf->cell(10, $alt, $k12_receit, "LTB", 0, "R", 0);
+  		$pdf->cell(102, $alt, '- '.$k02_drecei, "RTB", 0, "L", 0);
+  		$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
+  		$total_valor += $valor;
+  		$total_estorno += $estorno;
+  		$total_banco += $valor + $estorno;
+  		$total_geral += $valor + $estorno;
+  		if ($i +1 == $numlin) {
+  			$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  			$total_banco = 0;
+  		}
+  		elseif ($quebra != pg_result($resultreceitas, $i +1, "k12_conta")) {
+  			$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  			$total_banco = 0;
+  		} else {
+  			$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
+  		}
+  	}
+  }
+
+  $pdf->SetFont('Arial', 'B', 6);
+  //$pdf->SetTextColor(0,100,255);
+  $pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 1, 'R', 0);
+
+  //RECEITAS EXTRA-ORÇAMENTÁRIAS
+
+  $pdf->SetTextColor(0);
+
+  if ($quebrarpag == 'N') {
+  	$pdf->ln();
+  } else {
+  	$pdf->addpage();
+  }
+
+  //$pdf->SetTextColor(0,100,255);
+  $pdf->SetFont('Arial', 'B', 10);
+  $pdf->Cell(192, 6, "RECEITAS EXTRA-ORÇAMENTÁRIAS", 1, 1, "L", 0);
+  $pdf->SetFont('Arial', 'B', 7);
+  $pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'TOTAL CONTA', 1, 1, 'C', 0);
+  $pdf->SetTextColor(0);
+  $saldo_anterior = 0;
+  $saldo_debitado = 0;
+  $saldo_creditado = 0;
+  $saldo_atual = 0;
+  $pdf->SetTextColor(0);
+  $pdf->SetFont('Arial', 'b', 6);
+
+  $numlin = pg_numrows($resultreceitas);
+  $total_valor = 0;
+  $total_estorno = 0;
+  $quebra = 0;
+  $total_banco = 0;
+  $total_geral = 0;
+  for ($i = 0; $i < $numlin; $i ++) {
+  	db_fieldsmemory($resultreceitas, $i);
+
+  	if ($k02_tipo == 'E') {
+  		if ($quebra != $k12_conta) {
+  			$pdf->SetFont('Arial', 'B', 8);
+  			$pdf->cell(10, $alt, $k12_conta, "LTB", 0, "R", 0);
+  			$pdf->cell(102, $alt, '- '.$c60_descr, "RTB", 0, "L", 0);
+  			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  			$pdf->cell(20, $alt, '', 1, 1, "R", 0);
+  			$quebra = $k12_conta;
+  			$pdf->SetFont('Arial', '', 6);
+  		}
+
+  		$pdf->cell(10, $alt, $k12_receit, "LTB", 0, "R", 0);
+  		$pdf->cell(102, $alt, '- '.$k02_drecei, "RTB", 0, "L", 0);
+  		$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
+  		$total_valor += $valor;
+  		$total_estorno += $estorno;
+  		$total_banco += $valor + $estorno;
+  		$total_geral += $valor + $estorno;
+  		if ($i +1 == $numlin) {
+  			$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  			$total_banco = 0;
+  		}
+  		elseif ($quebra != pg_result($resultreceitas, $i +1, "k12_conta")) {
+  			$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  			$total_banco = 0;
+  		} else {
+  			$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
+  		}
+  	}
+  }
+
+
+  $numlin = pg_numrows($resultextraorcamentaria);
+  $quebra = 0;
+  for ($z = 0; $z < $numlin; $z ++) {
+  	db_fieldsmemory($resultextraorcamentaria, $z);
+
+  	if ($quebra != $k12_conta) {
+  		$pdf->SetFont('Arial', 'B', 8);
+  		$pdf->cell(10, $alt, $k12_conta, "LTB", 0, "R", 0);
+  		$pdf->cell(102, $alt, '- '.$k12_dconta, "RTB", 0, "L", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 1, "R", 0);
+  		$quebra = $k12_conta;
+  		$pdf->SetFont('Arial', '', 6);
+  	}
+
+  	$pdf->cell(10, $alt, $ctarec, "LTB", 0, "R", 0);
+  	$pdf->cell(102, $alt, '- '.$descr_ctarec, "RTB", 0, "L", 0);
+  	$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
+  	$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
+    $pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
+
+  	$total_valor   += $valor;
+  	$total_estorno += $estorno;
+  	$total_banco   += $valor + $estorno;
+    $total_geral   += $valor + $estorno;
+
+  	if ($z +1 == $numlin) {
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  		$total_banco = 0;
+  	} elseif ($quebra != pg_result($resultextraorcamentaria, $z +1, "k12_conta")) {
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  		$total_banco = 0;
+  	} else {
+  		$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
+  	}
+  }
+
+
+  $pdf->SetFont('Arial', 'B', 6);
+  $pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 1, 'R', 0);
+
+
+
+  //DESPESAS ORÇAMENTÁRIAS
+
+  $pdf->SetTextColor(0);
+
+  if ($quebrarpag == 'N') {
+  	$pdf->ln();
+  } else {
+  	$pdf->addpage();
+  }
+
+  //$pdf->SetTextColor(0,100,255);
+  $pdf->SetFont('Arial', 'B', 10);
+  $pdf->Cell(192, 6, "DESPESAS ORÇAMENTÁRIAS", 1, 1, "L", 0);
+  $pdf->SetFont('Arial', 'B', 7);
+  $pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'TOTAL CONTA', 1, 1, 'C', 0);
+  $pdf->SetTextColor(0);
+  $pdf->SetFont('Arial', '', 6);
+  $numlin = pg_numrows($resultdespesaorca);
+  $total_valor = 0;
+  $total_estorno = 0;
+  $total_banco = 0;
+  $quebra = 0;
+
+  for ($i = 0; $i < $numlin; $i ++) {
+  	db_fieldsmemory($resultdespesaorca, $i);
+  	/*   if($quebra != $k12_conta){
+  	      $pdf->SetFont('Arial','B',8);
+  	      $pdf->cell(10,$alt,$k12_conta,"LTB",0,"R",0); 
+  	      $pdf->cell(102,$alt,'- '.$c60_descr,"RTB",0,"L",0); 
+  	      $pdf->cell(20,$alt,'',1,0,"R",0); 
+  	      $pdf->cell(20,$alt,'',1,0,"R",0); 
+  	      $pdf->cell(20,$alt,'',1,0,"R",0); 
+  	      $pdf->cell(20,$alt,'',1,1,"R",0); 
+  	      $quebra = $k12_conta;
+  	      $pdf->SetFont('Arial','',6);
+  	   }*/
+  	$pdf->cell(10, $alt, $k12_conta, "LTB", 0, "R", 0);
+  	$pdf->cell(102, $alt, '- '.$c60_descr, "TB", 0, "L", 0);
+  	$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
+  	$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
+  	$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
+  	$total_valor += $valor;
+  	$total_estorno += $estorno;
+
+  	$total_banco += $valor + $estorno;
+  	if ($i +1 == $numlin) {
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  		$total_banco = 0;
+  	}
+  	elseif ($quebra != pg_result($resultdespesaorca, $i +1, "k12_conta")) {
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  		$total_banco = 0;
+  	} else {
+  		$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
+  	}
+  }
+
+  $pdf->SetFont('Arial', 'B', 6);
+  //$pdf->SetTextColor(0,100,255);
+  $pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, 'R', 0);
+  $pdf->SetTextColor(0);
+
+  //DESPESAS EXTRA-ORÇAMENTÁRIAS
+  if ($quebrarpag == 'N') {
+  	$pdf->ln();
+  } else {
+  	$pdf->addpage();
+  }
+  //$pdf->SetTextColor(0,100,255);
+  $pdf->SetFont('Arial', 'B', 10);
+  $pdf->Cell(192, 6, "DESPESAS EXTRA-ORÇAMENTÁRIAS", 1, 1, "L", 0);
+  $pdf->SetFont('Arial', 'B', 7);
+  $pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
+  $pdf->cell(20, $alt, 'BANCO', 1, 1, 'C', 0);
+  $pdf->SetTextColor(0);
+  $saldo_anterior = 0;
+  $saldo_debitado = 0;
+  $saldo_creditado = 0;
+  $saldo_atual = 0;
+  $pdf->SetFont('Arial', '', 6);
+
+  //echo 'Despesa Extra-Orçamentaria';
+  //db_criatabela($resultdespesaextra);
+
+  $numlin = pg_numrows($resultdespesaextra);
+  $total_valor = 0;
+  $total_estorno = 0;
+  $total_banco = 0;
+  $quebra = 0;
+  $tipo = null;
+  for ($i = 0; $i < $numlin; $i ++) {
+  	db_fieldsmemory($resultdespesaextra, $i);
+  	$sql = "select k13_conta
+  	           from saltes 
+  	             inner join conplanoexe on c62_reduz = k13_reduz and 
+  		                              c62_anousu = ".db_getsession('DB_anousu')."
+  	             inner join conplanoreduz on c62_reduz = c61_reduz and 
+  		                                c61_anousu = c62_anousu and 
+  		                                c61_instit = ".db_getsession('DB_instit')."
+  		   where k13_conta = $corr_saltes
+  		   union all
+  		   select k13_conta
+  		   from saltes
+  	             inner join conplanoexe on c62_reduz = k13_reduz and 
+  		                              c62_anousu = ".db_getsession('DB_anousu')."
+  	             inner join conplanoreduz on c62_reduz = c61_reduz and 
+  		                                c61_anousu = c62_anousu and   
+  		                                c61_instit = ".db_getsession('DB_instit')."
+  		   where k13_conta = $corl_saltes";
+  	$result = db_query($sql);
+  	//echo "$sql<br>";exit;
+  	//if ($result == false || pg_numrows($result) == 2)
+  	if ($result == false || $tipo != 'desp') {
+  		continue;
+  	}
+
+  	if ($quebra != $corrente) {
+  		$pdf->SetFont('Arial', 'B', 8);
+  		$pdf->cell(10, $alt, $corrente, "LTB", 0, "R", 0);
+  		$pdf->cell(102, $alt, '- '.$descr_conta, "RTB", 0, "L", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
+  		$pdf->cell(20, $alt, '', 1, 1, "R", 0);
+  		$quebra = $corrente;
+  		$pdf->SetFont('Arial', '', 6);
+  	}
+  	$pdf->cell(10, $alt, $corlanc, "LTB", 0, "R", 0);
+  	$pdf->cell(102, $alt, '- '.$descr_receita, "RTB", 0, "L", 0);
+  	$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
+  	$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
+  	$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
+  	$total_banco += $valor + $estorno;
+  	if ($i +1 == $numlin) {
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  		$total_banco = 0;
+  	}
+  	elseif ($quebra != pg_result($resultdespesaextra, $i +1, "corrente")) {
+  		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
+  		$total_banco = 0;
+  	} else {
+  		$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
+  	}
+  	$total_valor += $valor;
+  	$total_estorno += $estorno;
+  }
+
+  $pdf->SetFont('Arial', 'B', 6);
+  //$pdf->SetTextColor(0,100,255);
+  $pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 0, 'R', 0);
+  $pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 1, 'R', 0);
+
+  $pdf->cell(192, 5, '', 1, 1, 'R', 0);
+
 }
-
-$pdf->SetFont('Arial', 'B', 6);
-//$pdf->SetTextColor(0,100,255);
-$pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 1, 'R', 0);
-
-//RECEITAS EXTRA-ORÇAMENTÁRIAS
-
-$pdf->SetTextColor(0);
-
-if ($quebrarpag == 'N') {
-	$pdf->ln();
-} else {
-	$pdf->addpage();
-}
-
-//$pdf->SetTextColor(0,100,255);
-$pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(192, 6, "RECEITAS EXTRA-ORÇAMENTÁRIAS", 1, 1, "L", 0);
-$pdf->SetFont('Arial', 'B', 7);
-$pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'TOTAL CONTA', 1, 1, 'C', 0);
-$pdf->SetTextColor(0);
-$saldo_anterior = 0;
-$saldo_debitado = 0;
-$saldo_creditado = 0;
-$saldo_atual = 0;
-$pdf->SetTextColor(0);
-$pdf->SetFont('Arial', 'b', 6);
-
-$numlin = pg_numrows($resultreceitas);
-$total_valor = 0;
-$total_estorno = 0;
-$quebra = 0;
-$total_banco = 0;
-$total_geral = 0;
-for ($i = 0; $i < $numlin; $i ++) {
-	db_fieldsmemory($resultreceitas, $i);
-
-	if ($k02_tipo == 'E') {
-		if ($quebra != $k12_conta) {
-			$pdf->SetFont('Arial', 'B', 8);
-			$pdf->cell(10, $alt, $k12_conta, "LTB", 0, "R", 0);
-			$pdf->cell(102, $alt, '- '.$c60_descr, "RTB", 0, "L", 0);
-			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-			$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-			$pdf->cell(20, $alt, '', 1, 1, "R", 0);
-			$quebra = $k12_conta;
-			$pdf->SetFont('Arial', '', 6);
-		}
-
-		$pdf->cell(10, $alt, $k12_receit, "LTB", 0, "R", 0);
-		$pdf->cell(102, $alt, '- '.$k02_drecei, "RTB", 0, "L", 0);
-		$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
-		$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
-		$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
-		$total_valor += $valor;
-		$total_estorno += $estorno;
-		$total_banco += $valor + $estorno;
-		$total_geral += $valor + $estorno;
-		if ($i +1 == $numlin) {
-			$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-			$total_banco = 0;
-		}
-		elseif ($quebra != pg_result($resultreceitas, $i +1, "k12_conta")) {
-			$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-			$total_banco = 0;
-		} else {
-			$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
-		}
-	}
-}
-
-
-$numlin = pg_numrows($resultextraorcamentaria);
-$quebra = 0;
-for ($z = 0; $z < $numlin; $z ++) {
-	db_fieldsmemory($resultextraorcamentaria, $z);
-
-	if ($quebra != $k12_conta) {
-		$pdf->SetFont('Arial', 'B', 8);
-		$pdf->cell(10, $alt, $k12_conta, "LTB", 0, "R", 0);
-		$pdf->cell(102, $alt, '- '.$k12_dconta, "RTB", 0, "L", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 1, "R", 0);
-		$quebra = $k12_conta;
-		$pdf->SetFont('Arial', '', 6);
-	}
-
-	$pdf->cell(10, $alt, $ctarec, "LTB", 0, "R", 0);
-	$pdf->cell(102, $alt, '- '.$descr_ctarec, "RTB", 0, "L", 0);
-	$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
-	$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
-  $pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
-
-	$total_valor   += $valor;
-	$total_estorno += $estorno;
-	$total_banco   += $valor + $estorno;
-  $total_geral   += $valor + $estorno;
-
-	if ($z +1 == $numlin) {
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-		$total_banco = 0;
-	} elseif ($quebra != pg_result($resultextraorcamentaria, $z +1, "k12_conta")) {
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-		$total_banco = 0;
-	} else {
-		$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
-	}
-}
-
-
-$pdf->SetFont('Arial', 'B', 6);
-$pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 1, 'R', 0);
-
-
-
-//DESPESAS ORÇAMENTÁRIAS
-
-$pdf->SetTextColor(0);
-
-if ($quebrarpag == 'N') {
-	$pdf->ln();
-} else {
-	$pdf->addpage();
-}
-
-//$pdf->SetTextColor(0,100,255);
-$pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(192, 6, "DESPESAS ORÇAMENTÁRIAS", 1, 1, "L", 0);
-$pdf->SetFont('Arial', 'B', 7);
-$pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'TOTAL CONTA', 1, 1, 'C', 0);
-$pdf->SetTextColor(0);
-$pdf->SetFont('Arial', '', 6);
-$numlin = pg_numrows($resultdespesaorca);
-$total_valor = 0;
-$total_estorno = 0;
-$total_banco = 0;
-$quebra = 0;
-
-for ($i = 0; $i < $numlin; $i ++) {
-	db_fieldsmemory($resultdespesaorca, $i);
-	/*   if($quebra != $k12_conta){
-	      $pdf->SetFont('Arial','B',8);
-	      $pdf->cell(10,$alt,$k12_conta,"LTB",0,"R",0); 
-	      $pdf->cell(102,$alt,'- '.$c60_descr,"RTB",0,"L",0); 
-	      $pdf->cell(20,$alt,'',1,0,"R",0); 
-	      $pdf->cell(20,$alt,'',1,0,"R",0); 
-	      $pdf->cell(20,$alt,'',1,0,"R",0); 
-	      $pdf->cell(20,$alt,'',1,1,"R",0); 
-	      $quebra = $k12_conta;
-	      $pdf->SetFont('Arial','',6);
-	   }*/
-	$pdf->cell(10, $alt, $k12_conta, "LTB", 0, "R", 0);
-	$pdf->cell(102, $alt, '- '.$c60_descr, "TB", 0, "L", 0);
-	$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
-	$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
-	$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
-	$total_valor += $valor;
-	$total_estorno += $estorno;
-
-	$total_banco += $valor + $estorno;
-	if ($i +1 == $numlin) {
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-		$total_banco = 0;
-	}
-	elseif ($quebra != pg_result($resultdespesaorca, $i +1, "k12_conta")) {
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-		$total_banco = 0;
-	} else {
-		$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
-	}
-}
-
-$pdf->SetFont('Arial', 'B', 6);
-//$pdf->SetTextColor(0,100,255);
-$pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, 'R', 0);
-$pdf->SetTextColor(0);
-
-//DESPESAS EXTRA-ORÇAMENTÁRIAS
-if ($quebrarpag == 'N') {
-	$pdf->ln();
-} else {
-	$pdf->addpage();
-}
-//$pdf->SetTextColor(0,100,255);
-$pdf->SetFont('Arial', 'B', 10);
-$pdf->Cell(192, 6, "DESPESAS EXTRA-ORÇAMENTÁRIAS", 1, 1, "L", 0);
-$pdf->SetFont('Arial', 'B', 7);
-$pdf->cell(112, $alt, 'DESCRIÇÃO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'VALOR', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'ESTORNO', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'TOTAL', 1, 0, 'C', 0);
-$pdf->cell(20, $alt, 'BANCO', 1, 1, 'C', 0);
-$pdf->SetTextColor(0);
-$saldo_anterior = 0;
-$saldo_debitado = 0;
-$saldo_creditado = 0;
-$saldo_atual = 0;
-$pdf->SetFont('Arial', '', 6);
-
-//echo 'Despesa Extra-Orçamentaria';
-//db_criatabela($resultdespesaextra);
-
-$numlin = pg_numrows($resultdespesaextra);
-$total_valor = 0;
-$total_estorno = 0;
-$total_banco = 0;
-$quebra = 0;
-$tipo = null;
-for ($i = 0; $i < $numlin; $i ++) {
-	db_fieldsmemory($resultdespesaextra, $i);
-	$sql = "select k13_conta
-	           from saltes 
-	             inner join conplanoexe on c62_reduz = k13_reduz and 
-		                              c62_anousu = ".db_getsession('DB_anousu')."
-	             inner join conplanoreduz on c62_reduz = c61_reduz and 
-		                                c61_anousu = c62_anousu and 
-		                                c61_instit = ".db_getsession('DB_instit')."
-		   where k13_conta = $corr_saltes
-		   union all
-		   select k13_conta
-		   from saltes
-	             inner join conplanoexe on c62_reduz = k13_reduz and 
-		                              c62_anousu = ".db_getsession('DB_anousu')."
-	             inner join conplanoreduz on c62_reduz = c61_reduz and 
-		                                c61_anousu = c62_anousu and   
-		                                c61_instit = ".db_getsession('DB_instit')."
-		   where k13_conta = $corl_saltes";
-	$result = db_query($sql);
-	//echo "$sql<br>";exit;
-	//if ($result == false || pg_numrows($result) == 2)
-	if ($result == false || $tipo != 'desp') {
-		continue;
-	}
-
-	if ($quebra != $corrente) {
-		$pdf->SetFont('Arial', 'B', 8);
-		$pdf->cell(10, $alt, $corrente, "LTB", 0, "R", 0);
-		$pdf->cell(102, $alt, '- '.$descr_conta, "RTB", 0, "L", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 0, "R", 0);
-		$pdf->cell(20, $alt, '', 1, 1, "R", 0);
-		$quebra = $corrente;
-		$pdf->SetFont('Arial', '', 6);
-	}
-	$pdf->cell(10, $alt, $corlanc, "LTB", 0, "R", 0);
-	$pdf->cell(102, $alt, '- '.$descr_receita, "RTB", 0, "L", 0);
-	$pdf->cell(20, $alt, db_formatar($valor, 'f'), 1, 0, "R", 0);
-	$pdf->cell(20, $alt, db_formatar($estorno, 'f'), 1, 0, "R", 0);
-	$pdf->cell(20, $alt, db_formatar($valor + $estorno, 'f'), 1, 0, "R", 0);
-	$total_banco += $valor + $estorno;
-	if ($i +1 == $numlin) {
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-		$total_banco = 0;
-	}
-	elseif ($quebra != pg_result($resultdespesaextra, $i +1, "corrente")) {
-		$pdf->cell(20, $alt, db_formatar($total_banco, 'f'), 1, 1, "R", 0);
-		$total_banco = 0;
-	} else {
-		$pdf->cell(20, $alt, db_formatar(0, 'f'), 1, 1, "R", 0);
-	}
-	$total_valor += $valor;
-	$total_estorno += $estorno;
-}
-
-$pdf->SetFont('Arial', 'B', 6);
-//$pdf->SetTextColor(0,100,255);
-$pdf->cell(112, $alt, 'TOTAL', 1, 0, 'L', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_estorno, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 0, 'R', 0);
-$pdf->cell(20, $alt, db_formatar($total_valor + $total_estorno, 'f'), 1, 1, 'R', 0);
-
-$pdf->cell(192, 5, '', 1, 1, 'R', 0);
-
 /**
  * 
  */
