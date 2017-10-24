@@ -34,7 +34,7 @@ $aLocalPagamento = array(1 => 'Local de prestação', 2 => 'Sede Prestador', 3 => 
 $aTipoTributacao = array(1 => 'Fixo', 2 => 'Variável', 3 => 'Não Incide');
 
 $sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
-var_dump($q136_issgruposervico);
+
 ?>
 <form name="form1" method="post" action="">
 
