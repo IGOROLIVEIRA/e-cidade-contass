@@ -163,6 +163,50 @@ function gerarSQL($sMes, $sEnte) {
 
 }
 
+function gerarSQLReceitas($sMes, $sEnte) {
+
+  $nEnte  = intval($sEnte);
+  $nMes   = intval($sMes);
+  $nAno   = intval(db_getsession('DB_anousu'));
+
+  return "SELECT c216_tiporeceita,c218_descricao,c216_saldo3112,
+               (sum(CASE
+                        WHEN c71_coddoc = 100 THEN (c70_valor*(c216_percentual/100))
+                        ELSE (c70_valor*(c216_percentual/100)) * -1
+                    END)) AS receitasatemes
+        FROM entesconsorciadosreceitas
+        INNER JOIN orcreceita ON c216_receita=o70_codfon
+        AND c216_anousu=o70_anousu
+        INNER JOIN conlancamrec ON c74_anousu=o70_anousu
+        AND c74_codrec=o70_codrec
+        INNER JOIN conlancam ON c74_codlan=c70_codlan
+        INNER JOIN conlancamdoc ON c71_codlan=c70_codlan
+        INNER JOIN entesconsorciados ON c216_enteconsorciado=c215_sequencial
+        INNER JOIN tipodereceitarateio ON c216_tiporeceita=c218_codigo 
+        WHERE date_part('MONTH',c70_data) <={$nMes}
+            AND date_part('YEAR',c70_data)={$nAno}
+            AND c216_enteconsorciado={$nEnte}
+            AND (date_part('MONTH',c215_datainicioparticipacao) <={$nMes}
+                 AND date_part('YEAR',c215_datainicioparticipacao) <={$nAno})
+        GROUP BY c216_tiporeceita,c218_descricao,c216_saldo3112
+        ORDER BY c216_tiporeceita ";
+}
+
+function gerarSQLDespesas($sMes, $sEnte, $sTipo) {
+  $nTipo  = intval($sTipo);
+  $nEnte  = intval($sEnte);
+  $nMes   = intval($sMes);
+  $nAno   = intval(db_getsession('DB_anousu'));
+
+  return "SELECT sum(c217_valorpago) despesasatemes
+    FROM despesarateioconsorcio
+    WHERE c217_enteconsorciado={$nEnte}
+        AND substr(c217_natureza,1,2)='{$nTipo}'
+        AND c217_mes<={$nMes}
+        AND c217_anousu={$nAno}
+    GROUP BY substr(c217_natureza,1,2)
+    ORDER BY substr(c217_natureza,1,2) ";
+}
 $aMeses = array(
   1 => 'Janeiro',
     'Fevereiro',
@@ -184,7 +228,6 @@ try {
 
   $oInfoRelatorio = new stdClass();
   $aDadosConsulta = db_utils::getCollectionByRecord($rsRelatorio);
-
   $oInfoRelatorio->aDados = array();
 
   foreach ($aDadosConsulta as $key => $oRow) {
@@ -206,6 +249,27 @@ try {
       $oInfoRelatorio->aDados[] = $oRow;
     }
 
+
+  }
+
+  $rsRelatorioFinanceiro = db_query(gerarSQLReceitas($_GET['mes'], $_GET['c215_sequencial']));
+
+  $aDadosConsultaFinanc = db_utils::getCollectionByRecord($rsRelatorioFinanceiro);
+  $oInfoRelatorio->aDadosFinanceiros = array();
+  $oEntes = new cl_entesconsorciados();
+  foreach ($aDadosConsultaFinanc as $key => $oRow) {
+    
+    $oRelFinanceiro = new stdClass();
+    $oRelFinanceiro->classificacao = $oRow->c216_tiporeceita." - ".$oRow->c218_descricao;
+    $rsDesp = $oEntes->sql_record(gerarSQLDespesas($_GET['mes'], $_GET['c215_sequencial'],$oRow->c216_tiporeceita));
+    $nDesp = db_utils::fieldsMemory($rsDesp, 0)->despesasatemes;
+    $oRelFinanceiro->saldoinicial = $oRow->c216_saldo3112;
+    $oRelFinanceiro->receitasatemes = $oRow->receitasatemes;
+    $oRelFinanceiro->despesasatemes = $nDesp;
+    $oRelFinanceiro->rps = 0;
+    $oRelFinanceiro->saldo = $oRelFinanceiro->saldoinicial+$oRelFinanceiro->receitasatemes-$oRelFinanceiro->despesasatemes-$oRelFinanceiro->rps;
+    $oInfoRelatorio->aDadosFinanceiros[] = $oRelFinanceiro;
+  
   }
 
   switch ($_GET['tipoarquivo']) {

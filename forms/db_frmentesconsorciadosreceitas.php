@@ -97,6 +97,16 @@ $cltipodereceitarateio = new cl_tipodereceitarateio();
       ?>
           </td>
         </tr>
+         <tr>
+          <td nowrap title="<?=@$Tc216_percentual?>">
+             <strong>Percentual:</strong>
+          </td>
+          <td>
+      <?
+      db_input('c216_percentual',11,$Ic216_percentual,true,'text',1,"")
+      ?>
+          </td>
+        </tr>
       </table>
 
       <input name="incluir" type="submit" id="db_opcao" value="Incluir">
@@ -192,7 +202,8 @@ function salvarReceita(form) {
       enteConsorciado: form.c216_enteconsorciado.value,
       tipoReceita: form.c216_tiporeceita.value,
       receita: form.c216_receita.value,
-      saldo: form.c216_saldo3112.value
+      saldo: form.c216_saldo3112.value,
+      percentual: form.c216_percentual.value
     }
   };
 
@@ -234,6 +245,7 @@ function carregaTabelaReceitas(r) {
   ths += '<th>Tipos</th>';
   ths += '<th>Receita</th>';
   ths += '<th>Saldo</th>';
+  ths += '<th>Percentual</th>';
   ths += '<th>Ação</th>';
   ths += '</tr>';
 
@@ -245,6 +257,7 @@ function carregaTabelaReceitas(r) {
       tr += '<td>' + getTipo(receita.tipo) + '</td>';
       tr += '<td>' + receita.codReceita + ' - ' + receita.descReceita + '</td>';
       tr += '<td class="align-right">' + js_formatar(receita.saldo, 'f') + '</td>';
+      tr += '<td class="align-right">' + js_formatar(receita.percentual, 'f') + '</td>';
       tr += '<td><input type="button" onclick="excluirReceita(' + receita.sequencial + ');" value="Excluir"></td>';
       tr += '</tr>';
 
@@ -278,6 +291,7 @@ function buscaReceitasCadastradas(codigo) {
   document.form2.c216_saldo3112.value = '';
   document.form2.c216_receita.value = '';
   document.form2.o57_descr.value = '';
+  document.form2.c216_percentual.value = '';
 
   var params = {
     exec: 'buscaReceitasCadastradas',

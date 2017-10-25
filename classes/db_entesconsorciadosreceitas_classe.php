@@ -22,6 +22,7 @@ class cl_entesconsorciadosreceitas {
   public $c216_receita = 0;
   public $c216_saldo3112 = 0;
   public $c216_anousu = null;
+  public $c216_percentual = 0;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  c216_sequencial = int4 =
@@ -29,7 +30,8 @@ class cl_entesconsorciadosreceitas {
                  c216_tiporeceita = int4 = Tipo receita
                  c216_receita = int4 = Receita
                  c216_saldo3112 = float4 = Saldo3112
-                 c216_anousu = int4 =
+                 c216_anousu = int4 = AnoUso
+                 c216_percentual = float4 = Percentual
                  ";
 
   //funcao construtor da classe
@@ -57,6 +59,7 @@ class cl_entesconsorciadosreceitas {
        $this->c216_tiporeceita = ($this->c216_tiporeceita == ""?@$GLOBALS["HTTP_POST_VARS"]["c216_tiporeceita"]:$this->c216_tiporeceita);
        $this->c216_receita = ($this->c216_receita == ""?@$GLOBALS["HTTP_POST_VARS"]["c216_receita"]:$this->c216_receita);
        $this->c216_saldo3112 = ($this->c216_saldo3112 == ""?@$GLOBALS["HTTP_POST_VARS"]["c216_saldo3112"]:$this->c216_saldo3112);
+       $this->c216_percentual = ($this->c216_percentual == ""?@$GLOBALS["HTTP_POST_VARS"]["c216_percentual"]:$this->c216_percentual);
        $this->c216_anousu = ($this->c216_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c216_anousu"]:$this->c216_anousu);
      } else {
        $this->c216_sequencial = ($this->c216_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["c216_sequencial"]:$this->c216_sequencial);
@@ -144,6 +147,7 @@ class cl_entesconsorciadosreceitas {
                                       ,c216_receita
                                       ,c216_saldo3112
                                       ,c216_anousu
+                                      ,c216_percentual
                        )
                 values (
                                 $this->c216_sequencial
@@ -152,6 +156,7 @@ class cl_entesconsorciadosreceitas {
                                ,$this->c216_receita
                                ,$this->c216_saldo3112
                                ,$this->c216_anousu
+                               ,$this->c216_percentual
                       )";
      $result = db_query($sql);
      if ($result==false) {
@@ -244,6 +249,20 @@ class cl_entesconsorciadosreceitas {
        if (trim($this->c216_saldo3112) == null ) {
          $this->erro_sql = " Campo Saldo3112 não informado.";
          $this->erro_campo = "c216_saldo3112";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     
+     if (trim($this->c216_percentual)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c216_percentual"])) {
+       $sql  .= $virgula." c216_percentual = $this->c216_percentual ";
+       $virgula = ",";
+       if (trim($this->c216_percentual) == null ) {
+         $this->erro_sql = " Campo percentual não informado.";
+         $this->erro_campo = "c216_percentual";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

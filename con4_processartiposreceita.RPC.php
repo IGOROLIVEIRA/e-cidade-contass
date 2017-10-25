@@ -31,7 +31,8 @@ switch ($oParam->exec){
       $oNovoEntesReceitas->c216_tiporeceita     = $oParam->dados->tipoReceita;
       $oNovoEntesReceitas->c216_receita         = $oParam->dados->receita;
       $oNovoEntesReceitas->c216_saldo3112       = $oParam->dados->saldo;
-      $oNovoEntesReceitas->c216_anousu          = null;
+      $oNovoEntesReceitas->c216_percentual      = $oParam->dados->percentual;
+      $oNovoEntesReceitas->c216_anousu          = db_getsession('DB_anousu');
 
       $oNovoEntesReceitas->incluir();
 
@@ -59,7 +60,8 @@ switch ($oParam->exec){
         'c216_tiporeceita',
         'c216_receita',
         'c216_saldo3112',
-        'o57_descr'
+        'c216_percentual',
+        'o57_descr',
       ));
 
       $sSql = $oEntesReceitas->sql_query(null, $sCampos, null, " c216_enteconsorciado = {$oParam->enteConsorciado}");
@@ -77,6 +79,7 @@ switch ($oParam->exec){
         $oNovaReceita->tipo         = $oReceita->c216_tiporeceita;
         $oNovaReceita->codReceita   = $oReceita->c216_receita;
         $oNovaReceita->descReceita  = $oReceita->o57_descr;
+        $oNovaReceita->percentual   = $oReceita->c216_percentual;
         $oNovaReceita->saldo        = $oReceita->c216_saldo3112;
 
         $oRetorno->receitas[] = $oNovaReceita;

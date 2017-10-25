@@ -391,7 +391,28 @@ class cl_entesconsorciados {
     }
     return $sql;
   }
-
+   
+  // funcao do sql para pegar valor percentual da arrecadação de um ente sobre todos os outros.
+  function sql_query_percentual ($dbwhere2="",$dbwhere3="") {
+     $sql = "select coalesce(round(vlrarrecadeente/vlrarrecadetotal,2),0) as percent from (
+            select (select sum(case when c71_coddoc = 100 then c70_valor else c70_valor * -1 end)
+              from entesconsorciadosreceitas 
+            inner join orcreceita on c216_receita=o70_codfon and c216_anousu=o70_anousu
+            inner join conlancamrec on c74_anousu=o70_anousu and c74_codrec=o70_codrec
+            inner join conlancam on c74_codlan=c70_codlan
+            inner join conlancamdoc on c71_codlan=c70_codlan
+            inner join entesconsorciados on c216_enteconsorciado=c215_sequencial
+            ".$dbwhere2.") as vlrarrecadetotal,
+            (select sum(case when c71_coddoc = 100 then c70_valor else c70_valor * -1 end)
+              from entesconsorciadosreceitas 
+            inner join orcreceita on c216_receita=o70_codfon and c216_anousu=o70_anousu
+            inner join conlancamrec on c74_anousu=o70_anousu and c74_codrec=o70_codrec
+            inner join conlancam on c74_codlan=c70_codlan
+            inner join conlancamdoc on c71_codlan=c70_codlan
+            inner join entesconsorciados on c216_enteconsorciado=c215_sequencial
+            ".$dbwhere3.") as vlrarrecadeente) as percent ";
+    return $sql;
+  }
   // funcao do sql
   function sql_query_file ( $c215_sequencial=null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";

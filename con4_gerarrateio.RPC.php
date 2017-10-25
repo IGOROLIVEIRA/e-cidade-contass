@@ -61,7 +61,18 @@ switch ($oParam->exec){
 
         $oNovoEnte = new stdClass();
         $oNovoEnte->sequencial   = $oEnte->c215_sequencial;
-        $oNovoEnte->percentual   = $oEnte->c215_percentualrateio;
+        $sWhere2   = " where date_part('MONTH',c70_data) <={$oParam->mes} and date_part('YEAR',c70_data)={$nAnoUsu} ";
+        $sWhere2  .= " and (date_part('MONTH',c215_datainicioparticipacao) <={$oParam->mes} ";  
+        $sWhere2  .= " and date_part('YEAR',c215_datainicioparticipacao) <={$nAnoUsu}) ";
+        $sWhere3   = " where date_part('MONTH',c70_data) <={$oParam->mes} ";
+        $sWhere3  .= " and date_part('YEAR',c70_data)={$nAnoUsu} and c216_enteconsorciado=".$oEnte->c215_sequencial;
+        $sWhere3  .= " and (date_part('MONTH',c215_datainicioparticipacao) <={$oParam->mes} "; 
+        $sWhere3  .= " and date_part('YEAR',c215_datainicioparticipacao) <={$nAnoUsu}) ";
+        $sSql2 = $oEntes->sql_query_percentual($sWhere2, $sWhere3);
+        $rsEntesPerc = $oEntes->sql_record($sSql2);
+        $percentualrateio = db_utils::fieldsMemory($rsEntesPerc, 0)->percent;
+
+        $oNovoEnte->percentual   = $percentualrateio;
         $oNovoEnte->cgm          = $oEnte->c215_cgm;
         $oNovoEnte->nome         = utf8_encode($oEnte->z01_nome);
 
