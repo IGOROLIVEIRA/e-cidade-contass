@@ -215,7 +215,7 @@ class empenho {
     $isPrecatoria        = $oEmpenhoFinanceiro->isPrecatoria();
 
     $iAnoSessao          = db_getsession("DB_anousu");
- 
+
     if ($e60_anousu < db_getsession("DB_anousu")){
 
       $codteste    = "33";
@@ -231,7 +231,7 @@ class empenho {
       if ($lPossuiControleEmLiqudacao ) {
         $codteste = "39";
       }
-          
+
     } else {
 
       $codteste = "3";
@@ -1376,29 +1376,27 @@ class empenho {
     if ($lNotaCancelada) {
       $sJoinPag = '';
     } else {
-      $sJoinPag = ' and e71_anulado is false';
+      $sJoinPag = ' AND e71_anulado IS FALSE';
     }
-    $sSqlNota  = "SELECT {$this->sCamposNota}";
-    $sSqlNota .= "  from empnota ";
-    $sSqlNota .= "       inner join empnotaele   on  e69_codnota              = e70_codnota";
-    $sSqlNota .= "       inner join db_usuarios  on  db_usuarios.id_usuario   = empnota.e69_id_usuario";
-    $sSqlNota .= "       inner join empempenho   on  empempenho.e60_numemp    = empnota.e69_numemp";
-    $sSqlNota .= "       inner join cgm          on  cgm.z01_numcgm           = empempenho.e60_numcgm";
-    $sSqlNota .= "       inner join db_config    on  db_config.codigo         = empempenho.e60_instit";
-    $sSqlNota .= "                              and  e60_instit               =".db_getsession('DB_instit');
-    $sSqlNota .= "       inner join orcdotacao   on  orcdotacao.o58_anousu    = empempenho.e60_anousu";
-    $sSqlNota .= "                              and  orcdotacao.o58_coddot    = empempenho.e60_coddot";
-    $sSqlNota .= "       inner join pctipocompra on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
-    $sSqlNota .= "       inner join emptipo      on  emptipo.e41_codtipo      = empempenho.e60_codtipo";
-    $sSqlNota .= "       left join pagordemnota  on  e71_codnota              = empnota.e69_codnota {$sJoinPag}";
-    $sSqlNota .= "       left join pagordem      on  e71_codord               = e50_codord";
-    $sSqlNota .= "       left join pagordemconta on  e49_codord               = e71_codord";
-    $sSqlNota .= "       left join cgm cgmordem  on  e49_numcgm               = cgmordem.z01_numcgm";
-    $sSqlNota .= "       left join pagordemele   on  e53_codord               = pagordemnota.e71_codord";
-    $sSqlNota .= "       left join empnotaord    on  m72_codnota              = e69_codnota";
-    $sSqlNota .= "       left join matordem      on  m72_codordem             = m51_codordem";
-    $sSqlNota .= "       left join matordemanu   on  m51_codordem             = m53_codordem";
-    $sSqlNota .= " where  e69_numemp = {$iEmpenho} {$sWhere}";
+    $sSqlNota  = " SELECT {$this->sCamposNota} FROM empnota ";
+    $sSqlNota .= " INNER JOIN empnotaele ON e69_codnota = e70_codnota";
+    $sSqlNota .= " INNER JOIN db_usuarios ON db_usuarios.id_usuario = empnota.e69_id_usuario";
+    $sSqlNota .= " INNER JOIN empempenho ON empempenho.e60_numemp = empnota.e69_numemp";
+    $sSqlNota .= " INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm";
+    $sSqlNota .= " INNER JOIN db_config ON db_config.codigo = empempenho.e60_instit AND e60_instit =".db_getsession('DB_instit');
+    $sSqlNota .= " INNER JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu AND orcdotacao.o58_coddot = empempenho.e60_coddot";
+    $sSqlNota .= " INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = empempenho.e60_codcom";
+    $sSqlNota .= " INNER JOIN emptipo ON emptipo.e41_codtipo = empempenho.e60_codtipo";
+    $sSqlNota .= " LEFT JOIN pagordemnota ON e71_codnota = empnota.e69_codnota {$sJoinPag}";
+    $sSqlNota .= " LEFT JOIN pagordem ON e71_codord = e50_codord";
+    $sSqlNota .= " LEFT JOIN pagordemconta ON e49_codord = e71_codord";
+    $sSqlNota .= " LEFT JOIN cgm cgmordem ON e49_numcgm = cgmordem.z01_numcgm";
+    $sSqlNota .= " LEFT JOIN pagordemele ON e53_codord = pagordemnota.e71_codord";
+    $sSqlNota .= " LEFT JOIN empnotaord ON m72_codnota = e69_codnota";
+    $sSqlNota .= " LEFT JOIN matordem ON m72_codordem = m51_codordem";
+    $sSqlNota .= " LEFT JOIN matordemanu ON m51_codordem = m53_codordem";
+    $sSqlNota .= " WHERE e69_numemp = {$iEmpenho} {$sWhere}";
+    $sSqlNota .= "   AND e69_dtrecebe <= '".date('Y-m-d',db_getsession("DB_datausu"))."' AND e70_vlrliq = 0 ";
     $rsNota    = $objNota->sql_record($sSqlNota);
     $this->iNumRowsNotas = $objNota->numrows;
     if ($objNota->numrows > 0) {
@@ -1417,17 +1415,17 @@ class empenho {
   public function getItensNota($iCodNota) {
 
     $oNota           = $this->usarDao("empnotaitem", true);
-    $sSqlItensNota   = "select pc01_descrmater, ";
+    $sSqlItensNota   = "SELECT pc01_descrmater, ";
     $sSqlItensNota  .= "       e72_qtd, ";
     $sSqlItensNota  .= "       e72_empempitem , ";
     $sSqlItensNota  .= "       e72_valor,";
     $sSqlItensNota  .= "       e72_vlrliq,";
     $sSqlItensNota  .= "       e72_vlranu,";
     $sSqlItensNota  .= "       e72_sequencial";
-    $sSqlItensNota  .= "  from empnotaitem";
-    $sSqlItensNota  .= "         inner join empempitem on e62_sequencial = e72_empempitem";
-    $sSqlItensNota  .= "         inner join pcmater    on  e62_item      = pc01_codmater";
-    $sSqlItensNota  .= "  where e72_codnota = {$iCodNota}";
+    $sSqlItensNota  .= "FROM empnotaitem";
+    $sSqlItensNota  .= "INNER JOIN empempitem ON e62_sequencial = e72_empempitem";
+    $sSqlItensNota  .= "INNER JOIN pcmater ON e62_item = pc01_codmater";
+    $sSqlItensNota  .= "WHERE e72_codnota = {$iCodNota}";
 
     $rsNota          = $oNota->sql_record($sSqlItensNota);
     $aItensNota      = array();
@@ -1503,7 +1501,7 @@ class empenho {
 
       $oDaoTipoEmpenho = db_utils::getDao('empempenho');
       $sWhere          = "e60_numemp = {$this->dadosEmpenho->e60_numemp}";
-      $sCampos         = "(select l44_codigotribunal from pctipocompratribunal 
+      $sCampos         = "(select l44_codigotribunal from pctipocompratribunal
                           join pctipocompra on l44_sequencial = pc50_pctipocompratribunal
                           where l44_uf = 'MG' and pc50_codcom = empempenho.e60_codcom limit 1) as tipocompratribunal";
       $sSqlTipoEmpenho = $oDaoTipoEmpenho->sql_query_file(null,$sCampos, null, $sWhere);
@@ -4445,7 +4443,7 @@ class empenho {
         $oDaoContaCorrenteDetalhe = new cl_contacorrentedetalhe();
         $result = db_query($oDaoContaCorrenteDetalhe->sql_query_file(null,"c19_sequencial",null,"c19_numemp = {$this->numemp}"));
         $iCodContacorrente = db_utils::fieldsMemory($result, 0)->c19_sequencial;
-        
+
         // Adicionado exclusão a tabela contacorrentesaldo pois estava causando erro ao excluir da contacorrentedetalhe
         $oDaoContaCorrenteSaldo   = new cl_contacorrentesaldo();
         $oDaoContaCorrenteSaldo->excluir(null,"c29_contacorrentedetalhe = {$iCodContacorrente}");
@@ -4454,7 +4452,7 @@ class empenho {
           $sErroMensagem = "Erro ao excluir conta corrente saldo\n[ET] - {$oDaoContaCorrenteSaldo->erro_msg}";
           throw new Exception($sErroMensagem);
         }
-        
+
         $oDaoContaCorrenteDetalhe->excluir(null, "c19_sequencial = {$iCodContacorrente}");
         if ($oDaoContaCorrenteDetalhe->erro_status == 0 ) {
 
@@ -5845,7 +5843,7 @@ class empenho {
     $sOrdem = " c70_codlan desc limit 1 ";
 
     $oDaoConlancam      = new cl_conlancamemp();
-    $sSqlBuscaDocumento = $oDaoConlancam->sql_query_documentos(null, "conhistdoc.*", $sOrdem, $sWhere);   
+    $sSqlBuscaDocumento = $oDaoConlancam->sql_query_documentos(null, "conhistdoc.*", $sOrdem, $sWhere);
     $rsBuscaDocumento   = $oDaoConlancam->sql_record($sSqlBuscaDocumento);
     if ($oDaoConlancam->numrows == 0) {
       return false;
