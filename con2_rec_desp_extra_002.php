@@ -81,7 +81,6 @@ $dataini = db_getsession("DB_anousu").'-'.$mesini.'-'.'01';
 $datafin = db_getsession("DB_anousu").'-'.$mesfin.'-'.date('t',mktime(0,0,0,$mesfin,'01',db_getsession("DB_anousu")));
 
 $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"),$dataini,$datafin,false,$where,'','true','true');
-
 $pdf = new PDF(); 
 $pdf->Open(); 
 $pdf->AliasNbPages(); 
@@ -125,23 +124,23 @@ for($i=0;$i<pg_numrows($result);$i++){
    // if (in_array($estrutural,$m_outros)){
       $pdf->cell(10,$alt,"",0,0,"C",0);
       $pdf->cell(130,$alt,$estrutural.' - '.$c60_descr,"R",0,"L",0);
-      $pdf->cell(35,$alt,db_formatar($saldo_anterior,'f'),"R",0,"R",0);
+      $pdf->cell(35,$alt,db_formatar($saldo_anterior,'f')." ".$sinal_anterior,"R",0,"R",0);
       $pdf->cell(30,$alt,db_formatar($saldo_anterior_debito,'f'),"R",0,"R",0);
       $pdf->cell(30,$alt,db_formatar($saldo_anterior_credito,'f'),"R",0,"R",0);
-      $pdf->cell(30,$alt,db_formatar($saldo_final,'f'),"0",1,"R",0);
+      $pdf->cell(30,$alt,db_formatar($saldo_final,'f')." ".$sinal_final,"0",1,"R",0);
       
       if (substr($estrutural,0,1)=='1'){
       	  //  totalizador ativo
-      	 $geral_ativo_anterior  += $saldo_anterior;
+      	 $geral_ativo_anterior  += $sinal_anterior=='C'?$saldo_anterior:$saldo_anterior*-1;
       	 $geral_ativo_inscricao += $saldo_anterior_debito ;
       	 $geral_ativo_baixa     += $saldo_anterior_credito;
-      	 $geral_ativo_saldo     += $saldo_final;	
+      	 $geral_ativo_saldo     += $sinal_final=='C'?$saldo_final:$saldo_final*-1;	
       	
       } else {
-      	 $geral_passivo_anterior  += $saldo_anterior;
+      	 $geral_passivo_anterior  += $sinal_anterior=='C'?$saldo_anterior:$saldo_anterior*-1;
       	 $geral_passivo_inscricao += $saldo_anterior_debito ;
       	 $geral_passivo_baixa     += $saldo_anterior_credito;
-      	 $geral_passivo_saldo     += $saldo_final;      	
+      	 $geral_passivo_saldo     += $sinal_final=='C'?$saldo_final:$saldo_final*-1;   	
       }	
           
       
@@ -151,10 +150,16 @@ for($i=0;$i<pg_numrows($result);$i++){
 
 $pdf->setfont('arial','b',8);
 $pdf->cell(140,$alt,"TOTAL","RTB",0,"L",0);
-$pdf->cell(35,$alt,db_formatar($geral_ativo_anterior   - $geral_passivo_anterior,'f'),"TBR",0,"R",0);
+$sSinalIncial = ($geral_ativo_anterior - $geral_passivo_anterior) > 0 ? "D" : "C";
+$saldoIncial = $geral_ativo_anterior - $geral_passivo_anterior;
+$saldoFinal = $geral_ativo_saldo - $geral_passivo_saldo;
+$sSinalFinal = ($geral_ativo_saldo - $geral_passivo_saldo) > 0 ? "D" : "C";
+$pdf->cell(35,$alt,db_formatar(abs($saldoIncial),'f')." ".$sSinalIncial,"TBR",0,"R",0);
 $pdf->cell(30,$alt,db_formatar($geral_ativo_inscricao + $geral_passivo_inscricao,'f'),"TBR",0,"R",0);
 $pdf->cell(30,$alt,db_formatar($geral_ativo_baixa +  $geral_passivo_baixa , 'f'),"TBR",0,"R",0);
-$pdf->cell(30,$alt,db_formatar($geral_ativo_saldo - $geral_passivo_saldo  ,'f'),"TB",1,"R",0);    
+$pdf->cell(30,$alt,db_formatar( abs($saldoFinal),'f')." ".$sSinalFinal,"TB",1,"R",0);  
+
+
 
 
 $pdf->Ln(15);
