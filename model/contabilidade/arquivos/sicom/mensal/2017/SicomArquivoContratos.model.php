@@ -1042,7 +1042,7 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                  where db01_anousu ={$oDados10->ac16_anousu}  and db01_coddepto ={$oDados30->ac16_coddepto}";
+                  where db01_anousu ={$oDados30->ac16_anousu}  and db01_coddepto ={$oDados30->ac16_coddepto}";
 
                 $result = db_query($sSql);
                 $sCodUnidadeSub = db_utils::fieldsMemory($result, 0)->codunidadesub;
