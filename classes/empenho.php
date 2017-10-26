@@ -1396,7 +1396,6 @@ class empenho {
     $sSqlNota .= " LEFT JOIN matordem ON m72_codordem = m51_codordem";
     $sSqlNota .= " LEFT JOIN matordemanu ON m51_codordem = m53_codordem";
     $sSqlNota .= " WHERE e69_numemp = {$iEmpenho} {$sWhere}";
-    $sSqlNota .= "   AND e69_dtrecebe <= '".date('Y-m-d',db_getsession("DB_datausu"))."' AND e70_vlrliq = 0 ";
     $rsNota    = $objNota->sql_record($sSqlNota);
     $this->iNumRowsNotas = $objNota->numrows;
     if ($objNota->numrows > 0) {

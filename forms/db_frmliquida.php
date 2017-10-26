@@ -373,7 +373,7 @@ function js_saida(oAjax){
       $('confirmar').disabled = false;
     } else {
 
-      alert("Empenho sem notas lançadas, pendentes de inclusão no Módulo Patrimônio ou fora da data.");
+      alert("Empenho sem notas lançadas ou pendentes de inclusão no Módulo Patrimônio!");
       $('confirmar').disabled = true;
     }
     if (obj.validaContrato == 'f') {
