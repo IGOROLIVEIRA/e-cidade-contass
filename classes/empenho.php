@@ -1414,17 +1414,17 @@ class empenho {
   public function getItensNota($iCodNota) {
 
     $oNota           = $this->usarDao("empnotaitem", true);
-    $sSqlItensNota   = "SELECT pc01_descrmater, ";
+    $sSqlItensNota   = " SELECT pc01_descrmater, ";
     $sSqlItensNota  .= "       e72_qtd, ";
     $sSqlItensNota  .= "       e72_empempitem , ";
-    $sSqlItensNota  .= "       e72_valor,";
-    $sSqlItensNota  .= "       e72_vlrliq,";
-    $sSqlItensNota  .= "       e72_vlranu,";
-    $sSqlItensNota  .= "       e72_sequencial";
-    $sSqlItensNota  .= "FROM empnotaitem";
-    $sSqlItensNota  .= "INNER JOIN empempitem ON e62_sequencial = e72_empempitem";
-    $sSqlItensNota  .= "INNER JOIN pcmater ON e62_item = pc01_codmater";
-    $sSqlItensNota  .= "WHERE e72_codnota = {$iCodNota}";
+    $sSqlItensNota  .= "       e72_valor, ";
+    $sSqlItensNota  .= "       e72_vlrliq, ";
+    $sSqlItensNota  .= "       e72_vlranu, ";
+    $sSqlItensNota  .= "       e72_sequencial ";
+    $sSqlItensNota  .= " FROM empnotaitem ";
+    $sSqlItensNota  .= " INNER JOIN empempitem ON e62_sequencial = e72_empempitem ";
+    $sSqlItensNota  .= " INNER JOIN pcmater ON e62_item = pc01_codmater ";
+    $sSqlItensNota  .= " WHERE e72_codnota = {$iCodNota} ";
 
     $rsNota          = $oNota->sql_record($sSqlItensNota);
     $aItensNota      = array();
