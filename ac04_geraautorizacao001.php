@@ -289,6 +289,8 @@ var iPosicaoAtual = 0;
  */
 var VerificaLicitacao = false;
 
+var tipocompratribunal = '';
+
 function js_pesquisaCaracteristicaPeculiar(lMostra) {
 
   if (lMostra == true) {
@@ -480,8 +482,6 @@ function js_retornoGetItensPosicao(oAjax) {
 
   js_removeObj("msgbox");
   var oRetorno = JSON.parse(oAjax.responseText);
-  console.log('origem: ');
-  console.log(oRetorno.iOrigemContrato);
 
   if (oRetorno.iOrigemContrato == 2) {
     verificaLicitacao = true;
@@ -1069,23 +1069,16 @@ function js_processarAutorizacoes(lProcessar) {
   oParam.aItens     = new Array();
   oParam.dados      = new Object();
 
-  if($('e54_codcom').value.length != 0) {
+  if($('e54_codcom').value.length != 0){
 
-      if ($('e54_codcom').value != 7 && $('e54_codcom').value != 9) {
+     if(tipocompratribunal != 13 && $('e54_numerl').value.length == 0) {
+         alert('Campo Numero da licitação e obrigatório');
+         js_removeObj('msgbox');
+         return false;
+     }
 
-          if ($('e54_codcom').value.length != 0) {
-
-              if ($('e54_numerl').value.length == 0) {
-
-                  alert('Campo Numero da licitação e obrigatório');
-                  js_removeObj('msgbox');
-                  return false;
-              }
-
-          }
-
-      }
   }else{
+
       alert('Escolha um tipo');
       js_removeObj('msgbox');
       return false;
@@ -1178,7 +1171,7 @@ function js_retornoBuscarInformacoesAutorizacao(oAjax) {
 
   $('e54_resumo').value = oRetorno.sResumoAcordo.urlDecode();
 
-  if($('e54_numerl').value.length == 0){
+  if($('e54_numerl').value.length == 0) {
       $('e54_numerl').value = oRetorno.sLicitacao.urlDecode();
       $('e54_codcom').value = oRetorno.iModalidade.urlDecode();
       $('e54_codcomdescr').value = oRetorno.iModalidade.urlDecode();
@@ -1220,7 +1213,9 @@ function setInformacoesAutorizacao() {
  * @param {integer} Código do tipo de compra
  */
 function js_buscarTipoLicitacao(iTipoCompra) {
+    console.log('itipocompra: ');
     console.log(iTipoCompra);
+
     if (iTipoCompra != "" && iTipoCompra != "undefined") {
 
         var oParamTipoCompra         = new Object();
@@ -1242,39 +1237,34 @@ function js_buscarTipoLicitacao(iTipoCompra) {
 function js_preencheTipoLicitacao(oAjax) {
 
     var oRetorno = eval("("+oAjax.responseText+")");
-    console.log(oRetorno);
     $('e54_tipol').innerHTML = "";
 
-    if (oRetorno.aTiposLicitacao.length > 0) {
+    tipocompratribunal = oRetorno.tipocompratribunal;
 
+    if( oRetorno.tipocompratribunal != 13 ) {
+
+        console.log('tipotribunal 1');
+        console.log(tipocompratribunal);
+        $('e54_numerl').removeAttribute('readOnly',true);
+        $('e54_numerl').removeAttribute('disabled', true);
+        $('e54_numerl').removeAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+
+
+    }else {
+
+        console.log('tipotribunal 2');
+        console.log(tipocompratribunal);
+        $('e54_numerl').setAttribute('readOnly',true);
+        $('e54_numerl').setAttribute('disabled', true);
+        $('e54_numerl').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+
+    }
+
+    if (oRetorno.aTiposLicitacao.length > 0) {
         oRetorno.aTiposLicitacao.each(function (oItem) {
-            console.log(oItem.l03_descr);
-            console.log(verificaLicitacao);
             $('e54_tipol').value = oItem.l03_tipo;
             $('e54_tipoldescr').value = oItem.l03_descr;
-
-
         });
-
-    } else {
-        if($('e54_codcom').value == 7 || $('e54_codcom').value == 9) {
-            $('e54_numerl').setAttribute('disabled', true);
-            $('e54_tipol').setAttribute('disabled', true);
-            $('e54_tipoldescr').setAttribute('disabled', true);
-            $('e54_numerl').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-            $('e54_tipol').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-            $('e54_tipoldescr').setAttribute('style', 'width: 68px; background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-            //$('e54_numerl').value = "";
-            //me.oTipoLicitacao.setDisable();
-        }else{
-            $('e54_numerl').removeAttribute('disabled', true);
-            $('e54_tipol').removeAttribute('disabled', true);
-            $('e54_tipoldescr').removeAttribute('disabled', true);
-            $('e54_numerl').removeAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-            $('e54_tipol').removeAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-            $('e54_tipoldescr').removeAttribute('style', 'width: 68px; background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
-            //$('e54_numerl').value = "";
-        }
     }
 }
 
