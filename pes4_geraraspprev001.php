@@ -90,7 +90,7 @@ WHEN h13_tpcont::integer = 12 THEN lpad(1,4,0)
 WHEN h13_tpcont::integer = 21 THEN lpad(1,4,0)
 WHEN h13_tpcont::integer = 19 THEN lpad(3,4,0)
 WHEN h13_tpcont::integer = 20 THEN lpad(2,4,0)
-END || lpad(' ',20) || lpad(COALESCE(db83_sequencial::varchar,''),3) || lpad(COALESCE(db83_bancoagencia::varchar,''),4) || lpad(COALESCE(db83_conta::varchar,''),9) || lpad(COALESCE(db83_dvconta::varchar,''),1) ||
+END || lpad(' ',20) || lpad(COALESCE(rh44_codban::varchar,''),3) || lpad(COALESCE(rh44_agencia::varchar,''),4) || reverse(substring(reverse(rh44_conta),1,9)) || lpad(COALESCE(rh44_dvconta::varchar,''),1) ||
 lpad(' ',8) || lpad(' ',7) || lpad(COALESCE(z01_cgccpf,''),11) || lpad(' ',11) || lpad(' ',11) || lpad(' ',2) || lpad(' ',4) || lpad(' ',5) || lpad(' ',11) || lpad(' ',8) || lpad(' ',6) || lpad('*',1) AS todo
 
   FROM rhpessoal
@@ -119,6 +119,7 @@ LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
 AND rh138_instit = rh02_instit
 LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+LEFT JOIN rhpesbanco ON rh44_seqpes = rh02_seqpes
   where rh30_vinculo = 'A'
   AND rh02_anousu = $ano
   AND rh02_mesusu = $mes
@@ -255,7 +256,6 @@ SELECT distinct
     and r08_instit = ".db_getsession('DB_instit')."
     $wh
 ";
-    echo $sql;exit;
 
     $result = db_query($sql);
     $num = pg_numrows($result);
@@ -323,6 +323,8 @@ LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
 AND rh138_instit = rh02_instit
 LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+where 1=1
+$wh
 
 union
 
@@ -371,6 +373,8 @@ LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
 AND rh138_instit = rh02_instit
 LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+where 1=1
+$wh
 ";
 
     $result = db_query($sql);
@@ -603,6 +607,7 @@ AND rhpessoalmov.rh02_mesusu = $mes
 join rhdepend on rh31_regist = rh01_regist
 LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
 where rh05_seqpes IS NULL
+$wh
     ";
 
   $result = db_query($sql);
