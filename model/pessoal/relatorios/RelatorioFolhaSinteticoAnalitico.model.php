@@ -52,10 +52,13 @@ class RelatorioFolhaSinteticoAnalitico extends RelatorioFolhaPagamento  {
      *
      * @return $this
      */
-  public function getDadosBase(){
-    
+  public function getDadosBase($iTipoFolha=""){
+
+
     $oDadosRetorno    = new stdClass();
-    $sWhere           = " rh05_seqpes IS NULL ";
+    if($iTipoFolha != 3) {
+        $sWhere = " rh05_seqpes IS NULL ";
+    }
     $oDaoAfasta       = db_utils::getDao('afasta', true);
 
     /**

@@ -172,7 +172,8 @@ switch($oParam->exec) {
 		  $oDadosCsv->setCodigoComplementar($oParam->sSemest);
 		}
 
-		$aDadosCsv          = $oDadosCsv->getDadosBase();
+		$aDadosCsv          = $oDadosCsv->getDadosBase($iTipoFolha);
+
 		$aDadosCsvServidor  = $aDadosCsv->aDadosServidor;
 		$aDadosCsvRubricas  = $aDadosCsv->aDadosRubricas;
 		$aDadosRubricas     = $aDadosCsv->aRubricas;
