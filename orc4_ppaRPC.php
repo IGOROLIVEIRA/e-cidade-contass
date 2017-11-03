@@ -660,7 +660,8 @@ if ($oParam->exec == "getParametros") {
 
   require_once('model/ppaVersao.model.php');
   $oPPaVersao   = new ppaVersao($oParam->o119_sequencial);
-  $iAno         = $oPPaVersao->getUltimoAnoIntegrado();
+  //$iAno         = $oPPaVersao->getUltimoAnoIntegrado();
+  $iAno         = db_getsession("DB_anousu");
   if ($iAno == null) {
     $iAno = $oPPaVersao->getAnoinicio();
   } else {
