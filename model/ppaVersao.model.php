@@ -644,7 +644,7 @@ class ppaVersao {
     if ($iUltimoAno == "") {
       $iUltimoAno = null; 
     }
-    return $iUltimoAno;
+    return db_getsession("DB_anousu");
   }
 
   /**
