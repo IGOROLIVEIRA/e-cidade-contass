@@ -149,7 +149,14 @@ ob_start();
 .row .col-valor_un,
 .row .col-valor_un {
 }
+.linha-vertical {
+    border-top: 2px solid;
+    text-align: center;
+    margin-top: 80px;
+    margin-left: 19%;
+    width: 50%;
 
+}
 </style>
 </head>
 <body>
@@ -223,6 +230,11 @@ HTML;
   </div>
 
 </div>
+
+<div class="linha-vertical">
+    <strong>RESPONSÁVEL PELA COTAÇÃO</strong>
+</div>
+
 </body>
 </html>
 
