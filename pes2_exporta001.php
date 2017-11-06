@@ -276,7 +276,7 @@ order by z01_nome";
   select
        '1'
        ||';'||lpad(coalesce(rh01_regist,'0'),8,'0')
-       ||';'||substr(rpad(coalesce(z01_cgccpf,''),11,'0'),1,9)
+       ||';'||substr(rpad(coalesce(z01_cgccpf,''),11,'0'),1,11)
        ||';'||'0000'
        ||';'||substr(rpad(coalesce(z01_cgccpf,''),11,'0'),10,2)
        ||';'||'1'
