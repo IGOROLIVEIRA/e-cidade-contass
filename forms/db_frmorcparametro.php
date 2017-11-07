@@ -1,35 +1,35 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
 $clorcparametro->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
-<fieldset style="width: 500px;">  
+<fieldset style="width: 500px;">
   <legend>
     <b>Parâmetros - Orçamento</b>
   </legend>
@@ -40,8 +40,8 @@ $clorcparametro->rotulo->label();
           <tr>
             <td nowrap title="<?=@$To50_anousu?>"> <?=@$Lo50_anousu?> </td>
             <td>
-              <? 
-                 $o50_anousu = db_getsession('DB_anousu'); 
+              <?
+                 $o50_anousu = db_getsession('DB_anousu');
                  db_input('o50_anousu',6,$Io50_anousu,true,'text',$db_opcao,"") ;
                ?>
             </td>
@@ -54,8 +54,8 @@ $clorcparametro->rotulo->label();
             <td nowrap title="<?=@$To50_subelem?>"><?=@$Lo50_subelem?> </td>
             <td>
              <?
-               $x = array("f"=>"NAO","t"=>"SIM"); 
-               db_select('o50_subelem',$x,true,$db_opcao,"style='width:65px'"); 
+               $x = array("f"=>"NAO","t"=>"SIM");
+               db_select('o50_subelem',$x,true,$db_opcao,"style='width:65px'");
              ?>
             </td>
           </tr>
@@ -75,13 +75,13 @@ $clorcparametro->rotulo->label();
             <td nowrap title="<?=@$To50_estrutelemento?>"><?=@$Lo50_estrutelemento?></td>
             <td><? db_input('o50_estrutelemento',50,$Io50_estrutelemento,true,'text',$db_opcao,"") ?></td>
           </tr>
-        
+
           <tr>
             <td nowrap title="<?=@$To50_tipoproj?>"><?=@$Lo50_tipoproj?> </td>
             <td>
-              <? 
-                $x = array("1"=>"1-Com Timbre","2"=>"2-Dotação Sintética","3"=>"3-Com Dot","4"=>"4-Sem Timbre"); 
-                db_select('o50_tipoproj',$x,true,$db_opcao,"style='width:200px'"); 
+              <?
+                $x = array("1"=>"1-Com Timbre","2"=>"2-Dotação Sintética","3"=>"3-Com Dot","4"=>"4-Sem Timbre");
+                db_select('o50_tipoproj',$x,true,$db_opcao,"style='width:200px'");
               ?>
             </td>
           </tr>
@@ -96,11 +96,17 @@ $clorcparametro->rotulo->label();
             <td><? $x = array("t"=>"Sim","f"=>"Não");
              db_select('o50_liberadecimalppa',$x,true,$db_opcao,"style='width:200px'"); ?></td>
           </tr>
+          <tr>
+            <td nowrap title="<?=@$To50_motivosuplementacao?>">
+              <?=@$Lo50_motivosuplementacao?> </td>
+            <td><? $x = array("t"=>"Sim","f"=>"Não");
+             db_select('o50_motivosuplementacao',$x,true,$db_opcao,"style='width:200px'"); ?></td>
+          </tr>
         </table>
       </td>
     </tr>
   </table>
-  <br>  
+  <br>
   <fieldset class="fieldBorder">
     <legend><strong>C. Peculiar / C. Aplicação</strong></legend>
     <table width="100%">
@@ -115,7 +121,7 @@ $clorcparametro->rotulo->label();
           ?>
         </td>
       </tr>
-    </table>     
+    </table>
   </fieldset>
   <br>
   <fieldset class="fieldBorder">
@@ -132,7 +138,7 @@ $clorcparametro->rotulo->label();
           ?>
         </td>
       </tr>
-    </table>     
+    </table>
   </fieldset>
 </fieldset>
 <p>
@@ -144,7 +150,7 @@ $clorcparametro->rotulo->label();
 
 
 <script>
-  
+
   /**
    *  Declara as variáveis e recebem o elemento HTML com o respectivo id.
    */
@@ -157,7 +163,7 @@ $clorcparametro->rotulo->label();
    * Observa as alterações no campo sEstruturaCP e verifica se não é o mesmo no campo sEstruturaRecurso
    */
   sEstruturaCP.observe('change', function() {
-    
+
     if ( sEstruturaCP.value == sEstruturaRecurso.value && sEstruturaCP.value != "" ) {
 
       alert("As estruturas não podem ser iguais.");
@@ -167,12 +173,12 @@ $clorcparametro->rotulo->label();
       sDescrCP.value     = "";
     }
   });
-  
+
   /**
    * Observa as alterações no campo sEstruturaRecurso e verifica se não é o mesmo no campo sEstruturaCP
    */
   sEstruturaRecurso.observe('change', function() {
-    
+
     if ( sEstruturaRecurso.value == sEstruturaCP.value && sEstruturaRecurso.value != "" ) {
 
       alert("As estruturas não podem ser iguais.");
@@ -182,21 +188,21 @@ $clorcparametro->rotulo->label();
       sDescrRecurso.value     = "";
     }
   });
-  
+
   /**
    *  Função de Pesquisa Ancora o50_db_estruturacp
    */
   function js_pesquisaEstruturaCP( lMostra ) {
-  
+
     if ( lMostra ) {
       js_OpenJanelaIframe('top.corpo','db_iframe_db_estrutura','func_db_estrutura.php?funcao_js=parent.js_preencheEstruturaCP|db77_codestrut|db77_descr','Pesquisa',true);
     } else {
       js_OpenJanelaIframe('top.corpo','db_iframe_db_estrutura','func_db_estrutura.php?pesquisa_chave='+sEstruturaCP.value+'&funcao_js=parent.js_preencheEstruturaCP1','Pesquisa',false);
     }
   }
-  
+
   function js_preencheEstruturaCP( sEstrutura, sDescEstrutura ) {
-  
+
     sEstruturaCP.value = sEstrutura;
     sDescrCP.value     = sDescEstrutura;
     db_iframe_db_estrutura.hide();
@@ -208,23 +214,23 @@ $clorcparametro->rotulo->label();
     } else {
       sEstruturaCP.value = "";
       sDescrCP.value     = sDescricao;
-    }    
+    }
   }
-  
+
   /**
    * Funções de Pesquisa Ancora o50_estruturarecurso
    */
   function js_pesquisaEstruturaRecurso( lMostra ) {
-  
+
     if ( lMostra ) {
       js_OpenJanelaIframe('top.corpo','db_iframe_db_estruturaRec','func_db_estrutura.php?funcao_js=parent.js_preencheEstruturaRecurso|db77_codestrut|db77_descr','Pesquisa',true);
     } else {
       js_OpenJanelaIframe('top.corpo','db_iframe_db_estruturaRec','func_db_estrutura.php?pesquisa_chave='+sEstruturaRecurso.value+'&funcao_js=parent.js_preencheEstruturaRecurso1','Pesquisa',false);
     }
   }
-  
+
   function js_preencheEstruturaRecurso( sEstrutura, sDescEstrutura ) {
-  
+
     sEstruturaRecurso.value = sEstrutura;
     sDescrRecurso.value     = sDescEstrutura;
     db_iframe_db_estruturaRec.hide();
@@ -236,9 +242,9 @@ $clorcparametro->rotulo->label();
     } else {
       sEstruturaRecurso.value = "";
       sDescrRecurso.value     = sDescricao;
-    }    
+    }
   }
-  
+
   function js_pesquisa(){
     js_OpenJanelaIframe('top.corpo','db_iframe_orcparametro','func_orcparametro.php?funcao_js=parent.js_preenchepesquisa|o50_anousu','Pesquisa',true);
   }
@@ -250,7 +256,7 @@ $clorcparametro->rotulo->label();
     }
     ?>
   }
-  
+
   /**
    * Executa as funções de busca de código estrutural depois do programa preencher com os
    * valores de descrição correspondentes os campos

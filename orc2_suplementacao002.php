@@ -1,30 +1,29 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
-
 
 include ("libs/db_liborcamento.php");
 include ("libs/db_utils.php");
@@ -32,11 +31,11 @@ include ("fpdf151/pdf.php");
 include("fpdf151/assinatura.php");
 include ("libs/db_sql.php");
 
-db_postmemory($HTTP_POST_VARS); 
+db_postmemory($HTTP_POST_VARS);
 
 $classinatura = new cl_assinatura;
 
-//---------------------------------------------------------------  
+//---------------------------------------------------------------
 $clselorcdotacao = new cl_selorcdotacao();
 $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
 // $instits = $clselorcdotacao->getInstit();
@@ -89,8 +88,20 @@ $imprimecabec = false;
 
 $array_totais = array();
 $sWhere       = "" ;
+
+/*OC2785*/
+$o47_motivoo = "";
+$o47_motivo_union = "";
+$motivo  = db_query("
+                    select o50_motivosuplementacao from orcparametro where o50_anousu = ".db_getsession("DB_anousu"));
+    $aMotivo = db_utils::getCollectionByRecord($motivo);
+if ($aMotivo[0]->o50_motivosuplementacao == 't') {
+  $o47_motivoo      = "o47_motivo,";
+  $o47_motivo_union = "'A' as o47_motivo,";
+}
+
 for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
-  
+
   $wheretipo = ($tiporel == 0?"( o39_usalimite is true or o139_orcprojeto is not null)":" (o39_usalimite is false and o139_orcprojeto is null)") . " and ";
 
 	/////////////////////////////////////////////////////////
@@ -107,32 +118,33 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 						 o47_coddot,
 						 o58_orgao,
 						 o47_anousu,
+             {$o47_motivoo}
 						 case when o47_valor>0 then
 								o47_valor
 						 end as suplementado,
 						 case when o47_valor<0 then
-								o47_valor *-1 
+								o47_valor *-1
 						 end as reduzido,
 						 o58_codigo,
 						 o39_usalimite,
 						 o139_orcprojeto
-				from orcsuplem 
+				from orcsuplem
 							inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
-							inner join orcsuplemval on o47_codsup=o46_codsup 
-							left outer join orcsuplemlan on o49_codsup = o47_codsup  
+							inner join orcsuplemval on o47_codsup=o46_codsup
+							left outer join orcsuplemlan on o49_codsup = o47_codsup
 							inner join orcprojeto on o39_codproj = orcsuplem.o46_codlei
-							left  join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto   
+							left  join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto
 							inner join orclei on o45_codlei = orcprojeto.o39_codlei
-							left  join orcsuplemretif on o48_retificado = orcprojeto.o39_codproj                   
-							inner join orcdotacao on o58_coddot =orcsuplemval.o47_coddot 
+							left  join orcsuplemretif on o48_retificado = orcprojeto.o39_codproj
+							inner join orcdotacao on o58_coddot =orcsuplemval.o47_coddot
 																	 and o58_anousu=orcsuplemval.o47_anousu
 													 and o58_instit in ($instits)
 							inner join orcelemento on o58_codele = o56_codele and o56_anousu = o58_anousu
-				 where $wheretipo o48_retificado is null and o46_tiposup in ($vTipos) and $sele_work 
+				 where $wheretipo o48_retificado is null and o46_tiposup in ($vTipos) and $sele_work
 						";
   $sWherePPA        = str_replace("o58_", "o08_", $sele_work);
-  $sWherePPA        = str_replace("o08_codele", "o08_elemento", $sWherePPA); 				 
-  $sWherePPA        = str_replace("o08_codigo", "o08_recurso", $sWherePPA); 				 
+  $sWherePPA        = str_replace("o08_codele", "o08_elemento", $sWherePPA);
+  $sWherePPA        = str_replace("o08_codigo", "o08_recurso", $sWherePPA);
 	$sSqlDotacoesPPA  = "select o46_codsup, ";
   $sSqlDotacoesPPA .= "       o49_data, ";
   $sSqlDotacoesPPA .= "       o45_numlei as lei, ";
@@ -143,11 +155,12 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
   $sSqlDotacoesPPA .= "       0 as o47_coddot, ";
   $sSqlDotacoesPPA .= "       o08_orgao, ";
   $sSqlDotacoesPPA .= "       o08_ano, ";
+  $sSqlDotacoesPPA .= "       {$o47_motivo_union} ";
   $sSqlDotacoesPPA .= "       case when o136_valor>0 then ";
   $sSqlDotacoesPPA .= "                 o136_valor ";
   $sSqlDotacoesPPA .= "       end as suplementado, ";
   $sSqlDotacoesPPA .= "       case when o136_valor<0 then ";
-  $sSqlDotacoesPPA .= "                 o136_valor *-1 "; 
+  $sSqlDotacoesPPA .= "                 o136_valor *-1 ";
   $sSqlDotacoesPPA .= "       end as reduzido, ";
   $sSqlDotacoesPPA .= "       o08_recurso, ";
   $sSqlDotacoesPPA .= "       o39_usalimite, ";
@@ -158,24 +171,24 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
   $sSqlDotacoesPPA .= "       left outer join orcsuplemlan    on o49_codsup     = o46_codsup   ";
   $sSqlDotacoesPPA .= "       inner join orcprojeto           on o39_codproj    = orcsuplem.o46_codlei    ";
   $sSqlDotacoesPPA .= "       inner join orclei               on o45_codlei     = orcprojeto.o39_codlei ";
-  $sSqlDotacoesPPA .= "       left  join orcsuplemretif       on o48_retificado = orcprojeto.o39_codproj ";                   
-  $sSqlDotacoesPPA .= "       inner join ppaestimativadespesa on o136_ppaestimativadespesa = o07_sequencial "; 
+  $sSqlDotacoesPPA .= "       left  join orcsuplemretif       on o48_retificado = orcprojeto.o39_codproj ";
+  $sSqlDotacoesPPA .= "       inner join ppaestimativadespesa on o136_ppaestimativadespesa = o07_sequencial ";
   $sSqlDotacoesPPA .= "       left  join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto ";
-  $sSqlDotacoesPPA .= "       inner join ppadotacao           on o08_sequencial     = o07_coddot "; 
+  $sSqlDotacoesPPA .= "       inner join ppadotacao           on o08_sequencial     = o07_coddot ";
   $sSqlDotacoesPPA .= "                                      and o08_instit in ($instits) ";
   $sSqlDotacoesPPA .= "       inner join orcelemento          on o08_elemento = o56_codele  ";
-  $sSqlDotacoesPPA .= "                                      and o08_ano      = o56_anousu "; 
-  $sSqlDotacoesPPA .= " where {$wheretipo} o48_retificado is null "; 
-  $sSqlDotacoesPPA .= "   and o46_tiposup in ({$vTipos}) "; 
-  $sSqlDotacoesPPA .= "   and {$sWherePPA} "; 	
-  
+  $sSqlDotacoesPPA .= "                                      and o08_ano      = o56_anousu ";
+  $sSqlDotacoesPPA .= " where {$wheretipo} o48_retificado is null ";
+  $sSqlDotacoesPPA .= "   and o46_tiposup in ({$vTipos}) ";
+  $sSqlDotacoesPPA .= "   and {$sWherePPA} ";
+
 	if ($processados == 1) { // so processador
 		if (isset ($data_ini))
 			$sWhere .= " and orcsuplemlan.o49_data >= '$data_ini' ";
 		if (isset ($data_fim))
 			$sWhere .= " and orcsuplemlan.o49_data <= '$data_fim' ";
 		$sWhere .= " and o49_codsup is not null  ";
-	} elseif ($processados == 2) { // não processados  
+	} elseif ($processados == 2) { // não processados
 		if (isset ($data_ini))
 			$sWhere .= " and orcsuplem.o46_data >= '$data_ini' ";
 		if (isset ($data_fim))
@@ -188,19 +201,20 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 		if (isset ($data_fim))
 			$sWhere .= " and orcsuplem.o46_data <= '$data_fim' ";
 	}
-	// filtro de tipo 
+	// filtro de tipo
 	if ($tipo == 'decreto') {
 		$sWhere .= "  and orcprojeto.o39_tipoproj=1  ";
 	}
 	elseif ($tipo == 'lei') {
 		$sWhere .= "  and orcprojeto.o39_tipoproj=2  ";
 	}
-	
+
 	$sql .= $sWhere;
   $sSqlDotacoesPPA .= $sWhere;
   $sSqlDotacoesPPA .= " order by 1, 4, 7";
 	//--//
 	$sSqlSuplementacoes = "{$sql} union all {$sSqlDotacoesPPA}";
+
 	$res = pg_exec($sSqlSuplementacoes) or die($sSqlSuplementacoes);
 	if (pg_numrows($res) == 0) {
 		continue;
@@ -224,7 +238,7 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 	if (pg_numrows($res)>0){
 		db_fieldsmemory($res, 0);
 		$codsup = $o47_codsup;
-	}  
+	}
 	$dotant = "";
 
 	for ($i = 0; $i < $rows; $i ++) {
@@ -266,8 +280,8 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
         $sSqlReceitasOrcamento .= "                            and o57_codfon = o70_codfon ";
 				$sSqlReceitasOrcamento .= " where o46_tiposup in ($vTipos) ";
 				$sSqlReceitasOrcamento .= "   and o85_codsup = $codsup ";
-							 
-				 $sSqlReceitasPPA  = "select  o137_orcsuplem, "; 
+
+				 $sSqlReceitasPPA  = "select  o137_orcsuplem, ";
 				 $sSqlReceitasPPA .= "        0 as o85_codrec,";
 				 $sSqlReceitasPPA .= "        o06_anousu,";
 				 $sSqlReceitasPPA .= "        o137_valor, ";
@@ -278,28 +292,42 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
          $sSqlReceitasPPA .= "        inner join orcfontes            on o57_codfon  = o06_codrec ";
          $sSqlReceitasPPA .= "                                       and o57_anousu = o06_anousu  ";
          $sSqlReceitasPPA .= "        inner join conplanoreduz       on o57_codfon  = c61_codcon ";
-         $sSqlReceitasPPA .= "                                       and o57_anousu = c61_anousu  ";                     
+         $sSqlReceitasPPA .= "                                       and o57_anousu = c61_anousu  ";
          $sSqlReceitasPPA .= "        inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup ";
          $sSqlReceitasPPA .= "  where o46_tiposup in ($vTipos) and o137_orcsuplem = $codsup ";
          $sSqlReceitas = "{$sSqlReceitasOrcamento} union all {$sSqlReceitasPPA} ";
-         
+
     		 $ress = pg_exec(analiseQueryPlanoOrcamento($sSqlReceitas));
 			   //$codsup_reduzido = 0;
-				 for ($xx = 0; $xx < pg_num_rows($ress); $xx++) {
+
+         /*OC2785*/
+         $SQL = "";
+         $mot = "";
+         if ($aMotivo[0]->o50_motivosuplementacao == 't') {
+            $SQL = "
+              SELECT  o47_motivo
+              FROM orcsuplemval
+              WHERE o47_codsup = {$codsup}
+            ";
+            //echo $SQL; die;
+          $mot = pg_exec($SQL);
+         }
+
+				for ($xx = 0; $xx < pg_num_rows($ress); $xx++) {
 
 				   $oReceita = db_utils::fieldsMemory($ress, $xx);
-					 $pdf->setX(3);	   
+					 $pdf->setX(3);
 					 $pdf->Cell(18, $alt, "", 0, 0, "R", '0');
 					 $pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
 					 $pdf->Cell(90, $alt, "$oReceita->o57_descr", 0, 0, "L", '0');
 					 $pdf->Cell(20, $alt, "$oReceita->o85_codrec", 0, 0, "C", '0');
 					 $pdf->Cell(25, $alt, '', 0, 0, "R", '0');
 					 $pdf->Cell(25, $alt, db_formatar($oReceita->o85_valor, 'f'), 0, 1, "R", '0');
-			
+
 					 $codsup_reduzido += $oReceita->o85_valor;
 					 $tot_rec += $oReceita->o85_valor;
-			 
-			 }	  
+
+			 }
 			 $pdf->setX(3);
 			 $pdf->Cell(15, $alt, "TOTAL", "TB", 0, "R", '0');
 			 $pdf->Cell(15, $alt, "", "TB", 0, "C", '0');
@@ -311,15 +339,23 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 			 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
 			 $pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
 			 $pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
-			 $pdf->Ln();
 			 $codsup = $o47_codsup;
-			 
+
 			 $codsup_suplementado = 0;
 			 $codsup_reduzido = 0;
 			 $codsup_receita = 0;
 
-					 
+      if ($imprime_motivo == 's') {
+        $oMotivo = db_utils::fieldsMemory($mot,$xx);
+        $pdf->setX(3);
+        $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
+        $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
+        $pdf->Ln();$pdf->Ln();$pdf->Ln();
+      }
+
+
 		}
+    $pdf->Ln(1);
 		$pdf->setX(3);
 		$pdf->Cell(15, $alt, "$o47_codsup", 0, 0, "C", '0');
 		$pdf->Cell(15, $alt, db_formatar($o49_data, "d"), 0, 0, "C", '0');
@@ -333,7 +369,7 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 		$pdf->Cell(25, $alt, db_formatar($reduzido, 'f'), 0, 1, "R", '0');
 		$codsup_suplementado += $suplementado;
 		$codsup_reduzido += $reduzido;
-		$codsup_receita += $receita;		
+		$codsup_receita += $receita;
 		$tot_sup += $suplementado;
 		$tot_red += $reduzido;
     if ($tiporel == 0 && $o39_usalimite == 't') {
@@ -346,20 +382,20 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
     if (!(isset($array_totais[$o48_descr][1]))) {
       $array_totais[$o48_descr][1] = 0;
     }
-   
+
     $array_totais[$o48_descr][0] += $suplementado;
     $array_totais[$o48_descr][1] += $reduzido;
-    
+
 
 	}
 
 	$pdf->setX(3);
-					
+
   $sSqlReceitasOrcamento  = "select  o85_codsup,";
   $sSqlReceitasOrcamento .= "        o85_codrec,";
   $sSqlReceitasOrcamento .= "        o85_anousu, ";
   $sSqlReceitasOrcamento .= "        o85_valor ,";
-  $sSqlReceitasOrcamento .= "        o57_descr ";
+  $sSqlReceitasOrcamento .= "        o57_descr ,";
   $sSqlReceitasOrcamento .= "  from orcsuplemrec ";
   $sSqlReceitasOrcamento .= "       inner join orcsuplem  on o46_codsup  = o85_codsup ";
   $sSqlReceitasOrcamento .= "       inner join orcreceita on o70_anousu = o85_anousu ";
@@ -369,26 +405,41 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
   $sSqlReceitasOrcamento .= "                            and o57_codfon = o70_codfon ";
   $sSqlReceitasOrcamento .= " where o46_tiposup in ($vTipos) ";
   $sSqlReceitasOrcamento .= "   and o85_codsup = $codsup ";
-         
-  $sSqlReceitasPPA  = "select  o137_orcsuplem, "; 
+
+  $sSqlReceitasPPA  = "select  o137_orcsuplem, ";
   $sSqlReceitasPPA .= "        0 as o85_codrec,";
   $sSqlReceitasPPA .= "        o06_anousu,";
   $sSqlReceitasPPA .= "        o137_valor, ";
-  $sSqlReceitasPPA .= "        o57_descr ";
+  $sSqlReceitasPPA .= "        o57_descr, ";
   $sSqlReceitasPPA .= "   from orcsuplemreceitappa ";
   $sSqlReceitasPPA .= "        inner join orcsuplem            on o137_orcsuplem = o46_codsup";
   $sSqlReceitasPPA .= "        inner join ppaestimativareceita on o137_ppaestimativareceita = o06_sequencial";
   $sSqlReceitasPPA .= "        inner join orcfontes            on o57_codfon  = o06_codrec ";
   $sSqlReceitasPPA .= "                                       and o57_anousu = o06_anousu  ";
   $sSqlReceitasPPA .= "        inner join conplanoreduz       on o57_codfon  = c61_codcon ";
-  $sSqlReceitasPPA .= "                                       and o57_anousu = c61_anousu  ";                     
+  $sSqlReceitasPPA .= "                                       and o57_anousu = c61_anousu  ";
   $sSqlReceitasPPA .= "        inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup ";
   $sSqlReceitasPPA .= "  where o46_tiposup in ($vTipos) and o137_orcsuplem = $codsup ";
-  $sSqlReceitas = "{$sSqlReceitasOrcamento} union all {$sSqlReceitasPPA} ";
-  
+
+
+  $sSqlReceitas = "{$sSqlReceitasOrcamento} union all {$sSqlReceitasPPA}";
 	$ress = pg_exec($sSqlReceitas);
+
+  /*OC2785*/
+  $SQL = "";
+  $mot = "";
+  if ($aMotivo[0]->o50_motivosuplementacao == 't') {
+    $SQL = "
+      SELECT  o47_motivo
+      FROM orcsuplemval
+      WHERE o47_codsup = {$codsup}
+    ";
+    $mot = pg_exec($SQL);
+  }
+
+
 	for ($xx = 0; $xx < pg_num_rows($ress); $xx++) {
-		 
+
 	  $oReceita = db_utils::fieldsMemory($ress,$xx);
 		$pdf->setX(3);
  	  $pdf->Cell(18, $alt, "", 0, 0, "R", '0');
@@ -397,7 +448,7 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 		$pdf->Cell(20, $alt, "$oReceita->o85_codrec", 0, 0, "C", '0');
 		$pdf->Cell(25, $alt, '', 0, 0, "R", '0');
 		$pdf->Cell(25, $alt, db_formatar($oReceita->o85_valor, 'f'), 0, 1, "R", '0');
-			
+
 		$codsup_reduzido += $oReceita->o85_valor;
 		$tot_rec         += $oReceita->o85_valor;
 
@@ -413,12 +464,27 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
 	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
 	$pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
-	$pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
+	$pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 0, "R", '0');
 	//$pdf->Cell(30, $alt, db_formatar($codsup_receita, 'f'), "TB", 1, "R", '0');
 
+  /*OC2785*/
+  if ($imprime_motivo == 's') {
+    $oMotivo = db_utils::fieldsMemory($mot,$xx);
+    //$pdf->Ln(4);
+    $pdf->Ln();
+    $pdf->setX(3);
+    $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
+    $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
+  }
 
+  if($imprime_motivo == 's'){
+    $pdf->Ln(7);
+  }
+  else {
+    $pdf->Ln(4);
+  }
 
-	$pdf->Ln(2);
+  $pdf->Ln();
 	$pdf->setX(3);
 	$pdf->Cell(15, $alt, "GERAL", "TB", 0, "R", '0');
 	$pdf->Cell(15, $alt, "", "TB", 0, "C", '0');
@@ -430,20 +496,27 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
 	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
 	$pdf->Cell(25, $alt, db_formatar($tot_sup, 'f'), "TB", 0, "R", '0');
 	$pdf->Cell(25, $alt, db_formatar($tot_red, 'f'), "TB", 1, "R", '0');
-	$pdf->Ln(5);
+  /*OC2785*/
+  if($imprime_motivo == 's'){
+    $pdf->Ln();$pdf->Ln();
+  } else {
+      $pdf->Ln(5);
+  }
+
 	$pdf->setX(3);
 	$sTexto = "Total utilizado no limite autorizado pela LOA para créditos suplementares: ";
 	$pdf->Cell(150, $alt, "Total da previsão adicional da receita: ".trim(db_formatar($tot_rec, 'f')), 0, 1, "L");
 	$pdf->setX(3);
-	if ($tiporel == 0) { 
+	if ($tiporel == 0) {
   	$pdf->Cell(150, $alt, $sTexto.trim(db_formatar($nTotalUtilizado, 'f')), 0, 1, "L");
 	}
 
 
+  /*OC2785*/
+  if($imprime_motivo == 'n'){
+    $pdf->Ln(6);
+  }
 
-
-
-	$pdf->ln(5);
 
 	// -----------------------------------------------------------------------------------
 
@@ -468,21 +541,22 @@ $sql = "select o47_codsup,
 		       o47_coddot,
 		       o58_orgao,
 		       o47_anousu,
+           {$o47_motivoo}
 		       case when o47_valor>0 then
 		          o47_valor
 		       end as suplementado,
 		       case when o47_valor<0 then
-		          o47_valor *-1 
+		          o47_valor *-1
 		       end as reduzido,
 		       o58_codigo
-      from orcsuplem                  
+      from orcsuplem
 	          inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
-	          inner join orcsuplemval on o47_codsup=o46_codsup 
-	          left outer join orcsuplemlan on o49_codsup = o47_codsup  
-		      inner join orcprojeto on o39_codproj = orcsuplem.o46_codlei   
+	          inner join orcsuplemval on o47_codsup=o46_codsup
+	          left outer join orcsuplemlan on o49_codsup = o47_codsup
+		      inner join orcprojeto on o39_codproj = orcsuplem.o46_codlei
               inner join orclei on o45_codlei = orcprojeto.o39_codlei
-	          inner join orcsuplemretif on o48_retificado = orcprojeto.o39_codproj 
-  		      inner join orcdotacao on o58_coddot =orcsuplemval.o47_coddot 
+	          inner join orcsuplemretif on o48_retificado = orcprojeto.o39_codproj
+  		      inner join orcdotacao on o58_coddot =orcsuplemval.o47_coddot
 	                                 and o58_anousu=orcsuplemval.o47_anousu
 			           		         and o58_instit in ($instits)
 	          inner join orcelemento on o58_codele = o56_codele and o56_anousu = o58_anousu
@@ -494,7 +568,7 @@ if ($processados == 1) { // so processador
 	if (isset ($data_fim))
 		$sql .= " and orcsuplemlan.o49_data <= '$data_fim' ";
 	$sql .= " and o49_codsup is not null  ";
-} elseif ($processados == 2) { // não processados  
+} elseif ($processados == 2) { // não processados
 	if (isset ($data_ini))
 		$sql .= " and orcsuplem.o46_data >= '$data_ini' ";
 	if (isset ($data_fim))
@@ -507,7 +581,7 @@ if ($processados == 1) { // so processador
 	if (isset ($data_fim))
 		$sql .= " and orcsuplem.o46_data <= '$data_fim' ";
 }
-// filtro de tipo 
+// filtro de tipo
 if ($tipo == 'decreto') {
 	$sql .= "  and orcprojeto.o39_tipoproj=1  ";
 }
@@ -571,30 +645,42 @@ if ($rows > 0 ) {
 		if ($codsup != $o47_codsup) {
 
 				 $sql = "select  o85_codsup,o85_codrec,o85_anousu,o85_valor ,o57_descr
-							 from orcsuplemrec 
+							 from orcsuplemrec
 									 inner join orcsuplem on o46_codsup = o85_codsup
-											 inner join orcprojeto on o39_codproj = orcsuplem.o46_codlei   
-											 inner join orcsuplemretif on o48_retificado = orcprojeto.o39_codproj 
+											 inner join orcprojeto on o39_codproj = orcsuplem.o46_codlei
+											 inner join orcsuplemretif on o48_retificado = orcprojeto.o39_codproj
 									 inner join orcreceita on o70_anousu = o85_anousu and o70_codrec = o85_codrec and	o70_instit in ($instits)
 									 inner join orcfontes  on o57_anousu = o70_anousu and o57_codfon = o70_codfon
 						 where o46_tiposup in ($vTipos) and o85_codsup = $codsup";
 				 $ress = pg_exec($sql);
-			
+
+         /*OC2785*/
+         $SQL = "";
+         $mot = "";
+         if ($aMotivo[0]->o50_motivosuplementacao == 't') {
+          $SQL = "
+            SELECT  o47_motivo
+            FROM orcsuplemval
+            WHERE o47_codsup = {$codsup}
+          ";
+          $mot = pg_exec($SQL);
+        }
+
 			 for($xx=0;$xx<pg_numrows($ress);$xx++){
 						 db_fieldsmemory($ress,$xx);
-						 
-							 $pdf->setX(3);	   
+
+							 $pdf->setX(3);
 						 $pdf->Cell(18, $alt, "", 0, 0, "R", '0');
 						 $pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
 					 $pdf->Cell(90, $alt, "$o57_descr", 0, 0, "L", '0');
 					 $pdf->Cell(20, $alt, "$o85_codrec", 0, 0, "C", '0');
 					 $pdf->Cell(25, $alt, '', 0, 0, "R", '0');
 					 $pdf->Cell(25, $alt, db_formatar($o85_valor, 'f'), 0, 1, "R", '0');
-		
+
 					 $codsup_reduzido += $o85_valor;
 					 $tot_rec += $o85_valor;
-			 
-			 }	  
+
+			 }
 			 $pdf->setX(3);
 			 $pdf->Cell(18, $alt, "TOTAL", "TB", 0, "R", '0');
 			 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
@@ -603,17 +689,26 @@ if ($rows > 0 ) {
 			 $pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');
 			 $pdf->Cell(70, $alt, "", "TB", 0, "L", '0');
 			 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
-			 $pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
+			 $pdf->Cell(20, $alt, $o47_motivo, "TB", 0, "C", '0');
 			 $pdf->Cell(25, $alt, db_formatar($codsup_suplementado, 'f'), "TB", 0, "R", '0');
 			 $pdf->Cell(25, $alt, db_formatar($codsup_reduzido, 'f'), "TB", 1, "R", '0');
 			 $pdf->Ln();
 			 $codsup = $o47_codsup;
-			 
+
 			 $codsup_suplementado = 0;
 			 $codsup_reduzido = 0;
 			 $codsup_receita = 0;
 
-					 
+      /*OC2785*/
+      if ($imprime_motivo == 's') {
+        $oMotivo = db_utils::fieldsMemory($mot,$xx);
+        $pdf->setX(3);
+        $pdf->Cell(17, $alt, "MOTIVO:", "0", 0, "R", '0');
+        $pdf->MultiCell(265, $alt, "$oMotivo->o47_motivo", "", "J", 0, '');
+        $pdf->Ln();$pdf->Ln();
+      }
+
+
 		}
 		$pdf->setX(3);
 		$pdf->Cell(18, $alt, "$o47_codsup", 0, 0, "C", '0');
@@ -628,7 +723,7 @@ if ($rows > 0 ) {
 		$pdf->Cell(25, $alt, db_formatar($reduzido, 'f'), 0, 1, "R", '0');
 		$codsup_suplementado += $suplementado;
 		$codsup_reduzido += $reduzido;
-		$codsup_receita += $receita;		
+		$codsup_receita += $receita;
 		$tot_sup += $suplementado;
 			$tot_red += $reduzido;
 
@@ -639,7 +734,7 @@ if ($rows > 0 ) {
       if (!(isset($array_totais[$o48_descr][1]))) {
         $array_totais[$o48_descr][1] = 0;
       }
-     
+
       $array_totais[$o48_descr][0] += $suplementado;
       $array_totais[$o48_descr][1] += $reduzido;
 
@@ -648,37 +743,38 @@ if ($rows > 0 ) {
 
 	$pdf->setX(3);
 		 $sql = "select  o85_codsup,o85_codrec,o85_anousu,o85_valor ,o57_descr
-			from orcsuplemrec 
+			from orcsuplemrec
 
 					 inner join orcsuplem on o46_codsup = o85_codsup
-								 inner join orcprojeto on o39_codproj = orcsuplem.o46_codlei   
-								 inner join orcsuplemretif on o48_retificado = orcprojeto.o39_codproj 
-			
-					 inner join orcreceita on o70_anousu = o85_anousu and 
+								 inner join orcprojeto on o39_codproj = orcsuplem.o46_codlei
+								 inner join orcsuplemretif on o48_retificado = orcprojeto.o39_codproj
+
+					 inner join orcreceita on o70_anousu = o85_anousu and
 																		o70_codrec = o85_codrec and
-						o70_instit in ($instits)	       
+						o70_instit in ($instits)
 					 inner join orcfontes  on o57_anousu = o70_anousu and o57_codfon = o70_codfon
 						 where o46_tiposup in ($vTipos) and o85_codsup = $codsup";
 						 $ress = pg_exec($sql);
-		
-			 for($xx=0;$xx<pg_numrows($ress);$xx++){
-				 db_fieldsmemory($ress,$xx);
-							 $pdf->setX(3);
-				 
-				
-						 $pdf->Cell(18, $alt, "", 0, 0, "R", '0');
-				 $pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
-				 $pdf->Cell(90, $alt, "$o57_descr", 0, 0, "L", '0');
-				 $pdf->Cell(20, $alt, "$o85_codrec", 0, 0, "C", '0');
-				 $pdf->Cell(25, $alt, '', 0, 0, "R", '0');
-				 $pdf->Cell(25, $alt, db_formatar($o85_valor, 'f'), 0, 1, "R", '0');
-		
-				 $codsup_reduzido += $o85_valor;
-					 $tot_rec += $o85_valor;
+
+   for($xx=0;$xx<pg_numrows($ress);$xx++){
+  	 db_fieldsmemory($ress,$xx);
+  				 $pdf->setX(3);
+
+
+  	$pdf->Cell(18, $alt, "", 0, 0, "R", '0');
+  	$pdf->Cell(50, $alt, "Receita", 0, 0, "L", '0');
+  	$pdf->Cell(90, $alt, "$o57_descr", 0, 0, "L", '0');
+  	$pdf->Cell(20, $alt, "$o85_codrec", 0, 0, "C", '0');
+  	$pdf->Cell(25, $alt, '', 0, 0, "R", '0');
+  	$pdf->Cell(25, $alt, db_formatar($o85_valor, 'f'), 0, 1, "R", '0');
+
+  	$codsup_reduzido += $o85_valor;
+  	$tot_rec += $o85_valor;
 
 	}
+  $pdf->Ln();
 	$pdf->setX(3);
-	$pdf->Cell(18, $alt, "TOTAL ", "TB", 0, "R", '0');
+	$pdf->Cell(18, $alt, "TOTAL ", "0", 0, "R", '0');
 	$pdf->Cell(20, $alt, "", "TB", 0, "C", '0');
 	$pdf->Cell(20, $alt, "", "TB", 0, "R", '0');
 	$pdf->Cell(30, $alt, "", "TB", 0, "L", 'L');

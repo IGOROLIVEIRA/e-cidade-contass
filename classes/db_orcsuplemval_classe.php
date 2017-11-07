@@ -1,68 +1,69 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
 //CLASSE DA ENTIDADE orcsuplemval
-class cl_orcsuplemval { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $o47_codsup = 0; 
-   var $o47_anousu = 0; 
-   var $o47_coddot = 0; 
-   var $o47_valor = 0; 
-   var $o47_concarpeculiar = null; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_orcsuplemval {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $o47_codsup = 0;
+   var $o47_anousu = 0;
+   var $o47_coddot = 0;
+   var $o47_valor  = 0;
+   var $o47_motivo = null; /*OC2785*/
+   var $o47_concarpeculiar = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 o47_codsup = int4 = Código Suplementação 
-                 o47_anousu = int4 = Exercício 
-                 o47_coddot = int4 = Reduzido da Dotação 
-                 o47_valor = float8 = Valor 
-                 o47_concarpeculiar = varchar(100) = C.Peculiar/ C. Aplicação 
+                 o47_codsup = int4 = Código Suplementação
+                 o47_anousu = int4 = Exercício
+                 o47_coddot = int4 = Reduzido da Dotação
+                 o47_valor = float8 = Valor
+                 o47_concarpeculiar = varchar(100) = C.Peculiar/ C. Aplicação
                  ";
-   //funcao construtor da classe 
-   function cl_orcsuplemval() { 
+   //funcao construtor da classe
+   function cl_orcsuplemval() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("orcsuplemval"); 
+     $this->rotulo = new rotulo("orcsuplemval");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -85,9 +86,9 @@ class cl_orcsuplemval {
      }
    }
    // funcao para inclusao
-   function incluir ($o47_codsup,$o47_anousu,$o47_coddot){ 
+   function incluir ($o47_codsup,$o47_anousu,$o47_coddot){
       $this->atualizacampos();
-     if($this->o47_valor == null ){ 
+     if($this->o47_valor == null ){
        $this->erro_sql = " Campo Valor nao Informado.";
        $this->erro_campo = "o47_valor";
        $this->erro_banco = "";
@@ -96,7 +97,8 @@ class cl_orcsuplemval {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o47_concarpeculiar == null ){ 
+
+     if($this->o47_concarpeculiar == null ){
        $this->erro_sql = " Campo C.Peculiar/ C. Aplicação nao Informado.";
        $this->erro_campo = "o47_concarpeculiar";
        $this->erro_banco = "";
@@ -105,10 +107,10 @@ class cl_orcsuplemval {
        $this->erro_status = "0";
        return false;
      }
-       $this->o47_codsup = $o47_codsup; 
-       $this->o47_anousu = $o47_anousu; 
-       $this->o47_coddot = $o47_coddot; 
-     if(($this->o47_codsup == null) || ($this->o47_codsup == "") ){ 
+       $this->o47_codsup = $o47_codsup;
+       $this->o47_anousu = $o47_anousu;
+       $this->o47_coddot = $o47_coddot;
+     if(($this->o47_codsup == null) || ($this->o47_codsup == "") ){
        $this->erro_sql = " Campo o47_codsup nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -116,7 +118,7 @@ class cl_orcsuplemval {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->o47_anousu == null) || ($this->o47_anousu == "") ){ 
+     if(($this->o47_anousu == null) || ($this->o47_anousu == "") ){
        $this->erro_sql = " Campo o47_anousu nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -124,7 +126,7 @@ class cl_orcsuplemval {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->o47_coddot == null) || ($this->o47_coddot == "") ){ 
+     if(($this->o47_coddot == null) || ($this->o47_coddot == "") ){
        $this->erro_sql = " Campo o47_coddot nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -133,21 +135,23 @@ class cl_orcsuplemval {
        return false;
      }
      $sql = "insert into orcsuplemval(
-                                       o47_codsup 
-                                      ,o47_anousu 
-                                      ,o47_coddot 
-                                      ,o47_valor 
-                                      ,o47_concarpeculiar 
+                                       o47_codsup
+                                      ,o47_anousu
+                                      ,o47_coddot
+                                      ,o47_valor
+                                      ,o47_concarpeculiar
+                                      ,o47_motivo
                        )
                 values (
-                                $this->o47_codsup 
-                               ,$this->o47_anousu 
-                               ,$this->o47_coddot 
-                               ,$this->o47_valor 
-                               ,'$this->o47_concarpeculiar' 
+                                $this->o47_codsup
+                               ,$this->o47_anousu
+                               ,$this->o47_coddot
+                               ,$this->o47_valor
+                               ,'$this->o47_concarpeculiar'
+                               ,'$this->o47_motivo'
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Valor das Suplementações ($this->o47_codsup."-".$this->o47_anousu."-".$this->o47_coddot) nao Incluído. Inclusao Abortada.";
@@ -185,16 +189,16 @@ class cl_orcsuplemval {
        $resac = db_query("insert into db_acount values($acount,787,18159,'','".AddSlashes(pg_result($resaco,0,'o47_concarpeculiar'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($o47_codsup=null,$o47_anousu=null,$o47_coddot=null) { 
+   function alterar ($o47_codsup=null,$o47_anousu=null,$o47_coddot=null) {
       $this->atualizacampos();
      $sql = " update orcsuplemval set ";
      $virgula = "";
-     if(trim($this->o47_codsup)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_codsup"])){ 
+     if(trim($this->o47_codsup)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_codsup"])){
        $sql  .= $virgula." o47_codsup = $this->o47_codsup ";
        $virgula = ",";
-       if(trim($this->o47_codsup) == null ){ 
+       if(trim($this->o47_codsup) == null ){
          $this->erro_sql = " Campo Código Suplementação nao Informado.";
          $this->erro_campo = "o47_codsup";
          $this->erro_banco = "";
@@ -204,10 +208,10 @@ class cl_orcsuplemval {
          return false;
        }
      }
-     if(trim($this->o47_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_anousu"])){ 
+     if(trim($this->o47_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_anousu"])){
        $sql  .= $virgula." o47_anousu = $this->o47_anousu ";
        $virgula = ",";
-       if(trim($this->o47_anousu) == null ){ 
+       if(trim($this->o47_anousu) == null ){
          $this->erro_sql = " Campo Exercício nao Informado.";
          $this->erro_campo = "o47_anousu";
          $this->erro_banco = "";
@@ -217,10 +221,10 @@ class cl_orcsuplemval {
          return false;
        }
      }
-     if(trim($this->o47_coddot)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_coddot"])){ 
+     if(trim($this->o47_coddot)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_coddot"])){
        $sql  .= $virgula." o47_coddot = $this->o47_coddot ";
        $virgula = ",";
-       if(trim($this->o47_coddot) == null ){ 
+       if(trim($this->o47_coddot) == null ){
          $this->erro_sql = " Campo Reduzido da Dotação nao Informado.";
          $this->erro_campo = "o47_coddot";
          $this->erro_banco = "";
@@ -230,10 +234,10 @@ class cl_orcsuplemval {
          return false;
        }
      }
-     if(trim($this->o47_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_valor"])){ 
+     if(trim($this->o47_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_valor"])){
        $sql  .= $virgula." o47_valor = $this->o47_valor ";
        $virgula = ",";
-       if(trim($this->o47_valor) == null ){ 
+       if(trim($this->o47_valor) == null ){
          $this->erro_sql = " Campo Valor nao Informado.";
          $this->erro_campo = "o47_valor";
          $this->erro_banco = "";
@@ -243,10 +247,10 @@ class cl_orcsuplemval {
          return false;
        }
      }
-     if(trim($this->o47_concarpeculiar)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_concarpeculiar"])){ 
+     if(trim($this->o47_concarpeculiar)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o47_concarpeculiar"])){
        $sql  .= $virgula." o47_concarpeculiar = '$this->o47_concarpeculiar' ";
        $virgula = ",";
-       if(trim($this->o47_concarpeculiar) == null ){ 
+       if(trim($this->o47_concarpeculiar) == null ){
          $this->erro_sql = " Campo C.Peculiar/ C. Aplicação nao Informado.";
          $this->erro_campo = "o47_concarpeculiar";
          $this->erro_banco = "";
@@ -288,7 +292,7 @@ class cl_orcsuplemval {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Valor das Suplementações nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->o47_codsup."-".$this->o47_anousu."-".$this->o47_coddot;
@@ -316,14 +320,14 @@ class cl_orcsuplemval {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($o47_codsup=null,$o47_anousu=null,$o47_coddot=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($o47_codsup=null,$o47_anousu=null,$o47_coddot=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($o47_codsup,$o47_anousu,$o47_coddot));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,null,null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -367,7 +371,7 @@ class cl_orcsuplemval {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Valor das Suplementações nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$o47_codsup."-".$o47_anousu."-".$o47_coddot;
@@ -395,11 +399,11 @@ class cl_orcsuplemval {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -421,8 +425,8 @@ class cl_orcsuplemval {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $o47_codsup=null,$o47_anousu=null,$o47_coddot=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $o47_codsup=null,$o47_anousu=null,$o47_coddot=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -454,24 +458,24 @@ class cl_orcsuplemval {
      $sql2 = "";
      if($dbwhere==""){
        if($o47_codsup!=null ){
-         $sql2 .= " where orcsuplemval.o47_codsup = $o47_codsup "; 
-       } 
+         $sql2 .= " where orcsuplemval.o47_codsup = $o47_codsup ";
+       }
        if($o47_anousu!=null ){
          if($sql2!=""){
             $sql2 .= " and ";
          }else{
             $sql2 .= " where ";
-         } 
-         $sql2 .= " orcsuplemval.o47_anousu = $o47_anousu "; 
-       } 
+         }
+         $sql2 .= " orcsuplemval.o47_anousu = $o47_anousu ";
+       }
        if($o47_coddot!=null ){
          if($sql2!=""){
             $sql2 .= " and ";
          }else{
             $sql2 .= " where ";
-         } 
-         $sql2 .= " orcsuplemval.o47_coddot = $o47_coddot "; 
-       } 
+         }
+         $sql2 .= " orcsuplemval.o47_coddot = $o47_coddot ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -487,8 +491,8 @@ class cl_orcsuplemval {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $o47_codsup=null,$o47_anousu=null,$o47_coddot=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $o47_codsup=null,$o47_anousu=null,$o47_coddot=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -504,24 +508,24 @@ class cl_orcsuplemval {
      $sql2 = "";
      if($dbwhere==""){
        if($o47_codsup!=null ){
-         $sql2 .= " where orcsuplemval.o47_codsup = $o47_codsup "; 
-       } 
+         $sql2 .= " where orcsuplemval.o47_codsup = $o47_codsup ";
+       }
        if($o47_anousu!=null ){
          if($sql2!=""){
             $sql2 .= " and ";
          }else{
             $sql2 .= " where ";
-         } 
-         $sql2 .= " orcsuplemval.o47_anousu = $o47_anousu "; 
-       } 
+         }
+         $sql2 .= " orcsuplemval.o47_anousu = $o47_anousu ";
+       }
        if($o47_coddot!=null ){
          if($sql2!=""){
             $sql2 .= " and ";
          }else{
             $sql2 .= " where ";
-         } 
-         $sql2 .= " orcsuplemval.o47_coddot = $o47_coddot "; 
-       } 
+         }
+         $sql2 .= " orcsuplemval.o47_coddot = $o47_coddot ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
