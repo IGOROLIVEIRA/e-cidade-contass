@@ -47,6 +47,7 @@ class cl_protprocessodocumento {
    var $p01_descricao = null; 
    var $p01_documento = 0; 
    var $p01_nomedocumento = null; 
+   var $p01_depart = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  p01_sequencial = int4 = Sequencial de Documentos 
@@ -54,6 +55,7 @@ class cl_protprocessodocumento {
                  p01_descricao = varchar(200) = Descrição 
                  p01_documento = oid = Documento 
                  p01_nomedocumento = varchar(255) = Nome do documento 
+                 p01_depart = int4 = Departamento
                  ";
    //funcao construtor da classe 
    function cl_protprocessodocumento() { 
@@ -78,6 +80,7 @@ class cl_protprocessodocumento {
        $this->p01_descricao = ($this->p01_descricao == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_descricao"]:$this->p01_descricao);
        $this->p01_documento = ($this->p01_documento == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_documento"]:$this->p01_documento);
        $this->p01_nomedocumento = ($this->p01_nomedocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_nomedocumento"]:$this->p01_nomedocumento);
+       $this->p01_depart = ($this->p01_depart == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_depart"]:$this->p01_depart);
      }else{
        $this->p01_sequencial = ($this->p01_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_sequencial"]:$this->p01_sequencial);
      }
@@ -159,6 +162,7 @@ class cl_protprocessodocumento {
                                       ,p01_descricao 
                                       ,p01_documento 
                                       ,p01_nomedocumento 
+                                      ,p01_depart
                        )
                 values (
                                 $this->p01_sequencial 
@@ -166,6 +170,7 @@ class cl_protprocessodocumento {
                                ,'$this->p01_descricao' 
                                ,$this->p01_documento 
                                ,'$this->p01_nomedocumento' 
+                               ,$this->p01_depart
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -280,6 +285,10 @@ class cl_protprocessodocumento {
          $this->erro_status = "0";
          return false;
        }
+     }
+     if(trim($this->p01_depart)!="" || isset($GLOBALS["HTTP_POST_VARS"]["p01_depart"])){ 
+       $sql  .= $virgula." p01_depart = '$this->p01_depart' ";
+       $virgula = ",";
      }
      $sql .= " where ";
      if($p01_sequencial!=null){

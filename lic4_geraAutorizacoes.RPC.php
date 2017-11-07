@@ -93,6 +93,14 @@ switch ($oParam->exec) {
       }
     }
 
+      /*
+       * Busca os Tipos de Compra
+       */
+      $sSqlPcTipoCompra   = $oDaoPcTipoCompra->sql_query_file(null, 'pc50_codcom, pc50_descr,pc50_pctipocompratribunal','',"pc50_codcom = {$oParam->iTipoCompra}");
+      $rsExecPcTipoCompra = $oDaoPcTipoCompra->sql_record($sSqlPcTipoCompra);
+      $oRetorno->tipocompratribunal = db_utils::fieldsMemory($rsExecPcTipoCompra, 0)->pc50_pctipocompratribunal;
+
+
   break;
   /**
    * Busca os Tipos de Compra

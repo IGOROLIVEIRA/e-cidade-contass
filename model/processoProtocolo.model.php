@@ -798,6 +798,20 @@ class processoProtocolo {
     return new licitacao(db_utils::fieldsMemory($rsBuscaLicitacao, 0)->l34_liclicita);
   }
 
+  public function getHaTramiteInicial($sNumeroProcesso,$iAno) {
+
+        $oDaoProtProcesso  = db_utils::getDao("protprocesso");
+
+        $sSqlBuscaProcesso = "select count(*) as qt_andamento from procandam join protprocesso on p58_codproc = p61_codproc where p58_numero = '$sNumeroProcesso' and p58_ano = $iAno;";
+
+        $rsBuscaAndamento   = $oDaoProtProcesso->sql_record($sSqlBuscaProcesso);
+
+        if ($oDaoProtProcesso->erro_status == "0") {
+            return false;
+        }
+        return db_utils::fieldsMemory($rsBuscaAndamento, 0)->qt_andamento;
+    }
+
 
   /**
    * Retorna uma instancia do processo de acordo com o ano e número do processo informados no parâmetro

@@ -79,6 +79,15 @@ class ProcessoDocumento {
   private $iOid; 
 
   /**
+   * Departamento do anexo
+   * - campo p01_depart
+   * 
+   * @var int
+   * @access private
+   */
+  private $iDepart; 
+
+  /**
    * Tamanho limite do arquivo em bytes
    * - Limite 30mb
    * 
@@ -135,6 +144,7 @@ class ProcessoDocumento {
     $this->oProcessoProtocolo = $oDocumento->p01_protprocesso; 
     $this->sDescricao         = $oDocumento->p01_descricao;    
     $this->iOid               = $oDocumento->p01_documento;    
+    $this->iDepart            = $oDocumento->p01_depart;    
     $this->sNomeDocumento     = substr($oDocumento->p01_descricao, 0, 15) . " " . $oDocumento->p01_nomedocumento;    
   }
 
@@ -209,6 +219,16 @@ class ProcessoDocumento {
    */
   public function getOID() {
     return $this->iOid;
+  }
+
+  /**
+   * Retorna o Departamento do documento
+   *
+   * @access public
+   * @return int
+   */
+  public function getDepart() {
+    return $this->iDepart;
   }
 
   /**
@@ -321,7 +341,7 @@ class ProcessoDocumento {
     if ( !($this->oProcessoProtocolo instanceof processoProtocolo) && $this->getProcessoProtocolo()->getCodProcesso() != '' ) {
       throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_processo_nao_informado'));
     } 
-
+    
     $this->iOi = $this->salvarArquivoBanco();
     $this->sNomeDocumento = basename($this->sCaminhoArquivo);
 
@@ -331,6 +351,7 @@ class ProcessoDocumento {
     $oDaoProtprocessodocumento->p01_descricao     = $this->sDescricao;    
     $oDaoProtprocessodocumento->p01_documento     = $this->iOi;    
     $oDaoProtprocessodocumento->p01_nomedocumento = $this->sNomeDocumento;
+    $oDaoProtprocessodocumento->p01_depart        = db_getsession('DB_coddepto');
     $oDaoProtprocessodocumento->incluir(null);   
 
     /**

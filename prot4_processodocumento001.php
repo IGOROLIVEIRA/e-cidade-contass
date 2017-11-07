@@ -163,10 +163,10 @@ var oGridDocumentos = new DBGrid('gridDocumentos');
 
 oGridDocumentos.nameInstance = "oGridDocumentos";
 oGridDocumentos.setCheckbox(0);
-oGridDocumentos.setCellAlign(new Array("center", "left", "center"));
-oGridDocumentos.setCellWidth(["10%", "65%", "25%"]);
-oGridDocumentos.setHeader(new Array("Código", "Descrição", "Ação"));
-oGridDocumentos.allowSelectColumns(false);
+oGridDocumentos.setCellAlign(new Array("center", "left", "left", "center"));
+oGridDocumentos.setCellWidth(["10%", "30%", "30%" , "30%"]);
+oGridDocumentos.setHeader(new Array("Código", "Descrição", "Departamento","Ação"));
+oGridDocumentos.allowSelectColumns(true);
 oGridDocumentos.show($('ctnDbGridDocumentos'));
 
 /**
@@ -201,6 +201,7 @@ function js_buscarDocumentos() {
 
         js_removeObj("msgbox");
         var oRetorno  = eval('('+oAjax.responseText+")");
+
         var sMensagem = oRetorno.sMensagem.urlDecode();
 
         if ( oRetorno.iStatus > 1 ) {
@@ -212,14 +213,39 @@ function js_buscarDocumentos() {
         oGridDocumentos.clearAll(true);
         var iDocumentos = oRetorno.aDocumentosVinculados.length;
 
+        console.log('retorno:');
+        console.log(oRetorno);
+
         for ( var iIndice = 0; iIndice < iDocumentos; iIndice++ ) {
 
           var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
           var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
-          var sHTMLBotoes  = '<input type="button" value="Alterar" onClick="js_alterarDocumento('+ oDocumento.iCodigoDocumento +', \'' + sDescricaoDocumento + '\');" />  ';
+
+          if(oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0){
+
+                  var sHTMLBotoes  = '<input type="button" value="Alterar" onClick="js_alterarDocumento('+ oDocumento.iCodigoDocumento +', \'' + sDescricaoDocumento + '\');" />  ';
+                      sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento('+ oDocumento.iCodigoDocumento +');" />  ';
+
+                      $bBloquea = false;
+
+          }else if(oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0){
+
+              var sHTMLBotoes = '<input type="button" value="Download" onClick="js_downloadDocumento('+ oDocumento.iCodigoDocumento +');" />  ';
+
+              $bBloquea = true;
+
+          }else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0){
+
+              var sHTMLBotoes  = '<input type="button" value="Alterar" onClick="js_alterarDocumento('+ oDocumento.iCodigoDocumento +', \'' + sDescricaoDocumento + '\');" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento('+ oDocumento.iCodigoDocumento +');" />  ';
-          var aLinha       = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), sHTMLBotoes];
-          oGridDocumentos.addRow(aLinha);
+
+              $bBloquea = false;
+          }
+
+
+
+          var aLinha       = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart +' - '+ oDocumento.sDepartamento ,sHTMLBotoes];
+          oGridDocumentos.addRow(aLinha, false, $bBloquea);
         }
 
         oGridDocumentos.renderRows();

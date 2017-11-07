@@ -53,6 +53,7 @@ try {
     case "carregarDocumentos":
 
       $oProcessoProtocolo    = new processoProtocolo($oParam->iCodigoProcesso);
+
       $aDocumentosVinculados = $oProcessoProtocolo->getDocumentos();
       $aDocumentosRetorno    = array();
       foreach ($aDocumentosVinculados as $oProcessoDocumento) {
@@ -60,10 +61,17 @@ try {
         $oStdDocumento = new stdClass();
         $oStdDocumento->iCodigoDocumento    = $oProcessoDocumento->getCodigo();
         $oStdDocumento->sDescricaoDocumento = urlencode($oProcessoDocumento->getDescricao());
+        $oStdDocumento->iDepart             = $oProcessoDocumento->getDepart();
+        $oDepartamento = new DBDepartamento($oProcessoDocumento->getDepart());
+        $oStdDocumento->sDepartamento = urlencode($oDepartamento->getNomeDepartamento());
+
+        $oStdDocumento->iDepartUsuario      = db_getsession("DB_coddepto");
+
         $aDocumentosRetorno[] = $oStdDocumento;
       }
-
       $oRetorno->aDocumentosVinculados = $aDocumentosRetorno;
+
+      $oRetorno->andamento = $oProcessoProtocolo->getHaTramiteInicial($oProcessoProtocolo->getNumeroProcesso(),$oProcessoProtocolo->getAnoProcesso());
 
     break;
 
