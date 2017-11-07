@@ -91,6 +91,11 @@ class cl_acordo {
     // var $ac16_cpfsignatariocontratante = null;
     // var $ac16_datainclusao = null;
     var $ac16_veiculodivulgacao = null;
+    var $ac16_datarescisao_dia = null;
+    var $ac16_datarescisao_mes = null;
+    var $ac16_datarescisao_ano = null;
+    var $ac16_datarescisao = null;
+    var $ac16_valorrescisao = null;
 
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -126,6 +131,8 @@ class cl_acordo {
                  ac16_formafornecimento = Forma de fornecimento acordo
                  ac16_formapagamento = Forma de pagamento acordo
                  ac16_veiculodivulgacao = varchar(50) = Veículo de divulgação
+                  ac16_datarescisao = date = Data Rescisão
+                 ac16_valorrescisao = float8 = Valor da rescisão do acordo
                  ";
    //funcao construtor da classe
    function cl_acordo() {
@@ -206,6 +213,16 @@ class cl_acordo {
        $this->ac16_formapagamento = ($this->ac16_formapagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_formapagamento"]:$this->ac16_formapagamento);
        $this->ac16_licitacao = ($this->ac16_licitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"]:$this->ac16_licitacao);
        $this->ac16_veiculodivulgacao = ($this->ac16_veiculodivulgacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_veiculodivulgacao"]:$this->ac16_veiculodivulgacao);
+
+       if($this->ac16_datarescisao == ""){
+         $this->ac16_datarescisao_dia = ($this->ac16_datarescisao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_datarescisao_dia"]:$this->ac16_datarescisao_dia);
+         $this->ac16_datarescisao_mes = ($this->ac16_datarescisao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_datarescisao_mes"]:$this->ac16_datarescisao_mes);
+         $this->ac16_datarescisao_ano = ($this->ac16_datarescisao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_datarescisao_ano"]:$this->ac16_datarescisao_ano);
+         if($this->ac16_datarescisao_dia != ""){
+            $this->ac16_datarescisao = $this->ac16_datarescisao_ano."-".$this->ac16_datarescisao_mes."-".$this->ac16_datarescisao_dia;
+         }
+       }
+       $this->ac16_valorrescisao = ($this->ac16_valorrescisao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_valorrescisao"]:$this->ac16_valorrescisao);
      }else{
        $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
      }
@@ -251,6 +268,9 @@ class cl_acordo {
      }
      if($this->ac16_dataassinatura == null ){
        $this->ac16_dataassinatura = "null";
+     }
+     if($this->ac16_datarescisao == null ){
+       $this->ac16_datarescisao = "null";
      }
      if($this->ac16_contratado == null ){
        $this->erro_sql = " Campo Contratado não informado.";
@@ -402,6 +422,9 @@ class cl_acordo {
      if($this->ac16_valor == null ){
        $this->ac16_valor = "0";
      }
+     if($this->ac16_valorrescisao == null ){
+       $this->ac16_valorrescisao = "0";
+     }
      if($this->ac16_formafornecimento == null ){
        $this->erro_sql = " Campo Forma de fornecimento não informado.";
        $this->erro_campo = "ac16_formafornecimento";
@@ -459,6 +482,7 @@ class cl_acordo {
                                       ,ac16_numero
                                       ,ac16_anousu
                                       ,ac16_dataassinatura
+                                      ,ac16_datarescisao
                                       ,ac16_contratado
                                       ,ac16_datainicio
                                       ,ac16_datafim
@@ -480,6 +504,7 @@ class cl_acordo {
                                       ,ac16_acordoclassificacao
                                       ,ac16_numeroacordo
                                       ,ac16_valor
+                                      ,ac16_valorrescisao
                                       ,ac16_tipoorigem
                                       ,ac16_formafornecimento
                                       ,ac16_formapagamento
@@ -492,6 +517,7 @@ class cl_acordo {
                                ,'$this->ac16_numero'
                                ,$this->ac16_anousu
                                ,".($this->ac16_dataassinatura == "null" || $this->ac16_dataassinatura == ""?"null":"'".$this->ac16_dataassinatura."'")."
+                               ,".($this->ac16_datarescisao == "null" || $this->ac16_datarescisao == ""?"null":"'".$this->ac16_datarescisao."'")."
                                ,$this->ac16_contratado
                                ,".($this->ac16_datainicio == "null" || $this->ac16_datainicio == ""?"null":"'".$this->ac16_datainicio."'")."
                                ,".($this->ac16_datafim == "null" || $this->ac16_datafim == ""?"null":"'".$this->ac16_datafim."'")."
@@ -513,6 +539,7 @@ class cl_acordo {
                                ,".($this->ac16_acordoclassificacao == "null" || $this->ac16_acordoclassificacao == ""?"null":"'".$this->ac16_acordoclassificacao."'")."
                                ,$this->ac16_numeroacordo
                                ,$this->ac16_valor
+                               ,$this->ac16_valorrescisao
                                ,".($this->ac16_tipoorigem == "null" || $this->ac16_tipoorigem == ""?'null':$this->ac16_tipoorigem)."
                                ,'$this->ac16_formafornecimento'
                                ,'$this->ac16_formapagamento'
@@ -657,6 +684,15 @@ class cl_acordo {
      }
      if(trim($this->ac16_dataassinatura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_dataassinatura_dia"] !="") ){
        $sql  .= $virgula." ac16_dataassinatura = '$this->ac16_dataassinatura' ";
+       $virgula = ",";
+     }
+
+     if($this->ac16_datarescisao !== null || isset($GLOBALS["HTTP_POST_VARS"]["ac16_datarescisao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_datarescisao_dia"] !="") ){
+        if (empty($this->ac16_datarescisao)) {
+          $sql  .= $virgula." ac16_datarescisao = null ";
+        } else {
+          $sql  .= $virgula." ac16_datarescisao = '$this->ac16_datarescisao' ";
+        }
        $virgula = ",";
      }
 
@@ -909,6 +945,14 @@ class cl_acordo {
         }
        $sql  .= $virgula." ac16_valor = $this->ac16_valor ";
        $virgula = ",";
+     }
+     if (!($this->ac16_valorrescisao === null)
+      || isset($GLOBALS["HTTP_POST_VARS"]["ac16_valorrescisao"])) {
+
+        $this->ac16_valorrescisao = floatval($this->ac16_valorrescisao);
+        $sql  .= $virgula." ac16_valorrescisao = {$this->ac16_valorrescisao} ";
+        $virgula = ",";
+
      }
      if(trim($this->ac16_tipoorigem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_tipoorigem"])){
         if(trim($this->ac16_tipoorigem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ac16_tipoorigem"])){
@@ -1311,9 +1355,9 @@ class cl_acordo {
      $sql .= "      inner join acordoorigem   on acordoorigem.ac28_sequencial   = acordo.ac16_origem";
      $sql .= "      left  join acordoleis   on acordo.ac16_lei   = acordoleis.ac54_sequencial";
      $sql .= "
-     
+
       LEFT JOIN acordoposicao on ac26_acordo=ac16_sequencial
-      LEFT JOIN acordoitem on ac20_acordoposicao=ac26_sequencial 
+      LEFT JOIN acordoitem on ac20_acordoposicao=ac26_sequencial
       LEFT JOIN acordopcprocitem on ac23_acordoitem=ac20_sequencial
       LEFT JOIN pcprocitem on pc81_codprocitem=ac23_pcprocitem
       LEFT JOIN solicitem on pc11_codigo=pc81_solicitem

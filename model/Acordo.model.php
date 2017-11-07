@@ -41,6 +41,9 @@ class Acordo
     const TIPO_ADITAMENTO_REEQUILIBRIO = 2;
     const TIPO_ADITAMENTO_QUANTIDADE_VALOR = 4;
 
+    const CONTRATO_ATIVO      = 1;
+    const CONTRATO_RESCINDIDO = 2;
+    const CONTRATO_CANCELADO  = 3;
     const CONTRATO_HOMOLOGADO = 4;
     const CONTRATO_PARALISADO = 5;
 
@@ -403,6 +406,21 @@ class Acordo
 
     protected $sTipo;
 
+
+    /**
+     * Data Rescisao do acordo acordo.ac16_datarescisao
+     * @var string
+     */
+    private $sDataRescisao;
+
+
+    /**
+     * Valor da Rescisao do acordo acordo.ac16_valorrescisao
+     * @var float
+     */
+    private $nValorRescisao;
+
+
     /**
      * @return mixed
      */
@@ -468,8 +486,8 @@ class Acordo
             db_utils::getDao("acordo", false);
             $oDaoAcordo = new cl_acordo;
             $sSqlAcordo = $oDaoAcordo->sql_query_completo($iCodigoAcordo, "acordo.*, ac02_descricao,ac54_descricao,l20_edital||'/'||l20_anousu as e54_numerl,
-	   l03_codcom as modalidade,
-	   l03_tipo as tipo ");
+       l03_codcom as modalidade,
+       l03_tipo as tipo ");
             $rsAcordo = $oDaoAcordo->sql_record($sSqlAcordo);
 
             if ($oDaoAcordo->numrows > 0) {
@@ -506,6 +524,8 @@ class Acordo
                 $this->setQuantidadeRenovacao($oDadosAcordo->ac16_qtdrenovacao);
                 $this->setTipoRenovacao($oDadosAcordo->ac16_tipounidtempo);
                 $this->setValorContrato($oDadosAcordo->ac16_valor);
+                $this->setDataRescisao(db_formatar($oDadosAcordo->ac16_datarescisao, "d"));
+                $this->setValorRescisao($oDadosAcordo->ac16_valorrescisao);
 
 
 
@@ -902,6 +922,47 @@ class Acordo
     {
 
         $this->sDataFinal = $sDataFinal;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDataRescisao()
+    {
+
+        return $this->sDataRescisao;
+    }
+
+    /**
+     * @param string $sDataRescisao
+     * @return Acordo
+     */
+    public function setDataRescisao($sDataRescisao)
+    {
+
+        $this->sDataRescisao = $sDataRescisao;
+        return $this;
+    }
+
+
+    /**
+     * @return float
+     */
+    public function getValorRescisao()
+    {
+
+        return $this->nValorRescisao;
+    }
+
+    /**
+     * @param float $nValorRescisao
+     * @return Acordo
+     */
+    public function setValorRescisao($nValorRescisao)
+    {
+
+        $this->nValorRescisao = $nValorRescisao;
         return $this;
     }
 

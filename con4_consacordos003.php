@@ -154,7 +154,13 @@ db_app::load("estilos.css, grid.style.css,tab.style.css");
           <b>Situacao Atual:</b>
         </td>
         <td class="tdBgColor">
-          <?php echo $clAcordo->getDescricaoSituacao(); ?>
+          <?php
+          echo $clAcordo->getDescricaoSituacao();
+
+          if ($clAcordo->getSituacao() == $clAcordo::CONTRATO_RESCINDIDO) {
+            echo ' em ' . $clAcordo->getDataRescisao();
+          }
+          ?>
         </td>
         <td width="150">
           <b>Período de Vigência:</b>

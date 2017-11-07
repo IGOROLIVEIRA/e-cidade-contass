@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -49,6 +49,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("ac10_sequencial");
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
+$clrotulo->label("ac16_valorrescisao");
 $clrotulo->label("ac10_datamovimento");
 $clrotulo->label("ac10_obs");
 ?>
@@ -57,7 +58,7 @@ $clrotulo->label("ac10_obs");
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<?   
+<?
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
@@ -75,8 +76,8 @@ fieldset table td:first-child {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_pesquisarRecisao();">
 <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-  <tr> 
-    <td valign="top" align="center"> 
+  <tr>
+    <td valign="top" align="center">
       <fieldset>
         <legend><b>Cancelar Rescisão do Acordo</b></legend>
         <table align="center" border="0">
@@ -113,13 +114,25 @@ fieldset table td:first-child {
             </td>
             <td align="left">
               <?
-                db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia, 
-                                                  @$ac10_datamovimento_mes, 
+                db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia,
+                                                  @$ac10_datamovimento_mes,
                                                   @$ac10_datamovimento_ano, true, 'text', $db_opcao, "");
               ?>
             </td>
             <td>&nbsp;</td>
           </tr>
+          <tr>
+            <td title="<?=@$Tac16_valorrescisao?>" align="left">
+              <b>Valor Rescindido:</b>
+            </td>
+            <td align="left">
+              <?
+                db_input('ac16_valorrescisao',10,$Iac16_valorrescisao,true,'text',3);
+              ?>
+            </td>
+            <td align="left">&nbsp;</td>
+          </tr>
+
           <tr>
             <td colspan="3">
               <fieldset>
@@ -131,7 +144,7 @@ fieldset table td:first-child {
                   ?>
               </fieldset>
             </td>
-          </tr> 
+          </tr>
         </table>
       </fieldset>
     </td>
@@ -141,7 +154,7 @@ fieldset table td:first-child {
   </tr>
   <tr>
     <td align="center">
-      <input id="cancelar" name="cancelar" type="button" value="Cancelar" 
+      <input id="cancelar" name="cancelar" type="button" value="Cancelar"
              onclick="return js_cancelarRecisao();" disabled>
       <input id="pesquisar" name="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisarRecisao();">
     </td>
@@ -155,6 +168,7 @@ fieldset table td:first-child {
 $('ac10_sequencial').style.width    = "100%";
 $('ac16_sequencial').style.width    = "100%";
 $('ac16_resumoobjeto').style.width  = "100%";
+$('ac16_valorrescisao').style.width = "100%";
 $('ac10_datamovimento').style.width = "100%";
 
 var sUrl = 'con4_contratosmovimento.RPC.php';
@@ -167,9 +181,9 @@ function js_pesquisarRecisao() {
   $('cancelar').disabled  = true;
   var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=6';
       sUrl += '&funcao_js=parent.js_mostrarPesquisaRecisao|ac10_sequencial';
-      
-  js_OpenJanelaIframe('top.corpo', 
-                      'db_iframe_recisao', 
+
+  js_OpenJanelaIframe('top.corpo',
+                      'db_iframe_recisao',
                       sUrl,
                       'Pesquisar Recisão',
                       true);
@@ -191,14 +205,14 @@ function js_mostrarPesquisaRecisao(chave) {
 function js_getDadosRecisao(iCodigo) {
 
   js_divCarregando('Aguarde pesquisando recisão...', 'msgBoxGetDadosRecisao');
-   
+
   var oParam        = new Object();
   oParam.exec       = "getDadosRescisao";
   oParam.codigo     = iCodigo;
-    
+
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoGetDadosRecisao
                                         }
                                 );
@@ -208,16 +222,17 @@ function js_getDadosRecisao(iCodigo) {
  * Retorno dos dados da recisão
  */
 function js_retornoGetDadosRecisao(oAjax) {
-  
+
   js_removeObj("msgBoxGetDadosRecisao");
-  
+
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   if (oRetorno.status == 2) {
-    
+
     alert(oRetorno.erro.urlDecode());
     $('ac16_sequencial').value     = "";
     $('ac16_resumoobjeto').value   = "";
+    $('ac16_valorrescisao').value  = "";
     $('ac10_datamovimento').value  = "";
     $('ac10_obs').value            = "";
     return false;
@@ -227,6 +242,7 @@ function js_retornoGetDadosRecisao(oAjax) {
     $('ac16_sequencial').value     = oRetorno.acordo;
     $('ac10_datamovimento').value  = js_formatar(oRetorno.datamovimento,'d');
     $('ac16_resumoobjeto').value   = oRetorno.descricao.urlDecode();
+    $('ac16_valorrescisao').value  = js_formatar(oRetorno.valorrescisao,'f');
     $('ac10_obs').value            = "";
     return true;
   }
@@ -235,54 +251,55 @@ function js_retornoGetDadosRecisao(oAjax) {
 
 /**
  * Cancelamento de recisão
- */  
+ */
 function js_cancelarRecisao() {
-   
+
   if ($('ac16_sequencial').value == '') {
-    
+
     alert('Acordo não informado!');
     return false;
   }
-  
+
   if ($('ac10_datamovimento').value == '') {
-    
+
     alert('Data não informada!');
     return false;
-  }  
-  
+  }
+
   if ($('ac10_sequencial').value == '') {
-    
+
     alert('Código da recisão não informado! Verifique a pesquisa.');
     return false;
   }
-  
+
   js_divCarregando('Aguarde cancelando recisão...','msgBoxCancelarRecisao');
-   
+
   var oParam        = new Object();
   oParam.exec       = "cancelarRescisao";
   oParam.codigo     = $F('ac10_sequencial');
   oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
-    
+
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoCancelamentoRecisao
                                         }
-                                );  
+                                );
 }
-  
+
 /**
  * Retorno dos dados do cancelamento da recisão
  */
 function js_retornoCancelamentoRecisao(oAjax) {
-  
+
   js_removeObj("msgBoxCancelarRecisao");
-  
-  var oRetorno = eval("("+oAjax.responseText+")");   
-     
+
+  var oRetorno = eval("("+oAjax.responseText+")");
+
   $('ac10_sequencial').value    = "";
   $('ac16_sequencial').value    = "";
   $('ac16_resumoobjeto').value  = "";
+  $('ac16_valorrescisao').value = "";
   $('ac10_datamovimento').value = "";
   $('ac10_obs').value           = "";
   $('cancelar').disabled        = true;
@@ -292,9 +309,9 @@ function js_retornoCancelamentoRecisao(oAjax) {
   } else {
     alert("Cancelamento efetuado com Sucesso.");
   }
-  
+
   js_pesquisarRecisao();
-  
+
 }
 </script>
 </html>

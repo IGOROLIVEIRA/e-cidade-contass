@@ -12,6 +12,7 @@ require_once("classes/db_contratos402017_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarCONTRATOS.model.php");
 require_once("model/Acordo.model.php");
 require_once("model/AcordoPosicao.model.php");
+require_once("model/AcordoRescisao.model.php");
 
 
 /**
@@ -38,7 +39,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
         8 - Licitação realizada por consorcio público
         9 - Licitação realizada por outro ente da federação
      */
-    
+
     CONST TIPO_ORIGEM_NAO_OU_DISPENSA = 1;
     CONST TIPO_ORIGEM_LICIATACAO = 2;
     CONST TIPO_ORIGEM_DISPENSA_INEXIGIBILIDADE = 3;
@@ -450,7 +451,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
 
             /*
-             * Verificar se o contrato vem de licitacao mas foi vinculado apenas ao empenho 
+             * Verificar se o contrato vem de licitacao mas foi vinculado apenas ao empenho
              * por ser Origem empenho
              */
             if ($oDados10->ac16_origem == self::ORIGEM_EMPENHO && in_array($oDados10->contdeclicitacao, array(2, 3))) {
@@ -1075,22 +1076,23 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
         /*
         * selecionar informacoes registro 40
         */
-        $sSql = "select * from rescisaocontrato
-      join contratos on si176_nrocontrato = si172_sequencial
-      where si1176_datarescisao <= '{$this->sDataFinal}'
-      and si1176_datarescisao >= '{$this->sDataInicial}'
-      and si172_instit = " . db_getsession("DB_instit");
+        $sSql = "SELECT *
+          FROM acordo
+          WHERE ac16_acordosituacao = 2
+            AND ac16_datarescisao BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+            AND ac16_instit = " . db_getsession("DB_instit");
 
-        $rsResult40 = db_query($sSql);//db_criatabela($rsResult40);
+        $rsResult40 = db_query($sSql);
 
         for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
             $clcontratos40 = new cl_contratos402017();
             $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
-            $aAnoContrato = explode("-", $oDados40->si172_dataassinatura);
+            $aAnoContrato = explode("-", $oDados40->ac16_dataassinatura);
 
             if ($aAnoContrato[0] > 2013) {
+
                 $sSql = "select  (CASE
     WHEN o41_subunidade != 0
          OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
@@ -1103,23 +1105,23 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                  where db01_anousu = " . $aAnoContrato[0] . " and db01_coddepto =
-                  (select si172_codunidadesubresp::integer from contratos where si172_sequencial = {$oDados40->si172_sequencial})";
+                  where db01_anousu ={$oDados40->ac16_anousu}  and db01_coddepto ={$oDados40->ac16_coddepto}";
+
                 $result = db_query($sSql);//db_criatabela($result);echo $sSql;echo pg_last_error();
                 $sCodUnidadeSub = db_utils::fieldsMemory($result, 0)->codunidadesub;
             } else {
                 $sCodUnidadeSub = ' ';
             }
 
-            $clcontratos40->si91_tiporegistro = 40;
-            $clcontratos40->si91_codorgao = $sCodorgao;
-            $clcontratos40->si91_codunidadesub = $sCodUnidadeSub;
-            $clcontratos40->si91_nrocontrato = $oDados40->si172_nrocontrato;
-            $clcontratos40->si91_dtassinaturacontoriginal = $oDados40->si172_dataassinatura;
-            $clcontratos40->si91_datarescisao = $oDados40->si1176_datarescisao;
-            $clcontratos40->si91_valorcancelamentocontrato = $oDados40->si176_valorcancelamentocontrato;
-            $clcontratos40->si91_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $clcontratos40->si91_instit = $oDados40->si172_instit;
+            $clcontratos40->si91_tiporegistro               = 40;
+            $clcontratos40->si91_codorgao                   = $sCodorgao;
+            $clcontratos40->si91_codunidadesub              = $sCodUnidadeSub;
+            $clcontratos40->si91_nrocontrato                = $oDados40->ac16_numeroacordo;
+            $clcontratos40->si91_dtassinaturacontoriginal   = $oDados40->ac16_dataassinatura;
+            $clcontratos40->si91_datarescisao               = $oDados40->ac16_datarescisao;
+            $clcontratos40->si91_valorcancelamentocontrato  = $oDados40->ac16_valorrescisao;
+            $clcontratos40->si91_mes                        = date('m', strtotime($this->sDataFinal));
+            $clcontratos40->si91_instit                     = $oDados40->ac16_instit;
 
             $clcontratos40->incluir(null);
 

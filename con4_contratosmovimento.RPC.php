@@ -263,6 +263,7 @@ switch($oParam->exec) {
         $oRecisao                = new AcordoRescisao($oParam->codigo);
         $oAcordo                 = new Acordo($oRecisao->getAcordo());
         $oRetorno->codigo        = $oRecisao->getCodigo();
+        $oRetorno->valorrescisao = $oAcordo->getValorRescisao();
         $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
         $oRetorno->datamovimento = date("Y-m-d",db_getsession("DB_datausu"));
         $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
@@ -285,11 +286,20 @@ switch($oParam->exec) {
 
         db_inicio_transacao();
 
+        $oAcordo = new Acordo($oParam->acordo);
+
         $oRecisao = new AcordoRescisao();
         $oRecisao->setAcordo($oParam->acordo);
+        $nValorRescisao = str_replace(',', '.', $oParam->valorrescisao);
         $dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
         $oRecisao->setDataMovimento($dtMovimento);
         $oRecisao->setObservacao($sObservacao);
+        $oRecisao->setValorRescisao($nValorRescisao);
+
+        if ($oRecisao->getValorRescisao() > $oAcordo->getValorContrato()) {
+          throw new Exception("O valor rescindido não pode ser maior que o valor do acordo.");
+        }
+
         $oRecisao->save();
 
         db_fim_transacao(false);
@@ -314,6 +324,7 @@ switch($oParam->exec) {
 
         $oRecisao = new AcordoRescisao($oParam->codigo);
         $oRecisao->setDataMovimento();
+        $oRecisao->setValorRescisao(0);
         $oRecisao->setObservacao($sObservacao);
         $oRecisao->cancelar();
 

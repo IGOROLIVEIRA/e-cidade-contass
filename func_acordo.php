@@ -175,6 +175,10 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             }
           }
 
+          if (isset($lHomologados) && $lHomologados == true) {
+            $sWhere .= " and (ac16_acordosituacao = 4)";
+          }
+
           if (isset($lGeraAutorizacao) && $lGeraAutorizacao == "true") {
             $sWhere .= " and ac16_origem in(1, 2, 3, 6) ";
           }
