@@ -1,51 +1,51 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //echo "aqui"; exit();
 
 if (!isset($arqinclude)){
-  
-  include("fpdf151/pdf.php");
-  include("fpdf151/assinatura.php");
-  include("libs/db_sql.php");
-  include("libs/db_utils.php");
-  include("libs/db_libcontabilidade.php");
-  include("libs/db_liborcamento.php");
-  include("classes/db_orcparamrel_classe.php");
-  include("dbforms/db_funcoes.php");
-  include("classes/db_orcparamrelopcre_classe.php");
-  include("classes/db_db_config_classe.php");
-  
+
+  include_once("fpdf151/pdf.php");
+  include_once("fpdf151/assinatura.php");
+  include_once("libs/db_sql.php");
+  include_once("libs/db_utils.php");
+  include_once("libs/db_libcontabilidade.php");
+  include_once("libs/db_liborcamento.php");
+  include_once("classes/db_orcparamrel_classe.php");
+  include_once("dbforms/db_funcoes.php");
+  include_once("classes/db_orcparamrelopcre_classe.php");
+  include_once("classes/db_db_config_classe.php");
+
   $classinatura = new cl_assinatura;
   $orcparamrel  = new cl_orcparamrel;
   $cldb_config  = new cl_db_config();
   parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
   db_postmemory($HTTP_SERVER_VARS);
-  
+
 }
 
 include_once("classes/db_conrelinfo_classe.php");
@@ -75,19 +75,19 @@ $iLinhasInstit = $cldb_config->numrows;
 if ( $iLinhasInstit > 0 ){
 
   $aListaInstit = array();
-  
-  for ($iInd=0; $iInd < $iLinhasInstit; $iInd++) {	
-    $oInstit = db_utils::fieldsMemory($rsRppsInstit,$iInd);	
+
+  for ($iInd=0; $iInd < $iLinhasInstit; $iInd++) {
+    $oInstit = db_utils::fieldsMemory($rsRppsInstit,$iInd);
     $aListaInstit[] = $oInstit->codigo;
-  }   
-  
+  }
+
   $sListaInstit = implode(",",$aListaInstit);
-  
+
 }else{
   $sListaInstit = $iInstit;
 }
 db_inicio_transacao();
-for ($iAno = $iAnoUsu1; $iAno <= $iAnoUsu3; $iAno++) {  
+for ($iAno = $iAnoUsu1; $iAno <= $iAnoUsu3; $iAno++) {
   // Exclui elementos referente ao exercício anterior;
   $clorcparamelemento->o44_anousu    = $iAno;
   $clorcparamelemento->o44_codparrel = $iCodigoRelatorio;
@@ -114,17 +114,17 @@ $head5 = $iAnoUsu;
 $head6 = "RECEITAS E DESPEZAS PREVIDENCIÁRIAS DO REGIME PRÓPRIO DE PREVIDÊNCIA DOS SERVIDORES";
 // fechado ate a linha 360
 $aLinhasRelatorio              	= array();
-$aLinhasRelatorio[0]["label"]  	= "RECEITAS PREVIDENCIÁRIAS - RPPS (EXCETO INTRA-ORÇAMENTÁRIAS)(I)";    
-$aLinhasRelatorio[1]["label"]  	= "	 RECEITAS CORRENTES";    
-$aLinhasRelatorio[2]["label"]  	= "    Receita de Contribuíções dos Segurados";    
-$aLinhasRelatorio[3]["label"]  	= "      Pessoa Cívil";    
-$aLinhasRelatorio[4]["label"]  	= "      Pessoa Militar";    
-$aLinhasRelatorio[5]["label"]  	= "    Outras Receitas de Contribuíções";    
-$aLinhasRelatorio[6]["label"]  	= "    Receita Patrimonial";    	
-$aLinhasRelatorio[7]["label"]  	= "    Receita de Serviços";    	
+$aLinhasRelatorio[0]["label"]  	= "RECEITAS PREVIDENCIÁRIAS - RPPS (EXCETO INTRA-ORÇAMENTÁRIAS)(I)";
+$aLinhasRelatorio[1]["label"]  	= "	 RECEITAS CORRENTES";
+$aLinhasRelatorio[2]["label"]  	= "    Receita de Contribuíções dos Segurados";
+$aLinhasRelatorio[3]["label"]  	= "      Pessoa Cívil";
+$aLinhasRelatorio[4]["label"]  	= "      Pessoa Militar";
+$aLinhasRelatorio[5]["label"]  	= "    Outras Receitas de Contribuíções";
+$aLinhasRelatorio[6]["label"]  	= "    Receita Patrimonial";
+$aLinhasRelatorio[7]["label"]  	= "    Receita de Serviços";
 $aLinhasRelatorio[8]["label"]  	= "    Outras Receitas Correntes";
-$aLinhasRelatorio[9]["label"]  	= "      Compensação Previdenciária do RGPS para o RPPS";    
-$aLinhasRelatorio[10]["label"]  = "     Outras Receitas Correntes";    
+$aLinhasRelatorio[9]["label"]  	= "      Compensação Previdenciária do RGPS para o RPPS";
+$aLinhasRelatorio[10]["label"]  = "     Outras Receitas Correntes";
 $aLinhasRelatorio[11]["label"]  = "  RECEITAS DE CAPITAL";
 $aLinhasRelatorio[12]["label"]  = "    Alienação de Bens, Direitos e Ativos";
 $aLinhasRelatorio[13]["label"]  = "    Amortização de Empréstimos";
@@ -170,14 +170,14 @@ $aLinhasRelatorio[52]["label"]  = "RESERVA ORÇAMENTÁRIA DO RPPS";
 $aLinhasRelatorio[53]["label"]  = "BENS E DIREITOS DO RPPS";
 
 for ($i = 0; $i < count($aLinhasRelatorio); $i++) {
-  
+
   $aLinhasRelatorio[$i]["ano2"] = 0;
   $aLinhasRelatorio[$i]["ano3"] = 0;
   $aLinhasRelatorio[$i]["ano4"] = 0;
- 
+
 }
-for ($linha=1; $linha <= 20; $linha++){	
-  
+for ($linha=1; $linha <= 20; $linha++){
+
   $m_receita[$linha]['estrut1'] = $orcparamrel->sql_parametro($iCodigoRelatorio,$linha,"f",$sListaInstit,$iAnoUsu1);
   $m_receita[$linha]['estrut2'] = $orcparamrel->sql_parametro($iCodigoRelatorio,$linha,"f",$sListaInstit,$iAnoUsu2);
   $m_receita[$linha]['estrut3'] = $orcparamrel->sql_parametro($iCodigoRelatorio,$linha,"f",$sListaInstit,$iAnoUsu3);
@@ -185,22 +185,22 @@ for ($linha=1; $linha <= 20; $linha++){
   $m_receita[$linha]['ano3']   = 0;
   $m_receita[$linha]['ano4']   = 0;
   $oLinhaRelatorio             = new linhaRelatorioContabil($iCodigoRelatorio,$linha);
-  
+
   if (!empty($oLinhaRelatorio)) {
-    
+
     $aValores                    = $oLinhaRelatorio->getValoresColunas();
     foreach ($aValores as $oValorLinha) {
-  
+
       $m_receita[$linha]['ano4']   += $oValorLinha->colunas[0]->o117_valor;
       $m_receita[$linha]['ano3']   += $oValorLinha->colunas[1]->o117_valor;
       $m_receita[$linha]['ano2']   += $oValorLinha->colunas[2]->o117_valor;
-      
+
     }
   }
 }
 //Parametros de Despesas
-for ($linha=21; $linha<=42; $linha++){	
-  
+for ($linha=21; $linha<=42; $linha++){
+
   $m_despesa[$linha]['estrut1'] = $orcparamrel->sql_parametro($iCodigoRelatorio,$linha,"f",$sListaInstit,$iAnoUsu1);
   $m_despesa[$linha]['nivel1']  = $orcparamrel->sql_nivel($iCodigoRelatorio, $linha);
   $m_despesa[$linha]["funcao1"] = $orcparamrel->sql_funcao($iCodigoRelatorio, $linha);
@@ -214,12 +214,12 @@ for ($linha=21; $linha<=42; $linha++){
   $m_despesa[$linha]['ano3']    = 0;
   $m_despesa[$linha]['ano4']    = 0;
   $oLinhaRelatorio             = new linhaRelatorioContabil($iCodigoRelatorio,$linha);
-  
+
   if (!empty($oLinhaRelatorio)) {
-    
+
     $aValores                    = $oLinhaRelatorio->getValoresColunas();
     foreach ($aValores as $oValorLinha) {
-  
+
       $m_despesa[$linha]['ano4']   += $oValorLinha->colunas[0]->o117_valor;
       $m_despesa[$linha]['ano3']   += $oValorLinha->colunas[1]->o117_valor;
       $m_despesa[$linha]['ano2']   += $oValorLinha->colunas[2]->o117_valor;
@@ -227,8 +227,8 @@ for ($linha=21; $linha<=42; $linha++){
   }
 }
 
-for ($linha = 29; $linha <= 34; $linha++){	
-  
+for ($linha = 29; $linha <= 34; $linha++){
+
   $m_receita[$linha]['estrut1'] = $orcparamrel->sql_parametro($iCodigoRelatorio,$linha,"f",$sListaInstit,$iAnoUsu1);
   $m_receita[$linha]['estrut2'] = $orcparamrel->sql_parametro($iCodigoRelatorio,$linha,"f",$sListaInstit,$iAnoUsu2);
   $m_receita[$linha]['estrut3'] = $orcparamrel->sql_parametro($iCodigoRelatorio,$linha,"f",$sListaInstit,$iAnoUsu3);
@@ -236,26 +236,26 @@ for ($linha = 29; $linha <= 34; $linha++){
   $m_receita[$linha]['ano3']   = 0;
   $m_receita[$linha]['ano4']   = 0;
   $oLinhaRelatorio             = new linhaRelatorioContabil($iCodigoRelatorio,$linha);
-  
+
   if (!empty($oLinhaRelatorio)) {
-    
+
     $aValores                    = $oLinhaRelatorio->getValoresColunas();
     foreach ($aValores as $oValorLinha) {
-  
+
       $m_receita[$linha]['ano4']   += $oValorLinha->colunas[0]->o117_valor;
       $m_receita[$linha]['ano3']   += $oValorLinha->colunas[1]->o117_valor;
       $m_receita[$linha]['ano2']   += $oValorLinha->colunas[2]->o117_valor;
-      
-    }   
+
+    }
   }
 }
 $oLinhaRelatorio             = new linhaRelatorioContabil($iCodigoRelatorio, 35);
 
 if (!empty($oLinhaRelatorio)) {
-  
+
   $aValores                    = $oLinhaRelatorio->getValoresColunas();
   foreach ($aValores as $oValorLinha) {
-  
+
     $aLinhasRelatorio[52]['ano4']   += $oValorLinha->colunas[0]->o117_valor;
     $aLinhasRelatorio[52]['ano3']   += $oValorLinha->colunas[1]->o117_valor;
     $aLinhasRelatorio[52]['ano2']   += $oValorLinha->colunas[2]->o117_valor;
@@ -264,10 +264,10 @@ if (!empty($oLinhaRelatorio)) {
 
 $oLinhaRelatorio             = new linhaRelatorioContabil($iCodigoRelatorio, 36);
 if (!empty($oLinhaRelatorio)) {
-  
+
   $aValores                    = $oLinhaRelatorio->getValoresColunas();
   foreach ($aValores as $oValorLinha) {
-  
+
     $aLinhasRelatorio[53]['ano4']   += $oValorLinha->colunas[0]->o117_valor;
     $aLinhasRelatorio[53]['ano3']   += $oValorLinha->colunas[1]->o117_valor;
     $aLinhasRelatorio[53]['ano2']   += $oValorLinha->colunas[2]->o117_valor;
@@ -277,17 +277,17 @@ $db_filtro  = " o70_instit in ({$sListaInstit})";
 $rsRecExeAno4          = db_receitasaldo(11,1,3,true,$db_filtro,$iAnoUsu1,"{$iAnoUsu1}-01-01","{$iAnoUsu1}-12-31");
 $iLinhasRecExeAtual    = pg_num_rows($rsRecExeAno4);
 @db_query("drop table work_receita");
-	
+
 for ($iInd=0; $iInd < $iLinhasRecExeAtual; $iInd++) {
-	
+
   $oRecExeAtual = db_utils::fieldsMemory($rsRecExeAno4,$iInd);
   $sEstrut      = $oRecExeAtual->o57_fonte;
 
   for ($linha=1; $linha <= 20; $linha++) {
-    
+
     if (in_array($sEstrut,$m_receita[$linha]['estrut1'])) {
       $m_receita[$linha]['ano4']  += $oRecExeAtual->saldo_arrecadado_acumulado;
-      
+
     }
   }
 }
@@ -295,17 +295,17 @@ $db_filtro  = " o70_instit in ({$sListaInstit})";
 $rsRecExeAno3          = db_receitasaldo(11,1,3,true,$db_filtro,$iAnoUsu2,"{$iAnoUsu2}-01-01","{$iAnoUsu2}-12-31");
 $iLinhasRecExeAtual    = pg_num_rows($rsRecExeAno3);
 @db_query("drop table work_receita");
-	
+
 for ($iInd=0; $iInd < $iLinhasRecExeAtual; $iInd++) {
-	
+
   $oRecExeAtual = db_utils::fieldsMemory($rsRecExeAno3,$iInd);
   $sEstrut      = $oRecExeAtual->o57_fonte;
 
   for ($linha=1; $linha <= 20; $linha++) {
-    
+
     if (in_array($sEstrut,$m_receita[$linha]['estrut2'])) {
       $m_receita[$linha]['ano3']  += $oRecExeAtual->saldo_arrecadado_acumulado;
-      
+
     }
   }
 }
@@ -314,17 +314,17 @@ $db_filtro  = " o70_instit in ({$sListaInstit})";
 $rsRecExeAno3          = db_receitasaldo(11,1,3,true,$db_filtro,$iAnoUsu3,"{$iAnoUsu3}-01-01","{$iAnoUsu3}-12-31");
 $iLinhasRecExeAtual    = pg_num_rows($rsRecExeAno3);
 @db_query("drop table work_receita");
-	
+
 for ($iInd=0; $iInd < $iLinhasRecExeAtual; $iInd++) {
-	
+
   $oRecExeAtual = db_utils::fieldsMemory($rsRecExeAno3,$iInd);
   $sEstrut      = $oRecExeAtual->o57_fonte;
 
   for ($linha=1; $linha <= 20; $linha++) {
-    
+
     if (in_array($sEstrut,$m_receita[$linha]['estrut3'])) {
       $m_receita[$linha]['ano2']  += $oRecExeAtual->saldo_arrecadado_acumulado;
-      
+
     }
   }
 
@@ -334,32 +334,32 @@ for ($iInd=0; $iInd < $iLinhasRecExeAtual; $iInd++) {
  */
 $db_filtro = "o58_instit in ({$sListaInstit})";
 
-for ($linha = 21; $linha <= 28; $linha++){	
-  
+for ($linha = 21; $linha <= 28; $linha++){
+
   $aListaFuncao = array();
   $sWhereFuncao = "";
-	
+
   foreach($m_despesa[$linha]["funcao1"] as $sRegistro){
     $aListaFuncao[] = $sRegistro;
   }
 
   $sListaFuncao = implode(",",$aListaFuncao);
-  
+
   if (trim($sListaFuncao) != ""){
     $sWhereFuncao = " and o58_funcao in ({$sListaFuncao}) ";
   }
 
   $rsDespFuncaoAtual     = db_dotacaosaldo(8,2, 3, true, $db_filtro.$sWhereFuncao,$iAnoUsu1,"{$iAnoUsu1}-01-01","{$iAnoUsu1}-12-31");
-  $iLinhaDespFuncaoAtual = pg_num_rows($rsDespFuncaoAtual); 
-  
+  $iLinhaDespFuncaoAtual = pg_num_rows($rsDespFuncaoAtual);
+
   for ($iInd = 0; $iInd < $iLinhaDespFuncaoAtual; $iInd++) {
-    
+
   	$oDespFuncaoAtual = db_utils::fieldsMemory($rsDespFuncaoAtual,$iInd);
 
     $sNivel      = $m_despesa[$linha]['nivel1'];
     $sEstrutural = $oDespFuncaoAtual->o58_elemento.'00';
     $sEstrutural = substr($sEstrutural,0,$sNivel);
-    $sEstrutural = str_pad($sEstrutural,15,"0", STR_PAD_RIGHT);	
+    $sEstrutural = str_pad($sEstrutural,15,"0", STR_PAD_RIGHT);
 
     if (substr($oDespFuncaoAtual->o58_elemento,3,2) == "91"){
       continue;
@@ -369,31 +369,31 @@ for ($linha = 21; $linha <= 28; $linha++){
       $m_despesa[$linha]['ano4'] += $oDespFuncaoAtual->empenhado_acumulado - $oDespFuncaoAtual->anulado_acumulado;
     }
   }
-  
+
   $aListaFuncao = array();
   $sWhereFuncao = "";
-	
+
   foreach($m_despesa[$linha]["funcao2"] as $sRegistro){
     $aListaFuncao[] = $sRegistro;
   }
 
   $sListaFuncao = implode(",",$aListaFuncao);
-  
+
   if (trim($sListaFuncao) != ""){
     $sWhereFuncao = " and o58_funcao in ({$sListaFuncao}) ";
   }
-  
+
   $rsDespFuncaoAtual     = db_dotacaosaldo(8,2, 3, true, $db_filtro.$sWhereFuncao,$iAnoUsu2,"{$iAnoUsu2}-01-01","{$iAnoUsu2}-12-31");
-  $iLinhaDespFuncaoAtual = pg_num_rows($rsDespFuncaoAtual); 
-  
+  $iLinhaDespFuncaoAtual = pg_num_rows($rsDespFuncaoAtual);
+
   for ($iInd = 0; $iInd < $iLinhaDespFuncaoAtual; $iInd++) {
-    
+
   	$oDespFuncaoAtual = db_utils::fieldsMemory($rsDespFuncaoAtual,$iInd);
 
     $sNivel      = $m_despesa[$linha]['nivel2'];
     $sEstrutural = $oDespFuncaoAtual->o58_elemento.'00';
     $sEstrutural = substr($sEstrutural,0,$sNivel);
-    $sEstrutural = str_pad($sEstrutural,15,"0", STR_PAD_RIGHT);	
+    $sEstrutural = str_pad($sEstrutural,15,"0", STR_PAD_RIGHT);
 
     if (substr($oDespFuncaoAtual->o58_elemento,3,2) == "91"){
       continue;
@@ -403,31 +403,31 @@ for ($linha = 21; $linha <= 28; $linha++){
       $m_despesa[$linha]['ano3'] += $oDespFuncaoAtual->empenhado_acumulado - $oDespFuncaoAtual->anulado_acumulado;
     }
   }
-  
+
  $aListaFuncao = array();
   $sWhereFuncao = "";
-	
+
   foreach($m_despesa[$linha]["funcao3"] as $sRegistro){
     $aListaFuncao[] = $sRegistro;
   }
 
   $sListaFuncao = implode(",",$aListaFuncao);
-  
+
   if (trim($sListaFuncao) != ""){
     $sWhereFuncao = " and o58_funcao in ({$sListaFuncao}) ";
   }
-  
+
   $rsDespFuncaoAtual     = db_dotacaosaldo(8,2, 3, true, $db_filtro.$sWhereFuncao,$iAnoUsu3,"{$iAnoUsu3}-01-01","{$iAnoUsu3}-12-31");
-  $iLinhaDespFuncaoAtual = pg_num_rows($rsDespFuncaoAtual); 
-  
+  $iLinhaDespFuncaoAtual = pg_num_rows($rsDespFuncaoAtual);
+
   for ($iInd = 0; $iInd < $iLinhaDespFuncaoAtual; $iInd++) {
-    
+
   	$oDespFuncaoAtual = db_utils::fieldsMemory($rsDespFuncaoAtual,$iInd);
 
     $sNivel      = $m_despesa[$linha]['nivel3'];
     $sEstrutural = $oDespFuncaoAtual->o58_elemento.'00';
     $sEstrutural = substr($sEstrutural,0,$sNivel);
-    $sEstrutural = str_pad($sEstrutural,15,"0", STR_PAD_RIGHT);	
+    $sEstrutural = str_pad($sEstrutural,15,"0", STR_PAD_RIGHT);
 
     if (substr($oDespFuncaoAtual->o58_elemento,3,2) == "91"){
       continue;
@@ -447,18 +447,18 @@ $db_filtro_disponivel = "c61_instit in (".$sListaInstit.") ";
 // Exercicio Atual
 $rsDispAtual 	  = db_planocontassaldo_matriz($iAnoUsu1,"{$iAnoUsu1}-01-01","{$iAnoUsu1}-12-31",false,$db_filtro_disponivel);
 $iLinhasDispAtual = pg_num_rows($rsDispAtual);
-@db_query("drop table work_receita"); 
+@db_query("drop table work_receita");
 @db_query("drop table work_pl");
 @db_query("drop table work_pl_estrut");
 @db_query("drop table work_pl_estrutmae");
 for ($iInd = 0; $iInd < $iLinhasDispAtual; $iInd++) {
-    
+
 $oDispAtual  = db_utils::fieldsMemory($rsDispAtual,$iInd);
  if (substr($oDispAtual->estrutural,3,2) == "91"){
    continue;
  }
  for ($linha=29; $linha <= 34; $linha++) {
-    
+
    if (in_array($oDispAtual->estrutural,$m_receita[$linha]['estrut1'])) {
        $m_receita[$linha]['ano4']  += $oDispAtual->saldo_final;
     }
@@ -467,49 +467,49 @@ $oDispAtual  = db_utils::fieldsMemory($rsDispAtual,$iInd);
 
 $rsDispAtual 	  = db_planocontassaldo_matriz($iAnoUsu2,"{$iAnoUsu2}-01-01","{$iAnoUsu2}-12-31",false,$db_filtro_disponivel);
 $iLinhasDispAtual = pg_num_rows($rsDispAtual);
-@db_query("drop table work_receita"); 
+@db_query("drop table work_receita");
 @db_query("drop table work_pl");
 @db_query("drop table work_pl_estrut");
 @db_query("drop table work_pl_estrutmae");
 for ($iInd = 0; $iInd < $iLinhasDispAtual; $iInd++) {
-    
+
 $oDispAtual  = db_utils::fieldsMemory($rsDispAtual,$iInd);
  if (substr($oDispAtual->estrutural,3,2) == "91"){
    continue;
  }
  for ($linha=29; $linha <= 34; $linha++) {
-    
+
    if (in_array($oDispAtual->estrutural,$m_receita[$linha]['estrut2'])) {
        $m_receita[$linha]['ano3']  += $oDispAtual->saldo_final;
     }
   }
 }
-  
+
 $rsDispAtual 	  = db_planocontassaldo_matriz($iAnoUsu3,"{$iAnoUsu3}-01-01","{$iAnoUsu3}-12-31",false,$db_filtro_disponivel);
 $iLinhasDispAtual = pg_num_rows($rsDispAtual);
-@db_query("drop table work_receita"); 
+@db_query("drop table work_receita");
 @db_query("drop table work_pl");
 @db_query("drop table work_pl_estrut");
 @db_query("drop table work_pl_estrutmae");
 for ($iInd = 0; $iInd < $iLinhasDispAtual; $iInd++) {
-    
+
 $oDispAtual  = db_utils::fieldsMemory($rsDispAtual,$iInd);
  if (substr($oDispAtual->estrutural,3,2) == "91"){
    continue;
  }
  for ($linha=29; $linha <= 34; $linha++) {
-    
+
    if (in_array($oDispAtual->estrutural,$m_receita[$linha]['estrut3'])) {
        $m_receita[$linha]['ano2']  += $oDispAtual->saldo_final;
     }
   }
 }
-  
+
 $pcol = array( 1 => 'ano2',
 			   2 => 'ano3',
 			   3 => 'ano4'
-			 );  
-			   
+			 );
+
 $ipcol = count($pcol);
 
 
@@ -523,17 +523,17 @@ for ($col = 1; $col <= $ipcol; $col++) {
   $aLinhasRelatorio[9] [$pcol[$col]] = $m_receita[6][$pcol[$col]];
   $aLinhasRelatorio[10][$pcol[$col]] = $m_receita[7][$pcol[$col]];
   $aLinhasRelatorio[8] [$pcol[$col]] = $aLinhasRelatorio[9][$pcol[$col]] + $aLinhasRelatorio[10] [$pcol[$col]];
-                                       
+
   $aLinhasRelatorio[12][$pcol[$col]] = $m_receita[8][$pcol[$col]];
   $aLinhasRelatorio[13][$pcol[$col]] = $m_receita[9][$pcol[$col]];
-  
+
   $aLinhasRelatorio[14][$pcol[$col]] = $m_receita[10][$pcol[$col]];
-  
+
   $aLinhasRelatorio[11][$pcol[$col]] = $aLinhasRelatorio[12][$pcol[$col]] + $aLinhasRelatorio[13][$pcol[$col]]+
                                        $aLinhasRelatorio[14][$pcol[$col]];
-                                       
+
   $aLinhasRelatorio[15][$pcol[$col]] = $m_receita[11][$pcol[$col]];
-  
+
   $aLinhasRelatorio[20][$pcol[$col]] = $m_receita[12][$pcol[$col]];
   $aLinhasRelatorio[21][$pcol[$col]] = $m_receita[13][$pcol[$col]];
   $aLinhasRelatorio[19][$pcol[$col]] = $aLinhasRelatorio[20][$pcol[$col]] + $aLinhasRelatorio[21] [$pcol[$col]];
@@ -541,7 +541,7 @@ for ($col = 1; $col <= $ipcol; $col++) {
   $aLinhasRelatorio[22][$pcol[$col]] = $m_receita[14][$pcol[$col]];
   $aLinhasRelatorio[23][$pcol[$col]] = $m_receita[15][$pcol[$col]];
 
-  $aLinhasRelatorio[18][$pcol[$col]] = $aLinhasRelatorio[19][$pcol[$col]] +$aLinhasRelatorio[22][$pcol[$col]]+ 
+  $aLinhasRelatorio[18][$pcol[$col]] = $aLinhasRelatorio[19][$pcol[$col]] +$aLinhasRelatorio[22][$pcol[$col]]+
                                        $aLinhasRelatorio[23][$pcol[$col]];
 
   $aLinhasRelatorio[24][$pcol[$col]] = $m_receita[16][$pcol[$col]];
@@ -550,67 +550,67 @@ for ($col = 1; $col <= $ipcol; $col++) {
   $aLinhasRelatorio[27][$pcol[$col]] = $m_receita[19][$pcol[$col]];
   $aLinhasRelatorio[28][$pcol[$col]] = $m_receita[20][$pcol[$col]];
 
-  $aLinhasRelatorio[17][$pcol[$col]] = $aLinhasRelatorio[18][$pcol[$col]] + $aLinhasRelatorio[24][$pcol[$col]]+ 
+  $aLinhasRelatorio[17][$pcol[$col]] = $aLinhasRelatorio[18][$pcol[$col]] + $aLinhasRelatorio[24][$pcol[$col]]+
                                        $aLinhasRelatorio[25][$pcol[$col]] + $aLinhasRelatorio[26][$pcol[$col]];
-                                       
+
   $aLinhasRelatorio[16][$pcol[$col]] = $aLinhasRelatorio[17][$pcol[$col]]+$aLinhasRelatorio[27][$pcol[$col]]+
-                                       $aLinhasRelatorio[28][$pcol[$col]];                                       
+                                       $aLinhasRelatorio[28][$pcol[$col]];
   $aLinhasRelatorio[2] [$pcol[$col]] = $aLinhasRelatorio[3][$pcol[$col]]  + $aLinhasRelatorio[4] [$pcol[$col]];
   $aLinhasRelatorio[1] [$pcol[$col]] = $aLinhasRelatorio[2][$pcol[$col]]+$aLinhasRelatorio[5][$pcol[$col]]+
                                        $aLinhasRelatorio[6][$pcol[$col]]+$aLinhasRelatorio[7][$pcol[$col]]+
                                        $aLinhasRelatorio[8][$pcol[$col]];
   $aLinhasRelatorio[0] [$pcol[$col]] = ( $aLinhasRelatorio[1][$pcol[$col]]+$aLinhasRelatorio[11][$pcol[$col]] +
                                          $aLinhasRelatorio[15][$pcol[$col]]);
-  
-  
-  
+
+
+
   //Outras Receitas
-  
+
   $aLinhasRelatorio[45][$pcol[$col]] = $m_receita[29][$pcol[$col]];
   $aLinhasRelatorio[46][$pcol[$col]] = $m_receita[30][$pcol[$col]];
   $aLinhasRelatorio[47][$pcol[$col]] = $m_receita[31][$pcol[$col]];
   $aLinhasRelatorio[44][$pcol[$col]] = $aLinhasRelatorio[46][$pcol[$col]] + $aLinhasRelatorio[45][$pcol[$col]]+
                                        $aLinhasRelatorio[47][$pcol[$col]];
-  
+
   $aLinhasRelatorio[49][$pcol[$col]] = $m_receita[32][$pcol[$col]];
   $aLinhasRelatorio[50][$pcol[$col]] = $m_receita[33][$pcol[$col]];
   $aLinhasRelatorio[51][$pcol[$col]] = $m_receita[34][$pcol[$col]];
-  $aLinhasRelatorio[48][$pcol[$col]] = $aLinhasRelatorio[49][$pcol[$col]] + $aLinhasRelatorio[50][$pcol[$col]] + 
+  $aLinhasRelatorio[48][$pcol[$col]] = $aLinhasRelatorio[49][$pcol[$col]] + $aLinhasRelatorio[50][$pcol[$col]] +
                                        $aLinhasRelatorio[51][$pcol[$col]];
-  
+
   $aLinhasRelatorio[43][$pcol[$col]] = $aLinhasRelatorio[48][$pcol[$col]] + $aLinhasRelatorio[44][$pcol[$col]];
 
   //Despesas
   $aLinhasRelatorio[31][$pcol[$col]] = $m_despesa[21][$pcol[$col]];
   $aLinhasRelatorio[32][$pcol[$col]] = $m_despesa[22][$pcol[$col]];
   $aLinhasRelatorio[30][$pcol[$col]] = $aLinhasRelatorio[32][$pcol[$col]] +$aLinhasRelatorio[31][$pcol[$col]];
-  
+
   $aLinhasRelatorio[34][$pcol[$col]] = $m_despesa[23][$pcol[$col]];
   $aLinhasRelatorio[35][$pcol[$col]] = $m_despesa[24][$pcol[$col]];
-  
+
   $aLinhasRelatorio[37][$pcol[$col]] = $m_despesa[25][$pcol[$col]];
   $aLinhasRelatorio[38][$pcol[$col]] = $m_despesa[26][$pcol[$col]];
   $aLinhasRelatorio[36][$pcol[$col]] = $aLinhasRelatorio[37][$pcol[$col]] +$aLinhasRelatorio[38][$pcol[$col]];
-  
+
   $aLinhasRelatorio[33][$pcol[$col]] = $aLinhasRelatorio[35][$pcol[$col]] + $aLinhasRelatorio[34][$pcol[$col]]+
                                        $aLinhasRelatorio[36][$pcol[$col]];
-                                       
+
   $aLinhasRelatorio[29][$pcol[$col]] = $aLinhasRelatorio[30][$pcol[$col]] + $aLinhasRelatorio[33][$pcol[$col]];
-  
+
   $aLinhasRelatorio[41][$pcol[$col]] = $m_despesa[27][$pcol[$col]];
   $aLinhasRelatorio[42][$pcol[$col]] = $m_despesa[28][$pcol[$col]];
   $aLinhasRelatorio[40][$pcol[$col]] = $aLinhasRelatorio[42][$pcol[$col]] + $aLinhasRelatorio[41][$pcol[$col]];
   $aLinhasRelatorio[39][$pcol[$col]] = $aLinhasRelatorio[40][$pcol[$col]];
-  
+
   $aLinhasRelatorio[36][$pcol[$col]] = $aLinhasRelatorio[37][$pcol[$col]] +$aLinhasRelatorio[38][$pcol[$col]];
-}	
+}
 
 //echo "<pre>";
 //print_R($aLinhasRelatorio);
 //echo "</pre>";
-$pdf = new PDF("P", "mm", "A4"); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF("P", "mm", "A4");
+$pdf->Open();
+$pdf->AliasNbPages();
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',7);
 $alt            = 4;
@@ -635,29 +635,29 @@ $pdf->cell(100,$alt,"",'RB',0,"C",0);
 $pdf->cell(30,$alt,"",'LBR',0,"C",0);
 $pdf->cell(30,$alt,"",'LBR',0,"C",0);
 $pdf->cell(30,$alt,"",'LB',1,"C",0);
- 
+
 for ( $i=0; $i < 29; $i++) {
-  
+
   $pdf->cell(100,$alt,$aLinhasRelatorio[$i]["label"],'R',0,"L",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano4"],"f"),'LR',0,"R",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano3"],"f"),'LR',0,"R",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano2"],"f"),'L',1,"R",0);
- 
+
 }
-  
+
   //$pdf->cell(190,$alt,"",'TB',1,"L",0);
-  
-  
-  
+
+
+
 $pdf->setfont('arial','b',7);
 $pdf->cell(100,$alt,"TOTAL DAS RECEITAS PREVIDENCIÁRIAS (III)=(I+II)",'TR',0,"L",0);
 $pdf->setfont('arial','',7);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[0]["ano4"]+$aLinhasRelatorio[16]["ano4"],"f"),'LTR',0,"R",0);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[0]["ano3"]+$aLinhasRelatorio[16]["ano3"],"f"),'LTR',0,"R",0);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[0]["ano2"]+$aLinhasRelatorio[16]["ano2"],"f"),'LT',1,"R",0);
-  
+
 $pdf->cell(190,$alt,"",'TB',1,"L",0);
-  
+
 $pdf->cell(100,$alt,"",'R',0,"C",0);
 $pdf->cell(30,$alt,"",'R',0,"C",0);
 $pdf->cell(30,$alt,"",'R',0,"C",0);
@@ -672,37 +672,37 @@ $pdf->cell(100,$alt,"",'RB',0,"C",0);
 $pdf->cell(30,$alt,"",'LBR',0,"C",0);
 $pdf->cell(30,$alt,"",'LBR',0,"C",0);
 $pdf->cell(30,$alt,"",'LB',1,"C",0);
-  
+
 for ($i = 29; $i < 43; $i++) {
-  
+
   $pdf->cell(100,$alt,$aLinhasRelatorio[$i]["label"],'R',0,"L",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano4"],"f"),'LR',0,"R",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano3"],"f"),'LR',0,"R",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano2"],"f"),'L',1,"R",0);
 }
-  
+
 $pdf->setfont('arial','b',7);
 $pdf->cell(100,$alt,"TOTAL DAS DESPESAS PREVIDENCIÁRIAS (VI)=(IV+V)",'TR',0,"L",0);
 $pdf->setfont('arial','',7);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[29]["ano4"]+$aLinhasRelatorio[39]["ano4"],"f"),'LTR',0,"R",0);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[29]["ano3"]+$aLinhasRelatorio[39]["ano3"],"f"),'LTR',0,"R",0);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[29]["ano2"]+$aLinhasRelatorio[39]["ano2"],"f"),'LT',1,"R",0);
-  
+
 $pdf->cell(190,$alt,"",'TB',1,"L",0);
-  
+
 $pdf->setfont('arial','b',7);
 $pdf->cell(100,$alt,"RESULTADO PREVIDENCIÁRIO (VII)=(III-VI)",'TR',0,"L",0);
 $pdf->setfont('arial','',7);
-$pdf->cell(30,$alt,db_formatar(($aLinhasRelatorio[0]["ano4"]+$aLinhasRelatorio[16]["ano4"]) 
+$pdf->cell(30,$alt,db_formatar(($aLinhasRelatorio[0]["ano4"]+$aLinhasRelatorio[16]["ano4"])
                                  -($aLinhasRelatorio[29]["ano4"]+$aLinhasRelatorio[39]["ano4"]),"f"),'LTR',0,"R",0);
-$pdf->cell(30,$alt,db_formatar(($aLinhasRelatorio[0]["ano3"]+$aLinhasRelatorio[16]["ano3"]) 
+$pdf->cell(30,$alt,db_formatar(($aLinhasRelatorio[0]["ano3"]+$aLinhasRelatorio[16]["ano3"])
                                  -($aLinhasRelatorio[29]["ano3"]+$aLinhasRelatorio[39]["ano3"]),"f"),'LTR',0,"R",0);
-$pdf->cell(30,$alt,db_formatar(($aLinhasRelatorio[0]["ano2"]+$aLinhasRelatorio[16]["ano2"]) 
+$pdf->cell(30,$alt,db_formatar(($aLinhasRelatorio[0]["ano2"]+$aLinhasRelatorio[16]["ano2"])
                                  -($aLinhasRelatorio[29]["ano2"]+$aLinhasRelatorio[39]["ano2"]),"f"),'LT',1,"R",0);
-  
+
 $pdf->cell(190,$alt,"",'T',1,"L",0);
 $pdf->addpage();
-  
+
 $pdf->setfont('arial','b',7);
 $pdf->cell(100,$alt,"APORTES DE RECURSOS PARA O REGIME PRÓPRIO",'TR',0,"C",0);
 $pdf->setfont('arial','',7);
@@ -719,24 +719,24 @@ $pdf->cell(100,$alt,"",'RB',0,"C",0);
 $pdf->cell(30,$alt,"",'LBR',0,"C",0);
 $pdf->cell(30,$alt,"",'LBR',0,"C",0);
 $pdf->cell(30,$alt,"",'LB',1,"C",0);
-  
+
 for ( $i = 43; $i < 52; $i++) {
-  
+
   $pdf->cell(100,$alt,$aLinhasRelatorio[$i]["label"],'R',0,"L",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano4"],"f"),'LR',0,"R",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano3"],"f"),'LR',0,"R",0);
   $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[$i]["ano2"],"f"),'L',1,"R",0);
-  
+
 }
 $pdf->cell(190,$alt,"",'T',1,"L",0);
-  
+
 $pdf->setfont('arial','b',7);
 $pdf->cell(100,$alt,"RESERVA ORÇAMENTÁRIA DO RPPS",'TR',0,"L",0);
 $pdf->setfont('arial','',7);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[52]["ano4"],"f"),'TLR',0,"R",0);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[52]["ano3"],"f"),'TLR',0,"R",0);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[52]["ano2"],"f"),'TL',1,"R",0);
-  
+
 $pdf->setfont('arial','b',7);
 $pdf->cell(100,$alt,"BENS E DIREITOS DO RPPS",'TR',0,"L",0);
 $pdf->setfont('arial','',7);
@@ -744,7 +744,7 @@ $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[53]["ano4"],"f"),'TLR',0,"R",0)
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[53]["ano3"],"f"),'TLR',0,"R",0);
 $pdf->cell(30,$alt,db_formatar($aLinhasRelatorio[53]["ano2"],"f"),'TL',1,"R",0);
 $pdf->cell(190,$alt,"",'T',1,"L",0);
-$oRelatorio->getNotaExplicativa(&$pdf,1); 
+$oRelatorio->getNotaExplicativa(&$pdf,1);
 $pdf->Output();
 
 ?>

@@ -1,50 +1,50 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //echo "aqui"; exit();
 
 if (!isset($arqinclude)){
-  
-  include("fpdf151/pdf.php");
-  include("fpdf151/assinatura.php");
-  include("libs/db_sql.php");
-  include("libs/db_utils.php");
-  include("libs/db_libcontabilidade.php");
-  include("libs/db_liborcamento.php");
-  include("classes/db_orcparamrel_classe.php");
-  include("dbforms/db_funcoes.php");
-  include("classes/db_orcparamrelopcre_classe.php");
-  
+
+  include_once("fpdf151/pdf.php");
+  include_once("fpdf151/assinatura.php");
+  include_once("libs/db_sql.php");
+  include_once("libs/db_utils.php");
+  include_once("libs/db_libcontabilidade.php");
+  include_once("libs/db_liborcamento.php");
+  include_once("classes/db_orcparamrel_classe.php");
+  include_once("dbforms/db_funcoes.php");
+  include_once("classes/db_orcparamrelopcre_classe.php");
+
   $classinatura = new cl_assinatura;
   $orcparamrel  = new cl_orcparamrel;
-  
+
   parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
   db_postmemory($HTTP_SERVER_VARS);
-  
+
 }
 
 include_once("classes/db_conrelinfo_classe.php");
@@ -93,9 +93,9 @@ $head6 = "<ANO DE REFERÊNCIA>";
 //$period = '';
 //if ($periodo=="1Q"){
 //  $period = "JANEIRO A ABRIL DE {$anousu}";
-//}elseif($periodo=="2Q"){  
+//}elseif($periodo=="2Q"){
 //  $period = "JANEIRO A AGOSTO DE {$anousu}";
-//}elseif($periodo=="3Q"){  
+//}elseif($periodo=="3Q"){
 //  $period = "JANEIRO A DEZEMBRO DE {$anousu}";
 //}elseif($periodo=="1S"){
 //  $period = "JANEIRO A JUNHO DE {$anousu}";
@@ -109,23 +109,23 @@ $head6 = "<ANO DE REFERÊNCIA>";
  */
 // fechado ate a linha 360
 	$aLinhasRelatorio              = array();
-	$aLinhasRelatorio[0]["label"]  = "Aumento Permanente da Receita";    
-	$aLinhasRelatorio[1]["label"]  = "(-) Transferências Constitucionais";    
-	$aLinhasRelatorio[2]["label"]  = "(-) Transferências FUNDEB";    
-	$aLinhasRelatorio[3]["label"]  = "Redução Permanente de Despesa (II)";    
-	$aLinhasRelatorio[4]["label"]  = "  Novas DOCC";    
-	$aLinhasRelatorio[5]["label"]  = "  Novas DOCC geradas por PPP";    
-	
+	$aLinhasRelatorio[0]["label"]  = "Aumento Permanente da Receita";
+	$aLinhasRelatorio[1]["label"]  = "(-) Transferências Constitucionais";
+	$aLinhasRelatorio[2]["label"]  = "(-) Transferências FUNDEB";
+	$aLinhasRelatorio[3]["label"]  = "Redução Permanente de Despesa (II)";
+	$aLinhasRelatorio[4]["label"]  = "  Novas DOCC";
+	$aLinhasRelatorio[5]["label"]  = "  Novas DOCC geradas por PPP";
+
 	for ($i = 0; $i < count($aLinhasRelatorio); $i++) {
-  
+
 	  $aLinhasRelatorio[$i]["ano2"] = 0;
-  
+
 	}
-	
-	
-  $pdf = new PDF("P", "mm", "A4"); 
-  $pdf->Open(); 
-  $pdf->AliasNbPages(); 
+
+
+  $pdf = new PDF("P", "mm", "A4");
+  $pdf->Open();
+  $pdf->AliasNbPages();
   $pdf->setfillcolor(235);
   $pdf->setfont('arial','b',7);
   $alt            = 4;
@@ -141,13 +141,13 @@ $head6 = "<ANO DE REFERÊNCIA>";
   $pdf->cell(30,$alt,"SETORES/",'L',0,"C",0);
   $pdf->cell(60,$alt,"",'L',0,"C",0);
   $pdf->cell(40,$alt,"",'L',1,"C",0);
-  
+
   $pdf->cell(30,$alt,"TRIBUTO",0,0,"C",0);
   $pdf->cell(30,$alt,"MODALIDADE",'L',0,"C",0);
   $pdf->cell(30,$alt,"PROGRAMAS/",'L',0,"C",0);
   $pdf->cell(60,$alt,"RENÚNCIA DE RECEITA PREVISTA",'LB',0,"C",0);
   $pdf->cell(40,$alt,"COMPENSAÇÃO",'L',1,"C",0);
-  
+
   $pdf->cell(30,$alt,"",'B',0,"C",0);
   $pdf->cell(30,$alt,"",'BL',0,"C",0);
   $pdf->cell(30,$alt,"BENEFICIÁRIO",'LB',0,"C",0);
@@ -155,7 +155,7 @@ $head6 = "<ANO DE REFERÊNCIA>";
   $pdf->cell(20,$alt,"<Ano+1>",'LB',0,"C",0);
   $pdf->cell(20,$alt,"<Ano+2>",'LB',0,"C",0);
   $pdf->cell(40,$alt,"",'LB',1,"C",0);
-  
+
   //Corpo do Relatorio
   $pdf->cell(30,$alt,"---",0,0,"C",0);
   $pdf->cell(30,$alt,"---",'L',0,"C",0);
@@ -164,7 +164,7 @@ $head6 = "<ANO DE REFERÊNCIA>";
   $pdf->cell(20,$alt,"----",'L',0,"C",0);
   $pdf->cell(20,$alt,"---",'L',0,"C",0);
   $pdf->cell(40,$alt,"---",'L',1,"C",0);
-   
+
   //Fim do Relatorio
   //$pdf->cell(30,$alt,"---",0,0,"C",0);
   //$pdf->cell(30,$alt,"---",'L',0,"C",0);
@@ -173,18 +173,18 @@ $head6 = "<ANO DE REFERÊNCIA>";
   $pdf->cell(20,$alt,"----",'TLB',0,"C",0);
   $pdf->cell(20,$alt,"---",'TLB',0,"C",0);
   $pdf->cell(40,$alt,"---",'TLB',1,"C",0);
-  
+
   $pdf->ln();
 // ----------------------------------------------------------------
-//notasExplicativas(&$pdf, 63, $periodo,190); 
+//notasExplicativas(&$pdf, 63, $periodo,190);
 //  $pdf->Ln(5);
-//  
+//
 //  // assinaturas
 //  $pdf->setfont('arial','',5);
 //  $pdf->ln(20);
-//  
+//
 //  assinaturas(&$pdf,&$classinatura,'GF');
-  
+
   $pdf->Output();
 
 ?>
