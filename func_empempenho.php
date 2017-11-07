@@ -307,7 +307,7 @@ $rotulo->label("z01_cgccpf");
             if (isset($protocolo)) {
               $campos = " z01_nome,e60_numemp,e60_emiss,e60_vlremp,e60_codemp ";
               if ($protocolo == 2) {
-                $where = " e60_codemp = '{$pesquisa_chave}' ";
+                $where = " e60_codemp = '{$pesquisa_chave}' and e60_anousu = ".db_getsession("DB_anousu");;
                 $sSql = $clempempenho->sql_query(null, $campos, null, $where, $filtroempelemento);
               } else {
                 $sSql = $clempempenho->sql_query($pesquisa_chave, $campos, null,"", $filtroempelemento);

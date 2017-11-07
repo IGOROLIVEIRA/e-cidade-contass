@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -45,33 +45,33 @@ $clmatordem->rotulo->label("m51_data");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tm51_codordem?>">
               <?=$Lm51_codordem?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("m51_codordem",10,$Im51_codordem,true,"text",4,"","chave_m51_codordem");
 		       ?>
             </td>
           </tr>
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tm51_data?>">
               <?=$Lm51_data?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("m51_data",10,$Im51_data,true,"text",4,"","chave_m51_data");
 		       ?>
             </td>
           </tr>
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+          <tr>
+            <td colspan="2" align="center">
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
               <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_matordem.hide();">
              </td>
@@ -80,8 +80,8 @@ $clmatordem->rotulo->label("m51_data");
         </table>
       </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
       $where_instit = " e60_instit = ".db_getsession("DB_instit");
       if(!isset($pesquisa_chave)){
@@ -99,13 +99,20 @@ $clmatordem->rotulo->label("m51_data");
         }else{
            $sql = $clmatordem->sql_query_anu("",$campos,"m51_codordem",$where_instit);
         }
+        //echo $sql;die;
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
           $result = $clmatordem->sql_record($clmatordem->sql_query_anu($pesquisa_chave." and ".$where_instit));
           if($clmatordem->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$m51_data',false);</script>";
+            if (isset($prot) ) {
+              echo "<script>".$funcao_js."('$m51_codordem','$z01_nome','$m51_data','$m51_valortotal',false);</script>";
+            }
+            else {
+              echo "<script>".$funcao_js."('$m51_data',false);</script>";
+            }
+
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
