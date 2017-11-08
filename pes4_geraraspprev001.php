@@ -328,6 +328,104 @@ $wh
 
 union
 
+SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = 2017
+AND rh02_mesusu = 8
+AND rh02_instit = 1
+INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh02_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN
+    (SELECT r20_regist,
+            round(sum(CASE
+                          WHEN r20_pd = 1 THEN r20_valor
+                          ELSE 0
+                      END),2) AS provgerfsal,
+            round(sum(CASE
+                          WHEN r20_pd = 2 THEN r20_valor
+                          ELSE 0
+                      END),2) AS descogerfsal,
+            round(sum(CASE
+                          WHEN r20_rubric = 'R992' THEN r20_valor
+                          ELSE 0
+                      END),2) AS basegerfsal,
+            round(sum(CASE
+                          WHEN r20_rubric = 'R993' THEN r20_valor
+                          ELSE 0
+                      END),2) AS basegerfsaldesc
+     FROM gerfres
+     WHERE r20_anousu = 2017
+         AND r20_mesusu = 8
+         AND r20_instit = 1
+         AND r20_rubric in ('R993','R992')
+     GROUP BY r20_regist) AS salgerfsal ON r20_regist = rh01_regist
+
+
+INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
+AND rh138_instit = rh02_instit
+LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
+LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+where 1=1
+$wh
+
+union
+
+SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $ano
+AND rh02_mesusu = $mes
+AND rh02_instit = ".db_getsession('DB_instit')."
+INNER JOIN cgm ON z01_numcgm = rh01_numcgm
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh02_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN
+    (SELECT r48_regist,
+            round(sum(CASE
+                          WHEN r48_pd = 1 THEN r48_valor
+                          ELSE 0
+                      END),2) AS provgerfsal,
+            round(sum(CASE
+                          WHEN r48_pd = 2 THEN r48_valor
+                          ELSE 0
+                      END),2) AS descogerfsal,
+            round(sum(CASE
+                          WHEN r48_rubric = 'R992' THEN r48_valor
+                          ELSE 0
+                      END),2) AS basegerfsal,
+            round(sum(CASE
+                          WHEN r48_rubric = 'R993' THEN r48_valor
+                          ELSE 0
+                      END),2) AS basegerfsaldesc
+     FROM gerfcom
+     WHERE r48_anousu = $ano
+         AND r48_mesusu = $mes
+         AND r48_instit = ".db_getsession('DB_instit')."
+         AND r48_rubric in ('R993','R992')
+     GROUP BY r48_regist) AS salgerfsal ON r48_regist = rh01_regist
+
+
+INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
+AND rh138_instit = rh02_instit
+LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
+LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+where 1=1
+$wh
+
+union
+
 
 SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'S' || rpad('*',1)  AS todo
 FROM rhpessoal
