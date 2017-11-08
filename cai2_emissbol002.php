@@ -277,13 +277,19 @@ $resultdespesaextra = db_query($sql);
 //echo ' Despesa Extra-Orçamentaria ';
 //db_criatabela($resultdespesaextra);exit;
 if ($ordem_conta == 1) {
-	$ordem_conta = " c63_banco, k13_reduz ";
+  $ordem_conta = " c63_banco, k13_reduz ";
 }elseif ($ordem_conta == 2) {
   $ordem_conta = " k13_descr, k13_reduz";
 }elseif ($ordem_conta == 3) {
-	$ordem_conta = " c60_estrut ";
+  $ordem_conta = " c60_estrut ";
+}elseif ($ordem_conta == 5) {
+  $ordem_conta = " k13_reduz ";
 } else {
-	$ordem_conta = " c60_descr ";
+  $ordem_conta = " c60_descr ";
+}
+
+if($agrupar=='S'){
+  $ordem_conta = "c63_banco,lpad(c63_agencia,4,0),c63_dvagencia,c63_conta,c63_dvconta,c63_tipoconta";
 }
 /// CONTAS MOVIMENTO
 $sql="select k13_reduz,
@@ -313,7 +319,7 @@ $sql="select k13_reduz,
 	             inner join conplano      on c60_codcon = c61_codcon and c60_anousu=c61_anousu
 	             left  join conplanoconta on c60_codcon = c63_codcon and c63_anousu=c60_anousu
   where (k13_limite is null or k13_limite >= '$dataatual' )
- 	order by c63_banco,lpad(c63_agencia,4,0),c63_dvagencia,c63_conta,c63_dvconta,c63_tipoconta
+ 	order by ".$ordem_conta."
 
           ) as x
 	      ";
