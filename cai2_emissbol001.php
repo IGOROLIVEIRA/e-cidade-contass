@@ -136,6 +136,13 @@ function js_relatorio2() {
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
+function js_bloquearordem(){
+  if (document.form1.agrupar.value == 'S') {
+    document.form1.ordem_conta.disabled = true;
+  }else{
+    document.form1.ordem_conta.disabled = false;
+  }
+}
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
@@ -233,7 +240,7 @@ function js_relatorio2() {
    </td>
         <td>
     &nbsp; &nbsp;
-          <select name="agrupar">
+          <select name="agrupar" onchange="js_bloquearordem()" >
             <option value = 'N'>Não</option>
             <option value = 'S'>Sim</option>
         </td>
@@ -272,6 +279,7 @@ function js_relatorio2() {
             <option value = '2'>Nome Bco/Reduz</option>
             <option value = '3'>Estrutural</option>
             <option value = '4'>Descrição</option>
+            <option value = '5'>Reduzido</option>
 
         </td>
       </tr>
