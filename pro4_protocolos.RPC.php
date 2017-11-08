@@ -19,7 +19,6 @@ db_postmemory($_POST);
 
 $oJson  = new services_json();
 $oParam = $oJson->decode(str_replace("\\","",$_POST["json"]));
-$instituicao = db_getsession("DB_instit");
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $data = date("Y-m-d");
@@ -542,7 +541,7 @@ function buscaAutEmpenhos($protocolo) {
     return $rsConsulta;
 }
 
-function buscaEmpenhos($protocolo) {
+function buscaEmpenhos($protocolo, $instituicao) {
     $sSQL = "
       SELECT e60_numemp,
                 e60_codemp || '/' || e60_anousu as e60_codemp,
@@ -553,7 +552,7 @@ function buscaEmpenhos($protocolo) {
     INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
     INNER JOIN protempenhos ON protempenhos.p103_numemp = empempenho.e60_numemp
     INNER JOIN protocolos ON protocolos.p101_sequencial = protempenhos.p103_protocolo
-    WHERE protocolos.p101_sequencial = {$protocolo} and empempenho.e60_instit = {$instituicao}
+    WHERE protocolos.p101_sequencial = {$protocolo}
     ORDER BY e60_anousu, CAST (e60_codemp AS INTEGER)
     ";
 
