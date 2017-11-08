@@ -2213,7 +2213,7 @@ class cl_liclicita
 
     // funcao do sql 
 
-    function sql_query($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+    function sql_query($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "",$groupby=null)
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -2240,6 +2240,16 @@ class cl_liclicita
         $sql .= "      inner join ruas              on ruas.j14_codigo = liclocal.l26_lograd";
         $sql .= "      left  join liclicitaproc     on liclicitaproc.l34_liclicita = liclicita.l20_codigo";
         $sql .= "      left  join protprocesso      on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso";
+        $sql .= "      inner join habilitacaoforn   on l206_licitacao = l20_codigo";
+        $sql .= "      inner join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
+        $sql .= "      inner join liclicitem on l21_codliclicita = l20_codigo";
+        $sql .="       inner join pcprocitem on  pc81_codprocitem = l21_codpcprocitem";
+        $sql .="       inner join pcorcamitemproc on pc31_pcprocitem = pc81_codprocitem";
+        $sql .="       inner join pcorcamitem on pc22_orcamitem = pc31_orcamitem and pc31_pcprocitem = pc81_codprocitem";
+        $sql .="       inner join pcorcam on pc20_codorc = pc22_codorc";
+        $sql .="       inner join pcorcamval on pc23_orcamitem = pc22_orcamitem";
+        $sql .="       inner join pcorcamforne on pc21_orcamforne = pc23_orcamforne";
+        $sql .="       inner join pcorcamjulg on pc24_orcamitem = pc22_orcamitem and pc24_orcamforne = pc23_orcamforne";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l20_codigo != null) {
@@ -2249,6 +2259,17 @@ class cl_liclicita
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
+        if ($groupby != null) {
+            $sql .=" group by ";
+            $campos_sql = split("#", $groupby);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $groupby;
+        }
         if ($ordem != null) {
             $sql .= " order by ";
             $campos_sql = split("#", $ordem);
@@ -2258,7 +2279,7 @@ class cl_liclicita
                 $virgula = ",";
             }
         }
-        //echo $sql;
+//        echo $sql;exit;
         return $sql;
     }
 
