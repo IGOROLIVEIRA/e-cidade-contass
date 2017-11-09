@@ -432,7 +432,7 @@ if(isset($alterar)){
 
     echo $script;
 
-  $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l20_codigos and l20_naturezaobjeto = 6"));
+  $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l20_codigo and l20_naturezaobjeto = 6"));
 
   if ($cllicita->numrows > 0) {
 
