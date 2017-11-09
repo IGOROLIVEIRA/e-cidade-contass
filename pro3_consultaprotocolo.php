@@ -1,6 +1,4 @@
 <?php
-//ini_set('display_errors','On');
-//error_reporting(E_ALL);
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -14,30 +12,38 @@ require ("classes/db_protempautoriza_classe.php");
 require ("classes/db_protmatordem_classe.php");
 require ("classes/db_protocolos_classe.php");
 require ("classes/db_protempenhos_classe.php");
+require ("classes/db_empempenho_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 db_postmemory($HTTP_GET_VARS);
 
 $clprotocolos = new cl_protocolos();
+$clempempenho = new cl_empempenho();
 
 $campos = 'distinct p101_sequencial, a.descrdepto as descrorigem,b.descrdepto as descrdestino,p101_observacao,p101_sequencial,p101_hora,p101_coddeptoorigem,p101_coddeptodestino,p101_dt_protocolo, p101_dt_anulado';
 
 if(!empty($e54_autori)){
     $result = $clprotocolos->sql_record($clprotocolos->sql_consulta_protocolo('',"$campos",'p101_sequencial desc',"p102_autorizacao = $e54_autori"));
     $sTipo  = 'AUTORIZAÇÃO';
-    $iValor = $e54_autori;
+    $sValor = $e54_autori;
+    $iProtocolo = db_utils::fieldsMemory($result, 0)->p101_sequencial;
 }elseif(!empty($e60_numemp)){
-    $result = $clprotocolos->sql_record($clprotocolos->sql_consulta_protocolo('',"$campos",'p101_sequencial desc',"p103_numemp = $e60_numemp"));
+    $result = $clprotocolos->sql_record($clprotocolos->sql_consulta_protocolo('',"$campos,p103_numemp",'p101_sequencial desc',"p103_numemp = $e60_numemp"));
     $sTipo = 'EMPENHO';
-    $iValor = $e60_numemp;
+    $iProtocolo = db_utils::fieldsMemory($result, 0)->p101_sequencial;
+    $resultempenho = $clempempenho->sql_record($clempempenho->sql_query_file($e60_numemp));
+    $sValor = db_utils::fieldsMemory($resultempenho, 0)->e60_codemp.'/'.db_utils::fieldsMemory($resultempenho, 0)->e60_anousu;
+
 }elseif(!empty($m51_codordem)){
     $result = $clprotocolos->sql_record($clprotocolos->sql_consulta_protocolo('',"$campos",'p101_sequencial desc',"p104_codordem = $m51_codordem"));
     $sTipo = 'ORDEM DE COMPRA';
-    $iValor = $m51_codordem;
+    $sValor = $m51_codordem;
+    $iProtocolo = db_utils::fieldsMemory($result, 0)->p101_sequencial;
 }elseif(!empty($e53_codord)){
     $result = $clprotocolos->sql_record($clprotocolos->sql_consulta_protocolo('',"$campos",'p101_sequencial desc',"p105_codord = $e53_codord"));
     $sTipo = 'ORDEM DE PAGAMENTO';
-    $iValor = $e53_codord;
+    $sValor = $e53_codord;
+    $iProtocolo = db_utils::fieldsMemory($result, 0)->p101_sequencial;
 }
 
     $iProtocolo = db_utils::fieldsMemory($result, 0)->p101_sequencial;
@@ -62,7 +68,7 @@ if(!empty($e54_autori)){
       <table  border=0>
           <tr>
               <td  nowrap><b><? echo $sTipo ?>: </b></td>
-              <td nowrap><? echo $iValor ?> </td>
+              <td nowrap><? echo $sValor ?> </td>
           </tr>
           <tr>
               <td>&nbsp</td>
