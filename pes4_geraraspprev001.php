@@ -65,6 +65,7 @@ $sql_prev = "select r33_ppatro,r33_nome from inssirf
 								   and r33_mesusu = $mes
 									 and r33_instit = ".db_getsession("DB_instit")."
 									 and r33_codtab = $prev+2 limit 1;";
+
 $res_prev = pg_query($sql_prev);
 db_fieldsmemory($res_prev,0);
 
@@ -279,7 +280,7 @@ SELECT distinct
     db_query("create sequence layout_ina_seq");
 
     $sql = "
- SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+ SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $ano
@@ -328,7 +329,7 @@ $wh
 
 union
 
-SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = 2017
@@ -377,7 +378,7 @@ $wh
 
 union
 
-SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $ano
@@ -427,7 +428,7 @@ $wh
 union
 
 
-SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*22,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'S' || rpad('*',1)  AS todo
+SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'S' || rpad('*',1)  AS todo
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $ano
