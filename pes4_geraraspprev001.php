@@ -280,7 +280,17 @@ SELECT distinct
     db_query("create sequence layout_ina_seq");
 
     $sql = "
- SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+ select y.rh02_mesusu||y.rh02_anousu||y.pref_mat||y.matricula||y.campobranco||y.cpf||y.z01_nome||y.valorbase|| y.valorcontrib|| y.valorcontribrespec ||y.valorcontribcomple||y.valorcontribcomple2||y.marca||y.final as todo from
+(select x.rh02_mesusu as rh02_mesusu,x.rh02_anousu as rh02_anousu,x.pref_mat as pref_mat,
+	lpad(x.matricula,10,0) as matricula,x.campobranco as campobranco,lpad(x.cpf,11) as cpf,
+	rpad(x.z01_nome,80) as z01_nome,lpad(translate((coalesce(sum(x.valorbase),0.00))::varchar,'.',''),11,'0') as valorbase,
+	lpad(translate((coalesce(sum(x.valorcontrib),0.00))::varchar,'.',''),9,0) as valorcontrib ,
+	lpad(replace(round(coalesce(sum(x.valorcontribrespec),0.00),2)::varchar,'.',''),9,0) as valorcontribrespec,
+	rpad(x.valorcontribcomple,9) as valorcontribcomple,rpad(x.valorcontribcomple2,9) as valorcontribcomple2,
+	x.marca as marca,x.final as final 
+	from 
+
+(SELECT DISTINCT rh02_mesusu,rh02_anousu ,lpad(5,3,0) as pref_mat , lpad(rh01_regist,10,0) as matricula ,' ' as campobranco , lpad(z01_cgccpf,11) as cpf , z01_nome , basegerfsal as valorbase , basegerfsaldesc as valorcontrib , basegerfsal/100*$r33_ppatro as valorcontribrespec , rpad(' ',9) as valorcontribcomple , rpad(' ',9) as valorcontribcomple2 , 'N' as marca, rpad('*',1) as final  
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $ano
@@ -315,26 +325,22 @@ INNER JOIN
      WHERE r14_anousu = $ano
          AND r14_mesusu = $mes
          AND r14_instit = ".db_getsession('DB_instit')."
-         AND r14_rubric in ('R993','R992')
+         AND r14_rubric IN ('R993',
+                            'R992')
      GROUP BY r14_regist) AS salgerfsal ON r14_regist = rh01_regist
-
-
 INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
 AND rh138_instit = rh02_instit
 LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
-where 1=1
-$wh
-
-union
-
-SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+WHERE 1=1 $wh
+UNION
+SELECT DISTINCT rh02_mesusu,rh02_anousu ,lpad(5,3,0) as pref_mat , lpad(rh01_regist,10,0) as matricula ,' ' as campobranco , lpad(z01_cgccpf,11) as cpf , z01_nome , basegerfsal as valorbase , basegerfsaldesc as valorcontrib , basegerfsal/100*$r33_ppatro as valorcontribrespec , rpad(' ',9) as valorcontribcomple , rpad(' ',9) as valorcontribcomple2 , 'N' as marca, rpad('*',1) as final
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
-AND rh02_anousu = 2017
+AND rh02_anousu = $ano
 AND rh02_mesusu = 8
-AND rh02_instit = 1
+AND rh02_instit = ".db_getsession('DB_instit')."
 INNER JOIN cgm ON z01_numcgm = rh01_numcgm
 INNER JOIN rhlota ON r70_codigo = rh02_lota
 AND r70_instit = rh02_instit
@@ -361,24 +367,20 @@ INNER JOIN
                           ELSE 0
                       END),2) AS basegerfsaldesc
      FROM gerfres
-     WHERE r20_anousu = 2017
+     WHERE r20_anousu = $ano
          AND r20_mesusu = 8
-         AND r20_instit = 1
-         AND r20_rubric in ('R993','R992')
+         AND r20_instit = ".db_getsession('DB_instit')."
+         AND r20_rubric IN ('R993',
+                            'R992')
      GROUP BY r20_regist) AS salgerfsal ON r20_regist = rh01_regist
-
-
 INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
 AND rh138_instit = rh02_instit
 LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
-where 1=1
-$wh
-
-union
-
-SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'N'|| rpad('*',1)  AS todo
+WHERE 1=1 $wh
+UNION
+SELECT DISTINCT rh02_mesusu,rh02_anousu ,lpad(5,3,0) as pref_mat , lpad(rh01_regist,10,0) as matricula ,' ' as campobranco , lpad(z01_cgccpf,11) as cpf , z01_nome , basegerfsal as valorbase , basegerfsaldesc as valorcontrib , basegerfsal/100*$r33_ppatro as valorcontribrespec , rpad(' ',9) as valorcontribcomple , rpad(' ',9) as valorcontribcomple2 , 'N' as marca, rpad('*',1) as final
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $ano
@@ -413,22 +415,17 @@ INNER JOIN
      WHERE r48_anousu = $ano
          AND r48_mesusu = $mes
          AND r48_instit = ".db_getsession('DB_instit')."
-         AND r48_rubric in ('R993','R992')
+         AND r48_rubric IN ('R993',
+                            'R992')
      GROUP BY r48_regist) AS salgerfsal ON r48_regist = rh01_regist
-
-
 INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
 AND rh138_instit = rh02_instit
 LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
-where 1=1
-$wh
-
-union
-
-
-SELECT distinct lpad(rh02_mesusu,2,0)||rh02_anousu ||lpad(5,3,0) ||lpad(rh01_regist,10,0) ||' ' || lpad(z01_cgccpf,11) || rpad(z01_nome,80) || lpad(translate((coalesce(basegerfsal,0.00))::varchar,'.',''),11,'0') || lpad(translate((coalesce(basegerfsaldesc,0.00))::varchar,'.',''),9,0) || lpad(replace(round(basegerfsal/100*$r33_ppatro,2)::varchar,'.',''),9,0) || rpad(' ',9) || rpad(' ',9) || 'S' || rpad('*',1)  AS todo
+WHERE 1=1 $wh
+UNION
+SELECT DISTINCT rh02_mesusu,rh02_anousu ,lpad(5,3,0) as pref_mat , lpad(rh01_regist,10,0) as matricula ,' ' as campobranco , lpad(z01_cgccpf,11) as cpf , z01_nome , basegerfsal as valorbase , basegerfsaldesc as valorcontrib , basegerfsal/100*$r33_ppatro as valorcontribrespec , rpad(' ',9) as valorcontribcomple , rpad(' ',9) as valorcontribcomple2 , 'S' , rpad('*',1) as final
 FROM rhpessoal
 INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
 AND rh02_anousu = $ano
@@ -463,19 +460,18 @@ INNER JOIN
      WHERE r35_anousu = $ano
          AND r35_mesusu = $mes
          AND r35_instit = ".db_getsession('DB_instit')."
-         AND r35_rubric in ('R993','R986')
+         AND r35_rubric IN ('R993',
+                            'R986')
      GROUP BY r35_regist) AS salgerfsal ON r35_regist = rh01_regist
-
-
 INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
 AND rh138_instit = rh02_instit
 LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
-where 1=1
-$wh
+WHERE 1=1 $wh ) as x 
+group by x.rh02_mesusu,x.rh02_anousu,x.pref_mat,x.matricula,x.campobranco,x.cpf,x.z01_nome,x.valorcontribcomple,x.valorcontribcomple2,x.marca,x.final) as y;
 ";
-
+    //echo $sql;exit;
     $result = db_query($sql);
     $num = pg_numrows($result);
     for($x = 0;$x < pg_numrows($result);$x++){
