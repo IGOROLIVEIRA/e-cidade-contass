@@ -78,26 +78,28 @@ do
 
       executouScript=$?
 
-      [ $executouScript == 0 ] && {
+      if test $executouScript -eq 0
+      then
 
         sqlUpdate="begin; INSERT INTO updatedb (nomescript,dataexec) VALUES ('${SCRIPT}','${dataScript}'); commit;"
         psql -U dbportal -p $PORTA $BANCO -c "${sqlUpdate}" &>> $logScript
 
-      }
+      fi
 
     else
       continue
     fi
 
-    [ $executouScript == 0 ] && {
+    if test $executouScript -eq 0
+    then
       echo "  │  ├─ ${SCRIPT}: [ OK ]"
-    } || {
+    else
 
       echo "  │  ├─ ${SCRIPT}: [ ERRO - consulte o log ]"
       abortou=1
       break
 
-    }
+    fi
 
   done
 
