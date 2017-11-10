@@ -48,6 +48,7 @@ $db_opcao = 1;
 <script>
 function js_abre(){
    obj = document.form1;
+
    query='';
    vir="";
    listacgm="";
@@ -62,8 +63,15 @@ function js_abre(){
 
    if (obj.e60_numemp.value!=''){
        query += "&e60_numemp="+obj.e60_numemp.value;
-   }else if (obj.e60_codemp.value!=''){
+   }else if (obj.e60_codemp.value!='' && obj.e60_codemp_fim.value!=''){
        query += "&e60_codemp="+obj.e60_codemp.value;
+       if(obj.e60_codemp.value > obj.e60_codemp_fim.value) {
+         alert("Empenho inicial maior que o empenho final. Verifique!");
+         return false;
+       }
+       query += "&e60_codemp_fim="+obj.e60_codemp_fim.value;
+   }else if (obj.e60_codemp.value!=''){
+     query += "&e60_codemp="+obj.e60_codemp.value;   
    }else{
        if((obj.dtini_dia.value !='') && (obj.dtini_dia.value !='') && (obj.dtini_mes.value !='')){
 	 query +="&dtini_dia="+obj.dtini_dia.value+"&dtini_mes="+obj.dtini_mes.value+"&dtini_ano="+obj.dtini_ano.value;
@@ -134,12 +142,14 @@ function js_abre(){
                   </td>
               </tr>
             <tr>
-              <td nowrap title="<?=@$Te60_codemp?>">
+              <td >
                 <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",1); ?>
               </td>
-              <td>
-                <? db_input('e60_codemp',15,$Ie60_codemp,true,'text',$db_opcao,"")  ?>
-              </td>
+               <td>
+                 <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao," onchange='js_pesquisae60_codemp(false);'","e60_codemp")  ?>
+                  <strong> à </strong>
+                 <? db_input('e60_codemp',13,$Ie60_codemp,true,'text',$db_opcao,"","e60_codemp_fim" )  ?>
+                </td>
             </tr>
             <tr>
               <td nowrap title="<?=@$Te60_numemp?>">
@@ -156,7 +166,7 @@ function js_abre(){
               <td>
                 <?
                   db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");
-                  echo " a ";
+                  echo " à ";
                   db_inputdata('dtfim',@$dia,@$mes,@$ano,true,'text',1,"");
                 ?>
               </td>
@@ -203,7 +213,9 @@ function js_mostraempempenho1(chave1,x){
 }
 function js_pesquisae60_codemp(mostra){
   if(mostra==true){
-    var sUrl = 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp';
+    var sUrl  = 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp';
+    var sUrl2 = 'func_empempenho.php?pesquisa_chave='+e60_codemp+'&funcao_js=parent.js_mostracodemp';
+
     js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',sUrl,'Pesquisa',true);
   }else{
      if(document.form1.e60_numemp.value != ''){
@@ -212,6 +224,14 @@ function js_pesquisae60_codemp(mostra){
      }else{
        document.form1.e60_numemp.value = '';
      }
+  }
+}
+function js_mostracodemp(chave,erro){
+ var obj = document.form1;
+
+  if(erro==true){
+    obj.e60_codemp_ini.focus();
+    obj.e60_codemp_ini.value = '';
   }
 }
 </script>

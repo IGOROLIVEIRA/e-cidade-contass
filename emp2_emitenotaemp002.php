@@ -88,7 +88,17 @@ if(isset($e60_numemp) && $e60_numemp != ''){
    if ($numrows_empenho != 0){
      db_fieldsmemory($res_empenho,0);
    }
-} else if (isset($e60_codemp) && $e60_codemp !=''){
+} else if ((isset($e60_codemp) && $e60_codemp !='') && (isset($e60_codemp_fim) && $e60_codemp_fim !='')){
+  $arr = split("/",$e60_codemp);
+  $arr2 = split("/",$e60_codemp_fim);
+  if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
+    $dbwhere_ano = " and e60_anousu = ".$arr[1];
+    $anousu = $arr[1];
+  }else{
+  $dbwhere_ano = " and e60_anousu = ".db_getsession("DB_anousu");
+  }
+  $dbwhere = "e60_codemp::integer >=".$arr[0].". and e60_codemp::integer <='".$arr2[0]."'$dbwhere_ano";
+}else if (isset($e60_codemp) && $e60_codemp !=''){
 	      $arr = split("/",$e60_codemp);
 	      if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
 		$dbwhere_ano = " and e60_anousu = ".$arr[1];
@@ -185,6 +195,7 @@ $sqlemp .= " LEFT JOIN empautoriza ON e61_autori = e54_autori ";
 $sqlemp .= " LEFT JOIN empautidot ON e61_autori = e56_autori ";
 $sqlemp .= " LEFT OUTER JOIN emptipo ON e60_codtipo= e41_codtipo ";
 $sqlemp .= " WHERE $dbwhere ";
+$sqlemp .= " order by e60_codemp::integer ";
 
 //echo $sqlemp;
 $result = db_query($sqlemp);
