@@ -87,7 +87,7 @@ $rows = pg_numrows($result);
  }    
  */
 
-$pdf = new PDF(); 
+$pdf = new PDF("L"); 
 $pdf->Open(); 
 $pdf->AliasNbPages(); 
 $pdf->setfillcolor(235);
@@ -113,51 +113,67 @@ for($x=0;$x< $rows;$x++){
    if ($estrut_elemento =="" || $estrut_elemento !=$c60_estrut){
      if ($estrut_elemento !=""){
         $pdf->setX(55); 
-	$pdf->cell(80,$alt,"SUBTOTAL",'B',0,"L",0);
+	      $pdf->cell(120,$alt,"SUBTOTAL",'B',0,"L",0);
         $pdf->cell(20,$alt,db_formatar($tot_empenhado,'f'),'B',0,"R",0);
+        $pdf->cell(20,$alt,db_formatar($tot_empenhadoAnulado,'f'),'B',0,"R",0);
+        $pdf->cell(20,$alt,db_formatar($tot_empenhadoliquido,'f'),'B',0,"R",0);
         $pdf->cell(20,$alt,db_formatar($tot_liquidado,'f'),'B',0,"R",0);
         $pdf->cell(20,$alt,db_formatar($tot_pago,'f'),'B',1,"R",0);
-	$tot_empenhado = 0;
-	$tot_liquidado = 0;
+	      $tot_empenhado = 0;
+        $tot_empenhadoAnulado =0;
+        $tot_empenhadoliquido =0;
+	      $tot_liquidado = 0;
         $tot_pago=0;
      }  
-     $pdf->Ln(3);	   
+     $pdf->Ln(4);	   
      $estrut_elemento = $c60_estrut;
      $pdf->cell(25,$alt,"$c60_estrut",'B',0,"L",0);
-     $pdf->cell(100,$alt,"$c60_descr",'B',0,"L",0);
+     $pdf->cell(140,$alt,"$c60_descr",'B',0,"L",0);
      $pdf->cell(20,$alt,"Empenhado",'B',0,"R",0);
+     $pdf->cell(20,$alt,"Anulado",'B',0,"R",0);
+     $pdf->cell(20,$alt,"Emp. Líquido",'B',0,"R",0);
      $pdf->cell(20,$alt,"Liquidado",'B',0,"R",0);
      $pdf->cell(20,$alt,"Pago",'B',1,"R",0);
    }
    $pdf->setX(30); 
    $pdf->cell(25,$alt,"$o56_elemento",'0',0,"L",0);
-   $pdf->cell(80,$alt,"$o56_descr",'0',0,"L",0);
+   $pdf->cell(120,$alt,"$o56_descr",'0',0,"L",0);
+   $pdf->cell(20,$alt,db_formatar($empenhado,'f'),'0',0,"R",0);
+   $pdf->cell(20,$alt,db_formatar($empenhado_estornado,'f'),'0',0,"R",0);
    $pdf->cell(20,$alt,db_formatar($empenhado - $empenhado_estornado,'f'),'0',0,"R",0);
    $pdf->cell(20,$alt,db_formatar($liquidado - $liquidado_estornado,'f'),'0',0,"R",0);
    $pdf->cell(20,$alt,db_formatar($pagamento - $pagamento_estornado,'f'),'0',0,"R",0);
    $pdf->Ln();
-   $tot_empenhado += ($empenhado - $empenhado_estornado);
+   $tot_empenhado += ($empenhado);
+   $tot_empenhadoAnulado += ($empenhado_estornado);
+   $tot_empenhadoliquido += ($empenhado - $empenhado_estornado);
    $tot_liquidado += ($liquidado - $liquidado_estornado);
    $tot_pago      += ($pagamento - $pagamento_estornado);
    
    // se for o ultimo elemento imprime total também 
    if ($x == $rows -1 ){
         $pdf->setX(55); 
-	$pdf->cell(80,$alt,"SUBTOTAL",'B',0,"L",0);
+	      $pdf->cell(120,$alt,"SUBTOTAL",'B',0,"L",0);
         $pdf->cell(20,$alt,db_formatar($tot_empenhado,'f'),'B',0,"R",0);
+        $pdf->cell(20,$alt,db_formatar($tot_empenhadoAnulado,'f'),'B',0,"R",0);
+        $pdf->cell(20,$alt,db_formatar($tot_empenhadoliquido,'f'),'B',0,"R",0);
         $pdf->cell(20,$alt,db_formatar($tot_liquidado,'f'),'B',0,"R",0);
         $pdf->cell(20,$alt,db_formatar($tot_pago,'f'),'B',1,"R",0);
    }
-   $tg_empenhado += ($empenhado - $empenhado_estornado); 
-   $tg_liquidado += ($liquidado - $liquidado_estornado); 
-   $tg_pago      += ($pagamento - $pagamento_estornado);
+   $tg_empenhado        += ($empenhado); 
+   $tg_empenhadoAnulado += ($empenhado_estornado); 
+   $tg_empenhadoLiquido += ($empenhado - $empenhado_estornado); 
+   $tg_liquidado        += ($liquidado - $liquidado_estornado); 
+   $tg_pago             += ($pagamento - $pagamento_estornado);
 }
 
 // imprime total geral   
 $pdf->Ln(5);
 $pdf->setX(55); 
-$pdf->cell(80,$alt,"TOTAL GERAL",'B',0,"L",0);
+$pdf->cell(120,$alt,"TOTAL GERAL",'B',0,"L",0);
 $pdf->cell(20,$alt,db_formatar($tg_empenhado,'f'),'B',0,"R",0);
+$pdf->cell(20,$alt,db_formatar($tg_empenhadoAnulado,'f'),'B',0,"R",0);
+$pdf->cell(20,$alt,db_formatar($tg_empenhadoLiquido,'f'),'B',0,"R",0);
 $pdf->cell(20,$alt,db_formatar($tg_liquidado,'f'),'B',0,"R",0);
 $pdf->cell(20,$alt,db_formatar($tg_pago,'f'),'B',1,"R",0);
 
