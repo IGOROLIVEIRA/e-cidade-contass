@@ -786,7 +786,7 @@ class cl_veicmanut {
         if($result==false){
             $this->numrows    = 0;
             $this->erro_banco = str_replace("\n","",@pg_last_error());
-            $this->erro_sql   = "Erro ao selecionar os registros.";
+            $this->erro_sql   = "Erro ao selecionar os registros. aqui";
             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
             $this->erro_status = "0";
@@ -934,6 +934,41 @@ class cl_veicmanut {
                 $virgula = ",";
             }
         }
+        return $sql;
+    }
+    function sql_query_manutencao ($ve62_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql ="select * from (select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from veicmanut ";
+        $sql .= "";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($ve62_codigo!=null ){
+                $sql2 .= " ve62_codigo = $ve62_codigo ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+//        echo $sql;
         return $sql;
     }
 }

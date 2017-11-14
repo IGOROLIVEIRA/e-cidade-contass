@@ -590,29 +590,29 @@ $sHora = db_hora();
             return false;
         }
 
-        var medidamanut = new Number(document.form1.ve62_medida.value);
-        var ultimamanut = new Number(document.form1.ultimamedida.value);
-        var proxima = new Number(document.form1.proximamedida.value);
+//        var medidamanut = new Number(document.form1.ve62_medida.value);
+//        var ultimamanut = new Number(document.form1.ultimamedida.value);
+//        var proxima = new Number(document.form1.proximamedida.value);
 
         <? if ($db_opcao !=3 ) { ?>
 
-        if (ultimamanut > medidamanut) {
-            alert("Valor da medida menor que o valor da última medida");
-            document.form1.ve62_medida.style.backgroundColor = '#99A9AE';
-            document.form1.ve62_medida.value = '';
-            document.form1.ve62_medida.focus();
-            return false;
-        }
-
-        if (proxima > 0) {
-            if (proxima < medidamanut) {
-                alert("Valor da medida maior que o valor da proxima medida");
-                document.form1.ve62_medida.style.backgroundColor = '#99A9AE';
-                document.form1.ve62_medida.value = '';
-                document.form1.ve62_medida.focus();
-                return false;
-            }
-        }
+//        if (ultimamanut > medidamanut) {
+//            alert("Valor da medida menor que o valor da última medida");
+//            document.form1.ve62_medida.style.backgroundColor = '#99A9AE';
+//            document.form1.ve62_medida.value = '';
+//            document.form1.ve62_medida.focus();
+//            return false;
+//        }
+//
+//        if (proxima > 0) {
+//            if (proxima < medidamanut) {
+//                alert("Valor da medida maior que o valor da proxima medida");
+//                document.form1.ve62_medida.style.backgroundColor = '#99A9AE';
+//                document.form1.ve62_medida.value = '';
+//                document.form1.ve62_medida.focus();
+//                return false;
+//            }
+//        }
 
         <? } ?>
 

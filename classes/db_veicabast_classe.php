@@ -964,7 +964,7 @@ if($dbwhere==""){
      return $sql;
   }
    function sql_query_file_anula ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
-     $sql = "select ";
+     $sql = "select * from (select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
        $virgula = "";
@@ -976,11 +976,14 @@ if($dbwhere==""){
        $sql .= $campos;
      }
      $sql .= " from veicabast ";
+     $sql .= " inner join veicabastretirada on ve73_veicabast = ve70_codigo ";
+     $sql .= " inner join veicretirada on ve60_codigo = ve73_veicretirada ";
+     $sql .= " left join veicdevolucao on ve61_veicretirada = ve60_codigo ";
      $sql .= " left join veicabastanu on veicabastanu.ve74_veicabast=veicabast.ve70_codigo ";
      $sql2 = "";
      if($dbwhere==""){
        if($ve70_codigo!=null ){
-         $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+         $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
@@ -995,8 +998,48 @@ if($dbwhere==""){
          $virgula = ",";
        }
      }
-     return $sql;
-  }
+//       echo $sql;
+       return $sql;
+   }
+
+    function sql_query_retirada ($ve60_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql ='select distinct ';
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+    }else{
+            $sql .= $campos;
+        }
+        $sql .= " from veicretirada ";
+        $sql .= " left join veicabastretirada  on ve73_veicretirada = ve60_codigo ";
+        $sql .= " left join veicabast on ve70_codigo = ve73_veicabast ";
+        $sql .= " left join veicdevolucao on ve61_veicretirada = ve60_codigo ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($ve60_codigo!=null ){
+                $sql2 .= " ve73_veicretirada = $ve60_codigo ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+//        echo $sql;
+        return $sql;
+    }
+
     function sql_query_abast ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere="", $iCoddepto=null){
         $sql = "select ";
         if($campos != "*" ){

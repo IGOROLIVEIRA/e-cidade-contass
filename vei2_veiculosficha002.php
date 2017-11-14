@@ -401,7 +401,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
     $pdf->ln();
     $pdf->setfont('arial','b',8);
     $pdf->cell(90,$alt,'ABASTECIMENTOS :',0,1,"L",0);
-    $sCamposAbast = "DISTINCT ve70_codigo,ve26_descr,ve70_dtabast,ve70_litros,ve70_valor,ve70_medida,coalesce(ve07_sigla,'Km') as ve07_sigla,ve73_veicretirada,ve74_data,case when si05_numemp is null then '' else e60_codemp||'/'||e60_anousu end as empenho";
+    $sCamposAbast = "DISTINCT ve70_codigo,ve26_descr,ve70_dtabast,ve70_litros,ve70_valor,ve70_medida,ve70_hora,coalesce(ve07_sigla,'Km') as ve07_sigla,ve73_veicretirada,ve74_data,case when si05_numemp is null then '' else e60_codemp||'/'||e60_anousu end as empenho";
     $result_abast=$clveicabast->sql_record($clveicabast->sql_query_info(null,$sCamposAbast,"ve70_dtabast, ve70_medida"," ve70_veiculos= $veiculo  "));
     $numrows_abast = $clveicabast->numrows;
     if ($numrows_abast>0){
@@ -417,29 +417,31 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
           if($troca == 0 ){
             $pdf->addpage("L");
           }
-          $pdf->setfont('arial','b',8);
-          $pdf->cell(20,$alt,"Abast.",1,0,"C",1);
-          $pdf->cell(50,$alt,"Combustível",1,0,"C",1);
-          $pdf->cell(20,$alt,"Data",1,0,"C",1);
-          $pdf->cell(20,$alt,"Litros",1,0,"C",1);
-          $pdf->cell(20,$alt,"Valor Total",1,0,"C",1);
-          $pdf->cell(20,$alt,"Medida",1,0,"C",1);
-          $pdf->cell(20,$alt,"Retirada",1,0,"C",1);
-          $pdf->cell(20,$alt,"Anulado",1,0,"C",1);
-          $pdf->cell(20,$alt,"Empenho",1,1,"C",1);
+            $pdf->setfont('arial','b',8);
+            $pdf->cell(20,$alt,"Abast.",1,0,"C",1);
+            $pdf->cell(50,$alt,"Combustível",1,0,"C",1);
+            $pdf->cell(20,$alt,"Data",1,0,"C",1);
+            $pdf->cell(20,$alt,"Hora",1,0,"C",1);
+            $pdf->cell(20,$alt,"Litros",1,0,"C",1);
+            $pdf->cell(20,$alt,"Valor Total",1,0,"C",1);
+            $pdf->cell(20,$alt,"Medida",1,0,"C",1);
+            $pdf->cell(20,$alt,"Retirada",1,0,"C",1);
+            $pdf->cell(20,$alt,"Anulado",1,0,"C",1);
+            $pdf->cell(20,$alt,"Empenho",1,1,"C",1);
           $troca = 0;
         }
-         
-        $pdf->setfont('arial','',7);
-        $pdf->cell(20,$alt,$ve70_codigo,0,0,"C",$p);
-        $pdf->cell(50,$alt,$ve26_descr,0,0,"L",$p);
-        $pdf->cell(20,$alt,db_formatar($ve70_dtabast,"d"),0,0,"C",$p);
-        $pdf->cell(20,$alt,$ve70_litros,0,0,"C",$p);
-        $pdf->cell(20,$alt,db_formatar($ve70_valor,"f"),0,0,"R",$p);
-        $pdf->cell(20,$alt,$ve70_medida." ".$ve07_sigla,0,0,"C",$p);
-        $pdf->cell(20,$alt,$ve73_veicretirada,0,0,"C",$p);
-        $pdf->cell(20,$alt,db_formatar($ve74_data,"d"),0,0,"C",$p);
-        $pdf->cell(20,$alt,$empenho,0,1,"C",$p);
+
+          $pdf->setfont('arial','',7);
+          $pdf->cell(20,$alt,$ve70_codigo,0,0,"C",$p);
+          $pdf->cell(50,$alt,$ve26_descr,0,0,"L",$p);
+          $pdf->cell(20,$alt,db_formatar($ve70_dtabast,"d"),0,0,"C",$p);
+          $pdf->cell(20,$alt,$ve70_hora,0,0,"C",$p);
+          $pdf->cell(20,$alt,$ve70_litros,0,0,"C",$p);
+          $pdf->cell(20,$alt,db_formatar($ve70_valor,"f"),0,0,"R",$p);
+          $pdf->cell(20,$alt,$ve70_medida." ".$ve07_sigla,0,0,"C",$p);
+          $pdf->cell(20,$alt,$ve73_veicretirada,0,0,"C",$p);
+          $pdf->cell(20,$alt,db_formatar($ve74_data,"d"),0,0,"C",$p);
+          $pdf->cell(20,$alt,$empenho,0,1,"C",$p);
 
         $quant_litros   += $ve70_litros;
         $vlr_totalabast += $ve70_valor;
@@ -479,7 +481,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
     $pdf->setfont('arial','b',8);
     $pdf->cell(90,$alt,'MANUTENÇÕES :',0,1,"L",0);
   
-    $sCamposVeicmanut  = " distinct ve62_codigo,ve28_descr,ve62_dtmanut";
+    $sCamposVeicmanut  = " distinct ve62_codigo,ve28_descr,ve62_dtmanut,ve62_hora";
     $sCamposVeicmanut .= ",case when (ve62_vlrpecas is null or ve62_vlrpecas = 0) and ve62_tipogasto in (6,7,8) then ve62_valor else ve62_vlrpecas end as ve62_vlrpecas ";
     $sCamposVeicmanut .= ",case when (ve62_vlrmobra is null or ve62_vlrmobra = 0) and ve62_tipogasto in (9) then ve62_valor else ve62_vlrmobra end as ve62_vlrmobra ";
     $sCamposVeicmanut .= ",ve62_medida ";
@@ -551,6 +553,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
           $pdf->cell(15,$alt,"Manut."                                                                       ,1,0,"C",1);
           $pdf->cell(85,$alt,"Tipo de Serviço"                                                              ,1,0,"C",1); 
           $pdf->cell(20,$alt,"Data"                                                                         ,1,0,"C",1);
+          $pdf->cell(20,$alt,"Hora"                                                                         ,1,0,"C",1);
           $pdf->cell(20,$alt,"Medida"                                                                       ,1,0,"C",1);
           $pdf->cell(25,$alt,"Vlr. Mão de Obra"                                                             ,1,0,"C",1); 
           $pdf->cell(25,$alt,"Vlr. em Peças"                                                                ,1,1,"C",1);
@@ -561,6 +564,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
         $pdf->cell(15,$alt, $aManutencao[$ind]->ve62_codigo                                                ,0,0,"C",$p);
         $pdf->cell(85,$alt, $aManutencao[$ind]->ve28_descr                                                 ,0,0,"L",$p);
         $pdf->cell(20,$alt, db_formatar($aManutencao[$ind]->ve62_dtmanut,"d")                              ,0,0,"C",$p);
+        $pdf->cell(20,$alt, $aManutencao[$ind]->ve62_hora                                                   ,0,0,"C",$p);
         $pdf->cell(20,$alt, $aManutencao[$ind]->ve62_medida." ".$ve07_sigla                                ,0,0,"C",$p);
         $pdf->cell(25,$alt, db_formatar($aManutencao[$ind]->ve62_vlrmobra,"f")                             ,0,0,"R",$p);
         $pdf->cell(25,$alt, db_formatar($aManutencao[$ind]->ve62_vlrpecas,"f")                             ,0,1,"R",$p);

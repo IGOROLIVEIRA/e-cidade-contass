@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -61,142 +61,108 @@ $db_botao = true;
 $sqlerro=false;
 
 if (isset($ve60_datasaida) && $ve60_datasaida != "") {
-  
+
   $aData = explode("/", $ve60_datasaida);
-  
+
   $ve60_datasaida_dia = $aData[0];
   $ve60_datasaida_mes = $aData[1];
   $ve60_datasaida_ano = $aData[2];
-  
+
 }
-
-
-
+/**
+ * Validação solicitadas pela OC 4577
+ * @autor Mario Junior
+ *
+ */
 if (isset($incluir)) {
-  $medida     = $ve70_medida;
-  $dataabast  = implode("-",array_reverse(explode("/",$ve70_dtabast)));
-  $sDataBanco = $ve70_dtabast_ano."-".$ve70_dtabast_mes."-".$ve70_dtabast_dia;
-  $passa=false;
-  //último abastecimento
-  $clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo"," ve70_dtabast desc ,ve70_medida desc limit 1","ve70_veiculos=$ve70_veiculos and  ve74_codigo is null ");
-  $result_abast=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo"," ve70_dtabast desc ,ve70_medida desc limit 1","ve70_veiculos=$ve70_veiculos and  ve74_codigo is null "));
-  
-  if ($clveicabast->numrows>0 ) {
-    $oAbast       = db_utils::fieldsMemory($result_abast,0);
-    $ve70_medida  = $oAbast->ve70_medida;
-  }
-  
-  if (isset($ve70_medida) and $ve70_medida==0) {
+    $medida     = $ve70_medida;
+    $oDataAbast = new DBDate($ve70_dtabast);
+    $passa=false;
+    $horaabast = $ve70_hora;
+    $retirada = $ve73_veicretirada;
+    $datahoraAbastecimento = strtotime($oDataAbast->getDate()." ".$ve70_hora);
+    $dataabast = $oDataAbast->getDate();
+
+    if (isset($ve70_medida) and $ve70_medida==0) {
     $medidazero=true;
   } else {
     $medidazero=false;
   }
-  
-  if ($medidazero==false) {
-    
-    if (!isset($confirmamedida)) {
-      
-      //verifica se a última medida é zero
-      $result_abast=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_dtabast,ve70_codigo as ve70codigo"," ve70_dtabast desc ,ve70_medida desc limit 1","ve70_veiculos=$ve70_veiculos and  ve74_codigo is null"));
-      
-      if ($clveicabast->numrows>0 ) {
-        $oAbast       = db_utils::fieldsMemory($result_abast,0);
-        $ve70_medida0 = $oAbast->ve70_medida;
-        $ve70_codigo0 = $oAbast->ve70codigo;
-        
-      }
-      
-      //abastecimento anterior
-      //verifica se a existem vários registros com a mesma data
-      @$result_abast1=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_dtabast,ve70_codigo as ve70codigo","ve70_dtabast desc ,ve70_medida ","ve70_veiculos=$ve70_veiculos and ve70_dtabast = $databanco and ve74_codigo is null"));
-      $iNumrows=$clveicabast->numrows;
-      if ($iNumrows > 1 ) {
-        
-        $result_abast1=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_dtabast,ve70_codigo as ve70codigo","ve70_dtabast asc,ve70_medida asc limit 1","ve70_veiculos=$ve70_veiculos and ve70_dtabast = $databanco and ve74_codigo is null"));
-        $iNumrows=$clveicabast->numrows;
-        if ($clveicabast->numrows>0 ) {
+    /*
+     * verifica retirada e devolução vinculados ao abastecimento
+     */
+    $result_retirada=$clveicabast->sql_record($clveicabast->sql_query_retirada(null,"ve60_codigo,ve60_medidasaida,ve61_medidadevol,to_timestamp(ve60_datasaida||' '||ve60_horasaida::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS datahrretirada,to_timestamp(ve61_datadevol||' '||ve61_horadevol::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS datahrdevolucao",null,"ve60_codigo=$retirada"));
+        if (pg_num_rows($result_retirada)>0){
+          $oRetirada = db_utils::fieldsMemory($result_retirada,0);
+          $ve60_medidasaida = $oRetirada->ve60_medidasaida;
+          $datahoraRetirada = $oRetirada->datahrretirada;
+          $ve61_medidadevol = $oRetirada->ve61_medidadevol;
+          $datahoraDevolucao = $oRetirada->datahrdevolucao;
+        }
+
+      /*
+       * verifica abastecimentos anterior ao que o usuario deseja incluir
+       */
+    $result_abast1=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_codigo,ve60_medidasaida,ve60_datasaida,ve61_medidadevol,ve61_datadevol,ve61_horadevol,ve60_horasaida,to_timestamp(ve70_dtabast||' '||ve70_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve70_dtabast",null,"ve60_codigo = $retirada) as x WHERE ve70_dtabast < to_timestamp('{$oDataAbast->getDate()}'||' '||'$horaabast'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP LIMIT 1;"));
+        if (pg_num_rows($result_abast1)>0 ) {
           $oAbast1       = db_utils::fieldsMemory($result_abast1,0);
-          $ve70_codigo1  = $oAbast1->ve70codigo;
           $ve70_medida1  = $oAbast1->ve70_medida;
-          $ve70_dtabast1 = $oAbast1->ve70_dtabast;
+          $ve70_datahora1 = $oAbast1->ve70_dtabast;
         }
-        $passa=true;
-      } else {
-        
-        if (!isset($sDataParaFazerTeste)){
-          $sDataParaFazerTeste = "";
-        }
-        
-        $result_abast1 = $clveicabast->sql_record($clveiculos->sql_query_ultimamedida($ve70_veiculos, $sDataParaFazerTeste));
-        if ($clveicabast->numrows>0 ) {
-          $oAbast1       = db_utils::fieldsMemory($result_abast1,0);
-          $ve70_codigo1  = "";
-          $ve70_medida1  = $oAbast1->ultimamedida;
-          $ve70_dtabast1 = $oAbast1->data;
-        }
-        
-      }
-      
-      
-      //abastecimento posterior
-      //se tiver vários registros com a mesma data passa por aqui.
-      if ($passa==true) {
-        
-        if (!isset($databanco)) {
-          $databanco = "";
-        }
-        
-        $result_abast3=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"max(ve70_medida) as ve70_medida,ve74_codigo,ve70_dtabast,ve70_codigo as ve70codigo",null,"ve70_veiculos=$ve70_veiculos and  ve70_dtabast > $databanco and ve74_codigo is null group by  ve70_medida, ve70_dtabast,ve74_codigo,ve70_codigo limit 1"));
-        if ($clveicabast->numrows>0 ) {
+
+    /*
+     * verifica abastecimentos posterior ao que o usuario deseja incluir
+     */
+    $result_abast3=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_codigo,ve60_medidasaida,ve60_datasaida,ve61_medidadevol,ve61_datadevol,ve61_horadevol,ve60_horasaida,to_timestamp(ve70_dtabast||' '||ve70_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve70_dtabast","","ve70_veiculos=$ve70_veiculos and ve60_codigo = $retirada) as x WHERE ve70_dtabast > to_timestamp('{$oDataAbast->getDate()}'||' '||'$horaabast'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP ORDER BY ve70_medida asc LIMIT 1;"));
+        if (pg_num_rows($result_abast3)>0 ) {
           $oAbast3       = db_utils::fieldsMemory($result_abast3,0);
-          $ve70_codigo3  = $oAbast3->ve70codigo;
           $ve70_medida3  = $oAbast3->ve70_medida;
-          $ve70_dtabast3 = $oAbast3->ve70_dtabast;
+          $ve70_datahora3 = $oAbast3->ve70_dtabast;
         }
-      } else {
-        @$result_abast3=$clveicabast->sql_record($clveicabast->sql_query_file_anula(null,"ve70_medida,ve74_codigo,ve70_dtabast,ve70_codigo as ve70codigo","ve70_dtabast,ve70_medida limit 1","ve70_veiculos=$ve70_veiculos and  ve70_dtabast > $databanco and ve74_codigo is null "));
-        if ($clveicabast->numrows>0 ) {
-          $oAbast3       = db_utils::fieldsMemory($result_abast3,0);
-          $ve70_codigo3  = $oAbast3->ve70codigo;
-          $ve70_medida3  = $oAbast3->ve70_medida;
-          $ve70_dtabast3 = $oAbast3->ve70_dtabast;
+
+        if (!empty($ve70_datahora1) && $datahoraAbastecimento < strtotime($ve70_datahora1)){
+            db_msgbox("Data ou Hora menor que abastecimento anterior.");
+            $sqlerro=true;
+            $erro_msg="Não foi possível incluir.";
         }
-      }
-      
-      if (isset($ve70_dtabast3) && $ve70_dtabast3!=0) {
-        
-        
-        $dataabast     = db_strtotime($dataabast);
-        $ve70_dtabast1 = db_strtotime($ve70_dtabast1);
-        $ve70_dtabast3 = db_strtotime($ve70_dtabast3);
-        
-        if (isset($ve70_dtabast1) && isset($ve70_dtabast3) && isset($dataabast) && ($dataabast < $ve70_dtabast1) && ($dataabast > $ve70_dtabast3)) {
-          $sqlerro=true;
-          db_msgbox("Medida inválida para esta data");
-          $erro_msg="Não foi possível incluir.";
-          
-          
-        } else if (isset($medida) && isset($ve70_medida1) && isset($ve70_medida3) && ($medida > $ve70_medida1) && ($medida > $ve70_medida3) ) {
-          $sqlerro=true;
-          db_msgbox("Medida inválida");
-          $erro_msg="Não foi possível incluir.";
-          
-          
-        } else if (isset($medida) && isset($ve70_medida1) && isset($ve70_medida3) && ($medida < $ve70_medida1) && ($medida < $ve70_medida3) ) {
-          $sqlerro=true;
-          db_msgbox("Medida inválida");
-          $erro_msg="Não foi possível incluir.";
+        else if (!empty($ve70_datahora3) && $datahoraAbastecimento > strtotime($ve70_datahora3)){
+            db_msgbox("Data ou Hora maior que abastecimento posterior.");
+            $sqlerro=true;
+            $erro_msg="Não foi possível incluir.";
         }
-        
-      } else if (!isset($ve70_dtabast3) && !isset($ve70_medida3)  && ($medida < $ve70_medida1)  ) {
-        $sqlerro=true;
-        db_msgbox("Medida inválida");
-        $erro_msg="Não foi possível incluir.";
-      }
-      
-    }
-  }
-  if (isset($sel_proprio) && $sel_proprio==2) {
+        else if (!empty($ve70_medida1) && $medida < $ve70_medida1){
+            db_msgbox("Medida de Abastecimento menor que Medida de abastecimento anterior");
+            $sqlerro=true;
+            $erro_msg="Não foi possível incluir.";
+        }
+        else if (!empty($ve70_medida3) && $medida > $ve70_medida3){
+            db_msgbox("Medida de Abastecimento maior que Medida de abastecimento posterior");
+            $sqlerro=true;
+            $erro_msg="Não foi possível incluir.";
+        }
+        else if (!empty($datahoraRetirada) && $datahoraAbastecimento < strtotime($datahoraRetirada)){
+            db_msgbox("Data ou Hora do Abastecimento menor que da Retirada");
+            $sqlerro=true;
+            $erro_msg="Não foi possível incluir.";
+        }
+        else if (!empty($datahoraDevolucao) && $datahoraAbastecimento > strtotime($datahoraDevolucao)){
+            db_msgbox("Data ou Hora do Abastecimento maior que da Devolucao");
+            $sqlerro=true;
+            $erro_msg="Não foi possível incluir.";
+        }
+        else if (!empty($ve60_medidasaida) && $medida < $ve60_medidasaida){
+            db_msgbox("Medida de Abastecimento menor que Medida de Retirada");
+            $sqlerro=true;
+            $erro_msg="Não foi possível incluir.";
+        }
+        else if (!empty($ve61_medidadevol) && $medida > $ve61_medidadevol){
+            db_msgbox("Medida de Abastecimento maior que Medida de Devolucao");
+            $sqlerro=true;
+            $erro_msg="Não foi possível incluir.";
+        }
+}
+
+if (isset($sel_proprio) && $sel_proprio==2) {
     if ($ve70_valor == "") {
       db_msgbox("Informar o valor abastecido.");
       $sqlerro=true;
@@ -212,15 +178,13 @@ if (isset($incluir)) {
       $sqlerro=true;
       $erro_msg="Não foi possível incluir.";
     }
-    
+
   }
-  
-}
 
 if (isset($incluir) && $self != "") {
   if ($sqlerro==false) {
     db_inicio_transacao();
-    
+
     if (isset($sel_proprio) && trim($sel_proprio) != "") {
       if ($sel_proprio == 0 && (isset($ve71_veiccadposto) &&
       (trim($ve71_veiccadposto) == "" || trim($ve71_veiccadposto) != ""))) {
@@ -229,7 +193,7 @@ if (isset($incluir) && $self != "") {
         $sqlerro = true;
       }
     }
-    
+
     if ($sqlerro == false) {
       $clveicabast->ve70_usuario = db_getsession("DB_id_usuario");
       $clveicabast->ve70_data    = date("Y-m-d",db_getsession("DB_datausu"));
@@ -241,7 +205,7 @@ if (isset($incluir) && $self != "") {
         $sqlerro=true;
       }
     }
-    
+
     if ($sqlerro==false) {
       if (isset($posto_proprio) && trim($posto_proprio)!="") {
         if ($posto_proprio == 2) {
@@ -265,7 +229,7 @@ if (isset($incluir) && $self != "") {
             $erro_msg=$clveicabastposto->erro_msg;
           }
         }
-        
+
       } else {
         $clveicabastposto->ve71_veicabast=$clveicabast->ve70_codigo;
         $clveicabastposto->incluir(null);
@@ -274,8 +238,8 @@ if (isset($incluir) && $self != "") {
           $erro_msg=$clveicabastposto->erro_msg;
         }
       }
-    }    
-    
+    }
+
     if ($sqlerro==false) {
       if (isset($empnota) && $empnota!="") {
         $clveicabastpostoempnota->ve72_veicabastposto=$clveicabastposto->ve71_codigo;
@@ -286,9 +250,9 @@ if (isset($incluir) && $self != "") {
           $erro_msg=$clveicabastpostoempnota->erro_msg;
         }
       }
-    }    
-    
-    
+    }
+
+
     if ($sqlerro==false) {
       if (isset($ve73_veicretirada)&&$ve73_veicretirada!="") {
         $clveicabastretirada->ve73_veicabast=$clveicabast->ve70_codigo;
@@ -302,7 +266,7 @@ if (isset($incluir) && $self != "") {
     if (isset($posto_proprio)) {
       $sel_proprio = $posto_proprio;
     }
-    
+
     /*
      * Adicionando empabaste
      */
@@ -314,7 +278,7 @@ if (isset($incluir) && $self != "") {
           $erro_msg=$clempveiculos->erro_msg;
         }
     }
-    
+
     db_fim_transacao($sqlerro);
   }
 }
