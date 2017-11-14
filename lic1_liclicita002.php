@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -66,7 +66,7 @@ $db_botao = true;
 $sqlerro  = false;
 
 if(isset($alterar)){
-	
+
   db_inicio_transacao();
   $db_opcao = 2;
 
@@ -79,74 +79,92 @@ if(isset($alterar)){
   $iLinhasLicProc = $clliclicitaproc->numrows;
 
   if ( $iLinhasLicProc > 0 ) {
-    
+
     $oLicProc = db_utils::fieldsMemory($rsConsultaProc,0);
-    
+
     if ( $oLicProc->l34_protprocesso != $l34_protprocesso ) {
       $clliclicitaproc->excluir(null,$sWhereLicProc);
       if ( $clliclicitaproc->erro_status == 0 ) {
         $sqlerro  = true;
-        $erro_msg = $clliclicitaproc->erro_msg; 
+        $erro_msg = $clliclicitaproc->erro_msg;
       }
       $lIncluiProc = true;
     } else {
       $lIncluiProc = false;
     }
-    
+
   } else {
-    $lIncluiProc = true; 
+    $lIncluiProc = true;
   }
-  
+
   if ( $lIncluiProc && !$sqlerro && $lprocsis == 's') {
-      
+
     $clliclicitaproc->l34_liclicita    = $l20_codigo;
     $clliclicitaproc->l34_protprocesso = $l34_protprocesso;
     $clliclicitaproc->incluir(null);
-    
+
     if ( $clliclicitaproc->erro_status == 0 ) {
       $sqlerro  = true;
-      $erro_msg = $clliclicitaproc->erro_msg; 
-    }    
+      $erro_msg = $clliclicitaproc->erro_msg;
+    }
   }
-  
+
   if ( $lprocsis == 's' ) {
   	$sProcAdmin = " ";
   } else {
   	$sProcAdmin = $l20_procadmin;
   }
-  
+
+  /*OC4448*/
+  if ($lprocsis == 'n') {
+
+    try {
+      $resultado = db_query("
+        BEGIN;
+          delete from liclicitaproc where l34_liclicita = {$l20_codigo} and l34_protprocesso = {$l34_protprocesso};
+        COMMIT;
+        ");
+
+      if ($resultado == false) {
+          throw new Exception ("Erro!");
+      }
+    } catch (Exception $erro) {
+      echo '<script>alert("Erro ao desvincular processo do sistema!");</script>';
+    }
+  }
+
   $iNumero          = $l20_numero;
   $sSqlLicLicita    = $clliclicita->sql_query_file($l20_codigo, "l20_codtipocom");
   $rsLicLicita      = $clliclicita->sql_record($sSqlLicLicita);
   $iLinhasLicLicita = $clliclicita->numrows;
-  
+
   if ($iLinhasLicLicita > 0) {
-    
+
     $iModalidade = db_utils::fieldsMemory($rsLicLicita, 0)->l20_codtipocom;
-    
+
     if ($l20_codtipocom != $iModalidade) {
-      
+
       $sWhereLicitaPar = "l03_codigo = {$l20_codtipocom} and l25_anousu = ".db_getsession("DB_anousu");
       $sSqlLicitaPar   = $oDaoLicitaPar->sql_query(null, "l25_codigo, l25_numero", null, $sWhereLicitaPar);
       $rsLicitaPar     = $oDaoLicitaPar->sql_record($sSqlLicitaPar);
-      
+
       if ($oDaoLicitaPar->numrows > 0) {
-        
+
         $oDadosLicitaPar  = db_utils::fieldsMemory($rsLicitaPar, 0);
         $iCodigoLicitaPar = $oDadosLicitaPar->l25_codigo;
         $iNumero          = $oDadosLicitaPar->l25_numero;
         $iNumero          = $iNumero + 1;
-        
+
         $oDaoLicitaPar->l25_numero = $iNumero;
         $oDaoLicitaPar->alterar_where(null, "l25_codigo = {$iCodigoLicitaPar}");
-        
+
         if ( $oDaoLicitaPar->erro_status == 0 ) {
-          
+
           $sqlerro  = true;
           $erro_msg = $oDaoLicitaPar->erro_msg;
         }
       } else {
-        
+
         $erro_msg = "Veririfque se está configurado a numeração de licitação por modalidade.";
         $sqlerro  = true;
       }
@@ -162,37 +180,37 @@ if(isset($alterar)){
     $sqlerro = true;
   }
 
-    
-	/** 
+
+	/**
 	 * Acoes na troca de tipo de julgamento
 	 *
 	 * Se tipojulg == 1 era Por Item quando for trocado:
 	 *    l20_tipojulg == 2(Global)   - UPDATE NA TABELA liclicitemlote
-	 *    l20_tipojulg == 3(Por lote) - DELETE 
+	 *    l20_tipojulg == 3(Por lote) - DELETE
 	 *
 	 *
 	 * Se tipojulg == 2 era Global quando for trocado:
-	 *    l20_tipojulg == 1(Por item) - UPDATE NA TABELA liclicitemlote 
-	 *    l20_tipojulg == 3(Por lote) - DELETE 
+	 *    l20_tipojulg == 1(Por item) - UPDATE NA TABELA liclicitemlote
+	 *    l20_tipojulg == 3(Por lote) - DELETE
 	 *
 	 *
 	 * Se tipojulg == 3 era Por Lote quando for trocado:
-	 *    l20_tipojulg == 1(Por item) - DELETE, INSERT NA TABELA liclicitemlote 
+	 *    l20_tipojulg == 1(Por item) - DELETE, INSERT NA TABELA liclicitemlote
 	 *    l20_tipojulg == 2(Global)   - DELETE, INSERT NA TABELA liclicitemlote
    */
   if ($sqlerro == false){
 
     if ($tipojulg != $l20_tipojulg && $confirmado == 1) {
-      
+
       $res_liclicitem     = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo","l21_codigo","l21_codliclicita = $l20_codigo"));
       $numrows_liclicitem = $clliclicitem->numrows;
 
       $lista_liclicitem   = "";
       $lista_l21_codigo   = "";
       $virgula            = "";
-              
+
       for ($i = 0; $i < $numrows_liclicitem; $i++){
-      	
+
         db_fieldsmemory($res_liclicitem,$i);
 
         $lista_liclicitem .= $virgula.$l21_codigo;
@@ -204,7 +222,7 @@ if(isset($alterar)){
         $lista_liclicitem = "l04_liclicitem in (".$lista_liclicitem.")";
       }
 
-      if ($sqlerro == false  && strlen($lista_liclicitem) > 0) {  
+      if ($sqlerro == false  && strlen($lista_liclicitem) > 0) {
         if ($tipojulg == 1){  // Por item
           if ($l20_tipojulg == 2) {  // Trocou para GLOBAL
             $sql = "update liclicitemlote set l04_descricao = 'GLOBAL' where ".$lista_liclicitem;
@@ -231,9 +249,9 @@ if(isset($alterar)){
 
             for($i = 0; $i < $numrows_solicitem; $i++){
               db_fieldsmemory($res_solicitem,$i);
-                                  
+
               $l04_descricao = "LOTE_AUTOITEM_".$pc11_codigo;
-              $sql           = "update liclicitemlote set l04_descricao = '$l04_descricao' 
+              $sql           = "update liclicitemlote set l04_descricao = '$l04_descricao'
                                  where l04_liclicitem = $l21_codigo";
 
               $clliclicitemlote->sql_record($sql);
@@ -241,7 +259,7 @@ if(isset($alterar)){
           }
 
           if ($l20_tipojulg == 3){   // Trocou para LOTE
-            $clliclicitemlote->excluir(null,$lista_liclicitem); 
+            $clliclicitemlote->excluir(null,$lista_liclicitem);
             if ($clliclicitemlote->erro_status == "0"){
               $sqlerro = true;
             }
@@ -249,7 +267,7 @@ if(isset($alterar)){
         }
 
         if ($tipojulg == 3){  // Por lote
-        	
+
           // Testa se existe lote anterior para fazer insert caso nao exista
           $res_liclicitemlote     = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_file(null,"l04_liclicitem","l04_liclicitem","l04_liclicitem in ($lista_l21_codigo)"));
           $numrows_liclicitemlote = $clliclicitemlote->numrows;
@@ -258,19 +276,19 @@ if(isset($alterar)){
           $numrows_solicitem      = $clliclicitem->numrows;
 
           if ($l20_tipojulg == 1){   // Trocou para ITEM
-          	
+
             if ($numrows_solicitem == 0){
               $sqlerro = true;
-            } 
+            }
 
             for($i = 0; $i < $numrows_solicitem; $i++){
-            	
+
               db_fieldsmemory($res_solicitem,$i);
-                                  
+
               $l04_descricao = "LOTE_AUTOITEM_".$pc11_codigo;
-              
+
               if ($numrows_liclicitemlote == 0){
-              	
+
                 $clliclicitemlote->l04_descricao  = $l04_descricao;
                 $clliclicitemlote->l04_liclicitem = $l21_codigo;
 
@@ -280,7 +298,7 @@ if(isset($alterar)){
                   break;
                 }
               } else {
-                $sql = "update liclicitemlote set l04_descricao = '$l04_descricao' 
+                $sql = "update liclicitemlote set l04_descricao = '$l04_descricao'
                          where l04_liclicitem = $l21_codigo";
                 $clliclicitemlote->sql_record($sql);
               }
@@ -294,15 +312,15 @@ if(isset($alterar)){
               }
 
               for($i = 0; $i < $numrows_solicitem; $i++){
-              	
+
                 db_fieldsmemory($res_solicitem,$i);
-                                  
+
                 $l04_descricao = "GLOBAL";
                 $clliclicitemlote->l04_descricao  = $l04_descricao;
                 $clliclicitemlote->l04_liclicitem = $l21_codigo;
 
                 $clliclicitemlote->incluir(null);
-                
+
                 if ($clliclicitemlote->erro_status == "0"){
                   $sqlerro = true;
                   break;
@@ -345,7 +363,7 @@ if(isset($alterar)){
       }
 
       if ($sqlerro == false && strlen($lista_l21_codigo) > 0) {
-      	
+
         $res_pcorcamitemlic = $clpcorcamitemlic->sql_record($clpcorcamitemlic->sql_query(null,"pc22_orcamitem",null,"pc26_liclicitem in ($lista_l21_codigo)"));
         $numrows_itemlic    = $clpcorcamitemlic->numrows;
 
@@ -353,7 +371,7 @@ if(isset($alterar)){
           db_fieldsmemory($res_pcorcamitemlic,$i);
 
           $clpcorcamdescla->excluir(null,null,"pc32_orcamitem = $pc22_orcamitem");
-          
+
           if ($clpcorcamdescla->erro_status == "0"){
             $sqlerro = true;
             break;
@@ -368,7 +386,7 @@ if(isset($alterar)){
   }
 
   db_fim_transacao($sqlerro);
-    
+
 } else if(isset($chavepesquisa)) {
 	/*$result = $clhomologacao->sql_record($clhomologacao->sql_query_file(null,"*","","l202_licitacao = {$chavepesquisa}"));
 	if ($clhomologacao->numrows > 0) {
@@ -376,15 +394,15 @@ if(isset($alterar)){
 		unset($chavepesquisa);
 		db_msgbox("Esta licitação já está homologada.");
 	} else {*/
-	
+
   $db_opcao  = 2;
   $sCampos   = '*, ';
   $sCampos  .= "(select count(*) from liclicitem where l21_codliclicita = l20_codigo) as itens_lancados";
   $result = $clliclicita->sql_record($clliclicita->sql_query($chavepesquisa, $sCampos));
-  
+
   if ($clliclicita->numrows > 0) {
-  	 
-    db_fieldsmemory($result,0);   
+
+    db_fieldsmemory($result,0);
 
     if ($l08_altera == "t"){
       $db_botao = true;
@@ -393,7 +411,7 @@ if(isset($alterar)){
     if ( isset($l34_protprocesso) && trim($l34_protprocesso) != '' ) {
       $l34_protprocessodescr = $p58_requer;
     }
-        
+
     $tipojulg = $l20_tipojulg;
 
     if ( !empty($p58_numero) ) {
@@ -402,27 +420,27 @@ if(isset($alterar)){
       $l34_protprocesso = $p58_codproc;
     }
   }
-  
+
   if(db_getsession("DB_anousu") >= 2016){
 
   	echo "<script>
-       	       parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
+       	       parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n
                parent.document.formaba.liclicitem.disabled=true;\n
              </script>";
-  	
+
     echo "<script>
             parent.iframe_resplicita.location.href='lic1_resplicitacao001.php?l20_naturezaobjeto=$l20_naturezaobjeto&l31_licitacao=$l20_codigo&l20_codtipocom=$l20_codtipocom';
     </script>";
    } else {
    	echo "<script>
-       	       parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
+       	       parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n
                parent.document.formaba.liclicitem.disabled=false;\n
              </script>";
    }
-   
+
    $script = "<script>";
     if (isset($tipojulg) && $tipojulg == 3) {
-      $script .= "parent.iframe_liclicitemlote.location.href='lic1_liclicitemlote001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n 
+      $script .= "parent.iframe_liclicitemlote.location.href='lic1_liclicitemlote001.php?licitacao=$chavepesquisa&tipojulg=".@$tipojulg."';\n
                   parent.document.formaba.liclicitemlote.disabled=false;\n";
     } else {
       $script .= "parent.document.formaba.liclicitemlote.disabled=true;\n";
@@ -485,8 +503,8 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmliclicita.php");
@@ -504,14 +522,14 @@ function js_confirmar(){
        if (confirm("Todos os dados da licitacao serao modificados. Confirma?") == false){
             document.form1.pesquisar.click();
             document.form1.confirmado.value = 0;
-            return false;            
+            return false;
        } else {
             document.form1.confirmado.value = 1;
             return true;
        }
   } else {
        document.form1.confirmado.value = 0;
-       return true; 
+       return true;
   }
 }
 </script>

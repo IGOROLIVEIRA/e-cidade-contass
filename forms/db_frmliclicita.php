@@ -162,7 +162,7 @@ fieldset table tr > td {
           }
         }
       ?><input	type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
-      
+
     </td>
   </tr>
   <tr>
@@ -197,52 +197,52 @@ fieldset table tr > td {
       ?>
    </td>
  </tr>
- 
+
  <tr>
     <td nowrap title="<?=@$Tl20_codepartamento?>">
-       <?=@$Ll20_codepartamento?> 
+       <?=@$Ll20_codepartamento?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('l20_codepartamento',10,$Inome,true,'text',3,'');
       db_input('l20_descricaodep',45,$Inome,true,'text',3,'');
       ?>
    </td>
  </tr>
- 
- 
 
- 
+
+
+
  <tr>
     <td nowrap title="<?=@$Tl20_tipliticacao?>" id="tipolicitacao">
        <?=@$Ll20_tipliticacao?>
     </td>
-    <td> 
+    <td>
       <?
        $arr_tipo = array("1"=>"1- Menor Preço","2"=>"2- Melhor Técnica","3"=>"3- Técnica e Preço","4"=>"4- Maior Lance ou Oferta");
         db_select("l20_tipliticacao",$arr_tipo,true,$db_opcao);
       ?>
    </td>
  </tr>
- 
+
 
  <tr>
     <td nowrap title="<?=@$Tl20_tipnaturezaproced?>" id="tipnaturezaproced">
        <?=@$Ll20_tipnaturezaproced?>
     </td>
-    <td> 
+    <td>
       <?
        $al20_tipnaturezaproced =array("1"=>"1-Licitação Normal","2"=>"2-Registro de Preço","3"=>"3-Credenciamento/Chamada");
         db_select("l20_tipnaturezaproced",$al20_tipnaturezaproced,true,$db_opcao,"onchange='js_naturezaprocedimento(this.value);'");
       ?>
    </td>
  </tr>
- 
+
  <tr>
     <td nowrap title="<?=@$Tl20_naturezaobjeto?>">
        <?=@$Ll20_naturezaobjeto?>
     </td>
-    <td> 
+    <td>
       <?
        if(!isset($l20_naturezaobjeto) || $l20_naturezaobjeto == '') {
          $l20_naturezaobjeto = 2;
@@ -252,59 +252,59 @@ fieldset table tr > td {
       ?>
    </td>
  </tr>
- 
+
  <tr>
     <td nowrap title="<?=@$Tl20_regimexecucao?>">
        <?=@$Ll20_regimexecucao?>
     </td>
-    <td> 
+    <td>
       <?
        $al20_regimexecucao = array("0"=>"","1"=>"1- Empreitada por Preço Global","2"=>"2- Empreitada por Preço Unitário","3"=>"3- Empreitada Integral","4"=>"4- Tarefa","5"=>"5-Execução Direta");
         db_select("l20_regimexecucao",$al20_regimexecucao,true,$db_opcao);
       ?>
    </td>
  </tr>
- 
+
  <tr>
     <td nowrap title="<?=@$Tl20_descontotab?>" id="descontotab">
        <?=@$Ll20_descontotab?>
     </td>
-    <td> 
+    <td>
       <?
        $al20_descontotab = array("2"=>"2- Não","1"=>"1- Sim");
         db_select("l20_descontotab",$al20_descontotab,true,$db_opcao);
       ?>
    </td>
  </tr>
- 
- 
- 
+
+
+
   <tr>
     <td nowrap title="<?=@$Tl20_numeroconvidado?>" id="numeroconvidado">
        <?=@$Ll20_numeroconvidado?>
     </td>
-    <td> 
+    <td>
       <?
        db_input('l20_numeroconvidado',3,$Il20_numeroconvidado,true,'text',$db_opcao,"","","#E6E4F1")
       ?>
    </td>
  </tr>
- 
- 
+
+
   <tr>
     <td nowrap title="<?=@$Tl20_execucaoentrega?>">
        <?=@$Ll20_execucaoentrega?>
     </td>
-    <td> 
+    <td>
       <? $al20_diames = array("1"=>"Dias","2"=>"Mes");
          db_select("l20_diames",$al20_diames,true,$db_opcao);
          db_input('l20_execucaoentrega',3,$Il20_execucaoentrega,true,'text',$db_opcao,"");
       ?>
    </td>
  </tr>
- 
- 
- 
+
+
+
 </table>
 </fieldset>
 
@@ -316,12 +316,12 @@ fieldset table tr > td {
     <td nowrap title="Data Emis/Alt Edital/Convite" id="dataaber">
       <b> Data Emis/Alt Edital/Convite : </b>
     </td>
-    <td> 
+    <td>
       <?
         db_inputdata("l20_dataaber",@$l20_dataaber_dia,@$l20_dataaber_mes,@$l20_dataaber_ano,true,'text',$db_opcao);
       ?>
       <?=@$Ll20_horaaber?>
-       <? 
+       <?
        if (empty($l20_horaaber)) {
           $l20_horaaber= db_hora();
        }
@@ -369,7 +369,7 @@ fieldset table tr > td {
     <td nowrap title="<?=@$Tl20_recdocumentacao?>" id="recdocumentacao">
        <?=@$Ll20_recdocumentacao?>
     </td>
-    <td> 
+    <td>
        <?
          db_inputdata('l20_recdocumentacao',@$l20_recdocumentacao_dia,@$l20_recdocumentacao_mes,@$l20_recdocumentacao_ano,true,'text',$db_opcao,"");
        ?>
@@ -380,7 +380,7 @@ fieldset table tr > td {
     <td nowrap title="<?=@$Tl20_datapublicacao1?>" id="datapublicacao1">
        <?=@$Ll20_datapublicacao1?>
     </td>
-    <td> 
+    <td>
        <?
          db_inputdata('l20_datapublicacao1',@$l20_datapublicacao1_dia,@$l20_datapublicacao1_mes,@$l20_datapublicacao1_ano,true,'text',$db_opcao,"");
        ?>
@@ -391,7 +391,7 @@ fieldset table tr > td {
     <td nowrap title="<?=@$Tl20_nomeveiculo1?>" id="nomeveiculo1">
        <?=@$Ll20_nomeveiculo1?>
     </td>
-    <td> 
+    <td>
        <?
          db_input('l20_nomeveiculo1',50,$Il20_nomeveiculo1,true,'text',$db_opcao,"");
        ?>
@@ -402,7 +402,7 @@ fieldset table tr > td {
     <td nowrap title="<?=@$Tl20_datapublicacao2?>" id="datapublicacao2">
        <?=@$Ll20_datapublicacao2?>
     </td>
-    <td> 
+    <td>
        <?
          db_inputdata('l20_datapublicacao2',@$l20_datapublicacao2_dia,@$l20_datapublicacao2_mes,@$l20_datapublicacao2_ano,true,'text',$db_opcao,"");
        ?>
@@ -413,7 +413,7 @@ fieldset table tr > td {
     <td nowrap title="<?=@$Tl20_nomeveiculo2?>" id="nomeveiculo2">
        <?=@$Ll20_nomeveiculo2?>
     </td>
-    <td> 
+    <td>
        <?
          db_input('l20_nomeveiculo2',50,$Il20_nomeveiculo2,true,'text',$db_opcao,"");
        ?>
@@ -431,7 +431,7 @@ fieldset table tr > td {
     <td nowrap title="<?=@$Tl20_critdesempate?>">
        <?=@$Ll20_critdesempate?>
     </td>
-    <td> 
+    <td>
        <?
         $al20_critdesempate = array("2"=>"Não","1"=>"Sim");
         db_select("l20_critdesempate",$al20_critdesempate,true,$db_opcao);
@@ -450,7 +450,7 @@ fieldset table tr > td {
     <td nowrap title="<?=@$Tl20_destexclusiva?>">
        <?=@$Ll20_destexclusiva?>
     </td>
-    <td> 
+    <td>
        <?
         $al20_destexclusiva = array("2"=>"Não","1"=>"Sim");
         db_select("l20_destexclusiva",$al20_destexclusiva,true,$db_opcao);
@@ -485,7 +485,7 @@ fieldset table tr > td {
        ?>
        <?=@$Ll20_procadmin?>
        <? db_input('l20_procadmin',21,$Il20_procadmin,true,'text',$db_opcao,"")?>
-       
+
     </td>
  </tr>
  <tr>
@@ -542,10 +542,10 @@ fieldset table tr > td {
         db_ancora(@$Ll20_equipepregao,"js_pesquisal20_equipepregao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
        <?
         db_input('l20_equipepregao',10,$Il20_equipepregao,true,'text',$db_opcao," onchange='js_pesquisal20_equipepregao(false);'");
-       ?>  
+       ?>
     </td>
   </tr>
 
@@ -661,45 +661,45 @@ fieldset table tr > td {
        ?>
     </td>
  </tr>
- 
- 
+
+
  <tr>
     <td nowrap title="<?=@$Tl20_clausulapro?>">
        <?=@$Ll20_clausulapro?>
     </td>
-    <td> 
+    <td>
        <?
         db_textarea('l20_clausulapro',0,57,$Il20_clausulapro,true,'text',$db_opcao,"onkeyup='limitaTextareacpro(this);'",'','#E6E4F1');
        ?>
     </td>
  </tr>
- 
- 
+
+
  <tr>
     <td nowrap title="<?=@$Tl20_aceitabilidade?>" id="aceitabilidade">
        <b>Critério de Aceitabilidade:</b>
     </td>
-    <td> 
+    <td>
        <?
         db_textarea('l20_aceitabilidade',0,57,$Il20_aceitabilidade,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
        ?>
     </td>
  </tr>
- 
+
    </table>
   </fieldset>
-  
+
   <fieldset>
 <legend><b>Dispensa/Inexigibilidade</b></legend>
 
 <table>
-  
-  
+
+
   <tr>
     <td nowrap title="<?=@$Tl20_tipoprocesso?>">
        <?=@$Ll20_tipoprocesso?>
     </td>
-    <td> 
+    <td>
        <?
          $al20_tipoprocesso = array("0"=>"","1"=>"1-Dispensa","2"=>"2-Inexigibilidade","3"=>"3-Inexigibilidade por credenciamento/chamada pública","4"=>"4-Dispensa por chamada publica");
         db_select("l20_tipoprocesso",$al20_tipoprocesso,true,$db_opcao);
@@ -711,46 +711,46 @@ fieldset table tr > td {
     <td nowrap title="<?=@$Tl20_dtpubratificacao?>">
        <b>Data Publicação Termo Ratificação:</b>
     </td>
-    <td> 
+    <td>
        <?//echo $l20_dtpubratificacao;exit;
         db_inputdata('l20_dtpubratificacao',@$l20_dtpubratificacao_dia,@$l20_dtpubratificacao_mes,@$l20_dtpubratificacao_ano,true,'text',55,"");
        ?>
     </td>
  </tr>
- 
+
  <tr>
     <td nowrap title="<?=@$Tl20_veicdivulgacao?>">
        <b>Veiculo de Divulgação:</b>
     </td>
-    <td> 
+    <td>
        <?
         db_textarea('l20_veicdivulgacao',0,53,$Il20_veicdivulgacao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
        ?>
     </td>
  </tr>
- 
+
  <tr>
     <td nowrap title="<?=@$Tl20_justificativa?>">
        <?=@$Ll20_justificativa?>
     </td>
-    <td> 
+    <td>
        <?
         db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
        ?>
     </td>
  </tr>
- 
+
  <tr>
     <td nowrap title="<?=@$Tl20_razao?>">
        <?=@$Ll20_razao?>
     </td>
-    <td> 
+    <td>
        <?
         db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'");
        ?>
     </td>
  </tr>
- 
+
    </table>
   </fieldset>
 
@@ -782,15 +782,15 @@ document.form1.l20_local.style.backgroundColor = '#E6E4F1';
 
 js_busca();
 
-function js_registropreco(campo){  
+function js_registropreco(campo){
 	if(campo==1){
 		$('l20_tipnaturezaproced').value='2';
 	}
 }
 
-// alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE                         
+// alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
 function js_ProcCod_l20_codtipocom(proc,res) {
-	
+
     var sel1 = document.forms[0].elements[proc];
     var sel2 = document.forms[0].elements[res];
     for(var i = 0;i < sel1.options.length;i++) {
@@ -802,22 +802,22 @@ function js_ProcCod_l20_codtipocom(proc,res) {
     var oParam                = new Object();
     oParam.codigo =  codigocompra;
     var url       = 'lic1_liclicita_consulta.php';
-    var oAjax                 = new Ajax.Request(url, 
+    var oAjax                 = new Ajax.Request(url,
                                                     {method:'post',
                                                      parameters:'json='+Object.toJSON(oParam),
                                                      onComplete:js_retornolicitacao
                                                     }
                                                    );
-   
+
  }
-    
+
 
  function js_retornolicitacao(oAjax) {
 
-	 
+
 	 var oRetorno = eval("("+oAjax.responseText+")");
 	 var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
-	 
+
 	     // verifica se e do tipo convite
 		if(oRetorno.tribunal==48){
 			document.form1.l20_numeroconvidado.style.backgroundColor='#FFFFFF';
@@ -836,7 +836,7 @@ function js_ProcCod_l20_codtipocom(proc,res) {
 				document.form1.l20_numeroconvidado.style.backgroundColor='#E6E4F1';
 				$("l20_numeroconvidado").value="";
 				document.getElementById("l20_numeroconvidado").readOnly=true;
-				
+
 			  }
 
 		if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
@@ -893,14 +893,14 @@ function js_ProcCod_l20_codtipocom(proc,res) {
             document.getElementById("aceitabilidade").style.display='none';
 
 		}else{
-				
+
 			document.getElementById("l20_veicdivulgacao").disabled=true;
 			document.getElementById("l20_dtpubratificacao").disabled=true;
 			document.getElementById("l20_justificativa").disabled=true;
 			document.getElementById("l20_razao").disabled=true;
 			document.getElementById("l20_tipoprocesso").disabled=true;
 			//document.getElementById("l20_dtpubratificacao").value='';
-			
+
 			 /*document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';)*/
 
             /*Demandas sicom 2016*/
@@ -953,7 +953,7 @@ function js_ProcCod_l20_codtipocom(proc,res) {
 	//document.getElementById("l20_dtpubratificacao").value='';
 
 	/*para habiliatar o campo caso seja inex*/
-	 
+
 	 var campo  = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
 	    campo=campo.replace(" ", "");
 	    if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
@@ -969,16 +969,16 @@ function js_ProcCod_l20_codtipocom(proc,res) {
 			document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
 			document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
 			document.form1.l20_razao.style.backgroundColor='#FFFFFF ';
-	 
+
  }
 
 function js_busca(){
-		  
+
 	    var codigocompra = document.getElementById("l20_codtipocom").options[document.getElementById("l20_codtipocom").selectedIndex].text;
 	    var oParam                = new Object();
 	    oParam.codigo =  codigocompra;
 	    var url       = 'lic1_liclicita_consulta.php';
-	    var oAjax                 = new Ajax.Request(url, 
+	    var oAjax                 = new Ajax.Request(url,
 	                                                    {method:'post',
 	                                                     parameters:'json='+Object.toJSON(oParam),
 	                                                     onComplete:js_retornolicitacao
@@ -986,31 +986,31 @@ function js_busca(){
 );
 }
 
-function js_naturezaprocedimento(valor){ 
+function js_naturezaprocedimento(valor){
 	if(valor==2){
 		$('l20_usaregistropreco').value='t';
 		$('l20_usaregistropreco').disabled="disabled";
-		
-	}	
+
+	}
 }
 
 function js_ativaregistro(){
-	
+
 	var campo=$(l20_tipnaturezaproced).value;
 	$('l20_usaregistropreco').disabled="";
 	var campo         = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
 	var convite       =document.getElementById('l20_numeroconvidado').value;
-	
+
 	document.getElementById('descricao').value=campo;
 	document.form1.submit();
-		
+
 }
 
-function js_verifica_hora(valor,campo) { 
+function js_verifica_hora(valor,campo) {
 	  erro= 0;
 	  ms  = "";
 	  hs  = "";
-	  
+
 	  tam = "";
 	  pos = "";
 	  tam = valor.length;
@@ -1059,7 +1059,7 @@ function js_verifica_hora(valor,campo) {
 	      minu = ms;
 	    }
 	  }
-	  
+
 	  if (erro>0) {
 	    alert("Informe uma hora válida.");
 	  }
@@ -1203,7 +1203,7 @@ function js_pesquisal20_liclocal(mostra){
          if(document.form1.l20_liclocal.value != ''){
               js_OpenJanelaIframe('','db_iframe_local','func_liclocal.php?pesquisa_chave='+document.form1.l20_liclocal.value+'&funcao_js=parent.js_mostralocal&sCampoRetorno=l20_liclocal','Pesquisa',false);
             } else {
-              document.form1.nome.value = ''; 
+              document.form1.nome.value = '';
             }
   }
 }
@@ -1225,11 +1225,11 @@ function js_pesquisal20_liccomissao(mostra){
         if(document.form1.l20_liccomissao.value != ''){
               js_OpenJanelaIframe('','db_iframe_proc','func_liccomissao.php?pesquisa_chave='+document.form1.l20_liccomissao.value+'&funcao_js=parent.js_mostracomissao&sCampoRetorno=l20_liccomissao','Pesquisa',false);
             } else {
-              document.form1.l20_liccomissao.value = ''; 
+              document.form1.l20_liccomissao.value = '';
             }
 
 
-     
+
   }
 }
 function js_mostracomissao(chave,erro){
@@ -1246,7 +1246,7 @@ function js_mostracomissao1(chave1){
 function js_pesquisal34_protprocesso(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('','db_iframe_proc','func_protprocesso_protocolo.php?funcao_js=parent.js_mostraprocesso1|p58_numero|dl_código_do_processo|dl_nome_ou_razão_social','Pesquisa',true,"0");
+    js_OpenJanelaIframe('','db_iframe_proc','func_protprocesso_protocolo.php?funcao_js=parent.js_mostraprocesso1|p58_numero|p58_codproc|dl_nome_ou_razão_social','Pesquisa',true,"0");
   } else {
 
     if(document.form1.p58_numero.value != ''){
@@ -1283,7 +1283,7 @@ function js_mostraprocesso1(iNumeroProcesso, iCodigoProcesso, sNome) {
 }
 
 
-// aqui 
+// aqui
 function js_pesquisal20_equipepregao(mostra){
 
   if(mostra==true){
@@ -1293,16 +1293,16 @@ function js_pesquisal20_equipepregao(mostra){
     if(document.form1.l20_equipepregao.value != ''){
       js_OpenJanelaIframe('','db_iframe_proc','func_licpregao.php?pesquisa_chave='+document.form1.l20_equipepregao.value+'&funcao_js=parent.js_pregao&sCampoRetorno=l20_equipepregao','Pesquisa',false);
     } else {
-      document.form1.nome.value = ''; 
+      document.form1.nome.value = '';
     }
   }
 }
 
 //aqui
 function js_pregao(iCodigoProcesso, sNome, lErro){
-	 
+
 	  document.form1.l20_equipepregao.value = iCodigoProcesso;
-	  db_iframe_proc.hide();  
+	  db_iframe_proc.hide();
 	}
 
 
@@ -1353,14 +1353,14 @@ function js_confirmadatas() {
         }
       ?>
     } else {
-    
+
       /*alert("A Data Edital/Convite deve ser maior ou igual a Data de Publicação.");
       document.form1.l20_dataaber.style.backgroundColor='#99A9AE';
-       document.form1.l20_dataaber.focus();    
+       document.form1.l20_dataaber.focus();
       return false;*/
-    }    
+    }
   } else {
-    /*alert("A Data de Publicação deve ser maior ou igual a Data de Criação.");    
+    /*alert("A Data de Publicação deve ser maior ou igual a Data de Criação.");
     return false;*/
   }
 
@@ -1403,8 +1403,8 @@ if(campo=='2'){
 
 
  $('l20_descontotab').value='2';
- 
- 
+
+
  document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';
  document.form1.l20_veicdivulgacao.style.backgroundColor='#E6E4F1';
  document.form1.l20_justificativa.style.backgroundColor='#E6E4F1';
@@ -1415,12 +1415,12 @@ if(campo=='2'){
  if(campo=="CONVITE"){
 		document.getElementById("l20_numeroconvidado").readOnly=false;
 }
- 
- 
+
+
 
 /*Função para limitar texaarea*/
  //"onkeyup='limitaTextarea(this.value);'");
- function limitaTextarea(valor){ 
+ function limitaTextarea(valor){
 	 var qnt = valor.value;
 		quantidade = 80;
 		total = qnt.length;
@@ -1434,7 +1434,7 @@ if(campo=='2'){
 		}
 	}
 
-  function limitaTextareaobj(valor){ 
+  function limitaTextareaobj(valor){
    var qnt = valor.value;
     quantidade = 499;
     total = qnt.length;
@@ -1448,7 +1448,7 @@ if(campo=='2'){
     }
   }
 
-  function limitaTextareacpro(valor) { 
+  function limitaTextareacpro(valor) {
    var qnt = valor.value;
     quantidade = 249;
     total = qnt.length;
