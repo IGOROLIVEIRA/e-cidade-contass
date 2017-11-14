@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -44,7 +44,7 @@ $oRetorno->sMensagem = '';
 $iInstituicao = db_getsession('DB_instit');
 
 try {
-  
+
   switch ($oParametros->exec) {
 
     /**
@@ -52,17 +52,17 @@ try {
      */
     case 'origem' :
 
-      $oDaoAbatimento = db_utils::getDao('abatimento');
+      $oDaoAbatimento = new cl_abatimento;
 
       /**
        * Busca na tabela de transferencias a origem do credito pesquisado
        */
-      $oDaoTransferencia = db_utils::getDao('abatimentotransferencia');
+      $oDaoTransferencia = new cl_abatimentotransferencia;
       $sSqlTransferencia = $oDaoTransferencia->sql_query_file(null, 'k158_abatimentoorigem', null, "k158_abatimentodestino = {$oParametros->iCodigoCredito}");
       $rsTransferencia   = db_query($sSqlTransferencia);
 
       /**
-       * Erro na query 
+       * Erro na query
        */
       if ( !$rsTransferencia ) {
         throw new Exception('Erro ao buscar origem de crédito.');
@@ -74,28 +74,36 @@ try {
       if ( pg_num_rows($rsTransferencia) == 0 ) {
         $iCredito = $oParametros->iCodigoCredito;
       } else {
-        
+
         /**
          * Codigo do credito encontrado
          */
         $iCredito = db_utils::fieldsMemory($rsTransferencia, 0)->k158_abatimentoorigem;
       }
 
-      $sSqlCredito = $oDaoAbatimento->sql_queryDadosCreditos($iCredito);
+      $sCampos = "
+        arretipo.k00_descr,
+        abatimento.k125_sequencial,
+        abatimento.k125_valor,
+        abatimentorecibo.k127_numpreoriginal as origem,
+        cgm.z01_numcgm as dono_credito,
+        recibo.k00_receit as k02_descr
+      ";
+      $sSqlCredito = $oDaoAbatimento->sql_query_origem($sCampos, "k125_sequencial = {$iCredito}");
       $rsCredito = db_query($sSqlCredito);
 
       /**
-       * Erro na query 
+       * Erro na query
        */
       if ( !$rsCredito ) {
         throw new Exception('Erro ao buscar crédito: '.pg_last_error());
       }
 
       /**
-       * Nao encontrou credito 
+       * Nao encontrou credito
        */
       if ( pg_num_rows($rsCredito) == 0 ) {
-        throw new Exception('Crédito não encontrado: '.$iCredito);
+        throw new Exception('O Crédito não possui origem. Crédito Manual.');
       }
 
       $oCredito = db_utils::fieldsMemory($rsCredito, 0);
@@ -104,101 +112,82 @@ try {
       $oDadosCredido->sOrigem     = $oCredito->origem;
       $oDadosCredido->sCgm        = $oCredito->dono_credito;
       $oDadosCredido->iCodigo     = $oCredito->k125_sequencial;
-      $oDadosCredido->nValor      = db_formatar($oCredito->k125_valordisponivel, 'f');
+      $oDadosCredido->nValor      = db_formatar($oCredito->k125_valor, 'f');
       $oDadosCredido->sTipoDebito = $oCredito->k00_descr;
       $oDadosCredido->sReceita    = $oCredito->k02_descr;
 
-      $oRetorno->oCredito = $oDadosCredido; 
+      $oRetorno->oCredito = $oDadosCredido;
 
-    break;
+      break;
 
     case 'destino' :
 
-      $oDaoAbatimento   = db_utils::getDao('abatimento');
-      $aCreditos        = array();
-      $aDestinosCredito = array();
-
       /**
-       * Busca na tabela de transferencias o destino do credito pesquisado
+       * Busca na tabela utilizacao o destino do credito pesquisado
        */
-      $oDaoTransferencias = db_utils::getDao('abatimentotransferencia');
-      $sSqlTransferencias = $oDaoTransferencias->sql_query_file(null, 'k158_abatimentodestino', null, "k158_abatimentoorigem = {$oParametros->iCodigoCredito}");
-      $rsTransferencias   = db_query($sSqlTransferencias);
-      $iTransferencias    = pg_num_rows($rsTransferencias);
+      $oDaoUtilizacao = new cl_abatimento();
+      $sCampos = "
+        k170_numpre,
+        k170_numpar,
+        k170_valor,
+        k157_tipoutilizacao,
+        arretipo.k00_descr,
+        k157_data,
+        recibo.k00_receit,
+        case
+          when k157_tipoutilizacao = '2' then 'Compensação'
+          when k157_tipoutilizacao = '3' then 'Devolução'
+        end as tipo_utilizacao
+      ";
+      $sSqlUtilizacao = $oDaoUtilizacao->sql_query_utilizacao(
+        $sCampos, "k157_abatimento= {$oParametros->iCodigoCredito}",
+        "k170_numpre, k170_numpar, k157_data asc",
+        "k170_numpre, k170_numpar, k170_valor, tipo_utilizacao, k157_tipoutilizacao, k00_descr, k157_data, k00_receit"
+      );
 
-      /**
-       * Erro na query 
-       */
-      if ( !$rsTransferencias ) {
+      $rsUtilizacao = db_query($sSqlUtilizacao);
+      if (!$rsUtilizacao) {
         throw new Exception('Erro ao buscar destino de crédito.');
       }
 
       /**
-       * Não encontrou destino do credito
+       * Array com as transferencias do credito
        */
-      if ( $iTransferencias == 0 ) {
-        break;
-      }
+      $aUtilizacao = db_utils::getCollectionByRecord($rsUtilizacao);
 
-      /**
-       * Array com as transferencias do credito 
-       */
-      $aTransferencias = db_utils::getCollectionByRecord($rsTransferencias);
-
-      foreach ( $aTransferencias as $oTransferencia ) {
-        $aDestinosCredito[] = $oTransferencia->k158_abatimentodestino;
-      }
-
-      foreach ( $aDestinosCredito as $iCredito ) {
-      
-        $sSqlCredito = $oDaoAbatimento->sql_queryDadosCreditos($iCredito);
-        $rsCredito = db_query($sSqlCredito);
-
-        /**
-         * Erro na query 
-         */
-        if ( !$rsCredito ) {
-          throw new Exception('Erro ao buscar crédito: '.pg_last_error());
-        }
-
-        /**
-         * Nao encontrou credito 
-         */
-        if ( pg_num_rows($rsCredito) == 0 ) {
-          throw new Exception('Crédito não encontrado: '.$iCredito);
-        }
-
-        $oCredito = db_utils::fieldsMemory($rsCredito, 0);
+      $aCreditos = array();
+      foreach ($aUtilizacao as $oUtilizacao) {
 
         $oDadosCredido = new StdClass;
-        $oDadosCredido->sOrigem     = $oCredito->origem;
-        $oDadosCredido->sCgm        = $oCredito->dono_credito;
-        $oDadosCredido->iCodigo     = $oCredito->k125_sequencial;
-        $oDadosCredido->nValor      = db_formatar($oCredito->k125_valor, 'f');
-        $oDadosCredido->sTipoDebito = $oCredito->k00_descr;
-        $oDadosCredido->sReceita    = $oCredito->k02_descr;
+        $oDadosCredido->iNumpre     = (!empty($oUtilizacao->k170_numpre) ? $oUtilizacao->k170_numpre : ' - ');
+        $oDadosCredido->iNumpar     = (!empty($oUtilizacao->k170_numpar) ? $oUtilizacao->k170_numpar : ' - ');
+        $oDadosCredido->sDestino    = (!empty($oUtilizacao->k00_descr)   ? urlencode($oUtilizacao->k00_descr) : ' - ');
+        $oDadosCredido->sTipo       = urlencode($oUtilizacao->tipo_utilizacao);
+        $oDadosCredido->sReceita    = $oUtilizacao->k00_receit;
+        $oDadosCredido->nValor      = db_formatar($oUtilizacao->k170_valor, 'f');
+        $oDadosCredido->sData       = db_formatar($oUtilizacao->k157_data, 'd');
 
         $aCreditos[] = $oDadosCredido;
       }
 
       /**
-       * Array com as informacoes do credito 
+       * Array com as informacoes do credito
        */
       $oRetorno->aCreditos = $aCreditos;
 
-    break;
+      break;
 
     /**
      * Nenhum case encontrado
      */
     default :
       throw new Exception('Nenhum parametro informado.');
-    break;
+      break;
 
   }
-  
+
 } catch (Exception $eErro) {
-  
+
   $oRetorno->iStatus   = 2;
   $oRetorno->sMensagem = $eErro->getMessage();
 }

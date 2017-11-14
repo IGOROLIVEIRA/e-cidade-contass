@@ -110,7 +110,7 @@ $clativid->rotulo->label("q03_descr");
           $result = $clativid->sql_record($clativid->sql_query_dados($pesquisa_chave));
           if($clativid->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$q03_descr',false);</script>";
+            echo "<script>".$funcao_js."('$q03_descr','$q12_descr',false);</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

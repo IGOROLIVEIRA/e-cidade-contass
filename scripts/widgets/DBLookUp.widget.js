@@ -6,14 +6,14 @@
  * @param Object oInputDescricao Input com a informação da Descrição
  * @param Object oParametros     Parametros opcionais
  */
-var DBLookUp = function (oAncora, oInputID, oInputDescricao, oParametros) {
- 
+DBLookUp = function (oAncora, oInputID, oInputDescricao, oParametros) {
+
   /**
    * Define valor padrão
    */
- 
+
   oParametros = oParametros || {};
-  
+
   this.iReferencia     = DBLookUp.repository.addInstance(this);
 
   this.oAncora         = oAncora;
@@ -54,7 +54,7 @@ DBLookUp.prototype.__init = function() {
    /**
     * Modifica os Inputs
     */
-   this.oInputID.className        += "field-size2"; 
+   this.oInputID.className        += "field-size2";
    this.oInputID.oInstancia        = this;
    this.oInputDescricao.className += "field-size8";
    this.oInputDescricao.className += " readOnly";
@@ -66,16 +66,16 @@ DBLookUp.prototype.__init = function() {
 };
 
 /**
- * Realiza o tratamento dos eventos 
+ * Realiza o tratamento dos eventos
  * Click e Change
  */
-DBLookUp.prototype.eventFunctions = { 
+DBLookUp.prototype.eventFunctions = {
 
   click: function(click){
     this.abrirJanela(true);
   },
   change: function(change){
-    
+
     if ( this.oInputID.value == "" ) {
       this.oInputDescricao.value = "";
       change.preventDefault();
@@ -86,7 +86,7 @@ DBLookUp.prototype.eventFunctions = {
 };
 
 /**
- * Monta a QueryString para quando é 
+ * Monta a QueryString para quando é
  * feito o click na ancora
  * @return String QueryString
  */
@@ -104,20 +104,20 @@ DBLookUp.prototype.getQueryStringClick = function() {
       sQuery += "funcao_js=parent.DBLookUp.repository.getInstance("+this.iReferencia+").callBackClick";
       sQuery += "|" + (this.oInputID.lang        || this.oInputID.getAttribute('data')        || this.oInputID.id        || this.oInputID.name);
       sQuery += "|" + (this.oInputDescricao.lang || this.oInputDescricao.getAttribute('data') || this.oInputDescricao.id || this.oInputDescricao.name);
-  
+
   var sCampos = this.oParametros.aCamposAdicionais.join("|");
 
   if ( sCampos ) {
     sQuery += "|" + sCampos;
-  } 
+  }
 
   sQuery += this.oParametros.sQueryString ? "|" + this.oParametros.sQueryString : "";
 
-  return sQuery; 
+  return sQuery;
 }
 
 /**
- * Monta a QueryString para quando é executado 
+ * Monta a QueryString para quando é executado
  * o Change no objeto oInputID
  * @return String QueryString
  */
@@ -128,17 +128,17 @@ DBLookUp.prototype.getQueryStringChange = function() {
       sQuery += "?";
       sQuery += "pesquisa_chave=" + this.oInputID.value;
       sQuery += "&";
-	
+
       if ( this.oParametros.aParametrosAdicionais.length > 0 ){
         sQuery += this.oParametros.aParametrosAdicionais.join("&");
         sQuery += "&";
       }
 
       sQuery += "funcao_js=parent.DBLookUp.repository.getInstance("+this.iReferencia+").callBackChange";
-  
+
   sQuery += this.oParametros.sQueryString;
 
-  return sQuery; 
+  return sQuery;
 }
 
 /**
@@ -152,7 +152,7 @@ DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao) {
   this.oInputDescricao.value = sDescricao;
   var oObjetoLookUp          = eval(this.oParametros.sObjetoLookUp);
   oObjetoLookUp.hide();
-   
+
   this.oCallback.onClick();
   return;
 }
@@ -160,7 +160,7 @@ DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao) {
 /**
  * Trata o retorno do change no objeto oInputID.
  * Percorre todos os arguments recebido pela função, pois não temos um padrão
- * de retorno dos dados, verificando qual deles é responsavel por informar 
+ * de retorno dos dados, verificando qual deles é responsavel por informar
  * a ocorrencia de erro e qual realmente é a string que deverá ser a descrição.
  */
 DBLookUp.prototype.callBackChange  = function() {
@@ -171,7 +171,7 @@ DBLookUp.prototype.callBackChange  = function() {
 
   for (var iArgumento = 0; iArgumento < aArgumentos.length; iArgumento++) {
 
-    if (typeof(aArgumentos[iArgumento]) == "boolean") {  
+    if (typeof(aArgumentos[iArgumento]) == "boolean") {
       lErro = aArgumentos[iArgumento];
     };
 
@@ -195,7 +195,7 @@ DBLookUp.prototype.callBackChange  = function() {
  * @param  boolean lAbre
  */
 DBLookUp.prototype.abrirJanela = function(lAbre){
-  
+
   var sQueryString = '';
 
   if ( !this.oParametros.sArquivo ) {
@@ -236,7 +236,7 @@ DBLookUp.prototype.setArquivo = function(sArquivo){
 };
 
 /**
- * Seta o nome do Label que será utilizado como 
+ * Seta o nome do Label que será utilizado como
  * titulo da janela de pesquisa
  * @param String sLabel
  */
@@ -245,7 +245,7 @@ DBLookUp.prototype.setLabel = function(sLabel){
 };
 
 /**
- * Seta a query string que deverá ser utilizada 
+ * Seta a query string que deverá ser utilizada
  * na função de pesquisa.
  * @param String sQueryString
  */
@@ -294,9 +294,9 @@ DBLookUp.repository = {
   "oInstances"  : DBLookUp.repository.oInstances || {},
 
   "iCounter"    : DBLookUp.repository.iCounter   || 0,
-  
-  "addInstance" : function( oDBLookUp ) { 
-  
+
+  "addInstance" : function( oDBLookUp ) {
+
     if ( !( oDBLookUp instanceof DBLookUp ) ) {
       throw('Objeto Inválido');
     }
@@ -304,7 +304,7 @@ DBLookUp.repository = {
     DBLookUp.repository.oInstances['DBLookUp'+ iNumeroInstancia] = oDBLookUp;
     return iNumeroInstancia;
   },
-  "getInstance" : function( iCodigo ) { 
+  "getInstance" : function( iCodigo ) {
     return DBLookUp.repository.oInstances["DBLookUp" + iCodigo];
   }
 }

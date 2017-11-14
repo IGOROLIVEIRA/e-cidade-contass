@@ -102,7 +102,16 @@ $oGet = db_utils::postMemory($_GET);
    	if(!isset($oGet->codret) || $oGet->codret == ""){
    		throw new Exception("Código do arquivo ({$oGet->codret}) de Retorno Inválido.");
    	}
-   	
+   /**
+    * Integração JMS
+    * Este trecho foi inserido para que as guias emitidas no JMS podessem ser reconhecidas no e-cidade no momento da baixa de banco
+    * Rotina adaptada para a implantação do modulo tributário em Pirapora MG
+    * @author rodrigo@contass
+    */
+   	$sSqlIntegracaoJMS = "update disbanco set k00_numpre = debitos_jms.numpre_seq, k00_numpar = debitos_jms.k00_numpar from debitos_jms where disbanco.k00_numpre = debitos_jms.k00_numpre_old and disbanco.k00_numpar = debitos_jms.k00_numpar_old";
+    if(!db_query($sSqlIntegracaoJMS)){
+        throw new Exception(str_replace("\n","",substr(pg_last_error(), 0, strpos(pg_last_error(),"CONTEXT"))));
+    }
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
    	$rsBaixaBanco = db_query($sSql);
    	if (!$rsBaixaBanco) {

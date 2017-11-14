@@ -37,11 +37,11 @@
     <join tipo="inner"  tabela="cadenderruaruastipo"     	condicao="db85_cadenderrua               = db74_sequencial"         />
     <join tipo="inner"  tabela="ruastipo"     			condicao="db85_ruastipo                  = j88_codigo"              />
     <join tipo="inner"  tabela="cadendermunicipio"     		condicao="db72_sequencial                = db74_cadendermunicipio"  />
-    <join tipo="inner"  tabela="cadendermunicipiosistema"     	condicao="db72_sequencial                = db125_cadendermunicipio 
+    <join tipo="left"  tabela="cadendermunicipiosistema"     	condicao="db72_sequencial                = db125_cadendermunicipio
                                 and db125_db_sistemaexterno = 4" 								    />
-    <join tipo="inner"  tabela="cadenderestado"     		condicao="db71_sequencial                = db72_cadenderestado"     />
-    <join tipo="inner"  tabela="cadenderpais"     		condicao="db70_sequencial                = db71_cadenderpais"       />
-    <join tipo="inner"  tabela="cadenderpaissistema"     	condicao="db70_sequencial                = db135_db_cadenderpais 
+    <join tipo="left"  tabela="cadenderestado"     		condicao="db71_sequencial                = db72_cadenderestado"     />
+    <join tipo="left"  tabela="cadenderpais"     		condicao="db70_sequencial                = db71_cadenderpais"       />
+    <join tipo="left"  tabela="cadenderpaissistema"     	condicao="db70_sequencial                = db135_db_cadenderpais
                                 and db135_db_sistemaexterno = 3"   								    />
     <join tipo="left"   tabela="issbase"                	condicao="z01_numcgm                     = q02_numcgm"		    />
     <join tipo="left"  tabela="issbasecaracteristica" 		condicao="issbase.q02_inscr    		 = q138_inscr"      	    />

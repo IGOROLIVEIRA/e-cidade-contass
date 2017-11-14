@@ -29,7 +29,7 @@
  * Class PDFTable
  *
  * @author Matheus Felini <matheus.felini@dbseller.com.br>
- * @version $Revision: 1.6 $
+ * @version $Revision: 1.7 $
  */
 class PDFTable {
 
@@ -191,6 +191,13 @@ class PDFTable {
    */
   public function setEndPageHeight($iEndPageHeigth) {
     $this->iEndPageHeigth = $iEndPageHeigth;
+  }
+
+  /**
+   * @param integer $iLineHeigth
+   */
+  public function setLineHeigth($iLineHeigth) {
+    $this->iLineHeigth = $iLineHeigth;
   }
 
   /**

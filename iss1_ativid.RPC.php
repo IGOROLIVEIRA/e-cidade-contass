@@ -54,13 +54,105 @@ $clAtividCbo             = new cl_atividcbo;
 $clAtividCnae            = new cl_atividcnae;
 $clIssAtividConfDoc      = new cl_issatividconfdocumento;
 $clIssGrupoServicoAtivid = new cl_issgruposervicoativid;
+$clIssGrupoServico       = new cl_issgruposervico;
 $oJson                   = new services_json();
 $oParam                  = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno                = new stdClass();
 $oRetorno->status        = 1;
 $oRetorno->message       = '';
 
+function quebrar_texto($texto,$tamanho){
+//  echo $texto;
+  $aTexto = explode(" ", $texto);
+  $string_atual = "";
+  foreach ($aTexto as $word) {
+    $string_ant = $string_atual;
+    $string_atual .= " ".$word;
+    if (strlen($string_atual) > $tamanho) {
+      $aTextoNovo[] = $string_ant;
+      $string_ant   = "";
+      $string_atual = $word;
+    }
+  }
+
+  $aTextoNovo[] = $string_atual;
+
+  $sTextoNovo = "";
+  if(count($aTextoNovo) > 1 ) {
+    for ($i = 0; $i < count($aTextoNovo); $i++) {
+      $sTextoNovo .= $aTextoNovo[$i]."<br>";
+    }
+  } else {
+    $sTextoNovo = $aTextoNovo[0];
+  }
+
+  return trim($sTextoNovo);
+
+}
+
 switch ($oParam->exec) {
+
+  case 'buscaServicos' :
+
+    $oRetorno->aServs = array();
+    $sWhere          = 'db121_tipoconta = 2';
+    $sCampos         = "distinct issgruposervico.q126_sequencial, db_estruturavalor.db121_estrutural, db_estruturavalor.db121_descricao,
+    case when q136_tipotributacao = 1 then 'Fixo: '||round(q136_valor,2)::varchar
+    when q136_tipotributacao = 2 then round(q136_valor,2)::varchar||'%' when q136_tipotributacao = 2 then 'Nao incide'::varchar else 'Nao configurado'::varchar end as q136_valor ";
+    $sSql            = $clIssGrupoServico->sql_query('', $sCampos, 'db_estruturavalor.db121_estrutural', $sWhere);
+    $rsServ          = $clIssGrupoServico->sql_record($sSql);
+
+    if ($clIssGrupoServico->numrows > '0') {
+
+      if (isset($oParam->iCodAtividade) && $oParam->iCodAtividade != 0) {
+
+        $sWhereIssAtividConf = "q127_ativid = {$oParam->iCodAtividade}";
+        $sSqlIssAtividConf   = $clIssGrupoServicoAtivid->sql_query('', 'q126_sequencial', '', $sWhereIssAtividConf);
+        $rsIssAtividConf     = $clIssGrupoServicoAtivid->sql_record($sSqlIssAtividConf);
+
+        for ($ind = 0; $ind < $clIssGrupoServico->numrows; $ind++) {
+
+          $oServ = db_utils::fieldsMemory($rsServ, $ind);
+
+          $oServ->db121_descricao = quebrar_texto($oServ->db121_descricao, 90);
+
+          if ($clIssGrupoServicoAtivid->numrows > 0) {
+            for ($i = 0; $i < $clIssGrupoServicoAtivid->numrows; $i++) {
+              $oDados = new stdClass();
+              $oDados = db_utils::fieldsMemory($rsIssAtividConf, $i);
+
+              if ($oServ->q126_sequencial == $oDados->q126_sequencial) {
+                $oServ->checked = 1;
+              }
+            }
+          }
+          $oRetorno->aServs[] = $oServ;
+        }
+        /**
+         * Ordenando o array para que apareça primeiro os serviços configurados para a atividade.
+         */
+        foreach($oRetorno->aServs as $key => $elemento){
+
+          if(isset($elemento->checked)){
+            $oTemp = $elemento;
+            unset($oRetorno->aServs[$key]);
+            array_unshift($oRetorno->aServs,$oTemp);
+          }
+        }
+
+      } else {
+
+        for ($ind = 0; $ind < $clIssGrupoServico->numrows; $ind++) {
+
+          $oServ             = db_utils::fieldsMemory($rsServ, $ind);
+          $oServ->db121_descricao = quebrar_texto($oServ->db121_descricao, 90);
+          $oServ->checked    = 0;
+          $oRetorno->aServs[] = $oServ;
+          $oRetorno->message = 'Busca de serviços Completa';
+        }
+      }
+    }
+    break;
 
   case 'buscaDocs' :
 
@@ -209,7 +301,7 @@ switch ($oParam->exec) {
 
       if (isset($oParam->docs) && count($oParam->docs) > 0) {
 
-        //Antes de Incluir exclui de todos registros para a atividade 
+        //Antes de Incluir exclui de todos registros para a atividade
         $clIssAtividConfDoc->excluir('', $sWhereIssAtividConf);
 
         foreach ($oParam->docs as $iInd => $oDados) {
@@ -227,16 +319,24 @@ switch ($oParam->exec) {
         $clIssAtividConfDoc->excluir('', $sWhereIssAtividConf);
       }
 
-      if (isset($oParam->lCalCiss) && $oParam->lCalCiss == 1 || $oParam->lCalCiss == 't') {
+      //Percorre o array de documentos selecionados e inclui os vinculos
+      $sWhereIssGrupoServicoAtivid = "q127_ativid = {$oParam->iCodAtividade}";
 
-        $sWhereIssGrupoServicoAtivid = "q127_ativid = {$oParam->iCodAtividade}";
+      if (isset($oParam->servs) && count($oParam->servs) > 0) {
+
+        //Antes de Incluir exclui de todos registros para a atividade
         $clIssGrupoServicoAtivid->excluir('', $sWhereIssGrupoServicoAtivid);
 
-        if ($oParam->sServico != 0) {
+        if ($clIssGrupoServicoAtivid->erro_status == '0') {
+          throw new Exception($clIssGrupoServicoAtivid->erro_msg);
+        }
 
-          $clIssGrupoServicoAtivid->q127_issgruposerviso = $oParam->sServico;
+        foreach ($oParam->servs as $iInd => $oDados) {
+
+          $clIssGrupoServicoAtivid->q127_issgruposerviso = $oDados->q126_sequencial;
           $clIssGrupoServicoAtivid->q127_ativid          = $oParam->iCodAtividade;
-          $clIssGrupoServicoAtivid->incluir($clIssGrupoServicoAtivid->q127_sequencial);
+
+          $clIssGrupoServicoAtivid->incluir(NULL);
 
           if ($clIssGrupoServicoAtivid->erro_status == '0') {
             throw new Exception($clIssGrupoServicoAtivid->erro_msg);
@@ -244,8 +344,7 @@ switch ($oParam->exec) {
         }
       } else {
 
-        $sWhereGrpServAtiv = "q127_ativid = {$oParam->iCodAtividade}";
-        $clIssGrupoServicoAtivid->excluir('', $sWhereGrpServAtiv);
+        $clIssGrupoServicoAtivid->excluir('', $sWhereIssGrupoServicoAtivid);
 
         if ($clIssGrupoServicoAtivid->erro_status == '0') {
           throw new Exception($clIssGrupoServicoAtivid->erro_msg);
@@ -326,7 +425,7 @@ switch ($oParam->exec) {
         throw new Exception($clAtividCbo->erro_msg);
       }
 
-      // Exclui da atividcnae       
+      // Exclui da atividcnae
       $clAtividCnae->excluir(NULL, $oParam->iCodAtividade);
 
       if ($clAtividCnae->erro_status == '0') {

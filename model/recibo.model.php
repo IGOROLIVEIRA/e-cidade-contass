@@ -31,6 +31,9 @@
  */
 class Recibo {
 
+  const TIPOEMISSAO_RECIBO_AVULSO = 1;
+  const TIPOEMISSAO_RECIBO_CGF    = 2;
+
   /**
    * Código da arrecadacao
    *
