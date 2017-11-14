@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -71,18 +71,36 @@ if(isset($usuariossel) && count($usuariossel) > 0){
 }
 
 if(isset($tipo_principal) && trim($tipo_principal) == "0"){
-} elseif(isset($tipo_principal) && trim($tipo_principal) == "1"){
+}
+else if (isset($tipo_principal) && trim($tipo_principal) == "1"){
   $dbwhereid_usuariospermis .= " and d.usuext = 0";
   $dbwhereid_usuariosperfil .= " and d.usuext = 0";
-} elseif(isset($tipo_principal) && trim($tipo_principal) == "2"){
+}
+else if (isset($tipo_principal) && trim($tipo_principal) == "2"){
   $dbwhereid_usuariospermis .= " and d.usuext = 1";
   $dbwhereid_usuariosperfil .= " and d.usuext = 1";
-} elseif(isset($tipo_principal) && trim($tipo_principal) == "3"){
+}
+else if (isset($tipo_principal) && trim($tipo_principal) == "3"){
   $dbwhereid_usuariospermis .= " and d.usuext = 2";
   $dbwhereid_usuariosperfil .= " and d.usuext = 2";
-} elseif(isset($tipo_principal) && trim($tipo_principal) == "4"){
+    if (isset($numperfil) ) {
+    $dbwhereid_usuariospermis .= " and d.id_usuario IN (".implode($numperfil).") ";
+  }
+}
+else if (isset($tipo_principal) && trim($tipo_principal) == "4"){
   $dbwhereid_usuariospermis .= " and d.usuext in (0,2)";
   $dbwhereid_usuariosperfil .= " and d.usuext in (0,2)";
+  if (isset($numperfil) ) {
+  $dbwhereid_usuariosperfil .= " and h.id_perfil IN (".implode($numperfil).") ";
+}
+}
+
+
+//var_dump($HTTP_POST_VARS);die;
+if (isset($numperfil) ) {
+  $dbwhereperfis = " and h.id_perfil IN (".implode($numperfil).") ";
+} else {
+  $dbwhereperfis = '';
 }
 
 //// SQL VERIFICA PERMISSÕES DE USUÁRIOS --                                     inner join db_usermod   u  on u.id_modulo  = m.id_item
@@ -98,7 +116,7 @@ $sql_verifica_permissoesusu = "
                                     inner join db_permissao p  on p.anousu     = $anousu
                                                               and p.id_instit  = $codigo
                                                               and p.id_item    = m.id_item
-                                    inner join db_usuarios  d  on d.id_usuario = p.id_usuario
+                                    inner join db_usuarios  d   on d.id_usuario = p.id_usuario
                                where p.id_instit = $codigo
                                      ".$dbwhereid_usuariospermis."
                                      ".$dbwhere_permiss.
@@ -115,18 +133,19 @@ $sql_verifica_permissoesper = "
                                                  else 'INATIVO'
                                                end as status
                                from db_permherda h
-                                    inner join db_permissao p  on p.anousu     = $anousu
+                                    inner join db_permissao p  on p.anousu     = {$anousu}
                                                               and p.id_usuario = h.id_perfil
-                                                              and p.id_instit  = $codigo
+                                                              and p.id_instit  = {$codigo}
                                     inner join db_modulos   m  on m.id_item    = p.id_item
                                     inner join db_usuarios  d  on d.id_usuario = h.id_usuario
-                               where p.id_instit = $codigo
-                                     ".$dbwhereid_usuariosperfil."
-                                     ".$dbwhere_permiss.
-                                       $dbwhere_tipo_usuario;
+                               where p.id_instit = {$codigo}
+                                     {$dbwhereid_usuariosperfil}
+                                     {$dbwhere_permiss}
+                                     {$dbwhere_tipo_usuario}
+                                     {$dbwhereperfis} ";
 
-$sql_executa = " select distinct * from (($sql_verifica_permissoesusu) union ($sql_verifica_permissoesper)) as x order by nome, descr_modulo ";
-
+$sql_executa = " select distinct * from (({$sql_verifica_permissoesusu}) union ({$sql_verifica_permissoesper})) as x order by nome, descr_modulo ";
+//echo $sql_executa; die;
 /////////////////////////////////////////
 $result_executa = db_query($sql_executa);
 $numrows_executa = pg_numrows($result_executa);
@@ -160,7 +179,7 @@ if (isset($tipo_principal) && trim(@$tipo_principal) != ""){
      if (trim(@$tipo_principal) == "2"){
           $cabec_usuarios_tipo = "TIPO DE USUARIO: SOMENTE EXTERNOS";
      }
-     
+
      if (trim(@$tipo_principal) == "3"){
           $cabec_usuarios_tipo = "TIPO DE USUARIO: SOMENTE PERFIS";
      }
@@ -189,7 +208,7 @@ if (isset($tipo_usuario) && trim(@$tipo_usuario) != ""){
       break;
     default:
       $cabec_usuarios_situacao = "SITUAÇÃO: TODOS";
-      
+
   }
 }
 $head6 = $cabec_usuarios_situacao;
@@ -357,13 +376,13 @@ function recGravaMenus($id_usuario, $id_modulo, $id_item){
                           and p.id_instit  = $codigo
                           and m.id_item 	 = $id_item
                           and i.itemativo  = $ambiente
-                       "; 
-  
+                       ";
+
   $sql_itens_pai_per = "
                         select m.id_item as pai, m.id_item, m.id_item_filho, m.menusequencia, i.descricao, i.help
                         from db_menu m
                              inner join db_permherda h on h.id_usuario = $id_usuario
-                             inner join db_usuarios  u on u.id_usuario = h.id_perfil 
+                             inner join db_usuarios  u on u.id_usuario = h.id_perfil
                                                       and u.usuarioativo = '1'
                              inner join db_permissao p on p.id_item = m.id_item_filho
                              inner join db_itensmenu i on i.id_item = m.id_item_filho
@@ -373,16 +392,17 @@ function recGravaMenus($id_usuario, $id_modulo, $id_item){
                                                       and p.id_modulo = $id_modulo
                         where p.id_usuario = h.id_perfil
                           and m.modulo 		 = $id_modulo
-                          and p.id_instit  = $codigo 
+                          and p.id_instit  = $codigo
                           and m.id_item 	 = $id_item
                           and i.itemativo = '1' ";
 
   $sql_executa_item = " select distinct * from (($sql_itens_pai_usu) union ($sql_itens_pai_per)) as x order by pai, menusequencia, id_item_filho";
   /////////////////////////////////////////
+
   $result_executa_item = db_query($sql_executa_item);
   $numrows_executa_item = pg_numrows($result_executa_item);
   /////////////////////////////////////////
-  
+
   for($b=0; $b<$numrows_executa_item; $b++){
     db_fieldsmemory($result_executa_item, $b);
     $conta=1;
@@ -405,68 +425,70 @@ function verificaPerfilMenu($id_usuario, $id_modulo, $id_item, $id_item_filho, $
   global $anousu, $codigo, $pdf, $alt, $logper, $nomper, $usuper;
 
   $sql_itens_per = "
-                    select distinct u.id_usuario as usuper, u.nome as nomper, u.login as logper
-                    from db_menu m
-                         inner join db_permherda h on h.id_usuario = $id_usuario
-                         inner join db_usuarios  u on u.id_usuario = h.id_perfil
-                                                  and u.usuarioativo = '1'
-                         inner join db_permissao p on p.id_item = m.id_item_filho
-                                                  and p.permissaoativa = '1'
-                                                  and p.anousu = $anousu
-                                                  and p.id_instit = $codigo
-                                                  and p.id_modulo = $id_modulo
-                         inner join db_itensmenu i on i.id_item = m.id_item_filho
-                    where p.id_usuario    = h.id_perfil
-                      and m.modulo	 	    = $id_modulo 
-                      and m.id_item 	    = $id_item
-                      and p.id_instit     = $codigo
-                      and m.id_item_filho = $id_item_filho 
-                      and i.itemativo 	  = '1' 
-                      and u.usuext <> 0 ";
+    select distinct u.id_usuario as usuper, u.nome as nomper, u.login as logper
+    from db_menu m
+         inner join db_permherda h on h.id_usuario = $id_usuario
+         inner join db_usuarios  u on u.id_usuario = h.id_perfil
+                                  and u.usuarioativo = '1'
+         inner join db_permissao p on p.id_item = m.id_item_filho
+                                  and p.permissaoativa = '1'
+                                  and p.anousu = $anousu
+                                  and p.id_instit = $codigo
+                                  and p.id_modulo = $id_modulo
+         inner join db_itensmenu i on i.id_item = m.id_item_filho
+    where p.id_usuario    = h.id_perfil
+      and m.modulo	 	    = $id_modulo
+      and m.id_item 	    = $id_item
+      and p.id_instit     = $codigo
+      and m.id_item_filho = $id_item_filho
+      and i.itemativo 	  = '1'
+      and u.usuext <> 0 ";
 
 $result_itens_per = db_query($sql_itens_per);
-  $numrows_itens_per = pg_num_rows($result_itens_per);
-if ($numrows_itens_per == 0){
-$pdf->cell(70         ,$alt,"" , 0, 1, "L", 0);
-}
- if($numrows_itens_per > 0){
+$numrows_itens_per = pg_num_rows($result_itens_per);
+
+  if ($numrows_itens_per == 0){
+    $pdf->cell(70,$alt,"" , 0, 1, "L", 0);
+  }
+
+ if ($numrows_itens_per > 0) {
     $pdf->setfont("arial", "I", 7);
     $sql_itens_usu = "
-                      select distinct u.id_usuario as usuper, u.nome as nomper, u.login as logper
-                      from db_menu m
-                           inner join db_permissao p on p.id_item = m.id_item_filho
-                                                    and p.permissaoativa = '1'
-                                                    and p.anousu = $anousu
-                                                    and p.id_instit = $codigo
-                                                    and p.id_modulo = $id_modulo
-                           inner join db_usuarios  u on u.id_usuario = p.id_usuario
-                                                    and u.usuarioativo = '1'
-                           inner join db_itensmenu i on i.id_item = m.id_item_filho
-                      where p.id_usuario     = $id_usuario
-                        and m.modulo 		     = $id_modulo
-                        and p.id_instit      = $codigo 
-                        and m.id_item 	     = $id_item
-                        and m.id_item_filho  = $id_item_filho 
-                        and i.itemativo 		 = '1' ";
-    $result_itens_usu = db_query($sql_itens_usu);
+        select distinct u.id_usuario as usuper, u.nome as nomper, u.login as logper
+        from db_menu m
+             inner join db_permissao p on p.id_item = m.id_item_filho
+                                      and p.permissaoativa = '1'
+                                      and p.anousu = $anousu
+                                      and p.id_instit = $codigo
+                                      and p.id_modulo = $id_modulo
+             inner join db_usuarios  u on u.id_usuario = p.id_usuario
+                                      and u.usuarioativo = '1'
+             inner join db_itensmenu i on i.id_item = m.id_item_filho
+        where p.id_usuario     = $id_usuario
+          and m.modulo 		     = $id_modulo
+          and p.id_instit      = $codigo
+          and m.id_item 	     = $id_item
+          and m.id_item_filho  = $id_item_filho
+          and i.itemativo 		 = '1' ";
+
+    $result_itens_usu  = db_query($sql_itens_usu);
     $numrows_itens_usu = pg_num_rows($result_itens_usu);
-   $pdf->setx(120);
-    if($numrows_itens_usu > 0){
+    $pdf->setx(120);
+    if ($numrows_itens_usu > 0) {
       db_fieldsmemory($result_itens_usu, 0);
       $pdf->cell(30,$alt,"Login: $logper","0","L",$preenche);
     }
-$vNomper=null;
-    for($i=0; $i<$numrows_itens_per; $i++){
+    $vNomper = null;
+    for($i = 0; $i < $numrows_itens_per; $i++){
       db_fieldsmemory($result_itens_per, $i);
-        
       if ($i > 0) {
        $vNomper.=",".$nomper;
       } else {
        $vNomper.=$nomper;
       }
-      if ($i==$numrows_itens_per-1){
+      if ($i == $numrows_itens_per-1){
           $pdf->multiCell(60,$alt,"Perfil: $vNomper","0","L",$preenche);
-         }
+      }
    }
 
   }
