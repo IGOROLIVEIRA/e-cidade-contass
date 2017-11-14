@@ -523,19 +523,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
              */
 
             $aDadosAgrupados = array();
-            foreach ($oAcordo->getItens() as $oItens) {
-                $sSql = "SELECT si43_coditem FROM
-                            (select si43_coditem,si43_dscitem from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102017) as y
-                            WHERE si43_dscitem LIKE
-                            '" . trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oItens->getMaterial()->getDescricao()))) . "%'";
-                $result = db_query($sSql);
-
-                $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
-
-                if ($iCodItem == "") {
+            foreach ($oAcordo->getItensPosicaoInicial() as $oItens) {
                     $iUnidade = $oItens->getUnidade() == "" ? 1 : $oItens->getUnidade();
                     $iCodItem = $oItens->getMaterial()->getCodigo() . $iUnidade;
-                }
 
                 $sHash = $iCodItem;
                 if (!isset($aDadosAgrupados[$sHash])) {

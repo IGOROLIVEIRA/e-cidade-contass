@@ -3378,7 +3378,7 @@ class Acordo
 
         $aItens = array();
         $oDaoAcordoitem = new cl_acordoitem;
-         $sCampos = "ac20_ordem, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
+        $sCampos = "ac20_ordem, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
         $sCampos .= "sum(ac20_valortotal) as valortotal, ";
         $sCampos .= "pc01_descrmater, pc01_codmater, max(ac20_sequencial) as codigo, max(ac20_acordoposicao) as posicao, ";
         $sCampos .= "m61_codmatunid, m61_abrev ";
@@ -3402,6 +3402,41 @@ class Acordo
             $aItens[] = $oItem;
         }
         return $aItens;
+    }
+
+    /**
+     * retorna os itens na possição inicial
+     * @return Acordoitem[]
+     */
+    public function getItensPosicaoInicial()
+    {
+    $aItens = array();
+        $oDaoAcordoitem = new cl_acordoitem;
+        $sCampos = "ac20_ordem, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
+        $sCampos .= "sum(ac20_valortotal) as valortotal, ";
+        $sCampos .= "pc01_descrmater, pc01_codmater, max(ac20_sequencial) as codigo, max(ac20_acordoposicao) as posicao, ";
+        $sCampos .= "m61_codmatunid, m61_abrev ";
+        $sWhere = "ac16_sequencial = {$this->getCodigo()} and ac26_acordoposicaotipo = 1";
+        $sGroup = "group by ac20_ordem, pc01_descrmater, pc01_codmater, m61_codmatunid, m61_abrev ";
+        $sSqlItens = $oDaoAcordoitem->sql_query_transparencia($sCampos, "ac20_ordem", $sWhere . $sGroup);
+        $rsItem = $oDaoAcordoitem->sql_record($sSqlItens);
+        $iTotalLinhas = $oDaoAcordoitem->numrows;
+        for ($iItem = 0; $iItem < $iTotalLinhas; $iItem++) {
+
+            $oDadosItem = db_utils::fieldsMemory($rsItem, $iItem);
+            $oItem = new AcordoItem($oDadosItem->codigo);
+            $oItem->setCodigoPosicao($oDadosItem->posicao);
+            $oItem->setCodigo($oDadosItem->codigo);
+            $oItem->setMaterial(MaterialComprasRepository::getByCodigo($oDadosItem->pc01_codmater));
+            $oItem->setQuantidade($oDadosItem->quantidade);
+            $oItem->setValorTotal($oDadosItem->valortotal);
+            $oItem->setUnidade($oDadosItem->m61_codmatunid);
+            $oItem->setDescricaoUnidade($oDadosItem->m61_abrev);
+            $oItem->setOrdem($oDadosItem->ac20_ordem);
+            $aItens[] = $oItem;
+        }
+        return $aItens;
+
     }
 
     /**
