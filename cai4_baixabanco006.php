@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -45,7 +45,7 @@ $oGet = db_utils::postMemory($_GET);
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -54,7 +54,7 @@ $oGet = db_utils::postMemory($_GET);
 </table>
 
 <table width="790" height="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <form action="" name="form1" method="post">
 	      <center>
@@ -63,7 +63,7 @@ $oGet = db_utils::postMemory($_GET);
               <td height="45">&nbsp;</td>
             </tr>
             <tr>
-              <td height="30" align="center"><font size="5">Processando Classifica&ccedil;&atilde;o Aguarde... 
+              <td height="30" align="center"><font size="5">Processando Classifica&ccedil;&atilde;o Aguarde...
                 </font></td>
             </tr>
             <tr>
@@ -71,13 +71,13 @@ $oGet = db_utils::postMemory($_GET);
             </tr>
           </table>
           <table id="processado" style="visibility:hidden" width="100%" border="0" cellspacing="0">
-            <tr> 
+            <tr>
               <td>&nbsp;</td>
             </tr>
-            <tr> 
+            <tr>
               <td height="30" align="center"><font size="5">Processo Conclu&iacute;do.</font></td>
             </tr>
-            <tr> 
+            <tr>
               <td>&nbsp;</td>
             </tr>
           </table>
@@ -93,47 +93,38 @@ $oGet = db_utils::postMemory($_GET);
    db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 
    flush();
-   
+
    try {
-   	
-   	
+
+
    	db_inicio_transacao();
-   	
+
    	if(!isset($oGet->codret) || $oGet->codret == ""){
    		throw new Exception("Código do arquivo ({$oGet->codret}) de Retorno Inválido.");
    	}
-   /**
-    * Integração JMS
-    * Este trecho foi inserido para que as guias emitidas no JMS podessem ser reconhecidas no e-cidade no momento da baixa de banco
-    * Rotina adaptada para a implantação do modulo tributário em Pirapora MG
-    * @author rodrigo@contass
-    */
-   	$sSqlIntegracaoJMS = "update disbanco set k00_numpre = debitos_jms.numpre_seq, k00_numpar = debitos_jms.k00_numpar from debitos_jms where disbanco.k00_numpre = debitos_jms.k00_numpre_old and disbanco.k00_numpar = debitos_jms.k00_numpar_old";
-    if(!db_query($sSqlIntegracaoJMS)){
-        throw new Exception(str_replace("\n","",substr(pg_last_error(), 0, strpos(pg_last_error(),"CONTEXT"))));
-    }
+
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
    	$rsBaixaBanco = db_query($sSql);
    	if (!$rsBaixaBanco) {
    		throw new Exception(str_replace("\n","",substr(pg_last_error(), 0, strpos(pg_last_error(),"CONTEXT"))));
-   	}	
-   	
+   	}
+
    	$sRetornoBaixaBanco = db_utils::fieldsMemory($rsBaixaBanco, 0)->fc_executa_baixa_banco;
    	if (substr($sRetornoBaixaBanco,0,1) != '1') {
-   	  throw new Exception($sRetornoBaixaBanco);	
+   	  throw new Exception($sRetornoBaixaBanco);
    	}
-   	
+
    	db_msgbox($sRetornoBaixaBanco);
-   	
+
    	db_fim_transacao(false);
-   	
+
    } catch (Exception $oErro) {
-   	
+
    	db_fim_transacao(true);
    	$sMsgRetorno  = "Erro durante o processamento da Classificação da Baixa de Banco!\\n\\n{$oErro->getMessage()}";
    	db_msgbox($sMsgRetorno);
-   	
+
    }
-   
+
    db_redireciona("cai4_baixabanco002.php?db_opcao=4&pesquisar=true&k15_codbco={$oGet->k15_codbco}&k15_codage={$oGet->k15_codage}");
 ?>
