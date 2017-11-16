@@ -341,6 +341,7 @@ class cl_issgruposervico {
      $sql .= " from issgruposervico ";
      $sql .= "      inner join db_estruturavalor  on  db_estruturavalor.db121_sequencial = issgruposervico.q126_db_estruturavalor";
      $sql .= "      inner join db_estrutura  on  db_estrutura.db77_codestrut = db_estruturavalor.db121_db_estrutura";
+     $sql .= "      left join issconfiguracaogruposervico  on  issconfiguracaogruposervico.q136_issgruposervico = issgruposervico.q126_sequencial";
      $sql2 = "";
      if($dbwhere==""){
        if($q126_sequencial!=null ){

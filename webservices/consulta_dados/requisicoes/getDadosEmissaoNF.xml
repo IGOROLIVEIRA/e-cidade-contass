@@ -1,4 +1,4 @@
-<?xml version='1.0' ?>                                                                    
+<?xml version='1.0' ?>
 <consulta distinct="false">
   <campos>
     <campo campo="q03_ativ"         label="cod_atividade"     />
@@ -10,8 +10,8 @@
     <campo campo="db121_estrutural" label="cod_item_servico"  />
     <campo campo="db121_descricao"  label="desc_item_servico" />
     <campo campo="q136_valor"       label="aliq"              />
-    <campo campo="case when q136_localpagamento = 1 then 'Sede Prestador' 
-                        when q136_localpagamento = 2 then 'Sede tomador' 
+    <campo campo="case when q136_localpagamento = 1 then 'Sede Prestador'
+                        when q136_localpagamento = 2 then 'Sede tomador'
                         when q136_localpagamento = 3 then 'Local de prestação do serviço' end"
                                                                                   label="local_pgto"                     />
   </campos>
@@ -26,7 +26,8 @@
     <join tipo="left"   tabela="issconfiguracaogruposervico"     condicao="q126_sequencial        = q136_issgruposervico" />
   </juncoes>
   <filtros>
-    <filtro label="atividade" condicao="q03_ativ = '$atividade'" obrigatorio="true"/>
+    <filtro label="atividade" condicao="q03_ativ = '$atividade'" obrigatorio="false"/>
+    <filtro label="servico" condicao="q136_sequencial = '$servico'" obrigatorio="false"/>
   </filtros>
   <agrupamento campos="" />
   <ordenacao   campos="q03_ativ" />

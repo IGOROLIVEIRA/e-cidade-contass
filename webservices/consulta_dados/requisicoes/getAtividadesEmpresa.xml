@@ -1,9 +1,10 @@
-<?xml version='1.0' ?>                                                                    
+<?xml version='1.0' ?>
 <consulta distinct="false">
   <campos>
     <campo campo= "q02_inscr"                                                     label="inscricao"       	   />
-    <campo campo= "q03_ativ"                                                      label="cod_atividade"   	   />
-    <campo campo= "q03_descr"                                                     label="atividade"       	   />
+    <campo campo= "q03_ativ"                                               label="cod_atividade"   	   />
+    <campo campo= "q136_sequencial"                                               label="cod_servico"   	   />
+    <campo campo= "(db121_estrutural||' - '||q03_descr||' - '||round(q136_valor,2)::varchar||case when q136_tipotributacao = 2 then '%' else ' R$' end)" label="atividade"/>
     <campo campo= "q07_datain"                                                    label="dt_inicio"            />
     <campo campo= "q03_deducao"                                                   label="deducao"            />
     <campo campo= "q03_limite"                                                    label="dt_fim"           />
@@ -18,8 +19,8 @@
     <campo campo= "db121_estrutural"                                              label="cod_item_servico"  	   />
     <campo campo= "db121_descricao"                                               label="desc_item_servico"        />
     <campo campo= "q136_valor"                                                    label="aliq"                     />
-    <campo campo= "case when q136_localpagamento = 1 then 'Sede Prestador' 
-                        when q136_localpagamento = 2 then 'Sede tomador' 
+    <campo campo= "case when q136_localpagamento = 1 then 'Sede Prestador'
+                        when q136_localpagamento = 2 then 'Sede tomador'
                         when q136_localpagamento = 3 then 'Local de prestação do serviço' end"
                                                                                   label="local_pgto"               />
   </campos>
