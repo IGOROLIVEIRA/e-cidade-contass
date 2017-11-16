@@ -60,12 +60,5 @@ GRANT ALL ON TABLE abatimentoutilizacaodestino TO ecidade;
 GRANT SELECT ON TABLE abatimentoutilizacaodestino TO dbseller;
 GRANT SELECT ON TABLE abatimentoutilizacaodestino TO plugin;
 
-ALTER TABLE ONLY abatimentoutilizacao
-    ADD CONSTRAINT abatimentoutilizacao_abatimento_fk FOREIGN KEY (k157_abatimento) REFERENCES abatimento(k125_sequencial);
-
-ALTER TABLE ONLY abatimentoutilizacao
-    ADD CONSTRAINT abatimentoutilizacao_usuario_fk FOREIGN KEY (k157_usuario) REFERENCES configuracoes.db_usuarios(id_usuario);
-
-
 ALTER TABLE ONLY abatimentoutilizacaodestino
     ADD CONSTRAINT abatimentoutilizacaodestino_utilizacao_fk FOREIGN KEY (k170_utilizacao) REFERENCES abatimentoutilizacao(k157_sequencial);
