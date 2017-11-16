@@ -30,9 +30,8 @@ include ("libs/db_utils.php");
 include ("fpdf151/pdf.php");
 include("fpdf151/assinatura.php");
 include ("libs/db_sql.php");
-
+db_app::import("orcamento.suplementacao.*");
 db_postmemory($HTTP_POST_VARS);
-
 $classinatura = new cl_assinatura;
 
 //---------------------------------------------------------------
@@ -817,6 +816,72 @@ $pdf->Cell(80, $alt, "", 0, 0, "L", '0');
 $pdf->Cell(50, $alt, db_formatar($total_sup, 'f'), 0, 0, "R", '0');
 $pdf->Cell(50, $alt, db_formatar($total_red, 'f'), 0, 0, "R", '0');
 $pdf->SetFont('Arial', '', 9);
+
+/*OC2785*/
+
+$sSqlValorTotalOrcamento  = "select sum(o58_valor) as valororcamento from orcdotacao where o58_anousu = ".db_getsession("DB_anousu")." and o58_instit in({$instits})";
+$rsValorOrcamento        = db_query($sSqlValorTotalOrcamento);
+$nValorOrcamento         = 0;
+if (pg_num_rows($rsValorOrcamento) > 0) {
+  $nValorOrcamento = db_utils::fieldsMemory($rsValorOrcamento, 0)->valororcamento;
+}
+$nPercentualLoa = 0;
+$aParametro = db_stdClass::getParametro("orcsuplementacaoparametro", array(db_getsession("DB_anousu")));
+if (count($aParametro) > 0) {
+  $nPercentualLoa = $aParametro[0]->o134_percentuallimiteloa;
+}
+//$limiteloa = db_formatar(($nPercentualLoa*$nValorOrcamento)/100,'f');
+
+$sSqlSuplementacoes = "
+SELECT *
+FROM orcsuplem
+INNER JOIN orcsuplemtipo ON orcsuplemtipo.o48_tiposup = orcsuplem.o46_tiposup
+INNER JOIN orcprojeto ON orcprojeto.o39_codproj = orcsuplem.o46_codlei
+INNER JOIN conhistdoc ON conhistdoc.c53_coddoc = orcsuplemtipo.o48_coddocsup
+INNER JOIN orclei ON orclei.o45_codlei = orcprojeto.o39_codlei
+LEFT JOIN orcsuplemlan ON o49_codsup= orcsuplem.o46_codsup
+LEFT JOIN db_usuarios ON id_usuario = o49_id_usuario
+WHERE orcprojeto.o39_anousu = 2017
+    /*AND orcprojeto.o39_usalimite = 't'*/
+ORDER BY o46_codsup";
+$rsSuplementacoes = db_query($sSqlSuplementacoes);
+$aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
+foreach ($aSuplementacao as $oSuplem) {
+
+ $oSuplementacao = new Suplementacao($oSuplem->o46_codsup);
+ $valorutilizado += $oSuplementacao->getvalorSuplementacao();
+}
+
+
+//$percentualUtilizado = ($valorutilizado/$nValorOrcamento)*100;
+
+$percentualUtilizado = ($valorutilizado*100)/$nValorOrcamento;
+
+$percentualLoa = round($nPercentualLoa,2);
+$percentualUtiliz = round($percentualUtilizado,4);
+
+$pdf->ln();
+$pdf->setX(10);
+$pdf->SetFont('Arial', 'b', 9);
+$pdf->Cell(80, $alt, "TOTAL DO ORÇAMENTO: ", '','', "L", '0');
+$pdf->SetFont('Arial', '', 10);
+$pdf->setX(49);
+$pdf->Cell(0, $alt, db_formatar($nValorOrcamento,'f') , '', '', "", '');
+$pdf->ln();
+
+$pdf->SetFont('Arial', 'b', 9);
+$pdf->Cell(80, $alt, "PERCENTUAL PERMITIDO: ", 0, 0, "L", '0');
+$pdf->SetFont('Arial', '', 10);
+$pdf->setX(53);
+$pdf->Cell(0, $alt, $percentualLoa."%", '', '', "", '');
+$pdf->ln();
+
+$pdf->SetFont('Arial', 'b', 9);
+$pdf->Cell(80, $alt, "PERCENTUAL JÁ MOVIMENTADO: ", 0, 0, "L", '0');
+$pdf->SetFont('Arial', '', 10);
+$pdf->setX(64);
+$pdf->Cell(0, $alt, $percentualUtiliz."%", '', '', "", '');
+$pdf->ln();
 
 //-- imprime parametros
 if ($imprime_filtro == 's') {
