@@ -37,7 +37,16 @@ fi
 
 echo "
 -- Ocorrência ${ocorrencia}
+BEGIN;                   
+SELECT fc_startsession();
 
+-- Início do script
+
+
+
+-- Fim do script
+
+COMMIT;
 " > $pathCompleto
 
 echo "Arquivo '${pathCompleto}' criado com sucesso."
