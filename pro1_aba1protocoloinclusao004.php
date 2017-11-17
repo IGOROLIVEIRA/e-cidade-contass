@@ -245,23 +245,6 @@ function js_pesquisaProtocolo(chave1, chave2, chave3, chave4, chave5, chave6, ch
   }
 
 
-  /*if (chave10 == '') {
-    if (chave2 == id_sessao || id_sessao == 1) {
-      document.getElementById('anular').style.display = "inline-block";
-      document.getElementById('alterar').style.display = "inline-block";
-    } else {
-      document.getElementById('anular').style.display = "none";
-      document.getElementById('alterar').style.display = "none";
-    }
-    document.getElementById('anulado').style.display = "none";
-  }
-  else {
-    document.getElementById('anular').style.display = "none";
-    document.getElementById('alterar').style.display = "none";
-    document.getElementById('anulado').style.display = "inline-block";
-    document.form1.dt_anulado.value = chave10;
-  }*/
-
   document.getElementById('inclui').style.display  = "none";
   document.getElementById('imprimi').style.display = "inline-block";
 
@@ -277,6 +260,9 @@ function js_pesquisaProtocolo(chave1, chave2, chave3, chave4, chave5, chave6, ch
 
   parent.document.formaba.ordemdepagamento.disabled=false;
   top.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?pesquisa=1&protocolo='+chave1;
+
+  parent.document.formaba.slip.disabled=false;
+  top.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?pesquisa=1&protocolo='+chave1;
 
   db_iframe_protocolos.hide();
 }
@@ -356,6 +342,9 @@ function incluirprotocolo(iUsuario, iOrigem, iDestino, iObservacao, iHora) {
 
         parent.document.formaba.ordemdepagamento.disabled=false;
         top.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?protocolo='+oRetorno.protocolo;
+
+        parent.document.formaba.slip.disabled=false;
+        top.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?protocolo='+oRetorno.protocolo;
       } else {
           alert(oRetorno.erro);
         return;

@@ -12,6 +12,7 @@ $aAutEmpenhos   = array();
 $aEmpenhos      = array();
 $aAutCompras    = array();
 $aAutPagamentos = array();
+$aSlips         = array();
 try {
   if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
     $protocolo      = $aFiltros['protocolo'];
@@ -20,6 +21,7 @@ try {
     $aEmpenhos      = buscaEmpenhos($protocolo);
     $aAutCompras    = buscaAutCompras($protocolo);
     $aAutPagamentos = buscaAutPagamentos($protocolo);
+    $aSlips         = buscaSlips($protocolo);
   }
 
 
@@ -152,6 +154,34 @@ function buscaAutPagamentos($protocolo) {
   $rsConsulta = db_query($sSQL);
   $oAutPagamentos = pg_fetch_all($rsConsulta);
   return $oAutPagamentos;
+}
+
+function buscaSlips($protocolo) {
+  $sSQL = "
+    SELECT DISTINCT slip.k17_codigo,
+                to_char(k17_data,'DD/MM/YYYY') k17_data,
+                k17_valor,
+                z01_nome
+      FROM slip
+      INNER JOIN protslip ON protslip.p106_slip = slip.k17_codigo
+      INNER JOIN protocolos ON protocolos.p101_sequencial = protslip.p106_protocolo
+      LEFT JOIN conplanoreduz r1 ON r1.c61_reduz = k17_debito
+        AND r1.c61_instit = k17_instit
+      LEFT JOIN conplano c1 ON c1.c60_codcon = r1.c61_codcon
+        AND c1.c60_anousu = r1.c61_anousu
+      LEFT JOIN conplanoreduz r2 ON r2.c61_reduz = k17_credito
+        AND r2.c61_instit = k17_instit
+      LEFT JOIN conplano c2 ON c2.c60_codcon = r2.c61_codcon
+        AND c2.c60_anousu = r2.c61_anousu
+      LEFT JOIN slipnum ON slipnum.k17_codigo = slip.k17_codigo
+      LEFT JOIN cgm ON cgm.z01_numcgm = slipnum.k17_numcgm
+      LEFT JOIN slipprocesso ON slip.k17_codigo = slipprocesso.k145_slip
+        WHERE protocolos.p101_sequencial = {$protocolo}
+          ORDER BY slip.k17_codigo
+  ";
+  $rsConsulta = db_query($sSQL);
+  $oSlips = pg_fetch_all($rsConsulta);
+  return $oSlips;
 }
 
 
@@ -489,6 +519,51 @@ ob_start();
 
         <?php endif ?>
         <!-- ordem de pagamento -->
+
+        <tr style='height:20px;'>
+          <td class="border-left s15 softmerge">Slip:</td>
+          <td class="s16 border-bottom"></td>
+          <td class="s16 border-bottom"></td>
+          <td class="s2"></td>
+          <td class="s2"></td>
+          <td class="s2"></td>
+          <td class="s2"></td>
+          <td class="s2"></td>
+          <td class="s4"></td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="border-left s4"></td>
+          <td class="s11">Num. Slip</td>
+          <td class="s12" colspan="5">Credor</td>
+          <td class="s11">Valor (R$)</td>
+          <td class="s4"></td>
+        </tr>
+
+        <!-- Slip -->
+        <?php if (count($aSlips)): ?>
+
+          <?php foreach ($aSlips as $aSlip): ?>
+
+          <tr style='height:20px;'>
+            <td class="border-left s3"></td>
+            <td class="s13"><?= $aSlip['k17_codigo'] ?></td>
+            <td class="s3" colspan="5"><?= $aSlip['z01_nome'] ?></td>
+            <td class="s14"><?= db_formatar($aSlip['k17_valor'], 'f') ?></td>
+            <td class="s4"></td>
+          </tr>
+
+          <?php endforeach; ?>
+
+        <?php else: ?>
+
+          <tr style='height:20px;'>
+            <td class="border-left s3"></td>
+            <td class="s3" colspan="7">-</td>
+            <td class="s4"></td>
+          </tr>
+
+        <?php endif ?>
+        <!-- Slip -->
 
         <tr style='height:20px;'>
           <td colspan="1" class="border-left s3"><strong>Observação:</strong>&nbsp;</td>

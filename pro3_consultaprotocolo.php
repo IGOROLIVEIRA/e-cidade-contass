@@ -12,6 +12,7 @@ require ("classes/db_protempautoriza_classe.php");
 require ("classes/db_protmatordem_classe.php");
 require ("classes/db_protocolos_classe.php");
 require ("classes/db_protempenhos_classe.php");
+require ('classes/db_protslip_classe.php');
 require ("classes/db_empempenho_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
@@ -43,6 +44,11 @@ if(!empty($e54_autori)){
     $result = $clprotocolos->sql_record($clprotocolos->sql_consulta_protocolo('',"$campos",'p101_sequencial desc',"p105_codord = $e53_codord"));
     $sTipo = 'ORDEM DE PAGAMENTO';
     $sValor = $e53_codord;
+    $iProtocolo = db_utils::fieldsMemory($result, 0)->p101_sequencial;
+}elseif(!empty($k17_codigo)){
+    $result = $clprotocolos->sql_record($clprotocolos->sql_consulta_protocolo('',"$campos",'p101_sequencial desc',"p106_slip = $k17_codigo"));
+    $sTipo = 'SLIP';
+    $sValor = $k17_codigo;
     $iProtocolo = db_utils::fieldsMemory($result, 0)->p101_sequencial;
 }
 

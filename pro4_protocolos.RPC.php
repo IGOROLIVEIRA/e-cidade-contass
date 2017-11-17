@@ -5,6 +5,7 @@ require_once('classes/db_protempautoriza_classe.php');
 require_once('classes/db_protempenhos_classe.php');
 require_once('classes/db_protmatordem_classe.php');
 require_once('classes/db_protpagordem_classe.php');
+require_once('classes/db_protslip_classe.php');
 require_once("std/db_stdClass.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
@@ -168,6 +169,31 @@ switch ($oParam->exec) {
 
   break;
 
+  case "insereSlip";
+
+  try {
+
+      $verifica = false;
+      $verifica = verificaSlip($oParam->slip, $oParam->protocolo);
+        if ($verifica == true) {
+          throw new Exception("O Slip ".$oParam->slip." já existe para este protocolo!");
+        }
+        $oSlip = new cl_protslip;
+        $oSlip->p106_slip    = $oParam->slip;
+        $oSlip->p106_protocolo = $oParam->protocolo;
+        $oSlip->incluir(null);
+
+        if ($oSlip->erro_status != 1) {
+          throw new Exception($oSlip->erro_msg);
+        }
+
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+      $oRetorno->status   = 2;
+    }
+
+  break;
+
   case "pesquisaAutProtocolos";
 
     try {
@@ -267,6 +293,33 @@ switch ($oParam->exec) {
         $oAutPagamentos->valor = $aAutPagamento->e53_valor;
 
         $oRetorno->autpagamentos[] = $oAutPagamentos;
+
+      }
+
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+      $oRetorno->status   = 2;
+    }
+  break;
+
+  case "pesquisaSlipProtocolos";
+
+    try {
+
+      $rsBusca = buscaSlips($oParam->protocolo);
+      $aSlips = db_utils::getCollectionByRecord($rsBusca);
+      $oRetorno->id_usuario = buscaIdProtocolo($oParam->protocolo);
+      $oRetorno->slips = array();
+
+      foreach ($aSlips as $aSlip) {
+
+        $oSlips = new stdClass();
+        $oSlips->autorizacao     = $aSlip->k17_codigo;
+        $oSlips->razao           = $aSlip->z01_nome;
+        $oSlips->emissao         = $aSlip->k17_data;
+        $oSlips->valor = $aSlip->k17_valor;
+
+        $oRetorno->slips[] = $oSlips;
 
       }
 
@@ -422,6 +475,31 @@ switch ($oParam->exec) {
     }
   break;
 
+  case "excluirSlips";
+
+    try {
+
+      $resultado = db_query("
+        select p106_sequencial
+              from protslip
+                where p106_protocolo = {$oParam->protocolo} and p106_slip in (".implode(",",$oParam->slips).")
+      ");
+
+      $aSlips = db_utils::getCollectionByRecord($resultado);
+      foreach ($aSlips as $aSlip) {
+        $resultado = excluirSlip($aSlip->p106_sequencial);
+
+        if ($resultado == false) {
+          throw new Exception ("Erro ao excluir Slip!");
+        }
+      }
+
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+      $oRetorno->status   = 2;
+    }
+  break;
+
 }
 
 function buscaIdProtocolo($protocolo) {
@@ -471,6 +549,17 @@ function excluirAutPagamento($autpagamento) {
                 delete
                   from protpagordem
                     where p105_sequencial = {$autpagamento};
+                COMMIT;
+              ");
+  return $resultado;
+}
+
+function excluirSlip($slip) {
+  $resultado = db_query("
+                BEGIN;
+                delete
+                  from protslip
+                    where p106_sequencial = {$slip};
                 COMMIT;
               ");
   return $resultado;
@@ -603,6 +692,33 @@ function buscaAutPagamentos($protocolo) {
     return $rsConsulta;
 }
 
+function buscaSlips($protocolo) {
+    $sSQL = "
+      select distinct slip.k17_codigo,
+        to_char(k17_data,'DD/MM/YYYY') k17_data,
+        k17_valor,
+        z01_nome
+         from slip
+           inner join protslip on protslip.p106_slip = slip.k17_codigo
+           inner join protocolos on protocolos.p101_sequencial = protslip.p106_protocolo
+           left join conplanoreduz r1 on r1.c61_reduz  = k17_debito
+            and r1.c61_instit = k17_instit
+           left join conplano      c1 on c1.c60_codcon = r1.c61_codcon
+            and c1.c60_anousu = r1.c61_anousu
+           left join conplanoreduz r2 on r2.c61_reduz = k17_credito
+            and r2.c61_instit = k17_instit
+           left join conplano c2 on c2.c60_codcon = r2.c61_codcon
+            and c2.c60_anousu = r2.c61_anousu
+           left join slipnum on slipnum.k17_codigo = slip.k17_codigo
+           left join cgm on cgm.z01_numcgm = slipnum.k17_numcgm
+           left join slipprocesso on slip.k17_codigo = slipprocesso.k145_slip
+              where protocolos.p101_sequencial = {$protocolo}
+                order by slip.k17_codigo
+    ";
+    $rsConsulta = db_query($sSQL);
+    return $rsConsulta;
+}
+
 function buscaProtocolo() {
   $protocolo  = db_query("select max(p101_sequencial) as p101_sequencial from protocolos");
   return $protocolo;
@@ -634,6 +750,14 @@ function verificaAutCompra($autcompra, $protocolo) {
 
 function verificaAutPagamento($autpagamento, $protocolo) {
   $retorno = db_query("select p105_sequencial from protpagordem where p105_codord = {$autpagamento} and p105_protocolo = {$protocolo}");
+  if (pg_num_rows($retorno) > 0) {
+    return true;
+  }
+  return false;
+}
+
+function verificaSlip($slip, $protocolo) {
+  $retorno = db_query("select p106_sequencial from protslip where p106_slip = {$slip} and p106_protocolo = {$protocolo}");
   if (pg_num_rows($retorno) > 0) {
     return true;
   }

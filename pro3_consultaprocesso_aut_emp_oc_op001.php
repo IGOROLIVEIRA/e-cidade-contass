@@ -80,7 +80,7 @@ $rotulo         = new rotulocampo();
             <td align="left" nowrap > <? db_ancora('Autorizacao',"js_pesquisa_aut(true);",1);?>  </td>
             <td align="left" nowrap>
                 <?
-                db_input("e54_autori",6,$Ie54_autori,true,"text",4,"onclick='js_pesquisa_aut(false);'");
+                db_input("e54_autori",10,$Ie54_autori,true,"text",4,"onclick='js_pesquisa_aut(false);'");
                 // db_input("z01_nome1",40,"",true,"text",3);
                 ?></td>
         </tr>
@@ -97,7 +97,7 @@ $rotulo         = new rotulocampo();
         <tr id="codordem">
             <td  align="left" nowrap title="<?=$Tm51_codordem?>"><?db_ancora('Ordem de Compra',"js_pesquisa_matordem(true);",1);?></td>
             <td align="left" nowrap>
-                <? db_input("m51_codordem",6,$Im51_codordem,true,"text",4,"onchange='js_pesquisa_matordem(false);'");
+                <? db_input("m51_codordem",10,$Im51_codordem,true,"text",4,"onchange='js_pesquisa_matordem(false);'");
                 ?></td>
         </tr>
 
@@ -107,6 +107,15 @@ $rotulo         = new rotulocampo();
             </td>
             <td align="left" nowrap>
                 <? db_input("e53_codord",10,$Ie53_codord,true,"text",4,"onchange='js_buscae53_codord(false);'"); ?>
+            </td>
+        </tr>
+
+        <tr id="slip">
+            <td  align="left" nowrap title="Slip">
+                <?db_ancora('Slip',"js_pesquisak17_codigo(true)",1);?>
+            </td>
+            <td align="left" nowrap>
+                <? db_input("k17_codigo",10,$Ik17_codigo,true,"text",4,"onchange='js_pesquisak17_codigo(false);'"); ?>
             </td>
         </tr>
       </table>
@@ -129,7 +138,7 @@ function js_consultaProcesso() {
   var sUrl = 'pro3_consultaprotocolo.php';
 
   js_OpenJanelaIframe('top.corpo', 'db_iframe', sUrl+'?e54_autori='+document.form1.e54_autori.value+'&e60_numemp='+document.form1.e60_numemp.value+'&m51_codordem='
-      +document.form1.m51_codordem.value+'&e53_codord='+document.form1.e53_codord.value
+      +document.form1.m51_codordem.value+'&e53_codord='+document.form1.e53_codord.value+'&k17_codigo='+document.form1.k17_codigo.value
       , 'Pesquisa de Processos', true);
 }
 
@@ -185,10 +194,12 @@ $('e54_autori').setAttribute('readOnly',true);
 $('e60_numemp').setAttribute('readOnly',true);
 $('m51_codordem').setAttribute('readOnly',true);
 $('e53_codord').setAttribute('readOnly',true);
+$('k17_codigo').setAttribute('readOnly',true);
 $('e54_autori').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
 $('e60_numemp').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
 $('m51_codordem').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
 $('e53_codord').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+$('k17_codigo').setAttribute('style','background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
 
 //-Ordem Pagamento
 
@@ -214,9 +225,10 @@ function js_mostracodord(chave,erro){
 
 function js_mostracodord1(chave1){
     document.form1.e53_codord.value = chave1;
-    $('autori').style.display = 'none';
+    $('autori').style.display     = 'none';
     $('numempenho').style.display = 'none';
-    $('codordem').style.display = 'none';
+    $('codordem').style.display   = 'none';
+    $('slip').style.display       = 'none';
     //document.form1.z01_nome2.value = chave2;
     db_iframe_pagordemele.hide();
 }
@@ -242,9 +254,10 @@ function js_mostramatordem(chave,erro){
 }
 function js_mostramatordem1(chave1){
     document.form1.m51_codordem.value = chave1;
-    $('autori').style.display = 'none';
+    $('autori').style.display     = 'none';
     $('numempenho').style.display = 'none';
-    $('ordempag').style.display = 'none';
+    $('ordempag').style.display   = 'none';
+    $('slip').style.display       = 'none';
 
     db_iframe_matordem.hide();
 }
@@ -272,9 +285,10 @@ function js_mostraempenho(erro,chave){
 }
 function js_mostraempenho1(chave1){
     document.form1.e60_numemp.value = chave1;
-    $('autori').style.display = 'none';
+    $('autori').style.display   = 'none';
     $('codordem').style.display = 'none';
     $('ordempag').style.display = 'none';
+    $('slip').style.display     = 'none';
     // document.form1.z01_nome1.value = chave2;
     db_iframe_empempenho.hide();
 }
@@ -307,11 +321,46 @@ function js_mostraautori1(chave1){
 
     document.form1.e54_autori.value = chave1;
     $('numempenho').style.display = 'none';
-    $('codordem').style.display = 'none';
-    $('ordempag').style.display = 'none';
+    $('codordem').style.display   = 'none';
+    $('ordempag').style.display   = 'none';
+    $('slip').style.display       = 'none';
 
     // document.form1.z01_nome1.value = chave2;
     db_iframe_empautoriza.hide();
+}
+
+// - Slip
+function js_pesquisak17_codigo(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?protocolo=1&funcao_js=parent.js_mostraslip1|k17_codigo','Pesquisa',true);
+  }else{
+    slip01 = new Number(document.form1.k17_codigo.value);
+    if(slip01 != ""){
+       js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?&pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip','Pesquisa',false);
+    }else{
+        //document.form1.k17_codigo.value='';
+    }
+  }
+}
+function js_mostraslip(chave1, erro){
+  /*document.form1.z01_nome.value = chave2;
+  document.form1.dattab.value   = chave3;
+  document.form1.valtab.value   = chave4;*/
+  if(erro==true){
+    document.form1.k17_codigo.focus();
+    document.form1.k17_codigo.value = '';
+  }
+
+}
+
+function js_mostraslip1(chave1){
+  document.form1.k17_codigo.value = chave1;
+  $('autori').style.display     = 'none';
+  $('numempenho').style.display = 'none';
+  $('codordem').style.display   = 'none';
+  $('ordempag').style.display   = 'none';
+
+  db_iframe_slip.hide();
 }
 
 function js_cancelar(){
@@ -320,10 +369,11 @@ function js_cancelar(){
     opcao.setAttribute("name","novo");
     opcao.setAttribute("value","true");
 
-    $('e54_autori').value = "";
-    $('e60_numemp').value = "";
+    $('e54_autori').value   = "";
+    $('e60_numemp').value   = "";
     $('m51_codordem').value = "";
-    $('e53_codord').value = "";
+    $('e53_codord').value   = "";
+    $('k17_codigo').value   = "";
 
 
     document.form1.appendChild(opcao);

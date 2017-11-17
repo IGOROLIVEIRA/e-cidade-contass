@@ -61,14 +61,16 @@ $clcriaabas = new cl_criaabas;
                                           "autorizacaodeempenho"=>"Autorização de Empenho",
                                           "empenho"=>"Empenho",
                                           "ordemdecompra"=>"Ordem de Compra",
-                                          "ordemdepagamento"=>"Ordem de Pagamento"
+                                          "ordemdepagamento"=>"Ordem de Pagamento",
+                                          "slip" => "Slip"
                                           );
 
           $clcriaabas->title      = array("dadosprocesso"=>"Dados Processo",
                                           "autorizacaodeempenho"=>"Autorização de Empenho",
                                           "empenho"=>"Empenho",
                                           "ordemdecompra"=>"Ordem de Compra",
-                                          "ordemdepagamento"=>"Ordem de Pagamento"
+                                          "ordemdepagamento"=>"Ordem de Pagamento",
+                                          "slip" => "Slip"
                                           );
 
 
@@ -76,14 +78,16 @@ $clcriaabas = new cl_criaabas;
                                           "autorizacaodeempenho"=>"pro1_aba2protprocesso004.php",
                                           "empenho"=>"pro1_aba3protprocesso004.php",
                                           "ordemdecompra"=>"pro1_aba4protprocesso004.php",
-                                          "ordemdepagamento"=>"pro1_aba5protprocesso004.php"
+                                          "ordemdepagamento"=>"pro1_aba5protprocesso004.php",
+                                          "slip" => "pro1_aba6protprocesso004.php"
                                           );
 
           $clcriaabas->disabled   = array("dadosprocesso"=>"false",
                                           "autorizacaodeempenho"=>"true",
                                           "empenho"=>"true",
                                           "ordemdecompra"=>"true",
-                                          "ordemdepagamento"=>"true"
+                                          "ordemdepagamento"=>"true",
+                                          "slip" => "true"
                                           );
 
           $clcriaabas->cria_abas();
@@ -103,5 +107,6 @@ $clcriaabas = new cl_criaabas;
   document.formaba.empenho.size              = 25;
   document.formaba.ordemdecompra.size        = 25;
   document.formaba.ordemdepagamento.size     = 25;
+  document.formaba.slip.size                 = 25;
 </script>
 </html>

@@ -614,6 +614,7 @@ class cl_protocolos {
     $sql .= " left join protempautoriza on p102_protocolo = p101_sequencial";
     $sql .= " left join protmatordem on p104_protocolo = p101_sequencial";
     $sql .= " left join protempenhos on p103_protocolo = p101_sequencial";
+    $sql .= " left join protslip     on p106_protocolo = p101_sequencial";
 
     $sql2 = "";
     if ($dbwhere=="") {
