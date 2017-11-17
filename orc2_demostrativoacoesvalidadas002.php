@@ -72,6 +72,7 @@ $iLinhasEstimativa = pg_num_rows($rsEstimativa);
 $aEstimativa	   = array();	 
 
 $valor = 0;
+$aTotalAcoes  = array();
 for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
 
   $oDadosEstimativa = db_utils::fieldsMemory($rsEstimativa,$iInd);	
@@ -109,7 +110,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   $sSqlAcoes .= "		   left join unidaderesp                      on o13_unidaderesp 			= o20_sequencial ";
   $sSqlAcoes .= "    where $sWhere								 								 ";
   $sSqlAcoes .= "      and o08_programa  = {$oDados->iPrograma}    ";	
-  $sSqlAcoes .= " and o08_instit in({$sListaInstit})";
+  $sSqlAcoes .= " and o08_instit in({$sListaInstit}) ";
   $sSqlAcoes .= " group by o08_projativ, 													 ";
   $sSqlAcoes .= " 		   o15_tipo,																 ";
   $sSqlAcoes .= " 		   o55_tipo,																 ";
@@ -118,15 +119,17 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   $sSqlAcoes .= "          o20_descricao, 												 ";
   $sSqlAcoes .= "          o55_descrunidade,  										 ";
   $sSqlAcoes .= "          o55_valorunidade, 											 ";
-  $sSqlAcoes .= "          o05_anoreferencia,											 ";
-  $sSqlAcoes .= "          o28_valor		 													 ";
+  $sSqlAcoes .= "          o05_anoreferencia											 ";
+  //$sSqlAcoes .= "          o28_valor		 													 ";
   //$sSqlAcoes .= " order by o08_orgao,                             ";
   $sSqlAcoes .= " order by o08_projativ,											     ";
   $sSqlAcoes .= "          o05_anoreferencia;											 ";
-  
+  //echo $sSqlAcoes;exit;
   $rsConsultaAcoes 	= pg_query($sSqlAcoes);  
+  //db_criatabela($rsConsultaAcoes);
   $iLinhasAcoes    	= pg_num_rows($rsConsultaAcoes);
   $aAcoes 			= array();
+  
   
   if ( $iLinhasAcoes > 0 ) {
 
@@ -151,8 +154,8 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   	  }
   	  $aAcoes[$oDadosAcao->o08_projativ]['sUnidadeMed']  = $oDadosAcao->o55_descrunidade;
   	  $aAcoes[$oDadosAcao->o08_projativ]['sTipo']     = $oDadosAcao->tipo;
-  	  $aAcoes[$oDadosAcao->o08_projativ]['aExercicio'][$oDadosAcao->o05_anoreferencia]['nQuantFisica'] = $oDadosAcao->o28_valor;
-  	  $aAcoes[$oDadosAcao->o08_projativ]['aExercicio'][$oDadosAcao->o05_anoreferencia]['nValor']       = $oDadosAcao->valor;
+  	  $aAcoes[$oDadosAcao->o08_projativ]['aExercicio'][$oDadosAcao->o05_anoreferencia]['nQuantFisica'] += $oDadosAcao->o28_valor;
+  	  $aAcoes[$oDadosAcao->o08_projativ]['aExercicio'][$oDadosAcao->o05_anoreferencia]['nValor']       += $oDadosAcao->valor;
   	  @$aTotalAcoes[$oDados->iPrograma][$oDadosAcao->o05_anoreferencia] += $oDadosAcao->valor;
   	}
 
@@ -172,10 +175,10 @@ $mostra = 0;
 
 
 
-//echo "<pre>";
-//var_dump($aEstimativa);
-//echo "</pre>";
-//exit;
+/*echo "<pre>";
+var_dump($aEstimativa);
+echo "</pre>";
+exit;*/
 $sSqlPPALei  = $oDaoPPALei->sql_query($oGet->ppalei);
 $rsPPALei    = $oDaoPPALei->sql_record($sSqlPPALei);
 $oLeiPPA     = db_utils::fieldsMemory($rsPPALei, 0);
@@ -825,6 +828,7 @@ if ( $oGet->selforma == "s" ) {
     $pdf->setY($iY);
     
     $nTotalGeral  = 0;
+    $nTotalValor = 0;
     foreach ( $aTotalAcoes[$oEstimativa->iPrograma] as $iExercicio => $aDados ) {
         
       $nTotalValor     = $aDados;
