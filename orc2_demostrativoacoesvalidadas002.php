@@ -353,7 +353,7 @@ if ( $oGet->selforma == "s" ) {
     $iY = $pdf->getY();
     $pdf->Cell(193,$alt*4," TOTAL PROGRAMA","TBR",1,"C",0);
     $pdf->setY($iY);
-  
+    $nTotalGeral     = 0; 
     foreach ( $aTotalAcoes[$oEstimativa->iPrograma] as $iExercicio => $aDados ) {
         
       $nTotalValor     = $aDados;
