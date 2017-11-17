@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -98,11 +98,11 @@ $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 ob_start();
 
 ?>
-  
+
   <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    
+
     <style type="text/css">
       .ritz .waffle a { color : inherit; }
       .ritz .waffle .s12 { background-color : #ffffff; border-bottom : 1px SOLID #000000; color : #000000; direction : ltr; font-family : 'Arial'; font-size : 9pt; padding : 2px 3px 2px 3px; text-align : right; vertical-align : bottom; white-space : nowrap; }
@@ -123,11 +123,11 @@ ob_start();
       .ritz .wrapper { width: 32%; margin-left:1%; margin-right:1%; float:left; }
       .ritz .wrapper .waffle { width: 100%; }
     </style>
-  
+
   </head>
   <body>
-  
-  
+
+
   <div class="ritz grid-container" dir="ltr">
     <?php
     foreach($aDecendios as $aPeriodo){
@@ -461,13 +461,13 @@ ob_start();
           <td class="s7"></td>
           <td class="s6">
             <?php
-            $fTotalFPMEduc = $fFPM*0.05;
+            $fTotalFPMEduc = $fFPM*0.06;
             echo db_formatar($fTotalFPMEduc, "f");
             ?>
           </td>
           <td class="s11">
             <?php
-            $fTotalFPMSaude = $fFPM*0.15;
+            $fTotalFPMSaude = $fFPM*0.16;
             echo db_formatar($fTotalFPMSaude, "f");
             ?>
           </td>
@@ -477,7 +477,7 @@ ob_start();
           <td class="s7"></td>
           <td class="s6">
             <?php
-            $fTotalFPMDEZEduc = $fFPMDEZ*0.25;
+            $fTotalFPMDEZEduc = $fFPMDEZ*0.26;
             echo db_formatar($fTotalFPMDEZEduc, "f");
             ?>
           </td>
@@ -493,7 +493,7 @@ ob_start();
           <td class="s7"></td>
           <td class="s6">
             <?php
-            $fTotalFPMJULEduc = $fFPMJUL*0.25;
+            $fTotalFPMJULEduc = $fFPMJUL*0.26;
             echo db_formatar($fTotalFPMJULEduc, "f");
             ?>
           </td>
@@ -509,13 +509,13 @@ ob_start();
           <td class="s7"></td>
           <td class="s6">
             <?php
-            $fTotalITREduc = $fITR*0.05;
+            $fTotalITREduc = $fITR*0.06;
             echo db_formatar($fTotalITREduc,"f");
             ?>
           </td>
           <td class="s11">
             <?php
-            $fTotalITRSaude = $fITR*0.15;
+            $fTotalITRSaude = $fITR*0.16;
             echo db_formatar($fTotalITRSaude,"f");
             ?>
           </td>
@@ -527,30 +527,46 @@ ob_start();
           </td>
           <td class="s6">
             <?php
-            $fTotalICMSEduc = $fICMS*0.05;
+            $fTotalICMSEduc = $fICMS*0.06;
             echo db_formatar($fTotalICMSEduc,"f");
             ?>
           </td>
           <td class="s11">
             <?php
-            $fTotalICMSSaude = $fICMS*0.15;
+            $fTotalICMSSaude = $fICMS*0.16;
             echo db_formatar($fTotalICMSSaude,"f");
             ?>
           </td>
         </tr>
         <tr style='height:20px;'>
-          <td class="s7 bdleft">ICMS Est. &amp; IPI</td>
+          <td class="s7 bdleft">ICMS Est.</td>
           <td class="s7"></td>
           <td class="s6">
             <?php
-            $fTotalICMSIPIEduc = ($fPARTICMS + $fIPI)*0.05;
-            echo db_formatar($fTotalICMSIPIEduc,"f");
+            $fTotalICMSESTEduc = ($fPARTICMS)*0.06;
+            echo db_formatar($fTotalICMSESTEduc,"f");
             ?>
           </td>
           <td class="s11">
             <?php
-            $fTotalICMSIPISaude = ($fPARTICMS + $fIPI)*0.15;
-            echo db_formatar($fTotalICMSIPISaude,"f");
+            $fTotalICMSESTSaude = ($fPARTICMS)*0.16;
+            echo db_formatar($fTotalICMSESTSaude,"f");
+            ?>
+          </td>
+        </tr>
+        <tr style='height:20px;'>
+          <td class="s7 bdleft">IPI</td>
+          <td class="s7"></td>
+          <td class="s6">
+            <?php
+            $fTotalIPIEduc = ($fIPI)*0.06;
+            echo db_formatar($fTotalIPIEduc,"f");
+            ?>
+          </td>
+          <td class="s11">
+            <?php
+            $fTotalIPISaude = ($fIPI)*0.16;
+            echo db_formatar($fTotalIPISaude,"f");
             ?>
           </td>
         </tr>
@@ -559,13 +575,13 @@ ob_start();
           <td class="s7"></td>
           <td class="s12">
             <?php
-            $fTotalIPVAEduc = $fIPVA*0.05;
+            $fTotalIPVAEduc = $fIPVA*0.06;
             echo db_formatar($fTotalIPVAEduc,"f");
             ?>
           </td>
           <td class="s13">
             <?php
-            $fTotalIPVASaude = $fIPVA*0.15;
+            $fTotalIPVASaude = $fIPVA*0.16;
             echo db_formatar($fTotalIPVASaude,"f");
             ?>
           </td>
@@ -573,8 +589,8 @@ ob_start();
         <tr style='height:20px;'>
           <td class="s14 bdleft"></td>
           <td class="s14"></td>
-          <td class="s12"><?=db_formatar(array_sum(array($fTotalFPMEduc,$fTotalITREduc,$fTotalICMSEduc,$fTotalICMSIPIEduc,$fTotalIPVAEduc,$fTotalFPMDEZEduc,$fTotalFPMJULEduc)),"f") ?></td>
-          <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSIPISaude,$fTotalIPVASaude)),"f")?></td>
+          <td class="s12"><?=db_formatar(array_sum(array($fTotalFPMEduc,$fTotalITREduc,$fTotalICMSEduc,$fTotalICMSESTEduc,$fTotalIPIEduc,$fTotalIPVAEduc,$fTotalFPMDEZEduc,$fTotalFPMJULEduc,$fTotalTribMunEduc)),"f") ?></td>
+          <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSESTSaude,$fTotalIPISaude,$fTotalIPVASaude)),"f")?></td>
         </tr>
         </tbody>
       </table>
@@ -585,7 +601,7 @@ ob_start();
     }
     ?>
   </div>
-  
+
   </body>
   </html>
 
