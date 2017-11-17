@@ -82,7 +82,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   $oDados->sPrograma     	 = $oDadosEstimativa->o54_descr;
   
   
-  $sSqlAcoes  = "   select distinct o08_projativ, 																		 ";
+  $sSqlAcoes  = "   select o08_projativ, 																		 ";
   $sSqlAcoes .= "          o55_descr, 																				     ";
   $sSqlAcoes .= "          o05_anoreferencia,																		     ";
   $sSqlAcoes .= "          ( select sum(o28_valor) 
