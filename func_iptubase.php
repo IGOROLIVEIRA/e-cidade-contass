@@ -156,6 +156,20 @@ if(isset($j14_codigo)){
                 ?>
             </td>
            </tr>
+            <tr>
+
+            <td width="34%" align="right" nowrap title="Quadra e Lote do Registro de Imóveis">
+                <b>Registro de Imóveis Quadra
+                /
+                Lote</b>
+            </td>
+            <td width="66%" align="left" nowrap>
+                <?
+                db_input("j04_quadraregimo",8,$Ij04_quadraregimo,true,'text',4);
+                db_input("j04_loteregimo",8,$Ij04_loteregimo,true,'text',4);
+                ?>
+            </td>
+           </tr>
           <?php
             if (!is_bool($rsSetorLoc)) {
           ?>
@@ -265,9 +279,10 @@ if(isset($j14_codigo)){
                         case when j39_numero is null
                           then 0
                           else j39_numero
-                        end as j39_numero,
+                        end as j39_numero,j04_quadraregimo,j04_loteregimo,
                         j39_compl, j34_setor, j34_quadra, j34_lote, j01_baixa
                    from iptubase
+                        left outer join iptubaseregimovel on j04_matric = j01_matric
                         inner join      lote          on j34_idbql        = j01_idbql
                         left outer join testpri       on j49_idbql        = j01_idbql
                         left outer join ruas          on j14_codigo       = j49_codigo
@@ -306,6 +321,15 @@ if(isset($j14_codigo)){
             $sql2 .= " and j34_lote = '" . str_pad($j34_lote,4,"0",STR_PAD_LEFT) . "'";
           }
           $sql3 = " order by j34_setor, j34_quadra, j34_lote";
+        }else if(((isset($j04_quadraregimo) && (trim($j04_quadraregimo)!="")) or ((isset($j04_loteregimo) && (trim($j04_loteregimo)!="")))) ){
+          $sql2 = " where 1=1 ";
+          if (isset($j04_quadraregimo) && trim($j04_quadraregimo)!="") {
+            $sql2 .= " and j04_quadraregimo = '{$j04_quadraregimo}'";
+          }
+          if (isset($j04_loteregimo) && trim($j04_loteregimo)!="") {
+            $sql2 .= " and j04_loteregimo = '{$j04_loteregimo}'";
+          }
+          $sql3 = " order by j04_quadraregimo, j04_loteregimo";
         }else if((isset($j05_codigoproprio) && ($j05_codigoproprio != '' )) or
                  (isset($j06_quadraloc)     && ($j06_quadraloc != ''))      or
                  (isset($j06_lote)          && ($j06_lote != ''))){

@@ -411,7 +411,12 @@ class cl_iptubaseregimovel {
      $sql .= "      inner join iptubase  on  iptubase.j01_matric = iptubaseregimovel.j04_matric";
      $sql .= "      inner join setorregimovel  on  setorregimovel.j69_sequencial = iptubaseregimovel.j04_setorregimovel";
      $sql .= "      inner join lote  on  lote.j34_idbql = iptubase.j01_idbql";
+     $sql .= "      left outer join testpri       on j49_idbql        = iptubase.j01_idbql";
+     $sql .= "      left outer join iptuconstr    on j01_matric       = j39_matric";
+     $sql .= "      left outer join ruas          on j14_codigo       = testpri.j49_codigo";
+     $sql .= "      left outer join ruas as ruase on ruase.j14_codigo = j39_codigo";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = iptubase.j01_numcgm";
+     $sql .= "      left join bairro  on  lote.j34_bairro = bairro.j13_codi";
      $sql2 = "";
      if($dbwhere==""){
        if($j04_sequencial!=null ){

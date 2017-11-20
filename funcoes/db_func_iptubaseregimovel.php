@@ -25,5 +25,17 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "iptubaseregimovel.j04_sequencial,iptubaseregimovel.j04_setorregimovel,iptubaseregimovel.j04_matric,iptubaseregimovel.j04_matricregimo,iptubaseregimovel.j04_quadraregimo,iptubaseregimovel.j04_loteregimo";
+$campos = "iptubaseregimovel.j04_sequencial,case when j39_numero is null
+                          then 'Terr'
+                          else 'Pred'
+                        end as Tipo,
+                        case when ruase.j14_codigo is null
+                          then ruas.j14_nome
+                          else ruase.j14_nome
+                        end as j14_nome,
+                        case when j39_numero is null
+                          then 0
+                          else j39_numero
+                        end as j39_numero,j13_descr,
+                        j39_compl, iptubaseregimovel.j04_setorregimovel,iptubaseregimovel.j04_matric,iptubaseregimovel.j04_matricregimo,iptubaseregimovel.j04_quadraregimo,iptubaseregimovel.j04_loteregimo";
 ?>
