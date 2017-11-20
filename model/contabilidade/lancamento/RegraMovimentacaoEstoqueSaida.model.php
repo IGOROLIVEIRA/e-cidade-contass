@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("interfaces/IRegraLancamentoContabil.interface.php");
@@ -46,21 +46,22 @@ class RegraMovimentacaoEstoqueSaida implements IRegraLancamentoContabil {
    */
   public function getRegraLancamento($iCodigoDocumento, $iCodigoLancamento, ILancamentoAuxiliar $oLancamentoAuxiliar) {
 
-  	$oGrupo = $oLancamentoAuxiliar->getMaterial()->getGrupo();
-  	  	
+    $oMaterial = $oLancamentoAuxiliar->getMaterial();
+    $oGrupo = $oMaterial->getGrupo();
+
   	if(!isset($oGrupo)){
   		$sMsgErro  = "Grupo não configurado para material - ";
-  		$sMsgErro .= "{$oLancamentoAuxiliar->getMaterial()->getcodMater()}. ";
+  		$sMsgErro .= $oMaterial->getcodMater() . '. ';
   		throw new BusinessException($sMsgErro);
   	}
-  	
-    $oPlanoContaVPD = $oLancamentoAuxiliar->getMaterial()->getGrupo()->getContaVPD();
+
+    $oPlanoContaVPD = $oGrupo->getContaVPD($oMaterial->getTipoSaida());
     if (empty($oPlanoContaVPD)) {
       throw new BusinessException('Conta contábil VPD não configurada para o grupo  $oLancamentoAuxiliar->getMaterial()->getGrupo()->getDescricao().');
     }
-    
+
     $iContaCredito  = $oPlanoContaVPD->getReduzido();
-    $iContaDebito   = $oLancamentoAuxiliar->getMaterial()->getGrupo()->getContaAtivo()->getReduzido();
+    $iContaDebito   = $oGrupo->getContaAtivo($oMaterial->getTipoSaida())->getReduzido();
     $iEstruturalVPD = substr($oPlanoContaVPD->getEstrutural(), 0, 1);
 
     if (empty($iContaCredito) ||
@@ -68,8 +69,8 @@ class RegraMovimentacaoEstoqueSaida implements IRegraLancamentoContabil {
         $iEstruturalVPD <> 3) {
 
       $sMsgErro  = "Conta VPD (Variação Patrimonial Diminutiva) não configurada para o grupo ";
-      $sMsgErro .= "{$oLancamentoAuxiliar->getMaterial()->getGrupo()->getCodigo()} - ";
-      $sMsgErro .= "{$oLancamentoAuxiliar->getMaterial()->getGrupo()->getDescricao()}.";
+      $sMsgErro .= $oGrupo->getCodigo() . ' - ';
+      $sMsgErro .= $oGrupo->getDescricao() . '.';
     	throw new BusinessException($sMsgErro);
     }
 
@@ -78,7 +79,7 @@ class RegraMovimentacaoEstoqueSaida implements IRegraLancamentoContabil {
     $oRegraLancamentoContabil->setContaDebito($iContaDebito);
 
     if ($oLancamentoAuxiliar->isSaida()) {
-    	
+
     	$oRegraLancamentoContabil->setContaCredito($iContaDebito);
     	$oRegraLancamentoContabil->setContaDebito($iContaCredito);
     }

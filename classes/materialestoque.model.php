@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("model/contabilidade/planoconta/SistemaConta.model.php");
@@ -76,6 +76,16 @@ class materialEstoque {
    */
   protected $oMaterialGrupo;
 
+  /**
+   * Tipo de saída
+   *    1 - Inventário/Ajuste (Padrão)
+   *    2 - Transferência
+   *    3 - Doação
+   *    4 - Perda de Ativo
+   * @var int
+   */
+  protected $iTipoSaida = 1;
+
 
   /**
    * Desdobramento do material;
@@ -101,6 +111,24 @@ class materialEstoque {
       $this->iCodDepto = db_getsession ( "DB_coddepto" );
     }
   }
+
+  /**
+   * Setar o tipo de saída
+   */
+  public function setTipoSaida($valor = 1)
+  {
+    $this->iTipoSaida = $valor;
+    return $this;
+  }
+
+  /**
+   * @return int
+   */
+  public function getTipoSaida()
+  {
+    return $this->iTipoSaida;
+  }
+
   /**
    * @return unknown
    */
@@ -230,7 +258,7 @@ class materialEstoque {
       $dAtual = date('Y-m-d');
       $sWhere .= " and m77_dtvalidade > '$dAtual' ";
     }
-     
+
     $sSqlSaldoItem = $this->oDaoMater->sqlQuerySaldo ( null, $sCampos, $sOrder, $sWhere );
     $rsSaldoItem = $this->oDaoMater->sql_record ( $sSqlSaldoItem );
     if ($this->oDaoMater->numrows > 0) {
@@ -923,7 +951,7 @@ class materialEstoque {
     $sSqlPrecoMedio .= "   and m85_matmater = {$this->iCodigoMater}                               ";
 
     $sSqlPrecoMedio .= "   and m85_coddepto = ". $this->iCodDepto ;//.db_getsession("DB_coddepto");
-    
+
     $sSqlPrecoMedio .= "  order by to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') desc limit 1";
 
     $rsPrecoMedio = db_query($sSqlPrecoMedio);
@@ -940,10 +968,10 @@ class materialEstoque {
    * @return number
    */
   public function getPrecoMedioMaterial($sData='', $sHora='') {
-  
-  
+
+
     if ($sData == '') {
-  
+
       $sData = date("Y-m-d", db_getsession("DB_datausu"));
       $sHora = date("H:i:s");
     }
@@ -955,15 +983,15 @@ class materialEstoque {
     $sSqlPrecoMedio .= "   and m85_matmater = {$this->iCodigoMater}                               ";
     //$sSqlPrecoMedio .= "   and m85_coddepto = ".db_getsession("DB_coddepto");
     $sSqlPrecoMedio .= "  order by to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') desc limit 1";
-  
+
     $rsPrecoMedio = db_query($sSqlPrecoMedio);
     if (pg_num_rows($rsPrecoMedio)  > 0) {
       $nPrecoMedio = db_utils::fieldsMemory($rsPrecoMedio, 0)->m85_precomedio;
     }
     return $nPrecoMedio;
   }
-  
-  
+
+
 
   /**
    * método responsavel pelo ajuste de preços medios
@@ -1146,10 +1174,20 @@ class materialEstoque {
     $oLancamentoAuxiliarEstoque->setHistorico($iCodigoHistorico);
     $oLancamentoAuxiliarEstoque->setMaterial($this);
     $oLancamentoAuxiliarEstoque->setSaida(true);
-    if ($this->getGrupo() == null) {
+
+    $this->getGrupo();
+
+    if (empty($this->oMaterialGrupo)) {
       throw new BusinessException("Material sem grupo informado.");
     }
-    $oLancamentoAuxiliarEstoque->setContaPcasp($this->getGrupo()->getConta());
+
+    $iCodConta = $this->oMaterialGrupo->contasParaSaida($this->iTipoSaida)->codigo;
+
+    if (empty($iCodConta)) {
+      throw new Exception("Contas não cadastradas para a respectiva saída");
+    }
+
+    $oLancamentoAuxiliarEstoque->setContaPcasp($iCodConta);
     $this->executarLancamentosContabeis(403, $oLancamentoAuxiliarEstoque, $dtLancamento);
   }
 
@@ -1218,13 +1256,13 @@ class materialEstoque {
       throw new Exception('Erro ao selecionar itens para bloqueio');
     }
   }
-  
+
   /**
    * metodo para retornar o minimo que um material deve ter em estoque em um departamento (almox)
    * @return integer
    */
   public function getEstoqueMinimo(){
-    
+
     $iEstoqueMinimo     = 0;
     $oDaoMatmaterEstoque = new cl_matmaterestoque();
     $sWhereMinimo        = "    coddepto = {$this->iCodDepto}        ";
@@ -1234,7 +1272,7 @@ class materialEstoque {
     if ($oDaoMatmaterEstoque->numrows > 0) {
       $iEstoqueMinimo = db_utils::fieldsMemory($rsMinimo, 0)->m64_estoqueminimo;
     }
-    
+
     return $iEstoqueMinimo;
   }
   /**
@@ -1242,7 +1280,7 @@ class materialEstoque {
    * @return integer
    */
   public function getEstoqueMaximo(){
-    
+
     $iEstoqueMaximo     = 0;
     $oDaoMatmaterEstoque = new cl_matmaterestoque();
     $sWhereMaximo        = "    coddepto = {$this->iCodDepto}        ";
@@ -1252,16 +1290,16 @@ class materialEstoque {
     if ($oDaoMatmaterEstoque->numrows > 0) {
       $iEstoqueMaximo = db_utils::fieldsMemory($rsMaximo, 0)->m64_estoquemaximo;
     }
-    
+
     return $iEstoqueMaximo;
   }
-  
+
   /**
    * metodo para retornar o ponto de pedido que um material deve ter em estoque em um departamento (almox)
    * @return integer
    */
   public function getPontoPedido(){
-  
+
     $iPontoPedido        = 0;
     $oDaoMatmaterEstoque = new cl_matmaterestoque();
     $sWherePedido        = "    coddepto = {$this->iCodDepto}        ";
@@ -1272,6 +1310,6 @@ class materialEstoque {
       $iPontoPedido = db_utils::fieldsMemory($rsPedido, 0)->m64_pontopedido;
     }
     return $iPontoPedido;
-  }  
+  }
 }
 ?>

@@ -89,6 +89,49 @@ class MaterialGrupo extends DBEstruturaValor  {
   protected $oPlanoContaAtivo;
 
   /**
+   * Código da conta referente a Transferência
+   * @var integer
+   */
+  protected $iCodigoContaTransf;
+
+  /**
+   * Código da conta referente a Transferência VPD
+   * @var integer
+   */
+  protected $iCodigoContaTransfVPD;
+
+  /**
+   * Código da conta referente a Doação
+   * @var integer
+   */
+  protected $iCodigoContaDoacao;
+
+  /**
+   * Código da conta referente a Doação VPD
+   * @var integer
+   */
+  protected $iCodigoContaDoacaoVPD;
+
+  /**
+   * Código da conta referente a Perda de Ativo
+   * @var integer
+   */
+  protected $iCodigoContaPerdaAtivo;
+
+  /**
+   * Código da conta referente a Perda de Ativo VPD
+   * @var integer
+   */
+  protected $iCodigoContaPerdaAtivoVPD;
+
+
+  const SAIDA_INVENTARIO    = 1;
+  const SAIDA_TRANSFERENCIA = 2;
+  const SAIDA_DOACAO        = 3;
+  const SAIDA_PERDA_ATIVO   = 4;
+
+
+  /**
    * Código sequencial do grupo do material
    * @param $iCodigoGrupo
    */
@@ -110,6 +153,12 @@ class MaterialGrupo extends DBEstruturaValor  {
         $this->iConta          = $oDadosGrupo->m66_codcon;
         $this->sDescricaoConta = $oDadosGrupo->c60_descr;
         $this->iCodigoContaVPD = $oDadosGrupo->m66_codconvpd;
+        $this->iCodigoContaTransf         = $oDadosGrupo->m66_codcontransf;
+        $this->iCodigoContaTransfVPD      = $oDadosGrupo->m66_codcontransfvpd;
+        $this->iCodigoContaDoacao         = $oDadosGrupo->m66_codcondoacao;
+        $this->iCodigoContaDoacaoVPD      = $oDadosGrupo->m66_codcondoacaovpd;
+        $this->iCodigoContaPerdaAtivo     = $oDadosGrupo->m66_codconperdaativo;
+        $this->iCodigoContaPerdaAtivoVPD  = $oDadosGrupo->m66_codconperdaativovpd;
         $this->iAnoUsu         = $oDadosGrupo->m66_anousu;
         parent::__construct($oDadosGrupo->m65_db_estruturavalor);
         unset($oDadosGrupo);
@@ -156,6 +205,12 @@ class MaterialGrupo extends DBEstruturaValor  {
       $oDaoGrupoMaterialConta->m66_codcon               = $this->getConta();
       $oDaoGrupoMaterialConta->m66_materialestoquegrupo = $this->getCodigo();
       $oDaoGrupoMaterialConta->m66_codconvpd            = $this->iCodigoContaVPD;
+      $oDaoGrupoMaterialConta->m66_codcontransf         = $this->iCodigoContaTransf;
+      $oDaoGrupoMaterialConta->m66_codcontransfvpd      = $this->iCodigoContaTransfVPD;
+      $oDaoGrupoMaterialConta->m66_codcondoacao         = $this->iCodigoContaDoacao;
+      $oDaoGrupoMaterialConta->m66_codcondoacaovpd      = $this->iCodigoContaDoacaoVPD;
+      $oDaoGrupoMaterialConta->m66_codconperdaativo     = $this->iCodigoContaPerdaAtivo;
+      $oDaoGrupoMaterialConta->m66_codconperdaativovpd  = $this->iCodigoContaPerdaAtivoVPD;
 
       if ($oDaoGrupoMaterialConta->numrows == 0) {
         $oDaoGrupoMaterialConta->incluir(null);
@@ -278,13 +333,117 @@ class MaterialGrupo extends DBEstruturaValor  {
   }
 
   /**
+   * Retorna o código da conta Transferência
+   * @return integer
+   */
+  public function getCodigoContaTransf() {
+    return $this->iCodigoContaTransf;
+  }
+
+  /**
+   * Retorna o código da conta Transferência
+   * @return object
+   */
+  public function setCodigoContaTransf($iCodigoConta) {
+    $this->iCodigoContaTransf = $iCodigoConta;
+    return $this;
+  }
+
+  /**
+   * Retorna o código da conta Transferência VPD
+   * @return integer
+   */
+  public function getCodigoContaTransfVPD() {
+    return $this->iCodigoContaTransfVPD;
+  }
+
+  /**
+   * Retorna o código da conta Transferência VPD
+   * @return object
+   */
+  public function setCodigoContaTransfVPD($iCodigoConta) {
+    $this->iCodigoContaTransfVPD = $iCodigoConta;
+    return $this;
+  }
+
+  /**
+   * Retorna o código da conta Doação
+   * @return integer
+   */
+  public function getCodigoContaDoacao() {
+    return $this->iCodigoContaDoacao;
+  }
+
+  /**
+   * Retorna o código da conta Doação
+   * @return object
+   */
+  public function setCodigoContaDoacao($iCodigoConta) {
+    $this->iCodigoContaDoacao = $iCodigoConta;
+    return $this;
+  }
+
+  /**
+   * Retorna o código da conta Doação VPD
+   * @return integer
+   */
+  public function getCodigoContaDoacaoVPD() {
+    return $this->iCodigoContaDoacaoVPD;
+  }
+
+  /**
+   * Retorna o código da conta Doação VPD
+   * @return object
+   */
+  public function setCodigoContaDoacaoVPD($iCodigoConta) {
+    $this->iCodigoContaDoacaoVPD = $iCodigoConta;
+    return $this;
+  }
+
+  /**
+   * Retorna o código da conta Perda Ativo
+   * @return integer
+   */
+  public function getCodigoContaPerdaAtivo() {
+    return $this->iCodigoContaPerdaAtivo;
+  }
+
+  /**
+   * Retorna o código da conta Perda Ativo
+   * @return object
+   */
+  public function setCodigoContaPerdaAtivo($iCodigoConta) {
+    $this->iCodigoContaPerdaAtivo = $iCodigoConta;
+    return $this;
+  }
+
+  /**
+   * Retorna o código da conta Perda Ativo VPD
+   * @return integer
+   */
+  public function getCodigoContaPerdaAtivoVPD() {
+    return $this->iCodigoContaPerdaAtivoVPD;
+  }
+
+  /**
+   * Retorna o código da conta Perda Ativo VPD
+   * @return object
+   */
+  public function setCodigoContaPerdaAtivoVPD($iCodigoConta) {
+    $this->iCodigoContaPerdaAtivoVPD = $iCodigoConta;
+    return $this;
+  }
+
+  /**
    * Retorna um objeto do tipo ContaPlanoPCASP
    * @return ContaPlanoPCASP
    */
-  public function getContaVPD() {
+  public function getContaVPD($iTipoSaida = 1) {
 
-    if (!empty($this->iCodigoContaVPD)) {
-      $this->oPlanoContaVPD = new ContaPlanoPCASP($this->iCodigoContaVPD, $this->iAnoUsu);
+    $oContas = $this->contasParaSaida($iTipoSaida);
+
+    if (!empty($oContas->codigoVPD)) {
+      $this->oPlanoContaVPD = new ContaPlanoPCASP($oContas->codigoVPD, $this->iAnoUsu);
     }
     return $this->oPlanoContaVPD;
   }
@@ -293,11 +452,47 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna um objeto do tipo ContaPlanoPCASP para a Conta Contábil
    * @return ContaPlanoPCASP
    */
-  public function getContaAtivo() {
+  public function getContaAtivo($iTipoSaida = 1) {
 
-    if (!empty($this->iConta)) {
-      $this->oPlanoContaAtivo = new ContaPlanoPCASP($this->iConta, $this->iAnoUsu);
+    $oContas = $this->contasParaSaida($iTipoSaida);
+
+    if (!empty($oContas->codigo)) {
+      $this->oPlanoContaAtivo = new ContaPlanoPCASP($oContas->codigo, $this->iAnoUsu);
     }
     return $this->oPlanoContaAtivo;
+  }
+
+
+
+  public function contasParaSaida($iTipoSaida = 1) {
+
+    $oContas = new stdClass();
+    $oContas->codigo = 0;
+    $oContas->codigoVPD = 0;
+
+    if ($iTipoSaida === self::SAIDA_INVENTARIO) {
+
+      $oContas->codigo = $this->getConta();
+      $oContas->codigoVPD = $this->getCodigoContaVPD();
+
+    } else if ($iTipoSaida === self::SAIDA_TRANSFERENCIA) {
+
+      $oContas->codigo = $this->getCodigoContaTransf();
+      $oContas->codigoVPD = $this->getCodigoContaTransfVPD();
+
+    } else if ($iTipoSaida === self::SAIDA_DOACAO) {
+
+      $oContas->codigo = $this->getCodigoContaDoacao();
+      $oContas->codigoVPD = $this->getCodigoContaDoacaoVPD();
+
+    } else if ($iTipoSaida === self::SAIDA_PERDA_ATIVO) {
+
+      $oContas->codigo = $this->getCodigoContaPerdaAtivo();
+      $oContas->codigoVPD = $this->getCodigoContaPerdaAtivoVPD();
+
+    }
+
+    return $oContas;
+
   }
 }

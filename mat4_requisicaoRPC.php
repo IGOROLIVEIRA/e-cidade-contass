@@ -144,9 +144,12 @@ if ($oParam->exec == "getDados"){
   try {
 
     db_inicio_transacao();
+    $oParam->tipoSaida = isset($oParam->tipoSaida) ? $oParam->tipoSaida : 1;
+
     foreach ($oParam->params[0]->itens as $oMaterial) {
 
       $oMaterialEstoque = new materialEstoque($oMaterial->iCodMater);
+      $oMaterialEstoque->setTipoSaida(intval($oParam->tipoSaida));
       MaterialEstoque::bloqueioMovimentacaoItem($oMaterial->iCodMater, db_getsession("DB_coddepto"));
       if (isset($oMaterial->iCriterioCustoRateio)) {
         $oMaterialEstoque->setCriterioRateioCusto($oMaterial->iCriterioCustoRateio);
@@ -194,21 +197,21 @@ if ($oParam->exec == "getDados"){
 
       $oRetorno           = $oSolicitacao->getInfo();
       unset($oRetorno->senha);
-      if($oRetorno->m91_depto!=""){
-        if($oRetorno->m91_depto!=""){
-          $sql=$cldb_dbalmox->sql_record($cldb_dbalmox->sql_query("","descrdepto as descr","","m91_depto= ".$oRetorno->m91_depto));
-          db_fieldsmemory($sql,0);
-          $oRetorno->descr_depto= $descr;
-        }
-        $oRetorno->itens   =  $oSolicitacao->getItensPedidoRequisicao();
-        $oRetorno->status  = 1;
-        $oRetorno->message = null;
-
-        echo $oJson->encode($oRetorno);
-
-      } else {
-        echo $oJson->encode(array("status" => 2, "message"=> urlencode("Não Foi possivel consultar itens.")));
+    if($oRetorno->m91_depto!=""){
+      	 if($oRetorno->m91_depto!=""){
+	       $sql=$cldb_dbalmox->sql_record($cldb_dbalmox->sql_query("","descrdepto as descr","","m91_depto= ".$oRetorno->m91_depto));
+      	   db_fieldsmemory($sql,0);
+      	   $oRetorno->descr_depto= $descr;
       }
+      $oRetorno->itens   =  $oSolicitacao->getItensPedidoRequisicao();
+      $oRetorno->status  = 1;
+      $oRetorno->message = null;
+
+      echo $oJson->encode($oRetorno);
+
+    } else {
+      echo $oJson->encode(array("status" => 2, "message"=> urlencode("Não Foi possivel consultar itens.")));
+    }
     }
   } catch (Exception  $oExeption) {
 
@@ -216,25 +219,25 @@ if ($oParam->exec == "getDados"){
     echo $oJson->encode(array("status" => 2, "message"=>  urlencode($sError)));
   }
 }else if ($oParam->exec == "anularRequisicao") {  ///função que faz a anulação dos itens da requisição
-  db_inicio_transacao();
-  try {
-    foreach ($oParam->params[0]->aItens as $oMaterial) {
-      $oMaterialEstoque = new materialEstoque($oMaterial->iCodMater);
+ 	 db_inicio_transacao();
+	 try {
+	    foreach ($oParam->params[0]->aItens as $oMaterial) {
+         $oMaterialEstoque = new materialEstoque($oMaterial->iCodMater);
 
-      $oMaterialEstoque->anularRequisicao($oMaterial->nQtde,
-        db_stdClass::normalizeStringJsonEscapeString($oMaterial->sItemMotivo),
-        $oMaterial->iCodMater,
-        $oMaterial->iCodItemReq
-      );
+         $oMaterialEstoque->anularRequisicao($oMaterial->nQtde,
+                                               db_stdClass::normalizeStringJsonEscapeString($oMaterial->sItemMotivo),
+                                               $oMaterial->iCodMater,
+                                               $oMaterial->iCodItemReq
+                                               );
 
-    }
-    db_fim_transacao(false);
-  } catch (Exception  $eErro) {
-    $sqlerro = true;
-    $erro_msg = str_replace("\n", "\\n",$eErro->getMessage());
-    db_fim_transacao(true);
+      }
+      db_fim_transacao(false);
+    } catch (Exception  $eErro) {
+	    $sqlerro = true;
+	    $erro_msg = str_replace("\n", "\\n",$eErro->getMessage());
+	    db_fim_transacao(true);
 
-  }
-  echo $oJson->encode(array("status" => 1, "message"=> "Inclusão efetuada com Sucesso"));
+	  }
+	  echo $oJson->encode(array("status" => 1, "message"=> "Inclusão efetuada com Sucesso"));
 }
 ?>
