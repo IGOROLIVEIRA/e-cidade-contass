@@ -321,11 +321,11 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 	INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita = liclicita.l20_codigo and liclicitasituacao.l11_licsituacao in (1,10)
 	WHERE db_config.codigo= " . db_getsession("DB_instit") . " 
 	AND pctipocompratribunal.l44_sequencial in (100,101,102,103) AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
-	AND DATE_PART('YEAR',liclicitasituacao.l11_data)=" . db_getsession("DB_anousu") . "
-	AND DATE_PART('MONTH',liclicitasituacao.l11_data)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+	AND DATE_PART('YEAR',l20_dtpubratificacao)=" . db_getsession("DB_anousu") . "
+	AND DATE_PART('MONTH',l20_dtpubratificacao)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
     
     $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
-    
+
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
       
       $dispensa10 = new cl_dispensa102017();
