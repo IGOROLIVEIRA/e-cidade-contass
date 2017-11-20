@@ -279,11 +279,12 @@ if(isset($j14_codigo)){
                         case when j39_numero is null
                           then 0
                           else j39_numero
-                        end as j39_numero,j04_quadraregimo,j04_loteregimo,
+                        end as j39_numero,j13_descr,j04_quadraregimo,j04_loteregimo,
                         j39_compl, j34_setor, j34_quadra, j34_lote, j01_baixa
                    from iptubase
                         left outer join iptubaseregimovel on j04_matric = j01_matric
                         inner join      lote          on j34_idbql        = j01_idbql
+                        left join       bairro        on  lote.j34_bairro = bairro.j13_codi
                         left outer join testpri       on j49_idbql        = j01_idbql
                         left outer join ruas          on j14_codigo       = j49_codigo
                         inner join cgm                on z01_numcgm       = j01_numcgm
