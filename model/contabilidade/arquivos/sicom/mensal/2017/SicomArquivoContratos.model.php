@@ -498,7 +498,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_datainiciovigencia = $oDados10->ac16_datainicio;
             $clcontratos10->si83_datafinalvigencia = $oDados10->ac16_datafim;
             $oAcordo = new Acordo($oDados10->ac16_sequencial);
-            $clcontratos10->si83_vlcontrato = $oAcordo->getValorContrato();
+            $clcontratos10->si83_vlcontrato = $oDados10->ac16_valor;
             $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento);
             $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento);
             $sTipoUnidade = $oDados10->ac16_tipounidtempoperiodo == 1 ? ' Mês(s)' : ' Dia(s)';
@@ -1033,7 +1033,7 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                  where db01_anousu ={$oDados30->ac16_anousu}  and db01_coddepto ={$oDados30->ac16_coddepto}";
+                  where db01_anousu ={$oDados30->ac16_anousu}  and db01_coddepto ={$oDados10->ac16_deptoresponsavel}";
 
                 $result = db_query($sSql);
                 $sCodUnidadeSub = db_utils::fieldsMemory($result, 0)->codunidadesub;
@@ -1095,7 +1095,7 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                  where db01_anousu ={$oDados40->ac16_anousu}  and db01_coddepto ={$oDados40->ac16_coddepto}";
+                  where db01_anousu ={$oDados40->ac16_anousu}  and db01_coddepto ={$oDados10->ac16_deptoresponsavel}";
 
                 $result = db_query($sSql);//db_criatabela($result);echo $sSql;echo pg_last_error();
                 $sCodUnidadeSub = db_utils::fieldsMemory($result, 0)->codunidadesub;
