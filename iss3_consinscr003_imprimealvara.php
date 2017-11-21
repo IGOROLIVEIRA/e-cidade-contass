@@ -241,7 +241,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
       db_fieldsmemory($res_tipoalvara, 0);
       $pdf1->tipoalvara = $db02_texto;
     } else {
-      $pdf1->tipoalvara = 'ALVARÁ DE LICENÇA PARA LOCALIZAÇÃO';
+      $pdf1->tipoalvara = 'ALVARÁ DE LICENÇA, LOCALIZAÇÃO E FUNCIONAMENTO';
     }
 
     $pdf1->permanente = 't';
