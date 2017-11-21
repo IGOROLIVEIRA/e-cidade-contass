@@ -49,9 +49,10 @@
 	                          END as z01_nomefanta,
 		                                    z01_nome  , q02_numero     , q02_compl ,
 		                                    q02_cxpost, issruas.z01_cep, q02_dtinic,
-		                                    q02_dtbaix
+		                                    q02_dtbaix, q140_datainicio as dl_Data_da_Paralizacao, q140_datafim as dl_Data_Fim_Paralizacao
 		                     from issbase 
-                   inner join cgm on issbase.q02_numcgm = z01_numcgm 
+                   inner join cgm on issbase.q02_numcgm = z01_numcgm
+                   left join issbaseparalisacao on q02_inscr = q140_issbase
                    left  join issruas on issruas.q02_inscr = issbase.q02_inscr ";
 
               if (isset($pesquisaPorNome)) {

@@ -308,7 +308,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $pdf1->prefeitura = $nomeinst;
   $pdf1->municpref = $munic;
   $pdf1->ativ = $q07_ativ;
-  $pdf1->nrinscr = $q02_inscr;
+  $pdf1->nrinscr = empty($q02_inscmu) ? $q02_inscr : $q02_inscmu;
   $pdf1->nome = $z01_nome;
   $pdf1->nomecompl = $z01_nomecomple;
   $pdf1->processo    = @$q14_proces;
