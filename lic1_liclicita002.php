@@ -116,7 +116,7 @@ if(isset($alterar)){
   }
 
   /*OC4448*/
-  if ($lprocsis == 'n') {
+  if ($iLinhasLicProc > 0 && $lprocsis == 'n') {
 
     try {
       $resultado = db_query("
