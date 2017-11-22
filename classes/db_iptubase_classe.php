@@ -835,6 +835,7 @@ $sql = "
      $sql .= "      inner join setor  on  setor.j30_codi = lote.j34_setor";
      $sql .= "      left outer join iptuconstr on iptubase.j01_matric = iptuconstr.j39_matric";
      $sql .= "      left outer join iptuant on iptubase.j01_matric = iptuant.j40_matric";
+     $sql .= "      left join iptubaseregimovel  on  iptubase.j01_matric = iptubaseregimovel.j04_matric";
      $sql2 = "";
      if($dbwhere==""){
        if($j01_matric!=null ){

@@ -135,7 +135,8 @@ $sCampos .= "                                                          and j22_a
 $sCampos .= "             from iptucalc                                                         \n";
 $sCampos .= "            where j23_matric = j01_matric                                          \n";
 $sCampos .= "              and j23_anousu = " . db_getsession("DB_anousu") . " ) as j23_vlrter, \n";
-$sCampos .= "         iptuant.j40_refant                                                        \n";
+$sCampos .= "         iptuant.j40_refant,                                                        \n";
+$sCampos .= "         iptubaseregimovel.j04_quadraregimo,iptubaseregimovel.j04_loteregimo     \n";
 
 $result_matric = $cliptubase->sql_record($cliptubase->sql_query_constr( null, $sCampos, "j34_setor, j34_quadra, j34_lote", $where));
 $numrows_matric = $cliptubase->numrows;
@@ -184,10 +185,8 @@ for ($i = 0; $i < $numrows_matric; $i++) {
     $pdf->Cell(10, $alt, $RLj34_setor , 1,0, "C", 1);
     $pdf->Cell(11, $alt, $RLj34_quadra, 1,0, "C", 1);
     $pdf->Cell(10, $alt, $RLj34_lote  , 1,0, "C", 1);
-
-    if (!isset($mostra) || $mostra != 's') {
-      $pdf->Cell(25,$alt,$RLj40_refant,1,0,"C",1);
-    }
+    $pdf->Cell(15, $alt, 'Quadra RI', 1,0, "C", 1);
+    $pdf->Cell(15, $alt, 'Lote RI'  , 1,0, "C", 1);
 
     if  ($baix == true) {
       $pdf->Cell(15,$alt,$RLj01_baixa,1,0,"C",1);
@@ -196,9 +195,9 @@ for ($i = 0; $i < $numrows_matric; $i++) {
     $pdf->Cell(20,$alt,"Valor Venal",1,0,"C",1);
 
     if (isset($mostra) && $mostra == 's') {
-      $pdf->Cell(50, $alt, "Rua", 1, 0, "C", 1);
-      $pdf->Cell(20, $alt, "Número", 1, 0, "C", 1);
-      $pdf->Cell(20, $alt, "Complemento", 1, 0, "C", 1);
+      $pdf->Cell(40, $alt, "Rua", 1, 0, "C", 1);
+      $pdf->Cell(10, $alt, "Num", 1, 0, "C", 1);
+      $pdf->Cell(15, $alt, "Compl.", 1, 0, "C", 1);
       $pdf->Cell(40, $alt, "Bairro", 1, 0, "C", 1);
     }
 
@@ -212,10 +211,9 @@ for ($i = 0; $i < $numrows_matric; $i++) {
   $pdf->Cell(10,$alt,$j34_setor ,0,0,"C",$p);
   $pdf->Cell(11,$alt,$j34_quadra,0,0,"C",$p);
   $pdf->Cell(10,$alt,$j34_lote  ,0,0,"C",$p);
+  $pdf->Cell(15,$alt,$j04_quadraregimo,0,0,"C",$p);
+  $pdf->Cell(15,$alt,$j04_loteregimo  ,0,0,"C",$p);
 
-  if (!isset($mostra) || $mostra != 's') {
-    $pdf->Cell(25,$alt,@$j40_refant,0,0,"C",$p);
-  }
 
   if ($baix == true) {
     $pdf->Cell(15,$alt,db_formatar(@$j01_baixa,"d"),0,0,"C",$p);
@@ -231,9 +229,9 @@ for ($i = 0; $i < $numrows_matric; $i++) {
       db_fieldsmemory($result_ender,0);
     }
 
-    $pdf->Cell(50,$alt,@$j14_nome,0,0,"L",$p);
-    $pdf->Cell(20,$alt,@$j39_numero ,0,0,"C",$p);
-    $pdf->Cell(20,$alt,substr(@$j39_compl,0,10),0,0,"L",$p);
+    $pdf->Cell(40,$alt,@$j14_nome,0,0,"L",$p);
+    $pdf->Cell(10,$alt,@$j39_numero ,0,0,"C",$p);
+    $pdf->Cell(15,$alt,substr(@$j39_compl,0,10),0,0,"L",$p);
     $pdf->Cell(40,$alt,@$j13_descr,0,0,"L",$p);
   }
 
