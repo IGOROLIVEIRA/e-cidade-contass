@@ -52,7 +52,8 @@ class cl_issalvara {
    var $q123_situacao = 0; 
    var $q123_usuario = 0; 
    var $q123_geradoautomatico = 'f'; 
-   // cria propriedade com as variaveis do arquivo 
+   var $q123_numalvara = 'f';
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
                  q123_sequencial = int4 = Sequencial 
                  q123_isstipoalvara = int4 = Tipo de Alvará 
@@ -61,6 +62,7 @@ class cl_issalvara {
                  q123_situacao = int4 = Situação 
                  q123_usuario = int4 = Usuário 
                  q123_geradoautomatico = bool = Gerado automatico 
+                 q123_numalvara = varchar = Numero do Alvará
                  ";
    //funcao construtor da classe 
    function cl_issalvara() { 
@@ -188,7 +190,8 @@ class cl_issalvara {
                                       ,q123_dtinclusao 
                                       ,q123_situacao 
                                       ,q123_usuario 
-                                      ,q123_geradoautomatico 
+                                      ,q123_geradoautomatico
+                                      ,q123_numalvara
                        )
                 values (
                                 $this->q123_sequencial 
@@ -197,7 +200,8 @@ class cl_issalvara {
                                ,".($this->q123_dtinclusao == "null" || $this->q123_dtinclusao == ""?"null":"'".$this->q123_dtinclusao."'")." 
                                ,$this->q123_situacao 
                                ,$this->q123_usuario 
-                               ,'$this->q123_geradoautomatico' 
+                               ,'$this->q123_geradoautomatico'
+                               ,$this->q123_sequencial
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -263,6 +267,20 @@ class cl_issalvara {
        if(trim($this->q123_isstipoalvara) == null ){ 
          $this->erro_sql = " Campo Tipo de Alvará nao Informado.";
          $this->erro_campo = "q123_isstipoalvara";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+
+     if(trim($this->q123_numalvara)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q123_numalvara"])){
+       $sql  .= $virgula." q123_numalvara = $this->q123_numalvara ";
+       $virgula = ",";
+       if(trim($this->q123_numalvara) == null ){
+         $this->erro_sql = " Campo Número do Alvará nao Informado.";
+         $this->erro_campo = "q123_numalvara";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

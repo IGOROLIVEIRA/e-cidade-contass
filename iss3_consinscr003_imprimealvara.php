@@ -309,6 +309,27 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $pdf1->impobsativ = $impobsativ;
   $pdf1->impobslanc = $impobslanc;
 
+  /**
+   * Busca o Numero do alvara pela ultima movimentacao do ano
+   */
+
+  $clIssAlvara         = new cl_issalvara;
+  $sWhere              = " q123_inscr = {$q02_inscr}";
+  $sOrdem              = " q123_sequencial DESC limit 1 ";
+  $sCampos             = " q123_numalvara||'/'||date_part('year',q123_dtinclusao) as numeroalvara ";
+  $sSql     = $clIssAlvara->sql_query_file(null,$sCampos,$sOrdem,$sWhere);
+
+  $rsAlvara = $clIssAlvara->sql_record($sSql);
+
+  if($clIssAlvara->numrows > 0 ) {
+
+    $oAlvara  = db_utils::fieldsMemory($rsAlvara, 0);
+    $pdf1->numeroalvara     = $oAlvara->numeroalvara;
+
+  } else {
+    $pdf1->numeroalvara = "S/N";
+
+  }
   // PEGA AS ATIVIDADES SECUNDARIAS
   //die($cltabativ->sql_queryinf($q02_inscr,"","*",""," q88_inscr is null "));
   $arr = array ();

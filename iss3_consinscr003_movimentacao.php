@@ -46,7 +46,7 @@ $clMovAlvara    = new cl_issmovalvara();
  * 3 Tipo de Alvara
  * 4 Situação
  * 5 validade
- * 6 processo
+ * 6 numero alvara
  * 7 login
  * 8 obs
  * 
@@ -62,7 +62,7 @@ $sCampoMov .= "    then  'Válido'                            "; // 4
 $sCampoMov .= "  else 'Vencido'                              "; // 4
 $sCampoMov .= "end as dl_situação,                           "; // 4
 $sCampoMov .= "q120_dtmov + q120_validadealvara as dl_validade, "; // 5
-$sCampoMov .= "q124_codproc as dl_processo,                  "; // 6
+$sCampoMov .= "q123_numalvara||'/'||date_part('year',q120_dtmov) as dl_Numero,                  "; // 6
 $sCampoMov .= "login as dl_Login,                            "; // 7
 $sCampoMov .= "q120_obs                                      "; // 8
 

@@ -32,7 +32,7 @@ $cldb_config = new cl_db_config;
 	$this->objpdf->Multicell(0,8,$this->prefeitura,0,"C",0); // prefeitura
 
 	$this->objpdf->sety(42);
-	$this->objpdf->setfont('Arial','B',18);
+	$this->objpdf->setfont('Arial','B',16);
 	$this->objpdf->Multicell(0,8,$this->tipoalvara,0,"C",0); // tipo de alvara
 
 	$this->objpdf->setxy(10,59);
@@ -46,16 +46,16 @@ $cldb_config = new cl_db_config;
 	$this->objpdf->SetFont('Arial','B',$fonte);
 	$this->objpdf->Text($coluna,$linha+9,'INSCRIÇÃO:'); // inscricao
 
-//    if ($this->processo > 0) {
-//      $this->objpdf->Text($coluna + 97,$linha+9,'PROCESSO N°:'); // inscricao
-//    }
+
+   $this->objpdf->Text($coluna + 97,$linha+9,'Numero Alvará: '); // Numero Alvara
+
 
 	$this->objpdf->SetFont('Arial','',$fonte);
 	$this->objpdf->Text($coluna + 60,$linha+9,$this->nrinscr); // inscricao
 
-//    if ($this->processo > 0) {
-//  	  $this->objpdf->Text($coluna + 130,$linha+9,$this->processo); // processo
-//    }
+
+    $this->objpdf->Text($coluna + 130,$linha+9,$this->numeroalvara); // numeroalvara
+
 
 	$this->objpdf->SetFont('Arial','B',$fonte);
 	$this->objpdf->Text($coluna,$linha+15,"NOME/RAZAO SOCIAL: "); // nome
