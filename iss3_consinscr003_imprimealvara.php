@@ -191,36 +191,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   if ($q07_perman == 'f') {
     $pdf1->tipoalvara = 'ALVARÁ DE LICENÇA, LOCALIZAÇÃO E FUNCIONAMENTO PROVISÓRIO';
     $pdf1->permanente = 'f';
-    $sqlparag = "select *
-      from db_documento
-      inner join db_docparag on db03_docum = db04_docum
-      inner join db_tipodoc on db08_codigo  = db03_tipodoc
-      inner join db_paragrafo on db04_idparag = db02_idparag
-      where db03_tipodoc = 1011 and db03_instit = " . db_getsession("DB_instit") . "
-      and not db02_descr ilike 'assinatura%'
-      order by db04_ordem ";
-    $resparag = db_query($sqlparag);
-    //	   die($sqlparag);
-    //db_criatabela($resparag);exit;
-    if (pg_numrows($resparag) == 0) {
-      db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento 26 com os paragrafos do alvara!');
-      exit();
-    }
-    $numrows = pg_numrows($resparag);
-    //	$pdf1->inicia = $db02_inicia;
-    for($i = 0; $i < $numrows; $i ++) {
-      db_fieldsmemory($resparag, $i);
-      if ($db04_ordem == '1') {
-        $pdf1->texto = $db02_texto;
-      }
-      // == assinatura1
-      if ($db04_ordem == '2') {
-        $pdf1->obs = $db02_texto;
-      }
-      if ($db04_ordem == '3') {
-        $pdf1->assalvara = $db02_texto;
-      }
-    }
+
   } else {
     //============================== PARAGRAFOS ALVARA PERMANENTE ======================================================
 
@@ -245,7 +216,8 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
     }
 
     $pdf1->permanente = 't';
-    $sqlparag = "select *
+  }
+  $sqlparag = "select *
       from db_documento
       inner join db_docparag on db03_docum = db04_docum
       inner join db_tipodoc on db08_codigo  = db03_tipodoc
@@ -253,29 +225,27 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
       where db03_tipodoc = 1010 and db03_instit = " . db_getsession("DB_instit") . "
       and not db02_descr ilike 'assinatura%'
       order by db04_ordem ";
-    $resparag = db_query($sqlparag);
-    //die($sqlparag);
-    //db_criatabela($resparag);exit;
-    if (pg_numrows($resparag) == 0) {
-      db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento do alvara!');
-      exit();
+  $resparag = db_query($sqlparag);
+  //die($sqlparag);
+  //db_criatabela($resparag);exit;
+  if (pg_numrows($resparag) == 0) {
+    db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento do alvara!');
+    exit();
+  }
+  $numrows = pg_numrows($resparag);
+  //		$pdf1->inicia = $db02_inicia;
+  for($i = 0; $i < $numrows; $i ++) {
+    db_fieldsmemory($resparag, $i);
+    if ($db04_ordem == '1') {
+      $pdf1->texto = $db02_texto;
     }
-    $numrows = pg_numrows($resparag);
-    //		$pdf1->inicia = $db02_inicia;
-    for($i = 0; $i < $numrows; $i ++) {
-      db_fieldsmemory($resparag, $i);
-      if ($db04_ordem == '1') {
-        $pdf1->texto = $db02_texto;
-      }
-      if ($db04_ordem == '2') {
-        $pdf1->obs = $db02_texto;
-      }
-      if ($db04_ordem == '3') {
-        $pdf1->assalvara = $db02_texto;
-      }
+    if ($db04_ordem == '2') {
+      $pdf1->obs = $db02_texto;
+    }
+    if ($db04_ordem == '3') {
+      $pdf1->assalvara = $db02_texto;
     }
   }
-
   // PEGA A ATIVIDADE PRINCIPAL
   //die($cltabativ->sql_queryinf($oGet->inscricao,"","*",""," q88_inscr is not null and q11_inscr is null and tabativ.q07_inscr = $oGet->inscricao "));
   $result = $cltabativ->sql_record($cltabativ->sql_queryinf($oGet->inscricao, "", "*", "", " q88_inscr is not null and q11_inscr is null and tabativ.q07_inscr = $oGet->inscricao "));
