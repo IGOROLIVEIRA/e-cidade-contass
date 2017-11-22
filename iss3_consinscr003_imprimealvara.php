@@ -189,7 +189,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   }
   //================================= PARAGRAFOS ALVARA PROVISORIO =====================================================
   if ($q07_perman == 'f') {
-    $pdf1->tipoalvara = 'LICENÇA PROVISÓRIA DE ATIVIDADE';
+    $pdf1->tipoalvara = 'ALVARÁ DE LICENÇA, LOCALIZAÇÃO E FUNCIONAMENTO PROVISÓRIO';
     $pdf1->permanente = 'f';
     $sqlparag = "select *
       from db_documento
