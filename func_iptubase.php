@@ -325,10 +325,10 @@ if(isset($j14_codigo)){
         }else if(((isset($j04_quadraregimo) && (trim($j04_quadraregimo)!="")) or ((isset($j04_loteregimo) && (trim($j04_loteregimo)!="")))) ){
           $sql2 = " where 1=1 ";
           if (isset($j04_quadraregimo) && trim($j04_quadraregimo)!="") {
-            $sql2 .= " and j04_quadraregimo = '{$j04_quadraregimo}'";
+            $sql2 .= " and j04_quadraregimo like '%{$j04_quadraregimo}%'";
           }
           if (isset($j04_loteregimo) && trim($j04_loteregimo)!="") {
-            $sql2 .= " and j04_loteregimo = '{$j04_loteregimo}'";
+            $sql2 .= " and j04_loteregimo like '%{$j04_loteregimo}%'";
           }
           $sql3 = " order by j04_quadraregimo, j04_loteregimo";
         }else if((isset($j05_codigoproprio) && ($j05_codigoproprio != '' )) or

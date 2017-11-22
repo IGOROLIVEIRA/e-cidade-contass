@@ -41,10 +41,10 @@ if(isset($setor)){
   $where .= " and j04_setorregimovel = $setor";
 }
 if(isset($quadra)){
-  $where .= " and j04_quadraregimo = '$quadra'";
+  $where .= " and j04_quadraregimo like '%$quadra%'";
 }
 if(isset($lote)){
-  $where .= " and j04_loteregimo = '$lote'";
+  $where .= " and j04_loteregimo like '%$lote%'";
 }
 if(isset($matricregimo)){
   $where .= " and j04_matricregimo = '$matricregimo'";
