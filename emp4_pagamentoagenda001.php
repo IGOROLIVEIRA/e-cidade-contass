@@ -231,7 +231,7 @@ function js_retornoGetNotas(oAjax) {
            if (e81_valor == 0) {
              nValor = valorretencao;
            } else {
-             nValor   =  (e81_valor - valorretencao);
+             nValor   =  (e81_valor - valorretencao  - e53_vlranu);
            }
          } else {
            nValor = e91_valor;
