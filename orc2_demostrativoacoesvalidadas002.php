@@ -154,7 +154,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   	  }
   	  $aAcoes[$oDadosAcao->o08_projativ]['sUnidadeMed']  = $oDadosAcao->o55_descrunidade;
   	  $aAcoes[$oDadosAcao->o08_projativ]['sTipo']     = $oDadosAcao->tipo;
-  	  $aAcoes[$oDadosAcao->o08_projativ]['aExercicio'][$oDadosAcao->o05_anoreferencia]['nQuantFisica'] += $oDadosAcao->o28_valor;
+  	  $aAcoes[$oDadosAcao->o08_projativ]['aExercicio'][$oDadosAcao->o05_anoreferencia]['nQuantFisica'] = $oDadosAcao->o28_valor;
   	  $aAcoes[$oDadosAcao->o08_projativ]['aExercicio'][$oDadosAcao->o05_anoreferencia]['nValor']       += $oDadosAcao->valor;
   	  @$aTotalAcoes[$oDados->iPrograma][$oDadosAcao->o05_anoreferencia] += $oDadosAcao->valor;
   	}
