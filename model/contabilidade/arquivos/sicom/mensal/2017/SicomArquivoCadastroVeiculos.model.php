@@ -456,8 +456,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                      e60_codemp AS nroEmpenho,
                      e60_emiss::VARCHAR AS dtEmpenho,
                      ve62_tipogasto::varchar AS tipoGasto,
-                     CASE WHEN sum(veicmanutitem.ve63_quant) IS NULL THEN 1 ELSE sum(veicmanutitem.ve63_quant) END AS qtdeUtilizada,
-                   sum(veicmanutitem.ve63_vlruni) AS vlGasto,
+                   sum(DISTINCT veicmanutitem.ve63_quant) AS qtdeUtilizada,
+                   sum(DISTINCT veicmanutitem.ve63_vlruni) AS vlGasto,
                      ve62_descr AS dscPecasServicos,
                      ve62_atestado::varchar AS atestadoControle,
                      unveic.o41_subunidade AS subunidade,
@@ -561,7 +561,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHERE db_config.codigo =" . db_getsession("DB_instit") . "
                     AND DATE_PART('YEAR' ,veicabast.ve70_dtabast) = " . db_getsession("DB_anousu") . "
                     AND DATE_PART('MONTH',veicabast.ve70_dtabast) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-                    group by 
+                    group by
 		    infocomplementaresinstit.si09_codorgaotce,
 		    unveic.o41_codtri,
 		    orveic.o40_codtri,
@@ -583,7 +583,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
     $rsResult20 = db_query($sSql) or die(pg_last_error());
     //echo pg_last_error();
-    //db_criatabela($rsResult20);exit;
+    echo $sSql; db_criatabela($rsResult20); exit;
     /**
      * registro 20
      */
