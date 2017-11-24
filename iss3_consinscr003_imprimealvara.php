@@ -323,10 +323,14 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   if($clIssAlvara->numrows > 0 ) {
 
     $oAlvara  = db_utils::fieldsMemory($rsAlvara, 0);
-    $pdf1->numeroalvara     = $oAlvara->q123_inscr;
+    if(!empty($oAlvara->q123_inscr)) {
+      $pdf1->numeroalvara = $oAlvara->q123_inscr;
+    }else{
+      $pdf1->numeroalvara = "{$q02_inscr}-".substr($z01_nome,0,1)."/".db_getsession('DB_anousu');
+    }
 
   } else {
-    $pdf1->numeroalvara = "{$q123_inscr}-".substr($z01_nome,0,1)."/".db_getsession('DB_anousu');
+    $pdf1->numeroalvara = "{$q02_inscr}-".substr($z01_nome,0,1)."/".db_getsession('DB_anousu');
 
   }
   // PEGA AS ATIVIDADES SECUNDARIAS
