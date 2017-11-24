@@ -52,10 +52,14 @@ $result_procandamint = $clprocandamint->sql_record($clprocandamint->sql_query_si
 //echo $clprocandamint->sql_query_sim($codprocandamint);exit;
 
 if ( $clprocandamint->numrows > 0 ) {
-
   db_fieldsmemory($result_procandamint, 0);
-  $despacho      = $p78_despacho;
+    $oNumeroProcesso = db_utils::fieldsMemory($result_procandamint, 0);
+    $data = $oNumeroProcesso->p78_data;
+    $hora = $oNumeroProcesso->p78_hora;
+    $usuarios = $oNumeroProcesso->nome;
+    $despacho      = $p78_despacho;
   $sTipoDespacho = $p100_descricao;
+
 }
 
 $public        = "Não";
@@ -67,7 +71,7 @@ $sNumeroProcesso = $codproc;
 
 
 /**
- * Busca numero e ano do processo pelo codigo processo 
+ * Busca numero e ano do processo pelo codigo processo
  */
 $sSqlNumeroProcesso = $clprotprocesso->sql_query_file($codproc, 'p58_numero, p58_ano');
 
@@ -80,25 +84,25 @@ if ( $clprotprocesso->numrows > 0 ) {
 }
 $head2 = "PROCESSO N° $sNumeroProcesso";
 $head3 = "IMPRESSÃO DE ".mb_strtoupper($sTipoDespacho);
-$head4 = "Data: ".@$dataand;
-$head5 = "Hora: ".@$horaand;
-$head6 = "Usuário: ".@$usuario;
+$head4 = "Data: ".implode("/",(array_reverse(explode("-",$data))));
+$head5 = "Hora: ".$hora;
+$head6 = "Usuário: ".$usuarios;
 $head7 = "Público: ".@$public;
 
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $pdf->addpage();
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',8);
 $alt = 4;
-  
+
 $result_protprocesso = $clprotprocesso->sql_record($clprotprocesso->sql_query($codproc));
 
 if ($clprotprocesso->numrows!=0){
 
   db_fieldsmemory($result_protprocesso,0);
-  
+
   $pdf->cell(25,$alt,'Processo :',0,0,"R",0);
   $pdf->setfont('arial','',8);
   $pdf->cell(75,$alt, $sNumeroProcesso,0,0,"L",0);
@@ -106,7 +110,7 @@ if ($clprotprocesso->numrows!=0){
   $pdf->cell(25,$alt,'Titular do Processo :',0,0,"R",0);
   $pdf->setfont('arial','',8);
   $pdf->cell(75,$alt,$z01_nome,0,1,"L",0);
-  
+
   $pdf->setfont('arial','b',8);
   $pdf->cell(25,$alt,'Data :',0,0,"R",0);
   $pdf->setfont('arial','',8);
