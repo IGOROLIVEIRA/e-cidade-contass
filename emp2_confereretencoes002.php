@@ -32,7 +32,6 @@ require_once("classes/db_retencaoreceitas_classe.php");
 
 $oJson       = new Services_JSON();
 $oParametros = $oJson->decode(str_replace("\\","",$_GET["sFiltros"]));
-
 $sWhere = "e60_instit = ".db_getsession("DB_instit");
 if ($oParametros->iPagamento == 'p') {
   $sHeaderTipo = "Pagamento";
@@ -90,6 +89,19 @@ if ($oParametros->iPagamento == "p") {
   $sWhere .= " and e23_recolhido is true ";
 }
 
+/*OC4581*/
+if ($oParametros->iTipoLancamento != "") {
+  $sWhere .= " and lanctos.c60_tipolancamento = {$oParametros->iTipoLancamento} ";
+}
+/*OC4581*/
+if ($oParametros->isubtipo != "") {
+  $sWhere .= " and lanctos.c60_subtipolancamento = {$oParametros->isubtipo} ";
+}
+/*OC4581*/
+if ($oParametros->idesdobramento != "") {
+  $sWhere .= " and lanctos.c60_desdobramneto = {$oParametros->idesdobramento} ";
+}
+
 $sHeaderOps  = "Todas";
 if ($oParametros->sOps == "p") {
   $sHeaderOps = "Pagas";
@@ -99,18 +111,18 @@ if ($oParametros->sOps == "p") {
   $sWhere .= " and e23_recolhido is false ";
 }
 
-$sSqlRetencoes  = "select e23_sequencial,     ";
+$sSqlRetencoes  = "select distinct e23_sequencial,     ";
 $sSqlRetencoes .= "       corrente.k12_data,  ";
 $sSqlRetencoes .= "       case when corrente.k12_conta is null then 0  else corrente.k12_conta end as k12_conta,";
 $sSqlRetencoes .= "       e21_sequencial,     ";
-$sSqlRetencoes .= "       case when c60_descr is null then 'Sem conta'  else c60_descr end as c60_descr,";
+$sSqlRetencoes .= "       case when conplano.c60_descr is null then 'Sem conta'  else conplano.c60_descr end as c60_descr,";
 $sSqlRetencoes .= "       e50_codord,         ";
 $sSqlRetencoes .= "       e60_codemp,         ";
 $sSqlRetencoes .= "       e60_anousu,         ";
 $sSqlRetencoes .= "       c61_reduz,          ";
 $sSqlRetencoes .= "       o58_codigo,         ";
 $sSqlRetencoes .= "       case when k02_descr is null then 'Sem Conta' else k02_descr end,         ";
-$sSqlRetencoes .= "       k02_codigo,         ";
+$sSqlRetencoes .= "       tabrec.k02_codigo,         ";
 $sSqlRetencoes .= "       e53_valor,          ";
 $sSqlRetencoes .= "       e69_numero,         ";
 $sSqlRetencoes .= "       e69_dtnota,         ";
@@ -158,6 +170,14 @@ $sSqlRetencoes .= "       left join conplanoreduz            on corrente.k12_con
 $sSqlRetencoes .= "                                          and c61_anousu          = ".db_getsession("DB_anousu");
 $sSqlRetencoes .= "       left join conplano                 on c60_codcon          = c61_codcon           ";
 $sSqlRetencoes .= "                                          and c60_anousu          = c61_anousu           ";
+
+/*OC4581*/
+if ($oParametros->iTipoLancamento != "" || $oParametros->isubtipo != "" || $oParametros->idesdobramento != "") {
+  $sSqlRetencoes .= " LEFT JOIN tabplan          ON tabplan.k02_codigo = tabrec.k02_codigo
+                      LEFT JOIN conplano lanctos ON tabplan.k02_estpla = lanctos.c60_estrut AND lanctos.c60_anousu = tabplan.k02_anousu
+                      LEFT JOIN subtipo          ON c200_tipo = lanctos.c60_tipolancamento ";
+}
+
 $sSqlRetencoes .= " where e23_ativo is true ";
 $sSqlRetencoes .= "   and {$sWhere}              ";
 
@@ -174,6 +194,10 @@ if ($oParametros->order == 1) {
 
   $sCampoOrdenar = "e20_descricao";
   $sHeaderOrdem  = "Descrição";
+}
+/*OC4581*/
+if ($oParametros->iTipoLancamento != "" || $oParametros->isubtipo != "" || $oParametros->idesdobramento != "") {
+  $sCampoOrdenar = "e23_sequencial";
 }
 if ($oParametros->group == 2) {
 
@@ -202,6 +226,7 @@ if ($oParametros->group == 2) {
 }
 
 $sSqlRetencoes   .= " order by {$sCampoOrdenar}";
+
 $rsRetencoes      = db_query($sSqlRetencoes);
 $iTotalRetencoes  = pg_num_rows($rsRetencoes);
 if ($iTotalRetencoes == 0 || !$rsRetencoes) {
