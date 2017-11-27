@@ -583,7 +583,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
     $rsResult20 = db_query($sSql) or die(pg_last_error());
     //echo pg_last_error();
-    echo $sSql; db_criatabela($rsResult20); exit;
     /**
      * registro 20
      */
