@@ -112,7 +112,7 @@ $oGet = db_utils::postMemory($_GET);
       * @author rodrigo@contass
       */
      if($oInstit->getCodigoCliente() == 58) {
-       $sSqlIntegracaoJMS = "update disbanco set k00_numpre = debitos_jms.numpre_seq, k00_numpar = debitos_jms.k00_numpar from debitos_jms where disbanco.k00_numpre = debitos_jms.k00_numpre_old and disbanco.k00_numpar = debitos_jms.k00_numpar_old";
+       $sSqlIntegracaoJMS = "update disbanco set k00_numpre = debitos_jms.k00_numpre, k00_numpar = debitos_jms.k00_numpar from debitos_jms where disbanco.k00_numpre = debitos_jms.k00_numpre_old and disbanco.k00_numpar = debitos_jms.k00_numpar_old";
        if (!db_query($sSqlIntegracaoJMS)) {
          throw new Exception(str_replace("\n", "", substr(pg_last_error(), 0, strpos(pg_last_error(), "CONTEXT"))));
        }
