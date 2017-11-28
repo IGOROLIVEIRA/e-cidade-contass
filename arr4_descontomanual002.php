@@ -1,30 +1,30 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
- 
+
 require_once 'libs/db_stdlib.php';
 require_once 'libs/db_conecta.php';
 require_once 'libs/db_sessoes.php';
@@ -42,9 +42,9 @@ $oRotulo->label("k00_numpre");
 $oRotulo->label("z01_nome");
 $oRotulo->label("z01_numcgm");
 $oRotulo->label("k00_valor");
-$oRotulo->label("k00_descr"); 
+$oRotulo->label("k00_descr");
 $oRotulo->label("k00_numpar");
-$oRotulo->label("k00_receit"); 
+$oRotulo->label("k00_receit");
 $oRotulo->label("k00_histtxt");
 
 $aParcelas = array('0' => 'Todas parcelas');
@@ -68,23 +68,23 @@ try {
   $iNumpre = $oPost->k00_numpre;
 
   if ( !DBNumber::isInteger($iNumpre) ) {
-    throw new ParameterException("Numpre não é válido");   
+    throw new ParameterException("Numpre não é válido");
   }
 
   if ( !Desconto::validarProcessamento($iNumpre) ) {
-    // throw new BusinessException(" Débito com recibos válidos emitidos, desconto não pode ser aplicado.");    
+    // throw new BusinessException(" Débito com recibos válidos emitidos, desconto não pode ser aplicado.");
   }
-  
+
   $sDataHoje = date( "Y-m-d", db_getsession("DB_datausu") );
   $sWhere   = "not exists ( select 1                                 ";
   $sWhere  .= "               from recibopaga rp                     ";
   $sWhere  .= "              where rp.k00_numpre = y.k00_numpre      ";
   $sWhere  .= "                and rp.k00_numpar = y.k00_numpar      ";
   $sWhere  .= "                and rp.k00_dtpaga >= '{$sDataHoje}'   ";
-  $sWhere  .= "                and rp.k00_conta =  0 )               ";  
-  
-  
-  
+  $sWhere  .= "                and rp.k00_conta =  0 )               ";
+
+
+
 	$rsDebitosNumpre = debitos_numpre($iNumpre, 0, 0, db_getsession("DB_datausu"), db_getsession("DB_anousu"), 0, '', '', " and y.k00_hist <> 918 and $sWhere");
 
 	if ( !$rsDebitosNumpre || pg_num_rows($rsDebitosNumpre) == 0 ) {
@@ -115,7 +115,7 @@ try {
 		$aReceitas[$oDebitoNumpre->k00_receit] = $oDebitoNumpre->k02_descr;
 		$nValorHistorico += $oDebitoNumpre->vlrhis;
 		$nValorTotal     += $oDebitoNumpre->total;
-		
+
 	}
 
 	$nValorHistorico = trim(db_formatar($nValorHistorico, 'f'));
@@ -132,7 +132,7 @@ try {
 	db_msgbox( $oErro->getMessage() );
 	db_redireciona("arr4_descontomanual001.php");
 	exit;
-	
+
 }
 
 
@@ -210,7 +210,7 @@ try {
             <?php db_input('k00_descr', 42, $Ik00_descr, true, 'text', 3); ?>
           </td>
         </tr>
-        
+
         <tr>
           <td nowrap title="<?php echo $Tk00_numpar; ?>" width="160">
             <?php echo $Lk00_numpar; ?>
@@ -228,8 +228,25 @@ try {
             <?php db_select('k00_receit', $aReceitas, true, 2, "onChange=\"js_calculaValorComDesconto();\""); ?>
           </td>
         </tr>
-        
-        
+
+        <tr>
+          <td nowrap title="Aplicação do Desconto">
+            <b>Aplicação:</b>
+          </td>
+          <td nowrap colspan="3">
+            <select id="aplicacao" onchange="js_calculaValorComDesconto()">
+              <option value="6">Sobre Tudo</option>
+              <option value="1">Sobre a Multa</option>
+              <option value="2">Sobre os Juros</option>
+              <option value="3">Sobre Juros e Multa</option>
+              <option value="4">Sobre o valor Corrigido</option>
+              <option value="5">Sobre Juros, Multas e Correções</option>
+
+            </select>
+          </td>
+        </tr>
+
+
         <tr>
         	<td colspan='4'>
         	  <fieldset>
@@ -238,11 +255,11 @@ try {
         		</fieldset>
         	</td>
         </tr>
-        
-        <?php 
+
+        <?php
         	db_input('k00_valor', 15, 0, true,'hidden', 3, '', 'nValorTotal');
         	db_input('k00_valor', 15, "", true, 'hidden', 3,'', 'nValorHistorico');
-        	
+
         ?>
       </table>
 
@@ -314,22 +331,22 @@ try {
 require_once('scripts/numbers.js');
 
 /**
- * Arquivo de RPC 
+ * Arquivo de RPC
  */
-var sUrlRPC = 'arr4_descontomanual.RPC.php';  
+var sUrlRPC = 'arr4_descontomanual.RPC.php';
 
 js_gridComposicao();
 js_calculaValorComDesconto();
 
 function js_gridComposicao() {
-	
+
 	oGridComposicao = new DBGrid('gridComposicao');
 	oGridComposicao.nameInstance = 'gridComposicao';
 	oGridComposicao.setCellAlign(new Array('left', 'right', 'right', 'right'));
 	oGridComposicao.setCellWidth(new Array('15%', '25%', '30%', '30%'));
 	oGridComposicao.setHeader(new Array('Débito' , 'Antes', 'Desconto',  'Após'));
 	oGridComposicao.show($('gridComposicao'));
-	
+
 }
 
 function js_calculaValorComDesconto() {
@@ -339,19 +356,20 @@ function js_calculaValorComDesconto() {
   }
 
   var oParametros                 = new Object();
-  oParametros.exec                = 'getValorComDesconto';  
+  oParametros.exec                = 'getValorComDesconto';
   oParametros.iNumpre             = $F('k00_numpre');
   oParametros.iNumpar             = $F('k00_numpar');
   oParametros.iReceita            = $F('k00_receit');
+  oParametros.iAplicacao          = $F('aplicacao');
   oParametros.nPercentual         = $F('nPercentualCompleto').replace(/,/,'.').replace(/ /,'');
 
   js_divCarregando("Buscando dados do numpre...\nAguarde", 'msgBox');
-   
-  var oAjax = new Ajax.Request(sUrlRPC, 
+
+  var oAjax = new Ajax.Request(sUrlRPC,
                                {method     : 'post',
                                 parameters : 'json=' + Object.toJSON(oParametros),
                                 onComplete : js_retornoCalculaValorComDesconto }
-  );   
+  );
 }
 
 function js_retornoCalculaValorComDesconto(oAjax) {
@@ -360,81 +378,81 @@ function js_retornoCalculaValorComDesconto(oAjax) {
   var sMensagem = oRetorno.sMensagem.urlDecode();
 
   if ( oRetorno.iStatus > 1 ) {
-	  
+
     alert( sMensagem );
     return false;
-    
+
   }
 
   js_montaGridComposicao(oRetorno);
-  
-  $('nValorHistorico').value   = oRetorno.nValorHistorico;  
+
+  $('nValorHistorico').value   = oRetorno.nValorHistorico;
   $('nValorLimite').value      = js_formatar(oRetorno.nValorLimite, 'f');
 
   js_removeObj('msgBox');
-  
+
 }
 
 function js_montaGridComposicao(oValores) {
 
 	sLabelHistorico         = '<strong>Histórico</strong>';
   sLabelCorrigido         = '<strong>Corrigido</strong>';
-  sLabelJuros             = '<strong>Juros</strong>';    
-  sLabelMulta             = '<strong>Multa</strong>';   
-  sLabelTotal             = '<strong>Total</strong>';    
+  sLabelJuros             = '<strong>Juros</strong>';
+  sLabelMulta             = '<strong>Multa</strong>';
+  sLabelTotal             = '<strong>Total</strong>';
 
   nValorHistoricoAnterior = oValores.nValorHistoricoAnterior;
   nValorCorrigidoAnterior = oValores.nValorCorrigidoAnterior;
-  nValorJurosAnterior     = oValores.nValorJurosAnterior    ;    
-  nValorMultaAnterior     = oValores.nValorMultaAnterior    ;    
+  nValorJurosAnterior     = oValores.nValorJurosAnterior    ;
+  nValorMultaAnterior     = oValores.nValorMultaAnterior    ;
   nValorTotalAnterior     = oValores.nValorTotalAnterior    ;
 
   nValorHistoricoDepois   = oValores.nValorHistorico;
   nValorCorrigidoDepois   = oValores.nValorCorrigido;
-  nValorJurosDepois       = oValores.nValorJuros    ;     
-  nValorMultaDepois       = oValores.nValorMulta    ;    
+  nValorJurosDepois       = oValores.nValorJuros    ;
+  nValorMultaDepois       = oValores.nValorMulta    ;
   nValorTotalDepois       = oValores.nValorTotal    ;
 
   nValorHistoricoDesconto = nValorHistoricoAnterior - nValorHistoricoDepois;
   nValorCorrigidoDesconto = nValorCorrigidoAnterior - nValorCorrigidoDepois;
   nValorJurosDesconto     = nValorJurosAnterior     - nValorJurosDepois    ;
   nValorMultaDesconto     = nValorMultaAnterior     - nValorMultaDepois    ;
-  nValorTotalDesconto     = nValorTotalAnterior     - nValorTotalDepois    ;   
+  nValorTotalDesconto     = nValorTotalAnterior     - nValorTotalDepois    ;
 
   var aLinhaHistorico = [sLabelHistorico,
-                         js_formatar( nValorHistoricoAnterior, "f"), 
-                         js_formatar( nValorHistoricoDesconto, "f"), 
+                         js_formatar( nValorHistoricoAnterior, "f"),
+                         js_formatar( nValorHistoricoDesconto, "f"),
                          js_formatar( nValorHistoricoDepois, "f")];
-  var aLinhaCorrigido = [sLabelCorrigido, 
-                         js_formatar( nValorCorrigidoAnterior, "f"), 
-                         js_formatar( nValorCorrigidoDesconto, "f"), 
+  var aLinhaCorrigido = [sLabelCorrigido,
+                         js_formatar( nValorCorrigidoAnterior, "f"),
+                         js_formatar( nValorCorrigidoDesconto, "f"),
                          js_formatar( nValorCorrigidoDepois, "f")];
-  var aLinhaJuros     = [sLabelJuros, 
-                         js_formatar( nValorJurosAnterior, "f"), 
-                         js_formatar( nValorJurosDesconto, "f"), 
+  var aLinhaJuros     = [sLabelJuros,
+                         js_formatar( nValorJurosAnterior, "f"),
+                         js_formatar( nValorJurosDesconto, "f"),
                          js_formatar( nValorJurosDepois, "f")];
-  var aLinhaMulta     = [sLabelMulta, 
-                         js_formatar( nValorMultaAnterior, "f"), 
-                         js_formatar( nValorMultaDesconto, "f"), 
+  var aLinhaMulta     = [sLabelMulta,
+                         js_formatar( nValorMultaAnterior, "f"),
+                         js_formatar( nValorMultaDesconto, "f"),
                          js_formatar( nValorMultaDepois, "f")];
-  var aLinhaTotal     = [sLabelTotal, 
-                         js_formatar( nValorTotalAnterior, "f"), 
-                         js_formatar( nValorTotalDesconto, "f"), 
+  var aLinhaTotal     = [sLabelTotal,
+                         js_formatar( nValorTotalAnterior, "f"),
+                         js_formatar( nValorTotalDesconto, "f"),
                          js_formatar( nValorTotalDepois, "f")];
-  
+
   oGridComposicao.clearAll(true);
 	oGridComposicao.addRow(aLinhaHistorico);
 	oGridComposicao.addRow(aLinhaCorrigido);
 	oGridComposicao.addRow(aLinhaJuros);
 	oGridComposicao.addRow(aLinhaMulta);
 	oGridComposicao.addRow(aLinhaTotal);
-	oGridComposicao.renderRows();	
-	
+	oGridComposicao.renderRows();
+
 }
 
 /**
- * Incluir desconto 
- * 
+ * Incluir desconto
+ *
  * @access public
  * @return void
  */
@@ -445,11 +463,12 @@ function js_incluirDesconto() {
   }
 
   var oParametros                 = new Object();
-  oParametros.exec                = 'incluirDesconto';  
+  oParametros.exec                = 'incluirDesconto';
   oParametros.iCgm                = $F('z01_numcgm');
   oParametros.iNumpre             = $F('k00_numpre');
   oParametros.iNumpar             = $F('k00_numpar');
   oParametros.iReceita            = $F('k00_receit');
+  oParametros.iAplicacao          = $F('aplicacao');
   oParametros.nPercentualLimitado = $F('nPercentual').replace(/,/,'.').replace(/ /,'');
   oParametros.nValorHistorico     = $F('nValorHistorico').replace(/,/,'.').replace(/ /,'');
   oParametros.nValorDesconto      = $F('nValorDesconto').replace(/,/,'.').replace(/ /,'');
@@ -457,22 +476,22 @@ function js_incluirDesconto() {
   oParametros.sObservacao         = $F('k00_histtxt');
 
   js_divCarregando("Incluindo desconto...\nAguarde", 'msgBox');
-   
+
   var oAjax = new Ajax.Request(
-    sUrlRPC, 
+    sUrlRPC,
     {
       method     : 'post',
       parameters : 'json=' + Object.toJSON(oParametros),
       onComplete : js_retornoIncluirDesconto
     }
-  );   
+  );
 
 }
 
 /**
- * Chamada pela funcao js_incluirDesconto no retorno do rpc  
- * 
- * @param oAjax $oAjax 
+ * Chamada pela funcao js_incluirDesconto no retorno do rpc
+ *
+ * @param oAjax $oAjax
  * @access public
  * @return bool
  */
@@ -485,7 +504,7 @@ function js_retornoIncluirDesconto(oAjax) {
 
   /**
    * Erro
-   */   
+   */
   if ( oRetorno.iStatus > 1 ) {
 
     alert( sMensagem );
@@ -497,19 +516,19 @@ function js_retornoIncluirDesconto(oAjax) {
 }
 
 /**
- * Funcao para validar formulario 
- * 
+ * Funcao para validar formulario
+ *
  * @access public
  * @return bool
  */
 function js_validaFormulario() {
 
   /**
-   * Valida se foi informado valor/porcentagem do desconto 
+   * Valida se foi informado valor/porcentagem do desconto
    */
   var nValorLimite    = parseFloat($F('nValorLimite').replace(/,/,'.').replace(/ /,''));
   var nValorHistorico = parseFloat($F('nValorHistorico').replace(/,/,'.').replace(/ /,''));
-  
+
   if ( nValorHistorico == nValorLimite ) {
 
     alert('Desconto não Informado.');
@@ -517,7 +536,7 @@ function js_validaFormulario() {
   }
 
   /**
-   * Valida o campo com observacao 
+   * Valida o campo com observacao
    */
   if ( $F('k00_histtxt') == '' ) {
 
@@ -529,14 +548,14 @@ function js_validaFormulario() {
 }
 
 /**
- * Calcula desconto 
- * 
+ * Calcula desconto
+ *
  * @param sTipo $sTipo - tipo de calculo, pelo valor ou por porcentagem
  * @access public
  * @return void
  */
 function js_calculaDesconto(sTipo) {
-  
+
   var nValorTotal    = $F('nValorTotal');
   var nValorDesconto = $F('nValorDesconto');
   var nPercentual    = $F('nPercentual');
@@ -550,11 +569,11 @@ function js_calculaDesconto(sTipo) {
   }
 
   /**
-   * Calcular valor desconto 
+   * Calcular valor desconto
    */
   if ( sTipo == 'valor' ) {
-    nPercentual = nValorDesconto * 100 / nValorLimite; 
-  
+    nPercentual = nValorDesconto * 100 / nValorLimite;
+
     /**
      * Percentual invalido, erro no calculo
      */
@@ -564,11 +583,11 @@ function js_calculaDesconto(sTipo) {
   }
 
   /**
-   * Calcular valor desconto pela porcentagem 
+   * Calcular valor desconto pela porcentagem
    */
   if ( sTipo == 'porcentagem' ) {
 
-    nValorDesconto = nPercentual * nValorLimite / 100; 
+    nValorDesconto = nPercentual * nValorLimite / 100;
 
     /**
      * valor de desconto invalido, erro no calculo
@@ -577,20 +596,20 @@ function js_calculaDesconto(sTipo) {
       return false;
     }
   }
- 
+
   nValorDesconto = new Number(nValorDesconto);
   nValorLimite   = new Number(nValorLimite);
- 
-  if ( nValorDesconto >= nValorLimite ) {
+
+  if ( nValorDesconto > nValorLimite ) {
 
     var sErro  = 'Valor calculado para o desconto igual ao valor histórico.\n';
-        sErro += 'Para cancelamento total de um debito, use a opção Cancelamento de débito na consulta geral financeira.';    
+        sErro += 'Para cancelamento total de um debito, use a opção Cancelamento de débito na consulta geral financeira.';
     alert(sErro);
     return false;
-  } 
+  }
 
   /**
-   * Atualiza campos 
+   * Atualiza campos
    */
   $('nPercentualCompleto').value = nPercentual;
   $('nValorDesconto').value      = js_formatar(nValorDesconto, 'f');
