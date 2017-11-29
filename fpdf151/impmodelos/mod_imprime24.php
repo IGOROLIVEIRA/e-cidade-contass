@@ -28,14 +28,36 @@ if (file_exists('imagens/files/' . $logofundo.'_fundoalvara.jpg')){
 $this->objpdf->Image('imagens/files/' . $logo,90,7,16);
 
 $this->objpdf->sety(34);
-$this->objpdf->setfont('Arial','B',18);
+$this->objpdf->setfont('Arial','B',16);
 $this->objpdf->Multicell(0,8,$this->prefeitura,0,"C",0); // prefeitura
 
 $this->objpdf->sety(42);
-$this->objpdf->setfont('Arial','B',18);
+$this->objpdf->setfont('Arial','B',16);
 $this->objpdf->Multicell(0,8,$this->tipoalvara,0,"C",0); // tipo de alvara
 
-$this->objpdf->setxy(10,59);
+
+
+
+if($this->permanente == 't'){
+
+	$this->objpdf->sety(49);
+	$this->objpdf->setfont('Arial','B',12);
+	$this->objpdf->Multicell(0,8,"Número: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
+	$this->objpdf->sety(55);
+	$this->objpdf->setfont('Arial','B',12);
+	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
+	$this->objpdf->setxy(10,64);
+} else {
+
+	$this->objpdf->sety(56);
+	$this->objpdf->setfont('Arial','B',12);
+	$this->objpdf->Multicell(0,8,"Número: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
+	$this->objpdf->sety(61);
+	$this->objpdf->setfont('Arial','B',12);
+	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
+	$this->objpdf->setxy(10,70);
+}
+
 $this->objpdf->SetFont('Arial','',14);
 $this->objpdf->multicell(0,7,db_geratexto($this->texto),0,"J",0,40);
 
@@ -47,14 +69,14 @@ $this->objpdf->SetFont('Arial','B',$fonte);
 $this->objpdf->Text($coluna,$linha+9,'INSCRIÇÃO:'); // inscricao
 
 
-   $this->objpdf->Text($coluna + 97,$linha+9,'Numero Alvará: '); // Numero Alvara
+//   $this->objpdf->Text($coluna + 97,$linha+9,'Numero Alvará: '); // Numero Alvara
 
 
 $this->objpdf->SetFont('Arial','',$fonte);
 $this->objpdf->Text($coluna + 60,$linha+9,$this->nrinscr); // inscricao
 
 
-    $this->objpdf->Text($coluna + 130,$linha+9,$this->numeroalvara); // numeroalvara
+//    $this->objpdf->Text($coluna + 130,$linha+9,$this->numeroalvara); // numeroalvara
 
 
 $this->objpdf->SetFont('Arial','B',$fonte);
