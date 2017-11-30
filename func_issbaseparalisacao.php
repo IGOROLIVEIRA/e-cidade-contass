@@ -74,7 +74,7 @@ $clissbaseparalisacao->rotulo->label("q140_sequencial");
     <td align="center" valign="top">
       <?php
 
-      $sWhere = ' q140_datafim >= \'' . date('Y-m-d')  . '\' ';
+      $sWhere = ' q140_datafim >= \'' . date('Y-m-d')  . '\' or q140_datafim is null';
 
       if(!isset($pesquisa_chave)){
 
