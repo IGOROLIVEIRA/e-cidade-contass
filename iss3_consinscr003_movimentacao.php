@@ -57,10 +57,13 @@ $sCampoMov  = "q121_descr as dl_Movimentação,                "; // 1
 $sCampoMov .= "q120_dtmov as dl_data,                        "; // 2
 //$sCampoMov .= "q98_descricao as dl_Tipo_Alvará,              "; // 3 removido pois nao temos o tipo guardado na movimentação
 $sCampoMov .= "case                                          "; // 4
-$sCampoMov .= "  when q123_situacao = 1                      "; // 4
+$sCampoMov .= "  when q120_dtmov + q120_validadealvara >= CURRENT_DATE                      "; // 4
 $sCampoMov .= "    then  'Válido'                            "; // 4
-$sCampoMov .= "  else 'Vencido'                              "; // 4
-$sCampoMov .= "end as dl_situação,                           "; // 4
+$sCampoMov .= "  else 'Vencido' end as dl_situação,               "; // 4
+//$sCampoMov .= " CASE when q123_situacao = 1                  "; // 4
+//$sCampoMov .= "    then  'Ativo'                            "; // 4
+//$sCampoMov .= "  else 'Inativo'                              "; // 4
+//$sCampoMov .= "end as dl_status,                           "; // 4
 $sCampoMov .= "q120_dtmov + q120_validadealvara as dl_validade, "; // 5
 $sCampoMov .= "q123_numalvara||'/'||date_part('year',q120_dtmov) as dl_Numero,                  "; // 6
 $sCampoMov .= "login as dl_Login,                            "; // 7
@@ -74,8 +77,8 @@ $sSqlMovAlvara .= "		 inner join issbase on issbase.q02_inscr = issalvara.q123_i
 $sSqlMovAlvara .= "		 inner join isstipoalvara on isstipoalvara.q98_sequencial = issalvara.q123_isstipoalvara               "; 
 $sSqlMovAlvara .= "    inner join db_usuarios on id_usuario = q120_usuario                                                   ";
 $sSqlMovAlvara .= "     left join issmovalvaraprocesso on q124_issmovalvara = q120_sequencial  ";
-$sSqlMovAlvara .= "		 where q123_inscr = {$oGet->inscricao}                                                                 "; 
-$sSqlMovAlvara .= "		order by q120_sequencial desc                                                                          "; 
+$sSqlMovAlvara .= "		 where q123_inscr = {$oGet->inscricao}                                                                 ";
+$sSqlMovAlvara .= "		order by q120_sequencial desc                                                                          ";
 
 $rsMovAlvara    = $clMovAlvara->sql_record($sSqlMovAlvara);
 

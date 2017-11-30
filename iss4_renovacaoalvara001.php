@@ -73,9 +73,11 @@ require_once("libs/db_app.utils.php");
             <td coslpan="2"></td>
           </tr>
         <tr>
-            <td nowrap="nowrap"><b>Validade do alvará (dias):</b></td>
-            <td nowrap="nowrap"><? db_input('q120_validadealvara', 8, "", true, 'text', 1); ?></td>
-            <td coslpan="2"></td>
+            <td nowrap="nowrap"><b>Validade do alvará:</b></td>
+            <td nowrap="nowrap" coslpan="3">
+              <?=db_inputdata('q120_validadealvara',"","","",true,'text',4)?>
+            </td>
+            <td nowrap="nowrap" coslpan="2"></td>
           </tr>
           <tr>
             <td nowrap="nowrap"><? db_ancora("<b>Processo de protocolo:</b>", "js_pesquisaProtocolo(true,'');", 1); ?></td>

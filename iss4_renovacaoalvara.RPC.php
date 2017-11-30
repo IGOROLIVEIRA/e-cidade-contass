@@ -51,11 +51,14 @@ switch ($oParam->exec) {
 
 		 try {
 
-       $oAlvara         = new Alvara($oParam->q120_issalvara);
-       $oRenovarAlvara  = $oAlvara->incluirMovimentacao( MovimentacaoAlvara::TIPO_RENOVACAO );
-			 $oRenovarAlvara->setValidadeAlvara($oParam->q120_validadealvara);
+             $oAlvara         = new Alvara($oParam->q120_issalvara);
+             $oRenovarAlvara  = $oAlvara->incluirMovimentacao( MovimentacaoAlvara::TIPO_RENOVACAO );
+             $oDtMov = new DBDate($oParam->q120_dtmov);
+             $oDtValidade = new DBDate($oParam->q120_validadealvara);
+             $iValidade = DBDate::calculaIntervaloEntreDatas($oDtValidade,$oDtMov,'d');
+			 $oRenovarAlvara->setValidadeAlvara($iValidade);
 			 $oRenovarAlvara->setDataMovimentacao($oParam->q120_dtmov);
-       $oRenovarAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
+             $oRenovarAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
 
 			 /**
 			  * Valida se foi passado o codigo do processo
