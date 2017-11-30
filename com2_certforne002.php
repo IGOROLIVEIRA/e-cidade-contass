@@ -113,7 +113,7 @@ for ($z = 0; $z < $retorno_numrows; $z++) {
   $aParagrafos  = $oLibDocumento->getDocParagrafos();
 
   $sTitulo      = "CERTIFICADO DE REGISTRO CADASTRAL N° {$pc74_codigo}";
-  $sDescrcaoCGM = "Fornecedor: ";
+  $sDescrcaoCGM = "Fornecedor :";
   foreach ($aParagrafos as $oParagrafo) {
 
     if (!$oParagrafo instanceof stdClass) {
@@ -149,51 +149,57 @@ for ($z = 0; $z < $retorno_numrows; $z++) {
   }
 
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(35, $alt, $sDescrcaoCGM, 1, 0, "R", 0);
+  $pdf->cell(40, $alt, $sDescrcaoCGM, 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
-  $pdf->cell(145, $alt, $pc60_numcgm."-", 1, 0, "L", 0);
+  $pdf->cell(149, $alt, $pc60_numcgm."-", 1, 0, "L", 0);
 
   $pdf->setx(57);
   $pdf->setfont('arial', 'b', 10);
   $pdf->cell(50, $alt, $z01_nome, 0, 1, "L", 0);
 
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(35, $alt, 'Endereço', 1, 0, "R", 0);
+  $pdf->cell(40, $alt, 'Endereço :', 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
   $pdf->cell(60, $alt,$z01_ender.", ".$z01_numero."/".$z01_compl, 1, 0, "L", 0);
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(30, $alt, 'Bairro :', 1, 0, "R", 0);
+  $pdf->cell(34, $alt, 'Bairro :', 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
   $pdf->cell(55, $alt, $z01_bairro, 1, 1, "L", 0);
 
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(35, $alt, 'Cidade :', 1, 0, "R", 0);
+  $pdf->cell(40, $alt, 'Cidade :', 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
   $pdf->cell(60, $alt, $z01_munic, 1, 0, "L", 0);
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(30, $alt, 'Estado :', 1, 0, "R", 0);
+  $pdf->cell(34, $alt, 'Estado :', 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
   $pdf->cell(55, $alt, $z01_uf, 1, 1, "L", 0);
 
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(35, $alt, 'Cep :', 1, 0, "R", 0);
+  $pdf->cell(40, $alt, 'Cep :', 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
   $pdf->cell(60, $alt, $z01_cep, 1, 0, "L", 0);
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(30, $alt, 'CNPJ :', 1, 0, "R", 0);
+  $pdf->cell(34, $alt, 'CNPJ :', 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
   $pdf->cell(55, $alt,$z01_cgccpf, 1, 1, "L", 0);
 
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(35, $alt, 'Telefone Comercial :', 1, 0, "R", 0);
+  $pdf->cell(40, $alt, 'Telefone Comercial :', 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
   $pdf->cell(60, $alt, $z01_telcon, 1, 0, "L", 0);
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell(30, $alt, 'E-mail Comercial:', 1, 0, "R", 0);
+  $pdf->cell(34, $alt, 'E-mail Comercial:', 1, 0, "R", 0);
   $pdf->setfont('arial', '', 7);
   $pdf->cell(55, $alt,$z01_emailc, 1, 1, "L", 0);
 
   $pdf->ln();
+  $pdf->setfont('arial', 'b', 8);
+  $pdf->cell(25, $alt, 'Observação: ', 0, "L");
+  $pdf->setfont('arial', '', 8);
+  $pdf->multicell(164, 4, $pc74_observacao,1, 1, "L", 0);
+  $pdf->ln();
+
   if (isset($oSocial) && $oSocial == 0) {
 
     if ($pc60_obs != "") {
@@ -202,7 +208,7 @@ for ($z = 0; $z < $retorno_numrows; $z++) {
       $pdf->cell(0, 8, 'OBJETO SOCIAL DA EMPRESA: ', 0, 0, "L", 0);
       $pdf->cell(0, 8, "", 0, 1, "R", 0);
       $pdf->setfont('arial', 'b', 8);
-      $pdf->multicell(180,$alt,@$pc60_obs,1, "L", 0);
+      $pdf->multicell(189,$alt,@$pc60_obs,1, "L", 0);
       $pdf->ln();
     }
   }
@@ -224,10 +230,11 @@ for ($z = 0; $z < $retorno_numrows; $z++) {
   $pdf->SetAutoPageBreak(false);
 
   $pdf->setfont('arial', 'b', 8);
-  $pdf->cell($tam+10, $alt, "DESCRIÇÃO DOS DOCUMENTOS", 1, 0, "C", 0);
+  $pdf->cell($tam-17, $alt, "DESCRIÇÃO DOS DOCUMENTOS", 1, 0, "C", 0);
   $pdf->cell(20,  $alt, "EMISSÂO", 1, 0, "C", 0);
   $pdf->cell(20,  $alt, "VALIDADE", 1, 0, "C", 0);
-  $pdf->cell(18,  $alt, "AP *", 1, $br, "C", 0);
+  $pdf->cell(30, $alt, "Nº DO DOCUMENTO", 1,0,"C",0);
+  $pdf->cell(24,  $alt, "APRESENTADO", 1, $br, "C", 0);
 
   if ($pc30_comobs == "t") {
     $pdf->cell(60, $alt, "OBSERVAÇÃO", 1, 1, "C", 0);
@@ -236,43 +243,41 @@ for ($z = 0; $z < $retorno_numrows; $z++) {
   $pdf->setfont('arial', '', 7);
   for ($w = 0; $w < $clpctipodoccertif->numrows; $w++) {
 
-    $pdf->SetWidths(array($tam+10, 20, 20, 18, 60));
-    $pdf->SetAligns(array('L', 'C', 'C', 'C', 'L'));
+    $pdf->SetWidths(array($tam-17, 20, 20, 30, 24, 60));
+    $pdf->SetAligns(array('L', 'C', 'C', 'C', 'C','L'));
 
     db_fieldsmemory($result_doc, $w);
 
     $sDescricao = $pc72_pcdoccertif."-".$pc71_descr;
+    $sValidade = 'Não apresentado';
+    $sNumDocumento = '-';
+    $sApresentado = 'N/A';
 
     $sWhere     = "pc75_pcfornecertif = {$pc74_codigo} and pc75_pcdoccertif = {$pc72_pcdoccertif}";
     $sSql       = $clpcfornecertifdoc->sql_query_file(null, "*", "", $sWhere);
     $result_df  = $clpcfornecertifdoc->sql_record($sSql);
+
     if ($clpcfornecertifdoc->numrows > 0) {
 
       db_fieldsmemory($result_df, 0);
+      $sNumDocumento = $pc75_numdocumento;
+      $sApresentado = $pc75_apresentado == 1 ? 'S' : 'N/A';
 
       if ($pc75_validade == "") {
         $sValidade = "";
       } else {
         $sValidade = db_formatar($pc75_validade, 'd');
       }
-    } else {
-      $sValidade = "Não apresentado";
     }
 
     $sEmissao = isset($pc75_dataemissao) && $pc75_dataemissao != "" ? db_formatar($pc75_dataemissao, 'd') : "";
 
-    if (isset($pc75_apresentado)) {
-      $sApresentado = ($pc75_apresentado == 1 ? "SIM" : ($pc75_apresentado == 2 ? "NÃO" : ""));
-    } else {
-      $sApresentado = "NÂO";
-    }
-
     if ($pc30_comobs == "t") {
 
       $sObservacao = (strlen($pc75_obs) < 255 ? $pc75_obs : substr($pc75_obs, 0, 252).'...');
-      $aDados      = array($sDescricao, $sEmissao, $sValidade, $sApresentado, $sObservacao);
+      $aDados      = array($sDescricao, $sEmissao, $sValidade, $sNumDocumento, $sApresentado);
     } else {
-      $aDados      = array($sDescricao, $sEmissao, $sValidade, $sApresentado);
+      $aDados      = array($sDescricao, $sEmissao, $sValidade, $sNumDocumento, $sApresentado);
     }
 
     $pdf->Row($aDados, $alt, true, 5, 0, true);
@@ -318,7 +323,7 @@ for ($z = 0; $z < $retorno_numrows; $z++) {
             $pdf->cell(50, $alt, $z01_nome, 0, 1, "L", 0);
 
             $pdf->setfont('arial', 'b', 8);
-            $pdf->cell(35, $alt, 'Endereço', 1, 0, "R", 0);
+            $pdf->cell(35, $alt, 'Endereço :', 1, 0, "R", 0);
             $pdf->setfont('arial', '', 7);
             $pdf->cell(60, $alt,$z01_ender.", ".$z01_numero."/".$z01_compl, 1, 0, "L", 0);
             $pdf->setfont('arial', 'b', 8);
@@ -416,9 +421,11 @@ for ($z = 0; $z < $retorno_numrows; $z++) {
   }
 
 
-  $pdf->ln(10);
+  $pdf->ln(8);
 
-  $pdf->cell(175,4,"$munic, $dia de $mes de $ano. ",0,1,"R",0);
+  $pdf->setX(108);
+  $pdf->cell(85,6,"$munic, $dia de $mes de $ano. ","T",1,"C",0);
+
   $pdf->ln(20);
 
   $sqlparag      = "  select db02_descr,                                            ";
