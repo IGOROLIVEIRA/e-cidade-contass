@@ -132,7 +132,7 @@ if ($this->datafim != "") {
   $this->objpdf->Text($coluna + 60,$linha+51,"VALIDADE ATÉ: ");
 }
 $this->objpdf->SetFont('Arial','',$fonte);
-$this->objpdf->Text($coluna + 60,$linha+51,db_formatar($this->datainc,'d'));
+//$this->objpdf->Text($coluna + 60,$linha+51,db_formatar($this->datainc,'d'));
 if ($this->datafim != "") {
   $this->objpdf->Text($coluna + 105,$linha+51,db_formatar($this->datafim,'d'));
 }
