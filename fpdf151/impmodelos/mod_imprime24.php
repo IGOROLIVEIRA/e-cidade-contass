@@ -127,7 +127,7 @@ $this->objpdf->SetFont('Arial','',$fonte);
 $this->objpdf->Text($coluna + 60,$linha+45,$this->bairropri);
 
 $this->objpdf->SetFont('Arial','B',$fonte);
-$this->objpdf->Text($coluna,$linha+51,"DATA INICIAL: ");
+//$this->objpdf->Text($coluna,$linha+51,"DATA INICIAL: ");
 if ($this->datafim != "") {
   $this->objpdf->Text($coluna + 60,$linha+51,"VALIDADE ATÉ: ");
 }
