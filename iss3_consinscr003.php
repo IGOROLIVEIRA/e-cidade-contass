@@ -103,13 +103,11 @@
   $sSqlDadosInscricao .= "        q45_codporte,                                                                                    \n";
   $sSqlDadosInscricao .= "        q40_descr,                                                                                       \n";
   $sSqlDadosInscricao .= "        j88_sigla,                                                                                       \n";
-  $sSqlDadosInscricao .= "        case                                                                                             \n";
-  $sSqlDadosInscricao .= "          when meicgm.q115_numcgm is not null                                                            \n";
-  $sSqlDadosInscricao .= "            then 'MEI'                                                                                   \n";
-  $sSqlDadosInscricao .= "            else ''                                                                                      \n";
-  $sSqlDadosInscricao .= "        end as tipo                                                                                      \n";
+  $sSqlDadosInscricao .= "        db98_descricao as tipo                                                                           \n";
   $sSqlDadosInscricao .= "   from issbase                                                                                          \n";
   $sSqlDadosInscricao .= "        inner      join cgm cgm_inscr      on cgm_inscr.z01_numcgm         = q02_numcgm                  \n";
+  $sSqlDadosInscricao .= "        left       join cgmtipoempresa     on cgm_inscr.z01_numcgm         = z03_numcgm                  \n";
+  $sSqlDadosInscricao .= "        left       join tipoempresa        on cgmtipoempresa.z03_tipoempresa    = db98_sequencial        \n";
   $sSqlDadosInscricao .= "        left outer join issruas            on issbase.q02_inscr            = issruas.q02_inscr           \n";
   $sSqlDadosInscricao .= "        left outer join ruas               on ruas.j14_codigo              = issruas.j14_codigo          \n";
   $sSqlDadosInscricao .= "        left outer join ruastipo           on ruas.j14_tipo                = ruastipo.j88_codigo         \n";
