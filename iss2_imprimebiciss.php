@@ -57,7 +57,7 @@ cg.z01_compl,
 					   q02_compl, 
 					   q05_matric,
 					   q14_proces, 
-					   cg.z01_cgccpf
+					   cg.z01_cgccpf,q140_datainicio,q140_datafim,q140_observacao
       from issbase
              inner join cgm cg on cg.z01_numcgm = q02_numcgm
              left outer join issruas on issbase.q02_inscr = issruas.q02_inscr
@@ -68,6 +68,7 @@ cg.z01_compl,
              left outer join cgm c on c.z01_numcgm = q10_numcgm
              left outer join issmatric on issbase.q02_inscr = q05_inscr
              left outer join issprocesso on issbase.q02_inscr = q14_inscr
+             left outer join issbaseparalisacao on issbase.q02_inscr = q140_issbase
       where issbase.q02_inscr = $inscr";
 //die($sql);
 $result  = pg_query($sql) or die($sql);
@@ -674,6 +675,31 @@ if ($numrows <> 0) {
 } else {
 	$pdf->cell(190,4,"Sem lançamentos",0,1,"C",0);
 }
+
+$pdf->Cell(200,4,"","",1,"C",0);
+$pdf->setX(5);
+$pdf->SetFont('Arial','B',$titulo);
+$pdf->Cell(200,4,"Paralizações/Suspenções","LRBT",1,"C",0);
+$pdf->setX(5);
+$pdf->Cell(200,4,"","",1,"C",0);
+
+if(!empty($q140_datainicio)){
+    $pdf->setX(10);
+    $pdf->SetFont('Arial','',$titulo);
+    $pdf->cell(20,4,"Data Inicial",0,0,"C",1);
+    $pdf->cell(20,4,"Data Final",0,0,"C",1);
+    $pdf->cell(155,4,"Motivo",0,1,"C",1);
+
+    $pdf->setX(10);
+    $pdf->SetFont('Arial','',$texto);
+    $pdf->cell(20,4,db_formatar($q140_datainicio,'d'),0,0,"C",0);
+    $pdf->cell(20,4,db_formatar($q140_datafim,'d'),0,0,"C",0);
+    $pdf->Multicell(155,4,$q140_observacao,0,"L",0);
+
+}else{
+    $pdf->cell(190,4,"Sem lançamentos",0,1,"C",0);
+}
+
 
 $pdf->Output();
 
