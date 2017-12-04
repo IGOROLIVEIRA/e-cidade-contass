@@ -72,7 +72,7 @@ if (isset($incluir)) {
     /*
      * verifica manutencao anterior
      */
-    $result_manutencao1 = $clveicmanut->sql_record($clveicmanut->sql_query_manutencao(null, "ve62_medida,to_timestamp(ve62_dtmanut||' '||ve62_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve62_dtmanut","ve62_dtmanut desc limit 1;select * from (select ve62_medida,to_timestamp(ve62_dtmanut||' '||ve62_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve62_dtmanut from veicmanut where ve62_veiculos=89 ) AS x WHERE ve62_dtmanut < to_timestamp('2017-11-01'||' '||'11:00'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP order by ve62_dtmanut desc limit 1;", "where ve62_veiculos=$ve62_veiculos ) AS x WHERE ve62_dtmanut < to_timestamp('{$oDataManutencao->getDate()}'||' '||'$horaManutencao'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP "));
+    $result_manutencao1 = $clveicmanut->sql_record($clveicmanut->sql_query_manutencao(null, "ve62_medida,to_timestamp(ve62_dtmanut||' '||ve62_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve62_dtmanut","ve62_dtmanut desc limit 1;select * from (select ve62_medida,to_timestamp(ve62_dtmanut||' '||ve62_hora::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP AS ve62_dtmanut from veicmanut where ve62_veiculos=$ve65_veicretirada ) AS x WHERE ve62_dtmanut < to_timestamp('2017-11-01'||' '||'11:00'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP order by ve62_dtmanut desc limit 1;", "where ve62_veiculos=$ve62_veiculos ) AS x WHERE ve62_dtmanut < to_timestamp('{$oDataManutencao->getDate()}'||' '||'$horaManutencao'::varchar,'YYYY-MM-DD hh24:mi')::TIMESTAMP "));
     if (pg_num_rows($result_manutencao1) > 0) {
         $oManut1 = db_utils::fieldsMemory($result_manutencao1, 0);
         $ve62_medida1 = $oManut1->ve62_medida;
@@ -122,6 +122,7 @@ if (isset($incluir)) {
         $sqlerro = true;
         $erro_msg = "Não foi possível incluir.";
     } else if (!empty($ve62_medida1) && $medida < $ve62_medida1) {
+        var_dump($ve62_medida1); exit;
         db_msgbox("Medida de manutenção menor que Medida de manutenção anterior.");
         $sqlerro = true;
         $erro_msg = "Não foi possível incluir.";
