@@ -246,14 +246,6 @@ try {
           $oRetorno->nValorCorrigido         = empty($nPercentualDesconto) ? $oRetorno->nValorCorrigidoAnterior : $oRetorno->nValorCorrigido-($nValorCorrigido * $nPercentualDesconto) / 100;
           $oRetorno->nValorTotal             -= ($oRetorno->nValorMultaAnterior-$oRetorno->nValorMulta)+($oRetorno->nValorJurosAnterior-$oRetorno->nValorJuros)+($oRetorno->nValorCorrigidoAnterior-$oRetorno->nValorCorrigido);
           break;
-        case Desconto::APLICACAO_DESCONTO_VALOR_HISTORICO:
-          $oRetorno->nValorLimite            = $oRetorno->nValorHistorico;
-          $oRetorno->nValorHistorico         = $oRetorno->nValorHistorico-($nValorHistorico * $nPercentualDesconto) / 100;
-          $oRetorno->nValorCorrigido         = $oRetorno->nValorCorrigido-($nValorCorrigido * $nPercentualDesconto) / 100;
-          $oRetorno->nValorJuros             = $oRetorno->nValorJuros-($nValorJuros * $nPercentualDesconto) / 100;
-          $oRetorno->nValorMulta             = $oRetorno->nValorMulta-($nValorMulta * $nPercentualDesconto) / 100;
-          $oRetorno->nValorTotal             -= ($oRetorno->nValorHistoricoAnterior-$oRetorno->nValorHistorico);
-          break;
         default:
 
           $oRetorno->nValorHistorico         = $oRetorno->nValorHistorico-($nValorHistorico * $nPercentualDesconto) / 100;
@@ -352,17 +344,17 @@ try {
             $oValores->nValorDescontadoMulta     = ( $oDadosDebito->vlrmulta * $nPercentualDesconto ) / 100;
                 break;
           case Desconto::APLICACAO_DESCONTO_CORRECAO:
-            $oValores->nValorDescontadoCorrigido     = ( $nValorCorrecao * $nPercentualDesconto ) / 100;
+            $oValores->nValorDescontadoCorrigido     = ( $oDadosDebito->vlrcor * $nPercentualDesconto ) / 100;
                 break;
           case Desconto::APLICACAO_DESCONTO_JUROS_MULTA_CORRECAO:
             $oValores->nValorDescontadoJuros     = ( $oDadosDebito->vlrjuros * $nPercentualDesconto ) / 100;
             $oValores->nValorDescontadoMulta     = ( $oDadosDebito->vlrmulta * $nPercentualDesconto ) / 100;
-            $oValores->nValorDescontadoCorrigido     = ( $nValorCorrecao * $nPercentualDesconto ) / 100;
+            $oValores->nValorDescontadoCorrigido     = ( $oDadosDebito->vlrcor * $nPercentualDesconto ) / 100;
                 break;
 
           default:
             $oValores->nValorDescontadoHistorico = ( $oDadosDebito->vlrhis   * $nPercentualDesconto ) / 100;
-            $oValores->nValorDescontadoCorrigido = ( $nValorCorrecao         * $nPercentualDesconto ) / 100;
+            $oValores->nValorDescontadoCorrigido = ( $oDadosDebito->vlrcor         * $nPercentualDesconto ) / 100;
             $oValores->nValorDescontadoJuros     = ( $oDadosDebito->vlrjuros * $nPercentualDesconto ) / 100;
             $oValores->nValorDescontadoMulta     = ( $oDadosDebito->vlrmulta * $nPercentualDesconto ) / 100;
             $oValores->nValorDescontadoTotal     = ( $oDadosDebito->total    * $nPercentualDesconto ) / 100;

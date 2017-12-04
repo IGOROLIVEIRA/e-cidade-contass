@@ -235,7 +235,6 @@ try {
           </td>
           <td nowrap colspan="3">
             <select id="aplicacao" onchange="js_calculaValorComDesconto()">
-              <option value="6">Sobre Tudo</option>
               <option value="1">Sobre a Multa</option>
               <option value="2">Sobre os Juros</option>
               <option value="3">Sobre Juros e Multa</option>

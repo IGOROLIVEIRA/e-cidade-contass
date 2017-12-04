@@ -254,7 +254,29 @@ class Desconto extends Abatimento {
 
     $this->lancarValorDesconto();
     $this->lancarHistorico( Desconto::HISTORICO, "Desconto Manual");
-    $this->modificarValorDebito();
+    /**
+     * Modificado por Rodrigo Cabral @ Contass
+     * Motivo: A forma nativa de aplicação de desconto sempre abatia o valor do desconto em cima de tudo. Exemplo:
+     * Valor Hist: 100
+     * Valor Corrigido : 120
+     * Multa: 10
+     * Juros: 10
+     *
+     * Aplicando 10% de desconto ficaria:
+     * Valor Hist: 100 - 10%
+     * Valor corrigido: 120 - 10%
+     * Multa: 10 - 10%
+     * Juros: 10 - 10%
+     *
+     * Assim, ele calculava tudo e alterava o valor pricipal do debito na arrecad com o valor do desconto. Ou seja,
+     * se o valor total de descontos foi de 30 e o valor do debito na arrecad era 100, ele aterava pra 70.
+     *
+     * A nova forma, calcula o valor de desconto pela forma de aplicação (Sobre Juros, Sobre Multa, Sobre Multas
+     * e Juros, Sobre o valor da Correção, etc) grava os valores dos descontos na tabela abatimentosarreckey e
+     * aplica no momento da emissao do recibo, assim como é feito o desconto por regras.
+     *
+     */
+//    $this->modificarValorDebito();
 
     return true;
   }
@@ -467,27 +489,27 @@ class Desconto extends Abatimento {
       throw new Exception($oDaoArrecad->erro_msg);
     }
 
-    /**
-     * Valor do debito sem desconto
-     */
-    $nValorDebito = db_utils::fieldsMemory($rsDebito, 0)->valor;
+//    /**
+//     * Valor do debito sem desconto
+//     */
+//    $nValorDebito = db_utils::fieldsMemory($rsDebito, 0)->valor;
+//
+//    /**
+//     * Soma valor do debito com valor do desconto
+//     */
+//    $oDaoArrecad->k00_valor = $nValorDebito + $this->getValor();
+//
+//    /**
+//     * Atualiza arrecad retornando valor do desconto ao debito
+//     */
+//    $oDaoArrecad->alterar(null, $sWhereDebito);
 
-    /**
-     * Soma valor do debito com valor do desconto
-     */
-    $oDaoArrecad->k00_valor = $nValorDebito + $this->getValor();
-
-    /**
-     * Atualiza arrecad retornando valor do desconto ao debito
-     */
-    $oDaoArrecad->alterar(null, $sWhereDebito);
-
-    /**
-     * Erro ao alterar arrecad
-     */
-    if ( $oDaoArrecad->erro_status == "0" ) {
-      throw new Exception($oDaoArrecad->erro_msg);
-    }
+//    /**
+//     * Erro ao alterar arrecad
+//     */
+//    if ( $oDaoArrecad->erro_status == "0" ) {
+//      throw new Exception($oDaoArrecad->erro_msg);
+//    }
 
     /**
      * Lanca historio do tipo 919 - cancelamento de desconto
