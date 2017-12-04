@@ -83,7 +83,7 @@ if ( $clprotprocesso->numrows > 0 ) {
   $sNumeroProcesso = $oNumeroProcesso->p58_numero . '/' . $oNumeroProcesso->p58_ano;
 }
 $head2 = "PROCESSO N° $sNumeroProcesso";
-$head3 = "IMPRESSÃO DE ".mb_strtoupper($sTipoDespacho);
+$head3 = "INCLUSÃO DE ".mb_strtoupper($sTipoDespacho);
 $head4 = "Data: ".implode("/",(array_reverse(explode("-",$data))));
 $head5 = "Hora: ".$hora;
 $head6 = "Usuário: ".$usuarios;
