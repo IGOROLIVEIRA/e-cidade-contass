@@ -397,7 +397,8 @@ try {
             default:
               $nValorDesconto  = $oDebito->nValorDescontadoHistorico;
           }
-
+          if($nValorDesconto == 0)
+            continue;
           $nTotalDesconto += $nValorDesconto;
           $sObservacao     = db_stdClass::normalizeStringJsonEscapeString($oParametros->sObservacao);
 
