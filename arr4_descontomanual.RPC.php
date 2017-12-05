@@ -89,13 +89,13 @@ try {
        */
       db_inicio_transacao();
       $sDataHoje = date( "Y-m-d", db_getsession("DB_datausu") );
-      $sWhere   = "not exists ( select 1                                 ";
-      $sWhere  .= "               from recibopaga rp                     ";
-      $sWhere  .= "              where rp.k00_numpre = y.k00_numpre      ";
-      $sWhere  .= "                and rp.k00_numpar = y.k00_numpar      ";
-      $sWhere  .= "                and rp.k00_dtpaga >= '{$sDataHoje}'   ";
-      $sWhere  .= "                and rp.k00_conta =  0 )               ";
-      $sWhereDebitosNumpre  = " and y.k00_hist <> 918 AND $sWhere";
+//      $sWhere   = "not exists ( select 1                                 ";
+//      $sWhere  .= "               from recibopaga rp                     ";
+//      $sWhere  .= "              where rp.k00_numpre = y.k00_numpre      ";
+//      $sWhere  .= "                and rp.k00_numpar = y.k00_numpar      ";
+//      $sWhere  .= "                and rp.k00_dtpaga >= '{$sDataHoje}'   ";
+//      $sWhere  .= "                and rp.k00_conta =  0 )               ";
+      $sWhereDebitosNumpre  = " and y.k00_hist <> 918 ";
 
       if ( $iReceita > 0 ) {
       	$sWhereDebitosNumpre .= " and y.k00_receit = {$iReceita}";
@@ -125,12 +125,12 @@ try {
       $aWhereDebito[] = "arrecad.k00_hist <> 918";
       $aWhereDebito[] = "arreinstit.k00_instit = {$iInstituicao}";
 
-      $sWhere   = "not exists ( select 1                                 ";
-      $sWhere  .= "               from recibopaga rp                     ";
-      $sWhere  .= "              where rp.k00_numpre = arrecad.k00_numpre";
-      $sWhere  .= "                and rp.k00_numpar = arrecad.k00_numpar";
-      $sWhere  .= "                and rp.k00_dtpaga >= '{$sDataHoje}'   ";
-      $sWhere  .= "                and rp.k00_conta =  0 )               ";
+//      $sWhere   = "not exists ( select 1                                 ";
+//      $sWhere  .= "               from recibopaga rp                     ";
+//      $sWhere  .= "              where rp.k00_numpre = arrecad.k00_numpre";
+//      $sWhere  .= "                and rp.k00_numpar = arrecad.k00_numpar";
+//      $sWhere  .= "                and rp.k00_dtpaga >= '{$sDataHoje}'   ";
+//      $sWhere  .= "                and rp.k00_conta =  0 )               ";
       $aWhereDebito[] = $sWhere;
 
       if ( $iNumpar > 0 ) {
@@ -141,7 +141,7 @@ try {
       	$aWhereDebito[] = "arrecad.k00_receit = {$iReceita}";
       }
 
-      $sWhereDebito  = implode(' and ', $aWhereDebito);
+//      $sWhereDebito  = implode(' and ', $aWhereDebito);
 
       $sCamposDebito = "arrecad.*";
       $sSqlDebito    = $oDaoArrecad->sql_query_file_instit(null, $sCamposDebito, 'arrecad.k00_numpar', $sWhereDebito);
@@ -444,12 +444,12 @@ try {
       $sWhereDesconto        .= ' and abatimento.k125_tipoabatimento     = ' . Abatimento::TIPO_DESCONTO;
       $sWhereDesconto        .= ' and abatimento.k125_abatimentosituacao = ' . Abatimento::SITUACAO_ATIVO;
       $sWhereDesconto        .= ' and arrecad.k00_numpre is not null       ';
-      $sWhereDesconto        .= " and not exists ( select 1                                 ";
-      $sWhereDesconto        .= "                    from recibopaga rp                     ";
-      $sWhereDesconto        .= "                   where rp.k00_numpre = arrecad.k00_numpre      ";
-      $sWhereDesconto        .= "                     and rp.k00_numpar = arrecad.k00_numpar      ";
-      $sWhereDesconto        .= "                     and rp.k00_dtpaga >= '{$sDataHoje}'   ";
-      $sWhereDesconto        .= "                     and rp.k00_conta =  0 )               ";
+//      $sWhereDesconto        .= " and not exists ( select 1                                 ";
+//      $sWhereDesconto        .= "                    from recibopaga rp                     ";
+//      $sWhereDesconto        .= "                   where rp.k00_numpre = arrecad.k00_numpre      ";
+//      $sWhereDesconto        .= "                     and rp.k00_numpar = arrecad.k00_numpar      ";
+//      $sWhereDesconto        .= "                     and rp.k00_dtpaga >= '{$sDataHoje}'   ";
+//      $sWhereDesconto        .= "                     and rp.k00_conta =  0 )               ";
       $sSqlDesconto           = $oDaoAbatimentoArreckey->sql_query_buscaAbatimento('*', null, $sWhereDesconto);
       $rsDesconto             = $oDaoAbatimentoArreckey->sql_record($sSqlDesconto);
 
