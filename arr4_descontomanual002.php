@@ -75,17 +75,17 @@ try {
     // throw new BusinessException(" Débito com recibos válidos emitidos, desconto não pode ser aplicado.");
   }
 
-  $sDataHoje = date( "Y-m-d", db_getsession("DB_datausu") );
-  $sWhere   = "not exists ( select 1                                 ";
-  $sWhere  .= "               from recibopaga rp                     ";
-  $sWhere  .= "              where rp.k00_numpre = y.k00_numpre      ";
-  $sWhere  .= "                and rp.k00_numpar = y.k00_numpar      ";
-  $sWhere  .= "                and rp.k00_dtpaga >= '{$sDataHoje}'   ";
-  $sWhere  .= "                and rp.k00_conta =  0 )               ";
+//  $sDataHoje = date( "Y-m-d", db_getsession("DB_datausu") );
+//  $sWhere   = "not exists ( select 1                                 ";
+//  $sWhere  .= "               from recibopaga rp                     ";
+//  $sWhere  .= "              where rp.k00_numpre = y.k00_numpre      ";
+//  $sWhere  .= "                and rp.k00_numpar = y.k00_numpar      ";
+//  $sWhere  .= "                and rp.k00_dtpaga >= '{$sDataHoje}'   ";
+//  $sWhere  .= "                and rp.k00_conta =  0 )               ";
 
 
 
-	$rsDebitosNumpre = debitos_numpre($iNumpre, 0, 0, db_getsession("DB_datausu"), db_getsession("DB_anousu"), 0, '', '', " and y.k00_hist <> 918 and $sWhere");
+	$rsDebitosNumpre = debitos_numpre($iNumpre, 0, 0, db_getsession("DB_datausu"), db_getsession("DB_anousu"), 0, '', '', " and y.k00_hist <> 918 ");
 
 	if ( !$rsDebitosNumpre || pg_num_rows($rsDebitosNumpre) == 0 ) {
 		throw new Exception('Débitos para o numpre ' . $iNumpre .', não encontrados');
