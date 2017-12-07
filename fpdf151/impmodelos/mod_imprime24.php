@@ -37,25 +37,35 @@ $this->objpdf->Multicell(0,8,$this->tipoalvara,0,"C",0); // tipo de alvara
 
 
 
-
+if(!empty($this->dtemissao)){
+  $sDataEmissao = db_formatar($this->dtemissao,'d');
+}else{
+  $sDataEmissao = date('d/m/Y');
+}
 if($this->permanente == 't'){
 
 	$this->objpdf->sety(49);
 	$this->objpdf->setfont('Arial','B',12);
-	$this->objpdf->Multicell(0,8,"Número: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
+	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
 	$this->objpdf->sety(55);
 	$this->objpdf->setfont('Arial','B',12);
 	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
-	$this->objpdf->setxy(10,64);
+  $this->objpdf->sety(61);
+  $this->objpdf->setfont('Arial','B',12);
+  $this->objpdf->Multicell(0,8,"Data do Documento: ".$sDataEmissao,0,"C",0); // Data de Emissao
+	$this->objpdf->setxy(10,70);
 } else {
 
 	$this->objpdf->sety(56);
 	$this->objpdf->setfont('Arial','B',12);
-	$this->objpdf->Multicell(0,8,"Número: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
+	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
 	$this->objpdf->sety(61);
 	$this->objpdf->setfont('Arial','B',12);
 	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
-	$this->objpdf->setxy(10,70);
+  $this->objpdf->sety(70);
+  $this->objpdf->setfont('Arial','B',12);
+  $this->objpdf->Multicell(0,8,"Data do Documento: ".db_formatar($this->dtemissao,'d'),0,"C",0); // Data de Emissao
+	$this->objpdf->setxy(10,81);
 }
 
 $this->objpdf->SetFont('Arial','',14);
@@ -389,16 +399,10 @@ if(isset($this->impobslanc) && $this->impobslanc == 't'){
     $this->objpdf->Ln(2);
   }
 }
-if(!empty($this->dtemissao)){
-  $oDataEmissao = new DBDate($this->dtemissao);
-  $sDataEmissao = $this->municpref . ", ".$oDataEmissao->getDia()." DE ".strtoupper(db_mes( $oDataEmissao->getMes()))." DE ".$oDataEmissao->getAno() . ".";
-} else {
-  $sDataEmissao = $this->municpref . ", ".date('d')." DE ".strtoupper(db_mes( date('m')))." DE ".date('Y') . ".";
-}
 
 $this->objpdf->ln(10);
 $this->objpdf->SetFont('Arial','B',14);
-$this->objpdf->cell(0,8,$sDataEmissao,0,1,"R",0); // data
+$this->objpdf->cell(0,8,$this->municpref . ", ".date('d')." DE ".strtoupper(db_mes( date('m')))." DE ".date('Y') . ".",0,1,"R",0); // data
 
 //  global $db02_texto;
 $this->objpdf->setfont('arial','',9);
