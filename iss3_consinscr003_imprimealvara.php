@@ -316,12 +316,13 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $clIssAlvara         = new cl_issalvara;
   $sWhere              = " q123_inscr = {$q02_inscr} and date_part('year',q123_dtinclusao) = ".db_getsession('DB_anousu');
   $sOrdem              = " q123_sequencial DESC limit 1 ";
-  $sCampos             = " q123_numalvara||'/'||date_part('year',q123_dtinclusao) as numeroalvara, q123_sequencial ";
+  $sCampos             = " q123_numalvara||'/'||date_part('year',q123_dtinclusao) as numeroalvara, q123_sequencial, q123_dtinclusao ";
   $sSql     = $clIssAlvara->sql_query_file(null,$sCampos,$sOrdem,$sWhere);
   $rsAlvara = $clIssAlvara->sql_record($sSql);
 
   if($clIssAlvara->numrows > 0 ) {
     $oAlvara  = db_utils::fieldsMemory($rsAlvara, 0);
+    $pdf1->dtemissao = $oAlvara->q123_dtinclusao;
   }
 
   if(!empty($oAlvara->numeroalvara)) {

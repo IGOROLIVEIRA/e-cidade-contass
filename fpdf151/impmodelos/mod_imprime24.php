@@ -389,10 +389,16 @@ if(isset($this->impobslanc) && $this->impobslanc == 't'){
     $this->objpdf->Ln(2);
   }
 }
+if(!empty($this->dtemissao)){
+  $oDataEmissao = new DBDate($this->dtemissao);
+  $sDataEmissao = $this->municpref . ", ".$oDataEmissao->getDia()." DE ".strtoupper(db_mes( $oDataEmissao->getMes()))." DE ".$oDataEmissao->getAno() . ".";
+} else {
+  $sDataEmissao = $this->municpref . ", ".date('d')." DE ".strtoupper(db_mes( date('m')))." DE ".date('Y') . ".";
+}
 
-$this->objpdf->ln(16);
+$this->objpdf->ln(10);
 $this->objpdf->SetFont('Arial','B',14);
-$this->objpdf->cell(0,8,$this->municpref . ", ".date('d')." DE ".strtoupper(db_mes( date('m')))." DE ".date('Y') . ".",0,1,"R",0); // data
+$this->objpdf->cell(0,8,$sDataEmissao,0,1,"R",0); // data
 
 //  global $db02_texto;
 $this->objpdf->setfont('arial','',9);
