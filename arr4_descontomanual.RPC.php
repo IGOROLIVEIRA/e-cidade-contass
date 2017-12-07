@@ -141,7 +141,8 @@ try {
       	$aWhereDebito[] = "arrecad.k00_receit = {$iReceita}";
       }
 
-//      $sWhereDebito  = implode(' and ', $aWhereDebito);
+//      $sWhereDebito  = implode\q
+//(' and ', $aWhereDebito);
 
       $sCamposDebito = "arrecad.*";
       $sSqlDebito    = $oDaoArrecad->sql_query_file_instit(null, $sCamposDebito, 'arrecad.k00_numpar', $sWhereDebito);
