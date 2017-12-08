@@ -79,7 +79,7 @@ for ($i = 0;$i < 2;$i++){
   $this->objpdf->text($xcol+128,$xlin+19,$this->tipobairro);
   $this->objpdf->text($xcol+145,$xlin+19,$this->bairropri);
 
-  $this->objpdf->Roundedrect($xcol,$xlin+24,202,35,2,'DF','1234');
+  $this->objpdf->Roundedrect($xcol,$xlin+24,202,45,2,'DF','1234');
   $this->objpdf->sety($xlin+24);
   $maiscol = 0;
   $yy = $this->objpdf->gety();
@@ -102,7 +102,7 @@ for ($i = 0;$i < 2;$i++){
     }
     if (pg_result($this->recorddadospagto,$ii,"k00_hist") == 918){
 
-        $this->obsdescr = "(desconto)";
+      $this->obsdescr = "(desconto)";
     }
     $codtipo = pg_result($this->recorddadospagto,$ii,"codtipo");
     $valor   = pg_result($this->recorddadospagto,$ii,$this->valor);
@@ -117,15 +117,15 @@ for ($i = 0;$i < 2;$i++){
 
     $this->objpdf->cell(15,3,db_formatar(pg_result($this->recorddadospagto,$ii,$this->valor),'f'),0,1,"R",0);
     if ($valor < 0){
-         $this->totaldesc += pg_result($this->recorddadospagto,$ii,$this->valor);
+      $this->totaldesc += pg_result($this->recorddadospagto,$ii,$this->valor);
     }else if ($codtipo == 't' and $valor > 0){
-         $this->totalacres  += pg_result($this->recorddadospagto,$ii,$this->valor);
+      $this->totalacres  += pg_result($this->recorddadospagto,$ii,$this->valor);
     }else{
-       $this->totalrec  += pg_result($this->recorddadospagto,$ii,$this->valor);
+      $this->totalrec  += pg_result($this->recorddadospagto,$ii,$this->valor);
     }
   }
-  $this->objpdf->Roundedrect($xcol,$xlin+61,176,40,2,'DF','1234');
-  $this->objpdf->SetY($xlin+62);
+  $this->objpdf->Roundedrect($xcol,$xlin+71,176,30,2,'DF','1234');
+  $this->objpdf->SetY($xlin+72);
   $this->objpdf->SetX($xcol+3);
 
   $this->objpdf->Setfont('Arial','',5);
@@ -133,50 +133,46 @@ for ($i = 0;$i < 2;$i++){
   $this->objpdf->SetX($xcol+3);
   //dados do desconto
 
-  $this->objpdf->Roundedrect(181,$xlin+61,25,9,2,'DF','1234');
   $this->objpdf->Roundedrect(181,$xlin+71,25,9,2,'DF','1234');
   $this->objpdf->Roundedrect(181,$xlin+81.5,25,9,2,'DF','1234');
   $this->objpdf->Roundedrect(181,$xlin+92,25,9,2,'DF','1234');
 
   $this->objpdf->Setfont('Arial','',6);
-  $this->objpdf->text(182,$xlin+64,'Valor Original');
-  $this->objpdf->text(182,$xlin+73,'( + ) Valor Correção');
+  $this->objpdf->text(182,$xlin+73,'( = ) Valor Documento');
   $this->objpdf->text(182,$xlin+83.5,'( - ) Desconto ');
   $this->objpdf->text(182,$xlin+94,'( + ) Mora / Multa');
 
   if(isset($this->lEmiteVal)){
-		if( $this->lEmiteVal == false){
-			$totalrec   = "";
-			$totaldesc  = "";
-			$totalacres = "";
-			$valtotal   = "";
-		}else{
-			$totalrec   = $this->totalrec;
-			$totaldesc  = abs($this->totaldesc);
-			$totalacres = $this->totalacres;
-			$valtotal   = $this->valtotal;
-		}
+    if( $this->lEmiteVal == false){
+      $totalrec   = "";
+      $totaldesc  = "";
+      $totalacres = "";
+      $valtotal   = "";
+    }else{
+      $totalrec   = $this->totalrec;
+      $totaldesc  = abs($this->totaldesc);
+      $totalacres = $this->totalacres;
+      $valtotal   = $this->valtotal;
+    }
   }else{
-		$totalrec   = db_formatar($this->totalrec,'f');
-		$totaldesc  = db_formatar(abs($this->totaldesc),'f');
-		$totalacres = db_formatar($this->totalacres,'f');
-		$valtotal   = $this->valtotal;
-	}
+    $totalrec   = db_formatar($this->totalrec,'f');
+    $totaldesc  = db_formatar(abs($this->totaldesc),'f');
+    $totalacres = db_formatar($this->totalacres,'f');
+    $valtotal   = $this->valtotal;
+  }
 
-	$this->objpdf->setfont('Arial','',10);
-	$this->objpdf->setxy(181,$xlin+62);
-	$this->objpdf->cell(25,9,$this->valororigem,0,0,"R");
+  $this->objpdf->setfont('Arial','',10);
   $this->objpdf->setxy(181,$xlin+71);
-	$this->objpdf->cell(25,9,db_formatar($this->totalrec - $this->valororigem, 'f'),0,0,"R");
-	$this->objpdf->setxy(181,$xlin+81.5);
-	$this->objpdf->cell(25,9,$totaldesc,0,0,"R");
-	$this->objpdf->setxy(181,$xlin+92);
-	$this->objpdf->cell(25,9,$totalacres,0,0,"R");
+  $this->objpdf->cell(25,9,$totalrec,0,0,"R");
+  $this->objpdf->setxy(181,$xlin+81.5);
+  $this->objpdf->cell(25,9,$totaldesc,0,0,"R");
+  $this->objpdf->setxy(181,$xlin+92);
+  $this->objpdf->cell(25,9,$totalacres,0,0,"R");
 
 
   $this->objpdf->setx(15);
 
-   ///Totais
+  ///Totais
   $this->objpdf->Setfont('Arial','',6);
   $this->objpdf->Roundedrect(125,$xlin+103,32,9,2,'DF','1234');
   $this->objpdf->Roundedrect(158,$xlin+103,22,9,2,'DF','1234');
@@ -195,8 +191,8 @@ for ($i = 0;$i < 2;$i++){
   $this->objpdf->text(140,$xlin+116,"A   U   T   E   N   T   I   C   A   Ç   Ã   O      M   E   C   Â   N   I   C   A");
 
   if (isset($this->k12_codautent)){
-     $this->objpdf->SetFont('Arial','',8);
-     $this->objpdf->text(138,$xlin+122,$this->k12_codautent);
+    $this->objpdf->SetFont('Arial','',8);
+    $this->objpdf->text(138,$xlin+122,$this->k12_codautent);
   }
 
   $this->objpdf->setfillcolor(0,0,0);
