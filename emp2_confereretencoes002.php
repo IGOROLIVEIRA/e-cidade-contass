@@ -179,7 +179,7 @@ if ($oParametros->iTipoLancamento != "" || $oParametros->isubtipo != "" || $oPar
 }
 
 $sSqlRetencoes .= " where e23_ativo is true ";
-$sSqlRetencoes .= "   and {$sWhere}              ";
+$sSqlRetencoes .= "   and {$sWhere} ";
 
 $sValorCompararQuebra = "";
 $sCampoQuebrar        = "";
@@ -187,7 +187,7 @@ $sNomeQuebra          = "";
 $sHeaderQuebra        = "Nenhum";
 if ($oParametros->order == 1) {
 
-  $sCampoOrdenar = "e20_sequencial";
+  $sCampoOrdenar = "e23_sequencial";
   $sHeaderOrdem  = "Númerico";
 
 } else {
@@ -196,9 +196,9 @@ if ($oParametros->order == 1) {
   $sHeaderOrdem  = "Descrição";
 }
 /*OC4581*/
-if ($oParametros->iTipoLancamento != "" || $oParametros->isubtipo != "" || $oParametros->idesdobramento != "") {
+/*if ($oParametros->iTipoLancamento != "" || $oParametros->isubtipo != "" || $oParametros->idesdobramento != "") {
   $sCampoOrdenar = "e23_sequencial";
-}
+}*/
 if ($oParametros->group == 2) {
 
   $sCampoQuebrar = "k12_conta";
@@ -226,7 +226,7 @@ if ($oParametros->group == 2) {
 }
 
 $sSqlRetencoes   .= " order by {$sCampoOrdenar}";
-
+//print_r($sSqlRetencoes);die;
 $rsRetencoes      = db_query($sSqlRetencoes);
 $iTotalRetencoes  = pg_num_rows($rsRetencoes);
 if ($iTotalRetencoes == 0 || !$rsRetencoes) {
