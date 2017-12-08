@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -118,9 +118,9 @@ $tipoidentificacao = 0;
 $naopassa = 'f';
 $sqluf    = "select db21_codcli,
                     db12_uf,
-                    db12_extenso 
-               from db_config  
-              inner join db_uf on db_uf.db12_uf = db_config.uf  
+                    db12_extenso
+               from db_config
+              inner join db_uf on db_uf.db12_uf = db_config.uf
               where codigo = ".db_getsession("DB_instit");
 $resultuf = db_query($sqluf);
 db_fieldsmemory($resultuf,0);
@@ -130,7 +130,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
   db_inicio_transacao();
 
   if (isset($k03_numnov) && $k03_numnov != null){
-     
+
     /**
      *  Na tarefa 29472 foi alterado a forma de emissão de recibo passando a utilizar o model recibo.model.php
      *  porém foi detectado que essa variável (k03_numnov) substitui o valor do numpre gerado pelo model.
@@ -142,7 +142,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
     //exit;
     $oRecibo->setNumnov($k03_numnov);
     //$k03_numpre = $k03_numnov;
-     
+
   }
 
   //pega os numpres da ca3_gerfinanc002.php, separa e insere em db_reciboweb
@@ -178,7 +178,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
         $matnumpres = split("N", $vt[key($vt)]);
 
         if (!isset($inicial)) {
-           
+
           for ($contanumpres = 0; $contanumpres < sizeof($matnumpres); $contanumpres++) {
 
             $numprecerto = $matnumpres[$contanumpres];
@@ -223,11 +223,11 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
             }
 
             $sqlagrupa = "select distinct k00_descr as descrarretipo,
-                                 extract (months from k00_dtvenc) as mesagrupa, 
-                                 extract (year from k00_dtvenc) as anoagrupa 
-                            from arrecad 
-                                 inner join arretipo on arrecad.k00_tipo = arretipo.k00_tipo 
-                           where k00_numpre = " . $resultado[0] . " 
+                                 extract (months from k00_dtvenc) as mesagrupa,
+                                 extract (year from k00_dtvenc) as anoagrupa
+                            from arrecad
+                                 inner join arretipo on arrecad.k00_tipo = arretipo.k00_tipo
+                           where k00_numpre = " . $resultado[0] . "
                              and k00_numpar = " . $numpar[0];
             $resultagrupa = db_query($sqlagrupa) or die($sqlagrupa);
             if (pg_numrows($resultagrupa) > 0) {
@@ -394,8 +394,8 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
 
     for($ii = 1;$ii < sizeof($numpres);$ii++) {
 
-       
-       
+
+
       if ($numpres[$ii] == "") {
         continue;
       }
@@ -410,7 +410,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
         $sSqlinicial .= "   from inicialnumpre                                                       ";
         $sSqlinicial .= "        inner join arrecad on arrecad.k00_numpre = inicialnumpre.v59_numpre ";
         $sSqlinicial .= "  where v59_inicial = ".$numpres[$ii];
-         
+
         $resultinicial = db_query($sSqlinicial);
 
         for ($xinicial=0;$xinicial<pg_numrows($resultinicial);$xinicial++){
@@ -437,11 +437,11 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
             db_redireciona("db_erros.php?fechar=true&db_erro=[4] - {$eException->getMessage()}");
             exit;
           }
-           
+
         }
 
       } else {
-         
+
         $numpar = split("R", $valores[1]);
 
         if ( in_array(array($valores[0],$numpar[0]),$aDebitosRecibo) ) {
@@ -470,7 +470,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
     }
 
   } else {
-     
+
     try {
       $oRecibo->addNumpre($numpre_unica,0);
     } catch ( Exception $eException ) {
@@ -489,12 +489,12 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
   $minvenc = "";
 
   if(isset($oGet->forcarvencimento) && $oGet->forcarvencimento == 'true'){
-     
+
     $minvenc = date("Y-m-d",$DB_DATACALC);
     $exerc   = substr($minvenc,0,4);
 
   } else {
-     
+
     foreach ( $aDebitosRecibo as $oDebito ) {
 
       $sSqlVenc  = " select min(k00_dtvenc) as k00_dtvenc      ";
@@ -510,7 +510,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
       }
 
     }
-     
+
     $exerc = substr($minvenc,0,4);
 
     /* se o menor vencimento do numpre for menor que a data para pagamento(data informada na CGF) menor vencimento = data para pagamento */
@@ -534,7 +534,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
     $k03_numpre = $oRecibo->getNumpreRecibo();
 
   } catch ( Exception $eException ) {
-     
+
     db_fim_transacao(true);
     db_redireciona("db_erros.php?fechar=true&db_erro=[7] - {$eException->getMessage()}");
     exit;
@@ -557,8 +557,8 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
                           k00_hist7,
                           k00_hist8,
                           k03_tipo,
-                          k00_tipoagrup 
-                     from arretipo 
+                          k00_tipoagrup
+                     from arretipo
                     where k00_tipo = {$tipo}";
   $result = db_query($sSqlArreTipo);
 
@@ -592,7 +592,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
   db_fieldsmemory($result,0);
 
   $k00_descr = $k00_descr;
-  
+
   $historico = $k00_descr;
 
 
@@ -610,7 +610,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
       $minvenc = $oGet->db_datausu;
     }
   } else {
-     
+
     for ($conta=0; $conta < pg_numrows($resultrecibo); $conta++) {
 
       $sqlvenc  = " select min(k00_dtvenc) as k00_dtvenc ";
@@ -619,7 +619,7 @@ if (!isset($emite_recibo_protocolo) and !isset($reemite_recibo)) {
       $sqlvenc .= "    and k00_numpar = " . pg_result($resultrecibo,$conta,"k99_numpar");
       $resultvenc = db_query($sqlvenc) or die($sqlvenc);
       db_fieldsmemory($resultvenc,0);
-        
+
       if ($k00_dtvenc < $minvenc or $minvenc == "") {
         $minvenc = $k00_dtvenc;
       }
@@ -694,26 +694,26 @@ if(!isset($emite_recibo_protocolo)){
     $sGroupBy   = "";
 
   }
-   
+
   $sql  = "select * from (  select r.k00_numcgm,
                                    r.k00_receit,
-                                   null as k00_hist,  
-                                   case when taborc.k02_codigo is null 
-                                        then tabplan.k02_reduz 
-                                        else taborc.k02_codrec 
+                                   null as k00_hist,
+                                   case when taborc.k02_codigo is null
+                                        then tabplan.k02_reduz
+                                        else taborc.k02_codrec
                                    end as codreduz,
                                    t.k02_descr,
                                    t.k02_drecei,
                                    r.k00_dtpaga as k00_dtpaga,
                                    sum(r.k00_valor) as valor,
-                                   (select (select k02_codigo 
-                                             from tabrec 
-                                            where k02_recjur = r.k00_receit 
-                                               or k02_recmul = r.k00_receit limit 1) 
+                                   (select (select k02_codigo
+                                             from tabrec
+                                            where k02_recjur = r.k00_receit
+                                               or k02_recmul = r.k00_receit limit 1)
                                           is not null ) as codtipo
                                           {$sCampoNull}
                              from recibopaga r
-                                  inner join tabrec t on t.k02_codigo = r.k00_receit 
+                                  inner join tabrec t on t.k02_codigo = r.k00_receit
                                   inner join tabrecjm on tabrecjm.k02_codjm = t.k02_codjm
                                    left outer join taborc  on t.k02_codigo = taborc.k02_codigo and taborc.k02_anousu = ".db_getsession("DB_anousu")."
                                    left outer join tabplan  on t.k02_codigo = tabplan.k02_codigo and tabplan.k02_anousu = ".db_getsession("DB_anousu")."
@@ -725,28 +725,28 @@ if(!isset($emite_recibo_protocolo)){
                                      t.k02_drecei,
                                      r.k00_numcgm,
                                      codreduz
-                                     
+
                           union
-                           
+
                             select r.k00_numcgm,
                                    r.k00_receit,
-                                   r.k00_hist,  
-                                   case when taborc.k02_codigo is null 
-                                        then tabplan.k02_reduz 
-                                        else taborc.k02_codrec 
+                                   r.k00_hist,
+                                   case when taborc.k02_codigo is null
+                                        then tabplan.k02_reduz
+                                        else taborc.k02_codrec
                                     end as codreduz,
                                    t.k02_descr,
                                    t.k02_drecei,
                                    r.k00_dtpaga as k00_dtpaga,
                                    sum(r.k00_valor) as valor,
-                                   (select (select k02_codigo 
-                                             from tabrec 
-                                            where k02_recjur = r.k00_receit 
-                                               or k02_recmul = r.k00_receit limit 1) 
+                                   (select (select k02_codigo
+                                             from tabrec
+                                            where k02_recjur = r.k00_receit
+                                               or k02_recmul = r.k00_receit limit 1)
                                           is not null ) as codtipo
                                           {$sCampoJoin}
                               from recibopaga r
-                                   inner join tabrec t on t.k02_codigo = r.k00_receit 
+                                   inner join tabrec t on t.k02_codigo = r.k00_receit
                                    inner join tabrecjm on tabrecjm.k02_codjm = t.k02_codjm
                                     left outer join taborc   on t.k02_codigo = taborc.k02_codigo  and taborc.k02_anousu = ".db_getsession("DB_anousu")."
                                     left outer join tabplan  on t.k02_codigo = tabplan.k02_codigo and tabplan.k02_anousu = ".db_getsession("DB_anousu")."
@@ -765,25 +765,25 @@ if(!isset($emite_recibo_protocolo)){
   $sql = "select r.k00_numcgm,
                  r.k00_receit,
                  r.k00_hist,
-                 case when taborc.k02_codigo is null 
-                       then tabplan.k02_reduz 
-                       else taborc.k02_codrec 
+                 case when taborc.k02_codigo is null
+                       then tabplan.k02_reduz
+                       else taborc.k02_codrec
                  end as codreduz,
                  t.k02_descr,
                  t.k02_drecei,
                  r.k00_dtpaga as k00_dtpaga,
                  sum(r.k00_valor) as valor,
-                 (select (select k02_codigo 
-                            from tabrec 
-                           where k02_recjur = r.k00_receit 
+                 (select (select k02_codigo
+                            from tabrec
+                           where k02_recjur = r.k00_receit
                               or k02_recmul = r.k00_receit limit 1) is not null ) as codtipo
                     from recibo r
-                         inner join tabrec t on t.k02_codigo = r.k00_receit 
+                         inner join tabrec t on t.k02_codigo = r.k00_receit
                          inner join tabrecjm on tabrecjm.k02_codjm = t.k02_codjm
                    where r.k00_numpre = ".$k03_numpre."
-            left outer join taborc   on t.k02_codigo = taborc.k02_codigo 
+            left outer join taborc   on t.k02_codigo = taborc.k02_codigo
                                     and taborc.k02_anousu = ".db_getsession("DB_anousu")."
-            left outer join tabplan  on t.k02_codigo = tabplan.k02_codigo 
+            left outer join tabplan  on t.k02_codigo = tabplan.k02_codigo
                                     and tabplan.k02_anousu = ".db_getsession("DB_anousu")."
            group by r.k00_dtpaga,
                     r.k00_receit,
@@ -823,8 +823,8 @@ for($i = 0;$i < pg_numrows($DadosPagamento);$i++) {
 
 
 $sqldtop =" select min(arrecad.k00_dtoper) as mindatop ,
-                   case 
-                     when arrecad.k00_tipo = 3 
+                   case
+                     when arrecad.k00_tipo = 3
                       then coalesce( sum(issvar.q05_vlrinf),0)
                       else coalesce( sum(arrecad.k00_valor) ,0)
                    end as valor_origem
@@ -854,15 +854,15 @@ $sSqlDadosInstit = "select db12_uf,
                            logo,
                            to_char(tx_banc,'99.99') as tx_banc,
                            numbanco
-                      from db_config 
+                      from db_config
                      inner join db_uf on db_uf.db12_uf = db_config.uf
                      where codigo = ".db_getsession("DB_instit");
 $DadosInstit = db_query($sSqlDadosInstit);
 //cria codigo de barras e linha digitável
 
-$sSqlTxBancaria = "select to_char(k00_txban,'99.99') as tx_banc 
-                     from arretipo 
-                    where k00_instit = ".db_getsession("DB_instit")." 
+$sSqlTxBancaria = "select to_char(k00_txban,'99.99') as tx_banc
+                     from arretipo
+                    where k00_instit = ".db_getsession("DB_instit")."
                       and k00_tipo = $tipo";
 $sqlArretipo_tx_banc = db_query($sSqlTxBancaria);
 $taxabancaria = pg_result($sqlArretipo_tx_banc,0,"tx_banc");
@@ -887,10 +887,10 @@ $pql_localizacao = '';
 //seleciona dados de identificacao. Verifica se é inscr ou matric e da o respectivo select
 //essa variavel vem do cai3_gerfinanc002.php, pelo window open, criada por parse_str
 if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
-  
+
   $numero = @$aDados["ver_matric"] + $matricularecibo;
   $tipoidentificacao = "Matricula :";
-  
+
   $sSqlIdentificacao = "select proprietario.z01_nome,
                                proprietario.z01_ender,
                                proprietario.z01_numero,
@@ -902,13 +902,13 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
                                proprietario.j39_compl,
                                proprietario.j39_numero,
                                proprietario.j13_descr as bairro_matricula,
-                               case 
-                                 when proprietario.j13_descr is not null and proprietario.j13_descr != '' 
-                                   then proprietario.j13_descr 
+                               case
+                                 when proprietario.j13_descr is not null and proprietario.j13_descr != ''
+                                   then proprietario.j13_descr
                                    else ''
                                end as j13_descr,
                                proprietario.j34_setor||'.'||proprietario.j34_quadra||'.'||proprietario.j34_lote as sql,
-                               proprietario.z01_cgccpf, 
+                               proprietario.z01_cgccpf,
                                proprietario.z01_bairro,
                                proprietario.z01_cgmpri as z01_numcgm,
                                proprietario.j40_refant,
@@ -919,20 +919,20 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
   if (pg_numrows($Identificacao)==0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=[9] - Problemas no Cadastro da Matricula ' . $numero);
   }
-  
+
   db_fieldsmemory($Identificacao,0);
-  
+
   $sPQLLocal = "PQL: {$pql_localizacao}";
-  
+
   $ident_tipo_ii = 'Imóvel';
-  
+
   $numero = $numero." SQL: ".$sql;
-  
+
 } else if(!empty($aDados["ver_inscr"]) || $inscricaorecibo > 0 ) {
-  
+
   $numero = @$aDados["ver_inscr"] + $inscricaorecibo;
   $tipoidentificacao = "Inscricao :";
-  
+
   $Identificacao = db_query("select z01_nome,
                                    z01_ender,
                                    z01_numero,
@@ -943,13 +943,13 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
                                    z01_ender as nomepri,
                                    z01_compl as j39_compl,
                                    z01_numero as j39_numero,
-                                   z01_bairro as j13_descr, 
-                                   z01_bairro, 
+                                   z01_bairro as j13_descr,
+                                   z01_bairro,
                                    '' as sql,
-                                   z01_cgccpf  
+                                   z01_cgccpf
                               from empresa
                              where q02_inscr = $numero");
-  
+
   $sqlidentificacao = "select cgm.z01_numcgm,
                               cgm.z01_nome,
                               cgm.z01_ender,
@@ -962,7 +962,7 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
                               empresa.z01_ender as nomepri,
                               empresa.z01_compl as j39_compl,
                               empresa.z01_numero as j39_numero,
-                              empresa.z01_bairro as j13_descr, 
+                              empresa.z01_bairro as j13_descr,
                               '' as sql,
                               cgm.z01_cgccpf
                          from issbase
@@ -977,12 +977,12 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
 
   $ident_tipo_ii = 'Alvará';
   db_fieldsmemory($Identificacao,0);
-  
+
 } else if(!empty($aDados["ver_numcgm"]) || $numcgmrecibo > 0 ) {
-  
+
   $numero = @$aDados["ver_numcgm"] + $numcgmrecibo ;
   $tipoidentificacao = "Numcgm :";
-  
+
   $sSqlIdentificacao = "select z01_numcgm,
                                z01_nome,
                                z01_ender,
@@ -992,7 +992,7 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
                                z01_munic,
                                z01_uf,
                                z01_cep,
-                               z01_ender as nomepri, 
+                               z01_ender as nomepri,
                                z01_compl as j39_compl,
                                z01_numero as j39_numero,
                                z01_bairro as j13_descr,
@@ -1008,12 +1008,12 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
 
   db_fieldsmemory($Identificacao,0);
   $ident_tipo_ii = '';
-  
+
 } else {
-  
+
   if (isset($emite_recibo_protocolo)) {
-    
-    $sSqlIdentificacao = " select c.z01_bairro, 
+
+    $sSqlIdentificacao = " select c.z01_bairro,
                                   c.z01_nome,
                                   c.z01_ender,
                                   c.z01_numero,
@@ -1022,11 +1022,11 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
                                   c.z01_uf,
                                   c.z01_cep,
                                   ' ' as nomepri,
-                                  ' ' as j39_compl, 
-                                  ' ' as j39_numero, 
-                                  ' ' as j13_descr, 
+                                  ' ' as j39_compl,
+                                  ' ' as j39_numero,
+                                  ' ' as j13_descr,
                                   '' as sql,
-                                  z01_cgccpf, 
+                                  z01_cgccpf,
                                   c.z01_numcgm
                              from recibo r
                             inner join cgm c on c.z01_numcgm = r.k00_numcgm
@@ -1036,9 +1036,9 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
       db_redireciona('db_erros.php?fechar=true&db_erro=[12] - Problema no Cadastro do Recibo do Protocolo Numpre ' . $k03_numpre);
     }
     db_fieldsmemory($Identificacao,0);
-    
+
   }
-  
+
 }
 
 // Controle de Limitação do Tamanho do Historico em 210 Caracteres
@@ -1057,15 +1057,15 @@ if (isset($tipo_debito)) {
 
   $sHistoricoIniciaisParcelamento = "";
   if ($k03_tipo==5 && $k00_tipoagrup<>2 ) {
-    
+
     $histparcela = "Divida: ";
     $sqlhist = "select distinct
                        v01_exerc,
                        v01_numpar
                   from db_reciboweb
-                       left outer join divida on v01_numpre = k99_numpre 
+                       left outer join divida on v01_numpre = k99_numpre
                                              and v01_numpar = k99_numpar
-                 where k99_numpre_n = $k03_numpre 
+                 where k99_numpre_n = $k03_numpre
                  group by v01_exerc,v01_numpar
                  order by v01_exerc,v01_numpar";
     $result = db_query($sqlhist);
@@ -1082,7 +1082,7 @@ if (isset($tipo_debito)) {
     $sqlobs = "select distinct
                       v01_obs
                  from db_reciboweb
-                inner join divida on v01_numpre = k99_numpre 
+                inner join divida on v01_numpre = k99_numpre
                                  and v01_numpar = k99_numpar
                 where k99_numpre_n = $k03_numpre";
     $result = db_query($sqlobs);
@@ -1094,16 +1094,16 @@ if (isset($tipo_debito)) {
         }
       }
     }
-    
+
   } else if($k03_tipo == 2 && $k00_tipoagrup<>2) {
-    
+
     $histparcela = "Exercicio: ";
-    $sqlhist = "select distinct 
-                       q01_anousu, 
+    $sqlhist = "select distinct
+                       q01_anousu,
                        k99_numpar
                   from db_reciboweb
                        inner join isscalc on q01_numpre = k99_numpre
-                 where k99_numpre_n = $k03_numpre 
+                 where k99_numpre_n = $k03_numpre
                  group by q01_anousu,k99_numpar
                  order by q01_anousu,k99_numpar";
     $result = db_query($sqlhist);
@@ -1117,25 +1117,25 @@ if (isset($tipo_debito)) {
         $histparcela .= "-".pg_result($result,$xy,1);
       }
     }
-    
+
   } else if($k03_tipo == 3 && $k00_tipoagrup<>2) {
-    
+
     $histparcela = "Exercicio: ";
-    $sqlhist = "select distinct 
-                       q05_ano, 
+    $sqlhist = "select distinct
+                       q05_ano,
                        q05_mes
                   from db_reciboweb
-                       left outer join issvar on q05_numpre = k99_numpre 
+                       left outer join issvar on q05_numpre = k99_numpre
                                              and q05_numpar = k99_numpar
-                 where k99_numpre_n = $k03_numpre 
+                 where k99_numpre_n = $k03_numpre
                  group by q05_ano,q05_mes
                  order by q05_ano,q05_mes";
     $result = db_query($sqlhist);
     if (pg_numrows($result)!=false) {
       $exercv = "0000";
-      
+
       for ($xy=0;$xy<pg_numrows($result);$xy++) {
-        
+
         if ( $exercv != pg_result($result,$xy,0)) {
           $exercv = pg_result($result,$xy,0);
           $histparcela .= "  ".pg_result($result,$xy,0).": Mês:";
@@ -1143,10 +1143,10 @@ if (isset($tipo_debito)) {
         $histparcela .= "-".pg_result($result,$xy,1);
 
         if (pg_result($result,$xy,1) != "") {
-          $sqlhistor = "select distinct 
+          $sqlhistor = "select distinct
                                q05_histor
                           from db_reciboweb
-                               inner join issvar on q05_numpre = k99_numpre 
+                               inner join issvar on q05_numpre = k99_numpre
                                                 and q05_numpar = k99_numpar
                          where k99_numpre_n = $k03_numpre and q05_numpar = " . pg_result($result,$xy,1);
           $resulthistor = db_query($sqlhistor);
@@ -1166,15 +1166,15 @@ if (isset($tipo_debito)) {
 
     $histparcela = '';
     $parcelamento = '';
-    $sqlhist = "select v07_parcel, 
+    $sqlhist = "select v07_parcel,
                        k99_numpar
                   from db_reciboweb
                        left outer join termo on v07_numpre = k99_numpre
-                 where k99_numpre_n = $k03_numpre 
+                 where k99_numpre_n = $k03_numpre
                  order by v07_parcel,k99_numpar";
     $result = db_query($sqlhist);
     if(pg_numrows($result)!=false){
-      
+
       for ($xy=0;$xy<pg_numrows($result);$xy++) {
         if (pg_result($result,$xy,0) != $parcelamento){
           $histparcela .= "\nParcelamento" . ($k03_tipo == 13?" do foro":"") . ': '.pg_result($result,$xy,0)." - ";
@@ -1183,14 +1183,14 @@ if (isset($tipo_debito)) {
         $parcelamento = pg_result($result,$xy,0);
       }
     }
-    
+
   } else if ($k03_tipo==13 && $k00_tipoagrup<>2) {
 
     $histparcela  = "";
     $parcelamento = "";
     $iMinParc     = "";
     $iMaxParc     = "";
-    
+
     $sSqlHist = "select v07_parcel   as parcel,
                         v07_numpre   as numpre,
                         v07_totpar   as totpar,
@@ -1198,41 +1198,41 @@ if (isset($tipo_debito)) {
                         k99_numpar   as numpar
                    from db_reciboweb
                         left join termo on termo.v07_numpre = db_reciboweb.k99_numpre
-                  where k99_numpre_n = $k03_numpre 
+                  where k99_numpre_n = $k03_numpre
                   order by v07_parcel,k99_numpar";
     $result = db_query($sSqlHist);
     if (pg_numrows($result)!=false) {
-      
+
       for ($xy=0;$xy<pg_numrows($result);$xy++) {
         $oHistParcelaTermo = db_utils::fieldsMemory($result, $xy);
-        
+
         if ($iMinParc > $oHistParcelaTermo->numpar || $iMinParc == "") {
           $iMinParc =  $oHistParcelaTermo->numpar;
         }
-        
+
         if ($oHistParcelaTermo->parcel != $parcelamento) {
           $histparcela .= " Parcelamento do foro : {$oHistParcelaTermo->parcel}\n Parcelas:";
         }
         $histparcela .= "{$oHistParcelaTermo->numpar}/$oHistParcelaTermo->totpar, ";
         $parcelamento = $oHistParcelaTermo->parcel;
       }
-      
+
     }
-    
+
     $sSqlIniciaisParcelamento = "select termoini.inicial as inicial,
-                                        processoforo.v70_sequencial, 
-                                        processoforo.v70_codforo,    
-                                        array_accum(distinct v01_exerc) as exerc    
-                                   from fc_origemparcelamento({$oHistParcelaTermo->numpre}) as origemparcelamento 
-                                  inner join termo               on termo.v07_parcel                = riparcel         
-                                  inner join termoini            on termoini.parcel                 = riparcel         
+                                        processoforo.v70_sequencial,
+                                        processoforo.v70_codforo,
+                                        array_accum(distinct v01_exerc) as exerc
+                                   from fc_origemparcelamento({$oHistParcelaTermo->numpre}) as origemparcelamento
+                                  inner join termo               on termo.v07_parcel                = riparcel
+                                  inner join termoini            on termoini.parcel                 = riparcel
                                   inner join inicialcert         on inicial                         = v51_inicial
-                                  inner join certdiv             on v14_certid                      = v51_certidao     
-                                  inner join divida              on divida.v01_coddiv               = v14_coddiv       
+                                  inner join certdiv             on v14_certid                      = v51_certidao
+                                  inner join divida              on divida.v01_coddiv               = v14_coddiv
                                                                 and divida.v01_instit               = " . db_getsession("DB_instit")."
                                   inner join proced              on proced.v03_codigo               = divida.v01_proced
                                    left join processoforoinicial on processoforoinicial.v71_inicial = termoini.inicial
-                                   left join processoforo        on processoforo. v70_sequencial    = processoforoinicial.v71_processoforo                              
+                                   left join processoforo        on processoforo. v70_sequencial    = processoforoinicial.v71_processoforo
                                   group by termoini.inicial, processoforo.v70_codforo, processoforo.v70_sequencial";
     $rsIniciaisParcelamento = db_query($sSqlIniciaisParcelamento);
     if (pg_numrows($rsIniciaisParcelamento) > 0) {
@@ -1240,17 +1240,17 @@ if (isset($tipo_debito)) {
      for ($xy=0; $xy < pg_num_rows($rsIniciaisParcelamento); $xy++) {
         $oDadosInicial = db_utils::fieldsmemory($rsIniciaisParcelamento, $xy);
         $aProcessoForo[]    = $oDadosInicial->v70_sequencial;
-        $aCodProcessoForo[] = $oDadosInicial->v70_codforo;        
+        $aCodProcessoForo[] = $oDadosInicial->v70_codforo;
         $sHistoricoIniciaisParcelamento  .= "Inicial: $oDadosInicial->inicial - Processo do Foro: {$oDadosInicial->v70_codforo} \nExercício(s): ".str_replace("{", "", str_replace("}", "", $oDadosInicial->exerc))."\n";
      }
-     
+
     }
-   
+
   } else if ($k03_tipo==7 && $k00_tipoagrup<>2) {
-    
+
     $histparcela = "\nDiversos: ";
-    $sqlhist = "select distinct 
-                       dv05_exerc, 
+    $sqlhist = "select distinct
+                       dv05_exerc,
                        k00_numpar
                   from db_reciboweb
                        inner join arrecad on k99_numpre = k00_numpre and k99_numpar = k00_numpar
@@ -1269,8 +1269,8 @@ if (isset($tipo_debito)) {
         $histparcela .= pg_result($result,$xy,1)."-";
       }
     }
-    
-    $sqlobs = "select distinct 
+
+    $sqlobs = "select distinct
                       dv05_obs
                  from db_reciboweb
                 inner join diversos on dv05_numpre = k99_numpre
@@ -1286,31 +1286,31 @@ if (isset($tipo_debito)) {
     }
 
   } else if ($k03_tipo==18 && $k00_tipoagrup<>2) {
-    
+
     $histparcela = "\nInicial: ";
-    
-    $sqlhist = "select * 
-                  from ( select distinct 
+
+    $sqlhist = "select *
+                  from ( select distinct
                                 v59_inicial as inicial,
                                 v70_sequencial,
                                 v70_codforo,
-                                case 
-                                  when divida.v01_exerc is null 
-                                    then 
-                                      case 
-                                        when divida2.v01_exerc is null 
-                                          then 0 
-                                          else divida2.v01_exerc 
-                                      end 
-                                    else divida.v01_exerc 
+                                case
+                                  when divida.v01_exerc is null
+                                    then
+                                      case
+                                        when divida2.v01_exerc is null
+                                          then 0
+                                          else divida2.v01_exerc
+                                      end
+                                    else divida.v01_exerc
                                 end as exerc
                            from db_reciboweb
-                                inner join arrecad             on db_reciboweb.k99_numpre         = arrecad.k00_numpre 
+                                inner join arrecad             on db_reciboweb.k99_numpre         = arrecad.k00_numpre
                                                               and db_reciboweb.k99_numpar         = arrecad.k00_numpar
                                 inner join inicialnumpre       on inicialnumpre.v59_numpre        = arrecad.k00_numpre
                                 inner join inicialcert         on inicialcert.v51_inicial         = inicialnumpre.v59_inicial
-                                 left join processoforoinicial on processoforoinicial.v71_inicial = inicialnumpre.v59_inicial 
-                                 left join processoforo        on processoforo. v70_sequencial    = processoforoinicial.v71_processoforo                              
+                                 left join processoforoinicial on processoforoinicial.v71_inicial = inicialnumpre.v59_inicial
+                                 left join processoforo        on processoforo. v70_sequencial    = processoforoinicial.v71_processoforo
                                  left join certdiv             on certdiv.v14_certid              = inicialcert.v51_certidao
                                  left join divida              on divida.v01_coddiv               = certdiv.v14_coddiv
                                  left join certter             on certter.v14_certid              = inicialcert.v51_certidao
@@ -1325,7 +1325,7 @@ if (isset($tipo_debito)) {
       $sSeparador = "";
       for ($xy=0;$xy<pg_numrows($result);$xy++) {
         $oHistParcela = db_utils::fieldsMemory($result, $xy);
-        
+
         $aProcessoForo[]    = $oHistParcela->v70_sequencial;
         $aCodProcessoForo[] = $oHistParcela->v70_codforo;
         if ( $exercv != $oHistParcela->inicial) {
@@ -1333,31 +1333,31 @@ if (isset($tipo_debito)) {
           $histparcela .= $oHistParcela->inicial." - Processo do Foro: {$oHistParcela->v70_codforo} \nExercício(s): ";
         }
         $histparcela .= $sSeparador.$oHistParcela->exerc;
-        
+
         $sSeparador = ",";
       }
     }
- 
+
   } else if ($k03_tipo==11 && $k00_tipoagrup<>2) {
-    
+
     $sSqlDadosHist = "select y50_codauto,
                              y50_obs,
                              y50_data,
                              extract(year from arrecad.k00_dtoper) as exerc,
                              k00_descr,
-                             k99_numpar                             
-                        from db_reciboweb 
-                             inner join autonumpre on autonumpre.y17_numpre = db_reciboweb.k99_numpre 
+                             k99_numpar
+                        from db_reciboweb
+                             inner join autonumpre on autonumpre.y17_numpre = db_reciboweb.k99_numpre
                              inner join auto       on auto.y50_codauto      = autonumpre.y17_codauto
-                             inner join arrecad    on k99_numpre            = k00_numpre 
+                             inner join arrecad    on k99_numpre            = k00_numpre
                                                   and k99_numpar            = k00_numpar
-                             inner join arretipo   on arretipo.k00_tipo     = arrecad.k00_tipo                              
+                             inner join arretipo   on arretipo.k00_tipo     = arrecad.k00_tipo
                        where db_reciboweb.k99_numpre_n = {$k03_numpre}";
     $rsDadosHist = db_query($sSqlDadosHist);
     if (@pg_numrows($rsDadosHist) > 0) {
       $oDadosAuto   = db_utils::fieldsmemory($rsDadosHist,0);
       $sObsAuto     = "";
-      
+
       $aObs = split("\n",$oDadosAuto->y50_obs);
       if (count($aObs) > 3) {
         $sObsAuto = $aObs[0]."\n".$aObs[1]."\n".$aObs[2];
@@ -1368,30 +1368,30 @@ if (isset($tipo_debito)) {
       $histparcela  = $oDadosAuto->k00_descr."=>".$oDadosAuto->exerc."/P:".$oDadosAuto->k99_numpar."\n";
       $histparcela .= "Cod. Auto: ".$oDadosAuto->y50_codauto." - Obs.: ".$sObsAuto;
     }
-    
-  } else {  
-    
+
+  } else {
+
     $histparcela = "";
-    $sqlhist = " select * 
-                   from ( select distinct 
+    $sqlhist = " select *
+                   from ( select distinct
                                  arretipo.k00_tipo,
                                  k00_descr,
                                  k99_numpar,
-                                 case 
-                                   when divida.v01_exerc is not null 
+                                 case
+                                   when divida.v01_exerc is not null
                                      then divida.v01_exerc
                                      else
-                                       case 
-                                         when termo.v07_parcel is not null 
+                                       case
+                                         when termo.v07_parcel is not null
                                            then termo.v07_parcel
                                            else extract (year from arrecad.k00_dtoper)
-                                       end 
+                                       end
                                  end as k00_origem
                             from db_reciboweb
-                           inner join arrecad  on k99_numpre        = k00_numpre 
+                           inner join arrecad  on k99_numpre        = k00_numpre
                                               and k99_numpar        = k00_numpar
                            inner join arretipo on arretipo.k00_tipo = arrecad.k00_tipo
-                            left join divida   on divida.v01_numpre = arrecad.k00_numpre 
+                            left join divida   on divida.v01_numpre = arrecad.k00_numpre
                                               and divida.v01_numpar = arrecad.k00_numpar
                             left join termo    on termo.v07_numpre  = arrecad.k00_numpre
                            where k99_numpre_n = $k03_numpre  ) as x
@@ -1402,17 +1402,17 @@ if (isset($tipo_debito)) {
     $histparcela .=  pg_result($result,0,"k00_descr") . "=>" . pg_result($result,0,"k00_origem") . " / P: ";
 
     for ($xy=0;$xy<pg_numrows($result);$xy++) {
-      
+
       if (pg_result($result,$xy,"k00_origem") . "-" . pg_result($result,$xy,"k00_descr") <> $histant) {
         $histparcela .= "-" . pg_result($result,$xy,"k00_descr") . "=>" . pg_result($result,$xy,"k00_origem") . " / P: ";
         $histant = pg_result($result,$xy,"k00_origem") . "-" . pg_result($result,$xy,"k00_descr");
       }
       $histparcela .= pg_result($result,$xy,"k99_numpar") . " ";
-      
+
     }
-    
+
   }
-  
+
   if ($lHistLimitado == true) {
     $historico = substr($histparcela,0,210);
   } else {
@@ -1422,16 +1422,16 @@ if (isset($tipo_debito)) {
 
 //select pras observacoes
 $sSqlConfMensagem = "select mens,
-                            alinhamento 
-                       from db_confmensagem 
+                            alinhamento
+                       from db_confmensagem
                       where cod in('obsboleto1','obsboleto2','obsboleto3','obsboleto4')";
 $Observacoes = db_query($conn,$sSqlConfMensagem);
 $db_vlrbar = db_formatar(str_replace('.','',str_pad(number_format($total_recibo,2,"","."),11,"0",STR_PAD_LEFT)),'s','0',11,'e');
 
 
 $sqlvalor = "select k00_tercdigrecnormal,
-                    k00_msgrecibo 
-               from arretipo 
+                    k00_msgrecibo
+               from arretipo
               where k00_tipo = $tipo_debito";
 db_fieldsmemory(db_query($sqlvalor),0);
 if(!isset($k00_tercdigrecnormal) || $k00_tercdigrecnormal == ""){
@@ -1515,14 +1515,14 @@ $pdf1->tipobairro       = 'Bairro:';
 $pdf1->pretipobairro    = 'Bairro:';
 
 if ( $tipoidentificacao == "Matricula :") {
-  
+
   $pdf1->refant           = $j40_refant;
-  $pdf1->pql_localizacao  = $pql_localizacao;    
+  $pdf1->pql_localizacao  = $pql_localizacao;
 } else {
-  
+
   $pdf1->refant          = "";
   $pdf1->pql_localizacao = "";
-   
+
 }
 
 if (trim($j13_descr) != trim($z01_bairro)) {
@@ -1554,16 +1554,16 @@ if (pg_num_rows($rsReEmiteRecibo) > 0){
   $sqlObs = "select k00_historico
                from recibopagahist
               where k00_numnov = $k03_numpre";
-  
+
   $rsObs  = db_query($sqlObs);
-  
+
   if (pg_num_rows($rsObs) > 0){
-    
+
     $historico = pg_result($rsObs, 0, 0);
   }
-  
+
 } else {
-  
+
   if (isset($_SESSION["DB_obsrecibo"])) {
     $historico = db_getsession("DB_obsrecibo")."\n".$k00_msgrecibo;
   } else {
@@ -1580,6 +1580,7 @@ $pdf1->histparcel     = @$histparcela;
 $pdf1->dtvenc         = $datavencimento;
 $pdf1->numpre         = $numpre;
 $pdf1->valororigem    = db_formatar(@$valor_origem,'f');
+$pdf1->valorhist      = (float) @$valor_origem;
 $pdf1->valtotal       = db_formatar(@$valor_parm,'f');
 $pdf1->linhadigitavel = $linhadigitavel;
 $pdf1->codigobarras   = $codigobarras;
@@ -1610,7 +1611,7 @@ $sqlReceitas = " select k00_receit as codreceita,
                         k02_descr as descrreceita,
                         sum(k00_valor) as valreceita,
                         null as codhist,
-                        case 
+                        case
                           when taborc.k02_codigo is not null
                             then taborc.k02_codrec
                             else tabplan.k02_reduz
@@ -1629,14 +1630,14 @@ $sqlReceitas = " select k00_receit as codreceita,
                            taborc.k02_codrec,
                            tabplan.k02_reduz,
                            taborc.k02_codigo
-                           
+
                   union
 
                  select k00_receit as codreceita,
                         k02_descr as descrreceita,
                         sum(k00_valor) as valreceita,
                         k00_hist as codhist,
-                        case 
+                        case
                           when taborc.k02_codigo is not null
                             then taborc.k02_codrec
                             else tabplan.k02_reduz
@@ -1720,10 +1721,10 @@ $pdf1->uf                  = trim(pg_result($Identificacao,0,"z01_uf"));
 $pdf1->tipoinscr           = $tipoidentificacao;
 $pdf1->nrinscr             = $numero;
 
-$sqlmensagemdesconto = "select distinct 
-                               k99_desconto, 
+$sqlmensagemdesconto = "select distinct
+                               k99_desconto,
                                k40_descr
-                          from db_reciboweb 
+                          from db_reciboweb
                          inner join cadtipoparc on cadtipoparc.k40_codigo = k99_desconto
                          where k99_numpre_n = $k03_numpre";
 $resultmensagemdesconto = db_query($sqlmensagemdesconto) or die($sqlmensagemdesconto);
@@ -1750,7 +1751,7 @@ if (trim($k00_mensagemdesconto) != "") {
   $descr12_1 .= "\n".$k00_mensagemdesconto;
 }
 
-$pdf1->descr12_1   = $descr12_1; 
+$pdf1->descr12_1   = $descr12_1;
 $pdf1->pqllocal    = @$sPQLLocal;
 
 $pdf1->descr14     = $datavencimento; // vencimento
@@ -1772,7 +1773,7 @@ $pdf1->loteamento = $loteador;
 //verifica se é ficha e busca o codigo do banco
 
 if ($oRegraEmissao->isCobranca()) {
-    
+
   $rsConsultaBanco  = $cldb_bancos->sql_record($cldb_bancos->sql_query_file($oConvenio->getCodBanco()));
   $oBanco     = db_utils::fieldsMemory($rsConsultaBanco,0);
   $pdf1->numbanco   = $oBanco->db90_codban."-".$oBanco->db90_digban;
@@ -1790,63 +1791,63 @@ if ($oRegraEmissao->isCobranca()) {
    * vinculado ao cadastro de convênio utilizado
    */
   if ( $k03_tipo == 18 || $k03_tipo == 12 || $k03_tipo == 13 ) {
-    
+
   	$oDaoParJuridico = db_utils::getDao("parjuridico");
   	$rsValidaUtilizacaoPartilha = $oDaoParJuridico->sql_record($oDaoParJuridico->sql_query_file(db_getsession("DB_anousu"),db_getsession("DB_instit"), "v19_partilha"));
   	$lUtilizaPartilha = db_utils::fieldsMemory($rsValidaUtilizacaoPartilha, 0)->v19_partilha;
-  	
-    $aProcessoForo                  = array_unique($aProcessoForo); 
+
+    $aProcessoForo                  = array_unique($aProcessoForo);
     $aCodProcessoForo               = array_unique($aCodProcessoForo);
     $nTotalTaxas                    = 0;
     $aTaxas                         = array();
     $aDadosPartilha                 = null;
     $aDadosPartilha->ar37_descricao = null;
-    
+
     if ($lUtilizaPartilha == "t") {
       /*
-       * 
+       *
        * Buscamos os dados das custas envolvidas na partilha do Recibo
-       * 
-       * Caso não sejam encontrados registros, significa que não foram geradas custas para este recibo pois foi efetuado o 
+       *
+       * Caso não sejam encontrados registros, significa que não foram geradas custas para este recibo pois foi efetuado o
        * pagamento do recibo com as custas emitidas ou um lançamento manual ou uma isenção para o processo do foro
-       * 
+       *
        */
       $sSqlPartilhaReciboPaga = "select ar37_descricao,
-                                        ar36_sequencial, 
-                                        ar36_descricao, 
+                                        ar36_sequencial,
+                                        ar36_descricao,
                                         v76_tipolancamento,
-                                        sum(v77_valor) as v77_valor 
+                                        sum(v77_valor) as v77_valor
                                    from processoforopartilhacusta
-                                        inner join processoforopartilha on processoforopartilha.v76_sequencial = processoforopartilhacusta.v77_processoforopartilha 
+                                        inner join processoforopartilha on processoforopartilha.v76_sequencial = processoforopartilhacusta.v77_processoforopartilha
                                         inner join processoforo         on processoforo.v70_sequencial         = processoforopartilha.v76_processoforo
                                         inner join taxa                 on taxa.ar36_sequencial                = processoforopartilhacusta.v77_taxa
                                         inner join grupotaxa            on grupotaxa.ar37_sequencial           = taxa.ar36_grupotaxa
                                   where processoforopartilhacusta.v77_numnov = {$k03_numpre}
-                                    and not exists ( select 1 
+                                    and not exists ( select 1
                                                        from processoforopartilha as p
                                                       where p.v76_processoforo = processoforo.v70_sequencial
-                                                        and (p.v76_tipolancamento <> 1 or p.v76_dtpagamento is not null ) )                                                      
+                                                        and (p.v76_tipolancamento <> 1 or p.v76_dtpagamento is not null ) )
                                   group by ar37_descricao,
-                                           ar36_sequencial, 
+                                           ar36_sequencial,
                                            ar36_descricao,
                                            v76_tipolancamento ";
       $rsDadosPartilhaReciboPaga = db_query($sSqlPartilhaReciboPaga);
-      if ( pg_num_rows($rsDadosPartilhaReciboPaga) > 0 ) { 
-      
+      if ( pg_num_rows($rsDadosPartilhaReciboPaga) > 0 ) {
+
         for ($iInd=0; $iInd < pg_num_rows($rsDadosPartilhaReciboPaga); $iInd++) {
           $aDadosPartilha = db_utils::fieldsMemory($rsDadosPartilhaReciboPaga, $iInd);
-           
+
           $aTaxas[$iInd]["sequencial"] = $aDadosPartilha->ar36_sequencial;
           $aTaxas[$iInd]["descricao"]  = $aDadosPartilha->ar36_descricao;
           $aTaxas[$iInd]["valor"]      = $aDadosPartilha->v77_valor;
           $nTotalTaxas += $aDadosPartilha->v77_valor;
-           
+
         }
-        
+
         /*
          * Se foram encontradas custas para o recibo gerado
-         *  
-         * Chamamos novamente a classe convenio só que somando o valor total das custas ao valor do débito para geração 
+         *
+         * Chamamos novamente a classe convenio só que somando o valor total das custas ao valor do débito para geração
          * do código de barras e da linha digtável com o valor total a ser pago
          */
         try {
@@ -1859,96 +1860,96 @@ if ($oRegraEmissao->isCobranca()) {
           db_redireciona("db_erros.php?fechar=true&db_erro=[16] - {$eExeption->getMessage()}");
           exit;
         }
-        
+
         $pdf1->codigobarras   = $oConvenio->getCodigoBarra();
         $pdf1->codigo_barras  = $oConvenio->getCodigoBarra();
         $pdf1->linha_digitavel= $oConvenio->getLinhaDigitavel();
-      
+
         $pdf1->partilhaTipoLancamento = "";
         $pdf1->partilhaDtPaga         = "";
         $pdf1->partilhaObs            = "";
-        
+
       } else {
-        
+
         /*
-         * 
+         *
          * Buscamos os dados das custas envolvidas na partilha do processo do foro pois não foram geradas as custas para o recibo
          * Retornando apenas quando as custas foram pagas (processoforopartilha.v76_dtpagamento is not null) ou o tipo de lancamento
          * seja manual ou isento (processoforopartilha.v76_tipolancamento)
-         * 
+         *
          */
-      
+
         if ( count($aProcessoForo) > 0 ) {
-      
+
           $sSqlPartilha = "select ar37_descricao,
-                                  ar36_sequencial, 
-                                  ar36_descricao, 
+                                  ar36_sequencial,
+                                  ar36_descricao,
                                   v76_tipolancamento,
                                   v76_dtpagamento,
                                   v76_obs,
-                                  sum(v77_valor) as v77_valor 
+                                  sum(v77_valor) as v77_valor
                              from processoforopartilhacusta
-                                  inner join processoforopartilha on processoforopartilha.v76_sequencial = processoforopartilhacusta.v77_processoforopartilha 
+                                  inner join processoforopartilha on processoforopartilha.v76_sequencial = processoforopartilhacusta.v77_processoforopartilha
                                   inner join processoforo         on processoforo.v70_sequencial         = processoforopartilha.v76_processoforo
                                   inner join taxa                 on taxa.ar36_sequencial                = processoforopartilhacusta.v77_taxa
                                   inner join grupotaxa            on grupotaxa.ar37_sequencial           = taxa.ar36_grupotaxa
                             where processoforopartilha.v76_processoforo in (".implode(",",$aProcessoForo).")
                               and ( processoforopartilha.v76_tipolancamento <> 1 or processoforopartilha.v76_dtpagamento is not null)
                             group by ar37_descricao,
-                                     ar36_sequencial, 
+                                     ar36_sequencial,
                                      ar36_descricao,
                                      v76_tipolancamento,
                                      v76_dtpagamento,
                                      v76_obs";
-      
+
           $rsDadosPartilha = db_query($sSqlPartilha);
           $iLinhasPartilha = pg_num_rows($rsDadosPartilha);
           for ($iInd=0; $iInd < $iLinhasPartilha; $iInd++) {
             $aDadosPartilha = db_utils::fieldsMemory($rsDadosPartilha, $iInd);
-             
+
             $aTaxas[$iInd]["sequencial"] = $aDadosPartilha->ar36_sequencial;
             $aTaxas[$iInd]["descricao"]  = $aDadosPartilha->ar36_descricao;
             $aTaxas[$iInd]["valor"]      = $aDadosPartilha->v77_valor;
             $nTotalTaxas += $aDadosPartilha->v77_valor;
           }
-          
+
           /*
            * Situação das Custas de Acordo com o tipo de lançamento
-           * 
+           *
            * Caso o tipo de lancamento seja 1 (Automático) e a data de pagamento não seja nula significa que as custas foram pagas
            * Caso o tipo de lancamento seja 2 (Manual) significa que as custas foram pagas no Foro e lançadas manualmente com a data de pagamento
            * Caso o tipo de lancamento seja 3 (Isento) significa que o processo é isento de Custas
-           *  
+           *
            */
           if ($iLinhasPartilha > 0) {
-          	
+
             $sTipoLancamento = '';
             if ( ($aDadosPartilha->v76_tipolancamento == 1 && !empty($aDadosPartilha->v76_dtpagamento)) || $aDadosPartilha->v76_tipolancamento == 2) {
-              $sTipoLancamento = "Custas Pagas";  
+              $sTipoLancamento = "Custas Pagas";
             } else if ( $aDadosPartilha->v76_tipolancamento == 3) {
               $sTipoLancamento = "Isento de Custas";
-            } 
-            
+            }
+
             $pdf1->partilhaTipoLancamento = $sTipoLancamento;
             $pdf1->partilhaDtPaga         = db_formatar($aDadosPartilha->v76_dtpagamento,"d");
             $pdf1->partilhaObs            = $aDadosPartilha->v76_obs;
           } else {
-          	 
+
           	$pdf1->partilhaTipoLancamento = "";
           	$pdf1->partilhaDtPaga         = "";
-          	$pdf1->partilhaObs            = "";  	
+          	$pdf1->partilhaObs            = "";
           }
-        } 
+        }
       }
     } else {
-    	
+
     	$pdf1->partilhaTipoLancamento = "";
     	$pdf1->partilhaDtPaga         = "";
     	$pdf1->partilhaObs            = "";
     }
-    
+
     $sSqlExercValor  = "select exerc,                                                                              ";
-    $sSqlExercValor .= "       sum(vlrhist)    as historico,                                                       ";   
+    $sSqlExercValor .= "       sum(vlrhist)    as historico,                                                       ";
     $sSqlExercValor .= "       sum(principal)  as corrigido,                                                       ";
     $sSqlExercValor .= "       sum(juro)       as juro,                                                            ";
     $sSqlExercValor .= "       sum(multa)      as multa,                                                           ";
@@ -1993,7 +1994,7 @@ if ($oRegraEmissao->isCobranca()) {
     $sSqlExercValor .= "                          else recibopaga.k00_valor                                        ";
     $sSqlExercValor .= "                      end                                                                  ";
     $sSqlExercValor .= "                    else 0                                                                 ";
-    $sSqlExercValor .= "                end as multa,                                                              ";                
+    $sSqlExercValor .= "                end as multa,                                                              ";
     $sSqlExercValor .= "                case                                                                       ";
     $sSqlExercValor .= "                  when k02_tabrectipo = 4                                                  ";
     $sSqlExercValor .= "                    then                                                                   ";
@@ -2015,7 +2016,7 @@ if ($oRegraEmissao->isCobranca()) {
     $sSqlExercValor .= "       recibopaga.k00_numpar,                                                              ";
     $sSqlExercValor .= "       recibopaga.k00_numpre,                                                              ";
     $sSqlExercValor .= "       recibopaga.k00_numnov                                                               ";
-    $sSqlExercValor .= "  from recibopaga                                                                          ";   
+    $sSqlExercValor .= "  from recibopaga                                                                          ";
     $sSqlExercValor .= " where k00_numnov = {$k03_numpre}                                                          ";
     $sSqlExercValor .= " group by recibopaga.k00_receit,                                                           ";
     $sSqlExercValor .= "          recibopaga.k00_numpar,                                                           ";
@@ -2114,12 +2115,12 @@ if ($oRegraEmissao->isCobranca()) {
     $sSqlExercValor .= "                                   v01_exerc,                                                                                                            ";
     $sSqlExercValor .= "                                   v07_vlrhis) as termo on termo.v07_numpre = recibopaga.k00_numpre                                                      ";
     $sSqlExercValor .= " WHere recibopaga.k00_numnov = {$k03_numpre } ) as x                                                                                                     ";
-    $sSqlExercValor .= " group by exerc                                                                                                                                          ";                         
+    $sSqlExercValor .= " group by exerc                                                                                                                                          ";
     $sSqlExercValor .= " order by exerc                                                                                                                                          ";
     $rsExercValor = db_query($sSqlExercValor);
 
-    
-    
+
+
 
     $pdf1->aExercValor      = db_utils::getColectionByRecord($rsExercValor);
     //echo "<pre>";
@@ -2130,11 +2131,11 @@ if ($oRegraEmissao->isCobranca()) {
     $pdf1->sGrupoTaxa       = $aDadosPartilha->ar37_descricao;
     $pdf1->nTaxaBancaria    = $taxabancaria;
     $pdf1->valor_cobrado    = $pdf1->valtotal+$nTotalTaxas;
-    
+
     $sSqlMsgContribuinte  = "select k00_msgparc,
                                     k00_msgparc2,
-                                    k00_msgrecibo 
-                               from arretipo 
+                                    k00_msgrecibo
+                               from arretipo
                               where k00_tipo = {$tipo_debito}";
     $rsMsgContribuinte    = db_query($sSqlMsgContribuinte);
     $oDadosMsg = db_utils::fieldsMemory($rsMsgContribuinte,0);
@@ -2146,9 +2147,9 @@ if ($oRegraEmissao->isCobranca()) {
     if ($k03_tipo == 13) {
       $pdf1->descr10                        = "1 / $oHistParcelaTermo->totpar";
       $pdf1->sHistoricoIniciaisParcelamento = $sHistoricoIniciaisParcelamento;
-    } 
+    }
   }
-   
+
 }
 db_fim_transacao();
 $pdf1->numnov_recibo = $k03_numpre;
@@ -2192,8 +2193,8 @@ function recibodesconto($numpre, $numpar, $tipo, $tipo_debito, $whereloteador, $
   $cadtipoparc = 0;
 
   $sqlvenc = "select k00_dtvenc
-                from arrecad 
-               where k00_numpre = $numpre 
+                from arrecad
+               where k00_numpre = $numpre
                  and k00_numpar = $numpar";
   $resultvenc = db_query($sqlvenc) or die($sqlvenc);
   if (pg_numrows($resultvenc) == 0) {
@@ -2205,35 +2206,35 @@ function recibodesconto($numpre, $numpar, $tipo, $tipo_debito, $whereloteador, $
   $dDataUsu = date("Y-m-d",db_getsession("DB_datausu"));
 
   $sqltipoparc = "select k40_codigo,
-                         k40_todasmarc, 
+                         k40_todasmarc,
                          cadtipoparc
-                    from tipoparc 
+                    from tipoparc
                          inner join cadtipoparc    on cadtipoparc     = k40_codigo
                          inner join cadtipoparcdeb on k41_cadtipoparc = cadtipoparc
-                   where maxparc = 1 
-                     and '{$dDataUsu}' >= k40_dtini 
-                     and '{$dDataUsu}' <= k40_dtfim 
-                     and k41_arretipo   = $tipo $whereloteador 
-                     and '$k00_dtvenc' >= k41_vencini 
+                   where maxparc = 1
+                     and '{$dDataUsu}' >= k40_dtini
+                     and '{$dDataUsu}' <= k40_dtfim
+                     and k41_arretipo   = $tipo $whereloteador
+                     and '$k00_dtvenc' >= k41_vencini
                      and '$k00_dtvenc' <= k41_vencfim ";
 
   $resulttipoparc = db_query($sqltipoparc) or die($sqltipoparc);
   if (pg_numrows($resulttipoparc) > 0) {
     db_fieldsmemory($resulttipoparc,0);
   } else {
-     
+
     $sqltipoparc = "select k40_codigo,
-                           k40_todasmarc, 
+                           k40_todasmarc,
                            cadtipoparc
-                      from tipoparc 
+                      from tipoparc
                            inner join cadtipoparc on cadtipoparc = k40_codigo
                            inner join cadtipoparcdeb on k41_cadtipoparc = cadtipoparc
-                     where maxparc = 1 
-                       and k41_arretipo = $tipo 
-                       and '{$dDataUsu}' >= k40_dtini 
-                       and '{$dDataUsu}' <= k40_dtfim 
+                     where maxparc = 1
+                       and k41_arretipo = $tipo
+                       and '{$dDataUsu}' >= k40_dtini
+                       and '{$dDataUsu}' <= k40_dtfim
                        $whereloteador
-                       and '$k00_dtvenc' >= k41_vencini 
+                       and '$k00_dtvenc' >= k41_vencini
                        and '$k00_dtvenc' <= k41_vencfim ";
 
                        $resulttipoparc = db_query($sqltipoparc) or die($sqltipoparc);
@@ -2241,7 +2242,7 @@ function recibodesconto($numpre, $numpar, $tipo, $tipo_debito, $whereloteador, $
                        if (pg_numrows($resulttipoparc) == 1) {
                          db_fieldsmemory($resulttipoparc,0);
                        } else {
-                          
+
                          $k40_todasmarc = false;
                        }
   }
@@ -2253,13 +2254,13 @@ function recibodesconto($numpre, $numpar, $tipo, $tipo_debito, $whereloteador, $
   if (pg_numrows($resulttipoparcdeb) == 0) {
     $passar = true;
   } else {
-     
+
     $sqltipoparcdeb = "select k40_codigo, k40_todasmarc
-                         from cadtipoparcdeb 
+                         from cadtipoparcdeb
                               inner join cadtipoparc on k40_codigo = k41_cadtipoparc
-                        where k41_cadtipoparc = $cadtipoparc and 
+                        where k41_cadtipoparc = $cadtipoparc and
                        k41_arretipo = $tipo_debito $whereloteador and
-                       '$k00_dtvenc' >= k41_vencini and 
+                       '$k00_dtvenc' >= k41_vencini and
                        '$k00_dtvenc' <= k41_vencfim ";
     $resulttipoparcdeb = db_query($sqltipoparcdeb) or die($sqltipoparcdeb);
     if (pg_numrows($resulttipoparcdeb) > 0) {

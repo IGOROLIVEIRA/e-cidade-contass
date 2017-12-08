@@ -79,7 +79,7 @@ for ($i = 0;$i < 2;$i++){
   $this->objpdf->text($xcol+128,$xlin+19,$this->tipobairro);
   $this->objpdf->text($xcol+145,$xlin+19,$this->bairropri);
 
-  $this->objpdf->Roundedrect($xcol,$xlin+24,202,45,2,'DF','1234');
+  $this->objpdf->Roundedrect($xcol,$xlin+24,202,35,2,'DF','1234');
   $this->objpdf->sety($xlin+24);
   $maiscol = 0;
   $yy = $this->objpdf->gety();
@@ -124,8 +124,8 @@ for ($i = 0;$i < 2;$i++){
       $this->totalrec  += pg_result($this->recorddadospagto,$ii,$this->valor);
     }
   }
-  $this->objpdf->Roundedrect($xcol,$xlin+71,176,30,2,'DF','1234');
-  $this->objpdf->SetY($xlin+72);
+  $this->objpdf->Roundedrect($xcol,$xlin+61,176,40,2,'DF','1234');
+  $this->objpdf->SetY($xlin+62);
   $this->objpdf->SetX($xcol+3);
 
   $this->objpdf->Setfont('Arial','',5);
@@ -133,12 +133,14 @@ for ($i = 0;$i < 2;$i++){
   $this->objpdf->SetX($xcol+3);
   //dados do desconto
 
+  $this->objpdf->Roundedrect(181,$xlin+61,25,9,2,'DF','1234');
   $this->objpdf->Roundedrect(181,$xlin+71,25,9,2,'DF','1234');
   $this->objpdf->Roundedrect(181,$xlin+81.5,25,9,2,'DF','1234');
   $this->objpdf->Roundedrect(181,$xlin+92,25,9,2,'DF','1234');
 
   $this->objpdf->Setfont('Arial','',6);
-  $this->objpdf->text(182,$xlin+73,'( = ) Valor Documento');
+  $this->objpdf->text(182,$xlin+64,'Valor Original');
+  $this->objpdf->text(182,$xlin+73,'( + ) Valor Correção');
   $this->objpdf->text(182,$xlin+83.5,'( - ) Desconto ');
   $this->objpdf->text(182,$xlin+94,'( + ) Mora / Multa');
 
@@ -162,8 +164,10 @@ for ($i = 0;$i < 2;$i++){
   }
 
   $this->objpdf->setfont('Arial','',10);
+  $this->objpdf->setxy(181,$xlin+62);
+  $this->objpdf->cell(25,9,db_formatar($this->valorhist,'f'),0,0,"R");
   $this->objpdf->setxy(181,$xlin+71);
-  $this->objpdf->cell(25,9,$totalrec,0,0,"R");
+  $this->objpdf->cell(25,9,db_formatar($this->totalrec - $this->valorhist, 'f'),0,0,"R");
   $this->objpdf->setxy(181,$xlin+81.5);
   $this->objpdf->cell(25,9,$totaldesc,0,0,"R");
   $this->objpdf->setxy(181,$xlin+92);
