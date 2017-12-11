@@ -53,6 +53,7 @@ if (USE_PCASP) {
                  coalesce(k18_codigo,0)  as k18_codigo,
                  contador.z01_nome as contador,
                  contad.si166_crccontador as crc,
+                 db_usuarios.nome,
                  controleinterno.z01_nome as controleinterno,
                  case when
                    k153_slipoperacaotipo not in (1, 2, 9, 10, 13, 14)
@@ -67,6 +68,7 @@ if (USE_PCASP) {
                      then saltes_credito.k13_descr
                    else conta_credito.c60_descr end as descr_credito
             from slip
+                 left join db_usuarios on db_usuarios.id_usuario = slip.k17_id_usuario
                  left join sliptipooperacaovinculo         on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
                  left join sliptipooperacao                on sliptipooperacaovinculo.k153_slipoperacaotipo = sliptipooperacao.k152_sequencial
                  left join slipanul                        on slip.k17_codigo          = slipanul.k18_codigo
@@ -267,6 +269,10 @@ try {
   $pdf->contador        = $contador;
   $pdf->crc             = $crc;
   $pdf->controleinterno = $controleinterno;
+
+  /*OC4401*/
+  $pdf->usuario = $nome;
+  /*FIM - OC4401*/
 
   $pdf->logo     = $logo;
   $pdf->nomeinst = $nomeinst;

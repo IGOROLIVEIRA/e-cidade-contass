@@ -106,9 +106,16 @@ $sqlemp .= "       o56_descr as descr_sintetico,                                
 $sqlemp .= "       o58_codigo,                                                                ";
 $sqlemp .= "       o15_descr,                                                                 ";
 $sqlemp .= "       e61_autori,                                                                ";
-$sqlemp .= "       pc50_descr as l03_descr,                                                                 ";
+$sqlemp .= "       pc50_descr as l03_descr,                                                   ";
+/*OC4401*/
+$sqlemp .= "        e60_id_usuario, ";
+$sqlemp .= "        db_usuarios.nome, ";
+/*FIM - OC4401*/
 $sqlemp .= "       fc_estruturaldotacao(o58_anousu,o58_coddot) as estrutural                  ";
 $sqlemp .= "  from empempenho                                                                 ";
+/*OC4401*/
+$sqlemp .= " LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e60_id_usuario";
+/*FIM - OC4401*/
 $sqlemp .= "       left join pctipocompra	 on pc50_codcom = e60_codcom                       ";
 $sqlemp .= "       left join orcdotacao    	 on o58_coddot       = e60_coddot                 ";
 $sqlemp .= "                                and o58_instit       = ".db_getsession("DB_instit");
@@ -185,7 +192,10 @@ for($i = 0;$i < pg_numrows($result02);$i++){
    $sqlitens .= "                inner join empempitem      on e62_sequencial        = e37_empempitem        ";
    $sqlitens .= "                                          and empempitem.e62_numemp = empanulado.e94_numemp ";
    $sqlitens .= "                inner join empempenho      on e60_numemp            = e62_numemp            ";
-   $sqlitens .= "       		 inner join orcelemento     on o56_codele            = e62_codele            ";
+   /*OC4401*/
+   $sqlitens .= "                LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e94_id_usuario";
+   /*FIM - OC4401*/
+   $sqlitens .= "       		     inner join orcelemento     on o56_codele            = e62_codele            ";
    $sqlitens .= "       		      					   and o56_anousu            = e60_anousu            ";
    $sqlitens .= "                inner join pcmater         on pc01_codmater         = e62_item              ";
    $sqlitens .= " 	where e95_codanu = $e94_codanu ";
@@ -227,6 +237,9 @@ for($i = 0;$i < pg_numrows($result02);$i++){
    $pdf1->saldo_atu        = $atual;
    $pdf1->empenhado        = $e60_vlremp;
    $pdf1->anulado          = $e94_valor;
+   /*OC4401*/
+   $pdf1->usuario          = $nome;
+   /*FIM - OC4401*/
    $pdf1->numemp           = $e60_numemp;
    $pdf1->codemp           = $e60_codemp;
    $pdf1->anousu           = $e60_anousu;

@@ -432,6 +432,9 @@ class db_impcarne extends cl_assinatura {
   var $numaut 		= null;  	// numero do empenho
   var $numsol 		= null;  	// numero do empenho
   var $numemp 		= null;  	// numero do empenho
+    /*OC4401*/
+  var $usuario  = null; // Usuário emissor do empenho
+  /*FIM - OC4401*/
   var $codemp 		= null;  	// numero do empenho do ano
   var $emissao 		= null;  	// data da emissao
   var $orgao 		= null;  	// data da emissao
@@ -1338,13 +1341,12 @@ var $lUtilizaModeloDefault = true;
  	 */
  	if (file_exists("fpdf151/impmodelos/especificos/mod_imprime_especifico_{$this->impmodelo}_{$sCodCliente}{$sInstit}.php") ) {
  		include (Modification::getFile("fpdf151/impmodelos/especificos/mod_imprime_especifico_{$this->impmodelo}_{$sCodCliente}{$sInstit}.php"));
- 	}
+  }
 
  	/**
  	 * Valida se utiliza modelo default junto com especifico
  	 */
  	if ($this->lUtilizaModeloDefault) {
-
  	  include(Modification::getFile("fpdf151/impmodelos/mod_imprime".$this->impmodelo.".php"));
  	}
 

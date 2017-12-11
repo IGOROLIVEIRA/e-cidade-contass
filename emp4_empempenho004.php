@@ -482,6 +482,9 @@ if(isset($incluir)) {
       $clempempenho->e60_numcgm = $e54_numcgm;
       $clempempenho->e60_emiss  = date("Y-m-d", db_getsession("DB_datausu"));
       $clempempenho->e60_vencim = date("Y-m-d", db_getsession("DB_datausu"));
+      /*OC4401*/
+      $clempempenho->e60_id_usuario = db_getsession("DB_id_usuario");
+      /*FIM - OC4401*/
 
       $result = db_dotacaosaldo(8, 2, 2, "true", "o58_coddot=$e56_coddot", db_getsession("DB_anousu"));
       db_fieldsmemory($result, 0);

@@ -161,6 +161,12 @@ class slip {
    */
   protected $iInstituicao;
 
+    /**
+   * Usuário que criou o slip
+   * @var integer
+   */
+  protected $iUsuario;
+
 
   /**
    * Codigo da Caracteristica Peculiar Credito
@@ -389,6 +395,9 @@ class slip {
     $clslip->k17_hist          = $this->getHistorico();
     $clslip->k17_texto         = $this->getObservacoes();
     $clslip->k17_instit        = db_getsession("DB_instit");
+    /*OC4401*/
+    $clslip->k17_id_usuario    = db_getsession("DB_id_usuario");
+    /*FIM - OC4401*/
     $clslip->k17_dtanu         = "";
     $clslip->k17_tipopagamento = "".$this->getTipoPagamento()."";
     $clslip->k17_situacao      = $this->getSituacao();
@@ -848,6 +857,22 @@ class slip {
    */
   public function getInstituicao() {
     return $this->iInstituicao;
+  }
+
+  /*OC4401*/
+  /**
+   * Seta o usuário que criou o slip
+   * @param integer $iUsuario
+   */
+  public function setUsuario($iUsuario) {
+    $this->iUsuario = $iUsuario;
+  }
+  /**
+   * Retorna o usuário que criou o slip
+   * @return integer $iUsuario
+   */
+  public function getUsuario() {
+    return $this->iUsuario;
   }
 
   /**

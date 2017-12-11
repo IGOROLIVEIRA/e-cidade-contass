@@ -167,6 +167,10 @@ if(pg_numrows($result2)>0){
   $pdf1->nvias= $e30_nroviaord;
 }
 
+/*
+ *
+ */
+
 for($i = 0;$i < $clpagordem->numrows;$i++){
 
   db_fieldsmemory($result,$i);
@@ -188,6 +192,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
              controleinterno.z01_nome as controleinterno
            from pagordem
 				        inner join empempenho 		on empempenho.e60_numemp = pagordem.e50_numemp
+                LEFT JOIN db_usuarios ON db_usuarios.id_usuario = empempenho.e60_id_usuario
                 inner join cgm    on cgm.z01_numcgm = empempenho.e60_numcgm
   			        inner join empnota        on empnota.e69_numemp    = pagordem.e50_numemp
 								inner join db_config 		  on db_config.codigo      = empempenho.e60_instit
@@ -210,8 +215,8 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 				        inner join orctiporec  		on o58_codigo    = o15_codigo
 				        inner join emptipo 		    on emptipo.e41_codtipo = empempenho.e60_codtipo
                 left join cgm as ordena on ordena.z01_numcgm  = o41_orddespesa
-                left join cgm as paga on paga.z01_numcgm = o41_ordpagamento 
-                left join cgm as liquida on liquida.z01_numcgm = o41_ordliquidacao  
+                left join cgm as paga on paga.z01_numcgm = o41_ordpagamento
+                left join cgm as liquida on liquida.z01_numcgm = o41_ordliquidacao
                 left join identificacaoresponsaveis contad on  contad.si166_instit= e60_instit and contad.si166_tiporesponsavel=2
                 left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
                 left join identificacaoresponsaveis controle on  controle.si166_instit= e60_instit and controle.si166_tiporesponsavel=3
@@ -236,7 +241,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
 	           inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
 		   inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
-
+       LEFT JOIN db_usuarios ON db_usuarios.id_usuario = empempenho.e60_id_usuario
 		   inner join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and
 		                             orcelemento.o56_anousu = empempenho.e60_anousu
 
@@ -303,6 +308,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $sSqlFuncaoLiquida.=" where rh01_numcgm = $cgmliquida order by rh02_seqpes desc limit 1";
 
    $pdf1->cargoliquida = db_utils::fieldsMemory(db_query($sSqlFuncaoLiquida),0)->cargoliquida;
+
+  /*OC4401*/
+  $pdf->usuario = $nome;
+  /*FIM = OC4401*/
 
    //assinaturas
    $pdf1->ordenadespesa   =  $ordenadesp;

@@ -73,6 +73,9 @@ class cl_empempenho {
     var $e60_convenio = null;
     var $e60_numconvenio = null;
     var $e60_dataconvenio = null;
+    /*OC4401*/
+    var $e60_id_usuario = null;
+    /*FIM - OC4401*/
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  e60_numemp = int4 = Número
@@ -100,6 +103,7 @@ class cl_empempenho {
                  e60_convenio = int8 = Convênio
                  e60_numconvenio = int8 = Número Convênio
                  e60_dataconvenio = date = Data Convênio
+                 e60_id_usuario = int4 = Número
                  ";
     //funcao construtor da classe
     function cl_empempenho() {
@@ -360,6 +364,17 @@ class cl_empempenho {
             $this->erro_status = "0";
             return false;
         }
+        /*OC4401*/
+        if($this->e60_id_usuario == null ){
+            $this->erro_sql = " Ocorreu um erro ao buscar o ID do usuário!";
+            $this->erro_campo = "e60_id_usuario";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        /*FIM - OC4401*/
         $sql = "insert into empempenho(
                                        e60_numemp
                                       ,e60_codemp
@@ -386,6 +401,7 @@ class cl_empempenho {
                                       ,e60_convenio
                                       ,e60_numconvenio
                                       ,e60_dataconvenio
+                                      ,e60_id_usuario
                        )
                 values (
                                 $this->e60_numemp
@@ -413,6 +429,7 @@ class cl_empempenho {
                                ,".($this->e60_convenio == ""? "2" : $this->e60_convenio)."
                                ,".($this->e60_numconvenio == ""? "null" : $this->e60_numconvenio)."
                                ,".($this->e60_dataconvenio == "null" || $this->e60_dataconvenio == ""?"null":"'".$this->e60_dataconvenio."'")."
+                               ,$this->e60_id_usuario
                       )";
         $result = db_query($sql);
         if($result==false){

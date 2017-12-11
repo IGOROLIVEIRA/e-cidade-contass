@@ -69,6 +69,8 @@ class cl_slip {
    var $k17_dtestorno_ano = null;
    var $k17_dtestorno = null;
    var $k17_motivoestorno = null;
+   /*OC4401*/
+   var $k17_id_usuario = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  k17_codigo = int4 = Código Slip
@@ -86,6 +88,7 @@ class cl_slip {
                  k17_tipopagamento = int4 = Tipo de Pagamento
                  k17_dtestorno = date = Data do estorno
                  k17_motivoestorno = text = Motivo do estorno
+                 k17_id_usuario = int4 = Usuário
                  ";
    //funcao construtor da classe
    function cl_slip() {
@@ -256,6 +259,17 @@ class cl_slip {
        $this->erro_status = "0";
        return false;
      }
+     /*OC4401*/
+     if($this->k17_instit == null ){
+       $this->erro_sql = " Ocorreu um erro ao buscar o ID do usuário!";
+       $this->erro_campo = "k17_id_usuario";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
      $sql = "insert into slip(
                                        k17_codigo
                                       ,k17_data
@@ -272,6 +286,7 @@ class cl_slip {
                                       ,k17_tipopagamento
                                       ,k17_dtestorno
                                       ,k17_motivoestorno
+                                      ,k17_id_usuario
                        )
                 values (
                                 $this->k17_codigo
@@ -289,6 +304,7 @@ class cl_slip {
                                ,$this->k17_tipopagamento
                                ,".($this->k17_dtestorno == "null" || $this->k17_dtestorno == ""?"null":"'".$this->k17_dtestorno."'")."
                                ,'$this->k17_motivoestorno'
+                               ,$this->k17_id_usuario
                       )";
      $result = db_query($sql);
      if($result==false){

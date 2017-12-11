@@ -2372,7 +2372,7 @@ class empenho {
    * @param   $nValorAnular valor total a ser anulado;
    * @returns   void;
    */
-  function anularEmpenho($aItens , $nValorAnular = 0,$sMotivo = null, $aSolicitacoes = null, $iTipoAnulacao, $lTransacao = true){
+  function anularEmpenho($aItens , $nValorAnular = 0,$sMotivo = null, $aSolicitacoes = null, $iTipoAnulacao, $lTransacao = true, $id_usuario){
 
     if (!is_array($aItens)){
 
@@ -2631,6 +2631,8 @@ class empenho {
       $clempanulado->e94_motivo         = $sMotivo;
       $clempanulado->e94_empanuladotipo = $iTipoAnulacao;
       $clempanulado->e94_data           = date("Y-m-d", db_getsession("DB_datausu"));
+      $clempanulado->e94_id_usuario     = db_getsession("DB_id_usuario");
+
       $clempanulado->incluir(null);
       $iCodAnu = $clempanulado->e94_codanu;
       if ($clempanulado->erro_status == 0) {

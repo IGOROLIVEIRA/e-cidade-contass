@@ -35,7 +35,6 @@ require_once("classes/db_empparametro_classe.php");
 require_once("classes/db_cgmalt_classe.php");
 require_once("classes/db_pcforneconpad_classe.php");
 
-
 /*
  * Configurações GED
 */
@@ -155,6 +154,10 @@ $sqlemp .= "        e56_orctiporec, ";
 $sqlemp .= "        e54_praent, ";
 $sqlemp .= "        e54_codout, ";
 $sqlemp .= "        e54_conpag, ";
+/*OC4401*/
+$sqlemp .= "        e60_id_usuario, ";
+$sqlemp .= "        db_usuarios.nome, ";
+/*FIM - OC4401*/
 $sqlemp .= "        ordena.z01_numcgm AS cgmordenadespesa, ";
 $sqlemp .= "        ordena.z01_nome AS ordenadesp, ";
 $sqlemp .= "        liquida.z01_numcgm AS cgmliquida, ";
@@ -165,6 +168,9 @@ $sqlemp .= "        contador.z01_nome AS contador, ";
 $sqlemp .= "        contad.si166_crccontador AS crc, ";
 $sqlemp .= "        controleinterno.z01_nome AS controleinterno ";
 $sqlemp .= " FROM empempenho ";
+/*OC4401*/
+$sqlemp .= " LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e60_id_usuario";
+/*FIM - OC4401*/
 $sqlemp .= " LEFT JOIN pctipocompra ON pc50_codcom = e60_codcom ";
 $sqlemp .= " INNER JOIN orcdotacao ON o58_coddot = e60_coddot AND o58_instit = ".db_getsession("DB_instit")." AND o58_anousu = e60_anousu ";
 $sqlemp .= " INNER JOIN orcorgao ON o58_orgao = o40_orgao AND o40_anousu = $anousu ";
@@ -302,10 +308,19 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 	$sqlitem .= "        solrp.pc11_numero, ";
 	$sqlitem .= "        solrp.pc11_codigo, ";
 	$sqlitem .= "        l20_prazoentrega, ";
+  /*OC4401*/
+  $sqlempm .= "        e60_id_usuario, ";
+  $sqlempm .= "        db_usuarios.nome, ";
+  /*FIM - OC4401*/
   $sqlitem .= "        case when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '') ";
   $sqlitem .= "             else  coalesce(trim(pcorcamval.pc23_obs), '') end as pc23_obs ";
 	$sqlitem .= "   from empempitem ";
 	$sqlitem .= "       inner join empempenho           on empempenho.e60_numemp           = empempitem.e62_numemp ";
+
+  /*OC4401*/
+  $sqlitem .= "left join db_usuarios ON db_usuarios.id_usuario = empempenho.e60_id_usuario";
+  /*OC4401*/
+
 	$sqlitem .= "       inner join pcmater              on pcmater.pc01_codmater           = empempitem.e62_item ";
 	$sqlitem .= "       inner join orcelemento          on orcelemento.o56_codele          = empempitem.e62_codele ";
 	$sqlitem .= "                                      and orcelemento.o56_anousu          = empempenho.e60_anousu ";
@@ -512,6 +527,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
 
    }
+
    //$pdf1->descr_licitacao  = $pc50_descr;
    $pdf1->coddot           = $o58_coddot;
    $pdf1->destino          = $e60_destin;
@@ -531,10 +547,13 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
    $pdf1->valor            = "e62_vlrun";
    $pdf1->descricaoitem    = "pc01_descrmater";
 
-   $pdf1->orcado	   = $e60_vlrorc;
+   $pdf1->orcado	         = $e60_vlrorc;
    $pdf1->saldo_ant        = $e60_salant;
    $pdf1->empenhado        = $e60_vlremp;
    $pdf1->numemp           = $e60_numemp;
+   /*OC4401*/
+   $pdf1->usuario          = $nome;
+   /*FIM - OC4401*/
    $pdf1->codemp           = $e60_codemp;
    $pdf1->numaut           = $e61_autori;
    $pdf1->orgao            = $o58_orgao;
