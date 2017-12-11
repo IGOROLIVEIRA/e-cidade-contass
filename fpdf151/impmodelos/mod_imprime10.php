@@ -236,8 +236,10 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 	  }
 
     $obsitem  = pg_result($this->recorddositens,$ii,$this->observacaoitem);
-	  $obsitem .= "\n\n".'Marca: '.pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
+    $obsitem  = substr($obsitem,0,1421);
+	$obsitem .= "\n\n".'Marca: '.pg_result($this->recorddositens,$ii,$this->obs_ordcom_orcamval)."\n\n\n";
     $sObsItem = $obsitem;
+    //$sObsItem = substr($obsitem,0,1421);
 
     //// troca de pagina
 	  if( ($this->objpdf->gety() > $this->objpdf->h - 90 && $pagina == 1 )
@@ -356,7 +358,7 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 
    if ((isset($sObsItem) && $obsitem != '' && $iVoltaImp == 0) || $iVoltaImp == 1){
 
-     $this->objpdf->Setfont('Arial','',8);
+     $this->objpdf->Setfont('Arial','',5);
      $iAlturaFinal = 80;
      if ($pagina != 1) {
        $iAlturaFinal = 30;
@@ -387,7 +389,8 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
      	}
 
      	// Insere quebra no ponto informado
-     	$sObsItem = substr($sObsItem,0,$iLimitString)."\n".substr($sObsItem,$iLimitString,strlen($sObsItem));
+     	//$sObsItem = substr($sObsItem,0,$iLimitString)."\n".substr($sObsItem,$iLimitString,strlen($sObsItem));
+        //$sObsItem = substr($sObsItem,0,1421);
      }
 
 		$sObsItem = $this->objpdf->Row_multicell(array('', '', '', '',stripslashes($sObsItem), '', ''),
