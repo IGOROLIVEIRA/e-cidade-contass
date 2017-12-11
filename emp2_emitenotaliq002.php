@@ -309,7 +309,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->cargoliquida = db_utils::fieldsMemory(db_query($sSqlFuncaoLiquida),0)->cargoliquida;
 
   /*OC4401*/
-  $pdf->usuario = $usuario;
+  $pdf1->usuario = $usuario;
   /*FIM = OC4401*/
 
    //assinaturas
