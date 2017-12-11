@@ -189,10 +189,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
              paga.z01_nome as ordenapaga,
              contador.z01_nome as contador,
              contad.si166_crccontador as crc,
-             controleinterno.z01_nome as controleinterno
+             controleinterno.z01_nome as controleinterno,
+             (select nome from db_usuarios where id_usuario = pagordem.e50_id_usuario) as usuario
            from pagordem
 				        inner join empempenho 		on empempenho.e60_numemp = pagordem.e50_numemp
-                LEFT JOIN db_usuarios ON db_usuarios.id_usuario = empempenho.e60_id_usuario
                 inner join cgm    on cgm.z01_numcgm = empempenho.e60_numcgm
   			        inner join empnota        on empnota.e69_numemp    = pagordem.e50_numemp
 								inner join db_config 		  on db_config.codigo      = empempenho.e60_instit
@@ -241,7 +241,6 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
 	           inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
 		   inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
-       LEFT JOIN db_usuarios ON db_usuarios.id_usuario = empempenho.e60_id_usuario
 		   inner join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and
 		                             orcelemento.o56_anousu = empempenho.e60_anousu
 
@@ -310,7 +309,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->cargoliquida = db_utils::fieldsMemory(db_query($sSqlFuncaoLiquida),0)->cargoliquida;
 
   /*OC4401*/
-  $pdf->usuario = $nome;
+  $pdf->usuario = $usuario;
   /*FIM = OC4401*/
 
    //assinaturas
