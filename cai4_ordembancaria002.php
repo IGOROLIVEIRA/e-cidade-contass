@@ -79,7 +79,7 @@ CASE WHEN k00_codord IS NULL THEN
   (SELECT k17_texto FROM slip WHERE k17_codigo=k00_slip and k17_instit = ".db_getsession("DB_anousu").")
 ELSE
   (SELECT e50_obs FROM  pagordem WHERE e50_codord=k00_codord LIMIT 1)
-END  AS observacao
+END  AS observacao,k00_ordemauxiliar
 FROM
 ordembancaria   
 JOIN conplanoconta ON k00_ctpagadora = c63_codcon and c63_anousu = ".db_getsession("DB_anousu")."
@@ -99,7 +99,7 @@ if (pg_num_rows($rsResult) == 0){
 						  (SELECT k17_texto FROM slip WHERE k17_codigo=k00_slip and k17_instit = ".db_getsession("DB_instit")." LIMIT 1)
 						ELSE
 						  (SELECT e50_obs FROM  pagordem WHERE e50_codord=k00_codord LIMIT 1)
-						  END  AS observacao
+						  END  AS observacao,k00_ordemauxiliar
 						FROM
 						ordembancaria JOIN conplanoreduz ON k00_ctpagadora = c61_reduz  
 						JOIN conplanoconta ON c61_codcon = c63_codcon and c63_anousu = ".db_getsession("DB_anousu")."
@@ -144,10 +144,11 @@ $pdf->Cell(30,$tam,"AGÊNCIA: ".$oResult0->c63_agencia."-".$oResult0->c63_dvconta
 $pdf->Cell(120,$tam,"CONTA CORRENTE: ".$oResult0->c63_conta."-".$oResult0->c63_dvconta,1,1,"C",1);
 
 
-$pdf->Cell(83,$tam,"NOME DO FAVORECIDO:",1,0,"C",1);
-$pdf->Cell(30,$tam,"CPF/CNPJ:",1,0,"C",1);  
-$pdf->Cell(30,$tam,"Nº Documento:",1,0,"C",1);
-$pdf->Cell(10,$tam,"Tipo:",1,0,"C",1);  
+$pdf->Cell(83,$tam,"NOME DO FAVORECIDO",1,0,"C",1);
+$pdf->Cell(30,$tam,"CPF/CNPJ",1,0,"C",1);  
+$pdf->Cell(20,$tam,"Nº Documento",1,0,"C",1);
+$pdf->Cell(10,$tam,"OP Aux",1,0,"C",1);
+$pdf->Cell(10,$tam,"Tipo",1,0,"C",1);  
 $pdf->Cell(22,$tam,"VALOR:",1,1,"L",1);  
 $valor_total = 0;
 for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
@@ -186,7 +187,8 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
   $pdf->SetY($y);
   $pdf->SetX($x + 83);
   $pdf->Cell(30,$tam,db_formatar($oResult->z01_cgccpf,$tipo),0,0,"C",0);
-  $pdf->Cell(30,$tam,$oResult->tipo." ".$oResult->codigo,0,0,"C",0);
+  $pdf->Cell(20,$tam,$oResult->tipo." ".$oResult->codigo,0,0,"C",0);
+  $pdf->Cell(10,$tam,$oResult->k00_ordemauxiliar,0,0,"C",0);
   $pdf->Cell(10,$tam,$e96_descr,0,0,"C",0);
   $pdf->Cell(22,$tam,"R$ ".number_format($oResult->k00_valorpag,2,",","."),0,1,"L",0);
   $pdf->Cell(83,$tam,"Forma de Pag: ".$oResult->k00_formapag,0,0,"L",0);

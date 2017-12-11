@@ -37,7 +37,18 @@
                     <? db_textarea("k17_texto",2,63,$Ik17_texto,true,"text",3); ?>
                 </td>
             </tr>
-
+            <tr>
+                <td>
+                   <b>
+                   <? db_ancora("<b>Código da Ordem Auxiliar</b>","js_pesquisae43_ordempagamento(true);",1);  ?>
+                   </b>
+                </td>
+                <td>
+                  <?
+                    db_input("e43_ordempagamento", 10, $Ie43_ordempagamento, true,"text",1,"onchange='js_pesquisae43_ordempagamento(false)';");
+                  ?>
+                </td>
+            </tr>
             <tr>
                 <td><b>Forma de Pagamento:</b></td>
                 <td colspan="2">
@@ -107,6 +118,7 @@
                     <th class="table_header" style="width: 50%;">Fornecedor</th>
                     <th class="table_header" style="width: 8%;">Forma de Pagamento</th>
                     <th class="table_header" style="width: 20%;">Valor</th>
+                    <th class="table_header" style="width: 7%;">OP Auxiliar</th>
                     <th class="table_header" style="width: 20%;">Conta Depósito</th>
                     <th class="table_header" style="width: 10%;"></th>
                 </tr>
@@ -114,15 +126,16 @@
                 for ($iCont = 0; $iCont < pg_num_rows($rsResultTabela); $iCont++) {
 
                     $oDadosTabela = db_utils::fieldsMemory($rsResultTabela, $iCont);
-                    $sTabela = "<tr id=\"{$oDadosTabela->codigo}\" class=\"normal\" style=\"height:1em;\">";
+                    $sTabela = "<tr id=\"{$oDadosTabela->k00_sequencial}\" class=\"normal\" style=\"height:1em;\">";
                     $sTabela .= "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">{$oDadosTabela->tipo}</td>";
                     $sTabela .= "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">{$oDadosTabela->codigo}</td>";
                     $sTabela .= "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">{$oDadosTabela->z01_nome}</td>";
                     $sTabela .= "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">{$oDadosTabela->k00_formapag}</td>";
                     $sTabela .= "<td id=\"Pagamentosrow1cell1\" class=\"linhagrid\" style=\"text-align:center;\">R$" . number_format($oDadosTabela->k00_valorpag, 2, ",", ".") . "</td>";
+                    $sTabela .= "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">{$oDadosTabela->k00_ordemauxiliar}</td>";
                     $sTabela .= "<td id=\"Pagamentosrow1cell2\" class=\"linhagrid\" style=\"text-align:center;\">{$oDadosTabela->contafornec}</td>";
                     $sTabela .= "<td id=\"Pagamentosrow1cell3\" class=\"linhagrid\" style=\"text-align:center;\">";
-                    $sTabela .= "<input type=\"button\" name=\"excluir\" value=\"Excluir\" onclick=\"js_excluir({$oDadosTabela->codigo},this)\"></td></tr>";
+                    $sTabela .= "<input type=\"button\" name=\"excluir\" value=\"Excluir\" onclick=\"js_excluir({$oDadosTabela->k00_sequencial},this)\"></td></tr>";
                     echo $sTabela;
                 }
                 ?>
@@ -134,47 +147,22 @@
 <script>
     function js_nova_linha() {
 
-        if (document.form1.e53_codord.value == '' && document.form1.k17_codigo.value == '') {
+        if (document.form1.e53_codord.value == '' && document.form1.k17_codigo.value == '' && document.form1.e43_ordempagamento == '') {
             alert("Nenhuma Ordem de Pagamento ou Slip Foi Selecionada");
-            document.form1.k00_cgmfornec.value = '';
-            document.form1.nome_fornec.value = '';
-            document.form1.k00_valor.value = '';
-            document.getElementById("k00_contabanco").options.length = 0;
-            document.form1.k00_formapag.value = '';
-            document.form1.e50_obs.value = '';
-            document.form1.k17_texto.value = '';
-            document.form1.e53_codord.focus();
+            js_limpa_campos();
             return;
         }
 
         if (document.form1.k00_valor.value == 0) {
             alert("Ordem de Pagamento Totalmente Paga");
-            document.form1.e53_codord.value = '';
-            document.form1.k17_codigo.value = '';
-            document.form1.k00_cgmfornec.value = '';
-            document.form1.nome_fornec.value = '';
-            document.form1.k00_valor.value = '';
-            document.getElementById("k00_contabanco").options.length = 0;
-            document.form1.k00_formapag.value = '';
-            document.form1.e50_obs.value = '';
-            document.form1.k17_texto.value = '';
-            document.form1.e53_codord.focus();
+            js_limpa_campos();
             return;
         }
         // Ocorrência 756 - incluído na linha 134 para formatar a data
         var dtvencpag = document.form1.k00_dtvencag_ano.value + '-' + document.form1.k00_dtvencag_mes.value + '-' + document.form1.k00_dtvencag_dia.value;
         if (dtvencpag == '' || dtvencpag == '--') {
             alert("A data de vencimento não pode ficar em branco.");
-            document.form1.e53_codord.value = '';
-            document.form1.k17_codigo.value = '';
-            document.form1.k00_cgmfornec.value = '';
-            document.form1.nome_fornec.value = '';
-            document.form1.k00_valor.value = '';
-            document.getElementById("k00_contabanco").options.length = 0;
-            document.form1.k00_formapag.value = '';
-            document.form1.e50_obs.value = '';
-            document.form1.k17_texto.value = '';
-            document.form1.e53_codord.focus();
+            js_limpa_campos();
             return;
         }
         var i = document.form1.k00_contabanco.selectedIndex;
@@ -196,46 +184,37 @@
                     k17_codigo: document.form1.k17_codigo.value,
                     k00_valor: document.form1.k00_valor.value,
                     k00_contabanco: document.form1.k00_contabanco[i].value,
-                    k00_formapag: document.form1.k00_formapag.value,
-                    k00_dtvencpag: dtvencpag
+                    k00_formapag: document.form1.k00_formapag.value.toUpperCase(),
+                    k00_dtvencpag: dtvencpag,
+                    ordemauxiliar: document.form1.e43_ordempagamento.value
                 },
                 onComplete: function (json) {
                     var jsonObj = eval("(" + json.responseText + ")");
 
                     if (jsonObj.erro == true) {
                         alert("Ordem de Pagamento ou Slip já lançada");
-                        document.form1.e53_codord.value = '';
-                        document.form1.k17_codigo.value = '';
-                        document.form1.k00_cgmfornec.value = '';
-                        document.form1.nome_fornec.value = '';
-                        document.form1.k00_valor.value = '';
-                        document.getElementById("k00_contabanco").options.length = 0;
-                        document.form1.k00_formapag.value = '';
-                        document.form1.e50_obs.value = '';
-                        document.form1.k17_texto.value = '';
-                        document.form1.e53_codord.focus();
+                        js_limpa_campos();
                     } else {
-                        var tabela = "<tr id=\"" + codigo + "\" class=\"normal\" style=\"height:1em;\">";
-                        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + tipo + "</td>";
-                        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + codigo + "</td>";
-                        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + document.form1.nome_fornec.value + "</td>";
-                        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + document.form1.k00_formapag.value + "</td>";
-                        tabela += "<td id=\"Pagamentosrow1cell1\" class=\"linhagrid\" style=\"text-align:center;\">R$" + js_moeda(document.form1.k00_valor.value, 2, ",", ".") + "</td>";
-                        tabela += "<td id=\"Pagamentosrow1cell2\" class=\"linhagrid\" style=\"text-align:center;\">" + document.form1.k00_contabanco[i].text + "</td>";
-                        tabela += "<td id=\"Pagamentosrow1cell3\" class=\"linhagrid\" style=\"text-align:center;\">";
-                        tabela += "<input type=\"button\" name=\"excluir\" value=\"Excluir\" onclick=\"js_excluir2(" + codigo + ")\"></td></tr>";
+                        var tabela = "";
+                        if (document.form1.e43_ordempagamento.value != '') {
+                            
+                            tabela = js_linhas_ordem_auxiliar(jsonObj.aOrdem);
+                        } else {
+
+                            tabela = "<tr id=\"" + jsonObj.aOrdem[0].k00_sequencial + "\" class=\"normal\" style=\"height:1em;\">";
+                            tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + tipo + "</td>";
+                            tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + codigo + "</td>";
+                            tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + document.form1.nome_fornec.value + "</td>";
+                            tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + document.form1.k00_formapag.value.toUpperCase() + "</td>";
+                            tabela += "<td id=\"Pagamentosrow1cell1\" class=\"linhagrid\" style=\"text-align:center;\">R$" + js_moeda(document.form1.k00_valor.value, 2, ",", ".") + "</td>";
+                            tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\"></td>";
+                            tabela += "<td id=\"Pagamentosrow1cell2\" class=\"linhagrid\" style=\"text-align:center;\">" + document.form1.k00_contabanco[i].text + "</td>";
+                            tabela += "<td id=\"Pagamentosrow1cell3\" class=\"linhagrid\" style=\"text-align:center;\">";
+                            tabela += "<input type=\"button\" name=\"excluir\" value=\"Excluir\" onclick=\"js_excluir2(" + jsonObj.aOrdem[0].k00_sequencial + ")\"></td></tr>";
+                        }
 
                         document.getElementById("gridPagamentos").innerHTML += tabela;
-                        document.form1.e53_codord.value = '';
-                        document.form1.k17_codigo.value = '';
-                        document.form1.k00_cgmfornec.value = '';
-                        document.form1.nome_fornec.value = '';
-                        document.form1.k00_valor.value = '';
-                        document.getElementById("k00_contabanco").options.length = 0;
-                        document.form1.k00_formapag.value = '';
-                        document.form1.e50_obs.value = '';
-                        document.form1.k17_texto.value = '';
-                        document.form1.e53_codord.focus();
+                        js_limpa_campos();
                     }
                 }
             }
@@ -248,7 +227,7 @@
         var oAjax = new Ajax.Request("func_ordembancariapagamento.RPC.php",
             {
                 method: 'post',
-                parameters: {codord_excluir: id},
+                parameters: {cod_excluir: id},
                 onComplete: function (json) {
                 }
             }
@@ -264,16 +243,17 @@
         var oAjax = new Ajax.Request("func_ordembancariapagamento.RPC.php",
             {
                 method: 'post',
-                parameters: {codord_excluir: id},
+                parameters: {cod_excluir: id},
                 onComplete: function (json) {
                 }
             }
         );
         linha = document.getElementById(id);
-        linha.parentNode.parentNode.removeChild(linha.parentNode);
+        linha.parentNode.removeChild(linha);
     }
 
     function js_buscae53_codord(mostra) {
+        js_limpa_codigos("e53_codord");
         if (mostra == true) {
             js_OpenJanelaIframe('', 'db_iframe_pagordemele', 'func_pagordemele.php?funcao_js=parent.js_mostracodord1|e53_codord|e50_obs', 'Pesquisa', true);
         } else {
@@ -288,16 +268,7 @@
     function js_mostracodord(chave,chave2, erro) {
 
         if (erro == true) {
-            document.form1.e53_codord.value = '';
-            document.form1.k17_codigo.value = '';
-            document.form1.k00_cgmfornec.value = '';
-            document.form1.nome_fornec.value = '';
-            document.form1.k00_valor.value = '';
-            document.getElementById("k00_contabanco").options.length = 0;
-            document.form1.k00_formapag.value = '';
-            document.form1.e50_obs.value = '';
-            document.form1.k17_texto.value = '';
-            document.form1.e53_codord.focus();
+            js_limpa_campos();
         } else {
             document.form1.e50_obs.value = chave2;
             var oAjax = new Ajax.Request("func_ordembancariapagamento.RPC.php",
@@ -310,12 +281,14 @@
                         if (jsonObj.erro == true) {
                             alert("Movimentos não configurados no menu Financeiro->Caixa->Procedimentos->Agenda->Manutenção de Pagamentos");
                             document.form1.e53_codord.value = '';
+                            document.form1.e50_obs.value = '';
                             document.form1.e53_codord.focus();
                         } else {
 
                             document.form1.k00_cgmfornec.value = jsonObj[0].z01_numcgm;
                             document.form1.nome_fornec.value = jsonObj[0].z01_nome;
                             document.form1.k00_valor.value = jsonObj[0].valorapagar;
+                            document.getElementById("k00_contabanco").options.length = 0;
                             for (var i = 0; i < jsonObj.length; i++) {
 
                                 var op = document.createElement('option');
@@ -347,12 +320,14 @@
                     if (jsonObj.erro == true) {
                         alert("Movimentos não configurados no menu Financeiro->Caixa->Procedimentos->Agenda->Manutenção de Pagamentos");
                         document.form1.e53_codord.value = '';
+                        document.form1.e50_obs.value = '';
                         document.form1.e53_codord.focus();
                     } else {
 
                         document.form1.k00_cgmfornec.value = jsonObj[0].z01_numcgm;
                         document.form1.nome_fornec.value = jsonObj[0].z01_nome;
                         document.form1.k00_valor.value = jsonObj[0].valorapagar;
+                        document.getElementById("k00_contabanco").options.length = 0;
                         for (var i = 0; i < jsonObj.length; i++) {
 
                             var op = document.createElement('option');
@@ -371,6 +346,7 @@
 
 
     function js_pesquisak17_codigo(mostra) {
+        js_limpa_codigos("k17_codigo");
         if (mostra == true) {
             js_OpenJanelaIframe('', 'db_iframe_slip', 'func_slip.php?funcao_js=parent.js_mostraslip1|k17_codigo|k17_texto', 'Pesquisa', true);
         } else {
@@ -408,12 +384,14 @@
                         if (jsonObj.erro == true) {
                             alert("Movimentos não configurados no menu Financeiro->Caixa->Procedimentos->Agenda->Manutenção de Pagamentos");
                             document.form1.e53_codord.value = '';
+                            document.form1.k17_texto.value = '';
                             document.form1.e53_codord.focus();
                         } else {
 
                             document.form1.k00_cgmfornec.value = jsonObj[0].z01_numcgm;
                             document.form1.nome_fornec.value = jsonObj[0].z01_nome;
                             document.form1.k00_valor.value = jsonObj[0].k17_valor;
+                            document.getElementById("k00_contabanco").options.length = 0;
                             for (var i = 0; i < jsonObj.length; i++) {
 
                                 var op = document.createElement('option');
@@ -444,12 +422,14 @@
                     if (jsonObj.erro == true) {
                         alert("Movimentos não configurados no menu Financeiro->Caixa->Procedimentos->Agenda->Manutenção de Pagamentos");
                         document.form1.e53_codord.value = '';
+                        document.form1.k17_texto.value = '';
                         document.form1.e53_codord.focus();
                     } else {
 
                         document.form1.k00_cgmfornec.value = jsonObj[0].z01_numcgm;
                         document.form1.nome_fornec.value = jsonObj[0].z01_nome;
                         document.form1.k00_valor.value = jsonObj[0].k17_valor;
+                        document.getElementById("k00_contabanco").options.length = 0;
                         for (var i = 0; i < jsonObj.length; i++) {
 
                             var op = document.createElement('option');
@@ -537,4 +517,138 @@
     function js_limpa_slip() {
         document.form1.k17_codigo.value = '';
     }
+
+
+function js_pesquisae43_ordempagamento(mostra){
+  js_limpa_codigos("e43_ordempagamento");
+  if(mostra==true){
+    js_OpenJanelaIframe('',
+                        'func_nome',
+                        'func_empageordem.php?funcao_js=parent.js_mostraordem1|e42_sequencial|e42_dtpagamento&credor=false',
+                        'Pesquisa OP Auxiliares',
+                        true,
+                        22,
+                        0,
+                        document.width,
+                        document.body.scrollHeight-30
+                        );
+  } else {
+    if ($F('e43_ordempagamento') != "") {
+      js_OpenJanelaIframe('',
+                         'func_nome',
+                         'func_empageordem.php?pesquisa_chave='+$F('e43_ordempagamento')+'&funcao_js=parent.js_mostraordemagenda&credor=false',
+                         'Pesquisa OP Auxiliares',
+                         false,
+                         22,
+                         0,
+                         document.width,
+                         document.body.scrollHeight-30);
+    } else {
+      $('e43_ordempagamento').value = '';
+    }
+  }
+}
+
+function js_mostraordem1(chave1,chave2){
+
+  document.form1.e43_ordempagamento.value = chave1;
+
+          var oAjax = new Ajax.Request("func_ordembancariapagamento.RPC.php",
+            {
+                method: 'post',
+                parameters: {e43_ordempagamento: document.form1.e43_ordempagamento.value},
+                onComplete: function (json) {
+                    var jsonObj = eval("(" + json.responseText + ")");
+
+                    document.form1.nome_fornec.value = "ORDEM DE PAGAMENTO AUXILIAR";
+                    document.form1.k00_valor.value = jsonObj.vlliquido;
+                    document.getElementById("k00_contabanco").options.length = 0;
+                    var op = document.createElement('option');
+                    op.text = "PADRÃO";
+                    op.value = 0;
+                    document.getElementById("k00_contabanco").add(op);
+                    document.form1.incluir.focus();
+                }
+            }
+        );
+
+  func_nome.hide();
+
+}
+
+function js_mostraordemagenda(chave,erro){
+
+  if(erro) {
+    document.form1.e43_ordempagamento.value  = '';
+  } else {
+    var oAjax = new Ajax.Request("func_ordembancariapagamento.RPC.php",
+            {
+                method: 'post',
+                parameters: {e43_ordempagamento: document.form1.e43_ordempagamento.value},
+                onComplete: function (json) {
+                    var jsonObj = eval("(" + json.responseText + ")");
+
+
+                    document.form1.nome_fornec.value = "ORDEM DE PAGAMENTO AUXILIAR";
+                    document.form1.k00_valor.value = jsonObj.vlliquido;
+                    document.getElementById("k00_contabanco").options.length = 0;
+                    var op = document.createElement('option');
+                    op.text = "PADRÃO";
+                    op.value = 0;
+                    document.getElementById("k00_contabanco").add(op);
+                    document.form1.incluir.focus();
+                }
+            }
+        );
+  }
+}
+
+function js_limpa_campos() {
+    document.form1.e53_codord.value = '';
+    document.form1.k17_codigo.value = '';
+    document.form1.k00_cgmfornec.value = '';
+    document.form1.nome_fornec.value = '';
+    document.form1.k00_valor.value = '';
+    document.getElementById("k00_contabanco").options.length = 0;
+    document.form1.k00_formapag.value = '';
+    document.form1.e50_obs.value = '';
+    document.form1.k17_texto.value = '';
+    document.form1.e43_ordempagamento = '';
+    document.form1.e53_codord.focus();
+}
+
+function js_linhas_ordem_auxiliar(aOrdem) {
+
+    var tabela = "";
+    var index = document.form1.k00_contabanco.selectedIndex;
+    aOrdem.forEach(function(oOrdem) {
+        var tipo   = oOrdem.k17_codigo != 'null' ? "SL" : "OP";
+        var codigo = oOrdem.k17_codigo != 'null' ? oOrdem.k17_codigo : oOrdem.k00_codord;
+
+        tabela += "<tr id=\"" +oOrdem.k00_sequencial + "\" class=\"normal\" style=\"height:1em;\">";
+        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + tipo + "</td>";
+        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + codigo + "</td>";
+        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + oOrdem.z01_nome.urlDecode() + "</td>";
+        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + document.form1.k00_formapag.value.toUpperCase() + "</td>";
+        tabela += "<td id=\"Pagamentosrow1cell1\" class=\"linhagrid\" style=\"text-align:center;\">R$" + js_moeda(oOrdem.k00_valor, 2, ",", ".") + "</td>";
+        tabela += "<td id=\"Pagamentosrow1cell0\" class=\"linhagrid\" style=\"text-align:left;\">" + document.form1.e43_ordempagamento.value + "</td>";
+        tabela += "<td id=\"Pagamentosrow1cell2\" class=\"linhagrid\" style=\"text-align:center;\">" + oOrdem.contafornec + "</td>";
+        tabela += "<td id=\"Pagamentosrow1cell3\" class=\"linhagrid\" style=\"text-align:center;\">";
+        tabela += "<input type=\"button\" name=\"excluir\" value=\"Excluir\" onclick=\"js_excluir2(" + oOrdem.k00_sequencial + ")\"></td></tr>";
+
+    });
+    return tabela;
+
+}
+
+function js_limpa_codigos(campo) {
+    var codigo = $(campo).value;
+    document.form1.e53_codord.value = "";
+    document.form1.e50_obs.value = "";
+    document.form1.k17_codigo.value = "";
+    document.form1.k17_texto.value = "";
+    document.form1.e43_ordempagamento.value = "";
+
+    $(campo).value = codigo;
+}
 </script>
