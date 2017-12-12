@@ -2328,7 +2328,7 @@ class cl_formulario_rel_pes {
       }
 
       echo "
-            <tr>
+            <tr id='anomes'>
               <td align='left' nowrap title='Digite o Ano / Mês de competência' >
                 <strong>Ano / Mês:</strong>
               </td>
@@ -2444,7 +2444,7 @@ class cl_formulario_rel_pes {
           } else {
             $result_complementar = db_query("select distinct r48_semest as semestralidade from gerfcom  where r48_anousu = ".$$campoano." and r48_mesusu = ".$$campomes);
           }
-          
+
           if(pg_numrows($result_complementar) > 0){
             $arr_selcomplementar[0] = "Todos ...";
             for($icompl=0; $icompl<pg_numrows($result_complementar); $icompl++){
