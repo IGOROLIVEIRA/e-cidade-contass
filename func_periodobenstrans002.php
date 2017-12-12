@@ -13,7 +13,7 @@ require_once("model/patrimonio/BemDadosImovel.model.php");
 require_once("model/patrimonio/BemTipoAquisicao.php");
 require_once("model/patrimonio/BemTipoDepreciacao.php");
 require_once("model/CgmFactory.model.php");
-
+//retirou-se
 
 $oGet = db_utils::postMemory($_GET, false);
 
