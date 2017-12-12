@@ -3862,7 +3862,7 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
          
          $matriz2[1] = $pessoal[$Ipessoal]["r01_regist"];
          $matriz2[2] = $pontof13[$Ipontof13]["r34_rubric"];
-         $matriz2[3] = $r110_lotac;
+         $matriz2[3] = $pessoal[$Ipessoal]["r01_lotac"];
          $matriz2[4] = round($r14_valor,2);
          $matriz2[5] = $r14_quant;
          $matriz2[6] = $r14_pd;

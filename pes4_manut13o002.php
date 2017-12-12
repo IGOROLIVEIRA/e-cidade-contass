@@ -141,7 +141,7 @@ $m_quant= array();
 
   $condicaoaux = db_condicaoaux($opcao_filtro,$opcao_gml,"rh02_",$r110_regisi,$r110_regisf,$r110_lotaci,
 				$r110_lotacf,$faixa_regis,$faixa_lotac);
-	echo $condicaoaux;exit;
+
         if( $opcao_gml == "l"){
            if( $opcao_filtro == "i"){
              $condicaoaux  = " and r70_estrut between ".db_sqlformat($r110_lotaci);
@@ -286,12 +286,12 @@ function gera_ponto(){
   global $opcao,$opcao_filtro,$opcao_gml,$r110_regisi,$r110_regisf,$r110_lotaci,
          $r110_lotacf,$faixa_regis,$faixa_lotac,$selecao;
 	 
-//echo "<BR> ".($pagaradiantamentonovamente?"1":"2")." ,$fracao_certa,$mesana,$d08_carnes";
-  
-//echo "<BR> $subpes,$dias_pagamento"; 
-
-//echo "<BR>  $opcao,$opcao_filtro,$opcao_gml,$r110_regisi,$r110_regisf,$r110_lotaci,";
-//echo "<BR>  $r110_lotacf,$faixa_regis,$faixa_lotac;";
+//  echo "<BR> ".($pagaradiantamentonovamente?"1":"2")." ,$fracao_certa,$mesana,$d08_carnes";
+//
+//  echo "<BR> $subpes,$dias_pagamento";
+//
+//  echo "<BR>  $opcao,$opcao_filtro,$opcao_gml,$r110_regisi,$r110_regisf,$r110_lotaci,";
+//  echo "<BR>  $r110_lotacf,$faixa_regis,$faixa_lotac;";exit;
 
   $subpes = db_anofolha().'/'.db_mesfolha();
   
@@ -309,8 +309,10 @@ function gera_ponto(){
   $subpes_processa = db_strtran( $cfpess[0]["r11_altfer"], "/", "" );
   $faixa_lotac     = str_replace("\\","",$faixa_lotac);
 
+
   $condicaoaux = db_condicaoaux($opcao_filtro,$opcao_gml,"rh02_",$r110_regisi,$r110_regisf,$r110_lotaci,
 				$r110_lotacf,$faixa_regis,str_replace("\\","",$faixa_lotac) );
+
         if( $opcao_gml == "l"){
            if( $opcao_filtro == "i"){
              $condicaoaux  = " and r70_estrut between ".db_sqlformat($r110_lotaci);
@@ -330,6 +332,7 @@ if ($selecao != '') {
 //echo "<BR> faixa_lotac-->$faixa_lotac<br>";
 
 //  db_selectmax( "pessoal", "select * from pessoal ".bb_condicaosubpes( "r01_" )." and r01_regist in ('242918','237914','471313')");
+  $condicaoaux .= " and rh02_anousu = ".db_anofolha()." and rh02_mesusu = ".db_mesfolha();
   $sql = "select distinct rh01_regist as r01_regist,
                  rh02_hrsmen as r01_hrsmen, 
                  trim(TO_CHAR(RH02_LOTA,'9999')) as r01_lotac,  
@@ -345,8 +348,9 @@ if ($selecao != '') {
       	              left  join rhpespadrao   on  rhpespadrao.rh03_seqpes   = rhpessoalmov.rh02_seqpes 
 		                  left  join rhpesrescisao on  rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes 
 			inner join rhlotavinc on rh25_codigo = r70_codigo
+			inner join rhlotaexe  on r70_codigo = rh26_codigo
                        ".$condicaoaux;
- 
+    //echo $sql;exit;
 	db_selectmax("pessoal", $sql);
 //"select * from pessoal
 //                          inner join rhpessoalmov on rh02_regist = r01_regist

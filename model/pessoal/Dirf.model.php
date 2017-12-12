@@ -492,6 +492,7 @@ class Dirf {
     $condicaoaux .= "      or  ( rh05_recis is not null and exists(select 1 from gerfres where r20_regist = rh01_regist ";
     $condicaoaux .= "            and r20_anousu = {$ano_base})))";
     $condicaoaux .= " and o41_cnpj='{$this->sCnpj}' ";
+    //$condicaoaux .= " and z01_numcgm = 550";
     $condicaoaux .= " order by rh01_numcgm ";
     $sSqlPessoal    = "select distinct(rh01_numcgm),";
     $sSqlPessoal   .= "       z01_nome, ";
@@ -508,6 +509,7 @@ class Dirf {
     $sSqlPessoal   .= "                              and o41_orgao   = rh26_orgao ";
     $sSqlPessoal   .= "                              and o41_anousu  = rh26_anousu ";
     $sSqlPessoal   .= " where rh02_anousu = {$this->iAno} ".$condicaoaux;
+
     $rsDadosPessoal = db_query($sSqlPessoal);
     $aPessoas       = db_utils::getCollectionByRecord($rsDadosPessoal);
 
@@ -574,6 +576,7 @@ class Dirf {
         $condicaoaux .= "      or  ( rh05_recis is not null and exists(select 1 from gerfres where r20_regist = rh01_regist ";
         $condicaoaux .= "            and r20_anousu = {$ano_base})))";
         $condicaoaux .= " and rh01_numcgm = {$oPessoa->rh01_numcgm}";
+        //$condicaoaux .= " and rh01_numcgm = 1546";
         $condicaoaux .= " and o41_cnpj='{$this->sCnpj}'";
         $condicaoaux .= "order by rh01_numcgm ";
 
@@ -604,7 +607,7 @@ class Dirf {
         $sSqlComplementoPessoal .= "                              and o41_anousu  = rh26_anousu ";
 
         $sSqlComplementoPessoal .= bb_condicaosubpesproc("rh02_",$this->iAno.'/'.$ind).$condicaoaux;
-
+        //echo $sSqlComplementoPessoal;
         $rsComplementoPessoal    = db_query($sSqlComplementoPessoal);
 
         $aComplementoPessoal     = db_utils::getCollectionByRecord($rsComplementoPessoal);
@@ -657,6 +660,7 @@ class Dirf {
           $oPessoa->deducao65    = 0;
           $oPessoa->deducao65_13 = 0;
 
+
           if ((db_year($oDados->r01_admiss) <= db_val($ano_base) &&
              (db_empty($oDados->r01_recis) || (!db_empty($oDados->r01_recis)) &&
                db_year($oDados->r01_recis) >= db_val($ano_base)) || $oDados->tem_resciscao_calculada_no_ano == 't') || $ind == 13) {
@@ -675,20 +679,21 @@ class Dirf {
             /**
              * calcula os valores de folha de pagmento para o mes.
              */
-            $condicaoaux = " and r14_lotac = '{$oDados->r01_lotac}' and r14_regist = ".$oDados->r01_regist;
+            $condicaoaux = " and r14_regist = ".$oDados->r01_regist;
             $sSqlFolha = "select * from gerfsal ".bb_condicaosubpes( "r14_" ).$condicaoaux ;
+            //echo $sSqlFolha;
             global $gerfsal;
             if (db_selectmax( "gerfsal", $sSqlFolha)) {
               $this->calculaValoresDirfPessoal($gerfsal, "r14_", $oPessoa);
             }
 
-            $condicaoaux = " and r48_lotac = '{$oDados->r01_lotac}' and r48_regist = ".$oDados->r01_regist;
+            $condicaoaux = " and r48_regist = ".$oDados->r01_regist;
             global $gerfcom;
             if ( db_selectmax( "gerfcom", "select * from gerfcom ".bb_condicaosubpes( "r48_" ).$condicaoaux )){
               $this->calculaValoresDirfPessoal($gerfcom, "r48_", $oPessoa);
             }
 
-            $condicaoaux = " and r20_lotac = '{$oDados->r01_lotac}' and r20_regist = ".$oDados->r01_regist;
+            $condicaoaux = " and r20_regist = ".$oDados->r01_regist;
             global $gerfres;
             if (db_selectmax("gerfres", "select * from gerfres ".bb_condicaosubpes( "r20_" ).$condicaoaux )) {
               $this->calculaValoresDirfPessoal($gerfres, "r20_", $oPessoa);
@@ -696,13 +701,13 @@ class Dirf {
 
             if (db_empty($cfpess[0]["r11_altfer"] ) || $subpes < $cfpess[0]["r11_altfer"] ) {
 
-              $condicaoaux = " and r31_lotac = '{$oDados->r01_lotac}' and r31_regist = {$oDados->r01_regist}";
+              $condicaoaux = " and r31_regist = {$oDados->r01_regist}";
               global $gerffer;
               if ( db_selectmax( "gerffer", "select * from gerffer ".bb_condicaosubpes( "r31_" ).$condicaoaux )){
                 $this->calculaValoresDirfPessoal($gerffer, "r31_", $oPessoa);
               }
             }
-            $condicaoaux = " and r35_lotac = '{$oDados->r01_lotac}' and r35_regist = {$oDados->r01_regist}";
+            $condicaoaux = " and r35_regist = {$oDados->r01_regist}";
             global $gerfs13;
             if( db_selectmax( "gerfs13", "select * from gerfs13 ".bb_condicaosubpes( "r35_" ).$condicaoaux )){
               $this->calculaValoresDirfPessoal($gerfs13, "r35_", $oPessoa);
@@ -717,18 +722,18 @@ class Dirf {
               $ina = 0;
             }
 
-            $sWhereVerificabaseinativo  = " where r14_lotac = '{$oDados->r01_lotac}' and r14_regist = ".$oDados->r01_regist;
+            $sWhereVerificabaseinativo  = " where r14_regist = ".$oDados->r01_regist;
             $sWhereVerificabaseinativo .= "   and r14_mesusu = {$ind} and r14_anousu = {$this->iAno} and r14_rubric = 'R997'";
 
             $rsVerificabaseinativo = db_query("select * from gerfsal ".$sWhereVerificabaseinativo);
-
+            //echo "select * from gerfsal ".$sWhereVerificabaseinativo;
             if ($rsVerificabaseinativo && pg_num_rows($rsVerificabaseinativo) > 0) {
               $folhaSalarioBaseInativo = db_utils::fieldsMemory(db_query("select * from gerfsal ".$sWhereVerificabaseinativo), 0);
               $folhaSalarioBaseInativo->r14_valor;
             }
 
             if ( isset($oPessoa->aValorGrupo[1]) && $oPessoa->aValorGrupo[1] >= $D902) {
-
+              //echo 'aqui 1';
               $ina     += $D902;
               if (isset($folhaSalarioBaseInativo->r14_valor)) {
                 $oPessoa->aValorGrupo[1] -= $folhaSalarioBaseInativo->r14_valor;
@@ -737,19 +742,20 @@ class Dirf {
               }
 
             } else {
-
+                //echo 'aqui 2';
+                //echo 'base inativo '.$folhaSalarioBaseInativo->r14_valor;
               if (isset($folhaSalarioBaseInativo->r14_valor)) {
                 $oPessoa->aValorGrupo[1] -= $folhaSalarioBaseInativo->r14_valor;
               }
 
-              $sWhereVerificairf  = " where r14_lotac = '{$oDados->r01_lotac}' and r14_regist = ".$oDados->r01_regist;
+              $sWhereVerificairf  = " where r14_regist = ".$oDados->r01_regist;
               $sWhereVerificairf .= "   and r14_mesusu = {$ind} and r14_pd = 2 and r14_rubric = 'R913'";
 
               $rsVerificairf = db_query("select * from gerfsal ".$sWhereVerificairf);
 
               if ($rsVerificairf && pg_num_rows($rsVerificairf) == 0) {
 
-                $sWherebaseirf  = " where r14_lotac = '{$oDados->r01_lotac}' and r14_regist = ".$oDados->r01_regist;
+                $sWherebaseirf  = " where  r14_regist = ".$oDados->r01_regist;
                 $sWherebaseirf .= " and r14_mesusu = {$ind} and r14_anousu = {$this->iAno} and r14_rubric = 'R981'";
 
                 $folhaSalarioBase = null;
@@ -777,6 +783,7 @@ class Dirf {
           /**
            * Inclui o mes para a pessoa valor base
            */
+          //print_r($oPessoa);
           foreach ($oPessoa->aValorGrupo as $iIndice => $nValor) {
 
 

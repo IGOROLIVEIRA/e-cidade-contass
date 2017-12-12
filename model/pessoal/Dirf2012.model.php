@@ -217,7 +217,7 @@ class Dirf2012 extends Dirf {
     
     $sSqlDadosContabilidade .= " group by z01_numcgm,z01_cgccpf,z01_nome,6,7,c80_codord";
     $sSqlDadosContabilidade .= " order by z01_numcgm, 6, c80_codord   ";
-    
+
     $rsDadosContabilidade = db_query($sSqlDadosContabilidade);
     //$fp = fopen('/tmp/ordensErradas_dirf.txt','w');
     if ( !$rsDadosContabilidade ) {
@@ -473,7 +473,8 @@ class Dirf2012 extends Dirf {
                                 "PSE",
                                 "RIO",
                                 "OPSE",
-                                "TPSE");
+                                "TPSE",
+                                "INFPA");
     /**
      * tipo de registros de valores gerados.
      * os tipos usados por mes vao de 1 até 11.
@@ -525,6 +526,7 @@ class Dirf2012 extends Dirf {
                                inner join cgm       on r70_numcgm   = z01_numcgm
                                where o41_cnpj   = '{$this->sCnpj}'
                                  and z01_cgccpf = '{$this->sCnpj}'";
+
     $rsDadosInstituicao    = db_query($sSqlDadosInstituicao);
     $iNumRowsDadosInstituicao = pg_num_rows($rsDadosInstituicao);
 
@@ -604,7 +606,8 @@ class Dirf2012 extends Dirf {
     $sSqlTipoReceitas .= "    and rh96_tipo in({$sTipo})                  ";
     $sSqlTipoReceitas .= "    and rh95_fontepagadora   = '{$this->sCnpj}' ";
     $sSqlTipoReceitas .= "    and rh95_ano             = {$this->iAno}    ";
-
+    //$sSqlTipoReceitas .= "    and rh96_numcgm = 550    ";
+    //echo $sSqlTipoReceitas;exit;
     $sMatriculaSelecionadas = $this->getMatriculas();
 
     if (!empty($sMatriculaSelecionadas)) {
@@ -613,8 +616,9 @@ class Dirf2012 extends Dirf {
 
     $sSqlTipoReceitas .= "   order by rh98_tipoirrf,1,                    ";
     $sSqlTipoReceitas .= "            z01_cgccpf                          ";
-
+    //echo $sSqlTipoReceitas;exit;
     $rsTipoReceitas    = db_query($sSqlTipoReceitas);
+
     $iTotalLinhas      = pg_num_rows($rsTipoReceitas);
 
     $aLinhasDirf       = array();
@@ -755,12 +759,38 @@ class Dirf2012 extends Dirf {
         /**
          * carregamos as informações dos pagamentos
          */
+
         foreach ($oPessoaFisica->pagamentos as $iTipo => $oPagamento) {
+
+
+
+            if($iTipo == 5 && $oPessoaFisica->cgm) {
+                /* Pensão alimentícia */
+                $sSqlPensao = $this->Busca_INFPA($oPessoaFisica->cgm);
+                $rsPensao = db_query($sSqlPensao);
+                if ($rsPensao && pg_num_rows($rsPensao) > 0) {
+                    for ($iCont = 0; $iCont < pg_num_rows($rsPensao); $iCont++) {
+                        $oPensao = db_utils::fieldsMemory($rsPensao, $iCont);
+
+                        $oLayout->setCampoTipoLinha(3);
+                        $oLayout->setCampoIdentLinha("INFPA");
+                        $oLayout->setCampo("identificador_registro", 'INFPA');
+                        $oLayout->setCampo("cpf", $oPensao->z01_cgccpf);
+                        $oLayout->setCampo("dtnasc", $oPensao->z01_nasc);
+                        $oLayout->setCampo("nome", $oPensao->z01_nome);
+                        $oLayout->setCampo("tipo", '');
+                        $oLayout->geraDadosLinha();
+
+                    }
+                }
+            }
+
 
           $oLayout->setCampoTipoLinha(3);
           $oLayout->setCampoIdentLinha("RTRT");
           $iSiglaRegistro = $aSiglasTipoArquivo[$iTipo];
           $oLayout->setCampo("idetificador_registro", $iSiglaRegistro);
+
 
           /**
            * escreve os meses com cada valor
@@ -768,7 +798,6 @@ class Dirf2012 extends Dirf {
           for ($iMes = 1; $iMes <= 13; $iMes++) {
 
             $aMes[$iMes] = '';
-
             foreach ($oPagamento as $oMes) {
 
               if ($oMes->rh98_mes == $iMes) {
@@ -779,8 +808,12 @@ class Dirf2012 extends Dirf {
                   $nValorDeducao65 = $this->getValorDeducaoRIP65($iMes,$oPessoaFisica->pagamentos);
                 }
 
-                $nValorLancar = ( ( $oMes->valor - $nValorDeducao65 ) > 0 ? ( $oMes->valor - $nValorDeducao65 ) : 0  );
+                //echo 'valor dedução: '.$nValorDeducao65.'<br>';
+                //echo 'valor mes: '.$oMes->valor.'<br>';
 
+                //$nValorLancar = ( ( $oMes->valor - $nValorDeducao65 ) > 0 ? ( $oMes->valor - $nValorDeducao65 ) : 0  );
+                $nValorLancar = $oMes->valor;
+                //echo 'valor lançar: '.$nValorLancar.'<br>';
                 $aMes[$iMes] = db_formatar(str_replace(',','',str_replace('.','',trim(db_formatar($nValorLancar,'f')))),'s','0',8,'e',2);
               }
             }
@@ -789,11 +822,12 @@ class Dirf2012 extends Dirf {
           }
 
           $oLayout->geraDadosLinha();
+
         }
 
-        /*
-         * Outros dados.
-         */
+          /*
+           * Outros dados.
+           */
         if($oPessoaFisica->totaloutros > 0){
 
           $nValorAno = db_formatar(str_replace(',','',str_replace('.','',
@@ -840,6 +874,10 @@ class Dirf2012 extends Dirf {
 
           $oLayout->geraDadosLinha();
         }
+
+
+
+
       }
     }
 
@@ -1124,6 +1162,7 @@ class Dirf2012 extends Dirf {
      */
     $sSqlDesdobramento .= " having sum(valor_pago - valor_estornado) >= 6000 ";
 
+
     $rsDesdobramentos = db_query($sSqlDesdobramento);
     $iDesdobramentos  = pg_num_rows($rsDesdobramentos);
 
@@ -1256,6 +1295,70 @@ class Dirf2012 extends Dirf {
     }
 
     unset($aPagamentos);
+  }
+
+    /**
+     * Busca INFPA
+     */
+
+  public function Busca_INFPA($cgm){
+
+          $sSql = "SELECT r52_anousu,
+                                       r52_mesusu,
+                                       r52_regist,
+                                       r52_numcgm,
+                                       cgm.z01_numcgm,
+                                       cgm.z01_nome,
+                                       cgm.z01_cgccpf,
+                                       r52_vlrpen,
+                                       r52_perc,
+                                       r52_codbco,
+                                       r52_formul,
+                                       cgm.z01_nasc,
+                                       CASE
+                                           WHEN r52_pag13='t' THEN 'SIM'
+                                          ELSE 'NÃO'
+                                       END AS r52_pag13,
+                                       CASE
+                                           WHEN r52_pagfer='t' THEN 'SIM'
+                                           ELSE 'NÃO'
+                                       END AS r52_pagfer,
+                                       CASE
+                                           WHEN r52_pagcom='t' THEN 'SIM'
+                                           ELSE 'NÃO'
+                                       END AS r52_pagcom,
+                                       CASE
+                                           WHEN r52_pagres='t' THEN 'SIM'
+                                           ELSE 'NÃO'
+                                       END AS r52_pagres,
+                                       CASE
+                                           WHEN r52_adiantamento13='t' THEN 'SIM'
+                                           ELSE 'NÃO'
+                                       END AS r52_adiantamento13,
+                                       r52_percadiantamento13
+                                FROM pensao
+                                INNER JOIN cgm ON cgm.z01_numcgm = pensao.r52_numcgm
+                                INNER JOIN rhpessoal ON rhpessoal.rh01_regist = pensao.r52_regist
+                                INNER JOIN cgm a ON a.z01_numcgm = rhpessoal.rh01_numcgm
+                                LEFT JOIN db_bancos ON db_bancos.db90_codban::char(3) = pensao.r52_codbco
+                                LEFT JOIN pensaoretencao ON pensaoretencao.rh77_numcgm = pensao.r52_numcgm
+                                AND pensaoretencao.rh77_regist = pensao.r52_regist
+                                AND pensaoretencao.rh77_anousu = pensao.r52_anousu
+                                AND pensaoretencao.rh77_mesusu = pensao.r52_mesusu
+                                LEFT JOIN retencaotiporec ON retencaotiporec.e21_sequencial = pensaoretencao.rh77_retencaotiporec
+                                INNER JOIN rhpessoalmov ON rhpessoalmov.rh02_anousu = pensao.r52_anousu
+                                AND rhpessoalmov.rh02_mesusu = pensao.r52_mesusu
+                                AND rhpessoalmov.rh02_regist = pensao.r52_regist
+                                LEFT JOIN pensaocontabancaria ON pensaocontabancaria.rh139_anousu = pensao.r52_anousu
+                                AND pensaocontabancaria.rh139_mesusu = pensao.r52_mesusu
+                                AND pensaocontabancaria.rh139_regist = pensao.r52_regist
+                                AND pensaocontabancaria.rh139_numcgm = pensao.r52_numcgm
+                                WHERE r52_anousu={$this->iAno}
+                                    AND r52_mesusu={$this->iMes}
+                                    AND a.z01_numcgm = {$cgm}
+                                ORDER BY cgm.z01_nome";
+
+      return $sSql;
   }
 
 }
