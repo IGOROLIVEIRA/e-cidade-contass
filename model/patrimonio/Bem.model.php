@@ -40,6 +40,8 @@ class Bem {
 
   protected $nValorAquisicao;
 
+  protected $iCodigoTransferencia;
+
   /**
    * Classificacao do bem
    * @var BemClassificacao
@@ -218,8 +220,15 @@ class Bem {
     $sSqlCodigoPlaca  = "(select t41_codigo ";
     $sSqlCodigoPlaca .= "   from bensplaca ";
     $sSqlCodigoPlaca .= "  where t41_bem = t52_bem ";
-    $sSqlCodigoPlaca .= "  order by t41_codigo desc limit 1) as codigoplaca";
-    $sSqlDadosBem    = $oDaoBem->sql_query_dados_depreciacao($iCodigoBem, "*,{$sSqlSituacaoBem} {$sSqlCodigoPlaca}", "t44_ultimaavaliacao desc");
+    $sSqlCodigoPlaca .= "  order by t41_codigo desc limit 1) as codigoplaca, ";
+
+    $sSqlCodigoTransf = "(select t95_codtran ";
+    $sSqlCodigoTransf.= "   from benstransfcodigo ";
+    $sSqlCodigoTransf.= "  where t95_codbem = t52_bem ";
+    $sSqlCodigoTransf.= "  order by t95_codtran desc limit 1) as codtransf";
+
+    $sSqlDadosBem    = $oDaoBem->sql_query_dados_depreciacao($iCodigoBem, "*,{$sSqlSituacaoBem} {$sSqlCodigoPlaca} {$sSqlCodigoTransf}", "t44_ultimaavaliacao desc");
+
     $rsDadosBem      = $oDaoBem->sql_record($sSqlDadosBem);
 
     if ($oDaoBem->numrows == 0) {
@@ -253,6 +262,7 @@ class Bem {
     $this->setSituacaoBem($oDadosBem->situacao);
     $this->setVidaUtil($oDadosBem->t44_vidautil);
     $this->setPlaca(new PlacaBem($oDadosBem->codigoplaca));
+    $this->setCodigoTransferencia($oDadosBem->codtransf);
 
     $this->iCodigoCgm            = $oDadosBem->t52_numcgm;
     $this->iCodigoBemDepreciacao = $oDadosBem->t44_sequencial;
@@ -447,12 +457,12 @@ class Bem {
   }
 
   /**
-   * Função criada para verificar se o bem tem tipo depreciação antes de chamar a 
+   * Função criada para verificar se o bem tem tipo depreciação antes de chamar a
    * getTipoDepreciacao, pois quando não tinha estava dando erro na baixa de bens
    * @return BemTipoDepreciacao
    */
   public function getCodigoTipoDepreciacao() {
-  	
+
     return $this->iTipoDepreciacao;
   }
 
@@ -747,6 +757,14 @@ class Bem {
    */
   public function setValorDepreciavel($nValorDepreciavel) {
     $this->nValorDepreciavel = $nValorDepreciavel;
+  }
+
+  public function getCodigoTransferencia() {
+    return $this->iCodigoTransferencia;
+  }
+
+  public function setCodigoTransferencia($iCodigoTransferencia) {
+    $this->iCodigoTransferencia = $iCodigoTransferencia;
   }
 
 

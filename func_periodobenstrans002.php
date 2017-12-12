@@ -1,5 +1,4 @@
 <?php
-
 require_once("fpdf151/pdf.php");
 require_once("libs/db_sql.php");
 require_once("libs/db_utils.php");
@@ -15,6 +14,7 @@ require_once("model/patrimonio/BemTipoAquisicao.php");
 require_once("model/patrimonio/BemTipoDepreciacao.php");
 require_once("model/CgmFactory.model.php");
 
+
 $oGet = db_utils::postMemory($_GET, false);
 
 $head3 = "Transferência por Período";
@@ -29,25 +29,52 @@ $pdf->SetTextColor(0,0,0);
 $pdf->SetFillColor(235);
 $tam = '04';
 
-$pdf->SetFont("","B","");	
+$pdf->SetFont("","B","");
+//$parametro = '';
+switch ($oGet->ordem) {
+  case 'placa':
+    $parametro = 't52_ident, t93_data, t95_codtran';
+    break;
+
+  case 'usuario':
+    $parametro = 'nome, t52_ident, t95_codtran, t93_data';
+    break;
+
+  case 'data':
+    $parametro = 't93_data, t52_ident, t95_codtran';
+    break;
+
+  case 'origem':
+    $parametro = 'origem, t93_data, t95_codtran, t52_ident';
+    break;
+
+  case 'destino':
+    $parametro = 'destino, t93_data, t95_codtran, t52_ident';
+    break;
+
+  default:
+    $parametro = 't95_codtran, t52_ident';
+    break;
+}
 
 /**
    * pegar divisao e situacao
    */
   $sSqlDivisao = "SELECT DISTINCT dp1.descrdepto AS origem,
 								dp2.descrdepto AS destino,
-								db_usuarios.login as nome,
+								db_usuarios.login AS nome,
 								t52_bem,
 								t52_descr,
 								t64_class,
 								t52_ident,
 								t93_data,
-								divisaoorigem.t30_descr AS divorigem,
+                t95_codtran,
+                divisaoorigem.t30_descr AS divorigem,
 								divisaodestino.t30_descr AS divdestino,
 								situabens.t70_descr AS situacao
 				FROM benstransfcodigo
 				INNER JOIN bens ON bens.t52_bem = benstransfcodigo.t95_codbem
-				INNER JOIN clabens ON clabens.t64_codcla = bens.t52_codcla
+        INNER JOIN clabens ON clabens.t64_codcla = bens.t52_codcla
 				INNER JOIN benstransf ON benstransf.t93_codtran = benstransfcodigo.t95_codtran
 				LEFT JOIN benstransfdiv ON benstransfdiv.t31_bem = bens.t52_bem
 				AND benstransfdiv.t31_codtran = benstransf.t93_codtran
@@ -63,24 +90,27 @@ $pdf->SetFont("","B","");
 				INNER JOIN db_depart AS dp1 ON benstransf.t93_depart = dp1.coddepto
 				INNER JOIN benstransfdes AS btd1 ON benstransf.t93_codtran = btd1.t94_codtran
 				INNER JOIN db_depart AS dp2 ON dp2.coddepto = btd1.t94_depart
-				WHERE benstransf.t93_data BETWEEN '{$oGet->dataINI}' and '{$oGet->dataFIM}'";
-  
-  $rsDivisaoSituacao = db_query($sSqlDivisao);
+				WHERE benstransf.t93_data BETWEEN '{$oGet->dataINI}' and '{$oGet->dataFIM}'
+        ORDER BY {$parametro} ASC";
 
+  $rsDivisaoSituacao = db_query($sSqlDivisao);
+  //db_criatabela($rsDivisaoSituacao);die;
+
+$pdf->Cell(20,$tam,"COD. TRANS.",1,0,"C",1);
 $pdf->Cell(15,$tam,"PLACA",1,0,"C",1);
 $pdf->Cell(15,$tam,"DATA",1,0,"C",1);
-$pdf->Cell(70,$tam,"DESCRICÃO",1,0,"L",1);
-$pdf->Cell(40,$tam,"ORIGEM",1,0,"L",1);
-$pdf->Cell(40,$tam,"DIVISÃO DE ORIGEM",1,0,"L",1);
-$pdf->Cell(40,$tam,"DESTINO",1,0,"L",1);
-$pdf->Cell(40,$tam,"DIVISÃO DE DESTINO",1,0,"L",1);
+$pdf->Cell(55,$tam,"DESCRIÇÃO",1,0,"C",1);
+$pdf->Cell(30,$tam,"ORIGEM",1,0,"C",1);
+$pdf->Cell(40,$tam,"DIVISÃO DE ORIGEM",1,0,"C",1);
+$pdf->Cell(40,$tam,"DESTINO",1,0,"C",1);
+$pdf->Cell(40,$tam,"DIVISÃO DE DESTINO",1,0,"C",1);
 $pdf->Cell(25,$tam,"USUÁRIO",1,1,"C",1);
 
-for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 
+for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
   $oDivisaoSituacao = db_utils::fieldsMemory($rsDivisaoSituacao, $iCont);
-    
   $oBem           = new Bem($oDivisaoSituacao->t52_bem);
+  $oCodigo        = $oBem->getCodigoTransferencia();
   $oClassificao   = $oBem->getClassificacao();
   $oFornecedor    = $oBem->getFornecedor();
   $oCedente       = $oBem->getCedente();
@@ -91,65 +121,66 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
   $nValorUnitario = $oBem->getValorAquisicao();
   $iValorTotal    += $oBem->getValorAquisicao();
 
-  if (strlen($oBem->getDescricao()) > 45 || strlen($oDivisaoSituacao->divorigem) > 27 || strlen($oDivisaoSituacao->divdestino) > 27 || strlen($oDivisaoSituacao->origem) > 25 || strlen($oDivisaoSituacao->destino) > 20) {
-		  
-	  	$aDescricao  = quebrar_texto($oBem->getDescricao(),45);
-	  	$aDivOrigem  = quebrar_texto($oDivisaoSituacao->divorigem,27);
-	  	$aDivDestino = quebrar_texto($oDivisaoSituacao->divdestino,27);
-	  	$aOrigem     = quebrar_texto($oDivisaoSituacao->origem,25);
-	  	$aDestino    = quebrar_texto($oDivisaoSituacao->destino,20);
-	  	//$aDivOrigem  = $oDivisaoSituacao->divorigem;
-	  	//$aDivDestino = $oDivisaoSituacao->divdestino;
-	  $aDados = array(count($aDescricao),count($aDivOrigem),count($aDivDestino),count($aOrigem),count($aDestino));
-	  $alt_novo = max($aDados);
+  if (strlen($oBem->getDescricao()) > 32 || strlen($oDivisaoSituacao->divorigem) > 27 || strlen($oDivisaoSituacao->divdestino) > 27 || strlen($oDivisaoSituacao->origem) > 25 || strlen($oDivisaoSituacao->destino) > 25) {
 
-	} else {
-	  $alt_novo = 1;
-	}
+      $aDescricao  = quebrar_texto($oBem->getDescricao(),32);
+      $aDivOrigem  = quebrar_texto($oDivisaoSituacao->divorigem,27);
+      $aDivDestino = quebrar_texto($oDivisaoSituacao->divdestino,27);
+      $aOrigem     = quebrar_texto($oDivisaoSituacao->origem,25);
+      $aDestino    = quebrar_texto($oDivisaoSituacao->destino,25);
+      //$aDivOrigem  = $oDivisaoSituacao->divorigem;
+      //$aDivDestino = $oDivisaoSituacao->divdestino;
 
+    $aDados = array(count($aDescricao),count($aDivOrigem),count($aDivDestino),count($aOrigem),count($aDestino));
+    $alt_novo = max($aDados);
+
+  } else {
+    $alt_novo = 1;
+  }
+
+
+  $pdf->Cell(20,$tam*$alt_novo,$oDivisaoSituacao->t95_codtran,1,0,"C",0);
   $pdf->Cell(15,$tam*$alt_novo,$oDivisaoSituacao->t52_ident,1,0,"C",0);
   $pdf->cell(15,$tam*$alt_novo,implode('/',array_reverse(explode('-',$oDivisaoSituacao->t93_data))),1,0,"C",0);
-  
+
   /**
    * imprimir descricao item
    */
-  if (strlen($oBem->getDescricao()) > 45) {
-	    	  
+  if (strlen($oBem->getDescricao()) > 32) {
+
 	  $pos_x = $pdf->x;
 	  $pos_y = $pdf->y;
-	  $pdf->Cell(70,$tam*$alt_novo,"",1,0,"L",0);
+    $pdf->Cell(55,$tam*$alt_novo,"",1,0,"L",0);
 	  $pdf->x = $pos_x;
 	  $pdf->y = $pos_y;
-	  foreach ($aDescricao as $oDescricao) {
-	    $pdf->cell(70,($tam),$oDescricao,0,1,"L",0); 
-	  	$pdf->x=$pos_x;	
+    foreach ($aDescricao as $oDescricao) {
+	    $pdf->cell(55,($tam),$oDescricao,0,1,"L",0);
+	  	$pdf->x=$pos_x;
 	  }
-	  $pdf->x = $pos_x+70;
+	  $pdf->x = $pos_x+55;
 	  $pdf->y=$pos_y;
-	    
-	} else {
-	  $pdf->Cell(70,$tam*$alt_novo,$oBem->getDescricao(),1,0,"L",0);
+  } else {
+	  $pdf->Cell(55,$tam*$alt_novo,$oBem->getDescricao(),1,0,"L",0);
 	}
-  
+
   /**
    * imprimir  origem
    */
   if (strlen($oDivisaoSituacao->origem) > 27) {
-	  
-	  $pos_x = $pdf->x;
+    $pos_x = $pdf->x;
 	  $pos_y = $pdf->y;
-	  $pdf->Cell(40,$tam*$alt_novo,"",1,0,"L",0);
+	  $pdf->Cell(30,$tam*$alt_novo,"",1,0,"L",0);
 	  $pdf->x = $pos_x;
 	  $pdf->y = $pos_y;
 	  foreach ($aOrigem as $oOrigem) {
-	    $pdf->cell(40,($tam),$oOrigem,0,1,"L",0);
-	  	$pdf->x=$pos_x;	
+	    $pdf->cell(30,($tam),$oOrigem,0,1,"L",0);
+	  	$pdf->x=$pos_x;
 	  }
-	  $pdf->x = $pos_x+40;
+	  $pdf->x = $pos_x+30;
 	  $pdf->y=$pos_y;
-	    
+
 	} else {
-	  $pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->origem,1,0,"L",0);
+	  $pdf->Cell(30,$tam*$alt_novo,$oDivisaoSituacao->origem,1,0,"L",0);
 	}
 
 	/**
@@ -172,12 +203,12 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 	} else {
 		$pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->divorigem,1,0,"L",0);
 	}
-  
+
   /**
    * imprimir  destino
    */
   if (strlen($oDivisaoSituacao->destino) > 20) {
-	  
+
 	  $pos_x = $pdf->x;
 	  $pos_y = $pdf->y;
 	  $pdf->Cell(40,$tam*$alt_novo,"",1,0,"L",0);
@@ -185,33 +216,33 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 	  $pdf->y = $pos_y;
 	  foreach ($aDestino as $oDestino) {
 	    $pdf->cell(40,($tam),$oDestino,0,1,"L",0);
-	  	$pdf->x=$pos_x;	
+	  	$pdf->x=$pos_x;
 	  }
 	  $pdf->x = $pos_x+40;
 	  $pdf->y=$pos_y;
-	    
+
 	} else {
 	  $pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->destino,1,0,"L",0);
 	}
 
-  
+
   /**
    * imprimir  divdestino
    */
   if (strlen($oDivisaoSituacao->divdestino) > 27) {
-	  
+
 	  $pos_x = $pdf->x;
 	  $pos_y = $pdf->y;
 	  $pdf->Cell(40,$tam*$alt_novo,"",1,1,"L",0);
 	  $pdf->x = $pos_x;
 	  $pdf->y = $pos_y;
 	  foreach ($aDivDestino as $oDivDestino) {
-	    $pdf->cell(40,($tam),$oDivDestino,0,1,"L",0); 
-	  	$pdf->x=$pos_x;	
+	    $pdf->cell(40,($tam),$oDivDestino,0,1,"L",0);
+	  	$pdf->x=$pos_x;
 	  }
 	  $pdf->x = $pos_x+40;
 	  $pdf->y=$pos_y;
-	    
+
 	} else {
 	  $pdf->Cell(40,$tam*$alt_novo,$oDivisaoSituacao->divdestino,1,0,"L",0);
 	}
@@ -220,16 +251,16 @@ for ($iCont=0;$iCont < pg_num_rows($rsDivisaoSituacao);$iCont++) {
 
 }
 
-$pdf->Cell(18,$tam,"Total de Bens",1,0,"R",1);
-$pdf->Cell(121,$tam,pg_num_rows($rsDivisaoSituacao),1,0,"C",0);
+$pdf->Cell(20,$tam,"Total de Bens",1,0,"C",1);
+$pdf->Cell(115,$tam,pg_num_rows($rsDivisaoSituacao),1,0,"C",0);
 
-$pdf->Cell(16,$tam,"Valor Total",1,0,"R",1);
-$pdf->Cell(125,$tam,db_formatar($iValorTotal,"f"),1,0,"R",0);
+$pdf->Cell(40,$tam,"Valor Total",1,0,"C",1);
+$pdf->Cell(105,$tam,db_formatar($iValorTotal,"f"),1,0,"C",0);
 
 $pdf->output();
 
 function quebrar_texto($texto,$tamanho) {
-	
+
 	$aTexto = explode(" ", $texto);
 	$string_atual = "";
 	foreach ($aTexto as $word) {
@@ -243,8 +274,5 @@ function quebrar_texto($texto,$tamanho) {
 	}
 	$aTextoNovo[] = trim($string_atual);
 	return $aTextoNovo;
-	
+
 }
-
-
-
