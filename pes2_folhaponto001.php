@@ -131,26 +131,6 @@ db_postmemory($HTTP_POST_VARS);
     echo '</td>';
   echo '</tr>';
 
-
-
-  /*echo '<tr>';
-    echo '<td>';
-      echo '<strong>Período:&nbsp;</strong>';
-    echo '</td>';
-    echo '<td>';
-      echo '<input id="dia1" name="dia1" size="2" value="" maxlength="2">';
-      echo "&nbsp;&nbsp;/&nbsp;&nbsp;";
-      echo '<input id="mes1" name="mes1" size="2" value="'.$mesfolha.'" maxlength="2">';
-      echo "&nbsp;&nbsp;/&nbsp;&nbsp;";
-      echo '<input id="ano1" name="ano1" size="4" value="'.$anofolha.'" maxlength="4">';
-      echo "&nbsp;&nbsp;&nbsp;&nbsp;<strong>à</strong>&nbsp;&nbsp;&nbsp;";
-      echo '<input id="dia2" name="dia2" size="2" value="" maxlength="2">';
-      echo "&nbsp;&nbsp;/&nbsp;&nbsp;";
-      echo '<input id="mes2" name="mes2" size="2" value="'.$mesfolha.'" maxlength="2">';
-      echo "&nbsp;&nbsp;/&nbsp;&nbsp;";
-      echo '<input id="ano2" name="ano2" size="4" value="'.$anofolha.'" maxlength="4">';
-    echo '</td>';
-  echo '</tr>';*/
   ?>
   <tr>
   <tr>
@@ -246,14 +226,6 @@ function js_emite(){
 
   if (mes1 > mes2 && ano2 == ano1) {
     alert("Mês inicial não pode ser menor que o final!");
-    return;
-  }
-  if ((mes2 - mes1) > 1) {
-    alert("Período não permitido!");
-    return;
-  }
-  if (ano1 != ano2) {
-    alert("Período não permitido!");
     return;
   }
 
