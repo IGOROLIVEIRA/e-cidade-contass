@@ -872,7 +872,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                   ac35_descricaoalteracao,
                   ac35_datapublicacao,
                   ac35_veiculodivulgacao,
-                  ac16_deptoresponsavel
+                  ac16_deptoresponsavel,
+                  ac26_numero
                   from
                   acordoposicaoaditamento
                   inner join acordoposicao on ac26_sequencial = ac35_acordoposicao
@@ -947,39 +948,44 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
 
+                    if ($oAcordoItem->getCodigoPosicaoTipo() != '') {
 
-                    $sSql = "SELECT si43_coditem FROM
-                            (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102017) as y
-                            WHERE si43_dscitem LIKE
-                                    '" . trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oAcordoItem->getMaterial()->getDescricao()))) . "%'";
-                    $result = db_query($sSql);
-                    $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
+                        $sSql = "SELECT si43_coditem FROM
+                                (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102017) as y
+                                WHERE si43_dscitem LIKE
+                                        '" . trim(preg_replace("/[^a-zA-Z0-9 ]/", "", str_replace($what, $by, $oAcordoItem->getMaterial()->getDescricao()))) . "%'";
+                        $result = db_query($sSql);
+                        $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
 
-                    if ($iCodItem == "") {
-                        $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
-                        $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
-                    }
-                    $iTipoAlteraoItem = 1;
-                    if ($oAcordoItem->getCodigoPosicaoTipo() == 9)
+                        if ($iCodItem == "") {
+                            $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
+                            $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
+                        }
                         $iTipoAlteraoItem = 1;
-                    elseif ($oAcordoItem->getCodigoPosicaoTipo() == 10)
-                        $iTipoAlteraoItem = 2;
+                        if ($oAcordoItem->getCodigoPosicaoTipo() == 9)
+                            $iTipoAlteraoItem = 1;
+                        elseif ($oAcordoItem->getCodigoPosicaoTipo() == 10)
+                            $iTipoAlteraoItem = 2;
+                        else 
+                            $iTipoAlteraoItem = $oAcordoItem->getCodigoPosicaoTipo();
 
-                    $clcontratos21->si88_tiporegistro = 21;
-                    $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
-                    $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
-                    $clcontratos21->si88_coditem = $iCodItem;
-                    $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
-                    $clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantidadeAtualizadaRenovacao();
-                    $clcontratos21->si88_valorunitarioitem = $oAcordoItem->getValorUnitario();
-                    $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $clcontratos21->si88_instit = db_getsession("DB_instit");
+                        $clcontratos21->si88_tiporegistro = 21;
+                        $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
+                        $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
+                        $clcontratos21->si88_coditem = $iCodItem;
+                        $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
+                        $clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantidadeAditivada($oDados20->ac26_numero);
+                        $clcontratos21->si88_valorunitarioitem = $oAcordoItem->getValorUnitario();
+                        $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                        $clcontratos21->si88_instit = db_getsession("DB_instit");
 
-                    $clcontratos21->incluir(null);
-                    if ($clcontratos21->erro_status == 0) {
-                        throw new Exception($clcontratos21->erro_msg);
+                        $clcontratos21->incluir(null);
+                        if ($clcontratos21->erro_status == 0) {
+                            throw new Exception($clcontratos21->erro_msg);
+                        }
+
                     }
-
+                    
                 }
             }
 

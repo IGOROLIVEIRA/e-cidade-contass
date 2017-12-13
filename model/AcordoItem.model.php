@@ -2702,4 +2702,23 @@ class AcordoItem {
     }
   }
 
+  /**
+   * Retorna quantidade aditivada em comparacao com a posicao anterior
+   * Necessario para o sicom
+   * @param integer $iNumeroAditamento
+   */
+  public function getQuantidadeAditivada($iNumeroAditamento) {
+
+    $oDaoAcordoitem  = new cl_acordoitem;
+
+    $sCampos    = "SUM(CASE WHEN ac26_numero = {$iNumeroAditamento} THEN ac20_quantidade 
+                            WHEN ac26_numero = ".($iNumeroAditamento-1)." THEN ac20_quantidade*-1 END) AS aditivado";
+    $sWhere     = "ac16_sequencial = {$this->getPosicao()->getAcordo()} AND ac20_ordem = {$this->getOrdem()} AND ac20_pcmater = ".$this->getMaterial()->getMaterial();
+    $sSqlItens  = $oDaoAcordoitem->sql_query_transparencia( $sCampos, null, $sWhere);
+    $rsItem     = $oDaoAcordoitem->sql_record($sSqlItens);
+
+    return abs(db_utils::fieldsMemory($rsItem, 0)->aditivado);
+
+  }
+
 }
