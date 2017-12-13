@@ -120,6 +120,9 @@ class slipFolha {
 		$oDaoSlip->k17_debito   = $iContaDebito;
 		$oDaoSlip->k17_credito  = $iContaCredito;
 		$oDaoSlip->k17_valor    = $nValor;
+		/*OC 4401*/
+		$oDaoSlip->k17_id_usuario    = db_getsession("DB_id_usuario");
+		/*Fim OC 4401*/
 		
 		$oDaoSlip->incluir(null);
     
