@@ -1828,6 +1828,9 @@ class ordemPagamento {
     $clempanulado->e94_motivo         = $sMotivo;
     $clempanulado->e94_empanuladotipo = 2;
     $clempanulado->e94_data           = date("Y-m-d", db_getsession("DB_datausu"));
+    /*OC 4401*/
+    $clempanulado->e94_id_usuario     = db_getsession("DB_id_usuario");
+    /*Fim - OC 4401*/
     $clempanulado->incluir(null);
 
     if ($clempanulado->erro_status == 0) {

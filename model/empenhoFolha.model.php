@@ -810,6 +810,7 @@ class empenhoFolha {
 	  $oDaoEmpenho->e60_vlrliq         = "0";
 	  $oDaoEmpenho->e60_vlrpag         = "0";
 	  $oDaoEmpenho->e60_vlranu         = "0";
+	  $oDaoEmpenho->e60_id_usuario     = db_getsession("DB_id_usuario");
 	  $oDaoEmpenho->incluir(null);
 	  if ($oDaoEmpenho->erro_status == 0) {
 
