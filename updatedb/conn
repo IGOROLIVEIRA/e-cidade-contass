@@ -72,3 +72,4 @@ pirapora_teste_mario 5432 teste
 pmbotumirim     5432    manutencao
 prevmoc_tributario 5432 manutencao
 e-cidade	5432	pmpirapora
+supermoc        5433    e-cidade
