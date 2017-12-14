@@ -322,33 +322,44 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
 
   if($clIssAlvara->numrows > 0 ) {
     $oAlvara  = db_utils::fieldsMemory($rsAlvara, 0);
+
     $pdf1->dtemissao = $oAlvara->q123_dtinclusao;
-  }
 
-  if(!empty($oAlvara->numeroalvara)) {
-    $pdf1->numeroalvara = $oAlvara->numeroalvara;
-  }else{
-    $pdf1->numeroalvara = "{$q02_inscr}-".substr($z01_nome,0,1)."/".db_getsession('DB_anousu');
-  }
-
-  if(!empty($oAlvara->q123_sequencial)){
-    if($pdf1->permanente == 't'){
-      $pdf1->validadealvara = "31/12/".db_getsession('DB_anousu');
-    } else {
-      require_once 'model/issqn/alvara/Alvara.model.php';
-      require_once 'model/issqn/alvara/MovimentacaoAlvara.model.php';
-      require_once 'model/issqn/alvara/MovimentacaoAlvaraFactory.model.php';
-
-      $oAlvaraMovimentacao = new Alvara($oAlvara->q123_sequencial);
-      $oMovimentacao = $oAlvaraMovimentacao->getMovimentacoes(MovimentacaoAlvara::TIPO_LIBERACAO);
-      $oDataInicial = new DateTime($oMovimentacao[0]->getDataMovimentacao());
-      $pdf1->validadealvara = $oDataInicial->modify('+ '.$oMovimentacao[0]->getValidadeAlvara().' days')->format('d/m/Y');
-
+    if(!empty($oAlvara->numeroalvara)) {
+      $pdf1->numeroalvara = $oAlvara->numeroalvara;
+    }else{
+      $pdf1->numeroalvara = "{$q02_inscr}-".substr($z01_nome,0,1)."/".db_getsession('DB_anousu');
     }
 
-  }else{
-    $pdf1->validadealvara = "31/12/".db_getsession('DB_anousu');
+    if(!empty($oAlvara->q123_sequencial)){
+
+      if($pdf1->permanente == 't'){
+        $pdf1->validadealvara = "31/12/".db_getsession('DB_anousu');
+
+      } else {
+
+        require_once 'model/issqn/alvara/Alvara.model.php';
+        require_once 'model/issqn/alvara/MovimentacaoAlvara.model.php';
+        require_once 'model/issqn/alvara/MovimentacaoAlvaraFactory.model.php';
+
+        $oAlvaraMovimentacao = new Alvara($oAlvara->q123_sequencial);
+        $oMovimentacao = $oAlvaraMovimentacao->getMovimentacoes(MovimentacaoAlvara::TIPO_LIBERACAO);
+
+        if(count($oMovimentacao) == 0){
+          db_redireciona('db_erros.php?fechar=true&db_erro=Não existem alvará liberado.');
+          exit();
+        }
+        $oDataInicial = new DateTime($oMovimentacao[0]->getDataMovimentacao());
+        $pdf1->validadealvara = $oDataInicial->modify('+ '.$oMovimentacao[0]->getValidadeAlvara().' days')->format('d/m/Y');
+
+      }
+
+    }else{
+      $pdf1->validadealvara = "31/12/".db_getsession('DB_anousu');
+    }
   }
+
+
 
   // PEGA AS ATIVIDADES SECUNDARIAS
   //die($cltabativ->sql_queryinf($q02_inscr,"","*",""," q88_inscr is null "));
