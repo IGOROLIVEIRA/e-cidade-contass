@@ -218,7 +218,22 @@ $db_botao = true;
       ?>
     </td>
   </tr>
+  <!--OC3117-->
+  <tr>
+    <td nowrap align="right">&nbsp;</td>
+    <td>
+      <?
+         if (trim(@$tipo_principal) == ""){
+              $tipo_principal = "0";
+         }
+         $x = array("a"=>"ANALÍTICO","s"=>"SINTÉTICO");
+         db_select("tipoAS",$x,true,1);
+      ?>
+    </td>
+  </tr>
+  <!--OC3117-->
 	</table>
+  <!--OC3161-->
   <fieldset style="width: 37%;">
     <table>
     <legend>PERFIS SELECIONADOS-</legend>
@@ -246,6 +261,7 @@ $db_botao = true;
     </tr>
     </table>
   </fieldset><br><br>
+  <!--OC3161-->
         <input name="relatorio" type="button" value="Relatório" onClick="js_relatorio();">
       </center>
       </form>
