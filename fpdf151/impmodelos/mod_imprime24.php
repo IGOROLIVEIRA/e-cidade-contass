@@ -59,13 +59,13 @@ if($this->permanente == 't'){
 	$this->objpdf->sety(56);
 	$this->objpdf->setfont('Arial','B',12);
 	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
-	$this->objpdf->sety(61);
+	$this->objpdf->sety(62);
 	$this->objpdf->setfont('Arial','B',12);
 	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
-  $this->objpdf->sety(70);
+  $this->objpdf->sety(67);
   $this->objpdf->setfont('Arial','B',12);
   $this->objpdf->Multicell(0,8,"Data do Documento: ".db_formatar($this->dtemissao,'d'),0,"C",0); // Data de Emissao
-	$this->objpdf->setxy(10,81);
+	$this->objpdf->setxy(10,75);
 }
 
 $this->objpdf->SetFont('Arial','',14);
