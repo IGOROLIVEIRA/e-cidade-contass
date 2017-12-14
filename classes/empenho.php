@@ -2631,7 +2631,7 @@ class empenho {
       $clempanulado->e94_motivo         = $sMotivo;
       $clempanulado->e94_empanuladotipo = $iTipoAnulacao;
       $clempanulado->e94_data           = date("Y-m-d", db_getsession("DB_datausu"));
-      $clempanulado->e94_id_usuario     = db_getsession("DB_id_usuario");//Salva o usuario da seção
+      $clempanulado->e94_id_usuario     = db_getsession("DB_id_usuario");
 
       $clempanulado->incluir(null);
       $iCodAnu = $clempanulado->e94_codanu;
