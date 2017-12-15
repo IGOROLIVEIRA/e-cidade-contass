@@ -3356,8 +3356,9 @@ class empenho {
         $oEmpAnulado->e94_saldoant       = $nValorEstornado; // carlos atualizado
         $oEmpAnulado->e94_motivo         = $sMotivo;
         $oEmpAnulado->e94_empanuladotipo = $iTipoAnulacao;
-        /*OC 4401*/
         $oEmpAnulado->e94_data           = date("Y-m-d", db_getsession("DB_datausu"));
+        /*OC 4401*/
+        $oEmpAnulado->e94_id_usuario     = db_getsession("DB_id_usuario");
         /*Fim OC 4401*/
         $oEmpAnulado->incluir(null);
         $iCodAnu                         = $oEmpAnulado->e94_codanu;
