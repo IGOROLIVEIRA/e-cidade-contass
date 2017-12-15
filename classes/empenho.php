@@ -3356,7 +3356,9 @@ class empenho {
         $oEmpAnulado->e94_saldoant       = $nValorEstornado; // carlos atualizado
         $oEmpAnulado->e94_motivo         = $sMotivo;
         $oEmpAnulado->e94_empanuladotipo = $iTipoAnulacao;
+        /*OC 4401*/
         $oEmpAnulado->e94_data           = date("Y-m-d", db_getsession("DB_datausu"));
+        /*Fim OC 4401*/
         $oEmpAnulado->incluir(null);
         $iCodAnu                         = $oEmpAnulado->e94_codanu;
         if ($oEmpAnulado->erro_status == 0) {
@@ -3631,16 +3633,20 @@ class empenho {
     $oDaoEmpempenho = db_utils::getDao("empempenho");
     $aItens         = array();
 
-    $sCampos   = "e60_numemp, e60_codemp, e60_anousu, e60_vlremp, e60_vlrliq, e60_vlranu, z01_cgccpf, e22_sequencial, ";
-    $sCampos  .= "z01_nome, e60_emiss, (round(e60_vlremp,2)-round(e60_vlranu,2)-round(e60_vlrpag,2)) as saldo,        ";
-    $sCampos  .= "exists (select 1                                                                                    ";
-    $sCampos  .= "          from matordemitem                                                                         ";
-    $sCampos  .= "               left join matordemanu on m53_codordem = m52_codordem                                 ";
-    $sCampos  .= "         where m52_numemp = e60_numemp                                                              ";
-    $sCampos  .= "           and m53_codordem is null) as temordemdecompra,                                           ";
-    $sCampos  .= "       (select ridepto||'-'||descrdepto                                                             ";
-    $sCampos  .= "          from fc_origem_empenho(e60_numemp)                                                        ";
-    $sCampos  .= "               inner join db_depart on ridepto = coddepto limit 1) as origem                        ";
+    $sCampos   = " e60_numemp, ";
+    $sCampos  .= " e60_codemp, ";
+    $sCampos  .= " e60_anousu, ";
+    $sCampos  .= " e60_vlremp, ";
+    $sCampos  .= " e60_vlrliq, ";
+    $sCampos  .= " e60_vlranu, ";
+    $sCampos  .= " z01_cgccpf, ";
+    $sCampos  .= " e22_sequencial, ";
+    $sCampos  .= " z01_nome, ";
+    $sCampos  .= " e60_emiss, ";
+    $sCampos  .= " (round(e60_vlremp,2)-round(e60_vlranu,2)-round(e60_vlrpag,2)) AS saldo, ";
+    $sCampos  .= " 'f' AS temordemdecompra, ";
+    $sCampos  .= " ( SELECT ridepto||'-'||descrdepto FROM fc_origem_empenho(e60_numemp) ";
+    $sCampos  .= "   INNER JOIN db_depart ON ridepto = coddepto LIMIT 1) AS origem ";
 
     if(isset($oFiltro->codempini) && !empty($oFiltro->codempini)) {
 
@@ -3648,27 +3654,27 @@ class empenho {
       if (isset($oFiltro->codempfim) && !empty($oFiltro->codempfim)) {
 
         $codempFim  = split("/",$oFiltro->codempfim);
-        $str = "  ( ( e60_codemp::integer >= ".$codempIni[0]." and e60_anousu = {$iAnoUso} )                          ";
-        $str .= " and ( e60_codemp::integer <= ".$codempFim[0]." and e60_anousu = {$iAnoUso} ) )                      ";
+        $str = "  ( ( e60_codemp::integer >= ".$codempIni[0]." AND e60_anousu = {$iAnoUso} )                          ";
+        $str .= " AND ( e60_codemp::integer <= ".$codempFim[0]." AND e60_anousu = {$iAnoUso} ) )                      ";
 
       } else {
 
         $codemp  = split("/",$oFiltro->codempini);
         if (count($codemp) > 1) {
-          $str = " e60_codemp = '".$codemp[0]."' and e60_anousu = ".$codemp[1]." ";
+          $str = " e60_codemp = '".$codemp[0]."' AND e60_anousu = ".$codemp[1]." ";
         } else {
-          $str = " e60_codemp = '".$oFiltro->codempini."' and e60_anousu = {$iAnoUso} ";
+          $str = " e60_codemp = '".$oFiltro->codempini."' AND e60_anousu = {$iAnoUso} ";
         }
       }
 
       $sWhere .= "{$sAnd}{$str}";
-      $sAnd    = " and ";
+      $sAnd    = " AND ";
     }
 
     if (isset($oFiltro->numcgm) && !empty($oFiltro->numcgm)) {
 
       $sWhere .= "{$sAnd} e60_numcgm = {$oFiltro->numcgm}";
-      $sAnd    = " and ";
+      $sAnd    = " AND ";
     }
 
     if (isset($oFiltro->dtemissini) && isset($oFiltro->dtemissfim)) {
@@ -3685,26 +3691,26 @@ class empenho {
 
       if (!empty($dtDataIni) && !empty($dtDataFim)) {
 
-        $sWhere .= "{$sAnd} e60_emiss between '{$dtDataIni}' and '{$dtDataFim}'";
-        $sAnd    = " and ";
+        $sWhere .= "{$sAnd} e60_emiss BETWEEN '{$dtDataIni}' AND '{$dtDataFim}'";
+        $sAnd    = " AND ";
       } else if (!empty($dtDataIni)) {
 
         $sWhere .= "{$sAnd} e60_emiss = '{$dtDataIni}'";
-        $sAnd    = " and ";
+        $sAnd    = " AND ";
       } else if (!empty($dtDataFim)) {
 
         $sWhere .= "{$sAnd} e60_emiss <= '{$dtDataFim}'";
-        $sAnd    = " and ";
+        $sAnd    = " AND ";
       }
     }
 
-    $sWhere .= " {$sAnd} e60_instit = {$iInstit}                                                                      ";
-    $sWhere .= " and (round(e60_vlremp,2)-round(e60_vlranu,2)-round(e60_vlrpag,2)) > 0                                ";
-    $sWhere .= " and not exists (select 1                                                                             ";
-    $sWhere .= "                   from matordemitem                                                                  ";
-    $sWhere .= "                        left join matordemanu on m53_codordem = m52_codordem                          ";
-    $sWhere .= "                  where m52_numemp = e60_numemp                                                       ";
-    $sWhere .= "                    and m53_codordem is null)                                                         ";
+    $sWhere .= " {$sAnd} e60_instit = {$iInstit} ";
+    $sWhere .= " AND (round(e60_vlremp,2)-round(e60_vlranu,2)-round(e60_vlrpag,2)) > 0 ";
+    $sWhere .= " AND NOT EXISTS ";
+    $sWhere .= "     (SELECT 1 FROM matordemitem ";
+    $sWhere .= "      LEFT JOIN matordemanu ON m53_codordem = m52_codordem ";
+    $sWhere .= "      WHERE m52_numemp = e60_numemp ";
+    $sWhere .= "        AND m53_codordem != NULL) ";
 
     $sSqlEmpenhos    = $oDaoEmpempenho->sql_query_liberarempenho(null,$sCampos,"e60_numemp",$sWhere);
     $rsSqlEmpEmpenho = $oDaoEmpempenho->sql_record($sSqlEmpenhos);
