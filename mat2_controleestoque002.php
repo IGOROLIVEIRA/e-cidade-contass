@@ -43,6 +43,7 @@ try {
   $oPeriodoInicial       = null;
   $lMaterialImpresso     = false;
   $iAlmoxarifadoAnterior = null;
+  $totalizador = $oGet->totalizador;
 
   if (!empty($oGet->periodoInicial)) {
     $oPeriodoInicial = new DBDate($oGet->periodoInicial);
@@ -268,6 +269,12 @@ try {
   $head6 = 'Somente itens com movimento: ' . ($somenteItensComMovimento ? 'Sim' : 'Não');
   $head7 = 'Ordem: ' . $aDescricaoOrdem[$sOrdem];
   $head8 = 'Tipo de impressão: ' . $aDescricaoTipoImpressao[$sTipoImpressao];
+  if ($totalizador == 'sim') {
+    $head9 = 'Totalizador: Sim';
+  }
+  else {
+    $head9 = 'Totalizador: Não';
+  }
 
   $oPDF = new PDF('P', 'mm', 'A4');
   $oPDF->Open();
@@ -291,6 +298,16 @@ try {
       cabecalhoConferencia(false, $oDados);
     }
   }
+
+  $nContador = count($aDadosMovimentacoes);
+  $tQuantidadeAnterior = 0;
+  $tValorAnterior      = 0;
+  $tQuantidadeEntrada  = 0;
+  $tValorEntrada       = 0;
+  $tQuantidadeSaida    = 0;
+  $tValorSaida         = 0;
+  $tValorFinal         = 0;
+  $tQuantidadeFinal    = 0;
 
   foreach ($aDadosMovimentacoes as $oMovimentacao) {
 
@@ -333,14 +350,31 @@ try {
 
     if ($tipoImpressao == 'conferencia') {
 
+      if ($totalizador == 'sim') {
+        $tQuantidadeFinal    += $nQuantidadeFinal;
+        $tValorFinal         += $nValorFinal;
+      }
+
       if ($oDados->lImprimirCabecalho) {
         cabecalhoConferencia($lQuebraPorAlmoxarifado, $oDados);
+
       }
 
       linhaConferencia($oDados);
     }
 
     if ($tipoImpressao == 'sintetico') {
+
+      if ($totalizador == 'sim') {
+        $tQuantidadeAnterior += $oMovimentacao->getQuantidadeAnterior();
+        $tValorAnterior      += $oMovimentacao->getValorAnterior();
+        $tQuantidadeEntrada  += $oMovimentacao->getQuantidadeEntrada();
+        $tValorEntrada       += $oMovimentacao->getValorEntrada();
+        $tQuantidadeSaida    += $oMovimentacao->getQuantidadeSaida();
+        $tValorSaida         += $oMovimentacao->getValorSaida();
+        $tQuantidadeFinal    += $nQuantidadeFinal;
+        $tValorFinal         += $nValorFinal;
+      }
 
       if ($oDados->lImprimirCabecalho) {
         cabecalhoSintetico($lQuebraPorAlmoxarifado, $oDados);
@@ -352,6 +386,32 @@ try {
     $lMaterialImpresso     = true;
     $iAlmoxarifadoAnterior = $oMovimentacao->getAlmoxarifado()->getCodigo();
   }
+
+  if ($totalizador == 'sim' && $tipoImpressao == 'sintetico') {
+    if (--$nContador > 0) {
+      $oPDF->setfont('arial', 'b', TAMANHO_FONTE_CABECALHO);
+      linha(36, "TOTALIZADOR:", "TRB", "L");
+      linha(8, formatar($tQuantidadeAnterior,0), "TRB", "R");
+      linha(8, formatar($tValorAnterior), "TRB", "R");
+      linha(8, formatar($tQuantidadeEntrada,0), "TRB", "R");
+      linha(8, formatar($tValorEntrada), "TRB", "R");
+      linha(8, formatar($tQuantidadeSaida,0), "TRB", "R");
+      linha(8, formatar($tValorSaida), "TRB", "R");
+      linha(8, formatar($tQuantidadeFinal,0), "TRB", "R");
+      linha(8, formatar($tValorFinal), "TB", "R");
+    }
+  }
+
+  if ($totalizador == 'sim' && $tipoImpressao == 'conferencia') {
+    if (--$nContador > 0) {
+      $oPDF->setfont('arial', 'b', TAMANHO_FONTE_CABECALHO);
+      linha(70, "TOTALIZADOR:", "TRB", "L");
+      linha(10, formatar($tQuantidadeFinal,0), "TRB", "R");
+      linha(10, "", "TRB", "R");
+      linha(10, formatar($tValorFinal), "TB", "R");
+    }
+  }
+
 
   if (!$lMaterialImpresso) {
     throw new Exception(_M('patrimonial.material.mat2_controleestoque002.nenhuma_movimentacao_encontrada'));

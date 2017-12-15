@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -63,7 +63,7 @@ $iAnoPeriodoFinal = date('Y', $iPeriodoFinal);
               &nbsp;&nbsp;
               <?php db_inputdata('periodoFinal', $iDiaPeriodoFinal, $iMesPeriodoFinal, $iAnoPeriodoFinal, true, 'text', 1); ?>
             </td>
-          </tr> 
+          </tr>
 
           <tr>
             <td><strong>Quebra por Almoxarifado:</strong></td>
@@ -96,7 +96,7 @@ $iAnoPeriodoFinal = date('Y', $iPeriodoFinal);
             </td>
           </tr>
 
-          <tr>                           
+          <tr>
             <td><strong>Tipo de Impressão:</strong></td>
             <td>
               <select id="tipoImpressao">
@@ -106,13 +106,23 @@ $iAnoPeriodoFinal = date('Y', $iPeriodoFinal);
             </td>
           </tr>
 
-          <tr>                           
+          <tr>
             <td><strong>Seleção por:</strong></td>
             <td>
               <select id="ativos">
                 <option value="t">Ativos</option>
                 <option value="f">Inativos</option>
                 <option value="i">Todos</option>
+              </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td><strong>Imprime com Totalizador:</strong></td>
+            <td>
+              <select id="totalizador">
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
               </select>
             </td>
           </tr>
@@ -176,7 +186,7 @@ function js_validarFormulario() {
   if (!empty(sPeriodoInicial) && !empty(sPeriodoFinal)) {
 
     var mPeriodoInicialInvalido = js_diferenca_datas(js_formatar(sPeriodoInicial, 'd'), js_formatar(sPeriodoFinal, 'd'), 3);
-    
+
     if (mPeriodoInicialInvalido && mPeriodoInicialInvalido != 'i') {
 
       alert('Período inicial maior que final.');
@@ -201,7 +211,7 @@ function js_imprimir() {
 
     if (iIndice > 0) {
       sAlmoxarifados += ',';
-    } 
+    }
     sAlmoxarifados += oDadosAlmoxarifado.sCodigo;
   });
 
@@ -209,7 +219,7 @@ function js_imprimir() {
 
     if (iIndice > 0) {
       sMateriais += ',';
-    } 
+    }
     sMateriais += oDadosMaterial.sCodigo;
   });
 
@@ -222,6 +232,7 @@ function js_imprimir() {
   sParametros += '&sAlmoxarifados=' + sAlmoxarifados;
   sParametros += '&sMateriais=' + sMateriais;
   sParametros += '&ativos=' + $('ativos').value;
+  sParametros += '&totalizador=' + $('totalizador').value;
 
   var janela = window.open('mat2_controleestoque002.php?' + sParametros,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   janela.moveTo(0,0);
