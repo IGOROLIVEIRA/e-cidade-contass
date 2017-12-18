@@ -314,7 +314,8 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
    */
 
   $clIssAlvara         = new cl_issalvara;
-  $sWhere              = " q123_inscr = {$q02_inscr} and date_part('year',q123_dtinclusao) = ".db_getsession('DB_anousu');
+  $sWhere              = " q123_inscr = {$q02_inscr} ";
+  $sWhere             .= " and EXISTS (select 1 from issmovalvara where q123_sequencial = q120_issalvara AND date_part('year',q120_dtmov) = ".db_getsession('DB_anousu')." order by q120_dtmov DESC limit 1) ";
   $sOrdem              = " q123_sequencial DESC limit 1 ";
   $sCampos             = " q123_numalvara||'/'||date_part('year',q123_dtinclusao) as numeroalvara, q123_sequencial, q123_dtinclusao ";
   $sSql     = $clIssAlvara->sql_query_file(null,$sCampos,$sOrdem,$sWhere);
@@ -357,6 +358,9 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
     }else{
       $pdf1->validadealvara = "31/12/".db_getsession('DB_anousu');
     }
+  } else {
+    db_redireciona('db_erros.php?fechar=true&db_erro=Não existem alvará liberado.');
+    exit();
   }
 
 
