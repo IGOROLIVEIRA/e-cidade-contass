@@ -314,11 +314,14 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
    */
 
   $clIssAlvara         = new cl_issalvara;
-  $sWhere              = " q123_inscr = {$q02_inscr} ";
-  $sWhere             .= " and EXISTS (select 1 from issmovalvara where q123_sequencial = q120_issalvara AND date_part('year',q120_dtmov) = ".db_getsession('DB_anousu')." order by q120_dtmov DESC limit 1) ";
-  $sOrdem              = " q123_sequencial DESC limit 1 ";
-  $sCampos             = " q123_numalvara||'/'||date_part('year',q123_dtinclusao) as numeroalvara, q123_sequencial, q123_dtinclusao ";
-  $sSql     = $clIssAlvara->sql_query_file(null,$sCampos,$sOrdem,$sWhere);
+  $sSql     = "SELECT q123_numalvara||'/'||date_part('year',q123_dtinclusao) AS numeroalvara,q123_dtinclusao,q120_dtmov,q120_validadealvara,
+                     q123_sequencial,
+                     q123_dtinclusao
+              FROM issalvara
+              inner join issmovalvara on q123_sequencial = q120_issalvara
+              WHERE q123_inscr = {$q02_inscr}
+                AND date_part('year',q120_dtmov) = ".db_getsession('DB_anousu')."
+              order by q120_dtmov DESC limit 1";
   $rsAlvara = $clIssAlvara->sql_record($sSql);
 
   if($clIssAlvara->numrows > 0 ) {
@@ -339,19 +342,8 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
 
       } else {
 
-        require_once 'model/issqn/alvara/Alvara.model.php';
-        require_once 'model/issqn/alvara/MovimentacaoAlvara.model.php';
-        require_once 'model/issqn/alvara/MovimentacaoAlvaraFactory.model.php';
-
-        $oAlvaraMovimentacao = new Alvara($oAlvara->q123_sequencial);
-        $oMovimentacao = $oAlvaraMovimentacao->getMovimentacoes(MovimentacaoAlvara::TIPO_LIBERACAO);
-
-        if(count($oMovimentacao) == 0){
-          db_redireciona('db_erros.php?fechar=true&db_erro=Não existem alvará liberado.');
-          exit();
-        }
-        $oDataInicial = new DateTime($oMovimentacao[0]->getDataMovimentacao());
-        $pdf1->validadealvara = $oDataInicial->modify('+ '.$oMovimentacao[0]->getValidadeAlvara().' days')->format('d/m/Y');
+        $oDataInicial = new DateTime($oAlvara->q120_dtmov);
+        $pdf1->validadealvara = $oDataInicial->modify('+ '.$oAlvara->q120_validadealvara.' days')->format('d/m/Y');
 
       }
 
