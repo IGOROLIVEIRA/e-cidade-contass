@@ -1102,8 +1102,8 @@ db_app::load("estilos.css, grid.style.css");
       $('oTxtQuantidadeDotacao').focus();
       return false;
     }
-    if ((js_round(oGridDotacoes.sum(2, false),2)+js_strToFloat(oTxtValorDotacao.getValue())) > js_strToFloat(oDadosItem.aCells[5].getValue())) {
-      alert('Valor Dotação maior que Valor Total do item!');
+    if (js_round((js_round(oGridDotacoes.sum(2, false),2)+js_strToFloat(oTxtValorDotacao.getValue())),2) > js_strToFloat(oDadosItem.aCells[5].getValue())) {
+        alert('Valor Dotação maior que Valor Total do item!');
       $('oTxtValorDotacao').focus();
       return false;
     }
