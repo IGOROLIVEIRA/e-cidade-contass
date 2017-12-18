@@ -400,7 +400,7 @@ if(isset($this->impobslanc) && $this->impobslanc == 't'){
   }
 }
 
-$this->objpdf->ln(10);
+$this->objpdf->ln(5);
 $this->objpdf->SetFont('Arial','B',14);
 $this->objpdf->cell(0,8,$this->municpref . ", ".date('d')." DE ".strtoupper(db_mes( date('m')))." DE ".date('Y') . ".",0,1,"R",0); // data
 
@@ -448,7 +448,7 @@ if ($linhasass>0){
   }
   $numrows = pg_numrows($resparag);
 
-  $linha  = $this->objpdf->getY()+10;
+  $linha  = $this->objpdf->getY()+7;
   $colpri = $coluna;
   global $db02_texto;
   for ($i = 0; $i < $numrows; $i ++){
