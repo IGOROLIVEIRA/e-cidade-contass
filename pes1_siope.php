@@ -61,7 +61,7 @@ translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119
                    when x.pd=1 and x.rh25_recurso in (119,1119) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
 '0,00' || ';' ||
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119) then -x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,118,1118) then -x.valor 
                    when x.pd=1 and x.rh25_recurso in (119,1119,118,1118) then x.valor 
                    else 0 end ),2))::varchar),'.',',') 
 
