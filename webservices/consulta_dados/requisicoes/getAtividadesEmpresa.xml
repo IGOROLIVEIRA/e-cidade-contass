@@ -4,7 +4,7 @@
     <campo campo= "q02_inscr"                                                     label="inscricao"       	   />
     <campo campo= "q03_ativ"                                               label="cod_atividade"   	   />
     <campo campo= "q136_sequencial"                                               label="cod_servico"   	   />
-    <campo campo= "(db121_estrutural||' - '||q03_descr||' - '||round(q136_valor,2)::varchar||case when q136_tipotributacao = 2 then '%' else ' R$' end)" label="atividade"/>
+    <campo campo= "(db121_estrutural||' - '||q71_estrutural||' '||q71_descr||' - '||round(q136_valor,2)::varchar||case when q136_tipotributacao = 2 then '%' else ' R$' end)" label="atividade"/>
     <campo campo= "q07_datain"                                                    label="dt_inicio"            />
     <campo campo= "q03_deducao"                                                   label="deducao"            />
     <campo campo= "q03_limite"                                                    label="dt_fim"           />
