@@ -338,6 +338,16 @@ foreach ($oDadosDebitos as $aDados) {
          $aDadosProcessado->complemento_numpre  = " - Exercício: ".$aDadosProcessado->divida_exercicios;
 
        }
+
+       $sSqlDividaObs    = $oDaoDivida->sql_query_file(null,"v01_obs", "", "v01_numpre = $aDados->k00_numpre");
+       $rsDadosDividaObs = $oDaoDivida->sql_record($sSqlDividaObs);
+
+       if(pg_num_rows($rsDadosDividaObs) > 0){
+         $sObs = db_utils::fieldsMemory($rsDadosDividaObs,0)->v01_obs;
+
+         $aDadosProcessado->complemento_numpre  .= " - Obs: ".$sObs;
+
+       }
      }
 
      $aDadosProcessado->termo = "";
@@ -684,7 +694,7 @@ $head5 = $sInfo;
 $head6 = $sInfo1;
 $head7 = "Débitos Calculados até: ".db_formatar($db_datausu,'d');
 
-$oPdf = new PDF();
+$oPdf = new PDF('L');
 $oPdf->Open();
 $oPdf->AliasNbPages();
 
@@ -782,7 +792,7 @@ foreach ($aDadosRelatorio as $aDadosOrigem) {
              $oPdf->cell( 13, 4 , $aDadosNumpre->origem                                  ,"R"   ,0, "L", 0);
              $oPdf->Cell( 30, 4 , substr(trim($aDadosNumpre->histcalc_descricao) ,0,20)  ,"R"   ,0, "L", 0);
              $oPdf->Cell( 6 , 4 , $aDadosNumpre->receita                                 ,"R"   ,0, "C", 0);
-             $oPdf->Cell( 23, 4 , substr(trim($aDadosNumpre->receita_descricao) ,0,15)   ,"R"   ,0, "L", 0);
+             $oPdf->Cell( 107, 4 , substr(trim($aDadosNumpre->receita_descricao) ,0,15)   ,"R"   ,0, "L", 0);
 
              $oPdf->SetFont('arial','',6);
              $oPdf->Cell( 15 , 4 , db_formatar($aDadosNumpre->total_historico,'f')      ,"R"   ,0, "R", 0);
@@ -1004,7 +1014,7 @@ if ( $iLinhasSuspensao > 0 ) {
 
     	$oPdf->setx(7);
     	$oPdf->SetFont('arial','B',6);
-    	$oPdf->Cell(106,5,"TOTAL DO NUMPRE ".$oSuspensao->k00_numpre,"T",0,"L",1);
+    	$oPdf->Cell(192,5,"TOTAL DO NUMPRE ".$oSuspensao->k00_numpre,"T",0,"L",1);
     	$oPdf->Cell(15 ,5,db_formatar($nTotNumprehis,'f'),1,0,"R",1);
     	$oPdf->Cell(15 ,5,db_formatar($nTotNumprecor,'f'),1,0,"R",1);
     	$oPdf->Cell(15 ,5,db_formatar($nTotNumprejur,'f'),1,0,"R",1);
@@ -1027,7 +1037,7 @@ if ( $iLinhasSuspensao > 0 ) {
 
        $oPdf->setx(7);
        $oPdf->SetFont('arial','B',6);
-       $oPdf->Cell(106,5,"TOTAL DO TIPO ".$oSuspensao->k00_tipo,"T",0,"L",1);
+       $oPdf->Cell(192,5,"TOTAL DO TIPO ".$oSuspensao->k00_tipo,"T",0,"L",1);
        $oPdf->Cell(15 ,5,db_formatar($nTotTipohis,'f'),1,0,"R",1);
        $oPdf->Cell(15 ,5,db_formatar($nTotTipocor,'f'),1,0,"R",1);
        $oPdf->Cell(15 ,5,db_formatar($nTotTipojur,'f'),1,0,"R",1);
@@ -1051,7 +1061,7 @@ if ( $iLinhasSuspensao > 0 ) {
   $oPdf->SetFont('arial','B',6);
 
   $oPdf->setx(7);
-  $oPdf->Cell(106,5,"TOTAL DO NUMPRE ".$oSuspensao->k00_numpre,"T",0,"L",1);
+  $oPdf->Cell(192,5,"TOTAL DO NUMPRE ".$oSuspensao->k00_numpre,"T",0,"L",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotNumprehis,'f'),1,0,"R",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotNumprecor,'f'),1,0,"R",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotNumprejur,'f'),1,0,"R",1);
@@ -1060,7 +1070,7 @@ if ( $iLinhasSuspensao > 0 ) {
   $oPdf->Cell(15 ,5,db_formatar($nTotNumpretot,'f'),1,1,"R",1);
 
   $oPdf->setx(7);
-  $oPdf->Cell(106,5,"TOTAL DO TIPO ".$oSuspensao->k00_tipo,"T",0,"L",1);
+  $oPdf->Cell(192,5,"TOTAL DO TIPO ".$oSuspensao->k00_tipo,"T",0,"L",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotTipohis,'f'),1,0,"R",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotTipocor,'f'),1,0,"R",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotTipojur,'f'),1,0,"R",1);
@@ -1071,7 +1081,7 @@ if ( $iLinhasSuspensao > 0 ) {
   $oPdf->Ln(3);
 
   $oPdf->setx(7);
-  $oPdf->Cell(106,5,"TOTAL GERAL :"			 ,"T",0,"L",1);
+  $oPdf->Cell(192,5,"TOTAL GERAL :"			 ,"T",0,"L",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotSusphis,'f'),1,0,"R",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotSuspcor,'f'),1,0,"R",1);
   $oPdf->Cell(15 ,5,db_formatar($nTotSuspjur,'f'),1,0,"R",1);
@@ -1131,7 +1141,7 @@ function fc_cabecalhoDebitos($oPdf) {
   $oPdf->Cell( 13 , 5 ,"ORIGEM"   ,1,0,"C",0);
   $oPdf->Cell( 30 , 5 ,"DESCRIÇÃO",1,0,"C",0);
   $oPdf->Cell( 6  , 5 ,"REC"      ,1,0,"C",0);
-  $oPdf->Cell( 23 , 5 ,"DESCRIÇÃO",1,0,"C",0);
+  $oPdf->Cell( 107 , 5 ,"DESCRIÇÃO",1,0,"C",0);
   $oPdf->Cell( 15 , 5 ,"VALOR"    ,1,0,"C",0);
   $oPdf->Cell( 15 , 5 ,"CORRIGIDO",1,0,"C",0);
   $oPdf->Cell( 15 , 5 ,"JUROS"    ,1,0,"C",0);
@@ -1144,7 +1154,7 @@ function fc_cabecalhoDebitos($oPdf) {
 
 function fc_quebraPagina($oPdf, $oDadosCgm){
 
-   if ( $oPdf->GetY() > ( $oPdf->h - 30 ) ) {
+   if ( $oPdf->GetY() > ( $oPdf->h - 34 ) ) {
      fc_dadosContribuinte($oPdf, $oDadosCgm);
      fc_cabecalhoDebitos($oPdf);
    }
@@ -1157,7 +1167,7 @@ function fc_totalTipo($oPdf, $oDadosTipo) {
   $oPdf->setx(5);
   $oPdf->SetFont('arial','B',6);
 
-  $oPdf->Cell( 108, 5 , "TOTAL DO TIPO : {$oDadosTipo->tipo} - {$oDadosTipo->tipo_descricao} {$oDadosTipo->tipo_complemento}","T",0,"L",1);
+  $oPdf->Cell( 192, 5 , "TOTAL DO TIPO : {$oDadosTipo->tipo} - {$oDadosTipo->tipo_descricao} {$oDadosTipo->tipo_complemento}","T",0,"L",1);
 
   $oPdf->Cell( 15 , 5 , db_formatar($oDadosTipo->total_historico,'f')    ,1   , 0 , "R", 1);
   $oPdf->Cell( 15 , 5 , db_formatar($oDadosTipo->total_corrigido,'f')    ,1   , 0 , "R", 1);
@@ -1186,15 +1196,23 @@ function fc_totalNumpre($oPdf, $oDadosNumpre) {
 
   $oPdf->setx(5);
   $oPdf->SetFont('Arial','B',5);
+  $sTexto_complementar = "TOTAL DO NUMPRE {$oDadosNumpre->numpre} {$oDadosNumpre->numpre_complemento}";
+  $iAlt = 5;
+  if(strlen($sTexto_complementar) > 184) {
+    $aTexto_Complemento = quebrar_texto($sTexto_complementar, 184);
+    $iAltNovo = count($aTexto_Complemento);
+    $iAlt *= $iAltNovo;
+    multiCell($oPdf, $aTexto_Complemento, 5, $iAlt,192);
+  } else {
+    $oPdf->Cell(192, 5, $sTexto_complementar, "T", 0, "L", 1);
+  }
 
-  $oPdf->Cell(108,5,"TOTAL DO NUMPRE {$oDadosNumpre->numpre} {$oDadosNumpre->numpre_complemento}","T",0,"L",1);
-
-  $oPdf->Cell( 15 , 5 , db_formatar($oDadosNumpre->total_historico,'f')  ,1   , 0 , "R", 1);
-  $oPdf->Cell( 15 , 5 , db_formatar($oDadosNumpre->total_corrigido,'f')  ,1   , 0 , "R", 1);
-  $oPdf->Cell( 15 , 5 , db_formatar($oDadosNumpre->total_juros,'f')      ,1   , 0 , "R", 1);
-  $oPdf->Cell( 15 , 5 , db_formatar($oDadosNumpre->total_multa,'f')      ,1   , 0 , "R", 1);
-  $oPdf->Cell( 15 , 5 , db_formatar($oDadosNumpre->total_desconto,'f')   ,1   , 0 , "R", 1);
-  $oPdf->Cell( 15 , 5 , db_formatar($oDadosNumpre->total_geral,'f')      ,1   , 1 , "R", 1);
+  $oPdf->Cell( 15 , $iAlt , db_formatar($oDadosNumpre->total_historico,'f')  ,1   , 0 , "R", 1);
+  $oPdf->Cell( 15 , $iAlt , db_formatar($oDadosNumpre->total_corrigido,'f')  ,1   , 0 , "R", 1);
+  $oPdf->Cell( 15 , $iAlt , db_formatar($oDadosNumpre->total_juros,'f')      ,1   , 0 , "R", 1);
+  $oPdf->Cell( 15 , $iAlt , db_formatar($oDadosNumpre->total_multa,'f')      ,1   , 0 , "R", 1);
+  $oPdf->Cell( 15 , $iAlt , db_formatar($oDadosNumpre->total_desconto,'f')   ,1   , 0 , "R", 1);
+  $oPdf->Cell( 15 , $iAlt , db_formatar($oDadosNumpre->total_geral,'f')      ,1   , 1 , "R", 1);
 
   $oPdf->SetFont('arial','',6);
 
@@ -1230,7 +1248,7 @@ function fc_totalOrigem($oPdf, $oDadosOrigem) {
   $oPdf->setx(5);
   $oPdf->SetFont('arial','B',6);
 
-  $oPdf->Cell(108 , 5 , "TOTAL DA ORIGEM {$oDadosOrigem->origem}" ,"T",0,"L",1);
+  $oPdf->Cell(192 , 5 , "TOTAL DA ORIGEM {$oDadosOrigem->origem}" ,"T",0,"L",1);
   $oPdf->Cell( 15 , 5 , db_formatar($oDadosOrigem->total_historico,'f')   ,1   , 0 , "R", 1);
   $oPdf->Cell( 15 , 5 , db_formatar($oDadosOrigem->total_corrigido,'f')   ,1   , 0 , "R", 1);
   $oPdf->Cell( 15 , 5 , db_formatar($oDadosOrigem->total_juros,'f')       ,1   , 0 , "R", 1);
@@ -1258,7 +1276,7 @@ function fc_totalGeral($oPdf, $oDadosTotal) {
   $oPdf->SetX(5);
   $oPdf->SetFont('arial','B',6);
 
-  $oPdf->Cell(108 , 5 , "TOTAL GERAL : ","T",0,"L",1);
+  $oPdf->Cell(192 , 5 , "TOTAL GERAL : ","T",0,"L",1);
   $oPdf->Cell( 15 , 5 , db_formatar($oDadosTotal->total_historico,'f')  ,1   , 0 , "R", 1);
   $oPdf->Cell( 15 , 5 , db_formatar($oDadosTotal->total_corrigido,'f')  ,1   , 0 , "R", 1);
   $oPdf->Cell( 15 , 5 , db_formatar($oDadosTotal->total_juros,'f')      ,1   , 0 , "R", 1);
@@ -1287,4 +1305,37 @@ function fc_msgOutrosDebitos($oPdf, $lOutrosTipos=false, $lOutrosDebitos=false) 
   	$oPdf->Cell(195, 5, "*** EXISTEM MAIS DÉBITOS LANÇADOS QUE NÃO FORAM LISTADOS NESTE RELATÓRIO ***", 0, 1, "L", 1);
   }
 
+}
+
+function quebrar_texto($texto,$tamanho){
+
+  $aTexto = explode(" ", $texto);
+  $string_atual = "";
+  foreach ($aTexto as $word) {
+    $string_ant = $string_atual;
+    $string_atual .= " ".$word;
+    if (strlen($string_atual) > $tamanho) {
+      $aTextoNovo[] = $string_ant;
+      $string_ant   = "";
+      $string_atual = $word;
+    }
+  }
+  $aTextoNovo[] = $string_atual;
+  return $aTextoNovo;
+
+}
+
+function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo) {
+  $pos_x = $oPdf->x;
+  $pos_y = $oPdf->y;
+  $oPdf->cell($iTamCampo, $iTam, "", 1, 0, 'L');
+  $oPdf->x = $pos_x;
+  $oPdf->y = $pos_y;
+  foreach ($aTexto as $sProcedimento) {
+    $sProcedimento=ltrim($sProcedimento);
+    $oPdf->cell($iTamCampo, $iTamFixo, $sProcedimento, 0, 1, 'L');
+    $oPdf->x=$pos_x;
+  }
+  $oPdf->x = $pos_x+$iTamCampo;
+  $oPdf->y = $pos_y;
 }
