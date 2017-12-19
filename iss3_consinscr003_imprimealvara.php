@@ -314,7 +314,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
    */
 
   $clIssAlvara         = new cl_issalvara;
-  $sSql     = "SELECT q123_numalvara||'/'||date_part('year',q123_dtinclusao) AS numeroalvara,q123_dtinclusao,q120_dtmov,q120_validadealvara,
+  $sSql     = "SELECT q123_numalvara||'/'||date_part('year',q120_dtmov) AS numeroalvara,q120_dtmov q123_dtinclusao,q120_dtmov,q120_validadealvara,
                      q123_sequencial,
                      q123_dtinclusao
               FROM issalvara
