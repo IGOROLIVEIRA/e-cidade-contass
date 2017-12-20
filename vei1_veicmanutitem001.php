@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -35,6 +35,7 @@ include("classes/db_veicmanut_classe.php");
 include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
+
 $clveicmanutitem = new cl_veicmanutitem;
 $clveicmanutitempcmater = new cl_veicmanutitempcmater;
 $clveicmanut = new cl_veicmanut;
@@ -50,9 +51,22 @@ $clveicmanutitem->ve63_quant = $ve63_quant;
 $clveicmanutitem->ve63_vlruni = $ve63_vlruni;
   */
 }
+
 if(isset($incluir)){
+    $consulta = "select * from  veicmanutitem join veicmanutitempcmater on ve64_veicmanutitem = ve63_codigo where ve63_veicmanut = '".$ve63_veicmanut."' and ve64_pcmater = '".$ve64_pcmater."' ";
+    $resultado = db_query($consulta);
+    $resultado = db_utils::getColectionByRecord($resultado);
+    if(count($resultado)>0){
+     $erro_msg = "Material já cadastrado";
+     $sqlerro = true;
+    }
   if($sqlerro==false){
     db_inicio_transacao();
+    //\d veicmanutitem
+    //select * from veicmanutitem where ve63_veicmanut = 33
+    //select * from veicmanutitempcmater where ve64_veicmanutitem = 146
+
+
     $clveicmanutitem->incluir($ve63_codigo);
     $erro_msg = $clveicmanutitem->erro_msg;
     if($clveicmanutitem->erro_status==0){
@@ -61,7 +75,7 @@ if(isset($incluir)){
     if ($sqlerro==false){
     	if (isset($ve64_pcmater)&&$ve64_pcmater){
     		$clveicmanutitempcmater->ve64_veicmanutitem=$clveicmanutitem->ve63_codigo;
-    		$clveicmanutitempcmater->incluir(null);    		
+    		$clveicmanutitempcmater->incluir(null);
     		if($clveicmanutitempcmater->erro_status==0){
     			$erro_msg = $clveicmanutitempcmater->erro_msg;
       			$sqlerro=true;
@@ -71,6 +85,13 @@ if(isset($incluir)){
     db_fim_transacao($sqlerro);
   }
 }else if(isset($alterar)){
+  $consulta = "select * from  veicmanutitem join veicmanutitempcmater on ve64_veicmanutitem = ve63_codigo where ve63_veicmanut = '".$ve63_veicmanut."' and ve64_pcmater = '".$ve64_pcmater."' and ve63_codigo <> '".$ve63_codigo."'";
+    $resultado = db_query($consulta);
+    $resultado = db_utils::getColectionByRecord($resultado);
+    if(count($resultado)>0){
+     $erro_msg = "Material já cadastrado";
+     $sqlerro = true;
+    }
   if($sqlerro==false){
     db_inicio_transacao();
     $clveicmanutitem->alterar($ve63_codigo);
@@ -79,19 +100,19 @@ if(isset($incluir)){
       $sqlerro=true;
     }
     if ($sqlerro==false){
-    	$result_mat=$clveicmanutitempcmater->sql_record($clveicmanutitempcmater->sql_query_file(null,"ve64_codigo",null,"ve64_veicmanutitem=$ve63_codigo"));    	
+    	$result_mat=$clveicmanutitempcmater->sql_record($clveicmanutitempcmater->sql_query_file(null,"ve64_codigo",null,"ve64_veicmanutitem=$ve63_codigo"));
     	if (isset($ve64_pcmater)&&$ve64_pcmater){
     		if ($clveicmanutitempcmater->numrows>0){
     			db_fieldsmemory($result_mat,0);
     			$clveicmanutitempcmater->ve64_codigo=$ve64_codigo;
-    			$clveicmanutitempcmater->alterar($ve64_codigo);    		
+    			$clveicmanutitempcmater->alterar($ve64_codigo);
     			if($clveicmanutitempcmater->erro_status==0){
     				$erro_msg = $clveicmanutitempcmater->erro_msg;
       				$sqlerro=true;
     			}
     		}else{
     			$clveicmanutitempcmater->ve64_veicmanutitem=$clveicmanutitem->ve63_codigo;
-    			$clveicmanutitempcmater->incluir(null);    		
+    			$clveicmanutitempcmater->incluir(null);
     			if($clveicmanutitempcmater->erro_status==0){
     				$erro_msg = $clveicmanutitempcmater->erro_msg;
       				$sqlerro=true;
@@ -99,22 +120,22 @@ if(isset($incluir)){
     		}
     	}else{
     		if ($clveicmanutitempcmater->numrows>0){
-    			$clveicmanutitempcmater->excluir(null,"ve64_veicmanutitem=$ve63_codigo");    		
+    			$clveicmanutitempcmater->excluir(null,"ve64_veicmanutitem=$ve63_codigo");
     			if($clveicmanutitempcmater->erro_status==0){
     				$erro_msg = $clveicmanutitempcmater->erro_msg;
       				$sqlerro=true;
     			}
     		}
-    	}    	
+    	}
     }
     db_fim_transacao($sqlerro);
   }
 }else if(isset($excluir)){
   if($sqlerro==false){
-    db_inicio_transacao();    
+    db_inicio_transacao();
     $result_mat=$clveicmanutitempcmater->sql_record($clveicmanutitempcmater->sql_query_file(null,"*",null,"ve64_veicmanutitem=$ve63_codigo"));
     if ($clveicmanutitempcmater->numrows>0){
-     	$clveicmanutitempcmater->excluir(null,"ve64_veicmanutitem=$ve63_codigo");    		
+     	$clveicmanutitempcmater->excluir(null,"ve64_veicmanutitem=$ve63_codigo");
     	if($clveicmanutitempcmater->erro_status==0){
     		$erro_msg = $clveicmanutitempcmater->erro_msg;
     		$sqlerro=true;
@@ -146,10 +167,11 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
+  //apos solicitacao da ocorrencia 4864, foi modificado o formulario, agora passando a ser o abaixo
 	include("forms/db_frmveicmanutitem.php");
 	?>
     </center>
