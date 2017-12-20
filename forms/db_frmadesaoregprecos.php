@@ -5,6 +5,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
 $clrotulo->label("z01_nome");
 $clrotulo->label("z01_nome");
+$clrotulo->label("si06_anoproc");
 ?>
 <fieldset style="width: 650px; margin-top: 0px;"><legend><b>Informações do Orgão Gerenciador</b></legend>
 <form name="form1" method="post" action="">
@@ -44,6 +45,16 @@ db_input('z01_nomeorg',40,$Iz01_nome,true,'text',3,'')
 db_input('si06_numeroprc',10,$Isi06_numeroprc,true,'text',$db_opcao,"")
 ?>
     </td>
+  </tr>
+  <tr>
+      <td nowrap title="<?=@$Tsi06_anoproc?>">
+        <?=@$Lsi06_anoproc?>
+      </td>
+      <td>
+<?
+db_input('si06_anoproc',10,$Isi06_anoproc,true,'text',$db_opcao,"")
+?>
+      </td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tsi06_modalidade?>">

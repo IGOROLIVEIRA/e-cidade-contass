@@ -18,7 +18,8 @@ class cl_adesaoregprecos {
    // cria variaveis do arquivo 
    var $si06_sequencial = 0; 
    var $si06_orgaogerenciador = 0; 
-   var $si06_modalidade = 0; 
+   var $si06_modalidade = 0;
+   var $si06_anoproc = 0;
    var $si06_numeroprc = 0; 
    var $si06_numlicitacao = 0; 
    var $si06_dataadesao_dia = null; 
@@ -91,6 +92,7 @@ class cl_adesaoregprecos {
        $this->si06_sequencial = ($this->si06_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"]:$this->si06_sequencial);
        $this->si06_orgaogerenciador = ($this->si06_orgaogerenciador == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_orgaogerenciador"]:$this->si06_orgaogerenciador);
        $this->si06_modalidade = ($this->si06_modalidade == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_modalidade"]:$this->si06_modalidade);
+       $this->si06_anoproc = ($this->si06_anoproc == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_anoproc"]:$this->si06_anoproc);
        $this->si06_numeroprc = ($this->si06_numeroprc == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_numeroprc"]:$this->si06_numeroprc);
        $this->si06_numlicitacao = ($this->si06_numlicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_numlicitacao"]:$this->si06_numlicitacao);
        if($this->si06_dataadesao == ""){
@@ -145,6 +147,7 @@ class cl_adesaoregprecos {
        $this->si06_sequencial = ($this->si06_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"]:$this->si06_sequencial);
      }
    }
+
    // funcao para inclusao
    function incluir ($si06_sequencial){ 
       $this->atualizacampos();
@@ -166,6 +169,16 @@ class cl_adesaoregprecos {
        $this->erro_status = "0";
        return false;
      }
+     if($this->si06_anoproc == null ){
+       $this->erro_sql = " Campo Ano Processo nao Informado.";
+       $this->erro_campo = "si06_anoproc";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+
      if($this->si06_numeroprc == null ){ 
        $this->erro_sql = " Campo Número do PRC nao Informado.";
        $this->erro_campo = "si06_numeroprc";
@@ -355,9 +368,10 @@ class cl_adesaoregprecos {
                                       ,si06_processocompra
                                       ,si06_processoporlote
                                       ,si06_instit
+                                      ,si06_anoproc
                        )
                 values (
-                                $this->si06_sequencial 
+                                $this->si06_sequencial
                                ,$this->si06_orgaogerenciador 
                                ,$this->si06_modalidade 
                                ,$this->si06_numeroprc 
@@ -375,6 +389,7 @@ class cl_adesaoregprecos {
                                ,$this->si06_processocompra
                                ,$this->si06_processoporlote
                                ,".db_getsession("DB_instit")."
+                               ,$this->si06_anoproc
                       )";
      $result = db_query($sql);
      if($result==false){ 
@@ -423,6 +438,8 @@ class cl_adesaoregprecos {
        $resac = db_query("insert into db_acount values($acount,2010205,2009310,'','".AddSlashes(pg_result($resaco,0,'si06_dataabertura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010205,2009311,'','".AddSlashes(pg_result($resaco,0,'si06_processocompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010205,2009312,'','".AddSlashes(pg_result($resaco,0,'si06_fornecedor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2010205,2009313,'','".AddSlashes(pg_result($resaco,0,'si06_anoproc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+
      }
      return true;
    } 
@@ -479,6 +496,19 @@ class cl_adesaoregprecos {
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si06_anoproc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si06_anoproc"])) {
+       $sql .= $virgula . " si06_anoproc = $this->si06_anoproc ";
+       $virgula = ",";
+       if (trim($this->si06_anoproc) == null) {
+         $this->erro_sql = " Campo Exercicio do Processo nao Informado.";
+         $this->erro_campo = "si06_anoproc";
+         $this->erro_banco = "";
+         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
          $this->erro_status = "0";
          return false;
        }
@@ -780,6 +810,8 @@ class cl_adesaoregprecos {
            $resac = db_query("insert into db_acount values($acount,2010205,1009311,'".AddSlashes(pg_result($resaco,$conresaco,'si06_processocompra'))."','$this->si06_processocompra',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si06_fornecedor"]) || $this->si06_fornecedor != "")
            $resac = db_query("insert into db_acount values($acount,2010205,1009312,'".AddSlashes(pg_result($resaco,$conresaco,'si06_fornecedor'))."','$this->si06_fornecedor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["si06_anoproc"]) || $this->si06_anoproc != "")
+           $resac = db_query("insert into db_acount values($acount,2010205,1009313,'".AddSlashes(pg_result($resaco,$conresaco,'si06_anoproc'))."','$this->si06_anoproc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $result = db_query($sql);
@@ -844,6 +876,8 @@ class cl_adesaoregprecos {
          $resac = db_query("insert into db_acount values($acount,2010205,1009310,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_dataabertura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010205,1009311,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_processocompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010205,1009312,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_fornecedor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2010205,1009313,'','".AddSlashes(pg_result($resaco,$iresaco,'si06_anoproc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+
        }
      }
      $sql = " delete from adesaoregprecos

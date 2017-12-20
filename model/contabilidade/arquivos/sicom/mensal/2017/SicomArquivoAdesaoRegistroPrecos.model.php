@@ -207,7 +207,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
     db_fim_transacao();
     
     $sSql = "select adesaoregprecos.*,date_part('year',si06_dataadesao) as exercicioadesao,orgaogerenciador.z01_nome as nomeorgaogerenciador,responsavel.z01_cgccpf as cpfresponsavel,
-                       infocomplementaresinstit.si09_codorgaotce as codorgao,date_part('year',si06_dataata) as exerciciolicitacao,
+                       infocomplementaresinstit.si09_codorgaotce as codorgao,si06_anoproc as exerciciolicitacao,
                 (SELECT CASE
                  WHEN o41_subunidade != 0
                  OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
