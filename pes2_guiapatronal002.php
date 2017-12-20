@@ -163,7 +163,7 @@ $patronal = 0;
 
 for($inome=0;$inome<pg_numrows($res_nome);$inome++){
     db_fieldsmemory($res_nome,$inome);
-    if($tipo == 's'){
+    if ($tipo == 's') {
 
     $sql = "
     select count(soma) as soma1,
@@ -300,43 +300,49 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
            rh02_lota,
            rh03_padrao
     ) as xx group by r01_regist
+    
+    
     ) as xxx
                      
            ";
     }else{
     $sql = "
+
     select count(soma) as soma1,
-           round(sum(base),2)                   as base1,
-           round(sum(ded),2)                    as ded1,
-           round(sum(dev),2)                    as dev1,
-           round(sum(desco),2)                  as desco1,
-           round(sum(parcela_patronal),2)       as patronal1
+           round(sum(base),2)                 as base1,
+           round(sum(ded),2)                  as ded1,
+           round(sum(dev),2)                  as dev1,
+           round(sum(desco),2)                as desco1,
+           round(sum(parcela_patronal),2)     as patronal1,
+           round(sum(campoextra),2) AS campoextra1
     from 
     (
-    select rh01_regist                         as soma,
-           sum(base)                          as base,
-           sum(ded)                           as ded,
-           sum(dev)                           as dev,
-           sum(desco)                         as desco,
-           round(sum(base)/100*$r33_ppatro,2) as parcela_patronal
+    select r01_regist                           as soma,
+           sum(base)                            as base,
+           sum(ded)                             as ded,
+           sum(dev)                             as dev,
+           sum(desco)                           as desco,
+           sum(base)/100*$r33_ppatro   as parcela_patronal,
+           sum(base)/100* ".$campoextra." AS campoextra
     from 
     (
-    select rh01_regist,
+    select 
+           rh01_regist as r01_regist,
            z01_nome,
            rh02_lota,
            rh03_padrao,
-           case when r35_rubric in ".$xrubricas." then r35_valor else 0 end as desco,
-           case when r35_rubric in ".$xdeducao."  then r35_valor else 0 end as ded ,
-           case when r35_rubric in ".$devolucao." then r35_valor else 0 end as dev ,
-           case when r35_rubric in ".$xbases."    then r35_valor else 0 end as base
-    from gerfs13 
+           sum(case when r35_rubric in ".$xrubricas." then r35_valor else 0 end) as desco,
+           sum(case when r35_rubric in ".$xdeducao." then r35_valor else 0 end) as ded ,
+           sum(case when r35_rubric in ".$devolucao." then r35_valor else 0 end) as dev ,
+           sum(case when r35_rubric in ".$xbases."    then r35_valor else 0 end) as base
+    from gerfs13
          inner join rhpessoalmov on rh02_anousu = r35_anousu 
                                 and rh02_mesusu = r35_mesusu 
                                 and rh02_regist = r35_regist
                                 and rh02_instit = r35_instit
          inner join rhlota       on r70_codigo  = rh02_lota
                                 and r70_instit  = rh02_instit
-         left  join rhlotavinc  on rh25_codigo = r70_codigo 
+                                left  join rhlotavinc  on rh25_codigo = r70_codigo 
          inner join rhregime     on rh02_codreg = rh30_codreg
                                 and rh02_instit = rh30_instit
          inner join rhpessoal    on rh01_regist = r35_regist 
@@ -351,8 +357,16 @@ for($inome=0;$inome<pg_numrows($res_nome);$inome++){
          or r35_rubric in ".$xdeducao." 
          or r35_rubric in ".$devolucao." 
          or r35_rubric in ".$xbases.")
-      and rh25_anousu = $ano      
-    ) as xx group by rh01_regist
+      and rh25_anousu = $ano       
+      group by 
+           rh01_regist,
+           z01_nome,
+           rh02_lota,
+           rh03_padrao
+
+    ) as xx group by r01_regist
+    
+    
     ) as xxx
                      
            ";
