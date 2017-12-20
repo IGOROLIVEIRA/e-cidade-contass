@@ -190,7 +190,7 @@ if (count($aParametrosEmpenho) > 0) {
     /**
      * Acrescentado por causa do sicom
      */
-    $aNfEletronica = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05',2 => 'Sim, chave de acesso municipal',3 => 'Não',4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
+    $aNfEletronica = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05',2 => 'Sim, chave de acesso municipal ou outra',3 => 'Não',4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
     db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);'");
     ?>
     </td>
@@ -2007,7 +2007,7 @@ function js_retornoVerificaNota(oAjax) {
 // Acrescentado por causa do sicom
 function js_tipoChave(iTipoNfe) {
 
-  // codições para a chave de acesso 
+  // codições para a chave de acesso
   if (iTipoNfe == 1 || iTipoNfe == 2 || iTipoNfe == 4) {
     $('e69_chaveacesso').readOnly           = false;
     $('e69_chaveacesso').style.background   = "#FFFFFF";
@@ -2017,7 +2017,7 @@ function js_tipoChave(iTipoNfe) {
     $('e69_chaveacesso').style.background  = "#DEB887";
   }
 
-  // codições para a Nf serie 
+  // codições para a Nf serie
   if (iTipoNfe == 2 || iTipoNfe == 3) {
     $('e69_nfserie').readOnly           = false;
     $('e69_nfserie').style.background   = "#FFFFFF";
@@ -2043,23 +2043,23 @@ function js_verificaChaveAcesso(iChaveAcesso) {
     return true;
   };
   var aChave = iChaveAcesso.split("");
-  var multiplicadores = [2, 3, 4, 5, 6, 7, 8, 9];  
+  var multiplicadores = [2, 3, 4, 5, 6, 7, 8, 9];
   var soma_ponderada = 0;
-  var i = 42;  
-  while (i >= 0) {    
-    for (m = 0; m < multiplicadores.length && i >= 0; m++) {      
-      soma_ponderada += aChave[i] * multiplicadores[m];     
-      i--;    
-    }  
+  var i = 42;
+  while (i >= 0) {
+    for (m = 0; m < multiplicadores.length && i >= 0; m++) {
+      soma_ponderada += aChave[i] * multiplicadores[m];
+      i--;
+    }
   }
-   
-  var resto = soma_ponderada % 11;  
+
+  var resto = soma_ponderada % 11;
   if ( (aChave[43] == (11 - resto)) || ((resto == 0 || resto == 1) && (aChave[43] == 0)) ) {
     return true;
-  } else {    
+  } else {
     alert("Chave de Acesso inválida ");
     $('e69_chaveacesso').value = '';
-    return false;  
+    return false;
   }
 
 }
