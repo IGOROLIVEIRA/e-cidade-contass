@@ -28,6 +28,10 @@ class cl_lqd102017
   var $si118_dtempenho_mes = null;
   var $si118_dtempenho_ano = null;
   var $si118_dtempenho = null;
+  var $si118_dtsentenca_dia = null;
+  var $si118_dtsentenca_mes = null;
+  var $si118_dtsentenca_ano = null;
+  var $si118_dtsentenca = null;
   var $si118_dtliquidacao_dia = null;
   var $si118_dtliquidacao_mes = null;
   var $si118_dtliquidacao_ano = null;
@@ -39,22 +43,23 @@ class cl_lqd102017
   var $si118_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si118_sequencial = int8 = sequencial 
-                 si118_tiporegistro = int8 = Tipo do  registro 
-                 si118_codreduzido = int8 = Código Identificador do registro 
-                 si118_codorgao = varchar(2) = Código do órgão 
-                 si118_codunidadesub = varchar(8) = Código da unidade 
-                 si118_tpliquidacao = int8 = Tipo de  liquidação 
-                 si118_nroempenho = int8 = Número do  empenho 
-                 si118_dtempenho = date = Data do  empenho 
-                 si118_dtliquidacao = date = Data da  Liquidação do  empenho 
-                 si118_nroliquidacao = int8 = Número da  Liquidação 
-                 si118_vlliquidado = float8 = Valor Liquidado  do empenho 
-                 si118_cpfliquidante = varchar(11) = Número do CPF 
-                 si118_mes = int8 = Mês 
-                 si118_instit = int8 = Instituição 
+                 si118_sequencial = int8 = sequencial
+                 si118_tiporegistro = int8 = Tipo do  registro
+                 si118_codreduzido = int8 = Código Identificador do registro
+                 si118_codorgao = varchar(2) = Código do órgão
+                 si118_codunidadesub = varchar(8) = Código da unidade
+                 si118_tpliquidacao = int8 = Tipo de  liquidação
+                 si118_nroempenho = int8 = Número do  empenho
+                 si118_dtempenho = date = Data do  empenho
+                 si118_dtsentenca = date = Data da  sentenca
+                 si118_dtliquidacao = date = Data da  Liquidação do  empenho
+                 si118_nroliquidacao = int8 = Número da  Liquidação
+                 si118_vlliquidado = float8 = Valor Liquidado  do empenho
+                 si118_cpfliquidante = varchar(11) = Número do CPF
+                 si118_mes = int8 = Mês
+                 si118_instit = int8 = Instituição
                  ";
-  
+
   //funcao construtor da classe
   function cl_lqd102017()
   {
@@ -62,7 +67,7 @@ class cl_lqd102017
     $this->rotulo = new rotulo("lqd102017");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -73,7 +78,7 @@ class cl_lqd102017
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -93,6 +98,14 @@ class cl_lqd102017
           $this->si118_dtempenho = $this->si118_dtempenho_ano . "-" . $this->si118_dtempenho_mes . "-" . $this->si118_dtempenho_dia;
         }
       }
+      if ($this->si118_dtsentenca == "") {
+        $this->si118_dtsentenca_dia = ($this->si118_dtsentenca_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_dia"] : $this->si118_dtsentenca_dia);
+        $this->si118_dtsentenca_mes = ($this->si118_dtsentenca_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_mes"] : $this->si118_dtsentenca_mes);
+        $this->si118_dtsentenca_ano = ($this->si118_dtsentenca_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_ano"] : $this->si118_dtsentenca_ano);
+        if ($this->si118_dtsentenca_dia != "") {
+          $this->si118_dtsentenca = $this->si118_dtsentenca_ano . "-" . $this->si118_dtsentenca_mes . "-" . $this->si118_dtsentenca_dia;
+        }
+      }
       if ($this->si118_dtliquidacao == "") {
         $this->si118_dtliquidacao_dia = ($this->si118_dtliquidacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao_dia"] : $this->si118_dtliquidacao_dia);
         $this->si118_dtliquidacao_mes = ($this->si118_dtliquidacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao_mes"] : $this->si118_dtliquidacao_mes);
@@ -110,7 +123,7 @@ class cl_lqd102017
       $this->si118_sequencial = ($this->si118_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_sequencial"] : $this->si118_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si118_sequencial)
   {
@@ -122,7 +135,7 @@ class cl_lqd102017
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si118_codreduzido == null) {
@@ -136,6 +149,9 @@ class cl_lqd102017
     }
     if ($this->si118_dtempenho == null) {
       $this->si118_dtempenho = "null";
+    }
+    if ($this->si118_dtsentenca == null) {
+      $this->si118_dtsentenca = "null";
     }
     if ($this->si118_dtliquidacao == null) {
       $this->si118_dtliquidacao = "null";
@@ -153,7 +169,7 @@ class cl_lqd102017
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si118_instit == null) {
@@ -163,7 +179,7 @@ class cl_lqd102017
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si118_sequencial == "" || $si118_sequencial == null) {
@@ -174,7 +190,7 @@ class cl_lqd102017
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si118_sequencial = pg_result($result, 0, 0);
@@ -186,7 +202,7 @@ class cl_lqd102017
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si118_sequencial = $si118_sequencial;
@@ -198,40 +214,42 @@ class cl_lqd102017
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into lqd102017(
-                                       si118_sequencial 
-                                      ,si118_tiporegistro 
-                                      ,si118_codreduzido 
-                                      ,si118_codorgao 
-                                      ,si118_codunidadesub 
-                                      ,si118_tpliquidacao 
-                                      ,si118_nroempenho 
-                                      ,si118_dtempenho 
-                                      ,si118_dtliquidacao 
-                                      ,si118_nroliquidacao 
-                                      ,si118_vlliquidado 
-                                      ,si118_cpfliquidante 
-                                      ,si118_mes 
-                                      ,si118_instit 
+                                       si118_sequencial
+                                      ,si118_tiporegistro
+                                      ,si118_codreduzido
+                                      ,si118_codorgao
+                                      ,si118_codunidadesub
+                                      ,si118_tpliquidacao
+                                      ,si118_nroempenho
+                                      ,si118_dtempenho
+                                      ,si118_dtsentenca
+                                      ,si118_dtliquidacao
+                                      ,si118_nroliquidacao
+                                      ,si118_vlliquidado
+                                      ,si118_cpfliquidante
+                                      ,si118_mes
+                                      ,si118_instit
                        )
                 values (
-                                $this->si118_sequencial 
-                               ,$this->si118_tiporegistro 
-                               ,$this->si118_codreduzido 
-                               ,'$this->si118_codorgao' 
-                               ,'$this->si118_codunidadesub' 
-                               ,$this->si118_tpliquidacao 
-                               ,$this->si118_nroempenho 
-                               ," . ($this->si118_dtempenho == "null" || $this->si118_dtempenho == "" ? "null" : "'" . $this->si118_dtempenho . "'") . " 
-                               ," . ($this->si118_dtliquidacao == "null" || $this->si118_dtliquidacao == "" ? "null" : "'" . $this->si118_dtliquidacao . "'") . " 
-                               ,$this->si118_nroliquidacao 
-                               ,$this->si118_vlliquidado 
-                               ,'$this->si118_cpfliquidante' 
-                               ,$this->si118_mes 
-                               ,$this->si118_instit 
+                                $this->si118_sequencial
+                               ,$this->si118_tiporegistro
+                               ,$this->si118_codreduzido
+                               ,'$this->si118_codorgao'
+                               ,'$this->si118_codunidadesub'
+                               ,$this->si118_tpliquidacao
+                               ,$this->si118_nroempenho
+                               ," . ($this->si118_dtempenho == "null" || $this->si118_dtempenho == "" ? "null" : "'" . $this->si118_dtempenho . "'") . "
+                               ," . ($this->si118_dtsentenca == "null" || $this->si118_dtsentenca == "" ? "null" : "'" . $this->si118_dtsentenca . "'") . "
+                               ," . ($this->si118_dtliquidacao == "null" || $this->si118_dtliquidacao == "" ? "null" : "'" . $this->si118_dtliquidacao . "'") . "
+                               ,$this->si118_nroliquidacao
+                               ,$this->si118_vlliquidado
+                               ,'$this->si118_cpfliquidante'
+                               ,$this->si118_mes
+                               ,$this->si118_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -248,7 +266,7 @@ class cl_lqd102017
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -279,10 +297,10 @@ class cl_lqd102017
       $resac = db_query("insert into db_acount values($acount,2010347,2010798,'','" . AddSlashes(pg_result($resaco, 0, 'si118_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010347,2011631,'','" . AddSlashes(pg_result($resaco, 0, 'si118_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si118_sequencial = null)
   {
@@ -306,7 +324,7 @@ class cl_lqd102017
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -348,6 +366,15 @@ class cl_lqd102017
         $virgula = ",";
       }
     }
+    if (trim($this->si118_dtsentenca) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_dia"] != "")) {
+      $sql .= $virgula . " si118_dtsentenca = '$this->si118_dtsentenca' ";
+      $virgula = ",";
+    } else {
+      if (isset($GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_dia"])) {
+        $sql .= $virgula . " si118_dtsentenca = null ";
+        $virgula = ",";
+      }
+    }
     if (trim($this->si118_dtliquidacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao_dia"] != "")) {
       $sql .= $virgula . " si118_dtliquidacao = '$this->si118_dtliquidacao' ";
       $virgula = ",";
@@ -385,7 +412,7 @@ class cl_lqd102017
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -399,7 +426,7 @@ class cl_lqd102017
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -438,6 +465,9 @@ class cl_lqd102017
         if (isset($GLOBALS["HTTP_POST_VARS"]["si118_dtempenho"]) || $this->si118_dtempenho != "") {
           $resac = db_query("insert into db_acount values($acount,2010347,2010793,'" . AddSlashes(pg_result($resaco, $conresaco, 'si118_dtempenho')) . "','$this->si118_dtempenho'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca"]) || $this->si118_dtsentenca != "") {
+          $resac = db_query("insert into db_acount values($acount,2010347,2010793,'" . AddSlashes(pg_result($resaco, $conresaco, 'si118_dtsentenca')) . "','$this->si118_dtsentenca'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        }
         if (isset($GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao"]) || $this->si118_dtliquidacao != "") {
           $resac = db_query("insert into db_acount values($acount,2010347,2010794,'" . AddSlashes(pg_result($resaco, $conresaco, 'si118_dtliquidacao')) . "','$this->si118_dtliquidacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
@@ -467,7 +497,7 @@ class cl_lqd102017
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -478,7 +508,7 @@ class cl_lqd102017
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -488,12 +518,12 @@ class cl_lqd102017
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si118_sequencial = null, $dbwhere = null)
   {
@@ -546,7 +576,7 @@ class cl_lqd102017
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -557,7 +587,7 @@ class cl_lqd102017
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -567,12 +597,12 @@ class cl_lqd102017
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -584,7 +614,7 @@ class cl_lqd102017
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -594,13 +624,13 @@ class cl_lqd102017
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si118_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -636,10 +666,10 @@ class cl_lqd102017
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si118_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -675,7 +705,7 @@ class cl_lqd102017
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

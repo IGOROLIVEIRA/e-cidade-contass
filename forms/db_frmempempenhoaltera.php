@@ -39,6 +39,7 @@ $clrotulo->label("c58_descr");
 $clrotulo->label("e60_convenio");
 $clrotulo->label("e60_numconvenio");
 $clrotulo->label("e60_dataconvenio");
+$clrotulo->label("e60_datasentenca");
 
 ?>
 <form name="form1" method="post" action="">
@@ -353,13 +354,23 @@ $clrotulo->label("e60_dataconvenio");
 	    </td>
 	  </tr>
 
+    <tr>
+      <td nowrap title="<?=@$Te60_dataconvenio?>">
+        <?=@$Le60_dataconvenio?>
+      </td>
+      <td>
+        <?
+          db_inputData('e60_dataconvenio',@$e60_dataconvenio_dia, @$e60_dataconvenio_mes,@$e60_dataconvenio_ano, true, 'text', $db_opcao);
+        ?>
+      </td>
+    </tr>
 	  <tr>
-	    <td nowrap title="<?=@$Te60_dataconvenio?>">
-	      <?=@$Le60_dataconvenio?>
+	    <td nowrap title="<?=@$Te60_datasentenca?>">
+	      <?=@$Le60_datasentenca?>
 	    </td>
 	    <td>
 				<?
-				  db_inputData('e60_dataconvenio',@$e60_dataconvenio_dia, @$e60_dataconvenio_mes,@$e60_dataconvenio_ano, true, 'text', $db_opcao);
+				  db_inputData('e60_datasentenca',@$e60_datasentenca_dia, @$e60_datasentenca_mes,@$e60_datasentenca_ano, true, 'text', $db_opcao);
 				?>
 	    </td>
 	  </tr>

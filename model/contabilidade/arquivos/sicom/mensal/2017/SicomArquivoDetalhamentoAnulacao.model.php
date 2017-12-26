@@ -99,11 +99,11 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
 
     $sSql = "SELECT e50_data,
-                   case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else 
+                   case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
                    (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) end as codreduzido,
                    case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
-                   (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao, 
-                   c80_data, orctiporec.o15_codtri,e60_codemp, e60_emiss,  e60_anousu,e60_numemp,
+                   (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao,
+                   c80_data, orctiporec.o15_codtri,e60_codemp, e60_emiss,  e60_anousu,e60_numemp,e60_datasentenca,
                   lpad((CASE WHEN o40_codtri = '0'
          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
            OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade,o41_subunidade, e60_codcom, sum(c70_valor) as c70_valor, c70_data, c53_tipo, c70_data,si09_codorgaotce
@@ -242,6 +242,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamento->si121_codunidadesub = $sCodUnidade;
         $oDadosDetalhamento->si121_nroempenho = substr($oDetalhamento->e60_codemp, 0, 22);
         $oDadosDetalhamento->si121_dtempenho = $oDetalhamento->e60_emiss;
+        $oDadosDetalhamento->si121_dtsentenca = $oDetalhamento->e60_datasentenca;
         $oDadosDetalhamento->si121_dtliquidacao = $oDetalhamento->e50_data;
         $oDadosDetalhamento->si121_nroliquidacao = substr($oDetalhamento->nroliquidacao, 0, 19);
         $oDadosDetalhamento->si121_dtanulacaoliq = $oDetalhamento->c70_data;
@@ -285,6 +286,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       $oDados10->si121_codunidadesub = $oDadosAgrupados->si121_codunidadesub;
       $oDados10->si121_nroempenho = $oDadosAgrupados->si121_nroempenho;
       $oDados10->si121_dtempenho = $oDadosAgrupados->si121_dtempenho;
+      $oDados10->si121_dtsentenca = $oDadosAgrupados->si121_dtsentenca;
       $oDados10->si121_dtliquidacao = $oDadosAgrupados->si121_dtliquidacao;
       $oDados10->si121_nroliquidacao = $oDadosAgrupados->si121_nroliquidacao;
       $oDados10->si121_dtanulacaoliq = $oDadosAgrupados->si121_dtanulacaoliq;
@@ -323,6 +325,23 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
         $oDados12->si123_mescompetencia = 12;
         $oDados12->si123_exerciciocompetencia = db_getsession("DB_anousu") - 1;
+        $oDados12->si123_vlanuladodspexerant = $oDados10->si121_vlanulado;
+        $oDados12->si123_mes = $oDados10->si121_mes;
+        $oDados12->si123_instit = db_getsession("DB_instit");
+        $oDados12->incluir(null);
+        if ($oDados12->erro_status == 0) {
+          throw new Exception($oDados12->erro_msg);
+        }
+
+      }
+      if (substr($oDadosAgrupados->o56_elemento, 0, 7) == '3319091') {
+
+        $oDados12 = new cl_alq122017();
+        $oDados12->si123_tiporegistro = 12;
+        $oDados12->si123_reg10 = $oDados10->si121_sequencial;
+        $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
+        $oDados12->si123_mescompetencia = substr($oDados10->si121_dtsentenca, 5, 2);
+        $oDados12->si123_exerciciocompetencia = substr($oDados10->si121_dtsentenca, 0, 4);
         $oDados12->si123_vlanuladodspexerant = $oDados10->si121_vlanulado;
         $oDados12->si123_mes = $oDados10->si121_mes;
         $oDados12->si123_instit = db_getsession("DB_instit");

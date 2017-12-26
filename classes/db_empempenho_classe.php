@@ -73,6 +73,9 @@ class cl_empempenho {
     var $e60_convenio = null;
     var $e60_numconvenio = null;
     var $e60_dataconvenio = null;
+    /*OC4604 - LQD*/
+    var $e60_datasentenca = null;
+    /*FIM OC4604 - LQD*/
     /*OC4401*/
     var $e60_id_usuario = null;
     /*FIM - OC4401*/
@@ -103,6 +106,7 @@ class cl_empempenho {
                  e60_convenio = int8 = Convênio
                  e60_numconvenio = int8 = Número Convênio
                  e60_dataconvenio = date = Data Convênio
+                 e60_datasentenca = date = Data Senteça Judicial
                  e60_id_usuario = int4 = Número
                  ";
     //funcao construtor da classe
@@ -167,6 +171,14 @@ class cl_empempenho {
                 $this->e60_dataconvenio_ano = ($this->e60_dataconvenio_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_ano"]:$this->e60_dataconvenio_ano);
                 if($this->e60_dataconvenio_dia != ""){
                     $this->e60_dataconvenio = $this->e60_dataconvenio_ano."-".$this->e60_dataconvenio_mes."-".$this->e60_dataconvenio_dia;
+                }
+            }
+            if($this->e60_datasentenca == ""){
+                $this->e60_datasentenca_dia = ($this->e60_datasentenca_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"]:$this->e60_datasentenca_dia);
+                $this->e60_datasentenca_mes = ($this->e60_datasentenca_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_mes"]:$this->e60_datasentenca_mes);
+                $this->e60_datasentenca_ano = ($this->e60_datasentenca_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_ano"]:$this->e60_datasentenca_ano);
+                if($this->e60_datasentenca_dia != ""){
+                    $this->e60_datasentenca = $this->e60_datasentenca_ano."-".$this->e60_datasentenca_mes."-".$this->e60_datasentenca_dia;
                 }
             }
         }else{
@@ -401,6 +413,7 @@ class cl_empempenho {
                                       ,e60_convenio
                                       ,e60_numconvenio
                                       ,e60_dataconvenio
+                                      ,e60_datasentenca
                                       ,e60_id_usuario
                        )
                 values (
@@ -429,6 +442,7 @@ class cl_empempenho {
                                ,".($this->e60_convenio == ""? "2" : $this->e60_convenio)."
                                ,".($this->e60_numconvenio == ""? "null" : $this->e60_numconvenio)."
                                ,".($this->e60_dataconvenio == "null" || $this->e60_dataconvenio == ""?"null":"'".$this->e60_dataconvenio."'")."
+                               ,".($this->e60_datasentenca == "null" || $this->e60_datasentenca == ""?"null":"'".$this->e60_datasentenca."'")."
                                ,$this->e60_id_usuario
                       )";
         $result = db_query($sql);
@@ -796,6 +810,17 @@ class cl_empempenho {
                     $this->erro_status = "0";
                     return false;
                 }
+            }
+        }
+        if(trim($this->e60_datasentenca)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"] !="") ){
+            $sql  .= $virgula." e60_datasentenca = '$this->e60_datasentenca' ";
+            $virgula = ",";
+
+        }else{
+            if(isset($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"])){
+                $sql  .= $virgula." e60_datasentenca = null ";
+                $virgula = ",";
+
             }
         }
         $sql .= " where ";

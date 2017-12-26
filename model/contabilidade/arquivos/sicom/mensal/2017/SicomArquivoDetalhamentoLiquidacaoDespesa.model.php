@@ -14,30 +14,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarLQD.
  */
 class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 169;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'LQD';
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -47,48 +47,48 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos()
   {
-    
-    
+
+
   }
-  
+
   /**
    * selecionar os dados dos empenhos do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
   {
-    
+
     $cllqd10 = new cl_lqd102017();
     $cllqd11 = new cl_lqd112017();
     $cllqd12 = new cl_lqd122017();
-    
-    $sSqlUnidade = "select * from infocomplementares where 
+
+    $sSqlUnidade = "select * from infocomplementares where
   	si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
-    
+
     $rsResultUnidade = db_query($sSqlUnidade);
     $sTipoLiquidante = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tipoliquidante;
-    
-    
-    $sSqlUnidade = "select * from infocomplementares where 
+
+
+    $sSqlUnidade = "select * from infocomplementares where
   	 si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
-    
+
     $rsResultUnidade = db_query($sSqlUnidade);
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
-    
+
     $sSql = "SELECT  e50_id_usuario,(rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) as codreduzido,
     (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) as nroliquidacao,
     e50_codord, e50_DATA, e60_anousu,e60_numemp,
 			           e60_codemp, e60_emiss, lpad((CASE WHEN o40_codtri = '0'
          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
-           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade, z01_nome, 
-				   z01_cgccpf, e53_valor,e53_vlranu,  o15_codtri,  si09_codorgaotce, 
-				   o41_subunidade AS subunidade,o56_elemento,o40_orgao,o41_unidade
+           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade, z01_nome,
+				   z01_cgccpf, e53_valor,e53_vlranu,  o15_codtri,  si09_codorgaotce,
+				   o41_subunidade AS subunidade,o56_elemento,o40_orgao,o41_unidade,e60_datasentenca
 			     FROM pagordem
 			     JOIN empempenho ON e50_numemp = e60_numemp
 			     JOIN orcdotacao ON e60_coddot = o58_coddot AND o58_anousu = e60_anousu
@@ -100,21 +100,21 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
 			     JOIN pagordemnota ON e71_codord = e50_codord
 			     JOIN orctiporec ON o58_codigo = o15_codigo
 			LEFT JOIN infocomplementaresinstit ON o58_instit = si09_instit
-          where e50_data >= '" . $this->sDataInicial . "' and e50_data <= '" . $this->sDataFinal . "' 
+          where e50_data >= '" . $this->sDataInicial . "' and e50_data <= '" . $this->sDataFinal . "'
           and o58_anousu = e60_anousu and e60_instit = " . db_getsession("DB_instit");
-    
+
     $rsLiquidacao = db_query($sSql);
     //echo $sSql;
     //db_criatabela($rsLiquidacao);
-    
-    
+
+
     /*
      * SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
      */
     db_inicio_transacao();
     $result = $cllqd10->sql_record($cllqd10->sql_query(null, "*", null, "si118_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si118_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      
+
       $cllqd11->excluir(null, "si119_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si119_instit = " . db_getsession("DB_instit"));
       $cllqd12->excluir(null, "si120_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si120_instit = " . db_getsession("DB_instit"));
       $cllqd10->excluir(null, "si118_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si118_instit = " . db_getsession("DB_instit"));
@@ -122,21 +122,21 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         throw new Exception($cllqd10->erro_msg);
       }
     }
-    
+
     /**
      * salavando os dados novamente nas tabelas
      */
     $aDadosAgrupados = array();
     for ($iCont = 0; $iCont < pg_num_rows($rsLiquidacao); $iCont++) {
-      
+
       $oLiquidacao = db_utils::fieldsMemory($rsLiquidacao, $iCont);
       $sHash = substr($oLiquidacao->codreduzido, 0, 15);
-      
+
       if (!isset($aDadosAgrupados[$sHash])) {
-        
+
         if ($sTipoLiquidante == '2') {
           $sSql = "select z01_nome,substr(z01_cgccpf,1,11) as z01_cgccpf from db_usuarios usu join db_usuacgm usucgm on usu.id_usuario = usucgm.id_usuario
-                   join cgm on usucgm.cgmlogin = cgm.z01_numcgm 
+                   join cgm on usucgm.cgmlogin = cgm.z01_numcgm
                    join db_userinst usuinst on usu.id_usuario = usuinst.id_usuario
                    where usu.id_usuario = {$oLiquidacao->e50_id_usuario} and usuinst.id_instit = " . db_getsession("DB_instit");
         } else {
@@ -147,31 +147,31 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         }
         $rsLiquidante = db_query($sSql);
         $oLiquidante = db_utils::fieldsMemory($rsLiquidante, 0);
-        
+
         if ($oLiquidacao->e60_anousu == db_getsession("DB_anousu")) {
           $stpLiquidacao = 1;
         } else {
           $stpLiquidacao = 2;
         }
-        
+
         if ($sTrataCodUnidade == "2") {
-          
+
           $sCodUnidade = str_pad($oLiquidacao->o58_orgao, 3, "0", STR_PAD_LEFT);
           $sCodUnidade .= str_pad($oLiquidacao->o58_unidade, 2, "0", STR_PAD_LEFT);
-          
+
         } else {
-          
+
           $sCodUnidade = str_pad($oLiquidacao->o58_orgao, 2, "0", STR_PAD_LEFT);
           $sCodUnidade .= str_pad($oLiquidacao->o58_unidade, 3, "0", STR_PAD_LEFT);
-          
+
         }
-        
+
         if ($oLiquidacao->subunidade != '' && $oLiquidacao->subunidade != 0) {
           $sCodUnidade .= str_pad($oLiquidacao->subunidade, 3, "0", STR_PAD_LEFT);
         }
-        
+
         $oDadosLiquidacao = new stdClass();
-        
+
         /*
          * Verifica se o empenho existe na tabela dotacaorpsicom
          * Caso exista, busca os dados da dotação.
@@ -193,40 +193,41 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         $oDadosLiquidacao->si118_nroempenho = substr($oLiquidacao->e60_codemp, 0, 22);
         $oDadosLiquidacao->si118_dtempenho = $oLiquidacao->e60_emiss;
         $oDadosLiquidacao->si118_dtliquidacao = $oLiquidacao->e50_data;
+        $oDadosLiquidacao->si118_dtsentenca = $oLiquidacao->e60_datasentenca;
         $oDadosLiquidacao->si118_nroliquidacao = substr($oLiquidacao->nroliquidacao, 0, 19);
         $oDadosLiquidacao->si118_vlliquidado = $oLiquidacao->e53_valor;
         $oDadosLiquidacao->si118_cpfliquidante = str_pad($oLiquidante->z01_cgccpf, 11, "0", STR_PAD_LEFT);
         $oDadosLiquidacao->si118_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oDadosLiquidacao->o56_elemento = $oLiquidacao->o56_elemento;
         $oDadosLiquidacao->Reg11 = array();
-        
-        
+
+
         $aDadosAgrupados[$sHash] = $oDadosLiquidacao;
-        
+
         /**
          * registro 11
          */
-        
+
         $oDadosLiquidacaoFonte = new stdClass();
-        
+
         $oDadosLiquidacaoFonte->si119_tiporegistro = '11';
         $oDadosLiquidacaoFonte->si119_codreduzido = substr($oLiquidacao->codreduzido, 0, 15);
         $oDadosLiquidacaoFonte->si119_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : substr($oLiquidacao->o15_codtri, 0, 3);
         $oDadosLiquidacaoFonte->si119_valorfonte = $oLiquidacao->e53_valor;
         $oDadosLiquidacaoFonte->si119_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        
+
         $aDadosAgrupados[$sHash]->Reg11[$sHash] = $oDadosLiquidacaoFonte;
-        
+
       } else {
-        
+
         $aDadosAgrupados[$sHash]->si118_vlliquidado += $oLiquidacao->e53_valor;
         $aDadosAgrupados[$sHash]->Reg11[$sHash]->si119_valorfonte += $oLiquidacao->e53_valor;
-        
+
       }
-      
+
     }
     foreach ($aDadosAgrupados as $oDados10) {
-      
+
       $cllqd10 = new cl_lqd102017();
       $cllqd10->si118_tiporegistro = $oDados10->si118_tiporegistro;
       $cllqd10->si118_codreduzido = $oDados10->si118_codreduzido;
@@ -235,22 +236,23 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
       $cllqd10->si118_tpliquidacao = $oDados10->si118_tpliquidacao;
       $cllqd10->si118_nroempenho = $oDados10->si118_nroempenho;
       $cllqd10->si118_dtempenho = $oDados10->si118_dtempenho;
+      $cllqd10->si118_dtsentenca = $oDados10->si118_dtsentenca;
       $cllqd10->si118_dtliquidacao = $oDados10->si118_dtliquidacao;
       $cllqd10->si118_nroliquidacao = $oDados10->si118_nroliquidacao;
       $cllqd10->si118_vlliquidado = $oDados10->si118_vlliquidado;
       $cllqd10->si118_cpfliquidante = $oDados10->si118_cpfliquidante;
       $cllqd10->si118_mes = $oDados10->si118_mes;
       $cllqd10->si118_instit = db_getsession("DB_instit");
-      
+
       $cllqd10->incluir(null);
       if ($cllqd10->erro_status == 0) {
         //echo "<pre>";print_r($cllqd10);
         throw new Exception($cllqd10->erro_msg);
       }
       foreach ($oDados10->Reg11 as $oDados11) {
-        
+
         $cllqd11 = new cl_lqd112017();
-        
+
         $cllqd11->si119_tiporegistro = $oDados11->si119_tiporegistro;
         $cllqd11->si119_codreduzido = $oDados11->si119_codreduzido;
         $cllqd11->si119_codfontrecursos = $oDados11->si119_codfontrecursos;
@@ -258,15 +260,15 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         $cllqd11->si119_mes = $oDados11->si119_mes;
         $cllqd11->si119_reg10 = $cllqd10->si118_sequencial;
         $cllqd11->si119_instit = db_getsession("DB_instit");
-        
+
         $cllqd11->incluir(null);
         if ($cllqd11->erro_status == 0) {
           throw new Exception($cllqd11->erro_msg);
         }
-        
+
       }
       if (substr($oDados10->o56_elemento, 0, 7) == '3319092') {
-        
+
         $cllqd12 = new cl_lqd122017();
         $cllqd12->si120_tiporegistro = 12;
         $cllqd12->si120_reg10 = $cllqd10->si118_sequencial;
@@ -280,20 +282,37 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         if ($cllqd12->erro_status == 0) {
           throw new Exception($cllqd12->erro_msg);
         }
-        
+
       }
-      
-      
+      if (substr($oDados10->o56_elemento, 0, 7) == '3319091') {
+
+        $cllqd12 = new cl_lqd122017();
+        $cllqd12->si120_tiporegistro = 12;
+        $cllqd12->si120_reg10 = $cllqd10->si118_sequencial;
+        $cllqd12->si120_codreduzido = $oDados10->si118_codreduzido;
+        $cllqd12->si120_mescompetencia = substr($oDados10->si118_dtsentenca, 5, 2);
+        $cllqd12->si120_exerciciocompetencia = substr($oDados10->si118_dtsentenca, 0, 4);
+        $cllqd12->si120_vldspexerant = $oDados10->si118_vlliquidado;
+        $cllqd12->si120_mes = $oDados10->si118_mes;
+        $cllqd12->si120_instit = db_getsession("DB_instit");
+        $cllqd12->incluir(null);
+        if ($cllqd12->erro_status == 0) {
+          throw new Exception($cllqd12->erro_msg);
+        }
+
+      }
+
+
     }
-    
+
     db_fim_transacao();
-    
+
     $oGerarLQD = new GerarLQD();
     $oGerarLQD->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarLQD->gerarDados();
-    
-    
+
+
   }
-  
-  
+
+
 }
