@@ -462,6 +462,7 @@
     function js_apaga_linha(e, num){
       item = [];
       document.form1.ve62_valor.value = parseFloat(document.form1.ve62_valor.value - (itens[num].ve63_vlruni * itens[num].ve63_quant)).toFixed(2);
+      cell7-= (itens[num].ve63_vlruni * itens[num].ve63_quant).toFixed(2);
       e.parentNode.parentNode.parentNode.removeChild(e.parentNode.parentNode);
       for(i = 0; i < itens.length; i++){
         if(i!=num){
