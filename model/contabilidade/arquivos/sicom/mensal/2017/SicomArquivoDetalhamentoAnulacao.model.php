@@ -286,7 +286,6 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       $oDados10->si121_codunidadesub = $oDadosAgrupados->si121_codunidadesub;
       $oDados10->si121_nroempenho = $oDadosAgrupados->si121_nroempenho;
       $oDados10->si121_dtempenho = $oDadosAgrupados->si121_dtempenho;
-      $oDados10->si121_dtsentenca = $oDadosAgrupados->si121_dtsentenca;
       $oDados10->si121_dtliquidacao = $oDadosAgrupados->si121_dtliquidacao;
       $oDados10->si121_nroliquidacao = $oDadosAgrupados->si121_nroliquidacao;
       $oDados10->si121_dtanulacaoliq = $oDadosAgrupados->si121_dtanulacaoliq;
@@ -340,8 +339,8 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDados12->si123_tiporegistro = 12;
         $oDados12->si123_reg10 = $oDados10->si121_sequencial;
         $oDados12->si123_codreduzido = $oDados10->si121_codreduzido;
-        $oDados12->si123_mescompetencia = substr($oDados10->si121_dtsentenca, 5, 2);
-        $oDados12->si123_exerciciocompetencia = substr($oDados10->si121_dtsentenca, 0, 4);
+        $oDados12->si123_mescompetencia = substr($oDadosAgrupados->si121_dtsentenca, 5, 2);
+        $oDados12->si123_exerciciocompetencia = substr($oDadosAgrupados->si121_dtsentenca, 0, 4);
         $oDados12->si123_vlanuladodspexerant = $oDados10->si121_vlanulado;
         $oDados12->si123_mes = $oDados10->si121_mes;
         $oDados12->si123_instit = db_getsession("DB_instit");

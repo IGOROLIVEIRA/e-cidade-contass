@@ -236,7 +236,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
       $cllqd10->si118_tpliquidacao = $oDados10->si118_tpliquidacao;
       $cllqd10->si118_nroempenho = $oDados10->si118_nroempenho;
       $cllqd10->si118_dtempenho = $oDados10->si118_dtempenho;
-      $cllqd10->si118_dtsentenca = $oDados10->si118_dtsentenca;
+      //$cllqd10->si118_dtsentenca = $oDados10->si118_dtsentenca;
       $cllqd10->si118_dtliquidacao = $oDados10->si118_dtliquidacao;
       $cllqd10->si118_nroliquidacao = $oDados10->si118_nroliquidacao;
       $cllqd10->si118_vlliquidado = $oDados10->si118_vlliquidado;

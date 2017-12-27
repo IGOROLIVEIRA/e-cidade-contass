@@ -28,10 +28,6 @@ class cl_lqd102017
   var $si118_dtempenho_mes = null;
   var $si118_dtempenho_ano = null;
   var $si118_dtempenho = null;
-  var $si118_dtsentenca_dia = null;
-  var $si118_dtsentenca_mes = null;
-  var $si118_dtsentenca_ano = null;
-  var $si118_dtsentenca = null;
   var $si118_dtliquidacao_dia = null;
   var $si118_dtliquidacao_mes = null;
   var $si118_dtliquidacao_ano = null;
@@ -51,7 +47,6 @@ class cl_lqd102017
                  si118_tpliquidacao = int8 = Tipo de  liquidação
                  si118_nroempenho = int8 = Número do  empenho
                  si118_dtempenho = date = Data do  empenho
-                 si118_dtsentenca = date = Data da  sentenca
                  si118_dtliquidacao = date = Data da  Liquidação do  empenho
                  si118_nroliquidacao = int8 = Número da  Liquidação
                  si118_vlliquidado = float8 = Valor Liquidado  do empenho
@@ -98,14 +93,6 @@ class cl_lqd102017
           $this->si118_dtempenho = $this->si118_dtempenho_ano . "-" . $this->si118_dtempenho_mes . "-" . $this->si118_dtempenho_dia;
         }
       }
-      if ($this->si118_dtsentenca == "") {
-        $this->si118_dtsentenca_dia = ($this->si118_dtsentenca_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_dia"] : $this->si118_dtsentenca_dia);
-        $this->si118_dtsentenca_mes = ($this->si118_dtsentenca_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_mes"] : $this->si118_dtsentenca_mes);
-        $this->si118_dtsentenca_ano = ($this->si118_dtsentenca_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_ano"] : $this->si118_dtsentenca_ano);
-        if ($this->si118_dtsentenca_dia != "") {
-          $this->si118_dtsentenca = $this->si118_dtsentenca_ano . "-" . $this->si118_dtsentenca_mes . "-" . $this->si118_dtsentenca_dia;
-        }
-      }
       if ($this->si118_dtliquidacao == "") {
         $this->si118_dtliquidacao_dia = ($this->si118_dtliquidacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao_dia"] : $this->si118_dtliquidacao_dia);
         $this->si118_dtliquidacao_mes = ($this->si118_dtliquidacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao_mes"] : $this->si118_dtliquidacao_mes);
@@ -149,9 +136,6 @@ class cl_lqd102017
     }
     if ($this->si118_dtempenho == null) {
       $this->si118_dtempenho = "null";
-    }
-    if ($this->si118_dtsentenca == null) {
-      $this->si118_dtsentenca = "null";
     }
     if ($this->si118_dtliquidacao == null) {
       $this->si118_dtliquidacao = "null";
@@ -226,7 +210,6 @@ class cl_lqd102017
                                       ,si118_tpliquidacao
                                       ,si118_nroempenho
                                       ,si118_dtempenho
-                                      ,si118_dtsentenca
                                       ,si118_dtliquidacao
                                       ,si118_nroliquidacao
                                       ,si118_vlliquidado
@@ -243,7 +226,6 @@ class cl_lqd102017
                                ,$this->si118_tpliquidacao
                                ,$this->si118_nroempenho
                                ," . ($this->si118_dtempenho == "null" || $this->si118_dtempenho == "" ? "null" : "'" . $this->si118_dtempenho . "'") . "
-                               ," . ($this->si118_dtsentenca == "null" || $this->si118_dtsentenca == "" ? "null" : "'" . $this->si118_dtsentenca . "'") . "
                                ," . ($this->si118_dtliquidacao == "null" || $this->si118_dtliquidacao == "" ? "null" : "'" . $this->si118_dtliquidacao . "'") . "
                                ,$this->si118_nroliquidacao
                                ,$this->si118_vlliquidado
@@ -366,15 +348,6 @@ class cl_lqd102017
         $virgula = ",";
       }
     }
-    if (trim($this->si118_dtsentenca) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_dia"] != "")) {
-      $sql .= $virgula . " si118_dtsentenca = '$this->si118_dtsentenca' ";
-      $virgula = ",";
-    } else {
-      if (isset($GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca_dia"])) {
-        $sql .= $virgula . " si118_dtsentenca = null ";
-        $virgula = ",";
-      }
-    }
     if (trim($this->si118_dtliquidacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao_dia"] != "")) {
       $sql .= $virgula . " si118_dtliquidacao = '$this->si118_dtliquidacao' ";
       $virgula = ",";
@@ -464,9 +437,6 @@ class cl_lqd102017
         }
         if (isset($GLOBALS["HTTP_POST_VARS"]["si118_dtempenho"]) || $this->si118_dtempenho != "") {
           $resac = db_query("insert into db_acount values($acount,2010347,2010793,'" . AddSlashes(pg_result($resaco, $conresaco, 'si118_dtempenho')) . "','$this->si118_dtempenho'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si118_dtsentenca"]) || $this->si118_dtsentenca != "") {
-          $resac = db_query("insert into db_acount values($acount,2010347,2010793,'" . AddSlashes(pg_result($resaco, $conresaco, 'si118_dtsentenca')) . "','$this->si118_dtsentenca'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
         if (isset($GLOBALS["HTTP_POST_VARS"]["si118_dtliquidacao"]) || $this->si118_dtliquidacao != "") {
           $resac = db_query("insert into db_acount values($acount,2010347,2010794,'" . AddSlashes(pg_result($resaco, $conresaco, 'si118_dtliquidacao')) . "','$this->si118_dtliquidacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");

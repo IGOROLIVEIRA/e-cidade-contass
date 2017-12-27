@@ -27,10 +27,6 @@ class cl_alq102017
   var $si121_dtempenho_mes = null;
   var $si121_dtempenho_ano = null;
   var $si121_dtempenho = null;
-  var $si121_dtsentenca_dia = null;
-  var $si121_dtsentenca_mes = null;
-  var $si121_dtsentenca_ano = null;
-  var $si121_dtsentenca = null;
   var $si121_dtliquidacao_dia = null;
   var $si121_dtliquidacao_mes = null;
   var $si121_dtliquidacao_ano = null;
@@ -55,7 +51,6 @@ class cl_alq102017
                  si121_codunidadesub = varchar(8) = Código da unidade
                  si121_nroempenho = int8 = Número do  empenho
                  si121_dtempenho = date = Data do empenho
-                 si121_dtsentenca = date = Data do sentenca
                  si121_dtliquidacao = date = Data da  liquidação
                  si121_nroliquidacao = int8 = Número da  Liquidação
                  si121_dtanulacaoliq = date = Data da anulação  da liquidação
@@ -102,14 +97,6 @@ class cl_alq102017
         $this->si121_dtempenho_ano = ($this->si121_dtempenho_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si121_dtempenho_ano"] : $this->si121_dtempenho_ano);
         if ($this->si121_dtempenho_dia != "") {
           $this->si121_dtempenho = $this->si121_dtempenho_ano . "-" . $this->si121_dtempenho_mes . "-" . $this->si121_dtempenho_dia;
-        }
-      }
-      if ($this->si121_dtsentenca == "") {
-        $this->si121_dtsentenca_dia = ($this->si121_dtsentenca_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si121_dtsentenca_dia"] : $this->si121_dtsentenca_dia);
-        $this->si121_dtsentenca_mes = ($this->si121_dtsentenca_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si121_dtsentenca_mes"] : $this->si121_dtsentenca_mes);
-        $this->si121_dtsentenca_ano = ($this->si121_dtsentenca_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si121_dtsentenca_ano"] : $this->si121_dtsentenca_ano);
-        if ($this->si121_dtsentenca_dia != "") {
-          $this->si121_dtsentenca = $this->si121_dtsentenca_ano . "-" . $this->si121_dtsentenca_mes . "-" . $this->si121_dtsentenca_dia;
         }
       }
       if ($this->si121_dtliquidacao == "") {
@@ -162,9 +149,6 @@ class cl_alq102017
     }
     if ($this->si121_dtempenho == null) {
       $this->si121_dtempenho = "null";
-    }
-    if ($this->si121_dtsentenca == null) {
-      $this->si121_dtsentenca = "null";
     }
     if ($this->si121_dtliquidacao == null) {
       $this->si121_dtliquidacao = "null";
@@ -247,7 +231,6 @@ class cl_alq102017
                                       ,si121_codunidadesub
                                       ,si121_nroempenho
                                       ,si121_dtempenho
-                                      ,si121_dtsentenca
                                       ,si121_dtliquidacao
                                       ,si121_nroliquidacao
                                       ,si121_dtanulacaoliq
@@ -266,7 +249,6 @@ class cl_alq102017
                                ,'$this->si121_codunidadesub'
                                ,$this->si121_nroempenho
                                ," . ($this->si121_dtempenho == "null" || $this->si121_dtempenho == "" ? "null" : "'" . $this->si121_dtempenho . "'") . "
-                               ," . ($this->si121_dtsentenca == "null" || $this->si121_dtsentenca == "" ? "null" : "'" . $this->si121_dtsentenca . "'") . "
                                ," . ($this->si121_dtliquidacao == "null" || $this->si121_dtliquidacao == "" ? "null" : "'" . $this->si121_dtliquidacao . "'") . "
                                ,$this->si121_nroliquidacao
                                ," . ($this->si121_dtanulacaoliq == "null" || $this->si121_dtanulacaoliq == "" ? "null" : "'" . $this->si121_dtanulacaoliq . "'") . "
@@ -384,15 +366,6 @@ class cl_alq102017
     } else {
       if (isset($GLOBALS["HTTP_POST_VARS"]["si121_dtempenho_dia"])) {
         $sql .= $virgula . " si121_dtempenho = null ";
-        $virgula = ",";
-      }
-    }
-    if (trim($this->si121_dtsentenca) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si121_dtsentenca_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si121_dtsentenca_dia"] != "")) {
-      $sql .= $virgula . " si121_dtsentenca = '$this->si121_dtsentenca' ";
-      $virgula = ",";
-    } else {
-      if (isset($GLOBALS["HTTP_POST_VARS"]["si121_dtsentenca_dia"])) {
-        $sql .= $virgula . " si121_dtsentenca = null ";
         $virgula = ",";
       }
     }
