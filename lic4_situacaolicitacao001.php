@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -45,6 +45,11 @@ unset($oGet);
 switch ($iCodigoTipoSituacao) {
 
 
+  case 0:
+    $sTipoSituacao   = "Em Andamento";
+    $sLegendSituacao = "Licitação Em Andamento";
+    break;
+
   case 3:
 
     $sTipoSituacao   = "Deserta";
@@ -53,13 +58,13 @@ switch ($iCodigoTipoSituacao) {
 
   case 4 :
 
-    $sTipoSituacao = "Fracassada";
+    $sTipoSituacao   = "Fracassada";
     $sLegendSituacao = "Licitação Fracassada";
     break;
 
   case 5 :
 
-    $sTipoSituacao = "Anulada";
+    $sTipoSituacao   = "Anulada";
     $sLegendSituacao = "Anular Licitação";
     break;
 }
@@ -84,7 +89,7 @@ switch ($iOpcao) {
     $sAcao    = 'Salvar';
     $sAcaoRPC = $sAcao;
     break;
-  
+
 }
 
 ?>
@@ -104,37 +109,37 @@ switch ($iOpcao) {
 <form id = "form1" name="form1" method="post" action="">
 <fieldset style="width: 400px";>
   <legend><b><?php echo $sLegendSituacao; ?></legend>
-  
+
   <table border = '0'>
-  
+
   <!-- Licitação -->
-    <tr> 
+    <tr>
       <td  align = "left" nowrap title = "<?=$Tl20_codigo?>" width="95">
         <b>
           <?
           $iOpcaoAncora   = 1;
           db_ancora('Licitação:', "js_pequisaLicitacao({$iOpcao});", $iOpcaoAncora);?>
-        </b> 
+        </b>
       </td>
       <td align = "left" nowrap>
-        <? 
+        <?
           db_input("l20_codigo", 6, $Il20_codigo, true, "text", 3);
         ?>
       </td>
     </tr>
-  
+
     <!-- Edital -->
-    <tr> 
+    <tr>
       <td  align = "left" nowrap title = "<?=$Tl20_codigo?>">
         <b>Edital:</b>
       </td>
       <td align = "left" nowrap>
-        <? 
+        <?
           db_input("l20_edital", 6, $Il20_edital, true, "text", 3);
         ?>
       </td>
     </tr>
-  
+
     <!-- Motivo -->
     <tr>
       <td colspan="2">
@@ -155,11 +160,11 @@ switch ($iOpcao) {
 
 <br />
 <?php
-  db_input("iSituacaoSequencial", 10, null, false, 'hidden', 3); 
+  db_input("iSituacaoSequencial", 10, null, false, 'hidden', 3);
 ?>
-<input name    = "btnSalvarSituacao" 
-       type    = "button" 
-       id      = "db_opcao" 
+<input name    = "btnSalvarSituacao"
+       type    = "button"
+       id      = "db_opcao"
        onclick = "return js_salvarOperacao()"
        value   = <?php echo $sAcao; ?> />
 </form>
@@ -182,24 +187,24 @@ var sUrlRPC       = "lic4_situacaolicitacao.RPC.php";
 sPesquisaTipo     = "situacao="+iTipoSituacao+"&opcao="+iOpcao+"&";
 
 if (iOpcao == 1 && iTipoSituacao == 12) {
-    
+
   var sUrlLicitacao = "func_liclicitaanulacao.php?"+sPesquisaTipo+"funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
   js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicitasituacao', sUrlLicitacao, 'Pesquisa Licitações', true);
-    
+
 }else if (iOpcao == 2 && iTipoSituacao == 12) {
-    
+
   var sUrlLicitacao = "func_liclicita.php?"+sPesquisaTipo+"funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
   js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicitasituacao', sUrlLicitacao, 'Pesquisa Licitações', true);
-    
+
 }else if (iOpcao == 3 && iTipoSituacao == 12) {
-    
+
   var sUrlLicitacao = "func_liclicita.php?"+sPesquisaTipo+"funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
   js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicitasituacao', sUrlLicitacao, 'Pesquisa Licitações', true);
-    
+
 }else{
 
   var sUrlLicitacao = "func_liclicita?"+sPesquisaTipo+"funcao_js=parent.js_preencheDados|l20_codigo|l20_edital"
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', sUrlLicitacao, 'Pesquisa Licitações', true);    
+  js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', sUrlLicitacao, 'Pesquisa Licitações', true);
 
 }
 
@@ -212,7 +217,7 @@ function js_getDadosSituacaoLicitacao(iCodigoAlteracao) {
   oParam.exec             = "getDadosSituacaoLicitacao";
 
   js_divCarregando("Aguarde, pesquisando...", "msgBox");
-  
+
   var oAjax = new Ajax.Request(sUrlRPC,
                                     {
                                     method:'post',
@@ -228,7 +233,7 @@ function js_getDadosSituacaoLicitacao(iCodigoAlteracao) {
                                         $('l20_codigo').value          = oRetorno.iCodigoLicitacao;
                                         $('l11_obs').value             = oRetorno.l11_obs.urlDecode();
                                         $('l20_edital').value          = oRetorno.iCodigoEdital;
-                                        
+
                                       } else {
                                         alert(oRetorno.message.urlDecode());
                                       }
@@ -239,11 +244,11 @@ function js_getDadosSituacaoLicitacao(iCodigoAlteracao) {
 function js_pequisaLicitacao(iOpcao) {
 
   if (iOpcao == 1 && iTipoSituacao == 12) {
-    
+
     sPesquisaTipo     = "situacao="+iTipoSituacao+"&";
     var sUrlLicitacao = "func_liclicitaanulacao.php?"+sPesquisaTipo+"funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
     js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicitasituacao', sUrlLicitacao, 'Pesquisa Licitações', true);
-    
+
   } else {
 
   var sUrlLicitacao = "func_liclicita?"+sPesquisaTipo+"funcao_js=parent.js_preencheDados|l20_codigo|l20_edital"
@@ -258,26 +263,26 @@ function js_preencheDados(iCodigoLicitacao, iCodigoEdital, sObservacao) {
   $('l20_edital').value = iCodigoEdital;
 
   if(sObservacao != undefined) {
-    
+
     $('l11_obs').value    = sObservacao;
   }
-  
+
   db_iframe_liclicita.hide();
 }
 
 function js_salvarOperacao() {
 
-  /** 
+  /**
   *  validar existência licitação
   */
-  
+
   if($F("l20_codigo") == "") {
-	
+
 		alert("Seleciona uma licitação");
 		return false;
 	}
-  
-  
+
+
   if (iOpcao == 1) {
     sAcaoRPC = "incluir";
   } else if (iOpcao == 2) {
@@ -290,9 +295,9 @@ function js_salvarOperacao() {
     return false;
   }
 
-  
+
   if ($F('l11_obs').trim() == "") {
-    
+
     alert("Informe um motivo.");
     return false;
   }
@@ -310,7 +315,7 @@ function js_salvarOperacao() {
   // return false;
 
   js_divCarregando("Aguarde, salvando situação...", "msgBox");
-  
+
   var oAjax = new Ajax.Request(sUrl,
                                     {
                                     method:'post',
