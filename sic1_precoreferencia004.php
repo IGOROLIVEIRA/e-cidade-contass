@@ -184,7 +184,7 @@ ob_start();
       $nTotalItens += $lTotal;
 
       $oDadosDaLinha = new stdClass();
-      $oDadosDaLinha->item = $iCont + 1;
+      $oDadosDaLinha->item =  $oResult->pc11_seq;
       $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
       $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 2, ",", ".");
       $oDadosDaLinha->quantidade = $oResult->pc11_quant;
