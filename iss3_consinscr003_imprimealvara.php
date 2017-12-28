@@ -309,53 +309,58 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $pdf1->impobsativ = $impobsativ;
   $pdf1->impobslanc = $impobslanc;
 
+  $oInstit = new Instituicao(db_getsession('DB_instit'));
   /**
-   * Busca o Numero do alvara pela ultima movimentacao do ano
+   * Se for pirapora
    */
+  if($oInstit->getCodigoCliente() == 58) {
+    /**
+     * Busca o Numero do alvara pela ultima movimentacao do ano
+     */
 
-  $clIssAlvara         = new cl_issalvara;
-  $sSql     = "SELECT q123_numalvara||'/'||date_part('year',q120_dtmov) AS numeroalvara,q120_dtmov q123_dtinclusao,q120_dtmov,q120_validadealvara,
+    $clIssAlvara = new cl_issalvara;
+    $sSql = "SELECT q123_numalvara||'/'||date_part('year',q120_dtmov) AS numeroalvara,q120_dtmov q123_dtinclusao,q120_dtmov,q120_validadealvara,
                      q123_sequencial,
                      q123_dtinclusao
               FROM issalvara
               inner join issmovalvara on q123_sequencial = q120_issalvara
               WHERE q123_inscr = {$q02_inscr}
-                AND date_part('year',q120_dtmov) = ".db_getsession('DB_anousu')."
+                AND date_part('year',q120_dtmov) = " . db_getsession('DB_anousu') . "
               order by q120_dtmov DESC limit 1";
-  $rsAlvara = $clIssAlvara->sql_record($sSql);
+    $rsAlvara = $clIssAlvara->sql_record($sSql);
 
-  if($clIssAlvara->numrows > 0 ) {
-    $oAlvara  = db_utils::fieldsMemory($rsAlvara, 0);
+    if ($clIssAlvara->numrows > 0) {
+      $oAlvara = db_utils::fieldsMemory($rsAlvara, 0);
 
-    $pdf1->dtemissao = $oAlvara->q123_dtinclusao;
+      $pdf1->dtemissao = $oAlvara->q123_dtinclusao;
 
-    if(!empty($oAlvara->numeroalvara)) {
-      $pdf1->numeroalvara = $oAlvara->numeroalvara;
-    }else{
-      $pdf1->numeroalvara = "{$q02_inscr}-".substr($z01_nome,0,1)."/".db_getsession('DB_anousu');
-    }
-
-    if(!empty($oAlvara->q123_sequencial)){
-
-      if($pdf1->permanente == 't'){
-        $pdf1->validadealvara = "31/12/".db_getsession('DB_anousu');
-
+      if (!empty($oAlvara->numeroalvara)) {
+        $pdf1->numeroalvara = $oAlvara->numeroalvara;
       } else {
-
-        $oDataInicial = new DateTime($oAlvara->q120_dtmov);
-        $pdf1->validadealvara = $oDataInicial->modify('+ '.$oAlvara->q120_validadealvara.' days')->format('d/m/Y');
-
+        $pdf1->numeroalvara = "{$q02_inscr}-" . substr($z01_nome, 0, 1) . "/" . db_getsession('DB_anousu');
       }
 
-    }else{
-      $pdf1->validadealvara = "31/12/".db_getsession('DB_anousu');
+      if (!empty($oAlvara->q123_sequencial)) {
+
+        if ($pdf1->permanente == 't') {
+          $pdf1->validadealvara = "31/12/" . db_getsession('DB_anousu');
+
+        } else {
+
+          $oDataInicial = new DateTime($oAlvara->q120_dtmov);
+          $pdf1->validadealvara = $oDataInicial->modify('+ ' . $oAlvara->q120_validadealvara . ' days')->format('d/m/Y');
+
+        }
+
+      } else {
+        $pdf1->validadealvara = "31/12/" . db_getsession('DB_anousu');
+      }
+    } else {
+      db_redireciona('db_erros.php?fechar=true&db_erro=Não existem alvará liberado.');
+      exit();
     }
-  } else {
-    db_redireciona('db_erros.php?fechar=true&db_erro=Não existem alvará liberado.');
-    exit();
+
   }
-
-
 
   // PEGA AS ATIVIDADES SECUNDARIAS
   //die($cltabativ->sql_queryinf($q02_inscr,"","*",""," q88_inscr is null "));
