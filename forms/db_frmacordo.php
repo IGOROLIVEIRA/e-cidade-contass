@@ -158,14 +158,22 @@ db_app::load("dbtextFieldData.widget.js");
                                                 </td>
                                                 <td>
                                                     <?
-                                                    $aValores = array(
-                                                        0 => 'Selecione',
-                                                        1 => 'Processo de Compras',
-                                                        2 => 'Licitação',
-                                                        3 => 'Manual',
-                                                        6 => 'Empenho'
-                                                    );
-
+                                                    if(db_getsession('DB_anousu') <= 2017) {
+                                                        $aValores = array(
+                                                            0 => 'Selecione',
+                                                            1 => 'Processo de Compras',
+                                                            2 => 'Licitação',
+                                                            3 => 'Manual',
+                                                            6 => 'Empenho'
+                                                        );
+                                                    }else{
+                                                        $aValores = array(
+                                                            0 => 'Selecione',
+                                                            1 => 'Processo de Compras',
+                                                            2 => 'Licitação',
+                                                            3 => 'Manual'
+                                                        );
+                                                    }
                                                     db_select('ac16_origem', $aValores, true, $db_opcao,
                                                         " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_verificaOrigem(this.value);js_validaCampoValor();' style='width:100%;'");
 

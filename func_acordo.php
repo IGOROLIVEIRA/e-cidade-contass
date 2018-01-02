@@ -32,13 +32,21 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_acordo_classe.php");
+require_once("classes/db_parametroscontratos_classe.php");
 $lAtivo      = '';
 db_postmemory($_POST);
 parse_str($_SERVER["QUERY_STRING"]);
 
 $clacordo = new cl_acordo;
+$clparametroscontratos = new cl_parametroscontratos;
 $clacordo->rotulo->label();
 $iInstituicaoSessao = db_getsession('DB_instit');
+
+$rsParametros = $clparametroscontratos->sql_record($clparametroscontratos->sql_query_file('','*'));
+
+$pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaautorizacao;
+
+
 ?>
 <html>
 <head>
@@ -123,9 +131,10 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             $sDepartamentos = "( ac16_coddepto = ".db_getsession("DB_coddepto"). " or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." )";
             $sWhere .= " and {$sDepartamentos} ";
           }
-
-          if (isset($iTipoFiltro)) {
-            $sWhere .= " and ac16_acordosituacao in ({$iTipoFiltro})";
+          if($pc01_liberaautorizacao <> 't') {
+              if (isset($iTipoFiltro)) {
+                  $sWhere .= " and ac16_acordosituacao in ({$iTipoFiltro})";
+              }
           }
 
           if (isset($lParaExcluir) && $lParaExcluir == true) {
@@ -175,8 +184,8 @@ $iInstituicaoSessao = db_getsession('DB_instit');
             }
           }
 
-          if (isset($lHomologados) && $lHomologados == true) {
-            $sWhere .= " and (ac16_acordosituacao = 4)";
+          if (isset($lHomologados) && $lHomologados == true && $pc01_liberaautorizacao <> 't') {
+            //$sWhere .= " and (ac16_acordosituacao = 4)";
           }
 
           if (isset($lGeraAutorizacao) && $lGeraAutorizacao == "true") {
