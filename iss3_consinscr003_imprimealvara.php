@@ -319,14 +319,14 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
      */
 
     $clIssAlvara = new cl_issalvara;
-    $sSql = "SELECT q123_numalvara||'/'||date_part('year',q120_dtmov) AS numeroalvara,q120_dtmov q123_dtinclusao,q120_dtmov,q120_validadealvara,
+    $sSql = "SELECT q120_sequencial, q123_numalvara||'/'||date_part('year',q120_dtmov) AS numeroalvara,q120_dtmov q123_dtinclusao,q120_dtmov,q120_validadealvara,
                      q123_sequencial,
                      q123_dtinclusao
               FROM issalvara
               inner join issmovalvara on q123_sequencial = q120_issalvara
               WHERE q123_inscr = {$q02_inscr}
                 AND date_part('year',q120_dtmov) = " . db_getsession('DB_anousu') . "
-              order by q120_dtmov DESC limit 1";
+              order by q120_sequencial DESC limit 1";
     $rsAlvara = $clIssAlvara->sql_record($sSql);
 
     if ($clIssAlvara->numrows > 0) {
