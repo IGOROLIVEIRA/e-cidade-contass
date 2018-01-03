@@ -684,7 +684,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     ELSE veiculos.ve01_codigoant
                 END AS codVeiculo,
                 veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
-                veicbaixa.ve04_motivo AS descBaixa,
+                veicbaixa.ve04_motivo AS descbaixa,
                 veicbaixa.ve04_data AS dtBaixa
       FROM veiculos.veiculos AS veiculos
       INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
@@ -721,7 +721,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                           ELSE veiculos.ve01_codigoant
                       END AS codVeiculo,
                       veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
-                      veicbaixa.ve04_motivo AS descBaixa,
+                      veicbaixa.ve04_motivo AS descbaixa,
                       veicbaixa.ve04_data AS dtBaixa
       FROM veiculos.veiculos AS veiculos
       INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
@@ -770,7 +770,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         $clcvc40->si149_codunidadesub = $oDados40->ve01_codunidadesub != '' || $oDados40->ve01_codunidadesub != 0 ? $oDados40->ve01_codunidadesub : $oDados40->codunidadesub;
         $clcvc40->si149_codveiculo = $oDados40->codveiculo;
         $clcvc40->si149_tipobaixa = $oDados40->tipobaixa;
-        if($oDados40->si149_tipobaixa == 99){
+        if($oDados40->tipobaixa == 99){
             $clcvc40->si149_descbaixa = $oDados40->descbaixa;
         }else{
             $clcvc40->si149_descbaixa = " ";
