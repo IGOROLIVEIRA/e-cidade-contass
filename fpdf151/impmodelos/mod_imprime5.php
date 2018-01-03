@@ -441,7 +441,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             $this->objpdf->text($xcol + 1, $xlin + 62, 'SEQ.');
             $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');
             $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
-            $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
+            //$this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
             $this->objpdf->text($xcol + 145, $xlin + 62, 'VALOR UNITÁRIO');
             $this->objpdf->text($xcol + 176, $xlin + 62, 'VALOR TOTAL');
             $this->objpdf->text($xcol + 38, $xlin + 67, 'Continuação da Página ' . ($this->objpdf->PageNo() - 1));
@@ -717,7 +717,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 }
             }
 
-            $this->objpdf->Setfont('Arial', '', 7);
+            $this->objpdf->Setfont('Arial', '', 6);
             $this->objpdf->Row(array(
 
                 db_formatar($seq_item, "s", "0", (strlen($seq_item) + 1), "e", 0),
