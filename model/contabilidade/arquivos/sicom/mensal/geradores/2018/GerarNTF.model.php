@@ -16,13 +16,13 @@ class GerarNTF extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "NTF";
     $this->abreArquivo();
-    
+
     $sSql = "select * from ntf102018 where si143_mes = " . $this->iMes . " and si143_instit = " . db_getsession("DB_instit");
     $rsNTF10 = db_query($sSql);
 
@@ -63,21 +63,21 @@ class GerarNTF extends GerarAM
         $aCSVNTF10['si143_ufcredor']              = $this->padLeftZero($aNTF10['si143_ufcredor'], 2);
         $aCSVNTF10['si143_notafiscaleletronica']  = $this->padLeftZero($aNTF10['si143_notafiscaleletronica'], 1);
         $aCSVNTF10['si143_chaveacesso']           = $aNTF10['si143_chaveacesso'] == 0 ? ' ' : $this->padLeftZero($aNTF10['si143_chaveacesso'], 44);
-        $aCSVNTF10['si143_chaveacessomunicipal']  = substr($aNTF10['si143_chaveacessomunicipal'], 0, 60);
+        $aCSVNTF10['si143_outraChaveAcesso']      = substr($aNTF10['si143_outraChaveAcesso'], 0, 60);
         $aCSVNTF10['si143_nfaidf']                = substr($aNTF10['si143_nfaidf'], 0, 15);
         $aCSVNTF10['si143_dtemissaonf']           = $this->sicomDate($aNTF10['si143_dtemissaonf']);
         $aCSVNTF10['si143_dtvencimentonf']        = $this->sicomDate($aNTF10['si143_dtvencimentonf']);
         $aCSVNTF10['si143_nfvalortotal']          = $this->sicomNumberReal($aNTF10['si143_nfvalortotal'], 2);
         $aCSVNTF10['si143_nfvalordesconto']       = $this->sicomNumberReal($aNTF10['si143_nfvalordesconto'], 2);
         $aCSVNTF10['si143_nfvalorliquido']        = $this->sicomNumberReal($aNTF10['si143_nfvalorliquido'], 2);
-        
+
         $this->sLinha = $aCSVNTF10;
         $this->adicionaLinha();
 
-        /*for ($iCont2 = 0;$iCont2 < pg_num_rows($rsNTF11); $iCont2++) {        
+        /*for ($iCont2 = 0;$iCont2 < pg_num_rows($rsNTF11); $iCont2++) {
 
           $aNTF11  = pg_fetch_array($rsNTF11,$iCont2);
-          
+
           if ($aNTF10['si143_sequencial'] == $aNTF11['si144_reg10']) {
 
             $aCSVNTF11['si144_tiporegistro']      = $this->padLeftZero($aNTF11['si144_tiporegistro'], 2);
@@ -85,10 +85,10 @@ class GerarNTF extends GerarAM
             $aCSVNTF11['si144_coditem']           = substr($aNTF11['si144_coditem'], 0, 15);
             $aCSVNTF11['si144_quantidadeitem']    = $this->sicomNumberReal($aNTF11['si144_quantidadeitem'], 4);
             $aCSVNTF11['si144_valorunitarioitem'] = $this->sicomNumberReal($aNTF11['si144_valorunitarioitem'], 4);
-            
+
             $this->sLinha = $aCSVNTF11;
             $this->adicionaLinha();
-            
+
           }
 
         }*/
@@ -96,7 +96,7 @@ class GerarNTF extends GerarAM
         for ($iCont3 = 0; $iCont3 < pg_num_rows($rsNTF20); $iCont3++) {
 
           $aNTF20 = pg_fetch_array($rsNTF20, $iCont3);
-          
+
           if ($aNTF10['si143_sequencial'] == $aNTF20['si145_reg10']) {
 
             $aCSVNTF20['si145_tiporegistro']  = $this->padLeftZero($aNTF20['si145_tiporegistro'], 2);
@@ -111,10 +111,10 @@ class GerarNTF extends GerarAM
             $aCSVNTF20['si145_nroempenho']    = substr($aNTF20['si145_nroempenho'], 0, 22);
             $aCSVNTF20['si145_dtliquidacao']  = $this->sicomDate($aNTF20['si145_dtliquidacao']);
             $aCSVNTF20['si145_nroliquidacao'] = substr($aNTF20['si145_nroliquidacao'], 0, 22);
-            
+
             $this->sLinha = $aCSVNTF20;
             $this->adicionaLinha();
-            
+
           }
 
         }

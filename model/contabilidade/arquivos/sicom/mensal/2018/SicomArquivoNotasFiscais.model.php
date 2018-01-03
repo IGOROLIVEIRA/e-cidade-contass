@@ -3,7 +3,7 @@ require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_ntf102018_classe.php");
 require_once("classes/db_ntf112018_classe.php");
-require_once("classes/db_ntf202018_classe.php");
+require_once("classes/db_ntdb_ntf102018_classe.php202018_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarNTF.model.php");
 
 /**
@@ -13,30 +13,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarNTF.
  */
 class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout
    * @var Integer
    */
   protected $iCodigoLayout = 174;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'NTF';
-  
+
   /**
    *
    * Contrutor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * retornar o codio do layout
    *
@@ -46,36 +46,36 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    * @return Array
    */
   public function getCampos()
   {
-    
+
   }
-  
+
   /**
    * selecionar os dados de Notas Fiscais referentes a instituicao logada
    *
    */
   public function gerarDados()
   {
-    
+
     $clntf10 = new cl_ntf102018();
     $clntf11 = new cl_ntf112018();
     $clntf20 = new cl_ntf202018();
 
 
     db_inicio_transacao();
-    
+
     /*
      * excluir informacoes do mes selecionado registro 20
      */
     $result = $clntf20->sql_record($clntf20->sql_query(null, "*", null, "si145_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si145_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      
+
       $clntf20->excluir(null, "si145_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si145_instit = " . db_getsession("DB_instit"));
       if ($clntf20->erro_status == 0) {
         throw new Exception($clntf20->erro_msg);
@@ -87,7 +87,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
     */
     $result = $clntf11->sql_record($clntf11->sql_query(null, "*", null, "si144_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si144_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
-      
+
       $clntf11->excluir(null, "si144_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si144_instit = " . db_getsession("DB_instit"));
       if ($clntf11->erro_status == 0) {
         throw new Exception($clntf11->erro_msg);
@@ -104,20 +104,20 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
         throw new Exception($clntf10->erro_msg);
       }
     }
-    
+
     db_fim_transacao();
-    
+
     $sSqlTrataUnidade = "select si08_tratacodunidade from infocomplementares where si08_instit = " . db_getsession("DB_instit");
     $rsResultTrataUnidade = db_query($sSqlTrataUnidade);
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultTrataUnidade, 0)->si08_tratacodunidade;
-    
+
     $sSql = "SELECT si09_codorgaotce AS codorgao
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");
 
     $rsResult = db_query($sSql);
     $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;
-    
+
     /*
      * selecionar informacoes registro 10
      */
@@ -139,7 +139,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
               cgm.z01_uf as ufcredor,
               empnota.e69_notafiscaleletronica as notafiscaleletronica,
               case when empnota.e69_notafiscaleletronica=1 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
-              case when empnota.e69_notafiscaleletronica=2 then empnota.e69_chaveacesso else ' ' end as chaveacessomunicipal,
+              case when empnota.e69_notafiscaleletronica=2 then empnota.e69_chaveacesso else ' ' end as outrachaveacesso,
               ' ' as nfaidf,
               empnota.e69_dtnota as dtemissaonf,
               ' ' as dtvencimentonf,
@@ -152,10 +152,10 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
             inner join configuracoes.db_config as db_config on (empempenho.e60_instit=db_config.codigo)
             inner join patrimonio.cgmendereco as cgmendereco on (cgm.z01_numcgm=cgmendereco.z07_numcgm and z07_tipo = 'P')
             inner join configuracoes.endereco as endereco on (cgmendereco.z07_endereco = endereco.db76_sequencial)
-            inner join configuracoes.cadenderlocal as cadenderlocal on (endereco.db76_cadenderlocal = cadenderlocal.db75_sequencial)     
+            inner join configuracoes.cadenderlocal as cadenderlocal on (endereco.db76_cadenderlocal = cadenderlocal.db75_sequencial)
             inner join configuracoes.cadenderbairrocadenderrua as cadenderbairrocadenderrua  on (cadenderbairrocadenderrua.db87_sequencial = cadenderlocal.db75_cadenderbairrocadenderrua)
             inner join configuracoes.cadenderbairro as cadenderbairro on (cadenderbairro.db73_sequencial = cadenderbairrocadenderrua.db87_cadenderbairro)
-            inner join configuracoes.cadenderrua as cadenderrua on  (cadenderrua.db74_sequencial = cadenderbairrocadenderrua.db87_cadenderrua)  
+            inner join configuracoes.cadenderrua as cadenderrua on  (cadenderrua.db74_sequencial = cadenderbairrocadenderrua.db87_cadenderrua)
             inner join configuracoes.cadenderruaruastipo as cadenderruaruastipo on (cadenderruaruastipo.db85_cadenderrua = cadenderrua.db74_sequencial)
             inner join configuracoes.cadendermunicipio as cadendermunicipio on (cadendermunicipio.db72_sequencial = cadenderrua.db74_cadendermunicipio)
             inner join configuracoes.cadenderestado as cadenderestado on (cadenderestado.db71_sequencial = cadendermunicipio.db72_cadenderestado)
@@ -179,7 +179,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
       $sHash10 = $oDados10->codorgao . ltrim($oDados10->nfnumero, "0") . $this->removeCaracteres($oDados10->nfserie) . $oDados10->tipodocumento . $oDados10->nrodocumento;
       $sHash10 .= $oDados10->chaveacesso . $oDados10->dtemissaonf;
-      
+
       if (!$aDadosAgrupados[$sHash10]) {
 
         $clntf10 = new stdClass();
@@ -205,7 +205,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
         $clntf10->si143_ufcredor = $oDados10->ufcredor;
         $clntf10->si143_notafiscaleletronica = $oDados10->notafiscaleletronica;
         $clntf10->si143_chaveacesso = $oDados10->chaveacesso;
-        $clntf10->si143_chaveacessomunicipal = $oDados10->chaveacessomunicipal;
+        $clntf10->si143_outraChaveAcesso = $oDados10->outraChaveAcesso;
         $clntf10->si143_nfaidf = $oDados10->nfaidf;
         $clntf10->si143_dtemissaonf = $oDados10->dtemissaonf;
         $clntf10->si143_dtvencimentonf = $oDados10->dtvencimentonf;
@@ -314,7 +314,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
         empempenho.e60_emiss as dtempenho,
         empempenho.e60_codemp as nroempenho,
         pagordem.e50_data as dtliquidacao,
-        (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) as nroliquidacao,   
+        (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) as nroliquidacao,
         orcdotacao.o58_unidade as unidade,
         orcdotacao.o58_orgao as orgao,
         lpad(o41_subunidade::varchar,3,0) as subunidade
@@ -329,7 +329,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       LEFT JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
       where orcdotacao.o58_anousu = " . db_getsession("DB_anousu") . "
       and empnota.e69_codnota = " . $oDados10->codnotafiscal;
-      
+
       //orcdotacao pegar orgão e unidade
       $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);echo $sSql;echo pg_last_error();
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
@@ -337,7 +337,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
         $sHash20 = $oDados20->nfnumero . $this->removeCaracteres($oDados20->nfserie) . $oDados20->tipodocumento . $oDados20->nrodocumento . $oDados20->chaveacesso . $oDados20->dtemissaonf;
         $sHash20 .= $oDados20->codunidadesub . $oDados20->dtempenho . $oDados20->nroempenho . $oDados20->dtliquidacao . $oDados20->nroliquidacao;
-        
+
         if (!$aDadosAgrupados[$sHash10]->reg20[$sHash20]) {
 
           $clntf20 = new stdClass();
@@ -367,7 +367,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
           $aDadosAgrupados[$sHash10]->reg20[$sHash20] = $clntf20;
 
         }
-        
+
       }
 
     }
@@ -392,7 +392,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       $clntf10->si143_ufcredor = $oDados10->si143_ufcredor;
       $clntf10->si143_notafiscaleletronica = $oDados10->si143_notafiscaleletronica;
       $clntf10->si143_chaveacesso = $oDados10->si143_chaveacesso;
-      $clntf10->si143_chaveacessomunicipal = $oDados10->si143_chaveacessomunicipal;
+      $clntf10->si143_outraChaveAcesso = $oDados10->si143_outraChaveAcesso;
       $clntf10->si143_nfaidf = $oDados10->si143_nfaidf;
       $clntf10->si143_dtemissaonf = $oDados10->si143_dtemissaonf;
       $clntf10->si143_dtvencimentonf = $oDados10->si143_dtvencimentonf;
@@ -401,12 +401,12 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       $clntf10->si143_nfvalorliquido = $oDados10->si143_nfvalorliquido;
       $clntf10->si143_mes = $oDados10->si143_mes;
       $clntf10->si143_instit = $oDados10->si143_instit;
-      
+
       $clntf10->incluir(null);
       if ($clntf10->erro_status == 0) {
         throw new Exception($clntf10->erro_msg);
       }
-      
+
       foreach ($oDados10->reg20 as $oDados20) {
 
         $clntf20 = new cl_ntf202018();
@@ -430,17 +430,17 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
         if ($clntf20->erro_status == 0) {
           throw new Exception($clntf20->erro_msg);
         }
-        
+
       }
 
     }
 
     db_fim_transacao();
-    
+
     $oGerarNTF = new GerarNTF();
     $oGerarNTF->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarNTF->gerarDados();
-    
+
   }
 
 }
