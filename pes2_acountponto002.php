@@ -44,6 +44,24 @@ if($ponto == 's'){
   $dcodcam1 = '4326';  /// r90_rubric
   $kcodcam1 = '4325';  /// r90_regist
   $dcodcamnot = '4323, 4324, 4325, 7467, 4329, 4326';
+}elseif($ponto == 'c'){
+  $arquivo = '574';
+  $head7   = 'PONTO COMPLEMENTAR';
+  $dcodcam1 = '4277';  /// r47_rubric
+  $kcodcam1 = '4276';  /// r47_regist
+  $dcodcamnot = '4274, 7461, 4280, 4275, 4276, 4277';
+}elseif($ponto == 'fe'){
+    $arquivo = '577';
+    $head7   = 'PONTO FERIAS';
+    $dcodcam1 = '4300';  /// r29_rubric
+    $kcodcam1 = '4299';  /// r29_regist
+    $dcodcamnot = '4297, 7464, 4303, 4298, 4299, 4300';
+}elseif($ponto == 'f13'){
+    $arquivo = '575';
+    $head7   = 'PONTO 13º';
+    $dcodcam1 = '4284';  /// r34_rubric
+    $kcodcam1 = '4283';  /// r34_regist
+    $dcodcamnot = '4281, 7462, 4287, 4282, 4283, 4284';
 }
 
 $where_usuarios = '';

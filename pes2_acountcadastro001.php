@@ -159,7 +159,7 @@ function js_relatorio() {
                       db_input("colunas_sselecionados", 3, 0, true, 'hidden', 3);
                       db_input("colunas_nselecionados", 3, 0, true, 'hidden', 3);
                        if(!isset($result_usuarios)){
-                          $result_usuarios = $clusuarios->sql_record($clusuarios->sql_query_file(null, "id_usuario, id_usuario||'-'||upper(nome) as rh30_descr", "nome"  ));
+                          $result_usuarios = $clusuarios->sql_record($clusuarios->sql_query_file(null, "id_usuario, id_usuario||'-'||upper(nome) as rh30_descr", "nome", "usuext = 0"  ));
                           for($x=0; $x<$clusuarios->numrows; $x++){
                                db_fieldsmemory($result_usuarios,$x);
                                $arr_colunas[$id_usuario]= $rh30_descr;
