@@ -27,165 +27,165 @@
 
 //MODULO: protocolo
 //CLASSE DA ENTIDADE cgm
-class cl_cgm { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $z01_numcgm = 0; 
-   var $z01_nome = null; 
-   var $z01_ender = null; 
-   var $z01_numero = 0; 
-   var $z01_compl = null; 
-   var $z01_bairro = null; 
-   var $z01_munic = null; 
-   var $z01_uf = null; 
-   var $z01_cep = null; 
-   var $z01_cxpostal = null; 
-   var $z01_cadast_dia = null; 
-   var $z01_cadast_mes = null; 
-   var $z01_cadast_ano = null; 
-   var $z01_cadast = null; 
-   var $z01_telef = null; 
-   var $z01_ident = null; 
-   var $z01_login = 0; 
-   var $z01_incest = null; 
-   var $z01_telcel = null; 
-   var $z01_email = null; 
-   var $z01_endcon = null; 
-   var $z01_numcon = 0; 
-   var $z01_comcon = null; 
-   var $z01_baicon = null; 
-   var $z01_muncon = null; 
-   var $z01_ufcon = null; 
-   var $z01_cepcon = null; 
-   var $z01_cxposcon = null; 
-   var $z01_telcon = null; 
-   var $z01_celcon = null; 
-   var $z01_emailc = null; 
-   var $z01_nacion = 0; 
-   var $z01_estciv = 0; 
-   var $z01_profis = null; 
-   var $z01_tipcre = 0; 
-   var $z01_cgccpf = null; 
-   var $z01_fax = null; 
-   var $z01_nasc_dia = null; 
-   var $z01_nasc_mes = null; 
-   var $z01_nasc_ano = null; 
-   var $z01_nasc = null; 
-   var $z01_pai = null; 
-   var $z01_mae = null; 
-   var $z01_sexo = null; 
-   var $z01_ultalt_dia = null; 
-   var $z01_ultalt_mes = null; 
-   var $z01_ultalt_ano = null; 
-   var $z01_ultalt = null; 
-   var $z01_contato = null; 
-   var $z01_hora = null; 
-   var $z01_nomefanta = null; 
-   var $z01_cnh = null; 
-   var $z01_categoria = null; 
-   var $z01_dtemissao_dia = null; 
-   var $z01_dtemissao_mes = null; 
-   var $z01_dtemissao_ano = null; 
-   var $z01_dtemissao = null; 
-   var $z01_dthabilitacao_dia = null; 
-   var $z01_dthabilitacao_mes = null; 
-   var $z01_dthabilitacao_ano = null; 
-   var $z01_dthabilitacao = null; 
-   var $z01_nomecomple = null; 
-   var $z01_dtvencimento_dia = null; 
-   var $z01_dtvencimento_mes = null; 
-   var $z01_dtvencimento_ano = null; 
-   var $z01_dtvencimento = null; 
-   var $z01_dtfalecimento_dia = null; 
-   var $z01_dtfalecimento_mes = null; 
-   var $z01_dtfalecimento_ano = null; 
-   var $z01_dtfalecimento = null; 
-   var $z01_escolaridade = null; 
-   var $z01_naturalidade = null; 
-   var $z01_identdtexp_dia = null; 
-   var $z01_identdtexp_mes = null; 
-   var $z01_identdtexp_ano = null; 
-   var $z01_identdtexp = null; 
-   var $z01_identorgao = null; 
-   var $z01_localtrabalho = null; 
-   var $z01_renda = 0; 
-   var $z01_trabalha = 'f'; 
-   var $z01_pis = null; 
-   var $z01_obs = null; 
-   var $z01_incmunici = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_cgm {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $z01_numcgm = 0;
+   var $z01_nome = null;
+   var $z01_ender = null;
+   var $z01_numero = 0;
+   var $z01_compl = null;
+   var $z01_bairro = null;
+   var $z01_munic = null;
+   var $z01_uf = null;
+   var $z01_cep = null;
+   var $z01_cxpostal = null;
+   var $z01_cadast_dia = null;
+   var $z01_cadast_mes = null;
+   var $z01_cadast_ano = null;
+   var $z01_cadast = null;
+   var $z01_telef = null;
+   var $z01_ident = null;
+   var $z01_login = 0;
+   var $z01_incest = null;
+   var $z01_telcel = null;
+   var $z01_email = null;
+   var $z01_endcon = null;
+   var $z01_numcon = 0;
+   var $z01_comcon = null;
+   var $z01_baicon = null;
+   var $z01_muncon = null;
+   var $z01_ufcon = null;
+   var $z01_cepcon = null;
+   var $z01_cxposcon = null;
+   var $z01_telcon = null;
+   var $z01_celcon = null;
+   var $z01_emailc = null;
+   var $z01_nacion = 0;
+   var $z01_estciv = 0;
+   var $z01_profis = null;
+   var $z01_tipcre = 0;
+   var $z01_cgccpf = null;
+   var $z01_fax = null;
+   var $z01_nasc_dia = null;
+   var $z01_nasc_mes = null;
+   var $z01_nasc_ano = null;
+   var $z01_nasc = null;
+   var $z01_pai = null;
+   var $z01_mae = null;
+   var $z01_sexo = null;
+   var $z01_ultalt_dia = null;
+   var $z01_ultalt_mes = null;
+   var $z01_ultalt_ano = null;
+   var $z01_ultalt = null;
+   var $z01_contato = null;
+   var $z01_hora = null;
+   var $z01_nomefanta = null;
+   var $z01_cnh = null;
+   var $z01_categoria = null;
+   var $z01_dtemissao_dia = null;
+   var $z01_dtemissao_mes = null;
+   var $z01_dtemissao_ano = null;
+   var $z01_dtemissao = null;
+   var $z01_dthabilitacao_dia = null;
+   var $z01_dthabilitacao_mes = null;
+   var $z01_dthabilitacao_ano = null;
+   var $z01_dthabilitacao = null;
+   var $z01_nomecomple = null;
+   var $z01_dtvencimento_dia = null;
+   var $z01_dtvencimento_mes = null;
+   var $z01_dtvencimento_ano = null;
+   var $z01_dtvencimento = null;
+   var $z01_dtfalecimento_dia = null;
+   var $z01_dtfalecimento_mes = null;
+   var $z01_dtfalecimento_ano = null;
+   var $z01_dtfalecimento = null;
+   var $z01_escolaridade = null;
+   var $z01_naturalidade = null;
+   var $z01_identdtexp_dia = null;
+   var $z01_identdtexp_mes = null;
+   var $z01_identdtexp_ano = null;
+   var $z01_identdtexp = null;
+   var $z01_identorgao = null;
+   var $z01_localtrabalho = null;
+   var $z01_renda = 0;
+   var $z01_trabalha = 'f';
+   var $z01_pis = null;
+   var $z01_obs = null;
+   var $z01_incmunici = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 z01_numcgm = int4 = Numcgm 
-                 z01_nome = varchar(40) = Nome/Razão Social 
-                 z01_ender = varchar(100) = Endereço 
-                 z01_numero = int4 = Numero 
-                 z01_compl = varchar(100) = Complemento 
-                 z01_bairro = varchar(40) = Bairro 
-                 z01_munic = varchar(40) = Município 
-                 z01_uf = varchar(2) = UF 
-                 z01_cep = varchar(8) = CEP 
-                 z01_cxpostal = varchar(20) = Caixa Postal 
-                 z01_cadast = date = Data do cadastramento 
-                 z01_telef = varchar(12) = Telefone 
-                 z01_ident = varchar(20) = Identidade 
-                 z01_login = int4 = Login 
-                 z01_incest = varchar(15) = Inscricao Estadual 
-                 z01_telcel = varchar(12) = Celular 
-                 z01_email = varchar(100) = email 
-                 z01_endcon = varchar(100) = Endereco Comercial 
-                 z01_numcon = int4 = Numero 
-                 z01_comcon = varchar(20) = Complemento 
-                 z01_baicon = varchar(40) = Bairro 
-                 z01_muncon = varchar(40) = Municipio Comercial 
-                 z01_ufcon = varchar(2) = Estado Comercial 
-                 z01_cepcon = varchar(8) = CEP 
-                 z01_cxposcon = varchar(20) = Caixa Postal 
-                 z01_telcon = varchar(12) = Telefone comercial 
-                 z01_celcon = varchar(12) = Celular comercial 
-                 z01_emailc = varchar(100) = email comercial 
-                 z01_nacion = int4 = Nacionalidade 
-                 z01_estciv = int4 = Estado civil 
-                 z01_profis = varchar(40) = Profissao 
-                 z01_tipcre = int4 = Tipo de credor 
-                 z01_cgccpf = varchar(14) = CNPJ/CPF 
-                 z01_fax = varchar(12) = Fax 
-                 z01_nasc = date = Nascimento 
-                 z01_pai = varchar(40) = Pai 
-                 z01_mae = varchar(40) = Mãe 
-                 z01_sexo = varchar(1) = Sexo 
-                 z01_ultalt = date = Ultima Alteração 
-                 z01_contato = varchar(40) = Contato 
-                 z01_hora = varchar(5) = Hora do Cadastramento 
-                 z01_nomefanta = varchar(100) = Nome Fantasia 
-                 z01_cnh = varchar(20) = CNH 
-                 z01_categoria = varchar(2) = Categoria CNH 
-                 z01_dtemissao = date = Emissão CNH 
-                 z01_dthabilitacao = date = Primeira CNH 
-                 z01_nomecomple = varchar(100) = Nome Completo 
-                 z01_dtvencimento = date = Vencimento CNH 
-                 z01_dtfalecimento = date = Falecimento 
-                 z01_escolaridade = varchar(50) = Escolaridade 
-                 z01_naturalidade = varchar(100) = Naturalidade 
-                 z01_identdtexp = date = Data Expedição 
-                 z01_identorgao = varchar(50) = Orgão Emissor 
-                 z01_localtrabalho = varchar(100) = Local de Trabalho 
-                 z01_renda = float4 = Renda 
-                 z01_trabalha = bool = Trabalha 
-                 z01_pis = varchar(11) = Pis/Pasep/CI 
-                 z01_obs = text = Observações 
-                 z01_incmunici = int8 = Inscrição Municipal 
+                 z01_numcgm = int4 = Numcgm
+                 z01_nome = varchar(40) = Nome/Razão Social
+                 z01_ender = varchar(100) = Endereço
+                 z01_numero = int4 = Numero
+                 z01_compl = varchar(100) = Complemento
+                 z01_bairro = varchar(40) = Bairro
+                 z01_munic = varchar(40) = Município
+                 z01_uf = varchar(2) = UF
+                 z01_cep = varchar(8) = CEP
+                 z01_cxpostal = varchar(20) = Caixa Postal
+                 z01_cadast = date = Data do cadastramento
+                 z01_telef = varchar(12) = Telefone
+                 z01_ident = varchar(20) = Identidade
+                 z01_login = int4 = Login
+                 z01_incest = varchar(15) = Inscricao Estadual
+                 z01_telcel = varchar(12) = Celular
+                 z01_email = varchar(100) = email
+                 z01_endcon = varchar(100) = Endereco Comercial
+                 z01_numcon = int4 = Numero
+                 z01_comcon = varchar(20) = Complemento
+                 z01_baicon = varchar(40) = Bairro
+                 z01_muncon = varchar(40) = Municipio Comercial
+                 z01_ufcon = varchar(2) = Estado Comercial
+                 z01_cepcon = varchar(8) = CEP
+                 z01_cxposcon = varchar(20) = Caixa Postal
+                 z01_telcon = varchar(12) = Telefone comercial
+                 z01_celcon = varchar(12) = Celular comercial
+                 z01_emailc = varchar(100) = email comercial
+                 z01_nacion = int4 = Nacionalidade
+                 z01_estciv = int4 = Estado civil
+                 z01_profis = varchar(40) = Profissao
+                 z01_tipcre = int4 = Tipo de credor
+                 z01_cgccpf = varchar(14) = CNPJ/CPF
+                 z01_fax = varchar(12) = Fax
+                 z01_nasc = date = Nascimento
+                 z01_pai = varchar(40) = Pai
+                 z01_mae = varchar(40) = Mãe
+                 z01_sexo = varchar(1) = Sexo
+                 z01_ultalt = date = Ultima Alteração
+                 z01_contato = varchar(40) = Contato
+                 z01_hora = varchar(5) = Hora do Cadastramento
+                 z01_nomefanta = varchar(100) = Nome Fantasia
+                 z01_cnh = varchar(20) = CNH
+                 z01_categoria = varchar(2) = Categoria CNH
+                 z01_dtemissao = date = Emissão CNH
+                 z01_dthabilitacao = date = Primeira CNH
+                 z01_nomecomple = varchar(100) = Nome Completo
+                 z01_dtvencimento = date = Vencimento CNH
+                 z01_dtfalecimento = date = Falecimento
+                 z01_escolaridade = varchar(50) = Escolaridade
+                 z01_naturalidade = varchar(100) = Naturalidade
+                 z01_identdtexp = date = Data Expedição
+                 z01_identorgao = varchar(50) = Orgão Emissor
+                 z01_localtrabalho = varchar(100) = Local de Trabalho
+                 z01_renda = float4 = Renda
+                 z01_trabalha = bool = Trabalha
+                 z01_pis = varchar(11) = Pis/Pasep/CI
+                 z01_obs = text = Observações
+                 z01_incmunici = int8 = Inscrição Municipal
                  ";
    //funcao construtor da classe
    function cl_cgm() {
@@ -393,7 +393,7 @@ class cl_cgm {
      if($this->z01_trabalha == null ){
        $this->z01_trabalha = "f";
      }
-     if($this->z01_incmunici == null ){ 
+     if($this->z01_incmunici == null ){
        $this->z01_incmunici = "0";
      }
      if($z01_numcgm == "" || $z01_numcgm == null ){
@@ -429,126 +429,126 @@ class cl_cgm {
        return false;
      }
      $sql = "insert into cgm(
-                                       z01_numcgm 
-                                      ,z01_nome 
-                                      ,z01_ender 
-                                      ,z01_numero 
-                                      ,z01_compl 
-                                      ,z01_bairro 
-                                      ,z01_munic 
-                                      ,z01_uf 
-                                      ,z01_cep 
-                                      ,z01_cxpostal 
-                                      ,z01_cadast 
-                                      ,z01_telef 
-                                      ,z01_ident 
-                                      ,z01_login 
-                                      ,z01_incest 
-                                      ,z01_telcel 
-                                      ,z01_email 
-                                      ,z01_endcon 
-                                      ,z01_numcon 
-                                      ,z01_comcon 
-                                      ,z01_baicon 
-                                      ,z01_muncon 
-                                      ,z01_ufcon 
-                                      ,z01_cepcon 
-                                      ,z01_cxposcon 
-                                      ,z01_telcon 
-                                      ,z01_celcon 
-                                      ,z01_emailc 
-                                      ,z01_nacion 
-                                      ,z01_estciv 
-                                      ,z01_profis 
-                                      ,z01_tipcre 
-                                      ,z01_cgccpf 
-                                      ,z01_fax 
-                                      ,z01_nasc 
-                                      ,z01_pai 
-                                      ,z01_mae 
-                                      ,z01_sexo 
-                                      ,z01_ultalt 
-                                      ,z01_contato 
-                                      ,z01_hora 
-                                      ,z01_nomefanta 
-                                      ,z01_cnh 
-                                      ,z01_categoria 
-                                      ,z01_dtemissao 
-                                      ,z01_dthabilitacao 
-                                      ,z01_nomecomple 
-                                      ,z01_dtvencimento 
-                                      ,z01_dtfalecimento 
-                                      ,z01_escolaridade 
-                                      ,z01_naturalidade 
-                                      ,z01_identdtexp 
-                                      ,z01_identorgao 
-                                      ,z01_localtrabalho 
-                                      ,z01_renda 
-                                      ,z01_trabalha 
-                                      ,z01_pis 
-                                      ,z01_obs 
-                                      ,z01_incmunici 
+                                       z01_numcgm
+                                      ,z01_nome
+                                      ,z01_ender
+                                      ,z01_numero
+                                      ,z01_compl
+                                      ,z01_bairro
+                                      ,z01_munic
+                                      ,z01_uf
+                                      ,z01_cep
+                                      ,z01_cxpostal
+                                      ,z01_cadast
+                                      ,z01_telef
+                                      ,z01_ident
+                                      ,z01_login
+                                      ,z01_incest
+                                      ,z01_telcel
+                                      ,z01_email
+                                      ,z01_endcon
+                                      ,z01_numcon
+                                      ,z01_comcon
+                                      ,z01_baicon
+                                      ,z01_muncon
+                                      ,z01_ufcon
+                                      ,z01_cepcon
+                                      ,z01_cxposcon
+                                      ,z01_telcon
+                                      ,z01_celcon
+                                      ,z01_emailc
+                                      ,z01_nacion
+                                      ,z01_estciv
+                                      ,z01_profis
+                                      ,z01_tipcre
+                                      ,z01_cgccpf
+                                      ,z01_fax
+                                      ,z01_nasc
+                                      ,z01_pai
+                                      ,z01_mae
+                                      ,z01_sexo
+                                      ,z01_ultalt
+                                      ,z01_contato
+                                      ,z01_hora
+                                      ,z01_nomefanta
+                                      ,z01_cnh
+                                      ,z01_categoria
+                                      ,z01_dtemissao
+                                      ,z01_dthabilitacao
+                                      ,z01_nomecomple
+                                      ,z01_dtvencimento
+                                      ,z01_dtfalecimento
+                                      ,z01_escolaridade
+                                      ,z01_naturalidade
+                                      ,z01_identdtexp
+                                      ,z01_identorgao
+                                      ,z01_localtrabalho
+                                      ,z01_renda
+                                      ,z01_trabalha
+                                      ,z01_pis
+                                      ,z01_obs
+                                      ,z01_incmunici
                        )
                 values (
-                                $this->z01_numcgm 
-                               ,'$this->z01_nome' 
-                               ,'$this->z01_ender' 
-                               ,$this->z01_numero 
-                               ,'$this->z01_compl' 
-                               ,'$this->z01_bairro' 
-                               ,'$this->z01_munic' 
-                               ,'$this->z01_uf' 
-                               ,'$this->z01_cep' 
-                               ,'$this->z01_cxpostal' 
-                               ,".($this->z01_cadast == "null" || $this->z01_cadast == ""?"null":"'".$this->z01_cadast."'")." 
-                               ,'$this->z01_telef' 
-                               ,'$this->z01_ident' 
-                               ,$this->z01_login 
-                               ,'$this->z01_incest' 
-                               ,'$this->z01_telcel' 
-                               ,'$this->z01_email' 
-                               ,'$this->z01_endcon' 
-                               ,$this->z01_numcon 
-                               ,'$this->z01_comcon' 
-                               ,'$this->z01_baicon' 
-                               ,'$this->z01_muncon' 
-                               ,'$this->z01_ufcon' 
-                               ,'$this->z01_cepcon' 
-                               ,'$this->z01_cxposcon' 
-                               ,'$this->z01_telcon' 
-                               ,'$this->z01_celcon' 
-                               ,'$this->z01_emailc' 
-                               ,$this->z01_nacion 
-                               ,$this->z01_estciv 
-                               ,'$this->z01_profis' 
-                               ,$this->z01_tipcre 
-                               ,'$this->z01_cgccpf' 
-                               ,'$this->z01_fax' 
-                               ,".($this->z01_nasc == "null" || $this->z01_nasc == ""?"null":"'".$this->z01_nasc."'")." 
-                               ,'$this->z01_pai' 
-                               ,'$this->z01_mae' 
-                               ,'$this->z01_sexo' 
-                               ,".($this->z01_ultalt == "null" || $this->z01_ultalt == ""?"null":"'".$this->z01_ultalt."'")." 
-                               ,'$this->z01_contato' 
-                               ,'$this->z01_hora' 
-                               ,'$this->z01_nomefanta' 
-                               ,'$this->z01_cnh' 
-                               ,'$this->z01_categoria' 
-                               ,".($this->z01_dtemissao == "null" || $this->z01_dtemissao == ""?"null":"'".$this->z01_dtemissao."'")." 
-                               ,".($this->z01_dthabilitacao == "null" || $this->z01_dthabilitacao == ""?"null":"'".$this->z01_dthabilitacao."'")." 
-                               ,'$this->z01_nomecomple' 
-                               ,".($this->z01_dtvencimento == "null" || $this->z01_dtvencimento == ""?"null":"'".$this->z01_dtvencimento."'")." 
-                               ,".($this->z01_dtfalecimento == "null" || $this->z01_dtfalecimento == ""?"null":"'".$this->z01_dtfalecimento."'")." 
-                               ,'$this->z01_escolaridade' 
-                               ,'$this->z01_naturalidade' 
-                               ,".($this->z01_identdtexp == "null" || $this->z01_identdtexp == ""?"null":"'".$this->z01_identdtexp."'")." 
-                               ,'$this->z01_identorgao' 
-                               ,'$this->z01_localtrabalho' 
-                               ,$this->z01_renda 
-                               ,'$this->z01_trabalha' 
-                               ,'$this->z01_pis' 
-                               ,'$this->z01_obs' 
-                               ,$this->z01_incmunici 
+                                $this->z01_numcgm
+                               ,'$this->z01_nome'
+                               ,'$this->z01_ender'
+                               ,$this->z01_numero
+                               ,'$this->z01_compl'
+                               ,'$this->z01_bairro'
+                               ,'$this->z01_munic'
+                               ,'$this->z01_uf'
+                               ,'$this->z01_cep'
+                               ,'$this->z01_cxpostal'
+                               ,".($this->z01_cadast == "null" || $this->z01_cadast == ""?"null":"'".$this->z01_cadast."'")."
+                               ,'$this->z01_telef'
+                               ,'$this->z01_ident'
+                               ,$this->z01_login
+                               ,'$this->z01_incest'
+                               ,'$this->z01_telcel'
+                               ,'$this->z01_email'
+                               ,'$this->z01_endcon'
+                               ,$this->z01_numcon
+                               ,'$this->z01_comcon'
+                               ,'$this->z01_baicon'
+                               ,'$this->z01_muncon'
+                               ,'$this->z01_ufcon'
+                               ,'$this->z01_cepcon'
+                               ,'$this->z01_cxposcon'
+                               ,'$this->z01_telcon'
+                               ,'$this->z01_celcon'
+                               ,'$this->z01_emailc'
+                               ,$this->z01_nacion
+                               ,$this->z01_estciv
+                               ,'$this->z01_profis'
+                               ,$this->z01_tipcre
+                               ,'$this->z01_cgccpf'
+                               ,'$this->z01_fax'
+                               ,".($this->z01_nasc == "null" || $this->z01_nasc == ""?"null":"'".$this->z01_nasc."'")."
+                               ,'$this->z01_pai'
+                               ,'$this->z01_mae'
+                               ,'$this->z01_sexo'
+                               ,".($this->z01_ultalt == "null" || $this->z01_ultalt == ""?"null":"'".$this->z01_ultalt."'")."
+                               ,'$this->z01_contato'
+                               ,'$this->z01_hora'
+                               ,'$this->z01_nomefanta'
+                               ,'$this->z01_cnh'
+                               ,'$this->z01_categoria'
+                               ,".($this->z01_dtemissao == "null" || $this->z01_dtemissao == ""?"null":"'".$this->z01_dtemissao."'")."
+                               ,".($this->z01_dthabilitacao == "null" || $this->z01_dthabilitacao == ""?"null":"'".$this->z01_dthabilitacao."'")."
+                               ,'$this->z01_nomecomple'
+                               ,".($this->z01_dtvencimento == "null" || $this->z01_dtvencimento == ""?"null":"'".$this->z01_dtvencimento."'")."
+                               ,".($this->z01_dtfalecimento == "null" || $this->z01_dtfalecimento == ""?"null":"'".$this->z01_dtfalecimento."'")."
+                               ,'$this->z01_escolaridade'
+                               ,'$this->z01_naturalidade'
+                               ,".($this->z01_identdtexp == "null" || $this->z01_identdtexp == ""?"null":"'".$this->z01_identdtexp."'")."
+                               ,'$this->z01_identorgao'
+                               ,'$this->z01_localtrabalho'
+                               ,$this->z01_renda
+                               ,'$this->z01_trabalha'
+                               ,'$this->z01_pis'
+                               ,'$this->z01_obs'
+                               ,$this->z01_incmunici
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -973,10 +973,10 @@ class cl_cgm {
        $sql  .= $virgula." z01_obs = '$this->z01_obs' ";
        $virgula = ",";
      }
-     if(trim($this->z01_incmunici)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_incmunici"])){ 
-        if(trim($this->z01_incmunici)=="" && isset($GLOBALS["HTTP_POST_VARS"]["z01_incmunici"])){ 
-           $this->z01_incmunici = "0" ; 
-        } 
+     if(trim($this->z01_incmunici)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_incmunici"])){
+        if(trim($this->z01_incmunici)=="" && isset($GLOBALS["HTTP_POST_VARS"]["z01_incmunici"])){
+           $this->z01_incmunici = "0" ;
+        }
        $sql  .= $virgula." z01_incmunici = $this->z01_incmunici ";
        $virgula = ",";
      }
@@ -1118,7 +1118,7 @@ class cl_cgm {
          }
        }
      }
-     
+
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -1148,11 +1148,11 @@ class cl_cgm {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($z01_numcgm=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($z01_numcgm=null,$dbwhere=null) {
 
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
@@ -1161,7 +1161,7 @@ class cl_cgm {
        if ($dbwhere==null || $dbwhere=="") {
 
          $resaco = $this->sql_record($this->sql_query_file($z01_numcgm));
-       } else { 
+       } else {
          $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
        }
        if (($resaco != false) || ($this->numrows!=0)) {
@@ -1315,7 +1315,7 @@ class cl_cgm {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from cgm ";
+     $sql .= " from cgm left join issbase on z01_numcgm = q02_numcgm ";
      $sql2 = "";
      if($dbwhere==""){
        if($z01_numcgm!=null ){
@@ -1443,7 +1443,7 @@ class cl_cgm {
 
   $sql = "
       select $campos
-      from cgm
+      from cgm left join issbase on z01_numcgm = q02_numcgm
   ";
     if ($filtro==1){
       $sql .= " inner join db_cgmcpf on db_cgmcpf.z01_numcgm=cgm.z01_numcgm ";
@@ -1946,11 +1946,11 @@ class cl_cgm {
      if(trim($this->z01_obs)!="" ){
        $sql  .= $virgula." z01_obs = '$this->z01_obs' ";
        $virgula = ",";
-     }  
-     if(trim($this->z01_incmunici)!="" ){ 
+     }
+     if(trim($this->z01_incmunici)!="" ){
        $sql  .= $virgula." z01_incmunici = '$this->z01_incmunici' ";
        $virgula = ",";
-     }       
+     }
      $sql .= " where ";
      if($z01_numcgm!=null){
        $sql .= " z01_numcgm = $this->z01_numcgm";
