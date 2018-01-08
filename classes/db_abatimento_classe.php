@@ -636,16 +636,21 @@ class cl_abatimento {
     $sSql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
     $sSql .= "      left join abatimentorecibo on k125_sequencial = k127_abatimento";
     $sSql .= "      left join arrenumcgm on arrenumcgm.k00_numpre = k127_numprerecibo";
+    $sql2 = "";
 
-    if ($iSequencial) {
-      $sWhere .= " abatimento.k125_sequencial = {$iSequencial}" . (!empty($sWhere) ? " and " : '');
+    if ($sWhere == "") {
+      if ($iSequencial != null) {
+        $sql2 .= " where abatimento.k125_sequencial = {$iSequencial} ";
+      }
+
+    }elseif($sWhere != ""){
+      $sql2 = " where $sWhere";
+      if ($iSequencial != null) {
+        $sql2 .= " and abatimento.k125_sequencial = {$iSequencial} ";
+      }
     }
 
-    if ($sWhere) {
-      $sSql .= " where {$sWhere} ";
-    }
-
-
+    $sSql .= $sql2;
     if ($sOrdem) {
       $sSql .= " order by {$sOrdem}";
     }
