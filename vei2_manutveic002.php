@@ -83,7 +83,12 @@ ob_start();
 <head>
 <title>Relatório</title>
 <link rel="stylesheet" type="text/css" href="estilos/relatorios/padrao.style.css">
-<style type="text/css">.ritz .waffle a { color: inherit; }.ritz .waffle .s11{border-bottom:0;border-right:0;background-color:#d9d9d9;text-align:center;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s7{border-bottom:1px SOLID #000000;border-right:1px SOLID #000000;background-color:#cccccc;text-align:left;font-weight:bold;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s10{border-bottom:0;background-color:#ffffff;text-align:right;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s12{border-bottom:0;border-right:0;background-color:#d9d9d9;text-align:left;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s2{border-left: none;background-color:#ffffff;text-align:left;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s1{border-left: none;background-color:#ffffff;text-align:right;font-weight:bold;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s4{background-color:#ffffff;text-align:left;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s3{background-color:#ffffff;text-align:right;font-weight:bold;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s5{border-bottom:1px SOLID #000000;background-color:#ffffff;text-align:left;font-weight:bold;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s9{border-bottom:0;background-color:#ffffff;text-align:left;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s6{border-bottom:1px SOLID #000000;background-color:#ffffff;text-align:left;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s13{border-bottom:0;border-right:0;background-color:#d9d9d9;text-align:right;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s0{background-color:#ffffff;text-align:left;font-weight:bold;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}.ritz .waffle .s8{border-bottom:0;background-color:#ffffff;text-align:center;color:#000000;font-family:'Arial';font-size:10pt;vertical-align:bottom;white-space:nowrap;direction:ltr;padding:0px 3px 0px 3px;}</style>
+    <style>
+        .ritz .waffle a{color:inherit}.ritz .waffle .s11,.ritz .waffle .s7{color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s11{border-bottom:0;border-RIGHT:0;background-color:#d9d9d9;text-align:center}.ritz .waffle .s7{border-bottom:1px SOLID #000;border-RIGHT:1px SOLID #000;background-color:#ccc;text-align:LEFT;font-weight:700}.ritz .waffle .s10{border-bottom:0;background-color:#fff;text-align:RIGHT;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s12,.ritz .waffle .s2{text-align:LEFT;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s12{border-bottom:0;border-RIGHT:0;background-color:#d9d9d9}.ritz .waffle .s2{border-LEFT:NONE;background-color:#fff}.ritz .waffle .s1{border-LEFT:NONE;background-color:#fff;text-align:RIGHT;font-weight:700;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s4{background-color:#fff;text-align:LEFT;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s3{background-color:#fff;text-align:RIGHT;font-weight:700;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s5,.ritz .waffle .s6,.ritz .waffle .s9{background-color:#fff;text-align:LEFT;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s5{border-bottom:1px SOLID #000;font-weight:700}.ritz .waffle .s9{border-bottom:0}.ritz .waffle .s6{border-bottom:1px SOLID #000}.ritz .waffle .s13{border-bottom:0;border-RIGHT:0;background-color:#d9d9d9;text-align:RIGHT;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s0{background-color:#fff;text-align:LEFT;font-weight:700;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.ritz .waffle .s8{border-bottom:0;background-color:#fff;text-align:center;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding:0 3px}.t1,.t2{text-align:right;border-bottom:1px SOLID #000;border-top:1px SOLID #000;background-color:#ccc;font-weight:700;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding: 2px;}.t1{border-left:1px SOLID #000;padding: 2px}.t3{border-bottom:1px SOLID #000;border-top:1px SOLID #000;border-right:1px SOLID #000;background-color:#ccc;text-align:center;font-weight:700;color:#000;font-family:Arial;font-SIZE:10pt;vertical-align:bottom;white-SPACE:nowrap;direction:ltr;padding: 2px}
+        .space {
+            height: 25px;
+        }
+    </style>
 </head>
 <body>
     <div class="ritz grid-container" dir="ltr">
@@ -91,7 +96,7 @@ ob_start();
         <thead>
           <tr>
             <th id="19688284C0" style="width:129px" class="column-headers-background">&nbsp;</th>
-            <th id="19688284C1" style="width:194px" class="column-headers-background">&nbsp;</th>
+            <th id="19688284C1" style="width:194px" class="column-headers-background">&nbsp;</th>d
             <th id="19688284C2" style="width:87px" class="column-headers-background">&nbsp;</th>
             <th id="19688284C3" style="width:91px" class="column-headers-background">&nbsp;</th>
             <th id="19688284C4" style="width:115px" class="column-headers-background">&nbsp;</th>
@@ -108,45 +113,44 @@ ob_start();
                   $oResult = db_utils::fieldsMemory($rsResult, $iCont);
                   echo <<<HTML
                   <tr style='height:20px;'>
-                      <td class="s0" colspan="10">DADOS DO VEICULO:</td>
+                      <td class="s0" colspan="10"><strong>DADOS DO VEICULO:<strong></td>
                   </tr>
                   <tr style='height:20px;'>
                       <td class="s1 softmerge">
-                          <div class="softmerge-inner" style="width: 141px; left: -15px;">Codigo do veiculo:</div>
+                          <div class="softmerge-inner" style="width: 141px; left: -15px;"><strong>Codigo do veiculo:<strong></div>
                       </td>
                       <td class="s2" colspan="3">{$oResult->ve01_codigo}</td>
-                      <td class="s3">Placa:</td>
+                      <td class="s3"><strong>Placa:<strong></td>
                       <td class="s4" colspan="5">{$oResult->ve01_placa}</td>
                   </tr>
                   <tr style='height:20px;'>
-                      <td class="s3">Marca:</td>
+                      <td class="s3"><strong>Marca:<strong></td>
                       <td class="s4" colspan="3">{$oResult->marca}</td>
-                      <td class="s3">Modelo:</td>
+                      <td class="s3"><strong>Modelo:<strong></td>
                       <td class="s4" colspan="5">{$oResult->modelo}</td>
                   </tr>
                   <tr style='height:20px;'>
-                      <td class="s3">Central:</td>
+                      <td class="s3"><strong>Central:<strong></td>
                       <td class="s4" colspan="3">{$oResult->central}</td>
                       <td class="s3"></td>
                       <td class="s4" colspan="5"></td>
                   </tr>
                   <tr style='height:20px;'>
-                      <td class="s5">MANUTENÇÕES:</td>
+                      <td class="s5" style="margin-bottom: 10px"><strong>MANUTENÇÕES:<strong></td>
                       <td class="s6" colspan="9"></td>
                   </tr>
-                  <tr style='height:20px;'>
-                      <td class="s7">Manut.</td>
-                      <td class="s7">Tipo de Serviço</td>
-                      <td class="s7">Data</td>
-                      <td class="s7">Media</td>
+                  <tr style='height:20px; margin-bottom: 10px'>
+                      <td class="s7" style="border-left: 1px solid #000000"><strong>Manut.<strong></td>
+                      <td class="s7"><strong>Tipo de Gasto<strong></td>
+                      <td class="s7"><strong>Tipo de Serviço<strong></tdclass></td>
+                      <td class="s7"><strong>Data<strong></td>
+                      <td class="s7"><strong>Media<strong></td>
                       <td class="s7 softmerge">
-                          <div class="softmerge-inner" style="width: 112px; left: -1px;">Vlr. Mão de Obra</div>
+                          <div class="softmerge-inner" style="width: 97px; left: -1px;"><strong>Valor<strong></div>
                       </td>
-                      <td class="s7 softmerge">
-                          <div class="softmerge-inner" style="width: 97px; left: -1px;">Vlr. em Peças</div>
-                      </td>
-                      <td class="s7" colspan="4">Fornecedor</td>
+                      <td class="s7" colspan="5"><strong>Fornecedor<strong></td>
                   </tr>
+
 HTML;
 
 
@@ -165,7 +169,15 @@ HTML;
                            ve62_vlrmobra,
                            ve62_vlrpecas,
                            ve28_descr,
-                           cgm.z01_numcgm||'-'||cgm.z01_nome as fornecedor
+                           cgm.z01_numcgm||'-'||cgm.z01_nome as fornecedor,
+                           sum(ve63_vlruni) as valortotalpecas,
+                           CASE ve62_tipogasto
+                                WHEN 6 THEN 'ÓLEO LUBRIFICANTE'
+                                WHEN 7 THEN 'GRAXA (QUILOGRAMA)'
+                                WHEN 8 THEN 'PEÇAS'
+                                WHEN 9 THEN 'SERVICOS'
+                           END AS tipogasto,
+                           ve62_descr
                     FROM veicmanut
                     INNER JOIN veiccadtiposervico ON veiccadtiposervico.ve28_codigo = veicmanut.ve62_veiccadtiposervico
                     INNER JOIN veiculos ON veiculos.ve01_codigo = veicmanut.ve62_veiculos
@@ -179,12 +191,25 @@ HTML;
                     INNER JOIN veicmanutoficina ON veicmanutoficina.ve66_veicmanut = veicmanut.ve62_codigo
                     LEFT JOIN empempenho ON ve62_numemp = e60_numemp
                     LEFT JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
-                    LEFT JOIN veiccentral ON ve40_veiculos = ve01_codigo";
+                    LEFT JOIN veiccentral ON ve40_veiculos = ve01_codigo
+                    LEFT JOIN veicmanutitem ON ve63_veicmanut = ve62_codigo
+                    ";
 
                       $sSql2 .= " where veiculos.ve01_codigo = $oResult->ve01_codigo ";
 
                       if ($ve01_codigo) {
-                          $sSql2 .= " and veicmanut.ve62_veiculos in ($ve01_codigo)";
+                          $sSql2 .= " and veicmanut.ve62_veiculos in ($ve01_codigo)
+                                   GROUP BY veiculos.ve01_codigo,
+                                   veiccadmarca.ve21_descr,
+                                   veicmanut.ve62_codigo,
+                                   cgm.z01_numcgm,
+                                   veiculos.ve01_veiccadmodelo,
+                                   veiculos.ve01_veiccadmarca,
+                                   veiccadtiposervico.ve28_descr,
+                                   veiccadmodelo,
+                                   ve62_descr
+                                   order by ve62_dtmanut
+                                   ";
                       }
                       if ($ve70_dataini) {
                           $sSql2 .= " and ve62_dtmanut >= '$ve70_dataini' ";
@@ -199,26 +224,39 @@ HTML;
                           $sSql2 .= " and ve40_veiccadcentral = $idCentral";
                       }
                       if ($ve62_veiccadtiposervico) {
-                          $sSql2 .= " and ve62_veiccadtiposervico = $ve62_veiccadtiposervico";
+                          $sSql2 .= " and ve62_veiccadtiposervico = $ve62_veiccadtiposervico
+                          ";
                       }
-                      //echo $sSql2;exit;
+//                      echo $sSql2;exit;
                       $rsResult2 = db_query($sSql2) or die(pg_last_error());//db_criatabela($rsResult2);exit;
-
+                      $valor = 0;
                       for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResult2); $iCont2++) {
                           $oResult2 = db_utils::fieldsMemory($rsResult2, $iCont2);
+                          $valor += $oResult2->valortotalpecas;
+                          db_formatar($valor,2);
                           $datamanut = implode("/", array_reverse(explode("-", $oResult2->dtmanutencao)));
                         echo <<<HTML
                         <tr style="height:20px;">
-                            <td class="s8">{$oResult2->manutencao}</td>
-                            <td class="s9">{$oResult2->ve28_descr}</td>
-                            <td class="s8">$datamanut</td>
-                            <td class="s8">{$oResult2->ve62_medida}</td>
-                            <td class="s10">{$oResult2->ve62_vlrmobra}</td>
-                            <td class="s10">{$oResult2->ve62_vlrpecas}</td>
-                            <td class="s9" colspan="4">{$oResult2->fornecedor}</td>
+                            <td class="s8 space">{$oResult2->manutencao}</td>
+                            <td class="s9 space">{$oResult2->tipogasto}</td>
+                            <td class="s9 space">{$oResult2->ve62_descr}</td>
+                            <td class="s8 space">$datamanut</td>
+                            <td class="s8 space">{$oResult2->ve62_medida}</td>
+                            <td class="s10 space">{$oResult2->valortotalpecas}</td>
+                            <td class="s9 space" colspan="4">{$oResult2->fornecedor}</td>
                         </tr>
 HTML;
-                  }
+
+                       }
+                  echo <<<HTML
+                  <tr>
+                           <td colspan = "5" class="t1 "><strong>VALOR TOTAL DAS MANUTENÇÕES: R$ <strong></td>
+                           <td colspan = "1" class="t2 ">{$valor}</td>
+                           <td colspan = "5" class="t3 "></td>
+
+                  </tr>
+HTML;
+
               }
               ?>
         </tbody>

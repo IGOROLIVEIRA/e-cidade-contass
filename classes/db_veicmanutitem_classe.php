@@ -588,6 +588,7 @@ class cl_veicmanutitem {
      }
      $sql .= " from veicmanut ";
      $sql .= " inner join veicmanutitem on ve63_veicmanut = ve62_codigo ";
+     $sql .= " left join veicmanutitempcmater on ve64_veicmanutitem = ve63_codigo ";
      $sql2 = "";
      if($dbwhere==""){
        if($ve62_codigo!=null ){

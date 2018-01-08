@@ -455,17 +455,16 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
         $total_abast++;
       }
       $pdf->cell(20,$alt,'','T',0,"C",$p);
-      $pdf->cell(50,$alt,'','T',0,"L",$p);
+      $pdf->cell(90,$alt,'','T',0,"L",$p);
       $pdf->cell(20,$alt,'Total','T',0,"R",$p);
       $pdf->cell(20,$alt,$quant_litros,'T',0,"C",$p);
       $pdf->cell(20,$alt,db_formatar($vlr_totalabast,"f"),'T',0,"R",$p);
-      $pdf->cell(20,$alt,$ve70_medida ,'T',0,"C",$p);
       $pdf->cell(20,$alt,'','T',0,"C",$p);
       $pdf->cell(20,$alt,'','T',0,"C",$p);
       $pdf->cell(20,$alt,'','T',1,"C",$p);
        
       $pdf->setfont('arial','b',8);
-      $pdf->cell(210,$alt,"Total de Abastecimentos :".$total_abast,"T",1,"L",0);
+      $pdf->cell(230,$alt,"Total de Abastecimentos :".$total_abast,"T",1,"L",0);
        
     }else{
       $pdf->cell(0,$alt,"Não Existem Abastecimentos","T",1,"L",0);
@@ -503,7 +502,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
          */
         if (isset($lItens)) {
            
-          $sCamposManutitem = " ve63_veicmanut, ve63_descr, ve63_quant, ve63_vlruni, ve63_codigo ";
+          $sCamposManutitem = " ve63_veicmanut, ve63_descr, ve63_quant, ve63_vlruni, ve64_pcmater ";
           $sWhereManutitem  = " ve62_veiculos = {$veiculo}  and ve63_veicmanut = {$oManutencao->ve62_codigo} "; 
       
           $sSqlManutitem    = $clveicmanutitem->sql_query_ItensManutencao(null,$sCamposManutitem, "", $sWhereManutitem);
@@ -538,123 +537,105 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
       $troca           = 1;
       $p               = 0;
       $total_manut     = 0;
-      $nValorPeca	     = 0;
-      $nValorMaoObra	 = 0;
+      $nValorPeca	   = 0;
+      $nValorMaoObra   = 0;
       $nValorTotal     = 0;
+      $nValormanut     = 0;
+
+        if ($pdf->gety() > $pdf->h - 30) {
+
+            if($troca == 0 ) {
+                $pdf->addpage("L");
+            }
+        }
       
       for($ind = 0; $ind < count($aManutencao); $ind++) {
-      
-        if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ) {
-           
-       	  if($troca == 0 ) {
-       	    $pdf->addpage("L");
-       	  }
-          $pdf->setfont('arial','b',8);
-          $pdf->cell(15,$alt,"Manut."                                                                       ,1,0,"C",1);
-          $pdf->cell(85,$alt,"Tipo de Serviço"                                                              ,1,0,"C",1); 
-          $pdf->cell(20,$alt,"Data"                                                                         ,1,0,"C",1);
-          $pdf->cell(20,$alt,"Hora"                                                                         ,1,0,"C",1);
-          $pdf->cell(20,$alt,"Medida"                                                                       ,1,0,"C",1);
-          $pdf->cell(25,$alt,"Vlr. Mão de Obra"                                                             ,1,0,"C",1); 
-          $pdf->cell(25,$alt,"Vlr. em Peças"                                                                ,1,1,"C",1);
-          $troca = 0;
-        }
-        
+
+          if ($pdf->gety() > $pdf->h - 30) {
+
+                  $pdf->addpage("L");
+          }
+
+        $pdf->setfont('arial','b',8);
+        $pdf->cell(15,$alt,"Manut."         ,1,0,"C",1);
+        $pdf->cell(85,$alt,"Tipo de Serviço",1,0,"C",1);
+        $pdf->cell(25,$alt,"Data"           ,1,0,"C",1);
+        $pdf->cell(25,$alt,"Hora"           ,1,0,"C",1);
+        $pdf->cell(25,$alt,"Medida"         ,1,1,"C",1);
+
         $pdf->setfont('arial','',7);
-        $pdf->cell(15,$alt, $aManutencao[$ind]->ve62_codigo                                                ,0,0,"C",$p);
-        $pdf->cell(85,$alt, $aManutencao[$ind]->ve28_descr                                                 ,0,0,"L",$p);
-        $pdf->cell(20,$alt, db_formatar($aManutencao[$ind]->ve62_dtmanut,"d")                              ,0,0,"C",$p);
-        $pdf->cell(20,$alt, $aManutencao[$ind]->ve62_hora                                                   ,0,0,"C",$p);
-        $pdf->cell(20,$alt, $aManutencao[$ind]->ve62_medida." ".$ve07_sigla                                ,0,0,"C",$p);
-        $pdf->cell(25,$alt, db_formatar($aManutencao[$ind]->ve62_vlrmobra,"f")                             ,0,0,"R",$p);
-        $pdf->cell(25,$alt, db_formatar($aManutencao[$ind]->ve62_vlrpecas,"f")                             ,0,1,"R",$p);
-        
-        // -> Imprime Itens de Manutenção
+        $pdf->cell(15,$alt, $aManutencao[$ind]->ve62_codigo                  ,0,0,"C",$p);
+        $pdf->cell(85,$alt, $aManutencao[$ind]->ve28_descr                   ,0,0,"L",$p);
+        $pdf->cell(25,$alt, db_formatar($aManutencao[$ind]->ve62_dtmanut,"d"),0,0,"C",$p);
+        $pdf->cell(25,$alt, $aManutencao[$ind]->ve62_hora                    ,0,0,"C",$p);
+        $pdf->cell(25,$alt, $aManutencao[$ind]->ve62_medida." ".$ve07_sigla  ,0,1,"C",$p);
+
+
+          // -> Imprime Itens de Manutenção
         if (isset($lItens)) {
-           
+
+            if ($pdf->gety() > $pdf->h - 30) {
+                $pdf->addpage("L");
+            }
+
           if($aManutencao[$ind]->lItens == true) {
             
-            $iTotalItens = 0;  
+            $iTotalItens = 0;
+            $iValormanut = 0;
             for ($iItens = 0; $iItens < count($aManutencao[$ind]->aItens); $iItens++) {
               
               if ($aManutencao[$ind]->lItens == true ) {
-                
+                  $iValormanut = $iValormanut + $aManutencao[$ind]->aItens[$iItens]->ve63_vlruni;
                 if ($pdf->gety() > $pdf->h - 30 ) {
-                  
+
                   $pdf->addpage("L");
                   $pdf->setfont('arial','b',8);
-                  $pdf->cell(15,$alt,"Manut."                                                               ,1,0,"C",1);
-                  $pdf->cell(85,$alt,"Tipo de Serviço"                                                      ,1,0,"C",1); 
-                  $pdf->cell(20,$alt,"Data"                                                                 ,1,0,"C",1);
-                  $pdf->cell(20,$alt,"Medida"                                                               ,1,0,"C",1);
-                  $pdf->cell(25,$alt,"Vlr. Mão de Obra"                                                     ,1,0,"C",1); 
-                  $pdf->cell(25,$alt,"Vlr. em Peças"                                                        ,1,1,"C",1);
+                  $pdf->cell(15,$alt,"Manut."         ,1,1,"C",1);
+                  $pdf->cell(85,$alt,"Tipo de Serviço",1,0,"C",1);
+                  $pdf->cell(20,$alt,"Data"           ,1,0,"C",1);
+                  $pdf->cell(20,$alt,"Medida"         ,1,0,"C",1);
+
                   
                   $pdf->setfont('arial','b',8);
-                  $pdf->cell(15,$alt,""                                                                     ,0,0,"C",$p);
-                  $pdf->cell(15,$alt,"Item."                                                                ,0,0,"C",$p);
-                  $pdf->cell(100,$alt,"Descrição do Item"                                                    ,0,0,"C",$p);  
-                  $pdf->cell(20,$alt,"Quantidade"                                                           ,0,0,"C",$p);
-                  $pdf->cell(40,$alt,"Valor Peça"                                                           ,0,1,"C",$p);
-                  
+                  $pdf->cell(15,$alt,"",0,0,"C",$p);
+                  $pdf->cell(15,$alt,"Item."             ,0,0,"C",$p);
+                  $pdf->cell(85,$alt,"Descrição do Item" ,0,0,"C",$p);
+                  $pdf->cell(20,$alt,"Quantidade"        ,0,0,"C",$p);
+                  $pdf->cell(40,$alt,"Valor Item"        ,0,1,"C",$p);
+
                 }
-                
+
                 if ($iItens == 0) {
-                  
+
                   $pdf->setfont('arial','b',8);
-                  $pdf->cell(15,$alt,""                                                                     ,0,0,"C",$p);
-                  $pdf->cell(15,$alt,"Item."                                                                ,0,0,"C",$p);
-                  $pdf->cell(100,$alt,"Descrição do Item"                                                    ,0,0,"C",$p);  
-                  $pdf->cell(20,$alt,"Quantidade"                                                           ,0,0,"C",$p);
-                  $pdf->cell(40,$alt,"Valor Peça"                                                           ,0,1,"C",$p);
+                  $pdf->cell(15,$alt,""                  ,0,0,"C",$p);
+                  $pdf->cell(15,$alt,"Item."             ,1,0,"C",$p);
+                  $pdf->cell(85,$alt,"Descrição do Item" ,1,0,"C",$p);
+                  $pdf->cell(20,$alt,"Quantidade"        ,1,0,"C",$p);
+                  $pdf->cell(40,$alt,"Valor Item"        ,1,1,"C",$p);
                 }
               }
-              
+
               $pdf->setfont('arial','',7);
               $pdf->cell(15,$alt,"",0,0,"C",$p);
-              $pdf->cell(15,$alt,$aManutencao[$ind]->aItens[$iItens]->ve63_codigo                          ,0,0,"C",$p);
-              $pdf->cell(100,$alt,$aManutencao[$ind]->aItens[$iItens]->ve63_descr                           ,0,0,"L",$p);
-              $pdf->cell(20,$alt,$aManutencao[$ind]->aItens[$iItens]->ve63_quant                           ,0,0,"C",$p);
-              $pdf->cell(40,$alt,db_formatar($aManutencao[$ind]->aItens[$iItens]->ve63_vlruni,"f")         ,0,1,"R",$p);
-              
+              $pdf->cell(15,$alt,$aManutencao[$ind]->aItens[$iItens]->ve64_pcmater                        ,0,0,"C",$p);
+              $pdf->cell(85,$alt,$aManutencao[$ind]->aItens[$iItens]->ve63_descr                          ,0,0,"L",$p);
+              $pdf->cell(20,$alt,$aManutencao[$ind]->aItens[$iItens]->ve63_quant                          ,0,0,"C",$p);
+              $pdf->cell(40,$alt,db_formatar($aManutencao[$ind]->aItens[$iItens]->ve63_vlruni,"f")        ,0,1,"R",$p);
               $iTotalItens++;
+
             }
+              $pdf->setfont('arial','b',10);
+              $pdf->cell(150,$alt,"Total:",'T',0,"R",$p,0);
+              $pdf->cell(25,$alt,db_formatar($iValormanut,"f"),1,0,"L",$p,0);
+              $pdf->ln(5);
+
           }
-        }
-        /* 
-         *                                FIM iMPRESSÃO DOS ITENS 
-         */
-  
-        $nValorMaoObra += $aManutencao[$ind]->ve62_vlrmobra;
-        $nValorPeca    += $aManutencao[$ind]->ve62_vlrpecas;
-         
-        if ($p==0) {
-       	  $p=1;
-        } else {
-       	  $p=0;
-        }
+
+        }$pdf->ln();
+
         $total_manut++;
-      }
-      
-      $nValorTotal = $nValorMaoObra + $nValorPeca;
-      
-      $pdf->cell(15,$alt,''                                                                              ,'T',0,"C",$p);
-      $pdf->cell(85,$alt,''                                                                              ,'T',0,"L",$p);
-      $pdf->cell(20,$alt,''                                                                              ,'T',0,"R",$p);
-      $pdf->cell(20,$alt,''                                                                              ,'T',0,"R",$p);
-      $pdf->cell(25,$alt,db_formatar($nValorMaoObra,"f")                                                 ,'T',0,"R",$p);
-      $pdf->cell(25,$alt,db_formatar($nValorPeca,"f")                                                    ,'T',1,"R",$p);
-      
-      $pdf->cell(15,$alt,''                                                                              ,'B',0,"C",$p);
-      $pdf->cell(85,$alt,''                                                                              ,'B',0,"L",$p);
-      $pdf->cell(20,$alt,''                                                                              ,'B',0,"R",$p);
-      $pdf->cell(20,$alt,''                                                                              ,'B',0,"R",$p);
-      $pdf->setfont('arial','b',7);
-      $pdf->cell(25,$alt,'Total'                                                                         ,'B',0,"R",$p);
-      $pdf->cell(25,$alt,db_formatar($nValorTotal,"f")                                                   ,'B',1,"C",$p);
-      
-      $pdf->setfont('arial','b',8);
-      $pdf->cell(190,$alt,"Total de Manutenções :".$total_manut                                           ,"T",1,"L",0);
+      }$pdf->ln(); $pdf->ln();
   
     } else {
       $pdf->cell(0,$alt,"Não Existem Itens ","T",1,"L",0);
