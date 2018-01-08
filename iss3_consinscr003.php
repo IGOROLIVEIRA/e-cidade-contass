@@ -74,7 +74,7 @@
   /**
    * Sql que retorna os dados básicos da inscrição
    */
-  $sSqlDadosInscricao  = " select issbase.*,                                                                                       \n";
+  $sSqlDadosInscricao  = " select distinct issbase.*,                                                                                       \n";
   $sSqlDadosInscricao .= "        case when (cgm_inscr.z01_nomecomple is null or trim(cgm_inscr.z01_nomecomple) = '')              \n";
   $sSqlDadosInscricao .= "          then cgm_inscr.z01_nome                                                                        \n";
   $sSqlDadosInscricao .= "          else cgm_inscr.z01_nomecomple                                                                  \n";
@@ -228,7 +228,7 @@ function js_Imprime_iss() {
   window.open('iss2_imprimebiciss.php?inscr=<?=$iCodigoIncricao?>','','location=0,HEIGHT=600,WIDTH=600');
 }
 function js_Imprimebaix() {
-	
+
   if (iBloqueioCertidao == 2){
     alert(_M("tributario.issqn.iss3_consinscr003.certidaoavisodebito"));
   } else if (iBloqueioCertidao == 3) {
