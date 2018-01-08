@@ -423,7 +423,8 @@ class AcordoItem {
                                                                        o80_valor      as valorreserva,
                                                                        ac22_anousu as ano",
                                                                       "ac22_coddot",
-                                                                      "ac22_acordoitem={$this->getCodigo()}"
+                                                                      "ac22_acordoitem={$this->getCodigo()}
+                                                                       and ac22_anousu=".db_getsession("DB_anousu").""
                                                                      );
       $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
       $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
