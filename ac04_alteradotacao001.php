@@ -115,8 +115,7 @@ if(isset($adicionar)){
   }else if(pg_numrows(db_query($sSqlDotacao)) > 0 && pg_numrows(db_query($sSqlDotacaoAcordo)) == 0){
     $sInsert = "INSERT INTO acordoitemdotacao (ac22_sequencial, ac22_coddot,ac22_anousu,ac22_acordoitem)
     VALUES (
-    (SELECT max(ac22_sequencial)+1
-    FROM acordoitemdotacao), '".$codigo_dotacao[$material]."',
+    (select nextval('acordoitemdotacao_ac22_sequencial_seq')), '".$codigo_dotacao[$material]."',
     '".db_getsession("DB_anousu")."',
     '".$codigo_acordo_item[$material]."')";
 
