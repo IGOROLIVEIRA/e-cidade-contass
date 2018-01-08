@@ -2,39 +2,40 @@
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_cronem102017_classe.php");
+require_once("classes/db_cronogramamesdesembolso_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarCRONEM.model.php");
 
 /**
- * Dados Complementares Sicom Acompanhamento Mensal
- * @author marcelo
+ * gerar arquivo Cronograma de Execucao Mensal de Desembolso Sicom Acompanhamento Mensal
+ * @author robson
  * @package Contabilidade
  */
 class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-
+  
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
-  protected $iCodigoLayout;
-
+  protected $iCodigoLayout = 0;
+  
   /**
    *
-   * Nome do arquivo a ser criado
+   * NOme do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'CRONEM';
-
+  
   /**
    *
-   * Construtor da classe
+   * Contrutor da classe
    */
   public function __construct()
   {
-
+    
   }
-
+  
   /**
    * Retorna o codigo do layout
    *
@@ -44,84 +45,117 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
   {
     return $this->iCodigoLayout;
   }
-
+  
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos()
   {
 
-  }
+    $aElementos = array(
+      "tipoRegistro",
+      "codOrgao",
+      "codUnidadeSub",
+      "grupoDespesa",
+      "vlDotMensal"
+    );
 
+    return $aElementos;
+  }
+  
   /**
-   * selecionar os dados de Dados Complementares à LRF do mes para gerar o arquivo
+   * selecionar os dados de indentificacao da remessa pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados()
   {
 
-    $clmetareal10 = new cl_cronem102017();
+    /**
+     * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
+     */
+    $clcronem10 = new cl_cronem102017();
+    
+    /**
+     * inserir informacoes no banco de dados
+     */
+    db_inicio_transacao();
+    $result = $clcronem10->sql_record($clcronem10->sql_query(null, "*", null, "si170_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si170_instit = " . db_getsession("DB_instit")));
+    if (pg_num_rows($result) > 0) {
+      $clcronem10->excluir(null, "si170_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si170_instit = " . db_getsession("DB_instit"));
+      if ($clcronem10->erro_status == 0) {
+        throw new Exception($clcronem10->erro_msg);
+      }
+    }
+    db_fim_transacao();
+    
 
     db_inicio_transacao();
+    $sSqlTrataUnidade = "select si08_tratacodunidade from infocomplementares where si08_instit = " . db_getsession("DB_instit");
+    $rsResultTrataUnidade = db_query($sSqlTrataUnidade);
+    $sTrataCodUnidade = db_utils::fieldsMemory($rsResultTrataUnidade, 0)->si08_tratacodunidade;
 
-    /*
-     * excluir informacoes do mes selecionado registro 10
-     */
-    $result = $clmetareal10->sql_record($clmetareal10->sql_query(null, "*", null, "si171_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si171_instit = " . db_getsession("DB_instit")));
-    if (pg_num_rows($result) > 0) {
-      $clmetareal10->excluir(null, "si171_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si171_instit = " . db_getsession("DB_instit"));
-      if ($clmetareal10->erro_status == 0) {
-        throw new Exception($clmetareal10->erro_msg);
+    $aTipoDespesa = array("3310000000000" => "1",
+    "3320000000000" => "2",
+    "3330000000000" => "3",
+    "3440000000000" => "4",
+    "3450000000000" => "5",
+    "3460000000000" => "6");
+
+    $aMeses = array("01" => "o202_janeiro",
+    "02" => "o202_fevereiro",
+    "03" => "o202_marco",
+    "04" => "o202_abril",
+    "05" => "o202_maio",
+    "06" => "o202_junho",
+    "07" => "o202_julho",
+    "08" => "o202_agosto",
+    "09" => "o202_setembro",
+    "10" => "o202_outubro",
+    "11" => "o202_novembro",
+    "12" => "o202_dezembro");
+    $sMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
+    $clcronogramamesdesembolso = new cl_cronogramamesdesembolso;
+    $sWhere  = " o202_instit = ".db_getsession("DB_instit");
+    $sWhere .= " and o202_anousu = ".db_getsession("DB_anousu");
+
+    $sCampos  = "o202_unidade,o202_orgao,o202_elemento,".$aMeses[$sMes].",";
+    $sCampos .= "(SELECT lpad(si09_codorgaotce::VARCHAR,2,0) FROM infocomplementaresinstit WHERE si09_instit = ".db_getsession("DB_instit").") as codorgao,";
+    $sCampos .= "lpad((CASE WHEN orcorgao.o40_codtri = '0'
+         OR NULL THEN orcorgao.o40_orgao::VARCHAR ELSE orcorgao.o40_codtri END),2,0)||lpad((CASE WHEN orcunidade.o41_codtri = '0'
+           OR NULL THEN orcunidade.o41_unidade::VARCHAR ELSE orcunidade.o41_codtri END),3,0)||(CASE WHEN orcunidade.o41_subunidade = '0'
+           OR NULL THEN '' ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0) END) as codunidadesub";
+    
+    $sSql = $clcronogramamesdesembolso->sql_query(null,$sCampos,"",$sWhere);
+
+    $rsResult = db_query($sSql);//db_criatabela($rsResult);
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+      
+      $clcronem10 = new cl_cronem102017();
+      $oDados = db_utils::fieldsMemory($rsResult, $iCont);
+
+      $clcronem10->si170_tiporegistro = "10";
+      $clcronem10->si170_codorgao = $oDados->codorgao;
+      $clcronem10->si170_codunidadesub = $oDados->codunidadesub;
+      $clcronem10->si170_grupodespesa = $aTipoDespesa[$oDados->o202_elemento];
+      $clcronem10->si170_vldotmensal = $oDados->$aMeses[$sMes];
+      $clcronem10->si170_mes = $sMes;
+      $clcronem10->si170_instit = db_getsession("DB_instit");
+
+
+      $clcronem10->incluir(null);
+      if ($clcronem10->erro_status == 0) {
+        throw new Exception($clcronem10->erro_msg);
       }
-    }
-
-
-    $sSql = "SELECT si09_codorgaotce AS codorgao, si09_tipoinstit AS tipoinstit
-              FROM infocomplementaresinstit
-              WHERE si09_instit = " . db_getsession("DB_instit");
-
-    $rsResult = db_query($sSql);
-    $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;
-
-    /*
-     * selecionar informacoes registro 10
-     */
-
-    $sSql = "select * from dadoscomplementareslrf where si171_mesreferencia = '{$this->sDataFinal['6']}' and si171_instit = " . db_getsession("DB_instit") . 'limit 0';
-
-    $rsResult10 = db_query($sSql);
-
-    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-
-      $clmetareal10 = new cl_metareal102017();
-      $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-
-      $clmetareal10->si171_tiporegistro = 10;
-      $clmetareal10->si171_codorgao = $sCodorgao;
-      $clmetareal10->si171_codunidadesub = $oDados10->si171_codunidadesub;
-      $clmetareal10->si171_codfuncao = $oDados10->si171_codfuncao;
-      $clmetareal10->si171_codsubfuncao = $oDados10->si171_codsubfuncao;
-      $clmetareal10->si171_codprograma = $oDados10->si171_codprograma;
-      $clmetareal10->si171_idacao = $oDados10->si171_idacao;
-      $clmetareal10->si171_idsubacao = $oDados10->si171_idsubacao;
-      $clmetareal10->si171_metarealizada = $oDados10->si171_metarealizada;
-      $clmetareal10->si171_justificativa = $oDados10->si171_justificativa;
-      $clmetareal10->si171_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-      $clmetareal10->si171_instit = db_getsession("DB_instit");
-
-      $clmetareal10->incluir(null);
-      if ($clmetareal10->erro_status == 0) {
-        throw new Exception($clmetareal10->erro_msg);
-      }
 
     }
-
+    
     db_fim_transacao();
-
-    $oGerarMETAREAL = new GerarCRONEM();
-    $oGerarMETAREAL->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-    $oGerarMETAREAL->gerarDados();
-
+    
+    $oGerarCRONEM = new GerarCRONEM();
+    $oGerarCRONEM->iMes = $sMes;
+    $oGerarCRONEM->gerarDados();
+    
   }
-
+  
 }

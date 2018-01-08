@@ -45,7 +45,7 @@ class GerarCRONEM extends GerarAM
         
         $aCSVCRONEM10['si170_tiporegistro']   = $this->padLeftZero($aCRONEM10['si170_tiporegistro'], 2);
         $aCSVCRONEM10['si170_codorgao']       = $this->padLeftZero($aCRONEM10['si170_codorgao'], 2);
-        $aCSVCRONEM10['si170_codunidadesub']  = $this->padLeftZero($aCRONEM10['si170_codunidadesub'], 8);
+        $aCSVCRONEM10['si170_codunidadesub']  = $this->padLeftZero($aCRONEM10['si170_codunidadesub'], strlen($aCRONEM10['si170_codunidadesub']) > 5 ? 8 : 5);
         $aCSVCRONEM10['si170_grupodespesa']   = $this->padLeftZero($aCRONEM10['si170_grupodespesa'], 1);
         $aCSVCRONEM10['si170_vldotmensal']    = $this->sicomNumberReal($aCRONEM10['si170_vldotmensal'], 2);
         

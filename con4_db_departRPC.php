@@ -59,7 +59,11 @@ if ($oPars->method == "getOrgaos"){
 }else if ($oPars->method == "getUnidades"){
   
   $sWhere  = " o41_anousu     = ".db_getSession("DB_anousu");
+  $sWhere .= " and o41_instit = ".db_getSession("DB_instit");
   $sWhere .= " and o41_orgao  = {$oPars->iOrgao}"; 
+  if (isset($oPars->sWhere)) {
+    $sWhere .= $oPars->sWhere;
+  }
   $oOrcUnidade = db_utils::getDao("orcunidade");  
   $rsUnidade   = $oOrcUnidade->sql_record($oOrcUnidade->sql_query(
                                              null,

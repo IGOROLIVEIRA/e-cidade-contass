@@ -198,7 +198,7 @@ class cl_cronem102018
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    $resaco = $this->sql_record($this->sql_query_file($this->si170_sequencial));
+/*    $resaco = $this->sql_record($this->sql_query_file($this->si170_sequencial));
     if (($resaco != false) || ($this->numrows != 0)) {
       $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
       $acount = pg_result($resac, 0, 0);
@@ -211,7 +211,7 @@ class cl_cronem102018
       $resac = db_query("insert into db_acount values($acount,2010386,2011202,'','" . AddSlashes(pg_result($resaco, 0, 'si170_tiporealizopcreditoassunobg')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010386,2011207,'','" . AddSlashes(pg_result($resaco, 0, 'si170_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010386,2011670,'','" . AddSlashes(pg_result($resaco, 0, 'si170_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-    }
+    }*/
 
     return true;
   }
@@ -296,7 +296,7 @@ class cl_cronem102018
     if ($si170_sequencial != null) {
       $sql .= " si170_sequencial = $this->si170_sequencial";
     }
-    $resaco = $this->sql_record($this->sql_query_file($this->si170_sequencial));
+/*    $resaco = $this->sql_record($this->sql_query_file($this->si170_sequencial));
     if ($this->numrows > 0) {
       for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
@@ -330,7 +330,7 @@ class cl_cronem102018
         if (isset($GLOBALS["HTTP_POST_VARS"]["si170_instit"]) || $this->si170_instit != "")
           $resac = db_query("insert into db_acount values($acount,2010386,2011670,'" . AddSlashes(pg_result($resaco, $conresaco, 'si170_instit')) . "','$this->si170_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
-    }
+    }*/
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("
