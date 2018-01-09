@@ -325,7 +325,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
               FROM issalvara
               inner join issmovalvara on q123_sequencial = q120_issalvara
               WHERE q123_inscr = {$q02_inscr}
-                AND date_part('year',q120_dtmov) = " . db_getsession('DB_anousu') . "
+                AND q120_dtmov+q120_validadealvara >= '" . date('Y-m-d',db_getsession('DB_datausu')) . "'::date
               order by q120_sequencial DESC limit 1";
     $rsAlvara = $clIssAlvara->sql_record($sSql);
 
