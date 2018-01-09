@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -44,7 +44,7 @@ $clIssMovAlvara->rotulo->label("q120_sequencial");
 
 if (isset($oPost->transformar)) {
 
-  
+
   try {
 
   require_once("libs/exceptions/DBException.php");
@@ -54,14 +54,17 @@ if (isset($oPost->transformar)) {
     db_inicio_transacao();
 
     $oAlvara            = new Alvara($oPost->q120_issalvara);
-  
+
     $oTransformaAlvara  = $oAlvara->incluirMovimentacao( MovimentacaoAlvara::TIPO_TRANSFORMACAO );
     $oTransformaAlvara->setDataMovimentacao(date("Y-m-d", db_getsession("DB_datausu")));
+    $oDtMov = new DBDate(date("Y-m-d", db_getsession("DB_datausu")));
+    $oDtValidade = new DBDate($oPost->q120_validadealvara);
+    $iValidade = DBDate::calculaIntervaloEntreDatas($oDtValidade,$oDtMov,'d');
     $oTransformaAlvara->setTipoTransformacao($oPost->q98_sequencial);
-    $oTransformaAlvara->setValidadeAlvara($oPost->q120_validadealvara);
+    $oTransformaAlvara->setValidadeAlvara($iValidade);
     $oTransformaAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
     $oTransformaAlvara->setObservacao($oPost->q120_obs);
-    
+
     if ($oPost->documentos != "" ) {
 
       $aDocumentos = explode(",", $oPost->documentos);
@@ -69,28 +72,28 @@ if (isset($oPost->transformar)) {
         $oAlvara->addDocumento($oValor);
       }
     }
-    
+
     $oTransformaAlvara->processar();
-    
+
     db_msgbox("Movimentação realizada com sucesso");
     db_fim_transacao(false);
     db_redireciona("iss4_transformacaoalvara001.php");
     exit;
   } catch (Exception $erro) {
-    
+
     db_msgbox($erro->getMessage());
     db_fim_transacao(true);
   }
 
 } else {
-  
+
   $clGrupoTipoAlvara  = db_utils::getDao('issgrupotipoalvara');
-  
-  $sCampos            = "q97_sequencial, q97_descricao"; 
+
+  $sCampos            = "q97_sequencial, q97_descricao";
   $sSql               = $clGrupoTipoAlvara->sql_query(null, $sCampos);
 
 /**
- * Quando o novo tipo de alvara tiver o campo tipo de validade 3 - indeterminado, 
+ * Quando o novo tipo de alvara tiver o campo tipo de validade 3 - indeterminado,
  * nao precisa pedir prazo de validade
  */
 }
@@ -108,9 +111,9 @@ if (isset($oPost->transformar)) {
   db_app::load("grid.style.css");
   db_app::load("estilos.css");
   db_app::load("classes/dbViewAvaliacoes.classe.js");
-  db_app::load("widgets/windowAux.widget.js");  
+  db_app::load("widgets/windowAux.widget.js");
   db_app::load("dbcomboBox.widget.js");
-  db_app::load("DBViewAlvaraDocumentos.js");   
+  db_app::load("DBViewAlvaraDocumentos.js");
 ?>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
@@ -121,7 +124,7 @@ if (isset($oPost->transformar)) {
       <legend><strong>Selecione Alvará a ser Transformado</strong></legend>
       <table class="form-container">
         <tr>
-          <td ><b> 
+          <td ><b>
             <?
               db_ancora("Inscrição: ", 'js_buscaAlvara(true);',$db_opcao );
             ?></b>
@@ -132,50 +135,50 @@ if (isset($oPost->transformar)) {
               db_input("z01_nome",        45,"", true, 'text',   3);
               db_input("q120_sequencial", 10,"", true, 'hidden', 1);
             ?>
-          </td>        
+          </td>
         </tr>
-        
+
         <tr >
-          <td nowrap="nowrap"><b>Alvará: </b> 
-          </td> 
+          <td nowrap="nowrap"><b>Alvará: </b>
+          </td>
           <td nowrap="nowrap">
            <?
                db_input("q120_issalvara",  10,"", true, 'text', 3);
            ?>
-          </td>        
-        </tr>        
-        
+          </td>
+        </tr>
+
         <tr >
-          <td nowrap="nowrap"><b>Grupo do Alvará: </b> 
-          </td> 
+          <td nowrap="nowrap"><b>Grupo do Alvará: </b>
+          </td>
           <td nowrap="nowrap">
            <?
              db_input("q97_sequencialAtual", 10,"", true, '', 3);
              db_input("q97_descricaoAtual", 45,"", true, 'text', 3);
            ?>
-          </td>        
+          </td>
         </tr>
         <tr >
-          <td nowrap="nowrap"><b>Tipo do Alvará: </b> 
-          </td> 
+          <td nowrap="nowrap"><b>Tipo do Alvará: </b>
+          </td>
           <td nowrap="nowrap">
            <?
              db_input("q98_sequencialAtual", 10,"", true, '', 3);
              db_input("q98_descricaoAtual", 45,"", true, 'text', 3);
            ?>
-          </td>        
+          </td>
         </tr>
       </table>
    </fieldset>
-   
+
    <fieldset>
     <legend><strong>Transformar Para</strong></legend>
     <table class="form-container">
       <tr title="Grupo do Alvara">
         <td style="width: 150px;">
           Grupo do Alvara:
-        </td nowrap="nowrap"> 
-          <td>  
+        </td nowrap="nowrap">
+          <td>
            <?
              $aGrupo = array("0"=>"Selecione",
                              "1"=>"SEM ALVARA",
@@ -187,45 +190,43 @@ if (isset($oPost->transformar)) {
                             );
              db_select("grupo",$aGrupo,true,4,"onchange='mostraTipo();'");
            ?>
-        </td>        
+        </td>
       </tr>
       <tr id='tipo' style="display: none;" title='Tipo do Grupo'>
-        <td ><b> 
+        <td ><b>
           <?
             db_ancora("Tipo Grupo: ", 'js_buscaTipoAlvara(true);',$db_opcao );
           ?></b>
         </td>
         <td>
-          <?   
-            db_input("q98_sequencial", 10,"", true, '',     3, "func_isstransformaalvara(false);");   
+          <?
+            db_input("q98_sequencial", 10,"", true, '',     3, "func_isstransformaalvara(false);");
             db_input("q98_descricao" , 45,"", true, 'text', 3);
           ?>
-        </td>        
-      </tr>  
+        </td>
+      </tr>
       <tr>
-        <td nowrap="nowrap" title="Validade em Dias">
+        <td nowrap="nowrap" title="Validade do Alvará">
           <b>Validade do Alvará : </b>
         </td>
         <td nowrap="nowrap">
-         <?
-          db_input("q120_validadealvara", 10,"", true, 'text', 1);
-         ?>
+          <?=db_inputdata('q120_validadealvara',"","","",true,'text',4)?>
          <input type="hidden" id="tipovalidade" name='tipovalidade' />
-        </td>        
-      </tr> 
+        </td>
+      </tr>
       <tr>
         <td colspan="2">
           <fieldset>
           <legend>Observação:</legend>
           <? db_textarea("q120_obs",5, 48,  "", true,null, 1); ?>
-        </td>        
-      </tr> 
+        </td>
+      </tr>
    </table>
    <input type='hidden' id='documentos' name='documentos'>
    <div id='ctnDocumento'> </div>
   </fieldset>
   <input type="submit" style="margin-left: 10px; margin-top: 10px;" name="transformar" id='transformar' value="Transformar Alvará" onclick="return verifica();" />
-</form>   
+</form>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
@@ -239,7 +240,7 @@ if (isset($oPost->transformar)) {
 function jsMontaDocumentos(){
 
    $('documentos').value = oDocumentos.getDocumentosSelecionados().toString();
-} 
+}
 
 
 
@@ -256,7 +257,7 @@ function js_buscaAlvara(mostra) {
                         'Pesquisa',
                         true);
   }else{
-  
+
     js_OpenJanelaIframe('',
                         'db_iframe_isstrasnf',
                         'func_isstransformaalvara.php?lLibera=1&filtro=1&pesquisa_chave='+$F('q123_inscr')+'&funcao_js=parent.js_mostraAlvara1',
@@ -277,7 +278,7 @@ function js_mostraAlvara(iInscr, iAlvara,iSeqGrupo,sGrupo, iSeqTipo, sTipo, iSeq
   oDocumentos.setCodigoAlvara(iAlvara);
   oDocumentos.carregaDados();
   db_iframe_isstrasnf.hide();
-  
+
 }
 function js_mostraAlvara1(iInscr, iAlvara,iSeqGrupo,sGrupo, iSeqTipo, sTipo, iSeqMov, sNome, lChave){
 
@@ -291,7 +292,7 @@ function js_mostraAlvara1(iInscr, iAlvara,iSeqGrupo,sGrupo, iSeqTipo, sTipo, iSe
 	  $("q98_descricaoAtual").value   = sTipo;
 	  $("q120_sequencial").value      = iSeqMov;
 	  $("z01_nome").value      = sNome;
-   
+
     oDocumentos.setCodigoAlvara(iAlvara);
     oDocumentos.carregaDados();
 
@@ -316,7 +317,7 @@ function js_buscaTipoAlvara(mostra) {
 
   if ( !$F("q98_sequencialAtual") || !$F("grupo") ) {
     return;
-  } 
+  }
  // q98_sequencial   q98_descricao
   if (mostra == true) {
     js_OpenJanelaIframe('',
@@ -333,26 +334,26 @@ function js_buscaTipoAlvara(mostra) {
 }
 
 function js_mostraTipoAlvara(iSequencia, iGrupoTipo, iTipoValidade) {
-  
-  
+
+
   $("q98_sequencial").value      = iSequencia;
   $("q98_descricao").value       = iGrupoTipo;
   $("tipovalidade").value        = iTipoValidade;
-  
+
   if (iTipoValidade == 3) {
-  
+
     $("q120_validadealvara").value = '0';
     $("q120_validadealvara").readOnly = "true";
   } else {
-  
+
     $("q120_validadealvara").value = '';
     $("q120_validadealvara").readOnly = "";
-  }  
-  
-  
+  }
+
+
   //alert('estou no js_mostraTipoAlvara = '+ iTipoValidade);
   db_iframe_issgrupo.hide();
-  
+
 }
 /*
 function js_mostraTipoAlvara(iSequencia, iGrupoTipo) {
@@ -366,24 +367,24 @@ function js_mostraTipoAlvara(iSequencia, iGrupoTipo) {
 function verifica(){
 
   if ($F("grupo") == "" ) {
-    
+
     alert ("Selecione um grupo.");
     return false;
   }
 
   if ($F("q98_sequencial") == "" ) {
-    
+
     alert ("Tipo do Alvará não selecionado.");
     return false;
   }
-  
+
   if($F("q120_validadealvara") == "" && $F("tipovalidade") != 3 ) {
     alert ("Especifique um número de dias para validade do Alvará.");
     return false;
   }
-  
 
-  
+
+
   return true;
 
 }
@@ -401,9 +402,9 @@ function mostraTipo() {
 
     $("q98_sequencial").value = "";
     $("q98_descricao").value  = "";
-    $("tipo").style.display   = "none";  
+    $("tipo").style.display   = "none";
   }
-  
+
 }
 </script>
 
