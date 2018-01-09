@@ -333,17 +333,21 @@ if (isset($testanome) && !isset($pesquisa_chave)) {
 								</script>";
 
 					if(isset($campos)==false){
-						$campos = "cgm.z01_numcgm, z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, q02_inscr, q02_inscmu, trim(z01_ender) as z01_ender, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
+						$campos = "cgm.z01_numcgm, z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, trim(z01_ender) as z01_ender, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
 					}
 
           if ($filtro==1){
-             $campos = "cgm.z01_numcgm, z01_nome,trim(z01_cpf) as z01_cpf,case when length(trim(z01_cpf)) = 11 then 'FISICA' else 'JURIDICA' end as tipo,q02_inscr, q02_inscmu, trim(z01_ender) as z01_ender, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
+             $campos = "cgm.z01_numcgm, z01_nome,trim(z01_cpf) as z01_cpf,case when length(trim(z01_cpf)) = 11 then 'FISICA' else 'JURIDICA' end as tipo, trim(z01_ender) as z01_ender, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
 
            }elseif($filtro==2){
-             $campos = "cgm.z01_numcgm, z01_nome,trim(z01_cgc) as z01_cgc, case when length(trim(z01_cgc)) = 14 then 'JURIDICA' else 'FISICA' end as tipo,q02_inscr, q02_inscmu, trim(z01_ender) as z01_ender, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
+             $campos = "cgm.z01_numcgm, z01_nome,trim(z01_cgc) as z01_cgc, case when length(trim(z01_cgc)) = 14 then 'JURIDICA' else 'FISICA' end as tipo, trim(z01_ender) as z01_ender, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
           }
 
           if (isset($lCadTecMunic)) {
+          	$campos = "cgm.z01_numcgm, z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, trim(z01_ender) as z01_ender, z01_numero, z01_compl, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
+          }
+
+          if (isset($lCadTec)) {
           	$campos = "cgm.z01_numcgm, z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, q02_inscr, q02_inscmu, trim(z01_ender) as z01_ender, z01_numero, z01_compl, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
           }
 
