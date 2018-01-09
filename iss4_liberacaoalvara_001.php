@@ -82,7 +82,10 @@ if (isset($liberar)) {
     db_inicio_transacao();
 
     $oLiberarAlvara->setDataMovimentacao( date("Y-m-d", db_getsession("DB_datausu")));
-    $oLiberarAlvara->setValidadeAlvara($oPost->q120_validadealvara);
+    $oDtMov = new DBDate(date("Y-m-d", db_getsession("DB_datausu")));
+    $oDtValidade = new DBDate($oPost->q120_validadealvara);
+    $iValidade = DBDate::calculaIntervaloEntreDatas($oDtValidade,$oDtMov,'d');
+    $oLiberarAlvara->setValidadeAlvara($iValidade);
     $oLiberarAlvara->setCodigoProcesso($oPost->p58_codproc);
     $oLiberarAlvara->setObservacao($oPost->q120_obs);
     $oLiberarAlvara->setUsuario( new UsuarioSistema(db_getsession('DB_id_usuario')) );
@@ -217,12 +220,10 @@ if (isset($liberar)) {
       </tr>
 
       <tr>
-        <td title="Validade em Dias"><strong>Validade do Alvará : </strong>
+        <td title="Validade do Alvará"><strong>Validade do Alvará : </strong>
         </td>
         <td>
-			   <?
-			    db_input("q120_validadealvara", 8,"", true, 'text', 1);
-			   ?>
+          <?=db_inputdata('q120_validadealvara',"","","",true,'text',4)?>
         </td>
       </tr>
 
