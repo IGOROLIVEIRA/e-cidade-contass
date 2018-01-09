@@ -392,7 +392,7 @@
                                       <tr class="cabec">
                                         <td class="cabec" ><strong>Código Seq.</strong></td>
 
-                                        <td class="cabec" ><strong>Descrição da Peça</strong></td>
+                                        <td class="cabec" ><strong>Descrição do Item</strong></td>
                                         <td class="cabec" ><strong>Quantidade</strong></td>
                                         <td class="cabec" ><strong>Valor Unitário</strong></td>
                                         <td class="cabec" ><strong>Valor Total</strong></td>
