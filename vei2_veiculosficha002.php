@@ -585,7 +585,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
             for ($iItens = 0; $iItens < count($aManutencao[$ind]->aItens); $iItens++) {
               
               if ($aManutencao[$ind]->lItens == true ) {
-                  $iValormanut = $iValormanut + $aManutencao[$ind]->aItens[$iItens]->ve63_vlruni;
+                  $iValormanut = $aManutencao[$ind]->aItens[$iItens]->ve63_vlruni * $aManutencao[$ind]->aItens[$iItens]->ve63_quant;
                 if ($pdf->gety() > $pdf->h - 30 ) {
 
                   $pdf->addpage("L");
