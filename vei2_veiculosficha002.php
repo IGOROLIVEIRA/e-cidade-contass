@@ -552,7 +552,6 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
       for($ind = 0; $ind < count($aManutencao); $ind++) {
 
           if ($pdf->gety() > $pdf->h - 30) {
-
                   $pdf->addpage("L");
           }
 
@@ -585,17 +584,10 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
             for ($iItens = 0; $iItens < count($aManutencao[$ind]->aItens); $iItens++) {
               
               if ($aManutencao[$ind]->lItens == true ) {
-                  $iValormanut = $aManutencao[$ind]->aItens[$iItens]->ve63_vlruni * $aManutencao[$ind]->aItens[$iItens]->ve63_quant;
+                  $iValormanut = $iValormanut + $aManutencao[$ind]->aItens[$iItens]->ve63_vlruni * $aManutencao[$ind]->aItens[$iItens]->ve63_quant;
                 if ($pdf->gety() > $pdf->h - 30 ) {
 
                   $pdf->addpage("L");
-                  $pdf->setfont('arial','b',8);
-                  $pdf->cell(15,$alt,"Manut."         ,1,1,"C",1);
-                  $pdf->cell(85,$alt,"Tipo de Serviço",1,0,"C",1);
-                  $pdf->cell(20,$alt,"Data"           ,1,0,"C",1);
-                  $pdf->cell(20,$alt,"Medida"         ,1,0,"C",1);
-
-                  
                   $pdf->setfont('arial','b',8);
                   $pdf->cell(15,$alt,"",0,0,"C",$p);
                   $pdf->cell(15,$alt,"Item."             ,0,0,"C",$p);
