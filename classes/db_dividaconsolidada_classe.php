@@ -79,7 +79,7 @@ class cl_dividaconsolidada
                  si167_numcgm = int8 = Número do cgm
                  si167_justificativacancelamento = varchar(500) = Justificativa de cancelamento
                  ";
-  
+
   //funcao construtor da classe
   function cl_dividaconsolidada()
   {
@@ -87,7 +87,7 @@ class cl_dividaconsolidada
     $this->rotulo = new rotulo("dividaconsolidada");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -98,7 +98,7 @@ class cl_dividaconsolidada
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -143,13 +143,13 @@ class cl_dividaconsolidada
       $this->si167_objetocontratodivida = ($this->si167_objetocontratodivida == "" ? @$GLOBALS["HTTP_POST_VARS"]["si167_objetocontratodivida"] : $this->si167_objetocontratodivida);
       $this->si167_especificacaocontratodivida = ($this->si167_especificacaocontratodivida == "" ? @$GLOBALS["HTTP_POST_VARS"]["si167_especificacaocontratodivida"] : $this->si167_especificacaocontratodivida);
       $this->si167_tipolancamento = ($this->si167_tipolancamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si167_tipolancamento"] : $this->si167_tipolancamento);
-      $this->si167_si167_subtipo = ($this->si167_si167_subtipo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si167_subtipo"] : $this->si167_subtipo);
+      $this->si167_subtipo = ($this->si167_subtipo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si167_subtipo"] : $this->si167_subtipo);
       $this->si167_mesreferencia = ($this->si167_mesreferencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si167_mesreferencia"] : $this->si167_mesreferencia);
     } else {
       $this->si167_sequencial = ($this->si167_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si167_sequencial"] : $this->si167_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si167_sequencial)
   {
@@ -161,7 +161,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_dtleiautorizacao == null) {
@@ -171,7 +171,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_dtpublicacaoleiautorizacao == null) {
@@ -181,7 +181,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_nrocontratodivida == null) {
@@ -191,7 +191,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_dtassinatura == null) {
@@ -201,7 +201,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     /*if($this->si167_tipodocumentocredor == null ){
@@ -229,7 +229,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_vlcontratacao == null) {
@@ -239,7 +239,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_vlamortizacao == null) {
@@ -249,7 +249,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_vlcancelamento == null) {
@@ -259,7 +259,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_vlencampacao == null) {
@@ -269,7 +269,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_vlatualizacao == null) {
@@ -279,7 +279,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_vlsaldoatual == null) {
@@ -289,7 +289,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_contratodeclei == null) {
@@ -299,7 +299,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_objetocontratodivida == null) {
@@ -309,7 +309,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_especificacaocontratodivida == null) {
@@ -319,7 +319,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_tipolancamento == null) {
@@ -329,7 +329,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_numcgm == null) {
@@ -339,7 +339,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si167_mesreferencia == null || $this->si167_mesreferencia == 0) {
@@ -349,10 +349,10 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     if ($this->si167_vlcancelamento > 0) {
       if ($this->si167_justificativacancelamento == null) {
         $this->erro_sql = " Campo Justificativa de cancelamento nao Informado.";
@@ -361,11 +361,11 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
-    
+
     if ($si167_sequencial == "" || $si167_sequencial == null) {
       $result = db_query("select nextval('dividaconsolidada_si167_sequencial_seq')");
       if ($result == false) {
@@ -374,7 +374,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si167_sequencial = pg_result($result, 0, 0);
@@ -386,7 +386,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si167_sequencial = $si167_sequencial;
@@ -398,7 +398,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into dividaconsolidada(
@@ -470,7 +470,7 @@ class cl_dividaconsolidada
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -507,10 +507,10 @@ class cl_dividaconsolidada
       $resac = db_query("insert into db_acount values($acount,2010401,2011433,'','" . AddSlashes(pg_result($resaco, 0, 'si167_tipolancamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010401,2011429,'','" . AddSlashes(pg_result($resaco, 0, 'si167_mesreferencia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si167_sequencial = null)
   {
@@ -527,7 +527,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -541,7 +541,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -555,7 +555,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     } else {
@@ -569,7 +569,7 @@ class cl_dividaconsolidada
           $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
           $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
           $this->erro_status = "0";
-          
+
           return false;
         }
       }
@@ -584,7 +584,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     } else {
@@ -598,7 +598,7 @@ class cl_dividaconsolidada
           $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
           $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
           $this->erro_status = "0";
-          
+
           return false;
         }
       }
@@ -613,7 +613,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -627,7 +627,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     } else {
@@ -641,7 +641,7 @@ class cl_dividaconsolidada
           $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
           $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
           $this->erro_status = "0";
-          
+
           return false;
         }
       }
@@ -682,7 +682,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -696,7 +696,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -710,7 +710,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -724,7 +724,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -738,7 +738,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -752,7 +752,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -766,7 +766,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -780,7 +780,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -794,7 +794,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -808,7 +808,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -822,7 +822,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -830,7 +830,7 @@ class cl_dividaconsolidada
       $sql .= $virgula . " si167_subtipo = '$this->si167_subtipo' ";
       $virgula = ",";
     }
-    
+
     if (trim($this->si167_numcgm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si167_numcgm"])) {
       $sql .= $virgula . " si167_numcgm = '$this->si167_numcgm' ";
       $virgula = ",";
@@ -841,11 +841,11 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
-    
+
     if (trim($this->si167_mesreferencia) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si167_mesreferencia"])) {
       $sql .= $virgula . " si167_mesreferencia = $this->si167_mesreferencia ";
       $virgula = ",";
@@ -856,7 +856,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -871,7 +871,7 @@ class cl_dividaconsolidada
         $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -937,7 +937,7 @@ class cl_dividaconsolidada
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -948,7 +948,7 @@ class cl_dividaconsolidada
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -958,12 +958,12 @@ class cl_dividaconsolidada
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si167_sequencial = null, $dbwhere = null)
   {
@@ -1022,7 +1022,7 @@ class cl_dividaconsolidada
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -1033,7 +1033,7 @@ class cl_dividaconsolidada
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -1043,12 +1043,12 @@ class cl_dividaconsolidada
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -1060,7 +1060,7 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -1070,13 +1070,13 @@ class cl_dividaconsolidada
       $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si167_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -1110,10 +1110,10 @@ class cl_dividaconsolidada
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si167_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -1147,7 +1147,7 @@ class cl_dividaconsolidada
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }
