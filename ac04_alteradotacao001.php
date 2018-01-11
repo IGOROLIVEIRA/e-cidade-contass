@@ -54,26 +54,26 @@ db_postmemory($HTTP_POST_VARS);
 db_postmemory($HTTP_GET_VARS);
 if(isset($excluir)){
 
-      $sDelete = "DELETE FROM acordoitemdotacao WHERE
-      ac22_sequencial = '".$acordo_item_sequencial."' AND ac22_anousu = '".db_getsession('DB_anousu')."' ";
+  $sDelete = "DELETE FROM acordoitemdotacao WHERE
+  ac22_sequencial = '".$acordo_item_sequencial."' AND ac22_anousu = '".db_getsession('DB_anousu')."' ";
      // echo $sDelete;
-      $delete = db_query($sDelete);
+  $delete = db_query($sDelete);
 //var_dump($delete);die;
 
-    if($delete){
-      echo "<script>";
-      echo "alert('Dotação apagada.');";
-      echo "location.href = 'ac04_alteradotacao001.php?codigo_acordo=".$acordo.";";
-      echo "</script>";
-      $delete = "true";
-    }else{
-      echo "<script>";
-      echo "alert('Dotação não apagada.');";
-      echo "location.href = 'ac04_alteradotacao001.php?codigo_acordo=".$acordo.";";
-      echo "</script>";
-      $delete = "false";
-    }
-    db_redireciona("ac04_alteradotacao001.php?codigo_acordo=".$acordo);
+  if($delete){
+    echo "<script>";
+    echo "alert('Dotação apagada.');";
+    echo "location.href = 'ac04_alteradotacao001.php?codigo_acordo=".$acordo.";";
+    echo "</script>";
+    $delete = "true";
+  }else{
+    echo "<script>";
+    echo "alert('Dotação não apagada.');";
+    echo "location.href = 'ac04_alteradotacao001.php?codigo_acordo=".$acordo.";";
+    echo "</script>";
+    $delete = "false";
+  }
+  db_redireciona("ac04_alteradotacao001.php?material=$material&codigo_acordo=".$acordo);
 }
 if(isset($adicionar)){
   $material = key($adicionar);
@@ -105,7 +105,7 @@ if(isset($adicionar)){
   JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
   JOIN acordo ON ac26_acordo = ac16_sequencial
   JOIN pcmater ON ac20_pcmater = pc01_codmater
-  WHERE ac16_sequencial = '".$codigo_acordo1[$material]."' AND ac20_pcmater = '".$codigo_material[$material]."' AND ac22_coddot = '".$codigo_dotacao[$material]."' AND ac20_acordoposicao = '".$codigo_posicao[$material]."' AND o58_anousu = '".db_getsession("DB_anousu")."' AND ac22_acordoitem = '".$codigo_acordo_item[$material]."' ORDER BY ac20_acordoposicao DESC, ac20_pcmater ASC";
+  WHERE ac16_sequencial = '".$codigo_acordo1[$material]."' AND ac20_pcmater = '".$codigo_material[$material]."' AND ac22_coddot = '".$codigo_dotacao[$material]."' AND ac20_acordoposicao = '".$codigo_posicao[$material]."' AND o58_anousu = '".db_getsession("DB_anousu")."' AND ac22_acordoitem = '".$codigo_acordo_item[$material]."' AND ac26_acordoposicaotipo <> 6 ORDER BY ac20_acordoposicao DESC, ac20_pcmater ASC";
 
   if(pg_numrows(db_query($sSqlDotacao)) == 0 || pg_numrows(db_query($sSqlDotacaoAcordo)) > 0){
     //significa que há a relação ou a dotação nao existe
@@ -122,7 +122,8 @@ if(isset($adicionar)){
     $insert = db_query($sInsert);
     if($insert){
      echo "<script>";
-     echo "alert('Dotação cadastrada.');";
+    // echo "alert('Dotação cadastrada.');";
+     echo " document.getElementById('ancora$material').scrollIntoView(); ";
      echo "</script>";
    }else{
      echo "<script>";
@@ -136,15 +137,19 @@ if(isset($adicionar)){
 if(isset($codigo_acordo)){
   $sSql = "SELECT DISTINCT
   ac22_coddot ,
+  ac16_numero ||'/'|| ac16_anousu AS contrato,
   ac26_acordo,
   ac22_sequencial ,
   ac22_anousu ,
+  ac16_sequencial,
   ac22_acordoitem ,
+  z01_nome,
   ac22_valor ,
   ac22_quantidade ,
   ac20_sequencial ,
   ac20_acordoposicao ,
   ac20_pcmater,
+  ac20_ordem,
   pc01_descrmater,
   ac20_quantidade,
   ac20_valortotal,
@@ -152,7 +157,8 @@ if(isset($codigo_acordo)){
   ac26_data,
   o58_valor,
   o58_anousu,
-  o56_elemento
+  o56_elemento,
+  ac16_dataassinatura
   FROM orcdotacao
   JOIN acordoitemdotacao ON ac22_coddot=o58_coddot
   JOIN acordoitem ON ac22_acordoitem = ac20_sequencial
@@ -160,8 +166,9 @@ if(isset($codigo_acordo)){
   JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
   JOIN orcelemento ON o56_codele = ac20_elemento
   JOIN acordo ON ac26_acordo = ac16_sequencial
+  JOIN cgm ON ac16_contratado = z01_numcgm
   JOIN pcmater ON ac20_pcmater = pc01_codmater
-  WHERE ac16_sequencial = '".$codigo_acordo."' ORDER BY ac20_acordoposicao DESC, ac20_pcmater ASC, ac22_coddot ASC";
+  WHERE ac16_sequencial = '".$codigo_acordo."' AND ac26_acordoposicaotipo <> 6 ORDER BY ac20_acordoposicao DESC, ac20_ordem asc, ac22_coddot ASC ";
   $oResult = db_query($sSql);
   $oResult = db_utils::getColectionByRecord($oResult);
   //echo $sSql;
@@ -188,128 +195,152 @@ if(isset($codigo_acordo)){
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
 
-<?php db_menu(); ?>
+  <?php db_menu(); ?>
   <br>
   <br>
   <center>
-  <?php if (isset($codigo_acordo)): ?>
+    <?php if (isset($codigo_acordo)): ?>
+
+      <form action="" method="post" id="form1">
 
 
-    <form action="" method="post" id="form1">
-
-
-      <fieldset style="width: 75%;">
-        <legend><b>Alteração de dotação</b></legend>
-        <table style='width: 100%' border='0' align="center">
-          <tr>
-            <td width="100%">
-              <table width="100%" id="dotacoes">
-                <!-- primeiro exige posicao, data, material, quantidade valor total, qtd autorizar -->
-                <tr style="border:1px solid black; background:#bac6d8;">
+        <fieldset style="width: 75%;">
+          <legend><b>Alteração de dotação</b></legend>
+          <table style='width: 100%; background: #ffffff;' border='0' align="center">
+            <tr>
+              <td width="100%">
+                <table width="100%" id="dotacoes">
+                  <!-- primeiro exige posicao, data, material, quantidade valor total, qtd autorizar -->
+                <!--tr style="border:1px solid black; background:#bac6d8;">
                   <th colspan="4">Posições de acordo</th>
+                </tr-->
+                <tr style="background: #ffffff;
+                height: 20px;">
+                <th style="height: 25px; font-size:14px; background: #ffffff;">Cód. Acordo</th>
+                <th style="height: 25px; font-size:14px; background: #ffffff;">Contratado</th>
+                <th style="height: 25px; font-size:14px; background: #ffffff;">Nº. Contrato</th>
+                <th style="height: 25px; font-size:14px; background: #ffffff;">Data Ass.</th> </tr>
+                <tr style="background: #ffffff; height:20px; ">
+
+                  <td style=""><?php echo $oResult[0]->ac16_sequencial; ?></td>
+                  <td style=""><?php echo $oResult[0]->z01_nome; ?></td>
+                  <td style=""><?php echo $oResult[0]->contrato; ?></td>
+                  <td style=""><?php echo date("d/m/Y", strtotime($oResult[0]->ac16_dataassinatura)); ?></td>
+
                 </tr>
-                <tr style="border:1px solid black; background:#bac6d8;">
-                  <th>Cdg. Posição</th>
-                  <th>Tipo</th>
-                  <th>Data</th>
-                  <th>Emergencial</th>
-                </tr>
-                <tr style="background: #bac6d8;">
-
-                  <td><?php echo $oResult[0]->ac20_acordoposicao; ?></td>
-                  <td><?php echo $oResult[0]->ac27_descricao; ?></td>
-                  <td><?php echo DateTime::createFromFormat('Y-m-d', $oResult[0]->ac26_data )->format('d/m/Y'); ?></td>
-                  <td><?php if($oResult[0]->ac26_emergencial == "f") echo "Não";else echo "Sim"; ?></td>
-                </tr>
 
 
 
-             <?php $iMaterial = ""; ?>
-             <?php foreach ($oResult as $aResult): ?>
-              <?php if($aResult->ac20_acordoposicao == $oResult[0]->ac20_acordoposicao){
-                if($iMaterial != $aResult->ac20_pcmater){ ?>
-                <tr style="border:1px solid black; background:#bce5c4;">
-                 <th>Cdg. Material: <?php echo $aResult->ac20_pcmater; ?> </th>
-                 <th>Material: <?php echo $aResult->pc01_descrmater; ?> </th>
-                 <th >Qtd: <?php echo $aResult->ac20_quantidade; ?> </th>
-                 <th >Valor total: <?php echo $aResult->ac20_valortotal; ?> </th>
-               </tr>
-               <tr style="border:1px solid black; background:#b5cdfc;">
-                <th colspan="4">Dotações</th>
-              </tr>
+                <?php $iMaterial = ""; ?>
+                <?php $i = 0; ?>
+                <?php foreach ($oResult as $aResult): ?>
+                  <?php if($aResult->ac20_acordoposicao == $oResult[0]->ac20_acordoposicao){
+                    if($iMaterial != $aResult->ac20_pcmater){ ?>
+                    <?php if($i!=0): ?>
 
-             <tr>
-              <td colspan="4">
-                <a href="#" onclick="js_pesquisao47_coddot(true, <?php echo $aResult->ac20_pcmater; ?>, <?php echo $aResult->o56_elemento; ?>);"><b>Código da Dotações:</b></a>
-               <input type="text" onchange="js_pesquisao47_coddot(false, <?php echo $aResult->ac20_pcmater; ?>)" placeholder="Código da dotação" id="<?php echo $aResult->ac20_pcmater; ?>" name="codigo_dotacao[<?php echo $aResult->ac20_pcmater; ?>]">
-              <input type="hidden" name="codigo_material[<?php echo $aResult->ac20_pcmater; ?>]" value="<?php echo $aResult->ac20_pcmater; ?>">
-              <input type="hidden" name="codigo_posicao[<?php echo $aResult->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac20_acordoposicao; ?>">
-              <input type="hidden" name="codigo_acordo1[<?php echo $aResult->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac26_acordo; ?>">
-              <input type="hidden" name="codigo_acordo_item[<?php echo $aResult->ac20_pcmater; ?>]" value="<?php echo $aResult->ac22_acordoitem; ?>">
-<input type="submit"  name="adicionar[<?php echo $aResult->ac20_pcmater; ?>]" value="Adicionar dotação"></td>
-            </tr>
-              <?php $iMaterial = $aResult->ac20_pcmater; ?>
-              <tr style="border:1px solid black; background:#b5cdfc;">
-               <th colspan="2">Codigo dotacao</th>
-
-
-               <th colspan="2">Exercício</th>
-             </tr>
-             <?php } ?>
+                     <tr>
+                      <td colspan="4" style=" background:#ededed; height:25px" >
+                        <a href="#" id="ancora<?php echo $oResult[$i-1]->ac20_pcmater; ?>" onclick="js_pesquisao47_coddot(true, <?php echo $oResult[$i-1]->ac20_pcmater; ?>, <?php echo $oResult[$i-1]->o56_elemento; ?>);"><b>Dotações:</b></a>
+                        <input type="text" onchange="js_pesquisao47_coddot(false, <?php echo $oResult[$i-1]->ac20_pcmater; ?>)" maxlengh="4" style="width:60px;" id="<?php echo $oResult[$i-1]->ac20_pcmater; ?>" name="codigo_dotacao[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]">
+                        <input type="hidden" name="codigo_material[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[$i-1]->ac20_pcmater; ?>">
+                        <input type="hidden" name="codigo_posicao[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac20_acordoposicao; ?>">
+                        <input type="hidden" name="codigo_acordo1[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac26_acordo; ?>">
+                        <input type="hidden" name="codigo_acordo_item[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[$i-1]->ac22_acordoitem; ?>">
+                        <input type="submit"  name="adicionar[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="Incluir"></td>
+                      </tr>
+                    <?php endif; ?>
+                    <tr>
+                      <td colspan="4" style="height: 20px; width:100%;"> <hr> </td>
+                    </tr>
+                    <tr style="margin-top:10px;border: 1px solid black; background: #e1dede; height: 25px; ">
+                      <th>Cód. Item: <?php echo $aResult->ac20_pcmater; ?> </th>
+                      <th><?php echo $aResult->pc01_descrmater; ?> </th>
+                      <th >Qtd: <?php echo $aResult->ac20_quantidade; ?> </th>
+                      <th >Valor total: <?php echo $aResult->ac20_valortotal; ?> </th>
+                    </tr>
 
 
 
-             <tr >
-             <?php if(DB_getsession("DB_anousu") == $aResult->o58_anousu && $aResult->o58_anousu == $aResult->ac22_anousu): ?>
-             <?php
+                    <?php $iMaterial = $aResult->ac20_pcmater; ?>
+
+                    <tr style="border:1px solid black; background:#dedede; height:20px">
+                     <th colspan="2">Dotações do item</th>
+
+
+                     <th colspan="2">Exercício</th>
+                   </tr>
+
+                   <?php } ?>
+
+
+
+                   <tr >
+                     <?php if(DB_getsession("DB_anousu") == $aResult->o58_anousu && $aResult->o58_anousu == $aResult->ac22_anousu): ?>
+                       <?php
              /*
              SE O ANO FOR MAIOR QUE O ATUAL (NAO O DA SESSAO) + 1 E A MESMO
              TEMPO MAIOR QUE 2017 (JA FOI ENVIADO PRO SICOM),
              SERÁ POSSIVEL REALIZAR A EXCLUSÃO
              */
              if($aResult->o58_anousu > 2017):
-             ?>
-              <td colspan="2" style="border:1px solid #e8e8e8;" ><?php echo $aResult->ac22_coddot; ?></td>
-              <td  style="border:1px solid #e8e8e8;" ><?php echo $aResult->o58_anousu; ?></td>
-              <td  style="border:1px solid #e8e8e8;" ><a href="ac04_alteradotacao001.php?excluir=true&acordo=<?php echo $codigo_acordo; ?>&ano=<?php echo $aResult->o58_anousu; ?>&acordo_item_sequencial=<?php echo $aResult->ac22_sequencial; ?>">Excluir</a></td>
-            <?php else: ?>
-               <td colspan="2" style="border:1px solid #e8e8e8;" ><?php echo $aResult->ac22_coddot; ?></td>
-              <td  colspan="2" style="border:1px solid #e8e8e8;" ><?php echo $aResult->o58_anousu; ?></td>
-            <?php endif; ?>
-            <?php endif; ?>
+               ?>
+             <td colspan="2" style="border:1px solid #e8e8e8;" ><?php echo $aResult->ac22_coddot; ?></td>
+             <td  style="border:1px solid #e8e8e8;" ><?php echo $aResult->o58_anousu; ?></td>
+             <td  style="border:1px solid #e8e8e8;" ><a href="ac04_alteradotacao001.php?excluir=true&material=<?php echo $aResult->ac20_pcmater;?>&acordo=<?php echo $codigo_acordo; ?>&ano=<?php echo $aResult->o58_anousu; ?>&acordo_item_sequencial=<?php echo $aResult->ac22_sequencial; ?>">Excluir</a></td>
+           <?php else: ?>
+             <td colspan="2" style="border:1px solid #e8e8e8;" ><?php echo $aResult->ac22_coddot; ?></td>
+             <td  colspan="2" style="border:1px solid #e8e8e8;" ><?php echo $aResult->o58_anousu; ?></td>
+           <?php endif; ?>
+         <?php endif; ?>
 
-            </tr>
+       </tr>
 
 
 
-          <?php } ?>
+       <?php } ?>
+       <?php $i++; ?>
+     <?php endforeach;?>
 
-        <?php endforeach;
-        ?>
+     <tr>
+      <td colspan="4" style=" background:#ededed; height:25px" >
+        <a href="#" id="ancora<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>" onclick="js_pesquisao47_coddot(true, <?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>, <?php echo $oResult[count($oResult)-1]->o56_elemento; ?>);"><b>Dotações:</b></a>
+        <input type="text" onchange="js_pesquisao47_coddot(false, <?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>)" maxlengh="4" style="width:60px;" id="<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>" name="codigo_dotacao[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]">
+        <input type="hidden" name="codigo_material[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>">
+        <input type="hidden" name="codigo_posicao[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac20_acordoposicao; ?>">
+        <input type="hidden" name="codigo_acordo1[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac26_acordo; ?>">
+        <input type="hidden" name="codigo_acordo_item[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[count($oResult)-1]->ac22_acordoitem; ?>">
+        <input type="submit"  name="adicionar[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="Incluir"></td>
+      </tr>
 
-      </table>
-    </td>
-  </tr>
+
+    </table>
+  </td>
+</tr>
 
 </table>
 </fieldset>
+<center>
+  <br>
+  <input type="button" name="Pesquisar" value="Pesquisar" onclick="js_pesquisaac16_sequencial(true);" >
+</center>
 </form>
 <?php endif; ?>
 </body>
 <script type="text/javascript">
-<?php if(isset($excluido) && $excluido == true){
-  echo "alert('Dotação removida');";
-}else if(isset($excluido) && $excluido != true){
 
-  echo "alert('Dotação não removida');";
-} ?>
-<?php if(!isset($codigo_acordo) && $codigo_acordo == null): ?>
+  <?php if(isset($excluido) && $excluido == true){
+    echo "alert('Dotação removida');";
+  }else if(isset($excluido) && $excluido != true){
+
+    echo "alert('Dotação não removida');";
+  } ?>
+  <?php if(!isset($codigo_acordo) && $codigo_acordo == null): ?>
   js_pesquisaac16_sequencial(true);
-  <?php endif; ?>
+<?php endif; ?>
 var input = "";
 function js_pesquisao47_coddot(mostra, campo, estrutural){
-    input = campo;
-    query='elemento='+estrutural;
+  input = campo;
+  query='elemento='+estrutural;
 
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'&funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,20,0);
@@ -334,6 +365,13 @@ function js_mostraorcdotacao1(chave1){
 
 
   db_iframe_orcdotacao.hide();
+  Element.prototype.documentOffsetTop = function () {
+    return this.offsetTop + ( this.offsetParent ? this.offsetParent.documentOffsetTop() : 0 );
+  };
+  var top = document.getElementById("ancora"+input).documentOffsetTop() - ( window.innerHeight / 2 );
+  window.scrollTo( 0, top );
+  /*var elmnt = document.getElementById("ancora"+input);
+  elmnt.scrollIntoView();*/
 }
 
 function js_pesquisaac16_sequencial(lMostrar) {
@@ -390,6 +428,12 @@ function js_pesquisaac16_sequencial(lMostrar) {
   /*oTxtCodigoAcordo.setValue(chave1);
   oTxtDescricaoAcordo.setValue(chave2);*/
 }
-
 </script>
+<?php
+if($material){
+     echo "<script>";
+     echo " document.getElementById('ancora$material').scrollIntoView(); ";
+     echo "</script>";
+   }
+ ?>
 </html>
