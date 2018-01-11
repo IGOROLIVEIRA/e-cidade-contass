@@ -105,7 +105,7 @@ if(isset($adicionar)){
   JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
   JOIN acordo ON ac26_acordo = ac16_sequencial
   JOIN pcmater ON ac20_pcmater = pc01_codmater
-  WHERE ac16_sequencial = '".$codigo_acordo1[$material]."' AND ac20_pcmater = '".$codigo_material[$material]."' AND ac22_coddot = '".$codigo_dotacao[$material]."' AND ac20_acordoposicao = '".$codigo_posicao[$material]."' AND o58_anousu = '".db_getsession("DB_anousu")."' AND ac22_acordoitem = '".$codigo_acordo_item[$material]."' AND ac26_acordoposicaotipo <> 6 ORDER BY ac20_acordoposicao DESC, ac20_pcmater ASC";
+  WHERE ac16_sequencial = '".$codigo_acordo1[$material]."' AND ac20_pcmater = '".$codigo_material[$material]."' AND ac22_coddot = '".$codigo_dotacao[$material]."' AND ac20_acordoposicao = '".$codigo_posicao[$material]."' AND o58_anousu = '".db_getsession("DB_anousu")."' AND ac22_anousu = '".db_getsession("DB_anousu")."' AND ac22_acordoitem = '".$codigo_acordo_item[$material]."' AND ac26_acordoposicaotipo <> 6 ORDER BY ac20_acordoposicao DESC, ac20_pcmater ASC";
 
   if(pg_numrows(db_query($sSqlDotacao)) == 0 || pg_numrows(db_query($sSqlDotacaoAcordo)) > 0){
     //significa que há a relação ou a dotação nao existe
