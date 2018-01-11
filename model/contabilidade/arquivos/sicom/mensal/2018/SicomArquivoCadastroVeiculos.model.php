@@ -273,7 +273,11 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     $clcvc10->si146_ano = $oDados10->ano;
                     $clcvc10->si146_placa = $oDados10->tpveiculo == 3 ? $oDados10->placa : ' ';
                     $clcvc10->si146_chassi = $oDados10->tpveiculo == 3 ? $oDados10->chassi : ' ';
-                    $clcvc10->si146_numerorenavam = $oDados10->tpveiculo == 3 ? $oDados10->numerorenavam : '0';
+                    if($oDados10->tpveiculo == 3) {
+                        $clcvc10->si146_numerorenavam = $oDados10->numerorenavam;
+                    } else{
+                        $clcvc10->si146_numerorenavam = '';
+                    }
                     $clcvc10->si146_nroserie = $oDados10->nroserie;
                     $clcvc10->si146_situacao = $oDados10->situacao;
                     $clcvc10->si146_tipodocumento = $tipodocumento;
@@ -318,7 +322,11 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc10->si146_ano = $oDados10->ano;
                 $clcvc10->si146_placa = $oDados10->tpveiculo == 3 ? $oDados10->placa : ' ';
                 $clcvc10->si146_chassi = $oDados10->tpveiculo == 3 ? $oDados10->chassi : ' ';
-                $clcvc10->si146_numerorenavam = $oDados10->tpveiculo == 3 ? $oDados10->numerorenavam : '0';
+                if($oDados10->tpveiculo == 3) {
+                    $clcvc10->si146_numerorenavam = $oDados10->numerorenavam;
+                } else{
+                    $clcvc10->si146_numerorenavam = '';
+                }
                 $clcvc10->si146_nroserie = $oDados10->nroserie;
                 $clcvc10->si146_situacao = $oDados10->situacao;
                 $clcvc10->si146_tipodocumento = $tipodocumento;

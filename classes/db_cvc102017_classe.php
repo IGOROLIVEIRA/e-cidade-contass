@@ -30,7 +30,7 @@ class cl_cvc102017
   var $si146_ano = 0;
   var $si146_placa = null;
   var $si146_chassi = null;
-  var $si146_numerorenavam = 0;
+  var $si146_numerorenavam = null;
   var $si146_nroserie = null;
   var $si146_situacao = null;
   var $si146_tipodocumento = 0;
@@ -53,7 +53,7 @@ class cl_cvc102017
                  si146_ano = int8 = Ano do Veículo 
                  si146_placa = varchar(8) = Placa do Veículo 
                  si146_chassi = varchar(30) = Número do  Chassis 
-                 si146_numerorenavam = int8 = Número do  RENAVAM 
+                 si146_numerorenavam = varchar(14) = Número do  RENAVAM
                  si146_nroserie = varchar(20) = Número de Série 
                  si146_situacao = varchar(2) = Situação do  veículo 
                  si146_tipodocumento = int8 = Tipo de documento
@@ -130,7 +130,7 @@ class cl_cvc102017
       $this->si146_ano = "0";
     }
     if ($this->si146_numerorenavam == null) {
-      $this->si146_numerorenavam = "0";
+      $this->si146_numerorenavam = " ";
     }
     if ($this->si146_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -224,7 +224,7 @@ class cl_cvc102017
                                ,$this->si146_ano 
                                ,'$this->si146_placa' 
                                ,'$this->si146_chassi' 
-                               ,$this->si146_numerorenavam 
+                               ,'$this->si146_numerorenavam'
                                ,'$this->si146_nroserie' 
                                ,'$this->si146_situacao' 
                                ,".($this->si146_tipodocumento == NULL ? 'NULL' : $this->si146_tipodocumento)."
@@ -364,7 +364,7 @@ class cl_cvc102017
     }
     if (trim($this->si146_numerorenavam) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si146_numerorenavam"])) {
       if (trim($this->si146_numerorenavam) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si146_numerorenavam"])) {
-        $this->si146_numerorenavam = "0";
+        $this->si146_numerorenavam = " ";
       }
       $sql .= $virgula . " si146_numerorenavam = $this->si146_numerorenavam ";
       $virgula = ",";
