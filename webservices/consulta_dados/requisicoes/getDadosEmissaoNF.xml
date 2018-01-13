@@ -14,6 +14,8 @@
                         when q136_localpagamento = 2 then 'Sede tomador'
                         when q136_localpagamento = 3 then 'Local de prestação do serviço' end"
                                                                                   label="local_pgto"                     />
+    <campo campo="case when q136_tipotributacao = 3 then 't' else 'f' end"                     label="tributacao_nao_incide" />
+    <campo campo="q136_exercicio"                                  label="exercicio" />
   </campos>
   <from tabela="ativid" />
   <juncoes>
