@@ -26,6 +26,8 @@
  *                                licenca/licenca_pt.txt
  */
 
+use \ECidade\Tributario\Arrecadacao\CobrancaRegistrada\CobrancaRegistrada;
+
 /**
  * Classe responsável pela geração de recibo avulso do Portal de Doações
  *set
@@ -40,6 +42,13 @@ class ReciboAvulsoPortalDoacoes {
   protected $iCnpjCpf;
 
   /**
+   * Cnpj da Instituicao que irá receber a doação
+   * @var integer
+   */
+  protected $iCnpjInstituicao;
+
+
+  /**
    * Valor da doação
    * @var float
    */
@@ -50,6 +59,30 @@ class ReciboAvulsoPortalDoacoes {
    * @var string
    */
   // protected $sNomeDoador;
+
+  /**
+   * Nome da Instituicao
+   * @var string
+   */
+  protected $sNomeInstituicao;
+
+  /**
+   * Endereco da Instituicao
+   * @var string
+   */
+  protected $sEnderecoInstituicao;
+
+  /**
+   * E-mail da Instituicao
+   * @var string
+   */
+  protected $sEmailInstituicao;
+
+  /**
+   * Telefone da Instituicao
+   * @var string
+   */
+  protected $sTelefoneInstituicao;
 
   /**
    * Código da receita para gerar o recibo
@@ -112,6 +145,86 @@ class ReciboAvulsoPortalDoacoes {
   public function setCnpjCpf($iCnpjCpf) {
 
     $this->iCnpjCpf = $iCnpjCpf;
+  }
+
+  /**
+   * @return integer
+   */
+  public function getCnpjInstituicao() {
+
+    return $this->iCnpjInstituicao;
+  }
+
+  /**
+   * @param integer $iCnpj
+   */
+  public function setCnpjInstituicao($iCnpjInstituicao) {
+
+    $this->iCnpjInstituicao = $iCnpjInstituicao;
+  }
+
+  /**
+   * @return string
+   */
+  public function getNomeInstituicao() {
+
+    return $this->sNomeInstituicao;
+  }
+
+  /**
+   * @param string $sNomeInstituicao
+   */
+  public function setNomeInstituicao($sNomeInstituicao) {
+
+    $this->sNomeInstituicao = $sNomeInstituicao;
+  }
+
+  /**
+   * @return string
+   */
+  public function getEnderecoInstituicao() {
+
+    return $this->sEnderecoInstituicao;
+  }
+
+  /**
+   * @param string $sEnderecoInstituicao
+   */
+  public function setEnderecoInstituicao($sEnderecoInstituicao) {
+
+    $this->sEnderecoInstituicao = $sEnderecoInstituicao;
+  }
+
+  /**
+   * @return string
+   */
+  public function getEmailInstituicao() {
+
+    return $this->sEmailInstituicao;
+  }
+
+  /**
+   * @param string $sEmailInstituicao
+   */
+  public function setEmailInstituicao($sEmailInstituicao) {
+
+    $this->sEmailInstituicao = $sEmailInstituicao;
+  }
+
+  /**
+   * @return string
+   */
+  public function getTelefoneInstituicao() {
+
+    return $this->sTelefoneInstituicao;
+  }
+
+  /**
+   * @param string $sTelefoneInstituicao
+   */
+  public function setTelefoneInstituicao($sTelefoneInstituicao) {
+
+    $this->sTelefoneInstituicao = $sTelefoneInstituicao;
   }
 
   /**
@@ -199,13 +312,15 @@ class ReciboAvulsoPortalDoacoes {
    * @throws Exception
    */
   public function gerarRecibo() {
-        
-    db_inicio_transacao();
+
+    if (!db_utils::inTransaction()) {
+      throw new Exception("Sem transação ativa");
+    }
 
     try {
 
       $iAnoUsu = db_getsession("DB_anousu");
-    
+
       $sSql  = "   SELECT c61_instit                                                                          ";
       $sSql .= "     FROM tabplan                                                                             ";
       $sSql .= "          INNER JOIN conplanoreduz     ON tabplan.k02_anousu     = conplanoreduz.c61_anousu   ";
@@ -219,24 +334,20 @@ class ReciboAvulsoPortalDoacoes {
 
       if (pg_numrows($rsInstituicao)>0){
         $iInstituicao = db_utils:: fieldsMemory($rsInstituicao,0)->c61_instit;
-      }    
+      }
 
       $this->setInstituicao(new Instituicao($iInstituicao));
-      
+
       $oCGM = CgmFactory::getInstanceByCnpjCpf($this->getCnpjCpf());
 
       // Verifica se existe cadastro se não pega CGM prefeitura
       if ($oCGM) {
-     
+
         $this->setNumCgm($oCGM->getCodigo());
         $oDoador = CgmFactory::getInstanceByCgm($this->getNumCgm());
         $this->setNomeDoador($oDoador->getNome());
       } else {
-        db_fim_transacao(true);
         throw new Exception("Cadastro não localizado", 1);
-        
-        // Pega o CGM prefeitura
-        // $this->setNumCgm($this->getInstituicao()->getCgm()->getCodigo());
       }
 
       $iNumCgm = $this->getNumCgm();
@@ -252,17 +363,14 @@ class ReciboAvulsoPortalDoacoes {
       $oRecibo->adicionarReceita($this->getCodigoReceita(), $this->getValorDoacao(), 0);
       $oRecibo->setHistorico("Doação para o Portal Doações - {$this->getNomeDoador()}");
       $oRecibo->emiteRecibo();
-  
+
       $sRetorno = $this->gerarBoleto($oRecibo, $iInstituicao);
-      db_fim_transacao(false);
     } catch (Exception $eErro) {
-      db_fim_transacao(true);
       throw $eErro;
     }
 
     return $sRetorno;
   }
-
 
   /**
    * Gera o boleto do recibo
@@ -327,7 +435,13 @@ class ReciboAvulsoPortalDoacoes {
       $rsDadosPagamento = db_query($sSql);
 
       // Gera o objeto PDF para a emissão
-      $oRegraEmissao = new regraEmissao(null, 22, $iInstituicao, date("Y-m-d",$dDataUsu), $sIp);
+      $oRegraEmissao = new regraEmissao(null, 24, $iInstituicao, date("Y-m-d", $dDataUsu), $sIp);
+
+      $lConvenioCobrancaRegistrada = CobrancaRegistrada::validaConvenioCobranca($oRegraEmissao->getConvenio());
+
+      if ($lConvenioCobrancaRegistrada) {
+        CobrancaRegistrada::adicionarRecibo($oRecibo, $oRegraEmissao->getConvenio());
+      }
 
       // Formata valor para gerar o código de barras
       $fValorBarra = str_replace('.','',str_pad(number_format($oRecibo->getTotalRecibo(),2,"","."),11,"0",STR_PAD_LEFT));
@@ -363,6 +477,19 @@ class ReciboAvulsoPortalDoacoes {
       $oPdf->emailpref	   = $oInstituicao->getEmail();
       $oPdf->cgcpref       = $oInstituicao->getCNPJ();
 
+      if($this->getCnpjInstituicao()){
+
+        $oPdf->prefeitura    = $this->getNomeInstituicao();
+        $oPdf->enderpref     = $this->getEnderecoInstituicao();
+        $oPdf->telefpref     = $this->getTelefoneInstituicao();
+        $oPdf->emailpref     = $this->getEmailInstituicao();
+        $oPdf->cgcpref       = $this->getCnpjInstituicao();
+
+        $oPdf->municpref     = $oInstituicao->getMunicipio();
+        $oPdf->tipo_convenio = $oConvenio->getTipoConvenio();
+        $oPdf->uf_config     = $oInstituicao->getUf();
+      }
+
       $sLogradouro  = utf8_decode($oIdentificacao->getLogradouro());
       $sComplemento = utf8_decode($oIdentificacao->getComplemento());
       $sNumCgm      = $oIdentificacao->getCodigo();
@@ -385,7 +512,7 @@ class ReciboAvulsoPortalDoacoes {
         $sMunicipio   = "XXXX";
         $sNumInscr    = "XXXXX";
       }
-
+// ORIGINAL
       // Identificação da origem
       $oPdf->nome               = $sNome;
       $oPdf->ender              = $sLogradouro;
@@ -399,29 +526,149 @@ class ReciboAvulsoPortalDoacoes {
       if(!empty($sComplemento)){
         $sNumero .= ' - ' . $sComplemento;
       }
-      $oPdf->tipocompl          = 'N'.chr(176)."/Compl : " . $sNumero;
+      $oPdf->tipocompl          = 'N'.chr(176)."/Compl : ";
       $oPdf->tipobairro         = "Bairro : {$sBairro}";
 
       // Identificações recibo
-      $oPdf->datacalc	      	  = date('d-m-Y',$dDataUsu);
-      $oPdf->predatacalc	   	  = date('d-m-Y',$dDataUsu);
+      $oPdf->datacalc           = date('d-m-Y',$dDataUsu);
+      $oPdf->predatacalc        = date('d-m-Y',$dDataUsu);
       $oPdf->linhasdadospagto   = pg_numrows($rsDadosPagamento);
       $oPdf->recorddadospagto   = $rsDadosPagamento;
-      $oPdf->receita		        = 'k00_receit';
-      $oPdf->receitared	        = 'codreduz';
+      $oPdf->receita            = 'k00_receit';
+      $oPdf->receitared         = 'codreduz';
       $oPdf->dreceita           = 'k02_drecei';
-      $oPdf->ddreceita	        = 'k07_descr';
-      $oPdf->valor 	   	        = 'valor';
-      $oPdf->historico	        = "Doação para o Portal Doações";
-      $oPdf->histparcel	        = "Histórico das parcelas";
-      $oPdf->dtvenc  		        = $dDataVencimento;
-      $oPdf->numpre	  	        = $iNumpreFormatado;
-      $oPdf->valtotal		        = db_formatar($oRecibo->getTotalRecibo(),'f');
-      $oPdf->linhadigitavel	    = $iLinhaDigitavel;
-      $oPdf->codigobarras    	  = $iCodigoBarras;
+      $oPdf->ddreceita          = 'k07_descr';
+      $oPdf->valor              = 'valor';
+      // $oPdf->historico         = "Doação para o Portal Doações";
+      $oPdf->historico          = "";
+      $oPdf->histparcel         = "Histórico das parcelas";
+      $oPdf->dtvenc             = $dDataVencimento;
+      $oPdf->numpre             = $iNumpreFormatado;
+      $oPdf->valtotal           = db_formatar($oRecibo->getTotalRecibo(),'f');
+      $oPdf->linhadigitavel     = $iLinhaDigitavel;
+      $oPdf->codigobarras       = $iCodigoBarras;
+// FIM ORIGINAL
+
+// Novo Modelo
+  // $oConvenio      = new convenio($oRegraEmissao->getConvenio(),$oRecibo->getNumpreRecibo(),1,$oRecibo->getTotalRecibo(),$fValorBarra, $dDataVencimento,6);
+
+  $codigobarras   = $oConvenio->getCodigoBarra();
+  $linhadigitavel = $oConvenio->getLinhaDigitavel();
+  $datavencimento = db_formatar($oRecibo->getDataVencimentoRecibo(),"d");
+
+
+  if(strlen($oConvenio->getConvenioCobranca()) == 7) {
+
+    $oPdf->nosso_numero = trim($oConvenio->getConvenioCobranca()) . str_pad($oRecibo->getNumpreRecibo(),8,"0",STR_PAD_LEFT) . "00";
+  } else {
+
+    $oPdf->nosso_numero = $oConvenio->getNossoNumero();
+  }
+
+  $oPdf->agencia_cedente  = $oConvenio->getAgenciaCedente();
+  $oPdf->carteira         = $oConvenio->getCarteira();
+  $oPdf->tipobairro       = 'Bairro :';
+
+ $sql = "select r.k00_numcgm,
+                r.k00_dtvenc,
+                r.k00_receit,
+                upper(t.k02_descr) as k02_descr,
+                upper(t.k02_drecei) as k02_drecei,
+                r.k00_dtoper as k00_dtoper,
+                k00_codsubrec,
+                coalesce(upper(k07_descr),' ') as k07_descr ,
+                sum(r.k00_valor) as valor,
+                case
+                   when taborc.k02_codigo is null
+                     then tabplan.k02_reduz
+                   else
+                     taborc.k02_codrec
+                end as codreduz,
+                k00_hist,
+                (select (select k02_codigo from tabrec where k02_recjur = k00_receit or k02_recmul = k00_receit limit 1) is not null ) as codtipo           from recibo r
+                inner join tabrec t      on t.k02_codigo       = r.k00_receit
+                inner join tabrecjm      on tabrecjm.k02_codjm = t.k02_codjm
+                 left outer join tabdesc on codsubrec          = k00_codsubrec
+                                        and k07_instit         = ".$oInstituicao->getCodigo()."
+                 left outer join taborc  on t.k02_codigo       = taborc.k02_codigo
+                                        and taborc.k02_anousu  = ".$iAnoUsu."
+                 left outer join tabplan on t.k02_codigo       = tabplan.k02_codigo
+                                        and tabplan.k02_anousu = ".$iAnoUsu."
+           where r.k00_numpre = ".$oRecibo->getNumpreRecibo()."
+           group by r.k00_dtoper,r.k00_dtvenc,r.k00_receit,t.k02_descr,t.k02_drecei,r.k00_numcgm,k00_codsubrec,k07_descr,codreduz,r.k00_hist";
+ $DadosPagamento = db_query($sql);
+
+$total_recibo = 0;
+for($i = 0;$i < pg_num_rows($DadosPagamento);$i++) {
+
+  $oReceitas = db_utils::fieldsMemory($DadosPagamento,$i);
+
+  $total_recibo           += $oReceitas->valor;
+  $arraycodreceitas[$i]   =  $oReceitas->k00_receit;
+  $arrayreduzreceitas[$i] =  $oReceitas->codreduz;
+  $arraydescrreceitas[$i] =  $oReceitas->k02_descr;
+  $arrayvalreceitas[$i]   =  $oReceitas->valor;
+}
+
+
+$oPdf->arraycodreceitas   = $arraycodreceitas;
+$oPdf->arrayreduzreceitas = $arrayreduzreceitas;
+$oPdf->arraydescrreceitas = $arraydescrreceitas;
+$oPdf->arrayvalreceitas   = $arrayvalreceitas;
+
+$oPdf->receita          = 'k00_receit';
+$oPdf->receitared       = 'codreduz';
+$oPdf->dreceita         = 'k02_drecei';
+$oPdf->ddreceita        = 'k07_descr';
+$oPdf->valor            = 'valor';
+$oPdf->nrpri         = $sNumero;
+$oPdf->nomepriimo    = $sLogradouro;
+$oPdf->complpri      = $sComplemento;
+$oPdf->bairropri     = $sBairro;
+
+$oPdf->dtvenc = $dataVencimento;
+
+$oPdf->linha_digitavel = $linhadigitavel;
+$oPdf->codigo_barras   = $codigobarras;
+
+$oPdf->descr6 = $datavencimento;  // Data de Vencimento
+$oPdf->descr7 = db_formatar($oRecibo->getTotalRecibo(),'f');  // qtd de URM ou valor
+$oPdf->descr9 = $oRecibo->getNumpreRecibo()."001"; //$numpre; // cod. de arrecadação
+
+$oPdf->predescr6 = $datavencimento;  // Data de Vencimento
+$oPdf->predescr7 = db_formatar($this->getValorDoacao(),'f');  // qtd de URM ou valor
+$oPdf->predescr9 = $oRecibo->getNumpreRecibo()."001"; //$numpre; // cod. de arrecadação
+/*************************************************************************************/
+$oPdf->descr11_1           = $sNome;
+$oPdf->descr11_2           = $sLogradouro .', ' . $sNumero; // Endereco
+$oPdf->descr11_3           = $sMunicipio;
+$oPdf->descr12_1           = ""; // Historico
+$oPdf->descr14             = $datavencimento;
+$oPdf->descr10             = "1 / 1";
+$oPdf->data_processamento  = date('d/m/Y',db_getsession('DB_datausu'));
+$oPdf->tipo_exerc          = "11 / ".date('Y',db_getsession('DB_datausu'));
+$oPdf->especie             = "R$";
+$oPdf->dtparapag           = $datavencimento; //date('d/m/Y',db_getsession('DB_datausu'));
+$oPdf->ufcgm               = $oIdentificacao->sUF;
+
+
+  $cldb_bancos = new cl_db_bancos;
+
+  $rsConsultaBanco  = $cldb_bancos->sql_record($cldb_bancos->sql_query_file($oConvenio->getCodBanco()));
+  $oBanco     = db_utils::fieldsMemory($rsConsultaBanco,0);
+  $oPdf->numbanco   = $oBanco->db90_codban."-".$oBanco->db90_digban;
+  $oPdf->banco      = $oBanco->db90_abrev;
+
+  try {
+    $oPdf->imagemlogo = $oConvenio->getImagemBanco();
+  } catch (Exception $eExeption){
+    db_redireciona("db_erros.php?fechar=true&db_erro=".$eExeption->getMessage());
+  }
+  $pdf1->lUtilizaModeloDefault = false;
+// FIM NOVO MODELO
       $oPdf->imprime();
 
-      $sCaminhoPDF  = 'tmp/boleto_portaldoacoes_';
+      $sCaminhoPDF  = 'tmp/rp_boleto_portaldoacoes_';
       $sCaminhoPDF .= $iIDUsuario . '_';
       $sCaminhoPDF .= date('d-m-Y_H:i:s');
       $sCaminhoPDF .= '.pdf';

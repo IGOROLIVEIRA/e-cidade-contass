@@ -161,8 +161,8 @@ class Processamento {
 
     if (!$sCaminhoArquivo) {
 
-      $this->log('Metodo de processamento nao encontrado', DBLog::LOG_ERROR);
-      throw new Exception('Metodo de processamento nao encontrado');
+      $this->log('Metodo de processamento ('.$this->sNomeMetodo.') nao encontrado', DBLog::LOG_ERROR);
+      throw new Exception('Metodo de processamento ('.$this->sNomeMetodo.') nao encontrado');
     }
 
     $oArquivoXML       = new DOMDocument();
@@ -323,7 +323,7 @@ class Processamento {
 
         // Se for obrigatório e não estiver setado lança exceção
         if (!isset($this->aDadosRecebidos[$oParametro->sNome])) {
-          throw new Exception("Parâmetro obrigatório({$oParametro->sNome}) não foi informado");
+          throw new Exception("Parâmetro obrigatório({$oParametro->sNome}) não foi informado para o arquivo {$this->sNomeMetodo}.xml");
         }
 
         if (is_null($this->aDadosRecebidos[$oParametro->sNome]) || $this->aDadosRecebidos[$oParametro->sNome] == '') {

@@ -116,7 +116,7 @@ class ConsultaDados {
     $sCaminhoMetodo = DBFileExplorer::getCaminhoArquivo(ConsultaDados::PATH_REQUISICOES, $sMetodo.'.xml');
 
     if ( !$sCaminhoMetodo ) {
-      throw new SoapFault("e-Cidade", "Metodo nao Encontrado. Contate Suporte.");
+      throw new SoapFault("e-Cidade", "Metodo {$sMetodo} nao Encontrado. Contate Suporte.");
     }
 
     $sSQL                = ConsultaDados::carregarXMLPesquisa( $sCaminhoMetodo );
@@ -251,7 +251,7 @@ class ConsultaDados {
       foreach ( $aLabelsInformados as $sLabelInformado ) {
 
         if ( !array_key_exists($sLabelInformado, $aCamposXML ) ) {
-          throw new Exception("O Campo $sLabelInformado nao foi encontrado na Lista de campos permitidos");
+          throw new Exception("O Campo {$sLabelInformado} nao foi encontrado na Lista de campos permitidos para o arquivo: {$sCaminhoXML}");
         }
 
         $aCampos[$sLabelInformado] = $aCamposXML[$sLabelInformado];
