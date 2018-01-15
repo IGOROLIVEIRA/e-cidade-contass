@@ -1978,6 +1978,9 @@ class cl_translan extends cl_contranslan {
           } ELSEIF ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, $anousu, array(208))) {
           $c47_debito = self::getContaCreditoLiquidacao($numemp, array(208), $anousu);
 
+          } ELSEIF ($this->coddoc == 37 && empenho::possuiLancamentoDeControle($numemp, $anousu, array(210))) {
+          $c47_debito = self::getContaCreditoLiquidacao($numemp, array(210), $anousu);
+
           } ELSE {
 
               $sSqlContaCredito = " SELECT c69_credito
