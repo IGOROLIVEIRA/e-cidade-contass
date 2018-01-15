@@ -168,7 +168,7 @@ if(isset($codigo_acordo)){
   JOIN acordo ON ac26_acordo = ac16_sequencial
   JOIN cgm ON ac16_contratado = z01_numcgm
   JOIN pcmater ON ac20_pcmater = pc01_codmater
-  WHERE ac16_sequencial = '".$codigo_acordo."' AND ac26_acordoposicaotipo <> 6 ORDER BY ac20_acordoposicao DESC, ac20_ordem asc, ac22_coddot ASC ";
+  WHERE ac20_acordoposicao = (SELECT max(ac26_sequencial) FROM acordoposicao where ac26_acordo = '".$codigo_acordo."' AND ac26_acordoposicaotipo <> 6) AND ac16_sequencial = '".$codigo_acordo."' AND ac26_acordoposicaotipo <> 6 ORDER BY ac20_acordoposicao DESC, ac20_ordem asc, ac22_coddot ASC ";
   $oResult = db_query($sSql);
   $oResult = db_utils::getColectionByRecord($oResult);
   //echo $sSql;
