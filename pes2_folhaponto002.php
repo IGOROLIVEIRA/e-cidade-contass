@@ -5,6 +5,7 @@ include("std/DBDate.php");
 include("dbforms/db_funcoes.php");
 include("fpdf151/pdf.php");
 
+$anoControle = array();
 $aDias     = array();
 $aConsulta = array();
 $where    = "";
@@ -224,28 +225,35 @@ try {
       } else {
         $aDias[$i] = $i."/".$mes1;
       }
+      $anoControle[$i] = $ano1;
     }
   } else {
       $nDias1 = cal_days_in_month(CAL_GREGORIAN, $mes1, $ano1);
-      $nDias2 = cal_days_in_month(CAL_GREGORIAN, $mes2, $ano1);
+      if ($ano2 > $ano1) {
+        $nDias2 = cal_days_in_month(CAL_GREGORIAN, $mes2, $ano2);
+      } else {
+        $nDias2 = cal_days_in_month(CAL_GREGORIAN, $mes2, $ano1);
+      }
       $indice = $nDias1 - $dia1;
 
-      for($i = $dia1,$j = 0; $i <= $nDias1 && $j <= $indice; $i++,$j++){
+      for($i = $dia1,$j = 0; $i <= $nDias1 && $j <= $indice; $i++,$j++) {
           if ($i < 10) {
             $i *= 1;
             $aDias[$j] = "0".$i."/".$mes1;
           } else {
             $aDias[$j] = $i."/".$mes1;
           }
+          $anoControle[$j] = $ano1;
       }
 
-      for($i = 1,$j = $indice+1; $i <= $dia2; $i++,$j++){
+      for($i = 1,$j = $indice+1; $i <= $dia2; $i++,$j++) {
           if ($i < 10) {
             $i *= 1;
             $aDias[$j] = "0".$i."/".$mes2;
           } else {
             $aDias[$j] = $i."/".$mes2;
           }
+          $anoControle[$j] = $ano2;
       }
     }
 
@@ -327,6 +335,7 @@ try {
   $numrows_dados = pg_numrows($aConsulta);
 
   $aConsulta = db_utils::getCollectionByRecord($rsConsulta);
+  //echo '<pre>';print_r($anoControle);print_r($aDias);die;
 
   if ($aConsulta === false) {
     throw new Exception("Não foi possível realizar consulta!");
@@ -422,9 +431,11 @@ $pdf->cell(28,5,"ASS. SERV.","1",0,"C",0);
 $pdf->cell(17,5,"HRs. TRAB.","1",0,"C",0);
 
 $pdf->ln();
-
+  $controle = 0;
   foreach ($aDias as $aDia) {
-    $data = date("D", strtotime($ano1."-".implode("-",array_reverse(explode("/",$aDia)))));
+
+    $data = date("D", strtotime($anoControle[$controle]."-".implode("-",array_reverse(explode("/",$aDia)))));
+    $controle++;
 
     $pdf->setfont("arial", "", 8);
     $pdf->cell(13,5,$aDia,"1",0,"C",0);
