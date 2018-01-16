@@ -1063,7 +1063,7 @@ db_app::load("estilos.css, grid.style.css");
       aLinha[0] = oRow.dotacao;
       aLinha[1] = oRow.quantidade;
       aLinha[2] = js_formatar(oRow.valor, 'f');
-      aLinha[3] = "<input type='button' value='E' onclick='js_excluirDotacao(" + oRow.dotacao + ")' "+(desabilitaDotacao==true?"disabled='disabled'":"")+" style='width:100%'>";
+      aLinha[3] = "<input type='button' value='E' onclick='js_excluirDotacao(" + oRow.dotacao + ")' "+(desabilitaDotacao==false?"disabled='disabled'":"")+" style='width:100%'>";
       oGridDotacoes.addRow(aLinha);
     });
     oGridDotacoes.renderRows();
