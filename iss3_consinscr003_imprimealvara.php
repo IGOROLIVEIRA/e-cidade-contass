@@ -314,6 +314,9 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
    * Se for pirapora
    */
   if($oInstit->getCodigoCliente() == 58) {
+
+  $pdf1->horariofuncionamento = empty($q07_horaini) || empty($q07_horafim) ? "08:00 às 18:00" : $q07_horaini." às ".$q07_horafim;
+
     /**
      * Busca o Numero do alvara pela ultima movimentacao do ano
      */

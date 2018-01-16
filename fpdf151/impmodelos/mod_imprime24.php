@@ -177,11 +177,16 @@ if ($this->impobsativ == 'f'){
 $iAlturaBox = $this->objpdf->gety();
 $this->objpdf->Cell(135,5,"ATIVIDADE PRINCIPAL: ",0,0,"L",0) ; // descrição da atividade principal
 if ($this->impdatas == 't'){
-  $this->objpdf->Cell(24,5,"INICIO",0,0,"C",0);
-  if($this->permanente == 'f'){
-    $this->objpdf->Cell(24,5,"FINAL",0,1,"C",0);
-  }else{
+  if(isset($this->horariofuncionamento)){
+    $this->objpdf->Cell(24,5,"HORÁRIO",0,0,"C",0);
     $this->objpdf->Cell(24,5,"",0,1,"C",0);
+  }else{
+    $this->objpdf->Cell(24,5,"INICIO",0,0,"C",0);
+    if($this->permanente == 'f'){
+      $this->objpdf->Cell(24,5,"FINAL",0,1,"C",0);
+    }else{
+      $this->objpdf->Cell(24,5,"",0,1,"C",0);
+    }
   }
 }else{
   $this->objpdf->Cell(24,5,"",0,0,"C",0);
@@ -204,11 +209,16 @@ $this->objpdf->sety( $iAltura );
 $this->objpdf->setx(152);
 
 if ($this->impdatas == 't'){
-  $this->objpdf->Cell(24,5,db_formatar($this->dtiniativ,'d'),0,0,"C",0);
-  if ($this->permanente == 'f'){
-    $this->objpdf->Cell(24,5,db_formatar($this->dtfimativ,'d'),0,$quebradatas,"C",0);
+  if(isset($this->horariofuncionamento)){
+    $this->objpdf->Cell(24,5,$this->horariofuncionamento,0,0,"C",0);
+      $this->objpdf->Cell(24,5,"",0,$quebradatas,"C",0);
   }else{
-    $this->objpdf->Cell(24,5,"",0,$quebradatas,"C",0);
+    $this->objpdf->Cell(24,5,$this->dtiniativ,0,0,"C",0);
+    if ($this->permanente == 'f'){
+      $this->objpdf->Cell(24,5,db_formatar($this->dtfimativ,'d'),0,$quebradatas,"C",0);
+    }else{
+      $this->objpdf->Cell(24,5,"",0,$quebradatas,"C",0);
+    }
   }
 }else{
   $this->objpdf->Cell(24,5,"",0,0,"C",0);
