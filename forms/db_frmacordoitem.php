@@ -926,7 +926,7 @@ db_app::load("estilos.css, grid.style.css");
     sContent += "    </tr>";
     sContent += "    <tr>";
     sContent += "     <td colspan='4' style='text-align:center'>";
-    sContent += "       <input type='button' value='Salvar' id='btnSalvarDotacao' "+(desabilitaDotacao==true?"disabled='disabled'":"")+">";
+    sContent += "       <input type='button' value='Salvar' id='btnSalvarDotacao' "+(desabilitaDotacao==false?"disabled='disabled'":"")+">";
     sContent += "     </td>";
     sContent += "    </tr>";
     sContent += "  </table>";
