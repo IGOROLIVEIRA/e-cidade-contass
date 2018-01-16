@@ -47,7 +47,7 @@
   <filtros>
     <filtro                     condicao = "q12_calciss"              obrigatorio="true"                           />
     <filtro label="inscricao"   condicao = "q02_inscr = '$inscricao'" obrigatorio="true"                           />
-    <filtro label="exercicio"   condicao = "q136_exercicio = '$exercicio'" obrigatorio="true"                           />
+    <filtro label="exercicio"   condicao = "q136_exercicio = '$exercicio'" obrigatorio="false"                           />
   </filtros>
   <agrupamento campos=""                                                                                           />
   <ordenacao   campos="q02_inscr"                                                                                  />
