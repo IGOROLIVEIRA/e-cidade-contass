@@ -117,6 +117,18 @@ fieldset fieldset table tr td:first-child {
         </td>
       </tr>
 
+      <tr id="aliquotasreduzidas">
+        <td>
+          <?=@$Lq60_aliq_reduzida?>
+        </td>
+        <td>
+          <?
+            $aAliquotasReduzidas = array('0'=>'Desativado','1'=>'Ativado');
+            db_select('q60_aliq_reduzida',$aAliquotasReduzidas, true, $db_opcao);
+          ?>
+        </td>
+      </tr>
+
       <tr id="vencimento">
         <td>
           <?

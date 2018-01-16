@@ -86,6 +86,16 @@ $sDesabilitaBotao = $db_opcao ? null : 'disabled="true"';
 			</tr>
 
 			<tr>
+				<td nowrap title="<?php echo $Tq136_valor_reduzido; ?>">
+					<strong>Alíquota reduzida:</strong>
+				</td>
+				<td>
+					<?php db_input('q136_valor_reduzido', 10, $Iq136_valor_reduzido, true, 'text', $db_opcao, "") ?>
+					<span id="porcentagem_reduzido" style="display:none;">%</span>
+				</td>
+			</tr>
+
+			<tr>
 				<td nowrap title="<?php echo $Tq136_localpagamento; ?>">
 					 <?php echo $Lq136_localpagamento; ?>
 				</td>
@@ -125,6 +135,9 @@ function js_tipoTributacao(oElemento) {
 		sValor += 'Valor do índice';
 		$('porcentagem').style.display = 'none';
 		$('q136_valor').readOnly = false;
+
+		$('porcentagem_reduzido').style.display = 'none';
+		$('q136_valor_reduzido').readOnly = false;
 	}
 
 	/**
@@ -135,6 +148,9 @@ function js_tipoTributacao(oElemento) {
 		sValor += 'Alíquota:';
 		$('porcentagem').style.display = '';
 		$('q136_valor').readOnly = false;
+
+		$('porcentagem_reduzido').style.display = '';
+		$('q136_valor_reduzido').readOnly = false;
 	}
 
 	/**
@@ -146,6 +162,10 @@ function js_tipoTributacao(oElemento) {
   	$('porcentagem').style.display = 'none';
   	$('q136_valor').value = '0';
   	$('q136_valor').readOnly = true;
+
+  	$('porcentagem_reduzido').style.display = 'none';
+  	$('q136_valor_reduzido').value = '0';
+  	$('q136_valor_reduzido').readOnly = true;
 	}
 
 	$('valor').innerHTML = '<strong>' + sValor + '</strong>';

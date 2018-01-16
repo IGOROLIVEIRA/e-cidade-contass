@@ -176,6 +176,36 @@ class EmissaoBoleto {
    */
   protected $lNovoRecibo = true;
   
+
+  /**
+  * Valor desconto de Aliquota reduzida
+  *
+  * @var number
+  * @access protected
+  */
+  protected $nDescontoAliqReduz = 0;
+
+    /**
+  * Retorna o modelo de impressao
+  *
+  * @access public
+  * @return number
+  */
+  public function getDescontoAliqReduz() {
+    return $this->nDescontoAliqReduz;
+  }
+
+  /**
+  * Define o valor do desconto de aliquota reduzida
+  *
+  * @param number $nDescontoAliqReduz
+  * @access public
+  * @return void
+  */
+  public function setDescontoAliqReduz($nDescontoAliqReduz) {
+    $this->nDescontoAliqReduz = $nDescontoAliqReduz;
+  }
+
   /**
    * Retorna se deve forçar o vencimento do recibo
    * 
@@ -568,6 +598,7 @@ class EmissaoBoleto {
    */
   public function gerarRecibo() {
 
+
     /**
      * Refactor de geracao de boleto 
      */
@@ -659,6 +690,9 @@ class EmissaoBoleto {
      */
     $oGeracaoBoleto->set('iCodigoModeloImpressao', $this->getModeloImpressao());
     
+
+    $oGeracaoBoleto->set('nDescontoAliqReduz', $this->getDescontoAliqReduz());
+
     
     /**
      * Processar 
@@ -770,6 +804,26 @@ class EmissaoBoleto {
     }
     
     //die(print_r($this));
+  }
+
+  /**
+  **  Função que verifica se a data de pagamento está antes do vencimento da competencia
+  **/
+  public static function verificaDescontoIss($dataPagamento,$compMes,$compAno){
+
+      $sqlVencimentoIss   =   "SELECT q82_venc from confvencissqnvariavel
+                                    INNER JOIN cadvenc on q82_codigo=q144_codvenc
+                                    INNER JOIN cadvencdesc on q92_codigo=q144_codvenc
+                                    WHERE q82_venc= concat('{$compAno}','-{$compMes}-',q144_diavenc)::date + interval '1 month' 
+                                    AND q82_venc > '{$dataPagamento}'";
+
+
+            $rsVencimento = db_query($sqlVencimentoIss);
+          if(pg_num_rows($rsVencimento) >0 ){
+            return true;
+          }
+
+          return false;
   }
   
 }

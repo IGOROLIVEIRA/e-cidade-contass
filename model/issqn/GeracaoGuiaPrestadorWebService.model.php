@@ -68,6 +68,12 @@ class GeracaoGuiaPrestadorWebService {
   private $nValorServico;
 
   /**
+   * Valor do desconto do ISS
+   * @var float
+   */
+  private $nValorDesconto;
+
+  /**
    * Mes da competencia
    * @var integer
    */
@@ -147,6 +153,14 @@ class GeracaoGuiaPrestadorWebService {
   }
 
   /**
+   * Seta o valor do desconto
+   * @param float $nValorDesconto Valor total do desconto
+   */
+  public function setValorDesconto($nValorDesconto) {
+    $this->nValorDesconto = $nValorDesconto;
+  }
+
+  /**
    * Seta o valor do imposto
    * @param float $nValorImposto valor recolhido de imposto
    */
@@ -173,6 +187,7 @@ class GeracaoGuiaPrestadorWebService {
     $this->oDataPagamento = new DBDate($dDataPagamento);
   }
 
+  
   /**
    * @param DBString $sTipoDebito
    */
@@ -251,6 +266,7 @@ class GeracaoGuiaPrestadorWebService {
     $rsDadosCompentencia  = $oDaoIssVar->sql_record($sSqlDadosCompetencia);
 
     $aListaPlanilhas = array();
+
 
     foreach ($this->aPlanilhas as $iCodigoPlanilha) {
 
@@ -376,6 +392,9 @@ class GeracaoGuiaPrestadorWebService {
       }
     }
 
+    
+    
+
     $oDadosRetorno->dados_boleto = $this->gerarRecibo($aDebitos);
 
     // Realiza a geração do recibo
@@ -396,11 +415,25 @@ class GeracaoGuiaPrestadorWebService {
       $oGerarBoleto->adicionarDebito($iNumpre, $this->iMesCompetencia);
     }
 
+
+  /**
+  **  Desconto aliquota reduzida NFE
+  **/
+
+    $dataVencimento   = $this->oDataPagamento->getDate();
+    if($oGerarBoleto->verificaDescontoIss($dataVencimento, $this->iMesCompetencia, $this->iAnoCompetencia) ){
+        
+        $nDesconto  = $this->nValorDesconto;
+        $oGerarBoleto->setDescontoAliqReduz($nDesconto);
+    }
+    
     $oGerarBoleto->setInscricao($this->iInscricao);
     $oGerarBoleto->setCodigoCgm($this->iNumcgm);
     $oGerarBoleto->setDataVencimento($this->oDataPagamento);
     $oGerarBoleto->setForcaVencimento(true);
     $oGerarBoleto->setModeloImpressao(21);
+    
+    
     $oGerarBoleto->gerarRecibo();
     $oGerarBoleto->imprimir();
 

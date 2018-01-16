@@ -70,6 +70,7 @@ class RefactorGeracaoBoleto {
   private $forcarvencimento;
   private $processarDescontoRecibo;
   private $k00_dtoper;
+  private $nDescontoAliqReduz;
 
   /**
    * Construtor 
@@ -189,6 +190,9 @@ class RefactorGeracaoBoleto {
      */
     $tsDataOperacao = strtotime(date("Y-m-d", db_getsession("DB_datausu") ));
     $DB_DATACALC    = $tsDataOperacao;
+
+
+    
 
     if (isset($this->k00_dtoper) ) {
       $dVencimento  = implode("-",array_reverse(explode("/",$this->k00_dtoper)));
@@ -607,6 +611,7 @@ class RefactorGeracaoBoleto {
                 $sSqlVenc .= "  and k00_numpar in (".implode(", ", $aParcelasRecibo).")     ";
 
                 $rsVencimento = db_query($sSqlVenc);  
+
                 $dtDataVenc   = db_utils::fieldsMemory($rsVencimento, 0)->k00_dtvenc;
 
                 if ( db_strtotime($dtDataVenc) > db_strtotime($dVencimento) || $dVencimento == "" ) {
@@ -669,6 +674,26 @@ class RefactorGeracaoBoleto {
 
               $k03_numnov           = $oRecibo->getNumpreRecibo();
               $aRecibopaga_numnov[] = $k03_numnov;
+
+              
+              //Adiciona desconto ao recibo
+              if (!empty($this->iCodigoModeloImpressao) && !empty($k03_numnov) && $this->nDescontoAliqReduz>0) {
+                $aDescontoAliquota = $this->nDescontoAliqReduz * -1;
+
+                $sqlDescAliq = "INSERT INTO recibopaga
+                                  SELECT
+                                        k00_numcgm,k00_dtoper,k00_receit,918,$aDescontoAliquota,k00_dtvenc,k00_numpre,
+                                        k00_numpar,k00_numtot,k00_numdig,k00_conta,k00_dtpaga,k00_numnov
+                                    FROM recibopaga
+                                      WHERE k00_numnov=$k03_numnov
+                                      AND k00_receit=23 ";
+
+                $rsSqlDescAliq = db_query($sqlDescAliq);
+                if( !$rsSqlDescAliq ) {
+                  throw new Exception(pg_last_error());
+                }
+              }
+
 
               if (in_array($oRegraEmissao->k03_tipo, $aTipoInicial) && $oRegraEmissao->ar11_cadtipoconvenio == 7) {              
 

@@ -79,7 +79,7 @@ class EmissaoBoletoWebService extends EmissaoBoleto{
    * @access public
    * @return void
    */
-  public function regerarBoleto($iNumpreDebito, $sData, $iNumparDebito) {
+  public function regerarBoleto($iNumpreDebito, $sData, $iNumparDebito, $nDesconto=0, $sCompetencia=null) {
     /**
      * If verificar numpre
      *
@@ -113,6 +113,7 @@ class EmissaoBoletoWebService extends EmissaoBoleto{
       /**
        * Gera recibo novo 
        */
+
       $this->adicionarDebito($oDebito->numpre_debito, $oDebito->numpar_debito);
       $this->setInscricao($oDebito->inscricao);
       $this->setMatricula($oDebito->matricula);
@@ -120,6 +121,20 @@ class EmissaoBoletoWebService extends EmissaoBoleto{
       $this->setDataVencimento(new DBDate($sData));
       $this->setForcaVencimento(true); 
       $this->setModeloImpressao(21);
+      
+      /**
+      ** Desconto Aliquota reduzida NFE
+      **/
+      if($nDesconto>0 && !empty($sCompetencia)){
+      		$sCompetencia 	=	explode("/",$sCompetencia);
+      	
+	      	if(parent::verificaDescontoIss(  $sData, $sCompetencia[0], $sCompetencia[1]) ){
+		          $this->setDescontoAliqReduz($nDesconto);
+	      	}
+	      	
+      }
+      
+
       $this->gerarRecibo();
       $this->imprimir();
 
@@ -133,5 +148,8 @@ class EmissaoBoletoWebService extends EmissaoBoleto{
       throw new Exception($oErro->getMessage());
     }
   }
+
+
+  
 
 }

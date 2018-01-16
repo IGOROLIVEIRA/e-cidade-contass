@@ -5,6 +5,8 @@
     <parametro nome="numero_debito" obrigatorio="true" tipo="integer" />
     <parametro nome="data"          obrigatorio="true" tipo="date"    />
     <parametro nome="parcela_debito" obrigatorio="true" tipo="integer" />
+    <parametro nome="desconto" obrigatorio="false" tipo="float" />
+    <parametro nome="competencia" obrigatorio="false" tipo="string" />
   </parametros>
 
   <configuracoes>
@@ -13,7 +15,7 @@
 
       <metodos>
         <metodo nome="setModeloImpressao" parametros="2" />
-        <metodo nome="regerarBoleto"      parametros="$numero_debito,$data,$parcela_debito" />
+        <metodo nome="regerarBoleto"      parametros="$numero_debito,$data,$parcela_debito,$desconto,$competencia" />
         <metodo nome="getDadosBoleto"     parametros="" />
       </metodos>
     </classe>

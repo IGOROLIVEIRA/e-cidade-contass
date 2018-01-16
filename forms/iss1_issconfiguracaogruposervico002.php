@@ -52,7 +52,6 @@ if ( isset($oPost->salvar) ) {
 	$oDaoConfiguracaoGrupo->q136_exercicio       = $oPost->q136_exercicio;
 	$oDaoConfiguracaoGrupo->q136_tipotributacao  = $oPost->q136_tipotributacao;
 	$oDaoConfiguracaoGrupo->q136_valor           = $oPost->q136_valor;
-	$oDaoConfiguracaoGrupo->q136_valor_reduzido           = $oPost->q136_valor_reduzido;
 
 	if ( !empty($oPost->q136_sequencial) ) {
 		$oDaoConfiguracaoGrupo->alterar($q136_sequencial);
@@ -86,7 +85,6 @@ if ( isset($oPost->salvar) ) {
 		$q136_exercicio       = $oConfiguracaoGrupo->q136_exercicio;
 		$q136_tipotributacao  = $oConfiguracaoGrupo->q136_tipotributacao;
 		$q136_valor           = $oConfiguracaoGrupo->q136_valor;
-		$q136_valor_reduzido  = $oConfiguracaoGrupo->q136_valor_reduzido;
 		$q136_localpagamento  = $oConfiguracaoGrupo->q136_localpagamento;
 
 		$db_botao = true;
