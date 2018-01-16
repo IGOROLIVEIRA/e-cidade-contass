@@ -293,7 +293,7 @@ db_app::load("estilos.css, grid.style.css");
   iElementoDotacao = '';
   iCasasDecimais = <?=$iCasasDecimais?>;
   sTipoOrigem = null;
-  desabilitaDotacao = false;
+  desabilitaDotacao = true;
   isServico = 'f';
   
   function js_pesquisaac20_acordo(mostra) {
