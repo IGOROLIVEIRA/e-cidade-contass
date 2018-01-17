@@ -389,7 +389,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
    $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao ";
    $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes ";
    $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo  ";
-   $sSqlFuncaoOrdenaPagamento.="where rh01_numcgm = $cgmpaga  order by rh02_seqpes desc limit 1 ";
+   $sSqlFuncaoOrdenaPagamento.="LEFT JOIN rhpesrescisao ON rh02_seqpes=rh05_seqpes ";
+   $sSqlFuncaoOrdenaPagamento.="where rh05_recis is null and rh01_numcgm = $cgmpaga  order by rh02_seqpes limit 1 ";
    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
 
    $sSqlFuncaoOrdenadespesa =" select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenadespesa";
@@ -398,7 +399,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
    $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao";
    $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes";
    $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo ";
-   $sSqlFuncaoOrdenadespesa.=" where rh01_numcgm = $cgmordenadespesa order by rh02_seqpes desc limit 1";
+   $sSqlFuncaoOrdenadespesa.=" LEFT JOIN rhpesrescisao ON rh02_seqpes=rh05_seqpes ";
+   $sSqlFuncaoOrdenadespesa.=" where rh05_recis is null and rh01_numcgm = $cgmordenadespesa order by rh02_seqpes limit 1";
    $pdf1->cargoordenadespesa = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenadespesa),0)->cargoordenadespesa;
 
    //assinaturas
