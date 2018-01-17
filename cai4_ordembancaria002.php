@@ -140,7 +140,7 @@ $pdf->Cell(175,$tam,"Autorizo o pagamento das despesas descritas nas Ordens de P
 //$pdf->Cell(250,$tam,"DATA: ".$oResult->k00_dtpagamento,1,1,"R",1);
 $pdf->SetFont("","B","");		
 $pdf->Cell(25,$tam,"BANCO: ".$oResult0->c63_banco,1,0,"C",1);
-$pdf->Cell(30,$tam,"AGÊNCIA: ".$oResult0->c63_agencia."-".$oResult0->c63_dvconta,1,0,"C",1);  
+$pdf->Cell(30,$tam,"AGÊNCIA: ".$oResult0->c63_agencia."-".$oResult0->c63_dvagencia,1,0,"C",1);  
 $pdf->Cell(120,$tam,"CONTA CORRENTE: ".$oResult0->c63_conta."-".$oResult0->c63_dvconta,1,1,"C",1);
 
 
@@ -232,7 +232,7 @@ $pdf->Cell(175,"07","",0,1,"C",0);
 $pdf->Cell(175,"07","",0,1,"C",0);
 $pdf->Cell(175,"0.01","",1,1,"C",0);
 //$pdf->Cell(175,"09","Fica esse banco autorizado a creditar as importâncias mencionadas ao(s) favorecido(s) a debito de nossa Conta Corrente: Nº 2-2, Agência: 2333.",1,1,"C",0);
-$pdf->MultiCell(175, 5, "Fica esse banco autorizado a creditar as importâncias mencionadas ao(s) favorecido(s) a débito de nossa Conta Corrente: Nº 2-2, Agência: 2333.",1);
+$pdf->MultiCell(175, 5, "Fica esse banco autorizado a creditar as importâncias mencionadas ao(s) favorecido(s) a débito de nossa Conta Corrente: Nº ".$oResult0->c63_conta."-".$oResult0->c63_dvconta.", Agência: ".$oResult0->c63_agencia."-".$oResult0->c63_dvagencia.".",1);
 $pdf->Cell(175,"0.01","",1,1,"C",0);
 
 $sql    = "select munic,uf from db_config where codigo = ".db_getsession("DB_instit");
