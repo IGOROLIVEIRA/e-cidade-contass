@@ -248,9 +248,22 @@ $pdf->Cell(175,"07","",0,1,"C",0);
 $pdf->Cell(80,"0.01","",1,0,"C",0);
 $pdf->Cell(10,"0.01","",0,0,"C",0);
 $pdf->Cell(80,"0.01","",1,1,"C",0);
-$pdf->Cell(80,$tam,"Presidente",0,0,"C",0);
-$pdf->Cell(10,"0.01","",0,0,"C",0);
-$pdf->Cell(80,$tam,"Diretor de Adm. e Finanças",0,1,"C",0);
+
+/* FEITO ISSO PARA QUE A CAMARA DE BELO HORIZONTE TENHA UMA FORMA DE ASSINATURA EXCLUSIVA 
+   AUTOR: IGOR OLIVEIRA 
+  */
+$sSqlCnpjCliente = "select cgc from db_config where codigo= ".db_getsession("DB_instit");
+$CnpjCliente = db_utils::fieldsMemory(db_query($sSqlCnpjCliente),0)->cgc;
+
+if ($CnpjCliente == '17316563000196'){
+  $pdf->Cell(80,$tam,"Presidente",0,0,"C",0);
+  $pdf->Cell(10,"0.01","",0,0,"C",0);
+  $pdf->Cell(80,$tam,"Diretor de Adm. e Finanças",0,1,"C",0);
+}else {
+  $pdf->Cell(80,$tam," ",0,0,"C",0);
+  $pdf->Cell(10,"0.01","",0,0,"C",0);
+  $pdf->Cell(80,$tam," ",0,1,"C",0);
+}
 
 $pdf->output();
 	
