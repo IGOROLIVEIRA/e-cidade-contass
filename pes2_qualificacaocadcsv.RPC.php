@@ -57,7 +57,7 @@ switch($oParam->exec) {
 
 		//echo $oParam->iMes.' '. $oParam->iAno;exit;
 
-		$sSql  = "select z01_cgccpf,
+		$sSql  = "select distinct z01_cgccpf,
 		       z01_pis,
 		       trim(z01_nome),
                case
@@ -66,9 +66,15 @@ switch($oParam->exec) {
                end as z01_nasc
 		      from cgm
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
+		      inner join rhpessoalmov on rh02_regist = rh01_regist
+		            and rh02_anousu = $oParam->iAno and rh02_mesusu = $oParam->iMes
+		      left join  rhpesrescisao on rh02_seqpes = rh05_seqpes
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-		      AND ((DATE_PART('YEAR',rh01_admiss) = ".$oParam->iAno." and DATE_PART('MONTH',rh01_admiss)<=" .$oParam->iMes.")
-		      and (z01_cgccpf != '' and z01_cgccpf is not null))
+		      and (z01_cgccpf != '' and z01_cgccpf is not null)
+		      and (
+		      rh05_recis is null or (DATE_PART('YEAR',rh05_recis)= ".$oParam->iAno." and DATE_PART('MONTH',rh05_recis)=" .$oParam->iMes.") 
+		      )
+		          
 		      ";
 
 		$rsResult  = db_query($sSql);
