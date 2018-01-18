@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
- 
+
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_utils.php");
 require_once ("std/db_stdClass.php");
@@ -40,130 +40,124 @@ $oParam = $oJson->decode(str_replace("\\", "", $_POST['json']));
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = "";
-   
+
 db_inicio_transacao();
 
 switch ($oParam->exec) {
 
-  case 'incluir':
-    
-    try {
-      
-      $iCodigoEdital     = $oParam->iCodigoEdital;
-      $iCodigoLicitacao  = $oParam->iCodigoLicitacao;
-      $iTipoSituacao     = $oParam->iTipoSituacao;
-      $sObservacao       = '';
-      
-      
-      if (isset($sObservacao)) {
-        $sObservacao       = db_stdClass::normalizeStringJson($oParam->sObservacao);
-      }
-      
-      $oLicitacao = new licitacao($iCodigoLicitacao);
-      $oLicitacao->alterarSituacao($iTipoSituacao,$sObservacao);
-      $oRetorno->message = urlencode("Situação salva com sucesso.");
-      db_fim_transacao(false);
-    
-    }catch (Exception $eErro) {
-      	
-      $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
-      $oRetorno->status  = 2;
-      db_fim_transacao(true);
-    }
-    break;
-  
-  /**
-   * Modifica apenas a observação da Licitação
-   */
-  case 'alterar':
-    
-    try {
-      
-      $iSituacaoSequencial = $oParam->iSituacaoSequencial;
-      $iCodigoLicitacao    = $oParam->iCodigoLicitacao;
-      $sObservacao         = '';
-      
-      if (isset($sObservacao)) {
-        $sObservacao = db_stdClass::normalizeStringJson($oParam->sObservacao);
-      }
-      
-      $oLicitacao          = new licitacao($iCodigoLicitacao);
-      $oLicitacao->alterarObservacaoSituacao($iSituacaoSequencial,$sObservacao);
-      $oRetorno->message = urlencode("Motivo alterado com sucesso.");
-      
-    }catch (Exception $eErro) {
-         
-      $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
-      $oRetorno->status  = 1;
-      db_fim_transacao(true);
-    }
-    break;
-    
-    
-  
-  case "getDadosSituacaoLicitacao":
-    
-    try {
-      
-      $oDaoLicLicitaSituacao = db_utils::getDao('liclicitasituacao');
-      $sSqlBuscaSituacao     = $oDaoLicLicitaSituacao->sql_query_file($oParam->iCodigoAlteracao);
-      $rsBuscaSituacao       = $oDaoLicLicitaSituacao->sql_record($sSqlBuscaSituacao);
-      if ($oDaoLicLicitaSituacao->numrows == 0) {
-        throw new Exception("Situação da licitação não encontrada.");
-      }
+    case 'incluir':
 
-      $oDadoSituacao              = db_utils::fieldsMemory($rsBuscaSituacao, 0);
-      $oLicitacao                 = new licitacao($oDadoSituacao->l11_liclicita);
-      $oRetorno->l11_obs          = urlencode($oDadoSituacao->l11_obs);
-      $oRetorno->l11_sequencial   = $oDadoSituacao->l11_sequencial;
-      $oRetorno->iCodigoEdital    = $oLicitacao->getEdital();
-      $oRetorno->iCodigoLicitacao = $oDadoSituacao->l11_liclicita;
-      
-    } catch (Exception $eErro) {
-      
-      $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
-      $oRetorno->status  = 1;
-      db_fim_transacao(true);
-      
-    }   
-    
-  break;
-  
-  
-  case "cancelar":
-  
-    try {
-      
-      $iCodigoLicitacao    = $oParam->iCodigoLicitacao;
+        try {
 
-      $sObservacao         = '';
+            $iCodigoEdital     = $oParam->iCodigoEdital;
+            $iCodigoLicitacao  = $oParam->iCodigoLicitacao;
+            $iTipoSituacao     = $oParam->iTipoSituacao;
+            $sObservacao       = '';
 
-      $iSituacao           = $oParam->iTipoSituacao;
-      
-      if (isset($sObservacao)) {
-        $sObservacao       = $oParam->sObservacao;
-      }
-      
-      $oLicitacao = new licitacao($iCodigoLicitacao);
 
-      if($iSituacao <> 12){
-        $oLicitacao->alterarSituacao(0,$sObservacao);  
-      }else{
-        $oLicitacao->alterarSituacao($iSituacao,$sObservacao);  
-      }
+            if (isset($sObservacao)) {
+                $sObservacao       = db_stdClass::normalizeStringJson($oParam->sObservacao);
+            }
 
-      $oRetorno->message = urlencode("Situação cancelada com sucesso.");
-  
-    } catch (Exception $eErro) {
-  
-      $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
-      $oRetorno->status  = 1;
-      db_fim_transacao(true);
+            $oLicitacao = new licitacao($iCodigoLicitacao);
+            $oLicitacao->alterarSituacao($iTipoSituacao,$sObservacao);
+            $oRetorno->message = urlencode("Situação salva com sucesso.");
+            db_fim_transacao(false);
 
-    }
-  
-    break;
-  
+        }catch (Exception $eErro) {
+
+            $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
+            $oRetorno->status  = 2;
+            db_fim_transacao(true);
+        }
+        break;
+
+    /**
+     * Modifica apenas a observação da Licitação
+     */
+    case 'alterar':
+
+        try {
+
+            $iSituacaoSequencial = $oParam->iSituacaoSequencial;
+            $iCodigoLicitacao    = $oParam->iCodigoLicitacao;
+            $sObservacao         = '';
+
+            if (isset($sObservacao)) {
+                $sObservacao = db_stdClass::normalizeStringJson($oParam->sObservacao);
+            }
+
+            $oLicitacao          = new licitacao($iCodigoLicitacao);
+            $oLicitacao->alterarObservacaoSituacao($iSituacaoSequencial,$sObservacao);
+            $oRetorno->message = urlencode("Motivo alterado com sucesso.");
+
+        }catch (Exception $eErro) {
+
+            $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
+            $oRetorno->status  = 1;
+            db_fim_transacao(true);
+        }
+        break;
+
+
+
+    case "getDadosSituacaoLicitacao":
+
+        try {
+
+            $oDaoLicLicitaSituacao = db_utils::getDao('liclicitasituacao');
+            $sSqlBuscaSituacao     = $oDaoLicLicitaSituacao->sql_query_file($oParam->iCodigoAlteracao);
+            $rsBuscaSituacao       = $oDaoLicLicitaSituacao->sql_record($sSqlBuscaSituacao);
+            if ($oDaoLicLicitaSituacao->numrows == 0) {
+                throw new Exception("Situação da licitação não encontrada.");
+            }
+
+            $oDadoSituacao              = db_utils::fieldsMemory($rsBuscaSituacao, 0);
+            $oLicitacao                 = new licitacao($oDadoSituacao->l11_liclicita);
+            $oRetorno->l11_obs          = urlencode($oDadoSituacao->l11_obs);
+            $oRetorno->l11_sequencial   = $oDadoSituacao->l11_sequencial;
+            $oRetorno->iCodigoEdital    = $oLicitacao->getEdital();
+            $oRetorno->iCodigoLicitacao = $oDadoSituacao->l11_liclicita;
+
+        } catch (Exception $eErro) {
+
+            $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
+            $oRetorno->status  = 1;
+            db_fim_transacao(true);
+
+        }
+
+        break;
+
+
+    case "cancelar":
+
+        try {
+
+            $iCodigoLicitacao    = $oParam->iCodigoLicitacao;
+            $sObservacao         = '';
+
+
+            if (isset($sObservacao)) {
+                $sObservacao       = $oParam->sObservacao;
+            }
+
+            $oLicitacao = new licitacao($iCodigoLicitacao);
+            $oLicitacao->alterarSituacao(0,$sObservacao);
+            $oRetorno->message = urlencode("Situação cancelada com sucesso.");
+
+        } catch (Exception $eErro) {
+
+            $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
+            $oRetorno->status  = 1;
+            db_fim_transacao(true);
+        }
+
+        break;
+
+
+
+
 }
 db_fim_transacao(false);
 
