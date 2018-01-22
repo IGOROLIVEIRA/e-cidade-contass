@@ -48,7 +48,6 @@ class GerarPAREC extends GerarAM
         $aCSVPAREC10['si22_identificadordeducao'] = $aPAREC10['si22_identificadordeducao'] == 0 ? ' ' : $this->padLeftZero($aPAREC10['si22_identificadordeducao'], 2);
         $aCSVPAREC10['si22_naturezareceita']      = $this->padLeftZero($aPAREC10['si22_naturezareceita'], 8);
         $aCSVPAREC10['si22_tipoatualizacao']      = $aPAREC10['si22_tipoatualizacao'];
-        $aCSVPAREC10['si22_especificacao']        = substr($aPAREC10['si22_especificacao'], 0, 100);
         $aCSVPAREC10['si22_vlacrescidoreduzido']  = $this->sicomNumberReal($aPAREC10['si22_vlacrescidoreduzido'], 2);
         
         

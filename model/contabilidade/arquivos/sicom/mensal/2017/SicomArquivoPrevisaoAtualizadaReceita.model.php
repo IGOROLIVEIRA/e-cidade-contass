@@ -151,7 +151,8 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
       
 
       $oDadosParec = db_utils::fieldsMemory($rsResult10, $iCont10);
-      if ($oDadosParec->o70_codigo != 0 && $oDadosParec->saldo_inicial_prevadic != 0) {
+      $vlPrevisao = $oDadosParec->saldo_prevadic_acum-$oDadosParec->saldo_prev_anterior;
+      if ($oDadosParec->o70_codrec != 0 && $vlPrevisao != 0) {
 
         $sNaturezaReceita = substr($oDadosParec->o57_fonte, 1, 8);
         foreach ($oNaturezaReceita as $oNatureza) {
@@ -195,14 +196,14 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           $oDados10->si22_naturezareceita = $sNaturezaReceita;
           $oDados10->si22_tipoatualizacao = 1;
           $oDados10->si22_especificacao = $oDadosParec->o57_descr;
-          $oDados10->si22_vlacrescidoreduzido = 0;//$oDadosParec->saldo_prevadic_acum;
+          $oDados10->si22_vlacrescidoreduzido = 0;
           $oDados10->si22_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
           $oDados10->Reg11 = array();
 
           $aDadosAgrupados[$sHash10] = $oDados10;
 
         }
-        $aDadosAgrupados[$sHash10]->si22_vlacrescidoreduzido += $oDadosParec->saldo_inicial_prevadic;
+        $aDadosAgrupados[$sHash10]->si22_vlacrescidoreduzido += $vlPrevisao;
 
         /**
          * agrupar registro 11
@@ -224,7 +225,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $oDados11;
 
         }
-        $aDadosAgrupados[$sHash10]->Reg11[$sHash11]->si23_vlfonte += $oDadosParec->saldo_inicial_prevadic;
+        $aDadosAgrupados[$sHash10]->Reg11[$sHash11]->si23_vlfonte += $vlPrevisao;
 
       }
     }
@@ -305,6 +306,22 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           $clparec11->incluir(null);
           if ($clparec11->erro_status == 0) {
             throw new Exception($clparec11->erro_msg);
+          }
+
+          if (($oDados11->si23_codfontrecursos == '118' || $oDados11->si23_codfontrecursos == '119') && count($oDados10->Reg11) == 1) {
+            $clparec11 = new cl_parec112017();
+            $clparec11->si23_tiporegistro = $oDados11->si23_tiporegistro;
+            $clparec11->si23_codreduzido = $oDados10->si22_codreduzido;
+            $clparec11->si23_codfontrecursos = $oDados11->si23_codfontrecursos == '118' ? '119' : '118';
+            $clparec11->si23_vlfonte = 0;
+            $clparec11->si23_mes = $oDados11->si23_mes;
+            $clparec11->si23_reg10 = $clparec10->si22_sequencial;
+            $clparec11->si23_instit = db_getsession("DB_instit");
+
+            $clparec11->incluir(null);
+            if ($clparec11->erro_status == 0) {
+              throw new Exception($clparec11->erro_msg);
+            }
           }
 
         }

@@ -25,7 +25,6 @@ class cl_parec102018
   var $si22_identificadordeducao = 0;
   var $si22_naturezareceita = 0;
   var $si22_tipoatualizacao = 0;
-  var $si22_especificacao = null;
   var $si22_vlacrescidoreduzido = 0;
   var $si22_mes = 0;
   var $si22_instit = 0;
@@ -39,7 +38,6 @@ class cl_parec102018
                  si22_identificadordeducao = int8 = Identificador da  receita 
                  si22_naturezareceita = int8 = Natureza da receita 
                  si22_tipoatualizacao = int8 = Identifica o tipo 
-                 si22_especificacao = varchar(100) = Especificação da  receita 
                  si22_vlacrescidoreduzido = float8 = Valor acrescido 
                  si22_mes = int8 = Mês 
                  si22_instit = int8 = Instituição 
@@ -76,7 +74,6 @@ class cl_parec102018
       $this->si22_identificadordeducao = ($this->si22_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si22_identificadordeducao"] : $this->si22_identificadordeducao);
       $this->si22_naturezareceita = ($this->si22_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si22_naturezareceita"] : $this->si22_naturezareceita);
       $this->si22_tipoatualizacao = ($this->si22_tipoatualizacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si22_tipoatualizacao"] : $this->si22_tipoatualizacao);
-      $this->si22_especificacao = ($this->si22_especificacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si22_especificacao"] : $this->si22_especificacao);
       $this->si22_vlacrescidoreduzido = ($this->si22_vlacrescidoreduzido == "" ? @$GLOBALS["HTTP_POST_VARS"]["si22_vlacrescidoreduzido"] : $this->si22_vlacrescidoreduzido);
       $this->si22_mes = ($this->si22_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si22_mes"] : $this->si22_mes);
       $this->si22_instit = ($this->si22_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si22_instit"] : $this->si22_instit);
@@ -182,7 +179,6 @@ class cl_parec102018
                                       ,si22_identificadordeducao 
                                       ,si22_naturezareceita 
                                       ,si22_tipoatualizacao 
-                                      ,si22_especificacao 
                                       ,si22_vlacrescidoreduzido 
                                       ,si22_mes 
                                       ,si22_instit 
@@ -195,8 +191,7 @@ class cl_parec102018
                                ,$this->si22_ededucaodereceita 
                                ,$this->si22_identificadordeducao 
                                ,$this->si22_naturezareceita 
-                               ,$this->si22_tipoatualizacao 
-                               ,'$this->si22_especificacao' 
+                               ,$this->si22_tipoatualizacao  
                                ,$this->si22_vlacrescidoreduzido 
                                ,$this->si22_mes 
                                ,$this->si22_instit 
@@ -241,7 +236,6 @@ class cl_parec102018
       $resac = db_query("insert into db_acount values($acount,2010250,2009659,'','" . AddSlashes(pg_result($resaco, 0, 'si22_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010250,2009660,'','" . AddSlashes(pg_result($resaco, 0, 'si22_naturezareceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010250,2009661,'','" . AddSlashes(pg_result($resaco, 0, 'si22_tipoatualizacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010250,2009662,'','" . AddSlashes(pg_result($resaco, 0, 'si22_especificacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010250,2009663,'','" . AddSlashes(pg_result($resaco, 0, 'si22_vlacrescidoreduzido')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010250,2009741,'','" . AddSlashes(pg_result($resaco, 0, 'si22_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010250,2011539,'','" . AddSlashes(pg_result($resaco, 0, 'si22_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -316,10 +310,6 @@ class cl_parec102018
       $sql .= $virgula . " si22_tipoatualizacao = $this->si22_tipoatualizacao ";
       $virgula = ",";
     }
-    if (trim($this->si22_especificacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si22_especificacao"])) {
-      $sql .= $virgula . " si22_especificacao = '$this->si22_especificacao' ";
-      $virgula = ",";
-    }
     if (trim($this->si22_vlacrescidoreduzido) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si22_vlacrescidoreduzido"])) {
       if (trim($this->si22_vlacrescidoreduzido) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si22_vlacrescidoreduzido"])) {
         $this->si22_vlacrescidoreduzido = "0";
@@ -382,8 +372,6 @@ class cl_parec102018
           $resac = db_query("insert into db_acount values($acount,2010250,2009660,'" . AddSlashes(pg_result($resaco, $conresaco, 'si22_naturezareceita')) . "','$this->si22_naturezareceita'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si22_tipoatualizacao"]) || $this->si22_tipoatualizacao != "")
           $resac = db_query("insert into db_acount values($acount,2010250,2009661,'" . AddSlashes(pg_result($resaco, $conresaco, 'si22_tipoatualizacao')) . "','$this->si22_tipoatualizacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si22_especificacao"]) || $this->si22_especificacao != "")
-          $resac = db_query("insert into db_acount values($acount,2010250,2009662,'" . AddSlashes(pg_result($resaco, $conresaco, 'si22_especificacao')) . "','$this->si22_especificacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si22_vlacrescidoreduzido"]) || $this->si22_vlacrescidoreduzido != "")
           $resac = db_query("insert into db_acount values($acount,2010250,2009663,'" . AddSlashes(pg_result($resaco, $conresaco, 'si22_vlacrescidoreduzido')) . "','$this->si22_vlacrescidoreduzido'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si22_mes"]) || $this->si22_mes != "")
@@ -451,7 +439,6 @@ class cl_parec102018
         $resac = db_query("insert into db_acount values($acount,2010250,2009659,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si22_identificadordeducao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010250,2009660,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si22_naturezareceita')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010250,2009661,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si22_tipoatualizacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010250,2009662,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si22_especificacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010250,2009663,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si22_vlacrescidoreduzido')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010250,2009741,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si22_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010250,2011539,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si22_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");

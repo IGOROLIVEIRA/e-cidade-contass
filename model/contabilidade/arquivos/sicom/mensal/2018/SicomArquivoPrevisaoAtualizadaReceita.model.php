@@ -151,7 +151,8 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
       
 
       $oDadosParec = db_utils::fieldsMemory($rsResult10, $iCont10);
-      if ($oDadosParec->o70_codigo != 0 && $oDadosParec->saldo_inicial_prevadic != 0) {
+      $vlPrevisao = $oDadosParec->saldo_prevadic_acum-$oDadosParec->saldo_prev_anterior;
+      if ($oDadosParec->o70_codrec != 0 && $vlPrevisao != 0) {
 
         $sNaturezaReceita = substr($oDadosParec->o57_fonte, 1, 8);
         foreach ($oNaturezaReceita as $oNatureza) {
@@ -194,15 +195,14 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           $oDados10->si22_identificadordeducao = $oDadosParec->o70_concarpeculiar != 0 ? substr($oDadosParec->o70_concarpeculiar, -2, 2) : '';
           $oDados10->si22_naturezareceita = $sNaturezaReceita;
           $oDados10->si22_tipoatualizacao = 1;
-          $oDados10->si22_especificacao = $oDadosParec->o57_descr;
-          $oDados10->si22_vlacrescidoreduzido = 0;//$oDadosParec->saldo_prevadic_acum;
+          $oDados10->si22_vlacrescidoreduzido = 0;
           $oDados10->si22_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
           $oDados10->Reg11 = array();
 
           $aDadosAgrupados[$sHash10] = $oDados10;
 
         }
-        $aDadosAgrupados[$sHash10]->si22_vlacrescidoreduzido += $oDadosParec->saldo_inicial_prevadic;
+        $aDadosAgrupados[$sHash10]->si22_vlacrescidoreduzido += $vlPrevisao;
 
         /**
          * agrupar registro 11
@@ -224,7 +224,7 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
           $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $oDados11;
 
         }
-        $aDadosAgrupados[$sHash10]->Reg11[$sHash11]->si23_vlfonte += $oDadosParec->saldo_inicial_prevadic;
+        $aDadosAgrupados[$sHash10]->Reg11[$sHash11]->si23_vlfonte += $vlPrevisao;
 
       }
     }
@@ -242,7 +242,6 @@ class SicomArquivoPrevisaoAtualizadaReceita extends SicomArquivoBase implements 
       $clparec10->si22_identificadordeducao = $oDados10->si22_identificadordeducao;
       $clparec10->si22_naturezareceita = $oDados10->si22_naturezareceita;
       $clparec10->si22_tipoatualizacao = $oDados10->si22_tipoatualizacao;
-      $clparec10->si22_especificacao = $this->removeCaracteres($oDados10->si22_especificacao);
       $clparec10->si22_vlacrescidoreduzido = abs($oDados10->si22_vlacrescidoreduzido);
       $clparec10->si22_mes = $oDados10->si22_mes;
       $clparec10->si22_instit = db_getsession("DB_instit");
