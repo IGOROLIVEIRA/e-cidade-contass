@@ -126,9 +126,15 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
           cgc as cnpjmunicipio, 
           si09_tipoinstit as tipoorgao,
           si09_codorgaotce as codorgao, 
-          prefeitura 
+          prefeitura,
+          si09_assessoriacontabil as assessoriacontabil,
+          CASE WHEN LENGTH(cgmassessoria.z01_cgccpf) = 11 THEN 1
+          WHEN  LENGTH(cgmassessoria.z01_cgccpf) = 14 THEN 2
+          ELSE 3 END AS tipodocumentoassessoria,
+          cgmassessoria.z01_cgccpf AS nrodocumentoassessoria
 FROM db_config 
-left join infocomplementaresinstit on si09_instit = codigo 
+LEFT JOIN infocomplementaresinstit ON si09_instit = codigo 
+LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacontabil = cgmassessoria.z01_numcgm
   WHERE codigo = " . db_getsession("DB_instit");
     
     $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
@@ -149,6 +155,9 @@ left join infocomplementaresinstit on si09_instit = codigo
       $clorgao10->si14_tipodocumentofornsoftware = 2;
       $clorgao10->si14_nrodocumentofornsoftware = "09016362000145";
       $clorgao10->si14_versaosoftware = "2.3.31";
+      $clorgao10->si14_assessoriacontabil = $oDados10->assessoriacontabil;
+      $clorgao10->si14_tipodocumentoassessoria = $oDados10->tipodocumentoassessoria;
+      $clorgao10->si14_nrodocumentoassessoria = $oDados10->nrodocumentoassessoria;
       $clorgao10->si14_cnpjorgao = $oDados10->cnpjmunicipio;
       $clorgao10->si14_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clorgao10->si14_instit = db_getsession("DB_instit");

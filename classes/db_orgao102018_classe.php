@@ -25,6 +25,9 @@ class cl_orgao102018
   var $si14_tipodocumentofornsoftware = 0;
   var $si14_nrodocumentofornsoftware = null;
   var $si14_versaosoftware = null;
+  var $si14_assessoriacontabil = null;
+  var $si14_tipodocumentoassessoria = null;
+  var $si14_nrodocumentoassessoria = null;
   var $si14_mes = 0;
   var $si14_instit = 0;
   // cria propriedade com as variaveis do arquivo
@@ -37,6 +40,9 @@ class cl_orgao102018
                  si14_tipodocumentofornsoftware = int8 = Tipo de documento do fornecedor
                  si14_nrodocumentofornsoftware = varchar(14) = Número do documento do fornecedor
                  si14_versaosoftware = varchar(50) = Versão do Software
+                 si14_assessoriacontabil = int8 = Assessoria Contabil
+                 si14_tipodocumentoassessoria = int8 = Tipo Documento
+                 si14_nrodocumentoassessoria = int8 = Numero Documento
                  si14_mes = int8 = Mês 
                  si14_instit = int8 = Instituição 
                  ";
@@ -72,6 +78,9 @@ class cl_orgao102018
       $this->si14_tipodocumentofornsoftware = ($this->si14_tipodocumentofornsoftware == "" ? @$GLOBALS["HTTP_POST_VARS"]["si14_tipodocumentofornsoftware"] : $this->si14_tipodocumentofornsoftware);
       $this->si14_nrodocumentofornsoftware = ($this->si14_nrodocumentofornsoftware == "" ? @$GLOBALS["HTTP_POST_VARS"]["si14_nrodocumentofornsoftware"] : $this->si14_nrodocumentofornsoftware);
       $this->si14_versaosoftware = ($this->si14_versaosoftware == "" ? @$GLOBALS["HTTP_POST_VARS"]["si14_versaosoftware"] : $this->si14_versaosoftware);
+      $this->si14_assessoriacontabil = ($this->si14_assessoriacontabil == "" ? @$GLOBALS["HTTP_POST_VARS"]["si14_assessoriacontabil"] : $this->si14_assessoriacontabil);
+      $this->si14_tipodocumentoassessoria = ($this->si14_tipodocumentoassessoria == "" ? @$GLOBALS["HTTP_POST_VARS"]["si14_tipodocumentoassessoria"] : $this->si14_tipodocumentoassessoria);
+      $this->si14_nrodocumentoassessoria = ($this->si14_nrodocumentoassessoria == "" ? @$GLOBALS["HTTP_POST_VARS"]["si14_nrodocumentoassessoria"] : $this->si14_nrodocumentoassessoria);
       $this->si14_mes = ($this->si14_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si14_mes"] : $this->si14_mes);
       $this->si14_instit = ($this->si14_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si14_instit"] : $this->si14_instit);
     } else {
@@ -106,6 +115,26 @@ class cl_orgao102018
     if ($this->si14_instit == null) {
       $this->erro_sql = " Campo Instituição nao Informado.";
       $this->erro_campo = "si14_instit";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+    if ($this->si14_assessoriacontabil == 1 && empty($this->si14_nrodocumentoassessoria)) {
+      $this->erro_sql = " Campo Numero Documento Assessoria Contabil Nao Informado.";
+      $this->erro_campo = "si14_assessoriacontabil";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+    if ($this->si14_assessoriacontabil == 1 && empty($this->si14_tipodocumentoassessoria)) {
+      $this->erro_sql = " Campo Tipo Documento Assessoria Contabil Nao Informado.";
+      $this->erro_campo = "si14_tipodocumentoassessoria";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -159,7 +188,10 @@ class cl_orgao102018
                                       ,si14_nrodocumentofornsoftware
                                       ,si14_versaosoftware 
                                       ,si14_mes 
-                                      ,si14_instit 
+                                      ,si14_instit
+                                      ,si14_assessoriacontabil
+                                      ,si14_tipodocumentoassessoria
+                                      ,si14_nrodocumentoassessoria 
                        )
                 values (
                                 $this->si14_sequencial 
@@ -171,7 +203,10 @@ class cl_orgao102018
                                ,'$this->si14_nrodocumentofornsoftware' 
                                ,'$this->si14_versaosoftware' 
                                ,$this->si14_mes 
-                               ,$this->si14_instit 
+                               ,$this->si14_instit
+                               ,$this->si14_assessoriacontabil
+                               ,".($this->si14_tipodocumentoassessoria == '' ? 'null' : $this->si14_tipodocumentoassessoria)."
+                               ,".($this->si14_nrodocumentoassessoria == '' ? 'null' : $this->si14_nrodocumentoassessoria)."
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -266,6 +301,18 @@ class cl_orgao102018
     }
     if (trim($this->si14_versaosoftware) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si14_versaosoftware"])) {
       $sql .= $virgula . " si14_versaosoftware = '$this->si14_versaosoftware' ";
+      $virgula = ",";
+    }
+    if (trim($this->si14_assessoriacontabil) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si14_assessoriacontabil"])) {
+      $sql .= $virgula . " si14_assessoriacontabil = '$this->si14_assessoriacontabil' ";
+      $virgula = ",";
+    }
+    if (trim($this->si14_tipodocumentoassessoria) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si14_tipodocumentoassessoria"])) {
+      $sql .= $virgula . " si14_tipodocumentoassessoria = '$this->si14_tipodocumentoassessoria' ";
+      $virgula = ",";
+    }
+    if (trim($this->si14_nrodocumentoassessoria) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si14_nrodocumentoassessoria"])) {
+      $sql .= $virgula . " si14_nrodocumentoassessoria = '$this->si14_nrodocumentoassessoria' ";
       $virgula = ",";
     }
     if (trim($this->si14_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si14_mes"])) {

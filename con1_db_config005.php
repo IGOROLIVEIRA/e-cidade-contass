@@ -127,8 +127,8 @@ if(isset($alterar)){
    $result   = $cldb_config->sql_record($cldb_config->sql_query($chavepesquisa));
 
    db_fieldsmemory($result, 0);
-   
-   $result = db_query($clinfocomplementaresinstit->sql_query(null,"infocomplementaresinstit.*,z01_nome as nomegestor",null,"si09_instit = {$codigo}"));
+
+   $result = db_query($clinfocomplementaresinstit->sql_query(null,"infocomplementaresinstit.*,cgmgestor.z01_nome as nomegestor,cgmassessoria.z01_nome as nomeassessoriacontabil",null,"si09_instit = {$codigo}"));
    db_fieldsmemory($result, 0);
    
    

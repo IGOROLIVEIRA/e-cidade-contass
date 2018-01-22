@@ -22,7 +22,9 @@ class cl_infocomplementaresinstit {
    var $si09_opcaosemestralidade = 0; 
    var $si09_gestor = 0; 
    var $si09_cnpjprefeitura = 0; 
-   var $si09_instit = 0; 
+   var $si09_instit = 0;
+   var $si09_assessoriacontabil = 0;
+   var $si09_cgmassessoriacontabil = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si09_sequencial = int8 = Código Sequencial 
@@ -32,6 +34,8 @@ class cl_infocomplementaresinstit {
                  si09_gestor = int8 = CGM do Gestor 
                  si09_cnpjprefeitura = int8 = Cnpj da Prefeitura 
                  si09_instit = float8 = Intituição 
+                 si09_assessoriacontabil = int8 = Assessoria Contabil
+                 si09_cgmassessoriacontabil = int8 = Cgm Assessoria Contabil
                  ";
    //funcao construtor da classe 
    function cl_infocomplementaresinstit() { 
@@ -58,6 +62,8 @@ class cl_infocomplementaresinstit {
        $this->si09_gestor = ($this->si09_gestor == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_gestor"]:$this->si09_gestor);
        $this->si09_cnpjprefeitura = ($this->si09_cnpjprefeitura == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"]:$this->si09_cnpjprefeitura);
        $this->si09_instit = ($this->si09_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_instit"]:$this->si09_instit);
+       $this->si09_assessoriacontabil = ($this->si09_assessoriacontabil == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_assessoriacontabil"]:$this->si09_assessoriacontabil);
+       $this->si09_cgmassessoriacontabil = ($this->si09_cgmassessoriacontabil == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_cgmassessoriacontabil"]:$this->si09_cgmassessoriacontabil);
      }else{
        $this->si09_sequencial = ($this->si09_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_sequencial"]:$this->si09_sequencial);
      }
@@ -123,6 +129,15 @@ class cl_infocomplementaresinstit {
        $this->erro_status = "0";
        return false;
      }
+     if($this->si09_assessoriacontabil == 1 && empty($this->si09_cgmassessoriacontabil)){ 
+       $this->erro_sql = " Campo Cgm Assessoria Contabil nao Informado.";
+       $this->erro_campo = "si09_cgmassessoriacontabil";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($si09_sequencial == "" || $si09_sequencial == null ){
        $result = db_query("select nextval('infocomplementaresinstit_si09_sequencial_seq')"); 
        if($result==false){
@@ -162,7 +177,9 @@ class cl_infocomplementaresinstit {
                                       ,si09_opcaosemestralidade 
                                       ,si09_gestor 
                                       ,si09_cnpjprefeitura 
-                                      ,si09_instit 
+                                      ,si09_instit
+                                      ,si09_assessoriacontabil
+                                      ,si09_cgmassessoriacontabil 
                        )
                 values (
                                 $this->si09_sequencial 
@@ -171,7 +188,9 @@ class cl_infocomplementaresinstit {
                                ,$this->si09_opcaosemestralidade 
                                ,$this->si09_gestor 
                                ,$this->si09_cnpjprefeitura 
-                               ,$this->si09_instit 
+                               ,$this->si09_instit
+                               ,$this->si09_assessoriacontabil
+                               ,".($this->si09_cgmassessoriacontabil == '' ? 'null' : $this->si09_cgmassessoriacontabil)." 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -309,6 +328,23 @@ class cl_infocomplementaresinstit {
        if(trim($this->si09_instit) == null ){ 
          $this->erro_sql = " Campo Intituição nao Informado.";
          $this->erro_campo = "si09_instit";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si09_assessoriacontabil)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_assessoriacontabil"])){ 
+       $sql  .= $virgula." si09_assessoriacontabil = $this->si09_assessoriacontabil ";
+       $virgula = ",";
+     }
+    if(trim($this->si09_cgmassessoriacontabil)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_cgmassessoriacontabil"])){ 
+       $sql  .= $virgula." si09_cgmassessoriacontabil = ".($this->si09_cgmassessoriacontabil == '' ? 'null' : $this->si09_cgmassessoriacontabil);
+       $virgula = ",";
+       if($this->si09_assessoriacontabil == 1 && empty($this->si09_cgmassessoriacontabil)){ 
+         $this->erro_sql = " Campo Cgm Assessoria Contabil nao Informado.";
+         $this->erro_campo = "si09_cgmassessoriacontabil";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -479,7 +515,8 @@ class cl_infocomplementaresinstit {
        $sql .= $campos;
      }
      $sql .= " from infocomplementaresinstit ";
-     $sql .= "      inner join cgm  on  cgm.z01_numcgm = infocomplementaresinstit.si09_gestor";
+     $sql .= "      inner join cgm as cgmgestor  on  cgmgestor.z01_numcgm = infocomplementaresinstit.si09_gestor";
+     $sql .= "      left join cgm as cgmassessoria  on  cgmassessoria.z01_numcgm = infocomplementaresinstit.si09_cgmassessoriacontabil";
      $sql2 = "";
      if($dbwhere==""){
        if($si09_sequencial!=null ){

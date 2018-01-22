@@ -710,6 +710,33 @@ if ($db_opcao == 1) {
 	      ?>
 	    </td>
 	  </tr>
+	  <tr>
+	    <td nowrap title="Possui Assessoria Contábil">
+	       <strong>Assessoria Contábil:</strong>
+	    </td>
+	    <td> 
+	      <?
+	      $x = array('2'=>'NÃO','1'=>'SIM');
+	      db_select('si09_assessoriacontabil',$x,true,$db_opcao,"onchange='js_mostra_cgm_assessoria()'");
+	      ?>
+	    </td>
+	  </tr>
+	  <tr id="cgmAssessoria">
+		    <td nowrap title="Cgm Assessoria Contábil">
+		       <?
+		        db_ancora("Cgm Assessoria Contábil","js_pesquisanumcgmassessoria(true);",$db_opcao);
+		       ?>
+		    </td>
+		 
+		    <td> 
+		      <?
+		       db_input('si09_cgmassessoriacontabil',10,1,true,'text',$db_opcao," onchange='js_pesquisanumcgmassessoria(false);'")
+		      ?>
+		      <?
+		        db_input('nomeassessoriacontabil',40,'',true,'text',3,'')
+		      ?>
+		    </td>
+		</tr>
   </table>
   </fieldset>
   </td>
@@ -1209,7 +1236,45 @@ function js_mostraorcunidade1(chave1,chave2,chave3,chave4){
   db_iframe_orcunidade.hide();
 }
 
+function js_mostra_cgm_assessoria() {
+
+	if ($('si09_assessoriacontabil').value == 1) {
+	  $('cgmAssessoria').style.display = '';	
+	} else {
+		$('cgmAssessoria').style.display = 'none';
+		$('si09_cgmassessoriacontabil').value = '';
+		$('nomeassessoriacontabil').value = '';
+	}
+	
+}
+
+function js_pesquisanumcgmassessoria(mostra){
+	  if(mostra==true){
+	    js_OpenJanelaIframe('','func_nome','func_cgm.php?funcao_js=parent.js_mostracgmassessoria1|z01_numcgm|z01_nome','Pesquisa',true);
+	  }else{
+	     if(document.form1.si09_cgmassessoriacontabil.value != ''){ 
+	        js_OpenJanelaIframe('','func_nome','func_cgm.php?pesquisa_chave='+document.form1.si09_cgmassessoriacontabil.value+'&funcao_js=parent.js_mostracgmassessoria','Pesquisa',false);
+	     }else{
+	       document.form1.nomeassessoriacontabil.value = ''; 
+	     }
+	  }
+	}
+	function js_mostracgmassessoria(chave,erro){
+	  document.form1.nomeassessoriacontabil.value = erro; 
+	  if(erro==true){ 
+	    document.form1.si09_cgmassessoriacontabil.focus(); 
+	    document.form1.si09_cgmassessoriacontabil.value = ''; 
+	  }
+	}
+	function js_mostracgmassessoria1(chave1,chave2){
+	  document.form1.si09_cgmassessoriacontabil.value = chave1;
+	  document.form1.nomeassessoriacontabil.value = chave2;
+	  func_nome.hide();
+	}
+
 $('nomeinst').focus();
 
 js_mostra_cnpjprefeitura();
+
+js_mostra_cgm_assessoria();
 </script>
