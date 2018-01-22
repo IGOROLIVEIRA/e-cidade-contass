@@ -117,7 +117,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
             $projeto_tipo = 1;
         }
 
-        $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_codproj= {$projeto}");
+        $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_codproj= {$projeto} and o49_data is not null");
         $rsSuplementacoes     = $clorcsuplem->sql_record($sSqlSuplementacoes);
         $aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
         $valorutilizado       = 0;
@@ -288,6 +288,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
                 inner join orcprojativ on o58_projativ  = o55_projativ  and o55_anousu = ".db_getsession("DB_anousu")."
 		            inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
 		                                      and orcsuplemtipo.o48_coddocsup >  0
+                inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
          	where o39_codproj=$projeto
 	     	 group by o47_coddot,
 	               o46_tiposup,
@@ -332,6 +333,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
                 inner join orcprojativ on o08_projativ  = o55_projativ  and o55_anousu = o08_ano
                 inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                           and orcsuplemtipo.o48_coddocsup >  0
+                inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
           where o39_codproj=$projeto
          group by 3,
                  o46_tiposup,
@@ -410,6 +412,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
 	                               o58_anousu=o47_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_coddocred >  0
+              inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
          where o39_codproj=$projeto
 	 group by o39_codproj,
                   o39_texto,
@@ -436,17 +439,17 @@ class SicomArquivoLegislacaoCaraterFinanceiro
                 $r_dot = db_dotacaosaldo(8,2,2,true," o58_coddot = $oDados->o47_coddot and o58_anousu =$oDados->o47_anousu ");
                 db_query("ROLLBACK");
                 if(pg_numrows($r_dot)>0){
-                    $oDados = db_utils::fieldsMemory($r_dot,0,true);
+                    $oDadosDot = db_utils::fieldsMemory($r_dot,0,true);
                     $pdf->setX(20);
-                    $pdf->Cell(150,4,db_formatar($oDados->o58_orgao,'orgao')."00 - $oDados->o40_descr",0,1,"L",'0');
+                    $pdf->Cell(150,4,db_formatar($oDadosDot->o58_orgao,'orgao')."00 - $oDadosDot->o40_descr",0,1,"L",'0');
                     $pdf->setX(20);
-                    $pdf->Cell(150,4,db_formatar($oDados->o58_orgao,'orgao').db_formatar($oDados->o58_unidade,'orgao')." - $oDados->o41_descr",0,1,"L",'0');
+                    $pdf->Cell(150,4,db_formatar($oDadosDot->o58_orgao,'orgao').db_formatar($oDadosDot->o58_unidade,'orgao')." - $oDadosDot->o41_descr",0,1,"L",'0');
                     $pdf->setX(20);
-                    $pdf->Cell(150,4,"$oDados->o58_projativ - $oDados->o55_descr",0,1,"L",'0');
+                    $pdf->Cell(150,4,"$oDadosDot->o58_projativ - $oDadosDot->o55_descr",0,1,"L",'0');
                     $pdf->setX(20);
-                    $pdf->Cell(150,4,db_formatar($oDados->o58_elemento,'elemento')." - ".$oDados->o56_descr,0,1,"L",'0');
+                    $pdf->Cell(150,4,db_formatar($oDadosDot->o58_elemento,'elemento')." - ".$oDadosDot->o56_descr,0,1,"L",'0');
                     $pdf->setX(20);
-                    $pdf->Cell(120,4,db_formatar($oDados->o58_codigo,'recurso')." - ".trim($oDados->o15_descr)." ( $oDados->o47_coddot ) ",0,0,"L",'0');
+                    $pdf->Cell(120,4,db_formatar($oDadosDot->o58_codigo,'recurso')." - ".trim($oDadosDot->o15_descr)." ( $oDados->o47_coddot ) ",0,0,"L",'0');
                     $oDados->o47_valor =$oDados->o47_valor*-1;
                     $pdf->Cell(50,4,db_formatar($oDados->o47_valor,'f'),0,1,"R",'0');
                     $pdf->setX(20);
@@ -475,6 +478,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
               inner join orcfontes on o57_codfon  =   orcreceita.o70_codfon and o57_anousu = orcsuplemrec.o85_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_arrecadmaior >  0
+              inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
           where o39_codproj=$projeto
          ";
 
@@ -494,6 +498,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
               inner join orcfontes on o57_codfon  =   o06_codrec and o57_anousu = o06_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_arrecadmaior >  0
+              inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
           where o39_codproj=$projeto
          ";
         $res= $auxiliar->sql_record($sql." union all {$sSqlPPA}");

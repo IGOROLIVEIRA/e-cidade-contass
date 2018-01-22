@@ -117,7 +117,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
             $projeto_tipo = 1;
         }
 
-        $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_codproj= {$projeto}");
+        $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_codproj= {$projeto} and o49_data is not null");
         $rsSuplementacoes     = $clorcsuplem->sql_record($sSqlSuplementacoes);
         $aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
         $valorutilizado       = 0;
@@ -288,6 +288,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
                 inner join orcprojativ on o58_projativ  = o55_projativ  and o55_anousu = ".db_getsession("DB_anousu")."
 		            inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
 		                                      and orcsuplemtipo.o48_coddocsup >  0
+                inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
          	where o39_codproj=$projeto
 	     	 group by o47_coddot,
 	               o46_tiposup,
@@ -332,6 +333,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
                 inner join orcprojativ on o08_projativ  = o55_projativ  and o55_anousu = o08_ano
                 inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                           and orcsuplemtipo.o48_coddocsup >  0
+                inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
           where o39_codproj=$projeto
          group by 3,
                  o46_tiposup,
@@ -410,6 +412,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
 	                               o58_anousu=o47_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_coddocred >  0
+              inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
          where o39_codproj=$projeto
 	 group by o39_codproj,
                   o39_texto,
@@ -436,17 +439,17 @@ class SicomArquivoLegislacaoCaraterFinanceiro
                 $r_dot = db_dotacaosaldo(8,2,2,true," o58_coddot = $oDados->o47_coddot and o58_anousu =$oDados->o47_anousu ");
                 db_query("ROLLBACK");
                 if(pg_numrows($r_dot)>0){
-                    $oDados = db_utils::fieldsMemory($r_dot,0,true);
+                    $oDadosDot = db_utils::fieldsMemory($r_dot,0,true);
                     $pdf->setX(20);
-                    $pdf->Cell(150,4,db_formatar($oDados->o58_orgao,'orgao')."00 - $oDados->o40_descr",0,1,"L",'0');
+                    $pdf->Cell(150,4,db_formatar($oDadosDot->o58_orgao,'orgao')."00 - $oDadosDot->o40_descr",0,1,"L",'0');
                     $pdf->setX(20);
-                    $pdf->Cell(150,4,db_formatar($oDados->o58_orgao,'orgao').db_formatar($oDados->o58_unidade,'orgao')." - $oDados->o41_descr",0,1,"L",'0');
+                    $pdf->Cell(150,4,db_formatar($oDadosDot->o58_orgao,'orgao').db_formatar($oDadosDot->o58_unidade,'orgao')." - $oDadosDot->o41_descr",0,1,"L",'0');
                     $pdf->setX(20);
-                    $pdf->Cell(150,4,"$oDados->o58_projativ - $oDados->o55_descr",0,1,"L",'0');
+                    $pdf->Cell(150,4,"$oDadosDot->o58_projativ - $oDadosDot->o55_descr",0,1,"L",'0');
                     $pdf->setX(20);
-                    $pdf->Cell(150,4,db_formatar($oDados->o58_elemento,'elemento')." - ".$oDados->o56_descr,0,1,"L",'0');
+                    $pdf->Cell(150,4,db_formatar($oDadosDot->o58_elemento,'elemento')." - ".$oDadosDot->o56_descr,0,1,"L",'0');
                     $pdf->setX(20);
-                    $pdf->Cell(120,4,db_formatar($oDados->o58_codigo,'recurso')." - ".trim($oDados->o15_descr)." ( $oDados->o47_coddot ) ",0,0,"L",'0');
+                    $pdf->Cell(120,4,db_formatar($oDadosDot->o58_codigo,'recurso')." - ".trim($oDadosDot->o15_descr)." ( $oDados->o47_coddot ) ",0,0,"L",'0');
                     $oDados->o47_valor =$oDados->o47_valor*-1;
                     $pdf->Cell(50,4,db_formatar($oDados->o47_valor,'f'),0,1,"R",'0');
                     $pdf->setX(20);
@@ -475,6 +478,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
               inner join orcfontes on o57_codfon  =   orcreceita.o70_codfon and o57_anousu = orcsuplemrec.o85_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_arrecadmaior >  0
+              inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
           where o39_codproj=$projeto
          ";
 
@@ -494,6 +498,7 @@ class SicomArquivoLegislacaoCaraterFinanceiro
               inner join orcfontes on o57_codfon  =   o06_codrec and o57_anousu = o06_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_arrecadmaior >  0
+              inner join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
           where o39_codproj=$projeto
          ";
         $res= $auxiliar->sql_record($sql." union all {$sSqlPPA}");
@@ -548,19 +553,11 @@ class SicomArquivoLegislacaoCaraterFinanceiro
             $txt = "GABINETE DO PREFEITO MUNICIPAL DE ".strtoupper($munic)." AOS ".substr($xdata,8,2)." DIAS DO MÊS DE ".strtoupper(db_mes(substr($xdata,5,2)))." DE ".substr($xdata,0,4).".";
             $pdf->multicell(180,4,$txt,'0','J','0',20);
             $pdf->Ln(10);
-            $pdf->multicell(0,4,$pref."
-"."PREFEITO MUNICIPAL",'0','C','0');
+            $pdf->multicell(0,4,$pref."\n"."PREFEITO MUNICIPAL",'0','C','0');
             $pdf->Ln(10);
             $pdf->multicell(0,4,"Registre-se e cumpra-se",'0','L','0');
-            //    $pdf->multicell(0,4,"
-
-
-"."FERNANDO FERREIRA DA CUNHA"."
-"."Secretario Municipal de Administração",'0','L','0');
-            $pdf->multicell(0,3,"
-
-
-".strtoupper($ass_sec),'0','L','0');
+            //    $pdf->multicell(0,4,"\n\n\n"."FERNANDO FERREIRA DA CUNHA"."\n"."Secretario Municipal de Administração",'0','L','0');
+            $pdf->multicell(0,3,"\n\n\n".strtoupper($ass_sec),'0','L','0');
         }else if ($projeto_tipo == "1" && strtoupper(trim($munic)) == "BAGE"){
             // texto de sapiranga
 //      $pdf->Ln(10);
@@ -578,17 +575,9 @@ class SicomArquivoLegislacaoCaraterFinanceiro
             $pdf->cell(30,4,'','0','J','0');
             $pdf->multicell(180,4,$txt,'0','J','0');
             $pdf->Ln(10);
-            $pdf->multicell(0,4,$pref."
-"."PREFEITO MUNICIPAL",'0','C','0');
-            //    $pdf->multicell(0,4,"
-
-
-"."FERNANDO FERREIRA DA CUNHA"."
-"."Secretario Municipal de Administração",'0','L','0');
-            $pdf->multicell(0,3,"
-
-
-".strtoupper($ass_sec),'0','L','0');
+            $pdf->multicell(0,4,$pref."\n"."PREFEITO MUNICIPAL",'0','C','0');
+            //    $pdf->multicell(0,4,"\n\n\n"."FERNANDO FERREIRA DA CUNHA"."\n"."Secretario Municipal de Administração",'0','L','0');
+            $pdf->multicell(0,3,"\n\n\n".strtoupper($ass_sec),'0','L','0');
             $pdf->Ln(10);
             $pdf->multicell(0,4,"Registre-se e cumpra-se",'0','L','0');
         }else if ($projeto_tipo == "1" && strtoupper(trim($munic)) == "ARROIO DO SAL"){
@@ -601,12 +590,8 @@ class SicomArquivoLegislacaoCaraterFinanceiro
             $pdf->cell(30,4,'','0','J','0');
             $pdf->multicell(180,4,$txt,'0','J','0');
             $pdf->Ln(10);
-            $pdf->multicell(0,4,$pref."
-"."PREFEITO MUNICIPAL ",'0','C','0');
-            $pdf->multicell(0,3,"
-
-
-".strtoupper($ass_sec),'0','L','0');
+            $pdf->multicell(0,4,$pref."\n"."PREFEITO MUNICIPAL ",'0','C','0');
+            $pdf->multicell(0,3,"\n\n\n".strtoupper($ass_sec),'0','L','0');
 
         }elseif ($projeto_tipo == "1" && strtoupper(trim($munic)) == "ELDORADO DO SUL"){
 
@@ -630,23 +615,16 @@ class SicomArquivoLegislacaoCaraterFinanceiro
             $pdf->Ln(10);
             $pdf->setx(30);
             if ( $db21_codcli == 34 ) {
-                $pdf->multicell(0,4,$pref."
-"."Presidente da Camara Municipal de Vereadores",'0','C','0');
+                $pdf->multicell(0,4,$pref."\n"."Presidente da Camara Municipal de Vereadores",'0','C','0');
             } else {
-                $pdf->multicell(160,4,$pref."
-"."Prefeito Municipal ",'0','C','0');
+                $pdf->multicell(160,4,$pref."\n"."Prefeito Municipal ",'0','C','0');
             }
-            // $pdf->multicell(160,4,$pref."
-"."Prefeito(a) Municipal em Exercício ",'0','C','0');
+            // $pdf->multicell(160,4,$pref."\n"."Prefeito(a) Municipal em Exercício ",'0','C','0');
             $linha = $pdf->gety();
-            $pdf->multicell(100,4,"
-
-".ucfirst($ass_adm),'0','C','0');
+            $pdf->multicell(100,4,"\n\n".ucfirst($ass_adm),'0','C','0');
             $pdf->sety($linha);
             $pdf->setx(100);
-            $pdf->multicell(100,4,"
-
-".ucfirst($ass_faz),'0','C','0');
+            $pdf->multicell(100,4,"\n\n".ucfirst($ass_faz),'0','C','0');
         }
 
         $pdf->ln();

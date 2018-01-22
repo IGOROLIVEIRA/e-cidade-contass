@@ -161,16 +161,21 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
       /*
        * selecionar informacoes registro 10
        */
-      $sSql = "select * from orcprojetolei where o138_altpercsuplementacao = 2 and o138_data >= '{$this->sDataInicial}' and o138_data <= '{$this->sDataFinal}'";
-      $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);
+      $sSql = "select distinct orcprojetolei.* from orcprojetolei
+      inner join orcprojetoorcprojetolei on o138_sequencial=o139_orcprojetolei
+      inner join orcprojeto on o139_orcprojeto=o39_codproj
+      inner join orcsuplem on o46_codlei=o39_codproj
+      inner join conlancamsup on c79_codsup=o46_codsup
+      where o138_altpercsuplementacao = 2 and o138_data >= '{$this->sDataInicial}' and o138_data <= '{$this->sDataFinal}'";
+      $rsResult10 = db_query($sSql);
       for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
         $cllao10 = new cl_lao102017();
         $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
-
+        $sNroLei = str_pad(preg_replace("/[^0-9]/", "", $oDados10->o138_numerolei),1,"0",STR_PAD_LEFT);
         $cllao10->si34_tiporegistro = 10;
         $cllao10->si34_codorgao = $sCodorgao;
-        $cllao10->si34_nroleialteracao = $oDados10->o138_numerolei;
+        $cllao10->si34_nroleialteracao = $sNroLei;
         $cllao10->si34_dataleialteracao = $oDados10->o138_data;
         $cllao10->si34_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $cllao10->si34_instit = db_getsession("DB_instit");
@@ -183,7 +188,13 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
         /*
          * selecionar informacoes registro 11
          */
-        $sSql = "select * from orcleialtorcamentaria where o200_orcprojetolei = {$oDados10->o138_sequencial}";
+        $sSql = "select distinct orcleialtorcamentaria.* from orcleialtorcamentaria
+        inner join orcprojetolei on o200_orcprojetolei=o138_sequencial
+        inner join orcprojetoorcprojetolei on o138_sequencial=o139_orcprojetolei
+        inner join orcprojeto on o139_orcprojeto=o39_codproj
+        inner join orcsuplem on o46_codlei=o39_codproj
+        inner join conlancamsup on c79_codsup=o46_codsup
+        where o200_orcprojetolei = {$oDados10->o138_sequencial}";
         $rsResult11 = db_query($sSql);
         for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 
@@ -192,7 +203,7 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
 
           $cllao11->si35_tiporegistro = 11;
           $cllao11->si35_reg10 = $cllao10->si34_sequencial;
-          $cllao11->si35_nroleialteracao = $oDados10->o138_numerolei;
+          $cllao11->si35_nroleialteracao = $sNroLei;
           $cllao11->si35_tipoleialteracao = $oDados11->o200_tipoleialteracao;
           $cllao11->si35_artigoleialteracao = $oDados11->o200_artleialteracao;
           $cllao11->si35_descricaoartigo = $oDados11->o200_descrartigo;
@@ -212,17 +223,22 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
       /*
        * selecionar informacoes registro 20
        */
-      $sSql = "select * from orcprojetolei where o138_altpercsuplementacao = 1 and o138_data >= '{$this->sDataInicial}' and o138_data <= '{$this->sDataFinal}'";
+      $sSql = "select distinct orcprojetolei.* from orcprojetolei
+      inner join orcprojetoorcprojetolei on o138_sequencial=o139_orcprojetolei
+      inner join orcprojeto on o139_orcprojeto=o39_codproj
+      inner join orcsuplem on o46_codlei=o39_codproj
+      inner join conlancamsup on c79_codsup=o46_codsup
+      where o138_altpercsuplementacao = 1 and o138_data >= '{$this->sDataInicial}' and o138_data <= '{$this->sDataFinal}'";
       $rsResult20 = db_query($sSql);
 
       for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
         $cllao20 = new cl_lao202017();
         $oDados20 = db_utils::fieldsMemory($rsResult20, $iCont20);
-
+        $sNroLei = str_pad(preg_replace("/[^0-9]/", "", $oDados20->o138_numerolei),1,"0",STR_PAD_LEFT);
         $cllao20->si36_tiporegistro = 20;
         $cllao20->si36_codorgao = $sCodorgao;
-        $cllao20->si36_nroleialterorcam = $oDados20->o138_numerolei;
+        $cllao20->si36_nroleialterorcam = $sNroLei;
         $cllao20->si36_dataleialterorcam = $oDados20->o138_data;
         $cllao20->si36_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $cllao20->si36_instit = db_getsession("DB_instit");
@@ -235,7 +251,12 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
         /*
          * selecionar informacoes registro 21
          */
-        $sSql = "select * from orcleialtorcamentaria where o200_orcprojetolei = {$oDados20->o138_sequencial}";
+        $sSql = "select distinct orcleialtorcamentaria.* from orcleialtorcamentaria
+        inner join orcprojetoorcprojetolei on o138_sequencial=o139_orcprojetolei
+        inner join orcprojeto on o139_orcprojeto=o39_codproj
+        inner join orcsuplem on o46_codlei=o39_codproj
+        inner join conlancamsup on c79_codsup=o46_codsup
+        where o200_orcprojetolei = {$oDados20->o138_sequencial}";
         $rsResult21 = db_query($sSql);
         for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
 
@@ -244,7 +265,7 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
 
           $cllao21->si37_tiporegistro = 21;
           $cllao21->si37_reg20 = $cllao20->si36_sequencial;
-          $cllao21->si37_nroleialterorcam = $oDados20->o138_numerolei;
+          $cllao21->si37_nroleialterorcam = $sNroLei;
           $cllao21->si37_tipoautorizacao = $oDados21->o200_tipoleialteracao;
           $cllao21->si37_artigoleialterorcamento = $oDados21->o200_artleialteracao;
           $cllao21->si37_descricaoartigo = $oDados21->o200_descrartigo;

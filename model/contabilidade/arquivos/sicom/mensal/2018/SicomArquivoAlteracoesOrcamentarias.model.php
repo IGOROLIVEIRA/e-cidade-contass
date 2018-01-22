@@ -158,6 +158,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
        join orcsuplemval  on o47_codsup = o46_codsup
        join orcprojeto    on o46_codlei = o39_codproj
        join db_config on prefeitura  = 't'
+       join conlancamsup on c79_codsup=o46_codsup
        left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
      where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'";
     $rsResult10 = db_query($sSql);
@@ -211,6 +212,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
      join orcsuplemval  on o47_codsup = o46_codsup
      join orcprojeto    on o46_codlei = o39_codproj
      join orcsuplemtipo on o46_tiposup =  o48_tiposup
+     join conlancamsup on c79_codsup=o46_codsup
     where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc})
     group by o46_codlei, o39_numero,o46_tiposup";
         $rsResult11 = db_query($sSql);
@@ -324,6 +326,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
      join orcsuplemval  on o47_codsup = o46_codsup
      join orcprojeto    on o46_codlei = o39_codproj
      join orcsuplemtipo on o46_tiposup =  o48_tiposup
+     join conlancamsup on c79_codsup=o46_codsup
     where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc})
     group by o46_codlei, o39_numero,o46_tiposup";
         $rsResult13 = db_query($sSql);
@@ -352,7 +355,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
         /**
          * registro 14
          */
-        $sSql = "select '14' as tipoRegistro,
+        $sSql = "select distinct o46_codsup,'14' as tipoRegistro,
   o46_codlei as codReduzidoDecreto,
   (case when o46_tiposup = 1001 or o46_tiposup = 1006 then 3
        when o46_tiposup = 1002 then 4
@@ -384,8 +387,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
   join orcunidade on orcdotacao.o58_orgao = orcunidade.o41_orgao and orcdotacao.o58_unidade = orcunidade.o41_unidade
   and orcdotacao.o58_anousu = orcunidade.o41_anousu
   join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+  join conlancamsup on c79_codsup=o46_codsup
   left join infocomplementaresinstit on codigo = si09_instit
-  where o46_codlei in ({$oDados10->codigovinc})";
+  where o46_codlei in ({$oDados10->codigovinc}) order by o46_codsup";
         $rsResult14 = db_query($sSql);
         //db_criatabela($rsResult14);
 

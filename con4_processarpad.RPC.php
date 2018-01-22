@@ -558,6 +558,7 @@ switch($oParam->exec) {
        join orcsuplemval  on o47_codsup = o46_codsup
        join orcprojeto    on o46_codlei = o39_codproj
        join db_config on prefeitura  = 't'
+       join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
        left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
      where o39_data between  '$sDataInicial' and '$sDataFinal'";
       $aDecretos = db_utils::getColectionByRecord(db_query($sSqlDecretosMes));
