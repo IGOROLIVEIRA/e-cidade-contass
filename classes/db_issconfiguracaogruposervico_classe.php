@@ -47,6 +47,7 @@ class cl_issconfiguracaogruposervico {
    var $q136_exercicio = 0; 
    var $q136_tipotributacao = 0; 
    var $q136_valor = 0; 
+   var $q136_valor_reduzido = 0; 
    var $q136_localpagamento = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
@@ -55,6 +56,7 @@ class cl_issconfiguracaogruposervico {
                  q136_exercicio = int4 = Exercício 
                  q136_tipotributacao = int4 = Tipo de tributação 
                  q136_valor = float8 = Valor 
+                 q136_valor_reduzido = float8 = Valor 
                  q136_localpagamento = int4 = Local de pagamento 
                  ";
    //funcao construtor da classe 
@@ -80,6 +82,7 @@ class cl_issconfiguracaogruposervico {
        $this->q136_exercicio = ($this->q136_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["q136_exercicio"]:$this->q136_exercicio);
        $this->q136_tipotributacao = ($this->q136_tipotributacao == ""?@$GLOBALS["HTTP_POST_VARS"]["q136_tipotributacao"]:$this->q136_tipotributacao);
        $this->q136_valor = ($this->q136_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["q136_valor"]:$this->q136_valor);
+       $this->q136_valor_reduzido = ($this->q136_valor_reduzido == ""?@$GLOBALS["HTTP_POST_VARS"]["q136_valor_reduzido"]:$this->q136_valor_reduzido);
        $this->q136_localpagamento = ($this->q136_localpagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["q136_localpagamento"]:$this->q136_localpagamento);
      }else{
        $this->q136_sequencial = ($this->q136_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["q136_sequencial"]:$this->q136_sequencial);
@@ -117,6 +120,9 @@ class cl_issconfiguracaogruposervico {
      }
      if($this->q136_valor == null ){ 
        $this->q136_valor = "0";
+     }
+     if($this->q136_valor_reduzido == null ){ 
+       $this->q136_valor_reduzido = "0";
      }
      if($this->q136_localpagamento == null ){ 
        $this->erro_sql = " Campo Local de pagamento nao Informado.";
@@ -165,6 +171,7 @@ class cl_issconfiguracaogruposervico {
                                       ,q136_exercicio 
                                       ,q136_tipotributacao 
                                       ,q136_valor 
+                                      ,q136_valor_reduzido 
                                       ,q136_localpagamento 
                        )
                 values (
@@ -173,6 +180,7 @@ class cl_issconfiguracaogruposervico {
                                ,$this->q136_exercicio 
                                ,$this->q136_tipotributacao 
                                ,$this->q136_valor 
+                               ,$this->q136_valor_reduzido 
                                ,$this->q136_localpagamento 
                       )";
      $result = db_query($sql); 
@@ -210,6 +218,7 @@ class cl_issconfiguracaogruposervico {
        $resac = db_query("insert into db_acount values($acount,3430,19299,'','".AddSlashes(pg_result($resaco,0,'q136_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3430,19300,'','".AddSlashes(pg_result($resaco,0,'q136_tipotributacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3430,19301,'','".AddSlashes(pg_result($resaco,0,'q136_valor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3430,19303,'','".AddSlashes(pg_result($resaco,0,'q136_valor_reduzido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3430,19302,'','".AddSlashes(pg_result($resaco,0,'q136_localpagamento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
@@ -278,6 +287,14 @@ class cl_issconfiguracaogruposervico {
        $sql  .= $virgula." q136_valor = $this->q136_valor ";
        $virgula = ",";
      }
+
+     if(trim($this->q136_valor_reduzido)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q136_valor_reduzido"])){ 
+        if(trim($this->q136_valor_reduzido)=="" && isset($GLOBALS["HTTP_POST_VARS"]["q136_valor_reduzido"])){ 
+           $this->q136_valor_reduzido = "0" ; 
+        } 
+       $sql  .= $virgula." q136_valor_reduzido = $this->q136_valor_reduzido ";
+       $virgula = ",";
+     }
      if(trim($this->q136_localpagamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q136_localpagamento"])){ 
        $sql  .= $virgula." q136_localpagamento = $this->q136_localpagamento ";
        $virgula = ",";
@@ -312,6 +329,8 @@ class cl_issconfiguracaogruposervico {
            $resac = db_query("insert into db_acount values($acount,3430,19300,'".AddSlashes(pg_result($resaco,$conresaco,'q136_tipotributacao'))."','$this->q136_tipotributacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["q136_valor"]) || $this->q136_valor != "")
            $resac = db_query("insert into db_acount values($acount,3430,19301,'".AddSlashes(pg_result($resaco,$conresaco,'q136_valor'))."','$this->q136_valor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["q136_valor_reduzido"]) || $this->q136_valor_reduzido != "")
+           $resac = db_query("insert into db_acount values($acount,3430,19303,'".AddSlashes(pg_result($resaco,$conresaco,'q136_valor_reduzido'))."','$this->q136_valor_reduzido',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["q136_localpagamento"]) || $this->q136_localpagamento != "")
            $resac = db_query("insert into db_acount values($acount,3430,19302,'".AddSlashes(pg_result($resaco,$conresaco,'q136_localpagamento'))."','$this->q136_localpagamento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
@@ -366,6 +385,7 @@ class cl_issconfiguracaogruposervico {
          $resac = db_query("insert into db_acount values($acount,3430,19299,'','".AddSlashes(pg_result($resaco,$iresaco,'q136_exercicio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3430,19300,'','".AddSlashes(pg_result($resaco,$iresaco,'q136_tipotributacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3430,19301,'','".AddSlashes(pg_result($resaco,$iresaco,'q136_valor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3430,19303,'','".AddSlashes(pg_result($resaco,$iresaco,'q136_valor_reduzido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3430,19302,'','".AddSlashes(pg_result($resaco,$iresaco,'q136_localpagamento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }

@@ -45,6 +45,7 @@ class cl_parissqn {
    var $q60_receit = 0;
    var $q60_tipo = 0;
    var $q60_aliq = 0;
+   var $q60_aliq_reduzida = 0;
    var $q60_codvencvar = 0;
    var $q60_histsemmov = 0;
    var $q60_impcodativ = 'f';
@@ -79,6 +80,7 @@ class cl_parissqn {
                  q60_receit = int4 = Receita
                  q60_tipo = int4 = tipo de débito
                  q60_aliq = float8 = Aliquota padrão
+                 q60_aliq_reduzida = int8 = Alíquotas reduzidas
                  q60_codvencvar = int4 = Código do vencimento
                  q60_histsemmov = int4 = Hist.Calc.
                  q60_impcodativ = bool = Imprime Código Atividade
@@ -127,6 +129,7 @@ class cl_parissqn {
        $this->q60_receit = ($this->q60_receit == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_receit"]:$this->q60_receit);
        $this->q60_tipo = ($this->q60_tipo == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_tipo"]:$this->q60_tipo);
        $this->q60_aliq = ($this->q60_aliq == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_aliq"]:$this->q60_aliq);
+       $this->q60_aliq_reduzida = ($this->q60_aliq_reduzida == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_aliq_reduzida"]:$this->q60_aliq_reduzida);
        $this->q60_codvencvar = ($this->q60_codvencvar == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_codvencvar"]:$this->q60_codvencvar);
        $this->q60_histsemmov = ($this->q60_histsemmov == ""?@$GLOBALS["HTTP_POST_VARS"]["q60_histsemmov"]:$this->q60_histsemmov);
        $this->q60_impcodativ = ($this->q60_impcodativ == "f"?@$GLOBALS["HTTP_POST_VARS"]["q60_impcodativ"]:$this->q60_impcodativ);
@@ -187,6 +190,15 @@ class cl_parissqn {
      if($this->q60_aliq == null ){
        $this->erro_sql = " Campo Aliquota padrão não informado.";
        $this->erro_campo = "q60_aliq";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if($this->q60_aliq_reduzida == null ){
+       $this->erro_sql = " Campo Aliquotas reduzidas não informado.";
+       $this->erro_campo = "q60_aliq_reduzida";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -383,6 +395,7 @@ class cl_parissqn {
                                        q60_receit
                                       ,q60_tipo
                                       ,q60_aliq
+                                      ,q60_aliq_reduzida
                                       ,q60_codvencvar
                                       ,q60_histsemmov
                                       ,q60_impcodativ
@@ -414,6 +427,7 @@ class cl_parissqn {
                                 $this->q60_receit
                                ,$this->q60_tipo
                                ,$this->q60_aliq
+                               ,$this->q60_aliq_reduzida
                                ,$this->q60_codvencvar
                                ,$this->q60_histsemmov
                                ,'$this->q60_impcodativ'
@@ -503,6 +517,19 @@ class cl_parissqn {
        if(trim($this->q60_aliq) == null ){
          $this->erro_sql = " Campo Aliquota padrão não informado.";
          $this->erro_campo = "q60_aliq";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->q60_aliq_reduzida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_aliq_reduzida"])){
+       $sql  .= $virgula." q60_aliq_reduzida = $this->q60_aliq_reduzida ";
+       $virgula = ",";
+       if(trim($this->q60_aliq_reduzida) == null ){
+         $this->erro_sql = " Campo Aliquotas reduzidas não informado.";
+         $this->erro_campo = "q60_aliq_reduzida";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -1007,6 +1034,19 @@ class cl_parissqn {
        if(trim($this->q60_aliq) == null ){
          $this->erro_sql = " Campo Aliquota padrão nao Informado.";
          $this->erro_campo = "q60_aliq";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->q60_aliq_reduzida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["q60_aliq_reduzida"])){
+       $sql  .= $virgula." q60_aliq_reduzida = $this->q60_aliq_reduzida ";
+       $virgula = ",";
+       if(trim($this->q60_aliq_reduzida) == null ){
+         $this->erro_sql = " Campo Aliquotas reduzidas nao Informado.";
+         $this->erro_campo = "q60_aliq_reduzida";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

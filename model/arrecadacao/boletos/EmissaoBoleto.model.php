@@ -807,19 +807,31 @@ class EmissaoBoleto {
   }
 
   /**
-  **  Função que verifica se a data de pagamento está antes do vencimento da competencia
+  **  Função que verifica se parametro está ativado e data de pagamento está antes do vencimento da competencia
   **/
   public static function verificaDescontoIss($dataPagamento,$compMes,$compAno){
 
-      $sqlVencimentoIss   =   "SELECT q82_venc from confvencissqnvariavel
-                                    INNER JOIN cadvenc on q82_codigo=q144_codvenc
-                                    INNER JOIN cadvencdesc on q92_codigo=q144_codvenc
-                                    WHERE q82_venc= concat('{$compAno}','-{$compMes}-',q144_diavenc)::date + interval '1 month' 
-                                    AND q82_venc > '{$dataPagamento}'";
+      
+      	$sqlParametroAliq	=	"SELECT 1 
+  									FROM parissqn 
+  									WHERE q60_aliq_reduzida=1";
+  			$rsParametroAliq 	= 	db_query($sqlParametroAliq);
 
+        if($compMes==12){
+          $compMes=1;
+          $compAno++;
+        }
 
-            $rsVencimento = db_query($sqlVencimentoIss);
-          if(pg_num_rows($rsVencimento) >0 ){
+        $sqlVencimentoIss   =   "SELECT q82_venc 
+                                    FROM confvencissqnvariavel
+                                    INNER JOIN cadvenc on q82_codigo=q144_codvenc_desconto
+                                    AND EXTRACT(YEAR FROM q82_venc)=$compAno
+                                    AND EXTRACT(MONTH FROM q82_venc)=$compMes
+                                    AND q82_venc > '{$dataPagamento}'";                                    
+                                                                
+            $rsVencimento 	= 	db_query($sqlVencimentoIss);
+
+          if(pg_num_rows($rsVencimento) >0  && pg_numrows($rsParametroAliq) >0 ){
             return true;
           }
 
