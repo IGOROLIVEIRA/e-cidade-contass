@@ -95,7 +95,7 @@ switch ($oParam->exec) {
   case 'buscaServicos' :
 
     $oRetorno->aServs = array();
-    $sWhere          = 'db121_tipoconta = 2';
+    $sWhere          = 'db121_tipoconta = 2 and q136_exercicio = '.db_getsession('DB_anousu');
     $sCampos         = "distinct issgruposervico.q126_sequencial, db_estruturavalor.db121_estrutural, db_estruturavalor.db121_descricao,
     case when q136_tipotributacao = 1 then 'Fixo: '||round(q136_valor,2)::varchar
     when q136_tipotributacao = 2 then round(q136_valor,2)::varchar||'%' when q136_tipotributacao = 2 then 'Nao incide'::varchar else 'Nao configurado'::varchar end as q136_valor ";
