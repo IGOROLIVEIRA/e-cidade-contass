@@ -927,7 +927,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
             $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal());
             $clcontratos20->si87_novadatatermino = in_array($oAcordoPosicao->getTipo(), array(6, 13, 14)) ? $oDataTermino->getDate() : "";
-            $clcontratos20->si87_valoraditivo = ($iTipoAlteracaoValor == 3 ? 0 : $oAcordoPosicao->getValorAditado());
+            if($iTipoAlteracaoValor == 3){
+                $clcontratos20->si87_valoraditivo = 0;
+            }else{
+            $clcontratos20->si87_valoraditivo = abs($oAcordoPosicao->getValorAditado() - $oAcordoPosicao->getValorPosicaoAnterior($oDados20->ac26_numero));
+            }
             $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao;
             $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao);
             $clcontratos20->si87_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -1012,9 +1016,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        si03_instit,
        si03_numcontratoanosanteriores,
        si03_acordo,
-       si03_acordoposicao
+       si03_acordoposicao,
+       ac26_numero
 FROM apostilamento
 INNER JOIN acordo ON si03_acordo=ac16_sequencial
+inner join acordoposicao on ac26_sequencial = si03_acordoposicao
 WHERE si03_dataapostila <='{$this->sDataFinal}'
     AND si03_dataapostila >= '{$this->sDataInicial}'
     AND si03_instit = " . db_getsession("DB_instit");
@@ -1059,7 +1065,12 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
             $clcontratos30->si89_dataapostila = $oDados30->si03_dataapostila;
             $clcontratos30->si89_tipoalteracaoapostila = $oDados30->tipoalteracaoapostila;
             $clcontratos30->si89_dscalteracao = substr($this->removeCaracteres($oDados30->si03_descrapostila), 0, 250);
-            $clcontratos30->si89_valorapostila = $oDados30->tipoalteracaoapostila == 3 ? 0 : $oDados30->si89_valorapostila;
+            $oAcordoPosicao = new Acordoposicao($oDados30->si03_acordoposicao);
+            if($oDados30->tipoalteracaoapostila == 3) {
+                $clcontratos30->si89_valorapostila = 0;
+            }else{
+                $clcontratos30->si89_valorapostila = abs($oAcordoPosicao->getValorPosicaoAtual($oDados30->ac26_numero) - $oAcordoPosicao->getValorPosicaoAnterior($oDados30->ac26_numero));
+            }
             $clcontratos30->si89_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos30->si89_instit = $oDados30->si03_instit;
             $clcontratos30->incluir(null);

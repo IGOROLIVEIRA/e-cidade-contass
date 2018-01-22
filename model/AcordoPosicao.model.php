@@ -1516,5 +1516,36 @@ class AcordoPosicao {
 
     }
   }
-
+  function getValorPosicaoAnterior($iNumeroAditamento){
+      $oDaoValorTotal = new cl_acordoposicao();
+      $rsValdoraditado=0;
+      $sCampos = " sum(ac20_valortotal) AS valortotal";
+      $sWhere  = " ac16_sequencial = {$this->getAcordo()} AND ac26_numero =".($iNumeroAditamento -1)."
+                   GROUP BY acordoitem.ac20_ordem,
+                            ac20_valortotal
+                   ORDER BY ac20_ordem";
+      $sSqlvalor = $oDaoValorTotal->sql_valor_total_aditado($sCampos, null, $sWhere);
+      $srValor = $oDaoValorTotal->sql_record($sSqlvalor);
+      for($iCont = 0; $iCont < pg_num_rows($srValor); $iCont++) {
+          $valor = db_utils::fieldsMemory($srValor, $iCont);
+          $rsValdoraditado += $valor->valortotal;
+      }
+      return $rsValdoraditado;
+  }
+  function getValorPosicaoAtual($iNumero){
+      $oDaoValorAtual = new cl_acordoposicao();
+      $rsValorAtual=0;
+      $sCampos = "sum(ac20_valortotal) AS valortotal";
+      $sWhere  = "ac16_sequencial = {$this->getAcordo()} AND ac26_numero =".($iNumero)."
+                   GROUP BY acordoitem.ac20_ordem,
+                            ac20_valortotal
+                   ORDER BY ac20_ordem";
+      $sSqlvalor = $oDaoValorAtual->sql_valor_total_aditado($sCampos, null, $sWhere);
+      $srValor = $oDaoValorAtual->sql_record($sSqlvalor);
+      for($iCont = 0; $iCont < pg_num_rows($srValor); $iCont++) {
+          $valor = db_utils::fieldsMemory($srValor, $iCont);
+          $rsValorAtual += $valor->valortotal;
+      }
+      return $rsValorAtual;
+  }
 }

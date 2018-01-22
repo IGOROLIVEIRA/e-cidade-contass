@@ -769,7 +769,19 @@ class cl_acordoposicao {
             }
           }
           return $sql;
-  }  
-  
+  }
+  public function sql_valor_total_aditado ($sCampos = "*", $sOrdem = null, $sWhere = ""){
+      $sSql  = "select {$sCampos} \n";
+      $sSql .= "  from acordoposicao                                                    \n";
+      $sSql .= "       inner join acordoitem on ac20_acordoposicao = ac26_sequencial    \n";
+      $sSql .= "       inner join acordo on ac16_sequencial = ac26_acordo               \n";
+      if (!empty($sWhere)) {
+          $sSql .= " where {$sWhere} \n";
+      }
+      if (!empty($sOrdem)) {
+          $sSql .= " order by {$sOrdem} ";
+      }
+      return $sSql;
+  }
 }
 ?>
