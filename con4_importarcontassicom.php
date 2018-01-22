@@ -23,12 +23,17 @@ include("dbforms/db_funcoes.php");
 <center>
     <div style="display: table">
         <fieldset>
-            <legend>Importar contas do Sicom</legend>
+            <legend>Migrações</legend>
             <form id="frmImportarContas" method="post">
                 <table>
                     <tr>
                         <td>
-                            <input type="button" name="Importar" value="Importar" onclick="js_processar();"/>
+                            <input type="button" name="Importar Contas SICOM" value="Importar CTB SICOM" onclick="js_processar();"/>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="button" name="Importar Contas Fornecedores" value="Importar Contas Fornecedores" onclick="js_processarForne();"/>
                         </td>
                     </tr>
                 </table>
@@ -54,16 +59,24 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
             }
         );
     }
+    function js_processarForne() {        
+        js_divCarregando('Aguarde, importando contas do fornecedores', 'msgBox');
+        var oAjax = new Ajax.Request("func_importarcontafornec.php",
+            {
+                method: 'post',
+                onComplete: js_retornoProcessamento
+            }
+        );
+    }
     function js_retornoProcessamento(oAjax) {
-    	js_removeObj('msgBox');
-    	var oRetorno = eval("("+oAjax.responseText+")");
-    	
-    	if(oRetorno.status == 2){
-			alert(oRetorno.message);
+        js_removeObj('msgBox');
+        var oRetorno = eval("("+oAjax.responseText+")");
+        
+        if(oRetorno.status == 2){
+            alert(oRetorno.message);
         }else{           
-        	alert("Processo concluído com sucesso!");
+            alert("Processo concluído com sucesso!");
         }
 
     }
-
 </script>
