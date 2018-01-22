@@ -779,7 +779,7 @@ class cl_empagetipo {
     }
     return $sql;
   }
-   function sql_query_contas_vinculadas ($e83_codtipo=null,$campos="*",$ordem=null,$sWhere, $lVinculadas = false) {
+   function sql_query_contas_vinculadas ($e83_codtipo=null,$campos="*",$ordem=null,$sWhere, $lVinculadas = false , $op = null) {
 
    $sSql = "select ";
     if($campos != "*" ){
@@ -792,15 +792,31 @@ class cl_empagetipo {
     }else{
       $sSql .= $campos;
     }
+    /* PARA ATENDER A Portaria n° 3992/GM/MS/2017 DO MINISTERIO DA SAÚDE. QUE PERMITE PAGAMENTO DESTAS FONTES COM A MESMA CONTA BANCARIA */
+    $aFontes = array('148','149','150','151','152','153','154','248','249','250','251','252','253','254');
+    $sqlFonteEmp = "select o15_codtri from empempenho inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu=o58_anousu ";
+    $sqlFonteEmp .= " inner join pagordem on e60_numemp=e50_numemp ";
+    $sqlFonteEmp .= " inner join orctiporec on o58_codigo=o15_codigo ";  
+    $sqlFonteEmp .= " where e50_codord = ".$op;
+    $rsResultFonteEmp = db_query($sqlFonteEmp);
+    $iFonteEmpenho = db_utils::fieldsMemory($rsResultFonteEmp, 0)->o15_codtri;
+    if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('148','149','150','151','152','153','154','248','249','250','251','252','253','254')) and";
+      $whereFonte2 = " ";
+    }else{
+      $whereFonte = " ";
+      $whereFonte2 = " and c61_codigo = o58_codigo ";
+    }
+
     $sSql .= "from empagetipo left join ";
     $sSql .= "( select distinct c61_reduz,C61_CODIGO, c61_anousu from ";
     $sSql .= "  empempenho";
     $sSql .= "  inner join orcdotacao on e60_coddot    = o58_coddot and e60_anousu = o58_anousu";
     $sSql .= "  inner join conplanoreduz on (c61_anousu = o58_anousu or c61_anousu = ".db_getsession("DB_anousu").")";
-    $sSql .= "                          and c61_codigo = o58_codigo";
+    $sSql .= "                   ".$whereFonte2."      ";
     $sSql .= "  left join pagordem on e60_numemp       = e50_numemp ";
     $sSql .= "  left join saltes   on c61_reduz = k13_conta ";
-    $sSql .= " where c61_instit=".db_getsession("DB_instit");
+    $sSql .= " where ".$whereFonte." c61_instit=".db_getsession("DB_instit")  ;
     if ($sWhere != '') {
       $sSql .= " and {$sWhere}";
     }
