@@ -199,7 +199,7 @@ class agendaPagamento {
     $oDaoEmpAgeTipo = db_utils::getDao("empagetipo");
     $sWhere         = " e50_codord = {$iCodigoOrdem} AND (k13_limite is null or k13_limite >= '{$sDataAtual}') ";
     $sCampos        = " distinct e83_conta, e83_descr,e83_codtipo,c61_codigo ";
-    $sSqlContas     = $oDaoEmpAgeTipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere,$lRetornaContasVinculadas);
+    $sSqlContas     = $oDaoEmpAgeTipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere,$lRetornaContasVinculadas , $iCodigoOrdem);
     /* [Extensão] - Filtro da Despesa - getContasRecurso */
 
 
