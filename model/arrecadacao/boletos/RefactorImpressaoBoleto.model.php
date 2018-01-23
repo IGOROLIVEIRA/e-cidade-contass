@@ -1112,7 +1112,7 @@ class RefactorImpressaoBoleto {
     $sqldtop =" select min(arrecad.k00_dtoper) as mindatop ,
                        case
                          when arrecad.k00_tipo = 3
-                          then coalesce( sum(issvar.q05_vlrinf),0)
+                          then coalesce( sum(issvar.q05_valor),0)
                           else coalesce( sum(arrecad.k00_valor) ,0)
                        end as valor_origem
                   from recibopaga
