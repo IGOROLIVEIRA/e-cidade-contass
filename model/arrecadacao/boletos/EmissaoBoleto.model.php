@@ -1,33 +1,33 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
  * Dependencias
- */   
+ */
 db_app::import('arrecadacao.boletos.RefactorGeracaoBoleto');
 db_app::import('arrecadacao.boletos.RefactorImpressaoBoleto');
 
@@ -41,48 +41,48 @@ db_app::import('arrecadacao.boletos.RefactorImpressaoBoleto');
 class EmissaoBoleto {
 
   /**
-   * CGM 
-   * 
+   * CGM
+   *
    * @var integer
    * @access protected
    */
   protected $iCodigoCgm = 0;
 
   /**
-   * Inscricao 
-   * 
+   * Inscricao
+   *
    * @var integer
    * @access protected
    */
   protected $iInscricao = 0;
-  
+
   /**
-   * Matricula 
-   * 
+   * Matricula
+   *
    * @var integer
    * @access protected
    */
   protected $iMatricula = 0;
 
   /**
-   * Modelo de impressao do boleto 
-   * 
+   * Modelo de impressao do boleto
+   *
    * @var integer
    * @access protected
    */
   protected $iModeloImpressao = 0;
 
   /**
-   * TIpo de debito, k00_tipo 
-   * 
+   * TIpo de debito, k00_tipo
+   *
    * @var integer
    * @access protected
    */
   protected $iTipoDebito = 0;
 
   /**
-   * Array com numpre e numpar dos debitos 
-   * 
+   * Array com numpre e numpar dos debitos
+   *
    * @var array
    * @access protected
    */
@@ -90,16 +90,16 @@ class EmissaoBoleto {
 
   /**
    * Numpre do boleto
-   * numpre/numnov do recibo/carne 
-   * 
+   * numpre/numnov do recibo/carne
+   *
    * @var integer
    * @access protected
    */
   protected $iNumpreBoleto = 0;
 
   /**
-   * Data de operacao 
-   * 
+   * Data de operacao
+   *
    * @var DBDate
    * @access protected
    */
@@ -111,71 +111,71 @@ class EmissaoBoleto {
    * @access protected
    */
   protected $sCaminhoPdf = null;
- 
+
   /**
-   * Valor Corrigido 
-   * 
+   * Valor Corrigido
+   *
    * @var number
    * @access protected
    */
   protected $nValorCorrigido = 0;
 
   /**
-   * Valor do Historico 
-   * 
+   * Valor do Historico
+   *
    * @var number
    * @access protected
    */
   protected $nValorHistorico = 0;
 
   /**
-   * Juros da Multa 
-   * 
+   * Juros da Multa
+   *
    * @var number
    * @access protected
    */
   protected $nJurosMulta = 0;
- 
+
   /**
-   * Codigo de Barras 
-   * 
+   * Codigo de Barras
+   *
    * @var integer
    * @access protected
    */
   protected $iCodigoBarras = 0;
- 
+
   /**
-   * Linha Digitavel 
-   * 
+   * Linha Digitavel
+   *
    * @var string
    * @access protected
    */
   protected $sLinhaDigitavel = null;
-  
+
   /**
    * Força a data de vencimento
-   * 
+   *
    * @var boolean
    * @access protected
    */
   protected $lForcaVencimento = false;
-  
+
   /**
    * Processa desconto no recibo
-   * 
+   *
    * @var boolean
    * @access protected
    */
   protected $lProcessaDescontoRecibo = false;
-  
+
   /**
    * Novo recibo
-   * 
+   *
    * @var boolean
    * @access protected
    */
   protected $lNovoRecibo = true;
-  
+
 
   /**
   * Valor desconto de Aliquota reduzida
@@ -208,14 +208,14 @@ class EmissaoBoleto {
 
   /**
    * Retorna se deve forçar o vencimento do recibo
-   * 
+   *
    * @access public
    * @return boolean
    */
   public function getForcaVencimento() {
     return $this->lForcaVencimento;
   }
-  
+
   /**
    * Seta se deve forçar o vencimento do recibo
    *
@@ -226,7 +226,7 @@ class EmissaoBoleto {
   public function setForcaVencimento($lForcaVencimento = false) {
     $this->lForcaVencimento = $lForcaVencimento;
   }
-  
+
   /**
    * Retorna se deve processar o desconto no recibo
    *
@@ -236,7 +236,7 @@ class EmissaoBoleto {
   public function getProcessaDescontoRecibo() {
     return $this->lProcessaDescontoRecibo;
   }
-  
+
   /**
    * Seta se deve processar o desconto no recibo
    *
@@ -247,7 +247,7 @@ class EmissaoBoleto {
   public function setProcessaDescontoRecibo($lProcessaDescontoRecibo = false) {
     $this->lProcessaDescontoRecibo = $lProcessaDescontoRecibo;
   }
-  
+
   /**
    * Retorna se deve gerar o desconto no recibo
    *
@@ -257,7 +257,7 @@ class EmissaoBoleto {
   public function getNovoRecibo() {
     return $this->lNovoRecibo;
   }
-  
+
   /**
    * Seta se deve gerar o desconto no recibo
    *
@@ -267,13 +267,13 @@ class EmissaoBoleto {
    */
   public function setNovoRecibo($lNovoRecibo = true) {
     $this->lNovoRecibo = $lNovoRecibo;
-  }  
-  
+  }
+
   /**
-   * Construtor  
+   * Construtor
    * @todo criar lazzy load
-   * 
-   * @param integer $iNumpreBoleto 
+   *
+   * @param integer $iNumpreBoleto
    * @access public
    * @return void
    */
@@ -283,14 +283,14 @@ class EmissaoBoleto {
       return;
     }
 
-    $this->iNumpreBoleto = $iNumpreBoleto; 
+    $this->iNumpreBoleto = $iNumpreBoleto;
     $this->buscarDadosBoleto();
   }
 
   /**
    * Define o CGM do recibo
-   * 
-   * @param integer $iCodigoCgm 
+   *
+   * @param integer $iCodigoCgm
    * @access public
    * @return void
    */
@@ -299,8 +299,8 @@ class EmissaoBoleto {
   }
 
   /**
-   * Retorna o CGM do boleto 
-   * 
+   * Retorna o CGM do boleto
+   *
    * @access public
    * @return integer
    */
@@ -310,122 +310,122 @@ class EmissaoBoleto {
 
   /**
    * Define a matricula do boleto
-   * 
-   * @param integer $iMatricula 
+   *
+   * @param integer $iMatricula
    * @access public
    * @return void
    */
   public function setMatricula($iMatricula) {
-    $this->iMatricula = $iMatricula; 
+    $this->iMatricula = $iMatricula;
   }
 
   /**
-   * Retorna a matricula do boleto 
-   * 
+   * Retorna a matricula do boleto
+   *
    * @access public
    * @return void
    */
   public function getMatricula() {
-    return $this->iMatricula; 
+    return $this->iMatricula;
   }
 
   /**
-   * Define a inscricao do boleto  
-   * 
-   * @param mixed $iInscricao 
+   * Define a inscricao do boleto
+   *
+   * @param mixed $iInscricao
    * @access public
    * @return void
    */
   public function setInscricao($iInscricao) {
-    $this->iInscricao = $iInscricao; 
+    $this->iInscricao = $iInscricao;
   }
 
   /**
-   * Retorna a inscricao 
-   * 
+   * Retorna a inscricao
+   *
    * @access public
    * @return integer
    */
   public function getInscricao() {
-    return $this->iInscricao; 
+    return $this->iInscricao;
   }
 
   /**
-   * Define o tipo de debito 
-   * 
-   * @param integer $iTipoDebito 
+   * Define o tipo de debito
+   *
+   * @param integer $iTipoDebito
    * @access public
    * @return void
    */
   public function setTipoDebito($iTipoDebito) {
-    $this->iTipoDebito = $iTipoDebito; 
+    $this->iTipoDebito = $iTipoDebito;
   }
 
   /**
-   * Retorna o tipo de debito 
-   * 
+   * Retorna o tipo de debito
+   *
    * @access public
    * @return integer
    */
   public function getTipoDebito() {
-    return $this->iTipoDebito; 
+    return $this->iTipoDebito;
   }
 
   /**
-   * Define modelo de impressao 
-   * 
-   * @param integer $iModeloImpressao 
+   * Define modelo de impressao
+   *
+   * @param integer $iModeloImpressao
    * @access public
    * @return void
    */
   public function setModeloImpressao($iModeloImpressao) {
-    $this->iModeloImpressao = $iModeloImpressao; 
+    $this->iModeloImpressao = $iModeloImpressao;
   }
 
   /**
-   * Retorna o modelo de impressao 
-   * 
+   * Retorna o modelo de impressao
+   *
    * @access public
    * @return integer
    */
   public function getModeloImpressao() {
-    return $this->iModeloImpressao; 
+    return $this->iModeloImpressao;
   }
 
   /**
-   * Define a data de operacao 
-   * 
-   * @param string $sDataOperacao 
+   * Define a data de operacao
+   *
+   * @param string $sDataOperacao
    * @access public
    * @return void
    */
   public function setDataVencimento(DBDate $oDataVencimento) {
-    $this->oDataVencimento = $oDataVencimento; 
+    $this->oDataVencimento = $oDataVencimento;
   }
 
   /**
-   * Retorna data de operaco 
-   * 
+   * Retorna data de operaco
+   *
    * @access public
    * @return DBDate
    */
   public function getDataOperacao() {
-    return $this->oDataVencimento; 
+    return $this->oDataVencimento;
   }
-  
+
   /**
    * Retorna o numpre do boleto gerado
    *
    * @return integer
    * @access public
    */
-  public function getNumpreBoleto() {   
+  public function getNumpreBoleto() {
     return $this->iNumpreBoleto;
   }
-  
+
   /**
-   * getCodigoBoleto 
-   * 
+   * getCodigoBoleto
+   *
    * @access public
    * @return void
    */
@@ -434,8 +434,8 @@ class EmissaoBoleto {
   }
 
   /**
-   * getDebitos 
-   * 
+   * getDebitos
+   *
    * @access public
    * @return void
    */
@@ -444,8 +444,8 @@ class EmissaoBoleto {
   }
 
   /**
-   * getValorBoleto 
-   * 
+   * getValorBoleto
+   *
    * @access public
    * @return void
    */
@@ -454,8 +454,8 @@ class EmissaoBoleto {
   }
 
   /**
-   * Retorna o valor do historico. 
-   * 
+   * Retorna o valor do historico.
+   *
    * @access public
    * @return number
    */
@@ -464,8 +464,8 @@ class EmissaoBoleto {
   }
 
   /**
-   * Retorna o valor corrigido 
-   * 
+   * Retorna o valor corrigido
+   *
    * @access public
    * @return number
    */
@@ -475,7 +475,7 @@ class EmissaoBoleto {
 
   /**
    * Retorna o valor do juro
-   * 
+   *
    * @access public
    * @return number
    */
@@ -484,8 +484,8 @@ class EmissaoBoleto {
   }
 
   /**
-   * Retorna o Codigo de Barras 
-   * 
+   * Retorna o Codigo de Barras
+   *
    * @access public
    * @return integer
    */
@@ -495,7 +495,7 @@ class EmissaoBoleto {
 
   /**
    * Retorna a linha digitavel
-   * 
+   *
    * @access public
    * @return string
    */
@@ -505,17 +505,17 @@ class EmissaoBoleto {
 
   /**
    * Retorna o caminho do PDF
-   * 
+   *
    * @access public
    * @return string
    */
   public function getCaminhoPDF() {
-    return $this->sCaminhoPdf; 
+    return $this->sCaminhoPdf;
   }
 
   /**
-   * Busca o tipo de debito pelo primeiro debito informado 
-   * 
+   * Busca o tipo de debito pelo primeiro debito informado
+   *
    * @access public
    * @return integer
    */
@@ -543,26 +543,26 @@ class EmissaoBoleto {
   }
 
   /**
-   * Adicionar debito 
-   * 
-   * @param integer $iNumpre 
-   * @param integer $iNumpar 
+   * Adicionar debito
+   *
+   * @param integer $iNumpre
+   * @param integer $iNumpar
    * @access public
    * @return void
    */
   public function adicionarDebito( $iNumpre, $iNumpar ) {
 
     $oDadosDebito = new stdClass();
-    $oDadosDebito->iNumpre = $iNumpre; 
-    $oDadosDebito->iNumpar = $iNumpar; 
-    $iIndice = (int) $iNumpre . (int) $iNumpar; 
+    $oDadosDebito->iNumpre = $iNumpre;
+    $oDadosDebito->iNumpar = $iNumpar;
+    $iIndice = (int) $iNumpre . (int) $iNumpar;
 
     $this->aDebitos[$iIndice] = $oDadosDebito;
   }
 
   /**
    * Busca o codigo do cgm, numcgm pela matricula
-   * 
+   *
    * @access public
    * @return integer
    */
@@ -577,7 +577,7 @@ class EmissaoBoleto {
 
   /**
    * Busca o codigo do cgm, numcgm pela inscricao
-   * 
+   *
    * @access public
    * @return integer
    */
@@ -589,10 +589,10 @@ class EmissaoBoleto {
     $iCodigoCgm  = $oEmpresa->getCgmEmpresa()->getCodigo();
     return $iCodigoCgm;
   }
-  
+
   /**
-   * Gerar recibo 
-   * 
+   * Gerar recibo
+   *
    * @access public
    * @return void
    */
@@ -600,7 +600,7 @@ class EmissaoBoleto {
 
 
     /**
-     * Refactor de geracao de boleto 
+     * Refactor de geracao de boleto
      */
     $oGeracaoBoleto = new RefactorGeracaoBoleto();
 
@@ -612,55 +612,55 @@ class EmissaoBoleto {
     }
 
     /**
-     * nao foi definido cgm 
+     * nao foi definido cgm
      * pesquisa cgm pela matricula ou inscricao
      * caso nao for informado matricula ou inscricao, lanca exception
      */
     if ( empty($this->iCodigoCgm) ) {
-    
+
       /**
-       * matricula e inscricao vazias 
+       * matricula e inscricao vazias
        */
       if ( empty($this->iMatricula) && empty($this->iInscricao) ) {
         throw new Exception('CGM, matrícula ou inscrição não informado.');
       }
 
       /**
-       * se foi passado matricula, pesquisa cgm pela matricula 
+       * se foi passado matricula, pesquisa cgm pela matricula
        */
       if ( !empty($this->iMatricula) ) {
-        $this->iCodigoCgm = $this->getCodigoCgmPelaMatricula(); 
+        $this->iCodigoCgm = $this->getCodigoCgmPelaMatricula();
       }
 
       /**
-       * se foi passado inscricao, pesquisa cgm pela inscricao 
+       * se foi passado inscricao, pesquisa cgm pela inscricao
        */
       if ( !empty($this->iInscricao) && empty($this->iCodigoCgm) ) {
-        $this->iCodigoCgm = $this->getCodigoCgmPelaInscricao(); 
+        $this->iCodigoCgm = $this->getCodigoCgmPelaInscricao();
       }
 
     }
 
     $oGeracaoBoleto->set('ver_inscr', $this->getInscricao());
-    $oGeracaoBoleto->set('ver_matric', $this->getMatricula()); 
+    $oGeracaoBoleto->set('ver_matric', $this->getMatricula());
     $oGeracaoBoleto->set('ver_numcgm', $this->getCodigoCgm());
 
     /**
-     * Nenhum debito informado 
+     * Nenhum debito informado
      */
     if ( empty($this->aDebitos) ) {
       throw new Exception("Débitos não informados.");
     }
 
     /**
-     * se nao for definido tipo de debito, procura, k03_tipo 
+     * se nao for definido tipo de debito, procura, k03_tipo
      */
     if ( empty($this->iTipoDebito) ) {
-      $this->iTipoDebito = $this->buscarTipoDebito(); 
+      $this->iTipoDebito = $this->buscarTipoDebito();
     }
 
     /**
-     * Tipo de debito 
+     * Tipo de debito
      */
     $oGeracaoBoleto->set('tipo_debito', $this->getTipoDebito());
     $oGeracaoBoleto->set('k03_tipo', $this->getTipoDebito());
@@ -669,19 +669,19 @@ class EmissaoBoleto {
      * fixos
      */
     $oGeracaoBoleto->set('totregistros', 1);
-    $oGeracaoBoleto->set('forcarvencimento', $this->lForcaVencimento); 
-    $oGeracaoBoleto->set('processarDescontoRecibo', $this->lProcessaDescontoRecibo); 
+    $oGeracaoBoleto->set('forcarvencimento', $this->lForcaVencimento);
+    $oGeracaoBoleto->set('processarDescontoRecibo', $this->lProcessaDescontoRecibo);
     $oGeracaoBoleto->set('lNovoRecibo', $this->lNovoRecibo);
 
     /**
-     * Valida se foi informada data de operacao 
+     * Valida se foi informada data de operacao
      */
     if ( empty($this->oDataVencimento)  ) {
       throw new Exception("Data de operação não informada.");
     }
 
     /**
-     * Data de opercao em formato pt-br 
+     * Data de opercao em formato pt-br
      */
     $oGeracaoBoleto->set('k00_dtoper', $this->oDataVencimento->getDate(DBDate::DATA_PTBR));
 
@@ -689,37 +689,37 @@ class EmissaoBoleto {
      * modelo que deve ser utlizado para emissão (cadtipomod)
      */
     $oGeracaoBoleto->set('iCodigoModeloImpressao', $this->getModeloImpressao());
-    
+
 
     $oGeracaoBoleto->set('nDescontoAliqReduz', $this->getDescontoAliqReduz());
 
-    
+
     /**
-     * Processar 
+     * Processar
      */
     $oRetornoGeracaoBoleto = $oGeracaoBoleto->processar();
 
     /**
      * Numpre/numnov do boleto gerado
      */
-    $this->iNumpreBoleto = $oRetornoGeracaoBoleto->recibos_emitidos[0]; 
+    $this->iNumpreBoleto = $oRetornoGeracaoBoleto->recibos_emitidos[0];
 
     /**
-     * Busca informacoes do boleto 
+     * Busca informacoes do boleto
      */
     $this->buscarDadosBoleto();
   }
 
   /**
-   * Imprimir boleto 
-   * 
+   * Imprimir boleto
+   *
    * @access public
    * @return string - caminho do pdf gerado
    */
   public function imprimir() {
 
     /**
-     * Numpre recibo nao informado 
+     * Numpre recibo nao informado
      */
     if ( empty($this->iNumpreBoleto) ) {
       throw new Exception('Código do boleto não gerado.');
@@ -743,7 +743,7 @@ class EmissaoBoleto {
     $oImpressao->set('tipo', $this->getTipoDebito());
     $oImpressao->set('k00_dtoper', $this->oDataVencimento->getDate(DBDate::DATA_PTBR));
     $oImpressao->set('iModeloRecibo', $this->getModeloImpressao());
-    
+
     $oImpressao->set("reemite_recibo", true);
     $oImpressao->set('totregistros', 1);
     $oImpressao->set('forcarvencimento', $this->lForcaVencimento);
@@ -757,9 +757,9 @@ class EmissaoBoleto {
       throw new Exception("Erro ao gerar PDF.");
     }
 
-    $this->sCaminhoPdf = $oImpressao->getCaminhoPDF(); 
+    $this->sCaminhoPdf = $oImpressao->getCaminhoPDF();
   }
-   
+
   /**
    * Busca e define as informacoes do boleto gerado
    * codigo de barras, linha digitavel, valores
@@ -769,21 +769,21 @@ class EmissaoBoleto {
     $oDaoReciboPagaBoleto = db_utils::getDao('recibopagaboleto');
 
     $sSqlBoleto = $oDaoReciboPagaBoleto->sql_queryDadosRecibo($this->iNumpreBoleto);
-    
+
     $rsBoleto   = db_query($sSqlBoleto);
-    
-    if ( !$rsBoleto) {      
+
+    if ( !$rsBoleto) {
       throw new Exception('Erro ao consultar informações do boleto.');
     }
 
     if ( pg_num_rows($rsBoleto) == 0 ) {
       throw new Exception('Nenhum boleto encontrado com código informado: ' . $this->iNumpreBoleto);
     }
-    
+
     $aDados = db_utils::getCollectionByRecord($rsBoleto);
 
-    foreach ($aDados as $oDadosBoleto) { 
-      
+    foreach ($aDados as $oDadosBoleto) {
+
       if ( $oDadosBoleto->tipo_receita == 1 ) {
         $this->nValorHistorico = $oDadosBoleto->valor_historico;
       }
@@ -791,8 +791,8 @@ class EmissaoBoleto {
       if ( in_array($oDadosBoleto->tipo_receita, array(2, 3, 5))) {
         $this->nJurosMulta += $oDadosBoleto->valor;
       }
-      
-      $this->nValorCorrigido += $oDadosBoleto->valor;      
+
+      $this->nValorCorrigido += $oDadosBoleto->valor;
       $this->iCodigoBarras    = $oDadosBoleto->codigo_barras;
       $this->sLinhaDigitavel  = $oDadosBoleto->linha_digitavel;
       $this->iInscricao       = $oDadosBoleto->inscricao;
@@ -802,7 +802,7 @@ class EmissaoBoleto {
       $this->setDataVencimento( new DBDate($oDadosBoleto->data_pagamento) );
       $this->adicionarDebito($oDadosBoleto->numpre_debito, $oDadosBoleto->numpar_debito);
     }
-    
+
     //die(print_r($this));
   }
 
@@ -811,9 +811,9 @@ class EmissaoBoleto {
   **/
   public static function verificaDescontoIss($dataPagamento,$compMes,$compAno){
 
-      
-      	$sqlParametroAliq	=	"SELECT 1 
-  									FROM parissqn 
+
+      	$sqlParametroAliq	=	"SELECT 1
+  									FROM parissqn
   									WHERE q60_aliq_reduzida=1";
   			$rsParametroAliq 	= 	db_query($sqlParametroAliq);
 
@@ -822,13 +822,13 @@ class EmissaoBoleto {
           $compAno++;
         }
 
-        $sqlVencimentoIss   =   "SELECT q82_venc 
+        $sqlVencimentoIss   =   "SELECT q82_venc
                                     FROM confvencissqnvariavel
                                     INNER JOIN cadvenc on q82_codigo=q144_codvenc_desconto
                                     AND EXTRACT(YEAR FROM q82_venc)=$compAno
                                     AND EXTRACT(MONTH FROM q82_venc)=$compMes
-                                    AND q82_venc > '{$dataPagamento}'";                                    
-                                                                
+                                    AND q82_venc >= '{$dataPagamento}'";
+
             $rsVencimento 	= 	db_query($sqlVencimentoIss);
 
           if(pg_num_rows($rsVencimento) >0  && pg_numrows($rsParametroAliq) >0 ){
@@ -837,5 +837,5 @@ class EmissaoBoleto {
 
           return false;
   }
-  
+
 }
