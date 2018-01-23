@@ -892,13 +892,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
                     lAditar = false;
                     return alert("A Quantidade informada para o item " + oItem.descricaoitem.urlDecode() + " deve ser menor ou igual a quantidade original do item.");
                 }
-
-                if ((oItemAdicionar.quantidade == 0 || oItemAdicionar.valorunitario == 0)
-                    && ([6, 8, 13].indexOf(parseInt(oParam.tipoalteracaoaditivo)) === -1)) {
-
-                    lAditar = false;
-                    return alert("Os itens marcados para aditamento devem possuir quantidade e valor unitário.");
-                }
+                /**
+                 *Comentado para permitir aditar com quantidade 0 conforme OC 5177
+                **/
+                //if ((oItemAdicionar.quantidade == 0 || oItemAdicionar.valorunitario == 0)
+                //    && ([6, 8, 13].indexOf(parseInt(oParam.tipoalteracaoaditivo)) === -1)) {
+                //
+                //    lAditar = false;
+                //    return alert("Os itens marcados para aditamento devem possuir quantidade e valor unitário.");
+                //}
 
                 /**
                  * Validamos o total do item com as dotacoes quando não for aditamento de prazo
