@@ -503,8 +503,12 @@ class cl_controleext {
                         k168_previni,
                         k168_prevfim,
                         k168_vlrprev
-      FROM
-         (SELECT slipsNaoEstornados.lancamento,
+      FROM conplanoreduz 
+      JOIN controleext ON k167_codcon = c61_codcon
+      JOIN controleextvlrtransf ON k168_codprevisao = k167_sequencial
+      JOIN conplano ON c60_codcon = c61_codcon
+      LEFT JOIN
+      (SELECT slipsNaoEstornados.lancamento,
                  slipsNaoEstornados.cod_slip,
                  slipsNaoEstornados.data_recebimento,
                  k17_credito AS conta_banc,
@@ -533,15 +537,15 @@ class cl_controleext {
                    {$sWhereConta})
               {$sWhereDatas}
           ORDER BY slipsNaoEstornados.data_recebimento) AS geral
-      JOIN conplanoreduz ON c61_reduz = geral.conta_banc
-      JOIN controleext ON k167_codcon = c61_codcon
-      JOIN controleextvlrtransf ON k168_codprevisao = k167_sequencial
-      JOIN conplano ON c60_codcon = c61_codcon
-      WHERE k168_mescompet = EXTRACT (MONTH FROM data_recebimento)
-      AND geral.data_recebimento >= k167_dtcad;
+          ON c61_reduz = geral.conta_banc AND geral.data_recebimento >= k167_dtcad
+          AND k168_mescompet = EXTRACT (MONTH FROM data_recebimento)
+      WHERE 1=1  
+      
       ";
 
+//    print_r($sSQL);die();
     $rsContas = db_query($sSQL);
+//    db_criatabela($rsContas);die();
 
     if (pg_num_rows($rsContas) === 0) {
       throw new Exception("Não há dados para os filtros selecionados", 1);
