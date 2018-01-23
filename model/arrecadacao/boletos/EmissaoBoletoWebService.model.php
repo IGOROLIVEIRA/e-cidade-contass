@@ -83,9 +83,9 @@ class EmissaoBoletoWebService extends EmissaoBoleto{
     /**
      * If verificar numpre
      *
-     * Esta fun√ß√£o foi alterada devido ao fato de que os parametros estavam na ordem errada ($iNumpreDebito, $iNumparDebito, $sData)
-     * Dessa forma, o numpar era sempre a data do debito. Al√©m disso, a numpar n√£o era passado, dessa forma foi necess√°rio
-     * criar a estrutura de condi√ß√£o abaixo para povoar o numpar.
+     * Esta funÁ„o foi alterada devido ao fato de que os parametros estavam na ordem errada ($iNumpreDebito, $iNumparDebito, $sData)
+     * Dessa forma, o numpar era sempre a data do debito. AlÈm disso, a numpar n„o era passado, dessa forma foi necess·rio
+     * criar a estrutura de condiÁ„o abaixo para povoar o numpar.
      *
      */
     
