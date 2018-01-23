@@ -191,9 +191,9 @@ class cl_metareal102018
                                ,$this->si171_codsubfuncao
                                ,$this->si171_codprograma
                                ,$this->si171_idacao
-                               ,$this->si171_idsubacao
+                               ,'$this->si171_idsubacao'
                                ,$this->si171_metarealizada
-                               ,$this->si171_justificativa
+                               ,'$this->si171_justificativa'
                                ,$this->si171_mes 
                                ,$this->si171_instit 
                       )";

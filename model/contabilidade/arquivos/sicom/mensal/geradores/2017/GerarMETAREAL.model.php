@@ -50,7 +50,7 @@ class GerarMETAREAL extends GerarAM
         $aCSVMETAREAL10['si171_codsubfuncao']   = $this->padLeftZero($aMETAREAL10['si171_codsubfuncao'], 3);
         $aCSVMETAREAL10['si171_codprograma']    = $this->padLeftZero($aMETAREAL10['si171_codprograma'], 4);
         $aCSVMETAREAL10['si171_idacao']         = $this->padLeftZero($aMETAREAL10['si171_idacao'], 4);
-        $aCSVMETAREAL10['si171_idsubacao']      = $this->padLeftZero($aMETAREAL10['si171_idsubacao'], 4);
+        $aCSVMETAREAL10['si171_idsubacao']      = ($aMETAREAL10['si171_idsubacao'] == 0)? ' ' : $this->padLeftZero($aMETAREAL10['si171_idsubacao'], 4);
         $aCSVMETAREAL10['si171_metarealizada']  = $this->sicomNumberReal($aMETAREAL10['si171_metarealizada'], 2);
         $aCSVMETAREAL10['si171_justificativa']  = substr($aMETAREAL10['si171_justificativa'], 0, 1000);
 
