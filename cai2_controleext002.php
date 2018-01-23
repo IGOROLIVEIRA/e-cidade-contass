@@ -11,6 +11,7 @@ $oControleExt = new cl_controleext();
 $aConsulta = array();
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
+//print_r($aFiltros);die();
 
 try {
 
@@ -32,6 +33,7 @@ try {
   }
 
   $aConsulta = $oControleExt->getRecebimentosELancamentos($iCodConta, $oDatas);
+//  print_r($aConsulta);die();
 
 } catch (Exception $e) {
 
@@ -43,23 +45,22 @@ try {
 $aContas = array();
 
 foreach ($aConsulta as $aConta) {
-
+//  print_r($aConta);die();
   $iConta = $aConta['k167_codcon'];
   $iMes   = $aConta['k168_mescompet'];
   $iLancamento = $aConta['lancamento'];
-
   if (!isset($aContas[$iConta])) {
 
     $oNovaConta = new stdClass();
     $oNovaConta->codigo     = $iConta;
     $oNovaConta->descricao  = $aConta['c60_descr'];
     $oNovaConta->previsao   = $aConta['k167_prevanu'];
+
     $oNovaConta->previsoesMensais = array();
 
     $aContas[$iConta] = $oNovaConta;
 
   }
-
 
   if (!isset($aContas[$iConta]->previsoesMensais[$iMes])) {
 
@@ -68,6 +69,7 @@ foreach ($aConsulta as $aConta) {
     $oNovaPrevisao->dataInicio    = $aConta['k168_previni'];
     $oNovaPrevisao->dataFinal     = $aConta['k168_prevfim'];
     $oNovaPrevisao->valorPrevisto = $aConta['k168_vlrprev'];
+
     $oNovaPrevisao->lancamentos   = array();
 
     $aContas[$iConta]
@@ -175,6 +177,8 @@ $totalPrevistos = 0;
         </tr>
 
         <!-- recebimentos mensais -->
+
+
         <?php foreach ($aConta->previsoesMensais as $recebimento): ?>
         <?php $valorTotalPrevisao = 0; ?>
 
@@ -202,8 +206,9 @@ $totalPrevistos = 0;
           <td class="s4">Diferença Previsto (anual)</td>
         </tr>
 
+
           <?php foreach ($recebimento->lancamentos as $lancamento): ?>
-          <?php
+            <?php
             $valorTotalPrevisao += $lancamento->valorRecebido;
             $totalRecebidos += $lancamento->valorRecebido;
           ?>
@@ -238,6 +243,7 @@ $totalPrevistos = 0;
 
         <?php
           $totalPrevistos += $recebimento->valorPrevisto;
+//          print_r($totalPrevistos);
         ?>
         <?php endforeach; // recebimentos mensais ?>
 
