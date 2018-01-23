@@ -93,9 +93,9 @@ switch($oParam->exec) {
          $lOrigemEmpenho = true;
        }
 
-       if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_VIGENCIA) {
-         continue;
-       }
+//       if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_VIGENCIA) {
+//         continue;
+//       }
        $iTipoPosicao =  $oPosicaoContrato->getTipo();
 
        /**

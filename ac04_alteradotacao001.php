@@ -77,6 +77,21 @@ if(isset($excluir)){
 }
 if(isset($adicionar)){
   $material = key($adicionar);
+    /**
+     * Pega quantidade da ultima posição
+     */
+  $sSqlVlr = " SELECT ac20_sequencial,
+                      ac20_valorunitario,
+                      ac20_valortotal
+               FROM acordoposicao
+               JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+               WHERE ac20_acordoposicao =
+                    (SELECT max(ac26_sequencial)
+                     FROM acordoposicao
+                     WHERE ac26_acordo = $codigo_acordo1[$material])";
+    $oResultVlr = db_query($sSqlVlr);
+    $oResultVlr = db_utils::getColectionByRecord($oResultVlr);
+
   //verifica se existe a dotação cadastrada
   $sSqlDotacao = "SELECT * FROM orcdotacao WHERE o58_coddot = '".$codigo_dotacao[$material]."' AND o58_anousu = '".db_getsession("DB_anousu")."'";
   //verifica se existe a relacao
@@ -105,7 +120,7 @@ if(isset($adicionar)){
   JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
   JOIN acordo ON ac26_acordo = ac16_sequencial
   JOIN pcmater ON ac20_pcmater = pc01_codmater
-  WHERE ac16_sequencial = '".$codigo_acordo1[$material]."' AND ac20_pcmater = '".$codigo_material[$material]."' AND ac22_coddot = '".$codigo_dotacao[$material]."' AND ac20_acordoposicao = '".$codigo_posicao[$material]."' AND o58_anousu = '".db_getsession("DB_anousu")."' AND ac22_anousu = '".db_getsession("DB_anousu")."' AND ac22_acordoitem = '".$codigo_acordo_item[$material]."' AND ac26_acordoposicaotipo <> 6 ORDER BY ac20_acordoposicao DESC, ac20_pcmater ASC";
+  WHERE ac16_sequencial = '".$codigo_acordo1[$material]."' AND ac20_pcmater = '".$codigo_material[$material]."' AND ac22_coddot = '".$codigo_dotacao[$material]."' AND ac20_acordoposicao = '".$codigo_posicao[$material]."' AND o58_anousu = '".db_getsession("DB_anousu")."' AND ac22_anousu = '".db_getsession("DB_anousu")."' AND ac22_acordoitem = '".$codigo_acordo_item[$material]."' ORDER BY ac20_acordoposicao DESC, ac20_pcmater ASC";
 
   if(pg_numrows(db_query($sSqlDotacao)) == 0 || pg_numrows(db_query($sSqlDotacaoAcordo)) > 0){
     //significa que há a relação ou a dotação nao existe
@@ -113,12 +128,13 @@ if(isset($adicionar)){
     echo "alert('Operação inválida. Verifique se existe a dotação ou se ela já está vinculada a este ítem.');";
     echo "</script>";
   }else if(pg_numrows(db_query($sSqlDotacao)) > 0 && pg_numrows(db_query($sSqlDotacaoAcordo)) == 0){
-    $sInsert = "INSERT INTO acordoitemdotacao (ac22_sequencial, ac22_coddot,ac22_anousu,ac22_acordoitem)
+    $sInsert = "INSERT INTO acordoitemdotacao
     VALUES (
-    (select nextval('acordoitemdotacao_ac22_sequencial_seq')), '".$codigo_dotacao[$material]."',
-    '".db_getsession("DB_anousu")."',
-    '".$codigo_acordo_item[$material]."')";
-
+    (select nextval('acordoitemdotacao_ac22_sequencial_seq')), ".$codigo_dotacao[$material].",
+    ".db_getsession("DB_anousu").",
+    ".$codigo_acordo_item[$material].",
+    ".$oResultVlr[0]->ac20_valorunitario.",
+    ".$oResultVlr[0]->ac20_valortotal.")";
     $insert = db_query($sInsert);
     if($insert){
      echo "<script>";
@@ -168,10 +184,10 @@ if(isset($codigo_acordo)){
   JOIN acordo ON ac26_acordo = ac16_sequencial
   JOIN cgm ON ac16_contratado = z01_numcgm
   JOIN pcmater ON ac20_pcmater = pc01_codmater
-  WHERE  ac20_acordoposicao = (SELECT max(ac26_sequencial) FROM acordoposicao where ac26_acordo = '".$codigo_acordo."' AND ac26_acordoposicaotipo <> 6) AND ac16_sequencial = '".$codigo_acordo."' AND ac26_acordoposicaotipo <> 6 ORDER BY ac20_acordoposicao DESC, ac20_ordem asc, ac22_coddot ASC ";
+  WHERE  ac20_acordoposicao = (SELECT max(ac26_sequencial) FROM acordoposicao where ac26_acordo = '".$codigo_acordo."') AND ac16_sequencial = '".$codigo_acordo."' ORDER BY ac20_acordoposicao DESC, ac20_ordem asc, ac22_coddot ASC ";
   $oResult = db_query($sSql);
   $oResult = db_utils::getColectionByRecord($oResult);
-  //echo $sSql;
+//  echo $sSql;
 
 }
 ?>
