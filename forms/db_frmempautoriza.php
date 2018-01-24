@@ -161,7 +161,7 @@ db_app::load("DBFormCache.js");
           db_input('e54_tipol',8,$Ie54_tipol,true,'text',3);
         }
       ?>
-      <strong>Número da Licitação:</strong>
+      <strong>Número do Processo:</strong>
       <? db_input('e54_numerl', 7,"",true,'text',isset($emprocesso)&&$emprocesso==true?"1":$dop); ?>
       <? db_input('dop',8,1,true,'hidden'); ?>
     </td>
