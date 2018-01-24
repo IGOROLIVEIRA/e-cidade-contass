@@ -817,17 +817,12 @@ class EmissaoBoleto {
   									WHERE q60_aliq_reduzida=1";
   			$rsParametroAliq 	= 	db_query($sqlParametroAliq);
 
-        if($compMes==12){
-          $compMes=1;
-          $compAno++;
-        }
-
         $sqlVencimentoIss   =   "SELECT q82_venc
                                     FROM confvencissqnvariavel
                                     INNER JOIN cadvenc on q82_codigo=q144_codvenc_desconto
-                                    AND EXTRACT(YEAR FROM q82_venc)=$compAno
-                                    AND EXTRACT(MONTH FROM q82_venc)=$compMes
-                                    AND q82_venc >= '{$dataPagamento}'";
+                                    AND q82_parc = {$compMes}
+                                    AND q82_venc >= '{$dataPagamento}'
+                                    AND q82_ano = {$compAno}";
 
             $rsVencimento 	= 	db_query($sqlVencimentoIss);
 
