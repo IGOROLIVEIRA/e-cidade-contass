@@ -820,8 +820,7 @@ class EmissaoBoleto {
         $sqlVencimentoIss   =   "SELECT q82_venc
                                     FROM confvencissqnvariavel
                                     INNER JOIN cadvenc on q82_codigo=q144_codvenc_desconto
-                                    WHERE
-                                    AND q82_parc = {$compMes}
+                                    WHERE q82_parc = {$compMes}
                                     AND q82_venc >= '{$dataPagamento}'
                                     AND q82_ano = {$compAno}";
 
