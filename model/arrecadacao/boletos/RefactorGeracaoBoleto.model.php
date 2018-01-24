@@ -1,38 +1,38 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
  * Dependencias
- */   
+ */
 db_app::import('DBDate');
 db_app::import('recibo');
 
 /**
- * Refactor de geracao de boleto 
+ * Refactor de geracao de boleto
  *
  * @author Jeferson Belmiro <jeferson.belmiro@dbseller.com.br>
  *
@@ -41,15 +41,15 @@ db_app::import('recibo');
 class RefactorGeracaoBoleto {
 
   /**
-   * variaveis o array $aDados 
+   * variaveis o array $aDados
    */
   private $aDebitosSelecionados = array();
-  
+
   /**
    * codigo do modelo de impressão
    */
   private $iCodigoModeloImpressao;
-  
+
 
   /**
    * Array com string contendo informacoes do numpre como numpar e receita
@@ -73,8 +73,8 @@ class RefactorGeracaoBoleto {
   private $nDescontoAliqReduz;
 
   /**
-   * Construtor 
-   * 
+   * Construtor
+   *
    * @access public
    * @exception - sem transacao ativa
    * @return void
@@ -87,9 +87,9 @@ class RefactorGeracaoBoleto {
   }
 
   /**
-   * Define as variaveis internas do refactor 
-   * 
-   * @param string $sVariavel - nome da propriedade 
+   * Define as variaveis internas do refactor
+   *
+   * @param string $sVariavel - nome da propriedade
    * @param mixed $valor      - valor da propriedade
    * @access public
    * @return void
@@ -100,28 +100,28 @@ class RefactorGeracaoBoleto {
       throw new Exception(__CLASS__ . ": Propriedade {$sVariavel} não encontrada.");
     }
 
-    $this->{$sVariavel} = $valor; 
+    $this->{$sVariavel} = $valor;
   }
 
   /**
-   * Adicionar debito 
+   * Adicionar debito
    * Adiciona ao array aDebitosSelecionados stdClass com numpre, numpar e receita
    * e adciona no array aDadosNumpre com chave CHECK0,1,2... com string contendo numpre, numpar e receita
-   * 
-   * @param integer $iNumpre 
-   * @param integer $iNumpar 
-   * @param integer $iReceita 
+   *
+   * @param integer $iNumpre
+   * @param integer $iNumpar
+   * @param integer $iReceita
    * @access public
    * @return bool
    */
   public function adicionarDebito( $iNumpre, $iNumpar, $iReceita = 0 ) {
-    
+
     $oDadosDebito                 = new stdClass();
-    $oDadosDebito->iNumpre        = $iNumpre; 
-    $oDadosDebito->iNumpar        = $iNumpar; 
-    $oDadosDebito->iReceita       = $iReceita; 
+    $oDadosDebito->iNumpre        = $iNumpre;
+    $oDadosDebito->iNumpar        = $iNumpar;
+    $oDadosDebito->iReceita       = $iReceita;
     $this->aDebitosSelecionados[] = $oDadosDebito;
-    
+
     $sChave        = 'CHECK' . count($this->aDadosNumpre);
     $sDadosNumpre  = "N{$iNumpre}";
     $sDadosNumpre .= "P{$iNumpar}";
@@ -132,7 +132,7 @@ class RefactorGeracaoBoleto {
   }
 
   /**
-   * processar 
+   * processar
    *
    * @access public
    * @return void
@@ -158,7 +158,7 @@ class RefactorGeracaoBoleto {
      */
     $sSqlParametros         = $oDaoNumpref->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'));
     $rsSqlParametros        = $oDaoNumpref->sql_record($sSqlParametros);
-    
+
     if ( $rsSqlParametros && pg_num_rows($rsSqlParametros) ) {
 
       $oParametrosTributario = db_utils::fieldsMemory($rsSqlParametros,0);
@@ -192,7 +192,7 @@ class RefactorGeracaoBoleto {
     $DB_DATACALC    = $tsDataOperacao;
 
 
-    
+
 
     if (isset($this->k00_dtoper) ) {
       $dVencimento  = implode("-",array_reverse(explode("/",$this->k00_dtoper)));
@@ -205,7 +205,7 @@ class RefactorGeracaoBoleto {
     /*
      * Caso atributo $this->geracarne for != "" eh uma emissao de carne
      *   Caso contrario eh uma emissao de recibo
-     */    
+     */
     $lEmissaoCarne  = false;
     $lEmissaoRecibo = false;
 
@@ -220,7 +220,7 @@ class RefactorGeracaoBoleto {
      */
     $sSqlArretipo           = $oDaoArretipo->sql_query($this->tipo_debito, "*","");
     $rsSqlArretipo          = $oDaoArretipo->sql_record($sSqlArretipo);
-    $oArretipo              = db_utils::fieldsMemory($rsSqlArretipo, 0);   
+    $oArretipo              = db_utils::fieldsMemory($rsSqlArretipo, 0);
 
     $aTipoInicial[0]               = 18;
     $aTipoInicial[1]               = 12;
@@ -257,7 +257,7 @@ class RefactorGeracaoBoleto {
       foreach ($oDebitosFormulario->aValidaNumpre as $iNumpre) {
 
         $aNumpresOrigem = array();
-        $aProcessosForo = $oDaoProcessoForoPartilhaCusta->getProcessoForoByNumprePacelamento($iNumpre, $oArretipo->k03_tipo);       
+        $aProcessosForo = $oDaoProcessoForoPartilhaCusta->getProcessoForoByNumprePacelamento($iNumpre, $oArretipo->k03_tipo);
         if (count($aProcessosForo) == 0 ) {
 
           $iTipoModeloRecibo  = 2;
@@ -275,7 +275,7 @@ class RefactorGeracaoBoleto {
             foreach ($aPartilhas as $oProcessoForoPartilha) {
 
               $iTipoLancamento = $oProcessoForoPartilha->v76_tipolancamento;
-              $dtLancamento    = $oProcessoForoPartilha->v76_dtpagamento;  
+              $dtLancamento    = $oProcessoForoPartilha->v76_dtpagamento;
 
               if ( $iTipoLancamento == 2 || $iTipoLancamento == 3 || ($iTipoLancamento == 1 && !empty($dtLancamento) ) ) {
 
@@ -288,12 +288,12 @@ class RefactorGeracaoBoleto {
                 $iTipoModeloRecibo = 19;
                 $iTipoModeloCarne  = 20;
               }
-            } 
+            }
           } else {
 
             $iTipoModeloRecibo = 19;
             $iTipoModeloCarne  = 20;
-          } 
+          }
         } else {
 
           throw new Exception("Existe mais de um processo do foro encontrado para os débitos selecionados");
@@ -306,15 +306,15 @@ class RefactorGeracaoBoleto {
       $iTipoModeloRecibo  = 2;
       $iTipoModeloCarne   = 1;
     }
-    
+
     /*
      * validações para emissão de guia atravvez da nota
-     * cadtipmod 21 
+     * cadtipmod 21
      */
     if (!empty($this->iCodigoModeloImpressao)) {
       $iTipoModeloRecibo = $this->iCodigoModeloImpressao;
     }
-    
+
     $oRetorno->iTipoModeloRecibo = $iTipoModeloRecibo;
     $oRetorno->iTipoModeloCarne  = $iTipoModeloCarne;
 
@@ -351,8 +351,8 @@ class RefactorGeracaoBoleto {
     $sSqlRegraEmissao .= "           and k48_instit     = {$iInstit}                                                                                    \n ";
     $sSqlRegraEmissao .= "           and ( case                                                                                                         \n ";
     $sSqlRegraEmissao .= "                   when modcarnepadraotipo.k49_modcarnepadrao is not null then                                                \n ";
-    $sSqlRegraEmissao .= "                     modcarnepadraotipo.k49_tipo = {$this->tipo_debito}                                         \n "; 
-    $sSqlRegraEmissao .= "                   else true                                                                                                  \n "; 
+    $sSqlRegraEmissao .= "                     modcarnepadraotipo.k49_tipo = {$this->tipo_debito}                                         \n ";
+    $sSqlRegraEmissao .= "                   else true                                                                                                  \n ";
     $sSqlRegraEmissao .= "                 end )                                                                                                        \n ";
     $sSqlRegraEmissao .= "           and ( case                                                                                                         \n ";
     $sSqlRegraEmissao .= "                   when modcarneexcessao.k36_modcarnepadrao is not null then                                                  \n ";
@@ -365,11 +365,11 @@ class RefactorGeracaoBoleto {
     $sSqlRegraEmissao .= "                {$oRetorno->iMinimoParcelasGeral} between k48_parcini and k48_parcfim                                         \n ";
     $sSqlRegraEmissao .= "               )                                                                                                              \n ";
     $sSqlRegraEmissao .= "           and k48_cadtipomod in ({$iTipoModeloReciboQuery})                                                                    \n ";
-    $sSqlRegraEmissao .= "         group by k49_tipo, k36_ip, k48_parcini, k48_parcfim, k48_cadconvenio, ar11_cadtipoconvenio, k03_tipo, k48_cadtipomod \n ";    
+    $sSqlRegraEmissao .= "         group by k49_tipo, k36_ip, k48_parcini, k48_parcfim, k48_cadconvenio, ar11_cadtipoconvenio, k03_tipo, k48_cadtipomod \n ";
     $sSqlRegraEmissao .= "       ) as x                                                                    \n ";
     $rsSqlRegraEmissao = db_query($sSqlRegraEmissao);
 
-    
+
     if ( !$rsSqlRegraEmissao ) {
       throw new Exception(pg_last_error());
     }
@@ -379,7 +379,7 @@ class RefactorGeracaoBoleto {
     /**
      * Valida se existe alguma regra de emissao cadastrada no sistema
      */
-    if ($iRowsRegraEmissao > 0) {  
+    if ($iRowsRegraEmissao > 0) {
 
       $aRegrasEmissao           = db_utils::getCollectionByRecord($rsSqlRegraEmissao);
       $aRegrasEmissaoEspecifica = array();
@@ -394,11 +394,11 @@ class RefactorGeracaoBoleto {
           $aRegrasEmissaoEspecifica[] = $oRegraEmissao;
         } else {
           $aRegrasEmissaoGeral[] = $oRegraEmissao;
-        }         
+        }
       }
 
       if (count($aRegrasEmissaoEspecifica) > 0 ) {
-        $aRegrasEmissao = $aRegrasEmissaoEspecifica;        
+        $aRegrasEmissao = $aRegrasEmissaoEspecifica;
       } else {
         $aRegrasEmissao = $aRegrasEmissaoGeral;
       }
@@ -420,7 +420,7 @@ class RefactorGeracaoBoleto {
         }
 
         /**
-         * Instancia novo recibo para ser gerado ou não 
+         * Instancia novo recibo para ser gerado ou não
          */
         if ($lCobrancaRegistrada || $sGeraCarne == "") {
           $oRecibo = new recibo(2, null, 1);
@@ -473,12 +473,12 @@ class RefactorGeracaoBoleto {
 
                 $iTotalRegistros = $oDebitosFormulario->oReciboDesconto->iTotalRegistros;
                 $nValorDesconto  = $this->reciboDesconto(
-                  $aValores["Numpre"], 
-                  $aValores["Numpar"], 
-                  $oDebitosFormulario->oReciboDesconto->iTipoDebito, 
-                  $oDebitosFormulario->oReciboDesconto->iTipoDebito, 
-                  $oDebitosFormulario->oReciboDesconto->sWhereLoteador, 
-                  $oDebitosFormulario->oReciboDesconto->iTotalSelecionados, 
+                  $aValores["Numpre"],
+                  $aValores["Numpar"],
+                  $oDebitosFormulario->oReciboDesconto->iTipoDebito,
+                  $oDebitosFormulario->oReciboDesconto->iTipoDebito,
+                  $oDebitosFormulario->oReciboDesconto->sWhereLoteador,
+                  $oDebitosFormulario->oReciboDesconto->iTotalSelecionados,
                   $iTotalRegistros,
                   $this->ver_matric,
                   $this->ver_inscr
@@ -492,7 +492,7 @@ class RefactorGeracaoBoleto {
 
               /**
                * Adiciona numpre e numpar ao recibo
-               */              
+               */
               $oRecibo->setDescontoReciboWeb($aValores["Numpre"], $aValores["Numpar"], $nValorDesconto);
               $oRecibo->addNumpre($aValores["Numpre"], $aValores["Numpar"]);
 
@@ -510,6 +510,9 @@ class RefactorGeracaoBoleto {
                 $sSqlRecibosEmitidos.= "    and not exists (select 1                                                  \n";
                 $sSqlRecibosEmitidos.= "                      from cancrecibopaga                                     \n";
                 $sSqlRecibosEmitidos.= "                     where cancrecibopaga.k134_numnov = recibopaga.k00_numnov)\n";
+                $sSqlRecibosEmitidos.= "    and not exists (select 1                                                  \n";
+                $sSqlRecibosEmitidos.= "                      from issvar                                     \n";
+                $sSqlRecibosEmitidos.= "                     where issvar.q05_numpre = recibopaga.k00_numpre and issvar.q05_numpar = recibopaga.k00_numpar)\n";
 
                 $rsSqlRecibosEmitidos   = db_query($sSqlRecibosEmitidos);
                 $aRecibosEmitidos       = db_utils::getCollectionByRecord($rsSqlRecibosEmitidos);
@@ -569,19 +572,19 @@ class RefactorGeracaoBoleto {
             /**
              * Compara o array de debitos e parcelas selecionadas e debitos e parcelas emitidas
              * Caso exista caso para comparação apenas faz reemissao do recibo
-             * Caso algum numpre ou numpar esteja faltanto ou sobrando emite um novo recibo. 
+             * Caso algum numpre ou numpar esteja faltanto ou sobrando emite um novo recibo.
              */
             $aComparaBanco = explode("|", $oNumpreNumpar->numpre_numpar);
-            $iDiferenca[]  = count(array_diff($aCompara[$oRegraEmissao->k48_sequencial], $aComparaBanco) ) + 
+            $iDiferenca[]  = count(array_diff($aCompara[$oRegraEmissao->k48_sequencial], $aComparaBanco) ) +
               count(array_diff($aComparaBanco, $aCompara[$oRegraEmissao->k48_sequencial]) );
 
           }
         }
 
-        if ( (!in_array(0, $iDiferenca) && ($lCobrancaRegistrada || $sGeraCarne == "") && $this->lNovoRecibo) || ($sGeraCarne == "" && !$lConfReemissaoRecibo ) ) {  
+        if ( (!in_array(0, $iDiferenca) && ($lCobrancaRegistrada || $sGeraCarne == "") && $this->lNovoRecibo) || ($sGeraCarne == "" && !$lConfReemissaoRecibo ) ) {
 
           /**
-           * Valida se foram vinculados debitos ao recibo criado, 
+           * Valida se foram vinculados debitos ao recibo criado,
            * se verdadeiro tenta gerar o recibo
            */
 
@@ -595,8 +598,8 @@ class RefactorGeracaoBoleto {
               if (!$lForcaVencimento) {
 
                 /**
-                 * 
-                 * Caso a data do sistema foi maior que as datas de vencimento, significa que parcelas estão vencidas e 
+                 *
+                 * Caso a data do sistema foi maior que as datas de vencimento, significa que parcelas estão vencidas e
                  * a data de vencimento será a data do sistema. Caso a data do sistema for menor que a data de vencimento
                  * a data de vencimento será a menor dentre as das parcelas selecionadas
                  */
@@ -610,7 +613,7 @@ class RefactorGeracaoBoleto {
                 $sSqlVenc .= "where k00_numpre in (".implode(", ", $aNumpresRecibo).")      ";
                 $sSqlVenc .= "  and k00_numpar in (".implode(", ", $aParcelasRecibo).")     ";
 
-                $rsVencimento = db_query($sSqlVenc);  
+                $rsVencimento = db_query($sSqlVenc);
 
                 $dtDataVenc   = db_utils::fieldsMemory($rsVencimento, 0)->k00_dtvenc;
 
@@ -625,8 +628,8 @@ class RefactorGeracaoBoleto {
                   $sUltimoDiaMenos5   = "select ultimo_dia - '5 day'::interval as ultimo_dia_menos_5 ";
                   $sUltimoDiaMenos5  .= "  from ( select ( substr(proximo_mes::text,1,7) || '-01'::text)::date - '1 day'::interval as ultimo_dia ";
                   $sUltimoDiaMenos5  .= "           from ( select '$db_datausu'::date + '1 month'::interval as proximo_mes ) as x ) as y ";
-                  $rsUltimoDiaMenos5 = db_query($sUltimoDiaMenos5); 
-                  $oUltimoDiaMenos5  = db_utils::fieldsMemory($rsUltimoDiaMenos5,0);  
+                  $rsUltimoDiaMenos5 = db_query($sUltimoDiaMenos5);
+                  $oUltimoDiaMenos5  = db_utils::fieldsMemory($rsUltimoDiaMenos5,0);
 
                   $db_datausu_dia = substr($db_datausu,8,2);
                   $oUltimoDiaMenos5->dia = substr( $oUltimoDiaMenos5->ultimo_dia_menos_5,8,2);
@@ -639,8 +642,8 @@ class RefactorGeracaoBoleto {
 
                   $sUltimoDia   = "select ( substr(proximo_mes::text,1,7) || '-01'::text)::date - '1 day'::interval as ultimo_dia ";
                   $sUltimoDia  .= "  from ( select '$db_datausu'::date + '$iSomaDia month'::interval as proximo_mes ) as x";
-                  $rsUltimoDia = db_query($sUltimoDia); 
-                  $oUltimoDia  = db_utils::fieldsMemory($rsUltimoDia,0);  
+                  $rsUltimoDia = db_query($sUltimoDia);
+                  $oUltimoDia  = db_utils::fieldsMemory($rsUltimoDia,0);
                   $db_datausu  = $oUltimoDia->ultimo_dia;
 
                   $db_datausu_mes = substr($db_datausu,5,2);
@@ -660,7 +663,7 @@ class RefactorGeracaoBoleto {
                * gera Recibo
                */
               if ( !empty($oRegraEmissao->ar13_sequencial) ) {
-                $iCodigoConvenioCobranca = $oRegraEmissao->ar13_sequencial; 
+                $iCodigoConvenioCobranca = $oRegraEmissao->ar13_sequencial;
               } else {
                 $iCodigoConvenioCobranca = 0;
               }
@@ -675,7 +678,7 @@ class RefactorGeracaoBoleto {
               $k03_numnov           = $oRecibo->getNumpreRecibo();
               $aRecibopaga_numnov[] = $k03_numnov;
 
-              
+
               //Adiciona desconto ao recibo
               if (!empty($this->iCodigoModeloImpressao) && !empty($k03_numnov) && $this->nDescontoAliqReduz>0) {
                 $aDescontoAliquota = $this->nDescontoAliqReduz * -1;
@@ -695,10 +698,10 @@ class RefactorGeracaoBoleto {
               }
 
 
-              if (in_array($oRegraEmissao->k03_tipo, $aTipoInicial) && $oRegraEmissao->ar11_cadtipoconvenio == 7) {              
+              if (in_array($oRegraEmissao->k03_tipo, $aTipoInicial) && $oRegraEmissao->ar11_cadtipoconvenio == 7) {
 
                 /**
-                 * Valida se existe custas para o recibo gerado 
+                 * Valida se existe custas para o recibo gerado
                  */
                 $sSqlValidaCustas     = $oDaoProcessoForoPartilhaCusta->sql_query_file("", "*", "", "v77_numnov ={$oRecibo->getNumpreRecibo()} ");
                 $rsSqlValidaCustas    = $oDaoProcessoForoPartilhaCusta->sql_record($sSqlValidaCustas);
@@ -746,9 +749,9 @@ class RefactorGeracaoBoleto {
                     $sWherePartilhaProcesso   .= "   v76_tipolancamento in(2, 3)                             ";
                     $sWherePartilhaProcesso   .= " )                                                         ";
 
-                    $sSqlPartilhaProcesso      = $oDaoProcessoForoPartilha->sql_query("", 
-                      "v76_sequencial", 
-                      "", 
+                    $sSqlPartilhaProcesso      = $oDaoProcessoForoPartilha->sql_query("",
+                      "v76_sequencial",
+                      "",
                       $sWherePartilhaProcesso
                     );
                     $rsSqlPartilhaProcesso     = db_query($sSqlPartilhaProcesso);
@@ -832,7 +835,7 @@ class RefactorGeracaoBoleto {
 
                         if ($oDaoProcessoForoPartilhaCusta->erro_status == "0") {
                           throw new Exception($oDaoProcessoForoPartilhaCusta->erro_msg);
-                        }                    
+                        }
                       }
                       /**
                        * Adiciona ao array o Recibo caso sejam emitidas custas para o mesmo
@@ -844,9 +847,9 @@ class RefactorGeracaoBoleto {
                       unset($oDadosEnvio);
                     }//
 
-                  }//FOREACH 
+                  }//FOREACH
 
-                }//Fim validação Processo Foro 
+                }//Fim validação Processo Foro
 
                 /**
                  *  Geração do Convenio de Cobrança
@@ -858,28 +861,28 @@ class RefactorGeracaoBoleto {
                 if (!isset($nValorTotalCustas) && empty($nValorTotalCustas)) {
                   $nValorTotalCustas = 0.00;
                 }
-                
+
                 $nValorRecibo       = $oRecibo->getTotalRecibo() + $nValorTotalCustas;
                 $sValorCodigoBarras = str_pad( number_format( $nValorRecibo, 2, "", "" ), 11, "0", STR_PAD_LEFT);
 
                 $oConvenio = new convenio(
-                  $oRegraEmissao->k48_cadconvenio,     
-                  $oRecibo->getNumpreRecibo(),       
-                  0,                                 
-                  $nValorRecibo,                     
-                  $sValorCodigoBarras,               
-                  $oRecibo->getDataRecibo(),         
+                  $oRegraEmissao->k48_cadconvenio,
+                  $oRecibo->getNumpreRecibo(),
+                  0,
+                  $nValorRecibo,
+                  $sValorCodigoBarras,
+                  $oRecibo->getDataRecibo(),
                   $oArretipo->k00_tercdigrecnormal
-                ); 
+                );
 
             } catch ( Exception $eException ) {
               throw new Exception($eException->getMessage());
             }
           }
-        }  
+        }
 
         /**
-         * Mescla os dados do array com os dados especificos e os com dados que devem ficar em 
+         * Mescla os dados do array com os dados especificos e os com dados que devem ficar em
          * todos os arrays
          */
         $aDadosCompletos[$iIndiceRegra]             = array_merge($aDadosCarne[$iIndiceRegra], $aDadosForm );
@@ -924,7 +927,7 @@ class RefactorGeracaoBoleto {
   }
 
   /**
-   * Retorna os Débitos  selecionados no formulário da CGF  
+   * Retorna os Débitos  selecionados no formulário da CGF
    * Com minimo e maximo de parcelas array com combinação de numpre, numpar e receita e string de retorno
    *
    * @param object   $oFormulario - Objeto contentdo os dados do Formulário da CGF
@@ -958,14 +961,14 @@ class RefactorGeracaoBoleto {
           $sSqlInicial .= "        arrecad.k00_numpre,                                                   ";
           $sSqlInicial .= "         arrecad.k00_numpar                                                   ";
           $sSqlInicial .= "    from inicialnumpre                                                        ";
-          $sSqlInicial .= "          inner join arrecad on arrecad.k00_numpre = inicialnumpre.v59_numpre "; 
+          $sSqlInicial .= "          inner join arrecad on arrecad.k00_numpre = inicialnumpre.v59_numpre ";
           $sSqlInicial .= "  where v59_inicial in (".implode(", ", $aInicial).");                          ";
           $rsSqlInicial = db_query($sSqlInicial);
           $aIniciais  = db_utils::getCollectionByRecord($rsSqlInicial);
 
-          foreach ($aIniciais as $oInicial) { 
+          foreach ($aIniciais as $oInicial) {
 
-            $aParcelas[]          = $oInicial->k00_numpar; 
+            $aParcelas[]          = $oInicial->k00_numpar;
             $sValores             = "N". $oInicial->k00_numpre."P".$oInicial->k00_numpar."R0";
             $aChecks["CHECK".$iI] = array("Numpre"=>$oInicial->k00_numpre, "Numpar"=>$oInicial->k00_numpar, "Receita"=>"0", "valor"=>$sValores);
 
@@ -975,7 +978,7 @@ class RefactorGeracaoBoleto {
             $oNumpreNumpar          = new stdClass();
             $oNumpreNumpar->iNumpre = $oInicial->k00_numpre;
             $oNumpreNumpar->iNumpar = $oInicial->k00_numpar;
-            $aObjDebitos[]          = $oNumpreNumpar;          
+            $aObjDebitos[]          = $oNumpreNumpar;
 
 
             $aNumpreValidacao[]   = $oInicial->k00_numpre;
@@ -988,7 +991,7 @@ class RefactorGeracaoBoleto {
 
           /**
            * Formata string Gera Carne
-           */   
+           */
           if ($sChave == "geracarne") {
             $sGeraCarne = $sValor;
           } else {
@@ -1027,7 +1030,7 @@ class RefactorGeracaoBoleto {
             $aChecks["CHECK".$iI]   = array("Numpre"=>$iNumpre, "Numpar"=>$iNumpar, "Receita"=>$iReceita, "valor"=>"N".$sNumpres);
 
             /**
-             * Cria array com os numpres e numpar dos débitos 
+             * Cria array com os numpres e numpar dos débitos
              */
             $oNumpreNumpar          = new stdClass();
             $oNumpreNumpar->iNumpre = $iNumpre;
@@ -1037,17 +1040,17 @@ class RefactorGeracaoBoleto {
             $aNumpreValidacao[]     = $iNumpre;
             $aNumparValidacao[]     = $iNumpar;
             $sRecibos              .= " or (k00_numpre = {$iNumpre} and k00_numpar = {$iNumpar})" ;
-            $iI++;                 
+            $iI++;
           }
 
         } else {
 
           /**
            * Formata string Gera Carne
-           */   
+           */
           if ($sChave == "geracarne") {
             $sGeraCarne = $sValor;
-          } elseif ($sChave == "numpre_unica") { 
+          } elseif ($sChave == "numpre_unica") {
 
             $aDadosForm[$sChave]    = $sValor;
             if(!empty($oFormulario->numpre_unica)){
@@ -1109,9 +1112,9 @@ class RefactorGeracaoBoleto {
         $iI++;
         $oDebitosAgrupados->iNumpre;
 
-        $aChecks["CHECK".$iI]   = array("Numpre" => $oDebitosAgrupados->iNumpre, 
-          "Numpar" => $oDebitosAgrupados->iNumpar, 
-          "Receita"=> $oDebitosAgrupados->iReceit, 
+        $aChecks["CHECK".$iI]   = array("Numpre" => $oDebitosAgrupados->iNumpre,
+          "Numpar" => $oDebitosAgrupados->iNumpar,
+          "Receita"=> $oDebitosAgrupados->iReceit,
           "valor"  => "N".$oDebitosAgrupados->iNumpre.
           "P".$oDebitosAgrupados->iNumpar.
           "R".$oDebitosAgrupados->iReceit
@@ -1257,8 +1260,8 @@ class RefactorGeracaoBoleto {
     $cadtipoparc = 0;
 
     $sqlvenc = "select k00_dtvenc
-      from arrecad 
-      where k00_numpre = $numpre 
+      from arrecad
+      where k00_numpre = $numpre
       and k00_numpar = $numpar";
     $resultvenc = db_query($sqlvenc) or die($sqlvenc);
     if (pg_numrows($resultvenc) == 0) {
@@ -1269,16 +1272,16 @@ class RefactorGeracaoBoleto {
     $dDataUsu = date("Y-m-d",db_getsession("DB_datausu"));
 
     $sqltipoparc = "select k40_codigo,
-      k40_todasmarc, 
+      k40_todasmarc,
       cadtipoparc
-      from tipoparc 
+      from tipoparc
       inner join cadtipoparc    on cadtipoparc     = k40_codigo
       inner join cadtipoparcdeb on k41_cadtipoparc = cadtipoparc
-      where maxparc = 1 
-      and '{$dDataUsu}' >= k40_dtini 
-      and '{$dDataUsu}' <= k40_dtfim 
-      and k41_arretipo   = $tipo $whereloteador 
-      and '$k00_dtvenc' >= k41_vencini 
+      where maxparc = 1
+      and '{$dDataUsu}' >= k40_dtini
+      and '{$dDataUsu}' <= k40_dtfim
+      and k41_arretipo   = $tipo $whereloteador
+      and '$k00_dtvenc' >= k41_vencini
       and '$k00_dtvenc' <= k41_vencfim ";
     if ( ( (int) @$ver_matric > 0 or (int) @$ver_inscr > 0 ) and $oConfig->db21_codcli == 19985 and false ) { // marica/rj
       $sqltipoparc .= " and case when $iTemDesconto = 0 and k40_codigo = 3 then false else true end ";
@@ -1290,17 +1293,17 @@ class RefactorGeracaoBoleto {
     } else {
 
       $sqltipoparc = "select k40_codigo,
-        k40_todasmarc, 
+        k40_todasmarc,
         cadtipoparc
-        from tipoparc 
+        from tipoparc
         inner join cadtipoparc on cadtipoparc = k40_codigo
         inner join cadtipoparcdeb on k41_cadtipoparc = cadtipoparc
-        where maxparc = 1 
-        and k41_arretipo = $tipo 
-        and '{$dDataUsu}' >= k40_dtini 
-        and '{$dDataUsu}' <= k40_dtfim 
+        where maxparc = 1
+        and k41_arretipo = $tipo
+        and '{$dDataUsu}' >= k40_dtini
+        and '{$dDataUsu}' <= k40_dtfim
         $whereloteador
-        and '$k00_dtvenc' >= k41_vencini 
+        and '$k00_dtvenc' >= k41_vencini
         and '$k00_dtvenc' <= k41_vencfim ";
       if ( ( (int) @$ver_matric > 0 or (int) @$ver_inscr > 0 ) and $oConfig->db21_codcli == 19985 and false ) { // marica/rj
         $sqltipoparc .= " and case when $iTemDesconto = 0 and k40_codigo = 3 then false else true end ";
@@ -1323,11 +1326,11 @@ class RefactorGeracaoBoleto {
     } else {
 
       $sqltipoparcdeb = "select k40_codigo, k40_todasmarc
-        from cadtipoparcdeb 
+        from cadtipoparcdeb
         inner join cadtipoparc on k40_codigo = k41_cadtipoparc
-        where k41_cadtipoparc = $cadtipoparc and 
+        where k41_cadtipoparc = $cadtipoparc and
         k41_arretipo = $tipo_debito $whereloteador and
-        '$k00_dtvenc' >= k41_vencini and 
+        '$k00_dtvenc' >= k41_vencini and
         '$k00_dtvenc' <= k41_vencfim ";
       if ( ( (int) @$ver_matric > 0 or (int) @$ver_inscr > 0 ) and $oConfig->db21_codcli == 19985 and false ) { // marica/rj
         $sqltipoparcdeb .= " and case when $iTemDesconto = 0 and k40_codigo = 3 then false else true end ";
