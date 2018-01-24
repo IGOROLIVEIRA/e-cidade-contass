@@ -67,21 +67,38 @@ if(isset($incluir)){
 
 	}else{
 
-     $rsIss = $clissbase->sql_record($clissbase->sql_query($post->q38_inscr));
+    $rsAtivPrint = $cltabativ->sql_record($cltabativ->sql_query_princ($post->q38_inscr));
 
-		 if ($clissbase->numrows > 0){
+    if ($cltabativ->numrows > 0){
 
-       $oIss = db_utils::fieldsMemory($rsIss,0);
-			 if (db_strtotime($dataIni2) < db_strtotime($oIss->q02_dtinic)){
+      $oAtiv = db_utils::fieldsMemory($rsAtivPrint,0);
+      $oDataIni2 = new DBDate($dataIni2);
+      $oDataIni  = new DBDate($oAtiv->q07_datain);
+      if ($oDataIni2->getTimeStamp() < $oDataIni->getTimeStamp()){
 
-         $erro_msg = "Data Inicial menor que a data do início da Atividade.";
-				 $lSqlErro = true;
-				 $clisscadsimples->erro_msg    = $erro_msg;
-				 $clisscadsimples->erro_campo  = "q38_dtinicial";
-				 $clisscadsimples->erro_status = 0;
-			 }
-		 }
+        $erro_msg = "Data Inicial menor que a data do início da atividade principal.";
+        $lSqlErro = true;
+        $clisscadsimples->erro_msg    = $erro_msg;
+        $clisscadsimples->erro_campo  = "q38_dtinicial";
+        $clisscadsimples->erro_status = 0;
+      }
+    } else {
 
+      $rsIss = $clissbase->sql_record($clissbase->sql_query($post->q38_inscr));
+
+      if ($clissbase->numrows > 0) {
+
+        $oIss = db_utils::fieldsMemory($rsIss, 0);
+        if (db_strtotime($dataIni2) < db_strtotime($oIss->q02_dtinic)) {
+
+          $erro_msg = "Data Inicial menor que a data do início da inscricao.";
+          $lSqlErro = true;
+          $clisscadsimples->erro_msg = $erro_msg;
+          $clisscadsimples->erro_campo = "q38_dtinicial";
+          $clisscadsimples->erro_status = 0;
+        }
+      }
+    }
      $sSqlBaixa    = $clisscadsimples->sql_query_baixa(null,'q38_dtinicial,q38_sequencial,q38_inscr,z01_nome',null,"q38_inscr = $q38_inscr and q39_dtbaixa > '$dataIni2'::date");
      $rsIssSimples = db_query($sSqlBaixa);
 
