@@ -822,7 +822,7 @@ class EmissaoBoleto {
                                     INNER JOIN cadvenc on q82_codigo=q144_codvenc_desconto
                                     WHERE q82_parc = {$compMes}
                                     AND q82_venc >= '{$dataPagamento}'
-                                    AND q82_ano = {$compAno}";
+                                    AND q144_ano = {$compAno}";
 
             $rsVencimento 	= 	db_query($sqlVencimentoIss);
 
