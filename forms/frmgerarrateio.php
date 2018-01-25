@@ -75,7 +75,16 @@ $aMeses = array(
           <tbody id="table_entes">
 
           </tbody>
+          <tfoot>
+            <tr>
+              <th class="table_entes">Percentual Total</th>
+              <th id="table_percentual">
+                
+              </th>
+            </tr>
+        </tfoot>
         </table>
+        
       </div>
 
       <div>
@@ -216,22 +225,24 @@ function carregarEntesConsorciados(mes) {
     var trs   = [];
 
     tableEntes.innerHTML = '<tr><td colspan="2">' + entes.join('') + '</td></tr>';
-
+    var percentualFinal = 0;
     entes.forEach(function(ente, i) {
 
       var tr = ''
       + '<tr class="bg_' + (i % 2 == 0) + '">'
         + '<td class="th_titulo">' + ente.cgm + ' - ' + ente.nome + '</td>'
         + '<td>'
-        + '<input value="' + ente.percentual + '" size="4" data-ente="' + ente.sequencial + '" name="entes[]"> %'
+        + '<input  value="' + ente.percentual + '" size="4" data-ente="' + ente.sequencial + '" name="entes[]" onchange="js_TotalPercent()" '
+        + ' oninput="js_ValidaCampos(this,4,\'Percentual\',\'t\',\'t\',event);" > % ' 
         + '</td>'
       + '</tr>';
-
+      
       trs.push(tr);
-
+      percentualFinal += new Number(ente.percentual);
     });
 
     tableEntes.innerHTML = trs.join('');
+    $('table_percentual').innerHTML = js_round(percentualFinal,2)+'%';
 
     if (entes.length == 0) {
       tableEntes.innerHTML = '<tr><td colspan="2">Nenhum ente encontrado</td></tr>';
@@ -239,6 +250,17 @@ function carregarEntesConsorciados(mes) {
 
   });
 
+}
+
+function js_TotalPercent(){
+  
+  var percentuais = document.getElementsByName('entes[]');
+  var percentualFinal = 0;
+  percentuais.forEach(function(perc){
+    percentualFinal += new Number(perc.value);
+  });
+  //console.log(percentualFinal);
+  $('table_percentual').innerHTML = js_round(percentualFinal,2)+'%';
 }
 
 function carregarDotacoesParaRateio(mes) {

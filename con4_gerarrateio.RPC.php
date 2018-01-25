@@ -61,10 +61,10 @@ switch ($oParam->exec){
 
         $oNovoEnte = new stdClass();
         $oNovoEnte->sequencial   = $oEnte->c215_sequencial;
-        $sWhere2   = " where date_part('MONTH',c70_data) <={$oParam->mes} and date_part('YEAR',c70_data)={$nAnoUsu} ";
+        $sWhere2   = " where date_part('MONTH',c70_data) ={$oParam->mes} and date_part('YEAR',c70_data)={$nAnoUsu} ";
         $sWhere2  .= " and (date_part('MONTH',c215_datainicioparticipacao) <={$oParam->mes} ";  
         $sWhere2  .= " and date_part('YEAR',c215_datainicioparticipacao) <={$nAnoUsu}) ";
-        $sWhere3   = " where date_part('MONTH',c70_data) <={$oParam->mes} ";
+        $sWhere3   = " where date_part('MONTH',c70_data) ={$oParam->mes} ";
         $sWhere3  .= " and date_part('YEAR',c70_data)={$nAnoUsu} and c216_enteconsorciado=".$oEnte->c215_sequencial;
         $sWhere3  .= " and (date_part('MONTH',c215_datainicioparticipacao) <={$oParam->mes} "; 
         $sWhere3  .= " and date_part('YEAR',c215_datainicioparticipacao) <={$nAnoUsu}) ";
@@ -171,43 +171,43 @@ switch ($oParam->exec){
       }
 
       $sDotacoes = implode(', ', $oParam->dotacoes);
+      //if (intval($oParam->mes) < 12) {
+        $aClassificacao = $oConLancamDoc->classificacao($oParam->mes, $sDotacoes);
 
-      $aClassificacao = $oConLancamDoc->classificacao($oParam->mes, $sDotacoes);
+        $aPercenteAplicado = $oConLancamDoc->aplicaPercentDotacoes($aClassificacao, $aEntes);
 
-      $aPercenteAplicado = $oConLancamDoc->aplicaPercentDotacoes($aClassificacao, $aEntes);
+        $aRetornoFinal = $aPercenteAplicado;
 
-      $aRetornoFinal = $aPercenteAplicado;
+      // }else {
 
-      if (intval($oParam->mes) >= 12) {
+      //   $aClassificacaoDezembro = $oConLancamDoc->classificacaoAteDezembro($sDotacoes);
 
-        $aClassificacaoDezembro = $oConLancamDoc->classificacaoAteDezembro($sDotacoes);
+      //   $aPercenteAplicadoDezmb = $oConLancamDoc->aplicaPercentDotacoes($aClassificacaoDezembro, $aEntes);
 
-        $aPercenteAplicadoDezmb = $oConLancamDoc->aplicaPercentDotacoes($aClassificacaoDezembro, $aEntes);
+      //   foreach ($aPercenteAplicadoDezmb as $nIdEnte => $oInfoEnte) {
 
-        foreach ($aPercenteAplicadoDezmb as $nIdEnte => $oInfoEnte) {
+      //     foreach ($oInfoEnte->dotacoes as $sHash => $oDotacao) {
 
-          foreach ($oInfoEnte->dotacoes as $sHash => $oDotacao) {
+      //       if (!isset($aRetornoFinal[$nIdEnte])) {
+      //         $aRetornoFinal[$nIdEnte] = $oInfoEnte;
+      //       }
+           
+      //       if (isset($aRetornoFinal[$nIdEnte]->dotacoes[$sHash])) {
+              
+      //         $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorempenhado  += $oDotacao->valorempenhado ;
+      //         $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorliquidado  += $oDotacao->valorliquidado;
+      //         $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorpago       += $oDotacao->valorpago;
 
-            if (!isset($aRetornoFinal[$nIdEnte])) {
-              $aRetornoFinal[$nIdEnte] = $oInfoEnte;
-            }
+      //       } else {
+      //         $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]= $oDotacao;
+      //       }
 
-            if (isset($aRetornoFinal[$nIdEnte]->dotacoes[$sHash])) {
+      //     }
 
-              $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorempenhado  += $oDotacao->valorempenhado;
-              $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorliquidado  += $oDotacao->valorliquidado;
-              $aRetornoFinal[$nIdEnte]->dotacoes[$sHash]->valorpago       += $oDotacao->valorpago;
+      //   }
 
-            } else {
-              $aRetornoFinal[$nIdEnte]->dotacoes[$sHash] = $oDotacao;
-            }
-
-          }
-
-        }
-
-      } // mês 12
-
+      //} // mês 12
+      //print_r($aRetornoFinal);
       $oDespesaRateioConsorcio  = new cl_despesarateioconsorcio();
       $sWhereExcluir = ''
         . ' c217_mes = ' . intval($oParam->mes)

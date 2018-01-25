@@ -394,7 +394,7 @@ class cl_entesconsorciados {
    
   // funcao do sql para pegar valor percentual da arrecadação de um ente sobre todos os outros.
   function sql_query_percentual ($dbwhere2="",$dbwhere3="") {
-     $sql = "select coalesce(round(vlrarrecadeente/vlrarrecadetotal,2),0) as percent from (
+     $sql = "select coalesce(round((vlrarrecadeente/vlrarrecadetotal)*100,2),0) as percent from (
             select (select sum(case when c71_coddoc = 100 then c70_valor else c70_valor * -1 end)
               from entesconsorciadosreceitas 
             inner join orcreceita on c216_receita=o70_codfon and c216_anousu=o70_anousu
