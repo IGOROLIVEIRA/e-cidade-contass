@@ -56,9 +56,8 @@ if(isset($excluir)){
 
   $sDelete = "DELETE FROM acordoitemdotacao WHERE
   ac22_sequencial = '".$acordo_item_sequencial."' AND ac22_anousu = '".db_getsession('DB_anousu')."' ";
-     // echo $sDelete;
+
   $delete = db_query($sDelete);
-//var_dump($delete);die;
 
   if($delete){
     echo "<script>";
@@ -77,6 +76,8 @@ if(isset($excluir)){
 }
 if(isset($adicionar)){
   $material = key($adicionar);
+//    $material = explode('-',$material);
+//    $material = $material[0];
     /**
      * Pega quantidade da ultima posição
      */
@@ -256,13 +257,13 @@ if(isset($codigo_acordo)){
 
                      <tr>
                       <td colspan="4" style=" background:#ededed; height:25px" >
-                        <a href="#" id="ancora<?php echo $oResult[$i-1]->ac20_pcmater; ?>" onclick="js_pesquisao47_coddot(true, <?php echo $oResult[$i-1]->ac20_pcmater; ?>, <?php echo $oResult[$i-1]->o56_elemento; ?>);"><b>Dotações:</b></a>
-                        <input type="text" onchange="js_pesquisao47_coddot(false, <?php echo $oResult[$i-1]->ac20_pcmater; ?>)" maxlengh="4" style="width:60px;" id="<?php echo $oResult[$i-1]->ac20_pcmater; ?>" name="codigo_dotacao[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]">
-                        <input type="hidden" name="codigo_material[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[$i-1]->ac20_pcmater; ?>">
-                        <input type="hidden" name="codigo_posicao[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac20_acordoposicao; ?>">
-                        <input type="hidden" name="codigo_acordo1[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac26_acordo; ?>">
-                        <input type="hidden" name="codigo_acordo_item[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[$i-1]->ac22_acordoitem; ?>">
-                        <input type="submit"  name="adicionar[<?php echo $oResult[$i-1]->ac20_pcmater; ?>]" value="Incluir"></td>
+                        <a href="#" id="ancora<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>" onclick="js_pesquisao47_coddot(true, '<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>', <?php echo $oResult[$i-1]->o56_elemento; ?>);"><b>Dotações:</b></a>
+                        <input type="text" onchange="js_pesquisao47_coddot(false, <?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>)" maxlengh="4" style="width:60px;" id="<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>" name="codigo_dotacao[<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>]">
+                        <input type="hidden" name="codigo_material[<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>]" value="<?php echo $oResult[$i-1]->ac20_pcmater; ?>">
+                        <input type="hidden" name="codigo_posicao[<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>]" value="<?php echo $oResult[0]->ac20_acordoposicao; ?>">
+                        <input type="hidden" name="codigo_acordo1[<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>]" value="<?php echo $oResult[0]->ac26_acordo; ?>">
+                        <input type="hidden" name="codigo_acordo_item[<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>]" value="<?php echo $oResult[$i-1]->ac22_acordoitem; ?>">
+                        <input type="submit" name="adicionar[<?php echo $oResult[$i-1]->ac20_pcmater.'-'.$oResult[$i-1]->ac20_ordem; ?>]" value="Incluir"></td>
                       </tr>
                     <?php endif; ?>
                     <tr>
@@ -319,13 +320,13 @@ if(isset($codigo_acordo)){
 
      <tr>
       <td colspan="4" style=" background:#ededed; height:25px" >
-        <a href="#" id="ancora<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>" onclick="js_pesquisao47_coddot(true, <?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>, <?php echo $oResult[count($oResult)-1]->o56_elemento; ?>);"><b>Dotações:</b></a>
-        <input type="text" onchange="js_pesquisao47_coddot(false, <?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>)" maxlengh="4" style="width:60px;" id="<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>" name="codigo_dotacao[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]">
-        <input type="hidden" name="codigo_material[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>">
-        <input type="hidden" name="codigo_posicao[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac20_acordoposicao; ?>">
-        <input type="hidden" name="codigo_acordo1[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[0]->ac26_acordo; ?>">
-        <input type="hidden" name="codigo_acordo_item[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="<?php echo $oResult[count($oResult)-1]->ac22_acordoitem; ?>">
-        <input type="submit"  name="adicionar[<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>]" value="Incluir"></td>
+        <a href="#" id="ancora<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>" onclick="js_pesquisao47_coddot(true, '<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>', <?php echo $oResult[count($oResult)-1]->o56_elemento; ?>);"><b>Dotações:</b></a>
+        <input type="text" onchange="js_pesquisao47_coddot(false, <?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>)" maxlengh="4" style="width:60px;" id="<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>" name="codigo_dotacao[<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>]">
+        <input type="hidden" name="codigo_material[<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>]" value="<?php echo $oResult[count($oResult)-1]->ac20_pcmater; ?>">
+        <input type="hidden" name="codigo_posicao[<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>]" value="<?php echo $oResult[0]->ac20_acordoposicao; ?>">
+        <input type="hidden" name="codigo_acordo1[<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>]" value="<?php echo $oResult[0]->ac26_acordo; ?>">
+        <input type="hidden" name="codigo_acordo_item[<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>]" value="<?php echo $oResult[count($oResult)-1]->ac22_acordoitem; ?>">
+        <input type="submit"  name="adicionar[<?php echo $oResult[count($oResult)-1]->ac20_pcmater.'-'.$oResult[count($oResult)-1]->ac20_ordem; ?>]" value="Incluir"></td>
       </tr>
 
 
