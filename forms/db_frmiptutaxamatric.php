@@ -125,7 +125,7 @@ if(isset($db_opcaoal)){
              j21_valor as db_valor_origem,
              j10_perccorre
         from iptutaxamatric
-             inner join iptucalcpadrao        on j10_matric         = j09_matric
+             inner join iptucalcpadrao        on j10_matric         = j09_matric and j10_anousu = ".db_getsession('DB_anousu')."
              inner join iptucadtaxaexe        on j08_iptucadtaxaexe = j09_iptucadtaxaexe
                                              and j08_anousu         = ".db_getsession('DB_anousu')."
              left  join iptucalcpadraoorigem  on j27_matric         = j09_matric
