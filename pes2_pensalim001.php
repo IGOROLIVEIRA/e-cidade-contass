@@ -1,28 +1,28 @@
 <?php
 /**
- *  E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *  E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once 'libs/db_stdlib.php';
@@ -56,7 +56,7 @@ db_postmemory($HTTP_POST_VARS);
   <form action="" name="form1" method="post" class="container">
     <fieldset>
       <legend>Pensão Alimentícia</legend>
-      <table align="center" class="form-container"> 
+      <table align="center" class="form-container">
         <tr>
           <td>
             <label>Competência: </label>
@@ -72,6 +72,17 @@ db_postmemory($HTTP_POST_VARS);
             <?php db_input('r44_descr', 40, $Ir44_descr, true, 'text', 3, 'class="field-size7"'); ?>
           </td>
         </tr>
+        <!-- OC4395 -->
+        <tr>
+          <td>
+            <?php db_ancora('Recurso: ','js_pesquisarRecurso(true)', 1); ?>
+          </td>
+          <td>
+            <?php db_input('o15_codigo', 10, $Ir44_selec, true, 'text', 1, 'onchange="js_pesquisarRecurso(false)" class="field-size2"'); ?>
+            <?php db_input('o15_descr', 40, $Ir44_descr, true, 'text', 3, 'class="field-size7"'); ?>
+          </td>
+        </tr>
+        <!-- FIM - OC4395 -->
         <tr>
           <td title="Tipo">
             <label>Tipo de Folha: </label>
@@ -116,7 +127,8 @@ db_postmemory($HTTP_POST_VARS);
             <?php
               $aTipoQuebra = array(
                 'b' => 'Banco',
-                'a' => 'Agência'
+                'a' => 'Agência',
+                'r' => 'Recurso'
               );
 
               db_select('tipoquebra', $aTipoQuebra, true, 4, '');
@@ -175,13 +187,14 @@ db_postmemory($HTTP_POST_VARS);
 function js_emite() {
 
   var aParams = [
-    'selecao='    + $F('r44_selec'),
-    'ordem='      + $F('ordem'),
-    'func='       + $F('func'),
-    'tipoquebra=' + $F('tipoquebra'),
-    'tipo='       + $F('tipo'),
-    'ano='        + $F('ano'),
-    'mes='        + $F('mes')
+    'selecao='     + $F('r44_selec'),
+    'ordem='       + $F('ordem'),
+    'func='        + $F('func'),
+    'tipoquebra='  + $F('tipoquebra'),
+    'tipo='        + $F('tipo'),
+    'ano='         + $F('ano'),
+    'mes='         + $F('mes'),
+    'recurso='     + $F('o15_codigo')
   ];
 
   var jan = window.open(
@@ -189,7 +202,7 @@ function js_emite() {
     '',
     'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0'
   );
-  
+
   jan.moveTo(0, 0);
 }
 
@@ -216,4 +229,29 @@ function js_mmostraSelecaoDescricao(sDescricao, lErro) {
     $('r44_selec').value = '';
   }
 }
+/*OC4395*/
+function js_pesquisarRecurso(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraRecurso1|o15_codigo|o15_descr','Pesquisa',true);
+  }else{
+     if(document.form1.o15_codigo.value != ''){
+       js_OpenJanelaIframe('top.corpo','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostraRecurso','Pesquisa',false);
+     }else{
+       document.form1.o15_descr.value = '';
+     }
+  }
+}
+function js_mostraRecurso(chave,erro){
+  document.form1.o15_descr.value  = chave;
+  if(erro==true){
+    document.form1.o15_codigo.value = '';
+    document.form1.o15_codigo.focus();
+  }
+}
+function js_mostraRecurso1(chave1,chave2){
+  document.form1.o15_codigo.value = chave1;
+  document.form1.o15_descr.value  = chave2;
+  db_iframe_orctiporec.hide();
+}
+/*FIM - OC4395*/
 </script>

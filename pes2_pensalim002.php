@@ -1,28 +1,28 @@
 <?php
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once 'fpdf151/pdf.php';
@@ -39,34 +39,34 @@ $sWhere       = '';
 /**
  * Define cabeçalho
  */
-$head2 = "Resumo de Pensões Alimentícias";
-$head4 = "Período: {$oPost->mes}/{$oPost->ano}";
+$head1 = "Resumo de Pensões Alimentícias";
+$head2 = "Período: {$oPost->mes}/{$oPost->ano}";
 
 switch ($oPost->tipo) {
   case 's':
-    $head6      = 'Salário';
+    $head3      = 'Salário';
     $sValor     = 'r52_valor + r52_valfer';
     $iTipoFolha = FolhaPagamento::TIPO_FOLHA_SALARIO;
     break;
 
   case 'c':
-    $head6      = 'Complementar';
+    $head3      = 'Complementar';
     $sValor     = 'r52_valcom';
     $iTipoFolha = FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR;
     break;
 
   case '3':
-    $head6  = '13º. Salário';
-    $sValor = 'r52_val13'; 
+    $head3  = '13º. Salário';
+    $sValor = 'r52_val13';
     break;
 
   case 'r':
-    $head6  = 'Rescisão';
-    $sValor = 'r52_valres'; 
+    $head3  = 'Rescisão';
+    $sValor = 'r52_valres';
     break;
 
   case 'u':
-    $head6      = 'Suplementar';
+    $head3      = 'Suplementar';
     $sValor     = 'r52_valor + r52_valfer';
     $iTipoFolha = FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR;
     break;
@@ -82,23 +82,32 @@ if (!empty($oPost->selecao)) {
   if ($oDaoSelecao->numrows) {
 
     $oSelecao = db_utils::fieldsMemory($rsResult, 0);
-    $sWhere   = "AND {$oSelecao->r44_where}";
+    $sWhere  .= "AND {$oSelecao->r44_where}";
 
-    $head8    = "Seleção {$oPost->selecao} - {$oSelecao->r44_descr}";
+    $head4    = "Seleção {$oPost->selecao} - {$oSelecao->r44_descr}";
   }
 }
-
+/*OC4395*/
+if (!empty($oPost->recurso)) {
+  $head5   = "Recurso: {$oPost->recurso}";
+  $sWhere .= " AND o15_codigo =  {$oPost->recurso} ";
+}
+/*FIM - OC4395*/
 if ($oPost->ordem == 'n') {
   $sOrder = 'rh01_regist';
 } else {
   if ($oPost->func == 's') {
     $sOrder = 'z01_nome, codigo_banco, codigo_agencia';
   } else {
-    $sOrder = 'codigo_banco, codigo_agencia, nome_beneficiario';
+      if ($tipoquebra == 'r') {
+        $sOrder = 'o15_codigo, codigo_banco, codigo_agencia, nome_beneficiario';
+      } else {
+          $sOrder = 'codigo_banco, codigo_agencia, nome_beneficiario';
+      }
   }
 }
 
-$sGroup = 'descricao_banco, codigo_banco, codigo_agencia, r52_dvagencia, conta, r52_dvconta, cgm_beneficiario, nome_beneficiario, rh01_regist, x.z01_nome, x.w01_work05,x.z01_cgccpf';
+$sGroup = 'descricao_banco, codigo_banco, codigo_agencia, r52_dvagencia, conta, r52_dvconta, cgm_beneficiario, nome_beneficiario, rh01_regist, x.z01_nome, x.w01_work05,x.z01_cgccpf,x.o15_codigo,x.o15_descr';
 
 if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) {
 
@@ -135,7 +144,9 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) 
                     AND rh141_instit    = rh02_instit
                     AND rh141_tipofolha = {$iTipoFolha}
                     AND rh145_pensao    = r52_sequencial
-               )                       AS w01_work05
+               )                       AS w01_work05,
+               o15_codigo,
+               o15_descr
           FROM pensao
                INNER JOIN cgm          ON r52_numcgm              = z01_numcgm
                INNER JOIN rhpessoal    ON rh01_regist             = r52_regist
@@ -145,6 +156,13 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) 
                                       AND rh02_instit             = {$iInstituicao}
                INNER JOIN rhlota       ON r70_codigo              = rh02_lota
                                       AND r70_instit              = rh02_instit
+
+              LEFT JOIN rhlotaexe ON rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
+                AND rhlotaexe.rh26_codigo = rhlota.r70_codigo
+              LEFT JOIN rhlotavinc ON rhlotavinc.rh25_codigo = rhlotaexe.rh26_codigo
+                AND rhlotavinc.rh25_anousu = rhpessoalmov.rh02_anousu
+              LEFT JOIN orctiporec ON orctiporec.o15_codigo = rhlotavinc.rh25_recurso
+
                INNER JOIN cgm AS a     ON a.z01_numcgm            = rh01_numcgm
                LEFT  JOIN db_bancos    ON r52_codbco::varchar(10) = db90_codban
          WHERE r52_anousu = {$oPost->ano}
@@ -181,7 +199,9 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) 
                  a.z01_nome,
                rh01_regist,
                {$sValor}               AS w01_work05,
-               cgm.z01_cgccpf
+               cgm.z01_cgccpf,
+               o15_codigo,
+               o15_descr
           FROM pensao
             INNER JOIN cgm          ON   r52_numcgm              =  z01_numcgm
             INNER JOIN rhpessoal    ON  rh01_regist              =  r52_regist
@@ -191,6 +211,14 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) 
                                    AND  rh02_instit              = {$iInstituicao}
             INNER JOIN rhlota       ON   r70_codigo              = rh02_lota
                                    AND   r70_instit              = rh02_instit
+
+
+            LEFT JOIN rhlotaexe ON rhlotaexe.rh26_anousu = rhpessoalmov.rh02_anousu
+              AND rhlotaexe.rh26_codigo = rhlota.r70_codigo
+            LEFT JOIN rhlotavinc ON rhlotavinc.rh25_codigo = rhlotaexe.rh26_codigo
+              AND rhlotavinc.rh25_anousu = rhpessoalmov.rh02_anousu
+            LEFT JOIN orctiporec ON orctiporec.o15_codigo = rhlotavinc.rh25_recurso
+
             INNER JOIN cgm AS a     ON a.z01_numcgm              = rh01_numcgm
             LEFT  JOIN db_bancos    ON   r52_codbco::varchar(10) = db90_codban
          WHERE r52_anousu = {$oPost->ano}
@@ -202,15 +230,15 @@ if (DBPessoal::verificarUtilizacaoEstruturaSuplementar() && isset($iTipoFolha)) 
      ORDER BY {$sOrder}
   ";
 }
-
+//die($sSql);
 $rsResult = db_query($sSql);
 if (!pg_num_rows($rsResult)) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Nao existem lancamentos no periodo de {$oPost->mes}/{$oPost->ano}");
 }
 
-$oPDF = new PDF(); 
-$oPDF->Open(); 
-$oPDF->AliasNbPages(); 
+$oPDF = new PDF();
+$oPDF->Open();
+$oPDF->AliasNbPages();
 $oPDF->setfillcolor(235);
 $oPDF->setfont('arial', 'b', 8);
 
@@ -218,17 +246,22 @@ $alt     = 5;
 $total   = 0;
 $total_g = 0;
 
-if($oPost->func != 's'){
-  
-  if($oPost->tipoquebra == 'a'){
+if ($oPost->func != 's') {
+
+  if ($oPost->tipoquebra == 'a') {
     $quebra = substr($codigo_banco,0,3).$codigo_agencia;
-  }else{  
-    $quebra = substr($codigo_banco,0,3);
   }
+  else if ($oPost->tipoquebra == 'b') {
+    $quebra  = substr($codigo_banco,0,3);
+  }
+  else {
+    $quebra = "";
+  }
+
   $troca = 0;
 
   for($x = 0; $x < pg_numrows($rsResult);$x++){
-     
+
      db_fieldsmemory($rsResult,$x);
 
      if ($quebra != substr($codigo_banco,0,3).$codigo_agencia && $oPost->tipoquebra == 'a') {
@@ -242,7 +275,7 @@ if($oPost->func != 's'){
         $quebra = substr($codigo_banco,0,3).$codigo_agencia;
      }
 
-     if ($quebra != substr($codigo_banco,0,3) && $tipoquebra != 'a') {
+     if ($quebra != substr($codigo_banco,0,3) && $tipoquebra == 'b') {
 
         $oPDF->setfont('arial','b',8);
         $oPDF->cell(122,$alt,'Total do Banco',"T",0,"C",0);
@@ -250,7 +283,19 @@ if($oPost->func != 's'){
         $oPDF->cell(30,$alt,db_formatar($total,'f'),"T",1,"R",0);
         $oPDF->sety(300);
         $total = 0;
-        $quebra = substr($codigo_banco,0,3);
+        $quebra  = substr($codigo_banco,0,3);
+
+     }
+
+     if ($quebra != $o15_codigo && $tipoquebra == 'r') {
+
+        $oPDF->setfont('arial','b',8);
+        $oPDF->cell(122,$alt,'Total do Recurso',"T",0,"C",0);
+        $oPDF->cell(40,$alt,'',"T",0,"C",0);
+        $oPDF->cell(30,$alt,db_formatar($total,'f'),"T",1,"R",0);
+        $oPDF->sety(300);
+        $total = 0;
+        $quebra  = $o15_codigo;
      }
 
      if ($oPDF->gety() > $oPDF->h - 30 || $troca == 0) {
@@ -259,12 +304,24 @@ if($oPost->func != 's'){
         $oPDF->setfont('arial','b',8);
         if ($tipoquebra == 'a') {
           $oPDF->cell(80,$alt,$descricao_banco.' - Agência: '.$codigo_agencia,0,1,"L",0);
-        } else {
+        }
+        else if ($tipoquebra == 'b') {
           $oPDF->cell(80,$alt,$descricao_banco,0,1,"L",0);
         }
+        else {
+          $oPDF->cell(180,$alt,$o15_codigo.' - '.$o15_descr,0,1,"L",0);//OC4395
+        }
+
         $oPDF->ln(3);
-        $oPDF->cell(102,$alt,'Nome do Beneficiário',1,0,"C",1);
+        $oPDF->cell(82,$alt,'Nome do Beneficiário',1,0,"C",1);
         $oPDF->cell(20,$alt,'CPF',1,0,"C",1);
+
+        if ($oPost->tipoquebra == 'r') {
+          $oPDF->cell(20,$alt,'Banco',1,0,"C",1);
+        } else {
+            $oPDF->cell(20,$alt,'Recurso',1,0,"C",1);
+        }
+
         $oPDF->cell(20,$alt,'Agência',1,0,"C",1);
         $oPDF->cell(20,$alt,'Conta',1,0,"C",1);
         $oPDF->cell(30,$alt,'Valor',1,1,"C",1);
@@ -272,13 +329,19 @@ if($oPost->func != 's'){
      }
 
      $oPDF->setfont('arial','',7);
-     $oPDF->cell(102, $alt, $nome_beneficiario,0,0,"l",0);
-
+     $oPDF->cell(82, $alt, $nome_beneficiario,0,0,"l",0);
      $oPDF->cell(20, $alt, $z01_cgccpf, 0, 0, "R", 0);
 
-     $oPDF->cell(20, $alt, $codigo_agencia.$r52_dvagencia, 0, 0, "R", 0);
-     $oPDF->cell(20, $alt, $conta.$r52_dvconta, 0, 0, "R", 0);
-     $oPDF->cell(30, $alt, db_formatar($w01_work05,'f'), 0, 1, "R", 0);
+     if ($oPost->tipoquebra == 'r') {
+        $oPDF->cell(20,$alt,$codigo_banco, 0, 0, "C" ,0);
+     } else {
+        $oPDF->cell(20,$alt,$o15_codigo,0,0,"C",0);
+     }
+
+     $oPDF->cell(20, $alt, $codigo_agencia.$r52_dvagencia, 0, 0, "C", 0);
+     $oPDF->cell(20, $alt, $conta.$r52_dvconta, 0, 0, "C", 0);
+     $oPDF->cell(30, $alt, db_formatar($w01_work05,'f'), 0, 1, "C", 0);
+
      $total   += $w01_work05;
      $total_g += $w01_work05;
   }
@@ -286,8 +349,12 @@ if($oPost->func != 's'){
   $oPDF->setfont('arial','b',8);
   if ($oPost->tipoquebra == 'a') {
     $oPDF->cell(122,$alt,'Total da Agência',"T",0,"C",0);
-  } else {
+  }
+  else if ($oPost->tipoquebra == 'b') {
     $oPDF->cell(122,$alt,'Total do Banco',"T",0,"C",0);
+  }
+  else {
+    $oPDF->cell(122,$alt,'Total do Recurso',"T",0,"C",0);
   }
   $oPDF->cell(40,$alt,'',"T",0,"C",0);
   $oPDF->cell(30,$alt,db_formatar($total,'f'),"T",1,"R",0);
@@ -296,37 +363,41 @@ if($oPost->func != 's'){
   $oPDF->cell(122,$alt,'Total do Geral',"T",0,"C",0);
   $oPDF->cell(40,$alt,'',"T",0,"C",0);
   $oPDF->cell(30,$alt,db_formatar($total_g,'f'),"T",1,"R",0);
-}else{
+} else {
 
-  $troca = 0;
+  $troca  = 0;
+  $quebra = "";
 
   for ($x = 0; $x < pg_numrows($rsResult);$x++) {
      db_fieldsmemory($rsResult,$x);
+
      if ($oPDF->gety() > $oPDF->h - 30 || $troca == 0) {
 
         $oPDF->addpage('L');
         $oPDF->setfont('arial','b',8);
         $oPDF->ln(3);
         $oPDF->cell(15,$alt,'Matr',1,0,"C",1);
-        $oPDF->cell(80,$alt,'Nome do Funcionário',1,0,"C",1);
+        $oPDF->cell(75,$alt,'Nome do Funcionário',1,0,"C",1);
         $oPDF->cell(15,$alt,'CGM',1,0,"C",1);
-        $oPDF->cell(80,$alt,'Nome do Beneficiário',1,0,"C",1);
+        $oPDF->cell(75,$alt,'Nome do Beneficiário',1,0,"C",1);
+        $oPDF->cell(20,$alt,'Recurso',1,0,"C",1);
         $oPDF->cell(10,$alt,'Banco',1,0,"C",1);
         $oPDF->cell(20,$alt,'Agência',1,0,"C",1);
         $oPDF->cell(20,$alt,'Conta',1,0,"C",1);
-        $oPDF->cell(30,$alt,'Valor',1,1,"C",1);
+        $oPDF->cell(20,$alt,'Valor',1,1,"C",1);
         $troca = 1;
      }
 
      $oPDF->setfont('arial','',7);
      $oPDF->cell(15,$alt,$rh01_regist,0,0,"l",0);
-     $oPDF->cell(80,$alt,$z01_nome,0,0,"l",0);
+     $oPDF->cell(75,$alt,$z01_nome,0,0,"l",0);
      $oPDF->cell(15,$alt,$cgm_beneficiario,0,0,"l",0);
-     $oPDF->cell(80,$alt,$nome_beneficiario,0,0,"l",0);
-     $oPDF->cell(10,$alt,$codigo_banco,0,0,"l",0);
-     $oPDF->cell(20,$alt,$codigo_agencia.$r52_dvagencia,0,0,"R",0);
+     $oPDF->cell(75,$alt,$nome_beneficiario,0,0,"l",0);
+     $oPDF->cell(20,$alt,$o15_codigo,0,0,"C",0);
+     $oPDF->cell(10,$alt,$codigo_banco,0,0,"C",0);
+     $oPDF->cell(20,$alt,$codigo_agencia.$r52_dvagencia,0,0,"C",0);
      $oPDF->cell(20,$alt,$conta.$r52_dvconta,0,0,"R",0);
-     $oPDF->cell(30,$alt,db_formatar($w01_work05,'f'),0,1,"R",0);
+     $oPDF->cell(20,$alt,db_formatar($w01_work05,'f'),0,1,"C",0);
      $total += $w01_work05;
      $total_g += $w01_work05;
   }
