@@ -646,82 +646,48 @@ if($dbwhere==""){
     $nInstit  = db_getsession('DB_instit');
     $nMes     = 12;
 
-    $sSql = "
-      SELECT funcao,
-             subfuncao,
-             natureza,
-             subelemento,
-             fonte,
-             round(sum(emp-lqd),2) AS emp,
-             round(sum(lqd - pag),2) AS lqd
-      FROM (
-      SELECT lpad(o58_funcao,2,'0') AS funcao,
-             lpad(o58_subfuncao,3,'0') AS subfuncao,
-             substring(o56_elemento,2,6) AS natureza,
-             substring(o56_elemento,8,2) AS subelemento,
-             o15_codtri AS fonte,
-             sum(CASE
-                     WHEN c53_tipo = 10 THEN c70_valor
-                     ELSE 0
-                 END) - sum(CASE
-                                WHEN c53_tipo = 11 THEN c70_valor
-                                ELSE 0
-                            END) AS emp,
-             sum(CASE
-                     WHEN c53_tipo = 20 THEN c70_valor
-                     ELSE 0
-                 END) - sum(CASE
-                                WHEN c53_tipo = 21 THEN c70_valor
-                                ELSE 0
-                            END) AS lqd,
-             sum(CASE
-                     WHEN c53_tipo = 30 THEN c70_valor
-                     ELSE 0
-                 END) - sum(CASE
-                                WHEN c53_tipo = 31 THEN c70_valor
-                                ELSE 0
-                            END) AS pag
-      FROM conlancamdoc
-      INNER JOIN conlancam ON c70_codlan=c71_codlan
-      INNER JOIN conlancamele ON c67_codlan=c71_codlan
-      INNER JOIN conlancaminstit ON c71_codlan=c02_codlan
-      INNER JOIN conlancamdot ON c73_codlan=c71_codlan
-      INNER JOIN orcelemento ON c67_codele =o56_codele
-      AND c73_anousu=o56_anousu
-      INNER JOIN orcdotacao ON c73_coddot = o58_coddot
-      AND c73_anousu=o58_anousu
-      INNER JOIN orctiporec ON o15_codigo = o58_codigo
-      INNER JOIN conlancamemp ON c71_codlan=c75_codlan
-      INNER JOIN empempenho ON c75_numemp=e60_numemp
-      INNER JOIN conhistdoc ON c71_coddoc=c53_coddoc
-      WHERE c53_tipo IN (10,
-                         11,
-                         20,
-                         21,
-                         30,
-                         31)
-          AND e60_anousu = '{$nAnoUsu}'
-          AND DATE_PART('YEAR',c71_data) = '{$nAnoUsu}'
-          AND c02_instit = '{$nInstit}'
-          AND o58_coddot IN ({$sDotacoes})
-      GROUP BY o58_funcao,
-               o58_subfuncao,
-               o15_codtri,
-               o56_elemento ) AS foo
-      GROUP BY
-        funcao,
-        subfuncao,
-        natureza,
-        subelemento,
-        fonte
-    ";
-
+    $sSql = "SELECT lpad(o58_funcao,2,'0') AS funcao,
+                 lpad(o58_subfuncao,3,'0') AS subfuncao,
+                 substring(o56_elemento,2,6) AS natureza,
+                 substring(o56_elemento,8,2) AS subelemento,
+                 o15_codtri AS fonte,
+                 sum(CASE
+                         WHEN c71_coddoc = 6 THEN c70_valor*-1
+                         ELSE c70_valor
+                     END) AS emp,
+                 0 AS empanulado,
+                 sum(CASE
+                         WHEN c71_coddoc = 6 THEN c70_valor*-1
+                         ELSE c70_valor
+                     END) AS lqd,
+                 0 AS lqdanulado,
+                 sum(CASE
+                         WHEN c71_coddoc = 6 THEN c70_valor*-1
+                         ELSE c70_valor
+                     END) AS pag,
+                 0 AS paganulado
+          FROM conlancamdoc
+          INNER JOIN conlancam ON c70_codlan=c71_codlan
+          INNER JOIN conlancamele ON c67_codlan=c71_codlan
+          INNER JOIN conlancaminstit ON c71_codlan=c02_codlan
+          INNER JOIN conlancamdot ON c73_codlan=c71_codlan
+          INNER JOIN orcelemento ON c67_codele=o56_codele
+          AND c73_anousu=o56_anousu
+          INNER JOIN orcdotacao ON c73_coddot = o58_coddot
+          AND c73_anousu=o58_anousu
+          INNER JOIN orctiporec ON o15_codigo = o58_codigo
+          WHERE c71_coddoc IN (5,
+                               6)
+              AND DATE_PART('YEAR',c71_data) = '{$nAnoUsu}'
+              AND c02_instit = '{$nInstit}'
+              AND o58_coddot IN ({$sDotacoes})
+          GROUP BY o58_funcao,
+                   o58_subfuncao,
+                   o15_codtri,
+                   o56_elemento
+        ";
+    
     $rsConLancamDoc = $this->sql_record($sSql);
-
-    // if ($this->erro_status != null) {
-    //   throw new Exception('Erro na busca de Dezembro: \n' . $this->erro_msg, 1);
-    // }
-
     $aConLancamDoc = db_utils::getCollectionByRecord($rsConLancamDoc);
 
     $aRetorno = array();
@@ -742,8 +708,17 @@ if($dbwhere==""){
 
     return $aRetorno;
   }
+  /* Retornar o total das despesas que já foram para o rateio */
+  public function totalClassificacao($hash){
+    $sql = "SELECT sum(c217_valorpago) as valor
+              FROM despesarateioconsorcio
+              WHERE c217_mes<12
+                AND c217_anousu=". db_getsession('DB_anousu') ."
+                AND c217_enteconsorciado||c217_funcao||c217_subfuncao||c217_natureza||c217_subelemento||c217_fonte='{$hash}' ";
 
-
+     $rsValor = db_query($sql);
+     return db_utils::fieldsMemory($rsValor, 0)->valor;
+  }
 
   public function aplicaPercentDotacoes($aClassificacoes = array(), $aEntes = array())
   {
