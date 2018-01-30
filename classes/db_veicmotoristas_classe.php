@@ -54,7 +54,8 @@ class cl_veicmotoristas {
    var $ve05_dtprimcnh_mes = null; 
    var $ve05_dtprimcnh_ano = null; 
    var $ve05_dtprimcnh = null; 
-   var $ve05_veiccadmotoristasit = 0; 
+   var $ve05_veiccadmotoristasit = 0;
+   var $ve05_instit = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  ve05_codigo = int4 = Código do Motorista 
@@ -63,7 +64,8 @@ class cl_veicmotoristas {
                  ve05_veiccadcategcnh = int4 = Categoria CNH 
                  ve05_dtvenc = date = Validade 
                  ve05_dtprimcnh = date = Primeira Habilitação 
-                 ve05_veiccadmotoristasit = int4 = Situação do Condutor 
+                 ve05_veiccadmotoristasit = int4 = Situação do Condutor
+                 ve05_instit = int(8) = Instituição
                  ";
    //funcao construtor da classe 
    function cl_veicmotoristas() { 
@@ -104,6 +106,8 @@ class cl_veicmotoristas {
          }
        }
        $this->ve05_veiccadmotoristasit = ($this->ve05_veiccadmotoristasit == ""?@$GLOBALS["HTTP_POST_VARS"]["ve05_veiccadmotoristasit"]:$this->ve05_veiccadmotoristasit);
+       $this->ve05_instit = ($this->ve05_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["ve05_instit"]:$this->ve05_instit);
+
      }else{
        $this->ve05_codigo = ($this->ve05_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve05_codigo"]:$this->ve05_codigo);
      }
@@ -204,7 +208,8 @@ class cl_veicmotoristas {
                                       ,ve05_veiccadcategcnh 
                                       ,ve05_dtvenc 
                                       ,ve05_dtprimcnh 
-                                      ,ve05_veiccadmotoristasit 
+                                      ,ve05_veiccadmotoristasit
+                                      ,ve05_instit
                        )
                 values (
                                 $this->ve05_codigo 
@@ -213,7 +218,8 @@ class cl_veicmotoristas {
                                ,$this->ve05_veiccadcategcnh 
                                ,".($this->ve05_dtvenc == "null" || $this->ve05_dtvenc == ""?"null":"'".$this->ve05_dtvenc."'")." 
                                ,".($this->ve05_dtprimcnh == "null" || $this->ve05_dtprimcnh == ""?"null":"'".$this->ve05_dtprimcnh."'")." 
-                               ,$this->ve05_veiccadmotoristasit 
+                               ,$this->ve05_veiccadmotoristasit
+                               ,$this->ve05_instit
                       )";
      $result = db_query($sql); 
      if($result==false){ 
