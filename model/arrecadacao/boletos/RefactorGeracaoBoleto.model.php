@@ -678,26 +678,6 @@ class RefactorGeracaoBoleto {
               $k03_numnov           = $oRecibo->getNumpreRecibo();
               $aRecibopaga_numnov[] = $k03_numnov;
 
-
-              //Adiciona desconto ao recibo
-              if (!empty($this->iCodigoModeloImpressao) && !empty($k03_numnov) && $this->nDescontoAliqReduz>0) {
-                $aDescontoAliquota = $this->nDescontoAliqReduz * -1;
-
-                $sqlDescAliq = "INSERT INTO recibopaga
-                                  SELECT
-                                        k00_numcgm,k00_dtoper,k00_receit,918,$aDescontoAliquota,k00_dtvenc,k00_numpre,
-                                        k00_numpar,k00_numtot,k00_numdig,k00_conta,k00_dtpaga,k00_numnov
-                                    FROM recibopaga
-                                      WHERE k00_numnov=$k03_numnov
-                                      AND k00_receit=23 ";
-
-                $rsSqlDescAliq = db_query($sqlDescAliq);
-                if( !$rsSqlDescAliq ) {
-                  throw new Exception(pg_last_error());
-                }
-              }
-
-
               if (in_array($oRegraEmissao->k03_tipo, $aTipoInicial) && $oRegraEmissao->ar11_cadtipoconvenio == 7) {
 
                 /**
@@ -922,6 +902,23 @@ class RefactorGeracaoBoleto {
     }
 
     $oRetorno->recibos_emitidos  = array_unique($aRecibopaga_numnov);
+    //Adiciona desconto ao recibo
+    if ($this->nDescontoAliqReduz>0) {
+      $aDescontoAliquota = $this->nDescontoAliqReduz * -1;
+
+      $sqlDescAliq = "INSERT INTO recibopaga
+                                  SELECT
+                                        k00_numcgm,k00_dtoper,k00_receit,918,$aDescontoAliquota,k00_dtvenc,k00_numpre,
+                                        k00_numpar,k00_numtot,k00_numdig,k00_conta,k00_dtpaga,k00_numnov
+                                    FROM recibopaga
+                                      WHERE k00_numnov=".$oRetorno->recibos_emitidos[0]."
+                                      AND k00_receit=23 ";
+      $rsSqlDescAliq = db_query($sqlDescAliq);
+
+      if( !$rsSqlDescAliq ) {
+        throw new Exception(pg_last_error());
+      }
+    }
 
     return $oRetorno;
   }

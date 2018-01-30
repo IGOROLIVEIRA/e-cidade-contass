@@ -88,6 +88,7 @@ class EmissaoBoletoWebService extends EmissaoBoleto{
      * criar a estrutura de condição abaixo para povoar o numpar.
      *
      */
+    $nDesconto = abs($nDesconto);
 
     if(empty($iNumparDebito)){
       $iNumparDebito = date("m",strtotime($sData)) - 1;
