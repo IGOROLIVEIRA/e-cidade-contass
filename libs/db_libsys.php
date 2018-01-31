@@ -128,7 +128,7 @@ class cl_dbagata {
     $this->api->setParameter('$db_nomeinst', "$nomeinst");
 
     // A resolucao da Imagem deve ser 68 x 74 pixels
-    $this->api->setParameter('$db_logo', "imagens/files/$logo");
+//    $this->api->setParameter('$db_logo', "imagens/files/$logo");
 
     $this->api->setParameter('$db_enderinst', "$ender");
 
