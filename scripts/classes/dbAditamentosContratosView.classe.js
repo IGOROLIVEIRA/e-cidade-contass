@@ -101,13 +101,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
     sContent += "             <td id=\"ctnCodigoAcordo\"></td>";
     sContent += "           </tr> ";
 
-    sContent += "           <tr> ";
-    sContent += "             <td nowrap> ";
-    sContent += "               <label class=\"bold\" for=\"oTxtNumeroAditamento\">Número do Aditamento:</label>";
-    sContent += "             </td>";
-    sContent += "             <td id=\"ctnTxtNumeroAditamento\"></td>";
-    sContent += "           </tr> ";
-
     if(iTipoAditamento == 7) {
         sContent += "           <tr> ";
         sContent += "             <td nowrap> ";
@@ -116,6 +109,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
         sContent += "             <td id=\"ctnTipoAditivo\"></td>";
         sContent += "           </tr> ";
     }
+
+    sContent += "           <tr> ";
+    sContent += "             <td nowrap> ";
+    sContent += "               <label class=\"bold\" for=\"oTxtNumeroAditamento\">Número do Aditamento:</label>";
+    sContent += "             </td>";
+    sContent += "             <td id=\"ctnTxtNumeroAditamento\"></td>";
+    sContent += "           </tr> ";
 
     sContent += "           <tr> ";
     sContent += "             <td nowrap> ";
