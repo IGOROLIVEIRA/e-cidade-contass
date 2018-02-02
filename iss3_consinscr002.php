@@ -47,11 +47,13 @@
 	                         WHEN trim(cgm.z01_nomefanta) = '' THEN 'Sem nome fantasia cadastrado'
 	                         ELSE cgm.z01_nomefanta
 	                          END as z01_nomefanta,
-		                                    z01_nome  , j14_nome, q02_numero     , q02_compl ,
+		                                    z01_nome  , db98_descricao as dl_Tipo_Empresa,j14_nome, q02_numero     , q02_compl ,
 		                                    q02_cxpost, j13_descr, issruas.z01_cep, q02_dtinic,
 		                                    q02_dtbaix, q140_datainicio as dl_Data_da_Paralizacao, q140_datafim as dl_Data_Fim_Paralizacao
 		                     from issbase
                    inner join cgm on issbase.q02_numcgm = z01_numcgm
+                   left join cgmtipoempresa on z03_numcgm = z01_numcgm
+                   left join tipoempresa on z03_tipoempresa = db98_sequencial
                    left join issbaseparalisacao on q02_inscr = q140_issbase
                    left  join issruas on issruas.q02_inscr = issbase.q02_inscr
                    left join ruas on issruas.j14_codigo = ruas.j14_codigo
