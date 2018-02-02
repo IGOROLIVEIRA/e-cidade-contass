@@ -1746,7 +1746,7 @@ order by iptucalc.j23_anousu desc
    $result = db_query($sql);
    if( pg_numrows($result) != 0 ) {
 
-		 $sql2 = "select k02_codigo,                                                             ";
+		 $sql2 = "select distinct k02_codigo,                                                    ";
 		 $sql2 .= "       k02_descr,                                                             ";
 		 $sql2 .= "       j17_codhis,                                                            ";
 		 $sql2 .= "       j17_descr,                                                             ";
@@ -1760,7 +1760,7 @@ order by iptucalc.j23_anousu desc
 		 $sql2 .= "							 and x.j21_receit = iptucalv.j21_receit                          ";
 		 $sql2 .= "							 and x.j21_codhis = iptucalhconf.j89_codhis)                     ";
 		 $sql2 .= "         else 0                                                               ";
-		 $sql2 .= "       end as j21_valorisen                                                   ";
+		 $sql2 .= "       end as j21_valorisen,iptucalh.j17_codhis                               ";
 		 $sql2 .= "  from iptucalv                                                               ";
 		 $sql2 .= "       inner join iptucalh        on iptucalh.j17_codhis        = j21_codhis  ";
 		 $sql2 .= "       left  join iptucalhconf    on iptucalhconf.j89_codhispai = j21_codhis  ";
