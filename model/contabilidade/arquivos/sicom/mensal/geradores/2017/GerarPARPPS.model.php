@@ -47,8 +47,8 @@ class GerarPARPPS extends GerarAM
 
         $aPARPPS10 = pg_fetch_array($rsPARPPS10, $iCont);
 
-        $aCSVPARPPS10['si156_tiporegistro']                       = $this->padZeroLeft($aPARPPS10['si156_tiporegistro'], 2);
-        $aCSVPARPPS10['si156_codorgao']                           = $this->padZeroLeft($aPARPPS10['si156_codorgao'], 2);
+        $aCSVPARPPS10['si156_tiporegistro']                       = $aPARPPS10['si156_tiporegistro'];//$this->padZeroLeft($aPARPPS10['si156_tiporegistro'], 2);
+        $aCSVPARPPS10['si156_codorgao']                           = $aPARPPS10['si156_codorgao'];//$this->padZeroLeft($aPARPPS10['si156_codorgao'], 2);
         $aCSVPARPPS10['si156_vlsaldofinanceiroexercicioanterior'] = $this->sicomNumberReal($aPARPPS10['si156_vlsaldofinanceiroexercicioanterior'], 2);
         
         $this->sLinha = $aCSVPARPPS10;
@@ -60,9 +60,9 @@ class GerarPARPPS extends GerarAM
 
         $aPARPPS20 = pg_fetch_array($rsPARPPS20, $iCont2);
 
-        $aCSVPARPPS20['si155_tiporegistro']             = $this->padZeroLeft($aPARPPS20['si155_tiporegistro'], 2);
-        $aCSVPARPPS20['si155_codorgao']                 = $this->padZeroLeft($aPARPPS20['si155_codorgao'], 2);
-        $aCSVPARPPS20['si155_exercicio']                = $this->padZeroLeft($aPARPPS20['si155_exercicio'], 4);
+        $aCSVPARPPS20['si155_tiporegistro']             = $aPARPPS20['si155_tiporegistro'];//$this->padZeroLeft($aPARPPS20['si155_tiporegistro'], 2);
+        $aCSVPARPPS20['si155_codorgao']                 = $aPARPPS20['si155_codorgao'];//$this->padZeroLeft($aPARPPS20['si155_codorgao'], 2);
+        $aCSVPARPPS20['si155_exercicio']                = $aPARPPS20['si155_exercicio'];//$this->padZeroLeft($aPARPPS20['si155_exercicio'], 4);
         $aCSVPARPPS20['si155_vlreceitaprevidenciaria']  = $this->sicomNumberReal($aPARPPS20['si155_vlreceitaprevidenciaria'], 2);
         $aCSVPARPPS20['si155_vldespesaprevidenciaria']  = $this->sicomNumberReal($aPARPPS20['si155_vldespesaprevidenciaria'], 2);
         
