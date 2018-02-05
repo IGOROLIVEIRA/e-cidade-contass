@@ -454,7 +454,8 @@ order by z01_nome";
        coalesce(rh55_estrut,'')||';'||
        coalesce(rh55_descr,'')||';'||
        coalesce(to_char(rh01_trienio,'DD-MM-YYYY'),'')||';'||
-       coalesce(to_char(rh01_progres,'DD-MM-YYYY'),'')
+       coalesce(to_char(rh01_progres,'DD-MM-YYYY'),'')||';'||
+       round(rh02_salari,2)
        
        as tipo
        
@@ -481,7 +482,9 @@ from rhpessoal
 where 1 = 1 
 $xwhere
 order by z01_nome
+
 " ;
+
   }elseif($exporta == 'E'){
     
   $arq = '/tmp/cadastro_banespa.txt';
@@ -646,7 +649,7 @@ order by z01_nome";
   $result = db_query($sql);
 // db_criatabela($result);exit; 
   if($exporta == 'C'){
-    fputs($arquivo,"ano;mes;matricula; nome; admissao;rescisao; sexo; nascimento; lotacao; descr_lotacao; funcao; descr_funcao; endereco; numero; complemento; bairro; municipio; uf; cep; telefone; instrucao; estado civil; matr_ipe; titulo; zona; secao; cert_reservista; cat_reserv; ctps_numero; ctps_serie; ctps_digito; ctps_uf; pis;cpf;rg; habilitacao; cat_habilit; validade_habilit; padrao; descr_tipo_vinculo; regime; vinculo; banco; agencia; dig_agencia; conta; dig_conta;estr_local;descr_local;trienio;progressao"."\r\n");
+    fputs($arquivo,"ano;mes;matricula; nome; admissao;rescisao; sexo; nascimento; lotacao; descr_lotacao; funcao; descr_funcao; endereco; numero; complemento; bairro; municipio; uf; cep; telefone; instrucao; estado civil; matr_ipe; titulo; zona; secao; cert_reservista; cat_reserv; ctps_numero; ctps_serie; ctps_digito; ctps_uf; pis;cpf;rg; habilitacao; cat_habilit; validade_habilit; padrao; descr_tipo_vinculo; regime; vinculo; banco; agencia; dig_agencia; conta; dig_conta;estr_local;descr_local;trienio;progressao;salario"."\r\n");
   }elseif($exporta == 'P'){
     fputs($arquivo,"matricula; nome; cod_regime; cod_cargo; descr_cargo; cod_funcao; descr_funcao"."\r\n");
   }elseif($exporta == 'B'){
