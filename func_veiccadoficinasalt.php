@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -35,7 +35,7 @@ db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clveiccadoficinas = new cl_veiccadoficinas;
 $clveiccadoficinas->rotulo->label("ve27_codigo");
-$clrotulo = new rotulocampo; 
+$clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
 ?>
 <html>
@@ -46,33 +46,33 @@ $clrotulo->label("z01_nome");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tve27_codigo?>">
               <?=$Lve27_codigo?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("ve27_codigo",10,$Ive27_codigo,true,"text",4,"","chave_ve27_codigo");
 		       ?>
             </td>
           </tr>
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tz01_nome?>">
               <?=$Lz01_nome?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("z01_nome",40,$Iz01_nome,true,"text",4,"","chave_z01_nome");
 		       ?>
             </td>
-          </tr>          
-          <tr> 
-            <td colspan="2" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+          </tr>
+          <tr>
+            <td colspan="2" align="center">
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
               <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_veiccadoficinas.hide();">
              </td>
@@ -81,11 +81,11 @@ $clrotulo->label("z01_nome");
         </table>
       </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
       if(!isset($pesquisa_chave)){
-        $campos = "veiccadoficinas.ve27_codigo,veiccadoficinas.ve27_numcgm,cgm.z01_nome";
+        $campos = "veiccadoficinas.ve27_codigo,veiccadoficinas.ve27_numcgm, cgm.z01_numcgm, cgm.z01_cgccpf, cgm.z01_nome";
         if(isset($chave_ve27_codigo) && (trim($chave_ve27_codigo)!="") ){
 	         $sql = $clveiccadoficinas->sql_query($chave_ve27_codigo,$campos,"ve27_codigo");
         }else if(isset($chave_z01_nome) && (trim($chave_z01_nome)!="") ){
@@ -93,6 +93,7 @@ $clrotulo->label("z01_nome");
         }else{
            $sql = $clveiccadoficinas->sql_query("",$campos,"ve27_codigo","");
         }
+
         $repassa = array();
         if(isset($chave_ve27_codigo)){
           $repassa = array("chave_ve27_codigo"=>$chave_ve27_codigo,"chave_ve27_codigo"=>$chave_ve27_codigo);
