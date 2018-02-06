@@ -59,7 +59,7 @@ ORDER BY pc11_seq) as x GROUP BY
                 pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
-                round(si02_vlprecoreferencia,2) as si02_vlprecoreferencia,
+                si02_vlprecoreferencia as si02_vlprecoreferencia,
                 pc01_codmater,
                 si01_datacotacao
 FROM pcproc
@@ -180,13 +180,13 @@ ob_start();
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
       $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-      $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
+      $lTotal = round($oResult->si02_vlprecoreferencia, 3) * $oResult->pc11_quant;
       $nTotalItens += $lTotal;
 
       $oDadosDaLinha = new stdClass();
       $oDadosDaLinha->item = $iCont + 1;
       $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
-      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 2, ",", ".");
+      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 3, ",", ".");
       $oDadosDaLinha->quantidade = $oResult->pc11_quant;
       $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
       $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");;
@@ -224,7 +224,7 @@ HTML;
         VALOR TOTAL DOS ITENS
       </div>
       <div class="th col-valor_total-valor align-right">
-        <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
+        <?= "R$" . number_format($nTotalItens, 3, ",", ".") ?>
       </div>
     </div>
   </div>

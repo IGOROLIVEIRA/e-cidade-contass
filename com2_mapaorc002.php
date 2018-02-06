@@ -214,7 +214,7 @@ if ($modelo == 1) {
     $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
     $pdf->cell(194, $alt,substr($pc01_descrmater,0,190), 1, 0, "L", 0);
     $pdf->cell(30, $alt,substr($pc23_obs,0,30), 1, 0, "L", 0);
-    $pdf->cell(20, $alt, db_formatar($vlrunit,"f"), 1, 0, "R", 0);
+    $pdf->cell(20, $alt, db_formatar($vlrunit,"f"," ",0,'e',3), 1, 0, "R", 0);
     $pdf->cell(20, $alt, $quant, 1, 1, "R", 0);
     $pdf->cell(279,$alt/2,'','',1,"L",0);
     
@@ -246,8 +246,8 @@ if ($modelo == 1) {
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
       $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-      $pdf->cell(20, $alt, db_formatar($pc23_vlrun,'f'), 1, 0, "R", 0);
-      $pdf->cell(20, $alt, db_formatar($pc23_valor,'f'), 1, 1, "R", 0);
+      $pdf->cell(20, $alt, db_formatar($pc23_vlrun,'f'," ",0,'e',3), 1, 0, "R", 0);
+      $pdf->cell(20, $alt, db_formatar($pc23_valor,'f'," ",0,'e',3), 1, 1, "R", 0);
       $total_unit  += $pc23_vlrun;
       $iContOrcamento++;
     }
@@ -255,8 +255,8 @@ if ($modelo == 1) {
     $pdf->setfont('arial', '', 9);
     $pdf->cell(20, $alt, "", 0, 0, "L", 0);
     $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
-    $pdf->cell(20, $alt, db_formatar($total_unit/$iContOrcamento,'f'), 0, 0, "R", 0);
-    $pdf->cell(20, $alt, db_formatar(($total_unit/$iContOrcamento)*$quant,'f'), 0, 1, "R", 0);
+    $pdf->cell(20, $alt, db_formatar($total_unit/$iContOrcamento,'f'," ",0,'e',3), 0, 0, "R", 0);
+    $pdf->cell(20, $alt, db_formatar(($total_unit/$iContOrcamento)*$quant,'f'," ",0,'e',3), 0, 1, "R", 0);
     $pdf->cell(279,$alt,'','',1,"L",0);
     $total_media += ($total_unit/$iContOrcamento)*$quant;
     
@@ -286,14 +286,14 @@ if ($modelo == 1) {
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
       $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-      $pdf->cell(40, $alt, db_formatar($vltotal, 'f'), 1, 1, "R", 0);
+      $pdf->cell(40, $alt, db_formatar($vltotal, 'f'," ",0,'e',3), 1, 1, "R", 0);
     }
     
   }
   $pdf->setfont('arial', '', 9);
   $pdf->cell(279,$alt,'','',1,"L",0);
   $pdf->cell(15, $alt, "Total da Média", 0, 0, "C", 0);
-  $pdf->cell(264, $alt, db_formatar($total_media,'f'), 0, 1, "R", 0);
+  $pdf->cell(264, $alt, db_formatar($total_media,'f'," ",0,'e',3), 0, 1, "R", 0);
 
 } else if ($modelo == 2) {
 
