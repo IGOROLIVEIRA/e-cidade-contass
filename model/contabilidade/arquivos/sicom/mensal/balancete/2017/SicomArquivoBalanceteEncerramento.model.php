@@ -17,6 +17,8 @@ require_once("classes/db_balancete222017_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarBALANCETE.model.php");
 require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
 
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 /**
  * Dados Complementares Sicom Acompanhamento Mensal
  * @author marcelo
@@ -120,7 +122,16 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         }
 
     }
-
+    public function getCodOrgaoTce($iCodInstit)
+    {
+        $sSqlorgao = "select si09_codorgaotce as codorgao,numcgm from infocomplementaresinstit inner join db_config on codigo = si09_instit where codigo = {$iCodInstit}";
+        $iCodOrgaoTce = db_utils::fieldsMemory(db_query($sSqlorgao), 0)->codorgao;
+        if ($iCodOrgaoTce == "") {
+          throw new Exception("Não foi possível encontrar o código do TCE do instituição {$iCodInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
+        }
+        
+        return $iCodOrgaoTce;
+    }
     /**
      * selecionar os dados para arquivo
      * @see iPadArquivoBase::gerarDados()
@@ -211,7 +222,11 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         $obalancete16 = new cl_balancete162017();
         $obalancete17 = new cl_balancete172017();
         $obalancete18 = new cl_balancete182017();
+        $obalancete23 = new cl_balancete232017();
+        $obalancete24 = new cl_balancete242017();
 
+        $obalancete24->excluir(null, "si191_mes = 13 and si191_instit = " . db_getsession("DB_instit"));
+        $obalancete23->excluir(null, "si190_mes = 13 and si190_instit = " . db_getsession("DB_instit"));
         $obalancete18->excluir(NULL, "si185_mes = 13 and si185_instit = " . db_getsession("DB_instit"));
         $obalancete17->excluir(NULL, "si184_mes = 13 and si184_instit = " . db_getsession("DB_instit"));
         $obalancete16->excluir(NULL, "si183_mes = 13 and si183_instit = " . db_getsession("DB_instit"));
@@ -2546,6 +2561,144 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     }
                 }
             }
+            /*
+               * DADOS PARA GERAÇÃO DO REGISTRO 24 Orgao
+               * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 24
+               *
+               */
+              
+              if ($oContas10->nregobrig == 24) {
+                
+                /*
+                 * Constante da contacorrente que indica o orgao
+                 */
+                
+                $nContaCorrente = 3;
+                
+                $sSqlReg24saldos = "SELECT
+                                                  (SELECT round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) AS saldoinicial
+                                                   FROM
+                                                     (SELECT
+                                                        (SELECT SUM(saldoanterior) AS saldoanterior FROM
+                                                            (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                                                             FROM contacorrente
+                                                             INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                                             INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+                                                             AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
+                                                             AND c19_instit = " . db_getsession('DB_instit') . "
+                                                             AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+                                                               AND c17_sequencial = {$nContaCorrente}) as x) AS saldoimplantado,
+
+                                                        (SELECT sum(c69_valor) AS debito
+                                                         FROM conlancamval
+                                                           INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                                           AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                                           INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                                           INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                                           INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                                           INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                                           WHERE c28_tipo = 'D'
+                                                             AND DATE_PART('MONTH',c69_data) < " . $nMes . "
+                                                             AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                                                             AND c19_contacorrente = {$nContaCorrente}
+                                                             AND c19_instit = " . db_getsession('DB_instit') . "
+                                                             AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+                                                             {$sWhereEncerramento}
+                                                           GROUP BY c28_tipo) AS debitoatual,
+
+                                                        (SELECT sum(c69_valor) AS credito
+                                                         FROM conlancamval
+                                                           INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                                           AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                                           INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                                           INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                                           INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                                           INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                                           WHERE c28_tipo = 'C'
+                                                             AND DATE_PART('MONTH',c69_data) < " . $nMes . "
+                                                             AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                                                             AND c19_contacorrente = {$nContaCorrente}
+                                                             AND c19_instit = " . db_getsession('DB_instit') . "
+                                                             AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+                                                             {$sWhereEncerramento}
+                                                           GROUP BY c28_tipo) AS creditoatual) AS movi) AS saldoanterior,
+
+                                                  (SELECT sum(c69_valor)
+                                                   FROM conlancamval
+                                                   INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                                   AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                                   INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                                   INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                                   INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                                   INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                                   WHERE c28_tipo = 'C'
+                                                     AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                                                     AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                                                     AND c19_contacorrente = {$nContaCorrente}
+                                                     AND c19_instit = " . db_getsession('DB_instit') . "
+                                                     AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+                                                     {$sWhereEncerramento}
+                                                   GROUP BY c28_tipo) AS creditos,
+
+                                                  (SELECT sum(c69_valor)
+                                                   FROM conlancamval
+                                                   INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                                   AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                                   INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                                   INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                                   INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                                   INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                                   WHERE c28_tipo = 'D'
+                                                     AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                                                     AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                                                     AND c19_contacorrente = {$nContaCorrente}
+                                                     AND c19_instit = " . db_getsession('DB_instit') . "
+                                                     AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
+                                                     {$sWhereEncerramento}
+                                                   GROUP BY c28_tipo) AS debitos";
+                
+                $rsReg24saldos = db_query($sSqlReg24saldos);
+                
+                for ($iContSaldo24 = 0; $iContSaldo24 < pg_num_rows($rsReg24saldos); $iContSaldo24++) {
+                  
+                  $oReg24Saldo = db_utils::fieldsMemory($rsReg24saldos, $iContSaldo24);
+                  
+                  if (!(($oReg24Saldo->saldoanterior == "" || $oReg24Saldo->saldoanterior == 0) && $oReg24Saldo->debitos == "" && $oReg24Saldo->creditos == "")) {
+                    
+                    $sHash24 = '24' . $oContas10->si177_contacontaabil . $objContasorgao->codorgao;
+                    
+                    if (!isset($aContasReg10[$reg10Hash]->reg24[$sHash24])) {
+                      
+                      $obalancete24 = new stdClass();
+                      
+                      $obalancete24->si191_tiporegistro = 24;
+                      $obalancete24->si191_contacontabil = $oContas10->si177_contacontaabil;
+                      $obalancete24->si191_codfundo = "00000000";
+                      $obalancete24->si191_codorgao = $this->getCodOrgaoTce(db_getsession("DB_instit"));
+                      $obalancete24->si191_codunidadesub = "";
+                      $obalancete24->si191_saldoinicialorgao = $oReg24Saldo->saldoanterior;
+                      $obalancete24->si191_naturezasaldoinicialorgao = $oReg24Saldo->saldoanterior >= 0 ? 'D' : 'C';
+                      $obalancete24->si191_totaldebitosorgao = $oReg24Saldo->debitos;
+                      $obalancete24->si191_totalcreditosorgao = $oReg24Saldo->creditos;
+                      $obalancete24->si191_saldofinalorgao = ($oReg24Saldo->saldoanterior + $oReg24Saldo->debitos - $oReg24Saldo->creditos) == '' ? 0 : ($oReg24Saldo->saldoanterior + $oReg24Saldo->debitos - $oReg24Saldo->creditos);
+                      $obalancete24->si191_naturezasaldofinalorgao = ($oReg24Saldo->saldoanterior + $oReg24Saldo->debitos - $oReg24Saldo->creditos) >= 0 ? 'D' : 'C';
+                      $obalancete24->si191_instit = db_getsession("DB_instit");
+                      $obalancete24->si191_mes = 13;
+                      
+                      $aContasReg10[$reg10Hash]->reg24[$sHash24] = $obalancete24;
+                    } else {
+                      
+                      $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_saldoinicialorgao += $oReg24Saldo->saldoanterior;
+                      $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_totaldebitosorgao += $oReg24Saldo->debitos;
+                      $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_totalcreditosorgao += $oReg24Saldo->creditos;
+                      $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_saldofinalorgao += ($oReg24Saldo->saldoanterior + $oReg24Saldo->debitos - $oReg24Saldo->creditos) == '' ? 0 : ($oReg24Saldo->saldoanterior + $oReg24Saldo->debitos - $oReg24Saldo->creditos);
+                      $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_naturezasaldofinalorgao = $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_saldofinalorgao >= 0 ? 'D' : 'C';
+                      $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_naturezasaldoinicialorgao = $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_saldoinicialorgao >= 0 ? 'D' : 'C';
+                    }
+                  }
+                }
+                
+              }
         }
 
         /*
@@ -3059,7 +3212,46 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     throw new Exception($obalreg22->erro_msg);
                 }
             }
-        }
+            foreach ($oDado10->reg24 as $reg24) {
+        
+                $obalreg24 = new cl_balancete242017();
+                
+                $obalreg24->si191_tiporegistro = $reg24->si191_tiporegistro;
+                $obalreg24->si191_contacontabil = $reg24->si191_contacontabil;
+                $obalreg24->si191_codfundo = "00000000";
+                $obalreg24->si191_codorgao = $reg24->si191_codorgao;
+                $obalreg24->si191_codunidadesub = "";
+                $obalreg24->si191_saldoinicialorgao = number_format(abs($reg24->si191_saldoinicialorgao == '' ? 0 : $reg24->si191_saldoinicialorgao), 2, ".", "");
+                $obalreg24->si191_naturezasaldoinicialorgao = $obalreg24->si191_naturezasaldoinicialorgao = $reg24->si191_saldoinicialorgao == 0 ? $oDado10->naturezasaldo : ($reg24->si191_saldoinicialorgao > 0 ? 'D' : 'C');
+                $obalreg24->si191_totaldebitosorgao = number_format(abs($reg24->si191_totaldebitosorgao), 2, ".", "");
+                $obalreg24->si191_totalcreditosorgao = number_format(abs($reg24->si191_totalcreditosorgao), 2, ".", "");
+                $saldoFinal = ($reg24->si191_saldoinicialorgao + $reg24->si191_totaldebitosorgao - $reg24->si191_totalcreditosorgao) == '' ? 0 : ($reg24->si191_saldoinicialorgao + $reg24->si191_totaldebitosorgao - $reg24->si191_totalcreditosorgao);
+                $obalreg24->si191_saldofinalorgao = number_format(abs($saldoFinal), 2, ".", "");
+                if ($this->bEncerramento) {
+                    /**
+                     * Caso seja encerramento:
+                     * 1. O saldo inicial é o saldo final calculado com os debitos e creditos sem os documentos do tipo 1000 (mesmo saldo final do mes 12)
+                     * 2. Calculamos um novo saldo final baseado na movimentação (debitos e creditos) que tenha apenas o documento 1000
+                     */
+                    $obalreg24->si191_saldoinicialorgao = $obalreg24->si191_saldofinalorgao == '' ? 0 : $obalreg24->si191_saldofinalorgao;
+                    $obalreg24->si191_naturezasaldoinicialorgao = $reg24->si191_saldofinalorgao == 0 ? $oDado10->naturezasaldo : ($reg24->si191_saldofinalorgao > 0 ? 'D' : 'C');
+                    $obalreg24->si191_totaldebitosorgao = number_format(abs(0), 2, ".", "");
+                    $obalreg24->si191_totalcreditosorgao = number_format(abs(0), 2, ".", "");
+                    $saldoFinal = ($saldoFinal + $obalreg24->si191_totaldebitosorgao - $obalreg24->si191_totalcreditosorgao) == '' ? 0 : ($saldoFinal + $obalreg24->si191_totaldebitosorgao - $obalreg24->si191_totalcreditosorgao);
+                    $obalreg24->si191_saldofinalorgao = number_format(abs($saldoFinal == '' ? 0 : $saldoFinal), 2, ".", "");
+                }
+                $obalreg24->si191_naturezasaldofinalorgao = $saldoFinal == 0 ? $obalreg24->si191_naturezasaldoinicialorgao : ($saldoFinal > 0 ? 'D' : 'C');
+                $obalreg24->si191_instit = $reg24->si191_instit;
+                $obalreg24->si191_mes = $reg24->si191_mes;
+                $obalreg24->si191_reg10 = $obalancete10->si177_sequencial;
+                
+                $obalreg24->incluir(null);
+                
+                if ($obalreg24->erro_status == 0) {
+                  throw new Exception($obalreg24->erro_msg);
+                }
+              }
+            }
 
 
         db_fim_transacao();
