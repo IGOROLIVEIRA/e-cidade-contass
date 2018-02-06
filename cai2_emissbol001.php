@@ -74,6 +74,7 @@ function js_relatorio() {
   //var conta                = obj.k13_conta.value;
   var quebrarpag           = obj.quebrarpag.value;
   var contassemmov         = obj.k29_contassemmovimento.value;
+  var agruparfonte         = obj.agrupar_fonte.value;
   
   jan = window.open('cai2_emissbol002.php?contasnegativas='+contasnegativas
                                                            +'&imprime_interferencia='+imprimeinterferencia
@@ -84,7 +85,8 @@ function js_relatorio() {
                                                            +'&caixabanco='+caixabanco
                                                            //+'&conta='+conta
                                                            +'&quebrarpag='+quebrarpag
-                                                           +'&contassemmov='+contassemmov,
+                                                           +'&contassemmov='+contassemmov
+                                                           +'&agrupar_fonte='+agruparfonte,
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
@@ -271,7 +273,7 @@ function js_bloquearordem(){
             <option value = 'N'>Não</option>
         </td>
       </tr>  	    
-     <tr>
+      <tr>
         <td align="right"><strong>Ordem:</strong></td>
         <td> &nbsp; &nbsp;
           <select name="ordem_conta">
@@ -281,6 +283,15 @@ function js_bloquearordem(){
             <option value = '4'>Descrição</option>
             <option value = '5'>Reduzido</option>
 
+        </td>
+      </tr>
+     <tr>
+        <td align="right"><strong>Agrupar por fonte de recursos:</strong></td>
+        <td> &nbsp; &nbsp;
+          <select name="agrupar_fonte">
+            <option value = 'N'>Não</option>
+            <option value = 'S'>Sim</option>
+          </select>
         </td>
       </tr>
 

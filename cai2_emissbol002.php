@@ -256,7 +256,23 @@ from
               left join saltes c   on c.k13_conta = corrente.k12_conta
               left join saltes d   on d.k13_conta = b.k12_conta
 	 where corrente.k12_instit = ".db_getsession("DB_instit")." and
-	       corrente.k12_data between '".$datai."' and '".$dataf."' $seleciona_conta $seleciona)
+	       corrente.k12_data between '".$datai."' and '".$dataf."' $seleciona_conta $seleciona ";
+if ($agrupar == 'S') {
+
+      $sql .= " and (select c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia as hashconta
+                 from conplanoconta
+                 inner join conplanoreduz on c61_anousu = c63_anousu
+                 and c61_codcon=c63_codcon
+                 where c61_reduz=corrente.k12_conta
+                     and c61_anousu=".db_getsession('DB_anousu').") !=
+                (select c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia as hashconta
+                 from conplanoconta
+                 inner join conplanoreduz on c61_anousu = c63_anousu
+                 and c61_codcon=c63_codcon
+                 where c61_reduz=b.k12_conta
+                     and c61_anousu=".db_getsession('DB_anousu').") ";
+}
+      $sql .= " )
 	as x) as xx) as xxx
           inner join conplanoexe   e on entrou = e.c62_reduz
                               and e.c62_anousu = ".db_getsession('DB_anousu')."
@@ -291,8 +307,14 @@ if ($ordem_conta == 1) {
 if($agrupar=='S'){
   $ordem_conta = "c63_banco,lpad(c63_agencia,4,0),c63_dvagencia,c63_conta,c63_dvconta,c63_tipoconta";
 }
+
+if ($agrupar_fonte == 'S') {
+  $ordem_conta = "c61_codigo,".$ordem_conta;
+}
 /// CONTAS MOVIMENTO
-$sql="select k13_reduz,
+$sql="select   c61_codigo,
+               o15_descr,
+               k13_reduz,
                k13_descr,
                c60_estrut,
                c60_codsis,
@@ -303,20 +325,29 @@ $sql="select k13_reduz,
 	       substr(fc_saltessaldo,28,13)::float8 as creditado,
 	       substr(fc_saltessaldo,41,13)::float8 as atual
 	from (
- 	      select k13_reduz,
+ 	      select c61_codigo,
+               o15_descr,
+               k13_reduz,
  	             k13_descr,
 	             c60_estrut,
 		     c60_codsis,
          c63_banco,c63_agencia,c63_conta,c63_dvconta,c63_dvagencia,c63_tipoconta,
-         c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia as hashconta,
-	             fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',$ip,".db_getsession("DB_instit").")
-	      from  saltes
+         c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia as hashconta, ";
+
+         if ($agrupar == 'S') {
+          $sql .= " fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',$ip,".db_getsession("DB_instit").",
+                     c63_banco::integer||lpad(c63_agencia,4,0)||c63_conta||c63_dvconta||c63_dvagencia) ";
+        } else {
+          $sql .= " fc_saltessaldo(k13_reduz,'".$datai."','".$dataf."',$ip,".db_getsession("DB_instit").") ";
+        }
+$sql .=	" from  saltes
 	             inner join conplanoexe   on k13_reduz = c62_reduz
 		                             and c62_anousu = ".db_getsession('DB_anousu')."
 		     inner join conplanoreduz on c62_reduz  = c61_reduz and
 		                                 c61_anousu = c62_anousu and
 		                                 c61_instit = ".db_getsession("DB_instit")."
 	             inner join conplano      on c60_codcon = c61_codcon and c60_anousu=c61_anousu
+               inner join orctiporec ON o15_codigo = c61_codigo
 	             left  join conplanoconta on c60_codcon = c63_codcon and c63_anousu=c60_anousu
   where (k13_limite is null or k13_limite >= '$dataatual' )
  	order by ".$ordem_conta."
@@ -445,14 +476,36 @@ $caixa_saldo_anterior = 0;
 $caixa_debitado = 0;
 $caixa_creditado = 0;
 $caixa_saldo_atual = 0;
+$aAgrupaFonteCaixa  = array();
+$aAgrupaFonteBancos = array();
 for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 	db_fieldsmemory($resultcontasmovimento, $i);
 	//if ($c60_codsis == 5) {
 		$caixa_saldo_anterior += $anterior;
-		$caixa_debitado += $debitado;
+    $caixa_debitado += $debitado;
 		$caixa_creditado += $creditado;
 		$caixa_saldo_atual += $atual;
 	//}
+    if ($agrupar_fonte == 'S') {
+      if ($c60_codsis == 5) {
+        $nomeArray = "aAgrupaFonteCaixa";
+      } else if ($c60_codsis == 6) {
+        $nomeArray = "aAgrupaFonteBancos";
+      }
+      if (!isset(${$nomeArray}[$c61_codigo])) {
+        $oFonte = new stdClass();
+        $oFonte->o15_descr = $o15_descr;
+        $oFonte->anterior = 0;
+        $oFonte->debitado = 0;
+        $oFonte->creditado = 0;
+        $oFonte->atual = 0;
+        ${$nomeArray}[$c61_codigo] = $oFonte;
+      }
+      ${$nomeArray}[$c61_codigo]->anterior += $anterior;
+      ${$nomeArray}[$c61_codigo]->debitado += $debitado;
+      ${$nomeArray}[$c61_codigo]->creditado += $creditado;
+      ${$nomeArray}[$c61_codigo]->atual += $atual;
+    }
 }
 
 $saldo_seguinte = $cai_tot_entradas + $caixa_saldo_anterior - $cai_tot_saidas;
@@ -504,7 +557,7 @@ $cai_tot_entradas = $cai_rec_orc + $cai_rec_ext + $cai_ret_bco;
 $cai_tot_saidas = $cai_desp_ext + $cai_dep_bco + $cai_desp_orca + $cai_dep_bco_orca;
 //echo $cai_desp_ext;
 /// SALDOS DO CAIXA
-$caixa_saldo_anterior = 0;
+/*$caixa_saldo_anterior = 0;
 $caixa_debitado = 0;
 $caixa_creditado = 0;
 $caixa_saldo_atual = 0;
@@ -516,7 +569,7 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 		$caixa_creditado += $creditado;
 		$caixa_saldo_atual += $atual;
 	//}
-}
+}*/
 $saldo_seguinte = $cai_tot_entradas + $caixa_saldo_anterior - $cai_tot_saidas;
 $alt = 5;
 $pdf->SetFont('Arial', 'B', 10);
@@ -539,6 +592,7 @@ $saldoc_creditado = 0;
 $saldoc_atual = 0;
 $pdf->SetTextColor(0);
 $pdf->SetFont('Arial', '', 8);
+$sVerificaFonte = "";
 for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 	db_fieldsmemory($resultcontasmovimento, $i);
 	if ($pdf->gety() > ($pdf->h - 30)) {
@@ -559,6 +613,19 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 		$pdf->SetFont('Arial', '', 6);
 	}
 	if ($c60_codsis == 5) {
+    if ($agrupar_fonte == "S" && $sVerificaFonte != $o15_descr) {
+      if ($sVerificaFonte != "") {
+        $pdf->cell(192, $alt, "", 1, 1, 1, 0);
+      }
+      $pdf->SetFont('Arial', 'B', 7);
+      $pdf->cell(96, $alt, $c61_codigo.' - '.substr($o15_descr,0,57), "LTB", 0, 'L', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o61_codigo]->anterior, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o61_codigo]->debitado, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o61_codigo]->creditado, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o61_codigo]->atual, 'f'), 1, 1, 'R', 0);
+      $pdf->SetFont('Arial', '', 6);
+      $sVerificaFonte = $o15_descr;
+    }
 		$pdf->cell(80, $alt, $k13_reduz.' - '.$k13_descr, "LTB", 0, 'L', 0);
 		$pdf->cell(16, $alt, $c63_conta, "RTB", 0, 'L', 0);
 		$pdf->cell(24, $alt, db_formatar($anterior, 'f'), 1, 0, 'R', 0);
@@ -697,6 +764,8 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
         $oConta->descr = $k13_reduz.' - '.$k13_descr;
         $oConta->c63_conta = $c63_conta;
       }
+      $oConta->o15_descr   = $o15_descr;
+      $oConta->c61_codigo  = $c61_codigo;
       $oConta->anterior    = $anterior;
       $oConta->debitado    = $debitado;
       $oConta->creditado   = $creditado;
@@ -711,6 +780,7 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
     }
   }
 }
+$sVerificaFonte = "";
 foreach ($aContasMovs as $oConta) {
 	if ($contassemmov == "f" and $oConta->debitado == 0 and $oConta->creditado == 0 and $oConta->anterior==0 and $oConta->atual ==0) {
     continue;
@@ -741,12 +811,24 @@ foreach ($aContasMovs as $oConta) {
   }
 
 	if ($oConta->codsis == 6) {
+    if ($agrupar_fonte == "S" && $sVerificaFonte != $oConta->o15_descr) {
+      if ($sVerificaFonte != "") {
+        $pdf->cell(192, $alt, 0, 1, 1, 1, 0);
+      }
+      $pdf->SetFont('Arial', 'B', 7);
+      $pdf->cell(96, $alt, $oConta->c61_codigo.' - '.substr($oConta->o15_descr,0,57), "LTB", 0, 'L', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->c61_codigo]->anterior, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->c61_codigo]->debitado, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->c61_codigo]->creditado, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->c61_codigo]->atual, 'f'), 1, 1, 'R', 0);
+      $pdf->SetFont('Arial', '', 6);
+      $sVerificaFonte = $oConta->o15_descr;
+    }
 		$pdf->cell(80, $alt, $oConta->descr, "LTB", 0, 'L', $pre);
 
 		$pdf->SetFont('Arial', '', 6);
 		$pdf->cell(16, $alt, $oConta->c63_conta, "RTB", 0, 'L', $pre);
 
-		$pdf->SetFont('Arial', '', 8);
 		$pdf->cell(24, $alt, db_formatar($oConta->anterior, 'f'), 1, 0, 'R', $pre);
 		$pdf->cell(24, $alt, db_formatar($oConta->debitado, 'f'), 1, 0, 'R', $pre);
 		$pdf->cell(24, $alt, db_formatar($oConta->creditado, 'f'), 1, 0, 'R', $pre);
@@ -1486,10 +1568,10 @@ $pdf->SetTextColor(0);
 
 $ass_sec_original = $classinatura->assinatura(1002, "");
 
-$tes = "______________________________"."\n"."Tesoureiro";
-$sec = "______________________________"."\n"."Secretaria da Fazenda";
-$cont = "______________________________"."\n"."Contador";
-$pref = "______________________________"."\n"."Prefeito";
+$tes = "______________________________"."\n\n"."Tesoureiro";
+$sec = "______________________________"."\n\n"."Secretaria da Fazenda";
+$cont = "______________________________"."\n\n"."Contador";
+$pref = "______________________________"."\n\n"."Prefeito";
 $ass_pref = $classinatura->assinatura(1000, $pref);
 //$ass_pref = $classinatura->assinatura_usuario();
 $ass_sec = $classinatura->assinatura(1002, $sec);
