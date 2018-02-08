@@ -76,7 +76,8 @@ WHERE pc80_codproc = $codigo_preco
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
 ;
 
-$rsResult = db_query($sSql) or die(pg_last_error());//db_criatabela($rsResult);exit;
+$rsResult = db_query($sSql) or die(pg_last_error());
+//db_criatabela($rsResult);exit;
 
 $head3 = "Preço de Referência";
 $head5 = "Processo de Compra: $codigo_preco";
@@ -180,7 +181,7 @@ ob_start();
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
       $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-      $lTotal = round($oResult->si02_vlprecoreferencia, 3) * $oResult->pc11_quant;
+      $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
       $nTotalItens += $lTotal;
 
       $oDadosDaLinha = new stdClass();
