@@ -161,16 +161,16 @@
 	$this->objpdf->rect($xcol+ 29,$xlin+24,13,6,2,'DF','12');//$this->objpdf->rect($xcol+ 27,$xlin+24,11,6,2,'DF','12');
 $this->objpdf->rect($xcol + 42, $xlin + 24, 13, 6, 2, 'DF', '12');//$this->objpdf->rect($xcol+ 27,$xlin+24,11,6,2,'DF','12');
 $this->objpdf->rect($xcol + 55, $xlin + 24, 99, 6, 2, 'DF', '12');//$this->objpdf->rect($xcol+ 38,$xlin+24,104,6,2,'DF','12');
-$this->objpdf->rect($xcol + 154, $xlin + 24, 28, 6, 2, 'DF', '12');
-$this->objpdf->rect($xcol + 182, $xlin + 24, 21, 6, 2, 'DF', '12');
+$this->objpdf->rect($xcol + 154, $xlin + 24, 26, 6, 2, 'DF', '12');
+$this->objpdf->rect($xcol + 180, $xlin + 24, 22, 6, 2, 'DF', '12');
 
 	$this->objpdf->rect($xcol    ,$xlin+30,12,205  -$xlin ,2,'DF','34');
 	$this->objpdf->rect($xcol+ 12,$xlin+30,17,205  -$xlin ,2,'DF','34');
 	$this->objpdf->rect($xcol+ 29,$xlin+30,13,205  -$xlin ,2,'DF','34'); //$this->objpdf->rect($xcol+ 27,$xlin+30,11,205  -$xlin ,2,'DF','34');
 $this->objpdf->rect($xcol + 42, $xlin + 30, 13, 205 - $xlin, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 27,$xlin+30,11,205  -$xlin ,2,'DF','34');
 $this->objpdf->rect($xcol + 55, $xlin + 30, 99, 205 - $xlin, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 38,$xlin+30,104,205 -$xlin ,2,'DF','34');
-$this->objpdf->rect($xcol + 154, $xlin + 30, 28, 205 - $xlin, 2, 'DF', '');
-$this->objpdf->rect($xcol + 182, $xlin + 30, 21, 205 - $xlin, 2, 'DF', '34');
+$this->objpdf->rect($xcol + 154, $xlin + 30, 26, 205 - $xlin, 2, 'DF', '');
+$this->objpdf->rect($xcol + 180, $xlin + 30, 22, 205 - $xlin, 2, 'DF', '34');
 
   $this->objpdf->sety($xlin+28);
 	$alt = 4;
@@ -180,8 +180,8 @@ $this->objpdf->rect($xcol + 182, $xlin + 30, 21, 205 - $xlin, 2, 'DF', '34');
 	$this->objpdf->text($xcol+30.5,$xlin+28,'QUANT');  //$this->objpdf->text($xcol+27.5,$xlin+28,'QUANT');
 $this->objpdf->text($xcol + 45.5, $xlin + 28, 'UNID');
 $this->objpdf->text($xcol + 77, $xlin + 28, 'MATERIAL OU SERVIÇO'); //$this->objpdf->text($xcol+  70,$xlin+28,'MATERIAL OU SERVIÇO');
-$this->objpdf->text($xcol + 156, $xlin + 28, 'VALOR UNITÁRIO');
-$this->objpdf->text($xcol + 182, $xlin + 28, 'VALOR TOTAL');
+$this->objpdf->text($xcol + 155, $xlin + 28, 'VALOR UNITÁRIO');
+$this->objpdf->text($xcol + 181, $xlin + 28, 'VALOR TOTAL');
   $maiscol = 0;
 
   $this->objpdf->setfillcolor(0,0,0);
@@ -216,7 +216,7 @@ $this->objpdf->text($xcol + 182, $xlin + 28, 'VALOR TOTAL');
     }
   }
 
-$this->objpdf->SetWidths(array(12, 17, 13, 13, 99, 28, 21));  //$this->objpdf->SetWidths(array(12,16,10,104,30,30));
+$this->objpdf->SetWidths(array(12, 17, 13, 13, 99, 26, 21));  //$this->objpdf->SetWidths(array(12,16,10,104,30,30));
 $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 
 	$this->objpdf->setleftmargin(4);
@@ -416,13 +416,14 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 	  $item++;
 
 	}
+  $this->objpdf->Setfont('Arial','B',8);
 	if($pagina == 1){
 
 	  $xlin = 20;
 	  $xcol = 4;
 	$this->objpdf->rect($xcol, $xlin + 205, 154, 10, 2, 'DF', '34');
-	$this->objpdf->rect($xcol + 154, $xlin + 205, 28, 10, 2, 'DF', '34');
-	$this->objpdf->rect($xcol + 182, $xlin + 205, 21, 10, 2, 'DF', '34');
+	$this->objpdf->rect($xcol + 154, $xlin + 205, 26, 10, 2, 'DF', '34');
+	$this->objpdf->rect($xcol + 180, $xlin + 205, 22, 10, 2, 'DF', '34');
 	$this->objpdf->text($xcol + 111, $xlin + 211, 'T O T A L   G E R A L');
 
 	  $this->objpdf->SetXY(173,$xlin+205);
