@@ -440,7 +440,7 @@ union all
 		                    0 as valor_credito,
 	                      ('Baixa da banco ')::text as tipo_movimentacao,
 		                     discla.codret as codigo,
-                        'Baixa'::text as tipo,
+                        'baixa'::text as tipo,
 		                    cornump.k12_receit as receita,
 		                    tabrec.k02_drecei::text as receita_descr,
 		                    (coalesce(corhist.k12_histcor,'.'))::text as historico,
