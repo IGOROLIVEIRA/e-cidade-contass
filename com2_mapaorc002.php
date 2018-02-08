@@ -83,7 +83,7 @@ if (isset($tipoOrcamento) && !empty($tipoOrcamento)) {
 $sInner = "";
 
 if ($sOrigem == "solicitacao") {
-  $sSqlMater = $clpcorcamitem->sql_query_pcmatersol(null, "pc11_codigo, pc11_numero, pc11_seq, pc22_codorc, 1 as l20_tipojulg", null, "pc20_codorc=$pc20_codorc"); 
+  $sSqlMater = $clpcorcamitem->sql_query_pcmatersol(null, "pc11_codigo, pc11_numero, pc11_seq, pc22_codorc, 1 as l20_tipojulg", null, "pc20_codorc=$pc20_codorc");
   $sInner = "inner join pcorcamitemsol          on pcorcamitemsol.pc29_orcamitem  = pcorcamtroca.pc25_orcamitem
              inner join solicitem               on solicitem.pc11_codigo          = pcorcamitemsol.pc29_solicitem";
 
@@ -101,15 +101,15 @@ if ($clpcorcamitem->numrows > 0) {
 }
 
 if (isset($imp_troca) && $imp_troca == "S") {
-  
+
   if ($sOrigem == "solicitacao") {
     $sWhere = "  pc11_numero =  $pc11_numero  ";
   }
-  
+
   if ($sOrigem == "processo") {
     $sWhere = "  pc81_codproc =  $pc81_codproc  ";
   }
-  
+
   $sql_troca = "select pc01_codmater, pc01_descrmater, pc25_motivo, nome_julgado, nome_trocado
                 from (select distinct on(pc25_orcamitem) pc25_orcamitem, pc25_codtroca, pc01_codmater, pc01_descrmater,
                                                          pc25_motivo, cgm.z01_nome as nome_julgado,
@@ -157,7 +157,7 @@ if ($modelo == 1) {
   //-----------------------------  MODELO 1  -----------------------------------------------------------------------------------------------------------------//
 
 
-  $sSqlFornecedores = $clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento");  
+  $sSqlFornecedores = $clpcorcamforne->sql_query(null, "*", null, "pc21_codorc=$orcamento");
   $result_forne = $clpcorcamforne->sql_record($sSqlFornecedores);
   $numrows_forne = $clpcorcamforne->numrows;
   if ($numrows_forne == 0) {
@@ -173,25 +173,25 @@ if ($modelo == 1) {
   $alt = 4;
   $total = 0;
   $p = 0;
-	
+
   if ($sOrigem == "solicitacao") {
-    $sSqlMater = $clpcorcamitem->sql_query_pcmatersol(null, 
-                                                        "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum", 
-                                                        "pc11_seq", "pc22_codorc=$orcamento");  
+    $sSqlMater = $clpcorcamitem->sql_query_pcmatersol(null,
+        "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum",
+        "pc11_seq", "pc22_codorc=$orcamento");
   } else if ($sOrigem == "processo") {
-    $sSqlMater = $clpcorcamitem->sql_query_pcmaterproc(null, 
-                                                        "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum", 
-                                                        "pc11_seq", "pc22_codorc=$orcamento");  
+    $sSqlMater = $clpcorcamitem->sql_query_pcmaterproc(null,
+        "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum",
+        "pc11_seq", "pc22_codorc=$orcamento");
   }
 
   $result_itens = $clpcorcamitem->sql_record($sSqlMater);
   $numrows_itens = $clpcorcamitem->numrows;
-  
+
   $pdf->addpage('L');
   $total_media = 0;
   for($x = 0; $x < $numrows_itens; $x ++) {
-  	
-  	$troca = 1;
+
+    $troca = 1;
     db_fieldsmemory($result_itens, $x);
     if ($pdf->gety() > $pdf->h - 60 || $troca != 0) {
       if ($pdf->gety() > $pdf->h - 60) {
@@ -206,21 +206,21 @@ if ($modelo == 1) {
       $p = 0;
       $troca = 0;
     }
-    $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as vlrunit,pc23_quant as quant,pc24_pontuacao,pc23_obs", null, 
-                                                   "pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1");
+    $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as vlrunit,pc23_quant as quant,pc24_pontuacao,pc23_obs", null,
+        "pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1");
     $result_valor_item = $clpcorcamval->sql_record($sSqlJulg);
     db_fieldsmemory($result_valor_item);
     $pdf->setfont('arial', '', 8);
     $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
     $pdf->cell(194, $alt,substr($pc01_descrmater,0,190), 1, 0, "L", 0);
     $pdf->cell(30, $alt,substr($pc23_obs,0,30), 1, 0, "L", 0);
-    $pdf->cell(20, $alt, db_formatar($vlrunit,"f"," ",0,'e',3), 1, 0, "R", 0);
+    $pdf->cell(20, $alt, db_formatar($vlrunit,"f"), 1, 0, "R", 0);
     $pdf->cell(20, $alt, $quant, 1, 1, "R", 0);
     $pdf->cell(279,$alt/2,'','',1,"L",0);
-    
+
     $troca = 1;
     $total_unit = 0;
-      $iContOrcamento = 0;
+    $iContOrcamento = 0;
     for($y = 0; $y < $numrows_forne; $y ++) {
       db_fieldsmemory($result_forne, $y);
       if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
@@ -235,9 +235,9 @@ if ($modelo == 1) {
         $pdf->cell(20, $alt, "Vl. Total", 1, 1, "C", 1);
         $troca = 0;
       }
-          
-      $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun,pc23_quant,pc23_valor,pc24_pontuacao", null, 
-                                                "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
+
+      $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun,pc23_quant,pc23_valor,pc24_pontuacao", null,
+          "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
       if(pg_num_rows($result_valor) == 0){
         continue;
@@ -246,8 +246,8 @@ if ($modelo == 1) {
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
       $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-      $pdf->cell(20, $alt, db_formatar($pc23_vlrun,'f'," ",0,'e',3), 1, 0, "R", 0);
-      $pdf->cell(20, $alt, db_formatar($pc23_valor,'f'," ",0,'e',3), 1, 1, "R", 0);
+      $pdf->cell(20, $alt, db_formatar($pc23_vlrun,'f'), 1, 0, "R", 0);
+      $pdf->cell(20, $alt, db_formatar($pc23_valor,'f'), 1, 1, "R", 0);
       $total_unit  += $pc23_vlrun;
       $iContOrcamento++;
     }
@@ -255,13 +255,13 @@ if ($modelo == 1) {
     $pdf->setfont('arial', '', 9);
     $pdf->cell(20, $alt, "", 0, 0, "L", 0);
     $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
-    $pdf->cell(20, $alt, db_formatar($total_unit/$iContOrcamento,'f'," ",0,'e',3), 0, 0, "R", 0);
-    $pdf->cell(20, $alt, db_formatar(($total_unit/$iContOrcamento)*$quant,'f'," ",0,'e',3), 0, 1, "R", 0);
+    $pdf->cell(20, $alt, db_formatar($total_unit/$iContOrcamento,'f'), 0, 0, "R", 0);
+    $pdf->cell(20, $alt, db_formatar(($total_unit/$iContOrcamento)*$quant,'f'), 0, 1, "R", 0);
     $pdf->cell(279,$alt,'','',1,"L",0);
     $total_media += ($total_unit/$iContOrcamento)*$quant;
-    
+
   }
-  
+
   $troca = 1;
   for($y = 0; $y < $numrows_forne; $y ++) {
     db_fieldsmemory($result_forne, $y);
@@ -269,31 +269,31 @@ if ($modelo == 1) {
       if ($pdf->gety() > $pdf->h - 30 ) {
         $pdf->addpage('L');
       }
-        $p = 0;
-        $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(279,$alt,'TOTAL',1,1,"C",1);
-        $pdf->cell(15, $alt, "Cgm", 1, 0, "C", 1);
-        $pdf->cell(224, $alt, "Fornecedor", 1, 0, "C", 1);
-        $pdf->cell(40, $alt, "Valor", 1, 1, "C", 1);
-        $troca = 0;
+      $p = 0;
+      $pdf->setfont('arial', 'b', 8);
+      $pdf->cell(279,$alt,'TOTAL',1,1,"C",1);
+      $pdf->cell(15, $alt, "Cgm", 1, 0, "C", 1);
+      $pdf->cell(224, $alt, "Fornecedor", 1, 0, "C", 1);
+      $pdf->cell(40, $alt, "Valor", 1, 1, "C", 1);
+      $troca = 0;
     }
-          
+
     $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "sum(pc23_valor) as vltotal", null,
-                                                "pc23_orcamforne=$pc21_orcamforne");
+        "pc23_orcamforne=$pc21_orcamforne");
     $result_valor = $clpcorcamval->sql_record($sSqlJulg);
     db_fieldsmemory($result_valor);
     if($vltotal > 0) {
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
       $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-      $pdf->cell(40, $alt, db_formatar($vltotal, 'f'," ",0,'e',3), 1, 1, "R", 0);
+      $pdf->cell(40, $alt, db_formatar($vltotal, 'f'), 1, 1, "R", 0);
     }
-    
+
   }
   $pdf->setfont('arial', '', 9);
   $pdf->cell(279,$alt,'','',1,"L",0);
   $pdf->cell(15, $alt, "Total da Média", 0, 0, "C", 0);
-  $pdf->cell(264, $alt, db_formatar($total_media,'f'," ",0,'e',3), 0, 1, "R", 0);
+  $pdf->cell(264, $alt, db_formatar($total_media,'f'), 0, 1, "R", 0);
 
 } else if ($modelo == 2) {
 
@@ -444,8 +444,8 @@ if ($modelo == 1) {
       }
 
       $sSqlJulg = $clpcorcamval->sql_query_julg(null, null,
-                                                "pc23_valor,pc23_vlrun,pc24_pontuacao", null,
-                                                "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
+          "pc23_valor,pc23_vlrun,pc24_pontuacao", null,
+          "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
 
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
       if ($clpcorcamval->numrows > 0) {
