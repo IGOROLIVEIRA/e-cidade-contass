@@ -805,7 +805,7 @@ class cl_empagetipo {
       $whereFonte2 = " ";
     }else{
       $whereFonte = " ";
-      $whereFonte2 = " and c61_codigo = o58_codigo ";
+      $whereFonte2 = " AND (SELECT o15_codtri FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT o15_codtri FROM orctiporec WHERE o15_codigo = o58_codigo) ";
     }
 
     $sSql .= "from empagetipo left join ";
