@@ -108,7 +108,7 @@ require_once ("dbforms/db_funcoes.php");
               <table>
                 <tr>
                   <td>
-                    <label class="bold" for="contadevedora" id="lbl_contadevedora">Conta Devedora:</label>
+                    <label class="bold" for="contadevedora" id="lbl_contadevedora">Conta com SALDO Devedor:</label>
                   </td>
                   <td>
                     <?php
@@ -119,7 +119,7 @@ require_once ("dbforms/db_funcoes.php");
                 </tr>
                 <tr>
                   <td>
-                    <label class="bold" for="contacredora" id="lbl_contacredora">Conta Credora:</label>
+                    <label class="bold" for="contacredora" id="lbl_contacredora">Conta com SALDO Credor:</label>
                   </td>
                   <td>
                     <?php
@@ -130,11 +130,11 @@ require_once ("dbforms/db_funcoes.php");
                 </tr>
                 <tr>
                   <td>
-                    <label class="bold" for="c117_contareferencia" id="lbl_c117_contareferenciaa">Conta Referência:</label>
+                    <label class="bold" for="c117_contareferencia" id="lbl_c117_contareferenciaa">Conta Referência para valor do lançamento:</label>
                   </td>
                   <td>
                     <?php
-                    $x = array("D" => "Devedora", "C" => "Credora");
+                    $x = array("D" => "Conta com SALDO Devedor", "C" => "Conta com SALDO Credor");
                     db_select('c117_contareferencia',$x,'','','','c117_contareferencia');
                     ?>
                   </td>
