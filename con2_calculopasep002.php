@@ -311,10 +311,22 @@ ob_start();
         <td class="s4"><?=db_formatar($fTEIMN = 0,"f")?></td>
       </tr>
       <tr style=''>
+        <td class="s3 bdleft">
+          Transferências de Municípios a Consórcios Públicos
+        </td>
+
+        <td class="s4">
+          <?php
+           $aDadosCons = getSaldoReceita(null,"sum(saldo_arrecadado) as saldo_arrecadado",null,"o57_fonte like '4173802%'");
+           $fTCons = count($aDadosCons) > 0 ? $aDadosCons[0]->saldo_arrecadado : 0;
+           echo db_formatar($fTCons,"f");
+          ?>
+      </tr>
+      <tr style=''>
         <td class="s1 bdleft">Total das exclusões da Receita (II) -</td>
         <td class="s5">
           <?php
-          $fTotalExclusaoReceitaII = array_sum(array($fTotalTC,$fCRICOD,$fTOEDPI,$fTEUEDM,$fTEIMN));
+          $fTotalExclusaoReceitaII = array_sum(array($fTotalTC,$fCRICOD,$fTOEDPI,$fTEUEDM,$fTEIMN,$fTCons));
           echo db_formatar($fTotalExclusaoReceitaII,"f");
           ?>
         </td>
