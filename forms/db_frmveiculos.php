@@ -94,7 +94,7 @@ if ($clveicparam->numrows>0){
 	db_fieldsmemory($result_param,0);		
 }
 ?>
-<form name="form1" method="post" action="">
+<form name="form1" id="form1" method="post" action="">
 <center>
 <table border="0">
  <tr>
@@ -126,8 +126,16 @@ db_input('ve01_codunidadesub',10,1,true,'text',$db_opcao,"","","","",8);
 	<td> <?=@$Lsi04_tipoveiculo?> </td>
 	<td nowrap title="<?=@$Tsi04_tipoveiculo?>">
 	<?
-    $x = array('3'=>'Veiculos', '1'=>'Aeronaves','2'=>'Embarcações', '4'=>'Maquinário', '5'=>'Equipamentos', '99'=>'Outros');
-	db_select('si04_tipoveiculo',$x,true,$db_opcao," onchange='js_verifica_select(this.value);'");
+    $x = array(
+         0 =>'Selecione',
+         3 =>'Veiculos',
+         1 =>'Aeronaves',
+         2 =>'Embarcações',
+         4 =>'Maquinário',
+         5 =>'Equipamentos',
+         99=>'Outros');
+	db_select('si04_tipoveiculo',$x,true,$db_opcao,
+        " onchange='js_verifica_select(this.value);js_tipodeveiculo(this.value)'");
     ?>
     </td>
     </tr>
@@ -258,7 +266,7 @@ db_selectrecord("ve01_veiccadcateg",$result_categ,true,$db_opcao,"","","","0-Nen
 ?>
     </td>
   </tr>
-  <tr>
+  <tr id="trchassi" style="display: ;">
     <td nowrap title="<?=@$Tve01_chassi?>">
        <?=@$Lve01_chassi?>
     </td>
@@ -268,7 +276,7 @@ db_input('ve01_chassi',30,$Ive01_chassi,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  <tr>
+  <tr id="trrenavam" style="display: ;">
     <td nowrap title="<?=@$Tve01_ranavam?>">
        <?=@$Lve01_ranavam?>
     </td>
@@ -289,7 +297,7 @@ db_input('ve01_placanum',12,$Ive01_placanum,true,'text',$db_opcao,"")
     </td>
   </tr>
   
-    <tr>
+    <tr id="trnumserie" style="display: ;">
     <td nowrap title="<?=@$Tve01_nroserie?>">
        <?=@$Lve01_nroserie?>
     </td>
@@ -300,7 +308,7 @@ db_input('ve01_nroserie',20,$Ive01_nroserie,true,'text',$db_opcao,"")
     </td>
   </tr>
   
-  <tr>
+  <tr id="trnumcertificado" style="display: ;">
     <td nowrap title="<?=@$Tve01_certif?>">
        <?=@$Lve01_certif?>
     </td>
@@ -784,6 +792,23 @@ function js_preenchepesquisa(chave){
   }
   ?>
 }
+
+function js_tipodeveiculo(value)
+{
+    console.log(value);
+    if (value == 3) {
+        document.getElementById("trchassi").style.display = "";
+        document.getElementById("trrenavam").style.display = "";
+        document.getElementById("trnumserie").style.display = "";
+        document.getElementById("trnumcertificado").style.display = "";
+    } else {
+        document.getElementById("trchassi").style.display  = "none";
+        document.getElementById("trrenavam").style.display = "none";
+        document.getElementById("trnumserie").style.display = "none";
+        document.getElementById("trnumcertificado").style.display = "none";
+    }
+}
+
 function js_mostramedida(){
   var sel1  = document.form1.elements["ve01_veictipoabast"];
   var valor = sel1.options[sel1.selectedIndex].value;
