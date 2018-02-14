@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -57,6 +57,124 @@ if (count($aInstits) > 1) {
     }
 }
 db_inicio_transacao();
+function getDespesasReceitas($instits,$dtini,$dtfim){
+    $fTotalarrecadado=0;
+    $fCSACRPPS=0;//412102907
+    $fCSICRPPS=0;//412102909
+    $fCPRPPS=0;//412102911
+    $fRRCSACOPSJ=0;//412102917
+    $fRRCSICOPSJ=0;//412102918
+    $fRRCPPSJ=0;//412102919
+    $fCFRP=0;//4192210
+
+    $db_filtro = " o70_instit in({$instits}) ";
+    $anousu = db_getsession("DB_anousu");
+
+    $oUltimoano = db_receitasaldo(11,1,3,true,$db_filtro,$anousu-1,$dtini,$dtfim,false,' * ',true,0);
+    $oUltimoano = db_utils::getColectionByRecord($oUltimoano);
+    foreach ($oUltimoano as $oDados) {
+        if($oDados->o57_fonte == "410000000000000"){
+            $fTotalarrecadado+=$oDados->saldo_arrecadado;
+        }
+        if($oDados->o57_fonte == "490000000000000"){
+            $fTotalarrecadado+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102907000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102909000000"){
+            $fCSICRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102911000000"){
+            $fCPRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102917000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102918000000"){
+            $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102919000000"){
+            $fRRCPPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "419221000000000"){
+            $fCFRP+=$oDados->saldo_arrecadado;
+        }
+
+    }
+    db_query("drop table if exists work_receita");
+
+    $oAnoatual = db_receitasaldo(11,1,3,true,$db_filtro,$anousu,$dtini,$dtfim,false,' * ',true,0);
+    $oAnoatual = db_utils::getColectionByRecord($oAnoatual);
+    foreach ($oAnoatual as $oDados) {
+        if($oDados->o57_fonte == "410000000000000"){
+            $fTotalarrecadado+=$oDados->saldo_arrecadado;
+        }
+        if($oDados->o57_fonte == "490000000000000"){
+            $fTotalarrecadado+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102907000000"){
+            $fCSACRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102909000000"){
+            $fCSICRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102911000000"){
+            $fCPRPPS+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102917000000"){
+            $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102918000000"){
+            $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "412102919000000"){
+            $fRRCPPSJ+=$oDados->saldo_arrecadado;
+        }
+
+        if($oDados->o57_fonte == "419221000000000"){
+            $fCFRP+=$oDados->saldo_arrecadado;
+        }
+
+    }
+    db_query("drop table if exists work_receita");
+
+    return array(
+        'fTotalReceitasArrecadadas' => $fTotalarrecadado,
+        'fCSACRPPS' => $fCSACRPPS,
+        'fCSICRPPS' => $fCSICRPPS,
+        'fCPRPPS' => $fCPRPPS,
+        'fRRCSACOPSJ' => $fRRCSACOPSJ,
+        'fRRCSICOPSJ' => $fRRCSICOPSJ,
+        'fRRCPPSJ' => $fRRCPPSJ,
+        'fCFRP' => $fCFRP,
+    );
+}
+
+$aDespesasReceitas = getDespesasReceitas($instits,$dtini,$dtfim);
+
+$fTotalReceitasArrecadadas = $aDespesasReceitas['fTotalReceitasArrecadadas'];
+$fCSACRPPS = $aDespesasReceitas['fCSACRPPS'];
+$fCSICRPPS = $aDespesasReceitas['fCSICRPPS'];
+$fCPRPPS = $aDespesasReceitas['fCPRPPS'];
+$fRRCSACOPSJ = $aDespesasReceitas['fRRCSACOPSJ'];
+$fRRCSICOPSJ = $aDespesasReceitas['fRRCSICOPSJ'];
+$fRRCPPSJ = $aDespesasReceitas['fRRCPPSJ'];
+$fCFRP = $aDespesasReceitas['fCFRP'];
+
 $sWhereDespesa = " o58_instit in({$instits})";
 //Aqui passo o(s) exercicio(s) e a funcao faz o sql para cada exercicio
 criaWorkDotacao($sWhereDespesa, array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $dtini, $dtfim);
@@ -116,501 +234,491 @@ ob_start();
 
 ?>
 
-    <html>
-    <head>
-        <style type="text/css">
-            .ritz .waffle a {
-                color: inherit;
-            }
+<html>
+<head>
+    <style type="text/css">
+        .ritz .waffle a {
+            color: inherit;
+        }
 
-            .ritz .waffle .s1 {
-                background-color: #d8d8d8;
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                font-weight: bold;
-                padding: 0px 3px 0px 3px;
-                text-align: left;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s1 {
+            background-color: #d8d8d8;
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            font-weight: bold;
+            padding: 0px 3px 0px 3px;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s2 {
-                background-color: #ffffff;
-                border-bottom: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                padding: 0px 3px 0px 3px;
-                text-align: left;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s2 {
+            background-color: #ffffff;
+            border-bottom: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            padding: 0px 3px 0px 3px;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s4 {
-                background-color: #ffffff;
-                border-right: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                padding: 0px 3px 0px 3px;
-                text-align: left;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s4 {
+            background-color: #ffffff;
+            border-right: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            padding: 0px 3px 0px 3px;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s3 {
-                background-color: #ffffff;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                padding: 0px 3px 0px 3px;
-                text-align: left;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s3 {
+            background-color: #ffffff;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            padding: 0px 3px 0px 3px;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s10 {
-                background-color: #d8d8d8;
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                font-weight: bold;
-                padding: 0px 3px 0px 3px;
-                text-align: right;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s10 {
+            background-color: #d8d8d8;
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            font-weight: bold;
+            padding: 0px 3px 0px 3px;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s6 {
-                background-color: #ffffff;
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                padding: 0px 3px 0px 3px;
-                text-align: right;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s6 {
+            background-color: #ffffff;
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            padding: 0px 3px 0px 3px;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s7 {
-                background-color: #ffffff;
-                border-bottom: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                font-weight: bold;
-                padding: 0px 3px 0px 3px;
-                text-align: left;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s7 {
+            background-color: #ffffff;
+            border-bottom: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            font-weight: bold;
+            padding: 0px 3px 0px 3px;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s8 {
-                background-color: #ffffff;
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                font-weight: bold;
-                padding: 0px 3px 0px 3px;
-                text-align: right;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s8 {
+            background-color: #ffffff;
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            font-weight: bold;
+            padding: 0px 3px 0px 3px;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s5 {
-                background-color: #ffffff;
-                border-right: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                padding: 0px 3px 0px 3px;
-                text-align: right;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s5 {
+            background-color: #ffffff;
+            border-right: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            padding: 0px 3px 0px 3px;
+            text-align: right;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s0 {
-                background-color: #d8d8d8;
-                border-right: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                font-weight: bold;
-                padding: 0px 3px 0px 3px;
-                text-align: center;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s0 {
+            background-color: #d8d8d8;
+            border-right: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            font-weight: bold;
+            padding: 0px 3px 0px 3px;
+            text-align: center;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .ritz .waffle .s9 {
-                background-color: #ffffff;
-                border-bottom: 1px SOLID #000000;
-                border-right: 1px SOLID #000000;
-                color: #000000;
-                direction: ltr;
-                font-family: 'Calibri', Arial;
-                font-size: 11pt;
-                padding: 0px 3px 0px 3px;
-                text-align: left;
-                vertical-align: bottom;
-                white-space: nowrap;
-            }
+        .ritz .waffle .s9 {
+            background-color: #ffffff;
+            border-bottom: 1px SOLID #000000;
+            border-right: 1px SOLID #000000;
+            color: #000000;
+            direction: ltr;
+            font-family: 'Calibri', Arial;
+            font-size: 11pt;
+            padding: 0px 3px 0px 3px;
+            text-align: left;
+            vertical-align: bottom;
+            white-space: nowrap;
+        }
 
-            .column-headers-background {
-                background-color: #d8d8d8;
-            }
-        </style>
-    </head>
-    <body>
-    <div class="ritz grid-container" dir="ltr">
-        <table class="waffle" cellspacing="0" cellpadding="0">
-            <tbody>
-            <tr>
-                <th id="1606692746C0" style="width:463px" class="bdtop column-headers-background">&nbsp;</th>
-                <th id="1606692746C1" style="width:92px" class="bdtop column-headers-background">&nbsp;</th>
-                <th id="1606692746C2" style="width:106px" class="bdtop column-headers-background">&nbsp;</th>
-            </tr>
+        .column-headers-background {
+            background-color: #d8d8d8;
+        }
+    </style>
+</head>
+<body>
+<div class="ritz grid-container" dir="ltr">
+    <table class="waffle" cellspacing="0" cellpadding="0">
+        <tbody>
+        <tr>
+            <th id="1606692746C0" style="width:463px" class="bdtop column-headers-background">&nbsp;</th>
+            <th id="1606692746C1" style="width:92px" class="bdtop column-headers-background">&nbsp;</th>
+            <th id="1606692746C2" style="width:106px" class="bdtop column-headers-background">&nbsp;</th>
+        </tr>
+        <tr style='height:19px;'>
+            <td class="s0 bdleft" colspan="3">ANEXO IV</td>
+        </tr>
+        <tr style='height:19px;'>
+            <td class="s0 bdleft" colspan="3">Demonstrativo dos Gastos com Pessoal</td>
+        </tr>
+        <tr style='height:19px;'>
+            <td class="s0 bdleft" colspan="3">Incluída a Remuneração dos Agentes Políticos</td>
+        </tr>
+        <tr style='height:19px;'>
+            <td class="s0 bdleft" colspan="3">(Face ao Disposto pela Lei Complementar nº101, de 04/05/2000)</td>
+        </tr>
+        <tr style='height:20px;'>
+            <td class="s1 bdleft" colspan="3">&nbsp;</td>
+        </tr>
+        <tr style='height:19px;'>
+            <td class="s2" colspan="3">&nbsp;</td>
+        </tr>
+        <tr style='height:19px;'>
+            <td class="s1 bdleft" colspan="3">I) DESPESA</td>
+        </tr>
+
+        <?php
+        /**
+         * Para cada instit do sql
+         */
+        $i = 1;
+        $fTotalDespesas = 0;
+        foreach ($aInstits as $iInstit) {
+
+            $oInstit = new Instituicao($iInstit);
+
+            ?>
             <tr style='height:19px;'>
-                <td class="s0 bdleft" colspan="3">ANEXO IV</td>
+                <td class="s3 bdleft" colspan="2">I-<?= $i++; ?>) DESPESA
+                    - <?php echo $oInstit->getDescricao(); ?></td>
+                <td class="s4"></td>
             </tr>
+
             <tr style='height:19px;'>
-                <td class="s0 bdleft" colspan="3">Demonstrativo dos Gastos com Pessoal</td>
-            </tr>
-            <tr style='height:19px;'>
-                <td class="s0 bdleft" colspan="3">Incluída a Remuneração dos Agentes Políticos</td>
-            </tr>
-            <tr style='height:19px;'>
-                <td class="s0 bdleft" colspan="3">(Face ao Disposto pela Lei Complementar nº101, de 04/05/2000)</td>
-            </tr>
-            <tr style='height:20px;'>
-                <td class="s1 bdleft" colspan="3">&nbsp;</td>
-            </tr>
-            <tr style='height:19px;'>
-                <td class="s2" colspan="3">&nbsp;</td>
-            </tr>
-            <tr style='height:19px;'>
-                <td class="s1 bdleft" colspan="3">I) DESPESA</td>
+                <td class="s3 bdleft" colspan="2">3.1.00.00.00 - PESSOAL E ENCARGOS SOCIAIS</td>
+                <td class="s4"></td>
             </tr>
 
             <?php
-            /**
-             * Para cada instit do sql
-             */
-            $i = 1;
-            $fTotalDespesas = 0;
-            foreach ($aInstits as $iInstit) {
+            $fTotalLiquidado = 0;
+            $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+            foreach ($aDespesas as $oDespesa) {
 
-                $oInstit = new Instituicao($iInstit);
-
+                if ($oDespesa->o58_elemento == '3317170000000') {
+                    /**
+                     * Solicitado por Wesley@contass em 28/03/2017
+                     */
+                    //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
+                    $oDespesa->liquidado = $oDespesa->liquidado;
+                }
+                $fTotalLiquidado += $oDespesa->liquidado;
                 ?>
                 <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">I-<?= $i++; ?>) DESPESA
-                        - <?php echo $oInstit->getDescricao(); ?></td>
-                    <td class="s4"></td>
+                    <td class="s3 bdleft" colspan="2">
+                        <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
+                    </td>
+                    <td class="s5">
+                        <?php echo db_formatar($oDespesa->liquidado, "f"); ?>
+                    </td>
                 </tr>
+            <?php } ?>
+            <tr style='height:19px;'>
+                <td class="s2 bdleft bdtop" colspan="2">SUB-TOTAL</td>
+                <td class="s6 bdtop">
+                    <?php echo db_formatar($fTotalLiquidado, "f");
+                    $fTotalDespesas += $fTotalLiquidado; ?>
+                </td>
+            </tr>
+        <?php } ?>
 
-                <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">3.1.00.00.00 - PESSOAL E ENCARGOS SOCIAIS</td>
-                    <td class="s4"></td>
-                </tr>
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL NO MUNICÍPIO</td>
+            <td class="s5"><?= db_formatar($fTotalDespesas, "f") ?></td>
+        </tr>
 
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Inativos e Pensionistas com Fonte de Custeio Própria</td>
+            <td class="s5">
                 <?php
-                $fTotalLiquidado = 0;
-                $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                foreach ($aDespesas as $oDespesa) {
-
-                    if ($oDespesa->o58_elemento == '3317170000000') {
-                        /**
-                         * Solicitado por Wesley@contass em 28/03/2017
-                         */
-                        //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
-                        $oDespesa->liquidado = $oDespesa->liquidado;
+                $fSaldoIntaivosPensionistasProprio = 0;
+                foreach ($aInstits as $iInstit) {
+                    $oInstit = new Instituicao($iInstit);
+                    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
+                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
                     }
-                    $fTotalLiquidado += $oDespesa->liquidado;
-                    ?>
-                    <tr style='height:19px;'>
-                        <td class="s3 bdleft" colspan="2">
-                            <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
-                        </td>
-                        <td class="s5">
-                            <?php echo db_formatar($oDespesa->liquidado, "f"); ?>
-                        </td>
-                    </tr>
-                <?php } ?>
-                <tr style='height:19px;'>
-                    <td class="s2 bdleft bdtop" colspan="2">SUB-TOTAL</td>
-                    <td class="s6 bdtop">
-                        <?php echo db_formatar($fTotalLiquidado, "f");
-                        $fTotalDespesas += $fTotalLiquidado; ?>
-                    </td>
-                </tr>
-            <?php } ?>
 
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL NO MUNICÍPIO</td>
-                <td class="s5"><?= db_formatar($fTotalDespesas, "f") ?></td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Inativos e Pensionistas com Fonte de Custeio Própria</td>
-                <td class="s5">
-                    <?php
-                    $fSaldoIntaivosPensionistasProprio = 0;
-                    foreach ($aInstits as $iInstit) {
-                        $oInstit = new Instituicao($iInstit);
-                        if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_RPPS) {
-                            $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                            $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                            $fSaldoIntaivosPensionistasProprio += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
-                        }
-
-                    }
-                    echo db_formatar($fSaldoIntaivosPensionistasProprio, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Sentenças Judiciais Anteriores</td>
-                <td class="s5">
-                    <?php
-                    $fSaldoSentencasJudAnt = getValorManual($codigorelatorio, 2, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
-                    echo db_formatar($fSaldoSentencasJudAnt == null ? 0 : $fSaldoSentencasJudAnt, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Despesa de Exercícios Anteriores</td>
-                <td class="s5">
-                    <?php
-                    $fSaldoDespesasAnteriores = 0;
-                    foreach ($aInstits as $iInstit) {
-                        $oInstit = new Instituicao($iInstit);
-                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319092%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                        $fSaldoDespesasAnteriores += $aSaldoEstrut1[0]->liquidado;
-                    }
-                    echo db_formatar($fSaldoDespesasAnteriores, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s2 bdleft" colspan="2">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
-                <td class="s6">
-                    <?php
-                    $fSaldoAposentadoriaPensoesTesouro = 0;
-                    foreach ($aInstits as $iInstit) {
-                        $oInstit = new Instituicao($iInstit);
-                        if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
-                            $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                            $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-                            $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
-                        }
-                    }
-                    echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
-                    ?>
-                </td>
-            </tr>
-            <tr style='height:19px;'>
-                <td class="s7 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL = BASE DE CÁLCULO</td>
-                <td class="s8">
-                    <?php
-                    $fTotalDespesaPessoal = $fTotalDespesas - ($fSaldoIntaivosPensionistasProprio + $fSaldoSentencasJudAnt + $fSaldoAposentadoriaPensoesTesouro + $fSaldoDespesasAnteriores);
-                    echo db_formatar($fTotalDespesaPessoal, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s1 bdleft" colspan="3">II) RECEITA</td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s7 bdleft" colspan="2">Receita Corrente do Município</td>
-                <td class="s8">
-                    <?php
-                    $fValorManualRCL = getValorManual($codigorelatorio, 1, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
-                    $fRCL = $fValorManualRCL == NULL ? getRCL($oDataFim, $instits) : $fValorManualRCL;
-                    echo db_formatar($fRCL, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Receita Corrente Intraorçamentária</td>
-                <td class="s5">
-                    <?php
-                    $aDadosRCI = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '47%'");
-                    $fRCI = count($aDadosRCI) > 0 ? $aDadosRCI[0]->saldo_arrecadado : 0;
-                    echo db_formatar($fRCI, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Ativo Civil para Regime Próprio</td>
-                <td class="s5">
-                    <?php
-                    $aDadosCSACRPPS = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '412102907%'");
-                    $fCSACRPPS = count($aDadosCSACRPPS) > 0 ? $aDadosCSACRPPS[0]->saldo_arrecadado : 0;
-                    echo db_formatar($fCSACRPPS, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Inativo Civil para o Regime Próprio</td>
-                <td class="s5">
-                    <?php
-                    $aDadosCSICRPPS = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '412102909%'");
-                    $fCSICRPPS = count($aDadosCSICRPPS) > 0 ? $aDadosCSICRPPS[0]->saldo_arrecadado : 0;
-                    echo db_formatar($fCSICRPPS, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Contribuição do Pensionista Civil para o Regime Próprio</td>
-                <td class="s5">
-                    <?php
-                    $aDadosCPRPPS = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '412102911%'");
-                    $fCPRPPS = count($aDadosCPRPPS) > 0 ? $aDadosCPRPPS[0]->saldo_arrecadado : 0;
-                    echo db_formatar($fCPRPPS, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Rec.Rec.Contrib.Servidor Ativo Civil oriunda do
-                    Pagto.Sent.JudiciaIs
-                </td>
-                <td class="s5">
-                    <?php
-                    $aDadosRRCSACOPSJ = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '412102917%'");
-                    $fRRCSACOPSJ = count($aDadosRRCSACOPSJ) > 0 ? $aDadosRRCSACOPSJ[0]->saldo_arrecadado : 0;
-                    echo db_formatar($fRRCSACOPSJ, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Rec.Rec.Contrib.Servidor Inativo Civil oriunda do
-                    Pagto.Sent.Judiciais
-                </td>
-                <td class="s5">
-                    <?php
-                    $aDadosRRCSICOPSJ = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '412102918%'");
-                    $fRRCSICOPSJ = count($aDadosRRCSICOPSJ) > 0 ? $aDadosRRCSICOPSJ[0]->saldo_arrecadado : 0;
-                    echo db_formatar($fRRCSICOPSJ, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Rec.de Rec.da Contrib.Pensionista sob Pagto.Sent.Judiciais</td>
-                <td class="s5">
-                    <?php
-                    $aDadosRRCPPSJ = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '412102919%'");
-                    $fRRCPPSJ = count($aDadosRRCPPSJ) > 0 ? $aDadosRRCPPSJ->saldo_arrecadado : 0;
-                    echo db_formatar($fRRCPPSJ, "f");
-                    ?>
-                </td>
-            </tr>
-
-            <tr style='height:19px;'>
-                <td class="s3 bdleft" colspan="2">(-) Comp.Financ.entre o RGPS e os RPPS</td>
-                <td class="s5">
-                    <?php
-                    $aDadosCFRP = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '4192210%'");
-                    $fCFRP = count($aDadosCFRP) > 0 ? $aDadosCFRP[0]->saldo_arrecadado : 0;
-                    echo db_formatar($fCFRP, "f");
-                    ?>
-                </td>
-            </tr>
-            <?php
-            $fTotalDeducoes = 0;
-            $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '492%'");
-            foreach ($aDadoDeducao as $oDeducao) {
+                }
+                echo db_formatar($fSaldoIntaivosPensionistasProprio, "f");
                 ?>
-                <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">
-                        <?php echo db_formatar($oDespesa->o57_fonte, "receita") . " - " . $oDespesa->o57_descr; ?>
-                    </td>
-                    <td class="s5">
-                        <?php
-                        $fTotalDeducoes += $oDespesa->saldo_arrecadado;
-                        echo db_formatar($oDespesa->saldo_arrecadado, "f");
-                        ?>
-                    </td>
-                </tr>
-            <?php }
+            </td>
+        </tr>
 
-            $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '499%'");
-            foreach ($aDadoDeducao as $oDeducao) { ?>
-                <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">
-                        <?php echo db_formatar($oDespesa->o57_fonte, "receita") . " - " . $oDespesa->o57_descr; ?>
-                    </td>
-                    <td class="s5">
-                        <?php
-                        $fTotalDeducoes += $oDespesa->saldo_arrecadado;
-                        echo db_formatar($oDespesa->saldo_arrecadado, "f");
-                        ?>
-                    </td>
-                </tr>
-            <?php } ?>
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Sentenças Judiciais Anteriores</td>
+            <td class="s5">
+                <?php
+                $fSaldoSentencasJudAnt = getValorManual($codigorelatorio, 2, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
+                echo db_formatar($fSaldoSentencasJudAnt == null ? 0 : $fSaldoSentencasJudAnt, "f");
+                ?>
+            </td>
+        </tr>
 
-            <tr style='height:20px;'>
-                <td class="s7 bdleft" colspan="2">RECEITA CORRENTE LÍQUIDA = BASE DE CÁLCULO</td>
-                <td class="s8">
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Despesa de Exercícios Anteriores</td>
+            <td class="s5">
+                <?php
+                $fSaldoDespesasAnteriores = 0;
+                foreach ($aInstits as $iInstit) {
+                    $oInstit = new Instituicao($iInstit);
+                    $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319092%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                    $fSaldoDespesasAnteriores += $aSaldoEstrut1[0]->liquidado;
+                }
+                echo db_formatar($fSaldoDespesasAnteriores, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s2 bdleft" colspan="2">(-) Aposentadorias e Pensões Custeadas c/Rec.Fonte Tesouro</td>
+            <td class="s6">
+                <?php
+                $fSaldoAposentadoriaPensoesTesouro = 0;
+                foreach ($aInstits as $iInstit) {
+                    $oInstit = new Instituicao($iInstit);
+                    if ($oInstit->getTipoInstit() == Instituicao::TIPO_INSTIT_PREFEITURA) {
+                        $aSaldoEstrut1 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319001%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $aSaldoEstrut2 = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '3319003%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
+                        $fSaldoAposentadoriaPensoesTesouro += $aSaldoEstrut1[0]->liquidado + $aSaldoEstrut2[0]->liquidado;
+                    }
+                }
+                echo db_formatar($fSaldoAposentadoriaPensoesTesouro, "f");
+                ?>
+            </td>
+        </tr>
+        <tr style='height:19px;'>
+            <td class="s7 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL = BASE DE CÁLCULO</td>
+            <td class="s8">
+                <?php
+                $fTotalDespesaPessoal = $fTotalDespesas - ($fSaldoIntaivosPensionistasProprio + $fSaldoSentencasJudAnt + $fSaldoAposentadoriaPensoesTesouro + $fSaldoDespesasAnteriores);
+                echo db_formatar($fTotalDespesaPessoal, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s1 bdleft" colspan="3">II) RECEITA</td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s7 bdleft" colspan="2">Receita Corrente do Município</td>
+            <td class="s8">
+                <?php
+                $fValorManualRCL = getValorManual($codigorelatorio, 1, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
+                $fRCL = $fValorManualRCL == NULL ? $fTotalReceitasArrecadadas : $fValorManualRCL;
+                echo db_formatar($fRCL, "f");
+                ?>
+            </td>
+        </tr>
+        <!--
+                      <tr style='height:19px;'>
+                        <td class="s3 bdleft" colspan="2">(-) Receita Corrente Intraorçamentária</td>
+                        <td class="s5">
+                          <?php
+        //$aDadosRCI = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '47%'");
+        $fRCI = 0;//count($aDadosRCI) > 0 ? $aDadosRCI[0]->saldo_arrecadado : 0;
+        //echo db_formatar($fRCI, "f");
+        ?>
+                        </td>
+                      </tr>
+                    -->
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Ativo Civil para Regime Próprio</td>
+            <td class="s5">
+                <?php
+
+                echo db_formatar($fCSACRPPS, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Contribuição do Servidor Inativo Civil para o Regime Próprio</td>
+            <td class="s5">
+                <?php
+
+                echo db_formatar($fCSICRPPS, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Contribuição do Pensionista Civil para o Regime Próprio</td>
+            <td class="s5">
+                <?php
+                echo db_formatar($fCPRPPS, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Rec.Rec.Contrib.Servidor Ativo Civil oriunda do
+                Pagto.Sent.JudiciaIs
+            </td>
+            <td class="s5">
+                <?php
+
+                echo db_formatar($fRRCSACOPSJ, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Rec.Rec.Contrib.Servidor Inativo Civil oriunda do
+                Pagto.Sent.Judiciais
+            </td>
+            <td class="s5">
+                <?php
+
+                echo db_formatar($fRRCSICOPSJ, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Rec.de Rec.da Contrib.Pensionista sob Pagto.Sent.Judiciais</td>
+            <td class="s5">
+                <?php
+                echo db_formatar($fRRCPPSJ, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s3 bdleft" colspan="2">(-) Comp.Financ.entre o RGPS e os RPPS</td>
+            <td class="s5">
+                <?php
+                echo db_formatar($fCFRP, "f");
+                ?>
+            </td>
+        </tr>
+        <?php
+        $fTotalDeducoes = 0;
+        $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '492%'");
+        foreach ($aDadoDeducao as $oDeducao) {
+            ?>
+            <tr style='height:19px;'>
+                <td class="s3 bdleft" colspan="2">
+                    <?php echo db_formatar($oDespesa->o57_fonte, "receita") . " - " . $oDespesa->o57_descr; ?>
+                </td>
+                <td class="s5">
                     <?php
-                    $fRCLBase = $fRCL - (array_sum(array($fRCI, $fCSACRPPS, $fCSICRPPS, $fCPRPPS, $fRRCSACOPSJ, $fRRCSICOPSJ, $fRRCPPSJ, $fCFRP, $fTotalDeducoes)));
-                    echo db_formatar($fRCLBase, "f");
+                    $fTotalDeducoes += $oDespesa->saldo_arrecadado;
+                    echo db_formatar($oDespesa->saldo_arrecadado, "f");
                     ?>
                 </td>
             </tr>
+        <?php }
 
+        $aDadoDeducao = getSaldoReceita(null, "o57_fonte,o57_descr,saldo_arrecadado", null, "o57_fonte like '499%'");
+        foreach ($aDadoDeducao as $oDeducao) { ?>
             <tr style='height:19px;'>
-                <td class="s9 bdleft" colspan="3">III) PERCENTUAIS MONETÁRIOS DE APLICAÇÃO</td>
+                <td class="s3 bdleft" colspan="2">
+                    <?php echo db_formatar($oDespesa->o57_fonte, "receita") . " - " . $oDespesa->o57_descr; ?>
+                </td>
+                <td class="s5">
+                    <?php
+                    $fTotalDeducoes += $oDespesa->saldo_arrecadado;
+                    echo db_formatar($oDespesa->saldo_arrecadado, "f");
+                    ?>
+                </td>
             </tr>
+        <?php } ?>
+
+        <tr style='height:20px;'>
+            <td class="s7 bdleft" colspan="2">RECEITA CORRENTE LÍQUIDA = BASE DE CÁLCULO</td>
+            <td class="s8">
+                <?php
+                $fRCLBase = $fRCL - (array_sum(array($fRCI, $fCSACRPPS, $fCSICRPPS, $fCPRPPS, $fRRCSACOPSJ, $fRRCSICOPSJ, $fRRCPPSJ, $fCFRP, $fTotalDeducoes)));
+                echo db_formatar($fRCLBase, "f");
+                ?>
+            </td>
+        </tr>
+
+        <tr style='height:19px;'>
+            <td class="s9 bdleft" colspan="3">III) PERCENTUAIS MONETÁRIOS DE APLICAÇÃO</td>
+        </tr>
 
 
-            <tr style='height:19px;'>
-                <td class="s1 bdleft">Aplicação no Exercício</td>
-                <td class="s10"><?php echo db_formatar(($fTotalDespesaPessoal / $fRCLBase) * 100, "f"); ?>%</td>
-                <td class="s10"><?php echo db_formatar($fTotalDespesaPessoal, "f") ?></td>
-            </tr>
+        <tr style='height:19px;'>
+            <td class="s1 bdleft">Aplicação no Exercício</td>
+            <td class="s10"><?php echo db_formatar(($fTotalDespesaPessoal / $fRCLBase) * 100, "f"); ?>%</td>
+            <td class="s10"><?php echo db_formatar($fTotalDespesaPessoal, "f") ?></td>
+        </tr>
 
-            <tr style='height:20px;'>
-                <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
-                <td class="s6">60.00%</td>
-                <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    </body>
-    </html>
+        <tr style='height:20px;'>
+            <td class="s9 bdleft">Permitido pela Lei Complementar 101/00</td>
+            <td class="s6">60.00%</td>
+            <td class="s6"><?php echo db_formatar($fRCLBase * 0.6, "f") ?></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
 
 <?php
 
@@ -621,6 +729,7 @@ $mPDF->WriteHTML(utf8_encode($html));
 $mPDF->Output();
 
 /* ---- */
+
 
 db_query("drop table if exists work_dotacao");
 db_query("drop table if exists work_receita");
