@@ -905,6 +905,12 @@ class RefactorGeracaoBoleto {
     //Adiciona desconto ao recibo
     if ($this->nDescontoAliqReduz>0) {
       $aDescontoAliquota = $this->nDescontoAliqReduz * -1;
+      $sSqlDeletaDesc = "delete from recibopaga where k00_hist = 918 and k00_numnov = ".$oRetorno->recibos_emitidos[0];
+      db_query($sSqlDeletaDesc);
+
+      if( !db_query($sSqlDeletaDesc) ) {
+        throw new Exception(pg_last_error());
+      }
 
       $sqlDescAliq = "INSERT INTO recibopaga
                                   SELECT
