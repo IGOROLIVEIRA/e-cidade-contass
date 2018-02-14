@@ -312,7 +312,7 @@ if ($agrupar_fonte == 'S') {
   $ordem_conta = "c61_codigo,".$ordem_conta;
 }
 /// CONTAS MOVIMENTO
-$sql="select   c61_codigo,
+$sql="select   o15_codtri,c61_codigo,
                o15_descr,
                k13_reduz,
                k13_descr,
@@ -325,7 +325,7 @@ $sql="select   c61_codigo,
 	       substr(fc_saltessaldo,28,13)::float8 as creditado,
 	       substr(fc_saltessaldo,41,13)::float8 as atual
 	from (
- 	      select c61_codigo,
+ 	      select o15_codtri,c61_codigo,
                o15_descr,
                k13_reduz,
  	             k13_descr,
@@ -492,19 +492,19 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
       } else if ($c60_codsis == 6) {
         $nomeArray = "aAgrupaFonteBancos";
       }
-      if (!isset(${$nomeArray}[$c61_codigo])) {
+      if (!isset(${$nomeArray}[$o15_codtri])) {
         $oFonte = new stdClass();
         $oFonte->o15_descr = $o15_descr;
         $oFonte->anterior = 0;
         $oFonte->debitado = 0;
         $oFonte->creditado = 0;
         $oFonte->atual = 0;
-        ${$nomeArray}[$c61_codigo] = $oFonte;
+        ${$nomeArray}[$o15_codtri] = $oFonte;
       }
-      ${$nomeArray}[$c61_codigo]->anterior += $anterior;
-      ${$nomeArray}[$c61_codigo]->debitado += $debitado;
-      ${$nomeArray}[$c61_codigo]->creditado += $creditado;
-      ${$nomeArray}[$c61_codigo]->atual += $atual;
+      ${$nomeArray}[$o15_codtri]->anterior += $anterior;
+      ${$nomeArray}[$o15_codtri]->debitado += $debitado;
+      ${$nomeArray}[$o15_codtri]->creditado += $creditado;
+      ${$nomeArray}[$o15_codtri]->atual += $atual;
     }
 }
 
@@ -619,10 +619,10 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
       }
       $pdf->SetFont('Arial', 'B', 7);
       $pdf->cell(96, $alt, $c61_codigo.' - '.substr($o15_descr,0,57), "LTB", 0, 'L', 0);
-      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o61_codigo]->anterior, 'f'), 1, 0, 'R', 0);
-      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o61_codigo]->debitado, 'f'), 1, 0, 'R', 0);
-      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o61_codigo]->creditado, 'f'), 1, 0, 'R', 0);
-      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o61_codigo]->atual, 'f'), 1, 1, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o15_codtri]->anterior, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o15_codtri]->debitado, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o15_codtri]->creditado, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteCaixa[$o15_codtri]->atual, 'f'), 1, 1, 'R', 0);
       $pdf->SetFont('Arial', '', 6);
       $sVerificaFonte = $o15_descr;
     }
@@ -764,6 +764,7 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
         $oConta->descr = $k13_reduz.' - '.$k13_descr;
         $oConta->c63_conta = $c63_conta;
       }
+      $oConta->o15_codtri  = $o15_codtri;
       $oConta->o15_descr   = $o15_descr;
       $oConta->c61_codigo  = $c61_codigo;
       $oConta->anterior    = $anterior;
@@ -816,11 +817,11 @@ foreach ($aContasMovs as $oConta) {
         $pdf->cell(192, $alt, 0, 1, 1, 1, 0);
       }
       $pdf->SetFont('Arial', 'B', 7);
-      $pdf->cell(96, $alt, $oConta->c61_codigo.' - '.substr($oConta->o15_descr,0,57), "LTB", 0, 'L', 0);
-      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->c61_codigo]->anterior, 'f'), 1, 0, 'R', 0);
-      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->c61_codigo]->debitado, 'f'), 1, 0, 'R', 0);
-      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->c61_codigo]->creditado, 'f'), 1, 0, 'R', 0);
-      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->c61_codigo]->atual, 'f'), 1, 1, 'R', 0);
+      $pdf->cell(96, $alt, $oConta->o15_codtri.' - '.substr($oConta->o15_descr,0,57), "LTB", 0, 'L', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->anterior, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->debitado, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->creditado, 'f'), 1, 0, 'R', 0);
+      $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->atual, 'f'), 1, 1, 'R', 0);
       $pdf->SetFont('Arial', '', 6);
       $sVerificaFonte = $oConta->o15_descr;
     }
