@@ -46,7 +46,7 @@ $clselorcdotacao = new cl_selorcdotacao();
 $clselorcdotacao->setDados($filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
 // $instits = $clselorcdotacao->getInstit();
 
-$instits = ' (' . str_replace('-', ', ', $db_selinstit) . ') ';
+$instits =  str_replace('-', ', ', $db_selinstit) ;
 
 $w_elemento = $clselorcdotacao->getElemento();
 //@ recupera as informações fornecidas para gerar os dados
@@ -58,7 +58,7 @@ $d1 = $DBtxt21;
 $d2 = $DBtxt22;
 $head3 = "Período selecionado: $d1 à $d2  ";
 
-$resultinst = db_query("select codigo,nomeinstabrev from db_config where codigo in $instits");
+$resultinst = db_query("select codigo,nomeinstabrev from db_config where codigo in ($instits)");
 $descr_inst = '';
 $xvirg = '';
 for ($xins = 0; $xins < pg_numrows($resultinst); $xins++) {
@@ -71,7 +71,7 @@ $head6 = "INSTITUIÇÕES : " . $descr_inst;
 /////////////////////////////////////////////////////////
 
 $anousu = db_getsession("DB_anousu");
-$sele_work = $clselorcdotacao->getDados(false, true) . " and o58_instit in $instits and  o58_anousu=$anousu  ";
+$sele_work = $clselorcdotacao->getDados(false, true) . " and o58_instit in ($instits) and  o58_anousu=$anousu  ";
 if ($w_elemento != "") {
     $w_elemento = " and o58_codele in  ({$w_elemento}) ";
 }
@@ -268,7 +268,7 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
     /**
      * Despesas no mes
      */
-    $resDepsMes = db_query($cldesdobramento->sql($sele_work2, $dtini, $dtfim, $instits)) or die($cldesdobramento->sql($sele_work2, $dtini, $dtfim, $instits) . pg_last_error());
+    $resDepsMes = db_query($cldesdobramento->sql($sele_work2, $dtini, $dtfim, "({$instits})")) or die($cldesdobramento->sql($sele_work2, $dtini, $dtfim, "({$instits})") . pg_last_error());
 
     $aDadosAgrupados = array();
 
@@ -306,7 +306,7 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
     /**
      * Despesas até o mes
      */
-    $resDepsAteMes = db_query($cldesdobramento->sql2($sele_work2, $dtini, $dtfim, $instits)) or die($cldesdobramento->sql2($sele_work2, $dtini, $dtfim, $instits) . pg_last_error());
+    $resDepsAteMes = db_query($cldesdobramento->sql2($sele_work2, $dtini, $dtfim, "({$instits})")) or die($cldesdobramento->sql2($sele_work2, $dtini, $dtfim, "({$instits})") . pg_last_error());
 
     for ($contDesp = 0; $contDesp < pg_num_rows($resDepsAteMes); $contDesp++) {
       $oDadosAteMes = db_utils::fieldsMemory($resDepsAteMes, $contDesp);
