@@ -236,7 +236,7 @@ if ($modelo == 1) {
         $troca = 0;
       }
 
-      $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun,pc23_quant,pc23_valor,pc24_pontuacao", null,
+      $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "round(pc23_vlrun,2) as pc23_vlrun,pc23_quant,pc23_valor,pc24_pontuacao", null,
           "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
       if(pg_num_rows($result_valor) == 0){
@@ -246,7 +246,7 @@ if ($modelo == 1) {
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
       $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-      $pdf->cell(20, $alt, db_formatar($pc23_vlrun,'f'), 1, 0, "R", 0);
+      $pdf->cell(20, $alt, $pc23_vlrun, 1, 0, "R", 0);
       $pdf->cell(20, $alt, db_formatar($pc23_valor,'f'), 1, 1, "R", 0);
       $total_unit  += $pc23_vlrun;
       $iContOrcamento++;
@@ -255,8 +255,8 @@ if ($modelo == 1) {
     $pdf->setfont('arial', '', 9);
     $pdf->cell(20, $alt, "", 0, 0, "L", 0);
     $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
-    $pdf->cell(20, $alt, db_formatar($total_unit/$iContOrcamento,'f'), 0, 0, "R", 0);
-    $pdf->cell(20, $alt, db_formatar(($total_unit/$iContOrcamento)*$quant,'f'), 0, 1, "R", 0);
+    $pdf->cell(20, $alt, $total_unit/$iContOrcamento, 0, 0, "R", 0);
+    $pdf->cell(20, $alt, ($total_unit/$iContOrcamento)*$quant, 0, 1, "R", 0);
     $pdf->cell(279,$alt,'','',1,"L",0);
     $total_media += ($total_unit/$iContOrcamento)*$quant;
 
@@ -293,7 +293,7 @@ if ($modelo == 1) {
   $pdf->setfont('arial', '', 9);
   $pdf->cell(279,$alt,'','',1,"L",0);
   $pdf->cell(15, $alt, "Total da Média", 0, 0, "C", 0);
-  $pdf->cell(264, $alt, db_formatar($total_media,'f'), 0, 1, "R", 0);
+  $pdf->cell(264, $alt, $total_media, 0, 1, "R", 0);
 
 } else if ($modelo == 2) {
 
