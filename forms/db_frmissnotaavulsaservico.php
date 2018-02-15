@@ -327,7 +327,24 @@ db_textarea('q62_obs',0,57,$Iq62_obs,true,'text',$db_opcao,"onkeyup='js_controla
  <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
   <input name="recibo" type="submit"  onclick='return js_emiteRecibo(<?=$oPar->q60_notaavulsavlrmin;?>)' id="recibo" value="Emitir Recibo" >
       <input name='notaavulsa' onclick='return js_verificaNota();' type='submit' id='nota' value='Emitir nota'>
+	 <?
+      $fTotal    = 0;
+			$sql       = "select sum(q62_vlrissqn) as totalissqn,";
+      $sql .= "sum(q62_vlruni) as q62_vlrini,";
+      $sql .= "sum(q62_vlrdeducao) as q62_vlrdeducao,";
+      $sql .= "sum(q62_vlrtotal) as q62_vlrtotal,";
+      $sql .= "sum(q62_vlrbasecalc) as q62_vlrbasecalc";
+			$sql .= " from issnotaavulsaservico
+ 									where q62_issnotaavulsa = ".$q62_issnotaavulsa;
+      $oTotal = db_utils::fieldsMemory(pg_query($sql),0);
+      $totalissqn = $oTotal->totalissqn;
+//      if (($lGeraNota and $emitenota) or ($oPar->q60_notaavulsavlrmin > $totalissqn )){
+//
+//           echo " <input name='notaavulsa' onclick='return js_verificaNota();' type='submit' id='nota' value='Emitir nota'>";
+//
+//      }
 
+   ?>
     </td>
   </tr>
   </table>
