@@ -38,14 +38,14 @@ class siacelrfdespesasfuncaosubfuncao {
   
    $oDespFuncSub['mes'] = '';
    $oDespFuncSub['codVinc'] = 0;
-   $oDespFuncSub['codFuncao'] = 0;
-   $oDespFuncSub['codSubFuncao'] = 0;
-   $oDespFuncSub['codEntidade'] = ' ';
    $oDespFuncSub['dotInicial'] = 0;
    $oDespFuncSub['dotAtual'] = 0;
    $oDespFuncSub['despEmp'] = 0;
    $oDespFuncSub['despLiq'] = 0;
    $oDespFuncSub['despAnulada'] = 0;
+   $oDespFuncSub['codFuncao'] = 0;
+   $oDespFuncSub['codSubFuncao'] = 0;
+   $oDespFuncSub['codEntidade'] = ' ';
    
    
   
