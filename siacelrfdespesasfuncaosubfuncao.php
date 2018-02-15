@@ -38,14 +38,15 @@ class siacelrfdespesasfuncaosubfuncao {
   
    $oDespFuncSub['mes'] = '';
    $oDespFuncSub['codVinc'] = 0;
+   $oDespFuncSub['codFuncao'] = 0;
+   $oDespFuncSub['codSubFuncao'] = 0;
+   $oDespFuncSub['codEntidade'] = ' ';
    $oDespFuncSub['dotInicial'] = 0;
    $oDespFuncSub['dotAtual'] = 0;
    $oDespFuncSub['despEmp'] = 0;
    $oDespFuncSub['despLiq'] = 0;
-   $oDespFuncSub['DespAnulada'] = 0;
-   $oDespFuncSub['codFuncao'] = 0;
-   $oDespFuncSub['codSubFunção'] = 0;
-   $oDespFuncSub['codEntidade'] = ' ';
+   $oDespFuncSub['despAnulada'] = 0;
+   
    
   
   $aDadosDespesas = array();
@@ -77,19 +78,21 @@ class siacelrfdespesasfuncaosubfuncao {
 			//dotação anual inicial
 			$oDespFuncSub['mes'] 			= $iMes;
 			$oDespFuncSub['codVinc'] 		= $linha->orgao;
-	   		$oDespFuncSub['dotInicial'] 	= $linha2->dotinicial;
-	   		$oDespFuncSub['dotAtual'] 		= $linha2->dotinicialatualizada;
-	   		$oDespFuncSub['despEmp'] 		= $linha2->empenhado;
-	   		$oDespFuncSub['despLiq'] 		= $linha2->anulado;
-	   		$oDespFuncSub['DespAnulada'] 	= $linha2->liquidado;
-	   		$oDespFuncSub['codFuncao'] 		= $linha->o58_funcao;
-	   		$oDespFuncSub['codSubFunção'] 	= $linha->o58_subfuncao;
-	   		
+			$oDespFuncSub['codFuncao'] 		= $linha->o58_funcao;
+	   		$oDespFuncSub['codSubFuncao'] 	= $linha->o58_subfuncao;
 	   		if($linha->orgao != '03'){
 	   			$oDespFuncSub['codEntidade'] 	= $linha->entidade.'E';	
 	   		}else {
 	   			$oDespFuncSub['codEntidade'] 	= " ";
 	   		}
+	   		$oDespFuncSub['dotInicial'] 	= $linha2->dotinicial;
+	   		$oDespFuncSub['dotAtual'] 		= $linha2->dotinicialatualizada;
+	   		$oDespFuncSub['despEmp'] 		= $linha2->empenhado;
+	   		$oDespFuncSub['despLiq'] 		= $linha2->anulado;
+	   		$oDespFuncSub['despAnulada'] 	= $linha2->liquidado;
+	   		
+	   		
+	   		
 			
 	   		$aDadosDespesas[] = $oDespFuncSub;
    		}
@@ -102,7 +105,7 @@ class siacelrfdespesasfuncaosubfuncao {
   		
   		$sHash  = $oDespesa['codVinc'];
    		$sHash .= $oDespesa['codFuncao'];
-   		$sHash .= $oDespesa['codSubFunção'];
+   		$sHash .= $oDespesa['codSubFuncao'];
 		
 			if(!$aDadosDespesasAgrupados[$sHash]){
 				$aDadosDespesasAgrupados[$sHash] = $oDespesa;
@@ -111,7 +114,7 @@ class siacelrfdespesasfuncaosubfuncao {
 				$aDadosDespesasAgrupados[$sHash]['dotAtual'] += $oDespesa['dotAtual'];
 				$aDadosDespesasAgrupados[$sHash]['despEmp'] += $oDespesa['despEmp'];
 				$aDadosDespesasAgrupados[$sHash]['despLiq'] += $oDespesa['despLiq'];
-				$aDadosDespesasAgrupados[$sHash]['DespAnulada'] += $oDespesa['DespAnulada'];
+				$aDadosDespesasAgrupados[$sHash]['despAnulada'] += $oDespesa['despAnulada'];
 			}
 		
 		
@@ -128,7 +131,7 @@ class siacelrfdespesasfuncaosubfuncao {
 		  $obj['dotAtual']   = number_format($obj['dotAtual'],2,"","");
 		  $obj['despEmp']    = number_format($obj['despEmp'],2,"","");
 		  $obj['despLiq']    = number_format($obj['despLiq'],2,"","");
-		  $obj['DespAnulada']    = number_format($obj['DespAnulada'],2,"","");
+		  $obj['despAnulada']    = number_format($obj['despAnulada'],2,"","");
 
 		$aDadosFormatados[] = $obj;
   	}
