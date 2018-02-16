@@ -298,7 +298,7 @@ global $pess;
                        left join rhregime on rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
 											                   and rhregime.rh30_instit = rhpessoalmov.rh02_instit
                        left join rhpesfgts on rhpesfgts.rh15_regist = rhpessoalmov.rh02_regist
-                       WHERE rh02_anousu = '$ano_base' AND rh02_instit = " . db_getsession('DB_instit') . " $condicaoaux";
+                       WHERE rh02_anousu = '$ano_base' AND rh02_instit = " . db_getsession('DB_instit') . " $condicaoaux ";
                        
     db_selectmax("pess", $sql);
 
@@ -651,9 +651,10 @@ function ficha_128(){
          $condicaoaux = " and r35_regist = ".db_sqlformat($work[$Iwork]["w_matric"] );
 	       global $gerfs13;
          if( db_selectmax( "gerfs13", "select * from gerfs13 ".bb_condicaosubpes( "r35_" ).$condicaoaux )){
+             print_r($gerfs13);
             $mes13 = $ind;
             $x = soma_128($gerfs13,"r35_");
-
+            //echo $x;exit;
            /*
             * Verificamos se o servidor possui alguma rubrica de 13º lançado no calculo de salário (gerfsal)
             * Se existir, somamos esse valor ao valor do calculo de 13º (gerfs13)
@@ -675,6 +676,12 @@ function ficha_128(){
             $nGerfcom13    = pg_result($rsGerfcom13,0,0);
 
             $sal13 += $x;
+            /*echo $sal13;
+            echo $ind;
+            echo $r11_mes13;
+            echo 'desliga: '.$work[$Iwork]["w_desliga"];
+            echo 'anomes: '.$anomes;
+            echo 'dtos: '.db_substr(db_dtos($work[$Iwork]["w_desliga"]),1,6);*/
             if( $sal13 != 0 && $ind < $r11_mes13 && (db_empty($work[$Iwork]["w_desliga"]) || $anomes < db_substr(db_dtos($work[$Iwork]["w_desliga"]),1,6))) {
 
                $matriz3[1] = "w_adianta" ;
@@ -694,6 +701,7 @@ function ficha_128(){
                db_update( $arq_work, $matriz1, $matriz2, $condicaoalt );
 
            }
+
          }
 
          $matriz5 = array();
@@ -1127,10 +1135,17 @@ function imprime_rais_128($nomearq){
      /*
       * Verificamos se o caso se trata de registro de rescisão
       */
+
      if (!empty($work[$Iwork]["w_desliga"])) {
-       $lin .= valor_128($work[$Iwork]["w_sal13"]-$work[$Iwork]["w_adianta"]); // 282 a 290 - valor 13 salario;
+         //echo ' w_sal13'.$work[$Iwork]["w_sal13"];
+         //echo ' w_adianta'.$work[$Iwork]["w_adianta"];exit;
+         //$lin .= valor_128($work[$Iwork]["w_sal13"]-$work[$Iwork]["w_adianta"]); // 282 a 290 - valor 13 salario;
+         $lin .= valor_128($work[$Iwork]["w_sal13"]); // 282 a 290 - valor 13 salario;
+         //echo '1º '.$lin;exit;
      } else{
+         //$work[$Iwork]["w_sal13"];exit;
      	 $lin .= valor_128($work[$Iwork]["w_sal13"]);                            // 282 a 290 - valor 13 salario;
+         //echo '2º '.$lin;exit;
      }
 
      $lin .= db_str($work[$Iwork]["w_mes13"],2,0,"0");                   // 291 a 292 - mes do 13 salario ;
@@ -1205,7 +1220,7 @@ function imprime_rais_128($nomearq){
      }else{
        $lin .= "2"  ;                                                    // 539 a 539 - Indicador - Sidicalizado (1-sim 2-nao)
      }
-     $lin .= bb_space(12);                                               // 540 a 551 - espacos;
+     $lin .= "2222".bb_space(8);                                               // 540 a 551 - espacos;
      fputs($arquivo,$lin."\n");
   }
 
