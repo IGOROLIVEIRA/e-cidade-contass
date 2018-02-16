@@ -18,7 +18,6 @@ class cl_dvpdcasp202018 {
    // cria variaveis do arquivo 
    var $si217_sequencial = 0; 
    var $si217_tiporegistro = 0; 
-   var $si217_exercicio = 0; 
    var $si217_vldiminutivapessoaencargos = 0; 
    var $si217_vlprevassistenciais = 0; 
    var $si217_vlservicoscapitalfixo = 0; 
@@ -36,7 +35,6 @@ class cl_dvpdcasp202018 {
    var $campos = "
                  si217_sequencial = int4 = si217_sequencial 
                  si217_tiporegistro = int4 = si217_tiporegistro 
-                 si217_exercicio = int4 = si217_exercicio 
                  si217_vldiminutivapessoaencargos = float4 = si217_vldiminutivapessoaencargos 
                  si217_vlprevassistenciais = float4 = si217_vlprevassistenciais 
                  si217_vlservicoscapitalfixo = float4 = si217_vlservicoscapitalfixo 
@@ -68,7 +66,6 @@ class cl_dvpdcasp202018 {
      if($exclusao==false){
        $this->si217_sequencial = ($this->si217_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_sequencial"]:$this->si217_sequencial);
        $this->si217_tiporegistro = ($this->si217_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_tiporegistro"]:$this->si217_tiporegistro);
-       $this->si217_exercicio = ($this->si217_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_exercicio"]:$this->si217_exercicio);
        $this->si217_vldiminutivapessoaencargos = ($this->si217_vldiminutivapessoaencargos == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_vldiminutivapessoaencargos"]:$this->si217_vldiminutivapessoaencargos);
        $this->si217_vlprevassistenciais = ($this->si217_vlprevassistenciais == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_vlprevassistenciais"]:$this->si217_vlprevassistenciais);
        $this->si217_vlservicoscapitalfixo = ($this->si217_vlservicoscapitalfixo == ""?@$GLOBALS["HTTP_POST_VARS"]["si217_vlservicoscapitalfixo"]:$this->si217_vlservicoscapitalfixo);
@@ -92,15 +89,6 @@ class cl_dvpdcasp202018 {
      if($this->si217_tiporegistro == null ){ 
        $this->erro_sql = " Campo si217_tiporegistro não informado.";
        $this->erro_campo = "si217_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si217_exercicio == null ){ 
-       $this->erro_sql = " Campo si217_exercicio não informado.";
-       $this->erro_campo = "si217_exercicio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -141,7 +129,6 @@ class cl_dvpdcasp202018 {
      $sql = "insert into dvpdcasp202018(
                                        si217_sequencial 
                                       ,si217_tiporegistro 
-                                      ,si217_exercicio 
                                       ,si217_vldiminutivapessoaencargos 
                                       ,si217_vlprevassistenciais 
                                       ,si217_vlservicoscapitalfixo 
@@ -159,7 +146,6 @@ class cl_dvpdcasp202018 {
                 values (
                                 (select nextval('dvpdcasp202018_si217_sequencial_seq'))
                                ,$this->si217_tiporegistro 
-                               ,$this->si217_exercicio 
                                ,$this->si217_vldiminutivapessoaencargos 
                                ,$this->si217_vlprevassistenciais 
                                ,$this->si217_vlservicoscapitalfixo 
@@ -225,19 +211,6 @@ class cl_dvpdcasp202018 {
        if(trim($this->si217_tiporegistro) == null ){ 
          $this->erro_sql = " Campo si217_tiporegistro não informado.";
          $this->erro_campo = "si217_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si217_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si217_exercicio"])){ 
-       $sql  .= $virgula." si217_exercicio = $this->si217_exercicio ";
-       $virgula = ",";
-       if(trim($this->si217_exercicio) == null ){ 
-         $this->erro_sql = " Campo si217_exercicio não informado.";
-         $this->erro_campo = "si217_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -396,8 +369,6 @@ class cl_dvpdcasp202018 {
              $resac = db_query("insert into db_acount values($acount,1010211,1009461,'".AddSlashes(pg_result($resaco,$conresaco,'si217_sequencial'))."','$this->si217_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si217_tiporegistro"]) || $this->si217_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010211,1009462,'".AddSlashes(pg_result($resaco,$conresaco,'si217_tiporegistro'))."','$this->si217_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si217_exercicio"]) || $this->si217_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010211,1009463,'".AddSlashes(pg_result($resaco,$conresaco,'si217_exercicio'))."','$this->si217_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si217_vldiminutivapessoaencargos"]) || $this->si217_vldiminutivapessoaencargos != "")
              $resac = db_query("insert into db_acount values($acount,1010211,1009464,'".AddSlashes(pg_result($resaco,$conresaco,'si217_vldiminutivapessoaencargos'))."','$this->si217_vldiminutivapessoaencargos',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si217_vlprevassistenciais"]) || $this->si217_vlprevassistenciais != "")

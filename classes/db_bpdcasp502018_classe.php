@@ -18,7 +18,6 @@ class cl_bpdcasp502018 {
    // cria variaveis do arquivo 
    var $si212_sequencial = 0; 
    var $si212_tiporegistro = 0; 
-   var $si212_exercicio = 0; 
    var $si212_vlsaldopatrimonial = 0; 
    var $si212_ano = 0;
    var $si212_periodo = 0;
@@ -27,7 +26,6 @@ class cl_bpdcasp502018 {
    var $campos = "
                  si212_sequencial = int4 = si212_sequencial 
                  si212_tiporegistro = int4 = si212_tiporegistro 
-                 si212_exercicio = int4 = si212_exercicio 
                  si212_vlsaldopatrimonial = float4 = si212_vlsaldopatrimonial 
                  ";
    //funcao construtor da classe 
@@ -50,7 +48,6 @@ class cl_bpdcasp502018 {
      if($exclusao==false){
        $this->si212_sequencial = ($this->si212_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si212_sequencial"]:$this->si212_sequencial);
        $this->si212_tiporegistro = ($this->si212_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si212_tiporegistro"]:$this->si212_tiporegistro);
-       $this->si212_exercicio = ($this->si212_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si212_exercicio"]:$this->si212_exercicio);
        $this->si212_vlsaldopatrimonial = ($this->si212_vlsaldopatrimonial == ""?@$GLOBALS["HTTP_POST_VARS"]["si212_vlsaldopatrimonial"]:$this->si212_vlsaldopatrimonial);
        $this->si212_ano = ($this->si212_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si212_ano"]:$this->si212_ano);
        $this->si212_periodo = ($this->si212_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si212_periodo"]:$this->si212_periodo);
@@ -71,15 +68,6 @@ class cl_bpdcasp502018 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si212_exercicio == null ){
-       $this->erro_sql = " Campo si212_exercicio não informado.";
-       $this->erro_campo = "si212_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->si212_vlsaldopatrimonial == null ){
        $this->si212_vlsaldopatrimonial = 0;
      }
@@ -87,7 +75,6 @@ class cl_bpdcasp502018 {
      $sql = "insert into bpdcasp502018(
                                        si212_sequencial 
                                       ,si212_tiporegistro 
-                                      ,si212_exercicio 
                                       ,si212_vlsaldopatrimonial 
                                       ,si212_ano
                                       ,si212_periodo
@@ -96,7 +83,6 @@ class cl_bpdcasp502018 {
                 values (
                                 (select nextval('bpdcasp502018_si212_sequencial_seq'))
                                ,$this->si212_tiporegistro 
-                               ,$this->si212_exercicio 
                                ,$this->si212_vlsaldopatrimonial 
                                ,$this->si212_ano
                                ,$this->si212_periodo
@@ -160,19 +146,6 @@ class cl_bpdcasp502018 {
          return false;
        }
      }
-     if(trim($this->si212_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si212_exercicio"])){ 
-       $sql  .= $virgula." si212_exercicio = $this->si212_exercicio ";
-       $virgula = ",";
-       if(trim($this->si212_exercicio) == null ){ 
-         $this->erro_sql = " Campo si212_exercicio não informado.";
-         $this->erro_campo = "si212_exercicio";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
      if(trim($this->si212_vlsaldopatrimonial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si212_vlsaldopatrimonial"])){ 
        $sql  .= $virgula." si212_vlsaldopatrimonial = $this->si212_vlsaldopatrimonial ";
        $virgula = ",";
@@ -207,8 +180,6 @@ class cl_bpdcasp502018 {
              $resac = db_query("insert into db_acount values($acount,1010206,1009426,'".AddSlashes(pg_result($resaco,$conresaco,'si212_sequencial'))."','$this->si212_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si212_tiporegistro"]) || $this->si212_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010206,1009427,'".AddSlashes(pg_result($resaco,$conresaco,'si212_tiporegistro'))."','$this->si212_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si212_exercicio"]) || $this->si212_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010206,1009428,'".AddSlashes(pg_result($resaco,$conresaco,'si212_exercicio'))."','$this->si212_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si212_vlsaldopatrimonial"]) || $this->si212_vlsaldopatrimonial != "")
              $resac = db_query("insert into db_acount values($acount,1010206,1009429,'".AddSlashes(pg_result($resaco,$conresaco,'si212_vlsaldopatrimonial'))."','$this->si212_vlsaldopatrimonial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }

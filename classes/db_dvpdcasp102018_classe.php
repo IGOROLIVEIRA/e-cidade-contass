@@ -18,7 +18,6 @@ class cl_dvpdcasp102018 {
    // cria variaveis do arquivo 
    var $si216_sequencial = 0; 
    var $si216_tiporegistro = 0; 
-   var $si216_exercicio = 0; 
    var $si216_vlimpostos = 0; 
    var $si216_vlcontribuicoes = 0; 
    var $si216_vlexploracovendasdireitos = 0; 
@@ -34,7 +33,6 @@ class cl_dvpdcasp102018 {
    var $campos = "
                  si216_sequencial = int4 = si216_sequencial 
                  si216_tiporegistro = int4 = si216_tiporegistro 
-                 si216_exercicio = int4 = si216_exercicio 
                  si216_vlimpostos = float4 = si216_vlimpostos 
                  si216_vlcontribuicoes = float4 = si216_vlcontribuicoes 
                  si216_vlexploracovendasdireitos = float4 = si216_vlexploracovendasdireitos 
@@ -64,7 +62,6 @@ class cl_dvpdcasp102018 {
      if($exclusao==false){
        $this->si216_sequencial = ($this->si216_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_sequencial"]:$this->si216_sequencial);
        $this->si216_tiporegistro = ($this->si216_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_tiporegistro"]:$this->si216_tiporegistro);
-       $this->si216_exercicio = ($this->si216_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_exercicio"]:$this->si216_exercicio);
        $this->si216_vlimpostos = ($this->si216_vlimpostos == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_vlimpostos"]:$this->si216_vlimpostos);
        $this->si216_vlcontribuicoes = ($this->si216_vlcontribuicoes == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_vlcontribuicoes"]:$this->si216_vlcontribuicoes);
        $this->si216_vlexploracovendasdireitos = ($this->si216_vlexploracovendasdireitos == ""?@$GLOBALS["HTTP_POST_VARS"]["si216_vlexploracovendasdireitos"]:$this->si216_vlexploracovendasdireitos);
@@ -86,15 +83,6 @@ class cl_dvpdcasp102018 {
      if($this->si216_tiporegistro == null ){ 
        $this->erro_sql = " Campo si216_tiporegistro não informado.";
        $this->erro_campo = "si216_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si216_exercicio == null ){ 
-       $this->erro_sql = " Campo si216_exercicio não informado.";
-       $this->erro_campo = "si216_exercicio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -129,7 +117,6 @@ class cl_dvpdcasp102018 {
      $sql = "insert into dvpdcasp102018(
                                        si216_sequencial 
                                       ,si216_tiporegistro 
-                                      ,si216_exercicio 
                                       ,si216_vlimpostos 
                                       ,si216_vlcontribuicoes 
                                       ,si216_vlexploracovendasdireitos 
@@ -145,7 +132,6 @@ class cl_dvpdcasp102018 {
                 values (
                                 (select nextval('dvpdcasp102018_si216_sequencial_seq'))
                                ,$this->si216_tiporegistro 
-                               ,$this->si216_exercicio 
                                ,$this->si216_vlimpostos 
                                ,$this->si216_vlcontribuicoes 
                                ,$this->si216_vlexploracovendasdireitos 
@@ -209,19 +195,6 @@ class cl_dvpdcasp102018 {
        if(trim($this->si216_tiporegistro) == null ){ 
          $this->erro_sql = " Campo si216_tiporegistro não informado.";
          $this->erro_campo = "si216_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si216_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si216_exercicio"])){ 
-       $sql  .= $virgula." si216_exercicio = $this->si216_exercicio ";
-       $virgula = ",";
-       if(trim($this->si216_exercicio) == null ){ 
-         $this->erro_sql = " Campo si216_exercicio não informado.";
-         $this->erro_campo = "si216_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

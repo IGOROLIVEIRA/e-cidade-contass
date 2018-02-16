@@ -21,7 +21,6 @@ class cl_dfcdcasp602018 {
    var $si224_instit  = 0;
    var $si224_sequencial = 0;
    var $si224_tiporegistro = 0;
-   var $si224_exercicio = 0;
    var $si224_vlfluxocaixaliquidoinvestimento = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -30,7 +29,6 @@ class cl_dfcdcasp602018 {
                  si224_instit = int4 = si224_instit
                  si224_sequencial = int4 = si224_sequencial
                  si224_tiporegistro = int4 = si224_tiporegistro
-                 si224_exercicio = int4 = si224_exercicio
                  si224_vlfluxocaixaliquidoinvestimento = float8 = si224_vlfluxocaixaliquidoinvestimento
                  ";
    //funcao construtor da classe
@@ -56,7 +54,6 @@ class cl_dfcdcasp602018 {
        $this->si224_instit = ($this->si224_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si224_instit"]:$this->si224_instit);
        $this->si224_sequencial = ($this->si224_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si224_sequencial"]:$this->si224_sequencial);
        $this->si224_tiporegistro = ($this->si224_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si224_tiporegistro"]:$this->si224_tiporegistro);
-       $this->si224_exercicio = ($this->si224_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si224_exercicio"]:$this->si224_exercicio);
        $this->si224_vlfluxocaixaliquidoinvestimento = ($this->si224_vlfluxocaixaliquidoinvestimento == ""?@$GLOBALS["HTTP_POST_VARS"]["si224_vlfluxocaixaliquidoinvestimento"]:$this->si224_vlfluxocaixaliquidoinvestimento);
      }else{
        $this->si224_sequencial = ($this->si224_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si224_sequencial"]:$this->si224_sequencial);
@@ -76,15 +73,6 @@ class cl_dfcdcasp602018 {
      }
      if( empty($this->si224_tiporegistro) ){
         $this->si224_tiporegistro = 60;
-     }
-     if( empty($this->si224_exercicio) ){
-       $this->erro_sql = " Campo si224_exercicio não informado.";
-       $this->erro_campo = "si224_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
      }
      if( empty($this->si224_vlfluxocaixaliquidoinvestimento) ){
         $this->si224_vlfluxocaixaliquidoinvestimento = 0;
@@ -122,7 +110,6 @@ class cl_dfcdcasp602018 {
                                       ,si224_instit
                                       ,si224_sequencial
                                       ,si224_tiporegistro
-                                      ,si224_exercicio
                                       ,si224_vlfluxocaixaliquidoinvestimento
                        )
                 values (
@@ -131,7 +118,6 @@ class cl_dfcdcasp602018 {
                                ,{$this->si224_instit}
                                ,$this->si224_sequencial
                                ,$this->si224_tiporegistro
-                               ,$this->si224_exercicio
                                ,$this->si224_vlfluxocaixaliquidoinvestimento
                       )";
      $result = db_query($sql);
@@ -186,19 +172,6 @@ class cl_dfcdcasp602018 {
        if(trim($this->si224_tiporegistro) == null ){
          $this->erro_sql = " Campo si224_tiporegistro não informado.";
          $this->erro_campo = "si224_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si224_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si224_exercicio"])){
-       $sql  .= $virgula." si224_exercicio = $this->si224_exercicio ";
-       $virgula = ",";
-       if(trim($this->si224_exercicio) == null ){
-         $this->erro_sql = " Campo si224_exercicio não informado.";
-         $this->erro_campo = "si224_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

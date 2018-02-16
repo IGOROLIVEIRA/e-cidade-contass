@@ -18,7 +18,6 @@ class cl_bpdcasp702018 {
    // cria variaveis do arquivo 
    var $si214_sequencial = 0; 
    var $si214_tiporegistro = 0; 
-   var $si214_exercicio = 0; 
    var $si214_vltotalsupdef = 0; 
    var $si214_ano = 0;
    var $si214_periodo = 0;
@@ -27,7 +26,6 @@ class cl_bpdcasp702018 {
    var $campos = "
                  si214_sequencial = int4 = si214_sequencial 
                  si214_tiporegistro = int4 = si214_tiporegistro 
-                 si214_exercicio = int4 = si214_exercicio 
                  si214_vltotalsupdef = float4 = si214_vltotalsupdef 
                  ";
    //funcao construtor da classe 
@@ -50,7 +48,6 @@ class cl_bpdcasp702018 {
      if($exclusao==false){
        $this->si214_sequencial = ($this->si214_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si214_sequencial"]:$this->si214_sequencial);
        $this->si214_tiporegistro = ($this->si214_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si214_tiporegistro"]:$this->si214_tiporegistro);
-       $this->si214_exercicio = ($this->si214_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si214_exercicio"]:$this->si214_exercicio);
        $this->si214_vltotalsupdef = ($this->si214_vltotalsupdef == ""?@$GLOBALS["HTTP_POST_VARS"]["si214_vltotalsupdef"]:$this->si214_vltotalsupdef);
        $this->si214_ano = ($this->si214_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si214_ano"]:$this->si214_ano);
        $this->si214_periodo = ($this->si214_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si214_periodo"]:$this->si214_periodo);
@@ -71,15 +68,6 @@ class cl_bpdcasp702018 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si214_exercicio == null ){
-       $this->erro_sql = " Campo si214_exercicio não informado.";
-       $this->erro_campo = "si214_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->si214_vltotalsupdef == null ){
        $this->si214_vltotalsupdef = 0;
      }
@@ -87,7 +75,6 @@ class cl_bpdcasp702018 {
      $sql = "insert into bpdcasp702018(
                                        si214_sequencial 
                                       ,si214_tiporegistro 
-                                      ,si214_exercicio 
                                       ,si214_vltotalsupdef 
                                       ,si214_ano
                                       ,si214_periodo
@@ -96,7 +83,6 @@ class cl_bpdcasp702018 {
                 values (
                                 (select nextval('bpdcasp702018_si214_sequencial_seq'))
                                ,$this->si214_tiporegistro 
-                               ,$this->si214_exercicio 
                                ,$this->si214_vltotalsupdef 
                                ,$this->si214_ano
                                ,$this->si214_periodo
@@ -160,19 +146,6 @@ class cl_bpdcasp702018 {
          return false;
        }
      }
-     if(trim($this->si214_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si214_exercicio"])){ 
-       $sql  .= $virgula." si214_exercicio = $this->si214_exercicio ";
-       $virgula = ",";
-       if(trim($this->si214_exercicio) == null ){ 
-         $this->erro_sql = " Campo si214_exercicio não informado.";
-         $this->erro_campo = "si214_exercicio";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
      if(trim($this->si214_vltotalsupdef)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si214_vltotalsupdef"])){ 
        $sql  .= $virgula." si214_vltotalsupdef = $this->si214_vltotalsupdef ";
        $virgula = ",";
@@ -207,8 +180,6 @@ class cl_bpdcasp702018 {
              $resac = db_query("insert into db_acount values($acount,1010208,1009441,'".AddSlashes(pg_result($resaco,$conresaco,'si214_sequencial'))."','$this->si214_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si214_tiporegistro"]) || $this->si214_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010208,1009442,'".AddSlashes(pg_result($resaco,$conresaco,'si214_tiporegistro'))."','$this->si214_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si214_exercicio"]) || $this->si214_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010208,1009443,'".AddSlashes(pg_result($resaco,$conresaco,'si214_exercicio'))."','$this->si214_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si214_vltotalsupdef"]) || $this->si214_vltotalsupdef != "")
              $resac = db_query("insert into db_acount values($acount,1010208,1009444,'".AddSlashes(pg_result($resaco,$conresaco,'si214_vltotalsupdef'))."','$this->si214_vltotalsupdef',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }

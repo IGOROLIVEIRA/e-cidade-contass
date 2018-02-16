@@ -18,7 +18,6 @@ class cl_bpdcasp202018 {
    // cria variaveis do arquivo 
    var $si209_sequencial = 0; 
    var $si209_tiporegistro = 0; 
-   var $si209_exercicio = 0; 
    var $si209_vlpassivcircultrabprevicurtoprazo = 0; 
    var $si209_vlpassivcirculemprefinancurtoprazo = 0; 
    var $si209_vlpassivocirculafornecedcurtoprazo = 0; 
@@ -50,7 +49,6 @@ class cl_bpdcasp202018 {
    var $campos = "
                  si209_sequencial = int4 = si209_sequencial 
                  si209_tiporegistro = int4 = si209_tiporegistro 
-                 si209_exercicio = int4 = si209_exercicio 
                  si209_vlpassivcircultrabprevicurtoprazo = float4 = si209_vlpassivcircultrabprevicurtoprazo 
                  si209_vlpassivcirculemprefinancurtoprazo = float4 = si209_vlpassivcirculemprefinancurtoprazo 
                  si209_vlpassivocirculafornecedcurtoprazo = float4 = si209_vlpassivocirculafornecedcurtoprazo 
@@ -96,7 +94,6 @@ class cl_bpdcasp202018 {
      if($exclusao==false){
        $this->si209_sequencial = ($this->si209_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_sequencial"]:$this->si209_sequencial);
        $this->si209_tiporegistro = ($this->si209_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_tiporegistro"]:$this->si209_tiporegistro);
-       $this->si209_exercicio = ($this->si209_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_exercicio"]:$this->si209_exercicio);
        $this->si209_vlpassivcircultrabprevicurtoprazo = ($this->si209_vlpassivcircultrabprevicurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassivcircultrabprevicurtoprazo"]:$this->si209_vlpassivcircultrabprevicurtoprazo);
        $this->si209_vlpassivcirculemprefinancurtoprazo = ($this->si209_vlpassivcirculemprefinancurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassivcirculemprefinancurtoprazo"]:$this->si209_vlpassivcirculemprefinancurtoprazo);
        $this->si209_vlpassivocirculafornecedcurtoprazo = ($this->si209_vlpassivocirculafornecedcurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si209_vlpassivocirculafornecedcurtoprazo"]:$this->si209_vlpassivocirculafornecedcurtoprazo);
@@ -134,15 +131,6 @@ class cl_bpdcasp202018 {
      if($this->si209_tiporegistro == null ){
        $this->erro_sql = " Campo si209_tiporegistro não informado.";
        $this->erro_campo = "si209_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si209_exercicio == null ){
-       $this->erro_sql = " Campo si209_exercicio não informado.";
-       $this->erro_campo = "si209_exercicio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -225,7 +213,6 @@ class cl_bpdcasp202018 {
      $sql = "insert into bpdcasp202018(
                                        si209_sequencial 
                                       ,si209_tiporegistro 
-                                      ,si209_exercicio 
                                       ,si209_vlpassivcircultrabprevicurtoprazo 
                                       ,si209_vlpassivcirculemprefinancurtoprazo 
                                       ,si209_vlpassivocirculafornecedcurtoprazo 
@@ -257,7 +244,6 @@ class cl_bpdcasp202018 {
                 values (
                                 (select nextval('bpdcasp202018_si209_sequencial_seq'))
                                ,$this->si209_tiporegistro 
-                               ,$this->si209_exercicio 
                                ,$this->si209_vlpassivcircultrabprevicurtoprazo 
                                ,$this->si209_vlpassivcirculemprefinancurtoprazo 
                                ,$this->si209_vlpassivocirculafornecedcurtoprazo 
@@ -338,19 +324,6 @@ class cl_bpdcasp202018 {
        if(trim($this->si209_tiporegistro) == null ){ 
          $this->erro_sql = " Campo si209_tiporegistro não informado.";
          $this->erro_campo = "si209_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si209_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si209_exercicio"])){ 
-       $sql  .= $virgula." si209_exercicio = $this->si209_exercicio ";
-       $virgula = ",";
-       if(trim($this->si209_exercicio) == null ){ 
-         $this->erro_sql = " Campo si209_exercicio não informado.";
-         $this->erro_campo = "si209_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -691,8 +664,6 @@ class cl_bpdcasp202018 {
              $resac = db_query("insert into db_acount values($acount,1010203,1009386,'".AddSlashes(pg_result($resaco,$conresaco,'si209_sequencial'))."','$this->si209_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si209_tiporegistro"]) || $this->si209_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010203,1009388,'".AddSlashes(pg_result($resaco,$conresaco,'si209_tiporegistro'))."','$this->si209_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si209_exercicio"]) || $this->si209_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010203,1009389,'".AddSlashes(pg_result($resaco,$conresaco,'si209_exercicio'))."','$this->si209_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassivcircultrabprevicurtoprazo"]) || $this->si209_vlpassivcircultrabprevicurtoprazo != "")
              $resac = db_query("insert into db_acount values($acount,1010203,1009390,'".AddSlashes(pg_result($resaco,$conresaco,'si209_vlpassivcircultrabprevicurtoprazo'))."','$this->si209_vlpassivcircultrabprevicurtoprazo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si209_vlpassivcirculemprefinancurtoprazo"]) || $this->si209_vlpassivcirculemprefinancurtoprazo != "")

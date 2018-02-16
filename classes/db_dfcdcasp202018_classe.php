@@ -21,7 +21,6 @@ class cl_dfcdcasp202018 {
    var $si220_instit  = 0;
    var $si220_sequencial = 0;
    var $si220_tiporegistro = 0;
-   var $si220_exercicio = 0;
    var $si220_vldesembolsopessoaldespesas = 0;
    var $si220_vldesembolsojurosencargdivida = 0;
    var $si220_vldesembolsotransfconcedidas = 0;
@@ -34,7 +33,6 @@ class cl_dfcdcasp202018 {
                  si220_instit = int4 = si220_instit
                  si220_sequencial = int4 = si220_sequencial
                  si220_tiporegistro = int4 = si220_tiporegistro
-                 si220_exercicio = int4 = si220_exercicio
                  si220_vldesembolsopessoaldespesas = float8 = si220_vldesembolsopessoaldespesas
                  si220_vldesembolsojurosencargdivida = float8 = si220_vldesembolsojurosencargdivida
                  si220_vldesembolsotransfconcedidas = float8 = si220_vldesembolsotransfconcedidas
@@ -64,7 +62,6 @@ class cl_dfcdcasp202018 {
        $this->si220_instit = ($this->si220_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si220_instit"]:$this->si220_instit);
        $this->si220_sequencial = ($this->si220_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si220_sequencial"]:$this->si220_sequencial);
        $this->si220_tiporegistro = ($this->si220_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si220_tiporegistro"]:$this->si220_tiporegistro);
-       $this->si220_exercicio = ($this->si220_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si220_exercicio"]:$this->si220_exercicio);
        $this->si220_vldesembolsopessoaldespesas = ($this->si220_vldesembolsopessoaldespesas == ""?@$GLOBALS["HTTP_POST_VARS"]["si220_vldesembolsopessoaldespesas"]:$this->si220_vldesembolsopessoaldespesas);
        $this->si220_vldesembolsojurosencargdivida = ($this->si220_vldesembolsojurosencargdivida == ""?@$GLOBALS["HTTP_POST_VARS"]["si220_vldesembolsojurosencargdivida"]:$this->si220_vldesembolsojurosencargdivida);
        $this->si220_vldesembolsotransfconcedidas = ($this->si220_vldesembolsotransfconcedidas == ""?@$GLOBALS["HTTP_POST_VARS"]["si220_vldesembolsotransfconcedidas"]:$this->si220_vldesembolsotransfconcedidas);
@@ -89,15 +86,6 @@ class cl_dfcdcasp202018 {
 
      if(empty($this->si220_tiporegistro)){
         $this->si220_tiporegistro = 20;
-     }
-     if(empty($this->si220_exercicio)){
-       $this->erro_sql = " Campo si220_exercicio não informado.";
-       $this->erro_campo = "si220_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
      }
      if (empty($this->si220_vldesembolsopessoaldespesas)) {
         $this->si220_vldesembolsopessoaldespesas = 0;
@@ -149,7 +137,6 @@ class cl_dfcdcasp202018 {
                                       ,si220_instit
                                       ,si220_sequencial
                                       ,si220_tiporegistro
-                                      ,si220_exercicio
                                       ,si220_vldesembolsopessoaldespesas
                                       ,si220_vldesembolsojurosencargdivida
                                       ,si220_vldesembolsotransfconcedidas
@@ -162,7 +149,6 @@ class cl_dfcdcasp202018 {
                                ,{$this->si220_instit}
                                ,$this->si220_sequencial
                                ,$this->si220_tiporegistro
-                               ,$this->si220_exercicio
                                ,$this->si220_vldesembolsopessoaldespesas
                                ,$this->si220_vldesembolsojurosencargdivida
                                ,$this->si220_vldesembolsotransfconcedidas
@@ -221,19 +207,6 @@ class cl_dfcdcasp202018 {
        if(trim($this->si220_tiporegistro) == null ){
          $this->erro_sql = " Campo si220_tiporegistro não informado.";
          $this->erro_campo = "si220_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si220_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si220_exercicio"])){
-       $sql  .= $virgula." si220_exercicio = $this->si220_exercicio ";
-       $virgula = ",";
-       if(trim($this->si220_exercicio) == null ){
-         $this->erro_sql = " Campo si220_exercicio não informado.";
-         $this->erro_campo = "si220_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

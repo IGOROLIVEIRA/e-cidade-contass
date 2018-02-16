@@ -21,7 +21,6 @@ class cl_dfcdcasp902018 {
    var $si227_instit  = 0;
    var $si227_sequencial = 0;
    var $si227_tiporegistro = 0;
-   var $si227_exercicio = 0;
    var $si227_vlfluxocaixafinanciamento = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -30,7 +29,6 @@ class cl_dfcdcasp902018 {
                  si227_instit = int4 = si227_instit
                  si227_sequencial = int4 = si227_sequencial
                  si227_tiporegistro = int4 = si227_tiporegistro
-                 si227_exercicio = int4 = si227_exercicio
                  si227_vlfluxocaixafinanciamento = float8 = si227_vlfluxocaixafinanciamento
                  ";
    //funcao construtor da classe
@@ -56,7 +54,6 @@ class cl_dfcdcasp902018 {
        $this->si227_instit = ($this->si227_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si227_instit"]:$this->si227_instit);
        $this->si227_sequencial = ($this->si227_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si227_sequencial"]:$this->si227_sequencial);
        $this->si227_tiporegistro = ($this->si227_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si227_tiporegistro"]:$this->si227_tiporegistro);
-       $this->si227_exercicio = ($this->si227_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si227_exercicio"]:$this->si227_exercicio);
        $this->si227_vlfluxocaixafinanciamento = ($this->si227_vlfluxocaixafinanciamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si227_vlfluxocaixafinanciamento"]:$this->si227_vlfluxocaixafinanciamento);
      }else{
        $this->si227_sequencial = ($this->si227_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si227_sequencial"]:$this->si227_sequencial);
@@ -76,15 +73,6 @@ class cl_dfcdcasp902018 {
      }
      if (empty($this->si227_tiporegistro)) {
         $this->si227_tiporegistro = 90;
-     }
-     if (empty($this->si227_exercicio)) {
-       $this->erro_sql = " Campo si227_exercicio não informado.";
-       $this->erro_campo = "si227_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
      }
      if (empty($this->si227_vlfluxocaixafinanciamento)) {
         $this->si227_vlfluxocaixafinanciamento = 0;
@@ -123,7 +111,6 @@ class cl_dfcdcasp902018 {
                                       ,si227_instit
                                       ,si227_sequencial
                                       ,si227_tiporegistro
-                                      ,si227_exercicio
                                       ,si227_vlfluxocaixafinanciamento
                        )
                 values (
@@ -132,7 +119,6 @@ class cl_dfcdcasp902018 {
                                ,{$this->si227_instit}
                                ,$this->si227_sequencial
                                ,$this->si227_tiporegistro
-                               ,$this->si227_exercicio
                                ,$this->si227_vlfluxocaixafinanciamento
                       )";
      $result = db_query($sql);
@@ -187,19 +173,6 @@ class cl_dfcdcasp902018 {
        if(trim($this->si227_tiporegistro) == null ){
          $this->erro_sql = " Campo si227_tiporegistro não informado.";
          $this->erro_campo = "si227_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si227_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si227_exercicio"])){
-       $sql  .= $virgula." si227_exercicio = $this->si227_exercicio ";
-       $virgula = ",";
-       if(trim($this->si227_exercicio) == null ){
-         $this->erro_sql = " Campo si227_exercicio não informado.";
-         $this->erro_campo = "si227_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

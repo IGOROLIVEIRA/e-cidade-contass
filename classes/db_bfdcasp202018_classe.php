@@ -18,7 +18,6 @@ class cl_bfdcasp202018 {
    // cria variaveis do arquivo
    var $si207_sequencial = 0;
    var $si207_tiporegistro = 0;
-   var $si207_exercicio = 0;
    var $si207_vldesporcamenrecurordinarios = 0;
    var $si207_vldesporcamenrecurvincueducacao = 0;
    var $si207_vldesporcamenrecurvincusaude = 0;
@@ -45,7 +44,6 @@ class cl_bfdcasp202018 {
                 si207_institu  = int4 = si207_institu;
                  si207_sequencial = int4 = si207_sequencial
                  si207_tiporegistro = int4 = si207_tiporegistro
-                 si207_exercicio = int4 = si207_exercicio
                  si207_vldesporcamenrecurordinarios = float8 = si207_vldesporcamenrecurordinarios
                  si207_vldesporcamenrecurvincueducacao = float8 = si207_vldesporcamenrecurvincueducacao
                  si207_vldesporcamenrecurvincusaude = float8 = si207_vldesporcamenrecurvincusaude
@@ -86,7 +84,6 @@ class cl_bfdcasp202018 {
        $this->si207_institu = ($this->si207_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si207_institu"]:$this->si207_institu);
        $this->si207_sequencial = ($this->si207_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si207_sequencial"]:$this->si207_sequencial);
        $this->si207_tiporegistro = ($this->si207_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si207_tiporegistro"]:$this->si207_tiporegistro);
-       $this->si207_exercicio = ($this->si207_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si207_exercicio"]:$this->si207_exercicio);
        $this->si207_vldesporcamenrecurordinarios = ($this->si207_vldesporcamenrecurordinarios == ""?@$GLOBALS["HTTP_POST_VARS"]["si207_vldesporcamenrecurordinarios"]:$this->si207_vldesporcamenrecurordinarios);
        $this->si207_vldesporcamenrecurvincueducacao = ($this->si207_vldesporcamenrecurvincueducacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si207_vldesporcamenrecurvincueducacao"]:$this->si207_vldesporcamenrecurvincueducacao);
        $this->si207_vldesporcamenrecurvincusaude = ($this->si207_vldesporcamenrecurvincusaude == ""?@$GLOBALS["HTTP_POST_VARS"]["si207_vldesporcamenrecurvincusaude"]:$this->si207_vldesporcamenrecurvincusaude);
@@ -112,15 +109,6 @@ class cl_bfdcasp202018 {
       $this->atualizacampos();
      if($this->si207_tiporegistro == null ){
         $this->si207_tiporegistro = 20;
-     }
-     if($this->si207_exercicio == null ){
-       $this->erro_sql = " Campo si207_exercicio não informado.";
-       $this->erro_campo = "si207_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
      }
      if($this->si207_vldesporcamenrecurordinarios == null ){
         $this->si207_vldesporcamenrecurordinarios = 0;
@@ -210,7 +198,6 @@ class cl_bfdcasp202018 {
      $sql = "insert into bfdcasp202018(
                                        si207_sequencial
                                       ,si207_tiporegistro
-                                      ,si207_exercicio
                                       ,si207_vldesporcamenrecurordinarios
                                       ,si207_vldesporcamenrecurvincueducacao
                                       ,si207_vldesporcamenrecurvincusaude
@@ -234,7 +221,6 @@ class cl_bfdcasp202018 {
                 values (
                                 $this->si207_sequencial
                                ,$this->si207_tiporegistro
-                               ,$this->si207_exercicio
                                ,$this->si207_vldesporcamenrecurordinarios
                                ,$this->si207_vldesporcamenrecurvincueducacao
                                ,$this->si207_vldesporcamenrecurvincusaude
@@ -307,19 +293,6 @@ class cl_bfdcasp202018 {
        if(trim($this->si207_tiporegistro) == null ){
          $this->erro_sql = " Campo si207_tiporegistro não informado.";
          $this->erro_campo = "si207_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si207_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si207_exercicio"])){
-       $sql  .= $virgula." si207_exercicio = $this->si207_exercicio ";
-       $virgula = ",";
-       if(trim($this->si207_exercicio) == null ){
-         $this->erro_sql = " Campo si207_exercicio não informado.";
-         $this->erro_campo = "si207_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

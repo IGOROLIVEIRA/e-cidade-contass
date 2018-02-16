@@ -21,7 +21,6 @@ class cl_dfcdcasp702018 {
    var $si225_instit  = 0;
    var $si225_sequencial = 0;
    var $si225_tiporegistro = 0;
-   var $si225_exercicio = 0;
    var $si225_vloperacoescredito = 0;
    var $si225_vlintegralizacaodependentes = 0;
    var $si225_vltranscapitalrecebida = 0;
@@ -34,7 +33,6 @@ class cl_dfcdcasp702018 {
                  si225_instit = int4 = si225_instit
                  si225_sequencial = int4 = si225_sequencial
                  si225_tiporegistro = int4 = si225_tiporegistro
-                 si225_exercicio = int4 = si225_exercicio
                  si225_vloperacoescredito = float8 = si225_vloperacoescredito
                  si225_vlintegralizacaodependentes = float8 = si225_vlintegralizacaodependentes
                  si225_vltranscapitalrecebida = float8 = si225_vltranscapitalrecebida
@@ -64,7 +62,6 @@ class cl_dfcdcasp702018 {
        $this->si225_instit = ($this->si225_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si225_instit"]:$this->si225_instit);
        $this->si225_sequencial = ($this->si225_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si225_sequencial"]:$this->si225_sequencial);
        $this->si225_tiporegistro = ($this->si225_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si225_tiporegistro"]:$this->si225_tiporegistro);
-       $this->si225_exercicio = ($this->si225_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si225_exercicio"]:$this->si225_exercicio);
        $this->si225_vloperacoescredito = ($this->si225_vloperacoescredito == ""?@$GLOBALS["HTTP_POST_VARS"]["si225_vloperacoescredito"]:$this->si225_vloperacoescredito);
        $this->si225_vlintegralizacaodependentes = ($this->si225_vlintegralizacaodependentes == ""?@$GLOBALS["HTTP_POST_VARS"]["si225_vlintegralizacaodependentes"]:$this->si225_vlintegralizacaodependentes);
        $this->si225_vltranscapitalrecebida = ($this->si225_vltranscapitalrecebida == ""?@$GLOBALS["HTTP_POST_VARS"]["si225_vltranscapitalrecebida"]:$this->si225_vltranscapitalrecebida);
@@ -88,15 +85,6 @@ class cl_dfcdcasp702018 {
      }
      if ( empty($this->si225_tiporegistro) ) {
         $this->si225_tiporegistro = 70;
-     }
-     if ( empty($this->si225_exercicio) ) {
-       $this->erro_sql = " Campo si225_exercicio não informado.";
-       $this->erro_campo = "si225_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
      }
      if ( empty($this->si225_vloperacoescredito) ) {
         $this->si225_vloperacoescredito = 0;
@@ -148,7 +136,6 @@ class cl_dfcdcasp702018 {
                                       ,si225_instit
                                       ,si225_sequencial
                                       ,si225_tiporegistro
-                                      ,si225_exercicio
                                       ,si225_vloperacoescredito
                                       ,si225_vlintegralizacaodependentes
                                       ,si225_vltranscapitalrecebida
@@ -161,7 +148,6 @@ class cl_dfcdcasp702018 {
                                ,{$this->si225_instit}
                                ,$this->si225_sequencial
                                ,$this->si225_tiporegistro
-                               ,$this->si225_exercicio
                                ,$this->si225_vloperacoescredito
                                ,$this->si225_vlintegralizacaodependentes
                                ,$this->si225_vltranscapitalrecebida
@@ -220,19 +206,6 @@ class cl_dfcdcasp702018 {
        if(trim($this->si225_tiporegistro) == null ){
          $this->erro_sql = " Campo si225_tiporegistro não informado.";
          $this->erro_campo = "si225_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si225_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si225_exercicio"])){
-       $sql  .= $virgula." si225_exercicio = $this->si225_exercicio ";
-       $virgula = ",";
-       if(trim($this->si225_exercicio) == null ){
-         $this->erro_sql = " Campo si225_exercicio não informado.";
-         $this->erro_campo = "si225_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

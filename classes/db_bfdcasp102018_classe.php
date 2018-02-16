@@ -18,7 +18,6 @@ class cl_bfdcasp102018 {
    // cria variaveis do arquivo
    var $si206_sequencial = 0;
    var $si206_tiporegistro = 0;
-   var $si206_exercicio = 0;
    var $si206_vlrecorcamenrecurord = 0;
    var $si206_vlrecorcamenrecinceduc = 0;
    var $si206_vlrecorcamenrecurvincusaude = 0;
@@ -46,7 +45,6 @@ class cl_bfdcasp102018 {
                 si206_institu  = int4 = si206_institu;
                  si206_sequencial = int4 = si206_sequencial
                  si206_tiporegistro = int4 = si206_tiporegistro
-                 si206_exercicio = int4 = si206_exercicio
                  si206_vlrecorcamenrecurord = float8 = si206_vlrecorcamenrecurord
                  si206_vlrecorcamenrecinceduc = float8 = si206_vlrecorcamenrecinceduc
                  si206_vlrecorcamenrecurvincusaude = float8 = si206_vlrecorcamenrecurvincusaude
@@ -87,7 +85,6 @@ class cl_bfdcasp102018 {
        $this->si206_institu = ($this->si206_institu == ""?@$GLOBALS["HTTP_POST_VARS"]["si206_institu"]:$this->si206_institu);
        $this->si206_sequencial = ($this->si206_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si206_sequencial"]:$this->si206_sequencial);
        $this->si206_tiporegistro = ($this->si206_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si206_tiporegistro"]:$this->si206_tiporegistro);
-       $this->si206_exercicio = ($this->si206_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si206_exercicio"]:$this->si206_exercicio);
        $this->si206_vlrecorcamenrecurord = ($this->si206_vlrecorcamenrecurord == ""?@$GLOBALS["HTTP_POST_VARS"]["si206_vlrecorcamenrecurord"]:$this->si206_vlrecorcamenrecurord);
        $this->si206_vlrecorcamenrecinceduc = ($this->si206_vlrecorcamenrecinceduc == ""?@$GLOBALS["HTTP_POST_VARS"]["si206_vlrecorcamenrecinceduc"]:$this->si206_vlrecorcamenrecinceduc);
        $this->si206_vlrecorcamenrecurvincusaude = ($this->si206_vlrecorcamenrecurvincusaude == ""?@$GLOBALS["HTTP_POST_VARS"]["si206_vlrecorcamenrecurvincusaude"]:$this->si206_vlrecorcamenrecurvincusaude);
@@ -123,15 +120,6 @@ class cl_bfdcasp102018 {
 
      if($this->si206_tiporegistro == null ){
         $this->si206_tiporegistro = 10;
-     }
-     if($this->si206_exercicio == null ){
-       $this->erro_sql = " Campo si206_exercicio não informado.";
-       $this->erro_campo = "si206_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
      }
      if($this->si206_vlrecorcamenrecurord == null ){
         $this->si206_vlrecorcamenrecurord = 0;
@@ -219,7 +207,6 @@ class cl_bfdcasp102018 {
      $sql = "insert into bfdcasp102018(
                                        si206_sequencial
                                       ,si206_tiporegistro
-                                      ,si206_exercicio
                                       ,si206_vlrecorcamenrecurord
                                       ,si206_vlrecorcamenrecinceduc
                                       ,si206_vlrecorcamenrecurvincusaude
@@ -244,7 +231,6 @@ class cl_bfdcasp102018 {
                 values (
                                 $this->si206_sequencial
                                ,$this->si206_tiporegistro
-                               ,$this->si206_exercicio
                                ,$this->si206_vlrecorcamenrecurord
                                ,$this->si206_vlrecorcamenrecinceduc
                                ,$this->si206_vlrecorcamenrecurvincusaude
@@ -317,19 +303,6 @@ class cl_bfdcasp102018 {
        if(trim($this->si206_tiporegistro) == null ){
          $this->erro_sql = " Campo si206_tiporegistro não informado.";
          $this->erro_campo = "si206_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si206_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si206_exercicio"])){
-       $sql  .= $virgula." si206_exercicio = $this->si206_exercicio ";
-       $virgula = ",";
-       if(trim($this->si206_exercicio) == null ){
-         $this->erro_sql = " Campo si206_exercicio não informado.";
-         $this->erro_campo = "si206_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

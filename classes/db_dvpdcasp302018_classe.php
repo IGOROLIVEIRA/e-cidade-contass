@@ -18,7 +18,6 @@ class cl_dvpdcasp302018 {
    // cria variaveis do arquivo 
    var $si218_sequencial = 0; 
    var $si218_tiporegistro = 0; 
-   var $si218_exercicio = 0; 
    var $si218_vlresultadopatrimonialperiodo = 0; 
    var $si218_ano = 0;
    var $si218_periodo = 0;
@@ -27,7 +26,6 @@ class cl_dvpdcasp302018 {
    var $campos = "
                  si218_sequencial = int4 = si218_sequencial 
                  si218_tiporegistro = int4 = si218_tiporegistro 
-                 si218_exercicio = int4 = si218_exercicio 
                  si218_vlresultadopatrimonialperiodo = float4 = si218_vlresultadopatrimonialperiodo 
                  ";
    //funcao construtor da classe 
@@ -50,7 +48,6 @@ class cl_dvpdcasp302018 {
      if($exclusao==false){
        $this->si218_sequencial = ($this->si218_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_sequencial"]:$this->si218_sequencial);
        $this->si218_tiporegistro = ($this->si218_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_tiporegistro"]:$this->si218_tiporegistro);
-       $this->si218_exercicio = ($this->si218_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_exercicio"]:$this->si218_exercicio);
        $this->si218_vlresultadopatrimonialperiodo = ($this->si218_vlresultadopatrimonialperiodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_vlresultadopatrimonialperiodo"]:$this->si218_vlresultadopatrimonialperiodo);
        $this->si218_ano = ($this->si218_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_ano"]:$this->si218_ano);
        $this->si218_periodo = ($this->si218_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si218_periodo"]:$this->si218_periodo);
@@ -71,15 +68,6 @@ class cl_dvpdcasp302018 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si218_exercicio == null ){ 
-       $this->erro_sql = " Campo si218_exercicio não informado.";
-       $this->erro_campo = "si218_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->si218_vlresultadopatrimonialperiodo == null ){
        $this->si218_vlresultadopatrimonialperiodo = 0;
      }
@@ -87,7 +75,6 @@ class cl_dvpdcasp302018 {
      $sql = "insert into dvpdcasp302018(
                                        si218_sequencial 
                                       ,si218_tiporegistro 
-                                      ,si218_exercicio 
                                       ,si218_vlresultadopatrimonialperiodo 
                                       ,si218_ano
                                       ,si218_periodo
@@ -96,7 +83,6 @@ class cl_dvpdcasp302018 {
                 values (
                                 (select nextval('dvpdcasp302018_si218_sequencial_seq'))
                                ,$this->si218_tiporegistro 
-                               ,$this->si218_exercicio 
                                ,$this->si218_vlresultadopatrimonialperiodo 
                                ,$this->si218_ano
                                ,$this->si218_periodo
@@ -160,19 +146,6 @@ class cl_dvpdcasp302018 {
          return false;
        }
      }
-     if(trim($this->si218_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si218_exercicio"])){ 
-       $sql  .= $virgula." si218_exercicio = $this->si218_exercicio ";
-       $virgula = ",";
-       if(trim($this->si218_exercicio) == null ){ 
-         $this->erro_sql = " Campo si218_exercicio não informado.";
-         $this->erro_campo = "si218_exercicio";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
      if(trim($this->si218_vlresultadopatrimonialperiodo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si218_vlresultadopatrimonialperiodo"])){ 
        $sql  .= $virgula." si218_vlresultadopatrimonialperiodo = $this->si218_vlresultadopatrimonialperiodo ";
        $virgula = ",";
@@ -207,8 +180,6 @@ class cl_dvpdcasp302018 {
              $resac = db_query("insert into db_acount values($acount,1010212,1009474,'".AddSlashes(pg_result($resaco,$conresaco,'si218_sequencial'))."','$this->si218_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si218_tiporegistro"]) || $this->si218_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010212,1009475,'".AddSlashes(pg_result($resaco,$conresaco,'si218_tiporegistro'))."','$this->si218_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si218_exercicio"]) || $this->si218_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010212,1009476,'".AddSlashes(pg_result($resaco,$conresaco,'si218_exercicio'))."','$this->si218_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si218_vlresultadopatrimonialperiodo"]) || $this->si218_vlresultadopatrimonialperiodo != "")
              $resac = db_query("insert into db_acount values($acount,1010212,1009477,'".AddSlashes(pg_result($resaco,$conresaco,'si218_vlresultadopatrimonialperiodo'))."','$this->si218_vlresultadopatrimonialperiodo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }

@@ -18,7 +18,6 @@ class cl_bpdcasp402018 {
    // cria variaveis do arquivo 
    var $si211_sequencial = 0; 
    var $si211_tiporegistro = 0; 
-   var $si211_exercicio = 0; 
    var $si211_vlpassivofinanceiro = 0; 
    var $si211_vlpassivopermanente = 0; 
    var $si211_vltotalpassivofinanceiropermanente = 0; 
@@ -29,7 +28,6 @@ class cl_bpdcasp402018 {
    var $campos = "
                  si211_sequencial = int4 = si211_sequencial 
                  si211_tiporegistro = int4 = si211_tiporegistro 
-                 si211_exercicio = int4 = si211_exercicio 
                  si211_vlpassivofinanceiro = float4 = si211_vlpassivofinanceiro 
                  si211_vlpassivopermanente = float4 = si211_vlpassivopermanente 
                  si211_vltotalpassivofinanceiropermanente = float4 = si211_vltotalpassivofinanceiropermanente 
@@ -57,7 +55,6 @@ class cl_bpdcasp402018 {
      if($exclusao==false){
        $this->si211_sequencial = ($this->si211_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si211_sequencial"]:$this->si211_sequencial);
        $this->si211_tiporegistro = ($this->si211_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si211_tiporegistro"]:$this->si211_tiporegistro);
-       $this->si211_exercicio = ($this->si211_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si211_exercicio"]:$this->si211_exercicio);
        $this->si211_vlpassivofinanceiro = ($this->si211_vlpassivofinanceiro == ""?@$GLOBALS["HTTP_POST_VARS"]["si211_vlpassivofinanceiro"]:$this->si211_vlpassivofinanceiro);
        $this->si211_vlpassivopermanente = ($this->si211_vlpassivopermanente == ""?@$GLOBALS["HTTP_POST_VARS"]["si211_vlpassivopermanente"]:$this->si211_vlpassivopermanente);
        $this->si211_vltotalpassivofinanceiropermanente = ($this->si211_vltotalpassivofinanceiropermanente == ""?@$GLOBALS["HTTP_POST_VARS"]["si211_vltotalpassivofinanceiropermanente"]:$this->si211_vltotalpassivofinanceiropermanente);
@@ -80,15 +77,6 @@ class cl_bpdcasp402018 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si211_exercicio == null ){
-       $this->erro_sql = " Campo si211_exercicio não informado.";
-       $this->erro_campo = "si211_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->si211_vlpassivofinanceiro == null ){
        $this->si211_vlpassivofinanceiro = 0;
      }
@@ -102,7 +90,6 @@ class cl_bpdcasp402018 {
      $sql = "insert into bpdcasp402018(
                                        si211_sequencial 
                                       ,si211_tiporegistro 
-                                      ,si211_exercicio 
                                       ,si211_vlpassivofinanceiro 
                                       ,si211_vlpassivopermanente 
                                       ,si211_vltotalpassivofinanceiropermanente 
@@ -113,7 +100,6 @@ class cl_bpdcasp402018 {
                 values (
                                 (select nextval('bpdcasp402018_si211_sequencial_seq'))
                                ,$this->si211_tiporegistro 
-                               ,$this->si211_exercicio 
                                ,$this->si211_vlpassivofinanceiro 
                                ,$this->si211_vlpassivopermanente 
                                ,$this->si211_vltotalpassivofinanceiropermanente 
@@ -172,19 +158,6 @@ class cl_bpdcasp402018 {
        if(trim($this->si211_tiporegistro) == null ){ 
          $this->erro_sql = " Campo si211_tiporegistro não informado.";
          $this->erro_campo = "si211_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si211_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si211_exercicio"])){ 
-       $sql  .= $virgula." si211_exercicio = $this->si211_exercicio ";
-       $virgula = ",";
-       if(trim($this->si211_exercicio) == null ){ 
-         $this->erro_sql = " Campo si211_exercicio não informado.";
-         $this->erro_campo = "si211_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -252,8 +225,6 @@ class cl_bpdcasp402018 {
              $resac = db_query("insert into db_acount values($acount,1010205,1009420,'".AddSlashes(pg_result($resaco,$conresaco,'si211_sequencial'))."','$this->si211_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si211_tiporegistro"]) || $this->si211_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010205,1009421,'".AddSlashes(pg_result($resaco,$conresaco,'si211_tiporegistro'))."','$this->si211_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si211_exercicio"]) || $this->si211_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010205,1009422,'".AddSlashes(pg_result($resaco,$conresaco,'si211_exercicio'))."','$this->si211_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si211_vlpassivofinanceiro"]) || $this->si211_vlpassivofinanceiro != "")
              $resac = db_query("insert into db_acount values($acount,1010205,1009423,'".AddSlashes(pg_result($resaco,$conresaco,'si211_vlpassivofinanceiro'))."','$this->si211_vlpassivofinanceiro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si211_vlpassivopermanente"]) || $this->si211_vlpassivopermanente != "")

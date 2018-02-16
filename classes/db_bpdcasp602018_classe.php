@@ -18,7 +18,6 @@ class cl_bpdcasp602018 {
    // cria variaveis do arquivo 
    var $si213_sequencial = 0; 
    var $si213_tiporegistro = 0; 
-   var $si213_exercicio = 0; 
    var $si213_vlatospotenativosgarancontrarecebi = 0; 
    var $si213_vlatospotenativodirconveoutroinstr = 0; 
    var $si213_vlatospotenativosdireitoscontratua = 0; 
@@ -34,7 +33,6 @@ class cl_bpdcasp602018 {
    var $campos = "
                  si213_sequencial = int4 = si213_sequencial 
                  si213_tiporegistro = int4 = si213_tiporegistro 
-                 si213_exercicio = int4 = si213_exercicio 
                  si213_vlatospotenativosgarancontrarecebi = float4 = si213_vlatospotenativosgarancontrarecebi 
                  si213_vlatospotenativodirconveoutroinstr = float4 = si213_vlatospotenativodirconveoutroinstr 
                  si213_vlatospotenativosdireitoscontratua = float4 = si213_vlatospotenativosdireitoscontratua 
@@ -64,7 +62,6 @@ class cl_bpdcasp602018 {
      if($exclusao==false){
        $this->si213_sequencial = ($this->si213_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si213_sequencial"]:$this->si213_sequencial);
        $this->si213_tiporegistro = ($this->si213_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si213_tiporegistro"]:$this->si213_tiporegistro);
-       $this->si213_exercicio = ($this->si213_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si213_exercicio"]:$this->si213_exercicio);
        $this->si213_vlatospotenativosgarancontrarecebi = ($this->si213_vlatospotenativosgarancontrarecebi == ""?@$GLOBALS["HTTP_POST_VARS"]["si213_vlatospotenativosgarancontrarecebi"]:$this->si213_vlatospotenativosgarancontrarecebi);
        $this->si213_vlatospotenativodirconveoutroinstr = ($this->si213_vlatospotenativodirconveoutroinstr == ""?@$GLOBALS["HTTP_POST_VARS"]["si213_vlatospotenativodirconveoutroinstr"]:$this->si213_vlatospotenativodirconveoutroinstr);
        $this->si213_vlatospotenativosdireitoscontratua = ($this->si213_vlatospotenativosdireitoscontratua == ""?@$GLOBALS["HTTP_POST_VARS"]["si213_vlatospotenativosdireitoscontratua"]:$this->si213_vlatospotenativosdireitoscontratua);
@@ -86,15 +83,6 @@ class cl_bpdcasp602018 {
      if($this->si213_tiporegistro == null ){
        $this->erro_sql = " Campo si213_tiporegistro não informado.";
        $this->erro_campo = "si213_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si213_exercicio == null ){
-       $this->erro_sql = " Campo si213_exercicio não informado.";
-       $this->erro_campo = "si213_exercicio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -129,7 +117,6 @@ class cl_bpdcasp602018 {
      $sql = "insert into bpdcasp602018(
                                        si213_sequencial 
                                       ,si213_tiporegistro 
-                                      ,si213_exercicio 
                                       ,si213_vlatospotenativosgarancontrarecebi 
                                       ,si213_vlatospotenativodirconveoutroinstr 
                                       ,si213_vlatospotenativosdireitoscontratua 
@@ -145,7 +132,6 @@ class cl_bpdcasp602018 {
                 values (
                                 (select nextval('bpdcasp602018_si213_sequencial_seq'))
                                ,$this->si213_tiporegistro 
-                               ,$this->si213_exercicio 
                                ,$this->si213_vlatospotenativosgarancontrarecebi 
                                ,$this->si213_vlatospotenativodirconveoutroinstr 
                                ,$this->si213_vlatospotenativosdireitoscontratua 
@@ -210,19 +196,6 @@ class cl_bpdcasp602018 {
        if(trim($this->si213_tiporegistro) == null ){ 
          $this->erro_sql = " Campo si213_tiporegistro não informado.";
          $this->erro_campo = "si213_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si213_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si213_exercicio"])){ 
-       $sql  .= $virgula." si213_exercicio = $this->si213_exercicio ";
-       $virgula = ",";
-       if(trim($this->si213_exercicio) == null ){ 
-         $this->erro_sql = " Campo si213_exercicio não informado.";
-         $this->erro_campo = "si213_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -355,8 +328,6 @@ class cl_bpdcasp602018 {
              $resac = db_query("insert into db_acount values($acount,1010207,1009430,'".AddSlashes(pg_result($resaco,$conresaco,'si213_sequencial'))."','$this->si213_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si213_tiporegistro"]) || $this->si213_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010207,1009431,'".AddSlashes(pg_result($resaco,$conresaco,'si213_tiporegistro'))."','$this->si213_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si213_exercicio"]) || $this->si213_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010207,1009432,'".AddSlashes(pg_result($resaco,$conresaco,'si213_exercicio'))."','$this->si213_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si213_vlatospotenativosgarancontrarecebi"]) || $this->si213_vlatospotenativosgarancontrarecebi != "")
              $resac = db_query("insert into db_acount values($acount,1010207,1009433,'".AddSlashes(pg_result($resaco,$conresaco,'si213_vlatospotenativosgarancontrarecebi'))."','$this->si213_vlatospotenativosgarancontrarecebi',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si213_vlatospotenativodirconveoutroinstr"]) || $this->si213_vlatospotenativodirconveoutroinstr != "")

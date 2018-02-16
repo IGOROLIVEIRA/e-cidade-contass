@@ -21,7 +21,6 @@ class cl_dfcdcasp802018 {
    var $si226_instit  = 0;
    var $si226_sequencial = 0;
    var $si226_tiporegistro = 0;
-   var $si226_exercicio = 0;
    var $si226_vlamortizacaorefinanciamento = 0;
    var $si226_vloutrosdesembolsosfinanciamento = 0;
    var $si226_vltotaldesembolsoatividafinanciame = 0;
@@ -32,7 +31,6 @@ class cl_dfcdcasp802018 {
                  si226_instit = int4 = si226_instit
                  si226_sequencial = int4 = si226_sequencial
                  si226_tiporegistro = int4 = si226_tiporegistro
-                 si226_exercicio = int4 = si226_exercicio
                  si226_vlamortizacaorefinanciamento = float8 = si226_vlamortizacaorefinanciamento
                  si226_vloutrosdesembolsosfinanciamento = float8 = si226_vloutrosdesembolsosfinanciamento
                  si226_vltotaldesembolsoatividafinanciame = float8 = si226_vltotaldesembolsoatividafinanciame
@@ -60,7 +58,6 @@ class cl_dfcdcasp802018 {
        $this->si226_instit = ($this->si226_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si226_instit"]:$this->si226_instit);
        $this->si226_sequencial = ($this->si226_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si226_sequencial"]:$this->si226_sequencial);
        $this->si226_tiporegistro = ($this->si226_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si226_tiporegistro"]:$this->si226_tiporegistro);
-       $this->si226_exercicio = ($this->si226_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si226_exercicio"]:$this->si226_exercicio);
        $this->si226_vlamortizacaorefinanciamento = ($this->si226_vlamortizacaorefinanciamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si226_vlamortizacaorefinanciamento"]:$this->si226_vlamortizacaorefinanciamento);
        $this->si226_vloutrosdesembolsosfinanciamento = ($this->si226_vloutrosdesembolsosfinanciamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si226_vloutrosdesembolsosfinanciamento"]:$this->si226_vloutrosdesembolsosfinanciamento);
        $this->si226_vltotaldesembolsoatividafinanciame = ($this->si226_vltotaldesembolsoatividafinanciame == ""?@$GLOBALS["HTTP_POST_VARS"]["si226_vltotaldesembolsoatividafinanciame"]:$this->si226_vltotaldesembolsoatividafinanciame);
@@ -82,15 +79,6 @@ class cl_dfcdcasp802018 {
      }
      if (empty($this->si226_tiporegistro)) {
         $this->si226_tiporegistro = 80;
-     }
-     if (empty($this->si226_exercicio)) {
-       $this->erro_sql = " Campo si226_exercicio não informado.";
-       $this->erro_campo = "si226_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
      }
      if (empty($this->si226_vlamortizacaorefinanciamento)) {
         $this->si226_vlamortizacaorefinanciamento = 0;
@@ -136,7 +124,6 @@ class cl_dfcdcasp802018 {
                                       ,si226_instit
                                       ,si226_sequencial
                                       ,si226_tiporegistro
-                                      ,si226_exercicio
                                       ,si226_vlamortizacaorefinanciamento
                                       ,si226_vloutrosdesembolsosfinanciamento
                                       ,si226_vltotaldesembolsoatividafinanciame
@@ -147,7 +134,6 @@ class cl_dfcdcasp802018 {
                                ,{$this->si226_instit}
                                ,$this->si226_sequencial
                                ,$this->si226_tiporegistro
-                               ,$this->si226_exercicio
                                ,$this->si226_vlamortizacaorefinanciamento
                                ,$this->si226_vloutrosdesembolsosfinanciamento
                                ,$this->si226_vltotaldesembolsoatividafinanciame
@@ -204,19 +190,6 @@ class cl_dfcdcasp802018 {
        if(trim($this->si226_tiporegistro) == null ){
          $this->erro_sql = " Campo si226_tiporegistro não informado.";
          $this->erro_campo = "si226_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si226_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si226_exercicio"])){
-       $sql  .= $virgula." si226_exercicio = $this->si226_exercicio ";
-       $virgula = ",";
-       if(trim($this->si226_exercicio) == null ){
-         $this->erro_sql = " Campo si226_exercicio não informado.";
-         $this->erro_campo = "si226_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

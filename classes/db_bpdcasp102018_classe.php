@@ -18,7 +18,6 @@ class cl_bpdcasp102018 {
    // cria variaveis do arquivo 
    var $si208_sequencial = 0; 
    var $si208_tiporegistro = 0; 
-   var $si208_exercicio = 0; 
    var $si208_vlativocircucaixaequicaixa = 0; 
    var $si208_vlativocircucredicurtoprazo = 0; 
    var $si208_vlativocircuinvestapliccurtoprazo = 0; 
@@ -39,7 +38,6 @@ class cl_bpdcasp102018 {
    var $campos = "
                  si208_sequencial = int4 = si208_sequencial 
                  si208_tiporegistro = int4 = si208_tiporegistro 
-                 si208_exercicio = int4 = si208_exercicio 
                  si208_vlativocircucaixaequicaixa = float4 = si208_vlativocircucaixaequicaixa 
                  si208_vlativocircucredicurtoprazo = float4 = si208_vlativocircucredicurtoprazo 
                  si208_vlativocircuinvestapliccurtoprazo = float4 = si208_vlativocircuinvestapliccurtoprazo 
@@ -74,7 +72,6 @@ class cl_bpdcasp102018 {
      if($exclusao==false){
        $this->si208_sequencial = ($this->si208_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_sequencial"]:$this->si208_sequencial);
        $this->si208_tiporegistro = ($this->si208_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_tiporegistro"]:$this->si208_tiporegistro);
-       $this->si208_exercicio = ($this->si208_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_exercicio"]:$this->si208_exercicio);
        $this->si208_vlativocircucaixaequicaixa = ($this->si208_vlativocircucaixaequicaixa == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativocircucaixaequicaixa"]:$this->si208_vlativocircucaixaequicaixa);
        $this->si208_vlativocircucredicurtoprazo = ($this->si208_vlativocircucredicurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativocircucredicurtoprazo"]:$this->si208_vlativocircucredicurtoprazo);
        $this->si208_vlativocircuinvestapliccurtoprazo = ($this->si208_vlativocircuinvestapliccurtoprazo == ""?@$GLOBALS["HTTP_POST_VARS"]["si208_vlativocircuinvestapliccurtoprazo"]:$this->si208_vlativocircuinvestapliccurtoprazo);
@@ -101,15 +98,6 @@ class cl_bpdcasp102018 {
      if($this->si208_tiporegistro == null ){
        $this->erro_sql = " Campo si208_tiporegistro não informado.";
        $this->erro_campo = "si208_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si208_exercicio == null ){
-       $this->erro_sql = " Campo si208_exercicio não informado.";
-       $this->erro_campo = "si208_exercicio";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -183,7 +171,6 @@ class cl_bpdcasp102018 {
      $sql = "insert into bpdcasp102018(
                                        si208_sequencial 
                                       ,si208_tiporegistro 
-                                      ,si208_exercicio 
                                       ,si208_vlativocircucaixaequicaixa 
                                       ,si208_vlativocircucredicurtoprazo 
                                       ,si208_vlativocircuinvestapliccurtoprazo 
@@ -204,7 +191,6 @@ class cl_bpdcasp102018 {
                 values (
                                 $this->si208_sequencial 
                                ,$this->si208_tiporegistro 
-                               ,$this->si208_exercicio 
                                ,$this->si208_vlativocircucaixaequicaixa 
                                ,$this->si208_vlativocircucredicurtoprazo 
                                ,$this->si208_vlativocircuinvestapliccurtoprazo 
@@ -273,19 +259,6 @@ class cl_bpdcasp102018 {
        if(trim($this->si208_tiporegistro) == null ){ 
          $this->erro_sql = " Campo si208_tiporegistro não informado.";
          $this->erro_campo = "si208_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si208_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si208_exercicio"])){ 
-       $sql  .= $virgula." si208_exercicio = $this->si208_exercicio ";
-       $virgula = ",";
-       if(trim($this->si208_exercicio) == null ){ 
-         $this->erro_sql = " Campo si208_exercicio não informado.";
-         $this->erro_campo = "si208_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -483,8 +456,6 @@ class cl_bpdcasp102018 {
              $resac = db_query("insert into db_acount values($acount,1010202,1009368,'".AddSlashes(pg_result($resaco,$conresaco,'si208_sequencial'))."','$this->si208_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si208_tiporegistro"]) || $this->si208_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010202,1009369,'".AddSlashes(pg_result($resaco,$conresaco,'si208_tiporegistro'))."','$this->si208_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si208_exercicio"]) || $this->si208_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010202,1009370,'".AddSlashes(pg_result($resaco,$conresaco,'si208_exercicio'))."','$this->si208_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si208_vlativocircucaixaequicaixa"]) || $this->si208_vlativocircucaixaequicaixa != "")
              $resac = db_query("insert into db_acount values($acount,1010202,1009371,'".AddSlashes(pg_result($resaco,$conresaco,'si208_vlativocircucaixaequicaixa'))."','$this->si208_vlativocircucaixaequicaixa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si208_vlativocircucredicurtoprazo"]) || $this->si208_vlativocircucredicurtoprazo != "")

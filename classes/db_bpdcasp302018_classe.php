@@ -18,7 +18,6 @@ class cl_bpdcasp302018 {
    // cria variaveis do arquivo 
    var $si210_sequencial = 0; 
    var $si210_tiporegistro = 0; 
-   var $si210_exercicio = 0; 
    var $si210_vlativofinanceiro = 0; 
    var $si210_vlativopermanente = 0; 
    var $si210_vltotalativofinanceiropermanente = 0; 
@@ -29,7 +28,6 @@ class cl_bpdcasp302018 {
    var $campos = "
                  si210_sequencial = int4 = si210_sequencial 
                  si210_tiporegistro = int4 = si210_tiporegistro 
-                 si210_exercicio = int4 = si210_exercicio 
                  si210_vlativofinanceiro = float4 = si210_vlativofinanceiro 
                  si210_vlativopermanente = float4 = si210_vlativopermanente 
                  si210_vltotalativofinanceiropermanente = float4 = si210_vltotalativofinanceiropermanente 
@@ -54,7 +52,6 @@ class cl_bpdcasp302018 {
      if($exclusao==false){
        $this->si210_sequencial = ($this->si210_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_sequencial"]:$this->si210_sequencial);
        $this->si210_tiporegistro = ($this->si210_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_tiporegistro"]:$this->si210_tiporegistro);
-       $this->si210_exercicio = ($this->si210_exercicio == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_exercicio"]:$this->si210_exercicio);
        $this->si210_vlativofinanceiro = ($this->si210_vlativofinanceiro == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_vlativofinanceiro"]:$this->si210_vlativofinanceiro);
        $this->si210_vlativopermanente = ($this->si210_vlativopermanente == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_vlativopermanente"]:$this->si210_vlativopermanente);
        $this->si210_vltotalativofinanceiropermanente = ($this->si210_vltotalativofinanceiropermanente == ""?@$GLOBALS["HTTP_POST_VARS"]["si210_vltotalativofinanceiropermanente"]:$this->si210_vltotalativofinanceiropermanente);
@@ -76,16 +73,7 @@ class cl_bpdcasp302018 {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
        $this->erro_status = "0";
        return false;
-     }
-     if($this->si210_exercicio == null ){
-       $this->erro_sql = " Campo si210_exercicio não informado.";
-       $this->erro_campo = "si210_exercicio";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-       $this->erro_status = "0";
-       return false;
-     }
+     }     
      if($this->si210_vlativofinanceiro == null ){
        $this->si210_vlativofinanceiro = 0;
      }
@@ -99,7 +87,6 @@ class cl_bpdcasp302018 {
      $sql = "insert into bpdcasp302018(
                                        si210_sequencial 
                                       ,si210_tiporegistro 
-                                      ,si210_exercicio 
                                       ,si210_vlativofinanceiro 
                                       ,si210_vlativopermanente 
                                       ,si210_vltotalativofinanceiropermanente 
@@ -110,7 +97,6 @@ class cl_bpdcasp302018 {
                 values (
                                 (select nextval('bpdcasp302018_si210_sequencial_seq'))
                                ,$this->si210_tiporegistro 
-                               ,$this->si210_exercicio 
                                ,$this->si210_vlativofinanceiro 
                                ,$this->si210_vlativopermanente 
                                ,$this->si210_vltotalativofinanceiropermanente 
@@ -170,19 +156,6 @@ class cl_bpdcasp302018 {
        if(trim($this->si210_tiporegistro) == null ){ 
          $this->erro_sql = " Campo si210_tiporegistro não informado.";
          $this->erro_campo = "si210_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si210_exercicio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si210_exercicio"])){ 
-       $sql  .= $virgula." si210_exercicio = $this->si210_exercicio ";
-       $virgula = ",";
-       if(trim($this->si210_exercicio) == null ){ 
-         $this->erro_sql = " Campo si210_exercicio não informado.";
-         $this->erro_campo = "si210_exercicio";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -250,8 +223,6 @@ class cl_bpdcasp302018 {
              $resac = db_query("insert into db_acount values($acount,1010204,1009414,'".AddSlashes(pg_result($resaco,$conresaco,'si210_sequencial'))."','$this->si210_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si210_tiporegistro"]) || $this->si210_tiporegistro != "")
              $resac = db_query("insert into db_acount values($acount,1010204,1009415,'".AddSlashes(pg_result($resaco,$conresaco,'si210_tiporegistro'))."','$this->si210_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-           if(isset($GLOBALS["HTTP_POST_VARS"]["si210_exercicio"]) || $this->si210_exercicio != "")
-             $resac = db_query("insert into db_acount values($acount,1010204,1009416,'".AddSlashes(pg_result($resaco,$conresaco,'si210_exercicio'))."','$this->si210_exercicio',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si210_vlativofinanceiro"]) || $this->si210_vlativofinanceiro != "")
              $resac = db_query("insert into db_acount values($acount,1010204,1009417,'".AddSlashes(pg_result($resaco,$conresaco,'si210_vlativofinanceiro'))."','$this->si210_vlativofinanceiro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["si210_vlativopermanente"]) || $this->si210_vlativopermanente != "")
