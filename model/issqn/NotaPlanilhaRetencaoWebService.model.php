@@ -27,6 +27,7 @@
 
 require_once("model/issqn/NotaPlanilhaRetencao.model.php");
 require_once("std/DBDate.php");
+require_once("model/endereco.model.php");
 
 /**
  * Classe responsavel por realizar os Lançamentos do prestador,
@@ -171,44 +172,85 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
        */
       if ($this->isRetido() == true) {
 
-          if ($this->iInscricaoPrestador) {
+         if ($this->iInscricaoPrestador) {
 
-            $oEmpresa = new Empresa($this->iInscricaoPrestador);
-            $oCGM     = $oEmpresa->getCgmEmpresa();
+           $oEmpresa = new Empresa($this->iInscricaoPrestador);
+           $oCGM     = $oEmpresa->getCgmEmpresa();
 
-            if ( $oCGM instanceof CgmFisico ) {
-              $sCpfCnpj = $oCGM->getCpf();
-            } else {
-              $sCpfCnpj = $oCGM->getCnpj();
-            }
+           if ( $oCGM instanceof CgmFisico ) {
+             $sCpfCnpj = $oCGM->getCpf();
+           } else {
+             $sCpfCnpj = $oCGM->getCnpj();
+           }
 
-          } else if ($this->sCnpjPrestador) {
+         } else if ($this->sCnpjPrestador) {
 
-            $oCGM = CgmFactory::getInstanceByCnpjCpf($this->sCnpjPrestador);
+           $oCGM = CgmFactory::getInstanceByCnpjCpf($this->sCnpjPrestador);
 
-            if (!is_object($oCGM)) {
-              throw new Exception("Este prestador não possui cadastro junto à prefeitura.(CNPJ: $this->sCnpjPrestador)");
-            }
+           if (!is_object($oCGM)) {
+             if(strlen($this->sCnpjPrestador) > 11) {
+               $oCGM = CgmFactory::getInstanceByType(2);
+               $oCGM->setCnpj($this->sCnpjPrestador);
+             } else {
+               $oCGM = CgmFactory::getInstanceByType(1);
+               $oCGM->setCpf($this->sCnpjPrestador);
+             }
+             $oCGM->setNome($this->sNome);
+             $oCGM->setNomeCompleto($this->sNome);
 
-            if ($oCGM->isFisico()) {
-              $sCpfCnpj = $oCGM->getCpf();
-            } else {
-              $sCpfCnpj = $oCGM->getCnpj();
-            }
+             /*seta os endereços*/
+             $oEnderecoPrimario   = endereco::findEnderecoByCodigo(81364,   false);
+             $oCGM->setUf($oEnderecoPrimario[0]->ssigla);
+             if ($oEnderecoPrimario[0]->scep != "") {
+               $oCGM->setCep($oEnderecoPrimario[0]->scep);
+             }
+             $oCGM->setBairro($oEnderecoPrimario[0]->sbairro);
+             $oCGM->setNumero($oEnderecoPrimario[0]->snumero);
+             $oCGM->setMunicipio($oEnderecoPrimario[0]->smunicipio);
+             $oCGM->setLogradouro($oEnderecoPrimario[0]->srua);
+             $oCGM->setComplemento($oEnderecoPrimario[0]->scomplemento);
 
-          } else if ($this->sCpfPrestador) {
+             $oCGM->save();
+           }
 
-            $oCGM = CgmFactory::getInstanceByCnpjCpf($this->sCpfPrestador);
+           $oCGM = CgmFactory::getInstanceByCgm($oCGM->getCodigo());
 
-            if (!is_object($oCGM)) {
-              throw new Exception("Este prestador não possui cadastro junto à prefeitura.(CPF: $this->sCpfPrestador)");
-            }
+           if ($oCGM->isFisico()) {
+             $sCpfCnpj = $oCGM->getCpf();
+           } else {
+             $sCpfCnpj = $oCGM->getCnpj();
+           }
 
-            $sCpfCnpj = $oCGM->getCpf();
-          }
+         } else if ($this->sCpfPrestador) {
+
+           $oCGM = CgmFactory::getInstanceByCnpjCpf($this->sCpfPrestador);
+
+           if (!is_object($oCGM)) {
+               $oCGM = CgmFactory::getInstanceByType(1);
+               $oCGM->setCpf($this->sCpfPrestador);
+               $oCGM->setNome(utf8_decode($this->sNome));
+               $oCGM->setNomeCompleto(utf8_decode($this->sNome));
+
+               /*seta os endereços*/
+               $oEnderecoPrimario   = endereco::findEnderecoByCodigo(81364,   false);
+               $oCGM->setUf($oEnderecoPrimario[0]->ssigla);
+               if ($oEnderecoPrimario[0]->scep != "") {
+                 $oCGM->setCep($oEnderecoPrimario[0]->scep);
+               }
+               $oCGM->setBairro($oEnderecoPrimario[0]->sbairro);
+               $oCGM->setNumero($oEnderecoPrimario[0]->snumero);
+               $oCGM->setMunicipio($oEnderecoPrimario[0]->smunicipio);
+               $oCGM->setLogradouro($oEnderecoPrimario[0]->srua);
+               $oCGM->setComplemento($oEnderecoPrimario[0]->scomplemento);
+
+               $oCGM->save();
+           }
+
+           $sCpfCnpj = $oCGM->getCpf();
+         }
 
 
-      } else {
+     } else {
 
         if ($this->getTipoLancamento() == parent::SERVICO_PRESTADO) {
           $sCpfCnpj = (strlen($this->sCnpjPrestador) >= 11) ?  $this->sCnpjPrestador : 0;
