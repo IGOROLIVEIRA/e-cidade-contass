@@ -186,8 +186,7 @@ function gerarSQLReceitas($sMes, $sEnte) {
         WHERE date_part('MONTH',c70_data) <={$nMes}
             AND date_part('YEAR',c70_data)={$nAno}
             AND c216_enteconsorciado={$nEnte}
-            AND (date_part('MONTH',c215_datainicioparticipacao) <={$nMes}
-                 AND date_part('YEAR',c215_datainicioparticipacao) <={$nAno})
+            AND c215_datainicioparticipacao <= '{$nAno}-{$nMes}-01'
         GROUP BY c216_tiporeceita,c218_descricao,c216_saldo3112
         ORDER BY c216_tiporeceita ";
 }

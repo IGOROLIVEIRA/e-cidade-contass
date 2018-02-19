@@ -62,12 +62,10 @@ switch ($oParam->exec){
         $oNovoEnte = new stdClass();
         $oNovoEnte->sequencial   = $oEnte->c215_sequencial;
         $sWhere2   = " where date_part('MONTH',c70_data) ={$oParam->mes} and date_part('YEAR',c70_data)={$nAnoUsu} ";
-        $sWhere2  .= " and (date_part('MONTH',c215_datainicioparticipacao) <={$oParam->mes} ";  
-        $sWhere2  .= " and date_part('YEAR',c215_datainicioparticipacao) <={$nAnoUsu}) ";
+        $sWhere2  .= " and c215_datainicioparticipacao <= '{$nAnoUsu}-{$oParam->mes}-01' ";
         $sWhere3   = " where date_part('MONTH',c70_data) ={$oParam->mes} ";
         $sWhere3  .= " and date_part('YEAR',c70_data)={$nAnoUsu} and c216_enteconsorciado=".$oEnte->c215_sequencial;
-        $sWhere3  .= " and (date_part('MONTH',c215_datainicioparticipacao) <={$oParam->mes} "; 
-        $sWhere3  .= " and date_part('YEAR',c215_datainicioparticipacao) <={$nAnoUsu}) ";
+        $sWhere3  .= " and c215_datainicioparticipacao <= '{$nAnoUsu}-{$oParam->mes}-01' ";
         $sSql2 = $oEntes->sql_query_percentual($sWhere2, $sWhere3);
         $rsEntesPerc = $oEntes->sql_record($sSql2);
         $percentualrateio = db_utils::fieldsMemory($rsEntesPerc, 0)->percent;
