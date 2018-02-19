@@ -88,34 +88,34 @@ $clrotulo->label("o15_codigo");
               <td>Arquivos Gerados</td>
             </tr>
             <tr>
-              <td style="border: 2px groove white;" valign="top">
+              <td style="border: 2px groove white; padding-right:10px;" valign="top">
               <input type="checkbox" value="IdentificacaoRemessa" id="IdenficacaoRemessa" /> 
-              <label for="IdenficacaoRemessa">Identificação da Remessa</label><br>
+              <label for="IdenficacaoRemessa">IDE - Identificação da Remessa</label><br>
                 
               <? if (db_getsession("DB_anousu") >= 2014) {?>
               <input type="checkbox" value="Pessoa" id="Pessoa" /> 
-              <label for="Pessoa">Pessoas Físicas e Jurídicas</label><br>
+              <label for="Pessoa">PESSOA - Pessoas Físicas e Jurídicas</label><br>
               <? } ?>
               
                 <input type="checkbox" value="AmOrgao" id="AmOrgao" /> 
-                <label for="AmOrgao">Orgãos</label><br>
+                <label for="AmOrgao">ORGAO - Orgãos</label><br>
                 
                 <? if (db_getsession("DB_anousu") >= 2014) {?>
                 <input type="checkbox" value="ConsConsorcios" id="ConsConsorcios" /> 
-                <label for="ConsConsorcios">Consórcios</label><br>
+                <label for="ConsConsorcios">CONSOR - Consórcios</label><br>
                 <? } ?> 
                 
                 <input type="checkbox" value="PrevisaoAtualizadaReceita" id="PrevisaoAtualizadaReceita" /> 
-                <label for="PrevisaoAtualizadaReceita">Previsão Atualizada da Receita</label><br>
+                <label for="PrevisaoAtualizadaReceita">PAREC - Previsão Atualizada da Receita</label><br>
                 
                 <input type="checkbox" value="DetalhamentoReceitasMes" id="DetalhamentoReceitasMes" /> 
-                <label for="DetalhamentoReceitasMes">Detalhamento das Receitas do Mês</label><br>
+                <label for="DetalhamentoReceitasMes">REC - Detalha. das Receitas do Mês</label><br>
                   
                 <input type="checkbox" value="DetalhamentoCorrecoesReceitas" id="DetalhamentoCorrecoesReceitas" /> 
-                <label for="DetalhamentoCorrecoesReceitas">Detalhamento das Correções de Receitas</label><br>
+                <label for="DetalhamentoCorrecoesReceitas">ARC - Detalha. das Correções de Receitas</label><br>
                 
                 <input type="checkbox" value="LeiAlteracaoOrcamentaria" id="LeiAlteracaoOrcamentaria" />
-                <label for="LeiAlteracaoOrcamentaria">Lei de Alteração Orçamentária</label><br>
+                <label for="LeiAlteracaoOrcamentaria">LAO - Lei de Alteração Orçamentária</label><br>
                 
                 <? if (db_getsession("DB_anousu") < 2014) {?>
                 
@@ -125,137 +125,145 @@ $clrotulo->label("o15_codigo");
                 <? } ?>
                 
                 <input type="checkbox" value="AlteracoesOrcamentarias" id="AlteracoesOrcamentarias" />
-                <label for="AlteracoesOrcamentarias">Alterações Orçamentárias</label><br> 
+                <label for="AlteracoesOrcamentarias">AOC - Alterações Orçamentárias</label><br> 
                   
+                  <? if (db_getsession("DB_anousu") >= 2014) {?>
+                    <input type="checkbox" value="Item" id="Item" /> 
+                    <label for="Item">ITEM - Item das Lic. etc.</label><br>
+                  <? } ?>
+                  <? if (db_getsession("DB_anousu") >= 2014) {?>
+                  <input type="checkbox" value="LegislacaoMunicipalLicitacao" id="LegislacaoMunicipalLicitacao" /> 
+                  <label for="LegislacaoMunicipalLicitacao">REGLIC - Legislação Municipal para Licitação</label><br>
+                  <? } ?>
                   <input type="checkbox" value="AberturaLicitacao" id="AberturaLicitacao" /> 
-                  <label for="AberturaLicitacao">Abertura da Licitação</label><br>
+                  <label for="AberturaLicitacao">ABERLIC - Abertura da Licitação</label><br>
                   
                   <input type="checkbox" value="ResponsaveisLicitacao" id="ResponsaveisLicitacao" /> 
-                  <label for="ResponsaveisLicitacao">Responsáveis pela Licitação</label><br>
+                  <label for="ResponsaveisLicitacao">RESPLIC - Responsáveis pela Licitação</label><br>
                   
                   <input type="checkbox" value="HabilitacaoLicitacao" id="HabilitacaoLicitacao" /> 
-                  <label for="HabilitacaoLicitacao">Habilitação da Licitação</label><br>
+                  <label for="HabilitacaoLicitacao">HABLIC - Habilitação da Licitação</label><br>
                   
                   <input type="checkbox" value="JulgamentoLicitacao" id="JulgamentoLicitacao" /> 
-                  <label for="JulgamentoLicitacao">Julgamento da Licitação</label><br>
+                  <label for="JulgamentoLicitacao">JULGLIC - Julgamento da Licitação</label><br>
                   
                   <input type="checkbox" value="HomologacaoLicitacao" id="HomologacaoLicitacao" /> 
-                  <label for="HomologacaoLicitacao">Homologação da Licitação</label><br>
+                  <label for="HomologacaoLicitacao">HOMOLIC - Homologação da Licitação</label><br>
                   
                   <input type="checkbox" value="ParecerLicitacao" id="ParecerLicitacao" /> 
-                  <label for="ParecerLicitacao">Parecer da Licitação</label><br>
+                  <label for="ParecerLicitacao">PARELIC - Parecer da Licitação</label><br>
                   
                   <input type="checkbox" value="AdesaoRegistroPrecos" id="AdesaoRegistroPrecos" /> 
-                  <label for="AdesaoRegistroPrecos">Adesão a Registro de Preços</label><br>
+                  <label for="AdesaoRegistroPrecos">REGADESAO - Adesão a Registro de Preços</label><br>
                   
                   <input type="checkbox" value="DispensaInexigibilidade" id="DispensaInexigibilidade" /> 
-                  <label for="DispensaInexigibilidade">Dispensa ou Inexigibilidade</label><br>
+                  <label for="DispensaInexigibilidade">DISPENSA - Dispensa ou Inexigibilidade</label><br>
                   
                 <input type="checkbox" value="Contratos" id="Contratos" /> 
-                <label for="Contratos">Contratos</label><br>
-                <? if (db_getsession("DB_anousu") >= 2014) {?>
-                <input type="checkbox" value="Convenios" id="Convenios" />
-                <label for="Convenios">Convenios</label><br>
-                <? } ?>
+                <label for="Contratos">CONTRATOS - Contratos</label><br>
                 
-              </td>
-              <td style="border: 2px groove white;" valign="top">
-                 
+                <? if (db_getsession("DB_anousu") >= 2014) {?>
+                  <input type="checkbox" value="Convenios" id="Convenios" />
+                  <label for="Convenios">CONV - Convenios</label><br>
+                <? } ?>
+
                 <input type="checkbox" value="ContasBancarias" id="ContasBancarias" /> 
-                <label for="ContasBancarias">Contas Bancárias</label><br>
-                 
+                <label for="ContasBancarias">CTB - Contas Bancárias</label><br>
                 <input type="checkbox" value="Caixa" id="Caixa" /> 
-                <label for="Caixa">Caixa</label><br>
+                <label for="Caixa">CAIXA - Caixa</label><br>
+              </td>
+              <td style="border: 2px groove white; padding-right:10px;" valign="top">
               
-              	<input type="checkbox" value="DetalhamentoEmpenhosMes" id="DetalhamentoEmpenhosMes" /> 
-              	<label for="DetalhamentoEmpenhosMes">Detalhamento dos Empenhos do Mês</label><br>
+                <input type="checkbox" value="DetalhamentoEmpenhosMes" id="DetalhamentoEmpenhosMes" /> 
+                <label for="DetalhamentoEmpenhosMes">EMP - Detalhamento dos Empenhos do Mês</label><br>
                 
                 <input type="checkbox" value="EmpenhosAnuladosMes" id="EmpenhosAnuladosMes" /> 
-                <label for="EmpenhosAnuladosMes">Empenhos Anulados no mês</label><br>
+                <label for="EmpenhosAnuladosMes">ANL - Empenhos Anulados no mês</label><br>
                               
                 <input type="checkbox" value="RestosPagar" id="RestosPagar" /> 
-                <label for="RestosPagar">Restos a Pagar de Exercícios Anteriores</label><br>
+                <label for="RestosPagar">RSP - Restos a Pagar de Exercícios Anteriores</label><br>
                 
                 <input type="checkbox" value="DetalhamentoLiquidacaoDespesa" id="DetalhamentoLiquidacaoDespesa" /> 
-                <label for="DetalhamentoLiquidacaoDespesa">Detalhamento da liquidação da despesa</label><br>
+                <label for="DetalhamentoLiquidacaoDespesa">LQD - Detalhamento da liquidação da despesa</label><br>
                 
                 <input type="checkbox" value="DetalhamentoAnulacao" id="DetalhamentoAnulacao" /> 
-                <label for="DetalhamentoAnulacao">Detalhamento da Anulação da liquidação da despesa</label><br>
+                <label for="DetalhamentoAnulacao">ALQ - Detalha. da Anulação da liq. da despesa</label><br>
                 
                 <input type="checkbox" value="DetalhamentoExtraOrcamentarias" id="DetalhamentoExtraOrcamentarias" /> 
-                <label for="DetalhamentoExtraOrcamentarias">Detalhamento das Extra-Orçamentárias</label><br>
+                <label for="DetalhamentoExtraOrcamentarias">EXT - Detalhamento das Extra-Orçamentárias</label><br>
                 
                 <input type="checkbox" value="AnulacaoExtraOrcamentaria" id="AnulacaoExtraOrcamentaria" /> 
-                <label for="AnulacaoExtraOrcamentaria">Anulação das Extra-Orçamentárias</label><br>
+                <label for="AnulacaoExtraOrcamentaria">AEX - Anul. das Extra-Orçamentárias</label><br>
                 
                 <input type="checkbox" value="PagamentosDespesas" id="PagamentosDespesas" /> 
-                <label for="PagamentosDespesas">Pagamentos das Despesas</label><br>
+                <label for="PagamentosDespesas">OPS - Pagamentos das Despesas</label><br>
                 
                 <input type="checkbox" value="AnulacoesOrdensPagamento" id="AnulacoesOrdensPagamento" /> 
-                <label for="AnulacoesOrdensPagamento">Anulações das Ordens de Pagamento</label><br>
+                <label for="AnulacoesOrdensPagamento">AOP - Anulações das Ordens de Pagamento</label><br>
                 
                 <input type="checkbox" value="OutrasBaixasEmpenhos" id="OutrasBaixasEmpenhos" /> 
-                <label for="OutrasBaixasEmpenhos">Outras Baixas de Empenhos por Lançamento Contábil</label><br>
+                <label for="OutrasBaixasEmpenhos">OBELAC - Outras Baixas de Emp. por Lanç. Contábil </label><br>
                 
                 <input type="checkbox" value="AnulacoesOutrasBaixasEmpenhos" id="AnulacoesOutrasBaixasEmpenhos" /> 
-                <label for="AnulacoesOutrasBaixasEmpenhos">Anulações de Outras Baixas de Empenhos por Lançamento Contábil</label><br>
+                <label for="AnulacoesOutrasBaixasEmpenhos">AOB Anul. Out. Baixas de Emp. por Lanç. Contábil</label><br>
                 
                 <input type="checkbox" value="NotasFiscais" id="NotasFiscais" /> 
-                <label for="NotasFiscais">Notas Fiscais</label><br>
+                <label for="NotasFiscais">NTF - Notas Fiscais</label><br>
                 
                 <input type="checkbox" value="CadastroVeiculos" id="CadastroVeiculos" /> 
-                <label for="CadastroVeiculos">Cadastro de Veículos ou Equipamentos</label><br>
+                <label for="CadastroVeiculos">CVC - Cadastro de Veículos ou Equipamentos</label><br>
                 
                 <input type="checkbox" value="DividaConsolidada" id="DividaConsolidada" /> 
-                <label for="DividaConsolidada">Dívida Consolidada</label><br>
+                <label for="DividaConsolidada">DDC - Dívida Consolidada</label><br>
                 
                 <input type="checkbox" value="ProjecaoAtuarial" id="ProjecaoAtuarial" /> 
-                <label for="ProjecaoAtuarial">Projeção Atuarial do RPPS</label><br>
+                <label for="ProjecaoAtuarial">PARPPS - Projeção Atuarial do RPPS</label><br>
 
-                <? if (db_getsession("DB_anousu") < 2017) {?>
-                <input type="checkbox" value="DadosComplementares" id="DadosComplementares" /> 
-                <label for="DadosComplementares">Dados Complementares à LRF</label><br>
-                <? } ?>
-
-                <? if (db_getsession("DB_anousu") >= 2014) {?>
-                <input type="checkbox" value="Item" id="Item" /> 
-                <label for="Item">Item</label><br>
-                <? } ?>
-                
-                <? if (db_getsession("DB_anousu") >= 2014) {?>
-                <input type="checkbox" value="LegislacaoMunicipalLicitacao" id="LegislacaoMunicipalLicitacao" /> 
-                <label for="LegislacaoMunicipalLicitacao">Legislação Municipal para Licitação</label><br>
-                <? } ?>
-                
-                <? if (db_getsession("DB_anousu") >= 2014) {?>
-                <input type="checkbox" value="Consideracoes" id="Consideracoes" />
-                <label for="Consideracoes">Considerações</label><br>
-                <? } ?>
-                
-                <? if (db_getsession("DB_anousu") >= 2015) {?>
-                <input type="checkbox" value="SuperavitFinanceiro" id="SuperavitFinanceiro" />
-                <label for="Consideracoes">Superavit Financeiro</label><br>
+                <? if (db_getsession("DB_anousu") > 2017) {?>
+                  <input type="checkbox" value="DadosComplementares" id="DadosComplementares" /> 
+                  <label for="DadosComplementares">DCLRF - Dados Complementares à LRF</label><br>
                 <? } ?>
 
                 <? if (db_getsession("DB_anousu") >= 2016) {?>
                   <input type="checkbox" value="CronogramaExecucao" id="CronogramaExecucao" />
-                  <label for="CronogramaExecucao">Cronograma de Execucao</label><br>
+                  <label for="CronogramaExecucao">CRONEM - Cronograma de Execução</label><br>
                 <? } ?>
 
                 <? if (db_getsession("DB_anousu") >= 2016) {?>
                   <input type="checkbox" value="MetasFisicasRealizadas" id="MetasFisicasRealizadas" />
-                  <label for="MetasFisicasRealizadas">Metas Fisicas Realizadas</label><br>
+                  <label for="MetasFisicasRealizadas">METAREAL - Metas Físicas Realizadas</label><br>
+                <? } ?>
+                <? if (db_getsession("DB_anousu") > 2017) {?>
+                  <input type="checkbox" value="InscDespesasExercicioRestoAPagar" id="InscDespesasExercicioRestoAPagar" /> 
+                  <label for="InscDespesasExercicioRestoAPagar">IDERP - Insc. Despesas do Exercício em RP</label><br>
+                <? } ?>
+                <? if (db_getsession("DB_anousu") > 2017) {?>
+                  <input type="checkbox" value="ConveniosInstrumentosCongeneres" id="ConveniosInstrumentosCongeneres" /> 
+                  <label for="ConveniosInstrumentosCongeneres">CONGE - Convênios e Instruementos Congêneres</label><br>
+                <? } ?>
+                <? if (db_getsession("DB_anousu") > 2017) {?>
+                  <input type="checkbox" value="TomadasContasEspeciais" id="TomadasContasEspeciais" /> 
+                  <label for="TomadasContasEspeciais">TCE - Tomadas de Contas Especiais</label><br>
+                <? } ?>
+                <? if (db_getsession("DB_anousu") >= 2014) {?>
+                  <input type="checkbox" value="Consideracoes" id="Consideracoes" />
+                  <label for="Consideracoes">CONSID - Considerações</label><br>
                 <? } ?>
                 
+                <? if (db_getsession("DB_anousu") >= 2015 && db_getsession("DB_anousu") < 2017 ) {?>
+                  <input type="checkbox" value="SuperavitFinanceiro" id="SuperavitFinanceiro" />
+                  <label for="SuperavitFinanceiro">Superavit Financeiro</label><br>
+                <? } ?>
+
               </td>
               
-			<td style="border: 2px groove white;" valign="top">
+			<td style="border: 2px groove white; padding-right:10px;" valign="top">
 			
 				<input type="checkbox" value="IdentificacaoRemessa" id="IdentificacaoRemessa" /> 
-                <label for="IdentificacaoRemessa">Identificação da Remessa</label><br>
+                <label for="IdentificacaoRemessa">IDE - Identificação da Remessa</label><br>
                 
                 <input type="checkbox" value="ProgramasAnuais" id="ProgramasAnuais" /> 
-                <label for="ProgramasAnuais">Programas Anuais</label><br>
+                <label for="ProgramasAnuais">PROG - Programas Anuais</label><br>
                 
                 <input type="checkbox" value="AcoesMetasAnuais" id="AcoesMetasAnuais" /> 
                 <label for="AcoesMetasAnuais">Ações e Metas Anuais</label><br>
