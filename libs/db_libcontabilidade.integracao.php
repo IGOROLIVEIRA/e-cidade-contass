@@ -18,6 +18,7 @@ function db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql = false
   } else {
     $condicao = "";
   }
+
   $pesq_estrut = "";
   if ($estrut_inicial != "") {
         // oberve a concatenação da variável
