@@ -211,7 +211,6 @@ class cl_lqd102018
                                       ,si118_tpliquidacao
                                       ,si118_nroempenho
                                       ,si118_dtempenho
-                                      ,si118_dsentenca
                                       ,si118_dtliquidacao
                                       ,si118_nroliquidacao
                                       ,si118_vlliquidado
