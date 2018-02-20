@@ -195,7 +195,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
 
   if($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
     $pdf->addpage();
-    $pdf->setfont('arial','b',8);
+    $pdf->setfont('arial','b',7);
     $pdf->cell(15,$alt,'RUBRICA',1,0,"C",1);
     $pdf->cell(75,$alt,'DESCRIÇÃO',1,0,"C",1);
     $pdf->cell(75,$alt,'RECURSO',1,0,"C",1);
@@ -210,18 +210,18 @@ for($x = 0; $x < pg_numrows($result);$x++){
 
   if($rubri_ant != $rubrica || $proxpag == true){
     if($rubri_ant != $rubrica && $rubri_ant != ""){
-      $pdf->setfont('arial','b',7);
+      $pdf->setfont('arial','b',5);
       $pdf->cell(165,$alt,"Total da rubrica ",0,0,"R",1);
       $pdf->cell( 25,$alt,db_formatar($total_rub, "f"),0,1,"R",1);
       $pdf->ln(2);
       $total_rub = 0;
       $cor = 0;
     }
-    $pdf->setfont('arial','',7);
+    $pdf->setfont('arial','',5);
     $pdf->cell(15,$alt,$rubrica,0,0,"C",$cor);
     $pdf->cell(75,$alt,$rh27_descr,0,0,"L",$cor);
   }else{
-    $pdf->setfont('arial','',7);
+    $pdf->setfont('arial','',5);
     $pdf->cell(15,$alt,"",0,0,"C",$cor);
     $pdf->cell(75,$alt,"",0,0,"L",$cor);
   }
@@ -272,7 +272,7 @@ if($totaliza == 's') {
     if($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
       $pdf->addpage();
     }
-    $pdf->cell(75,$alt,$rh25_recurso . " - " .$o15_descr,0,0,"L",$cor,'','.');
+    $pdf->cell(150,$alt,$rh25_recurso . " - " .$o15_descr,0,0,"L",$cor,'','.');
     $pdf->cell(25,$alt,db_formatar($valor,"f"),0,1,"R",$cor);
   }
 }
