@@ -46,7 +46,6 @@ class GerarREC extends GerarAM {
         $aCSVREC10['si25_ededucaodereceita']    = $this->padLeftZero($aREC10['si25_ededucaodereceita'], 1);
         $aCSVREC10['si25_identificadordeducao'] = $aREC10['si25_identificadordeducao'] == '' || $aREC10['si25_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aREC10['si25_identificadordeducao'], 2);
         $aCSVREC10['si25_naturezareceita']      = $this->padLeftZero($aREC10['si25_naturezareceita'], 8);
-        $aCSVREC10['si25_especificacao']        = substr($aREC10['si25_especificacao'], 0, 100);
         $aCSVREC10['si25_vlarrecadado']         = $this->sicomNumberReal(abs($aREC10['si25_vlarrecadado']), 2);
 
         $this->sLinha = $aCSVREC10;

@@ -195,7 +195,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
           $oDados10->si25_identificadordeducao = $iIdentDeducao;//substr($oDadosRec->o70_concarpeculiar, -2);
           $oDados10->si25_naturezareceita = $sNaturezaReceita;
-          $oDados10->si25_especificacao = $oDadosRec->o57_descr;
           $oDados10->si25_vlarrecadado = 0;
           $oDados10->si25_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
           $oDados10->Reg11 = array();
@@ -244,7 +243,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
       $clrec10->si25_ededucaodereceita = $oDados10->si25_ededucaodereceita;
       $clrec10->si25_identificadordeducao = $oDados10->si25_identificadordeducao;
       $clrec10->si25_naturezareceita = $oDados10->si25_naturezareceita;
-      $clrec10->si25_especificacao = $this->removeCaracteres($oDados10->si25_especificacao);
       $clrec10->si25_vlarrecadado = abs($oDados10->si25_vlarrecadado);
       $clrec10->si25_mes = $oDados10->si25_mes;
       $clrec10->si25_instit = db_getsession("DB_instit");
