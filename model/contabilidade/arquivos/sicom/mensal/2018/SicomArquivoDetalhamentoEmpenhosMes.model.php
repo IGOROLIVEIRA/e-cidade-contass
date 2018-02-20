@@ -266,7 +266,11 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 cgm.z01_cgccpf AS nrodocumento,
                 orcunidade.o41_subunidade AS subunidade,
                 homologacaoadjudica.l202_datahomologacao AS datahomologacao,
-                ac16_deptoresponsavel
+                ac16_deptoresponsavel,
+                2 as si106_despdecconvenioconge,
+                NULL as si106_nroconvenioconge,
+                NULL as si106_dataassinaturaconvenioconge
+
 FROM empempenho
 JOIN orcdotacao ON e60_coddot = o58_coddot
 JOIN empelemento ON e60_numemp = e64_numemp
@@ -308,7 +312,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
 
         $rsEmpenho = db_query($sSql);
         //echo pg_last_error();
-        //echo $sSql;db_criatabela($rsEmpenho);
+//        echo $sSql;db_criatabela($rsEmpenho);exit;
         $aCaracteres = array("°", chr(13), chr(10), "'", ";");
         // matriz de entrada
         $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
@@ -424,6 +428,9 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             $oDadosEmpenho->si106_despdecconvenio = $oEmpenho->despdecconvenio;
             $oDadosEmpenho->si106_nroconvenio = $oEmpenho->nroconvenio;
             $oDadosEmpenho->si106_dataassinaturaconvenio = $oEmpenho->dataassinaturaconvenio;
+            $oDadosEmpenho->si106_despdecconvenioconge = $oEmpenho->si106_despdecconvenioconge;
+            $oDadosEmpenho->si106_nroconvenioconge = $oEmpenho->si106_nroconvenioconge;
+            $oDadosEmpenho->si106_dataassinaturaconvenioconge = $oEmpenho->si106_dataassinaturaconvenioconge;
             $aHomologa = explode("-", $oEmpenho->datahomologacao);
             if (($oEmpenho->datahomologacao == null && $oDadosEmpenho->exercicioprocessolicitatorio < 2014) || $aHomologa[0] < 2014) {
                 $oDadosEmpenho->si106_despdeclicitacao = 1;

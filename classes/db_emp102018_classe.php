@@ -52,6 +52,9 @@ class cl_emp102018
   var $si106_dataassinaturaconvenio_mes = null;
   var $si106_dataassinaturaconvenio_ano = null;
   var $si106_dataassinaturaconvenio = null;
+  var $si106_despdecconvenioconge = 2;
+  var $si106_nroconvenioconge = null;
+  var $si106_dataassinaturaconvenioconge = null;
   var $si106_despdeclicitacao = 0;
   var $si106_codorgaoresplicit = null;
   var $si106_codunidadesubresplicit = null;
@@ -89,7 +92,10 @@ class cl_emp102018
                  si106_nrosequencialtermoaditivo = varchar(2) = Número sequencial do Termo Aditivo
                  si106_despdecconvenio = int8 = Despesa  decorrente de convênio
                  si106_nroconvenio = varchar(30) = Número do  Convênio
-                 si106_dataassinaturaconvenio = date = Data da assinatura do Convênio
+                 si106_dataassinaturaconvenio = date = Data da assinatura do
+                 si106_despdecconvenioconge = int8 = A despesa realizada e decorrente de convenio?
+                 si106_nroconvenioconge = varchar(30) = Numero do convenio
+                 si106_dataassinaturaconvenioconge = date = data da assinatura do convenio
                  si106_despdeclicitacao = int8 = Despesa decorrente de Licitação
                  si106_codorgaoresplicit = varchar(2) = Código do órgão  responsável
                  si106_codunidadesubresplicit = varchar(8) = Código da unidade
@@ -165,13 +171,16 @@ class cl_emp102018
       $this->si106_despdecconvenio = ($this->si106_despdecconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_despdecconvenio"] : $this->si106_despdecconvenio);
       $this->si106_nroconvenio = ($this->si106_nroconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_nroconvenio"] : $this->si106_nroconvenio);
       if ($this->si106_dataassinaturaconvenio == "") {
-        $this->si106_dataassinaturaconvenio_dia = ($this->si106_dataassinaturaconvenio_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_dataassinaturaconvenio_dia"] : $this->si106_dataassinaturaconvenio_dia);
-        $this->si106_dataassinaturaconvenio_mes = ($this->si106_dataassinaturaconvenio_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_dataassinaturaconvenio_mes"] : $this->si106_dataassinaturaconvenio_mes);
-        $this->si106_dataassinaturaconvenio_ano = ($this->si106_dataassinaturaconvenio_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_dataassinaturaconvenio_ano"] : $this->si106_dataassinaturaconvenio_ano);
-        if ($this->si106_dataassinaturaconvenio_dia != "") {
-          $this->si106_dataassinaturaconvenio = $this->si106_dataassinaturaconvenio_ano . "-" . $this->si106_dataassinaturaconvenio_mes . "-" . $this->si106_dataassinaturaconvenio_dia;
-        }
+          $this->si106_dataassinaturaconvenio_dia = ($this->si106_dataassinaturaconvenio_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_dataassinaturaconvenio_dia"] : $this->si106_dataassinaturaconvenio_dia);
+          $this->si106_dataassinaturaconvenio_mes = ($this->si106_dataassinaturaconvenio_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_dataassinaturaconvenio_mes"] : $this->si106_dataassinaturaconvenio_mes);
+          $this->si106_dataassinaturaconvenio_ano = ($this->si106_dataassinaturaconvenio_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_dataassinaturaconvenio_ano"] : $this->si106_dataassinaturaconvenio_ano);
+          if ($this->si106_dataassinaturaconvenio_dia != "") {
+              $this->si106_dataassinaturaconvenio = $this->si106_dataassinaturaconvenio_ano . "-" . $this->si106_dataassinaturaconvenio_mes . "-" . $this->si106_dataassinaturaconvenio_dia;
+          }
       }
+      $this->si106_despdecconvenioconge = ($this->si106_despdecconvenioconge == ""? @$GLOBALS["HTTP_POST_VARS"]["si106_despdecconvenioconge"] : $this->si106_despdecconvenioconge);
+      $this->si106_nroconvenioconge = ($this->si106_nroconvenioconge == ""? @$GLOBALS["HTTP_POST_VARS"]["si106_nroconvenioconge"] : $this->si106_nroconvenioconge);
+      $this->si106_dataassinaturaconvenioconge = ($this->si106_dataassinaturaconvenioconge == ""? @$GLOBALS["HTTP_POST_VARS"]["si106_dataassinaturaconvenioconge"] : $this->si106_dataassinaturaconvenioconge);
       $this->si106_despdeclicitacao = ($this->si106_despdeclicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_despdeclicitacao"] : $this->si106_despdeclicitacao);
       $this->si106_codorgaoresplicit = ($this->si106_codorgaoresplicit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_codorgaoresplicit"] : $this->si106_codorgaoresplicit);
       $this->si106_codunidadesubresplicit = ($this->si106_codunidadesubresplicit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_codunidadesubresplicit"] : $this->si106_codunidadesubresplicit);
@@ -333,6 +342,9 @@ class cl_emp102018
                                       ,si106_despdecconvenio
                                       ,si106_nroconvenio
                                       ,si106_dataassinaturaconvenio
+                                      ,si106_despdecconvenioconge
+                                      ,si106_nroconvenioconge
+                                      ,si106_dataassinaturaconvenioconge
                                       ,si106_despdeclicitacao
                                       ,si106_codorgaoresplicit
                                       ,si106_codunidadesubresplicit
@@ -371,7 +383,10 @@ class cl_emp102018
                                ,$this->si106_despdecconvenio
                                ,'$this->si106_nroconvenio'
                                ," . ($this->si106_dataassinaturaconvenio == "null" || $this->si106_dataassinaturaconvenio == "" ? "null" : "'" . $this->si106_dataassinaturaconvenio . "'") . "
-                               ,$this->si106_despdeclicitacao
+                               ,$this->si106_despdecconvenioconge
+                               ,'$this->si106_nroconvenioconge'
+                               ,". ($this->si106_dataassinaturaconvenioconge == "null" || $this->si106_dataassinaturaconvenioconge == "" ? "null" : "'" . $this->si106_dataassinaturaconvenioconge . "'") . "
+                               ,'$this->si106_despdeclicitacao'
                                ,'$this->si106_codorgaoresplicit'
                                ,'$this->si106_codunidadesubresplicit'
                                ,'$this->si106_nroprocessolicitatorio'
@@ -440,15 +455,15 @@ class cl_emp102018
       $resac = db_query("insert into db_acount values($acount,2010335,2010664,'','" . AddSlashes(pg_result($resaco, 0, 'si106_despdecconvenio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010335,2010665,'','" . AddSlashes(pg_result($resaco, 0, 'si106_nroconvenio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010335,2010666,'','" . AddSlashes(pg_result($resaco, 0, 'si106_dataassinaturaconvenio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2010667,'','" . AddSlashes(pg_result($resaco, 0, 'si106_despdeclicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2010668,'','" . AddSlashes(pg_result($resaco, 0, 'si106_codorgaoresplicit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2010669,'','" . AddSlashes(pg_result($resaco, 0, 'si106_codunidadesubresplicit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2010670,'','" . AddSlashes(pg_result($resaco, 0, 'si106_nroprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2010671,'','" . AddSlashes(pg_result($resaco, 0, 'si106_exercicioprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2011328,'','" . AddSlashes(pg_result($resaco, 0, 'si106_tipoprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2010672,'','" . AddSlashes(pg_result($resaco, 0, 'si106_cpfordenador')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2010673,'','" . AddSlashes(pg_result($resaco, 0, 'si106_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010335,2011619,'','" . AddSlashes(pg_result($resaco, 0, 'si106_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2010670,'','" . AddSlashes(pg_result($resaco, 0, 'si106_despdeclicitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2010671,'','" . AddSlashes(pg_result($resaco, 0, 'si106_codorgaoresplicit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2010672,'','" . AddSlashes(pg_result($resaco, 0, 'si106_codunidadesubresplicit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2010673,'','" . AddSlashes(pg_result($resaco, 0, 'si106_nroprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2010674,'','" . AddSlashes(pg_result($resaco, 0, 'si106_exercicioprocessolicitatorio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2011375,'','" . AddSlashes(pg_result($resaco, 0, 'si106_tipoprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2010676,'','" . AddSlashes(pg_result($resaco, 0, 'si106_cpfordenador')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2010677,'','" . AddSlashes(pg_result($resaco, 0, 'si106_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010335,2011678,'','" . AddSlashes(pg_result($resaco, 0, 'si106_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
     
     return true;

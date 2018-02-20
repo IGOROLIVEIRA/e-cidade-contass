@@ -77,6 +77,11 @@ class GerarEMP extends GerarAM
         $aCSVEMP10['si106_despdecconvenio']               = $this->padLeftZero($aEMP10['si106_despdecconvenio'], 1);
         $aCSVEMP10['si106_nroconvenio']                   = $aEMP10['si106_nroconvenio'] == 0 ? ' ' : substr($aEMP10['si106_nroconvenio'], 0, 30);
         $aCSVEMP10['si106_dataassinaturaconvenio']        = $aEMP10['si106_dataassinaturaconvenio'] == '' ? ' ' : $this->sicomDate($aEMP10['si106_dataassinaturaconvenio']);
+
+        $aCSVEMP10['si106_despdecconvenioconge']          = $this->padLeftZero($aEMP10['si106_despdecconvenioconge'], 1);
+        $aCSVEMP10['si106_nroconvenioconge']              = $aEMP10['si106_nroconvenioconge'] == 0 ? ' ' : substr($aEMP10['si106_nroconvenioconge'], 0, 30);
+        $aCSVEMP10['si106_dataassinaturaconvenioconge']   = $aEMP10['si106_dataassinaturaconvenioconge'] == 0 ? ' ' : substr($aEMP10['si106_dataassinaturaconvenioconge'], 0, 30);
+
         $aCSVEMP10['si106_despdeclicitacao']              = $this->padLeftZero($aEMP10['si106_despdeclicitacao'], 1);
         $aCSVEMP10['si106_codorgaoresplicit']             = $aEMP10['si106_codorgaoresplicit'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codorgaoresplicit'], 2);
         $aCSVEMP10['si106_codunidadesubresplicit']        = $aEMP10['si106_codunidadesubresplicit'] == '' ? ' ' : $this->padLeftZero($aEMP10['si106_codunidadesubresplicit'], 5);
