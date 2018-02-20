@@ -3,7 +3,7 @@ require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_ntf102018_classe.php");
 require_once("classes/db_ntf112018_classe.php");
-require_once("classes/db_ntdb_ntf102018_classe.php202018_classe.php");
+require_once("classes/db_ntf202018_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarNTF.model.php");
 
 /**
