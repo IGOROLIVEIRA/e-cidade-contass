@@ -3,6 +3,7 @@
 //CLASSE DA ENTIDADE balancete132017
 class cl_balancete132017
 {
+  CONST PERIODO_ENCERRAMENTO = 13;
   // cria variaveis de erro
   var $rotulo = null;
   var $query_sql = null;
