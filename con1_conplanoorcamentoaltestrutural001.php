@@ -81,8 +81,13 @@ if (isset($alterar) && trim(@$alterar) != ""){
                if ($clconplanoOrcamento->numrows > 0) {
                	
                  $oConPlan = db_utils::fieldsMemory($rsSqlConPlan, 0);
+                 if($anousu < 2018){
+                  $anoFinal =$anousu;
+                 }else{
+                  $anoFinal = $oConPlan->anomax;
+                 }
 
-                 for ($iAnoAtual = $anousu; $iAnoAtual <= $oConPlan->anomax; $iAnoAtual++) {
+                 for ($iAnoAtual = $anousu; $iAnoAtual <= $anoFinal; $iAnoAtual++) {
                  	
 		               $sql = $clconplanoOrcamento->sql_query_file(null, null, "*", null, "c60_anousu = {$iAnoAtual} and 
 		                                                                          c60_estrut like '$novo_estrutural'");
