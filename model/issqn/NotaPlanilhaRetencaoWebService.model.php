@@ -195,8 +195,8 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
                $oCGM = CgmFactory::getInstanceByType(1);
                $oCGM->setCpf($this->sCnpjPrestador);
              }
-             $oCGM->setNome($this->sNome);
-             $oCGM->setNomeCompleto($this->sNome);
+             $oCGM->setNome(substr($this->sNome,0,40));
+             $oCGM->setNomeCompleto(substr($this->sNome,0,100));
 
              /*seta os endereços*/
              $oEnderecoPrimario   = endereco::findEnderecoByCodigo(81364,   false);
