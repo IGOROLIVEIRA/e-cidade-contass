@@ -51,7 +51,8 @@ class cl_rhfuncao {
    var $rh37_class = null;
    var $rh37_reqcargo = 0;
    var $rh37_ativo = 'f';
-   var $rh37_funcaogrupo = 0; 
+   var $rh37_funcaogrupo = 0;
+   var $rh37_atividadedocargo = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  rh37_instit = int4 = Cod. Instituição 
@@ -63,7 +64,8 @@ class cl_rhfuncao {
                  rh37_class = varchar(5) = Classificação
                  rh37_reqcargo = int4 = Requisito do Cargo
                  rh37_ativo = bool = Ativo
-                 rh37_funcaogrupo = int4 = Grupo 
+                 rh37_funcaogrupo = int4 = Grupo
+                 rh37_atividadedocargo = varchar(150) = atividadedocargo 
                  ";
    //funcao construtor da classe 
    function cl_rhfuncao() { 
@@ -92,6 +94,7 @@ class cl_rhfuncao {
        $this->rh37_class = ($this->rh37_class == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_class"]:$this->rh37_class);
        $this->rh37_ativo = ($this->rh37_ativo == "f"?@$GLOBALS["HTTP_POST_VARS"]["rh37_ativo"]:$this->rh37_ativo);
        $this->rh37_funcaogrupo = ($this->rh37_funcaogrupo == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_funcaogrupo"]:$this->rh37_funcaogrupo);
+       $this->rh37_atividadedocargo = ($this->rh37_atividadedocargo == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_atividadedocargo"]:$this->rh37_atividadedocargo);
      }else{
        $this->rh37_instit = ($this->rh37_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_instit"]:$this->rh37_instit);
        $this->rh37_funcao = ($this->rh37_funcao == ""?@$GLOBALS["HTTP_POST_VARS"]["rh37_funcao"]:$this->rh37_funcao);
@@ -168,6 +171,7 @@ class cl_rhfuncao {
                                       ,rh37_reqcargo
                                       ,rh37_ativo 
                                       ,rh37_funcaogrupo 
+                                      ,rh37_atividadedocargo
                        )
                 values (
                                 $this->rh37_instit 
@@ -180,6 +184,7 @@ class cl_rhfuncao {
                                ,$this->rh37_reqcargo
                                ,'$this->rh37_ativo' 
                                ,$this->rh37_funcaogrupo 
+                               ,'$this->rh37_atividadedocargo'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -290,6 +295,10 @@ class cl_rhfuncao {
      if(trim($this->rh37_reqcargo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_reqcargo"])){
        $sql  .= $virgula." rh37_reqcargo = '$this->rh37_reqcargo' ";
        $virgula = ",";
+     }
+     if(trim($this->rh37_atividadedocargo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_atividadedocargo"])){
+           $sql  .= $virgula." rh37_atividadedocargo = '$this->rh37_atividadedocargo' ";
+           $virgula = ",";
      }
      if(trim($this->rh37_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh37_ativo"])){ 
        $sql  .= $virgula." rh37_ativo = '$this->rh37_ativo' ";

@@ -102,10 +102,23 @@ if ($db_opcao == 2) {
               "2"=>"Profissão regulamentada privativa de profissionais de saúde (Ex: Médicos, Assistentes Sociais, Técnicos em Enfermagem etc)",
               "3"=>"Professor",
               "4"=>"Outras");
-          db_select('rh37_reqcargo', $areqCargo, true, $db_opcao);
+          db_select('rh37_reqcargo', $areqCargo, true, $db_opcao,"onchange='js_showOutros()'");
           ?>
         </td>
       </tr>
+      </table>
+      <table>
+      <tr id="atividadedocargo" <? if($rh37_reqcargo != 4){ ?> style="display: none;" <? }else{ ?> style="display: inline;" <? } ?>>
+          <td nowrap title="Atividade do cargo"><b>Atividade do cargo: </b></td>
+          <td>
+          <?
+          db_textarea('rh37_atividadedocargo',5,60,$Irh37_atividadedocargo,true,'text',$db_opcao,"","","","150");
+          ?>
+          </td>
+      </tr>
+      </table>
+
+      <table>
       <tr>
         <td nowrap title="<?=@$Trh37_ativo?>"><?=@$Lrh37_ativo?></td>
         <td> 
@@ -114,18 +127,19 @@ if ($db_opcao == 2) {
             db_select('rh37_ativo', $aAtivo, true, $db_opcao,"");
           ?>
       </td>
-    </tr>
-    </table>
+      </tr>
     <fieldset>
     <legend style="font-weight: bold;">&nbsp;Lei&nbsp;</legend>
       <?
         db_textarea('rh37_lei',5,60,$Irh37_lei,true,'text',$db_opcao,"");
       ?>
     </fieldset>
+
+      </table>
   </fieldset>
   </center>
   <br />
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> onClick="return validaCampos()" >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 
@@ -136,6 +150,19 @@ if($db_opcao==1){
  echo "top.corpo.document.form1.rh37_reqcargo.value='4'";
 }
 ?>
+
+function js_showOutros() {
+
+
+
+    if (document.form1.rh37_reqcargo.value == 4) {
+        document.getElementById('atividadedocargo').style.display = "inline";
+        console.log(document.getElementById('atividadedocargo'));
+    } else {
+        document.getElementById('atividadedocargo').style.display = "none";
+        console.log(document.getElementById('atividadedocargo'));
+    }
+}
 
 function js_buscagrupo(mostra) {
   if(mostra==true){
@@ -177,5 +204,18 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }
   ?>
+}
+
+function validaCampos() {
+
+    if (document.form1.rh37_reqcargo.value == 4) {
+        console.log(document.getElementById('rh37_atividadedocargo'));
+        if(document.getElementById('rh37_atividadedocargo').value == "") {
+            alert("O campo Atividade do cargo é obrigatório");
+            return false;
+        }
+    }
+
+    return true;
 }
 </script>
