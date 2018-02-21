@@ -98,7 +98,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                  and o58_anousu = " . db_getsession('DB_anousu') .
                 " and o58_instit = " . db_getsession('DB_instit') . " limit 1";
 
-            $rsSql = db_query($sSql) or die($sSql);
+            $rsSql = db_query($sSql) or die("erro 19".$sSql);
 
             if (pg_num_rows($rsSql) > 0) {
 
@@ -267,7 +267,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 //where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '622130500') as x
 
-        $rsReg10 = db_query($sqlReg10) or die($sqlReg10);
+        $rsReg10 = db_query($sqlReg10) or die("erro 20".$sqlReg10);
 
         $aDadosAgrupados10 = array();
         for ($iCont = 0; $iCont < pg_num_rows($rsReg10); $iCont++) {
@@ -316,7 +316,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                          AND c61_instit IN (" . db_getsession('DB_instit') . ")
 						 AND c61_codcon = {$oReg10->codcon} ) AS x) as y group by 1,2";
 
-                $rsSaldoAnt = db_query($sSqlSaldoAnt) or die(pg_last_error());
+                $rsSaldoAnt = db_query($sSqlSaldoAnt) or die("erro 21".g_last_error());
 
                 if ($this->bEncerramento) {
 
@@ -344,7 +344,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
                              where c60_anousu = " . db_getsession("DB_anousu") . " AND c61_codcon = {$oReg10->codcon}) as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
-                    $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die(pg_last_error());
+                    $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die("erro 22".pg_last_error());
 
                     $nCreditosEncerramento10 = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->credito;
                     $nDebitosEncerramento10 = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->debito;
@@ -527,7 +527,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                 }
 
-                $rsDotacoes = db_query($sSqlDotacoes) or die($sSqlDotacoes);
+                $rsDotacoes = db_query($sSqlDotacoes) or die("erro 24".$sSqlDotacoes);
 
                 for ($iCont11 = 0; $iCont11 < pg_num_rows($rsDotacoes); $iCont11++) {
 
@@ -669,7 +669,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                            GROUP BY c28_tipo) AS debitosEncerramento";
                     }
 
-                    $rsReg11saldos = db_query($sSqlReg11saldos) or die($sSqlReg11saldos);
+                    $rsReg11saldos = db_query($sSqlReg11saldos) or die("erro 27".$sSqlReg11saldos);
 
                     for ($iContSaldo = 0; $iContSaldo < pg_num_rows($rsReg11saldos); $iContSaldo++) {
 
@@ -784,7 +784,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                 WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
                                                 AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu");
 
-                $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die($sSqlVinculoContaOrcamento);
+                $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die("erro 28".$sSqlVinculoContaOrcamento);
 
                 //Constante da contacorrente orçamentária
                 $nContaCorrente = 100;
@@ -916,7 +916,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                            GROUP BY c28_tipo) AS debitosEncerramento";
                     }
 
-                    $rsReg12saldos = db_query($sSqlReg12saldos) or die($sSqlReg12saldos);
+                    $rsReg12saldos = db_query($sSqlReg12saldos) or die("erro 28".$sSqlReg12saldos);
 
                     for ($iContSaldo12 = 0; $iContSaldo12 < pg_num_rows($rsReg12saldos); $iContSaldo12++) {
 
@@ -1029,23 +1029,23 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                 $nContaCorrente = 101;
 
-                $rsDotacoes13 = db_query($sSqlDotacoes13) or die($sSqlDotacoes13);
+                $rsDotacoes13 = db_query($sSqlDotacoes13) or die("erro 29".$sSqlDotacoes13);
 
                 for ($iCont13 = 0; $iCont13 < pg_num_rows($rsDotacoes13); $iCont13++) {
                     $oReg13 = db_utils::fieldsMemory($rsDotacoes13, $iCont13);
-
+                    $iPrograma = str_pad($oReg13->codprograma,4,'0',STR_PAD_LEFT);
                     $sSqlReg13saldos = " SELECT
                                           (SELECT case when round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) = '0.00' then null else round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) end AS saldoinicial
                                            FROM
                                              (SELECT
-                                                (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                                                (SELECT SUM(CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END) AS saldoanterior
                                                  FROM contacorrente
                                                  INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                                  INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
                                                  AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                  WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                    AND c17_sequencial = {$nContaCorrente}
-                                                   AND c19_orcdotacao = {$oReg13->o58_coddot}) AS saldoimplantado,
+                                                   AND c19_programa = '{$iPrograma}' ) AS saldoimplantado,
 
                                                 (SELECT sum(c69_valor) AS debito
                                                  FROM conlancamval
@@ -1061,7 +1061,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                      AND c19_contacorrente = {$nContaCorrente}
                                                      AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                      AND c19_instit = " . db_getsession("DB_instit") . "
-                                                     AND c19_orcdotacao = {$oReg13->o58_coddot}
+                                                     AND c19_programa = '{$iPrograma}'
                                                      AND conhistdoc.c53_tipo not in (1000)
                                                    GROUP BY c28_tipo) AS debitoatual,
 
@@ -1079,7 +1079,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                      AND c19_contacorrente = {$nContaCorrente}
                                                      AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                      AND c19_instit = " . db_getsession("DB_instit") . "
-                                                     AND c19_orcdotacao = {$oReg13->o58_coddot}
+                                                     AND c19_programa = '{$iPrograma}'
                                                      AND conhistdoc.c53_tipo not in (1000)
                                                    GROUP BY c28_tipo) AS creditoatual) AS movi) AS saldoanterior,
 
@@ -1097,7 +1097,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                              AND c19_contacorrente = {$nContaCorrente}
                                              AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                              AND c19_instit = " . db_getsession("DB_instit") . "
-                                             AND c19_orcdotacao = {$oReg13->o58_coddot}
+                                             AND c19_programa = '{$iPrograma}'
                                              AND conhistdoc.c53_tipo not in (1000)
                                            GROUP BY c28_tipo) AS creditos,
 
@@ -1115,7 +1115,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                              AND c19_contacorrente = {$nContaCorrente}
                                              AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                              AND c19_instit = " . db_getsession("DB_instit") . "
-                                             AND c19_orcdotacao = {$oReg13->o58_coddot}
+                                             AND c19_programa = '{$iPrograma}'
                                              AND conhistdoc.c53_tipo not in (1000)
                                            GROUP BY c28_tipo) AS debitos";
                     if ($this->bEncerramento) {
@@ -1134,7 +1134,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                              AND c19_contacorrente = {$nContaCorrente}
                                              AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                              AND c19_instit = " . db_getsession("DB_instit") . "
-                                             AND c19_orcdotacao = {$oReg13->o58_coddot}
+                                             AND c19_programa = '{$iPrograma}'
                                              AND conhistdoc.c53_tipo in (1000)
                                            GROUP BY c28_tipo) AS creditosEncerramento,
 
@@ -1152,12 +1152,12 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                              AND c19_contacorrente = {$nContaCorrente}
                                              AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                              AND c19_instit = " . db_getsession("DB_instit") . "
-                                             AND c19_orcdotacao = {$oReg13->o58_coddot}
+                                             AND c19_programa = '{$iPrograma}'
                                              AND conhistdoc.c53_tipo in (1000)
                                            GROUP BY c28_tipo) AS debitosEncerramento";
                     }
 
-                    $rsReg13saldos = db_query($sSqlReg13saldos) or die($sSqlReg13saldos);
+                    $rsReg13saldos = db_query($sSqlReg13saldos) or die("Erro ZERO".$sSqlReg13saldos);
 
                     for ($iContSaldo13 = 0; $iContSaldo13 < pg_num_rows($rsReg13saldos); $iContSaldo13++) {
 
@@ -1250,7 +1250,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     where c19_reduz IN (" . implode(',', $oContas10->contas) . " )
                                     and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") ;
 
-                $rsRestos = db_query($sSqlRestos) or die($sSqlRestos);
+                $rsRestos = db_query($sSqlRestos) or die("erro aqui 2".$sSqlRestos);
 
                 //Constante da contacorrente orçamentária
                 $nContaCorrente = 106;
@@ -1384,7 +1384,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                            GROUP BY c28_tipo) AS debitosEncerramento";
                     }
 
-                    $rsReg14saldos = db_query($sSqlReg14saldos) or die($sSqlReg14saldos);
+                    $rsReg14saldos = db_query($sSqlReg14saldos) or die("erro aqui 3".$sSqlReg14saldos);
 
                         for ($iContSaldo14 = 0; $iContSaldo14 < pg_num_rows($rsReg14saldos); $iContSaldo14++) {
 
@@ -1578,14 +1578,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                             left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
                                  where c60_anousu = " . db_getsession("DB_anousu") . " AND c61_reduz = {$oReduz}) as x
                             where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
-                        $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die(pg_last_error());
+                        $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die("erro 5".pg_last_error());
 
                         $nCreditosEncerramento = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->credito;
                         $nDebitosEncerramento = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->debito;
 
                     }
 
-                    $rsReg15saldos = db_query($sSqlReg15saldos) or die($sSqlReg15saldos);
+                    $rsReg15saldos = db_query($sSqlReg15saldos) or die("erro 6".$sSqlReg15saldos);
 
                     for ($iContSaldo15 = 0; $iContSaldo15 < pg_num_rows($rsReg15saldos); $iContSaldo15++) {
 
@@ -1651,7 +1651,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 $sSqlFonteReg16 .= "where c60_codsis = 5 and c60_anousu = " . db_getsession("DB_anousu");
                 $sSqlFonteReg16 .= " and c61_anousu = " . db_getsession("DB_anousu") . " and c61_reduz in (" . implode(',', $oContas10->contas) . ") and c61_instit = " . db_getsession("DB_instit");
 
-                $rsReg16Font = db_query($sSqlFonteReg16) or die($sSqlFonteReg16);
+                $rsReg16Font = db_query($sSqlFonteReg16) or die("erro 7".$sSqlFonteReg16);
 
                 for ($iContFont16 = 0; $iContFont16 < pg_num_rows($rsReg16Font); $iContFont16++) {
 
@@ -1717,14 +1717,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                             left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
                                  where c60_anousu = " . db_getsession("DB_anousu") . " AND c61_reduz = {$oReg16Font->c61_reduz}) as x
                             where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
-                        $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die(pg_last_error());
+                        $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die("erro 9".pg_last_error());
 
                         $nCreditosEncerramento = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->credito;
                         $nDebitosEncerramento = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->debito;
 
                     }
 
-                    $rsReg16saldos = db_query($sSqlReg16saldos) or die($sSqlReg16saldos);
+                    $rsReg16saldos = db_query($sSqlReg16saldos) or die("erro 10".$sSqlReg16saldos);
 
                     for ($iContSaldo16 = 0; $iContSaldo16 < pg_num_rows($rsReg16saldos); $iContSaldo16++) {
 
@@ -1816,7 +1816,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
     				  and c61_instit = " . db_getsession("DB_instit") . "
     				  and c61_reduz in (" . implode(',', $oContas10->contas) . ") order by k13_reduz";
 
-                $rsSqlCTB = db_query($sSqlCTB) or die($sSqlCTB);
+                $rsSqlCTB = db_query($sSqlCTB) or die("erro 11".$sSqlCTB);
 
                 for ($iContctb = 0; $iContctb < pg_num_rows($rsSqlCTB); $iContctb++) {
 
@@ -1837,7 +1837,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta) as x order by 2 DESC limit 1";
 
-                    $rsResultVerifica = db_query($sSqlVerifica) or die($sSqlVerifica);
+                    $rsResultVerifica = db_query($sSqlVerifica) or die("erro 12".$sSqlVerifica);
 
                     if (pg_num_rows($rsResultVerifica) == 0) {
 
@@ -1896,14 +1896,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                             left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
                                  where c60_anousu = " . db_getsession("DB_anousu") . " AND c61_reduz = {$objContasctb->k13_reduz}) as x
                             where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
-                            $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die(pg_last_error());
+                            $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die("erro 13".pg_last_error());
 
                             $nCreditosEncerramento = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->credito;
                             $nDebitosEncerramento = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->debito;
 
                         }
 
-                        $rsReg17saldos = db_query($sSqlReg17saldos) or die($sSqlReg17saldos);
+                        $rsReg17saldos = db_query($sSqlReg17saldos) or die("erro 14".$sSqlReg17saldos);
 
                         for ($iContSaldo17 = 0; $iContSaldo17 < pg_num_rows($rsReg17saldos); $iContSaldo17++) {
 
@@ -2016,14 +2016,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                             left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
                                  where c60_anousu = " . db_getsession("DB_anousu") . " AND c61_reduz = {$objContasctb->k13_reduz}) as x
                             where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
-                                $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die(pg_last_error());
+                                $rsSqlSaldoAntEncerramento = db_query($sSqlSaldoAntEncerramento) or die("erro 15".pg_last_error());
 
                                 $nCreditosEncerramento = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->credito;
                                 $nDebitosEncerramento = db_utils::fieldsMemory($rsSqlSaldoAntEncerramento, 0)->debito;
 
                             }
 
-                            $rsReg17saldos = db_query($sSqlReg17saldos) or die($sSqlReg17saldos);
+                            $rsReg17saldos = db_query($sSqlReg17saldos) or die("erro 16".$sSqlReg17saldos);
 
                             for ($iContSaldo17 = 0; $iContSaldo17 < pg_num_rows($rsReg17saldos); $iContSaldo17++) {
 
@@ -2094,7 +2094,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                 $sSqlfr = " select DISTINCT o15_codigo, o15_codtri codfontrecursos FROM orctiporec where o15_codtri is not null";
 
-                $rsSqlfr = db_query($sSqlfr) or die($sSqlfr);
+                $rsSqlfr = db_query($sSqlfr) or die("erro 16".$sSqlfr);
 
                 /*
                  * Constante da contacorrente que indica o superavit financeiro
@@ -2230,7 +2230,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                            GROUP BY c28_tipo) AS debitosEncerramento";
                     }
 
-                    $rsReg18saldos = db_query($sSqlReg18saldos) or die($sSqlReg18saldos);
+                    $rsReg18saldos = db_query($sSqlReg18saldos) or die("erro 18".$sSqlReg18saldos);
 
                     for ($iContSaldo18 = 0; $iContSaldo18 < pg_num_rows($rsReg18saldos); $iContSaldo18++) {
 
