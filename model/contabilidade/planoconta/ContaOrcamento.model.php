@@ -179,7 +179,7 @@ class ContaOrcamento extends ContaPlano {
       throw new Exception('Conta de vínculo do PCASP deve ser informada.');
     }
     $iCodigoConta          = null;
-    if(db_getsession("DB_anousu") <= 2014){
+    if(db_getsession("DB_anousu") <= 2017){
     	$iUltimoAno = db_getsession("DB_anousu");
     }else{
     	$iUltimoAno            = $this->getUltimoAnoPlano();
