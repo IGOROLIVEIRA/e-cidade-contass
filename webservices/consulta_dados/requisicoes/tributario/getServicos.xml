@@ -8,6 +8,7 @@
     <campo campo="q71_descr"        label="desc_cnae"    />
     <campo campo="q136_valor"       label="aliq"         />
     <campo campo="db121_estrutural" label="estrutural"   />
+    <campo campo="q136_valor_reduz" label="aliq_reduz"   />
   </campos>
   <from tabela="ativid"/>
   <juncoes>
