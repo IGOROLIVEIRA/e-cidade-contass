@@ -529,6 +529,7 @@ $temporizador = date("His", mktime(date("H"), date("i"), date("s"), 0, 0, 0));
   $sSqlValorCorrecao .= "                round( ( ( k00_valor / 100 ) * coalesce( ( select k00_percdes                          \n";
   $sSqlValorCorrecao .= "                                                             from recibounica r                        \n";
   $sSqlValorCorrecao .= "                                                            where r.k00_numpre = arrecad.k00_numpre    \n";
+  $sSqlValorCorrecao .= "                                                              and r.k00_receit = arrecad.k00_receit    \n";
   $sSqlValorCorrecao .= "                                                              and r.k00_dtvenc <= $1                   \n";
   $sSqlValorCorrecao .= "                                                            order by r.k00_dtvenc limit 1 ),0 ) ) ,2)  \n";
   $sSqlValorCorrecao .= "                  as vlr_desconto                                                                      \n";
@@ -1001,7 +1002,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                                r.k00_dtvenc,
                                r.k00_dtoper,
                                r.k00_percdes,
-                               fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,$anousu)
+                               fc_calcula(r.k00_numpre,0,r.k00_receit,r.k00_dtvenc,r.k00_dtvenc,$anousu)
                           from recibounica r
                          where r.k00_numpre = $j20_numpre
                            and r.k00_dtvenc = '$vencunica'
@@ -1730,7 +1731,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                                    r.k00_dtvenc,
                                    r.k00_dtoper,
                                    r.k00_percdes,
-                                   fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,$anousu)
+                                   fc_calcula(r.k00_numpre,0,r.k00_receit,r.k00_dtvenc,r.k00_dtvenc,$anousu)
                               from recibounica r
                              where r.k00_numpre = $j20_numpre
                                and r.k00_dtvenc = '$vencunica'
@@ -2434,7 +2435,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
             $colunaTotal = "";
             $groupby     = " group by j17_codhis, ";
             $groupby    .= "          j17_descr  ";
-            $whereMatric = "";
+            $whereMatric = " and j21_matric = $j23_matric ";
 
           }
 
@@ -2912,7 +2913,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
             $colunaTotal = "";
             $groupby     = " group by j17_codhis, ";
             $groupby    .= "          j17_descr  ";
-            $whereMatric = "";
+            $whereMatric = " and j21_matric = $j23_matric ";
 
           }
 

@@ -1188,7 +1188,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
           substr(fc_calcula,54,13)::float8) as utotal
           from (
           select r.k00_numpre,r.k00_dtvenc as dtvencunic, r.k00_dtoper as dtoperunic,r.k00_percdes,
-          fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,".db_getsession("DB_anousu").")
+          fc_calcula(r.k00_numpre,0,r.k00_receit,r.k00_dtvenc,r.k00_dtvenc,".db_getsession("DB_anousu").")
           from recibounica r
           where r.k00_numpre = ".$elementos[$i]." and r.k00_dtvenc >= '".date('Y-m-d', $DB_DATACALC)."'
           ) as unica";
@@ -1458,7 +1458,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
             substr(fc_calcula,54,13)::float8) as utotal
             from (
             select r.k00_numpre,r.k00_dtvenc as dtvencunic, r.k00_dtoper as dtoperunic,r.k00_percdes,
-            fc_calcula(k00_numpre,0,0,k00_dtvenc,k00_dtvenc,".db_getsession("DB_anousu").")
+            fc_calcula(k00_numpre,0,r.k00_receit,k00_dtvenc,k00_dtvenc,".db_getsession("DB_anousu").")
             from recibounica r
             where r.k00_numpre = ".$elementos_numpres[$x]." and r.k00_dtvenc >= '".date('Y-m-d', $DB_DATACALC)."'
             ) as unica";
@@ -1776,7 +1776,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
               substr(fc_calcula,54,13)::float8) as utotal
               from (
               select r.k00_numpre,r.k00_dtvenc as dtvencunic, r.k00_dtoper as dtoperunic, r.k00_percdes,
-              fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,".db_getsession("DB_anousu").")
+              fc_calcula(r.k00_numpre,0,r.k00_receit,r.k00_dtvenc,r.k00_dtvenc,".db_getsession("DB_anousu").")
               from recibounica r
               where r.k00_numpre = ".pg_result($result,$i,"k00_numpre")." and r.k00_dtvenc >= '".date('Y-m-d', $DB_DATACALC)."'
               ) as unica");
