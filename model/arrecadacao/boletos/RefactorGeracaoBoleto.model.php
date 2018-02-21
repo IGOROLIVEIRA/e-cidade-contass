@@ -513,6 +513,9 @@ class RefactorGeracaoBoleto {
                 $sSqlRecibosEmitidos.= "    and not exists (select 1                                                  \n";
                 $sSqlRecibosEmitidos.= "                      from issvar                                     \n";
                 $sSqlRecibosEmitidos.= "                     where issvar.q05_numpre = recibopaga.k00_numpre and issvar.q05_numpar = recibopaga.k00_numpar)\n";
+                $sSqlRecibosEmitidos.= "    and not exists (select 1                                                  \n";
+                $sSqlRecibosEmitidos.= "                      from issplannumpre                                     \n";
+                $sSqlRecibosEmitidos.= "                     where issplannumpre.q32_numpre = recibopaga.k00_numpre)\n";
 
                 $rsSqlRecibosEmitidos   = db_query($sSqlRecibosEmitidos);
                 $aRecibosEmitidos       = db_utils::getCollectionByRecord($rsSqlRecibosEmitidos);
