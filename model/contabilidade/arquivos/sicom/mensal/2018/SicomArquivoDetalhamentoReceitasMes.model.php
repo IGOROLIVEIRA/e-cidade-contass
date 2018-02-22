@@ -215,10 +215,23 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           $result = db_query($sSql);
           $sCodFontRecursos = db_utils::fieldsMemory($result, 0)->o15_codtri;
 
+          $sSql = "select z01_cgccpf,o57_fonte from orcreceita
+                   left join placaixarec on k81_receita = o70_codrec
+                   left join cgm on z01_numcgm = k81_numcgm
+                   inner join orcfontes on (o57_codfon, o57_anousu) = (o70_codfon, o70_anousu)
+                   where o70_codrec = ".$oDadosRec->o70_codrec;
+          $resultcgmfonte = db_query($sSql);
+          $NumcgmFonte = db_utils::fieldsMemory($resultcgmfonte, 0);
+
           $oDados11 = new stdClass();
           $oDados11->si26_tiporegistro = 11;
           $oDados11->si26_codreceita = $oDadosRec->o70_codrec;
           $oDados11->si26_codfontrecursos = $sCodFontRecursos;
+          if(substr($NumcgmFonte->o57_fonte,0,-8) == 4121004 || substr($NumcgmFonte->o57_fonte,0,-8) == 4721004) {
+            $oDados11->si26_cnpjorgaocontribuinte = $NumcgmFonte->z01_cgccpf;
+          }else{
+            $oDados11->si26_cnpjorgaocontribuinte = '';
+          }
           $oDados11->si26_vlarrecadadofonte = 0;
           $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
@@ -262,6 +275,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           $clrec11->si26_reg10 = $clrec10->si25_sequencial;
           $clrec11->si26_codreceita = $oDados10->si25_codreceita;
           $clrec11->si26_codfontrecursos = '100';
+          $clrec11->si26_cnpjorgaocontribuinte;
           $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "");
           $clrec11->si26_mes = $oDados11->si26_mes;
           $clrec11->si26_instit = db_getsession("DB_instit");

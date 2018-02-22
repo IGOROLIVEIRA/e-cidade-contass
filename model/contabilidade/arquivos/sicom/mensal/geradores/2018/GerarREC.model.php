@@ -56,10 +56,11 @@ class GerarREC extends GerarAM {
           $aREC11  = pg_fetch_array($rsREC11,$iCont2);
           if ($aREC10['si25_sequencial'] == $aREC11['si26_reg10']) {
 
-            $aCSVREC11['si26_tiporegistro']       = $this->padLeftZero($aREC11['si26_tiporegistro'], 2);
-            $aCSVREC11['si26_codreceita']         = substr($aREC11['si26_codreceita'], 0, 15);
-            $aCSVREC11['si26_codfontrecursos']    = $this->padLeftZero($aREC11['si26_codfontrecursos'], 3);
-            $aCSVREC11['si26_vlarrecadadofonte']  = $this->sicomNumberReal(abs($aREC11['si26_vlarrecadadofonte']), 2);
+            $aCSVREC11['si26_tiporegistro']         = $this->padLeftZero($aREC11['si26_tiporegistro'], 2);
+            $aCSVREC11['si26_codreceita']           = substr($aREC11['si26_codreceita'], 0, 15);
+            $aCSVREC11['si26_codfontrecursos']      = $this->padLeftZero($aREC11['si26_codfontrecursos'], 3);
+            $aCSVREC11['si26_cnpjorgaocontribuinte']= $this->padLeftZero($aREC11['si26_cnpjorgaocontribuinte']);
+            $aCSVREC11['si26_vlarrecadadofonte']    = $this->sicomNumberReal(abs($aREC11['si26_vlarrecadadofonte']), 2);
 
             $this->sLinha = $aCSVREC11;
 

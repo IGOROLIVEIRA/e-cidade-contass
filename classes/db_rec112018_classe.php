@@ -21,6 +21,7 @@ class cl_rec112018
   var $si26_tiporegistro = 0;
   var $si26_codreceita = 0;
   var $si26_codfontrecursos = 0;
+  var $si26_cnpjorgaocontribuinte = null;
   var $si26_vlarrecadadofonte = 0;
   var $si26_reg10 = 0;
   var $si26_mes = 0;
@@ -30,7 +31,8 @@ class cl_rec112018
                  si26_sequencial = int8 = sequencial 
                  si26_tiporegistro = int8 = Tipo do  registro 
                  si26_codreceita = int8 = Código identificador 
-                 si26_codfontrecursos = int8 = Código da fonte de  recursos 
+                 si26_codfontrecursos = int8 = Código da fonte de  recursos
+                 si26_cnpjorgaocontribuinte = character varying(14) = cnpj do contribuinte;
                  si26_vlarrecadadofonte = float8 = Valor arrecadado 
                  si26_reg10 = int8 = reg10 
                  si26_mes = int8 = Mês 
@@ -64,6 +66,7 @@ class cl_rec112018
       $this->si26_tiporegistro = ($this->si26_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_tiporegistro"] : $this->si26_tiporegistro);
       $this->si26_codreceita = ($this->si26_codreceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_codreceita"] : $this->si26_codreceita);
       $this->si26_codfontrecursos = ($this->si26_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_codfontrecursos"] : $this->si26_codfontrecursos);
+      $this->si26_cnpjorgaocontribuinte = ($this->si26_cnpjorgaocontribuinte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_cnpjorgaocontribuinte"] : $this->si26_cnpjorgaocontribuinte);
       $this->si26_vlarrecadadofonte = ($this->si26_vlarrecadadofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_vlarrecadadofonte"] : $this->si26_vlarrecadadofonte);
       $this->si26_reg10 = ($this->si26_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_reg10"] : $this->si26_reg10);
       $this->si26_mes = ($this->si26_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_mes"] : $this->si26_mes);
@@ -159,21 +162,23 @@ class cl_rec112018
                                        si26_sequencial 
                                       ,si26_tiporegistro 
                                       ,si26_codreceita 
-                                      ,si26_codfontrecursos 
+                                      ,si26_codfontrecursos
+                                      ,si26_cnpjorgaocontribuinte
                                       ,si26_vlarrecadadofonte 
                                       ,si26_reg10 
                                       ,si26_mes 
                                       ,si26_instit 
                        )
                 values (
-                                $this->si26_sequencial 
-                               ,$this->si26_tiporegistro 
-                               ,$this->si26_codreceita 
-                               ,$this->si26_codfontrecursos 
-                               ,$this->si26_vlarrecadadofonte 
-                               ,$this->si26_reg10 
-                               ,$this->si26_mes 
-                               ,$this->si26_instit 
+                                $this->si26_sequencial
+                               ,$this->si26_tiporegistro
+                               ,$this->si26_codreceita
+                               ,$this->si26_codfontrecursos
+                               ,'$this->si26_cnpjorgaocontribuinte'
+                               ,$this->si26_vlarrecadadofonte
+                               ,$this->si26_reg10
+                               ,$this->si26_mes
+                               ,$this->si26_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
