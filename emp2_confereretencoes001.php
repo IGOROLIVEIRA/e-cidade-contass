@@ -219,6 +219,18 @@ $db_opcao = 1;
                 <table align="center">
                   <tr>
                     <td>
+                       <b>Credores:</b>
+                    </td>
+                    <td>
+                      <?
+                        $aSemCredores  = array(1 => "Com os Credores Selecionados",
+                                               2 => "Sem os Credores Selecionados");
+                       db_select("credorsim", $aSemCredores,true,1,"style='width:10em'");
+                      ?>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
                        <b>Quebra:</b>
                     </td>
                     <td>
@@ -560,6 +572,7 @@ function js_emitir() {
   oParametro.iOrdemFim   = $F('e82_codord02');
   oParametro.order       = $F('order');
   oParametro.group       = $F('group');
+  oParametro.credorsim   = $F('credorsim');
 
   /*OC4581*/
   oParametro.iTipoLancamento = $F('iTipoLancamento');

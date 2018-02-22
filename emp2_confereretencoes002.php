@@ -74,7 +74,11 @@ if ($oParametros->sRecursos != "") {
 }
 
 if ($oParametros->sCredores != "") {
-  $sWhere .= " and e60_numcgm in ({$oParametros->sCredores})";
+  if($oParametros->credorsim == 2){
+    $sWhere .= " and e60_numcgm not in ({$oParametros->sCredores}) ";
+  }else{
+    $sWhere .= " and e60_numcgm in ({$oParametros->sCredores})";
+  }
 }
 
 if ($oParametros->sRetencoes != "") {
