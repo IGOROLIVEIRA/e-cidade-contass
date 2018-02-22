@@ -1002,7 +1002,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                                r.k00_dtvenc,
                                r.k00_dtoper,
                                r.k00_percdes,
-                               fc_calcula(r.k00_numpre,0,r.k00_receit,r.k00_dtvenc,r.k00_dtvenc,$anousu)
+                               fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,$anousu,null,r.k00_receit)
                           from recibounica r
                          where r.k00_numpre = $j20_numpre
                            and r.k00_dtvenc = '$vencunica'
@@ -1731,7 +1731,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                                    r.k00_dtvenc,
                                    r.k00_dtoper,
                                    r.k00_percdes,
-                                   fc_calcula(r.k00_numpre,0,r.k00_receit,r.k00_dtvenc,r.k00_dtvenc,$anousu)
+                                   fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,$anousu,null,r.k00_receit)
                               from recibounica r
                              where r.k00_numpre = $j20_numpre
                                and r.k00_dtvenc = '$vencunica'

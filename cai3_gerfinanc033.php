@@ -805,7 +805,7 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
     $sql .= "                 r.k00_dtvenc as dtvencunicuni,           ";
     $sql .= "                 r.k00_dtoper as dtoperunic,              ";
     $sql .= "                 r.k00_percdes,                           ";
-    $sql .= "                 fc_calcula(r.k00_numpre,0,r.k00_receit,r.k00_dtvenc,r.k00_dtvenc,".db_getsession("DB_anousu").") ";
+    $sql .= "                 fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,".db_getsession("DB_anousu").",null,r.k00_receit) ";
     $sql .= "            from recibounica r                            ";
     $sql .= "                 {$sSqlWhereData}                         ";
     $sql .= "             and r.k00_dtvenc >= '".date('Y-m-d', db_getsession("DB_datausu"))."'::date ) as unica ";
@@ -1105,7 +1105,7 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
         $sqlReceitas .= "        k00_valor  as val,                                              ";
         $sqlReceitas .= "        k00_tipo as codtipo,                                            ";
         $sqlReceitas .= "        k00_hist,                                                       ";
-        $sqlReceitas .= "        fc_calcula(recibounica.k00_numpre,0,a.k00_receit,recibounica.k00_dtvenc,recibounica.k00_dtvenc,".db_getsession('DB_anousu').")";
+        $sqlReceitas .= "        fc_calcula(recibounica.k00_numpre,0,0,recibounica.k00_dtvenc,recibounica.k00_dtvenc,".db_getsession('DB_anousu').",null,recibounica.k00_receit)";
         $sqlReceitas .= "   from arrecad a                                                       ";
         $sqlReceitas .= "        inner join recibounica on recibounica.k00_numpre = a.k00_numpre and recibounica.k00_receit = a.k00_receit";
         $sqlReceitas .= "        inner join tabrec  on tabrec.k02_codigo = a.k00_receit          ";

@@ -124,13 +124,7 @@ class cl_recibounica {
        return false;
      }
      if($this->k00_receit == null ){
-       $this->erro_sql = " Campo Receita nao Informado.";
-       $this->erro_campo = "k00_receit";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+       $this->k00_receit = 0;
      }
      if($this->k00_dtvenc == null ){
        $this->erro_sql = " Campo DT.Venc nao Informado.";
@@ -228,7 +222,7 @@ class cl_recibounica {
                                ,$this->k00_recibounicageracao
                                ,$this->k00_sequencial
                                ,$this->k00_receit
-                      )";die($sql);
+                      )";
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
