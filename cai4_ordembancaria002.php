@@ -72,7 +72,7 @@ $ru) ? " e " : "").$ru;
 }
 
 $sSql = "SELECT k00_codigo,k00_dtpagamento,k00_codord,k00_formapag,c63_banco,c63_conta,c63_dvconta,c63_agencia,c63_dvagencia,z01_nome,
-pc63_banco,z01_cgccpf,k00_valorpag,pc63_conta_dig,pc63_conta,pc63_agencia_dig,pc63_agencia, 
+pc63_banco,z01_cgccpf,k00_valorpag,pc63_conta_dig,pc63_conta,pc63_agencia_dig,pc63_agencia,
 CASE WHEN k00_codord IS NULL THEN 'SL' ELSE 'OP' END AS tipo,
 CASE WHEN k00_codord IS NULL THEN k00_slip ELSE k00_codord END AS codigo,k00_dtvencpag,
 CASE WHEN k00_codord IS NULL THEN
@@ -81,18 +81,18 @@ ELSE
   (SELECT e50_obs FROM  pagordem WHERE e50_codord=k00_codord LIMIT 1)
 END  AS observacao,k00_ordemauxiliar
 FROM
-ordembancaria   
+ordembancaria
 JOIN conplanoconta ON k00_ctpagadora = c63_codcon and c63_anousu = ".db_getsession("DB_anousu")."
 JOIN ordembancariapagamento ON k00_codigo =  k00_codordembancaria
 JOIN cgm ON k00_cgmfornec = z01_numcgm
-LEFT JOIN pcfornecon ON z01_numcgm = pc63_numcgm and k00_contabanco = pc63_contabanco 
+LEFT JOIN pcfornecon ON z01_numcgm = pc63_numcgm and k00_contabanco = pc63_contabanco
 WHERE k00_codigo = {$codigo_ordem} ORDER BY z01_nome";
 
 $rsResult = db_query($sSql);
 if (pg_num_rows($rsResult) == 0){
-	
+
  $sSql = "	SELECT distinct k00_codigo,k00_dtpagamento,k00_codord,k00_formapag,c63_banco,c63_conta,c63_dvconta,c63_agencia,c63_dvagencia,z01_nome,
-						pc63_banco,z01_cgccpf,k00_valorpag,pc63_conta_dig,pc63_conta,pc63_agencia_dig,pc63_agencia, 
+						pc63_banco,z01_cgccpf,k00_valorpag,pc63_conta_dig,pc63_conta,pc63_agencia_dig,pc63_agencia,
 						CASE WHEN k00_codord IS NULL THEN 'SL' ELSE 'OP' END AS tipo,
 						CASE WHEN k00_codord IS NULL THEN k00_slip ELSE k00_codord END AS codigo,k00_dtvencpag,
 						CASE WHEN k00_codord IS NULL THEN
@@ -101,15 +101,18 @@ if (pg_num_rows($rsResult) == 0){
 						  (SELECT e50_obs FROM  pagordem WHERE e50_codord=k00_codord LIMIT 1)
 						  END  AS observacao,k00_ordemauxiliar
 						FROM
-						ordembancaria JOIN conplanoreduz ON k00_ctpagadora = c61_reduz  
-						JOIN conplanoconta ON c61_codcon = c63_codcon and c63_anousu = ".db_getsession("DB_anousu")."
+						ordembancaria JOIN conplanoreduz ON k00_ctpagadora = c61_reduz
+						JOIN conplanoconta ON c61_codcon = c63_codcon and c63_anousu = (SELECT max(c63_anousu) from ordembancaria JOIN conplanoreduz ON k00_ctpagadora = c61_reduz
+                         JOIN conplanoconta ON c61_codcon = c63_codcon
+                         JOIN ordembancariapagamento ON k00_codigo =  k00_codordembancaria
+                         WHERE k00_codigo =  {$codigo_ordem})
 						JOIN ordembancariapagamento ON k00_codigo =  k00_codordembancaria
 						JOIN cgm ON k00_cgmfornec = z01_numcgm
-						LEFT JOIN pcfornecon ON z01_numcgm = pc63_numcgm and k00_contabanco = pc63_contabanco 
+						LEFT JOIN pcfornecon ON z01_numcgm = pc63_numcgm and k00_contabanco = pc63_contabanco
 						WHERE k00_codigo =  {$codigo_ordem} ORDER BY z01_nome";
-            
+
  $rsResult = db_query($sSql);//db_criatabela($rsResult);echo $sSql;exit;
- 
+
 }
 $oResult0 = db_utils::fieldsMemory($rsResult, 0);
 
@@ -138,30 +141,30 @@ $pdf->Cell(175,$tam,"Autorizo o pagamento das despesas descritas nas Ordens de P
 
 //$pdf->Cell(250,$tam,"Nº: ".$oResult0->k00_codigo,1,1,"R",1);
 //$pdf->Cell(250,$tam,"DATA: ".$oResult->k00_dtpagamento,1,1,"R",1);
-$pdf->SetFont("","B","");		
+$pdf->SetFont("","B","");
 $pdf->Cell(25,$tam,"BANCO: ".$oResult0->c63_banco,1,0,"C",1);
-$pdf->Cell(30,$tam,"AGÊNCIA: ".$oResult0->c63_agencia."-".$oResult0->c63_dvagencia,1,0,"C",1);  
+$pdf->Cell(30,$tam,"AGÊNCIA: ".$oResult0->c63_agencia."-".$oResult0->c63_dvagencia,1,0,"C",1);
 $pdf->Cell(120,$tam,"CONTA CORRENTE: ".$oResult0->c63_conta."-".$oResult0->c63_dvconta,1,1,"C",1);
 
 
 $pdf->Cell(83,$tam,"NOME DO FAVORECIDO",1,0,"C",1);
-$pdf->Cell(30,$tam,"CPF/CNPJ",1,0,"C",1);  
+$pdf->Cell(30,$tam,"CPF/CNPJ",1,0,"C",1);
 $pdf->Cell(20,$tam,"Nº Documento",1,0,"C",1);
 $pdf->Cell(10,$tam,"OP Aux",1,0,"C",1);
-$pdf->Cell(10,$tam,"Tipo",1,0,"C",1);  
-$pdf->Cell(22,$tam,"VALOR:",1,1,"L",1);  
+$pdf->Cell(10,$tam,"Tipo",1,0,"C",1);
+$pdf->Cell(22,$tam,"VALOR:",1,1,"L",1);
 $valor_total = 0;
 for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-		
+
   $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-  
+
   $sSqlDescForma = "select max(e86_codmov) as movimento
-	from empageconf  
+	from empageconf
 	where e86_correto = true
 	       and e86_codmov = (select e82_codmov from empord where e82_codord = {$oResult->k00_codord})";
   $rsResultDescForma = db_query($sSqlDescForma);
   $e86_codmov = db_utils::fieldsMemory($rsResultDescForma, 0)->movimento;
-  
+
   $sSqlDescForma = "select e96_descr from empagemovforma join empageforma on e97_codforma  = e96_codigo where e97_codmov = {$e86_codmov}";
   $rsResultDescForma = db_query($sSqlDescForma);
   $e96_descr = db_utils::fieldsMemory($rsResultDescForma, 0)->e96_descr;
@@ -208,7 +211,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     $pdf->Cell(175,$tam+$dif,"",1,1,"L",0);
 
   $pdf->Cell(22,$tam,"Vencimento: ".date("d/m/Y",strtotime($oResult->k00_dtvencpag)),0,1,"L",0);//Ocorrência 756 - Incluído o Vencimento no relatório
-  
+
   if ($pdf->GetY() > 250) {
     $pdf->AddPage();
   } else {
@@ -216,7 +219,7 @@ for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
   }
 
   $valor_total += $oResult->k00_valorpag;
-  
+
 }
 $pdf->SetFont("","B","08");
 $pdf->SetRightMargin("0");
@@ -249,8 +252,8 @@ $pdf->Cell(80,"0.01","",1,0,"C",0);
 $pdf->Cell(10,"0.01","",0,0,"C",0);
 $pdf->Cell(80,"0.01","",1,1,"C",0);
 
-/* FEITO ISSO PARA QUE A CAMARA DE BELO HORIZONTE TENHA UMA FORMA DE ASSINATURA EXCLUSIVA 
-   AUTOR: IGOR OLIVEIRA 
+/* FEITO ISSO PARA QUE A CAMARA DE BELO HORIZONTE TENHA UMA FORMA DE ASSINATURA EXCLUSIVA
+   AUTOR: IGOR OLIVEIRA
   */
 $sSqlCnpjCliente = "select cgc from db_config where codigo= ".db_getsession("DB_instit");
 $CnpjCliente = db_utils::fieldsMemory(db_query($sSqlCnpjCliente),0)->cgc;
@@ -266,5 +269,5 @@ if ($CnpjCliente == '17316563000196'){
 }
 
 $pdf->output();
-	
+
 ?>
