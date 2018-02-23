@@ -82,6 +82,8 @@ try {
       $oDaoBensDispensaTombamento->e139_matestoqueitem = $oDadosEmpnotaitem->e137_matestoqueitem;
       $oDaoBensDispensaTombamento->e139_justificativa  = $oParametros->sJustificativa;
       $oDaoBensDispensaTombamento->e139_codcla         = $oParametros->iClassificacao;
+
+      $oDaoBensDispensaTombamento->e139_datadispensa   = date("Y-m-d",db_getsession("DB_datausu"));
       $oDaoBensDispensaTombamento->incluir(null);
 
       if ($oDaoBensDispensaTombamento->erro_status == "0") {

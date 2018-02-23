@@ -1,68 +1,70 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: patrimonio
 //CLASSE DA ENTIDADE bensdispensatombamento
-class cl_bensdispensatombamento { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $e139_sequencial = 0; 
-   var $e139_empnotaitem = 0; 
-   var $e139_matestoqueitem = 0; 
+class cl_bensdispensatombamento {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $e139_sequencial = 0;
+   var $e139_empnotaitem = 0;
+   var $e139_matestoqueitem = 0;
    var $e139_codcla = 0;
    var $e139_justificativa = null;
-   // cria propriedade com as variaveis do arquivo 
+   var $e139_datadispensa = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 e139_sequencial = int4 = Codigo sequencial 
-                 e139_empnotaitem = int4 = Item nota de empenho 
-                 e139_matestoqueitem = int8 = Item da entrada da ordem de compra 
+                 e139_sequencial = int4 = Codigo sequencial
+                 e139_empnotaitem = int4 = Item nota de empenho
+                 e139_matestoqueitem = int8 = Item da entrada da ordem de compra
                  e139_justificativa = text = Justificativa
                  e139_codcla = int8 = Codigo da Classificacao
+                 e139_datadispensa = date = Data da dispensa
                  ";
-   //funcao construtor da classe 
-   function cl_bensdispensatombamento() { 
+   //funcao construtor da classe
+   function cl_bensdispensatombamento() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("bensdispensatombamento"); 
+     $this->rotulo = new rotulo("bensdispensatombamento");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -78,14 +80,15 @@ class cl_bensdispensatombamento {
        $this->e139_matestoqueitem = ($this->e139_matestoqueitem == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_matestoqueitem"]:$this->e139_matestoqueitem);
        $this->e139_codcla = ($this->e139_codcla == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_codcla"]:$this->e139_codcla);
        $this->e139_justificativa = ($this->e139_justificativa == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_justificativa"]:$this->e139_justificativa);
+       $this->e139_datadispensa = ($this->e139_datadispensa == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_datadispensa"]:$this->e139_datadispensa);
      }else{
        $this->e139_sequencial = ($this->e139_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_sequencial"]:$this->e139_sequencial);
      }
    }
    // funcao para inclusao
-   function incluir ($e139_sequencial){ 
+   function incluir ($e139_sequencial){
       $this->atualizacampos();
-     if($this->e139_empnotaitem == null ){ 
+     if($this->e139_empnotaitem == null ){
        $this->erro_sql = " Campo Item nota de empenho não informado.";
        $this->erro_campo = "e139_empnotaitem";
        $this->erro_banco = "";
@@ -103,7 +106,7 @@ class cl_bensdispensatombamento {
        $this->erro_status = "0";
        return false;
      }
-     if($this->e139_justificativa == null ){ 
+     if($this->e139_justificativa == null ){
        $this->erro_sql = " Campo Justificativa não informado.";
        $this->erro_campo = "e139_justificativa";
        $this->erro_banco = "";
@@ -113,16 +116,16 @@ class cl_bensdispensatombamento {
        return false;
      }
      if($e139_sequencial == "" || $e139_sequencial == null ){
-       $result = db_query("select nextval('bensdispensatombamento_e139_sequencial_seq')"); 
+       $result = db_query("select nextval('bensdispensatombamento_e139_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: bensdispensatombamento_e139_sequencial_seq do campo: e139_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: bensdispensatombamento_e139_sequencial_seq do campo: e139_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->e139_sequencial = pg_result($result,0,0); 
+       $this->e139_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from bensdispensatombamento_e139_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $e139_sequencial)){
@@ -133,10 +136,10 @@ class cl_bensdispensatombamento {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->e139_sequencial = $e139_sequencial; 
+         $this->e139_sequencial = $e139_sequencial;
        }
      }
-     if(($this->e139_sequencial == null) || ($this->e139_sequencial == "") ){ 
+     if(($this->e139_sequencial == null) || ($this->e139_sequencial == "") ){
        $this->erro_sql = " Campo e139_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -145,21 +148,23 @@ class cl_bensdispensatombamento {
        return false;
      }
      $sql = "insert into bensdispensatombamento(
-                                       e139_sequencial 
-                                      ,e139_empnotaitem 
-                                      ,e139_matestoqueitem 
-                                      ,e139_justificativa 
+                                       e139_sequencial
+                                      ,e139_empnotaitem
+                                      ,e139_matestoqueitem
+                                      ,e139_justificativa
                                       ,e139_codcla
+                                      ,e139_datadispensa
                        )
                 values (
-                                $this->e139_sequencial 
-                               ,$this->e139_empnotaitem 
-                               ,$this->e139_matestoqueitem 
-                               ,'$this->e139_justificativa' 
+                                $this->e139_sequencial
+                               ,$this->e139_empnotaitem
+                               ,$this->e139_matestoqueitem
+                               ,'$this->e139_justificativa'
                                ,$this->e139_codcla
+                               ,$this->e139_datadispensa
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Dispensa de tombamento ($this->e139_sequencial) nao Incluído. Inclusao Abortada.";
@@ -200,16 +205,16 @@ class cl_bensdispensatombamento {
        }
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($e139_sequencial=null) { 
+   function alterar ($e139_sequencial=null) {
       $this->atualizacampos();
      $sql = " update bensdispensatombamento set ";
      $virgula = "";
-     if(trim($this->e139_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_sequencial"])){ 
+     if(trim($this->e139_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_sequencial"])){
        $sql  .= $virgula." e139_sequencial = $this->e139_sequencial ";
        $virgula = ",";
-       if(trim($this->e139_sequencial) == null ){ 
+       if(trim($this->e139_sequencial) == null ){
          $this->erro_sql = " Campo Codigo sequencial não informado.";
          $this->erro_campo = "e139_sequencial";
          $this->erro_banco = "";
@@ -219,10 +224,10 @@ class cl_bensdispensatombamento {
          return false;
        }
      }
-     if(trim($this->e139_empnotaitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_empnotaitem"])){ 
+     if(trim($this->e139_empnotaitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_empnotaitem"])){
        $sql  .= $virgula." e139_empnotaitem = $this->e139_empnotaitem ";
        $virgula = ",";
-       if(trim($this->e139_empnotaitem) == null ){ 
+       if(trim($this->e139_empnotaitem) == null ){
          $this->erro_sql = " Campo Item nota de empenho não informado.";
          $this->erro_campo = "e139_empnotaitem";
          $this->erro_banco = "";
@@ -235,7 +240,7 @@ class cl_bensdispensatombamento {
      if(trim($this->e139_matestoqueitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_matestoqueitem"])){
        $sql  .= $virgula." e139_matestoqueitem = $this->e139_matestoqueitem ";
        $virgula = ",";
-       if(trim($this->e139_matestoqueitem) == null ){ 
+       if(trim($this->e139_matestoqueitem) == null ){
          $this->erro_sql = " Campo Item da entrada da ordem de compra não informado.";
          $this->erro_campo = "e139_matestoqueitem";
          $this->erro_banco = "";
@@ -258,10 +263,10 @@ class cl_bensdispensatombamento {
          return false;
        }
      }
-     if(trim($this->e139_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_justificativa"])){ 
+     if(trim($this->e139_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e139_justificativa"])){
        $sql  .= $virgula." e139_justificativa = '$this->e139_justificativa' ";
        $virgula = ",";
-       if(trim($this->e139_justificativa) == null ){ 
+       if(trim($this->e139_justificativa) == null ){
          $this->erro_sql = " Campo Justificativa não informado.";
          $this->erro_campo = "e139_justificativa";
          $this->erro_banco = "";
@@ -300,7 +305,7 @@ class cl_bensdispensatombamento {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Dispensa de tombamento nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->e139_sequencial;
@@ -328,11 +333,11 @@ class cl_bensdispensatombamento {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($e139_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($e139_sequencial=null,$dbwhere=null) {
 
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
@@ -341,7 +346,7 @@ class cl_bensdispensatombamento {
        if ($dbwhere==null || $dbwhere=="") {
 
          $resaco = $this->sql_record($this->sql_query_file($e139_sequencial));
-       } else { 
+       } else {
          $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
        }
        if (($resaco != false) || ($this->numrows!=0)) {
@@ -373,7 +378,7 @@ class cl_bensdispensatombamento {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Dispensa de tombamento nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$e139_sequencial;
@@ -401,11 +406,11 @@ class cl_bensdispensatombamento {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -427,8 +432,8 @@ class cl_bensdispensatombamento {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $e139_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $e139_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -450,8 +455,8 @@ class cl_bensdispensatombamento {
      $sql2 = "";
      if($dbwhere==""){
        if($e139_sequencial!=null ){
-         $sql2 .= " where bensdispensatombamento.e139_sequencial = $e139_sequencial "; 
-       } 
+         $sql2 .= " where bensdispensatombamento.e139_sequencial = $e139_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -467,8 +472,8 @@ class cl_bensdispensatombamento {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $e139_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $e139_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -484,8 +489,8 @@ class cl_bensdispensatombamento {
      $sql2 = "";
      if($dbwhere==""){
        if($e139_sequencial!=null ){
-         $sql2 .= " where bensdispensatombamento.e139_sequencial = $e139_sequencial "; 
-       } 
+         $sql2 .= " where bensdispensatombamento.e139_sequencial = $e139_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
