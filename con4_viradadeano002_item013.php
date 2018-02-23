@@ -48,7 +48,7 @@ if ($sqlerro==false) {
   $resultdestino = db_query($sqldestino);
   $linhasdestino = pg_num_rows($resultdestino);
   
-  if (($linhasorigem > 0) && ($linhasdestino == 0 )) {
+  if (($linhasdestino == 0 )) {
     include("classes/db_empresto_classe.php");
     $clempresto = new cl_empresto;
     $sqlemp  = "  select distinct on (e60_numemp) ";
@@ -303,9 +303,6 @@ if ($sqlerro==false) {
     }    
   } else {
     
-    if ($linhasorigem == 0) {
-      $cldb_viradaitemlog->c35_log = "Não existem dados (empresto) para o exercicio $anoorigem";
-    }
     if ($linhasdestino >0) {
       $cldb_viradaitemlog->c35_log = "Ja existem dados  (empresto) para ano de destino $anodestino";
     }
