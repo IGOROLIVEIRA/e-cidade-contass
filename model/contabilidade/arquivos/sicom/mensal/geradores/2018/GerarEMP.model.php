@@ -54,7 +54,7 @@ class GerarEMP extends GerarAM
 
         $aCSVEMP10['si106_tiporegistro']                  = $this->padLeftZero($aEMP10['si106_tiporegistro'], 2);
         $aCSVEMP10['si106_codorgao']                      = $this->padLeftZero($aEMP10['si106_codorgao'], 2);
-        $aCSVEMP10['si106_codunidadesub']                 = $this->padLeftZero($aEMP10['si106_codunidadesub'], 5);
+        $aCSVEMP10['si106_codunidadesub']                 = $this->padLeftZero($aEMP10['si106_codunidadesub'], 5, strlen($aEMP10['si106_codunidadesub']) > 5 ? 8 : 5);
         $aCSVEMP10['si106_codfuncao']                     = $this->padLeftZero($aEMP10['si106_codfuncao'], 2);
         $aCSVEMP10['si106_codsubfuncao']                  = $this->padLeftZero($aEMP10['si106_codsubfuncao'], 3);
         $aCSVEMP10['si106_codprograma']                   = $this->padLeftZero($aEMP10['si106_codprograma'], 4);
@@ -101,7 +101,7 @@ class GerarEMP extends GerarAM
           if ($aEMP10['si106_sequencial'] == $aEMP11['si107_reg10']) {
 
             $aCSVEMP11['si107_tiporegistro']    = $this->padLeftZero($aEMP11['si107_tiporegistro'], 2);
-            $aCSVEMP11['si107_codunidadesub']   = $this->padLeftZero($aEMP11['si107_codunidadesub'], 5);
+            $aCSVEMP11['si107_codunidadesub']   = $this->padLeftZero($aEMP11['si107_codunidadesub'], 5, strlen($aEMP11['si107_codunidadesub']) > 5 ? 8 : 5);
             $aCSVEMP11['si107_nroempenho']      = substr($aEMP11['si107_nroempenho'], 0, 22);
             $aCSVEMP11['si107_codfontrecursos'] = $this->padLeftZero($aEMP11['si107_codfontrecursos'], 3);
             $aCSVEMP11['si107_valorfonte']      = $this->sicomNumberReal($aEMP11['si107_valorfonte'], 2);
@@ -119,7 +119,7 @@ class GerarEMP extends GerarAM
           if ($aEMP10['si106_sequencial'] == $aEMP12['si108_reg10']) {
 
             $aCSVEMP12['si108_tiporegistro']  = $this->padLeftZero($aEMP12['si108_tiporegistro'], 2);
-            $aCSVEMP12['si108_codunidadesub'] = $this->padLeftZero($aEMP12['si108_codunidadesub'], 5);
+            $aCSVEMP12['si108_codunidadesub'] = $this->padLeftZero($aEMP12['si108_codunidadesub'], 5, strlen($aEMP12['si108_codunidadesub']) > 5 ? 8 : 5);
             $aCSVEMP12['si108_nroempenho']    = substr($aEMP12['si108_nroempenho'], 0, 22);
             $aCSVEMP12['si108_tipodocumento'] = $this->padLeftZero($aEMP12['si108_tipodocumento'], 1);
             $aCSVEMP12['si108_nrodocumento']  = substr($aEMP12['si108_nrodocumento'], 0, 14);
@@ -143,7 +143,7 @@ class GerarEMP extends GerarAM
         $aCSVEMP20['si109_tiporegistro']    = $this->padLeftZero($aEMP20['si109_tiporegistro'], 2);
         $aCSVEMP20['si109_codorgao']        = $this->padLeftZero($aEMP20['si109_codorgao'], 2);
 //        $aCSVEMP20['si109_codunidadesub'] = $this->padLeftZero($aEMP20['si109_tiporegistro'], 8);
-        $aCSVEMP20['si109_codunidadesub']   = $this->padLeftZero($aEMP20['si109_codunidadesub'], 8);
+        $aCSVEMP20['si109_codunidadesub']   = $this->padLeftZero($aEMP20['si109_codunidadesub'], 8, strlen($aEMP20['si109_codunidadesub']) > 5 ? 8 : 5);
 //        $aCSVEMP20['si109_nroempenho'] = substr($aEMP20['si109_descrmovimentacao'], 0, 22);
         $aCSVEMP20['si109_nroempenho']      = substr($aEMP20['si109_nroempenho'], 0, 22);
         $aCSVEMP20['si109_dtempenho']       = $this->sicomDate($aEMP20['si109_dtempenho']);

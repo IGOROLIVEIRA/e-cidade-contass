@@ -151,7 +151,10 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                                            WHEN orcunidade.o41_codtri = '0'
                                                 OR NULL THEN orcunidade.o41_unidade::varchar
                                            ELSE orcunidade.o41_codtri
-                                       END),3,0) AS codunidadesub,
+                                       END),3,0)||(CASE WHEN orcunidade.o41_subunidade = '0'
+                                                             OR NULL THEN ''
+                                                        ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0)
+                                                   END) AS codunidadesub,
                 o58_funcao AS codfuncao,
                 o58_subfuncao AS codsubfuncao,
                 o58_programa AS codprograma,
@@ -311,7 +314,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
               AND e60_emiss between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'  order by e60_codemp";
 
         $rsEmpenho = db_query($sSql);
-        //echo pg_last_error();
+//        echo pg_last_error();
 //        echo $sSql;db_criatabela($rsEmpenho);exit;
         $aCaracteres = array("°", chr(13), chr(10), "'", ";");
         // matriz de entrada
