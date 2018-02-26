@@ -161,7 +161,7 @@ class cl_bensdispensatombamento {
                                ,$this->e139_matestoqueitem
                                ,'$this->e139_justificativa'
                                ,$this->e139_codcla
-                               ,$this->e139_datadispensa
+                               ,'$this->e139_datadispensa'
                       )";
      $result = db_query($sql);
      if($result==false){
