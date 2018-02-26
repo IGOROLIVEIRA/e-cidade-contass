@@ -199,7 +199,8 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
              $oCGM->setNomeCompleto(substr($this->sNome,0,100));
 
              /*seta os endereços*/
-             $oEnderecoPrimario   = endereco::findEnderecoByCodigo(81364,   false);
+             $iCodEndereco = $this->incluirEndereco();
+             $oEnderecoPrimario   = endereco::findEnderecoByCodigo($iCodEndereco, false);
              $oCGM->setUf($oEnderecoPrimario[0]->ssigla);
              if ($oEnderecoPrimario[0]->scep != "") {
                $oCGM->setCep($oEnderecoPrimario[0]->scep);
@@ -474,4 +475,31 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
       throw new BusinessException('Cpf, Cnpj ou numero de inscricao do tomador devem ser preenchidos');
     }
   }
+
+  /**
+   * Incluir endereco novo
+   */
+  public function incluirEndereco() {
+
+    $oCepmunic      = endereco::findCepDbConfig(db_getsession("DB_instit"));
+    $oValoresPadrao = endereco::findParametrosEndereco();
+    $oBairroRua = endereco::buscaBairroRuaMunicipio(0,0);
+    $oEndereco = new endereco(null);    
+
+    $oEndereco->setCodigoEstado($oValoresPadrao[0]->db72_cadenderestado);
+    $oEndereco->setCodigoMunicipio($oValoresPadrao[0]->db72_sequencial);
+    $oEndereco->setCodigoBairro($oBairroRua[0]->ibairro);
+    $oEndereco->setDescricaoBairro($oBairroRua[0]->sbairro);
+    $oEndereco->setCodigoRua($oBairroRua[0]->irua);
+    $oEndereco->setDescricaoRua($oBairroRua[0]->srua);
+    $oEndereco->setCodigoLocal($oParam->endereco->codigoLocal);
+    $oEndereco->setNumeroLocal(0);
+    $oEndereco->setCepEndereco($oCepmunic[0]->cep);
+    $oEndereco->setCadEnderRuaTipo($oBairroRua[0]->iruatipo);
+    $oEndereco->setCodigoRuasTipo($oBairroRua[0]->iruastipo);
+    $oEndereco->salvaEndereco();
+    return $oEndereco->getCodigoEndereco(); 
+    
+  }
+
 }
