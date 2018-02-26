@@ -473,22 +473,21 @@ class cl_controleext {
   {
     $sWhereConta = '';
     $sWhereDatas = '';
+    $aDatas = (array) $oDatas;
 
     if (!empty($iCodConta)) {
-      $sWhereConta = "WHERE c61_codcon IN ({$iCodConta})";
+      $sWhereConta = "WHERE c61_codcon IN ({$iCodConta})  AND c61_anousu = ".date('Y', strtotime($oDatas->inicio))." ";
+    }else{
+      $sWhereConta = "WHERE c61_anousu = ".date('Y', strtotime($oDatas->inicio))." ";
     }
 
-    $aDatas = (array) $oDatas;
-    if (!empty($aDatas)) {
       $sWhereDatas = "
         AND slipsNaoEstornados.data_recebimento
         BETWEEN '{$oDatas->inicio}' AND '{$oDatas->final}'
       ";
-    }
-
 
     $sSQL = "
-      SELECT DISTINCT ON (lancamento, cod_slip)
+      SELECT DISTINCT
                         lancamento,
                         cod_slip,
                         data_recebimento,
@@ -503,8 +502,8 @@ class cl_controleext {
                         k168_previni,
                         k168_prevfim,
                         k168_vlrprev
-      FROM conplanoreduz 
-      JOIN controleext ON k167_codcon = c61_codcon
+      FROM conplanoreduz
+      JOIN controleext ON k167_codcon = c61_codcon AND c61_anousu = k167_anousu
       JOIN controleextvlrtransf ON k168_codprevisao = k167_sequencial
       JOIN conplano ON c60_codcon = c61_codcon
       LEFT JOIN
@@ -539,8 +538,8 @@ class cl_controleext {
           ORDER BY slipsNaoEstornados.data_recebimento) AS geral
           ON c61_reduz = geral.conta_banc AND geral.data_recebimento >= k167_dtcad
           AND k168_mescompet = EXTRACT (MONTH FROM data_recebimento)
-      WHERE 1=1  
-      
+      WHERE 1=1  AND c61_anousu = ".(empty($aDatas)?db_getsession('DB_anousu'):date('Y', strtotime($oDatas->inicio)))." ORDER BY k168_previni
+
       ";
 
 //    print_r($sSQL);die();

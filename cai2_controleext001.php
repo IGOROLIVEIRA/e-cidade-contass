@@ -164,9 +164,7 @@ function js_mostraconplano(chave1, chave2, erro) {
 function js_mostraconplano1(chave1,chave2,chave3) {
   document.form1.k167_codcon.value = chave1;
   document.form1.c60_descr.value = chave2;
-  if (chave3) {
-    document.form1.k167_anousu.value = chave3;
-  }
+  document.form1.k167_anousu.value = chave3;
   db_iframe_conplano.hide();
 }
 
@@ -201,7 +199,7 @@ function addOption(anoUsu, codConta, descConta) {
   }
 
   var option = document.createElement('option');
-  option.value = codConta;
+  option.value = codConta+"-"+anoUsu;
   option.innerText = codConta + ' - ' + descConta;
 
   optionsContas.appendChild(option);
@@ -235,24 +233,44 @@ function js_emite() {
       final: document.form1.k168_prevfim.value
     },
     conta: Array.prototype.map.call(optionsContas.children, function(o) {
-      return o.value;
+      return (o.value).split("-")[0];
+    }).join(','),
+    anosContas: Array.prototype.map.call(optionsContas.children, function(o) {
+      return (o.value).split("-")[1];
     }).join(',')
   };
-
-  console.log(dados);
+  var aAnos = (dados.anosContas).split(",");
+  var contasAnosDiferentesPeriodo = false;
+  for(i=0; i<aAnos.length; i++){
+    if(aAnos[i] != (dados.datas.inicio).split("/")[2]){
+      contasAnosDiferentesPeriodo = true;
+    }
+  }
 
   var datasVazias   = dados.datas.inicio == '' && dados.datas.final == '';
   var contaVazia    = dados.conta == '';
   var umaDataVazia  = (dados.datas.inicio != '' && dados.datas.final == '')
                     || (dados.datas.inicio == '' && dados.datas.final != '');
+  var anosDiferentes = (dados.datas.inicio).split("/")[2] != (dados.datas.final).split("/")[2];
+
 
   if (umaDataVazia) {
-    alert('Preencha as datas corretamente.');
+    alert('Preencha o período de referência corretamente.');
     return;
   }
 
-  if (datasVazias && contaVazia) {
-    alert('Preencha data ou conta.');
+  if (datasVazias) {
+    alert('Preencha o período de referência.');
+    return;
+  }
+
+  if(anosDiferentes){
+    alert("O período de referência deverá ser do mesmo ano de cadastro da conta.");
+    return;
+  }
+
+  if(contasAnosDiferentesPeriodo && contaVazia == false){
+    alert("As contas selecionadas deverão ser do mesmo ano do período de referência.");
     return;
   }
 
