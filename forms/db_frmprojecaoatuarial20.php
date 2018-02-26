@@ -12,7 +12,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -23,7 +23,7 @@ if(isset($db_opcaoal)){
      $si169_dtcadastro = "";
      $si169_instit = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -32,7 +32,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tsi169_sequencial?>">
        <?=@$Lsi169_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si169_sequencial',10,$Isi169_sequencial,true,'text',3,"")
 ?>
@@ -42,7 +42,7 @@ db_input('si169_sequencial',10,$Isi169_sequencial,true,'text',3,"")
     <td nowrap title="<?=@$Tsi169_exercicio?>">
        <?=@$Lsi169_exercicio?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si169_exercicio',4,$Isi169_exercicio,true,'text',$db_opcao,"")
 ?>
@@ -52,7 +52,7 @@ db_input('si169_exercicio',4,$Isi169_exercicio,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsi169_vlreceitaprevidenciaria?>">
        <?=@$Lsi169_vlreceitaprevidenciaria?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si169_vlreceitaprevidenciaria',14,$Isi169_vlreceitaprevidenciaria,true,'text',$db_opcao,"")
 ?>
@@ -62,26 +62,26 @@ db_input('si169_vlreceitaprevidenciaria',14,$Isi169_vlreceitaprevidenciaria,true
     <td nowrap title="<?=@$Tsi169_vldespesaprevidenciaria?>">
        <?=@$Lsi169_vldespesaprevidenciaria?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si169_vldespesaprevidenciaria',14,$Isi169_vldespesaprevidenciaria,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  
+
 <?
 $si169_dtcadastro_dia = date("d");
 $si169_dtcadastro_mes = date("m");
 $si169_dtcadastro_ano = date("Y");
 db_inputdata('si169_dtcadastro',@$si169_dtcadastro_dia,@$si169_dtcadastro_mes,@$si169_dtcadastro_ano,true,'hidden',$db_opcao,"")
 ?>
-  
+
 
 <?
 $si169_instit = db_getsession("DB_instit");
 db_input('si169_instit',10,$Isi169_instit,true,'hidden',$db_opcao,"")
 ?>
-    
+
   </tr>
     <td colspan="2" align="center">
  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
@@ -91,11 +91,11 @@ db_input('si169_instit',10,$Isi169_instit,true,'hidden',$db_opcao,"")
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("si169_sequencial"=>@$si169_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
-	 $cliframe_alterar_excluir->sql     = $clprojecaoatuarial20->sql_query_file($si169_sequencial,"*","","si169_instit = ".db_getsession("DB_instit"));
+	 $cliframe_alterar_excluir->sql     = $clprojecaoatuarial20->sql_query_file($si169_sequencial,"si169_sequencial,si169_exercicio,si169_dtcadastro, to_char(si169_vlreceitaprevidenciaria,'R$ 999G999G990D99') as si169_vlreceitaprevidenciaria,to_char(si169_vldespesaprevidenciaria,'R$ 999G999G990D99') as si169_vldespesaprevidenciaria","si169_exercicio","si169_instit = ".db_getsession("DB_instit"));
 	 $cliframe_alterar_excluir->campos  ="si169_sequencial,si169_exercicio,si169_vlreceitaprevidenciaria,si169_vldespesaprevidenciaria,si169_dtcadastro";
 	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
