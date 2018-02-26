@@ -232,8 +232,8 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
                $oCGM->setNome(utf8_decode($this->sNome));
                $oCGM->setNomeCompleto(utf8_decode($this->sNome));
 
-               /*seta os endereços*/
-               $oEnderecoPrimario   = endereco::findEnderecoByCodigo(81364,   false);
+               $iCodEndereco = $this->incluirEndereco();
+               $oEnderecoPrimario   = endereco::findEnderecoByCodigo($iCodEndereco, false);
                $oCGM->setUf($oEnderecoPrimario[0]->ssigla);
                if ($oEnderecoPrimario[0]->scep != "") {
                  $oCGM->setCep($oEnderecoPrimario[0]->scep);
@@ -484,7 +484,7 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
     $oCepmunic      = endereco::findCepDbConfig(db_getsession("DB_instit"));
     $oValoresPadrao = endereco::findParametrosEndereco();
     $oBairroRua = endereco::buscaBairroRuaMunicipio(0,0);
-    $oEndereco = new endereco(null);    
+    $oEndereco = new endereco(null);
 
     $oEndereco->setCodigoEstado($oValoresPadrao[0]->db72_cadenderestado);
     $oEndereco->setCodigoMunicipio($oValoresPadrao[0]->db72_sequencial);
@@ -498,8 +498,8 @@ class NotaPlanilhaRetencaoWebService extends NotaPlanilhaRetencao{
     $oEndereco->setCadEnderRuaTipo($oBairroRua[0]->iruatipo);
     $oEndereco->setCodigoRuasTipo($oBairroRua[0]->iruastipo);
     $oEndereco->salvaEndereco();
-    return $oEndereco->getCodigoEndereco(); 
-    
+    return $oEndereco->getCodigoEndereco();
+
   }
 
 }
