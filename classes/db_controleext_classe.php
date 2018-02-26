@@ -538,7 +538,7 @@ class cl_controleext {
           ORDER BY slipsNaoEstornados.data_recebimento) AS geral
           ON c61_reduz = geral.conta_banc AND geral.data_recebimento >= k167_dtcad
           AND k168_mescompet = EXTRACT (MONTH FROM data_recebimento)
-      WHERE 1=1  AND c61_anousu = ".(empty($aDatas)?db_getsession('DB_anousu'):date('Y', strtotime($oDatas->inicio)))." ORDER BY k168_previni
+      WHERE 1=1  AND c61_anousu = ".(empty($aDatas)?db_getsession('DB_anousu'):date('Y', strtotime($oDatas->inicio)))." AND c60_anousu = ".(empty($aDatas)?db_getsession('DB_anousu'):date('Y', strtotime($oDatas->inicio)))." AND k168_previni >= '{$oDatas->inicio}' AND k168_prevfim <= '{$oDatas->final}' ORDER BY k168_previni
 
       ";
 
