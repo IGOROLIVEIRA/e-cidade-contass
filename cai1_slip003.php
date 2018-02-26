@@ -89,10 +89,13 @@ if (USE_PCASP) {
                                                           and conta_credito.c60_anousu  = ".db_getsession("DB_anousu")."
                  left join saltes saltes_credito           on slip.k17_credito          = saltes_credito.k13_reduz
                  left join identificacaoresponsaveis contad on  contad.si166_instit= k17_instit and contad.si166_tiporesponsavel=2
+                 and  DATE_PART('YEAR',contad.si166_dataini)= ".db_getsession("DB_anousu")."  
                  left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
                  left join identificacaoresponsaveis controle on  controle.si166_instit= k17_instit and controle.si166_tiporesponsavel=3
+                  and DATE_PART('YEAR',controle.si166_dataini)= ".db_getsession("DB_anousu")." 
                  left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
            where slip.k17_codigo = $numslip and k17_instit = ".db_getsession('DB_instit');
+
 } else {
 
   $sql = "select slip.*,
