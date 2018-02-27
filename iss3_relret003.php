@@ -1,37 +1,37 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/scpdf.php");
 //db_postmemory($HTTP_SERVER_VARS);
-$sql = "select uf, db12_extenso, logo, munic 
-			from db_config  
+$sql = "select uf, db12_extenso, logo, munic
+			from db_config
 				inner join db_uf on db12_uf = uf
 			where codigo = ".db_getsession("DB_instit");
-			
+
 $result = pg_query($sql);
 db_fieldsmemory($result,0);
 
@@ -95,13 +95,12 @@ $pdf->Ln(3);
 $pdf->Cell(270,6,ucwords(strtolower($munic)).', ________ de _______________________ de __________.',0,1,"L",0);
 $pdf->Ln(3);
 //$pdf->Cell(270,2,'______________________________________________',0,1,"L",0);
-//Busca numero de dias para venciemnto 
+//Busca numero de dias para venciemnto
 $sql = "select *  from db_confplan;";
 $result = pg_query($sql);
 db_fieldsmemory($result,0);
 
 $pdf->Cell(270,3,'Nome e Assinatura do Reponsável pelas Informações',0,1,"L",0);
-$pdf->Text(10,190,'O pagamento do imposto deverá ser efetuado até o dia '.$w10_dia.' do mês subseqüente ao da competência e a respectiva guia de recolhimento solicitada junto ao Setor de Tributos, mediante a apresentação deste relatório.');
 $pdf->Text(10,195,'* Preenchimento obrigatório apenas para empresas sediadas no Município de '.ucwords(strtolower($munic)).' - '.$uf);
 $pdf->Output();
 ?>
