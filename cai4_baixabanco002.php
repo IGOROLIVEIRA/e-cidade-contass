@@ -148,7 +148,7 @@ if(isset($pesquisar)){
 
     if ($db_opcao == 1) {
 
-       $sql = "select disarq.codret,arqret,disarq.k15_codbco,disarq.k15_codage,dtarquivo,k00_conta,substr(k13_descr,1,20) as k13_descr,sum(vlrtot) as vlrtot
+       $sql = "select disarq.codret,arqret,disarq.k15_codbco,disarq.k15_codage,dtarquivo,k00_conta,substr(k13_descr,1,20) as k13_descr,sum(vlrtot) as dl_A_Pagar
                  from disarq
                       inner join disbanco    on disbanco.codret = disarq.codret
                       left outer join saltes on k13_conta       = k00_conta
@@ -192,7 +192,7 @@ if(isset($pesquisar)){
      } else {
 
       // Verifica classificacoes executadas para um arquivo
-      $sql = "select disarq.codret,disarq.arqret,disarq.k15_codbco,disarq.k15_codage,disarq.dtarquivo,k00_conta,substr(k13_descr,1,20) as k13_descr,sum(vlrtot) as vlrtot
+      $sql = "select disarq.codret,disarq.arqret,disarq.k15_codbco,disarq.k15_codage,disarq.dtarquivo,k00_conta,substr(k13_descr,1,20) as k13_descr,sum(vlrtot) as dl_A_Pagar
                 from disarq
                      inner join disbanco    on disbanco.codret = disarq.codret
                      left outer join saltes on k13_conta       = k00_conta
