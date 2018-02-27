@@ -196,8 +196,24 @@ HTML;
                     ";
 
                       $sSql2 .= " where veiculos.ve01_codigo = $oResult->ve01_codigo ";
+                        if ($ve70_dataini) {
+                      $sSql2 .= " and ve62_dtmanut >= '$ve70_dataini' ";
+                        }
+                        if ($ve70_datafin) {
+                      $sSql2 .= " and ve62_dtmanut <= '$ve70_datafin' ";
+                        }
+                        if ($pc60_numcgm) {
+                      $sSql2 .= " and e60_numcgm = $pc60_numcgm";
+                        }
+                        if ($idCentral) {
+                      $sSql2 .= " and ve40_veiccadcentral = $idCentral";
+                        }
+                        if ($ve62_veiccadtiposervico) {
+                      $sSql2 .= " and ve62_veiccadtiposervico = $ve62_veiccadtiposervico
+                          ";
+                        }
 
-                      if ($ve01_codigo) {
+                    if ($ve01_codigo) {
                           $sSql2 .= " and veicmanut.ve62_veiculos in ($ve01_codigo)
                                    GROUP BY veiculos.ve01_codigo,
                                    veiccadmarca.ve21_descr,
@@ -210,24 +226,22 @@ HTML;
                                    ve62_descr
                                    order by ve62_dtmanut
                                    ";
-                      }
-                      if ($ve70_dataini) {
-                          $sSql2 .= " and ve62_dtmanut >= '$ve70_dataini' ";
-                      }
-                      if ($ve70_datafin) {
-                          $sSql2 .= " and ve62_dtmanut <= '$ve70_datafin' ";
-                      }
-                      if ($pc60_numcgm) {
-                          $sSql2 .= " and e60_numcgm = $pc60_numcgm";
-                      }
-                      if ($idCentral) {
-                          $sSql2 .= " and ve40_veiccadcentral = $idCentral";
-                      }
-                      if ($ve62_veiccadtiposervico) {
-                          $sSql2 .= " and ve62_veiccadtiposervico = $ve62_veiccadtiposervico
-                          ";
-                      }
-//                      echo $sSql2;exit;
+                    }else{
+                          $sSql2 .="
+                                   GROUP BY veiculos.ve01_codigo,
+                                   veiccadmarca.ve21_descr,
+                                   veicmanut.ve62_codigo,
+                                   cgm.z01_numcgm,
+                                   veiculos.ve01_veiccadmodelo,
+                                   veiculos.ve01_veiccadmarca,
+                                   veiccadtiposervico.ve28_descr,
+                                   veiccadmodelo,
+                                   ve62_descr
+                                   order by ve62_dtmanut
+                                   ";
+                    }
+
+//                      echo $sSql2;
                       $rsResult2 = db_query($sSql2) or die(pg_last_error());//db_criatabela($rsResult2);exit;
                       $valor = 0;
                       for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResult2); $iCont2++) {
