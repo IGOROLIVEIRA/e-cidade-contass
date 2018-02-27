@@ -1271,6 +1271,27 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
           $pdf1->descr12_2 .= $texto;
         }
 
+        /**
+         * Detalha por receita o lançamento para quando for IPTU
+         * Se for Pirapora
+         */
+        $oInstit = new Instituicao(db_getsession('DB_instit'));
+        if($oInstit->getCodigoCliente() == 58) {
+          $sSqlPorReceita = "select k01_descr,k00_receit,sum(k00_valor) as k00_valor from arrecad inner join histcalc on k01_codigo = k00_hist where k00_numpre = {$k00_numpre} group by k01_descr,k00_receit order by k00_receit";
+          $rResPorReceita = db_query($sSqlPorReceita);
+          $aReceitas = db_utils::getCollectionByRecord($rResPorReceita);
+          $sDescricaoPorReceita = "";
+          foreach ($aReceitas as $oReceita) {
+            $pdf1->descr4_1 = "";
+            $oReceita->k00_valor = $oReceita->k00_receit == $codreceita ? $oReceita->k00_valor + $valor_desconto: $oReceita->k00_valor;
+            $sValor = trim(db_formatar($oReceita->k00_valor, 'f'));
+            $pdf1->descr12_1 .= "+ {$oReceita->k01_descr}: R$" . $sValor . " ";
+
+          }
+
+          $pdf1->descr12_1 .= "Total: R$" . ($k00_valor);
+          $pdf1->descr4_1 .= "{$pdf1->descr12_1}";
+        }
         if ($texto2 != '' ) {
 
           $pdf1->descr16_1 = substr($texto2, 0, 55);
@@ -2499,6 +2520,27 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
     $pdf1->iptj01_matric      = $j01_matric;//$pdf1->descr1;
   }else{
     $pdf1->iptj01_matric      = $pdf1->descr1;
+  }
+
+  /**
+   * Detalha por receita o lançamento para quando for IPTU
+   * Se for Pirapora
+   */
+  $oInstit = new Instituicao(db_getsession('DB_instit'));
+  if($oInstit->getCodigoCliente() == 58) {
+    $sSqlPorReceita = "select k01_descr,k00_valor from arrecad inner join histcalc on k01_codigo = k00_hist where k00_numpre = {$k00_numpre} and k00_numpar = {$k00_numpar} order by k00_receit";
+    $rResPorReceita = db_query($sSqlPorReceita);
+    $aReceitas = db_utils::getCollectionByRecord($rResPorReceita);
+    $sDescricaoPorReceita = "";
+    foreach ($aReceitas as $oReceita) {
+
+      $sValor = trim(db_formatar($oReceita->k00_valor, 'f'));
+      $pdf1->descr12_1 .= "+ {$oReceita->k01_descr}: R$" . $sValor . " ";
+
+    }
+
+    $pdf1->descr12_1 .= "Total: R$" . ($nTotalDebito + $taxabancaria);
+    $pdf1->descr4_1 .= ": {$pdf1->descr12_1}";
   }
 
   /**
