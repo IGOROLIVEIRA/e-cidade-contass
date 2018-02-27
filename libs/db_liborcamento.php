@@ -2427,7 +2427,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     select ";
     if( $nivel_agrupar == 1 || $nivel_agrupar == 2 ) {
       $sql .= "
-         case when substr(o57_fonte,1,1)='9' then '4' else substr(o57_fonte,1,1) end::int4 as classe,
+         case when substr(o57_fonte,1,2)='49' then '4' else substr(o57_fonte,1,1) end::int4 as classe,
       ";
     }else if( $nivel_agrupar == 0 ){
       $sql .= " substr(o57_fonte,1,1)::int4 as classe, ";
