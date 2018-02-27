@@ -2463,8 +2463,10 @@ for ($vez = 0; $vez <= 1; $vez++) {
           $sqlcalc .= "                 inner join iptucalh        on iptucalh.j17_codhis        = j21_codhis    ";
           $sqlcalc .= "                 left  join iptucalhconf    on iptucalhconf.j89_codhispai = j21_codhis    ";
           $sqlcalc .= "                 inner join tabrec          on tabrec.k02_codigo          = j21_receit    ";
-          $sqlcalc .= "                 left  join iptucadtaxaexe  on iptucadtaxaexe.j08_tabrec  = j21_receit    ";
-          $sqlcalc .= "                                           and iptucadtaxaexe.j08_anousu  = $anousu       ";
+//          $sqlcalc .= "                 left  JOIN iptutaxamatric on j21_matric = j09_matric                     ";
+//          $sqlcalc .= "                 inner JOIN iptucadtaxaexe  on iptucadtaxaexe.j08_tabrec  = j21_receit    ";
+//          $sqlcalc .= "                                           and iptucadtaxaexe.j08_anousu  = $anousu       ";
+//          $sqlcalc .= "                         and iptucadtaxaexe.j08_iptucadtaxaexe = j09_iptucadtaxaexe       ";
           $sqlcalc .= "           where j21_anousu = $anousu                                                     ";
           $sqlcalc .= "                 $whereMatric                                                             ";
           $sqlcalc .= "             and j17_codhis not in (select j89_codhis from iptucalhconf)                  ";
@@ -2919,7 +2921,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
 
 
           $sqlcalc  = "  select j17_codhis,                                                                      ";
-          $sqlcalc .= "         $colunaTotal ";
+          $sqlcalc .= "         $colunaTotal                                                                     ";
           $sqlcalc .= "         j17_descr                                                                        ";
           $sqlcalc .= "    from (select k02_codigo,                                                              ";
           $sqlcalc .= "                 k02_descr,                                                               ";
@@ -2936,23 +2938,25 @@ for ($vez = 0; $vez <= 1; $vez++) {
           $sqlcalc .= "                        and x.j21_receit = iptucalv.j21_receit                            ";
           $sqlcalc .= "                        and x.j21_codhis = iptucalhconf.j89_codhis)                       ";
           $sqlcalc .= "                   else 0                                                                 ";
-          $sqlcalc .= "                 end) as j21_valorisen                                                     ";
+          $sqlcalc .= "                 end) as j21_valorisen                                                    ";
           $sqlcalc .= "            from iptucalv                                                                 ";
           $sqlcalc .= "                 inner join iptucalh        on iptucalh.j17_codhis        = j21_codhis    ";
           $sqlcalc .= "                 left  join iptucalhconf    on iptucalhconf.j89_codhispai = j21_codhis    ";
           $sqlcalc .= "                 inner join tabrec          on tabrec.k02_codigo          = j21_receit    ";
-          $sqlcalc .= "                 left  join iptucadtaxaexe  on iptucadtaxaexe.j08_tabrec  = j21_receit    ";
-          $sqlcalc .= "                                           and iptucadtaxaexe.j08_anousu  = $anousu       ";
+//          $sqlcalc .= "                 left  JOIN iptutaxamatric on j21_matric = j09_matric                     ";
+//          $sqlcalc .= "                 inner JOIN iptucadtaxaexe  on iptucadtaxaexe.j08_tabrec  = j21_receit    ";
+//          $sqlcalc .= "                                           and iptucadtaxaexe.j08_anousu  = $anousu       ";
+//          $sqlcalc .= "                         and iptucadtaxaexe.j08_iptucadtaxaexe = j09_iptucadtaxaexe       ";
           $sqlcalc .= "           where j21_anousu = $anousu                                                     ";
           $sqlcalc .= "                 $whereMatric                                                             ";
-          $sqlcalc .= "           group by k02_codigo, ";
-          $sqlcalc .= "                    k02_descr,  ";
-          $sqlcalc .= "                    j17_codhis, ";
-          $sqlcalc .= "                    j17_descr  ";
-          $sqlcalc .= "           order by iptucalh.j17_codhis ";
-          $sqlcalc .= "        ) as x ";
+          $sqlcalc .= "           group by k02_codigo,                                                           ";
+          $sqlcalc .= "                    k02_descr,                                                            ";
+          $sqlcalc .= "                    j17_codhis,                                                           ";
+          $sqlcalc .= "                    j17_descr                                                             ";
+          $sqlcalc .= "           order by iptucalh.j17_codhis                                                   ";
+          $sqlcalc .= "        ) as x                                                                            ";
           $sqlcalc .=     $groupby ;
-          $sqlcalc .= " order by j17_codhis ";
+          $sqlcalc .= " order by j17_codhis                                                                      ";
 
           $w_iptucalv = "ww_iptucalv_$anousu";
           $w_iptucalv2 = "ww_iptucalv2_$anousu";
@@ -2989,7 +2993,6 @@ for ($vez = 0; $vez <= 1; $vez++) {
 
                     fputs($clabre_arquivo->arquivo, str_pad($j17_descr, 40));
                     fputs($clabre_arquivo->arquivo, str_pad(db_formatar($j21_quant, 'f', ' ', 10),"0",STR_PAD_LEFT));
-
                     fputs($clabre_arquivo->arquivo, str_pad(db_formatar($j21_valor, 'f', ' ', 18), 18, ' ', STR_PAD_LEFT));
                     fputs($clabre_arquivo->arquivo, str_pad(db_formatar($j21_valor / pg_numrows($resultfin2), 'f', ' ', 18), 18, ' ', STR_PAD_LEFT));
 
