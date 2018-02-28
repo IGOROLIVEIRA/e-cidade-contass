@@ -105,7 +105,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
     $db_filtro = "o70_instit = " . db_getsession("DB_instit");
     $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
-    //db_criatabela($rsResult10);
+//    db_criatabela($rsResult10);
     /*$sSql   = "SELECT * FROM infocomplementaresinstit WHERE si09_tipoinstit != 2";
     $rsPref = db_query($sSql);
     if (pg_num_rows($rsPref) > 0) {
@@ -207,43 +207,52 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         /**
          * agrupar registro 11
          */
-        $sHash11 = $oDadosRec->o70_codigo;
-        if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
+        $sSql = "SELECT
+                                o70_codrec,
+                                CASE SUBSTRING(k02_estorc,0,8)
+                                     WHEN '4121004' THEN z01_cgccpf
+                                     WHEN '4721004'THEN z01_cgccpf
+                                ELSE '' END AS z01_cgccpf,
+                                SUM (k81_valor) AS k81_valor
+                  FROM orcreceita
+                  LEFT JOIN taborc on (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
+                  LEFT JOIN tabrec ON taborc.k02_codigo = tabrec.k02_codigo
+                  LEFT JOIN placaixarec ON k81_receita = tabrec.k02_codigo
+                  LEFT JOIN placaixa ON k80_codpla = k81_codpla
+                  LEFT JOIN cgm ON z01_numcgm = k81_numcgm
+                  WHERE o70_codrec = ".$oDadosRec->o70_codrec." and k81_datareceb >= '{$this->sDataInicial}' and k81_datareceb <= '{$this->sDataFinal}'
+                  GROUP BY 1, 2";
+        $resultcgmfonte = db_query($sSql);
+//echo '<pre>';
+//        echo $sSql;
+        for($iContcgmfonte = 0; $iContcgmfonte < pg_num_rows($resultcgmfonte); $iContcgmfonte++){
 
-          $sSql = "select * from orctiporec where o15_codigo = " . $oDadosRec->o70_codigo;
-          $result = db_query($sSql);
-          $sCodFontRecursos = db_utils::fieldsMemory($result, 0)->o15_codtri;
+          $NumcgmFonte = db_utils::fieldsMemory($resultcgmfonte, $iContcgmfonte);
+          $sHash11 = $NumcgmFonte->z01_cgccpf;
 
-          $sSql = "select z01_cgccpf,o57_fonte from orcreceita
-                   left join placaixarec on k81_receita = o70_codrec
-                   left join cgm on z01_numcgm = k81_numcgm
-                   inner join orcfontes on (o57_codfon, o57_anousu) = (o70_codfon, o70_anousu)
-                   where o70_codrec = ".$oDadosRec->o70_codrec;
-          $resultcgmfonte = db_query($sSql);
-          $NumcgmFonte = db_utils::fieldsMemory($resultcgmfonte, 0);
+          if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
+            $sSql = "select * from orctiporec where o15_codigo = " . $oDadosRec->o70_codigo;
+            $result = db_query($sSql);
+            $sCodFontRecursos = db_utils::fieldsMemory($result, 0)->o15_codtri;
 
-          $oDados11 = new stdClass();
-          $oDados11->si26_tiporegistro = 11;
-          $oDados11->si26_codreceita = $oDadosRec->o70_codrec;
-          $oDados11->si26_codfontrecursos = $sCodFontRecursos;
-          if(substr($NumcgmFonte->o57_fonte,0,-8) == 4121004 || substr($NumcgmFonte->o57_fonte,0,-8) == 4721004) {
+            $oDados11 = new stdClass();
+            $oDados11->si26_tiporegistro = 11;
+            $oDados11->si26_codreceita = $oDadosRec->o70_codrec;
+            $oDados11->si26_codfontrecursos = $sCodFontRecursos;
             $oDados11->si26_cnpjorgaocontribuinte = $NumcgmFonte->z01_cgccpf;
-          }else{
-            $oDados11->si26_cnpjorgaocontribuinte = '';
-          }
-          $oDados11->si26_vlarrecadadofonte = 0;
-          $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $oDados11->si26_vlarrecadadofonte = 0;
+            $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $oDados11;
 
-          $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $oDados11;
+          }
+          $aDadosAgrupados[$sHash10]->Reg11[$sHash11]->si26_vlarrecadadofonte += $NumcgmFonte->k81_valor;
 
         }
-        $aDadosAgrupados[$sHash10]->Reg11[$sHash11]->si26_vlarrecadadofonte += $oDadosRec->saldo_arrecadado;
-
       }
 
     }
-    //echo "<pre>";print_r($aDadosAgrupados);exit;
+//    echo "<pre>";print_r($aDadosAgrupados);
     $aRectceSaudEduc = array('11120101', '11120200', '11120431', '11120434', '11120800', '11130501', '11130502', '17210102', '17210105', '17213600',
       '17220101', '17220102', '17220104', '19110801', '19113800', '19113900', '19114000', '19130800', '19131100', '19131200',
       '19131300', '19310400', '19311100', '19311200', '19311300');
@@ -275,7 +284,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           $clrec11->si26_reg10 = $clrec10->si25_sequencial;
           $clrec11->si26_codreceita = $oDados10->si25_codreceita;
           $clrec11->si26_codfontrecursos = '100';
-          $clrec11->si26_cnpjorgaocontribuinte;
+          $clrec11->si26_cnpjorgaocontribuinte = $NumcgmFonte->z01_cgccpf;
           $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "");
           $clrec11->si26_mes = $oDados11->si26_mes;
           $clrec11->si26_instit = db_getsession("DB_instit");
@@ -284,7 +293,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           if ($clrec11->erro_status == 0) {
             throw new Exception($clrec11->erro_msg);
           }
-          
+
           $clrec11->si26_sequencial = null;
           $clrec11->si26_codfontrecursos = '101';
           $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", "");
@@ -292,7 +301,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           if ($clrec11->erro_status == 0) {
             throw new Exception($clrec11->erro_msg);
           }
-          
+
           $clrec11->si26_sequencial = null;
           $clrec11->si26_codfontrecursos = '102';
           $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado), 2, ".", "") - (number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "") + number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", ""));
@@ -312,7 +321,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           $clrec11->si26_reg10 = $clrec10->si25_sequencial;
           $clrec11->si26_codreceita = $oDados10->si25_codreceita;
           $clrec11->si26_codfontrecursos = $oDados11->si26_codfontrecursos;
-          $clrec11->si26_vlarrecadadofonte = abs($oDados11->si26_vlarrecadadofonte);
+          $clrec11->si26_cnpjorgaocontribuinte = $oDados11->si26_cnpjorgaocontribuinte;
+          $clrec11->si26_vlarrecadadofonte = $oDados11->si26_vlarrecadadofonte;
           $clrec11->si26_mes = $oDados11->si26_mes;
           $clrec11->si26_instit = db_getsession("DB_instit");
 
@@ -324,7 +334,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         }
 
       }
-      
+
 
     }
     
