@@ -255,8 +255,8 @@ if ($modelo == 1) {
     $pdf->setfont('arial', '', 9);
     $pdf->cell(20, $alt, "", 0, 0, "L", 0);
     $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
-    $pdf->cell(20, $alt, $total_unit/$iContOrcamento, 0, 0, "R", 0);
-    $pdf->cell(20, $alt, ($total_unit/$iContOrcamento)*$quant, 0, 1, "R", 0);
+    $pdf->cell(20, $alt, db_formatar($total_unit/$iContOrcamento,'f'), 0, 0, "R", 0);
+    $pdf->cell(20, $alt, db_formatar(($total_unit/$iContOrcamento)*$quant, 'f'), 0, 1, "R", 0);
     $pdf->cell(279,$alt,'','',1,"L",0);
     $total_media += ($total_unit/$iContOrcamento)*$quant;
 
