@@ -190,7 +190,7 @@ class agendaPagamento {
    * @return array|\stdClass[]
    * @throws \Exception
    */
-  public function getContasRecurso($iCodigoOrdem, $lRetornaContasVinculadas = true) {
+  public function getContasRecurso($iCodigoOrdem, $lRetornaContasVinculadas = true, $lSomenteCorrente = false) {
 
     if (empty($iCodigoOrdem)) {
       throw new Exception("Metodo GetContasRecurso - Código do Empenho não informado.");
@@ -201,7 +201,16 @@ class agendaPagamento {
     $sCampos        = " distinct e83_conta, e83_descr,e83_codtipo,c61_codigo ";
     $sSqlContas     = $oDaoEmpAgeTipo->sql_query_contas_vinculadas(null, $sCampos, "e83_conta", $sWhere,$lRetornaContasVinculadas , $iCodigoOrdem);
     /* [Extensão] - Filtro da Despesa - getContasRecurso */
-
+    
+    if ($lSomenteCorrente) {
+      $sSqlContas .= " AND EXISTS (SELECT contabancaria.*,c60_codcon,c60_descr,c61_anousu FROM conplanoreduz 
+      JOIN conplano ON conplanoreduz.c61_codcon = conplano.c60_codcon 
+      AND conplanoreduz.c61_anousu = conplano.c60_anousu
+      JOIN conplanocontabancaria ON conplano.c60_codcon = conplanocontabancaria.c56_codcon 
+      AND conplano.c60_anousu = conplanocontabancaria.c56_anousu
+      JOIN contabancaria ON conplanocontabancaria.c56_contabancaria = contabancaria.db83_sequencial
+      WHERE conplanoreduz.c61_anousu = 2017 AND contabancaria.db83_tipoconta = 1 AND conplanoreduz.c61_reduz = e83_conta) ";
+    }
 
     $rsContas       = $oDaoEmpAgeTipo->sql_record($sSqlContas);
     $aContas        = array();
@@ -1460,7 +1469,7 @@ class agendaPagamento {
         $oMovimento        = db_utils::fieldsMemory($rsMovimento, $iMovimentos,false, false, $this->getUrlEncode());
         $oMovimento->validaretencao = $oMovimento->validaretencao=="t"?true:false;
         if ($lTrazContaPagadora) {
-          $aContasVinculadas = $this->getContasRecurso($oMovimento->e50_codord, $lVinculadas);
+          $aContasVinculadas = $this->getContasRecurso($oMovimento->e50_codord, $lVinculadas, true);
           $oMovimento->aContasVinculadas = $aContasVinculadas;
         }
         if ($lTrazfornecedor) {

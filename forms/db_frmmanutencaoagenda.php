@@ -51,6 +51,41 @@ if (count($aParametrosEmpenho) > 0) {
 
 }
 ?>
+<style type="text/css">
+
+.pesquisaConta {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: none;
+  overflow-y:auto;
+  overflow-x: hidden;
+  position: absolute;
+  max-height: 200px;
+}
+
+.pesquisaConta li {
+  border: 1px solid #ddd;
+  margin-top: -1px;  /*Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+  display: block
+}
+
+.pesquisaConta li:hover:not(.header) {
+  background-color: #eee;
+}
+
+.codtipo {
+  display: none;
+}
+
+.ctapag {
+  width: 100%;
+}
+</style>
 <script>
   function js_mascara(evt){
     var evt = (evt) ? evt : (window.event) ? window.event : "";
@@ -993,14 +1028,8 @@ if (count($aParametrosEmpenho) > 0) {
     }
   }
 
-  function js_getContaSaltes(objSelect){
-    var iContaSaltes = 0;
-    for ( var i = 0; i < objSelect.options.length; i++ ) {
-      if ( objSelect.options[i].selected ){
-        iContaSaltes = objSelect.options[i].text.split('-')[0].trim();
-        break;
-      }
-    }
+  function js_getContaSaltes(objInput){
+    var iContaSaltes = objInput.value.split('-')[0].trim();
     return iContaSaltes;
   }
 
@@ -1020,7 +1049,7 @@ if (count($aParametrosEmpenho) > 0) {
         $(sRow).className += 'marcado';
         if (oRow.aCells[8].getValue() != "" && lVerificaSaldo) {
           if ($('ctapag' + oRow.aCells[1].getValue())) {
-            js_getSaldos($('ctapag'+oRow.aCells[1].getValue()));
+            js_getSaldos(oRow.aCells[1].getValue());
           }
         }
         if (lVerificaSaldo) {
@@ -1124,27 +1153,27 @@ if (count($aParametrosEmpenho) > 0) {
     if (lDisabled) {
       sDisabled = " disabled ";
     }
-    var sCombo  = "<select id='ctapag"+iCodMov+"' class='ctapag' style='width:100%'";
-    sCombo     += " onchange='js_getSaldos(this)' "+sDisabled+">";
-    sCombo     += "<option value=''>Selecione</option>";
+
+    var sComboInputHidden  = "<input type='hidden' id='tipoconta"+iCodMov+"' ";
+    var sComboInputText = "<input type='text' id='ctapag"+iCodMov+"' class='ctapag' onfocus='this.select();mostrarPesquisa("+iCodMov+")' onkeyup='pesquisaConta("+iCodMov+")' onclick='this.select();' onblur='fecharPesquisa("+iCodMov+");js_getSaldos("+iCodMov+")' placeholder='Selecione' title='' "+sDisabled;
+    
+    var sComboUL = "<ul id='pesquisaConta"+iCodMov+"' class='pesquisaConta'>";
     if (aContas != null) {
 
       for (var i = 0; i < aContas.length; i++) {
-
-        var sSelected = "";
-        if (iContaConfig == aContas[i].e83_codtipo) {
-          sSelected = " selected ";
-        }
         var sDescrConta =  aContas[i].e83_conta+" - "+aContas[i].e83_descr.urlDecode()+" - "+aContas[i].c61_codigo;
-        sCombo += "<option "+sSelected+" value = "+aContas[i].e83_codtipo+">"+sDescrConta+"</option>";
-
+        sComboUL += "<li onclick='selecionarConta(this,"+iCodMov+")'><div class='codtipo'>"+aContas[i].e83_codtipo+"</div><span>"+sDescrConta+"</span></li>";
+        if (iContaConfig == aContas[i].e83_codtipo) {
+          sComboInputHidden += " value='"+aContas[i].e83_codtipo+"' ";
+          sComboInputText += " value='"+sDescrConta+"' ";
+        }
       }
     }
-    sCombo  += "</select>";
-
-
-
-    return sCombo;
+    sComboUL += "</ul>";
+    sComboInputHidden += " /> ";
+    sComboInputText += " /> ";
+    
+    return sComboInputHidden+sComboInputText+sComboUL;
   }
 
   function js_objectToJson(oObject) {
@@ -1580,22 +1609,23 @@ if (count($aParametrosEmpenho) > 0) {
     }
   }
 
-  function js_getSaldos(objSelect) {
-
-    if (objSelect.value != 0) {
+  function js_getSaldos(iCodMov) {
+    objTipoConta = document.getElementById("tipoconta"+iCodMov);
+    objCtaPag = document.getElementById("ctapag"+iCodMov);
+    if (objTipoConta.value != 0) {
 
       var dtBase = $F('e42_dtpagamento');
       if ($F('e42_dtpagamento') == '') {
         dtBase = sDataDia;
         $('e42_dtpagamento').focus();
       }
-      if ($('descrConta').innerHTML == objSelect.options[objSelect.selectedIndex].innerHTML) {
+      if ($('descrConta').textContent == objCtaPag.value) {
         return false;
       }
       js_divCarregando("Aguarde, Verificando saldo da conta.","msgBox");
-      $('descrConta').innerHTML = objSelect.options[objSelect.selectedIndex].innerHTML;
+      $('descrConta').innerHTML = objCtaPag.value;
       var url       = 'emp4_agendaPagamentoRPC.php';
-      var sJson = '{"exec":"getSaldos","params":[{"iCodTipo":"'+objSelect.value+'","dtBase":"'+dtBase+'"}]}';
+      var sJson = '{"exec":"getSaldos","params":[{"iCodTipo":"'+objTipoConta.value+'","dtBase":"'+dtBase+'"}]}';
       var oAjax   = new Ajax.Request(
         url,
         {
@@ -1662,25 +1692,23 @@ if (count($aParametrosEmpenho) > 0) {
   function js_setContaPadrao(iCodigoConta) {
 
     var aItens = gridNotas.getElementsByClass('ctapag');
-    var oUltimoSelect = null;
-
+    var oUltimoCampo = null;
+    var contaPadrao = document.getElementById("e83_codtipo");
     for (var i = 0; i < aItens.length; i++) {
-      if (aItens[i].parentNode.parentNode.childNodes[0].childNodes[0].checked == true) {
 
         if ($F('e83_codtipo') == "0") {
           aItens[i].value = "";
         }else{
-          aItens[i].value = $F('e83_codtipo');
+          aItens[i].value = contaPadrao.options[contaPadrao.selectedIndex].text;
+          document.getElementById("tipoconta"+aItens[i].id.replace("ctapag","")).value = iCodigoConta;
         }
 
-        oUltimoSelect = aItens[i];
-
-      }
+        oUltimoCampo = aItens[i];
     }
 
 
     if (aItens.length > 0) {
-      js_getSaldos(oUltimoSelect);
+      js_getSaldos(oUltimoCampo.id.replace("ctapag",""));
     }
 
   }
@@ -1995,4 +2023,37 @@ if (count($aParametrosEmpenho) > 0) {
 
   verificaCadastroAutenticadora();
   $('col1').style.width = "10px";
+
+  function pesquisaConta(conta) {
+    var input, filter, ul, li, a, i;
+    input = document.getElementById("ctapag"+conta);
+    filter = input.value.toUpperCase();
+    ul = document.getElementById("pesquisaConta"+conta);
+    li = ul.getElementsByTagName("li");
+    
+    for (i = 0; i < li.length; i++) {
+      descricao = li[i].getElementsByTagName("span")[0];
+      if (descricao.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+
+      }
+    }
+  }
+
+  function mostrarPesquisa(conta) {
+    document.getElementById("pesquisaConta"+conta).style.display = "block";
+  }
+
+  function fecharPesquisa(conta) {
+    setTimeout(function(){ 
+      document.getElementById("pesquisaConta"+conta).style.display = "none";
+    }, 100);
+  }
+
+  function selecionarConta(elemento,conta) {
+    document.getElementById("tipoconta"+conta).value = elemento.getElementsByTagName("div")[0].textContent;
+    document.getElementById("ctapag"+conta).value = elemento.getElementsByTagName("span")[0].textContent;
+  }
 </script>
