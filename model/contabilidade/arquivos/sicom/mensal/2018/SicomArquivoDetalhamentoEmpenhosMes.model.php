@@ -182,6 +182,39 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
                 case when ac16_sequencial is null then 2 else 1 end as despdeccontrato,
 				       ' '::char as codorgaorespcontrato,
+                case when ac16_sequencial is null then null else (SELECT CASE
+                                         WHEN o41_subunidade != 0
+                                              OR NOT NULL THEN lpad((CASE
+                                                                         WHEN o40_codtri = '0'
+                                                                              OR NULL THEN o40_orgao::varchar
+                                                                         ELSE o40_codtri
+                                                                     END),2,0)||lpad((CASE
+                                                                                          WHEN o41_codtri = '0'
+                                                                                               OR NULL THEN o41_unidade::varchar
+                                                                                          ELSE o41_codtri
+                                                                                      END),3,0)||lpad(o41_subunidade::integer,3,0)
+                                         ELSE lpad((CASE
+                                                        WHEN o40_codtri = '0'
+                                                             OR NULL THEN o40_orgao::varchar
+                                                        ELSE o40_codtri
+                                                    END),2,0)||lpad((CASE
+                                                                         WHEN o41_codtri = '0'
+                                                                              OR NULL THEN o41_unidade::varchar
+                                                                         ELSE o41_codtri
+                                                                     END),3,0)
+                                     END AS unidadesub
+                              FROM db_departorg
+                              JOIN infocomplementares ON si08_anousu = db01_anousu
+                              AND si08_instit = 1
+                              JOIN orcunidade u ON db01_orgao=u.o41_orgao
+                              AND db01_unidade=u.o41_unidade
+                              AND db01_anousu = u.o41_anousu
+                              JOIN orcorgao o ON o.o40_orgao = u.o41_orgao
+                              AND o.o40_anousu = u.o41_anousu
+                              WHERE db01_coddepto = ac16_deptoresponsavel
+                                  AND db01_anousu = ac16_anousu
+                              LIMIT 1)
+                END AS codunidadesubrespcontrato,
 				case when ac16_sequencial is null then null else ac16_numeroacordo end as nrocontrato,
 				case when ac16_sequencial is null then null else ac16_dataassinatura end as dataassinaturacontrato,
 				case when ac16_sequencial is null then null else ac26_numeroaditamento end as nrosequencialtermoaditivo,
@@ -419,7 +452,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             }
 
             if( in_array($oEmpenho->despdeccontrato,array(1,3)) ) {
-                $oDadosEmpenho->si106_codunidadesubrespcontrato = $sCodUnidade;
+                $oDadosEmpenho->si106_codunidadesubrespcontrato = $oEmpenho->codunidadesubrespcontrato;
             }else{
                 $oDadosEmpenho->si106_codunidadesubrespcontrato = '';
             }
