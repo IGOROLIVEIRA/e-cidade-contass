@@ -209,7 +209,7 @@ class agendaPagamento {
       JOIN conplanocontabancaria ON conplano.c60_codcon = conplanocontabancaria.c56_codcon 
       AND conplano.c60_anousu = conplanocontabancaria.c56_anousu
       JOIN contabancaria ON conplanocontabancaria.c56_contabancaria = contabancaria.db83_sequencial
-      WHERE conplanoreduz.c61_anousu = 2017 AND contabancaria.db83_tipoconta = 1 AND conplanoreduz.c61_reduz = e83_conta) ";
+      WHERE conplanoreduz.c61_anousu = ". db_getsession('DB_anousu') ." AND contabancaria.db83_tipoconta = 1 AND conplanoreduz.c61_reduz = e83_conta) ";
     }
 
     $rsContas       = $oDaoEmpAgeTipo->sql_record($sSqlContas);
