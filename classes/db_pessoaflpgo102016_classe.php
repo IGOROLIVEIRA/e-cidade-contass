@@ -124,7 +124,7 @@ class cl_pessoaflpgo102016 {
       return false;
     }
     if($this->si193_indsexo == null ){
-      $this->erro_sql = " Campo Indica o sexo não informado.";
+      $this->erro_sql = " Campo Indica o sexo não informado.".$this->si193_nrodocumento;
       $this->erro_campo = "si193_indsexo";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
