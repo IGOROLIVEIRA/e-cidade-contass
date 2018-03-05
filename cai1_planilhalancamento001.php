@@ -205,6 +205,12 @@ if ($oInstit->db21_usasisagua == "t") {
       </td>
     </tr>
 
+    <tr id="notificacao2" style="display:none;">
+      <td colspan='4' style="text-align: left; background-color: #fcf8e3; border: 1px solid #fcc888; padding: 10px">
+        <!-- Mensagem de notificação -->
+      </td>
+    </tr>
+
     <!-- Origem -->
      <tr>
       <td class='tamanho-primeira-col' nowrap title="<?=@$Tk81_origem?>"><?=$Lk81_origem?></td>
@@ -610,8 +616,10 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
     $('k81_codigo').value = iCodigoRecurso;
     $('k81_codigo').onchange() ;
   }
-
-  js_getCgmConta(iCodigoConta);
+  //OC5689
+  if($('estrutural').value.substr(0,7) != '4121004' && $('estrutural').value.substr(0,7) != '4721004'){
+    js_getCgmConta(iCodigoConta);
+  }
   db_iframe_saltes.hide();
 
   js_mostrarNotificacaoConta();
@@ -649,6 +657,7 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
 
    }
    js_OpenJanelaIframe('top.corpo','db_iframe_tabrec',sPesquisa,'Pesquisa',lMostra);
+
  }
 
  function js_mostratabrec(iReceita, sReceita, chave3, chave4, erro, chave5){
@@ -663,7 +672,16 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
      $('k81_receita').focus();
      $('k81_receita').value = '';
    }
+
+   if($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004'){
+     $('k81_numcgm')   .value = '';
+     $('z01_nome')   .value = '';
+   }else{
+    js_getCgmConta($('k81_conta').value);
+   }
+
    js_verificaReceita();
+   js_mostrarNotificacaoEstruturais();
    js_mostrarNotificacaoConta();
  }
 
@@ -675,8 +693,16 @@ function js_mostraSaltes (iCodigoConta,sDescricao,iCodigoRecurso) {
    $('estrutural') .value = chave4;
    $('k02_tipo')   .value = chave5;
 
+   if($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004'){
+     $('k81_numcgm')   .value = '';
+     $('z01_nome')   .value = '';
+   }else{
+    js_getCgmConta($('k81_conta').value);
+   }
+
    db_iframe_tabrec.hide();
    js_verificaReceita();
+   js_mostrarNotificacaoEstruturais();
    js_mostrarNotificacaoConta();
 
  }
@@ -691,6 +717,7 @@ function js_pesquisaCgm(lMostra){
   } else {
     js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+$('k81_numcgm').value+'&funcao_js=parent.js_preencheCgm','Pesquisa',false);
   }
+  js_mostrarNotificacaoEstruturais();
 }
 
 function js_mostraCgm(iCodigoCgm, sDescricao){
@@ -698,6 +725,7 @@ function js_mostraCgm(iCodigoCgm, sDescricao){
   $('k81_numcgm').value = iCodigoCgm;
   $('z01_nome')  .value = sDescricao;
   db_iframe_cgm.hide();
+  js_mostrarNotificacaoEstruturais();
 }
 
 function js_preencheCgm(lErro,sDescricao){
@@ -709,6 +737,7 @@ function js_preencheCgm(lErro,sDescricao){
     $('k81_numcgm').value = '';
     $('z01_nome')  .value = sDescricao;
   }
+  js_mostrarNotificacaoEstruturais();
 }
 
 
@@ -925,7 +954,7 @@ function js_addReceita () {
     var oParametro         = new Object();
     oParametro.exec        = 'buscarDeducao';
     oParametro.k81_receita = $F('k81_receita');
-   
+
 
     var oAjax = new Ajax.Request(sRPC,
                 {
@@ -946,14 +975,14 @@ function js_addReceita () {
 }
 
 function js_criaDeducao(oAjax){
- 
+
 
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   if(oRetorno.status == 2){
       alert(oRetorno.message);
-    }else if ( oRetorno.oDeducao.k02_codigo != undefined  ){           
-    
+    }else if ( oRetorno.oDeducao.k02_codigo != undefined  ){
+
     var oReceita             = new Object();
     //Receita
     oReceita.iReceitaPlanilha = $F('codigo_receitaplanilha');
@@ -1199,7 +1228,7 @@ function js_getItensPlanilha(iCodigoPlanilha) {
   var oParametro       = new Object();
   oParametro.exec      = 'importarPlanilha';
   oParametro.iPlanilha = iCodigoPlanilha;
-  
+
 
   new Ajax.Request(sRPC,
                   {
@@ -1320,10 +1349,35 @@ function js_mostrarNotificacaoConta() {
 
   return false;
 }
+//OC5689
+function js_mostrarNotificacaoEstruturais() {
+
+  var iEstrutural = $('estrutural').value;
+
+    if(($('estrutural').value.substr(0,7) == '4121004' || $('estrutural').value.substr(0,7) == '4721004') && $('k81_numcgm').value == ""){
+
+      var sMensagem = "Ao arrecadar receitas de contribuições para o Regime Próprio de Previdência Social é obrigatório informar o CGM do Contribuinte.";
+
+      $('notificacao2').childElements()[0].update("");
+      $('notificacao2').childElements()[0].insert("<b>" + sMensagem + "</b>");
+
+      $('notificacao2').setStyle({
+        display : 'table-row'
+      });
+
+      return true;
+    }
+
+  $('notificacao2').setStyle({
+    display : 'none'
+  });
+
+  return false;
+}
 
 function js_autenticar(iPlaninhaAutentica) {
 
-  
+
   if (iPlaninhaAutentica == '') {
 
     alert('Planilha de arrecadação não localizada.');
@@ -1357,9 +1411,9 @@ function js_retornoAutenticacao (oAjax) {
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
   console.log(oRetorno);
-  if (oRetorno.status == 1) {         
+  if (oRetorno.status == 1) {
          alert("Planilha "+oRetorno.iPlanilha+" autenticada com sucesso");
-         js_novaReceita();         
+         js_novaReceita();
   } else {
     alert(oRetorno.message.urlDecode());
   }
