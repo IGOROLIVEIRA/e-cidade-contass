@@ -459,7 +459,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_tipodocumentoop = $reg12->tipodocumentoop;
             $clops12->si134_nrodocumento = $reg12->nrodocumento;
             $clops12->si134_codctb = $ContaPag;
-            $clops12->si134_codfontectb = $FontContaPag;
+            $clops12->si134_codfontectb = ($reg12->tipodocumentoop == '5' ? "100" : $FontContaPag);
             $clops12->si134_desctipodocumentoop = $reg12->tipodocumentoop == "99" ? "TED" : ' ';
             $clops12->si134_dtemissao = $reg12->dtemissao;
             $clops12->si134_vldocumento = $nVolorOp;
@@ -532,7 +532,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops12->si134_tipodocumentoop = 99;
             $clops12->si134_nrodocumento = 0;
             $clops12->si134_codctb = $ContaPag2;
-            $clops12->si134_codfontectb = $FontContaPag2;
+            $clops12->si134_codfontectb = ($reg12->tipodocumentoop == '5' ? "100" : $FontContaPag2);
             $clops12->si134_desctipodocumentoop = "TED";
             $clops12->si134_dtemissao = $oEmpPago->dtpagamento;
             $clops12->si134_vldocumento = $nVolorOp;
