@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -68,11 +68,11 @@ if ($oDaoEmpparam->numrows > 0 ) {
 <table  border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>  &nbsp; </td>
-  </tr>  
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  </tr>
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
        <form name="form1" method="post" action="<?=$sRelatorio?>">
-       
+
      <table border="0" >
          <tr>
          <td>
@@ -88,17 +88,17 @@ if ($oDaoEmpparam->numrows > 0 ) {
        <td>
        <br>
            <fieldset style="width:95%">
-      
-           <table> 
+
+           <table>
            <tr>
            <td>
                <strong>Quebrar página:</strong>
-           </td> 
-           <td> 
+           </td>
+           <td>
               <input type="checkbox" name="quebradepagina">
            </td>
            </tr>
-      
+
            <tr>
            <td>
                <strong>Data Inicial: </strong>
@@ -109,7 +109,7 @@ if ($oDaoEmpparam->numrows > 0 ) {
               ?>
            </td>
            </tr>
-       
+
 
            <tr>
            <td>
@@ -121,7 +121,7 @@ if ($oDaoEmpparam->numrows > 0 ) {
               ?>
            </td>
            </tr>
-       
+
 
 
 
@@ -133,16 +133,17 @@ if ($oDaoEmpparam->numrows > 0 ) {
                <?
                  $acumu = array(
                                 "or"=>"Órgão",
-		                            "un"=>"Unidade", 
+		                            "un"=>"Unidade",
 		                            "fu"=>"Função",
                                 "su"=>"Subfunção",
 		                            "pr"=>"Programa",
                                 "pa"=>"Projeto/Atividade",
-		                            "el"=>"Elemento",	    
+		                            "el"=>"Elemento",
 		                            "de"=>"Desdobramento",
 		                            "re"=>"Recurso",
 		                            "tr"=>"Tipo de resto",
-		                            "cr"=>"Credor"
+		                            "cr"=>"Credor",
+                                "ex"=>"Exercício"
                                 );
                  db_select("tipo",$acumu,true,"text",2);
               ?>
@@ -178,12 +179,12 @@ if ($oDaoEmpparam->numrows > 0 ) {
              <?
                $result = $clempresto->sql_record($clempresto->sql_query_empenho(db_getsession("DB_anousu"),null,' distinct e60_anousu ','e60_anousu'));
                $opcao = array("0"=>"Todos");
-       
+
                 for ($ini=0;$ini < $clempresto->numrows;$ini++){
        	             db_fieldsmemory($result,$ini);
                      $opcao[$e60_anousu]=$e60_anousu;
-                    }	
-       
+                    }
+
               db_select("exercicio",$opcao,true,"text",2);
             ?>
           </td>
@@ -200,7 +201,7 @@ if ($oDaoEmpparam->numrows > 0 ) {
                               );
 
                 db_select("impressao",$aImpressao,true,"text",2);
-              ?>          		
+              ?>
           	</td>
           </tr>
           <tr>
@@ -215,7 +216,7 @@ if ($oDaoEmpparam->numrows > 0 ) {
                               );
 
                 db_select("imprimefiltros",$aFiltros,true,"text",2);
-              ?>              
+              ?>
             </td>
           </tr>
                <tr>
@@ -233,7 +234,7 @@ if ($oDaoEmpparam->numrows > 0 ) {
               ?>
             </td>
           </tr>
-          <? 
+          <?
           	db_input('listacredor',10,"",true,"hidden",1);
           	db_input('filtra_despesa',10,"",true,"hidden",1);
           	db_input('vercredor',10,"",true,"hidden",1);
@@ -241,10 +242,10 @@ if ($oDaoEmpparam->numrows > 0 ) {
     </table>
     </fieldset>
     </td>
-	    <tr> 
+	    <tr>
      	 	<td colspan="2" align="center"><br>
          <input type="button" value="relatorio" onClick="js_emite()">
-         
+
 	 			</td>
      	</tr>
    </form>
@@ -266,7 +267,7 @@ function js_emite(){
      alert('Você não escolheu nenhuma Instituição. Verifique!');
      return false;
   }
-  
+
   vir="";
  listacredor="";
  for(x=0;x<parent.iframe_g2.document.form1.credor.length;x++){
@@ -277,7 +278,7 @@ function js_emite(){
  // pega dados da func_selorcdotacao_aba.php
  document.form1.filtra_despesa.value = parent.iframe_filtro.js_atualiza_variavel_retorno();
  document.form1.vercredor.value = parent.iframe_g2.document.form1.ver.value;
- 
+
  jan = window.open('','safo' + variavel,'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
  document.form1.target = 'safo' + variavel++;
  setTimeout("document.form1.submit()",1000);

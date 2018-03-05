@@ -165,6 +165,10 @@ if ($tipo == "tr") {
 if ($tipo == "cr") {
     $tipofiltro = "Credor";
 }
+/*OC5710*/
+if ($tipo == "ex") {
+  $tipofiltro = "Exercício";
+}
 
 if ($commov == "0") {
     $commovfiltro = "Todos";
@@ -275,6 +279,11 @@ if ($tipo == "tr") {//resto - tabela empresto
 if ($tipo == "cr") {//credor - tabela cgm
     $sql_order = " order by z01_nome,e60_anousu,e60_codemp::integer ";
 }
+/*OC5710*/
+if ($tipo == "ex") {//credor - tabela cgm
+    $sql_order = " order by e60_anousu,e60_codemp::integer ";
+}
+
 
 
 //filtro por restos a pagar
@@ -328,7 +337,7 @@ $sql_where_externo .= " and " . $sql_filtro;
 
 $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
 
-$res = $clempresto->sql_record($sqlempresto);
+$res = $clempresto->sql_record($sqlempresto);//die($sqlempresto);
 
 if ($clempresto->numrows == 0) {
     db_redireciona("db_erros.php?fechar=true&db_erro=Sem movimentação de restos a pagar.");
@@ -349,7 +358,7 @@ $vdesdobramento = null;
 $vrecurso = null;
 $vprograma = null;
 $vtiporesto = null;
-
+$vexercicio = null;//OC5710
 
 //subtotal
 $vorgaosub = 0;
@@ -363,6 +372,7 @@ $vrecursosub = 0;
 $vtiporestosub = 0;
 $vnumcgmsub = 0;
 $vdesdobramentosub = 0;
+$vexerciciosub = 0;//OC5710
 
 $subtotal_rp_n_proc = 0;
 $subtotal_rp_proc = 0;
@@ -405,6 +415,38 @@ if ($formato != "csv") {
 
         cabecalho($pdf, $troca);
         $troca = 0;
+
+        //Exercício OC5710
+        if ($vexerciciosub != $e60_anousu and $tipo == "ex") {
+            if ($vexerciciosub != 0) {
+
+                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                $subtotal_rp_n_proc = 0;
+                $subtotal_rp_proc = 0;
+                $subtotal_anula_rp_n_proc = 0;
+                $subtotal_anula_rp_proc = 0;
+                $subtotal_mov_liquida = 0;
+                $subtotal_mov_pagmento = 0;
+                $subtotal_mov_pagnproc = 0;
+                $subtotal_aliquidar_finais = 0;
+                $subtotal_liquidados_finais = 0;
+                $subtotal_geral_finais = 0;
+
+            }
+            $vexerciciosub = $e60_anousu;
+        }
 
         //subtotal
         if ($vorgaosub != $o58_orgao and $tipo == "or") {
@@ -754,7 +796,21 @@ if ($formato != "csv") {
         }
 
 
-        //filtro por órgão
+        //filtro por:
+        /*OC5710*/
+        if ($tipo == "ex" and $vexercicio != $e60_anousu) {//Exercício
+            if (isset($quebradepagina) and $verifica == false) {
+                $troca = 1;
+                cabecalho($pdf, $troca);
+            }
+
+            $pdf->SetFont('Arial', 'B', 7);
+            $pdf->cell(0, 2, "", 0, 1, "", 0);
+            $pdf->cell(0, 5, "Exercício: $e60_anousu ", 0, 1, "L", 0);
+            $vexercicio = $e60_anousu;
+            $verifica = false;
+        }
+
         if ($tipo == "or" and $vorgao != $o58_orgao) {//orgão
             if (isset($quebradepagina) and $verifica == false) {
                 $troca = 1;
