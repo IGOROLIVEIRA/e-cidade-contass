@@ -173,9 +173,9 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
           $sSqlVerifica  = "SELECT 1
                                         FROM ext102018
                                  WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-                                   AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
-                                   AND si124_subtipo         = '".$oContaExtra->subtipo."'
-                                   AND si124_desdobrasubtipo = '". $oContaExtra->desdobrasubtipo ."'
+                                   AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento ."'
+                                   AND si124_subtipo         = '".$cExt10->si124_subtipo."'
+                                   AND si124_desdobrasubtipo = '". $cExt10->si124_desdobrasubtipo ."'
                                    AND si124_mes             < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
 					$sSqlVerifica  .= " UNION ALL 
                                 SELECT 1

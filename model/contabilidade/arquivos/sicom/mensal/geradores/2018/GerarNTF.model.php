@@ -63,7 +63,7 @@ class GerarNTF extends GerarAM
         $aCSVNTF10['si143_ufcredor']              = $this->padLeftZero($aNTF10['si143_ufcredor'], 2);
         $aCSVNTF10['si143_notafiscaleletronica']  = $this->padLeftZero($aNTF10['si143_notafiscaleletronica'], 1);
         $aCSVNTF10['si143_chaveacesso']           = $aNTF10['si143_chaveacesso'] == 0 ? ' ' : $this->padLeftZero($aNTF10['si143_chaveacesso'], 44);
-        $aCSVNTF10['si143_outraChaveAcesso']      = substr($aNTF10['si143_outraChaveAcesso'], 0, 60);
+        $aCSVNTF10['si143_outraChaveAcesso']      = substr($aNTF10['si143_outrachaveacesso'], 0, 60);
         $aCSVNTF10['si143_nfaidf']                = substr($aNTF10['si143_nfaidf'], 0, 15);
         $aCSVNTF10['si143_dtemissaonf']           = $this->sicomDate($aNTF10['si143_dtemissaonf']);
         $aCSVNTF10['si143_dtvencimentonf']        = $this->sicomDate($aNTF10['si143_dtvencimentonf']);

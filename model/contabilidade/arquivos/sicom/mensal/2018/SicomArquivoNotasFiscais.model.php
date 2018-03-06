@@ -138,7 +138,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
               cgm.z01_cep as cepmunicipio,
               cgm.z01_uf as ufcredor,
               empnota.e69_notafiscaleletronica as notafiscaleletronica,
-              case when empnota.e69_notafiscaleletronica=1 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
+              case when empnota.e69_notafiscaleletronica=1  or empnota.e69_notafiscaleletronica=2 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
               case when empnota.e69_notafiscaleletronica=2 then empnota.e69_chaveacesso else ' ' end as outrachaveacesso,
               ' ' as nfaidf,
               empnota.e69_dtnota as dtemissaonf,
@@ -169,10 +169,10 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
             and   date_part('month',empnota.e69_dtnota) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
             and date_part('year',pagordem.e50_data) = " . $this->sDataFinal['0'] . $this->sDataFinal['1'] . $this->sDataFinal['2'] . $this->sDataFinal['3'] . "
             and   date_part('month',pagordem.e50_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-            and empnota.e69_numero != 's/n'
+            and empnota.e69_numero != 'S/N'
             order by empnota .e69_numero";
 
-    $rsResult10 = db_query($sSql);//db_criatabela($rsResult10);
+    $rsResult10 = db_query($sSql);
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -205,7 +205,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
         $clntf10->si143_ufcredor = $oDados10->ufcredor;
         $clntf10->si143_notafiscaleletronica = $oDados10->notafiscaleletronica;
         $clntf10->si143_chaveacesso = $oDados10->chaveacesso;
-        $clntf10->si143_outraChaveAcesso = $oDados10->outraChaveAcesso;
+        $clntf10->si143_outraChaveAcesso = $oDados10->outrachaveacesso;
         $clntf10->si143_nfaidf = $oDados10->nfaidf;
         $clntf10->si143_dtemissaonf = $oDados10->dtemissaonf;
         $clntf10->si143_dtvencimentonf = $oDados10->dtvencimentonf;
@@ -371,7 +371,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       }
 
     }
-    //echo "<pre>";print_r($aDadosAgrupados);
+//    echo "<pre>";print_r($aDadosAgrupados);
     /**
      * desagrupar e inserir dados
      */
