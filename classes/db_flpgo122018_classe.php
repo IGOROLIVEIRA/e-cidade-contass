@@ -1,8 +1,8 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE flpgo122018
+//CLASSE DA ENTIDADE \d flpgo122018
 class cl_flpgo122018 {
-    // cria variaveis de erro 
+    // cria variaveis de erro
     var $rotulo     = null;
     var $query_sql  = null;
     var $numrows    = 0;
@@ -15,9 +15,15 @@ class cl_flpgo122018 {
     var $erro_msg   = null;
     var $erro_campo = null;
     var $pagina_retorno = null;
-    // cria variaveis do arquivo 
+    // cria variaveis do arquivo
     var $si197_sequencial = 0;
     var $si197_tiporegistro = 0;
+
+    var $si197_indtipopagamento = 0;
+    var $si197_codvinculopessoa = 0;
+    var $si197_desctiporubrica = 0;
+    var $si197_codrubricadesconto = 0;
+
     var $si197_nrodocumento = 0;
     var $si197_codreduzidopessoa = 0;
     var $si197_tipodesconto = 0;
@@ -26,25 +32,32 @@ class cl_flpgo122018 {
     var $si197_inst = 0;
     var $si197_reg10 = 0;
 
-    // cria propriedade com as variaveis do arquivo 
+    // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 si197_sequencial = int8 = si197_sequencial 
-                 si197_tiporegistro = int8 = Tipo registro 
+                 si197_sequencial = int8 = si197_sequencial
+                 si197_tiporegistro = int8 = Tipo registro
+
+                 si197_indtipopagamento = varchar(1) = Tipo de pagamento
+                 si197_codvinculopessoa = bigint = Código do vinculo do agente público
+                 si197_codrubricadesconto = int8 = Código da rubrica das parcelas de desconto
+                 si197_desctiporubrica = varchar(150) = Descrição para as rubricas de desconto.
+
+
                  si197_nrodocumento = int8 = Número do CPF ou CNPJ
                  si197_codreduzidopessoa = int8 = Código identificador da pessoa
                  si197_tipodesconto = int8 = Tipo da remuneração
-                 si197_vlrdescontodetalhado = float8 = Valor dos rendimentos por tipo 
-                 si197_mes = int8 = si197_mes 
-                 si197_inst = int8 = si197_inst 
-                 si197_reg10 = int8 = si197_reg10 
+                 si197_vlrdescontodetalhado = float8 = Valor dos rendimentos por tipo
+                 si197_mes = int8 = si197_mes
+                 si197_inst = int8 = si197_inst
+                 si197_reg10 = int8 = si197_reg10
                  ";
-    //funcao construtor da classe 
+    //funcao construtor da classe
     function cl_flpgo122018() {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo("flpgo122018");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
-    //funcao erro 
+    //funcao erro
     function erro($mostra,$retorna) {
         if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
             echo "<script>alert(\"".$this->erro_msg."\");</script>";
@@ -58,6 +71,12 @@ class cl_flpgo122018 {
         if($exclusao==false){
             $this->si197_sequencial = ($this->si197_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_sequencial"]:$this->si197_sequencial);
             $this->si197_tiporegistro = ($this->si197_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_tiporegistro"]:$this->si197_tiporegistro);
+
+            $this->si197_indtipopagamento = ($this->si197_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_indtipopagamento"]:$this->si197_indtipopagamento);
+            $this->si197_codvinculopessoa = ($this->si197_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codvinculopessoa"]:$this->si197_codvinculopessoa);
+            $this->si197_codrubricadesconto = ($this->si197_codrubricadesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codrubricadesconto"]:$this->si197_codrubricadesconto);
+            $this->si197_desctiporubrica = ($this->si197_desctiporubrica == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_desctiporubrica"]:$this->si197_desctiporubrica);
+
             $this->si197_nrodocumento = ($this->si197_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nrodocumento"]:$this->si197_nrodocumento);
             $this->si197_tipodesconto = ($this->si197_tipodesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_tipodesconto"]:$this->si197_tipodesconto);
             $this->si197_vlrdescontodetalhado = ($this->si197_vlrdescontodetalhado == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_vlrdescontodetalhado"]:$this->si197_vlrdescontodetalhado);
@@ -74,33 +93,6 @@ class cl_flpgo122018 {
         if($this->si197_tiporegistro == null ){
             $this->erro_sql = " Campo Tipo registro não informado.";
             $this->erro_campo = "si197_tiporegistro";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if($this->si197_nrodocumento == null ){
-            $this->erro_sql = " Campo Número do CPF não informado. CODPESSOA: ". $this->si197_codreduzidopessoa;
-            $this->erro_campo = "si197_nrodocumento";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if($this->si197_codreduzidopessoa == null ){
-            $this->erro_sql = " Campo codigo reduzido pessoa não informado.";
-            $this->erro_campo = "si197_nrodocumento";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if($this->si197_tipodesconto == null ){
-            $this->erro_sql = " Campo Tipo da remuneração não informado.";
-            $this->erro_campo = "si197_tipodesconto";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -177,26 +169,34 @@ class cl_flpgo122018 {
             return false;
         }
         $sql = "insert into flpgo122018(
-                                       si197_sequencial 
+                                       si197_sequencial
                                       ,si197_tiporegistro
+                                      ,si197_indtipopagamento
+                                      ,si197_codvinculopessoa
+                                      ,si197_codrubricadesconto
+                                      ,si197_desctiporubrica
                                       ,si197_nrodocumento
                                       ,si197_codreduzidopessoa
                                       ,si197_tipodesconto
-                                      ,si197_vlrdescontodetalhado 
-                                      ,si197_mes 
-                                      ,si197_inst 
-                                      ,si197_reg10 
+                                      ,si197_vlrdescontodetalhado
+                                      ,si197_mes
+                                      ,si197_inst
+                                      ,si197_reg10
                        )
                 values (
-                                $this->si197_sequencial 
-                               ,$this->si197_tiporegistro 
+                                $this->si197_sequencial
+                               ,$this->si197_tiporegistro
+                               ,'$this->si197_indtipopagamento'
+                               ,'$this->si197_codvinculopessoa'
+                               ,'$this->si197_codrubricadesconto'
+                               ,'$this->si197_desctiporubrica'
                                ,'$this->si197_nrodocumento'
                                ,$this->si197_codreduzidopessoa
                                ,$this->si197_tipodesconto
-                               ,$this->si197_vlrdescontodetalhado 
-                               ,$this->si197_mes 
-                               ,$this->si197_inst 
-                               ,$this->si197_reg10 
+                               ,$this->si197_vlrdescontodetalhado
+                               ,$this->si197_mes
+                               ,$this->si197_inst
+                               ,$this->si197_reg10
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -424,7 +424,7 @@ class cl_flpgo122018 {
             }
         }
     }
-    // funcao para exclusao 
+    // funcao para exclusao
     function excluir ($si197_sequencial=null,$dbwhere=null) {
 
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
@@ -502,7 +502,7 @@ class cl_flpgo122018 {
             }
         }
     }
-    // funcao do recordset 
+    // funcao do recordset
     function sql_record($sql) {
         $result = db_query($sql);
         if($result==false){
@@ -526,7 +526,7 @@ class cl_flpgo122018 {
         }
         return $result;
     }
-    // funcao do sql 
+    // funcao do sql
     function sql_query ( $si197_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
@@ -561,7 +561,7 @@ class cl_flpgo122018 {
         }
         return $sql;
     }
-    // funcao do sql 
+    // funcao do sql
     function sql_query_file ( $si197_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){

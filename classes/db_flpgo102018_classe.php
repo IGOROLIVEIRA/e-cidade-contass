@@ -1,8 +1,8 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE flpgo102018
+//CLASSE DA ENTIDADE \d flpgo102018
 class cl_flpgo102018 {
-    // cria variaveis de erro 
+    // cria variaveis de erro
     var $rotulo     = null;
     var $query_sql  = null;
     var $numrows    = 0;
@@ -15,13 +15,14 @@ class cl_flpgo102018 {
     var $erro_msg   = null;
     var $erro_campo = null;
     var $pagina_retorno = null;
-    // cria variaveis do arquivo 
+    // cria variaveis do arquivo
     var $si195_sequencial = 0;
     var $si195_tiporegistro = 0;
     var $si195_nrodocumento = 0;
     var $si195_codreduzidopessoa = 0;
     var $si195_regime = null;
     var $si195_indtipopagamento = null;
+    var $si195_desctipopagextra = null;
     var $si195_indsituacaoservidorpensionista = null;
     var $si195_dscsituacao = null;
     var $si195_datconcessaoaposentadoriapensao_dia = null;
@@ -29,9 +30,12 @@ class cl_flpgo102018 {
     var $si195_datconcessaoaposentadoriapensao_ano = null;
     var $si195_datconcessaoaposentadoriapensao = null;
     var $si195_dsccargo = null;
+    var $si195_codcargo = 0;
     var $si195_sglcargo = null;
     var $si195_dscsiglacargo = null;
+    var $si195_dscapo = null;
     var $si195_reqcargo = 0;
+    var $si195_dscreqcargo = null;
     var $si195_indcessao = null;
     var $si195_dsclotacao = null;
     var $si195_vlrcargahorariasemanal = 0;
@@ -39,50 +43,64 @@ class cl_flpgo102018 {
     var $si195_datefetexercicio_mes = null;
     var $si195_datefetexercicio_ano = null;
     var $si195_datefetexercicio = null;
+    var $si195_datcomissionado_dia = null;
+    var $si195_datcomissionado_mes = null;
+    var $si195_datcomissionado_ano = null;
+    var $si195_datcomissionado = null;
     var $si195_datexclusao_dia = null;
     var $si195_datexclusao_mes = null;
     var $si195_datexclusao_ano = null;
     var $si195_datexclusao = null;
+    var $si195_datcomissionadoexclusao_dia = null;
+    var $si195_datcomissionadoexclusao_mes = null;
+    var $si195_datcomissionadoexclusao_ano = null;
+    var $si195_datcomissionadoexclusao = null;
     var $si195_vlrremuneracaobruta = 0;
     var $si195_natsaldoliquido = null;
     var $si195_vlrremuneracaoliquida = 0;
     var $si195_vlrdeducoes = 0;
     var $si195_mes = 0;
     var $si195_inst = 0;
-    // cria propriedade com as variaveis do arquivo 
+    // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 si195_sequencial = int8 = si195_sequencial 
-                 si195_tiporegistro = int8 = Tipo registro 
+                 si195_sequencial = int8 = si195_sequencial
+                 si195_tiporegistro = int8 = Tipo registro
                  si195_nrodocumento = int8 = Número do CPF
                  si195_codreduzidopessoa = int8 = Código identificador da pessoa
-                 si195_regime = varchar(1) = Civil (C) ou Militar (M) 
-                 si195_indtipopagamento = varchar(1) = Tipo de pagamento 
+                 si195_regime = varchar(1) = Civil (C) ou Militar (M)
+                 si195_indtipopagamento = varchar(1) = Tipo de pagamento
+                 si195_desctipopagextra = varchar(150) = Descrição do tipo de pagamento extra
                  si195_indsituacaoservidorpensionista = varchar(1) = Indica a situação do servidor público
                  si195_dscsituacao = varchar(150) = Descrição da situação do servidor público
-                 si195_datconcessaoaposentadoriapensao = date = Data de concessão da aposentadoria 
-                 si195_dsccargo = varchar(120) = Nome do cargo 
+                 si195_datconcessaoaposentadoriapensao = date = Data de concessão da aposentadoria
+                 si195_dsccargo = varchar(120) = Nome do cargo
+                 si195_codcargo = int8 = Código do cargo
                  si195_sglcargo = varchar(3) = Sigla de Cargo
                  si195_dscsiglacargo = varchar(150) = Descrição do tipo de cargo, função, emprego
-                 si195_reqcargo = int8 = Requisito do Cargo 
-                 si195_indcessao = varchar(3) = Servidor Cedido com ônus 
-                 si195_dsclotacao = varchar(120) = Descrição da lotação 
-                 si195_vlrcargahorariasemanal = int8 = Valor da carga horaria 
-                 si195_datefetexercicio = date = Data de exercício no cargo 
+                 si195_dscapo = varchar(3) = Descrição do tipo de cargo do agente político
+                 si195_reqcargo = int8 = Requisito do Cargo
+                 si195_dscreqcargo = varchar(150) = Descrição do requisito do cargo
+                 si195_indcessao = varchar(3) = Servidor Cedido com ônus
+                 si195_dsclotacao = varchar(120) = Descrição da lotação
+                 si195_vlrcargahorariasemanal = int8 = Valor da carga horaria
+                 si195_datefetexercicio = date = Data de exercício no cargo
+                 si195_datcomissionado = date = Data de ingresso no cargo comissionado
                  si195_datexclusao = date = Data de exclusão
-                 si195_vlrremuneracaobruta = float8 = Valor total dos rendimentos 
-                 si195_natsaldoliquido = varchar(1) = Natureza do saldo remuneratório liquido 
-                 si195_vlrremuneracaoliquida = float8 = Valor total dos rendimentos liquidos 
+                 si195_datcomissionadoexclusao = date = Data de término do exercício no cargo comissionado
+                 si195_vlrremuneracaobruta = float8 = Valor total dos rendimentos
+                 si195_natsaldoliquido = varchar(1) = Natureza do saldo remuneratório liquido
+                 si195_vlrremuneracaoliquida = float8 = Valor total dos rendimentos liquidos
                  si195_vlrdeducoes = float8 = Valor das deduções obrigatórias
-                 si195_mes = int8 = si195_mes 
-                 si195_inst = int8 = si195_inst 
+                 si195_mes = int8 = si195_mes
+                 si195_inst = int8 = si195_inst
                  ";
-    //funcao construtor da classe 
+    //funcao construtor da classe
     function cl_flpgo102018() {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo("flpgo102018");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
-    //funcao erro 
+    //funcao erro
     function erro($mostra,$retorna) {
         if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
             echo "<script>alert(\"".$this->erro_msg."\");</script>";
@@ -99,6 +117,7 @@ class cl_flpgo102018 {
             $this->si195_nrodocumento = ($this->si195_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_nrodocumento"]:$this->si195_nrodocumento);
             $this->si195_regime = ($this->si195_regime == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_regime"]:$this->si195_regime);
             $this->si195_indtipopagamento = ($this->si195_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indtipopagamento"]:$this->si195_indtipopagamento);
+            $this->si195_desctipopagextra = ($this->si195_desctipopagextra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_desctipopagextra"]:$this->si195_desctipopagextra);
             $this->si195_indsituacaoservidorpensionista = ($this->si195_indsituacaoservidorpensionista == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indsituacaoservidorpensionista"]:$this->si195_indsituacaoservidorpensionista);
             $this->si195_dscsituacao = ($this->si195_dscsituacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscsituacao"]:$this->si195_dscsituacao);
             if($this->si195_datconcessaoaposentadoriapensao == ""){
@@ -110,9 +129,12 @@ class cl_flpgo102018 {
                 }
             }
             $this->si195_dsccargo = ($this->si195_dsccargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dsccargo"]:$this->si195_dsccargo);
+            $this->si195_codcargo = ($this->si195_codcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codcargo"]:$this->si195_codcargo);
             $this->si195_sglcargo = ($this->si195_sglcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_sglcargo"]:$this->si195_sglcargo);
             $this->si195_dscsiglacargo = ($this->si195_dscsiglacargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscsiglacargo"]:$this->si195_dscsiglacargo);
+            $this->si195_dscapo = ($this->si195_dscapo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscapo"]:$this->si195_dscapo);
             $this->si195_reqcargo = ($this->si195_reqcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_reqcargo"]:$this->si195_reqcargo);
+            $this->si195_dscreqcargo = ($this->si195_dscreqcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscreqcargo"]:$this->si195_dscreqcargo);
             $this->si195_indcessao = ($this->si195_indcessao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indcessao"]:$this->si195_indcessao);
             $this->si195_dsclotacao = ($this->si195_dsclotacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dsclotacao"]:$this->si195_dsclotacao);
             $this->si195_vlrcargahorariasemanal = ($this->si195_vlrcargahorariasemanal == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlrcargahorariasemanal"]:$this->si195_vlrcargahorariasemanal);
@@ -124,12 +146,28 @@ class cl_flpgo102018 {
                     $this->si195_datefetexercicio = $this->si195_datefetexercicio_ano."-".$this->si195_datefetexercicio_mes."-".$this->si195_datefetexercicio_dia;
                 }
             }
+            if($this->si195_datcomissionado == ""){
+                $this->si195_datcomissionado_dia = ($this->si195_datcomissionado_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datcomissionado_dia"]:$this->si195_datcomissionado_dia);
+                $this->si195_datcomissionado_mes = ($this->si195_datcomissionado_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datcomissionado_mes"]:$this->si195_datcomissionado_mes);
+                $this->si195_datcomissionado_ano = ($this->si195_datcomissionado_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datcomissionado_ano"]:$this->si195_datcomissionado_ano);
+                if($this->si195_datcomissionado_dia != ""){
+                    $this->si195_datcomissionado = $this->si195_datcomissionado_ano."-".$this->si195_datcomissionado_mes."-".$this->si195_datcomissionado_dia;
+                }
+            }
             if($this->si195_datexclusao == ""){
                 $this->si195_datexclusao_dia = ($this->si195_datexclusao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datexclusao_dia"]:$this->si195_datexclusao_dia);
                 $this->si195_datexclusao_mes = ($this->si195_datexclusao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datexclusao_mes"]:$this->si195_datexclusao_mes);
                 $this->si195_datexclusao_ano = ($this->si195_datexclusao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datexclusao_ano"]:$this->si195_datexclusao_ano);
                 if($this->si195_datexclusao_dia != ""){
                     $this->si195_datexclusao = $this->si195_datexclusao_ano."-".$this->si195_datexclusao_mes."-".$this->si195_datexclusao_dia;
+                }
+            }
+            if($this->si195_datcomissionadoexclusao == ""){
+                $this->si195_datcomissionadoexclusao_dia = ($this->si195_datcomissionadoexclusao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datcomissionadoexclusao_dia"]:$this->si195_datcomissionadoexclusao_dia);
+                $this->si195_datcomissionadoexclusao_mes = ($this->si195_datcomissionadoexclusao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datcomissionadoexclusao_mes"]:$this->si195_datcomissionadoexclusao_mes);
+                $this->si195_datcomissionadoexclusao_ano = ($this->si195_datcomissionadoexclusao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_datcomissionadoexclusao_ano"]:$this->si195_datcomissionadoexclusao_ano);
+                if($this->si195_datcomissionadoexclusao_dia != ""){
+                    $this->si195_datcomissionadoexclusao = $this->si195_datcomissionadoexclusao_ano."-".$this->si195_datcomissionadoexclusao_mes."-".$this->si195_datcomissionadoexclusao_dia;
                 }
             }
             $this->si195_vlrremuneracaobruta = ($this->si195_vlrremuneracaobruta == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlrremuneracaobruta"]:$this->si195_vlrremuneracaobruta);
@@ -212,6 +250,9 @@ class cl_flpgo102018 {
             $this->erro_status = "0";
             return false;
         }
+        if($this->si195_codcargo == null ){
+            $this->si195_codcargo=0;
+        }
         if($this->si195_sglcargo == null ){
             $this->erro_sql = " Campo Sigla de Cargo não informado. ".$this->si195_codreduzidopessoa;
             $this->erro_campo = "si195_sglcargo";
@@ -244,6 +285,9 @@ class cl_flpgo102018 {
         }
         if($this->si195_datexclusao == null ){
             $this->si195_datexclusao = "null";
+        }
+        if($this->si195_datcomissionadoexclusao == null ){
+            $this->si195_datcomissionadoexclusao = "null";
         }
         if($this->si195_vlrremuneracaobruta == null ){
             $this->erro_sql = " Campo Valor total dos rendimentos não informado.";
@@ -334,56 +378,68 @@ class cl_flpgo102018 {
         }
 
         $sql = "insert into flpgo102018(
-                                       si195_sequencial 
-                                      ,si195_tiporegistro 
+                                       si195_sequencial
+                                      ,si195_tiporegistro
                                       ,si195_nrodocumento
                                       ,si195_codreduzidopessoa
-                                      ,si195_regime 
-                                      ,si195_indtipopagamento 
+                                      ,si195_regime
+                                      ,si195_indtipopagamento
+                                      ,si195_desctipopagextra
                                       ,si195_indsituacaoservidorpensionista
                                       ,si195_dscsituacao
-                                      ,si195_datconcessaoaposentadoriapensao 
-                                      ,si195_dsccargo 
+                                      ,si195_datconcessaoaposentadoriapensao
+                                      ,si195_dsccargo
+                                      ,si195_codcargo
                                       ,si195_sglcargo
                                       ,si195_dscsiglacargo
-                                      ,si195_reqcargo 
-                                      ,si195_indcessao 
-                                      ,si195_dsclotacao 
-                                      ,si195_vlrcargahorariasemanal 
-                                      ,si195_datefetexercicio 
+                                      ,si195_dscapo
+                                      ,si195_reqcargo
+                                      ,si195_dscreqcargo
+                                      ,si195_indcessao
+                                      ,si195_dsclotacao
+                                      ,si195_vlrcargahorariasemanal
+                                      ,si195_datefetexercicio
+                                      ,si195_datcomissionado
                                       ,si195_datexclusao
-                                      ,si195_vlrremuneracaobruta 
-                                      ,si195_natsaldoliquido 
-                                      ,si195_vlrremuneracaoliquida 
+                                      ,si195_datcomissionadoexclusao
+                                      ,si195_vlrremuneracaobruta
+                                      ,si195_natsaldoliquido
+                                      ,si195_vlrremuneracaoliquida
                                       ,si195_vlrdeducoes
-                                      ,si195_mes 
-                                      ,si195_inst 
+                                      ,si195_mes
+                                      ,si195_inst
                        )
                 values (
-                                $this->si195_sequencial 
-                               ,$this->si195_tiporegistro 
+                                $this->si195_sequencial
+                               ,$this->si195_tiporegistro
                                ,'$this->si195_nrodocumento'
                                ,$this->si195_codreduzidopessoa
-                               ,'$this->si195_regime' 
-                               ,'$this->si195_indtipopagamento' 
+                               ,'$this->si195_regime'
+                               ,'$this->si195_indtipopagamento'
+                               ,'$this->si195_desctipopagextra'
                                ,'$this->si195_indsituacaoservidorpensionista'
                                ,'$this->si195_dscsituacao'
-                               ,".($this->si195_datconcessaoaposentadoriapensao == "null" || $this->si195_datconcessaoaposentadoriapensao == ""?"null":"'".$this->si195_datconcessaoaposentadoriapensao."'")." 
-                               ,'$this->si195_dsccargo' 
+                               ,".($this->si195_datconcessaoaposentadoriapensao == "null" || $this->si195_datconcessaoaposentadoriapensao == ""?"null":"'".$this->si195_datconcessaoaposentadoriapensao."'")."
+                               ,'$this->si195_dsccargo'
+                               ,$this->si195_codcargo
                                ,'$this->si195_sglcargo'
                                ,'$this->si195_dscsiglacargo'
-                               ,$this->si195_reqcargo 
-                               ,'$this->si195_indcessao' 
-                               ,'$this->si195_dsclotacao' 
-                               ,$this->si195_vlrcargahorariasemanal 
-                               ,".($this->si195_datefetexercicio == "null" || $this->si195_datefetexercicio == ""?"null":"'".$this->si195_datefetexercicio."'")." 
+                               ,'$this->si195_dscapo'
+                               ,$this->si195_reqcargo
+                               ,'$this->si195_dscreqcargo'
+                               ,'$this->si195_indcessao'
+                               ,'$this->si195_dsclotacao'
+                               ,$this->si195_vlrcargahorariasemanal
+                               ,".($this->si195_datefetexercicio == "null" || $this->si195_datefetexercicio == ""?"null":"'".$this->si195_datefetexercicio."'")."
+                               ,".($this->si195_datcomissionado == "null" || $this->si195_datcomissionado == ""?"null":"'".$this->si195_datcomissionado."'")."
                                ,".($this->si195_datexclusao == "null" || $this->si195_datexclusao == ""?"null":"'".$this->si195_datexclusao."'")."
+                               ,".($this->si195_datcomissionadoexclusao == "null" || $this->si195_datcomissionadoexclusao == ""?"null":"'".$this->si195_datcomissionadoexclusao."'")."
                                ,'$this->si195_vlrremuneracaobruta'
-                               ,'$this->si195_natsaldoliquido' 
+                               ,'$this->si195_natsaldoliquido'
                                ,'$this->si195_vlrremuneracaoliquida'
                                ,'$this->si195_vlrdeducoes'
-                               ,$this->si195_mes 
-                               ,$this->si195_inst 
+                               ,$this->si195_mes
+                               ,$this->si195_inst
                       )";
 
         $result = db_query($sql);
@@ -511,6 +567,19 @@ class cl_flpgo102018 {
             if(trim($this->si195_indtipopagamento) == null ){
                 $this->erro_sql = " Campo Tipo de pagamento não informado.";
                 $this->erro_campo = "si195_indtipopagamento";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if(trim($this->si195_desctipopagextra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_desctipopagextra"])){
+            $sql  .= $virgula." si195_desctipopagextra = '$this->si195_desctipopagextra' ";
+            $virgula = ",";
+            if(trim($this->si195_desctipopagextra) == null ){
+                $this->erro_sql = " Campo Descrição do tipo de pagamento extra não informado.";
+                $this->erro_campo = "si195_desctipopagextra";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -811,23 +880,23 @@ class cl_flpgo102018 {
             }
         }
     }
-    // funcao para exclusao 
+    // funcao para exclusao
     function excluir ($si195_sequencial=null,$dbwhere=null) {
 
         /*$lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
         if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
           && ($lSessaoDesativarAccount === false))) {
-   
+
           if ($dbwhere==null || $dbwhere=="") {
-   
+
             $resaco = $this->sql_record($this->sql_query_file($si195_sequencial));
-          } else { 
+          } else {
             $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
           }
           if (($resaco != false) || ($this->numrows!=0)) {
-   
+
             for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-   
+
               $resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
               $acount = pg_result($resac,0,0);
               $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
@@ -903,7 +972,7 @@ class cl_flpgo102018 {
             }
         }
     }
-    // funcao do recordset 
+    // funcao do recordset
     function sql_record($sql) {
         $result = db_query($sql);
         if($result==false){
@@ -927,7 +996,7 @@ class cl_flpgo102018 {
         }
         return $result;
     }
-    // funcao do sql 
+    // funcao do sql
     function sql_query ( $si195_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
@@ -961,7 +1030,7 @@ class cl_flpgo102018 {
         }
         return $sql;
     }
-    // funcao do sql 
+    // funcao do sql
     function sql_query_file ( $si195_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){

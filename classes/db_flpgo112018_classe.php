@@ -1,8 +1,8 @@
 <?
 //MODULO: sicom
-//CLASSE DA ENTIDADE flpgo112018
+//CLASSE DA ENTIDADE \d flpgo112018
 class cl_flpgo112018 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   var $rotulo     = null;
   var $query_sql  = null;
   var $numrows    = 0;
@@ -15,9 +15,15 @@ class cl_flpgo112018 {
   var $erro_msg   = null;
   var $erro_campo = null;
   var $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   var $si196_sequencial = 0;
   var $si196_tiporegistro = 0;
+
+  var $si196_indtipopagamento = null;
+  var $si196_codvinculopessoa = null;
+  var $si196_codrubricaremuneracao = null;
+  var $si196_desctiporubrica = null;
+
   var $si196_nrodocumento = 0;
   var $si196_codreduzidopessoa = 0;
   var $si196_tiporemuneracao = 0;
@@ -27,26 +33,32 @@ class cl_flpgo112018 {
   var $si196_inst = 0;
   var $si196_reg10 = 0;
 
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si196_sequencial = int8 = si196_sequencial 
-                 si196_tiporegistro = int8 = Tipo registro 
+                 si196_sequencial = int8 = si196_sequencial
+                 si196_tiporegistro = int8 = Tipo registro
+
+                 si196_indtipopagamento = varchar(1) = Tipo de pagamento
+                 si196_codvinculopessoa = bigint = Código do vinculo do agente público
+                 si196_codrubricaremuneracao = int8 = Código da rubrica das parcelas da remuneração
+                 si196_desctiporubrica = varchar(150) = Descrição para as rubricas das parcelas da remuneração.
+
                  si196_nrodocumento = int8 = Número do CPF ou CNPJ
                  si196_codreduzidopessoa = int8 = Código identificador da pessoa
-                 si196_tiporemuneracao = int8 = Tipo da remuneração 
+                 si196_tiporemuneracao = int8 = Tipo da remuneração
                  si196_desctiporemuneracao = varchar(150) = Descrição para o tipo outros
-                 si196_vlrremuneracaodetalhada = float8 = Valor dos rendimentos por tipo 
-                 si196_mes = int8 = si196_mes 
-                 si196_inst = int8 = si196_inst 
-                 si196_reg10 = int8 = si196_reg10 
+                 si196_vlrremuneracaodetalhada = float8 = Valor dos rendimentos por tipo
+                 si196_mes = int8 = si196_mes
+                 si196_inst = int8 = si196_inst
+                 si196_reg10 = int8 = si196_reg10
                  ";
-  //funcao construtor da classe 
+  //funcao construtor da classe
   function cl_flpgo112018() {
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("flpgo112018");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  //funcao erro 
+  //funcao erro
   function erro($mostra,$retorna) {
     if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
       echo "<script>alert(\"".$this->erro_msg."\");</script>";
@@ -60,6 +72,12 @@ class cl_flpgo112018 {
     if($exclusao==false){
       $this->si196_sequencial = ($this->si196_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_sequencial"]:$this->si196_sequencial);
       $this->si196_tiporegistro = ($this->si196_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tiporegistro"]:$this->si196_tiporegistro);
+
+      $this->si196_indtipopagamento = ($this->si196_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_indtipopagamento"]:$this->si196_indtipopagamento);
+      $this->si196_codvinculopessoa = ($this->si196_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codvinculopessoa"]:$this->si196_codvinculopessoa);
+      $this->si196_codrubricaremuneracao = ($this->si196_codrubricaremuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codrubricaremuneracao"]:$this->si196_codrubricaremuneracao);
+      $this->si196_desctiporubrica = ($this->si196_desctiporubrica == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_desctiporubrica"]:$this->si196_desctiporubrica);
+
       $this->si196_nrodocumento = ($this->si196_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_nrodocumento"]:$this->si196_nrodocumento);
       $this->si196_tiporemuneracao = ($this->si196_tiporemuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tiporemuneracao"]:$this->si196_tiporemuneracao);
       $this->si196_desctiporemuneracao = ($this->si196_desctiporemuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_desctiporemuneracao"]:$this->si196_desctiporemuneracao);
@@ -77,33 +95,6 @@ class cl_flpgo112018 {
     if($this->si196_tiporegistro == null ){
       $this->erro_sql = " Campo Tipo registro não informado.";
       $this->erro_campo = "si196_tiporegistro";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if($this->si196_nrodocumento == null ){
-      $this->erro_sql = " Campo Número do CPF não informado.";
-      $this->erro_campo = "si196_nrodocumento";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if($this->si196_codreduzidopessoa == null ){
-      $this->erro_sql = " Campo codigo reduzido pessoa não informado.";
-      $this->erro_campo = "si196_nrodocumento";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if($this->si196_tiporemuneracao == null ){
-      $this->erro_sql = " Campo Tipo da remuneração não informado.". $this->si196_codreduzidopessoa;
-      $this->erro_campo = "si196_tiporemuneracao";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -180,28 +171,30 @@ class cl_flpgo112018 {
       return false;
     }
     $sql = "insert into flpgo112018(
-                                       si196_sequencial 
+                                       si196_sequencial
                                       ,si196_tiporegistro
-                                      ,si196_nrodocumento
-                                      ,si196_codreduzidopessoa
-                                      ,si196_tiporemuneracao 
+                                      ,si196_indtipopagamento
+                                      ,si196_codvinculopessoa
+                                      ,si196_codrubricaremuneracao
+                                      ,si196_desctiporubrica
                                       ,si196_desctiporemuneracao
-                                      ,si196_vlrremuneracaodetalhada 
-                                      ,si196_mes 
-                                      ,si196_inst 
-                                      ,si196_reg10 
+                                      ,si196_vlrremuneracaodetalhada
+                                      ,si196_mes
+                                      ,si196_inst
+                                      ,si196_reg10
                        )
                 values (
-                                $this->si196_sequencial 
-                               ,$this->si196_tiporegistro 
-                               ,'$this->si196_nrodocumento'
-                               ,$this->si196_codreduzidopessoa
-                               ,$this->si196_tiporemuneracao 
+                                $this->si196_sequencial
+                               ,$this->si196_tiporegistro
+                               ,'$this->si196_indtipopagamento'
+                               ,'$this->si196_codvinculopessoa'
+                               ,'$this->si196_codrubricaremuneracao'
+                               ,'$this->si196_desctiporubrica'
                                ,'$this->si196_desctiporemuneracao'
-                               ,$this->si196_vlrremuneracaodetalhada 
-                               ,$this->si196_mes 
-                               ,$this->si196_inst 
-                               ,$this->si196_reg10 
+                               ,$this->si196_vlrremuneracaodetalhada
+                               ,$this->si196_mes
+                               ,$this->si196_inst
+                               ,$this->si196_reg10
                       )";
     $result = db_query($sql);
     if($result==false){
@@ -283,19 +276,7 @@ class cl_flpgo112018 {
         return false;
       }
     }
-    if(trim($this->si196_nrodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_nrodocumento"])){
-      $sql  .= $virgula." si196_nrodocumento = $this->si196_nrodocumento ";
-      $virgula = ",";
-      if(trim($this->si196_nrodocumento) == null ){
-        $this->erro_sql = " Campo Número do CPF não informado.";
-        $this->erro_campo = "si196_nrodocumento";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
+
     if(trim($this->si196_tiporemuneracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_tiporemuneracao"])){
       $sql  .= $virgula." si196_tiporemuneracao = $this->si196_tiporemuneracao ";
       $virgula = ",";
@@ -436,7 +417,7 @@ class cl_flpgo112018 {
       }
     }
   }
-  // funcao para exclusao 
+  // funcao para exclusao
   function excluir ($si196_sequencial=null,$dbwhere=null) {
 
     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
@@ -515,7 +496,7 @@ class cl_flpgo112018 {
       }
     }
   }
-  // funcao do recordset 
+  // funcao do recordset
   function sql_record($sql) {
     $result = db_query($sql);
     if($result==false){
@@ -539,7 +520,7 @@ class cl_flpgo112018 {
     }
     return $result;
   }
-  // funcao do sql 
+  // funcao do sql
   function sql_query ( $si196_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
@@ -574,7 +555,7 @@ class cl_flpgo112018 {
     }
     return $sql;
   }
-  // funcao do sql 
+  // funcao do sql
   function sql_query_file ( $si196_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){

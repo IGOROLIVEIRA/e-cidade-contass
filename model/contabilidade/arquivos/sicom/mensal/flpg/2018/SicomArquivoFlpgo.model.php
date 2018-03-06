@@ -133,6 +133,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
     else rh37_descr
      end as si195_dsccargo,
    case
+   when rh37_cbo is not null then rh37_cbo
+   else '0'
+     end as rh37_cbo,
+   rh37_atividadedocargo,
+   case
    when h13_tipocargo = '1' then 'CEF'
    when h13_tipocargo = '2' then 'CRA'
    when h13_tipocargo = '3' then 'CRR'
@@ -340,7 +345,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
    AND rh01_instit = ".db_getsession('DB_instit')."
 
-   group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
+   group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
    ";
 
    $rsResult10 = db_query($sSql);
@@ -405,81 +410,149 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      'tipo'=>'4',
      );
   }
-			//print_r($aTiposPagamento);exit;
+  //Descrição do tipo de pagamento extra
+  if($aTiposPagamento[$iQuantTipoPagamento]['si195_indtipopagamento'] == 'E'){
+    //Consulta se o servidor possui ferias cadastradas no mes
+    $sSqlFerias = "SELECT *
+    FROM cadferia
+    WHERE r30_anousu = ".db_getsession("DB_anousu")."
+    AND r30_mesusu = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
+    AND r30_regist = ".$oDados10->rh02_regist."
+    ORDER BY r30_perai";
+    $rsResultFerias = db_query($sSqlFerias);
+    if(pg_num_rows($rsResultFerias)>0){
+      $aTiposPagamento[$iQuantTipoPagamento]['si195_desctipopagextra'] = 'FERIAS';
+    }else{
+
+      $sSqlRubricaCom = "SELECT r48_rubric
+      FROM gerfcom
+      WHERE r48_anousu = ".db_getsession("DB_anousu")."
+      AND r48_mesusu = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
+      AND r48_regist = ".$oDados10->rh02_regist."
+      ";
+      $rsResultRubricaCom = db_query($sSqlRubricaCom);
+      $rsResultRubricaCom = db_utils::fieldsMemory($rsResultRubricaCom, 0);
+      $aTiposPagamento[$iQuantTipoPagamento]['si195_desctipopagextra'] = $rsResultRubricaCom->r48_rubric;
+    }
+
+  }
+  $dscAPO = ' ';
+
+  if($oDados10->si195_sglcargo == 'APO'){
+    switch ($this->convert_accented_characters(strtolower($oDados10->si195_dsccargo))) {
+      case 'governador':
+      $dscAPO = 'GOV';
+      break;
+      case 'vice governador':
+      $dscAPO = 'VGO';
+      break;
+      case 'prefeito municipal':
+      $dscAPO = 'PRE';
+      break;
+      case 'vice prefeito':
+      $dscAPO = 'VPR';
+      break;
+      case 'secretario de estado':
+      $dscAPO = 'SCE';
+      break;
+      case 'secretario de estado adjunto':
+      $dscAPO = 'SEA';
+      break;
+      case 'secretario municipal':
+      $dscAPO = 'SCE';
+      break;
+      case 'secretario municipal adjunto':
+      $dscAPO = 'SMA';
+      break;
+      case 'presidente da assembleia':
+      $dscAPO = 'SMA';
+      break;
+      case 'vice presidente da assembleia':
+      $dscAPO = 'VPA';
+      break;
+      case 'deputado estadual':
+      $dscAPO = 'DEE';
+      break;
+      case 'presidente da camara municipal':
+      $dscAPO = 'PCA';
+      break;
+      case 'vice presidente da camara municipal':
+      $dscAPO = 'VPC';
+      break;
+      case 'vereador':
+      $dscAPO = 'VER';
+      break;
+    }
+  }
+
   for ($iContEx = 1; $iContEx <= $iQuantTipoPagamento; $iContEx++) {
 
     $clflpgo10                                          = new cl_flpgo102018();
     $clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
 				$clflpgo10->si195_nrodocumento                      = $oDados10->si195_nrodocumento; //NOME ALTERADO NO LAYOUT PARA nroDocumento
 				$clflpgo10->si195_codreduzidopessoa                 = $aTiposPagamento[$iContEx]['codreduzidopessoa'];
-				$clflpgo10->si195_regime             		        = $oDados10->si195_regime;
+				$clflpgo10->si195_regime             		            = $oDados10->si195_regime;
 				$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
-				$clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
-				$clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
-				$clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
-				$clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
-				$clflpgo10->si195_sglcargo 							= $oDados10->si195_sglcargo;
-				$clflpgo10->si195_dscsiglacargo  					= $this->convert_accented_characters($oDados10->si195_dscsiglacargo);
-				$clflpgo10->si195_reqcargo 							= $oDados10->si195_reqcargo;
-				$clflpgo10->si195_indcessao 						= $oDados10->si195_indcessao;
-				$clflpgo10->si195_dsclotacao 						= $this->convert_accented_characters($oDados10->si195_dsclotacao);
-				$clflpgo10->si195_vlrcargahorariasemanal 		    = $oDados10->si195_vlrcargahorariasemanal;
-				$clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
-				$clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
-				$clflpgo10->si195_vlrremuneracaobruta               = $aTiposPagamento[$iContEx]['si195_vlrremuneracaobruta'];
-				$clflpgo10->si195_natsaldoliquido                   = $aTiposPagamento[$iContEx]['si195_natsaldoliquido'];
-				$clflpgo10->si195_vlrremuneracaoliquida             = $aTiposPagamento[$iContEx]['si195_vlrremuneracaoliquida'];
-				$clflpgo10->si195_vlrdeducoes                       = $aTiposPagamento[$iContEx]['si195_vlrdeducoes'];
-				$clflpgo10->si195_mes                               = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-				$clflpgo10->si195_inst                              = db_getsession("DB_instit");
+        $clflpgo10->si195_desctipopagextra                  = $aTiposPagamento[$iContEx]['si195_desctipopagextra'];
+        $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
+        $clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
+        $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
+        $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
+        $clflpgo10->si195_codcargo                          = ($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0;
+        $clflpgo10->si195_sglcargo 							            = $oDados10->si195_sglcargo;
+        $clflpgo10->si195_dscsiglacargo                     = $this->convert_accented_characters($oDados10->si195_dscsiglacargo);
+        $clflpgo10->si195_dscapo           					        = $dscAPO;
+        $clflpgo10->si195_reqcargo                          = $oDados10->si195_reqcargo;
+        $clflpgo10->si195_dscreqcargo 							        = ($oDados10->si195_reqcargo == 4)?substr($oDados10->rh37_atividadedocargo,0,150):' ';
+        $clflpgo10->si195_indcessao 						            = $oDados10->si195_indcessao;
+        $clflpgo10->si195_dsclotacao 						            = $this->convert_accented_characters($oDados10->si195_dsclotacao);
+        $clflpgo10->si195_vlrcargahorariasemanal 		        = $oDados10->si195_vlrcargahorariasemanal;
+        $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
+        $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
+        $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
+        $clflpgo10->si195_datcomissionadoexclusao           = $oDados10->si195_datexclusao;
+        $clflpgo10->si195_vlrremuneracaobruta               = $aTiposPagamento[$iContEx]['si195_vlrremuneracaobruta'];
+        $clflpgo10->si195_natsaldoliquido                   = $aTiposPagamento[$iContEx]['si195_natsaldoliquido'];
+        $clflpgo10->si195_vlrremuneracaoliquida             = $aTiposPagamento[$iContEx]['si195_vlrremuneracaoliquida'];
+        $clflpgo10->si195_vlrdeducoes                       = $aTiposPagamento[$iContEx]['si195_vlrdeducoes'];
+        $clflpgo10->si195_mes                               = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $clflpgo10->si195_inst                              = db_getsession("DB_instit");
 
-				$clflpgo10->incluir(null);
-				if ($clflpgo10->erro_status == 0) {
-					echo $clflpgo10->erro_msg;
-					exit;
-					throw new Exception($clflpgo10->erro_msg);
-				}
+        $clflpgo10->incluir(null);
+        if ($clflpgo10->erro_status == 0) {
+         echo $clflpgo10->erro_msg;
+         exit;
+         throw new Exception($clflpgo10->erro_msg);
+       }
 
 				//print_r($clflpgo10);
-				$sSql2 = "
-       Select x.tipo,x.rh02_regist,
+       $sSql2 = "select
        x.si196_tiporegistro,
-       x.si196_tiporemuneracao,
+       CASE
+       when x.tipo = 'gerfsal' then 'M'
+       when x.tipo = 'gerfres' then 'M'
+       when x.tipo = 'gerfcom' then 'E'
+       when x.tipo = 'gerfs13' then 'D'
+       end as si196_indtipopagamento,
+       x.rh02_regist as si196_codvinculopessoa,
+       x.si196_desctiporemuneracao as si196_desctiporubrica,
+       sum(x.si196_vlrremuneracaodetalhada) AS si196_vlrremuneracaodetalhada,
        x.si196_desctiporemuneracao,
+       x.rh02_regist,
+       x.si196_tiporemuneracao,
+       x.si196_tiporemuneracao as si196_codrubricaremuneracao,
        x.si196_natsaldodetalhe,
-       sum(x.si196_vlrremuneracaodetalhada) as si196_vlrremuneracaodetalhada
+       x.tipo
        from
-       (SELECT 'gerfsal' as tipo,rh02_regist,r08_codigo,
-       r09_rubric,
+       (SELECT 'gerfsal' as tipo,rh02_regist,
+
        '11' AS si196_tiporegistro, ";
        if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
          $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
        }else{
-         $sSql2 .= "CASE
-         WHEN r08_codigo = 'S001' THEN 01
-         WHEN r08_codigo = 'S002' THEN 02
-         WHEN r08_codigo = 'S003' THEN 03
-         WHEN r08_codigo = 'S004' THEN 04
-         WHEN r08_codigo = 'S005' THEN 05
-         WHEN r08_codigo = 'S006' THEN 06
-         WHEN r08_codigo = 'S007' THEN 07
-         WHEN r08_codigo = 'S008' THEN 08
-         WHEN r08_codigo = 'S009' THEN 09
-         WHEN r08_codigo = 'S010' THEN 10
-         WHEN r08_codigo = 'S011' THEN 11
-         WHEN r08_codigo = 'S012' THEN 12
-         WHEN r08_codigo = 'S013' THEN 13
-         WHEN r08_codigo = 'S014' THEN 14
-         WHEN r08_codigo = 'S015' THEN 15
-         WHEN r08_codigo = 'S016' THEN 16
-         WHEN r08_codigo = 'S017' THEN 17
-         WHEN r08_codigo = 'SP99' THEN 99
-         END AS si196_tiporemuneracao,";
+         $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
-         $sSql2 .= "CASE
-         WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
-         ELSE ' '
-         END AS si196_desctiporemuneracao,";
+         $sSql2 .= "e990_descricao AS si196_desctiporemuneracao,";
        }
        $sSql2 .= "CASE
 
@@ -526,51 +599,24 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
        INNER JOIN rhrubricas ON r14_rubric = rh27_rubric
        AND r14_instit = rh27_instit
-       INNER JOIN basesr ON r09_rubric = rh27_rubric
-       INNER JOIN bases ON r09_anousu = r08_anousu
-       AND r09_mesusu = r08_mesusu
-       AND r09_base = r08_codigo
-       AND r09_instit = r08_instit
-       AND r09_anousu = ".db_anofolha()."
-       AND r09_mesusu = " .db_mesfolha()."
+       INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric AND rh27_instit = e991_instit
+       INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
        WHERE rh02_regist = $oDados10->rh02_regist
        AND (r14_pd in (1))
-       AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) group by 1,2,3,4,5,6,7,8,9
+       group by 1,2,3,4,5,6,7
 
        UNION
 
 
-       SELECT 'gerfcom' as tipo,rh02_regist,r08_codigo,
-       r09_rubric,
+       SELECT 'gerfcom' as tipo,rh02_regist,
+
        '11' AS si196_tiporegistro,";
        if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
          $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
        }else{
-         $sSql2 .= "CASE
-         WHEN r08_codigo = 'S001' THEN 01
-         WHEN r08_codigo = 'S002' THEN 02
-         WHEN r08_codigo = 'S003' THEN 03
-         WHEN r08_codigo = 'S004' THEN 04
-         WHEN r08_codigo = 'S005' THEN 05
-         WHEN r08_codigo = 'S006' THEN 06
-         WHEN r08_codigo = 'S007' THEN 07
-         WHEN r08_codigo = 'S008' THEN 08
-         WHEN r08_codigo = 'S009' THEN 09
-         WHEN r08_codigo = 'S010' THEN 10
-         WHEN r08_codigo = 'S011' THEN 11
-         WHEN r08_codigo = 'S012' THEN 12
-         WHEN r08_codigo = 'S013' THEN 13
-         WHEN r08_codigo = 'S014' THEN 14
-         WHEN r08_codigo = 'S015' THEN 15
-         WHEN r08_codigo = 'S016' THEN 16
-         WHEN r08_codigo = 'S017' THEN 17
-         WHEN r08_codigo = 'SP99' THEN 99
-         END AS si196_tiporemuneracao,";
+         $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
-         $sSql2 .= "CASE
-         WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
-         ELSE ' '
-         END AS si196_desctiporemuneracao,";
+         $sSql2 .= "e990_descricao AS si196_desctiporemuneracao,";
        }
        $sSql2 .= "CASE
        WHEN r48_pd = 1 THEN 'D'
@@ -616,50 +662,23 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
        INNER JOIN rhrubricas ON r48_rubric = rh27_rubric
        AND r48_instit = rh27_instit
-       INNER JOIN basesr ON r09_rubric = rh27_rubric
-       INNER JOIN bases ON r09_anousu = r08_anousu
-       AND r09_mesusu = r08_mesusu
-       AND r09_base = r08_codigo
-       AND r09_instit = r08_instit
-       AND r09_anousu = ".db_anofolha()."
-       AND r09_mesusu = " .db_mesfolha()."
+       INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric AND rh27_instit = e991_instit
+       INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
        WHERE rh02_regist = $oDados10->rh02_regist
        AND (r48_pd in (1))
-       AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) group by 1,2,3,4,5,6,7,8,9
+       group by 1,2,3,4,5,6,7
 
        UNION
 
-       SELECT 'gerfs13' as tipo,rh02_regist,r08_codigo,
-       r09_rubric,
+       SELECT 'gerfs13' as tipo,rh02_regist,
+
        '11' AS si196_tiporegistro,";
        if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
          $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
        }else{
-         $sSql2 .= "CASE
-         WHEN r08_codigo = 'S001' THEN 01
-         WHEN r08_codigo = 'S002' THEN 02
-         WHEN r08_codigo = 'S003' THEN 03
-         WHEN r08_codigo = 'S004' THEN 04
-         WHEN r08_codigo = 'S005' THEN 05
-         WHEN r08_codigo = 'S006' THEN 06
-         WHEN r08_codigo = 'S007' THEN 07
-         WHEN r08_codigo = 'S008' THEN 08
-         WHEN r08_codigo = 'S009' THEN 09
-         WHEN r08_codigo = 'S010' THEN 10
-         WHEN r08_codigo = 'S011' THEN 11
-         WHEN r08_codigo = 'S012' THEN 12
-         WHEN r08_codigo = 'S013' THEN 13
-         WHEN r08_codigo = 'S014' THEN 14
-         WHEN r08_codigo = 'S015' THEN 15
-         WHEN r08_codigo = 'S016' THEN 16
-         WHEN r08_codigo = 'S017' THEN 17
-         WHEN r08_codigo = 'SP99' THEN 99
-         END AS si196_tiporemuneracao,";
+         $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
-         $sSql2 .= "CASE
-         WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
-         ELSE ' '
-         END AS si196_desctiporemuneracao,";
+         $sSql2 .= "e990_descricao AS si196_desctiporemuneracao,";
        }
        $sSql2 .= "CASE
        WHEN r35_pd = 1 THEN 'D'
@@ -705,50 +724,23 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
        INNER JOIN rhrubricas ON r35_rubric = rh27_rubric
        AND r35_instit = rh27_instit
-       INNER JOIN basesr ON r09_rubric = rh27_rubric
-       INNER JOIN bases ON r09_anousu = r08_anousu
-       AND r09_mesusu = r08_mesusu
-       AND r09_base = r08_codigo
-       AND r09_instit = r08_instit
-       AND r09_anousu = ".db_anofolha()."
-       AND r09_mesusu = " .db_mesfolha()."
+       INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric AND rh27_instit = e991_instit
+       INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
        WHERE rh02_regist = $oDados10->rh02_regist
        AND (r35_pd in (1))
-       AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) group by 1,2,3,4,5,6,7,8,9
+       group by 1,2,3,4,5,6,7
 
        UNION
 
-       SELECT 'gerfres' as tipo,rh02_regist, r08_codigo,
-       r09_rubric,
+       SELECT 'gerfres' as tipo,rh02_regist,
+
        '11' AS si196_tiporegistro,";
        if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
          $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
        }else{
-         $sSql2 .= "CASE
-         WHEN r08_codigo = 'S001' THEN 01
-         WHEN r08_codigo = 'S002' THEN 02
-         WHEN r08_codigo = 'S003' THEN 03
-         WHEN r08_codigo = 'S004' THEN 04
-         WHEN r08_codigo = 'S005' THEN 05
-         WHEN r08_codigo = 'S006' THEN 06
-         WHEN r08_codigo = 'S007' THEN 07
-         WHEN r08_codigo = 'S008' THEN 08
-         WHEN r08_codigo = 'S009' THEN 09
-         WHEN r08_codigo = 'S010' THEN 10
-         WHEN r08_codigo = 'S011' THEN 11
-         WHEN r08_codigo = 'S012' THEN 12
-         WHEN r08_codigo = 'S013' THEN 13
-         WHEN r08_codigo = 'S014' THEN 14
-         WHEN r08_codigo = 'S015' THEN 15
-         WHEN r08_codigo = 'S016' THEN 16
-         WHEN r08_codigo = 'S017' THEN 17
-         WHEN r08_codigo = 'SP99' THEN 99
-         END AS si196_tiporemuneracao,";
+         $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
-         $sSql2 .= "CASE
-         WHEN r08_codigo = 'S009' or r08_codigo = 'SP99' THEN rh27_descr
-         ELSE ' '
-         END AS si196_desctiporemuneracao,";
+         $sSql2 .= "e990_descricao AS si196_desctiporemuneracao,";
        }
        $sSql2 .= "CASE
        WHEN r20_pd = 1 THEN 'D'
@@ -794,16 +786,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
        INNER JOIN rhrubricas ON r20_rubric = rh27_rubric
        AND r20_instit = rh27_instit
-       INNER JOIN basesr ON r09_rubric = rh27_rubric
-       INNER JOIN bases ON r09_anousu = r08_anousu
-       AND r09_mesusu = r08_mesusu
-       AND r09_base = r08_codigo
-       AND r09_instit = r08_instit
-       AND r09_anousu = ".db_anofolha()."
-       AND r09_mesusu = " .db_mesfolha()."
+       INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric AND rh27_instit = e991_instit
+       INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
        WHERE rh02_regist = $oDados10->rh02_regist
        AND (r20_pd in (1))
-       AND (r08_codigo BETWEEN 'S001' AND 'S017' or r08_codigo = 'SP99' ) group by 1,2,3,4,5,6,7,8,9 ) as x ";
+       group by 1,2,3,4,5,6,7 ) as x ";
 
        if($aTiposPagamento[$iContEx]['tipo'] == 4) {
          $sSql2 .= " Where x.tipo = 'gerfs13' ";
@@ -828,11 +815,19 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
          $clflpgo11 = new cl_flpgo112018();
          $clflpgo11->si196_tiporegistro            = $oDados11->si196_tiporegistro;
          $clflpgo11->si196_reg10                   = $clflpgo10->si195_sequencial;
-         $clflpgo11->si196_nrodocumento            = $clflpgo10->si195_nrodocumento;
-         $clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
-         $clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
-         $clflpgo11->si196_desctiporemuneracao     = $oDados11->si196_desctiporemuneracao;
-         $clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
+
+         $clflpgo11->si196_tiporegistro                   = $oDados11->si196_tiporegistro;
+         $clflpgo11->si196_indtipopagamento                   = $oDados11->si196_indtipopagamento;
+         $clflpgo11->si196_codvinculopessoa                   = $oDados11->si196_codvinculopessoa;
+         $clflpgo11->si196_desctiporubrica                   = $oDados11->si196_desctiporubrica;
+         $clflpgo11->si196_vlrremuneracaodetalhada                   = $oDados11->si196_vlrremuneracaodetalhada;
+         $clflpgo11->si196_codrubricaremuneracao                   = $oDados11->si196_codrubricaremuneracao;
+
+         //$clflpgo11->si196_nrodocumento            = $clflpgo10->si195_nrodocumento;
+         //$clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
+         //$clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
+         //$clflpgo11->si196_desctiporemuneracao     = $oDados11->si196_desctiporemuneracao;
+         //$clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
          $clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
          $clflpgo11->si196_inst                    = db_getsession("DB_instit");
 					//echo '<pre>';
@@ -846,36 +841,29 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       }
 
       $sSql3 = "
-      Select x.tipo,
+      Select x.si197_tiporegistro,
+      CASE
+      when x.tipo = 'gerfsal' then 'M'
+      when x.tipo = 'gerfres' then 'M'
+      when x.tipo = 'gerfcom' then 'E'
+      when x.tipo = 'gerfs13' then 'D'
+      end as si197_indtipopagamento,
+      x.rh02_regist as si197_codvinculopessoa,
+      x.si197_desctipodesconto as si197_desctiporubrica,
+      sum(x.si197_vlrdescontodetalhado) AS si197_vlrdescontodetalhado,
+      x.si197_desctipodesconto,
       x.rh02_regist,
-      x.si197_tiporegistro,
       x.si197_tipodesconto,
-      sum(x.si197_vlrdescontodetalhado) as si197_vlrdescontodetalhado
+      x.si197_tipodesconto as si197_codrubricadesconto,
+      x.si197_natsaldodetalhe,
+      x.tipo
       from
       (SELECT 'gerfsal' as tipo,
       rh02_regist,
-      r08_codigo,
-      r09_rubric,
+      e990_sequencial AS si197_tipodesconto,
+      e990_descricao AS si197_desctipodesconto,
       '12' AS si197_tiporegistro,
-      CASE
-      WHEN r08_codigo = 'S050' THEN 50
-      WHEN r08_codigo = 'S051' THEN 51
-      WHEN r08_codigo = 'S052' THEN 52
-      WHEN r08_codigo = 'S053' THEN 53
-      WHEN r08_codigo = 'S054' THEN 54
-      WHEN r08_codigo = 'S055' THEN 55
-      WHEN r08_codigo = 'S059' THEN 59
-      WHEN r08_codigo = 'S063' THEN 63
-      WHEN r08_codigo = 'S064' THEN 64
-      WHEN r08_codigo = 'S065' THEN 65
-      WHEN r08_codigo = 'S066' THEN 66
-      WHEN r08_codigo = 'S076' THEN 76
-      WHEN r08_codigo = 'SD99' THEN 99
-      END AS si197_tipodesconto,
-      CASE
-      WHEN r08_codigo = 'SD99' THEN rh27_descr
-      ELSE ' '
-      END AS si197_desctiporemuneracao,
+
       CASE
       WHEN r14_pd = 1 THEN 'D'
       WHEN r14_pd = 2 THEN 'C'
@@ -920,42 +908,22 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
       INNER JOIN rhrubricas ON r14_rubric = rh27_rubric
       AND r14_instit = rh27_instit
-      INNER JOIN basesr ON r09_rubric = rh27_rubric
-      INNER JOIN bases ON r09_anousu = ".db_anofolha()."
-      AND r09_mesusu = ".db_mesfolha()."
-      AND r09_base = r08_codigo
-      AND r09_instit = r08_instit
+      INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric
+      AND rh27_instit = e991_instit
+      INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
       WHERE rh02_regist = $oDados10->rh02_regist
       AND (r14_pd in (2))
-      AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) group by 1,2,3,4,5,6,7,8,9
+      group by 1,2,3,4,5,6,7
 
       UNION
 
 
       SELECT 'gerfcom' as tipo,
       rh02_regist,
-      r08_codigo,
-      r09_rubric,
+      e990_sequencial AS si197_tipodesconto,
+      e990_descricao AS si197_desctipodesconto,
       '12' AS si197_tiporegistro,
-      CASE
-      WHEN r08_codigo = 'S050' THEN 50
-      WHEN r08_codigo = 'S051' THEN 51
-      WHEN r08_codigo = 'S052' THEN 52
-      WHEN r08_codigo = 'S053' THEN 53
-      WHEN r08_codigo = 'S054' THEN 54
-      WHEN r08_codigo = 'S055' THEN 55
-      WHEN r08_codigo = 'S059' THEN 59
-      WHEN r08_codigo = 'S063' THEN 63
-      WHEN r08_codigo = 'S064' THEN 64
-      WHEN r08_codigo = 'S065' THEN 65
-      WHEN r08_codigo = 'S066' THEN 66
-      WHEN r08_codigo = 'S076' THEN 76
-      WHEN r08_codigo = 'SD99' THEN 99
-      END AS si197_tipodesconto,
-      CASE
-      WHEN r08_codigo = 'SD99' THEN rh27_descr
-      ELSE ' '
-      END AS si197_desctiporemuneracao,
+
       CASE
       WHEN r48_pd = 1 THEN 'D'
       WHEN r48_pd = 2 THEN 'C'
@@ -1000,42 +968,22 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
       INNER JOIN rhrubricas ON r48_rubric = rh27_rubric
       AND r48_instit = rh27_instit
-      INNER JOIN basesr ON r09_rubric = rh27_rubric
-      INNER JOIN bases ON r09_anousu = ".db_anofolha()."
-      AND r09_mesusu = ".db_mesfolha()."
-      AND r09_base = r08_codigo
-      AND r09_instit = r08_instit
+      INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric
+      AND rh27_instit = e991_instit
+      INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
       WHERE rh02_regist = $oDados10->rh02_regist
       AND (r48_pd in (2))
-      AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) group by 1,2,3,4,5,6,7,8,9
+      group by 1,2,3,4,5,6,7
 
 
       UNION
 
       SELECT 'gerfs13' as tipo,
       rh02_regist,
-      r08_codigo,
-      r09_rubric,
+      e990_sequencial AS si197_tipodesconto,
+      e990_descricao AS si197_desctipodesconto,
       '12' AS si197_tiporegistro,
-      CASE
-      WHEN r08_codigo = 'S050' THEN 50
-      WHEN r08_codigo = 'S051' THEN 51
-      WHEN r08_codigo = 'S052' THEN 52
-      WHEN r08_codigo = 'S053' THEN 53
-      WHEN r08_codigo = 'S054' THEN 54
-      WHEN r08_codigo = 'S055' THEN 55
-      WHEN r08_codigo = 'S059' THEN 59
-      WHEN r08_codigo = 'S063' THEN 63
-      WHEN r08_codigo = 'S064' THEN 64
-      WHEN r08_codigo = 'S065' THEN 65
-      WHEN r08_codigo = 'S066' THEN 66
-      WHEN r08_codigo = 'S076' THEN 76
-      WHEN r08_codigo = 'SD99' THEN 99
-      END AS si197_tipodesconto,
-      CASE
-      WHEN r08_codigo = 'SD99' THEN rh27_descr
-      ELSE ' '
-      END AS si197_desctiporemuneracao,
+
       CASE
       WHEN r35_pd = 1 THEN 'D'
       WHEN r35_pd = 2 THEN 'C'
@@ -1080,14 +1028,12 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
       INNER JOIN rhrubricas ON r35_rubric = rh27_rubric
       AND r35_instit = rh27_instit
-      INNER JOIN basesr ON r09_rubric = rh27_rubric
-      INNER JOIN bases ON r09_anousu = ".db_anofolha()."
-      AND r09_mesusu = ".db_mesfolha()."
-      AND r09_base = r08_codigo
-      AND r09_instit = r08_instit
+      INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric
+      AND rh27_instit = e991_instit
+      INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
       WHERE rh02_regist = $oDados10->rh02_regist
       AND (r35_pd in (2))
-      AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) group by 1,2,3,4,5,6,7,8,9
+      group by 1,2,3,4,5,6,7
 
 
       UNION
@@ -1095,28 +1041,10 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       SELECT
       'gerfres' as tipo,
       rh02_regist,
-      r08_codigo,
-      r09_rubric,
+      e990_sequencial AS si197_tipodesconto,
+      e990_descricao AS si197_desctipodesconto,
       '12' AS si197_tiporegistro,
-      CASE
-      WHEN r08_codigo = 'S050' THEN 50
-      WHEN r08_codigo = 'S051' THEN 51
-      WHEN r08_codigo = 'S052' THEN 52
-      WHEN r08_codigo = 'S053' THEN 53
-      WHEN r08_codigo = 'S054' THEN 54
-      WHEN r08_codigo = 'S055' THEN 55
-      WHEN r08_codigo = 'S059' THEN 59
-      WHEN r08_codigo = 'S063' THEN 63
-      WHEN r08_codigo = 'S064' THEN 64
-      WHEN r08_codigo = 'S065' THEN 65
-      WHEN r08_codigo = 'S066' THEN 66
-      WHEN r08_codigo = 'S076' THEN 76
-      WHEN r08_codigo = 'SD99' THEN 99
-      END AS si197_tipodesconto,
-      CASE
-      WHEN r08_codigo = 'SD99' THEN rh27_descr
-      ELSE ' '
-      END AS si197_desctiporemuneracao,
+
       CASE
       WHEN r20_pd = 1 THEN 'D'
       WHEN r20_pd = 2 THEN 'C'
@@ -1161,14 +1089,12 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
       INNER JOIN rhrubricas ON r20_rubric = rh27_rubric
       AND r20_instit = rh27_instit
-      INNER JOIN basesr ON r09_rubric = rh27_rubric
-      INNER JOIN bases ON r09_anousu = ".db_anofolha()."
-      AND r09_mesusu = ".db_mesfolha()."
-      AND r09_base = r08_codigo
-      AND r09_instit = r08_instit
+      INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric
+      AND rh27_instit = e991_instit
+      INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
       WHERE rh02_regist = $oDados10->rh02_regist
       AND (r20_pd in (2))
-      AND (r08_codigo BETWEEN 'S050' AND 'S076' or r08_codigo = 'SD99' ) group by 1,2,3,4,5,6,7,8,9
+      group by 1,2,3,4,5,6,7
       ) as x ";
 
       if($aTiposPagamento[$iContEx]['tipo'] == 4) {
@@ -1182,10 +1108,12 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      }
 
 
-     $sSql3 .= "group by     x.tipo,
+     $sSql3 .= "GROUP BY x.tipo,
      x.rh02_regist,
      x.si197_tiporegistro,
-     x.si197_tipodesconto";
+     x.si197_tipodesconto,
+     x.si197_desctipodesconto,
+     x.si197_natsaldodetalhe";
 
      $rsResult12 = db_query($sSql3);
 
@@ -1194,14 +1122,20 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
 
        $clflpgo12 = new cl_flpgo122018();
-       $clflpgo12->si197_tiporegistro            = $oDados12->si197_tiporegistro;
        $clflpgo12->si197_reg10                   = $clflpgo10->si195_sequencial;
-       $clflpgo12->si197_nrodocumento            = $clflpgo10->si195_nrodocumento;
-       $clflpgo12->si197_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
-       $clflpgo12->si197_tipodesconto            = $oDados12->si197_tipodesconto;
+
+       $clflpgo12->si197_tiporegistro            = $oDados12->si197_tiporegistro;
+       $clflpgo12->si197_indtipopagamento        = $oDados12->si197_indtipopagamento;
+       $clflpgo12->si197_codvinculopessoa        = $oDados12->si197_codvinculopessoa;
+       $clflpgo12->si197_desctiporubrica         = $oDados12->si197_desctiporubrica;
+       $clflpgo12->si197_codrubricadesconto      = $oDados12->si197_codrubricadesconto;
        $clflpgo12->si197_vlrdescontodetalhado    = $oDados12->si197_vlrdescontodetalhado;
+
        $clflpgo12->si197_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
        $clflpgo12->si197_inst                    = db_getsession("DB_instit");
+/*       $clflpgo12->si197_nrodocumento            = $clflpgo10->si195_nrodocumento;
+       $clflpgo12->si197_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
+       $clflpgo12->si197_tipodesconto            = $oDados12->si197_tipodesconto;*/
 					//echo '<pre>';
 					//print_r($clflpgo11);exit;
        $clflpgo12->incluir(null);
