@@ -82,12 +82,38 @@ db_input('h13_descr',40,$Ih13_descr,true,'text',$db_opcao,"")
                 '3' => 'CRR - Comissionado de recrutamento restrito','4' => 'FPU - Função pública',
                 '5' => 'EPU - Emprego público', '6' => 'APO - Agente político', '7' => 'STP - Servidor temporário',
                 '8' => 'OTC - Outros tipos de cargo');
-            db_select("h13_tipocargo",$x,true,$db_opcao);
+            db_select("h13_tipocargo",$x,true,$db_opcao,"onchange='js_showAPO()'");
             ?>
         </td>
     </tr>
+    </table>
 
-
+    <table>
+    <tr id="dscapo" <? if($h13_tipocargo != 6){ ?> style="display: none;" <? }else{ ?> style="display: inline;" <? } ?>>
+       <td nowrap title="Descrição do tipo de cargo"><b>Descrição do tipo de cargo: </b></td>
+       <td>
+           <?
+           $adescCargo = array("GOV"=>"Governador",
+               "VGO"=>"Vice Governador",
+               "PRE"=>"Prefeito Municipal",
+               "VPR"=>"Vice Prefeito",
+               "SCE"=>"Secretário de Estado",
+               "SEA"=>"Secretário de Estado Adjunto",
+               "SCM"=>"Secretário Municipal",
+               "SMA"=>"Secretário Municipal Adjunto",
+               "PAS"=>"Presidente da Assembléia",
+               "VPA"=>"Vice Presidente da Assembléia",
+               "DEE"=>"Deputado Estadual",
+               "PCA"=>"Presidente da Câmara Municipal",
+               "VPC"=>"Vice Presidente da Câmara Municipal",
+               "VER"=>"Vereador"
+           );
+           db_select('h13_dscapo', $adescCargo, true, $db_opcao);
+           ?>
+       </td>
+    </tr>
+    </table>
+    <table>
     <tr>
 
         <td nowrap="" title="Tipo Cargo Descrição" id="tipocargodescricao1" style="display: none;">
@@ -105,6 +131,17 @@ db_input('h13_descr',40,$Ih13_descr,true,'text',$db_opcao,"")
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
+
+function js_showAPO() {
+
+    if (document.form1.h13_tipocargo.value == 6) {
+        document.getElementById('dscapo').style.display = "inline";
+        console.log(document.getElementById('dscapo'));
+    } else {
+        document.getElementById('dscapo').style.display = "none";
+        console.log(document.getElementById('dscapo'));
+    }
+}
 
 
 /*if(top.corpo.document.getElementById('h13_tipocargo').options.selectedIndex == 7){

@@ -39,6 +39,7 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
+  $cltpcontra->h13_dscapo = $h13_dscapo;
   $cltpcontra->incluir($h13_codigo);
   db_fim_transacao();
 }

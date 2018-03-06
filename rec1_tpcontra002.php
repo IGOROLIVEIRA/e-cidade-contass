@@ -41,6 +41,7 @@ $db_botao = false;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
+  $cltpcontra->h13_dscapo = $h13_dscapo;
   $cltpcontra->alterar($h13_codigo);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){

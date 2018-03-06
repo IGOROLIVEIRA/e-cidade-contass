@@ -48,6 +48,7 @@ class cl_tpcontra {
    var $h13_descr = null;
    var $h13_tipocargo = 0;
    var $h13_tipocargodescr = null;
+   var $h13_dscapo = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  h13_codigo = int4 = Código 
@@ -56,6 +57,7 @@ class cl_tpcontra {
                  h13_descr = varchar(40) = Descrição do Tipo
                  h13_tipocargo = int4 = Tipo de cargo;
                  h13_tipocargodescr = varchar(150) Descrição do tipo de cargo;
+                 h13_dscapo        = varchar (3) Descrição do tipo de cargo
                  ";
    //funcao construtor da classe 
    function cl_tpcontra() { 
@@ -81,6 +83,7 @@ class cl_tpcontra {
        $this->h13_descr = ($this->h13_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_descr"]:$this->h13_descr);
        $this->h13_tipocargo = ($this->h13_tipocargo == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_tipocargo"]:$this->h13_tipocargo);
        $this->h13_tipocargodescr = ($this->h13_tipocargodescr == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_tipocargodescr"]:$this->h13_tipocargodescr);
+       $this->h13_dscapo = ($this->h13_dscapo == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_dscapo"]:$this->h13_dscapo);
      }else{
        $this->h13_codigo = ($this->h13_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["h13_codigo"]:$this->h13_codigo);
      }
@@ -148,6 +151,7 @@ class cl_tpcontra {
          $this->h13_codigo = $h13_codigo; 
        }
      }
+
      if(($this->h13_codigo == null) || ($this->h13_codigo == "") ){ 
        $this->erro_sql = " Campo h13_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
@@ -163,6 +167,7 @@ class cl_tpcontra {
                                       ,h13_descr
                                       ,h13_tipocargo
                                       ,h13_tipocargodescr
+                                      ,h13_dscapo
                        )
                 values (
                                 $this->h13_codigo 
@@ -171,6 +176,7 @@ class cl_tpcontra {
                                ,'$this->h13_descr'
                                ,$this->h13_tipocargo
                                ,'$this->h13_tipocargodescr'
+                               ,'$this->h13_dscapo'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -283,6 +289,12 @@ class cl_tpcontra {
        $sql .= $virgula . " h13_tipocargodescr = '$this->h13_tipocargodescr' ";
        $virgula = ",";
      }
+
+     if(trim($this->h13_dscapo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_dscapo"])) {
+       $sql .= $virgula . " h13_dscapo = '$this->h13_dscapo' ";
+       $virgula = ",";
+     }
+
      $sql .= " where ";
      if($h13_codigo!=null){
        $sql .= " h13_codigo = $this->h13_codigo";
