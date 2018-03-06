@@ -112,7 +112,7 @@ class cl_baserubricasesocial {
      return true;
    }
    // funcao para exclusao
-   function excluir($e991_rubricas=null, $e991_rubricasesocial=null) {
+   function excluir($e991_rubricas=null, $e991_rubricasesocial=null, $e991_instit=null) {
      $this->atualizacampos(true);
      $sql = " delete from baserubricasesocial
                     where ";
@@ -124,6 +124,9 @@ class cl_baserubricasesocial {
       }else{
         $sql2 = "e991_rubricasesocial = '$e991_rubricasesocial'";
       }
+     }
+     if($e991_instit!=null){
+        $sql2 .= " and e991_instit = '$e991_instit'";
      }
      $result = @pg_exec($sql.$sql2);
      if($result==false){
@@ -188,14 +191,9 @@ class cl_baserubricasesocial {
        $sql .= $campos;
      }
      $sql .= " from baserubricasesocial ";
-     $sql .= "      inner join rhrubricas  on  rhrubricas.rh27_instit = baserubricasesocial.e991_rubricas and  rhrubricas. = baserubricasesocial.e991_instit";
-     $sql .= "      inner join rubricasesocial  on  rubricasesocial. = baserubricasesocial.e991_rubricasesocial";
+     $sql .= "      inner join rhrubricas  on  rhrubricas.rh27_rubric = baserubricasesocial.e991_rubricas";
+     $sql .= "      inner join rubricasesocial  on  rubricasesocial.e990_sequencial = baserubricasesocial.e991_rubricasesocial";
      $sql .= "      inner join db_config  on  db_config.codigo = rhrubricas.rh27_instit";
-     $sql .= "      inner join rhtipomedia  on  rhtipomedia.rh29_tipo = rhrubricas.rh27_calc1";
-     $sql .= "      inner join rhfundamentacaolegal  on  rhfundamentacaolegal.rh137_sequencial = rhrubricas.rh27_rhfundamentacaolegal";
-     $sql .= "      inner join db_config  as a on   a.codigo = rhrubricas.rh27_instit";
-     $sql .= "      inner join rhtipomedia  as b on   b.rh29_tipo = rhrubricas.rh27_calc1";
-     $sql .= "      inner join rhfundamentacaolegal  as c on   c.rh137_sequencial = rhrubricas.rh27_rhfundamentacaolegal";
      $sql2 = "";
      if($dbwhere==""){
        if( $this->e991_sequencial != "" && $this->e991_sequencial != null){

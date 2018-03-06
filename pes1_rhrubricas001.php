@@ -57,7 +57,8 @@ $db_opcao = 1;
      <?
 	 $clcriaabas->identifica = array (
                                            "rhrubricas"    => "Rubricas",
-                                           "rhbases"       => "Bases"
+                                           "rhbases"       => "Bases",
+                                           "rhbasesesocial"       => "Bases E-social"
                                            /*
                                            ,
                                            "rhrubelemento" => "Elemento"
@@ -65,7 +66,8 @@ $db_opcao = 1;
                                          ); 
 	 $clcriaabas->src        = array("rhrubricas"=>"pes1_rhrubricas004.php");
 	 $clcriaabas->disabled   = array(
-                                         "rhbases"       => "true"
+                                         "rhbases"       => "true",
+                                         "rhbasesesocial"       => "true"
                                          /*
                                          ,
                                          "rhrubelemento" => "true"

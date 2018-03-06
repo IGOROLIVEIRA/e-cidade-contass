@@ -429,7 +429,9 @@ if(isset($chavepesquisa)){
             top.corpo.iframe_rhrubelemento.location.href='pes1_rhrubelemento001.php?rh23_rubric=".@$rh27_rubric."';
             */
             parent.document.formaba.rhbases.disabled=false;
-            top.corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=".@$rh27_rubric."';      
+            parent.document.formaba.rhbasesesocial.disabled=false;
+            top.corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=".@$rh27_rubric."';
+            top.corpo.iframe_rhbasesesocial.location.href='pes1_rhbasesesocial004.php?r09_rubric=".@$rh27_rubric."';     
        ";
   if(isset($liberaaba)){
     echo "  parent.mo_camada('rhbases');";
