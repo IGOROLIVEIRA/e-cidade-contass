@@ -8,7 +8,7 @@ SELECT fc_startsession();
 
 ALTER TABLE tetoremuneratorio add column te01_nrleiteto int4 NOT NULL default 0;
 ALTER TABLE tetoremuneratorio add column te01_dtpublicacaolei date;
-ALTER TABLE tetoremuneratorio ALTER COLUMN column te01_dtfinal DROP NOT NULL;
+ALTER TABLE tetoremuneratorio ALTER COLUMN te01_dtfinal DROP NOT NULL;
 
 ALTER TABLE terem102013 ALTER COLUMN si194_dtfinal DROP NOT NULL;
 ALTER TABLE terem102014 ALTER COLUMN si194_dtfinal DROP NOT NULL;
