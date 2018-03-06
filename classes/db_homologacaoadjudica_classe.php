@@ -715,5 +715,19 @@ class cl_homologacaoadjudica {
         return true;
     }
 
+    /**
+     * Busco data de julgamento
+     * @param $iLicitacao
+     * @return date
+     **/
+    function verificadatajulgamento($iLicitacao){
+        $sSqlJulg = "SELECT l11_data
+                     FROM liclicitasituacao
+                     WHERE l11_liclicita = {$iLicitacao}
+                     AND l11_sequencial = (SELECT max(l11_sequencial) FROM liclicitasituacao WHERE l11_licsituacao = 1
+                     AND l11_liclicita = {$iLicitacao})";
+        $oResult = db_query($sSqlJulg);
+        return db_utils::getColectionByRecord($oResult);
+    }
 }
 ?>

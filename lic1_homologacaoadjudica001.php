@@ -29,7 +29,12 @@ if(isset($incluir)){
     echo "<script>alert('Procedimento abortado. Verifique os fornecedores habilitados.');</script>";
     db_redireciona('lic1_homologacaoadjudica001.php');
   }
-
+  //Verifica data de julgamento da licitação
+    if($clhomologacaoadjudica->verificadatajulgamento($l202_licitacao) < $l202_datahomologacao){
+        echo
+        "<script>alert('Data de julgamento maior que data de Homologação')</script>";
+        db_redireciona('lic1_homologacaoadjudica001.php');
+    }
   $parecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao ")));
   $precomedio  = pg_num_rows($clprecomedio->sql_record($clprecomedio->sql_query(null,'*',null,'l209_licitacao ='.$l202_licitacao)));
   
