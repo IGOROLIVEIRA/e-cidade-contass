@@ -303,8 +303,9 @@ global $pess;
     db_selectmax("pess", $sql);
 
 for($Ipes=0;$Ipes<count($pess);$Ipes++){
+
    if( $pess[$Ipes]["r01_numcgm"] == $numcgm){
-       $prefixo += 1;
+       $prefixo = 0;
    }else{
        $numcgm = $pess[$Ipes]["r01_numcgm"];
        $prefixo = 0;
@@ -582,7 +583,7 @@ function ficha_128(){
             $soma_extras += soma_128_extras($gerfsal,"r14_",$w_extras);
          }
 
-         $condicaoaux = " and (r48_rubric < '4000' or r48_rubric > '6000') and r48_regist = ".db_sqlformat($work[$Iwork]["w_matric"] );
+         $condicaoaux = " and (r48_rubric < '2000' or r48_rubric > '6000') and r48_regist = ".db_sqlformat($work[$Iwork]["w_matric"] );
 	 global $gerfcom;
          if( db_selectmax( "gerfcom", "select * from gerfcom ".bb_condicaosubpes( "r48_" ).$condicaoaux )){
             $soma += soma_128($gerfcom,"r48_");
@@ -651,7 +652,7 @@ function ficha_128(){
          $condicaoaux = " and r35_regist = ".db_sqlformat($work[$Iwork]["w_matric"] );
 	       global $gerfs13;
          if( db_selectmax( "gerfs13", "select * from gerfs13 ".bb_condicaosubpes( "r35_" ).$condicaoaux )){
-             print_r($gerfs13);
+
             $mes13 = $ind;
             $x = soma_128($gerfs13,"r35_");
             //echo $x;exit;
@@ -897,6 +898,7 @@ function imprime_rais_128($nomearq){
 
 
      if( !$work[$Iwork]["w_prefixo"] == $prefixo){
+
          $prefixo = $work[$Iwork]["w_prefixo"];
 
          // REGISTRO TIPO-1 esta de acordo com Layout 2007
