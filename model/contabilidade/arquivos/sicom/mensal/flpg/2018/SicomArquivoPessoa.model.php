@@ -1,8 +1,11 @@
 <?php
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_pessoaflpgo102018_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/flpg/GerarPESSOA.model.php");
+
 
 /**
  * gerar arquivo pessoal Sicom Acompanhamento Mensal
@@ -90,9 +93,10 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 AND ((DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
               or (DATE_PART('YEAR',rh01_admiss) < ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=12))
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
-
+					 
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102018 where si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
-           and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)
+					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102017)
+                     and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
@@ -117,7 +121,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 or (z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}') )
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102018 where si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
-           and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)
+					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102017)
+                     and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
@@ -142,7 +147,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      AND ((DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
               or (DATE_PART('YEAR',rh01_admiss) < ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=12))
 		      and (z01_cgccpf != '' and z01_cgccpf is not null)
-		      and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)
+		      and z01_cgccpf not in (select si195_nrodocumento from flpgo102017)
+		   and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
@@ -164,7 +170,9 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      inner join db_config on db_config.numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      and (z01_cgccpf != '' and z01_cgccpf is not null) and prefeitura = 't'
-		       and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)
+		       and z01_cgccpf not in (select si195_nrodocumento from flpgo102017)
+		   and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)    
+		   and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)    
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)

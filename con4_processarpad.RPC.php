@@ -590,6 +590,7 @@ switch($oParam->exec) {
     break;
 
   case "processarFlpgo" :
+
     /*
      * Definindo o periodo em que serao selecionado os dados
      * Parametro de encerramento de exercicio.

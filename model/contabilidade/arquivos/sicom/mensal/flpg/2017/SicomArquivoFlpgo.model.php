@@ -327,7 +327,7 @@ WHERE
 	  AND (
 		      DATE_PART('YEAR',rh05_recis)= ".db_getsession("DB_anousu")."
 		  and DATE_PART('MONTH',rh05_recis)=" .$this->sDataFinal['5'].$this->sDataFinal['6']."
-		  or rh05_recis IS NULL
+		  or provento > 0
 	  )
 
 	  AND   rh01_sicom = 1
@@ -336,9 +336,8 @@ WHERE
 
 group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16
 ";
-
+        //echo $sSql;
 		$rsResult10 = db_query($sSql);
-		//echo $sSql;
 		//db_criatabela($rsResult10);exit;
 
 		for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {

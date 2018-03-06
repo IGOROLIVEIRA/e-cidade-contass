@@ -82,6 +82,21 @@ $clrotulo->label("o15_codigo");
                             <label for="IdenficacaoRemessa">Identificação da Remessa (IDE)</label><br>
                             <input type="checkbox" value="Pessoa" id="Pessoa" />
                             <label for="Pessoa">Pessoas Físicas (PESSOA)</label><br>
+
+                            <?php
+                            if(db_getsession("DB_anousu") > 2017) {
+                                ?>
+
+                                <input type="checkbox" value="Viap" id="Viap"/>
+                                <label for="Viap">Vínculo do Agente Público (Viap)</label><br>
+
+                                <input type="checkbox" value="Afast" id="Afast"/>
+                                <label for="Viap">Afastamento (Afast)</label><br>
+
+                                <?
+                            }
+                            ?>
+
                             <input type="checkbox" value="Terem" id="Terem" />
                             <label for="Terem">Teto Remuneratório (TEREM)</label><br>
                             <input type="checkbox" value="Flpgo" id="Flpgo" />

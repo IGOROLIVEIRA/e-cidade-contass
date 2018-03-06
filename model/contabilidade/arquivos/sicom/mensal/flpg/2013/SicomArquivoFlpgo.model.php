@@ -327,7 +327,7 @@ WHERE
 	  AND (
 		      DATE_PART('YEAR',rh05_recis)= ".db_getsession("DB_anousu")."
 		  and DATE_PART('MONTH',rh05_recis)=" .$this->sDataFinal['5'].$this->sDataFinal['6']."
-		  or rh05_recis IS NULL
+		  or provento > 0
 	  )
 
 	  AND   rh01_sicom = 1

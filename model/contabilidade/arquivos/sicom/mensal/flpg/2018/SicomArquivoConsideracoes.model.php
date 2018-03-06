@@ -1,8 +1,10 @@
 <?php
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_consid102018_classe.php");
-require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarCONSID.model.php");
+require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/flpg/GerarCONSID.model.php");
 
 /**
  * Dados Complementares Sicom Acompanhamento Mensal

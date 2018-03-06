@@ -130,15 +130,15 @@ class cl_terem102017 {
       $this->erro_status = "0";
       return false;
     }
-    if($this->si194_dtfinal == null ){
-      $this->erro_sql = " Campo Data Final não informado.";
-      $this->erro_campo = "si194_dtfinal_dia";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+//    if($this->si194_dtfinal == null ){
+//      $this->erro_sql = " Campo Data Final não informado.";
+//      $this->erro_campo = "si194_dtfinal_dia";
+//      $this->erro_banco = "";
+//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//      $this->erro_status = "0";
+//      return false;
+//    }
     if($this->si194_tipocadastro == null ){
       $this->erro_sql = " Campo Tipo de cadastro não informado.";
       $this->erro_campo = "si194_tipocadastro";
@@ -217,7 +217,7 @@ class cl_terem102017 {
                                ,$this->si194_vlrparateto 
                                ,$this->si194_tipocadastro
                                ,'$this->si194_dtinicial'
-                               ,'$this->si194_dtfinal'
+                               ,".($this->si194_dtfinal == "null" || $this->si194_dtfinal == ""?"null":"'".$this->si194_dtfinal."'")."
                                ,'$this->si194_justalteracao' 
                                ,$this->si194_mes 
                                ,$this->si194_inst 

@@ -4,6 +4,9 @@ require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_ide2018_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/flpg/GerarIDE.model.php");
 
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+
 /**
  * gerar arquivo de identificacao da Remessa Sicom Acompanhamento Mensal
  * @author marcelo

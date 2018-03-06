@@ -25,6 +25,14 @@ class cl_terem102018 {
   var $si194_dtinicial_mes = null;
   var $si194_dtinicial_ano = null;
   var $si194_dtinicial = null;
+
+  var $si194_nrleiteto = null;
+
+  var $si194_dtpublicacaolei_dia = null;
+  var $si194_dtpublicacaolei_mes = null;
+  var $si194_dtpublicacaolei_ano = null;
+  var $si194_dtpublicacaolei = null;
+
   var $si194_dtfinal_dia = null;
   var $si194_dtfinal_mes = null;
   var $si194_dtfinal_ano = null;
@@ -40,6 +48,10 @@ class cl_terem102018 {
                  si194_vlrparateto = float8 = Valor para o teto 
                  si194_tipocadastro = int8 = Tipo de cadastro
                  si194_dtinicial = date = Data Inicial
+                 
+                 si194_nrleiteto = int8 = Número da lei do teto
+                 si194_dtpublicacaolei = date = Data da publicação
+                 
                  si194_dtfinal = date = Data Final
                  si194_justalteracao = varchar(100) = Justificativa para a alteração 
                  si194_mes = int8 = si194_mes 
@@ -76,6 +88,18 @@ class cl_terem102018 {
           $this->te01_dtinicial = $this->te01_dtinicial_ano."-".$this->te01_dtinicial_mes."-".$this->te01_dtinicial_dia;
         }
       }
+
+      $this->si194_nrleiteto = ($this->si194_nrleiteto == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_nrleiteto"]:$this->si194_nrleiteto);
+
+      if($this->te01_dtpublicacaolei == ""){
+          $this->te01_dtpublicacaolei_dia = ($this->te01_dtpublicacaolei_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtpublicacaolei_dia"]:$this->te01_dtpublicacaolei_dia);
+          $this->te01_dtpublicacaolei_mes = ($this->te01_dtpublicacaolei_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtpublicacaolei_mes"]:$this->te01_dtinicial_mes);
+          $this->te01_dtpublicacaolei_ano = ($this->te01_dtpublicacaolei_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtpublicacaoleil_ano"]:$this->te01_dtinicial_ano);
+          if($this->te01_dtpublicacaolei_dia != ""){
+              $this->te01_dtpublicacaolei = $this->te01_dtpublicacaolei_ano."-".$this->te01_dtpublicacaolei_mes."-".$this->te01_dtpublicacaolei_dia;
+          }
+      }
+
       if($this->te01_dtfinal == ""){
         $this->te01_dtfinal_dia = ($this->te01_dtfinal_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtfinal_dia"]:$this->te01_dtfinal_dia);
         $this->te01_dtfinal_mes = ($this->te01_dtfinal_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtfinal_mes"]:$this->te01_dtfinal_mes);
@@ -130,15 +154,37 @@ class cl_terem102018 {
       $this->erro_status = "0";
       return false;
     }
-    if($this->si194_dtfinal == null ){
-      $this->erro_sql = " Campo Data Final não informado.";
-      $this->erro_campo = "si194_dtfinal_dia";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-      $this->erro_status = "0";
-      return false;
-    }
+
+      if($this->si194_nrleiteto == null ){
+          $this->erro_sql = " Campo nro lei não informado.";
+          $this->erro_campo = "si194_nrleiteto";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
+          $this->erro_status = "0";
+          return false;
+      }
+
+
+      if($this->si194_dtpublicacaolei == null ){
+          $this->erro_sql = " Campo Data publicacao da lei não informado.";
+          $this->erro_campo = "te01_dtpublicacaolei_dia";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
+          $this->erro_status = "0";
+          return false;
+      }
+
+//    if($this->si194_dtfinal == null ){
+//      $this->erro_sql = " Campo Data Final não informado.";
+//      $this->erro_campo = "si194_dtfinal_dia";
+//      $this->erro_banco = "";
+//      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
+//      $this->erro_status = "0";
+//      return false;
+//    }
     if($this->si194_tipocadastro == null ){
       $this->erro_sql = " Campo Tipo de cadastro não informado.";
       $this->erro_campo = "si194_tipocadastro";
@@ -206,6 +252,8 @@ class cl_terem102018 {
                                       ,si194_vlrparateto 
                                       ,si194_tipocadastro
                                       ,si194_dtinicial
+                                      ,si194_nrleiteto
+                                      ,si194_dtpublicacaolei
                                       ,si194_dtfinal
                                       ,si194_justalteracao 
                                       ,si194_mes 
@@ -218,7 +266,9 @@ class cl_terem102018 {
                                ,$this->si194_vlrparateto 
                                ,$this->si194_tipocadastro
                                ,'$this->si194_dtinicial'
-                               ,'$this->si194_dtfinal'
+                               ,$this->si194_nrleiteto
+                               ,'$this->si194_dtpublicacaolei'
+                               ,".($this->si194_dtfinal == "null" || $this->si194_dtfinal == ""?"null":"'".$this->si194_dtfinal."'")."
                                ,'$this->si194_justalteracao' 
                                ,$this->si194_mes 
                                ,$this->si194_inst 

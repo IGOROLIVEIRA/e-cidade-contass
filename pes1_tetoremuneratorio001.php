@@ -14,13 +14,34 @@ if(isset($incluir)){
   $cltetoremuneratorio->incluir($te01_sequencial);
   db_fim_transacao();
 }
+
+$rsTeto       = $cltetoremuneratorio->sql_record($cltetoremuneratorio->sql_query(null,'*','te01_sequencial desc limit 1',''));
+$te01_dtfinal = db_utils::fieldsMemory($rsTeto, 0)->te01_dtfinal;
+
+if(!empty($te01_dtfinal)){
+
+    $te01_dtinicial = date('d/m/Y', strtotime("+1 days",strtotime($te01_dtfinal)));
+    $aDtinicial = explode('/',$te01_dtinicial);
+    $te01_dtinicial_dia = $aDtinicial[0];
+    $te01_dtinicial_mes = $aDtinicial[1];
+    $te01_dtinicial_ano = $aDtinicial[2];
+    $bDisable = false;
+
+}else{
+    $bDisable = true;
+}
+
 ?>
 <html>
 <head>
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+
+    <?
+    db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
+    ?>
+
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
@@ -50,6 +71,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </html>
 <script>
 js_tabulacaoforms("form1","te01_valor",true,1,"te01_valor",true);
+
 </script>
 <?
 if(isset($incluir)){
@@ -65,4 +87,6 @@ if(isset($incluir)){
     $cltetoremuneratorio->erro(true,true);
   }
 }
+
+
 ?>

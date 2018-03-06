@@ -1,4 +1,6 @@
 <?php
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_respinf102018_classe.php");
