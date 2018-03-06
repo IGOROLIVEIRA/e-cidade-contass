@@ -315,6 +315,8 @@ COMMIT;
 
 BEGIN;
 
+select fc_startsession();
+
 ALTER TABLE tetoremuneratorio add column te01_nrleiteto int4 NOT NULL default 0;
 ALTER TABLE tetoremuneratorio add column te01_dtpublicacaolei date;
 ALTER TABLE tetoremuneratorio ALTER COLUMN column te01_dtfinal DROP NOT NULL;
