@@ -71,7 +71,15 @@ $sWhere          = "exists (select pc11_quant, pc23_valor
                                                    and e54_anulad is null
                                                    group by e73_pcprocitem ) as saldo_autorizacao on item = pc81_codprocitem
                             where (pc11_quant > coalesce(quantidade,0) or coalesce(pc23_valor,0) > valor)
-                          and licsaldo.l20_codigo = liclicita.l20_codigo)";
+                          and licsaldo.l20_codigo = liclicita.l20_codigo)
+                          AND l20_codigo NOT IN
+        (SELECT DISTINCT l20_codigo
+         FROM liclicita
+         INNER JOIN liclicitem ON l21_codliclicita = l20_codigo
+         INNER JOIN acordoliclicitem ON ac24_liclicitem = l21_codigo
+         INNER JOIN acordoitem ON ac20_sequencial = ac24_acordoitem
+         INNER JOIN acordoposicao ON ac26_sequencial = ac20_acordoposicao
+         ORDER BY l20_codigo)";
 
 $sWhereContratos = " and 1 = 1 ";
 ?>
