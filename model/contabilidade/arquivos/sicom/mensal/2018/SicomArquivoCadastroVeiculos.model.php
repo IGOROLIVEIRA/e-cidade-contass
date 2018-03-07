@@ -57,25 +57,6 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
 
     }
-    /**
-     *essse metodo retorna os veiculos enviados das tabelas do sicom para verifica o codigo do veiculo.
-     *@return codveiculo
-     */
-    public function getEnviados($iPlaca)
-    {
-        $sSql = "SELECT si146_codveiculo
-                    FROM cvc102017
-                      WHERE si146_placa = '{$iPlaca}'
-                    UNION
-             SELECT si146_codveiculo
-                    FROM cvc102015
-                      WHERE si146_placa = '{$iPlaca}'
-                    UNION
-             SELECT si146_codveiculo
-                    FROM cvc102014
-                      WHERE si146_placa = '{$iPlaca}'";
-        return db_utils::fieldsMemory(db_query($sSql), 0)->si146_codveiculo;
-    }
 
     /**
      * selecionar os dados do cadastro de veículos
@@ -87,10 +68,10 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         /**
          * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
          */
-    $clcvc10 = new cl_cvc102018();
-    $clcvc20 = new cl_cvc202018();
-    $clcvc30 = new cl_cvc302018();
-    $clcvc40 = new cl_cvc402018();
+        $clcvc10 = new cl_cvc102018();
+        $clcvc20 = new cl_cvc202018();
+        $clcvc30 = new cl_cvc302018();
+        $clcvc40 = new cl_cvc402018();
 
         $sSqlTrataUnidade = "SELECT si08_tratacodunidade FROM infocomplementares WHERE si08_instit = " . db_getsession("DB_instit");
         $rsResultTrataUnidade = db_query($sSqlTrataUnidade);
@@ -238,7 +219,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         if (pg_num_rows($rsResult10) > 0) {
             for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
-        $clcvc10 = new cl_cvc102018();
+                $clcvc10 = new cl_cvc102018();
                 $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
                 if ($oDados10->subunidade == 1) {
@@ -251,7 +232,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 where ve04_veiculo = '{$oDados10->codveiculo}'
                   and ve04_veiccadtipobaixa = 7 and to_char(ve04_data,'MM') = '" . $this->sDataFinal['5'] . $this->sDataFinal['6']."'";
 
-        $sSqlVerifica = "select si146_sequencial from cvc102018 where si146_codveiculo = '{$oDados10->codveiculo}'
+                $sSqlVerifica = "select si146_sequencial from cvc102018 where si146_codveiculo = '{$oDados10->codveiculo}'
         and si146_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $sSqlVerifica .= " union select si146_sequencial from cvc102015 where si146_codveiculo = '{$oDados10->codveiculo}'";
                 $sSqlVerifica .= " union select si146_sequencial from cvc102014 where si146_codveiculo = '{$oDados10->codveiculo}'";
@@ -283,11 +264,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     $clcvc10->si146_tiporegistro = 10;
                     $clcvc10->si146_codorgao = $oDados10->codorgao;
                     $clcvc10->si146_codunidadesub = $oDados10->ve01_codunidadesub != '' || $oDados10->ve01_codunidadesub != 0 ? $oDados10->ve01_codunidadesub : $oDados10->codunidadesub;
-                    if (is_null($this->getEnviados($oDados10->placa))){
-                        $clcvc10->si146_codveiculo = $oDados10->codveiculo;
-                    }else {
-                        $clcvc10->si146_codveiculo = $this->getEnviados($oDados10->placa);
-                    }
+                    $clcvc10->si146_codveiculo = $oDados10->codveiculo;
                     $clcvc10->si146_tpveiculo = $oDados10->tpveiculo;
                     $clcvc10->si146_subtipoveiculo = $oDados10->subtipoveiculo;
                     $clcvc10->si146_descveiculo = $this->removeCaracteres($oDados10->descveiculo);
@@ -296,9 +273,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     $clcvc10->si146_ano = $oDados10->ano;
                     $clcvc10->si146_placa = $oDados10->tpveiculo == 3 ? $oDados10->placa : ' ';
                     $clcvc10->si146_chassi = $oDados10->tpveiculo == 3 ? $oDados10->chassi : ' ';
-                    if ($oDados10->tpveiculo == 3) {
+                    if($oDados10->tpveiculo == 3) {
                         $clcvc10->si146_numerorenavam = $oDados10->numerorenavam;
-                    } else {
+                    } else{
                         $clcvc10->si146_numerorenavam = '';
                     }
                     $clcvc10->si146_nroserie = $oDados10->nroserie;
@@ -336,11 +313,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc10->si146_tiporegistro = 10;
                 $clcvc10->si146_codorgao = $oDados10->codorgao;
                 $clcvc10->si146_codunidadesub = $oDados10->ve01_codunidadesub != '' || $oDados10->ve01_codunidadesub != 0 ? $oDados10->ve01_codunidadesub : $oDados10->codunidadesub;
-                if (is_null($this->getEnviados($oDados10->placa))){
-                    $clcvc10->si146_codveiculo = $oDados10->codveiculo;
-                } else {
-                    $clcvc10->si146_codveiculo = $this->getEnviados($oDados10->placa);
-                }
+                $clcvc10->si146_codveiculo = $oDados10->codveiculo;
                 $clcvc10->si146_tpveiculo = $oDados10->tpveiculo;
                 $clcvc10->si146_subtipoveiculo = $oDados10->subtipoveiculo;
                 $clcvc10->si146_descveiculo = $this->removeCaracteres($oDados10->descveiculo);
@@ -349,9 +322,9 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc10->si146_ano = $oDados10->ano;
                 $clcvc10->si146_placa = $oDados10->tpveiculo == 3 ? $oDados10->placa : ' ';
                 $clcvc10->si146_chassi = $oDados10->tpveiculo == 3 ? $oDados10->chassi : ' ';
-                if ($oDados10->tpveiculo == 3) {
+                if($oDados10->tpveiculo == 3) {
                     $clcvc10->si146_numerorenavam = $oDados10->numerorenavam;
-                } else {
+                } else{
                     $clcvc10->si146_numerorenavam = '';
                 }
                 $clcvc10->si146_nroserie = $oDados10->nroserie;
@@ -406,8 +379,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                      pc01_codmater as codmater,
                      ve62_atestado::varchar AS atestadoControle,
                      unveic.o41_subunidade AS subunidade,
-                     DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo,
-                     veiculos.ve01_placa
+                     DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo
                   FROM veiculos.veiculos AS veiculos
                   INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
                   INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
@@ -492,8 +464,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     ELSE '1'
                     END) AS atestadoControle,
                     unveic.o41_subunidade AS subunidade,
-                    DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo,
-                    veiculos.ve01_placa
+                    DATE_PART('YEAR',veiculos.ve01_dtaquis) AS anoveiculo
                     FROM veiculos.veiculos AS veiculos
                     INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
                     INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
@@ -566,11 +537,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $oDados20->si147_tiporegistro = 20;
                 $oDados20->si147_codorgao = $oResult20->codorgao;
                 $oDados20->si147_codunidadesub = $oResult20->ve01_codunidadesub != '' || $oResult20->ve01_codunidadesub != 0 ? $oResult20->ve01_codunidadesub : $oResult20->codunidadesub;
-                if(is_null($this->getEnviados($oDados20->ve01_placa))){
-                    $oDados20->si147_codveiculo = $oResult20->codveiculo;
-                }else {
-                    $oDados20->si146_codveiculo = $this->getEnviados($oDados20->ve01_placa);
-                }
+                $oDados20->si147_codveiculo = $oResult20->codveiculo;
                 $oDados20->si147_origemgasto = $oResult20->origemgasto;
                 $oDados20->si147_codunidadesubempenho = $oResult20->codunidadesubempenho;
                 $oDados20->si147_nroempenho = $oResult20->nroempenho;
@@ -612,7 +579,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
         foreach ($aDadosAgrupados20 as $oDadosAgrupados20) {
 
-      $clcvc20 = new cl_cvc202018();
+            $clcvc20 = new cl_cvc202018();
             $clcvc20->si147_tiporegistro = 20;
             $clcvc20->si147_codorgao = $oDadosAgrupados20->si147_codorgao;
             $clcvc20->si147_codunidadesub = $oDadosAgrupados20->si147_codunidadesub;
@@ -659,8 +626,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
        transporteescolar.v200_distancia AS distanciaEstabelecimento,
        transporteescolar.v200_numpassageiros AS numeroPassageiros,
        transporteescolar.v200_turno AS turnos,
-       o41_subunidade AS subunidade,
-       veiculos.ve01_placa
+       o41_subunidade AS subunidade
 		FROM veiculos.veiculos AS veiculos
 		INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
 		INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
@@ -683,7 +649,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         if (pg_num_rows($rsResult30) > 0) {
             for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
-        $clcvc30 = new cl_cvc302018();
+                $clcvc30 = new cl_cvc302018();
                 $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
 
                 if ($oDados30->subunidade == 1) {
@@ -693,11 +659,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc30->si148_tiporegistro = 30;
                 $clcvc30->si148_codorgao = $oDados30->codorgao;
                 $clcvc30->si148_codunidadesub = $oDados30->ve01_codunidadesub != '' || $oDados30->ve01_codunidadesub != 0 ? $oDados30->ve01_codunidadesub : $oDados30->codunidadesub;
-                if(is_null($this->getEnviados($oDados30->ve01_placa))){
-                    $clcvc30->si148_codveiculo = $oDados30->codveiculo;
-                }else {
-                    $clcvc30->si148_codveiculo = $this->getEnviados($oDados30->ve01_placa);
-                }
+                $clcvc30->si148_codveiculo = $oDados30->codveiculo;
                 $clcvc30->si148_nomeestabelecimento = $this->removeCaracteres($oDados30->nomeestabelecimento);
                 $clcvc30->si148_localidade = $this->removeCaracteres($oDados30->localidade);
                 $clcvc30->si148_qtdediasrodados = $oDados30->qtdediasrodados;
@@ -806,7 +768,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
         if (pg_num_rows($rsResult40) > 0) {
             for ($iCont40 = 0; $iCont40 < pg_num_rows($rsResult40); $iCont40++) {
 
-        $clcvc40 = new cl_cvc402018();
+                $clcvc40 = new cl_cvc402018();
                 $oDados40 = db_utils::fieldsMemory($rsResult40, $iCont40);
 
                 if ($oDados10->subunidade == 1) {
