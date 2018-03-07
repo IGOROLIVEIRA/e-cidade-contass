@@ -919,8 +919,8 @@ function imprime_rais_128($nomearq){
          $lin .= str_pad(substr($d08_telef,0,2),2," ");                      // 209 a 210 - ddd;
          $lin .= str_pad(trim(db_substr($d08_telef,-9)), 9," ");             // 211 a 219 - telefone do estabelecimento;
          $lin .= str_pad(trim($d08_email),45 );                              // 220 a 264 - email;
-         $lin .= "8411600";                                                  // 265 a 271 - cnae;
-         $lin .= "1031";                                                     // 272 a 275 - concla;
+         $lin .= "$r11_codaec"."00";//"8411600";                                                  // 265 a 271 - cnae;
+         $lin .= $r11_natest;//"1031";                                                     // 272 a 275 - concla;
          $lin .= "0000";                                                     // 276 a 279 - numero de socios;
          $lin .= $mes_base;                                                  // 280 a 281 - mes da data base da categoria;
          $lin .= "1";                                                        // 282 a 282 - tipo de inscrição - 1 - cnpj;
