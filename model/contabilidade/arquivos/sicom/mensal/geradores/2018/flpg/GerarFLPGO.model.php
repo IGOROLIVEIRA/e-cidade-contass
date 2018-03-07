@@ -49,7 +49,7 @@ class GerarFLPGO extends GerarAM {
 				$aFLPGO10  = pg_fetch_array($rsFLPGO10,$iCont);
 
 				$aCSVFLPGO10['si195_tiporegistro']                        =   str_pad($aFLPGO10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
-				$aCSVFLPGO10['si195_codvinculopessoa']                        =   $aFLPGO10['si195_codvinculopessoa'];//str_pad($aFLPGO10['si195_numcpf'], 11, "0", STR_PAD_LEFT);
+				$aCSVFLPGO10['si195_codvinculopessoa']                        =   $aFLPGO10['si195_codvinculopessoa'];
 				$aCSVFLPGO10['si195_regime']                              =   str_pad($aFLPGO10['si195_regime'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_indtipopagamento']                    =   str_pad($aFLPGO10['si195_indtipopagamento'], 1, "0", STR_PAD_LEFT);
         $aCSVFLPGO10['si195_desctipopagextra']                    =   substr($aFLPGO10['si195_desctipopagextra'], 0, 150);
@@ -117,9 +117,9 @@ class GerarFLPGO extends GerarAM {
 				}else{
 					$aCSVFLPGO10['si195_datefetexercicio'] = ' ';
 				}
-        $aCSVFLPGO10['si195_datcomissionado'] = implode("", array_reverse(explode("-", $aFLPGO10['si195_datcomissionado'])));
+        $aCSVFLPGO10['si195_datcomissionado'] = ($aCSVFLPGO10['si195_sglcargo'] == 'CRR'||$aCSVFLPGO10['si195_sglcargo'] == 'CRA')?implode("", array_reverse(explode("-", $aFLPGO10['si195_datcomissionado']))):' ';
         $aCSVFLPGO10['si195_datexclusao']                         =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datexclusao'])));
-				$aCSVFLPGO10['si195_datcomissionadoexclusao']             =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datcomissionadoexclusao'])));
+				$aCSVFLPGO10['si195_datcomissionadoexclusao']             =   ($aCSVFLPGO10['si195_sglcargo'] == 'CRR'||$aCSVFLPGO10['si195_sglcargo'] == 'CRA')?implode("", array_reverse(explode("-", $aFLPGO10['si195_datcomissionadoexclusao']))):' ';
 				$aCSVFLPGO10['si195_vlrremuneracaobruta']                 =   number_format($aFLPGO10['si195_vlrremuneracaobruta'], 2, ",", "");
 				$aCSVFLPGO10['si195_vlrdescontos']                         =   number_format($aFLPGO10['si195_vlrdescontos'], 2, ",", "");
         $aCSVFLPGO10['si195_vlrremuneracaoliquida']               =   number_format($aFLPGO10['si195_vlrremuneracaoliquida'], 2, ",", "");
@@ -138,7 +138,15 @@ class GerarFLPGO extends GerarAM {
             $aCSVFLPGO11['si196_indtipopagamento']         =    $aFLPGO11['si196_indtipopagamento'];
             $aCSVFLPGO11['si196_codvinculopessoa']         =    substr($aFLPGO11['si196_codvinculopessoa'],0,15);
 						$aCSVFLPGO11['si196_codrubricaremuneracao']    =    substr($aFLPGO11['si196_codrubricaremuneracao'],0,4);
-            $aCSVFLPGO11['si196_desctiporubrica']          =    substr($aFLPGO11['si196_desctiporubrica'],0,150);
+            if($aCSVFLPGO11['si196_codrubricaremuneracao'] == '1099' ||
+               $aCSVFLPGO11['si196_codrubricaremuneracao'] == '1299' ||
+               $aCSVFLPGO11['si196_codrubricaremuneracao'] == '1403' ||
+               $aCSVFLPGO11['si196_codrubricaremuneracao'] == '6129' ||
+               $aCSVFLPGO11['si196_codrubricaremuneracao'] == '9989'){
+              $aCSVFLPGO11['si196_desctiporubrica']          =    substr($aFLPGO11['si196_desctiporubrica'],0,150);
+            }else{
+              $aCSVFLPGO11['si196_desctiporubrica']          =    ' ';
+            }
             $aCSVFLPGO11['si196_vlrremuneracaodetalhada']  =    number_format($aFLPGO11['si196_vlrremuneracaodetalhada'], 2, ",", "");
 
             $this->sLinha = $aCSVFLPGO11;
@@ -155,10 +163,14 @@ class GerarFLPGO extends GerarAM {
 					if ($aFLPGO10['si195_sequencial'] == $aFLPGO12['si197_reg10']) {
 
 						$aCSVFLPGO12['si197_tiporegistro']             =    str_pad($aFLPGO12['si197_tiporegistro'], 2, "0", STR_PAD_LEFT);
-						$aCSVFLPGO12['si197_indtipopagamento']         =    $aFLPGO12['si197_indtipopagamento'];//str_pad($aFLPGO11['si196_nrodocumento'], 11, "0", STR_PAD_LEFT);
+						$aCSVFLPGO12['si197_indtipopagamento']         =    $aFLPGO12['si197_indtipopagamento'];
 						$aCSVFLPGO12['si197_codvinculopessoa']         =    $aFLPGO12['si197_codvinculopessoa'];
             $aCSVFLPGO12['si197_codrubricadesconto']       =    $aFLPGO12['si197_codrubricadesconto'];
-						$aCSVFLPGO12['si197_desctiporubricadesconto']          =    substr($aFLPGO12['si197_desctiporubricadesconto'],0,150);
+            if($aCSVFLPGO12['si197_codrubricadesconto'] == '9222' || $aCSVFLPGO12['si197_codrubricadesconto'] == '9299'){
+              $aCSVFLPGO12['si197_desctiporubricadesconto']          =    substr($aFLPGO12['si197_desctiporubricadesconto'],0,150);
+            }else{
+						  $aCSVFLPGO12['si197_desctiporubricadesconto']          =    ' ';
+            }
 						$aCSVFLPGO12['si197_vlrremuneracaodetalhada']  =    number_format($aFLPGO12['si197_vlrdescontodetalhado'], 2, ",", "");
 
 						$this->sLinha = $aCSVFLPGO12;

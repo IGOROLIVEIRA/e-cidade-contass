@@ -109,6 +109,7 @@ class cl_flpgo102018 {
     function atualizacampos($exclusao=false) {
         if($exclusao==false){
             $this->si195_sequencial = ($this->si195_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_sequencial"]:$this->si195_sequencial);
+            $this->si195_codvinculopessoa = ($this->si195_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_codvinculopessoa"]:$this->si195_codvinculopessoa);
             $this->si195_tiporegistro = ($this->si195_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_tiporegistro"]:$this->si195_tiporegistro);
             $this->si195_regime = ($this->si195_regime == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_regime"]:$this->si195_regime);
             $this->si195_indtipopagamento = ($this->si195_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indtipopagamento"]:$this->si195_indtipopagamento);
@@ -191,6 +192,15 @@ class cl_flpgo102018 {
         if($this->si195_regime == null ){
             $this->erro_sql = " Campo Civil (C) ou Militar (M) não informado.";
             $this->erro_campo = "si195_regime";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if($this->si195_codvinculopessoa == null ){
+            $this->erro_sql = " Código de matrícula não informado.";
+            $this->erro_campo = "si195_codvinculopessoa";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -356,6 +366,7 @@ class cl_flpgo102018 {
 
         $sql = "insert into flpgo102018(
                                        si195_sequencial
+                                      ,si195_codvinculopessoa
                                       ,si195_tiporegistro
                                       ,si195_regime
                                       ,si195_indtipopagamento
@@ -386,6 +397,7 @@ class cl_flpgo102018 {
                        )
                 values (
                                 $this->si195_sequencial
+                               ,$this->si195_codvinculopessoa
                                ,$this->si195_tiporegistro
                                ,'$this->si195_regime'
                                ,'$this->si195_indtipopagamento'
@@ -501,6 +513,19 @@ class cl_flpgo102018 {
             if(trim($this->si195_tiporegistro) == null ){
                 $this->erro_sql = " Campo Tipo registro não informado.";
                 $this->erro_campo = "si195_tiporegistro";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if(trim($this->si195_codvinculopessoa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_codvinculopessoa"])){
+            $sql  .= $virgula." si195_codvinculopessoa = $this->si195_codvinculopessoa ";
+            $virgula = ",";
+            if(trim($this->si195_codvinculopessoa) == null ){
+                $this->erro_sql = " Código de matrícula não informado.";
+                $this->erro_campo = "si195_codvinculopessoa";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
