@@ -22,7 +22,7 @@ if(isset($processar)){
 elseif(isset($incluir)){
   db_inicio_transacao();
 
-  $clconextsaldo->sql_record($clconextsaldo->sql_query('','*','',"ces01_codcon = $ces01_codcon and ces01_fonte = $ces01_fonte "));
+  $clconextsaldo->sql_record($clconextsaldo->sql_query('','*','',"ces01_codcon = $ces01_codcon and ces01_fonte = $ces01_fonte and ces01_anousu = " . db_getsession('DB_anousu')));
   if($clconextsaldo->numrows > 0){
     db_msgbox('Esse lancançamento já existe!');
   }else{
@@ -33,11 +33,13 @@ elseif(isset($incluir)){
 elseif(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $clconextsaldo->sql_record($clconextsaldo->sql_query('','*','',"ces01_codcon = $ces01_codcon and ces01_fonte = $ces01_fonte "));
+  $clconextsaldo->sql_record($clconextsaldo->sql_query('','*','',
+    "ces01_codcon = $ces01_codcon and ces01_fonte = $ces01_fonte and ces01_anousu = " . db_getsession('DB_anousu')));
   if($clconextsaldo->numrows > 0){
-    db_msgbox('Esse lancançamento já existe!');
+    db_msgbox("Esse lancançamento já existe.<br> Verifique os dados informados!");
   }else {
     $clconextsaldo->alterar($ces01_sequencial);
+    db_msgbox('Alteração efetuada com sucesso!');
   }
   db_fim_transacao();
 }
