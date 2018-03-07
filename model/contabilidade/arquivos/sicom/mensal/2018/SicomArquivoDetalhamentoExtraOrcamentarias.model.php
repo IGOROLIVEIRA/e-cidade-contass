@@ -239,18 +239,36 @@ class SicomArquivoDetalhamentoExtraOrcamentarias extends SicomArquivoBase implem
 				$cExt10->si124_instit = db_getsession("DB_instit");
 				$cExt10->extras = array();
 
-				$sSqlVerifica = "SELECT si124_sequencial FROM ext102018 WHERE si124_codorgao = '$oContaExtra->codorgao'
-		       		AND si124_tipolancamento = '$cExt10->si124_tipolancamento' AND si124_subtipo = '$cExt10->si124_subtipo'
-		       		AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo' and si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-				/*$sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102015 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
-                   AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
-                   AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";
-                $sSqlVerifica .= " UNION SELECT si124_sequencial FROM ext102014 WHERE si124_codorgao = '$oContaExtra->codorgao' AND si124_codunidadesub = '$oContaExtra->codunidadesub'
-                   AND si124_tipolancamento = '$oContaExtra->tipolancamento' AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
-                   AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";*/
+				$sSqlVerifica = "SELECT si124_sequencial
+										FROM ext102018
+										WHERE si124_codorgao = '$oContaExtra->codorgao'
+		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
+		       							AND si124_subtipo = '$cExt10->si124_subtipo'
+		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'
+		       							AND si124_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+				$sSqlVerifica .= " UNION
+								 SELECT si124_sequencial
+										FROM ext102017
+										WHERE si124_codorgao = '$oContaExtra->codorgao'
+		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
+		       							AND si124_subtipo = '$cExt10->si124_subtipo'
+		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
+				$sSqlVerifica .= " UNION
+								 SELECT si124_sequencial
+										FROM ext102015
+										WHERE si124_codorgao = '$oContaExtra->codorgao'
+		       							AND si124_tipolancamento = '$cExt10->si124_tipolancamento'
+		       							AND si124_subtipo = '$cExt10->si124_subtipo'
+		       							AND si124_desdobrasubtipo = '$cExt10->si124_desdobrasubtipo'";
+                $sSqlVerifica .= " UNION
+                				 SELECT si124_sequencial
+                				 		FROM ext102014
+                				 		WHERE si124_codorgao = '$oContaExtra->codorgao'
+                				 		AND si124_codunidadesub = '$oContaExtra->codunidadesub'
+                   						AND si124_tipolancamento = '$oContaExtra->tipolancamento'
+                   						AND si124_subtipo = '" . substr($oContaExtra->subtipo, 0, 4) . "'
+                   						AND si124_desdobrasubtipo = '$oContaExtra->desdobrasubtipo' ";
 				$rsResulVerifica = db_query($sSqlVerifica);
-				//db_criatabela($rsResulVerifica);
-				//echo $sSqlVerifica;
 
 				if (pg_num_rows($rsResulVerifica) == 0) {
 					$cExt10->incluir(null);

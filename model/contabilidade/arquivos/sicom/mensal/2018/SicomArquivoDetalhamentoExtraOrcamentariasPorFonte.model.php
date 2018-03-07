@@ -177,9 +177,9 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                    AND si124_subtipo         = '".$cExt10->si124_subtipo."'
                                    AND si124_desdobrasubtipo = '". $cExt10->si124_desdobrasubtipo ."'
                                    AND si124_mes             < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
-					$sSqlVerifica  .= " UNION ALL 
+					$sSqlVerifica  .= " UNION ALL
                                 SELECT 1
-                                        FROM ext102016
+                                        FROM ext102017
 		       		                   WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
 		       		                     AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
 		       		                     AND si124_subtipo         = '".$oContaExtra->subtipo."'
@@ -199,6 +199,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 		       							 AND si124_desdobrasubtipo = '". $oContaExtra->desdobrasubtipo ."' ";
 
 		       		$rsResulVerifica = db_query($sSqlVerifica) or die ($sSqlVerifica);
+//					echo $rsResulVerifica;db_criatabela($rsResulVerifica);exit;
 
 		       		if ((pg_num_rows($rsResulVerifica) == 0) || (pg_num_rows($rsResulVerifica) != 0 && $this->sDataFinal['5'].$this->sDataFinal['6'] == 1)  ) {
 
