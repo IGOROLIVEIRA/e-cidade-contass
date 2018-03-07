@@ -20,7 +20,7 @@ class cl_flpgo102018 {
     var $si195_tiporegistro = 0;
     var $si195_regime = null;
     var $si195_indtipopagamento = null;
-    var $si195_desctipopagextra = null;
+    var $si195_dsctipopagextra = null;
     var $si195_indsituacaoservidorpensionista = null;
     var $si195_dscsituacao = null;
     var $si195_datconcessaoaposentadoriapensao_dia = null;
@@ -65,7 +65,7 @@ class cl_flpgo102018 {
                  si195_tiporegistro = int8 = Tipo registro
                  si195_regime = varchar(1) = Civil (C) ou Militar (M)
                  si195_indtipopagamento = varchar(1) = Tipo de pagamento
-                 si195_desctipopagextra = varchar(150) = Descrição do tipo de pagamento extra
+                 si195_dsctipopagextra = varchar(150) = Descrição do tipo de pagamento extra
                  si195_indsituacaoservidorpensionista = varchar(1) = Indica a situação do servidor público
                  si195_dscsituacao = varchar(150) = Descrição da situação do servidor público
                  si195_datconcessaoaposentadoriapensao = date = Data de concessão da aposentadoria
@@ -112,7 +112,7 @@ class cl_flpgo102018 {
             $this->si195_tiporegistro = ($this->si195_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_tiporegistro"]:$this->si195_tiporegistro);
             $this->si195_regime = ($this->si195_regime == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_regime"]:$this->si195_regime);
             $this->si195_indtipopagamento = ($this->si195_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indtipopagamento"]:$this->si195_indtipopagamento);
-            $this->si195_desctipopagextra = ($this->si195_desctipopagextra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_desctipopagextra"]:$this->si195_desctipopagextra);
+            $this->si195_dsctipopagextra = ($this->si195_dsctipopagextra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dsctipopagextra"]:$this->si195_dsctipopagextra);
             $this->si195_indsituacaoservidorpensionista = ($this->si195_indsituacaoservidorpensionista == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indsituacaoservidorpensionista"]:$this->si195_indsituacaoservidorpensionista);
             $this->si195_dscsituacao = ($this->si195_dscsituacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscsituacao"]:$this->si195_dscsituacao);
             if($this->si195_datconcessaoaposentadoriapensao == ""){
@@ -359,7 +359,7 @@ class cl_flpgo102018 {
                                       ,si195_tiporegistro
                                       ,si195_regime
                                       ,si195_indtipopagamento
-                                      ,si195_desctipopagextra
+                                      ,si195_dsctipopagextra
                                       ,si195_indsituacaoservidorpensionista
                                       ,si195_dscsituacao
                                       ,si195_datconcessaoaposentadoriapensao
@@ -389,7 +389,7 @@ class cl_flpgo102018 {
                                ,$this->si195_tiporegistro
                                ,'$this->si195_regime'
                                ,'$this->si195_indtipopagamento'
-                               ,'$this->si195_desctipopagextra'
+                               ,'$this->si195_dsctipopagextra'
                                ,'$this->si195_indsituacaoservidorpensionista'
                                ,'$this->si195_dscsituacao'
                                ,".($this->si195_datconcessaoaposentadoriapensao == "null" || $this->si195_datconcessaoaposentadoriapensao == ""?"null":"'".$this->si195_datconcessaoaposentadoriapensao."'")."
@@ -534,12 +534,12 @@ class cl_flpgo102018 {
                 return false;
             }
         }
-        if(trim($this->si195_desctipopagextra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_desctipopagextra"])){
-            $sql  .= $virgula." si195_desctipopagextra = '$this->si195_desctipopagextra' ";
+        if(trim($this->si195_dsctipopagextra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_dsctipopagextra"])){
+            $sql  .= $virgula." si195_dsctipopagextra = '$this->si195_dsctipopagextra' ";
             $virgula = ",";
-            if(trim($this->si195_desctipopagextra) == null ){
+            if(trim($this->si195_dsctipopagextra) == null ){
                 $this->erro_sql = " Campo Descrição do tipo de pagamento extra não informado.";
-                $this->erro_campo = "si195_desctipopagextra";
+                $this->erro_campo = "si195_dsctipopagextra";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

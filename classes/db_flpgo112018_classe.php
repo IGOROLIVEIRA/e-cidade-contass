@@ -23,9 +23,6 @@ class cl_flpgo112018 {
   var $si196_codvinculopessoa = null;
   var $si196_codrubricaremuneracao = null;
   var $si196_desctiporubrica = null;
-
-  var $si196_tiporemuneracao = 0;
-  var $si196_desctiporemuneracao = null;
   var $si196_vlrremuneracaodetalhada = 0;
   var $si196_mes = 0;
   var $si196_inst = 0;
@@ -35,14 +32,10 @@ class cl_flpgo112018 {
   var $campos = "
                  si196_sequencial = int8 = si196_sequencial
                  si196_tiporegistro = int8 = Tipo registro
-
                  si196_indtipopagamento = varchar(1) = Tipo de pagamento
                  si196_codvinculopessoa = bigint = Código do vinculo do agente público
                  si196_codrubricaremuneracao = int8 = Código da rubrica das parcelas da remuneração
                  si196_desctiporubrica = varchar(150) = Descrição para as rubricas das parcelas da remuneração.
-
-                 si196_tiporemuneracao = int8 = Tipo da remuneração
-                 si196_desctiporemuneracao = varchar(150) = Descrição para o tipo outros
                  si196_vlrremuneracaodetalhada = float8 = Valor dos rendimentos por tipo
                  si196_mes = int8 = si196_mes
                  si196_inst = int8 = si196_inst
@@ -73,8 +66,6 @@ class cl_flpgo112018 {
       $this->si196_codvinculopessoa = ($this->si196_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codvinculopessoa"]:$this->si196_codvinculopessoa);
       $this->si196_codrubricaremuneracao = ($this->si196_codrubricaremuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codrubricaremuneracao"]:$this->si196_codrubricaremuneracao);
       $this->si196_desctiporubrica = ($this->si196_desctiporubrica == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_desctiporubrica"]:$this->si196_desctiporubrica);
-      $this->si196_tiporemuneracao = ($this->si196_tiporemuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tiporemuneracao"]:$this->si196_tiporemuneracao);
-      $this->si196_desctiporemuneracao = ($this->si196_desctiporemuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_desctiporemuneracao"]:$this->si196_desctiporemuneracao);
       $this->si196_vlrremuneracaodetalhada = ($this->si196_vlrremuneracaodetalhada == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_vlrremuneracaodetalhada"]:$this->si196_vlrremuneracaodetalhada);
       $this->si196_mes = ($this->si196_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_mes"]:$this->si196_mes);
       $this->si196_inst = ($this->si196_inst == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_inst"]:$this->si196_inst);
@@ -171,7 +162,6 @@ class cl_flpgo112018 {
                                       ,si196_codvinculopessoa
                                       ,si196_codrubricaremuneracao
                                       ,si196_desctiporubrica
-                                      ,si196_desctiporemuneracao
                                       ,si196_vlrremuneracaodetalhada
                                       ,si196_mes
                                       ,si196_inst
@@ -184,7 +174,6 @@ class cl_flpgo112018 {
                                ,'$this->si196_codvinculopessoa'
                                ,'$this->si196_codrubricaremuneracao'
                                ,'$this->si196_desctiporubrica'
-                               ,'$this->si196_desctiporemuneracao'
                                ,$this->si196_vlrremuneracaodetalhada
                                ,$this->si196_mes
                                ,$this->si196_inst
@@ -269,24 +258,6 @@ class cl_flpgo112018 {
         $this->erro_status = "0";
         return false;
       }
-    }
-
-    if(trim($this->si196_tiporemuneracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_tiporemuneracao"])){
-      $sql  .= $virgula." si196_tiporemuneracao = $this->si196_tiporemuneracao ";
-      $virgula = ",";
-      if(trim($this->si196_tiporemuneracao) == null ){
-        $this->erro_sql = " Campo Tipo da remuneração não informado.";
-        $this->erro_campo = "si196_tiporemuneracao";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-    if(trim($this->si196_desctiporemuneracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_desctiporemuneracao"])){
-      $sql  .= $virgula." si196_desctiporemuneracao = '$this->si196_desctiporemuneracao' ";
-      $virgula = ",";
     }
     if(trim($this->si196_vlrremuneracaodetalhada)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_vlrremuneracaodetalhada"])){
       $sql  .= $virgula." si196_vlrremuneracaodetalhada = $this->si196_vlrremuneracaodetalhada ";

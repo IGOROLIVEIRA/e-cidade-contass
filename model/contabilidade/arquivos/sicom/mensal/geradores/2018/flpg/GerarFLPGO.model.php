@@ -158,7 +158,7 @@ class GerarFLPGO extends GerarAM {
 						$aCSVFLPGO12['si197_indtipopagamento']         =    $aFLPGO12['si197_indtipopagamento'];//str_pad($aFLPGO11['si196_nrodocumento'], 11, "0", STR_PAD_LEFT);
 						$aCSVFLPGO12['si197_codvinculopessoa']         =    $aFLPGO12['si197_codvinculopessoa'];
             $aCSVFLPGO12['si197_codrubricadesconto']       =    $aFLPGO12['si197_codrubricadesconto'];
-						$aCSVFLPGO12['si197_desctiporubrica']          =    substr($aFLPGO12['si197_desctiporubrica'],0,150);
+						$aCSVFLPGO12['si197_desctiporubricadesconto']          =    substr($aFLPGO12['si197_desctiporubricadesconto'],0,150);
 						$aCSVFLPGO12['si197_vlrremuneracaodetalhada']  =    number_format($aFLPGO12['si197_vlrdescontodetalhado'], 2, ",", "");
 
 						$this->sLinha = $aCSVFLPGO12;

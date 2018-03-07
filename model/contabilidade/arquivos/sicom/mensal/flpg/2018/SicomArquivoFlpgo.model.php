@@ -168,13 +168,13 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
    '0.00' as si195_vlrabateteto,
 
-   sum (case when y.ordem = 'gerfsal' or y.ordem = 'gerfres'  then desconto else 0 end) AS si195_vlrdeducoes_mensal,
+   sum (case when y.ordem = 'gerfsal' or y.ordem = 'gerfres'  then desconto else 0 end) AS si195_vlrdescontos_mensal,
 
-   sum (case when y.ordem = 'gerfcom' then desconto else 0 end) AS si195_vlrdeducoes_com,
+   sum (case when y.ordem = 'gerfcom' then desconto else 0 end) AS si195_vlrdescontos_com,
 
-   sum (case when y.ordem = 'gerfs13' then desconto else 0 end) AS si195_vlrdeducoes_13,
+   sum (case when y.ordem = 'gerfs13' then desconto else 0 end) AS si195_vlrdescontos_13,
 
-   sum (case when y.ordem = 'gerfres' then desconto else 0 end) AS si195_vlrdeducoes_res,
+   sum (case when y.ordem = 'gerfres' then desconto else 0 end) AS si195_vlrdescontos_res,
 
    sum (case when y.ordem = 'gerfsal' or y.ordem = 'gerfres'  then provento else 0 end) as si195_vlrremuneracaobruta_mensal,
 
@@ -364,7 +364,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         'Matricula'=>$oDados10->rh02_regist,
         'codreduzidopessoa'=>$oDados10->rh02_regist.'1',
         'si195_indtipopagamento'=>'M',
-        'si195_vlrdeducoes'=>$oDados10->si195_vlrdeducoes_mensal,
+        'si195_vlrdescontos'=>$oDados10->si195_vlrdescontos_mensal,
         'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_mensal,
         'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_mensal,
         'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_mensal,
@@ -376,7 +376,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         'Matricula'=>$oDados10->rh02_regist,
         'codreduzidopessoa'=>$oDados10->rh02_regist.'1',
         'si195_indtipopagamento'=>'M',
-        'si195_vlrdeducoes'=>$oDados10->si195_vlrdeducoes_res,
+        'si195_vlrdescontos'=>$oDados10->si195_vlrdescontos_res,
         'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_res,
         'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_res,
         'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_res,
@@ -390,7 +390,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      'Matricula'=>$oDados10->rh02_regist,
      'codreduzidopessoa'=>$oDados10->rh02_regist.'3',
      'si195_indtipopagamento'=>'E',
-     'si195_vlrdeducoes'=>$oDados10->si195_vlrdeducoes_com,
+     'si195_vlrdescontos'=>$oDados10->si195_vlrdescontos_com,
      'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_com,
      'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_com,
      'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_com,
@@ -403,7 +403,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      'Matricula'=>$oDados10->rh02_regist,
      'codreduzidopessoa'=>$oDados10->rh02_regist.'2',
      'si195_indtipopagamento'=>'D',
-     'si195_vlrdeducoes'=>$oDados10->si195_vlrdeducoes_13,
+     'si195_vlrdescontos'=>$oDados10->si195_vlrdescontos_13,
      'si195_vlrremuneracaobruta'=>$oDados10->si195_vlrremuneracaobruta_13,
      'si195_natsaldoliquido'=>$oDados10->si195_natsaldoliquido_13,
      'si195_vlrremuneracaoliquida'=>$oDados10->si195_vlrremuneracaoliquida_13,
@@ -421,7 +421,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
     ORDER BY r30_perai";
     $rsResultFerias = db_query($sSqlFerias);
     if(pg_num_rows($rsResultFerias)>0){
-      $aTiposPagamento[$iQuantTipoPagamento]['si195_desctipopagextra'] = 'FERIAS';
+      $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = 'FERIAS';
     }else{
 
       $sSqlRubricaCom = "SELECT r48_rubric
@@ -432,7 +432,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       ";
       $rsResultRubricaCom = db_query($sSqlRubricaCom);
       $rsResultRubricaCom = db_utils::fieldsMemory($rsResultRubricaCom, 0);
-      $aTiposPagamento[$iQuantTipoPagamento]['si195_desctipopagextra'] = $rsResultRubricaCom->r48_rubric;
+      $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = $rsResultRubricaCom->r48_rubric;
     }
 
   }
@@ -492,7 +492,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_codvinculopessoa                  = $oDados10->rh02_regist;
 				$clflpgo10->si195_regime             		            = $oDados10->si195_regime;
 				$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
-        $clflpgo10->si195_desctipopagextra                  = $aTiposPagamento[$iContEx]['si195_desctipopagextra'];
+        $clflpgo10->si195_dsctipopagextra                  = $aTiposPagamento[$iContEx]['si195_dsctipopagextra'];
         $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
         $clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
@@ -513,7 +513,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_vlrremuneracaobruta               = $aTiposPagamento[$iContEx]['si195_vlrremuneracaobruta'];
         $clflpgo10->si195_natsaldoliquido                   = $aTiposPagamento[$iContEx]['si195_natsaldoliquido'];
         $clflpgo10->si195_vlrremuneracaoliquida             = $aTiposPagamento[$iContEx]['si195_vlrremuneracaoliquida'];
-        $clflpgo10->si195_vlrdescontos                       = $aTiposPagamento[$iContEx]['si195_vlrdeducoes'];
+        $clflpgo10->si195_vlrdescontos                       = $aTiposPagamento[$iContEx]['si195_vlrdescontos'];
         $clflpgo10->si195_mes                               = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $clflpgo10->si195_inst                              = db_getsession("DB_instit");
 
@@ -838,7 +838,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       when x.tipo = 'gerfs13' then 'D'
       end as si197_indtipopagamento,
       x.rh02_regist as si197_codvinculopessoa,
-      x.si197_desctipodesconto as si197_desctiporubrica,
+      x.si197_desctipodesconto as si197_desctiporubricadesconto,
       sum(x.si197_vlrdescontodetalhado) AS si197_vlrdescontodetalhado,
       x.si197_desctipodesconto,
       x.rh02_regist,
@@ -1116,7 +1116,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        $clflpgo12->si197_tiporegistro            = $oDados12->si197_tiporegistro;
        $clflpgo12->si197_indtipopagamento        = $oDados12->si197_indtipopagamento;
        $clflpgo12->si197_codvinculopessoa        = $oDados12->si197_codvinculopessoa;
-       $clflpgo12->si197_desctiporubrica         = $oDados12->si197_desctiporubrica;
+       $clflpgo12->si197_desctiporubricadesconto         = $oDados12->si197_desctiporubricadesconto;
        $clflpgo12->si197_codrubricadesconto      = $oDados12->si197_codrubricadesconto;
        $clflpgo12->si197_vlrdescontodetalhado    = $oDados12->si197_vlrdescontodetalhado;
        $clflpgo12->si197_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];

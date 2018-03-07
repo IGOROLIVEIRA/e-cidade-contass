@@ -21,10 +21,8 @@ class cl_flpgo122018 {
 
     var $si197_indtipopagamento = 0;
     var $si197_codvinculopessoa = 0;
-    var $si197_desctiporubrica = 0;
+    var $si197_desctiporubricadesconto = 0;
     var $si197_codrubricadesconto = 0;
-
-    var $si197_tipodesconto = 0;
     var $si197_vlrdescontodetalhado = 0;
     var $si197_mes = 0;
     var $si197_inst = 0;
@@ -38,9 +36,7 @@ class cl_flpgo122018 {
                  si197_indtipopagamento = varchar(1) = Tipo de pagamento
                  si197_codvinculopessoa = bigint = Código do vinculo do agente público
                  si197_codrubricadesconto = int8 = Código da rubrica das parcelas de desconto
-                 si197_desctiporubrica = varchar(150) = Descrição para as rubricas de desconto.
-
-                 si197_tipodesconto = int8 = Tipo da remuneração
+                 si197_desctiporubricadesconto = varchar(150) = Descrição para as rubricas de desconto.
                  si197_vlrdescontodetalhado = float8 = Valor dos rendimentos por tipo
                  si197_mes = int8 = si197_mes
                  si197_inst = int8 = si197_inst
@@ -70,9 +66,7 @@ class cl_flpgo122018 {
             $this->si197_indtipopagamento = ($this->si197_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_indtipopagamento"]:$this->si197_indtipopagamento);
             $this->si197_codvinculopessoa = ($this->si197_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codvinculopessoa"]:$this->si197_codvinculopessoa);
             $this->si197_codrubricadesconto = ($this->si197_codrubricadesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codrubricadesconto"]:$this->si197_codrubricadesconto);
-            $this->si197_desctiporubrica = ($this->si197_desctiporubrica == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_desctiporubrica"]:$this->si197_desctiporubrica);
-
-            $this->si197_tipodesconto = ($this->si197_tipodesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_tipodesconto"]:$this->si197_tipodesconto);
+            $this->si197_desctiporubricadesconto = ($this->si197_desctiporubricadesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_desctiporubricadesconto"]:$this->si197_desctiporubricadesconto);
             $this->si197_vlrdescontodetalhado = ($this->si197_vlrdescontodetalhado == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_vlrdescontodetalhado"]:$this->si197_vlrdescontodetalhado);
             $this->si197_mes = ($this->si197_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_mes"]:$this->si197_mes);
             $this->si197_inst = ($this->si197_inst == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_inst"]:$this->si197_inst);
@@ -168,8 +162,7 @@ class cl_flpgo122018 {
                                       ,si197_indtipopagamento
                                       ,si197_codvinculopessoa
                                       ,si197_codrubricadesconto
-                                      ,si197_desctiporubrica
-                                      ,si197_tipodesconto
+                                      ,si197_desctiporubricadesconto
                                       ,si197_vlrdescontodetalhado
                                       ,si197_mes
                                       ,si197_inst
@@ -181,8 +174,7 @@ class cl_flpgo122018 {
                                ,'$this->si197_indtipopagamento'
                                ,'$this->si197_codvinculopessoa'
                                ,'$this->si197_codrubricadesconto'
-                               ,'$this->si197_desctiporubrica'
-                               ,$this->si197_tipodesconto
+                               ,'$this->si197_desctiporubricadesconto'
                                ,$this->si197_vlrdescontodetalhado
                                ,$this->si197_mes
                                ,$this->si197_inst
@@ -267,19 +259,7 @@ class cl_flpgo122018 {
                 return false;
             }
         }
-        if(trim($this->si197_tipodesconto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_tipodesconto"])){
-            $sql  .= $virgula." si197_tipodesconto = $this->si197_tipodesconto ";
-            $virgula = ",";
-            if(trim($this->si197_tipodesconto) == null ){
-                $this->erro_sql = " Campo Tipo da remuneração não informado.";
-                $this->erro_campo = "si197_tipodesconto";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
+
         if(trim($this->si197_vlrdescontodetalhado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_vlrdescontodetalhado"])){
             $sql  .= $virgula." si197_vlrdescontodetalhado = $this->si197_vlrdescontodetalhado ";
             $virgula = ",";
