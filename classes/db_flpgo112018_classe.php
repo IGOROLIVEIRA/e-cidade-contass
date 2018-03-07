@@ -24,8 +24,6 @@ class cl_flpgo112018 {
   var $si196_codrubricaremuneracao = null;
   var $si196_desctiporubrica = null;
 
-  var $si196_nrodocumento = 0;
-  var $si196_codreduzidopessoa = 0;
   var $si196_tiporemuneracao = 0;
   var $si196_desctiporemuneracao = null;
   var $si196_vlrremuneracaodetalhada = 0;
@@ -43,8 +41,6 @@ class cl_flpgo112018 {
                  si196_codrubricaremuneracao = int8 = Código da rubrica das parcelas da remuneração
                  si196_desctiporubrica = varchar(150) = Descrição para as rubricas das parcelas da remuneração.
 
-                 si196_nrodocumento = int8 = Número do CPF ou CNPJ
-                 si196_codreduzidopessoa = int8 = Código identificador da pessoa
                  si196_tiporemuneracao = int8 = Tipo da remuneração
                  si196_desctiporemuneracao = varchar(150) = Descrição para o tipo outros
                  si196_vlrremuneracaodetalhada = float8 = Valor dos rendimentos por tipo
@@ -77,8 +73,6 @@ class cl_flpgo112018 {
       $this->si196_codvinculopessoa = ($this->si196_codvinculopessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codvinculopessoa"]:$this->si196_codvinculopessoa);
       $this->si196_codrubricaremuneracao = ($this->si196_codrubricaremuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codrubricaremuneracao"]:$this->si196_codrubricaremuneracao);
       $this->si196_desctiporubrica = ($this->si196_desctiporubrica == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_desctiporubrica"]:$this->si196_desctiporubrica);
-
-      $this->si196_nrodocumento = ($this->si196_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_nrodocumento"]:$this->si196_nrodocumento);
       $this->si196_tiporemuneracao = ($this->si196_tiporemuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tiporemuneracao"]:$this->si196_tiporemuneracao);
       $this->si196_desctiporemuneracao = ($this->si196_desctiporemuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_desctiporemuneracao"]:$this->si196_desctiporemuneracao);
       $this->si196_vlrremuneracaodetalhada = ($this->si196_vlrremuneracaodetalhada == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_vlrremuneracaodetalhada"]:$this->si196_vlrremuneracaodetalhada);

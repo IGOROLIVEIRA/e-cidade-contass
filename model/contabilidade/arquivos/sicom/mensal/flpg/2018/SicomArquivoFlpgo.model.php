@@ -487,10 +487,9 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
   for ($iContEx = 1; $iContEx <= $iQuantTipoPagamento; $iContEx++) {
 
-    $clflpgo10                                          = new cl_flpgo102018();
-    $clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
-				$clflpgo10->si195_nrodocumento                      = $oDados10->si195_nrodocumento; //NOME ALTERADO NO LAYOUT PARA nroDocumento
-				$clflpgo10->si195_codreduzidopessoa                 = $aTiposPagamento[$iContEx]['codreduzidopessoa'];
+        $clflpgo10                                          = new cl_flpgo102018();
+        $clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
+        $clflpgo10->si195_codvinculopessoa                  = $oDados10->rh02_regist;
 				$clflpgo10->si195_regime             		            = $oDados10->si195_regime;
 				$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
         $clflpgo10->si195_desctipopagextra                  = $aTiposPagamento[$iContEx]['si195_desctipopagextra'];
@@ -813,26 +812,16 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
          $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
          $clflpgo11 = new cl_flpgo112018();
-         $clflpgo11->si196_tiporegistro            = $oDados11->si196_tiporegistro;
          $clflpgo11->si196_reg10                   = $clflpgo10->si195_sequencial;
-
          $clflpgo11->si196_tiporegistro                   = $oDados11->si196_tiporegistro;
          $clflpgo11->si196_indtipopagamento                   = $oDados11->si196_indtipopagamento;
          $clflpgo11->si196_codvinculopessoa                   = $oDados11->si196_codvinculopessoa;
          $clflpgo11->si196_desctiporubrica                   = $oDados11->si196_desctiporubrica;
          $clflpgo11->si196_vlrremuneracaodetalhada                   = $oDados11->si196_vlrremuneracaodetalhada;
          $clflpgo11->si196_codrubricaremuneracao                   = $oDados11->si196_codrubricaremuneracao;
-
-         //$clflpgo11->si196_nrodocumento            = $clflpgo10->si195_nrodocumento;
-         //$clflpgo11->si196_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
-         //$clflpgo11->si196_tiporemuneracao         = $oDados11->si196_tiporemuneracao;
-         //$clflpgo11->si196_desctiporemuneracao     = $oDados11->si196_desctiporemuneracao;
-         //$clflpgo11->si196_vlrremuneracaodetalhada = $oDados11->si196_vlrremuneracaodetalhada;
          $clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
          $clflpgo11->si196_inst                    = db_getsession("DB_instit");
-					//echo '<pre>';
-					//print_r($clflpgo11);exit;
-         $clflpgo11->incluir(null);
+				 $clflpgo11->incluir(null);
 
          if ($clflpgo11->erro_status == 0) {
           throw new Exception($clflpgo11->erro_msg);
@@ -1122,22 +1111,16 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        $oDados12 = db_utils::fieldsMemory($rsResult12, $iCont12);
 
        $clflpgo12 = new cl_flpgo122018();
-       $clflpgo12->si197_reg10                   = $clflpgo10->si195_sequencial;
 
+       $clflpgo12->si197_reg10                   = $clflpgo10->si195_sequencial;
        $clflpgo12->si197_tiporegistro            = $oDados12->si197_tiporegistro;
        $clflpgo12->si197_indtipopagamento        = $oDados12->si197_indtipopagamento;
        $clflpgo12->si197_codvinculopessoa        = $oDados12->si197_codvinculopessoa;
        $clflpgo12->si197_desctiporubrica         = $oDados12->si197_desctiporubrica;
        $clflpgo12->si197_codrubricadesconto      = $oDados12->si197_codrubricadesconto;
        $clflpgo12->si197_vlrdescontodetalhado    = $oDados12->si197_vlrdescontodetalhado;
-
        $clflpgo12->si197_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
        $clflpgo12->si197_inst                    = db_getsession("DB_instit");
-/*       $clflpgo12->si197_nrodocumento            = $clflpgo10->si195_nrodocumento;
-       $clflpgo12->si197_codreduzidopessoa       = $clflpgo10->si195_codreduzidopessoa;
-       $clflpgo12->si197_tipodesconto            = $oDados12->si197_tipodesconto;*/
-					//echo '<pre>';
-					//print_r($clflpgo11);exit;
        $clflpgo12->incluir(null);
 
        if ($clflpgo12->erro_status == 0) {

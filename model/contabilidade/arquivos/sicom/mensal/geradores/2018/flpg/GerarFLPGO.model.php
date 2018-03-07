@@ -49,8 +49,7 @@ class GerarFLPGO extends GerarAM {
 				$aFLPGO10  = pg_fetch_array($rsFLPGO10,$iCont);
 
 				$aCSVFLPGO10['si195_tiporegistro']                        =   str_pad($aFLPGO10['si195_tiporegistro'], 2, "0", STR_PAD_LEFT);
-				$aCSVFLPGO10['si195_nrodocumento']                        =   $aFLPGO10['si195_nrodocumento'];//str_pad($aFLPGO10['si195_numcpf'], 11, "0", STR_PAD_LEFT);
-				// $aCSVFLPGO10['si195_codreduzidopessoa']                   =   $aFLPGO10['si195_codreduzidopessoa'];
+				$aCSVFLPGO10['si195_codvinculopessoa']                        =   $aFLPGO10['si195_codvinculopessoa'];//str_pad($aFLPGO10['si195_numcpf'], 11, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_regime']                              =   str_pad($aFLPGO10['si195_regime'], 1, "0", STR_PAD_LEFT);
 				$aCSVFLPGO10['si195_indtipopagamento']                    =   str_pad($aFLPGO10['si195_indtipopagamento'], 1, "0", STR_PAD_LEFT);
         $aCSVFLPGO10['si195_desctipopagextra']                    =   substr($aFLPGO10['si195_desctipopagextra'], 0, 150);
@@ -135,12 +134,6 @@ class GerarFLPGO extends GerarAM {
 
 					if ($aFLPGO10['si195_sequencial'] == $aFLPGO11['si196_reg10']) {
 
-						/*$aCSVFLPGO11['si196_tiporegistro']             =    str_pad($aFLPGO11['si196_tiporegistro'], 2, "0", STR_PAD_LEFT);
-						$aCSVFLPGO11['si196_nrodocumento']             =    $aFLPGO11['si196_nrodocumento'];//str_pad($aFLPGO11['si196_nrodocumento'], 11, "0", STR_PAD_LEFT);
-						$aCSVFLPGO11['si196_codreduzidopessoa']        =    $aFLPGO11['si196_codreduzidopessoa'];
-						$aCSVFLPGO11['si196_tiporemuneracao']          =    str_pad($aFLPGO11['si196_tiporemuneracao'], 2, "0", STR_PAD_LEFT);
-						$aCSVFLPGO11['si196_desctiporemuneracao']      =    substr($aFLPGO11['si196_desctiporemuneracao'], 0, 150);
-*/
             $aCSVFLPGO11['si196_tiporegistro']             =    str_pad($aFLPGO11['si196_tiporegistro'], 2, "0", STR_PAD_LEFT);
             $aCSVFLPGO11['si196_indtipopagamento']         =    $aFLPGO11['si196_indtipopagamento'];
             $aCSVFLPGO11['si196_codvinculopessoa']         =    substr($aFLPGO11['si196_codvinculopessoa'],0,15);

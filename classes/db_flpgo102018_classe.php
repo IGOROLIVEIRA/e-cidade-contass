@@ -18,8 +18,6 @@ class cl_flpgo102018 {
     // cria variaveis do arquivo
     var $si195_sequencial = 0;
     var $si195_tiporegistro = 0;
-    var $si195_nrodocumento = 0;
-    var $si195_codreduzidopessoa = 0;
     var $si195_regime = null;
     var $si195_indtipopagamento = null;
     var $si195_desctipopagextra = null;
@@ -65,8 +63,6 @@ class cl_flpgo102018 {
     var $campos = "
                  si195_sequencial = int8 = si195_sequencial
                  si195_tiporegistro = int8 = Tipo registro
-                 si195_nrodocumento = int8 = Número do CPF
-                 si195_codreduzidopessoa = int8 = Código identificador da pessoa
                  si195_regime = varchar(1) = Civil (C) ou Militar (M)
                  si195_indtipopagamento = varchar(1) = Tipo de pagamento
                  si195_desctipopagextra = varchar(150) = Descrição do tipo de pagamento extra
@@ -114,7 +110,6 @@ class cl_flpgo102018 {
         if($exclusao==false){
             $this->si195_sequencial = ($this->si195_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_sequencial"]:$this->si195_sequencial);
             $this->si195_tiporegistro = ($this->si195_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_tiporegistro"]:$this->si195_tiporegistro);
-            $this->si195_nrodocumento = ($this->si195_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_nrodocumento"]:$this->si195_nrodocumento);
             $this->si195_regime = ($this->si195_regime == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_regime"]:$this->si195_regime);
             $this->si195_indtipopagamento = ($this->si195_indtipopagamento == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indtipopagamento"]:$this->si195_indtipopagamento);
             $this->si195_desctipopagextra = ($this->si195_desctipopagextra == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_desctipopagextra"]:$this->si195_desctipopagextra);
@@ -193,24 +188,6 @@ class cl_flpgo102018 {
             $this->erro_status = "0";
             return false;
         }
-        if($this->si195_nrodocumento == null ){
-            $this->erro_sql = " Campo Número do CPF não informado.";
-            $this->erro_campo = "si195_nrodocumento";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if($this->si195_codreduzidopessoa == null ){
-            $this->erro_sql = " Campo codigo reduzido pessoa não informado.";
-            $this->erro_campo = "si195_nrodocumento";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if($this->si195_regime == null ){
             $this->erro_sql = " Campo Civil (C) ou Militar (M) não informado.";
             $this->erro_campo = "si195_regime";
@@ -254,7 +231,7 @@ class cl_flpgo102018 {
             $this->si195_codcargo=0;
         }
         if($this->si195_sglcargo == null ){
-            $this->erro_sql = " Campo Sigla de Cargo não informado. ".$this->si195_codreduzidopessoa;
+            $this->erro_sql = " Campo Sigla de Cargo não informado. ";
             $this->erro_campo = "si195_sglcargo";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -380,8 +357,6 @@ class cl_flpgo102018 {
         $sql = "insert into flpgo102018(
                                        si195_sequencial
                                       ,si195_tiporegistro
-                                      ,si195_nrodocumento
-                                      ,si195_codreduzidopessoa
                                       ,si195_regime
                                       ,si195_indtipopagamento
                                       ,si195_desctipopagextra
@@ -412,8 +387,6 @@ class cl_flpgo102018 {
                 values (
                                 $this->si195_sequencial
                                ,$this->si195_tiporegistro
-                               ,'$this->si195_nrodocumento'
-                               ,$this->si195_codreduzidopessoa
                                ,'$this->si195_regime'
                                ,'$this->si195_indtipopagamento'
                                ,'$this->si195_desctipopagextra'
@@ -535,19 +508,6 @@ class cl_flpgo102018 {
                 return false;
             }
         }
-        if(trim($this->si195_nrodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_nrodocumento"])){
-            $sql  .= $virgula." si195_nrodocumento = $this->si195_nrodocumento ";
-            $virgula = ",";
-            if(trim($this->si195_nrodocumento) == null ){
-                $this->erro_sql = " Campo Número do CPF não informado.";
-                $this->erro_campo = "si195_nrodocumento";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
         if(trim($this->si195_regime)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_regime"])){
             $sql  .= $virgula." si195_regime = '$this->si195_regime' ";
             $virgula = ",";
@@ -630,7 +590,7 @@ class cl_flpgo102018 {
             $sql  .= $virgula." si195_sglcargo = '$this->si195_sglcargo' ";
             $virgula = ",";
             if(trim($this->si195_sglcargo) == null ){
-                $this->erro_sql = " Campo Sigla de Cargo não informado. ". $this->si195_codreduzidopessoa;
+                $this->erro_sql = " Campo Sigla de Cargo não informado. ";
                 $this->erro_campo = "si195_sglcargo";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -806,8 +766,6 @@ class cl_flpgo102018 {
                         $resac = db_query("insert into db_acount values($acount,1010195,1009276,'".AddSlashes(pg_result($resaco,$conresaco,'si195_sequencial'))."','$this->si195_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                     if(isset($GLOBALS["HTTP_POST_VARS"]["si195_tiporegistro"]) || $this->si195_tiporegistro != "")
                         $resac = db_query("insert into db_acount values($acount,1010195,1009277,'".AddSlashes(pg_result($resaco,$conresaco,'si195_tiporegistro'))."','$this->si195_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                    if(isset($GLOBALS["HTTP_POST_VARS"]["si195_nrodocumento"]) || $this->si195_nrodocumento != "")
-                        $resac = db_query("insert into db_acount values($acount,1010195,1009278,'".AddSlashes(pg_result($resaco,$conresaco,'si195_nrodocumento'))."','$this->si195_nrodocumento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                     if(isset($GLOBALS["HTTP_POST_VARS"]["si195_regime"]) || $this->si195_regime != "")
                         $resac = db_query("insert into db_acount values($acount,1010195,1009279,'".AddSlashes(pg_result($resaco,$conresaco,'si195_regime'))."','$this->si195_regime',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                     if(isset($GLOBALS["HTTP_POST_VARS"]["si195_indtipopagamento"]) || $this->si195_indtipopagamento != "")

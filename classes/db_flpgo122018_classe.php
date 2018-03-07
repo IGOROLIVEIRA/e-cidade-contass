@@ -24,8 +24,6 @@ class cl_flpgo122018 {
     var $si197_desctiporubrica = 0;
     var $si197_codrubricadesconto = 0;
 
-    var $si197_nrodocumento = 0;
-    var $si197_codreduzidopessoa = 0;
     var $si197_tipodesconto = 0;
     var $si197_vlrdescontodetalhado = 0;
     var $si197_mes = 0;
@@ -42,9 +40,6 @@ class cl_flpgo122018 {
                  si197_codrubricadesconto = int8 = Código da rubrica das parcelas de desconto
                  si197_desctiporubrica = varchar(150) = Descrição para as rubricas de desconto.
 
-
-                 si197_nrodocumento = int8 = Número do CPF ou CNPJ
-                 si197_codreduzidopessoa = int8 = Código identificador da pessoa
                  si197_tipodesconto = int8 = Tipo da remuneração
                  si197_vlrdescontodetalhado = float8 = Valor dos rendimentos por tipo
                  si197_mes = int8 = si197_mes
@@ -77,7 +72,6 @@ class cl_flpgo122018 {
             $this->si197_codrubricadesconto = ($this->si197_codrubricadesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_codrubricadesconto"]:$this->si197_codrubricadesconto);
             $this->si197_desctiporubrica = ($this->si197_desctiporubrica == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_desctiporubrica"]:$this->si197_desctiporubrica);
 
-            $this->si197_nrodocumento = ($this->si197_nrodocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_nrodocumento"]:$this->si197_nrodocumento);
             $this->si197_tipodesconto = ($this->si197_tipodesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_tipodesconto"]:$this->si197_tipodesconto);
             $this->si197_vlrdescontodetalhado = ($this->si197_vlrdescontodetalhado == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_vlrdescontodetalhado"]:$this->si197_vlrdescontodetalhado);
             $this->si197_mes = ($this->si197_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si197_mes"]:$this->si197_mes);
@@ -175,8 +169,6 @@ class cl_flpgo122018 {
                                       ,si197_codvinculopessoa
                                       ,si197_codrubricadesconto
                                       ,si197_desctiporubrica
-                                      ,si197_nrodocumento
-                                      ,si197_codreduzidopessoa
                                       ,si197_tipodesconto
                                       ,si197_vlrdescontodetalhado
                                       ,si197_mes
@@ -190,8 +182,6 @@ class cl_flpgo122018 {
                                ,'$this->si197_codvinculopessoa'
                                ,'$this->si197_codrubricadesconto'
                                ,'$this->si197_desctiporubrica'
-                               ,'$this->si197_nrodocumento'
-                               ,$this->si197_codreduzidopessoa
                                ,$this->si197_tipodesconto
                                ,$this->si197_vlrdescontodetalhado
                                ,$this->si197_mes
@@ -270,19 +260,6 @@ class cl_flpgo122018 {
             if(trim($this->si197_tiporegistro) == null ){
                 $this->erro_sql = " Campo Tipo registro não informado.";
                 $this->erro_campo = "si197_tiporegistro";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        if(trim($this->si197_nrodocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si197_nrodocumento"])){
-            $sql  .= $virgula." si197_nrodocumento = $this->si197_nrodocumento ";
-            $virgula = ",";
-            if(trim($this->si197_nrodocumento) == null ){
-                $this->erro_sql = " Campo Número do CPF não informado.";
-                $this->erro_campo = "si197_nrodocumento";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
