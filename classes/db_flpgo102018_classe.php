@@ -56,7 +56,7 @@ class cl_flpgo102018 {
     var $si195_vlrremuneracaobruta = 0;
     var $si195_natsaldoliquido = null;
     var $si195_vlrremuneracaoliquida = 0;
-    var $si195_vlrdeducoes = 0;
+    var $si195_vlrdescontos = 0;
     var $si195_mes = 0;
     var $si195_inst = 0;
     // cria propriedade com as variaveis do arquivo
@@ -86,7 +86,7 @@ class cl_flpgo102018 {
                  si195_vlrremuneracaobruta = float8 = Valor total dos rendimentos
                  si195_natsaldoliquido = varchar(1) = Natureza do saldo remuneratório liquido
                  si195_vlrremuneracaoliquida = float8 = Valor total dos rendimentos liquidos
-                 si195_vlrdeducoes = float8 = Valor das deduções obrigatórias
+                 si195_vlrdescontos = float8 = Valor das deduções obrigatórias
                  si195_mes = int8 = si195_mes
                  si195_inst = int8 = si195_inst
                  ";
@@ -168,7 +168,7 @@ class cl_flpgo102018 {
             $this->si195_vlrremuneracaobruta = ($this->si195_vlrremuneracaobruta == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlrremuneracaobruta"]:$this->si195_vlrremuneracaobruta);
             $this->si195_natsaldoliquido = ($this->si195_natsaldoliquido == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_natsaldoliquido"]:$this->si195_natsaldoliquido);
             $this->si195_vlrremuneracaoliquida = ($this->si195_vlrremuneracaoliquida == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlrremuneracaoliquida"]:$this->si195_vlrremuneracaoliquida);
-            $this->si195_vlrdeducoes = ($this->si195_vlrdeducoes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlrdeducoes"]:$this->si195_vlrdeducoes);
+            $this->si195_vlrdescontos = ($this->si195_vlrdescontos == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_vlrdescontos"]:$this->si195_vlrdescontos);
             $this->si195_mes = ($this->si195_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_mes"]:$this->si195_mes);
             $this->si195_inst = ($this->si195_inst == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_inst"]:$this->si195_inst);
         }else{
@@ -293,9 +293,9 @@ class cl_flpgo102018 {
             $this->erro_status = "0";
             return false;
         }
-        if($this->si195_vlrdeducoes == null ){
+        if($this->si195_vlrdescontos == null ){
             $this->erro_sql = " Campo Valor das deduções obrigatórias não informado.";
-            $this->erro_campo = "si195_vlrdeducoes";
+            $this->erro_campo = "si195_vlrdescontos";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -380,7 +380,7 @@ class cl_flpgo102018 {
                                       ,si195_vlrremuneracaobruta
                                       ,si195_natsaldoliquido
                                       ,si195_vlrremuneracaoliquida
-                                      ,si195_vlrdeducoes
+                                      ,si195_vlrdescontos
                                       ,si195_mes
                                       ,si195_inst
                        )
@@ -410,7 +410,7 @@ class cl_flpgo102018 {
                                ,'$this->si195_vlrremuneracaobruta'
                                ,'$this->si195_natsaldoliquido'
                                ,'$this->si195_vlrremuneracaoliquida'
-                               ,'$this->si195_vlrdeducoes'
+                               ,'$this->si195_vlrdescontos'
                                ,$this->si195_mes
                                ,$this->si195_inst
                       )";
@@ -470,7 +470,7 @@ class cl_flpgo102018 {
                 $resac = db_query("insert into db_acount values($acount,1010195,1009292,'','".AddSlashes(pg_result($resaco,0,'si195_vlrremuneracaobruta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,1010195,1009293,'','".AddSlashes(pg_result($resaco,0,'si195_natsaldoliquido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,1010195,1009294,'','".AddSlashes(pg_result($resaco,0,'si195_vlrremuneracaoliquida'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,1010195,1009295,'','".AddSlashes(pg_result($resaco,0,'si195_vlrdeducoes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,1010195,1009295,'','".AddSlashes(pg_result($resaco,0,'si195_vlrdescontos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,1010195,1009297,'','".AddSlashes(pg_result($resaco,0,'si195_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                 $resac = db_query("insert into db_acount values($acount,1010195,1009298,'','".AddSlashes(pg_result($resaco,0,'si195_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
             }
@@ -706,12 +706,12 @@ class cl_flpgo102018 {
                 return false;
             }
         }
-        if(trim($this->si195_vlrdeducoes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_vlrdeducoes"])){
-            $sql  .= $virgula." si195_vlrdeducoes = $this->si195_vlrdeducoes ";
+        if(trim($this->si195_vlrdescontos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si195_vlrdescontos"])){
+            $sql  .= $virgula." si195_vlrdescontos = $this->si195_vlrdescontos ";
             $virgula = ",";
-            if(trim($this->si195_vlrdeducoes) == null ){
+            if(trim($this->si195_vlrdescontos) == null ){
                 $this->erro_sql = " Campo Valor das deduções obrigatórias não informado.";
-                $this->erro_campo = "si195_vlrdeducoes";
+                $this->erro_campo = "si195_vlrdescontos";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -796,8 +796,8 @@ class cl_flpgo102018 {
                         $resac = db_query("insert into db_acount values($acount,1010195,1009293,'".AddSlashes(pg_result($resaco,$conresaco,'si195_natsaldoliquido'))."','$this->si195_natsaldoliquido',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                     if(isset($GLOBALS["HTTP_POST_VARS"]["si195_vlrremuneracaoliquida"]) || $this->si195_vlrremuneracaoliquida != "")
                         $resac = db_query("insert into db_acount values($acount,1010195,1009294,'".AddSlashes(pg_result($resaco,$conresaco,'si195_vlrremuneracaoliquida'))."','$this->si195_vlrremuneracaoliquida',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                    if(isset($GLOBALS["HTTP_POST_VARS"]["si195_vlrdeducoes"]) || $this->si195_vlrdeducoes != "")
-                        $resac = db_query("insert into db_acount values($acount,1010195,1009295,'".AddSlashes(pg_result($resaco,$conresaco,'si195_vlrdeducoes'))."','$this->si195_vlrdeducoes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                    if(isset($GLOBALS["HTTP_POST_VARS"]["si195_vlrdescontos"]) || $this->si195_vlrdescontos != "")
+                        $resac = db_query("insert into db_acount values($acount,1010195,1009295,'".AddSlashes(pg_result($resaco,$conresaco,'si195_vlrdescontos'))."','$this->si195_vlrdescontos',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                     if(isset($GLOBALS["HTTP_POST_VARS"]["si195_mes"]) || $this->si195_mes != "")
                         $resac = db_query("insert into db_acount values($acount,1010195,1009297,'".AddSlashes(pg_result($resaco,$conresaco,'si195_mes'))."','$this->si195_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
                     if(isset($GLOBALS["HTTP_POST_VARS"]["si195_inst"]) || $this->si195_inst != "")
@@ -878,7 +878,7 @@ class cl_flpgo102018 {
               $resac  = db_query("insert into db_acount values($acount,1010195,1009292,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_vlrremuneracaobruta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
               $resac  = db_query("insert into db_acount values($acount,1010195,1009293,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_natsaldoliquido'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
               $resac  = db_query("insert into db_acount values($acount,1010195,1009294,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_vlrremuneracaoliquida'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-              $resac  = db_query("insert into db_acount values($acount,1010195,1009295,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_vlrdeducoes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+              $resac  = db_query("insert into db_acount values($acount,1010195,1009295,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_vlrdescontos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
               $resac  = db_query("insert into db_acount values($acount,1010195,1009297,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
               $resac  = db_query("insert into db_acount values($acount,1010195,1009298,'','".AddSlashes(pg_result($resaco,$iresaco,'si195_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
             }

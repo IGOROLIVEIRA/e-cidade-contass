@@ -121,7 +121,7 @@ class GerarFLPGO extends GerarAM {
         $aCSVFLPGO10['si195_datexclusao']                         =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datexclusao'])));
 				$aCSVFLPGO10['si195_datcomissionadoexclusao']             =   implode("", array_reverse(explode("-", $aFLPGO10['si195_datcomissionadoexclusao'])));
 				$aCSVFLPGO10['si195_vlrremuneracaobruta']                 =   number_format($aFLPGO10['si195_vlrremuneracaobruta'], 2, ",", "");
-				$aCSVFLPGO10['si195_vlrdeducoes']                         =   number_format($aFLPGO10['si195_vlrdeducoes'], 2, ",", "");
+				$aCSVFLPGO10['si195_vlrdescontos']                         =   number_format($aFLPGO10['si195_vlrdescontos'], 2, ",", "");
         $aCSVFLPGO10['si195_vlrremuneracaoliquida']               =   number_format($aFLPGO10['si195_vlrremuneracaoliquida'], 2, ",", "");
         $aCSVFLPGO10['si195_natsaldoliquido']                     =   str_pad($aFLPGO10['si195_natsaldoliquido'], 1, "0", STR_PAD_LEFT);
 

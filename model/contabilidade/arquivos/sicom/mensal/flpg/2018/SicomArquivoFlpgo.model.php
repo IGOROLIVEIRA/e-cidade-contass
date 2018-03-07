@@ -513,7 +513,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_vlrremuneracaobruta               = $aTiposPagamento[$iContEx]['si195_vlrremuneracaobruta'];
         $clflpgo10->si195_natsaldoliquido                   = $aTiposPagamento[$iContEx]['si195_natsaldoliquido'];
         $clflpgo10->si195_vlrremuneracaoliquida             = $aTiposPagamento[$iContEx]['si195_vlrremuneracaoliquida'];
-        $clflpgo10->si195_vlrdeducoes                       = $aTiposPagamento[$iContEx]['si195_vlrdeducoes'];
+        $clflpgo10->si195_vlrdescontos                       = $aTiposPagamento[$iContEx]['si195_vlrdeducoes'];
         $clflpgo10->si195_mes                               = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $clflpgo10->si195_inst                              = db_getsession("DB_instit");
 
