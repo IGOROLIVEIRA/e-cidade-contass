@@ -16,17 +16,35 @@ class GerarAOP extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "AOP";
     $this->abreArquivo();
-    
+
     $sSql = "select * from aop102018 where si137_mes = " . $this->iMes . " and si137_instit = " . db_getsession("DB_instit");
     $rsAOP10 = db_query($sSql);
 
-    $sSql2 = "select * from aop112018 where si138_mes = " . $this->iMes . " and si138_instit = " . db_getsession("DB_instit");
+    $sSql2 = "SELECT si138_sequencial,
+                     si138_tiporegistro,
+                     si138_codreduzido,
+                     si138_tipopagamento,
+                     e60_codemp AS si138_nroempenho,
+                     si138_dtempenho,
+                     si138_nroliquidacao,
+                     si138_dtliquidacao,
+                     si138_codfontrecursos,
+                     si138_valoranulacaofonte,
+                     si138_codorgaoempop,
+                     si138_codunidadeempop,
+                     si138_mes,
+                     si138_reg10,
+                     si138_instit
+              FROM aop112018
+              INNER JOIN empempenho ON e60_codemp::int8 = si138_nroempenho AND e60_emiss = si138_dtempenho
+              WHERE si138_mes = " . $this->iMes . "
+                AND si138_instit = " . db_getsession("DB_instit");
     $rsAOP11 = db_query($sSql2);
 
 
@@ -56,14 +74,14 @@ class GerarAOP extends GerarAM
         $aCSVAOP10['si137_dtanulacaoop']          = $this->sicomDate($aAOP10['si137_dtanulacaoop']);
         $aCSVAOP10['si137_justificativaanulacao'] = substr($aAOP10['si137_justificativaanulacao'], 0, 500);
         $aCSVAOP10['si137_vlanulacaoop']          = $this->sicomNumberReal($aAOP10['si137_vlanulacaoop'], 2);
-        
+
         $this->sLinha = $aCSVAOP10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsAOP11); $iCont2++) {
 
           $aAOP11 = pg_fetch_array($rsAOP11, $iCont2);
-          
+
           if ($aAOP10['si137_sequencial'] == $aAOP11['si138_reg10']) {
 
             $aCSVAOP11['si138_tiporegistro']        = $this->padLeftZero($aAOP11['si138_tiporegistro'], 2);
