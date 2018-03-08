@@ -66,7 +66,6 @@ class GerarBP extends GerarAM
 
         $aCSVBP10 = array();
         $aCSVBP10['si208_tiporegistro']                       = $this->padLeftZero($aBP10['si208_tiporegistro'], 2);
-        $aCSVBP10['si208_exercicio']                          = $this->padLeftZero($aBP10['si208_exercicio'], 1);
         $aCSVBP10['si208_vlativocircucaixaequicaixa']         = $this->sicomNumberReal($aBP10['si208_vlativocircucaixaequicaixa'], 2);
         $aCSVBP10['si208_vlativocircucredicurtoprazo']        = $this->sicomNumberReal($aBP10['si208_vlativocircucredicurtoprazo'], 2);
         $aCSVBP10['si208_vlativocircuinvestapliccurtoprazo']  = $this->sicomNumberReal($aBP10['si208_vlativocircuinvestapliccurtoprazo'], 2);
@@ -94,7 +93,6 @@ class GerarBP extends GerarAM
 
         $aCSVBP20 = array();
         $aCSVBP20['si209_tiporegistro']                       = $this->padLeftZero($aBP20['si209_tiporegistro'], 2);
-        $aCSVBP20['si209_exercicio']                          = $this->padLeftZero($aBP20['si209_exercicio'], 1);
         $aCSVBP20['si209_vlpassivcircultrabprevicurtoprazo']  = $this->sicomNumberReal($aBP20['si209_vlpassivcircultrabprevicurtoprazo'], 2);
         $aCSVBP20['si209_vlpassivcirculemprefinancurtoprazo'] = $this->sicomNumberReal($aBP20['si209_vlpassivcirculemprefinancurtoprazo'], 2);
         $aCSVBP20['si209_vlpassivocirculafornecedcurtoprazo'] = $this->sicomNumberReal($aBP20['si209_vlpassivocirculafornecedcurtoprazo'], 2);
@@ -133,7 +131,6 @@ class GerarBP extends GerarAM
 
         $aCSVBP30 = array();
         $aCSVBP30['si210_tiporegistro']                     = $this->padLeftZero($aBP30['si210_tiporegistro'], 2);
-        $aCSVBP30['si210_exercicio']                        = $this->padLeftZero($aBP30['si210_exercicio'], 1);
         $aCSVBP30['si210_vlativofinanceiro']                = $this->sicomNumberReal($aBP30['si210_vlativofinanceiro'], 2);
         $aCSVBP30['si210_vlativopermanente']                = $this->sicomNumberReal($aBP30['si210_vlativopermanente'], 2);
         $aCSVBP30['si210_vltotalativofinanceiropermanente'] = $this->sicomNumberReal($aBP30['si210_vltotalativofinanceiropermanente'], 2);
@@ -151,7 +148,6 @@ class GerarBP extends GerarAM
 
         $aCSVBP40 = array();
         $aCSVBP40['si211_tiporegistro']                       = $this->padLeftZero($aBP40['si211_tiporegistro'], 2);
-        $aCSVBP40['si211_exercicio']                          = $this->padLeftZero($aBP40['si211_exercicio'], 1);
         $aCSVBP40['si211_vlpassivofinanceiro']                = $this->sicomNumberReal($aBP40['si211_vlpassivofinanceiro'], 2);
         $aCSVBP40['si211_vlpassivopermanente']                = $this->sicomNumberReal($aBP40['si211_vlpassivopermanente'], 2);
         $aCSVBP40['si211_vltotalpassivofinanceiropermanente'] = $this->sicomNumberReal($aBP40['si211_vltotalpassivofinanceiropermanente'], 2);
@@ -169,7 +165,6 @@ class GerarBP extends GerarAM
 
         $aCSVBP50 = array();
         $aCSVBP50['si212_tiporegistro']       = $this->padLeftZero($aBP50['si212_tiporegistro'], 2);
-        $aCSVBP50['si212_exercicio']          = $this->padLeftZero($aBP50['si212_exercicio'], 1);
         $aCSVBP50['si212_vlsaldopatrimonial'] = $this->sicomNumberReal($aBP50['si212_vlsaldopatrimonial'], 2);
 
         $this->sLinha = $aCSVBP50;
@@ -185,7 +180,6 @@ class GerarBP extends GerarAM
 
         $aCSVBP60 = array();
         $aCSVBP60['si213_tiporegistro']                       = $this->padLeftZero($aBP60['si213_tiporegistro'], 2);
-        $aCSVBP60['si213_exercicio']                          = $this->padLeftZero($aBP60['si213_exercicio'], 1);
         $aCSVBP60['si213_vlatospotenativosgarancontrarecebi'] = $this->sicomNumberReal($aBP60['si213_vlatospotenativosgarancontrarecebi'], 2);
         $aCSVBP60['si213_vlatospotenativodirconveoutroinstr'] = $this->sicomNumberReal($aBP60['si213_vlatospotenativodirconveoutroinstr'], 2);
         $aCSVBP60['si213_vlatospotenativosdireitoscontratua'] = $this->sicomNumberReal($aBP60['si213_vlatospotenativosdireitoscontratua'], 2);
@@ -208,7 +202,6 @@ class GerarBP extends GerarAM
 
         $aCSVBP70 = array();
         $aCSVBP70['si214_tiporegistro']   = $this->padLeftZero($aBP70['si214_tiporegistro'], 2);
-        $aCSVBP70['si214_exercicio']      = $this->padLeftZero($aBP70['si214_exercicio'], 1);
         $aCSVBP70['si214_vltotalsupdef']  = $this->sicomNumberReal($aBP70['si214_vltotalsupdef'], 2);
 
         $this->sLinha = $aCSVBP70;
@@ -224,7 +217,6 @@ class GerarBP extends GerarAM
 
         $aCSVBP71 = array();
         $aCSVBP71['si215_tiporegistro']     = $this->padLeftZero($aBP71['si215_tiporegistro'], 2);
-        $aCSVBP71['si215_exercicio']        = $this->padLeftZero($aBP71['si215_exercicio'], 1);
         $aCSVBP71['si215_codfontrecursos']  = $this->padLeftZero($aBP71['si215_codfontrecursos'], 3);
         $aCSVBP71['si215_vlsaldofonte']     = $this->sicomNumberReal($aBP71['si215_vlsaldofonte'], 2);
 

@@ -37,7 +37,15 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
-  $clconrelinfo->incluir($c83_codigo);
+  $res = $clconrelinfo->sql_record("select max(c83_codigo) as codigo from conrelinfo");
+  if ($clconrelinfo->numrows > 0 ){
+      db_fieldsmemory($res,0);
+      $codigo = $codigo + 1;      
+  } else {
+  	  $codigo = 1;
+  }
+	//$clconrelinfo->c83_anousu =	
+  $clconrelinfo->incluir($codigo);
   db_fim_transacao();
 }
 ?>
@@ -58,25 +66,19 @@ if(isset($incluir)){
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-    <center>
+
+<br /> <br />
+<center>
 	<?
-	include("forms/db_frmconrelinfo.php");
+  	include("forms/db_frmconrelinfo.php");
 	?>
-    </center>
-	</td>
-  </tr>
-</table>
+</center>
+
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
-<script>
-js_tabulacaoforms("form1","c83_codparrel",true,1,"c83_codparrel",true);
-</script>
 <?
 if(isset($incluir)){
   if($clconrelinfo->erro_status=="0"){
@@ -86,9 +88,9 @@ if(isset($incluir)){
     if($clconrelinfo->erro_campo!=""){
       echo "<script> document.form1.".$clconrelinfo->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clconrelinfo->erro_campo.".focus();</script>";
-    }
+    };
   }else{
     $clconrelinfo->erro(true,true);
-  }
-}
+  };
+};
 ?>
