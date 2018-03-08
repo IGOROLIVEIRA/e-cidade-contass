@@ -35,9 +35,9 @@ class cl_viap102018 {
                  ";
 
   //funcao construtor da classe 
-  function __construct() { 
+  function __construct() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("viap102018"); 
+    $this->rotulo = new rotulo("viap102018");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
@@ -67,7 +67,7 @@ class cl_viap102018 {
    }
 
   // funcao para inclusao
-  function incluir ($si198_sequencial) { 
+  function incluir ($si198_sequencial) {
       $this->atualizacampos();
      if ($this->si198_tiporegistro == null ) { 
        $this->erro_sql = " Campo si198_tiporegistro não informado.";
@@ -78,7 +78,7 @@ class cl_viap102018 {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->si198_nrocpfagentepublico == null ) { 
+     if ($this->si198_nrocpfagentepublico == null ) {
        $this->erro_sql = " Campo si198_nrocpfagentepublico não informado.";
        $this->erro_campo = "si198_nrocpfagentepublico";
        $this->erro_banco = "";
@@ -173,7 +173,7 @@ class cl_viap102018 {
                                ,$this->si198_mes 
                                ,$this->si198_inst 
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
@@ -204,7 +204,7 @@ class cl_viap102018 {
        $resaco = $this->sql_record($this->sql_query_file($this->si198_sequencial  ));
        if (($resaco!=false)||($this->numrows!=0)) {
 
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+         /*$resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
          $acount = pg_result($resac,0,0);
          $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
          $resac = db_query("insert into db_acountkey values($acount,1009278,'$this->si198_sequencial','I')");
@@ -214,7 +214,7 @@ class cl_viap102018 {
          $resac = db_query("insert into db_acount values($acount,1010198,1009281,'','".AddSlashes(pg_result($resaco,0,'si198_codmatriculapessoa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010198,1009282,'','".AddSlashes(pg_result($resaco,0,'si198_codvinculopessoa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010198,1009283,'','".AddSlashes(pg_result($resaco,0,'si198_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1010198,1009284,'','".AddSlashes(pg_result($resaco,0,'si198_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1010198,1009284,'','".AddSlashes(pg_result($resaco,0,'si198_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
        }
     }
     return true;
