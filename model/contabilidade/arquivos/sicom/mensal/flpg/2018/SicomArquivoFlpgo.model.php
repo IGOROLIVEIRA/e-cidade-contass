@@ -55,7 +55,17 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 	}
   function convert_accented_characters($str){
     setlocale (LC_ALL, 'pt_BR');
-    return iconv('UTF-8','ASCII//TRANSLIT',$str);
+    $new_string =  iconv('UTF-8','ASCII//IGNORE',$str);
+    if(strlen($new_string) != strlen($str)){
+      $new_string = preg_replace("/&([a-z])[a-z]+;/i", "$1", htmlentities(trim($str)));
+      if(strlen($new_string) != strlen($str)){
+        return $str;
+      }else{
+        return $new_string;
+      }
+    }else{
+      return $new_string;
+    }
   }
 
 
@@ -502,7 +512,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_dscsiglacargo                     = $this->convert_accented_characters($oDados10->si195_dscsiglacargo);
         $clflpgo10->si195_dscapo           					        = $this->convert_accented_characters($dscAPO);
         $clflpgo10->si195_reqcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);
-        $clflpgo10->si195_dscreqcargo 							        = $this->convert_accented_characters(($oDados10->si195_reqcargo == 4)?substr($oDados10->rh37_atividadedocargo,0,150):' ');
+        $clflpgo10->si195_dscreqcargo 							        = ($oDados10->si195_reqcargo == 4)?substr($this->convert_accented_characters($oDados10->rh37_atividadedocargo),0,150):' ';
         $clflpgo10->si195_indcessao 						            = $this->convert_accented_characters($oDados10->si195_indcessao);
         $clflpgo10->si195_dsclotacao 						            = $this->convert_accented_characters($oDados10->si195_dsclotacao);
         $clflpgo10->si195_vlrcargahorariasemanal 		        = $oDados10->si195_vlrcargahorariasemanal;
