@@ -493,50 +493,42 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
 
     $aLinhas = array();
 
-    $iDiaFinal    = DBDate::getQuantidadeDiasMes($this->oPeriodo->o114_mesfinal, $iAno);
-    $sDataInicial = "{$iAno}-01-01";
-    $sDataFinal   = "{$iAno}-{$this->oPeriodo->o114_mesfinal}-{$iDiaFinal}";
     $sIntituicoes = $this->getInstituicoes();
 
-    $sCampos = " case when o15_codtri is null then c61_codigo else o15_codtri::integer end as c61_codigo, o15_descr, k13_conta, c61_instit ";
-    $sOrdem  = " c61_codigo, k13_conta ";
-    $sGroup  = " 1, o15_descr, k13_conta, c61_instit ";
-    $sWhere  = " c60_codsis in (5,6) and (k13_limite is null or k13_limite >= '{$sDataFinal}')";
+    $sSqlfr = " select DISTINCT o15_codigo, o15_codtri,o15_descr  FROM orctiporec where o15_codtri is not null";
 
-    $oDaoSaltes = new cl_saltes();
-    $sSql       = $oDaoSaltes->sql_query_orcamento_recurso(null,
-                                                           $sIntituicoes,
-                                                           $iAno,
-                                                           $sCampos,
-                                                           $sOrdem,
-                                                           $sWhere,
-                                                           $sGroup
-    );
-    $rsRecursos = $oDaoSaltes->sql_record($sSql);
+
+    $rsRecursos = db_query($sSqlfr) or die($sSqlfr);
 
     $oLinha        = null;
     $nTotalRecurso = 0.0;
-    for ($iRecurso = 0; $iRecurso < $oDaoSaltes->numrows; $iRecurso++) {
+
+    for ($iRecurso = 0; $iRecurso < pg_num_rows($rsRecursos); $iRecurso++) {
 
       $oRecursoConta = db_utils::fieldsMemory($rsRecursos, $iRecurso);
-      if ($oLinha !== null  && $oLinha->codigo != $oRecursoConta->c61_codigo) {
-
+      if ($oLinha !== null  && $oLinha->codigo != $oRecursoConta->o15_codigo) {
         $oLinha->total = $nTotalRecurso;
         $aLinhas[]     = $oLinha;
         $nTotalRecurso = 0.0;
       }
+      $rsSaldoFontes = db_query($this->sql_query_saldoInicialContaCorrente(false,$oRecursoConta->o15_codigo, $sIntituicoes, $iAno) ) ;
+      $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
+      $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
+
+      if($oSaldoFontes->saldoanterior == 0 && $nSaldoFinal == 0)
+        continue;
 
       $oLinha            = new stdClass();
-      $oLinha->codigo    = $oRecursoConta->c61_codigo;
+      $oLinha->codigo    = $oRecursoConta->o15_codtri;
       $oLinha->descricao = $oRecursoConta->o15_descr;
 
-      $rsResultado = db_query("select fc_saltessaldo($oRecursoConta->k13_conta,'$sDataInicial','$sDataFinal', null, {$oRecursoConta->c61_instit})");
+      if($iAno==2016)
+        $valores =  $oSaldoFontes->saldoanterior * -1;
+      else
+        $valores =  $nSaldoFinal * -1;
 
-      $valores = pg_result($rsResultado, 0, 0);
-      $valores = preg_split("/\s+/", $valores);
-      if ($valores[0] == "1") {
-        $nTotalRecurso += (float) str_replace(",", "", $valores[4]);
-      }
+      $nTotalRecurso += $valores;
+
     }
     $oLinha->total = $nTotalRecurso;
     $aLinhas[]     = $oLinha;
@@ -648,4 +640,75 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
   public function setExibirExercicioAnterior($lExibirExercicioAnterior) {
     $this->lExibirExercicioAnterior = $lExibirExercicioAnterior;
   }
+
+  function sql_query_saldoInicialContaCorrente ($iInstit=false,$iFonte=null, $sIntituicoes, $iAno=null){
+
+        $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
+                             where substr(c60_estrut,1,5)='82111' and c60_anousu=" . $iAno ." and c61_anousu=" . $iAno;
+        $sWhere =  " AND conhistdoc.c53_tipo not in (1000) ";
+
+        if($iAno==2016){
+            $iAno = 2017;
+            $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
+                             where substr(c60_estrut,1,5)='82910' and c60_anousu=2017 and c61_anousu=2017";
+            $sWhere =  " AND conhistdoc.c53_tipo in (2023) ";
+        }
+
+        if($iInstit==false){
+            $sSqlReduzSuperavit = $sSqlReduzSuperavit." and c61_instit in (".$sIntituicoes.")";
+        }
+
+        $sSqlSaldos = " SELECT saldoanterior , debito , credito
+                                        FROM
+                                          (select coalesce((SELECT SUM(saldoanterior) AS saldoanterior FROM
+                                                    (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                                                     FROM contacorrente
+                                                     INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                                     INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+                                                     AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = c19_conplanoreduzanousu
+                                                     WHERE c19_reduz IN ( $sSqlReduzSuperavit )
+                                                       AND c19_conplanoreduzanousu = " . $iAno . "
+                                                       AND c17_sequencial = 103
+                                                       AND c19_orctiporec = {$iFonte}) as x),0) saldoanterior) AS saldoanteriores,
+
+                                            (select coalesce((SELECT sum(c69_valor) as credito
+                                             FROM conlancamval
+                                             INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                             AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                             INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                             INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                             INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                             INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                             INNER JOIN contacorrente ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                             WHERE c28_tipo = 'C'
+                                               AND DATE_PART('YEAR',c69_data) = " . $iAno . "
+                                               AND c17_sequencial = 103
+                                               AND c19_reduz IN (  $sSqlReduzSuperavit  )
+                                               AND c19_conplanoreduzanousu = " . $iAno . "
+                                               AND c19_orctiporec = {$iFonte}
+                                              ".$sWhere."
+                                             GROUP BY c28_tipo),0) as credito) AS creditos,
+
+                                            (select coalesce((SELECT sum(c69_valor) as debito
+                                             FROM conlancamval
+                                             INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                                             AND conlancam.c70_anousu = conlancamval.c69_anousu
+                                             INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                                             INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                                             INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                                             INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                                             INNER JOIN contacorrente  ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                                             WHERE c28_tipo = 'D'
+                                               AND DATE_PART('YEAR',c69_data) = " . $iAno . "
+                                               AND c17_sequencial = 103
+                                               AND c19_reduz IN ( $sSqlReduzSuperavit )
+                                               AND c19_conplanoreduzanousu = " . $iAno . "
+                                               AND c19_orctiporec = {$iFonte} 
+                                               ".$sWhere."                                              
+                                             GROUP BY c28_tipo),0) as debito) AS debitos";
+
+        return $sSqlSaldos;
+
+
+    }
 }
