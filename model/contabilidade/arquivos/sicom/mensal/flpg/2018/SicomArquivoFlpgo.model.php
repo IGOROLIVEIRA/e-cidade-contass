@@ -492,18 +492,18 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10->si195_codvinculopessoa                  = $oDados10->rh02_regist;
 				$clflpgo10->si195_regime             		            = $oDados10->si195_regime;
 				$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
-        $clflpgo10->si195_dsctipopagextra                  = $aTiposPagamento[$iContEx]['si195_dsctipopagextra'];
+        $clflpgo10->si195_dsctipopagextra                   = $this->convert_accented_characters($aTiposPagamento[$iContEx]['si195_dsctipopagextra']);
         $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
         $clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
         $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
         $clflpgo10->si195_codcargo                          = ($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0;
-        $clflpgo10->si195_sglcargo 							            = $oDados10->si195_sglcargo;
+        $clflpgo10->si195_sglcargo 							            = $this->convert_accented_characters($oDados10->si195_sglcargo);
         $clflpgo10->si195_dscsiglacargo                     = $this->convert_accented_characters($oDados10->si195_dscsiglacargo);
-        $clflpgo10->si195_dscapo           					        = $dscAPO;
-        $clflpgo10->si195_reqcargo                          = $oDados10->si195_reqcargo;
-        $clflpgo10->si195_dscreqcargo 							        = ($oDados10->si195_reqcargo == 4)?substr($oDados10->rh37_atividadedocargo,0,150):' ';
-        $clflpgo10->si195_indcessao 						            = $oDados10->si195_indcessao;
+        $clflpgo10->si195_dscapo           					        = $this->convert_accented_characters($dscAPO);
+        $clflpgo10->si195_reqcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);
+        $clflpgo10->si195_dscreqcargo 							        = $this->convert_accented_characters(($oDados10->si195_reqcargo == 4)?substr($oDados10->rh37_atividadedocargo,0,150):' ');
+        $clflpgo10->si195_indcessao 						            = $this->convert_accented_characters($oDados10->si195_indcessao);
         $clflpgo10->si195_dsclotacao 						            = $this->convert_accented_characters($oDados10->si195_dsclotacao);
         $clflpgo10->si195_vlrcargahorariasemanal 		        = $oDados10->si195_vlrcargahorariasemanal;
         $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
@@ -812,15 +812,15 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
          $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
 
          $clflpgo11 = new cl_flpgo112018();
-         $clflpgo11->si196_reg10                   = $clflpgo10->si195_sequencial;
+         $clflpgo11->si196_reg10                          = $clflpgo10->si195_sequencial;
          $clflpgo11->si196_tiporegistro                   = $oDados11->si196_tiporegistro;
-         $clflpgo11->si196_indtipopagamento                   = $oDados11->si196_indtipopagamento;
-         $clflpgo11->si196_codvinculopessoa                   = $oDados11->si196_codvinculopessoa;
-         $clflpgo11->si196_desctiporubrica                   = $oDados11->si196_desctiporubrica;
-         $clflpgo11->si196_vlrremuneracaodetalhada                   = $oDados11->si196_vlrremuneracaodetalhada;
-         $clflpgo11->si196_codrubricaremuneracao                   = $oDados11->si196_codrubricaremuneracao;
-         $clflpgo11->si196_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-         $clflpgo11->si196_inst                    = db_getsession("DB_instit");
+         $clflpgo11->si196_indtipopagamento               = $oDados11->si196_indtipopagamento;
+         $clflpgo11->si196_codvinculopessoa               = $oDados11->si196_codvinculopessoa;
+         $clflpgo11->si196_desctiporubrica                = $this->convert_accented_characters($oDados11->si196_desctiporubrica);
+         $clflpgo11->si196_vlrremuneracaodetalhada        = $oDados11->si196_vlrremuneracaodetalhada;
+         $clflpgo11->si196_codrubricaremuneracao          = $oDados11->si196_codrubricaremuneracao;
+         $clflpgo11->si196_mes                            = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+         $clflpgo11->si196_inst                           = db_getsession("DB_instit");
 				 $clflpgo11->incluir(null);
 
          if ($clflpgo11->erro_status == 0) {
@@ -1116,7 +1116,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        $clflpgo12->si197_tiporegistro            = $oDados12->si197_tiporegistro;
        $clflpgo12->si197_indtipopagamento        = $oDados12->si197_indtipopagamento;
        $clflpgo12->si197_codvinculopessoa        = $oDados12->si197_codvinculopessoa;
-       $clflpgo12->si197_desctiporubricadesconto         = $oDados12->si197_desctiporubricadesconto;
+       $clflpgo12->si197_desctiporubricadesconto = $this->convert_accented_characters($oDados12->si197_desctiporubricadesconto);
        $clflpgo12->si197_codrubricadesconto      = $oDados12->si197_codrubricadesconto;
        $clflpgo12->si197_vlrdescontodetalhado    = $oDados12->si197_vlrdescontodetalhado;
        $clflpgo12->si197_mes                     = $this->sDataFinal['5'] . $this->sDataFinal['6'];
