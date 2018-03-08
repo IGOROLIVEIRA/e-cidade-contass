@@ -26,7 +26,25 @@ class GerarAOP extends GerarAM
     $sSql = "select * from aop102017 where si137_mes = " . $this->iMes . " and si137_instit = " . db_getsession("DB_instit");
     $rsAOP10 = db_query($sSql);
 
-    $sSql2 = "select * from aop112017 where si138_mes = " . $this->iMes . " and si138_instit = " . db_getsession("DB_instit");
+    $sSql2 = "SELECT si138_sequencial,
+                     si138_tiporegistro,
+                     si138_codreduzido,
+                     si138_tipopagamento,
+                     e60_codemp AS si138_nroempenho,
+                     si138_dtempenho,
+                     si138_nroliquidacao,
+                     si138_dtliquidacao,
+                     si138_codfontrecursos,
+                     si138_valoranulacaofonte,
+                     si138_codorgaoempop,
+                     si138_codunidadeempop,
+                     si138_mes,
+                     si138_reg10,
+                     si138_instit
+              FROM aop112017
+              INNER JOIN empempenho ON e60_codemp::int8 = si138_nroempenho AND e60_emiss = si138_dtempenho
+              WHERE si138_mes = " . $this->iMes . "
+                AND si138_instit = " . db_getsession("DB_instit");
     $rsAOP11 = db_query($sSql2);
 
 

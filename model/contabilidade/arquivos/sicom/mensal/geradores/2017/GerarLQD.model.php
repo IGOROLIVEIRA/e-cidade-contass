@@ -24,7 +24,24 @@ class GerarLQD extends GerarAM
     $this->sArquivo = "LQD";
     $this->abreArquivo();
     
-    $sSql = "select * from lqd102017 where si118_mes = " . $this->iMes . " and si118_instit = " . db_getsession("DB_instit");
+    $sSql = "SELECT si118_sequencial,
+                     si118_tiporegistro,
+                     si118_codreduzido,
+                     si118_codorgao,
+                     si118_codunidadesub,
+                     si118_tpliquidacao,
+                     e60_codemp AS si118_nroempenho,
+                     si118_dtempenho,
+                     si118_dtliquidacao,
+                     si118_nroliquidacao,
+                     si118_vlliquidado,
+                     si118_cpfliquidante,
+                     si118_mes,
+                     si118_instit
+             FROM lqd102017
+             INNER JOIN empempenho ON e60_codemp::int8 = si118_nroempenho AND e60_emiss = si118_dtempenho
+             WHERE si118_mes = " . $this->iMes . "
+               AND si118_instit = " . db_getsession("DB_instit");
     $rsLQD10 = db_query($sSql);
     
     $sSql2 = "select * from lqd112017 where si119_mes = " . $this->iMes . " and si119_instit = " . db_getsession("DB_instit");

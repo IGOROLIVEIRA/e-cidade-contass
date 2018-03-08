@@ -23,7 +23,25 @@ class GerarRSP extends GerarAM
     $this->sArquivo = "RSP";
     $this->abreArquivo();
     
-    $sSql = "select * from rsp102017 where si112_mes = " . $this->iMes . " and si112_instit = " . db_getsession("DB_instit");
+    $sSql = "SELECT si112_sequencial,
+                     si112_tiporegistro,
+                     si112_codreduzidorsp,
+                     si112_codorgao,
+                     si112_codunidadesub,
+                     si112_codunidadesuborig,
+                     e60_codemp AS si112_nroempenho,
+                     si112_exercicioempenho,
+                     si112_dtempenho,
+                     si112_dotorig,
+                     si112_vloriginal,
+                     si112_vlsaldoantproce,
+                     si112_vlsaldoantnaoproc,
+                     si112_mes,
+                     si112_instit
+             FROM rsp102017
+             INNER JOIN empempenho ON e60_codemp::int8 = si112_nroempenho AND e60_anousu = si112_exercicioempenho
+             WHERE si112_mes = " . $this->iMes . "
+               AND si112_instit = " . db_getsession("DB_instit");
     $rsRSP10 = db_query($sSql);
     
     $sSql2 = "select * from rsp112017 where si113_mes = " . $this->iMes . " and si113_instit = " . db_getsession("DB_instit");
@@ -32,7 +50,31 @@ class GerarRSP extends GerarAM
     $sSql3 = "select * from rsp122017 where si114_mes = " . $this->iMes . " and si114_instit = " . db_getsession("DB_instit");
     $rsRSP12 = db_query($sSql3);
     
-    $sSql4 = "select * from rsp202017 where si115_mes = " . $this->iMes . " and si115_instit = " . db_getsession("DB_instit");
+    $sSql4 = "SELECT si115_sequencial,
+                     si115_tiporegistro,
+                     si115_codreduzidomov,
+                     si115_codorgao,
+                     si115_codunidadesub,
+                     si115_codunidadesuborig,
+                     e60_codemp AS si115_nroempenho,
+                     si115_exercicioempenho,
+                     si115_dtempenho,
+                     si115_tiporestospagar,
+                     si115_tipomovimento,
+                     si115_dtmovimentacao,
+                     si115_dotorig,
+                     si115_vlmovimentacao,
+                     si115_codorgaoencampatribuic,
+                     si115_codunidadesubencampatribuic,
+                     si115_justificativa,
+                     si115_atocancelamento,
+                     si115_dataatocancelamento,
+                     si115_mes,
+                     si115_instit
+              FROM rsp202017
+              INNER JOIN empempenho ON e60_codemp::int8 = si115_nroempenho AND e60_anousu = si112_exercicioempenho
+              WHERE si115_mes = " . $this->iMes . "
+                AND si115_instit = " . db_getsession("DB_instit");
     $rsRSP20 = db_query($sSql4);
     
     $sSql5 = "select * from rsp212017 where si116_mes = " . $this->iMes . " and si116_instit = " . db_getsession("DB_instit");

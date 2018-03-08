@@ -26,7 +26,30 @@ class GerarOPS extends GerarAM
     $sSql = "select * from ops102017 where si132_mes = " . $this->iMes . " and si132_instit = " . db_getsession("DB_instit");
     $rsOPS10 = db_query($sSql);
 
-    $sSql2 = "select * from ops112017 where si133_mes = " . $this->iMes . " and si133_instit = " . db_getsession("DB_instit");
+    $sSql2 = "SELECT si133_sequencial,
+                     si133_tiporegistro,
+                     si133_codreduzidoop,
+                     si133_codunidadesub,
+                     si133_nroop,
+                     si133_dtpagamento,
+                     si133_tipopagamento,
+                     e60_codemp AS si133_nroempenho,
+                     si133_dtempenho,
+                     si133_nroliquidacao,
+                     si133_dtliquidacao,
+                     si133_codfontrecursos,
+                     si133_valorfonte,
+                     si133_tipodocumentocredor,
+                     si133_nrodocumento,
+                     si133_codorgaoempop,
+                     si133_codunidadeempop,
+                     si133_mes,
+                     si133_reg10,
+                     si133_instit
+              FROM ops112017
+              INNER JOIN empempenho ON e60_codemp::int8 = si133_nroempenho AND e60_emiss = si133_dtempenho
+              WHERE si133_mes = " . $this->iMes . "
+                AND si133_instit = " . db_getsession("DB_instit");
     $rsOPS11 = db_query($sSql2);
 
     $sSql3 = "select * from ops122017 where si134_mes = " . $this->iMes . " and si134_instit = " . db_getsession("DB_instit");

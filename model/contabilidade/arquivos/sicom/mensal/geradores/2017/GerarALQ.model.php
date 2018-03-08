@@ -24,7 +24,26 @@ class GerarALQ extends GerarAM
     $this->sArquivo = "ALQ";
     $this->abreArquivo();
     
-    $sSql = "select * from alq102017 where si121_mes = " . $this->iMes . " and si121_instit = " . db_getsession("DB_instit");
+    $sSql = "SELECT si121_sequencial,
+                    si121_tiporegistro,
+                    si121_codreduzido,
+                    si121_codorgao,
+                    si121_codunidadesub,
+                    e60_codemp AS si121_nroempenho,
+                    si121_dtempenho,
+                    si121_dtliquidacao,
+                    si121_nroliquidacao,
+                    si121_dtanulacaoliq,
+                    si121_nroliquidacaoanl,
+                    si121_tpliquidacao,
+                    si121_justificativaanulacao,
+                    si121_vlanulado,
+                    si121_mes,
+                    si121_instit
+             FROM alq102017
+             INNER JOIN empempenho ON e60_codemp::int8 = si121_nroempenho AND e60_emiss = si121_dtempenho
+             WHERE si121_mes = " . $this->iMes . "
+               AND si121_instit = " . db_getsession("DB_instit");
     $rsALQ10 = db_query($sSql);
 
     $sSql2 = "select * from alq112017 where si122_mes = " . $this->iMes . " and si122_instit = " . db_getsession("DB_instit");
