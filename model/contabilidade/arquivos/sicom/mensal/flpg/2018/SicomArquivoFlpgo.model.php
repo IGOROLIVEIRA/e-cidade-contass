@@ -433,15 +433,17 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = 'FERIAS';
     }else{
 
-      $sSqlRubricaCom = "SELECT r48_rubric
+      $sSqlRubricaCom = "SELECT rh27_descr
       FROM gerfcom
+      INNER JOIN rhrubricas ON r48_rubric = rh27_rubric
+      AND r48_instit = rh27_instit
       WHERE r48_anousu = ".db_getsession("DB_anousu")."
       AND r48_mesusu = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
       AND r48_regist = ".$oDados10->rh02_regist."
       ";
       $rsResultRubricaCom = db_query($sSqlRubricaCom);
       $rsResultRubricaCom = db_utils::fieldsMemory($rsResultRubricaCom, 0);
-      $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = $rsResultRubricaCom->r48_rubric;
+      $aTiposPagamento[$iQuantTipoPagamento]['si195_dsctipopagextra'] = $rsResultRubricaCom->rh27_descr;
     }
 
   }
