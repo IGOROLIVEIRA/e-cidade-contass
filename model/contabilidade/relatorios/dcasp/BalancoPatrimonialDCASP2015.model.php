@@ -491,47 +491,46 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
    */
   private function getSaldoPorRecurso($iAno) {
 
-    $aLinhas = array();
+
 
     $sIntituicoes = $this->getInstituicoes();
 
-    $sSqlfr = " select DISTINCT o15_codigo, o15_codtri,o15_descr  FROM orctiporec where o15_codtri is not null";
+    $sSqlfr = " select DISTINCT o15_codigo, o15_codtri,o15_descr  FROM orctiporec where o15_codtri is not null order by o15_codtri";
 
-
+    $total = 0;
     $rsRecursos = db_query($sSqlfr) or die($sSqlfr);
+    $aLinhas = array();
 
-    $oLinha        = null;
-    $nTotalRecurso = 0.0;
 
-    for ($iRecurso = 0; $iRecurso < pg_num_rows($rsRecursos); $iRecurso++) {
+      for ($iRecurso = 0; $iRecurso < pg_num_rows($rsRecursos); $iRecurso++) {
 
-      $oRecursoConta = db_utils::fieldsMemory($rsRecursos, $iRecurso);
-      if ($oLinha !== null  && $oLinha->codigo != $oRecursoConta->o15_codigo) {
-        $oLinha->total = $nTotalRecurso;
-        $aLinhas[]     = $oLinha;
-        $nTotalRecurso = 0.0;
+          $oRecursoConta = db_utils::fieldsMemory($rsRecursos, $iRecurso);
+
+          $rsSaldoFontes = db_query($this->sql_query_saldoInicialContaCorrente(false, $oRecursoConta->o15_codigo, $sIntituicoes, $iAno));
+
+          $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes, 0);
+          $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
+
+
+          $sHash = $oRecursoConta->o15_codtri;
+          if($iAno==2016)
+              $valores =  $oSaldoFontes->saldoanterior * -1;
+          else
+              $valores =  $nSaldoFinal * -1;
+
+          if ( !isset($aLinhas[$sHash]) ) {
+              $oLinha            = new stdClass();
+              $oLinha->codigo    = $oRecursoConta->o15_codtri;
+              $oLinha->descricao = $oRecursoConta->o15_descr;
+              $oLinha->total     = $valores;
+              $aLinhas[$sHash]   = $oLinha;
+          }else{
+
+              $aLinhas[$sHash]->total  += $valores;
+          }
+
+
       }
-      $rsSaldoFontes = db_query($this->sql_query_saldoInicialContaCorrente(false,$oRecursoConta->o15_codigo, $sIntituicoes, $iAno) ) ;
-      $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
-      $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
-
-      if($oSaldoFontes->saldoanterior == 0 && $nSaldoFinal == 0)
-        continue;
-
-      $oLinha            = new stdClass();
-      $oLinha->codigo    = $oRecursoConta->o15_codtri;
-      $oLinha->descricao = $oRecursoConta->o15_descr;
-
-      if($iAno==2016)
-        $valores =  $oSaldoFontes->saldoanterior * -1;
-      else
-        $valores =  $nSaldoFinal * -1;
-
-      $nTotalRecurso += $valores;
-
-    }
-    $oLinha->total = $nTotalRecurso;
-    $aLinhas[]     = $oLinha;
 
     return $aLinhas;
   }
@@ -583,10 +582,12 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
       $oLinha->ultimaLinhaQuadro = false;
       $oLinha->ordem             = 0;
       $oLinha->nivel             = 1;
+      if($oLinha->vlrexatual == 0 && $oLinha->vlrexanter == 0){
+           continue;
+      }
       $aLinhas[]                 = $oLinha;
     }
     $aLinhas[] = $oLinhaTotalizado;
-
     return $aLinhas;
   }
 
