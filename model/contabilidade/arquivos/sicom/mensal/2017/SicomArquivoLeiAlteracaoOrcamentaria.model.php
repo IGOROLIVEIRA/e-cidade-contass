@@ -226,8 +226,8 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
       $sSql = "select distinct orcprojetolei.* from orcprojetolei
       inner join orcprojetoorcprojetolei on o138_sequencial=o139_orcprojetolei
       inner join orcprojeto on o139_orcprojeto=o39_codproj
-      inner join orcsuplem on o46_codlei=o39_codproj
-      inner join conlancamsup on c79_codsup=o46_codsup
+      left join orcsuplem on o46_codlei=o39_codproj
+      left join conlancamsup on c79_codsup=o46_codsup
       where o138_altpercsuplementacao = 1 and o138_data >= '{$this->sDataInicial}' and o138_data <= '{$this->sDataFinal}'";
       $rsResult20 = db_query($sSql);
 
@@ -252,10 +252,11 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
          * selecionar informacoes registro 21
          */
         $sSql = "select distinct orcleialtorcamentaria.* from orcleialtorcamentaria
+        inner join orcprojetolei on o138_sequencial=o200_orcprojetolei
         inner join orcprojetoorcprojetolei on o138_sequencial=o139_orcprojetolei
         inner join orcprojeto on o139_orcprojeto=o39_codproj
-        inner join orcsuplem on o46_codlei=o39_codproj
-        inner join conlancamsup on c79_codsup=o46_codsup
+        left join orcsuplem on o46_codlei=o39_codproj
+        left join conlancamsup on c79_codsup=o46_codsup
         where o200_orcprojetolei = {$oDados20->o138_sequencial}";
         $rsResult21 = db_query($sSql);
         for ($iCont21 = 0; $iCont21 < pg_num_rows($rsResult21); $iCont21++) {
