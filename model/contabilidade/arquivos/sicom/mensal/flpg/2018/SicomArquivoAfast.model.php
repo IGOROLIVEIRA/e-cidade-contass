@@ -261,11 +261,13 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
 
             db_fim_transacao();
 
-            $oGerarAfast = new GerarAFAST();
-            $oGerarAfast->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $oGerarAfast->gerarDados();
+
 
         }
+
+        $oGerarAfast = new GerarAFAST();
+        $oGerarAfast->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $oGerarAfast->gerarDados();
 
     }
 
