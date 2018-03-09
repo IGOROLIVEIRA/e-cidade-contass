@@ -425,8 +425,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
     //Consulta se o servidor possui ferias cadastradas no mes
     $sSqlFerias = "SELECT *
     FROM cadferia
-    WHERE r30_anousu = ".db_getsession("DB_anousu")."
-    AND r30_mesusu = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
+    WHERE r30_proc1 = '".db_getsession("DB_anousu")."/".$this->sDataFinal['5'].$this->sDataFinal['6']."'
     AND r30_regist = ".$oDados10->rh02_regist."
     ORDER BY r30_perai";
     $rsResultFerias = db_query($sSqlFerias);
