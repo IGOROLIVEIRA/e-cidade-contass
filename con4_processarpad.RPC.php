@@ -173,6 +173,12 @@ switch($oParam->exec) {
       $rsOrgao = db_query($sSql);
       $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2,"0",STR_PAD_LEFT);
 
+
+      $sSqlExtFonte  = "select count(*) as exist from conextsaldo where ces01_anousu=".db_getsession("DB_anousu");
+      $rsEXTFonte = db_query($sSqlExtFonte);
+      $nEXTFonte  = db_utils::fieldsMemory($rsEXTFonte, 0)->exist;
+
+
       /*
        * array para adicionar os arquivos de inslusao de programas
        */
@@ -193,11 +199,12 @@ switch($oParam->exec) {
         if (db_getsession("DB_anousu") > 2016 && $sArquivo == "SuperavitFinanceiro") {
           continue;
         }
-         if ($sArquivo == 'DetalhamentoExtraOrcamentarias' && in_array($sInstCgc, $aCgcExtFonte)   ){
-            
+         if ( ($sArquivo == 'DetalhamentoExtraOrcamentarias' && in_array($sInstCgc, $aCgcExtFonte))
+             || ($sArquivo == 'DetalhamentoExtraOrcamentarias' && $nEXTFonte > 0)  ){
             $sArquivo = "DetalhamentoExtraOrcamentariasPorFonte";
          }
-         if ($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && in_array($sInstCgc, $aCgcExtFonte)   ){
+         if (($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && in_array($sInstCgc, $aCgcExtFonte))
+             || ($sArquivo == 'SicomArquivoAnulacaoExtraOrcamentaria' && $nEXTFonte > 0) ){
             $sArquivo = 'SicomArquivoAnulacaoExtraOrcamentariaPorFonte';
          }
 
