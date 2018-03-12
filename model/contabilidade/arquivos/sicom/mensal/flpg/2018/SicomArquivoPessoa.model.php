@@ -90,8 +90,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					  from cgm
 					  inner join rhpessoal on rh01_numcgm = z01_numcgm
 					 where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000') 
-					 AND ((DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
-              or (DATE_PART('YEAR',rh01_admiss) < ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=12))
+					
 					 and (z01_cgccpf != '' and z01_cgccpf is not null)
 					 
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102018 where si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
@@ -100,9 +99,29 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
+					 
+					 AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102018 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." )
+					 
+					 AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102017)
+                    AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102016)
+                    AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102015)
+                    AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102014)
+                    AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102013)
+					 
 					 AND DATE_PART('YEAR',rh01_admiss) >= 2013
-					AND (DATE_PART('MONTH',rh01_admiss) = " .$this->sDataFinal['5'].$this->sDataFinal['6']."
-					    and DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")."
+					    
 					)
 
 					 union
@@ -126,6 +145,27 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
 					 and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
+					 
+					 AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102018 where si193_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." )
+					 
+					 AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102017)
+                    AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102016)
+                    AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102015)
+                    AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102014)
+                    AND z01_cgccpf NOT IN
+                        (SELECT si193_nrodocumento
+                         FROM pessoaflpgo102013)
+					 
 					 and prefeitura = 't'
 					 and z01_cadast >= '2013-01-01'
 					 ";
@@ -144,18 +184,32 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 		      from cgm
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-		      AND ((DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
-              or (DATE_PART('YEAR',rh01_admiss) < ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=12))
+		      
 		      and (z01_cgccpf != '' and z01_cgccpf is not null)
 		      and z01_cgccpf not in (select si195_nrodocumento from flpgo102017)
 		   and z01_cgccpf not in (select si195_nrodocumento from flpgo102016)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
-			  AND DATE_PART('YEAR',rh01_admiss) >= 2013
-			AND (DATE_PART('MONTH',rh01_admiss) = " .$this->sDataFinal['5'].$this->sDataFinal['6']."
-                                            and DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")."
-                                        )			
+           
+           
+           AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102017)
+    AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102016)
+    AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102015)
+    AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102014)
+    AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102013)
+           
+			  AND DATE_PART('YEAR',rh01_admiss) >= 2013		
 	
 		      UNION
 
@@ -176,6 +230,22 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102015)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102014)
            and z01_cgccpf not in (select si195_nrodocumento from flpgo102013)
+           
+           AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102017)
+    AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102016)
+    AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102015)
+    AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102014)
+    AND z01_cgccpf NOT IN
+        (SELECT si193_nrodocumento
+         FROM pessoaflpgo102013)
 					 and z01_cadast >= '2013-01-01'
 		      ";
     }

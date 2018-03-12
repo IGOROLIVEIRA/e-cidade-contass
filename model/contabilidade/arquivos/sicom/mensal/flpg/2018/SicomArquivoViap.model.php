@@ -79,25 +79,9 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
             }
         }
 
+        if ($this->sDataFinal['5'].$this->sDataFinal['6'] != 01) {
 
-//        if ($this->sDataFinal['5'].$this->sDataFinal['6'] != 01) {
-//
-//            $sSql  = "select distinct case when length(z01_cgccpf) < 11 then lpad(z01_cgccpf, 11, '0') else z01_cgccpf end as z01_cgccpf,
-//					       rh01_regist,
-//					       z01_numcgm
-//					  from cgm
-//					  inner join rhpessoal on rh01_numcgm = z01_numcgm
-//					 where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-//					 AND ((DATE_PART('YEAR',rh01_admiss) = ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
-//              or (DATE_PART('YEAR',rh01_admiss) < ".db_getsession("DB_anousu")." and DATE_PART('MONTH',rh01_admiss)<=12))
-//					 and (z01_cgccpf != '' and z01_cgccpf is not null)
-//
-//					 and z01_cgccpf not in (select si198_nrocpfagentepublico from viap102018 where si198_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
-//           and z01_cgccpf not in (select si198_nrocpfagentepublico from viap102018)
-//					 ";
-//
-//        } else {
-            $sSql  = "select z01_cgccpf,
+            $sSql = "select z01_cgccpf,
 		       rh01_regist,
 			   z01_numcgm
 		      from cgm
@@ -105,9 +89,26 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		      inner join rhpessoalmov on rh01_regist = rh02_regist
 		      LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes 
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
-		      AND rh02_anousu = ".db_getsession("DB_anousu"). " AND rh02_mesusu = ".$this->sDataFinal['5'].$this->sDataFinal['6']."
-			  AND rh05_seqpes is null
-		      ";
+		      AND rh02_anousu = " . db_getsession("DB_anousu") . " AND rh02_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+		      AND z01_numcgm NOT IN
+                        (SELECT si198_codmatriculapessoa
+                         FROM viap102018 where si198_mes < " . ($this->sDataFinal['5'] . $this->sDataFinal['6']) . " )
+			  ";
+        }else{
+
+            $sSql = "select z01_cgccpf,
+		       rh01_regist,
+			   z01_numcgm
+		      from cgm
+		      inner join rhpessoal on rh01_numcgm = z01_numcgm
+		      inner join rhpessoalmov on rh01_regist = rh02_regist
+		      LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes 
+		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
+		      AND rh02_anousu = " . db_getsession("DB_anousu") . " AND rh02_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+			  ";
+
+        }
+
 
         $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
 
