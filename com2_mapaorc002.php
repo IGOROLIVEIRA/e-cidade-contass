@@ -293,7 +293,7 @@ if ($modelo == 1) {
   $pdf->setfont('arial', '', 9);
   $pdf->cell(279,$alt,'','',1,"L",0);
   $pdf->cell(15, $alt, "Total da Média", 0, 0, "C", 0);
-  $pdf->cell(264, $alt, $total_media, 0, 1, "R", 0);
+  $pdf->cell(264, $alt, db_formatar($total_media, 'f'), 0, 1, "R", 0);
 
 } else if ($modelo == 2) {
 
