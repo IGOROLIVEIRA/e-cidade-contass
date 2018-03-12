@@ -166,6 +166,12 @@ class cl_habilitacaoforn {
       	$this->erro_status = "0";
         return false;
       }
+     if($this->verifica_habilitados($this->l206_licitacao,$this->l206_fornecedor) == true){
+         $this->erro_sql = "O Fornecedor já está Habilitado";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_status = "0";
+         return false;
+     }
      if($this->l206_fornecedor == null ){ 
        $this->erro_sql = " Campo Fornecedor nao Informado.";
        $this->erro_campo = "l206_fornecedor";
@@ -1004,6 +1010,16 @@ class cl_habilitacaoforn {
   	} else {
   		$this->fisica_juridica = 'j';
   	}
+  }
+
+  function verifica_habilitados($codliclicita, $num_cgm){
+    $sql = "select l206_fornecedor from habilitacaoforn where l206_licitacao = $codliclicita and l206_fornecedor = $num_cgm ";
+    $result = db_query($sql);
+    if(pg_result($result,0,0) > 0){
+        return true;
+      } else{
+        return false;
+    }
   }
 }
 ?>

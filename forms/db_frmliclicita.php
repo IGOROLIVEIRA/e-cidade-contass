@@ -991,7 +991,11 @@ function js_naturezaprocedimento(valor){
 		$('l20_usaregistropreco').value='t';
 		$('l20_usaregistropreco').disabled="disabled";
 
-	}
+	}else if(valor==1){
+        $('l20_usaregistropreco').value='f';
+        $('l20_usaregistropreco').disabled="disabled";
+
+    }
 }
 
 function js_ativaregistro(){
