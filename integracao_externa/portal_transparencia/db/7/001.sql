@@ -23,10 +23,5 @@ CREATE TABLE repasses (
 
 ALTER SEQUENCE repasses_id_seq OWNED BY repasses.id;
 
-ALTER TABLE repasses ADD CONSTRAINT repasses_instituicao_id_fk
-FOREIGN KEY (instituicao_id)
-REFERENCES instituicoes (codinstit)
-ON DELETE NO ACTION
-ON UPDATE NO ACTION
 DEFERRABLE INITIALLY DEFERRED;
 
