@@ -23,5 +23,3 @@ CREATE TABLE repasses (
 
 ALTER SEQUENCE repasses_id_seq OWNED BY repasses.id;
 
-DEFERRABLE INITIALLY DEFERRED;
-
