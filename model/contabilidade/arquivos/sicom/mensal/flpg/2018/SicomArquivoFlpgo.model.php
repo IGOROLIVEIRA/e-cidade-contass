@@ -562,7 +562,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        }else{
          $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
-         $sSql2 .= "e990_descricao AS si196_desctiporemuneracao,";
+         $sSql2 .= "rh27_descr AS si196_desctiporemuneracao,";
        }
        $sSql2 .= "CASE
 
@@ -626,7 +626,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        }else{
          $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
-         $sSql2 .= "e990_descricao AS si196_desctiporemuneracao,";
+         $sSql2 .= "rh27_descr AS si196_desctiporemuneracao,";
        }
        $sSql2 .= "CASE
        WHEN r48_pd = 1 THEN 'D'
@@ -688,7 +688,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        }else{
          $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
-         $sSql2 .= "e990_descricao AS si196_desctiporemuneracao,";
+         $sSql2 .= "rh27_descr AS si196_desctiporemuneracao,";
        }
        $sSql2 .= "CASE
        WHEN r35_pd = 1 THEN 'D'
@@ -750,7 +750,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        }else{
          $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
-         $sSql2 .= "e990_descricao AS si196_desctiporemuneracao,";
+         $sSql2 .= "rh27_descr AS si196_desctiporemuneracao,";
        }
        $sSql2 .= "CASE
        WHEN r20_pd = 1 THEN 'D'
@@ -861,7 +861,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       (SELECT 'gerfsal' as tipo,
       rh02_regist,
       e990_sequencial AS si197_tipodesconto,
-      e990_descricao AS si197_desctipodesconto,
+      rh27_descr AS si197_desctipodesconto,
       '12' AS si197_tiporegistro,
 
       CASE
@@ -921,7 +921,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       SELECT 'gerfcom' as tipo,
       rh02_regist,
       e990_sequencial AS si197_tipodesconto,
-      e990_descricao AS si197_desctipodesconto,
+      rh27_descr AS si197_desctipodesconto,
       '12' AS si197_tiporegistro,
 
       CASE
@@ -981,7 +981,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       SELECT 'gerfs13' as tipo,
       rh02_regist,
       e990_sequencial AS si197_tipodesconto,
-      e990_descricao AS si197_desctipodesconto,
+      rh27_descr AS si197_desctipodesconto,
       '12' AS si197_tiporegistro,
 
       CASE
@@ -1042,7 +1042,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
       'gerfres' as tipo,
       rh02_regist,
       e990_sequencial AS si197_tipodesconto,
-      e990_descricao AS si197_desctipodesconto,
+      rh27_descr AS si197_desctipodesconto,
       '12' AS si197_tiporegistro,
 
       CASE
