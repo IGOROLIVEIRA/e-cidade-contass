@@ -156,7 +156,10 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
                             AND DATE_PART('DAY',r45_dtreto) >= 2
                             AND DATE_PART('MONTH',r45_dtreto) >= 1
                             AND DATE_PART('YEAR',r45_dtreto) = 2018
-                            AND r45_situac <> 5";
+                            AND r45_anousu = 2018
+                            AND r45_situac <> 5 
+                            
+                            ";
 
             $rsResult2 = db_query($sSql);
             $oDadosAfast = db_utils::fieldsMemory($rsResult2, 0);//echo $sSql;db_criatabela($rsResult2);
