@@ -708,7 +708,7 @@ try {
                                                 from empresto
                                                 inner join empempenho on e60_numemp = e91_numemp
                                                 inner join empelemento on e60_numemp  = e64_numemp
-                                                inner join orcelemento on e64_codele = o56_codele and o56_anousu = e60_anousu
+                                                left join orcelemento on e64_codele = o56_codele and o56_anousu = e60_anousu
                                                 where e60_anousu = {$iAnousuEmp}
                                                 ";
                                 $rsLancamentos = db_query($sSqlLancamentos);
