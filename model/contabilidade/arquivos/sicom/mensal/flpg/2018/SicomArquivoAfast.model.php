@@ -133,7 +133,8 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
                   when r45_codafa = 'W' then ''
                   else r45_obs
                   end as si199_dscoutrosafastamentos
-                     FROM afasta 
+                     FROM afasta
+                     join rhpessoal on r45_regist = rh01_regist 
                         WHERE r45_regist = $oDados->r45_regist
                             AND 
                             (  r45_regist NOT IN
@@ -158,6 +159,7 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
                             AND DATE_PART('YEAR',r45_dtreto) = 2018
                             AND r45_anousu = 2018
                             AND r45_situac <> 5 
+                            AND rh01_instit =  " . db_getsession("DB_instit") . "
                             
                             ";
 
