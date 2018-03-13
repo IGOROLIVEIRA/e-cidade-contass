@@ -50,7 +50,8 @@ class cl_matmaterprecomedio {
    var $m85_data_dia = null; 
    var $m85_data_mes = null; 
    var $m85_data_ano = null; 
-   var $m85_data = null; 
+   var $m85_data = null;
+   var $m85_coddepto = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  m85_sequencial = int4 = Sequencial 
@@ -59,6 +60,7 @@ class cl_matmaterprecomedio {
                  m85_precomedio = float4 = Último Preço Médio 
                  m85_hora = varchar(5) = Hora 
                  m85_data = date = Data 
+                 m85_coddepto = int4 = Código departamento
                  ";
    //funcao construtor da classe 
    function cl_matmaterprecomedio() { 
@@ -91,6 +93,7 @@ class cl_matmaterprecomedio {
             $this->m85_data = $this->m85_data_ano."-".$this->m85_data_mes."-".$this->m85_data_dia;
          }
        }
+       $this->m85_coddepto = ($this->m85_coddepto == ""?@$GLOBALS["HTTP_POST_VARS"]["m85_coddepto"]:$this->m85_coddepto);
      }else{
        $this->m85_sequencial = ($this->m85_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["m85_sequencial"]:$this->m85_sequencial);
      }
@@ -182,6 +185,7 @@ class cl_matmaterprecomedio {
                                       ,m85_precomedio 
                                       ,m85_hora 
                                       ,m85_data 
+                                      ,m85_coddepto
                        )
                 values (
                                 $this->m85_sequencial 
@@ -189,7 +193,8 @@ class cl_matmaterprecomedio {
                                ,$this->m85_instit 
                                ,$this->m85_precomedio 
                                ,'$this->m85_hora' 
-                               ,".($this->m85_data == "null" || $this->m85_data == ""?"null":"'".$this->m85_data."'")." 
+                               ,".($this->m85_data == "null" || $this->m85_data == ""?"null":"'".$this->m85_data."'")."
+                               ,$this->m85_coddepto 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -327,6 +332,19 @@ class cl_matmaterprecomedio {
          }
        }
      }
+       if(trim($this->m85_coddepto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["m85_coddepto"])){
+           $sql  .= $virgula." m85_coddepto = '$this->m85_coddepto' ";
+           $virgula = ",";
+           if(trim($this->m85_coddepto) == null ){
+               $this->erro_sql = " Campo Departamento nao Informado.";
+               $this->erro_campo = "m85_coddepto";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
      $sql .= " where ";
      if($m85_sequencial!=null){
        $sql .= " m85_sequencial = $this->m85_sequencial";

@@ -1028,6 +1028,7 @@ class materialEstoque {
     $oDaoMatmaterprecomedio->m85_hora       =  '00:00:01';
     $oDaoMatmaterprecomedio->m85_data       =  $sDtAjuste;
     $oDaoMatmaterprecomedio->m85_precomedio =  $nValorPrecoMedio;
+    $oDaoMatmaterprecomedio->m85_coddepto   =  db_getsession("DB_coddepto");
     $oDaoMatmaterprecomedio->incluir(null);
 
     $iCodMatmaterprecomedio = $oDaoMatmaterprecomedio->m85_sequencial; // retorna o ultimo sequencial inserido
@@ -1071,8 +1072,8 @@ class materialEstoque {
     $sSqlPosterior .= "       inner join  matestoque     on m71_codmatestoque = m70_codigo                            ";
     $sSqlPosterior .= "       inner join  matestoqueini  on m82_matestoqueini = m80_codigo                            ";
     $sSqlPosterior .= " where m70_codmatmater = {$iCodMaterial} and to_timestamp(m80_data || ' '                      ";
-    $sSqlPosterior .= "                                                       || m80_hora,   'YYYY-MM-DD HH:MI:SS') > ";
-    $sSqlPosterior .= "                    to_timestamp('{$sDtAjuste}' || ' ' || '00:00:01', 'YYYY-MM-DD HH:MI:SS')   ";
+    $sSqlPosterior .= "                                                       || m80_hora,   'YYYY-MM-DD HH24:MI:SS') > ";
+    $sSqlPosterior .= "                    to_timestamp('{$sDtAjuste}' || ' ' || '00:00:01', 'YYYY-MM-DD HH24:MI:SS')   ";
     $sSqlPosterior .= " group by 1 order by 1                                                                         ";
 
     $rsDadosPosterior     = db_query($sSqlPosterior);
