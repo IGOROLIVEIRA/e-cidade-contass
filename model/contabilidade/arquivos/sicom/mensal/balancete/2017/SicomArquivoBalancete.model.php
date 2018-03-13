@@ -1160,7 +1160,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                     inner join empelemento on e64_numemp = e60_numemp
                                     inner join empresto on e91_numemp = e60_numemp
-                                    inner join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
                                     inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
                                     inner JOIN orctiporec ON o58_codigo = o15_codigo
                                     left join infocomplementaresinstit on  o58_instit = si09_instit
@@ -1195,7 +1195,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                     inner join empelemento on e64_numemp = e60_numemp
                                     inner join empresto on e91_numemp = e60_numemp
-                                    inner join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
                                     inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
                                     inner JOIN orctiporec ON o58_codigo = o15_codigo
                                     left join infocomplementaresinstit on  o58_instit = si09_instit
@@ -1230,7 +1230,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                     inner join empelemento on e64_numemp = e60_numemp
                                     inner join empresto on e91_numemp = e60_numemp
-                                    inner join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
                                     inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
                                     inner JOIN orctiporec ON o58_codigo = o15_codigo
                                     left join infocomplementaresinstit on  o58_instit = si09_instit
@@ -1267,7 +1267,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     inner join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                     inner join empelemento on e64_numemp = e60_numemp
                                     inner join empresto on e91_numemp = e60_numemp
-                                    inner join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
+                                    left join orcelemento ON o56_codele = e64_codele and e60_anousu = o56_anousu
                                     inner JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
                                     inner JOIN orctiporec ON o58_codigo = o15_codigo
                                     left join infocomplementaresinstit on  o58_instit = si09_instit
@@ -1441,7 +1441,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                   $obalancete14->si181_codprograma = trim($aDotacaoRpSicom[0]->si177_codprograma);
                   $obalancete14->si181_idacao = $aDotacaoRpSicom[0]->si177_idacao;
                   $obalancete14->si181_idsubacao = ($aDotacaoRpSicom[0]->si177_idsubacao == 0 ? "" : $aDotacaoRpSicom[0]->si177_idsubacao);
-                  $obalancete14->si181_naturezadespesa = $aDotacaoRpSicom[0]->si177_naturezadespesa;
+                  $obalancete14->si181_naturezadespesa = substr($aDotacaoRpSicom[0]->si177_naturezadespesa,0,6);
                   $obalancete14->si181_subelemento = $aDotacaoRpSicom[0]->si177_subelemento;
                   $obalancete14->si181_codfontrecursos = $aDotacaoRpSicom[0]->si177_codfontrecursos;
                   
@@ -2938,7 +2938,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
     $oGerarbalancete = new GerarBALANCETE();
     $oGerarbalancete->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarbalancete->gerarDados();
-    
+
   }
   
 }

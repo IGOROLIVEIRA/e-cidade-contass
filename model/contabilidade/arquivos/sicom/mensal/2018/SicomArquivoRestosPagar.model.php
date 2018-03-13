@@ -245,7 +245,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
             $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_codsubfuncao, 3, "0", STR_PAD_LEFT);
             $sDotacaoOrig .= str_pad(trim($aDotacaoRpSicom[0]->si177_codprograma), 4, "0", STR_PAD_LEFT);
             $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_idacao, 4, "0", STR_PAD_LEFT);
-            $sDotacaoOrig .= substr($aDotacaoRpSicom[0]->si177_naturezadespesa,0,5);
+            $sDotacaoOrig .= substr($aDotacaoRpSicom[0]->si177_naturezadespesa,0,6);
             $sDotacaoOrig .= str_pad($aDotacaoRpSicom[0]->si177_subelemento, 2, "0", STR_PAD_LEFT);
             $clrsp10->si112_dotorig = $sDotacaoOrig;
           } else {
