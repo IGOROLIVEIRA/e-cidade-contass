@@ -121,6 +121,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
                          FROM pessoaflpgo102013)
 					 
 					 AND DATE_PART('YEAR',rh01_admiss) >= 2013
+					 AND rh01_instit =  " . db_getsession("DB_instit") . "
 					    
 					)
 
@@ -168,6 +169,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
 					 
 					 and prefeitura = 't'
 					 and z01_cadast >= '2013-01-01'
+					 AND db_config.codigo =  " . db_getsession("DB_instit") . "
 					 ";
 
     } else {
@@ -210,6 +212,7 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
          FROM pessoaflpgo102013)
            
 			  AND DATE_PART('YEAR',rh01_admiss) >= 2013		
+			  AND rh01_instit =  " . db_getsession("DB_instit") . "
 	
 		      UNION
 
@@ -247,6 +250,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
         (SELECT si193_nrodocumento
          FROM pessoaflpgo102013)
 					 and z01_cadast >= '2013-01-01'
+					 
+	AND db_config.codigo =  " . db_getsession("DB_instit") . "
 		      ";
     }
 
