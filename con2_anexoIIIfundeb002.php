@@ -190,15 +190,9 @@ $aPagoAcumulado = array();
 
         </td>
       </tr>
-      <tr style='height:20px;'>
-        <td class="s12" >
-          <?
-          $aDadosRFMD = getSaldoReceita(null, "sum(saldo_arrecadado) as saldo_arrecadado", null, "o57_fonte like '4172401%'");
-          $fRFMD = count($aDadosRFMD) > 0 ? $aDadosRFMD[0]->saldo_arrecadado : 0;
-          echo db_formatar($fRFMD, "f");
-          $aRecursos[] = $fRFMD;
-          ?>
-        </td>
+      <tr>
+      <td colspan="7"></td>
+      <td ></td>
       </tr>
       <tr style='height:20px;'>
         <td class="s8 bdleft" colspan="7">1724.02.00 - Transf.de Recursos da Complementação da União ao FUNDEB</td>
