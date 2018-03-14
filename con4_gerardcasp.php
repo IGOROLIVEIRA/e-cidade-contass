@@ -74,16 +74,18 @@ $clrotulo->label("o15_codigo");
                         <td style="border: 2px groove white;" valign="top">
                             <input type="checkbox" value="IDE" id="IDE" />
                             <label for="IDE">Identificação da Remessa (IDE)</label><br>
-                            <input type="checkbox" value="BF" id="BF" />
-                            <label for="BF">Balance Financeiro (BF)</label><br>
                             <input type="checkbox" value="BO" id="BO" />
                             <label for="BO">Balance Orçamentário (BO)</label><br>
+                            <input type="checkbox" value="BF" id="BF" />
+                            <label for="BF">Balance Financeiro (BF)</label><br>
                             <input type="checkbox" value="BP" id="BP" />
                             <label for="BP">Balance Patrimonial (BP)</label><br>
                             <input type="checkbox" value="DVP" id="DVP" />
                             <label for="DVP">Demonstração das Variações Patrimoniais (DVP)</label><br>
                             <input type="checkbox" value="DFC" id="DFC" />
                             <label for="DFC">Demonstração dos Fluxos de Caixa (DFC)</label><br>
+                            <input type="checkbox" value="RPSD" id="RPSD" />
+                            <label for="RPSD">Restos a Pagar (RPSD)</label><br>
                         </td>
                         <td style="border: 2px groove white;" valign="top">
 
