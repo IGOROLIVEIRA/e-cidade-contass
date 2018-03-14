@@ -64,6 +64,22 @@ if ( isset($oGet->dtInicial) && isset($oGet->dtFinal) ) {
 	}
 }
 
+if(isset($oGet->ntFiscal) && $oGet->ntFiscal != ""){
+  $sWhere .="{$sAnd} e69_numero = '{$oGet->ntFiscal}' ";
+  $sAnd    = " and ";
+}
+
+if(isset($oGet->sqNtFiscal) && $oGet->sqNtFiscal != ""){
+  $sWhere .="{$sAnd} e69_codnota = '{$oGet->sqNtFiscal}' ";
+  $sAnd    = " and ";
+}
+
+if(isset($oGet->ordemCompra) && $oGet->ordemCompra != ""){
+  $sWhere .="{$sAnd} m51_codordem = {$oGet->ordemCompra} ";
+  $sAnd    = " and ";
+}
+
+
 if ( isset($oGet->ordenar) && $oGet->ordenar == 'ordfrn' ) {
 	$sOrder = "z01_numcgm";
 } else if ( isset($oGet->ordenar) && $oGet->ordenar == 'ordoc' ) {
@@ -83,6 +99,7 @@ $sCampos .= "matordem.m51_numcgm, matordem.m51_codordem, cgm.z01_numcgm, cgm.z01
 $sCampos .= "matestoqueitem.m71_quant, matestoqueitem.m71_valor, matestoqueitem.m71_data                              ";
 
 $sSqlMatestoque = $clmatestoque->sql_query_ent(null, $sCampos, $sOrder, $sWhere);
+// print_r($sSqlMatestoque);die();
 $rsMatestoque   = $clmatestoque->sql_record($sSqlMatestoque);
 
 if ($clmatestoque->numrows == 0) {
@@ -234,7 +251,7 @@ foreach ( $aDadosMatEstoque as $iCodInd => $aDados ) {
       //$pdf->Cell(20,$nAlt,db_formatar($aDados['dtData'],'d')                        ,0,1,"C",0);
 
       $pdf->SetFont($sLetra,'B',6);
-      $pdf->Cell(15,$nAlt,"Cod. Nota"                                               ,1,0,"C",1);
+      $pdf->Cell(15,$nAlt,"Número da NF"                                            ,1,0,"C",1);
       $pdf->Cell(15,$nAlt,"Data Nota"                                               ,1,0,"C",1);
       $pdf->Cell(15,$nAlt,"Cod. Item"                                               ,1,0,"C",1);
       $pdf->Cell(80,$nAlt,"Descricao do material"                                   ,1,0,"C",1);
@@ -259,8 +276,8 @@ foreach ( $aDadosMatEstoque as $iCodInd => $aDados ) {
         //$pdf->Cell(20,$nAlt,db_formatar($aDados['dtData'],'d')                      ,0,1,"C",0);
 
         $pdf->SetFont($sLetra,'B',6);
-        $pdf->Cell(15,$nAlt,"Cod. Nota"                                               ,1,0,"C",1);
-        $pdf->Cell(15,$nAlt,"Data Nota"                                               ,1,0,"C",1);
+        $pdf->Cell(15,$nAlt,"Número da NF"                                          ,1,0,"C",1);
+        $pdf->Cell(15,$nAlt,"Data Nota"                                             ,1,0,"C",1);
         $pdf->Cell(15,$nAlt,"Cod. Item"                                             ,1,0,"C",1);
         $pdf->Cell(80,$nAlt,"Descricao do material"                                 ,1,0,"C",1);
         $pdf->Cell(19,$nAlt,"Ordem de Compra"                                       ,1,0,"C",1);
@@ -298,9 +315,9 @@ foreach ( $aDadosMatEstoque as $iCodInd => $aDados ) {
       //$pdf->Cell(20,$nAlt,db_formatar($aDados['dtData'],'d')                        ,0,1,"C",0);
 
       $pdf->SetFont($sLetra,'B',6);
-      $pdf->Cell(15,$nAlt,"Cod. Nota"                                               ,1,0,"C",1);
+      $pdf->Cell(15,$nAlt,"Número da NF"                                            ,1,0,"C",1);
       $pdf->Cell(15,$nAlt,"Data Nota"                                               ,1,0,"C",1);
-      $pdf->Cell(15,$nAlt,"Cod. Forne."                                               ,1,0,"C",1);
+      $pdf->Cell(15,$nAlt,"Cod. Forne."                                             ,1,0,"C",1);
       $pdf->Cell(80,$nAlt,"Fornecedor"                                              ,1,0,"C",1);
       $pdf->Cell(19,$nAlt,"Ordem de Compra"                                         ,1,0,"C",1);
       $pdf->Cell(15,$nAlt,"Quantidade"                                              ,1,0,"C",1);
@@ -323,9 +340,9 @@ foreach ( $aDadosMatEstoque as $iCodInd => $aDados ) {
 	      //$pdf->Cell(20,$nAlt,db_formatar($aDados['dtData'],'d')                      ,0,1,"C",0);
 
 	      $pdf->SetFont($sLetra,'B',6);
-	      $pdf->Cell(15,$nAlt,"Cod. Nota"                                               ,1,0,"C",1);
-        $pdf->Cell(15,$nAlt,"Data Nota"                                               ,1,0,"C",1);
-	      $pdf->Cell(15,$nAlt,"Cod. Forne."                                             ,1,0,"C",1);
+	      $pdf->Cell(15,$nAlt,"Número da NF"                                          ,1,0,"C",1);
+        $pdf->Cell(15,$nAlt,"Data Nota"                                             ,1,0,"C",1);
+	      $pdf->Cell(15,$nAlt,"Cod. Forne."                                           ,1,0,"C",1);
 	      $pdf->Cell(80,$nAlt,"Fornecedor"                                            ,1,0,"C",1);
 	      $pdf->Cell(19,$nAlt,"Ordem de Compra"                                       ,1,0,"C",1);
 	      $pdf->Cell(15,$nAlt,"Quantidade"                                            ,1,0,"C",1);
