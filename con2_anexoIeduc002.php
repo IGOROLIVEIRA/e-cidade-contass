@@ -80,9 +80,9 @@ $fMJDAIPTU  = 0;
 $fMJDAITBI  = 0;
 $fMJDAISS = 0;
 $fMJDAITR = 0;
-$fMJDAIPTU  = 0;
-$fMJDAITBI  = 0;
-$fMJDAISS = 0;
+$fRJDAIPTU  = 0;
+$fRJDAITBI  = 0;
+$fRJDAISS = 0;
 
 foreach ($aReceitas as $Receitas) {
 
@@ -111,9 +111,9 @@ foreach ($aReceitas as $Receitas) {
   if(strstr($Receitas->o57_fonte, '411180144000000'))$fMJDAITBI+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '411180234000000'))$fMJDAISS+=$Receitas->saldo_arrecadado;
 
-  if(strstr($Receitas->o57_fonte, '411180113000000'))$fMJDAIPTU+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '411180143000000'))$fMJDAITBI+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '411180233000000'))$fMJDAISS+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '411180113000000'))$fRJDAIPTU+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '411180143000000'))$fRJDAITBI+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '411180233000000'))$fRJDAISS+=$Receitas->saldo_arrecadado;
 
 }
 db_query("drop table if exists work_receita");
@@ -537,8 +537,8 @@ ob_start();
             <td class="s9">
               <?php
               $aDadosRDAITR = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193104%'");
-              $fMJDAITR = count($aDadosRDAITR) > 0 ? $aDadosRDAITR[0]->saldo_arrecadado_acumulado : 0;
-              echo db_formatar($fMJDAITR, "f");
+              $fRJDAITR = count($aDadosRDAITR) > 0 ? $aDadosRDAITR[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fRJDAITR, "f");
               ?>
             </td>
           </tr>
@@ -549,8 +549,8 @@ ob_start();
             <td class="s13">
               <?php
               $aDadosRDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193111%'");
-              $fMJDAIPTU = count($aDadosRDAIPTU) > 0 ? $aDadosRDAIPTU[0]->saldo_arrecadado_acumulado : 0;
-              echo db_formatar($fMJDAIPTU, "f");
+              $fRJDAIPTU = count($aDadosRDAIPTU) > 0 ? $aDadosRDAIPTU[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fRJDAIPTU, "f");
               ?>
             </td>
           </tr>
@@ -561,8 +561,8 @@ ob_start();
             <td class="s9">
               <?php
               $aDadosRDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193112%'");
-              $fMJDAITBI = count($aDadosRDAITBI) > 0 ? $aDadosRDAITBI[0]->saldo_arrecadado_acumulado : 0;
-              echo db_formatar($fMJDAITBI, "f");
+              $fRJDAITBI = count($aDadosRDAITBI) > 0 ? $aDadosRDAITBI[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fRJDAITBI, "f");
               ?>
             </td>
           </tr>
@@ -573,45 +573,29 @@ ob_start();
             <td class="s13">
               <?php
               $aDadosRDAISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193113%'");
-              $fMJDAISS = count($aDadosRDAISS) > 0 ? $aDadosRDAISS[0]->saldo_arrecadado_acumulado : 0;
-              echo db_formatar($fMJDAISS, "f");
+              $fRJDAISS = count($aDadosRDAISS) > 0 ? $aDadosRDAISS[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fRJDAISS, "f");
               ?>
             </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">Subtotal</td>
-            <td class="s3"></td>
-          </tr>
-          <tr style='height:20px;'>
-            <td class="s3 bdleft" colspan="9">&nbsp;</td>
-            <td class="s3">
-              <?php
-              $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fMJDAITR,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS));
-              echo db_formatar($fSubTotalOutrasCorrentes,"f");?>
-            </td>
-          </tr>
-          <tr style='height:20px;'>
-            <td class="s6 bdleft" colspan="9">D - Deduções das Receitas (exceto FUNDEB)</td>
-            <td class="s3"></td>
-          </tr>
-          <?php
-          $fTotalDeducoes = 0;
-          $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '498%'");
-          foreach($aDadoDeducao as $oDeducao){
-            ?>
+            <td class="s3">              <?php
+              $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fRJDAITR,$fRJDAIPTU,$fRJDAITBI,$fRJDAISS));
+              echo db_formatar($fSubTotalOutrasCorrentes,"f");?></td>
+            </tr>
             <tr style='height:20px;'>
-              <td class="s7 bdleft"></td>
-              <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte,"receita"); ?></td>
-              <td class="s6" colspan="7"><?=$oDeducao->o57_descr; ?></td>
-              <td class="s15">
-                <?php
-                $fTotalDeducoes += $oDeducao->saldo_arrecadado;
-                echo db_formatar($oDeducao->saldo_arrecadado,"f");
-                ?>
+              <td class="s3 bdleft" colspan="9">&nbsp;</td>
+              <td class="s3">
               </td>
             </tr>
-            <?php }
-            $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '499%'");
+            <tr style='height:20px;'>
+              <td class="s6 bdleft" colspan="9">D - Deduções das Receitas (exceto FUNDEB)</td>
+              <td class="s3"></td>
+            </tr>
+            <?php
+            $fTotalDeducoes = 0;
+            $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '498%'");
             foreach($aDadoDeducao as $oDeducao){
               ?>
               <tr style='height:20px;'>
@@ -625,35 +609,50 @@ ob_start();
                   ?>
                 </td>
               </tr>
-              <?php } ?>
-              <tr style='height:20px;'>
-                <td class="s6 bdleft" colspan="9">Subtotal</td>
-                <td class="s3"></td>
-              </tr>
-              <tr style='height:20px;'>
-                <td class="s6 bdleft bdbottom" colspan="9">&nbsp;</td>
-                <td class="s3 bdbottom"><?=db_formatar($fTotalDeducoes,"f")?></td>
-              </tr>
-
-              <tr style='height:20px;'>
-                <td class="s20 bdleft" colspan="9">02 - Total das Receitas (A+B+C-D)</td>
-                <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto+$fSubTotalCorrentes+$fSubTotalOutrasCorrentes)-$fTotalDeducoes; echo db_formatar($fTotalReceitas,"f"); ?> </td>
-              </tr>
-              <tr style='height:20px;'>
-                <td class="s20 bdleft" colspan="9">03 - Valor Legal Mínimo (art. 212 da CF) 25 % =</td>
-                <td class="s21"><?php echo db_formatar($fTotalReceitas*0.25,"f");?></td>
-              </tr>
-              <tr style='height:20px;'>
-                <?php
-                db_query("drop table if exists work_receita");
-                db_fim_transacao();
-                $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
+              <?php }
+              $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '499%'");
+              foreach($aDadoDeducao as $oDeducao){
                 ?>
-                <td class="s20 bdleft" dir="ltr" colspan="9">04 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
-                <td class="s22"><?=db_formatar($fTotalAnexoII,"f")?></td>
-              </tr>
-            <?php else: ?>
-              <tr style='height:20px;'>
+                <tr style='height:20px;'>
+                  <td class="s7 bdleft"></td>
+                  <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte,"receita"); ?></td>
+                  <td class="s6" colspan="7"><?=$oDeducao->o57_descr; ?></td>
+                  <td class="s15">
+                    <?php
+                    $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+                    echo db_formatar($oDeducao->saldo_arrecadado,"f");
+                    ?>
+                  </td>
+                </tr>
+                <?php } ?>
+                <tr style='height:20px;'>
+                  <td class="s6 bdleft" colspan="9">Subtotal</td>
+                  <td class="s3"></td>
+                </tr>
+                <tr style='height:20px;'>
+                  <td class="s6 bdleft bdbottom" colspan="9">&nbsp;</td>
+                  <td class="s3 bdbottom"><?=db_formatar($fTotalDeducoes,"f")?></td>
+                </tr>
+
+                <tr style='height:20px;'>
+                  <td class="s20 bdleft" colspan="9">02 - Total das Receitas (A+B+C-D)</td>
+                  <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto+$fSubTotalCorrentes+$fSubTotalOutrasCorrentes)-$fTotalDeducoes; echo db_formatar($fTotalReceitas,"f"); ?> </td>
+                </tr>
+                <tr style='height:20px;'>
+                  <td class="s20 bdleft" colspan="9">03 - Valor Legal Mínimo (art. 212 da CF) 25 % =</td>
+                  <td class="s21"><?php echo db_formatar($fTotalReceitas*0.25,"f");?></td>
+                </tr>
+                <tr style='height:20px;'>
+                  <?php
+                  db_query("drop table if exists work_receita");
+                  db_fim_transacao();
+                  $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
+                  ?>
+                  <td class="s20 bdleft" dir="ltr" colspan="9">04 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
+                  <td class="s22"><?=db_formatar($fTotalAnexoII,"f")?></td>
+                </tr>
+              <?php else: ?>
+               <tr style='height:20px;'>
                 <td class="s3 bdleft bdtop" colspan="10">&nbsp;</td>
               </tr>
               <tr style='height:20px;'>
@@ -935,7 +934,7 @@ ob_start();
                 <td class="s12" colspan="7">Receita da Dívida Ativa do IPTU </td>
                 <td class="s13">
                   <?php
-                  echo db_formatar($fMJDAIPTU, "f");
+                  echo db_formatar($fRJDAIPTU, "f");
                   ?>
                 </td>
               </tr>
@@ -945,7 +944,7 @@ ob_start();
                 <td class="s6" colspan="7">Receita da Dívida Ativa do ITBI </td>
                 <td class="s9">
                   <?php
-                  echo db_formatar($fMJDAITBI, "f");
+                  echo db_formatar($fRJDAITBI, "f");
                   ?>
                 </td>
               </tr>
@@ -955,44 +954,29 @@ ob_start();
                 <td class="s12" colspan="7">Receita da Dívida Ativa do ISS </td>
                 <td class="s13">
                   <?php
-                  echo db_formatar($fMJDAISS, "f");
+                  echo db_formatar($fRJDAISS, "f");
                   ?>
                 </td>
               </tr>
               <tr style='height:20px;'>
                 <td class="s6 bdleft" colspan="9">Subtotal</td>
-                <td class="s3"></td>
-              </tr>
-              <tr style='height:20px;'>
-                <td class="s3 bdleft" colspan="9">&nbsp;</td>
-                <td class="s3">
-                  <?php
-                  $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fMJDAITR,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS));
-                  echo db_formatar($fSubTotalOutrasCorrentes,"f");?>
-                </td>
-              </tr>
-              <tr style='height:20px;'>
-                <td class="s6 bdleft" colspan="9">D - Deduções das Receitas (exceto FUNDEB)</td>
-                <td class="s3"></td>
-              </tr>
-              <?php
-              $fTotalDeducoes = 0;
-              $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '498%'");
-              foreach($aDadoDeducao as $oDeducao){
-                ?>
+                <td class="s3"><?php
+                  $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fMJDAITR,$fRJDAIPTU,$fRJDAITBI,$fRJDAISS));
+                  echo db_formatar($fSubTotalOutrasCorrentes,"f");?></td>
+                </tr>
                 <tr style='height:20px;'>
-                  <td class="s7 bdleft"></td>
-                  <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte,"receita"); ?></td>
-                  <td class="s6" colspan="7"><?=$oDeducao->o57_descr; ?></td>
-                  <td class="s15">
-                    <?php
-                    $fTotalDeducoes += $oDeducao->saldo_arrecadado;
-                    echo db_formatar($oDeducao->saldo_arrecadado,"f");
-                    ?>
+                  <td class="s3 bdleft" colspan="9">&nbsp;</td>
+                  <td class="s3">
+
                   </td>
                 </tr>
-                <?php }
-                $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '499%'");
+                <tr style='height:20px;'>
+                  <td class="s6 bdleft" colspan="9">D - Deduções das Receitas (exceto FUNDEB)</td>
+                  <td class="s3"></td>
+                </tr>
+                <?php
+                $fTotalDeducoes = 0;
+                $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '498%'");
                 foreach($aDadoDeducao as $oDeducao){
                   ?>
                   <tr style='height:20px;'>
@@ -1006,46 +990,61 @@ ob_start();
                       ?>
                     </td>
                   </tr>
-                  <?php } ?>
-                  <tr style='height:20px;'>
-                    <td class="s6 bdleft" colspan="9">Subtotal</td>
-                    <td class="s3"></td>
-                  </tr>
-                  <tr style='height:20px;'>
-                    <td class="s6 bdleft bdbottom" colspan="9">&nbsp;</td>
-                    <td class="s3 bdbottom"><?=db_formatar($fTotalDeducoes,"f")?></td>
-                  </tr>
-
-                  <tr style='height:20px;'>
-                    <td class="s20 bdleft" colspan="9">02 - Total das Receitas (A+B+C-D)</td>
-                    <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto+$fSubTotalCorrentes+$fSubTotalOutrasCorrentes)-$fTotalDeducoes; echo db_formatar($fTotalReceitas,"f"); ?> </td>
-                  </tr>
-                  <tr style='height:20px;'>
-                    <td class="s20 bdleft" colspan="9">03 - Valor Legal Mínimo (art. 212 da CF) 25 % =</td>
-                    <td class="s21"><?php echo db_formatar($fTotalReceitas*0.25,"f");?></td>
-                  </tr>
-                  <tr style='height:20px;'>
-                    <?php
-                    db_query("drop table if exists work_receita");
-                    db_fim_transacao();
-                    $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
+                  <?php }
+                  $aDadoDeducao = getSaldoReceita(null,"o57_fonte,o57_descr,saldo_arrecadado",null,"o57_fonte like '499%'");
+                  foreach($aDadoDeducao as $oDeducao){
                     ?>
-                    <td class="s20 bdleft" dir="ltr" colspan="9">04 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
-                    <td class="s22"><?=db_formatar($fTotalAnexoII,"f")?></td>
-                  </tr>
-                <?php endif; ?>
-              </tbody>
-            </table>
-          </div>
+                    <tr style='height:20px;'>
+                      <td class="s7 bdleft"></td>
+                      <td class="s14"><?php echo db_formatar($oDeducao->o57_fonte,"receita"); ?></td>
+                      <td class="s6" colspan="7"><?=$oDeducao->o57_descr; ?></td>
+                      <td class="s15">
+                        <?php
+                        $fTotalDeducoes += $oDeducao->saldo_arrecadado;
+                        echo db_formatar($oDeducao->saldo_arrecadado,"f");
+                        ?>
+                      </td>
+                    </tr>
+                    <?php } ?>
+                    <tr style='height:20px;'>
+                      <td class="s6 bdleft" colspan="9">Subtotal</td>
+                      <td class="s3"></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                      <td class="s6 bdleft bdbottom" colspan="9">&nbsp;</td>
+                      <td class="s3 bdbottom"><?=db_formatar($fTotalDeducoes,"f")?></td>
+                    </tr>
 
-        </body>
-        </html>
+                    <tr style='height:20px;'>
+                      <td class="s20 bdleft" colspan="9">02 - Total das Receitas (A+B+C-D)</td>
+                      <td class="s21"><?php $fTotalReceitas = ($fSubTotalImposto+$fSubTotalCorrentes+$fSubTotalOutrasCorrentes)-$fTotalDeducoes; echo db_formatar($fTotalReceitas,"f"); ?> </td>
+                    </tr>
+                    <tr style='height:20px;'>
+                      <td class="s20 bdleft" colspan="9">03 - Valor Legal Mínimo (art. 212 da CF) 25 % =</td>
+                      <td class="s21"><?php echo db_formatar($fTotalReceitas*0.25,"f");?></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                      <?php
+                      db_query("drop table if exists work_receita");
+                      db_fim_transacao();
+                      $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
+                      ?>
+                      <td class="s20 bdleft" dir="ltr" colspan="9">04 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
+                      <td class="s22"><?=db_formatar($fTotalAnexoII,"f")?></td>
+                    </tr>
+                  <?php endif; ?>
+                </tbody>
+              </table>
+            </div>
 
-        <?php
+          </body>
+          </html>
 
-        $html = ob_get_contents();
-        ob_end_clean();
-        $mPDF->WriteHTML(utf8_encode($html));
-        $mPDF->Output();
+          <?php
 
-        ?>
+          $html = ob_get_contents();
+          ob_end_clean();
+          $mPDF->WriteHTML(utf8_encode($html));
+          $mPDF->Output();
+
+          ?>
