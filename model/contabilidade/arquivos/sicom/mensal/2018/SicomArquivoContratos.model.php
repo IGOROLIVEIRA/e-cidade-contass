@@ -604,7 +604,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                          o41_subunidade
                                          from
                                          orcdotacao
-                                         JOIN orcelemento ON o58_codele = o56_codele
+                                         JOIN orcelemento ON o58_codele = o56_codele and o58_anousu = o56_anousu
                                         AND o56_anousu = " . db_getsession("DB_anousu") . "
                                         JOIN orctiporec ON o58_codigo = o15_codigo
                                         JOIN orcprojativ ON o55_projativ = o58_projativ
