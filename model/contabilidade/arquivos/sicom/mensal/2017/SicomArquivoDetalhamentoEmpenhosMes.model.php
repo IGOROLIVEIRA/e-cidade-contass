@@ -436,23 +436,34 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             $oDadosEmpenho->si106_especificacaoempenho = $oEmpenho->especificaoempenho == '' ? 'SEM HISTORICO' :
                 trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpenho->especificaoempenho), 0, 200)));
             $aAnoContrato = explode('-', $oEmpenho->dtassinaturacontrato);
-
-            $oDadosEmpenho->si106_despdeccontrato = $oEmpenho->despdeccontrato;
-            if($oEmpenho->despdeccontrato == 3) {
-                $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
-            }else{
-                $oDadosEmpenho->si106_codorgaorespcontrato = '';
-            }
-
-            if( in_array($oEmpenho->despdeccontrato,array(1,3)) ) {
-                $oDadosEmpenho->si106_codunidadesubrespcontrato = $oEmpenho->codunidadesubrespcontrato;
-            }else{
+            if ($oEmpenho->dtempenho <= $oEmpenho->dataassinaturacontrato || $oEmpenho->dataassinaturacontrato == null) {
+                $oDadosEmpenho->si106_despdeccontrato = 2;
+                if ($oEmpenho->despdeccontrato == 3) {
+                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
+                } else {
+                    $oDadosEmpenho->si106_codorgaorespcontrato = '';
+                }
                 $oDadosEmpenho->si106_codunidadesubrespcontrato = '';
-            }
-            $oDadosEmpenho->si106_nrocontrato = $oEmpenho->nrocontrato;
-            $oDadosEmpenho->si106_dtassinaturacontrato = $oEmpenho->dataassinaturacontrato;
-            $oDadosEmpenho->si106_nrosequencialtermoaditivo = $oEmpenho->nrosequencialtermoaditivo;
+                $oDadosEmpenho->si106_nrocontrato = '';
+                $oDadosEmpenho->si106_dtassinaturacontrato = '';
+                $oDadosEmpenho->si106_nrosequencialtermoaditivo = '';
+            }else {
+                $oDadosEmpenho->si106_despdeccontrato = $oEmpenho->despdeccontrato;
+                if ($oEmpenho->despdeccontrato == 3) {
+                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
+                } else {
+                    $oDadosEmpenho->si106_codorgaorespcontrato = '';
+                }
 
+                if (in_array($oEmpenho->despdeccontrato, array(1, 3))) {
+                    $oDadosEmpenho->si106_codunidadesubrespcontrato = $oEmpenho->codunidadesubrespcontrato;
+                } else {
+                    $oDadosEmpenho->si106_codunidadesubrespcontrato = '';
+                }
+                $oDadosEmpenho->si106_nrocontrato = $oEmpenho->nrocontrato;
+                $oDadosEmpenho->si106_dtassinaturacontrato = $oEmpenho->dataassinaturacontrato;
+                $oDadosEmpenho->si106_nrosequencialtermoaditivo = $oEmpenho->nrosequencialtermoaditivo;
+            }
 
             $oDadosEmpenho->si106_despdecconvenio = $oEmpenho->despdecconvenio;
             $oDadosEmpenho->si106_nroconvenio = $oEmpenho->nroconvenio;
