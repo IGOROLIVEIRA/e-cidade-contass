@@ -91,8 +91,8 @@ switch ($oParam->exec) {
                                 $oClasse = new $sClasse;
 
                             } else {
-
-                                throw new Exception("Arquivo $sCaminhoClasse nao encontrado!");
+                                continue;
+                                //throw new Exception("Arquivo $sCaminhoClasse nao encontrado!");
 
                             }
 
