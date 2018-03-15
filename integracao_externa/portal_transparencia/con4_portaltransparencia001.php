@@ -2430,10 +2430,9 @@ db_logTitulo(" IMPORTA PROJETOS",$sArquivoLog,$iParamLog);
   $sSqlServidores .= "       left join rhpesrescisao on rh05_seqpes = rh02_seqpes  ";
 
   $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} ";
-  $sSqlServidores .= "
-
-  AND
-  (
+  $sSqlServidores .= " AND
+  
+  ((
   rh02_anousu <
   (SELECT r11_anousu
   FROM cfpess
@@ -2454,10 +2453,8 @@ db_logTitulo(" IMPORTA PROJETOS",$sArquivoLog,$iParamLog);
   (SELECT r11_mesusu
   FROM cfpess
   ORDER BY r11_anousu DESC, r11_mesusu DESC
-  LIMIT 1)
+  LIMIT 1))
   )
-
-
   ";
   $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
   //echo $sSqlServidores;exit;
