@@ -99,7 +99,7 @@ WHERE DATE_PART ('YEAR' , homologacao . l202_datahomologacao) =" . db_getsession
   AND licitacao.l20_instit = " . db_getsession("DB_instit") . "
 UNION
 SELECT distinct '10' AS tipoRegistro ,
-       (pcmater.pc01_codmater::varchar || (CASE WHEN e55_unid = 0 THEN 1 ELSE e55_unid END)::varchar) AS coditem,
+       (pcmater.pc01_codmater::varchar || (CASE WHEN COALESCE(e55_unid,0) = 0 THEN 1 ELSE e55_unid END)::varchar) AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,

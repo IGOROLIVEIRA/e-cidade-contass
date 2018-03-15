@@ -99,7 +99,7 @@ WHERE DATE_PART ('YEAR' , homologacao . l202_datahomologacao) =" . db_getsession
   AND licitacao.l20_instit = " . db_getsession("DB_instit") . "
 UNION
 SELECT distinct '10' AS tipoRegistro ,
-       (pcmater.pc01_codmater::varchar || (CASE WHEN e55_unid = 0 THEN 1 ELSE e55_unid END)::varchar) AS coditem,
+       (pcmater.pc01_codmater::varchar || (CASE WHEN COALESCE(e55_unid,0) = 0 THEN 1 ELSE e55_unid END)::varchar) AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
@@ -214,7 +214,6 @@ where DATE_PART ('MONTH', si06_dataadesao) = " . $this->sDataFinal['5'] . $this-
       $clitem10 = new cl_item102017();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      //$sSqlitem="select si43_coditem,si43_unidademedida from item102017  where si43_coditem=".$oDados10->coditem." and si43_unidademedida='{$oDados10->unidademedida}'";
       $sSqlitem = "select si43_coditem,si43_unidademedida from item102017  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem . " and si43_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $sSqlitem .= " union
     	select si43_coditem,si43_unidademedida from item102016  where si43_instit = ".db_getsession('DB_instit')." and si43_coditem=" . $oDados10->coditem;
