@@ -222,7 +222,10 @@ abstract class ContaPlano {
 
       $sCampos = "c60_anousu as anousuanterior";
       $sWhere = "     c60_estrut = '{$this->getEstrutural()}'";
-      $sWhere .= " and c60_anousu >= " . db_getsession("DB_anousu");
+      if(db_getsession("DB_anousu") < 2018)
+          $sWhere .= " and c60_anousu = " . db_getsession("DB_anousu");
+      else
+          $sWhere .= " and c60_anousu >= " . db_getsession("DB_anousu");
       $sSqlBuscaaEstrutural = $oDaoPlano->sql_query_file(null, null, $sCampos, null, $sWhere);
       $rsConPlano = $oDaoPlano->sql_record($sSqlBuscaaEstrutural);
       if ($oDaoPlano->numrows > 0) {
