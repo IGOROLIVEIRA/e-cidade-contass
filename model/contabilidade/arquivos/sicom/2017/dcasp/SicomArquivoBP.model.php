@@ -24,7 +24,7 @@ require_once("classes/db_bpdcasp602017_classe.php");
 require_once("classes/db_bpdcasp702017_classe.php");
 require_once("classes/db_bpdcasp712017_classe.php");
 
-require_once("model/contabilidade/arquivos/sicom/2016/dcasp/geradores/GerarBP.model.php");
+require_once("model/contabilidade/arquivos/sicom/2017/dcasp/geradores/GerarBP.model.php");
 
 /**
  * gerar arquivo de Balanço Patrimonial

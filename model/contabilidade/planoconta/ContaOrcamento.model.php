@@ -285,7 +285,7 @@ class ContaOrcamento extends ContaPlano {
    */
   private function persistirElementoOuFontes() {
 
-  	if(db_getsession("DB_anousu") <= 2014){
+  	if(db_getsession("DB_anousu") <= 2018){
   		$iMaxAno = db_getsession("DB_anousu");
   	}else{
   		$iMaxAno  = $this->getUltimoAnoPlano();
@@ -848,7 +848,7 @@ class ContaOrcamento extends ContaPlano {
 
     if (!$this->hasContaGrupo($iCodigoGrupo)) {
 
-      $iUltimoAno   = $this->getUltimoAnoPlano();
+      //$iUltimoAno   = $this->getUltimoAnoPlano();
 
       $oDaoGrupoConta = db_utils::getDao("conplanoorcamentogrupo");
 
@@ -860,8 +860,13 @@ class ContaOrcamento extends ContaPlano {
       if ($oDaoGrupoConta->erro_status == "0") {
       	throw new Exception($oDaoGrupoConta->erro_msg);
       }
+        if(db_getsession("DB_anousu") <= 2018){
+            $iMaxAno = db_getsession("DB_anousu");
+        }else{
+            $iMaxAno  = $this->getUltimoAnoPlano();
+        }
 
-      for ($iAno = $this->getAno(); $iAno <= $iUltimoAno; $iAno++) {
+      for ($iAno = $this->getAno(); $iAno <= $iMaxAno; $iAno++) {
 
         $oDaoGrupoConta->c21_anousu       = $iAno;
         $oDaoGrupoConta->c21_codcon       = $this->getCodigoConta();
