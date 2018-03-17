@@ -16,17 +16,17 @@ class GerarOPS extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "OPS";
     $this->abreArquivo();
-    
+
     $sSql = "select * from ops102017 where si132_mes = " . $this->iMes . " and si132_instit = " . db_getsession("DB_instit");
     $rsOPS10 = db_query($sSql);
 
-    $sSql2 = "SELECT si133_sequencial,
+    $sSql2 = "SELECT DISTINCT si133_sequencial,
                      si133_tiporegistro,
                      si133_codreduzidoop,
                      si133_codunidadesub,
@@ -85,14 +85,14 @@ class GerarOPS extends GerarAM
         $aCSVOPS10['si132_vlop']            = $this->sicomNumberReal($aOPS10['si132_vlop'], 2);
         $aCSVOPS10['si132_especificacaoop'] = substr($aOPS10['si132_especificacaoop'], 0, 200);
         $aCSVOPS10['si132_cpfresppgto']     = $this->padLeftZero($aOPS10['si132_cpfresppgto'], 11);
-        
+
         $this->sLinha = $aCSVOPS10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsOPS11); $iCont2++) {
 
           $aOPS11 = pg_fetch_array($rsOPS11, $iCont2);
-          
+
           if ($aOPS10['si132_sequencial'] == $aOPS11['si133_reg10']) {
 
             $aCSVOPS11['si133_tiporegistro']        = $this->padLeftZero($aOPS11['si133_tiporegistro'], 2);
@@ -121,7 +121,7 @@ class GerarOPS extends GerarAM
         for ($iCont3 = 0; $iCont3 < pg_num_rows($rsOPS12); $iCont3++) {
 
           $aOPS12 = pg_fetch_array($rsOPS12, $iCont3);
-          
+
           if ($aOPS10['si132_sequencial'] == $aOPS12['si134_reg10']) {
 
             $aCSVOPS12['si134_tiporegistro']        = $this->padLeftZero($aOPS12['si134_tiporegistro'], 2);
@@ -133,7 +133,7 @@ class GerarOPS extends GerarAM
             $aCSVOPS12['si134_desctipodocumentoop'] = substr($aOPS12['si134_desctipodocumentoop'], 0, 50);
             $aCSVOPS12['si134_dtemissao']           = $this->sicomDate($aOPS12['si134_dtemissao']);
             $aCSVOPS12['si134_vldocumento']         = $this->sicomNumberReal($aOPS12['si134_vldocumento'], 2);
-            
+
             $this->sLinha = $aCSVOPS12;
             $this->adicionaLinha();
 
@@ -144,7 +144,7 @@ class GerarOPS extends GerarAM
         for ($iCont4 = 0; $iCont4 < pg_num_rows($rsOPS13); $iCont4++) {
 
           $aOPS13 = pg_fetch_array($rsOPS13, $iCont4);
-          
+
           if ($aOPS10['si132_sequencial'] == $aOPS13['si135_reg10']) {
 
             $aCSVOPS13['si135_tiporegistro']      = $this->padLeftZero($aOPS13['si135_tiporegistro'], 2);
@@ -163,7 +163,7 @@ class GerarOPS extends GerarAM
         for ($iCont5 = 0; $iCont5 < pg_num_rows($rsOPS14); $iCont5++) {
 
           $aOPS14 = pg_fetch_array($rsOPS14, $iCont5);
-          
+
           if ($aOPS10['si132_sequencial'] == $aOPS14['si136_reg10']) {
 
             $aCSVOPS14['si136_tiporegistro']          = $this->padLeftZero($aOPS14['si136_tiporegistro'], 2);
@@ -171,7 +171,7 @@ class GerarOPS extends GerarAM
             $aCSVOPS14['si136_tipovlantecipado']      = $this->padLeftZero($aOPS14['si136_tipovlantecipado'], 2);
             $aCSVOPS14['si136_descricaovlantecipado'] = substr($aOPS14['si136_descricaovlantecipado'], 0, 50);
             $aCSVOPS14['si136_vlantecipado']          = $this->sicomNumberReal($aOPS14['si136_vlantecipado'], 2);
-            
+
             $this->sLinha = $aCSVOPS14;
             $this->adicionaLinha();
           }
