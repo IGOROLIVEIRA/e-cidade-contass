@@ -47,10 +47,10 @@ $db_botao = false;
 if(isset($salvar)){
 
   db_inicio_transacao();
-  $clbaserubricasesocial->excluir(null,$e990_sequencial);
+  $clbaserubricasesocial->excluir(null,$e990_sequencial,db_getsession("DB_instit"));
   foreach($basesSelecionados as $cod){
     //tira a base de outra tabela
-    $clbaserubricasesocial->excluir($cod);
+    $clbaserubricasesocial->excluir($cod,null,db_getsession("DB_instit"));
     //insere na tabela pivô
     $clbaserubricasesocial->e991_rubricasesocial = $e990_sequencial;
     $clbaserubricasesocial->e991_rubricas = $cod;
@@ -93,10 +93,10 @@ if(isset($chavepesquisa)){
            rh27_obs", "rh27_rubric asc" ));
  $aBases = db_utils::getColectionByRecord($result);
  //bases vinculadas à tabela da consulta
- $result = $clbaserubricasesocial->sql_record("SELECT * FROM baserubricasesocial WHERE e991_rubricasesocial = '{$chavepesquisa}' ");
+ $result = $clbaserubricasesocial->sql_record("SELECT * FROM baserubricasesocial WHERE e991_rubricasesocial = '{$chavepesquisa}' AND e991_instit = ".db_getsession('DB_instit')."");
  $aBasesEsocial = db_utils::getColectionByRecord($result);
  //bases vinculadas à outras tabela da consulta
- $result = $clbaserubricasesocial->sql_record("SELECT e991_rubricas FROM baserubricasesocial WHERE e991_rubricasesocial <> '{$chavepesquisa}' ");
+ $result = $clbaserubricasesocial->sql_record("SELECT e991_rubricas FROM baserubricasesocial WHERE e991_rubricasesocial <> '{$chavepesquisa}' AND e991_instit = ".db_getsession('DB_instit')."");
  $aBasesEsocialOutras = db_utils::getColectionByRecord($result);
  $JSONaBasesEsocialOutras = "";
  foreach ($aBasesEsocialOutras as $b) {
