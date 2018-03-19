@@ -24,7 +24,7 @@ class GerarALQ extends GerarAM
     $this->sArquivo = "ALQ";
     $this->abreArquivo();
 
-    $sSql = "SELECT si121_sequencial,
+    $sSql = "SELECT DISTINCT si121_sequencial,
                     si121_tiporegistro,
                     si121_codreduzido,
                     si121_codorgao,

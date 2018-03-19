@@ -26,7 +26,7 @@ class GerarAOP extends GerarAM
     $sSql = "select * from aop102018 where si137_mes = " . $this->iMes . " and si137_instit = " . db_getsession("DB_instit");
     $rsAOP10 = db_query($sSql);
 
-    $sSql2 = "SELECT si138_sequencial,
+    $sSql2 = "SELECT DISTINCT si138_sequencial,
                      si138_tiporegistro,
                      si138_codreduzido,
                      si138_tipopagamento,

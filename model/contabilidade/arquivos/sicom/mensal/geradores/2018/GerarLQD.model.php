@@ -24,7 +24,7 @@ class GerarLQD extends GerarAM
     $this->sArquivo = "LQD";
     $this->abreArquivo();
 
-    $sSql = "SELECT si118_sequencial,
+    $sSql = "SELECT DISTINCT si118_sequencial,
                      si118_tiporegistro,
                      si118_codreduzido,
                      si118_codorgao,

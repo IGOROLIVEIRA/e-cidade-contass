@@ -23,7 +23,7 @@ class GerarRSP extends GerarAM
     $this->sArquivo = "RSP";
     $this->abreArquivo();
 
-    $sSql = "SELECT si112_sequencial,
+    $sSql = "SELECT DISTINCT si112_sequencial,
                      si112_tiporegistro,
                      si112_codreduzidorsp,
                      si112_codorgao,
@@ -50,7 +50,7 @@ class GerarRSP extends GerarAM
     $sSql3 = "select * from rsp122018 where si114_mes = " . $this->iMes . " and si114_instit = " . db_getsession("DB_instit");
     $rsRSP12 = db_query($sSql3);
 
-    $sSql4 = "SELECT si115_sequencial,
+    $sSql4 = "SELECT DISTINCT si115_sequencial,
                      si115_tiporegistro,
                      si115_codreduzidomov,
                      si115_codorgao,
@@ -72,7 +72,7 @@ class GerarRSP extends GerarAM
                      si115_mes,
                      si115_instit
               FROM rsp202018
-              INNER JOIN empempenho ON e60_codemp::int8 = si115_nroempenho AND e60_anousu = si112_exercicioempenho
+              INNER JOIN empempenho ON e60_codemp::int8 = si115_nroempenho AND e60_anousu = si115_exercicioempenho
               WHERE si115_mes = " . $this->iMes . "
                 AND si115_instit = " . db_getsession("DB_instit");
     $rsRSP20 = db_query($sSql4);
