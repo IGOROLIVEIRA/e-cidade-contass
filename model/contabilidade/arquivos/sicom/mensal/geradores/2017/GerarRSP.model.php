@@ -23,7 +23,7 @@ class GerarRSP extends GerarAM
     $this->sArquivo = "RSP";
     $this->abreArquivo();
 
-    $sSql = "SELECT si112_sequencial,
+    $sSql = "SELECT DISTINCT si112_sequencial,
                      si112_tiporegistro,
                      si112_codreduzidorsp,
                      si112_codorgao,

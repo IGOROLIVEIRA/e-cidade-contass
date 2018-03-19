@@ -17,14 +17,14 @@ class GerarALQ extends GerarAM
    * @var Integer
    */
   public $iMes;
-  
+
   public function gerarDados()
   {
 
     $this->sArquivo = "ALQ";
     $this->abreArquivo();
-    
-    $sSql = "SELECT si121_sequencial,
+
+    $sSql = "SELECT DISTINCT si121_sequencial,
                     si121_tiporegistro,
                     si121_codreduzido,
                     si121_codorgao,
@@ -48,7 +48,7 @@ class GerarALQ extends GerarAM
 
     $sSql2 = "select * from alq112017 where si122_mes = " . $this->iMes . " and si122_instit = " . db_getsession("DB_instit");
     $rsALQ11 = db_query($sSql2);
-    
+
 
     $sSql3 = "select * from alq122017 where si123_mes = " . $this->iMes . " and si123_instit = " . db_getsession("DB_instit");
     $rsALQ12 = db_query($sSql3);
@@ -83,21 +83,21 @@ class GerarALQ extends GerarAM
         $aCSVALQ10['si121_tpliquidacao']          = $this->padLeftZero($aALQ10['si121_tpliquidacao'], 1);
         $aCSVALQ10['si121_justificativaanulacao'] = substr($aALQ10['si121_justificativaanulacao'], 0, 500);
         $aCSVALQ10['si121_vlanulado']             = $this->sicomNumberReal($aALQ10['si121_vlanulado'], 2);
-        
+
         $this->sLinha = $aCSVALQ10;
         $this->adicionaLinha();
 
         for ($iCont2 = 0; $iCont2 < pg_num_rows($rsALQ11); $iCont2++) {
 
           $aALQ11 = pg_fetch_array($rsALQ11, $iCont2);
-          
+
           if ($aALQ10['si121_sequencial'] == $aALQ11['si122_reg10']) {
 
             $aCSVALQ11['si122_tiporegistro']      = $this->padLeftZero($aALQ11['si122_tiporegistro'], 2);
             $aCSVALQ11['si122_codreduzido']       = substr($aALQ11['si122_codreduzido'], 0, 15);
             $aCSVALQ11['si122_codfontrecursos']   = $this->padLeftZero($aALQ11['si122_codfontrecursos'], 3);
             $aCSVALQ11['si122_valoranuladofonte'] = $this->sicomNumberReal($aALQ11['si122_valoranuladofonte'], 2);
-            
+
             $this->sLinha = $aCSVALQ11;
             $this->adicionaLinha();
           }
@@ -107,7 +107,7 @@ class GerarALQ extends GerarAM
         for ($iCont3 = 0; $iCont3 < pg_num_rows($rsALQ12); $iCont3++) {
 
           $aALQ12 = pg_fetch_array($rsALQ12, $iCont3);
-          
+
           if ($aALQ10['si121_sequencial'] == $aALQ12['si123_reg10']) {
 
             $aCSVALQ12['si123_tiporegistro']          = $this->padLeftZero($aALQ12['si123_tiporegistro'], 2);
