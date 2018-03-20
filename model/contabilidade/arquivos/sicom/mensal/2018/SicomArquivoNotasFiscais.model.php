@@ -138,7 +138,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
               cgm.z01_cep as cepmunicipio,
               cgm.z01_uf as ufcredor,
               empnota.e69_notafiscaleletronica as notafiscaleletronica,
-              case when empnota.e69_notafiscaleletronica=1  or empnota.e69_notafiscaleletronica=2 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
+              case when empnota.e69_notafiscaleletronica=1 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
               case when empnota.e69_notafiscaleletronica=2 then empnota.e69_chaveacesso else ' ' end as outrachaveacesso,
               ' ' as nfaidf,
               empnota.e69_dtnota as dtemissaonf,
