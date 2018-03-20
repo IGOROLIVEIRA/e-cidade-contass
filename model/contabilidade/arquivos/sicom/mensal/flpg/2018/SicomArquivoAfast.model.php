@@ -132,7 +132,8 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
                   when r45_situac in (2,7) and r45_codafa <> 'W' then ''
                   when r45_codafa = 'W' then ''
                   else r45_obs
-                  end as si199_dscoutrosafastamentos
+                  end as si199_dscoutrosafastamentos,
+                  r45_situac
                      FROM afasta
                      join rhpessoal on r45_regist = rh01_regist 
                         WHERE r45_regist = $oDados->r45_regist
@@ -182,7 +183,27 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
                 $oDadosAfast->si199_dscoutrosafastamentos = str_replace("\r", " ", $oDadosAfast->si199_dscoutrosafastamentos); //na net pra tentar eliminar a quebra
                 $oDadosAfast->si199_dscoutrosafastamentos = preg_replace('/\s/', ' ', $oDadosAfast->si199_dscoutrosafastamentos);//de linha, mas até o momento sem sucesso :/
 
-                $clafast->si199_dscoutrosafastamentos = $oDadosAfast->si199_dscoutrosafastamentos;
+                if($oDadosAfast->si199_tipoafastamento == 99) {
+
+                    if($oDadosAfast->r45_situac == 2)
+                        $clafast->si199_dscoutrosafastamentos = 'Afastado sem remuneração';
+                    if($oDadosAfast->r45_situac == 3)
+                        $clafast->si199_dscoutrosafastamentos = 'Afastado acidente de trabalho +15 dias';
+                    if($oDadosAfast->r45_situac == 4)
+                        $clafast->si199_dscoutrosafastamentos = 'Afastado serviço militar';
+                    if($oDadosAfast->r45_situac == 5)
+                        $clafast->si199_dscoutrosafastamentos = 'Afastado licença gestante';
+                    if($oDadosAfast->r45_situac == 6)
+                        $clafast->si199_dscoutrosafastamentos = 'Afastado doença +15 dias';
+                    if($oDadosAfast->r45_situac == 7)
+                        $clafast->si199_dscoutrosafastamentos = 'Licença sem vencimento, cessão sem ônus';
+                    if($oDadosAfast->r45_situac == 8)
+                        $clafast->si199_dscoutrosafastamentos = 'Afastado doença +30 dias';
+
+                }else{
+                    $clafast->si199_dscoutrosafastamentos = $oDadosAfast->si199_dscoutrosafastamentos;
+                }
+
                 $clafast->si199_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clafast->si199_inst = db_getsession("DB_instit");
 
