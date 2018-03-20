@@ -475,13 +475,13 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
           $clbpdcasp71->si215_tiporegistro = 71;
           $clbpdcasp71->si215_exercicio = $iValorNumerico;
           $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
-          $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte;
+          $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte*-1;
 
           $clbpdcasp71->incluir(null);
           if ($clbpdcasp71->erro_status == 0) {
             throw new Exception($clbpdcasp71->erro_msg);
           }
-          $nVltotalsupdef += $oDadosBP71->si215_vlsaldofonte;
+          $nVltotalsupdef += $oDadosBP71->si215_vlsaldofonte*-1;
 
         }
       }
