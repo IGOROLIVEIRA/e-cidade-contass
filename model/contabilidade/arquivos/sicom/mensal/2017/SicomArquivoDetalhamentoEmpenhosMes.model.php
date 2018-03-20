@@ -436,12 +436,12 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             $oDadosEmpenho->si106_especificacaoempenho = $oEmpenho->especificaoempenho == '' ? 'SEM HISTORICO' :
                 trim(preg_replace("/[^a-zA-Z0-9 ]/", "", substr(str_replace($what, $by, $oEmpenho->especificaoempenho), 0, 200)));
             $aAnoContrato = explode('-', $oEmpenho->dtassinaturacontrato);
-            if ($oEmpenho->dtempenho <= $oEmpenho->dataassinaturacontrato || $oEmpenho->dataassinaturacontrato == null) {
+            if (date('m', strtotime($oEmpenho->dtempenho)) < date('m', strtotime($oEmpenho->dataassinaturacontrato)) || $oEmpenho->dataassinaturacontrato == null) {
                 $oDadosEmpenho->si106_despdeccontrato = 2;
                 if ($oEmpenho->despdeccontrato == 3) {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
-                } else {
                     $oDadosEmpenho->si106_codorgaorespcontrato = '';
+                } else {
+                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
                 }
                 $oDadosEmpenho->si106_codunidadesubrespcontrato = '';
                 $oDadosEmpenho->si106_nrocontrato = '';
