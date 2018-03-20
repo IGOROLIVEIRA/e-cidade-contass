@@ -147,6 +147,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
    else '0'
      end as rh37_cbo,
    rh37_atividadedocargo,
+   h13_dscapo,
    case
    when h13_tipocargo = '1' then 'CEF'
    when h13_tipocargo = '2' then 'CRA'
@@ -355,7 +356,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
    AND rh01_instit = ".db_getsession('DB_instit')."
 
-   group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18
+   group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
    ";
 
    $rsResult10 = db_query($sSql);
@@ -450,50 +451,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
   $dscAPO = ' ';
 
   if($oDados10->si195_sglcargo == 'APO'){
-    switch ($this->convert_accented_characters(strtolower($oDados10->si195_dsccargo))) {
-      case 'governador':
-      $dscAPO = 'GOV';
-      break;
-      case 'vice governador':
-      $dscAPO = 'VGO';
-      break;
-      case 'prefeito municipal':
-      $dscAPO = 'PRE';
-      break;
-      case 'vice prefeito':
-      $dscAPO = 'VPR';
-      break;
-      case 'secretario de estado':
-      $dscAPO = 'SCE';
-      break;
-      case 'secretario de estado adjunto':
-      $dscAPO = 'SEA';
-      break;
-      case 'secretario municipal':
-      $dscAPO = 'SCE';
-      break;
-      case 'secretario municipal adjunto':
-      $dscAPO = 'SMA';
-      break;
-      case 'presidente da assembleia':
-      $dscAPO = 'SMA';
-      break;
-      case 'vice presidente da assembleia':
-      $dscAPO = 'VPA';
-      break;
-      case 'deputado estadual':
-      $dscAPO = 'DEE';
-      break;
-      case 'presidente da camara municipal':
-      $dscAPO = 'PCA';
-      break;
-      case 'vice presidente da camara municipal':
-      $dscAPO = 'VPC';
-      break;
-      case 'vereador':
-      $dscAPO = 'VER';
-      break;
-    }
+      $dscAPO = $oDados10->h13_dscapo;
   }
 
   for ($iContEx = 1; $iContEx <= $iQuantTipoPagamento; $iContEx++) {
