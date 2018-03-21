@@ -90,8 +90,8 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		      LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes 
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      AND rh02_anousu = " . db_getsession("DB_anousu") . " AND rh02_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-		      AND z01_numcgm NOT IN
-                        (SELECT si198_codmatriculapessoa
+		      AND rh01_regist NOT IN
+                        (SELECT si198_codvinculopessoa
                          FROM viap102018 where si198_mes < " . ($this->sDataFinal['5'] . $this->sDataFinal['6']) . " )
               AND rh01_instit =  " . db_getsession("DB_instit") . "
 			  ";
@@ -103,7 +103,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		      from cgm
 		      inner join rhpessoal on rh01_numcgm = z01_numcgm
 		      inner join rhpessoalmov on rh01_regist = rh02_regist
-		      LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes 
+		      LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      AND rh02_anousu = " . db_getsession("DB_anousu") . " AND rh02_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 		      AND rh01_instit =  " . db_getsession("DB_instit") . "
