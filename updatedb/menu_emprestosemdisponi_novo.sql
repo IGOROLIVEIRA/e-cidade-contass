@@ -72,5 +72,5 @@ VALUES (
              WHERE descricao = 'RP Sem Disponiblidade'),
             (SELECT max(id_item)
              FROM db_itensmenu),3,
-                                209)
+                                209);
 COMMIT;
