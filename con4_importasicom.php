@@ -97,6 +97,8 @@ include("dbforms/db_funcoes.php");
         <div style="text-align: center;">
             <input type="button" id="btnProcessar" value="Importar"
                    onclick="js_processar();"/>
+            <input type="button" id="btnProcessar" value="Criar CTB Fonte"
+                   onclick="js_importarsicom();"/>
         </div>
     </div>
 
@@ -157,6 +159,32 @@ include("dbforms/db_funcoes.php");
             $('retorno').innerHTML = '';
             alert(oRetorno.message.urlDecode());
             return false;
+        }
+    }
+
+    function js_importarsicom() {
+        var oParam = new Object();
+        oParam.exec = 'importarCTBFONTE';
+        if (confirm("A geração do CTB SALDO Por Fonte ira aparagar todos os valores já lançados anteriormente. Tem certeza que deseja executar agora?")) {
+            js_divCarregando('Aguarde, importando saldo das contas do arquivo CTB', 'msgBox');
+            var oAjax = new Ajax.Request("con1_importarctbfonte.RPC.php",
+                {
+                    method: 'post',
+                    parameters: 'json=' + Object.toJSON(oParam),
+                    onComplete: js_importarsicomRetorno
+                }
+            );
+        }
+
+    }
+
+    function js_importarsicomRetorno(oAjax) {
+        js_removeObj('msgBox');
+        var oRetorno = eval("("+oAjax.responseText+")");
+        if(oRetorno.status == 2){
+            alert(oRetorno.message.urlDecode());
+        }else{
+            alert("Processo concluído com sucesso!");
         }
     }
 

@@ -196,9 +196,7 @@ switch ($oParam->exec) {
                                 }
 
                             } catch (Exception $e) {
-                                throw new Exception ($e->getMessage());
                                 $oRetorno->status = 2;
-                                echo $e->getMessage();
                                 $oRetorno->message = $e->getMessage();
                             }
 
