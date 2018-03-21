@@ -748,11 +748,11 @@ switch($oParam->exec) {
       foreach ($aArrayArquivos as $oArquivo){
         $aListaArquivos .= " ".$oArquivo->caminho;
       }
-      system("rm -f DCASP_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip");
-      system("bin/zip -q DCASP_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip $aListaArquivos");
+      system("rm -f DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip");
+      system("bin/zip -q DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip $aListaArquivos");
       $oArquivoZip = new stdClass();
-      $oArquivoZip->nome    = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip";
-      $oArquivoZip->caminho = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$iAnoReferencia}.zip";
+      $oArquivoZip->nome    = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip";
+      $oArquivoZip->caminho = "DCASP_{$oParam->tipoGeracao}_{$sInst}_{$sOrgao}_{$iAnoReferencia}.zip";
       $aArrayArquivos[] = $oArquivoZip;
       $oRetorno->itens  = $aArrayArquivos;
     }
