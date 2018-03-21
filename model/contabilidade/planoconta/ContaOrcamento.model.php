@@ -414,7 +414,7 @@ class ContaOrcamento extends ContaPlano {
     * Percorre um FOR inserindo na conplanoorcamentoanalitica utilizando o mesmo código reduzido (c61_reduz) sempre.
     */
     
-	  if(db_getsession("DB_anousu") <= 2018){
+	  if(db_getsession("DB_anousu") < 2018){
 	  		$iUltimoAno = db_getsession("DB_anousu");
 	  	}else{
 	  		$iUltimoAno  = $this->getUltimoAnoPlano();
