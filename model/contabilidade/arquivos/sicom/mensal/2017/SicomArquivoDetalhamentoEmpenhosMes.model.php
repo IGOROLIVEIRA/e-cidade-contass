@@ -151,7 +151,10 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                                            WHEN orcunidade.o41_codtri = '0'
                                                 OR NULL THEN orcunidade.o41_unidade::varchar
                                            ELSE orcunidade.o41_codtri
-                                       END),3,0) AS codunidadesub,
+                                       END),3,0)||(CASE WHEN orcunidade.o41_subunidade = '0'
+                                                             OR NULL THEN ''
+                                                        ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0)
+                                                   END) AS codunidadesub,
                 o58_funcao AS codfuncao,
                 o58_subfuncao AS codsubfuncao,
                 o58_programa AS codprograma,
