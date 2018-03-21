@@ -201,11 +201,12 @@ class ContaBancaria {
       $oDaoBancoAgencia->db89_digito     = $this->getDVAgencia();
       $oDaoBancoAgencia->db89_db_bancos  = $this->getCodigoBanco();
       $oDaoBancoAgencia->db89_codagencia = $this->getNumeroAgencia();
+      $oDaoBancoAgencia->db89_sequencial = $this->getSequencialBancoAgencia();
 
-      $this->setSequencialBancoAgencia($oDaoBancoAgencia->db89_sequencial);
+        $this->setSequencialBancoAgencia($oDaoBancoAgencia->db89_sequencial);
 
 
-      if ($this->getSequencialBancoAgencia() == null) {
+        if ($this->getSequencialBancoAgencia() == null) {
 
         $oDaoBancoAgencia->incluir(null);
         if ($oDaoBancoAgencia->erro_status == "0") {
@@ -235,7 +236,7 @@ class ContaBancaria {
         /**
          * Valida se é para incluir ou alterar um registro
          */
-        $this->setSequencialContaBancaria();
+//        $this->setSequencialContaBancaria();
 
         if ( $this->getSequencialContaBancaria() == null ) {
 
