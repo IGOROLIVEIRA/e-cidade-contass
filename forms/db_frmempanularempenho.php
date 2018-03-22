@@ -341,7 +341,7 @@ if (empty ($e60_numemp)) {
         saida += "    value='"+obj.data[i].e62_sequen+"' style='height:12px'></td>";
         saida += "<td class='linhagrid' style='text-align:right'>"+obj.data[i].e62_sequen+"</td>";
         saida += "<td class='linhagrid' style='text-align:left'>"+descrmater+"</td>";
-        saida += "<td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrun, 'f')+"</td>";
+        saida += "<td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrun, 'f', 3)+"</td>";
         saida += "<td class='linhagrid' id='saldo"+obj.data[i].e62_sequen+"'  style='text-align:right'>"+obj.data[i].saldo+"</td>";
         saida += "<td class='linhagrid' id='saldovlr"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrtot, 'f')+"</td>";
 
