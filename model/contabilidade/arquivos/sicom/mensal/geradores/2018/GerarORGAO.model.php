@@ -49,7 +49,7 @@ class GerarORGAO extends GerarAM
         $aCSVORGAO10['si14_nrodocumentofornsoftware']   = $this->padLeftZero($aORGAO10['si14_nrodocumentofornsoftware'], 14);
         $aCSVORGAO10['si14_versaosoftware']             = substr($aORGAO10['si14_versaosoftware'], 0, 50);
         $aCSVORGAO10['si14_assessoriacontabil']         = $this->padLeftZero($aORGAO10['si14_assessoriacontabil'], 1);
-        $aCSVORGAO10['si14_tipodocumentoassessoria']    = $this->padLeftZero($aORGAO10['si14_tipodocumentoassessoria'], 1);
+        $aCSVORGAO10['si14_tipodocumentoassessoria']    = $aORGAO10['si14_tipodocumentoassessoria'];
         $aCSVORGAO10['si14_nrodocumentoassessoria']     = substr($aORGAO10['si14_nrodocumentoassessoria'], 0, 14);
 
         $this->sLinha = $aCSVORGAO10;

@@ -130,7 +130,7 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
           si09_assessoriacontabil as assessoriacontabil,
           CASE WHEN LENGTH(cgmassessoria.z01_cgccpf) = 11 THEN 1
           WHEN  LENGTH(cgmassessoria.z01_cgccpf) = 14 THEN 2
-          ELSE 3 END AS tipodocumentoassessoria,
+          ELSE NULL END AS tipodocumentoassessoria,
           cgmassessoria.z01_cgccpf AS nrodocumentoassessoria
 FROM db_config 
 LEFT JOIN infocomplementaresinstit ON si09_instit = codigo 

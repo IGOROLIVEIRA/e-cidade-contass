@@ -444,7 +444,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
                 if ($oEmpenho->despdeccontrato == 3) {
                     $oDadosEmpenho->si106_codorgaorespcontrato = '';
                 } else {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
+                    $oDadosEmpenho->si106_codorgaorespcontrato = '';
                 }
                 $oDadosEmpenho->si106_codunidadesubrespcontrato = '';
                 $oDadosEmpenho->si106_nrocontrato = '';
@@ -453,7 +453,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             }else {
                 $oDadosEmpenho->si106_despdeccontrato = $oEmpenho->despdeccontrato;
                 if ($oEmpenho->despdeccontrato == 3) {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
+                    $oDadosEmpenho->si106_codorgaorespcontrato = '';
                 } else {
                     $oDadosEmpenho->si106_codorgaorespcontrato = '';
                 }
