@@ -123,7 +123,6 @@ try {
    * - busca todos os materias de cada almoxarifado
    */
   if (empty($aCodigosMateriais)) {
-
     $oDaoMatestoque = new cl_matestoque();
     $sWhereItens    = 'm70_coddepto in('. implode(',', $aCodigosAlmoxarifados) .')';
     if (!empty($oGet->ativos) && $oGet->ativos != 'i') {
@@ -140,6 +139,22 @@ try {
       $aCodigosMateriais[] = $oDadosItem->m70_codmatmater;
     }
   }
+    if (!empty($aCodigosMateriais)) {
+        $oDaoMatestoque = new cl_matestoque();
+        $sWhereItens    = 'm70_codmatmater in('. implode(',', $aCodigosMateriais) .')';
+        if (!empty($oGet->ativos) && $oGet->ativos != 'i') {
+            $sWhereItens .= " and (SELECT m60_ativo FROM matmater WHERE m60_codmater = m70_codmatmater) = '{$oGet->ativos}' ";
+        }
+        $sSqlItens      = $oDaoMatestoque->sql_query_almoxarifado('m70_codmatmater', null, $sWhereItens);
+        $rsItens        = $oDaoMatestoque->sql_record($sSqlItens);
+        if ($oDaoMatestoque->erro_status == '0') {
+            throw new Exception(_M('patrimonial.material.mat2_controleestoque002.nenhum_item_encontrado'));
+        }
+
+        foreach (db_utils::getCollectionByRecord($rsItens) as $oDadosItem) {
+            $aCodigosMateriais[] = $oDadosItem->m70_codmatmater;
+        }
+    }
 
   $oControleEstoque = new ControleEstoque();
   $oControleEstoque->setPeriodo($oPeriodoInicial, $oPeriodoFinal);
@@ -323,10 +338,13 @@ try {
     $oDados->nValorSaida         = formatar($oMovimentacao->getValorSaida());
     $oDados->lImprimirCabecalho  = false;
 
-    $nValorFinal      = $oMovimentacao->getValorAnterior() + $oMovimentacao->getValorEntrada() - $oMovimentacao->getValorSaida();
-    $nQuantidadeFinal = $oMovimentacao->getQuantidadeAnterior() + $oMovimentacao->getQuantidadeEntrada() - $oMovimentacao->getQuantidadeSaida();
-
-    /**
+      $nQuantidadeFinal = $oMovimentacao->getQuantidadeAnterior() + $oMovimentacao->getQuantidadeEntrada() - $oMovimentacao->getQuantidadeSaida();
+      if($nQuantidadeFinal == 0){
+          $nValorFinal = 0;
+      }else {
+          $nValorFinal = $oMovimentacao->getValorAnterior() + $oMovimentacao->getValorEntrada() - $oMovimentacao->getValorSaida();
+      }
+      /**
      * Nao exibe matareiais sem movimentacao no periodo
      */
     if ($somenteItensComMovimento && $oMovimentacao->getValorEntrada() <= 0 && $oMovimentacao->getValorSaida() <= 0) {
