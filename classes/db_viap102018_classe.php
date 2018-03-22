@@ -79,7 +79,7 @@ class cl_viap102018 {
        return false;
      }
      if ($this->si198_nrocpfagentepublico == null ) {
-       $this->erro_sql = " Campo si198_nrocpfagentepublico não informado.";
+       $this->erro_sql = " Campo si198_nrocpfagentepublico não informado. ".$this->si198_codvinculopessoa;
        $this->erro_campo = "si198_nrocpfagentepublico";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
