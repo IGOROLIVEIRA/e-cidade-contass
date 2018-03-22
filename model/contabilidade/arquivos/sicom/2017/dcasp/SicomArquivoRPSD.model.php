@@ -80,7 +80,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
             $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes, 0);
             $nSaldoFinal = ($oSaldoFontes->saldoanterior);
 
-            $sSqlRP = "SELECT DISTINCT 10 AS tiporegistro,
+            $sSqlRP = "SELECT  10 AS tiporegistro,
                       e60_numemp AS codreduzidorsp,
                     CASE WHEN orcorgao.o40_codtri = '0'
                     OR NULL THEN orcorgao.o40_orgao :: VARCHAR ELSE orcorgao.o40_codtri END AS o58_orgao,
@@ -96,11 +96,10 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                         ),3,0) AS codunidadesub,
                     e60_codemp AS nroempenho,
                     e60_anousu AS exercicioempenho,
-                    e60_emiss AS dtEmpenho,
-                    c70_valor AS vlpagorsp,
+                    e60_emiss AS dtEmpenho,   
                     o15_codtri AS codfontrecursos,
                     CASE WHEN c53_coddoc = 35 THEN 1 ELSE 2 END AS tipopagamentorsp,
-                    c70_valor vlpagofontersp
+                    sum(CASE WHEN c53_tipo = 31 then c70_valor * -1 else c70_valor end)  as vlpagofontersp
                 FROM empempenho 
                     INNER JOIN orcdotacao ON e60_coddot = o58_coddot
                            AND e60_anousu = o58_anousu
@@ -117,11 +116,13 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                            AND o58_unidade = orcunidade.o41_unidade
                      LEFT JOIN orcorgao ON orcorgao.o40_orgao = orcunidade.o41_orgao
                            AND orcorgao.o40_anousu = orcunidade.o41_anousu                   
-                WHERE e60_instit = ".$oInstit->codigo." and o15_codtri = '" . $iFonte . "' 
+                WHERE c53_tipo in (30,31) and e60_instit = ".$oInstit->codigo." and o15_codtri = '" . $iFonte . "' 
                 and DATE_PART('YEAR',c70_data) = ".db_getsession("DB_anousu") ."
                 and e60_anousu < ".db_getsession("DB_anousu") ."
-                 order by e60_emiss";
+                      group by 1,2,3,4,5,6,7,8,9,10,11
+                      order by e60_emiss";
             $rsRPPago = db_query($sSqlRP);
+
             $nTotalRPPago = 0;
             for ($iContRP = 0; $iContRP < pg_num_rows($rsRPPago); $iContRP++) {
 
@@ -129,8 +130,8 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
 
                 $oDadosRPSD = db_utils::fieldsMemory($rsRPPago, $iContRP);
 
-                if ($nSaldoFinal >= $nTotalRPPago) {
-                    $nTotalRPPago += $oDadosRPSD->vlpagorsp;
+                if (($nSaldoFinal >= $nTotalRPPago) || $oDadosRPSD->vlpagofontersp == 0) {
+                    $nTotalRPPago += $oDadosRPSD->vlpagofontersp;
                     continue;
                 }
                 /**
@@ -158,7 +159,7 @@ class SicomArquivoRPSD extends SicomArquivoBase implements iPadArquivoBaseCSV
                 $clrpsd10->si189_exercicioempenho = $oDadosRPSD->exercicioempenho;
                 $clrpsd10->si189_dtempenho = $oDadosRPSD->dtempenho;
                 $clrpsd10->si189_tipopagamentorsp = $oDadosRPSD->tipopagamentorsp;
-                $clrpsd10->si189_vlpagorsp = $oDadosRPSD->vlpagorsp;
+                $clrpsd10->si189_vlpagorsp = $oDadosRPSD->vlpagofontersp;
                 $clrpsd10->si189_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $clrpsd10->si189_instit = $iCodInstit;
 
