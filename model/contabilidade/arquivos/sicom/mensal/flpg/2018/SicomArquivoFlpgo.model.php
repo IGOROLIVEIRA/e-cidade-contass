@@ -349,8 +349,29 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
    AND (
    DATE_PART('YEAR',rh05_recis)= ".db_getsession("DB_anousu")."
    and DATE_PART('MONTH',rh05_recis)=" .$this->sDataFinal['5'].$this->sDataFinal['6']."
-   or rh05_recis IS NULL
-   )
+   or rh05_recis IS NULL OR (((DATE_PART('YEAR',rh05_recis) < ".db_getsession("DB_anousu").")
+       OR (DATE_PART('YEAR',rh05_recis) <= ".db_getsession("DB_anousu")."
+           AND DATE_PART('MONTH',rh05_recis)<" .$this->sDataFinal['5'].$this->sDataFinal['6']."))
+  AND (rh02_regist IN
+    (SELECT r48_regist
+     FROM gerfcom
+     WHERE r48_anousu = ".db_getsession("DB_anousu")."
+       AND r48_mesusu =" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
+  OR rh02_regist IN
+    (SELECT r14_regist
+     FROM gerfsal
+     WHERE r14_anousu = ".db_getsession("DB_anousu")."
+       AND r14_mesusu =" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
+  OR rh02_regist IN
+    (SELECT r35_regist
+     FROM gerfs13
+     WHERE r35_anousu = ".db_getsession("DB_anousu")."
+       AND r35_mesusu =" .$this->sDataFinal['5'].$this->sDataFinal['6'].")
+  OR rh02_regist IN
+    (SELECT r20_regist
+     FROM gerfres
+     WHERE r20_anousu = ".db_getsession("DB_anousu")."
+       AND r20_mesusu =" .$this->sDataFinal['5'].$this->sDataFinal['6']."))))
 
    AND   rh01_sicom = 1
 
