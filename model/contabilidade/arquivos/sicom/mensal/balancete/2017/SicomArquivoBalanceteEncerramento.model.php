@@ -68,11 +68,14 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
      */
     public function getFontReduzAM($iReduz)
     {
-        $sSqlVerifica = " select distinct si96_codfontrecursos, si96_anousu from ( SELECT distinct si96_codfontrecursos, 2017 as si96_anousu FROM ctb202017 WHERE si96_codctb = {$iReduz}
-                                      AND si96_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2016 as si96_anousu FROM ctb202016 WHERE si96_codctb = {$iReduz}";
-        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2015 as si96_anousu FROM ctb202015 WHERE si96_codctb = {$iReduz}) as x order by 2 DESC limit 1";
-        $iCodFont = db_utils::fieldsMemory(db_query($sSqlVerifica), 0)->si96_codfontrecursos;
+//        $sSqlVerifica = " select distinct si96_codfontrecursos, si96_anousu from (
+//                          SELECT distinct si96_codfontrecursos, 2017 as si96_anousu FROM ctb202017 WHERE si96_codctb = {$iReduz}
+//                                      AND si96_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+//        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2016 as si96_anousu FROM ctb202016 WHERE si96_codctb = {$iReduz}";
+//        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2014 as si96_anousu FROM ctb202016 WHERE si96_codctb = {$iReduz}";
+//        $sSqlVerifica .= " UNION SELECT distinct si96_codfontrecursos, 2015 as si96_anousu FROM ctb202015 WHERE si96_codctb = {$iReduz}) as x order by 2 DESC limit 1";
+        $sSqlVerifica = "select si184_codfontrecursos  from balancete17". db_getsession('DB_anousu') ." where si184_mes=12 and si184_codctb=".$iReduz ;
+        $iCodFont = db_utils::fieldsMemory(db_query($sSqlVerifica), 0)->si184_codfontrecursos;
 
         return $iCodFont;
 
@@ -263,7 +266,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where  c60_anousu = " . db_getsession("DB_anousu") . ") as x
+                             where  c60_nregobrig=17 and c60_anousu = " . db_getsession("DB_anousu") . ") as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 //where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '622130500') as x
 
@@ -1827,16 +1830,21 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                      * Busca o codigo unico do ctb enviado no AM
                      *
                      */
-                    $sSqlVerifica = " select distinct si95_codctb, ano from ( SELECT distinct si95_codctb, 2017 as ano FROM ctb102017 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
+                    $sSqlVerifica = " select distinct si95_codctb, ano from ( 
+                                      SELECT distinct si95_codctb, 2017 as ano FROM ctb102017 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'
                                       AND si95_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2016 as ano FROM ctb102016 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2016 as ano FROM ctb102016 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta ";
-                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2015 as ano FROM ctb102015 WHERE si95_codorgao::INTEGER = $objContasctb->si09_codorgaotce AND si95_banco = '$objContasctb->c63_banco'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2015 as ano FROM ctb102015 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
-                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta::INTEGER = $objContasctb->tipoconta) as x order by 2 DESC limit 1";
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'";
+                    $sSqlVerifica .= " UNION SELECT distinct si95_codctb, 2014 as ano FROM ctb102014 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
+                                      AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
+                                      AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'
+                                      ) as x order by 2 DESC limit 1";
 
                     $rsResultVerifica = db_query($sSqlVerifica) or die("erro 12".$sSqlVerifica);
 
@@ -2036,7 +2044,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 
                                     $iCodCtb = ($objContasctb->codctbtce == 0 ? $oCtb->si95_codctb : $objContasctb->codctbtce);
 
-                                    $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $iCodCtb . ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
+                                    $sHash17 = '17' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $iCodCtb
+                                        . ($this->getFontReduzAM($iCodCtb) == "" ? $objContasctb->codfontrecursos : $this->getFontReduzAM($iCodCtb));
 
                                     if (!isset($aContasReg10[$reg10Hash]->reg17[$sHash17])) {
 
