@@ -94,9 +94,8 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
         $sSql = "select r45_regist
                      from afasta 
-WHERE DATE_PART('DAY',r45_dtreto) >= 2
-    AND DATE_PART('MONTH',r45_dtreto) >= 1
-    AND DATE_PART('YEAR',r45_dtreto) = 2018
+WHERE 
+     DATE_PART('YEAR',r45_dtreto) = 2018
     AND r45_situac <> 5    
     group by 1";
 
@@ -106,7 +105,9 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
-            $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
+            if($this->sDataFinal['5'] . $this->sDataFinal['6'] == 01) {
+
+                $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
                   10||r45_regist as si199_codafastamento,
                   
                   case when r45_dtreto >
@@ -155,17 +156,99 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
                                                      and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )  
                             )  
+                            
+                            
+                            AND (
+                                    (DATE_PART('YEAR',r45_dtafas) = 2018 and DATE_PART('MONTH',r45_dtafas) = 01)
+                                    or
+                                    (DATE_PART('YEAR',r45_dtafas) = 2017 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                    or
+                                    (DATE_PART('YEAR',r45_dtafas) = 2016 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                    or
+                                    (DATE_PART('YEAR',r45_dtafas) = 2015 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                    or
+                                    (DATE_PART('YEAR',r45_dtafas) = 2014 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                    or
+                                    (DATE_PART('YEAR',r45_dtafas) = 2013 and DATE_PART('MONTH',r45_dtafas) <= 12)
+                                ) 
+                            
                             AND DATE_PART('DAY',r45_dtreto) >= 2
                             AND DATE_PART('MONTH',r45_dtreto) >= 1
                             AND DATE_PART('YEAR',r45_dtreto) = 2018
-                            AND r45_anousu = 2018
+                            AND r45_situac <> 5 
+                            AND rh01_instit =  " . db_getsession("DB_instit") . "
+                            
+                            ";
+            }else{
+
+                $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
+                  10||r45_regist as si199_codafastamento,
+                  
+                  case when r45_dtreto >
+				             (SELECT si199_dtretornoafastamento
+				              FROM afast102018
+				              WHERE si199_codvinculopessoa = $oDados->r45_regist
+				                  AND si199_mes < 02 limit 1) then (SELECT si199_dtretornoafastamento+1
+															              FROM afast102018
+															              WHERE si199_codvinculopessoa = $oDados->r45_regist
+															                  AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " limit 1)
+				     else r45_dtafas
+				     end as si199_dtinicioafastamento,        
+                  
+                  
+                  r45_dtreto as si199_dtretornoafastamento,
+                  case when r45_situac = 4 and r45_codafa <> 'W' then 2 
+                  when r45_situac in (2,7) and r45_codafa <> 'W' then 3
+                  when r45_codafa = 'W' then 4
+                  else 99
+                  end as si199_tipoafastamento,
+                  
+                  case when r45_situac = 4 and r45_codafa <> 'W' then '' 
+                  when r45_situac in (2,7) and r45_codafa <> 'W' then ''
+                  when r45_codafa = 'W' then ''
+                  else r45_obs
+                  end as si199_dscoutrosafastamentos,
+                  r45_situac
+                     FROM afasta
+                     join rhpessoal on r45_regist = rh01_regist 
+                        WHERE r45_regist = $oDados->r45_regist
+                            AND 
+                            (  r45_regist NOT IN
+                                               (SELECT si199_codvinculopessoa
+                                                FROM afast102018
+                                                WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                    AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " ) or r45_regist IN
+                                                (SELECT si199_codvinculopessoa
+                                                 FROM afast102018
+                                                 WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )
+
+                                                    and
+
+                                                 r45_dtreto > (SELECT si199_dtretornoafastamento
+                                                 FROM afast102018
+                                                 WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )  
+                            )  
+                            
+                            
+                            AND (
+                                    (DATE_PART('YEAR',r45_dtafas) = 2018 and DATE_PART('MONTH',r45_dtafas) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
+                                    
+                                ) 
+                            
+                            AND DATE_PART('DAY',r45_dtreto) >= 2
+                            AND DATE_PART('MONTH',r45_dtreto) >= 1
+                            AND DATE_PART('YEAR',r45_dtreto) = 2018
                             AND r45_situac <> 5 
                             AND rh01_instit =  " . db_getsession("DB_instit") . "
                             
                             ";
 
-            $rsResult2 = db_query($sSql);
-            $oDadosAfast = db_utils::fieldsMemory($rsResult2, 0);//echo $sSql;db_criatabela($rsResult2);
+            }
+
+            $rsResult2 = db_query($sSql);//echo $sSql;db_criatabela($rsResult2);exit;
+            $oDadosAfast = db_utils::fieldsMemory($rsResult2, 0);
 
             if (pg_num_rows($rsResult2) > 0) {
 
@@ -213,7 +296,6 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
                     throw new Exception($clafast->erro_msg);
                 }
 
-
             }
 
         }
@@ -221,6 +303,8 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $oDados = db_utils::fieldsMemory($rsResult, $iCont);
+
+
 
             $sSql = "SELECT distinct r45_regist as codvinculopessoa,
                   10||r45_regist as codafastamento,
@@ -253,7 +337,10 @@ WHERE DATE_PART('DAY',r45_dtreto) >= 2
                                                  FROM afast102018
                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
                                                      and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )  
-                            )  
+                            )
+                            
+                            AND r45_regist::varchar||r45_dtreto not in (select si200_codvinculopessoa::varchar||si200_dtterminoafastamento from afast202018 )
+                            
                             AND DATE_PART('DAY',r45_dtreto) >= 2
                             AND DATE_PART('MONTH',r45_dtreto) >= 1
                             AND DATE_PART('YEAR',r45_dtreto) = 2018
