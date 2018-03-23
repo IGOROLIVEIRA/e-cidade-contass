@@ -52,18 +52,18 @@ if(isset($incluir)){
   // db_msgbox($sselecionados);
   $sqlerro = false;
 
-  $clbaserubricasesocial->excluir($r09_rubric,null,db_getsession("DB_instit"));
+  /*$clbaserubricasesocial->excluir($r09_rubric,null,db_getsession("DB_instit"));
   $erro_msg = $clbaserubricasesocial->erro_msg;
   if($clbaserubricasesocial->erro_status==0){
       $sqlerro=true;
-  }
+  }*/
 
     if($sqlerro == false && trim($sselecionados) != ""){
     $arr_dados = split(",",$sselecionados);
     for($i=0;$i<sizeof($arr_dados);$i++){
       $base = $arr_dados[$i];
 
-      $clbaserubricasesocial->excluir(null,$base,db_getsession("DB_instit"));
+      $clbaserubricasesocial->excluir_novo($r09_rubric,$base,db_getsession("DB_instit"));
       $erro_msg = $clbaserubricasesocial->erro_msg;
       if($clbaserubricasesocial->erro_status==0){
           $sqlerro=true;
@@ -216,9 +216,12 @@ function js_retornacampos(){
   
   txt1.value = txt11;
   txt2.value = txt22;
-  
-  if (obj2.length > 0) { 
+
+  if (obj2.length == 1) {
     document.form1.submit();
+  }else if(obj2.length > 1){
+      alert('Erro:\nSelecione apenas uma base .');
+      return false;
   } else {
   
     alert('Erro:\nNenhuma base selecionada.');

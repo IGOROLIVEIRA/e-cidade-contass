@@ -154,6 +154,50 @@ class cl_baserubricasesocial {
        }
      }
    }
+
+    // funcao para exclusao
+    function excluir_novo($e991_rubricas=null, $e991_rubricasesocial=null, $e991_instit=null) {
+        $this->atualizacampos(true);
+        $sql = " delete from baserubricasesocial
+                    where ";
+        $sql2 = "";
+        $sql2 = "e991_rubricas = '$e991_rubricas'";
+        if($e991_rubricasesocial!=null){
+            if($e991_rubricas!=null){
+                $sql2 .= " and e991_rubricasesocial <> '$e991_rubricasesocial'";
+            }else{
+                $sql2 = "e991_rubricasesocial <> '$e991_rubricasesocial'";
+            }
+        }
+        if($e991_instit!=null){
+            $sql2 .= " and e991_instit = '$e991_instit'";
+        }
+        $result = @pg_exec($sql.$sql2);
+        if($result==false){
+            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_sql   = "Bases das rúbricas do E-Social nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }else{
+            if(pg_affected_rows($result)==0){
+                $this->erro_banco = "";
+                $this->erro_sql = "Bases das rúbricas do E-Social nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "1";
+                return true;
+            }else{
+                $this->erro_banco = "";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "1";
+                return true;
+            }
+        }
+    }
    // funcao do recordset
    function sql_record($sql) {
      $result = @pg_query($sql);
