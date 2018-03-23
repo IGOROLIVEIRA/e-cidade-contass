@@ -545,6 +545,21 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 																			  and si96_codfontrecursos = {$oExt30->fontepagadora} 
 																			  where c61_reduz = {$oExt30->contapagadora} and c61_anousu = " . db_getsession("DB_anousu") . " 
 																			  union all
+																			  select si95_codctb as conta,si96_codfontrecursos as fonte
+																			  from conplanoconta
+																			  inner join conplanoreduz on c61_codcon = c63_codcon
+																			  and c61_anousu = c63_anousu
+																			  inner join ctb102017 on si95_banco = c63_banco
+																			  and si95_agencia = c63_agencia
+																			  and si95_digitoverificadoragencia = c63_dvagencia
+																			  and si95_contabancaria = c63_conta::int8
+																			  and si95_digitoverificadorcontabancaria = c63_dvconta
+																			  and si95_tipoconta::int8 = c63_tipoconta
+																			  inner join ctb202017 on si96_codctb = si95_codctb
+																			  and si96_mes = si95_mes
+																			  and si96_codfontrecursos = {$oExt30->fontepagadora}
+																			  where c61_reduz = {$oExt30->contapagadora} and c61_anousu = " . db_getsession("DB_anousu") . "
+																			  union all
 																			  select si95_codctb as conta, si96_codfontrecursos as fonte 
 																			  from conplanoconta 
 																			  inner join conplanoreduz on c61_codcon = c63_codcon 
