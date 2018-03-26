@@ -94,6 +94,17 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                         (SELECT si198_codvinculopessoa
                          FROM viap102018 where si198_mes < " . ($this->sDataFinal['5'] . $this->sDataFinal['6']) . " )
               AND rh01_instit =  " . db_getsession("DB_instit") . "
+              AND (
+                    rh05_seqpes is null 
+                    or  
+                    (date_part('MONTH',rh05_recis) = 01
+                     and date_part('YEAR',rh05_recis) = 2018 
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2017 
+                    )
+                  )
 			  ";
         }else{
 
