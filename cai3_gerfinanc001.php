@@ -1961,6 +1961,27 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
     </td>
     </tr>
     </table>\n";
+
+    $sUrlReciboPago = null;
+
+    if($tipo_pesq[0] == "numcgm"){
+      $sUrlReciboPago = "numcgm=".$tipo_pesq[1];
+    } elseif ($tipo_pesq[0] == "matric"){
+      $sUrlReciboPago = "matric=".$tipo_pesq[1];
+    }elseif($tipo_pesq[0] == "inscr"){
+      $sUrlReciboPago = "inscr=".$tipo_pesq [1];
+    }
+
+    /**
+     * Pagamentos por Recibos
+     */
+    echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
+    echo "  <tr>";
+    echo "    <td valign=\"top\" class=\"links2\" id=\"pagamentosRecibos\">";
+    echo "      <a class=\"links2\" onClick=\"js_MudaLink('pagamentosRecibos')\" id=\"pagamentosRecibos\"  href=\"cai3_gerfinancPagamentosRecibos.php?{$sUrlReciboPago}\" target=\"debitos\">CONSULTA BOLETOS PAGOS</a>";
+    echo "    </td>";
+    echo "  </tr>";
+    echo "</table>\n";
   }
 
   if ($tipo_pesq[0] == "numcgm") {
@@ -2187,7 +2208,7 @@ if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
   ?>
   </td>
           </tr>
-          <td height="2">
+          <td height="2"></td>
           </form>
 
         </table>
