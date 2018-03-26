@@ -107,6 +107,17 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		      where (z01_cgccpf != '00000000000' and z01_cgccpf != '00000000000000')
 		      AND rh02_anousu = " . db_getsession("DB_anousu") . " AND rh02_mesusu = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 		      AND rh01_instit =  " . db_getsession("DB_instit") . "
+		      AND (
+                    rh05_seqpes is null 
+                    or 
+                    (date_part('MONTH',rh05_recis) = 01
+                     and date_part('YEAR',rh05_recis) = 2018 
+                    )
+                    or
+                    (date_part('MONTH',rh05_recis) = 12
+                     and date_part('YEAR',rh05_recis) = 2017 
+                    )
+                  )
 			  ";
 
         }
