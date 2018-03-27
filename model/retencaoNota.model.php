@@ -1447,10 +1447,12 @@ class retencaoNota
       return $this->iCodOrd;
     }
 
-    $sSelectCodOrd = " SELECT e50_codord FROM empnota "
-      . " LEFT JOIN pagordemnota ON e69_codnota = e71_codnota "
-      . " LEFT JOIN pagordem ON e71_codord = e50_codord "
-      . " WHERE e69_codnota = {$this->iCodNota} LIMIT 1 ";
+    $sSelectCodOrd  =
+     " SELECT e50_codord FROM empnota 
+       LEFT JOIN pagordemnota ON e69_codnota = e71_codnota 
+       LEFT JOIN pagordem ON e71_codord = e50_codord 
+       WHERE e69_codnota = {$this->iCodNota} 
+       AND e71_anulado = FALSE LIMIT 1 ";
 
     $this->iCodOrd = db_utils::fieldsMemory(db_query($sSelectCodOrd), 0)->e50_codord;
 
@@ -1485,7 +1487,7 @@ class retencaoNota
   public function getValorOP()
   {
     $sSqlValorOP = " SELECT SUM(e53_valor - e53_vlranu) AS valor_ordem FROM pagordemele "
-      . " WHERE e53_codord = {$this->getCodOrd()} LIMIT 1 ";
+                 . " WHERE e53_codord = {$this->getCodOrd()} LIMIT 1 ";
 
     $nRetorno = db_utils::fieldsMemory(db_query($sSqlValorOP), 0)->valor_ordem;
     return floatval($nRetorno);
