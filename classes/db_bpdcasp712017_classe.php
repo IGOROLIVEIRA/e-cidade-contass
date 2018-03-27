@@ -413,7 +413,7 @@ class cl_bpdcasp712017 {
       $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
                              where substr(c60_estrut,1,5)='82111' and c60_anousu=" . db_getsession("DB_anousu") ." and c61_anousu=" . db_getsession("DB_anousu");
 
-      if($iInstit==false){
+      if($iInstit==true){
        $sSqlReduzSuperavit = $sSqlReduzSuperavit." and c61_instit in (".db_getsession('DB_instit').")";
       }
       
