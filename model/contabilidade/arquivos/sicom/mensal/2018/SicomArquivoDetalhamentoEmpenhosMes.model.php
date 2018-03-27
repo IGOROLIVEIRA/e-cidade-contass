@@ -457,9 +457,9 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             }else {
                 $oDadosEmpenho->si106_despdeccontrato = $oEmpenho->despdeccontrato;
                 if ($oEmpenho->despdeccontrato == 3) {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = '';
-                } else {
                     $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
+                } else {
+                    $oDadosEmpenho->si106_codorgaorespcontrato = '';
                 }
 
                 if (in_array($oEmpenho->despdeccontrato, array(1, 3))) {
