@@ -438,8 +438,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         $clbpdcasp71 = new cl_bpdcasp712017();
         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
-        $consolidade = $this->getTipoGeracao() == 'CONSOLIDADO' ? true:false;
-        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($consolidade,$objContasfr->o15_codigo)) ;
+        $consolidado = $this->getTipoGeracao() == 'CONSOLIDADO' ? true:false;
+        $rsSaldoFontes = db_query($clbpdcasp71->sql_query_saldoInicialContaCorrente($consolidado,$objContasfr->o15_codigo)) ;
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
         //echo "<pre>";print_r($oSaldoFontes);
