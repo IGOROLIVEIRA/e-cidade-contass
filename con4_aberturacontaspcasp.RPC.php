@@ -287,7 +287,7 @@ try {
               $oContaBancaria->setIdentificador($sIdentificador);
               $oContaBancaria->setTipoConta($oDadosConta->c63_tipoconta);
               $oContaBancaria->setPlanoConta(true);
-              $oContaBancaria->salvar();
+              $oContaBancaria->salvar_conta_pcasp();
             }
           }
         }
