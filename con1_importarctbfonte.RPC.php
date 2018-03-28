@@ -26,15 +26,28 @@ $iInstituicao = db_getsession("DB_instit");
 
 try{
     switch ($oParam->exec) {
+
         case 'importarCTBFONTE' :
+            $naoCadastradas = array();
             db_inicio_transacao();
             $aDadosSicom = getDadosSicom($iAno);
+            $clconctbsaldo = new cl_conctbsaldo;
+            $clconctbsaldo->excluir(NULL, "ces02_anousu = " . db_getsession("DB_anousu"));
+
             if (empty($aDadosSicom)){
                 throw new Exception("Não foi localizado nenhuma conta a ser importada!");
             }
+
             for ($i = 0; $i < count($aDadosSicom) ; $i++ ) {
+                if($aDadosSicom[$i]->reduz != 0 || $aDadosSicom[$i]->codcon != 0) {
+                    $sAtualizaCodCTB = "UPDATE conplanoreduz SET c61_codtce=" . $aDadosSicom[$i]->si95_codctb . "
+                        WHERE c61_anousu=" . db_getsession("DB_anousu") . "  AND c61_reduz=" . $aDadosSicom[$i]->reduz;
+                    $rCtb10 = db_query($sAtualizaCodCTB);
+                }
+
                 for ($x = 0; $x < count($aDadosSicom[$i]->aSaldos) ; $x++ ) {
 
+                    //print_r($aDadosSicom[$i]->aSaldos[$x]);
                     $clconctbsaldo = new cl_conctbsaldo;
                     $clconctbsaldo->ces02_codcon = $aDadosSicom[$i]->codcon;
                     $clconctbsaldo->ces02_reduz = $aDadosSicom[$i]->reduz;
@@ -43,13 +56,24 @@ try{
                     $clconctbsaldo->ces02_anousu = $iAno + 1;
                     $clconctbsaldo->ces02_inst = $iInstituicao;
 
-                    $clconctbsaldo->incluir($ces02_sequencial);
-                    if($clconctbsaldo->erro_status == 0){
-                        throw new Exception("Erro ao incluir Saldo: ".$clconctbsaldo->erro_msg);
+                    if($aDadosSicom[$i]->reduz == 0 || $aDadosSicom[$i]->codcon == 0){
+                        $naoCadastradas[] = " Sem reduz "
+                            .$aDadosSicom[$i]->si95_contabancaria
+                            ."-".$aDadosSicom[$i]->si95_digitoverificadorcontabancaria
+                            ." ".$aDadosSicom[$i]->si95_desccontabancaria
+                            ." CodTCE =".$aDadosSicom[$i]->si95_codctb;
+                        continue;
                     }
+//                    $clconctbsaldo->incluir($ces02_sequencial);
+//                    if($clconctbsaldo->erro_status == 0){
+//                        throw new Exception("Erro ao incluir Saldo: ".$clconctbsaldo->erro_msg);
+//                    }
+
                 }
             }
             db_fim_transacao(false);
+            //print_r($naoCadastradas);
+            $oRetorno->naoCadastradas = $naoCadastradas;
             break;
         default:
             break;
@@ -79,13 +103,14 @@ function getDadosSicom($iAno){
         if(!validaContaEncerrada($oConta->si95_codctb,db_getsession('DB_anousu'))) {
             $oConta->aSaldos = getSaldoCTB($oConta->si95_codctb, $iAno);
             $oPlanoContaReduz = getCodConReduz($oConta);
-            if($oPlanoContaReduz == null)
-                throw new Exception("Não foi localizado reduzido para a Conta Bancária "
-                    .$oConta->si95_contabancaria."-".$oConta->si95_digitoverificadorcontabancaria
-                    ." ".$oConta->si95_desccontabancaria
-                    ." CodTCE =".$oConta->si95_codctb);
-            $oConta->codcon = $oPlanoContaReduz->c61_codcon;
-            $oConta->reduz  = $oPlanoContaReduz->c61_reduz;
+            if($oPlanoContaReduz == null){
+                $oConta->codcon = $oPlanoContaReduz->c61_codcon;
+                $oConta->reduz  = $oPlanoContaReduz->c61_reduz;
+            }else{
+                $oConta->codcon = $oPlanoContaReduz->c61_codcon;
+                $oConta->reduz  = $oPlanoContaReduz->c61_reduz;
+            }
+
             $aContasAgrupadas[] = $oConta;
         } else {
             continue;
@@ -148,15 +173,16 @@ function getCodConReduz($oConta){
                 AND c60_anousu=c61_anousu ";
     $sSql .= "WHERE c61_anousu      = ".db_getsession('DB_anousu');
     $sSql .= "  AND c61_instit      = ".db_getsession('DB_instit');
-    $sSql .= "  AND db89_db_bancos  ='".$oConta->si95_banco."' ";
+    $sSql .= "  AND lpad(db89_db_bancos,3,0)  ='".$oConta->si95_banco."' ";
     $sSql .= "  AND db89_codagencia ='" .$oConta->si95_agencia."' ";
     $sSql .= "  AND db83_conta      ='".$oConta->si95_contabancaria."' ";
     $sSql .= "  AND db83_dvconta    ='" .$oConta->si95_digitoverificadorcontabancaria."' ";
     $sSql .= "  AND db89_digito     ='".$oConta->si95_digitoverificadoragencia."' ";
-    $sSql .= "  AND db83_tipoconta  = ".$oConta->si95_tipoconta ;
+    $sSql .= "  AND lpad(db83_tipoconta,2,0)  = '".$oConta->si95_tipoconta."' " ;
     $sSql .= "  limit 1" ;
 
     $rsBuscaCodCon = db_query($sSql);
+
     if (pg_numrows($rsBuscaCodCon) == 0) {
         return null;
     }

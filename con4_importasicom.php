@@ -180,12 +180,21 @@ include("dbforms/db_funcoes.php");
 
     function js_importarsicomRetorno(oAjax) {
         js_removeObj('msgBox');
+
         var oRetorno = eval("("+oAjax.responseText+")");
+
         if(oRetorno.status == 2){
             alert(oRetorno.message.urlDecode());
         }else{
             alert("Processo concluído com sucesso!");
         }
+        var sContaReduz = "<hr>";
+
+        for (var c = 0; c < oRetorno.naoCadastradas.length; c++) {
+            sContaReduz += "<h3>"+oRetorno.naoCadastradas[c]+"</h3><br>";
+        }
+
+        $('debug').innerHTML = sContaReduz;
     }
 
 </script>

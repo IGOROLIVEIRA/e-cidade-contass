@@ -83,7 +83,7 @@ switch ($oParam->exec) {
                                 continue;
                             }
                             $sCaminhoClasse = "classes/db_" . strtolower($aArquivoCSV[0]) . $data[0] . $ano . "_classe.php";
-                            if (file_exists($sCaminhoClasse)) {
+                            if (file_exists($sCaminhoClasse) && $sCaminhoClasse != 'classes/db_ext24'.$ano.'_classe.php') {
 
                                 require_once $sCaminhoClasse;
                                 $sTabela = strtolower($aArquivoCSV[0]) . $data[0] . $ano;
@@ -187,7 +187,7 @@ switch ($oParam->exec) {
                             try {
                                 $oClasse->incluir(null);
                                 if($oClasse->erro_status == 0) {
-                                    die("Erro importacao. {$oClasse->erro_msg}");
+                                    $oRetorno->message = ("Erro importacao. {$oClasse->erro_msg}");
                                 }
                                 if ($iCtrListaArquivos == 0) {
                                     $oArquivoImportado->nome = $aArquivoCSV[0];
