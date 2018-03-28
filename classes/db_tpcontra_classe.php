@@ -1,72 +1,72 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: recursoshumanos
 //CLASSE DA ENTIDADE tpcontra
-class cl_tpcontra { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $h13_codigo = 0; 
-   var $h13_regime = 0; 
-   var $h13_tpcont = null; 
+class cl_tpcontra {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $h13_codigo = 0;
+   var $h13_regime = 0;
+   var $h13_tpcont = null;
    var $h13_descr = null;
    var $h13_tipocargo = 0;
    var $h13_tipocargodescr = null;
    var $h13_dscapo = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 h13_codigo = int4 = Código 
-                 h13_regime = int4 = Codigo do Regime do Func. 
-                 h13_tpcont = varchar(2) = Tipo de contrato 
+                 h13_codigo = int4 = Código
+                 h13_regime = int4 = Codigo do Regime do Func.
+                 h13_tpcont = varchar(2) = Tipo de contrato
                  h13_descr = varchar(40) = Descrição do Tipo
                  h13_tipocargo = int4 = Tipo de cargo;
                  h13_tipocargodescr = varchar(150) Descrição do tipo de cargo;
                  h13_dscapo        = varchar (3) Descrição do tipo de cargo
                  ";
-   //funcao construtor da classe 
-   function cl_tpcontra() { 
+   //funcao construtor da classe
+   function cl_tpcontra() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("tpcontra"); 
+     $this->rotulo = new rotulo("tpcontra");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -89,9 +89,9 @@ class cl_tpcontra {
      }
    }
    // funcao para inclusao
-   function incluir ($h13_codigo){ 
+   function incluir ($h13_codigo){
       $this->atualizacampos();
-     if($this->h13_regime == null ){ 
+     if($this->h13_regime == null ){
        $this->erro_sql = " Campo Codigo do Regime do Func. nao Informado.";
        $this->erro_campo = "h13_regime";
        $this->erro_banco = "";
@@ -100,7 +100,7 @@ class cl_tpcontra {
        $this->erro_status = "0";
        return false;
      }
-     if($this->h13_tpcont == null ){ 
+     if($this->h13_tpcont == null ){
        $this->erro_sql = " Campo Tipo de contrato nao Informado.";
        $this->erro_campo = "h13_tpcont";
        $this->erro_banco = "";
@@ -109,7 +109,7 @@ class cl_tpcontra {
        $this->erro_status = "0";
        return false;
      }
-     if($this->h13_descr == null ){ 
+     if($this->h13_descr == null ){
        $this->erro_sql = " Campo Descrição do Tipo nao Informado.";
        $this->erro_campo = "h13_descr";
        $this->erro_banco = "";
@@ -128,31 +128,21 @@ class cl_tpcontra {
        return false;
      }
      if($h13_codigo == "" || $h13_codigo == null ){
-       $result = db_query("select nextval('tpcontra_h13_codigo_seq')"); 
+       $result = db_query("select nextval('tpcontra_h13_codigo_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: tpcontra_h13_codigo_seq do campo: h13_codigo"; 
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false; 
-       }
-       $this->h13_codigo = pg_result($result,0,0); 
-     }else{
-       $result = db_query("select max(h13_codigo) from tpcontra");
-       if(($result != false) && (pg_result($result,0,0) > $h13_codigo)){
-         $this->erro_sql = " Campo h13_codigo maior que último número da sequencia.";
-         $this->erro_banco = "Sequencia menor que este número.";
+         $this->erro_sql   = "Verifique o cadastro da sequencia: tpcontra_h13_codigo_seq do campo: h13_codigo";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
-       }else{
-         $this->h13_codigo = $h13_codigo; 
        }
+       $this->h13_codigo = pg_result($result,0,0);
+     }else{
+         $this->h13_codigo = $h13_codigo;
      }
 
-     if(($this->h13_codigo == null) || ($this->h13_codigo == "") ){ 
+     if(($this->h13_codigo == null) || ($this->h13_codigo == "") ){
        $this->erro_sql = " Campo h13_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -161,25 +151,25 @@ class cl_tpcontra {
        return false;
      }
      $sql = "insert into tpcontra(
-                                       h13_codigo 
-                                      ,h13_regime 
-                                      ,h13_tpcont 
+                                       h13_codigo
+                                      ,h13_regime
+                                      ,h13_tpcont
                                       ,h13_descr
                                       ,h13_tipocargo
                                       ,h13_tipocargodescr
                                       ,h13_dscapo
                        )
                 values (
-                                $this->h13_codigo 
-                               ,$this->h13_regime 
-                               ,'$this->h13_tpcont' 
+                                $this->h13_codigo
+                               ,$this->h13_regime
+                               ,'$this->h13_tpcont'
                                ,'$this->h13_descr'
                                ,$this->h13_tipocargo
                                ,'$this->h13_tipocargodescr'
                                ,'$this->h13_dscapo'
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Tipos de contrato por regime ($this->h13_codigo) nao Incluído. Inclusao Abortada.";
@@ -214,16 +204,16 @@ class cl_tpcontra {
        $resac = db_query("insert into db_acount values($acount,597,4512,'','".AddSlashes(pg_result($resaco,0,'h13_descr'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($h13_codigo=null) { 
+   function alterar ($h13_codigo=null) {
       $this->atualizacampos();
      $sql = " update tpcontra set ";
      $virgula = "";
-     if(trim($this->h13_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_codigo"])){ 
+     if(trim($this->h13_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_codigo"])){
        $sql  .= $virgula." h13_codigo = $this->h13_codigo ";
        $virgula = ",";
-       if(trim($this->h13_codigo) == null ){ 
+       if(trim($this->h13_codigo) == null ){
          $this->erro_sql = " Campo Código nao Informado.";
          $this->erro_campo = "h13_codigo";
          $this->erro_banco = "";
@@ -233,10 +223,10 @@ class cl_tpcontra {
          return false;
        }
      }
-     if(trim($this->h13_regime)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_regime"])){ 
+     if(trim($this->h13_regime)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_regime"])){
        $sql  .= $virgula." h13_regime = $this->h13_regime ";
        $virgula = ",";
-       if(trim($this->h13_regime) == null ){ 
+       if(trim($this->h13_regime) == null ){
          $this->erro_sql = " Campo Codigo do Regime do Func. nao Informado.";
          $this->erro_campo = "h13_regime";
          $this->erro_banco = "";
@@ -246,10 +236,10 @@ class cl_tpcontra {
          return false;
        }
      }
-     if(trim($this->h13_tpcont)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_tpcont"])){ 
+     if(trim($this->h13_tpcont)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_tpcont"])){
        $sql  .= $virgula." h13_tpcont = '$this->h13_tpcont' ";
        $virgula = ",";
-       if(trim($this->h13_tpcont) == null ){ 
+       if(trim($this->h13_tpcont) == null ){
          $this->erro_sql = " Campo Tipo de contrato nao Informado.";
          $this->erro_campo = "h13_tpcont";
          $this->erro_banco = "";
@@ -259,10 +249,10 @@ class cl_tpcontra {
          return false;
        }
      }
-     if(trim($this->h13_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_descr"])){ 
+     if(trim($this->h13_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["h13_descr"])){
        $sql  .= $virgula." h13_descr = '$this->h13_descr' ";
        $virgula = ",";
-       if(trim($this->h13_descr) == null ){ 
+       if(trim($this->h13_descr) == null ){
          $this->erro_sql = " Campo Descrição do Tipo nao Informado.";
          $this->erro_campo = "h13_descr";
          $this->erro_banco = "";
@@ -317,7 +307,7 @@ class cl_tpcontra {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Tipos de contrato por regime nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->h13_codigo;
@@ -345,14 +335,14 @@ class cl_tpcontra {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($h13_codigo=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($h13_codigo=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($h13_codigo));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -381,7 +371,7 @@ class cl_tpcontra {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Tipos de contrato por regime nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$h13_codigo;
@@ -409,11 +399,11 @@ class cl_tpcontra {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -435,7 +425,7 @@ class cl_tpcontra {
       }
      return $result;
    }
-   function sql_query ( $h13_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query ( $h13_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -451,8 +441,8 @@ class cl_tpcontra {
      $sql2 = "";
      if($dbwhere==""){
        if($h13_codigo!=null ){
-         $sql2 .= " where tpcontra.h13_codigo = $h13_codigo "; 
-       } 
+         $sql2 .= " where tpcontra.h13_codigo = $h13_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -468,7 +458,7 @@ class cl_tpcontra {
      }
      return $sql;
   }
-   function sql_query_file ( $h13_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_file ( $h13_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -484,8 +474,8 @@ class cl_tpcontra {
      $sql2 = "";
      if($dbwhere==""){
        if($h13_codigo!=null ){
-         $sql2 .= " where tpcontra.h13_codigo = $h13_codigo "; 
-       } 
+         $sql2 .= " where tpcontra.h13_codigo = $h13_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
