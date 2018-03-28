@@ -2435,7 +2435,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
             $colunaTotal = "";
             $groupby     = " group by j17_codhis, ";
             $groupby    .= "          j17_descr  ";
-            $whereMatric = " and j21_matric = $j23_matric ";
+            $whereMatric = "";
 
           }
 
