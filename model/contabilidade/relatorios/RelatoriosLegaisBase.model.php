@@ -166,10 +166,12 @@ class RelatoriosLegaisBase {
    * @var array
    */
   static $aCamposVerificacao = array(
+      'sinal_anterior',
       'saldo_anterior',
       'saldo_anterior_debito',
       'saldo_anterior_credito',
-      'saldo_final'
+      'saldo_final',
+      'sinal_final'
   );
 
   /**
