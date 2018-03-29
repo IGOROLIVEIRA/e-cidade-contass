@@ -6,4 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Task' => array($vendorDir . '/ruckusing/ruckusing-migrations/lib'),
+    'Ruckusing' => array($vendorDir . '/ruckusing/ruckusing-migrations/lib'),
 );

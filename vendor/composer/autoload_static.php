@@ -6,6 +6,23 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit78bbc96be2b2706d3806cfb321aed21e
 {
+    public static $prefixesPsr0 = array (
+        'T' => 
+        array (
+            'Task' => 
+            array (
+                0 => __DIR__ . '/..' . '/ruckusing/ruckusing-migrations/lib',
+            ),
+        ),
+        'R' => 
+        array (
+            'Ruckusing' => 
+            array (
+                0 => __DIR__ . '/..' . '/ruckusing/ruckusing-migrations/lib',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'CGIF' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
         'CGIFCOLORTABLE' => __DIR__ . '/..' . '/mpdf/mpdf/classes/gif.php',
@@ -37,6 +54,7 @@ class ComposerStaticInit78bbc96be2b2706d3806cfb321aed21e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixesPsr0 = ComposerStaticInit78bbc96be2b2706d3806cfb321aed21e::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit78bbc96be2b2706d3806cfb321aed21e::$classMap;
 
         }, null, ClassLoader::class);
