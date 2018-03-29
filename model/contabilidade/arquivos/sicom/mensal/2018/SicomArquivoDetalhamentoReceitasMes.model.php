@@ -12,30 +12,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarREC.
  */
 class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 149;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'REC';
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -45,13 +45,13 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos()
   {
-    
+
     $aElementos[10] = array(
       "tipoRegistro",
       "codReceita",
@@ -72,7 +72,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
     return $aElementos;
   }
-  
+
   /**
    * selecionar os dados das receitas do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -95,8 +95,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
     $oDOMDocument = new DOMDocument();
     $oDOMDocument->loadXML($sTextoXml);
     $oNaturezaReceita = $oDOMDocument->getElementsByTagName('receita');
-    
-    
+
+
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
@@ -111,16 +111,16 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
     if (pg_num_rows($rsPref) > 0) {
     	$rsResult10 = 0;
     }*/
-    
+
     $sSql = "select si09_codorgaotce from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit");
     $rsResult = db_query($sSql);
     $sCodOrgaoTce = db_utils::fieldsMemory($rsResult, 0)->si09_codorgaotce;
-    
+
     /**
      * exlcuir informacoes do mes selecionado
      */
     db_inicio_transacao();
-    
+
     $result = $clrec11->sql_record($clrec11->sql_query(null, "*", null, "si26_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']) . " and si26_instit = " . db_getsession("DB_instit"));
     if (pg_num_rows($result) > 0) {
       $clrec11->excluir(null, "si26_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si26_instit = " . db_getsession("DB_instit"));
@@ -128,7 +128,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         throw new Exception($clrec11->erro_msg);
       }
     }
-    
+
     $result = $clrec10->sql_record($clrec10->sql_query(null, "*", null, "si25_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si25_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clrec10->excluir(null, "si25_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si25_instit = " . db_getsession("DB_instit"));
@@ -143,10 +143,10 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
       '160099', '112299', '176202', '242201', '242202', '222900', '193199',
       '191199', '176101', '160004', '132810', '132820', '132830', '192210',
       '242102', '199099', '247101', '172402', '172233');
-    
+
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
+
       $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
       if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
@@ -163,7 +163,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           }
 
         }
-        
+
         if (substr($oDadosRec->o57_fonte, 1, 8) == $sNaturezaReceita) {
 
           if (in_array(substr($oDadosRec->o57_fonte, 1, 6), $aRectce)) {
@@ -207,55 +207,78 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         /**
          * agrupar registro 11
          */
+        $sHash11 = $oDadosRec->o70_codigo;
+        if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
-        $sSql = "SELECT
-                                o70_codrec,
-                                CASE SUBSTRING(k02_estorc,0,8)
-                                     WHEN '4121004' THEN z01_cgccpf
-                                     WHEN '4721004'THEN z01_cgccpf
-                                ELSE '' END AS z01_cgccpf,
-                                SUM (k81_valor) AS k81_valor
-                  FROM orcreceita
-                  LEFT JOIN taborc on (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
-                  LEFT JOIN tabrec ON taborc.k02_codigo = tabrec.k02_codigo
-                  LEFT JOIN placaixarec ON k81_receita = tabrec.k02_codigo
-                  LEFT JOIN placaixa ON k80_codpla = k81_codpla
-                  LEFT JOIN cgm ON z01_numcgm = k81_numcgm
-                  WHERE o70_codrec = ".$oDadosRec->o70_codrec." and k81_datareceb >= '{$this->sDataInicial}' and k81_datareceb <= '{$this->sDataFinal}'
-                  GROUP BY 1, 2";
-        $resultcgmfonte = db_query($sSql);
-//echo '<pre>';
-//        echo $sSql;
-        for($iContcgmfonte = 0; $iContcgmfonte < pg_num_rows($resultcgmfonte); $iContcgmfonte++){
+            $sSql = "
+          SELECT k02_estorc,
+                 CASE 
+                     WHEN substr(k02_estorc,2,6) IN ('121004','721004') 
+                        THEN z01_cgccpf
+                     ELSE ''
+                 END AS z01_cgccpf,
+                 o70_codrec,
+                 o15_codtri,
+                 c70_valor
+          FROM conlancamrec
+          INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
+          INNER JOIN orctiporec ON o70_codigo = o15_codigo
+          LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
+          LEFT JOIN conlancam ON c74_codlan = c70_codlan
+          LEFT JOIN conlancamcgm ON c76_codlan = c70_codlan
+          LEFT JOIN cgm ON conlancamcgm.c76_numcgm = z01_numcgm
+          WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
+            AND substr(k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8)."'
+            AND c74_data   BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+          GROUP BY 1,2,3,4,5
+          ORDER BY 1,3,2";
+          $result = db_query($sSql);
+//          echo $sSql;
+//          db_criatabela($result);
 
-          $NumcgmFonte = db_utils::fieldsMemory($resultcgmfonte, $iContcgmfonte);
-          $sHash11 = $NumcgmFonte->z01_cgccpf;
+          $aDadosCgm11 = array();
 
-          if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
-            $sSql = "select * from orctiporec where o15_codigo = " . $oDadosRec->o70_codigo;
-            $result = db_query($sSql);
-            $sCodFontRecursos = db_utils::fieldsMemory($result, 0)->o15_codtri;
+          for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++){
 
-            $oDados11 = new stdClass();
-            $oDados11->si26_tiporegistro = 11;
-            $oDados11->si26_codreceita = $oDadosRec->o70_codrec;
-            $oDados11->si26_codfontrecursos = $sCodFontRecursos;
-            $oDados11->si26_cnpjorgaocontribuinte = $NumcgmFonte->z01_cgccpf;
-            $oDados11->si26_vlarrecadadofonte = 0;
-            $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-            $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $oDados11;
+          $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
+          $sHashCgm = $oCodFontRecursos->z01_cgccpf;
+
+          if (!isset($aDadosCgm11[$sHashCgm])){
+
+          $oDados11 = new stdClass();
+          $oDados11->si26_tiporegistro = 11;
+          $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
+          $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+          $oDados11->si26_cnpjorgaocontribuinte = $oCodFontRecursos->z01_cgccpf;
+          $oDados11->si26_vlarrecadadofonte = 0;
+          $oDados11->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+
+          $aDadosCgm11[$sHashCgm] = $oDados11;
+          }
+
+          $aDadosCgm11[$sHashCgm]->si26_vlarrecadadofonte += $oCodFontRecursos->c70_valor;
 
           }
-          $aDadosAgrupados[$sHash10]->Reg11[$sHash11]->si26_vlarrecadadofonte += $NumcgmFonte->k81_valor;
+
+          $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
 
         }
+
+
       }
 
     }
-//    echo "<pre>";print_r($aDadosAgrupados);
-    $aRectceSaudEduc = array('11120101', '11120200', '11120431', '11120434', '11120800', '11130501', '11130502', '17210102', '17210105', '17213600',
-      '17220101', '17220102', '17220104', '19110801', '19113800', '19113900', '19114000', '19130800', '19131100', '19131200',
-      '19131300', '19310400', '19311100', '19311200', '19311300');
+    //echo "<pre>";print_r($aDadosAgrupados);exit;
+
+
+    /*
+     * Alteração das fontes de receitas, para considerar os novos estruturais disponibilizados pelo TCE para 2018!
+     * */
+
+    $aRectceSaudEduc = array('11120111', '11180111', '11130311', '11130341', '11180141', '11180231', '11180241', '17180121', '17180151', '17180611',
+      '17280111', '17280121', '17280131', '11120112', '11180112', '11180142', '11180232', '19130800', '11180114', '11180144',
+      '11180234', '19310400', '11180113', '11180143', '11180233');
+
     foreach ($aDadosAgrupados as $oDados10) {
 
       $clrec10 = new cl_rec102018();
@@ -273,73 +296,73 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
       if ($clrec10->erro_status == 0) {
         throw new Exception($clrec10->erro_msg);
       }
-      foreach ($oDados10->Reg11 as $oDados11) {
-        if (in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc) &&
-          ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '') &&
-          ($oDados11->si26_codfontrecursos != '101') && ($oDados11->si26_codfontrecursos != '102')
-        ) {
+      foreach ($oDados10->Reg11 as $aDados11) {
+        foreach ($aDados11 as $oDados11) {
+          if (in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc) &&
+            ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '') &&
+            ($oDados11->si26_codfontrecursos != '101') && ($oDados11->si26_codfontrecursos != '102')
+          ) {
 
-          $clrec11 = new cl_rec112018();
-          $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
-          $clrec11->si26_reg10 = $clrec10->si25_sequencial;
-          $clrec11->si26_codreceita = $oDados10->si25_codreceita;
-          $clrec11->si26_codfontrecursos = '100';
-          $clrec11->si26_cnpjorgaocontribuinte = $NumcgmFonte->z01_cgccpf;
-          $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "");
-          $clrec11->si26_mes = $oDados11->si26_mes;
-          $clrec11->si26_instit = db_getsession("DB_instit");
+            $clrec11 = new cl_rec112018();
+            $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
+            $clrec11->si26_reg10 = $clrec10->si25_sequencial;
+            $clrec11->si26_codreceita = $oDados10->si25_codreceita;
+            $clrec11->si26_codfontrecursos = '100';
+            $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "");
+            $clrec11->si26_mes = $oDados11->si26_mes;
+            $clrec11->si26_instit = db_getsession("DB_instit");
 
-          $clrec11->incluir(null);
-          if ($clrec11->erro_status == 0) {
-            throw new Exception($clrec11->erro_msg);
+            $clrec11->incluir(null);
+            if ($clrec11->erro_status == 0) {
+              throw new Exception($clrec11->erro_msg);
+            }
+
+            $clrec11->si26_sequencial = null;
+            $clrec11->si26_codfontrecursos = '101';
+            $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", "");
+            $clrec11->incluir(null);
+            if ($clrec11->erro_status == 0) {
+              throw new Exception($clrec11->erro_msg);
+            }
+
+            $clrec11->si26_sequencial = null;
+            $clrec11->si26_codfontrecursos = '102';
+            $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado), 2, ".", "") - (number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "") + number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", ""));
+            $clrec11->incluir(null);
+            if ($clrec11->erro_status == 0) {
+              throw new Exception($clrec11->erro_msg);
+            }
+            break;
+          } else if (!in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc)
+            || $oDados10->si25_identificadordeducao != 0
+            || $oDados10->si25_identificadordeducao != ''
+          ) {
+
+
+            $clrec11 = new cl_rec112018();
+            $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
+            $clrec11->si26_reg10 = $clrec10->si25_sequencial;
+            $clrec11->si26_codreceita = $oDados10->si25_codreceita;
+            $clrec11->si26_codfontrecursos = $oDados11->si26_codfontrecursos;
+            $clrec11->si26_cnpjorgaocontribuinte = $oDados11->si26_cnpjorgaocontribuinte;
+            $clrec11->si26_vlarrecadadofonte = abs($oDados11->si26_vlarrecadadofonte);
+            $clrec11->si26_mes = $oDados11->si26_mes;
+            $clrec11->si26_instit = db_getsession("DB_instit");
+
+            $clrec11->incluir(null);
+            if ($clrec11->erro_status == 0) {
+              throw new Exception($clrec11->erro_msg);
+            }
+
           }
-
-          $clrec11->si26_sequencial = null;
-          $clrec11->si26_codfontrecursos = '101';
-          $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", "");
-          $clrec11->incluir(null);
-          if ($clrec11->erro_status == 0) {
-            throw new Exception($clrec11->erro_msg);
-          }
-
-          $clrec11->si26_sequencial = null;
-          $clrec11->si26_codfontrecursos = '102';
-          $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado), 2, ".", "") - (number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "") + number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", ""));
-          $clrec11->incluir(null);
-          if ($clrec11->erro_status == 0) {
-            throw new Exception($clrec11->erro_msg);
-          }
-          break;
-        } else if (!in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc)
-          || $oDados10->si25_identificadordeducao != 0
-          || $oDados10->si25_identificadordeducao != ''
-        ) {
-
-
-          $clrec11 = new cl_rec112018();
-          $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
-          $clrec11->si26_reg10 = $clrec10->si25_sequencial;
-          $clrec11->si26_codreceita = $oDados10->si25_codreceita;
-          $clrec11->si26_codfontrecursos = $oDados11->si26_codfontrecursos;
-          $clrec11->si26_cnpjorgaocontribuinte = $oDados11->si26_cnpjorgaocontribuinte;
-          $clrec11->si26_vlarrecadadofonte = $oDados11->si26_vlarrecadadofonte;
-          $clrec11->si26_mes = $oDados11->si26_mes;
-          $clrec11->si26_instit = db_getsession("DB_instit");
-
-          $clrec11->incluir(null);
-          if ($clrec11->erro_status == 0) {
-            throw new Exception($clrec11->erro_msg);
-          }
-
         }
-
       }
 
 
     }
-    
+
     db_fim_transacao();
-    
+
     $oGerarREC = new GerarREC();
     $oGerarREC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarREC->gerarDados();
