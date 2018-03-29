@@ -24,7 +24,7 @@ echo 'INICIANDO DEPLOY'.PHP_EOL;
 echo '======='.PHP_EOL;
 
 // uso o passthru para rodar um
-// git pull no console do Linux
+// git pull ou svn up no console do Linux
 echo 'Atualizando o repositório'.PHP_EOL;
 
 passthru('svn up --username marcelo --password 1301891w ');
