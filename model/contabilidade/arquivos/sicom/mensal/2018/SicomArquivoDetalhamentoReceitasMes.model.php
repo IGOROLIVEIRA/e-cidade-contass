@@ -219,21 +219,26 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                  END AS z01_cgccpf,
                  o70_codrec,
                  o15_codtri,
-                 c70_valor
+                 SUM( CASE  WHEN c53_tipo = 100 THEN ROUND(C70_VALOR,2)::FLOAT8 
+                            WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8                      
+                      ELSE 0::FLOAT8 
+                      END ) AS c70_valor
           FROM conlancamrec
           INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
           INNER JOIN orctiporec ON o70_codigo = o15_codigo
           LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
           LEFT JOIN conlancam ON c74_codlan = c70_codlan
           LEFT JOIN conlancamcgm ON c76_codlan = c70_codlan
+          INNER JOIN CONLANCAMDOC ON C71_CODLAN = C70_CODLAN
+          INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
           LEFT JOIN cgm ON conlancamcgm.c76_numcgm = z01_numcgm
           WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
-            AND substr(k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8)."'
+            AND substr(k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
             AND c74_data   BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
-          GROUP BY 1,2,3,4,5
+          GROUP BY 1,2,3,4,c53_tipo, c70_valor
           ORDER BY 1,3,2";
           $result = db_query($sSql);
-//          echo $sSql;
+//          echo $sSql;exit();
 //          db_criatabela($result);
 
           $aDadosCgm11 = array();
