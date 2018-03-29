@@ -536,13 +536,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        (SELECT 'gerfsal' as tipo,rh02_regist,
 
        '11' AS si196_tiporegistro, ";
-       if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
-         $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
-       }else{
+
          $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
          $sSql2 .= "rh27_descr AS si196_desctiporemuneracao,";
-       }
+
        $sSql2 .= "CASE
 
        WHEN r14_pd = 1 THEN 'D'
@@ -600,13 +598,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        SELECT 'gerfcom' as tipo,rh02_regist,
 
        '11' AS si196_tiporegistro,";
-       if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
-         $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
-       }else{
+
          $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
          $sSql2 .= "rh27_descr AS si196_desctiporemuneracao,";
-       }
+
        $sSql2 .= "CASE
        WHEN r48_pd = 1 THEN 'D'
        WHEN r48_pd = 2 THEN 'C'
@@ -662,13 +658,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        SELECT 'gerfs13' as tipo,rh02_regist,
 
        '11' AS si196_tiporegistro,";
-       if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
-         $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
-       }else{
+
          $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
          $sSql2 .= "rh27_descr AS si196_desctiporemuneracao,";
-       }
+
        $sSql2 .= "CASE
        WHEN r35_pd = 1 THEN 'D'
        WHEN r35_pd = 2 THEN 'C'
@@ -724,13 +718,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
        SELECT 'gerfres' as tipo,rh02_regist,
 
        '11' AS si196_tiporegistro,";
-       if($clflpgo10->si195_indsituacaoservidorpensionista == 'P'){
-         $sSql2 .= "02 AS si196_tiporemuneracao, ' ' AS si196_desctiporemuneracao, ";
-       }else{
+
          $sSql2 .= "e990_sequencial as si196_tiporemuneracao,";
 
          $sSql2 .= "rh27_descr AS si196_desctiporemuneracao,";
-       }
+
        $sSql2 .= "CASE
        WHEN r20_pd = 1 THEN 'D'
        WHEN r20_pd = 2 THEN 'C'
