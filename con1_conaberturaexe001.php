@@ -266,7 +266,11 @@ if (isset($p->incluir)) {
         flush();
         $iNumRows = $clconplano->numrows;
         for($i = 0; $i < $iNumRows; $i ++) {
-            
+
+            /*Incluir os campos de tipo, subtipo e desdobrasutipo da conplano na inclusão do exercicio
+             *
+             * */
+
           db_atutermometro($i, $iNumRows, 'divimp2');
           flush();
           $oConp = db_utils::fieldsMemory($rsPl, $i);
@@ -364,6 +368,10 @@ if (isset($p->incluir)) {
       flush();
       
     }
+
+    /* Incluir o campo c61_codtce no insert para o ano seguinte, pela rotina da Inclusão do Exercício
+     *
+     * */
       
     echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Contas Analíticas - {$iAno}'</script>";
     flush();
@@ -526,6 +534,13 @@ if (isset($p->incluir)) {
             throw new Exception($sErro);
             
           }
+
+          /* Incluir table conplanocontabancaria na inclusão do exercicio
+           *
+           *
+           * Incluir table contacorrente e suas dependencias na inclusão do exercício
+           *
+           * */
           
         }
       

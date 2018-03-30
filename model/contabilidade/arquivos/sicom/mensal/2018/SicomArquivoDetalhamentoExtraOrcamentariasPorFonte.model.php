@@ -14,29 +14,29 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarEXT
   * @package Contabilidade
   */
 class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout = 171;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'EXT';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
@@ -45,32 +45,32 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
   }
-  
+
   /**
    * selecionar os dados de //
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
-  	
+
   	$cExt10 = new cl_ext102018();
   	$cExt20 = new cl_ext202018();
   	$cExt30 = new cl_ext302018();
   	$cExt31 = new cl_ext312018();
 
   	/*
-  	 * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA 
+  	 * CASO JA TENHA SIDO GERADO ALTERIORMENTE PARA O MESMO PERIDO O SISTEMA IRA
   	 * EXCLUIR OS REGISTROS E GERAR NOVAMENTE
-  	 * 
+  	 *
   	 */
 
-  	     
+
   	    db_inicio_transacao();
 
 
@@ -170,33 +170,36 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 					/*
 					 * VERIFICA SE NO EM ALGUMA REMESSA ENVIADA O CODEXT FOI IMFORMADO, CASO NÃO TENHA ENCONTRATO CRIA UM NOVO
 					 */
-          $sSqlVerifica  = "SELECT 1
-                                        FROM ext102018
-                                 WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-                                   AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento ."'
-                                   AND si124_subtipo         = '".$cExt10->si124_subtipo."'
-                                   AND si124_desdobrasubtipo = '". $cExt10->si124_desdobrasubtipo ."'
-                                   AND si124_mes             < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
+          $sSqlVerifica  = "SELECT 1 FROM ext102018
+                             WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
+                               AND si124_tipolancamento  = '".$cExt10->si124_tipolancamento ."'
+                               AND si124_subtipo         = '".$cExt10->si124_subtipo."'
+                               AND si124_desdobrasubtipo = '". $cExt10->si124_desdobrasubtipo ."'
+                               AND si124_mes             < ".$this->sDataFinal['5'].$this->sDataFinal['6'];
 					$sSqlVerifica  .= " UNION ALL
-                                SELECT 1
-                                        FROM ext102017
-		       		                   WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-		       		                     AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
-		       		                     AND si124_subtipo         = '".$oContaExtra->subtipo."'
-		       		                     AND si124_desdobrasubtipo =  '". $oContaExtra->desdobrasubtipo ."' ";
-		       		$sSqlVerifica  .= " UNION ALL
-									  SELECT 1
-                                        FROM ext102015
-		       		                   WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-		       		                     AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
-		       		                     AND si124_subtipo         = '".$oContaExtra->subtipo."'
-		       		                     AND si124_desdobrasubtipo =  '". $oContaExtra->desdobrasubtipo ."' ";
-		       		$sSqlVerifica .= " UNION ALL
-		       		                  SELECT 1 FROM ext102014
-		       		                   WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
-		       						     AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
-		       							 AND si124_subtipo         = '".$oContaExtra->subtipo."'
-		       							 AND si124_desdobrasubtipo = '". $oContaExtra->desdobrasubtipo ."' ";
+                            SELECT 1 FROM ext102017
+                             WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
+                               AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
+                               AND si124_subtipo         = '".$oContaExtra->subtipo."'
+                               AND si124_desdobrasubtipo =  '". $oContaExtra->desdobrasubtipo ."' ";
+					$sSqlVerifica  .= " UNION ALL
+                            SELECT 1 FROM ext102016
+                             WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
+                               AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
+                               AND si124_subtipo         = '".$oContaExtra->subtipo."'
+                               AND si124_desdobrasubtipo =  '". $oContaExtra->desdobrasubtipo ."' ";
+          $sSqlVerifica  .= " UNION ALL
+                            SELECT 1 FROM ext102015
+                             WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
+                               AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
+                               AND si124_subtipo         = '".$oContaExtra->subtipo."'
+                               AND si124_desdobrasubtipo =  '". $oContaExtra->desdobrasubtipo ."' ";
+          $sSqlVerifica .= " UNION ALL
+                            SELECT 1 FROM ext102014
+                            WHERE si124_codorgao        = '".$oContaExtra->codorgao."'
+                            AND si124_tipolancamento  = '".$oContaExtra->tipolancamento."'
+                            AND si124_subtipo         = '".$oContaExtra->subtipo."'
+                            AND si124_desdobrasubtipo = '". $oContaExtra->desdobrasubtipo ."' ";
 
 		       		$rsResulVerifica = db_query($sSqlVerifica) or die ($sSqlVerifica);
 //					echo $rsResulVerifica;db_criatabela($rsResulVerifica);exit;
@@ -574,10 +577,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 																			  and si96_codfontrecursos = {$oExt30->fontepagadora} 
 																			  where c61_reduz = {$oExt30->contapagadora} and c61_anousu = " . db_getsession("DB_anousu") . " 
 																			  and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6']."
-																			  ) as cb"; 
+																			  ) as cb";
 																			  $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont);
-                  }	
-                  
+                  }
+
 									if(pg_num_rows($rsResultContaPag) > 0){
 
 										$oConta = db_utils::fieldsMemory($rsResultContaPag, 0);
@@ -609,9 +612,9 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 	 }
       //echo "<pre>";print_r($aExt20);
 	  foreach($aExt20 as $oExt20) {
-			
+
 			$cExt   = new cl_ext202018();
-			
+
 			$cExt->si165_tiporegistro          = $oExt20->si165_tiporegistro;
 			$cExt->si165_codorgao 			   = $oExt20->si165_codorgao;
 			$cExt->si165_codext                = $oExt20->si165_codext;
@@ -686,5 +689,5 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
     $oGerarEXT->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];;
 	$oGerarEXT->gerarDados();
   }
-		
+
 }

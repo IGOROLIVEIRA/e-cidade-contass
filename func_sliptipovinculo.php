@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -58,11 +58,11 @@ $clrotulo->label("k17_valor");
 		    <tr>
 		      <td align="left" nowrap title="<?=$Tk17_data?>"> <? db_ancora(@$Lk17_data,"",3);?>  </td>
 		      <td align="left" nowrap><? db_inputdata("k17_data",@$k17_data_dia,@$k17_data_mes,db_getsession("DB_anousu"),true,'text',1);    ?></td>
-		    </tr>		
+		    </tr>
 		    <tr>
 		      <td align="left" nowrap title="<?=$Tk17_debito?>"> <? db_ancora(@$Lk17_debito,"",3);?>  </td>
 		      <td align="left" nowrap><?    db_input("k17_debito",8,$Ik17_debito,true,"text",4,"","chave_k17_debito");	 ?></td>
-		    </tr>		
+		    </tr>
 		    <tr>
 		      <td align="left" nowrap title="<?=$Tk17_credito ?>"> <? db_ancora(@$Lk17_credito,"",3);?>  </td>
 		      <td align="left" nowrap><?    db_input("k17_credito",8,$Ik17_credito,true,"text",4,"","chave_k17_credito");	 ?></td>
@@ -77,12 +77,12 @@ $clrotulo->label("k17_valor");
 		    </tr>
 		  </table>
 		</fieldset>
-	    <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+	    <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
 	    <input name="limpar" type="reset" id="limpar" value="Limpar" >
 	    <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_slip.hide();">
 </form>
 		<div id="resultadoLovRot">
-		  
+
 	    <?
 
 
@@ -119,11 +119,15 @@ $campos = " distinct ".$campos;
 
 if (!isset ($pesquisa_chave)) {
 	if (isset ($chave_k17_codigo) && trim($chave_k17_codigo) != "") {
-  $wh2="$wh2 and k17_codigo=$chave_k17_codigo $where_instit";
+
+  	$wh2  = " $wh2 AND k17_codigo = $chave_k17_codigo ";
+  	$wh2 .= " AND TO_CHAR(k17_dtaut,'YYYY') = '".db_getsession("DB_anousu")."' ";
+  	$wh2 .= " $where_instit ";
+
   $sql = $clslip->sql_query_tipo_vinculo($chave_k17_codigo, $campos,"k17_data","$wh2 {$sTipoOperacao}");
 	} else {
 		/*
-		 *  
+		 *
 		 */
 		$data = "";
 		if (isset ($k17_data_dia) && $k17_data_dia != "") {
@@ -171,7 +175,7 @@ if (!isset ($pesquisa_chave)) {
 	}
 }
 ?>
-		  
+
 		</div>
   </center>
 </body>
