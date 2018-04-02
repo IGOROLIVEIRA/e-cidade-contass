@@ -29,6 +29,7 @@ require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_sql.php");
 require_once("libs/db_utils.php");
+require_once("libs/db_stdlib.php");
 require_once("libs/db_app.utils.php");
 require_once("libs/db_libtributario.php");
 require_once("dbforms/db_funcoes.php");
@@ -183,6 +184,8 @@ if ($oRegraEmissao->getCadTipoConvenio() == 6 ) {
 
 $pdf1->uf_config  = $db12_uf;
 $pdf1->prefeitura = $nomeinst;
+$pdf1->munic = $munic;
+$pdf1->cnpjprefeitura = db_formatar($cgc,"cnpj");
 
 $sqlparag  = " select db02_texto                                             ";
 $sqlparag .= "   from db_documento                                           ";
@@ -565,9 +568,14 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
 
   if (!empty ($descr) && $descr == 'Matrícula') {
 
-    $sSqlIdentificacao  = "select *                    ";
-    $sSqlIdentificacao .= "  from proprietario         ";
-    $sSqlIdentificacao .= " where j01_matric = $origem ";
+    $sSqlIdentificacao  = "select p.*,iptuant.j40_refant, iptuender.j43_bairro,iptubase.j01_fracao,";
+    $sSqlIdentificacao .= "iptubaseregimovel.j04_quadraregimo,iptubaseregimovel.j04_loteregimo";
+    $sSqlIdentificacao .= "  from proprietario p        ";
+    $sSqlIdentificacao .= "  left join iptuant on p.j01_matric = iptuant.j40_matric ";
+    $sSqlIdentificacao .= "  left join iptuender on p.j01_matric = iptuender.j43_matric ";
+    $sSqlIdentificacao .= "  left join iptubase on p.j01_matric = iptubase.j01_matric ";
+    $sSqlIdentificacao .= "  left join iptubaseregimovel on p.j01_matric = iptubaseregimovel.j04_matric ";
+    $sSqlIdentificacao .= " where p.j01_matric = $origem ";
     $sSqlIdentificacao .= " limit 1                    ";
     $Identificacao = db_query($sSqlIdentificacao);
 
@@ -577,10 +585,61 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
 
     db_fieldsmemory($Identificacao, 0);
 
+    $sqlIptucalc = "select distinct iptucalc.j23_anousu,         iptucalc.j23_matric ,
+                            iptucalc.j23_testad ,
+                            iptucalc.j23_arealo ,
+                            iptucalc.j23_areafr ,
+                            iptucalc.j23_areaed ,
+                            iptucalc.j23_m2terr ,
+                            iptucalc.j23_vlrter ,
+                            iptucalc.j23_aliq   ,
+                            iptucalc.j23_vlrisen,
+                            j22_pontos,
+                   sum(j22_valor) as j22_valor,
+                   sum(j22_vm2) as j22_vm2
+          from iptucalc
+           left outer join iptucale on j22_matric = j23_matric and j22_anousu = j23_anousu
+      where j23_matric = $origem 
+      group by iptucalc.j23_anousu,
+                            iptucalc.j23_matric ,
+                            iptucalc.j23_testad ,
+                            iptucalc.j23_arealo ,
+                            iptucalc.j23_areafr ,
+                            iptucalc.j23_areaed ,
+                            iptucalc.j23_m2terr ,
+                            iptucalc.j23_vlrter ,
+                            iptucalc.j23_aliq   ,
+                            iptucalc.j23_vlrisen,
+                            j22_pontos
+order by iptucalc.j23_anousu desc limit 1
+     ";
+     $Iptucalc = db_query($sqlIptucalc);
+     $oIptucalc = db_utils::fieldsMemory($Iptucalc, 0);
+
     $proprietario       = $z01_nome;
     $pdf1->bairropri    = $j13_descr;
     $pdf1->prebairropri = $z01_bairro;
     $pdf1->nomepriimo   = $nomepri;
+    $pdf1->matricula    = $j01_matric;
+    $pdf1->inscricao    = $j40_refant;
+    $pdf1->endercorrespondencia = "$j43_ender, $j43_numimo - $j43_bairro $j43_comple - $j43_munic - ".db_formatar($j43_cep, "cep")." $j43_uf";
+    $pdf1->enderimovel = "$tipopri . $nomepri, $j39_numero ".($j39_compl != ""?"/":"" )." $j39_compl - $j13_descr";
+    $pdf1->area   = $j34_area;
+    $pdf1->lote   = empty($j04_loteregimo) ? '0000' : $j04_loteregimo;
+    $pdf1->quadra = empty($j04_quadraregimo) ? '0000' : $j04_quadraregimo;
+    $pdf1->totcon =  trim(db_formatar($oIptucalc->j23_areaed,'f'));;
+    $pdf1->testad = trim(db_formatar($oIptucalc->j23_testad,'f'));
+    $pdf1->m2terr = trim(db_formatar($oIptucalc->j23_m2terr,'f'));
+    $pdf1->vlcons = trim(db_formatar($j22_valor,'f'));
+    $pdf1->vlrter = trim(db_formatar($oIptucalc->j23_vlrter,'f'));
+    $pdf1->vm2 = trim(db_formatar($oIptucalc->j22_vm2,'f'));
+    $pdf1->vlvenaltot = trim(db_formatar($oIptucalc->j23_vlrter+$oIptucalc->j22_valor,'f'));
+    $pdf1->fatorconstr= trim(db_formatar($oIptucalc->j22_pontos,'f'));
+    $pdf1->fracao  = trim(db_formatar($j01_fracao,'f'));
+    $pdf1->fatorterr  = "-";
+    $pdf1->aliqterr   = "-";
+    $pdf1->imppred    = "-";
+    $pdf1->impterr    = "-";
 
     $pdf1->pqllocal     = "PQL: {$pql_localizacao}";
 
@@ -1024,6 +1083,8 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
           $pdf1->uf            = $z01_uf;
           $pdf1->ufcgm         = $z01_uf;
           $pdf1->descr3_1      = $z01_cgmpri." - ".$proprietario;
+          $pdf1->cgmpessoa     = $z01_cgmpri;
+          $pdf1->nomepessoa    = $z01_nome;
           $pdf1->descr3_2      = $xender;
           $pdf1->predescr3_1   = $z01_cgmpri." - ".$proprietario;
           $pdf1->predescr3_2   = $z01_ender." ".$z01_numero." ".$z01_compl;
@@ -1060,6 +1121,8 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
           $pdf1->uf            = $z01_uf;
           $pdf1->ufcgm         = $z01_uf;
           $pdf1->descr3_1      = $z01_cgmpri." - ".$z01_nome;
+          $pdf1->cgmpessoa     = $z01_cgmpri;
+          $pdf1->nomepessoa    = $z01_nome;
           $pdf1->descr3_2      = strtoupper($z01_ender). ($z01_numero == "" ? "" : ', '.$z01_numero.'  '.$z01_compl);
           $pdf1->predescr3_1   = $z01_cgmpri." - ".$z01_nome;
           $pdf1->predescr3_2   = strtoupper($z01_ender). ($z01_numero == "" ? "" : ', '.$z01_numero.'  '.$z01_compl);
@@ -1189,7 +1252,7 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
         }
 
         //BUSCA A MSG DE PAGAMENTO E AS INSTRUÇÕES DA TABELA NUMPREF
-        $rsmsgcarne = db_query("select k03_msgcarne, k03_msgbanco from numpref where k03_anousu = ".db_getsession("DB_anousu"));
+        $rsmsgcarne = db_query("select k03_msgcarne, k03_msgbanco from numpref where k03_anousu = ".db_getsession("DB_anousu")." order by k03_msgbanco desc");
         if (pg_numrows($rsmsgcarne) > 0) {
           db_fieldsmemory($rsmsgcarne, 0);
         }
@@ -1207,6 +1270,7 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
 
         $pdf1->descr14   = db_formatar($dtvencunic,'d');
         $pdf1->dtparapag = db_formatar($dtvencunic,'d');
+        $pdf1->msgbanco  = $k03_msgbanco;
 
         if ($iTercDig == '7') {
 
