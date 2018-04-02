@@ -780,7 +780,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 $clcvc40->si149_codunidadesub = $oDados40->ve01_codunidadesub != '' || $oDados40->ve01_codunidadesub != 0 ? $oDados40->ve01_codunidadesub : $oDados40->codunidadesub;
                 $clcvc40->si149_codveiculo = $oDados40->codveiculo;
                 $clcvc40->si149_tipobaixa = $oDados40->tipobaixa;
-                if($oDados40->si149_tipobaixa == 99){
+                if($oDados40->tipobaixa == 99){
                     $clcvc40->si149_descbaixa = $oDados40->descbaixa;
                 }else{
                     $clcvc40->si149_descbaixa = " ";
