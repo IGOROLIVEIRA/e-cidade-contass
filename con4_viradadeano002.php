@@ -211,10 +211,10 @@ function js_imprime(virada){
 
 		        $rsOrcReceita    = db_query($sSqlOrcReceita);
 
-//		        if ( pg_num_rows($rsOrcReceita) == 0 ) {
-//		          $sErroMsg = "Nenhuma receita encontrada para o orçamento de {$iAnoDestino} na instituição {$sDescrInstit}\\n";
-//		          $sqlerro  = true;
-//		        }
+		        if ( pg_num_rows($rsOrcReceita) == 0 ) {
+		          $sErroMsg = "Nenhuma receita encontrada para o orçamento de {$iAnoDestino} na instituição {$sDescrInstit}\\n";
+		          $sqlerro  = true;
+		        }
 
 		        // Verifica se existe alguma conta de despesa cadastrada para o exercício de destino
 		        $sSqlOrcDotacao  = " select *                                    ";
@@ -224,10 +224,10 @@ function js_imprime(virada){
 
 		        $rsOrcDotacao    = db_query($sSqlOrcDotacao);
 
-//		        if ( pg_num_rows($rsOrcDotacao) == 0 ) {
-//		          $sErroMsg = "Nenhuma conta de despesa cadastrada para o exercício {$iAnoDestino} na instituição {$sDescrInstit}\\n";
-//		          $sqlerro  = true;
-//		        }
+		        if ( pg_num_rows($rsOrcDotacao) == 0 ) {
+		          $sErroMsg = "Nenhuma conta de despesa cadastrada para o exercício {$iAnoDestino} na instituição {$sDescrInstit}\\n";
+		          $sqlerro  = true;
+		        }
 		      }
 
 		      if ( $sqlerro ) {
