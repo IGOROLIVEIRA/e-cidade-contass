@@ -86,9 +86,10 @@ $fMJDAIPTU=0;
 $fMJDAITBI=0;
 $fMJDAISS=0;
 $fMJDAITR=0;
-$fMJDAIPTU=0;
-$fMJDAITBI=0;
-$fMJDAISS=0;
+
+$fRJDAIPTU  = 0;
+$fRJDAITBI  = 0;
+$fRJDAISS = 0;
 
 foreach ($aReceitas as $Receitas) {
 
@@ -112,9 +113,10 @@ foreach ($aReceitas as $Receitas) {
   if(strstr($Receitas->o57_fonte, '411180114000000'))$fMJDAIPTU+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '411180144000000'))$fMJDAITBI+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '411180234000000'))$fMJDAISS+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '411180113000000'))$fMJDAIPTU+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '411180143000000'))$fMJDAITBI+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '411180233000000'))$fMJDAISS+=$Receitas->saldo_arrecadado;
+
+  if(strstr($Receitas->o57_fonte, '411180113000000'))$fRJDAIPTU+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '411180143000000'))$fRJDAITBI+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '411180233000000'))$fRJDAISS+=$Receitas->saldo_arrecadado;
 
 
 }
@@ -767,8 +769,8 @@ ob_start();
             <td class="s13" colspan="2">
               <?php
               $aDadosRDAIPTU = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193111%'");
-              $fMJDAIPTU = count($aDadosRDAIPTU) > 0 ? $aDadosRDAIPTU[0]->saldo_arrecadado_acumulado : 0;
-              echo db_formatar($fMJDAIPTU, "f");
+              $fRJDAIPTU = count($aDadosRDAIPTU) > 0 ? $aDadosRDAIPTU[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fRJDAIPTU, "f");
               ?>
             </td>
           </tr>
@@ -779,8 +781,8 @@ ob_start();
             <td class="s9" colspan="2">
               <?php
               $aDadosRDAITBI = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193112%'");
-              $fMJDAITBI = count($aDadosRDAITBI) > 0 ? $aDadosRDAITBI[0]->saldo_arrecadado_acumulado : 0;
-              echo db_formatar($fMJDAITBI, "f");
+              $fRJDAITBI = count($aDadosRDAITBI) > 0 ? $aDadosRDAITBI[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fRJDAITBI, "f");
               ?>
             </td>
           </tr>
@@ -791,15 +793,15 @@ ob_start();
             <td class="s13" colspan="2">
               <?php
               $aDadosRDAISS = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '4193113%'");
-              $fMJDAISS = count($aDadosRDAISS) > 0 ? $aDadosRDAISS[0]->saldo_arrecadado_acumulado : 0;
-              echo db_formatar($fMJDAISS, "f");
+              $fRJDAISS = count($aDadosRDAISS) > 0 ? $aDadosRDAISS[0]->saldo_arrecadado_acumulado : 0;
+              echo db_formatar($fRJDAISS, "f");
               ?>
             </td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="8">Subtotal</td>
             <td class="s3" colspan="2">            <?php
-              $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fMJDAITR,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS));
+              $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fMJDAITR,$fRJDAIPTU,$fRJDAITBI,$fRJDAISS));
               echo db_formatar($fSubTotalOutrasCorrentes,"f");?></td>
             </tr>
             <tr style='height:20px;'>
@@ -1159,7 +1161,7 @@ ob_start();
           <td class="s12"  colspan="6">Receita da Dívida Ativa do IPTU </td>
           <td class="s13" colspan="2">
             <?php
-            echo db_formatar($fMJDAIPTU, "f");
+            echo db_formatar($fRJDAIPTU, "f");
             ?>
           </td>
         </tr>
@@ -1169,7 +1171,7 @@ ob_start();
           <td class="s6"  colspan="6">Receita da Dívida Ativa do ITBI </td>
           <td class="s9" colspan="2">
             <?php
-            echo db_formatar($fMJDAITBI, "f");
+            echo db_formatar($fRJDAITBI, "f");
             ?>
           </td>
         </tr>
@@ -1179,14 +1181,14 @@ ob_start();
           <td class="s12"  colspan="6">Receita da Dívida Ativa do ISS </td>
           <td class="s13" colspan="2">
             <?php
-            echo db_formatar($fMJDAISS, "f");
+            echo db_formatar($fRJDAISS, "f");
             ?>
           </td>
         </tr>
         <tr style='height:20px;'>
           <td class="s6 bdleft" colspan="8">Subtotal</td>
           <td class="s3" colspan="2">            <?php
-            $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fMJDAITR,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS));
+            $fSubTotalOutrasCorrentes = array_sum(array($fMJITR,$fMJIPTU,$fMJTIBI,$fMJISS,$fMJDA,$fMJDAIPTU,$fMJDAITBI,$fMJDAISS,$fMJDAITR,$fRJDAIPTU,$fRJDAITBI,$fRJDAISS));
             echo db_formatar($fSubTotalOutrasCorrentes,"f");?></td>
           </tr>
           <tr style='height:20px;'>
