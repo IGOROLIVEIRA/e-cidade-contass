@@ -145,7 +145,7 @@ switch ($oParam->exec) {
                      ->setCodigoOperacao  ($oParam->oDados->inputOperacao)
                      ->setTipoConta       ($oParam->oDados->cboTipoConta)
                      ->setPlanoConta      ($oParam->oDados->lContaPlano)
-                     ->salvar();
+                     ->salvar_conta_pcasp();
       $oRetorno->iSequencialContaBancaria = $oContaBancaria->getSequencialContaBancaria();
       $oRetorno->sDescricaoContaBancaria  = $oContaBancaria->getDadosConta();
       db_fim_transacao(false);
