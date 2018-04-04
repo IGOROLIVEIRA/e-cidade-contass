@@ -37,7 +37,7 @@ class RelatorioDeDistribuicao {
    * @var integer
    */
   private $iLargura;
-  
+
   /**
    * Altura padrão de uma linha do relatório.
    * @var integer
@@ -92,6 +92,15 @@ class RelatorioDeDistribuicao {
    */
   private $sDepartamentos;
 
+   /**
+   * Código dos materiais para filtro, separados por vírgula.
+   * @var string
+   */
+
+  private $sMateriais;
+
+  private $sControlHead = 0;
+
   /**
    * Grupos e Subgrupos para filtro dos materiais.
    * @var stdClass[]
@@ -103,6 +112,12 @@ class RelatorioDeDistribuicao {
    * @var stdClass[]
    */
   private $aDepartamentos = array();
+
+  /**
+   * Materiais usados para filtro do relatório.
+   * @var stdClass[]
+   */
+  private $aMateriais = array();
 
   /**
    * Sem quebra de pagina
@@ -174,6 +189,15 @@ class RelatorioDeDistribuicao {
   public function setDepartamentos($sDepartamentos) {
     $this->sDepartamentos = $sDepartamentos;
   }
+
+   /**
+   * Seta os códigos dos materiais para filtro, separados por vírgula.
+   * @param string $sDepartamentos
+   */
+  public function setMateriais($sMateriais) {
+    $this->sMateriais = $sMateriais;
+  }
+
 
   /**
    * Monta a árvore do grupos e subgrupos selcionados para a emissão do relatório.
@@ -287,6 +311,10 @@ class RelatorioDeDistribuicao {
       $aWhere[] = " m70_coddepto in ({$this->sDepartamentos}) ";
     }
 
+    if ($this->sMateriais) {
+      $aWhere[] = " m60_codmater in ({$this->sMateriais}) ";
+    }
+
     if ($this->sGrupoSubgrupo) {
       $aWhere[] = " db121_sequencial in ({$this->sGrupoSubgrupo}) ";
     }
@@ -310,9 +338,7 @@ class RelatorioDeDistribuicao {
 
 
     $sql .= "{$sWhere} {$sOrdem} ";
-
     $rsMateriais = $oDaoMaterial->sql_record($sql);
-
     $aMateriais = array();
     for ($i = 0; $i < $oDaoMaterial->numrows; $i++) {
 
@@ -383,7 +409,6 @@ class RelatorioDeDistribuicao {
     foreach ($aMateriais as $iIndice => $oMaterial) {
 
       $aParametros = array($oMaterial->codigo, $sDataInicial, $sDataFinal, $this->iInstituicao);
-
       if ($this->iQuebraPagina == self::QUEBRA_PAGINA_DEPARTAMENTO) {
         $aParametros[] = $oMaterial->depto;
       }
@@ -511,7 +536,7 @@ class RelatorioDeDistribuicao {
   private function configurarPdf() {
 
     $iMargin        = 10;
-    $this->iAltura  = 4;
+    $this->iAltura  = 6;
     $this->iLargura = $this->oPdf->getAvailWidth() - $iMargin;
 
     $sQuebraDePagina     = $this->iQuebraPagina == self::QUEBRA_PAGINA_DEPARTAMENTO ? "Sim" : "Não";
@@ -543,16 +568,25 @@ class RelatorioDeDistribuicao {
       $aMeses[] = $iMes;
     }
 
-    $this->oPdf->Cell($this->iLargura * 0.28, $this->iAltura, "Material", 'TBR', 0, 'C');
+    if(count($aMeses)==1){
 
-    $nLarguraMes = ($this->iLargura * 0.6) / count($aMeses);
+      $this->oPdf->Cell($this->iLargura * 0.12, $this->iAltura, "COD. MAT.", "TBR", 0, 'C');
+      $this->oPdf->Cell($this->iLargura * 0.34, $this->iAltura, "MATERIAL", 'TBR', 0, 'C');
+      $this->oPdf->Cell($this->iLargura * 0.30, $this->iAltura, strtoupper(DBDate::getMesExtenso($iMes-1)), 'TBL', 0, 'C');
+      $this->oPdf->Cell($this->iLargura * 0.15, $this->iAltura, "TOTAL", 'TBL', 0, 'C');
+      $this->oPdf->Cell($this->iLargura * 0.10, $this->iAltura, "MÉDIA PERÍODO", 'TBL', 1, 'C');
+    } else {
+      $this->oPdf->Cell($this->iLargura * 0.06, $this->iAltura, "COD. MAT.", '1', 0, 'C');
+      $this->oPdf->Cell($this->iLargura * 0.25, $this->iAltura, "MATERIAL", 'TBR', 0, 'C');
 
     foreach ($aMeses as $iMes) {
-      $this->oPdf->Cell($nLarguraMes, $this->iAltura, DBDate::getMesExtenso($iMes), 'TBL', 0, 'C');
+      $nLarguraMes = ($this->iLargura * 0.53) / count($aMeses);
+      $this->oPdf->Cell($nLarguraMes, $this->iAltura, strtoupper(DBDate::getMesExtenso($iMes)), 'TBL', 0, 'C');
     }
 
-    $this->oPdf->Cell($this->iLargura * 0.06, $this->iAltura, "Total", 'TBL', 0, 'C');
-    $this->oPdf->Cell($this->iLargura * 0.06, $this->iAltura, "Média Período", 'TBL', 1, 'C');
+      $this->oPdf->Cell($this->iLargura * 0.08, $this->iAltura, "TOTAL", 'TBL', 0, 'C');
+      $this->oPdf->Cell($this->iLargura * 0.08, $this->iAltura, "MÉDIA PERÍODO", '1', 1, 'C');
+    }
     $this->oPdf->setBold(false);
   }
 
@@ -562,7 +596,7 @@ class RelatorioDeDistribuicao {
   private function escreverCabecalhos() {
 
     $this->oPdf->AddPage();
-    $this->escreverCabecalhoTabela();
+    $this->escreverLinha();
   }
 
   /**
@@ -603,7 +637,17 @@ class RelatorioDeDistribuicao {
    * @param bool     $lPintar            Informa se deve pintar a linha.
    * @param bool     $lQuebrarLinhaAntes Informa se deve deixar uma linha em branco antes de escrever a nova linha.
    */
+
   private function escreverLinha(stdClass $oLinha, $lPintar = false, $lQuebrarLinhaAntes = false) {
+
+    /*if ($this->sControlHead == 0 && $oLinha->estrutural == "") {
+        $this->escreverCabecalhoTabela();
+        $this->sControlHead = 1;
+    }
+
+    if ($oLinha->estrutural != "") {
+      $this->sControlHead = 0;
+    }*/
 
     if (!$this->lBuscarDistribuicaoZerada && $oLinha->totalPeriodo == 0) {
      return;
@@ -613,25 +657,66 @@ class RelatorioDeDistribuicao {
       $this->oPdf->ln();
     }
 
-    $iAlturaMulticell = $this->oPdf->getMultiCellHeight($this->iLargura * 0.28, $this->iAltura, $oLinha->descricao);
-    if ($this->oPdf->getAvailHeight() - 12 < $iAlturaMulticell) {
+    $iAlturaMulticell = $this->oPdf->getMultiCellHeight($this->iLargura * 0.34, $this->iAltura, $oLinha->descricao);
 
+    if ($this->oPdf->getAvailHeight() - 12 < $iAlturaMulticell) {
       $lBold = $this->oPdf->getBold();
-      $this->escreverCabecalhos();
       $this->oPdf->setBold($lBold);
+      $this->oPdf->AddPage();
     }
 
     $this->oPdf->setAutoNewLineMulticell(false);
-    $this->oPdf->MultiCell($this->iLargura * 0.28, $this->iAltura, $oLinha->descricao, 'TBR', 'L', $lPintar);
 
-    $nLarguraMes = ($this->iLargura * 0.6) / count($oLinha->meses);
+    if(count($oLinha->meses)==1){ //Nao mexe aki jovem
+        if($oLinha->estrutural){
+          $this->oPdf->MultiCell($this->iLargura * 0.46, $this->iAltura, $oLinha->descricao, 'TBR', 'L', $lPintar);
+        }
+        else{
+          $this->oPdf->MultiCell($this->iLargura * 0.12, $iAlturaMulticell, $oLinha->codigo, 'TBR', 'C', $lPintar);
+          $this->oPdf->MultiCell($this->iLargura * 0.34, $this->iAltura, $oLinha->descricao, 'TBR', 'L', $lPintar);
+        }
 
-    foreach ($oLinha->meses as $nValor) {
-      $this->oPdf->Cell($nLarguraMes, $iAlturaMulticell , db_formatar($nValor, 'f'), 'TBL', 0, 'R', $lPintar);
+        $nLarguraMes = ($this->iLargura * 0.6) / count($oLinha->meses);
+
+        foreach ($oLinha->meses as $nValor) {
+          $this->oPdf->Cell($this->iLargura * 0.30, $iAlturaMulticell , db_formatar($nValor, 'f'), 'TBL', 0, 'R', $lPintar);
+        }
+        $this->oPdf->Cell($this->iLargura * 0.15, $iAlturaMulticell , db_formatar($oLinha->totalPeriodo, 'f'), 'TBL', 0, 'C', $lPintar);
+        $this->oPdf->Cell($this->iLargura * 0.10, $iAlturaMulticell , db_formatar($oLinha->mediaPeriodo, 'f'), 'TBL', 1, 'C', $lPintar);
+
     }
 
-    $this->oPdf->Cell($this->iLargura * 0.06, $iAlturaMulticell , db_formatar($oLinha->totalPeriodo, 'f'), 'TBL', 0, 'R', $lPintar);
-    $this->oPdf->Cell($this->iLargura * 0.06, $iAlturaMulticell , db_formatar($oLinha->mediaPeriodo, 'f'), 'TBL', 1, 'R', $lPintar);
+
+    else {
+
+    $iTamNovo = $tam = $this->iAltura;
+      if($oLinha->estrutural){
+          $this->oPdf->MultiCell($this->iLargura * 0.31, $this->iAltura, $oLinha->descricao, 1, 'L', $lPintar);
+      }
+      else{
+
+        $aDescricao = $this->quebrar_texto($oLinha->descricao, 50);
+        $iTamNovo = $tam * count($aDescricao);
+
+        $this->oPdf->Cell($this->iLargura * 0.06, $iTamNovo, $oLinha->codigo, 1, 'L', $lPintar);
+
+        if (strlen($oLinha->descricao) > 35) {
+          $this->multicell($this->oPdf, $aDescricao, $tam, $iTamNovo, $this->iLargura * 0.25, 0, $lPintar);
+        } else {
+          $this->oPdf->Cell($this->iLargura * 0.25, $iTamNovo, $oLinha->descricao, 1, 'L', $lPintar);
+        }
+
+      }
+
+      $nLarguraMes = ($this->iLargura * 0.53) / count($oLinha->meses);
+      foreach ($oLinha->meses as $nValor) {
+        $this->oPdf->Cell($nLarguraMes, $iTamNovo , db_formatar($nValor, 'f'), 'TBL', 0, 'R', $lPintar);
+      }
+
+      $this->oPdf->Cell($this->iLargura * 0.08, $iTamNovo , db_formatar($oLinha->totalPeriodo, 'f'), 'TBL', 0, 'R', $lPintar);
+      $this->oPdf->Cell($this->iLargura * 0.08, $iTamNovo , db_formatar($oLinha->mediaPeriodo, 'f'), 1, 1, 'R', $lPintar);
+    }
+
     $this->oPdf->setBold(false);
   }
 
@@ -661,6 +746,7 @@ class RelatorioDeDistribuicao {
     $this->validaDados();
 
     foreach ($this->aDepartamentos as $oDepartamento) {
+    $cabecalhoTabela = false;
 
       $oDepartamentoTotalizador = $this->totalizarDepartamento($oDepartamento);
       if (!$this->lBuscarDistribuicaoZerada && $oDepartamentoTotalizador->totalPeriodo == 0) {
@@ -675,12 +761,11 @@ class RelatorioDeDistribuicao {
         $this->oPdf->Cell($this->iLargura, $this->iAltura, "Departamento: {$oDepartamento->descricao}", 'T', 1);
         $this->oPdf->setBold(false);
       }
-      $this->escreverCabecalhoTabela();
 
+      $this->escreverCabecalhoTabela();
       foreach($oDepartamento->itens as $oGrupo) {
 
         if ($this->lAgruparGrupoSubgrupo) {
-
           $this->oPdf->setBold(true);
           $lQuebrarLinha =  $oGrupo->nivel == 1 && $lQuebrarLinha;
           $this->escreverLinha($oGrupo, true, $lQuebrarLinha);
@@ -689,16 +774,56 @@ class RelatorioDeDistribuicao {
         }
 
         if (count($oGrupo->itens) > 0) {
-
           foreach ($oGrupo->itens as $oMaterial) {
+            if(!$cabecalhoTabela){
+              $cabecalhoTabela = true;
+            }
             $this->escreverLinha($oMaterial);
           }
         }
+
       }
+
       $this->oPdf->setBold(true);
       $this->escreverLinha($oDepartamentoTotalizador);
+
     }
 
     $this->oPdf->showPDF('relatorio_de_distribuicao');
   }
+
+  public function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo,$iQuebra=0,$lCor=0) {
+    $pos_x = $oPdf->x;
+    $pos_y = $oPdf->y;
+    $oPdf->Cell($iTamCampo, $iTam, "", 1, 0, "L", $lCor);
+    $oPdf->x = $pos_x;
+    $oPdf->y = $pos_y;
+    foreach ($aTexto as $sProcedimento) {
+      $sProcedimento=ltrim($sProcedimento);
+      $oPdf->Cell($iTamCampo, $iTamFixo, $sProcedimento, 0, 1, 1, $lCor);
+      $oPdf->x=$pos_x;
+    }
+    $oPdf->x = $pos_x+$iTamCampo;
+    if ($iQuebra == 0) {
+      $oPdf->y = $pos_y;
+    }
+  }
+
+  public function quebrar_texto($texto,$tamanho){
+
+    $aTexto = explode(" ", $texto);
+    $string_atual = "";
+    foreach ($aTexto as $word) {
+      $string_ant = $string_atual;
+      $string_atual .= " ".$word;
+      if (strlen($string_atual) > $tamanho) {
+        $aTextoNovo[] = $string_ant;
+        $string_ant   = "";
+        $string_atual = $word;
+      }
+    }
+    $aTextoNovo[] = $string_atual;
+    return $aTextoNovo;
+  }
+
 }

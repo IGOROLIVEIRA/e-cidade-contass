@@ -33,6 +33,13 @@ require_once ("libs/db_utils.php");
 require_once ("libs/db_liborcamento.php");
 require_once ("dbforms/db_funcoes.php");
 require_once ("dbforms/db_classesgenericas.php");
+
+db_postmemory($HTTP_POST_VARS);
+$aux = new cl_arquivo_auxiliar;
+$rotulo = new rotulocampo();
+$rotulo->label("m60_codmater");
+$rotulo->label("m60_descr");
+
 ?>
 
 <html>
@@ -54,13 +61,15 @@ require_once ("dbforms/db_classesgenericas.php");
     <script type="text/javascript" src="scripts/widgets/DBTreeView.widget.js"></script>
     <script type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
     <script type="text/javascript" src="scripts/classes/material/FiltroGrupoSubgrupo.js"></script>
-
+    <style type="text/css">
+      #material { width: 480px; }
+    </style>
   </head>
-  <body bgcolor="#cccccc" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc">
+  <body bgcolor="#cccccc" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
 
     <div class="container">
 
-      <form id="frmDistribuicaoMateriais" name="frmDistribuicaoMateriais" method="post" action="">
+      <form id="frmDistribuicaoMateriais" name="form1" method="post" action="">
         <table>
           <tr>
             <td align="center" colspan="3">
@@ -84,7 +93,7 @@ require_once ("dbforms/db_classesgenericas.php");
                           $Scompetencia_inicial_mes = 'Competência Inicial';
                           $Scompetencia_inicial_ano = 'Competência Final';
                           db_input('competencia_inicial_mes', '', 1, false, '', '', 'style="width: 8%;" placeholder="mês"', '', '', '', 2);
-                          ?> /
+                          ?>
                           <?php
                           db_input('competencia_inicial_ano', '', 1, false, '', '', 'style="width: 16%;" placeholder="ano"', '', '', '', 4)
                           ?>
@@ -130,6 +139,40 @@ require_once ("dbforms/db_classesgenericas.php");
                     </tr>
 
                     <tr>
+                      <td colspan="2" nowrap width="100%">
+                        <center>
+                        <fieldset>
+                          <legend>Materiais</legend>
+                          <table>
+                            <tr>
+                              <td nowrap title="<?=@$Tm60_codmater?>">
+                               <?
+                                  db_ancora(@$Lm60_codmater,"js_pesquisam60_codmater(true);",1);
+                               ?>
+                               <?
+                                  db_input('m60_codmater',7,$Im60_codmater,true,'text',1," onchange='js_pesquisam60_codmater(false);'","")
+                               ?>
+                               <?
+                                  db_input('m60_descr',35,$Im60_descr,true,'text',3,'')
+                               ?>
+                               <input type="button" value="Lançar" id="btn-lancar"/>
+                              </td>
+                            </tr>
+                            <tr colspan="4">
+                              <td>
+                                <select name="material[]" id="material" class="DBSelectMultiplo" size="8" multiple></select>
+                              </td>
+                            </tr>
+                          </table>
+
+                          <strong>Dois cliques sobre o item o exclui</strong>
+
+                        </fieldset>
+                        </center>
+                      </td>
+                    </tr>
+
+                    <tr>
                       <td colspan="2">
                         <div id="lancador-departamentos" style="margin-top: 5px;">&nbsp;</div>
                       </td>
@@ -138,7 +181,7 @@ require_once ("dbforms/db_classesgenericas.php");
                   </table>
                 </fieldset>
 
-                <!-- Opções de visualização -->
+                <!-- Op??es de visualiza??o -->
                 <fieldset class="separator">
 
                   <legend>Opções de Visualização</legend>
@@ -189,9 +232,83 @@ require_once ("dbforms/db_classesgenericas.php");
     </div>
 
     <script type="text/javascript">
+
+      function js_pesquisam60_codmater(mostra){
+        if(mostra==true){
+          js_OpenJanelaIframe('top.corpo','db_iframe_material','func_matmater.php?funcao_js=parent.js_mostramatmater1|m60_codmater|m60_descr','Pesquisa',true);
+        }else{
+           if(document.form1.m60_codmater.value != ''){
+              js_OpenJanelaIframe('top.corpo','db_iframe_material','func_matmater.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostramatmater','Pesquisa',false);
+           }else{
+             document.form1.m60_codmater.value = '';
+           }
+        }
+      }
+
+      function js_mostramatmater(chave2,erro,chave1){
+        document.form1.m60_codmater.value = chave1;
+        document.form1.m60_descr.value = chave2;
+        if(erro==true){
+          document.form1.m60_codmater.focus();
+          document.form1.m60_codmater.value = '';
+          return;
+        }
+      }
+
+      function js_mostramatmater1(chave1,chave2){
+        document.form1.m60_codmater.value = chave1;
+        document.form1.m60_descr.value = chave2;
+        db_iframe_material.hide();
+      }
+
+      var optionsMateriais = document.getElementById("material");
+
       var oLancador;
       var oFiltroGrupoSubgrupo;
       var URL_RELATORIO = 'mat2_distribuicao002.php';
+
+      function addOption(codigoMaterial, descMaterial) {
+
+
+        var jaTem = Array.prototype.filter.call(optionsMateriais.children, function(o) {
+          return o.value == codigoMaterial;
+        });
+
+        if (jaTem.length > 0) {
+          alert("Material já inserido.");
+          limparCampos();
+          return;
+        }
+
+        var option = document.createElement('option');
+        option.value = codigoMaterial;
+        option.innerHTML = descMaterial;
+        optionsMateriais.appendChild(option);
+
+        limparCampos();
+      }
+
+      function limpar() {
+        optionsMateriais.innerHTML = "";
+      }
+
+      function limparCampos() {
+        document.form1.m60_codmater.value  = '';
+        document.form1.m60_descr.value  = '';
+        document.form1.material.value = '';
+      }
+
+      document.getElementById('btn-lancar').addEventListener('click', function(e) {
+        addOption(
+          document.form1.m60_codmater.value,
+          document.form1.m60_descr.value
+        );
+      });
+
+      optionsMateriais.addEventListener('dblclick', function excluirMaterial(e) {
+        optionsMateriais.removeChild(e.target);
+      });
+
 
       document.observe('dom:loaded', function () {
 
@@ -216,7 +333,6 @@ require_once ("dbforms/db_classesgenericas.php");
       });
 
       function js_emite() {
-
         var oForm               = $('frmDistribuicaoMateriais');
         var iAnoInicial         = oForm.competencia_inicial_ano.value;
         var iMesInicial         = oForm.competencia_inicial_mes.value;
@@ -232,12 +348,19 @@ require_once ("dbforms/db_classesgenericas.php");
           aDepartamentos.push(oRegistro.sCodigo);
         });
 
+        var dadosMateriais = {
+          material: Array.prototype.map.call(optionsMateriais.children, function(o) {
+            return o.value;
+          }).join(',')
+        };
+
+
         /**
          * Valida campos vazios
          */
         if (empty(iMesInicial)) {
 
-          alert('O campo Mês da Competência Inicial é de preenchimento obrigatório.');
+          alert('O campo Mês da Competência Inicial é de preenchimento obrigat?rio.');
           return;
         }
         if (parseInt(iMesInicial) > 12 || parseInt(iMesInicial) < 1) {
@@ -247,12 +370,12 @@ require_once ("dbforms/db_classesgenericas.php");
         }
         if (empty(iAnoInicial)) {
 
-          alert('O campo Ano da Competência Inicial é de preenchimento obrigatório.');
+          alert('O campo Ano da Competência Inicial é de preenchimento obrigat?rio.');
           return;
         }
         if (iAnoInicial.length !== 4) {
 
-          alert('O Ano da Competência Inicial é inválido. Informe um ano com 4 dígitos.');
+          alert('O Ano da Compet?ncia Inicial é inválido. Informe um ano com 4 dígitos.');
           return;
         }
         if (empty(iMesFinal)) {
@@ -277,11 +400,11 @@ require_once ("dbforms/db_classesgenericas.php");
         }
         if (parseInt(iMesInicial) > parseInt(iMesFinal)) {
 
-          alert('A Competência Inicial não pode ser maior que a Competência Final.');
+          alert('A Competância Inicial não pode ser maior que a Competência Final.');
           return;
         }
         /**
-         * Valida seleção de ao menos um Grupo/Subgrupo
+         * Valida sele??o de ao menos um Grupo/Subgrupo
          */
         if (aGrupoSubgrupo.length == 0) {
 
@@ -299,6 +422,9 @@ require_once ("dbforms/db_classesgenericas.php");
             sQuery += '&departamentos='          + aDepartamentos.join(',');
             sQuery += '&quebra_pagina='          + iQuebraPagina;
             sQuery += '&agrupar_grupo_subgrupo=' + iAgrupar;
+            sQuery += '&materiais='              + dadosMateriais.material;
+
+
 
         var iHeight = (screen.availHeight - 40);
         var iWidth  = (screen.availWidth  - 5);
@@ -307,6 +433,7 @@ require_once ("dbforms/db_classesgenericas.php");
 
         oJanela.moveTo(0, 0);
       }
+
     </script>
 
     <?php db_menu() ?>

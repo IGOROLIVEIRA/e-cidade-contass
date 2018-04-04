@@ -69,6 +69,7 @@ try {
   $oRelatorioDistribuicao->setAgruparGrupoSubGrupo($oGet->agrupar_grupo_subgrupo == RelatorioDeDistribuicao::OPCAO_AGRUPAR_GRUPO_SUBGRUPO);
   $oRelatorioDistribuicao->setGruposSubgrupos($oGet->grupo_subgrupo);
   $oRelatorioDistribuicao->setDepartamentos($oGet->departamentos);
+  $oRelatorioDistribuicao->setMateriais($oGet->materiais);
   $oRelatorioDistribuicao->setQuebrarPagina($oGet->quebra_pagina);
   $oRelatorioDistribuicao->emitir();
 } catch (Exception $e) {
