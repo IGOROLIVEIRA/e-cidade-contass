@@ -599,7 +599,7 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
                    sum(j22_vm2) as j22_vm2
           from iptucalc
            left outer join iptucale on j22_matric = j23_matric and j22_anousu = j23_anousu
-      where j23_matric = $origem 
+      where j23_matric = $origem
       group by iptucalc.j23_anousu,
                             iptucalc.j23_matric ,
                             iptucalc.j23_testad ,
@@ -1335,27 +1335,6 @@ order by iptucalc.j23_anousu desc limit 1
           $pdf1->descr12_2 .= $texto;
         }
 
-        /**
-         * Detalha por receita o lançamento para quando for IPTU
-         * Se for Pirapora
-         */
-        $oInstit = new Instituicao(db_getsession('DB_instit'));
-        if($oInstit->getCodigoCliente() == 58) {
-          $sSqlPorReceita = "select k01_descr,k00_receit,sum(k00_valor) as k00_valor from arrecad inner join histcalc on k01_codigo = k00_hist where k00_numpre = {$k00_numpre} group by k01_descr,k00_receit order by k00_receit";
-          $rResPorReceita = db_query($sSqlPorReceita);
-          $aReceitas = db_utils::getCollectionByRecord($rResPorReceita);
-          $sDescricaoPorReceita = "";
-          foreach ($aReceitas as $oReceita) {
-            $pdf1->descr4_1 = "";
-            $oReceita->k00_valor = $oReceita->k00_receit == $codreceita ? $oReceita->k00_valor + $valor_desconto: $oReceita->k00_valor;
-            $sValor = trim(db_formatar($oReceita->k00_valor, 'f'));
-            $pdf1->descr12_1 .= "+ {$oReceita->k01_descr}: R$" . $sValor . " ";
-
-          }
-
-          $pdf1->descr12_1 .= "Total: R$" . ($k00_valor);
-          $pdf1->descr4_1 .= "{$pdf1->descr12_1}";
-        }
         if ($texto2 != '' ) {
 
           $pdf1->descr16_1 = substr($texto2, 0, 55);
@@ -2584,27 +2563,6 @@ order by iptucalc.j23_anousu desc limit 1
     $pdf1->iptj01_matric      = $j01_matric;//$pdf1->descr1;
   }else{
     $pdf1->iptj01_matric      = $pdf1->descr1;
-  }
-
-  /**
-   * Detalha por receita o lançamento para quando for IPTU
-   * Se for Pirapora
-   */
-  $oInstit = new Instituicao(db_getsession('DB_instit'));
-  if($oInstit->getCodigoCliente() == 58) {
-    $sSqlPorReceita = "select k01_descr,k00_valor from arrecad inner join histcalc on k01_codigo = k00_hist where k00_numpre = {$k00_numpre} and k00_numpar = {$k00_numpar} order by k00_receit";
-    $rResPorReceita = db_query($sSqlPorReceita);
-    $aReceitas = db_utils::getCollectionByRecord($rResPorReceita);
-    $sDescricaoPorReceita = "";
-    foreach ($aReceitas as $oReceita) {
-
-      $sValor = trim(db_formatar($oReceita->k00_valor, 'f'));
-      $pdf1->descr12_1 .= "+ {$oReceita->k01_descr}: R$" . $sValor . " ";
-
-    }
-
-    $pdf1->descr12_1 .= "Total: R$" . ($nTotalDebito + $taxabancaria);
-    $pdf1->descr4_1 .= ": {$pdf1->descr12_1}";
   }
 
   /**
