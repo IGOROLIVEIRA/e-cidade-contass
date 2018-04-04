@@ -109,7 +109,7 @@ if ($db_opcao == 2) {
       </table>
       <table>
       <tr id="atividadedocargo" <? if($rh37_reqcargo != 4){ ?> style="display: none;" <? }else{ ?> style="display: inline;" <? } ?>>
-          <td nowrap title="Atividade do cargo"><b>Atividade do cargo: </b></td>
+          <td nowrap title="Atividade do cargo"><b>Escolaridade do cargo: </b></td>
           <td>
           <?
           db_textarea('rh37_atividadedocargo',5,60,$Irh37_atividadedocargo,true,'text',$db_opcao,"","","","150");
