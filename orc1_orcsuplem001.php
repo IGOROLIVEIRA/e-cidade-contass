@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -78,14 +78,14 @@ if(isset($excluir) && $codsup !=""){
           if ($clorcreservasup->erro_status == 0){
                $sqlerro = true;
               db_msgbox($clorcreservasup->erro_msg);
-          }  
+          }
           $clorcreserva->excluir($o81_codres); // nessa tabela podem existir varias reservas
           if ($clorcreserva->erro_status == 0){
                $sqlerro = true;
                db_msgbox($clorcreserva->erro_msg);
           }
       }
-  }       
+  }
   $clorcsuplemrec->excluir($codsup);
   if ($clorcsuplemrec->erro_status == 0){
      $sqlerro = true;
@@ -97,11 +97,11 @@ if(isset($excluir) && $codsup !=""){
       $sqlerro = true;
       db_msgbox($clorcsuplemval->erro_msg);
   }
-  $clorcsuplem->excluir($codsup);  
+  $clorcsuplem->excluir($codsup);
   if ($clorcsuplem->erro_status == "0" ){
       $sqlerro = true;
       db_msgbox($clorcsuplem->erro_msg);
-  }  
+  }
 
   db_fim_transacao($sqlerro);
 
@@ -119,23 +119,23 @@ if (pg_num_rows($rsValorOrcamento) > 0) {
   $nValorOrcamento = db_utils::fieldsMemory($rsValorOrcamento, 0)->valororcamento;
 }
 /**
- * Verificamos se existe parametro para o orcamento no ano 
+ * Verificamos se existe parametro para o orcamento no ano
  */
 $nPercentualLoa = 0;
 $aParametro = db_stdClass::getParametro("orcsuplementacaoparametro", array(db_getsession("DB_anousu")));
 if (count($aParametro) > 0) {
   $nPercentualLoa = $aParametro[0]->o134_percentuallimiteloa;
 } else {
-  
+
   db_msgbox("Parametros das suplementações não configurados.");
   $lDisabled = true;
 }
 if (isset($chavepesquisa) && $chavepesquisa !="") {
-  
+
    $sSqlProjeto = $clorcprojeto->sql_query_projeto($chavepesquisa);
    $res =  $clorcprojeto->sql_record($sSqlProjeto);
    if ($clorcprojeto->numrows > 0){
-      
+
      db_fieldsmemory($res,0);
      $limiteloa            = db_formatar(($nPercentualLoa*$nValorOrcamento)/100,'f');
      $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_anousu = ".db_getsession("DB_anousu")." and orcprojeto.o39_usalimite = 't' ");
@@ -143,18 +143,18 @@ if (isset($chavepesquisa) && $chavepesquisa !="") {
      $aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
      $valorutilizado       = 0;
      if ($o39_usalimite == 't') {
-        
+
        foreach ($aSuplementacao as $oSuplem) {
-          
+
          $oSuplementacao = new Suplementacao($oSuplem->o46_codsup);
-         $valorutilizado += $oSuplementacao->getvalorSuplementacao();  
-       }       
+         $valorutilizado += $oSuplementacao->getvalorSuplementacao();
+       }
        $percentualUtilizado = ($valorutilizado/$nValorOrcamento)*100;
        $valorutilizado = db_formatar($valorutilizado,'f');
-       
+
      }
-   }  
-}  
+   }
+}
 ?>
 <html>
 <head>
@@ -166,16 +166,16 @@ if (isset($chavepesquisa) && $chavepesquisa !="") {
 <script>
 function js_incluir(projeto,tiposup){
   js_OpenJanelaIframe('top.corpo','db_iframe_suplementacao','orc1_orcsuplem008.php?projeto='+projeto+'&tiposup='+tiposup,'Pesquisa',true);
-}  
-function js_alterar(projeto,codsup){
-  js_OpenJanelaIframe('top.corpo','db_iframe_suplementacao','orc1_orcsuplem008.php?projeto='+projeto+'&codsup='+codsup,'Pesquisa',true);
+}
+function js_alterar(projeto,codsup,tiposup){
+  js_OpenJanelaIframe('top.corpo','db_iframe_suplementacao','orc1_orcsuplem008.php?projeto='+projeto+'&codsup='+codsup+'&tiposup='+tiposup,'Pesquisa',true);
   db_iframe_suplementacao.liberarJanBTFechar(false) ;
-} 
-function js_excluir(projeto,codsup){ 
+}
+function js_excluir(projeto,codsup){
   if (confirm('Deseja Excluir a Suplementação '+codsup)==true){
     <?  echo " location.href='".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+projeto+'&excluir=true&projeto='+projeto+'&codsup='+codsup";  ?>
   }
-}  
+}
 
 function js_fechar(){
   db_iframe_suplementacao.hide();
@@ -183,7 +183,7 @@ function js_fechar(){
   <?
   echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   ?>
-}  
+}
 
 function js_pesquisa(){
   js_OpenJanelaIframe('top.corpo','db_iframe_orcprojeto','func_orcprojeto001.php?funcao_js=parent.js_preenchepesquisa|o39_codproj','Pesquisa',true);
@@ -199,7 +199,7 @@ function js_preenchepesquisa(chave){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -207,8 +207,8 @@ function js_preenchepesquisa(chave){
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr> 
-<td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+<tr>
+<td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 <br><br>
 
 <form name=form1>
@@ -242,21 +242,21 @@ function js_preenchepesquisa(chave){
       <td><? db_input('valorutilizado',20,'',true,'text',3) ; echo round($percentualUtilizado,4)."%";
       ?></td>
     </tr>
-    <?  
+    <?
     }
      ?>
-    </table>    
+    </table>
     </fieldset>
-</td>   
+</td>
 <td valign=top>
    <fieldset><legend><b>Nova Suplementação</b></legend>
    <table border=0>
    <tr>
      <td><b>Tipo </b></td>
-     <td> <? 
+     <td> <?
       if ($db_opcao == 1) {
 
-      	$result = db_query("select distinct o200_tipoleialteracao from orcprojeto 
+      	$result = db_query("select distinct o200_tipoleialteracao from orcprojeto
 									join orcprojetoorcprojetolei on orcprojetoorcprojetolei.o139_orcprojeto = orcprojeto.o39_codproj
 									join orcprojetolei on orcprojetoorcprojetolei.o139_orcprojetolei = orcprojetolei.o138_sequencial
 									join orcleialtorcamentaria on orcleialtorcamentaria.o200_orcprojetolei = orcprojetolei.o138_sequencial
@@ -280,15 +280,15 @@ function js_preenchepesquisa(chave){
       	} else {
       		array_push($aWhere, "1001","1002","1003","1004","1017","1016","1014","1015");
       	}
-      	
+
         $sSqlTipoSuplem = $clorcsuplemtipo->sql_query("","o48_tiposup as o46_tiposup,o48_descr","o48_tiposup","o48_tiposup in (".implode(",", $aWhere).")");
-	      $rtipo          = $clorcsuplemtipo->sql_record($sSqlTipoSuplem);  
+	      $rtipo          = $clorcsuplemtipo->sql_record($sSqlTipoSuplem);
         db_fieldsmemory($rtipo,0);
         db_selectrecord("o46_tiposup",$rtipo,false,$db_opcao);
-        
-	    } else {  
+
+	    } else {
         db_input('o46_tiposup',6,'',true,'true',3);
-	    } 
+	    }
 	 ?>
      </td>
    </tr>
@@ -298,8 +298,8 @@ function js_preenchepesquisa(chave){
    <tr>
       <td> &nbsp; </td>
       <td align=center>
-          <input style="width:145px" type=button name="" 
-             value="Lançar Suplementação" 
+          <input style="width:145px" type=button name=""
+             value="Lançar Suplementação"
              onclick="js_incluir(<?=$o39_codproj?>,document.form1.o46_tiposup.value); " <?=(@$o51_data!="" || $lDisabled?"disabled":""); ?>  >
           <input style="width:145px" type=button name="" value="Pesquisar Projeto" onclick="js_pesquisa();"></td>
     </tr>
@@ -316,7 +316,7 @@ function js_preenchepesquisa(chave){
 
 <tr>
 <td colspan=3 height=400px valign=top>
-  <fieldset><legend><b>Suplementações</b></legend> 
+  <fieldset><legend><b>Suplementações</b></legend>
   <div style="height:300px;overflow-y:scroll">
   <table border=0 width=98%>
   <tr style="background-color:#AAAAAA;height:15px" >
@@ -331,8 +331,8 @@ function js_preenchepesquisa(chave){
   </tr>
   <?
    // se projeto processado, botoes alterar e excluir são bloqueados
-   // se o51_codproj = processado 
-   if (!isset($o39_codproj)){ 
+   // se o51_codproj = processado
+   if (!isset($o39_codproj)){
      $o39_codproj='null';
    };
    $res = $clorcsuplem->sql_record($clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_codproj= $o39_codproj" ));
@@ -342,7 +342,7 @@ function js_preenchepesquisa(chave){
          db_fieldsmemory($res,$x,true);
 	 $op = '';
 	 ?>
-         <tr style="background-color:white;height:15px"> 
+         <tr style="background-color:white;height:15px">
 	  <td><?=$o46_codsup ?></td>
 	  <td><?=$o46_tiposup ?></td>
           <td><?=$o48_descr ?></td>
@@ -352,14 +352,14 @@ function js_preenchepesquisa(chave){
           <?
 	    if ($o49_data!='') {
 	       $op='disabled';
-	    }  
+	    }
 	  ?>
-          <td><input type=button value=Alterar onClick="js_alterar(<?=$o39_codproj?>,<?=$o46_codsup ?>); " <?=$op?> ></td>
+          <td><input type=button value=Alterar onClick="js_alterar(<?=$o39_codproj?>,<?=$o46_codsup ?>,<?=$o46_tiposup ?>); " <?=$op?> ></td>
           <td><input type=button value=Excluir onClick="js_excluir(<?=$o39_codproj?>,<?=$o46_codsup ?>); " <?=$op?> ></td>
 	 </tr>
 	 <?
-      }	
-   }    
+      }
+   }
   ?>
   </table>
   <div>
@@ -386,6 +386,6 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <?
 if (!isset($chavepesquisa)){
   echo "<script> js_pesquisa(); </script>";
-}  
+}
 
 ?>

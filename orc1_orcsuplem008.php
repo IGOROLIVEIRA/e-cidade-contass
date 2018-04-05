@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -49,9 +49,9 @@ if (isset($codsup) && $codsup !=""){
   db_fieldsmemory($rr,0);
   $res = $clorcsuplemtipo->sql_record($clorcsuplemtipo->sql_query_file($o46_tiposup));
   db_fieldsmemory($res,0); // é obrigatorio retornar 1 registro
- 
 
-} else {  
+
+} else {
   // inclusão
   // este fonte recebe  projeto, tiposup
   // de acordo com o tiposup ( tipo de suplementação ) carrega as abas
@@ -61,17 +61,17 @@ if (isset($codsup) && $codsup !=""){
   db_inicio_transacao();
    $erro = false;
    $clorcsuplem->o46_codlei = $projeto ; // codigo do projeto
-   $clorcsuplem->o46_data   = date("Y-m-d",db_getsession("DB_datausu"));   
+   $clorcsuplem->o46_data   = date("Y-m-d",db_getsession("DB_datausu"));
    $clorcsuplem->o46_instit = db_getsession("DB_instit");
    $clorcsuplem->o46_tiposup = $tiposup;
-   $clorcsuplem->incluir(null);  
+   $clorcsuplem->incluir(null);
    $codsup = $clorcsuplem->o46_codsup;
    if ($clorcsuplem->erro_status == "0" ){
          db_msgbox($clorcsuplem->erro_msg);
 	 $erro = true;
-   }  
+   }
   db_fim_transacao($erro);
-}	
+}
 
 $identifica = array();
 $src        = array();
@@ -79,19 +79,19 @@ $sizecampo  = array();
 
 if (isset($o48_coddocsup) && $o48_coddocsup > 0){
   $identifica["suplementacao"] = "Suplementações";
-  $src["suplementacao"]        = "orc1_orcsuplemval007.php?o39_codproj=$projeto&o46_codsup=$codsup";
+  $src["suplementacao"]        = "orc1_orcsuplemval007.php?o39_codproj=$projeto&o46_codsup=$codsup&tiposup=$tiposup";
   $sizecampo["suplementacao"]   = 23;
-}  
+}
 if (isset($o48_coddocred) && $o48_coddocred > 0){
   $identifica["reducao"] = "Reduções";
-  $src["reducao"]        = "orc1_orcsuplemval001.php?o39_codproj=$projeto&o46_codsup=$codsup";
+  $src["reducao"]        = "orc1_orcsuplemval001.php?o39_codproj=$projeto&o46_codsup=$codsup&tiposup=$tiposup";
   $sizecampo["reducao"]  = 23;
-}  
+}
 if (isset($o48_arrecadmaior) && $o48_arrecadmaior > 0){
   $identifica["receita"] = "Receitas";
-  $src["receita"]        = "orc1_orcsuplemrec007.php?o39_codproj=$projeto&o46_codsup=$codsup";
+  $src["receita"]        = "orc1_orcsuplemrec007.php?o39_codproj=$projeto&o46_codsup=$codsup&tiposup=$tiposup";
   $sizecampo["receita"]  = 23;
-}  
+}
 
 ?>
 <html>
@@ -104,14 +104,14 @@ if (isset($o48_arrecadmaior) && $o48_arrecadmaior > 0){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="99%" border="0" cellpadding="0" cellspacing="0" bgcolor="#CCCCCC">
-<tr> 
-  <td height="20px" align="left" valign="top" bgcolor="#CCCCCC"> 
+<tr>
+  <td height="20px" align="left" valign="top" bgcolor="#CCCCCC">
 
     <?
     $clcriaabas->identifica = $identifica;
     $clcriaabas->src        = $src;
     $clcriaabas->sizecampo  = $sizecampo;
-    $clcriaabas->cria_abas();    
+    $clcriaabas->cria_abas();
    ?>
 
 </td>

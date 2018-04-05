@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -75,15 +75,15 @@ if (isset($pesquisa_dot) && $o47_coddot!=""){
 
       $resdot= db_dotacaosaldo(8,2,2,"true","o58_coddot=$o47_coddot",db_getsession("DB_anousu"),$anousu.'-01-01',$anousu.'-12-31');
       db_fieldsmemory($resdot,0);
-       // $atual_menos_reservado 
+       // $atual_menos_reservado
 
-   }  
-}  
+   }
+}
 //------------------------------------------
 $limpa_dados = false;
 
 if(isset($incluir)){
-  // pressionado botao incluir na tela  
+  // pressionado botao incluir na tela
   $limpa_dados = true;
   $sqlerro = false;
 
@@ -97,8 +97,8 @@ if(isset($incluir)){
   if ($atual_menos_reservado < (abs($o47_valor))){
      $sqlerro =true;
      db_msgbox("Dotação $o47_coddot sem saldo ! (Saldo $atual_menos_reservado) ");
-  }    
-  
+  }
+
   // lança reserva
   $clorcreserva->o80_anousu = $anousu;
   $clorcreserva->o80_coddot = $o47_coddot;
@@ -112,7 +112,7 @@ if(isset($incluir)){
      if ($clorcreserva->erro_status == 0 ){
         $sqlerro = true;
 	db_msgbox($clorcreserva->erro_msg);
-     }  
+     }
   }
   //
   $clorcreservasup->o81_codres = $clorcreserva->o80_codres;
@@ -122,21 +122,91 @@ if(isset($incluir)){
     if ($clorcreservasup->erro_status == 0 ){
         $sqlerro = true;
         db_msgbox($clorcreservasup->erro_msg);
-    }		   
+    }
   }
-  $clorcsuplemval->o47_valor          = (abs($o47_valor))*-1; 
+  $clorcsuplemval->o47_valor          = (abs($o47_valor))*-1;
   $clorcsuplemval->o47_anousu         = db_getsession("DB_anousu");
   $clorcsuplemval->o47_concarpeculiar = "{$o58_concarpeculiar}";
+    /*OC5813*/
+    //valida se a dotação já foi usada numa operacao contrária
+
+  $sSuplementacao = $clorcsuplemval->sql_record("select * from orcsuplemval join orcsuplem on o47_codsup=o46_codsup where o46_codlei = {$o39_codproj} and o47_coddot = {$o47_coddot} ");
+  if(pg_num_rows($sSuplementacao)>0){
+    $aSuple = db_utils::getCollectionByRecord($sSuplementacao);
+    foreach($aSuple as $oSupl){
+      //existe uma suplementacao que agora está sendo reduzida
+      if($oSupl->o47_valor > 0){
+       $sqlerro = true;
+       db_msgbox('Usuário, inclusão abortada. Esta dotação já foi inserida em outra suplementação neste mesmo projeto!');
+       $limpa_dados = false;
+       break;
+     }else{
+      $sqlerro = false;
+     }
+   }
+ }else{
+    $sqlerro = false;
+ }
+ /*FIM OC5813*/
+  /*OC5815*/
+ /*todo estrutural anterior à fonte de recurso deve ser idêntico para a dotação que suplementa e para a dotação que reduz*/
+
+ if($tiposup=='1017'){
+  $sSqlEstruturalDotacaoEnviada = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural
+FROM orcdotacao d
+INNER JOIN orcprojativ p ON p.o55_anousu = ".db_getsession('DB_anousu')."
+AND p.o55_projativ = d.o58_projativ
+INNER JOIN orcelemento e ON e.o56_codele = d.o58_codele
+AND o56_anousu = o58_anousu
+WHERE o58_anousu=".db_getsession('DB_anousu')."
+  AND o58_coddot = {$o47_coddot}";
+
+  $oEstruturalDotacaoEnviada = db_utils::fieldsMemory(db_query($sSqlEstruturalDotacaoEnviada));
+
+  $sSqlestrututural = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural,
+  o56_elemento,
+  o55_descr::text,
+  o56_descr,
+  o58_coddot,
+  o58_instit,
+  o46_codlei,
+  o46_codsup,
+  o46_tiposup
+  FROM orcsuplemval
+  JOIN orcdotacao ON o47_anousu=o58_anousu
+  AND o47_coddot=o58_coddot
+  JOIN orcsuplem ON o47_codsup=o46_codsup
+  INNER JOIN orcprojativ ON o55_anousu = ".db_getsession('DB_anousu')."
+  AND o55_projativ = o58_projativ
+  INNER JOIN orcelemento e ON o56_codele = o58_codele
+  AND o56_anousu = o58_anousu
+  WHERE o46_codlei = {$o39_codproj}
+  AND o46_codsup = {$o46_codsup}
+  AND o46_tiposup = {$tiposup}
+  AND o58_anousu = ".db_getsession('DB_anousu')."
+  ";
+
+  if(pg_num_rows(db_query($sSqlestrututural))>0){
+    $oEstruturalSupl = db_query($sSqlestrututural);
+    $oEstruturalSupl = db_utils::fieldsMemory($oEstruturalSupl);
+    if(!(substr($oEstruturalDotacaoEnviada->dl_estrutural, 0,36) ==  substr($oEstruturalSupl->dl_estrutural, 0,36) && substr($oEstruturalDotacaoEnviada->dl_estrutural, 37,4) !=  substr($oEstruturalSupl->dl_estrutural, 37,4))){
+      $sqlerro = true;
+      db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+      $limpa_dados = false;
+
+    }
+  }
+}
   if ($sqlerro == false ) {
      $clorcsuplemval->incluir($o46_codsup,db_getsession("DB_anousu"),$o47_coddot);
      if ($clorcsuplemval->erro_status == 0){
          $sqlerro = true;
          db_msgbox($clorcsuplemval->erro_msg);
          $limpa_dados = false;
-     }  
+     }
   }
   db_fim_transacao($sqlerro);
-   
+
 }elseif(isset($opcao) && $opcao=="excluir" ){
   $limpa_dados = true;
   // clicou no exlcuir, já exlcui direto, nem confirma nada
@@ -146,12 +216,12 @@ if(isset($incluir)){
   $res = $clorcreservasup->sql_record($clorcreservasup->sql_query(null,"o81_codres",null,"o81_codsup = $o46_codsup and o80_coddot=$o47_coddot "));
   if ($clorcreservasup->numrows > 0){
       db_fieldsmemory($res,0);
-  }  
+  }
   $clorcreservasup->excluir($o81_codres);
   if ($clorcreservasup->erro_status == 0){
      $sqlerro = true;
      db_msgbox($clorcreservasup->erro_msg);
-  }  
+  }
   $clorcreserva->excluir($o81_codres);
   if ($clorcreserva->erro_status == 0){
       $sqlerro = true;
@@ -162,12 +232,12 @@ if(isset($incluir)){
      $sqlerro = true;
      $limpa_dados = false;
      db_msgbox($clorcsuplemval->erro_msg);
-  }  
+  }
   // $sqlerro = true;
   db_msgbox($clorcsuplemval->erro_msg);
   db_fim_transacao($sqlerro);
 
-}   
+}
 if ($limpa_dados ==true){
    $o47_coddot = "";
    $o58_orgao  = "";
@@ -178,13 +248,13 @@ if ($limpa_dados ==true){
    $o15_descr    ="";
    $o47_valor    ="";
    $atual_menos_reservado = "";
-}  
+}
 // --------------------------------------
 // calcula total das reduções
 $res = $clorcsuplemval->sql_record("select sum(o47_valor) as soma_reduz
                                     from orcsuplemval where o47_codsup=$o46_codsup and o47_valor < 0");
 if ($clorcsuplemval->numrows > 0 ){
-    db_fieldsmemory($res,0,true);	         
+    db_fieldsmemory($res,0,true);
 }
 
 // --------------------------------------
@@ -200,8 +270,8 @@ if ($clorcsuplemval->numrows > 0 ){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="480" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmorcsuplemval_reducao.php");
