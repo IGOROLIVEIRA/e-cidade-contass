@@ -67,6 +67,18 @@ class AcordoItem {
    */
   protected $nValorUnitario;
 
+  /** OC5304
+   * Valor aditado do item
+   * @var float
+   */
+  protected $nValorAditado;
+
+  /** OC5304
+   * Quantidade aditada do item
+   * @var float
+   */
+  protected $nQuantidadeAditada;
+
   /**
    * Quantidade do item
    * @var float
@@ -166,7 +178,7 @@ class AcordoItem {
    * @var integer
    */
   protected $iTipoControle;
-  
+
   /**
    * Controla Quantidade Servico
    * true / false
@@ -313,6 +325,8 @@ class AcordoItem {
       $sCamposItens .= "ac20_tipocontrole,                                       ";
       $sCamposItens .= "ac20_servicoquantidade,                                  ";
       $sCamposItens .= "ac20_ordem,                                              ";
+      $sCamposItens .= "ac20_valoraditado,                                       ";//OC5304
+      $sCamposItens .= "ac20_quantidadeaditada,                                  ";//OC5304
       $sCamposItens .= "m61_descr,                                               ";
       $sCamposItens .= "o56_elemento,                                            ";
       $sCamposItens .= "o56_descr,                                               ";
@@ -330,6 +344,7 @@ class AcordoItem {
       $sCamposItens.= "end  as pc11_servicoquantidade                            ";
 
       $sSqlAcordoitem = $oDaoAcordoItem->sql_query_completo(null, $sCamposItens, null, "ac20_sequencial = $iCodigoItem");
+
       $rsAcordoItem   = $oDaoAcordoItem->sql_record($sSqlAcordoitem);
       if ($oDaoAcordoItem->numrows > 0) {
 
@@ -347,6 +362,8 @@ class AcordoItem {
               ->setElemento($oDadosItem->ac20_elemento)
               ->setUnidade($oDadosItem->ac20_matunid)
               ->setQuantidade($oDadosItem->ac20_quantidade)
+              ->setValorAditado($oDadosItem->ac20_valoraditado)
+              ->setQuantiAditada($oDadosItem->ac20_quantidadeaditada)
               ->setValorTotal($oDadosItem->ac20_valortotal)
               ->setValorUnitario($oDadosItem->ac20_valorunitario)
               ->setCodigoPosicao($oDadosItem->ac20_acordoposicao)
@@ -646,6 +663,43 @@ class AcordoItem {
     $this->nValorUnitario = $nValorUnitario;
     return $this;
   }
+
+  /** OC5304
+   * @return float
+   */
+  public function getValorAditado() {
+
+    return $this->nValorAditado;
+  }
+
+  /** OC5304
+   * @param float $nValorAditado
+   * @return AcordoItem
+   */
+  public function setValorAditado($nValorAditado) {
+
+    $this->nValorAditado = $nValorAditado;
+    return $this;
+  }
+
+  /** OC5304
+   * @return float
+   */
+  public function getQuantiAditada() {
+
+    return $this->nQuantidadeAditada;
+  }
+
+  /** OC5304
+   * @param float $nQuantidadeAditada
+   * @return AcordoItem
+   */
+  public function setQuantiAditada($nQuantidadeAditada) {
+
+    $this->nQuantidadeAditada = $nQuantidadeAditada;
+    return $this;
+  }
+
   /**
    * @return integer
    */
@@ -799,7 +853,9 @@ class AcordoItem {
     	$this->setOrdem($this->getProximaPosicao());
     }
 
-    $nValorUnitario = (float)$this->getValorUnitario();
+    $nValorUnitario     = (float)$this->getValorUnitario();
+    $nValorAditado      = (float)$this->getValorAditado();//OC5304
+    $nQuantidadeAditada = (float)$this->getQuantiAditada();//OC5304
     $oDaoAcordoItem = db_utils::getDao("acordoitem");
     $oDaoAcordoItem->ac20_acordoposicao     = $this->getCodigoPosicao();
     $oDaoAcordoItem->ac20_acordoposicaotipo = $this->getCodigoPosicaoTipo();
@@ -809,6 +865,8 @@ class AcordoItem {
     $oDaoAcordoItem->ac20_matunid           = $this->getUnidade();
     $oDaoAcordoItem->ac20_quantidade        = "{$this->getQuantidade()}";
     $oDaoAcordoItem->ac20_valorunitario     = $nValorUnitario;
+    $oDaoAcordoItem->ac20_valoraditado      = $nValorAditado;//OC5304
+    $oDaoAcordoItem->ac20_quantidadeaditada = $nQuantidadeAditada;//OC5304
     $oDaoAcordoItem->ac20_valortotal        = "".round(($this->getQuantidade() * $nValorUnitario), 2)."";
     $this->setValorTotal(($this->getQuantidade() * $nValorUnitario));
     $oDaoAcordoItem->ac20_ordem             = $this->getOrdem();
@@ -2691,7 +2749,7 @@ class AcordoItem {
     if (!empty($iCodMaterial) != null) {
 
       $oDaoAcordoItem = db_utils::getDao("acordoitem");
-      $sWhere = "ac20_pcmater = {$iCodMaterial} and ac20_acordoposicao in (select ac26_sequencial from acordoposicao where ac26_acordo = {$iCodAcordo}) 
+      $sWhere = "ac20_pcmater = {$iCodMaterial} and ac20_acordoposicao in (select ac26_sequencial from acordoposicao where ac26_acordo = {$iCodAcordo})
         and ((ac20_quantidade > 0 and ac20_valorunitario > 0) or (ac20_acordoposicaotipo in (9,10)))";
       $sSqlAcordoitem = $oDaoAcordoItem->sql_query_file(null, "*", "ac20_acordoposicao desc", $sWhere);
       $rsAcordoItem   = $oDaoAcordoItem->sql_record($sSqlAcordoitem);
@@ -2712,7 +2770,7 @@ class AcordoItem {
 
     $oDaoAcordoitem  = new cl_acordoitem;
 
-    $sCampos    = "SUM(CASE WHEN ac26_numero = {$iNumeroAditamento} THEN ac20_quantidade 
+    $sCampos    = "SUM(CASE WHEN ac26_numero = {$iNumeroAditamento} THEN ac20_quantidade
                             WHEN ac26_numero = ".($iNumeroAditamento-1)." THEN ac20_quantidade*-1 END) AS aditivado";
     $sWhere     = "ac16_sequencial = {$this->getPosicao()->getAcordo()} AND ac20_ordem = {$this->getOrdem()} AND ac20_pcmater = ".$this->getMaterial()->getMaterial();
     $sSqlItens  = $oDaoAcordoitem->sql_query_transparencia( $sCampos, null, $sWhere);

@@ -2559,12 +2559,12 @@ class Acordo
      * @param $sDescricaoAlteracao
      * @param $sVeiculoDivulgacao
      * @param $iTipoalteracaoAditivo
+     * @param $sVigenciaalterada
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada)
     {
-
         $nValorItens = 0;
 
         foreach ($aItens as $oItem) {
@@ -2592,6 +2592,7 @@ class Acordo
         $oNovaPosicao->setVigenciaInicial($dtVigenciaInicial);
         $oNovaPosicao->setVigenciaFinal($dtVigenciaFinal);
         $oNovaPosicao->setPosicaoPeriodo($dtVigenciaInicial, $dtVigenciaFinal, $this->getPeriodoComercial());
+        $oNovaPosicao->setVigenciaAlterada($sVigenciaalterada);
 
         $oNovaPosicao->save();
 
@@ -2682,6 +2683,8 @@ class Acordo
 
             }
             $oNovoItem->setQuantidade((float)$oItem->quantidade);
+            $oNovoItem->setValorAditado((float)$oItem->valoraditado);//OC5304
+            $oNovoItem->setQuantiAditada((float)$oItem->quantiaditada);//OC5304
             $oNovoItem->setValorUnitario((float)$oItem->valorunitario);
             $oNovoItem->setValorTotal(round($oItem->valorunitario * $oItem->quantidade, 2));
 
@@ -3378,12 +3381,12 @@ class Acordo
 
         $aItens = array();
         $oDaoAcordoitem = new cl_acordoitem;
-        $sCampos = "ac20_ordem, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
+        $sCampos = "ac20_ordem, ac20_valoraditado, ac20_quantidadeaditada, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
         $sCampos .= "sum(ac20_valortotal) as valortotal, ";
         $sCampos .= "pc01_descrmater, pc01_codmater, max(ac20_sequencial) as codigo, max(ac20_acordoposicao) as posicao, ";
         $sCampos .= "m61_codmatunid, m61_abrev ";
         $sWhere = "ac16_sequencial = {$this->getCodigo()} ";
-        $sGroup = "group by ac20_ordem, pc01_descrmater, pc01_codmater, m61_codmatunid, m61_abrev ";
+        $sGroup = "group by ac20_ordem, pc01_descrmater, pc01_codmater, m61_codmatunid, m61_abrev, ac20_valoraditado, ac20_quantidadeaditada ";
         $sSqlItens = $oDaoAcordoitem->sql_query_transparencia($sCampos, "ac20_ordem", $sWhere . $sGroup);
         $rsItem = $oDaoAcordoitem->sql_record($sSqlItens);
         $iTotalLinhas = $oDaoAcordoitem->numrows;
@@ -3395,6 +3398,8 @@ class Acordo
             $oItem->setCodigo($oDadosItem->codigo);
             $oItem->setMaterial(MaterialComprasRepository::getByCodigo($oDadosItem->pc01_codmater));
             $oItem->setQuantidade($oDadosItem->quantidade);
+            $oItem->setValorAditado($oDadosItem->ac20_valoraditado);//OC5304
+            $oItem->setQuantiAditada($oDadosItem->ac20_quantidadeaditada);//OC5304
             $oItem->setValorTotal($oDadosItem->valortotal);
             $oItem->setUnidade($oDadosItem->m61_codmatunid);
             $oItem->setDescricaoUnidade($oDadosItem->m61_abrev);

@@ -54,6 +54,8 @@ class cl_acordoitem {
    var $ac20_resumo = null;
    var $ac20_tipocontrole = 0;
    var $ac20_servicoquantidade = null;
+   var $ac20_valoraditado = 0;//OC5304
+   var $ac20_quantidadeaditada = 0;//OC5304
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac20_sequencial = int4 = Sequencial
@@ -69,6 +71,8 @@ class cl_acordoitem {
                  ac20_tipocontrole = int4 = Forma de Controle
                  ac20_acordoposicaotipo = int8 = Tipo Alteracao Item
                  ac20_servicoquantidade = boolean = Controla Servico Quantidade
+                 ac20_valoraditado = float8 = Valor Aditado
+                 ac20_quantidadeaditada = float8 = Quantidade Aditada
                  ";
    //funcao construtor da classe
    function cl_acordoitem() {
@@ -235,6 +239,8 @@ class cl_acordoitem {
                                       ,ac20_tipocontrole
                                       ,ac20_acordoposicaotipo
                                       ,ac20_servicoquantidade
+                                      ,ac20_valoraditado
+                                      ,ac20_quantidadeaditada
                        )
                 values (
                                 $this->ac20_sequencial
@@ -250,6 +256,8 @@ class cl_acordoitem {
                                ,$this->ac20_tipocontrole
                                ,".($this->ac20_acordoposicaotipo == 0 || $this->ac20_acordoposicaotipo == null ? 'null' : $this->ac20_acordoposicaotipo)."
                                ,'$this->ac20_servicoquantidade'
+                               ,$this->ac20_valoraditado
+                               ,$this->ac20_quantidadeaditada
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -421,6 +429,18 @@ class cl_acordoitem {
        $sql  .= $virgula." ac20_resumo = '$this->ac20_resumo' ";
        $virgula = ",";
      }
+     /*OC5304*/
+     if(trim($this->ac20_valoraditado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac20_valoraditado"])){
+       $sql  .= $virgula." ac20_valoraditado = $this->ac20_valoraditado ";
+       $virgula = ",";
+     }
+     /*FIM*/
+     /*OC5304*/
+     if(trim($this->ac20_quantidadeaditada)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac20_quantidadeaditada"])){
+       $sql  .= $virgula." ac20_quantidadeaditada = $this->ac20_quantidadeaditada ";
+       $virgula = ",";
+     }
+     /*FIM*/
      if(trim($this->ac20_tipocontrole)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac20_tipocontrole"])){
        $sql  .= $virgula." ac20_tipocontrole = $this->ac20_tipocontrole ";
        $virgula = ",";

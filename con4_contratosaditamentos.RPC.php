@@ -67,8 +67,10 @@ try {
         $oItem->descricaoitem  = $oItemPosicao->getMaterial()->getDescricao();
         $oItem->valorunitario  = $oItemPosicao->getValorUnitario();
         $oItem->quantidade     = $oItemPosicao->getQuantidadeAtualizadaRenovacao();
+        $oItem->valoraditado   = $oItemPosicao->getValorAditado();//OC5304
+        $oItem->quantiaditada  = $oItemPosicao->getQuantiAditada();//OC5304
         $oItem->valor          = $oItemPosicao->getValorAtualizadoRenovacao();
-        $aItemPosicao = $oItemPosicao->getPeriodosItem();
+        $aItemPosicao          = $oItemPosicao->getPeriodosItem();
         $oItem->periodoini     = $aItemPosicao[0]->dtDataInicial;
         $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
         $oItem->servico        = $oItemPosicao->getMaterial()->isServico();
@@ -94,7 +96,7 @@ try {
           $oItem->vlunitanterior = $oItemUltimoValor->valorautorizar;
           $oItem->valorunitario  = $oItemUltimoValor->valorautorizar;
         }
-        
+
         foreach($oItemPosicao->getDotacoes() as $oDotacao) {
           if ($oItem->servico && $oItem->controlaquantidade == "f") {
             $iQuantDot =  1;
@@ -119,8 +121,8 @@ try {
 
     case "processarAditamento":
 
-      $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
-      $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura,$oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados);
+      $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);//var_dump($oParam->sVigenciaalterada);
+      $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura,$oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada);
       break;
 
     case "getUnidades":

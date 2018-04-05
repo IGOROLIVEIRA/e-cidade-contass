@@ -173,6 +173,14 @@ class AcordoPosicao {
   protected $sNumeroApostilamento;
 
   /**
+   * Se houve alteração no prazo de vigência do contrato
+   *
+   * @var string
+   * @access protected
+   */
+  protected $sVigenciaalterada;//OC5304
+
+  /**
    * Constante do caminho da mensagem do model
    * @var string
    */
@@ -191,6 +199,7 @@ class AcordoPosicao {
       $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
       $sSqlPosicao       = $oDaoAcordoPosicao->sql_query_vigencia($iCodigoPosicao);
       $rsPosicao         = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+
       if ($oDaoAcordoPosicao->numrows != 1) {
         throw new Exception("Posição não encontrada!\nContate suporte!");
       }
@@ -208,6 +217,7 @@ class AcordoPosicao {
       $this->setObservacao($oDadosPosicao->ac26_observacao);
       $this->setNumeroAditamento($oDadosPosicao->ac26_numeroaditamento);
       $this->setNumeroApostilamento($oDadosPosicao->ac26_numeroapostilamento);
+      $this->setVigenciaAlterada($oDadosPosicao->ac26_vigenciaalterada);
     }
   }
 
@@ -475,6 +485,26 @@ class AcordoPosicao {
   	return $this->sObservacao;
   }
 
+  /** OC5304
+   * define se o contrato de vigência foi alterado
+   *
+   * @param string $sObservacao
+   */
+  public function setVigenciaAlterada($sVigenciaalterada) {
+
+    $this->sVigenciaalterada = $sVigenciaalterada;
+    return $this;
+  }
+
+  /**
+   * retorna a observação da posição
+   *
+   * @return string
+   */
+  public function getVigenciaAlterada() {
+    return $this->sVigenciaalterada;
+  }
+
   /**
    * @return AcordoItem[]
    */
@@ -491,7 +521,7 @@ class AcordoPosicao {
     for ($i = 0; $i < $oDaoAcordoItem->numrows; $i++) {
       $this->aItens[] = (new AcordoItem(db_utils::fieldsMemory($rsItens, $i)->ac20_sequencial));
     }
-
+    //echo '<pre>';print_r($this->aItens);die;
     return $this->aItens;
   }
 
@@ -536,7 +566,7 @@ class AcordoPosicao {
         $oDotacao    = new stdClass();
 
         /*
-         * A formula de calculo do valor da Dotacao foi alterado para dividir 
+         * A formula de calculo do valor da Dotacao foi alterado para dividir
          * o valor entre as dotacoes conforme acontece em Gerar Autorizacao do Mod. Compras
          * solicitado por Danilo
          */
@@ -552,7 +582,7 @@ class AcordoPosicao {
          * retorna o valor novo da dotacao; (pode ter um aumento/diminuicao do valor)
          */
         $oDotacao->valor      = round(($oItemLicitacao->pc23_valor * $nPercentualDotacao)/100, 2);
-        
+
         $oDotacao->ano        = $oDotacaoItem->pc13_anousu;
         $oDotacao->dotacao    = $oDotacaoItem->pc13_coddot;
         $oDotacao->quantidade = $oDotacaoItem->pc13_quant;
@@ -643,7 +673,7 @@ class AcordoPosicao {
 
         $oDotacao   = new stdClass();
          /*
-         * A formula de calculo do valor da Dotacao foi alterado para dividir 
+         * A formula de calculo do valor da Dotacao foi alterado para dividir
          * o valor entre as dotacoes conforme acontece em Gerar Autorizacao do Mod. Compras
          * solicitado por Danilo
          */
@@ -729,6 +759,7 @@ class AcordoPosicao {
     $oDaoPosicao->ac26_emergencial       = $this->isEmergencial() ? "true" : "false";
     $oDaoPosicao->ac26_observacao        = $this->sObservacao;
     $oDaoPosicao->ac26_numeroapostilamento = $this->getNumeroApostilamento();
+    $oDaoPosicao->ac26_vigenciaalterada = $this->getVigenciaAlterada();
     $iCodigo                             = $this->getCodigo();
 
     if (empty($iCodigo)) {
@@ -903,8 +934,8 @@ class AcordoPosicao {
       $oDaoAcordoPosicaoAditamento->ac35_valor                              = $nValorSaldo;
       $oDaoAcordoPosicaoAditamento->ac35_dataassinaturatermoaditivo         = $dtAssinatura;
       $oDaoAcordoPosicaoAditamento->ac35_datapublicacao                     = $dtPublicacao;
-      $oDaoAcordoPosicaoAditamento->ac35_descricaoalteracao                 = $sDescricaoAlteracao;
-      $oDaoAcordoPosicaoAditamento->ac35_veiculodivulgacao                  = $sVeiculoDivulgacao;
+      $oDaoAcordoPosicaoAditamento->ac35_descricaoalteracao                 = utf8_decode($sDescricaoAlteracao);
+      $oDaoAcordoPosicaoAditamento->ac35_veiculodivulgacao                  = utf8_decode($sVeiculoDivulgacao);
       $oDaoAcordoPosicaoAditamento->incluir(null);
     }
   }
@@ -1213,8 +1244,8 @@ class AcordoPosicao {
     $oDAOEmpempitem = db_utils::getDao("empempitem");
     $sWhere         = "e62_sequencial = {$iPKEmpempitem}";
     $sCampos  = "*";
-    $sCampos .= ",(select e55_unid from empautitem 
-    join empempaut on e55_autori = e61_autori 
+    $sCampos .= ",(select e55_unid from empautitem
+    join empempaut on e55_autori = e61_autori
     join empempitem item on e61_numemp = e62_numemp and e55_item = e62_item
     where item.e62_sequencial=empempitem.e62_sequencial) as e55_unid";
     $sSqlDadosItem  = $oDAOEmpempitem->sql_query_file(null, null, $sCampos, null, $sWhere);
@@ -1548,4 +1579,5 @@ class AcordoPosicao {
       }
       return $rsValorAtual;
   }
+
 }
