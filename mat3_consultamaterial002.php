@@ -146,6 +146,7 @@ $iQuantidadeTransferencia = $oMaterialEstoque->getSaldoTransferencia(true);
     $oVerticalTab->add('detalhesMaterial', 'Devoluções', "mat3_matconsultaiframe006.php?{$sQueryString}");
     $oVerticalTab->add('detalhesMaterial', 'Ponto de Pedido', "mat3_matconsultaiframe008.php?{$sQueryString}");
     $oVerticalTab->add('detalhesMaterial', 'Lotes', "mat3_matconsultalotes.php?{$sQueryString}");
+    $oVerticalTab->add('detalhesMaterial', 'Material Compras', "mat1_matconsultaiframe002.php?{$sQueryString}");
     $oVerticalTab->add('detalhesMaterial', 'Nota Fiscal', "mat3_matconsultanota.php?{$sQueryString}");
     $oVerticalTab->add('detalhesMaterial', 'Localização', "mat3_consultalocalizacaomaterial001.php?{$sQueryString}");
 
