@@ -165,9 +165,9 @@ for ($i = 0;$i < 2;$i++){
 
   $this->objpdf->setfont('Arial','',10);
   $this->objpdf->setxy(181,$xlin+62);
-  $this->objpdf->cell(25,9,db_formatar($this->valorhist,'f'),0,0,"R");
+  $this->objpdf->cell(25,9,db_formatar(empty($this->valorhist) ? $this->totalrec : $this->valorhist,'f'),0,0,"R");
   $this->objpdf->setxy(181,$xlin+71);
-  $this->objpdf->cell(25,9,db_formatar($this->totalrec - $this->valorhist, 'f'),0,0,"R");
+  $this->objpdf->cell(25,9,db_formatar(empty($this->valorhist) ? 0 : $this->totalrec - $this->valorhist, 'f'),0,0,"R");
   $this->objpdf->setxy(181,$xlin+81.5);
   $this->objpdf->cell(25,9,$totaldesc,0,0,"R");
   $this->objpdf->setxy(181,$xlin+92);

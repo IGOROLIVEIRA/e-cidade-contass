@@ -831,7 +831,7 @@ $sqldtop =" select min(arrecad.k00_dtoper) as mindatop ,
               from recibopaga
              inner join arrecad on arrecad.k00_numpre    = recibopaga.k00_numpre
                                and recibopaga.k00_numpar = arrecad.k00_numpar
-                               and recibopaga.k00_receit = arrecad.k00_receit
+                               and recibopaga.k00_receit = arrecad.k00_receit and recibopaga.k00_hist <> 918
              left join issvar   on arrecad.k00_numpre    = q05_numpre
                                and arrecad.k00_numpar    = q05_numpar
              where k00_numnov= {$k03_numpre}
