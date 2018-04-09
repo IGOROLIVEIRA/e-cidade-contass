@@ -1155,7 +1155,7 @@ if (count($aParametrosEmpenho) > 0) {
     }
 
     var sComboInputHidden  = "<input type='hidden' id='tipoconta"+iCodMov+"' ";
-    var sComboInputText = "<input type='text' id='ctapag"+iCodMov+"' class='ctapag' onfocus='this.select();mostrarPesquisa("+iCodMov+")' onkeyup='pesquisaConta("+iCodMov+")' onclick='this.select();' onblur='fecharPesquisa("+iCodMov+");js_getSaldos("+iCodMov+")' placeholder='Selecione' title='' "+sDisabled;
+    var sComboInputText = "<input type='text' id='ctapag"+iCodMov+"' class='ctapag' onfocus='this.select();mostrarPesquisa("+iCodMov+")' onkeyup='pesquisaConta("+iCodMov+",event)' onkeydown='pesquisaConta("+iCodMov+",event)' onclick='this.select();' onblur='fecharPesquisa("+iCodMov+");js_getSaldos("+iCodMov+")' placeholder='Selecione' title='' "+sDisabled;
     
     var sComboUL = "<ul id='pesquisaConta"+iCodMov+"' class='pesquisaConta'>";
     if (aContas != null) {
@@ -2024,13 +2024,13 @@ if (count($aParametrosEmpenho) > 0) {
   verificaCadastroAutenticadora();
   $('col1').style.width = "10px";
 
-  function pesquisaConta(conta) {
+  function pesquisaConta(conta,event) {
     var input, filter, ul, li, a, i;
     input = document.getElementById("ctapag"+conta);
     filter = input.value.toUpperCase();
     ul = document.getElementById("pesquisaConta"+conta);
     li = ul.getElementsByTagName("li");
-    
+  
     for (i = 0; i < li.length; i++) {
       descricao = li[i].getElementsByTagName("span")[0];
       if (descricao.innerHTML.toUpperCase().indexOf(filter) > -1) {
@@ -2040,6 +2040,16 @@ if (count($aParametrosEmpenho) > 0) {
 
       }
     }
+
+    if (event.keyCode == 9) {
+      for (i = 0; i < li.length; i++) {
+        if (li[i].style.display == "") {
+          selecionarConta(li[i],conta);
+          break;
+        }
+      }
+    }
+    
   }
 
   function mostrarPesquisa(conta) {
