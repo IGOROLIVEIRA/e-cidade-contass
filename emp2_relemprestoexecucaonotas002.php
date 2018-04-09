@@ -232,58 +232,141 @@ $dtfim = $dtfim_ano . "-" . $dtfim_mes . "-" . $dtfim_dia;
 
 
 //filtro por agrupamento
+$arr_tipos = split(",",$vertipos);
+$ultimo = count($arr_tipos)-1;
 $sql_order = "";
-if ($tipo == "or") {// órgão - tabela orcdotacao
-    $sql_order = " order by o58_orgao,e60_anousu,e60_codemp::integer";
+$arr_vcampo;
+$arr_campo;
+
+
+for ($i = 0; $i < count($arr_tipos); $i++) {
+  $nivel = substr($arr_tipos[$i],0,2);
+
+  if ($nivel == "ex") {
+    $sql_order .= " order by e60_anousu ";
+    $arr_vcampo[]    = "vexercicio";
+    $arr_campo[]     = "e60_anousu";
+  }
+
+  if ($nivel == "or") {// órgão - tabela orcdotacao
+    if ($sql_order == "") {
+      $sql_order .= " order by o58_orgao ";
+    } else {
+        $sql_order .= " , o58_orgao";
+    }
+    $arr_vcampo[]    = "vorgao";
+    $arr_campo[]     = "o58_orgao";
+  }
+
+  if ($nivel == "un") {// unidade - tabela orcdotacao
+    if ($sql_order == "") {
+      $sql_order .= " order by o58_orgao, o58_unidade ";
+    } else {
+        $sql_order .= " , o58_unidade ";
+    }
+    $arr_vcampo[]    = "vunidade";
+    $arr_campo[]     = "o58_unidade";
+  }
+
+  if ($nivel == "fu") {//função  - tabela orcdotacao
+    if ($sql_order == "") {
+      $sql_order .= " order by o58_funcao ";
+    } else {
+        $sql_order .= " , o58_funcao";
+    }
+    $arr_vcampo[]    = "vfuncao";
+    $arr_campo[]     = "o58_funcao";
+  }
+
+  if ($nivel == "su") {//subfunção - tabela orcdotacao
+    if ($sql_order == "") {
+      $sql_order .= " order by o58_subfuncao ";
+    } else {
+        $sql_order .= " , o58_subfuncao ";
+    }
+    $arr_vcampo[]    = "vsubfuncao";
+    $arr_campo[]     = "o58_subfuncao";
+  }
+
+  if ($nivel == "pr") {//programa - tabela orcdotacao
+    if ($sql_order == "") {
+      $sql_order .= " order by o58_programa ";
+    } else {
+        $sql_order .= " , o58_programa ";
+    }
+    $arr_vcampo[]    = "vprograma";
+    $arr_campo[]     = "o58_programa";
+  }
+
+  if ($nivel == "pa") {//projeto atividade - tabela orcdotacao
+    if ($sql_order == "") {
+      $sql_order .= " order by o58_projativ ";
+    } else {
+        $sql_order .= " , o58_projativ ";
+    }
+    $arr_vcampo[]    = "vprojativ";
+    $arr_campo[]     = "o58_projativ";
+  }
+
+  if ($nivel == "el") {//elemento - tabela orcdotacao
+    if ($sql_order == "") {
+      $sql_order .= " order by o56_elemento ";
+    } else {
+        $sql_order .= " , o56_elemento ";
+    }
+    $arr_vcampo[]    = "velemento";
+    $arr_campo[]     = "o56_elemento";
+  }
+
+
+  if ($nivel == "de") {//desdobramento-tabela empelemento
+    if ($sql_order == "") {
+      $sql_order .= " order by e64_codele ";
+    } else {
+        $sql_order .= " , e64_codele ";
+    }
+    $arr_vcampo[]    = "vcodele";
+    $arr_campo[]     = "e64_codele";
+  }
+
+  if ($nivel == "re") {//recurso - tabela empresto
+    if ($sql_order == "") {
+      $sql_order .= " order by e91_recurso ";
+    } else {
+        $sql_order .= " , e91_recurso ";
+    }
+    $arr_vcampo[] = "vrecurso";
+    $arr_campo[] = "e91_recurso";
+  }
+
+
+  if ($nivel == "tr") {//resto - tabela empresto
+    if ($sql_order == "") {
+      $sql_order .= " order by e91_codtipo ";
+    } else {
+        $sql_order .= " , e91_codtipo ";
+    }
+    $arr_vcampo[] = "vtiporesto";
+    $arr_campo[] = "e91_codtipo";
+  }
+
+
+  if ($nivel == "cr") {//credor - tabela cgm
+    if ($sql_order == "") {
+      $sql_order .= " order by z01_nome ";
+    } else {
+        $sql_order .= " , z01_nome ";
+    }
+    $arr_vcampo[] = "vnumcgm";
+    $arr_campo[] = "z01_numcgm";
+  }
 }
 
-if ($tipo == "un") {// unidade - tabela orcdotacao
-    $sql_order = " order by  o58_orgao,o58_unidade,e60_anousu,e60_codemp::integer ";
+if(stristr($sql_order, 'e60_anousu') === FALSE) {
+    $sql_order .= " , e60_anousu, e60_codemp::integer ";
+} else {
+  $sql_order .= " , e60_codemp::integer";
 }
-
-if ($tipo == "fu") {//função  - tabela orcdotacao
-    $sql_order = " order by o58_funcao,e60_anousu,e60_codemp::integer";
-}
-
-if ($tipo == "su") {//subfunção - tabela orcdotacao
-    $sql_order = " order by o58_subfuncao,e60_anousu,e60_codemp::integer";
-}
-
-if ($tipo == "pr") {//programa - tabela orcdotacao
-    $sql_order = " order by o58_programa,e60_anousu,e60_codemp::integer";
-}
-
-if ($tipo == "pa") {//projeto atividade - tabela orcdotacao
-    $sql_order = " order by o58_projativ,e60_anousu,e60_codemp::integer";
-}
-
-if ($tipo == "el") {//elemento - tabela orcdotacao
-    $sql_order = " order by o58_codele,e60_anousu,e60_codemp::integer";
-}
-
-
-if ($tipo == "de") {//desdobramento-tabela empelemento
-    $sql_order = " order by e64_codele,e60_anousu,e60_codemp::integer";
-}
-
-if ($tipo == "re") {//recurso - tabela empresto
-    $sql_order = " order by e91_recurso,e60_anousu,e60_codemp::integer";
-}
-
-
-if ($tipo == "tr") {//resto - tabela empresto
-    $sql_order = "order by e91_codtipo,e60_anousu,e60_codemp::integer";
-}
-
-
-if ($tipo == "cr") {//credor - tabela cgm
-    $sql_order = " order by z01_nome,e60_anousu,e60_codemp::integer ";
-}
-/*OC5710*/
-if ($tipo == "ex") {//credor - tabela cgm
-    $sql_order = " order by e60_anousu,e60_codemp::integer ";
-}
-
 
 
 //filtro por restos a pagar
@@ -306,7 +389,6 @@ if ($commov == "3") {//liquidados
 
 if ($commov == "4") {//anulados
     $sql_where_externo .= " and (round(vlranu,2)) > 0";
-
 }
 
 
@@ -338,7 +420,6 @@ $sql_where_externo .= " and " . $sql_filtro;
 $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
 
 $res = $clempresto->sql_record($sqlempresto);//die($sqlempresto);
-
 if ($clempresto->numrows == 0) {
     db_redireciona("db_erros.php?fechar=true&db_erro=Sem movimentação de restos a pagar.");
     exit;
@@ -358,7 +439,21 @@ $vdesdobramento = null;
 $vrecurso = null;
 $vprograma = null;
 $vtiporesto = null;
-$vexercicio = null;//OC5710
+$vexercicio = null;
+$vcodele = null;
+
+/*$cnumcgm = null;
+$corgao = null;
+$cunidade = null;
+$cfuncao = null;
+$csubfuncao = null;
+$cprojativ = null;
+$celemento = null;
+$cdesdobramento = null;
+$crecurso = null;
+$cprograma = null;
+$ctiporesto = null;
+$cexercicio = null;*/
 
 //subtotal
 $vorgaosub = 0;
@@ -373,6 +468,41 @@ $vtiporestosub = 0;
 $vnumcgmsub = 0;
 $vdesdobramentosub = 0;
 $vexerciciosub = 0;//OC5710
+
+$cnumcgmanterior = 0;
+$corgaoanterior = 0;
+$cunidadeanterior = 0;
+$cfuncaoanterior = 0;
+$csubfuncaoanterior = 0;
+$cprojativanterior = 0;
+$celementoanterior = 0;
+$cdesdobramentoanterior = 0;
+$crecursoanterior = 0;
+$cprogramaanterior = 0;
+$ctiporestoanterior = 0;
+$cexercicioanterior = 0;
+
+$trocaexercicio = false;
+$trocaorgao  = false;
+$trocaorgao2 = false;
+$trocaunidade = false;
+$trocaunidade2 = false;
+$trocafuncao = false;
+$trocafuncao2 = false;
+$trocasubfuncao = false;
+$trocasubfuncao2 = false;
+$trocaprojativ = false;
+$trocaprojativ2 = false;
+$trocaelemento = false;
+$trocaelemento2 = false;
+$trocadesdobramento = false;
+$trocadesdobramento2 = false;
+$trocarecurso = false;
+$trocarecurso2 = false;
+$trocaprograma = false;
+$trocaprograma2 = false;
+$trocatiporesto = false;
+$trocatiporesto2 = false;
 
 $subtotal_rp_n_proc = 0;
 $subtotal_rp_proc = 0;
@@ -403,12 +533,12 @@ $total_liquidados_finais = 0;
 $total_geral_finais = 0;
 //
 
-
 $verifica = true;
 $estrutura = "";
 $projativ = "";
 $o55anousu = "";
 $vprojativ = "";
+$uIndice = count($arr_tipos)-1;
 if ($formato != "csv") {
     for ($x = 0; $x < $rows; $x++) {
         db_fieldsmemory($res, $x);
@@ -416,73 +546,121 @@ if ($formato != "csv") {
         cabecalho($pdf, $troca);
         $troca = 0;
 
-        //Exercício OC5710
-        if ($vexerciciosub != $e60_anousu and $tipo == "ex") {
-            if ($vexerciciosub != 0) {
+        if (substr($arr_tipos[$uIndice],0,2) == "ex") {
 
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+          if ($vexerciciosub != $e60_anousu) {
+
+              if ($vexerciciosub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
 
 
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
 
-            }
-            $vexerciciosub = $e60_anousu;
+              }
+
+              $vexerciciosub = $e60_anousu;
+          }
         }
 
         //subtotal
-        if ($vorgaosub != $o58_orgao and $tipo == "or") {
-            if ($vorgaosub != 0) {
+        if(substr($arr_tipos[$uIndice],0,2) == "or") {
+          $indice   = array_search('or', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i <= $indice-2; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
-
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vorgaosub = $o58_orgao;
-        }
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vorgaosub == $o58_orgao || $controle > 0) {
+              $vorgaosub = 0.1;
+            }
+          }
 
-        if ($vunidadesub != $o58_unidade and $tipo == "un") {
+          if ($vorgaosub != $o58_orgao) {
+
+              if ($vorgaosub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+              }
+
+              $vorgaosub = $o58_orgao;
+          }
+        }
+        //Unidades
+        if (substr($arr_tipos[$uIndice],0,2) == "un") {
+
+          $indice   = array_search('un', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i <= $indice-2; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
+
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
+            }
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vunidadesub == $o58_unidade || $controle > 0) {
+              $vunidadesub = 0.1;
+            }
+          }
+          if ($vunidadesub != $o58_unidade) {
+
             if ($vunidadesub != 0) {
-
                 $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
                 $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
                 $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
@@ -508,298 +686,495 @@ if ($formato != "csv") {
                 $subtotal_geral_finais = 0;
 
             }
+
             $vunidadesub = $o58_unidade;
+
+          }
         }
 
-        if ($vfuncaosub != $o58_funcao and $tipo == "fu") {
-            if ($vfuncaosub != 0) {
+        //Funções
+        if (substr($arr_tipos[$uIndice],0,2) == "fu") {
 
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+          $indice   = array_search('fu', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i <= $indice-2; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
-
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vfuncaosub = $o58_funcao;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vfuncaosub == $o58_funcao || $controle > 0) {
+              $vfuncaosub = 0.1;
+            }
+          }
+          if ($vfuncaosub != $o58_funcao) {
+              if ($vfuncaosub != 0) {
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+
+              }
+              $vfuncaosub = $o58_funcao;
+          }
         }
 
+        // Subfunções
+        if (substr($arr_tipos[$uIndice],0,2) == "su") {
+          $indice   = array_search('su', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i <= $indice-2; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-        if ($vsubfuncaosub != $o58_subfuncao and $tipo == "su") {
-            if ($vsubfuncaosub != 0) {
-
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
-
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vsubfuncaosub = $o58_subfuncao;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vsubfuncaosub == $o58_subfuncao || $controle > 0) {
+              $vsubfuncaosub = 0.1;
+            }
+          }
+          if ($vsubfuncaosub != $o58_subfuncao) {
+              if ($vsubfuncaosub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+
+              }
+              $vsubfuncaosub = $o58_subfuncao;
+          }
         }
 
+        // Programa
+        if (substr($arr_tipos[$uIndice],0,2) == "pr") {
+          $indice   = array_search('pr', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i < $indice-1; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-        if ($vprogramasub != $o58_programa and $tipo == "pr") {
-            if ($vprogramasub != 0) {
-
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
-
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vprogramasub = $o58_programa;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vprogramasub == $o58_programa || $controle > 0) {
+              $vprogramasub = 0.1;
+            }
+          }
+          if ($vprogramasub != $o58_programa) {
+              if ($vprogramasub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+
+              }
+              $vprogramasub = $o58_programa;
+          }
         }
 
+        // Projeto Ativo
+        if (substr($arr_tipos[$uIndice],0,2) == "pa") {
+          $indice   = array_search('pa', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i < $indice-1; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-        if ($vprojativsub != $o58_projativ and $tipo == "pa") {
-            if ($vprojativsub != 0) {
-
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
-
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vprojativsub = $o58_projativ;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vprojativsub == $o58_projativ || $controle > 0) {
+              $vprojativsub = 0.1;
+            }
+          }
+          if ($vprojativsub != $o58_projativ) {
+              if ($vprojativsub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+
+              }
+              $vprojativsub = $o58_projativ;
+          }
         }
 
+        // Elemento
+        if(substr($arr_tipos[$uIndice],0,2) == "el") {
+          $indice   = array_search('el', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i < $indice-1; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-        if ($velementosub != $o56_elemento and $tipo == "el") {
-            if ($velementosub != 0) {
-
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $velementosub = $o56_elemento;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $velementosub == $o56_elemento || $controle > 0) {
+              $velementosub = 0.1;
+            }
+          }
+          if ($velementosub != $o56_elemento) {
+              if ($velementosub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+              }
+              $velementosub = $o56_elemento;
+          }
         }
 
+        // Desdobramento
+        if (substr($arr_tipos[$uIndice],0,2) == "de") {
+          $indice   = array_search('de', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i < $indice-1; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-        if ($vdesdobramentosub != $e64_codele and $tipo == "de") {
-            if ($vdesdobramentosub != 0) {
-
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vdesdobramentosub = $e64_codele;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vdesdobramentosub == $e64_codele || $controle > 0) {
+              $vdesdobramentosub = 0.1;
+            }
+          }
+          if ($vdesdobramentosub != $e64_codele) {
+              if ($vdesdobramentosub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+              }
+              $vdesdobramentosub = $e64_codele;
+          }
         }
 
-        if ($vrecursosub != $e91_recurso and $tipo == "re") {
-            if ($vrecursosub != 0) {
+        // Recurso
+        if (substr($arr_tipos[$uIndice],0,2) == "re") {
+          $indice   = array_search('re', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i < $indice-1; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
-
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vrecursosub = $e91_recurso;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vrecursosub == $e91_recurso || $controle > 0) {
+              $vrecursosub = 0.1;
+            }
+          }
+          if ($vrecursosub != $e91_recurso) {
+              if ($vrecursosub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+
+              }
+              $vrecursosub = $e91_recurso;
+          }
+
         }
 
+        // Tipo de resto
+        if (substr($arr_tipos[$uIndice],0,2) == "tr") {
+          $indice   = array_search('tr', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i < $indice-1; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-        if ($vtiporestosub != $e91_codtipo and $tipo == "tr") {
-            if ($vtiporestosub != 0) {
-
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
-
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vtiporestosub = $e91_codtipo;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vtiporestosub == $e91_codtipo || $controle > 0) {
+              $vtiporestosub = 0.1;
+            }
+          }
+          if ($vtiporestosub != $e91_codtipo) {
+              if ($vtiporestosub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+
+              }
+              $vtiporestosub = $e91_codtipo;
+          }
         }
 
+        // Credor
+        if (substr($arr_tipos[$uIndice],0,2) == "cr") {
+          $indice   = array_search('cr', $arr_tipos);
+          $controle = 0;
+          for ($i=0; $i < $indice-1; $i++) {
+            $controle1 = $arr_vcampo[$i];
+            $controle2 = $arr_campo[$i];
 
-        if ($vnumcgmsub != $z01_numcgm and $tipo == "cr") {
-            if ($vnumcgmsub != 0) {
-
-                $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
-
-
-                $subtotal_rp_n_proc = 0;
-                $subtotal_rp_proc = 0;
-                $subtotal_anula_rp_n_proc = 0;
-                $subtotal_anula_rp_proc = 0;
-                $subtotal_mov_liquida = 0;
-                $subtotal_mov_pagmento = 0;
-                $subtotal_mov_pagnproc = 0;
-                $subtotal_aliquidar_finais = 0;
-                $subtotal_liquidados_finais = 0;
-                $subtotal_geral_finais = 0;
-
+            if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+              if ($$controle1 != $$controle2) {
+                $controle++;
+              }
             }
-            $vnumcgmsub = $z01_numcgm;
+          }
+          $controle1 = $arr_vcampo[$indice-1];
+          $controle2 = $arr_campo[$indice-1];
+          if ($controle1 != "" && $controle2 != "" && $$controle1 != "") {
+            if ($$controle1 != $$controle2 && $vnumcgmsub == $z01_numcgm || $controle > 0) {
+              $vnumcgmsub = 0.1;
+            }
+          }
+          if ($vnumcgmsub != $z01_numcgm) {
+              if ($vnumcgmsub != 0) {
+
+                  $pdf->Cell(80, $tam, "Subtotal", "TBR", 0, "C", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_liquidados_finais), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
+
+
+                  $subtotal_rp_n_proc = 0;
+                  $subtotal_rp_proc = 0;
+                  $subtotal_anula_rp_n_proc = 0;
+                  $subtotal_anula_rp_proc = 0;
+                  $subtotal_mov_liquida = 0;
+                  $subtotal_mov_pagmento = 0;
+                  $subtotal_mov_pagnproc = 0;
+                  $subtotal_aliquidar_finais = 0;
+                  $subtotal_liquidados_finais = 0;
+                  $subtotal_geral_finais = 0;
+
+              }
+              $vnumcgmsub = $z01_numcgm;
+          }
         }
 
 
         //filtro por:
-        /*OC5710*/
-        if ($tipo == "ex" and $vexercicio != $e60_anousu) {//Exercício
-            if (isset($quebradepagina) and $verifica == false) {
+        //Exercício
+        if (in_array("ex", $arr_tipos)) {
+
+          if ($vexercicio != $e60_anousu) {
+            if (isset($quebradepagina) and $verifica == false || ($pdf->getY() >= $pdf->h - 30)) {
                 $troca = 1;
                 cabecalho($pdf, $troca);
             }
@@ -809,165 +1184,246 @@ if ($formato != "csv") {
             $pdf->cell(0, 5, "Exercício: $e60_anousu ", 0, 1, "L", 0);
             $vexercicio = $e60_anousu;
             $verifica = false;
+            $indice  = array_search('ex', $arr_tipos);
+            $vcampo = $arr_vcampo[$indice+1];
+            $$vcampo = null;
+          }
         }
 
-        if ($tipo == "or" and $vorgao != $o58_orgao) {//orgão
-            if (isset($quebradepagina) and $verifica == false) {
+        //Orgão
+        if (in_array("or", $arr_tipos)) {
+
+          $indice  = array_search('or', $arr_tipos);
+
+          if ($vorgao != $o58_orgao) {
+
+            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
                 $troca = 1;
                 cabecalho($pdf, $troca);
             }
 
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
+
             $pdf->cell(0, 5, "Orgão: $o58_orgao $o40_descr ", 0, 1, "L", 0);
             $vorgao = $o58_orgao;
             $verifica = false;
-        }
+            $vcampo = $arr_vcampo[$indice+1];
+            $$vcampo = null;
 
-        if ($tipo == "un" and $vunidade != $o58_unidade) {//unidade
-            if (isset($quebradepagina) and $verifica == false) {
+          }
+        }
+        //Unidade
+        if (in_array("un", $arr_tipos)) {
+
+          if ($vunidade != $o58_unidade) {
+
+            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
                 $troca = 1;
                 cabecalho($pdf, $troca);
             }
 
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
-            $pdf->cell(0, 5, "Órgão:$o58_orgao $o40_descr  ", 0, 1, "L", 0);
+            if(!in_array("or", $arr_tipos)) {
+              $pdf->cell(0, 5, "Órgão:$o58_orgao $o40_descr  ", 0, 1, "L", 0);
+            }
             $pdf->cell(0, 5, "Unidade:$o58_unidade $o41_descr  ", 0, 1, "L", 0);
             $vunidade = $o58_unidade;
             $verifica = false;
+            $indice  = array_search('un', $arr_tipos);
+            $vcampo = $arr_vcampo[$indice+1];
+            $$vcampo = null;
+          }
         }
+        //Função
+        if (in_array("fu", $arr_tipos)) {
+          if ($vfuncao != $o58_funcao) {
 
-        if ($tipo == "fu" and $vfuncao != $o58_funcao) {//função
-            if (isset($quebradepagina) and $verifica == false) {
+            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
                 $troca = 1;
                 cabecalho($pdf, $troca);
             }
 
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
+            //$pdf->cell(0, 2, "", 0, 1, "", 0);
             $pdf->cell(0, 5, "Função:$o58_funcao $o52_descr", 0, 1, "L", 0);
             $vfuncao = $o58_funcao;
             $verifica = false;
+            $indice  = array_search('fu', $arr_tipos);
+            $vcampo = $arr_vcampo[$indice+1];
+            $$vcampo = null;
+          }
         }
-
-        if ($tipo == "su" and $vsubfuncao != $o58_subfuncao) {//subfuncao
-            if (isset($quebradepagina) and $verifica == false) {
+        //SubFunção
+        if (in_array("su", $arr_tipos)) {
+         if ($vsubfuncao != $o58_subfuncao) {
+            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
                 $troca = 1;
                 cabecalho($pdf, $troca);
             }
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
+            //$pdf->cell(0, 2, "", 0, 1, "", 0);
             $pdf->cell(0, 5, "Subfunção:$o58_subfuncao $o53_descr  ", 0, 1, "L", 0);
             $vsubfuncao = $o58_subfuncao;
             $verifica = false;
+            $indice  = array_search('su', $arr_tipos);
+            $vcampo = $arr_vcampo[$indice+1];
+            $$vcampo = null;
+          }
         }
 
-        if ($tipo == "pr" and $vprograma != $o58_programa) {//programa
-            if (isset($quebradepagina) and $verifica == false) {
-                $troca = 1;
-                cabecalho($pdf, $troca);
-            }
-            $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
-            $pdf->cell(0, 5, "Programa:$o58_programa $o54_descr ", 0, 1, "L", 0);
-            $vprograma = $o58_programa;
-            $verifica = false;
+        //Programa
+        if (in_array("pr", $arr_tipos)) {
+
+          if ($vprograma != $o58_programa) {
+              if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
+                  $troca = 1;
+                  cabecalho($pdf, $troca);
+              }
+              $pdf->SetFont('Arial', 'B', 7);
+              //$pdf->cell(0, 2, "", 0, 1, "", 0);
+              $pdf->cell(0, 5, "Programa:$o58_programa $o54_descr ", 0, 1, "L", 0);
+              $vprograma = $o58_programa;
+              $verifica = false;
+              $indice  = array_search('pr', $arr_tipos);
+              $vcampo = $arr_vcampo[$indice+1];
+              $$vcampo = null;
+          }
         }
 
-        if ($tipo == "pa" and $vprojativ != $o58_projativ) {//projetto atividade
-            if (isset($quebradepagina) and $verifica == false) {
+        //Projeto atividade
+        if (in_array("pa", $arr_tipos)) {
+
+          $indice  = array_search('pa', $arr_tipos);
+          if ($vprojativ != $o58_projativ) {
+            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
                 $troca = 1;
                 cabecalho($pdf, $troca);
             }
             if ($vprojativ != $o58_projativ or $o55anousu != $e60_anousu) {
 
-
                 $pdf->SetFont('Arial', 'B', 7);
-                $pdf->cell(0, 2, "", 0, 1, "", 0);
+                //$pdf->cell(0, 2, "", 0, 1, "", 0);
                 $pdf->cell(0, 5, "Projeto/atividade:$o58_projativ $o55_descr", 0, 1, "L", 0);
                 $projativ = $o58_projativ;
                 $vprojativ = $o58_projativ;
                 $o55anousu = $e60_anousu;
+                $vcampo = $arr_vcampo[$indice+1];
+                $$vcampo = null;
             }
-
             $verifica = false;
+
+          }
         }
-        if ($tipo == "el" and $velemento != $o56_elemento) {//elemento
-            if (isset($quebradepagina) and $verifica == false) {
-                $troca = 1;
-                cabecalho($pdf, $troca);
+        //Elemento
+        if (in_array("el", $arr_tipos)) {
+
+          if ($velemento != $o56_elemento) {
+            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
+              $troca = 1;
+              cabecalho($pdf, $troca);
             }
-            $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
-            $pdf->cell(0, 5, "Elemento:$o56_elemento  $o56_descr  ", 0, 1, "L", 0);
-            $velemento = $o56_elemento;
-            $verifica = false;
+              $pdf->SetFont('Arial', 'B', 7);
+              //$pdf->cell(0, 2, "", 0, 1, "", 0);
+              $pdf->cell(0, 5, "Elemento:$o56_elemento  $o56_descr  ", 0, 1, "L", 0);
+              $velemento = $o56_elemento;
+              $verifica = false;
+              $indice  = array_search('el', $arr_tipos);
+              $vcampo = $arr_vcampo[$indice+1];
+              $$vcampo = null;
+          }
         }
 
-        if ($tipo == "de") {//desdobramento
+        //Desdobramento
+        if (in_array("de", $arr_tipos)) {//desdobramento
 
+         $resdesdob = retorna_desdob(substr($o56_elemento, 0, 7), $e64_codele, $clorcelemento);
+         $numrows = pg_numrows($resdesdob);
 
-            $resdesdob = retorna_desdob(substr($o56_elemento, 0, 7), $e64_codele, $clorcelemento);
-            $numrows = pg_numrows($resdesdob);
-
-            for ($i = 0; $i < $numrows; $i++) {
-                db_fieldsmemory($resdesdob, $i);
-                if ($estrutural != $estrutura) {
-                    if (isset($quebradepagina) and $verifica == false) {
-                        $troca = 1;
-                        cabecalho($pdf, $troca);
-                    }
-
-                    $pdf->SetFont('Arial', 'B', 7);
-                    $pdf->cell(0, 3, "", 0, 1, "L", 0);
-                    $pdf->cell(0, 5, "Desdobramento:" . $estrutural . " " . $descr, 0, 1, "L", 0);
-                    $estrutura = $estrutural;
-                    $verifica = false;
-
+          for ($i = 0; $i < $numrows; $i++) {
+            db_fieldsmemory($resdesdob, $i);
+            if ($estrutura != $estrutural) {
+                if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
+                    $troca = 1;
+                    cabecalho($pdf, $troca);
                 }
 
+                /*if(substr($arr_tipos[0],0,2) == "de") {
+                  $pdf->cell(0, 2, "", 0, 1, "", 0);
+                }*/
+                $pdf->SetFont('Arial', 'B', 7);
+                $pdf->cell(0, 5, "Desdobramento:" . $estrutural . " " . $descr. " - " .$e64_codele, 0, 1, "L", 0);
+                $estrutura = $estrutural;
+                $verifica = false;
             }
-
+          }
+          if ($vcodele != $e64_codele) {
+            $vcodele = $e64_codele;
+            $indice  = array_search('de', $arr_tipos);
+            $vcampo  = $arr_vcampo[$indice+1];
+            $$vcampo = null;
+          }
         }
-        if ($tipo == "re" and $vrecurso != $e91_recurso) {//recurso
-            if (isset($quebradepagina) and $verifica == false) {
+
+        // Recurso
+        if (in_array("re", $arr_tipos)) {
+
+          if ($vrecurso != $e91_recurso) {
+              if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
+                  $troca = 1;
+                  cabecalho($pdf, $troca);
+              }
+              /*if(substr($arr_tipos[0],0,2) == "re") {
+                $pdf->cell(0, 2, "", 0, 1, "", 0);
+              }*/
+              $pdf->SetFont('Arial', 'B', 7);
+              $pdf->cell(0, 5, "Recurso:$e91_recurso $o15_descr  ", 0, 1, "L", 0);
+
+              $vrecurso = $e91_recurso;
+              $verifica = false;
+              $indice  = array_search('re', $arr_tipos);
+              $vcampo = $arr_vcampo[$indice+1];
+              $$vcampo = null;
+          }
+        }
+
+        //Resto
+        if (in_array("tr", $arr_tipos)) {
+
+         if ($vtiporesto != $e91_codtipo) {
+            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
                 $troca = 1;
                 cabecalho($pdf, $troca);
             }
-            $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
-            $pdf->cell(0, 5, "Recurso:$e91_recurso $o15_descr  ", 0, 1, "L", 0);
-            $vrecurso = $e91_recurso;
-            $verifica = false;
-        }
-
-        if ($tipo == "tr" and $vtiporesto != $e91_codtipo) {//tipo resto
-            if (isset($quebradepagina) and $verifica == false) {
-                $troca = 1;
-                cabecalho($pdf, $troca);
+            if(substr($arr_tipos[0],0,2) == "tr") {
+              $pdf->cell(0, 2, "", 0, 1, "", 0);
             }
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
             $pdf->cell(0, 5, "Tipo de resto: $e91_codtipo $e90_descr   ", 0, 1, "L", 0);
             $vtiporesto = $e91_codtipo;
             $verifica = false;
-
+            $indice  = array_search('tr', $arr_tipos);
+            $vcampo = $arr_vcampo[$indice+1];
+            $$vcampo = null;
+          }
         }
 
-
-        if ($tipo == "cr" and $vnumcgm != $z01_numcgm) {//credor
-            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 35)) {
+        //Credor
+        if (in_array("cr", $arr_tipos)) {
+         if ($vnumcgm != $z01_numcgm) {
+            if ((isset($quebradepagina) and $verifica == false) || ($pdf->getY() >= $pdf->h - 30)) {
                 $troca = 1;
                 cabecalho($pdf, $troca);
             }
+            if(substr($arr_tipos[0],0,2) == "cr") {
+              $pdf->cell(0, 2, "", 0, 1, "", 0);
+            }
             $pdf->SetFont('Arial', 'B', 7);
-            $pdf->cell(0, 2, "", 0, 1, "", 0);
             $pdf->cell(0, 5, "Credor:" . $z01_numcgm . " CNPJ:" . db_formatar($z01_cgccpf, 'cnpj') . " " . substr($z01_nome, 0, 100), 0, 1, "L", 0);
             $vnumcgm = $z01_numcgm;
             $verifica = false;
-
+          }
         }
+        /*--------------------------------FIM Credor--------------------------------*/
 
         //dados do relatório
         $pdf->SetFont('Arial', '', 7);

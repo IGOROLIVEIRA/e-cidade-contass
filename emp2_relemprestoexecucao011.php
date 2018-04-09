@@ -62,6 +62,7 @@ if ($oDaoEmpparam->numrows > 0 ) {
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
+
 </head>
 <body bgcolor=#CCCCCC bgcolor="#CCCCCC"  >
 <center>
@@ -132,18 +133,18 @@ if ($oDaoEmpparam->numrows > 0 ) {
            <td>
                <?
                  $acumu = array(
+                                "ex"=>"Exercício",
                                 "or"=>"Órgão",
-		                            "un"=>"Unidade",
-		                            "fu"=>"Função",
+                                "un"=>"Unidade",
+                                "fu"=>"Função",
                                 "su"=>"Subfunção",
-		                            "pr"=>"Programa",
+                                "pr"=>"Programa",
                                 "pa"=>"Projeto/Atividade",
-		                            "el"=>"Elemento",
-		                            "de"=>"Desdobramento",
-		                            "re"=>"Recurso",
-		                            "tr"=>"Tipo de resto",
-		                            "cr"=>"Credor",
-                                "ex"=>"Exercício"
+                                "el"=>"Elemento",
+                                "de"=>"Desdobramento",
+                                "re"=>"Recurso",
+                                "tr"=>"Tipo de resto",
+                                "cr"=>"Credor"
                                 );
                  db_select("tipo",$acumu,true,"text",2);
               ?>
@@ -245,7 +246,7 @@ if ($oDaoEmpparam->numrows > 0 ) {
 	    <tr>
      	 	<td colspan="2" align="center"><br>
          <input type="button" value="relatorio" onClick="js_emite()">
-
+         <input  name="vertipos" id="vertipos" type="hidden" value="">
 	 			</td>
      	</tr>
    </form>
@@ -259,6 +260,7 @@ if ($oDaoEmpparam->numrows > 0 ) {
 
 
 <script>
+document.forms[0].tipo.multiple = true;
 
 variavel = 1;
 function js_emite(){
@@ -268,7 +270,23 @@ function js_emite(){
      return false;
   }
 
-  vir="";
+  var tipo    = document.form1.tipo;
+  var vertipo = "";
+  var virgula = "";
+
+  for (var i = 0; i < tipo.options.length; i++){
+    if (tipo.options[i].selected == true){
+          vertipo += virgula+tipo.options[i].value;
+          virgula   = ",";
+    }
+  }
+  if (vertipo == "") {
+   alert('Você não escolheu nenhum Agrupamento. Verifique!');
+   return false;
+  }
+  document.form1.vertipos.value = vertipo;
+
+ vir="";
  listacredor="";
  for(x=0;x<parent.iframe_g2.document.form1.credor.length;x++){
   listacredor+=vir+parent.iframe_g2.document.form1.credor.options[x].value;
