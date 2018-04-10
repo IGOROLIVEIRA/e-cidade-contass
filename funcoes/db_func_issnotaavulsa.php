@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "issnotaavulsa.q51_sequencial as  db_q51_sequencial,issnotaavulsa.q51_numnota,q02_inscr,z01_nome,z01_cgccpf,issnotaavulsa.q51_dtemiss,issnotaavulsa.q51_hora,issnotaavulsa.q51_data";
+$campos = "issnotaavulsa.q51_sequencial,issnotaavulsa.q51_numnota,q02_inscr,z01_nome,z01_cgccpf,issnotaavulsa.q51_dtemiss,issnotaavulsa.q51_hora,issnotaavulsa.q51_data";
 ?>
