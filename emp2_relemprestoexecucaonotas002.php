@@ -196,6 +196,10 @@ if ($commov == "6") {
     $commovfiltro = "Não liquidados";
 }
 
+if ($commov=="7"){
+    $commovfiltro= "Com Saldo Liquidado a Pagar";
+}
+
 
 //$head1 = "INSTITUIÇÕE(S): ".$descr_inst. "\nPosição até: ".$dtfim. "\nAgrupado por: ".$tipofiltro. "\nRestos a pagar:".$commovfiltro;
 
@@ -399,6 +403,11 @@ if ($commov == "5") {//pagos
 
 if ($commov == "6") {//não liquidados
     $sql_where_externo .= "and (((round(round(e91_vlremp, 2) - (round(e91_vlranu, 2) + round(vlranu, 2)), 2)) - (round(e91_vlrliq, 2) + round(vlrliq, 2))) > 0) ";
+
+}
+
+if ($commov=="7"){//Com Saldo Liquidado a Pagar
+ $sql_where_externo .= "and (((round(round(e91_vlremp, 2) - (round(e91_vlranu, 2) + round(vlranu, 2)), 2)) - ( round(e91_vlrpag, 2) + round(vlrpag, 2) + round(vlrpagnproc,2) )) - ((round(round(e91_vlremp, 2) - (round(e91_vlranu, 2) + round(vlranu, 2)), 2)) - (round(e91_vlrliq, 2) + round(vlrliq, 2))) > 0) ";
 
 }
 

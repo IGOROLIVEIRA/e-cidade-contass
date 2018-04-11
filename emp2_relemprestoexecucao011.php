@@ -164,7 +164,8 @@ if ($oDaoEmpparam->numrows > 0 ) {
                                "3"=>"Com liquidação total/parcial",
                                "4"=>"Anulados",
                                "5"=>"Pagos",
-                               "6"=>"Com saldo a liquidar"
+                               "6"=>"Com saldo a liquidar",
+                               "7"=>"Com Saldo Liquidado a Pagar"
                               );
 
                 db_select("commov",$acumu,true,"text",2);
