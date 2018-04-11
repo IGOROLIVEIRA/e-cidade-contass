@@ -55,6 +55,8 @@ require_once("classes/db_conlancamlr_classe.php");
 require_once("classes/db_conlancamord_classe.php");
 require_once("classes/db_empord_classe.php");
 require_once("classes/db_empprestaitem_classe.php");
+require_once("classes/db_retencaoreceitas_classe.php");
+require_once("classes/db_retencaoempagemov_classe.php");
 
 $clconlancam      = new cl_conlancam;
 $clconlancamele   = new cl_conlancamele;
@@ -70,6 +72,7 @@ $clsaltes         = new cl_saltes;
 $clconplanoreduz  = new cl_conplanoreduz;
 $clconlancamord   = new cl_conlancamord;
 $clconlancamlr    = new cl_conlancamlr;
+
 
 /**
  * adicionados para incluir a agenda
@@ -427,7 +430,8 @@ db_postmemory($HTTP_POST_VARS);
 		  	    
 	  	    	$DtPagamento  = db_utils::fieldsMemory($rsSqlOpPaga, 0)->datapag;
 	  	    	
-	  	    	$sqlMesFechado = "SELECT * FROM condataconf  where c99_anousu = ".db_getsession("DB_anousu")." and c99_data >= '{$DtPagamento}'";
+	  	    	$sqlMesFechado = "SELECT * FROM condataconf  where c99_anousu = ".db_getsession("DB_anousu")." and c99_data >= '{$DtPagamento}' and 
+	  	    	c99_instit = ".db_getsession("DB_instit");
 	  	    	
 	  	    	$rsSqlMesFechado = db_query($sqlMesFechado);
 	  	        
@@ -460,7 +464,7 @@ db_postmemory($HTTP_POST_VARS);
 									  e53_vlranu,
 									  e53_vlrpag,
 									  e60_vlrliq,
-									  e60_vlrpag/*,e86_codmov,e90_codmov,e90_correto*/
+									  e60_vlrpag
 							   FROM pagordem
 							   INNER JOIN pagordemele ON pagordemele.e53_codord = pagordem.e50_codord
 							   INNER JOIN empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
@@ -481,7 +485,6 @@ db_postmemory($HTTP_POST_VARS);
 										o15_codigo,
 										o15_descr,
 										e60_anousu,
-										/*e86_codmov,e90_codmov,e90_correto,*/
 										e53_valor,
 										e53_vlranu,
 										e53_vlrpag,
@@ -560,36 +563,64 @@ db_postmemory($HTTP_POST_VARS);
                         }
                     }
 
-                    //-----------------------------------
-                    db_fim_transacao();
-                    db_inicio_transacao();
                     $sSqlRetentecao = "SELECT e20_sequencial FROM retencaopagordem WHERE e20_pagordem=".$ord;
                     $rsRetencao = db_query($sSqlRetentecao);
                     if(pg_num_rows($rsRetencao) > 0){
 
-                    	$sSqlIncluirAlterarRetencao="UPDATE retencaoreceitas
-													    SET e23_recolhido=false
-													  WHERE e23_retencaopagordem IN
-													        (SELECT (e20_sequencial)
-													         FROM retencaopagordem
-													         WHERE e20_pagordem=".$ord.")";
-						//echo $sSqlIncluirAlterarRetencao;
-						db_query($sSqlIncluirAlterarRetencao);
-                        $sSqlIncluirRetencaoAgenda="insert into retencaoempagemov 
-												  SELECT nextval('retencaoempagemov_e27_sequencial_seq'),
-												  e20_sequencial,(select e82_codmov from empord where e82_codord=".$ord."),true
+                        if($sqlerro==false){
+                            $sSqlIncluirAlterarRetencao="select e23_sequencial from retencaoreceitas where  e23_retencaopagordem in (SELECT e20_sequencial
+                                                                 FROM retencaopagordem
+                                                                 WHERE e20_pagordem=".$ord.")";
+                            $rsRetencaoReceitas = db_query($sSqlIncluirAlterarRetencao);
+
+                            for($r = 0; $r < pg_num_rows($rsRetencaoReceitas); $r++ ){
+
+                                $clretencaoreceitas    = new cl_retencaoreceitas;
+                                $clretencaoreceitas->e23_recolhido  = 'false';
+                                $clretencaoreceitas->e23_sequencial = db_utils::fieldsMemory($rsRetencaoReceitas,$r)->e23_sequencial;
+                                $clretencaoreceitas->alterar($clretencaoreceitas->e23_sequencial);
+                                $erro_msg = $clretencaoreceitas->erro_msg;
+
+                                if($clretencaoreceitas->erro_status==0){
+                                    $sqlerro = true;
+                                }
+                            }
+                        }
+                        if($sqlerro==false) {
+                            $sSqlIncluirRetencaoAgenda = "SELECT e23_sequencial AS e27_retencaoreceitas,
+                                                   (SELECT e82_codmov FROM empord WHERE e82_codord=" . $ord . ") AS e27_empagemov,
+                                                    TRUE AS e27_principal
 												  FROM retencaopagordem
-												INNER JOIN retencaoreceitas on e23_retencaopagordem=e20_sequencial
-												         WHERE e20_pagordem=".$ord;
-						db_query($sSqlIncluirRetencaoAgenda);
-						//echo $sSqlIncluirRetencaoAgenda;exit;
+												INNER JOIN retencaoreceitas ON e23_retencaopagordem=e20_sequencial
+												         WHERE e20_pagordem=" . $ord;
+
+
+                            $rsRetencaoEmpAgeMov = db_query($sSqlIncluirRetencaoAgenda);
+
+                            for ($t = 0; $t < pg_num_rows($rsRetencaoEmpAgeMov); $t++) {
+
+                                $oRetencaoEmAgeMov = db_utils::fieldsMemory($rsRetencaoEmpAgeMov, $t);
+                                $clretencaoempagemov = new cl_retencaoempagemov;
+                                $clretencaoempagemov->e27_empagemov = $oRetencaoEmAgeMov->e27_empagemov;
+                                $clretencaoempagemov->e27_principal = $oRetencaoEmAgeMov->e27_principal;
+                                $clretencaoempagemov->e27_retencaoreceitas = $oRetencaoEmAgeMov->e27_retencaoreceitas;
+                                $clretencaoempagemov->incluir();
+                                $erro_msg = $clretencaoempagemov->erro_msg;
+                                if ($clretencaoempagemov->erro_status == 0) {
+                                    $sqlerro = true;
+                                }
+                            }
+                        }
                     }
-                    db_fim_transacao();
+                    db_fim_transacao($sqlerro);
 		  	    	
 					 if ($rsExluirPagOp == false) {
 					    echo "<script> alert('Houve um erro ao excluir o pagamento!');</script>";
 			            db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
-					 } else {
+					 }elseif( $sqlerro) {
+                         echo "<script> alert('Houve um erro ao excluir o pagamento! {$erro_msg}');</script>";
+                         db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
+                     }else {
 			           echo "<script> alert('Pagamento excluído com sucesso!');</script>";
 			           db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 					 }
