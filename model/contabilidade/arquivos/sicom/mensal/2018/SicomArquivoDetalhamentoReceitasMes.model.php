@@ -227,13 +227,19 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           INNER JOIN orcreceita ON (c74_anousu, c74_codrec) = (o70_anousu, o70_codrec)
           INNER JOIN orctiporec ON o70_codigo = o15_codigo
           LEFT JOIN taborc ON (k02_anousu, k02_codrec) = (o70_anousu, o70_codrec)
+           AND k02_codigo = (SELECT max(k02_codigo) FROM taborc tab
+                             WHERE (tab.k02_codrec, tab.k02_anousu) = (taborc.k02_codrec, taborc.k02_anousu))
           LEFT JOIN conlancam ON c74_codlan = c70_codlan
           LEFT JOIN conlancamcgm ON c76_codlan = c70_codlan
           INNER JOIN CONLANCAMDOC ON C71_CODLAN = C70_CODLAN
           INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
           LEFT JOIN cgm ON conlancamcgm.c76_numcgm = z01_numcgm
           WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
-            AND substr(k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
+            AND (CASE 
+                    WHEN substr(k02_estorc,1,2) = '49'
+                        THEN substr(k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
+                    ELSE substr(k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8)."'
+                 END)
             AND c74_data   BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
           GROUP BY 1,2,3,4,c53_tipo, c70_valor
           ORDER BY 1,3,2";
