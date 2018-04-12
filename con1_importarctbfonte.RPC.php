@@ -64,10 +64,10 @@ try{
                             ." CodTCE =".$aDadosSicom[$i]->si95_codctb;
                         continue;
                     }
-//                    $clconctbsaldo->incluir($ces02_sequencial);
-//                    if($clconctbsaldo->erro_status == 0){
-//                        throw new Exception("Erro ao incluir Saldo: ".$clconctbsaldo->erro_msg);
-//                    }
+                    $clconctbsaldo->incluir($ces02_sequencial);
+                    if($clconctbsaldo->erro_status == 0){
+                        throw new Exception("Erro ao incluir Saldo: ".$clconctbsaldo->erro_msg);
+                    }
 
                 }
             }

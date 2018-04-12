@@ -130,7 +130,7 @@ class ContaPlanoPCASP extends ContaPlano {
     if (!empty($this->iCodigoConta)) {
       $lInclusao = false;
     }
-    if($this->getAno() <= 2014){
+    if($this->getAno() <= 2017){
     	$iUltimoAno = $this->getAno();// $this->getUltimoAnoPlano();
     }else{
     	$iUltimoAno = $this->getUltimoAnoPlano();
@@ -273,7 +273,7 @@ class ContaPlanoPCASP extends ContaPlano {
      * Insere os dados de acordo com o último ano cadastrado na tabela conplano.
      * Percorre um FOR inserindo na conplanoreduz utilizando o mesmo código reduzido (c61_reduz) sempre.
      */
-    if($this->getAno() <= 2014){
+    if($this->getAno() <= 2017){
     	$iUltimoAno = $this->getAno();
     }else{
     	$iUltimoAno = $this->getUltimoAnoPlano();
