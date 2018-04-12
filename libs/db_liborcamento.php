@@ -963,7 +963,9 @@ function db_rpsaldo($anousu = "", $w_instit = "=1", $dt_ini = "", $dt_fin = "", 
 // quando for zero o sistema trata como se não existisse e portanto da erro nos relatorios
 // tive que colocar em vez de zero, -1 para nao ficar fora de ordem
 // para funcionar corretamente deverá ser alterado todos os relatorios que utilizam esta funcao
-function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = true, $where = '', $anousu = null, $dataini = null, $datafim = null, $primeiro_fim = 8, $segundo_inicio = 0, $retsql = false, $tipo_balanco = 1, $desmembra_segundo_inicio = true, $subelemento = 'nao') {
+// para funcionar corretamente deverá ser alterado todos os relatorios que utilizam esta funcao
+// a pedido da OC067 foi adicionado o parâmetro $sinal que filtra as dotações negativas ou positivas
+function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = true, $where = '', $anousu = null, $dataini = null, $datafim = null, $primeiro_fim = 8, $segundo_inicio = 0, $retsql = false, $tipo_balanco = 1, $desmembra_segundo_inicio = true, $subelemento = 'nao', $sinal = null) {
 
   if ($anousu == null)
     $anousu = db_getsession("DB_anousu");
@@ -989,7 +991,15 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
   } else {
     $tipo_pa = 'pago';
   }
+  $whereSinal = "";
+  if($sinal == 1){
+    //mostra dotações positivas
+    $whereSinal=" where (dot_ini + suplemen_acumulado - reduzido_acumulado - empenhado_acumulado + anulado_acumulado) > 0 ";
+  }else if($sinal == 2){
+    //mostra dotações negativas
+    $whereSinal=" where (dot_ini + suplemen_acumulado - reduzido_acumulado - empenhado_acumulado + anulado_acumulado) < 0 ";
 
+  }
   //#00#//db_dotacaosaldo
   //#10#//Esta funcao retorna o recordset do saldo das dotações
   //#15#//db_dotacaosaldo($nivel=8, $tipo_nivel=1, $tipo_saldo=2, $descr=true, $where='', $anousu=null, $dataini=null, $datafim=null)
@@ -2282,6 +2292,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     oe.o56_anousu = $anousu
     left  outer join orctiporec  otr on o15_codigo   	 = o58_codigo
     ) as x
+    $whereSinal
     group by ".$xordem."
     order by ".$xordem;
 
