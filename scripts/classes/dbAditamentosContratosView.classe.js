@@ -1451,9 +1451,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             if (iTipoAditamento != 6) {
 
                 oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
-                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance);
+                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
                 oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
-                //oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
             }
 
             aLinha[4] = oInputQuantidade.toInnerHtml();
@@ -1464,11 +1463,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             oInputUnitario.setReadOnly(iTipoAditamento == 6);
 
             if (iTipoAditamento != 6) {
-
-                oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
-                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance);
-                oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
-                //oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
+              oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value)");
+              oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); "+me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
+              oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
             }
 
             aLinha[5] = oInputUnitario.toInnerHtml();
@@ -1493,9 +1490,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode) {
             oBotaoDotacao.id = "dotacoes" + iSeq;
             oBotaoDotacao.value = "Dotações";
             oBotaoDotacao.disabled = !me.lLiberaDotacoes;
-            if (iTipoAditamento != 7) {
-                oBotaoDotacao.setAttribute("onclick", me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
-            }
+            oBotaoDotacao.setAttribute("onclick", me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
 
             aLinha[9]  = oBotaoDotacao.outerHTML;
             aLinha[10] = new String(iSeq);
