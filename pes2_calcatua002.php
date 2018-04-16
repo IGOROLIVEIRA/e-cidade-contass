@@ -94,45 +94,82 @@ function calcatua_bb($anofolha,$mesfolha,$where){
   $arq = '/tmp/calc_ativos.txt';
   $arquivo = fopen($arq,'w');  
 
-pg_query("drop sequence layout_ati_seq");
-pg_query("create sequence layout_ati_seq");
+/*pg_query("drop sequence layout_ati_seq");
+pg_query("create sequence layout_ati_seq");*/
 
-$sql = " select rh01_regist as matricula,
-       lpad(nextval('layout_ati_seq')::text,5,'0')
-       ||'#'
-       ||lpad(rh01_regist::text,9,'0')
-       ||'#'
-			 ||case when rh01_sexo = 'M' 
-			      then 1 
-						else 2 
-			   end 
-       ||'#'
-			 ||lpad(date_part('month',rh01_nasc)::text,2,'0')||date_part('year',rh01_nasc)::text
-       ||'#'
-       ||lpad(trim(translate(to_char(round(prov,2),'999999999.99'),'.','')),9,0)
-       ||'#'
-			 ||lpad(date_part('month',rh01_admiss)::text,2,'0')||date_part('year',rh01_admiss)::text
-       as todo
-       
-from rhpessoal
-     inner join rhpessoalmov on rh02_regist = rh01_regist 
-                            and rh02_anousu = $anofolha 
-			                      and rh02_mesusu = $mesfolha
-                            and rh01_instit = ".db_getsession('DB_instit')."
-     inner join rhlota       on r70_codigo  = rh02_lota
-                            and r70_instit  = rh02_instit
-     inner join rhfuncao     on rh37_funcao = rh01_funcao
-                            and rh37_instit = rh02_instit
-     inner join rhregime     on rh30_codreg = rh02_codreg
-                            and rh30_instit = rh02_instit
-     inner join (select r14_regist,
-                        sum(case when r14_pd != 3 and r14_pd = 1 then r14_valor else 0 end) as prov,
-			                  sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
-            			      sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base 
-                 from gerfsal 
-		             where r14_anousu = $anofolha 
-		             and r14_mesusu = $mesfolha
-		             group by r14_regist ) as sal on r14_regist = rh01_regist 
+$sql = " SELECT rh01_regist AS matricula,
+       '1'||'#' 
+       ||'1'||'#' 
+       ||instituicao.z01_cgccpf||'#' 
+       ||instituicao.z01_nome||'#' 
+       ||'1'||'#' 
+       ||'1'||'#' 
+       ||'1'||'#' 
+       ||case when rhfuncao.rh37_funcaogrupo != 2 then 4 else 2 end||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||lpad(rh01_regist::text,9,'0') ||'#' 
+       ||servidor.z01_cgccpf||'#' 
+       ||coalesce(servidor.z01_pis,' ')||'#' 
+       ||CASE
+          WHEN rh01_sexo = 'M' THEN 2
+          ELSE 1
+          END ||'#'
+       ||rh01_estciv||'#'
+       ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#' 
+       ||'1'||'#' 
+       ||' '||'#' 
+       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#' 
+       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#' 
+       ||rhfuncao.rh37_descr||'#' 
+       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#' 
+       ||rhfuncao.rh37_descr||'#' 
+       ||trim(translate(to_char(round(sal.salariobase,2),'999999999.99'),'.',','))||'#' 
+       ||trim(translate(to_char(round(sal.total,2),'999999999.99'),'.',','))||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||coalesce( 
+  (select (count(*)||'#' ||coalesce(to_char(( select rh31_dtnasc from rhdepend as depend 
+    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='C' limit 1), 'DD/MM/YYYY'),' ')||'#' 
+  ||coalesce((select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend depend 
+    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='C' limit 1),' ')||'#' 
+  ||to_char(max(rh31_dtnasc),'DD/MM/YYYY')||'#' 
+  ||(select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend as depend 
+    where depend.rh31_regist=rhdependente.rh31_regist and depend.rh31_dtnasc = 
+    (select max(rh31_dtnasc) from rhdepend as dependmax where dependmax.rh31_regist=depend.rh31_regist) limit 1)||'#' 
+  ||coalesce(to_char(( select rh31_dtnasc from rhdepend as depend where depend.rh31_regist=rhdependente.rh31_regist 
+    and rh31_gparen='O' limit 1), 'DD/MM/YYYY'),' ')||'#' 
+  ||coalesce((select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend as depend 
+    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='O' limit 1),' ')) as dependentes FROM rhdepend rhdependente 
+  WHERE rhdependente.rh31_regist=rh01_regist group by rh31_regist limit 1),' # # # # # # ')||'#'
+       ||' '||'#' 
+       ||' ' AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $anofolha
+AND rh02_mesusu = $mesfolha
+AND rh01_instit = ".db_getsession("DB_instit")."
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh01_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN
+    (SELECT r14_regist,
+            sum(CASE
+                    WHEN r14_rubric = 'R985' THEN r14_valor
+                    ELSE 0
+                END) AS salariobase,
+            sum(case when r14_pd = 1 then r14_valor else 0 end) as total
+     FROM gerfsal
+     WHERE r14_anousu = $anofolha
+         AND r14_mesusu = $mesfolha
+     GROUP BY r14_regist) AS sal ON r14_regist = rh01_regist
+
+     join db_config on codigo = rh01_instit
+     join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
+     join cgm servidor on servidor.z01_numcgm = rh01_numcgm
 where rh30_vinculo = 'A'
   and rh30_regime = 1
   $where ";
@@ -143,67 +180,11 @@ where rh30_vinculo = 'A'
   for($x = 0;$x < pg_numrows($result);$x++){
 //    echo 'Total de : '.$num.' / '.$x."\r";
    db_atutermometro($x,$num,'calculo_folha',1);
-    
-    $matric = pg_result($result,$x,'matricula');
-    
-    ////  verifica se tem conjuge
-    
-    $sql1 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'YYYY') as nasc
-             from rhdepend
-	     where rh31_gparen = 'C' 
-	       and rh31_regist = $matric 
-	     limit 1";
-				 
-    $res1 = pg_query($sql1);
-    
-    if(pg_numrows($res1) > 0){
-      $dtconj  = pg_result($res1,0,'nasc');
-      $temconj = 'S'; 
-    }else{
-      $dtconj = '0000';
-      $temconj = 'N'; 
-    }
-    
-    ////  verifica numero de filhos
-    
-    $sql2 = "select lpad(count(*)::text,2,'0') as soma_filhos
-             from rhdepend
-             where rh31_gparen = 'F' 
-	             and rh31_regist = $matric 
-	          ";
-				 
-    $res2 = pg_query($sql2);
-    
-    if(pg_numrows($res2) > 0){
-      $numfilhos = pg_result($res2,0,'soma_filhos');
-    }else{
-      $numfilhos = '00';
-    }
-    
-    ////  verifica ano de nasc do filho cacula
-    
-    $sql3 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res3 = pg_query($sql3);
-    
-    if(pg_numrows($res3) > 0){
-      $cacula = pg_result($res3,0,'nasc');
-    }else{
-      $cacula = '0000';
-    }
-
-    $mesfolhaes_inss     = "000";
-		$anofolhas_trabalho  = "1";
-		$mesfolhaes_anterior = "000";
-		
-  fputs($arquivo,pg_result($result,$x,'todo')."#".$mesfolhaes_inss."#".$dtconj."#".$cacula."#".$numfilhos."#".$anofolhas_trabalho."#".$mesfolhaes_anterior."\r\n");
+	$todo = pg_result($result,$x,'todo');	
+  if (empty($todo)) {
+    continue;
+  }
+  fputs($arquivo,$todo."\r\n");
   }
   fclose($arquivo);
 
@@ -216,50 +197,87 @@ where rh30_vinculo = 'A'
 
   $arquivo = fopen($arq1,'w');  
 
-pg_query("drop sequence layout_ina_seq");
-pg_query("create sequence layout_ina_seq");
+/*pg_query("drop sequence layout_ina_seq");
+pg_query("create sequence layout_ina_seq");*/
 //echo "entrou no select"."\n\n";
 
-$sql = "select rh01_regist as matricula,
-       lpad(nextval('layout_pen_seq')::text,5,'0')
-       ||'#'
-       ||lpad(rh01_regist::text,9,'0')
-       ||'#'
-			 ||case when rh01_sexo = 'M' 
-			      then 1 
-						else 2 
-			   end 
-       ||'#'
-			 ||lpad(date_part('month',rh01_nasc)::text,2,'0')||date_part('year',rh01_nasc)::text
-       ||'#'
-			 ||lpad(date_part('day',rh01_admiss)::text,2,'0')||lpad(date_part('month',rh01_admiss)::text,2,'0')||date_part('year',rh01_admiss)::text
-       ||'#'
-       ||lpad(trim(translate(to_char(round(prov,2),'999999999.99'),'.','')),9,'0')
-       as todo
-       
-from rhpessoal
-     inner join rhpessoalmov on rh02_regist = rh01_regist 
-                            and rh02_anousu = $anofolha 
-			                      and rh02_mesusu = $mesfolha 
-                            and rh02_instit = ".db_getsession('DB_instit')."
-     inner join rhlota       on r70_codigo  = rh02_lota 
-                            and r70_instit  = rh02_instit
-     inner join rhfuncao     on rh37_funcao = rh01_funcao
-                            and rh37_instit = rh02_instit
-     inner join rhregime     on rh30_codreg = rh02_codreg
-                            and rh30_instit = rh02_instit
-     inner join (select r14_regist,
-                        sum(case when r14_pd != 3 and r14_pd = 1 then r14_valor else 0 end) as prov,
-			                  sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
-            			      sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base 
-                 from gerfsal 
-		             where r14_anousu = $anofolha 
-		             and r14_mesusu = $mesfolha
-		             group by r14_regist ) as sal on r14_regist = rh01_regist 
+$sql = "SELECT rh01_regist AS matricula,
+       '1'||'#' 
+       ||'3'||'#' 
+       ||instituicao.z01_cgccpf||'#' 
+       ||instituicao.z01_nome||'#' 
+       ||'1'||'#' 
+       ||'1'||'#' 
+       ||'5'||'#' 
+       ||'3'||'#' 
+       ||case 
+          when rh02_rhtipoapos = 4 then 1
+          when rh02_rhtipoapos = 5 then 2
+          when rh02_rhtipoapos = 2 then 3
+          when rh02_rhtipoapos = 3 then 4
+          else 5 end||'#' 
+       ||' '||'#' 
+       ||rh01_regist||'#' 
+       ||servidor.z01_cgccpf||'#' 
+       ||coalesce(servidor.z01_pis,' ')||'#' 
+       ||CASE
+          WHEN rh01_sexo = 'M' THEN 2
+          ELSE 2
+          END ||'#'
+       ||rh01_estciv||'#'
+       ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#'
+       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#' 
+       ||trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'#' 
+       ||'0'||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#'
+       ||' '||'#' 
+       ||' '||'#' 
+       ||coalesce( 
+  (select (count(*)||'#' ||coalesce(to_char(( select rh31_dtnasc from rhdepend as depend 
+    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='C' limit 1), 'DD/MM/YYYY'),' ')||'#' 
+  ||coalesce((select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend depend 
+    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='C' limit 1),' ')||'#' 
+  ||to_char(max(rh31_dtnasc),'DD/MM/YYYY')||'#' 
+  ||(select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend as depend 
+    where depend.rh31_regist=rhdependente.rh31_regist and depend.rh31_dtnasc = 
+    (select max(rh31_dtnasc) from rhdepend as dependmax where dependmax.rh31_regist=depend.rh31_regist) limit 1)||'#' 
+  ||coalesce(to_char(( select rh31_dtnasc from rhdepend as depend where depend.rh31_regist=rhdependente.rh31_regist 
+    and rh31_gparen='O' limit 1), 'DD/MM/YYYY'),' ')||'#' 
+  ||coalesce((select case when rh31_especi = 'N' then '1' else '2' end as cond from rhdepend as depend 
+    where depend.rh31_regist=rhdependente.rh31_regist and rh31_gparen='O' limit 1),' ')) as dependentes FROM rhdepend rhdependente 
+  WHERE rhdependente.rh31_regist=rh01_regist group by rh31_regist limit 1),' # # # # # # ')
+        AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $anofolha
+AND rh02_mesusu = $mesfolha
+AND rh01_instit = ".db_getsession("DB_instit")."
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh01_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN
+    (SELECT r14_regist,
+            sum(case when r14_pd = 1 then r14_valor else 0 end) as prov,
+            sum(case when r14_pd = 2 then r14_valor else 0 end) as desco,
+            sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base
+     FROM gerfsal
+     WHERE r14_anousu = $anofolha
+         AND r14_mesusu = $mesfolha
+     GROUP BY r14_regist) AS sal ON r14_regist = rh01_regist
+
+     join db_config on codigo = rh01_instit
+     join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
+     join cgm servidor on servidor.z01_numcgm = rh01_numcgm 
 where rh30_vinculo = 'I' 
   $where ";
   
-//  echo $sql;
+//  echo $sql;exit;
   $result = pg_query($sql);
 //  echo "gerou o result"."\n\n";
   $num = pg_numrows($result);
@@ -270,7 +288,11 @@ where rh30_vinculo = 'I'
 
     $matric = pg_result($result,$x,'matricula');
 		
-  fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
+  $todo = pg_result($result,$x,'todo'); 
+  if (empty($todo)) {
+    continue;
+  }
+  fputs($arquivo,$todo."\r\n");
   }
   fclose($arquivo);
 
@@ -285,58 +307,66 @@ where rh30_vinculo = 'I'
 
   $arquivo = fopen($arq2,'w');  
 
-pg_query("drop sequence layout_pen_seq");
-pg_query("create sequence layout_pen_seq");
+/*pg_query("drop sequence layout_pen_seq");
+pg_query("create sequence layout_pen_seq");*/
 
 //echo "entrou no select"."\n\n";
 
-$sql = " select rh01_regist as matricula,
-       lpad(nextval('layout_pen_seq')::text,5,'0')
-       ||'#'
-       ||lpad(rh01_regist::text,9,'0')
-       ||'#'
-       ||lpad(trim(translate(to_char(round(prov,2),'999999999.99'),'.','')),9,0)
-       ||'#'
-			 ||date_part('year',rh01_nasc)::text
-       ||'#'
-			 ||'0000'
-       ||'#'
-			 ||'0'
-       ||'#'
-			 ||'00000000'
-       ||'#'
-			 ||'000'
-       ||'#'
-			 ||'000'
-       ||'#'
-			 ||case when rh01_sexo = 'M' 
-			      then 1 
-						else 2 
-			   end 
-       ||'#'
-			 ||lpad(date_part('month',rh01_admiss)::text,2,'0')||date_part('year',rh01_admiss)::text
-       as todo
-       
-from rhpessoal
-     inner join rhpessoalmov on rh02_regist = rh01_regist 
-                            and rh02_anousu = $anofolha 
-			                      and rh02_mesusu = $mesfolha 
-     inner join rhlota       on r70_codigo = rh02_lota 
-     inner join rhfuncao     on rh37_funcao = rh01_funcao
-                            and rh37_instit = rh02_instit
-     inner join rhregime on rh30_codreg = rh02_codreg
-     inner join (select r14_regist,
-                        sum(case when r14_pd != 3 and r14_pd = 1 then r14_valor else 0 end) as prov,
-			                  sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
-            			      sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base
-                 from gerfsal 
-		             where r14_anousu = $anofolha 
-		             and r14_mesusu = $mesfolha
-		             group by r14_regist ) as sal on r14_regist = rh01_regist 
+$sql = " SELECT rh01_regist AS matricula,
+       '1'||'#' 
+       ||'3'||'#' 
+       ||instituicao.z01_cgccpf||'#' 
+       ||instituicao.z01_nome||'#' 
+       ||'1'||'#' 
+       ||'1'||'#' 
+       ||'7'||'#' 
+       ||'3'||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||rh01_regist||'#' 
+       ||servidor.z01_cgccpf||'#' 
+       ||CASE
+          WHEN rh01_sexo = 'M' THEN 2
+          ELSE 1
+          END ||'#'
+       ||to_char(rh01_nasc, 'DD/MM/YYYY')||'#' 
+       ||to_char(rh01_admiss, 'DD/MM/YYYY')||'#'
+       ||trim(translate(to_char(round(sal.prov,2),'999999999.99'),'.',','))||'#' 
+       ||'0'||'#' 
+       ||'0'||'#' 
+       ||' '||'#' 
+       ||' '||'#' 
+       ||case when rh02_rhtipoapos = 4 then 2 else 1 end||'#' 
+       ||' ' AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $anofolha
+AND rh02_mesusu = $mesfolha
+AND rh01_instit = ".db_getsession("DB_instit")."
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh01_funcao
+AND rh37_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN
+    (SELECT r14_regist,
+            sum(case when r14_pd = 1 then r14_valor else 0 end) as prov,
+            sum(case when r14_pd = 2 then r14_valor else 0 end) as desco,
+            sum(case when r14_rubric = 'R992' then r14_valor else 0 end ) as base
+     FROM gerfsal
+     WHERE r14_anousu = $anofolha
+         AND r14_mesusu = $mesfolha
+     GROUP BY r14_regist) AS sal ON r14_regist = rh01_regist
+
+     join db_config on codigo = rh01_instit
+     join cgm instituicao on db_config.numcgm=instituicao.z01_numcgm
+     join cgm servidor on servidor.z01_numcgm = rh01_numcgm
 where rh30_vinculo = 'P'
   $where ";
   
-//  echo $sql;
+//  echo $sql;exit;
   $result = pg_query($sql);
 //  echo "gerou o result"."\n\n";
   $num = pg_numrows($result);
@@ -344,61 +374,6 @@ where rh30_vinculo = 'P'
 //    echo 'Total de : '.$num.' / '.$x."\r";
     
    db_atutermometro($x,$num,'calculo_folha2',1);
-
-    $matric = pg_result($result,$x,'matricula');
-    
-    ////  verifica se tem conjuge
-    
-    $sql1 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'YYYY') as nasc
-             from rhdepend
-	     where rh31_gparen = 'C' 
-	       and rh31_regist = $matric 
-	     limit 1";
-				 
-    $res1 = pg_query($sql1);
-    
-    if(pg_numrows($res1) > 0){
-      $dtconj  = pg_result($res1,0,'nasc');
-      $temconj = 'S'; 
-    }else{
-      $dtconj = '0000';
-      $temconj = 'N'; 
-    }
-    
-    ////  verifica numero de filhos
-    
-    $sql2 = "select lpad(count(*)::text,2,'0') as soma_filhos
-             from rhdepend
-             where rh31_gparen = 'F' 
-	             and rh31_regist = $matric 
-	          ";
-				 
-    $res2 = pg_query($sql2);
-    
-    if(pg_numrows($res2) > 0){
-      $numfilhos = pg_result($res2,0,'soma_filhos');
-    }else{
-      $numfilhos = '00';
-    }
-    
-    ////  verifica ano de nasc do filho cacula
-    
-    $sql3 = "select rh31_regist,
-                    to_char(rh31_dtnasc,'YYYY') as nasc
-             from rhdepend
-             where rh31_gparen = 'F' 
-	       and rh31_regist = $matric 
-	       order by rh31_dtnasc desc
-	     limit 1";
-				 
-    $res3 = pg_query($sql3);
-    
-    if(pg_numrows($res3) > 0){
-      $cacula = pg_result($res3,0,'nasc');
-    }else{
-      $cacula = '0000';
-    }
 
   fputs($arquivo,pg_result($result,$x,'todo')."\r\n");
   }
@@ -629,19 +604,19 @@ from rhpessoal
      inner join cgm          on rh01_numcgm = z01_numcgm
      inner join rhpessoalmov on rh02_regist = rh01_regist
                             and rh02_anousu = $anofolha
-			                      and rh02_mesusu = $mesfolha
+                           and rh02_mesusu = $mesfolha
      inner join rhlota       on r70_codigo = rh02_lota
      inner join rhfuncao     on rh37_funcao = rh01_funcao
                             and rh37_instit = rh02_instit
      inner join rhregime on rh30_codreg = rh02_codreg
      inner join (select r14_regist,
                         sum(case when r14_pd != 3 and r14_pd = 1 then r14_valor else 0 end) as prov,
-			                  sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
-                   			sum(case when r14_rubric = 'R981' then r14_valor else 0 end ) as base
+                       sum(case when r14_pd != 3 and r14_pd = 2 then r14_valor else 0 end) as desco,
+                         sum(case when r14_rubric = 'R981' then r14_valor else 0 end ) as base
                  from gerfsal
-		 where r14_anousu = $anofolha
-		   and r14_mesusu = $mesfolha
-		   group by r14_regist ) as sal on r14_regist = rh01_regist
+    where r14_anousu = $anofolha
+      and r14_mesusu = $mesfolha
+      group by r14_regist ) as sal on r14_regist = rh01_regist
 where rh30_vinculo = 'P'
   and rh30_regime = 1
   $where
