@@ -16,7 +16,7 @@
   </juncoes>
   <filtros>
     <filtro label="cnpj" condicao="a.z01_cgccpf = '$cnpj'" obrigatorio="true"/>
-    <!--    <filtro label=""     condicao="q02_dtbaixa is null"  obrigatorio="true" /> -->
+    <filtro label=""     condicao="q02_dtbaix is null"  obrigatorio="true" />
   </filtros>
   <agrupamento campos="" />
   <ordenacao   campos="a.z01_nome" />
