@@ -125,11 +125,11 @@ $iInstituicao = db_getsession("DB_instit");
         }
         
         if (isset($chave_ve01_codigo) && (trim($chave_ve01_codigo)!="") ) {
-	         $sql = $clveiculos->sql_query($chave_ve01_codigo,$campos,"ve01_codigo","ve01_codigo=$chave_ve01_codigo and instit = {$iInstituicao} ");
+	         $sql = $clveiculos->sql_query($chave_ve01_codigo,$campos,"ve01_codigo","ve01_codigo=$chave_ve01_codigo and ve01_instit = {$iInstituicao} ");
         } else if( isset($chave_ve01_placa) && (trim($chave_ve01_placa)!="") ) {
-           $sql = $clveiculos->sql_query("",$campos,"ve01_placa"," trim(ve01_placa) like '$chave_ve01_placa%' and instit = {$iInstituicao} ");
+           $sql = $clveiculos->sql_query("",$campos,"ve01_placa"," trim(ve01_placa) like '$chave_ve01_placa%' and ve01_instit = {$iInstituicao} ");
         } else {
-           $sql = $clveiculos->sql_query("",$campos,"ve01_codigo","$where and instit = {$iInstituicao} ");
+           $sql = $clveiculos->sql_query("",$campos,"ve01_codigo","$where and ve01_instit = {$iInstituicao} ");
         }
 
         $repassa = array();
@@ -143,7 +143,7 @@ $iInstituicao = db_getsession("DB_instit");
           if ($where!=""){
            	$where = " and ".$where;
           }	
-          $result = $clveiculos->sql_record($clveiculos->sql_query($pesquisa_chave,"*",null,"ve01_codigo=$pesquisa_chave $where and instit = {$iInstituicao} "));
+          $result = $clveiculos->sql_record($clveiculos->sql_query($pesquisa_chave,"*",null,"ve01_codigo=$pesquisa_chave $where and ve01_instit = {$iInstituicao} "));
           if($clveiculos->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$ve01_placa',false);</script>";
