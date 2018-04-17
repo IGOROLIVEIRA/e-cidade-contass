@@ -35,7 +35,15 @@ if (!isset($dtfim)) {
 
 
 $head1 = "RELATÓRIO DE DISPENSA DE TOMBAMENTO";
-$head3 = ($dtfim == $dtini)?"Não informado": "$dtini à $dtfim";
+  if($dInibd!="" && $dFimbd!=""){
+    $head3 = "de $dtini à $dtfim ";
+  }else if($dInibd!=""){
+    $head3 = "a partir de $dtini";
+  }else if($dFimbd){
+   $head3 = "até $dtfim";
+  }else{
+    $head3 = "não informado";
+  }
 
 $head5 = "Data : "  .$dbaixa;
 $head6 .= "Período : $head3 ";
@@ -56,7 +64,7 @@ try {
   e69_numero AS NF,
   z01_nome AS Fornecedor,
   coddepto AS Departamento,
-  m52_vlruni AS Valor,
+  e72_valor AS Valor,
   e60_codemp||'/'||e60_anousu AS Empenho,
   m51_codordem AS OC,
   e139_datadispensa AS Datadispensa
@@ -72,6 +80,8 @@ try {
   empempenho ON e60_numemp=e62_numemp
   INNER JOIN
   matordemitem ON (m52_numemp, m52_sequen) = (e62_numemp, e62_sequen)
+  LEFT JOIN
+  matordemitemanu ON m36_matordemitem=m52_codlanc
   INNER JOIN
   matordem ON m51_codordem=m52_codordem
   INNER JOIN
@@ -82,44 +92,40 @@ try {
   pcmater ON pc01_codmater=e62_item
   ";
   $sWhere = "";
-  $sCondicoes = "";
+  $sCondicoes = " WHERE m36_sequencial is null ";
 
-  if($head3!="Não informado"){
-
-    $sWhere = " WHERE ";
-    $sCondicoes .= $sWhere."e69_dtrecebe >= '{$dInibd}' AND e69_dtrecebe <= '{$dFimbd}' ";
-
+  if($dInibd!="" && $dFimbd!=""){
+    $sWhere = " AND ";
+    $sCondicoes .= $sWhere."e139_datadispensa >= '{$dInibd}' AND e139_datadispensa <= '{$dFimbd}' ";
+  }else if($dInibd!=""){
+    $sWhere = " AND ";
+    $sCondicoes .= $sWhere."e139_datadispensa >= '{$dInibd}'";
+  }else if($dFimbd){
+    $sWhere = " AND ";
+    $sCondicoes .= $sWhere."e139_datadispensa <= '{$dFimbd}'";
   }
   if(($pc01_codmater)!=""){
-    if($sWhere ==""){
-      $sWhere = " WHERE ";
-    }else{
-      $sWhere = " AND ";
-    }
+
+    $sWhere = " AND ";
     $sCondicoes .= $sWhere."pc01_codmater=$pc01_codmater";
   }
   if(($z01_numcgm)!=""){
-    if($sWhere ==""){
-      $sWhere = " WHERE ";
-    }else{
-      $sWhere = " AND ";
-    }
+    $sWhere = " AND ";
     $sCondicoes .= $sWhere."z01_numcgm=$z01_numcgm";
   }
   if(($e69_numero)!="" && ($e69_numero)!="S/N"){
-    if($sWhere ==""){
-      $sWhere = " WHERE ";
-    }else{
-      $sWhere = " AND ";
-    }
+
+    $sWhere = " AND ";
+
     $sCondicoes .= $sWhere."e69_numero='$e69_numero'";
   }
   $sSql .= $sCondicoes;
   $sSql .= " ORDER BY e139_datadispensa, pc01_codmater";
+
   $rsSql = db_query($sSql);
   $rsResultado = db_utils::getCollectionByRecord($rsSql);
-
-
+  // echo $sSql;
+  // die;
   if(pg_num_rows($rsSql)==0){
     //db_redireciona("db_erros.php?fechar=true&db_erro=Não forão encontrados registros.");
   }
@@ -153,7 +159,7 @@ ob_start();
         <th style="font-size:14px; width:10%; border:1px solid black;" >NF</th>
         <th style="font-size:14px; width:20%;border:1px solid black;" >Fornecedor</th>
         <th style="font-size:14px; width:5%; border:1px solid black;" >Depto.</th>
-        <th style="font-size:14px; width:7%; border:1px solid black;" >Valor</th>
+        <th style="font-size:14px; width:7%; border:1px solid black;" >Valor Total</th>
         <th style="font-size:14px; width:7%; border:1px solid black;" >Empenho</th>
         <th style="font-size:14px; width:10%; border:1px solid black;" >Ordem de Compra</th>
         <th style="font-size:14px; width:10%; border:1px solid black;" >Data Dispensa</th>
