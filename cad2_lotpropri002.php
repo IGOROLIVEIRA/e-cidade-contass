@@ -152,9 +152,12 @@ $sql = "select * from (
              z01_nome as possuidor,
              j01_tipoimp as tipo,
              j01_baixa,
-             z01_numcgm		
+             z01_numcgm,
+             j04_quadraregimo,
+             j04_loteregimo
      from proprietario      
      left join iptuconstr on j39_matric = proprietario.j01_matric
+     left join iptubaseregimovel on j04_matric = proprietario.j01_matric
      $where  
      group by
              proprietario.j01_matric,
@@ -170,14 +173,16 @@ $sql = "select * from (
              proprietario.z01_nome,
              proprietario.j01_tipoimp,
 			 j01_baixa,
-             z01_numcgm ) as x $order";
+             z01_numcgm,
+             j04_quadraregimo,
+             j04_loteregimo ) as x $order";
 
 $result = db_query($sql);
 $numrows = pg_numrows($result);
 if ($numrows == 0){
    db_redireciona('db_erros.php?fechar=true&db_erro=Nao existem registros cadastrados.');
 }
-$pdf = new PDF(); 
+$pdf = new PDF();
 $pdf->Open(); 
 $pdf->AliasNbPages(); 
 $total = 0;
@@ -197,12 +202,14 @@ for($x = 0; $x < $numrows;$x++){
       $pdf->cell(8,$alt,$RLj34_lote,1,0,"C",1);
       $pdf->cell(16,$alt,"Area Lote",1,0,"C",1);
       $pdf->cell(16,$alt,"Area Constr",1,0,"C",1);
-      $pdf->cell(50,$alt,"Testada Principal",1,0,"C",1);
+      $pdf->cell(45,$alt,"Testada Principal",1,0,"C",1);
       $pdf->cell(12,$alt,"N°",1,0,"C",1);
       $pdf->cell(15,$alt,"Compl",1,0,"C",1);
-      $pdf->cell(50,$alt,"Proprietario",1,0,"C",1);
+      $pdf->cell(45,$alt,"Proprietario",1,0,"C",1);
       $pdf->cell(28,$alt,"Cidade",1,0,"C",1);
-      $pdf->cell(50,$alt,"Possuidor",1,0,"C",1); 
+      $pdf->cell(44,$alt,"Possuidor",1,0,"C",1);
+      $pdf->cell(8,$alt,"Q.R.I",1,0,"C",1);
+      $pdf->cell(8,$alt,"L.R.I",1,0,"C",1);
       $pdf->cell(5,$alt,"Tp",1,1,"C",1); 
       $troca = 0;
       $p=0;
@@ -214,12 +221,14 @@ for($x = 0; $x < $numrows;$x++){
    $pdf->cell(8,$alt,$j34_lote,0,0,"L",$p);
    $pdf->cell(16,$alt,db_formatar($area_lote+0,'p'),0,0,"R",$p);
    $pdf->cell(16,$alt,db_formatar($area_const+0,'p'),0,0,"R",$p);
-   $pdf->cell(50,$alt,substr($testada_principal,0,30),0,0,"L",$p);
+   $pdf->cell(45,$alt,substr($testada_principal,0,30),0,0,"L",$p);
    $pdf->cell(12,$alt,$j39_numero,0,0,"R",$p);
    $pdf->cell(15,$alt,substr($j39_compl,0,9),0,0,"L",$p);
-   $pdf->cell(50,$alt,substr($proprietario,0,30),0,0,"L",$p);
+   $pdf->cell(45,$alt,substr($proprietario,0,30),0,0,"L",$p);
    $pdf->cell(28,$alt,substr($z01_municpri,0,29),0,0,"L",$p);
-   $pdf->cell(50,$alt,substr($possuidor,0,32),0,0,"L",$p);
+   $pdf->cell(44,$alt,substr($possuidor,0,32),0,0,"L",$p);
+   $pdf->cell(8,$alt,$j04_quadraregimo,0,0,"L",$p);
+   $pdf->cell(8,$alt,$j04_loteregimo,0,0,"L",$p);
    $pdf->cell(5,$alt,substr($tipo,0,1),0,1,"L",$p);
    
    if ($p==1)$p=0;
