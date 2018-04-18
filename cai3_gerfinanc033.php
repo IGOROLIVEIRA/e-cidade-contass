@@ -596,7 +596,10 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
                             iptucalc.j23_vlrisen,
                             j22_pontos,
                    sum(j22_valor) as j22_valor,
-                   sum(j22_vm2) as j22_vm2
+                   sum(j22_vm2) as j22_vm2,
+                   (select j21_valor from iptucalv 
+inner join cfiptu on j21_anousu = j18_anousu and j21_receit = j18_rpredi
+where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limit 1) as totaliptu
           from iptucalc
            left outer join iptucale on j22_matric = j23_matric and j22_anousu = j23_anousu
       where j23_matric = $origem
@@ -613,8 +616,12 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
                             j22_pontos
 order by iptucalc.j23_anousu desc limit 1
      ";
-     $Iptucalc = db_query($sqlIptucalc);
+     $Iptucalc = db_query($sqlIptucalc);//db_criatabela($Iptucalc);exit;
      $oIptucalc = db_utils::fieldsMemory($Iptucalc, 0);
+
+     $rsDescrQuadro = db_query("select j17_descr||' - R$'||j21_valor as descrquadro from iptucalv 
+inner join cfiptu on j21_anousu = j18_anousu inner join iptucalh on j21_codhis = j17_codhis
+where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}");
 
     $proprietario       = $z01_nome;
     $pdf1->bairropri    = $j13_descr;
@@ -640,6 +647,10 @@ order by iptucalc.j23_anousu desc limit 1
     $pdf1->aliqterr   = "-";
     $pdf1->imppred    = "-";
     $pdf1->impterr    = "-";
+    $pdf1->totaliptu  = trim(db_formatar($oIptucalc->totaliptu,'f'));
+    for ($iCont=0; $iCont < pg_num_rows($rsDescrQuadro); $iCont++) {
+      $pdf1->descrquadro .= db_utils::fieldsMemory($rsDescrQuadro, $iCont)->descrquadro."\n";
+    }
 
     $pdf1->pqllocal     = "PQL: {$pql_localizacao}";
 

@@ -135,16 +135,14 @@ if (($this->qtdcarne % 3 ) == 0 ){
   $this->objpdf->Text(66,$top+43,$this->lote);
   $this->objpdf->Text(88,$top+43,$this->impterr);
   $this->objpdf->Text(112,$top+43,$this->imppred);
-  $this->objpdf->Text(137,$top+43,trim(str_replace("R$","",$this->descr15)));
+  $this->objpdf->Text(137,$top+43,$this->totaliptu);
 
   $this->objpdf->SetFont('Arial','',6);
   $this->objpdf->Rect(157,$top+26,45,18,'DF');
   $this->objpdf->Text(160,$top+25,"COMPONENTES DO LANÇAMENTO");
   $this->objpdf->sety(33);
   $this->objpdf->setx(157);
-  $this->objpdf->MultiCell(45,3,$this->descr4_1,0,"L",0,0);
-  $this->objpdf->setx(157);
-  $this->objpdf->MultiCell(45,3,$this->descr4_2,0,"L",0,0);
+  $this->objpdf->MultiCell(45,3,$this->descrquadro,0,"L",0,0);
   $this->objpdf->sety(51);
   $this->objpdf->setx(10);
   $this->objpdf->SetFont('Arial','B',7);
