@@ -298,6 +298,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 	$sqlitem .= "        case when pc01_complmater = '' then pc01_descrmater else pc01_descrmater||' \\n('||pc01_complmater||')' end as pc01_descrmater, ";
 	$sqlitem .= "        e62_sequen, ";
   $sqlitem .= "        e62_numemp, ";
+  $sqlitem .= "        pc01_codmater, ";
   $sqlitem .= "        e62_quant, ";
 	$sqlitem .= "        e62_vltot, ";
 	$sqlitem .= "        e62_vlrun, ";
