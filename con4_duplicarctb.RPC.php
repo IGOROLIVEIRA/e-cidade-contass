@@ -58,6 +58,7 @@ switch ($oParam->exec) {
                 $oCtbAplic->tpaplicanterior =  $ctb->si95_tipoaplicacao;
                 $oCtbAplic->tpaplicnovo = $oConta->tpaplicnovo;
                 $oCtbAplic->tipoinstit = $oConta->tipoinstit;
+                $oCtbAplic->si95_reduz = $oConta->si95_reduz;
 
                 $aContasBancarias[] = $oCtbAplic;
             }

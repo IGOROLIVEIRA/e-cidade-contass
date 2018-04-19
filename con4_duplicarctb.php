@@ -153,6 +153,7 @@ $clrotulo->label("e60_codemp");
                 for (var i = 0; i < oRetorno.contas.length; i++) {
 
                     var lBloqueia = false;
+                    var lChecked = false;
                     with(oRetorno.contas[i]) {
 
                         var aLinha = new Array();
@@ -164,7 +165,8 @@ $clrotulo->label("e60_codemp");
                         aLinha[5]  = tpaplicanterior;
                         aLinha[6]  = tpaplicnovo;
                         aLinha[7]  = tipoinstit;
-                        oGridContas.addRow(aLinha, false, lBloqueia);
+                        lChecked = si95_reduz == "" ? false : true;
+                        oGridContas.addRow(aLinha, false, lBloqueia,lChecked);
 
                     }
                 }

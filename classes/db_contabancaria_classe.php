@@ -810,6 +810,7 @@ class cl_contabancaria {
         $sql .= " db83_descricao as descricao,";
         $sql .= " db83_tipoaplicacao as tpaplicanterior, ";
         $sql .= " 0 as tpaplicnovo, ";
+        $sql .= " si95_reduz, ";
         $sql .= " si09_tipoinstit as tipoinstit";
         $sql .= " from contabancaria ";
         $sql .= " inner join conplanocontabancaria on c56_contabancaria = db83_sequencial ";
@@ -817,6 +818,7 @@ class cl_contabancaria {
         $sql .= " and c56_anousu = c61_anousu ";
         $sql .= " inner join conplanoconta on c63_codcon=c61_codcon and c63_anousu=c61_anousu";
         $sql .= " left join infocomplementaresinstit on c61_instit = si09_instit ";
+        $sql .= " left join acertactb on si95_reduz = c61_reduz ";
         $sql .= " where  db83_tipoconta in (2,3) ";
         $sql .= " and c56_anousu = ".db_getsession("DB_anousu");
         $sql .= " and c61_instit= ".db_getsession("DB_instit");
