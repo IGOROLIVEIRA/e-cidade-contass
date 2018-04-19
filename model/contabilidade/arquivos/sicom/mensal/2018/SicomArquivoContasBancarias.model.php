@@ -227,58 +227,58 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           // vericando se o ctb foi enviado em 2018
           $sSqlVerifica = "SELECT * FROM ctb102018 ";
           $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco'";
-          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta'";
-          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta";
-          $sSqlVerifica .= "AND si95_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " ";
-          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco'";
+          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta'";
+          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta";
+          $sSqlVerifica .= " AND si95_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] ;
+          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
 
             // vericando se o ctb foi enviado em 2017
           $sSqlVerifica .= " UNION SELECT * FROM ctb102017 ";
           $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco' ";
-          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta' ";
-          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco' ";
+          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta' ";
+          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
 
             // vericando se o ctb foi enviado em 2016
           $sSqlVerifica .= " UNION SELECT * FROM ctb102016 ";
           $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco'";
-          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta'";
-          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco'";
+          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta'";
+          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
 
             // vericando se o ctb foi enviado em 2015
           $sSqlVerifica .= " UNION SELECT * FROM ctb102015 ";
           $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
-          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco'";
-          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta' ";
-          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco'";
+          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta' ";
+          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
 
           // vericando se o ctb foi enviado em 2014
           $sSqlVerifica .= " UNION SELECT * FROM ctb102014 ";
           $sSqlVerifica .= "WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce' ";
-          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco' ";
-          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
-          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
-          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta'";
-          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
-          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta ";
-          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
+          $sSqlVerifica .= " AND si95_banco = '$oRegistro10->c63_banco' ";
+          $sSqlVerifica .= " AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= " AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= " AND si95_contabancaria = '$oRegistro10->c63_conta'";
+          $sSqlVerifica .= " AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
 
           $rsResultVerifica = db_query($sSqlVerifica);
           $nCodTce = $oRegistro10->codctb;
@@ -295,7 +295,6 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                   if ($cCtb10->erro_status == 0) {
                       throw new Exception($cCtb10->erro_msg);
                   }
-
                   $nCodTce = DB_utils::fieldsMemory($rsResultVerifica,0)->si95_codctb;
               }
 
