@@ -162,9 +162,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit
-				    where  (k13_limite is null 
+				    where (k13_limite is null 
 				    or k13_limite >= '" . $this->sDataFinal . "') 
-				    and (date_part('MONTH',k13_dtimplantacao) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
+				    and (date_part('MONTH',k13_dtimplantacao) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " 
+				    or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
     //echo $sSqlGeral k13_reduz in (4190,4208) and;
     $rsContas = db_query($sSqlGeral);//db_criatabela($rsContas);
@@ -218,31 +219,94 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $cCtb10->recurso = $oRegistro10->recurso;
           $cCtb10->contas = array();
 
+          // vericando se o ctb foi enviado em 2018
+          $sSqlVerifica = "SELECT * FROM ctb102018 ";
+          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
+          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco'";
+          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta'";
+          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta";
+          $sSqlVerifica .= "AND si95_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " ";
+          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
 
-          $sSqlVerifica = "SELECT * FROM ctb102018 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
-          AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta'
-          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'
-          AND si95_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si95_instit = " . db_getsession('DB_instit');
-          $sSqlVerifica .= " UNION SELECT * FROM ctb102017 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
-          AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta'
-          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'" . " and si95_instit = " . db_getsession('DB_instit');
-          $sSqlVerifica .= " UNION SELECT * FROM ctb102016 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
-          AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta'
-          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'" . " and si95_instit = " . db_getsession('DB_instit');
-          $sSqlVerifica .= " UNION SELECT * FROM ctb102015 WHERE si95_codorgao = '$oRegistro10->si09_codorgaotce' AND si95_banco = '$oRegistro10->c63_banco'
-          AND si95_agencia = '$oRegistro10->c63_agencia' AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' AND si95_contabancaria = '$oRegistro10->c63_conta'
-          AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' AND si95_tipoconta = '$oRegistro10->tipoconta'" . " and si95_instit = " . db_getsession('DB_instit');
-          $rsResultVerifica = db_query($sSqlVerifica);//echo $sSqlVerifica;db_criatabela($rsResultVerifica);
+            // vericando se o ctb foi enviado em 2017
+          $sSqlVerifica .= " UNION SELECT * FROM ctb102017 ";
+          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
+          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco' ";
+          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta' ";
+          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
 
-          if (pg_num_rows($rsResultVerifica) == 0) {
+            // vericando se o ctb foi enviado em 2016
+          $sSqlVerifica .= " UNION SELECT * FROM ctb102016 ";
+          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
+          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco'";
+          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta'";
+          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
 
-            $cCtb10->incluir(null);
-            if ($cCtb10->erro_status == 0) {
-              throw new Exception($cCtb10->erro_msg);
-            }
+            // vericando se o ctb foi enviado em 2015
+          $sSqlVerifica .= " UNION SELECT * FROM ctb102015 ";
+          $sSqlVerifica .= "WHERE si95_codorgao::int = $oRegistro10->si09_codorgaotce ";
+          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco'";
+          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta' ";
+          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
 
+          // vericando se o ctb foi enviado em 2014
+          $sSqlVerifica .= " UNION SELECT * FROM ctb102014 ";
+          $sSqlVerifica .= "WHERE si95_codorgao::int = '$oRegistro10->si09_codorgaotce' ";
+          $sSqlVerifica .= "AND si95_banco = '$oRegistro10->c63_banco' ";
+          $sSqlVerifica .= "AND si95_agencia = '$oRegistro10->c63_agencia' ";
+          $sSqlVerifica .= "AND si95_digitoverificadoragencia = '$oRegistro10->c63_dvagencia' ";
+          $sSqlVerifica .= "AND si95_contabancaria = '$oRegistro10->c63_conta'";
+          $sSqlVerifica .= "AND si95_digitoverificadorcontabancaria = '$oRegistro10->c63_dvconta' ";
+          $sSqlVerifica .= "AND si95_tipoconta::int = $oRegistro10->tipoconta ";
+          $sSqlVerifica .= "AND si95_instit = " . db_getsession('DB_instit');
+
+          $rsResultVerifica = db_query($sSqlVerifica);
+          $nCodTce = $oRegistro10->codctb;
+          /*
+           * condição adicionada para criar um registro das contas bancaria de aplicação que foram alteradas o tipo de aplicação no MES de 01/2018
+           * a tabela acertactb será preenchida pelo menu CONTABILAIDE > PROCEDIMENTOS > DUPLICAR CTB
+           */
+          if (pg_num_rows($rsResultVerifica) != 0 && (db_getsession("DB_anousu") == 2018 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1)) {
+
+              $sql = "select * from  acertactb where si95_reduz =".$cCtb10->si95_codctb ;
+              $rsCtb = db_query($sql);
+              if (pg_num_rows($rsCtb) != 0) {
+                  $cCtb10->incluir(null);
+                  if ($cCtb10->erro_status == 0) {
+                      throw new Exception($cCtb10->erro_msg);
+                  }
+
+                  $nCodTce = DB_utils::fieldsMemory($rsResultVerifica,0)->si95_codctb;
+              }
+
+          }else {
+              if (pg_num_rows($rsResultVerifica) == 0 ){
+                  $cCtb10->incluir(null);
+                  if ($cCtb10->erro_status == 0) {
+                      throw new Exception($cCtb10->erro_msg);
+                  }
+              }else{
+
+                  $nCodTce = DB_utils::fieldsMemory($rsResultVerifica,0)->si95_codctb;
+              }
           }
           $cCtb10->contas[] = $oRegistro10->codctb;
+          $cCtb10->si95_codctb = $nCodTce;
           $aBancosAgrupados[$aHash] = $cCtb10;
 
         } else {
@@ -257,7 +321,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       }
 
     }
-    //echo "<pre>";print_r($aBancosAgrupados);exit;
+    //echo "<pre>";print_r($aBancosAgrupados);
     foreach ($aBancosAgrupados as $oContaAgrupada) {
 
 
@@ -666,20 +730,100 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
        */
       foreach ($aCtb20Agrupado as $oCtb20) {
         $cCtb20 = new cl_ctb202018();
-
+        $sql = "select * from  acertactb where si95_codtceant =".$oCtb20->si96_codctb ;
+        $rsCtb = db_query($sql);
+        $alterarAplicacao = false;
+        if (db_getsession("DB_anousu")==2018 && $this->sDataFinal['5'] . $this->sDataFinal['6']==1 && pg_num_rows($rsCtb) != 0) {
+            $oCtb = db_utils::fieldsMemory($rsCtb,0);
+            $alterarAplicacao = true;
+        }
         $cCtb20->si96_tiporegistro = $oCtb20->si96_tiporegistro;
         $cCtb20->si96_codorgao = $oCtb20->si96_codorgao;
         $cCtb20->si96_codctb = $oCtb20->si96_codctb;
         $cCtb20->si96_codfontrecursos = $oCtb20->si96_codfontrecursos;
         $cCtb20->si96_vlsaldoinicialfonte = $oCtb20->si96_vlsaldoinicialfonte;
-        $cCtb20->si96_vlsaldofinalfonte = $oCtb20->si96_vlsaldofinalfonte;
+        if(db_getsession("DB_anousu")==2018 && $this->sDataFinal['5'] . $this->sDataFinal['6']==1 && $alterarAplicacao)
+            $cCtb20->si96_vlsaldofinalfonte = 0;
+        else
+            $cCtb20->si96_vlsaldofinalfonte = $oCtb20->si96_vlsaldofinalfonte;
         $cCtb20->si96_mes = $oCtb20->si96_mes;
         $cCtb20->si96_instit = $oCtb20->si96_instit;
-
         $cCtb20->incluir(null);
         if ($cCtb20->erro_status == 0) {
-          throw new Exception($cCtb20->erro_msg);
+              throw new Exception($cCtb20->erro_msg);
         }
+        if( db_getsession("DB_anousu")==2018 && $this->sDataFinal['5'] . $this->sDataFinal['6']==1 && $alterarAplicacao){
+            if($oCtb20->si96_vlsaldoinicialfonte != 0) {
+
+                //criar o movimento de saldo do saldo da conta de origem
+                $cCtb21alt = new cl_ctb212018();
+                $cCtb21alt->si97_tiporegistro = 21;
+                $cCtb21alt->si97_codctb = $oCtb20->si96_codctb;
+                $cCtb21alt->si97_codfontrecursos = $cCtb20->si96_codfontrecursos;
+                $cCtb21alt->si97_codreduzidomov = $cCtb20->si96_sequencial . "6";
+                $cCtb21alt->si97_tipomovimentacao = 2;
+                $cCtb21alt->si97_tipoentrsaida = 6;
+                $cCtb21alt->si97_valorentrsaida = abs($oCtb20->si96_vlsaldofinalfonte);
+                $cCtb21alt->si97_codctbtransf = $oCtb->si95_reduz;
+                $cCtb21alt->si97_codfontectbtransf = $oCtb20->si96_codfontrecursos;
+                $cCtb21alt->si97_mes = $oCtb20->si96_mes;
+                $cCtb21alt->si97_reg20 = $cCtb20->si96_sequencial;
+                $cCtb21alt->si97_instit = $oCtb20->si96_instit;
+
+                $cCtb21alt->incluir(null);
+                if ($cCtb21alt->erro_status == 0) {
+
+                    throw new Exception($cCtb21alt->erro_msg);
+                }
+            }
+        }
+
+        if(db_getsession("DB_anousu")==2018 && $this->sDataFinal['5'] . $this->sDataFinal['6']==1  ){
+
+            if ($alterarAplicacao) {
+
+                $cCtb20alt = new cl_ctb202018();
+                $cCtb20alt->si96_tiporegistro = $oCtb20->si96_tiporegistro;
+                $cCtb20alt->si96_codorgao = $oCtb20->si96_codorgao;
+                $cCtb20alt->si96_codctb = $oCtb->si95_reduz;
+                $cCtb20alt->si96_codfontrecursos = $oCtb20->si96_codfontrecursos;
+                $cCtb20alt->si96_vlsaldoinicialfonte = 0;
+                $cCtb20alt->si96_vlsaldofinalfonte = $oCtb20->si96_vlsaldofinalfonte;
+                $cCtb20alt->si96_mes = $oCtb20->si96_mes;
+                $cCtb20alt->si96_instit = $oCtb20->si96_instit;
+                $cCtb20alt->incluir(null);
+                if ($cCtb20alt->erro_status == 0) {
+                    throw new Exception($cCtb20alt->erro_msg);
+                }
+                if($oCtb20->si96_vlsaldoinicialfonte != 0) {
+                    //zerar o saldo da conta de origem
+                    $cCtb20alt->si96_vlsaldofinalfonte = 0;
+
+                    //criar um moviemnto de entrada na conta de destino
+                    $cCtb21alt2 = new cl_ctb212018();
+                    $cCtb21alt2->si97_tiporegistro = 21;
+                    $cCtb21alt2->si97_codctb = $oCtb->si95_reduz;
+                    $cCtb21alt2->si97_codfontrecursos = $cCtb20alt->si96_codfontrecursos;
+                    $cCtb21alt2->si97_codreduzidomov = $cCtb20alt->si96_sequencial . "5";
+                    $cCtb21alt2->si97_tipomovimentacao = 1;
+                    $cCtb21alt2->si97_tipoentrsaida = 5;
+                    $cCtb21alt2->si97_valorentrsaida = abs($oCtb20->si96_vlsaldofinalfonte);
+                    $cCtb21alt2->si97_codctbtransf = $oCtb20->si96_codctb;
+                    $cCtb21alt2->si97_codfontectbtransf = $oCtb20->si96_codfontrecursos;
+                    $cCtb21alt2->si97_mes = $oCtb20->si96_mes;
+                    $cCtb21alt2->si97_reg20 = $cCtb20alt->si96_sequencial;
+                    $cCtb21alt2->si97_instit = $oCtb20->si96_instit;
+
+                    $cCtb21alt2->incluir(null);
+                    if ($cCtb21alt2->erro_status == 0) {
+
+                        throw new Exception($cCtb21alt2->erro_msg);
+                    }
+                }
+            }
+        }
+
+
 
         foreach ($oCtb20->ext21 as $oCtb21agrupado) {
 
@@ -697,6 +841,8 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
           $cCtb21->si97_mes = $oCtb21agrupado->si97_mes;
           $cCtb21->si97_reg20 = $cCtb20->si96_sequencial;
           $cCtb21->si97_instit = $oCtb21agrupado->si97_instit;
+
+
 
           $cCtb21->incluir(null);
           if ($cCtb21->erro_status == 0) {
@@ -751,6 +897,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 						  left join infocomplementaresinstit on si09_instit = c61_instit
 						    where k13_limite between '" . $this->sDataInicial . "' and '" . $this->sDataFinal . "'
 							  and c61_instit = " . db_getsession("DB_instit");
+
     $rsCtbEncerradas = db_query($sSqlCtbEncerradas);
     if (pg_num_rows($rsCtbEncerradas) != 0) {
 
@@ -775,6 +922,40 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
       }
 
+    }
+
+
+    //Procedimento realizado apenas para acerto do ano de 2018
+    if(db_getsession("DB_anousu")==2018 && $this->sDataFinal['5'] . $this->sDataFinal['6']==1){
+        /*
+         * REGISTRO 50 CONTAS ENCERRADAS
+         */
+        $sSqlCtbEncerradas2 = "select * from  acertactb left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+        $rsCtbEncerradas2 = db_query($sSqlCtbEncerradas2);
+        if (pg_num_rows($rsCtbEncerradas2) != 0) {
+
+            for ($iCont502018 = 0; $iCont502018 < pg_num_rows($rsCtbEncerradas2); $iCont502018++) {
+
+                $oMovi50 = db_utils::fieldsMemory($rsCtbEncerradas2, $iCont502018);
+
+                $cCtb50 = new cl_ctb502018();
+
+                $cCtb50->si102_tiporegistro = 50;
+                $cCtb50->si102_codorgao = $oMovi50->si09_codorgaotce;
+                $cCtb50->si102_codctb = $oMovi50->si95_codtceant;
+                $cCtb50->si102_situacaoconta = 'E';
+                $cCtb50->si102_datasituacao = '2018-01-31';
+                $cCtb50->si102_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $cCtb50->si102_instit = db_getsession("DB_instit");
+
+                $cCtb50->incluir(null);
+                if ($cCtb50->erro_status == 0) {
+                    throw new Exception($cCtb50->erro_msg);
+                }
+
+            }
+
+        }
     }
 
 

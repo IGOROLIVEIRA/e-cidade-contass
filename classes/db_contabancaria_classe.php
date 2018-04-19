@@ -795,5 +795,33 @@ class cl_contabancaria {
     }
     return $sql;
   }
+    function sql_query_copiactb(){
+        $sql  = "select si09_codorgaotce, c61_codcon as codcon ,c61_reduz as reduz , case when c61_codtce<>0 then c61_codtce else c61_reduz end as codctb, ";
+        $sql .= " c63_banco , ";
+        $sql .= " c63_agencia, ";
+        $sql .= " c63_conta, ";
+        $sql .= " c63_dvconta, ";
+        $sql .= " c63_dvagencia, ";
+        $sql .= " c63_identificador, ";
+        $sql .= " c63_codigooperacao, ";
+        $sql .= " c63_tipoconta, ";
+        $sql .= " case when db83_tipoconta in (2,3) then 2 else 1 end as tipoconta, ";
+        $sql .= " db83_conta||'-'||db83_dvconta as conta, ";
+        $sql .= " db83_descricao as descricao,";
+        $sql .= " db83_tipoaplicacao as tpaplicanterior, ";
+        $sql .= " 0 as tpaplicnovo, ";
+        $sql .= " si09_tipoinstit as tipoinstit";
+        $sql .= " from contabancaria ";
+        $sql .= " inner join conplanocontabancaria on c56_contabancaria = db83_sequencial ";
+        $sql .= " inner join conplanoreduz on c56_codcon = c61_codcon ";
+        $sql .= " and c56_anousu = c61_anousu ";
+        $sql .= " inner join conplanoconta on c63_codcon=c61_codcon and c63_anousu=c61_anousu";
+        $sql .= " left join infocomplementaresinstit on c61_instit = si09_instit ";
+        $sql .= " where  db83_tipoconta in (2,3) ";
+        $sql .= " and c56_anousu = ".db_getsession("DB_anousu");
+        $sql .= " and c61_instit= ".db_getsession("DB_instit");
+
+        return $sql;
+    }
 }
 ?>

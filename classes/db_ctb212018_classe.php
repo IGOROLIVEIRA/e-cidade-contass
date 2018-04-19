@@ -217,12 +217,12 @@ class cl_ctb212018 {
      }
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\n";
-         $this->erro_sql .= "Valores : ".$this->si97_sequencial;
+     $this->erro_sql .= "Valores : ".$this->si97_sequencial;
      $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
-     $resaco = $this->sql_record($this->sql_query_file($this->si97_sequencial));
+     /*$resaco = $this->sql_record($this->sql_query_file($this->si97_sequencial));
      if(($resaco!=false)||($this->numrows!=0)){
        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
        $acount = pg_result($resac,0,0);
@@ -241,7 +241,7 @@ class cl_ctb212018 {
        $resac = db_query("insert into db_acount values($acount,2010326,2010578,'','".AddSlashes(pg_result($resaco,0,'si97_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010326,2011322,'','".AddSlashes(pg_result($resaco,0,'si97_reg20'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010326,2011609,'','".AddSlashes(pg_result($resaco,0,'si97_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     }
+     }*/
      return true;
    } 
    // funcao para alteracao
@@ -359,7 +359,7 @@ class cl_ctb212018 {
      if($si97_sequencial!=null){
        $sql .= " si97_sequencial = $this->si97_sequencial";
      }
-     $resaco = $this->sql_record($this->sql_query_file($this->si97_sequencial));
+     /*$resaco = $this->sql_record($this->sql_query_file($this->si97_sequencial));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
@@ -393,7 +393,7 @@ class cl_ctb212018 {
          if(isset($GLOBALS["HTTP_POST_VARS"]["si97_instit"]) || $this->si97_instit != "")
            $resac = db_query("insert into db_acount values($acount,2010326,2011609,'".AddSlashes(pg_result($resaco,$conresaco,'si97_instit'))."','$this->si97_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-     }
+     }*/
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("
@@ -434,7 +434,7 @@ class cl_ctb212018 {
      }else{ 
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
-     if(($resaco!=false)||($this->numrows!=0)){
+     /*if(($resaco!=false)||($this->numrows!=0)){
        for($iresaco=0;$iresaco<$this->numrows;$iresaco++){
          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
          $acount = pg_result($resac,0,0);
@@ -454,7 +454,7 @@ class cl_ctb212018 {
          $resac = db_query("insert into db_acount values($acount,2010326,2011322,'','".AddSlashes(pg_result($resaco,$iresaco,'si97_reg20'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010326,2011609,'','".AddSlashes(pg_result($resaco,$iresaco,'si97_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-     }
+     }*/
      $sql = " delete from ctb212018
                     where ";
      $sql2 = "";
