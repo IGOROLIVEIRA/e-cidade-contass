@@ -161,12 +161,19 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				       join orctiporec on c61_codigo = o15_codigo
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
-				  left join infocomplementaresinstit on si09_instit = c61_instit
-				    where (k13_limite is null 
+				  left join infocomplementaresinstit on si09_instit = c61_instit";
+    if( db_getsession("DB_anousu") == 2018 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1) {
+        $sSqlGeral .= "where (k13_limite is null 
+				          or k13_limite >= '" . $this->sDataFinal . "') 
+    				     and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
+    }else {
+        $sSqlGeral .= "where (k13_limite is null 
 				    or k13_limite >= '" . $this->sDataFinal . "') 
 				    and (date_part('MONTH',k13_dtimplantacao) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " 
 				    or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
+    }
+
     //echo $sSqlGeral k13_reduz in (4190,4208) and;
     $rsContas = db_query($sSqlGeral);//db_criatabela($rsContas);
 
