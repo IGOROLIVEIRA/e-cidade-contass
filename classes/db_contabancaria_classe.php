@@ -796,7 +796,7 @@ class cl_contabancaria {
     return $sql;
   }
     function sql_query_copiactb(){
-        $sql  = "select si09_codorgaotce, c61_codcon as codcon ,c61_reduz as reduz , case when c61_codtce<>0 then c61_codtce else c61_reduz end as codctb, ";
+        $sql  = "select si09_codorgaotce, c61_codcon as codcon ,c61_reduz as reduz , case when c61_codtce <> 0 then c61_codtce else c61_reduz end as codctb, ";
         $sql .= " c63_banco , ";
         $sql .= " c63_agencia, ";
         $sql .= " c63_conta, ";

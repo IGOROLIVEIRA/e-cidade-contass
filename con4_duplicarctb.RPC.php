@@ -52,7 +52,7 @@ switch ($oParam->exec) {
                 $oCtbAplic = new stdClass();
                 $oCtbAplic->codcon = $oConta->codcon;
                 $oCtbAplic->reduz = $oConta->reduz;
-                $oCtbAplic->codctb = $ctb->si95_codctb!=null ? $ctb->si95_codctb:$oConta->reduz;
+                $oCtbAplic->codctb = $ctb->si95_codctb != null ? $ctb->si95_codctb : $oConta->codctb;
                 $oCtbAplic->conta = $oConta->conta;
                 $oCtbAplic->descricao = $oConta->descricao;
                 $oCtbAplic->tpaplicanterior =  $ctb->si95_tipoaplicacao;
