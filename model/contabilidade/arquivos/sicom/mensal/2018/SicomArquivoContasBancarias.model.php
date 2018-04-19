@@ -205,7 +205,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 
           $cCtb10->si95_tiporegistro = $oRegistro10->tiporegistro;
-          $cCtb10->si95_codctb = $oRegistro10->codtce != 0 ? $oRegistro10->codtce : $oRegistro10->codctb;
+          if( db_getsession("DB_anousu") == 2018 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1 ) {
+                $cCtb10->si95_codctb = $oRegistro10->codctb;
+          }else{
+                $cCtb10->si95_codctb = $oRegistro10->codtce != 0 ? $oRegistro10->codtce : $oRegistro10->codctb;
+          }
           $cCtb10->si95_codorgao = $oRegistro10->si09_codorgaotce;
           $cCtb10->si95_banco = $oRegistro10->c63_banco;
           $cCtb10->si95_agencia = $oRegistro10->c63_agencia;
