@@ -74,6 +74,16 @@ switch ($oParam->exec) {
         try {
             $erro = false;
             db_inicio_transacao();
+
+            $rsCriaTabela = db_query( sql() );
+
+            if(!$rsCriaTabela){
+                $erro=true;
+                $oRetorno->status = 2;
+                $oRetorno->message = urlencode("Erro ao criar tabela  acertactb: " . pg_last_error());
+                break;
+            }
+
             $sqldelete = "delete from acertactb;";
             $rsDelete = db_query($sqldelete);
 
@@ -85,17 +95,6 @@ switch ($oParam->exec) {
             }
             foreach ($oParam->contas as $reduz){
 
-                $rsCriaTabela = db_query( sql() );
-
-                if(!$rsCriaTabela){
-                    $erro=true;
-                    $oRetorno->status = 2;
-                    $oRetorno->message = urlencode("Erro ao criar tabela  acertactb: " . pg_last_error());
-                    break;
-                }
-
-
-
                 $sql = "insert into acertactb values($reduz->reduz,$reduz->codtceantigo)";
                 $rsConta = db_query($sql);
 
@@ -105,15 +104,6 @@ switch ($oParam->exec) {
                     $oRetorno->message = urlencode("Erro ao inserir na tabela  acertactb: " . pg_last_error());
                     break;
                 }
-
-//                $rsDeleteContaSicom = db_query(deleteSicomAnterior($reduz->codtceantigo));
-//
-//                if(!$rsDeleteContaSicom){
-//                    $erro=true;
-//                    $oRetorno->status = 2;
-//                    $oRetorno->message = urlencode("Erro ao deletar nas tabelas do sicom: " . pg_last_error());
-//                    break;
-//                }
 
             }
             db_fim_transacao($erro);
