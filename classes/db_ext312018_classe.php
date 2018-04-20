@@ -244,22 +244,22 @@ class cl_ext312018
     $this->numrows_incluir = pg_affected_rows($result);
     $resaco = $this->sql_record($this->sql_query_file($this->si127_sequencial));
     if (($resaco != false) || ($this->numrows != 0)) {
-      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-      $acount = pg_result($resac, 0, 0);
-      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-      $resac = db_query("insert into db_acountkey values($acount,2010878,'$this->si127_sequencial','I')");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010878,'','" . AddSlashes(pg_result($resaco, 0, 'si127_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010879,'','" . AddSlashes(pg_result($resaco, 0, 'si127_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010880,'','" . AddSlashes(pg_result($resaco, 0, 'si127_codreduzidoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010881,'','" . AddSlashes(pg_result($resaco, 0, 'si127_tipodocumentoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010882,'','" . AddSlashes(pg_result($resaco, 0, 'si127_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010883,'','" . AddSlashes(pg_result($resaco, 0, 'si127_codctb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2011333,'','" . AddSlashes(pg_result($resaco, 0, 'si127_codfontectb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010884,'','" . AddSlashes(pg_result($resaco, 0, 'si127_dtemissao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010885,'','" . AddSlashes(pg_result($resaco, 0, 'si127_vldocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010886,'','" . AddSlashes(pg_result($resaco, 0, 'si127_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2010887,'','" . AddSlashes(pg_result($resaco, 0, 'si127_reg30')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010356,2011640,'','" . AddSlashes(pg_result($resaco, 0, 'si127_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//      $acount = pg_result($resac, 0, 0);
+//      $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//      $resac = db_query("insert into db_acountkey values($acount,2010878,'$this->si127_sequencial','I')");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010878,'','" . AddSlashes(pg_result($resaco, 0, 'si127_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010879,'','" . AddSlashes(pg_result($resaco, 0, 'si127_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010880,'','" . AddSlashes(pg_result($resaco, 0, 'si127_codreduzidoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010881,'','" . AddSlashes(pg_result($resaco, 0, 'si127_tipodocumentoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010882,'','" . AddSlashes(pg_result($resaco, 0, 'si127_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010883,'','" . AddSlashes(pg_result($resaco, 0, 'si127_codctb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2011333,'','" . AddSlashes(pg_result($resaco, 0, 'si127_codfontectb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010884,'','" . AddSlashes(pg_result($resaco, 0, 'si127_dtemissao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010885,'','" . AddSlashes(pg_result($resaco, 0, 'si127_vldocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010886,'','" . AddSlashes(pg_result($resaco, 0, 'si127_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2010887,'','" . AddSlashes(pg_result($resaco, 0, 'si127_reg30')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      $resac = db_query("insert into db_acount values($acount,2010356,2011640,'','" . AddSlashes(pg_result($resaco, 0, 'si127_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
     
     return true;
@@ -382,48 +382,48 @@ class cl_ext312018
     }
     $resaco = $this->sql_record($this->sql_query_file($this->si127_sequencial));
     if ($this->numrows > 0) {
-      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2010878,'$this->si127_sequencial','A')");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_sequencial"]) || $this->si127_sequencial != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010878,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_sequencial')) . "','$this->si127_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_tiporegistro"]) || $this->si127_tiporegistro != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010879,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_tiporegistro')) . "','$this->si127_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_codreduzidoop"]) || $this->si127_codreduzidoop != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010880,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_codreduzidoop')) . "','$this->si127_codreduzidoop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_tipodocumentoop"]) || $this->si127_tipodocumentoop != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010881,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_tipodocumentoop')) . "','$this->si127_tipodocumentoop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_nrodocumento"]) || $this->si127_nrodocumento != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010882,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_nrodocumento')) . "','$this->si127_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_codctb"]) || $this->si127_codctb != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010883,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_codctb')) . "','$this->si127_codctb'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_codfontectb"]) || $this->si127_codfontectb != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2011333,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_codfontectb')) . "','$this->si127_codfontectb'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_dtemissao"]) || $this->si127_dtemissao != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010884,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_dtemissao')) . "','$this->si127_dtemissao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_vldocumento"]) || $this->si127_vldocumento != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010885,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_vldocumento')) . "','$this->si127_vldocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_mes"]) || $this->si127_mes != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010886,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_mes')) . "','$this->si127_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_reg30"]) || $this->si127_reg30 != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2010887,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_reg30')) . "','$this->si127_reg30'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si127_instit"]) || $this->si127_instit != "") {
-          $resac = db_query("insert into db_acount values($acount,2010356,2011640,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_instit')) . "','$this->si127_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
-      }
+//      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
+//              $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//              $acount = pg_result($resac, 0, 0);
+//              $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//              $resac = db_query("insert into db_acountkey values($acount,2010878,'$this->si127_sequencial','A')");
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_sequencial"]) || $this->si127_sequencial != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010878,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_sequencial')) . "','$this->si127_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_tiporegistro"]) || $this->si127_tiporegistro != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010879,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_tiporegistro')) . "','$this->si127_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_codreduzidoop"]) || $this->si127_codreduzidoop != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010880,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_codreduzidoop')) . "','$this->si127_codreduzidoop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_tipodocumentoop"]) || $this->si127_tipodocumentoop != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010881,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_tipodocumentoop')) . "','$this->si127_tipodocumentoop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_nrodocumento"]) || $this->si127_nrodocumento != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010882,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_nrodocumento')) . "','$this->si127_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_codctb"]) || $this->si127_codctb != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010883,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_codctb')) . "','$this->si127_codctb'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_codfontectb"]) || $this->si127_codfontectb != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2011333,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_codfontectb')) . "','$this->si127_codfontectb'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_dtemissao"]) || $this->si127_dtemissao != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010884,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_dtemissao')) . "','$this->si127_dtemissao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_vldocumento"]) || $this->si127_vldocumento != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010885,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_vldocumento')) . "','$this->si127_vldocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_mes"]) || $this->si127_mes != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010886,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_mes')) . "','$this->si127_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_reg30"]) || $this->si127_reg30 != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2010887,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_reg30')) . "','$this->si127_reg30'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//              if (isset($GLOBALS["HTTP_POST_VARS"]["si127_instit"]) || $this->si127_instit != "") {
+//                  $resac = db_query("insert into db_acount values($acount,2010356,2011640,'" . AddSlashes(pg_result($resaco, $conresaco, 'si127_instit')) . "','$this->si127_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//              }
+//      }
     }
     $result = db_query($sql);
     if ($result == false) {
@@ -471,24 +471,24 @@ class cl_ext312018
       $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
     }
     if (($resaco != false) || ($this->numrows != 0)) {
-      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-        $acount = pg_result($resac, 0, 0);
-        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-        $resac = db_query("insert into db_acountkey values($acount,2010878,'$si127_sequencial','E')");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010878,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010879,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010880,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_codreduzidoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010881,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_tipodocumentoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010882,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010883,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_codctb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2011333,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_codfontectb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010884,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_dtemissao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010885,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_vldocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010886,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2010887,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_reg30')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010356,2011640,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
+//      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
+//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+//        $acount = pg_result($resac, 0, 0);
+//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
+//        $resac = db_query("insert into db_acountkey values($acount,2010878,'$si127_sequencial','E')");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010878,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010879,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010880,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_codreduzidoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010881,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_tipodocumentoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010882,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010883,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_codctb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2011333,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_codfontectb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010884,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_dtemissao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010885,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_vldocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010886,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2010887,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_reg30')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//        $resac = db_query("insert into db_acount values($acount,2010356,2011640,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si127_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+//      }
     }
     $sql = " delete from ext312018
                     where ";

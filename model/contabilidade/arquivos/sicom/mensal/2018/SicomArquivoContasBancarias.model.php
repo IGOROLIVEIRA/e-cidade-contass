@@ -754,7 +754,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
               throw new Exception($cCtb20->erro_msg);
         }
         if( db_getsession("DB_anousu")==2018 && $this->sDataFinal['5'] . $this->sDataFinal['6']==1 && $alterarAplicacao){
-            if($oCtb20->si96_vlsaldoinicialfonte != 0) {
+            if($oCtb20->si96_vlsaldoinicialfonte > 0) {
 
                 //criar o movimento de saldo do saldo da conta de origem
                 $cCtb21alt = new cl_ctb212018();
@@ -776,6 +776,31 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
                     throw new Exception($cCtb21alt->erro_msg);
                 }
+            }else if($oCtb20->si96_vlsaldoinicialfonte < 0) {
+
+
+                //criar o movimento de saldo do saldo da conta de origem
+                $cCtb21alt = new cl_ctb212018();
+                $cCtb21alt->si97_tiporegistro = 21;
+                $cCtb21alt->si97_codctb = $oCtb->si95_reduz;
+                $cCtb21alt->si97_codfontrecursos = $cCtb20->si96_codfontrecursos;
+                $cCtb21alt->si97_codreduzidomov = $cCtb20->si96_sequencial . "6";
+                $cCtb21alt->si97_tipomovimentacao = 1;
+                $cCtb21alt->si97_tipoentrsaida = 5;
+                $cCtb21alt->si97_valorentrsaida = abs($oCtb20->si96_vlsaldofinalfonte);
+                $cCtb21alt->si97_codctbtransf = $oCtb20->si96_codctb;
+                $cCtb21alt->si97_codfontectbtransf = $oCtb20->si96_codfontrecursos;
+                $cCtb21alt->si97_mes = $oCtb20->si96_mes;
+                $cCtb21alt->si97_reg20 = $cCtb20->si96_sequencial;
+                $cCtb21alt->si97_instit = $oCtb20->si96_instit;
+
+                $cCtb21alt->incluir(null);
+                if ($cCtb21alt->erro_status == 0) {
+
+                    throw new Exception($cCtb21alt->erro_msg);
+                }
+            }else{
+
             }
         }
 
@@ -796,7 +821,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                 if ($cCtb20alt->erro_status == 0) {
                     throw new Exception($cCtb20alt->erro_msg);
                 }
-                if($oCtb20->si96_vlsaldoinicialfonte != 0) {
+                if($oCtb20->si96_vlsaldoinicialfonte > 0) {
                     //zerar o saldo da conta de origem
                     $cCtb20alt->si96_vlsaldofinalfonte = 0;
 
@@ -820,6 +845,32 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
                         throw new Exception($cCtb21alt2->erro_msg);
                     }
+                }else if($oCtb20->si96_vlsaldoinicialfonte < 0) {
+                    //zerar o saldo da conta de origem
+                    $cCtb20alt->si96_vlsaldofinalfonte = 0;
+
+                    //criar um moviemnto de saida na conta de destino
+                    $cCtb21alt2 = new cl_ctb212018();
+                    $cCtb21alt2->si97_tiporegistro = 21;
+                    $cCtb21alt2->si97_codctb = $oCtb20->si96_codctb ;
+                    $cCtb21alt2->si97_codfontrecursos = $cCtb20alt->si96_codfontrecursos;
+                    $cCtb21alt2->si97_codreduzidomov = $cCtb20alt->si96_sequencial . "5";
+                    $cCtb21alt2->si97_tipomovimentacao = 2;
+                    $cCtb21alt2->si97_tipoentrsaida = 6;
+                    $cCtb21alt2->si97_valorentrsaida = abs($oCtb20->si96_vlsaldofinalfonte);
+                    $cCtb21alt2->si97_codctbtransf = $oCtb->si95_reduz;
+                    $cCtb21alt2->si97_codfontectbtransf = $oCtb20->si96_codfontrecursos;
+                    $cCtb21alt2->si97_mes = $oCtb20->si96_mes;
+                    $cCtb21alt2->si97_reg20 = $cCtb20alt->si96_sequencial;
+                    $cCtb21alt2->si97_instit = $oCtb20->si96_instit;
+
+                    $cCtb21alt2->incluir(null);
+                    if ($cCtb21alt2->erro_status == 0) {
+
+                        throw new Exception($cCtb21alt2->erro_msg);
+                    }
+                }else{
+
                 }
             }
         }

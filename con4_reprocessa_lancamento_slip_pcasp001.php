@@ -130,7 +130,7 @@ if (isset($_POST["processar"])) {
 
                     where corrente.k12_data between '{$sData}' and '{$sDataFinal}'
                       and corrente.k12_instit = ".db_getsession("DB_instit")."
-                      and cls.c84_slip is null
+                      
                       and slip.k17_debito<>slip.k17_credito
                     order by corrente.k12_data,
                              corrente.k12_id,
@@ -138,6 +138,7 @@ if (isset($_POST["processar"])) {
 
     //die($sSqlReceita);
     $rsReceitas   = db_query($sSqlReceita);
+    //db_criatabela($rsReceitas);exit;
     $iTotalLinhas = pg_num_rows($rsReceitas);
     echo "<pre>";
     $aSlipIncluidosTipo = array();
@@ -145,7 +146,34 @@ if (isset($_POST["processar"])) {
     $aSlipOperacao      = array();
     for ($i = 0; $i < $iTotalLinhas; $i++) {
 
-       $oDadosAutenticacao = db_utils::fieldsMemory($rsReceitas, $i);
+        $oDadosAutenticacao = db_utils::fieldsMemory($rsReceitas, $i);
+
+        $sSqlDelLancSlip  = "drop table if EXISTS  w_lancamentos; ";
+        $sSqlDelLancSlip .= "create temporary table w_lancamentos on commit drop as ";
+        $sSqlDelLancSlip .= " select c84_conlancam as lancam from conlancamslip  where c84_slip in  ($oDadosAutenticacao->slip); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamemp WHERE c75_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancambol WHERE c77_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamcgm WHERE c76_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamdig WHERE c78_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamdoc WHERE c71_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamdot WHERE c73_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamord WHERE c80_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamrec WHERE c74_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM contacorrentedetalhe WHERE c19_sequencial IN (SELECT c28_sequencial FROM contacorrentedetalheconlancamval WHERE c28_conlancamval IN (SELECT lancam FROM w_lancamentos)); ";
+        $sSqlDelLancSlip .= "DELETE FROM contacorrentedetalheconlancamval WHERE c28_conlancamval IN (SELECT c69_sequen FROM conlancamval WHERE c69_codlan IN (SELECT lancam FROM w_lancamentos)); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamval WHERE c69_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamcompl WHERE c72_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancampag WHERE c82_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamslip WHERE c84_conlancam IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancaminstit WHERE c02_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamordem WHERE c03_codlan IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancamcorrente WHERE c86_conlancam IN (SELECT lancam FROM w_lancamentos); ";
+        $sSqlDelLancSlip .= "DELETE FROM conlancam WHERE c70_codlan IN (SELECT lancam FROM w_lancamentos); ";
+
+         $rsDelLancSlip   = db_query($sSqlDelLancSlip);
+         if ( ! $rsDelLancSlip) {
+             throw new Exception("Erro ao ao excluir os dados na tabela para o slip {$oDadosAutenticacao->slip} tipoOP: {$oDadosAutenticacao->tipooperacaonovo}".pg_last_error());
+         }
 
        $lEstorno           = $oDadosAutenticacao->estorno == 't' ? true : false;
 
