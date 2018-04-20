@@ -185,9 +185,9 @@ if ($clconaberturaexe->numrows == 0) {
 </td>
 </tr>
 </table>
-
-</form>
 </center>
+</form>
+
 <?
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
 ?>
@@ -609,7 +609,7 @@ if (isset($p->incluir)) {
           $clorcelemento->o56_elemento = $oConc->o56_elemento;
           $clorcelemento->o56_descr    = $oConc->o56_descr;
           $clorcelemento->o56_finali   = $oConc->o56_finali;
-          $clorcelemento->o56_orcado   = $oConc->o56_orcado;
+          $clorcelemento->o56_orcado   = 't';
           $clorcelemento->incluir($oConc->o56_codele, $clorcelemento->o56_anousu);
           if ($clorcelemento->erro_status == "0") {
 
@@ -633,7 +633,7 @@ if (isset($p->incluir)) {
     $rs = db_query($sql1);
     if (pg_num_rows($rs) == 0) {
       $rsOrg = $clorcorgao->sql_record($clorcorgao->sql_query_file(null, null, "*", null, "o40_anousu=" . $clconaberturaexe->c91_anousuorigem));
-
+        //db_criatabela($rsOrg);exit;
       if ($clorcorgao->numrows > 0) {
 
         ( int ) $iNumRows = $clorcorgao->numrows;
