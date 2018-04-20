@@ -1007,6 +1007,9 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             $('l20_usaregistropreco').value='f';
             $('l20_usaregistropreco').disabled="disabled";
 
+        }else if(valor==3){
+            $('l20_usaregistropreco').value='f';
+            $('l20_usaregistropreco').disabled='';
         }
     }
 
