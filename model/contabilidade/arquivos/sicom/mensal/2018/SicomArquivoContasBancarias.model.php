@@ -205,11 +205,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 
           $cCtb10->si95_tiporegistro = $oRegistro10->tiporegistro;
-          if( db_getsession("DB_anousu") == 2018 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1 ) {
-                $cCtb10->si95_codctb = $oRegistro10->codctb;
-          }else{
-                $cCtb10->si95_codctb = $oRegistro10->codtce != 0 ? $oRegistro10->codtce : $oRegistro10->codctb;
-          }
+          $cCtb10->si95_codctb = $oRegistro10->codtce != 0 ? $oRegistro10->codtce : $oRegistro10->codctb;
           $cCtb10->si95_codorgao = $oRegistro10->si09_codorgaotce;
           $cCtb10->si95_banco = $oRegistro10->c63_banco;
           $cCtb10->si95_agencia = $oRegistro10->c63_agencia;
@@ -284,22 +280,22 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
           $sSqlVerifica .= " AND si95_tipoconta::int = $oRegistro10->tipoconta ";
           $sSqlVerifica .= " AND si95_instit = " . db_getsession('DB_instit');
 
-          $rsResultVerifica = db_query($sSqlVerifica);
-          $nCodTce = $oRegistro10->codctb;
+          $rsResultVerifica = db_query($sSqlVerifica);//echo $sSqlVerifica; db_criatabela($rsResultVerifica);
+
           /*
            * condição adicionada para criar um registro das contas bancaria de aplicação que foram alteradas o tipo de aplicação no MES de 01/2018
            * a tabela acertactb será preenchida pelo menu CONTABILAIDE > PROCEDIMENTOS > DUPLICAR CTB
            */
           if (pg_num_rows($rsResultVerifica) != 0 && (db_getsession("DB_anousu") == 2018 && $this->sDataFinal['5'] . $this->sDataFinal['6'] == 1)) {
 
-              $sql = "select * from  acertactb where si95_reduz =".$cCtb10->si95_codctb ;
+              $sql = "select * from  acertactb where si95_reduz =".$oRegistro10->codctb ;
               $rsCtb = db_query($sql);
               if (pg_num_rows($rsCtb) != 0) {
+                  $cCtb10->si95_codctb = $oRegistro10->codctb;
                   $cCtb10->incluir(null);
                   if ($cCtb10->erro_status == 0) {
                       throw new Exception($cCtb10->erro_msg);
                   }
-                  $nCodTce = DB_utils::fieldsMemory($rsResultVerifica,0)->si95_codctb;
               }
 
           }else {
@@ -308,13 +304,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                   if ($cCtb10->erro_status == 0) {
                       throw new Exception($cCtb10->erro_msg);
                   }
-              }else{
-
-                  $nCodTce = DB_utils::fieldsMemory($rsResultVerifica,0)->si95_codctb;
               }
           }
+          $cCtb10->si95_codctb = $oRegistro10->codtce != 0 ? $oRegistro10->codtce : $oRegistro10->codctb;
           $cCtb10->contas[] = $oRegistro10->codctb;
-          $cCtb10->si95_codctb = $nCodTce;
           $aBancosAgrupados[$aHash] = $cCtb10;
 
         } else {
