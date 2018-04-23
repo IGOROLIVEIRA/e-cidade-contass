@@ -774,7 +774,7 @@ class cl_abatimento {
      * Origem
      */
     $sSql .= " case                                                                                  ";
-    $sSql .= "   when abatimentodisbanco.k132_sequencial is not null and abatimento.k125_perc >= 100 ";
+    $sSql .= "   when abatimentodisbanco.k132_sequencial is not null and (abatimento.k125_perc >= 100 or abatimento.k125_tipoabatimento = ".Abatimento::TIPO_CREDITO.")";
     $sSql .= "     then 'PAGAMENTO EM DUPLICIDADE/MAIOR'                                             ";
     $sSql .= "   when abatimentodisbanco.k132_sequencial is not null and abatimento.k125_perc  < 100 ";
     $sSql .= "     then 'PAGAMENTO A MENOR'                                                          ";
