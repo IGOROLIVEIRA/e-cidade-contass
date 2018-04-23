@@ -73,20 +73,20 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
 
   //$this->objpdf->text($xcol +2, $xlin +51, "Característica Peculiar");
 
-  $this->objpdf->Setfont('Arial', '', 6);
-  $this->objpdf->text($xcol +17, $xlin +5, ':  '.db_formatar($this->orgao, 'orgao').' - '.substr($this->descr_orgao, 0, 46));
-  $this->objpdf->text($xcol +17, $xlin +8.5, ':  '.db_formatar($this->unidade, 'unidade').' - '.$this->descr_unidade);
-  $this->objpdf->text($xcol +17, $xlin +12, ':  '.db_formatar($this->funcao, 'funcao').' - '.$this->descr_funcao);
-  $this->objpdf->text($xcol +17, $xlin +15.5, ':  '.db_formatar($this->subfuncao, 'subfuncao').' - '.$this->descr_subfuncao);
-  $this->objpdf->text($xcol +17, $xlin +19, ':  '.db_formatar($this->programa, 'programa').' - '.$this->descr_programa);
+  $this->objpdf->Setfont('Arial', '', 8);
+  $this->objpdf->text($xcol +17, $xlin +5, ':  '.db_formatar($this->orgao, 'orgao').' - '.substr($this->descr_orgao, 0, 42));
+  $this->objpdf->text($xcol +17, $xlin +8.5, ':  '.db_formatar($this->unidade, 'unidade').' - '.substr($this->descr_unidade, 0, 42));
+  $this->objpdf->text($xcol +17, $xlin +12, ':  '.db_formatar($this->funcao, 'funcao').' - '.substr($this->descr_funcao, 0, 42));
+  $this->objpdf->text($xcol +17, $xlin +15.5, ':  '.db_formatar($this->subfuncao, 'subfuncao').' - '.substr($this->descr_subfuncao, 0, 42));
+  $this->objpdf->text($xcol +17, $xlin +19, ':  '.db_formatar($this->programa, 'programa').' - '.substr($this->descr_programa, 0, 42));
 
-  $this->objpdf->text($xcol +17, $xlin +22.5, ':  '.db_formatar($this->projativ, 'projativ').' - '.$this->descr_projativ);
+  $this->objpdf->text($xcol +17, $xlin +22.5, ':  '.db_formatar($this->projativ, 'projativ').' - '.substr($this->descr_projativ, 0, 42));
 
   $this->objpdf->text($xcol +17, $xlin +26, ':  '.db_formatar($this->sintetico, 'elemento_int'));
   $this->objpdf->setxy($xcol +18, $xlin +27);
-  $this->objpdf->multicell(90, 3, $this->descr_sintetico, 0, "L");
+  $this->objpdf->multicell(90, 3, substr($this->descr_sintetico, 0, 42), 0, "L");
 
-  $this->objpdf->text($xcol +17, $xlin +32, ':  '.$this->recurso.' - '.substr($this->descr_recurso,0,50));
+  $this->objpdf->text($xcol +17, $xlin +32.7, ':  '.$this->recurso.' - '.substr($this->descr_recurso,0,42));
 
   if ($this->banco != "") {
     $this->objpdf->text($xcol +17, $xlin +36, $this->banco);
@@ -110,7 +110,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
 
   // retangulo dos dados do credor
   $this->objpdf->rect($xcol +106, $xlin +2, 96, 21, 2, 'DF', '1234');
-  $this->objpdf->Setfont('Arial', '', 6);
+  $this->objpdf->Setfont('Arial', '', 7);
   $this->objpdf->text($xcol +108, $xlin +4, 'Dados do Credor:');
   $this->objpdf->Setfont('Arial', 'B', 8);
   $this->objpdf->text($xcol +107, $xlin +7, 'Nº Credor');
@@ -125,7 +125,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
   $this->objpdf->text($xcol+107,$xlin+19,'Telefone');
   $this->objpdf->text($xcol+150,$xlin+19,'Fax');
 
-  $this->objpdf->Setfont('Arial', '', 6);
+  $this->objpdf->Setfont('Arial', '', 7);
   $this->objpdf->text($xcol +124, $xlin +7,  ': '.$this->numcgm);
   $this->objpdf->text($xcol +158, $xlin +7,  ': '. (strlen($this->cnpj) == 11 ? db_formatar($this->cnpj, 'cpf') : db_formatar($this->cnpj, 'cnpj')));
   $this->objpdf->text($xcol +124, $xlin +10,  ': '.$this->nome);
