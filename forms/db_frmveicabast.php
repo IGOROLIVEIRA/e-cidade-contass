@@ -420,9 +420,10 @@ onSubmit="return js_verifica('<?= $db_opcao ?>'); return js_verificaDataAbasteci
     //Para filtrar apenas empenhos com o elemento 333903099000000, usar o parametro filtroabast=1
     function js_pesquisae60_codemp(mostra) {
       if (mostra == true) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss', 'Pesquisa', true);
+          var ve70_abast = $F("ve70_dtabast");
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss', 'Pesquisa', true);
       } else {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast='+ve70_abast+'&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
       }
     }
     /*
