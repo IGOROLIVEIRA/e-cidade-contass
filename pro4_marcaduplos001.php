@@ -80,6 +80,16 @@ if(isset($gravar)){
 	<tr>
 	  <td colspan='2'>
 	    <table border="0">
+            <tr align="center">
+                <td align="right" title="CPF/CNPJ">
+                    <b>CPF/CNPJ</b>
+                </td>
+                <td align="left">
+                    <?
+                    db_input("z01_cgccpf",15,$Iz01_cgccpf,true,"text",2);
+                    ?>
+                </td>
+            </tr>
 	      <tr>
 	        <td align="right" title="<?=$Tz01_nome?>">
 		  <?
@@ -102,7 +112,7 @@ if(isset($gravar)){
               </tr>
 	      <tr>
 	        <td align="center" colspan="2">
-		   <input name='elecionar' type='button' value='Selecionar' onclick='js_selecionar();'>
+		   <input name='Selecionar' type='button' value='Selecionar' onclick='js_selecionar();verificarcampos();'>
 		   <input name='gravar' type='button' value='Gravar' onclick='js_gravar();'>
 		</td>
 	      </tr> 
@@ -122,9 +132,15 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </body>
 </html>
 <script>
+    function verificarcampos() {
+        if((document.form1.z01_nome.value == "") && (document.form1.z01_cgccpf.value == ""))
+            alert("Informe Nome ou CPF/CNPJ");
+    }
+
 function js_selecionar(){
   var nome = document.form1.z01_nome.value.replace('%','|');
-  campos.location.href = 'pro4_marcaduplos002.php?z01_nome='+nome;
+  var cgccpf = document.form1.z01_cgccpf.value;
+  campos.location.href = 'pro4_marcaduplos002.php?z01_nome='+nome+'&z01_cgccpf='+cgccpf;
 }
 function js_gravar(){
   bj = campos.document.form1;

@@ -52,7 +52,6 @@ $db_botao = true;
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $nome = str_replace('|','%',$z01_nome);
-//echo "nome = $nome";
 $z01_nome= $nome;
 ?>
 <html>
@@ -98,15 +97,24 @@ function js_desab(cod){
     <center>
     <?
 	 
-     if($z01_nome!=""){
-       $sql = "select z01_numcgm,z01_nome,z01_ender,z01_munic,z01_cgccpf 
+     if($z01_nome!="") {
+         $sql = "select z01_numcgm,z01_nome,z01_ender,z01_munic,z01_cgccpf 
                from cgm 
 	       where z01_nome like '$z01_nome%'
 	         and z01_numcgm not in (select z10_numcgm from cgmcorreto where z10_proc is false) 
 		 and z01_numcgm not in (select z11_numcgm from cgmerrado inner join cgmcorreto on z11_codigo = z10_codigo and z10_proc is false) order by z01_nome,z01_cgccpf,z01_munic,z01_ender";
-     // die($sql);
+         // die($sql);
+     }
+     if($z01_cgccpf!=""){
+         $sql = "select z01_numcgm,z01_nome,z01_ender,z01_munic,z01_cgccpf 
+               from cgm 
+	       where z01_cgccpf like '$z01_cgccpf%'
+	         and z01_numcgm not in (select z10_numcgm from cgmcorreto where z10_proc is false) 
+		 and z01_numcgm not in (select z11_numcgm from cgmerrado inner join cgmcorreto on z11_codigo = z10_codigo and z10_proc is false) order by z01_nome,z01_cgccpf,z01_munic,z01_ender";
+         // die($sql);
+     }
        $result = pg_exec($sql);
-    
+
        echo "<table border='1' cellspacing='0' cellpadding='0' style='border-style:outset'> ";
        echo "<tr >
 		<td style='border-style:outset' align='center'><b>Pri</b></td>
@@ -117,7 +125,7 @@ function js_desab(cod){
 		<td style='border-style:outset' align='center'><b>$RLz01_ender</b></td>
 		<td style='border-style:outset' align='center'><b>$RLz01_munic</b></td>
 	      </tr>
-       ";         
+       ";
 
        for($i=0;$i<pg_numrows($result);$i++){
 	  db_fieldsmemory($result,$i);
@@ -131,9 +139,9 @@ function js_desab(cod){
 	      <td nowrap>$z01_munic&nbsp</td>
 	      </tr>
 	     ";
-        }      
+        }
         echo "</table>";
-      }
+
 ?>    
     </center>
     </td>
