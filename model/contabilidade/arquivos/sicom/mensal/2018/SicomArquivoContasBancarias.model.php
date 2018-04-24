@@ -723,15 +723,13 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         }
 
       }
-      //echo pg_last_error();
-      //echo "<pre>";print_r($oCtb20);
 
       /**
        * inclusão do registro 20 e 21 do procedimento normal
        */
       foreach ($aCtb20Agrupado as $oCtb20) {
         $cCtb20 = new cl_ctb202018();
-        $sql = "select * from  acertactb where si95_codtceant =".$oCtb20->si96_codctb ;
+        $sql = "select * from  acertactb where si95_codtceant =".$oCtb20->si96_codctb. "order by si95_reduz" ;
         $rsCtb = db_query($sql);
         $alterarAplicacao = false;
         if (db_getsession("DB_anousu")==2018 && $this->sDataFinal['5'] . $this->sDataFinal['6']==1 && pg_num_rows($rsCtb) != 0) {
@@ -782,13 +780,13 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                 //criar o movimento de saldo do saldo da conta de origem
                 $cCtb21alt = new cl_ctb212018();
                 $cCtb21alt->si97_tiporegistro = 21;
-                $cCtb21alt->si97_codctb = $oCtb->si95_reduz;
+                $cCtb21alt->si97_codctb = $oCtb20->si96_codctb;
                 $cCtb21alt->si97_codfontrecursos = $cCtb20->si96_codfontrecursos;
                 $cCtb21alt->si97_codreduzidomov = $cCtb20->si96_sequencial . "6";
                 $cCtb21alt->si97_tipomovimentacao = 1;
                 $cCtb21alt->si97_tipoentrsaida = 5;
                 $cCtb21alt->si97_valorentrsaida = abs($oCtb20->si96_vlsaldofinalfonte);
-                $cCtb21alt->si97_codctbtransf = $oCtb20->si96_codctb;
+                $cCtb21alt->si97_codctbtransf = $oCtb->si95_reduz;
                 $cCtb21alt->si97_codfontectbtransf = $oCtb20->si96_codfontrecursos;
                 $cCtb21alt->si97_mes = $oCtb20->si96_mes;
                 $cCtb21alt->si97_reg20 = $cCtb20->si96_sequencial;
@@ -852,13 +850,13 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                     //criar um moviemnto de saida na conta de destino
                     $cCtb21alt2 = new cl_ctb212018();
                     $cCtb21alt2->si97_tiporegistro = 21;
-                    $cCtb21alt2->si97_codctb = $oCtb20->si96_codctb ;
+                    $cCtb21alt2->si97_codctb = $oCtb->si95_reduz ;
                     $cCtb21alt2->si97_codfontrecursos = $cCtb20alt->si96_codfontrecursos;
                     $cCtb21alt2->si97_codreduzidomov = $cCtb20alt->si96_sequencial . "5";
                     $cCtb21alt2->si97_tipomovimentacao = 2;
                     $cCtb21alt2->si97_tipoentrsaida = 6;
                     $cCtb21alt2->si97_valorentrsaida = abs($oCtb20->si96_vlsaldofinalfonte);
-                    $cCtb21alt2->si97_codctbtransf = $oCtb->si95_reduz;
+                    $cCtb21alt2->si97_codctbtransf = $oCtb20->si96_codctb;
                     $cCtb21alt2->si97_codfontectbtransf = $oCtb20->si96_codfontrecursos;
                     $cCtb21alt2->si97_mes = $oCtb20->si96_mes;
                     $cCtb21alt2->si97_reg20 = $cCtb20alt->si96_sequencial;
@@ -982,7 +980,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         /*
          * REGISTRO 50 CONTAS ENCERRADAS
          */
-        $sSqlCtbEncerradas2 = "select * from  acertactb left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+        $sSqlCtbEncerradas2 = "select distinct si09_codorgaotce,si95_codtceant from  acertactb left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
         $rsCtbEncerradas2 = db_query($sSqlCtbEncerradas2);
         if (pg_num_rows($rsCtbEncerradas2) != 0) {
 
