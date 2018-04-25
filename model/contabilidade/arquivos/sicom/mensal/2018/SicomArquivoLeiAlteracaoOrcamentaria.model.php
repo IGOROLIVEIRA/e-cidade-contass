@@ -252,6 +252,7 @@ class SicomArquivoLeiAlteracaoOrcamentaria extends SicomArquivoBase implements i
          * selecionar informacoes registro 21
          */
         $sSql = "select distinct orcleialtorcamentaria.* from orcleialtorcamentaria
+        inner join orcprojetolei on o200_orcprojetolei=o138_sequencial
         inner join orcprojetoorcprojetolei on o138_sequencial=o139_orcprojetolei
         inner join orcprojeto on o139_orcprojeto=o39_codproj
         left join orcsuplem on o46_codlei=o39_codproj
