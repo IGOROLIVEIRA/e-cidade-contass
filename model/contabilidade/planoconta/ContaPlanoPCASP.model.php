@@ -71,7 +71,7 @@ class ContaPlanoPCASP extends ContaPlano {
    * @throws Exception
    * @return boolean
    */
-  public function salvar() {
+  public function salvar($iTipoConta) {
 
     /*
      * Verifica se existe transação com o banco de dados ativa
@@ -118,6 +118,7 @@ class ContaPlanoPCASP extends ContaPlano {
     $oDaoConPlano->c60_tipolancamento              = $this->getTipoLancamento();
     $oDaoConPlano->c60_subtipolancamento           = $this->getSubTipo();
     $oDaoConPlano->c60_desdobramneto               = $this->getDesdobramento();
+    $oDaoConPlano->c60_cgmpessoa                   = $this->getCgmPessoa();
 
     
  
@@ -143,7 +144,7 @@ class ContaPlanoPCASP extends ContaPlano {
       	
        try
 		{	
-			$oDaoConPlano->alterar($this->getCodigoConta(), $this->getAno(),$oDaoConPlano->c60_subtipolancamento);
+			$oDaoConPlano->alterar($this->getCodigoConta(), $this->getAno(),$oDaoConPlano->c60_subtipolancamento,$iTipoConta);
 		}
 		catch(Exception $erro)
 		{
@@ -152,7 +153,7 @@ class ContaPlanoPCASP extends ContaPlano {
         
       } else {
 
-        $oDaoConPlano->incluir($this->getCodigoConta(), $iAno,$oDaoConPlano->c60_subtipolancamento);
+        $oDaoConPlano->incluir($this->getCodigoConta(), $iAno,$oDaoConPlano->c60_subtipolancamento,$iTipoConta);
         $this->setCodigoConta($oDaoConPlano->c60_codcon);
       }
 

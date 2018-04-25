@@ -87,6 +87,7 @@ switch ($oParam->exec) {
             if (!empty($oParam->iContaBancaria)) {
                 $oPlanoPCASP->setContaBancaria(new ContaBancaria($oParam->iContaBancaria));
             }
+            $oPlanoPCASP->setCgmPessoa($oParam->iCgmPessoa);
 
 
             /**
@@ -127,7 +128,7 @@ switch ($oParam->exec) {
 
             }
 
-            $oPlanoPCASP->salvar();
+            $oPlanoPCASP->salvar($oParam->iTipoConta);
 
             $oRetorno->message = urlencode("Plano de contas salvo com sucesso.");
             $oRetorno->iAno = $oPlanoPCASP->getAno();
@@ -146,6 +147,7 @@ switch ($oParam->exec) {
             $oRetorno->iTipoLancamento = $oPlanoPCASP->getTipoLancamento();
             $oRetorno->iSubTipo = $oPlanoPCASP->getSubTipo();
             $oRetorno->iDesdobramento = $oPlanoPCASP->getDesdobramento();
+            $oRetorno->iCgmPessoa = $oPlanoPCASP->getCgmPessoa();
 
             db_fim_transacao(false);
         } catch (Exception $eErro) {
@@ -290,6 +292,7 @@ switch ($oParam->exec) {
         if ($oPlanoPCASP->getContasReduzidas()) {
             $oRetorno->dados->iTipoConta = 1;
         }
+        $oRetorno->dados->iCgmPessoa = $oPlanoPCASP->getCgmPessoa();
         //echo "<pre>";
         //print_r($oRetorno);exit;
         break;

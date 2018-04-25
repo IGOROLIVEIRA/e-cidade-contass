@@ -53,6 +53,8 @@ class GerarBALANCETE extends GerarAM
         $rsBALANCETE23 = db_query($sSql23);
         $sSql24 = "select * from balancete242018 where si191_mes = " . $this->iMes . " and si191_instit =" . db_getsession("DB_instit");
         $rsBALANCETE24 = db_query($sSql24);
+        $sSql26 = "select * from balancete262018 where si193_mes = " . $this->iMes . " and si193_instit =" . db_getsession("DB_instit");
+        $rsBALANCETE26 = db_query($sSql26);
 
         if (pg_num_rows($rsBALANCETE10) == 0) {
 
@@ -328,6 +330,30 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE24['si191_naturezasaldofinalorgao']   = $this->padLeftZero($aBALACETE24['si191_naturezasaldofinalorgao'], 1);
 
                         $this->sLinha = $aCSVBALANCETE24;
+                        $this->adicionaLinha();
+                    }
+                }
+
+                for ($iCont26 = 0; $iCont26 < pg_num_rows($rsBALANCETE26); $iCont26++) {
+
+                    $aBALACETE26 = pg_fetch_array($rsBALANCETE26, $iCont26);
+
+                    if ($aBALACETE26['si193_reg10'] == $aBALACETE10['si177_sequencial']) {
+
+                        $aCSVBALANCETE26['si193_tiporegistro']            = $this->padLeftZero($aBALACETE26['si193_tiporegistro'], 2);
+                        $aCSVBALANCETE26['si193_contacontabil']           = $this->padLeftZero($aBALACETE26['si193_contacontabil'], 9);
+                        $aCSVBALANCETE26['si193_codfundo']                = "00000000";
+                        $aCSVBALANCETE26['si193_tipodocumentopessoaatributosf'] = $aBALACETE26['si193_tipodocumentopessoaatributosf'];
+                        $aCSVBALANCETE26['si193_nrodocumentopessoaatributosf'] = $aBALACETE26['si193_nrodocumentopessoaatributosf'];
+                        $aCSVBALANCETE26['si193_atributosf']              = trim($aBALACETE26['si193_atributosf']);
+                        $aCSVBALANCETE26['si193_saldoinicialpessoaatributosf']          = $this->sicomNumberReal($aBALACETE26['si193_saldoinicialpessoaatributosf'], 2);
+                        $aCSVBALANCETE26['si193_naturezasaldoinicialpessoaatributosf']  = $this->padLeftZero($aBALACETE26['si193_naturezasaldoinicialpessoaatributosf'], 1);
+                        $aCSVBALANCETE26['si193_totaldebitospessoaatributosf']          = $this->sicomNumberReal($aBALACETE26['si193_totaldebitospessoaatributosf'], 2);
+                        $aCSVBALANCETE26['si193_totalcreditospessoaatributosf']         = $this->sicomNumberReal($aBALACETE26['si193_totalcreditospessoaatributosf'], 2);
+                        $aCSVBALANCETE26['si193_saldofinalpessoaatributosf']            = $this->sicomNumberReal($aBALACETE26['si193_saldofinalpessoaatributosf'], 2);
+                        $aCSVBALANCETE26['si193_naturezasaldofinalpessoaatributosf']    = $this->padLeftZero($aBALACETE26['si193_naturezasaldofinalpessoaatributosf'], 1);
+
+                        $this->sLinha = $aCSVBALANCETE26;
                         $this->adicionaLinha();
                     }
                 }

@@ -58,6 +58,8 @@ class cl_conplano {
       var $c60_subtipolancamento= null;
 
 	var $c60_nregobrig = null;
+	var $c60_cgmpessoa = null;
+	var $aContasCgmPessoa = array();
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
 	c60_codcon = int4 = Código
@@ -75,12 +77,15 @@ class cl_conplano {
 	c60_subtipolancamento = int8 = Subtipo
 	c60_desdobramneto = int8 = Desdobramento
 	c60_nregobrig = int8 = Registro
+	c60_cgmpessoa = int8 = Cgm
 	";
 	//funcao construtor da classe
 	function cl_conplano() {
 		//classes dos rotulos dos campos
 		$this->rotulo = new rotulo("conplano");
 		$this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
+		$this->aContasCgmPessoa[0] = array('1134101','1134102','1134103');
+	  $this->aContasCgmPessoa[1] = array('121210401','121210402','121210403','121210404','121210405','121210406','121210407','121210408','121210409','121210410','121210499','121210501','121210502','121210503','121210504','121210505','121210506','121210507','121210508','121210509','121210510','121210511','121210512','121210513','121210514','121210515','121210599');
 	}
 	//funcao erro
 	function erro($mostra,$retorna) {
@@ -110,13 +115,14 @@ class cl_conplano {
 			$this->c60_desdobramneto = ($this->c60_desdobramneto == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_desdobramneto"]:$this->c60_desdobramneto);
 
 			$this->c60_nregobrig = ($this->c60_nregobrig == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_nregobrig"]:$this->c60_nregobrig);
+			$this->c60_cgmpessoa = ($this->c60_cgmpessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_cgmpessoa"]:$this->c60_cgmpessoa);
 		}else{
 			$this->c60_codcon = ($this->c60_codcon == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_codcon"]:$this->c60_codcon);
 			$this->c60_anousu = ($this->c60_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_anousu"]:$this->c60_anousu);
 		}
 	}
 	// funcao para inclusao
-	function incluir ($c60_codcon,$c60_anousu,$subtipo){
+	function incluir ($c60_codcon,$c60_anousu,$subtipo,$iTipoConta){
 		$this->atualizacampos();
 		if($this->c60_estrut == null ){
 			$this->erro_sql = " Campo Estrutural nao Informado.";
@@ -189,6 +195,18 @@ class cl_conplano {
 			$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
 			$this->erro_status = "0";
 			return false;
+		}
+		if($this->c60_cgmpessoa == null && $iTipoConta == 1  && (in_array(substr($this->c60_estrut,0,7),$this->aContasCgmPessoa[0])
+			  || in_array(substr($this->c60_estrut,0,9),$this->aContasCgmPessoa[1]))){
+			$this->erro_sql = " Campo CGM Pessoa nao Informado.";
+			$this->erro_campo = "c60_cgmpessoa";
+			$this->erro_banco = "";
+			$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+			$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+			$this->erro_status = "0";
+			return false;
+		} else if ((!in_array(substr($this->c60_estrut,0,7),$this->aContasCgmPessoa[0]) && !in_array(substr($this->c60_estrut,0,9),$this->aContasCgmPessoa[1])) || $iTipoConta == 0) {
+			$this->c60_cgmpessoa = 'null';
 		}
 		if($c60_codcon == "" || $c60_codcon == null ){
 			$result = db_query("select nextval('conplano_c60_codcon_seq')");
@@ -279,6 +297,7 @@ class cl_conplano {
 		,c60_subtipolancamento
 		,c60_desdobramneto
 		,c60_nregobrig
+		,c60_cgmpessoa
 		)
 		values (
 		$this->c60_codcon
@@ -296,6 +315,7 @@ class cl_conplano {
 		,".($subtipo==''?'null':$subtipo)."
 		,".($this->c60_desdobramneto==''?'null':$this->c60_desdobramneto)."	
 		,$this->c60_nregobrig
+		,".($this->c60_cgmpessoa=='null'?'null':$this->c60_cgmpessoa)."
 		)";
 		$result = db_query($sql);
 		if($result==false){
@@ -343,7 +363,7 @@ class cl_conplano {
 		return true;
 	}
 	// funcao para alteracao
-	function alterar ($c60_codcon=null,$c60_anousu=null,$subtipo) {
+	function alterar ($c60_codcon=null,$c60_anousu=null,$subtipo,$iTipoConta) {
 		$this->atualizacampos();
 		$sql = " update conplano set ";
 		$virgula = "";
@@ -551,6 +571,28 @@ class cl_conplano {
 				$this->erro_status = "0";
 				return false;
 			}
+		}
+		if((trim($this->c60_cgmpessoa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c60_cgmpessoa"])) 
+			&& (in_array(substr($this->c60_estrut,0,7), $this->aContasCgmPessoa[0]) || in_array(substr($this->c60_estrut,0,9),$this->aContasCgmPessoa[1])) && $iTipoConta == 1){
+			$sql  .= $virgula." c60_cgmpessoa = $this->c60_cgmpessoa ";
+			$virgula = ",";
+			if($this->c60_cgmpessoa == null ){
+				$this->erro_sql = " Campo Cgm Pessoa nao Informado.";
+				$this->erro_campo = "c60_cgmpessoa";
+				$this->erro_banco = "";
+				$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+				$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+				$this->erro_status = "0";
+				return false;
+			}
+		} else if ((in_array(substr($this->c60_estrut,0,7), $this->aContasCgmPessoa[0]) || in_array(substr($this->c60_estrut,0,9),$this->aContasCgmPessoa[1])) && $this->c60_cgmpessoa == null && $iTipoConta == 1) {
+			$this->erro_sql = " Campo Cgm Pessoa nao Informado.";
+			$this->erro_campo = "c60_cgmpessoa";
+			$this->erro_banco = "";
+			$this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+			$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+			$this->erro_status = "0";
+			return false;
 		}
 		$sql .= " where ";
 		if($c60_codcon!=null){

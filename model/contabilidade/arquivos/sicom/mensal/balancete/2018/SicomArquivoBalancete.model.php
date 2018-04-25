@@ -16,6 +16,7 @@ require_once("classes/db_balancete212018_classe.php");
 require_once("classes/db_balancete222018_classe.php");
 require_once("classes/db_balancete232018_classe.php");
 require_once("classes/db_balancete242018_classe.php");
+require_once("classes/db_balancete262018_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarBALANCETE.model.php");
 require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
 
@@ -224,7 +225,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
     $obalancete18 = new cl_balancete182018();
     $obalancete23 = new cl_balancete232018();
     $obalancete24 = new cl_balancete242018();
+    $obalancete26 = new cl_balancete262018();
     
+    $obalancete26->excluir(null, "si193_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si193_instit = " . db_getsession("DB_instit"));
     $obalancete24->excluir(null, "si191_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si191_instit = " . db_getsession("DB_instit"));
     $obalancete23->excluir(null, "si190_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si190_instit = " . db_getsession("DB_instit"));
     $obalancete18->excluir(null, "si185_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si185_instit = " . db_getsession("DB_instit"));
@@ -377,6 +380,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $obalancete->reg20 = array();
         $obalancete->reg21 = array();
         $obalancete->reg22 = array();
+        $obalancete->reg23 = array();
+        $obalancete->reg24 = array();
+        $obalancete->reg26 = array();
         $obalancete->contas[] = $oReg10->c61_reduz;
         $aDadosAgrupados10[$sHash] = $obalancete;
         
@@ -2485,6 +2491,95 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         }
         
       }
+
+      /*
+       * DADOS PARA GERAÇÃO DO REGISTRO 26 Atributo de Superávit Financeiro,
+       * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 26 OU 15
+       *
+       */
+      
+      if ($oContas10->nregobrig == 26) {
+        
+        /*
+         * Busca os saldos das contas pelo reduzido na função fc_saltessaldo();
+         * */
+        foreach ($oContas10->contas as $oReduz) {
+          
+          $sSqlReg26saldos = "SELECT
+                                               round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS anterior,
+                                               round(substr(fc_planosaldonovo,17,14)::float8,2)::float8 AS debitos,
+                                               round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
+                                               round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
+                                               substr(fc_planosaldonovo,59,1)::varchar(1) AS naturezasaldoinicialsf,
+                                               substr(fc_planosaldonovo,60,1)::varchar(1) AS naturezasaldofinalsf,
+                                               nrodocumentopessoaatributosf,z01_numcgm
+                                        FROM
+                                          (SELECT p.c60_estrut AS estrut_mae,
+                                                  p.c60_estrut AS estrut,
+                                                  c61_reduz,
+                                                  c61_codcon,
+                                                  c61_codigo,
+                                                  p.c60_descr,
+                                                  p.c60_finali,
+                                                  r.c61_instit,
+                                                  fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $this->sDataInicial . "','" . $this->sDataFinal . "',$sEncerramento),
+                                                  p.c60_identificadorfinanceiro,
+                                                  c60_consistemaconta,
+                                                  cgm.z01_cgccpf as nrodocumentopessoaatributosf,z01_numcgm
+                                           FROM conplanoexe e
+                                           INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
+                                           AND r.c61_reduz = c62_reduz
+                                           INNER JOIN conplano p ON r.c61_codcon = c60_codcon
+                                           AND r.c61_anousu = c60_anousu
+                                           LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
+                                           LEFT JOIN cgm ON p.c60_cgmpessoa = cgm.z01_numcgm
+                                           WHERE c62_anousu = " . db_getsession('DB_anousu') . "
+                                             AND c61_instit IN (" . db_getsession('DB_instit') . ")
+                                             AND c61_reduz = {$oReduz}) as x";
+          
+          $rsReg26saldos = db_query($sSqlReg26saldos) or die($sSqlReg26saldos." ".pg_last_error());
+          //db_criatabela($rsReg26saldos);die($sSqlReg26saldos);
+          
+          for ($iContSaldo26 = 0; $iContSaldo26 < pg_num_rows($rsReg26saldos); $iContSaldo26++) {
+            
+            $oReg26Saldo = db_utils::fieldsMemory($rsReg26saldos, $iContSaldo26);
+            
+            $sHash26 = '26' . $oContas10->si177_contacontaabil . $oContas10->identificadorfinanceiro . $oReg26Saldo->nrodocumentopessoaatributosf;
+            
+            $oReg26Saldo->anterior = $oReg26Saldo->naturezasaldoinicialsf == 'C' ? $oReg26Saldo->anterior * -1 : $oReg26Saldo->anterior;
+            
+            if (!isset($aContasReg10[$reg10Hash]->reg26[$sHash26])) {
+              
+              $obalancete26 = new stdClass();
+              $obalancete26->si193_tiporegistro = 26;
+              $obalancete26->si193_contacontabil = $oContas10->si177_contacontaabil;
+              $obalancete26->si193_codfundo = "00000000";
+              $obalancete26->si193_tipodocumentopessoaatributosf = strlen($oReg26Saldo->nrodocumentopessoaatributosf) > 11 ? 2 : 1;
+              $obalancete26->si193_nrodocumentopessoaatributosf = $oReg26Saldo->nrodocumentopessoaatributosf;
+              $obalancete26->si193_atributosf = $oContas10->identificadorfinanceiro;
+              $obalancete26->si193_saldoinicialpessoaatributosf = $oReg26Saldo->anterior;
+              $obalancete26->si193_naturezasaldoinicialpessoaatributosf = $obalancete26->anterior >= 0 ? 'D' : 'C';
+              $obalancete26->si193_totaldebitospessoaatributosf = $oReg26Saldo->debitos;
+              $obalancete26->si193_totalcreditospessoaatributosf = $oReg26Saldo->creditos;
+              $obalancete26->si193_saldofinalpessoaatributosf = $oReg26Saldo->anterior + $oReg26Saldo->debitos - $oReg26Saldo->creditos;
+              $obalancete26->si193_naturezasaldofinalpessoaatributosf = $obalancete26->si193_saldofinalpessoaatributosf >= 0 ? 'D' : 'C';
+              $obalancete26->si193_instit = db_getsession("DB_instit");
+              $obalancete26->si193_mes = $nMes;
+              
+              $aContasReg10[$reg10Hash]->reg26[$sHash26] = $obalancete26;
+              
+            } else {
+              $aContasReg10[$reg10Hash]->reg26[$sHash26]->si193_saldoinicialpessoaatributosf += $oReg26Saldo->anterior;
+              $aContasReg10[$reg10Hash]->reg26[$sHash26]->si193_totaldebitospessoaatributosf += $oReg26Saldo->debitos;
+              $aContasReg10[$reg10Hash]->reg26[$sHash26]->si193_totalcreditospessoaatributosf += $oReg26Saldo->creditos;
+              $aContasReg10[$reg10Hash]->reg26[$sHash26]->si193_saldofinalpessoaatributosf += ($oReg26Saldo->anterior + $oReg26Saldo->debitos - $oReg26Saldo->creditos) == '' ? 0 : ($oReg26Saldo->anterior + $oReg26Saldo->debitos - $oReg26Saldo->creditos);
+              $aContasReg10[$reg10Hash]->reg26[$sHash26]->si193_naturezasaldofinalpessoaatributosf = ($aContasReg10[$reg10Hash]->reg26[$sHash26]->si193_saldofinalpessoaatributosf >= 0 ? 'D' : 'C');
+              $aContasReg10[$reg10Hash]->reg26[$sHash26]->si193_naturezasaldoinicialpessoaatributosf = ($aContasReg10[$reg10Hash]->reg26[$sHash26]->si193_saldoinicialpessoaatributosf >= 0 ? 'D' : 'C');
+            }
+          }
+        }
+      }
+
     }
     
     /*
@@ -2932,6 +3027,35 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
           throw new Exception($obalreg24->erro_msg);
         }
       }
+
+      foreach ($oDado10->reg26 as $reg26) {
+        
+        $obalreg26 = new cl_balancete262018();
+        
+        $obalreg26->si193_tiporegistro = $reg26->si193_tiporegistro;
+        $obalreg26->si193_contacontabil = $reg26->si193_contacontabil;
+        $obalreg26->si193_codfundo = "00000000";
+        $obalreg26->si193_tipodocumentopessoaatributosf = $reg26->si193_tipodocumentopessoaatributosf;
+        $obalreg26->si193_nrodocumentopessoaatributosf = $reg26->si193_nrodocumentopessoaatributosf;
+        $obalreg26->si193_atributosf = $reg26->si193_atributosf;
+        $obalreg26->si193_saldoinicialpessoaatributosf = number_format(abs($reg26->si193_saldoinicialpessoaatributosf == '' ? 0 : $reg26->si193_saldoinicialpessoaatributosf), 2, ".", "");
+        $obalreg26->si193_naturezasaldoinicialpessoaatributosf = $reg26->si193_saldoinicialpessoaatributosf == 0 ? $oDado10->naturezasaldo : ($reg26->si193_saldoinicialpessoaatributosf > 0 ? 'D' : 'C');
+        $obalreg26->si193_totaldebitospessoaatributosf = number_format(abs($reg26->si193_totaldebitospessoaatributosf), 2, ".", "");
+        $obalreg26->si193_totalcreditospessoaatributosf = number_format(abs($reg26->si193_totalcreditospessoaatributosf), 2, ".", "");
+        $saldoFinal = ($reg26->si193_saldoinicialpessoaatributosf + $reg26->si193_totaldebitospessoaatributosf - $reg26->si193_totalcreditospessoaatributosf) == '' ? 0 : ($reg26->si193_saldoinicialpessoaatributosf + $reg26->si193_totaldebitospessoaatributosf - $reg26->si193_totalcreditospessoaatributosf);
+        $obalreg26->si193_saldofinalpessoaatributosf = number_format(abs($saldoFinal), 2, ".", "");
+        $obalreg26->si193_naturezasaldofinalpessoaatributosf = $saldoFinal == 0 ? $obalreg26->si193_naturezasaldoinicialpessoaatributosf : ($saldoFinal > 0 ? 'D' : 'C');
+        $obalreg26->si193_instit = $reg26->si193_instit;
+        $obalreg26->si193_mes = $reg26->si193_mes;
+        $obalreg26->si193_reg10 = $obalancete10->si177_sequencial;
+        
+        $obalreg26->incluir(null);
+        
+        if ($obalreg26->erro_status == 0) {
+          throw new Exception($obalreg26->erro_msg." conta contabil {$obalreg26->si193_contacontabil}");
+        }
+      }
+
     }
     
     db_fim_transacao();

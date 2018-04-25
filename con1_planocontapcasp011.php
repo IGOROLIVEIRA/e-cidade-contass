@@ -324,6 +324,21 @@ $iOpcao = 1;
           </fieldset>
         </td>
       </tr>
+      <tr id="trCgmPessoa" style="display: none;">
+          <td>
+             <?
+             db_ancora("CGM Pessoa","js_pesquisac60_cgmpessoa(true);",$db_opcao);
+             ?>
+           </td>
+           <td>
+            <?
+            db_input('c60_cgmpessoa',5,1,true,'text',$db_opcao," onchange='js_pesquisac60_cgmpessoa(false);'")
+            ?>
+            <?
+            db_input('z01_nome',40,$Iz01_nomeo,true,'text',3,'')
+            ?>
+          </td>
+        </tr>
     </table>
   </fieldset>
   <br>
@@ -585,6 +600,8 @@ function js_preenchePlanoConta(oAjax) {
   if(oRetorno.dados.iTipoConta == 1) {
     $('conta-corrente').style.display = "";
   }
+  $("c60_cgmpessoa").value = oRetorno.dados.iCgmPessoa;
+  js_pesquisac60_cgmpessoa(false);
 
   var lAbaReduzidos     = oRetorno.dados.iTipoConta == 0?false:true;
   js_liberaAbasPlano(oRetorno.dados.iCodigoConta, lAbaReduzidos);
@@ -595,6 +612,8 @@ function js_preenchePlanoConta(oAjax) {
         js_getSubtipo();
         js_getDesdobraSubtipo(oRetorno.dados["isubtipo"]);
     }
+
+  js_habilitacgmpessoa(document.form1.c90_estrutcontabil.value,oRetorno.dados.iTipoConta);
 
 }
 
@@ -653,6 +672,7 @@ $("btnIncluir").observe("click", function() {
   var sSuperavitFinanceiro = 'N';
   var iClassificacao       = 1;
   var iTipoConta           = $("iTipoConta").value;
+  var iCgmPessoa           = document.form1.c60_cgmpessoa.value;
     if(iSistemaConta == 2  && iDetalhamentoSistema == 7) {
         var iTipoLancamento = $("iTipoLancamento").value;
         var iSubTipo = iTipoLancamento == 0 ? 0 : $("isubtipo").value;
@@ -781,7 +801,8 @@ $("btnIncluir").observe("click", function() {
   oParam.iTipoLancamento	  = iTipoLancamento;
   oParam.iSubTipo=iSubTipo;
 
-  oParam.iDesdobramento	      = iDesdobramento;
+  oParam.iDesdobramento       = iDesdobramento;
+  oParam.iCgmPessoa	          = iCgmPessoa;
 
   if (iTipoConta == 1 ) {
     oParam.iContaCorrente = $F('iCodigoContaCorrente');
@@ -1024,6 +1045,7 @@ $('iTipoConta').observe('change', function() {
   if ($F("iTipoConta") == 1) {
     $('conta-corrente').style.display = "";
   }
+  js_habilitacgmpessoa(document.form1.c90_estrutcontabil.value,$F("iTipoConta"));
 });
 
 
@@ -1132,6 +1154,44 @@ function js_completaContaCorrente(sDescricaoContaCorrente, lErro) {
     $('sDescricaoContaCorrente').value = sDescricaoContaCorrente;
   }
 }
+
+function js_pesquisac60_cgmpessoa(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('','db_iframe_cgm_pessoa','func_cgm.php?funcao_js=parent.js_mostracgmpessoa1|z01_numcgm|z01_nome','Pesquisa',true);
+  }else{
+   if(document.form1.c60_cgmpessoa.value != ''){ 
+    js_OpenJanelaIframe('','db_iframe_cgm_pessoa','func_cgm.php?pesquisa_chave='+document.form1.c60_cgmpessoa.value+'&funcao_js=parent.js_mostracgmpessoa','Pesquisa',false);
+  }else{
+   document.form1.z01_nome.value = ''; 
+ }
+}
+}
+function js_mostracgmpessoa(erro,chave){
+  document.form1.z01_nome.value = chave; 
+  if(erro==true){ 
+    document.form1.c60_cgmpessoa.focus(); 
+    document.form1.c60_cgmpessoa.value = ''; 
+  }
+}
+function js_mostracgmpessoa1(chave1,chave2){
+  document.form1.c60_cgmpessoa.value = chave1;
+  document.form1.z01_nome.value = chave2;
+  db_iframe_cgm_pessoa.hide();
+}
+function js_habilitacgmpessoa(estrutural,iTipoConta) {
+  var aEstruturais7 = ['1134101','1134102','1134103'];
+  var aEstruturais9 = ['121210401','121210402','121210403','121210404','121210405','121210406','121210407','121210408','121210409','121210410','121210499','121210501','121210502','121210503','121210504','121210505','121210506','121210507','121210508','121210509','121210510','121210511','121210512','121210513','121210514','121210515','121210599'];
+  if ((aEstruturais7.indexOf(estrutural.split('.').join('').substr(0, 7)) != '-1'
+      || aEstruturais9.indexOf(estrutural.split('.').join('').substr(0, 9)) != '-1') && iTipoConta == 1) {
+    $("trCgmPessoa").style.display = '';
+  } else {
+    $("trCgmPessoa").style.display = 'none';
+  }
+}
+
+$('c90_estrutcontabil').observe('change', function() {
+  js_habilitacgmpessoa(document.form1.c90_estrutcontabil.value,$F("iTipoConta"));
+});
 
 js_main();
 </script>

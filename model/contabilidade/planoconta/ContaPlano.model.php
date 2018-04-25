@@ -54,6 +54,7 @@ abstract class ContaPlano {
   protected $iGrupoComplano;
   protected $oSistemaConta        = null;
   protected $oSubSistemaConta     = null;
+  protected $iCgmPessoa;
 
   /**
    * @type ClassificacaoConta
@@ -159,6 +160,7 @@ abstract class ContaPlano {
         $this->setTipoLancamento($oContaPlano->c60_tipolancamento);
         $this->setSubTipo($oContaPlano->c60_subtipolancamento);
         $this->setDesdobramento($oContaPlano->c60_desdobramneto);
+        $this->setCgmPessoa($oContaPlano->c60_cgmpessoa);
         
       }
     }
@@ -752,11 +754,15 @@ public function getDesdobramento() {
     $this->iDesdobramento = $iDesdobramento;
     return $this;
   }
-  
-  
-  
-  
-  
+
+public function getCgmPessoa() {
+  return $this->iCgmPessoa;
+}
+
+public function setCgmPessoa($iCgmPessoa) {
+  $this->iCgmPessoa = $iCgmPessoa;
+  return $this;
+}
   
   
 
