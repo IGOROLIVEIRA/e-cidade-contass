@@ -31,6 +31,10 @@
 // --------------------
 function valida_dados(){
 
+   if(parseFloat(document.form1.atual_menos_reservado.value) < parseFloat(document.form1.o47_valor.value)){
+    alert("Dotação sem saldo ("+document.form1.atual_menos_reservado.value+")!");
+    return false;
+   }
    var op= document.createElement("input");
        op.setAttribute("type","hidden");
        op.setAttribute("name","<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>");
