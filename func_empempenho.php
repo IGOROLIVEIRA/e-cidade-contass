@@ -166,8 +166,8 @@ $rotulo->label("z01_cgccpf");
                  */
                 if ($filtroabast == 1) {
                     $dbwhere .= " and elementoempenho.o56_elemento in ('3339030010000','339033010000','339033990000','3339033990000') ";
-                    $dbwhere .= " and date_part('month', empempenho.e60_emiss) = date_part('month', date '".$ve70_abast."')";
-                    $dbwhere .= " and date_part('year', empempenho.e60_emiss) = date_part('year', date '".$ve70_abast."')";
+                    $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '".$ve70_abast."')";
+                    $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date '".$ve70_abast."')";
                     $filtroempelemento = 1;
                 }
                 /**
@@ -178,8 +178,8 @@ $rotulo->label("z01_cgccpf");
                  */
                 if ($filtromanut == 1) {
                     $dbwhere .= " and elementoempenho.o56_elemento in ('3339039990400','3339039990000','3339039170000','3339039160000','3339039150000','3339039050000','3339036990000','3339036170000','3339036160000','3339036060000','3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000') ";
-                    $dbwhere .= " and date_part('month', empempenho.e60_emiss) = date_part('month', date'".$ve62_dtmanut."')";
-                    $dbwhere .= " and date_part('year', empempenho.e60_emiss) = date_part('year', date'".$ve62_dtmanut."')";
+                    $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date'".$ve62_dtmanut."')";
+                    $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date'".$ve62_dtmanut."')";
                     $filtroempelemento = 1;
                 }
 
@@ -251,8 +251,9 @@ $rotulo->label("z01_cgccpf");
                          *
                          */
                         if ($filtroabast == 1) {
-                            $sWherePesquisaPorCodigoEmpenho .= " and elementoempenho.o56_elemento in ('3339030990000') ";
-                            $sWherePesquisaPorCodigoEmpenho .= "and DATEPART(m, '".$e60_emiss."') = DATEPART(m,'".$ve70_abast."')";
+                            $sWherePesquisaPorCodigoEmpenho .= " and elementoempenho.o56_elemento in ('3339030990000','339033010000','339033990000','3339033990000') ";
+                            $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '".$ve70_abast."')";
+                            $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date '".$ve70_abast."')";
                             $filtroempelemento = 1;
                         }
 
@@ -263,9 +264,10 @@ $rotulo->label("z01_cgccpf");
                          *
                          */
                         if ($filtromanut == 1) {
-                            $dbwhere .= " and elementoempenho.o56_elemento in ('3339030370000','3339030010000') ";
+                            $dbwhere .= " and elementoempenho.o56_elemento in ('3339039990400','3339039990000','3339039170000','3339039160000','3339039150000','3339039050000','3339036990000','3339036170000','3339036160000','3339036060000','3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000') ";
+                            $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date'".$ve62_dtmanut."')";
+                            $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date'".$ve62_dtmanut."')";
                             $filtroempelemento = 1;
-
                         }
 
                         $aCodEmp  = explode("/",$pesquisa_chave);
