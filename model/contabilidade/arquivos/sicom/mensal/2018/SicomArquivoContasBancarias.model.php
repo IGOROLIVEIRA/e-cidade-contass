@@ -307,6 +307,11 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
               }
           }
           $cCtb10->si95_codctb = $oRegistro10->codtce != 0 ? $oRegistro10->codtce : $oRegistro10->codctb;
+          $sql = "select * from  acertactb where si95_reduz =".$oRegistro10->codctb ;
+          $rsCtb = db_query($sql);
+          if (pg_num_rows($rsCtb) != 0 && (db_getsession("DB_anousu") == 2018 && $this->sDataFinal['5'] . $this->sDataFinal['6'] != 1)) {
+              $cCtb10->si95_codctb = $oRegistro10->codctb;
+          }
           $cCtb10->contas[] = $oRegistro10->codctb;
           $aBancosAgrupados[$aHash] = $cCtb10;
 
@@ -936,7 +941,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
     $sSqlCtbEncerradas = "select 50 as tiporegistro,
 							     si09_codorgaotce,
-							     k13_reduz as codctb,
+							     case when c61_codtce <> 0 then c61_codtce else k13_reduz end as codctb,
 							     'E' as situacaoconta,
 							     k13_limite as dataencerramento
 						       from saltes 
