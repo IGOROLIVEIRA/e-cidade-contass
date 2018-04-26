@@ -451,6 +451,27 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
             }
 
+            if($oDados10->ac16_origem == self::ORIGEM_MANUAL) {
+                $sSqlManual = "select CASE WHEN o40_codtri = '0'
+                     OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,
+                     CASE WHEN o41_codtri = '0'
+                     OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS db01_unidade,o41_subunidade from db_departorg
+                     join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
+                     and db01_anousu = o41_anousu
+                     JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                     where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oDados10->departmanual;
+
+                $rsDepartManual = db_query($sSqlManual);
+
+                $sOrgDepartM = db_utils::fieldsMemory($rsDepartManual, 0)->db01_orgao;
+                $sUnidDepartM = db_utils::fieldsMemory($rsDepartManual, 0)->db01_unidade;
+                $sSubUnidadeM = db_utils::fieldsMemory($rsDepartManual, 0)->o41_subunidade;
+
+                $sCodUnidadeM = str_pad($sOrgDepartM, 2, "0", STR_PAD_LEFT) . str_pad($sUnidDepartM, 3, "0", STR_PAD_LEFT);
+                if ($sSubUnidade == 1) {
+                    $sCodUnidadeM .= str_pad($sSubUnidadeM, 3, "0", STR_PAD_LEFT);
+                }
+            }
             /*
              * Verificar se o contrato vem de licitacao mas foi vinculado apenas ao empenho
              * por ser Origem empenho
@@ -484,12 +505,15 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_dataassinatura = $oDados10->ac16_dataassinatura;
             $clcontratos10->si83_contdeclicitacao = $oDados10->contdeclicitacao;
             $clcontratos10->si83_codorgaoresp = $oDados10->contdeclicitacao == 5 || $oDados10->contdeclicitacao == 6 ? $sCodorgao : ' ';
-            if ($oDados10->contdeclicitacao == 1 || $oDados10->contdeclicitacao == 8)
+            if ($oDados10->contdeclicitacao == 1 || $oDados10->contdeclicitacao == 8) {
                 $clcontratos10->si83_codunidadesubresp = ' ';
-            elseif ($oDados10->contdeclicitacao == 4)
+            }elseif ($oDados10->contdeclicitacao == 4) {
                 $clcontratos10->si83_codunidadesubresp = $this->getCodunidadesubrespAdesao($oDados10->ac16_sequencial);
-            else
+            }elseif ($oDados10->ac16_origem == self::ORIGEM_MANUAL) {
+                $clcontratos10->si83_codunidadesubresp = $sCodUnidadeM;
+            }else{
                 $clcontratos10->si83_codunidadesubresp = $oDados10->codunidadesubresp;
+            }
             $clcontratos10->si83_nroprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_edital : ' ';
             $clcontratos10->si83_exercicioprocesso = in_array($oDados10->contdeclicitacao, array(2, 3)) ? $oDados10->l20_anousu : ' ';
             $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
