@@ -409,7 +409,10 @@ if (isset ($processar)) {
 
             $iAnoSessao = db_getsession('DB_anousu');
 
-            $rRegrasTransacao = $cltranslan->getRegrasTransacao($c53_coddoc, $e60_anousu, db_getsession('DB_anousu'));
+            if($c53_coddoc == 39)
+                $rRegrasTransacao = $cltranslan->getRegrasTransacao($c53_coddoc, $iAnoSessao, db_getsession('DB_anousu'));
+            else
+                $rRegrasTransacao = $cltranslan->getRegrasTransacao($c53_coddoc, $e60_anousu, db_getsession('DB_anousu'));
 
             if (!$rRegrasTransacao|| pg_num_rows($rRegrasTransacao) == 0) {
               throw new Exception("Nenhuma regra para transação encontrada.");

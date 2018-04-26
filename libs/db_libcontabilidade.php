@@ -1391,7 +1391,7 @@ class cl_translan extends cl_contranslan {
     //rotina que pega o o valor que foi creditado na liquidacao para colocar no debit  do pagamento...
     if (USE_PCASP /*&& (in_array($coddoc_liq, $aDocumentosConferencia) || in_array($coddoc_liq_capital, $aDocumentosConferencia))*/) {
 
-      $c47_credito     = self::getContaCreditoLiquidacao($iNumEmp, array($coddoc_liq_capital, $coddoc_liq, 84, 3, 23), $iAnoSessao);
+      $c47_credito     = self::getContaCreditoLiquidacao($iNumEmp, array($coddoc_liq_capital, $coddoc_liq, 84, 3, 23, 202, 204, 206), $iAnoSessao);
       $c47_seqtranslr  = 0;
       $oEventoContabil = EventoContabilRepository::getEventoContabilByCodigo($coddoc_liq, $iAnoSessao, $iInstituicaoSessao);
       $aLancamentos    = $oEventoContabil->getEventoContabilLancamento();
