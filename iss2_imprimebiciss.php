@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -35,7 +35,7 @@ $clissquant = new cl_issquant;
 
 db_postmemory($HTTP_POST_VARS);
 
-$sql="select issbase.*, 
+$sql="select issbase.*,
 cg.z01_nome,
 cg.z01_numero,
 cg.z01_email,
@@ -52,11 +52,11 @@ cg.z01_compl,
 	           c.z01_nome as escritorio,
 	           cg.z01_nomefanta,
              j14_nome,
-					   j13_descr , 
+					   j13_descr ,
 					   q02_numero,
-					   q02_compl, 
+					   q02_compl,
 					   q05_matric,
-					   q14_proces, 
+					   q14_proces,
 					   cg.z01_cgccpf,q140_datainicio,q140_datafim,q140_observacao
       from issbase
              inner join cgm cg on cg.z01_numcgm = q02_numcgm
@@ -96,7 +96,7 @@ $pri = true;
 
 for ($i = 0;$i < $numrows;$i++){
  db_fieldsmemory($result,$i);
- 
+
  if (($pdf->gety() > $pdf->h -30)  || $pri==true ){
      $pdf->addpage("");
      $pdf->setfillcolor(235);
@@ -110,7 +110,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(200,4,"Dados Cadastrais do CGM","LRBT",1,"C",0);
      $pdf->setX(5);
      $pdf->Cell(200,4,"","",1,"C",0);
-     
+
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
      $pdf->Cell(30,4,"Nome:","",0,"L",1);
@@ -118,7 +118,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_nome","",0,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",0,"L",0);
-     
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->SetFont('Arial','',$titulo);
@@ -127,7 +127,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_cgccpf","",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-   
+
      //lado esquerdo da tela
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
@@ -145,7 +145,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_compl","",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
+
      //lado esquerdo da tela
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
@@ -153,8 +153,8 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->SetFont('Arial','',$texto);
      $pdf->Cell(60,4,"$z01_bairro","",0,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
-     $pdf->Cell(60,1,"","",0,"L",0);     
-     
+     $pdf->Cell(60,1,"","",0,"L",0);
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->SetFont('Arial','',$titulo);
@@ -163,7 +163,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_telef/$z01_telcel","",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
+
      //lado esquerdo da tela
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
@@ -172,7 +172,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_munic","",0,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",0,"L",0);
-     
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->SetFont('Arial','',$titulo);
@@ -190,27 +190,27 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_cep","",0,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",0,"L",0);
-     
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->Cell(60,10,"","",1,"L",0);
-          
-// fim      
-} 
- 
+
+// fim
+}
+
  if (($pdf->gety() > $pdf->h -30)  || $pri==true ){
      //$pdf->addpage("");
      $pdf->setfillcolor(235);
      $titulo = 9;
      $texto = 8;
-     
+
      //lado esquerdo da tela
      $pdf->setX(5);
      $pdf->SetFont('Arial','B',$titulo);
      $pdf->Cell(200,4,"Dados Cadastrais do Alvará","LRBT",1,"C",0);
      $pdf->setX(5);
      $pdf->Cell(200,4,"","",1,"C",0);
-     
+
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
      $pdf->Cell(30,4,"Inscrição Municipal:","",0,"L",1);
@@ -226,7 +226,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_cgccpf","",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-   
+
      //lado esquerdo da tela
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
@@ -243,7 +243,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_ender","",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-    
+
      //lado esquerdo da tela
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
@@ -261,7 +261,7 @@ for ($i = 0;$i < $numrows;$i++){
      //
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
+
      //lado esquerdo da tela
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
@@ -272,7 +272,7 @@ for ($i = 0;$i < $numrows;$i++){
      //
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",0,"L",0);
-     
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->SetFont('Arial','',$titulo);
@@ -281,7 +281,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,db_formatar($q02_dtjunta,"d"),"",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
+
      //lado esquerdo da tela
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
@@ -292,7 +292,7 @@ for ($i = 0;$i < $numrows;$i++){
      //
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",0,"L",0);
-     
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->SetFont('Arial','',$titulo);
@@ -301,8 +301,8 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,db_formatar($q02_dtbaix,"d"),"",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
-     
+
+
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
      $pdf->Cell(30,4,"Data Inicial:","",0,"L",1);
@@ -319,8 +319,8 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$q02_numero","",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
-     
+
+
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
      $pdf->Cell(30,4,"Rua:","",0,"L",1);
@@ -338,7 +338,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
 
-     
+
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
      $pdf->Cell(30,4,"Bairro:","",0,"L",1);
@@ -364,13 +364,13 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$q05_matric","",0,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",0,"L",0);
-     
-     $result_escritorio = $clescrito->sql_record($clescrito->sql_query(null,"q10_numcgm as cgm_esc,a.z01_nome as nome_esc",null,"q10_inscr = $inscr"));     
+
+     $result_escritorio = $clescrito->sql_record($clescrito->sql_query(null,"q10_numcgm as cgm_esc,a.z01_nome as nome_esc",null,"q10_inscr = $inscr"));
      if($clescrito->numrows>0){
      	db_fieldsmemory($result_escritorio,0);
      	$escri = @$cgm_esc." - ".@$nome_esc;
-     }     
-     
+     }
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->SetFont('Arial','',$titulo);
@@ -379,12 +379,12 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,@$escri,"",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
+
      $result_area=$clissquant->sql_record($clissquant->sql_query_file(null,$q02_inscr,"q30_area,q30_quant",null," q30_inscr = $q02_inscr and q30_anousu = ".db_getsession('DB_anousu')));
      if ($clissquant->numrows>0){
      	db_fieldsmemory($result_area,0);
      }
-     
+
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
      $pdf->Cell(30,4,"Área:","",0,"L",1);
@@ -392,7 +392,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,@$q30_area,"",0,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",0,"L",0);
-     
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->SetFont('Arial','',$titulo);
@@ -400,8 +400,8 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->SetFont('Arial','',$texto);
      $pdf->Cell(60,4,"$z01_ident","",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
-     $pdf->Cell(60,1,"","",1,"L",0);     
-     
+     $pdf->Cell(60,1,"","",1,"L",0);
+
      //lado esquerdo da tela
      $pdf->setX(10);
      $pdf->SetFont('Arial','',$titulo);
@@ -410,7 +410,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_email","",0,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",0,"L",0);
-     
+
      //lado direito da tela
      $pdf->setX(105);
      $pdf->SetFont('Arial','',$titulo);
@@ -419,7 +419,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,"$z01_cep","",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
+
 
      //lado esquerdo da tela
      $pdf->setX(10);
@@ -439,7 +439,7 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(60,4,@$q30_quant,"",1,"L",0);
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
-     
+
      $sqlzona    = "select * from isszona inner join zonas on j50_zona = q35_zona where q35_inscr = $q02_inscr";
      $resultzona = pg_query($sqlzona);
      $linhaszona = pg_num_rows($resultzona);
@@ -465,33 +465,37 @@ for ($i = 0;$i < $numrows;$i++){
      $pdf->Cell(30,1,"","",0,"R",0);
      $pdf->Cell(60,1,"","",1,"L",0);
   }
-}  
+}
 
 $pdf->Cell(60,5,"","",1,"L",0);
 if((isset($q02_obs) && $q02_obs != "") || (isset($q02_memo) && $q02_memo != "")){
 	  $pdf->MultiCell(200,5,"Observações - ".@$q02_obs.". ".@$q02_memo,"","J",0,0);
 }
 
-$sql = "select q07_ativ, 
-               q03_descr, 
-							 q07_datain, 
-							 q07_datafi, 
-							 q07_databx, 
+$sql = "select q07_ativ,
+               q03_descr,
+							 q07_datain,
+							 q07_datafi,
+							 q07_databx,
 		           q07_quant,
+		           q71_estrutural,
 							 tabativbaixa.*,
 							 case when q88_inscr is null then 'S'::char(1) else 'P'::char(1) end as q88_tipo,
-										 q11_processo, 
+										 q11_processo,
 							 case when q11_oficio = 'true' then 'NORMAL'
-													when q11_oficio = 'false' then 'OFICIO' 
+													when q11_oficio = 'false' then 'OFICIO'
 							else '' end as q11_oficio
 					from tabativ
 							inner join ativid on q07_ativ = q03_ativ
 							left join ativprinc on ativprinc.q88_inscr = tabativ.q07_inscr and ativprinc.q88_seq = tabativ.q07_seq
 							left join tabativbaixa on tabativ.q07_inscr = tabativbaixa.q11_inscr and tabativ.q07_seq = tabativbaixa.q11_seq
+							left join atividcnae on q74_ativid = q03_ativ
+							left join cnaeanalitica on q72_sequencial = q74_cnaeanalitica
+							left join cnae on q71_sequencial = q72_cnae
 	  		where q07_inscr = $inscr
         order by case when q88_inscr is null then 2 else 1 end, q07_datain, q07_datafi
         ";
-//die ($sql);	  
+//die ($sql);
 $result  = pg_query($sql);
 $numrows = pg_num_rows($result);
 $pdf->Cell(180,3,"","",1,"L",0);
@@ -511,13 +515,13 @@ if($numrows <> 0){
    $pdf->cell(25,4,"Data Inicio",0,0,"C",1);
    $pdf->cell(25,4,"Data Fim",0,0,"C",1);
    $pdf->cell(25,4,"Data Baixa",0,1,"C",1);
-  
+
    for ($i = 0;$i < $numrows;$i++){
       db_fieldsmemory($result,$i);
       $pdf->setX(10);
       $pdf->SetFont('Arial','',$texto);
       $pdf->cell(15,4,"$q07_ativ",0,0,"C",0);
-      $pdf->cell(100,4,"$q03_descr",0,0,"L",0);
+      $pdf->cell(100,4,substr(empty($q71_estrutural)  ? $q03_descr : "{$q71_estrutural} - {$q03_descr}",0,70),0,0,"L",0);
       $pdf->cell(6,4,$q88_tipo,0,0,"L",0);
       $pdf->cell(25,4,db_formatar($q07_datain,"d"),0,0,"C",0);
       $pdf->cell(25,4,db_formatar($q07_datafi,"d"),0,0,"C",0);
@@ -525,7 +529,7 @@ if($numrows <> 0){
 			if(isset($q11_obs) && $q11_obs != ""){
           $pdf->multicell(190,4,"Observações da baixa - $q11_obs  ",0,"L","L",0);
    		}
-   }   
+   }
 }else{
   $pdf->cell(190,4,"NÃO POSSUI ATIVIDADE",0,1,"C",0);
 }
@@ -534,10 +538,10 @@ $sql="select cgmsocio.z01_numcgm,
              cgmsocio.z01_nome,
 	     cgmsocio.z01_ender,
 	     cgmsocio.z01_munic,
-	     q95_perc 
-      from issbase 
-	     inner join socios on q95_cgmpri = q02_numcgm 
-	     inner join cgm cgmsocio on cgmsocio.z01_numcgm = q95_numcgm 
+	     q95_perc
+      from issbase
+	     inner join socios on q95_cgmpri = q02_numcgm
+	     inner join cgm cgmsocio on cgmsocio.z01_numcgm = q95_numcgm
 	     inner join cgm cgmempresa on cgmempresa.z01_numcgm = q02_numcgm where q95_tipo = 1 and q02_inscr =$inscr";
 $result = pg_exec($sql);
 $numrows = pg_num_rows($result);
@@ -557,7 +561,7 @@ if($numrows <> 0){
    $pdf->cell(30,4,"Municipio",0,0,"C",1);
    $pdf->cell(14,4,"Percentual",0,1,"C",1);
 
-  
+
    for ($i = 0;$i < $numrows;$i++){
       db_fieldsmemory($result,$i);
       $pdf->setX(10);
@@ -567,7 +571,7 @@ if($numrows <> 0){
       $pdf->cell(68,4,"$z01_ender",0,0,"L",0);
       $pdf->cell(30,4,"$z01_munic",0,0,"C",0);
       $pdf->cell(14,4,"$q95_perc",0,1,"C",0);
-   }   
+   }
 }
 else{
   $pdf->cell(190,4,"NÃO POSSUI SOCIOS",0,1,"C",0);
@@ -595,13 +599,13 @@ if ($numrows <> 0) {
    $pdf->cell(30,4,"Quant. Liberada",0,0,"C",1);
    $pdf->cell(20,4,"Nota Final",0,0,"C",1);
    $pdf->cell(20,4,"Gráfica",0,0,"C",1);
-   $pdf->cell(10,4,"Cancel.",0,1,"C",1);  
+   $pdf->cell(10,4,"Cancel.",0,1,"C",1);
    for ($i = 0; $i < $numrows;$i++) {
       db_fieldsmemory($result,$i);
       $pdf->setX(10);
       $pdf->SetFont('Arial','',$texto);
       $p=0;
-      if ($y08_cancel=="t"){      
+      if ($y08_cancel=="t"){
       	$cancel="Sim";
       }else{
       	$cancel="Não";
@@ -615,7 +619,7 @@ if ($numrows <> 0) {
       $pdf->cell(20,4,$y08_notafi,0,0,"C",$p);
       $pdf->cell(20,4,$y08_numcgm,0,0,"C",$p);
       $pdf->cell(10,4,$cancel,0,1,"C",$p);
-   }   
+   }
 }
 else{
   $pdf->cell(190,4,"NÃO POSSUI AIDOF",0,1,"C",0);
@@ -651,7 +655,7 @@ $pdf->setX(5);
 $pdf->Cell(200,4,"","",1,"C",0);
 
 if ($numrows <> 0) {
-	
+
 	$pdf->setX(10);
   $pdf->SetFont('Arial','',$titulo);
   $pdf->cell(10,4,"Código",0,0,"C",1);

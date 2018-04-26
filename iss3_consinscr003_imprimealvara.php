@@ -290,7 +290,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $pdf1->bairropri = $j13_descr;
   $pdf1->compl = $q02_compl;
   $pdf1->numero = $q02_numero;
-  $pdf1->descrativ = $q03_descr;
+  $pdf1->descrativ = empty($q71_estrutural)  ? $q03_descr : "{$q71_estrutural} - {$q03_descr}";
   $pdf1->datainc = $q02_dtinic;
   $pdf1->cnpjcpf = $z01_cgccpf;
   $pdf1->dtiniativ = $q07_datain;
@@ -380,7 +380,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
       db_fieldsmemory($result, $i);
       if ($descr != $q03_descr) {
         $arr [$i] ["codativ"] = $q07_ativ;
-        $arr [$i] ["descr"] = $q03_descr;
+        $arr [$i] ["descr"] = empty($q71_estrutural)  ? $q03_descr : "{$q71_estrutural} - {$q03_descr}";
         $arr [$i] ["datain"] = $q07_datain;
         $arr [$i] ["datafi"] = $q07_datafi;
         $arr [$i] ["atv_perman"] = $q07_perman;

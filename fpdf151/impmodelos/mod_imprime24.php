@@ -176,7 +176,11 @@ if ($this->impobsativ == 'f'){
 
 $iAlturaBox = $this->objpdf->gety();
 $this->objpdf->Cell(135,5,"ATIVIDADE PRINCIPAL: ",0,0,"L",0) ; // descrição da atividade principal
+$fWidthDescAtiv = 175;
+$iMaxCaracDescAtiv = 90;
 if ($this->impdatas == 't'){
+  $fWidthDescAtiv = 120;
+  $iMaxCaracDescAtiv = 55;
   if(isset($this->horariofuncionamento)){
     $this->objpdf->Cell(24,5,"HORÁRIO",0,0,"C",0);
     $this->objpdf->Cell(24,5,"",0,1,"C",0);
@@ -203,7 +207,7 @@ if ($this->impcodativ == 't'){
 }
 
 $iAltura = $this->objpdf->gety();
-$this->objpdf->Multicell(120,4,$this->descrativ,0,1,"L",0);
+$this->objpdf->Multicell($fWidthDescAtiv,4,substr($this->descrativ,0,$iMaxCaracDescAtiv),0,1,"L",0);
 $iAlturaNova = $this->objpdf->gety();
 $this->objpdf->sety( $iAltura );
 $this->objpdf->setx(152);
@@ -334,9 +338,9 @@ if ($num_outras >0) {
           $this->objpdf->Cell(15,4,"",0,0,"C",0);
         }
 
-        $descr=$this->outrasativs[$i]["descr"];
+        $descr=substr($this->outrasativs[$i]["descr"],0,$iMaxCaracDescAtiv);
         $iAltura = $this->objpdf->gety();
-        $this->objpdf->Multicell(120,4,$descr,0,1,"L",0);
+        $this->objpdf->Multicell($fWidthDescAtiv,4,$descr,0,1,"L",0);
         $iAlturaNova = $this->objpdf->gety();
         $this->objpdf->sety( $iAltura );
         $this->objpdf->setx(152);
@@ -364,7 +368,7 @@ if ($num_outras >0) {
       $this->objpdf->sety( $iAlturaNova );
       if ($this->impobsativ == 't'){
         $linhasec = $linhasec +1;
-        if($linhasec<6){
+        if($linhasec<7){
           if(isset($this->q03_atmemo[$codativ])){
             $this->objpdf->setx(15);
             $obs = $this->q03_atmemo[$codativ];
@@ -391,11 +395,11 @@ if ($num_outras >0) {
 
 //=====================================================================================================================================================
 
-  $this->objpdf->roundedrect($coluna-2,$y,187,35,2,'1234'); // descricao da atividade secundaria
+  $this->objpdf->roundedrect($coluna-2,$y,187,43,2,'1234'); // descricao da atividade secundaria
 }
 
 $x=64;
-$this->objpdf->setxy(14,$iPos+40);
+$this->objpdf->setxy(14,$iPos+50);
 
 $this->objpdf->SetFont('Arial','',14);
 $this->objpdf->Multicell(0,6,$this->obs); // observação
