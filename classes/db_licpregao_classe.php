@@ -27,7 +27,8 @@ class cl_licpregao {
    var $l45_validade_mes = null; 
    var $l45_validade_ano = null; 
    var $l45_validade = null; 
-   var $l45_tipo = 0; 
+   var $l45_tipo = 0;
+   var $l45_instit = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  l45_sequencial = int8 = Sequencial 
@@ -36,6 +37,7 @@ class cl_licpregao {
                  l45_tipo = int8 = Tipo 
                  l45_descrnomeacao= int8 = Tipo
                  l45_numatonomeacao= int8 = Tipo
+                 l45_instit = int4 = codigo da instituicao
                  ";
    //funcao construtor da classe 
    function cl_licpregao() { 
@@ -64,7 +66,7 @@ class cl_licpregao {
             $this->l45_data = $this->l45_data_ano."-".$this->l45_data_mes."-".$this->l45_data_dia;
          }
        }
-      
+       $this->l45_instit = ($this->l45_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l45_instit"]:$this->l45_instit);
        $this->l45_descrnomeacao = ($this->l45_descrnomeacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l45_descrnomeacao"]:$this->l45_descrnomeacao);
        $this->l45_numatonomeacao = ($this->l45_numatonomeacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l45_numatonomeacao"]:$this->l45_numatonomeacao);
        if($this->l45_validade == ""){
@@ -145,7 +147,7 @@ class cl_licpregao {
                                       ,l45_tipo 
                                       ,l45_descrnomeacao
                                       ,l45_numatonomeacao
-                                      
+                                      ,l45_instit
                        )
                 values (
                                 $this->l45_sequencial 
@@ -154,6 +156,7 @@ class cl_licpregao {
                                ,$this->l45_tipo 
                                 ,$this->l45_descrnomeacao
                                 ,$this->l45_numatonomeacao
+                                ,$this->l45_instit
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -312,6 +315,20 @@ class cl_licpregao {
          return false;
        }
      }
+
+       if(trim($this->l45_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l45_instit"])){
+           $sql  .= $virgula." l45_instit = $this->l45_instit ";
+           $virgula = ",";
+           if(trim($this->l45_instit) == null ){
+               $this->erro_sql = " Campo codigo da instituicao não Informado.";
+               $this->erro_campo = "l45_instit";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
      
      
      

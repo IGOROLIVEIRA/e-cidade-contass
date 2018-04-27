@@ -1,13 +1,16 @@
 <?
 //MODULO: licitacao
 $cllicpregao->rotulo->label();
+$l45_instit = db_getsession("DB_instit");
+
       if($db_opcao==1){
  	   $db_action="lic1_licpregao004.php";
       }else if($db_opcao==2||$db_opcao==22){
  	   $db_action="lic1_licpregao005.php";
       }else if($db_opcao==3||$db_opcao==33){
  	   $db_action="lic1_licpregao006.php";
-      }  
+      }
+
 ?>
 <form name="form1" method="post" action="<?=$db_action?>">
 <center>
@@ -78,6 +81,9 @@ $cllicpregao->rotulo->label();
 	db_select('l45_tipo',$al45_tipo,true,$db_opcao,"");
 	?>
     </td>
+    <?
+    db_input('l45_instit',6,$Il45_instit,true,'hidden',3,"");
+    ?>
   </tr>
   </table>
   </center>

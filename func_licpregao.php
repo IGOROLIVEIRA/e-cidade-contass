@@ -43,7 +43,7 @@ $cllicpregao = new cl_licpregao;
            $campos = "licpregao.oid,licpregao.*";
            }
         }
-	         $sql = $cllicpregao->sql_query('',$campos);
+	         $sql = $cllicpregao->sql_query('',$campos,'','l45_instit = '.db_getsession("DB_instit"));
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
