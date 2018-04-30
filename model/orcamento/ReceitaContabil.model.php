@@ -293,10 +293,12 @@ class ReceitaContabil {
     // passa aqui quando tem desdobramento (existe no arquivo orcreceitades)
     if (count($aReceitas) > 0) {
 
+
       foreach ($aReceitas as $iCodigoReceita => $oDadosReceita) {
 
         $codrec          = $oDadosReceita->codigo_receita;
         $valor           = $oDadosReceita->valor;
+
         $sCaracteristica = $oDadosReceita->caracteristica_peculiar;
         if ($valor == 0) {
           // quando entraria neste if ?
@@ -502,18 +504,24 @@ class ReceitaContabil {
         $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
 
         /**
-         * Verificamos se o processamento é um estorno e desconto para sob escrevermos o código do documento
+         * Verificamos se o processamento é um estorno ou desconto para sob escrevermos o código do documento
          */
-        if ($lDesconto) {
+        if ($lDesconto ) {
 
           $oLancamentoAuxiliar->setContaCredito($iContaDebito);
           $oLancamentoAuxiliar->setContaDebito($iCodigoContaCreditoPcasp);
-          $iCodigoDocumentoExecutar = 418;
+          if(substr($this->getContaOrcamento()->getEstrutural(), 0, 3) == 491)
+            $iCodigoDocumentoExecutar = 122;
+          else
+              $iCodigoDocumentoExecutar = 418;
           if ($lEstorno) {
 
             $oLancamentoAuxiliar->setContaCredito($iCodigoContaCreditoPcasp);
             $oLancamentoAuxiliar->setContaDebito($iContaDebito);
-            $iCodigoDocumentoExecutar = 419;
+            if(substr($this->getContaOrcamento()->getEstrutural(), 0, 3) == 491)
+                $iCodigoDocumentoExecutar = 123;
+            else
+                $iCodigoDocumentoExecutar = 419;
           }
           $oLancamentoContabil = EventoContabilRepository::getEventoContabilByCodigo($iCodigoDocumentoExecutar,
                                                                                      $iAnoAutenticacao);

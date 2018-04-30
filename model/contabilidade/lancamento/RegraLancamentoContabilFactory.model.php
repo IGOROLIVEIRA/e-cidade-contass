@@ -81,6 +81,8 @@ class RegraLancamentoContabilFactory {
     ,118 => "RegraArrecadacaoReceita"
     ,120 => "RegraPagamentoSlip"
     ,121 => "RegraAnulacaoSlip"
+    ,122 => "RegraArrecadacaoReceita"
+    ,123 => "RegraArrecadacaoReceita"
     ,130 => "RegraPagamentoSlip"
     ,131 => "RegraAnulacaoSlip"
     ,140 => "RegraPagamentoSlip"

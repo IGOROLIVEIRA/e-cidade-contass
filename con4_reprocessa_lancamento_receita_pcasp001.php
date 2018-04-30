@@ -277,6 +277,7 @@ if (isset($_POST["processar"])) {
                                                        null,
                                                        $oDadosAutenticacao->k12_conta
                                                       );
+
        $lReceitaContabil = $oAutenticacao->efetuarLancamentos($oDadosAutenticacao->data,
                                                               $oDadosAutenticacao->id,
                                                               $oDadosAutenticacao->codautent,
@@ -345,6 +346,7 @@ if (isset($_POST["processar"])) {
       $oDadosAutenticacao = db_utils::fieldsMemory($rsReceitas, $i);
 
       $oAutenticacao      = new LancamentoContabilAjusteBaixaBanco($oDadosAutenticacao->k12_codcla);
+
       $oAutenticacao->autenticar();
 
       db_fim_transacao(false);
