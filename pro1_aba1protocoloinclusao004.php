@@ -135,7 +135,8 @@ strong {
       <input type="button" value="Pesquisar" onclick="pesquisar();">
       <input id="alterar" style="display: none;" type="button" value="Alterar" onclick="alterarProtocolo(document.form1.p101_sequencial.value);">
       <input id="anular" style="display: none;" type="button" value="Anular" onclick="anularProtocolo(document.form1.p101_sequencial.value);">
-      <input type="button" value="Limpar" onclick="window.location.reload();">
+      <input type="button" value="Limpar" onclick="limpar();">
+      <input id="copiar" style="display: none;" type="button" value="Copiar" onclick="copiarProtocolo();">
     </div>
   </center>
   </form>
@@ -172,13 +173,11 @@ function js_mostradb_depart(chave,erro){
     document.form1.p101_coddeptoorigem.focus();
     document.form1.p101_coddeptoorigem.value = '';
   }
-  //document.form1.submit();
 }
 function js_mostradb_depart1(chave1,chave2){
   document.form1.p101_coddeptoorigem.value = chave1;
   document.form1.descrdeptoo.value = chave2;
   db_iframe_depart.hide();
-  //document.form1.submit();
 }
 
 
@@ -198,15 +197,12 @@ function js_mostradb_departdestino(chave,erro){
   if(erro==true){
     document.form1.p101_coddeptodestino.focus();
     document.form1.p101_coddeptodestino.value = '';
-  } else {
-    //document.form1.submit();
   }
 }
 function js_mostradb_departdestino1(chave1,chave2){
   document.form1.p101_coddeptodestino.value = chave1;
   document.form1.descrdeptod.value = chave2;
   db_iframe_depart.hide();
-  //document.form1.submit();
 }
 
 function pesquisar() {
@@ -230,9 +226,11 @@ function js_pesquisaProtocolo(chave1, chave2, chave3, chave4, chave5, chave6, ch
   if (chave2 == id_sessao || id_sessao == 1) {
     document.getElementById('anular').style.display = "inline-block";
     document.getElementById('alterar').style.display = "inline-block";
+    document.getElementById('copiar').style.display = "inline-block";
   } else {
     document.getElementById('anular').style.display = "none";
     document.getElementById('alterar').style.display = "none";
+    document.getElementById('copiar').style.display = "none";
   }
 
   if (chave10 == '') {
@@ -330,6 +328,7 @@ function incluirprotocolo(iUsuario, iOrigem, iDestino, iObservacao, iHora) {
         document.getElementById('imprimi').style.display = "inline-block";
         document.getElementById('alterar').style.display = "inline-block";
         document.getElementById('anular').style.display = "inline-block";
+        document.getElementById('copiar').style.display = "inline-block";
 
         parent.document.formaba.autorizacaodeempenho.disabled=false;
         top.corpo.iframe_autorizacaodeempenho.location.href='pro1_aba2protprocesso004.php?protocolo='+oRetorno.protocolo;
@@ -357,6 +356,7 @@ function desabilitaAbas(){
   parent.document.formaba.empenho.disabled=true;
   parent.document.formaba.ordemdecompra.disabled=true;
   parent.document.formaba.ordemdepagamento.disabled=true;
+  parent.document.formaba.slip.disabled=true;
 }
 
 function imprimir(protocolo) {
@@ -425,6 +425,47 @@ function anularProtocolo(protocolo) {
         alert(oRetorno.erro);
       }
     });
+}
+
+function copiarProtocolo() {
+  js_OpenJanelaIframe('','db_iframe_protocolos','func_protocolos.php?funcao_js=parent.salvarCopiaProtocolo|p101_sequencial','Pesquisa',true);
+}
+
+function salvarCopiaProtocolo(p101_sequencial) {
+  var protocolo = document.form1.p101_sequencial.value;
+  var salvar = confirm("Deseja copiar os dados do protocolo "+p101_sequencial+" para o protocolo atual?");
+  if (salvar == true) {
+    var params = {
+      exec: 'salvaCopiaProtocolo',
+      protocolo:protocolo,
+      copiaProtocolo:p101_sequencial
+    };
+
+    novoAjax(params, function(e) {
+      var oRetorno = JSON.parse(e.responseText);
+        if (oRetorno.status == 1) {
+          top.corpo.iframe_autorizacaodeempenho.location.href='pro1_aba2protprocesso004.php?protocolo='+protocolo;
+          top.corpo.iframe_empenho.location.href='pro1_aba3protprocesso004.php?protocolo='+protocolo;
+          top.corpo.iframe_ordemdecompra.location.href='pro1_aba4protprocesso004.php?protocolo='+protocolo;
+          top.corpo.iframe_ordemdepagamento.location.href='pro1_aba5protprocesso004.php?protocolo='+protocolo;
+          top.corpo.iframe_slip.location.href='pro1_aba6protprocesso004.php?protocolo='+protocolo;
+          alert("Protocolo copiado com sucesso!");
+          db_iframe_protocolos.hide();
+        } else {
+          alert(oRetorno.erro);
+        }
+    });
+  }
+  else {
+      return;
+  }
+}
+
+function limpar() {
+  window.location.reload();
+  document.form1.p101_sequencial.value = "";
+  document.form1.p101_coddeptodestino.value = "";
+  document.form1.p101_observacao.value = "";
 }
 </script>
 </html>

@@ -52,10 +52,6 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
   $protocolo = $aFiltros['protocolo'];
 }
 
-if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
-  $pesquisa = $aFiltros['pesquisa'];
-}
-
 ?>
 
 <html>
@@ -139,7 +135,6 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
   <tr>
     <td></td>
     <td align="left">
-      <!--<input name="pesquisar" type="button" onclick='js_abre();'  value="Pesquisar">-->
       <input style="margin-left: 128px;" type="button" id="inserir" value="Incluir" onclick="incluir();">
     </td>
   </tr>
@@ -293,11 +288,6 @@ function pesquisaProtocolo(protocolo) {
     table_autcompra.innerHTML = trs.join('');
     var usuario = JSON.parse(e.responseText).id_usuario;
     var id_sessao = <?php echo db_getsession("DB_id_usuario"); ?>;
-
-    /*if (autcompras.length == 0) {
-      table_autcompra.innerHTML = '<tr><td class="text-center" colspan="5">Nenhuma ordem de compra foi inserida neste protocolo!</td></tr>';
-      document.getElementById('bt_excluir').style.display = "none";
-    }*/
 
     if (usuario == id_sessao || id_sessao == 1) {
         document.getElementById('inserir').style.display = "inline-block";

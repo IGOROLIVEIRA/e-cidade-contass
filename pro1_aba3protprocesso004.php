@@ -58,9 +58,6 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
   $protocolo = $aFiltros['protocolo'];
 }
 
-if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
-  $pesquisa = $aFiltros['pesquisa'];
-}
 ?>
 
 <html>
@@ -142,18 +139,7 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
             db_input("z01_nome1",40,"",true,"text",3);
           ?>
         </td>
-      </tr><!--
-      <tr>
-        <td  align="left" nowrap title="<?=$Tz01_numcgm?>">
-          <?db_ancora(@$Lz01_nome,"js_pesquisa_cgm(true);",1);?>
-        </td>
-        <td align="left" nowrap>
-          <?
-            db_input("z01_numcgm",10,$Iz01_numcgm,true,"text",4,"onchange='js_pesquisa_cgm(false);'");
-            db_input("z01_nome2",30,"",true,"text",3);
-          ?>
-        </td>
-      </tr>-->
+      </tr>
       <tr height="14px">
       <td ></td>
       <td ></td>
@@ -343,11 +329,6 @@ function pesquisaProtocolo(protocolo) {
     var usuario = JSON.parse(e.responseText).id_usuario;
     var id_sessao = <?php echo db_getsession("DB_id_usuario"); ?>;
 
-    /*if (empenhos.length == 0) {
-      table_empenhos.innerHTML = '<tr><td class="text-center" colspan="5">Nenhum empenho foi inserido neste protocolo!</td></tr>';
-      document.getElementById('bt_excluir').style.display = "none";
-    }*/
-
     if (usuario == id_sessao || id_sessao == 1) {
         document.getElementById('inserir').style.display = "inline-block";
         if (empenhos.length == 0) {
@@ -387,16 +368,12 @@ function excluir(protocolo) {
       var ano        = empenhoAno[1];
       empenhos.push("'"+empenho+"'");
       anos.push(ano);
-      //console.log(empenho);
-      //empenhos.push("'"+item.value+"'");
     }
   });
 
   var e60_anousu = anos.filter(function(este, i) {
     return anos.indexOf(este) == i;
   })
-  //console.log(empenhos);
-  //console.log(e60_anousu); return;
 
   var params = {
     exec: 'excluirEmpenhos',
@@ -419,7 +396,6 @@ function excluir(protocolo) {
     }
   });
 }
-
 
 function verificaEmpenhos() {
 

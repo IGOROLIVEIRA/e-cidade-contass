@@ -107,7 +107,6 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
         <td></td>
         <td align="left">
           <input style="margin-left: 125px;" type="button" id="inserir" value="Incluir" onclick="incluir();">
-          <!--<input name="pesquisar" type="button" onclick='js_abre();'  value="Pesquisar">-->
         </td>
       </tr>
     </table>
@@ -130,6 +129,9 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
     </table>
     <td align="left">
       <input id="bt_excluir" style="margin-left: -3px; display: none" type="button" value="Remover" onclick="excluir(<?php echo $protocolo; ?>);">
+      <?php if (db_getsession("DB_id_usuario") == 1 || ("DB_coddepto") == 10 || db_getsession("DB_coddepto") == 31) : ?>
+        <input id="bt_autorizar" style="margin-left: 3px; display: none" type="button" value="Liberar" onclick="autorizar(<?php echo $protocolo; ?>);">
+      <?php endif ; ?>
     </td>
 </form>
 </fieldset>
@@ -209,7 +211,7 @@ function incluirSlip(iProtocolo, iSlip) {
     protocolo: iProtocolo,
     slip: iSlip
   };
-
+  js_divCarregando('Aguarde', 'div_aguarde');
   novoAjax(params, function(e) {
     var oRetorno = JSON.parse(e.responseText);
       if (oRetorno.status == 1) {
@@ -219,7 +221,9 @@ function incluirSlip(iProtocolo, iSlip) {
         document.form1.dattab.value     = "";
         document.form1.valtab.value     = "";
         document.getElementById('bt_excluir').style.display = "inline-block";
+        js_removeObj('div_aguarde');
       } else {
+          js_removeObj('div_aguarde');
           alert(oRetorno.erro);
         return;
       }
@@ -241,8 +245,9 @@ function pesquisaProtocolo(protocolo) {
 
     slips.forEach(function(slip, i) {
 
+      var cor = slip.autorizado == "t" ? " style=\"background-color:#D1F07C\"" : " style=\"background-color:#ffffff\"";
       var tr = ''
-        + '<tr id="slip'+slip.autorizacao+'">'
+        + '<tr id="slip'+slip.autorizacao+'"'+cor+'>'
           + '<td class="text-center">'
             + '<input id=autorizacao value="' + slip.autorizacao + '" type="checkbox" class="ch_slips" name="slips[]">'
           + '</td>'
@@ -259,22 +264,35 @@ function pesquisaProtocolo(protocolo) {
     table_slips.innerHTML = trs.join('');
     var usuario = JSON.parse(e.responseText).id_usuario;
     var id_sessao = <?php echo db_getsession("DB_id_usuario"); ?>;
+    var id_depart = <?php echo db_getsession("DB_coddepto"); ?>;
 
     if (usuario == id_sessao || id_sessao == 1) {
         document.getElementById('inserir').style.display = "inline-block";
         if (slips.length == 0) {
           table_slips.innerHTML = '<tr><td class="text-center" colspan="5">Nenhum Slip foi inserido neste protocolo!</td></tr>';
           document.getElementById('bt_excluir').style.display = "none";
+          if (id_depart == 10 || id_depart == 31 || id_sessao == 1) {
+            document.getElementById('bt_autorizar').style.display = "none";
+          }
         } else {
             document.getElementById('bt_excluir').style.display = "inline-block";
+            if (id_depart == 10 || id_depart == 31 || id_sessao == 1) {
+              document.getElementById('bt_autorizar').style.display = "inline-block";
+            }
         }
     } else {
         if (slips.length == 0) {
           table_slips.innerHTML = '<tr><td class="text-center" colspan="5">Nenhum Slip foi inserido neste protocolo!</td></tr>';
           document.getElementById('bt_excluir').style.display = "none";
+          if (id_depart == 10 || id_depart == 31 || id_sessao == 1) {
+            document.getElementById('bt_autorizar').style.display = "none";
+          }
         } else {
           document.getElementById('bt_excluir').style.display = "none";
           document.getElementById('inserir').style.display = "none";
+          if (id_depart == 10 || id_depart == 31 || id_sessao == 1) {
+              document.getElementById('bt_autorizar').style.display = "none";
+          }
         }
     }
 
@@ -342,6 +360,41 @@ function verificaSlips() {
   return temMarcado;
 }
 
+function autorizar(protocolo) {
+  var ckslips  = verificaSlips();
+  if (ckslips == false) {
+    alert('Selecione um Slip!');
+    return;
+  }
+
+  var recslips = document.querySelectorAll('.ch_slips');
+  var slips = [];
+
+  recslips.forEach(function (item) {
+    if (item.checked) {
+      slips.push(item.value);
+    }
+  });
+
+  var params = {
+    exec: 'autorizacaoSlips',
+    slips: slips,
+    protocolo:protocolo
+  };
+
+  js_divCarregando('Aguarde', 'div_aguarde');
+  novoAjax(params, function(e) {
+    var oRetorno = JSON.parse(e.responseText);
+    if (oRetorno.status == 1) {
+      pesquisaProtocolo(protocolo);
+      js_removeObj('div_aguarde');
+    } else {
+      js_removeObj('div_aguarde');
+      alert(oRetorno.erro);
+      return;
+    }
+  });
+}
 
 function marcaTodos(valor) {
 

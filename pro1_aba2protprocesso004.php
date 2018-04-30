@@ -54,11 +54,6 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
 
 if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
   $protocolo = $aFiltros['protocolo'];
-  //echo '<script>document.onload=pesquisa_protocolo('.$protocolo.')</script>';
-}
-
-if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
-  $pesquisa = $aFiltros['pesquisa'];
 }
 
 ?>

@@ -49,7 +49,6 @@ $clpcmater->rotulo->label();
 $clcgm->rotulo->label();
 
 $clempempenho->rotulo->label();
-
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING'], $aFiltros);
 
@@ -57,9 +56,6 @@ if (isset($aFiltros['protocolo']) && !empty($aFiltros['protocolo'])) {
   $protocolo = $aFiltros['protocolo'];
 }
 
-if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
-  $pesquisa = $aFiltros['pesquisa'];
-}
 ?>
 
 <html>
@@ -143,7 +139,6 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
         <td></td>
         <td align="left">
           <input style="margin-left: 125px;" type="button" id="inserir" value="Incluir" onclick="incluir();">
-          <!--<input name="pesquisar" type="button" onclick='js_abre();'  value="Pesquisar">-->
         </td>
       </tr>
     </table>
@@ -164,9 +159,11 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
 
         </tbody>
     </table>
-    <td align="left">
-      <input id="bt_excluir" style="margin-left: -3px; display: none" type="button" value="Remover" onclick="excluir(<?php echo $protocolo; ?>);">
-    </td>
+
+    <input id="bt_excluir" style="margin-left: -3px; display: none" type="button" value="Remover" onclick="excluir(<?php echo $protocolo; ?>);">
+    <?php if (db_getsession("DB_id_usuario") == 1 || ("DB_coddepto") == 10 || db_getsession("DB_coddepto") == 31) : ?>
+      <input id="bt_autorizar" style="margin-left: 3px; display: none" type="button" value="Liberar" onclick="autorizar(<?php echo $protocolo; ?>);">
+    <?php endif ; ?>
 </form>
 </fieldset>
 </div>
@@ -241,7 +238,7 @@ function incluirAutPagamento(iProtocolo, iAutPagamento) {
     protocolo: iProtocolo,
     autpagamento: iAutPagamento
   };
-
+  js_divCarregando('Aguarde', 'div_aguarde');
   novoAjax(params, function(e) {
     var oRetorno = JSON.parse(e.responseText);
       if (oRetorno.status == 1) {
@@ -251,7 +248,9 @@ function incluirAutPagamento(iProtocolo, iAutPagamento) {
         document.form1.dattab.value     = "";
         document.form1.valtab.value     = "";
         document.getElementById('bt_excluir').style.display = "inline-block";
+        js_removeObj('div_aguarde');
       } else {
+          js_removeObj('div_aguarde');
           alert(oRetorno.erro);
         return;
       }
@@ -272,45 +271,52 @@ function pesquisaProtocolo(protocolo) {
     var autpagamentos = JSON.parse(e.responseText).autpagamentos;
 
     autpagamentos.forEach(function(autpagamento, i) {
-
+      var cor = autpagamento.autorizado == "t" ? " style=\"background-color:#D1F07C\"" : " style=\"background-color:#ffffff\"";
       var tr = ''
-        + '<tr id="autpagamento'+autpagamento.autorizacao+'">'
+        + '<tr id="autpagamento'+autpagamento.autorizacao+'"'+cor+'>'
           + '<td class="text-center">'
-            + '<input id=autorizacao value="' + autpagamento.autorizacao + '" type="checkbox" class="ch_autpagamentos" name="autpagamentos[]">'
+            + '<input id=autorizacao value="'+autpagamento.autorizacao+'" type="checkbox" class="ch_autpagamentos" name="autpagamentos[]">'
           + '</td>'
-          + '<td style="width: 125px;" class="text-center">'   + autpagamento.autorizacao + '</td>'
-          + '<td>'     + autpagamento.razao + '</td>'
+          + '<td style="width: 125px;" class="text-center">'+autpagamento.autorizacao+'</td>'
+          + '<td>'+autpagamento.razao+'</td>'
           + '<td class="text-center">'   + autpagamento.emissao + '</td>'
-          + '<td style="width: 80px;" class="text-center">R$ ' +  number_format(autpagamento.valor, 2, ',', '.') + '</td>'
+          + '<td style="width: 80px;" class="text-center">R$ '+number_format(autpagamento.valor, 2, ',', '.')+'</td>'
         + '</tr>';
-
         trs.push(tr);
-
     });
 
     table_autpagamentos.innerHTML = trs.join('');
     var usuario = JSON.parse(e.responseText).id_usuario;
     var id_sessao = <?php echo db_getsession("DB_id_usuario"); ?>;
-
-    /*if (autpagamentos.length == 0) {
-      table_autpagamentos.innerHTML = '<tr><td class="text-center" colspan="5">Nenhuma ordem de pagamento foi inserida neste protocolo!</td></tr>';
-    }*/
+    var id_depart = <?php echo db_getsession("DB_coddepto"); ?>;
 
     if (usuario == id_sessao || id_sessao == 1) {
         document.getElementById('inserir').style.display = "inline-block";
         if (autpagamentos.length == 0) {
           table_autpagamentos.innerHTML = '<tr><td class="text-center" colspan="5">Nenhuma autorização de empenho foi inserida neste protocolo!</td></tr>';
-          document.getElementById('bt_excluir').style.display = "none";
+          document.getElementById('bt_excluir').style.display   = "none";
+          if (id_depart == 10 || id_depart == 31 || id_sessao == 1) {
+            document.getElementById('bt_autorizar').style.display = "none";
+          }
         } else {
-            document.getElementById('bt_excluir').style.display = "inline-block";
+            document.getElementById('bt_excluir').style.display   = "inline-block";
+            if (id_depart == 10 || id_depart == 31 || id_sessao == 1) {
+              document.getElementById('bt_autorizar').style.display = "inline-block";
+            }
         }
     } else {
         if (autpagamentos.length == 0) {
           table_autpagamentos.innerHTML = '<tr><td class="text-center" colspan="5">Nenhuma autorização de empenho foi inserida neste protocolo!</td></tr>';
-          document.getElementById('bt_excluir').style.display = "none";
+          document.getElementById('bt_excluir').style.display   = "none";
+          if (id_depart == 10 || id_depart == 31 || id_sessao == 1) {
+            document.getElementById('bt_autorizar').style.display = "none";
+          }
         } else {
-          document.getElementById('bt_excluir').style.display = "none";
-          document.getElementById('inserir').style.display = "none";
+            document.getElementById('bt_excluir').style.display = "none";
+            document.getElementById('inserir').style.display = "none";
+            if (id_depart == 10 || id_depart == 31 || id_sessao == 1) {
+              document.getElementById('bt_autorizar').style.display = "none";
+            }
         }
     }
 
@@ -320,7 +326,7 @@ function pesquisaProtocolo(protocolo) {
 function excluir(protocolo) {
   var ckautpagamentos  = verificaAutPagamentos();
   if (ckautpagamentos == false) {
-    alert('Selecione uma Ordem de Pagamento!');
+    alert('Selecione uma Ordem de Pagamento para excluí-la!');
     return;
   }
 
@@ -378,6 +384,40 @@ function verificaAutPagamentos() {
   return temMarcado;
 }
 
+function autorizar(protocolo) {
+  var ckautpagamentos  = verificaAutPagamentos();
+  if (ckautpagamentos == false) {
+    alert('Selecione uma Ordem de Pagamento!');
+    return;
+  }
+
+  var recautpagamentos = document.querySelectorAll('.ch_autpagamentos');
+  var autpagamentos = [];
+
+  recautpagamentos.forEach(function (item) {
+    if (item.checked) {
+      autpagamentos.push(item.value);
+    }
+  });
+
+  var params = {
+    exec: 'autorizacaoOrdemPagamentos',
+    autpagamentos: autpagamentos,
+    protocolo:protocolo
+  };
+  js_divCarregando('Aguarde', 'div_aguarde');
+  novoAjax(params, function(e) {
+    var oRetorno = JSON.parse(e.responseText);
+    if (oRetorno.status == 1) {
+      pesquisaProtocolo(protocolo);
+      js_removeObj('div_aguarde');
+    } else {
+      js_removeObj('div_aguarde');
+      alert(oRetorno.erro);
+      return;
+    }
+  });
+}
 
 function marcaTodos(valor) {
 
