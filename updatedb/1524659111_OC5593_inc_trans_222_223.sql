@@ -266,8 +266,6 @@ INSERT INTO contranslr
 INSERT INTO contranslrvinculo VALUES (nextval('contranslrvinculo_c116_sequencial_seq'),122,123);
 INSERT INTO vinculoeventoscontabeis VALUES (nextval('vinculoeventoscontabeis_c115_sequencial_seq'),122,123);
 
-INSERT INTO conhistdoc VALUES (122,'RENUNICA DE RECEITA',101);
-INSERT INTO conhistdoc VALUES (123,'RENUNICA DE RECEITA ESTORNO',100);
 SELECT setval('conhistdocregra_c92_sequencial_seq',(SELECT max(c92_sequencial) FROM conhistdocregra));
 INSERT INTO conhistdocregra(c92_sequencial,c92_conhistdoc,c92_descricao,c92_regra,c92_anousu)
 VALUES ((select nextval('conhistdocregra_c92_sequencial_seq')),
