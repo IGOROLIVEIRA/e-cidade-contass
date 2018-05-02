@@ -395,11 +395,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                                      ELSE o41_codtri
                                                  END),3,0)
                  END) AS codunidadesubresp,
-                      l2.l20_edital AS editalmanual,
-                      l2.l20_codigo AS codlicmanual,
-                      l2.l20_anousu AS anousumanual,
-                      l2.l20_codepartamento AS departmanual,
-                      l2.l20_naturezaobjeto AS naturezamanual,
+                      CASE WHEN l2.l20_edital = NULL THEN NULL ELSE l2.l20_edital END AS editalmanual,
+                      CASE WHEN l2.l20_codigo = NULL THEN NULL ELSE l2.l20_codigo END AS codlicmanual,
+                      CASE WHEN l2.l20_anousu = NULL THEN NULL ELSE l2.l20_anousu END AS anousumanual,
+                      CASE WHEN l2.l20_codepartamento = NULL THEN NULL ELSE l2.l20_codepartamento END AS departmanual,
+                      CASE WHEN l2.l20_naturezaobjeto = NULL THEN NULL ELSE l2.l20_naturezaobjeto END AS naturezamanual,
                       ac16_veiculodivulgacao
                 FROM acordoitem
                 INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
@@ -451,7 +451,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
             }
 
-            if($oDados10->ac16_origem == self::ORIGEM_MANUAL) {
+            if($oDados10->ac16_origem == self::ORIGEM_MANUAL && $oDados10->departmanual != null) {
                 $sSqlManual = "select CASE WHEN o40_codtri = '0'
                      OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,
                      CASE WHEN o41_codtri = '0'
