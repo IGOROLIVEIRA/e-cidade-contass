@@ -235,6 +235,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
           LEFT JOIN cgm ON conlancamcgm.c76_numcgm = z01_numcgm
           WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
+            AND o70_instit = " . db_getsession('DB_instit') . "
             AND (CASE 
                     WHEN substr(k02_estorc,1,2) = '49'
                         THEN substr(k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
