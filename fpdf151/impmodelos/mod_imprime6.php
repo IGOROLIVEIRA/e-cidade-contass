@@ -17,7 +17,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
   $this->objpdf->rect($xcol -2, $xlin -18, 206, 292, 2, 'DF', '1234');
   $this->objpdf->setfillcolor(255, 255, 255);
   $this->objpdf->Setfont('Arial', 'B', 10);
-  $this->objpdf->text(128, $xlin -13, 'NOTA DE EMPENHO N'.CHR(176).': ');
+  $this->objpdf->text(128, $xlin -13, 'NOTAa DE EMPENHO N'.CHR(176).': ');
   $this->objpdf->text(175, $xlin -13, db_formatar($this->codemp, 's', '0', 6, 'e'));
   $this->objpdf->text(134, $xlin -8, 'DATA DE EMISSÃO : ');
   $this->objpdf->text(175, $xlin -8, $this->emissao);
@@ -194,7 +194,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
   $xtotal = 0;
   $retorna_obs = 0;
 
-  for ($ii = 0; $ii < $this->linhasdositens; $ii ++) {
+  for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 
     $this->objpdf->SetWidths(array(15, 15, 122, 25, 25));
     $this->objpdf->SetAligns(array('C', 'C' ,'L', 'R', 'R'));
@@ -308,7 +308,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
       }
     }
 
-    $this->objpdf->Setfont('Arial', '', 7);
+    $this->objpdf->Setfont('Arial', '', 6);
     $descricaoitemimprime = $this->objpdf->Row_multicell(array($quantitem,
                                                                pg_result($this->recorddositens, $ii, 'pc01_codmater'),
                                                                substr($descricaoitem,0,2000),
@@ -334,8 +334,8 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
       $ii--;
     }
 
-    if (($this->objpdf->gety() > $this->objpdf->h - 110 && $pagina == 1) ||
-    ($this->objpdf->gety() > $this->objpdf->h - 30 && $pagina != 1)) {
+    if (($this->objpdf->gety() > $this->objpdf->h - 140 && $pagina == 1) ||
+    ($this->objpdf->gety() > $this->objpdf->h - 35 && $pagina != 1)) {
 
       $proxima_pagina = $pagina +1;
 
