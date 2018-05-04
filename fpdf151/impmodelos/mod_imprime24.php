@@ -395,11 +395,11 @@ if ($num_outras >0) {
 
 //=====================================================================================================================================================
 
-  $this->objpdf->roundedrect($coluna-2,$y,187,43,2,'1234'); // descricao da atividade secundaria
+  $this->objpdf->roundedrect($coluna-2,$y,187,35,2,'1234'); // descricao da atividade secundaria
 }
 
 $x=64;
-$this->objpdf->setxy(14,$iPos+50);
+$this->objpdf->setxy(14,$iPos+40);
 
 $this->objpdf->SetFont('Arial','',14);
 $this->objpdf->Multicell(0,6,$this->obs); // observação
