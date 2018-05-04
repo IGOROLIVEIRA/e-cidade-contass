@@ -1,4 +1,4 @@
-<?
+    <?
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -8,17 +8,18 @@ include("classes/db_itemprecoreferencia_classe.php");
 include("dbforms/db_funcoes.php");
 require("libs/db_utils.php");
 db_postmemory($HTTP_POST_VARS);
+
 $clprecoreferencia     = new cl_precoreferencia;
 $clitemprecoreferencia = new cl_itemprecoreferencia;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
 	db_inicio_transacao();
-	
+
   $clprecoreferencia->incluir(null);
-  
+
   if ($clprecoreferencia->erro_status != 0) {
-  	
+
   	if ($si01_tipoprecoreferencia == 1) {
      	$sFuncao = "avg";
      } else if ($si01_tipoprecoreferencia == 2) {
@@ -26,57 +27,57 @@ if(isset($incluir)){
      } else {
      	$sFuncao = "min";
      }
-     
+
      $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),3) as valor from pcproc
 join pcprocitem on pc80_codproc = pc81_codproc 
 join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
 join pcorcamitem on pc31_orcamitem = pc22_orcamitem
 join pcorcamval on pc22_orcamitem = pc23_orcamitem
 where pc80_codproc = $si01_processocompra group by pc23_orcamitem";
-     
+
      $rsResult = db_query($sSql);
-     
+
      for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-     
+
      	 $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
        $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
        $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
-          
+
        $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;
        $clitemprecoreferencia->incluir(null);
-       
+
      }
      if ($clitemprecoreferencia->erro_status == 0) {
-       
+
        $sqlerro = true;
-       $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg; 
+       $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
        $clprecoreferencia->erro_status = "0";
-       
-     } 
-     
+
+     }
+
      if (pg_num_rows($rsResult) == 0) {
-     	
+
      	 $clprecoreferencia->erro_msg = "Não existe orçamentos cadastrados.";
      	 $sqlerro = true;
      	 $clprecoreferencia->erro_status = "0";
-     	
+
      }
-  	
+
   }
-  
+
   db_fim_transacao($sqlerro);
   if ($clprecoreferencia->erro_status != 0){
-  	
+
     echo "<script>
-    jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$clprecoreferencia->si01_processocompra},
+    jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$clprecoreferencia->si01_processocompra}+'&quant_casas='+$quant_casas,
 			   
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
     </script>";
-   
+
   }
-  
+
 }
 ?>
 <html>
@@ -89,7 +90,7 @@ where pc80_codproc = $si01_processocompra group by pc23_orcamitem";
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -97,8 +98,8 @@ where pc80_codproc = $si01_processocompra group by pc23_orcamitem";
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmprecoreferencia.php");

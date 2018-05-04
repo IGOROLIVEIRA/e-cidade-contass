@@ -181,16 +181,16 @@ ob_start();
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
       $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-      $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
+      $lTotal = $oResult->si02_vlprecoreferencia * $oResult->pc11_quant;
       $nTotalItens += $lTotal;
 
       $oDadosDaLinha = new stdClass();
       $oDadosDaLinha->item = $iCont + 1;
       $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
-      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 2, ",", ".");
+      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
       $oDadosDaLinha->quantidade = $oResult->pc11_quant;
       $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-      $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");;
+      $oDadosDaLinha->total = number_format($lTotal, $quant_casas, ",", ".");
 
       echo <<<HTML
         <div class="tr row">
@@ -225,7 +225,7 @@ HTML;
         VALOR TOTAL DOS ITENS
       </div>
       <div class="th col-valor_total-valor align-right">
-        <?= "R$" . number_format($nTotalItens, 3, ",", ".") ?>
+        <?= "R$" . number_format($nTotalItens, $quant_casas, ",", ".") ?>
       </div>
     </div>
   </div>

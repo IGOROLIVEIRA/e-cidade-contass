@@ -43,6 +43,8 @@ require_once ("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao
 require_once ("libs/exceptions/BusinessException.php");
 
 $oGet = db_utils::postMemory($_GET);
+
+
 $oConfiguracaoGed = GerenciadorEletronicoDocumentoConfiguracao::getInstance();
 if ($oConfiguracaoGed->utilizaGED()) {
 
@@ -214,7 +216,7 @@ if ($modelo == 1) {
     $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
     $pdf->cell(194, $alt,substr($pc01_descrmater,0,190), 1, 0, "L", 0);
     $pdf->cell(30, $alt,substr($pc23_obs,0,30), 1, 0, "L", 0);
-    $pdf->cell(20, $alt, db_formatar($vlrunit,"f"), 1, 0, "R", 0);
+    $pdf->cell(20, $alt, number_format($vlrunit,$oGet->quant_casas,',','.'), 1, 0, "R", 0);
     $pdf->cell(20, $alt, $quant, 1, 1, "R", 0);
     $pdf->cell(279,$alt/2,'','',1,"L",0);
 
@@ -236,7 +238,7 @@ if ($modelo == 1) {
         $troca = 0;
       }
 
-      $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "round(pc23_vlrun,2) as pc23_vlrun,pc23_quant,pc23_valor,pc24_pontuacao", null,
+      $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as pc23_vlrun,pc23_quant,pc23_valor,pc24_pontuacao", null,
           "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
       if(pg_num_rows($result_valor) == 0){
@@ -246,8 +248,8 @@ if ($modelo == 1) {
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
       $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-      $pdf->cell(20, $alt, $pc23_vlrun, 1, 0, "R", 0);
-      $pdf->cell(20, $alt, db_formatar($pc23_valor,'f'), 1, 1, "R", 0);
+      $pdf->cell(20, $alt, number_format($pc23_vlrun,$oGet->quant_casas,',','.'), 1, 0, "R", 0);
+      $pdf->cell(20, $alt, number_format($pc23_valor,$oGet->quant_casas,',','.'), 1, 1, "R", 0);
       $total_unit  += $pc23_vlrun;
       $iContOrcamento++;
     }
@@ -255,8 +257,8 @@ if ($modelo == 1) {
     $pdf->setfont('arial', '', 9);
     $pdf->cell(20, $alt, "", 0, 0, "L", 0);
     $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
-    $pdf->cell(20, $alt, db_formatar($total_unit/$iContOrcamento,'f'), 0, 0, "R", 0);
-    $pdf->cell(20, $alt, db_formatar(($total_unit/$iContOrcamento)*$quant, 'f'), 0, 1, "R", 0);
+    $pdf->cell(20, $alt, number_format($total_unit/$iContOrcamento,$oGet->quant_casas,',','.'), 0, 0, "R", 0);
+    $pdf->cell(20, $alt, number_format(($total_unit/$iContOrcamento)*$quant, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
     $pdf->cell(279,$alt,'','',1,"L",0);
     $total_media += ($total_unit/$iContOrcamento)*$quant;
 
@@ -286,14 +288,14 @@ if ($modelo == 1) {
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
       $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-      $pdf->cell(40, $alt, db_formatar($vltotal, 'f'), 1, 1, "R", 0);
+      $pdf->cell(40, $alt, number_format($vltotal, $oGet->quant_casas,',','.'), 1, 1, "R", 0);
     }
 
   }
   $pdf->setfont('arial', '', 9);
   $pdf->cell(279,$alt,'','',1,"L",0);
   $pdf->cell(15, $alt, "Total da Média", 0, 0, "C", 0);
-  $pdf->cell(264, $alt, db_formatar($total_media, 'f'), 0, 1, "R", 0);
+  $pdf->cell(264, $alt, number_format($total_media, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
 
 } else if ($modelo == 2) {
 
@@ -431,7 +433,7 @@ if ($modelo == 1) {
     $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
     $pdf->cell(60, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 38), 1, 0, "L", 0);
     $pdf->cell(20, $alt, $m61_descr, 1, 0, "C", 0);
-    $pdf->cell(15, $alt, db_formatar($valor_medio, 'f'), 1, 0, "C", 0);
+    $pdf->cell(15, $alt, number_format($valor_medio, $oGet->quant_casas,',','.'), 1, 0, "C", 0);
     $pdf->cell(15, $alt, $pc11_quant, 1, 0, "C", 0);
 
     $t = 0;
@@ -465,10 +467,10 @@ if ($modelo == 1) {
         $arr_totalcotado [$pc21_orcamforne] += $pc23_valor;
 
         if ($imp_vlrun == "S") {
-          $pdf->cell(20, $alt, db_formatar(@$pc23_vlrun, "f"), 1, 0, "R", $fundo);
+          $pdf->cell(20, $alt, number_format(@$pc23_vlrun, $oGet->quant_casas,',','.'), 1, 0, "R", $fundo);
         }
 
-        $pdf->cell(60, $alt, db_formatar(@$pc23_valor, 'f'), 1, $t, "R", $fundo);
+        $pdf->cell(60, $alt, number_format(@$pc23_valor, $oGet->quant_casas,',','.'), 1, $t, "R", $fundo);
 
         if ($imp_vlrtotal == "S") {
           if (isset($arr_valor [$w]) && trim(@$arr_valor [$w]) != "") {
@@ -495,7 +497,7 @@ if ($modelo == 1) {
 
       $pdf->setfont('arial', 'b', 8);
 
-      $pdf->cell(125, $alt, db_formatar($total_quant, "f"), 1, 0, "R", 0);
+      $pdf->cell(125, $alt, number_format($total_quant, $oGet->quant_casas,',','.'), 1, 0, "R", 0);
       $pdf->cell(160, $alt, "", 1, 1, "R", 0);
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -521,8 +523,8 @@ if ($modelo == 1) {
           $br = 0;
         }
 
-        $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotganhoun [$xx], "f"), 1, 0, "R", 0);
-        $pdf->cell(60, $alt, db_formatar($arr_subtotganhovlr [$xx], "f"), 1, $br, "R", 0);
+        $pdf->cell($tam, $alt, $msg . number_format($arr_subtotganhoun [$xx], $oGet->quant_casas,',','.'), 1, 0, "R", 0);
+        $pdf->cell(60, $alt, number_format($arr_subtotganhovlr [$xx], $oGet->quant_casas,',','.'), 1, $br, "R", 0);
       }
 
       if ($w == 2) {
@@ -546,8 +548,8 @@ if ($modelo == 1) {
           $br = 0;
         }
 
-        $pdf->cell($tam, $alt, $msg . db_formatar($arr_subtotcotadoun [$xx], "f"), 1, 0, "R", 0);
-        $pdf->cell(60, $alt, db_formatar($arr_subtotcotadovlr [$xx], "f"), 1, $br, "R", 0);
+        $pdf->cell($tam, $alt, $msg . number_format($arr_subtotcotadoun [$xx], $oGet->quant_casas,',','.'), 1, 0, "R", 0);
+        $pdf->cell(60, $alt, number_format($arr_subtotcotadovlr [$xx], $oGet->quant_casas,',','.'), 1, $br, "R", 0);
       }
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       $pdf->ln();
@@ -565,14 +567,14 @@ if ($modelo == 1) {
 
   // Ficou pendente valores a serem impressos
   if ($quant_imp < $max_forne) {
-    $pdf->cell(125, $alt, "QUANT. TOTAL " . db_formatar($total_quant, "f"), 1, 0, "R", 0);
+    $pdf->cell(125, $alt, "QUANT. TOTAL " . number_format($total_quant, $oGet->quant_casas,',','.'), 1, 0, "R", 0);
     $pdf->cell(80, $alt, "", 1, 1, "R", 0);
 
-    $pdf->cell(145, $alt, "SUBTOTAL GANHO " . db_formatar($arr_subtotganhoun [$quant_imp], "f"), 1, 0, "R", 0);
-    $pdf->cell(60, $alt, db_formatar($arr_subtotganhovlr [$quant_imp], "f"), 1, 1, "R", 0);
+    $pdf->cell(145, $alt, "SUBTOTAL GANHO " . number_format($arr_subtotganhoun [$quant_imp], $oGet->quant_casas,',','.'), 1, 0, "R", 0);
+    $pdf->cell(60, $alt, number_format($arr_subtotganhovlr [$quant_imp], $oGet->quant_casas,',','.'), 1, 1, "R", 0);
 
-    $pdf->cell(145, $alt, "SUBTOTAL COTADO " . db_formatar($arr_subtotcotadoun [$quant_imp], "f"), 1, 0, "R", 0);
-    $pdf->cell(60, $alt, db_formatar($arr_subtotcotadovlr [$quant_imp], "f"), 1, 1, "R", 0);
+    $pdf->cell(145, $alt, "SUBTOTAL COTADO " . number_format($arr_subtotcotadoun [$quant_imp], $oGet->quant_casas,',','.'), 1, 0, "R", 0);
+    $pdf->cell(60, $alt, number_format($arr_subtotcotadovlr [$quant_imp], $oGet->quant_casas,',','.'), 1, 1, "R", 0);
 
     $pdf->ln();
   }
@@ -598,8 +600,8 @@ if ($modelo == 1) {
     $cont ++;
 
     $pdf->cell(65, $alt, $z01_numcgm." - ".substr($z01_nome, 0, 25) . " (" . $cont . ")", 0, 0, "L", $p);
-    $pdf->cell(30, $alt, db_formatar($arr_totalganho [$pc21_orcamforne], "f"), 0, 0, "R", $p);
-    $pdf->cell(30, $alt, db_formatar($arr_totalcotado [$pc21_orcamforne], "f"), 0, 1, "R", $p);
+    $pdf->cell(30, $alt, number_format($arr_totalganho [$pc21_orcamforne], $oGet->quant_casas,',','.'), 0, 0, "R", $p);
+    $pdf->cell(30, $alt, number_format($arr_totalcotado [$pc21_orcamforne], $oGet->quant_casas,',','.'), 0, 1, "R", $p);
 
     if ($p == 0) {
       $p = 1;
@@ -612,8 +614,8 @@ if ($modelo == 1) {
   }
   if ($numrows_forne > 0) {
     $pdf->cell(125, 1, "", "T", 1, "R", 0);
-    $pdf->cell(95, $alt, "TOTAIS " . db_formatar($total_ganho, "f"), 0, 0, "R", 0);
-    $pdf->cell(30, $alt, db_formatar($total_cotado, "f"), 0, 1, "R", 0);
+    $pdf->cell(95, $alt, "TOTAIS " . number_format($total_ganho, $oGet->quant_casas,',','.'), 0, 0, "R", 0);
+    $pdf->cell(30, $alt, number_format($total_cotado, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
   }
 
   $pdf->ln();
@@ -624,7 +626,7 @@ if ($modelo == 1) {
       $pdf->cell(20, $alt * 2, "", 0, 1, "L", 0);
     }
 
-    $pdf->cell(60, $alt, "TOTAL GERAL " . db_formatar($valor_total, "f"), 0, 1, "R", 0);
+    $pdf->cell(60, $alt, "TOTAL GERAL " . number_format($valor_total, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
   }
 } else {
   db_redireciona('db_erros.php?fechar=true&db_erro=Modelo não foi selecionado.');
