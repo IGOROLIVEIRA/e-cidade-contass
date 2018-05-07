@@ -345,7 +345,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
       $this->objpdf->Row(array('', "Continua na página $proxima_pagina", '', ''), 3, false, 4);
       } else {
 
-        $this->objpdf->sety($this->objpdf->h - 25);
+        $this->objpdf->sety($this->objpdf->h - 30);
         $this->objpdf->Row(array('', "Continua na página $proxima_pagina", '', ''), 3, false, 4);
       }
 
