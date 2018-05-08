@@ -17,7 +17,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
   $this->objpdf->rect($xcol -2, $xlin -18, 206, 292, 2, 'DF', '1234');
   $this->objpdf->setfillcolor(255, 255, 255);
   $this->objpdf->Setfont('Arial', 'B', 10);
-  $this->objpdf->text(128, $xlin -13, 'NOTAa DE EMPENHO N'.CHR(176).': ');
+  $this->objpdf->text(128, $xlin -13, 'NOTA DE EMPENHO N'.CHR(176).': ');
   $this->objpdf->text(175, $xlin -13, db_formatar($this->codemp, 's', '0', 6, 'e'));
   $this->objpdf->text(134, $xlin -8, 'DATA DE EMISSÃO : ');
   $this->objpdf->text(175, $xlin -8, $this->emissao);
@@ -84,7 +84,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
 
   $this->objpdf->text($xcol +17, $xlin +26, ':  '.db_formatar($this->sintetico, 'elemento_int'));
   $this->objpdf->setxy($xcol +18, $xlin +27);
-  $this->objpdf->multicell(90, 3, substr($this->descr_sintetico, 0, 42), 0, "L");
+  $this->objpdf->multicell(90, 3, substr($this->descr_sintetico, 0, 55), 0, "L");
 
   $this->objpdf->text($xcol +17, $xlin +32.7, ':  '.$this->recurso.' - '.substr($this->descr_recurso,0,42));
 
