@@ -80,7 +80,7 @@ if($q60_modalvara == 9) {
 	$aParam          = array();
 	$aParam['$inscr'] = $oGet->inscricao;
 
-	db_stdClass::oo2pdf(6, $oTipoAlvara->q98_documento, $sAgt, $aParam, $sCaminhoSalvoSxw, $sNomeRelatorio);
+	db_stdClass::oo2pdf(6, (empty($oTipoAlvara->q98_documento) ? 2 : $oTipoAlvara->q98_documento), $sAgt, $aParam, $sCaminhoSalvoSxw, $sNomeRelatorio);
 
 	exit;
 }
