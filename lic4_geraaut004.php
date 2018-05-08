@@ -475,7 +475,8 @@ if (isset ($incluir)) {
 		              $clorcreserva->o80_dtini  = date('Y-m-d', db_getsession('DB_datausu'));
 		              $clorcreserva->o80_dtlanc = date('Y-m-d', db_getsession('DB_datausu'));
 		              $clorcreserva->o80_valor  = $nSaldoReserva;             
-		              $clorcreserva->o80_descr  = " ";              
+		              $clorcreserva->o80_descr  = " ";
+		              $clorcreserva->o80_justificativa  = " ";              
 		              $clorcreserva->incluir(null);
 		              $codres_new = $clorcreserva->o80_codres;              
 		              if ($clorcreserva->erro_status == 0) {
@@ -521,7 +522,8 @@ if (isset ($incluir)) {
                 $clorcreserva->o80_dtini  = date('Y-m-d', db_getsession('DB_datausu'));
                 $clorcreserva->o80_dtlanc = date('Y-m-d', db_getsession('DB_datausu'));
                 $clorcreserva->o80_valor  = $nSaldoReserva;     
-                $clorcreserva->o80_descr  = " ";             
+                $clorcreserva->o80_descr  = " ";
+                $clorcreserva->o80_justificativa  = " ";             
                 $clorcreserva->incluir(null);
                 $codres_new = $clorcreserva->o80_codres;              
                 if ($clorcreserva->erro_status == 0) {
@@ -890,6 +892,7 @@ if (isset ($incluir)) {
 					$clorcreserva->o80_dtlanc = date('Y-m-d', db_getsession('DB_datausu'));					
 					$clorcreserva->o80_valor  = round($soma_e55_valor, 2);
 					$clorcreserva->o80_descr  = " ";
+					$clorcreserva->o80_justificativa  = " ";
 					$clorcreserva->incluir(null);
 					$o80_codres = $clorcreserva->o80_codres;
 					$soma_e55_valor = 0;

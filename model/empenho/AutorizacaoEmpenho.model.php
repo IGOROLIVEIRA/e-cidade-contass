@@ -801,6 +801,7 @@ class AutorizacaoEmpenho {
     $oDaoOrcReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
     $oDaoOrcReserva->o80_valor = $this->getValor();
     $oDaoOrcReserva->o80_descr = "Reserva item Solicitacao";
+    $oDaoOrcReserva->o80_justificativa = "Reserva item Solicitacao";
     $oDaoOrcReserva->incluir(null);
 
     if ($oDaoOrcReserva->erro_status == 0) {

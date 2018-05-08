@@ -138,6 +138,7 @@ if(isset($confirmar)){
     $clorcreserva->o80_dtlanc =  date('Y-m-d',db_getsession('DB_datausu')); 
     $clorcreserva->o80_valor  = $e54_valor;
     $clorcreserva->o80_descr  = "Reserva da autorização $e56_autori";
+    $clorcreserva->o80_justificativa  = "Reserva da autorização $e56_autori";
 
     if($numrows_verifica>0){
       $clorcreserva->o80_codres  = $o80_codres;

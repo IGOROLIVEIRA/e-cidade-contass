@@ -258,6 +258,7 @@ if (isset ($incluir)) {
 								$clorcreserva->o80_dtlanc = date('Y-m-d', db_getsession('DB_datausu'));
 								$clorcreserva->o80_valor = $valor_da_reserva;
 								$clorcreserva->o80_descr = " ";
+								$clorcreserva->o80_justificativa = " ";
 								$clorcreserva->incluir(null);
 								$codreserva = $clorcreserva->o80_codres;
 								if ($clorcreserva->erro_status == 0) {

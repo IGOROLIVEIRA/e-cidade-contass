@@ -604,6 +604,7 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 									$clorcreserva->o80_valor = $saldoreserva;
 								}
 								$clorcreserva->o80_descr = " ";
+								$clorcreserva->o80_justificativa = " ";
 								if ($saldoreserva > 0) {
 
 									$clorcreserva->incluir(null);

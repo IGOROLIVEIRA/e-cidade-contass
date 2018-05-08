@@ -47,7 +47,10 @@ select o80_codres,
        o80_dtfim,
        o80_anousu,
        o80_valor,
-       nomeinst
+       nomeinst,
+       o80_vlranu,
+       o80_justificativa,
+       o80_dtanu
 from orcreserva
      inner join orcdotacao   on o58_coddot  = o80_coddot
                             and o58_anousu  = o80_anousu
@@ -107,13 +110,25 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $pdf->setfont('arial','',8);
    $pdf->cell(30,$alt,':  '.db_formatar($o41_unidade,'orgao').'-'.$o41_descr,0,1,"L",0);
    $pdf->setfont('arial','b',8);
-   $pdf->cell(40,$alt,'Motivo da Reserva',0,0,"L",0);
+   $pdf->cell(40,$alt,'Descrição',0,0,"L",0);
    $pdf->setfont('arial','',8);
    $pdf->multicell(0,$alt,':  '.strtoupper($o80_descr));
+   $pdf->setfont('arial','b',8);
+   $pdf->cell(40,$alt,'Justificativa',0,0,"L",0);
+   $pdf->setfont('arial','',8);
+   $pdf->multicell(0,$alt,':  '.strtoupper($o80_justificativa));
    $pdf->setfont('arial','b',8);
    $pdf->cell(40,$alt,'Valor',0,0,"L",0);
    $pdf->setfont('arial','',8);
    $pdf->cell(30,$alt,':  R$ '.trim(db_formatar($o80_valor,'f')),0,1,"L",0);
+   $pdf->setfont('arial','b',8);
+   $pdf->cell(40,$alt,'Valor Anulado',0,0,"L",0);
+   $pdf->setfont('arial','',8);
+   $pdf->cell(30,$alt,':  R$ '.trim(db_formatar($o80_vlranu,'f')),0,1,"L",0);
+   $pdf->setfont('arial','b',8);
+   $pdf->cell(40,$alt,'Data Anulação',0,0,"L",0);
+   $pdf->setfont('arial','',8);
+   $pdf->cell(30,$alt,':  '.db_formatar($o80_dtanu,'d'),0,1,"L",0);
    $pdf->setfont('arial','b',8);
    $pdf->cell(40,$alt,'Validade',0,0,"L",0);
    $pdf->setfont('arial','',8);

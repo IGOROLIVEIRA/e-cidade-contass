@@ -107,6 +107,7 @@ if(isset($incluir)){
   $clorcreserva->o80_dtfim  = db_getsession('DB_anousu')."-12-31";
   $clorcreserva->o80_valor  = $o47_valor;
   $clorcreserva->o80_descr  = "suplementacao ";
+  $clorcreserva->o80_justificativa  = "suplementacao ";
   if ($sqlerro==false){
      $clorcreserva->incluir("");
      if ($clorcreserva->erro_status == 0 ){

@@ -201,9 +201,22 @@ if (!isset($op)){
             }
             db_input('original',15,"",true,'text',3,"") ?> </td>
         </tr>
+        <!---  // Dados Anulação --->
+        <tr>
+          <td nowrap title="Data Anulação"><strong>Data Anulação:</strong> </td>
+          <td> <? db_inputdata('o80_dtanu',@$o80_dtanu_dia,@$o80_dtanu_mes,@$o80_dtanu_ano,true,'text',$anular == true ? 2 : 3,"") ?> </td>
+
+          <td nowrap title="Valor Anulado"><strong>Valor Anulado:</strong>  
+          <? db_input('o80_vlranu',15,4,true,'text',$anular == true ? 2 : 3,"") ?>  </td>
+        </tr>
+        <!---  // end Anulação --->
         <tr>
           <td nowrap title="<?=@$To80_descr?>"> <?=@$Lo80_descr?> </td>
           <td colspan="2"><? db_textarea('o80_descr',1,72,$Io80_descr,true,'text',$db_opcao,"") ?> </td>
+        </tr>
+        <tr>
+          <td nowrap title="Justificativa"> <strong>Justificativa</strong> </td>
+          <td colspan="2"><? db_textarea('o80_justificativa',1,72,0,true,'text',($anular == true ? 2 : $db_opcao),"") ?> </td>
         </tr>
       </table>
     </fieldset>

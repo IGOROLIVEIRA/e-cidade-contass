@@ -708,6 +708,7 @@ function desprocessa_suplementacao2($codsup,$anousu,$estornar=false) {
           $clorcreserva->o80_dtfim  = db_getsession('DB_anousu')."-12-31";
           $clorcreserva->o80_valor  = abs($o47_valor);
           $clorcreserva->o80_descr  = "suplementacao, reserva recriada por desprocessamento ";
+          $clorcreserva->o80_justificativa  = "suplementacao, reserva recriada por desprocessamento ";
           if ($sqlerro==false){
             $clorcreserva->incluir("");
             if ($clorcreserva->erro_status == 0 ){

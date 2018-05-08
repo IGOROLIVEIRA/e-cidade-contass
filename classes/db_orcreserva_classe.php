@@ -58,7 +58,9 @@ class cl_orcreserva {
    var $o80_dtlanc_ano = null; 
    var $o80_dtlanc = null; 
    var $o80_valor = 0; 
-   var $o80_descr = null; 
+   var $o80_descr = null;
+   var $o80_justificativa = null;
+   var $o80_vlranu = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  o80_codres = int8 = Código 
@@ -68,7 +70,10 @@ class cl_orcreserva {
                  o80_dtini = date = Data Início 
                  o80_dtlanc = date = Data lançamento 
                  o80_valor = float8 = Valor da Reserva 
-                 o80_descr = text = Descrição 
+                 o80_descr = text = Descrição
+                 o80_justificativa = text = Justificativa
+                 o80_vlranu = float8 = Valor Anulado 
+                 o80_dtanu = float8 = Valor Anulado 
                  ";
    //funcao construtor da classe 
    function cl_orcreserva() { 
@@ -117,6 +122,16 @@ class cl_orcreserva {
        }
        $this->o80_valor = ($this->o80_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["o80_valor"]:$this->o80_valor);
        $this->o80_descr = ($this->o80_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["o80_descr"]:$this->o80_descr);
+       $this->o80_justificativa = ($this->o80_justificativa == ""?@$GLOBALS["HTTP_POST_VARS"]["o80_justificativa"]:$this->o80_justificativa);
+       $this->o80_vlranu = ($this->o80_vlranu == ""?@$GLOBALS["HTTP_POST_VARS"]["o80_vlranu"]:$this->o80_vlranu);
+       if($this->o80_dtanu == ""){
+         $this->o80_dtanu_dia = ($this->o80_dtanu_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["o80_dtanu_dia"]:$this->o80_dtanu_dia);
+         $this->o80_dtanu_mes = ($this->o80_dtanu_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["o80_dtanu_mes"]:$this->o80_dtanu_mes);
+         $this->o80_dtanu_ano = ($this->o80_dtanu_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["o80_dtanu_ano"]:$this->o80_dtanu_ano);
+         if($this->o80_dtanu_dia != ""){
+            $this->o80_dtanu = $this->o80_dtanu_ano."-".$this->o80_dtanu_mes."-".$this->o80_dtanu_dia;
+         }
+       }
      }else{
        $this->o80_codres = ($this->o80_codres == ""?@$GLOBALS["HTTP_POST_VARS"]["o80_codres"]:$this->o80_codres);
      }
@@ -187,6 +202,15 @@ class cl_orcreserva {
        $this->erro_status = "0";
        return false;
      }
+     if($this->o80_justificativa == null ){ 
+       $this->erro_sql = " Campo Justificativa nao Informado.";
+       $this->erro_campo = "o80_justificativa";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if($o80_codres == "" || $o80_codres == null ){
        $result = db_query("select nextval('orcreserva_o80_codres_seq')"); 
        if($result==false){
@@ -227,7 +251,10 @@ class cl_orcreserva {
                                       ,o80_dtini 
                                       ,o80_dtlanc 
                                       ,o80_valor 
-                                      ,o80_descr 
+                                      ,o80_descr
+                                      ,o80_justificativa 
+                                      ,o80_vlranu
+                                      ,o80_dtanu
                        )
                 values (
                                 $this->o80_codres 
@@ -235,9 +262,12 @@ class cl_orcreserva {
                                ,$this->o80_coddot 
                                ,".($this->o80_dtfim == "null" || $this->o80_dtfim == ""?"null":"'".$this->o80_dtfim."'")." 
                                ,".($this->o80_dtini == "null" || $this->o80_dtini == ""?"null":"'".$this->o80_dtini."'")." 
-                               ,".($this->o80_dtlanc == "null" || $this->o80_dtlanc == ""?"null":"'".$this->o80_dtlanc."'")." 
+                               ,".($this->o80_dtlanc == "null" || $this->o80_dtlanc == ""?"null":"'".$this->o80_dtlanc."'")."
                                ,$this->o80_valor 
-                               ,'$this->o80_descr' 
+                               ,'$this->o80_descr'
+                               ,'$this->o80_justificativa'
+                               ,".($this->o80_vlranu == '' ? 0 : $this->o80_vlranu)." 
+                               ,".($this->o80_dtanu == "null" || $this->o80_dtanu == ""?"null":"'".$this->o80_dtanu."'")." 
                       )";
      $result = @db_query($sql); 
      if($result==false){ 
@@ -431,6 +461,34 @@ class cl_orcreserva {
          return false;
        }
      }
+     if(trim($this->o80_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o80_justificativa"])){ 
+       $sql  .= $virgula." o80_justificativa = '$this->o80_justificativa' ";
+       $virgula = ",";
+       if(trim($this->o80_justificativa) == null ){ 
+         $this->erro_sql = " Campo Justificativa nao Informado.";
+         $this->erro_campo = "o80_justificativa";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->o80_vlranu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o80_vlranu"])){ 
+       $sql  .= $virgula." o80_vlranu = ".($this->o80_vlranu == '' ? 0 : $this->o80_vlranu);
+       $virgula = ",";
+     }
+
+     if(trim($this->o80_dtanu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o80_dtanu_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["o80_dtanu_dia"] !="") ){ 
+       $sql  .= $virgula." o80_dtanu = '$this->o80_dtanu' ";
+       $virgula = ",";
+     } else { 
+       if(isset($GLOBALS["HTTP_POST_VARS"]["o80_dtanu_dia"])){ 
+         $sql  .= $virgula." o80_dtanu = null ";
+         $virgula = ",";
+       }
+     }
+
      $sql .= " where ";
      if($o80_codres!=null){
        $sql .= " o80_codres = $this->o80_codres";

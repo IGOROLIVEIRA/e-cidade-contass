@@ -467,6 +467,7 @@ abstract class AcordoMovimentacao {
                 $oDaoReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
                 $oDaoReserva->o80_valor  = $nSaldoReservar;
                 $oDaoReserva->o80_descr  = "reserva de saldo";
+                $oDaoReserva->o80_justificativa  = "reserva de saldo";
                 $oDaoReserva->incluir(null);
                 
                 if ($oDaoReserva->erro_status == 0) {
@@ -516,6 +517,7 @@ abstract class AcordoMovimentacao {
                 $oDaoReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
                 $oDaoReserva->o80_valor  = $nSaldoReservar;
                 $oDaoReserva->o80_descr  = "reserva de saldo";
+                $oDaoReserva->o80_justificativa  = "reserva de saldo";
                 $oDaoReserva->incluir(null);
                 
                 if ($oDaoReserva->erro_status == 0) {
@@ -563,6 +565,18 @@ abstract class AcordoMovimentacao {
     if ( $oDaoAcordoMovimentacao->erro_status == 0 ) {
       throw new BusinessException( $oDaoAcordoMovimentacao->erro_msg );
     }
+  }
+
+  /**
+   * @return Boolean
+   */
+  public function verificaPeriodoContabil() {
+    $oDaoCondataconf = db_utils::getDao("condataconf");
+    $retorno = $oDaoCondataconf->verificaPeriodoContabil($this->dtMovimento);
+    if (!$retorno) {
+      throw new Exception($oDaoCondataconf->erro_msg);
+    }
+    return $retorno;
   }
 }
 ?>

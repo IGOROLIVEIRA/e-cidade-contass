@@ -262,7 +262,10 @@ for ( $iInd=0; $iInd < $iNroReserva; $iInd++ ) {
     	
 	$aReserva['Descr']  = $sDescricaoReserva;
 	$aReserva['DtLanc'] = $oReserva->o80_dtlanc;
+	$aReserva['DtAnu']  = $oReserva->o80_dtanu;
 	$aReserva['Valor']  = $oReserva->o80_valor;
+	$aReserva['ValorAnu']  = $oReserva->o80_vlranu;
+	$aReserva['Justificativa']  = $oReserva->o80_justificativa;
 
 	$sDescrOrgao         = db_formatar($oReserva->o58_orgao,'orgao')          .' - '.$oReserva->o40_descr;
 	$sDescrUnidade       = db_formatar($oReserva->o58_unidade,'orgao')        .' - '.$oReserva->o41_descr;
@@ -302,7 +305,7 @@ $head3 = "INSTITUIÇÕES : ".$descr_inst;
 $head4 = "POSIÇÃO ATÉ : ".$data_fin;
 $head5 = "NIVEL : ".($nivel{1}=="A"?"Até ":"").$sDescricaoNivel;
 
-$pdf = new PDF(); 
+$pdf = new PDF('L'); 
 $pdf->Open(); 
 $pdf->AliasNbPages(); 
 $pdf->addPage(); 
@@ -319,6 +322,7 @@ if ( $nivel{1} == 'A') {
 	  $pdf->cell(0,$alt,$sTipoReserva,0,1,"L",0);
 	  $nValorTotalReserva = 0;
 	  $nValorTotalNivel   = 0;
+	  $lPrimeiraCelula = true;
 	    
 	  foreach ($aDados as $sOrgao => $aDadosOrgao) {
 	  	if ( $nivel{0} >= 1 ) {
@@ -353,21 +357,13 @@ if ( $nivel{1} == 'A') {
 	                	  $pdf->cell(0,$alt,$sRecurso,0,1,"L",0);
          	          }
 	                  foreach ($aDadosRecursos['aReservas'] as $iCodReserva => $aReserva) {
-	                                    
-	                    $sDescrReserva = $aReserva['Descr'];
-	                    $dtDataLanc    = $aReserva['DtLanc'];
-	                    $nValor        = $aReserva['Valor'];
 	                    
 	                    if ( $forma_impressao == 'a' ) {
-	                      $pdf->setfont('arial','',8);
-	                      $pdf->cell(20,$alt,$iCodReserva                ,'TBR',0,'C');
-	                      $pdf->cell(20,$alt,db_formatar($dtDataLanc,'d'),'TBR',0,'C');
-	                      $pdf->cell(20,$alt,db_formatar($nValor,'f')    ,'TBR',0,"R");
-	                      $pdf->multicell(130,$alt,$sDescrReserva        ,'TB','L');
-	                      $pdf->setfont('arial','b',8);
+	                    	imprimeLinha($pdf,$iCodReserva, $aReserva, $alt, $lPrimeiraCelula);
+	                    	$lPrimeiraCelula = false;
 	                    }
-	                    $nValorTotalNivel   += $nValor;
-	                    $nValorTotalReserva += $nValor;
+	                    $nValorTotalNivel   += $aReserva['Valor'];
+	                    $nValorTotalReserva += $aReserva['Valor'];
 	                     
 	                  }
 	                  imprimeTotal($pdf,$alt,$nValorTotalNivel,"TOTAL RECURSO",$nivel{0},8);
@@ -404,32 +400,25 @@ if ( $nivel{1} == 'A') {
 			$pdf->Ln(3);
 			$pdf->cell(0,$alt,$sDescrNivel,0,1,"L",0);
 	    $nValorTotalNivel   = 0;
+	    $lPrimeiraCelula = true;
 			
 			foreach ($aReservas['aReservas'] as $iCodReserva => $aReserva ) {
-
-				$sDescrReserva = $aReserva['Descr'];
-				$dtDataLanc    = $aReserva['DtLanc'];
-				$nValor        = $aReserva['Valor'];
 				
 				if ( $forma_impressao == 'a' ) {
-					$pdf->setfont('arial','',8);
-					$pdf->cell(20,$alt,$iCodReserva                ,'TBR',0,'C');
-					$pdf->cell(20,$alt,db_formatar($dtDataLanc,'d'),'TBR',0,'C');
-					$pdf->cell(20,$alt,db_formatar($nValor,'f')    ,'TBR',0,"R");
-					$pdf->multicell(130,$alt,$sDescrReserva        ,'TB','L');
-	        $pdf->setfont('arial','b',8);
+					imprimeLinha($pdf,$iCodReserva, $aReserva, $alt, $lPrimeiraCelula);
+	        $lPrimeiraCelula = false;
 				}  
 
-				$nValorTotalNivel   += $nValor;
-				$nValorTotalReserva += $nValor;				
+				$nValorTotalNivel   += $aReserva['Valor'];
+				$nValorTotalReserva += $aReserva['Valor'];				
 				
 			}
-			$pdf->cell(40,$alt,'TOTAL '.strtoupper($sDescricaoNivel),'TBR',0,'L');
-	    $pdf->cell(20,$alt,db_formatar($nValorTotalNivel,'f')   ,'TBR',1,"R");
+			$pdf->cell(46,$alt,'TOTAL '.strtoupper($sDescricaoNivel),1,0,'L');
+	    $pdf->cell(30,$alt," R$ ".trim(db_formatar($nValorTotalNivel,'f')),1,1,"R");
 	    $pdf->ln(3);
 		}
-	  $pdf->cell(40,$alt,'TOTAL RESERVA'                     ,'TBR',0,'L');
-    $pdf->cell(20,$alt,db_formatar($nValorTotalReserva,'f'),'TBR',1,"R");
+	  $pdf->cell(46,$alt,'TOTAL RESERVA'                     ,1,0,'L');
+    $pdf->cell(30,$alt," R$ ".trim(db_formatar($nValorTotalReserva,'f')),1,1,"R");
     $pdf->ln(3);
 	}
 	
@@ -440,13 +429,100 @@ $pdf->Output();
 function imprimeTotal($pdf,$iAlt,$nValorTotal,$sDescr,$iNivel,$iNivelTotal){
 	
 	if ( $iNivel == $iNivelTotal) {	
-	  $pdf->cell(40,$iAlt,$sDescr                      ,'TBR',0,'L');
-	  $pdf->cell(20,$iAlt,db_formatar($nValorTotal,'f'),'TBR',1,"R");
+	  $pdf->cell(46,$iAlt,$sDescr                      ,1,0,'L');
+	  $pdf->cell(30,$iAlt," R$ ".trim(db_formatar($nValorTotal,'f')),1,1,"R");
 	  $pdf->ln(3);
 	  global $nValorTotalNivel;
 	  $nValorTotalNivel = 0;
 	}
 	
+}
+
+function imprimeLinha($oPdf, $iCodReserva, $aReserva, $iAlt, $lPrimeiraCelula) {
+
+	$sDescrReserva  = $aReserva['Descr'];
+	$sJustificativa = $aReserva['Justificativa'];
+	$dtDataLanc     = $aReserva['DtLanc'];
+	$dtDataAnu      = $aReserva['DtAnu'];
+	$nValor         = $aReserva['Valor'];
+	$nValorAnu      = $aReserva['ValorAnu'];
+
+	if ($oPdf->gety() > $oPdf->h - 30 || $lPrimeiraCelula ) {
+		if (!$lPrimeiraCelula) {
+			$oPdf->addPage();
+		}
+		$oPdf->setfont('arial','b',8);
+		$oPdf->cell(10,$iAlt,"Cod",1,0,'C',1);
+		$oPdf->cell(18,$iAlt,"Dt Inclusão",1,0,'C',1);
+		$oPdf->cell(18,$iAlt,"Dt Anulação",1,0,"C",1);
+		$oPdf->cell(30,$iAlt,"Valor Reserva",1,0,"C",1);
+		$oPdf->cell(30,$iAlt,"Valor Anulado",1,0,"C",1);
+		$oPdf->cell(85,$iAlt,"Descrição",1,0,"L",1);
+		$oPdf->cell(85,$iAlt,"Justificativa",1,1,"L",1);
+	}
+
+	$aDescrReserva = quebrar_texto($sDescrReserva,65);
+  $aJustificativa = quebrar_texto($sJustificativa, 65);
+  if (count($aDescrReserva) > count($aJustificativa)) {
+    $iAltNovo = $iAlt*(count($aDescrReserva));
+  } else {
+  	$iAltNovo = $iAlt*(count($aJustificativa));
+  }
+
+	$oPdf->setfont('arial','',8);
+	$oPdf->cell(10,$iAltNovo,$iCodReserva,1,0,'C');
+	$oPdf->cell(18,$iAltNovo,db_formatar($dtDataLanc,'d'),1,0,'C');
+	$oPdf->cell(18,$iAltNovo,db_formatar($dtDataAnu,'d'),1,0,'C');
+	$oPdf->cell(30,$iAltNovo," R$ ".trim(db_formatar($nValor,'f')),1,0,"R");
+	$oPdf->cell(30,$iAltNovo," R$ ".trim(db_formatar($nValorAnu,'f')),1,0,"R");
+	
+	if (strlen($sDescrReserva) > 65) {
+		multiCell($oPdf, $aDescrReserva, $iAlt, $iAltNovo, 85);
+  } else {
+	  $oPdf->cell(85, $iAltNovo, $sDescrReserva, 1, 0, 'L');
+	}
+  
+  if (strlen($sJustificativa) > 65) {
+		multiCell($oPdf, $aJustificativa, $iAlt, $iAltNovo, 85);
+		$oPdf->Ln($iAltNovo);
+  } else {
+	  $oPdf->cell(85, $iAltNovo, substr($sJustificativa, 0, 65), 1, 1, 'L');
+	}
+
+	$oPdf->setfont('arial','b',8);
+}
+
+function quebrar_texto($texto,$tamanho){
+
+	$aTexto = explode(" ", $texto);
+	$string_atual = "";
+	foreach ($aTexto as $word) {
+		$string_ant = $string_atual;
+		$string_atual .= " ".$word;
+		if (strlen($string_atual) > $tamanho) {
+			$aTextoNovo[] = $string_ant;
+			$string_ant   = "";
+			$string_atual = $word;
+		}
+	}
+	$aTextoNovo[] = $string_atual;
+	return $aTextoNovo;
+
+}
+
+function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo) {
+	  $pos_x = $oPdf->x;
+		$pos_y = $oPdf->y;
+		$oPdf->cell($iTamCampo, $iTam, "", 1, 0, 'L');
+		$oPdf->x = $pos_x;
+		$oPdf->y = $pos_y;
+		foreach ($aTexto as $sProcedimento) {
+			$sProcedimento=ltrim($sProcedimento);
+			$oPdf->cell($iTamCampo, $iTamFixo, $sProcedimento, 0, 1, 'L');
+			$oPdf->x=$pos_x;
+		}
+		$oPdf->x = $pos_x+$iTamCampo;
+		$oPdf->y = $pos_y;
 }
 
 ?>

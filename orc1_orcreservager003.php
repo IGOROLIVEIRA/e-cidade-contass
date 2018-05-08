@@ -99,6 +99,7 @@ if(isset($processar)){
           $clorcreserva->o80_dtfim  = db_getsession("DB_anousu")."-12-31";
           $clorcreserva->o80_valor  = $calcula;
           $clorcreserva->o80_descr  = "Reserva gerada para contenção de despesas";
+          $clorcreserva->o80_justificativa  = "Reserva gerada para contenção de despesas";
           
           $clorcreserva->incluir(0);
           

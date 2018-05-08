@@ -133,6 +133,7 @@ if(isset($incluir) && $sqlerro==false){
       $clorcreserva->o80_dtlanc =  date('Y-m-d',db_getsession('DB_datausu'));
       $clorcreserva->o80_valor  = $pc13_valor;
       $clorcreserva->o80_descr  = " ";
+      $clorcreserva->o80_justificativa  = " ";
       $clorcreserva->incluir(null);
       $o80_codres = $clorcreserva->o80_codres;
       if($clorcreserva->erro_status==0){
@@ -199,6 +200,7 @@ if(isset($incluir) && $sqlerro==false){
 	  $clorcreserva->o80_dtlanc =  date('Y-m-d',db_getsession('DB_datausu'));
 	  $clorcreserva->o80_valor  = $pc13_valor;
 	  $clorcreserva->o80_descr  = " ";
+    $clorcreserva->o80_justificativa  = " ";
 	  $clorcreserva->incluir(null);
 	  $o80_codres = $clorcreserva->o80_codres;
 	  if($clorcreserva->erro_status==0){

@@ -4516,6 +4516,7 @@ class empenho {
         $oDaoOrcReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));;
         $oDaoOrcReserva->o80_valor  = "{$oAutorizacao->e54_valor}";
         $oDaoOrcReserva->o80_descr  = "Reserva autorização";
+        $oDaoOrcReserva->o80_justificativa  = "Reserva autorização";
         $oDaoOrcReserva->incluir(null);
         if ($oDaoOrcReserva->erro_status == 0) {
 

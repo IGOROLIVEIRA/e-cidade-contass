@@ -1067,6 +1067,7 @@ class AcordoItem {
         $oDaoReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
         $oDaoReserva->o80_valor  = $nSaldoReservar;
         $oDaoReserva->o80_descr  = "reserva item acordo {$this->getCodigo()}";
+        $oDaoReserva->o80_justificativa  = "reserva item acordo {$this->getCodigo()}";
         $oDaoReserva->incluir(null);
 
         if ($oDaoReserva->erro_status == 0) {
@@ -1538,6 +1539,7 @@ class AcordoItem {
         $oDaoReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
         $oDaoReserva->o80_valor  = $nSaldoReservar;
         $oDaoReserva->o80_descr  = "reserva item acordo {$this->getCodigo()}";
+        $oDaoReserva->o80_justificativa  = "reserva item acordo {$this->getCodigo()}";
         $oDaoReserva->incluir(null);
 
         if ($oDaoReserva->erro_status == 0) {

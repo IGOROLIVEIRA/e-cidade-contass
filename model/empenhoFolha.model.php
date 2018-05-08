@@ -424,6 +424,7 @@ class empenhoFolha {
   	    $oDaoReservaSaldo->o80_dtlanc = date('Y-m-d', db_getsession('DB_datausu'));
   	    $oDaoReservaSaldo->o80_valor  = $this->valorempenho;
   	    $oDaoReservaSaldo->o80_descr  = "Reserva saldo empenho folha {$this->empenhofolha} ";
+        $oDaoReservaSaldo->o80_justificativa  = "Reserva saldo empenho folha {$this->empenhofolha} ";
   	    $oDaoReservaSaldo->incluir(null);
   	    if ($oDaoReservaSaldo->erro_status == 0) {
 

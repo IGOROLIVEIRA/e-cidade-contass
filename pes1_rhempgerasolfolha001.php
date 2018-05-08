@@ -521,6 +521,7 @@ if (isset($confirma) || isset($gera)) {
               $clorcreserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
               $clorcreserva->o80_valor  = $saldo_reserva;
               $clorcreserva->o80_descr  = " ";
+              $clorcreserva->o80_justificativa  = " ";
               
               if ($saldo_reserva > 0) {
                 $clorcreserva->incluir(null);

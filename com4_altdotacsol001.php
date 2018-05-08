@@ -295,6 +295,7 @@ if (isset($incluir) && $incluir != "") {
 								$clorcreserva->o80_valor = $saldoreserva;
 							}
 							$clorcreserva->o80_descr = " ";
+							$clorcreserva->o80_justificativa = " ";
 							if ($saldoreserva > 0) {
 								$clorcreserva->incluir(null);
 								$o80_codres = $clorcreserva->o80_codres;

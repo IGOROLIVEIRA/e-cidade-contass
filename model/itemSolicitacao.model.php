@@ -1071,6 +1071,7 @@ class itemSolicitacao {
     $oDaorcReserva->o80_dtlanc = $sData;
     $oDaorcReserva->o80_valor  = $nValorReserva;
     $oDaorcReserva->o80_descr  = $sMensagemReserva;
+    $oDaorcReserva->o80_justificativa  = $sMensagemReserva;
     $oDaorcReserva->incluir(null);
 
 

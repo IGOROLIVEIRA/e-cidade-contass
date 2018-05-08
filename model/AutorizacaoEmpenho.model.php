@@ -445,6 +445,7 @@ class AutorizacaoEmpenho {
     $oDaorcReserva->o80_dtini  = date("Y-m-d", db_getsession("DB_datausu"));
     $oDaorcReserva->o80_dtfim  = "{$this->getAnoUsu()}-12-31";
     $oDaorcReserva->o80_descr  = "Reserva autorizacao {$this->iCodigo} ";
+    $oDaorcReserva->o80_justificativa  = "Reserva autorizacao {$this->iCodigo} ";
     $oDaorcReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
     $oDaorcReserva->o80_valor  = $this->getValorAutoriza();
     $oDaorcReserva->incluir(null);

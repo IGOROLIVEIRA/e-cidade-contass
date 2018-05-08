@@ -1352,6 +1352,7 @@
                           }
 
                           $clorcreserva->o80_descr  = $o80_descr;
+                          $clorcreserva->o80_justificativa = $o80_descr;
 
                           // Anulacao de empenho, valor de cada item eh comparado ao saldo da dotacao
                           if ($valor_reserva == 0) {
@@ -1567,6 +1568,7 @@
                   $clorcreserva->o80_dtlanc = $oItensSolicitacao->pc10_data;
                   $clorcreserva->o80_valor  = $oItem->e55_vltot+$oItensSolicitacao->o80_valor;
                   $clorcreserva->o80_descr  = "Reserva automatica solicitação {$oItensSolicitacao->pc11_numero}";
+                  $clorcreserva->o80_justificativa  = "Reserva automatica solicitação {$oItensSolicitacao->pc11_numero}";
                   $clorcreserva->incluir(null);
                   if ($clorcreserva->erro_status == 0) {
                    throw new Exception("Erro[5] - Erro ao incluir reserva de saldo para a solicitação.\n{$clorcreserva->erro_msg}");

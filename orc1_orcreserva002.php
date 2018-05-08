@@ -70,7 +70,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Altera
     db_inicio_transacao();
     $clorcreserva->alterar($o80_codres);
     db_fim_transacao();
-    $db_opcao=3;
+    $db_opcao=2;
   }
 } else if(isset($chavepesquisa)) {
 
