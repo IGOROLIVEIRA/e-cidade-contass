@@ -2431,7 +2431,7 @@ db_logTitulo(" IMPORTA PROJETOS",$sArquivoLog,$iParamLog);
 
   $sSqlServidores .= " where rh02_anousu >= {$iExercicioBase} ";
   $sSqlServidores .= " AND
-  
+
   ((
   rh02_anousu <
   (SELECT r11_anousu
@@ -2457,7 +2457,7 @@ db_logTitulo(" IMPORTA PROJETOS",$sArquivoLog,$iParamLog);
   )
   ";
   $sSqlServidores .= " order by rh02_anousu, rh02_mesusu, rh01_regist           ";
-  //echo $sSqlServidores;exit;
+
   db_query($connOrigem, $sSqlServidores);
 
   $sSqlCreateIndex = "create index dados_servidor_ano_mes_matricula_in on dados_servidor (ano, mes, matricula) ";
@@ -2467,14 +2467,30 @@ db_logTitulo(" IMPORTA PROJETOS",$sArquivoLog,$iParamLog);
   db_query($connOrigem, $sSqlAnalyse);
 
 
-  $sSqlDadosCadastraisServidor  = " select matricula as id,                         ";
+  // $sSqlDadosCadastraisServidor  = " select matricula as id,                         ";
+  // $sSqlDadosCadastraisServidor .= "         nome,                                    ";
+  // $sSqlDadosCadastraisServidor .= "        cpf,                                     ";
+  // $sSqlDadosCadastraisServidor .= "        instit_servidor as instituicao,          ";
+  // $sSqlDadosCadastraisServidor .= "        admissao,                                ";
+  // $sSqlDadosCadastraisServidor .= "        max(rescisao) as rescisao                ";
+  // $sSqlDadosCadastraisServidor .= "   from dados_servidor                           ";
+  // $sSqlDadosCadastraisServidor .= "   group by id, nome, cpf, instit_servidor, admissao ";
+
+  $sSqlDadosCadastraisServidor  = " select dados_servidor.matricula as id,";
   $sSqlDadosCadastraisServidor .= "        nome,                                    ";
   $sSqlDadosCadastraisServidor .= "        cpf,                                     ";
-  $sSqlDadosCadastraisServidor .= "        instit_servidor as instituicao,              ";
+  $sSqlDadosCadastraisServidor .= "        instit_servidor as instituicao,          ";
   $sSqlDadosCadastraisServidor .= "        admissao,                                ";
-  $sSqlDadosCadastraisServidor .= "        max(rescisao) as rescisao                ";
+  $sSqlDadosCadastraisServidor .= "        max (rescisao) as rescisao               ";
   $sSqlDadosCadastraisServidor .= "   from dados_servidor                           ";
+  $sSqlDadosCadastraisServidor .= "
+        inner join (
+        select max(ano) as ano, matricula
+          from dados_servidor
+            GROUP BY matricula
+         ) maxano on maxano.matricula = dados_servidor.matricula and maxano.ano = dados_servidor.ano ";
   $sSqlDadosCadastraisServidor .= "   group by id, nome, cpf, instit_servidor, admissao ";
+
 
   $rsServidores                 = db_query($connOrigem, $sSqlDadosCadastraisServidor);
 
