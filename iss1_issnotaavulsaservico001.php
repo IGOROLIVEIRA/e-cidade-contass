@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -41,7 +41,7 @@ include("classes/db_issnotaavulsanumpre_classe.php");
 include("dbforms/db_funcoes.php");
 
 function db_calculaLinhasTexto22($texto){
- 
+
    $linha = 1;
    $caracter = 0;
    for ($i = 0;$i < strlen($texto); $i++){
@@ -63,9 +63,9 @@ $db_opcao               = 22;
 $db_botao               = false;
 $q62_notaavulsa         = isset($post->q62_issnotaavulsa)?$post->q62_issnotaavulsa:$get->q51_sequencial;
 $lGeraNota              = false;
-$emitenota              = true;    
+$emitenota              = true;
 $rsPar                  = $clparissqn->sql_record($clparissqn->sql_query(null,"*"));
-$oPar                   = db_utils::fieldsMemory($rsPar,0); 
+$oPar                   = db_utils::fieldsMemory($rsPar,0);
 if(isset($post->alterar) || isset($post->excluir) || isset($post->incluir)){
   $sqlerro = false;
   /*
@@ -91,7 +91,7 @@ $clissnotaavulsaservico->q62_obs = $q62_obs;
 			 insert na db_reciboweb
        fc_recibo
 
-  
+
 */
 }
 if(isset($post->incluir)){
@@ -137,24 +137,24 @@ if(isset($post->incluir)){
    }
 }
 if (isset($post->recibo)){
-	
+
   $lSqlErro = false;
   $rsNot    = $clissnotaavulsa->sql_record($clissnotaavulsa->sql_query($post->q62_issnotaavulsa,"*"));
-  $oNot     = db_utils::fieldsMemory($rsNot,0); 
+  $oNot     = db_utils::fieldsMemory($rsNot,0);
   if ($post->totlinhas > 40 ){
-    
+
     db_msgbox('Total das linhas da descrição da nota maior que o permitido (40 linha)');
-    $emitenota = true; 
+    $emitenota = true;
     $lGeraNota = true;
     $db_botao  = true;
   }else if (str_replace(",",".",$post->vlrrectotal) >= $oPar->q60_notaavulsavlrmin){
-       
+
 			db_inicio_transacao();
 		  $clarrecad  = new cl_arrecad();
 		  $clarrehist = new cl_arrehist();
 			$rsNum      = pg_exec("select nextval('numpref_k03_numpre_seq') as k03_numpre");
 			$oNum       = db_utils::fieldsMemory($rsNum,0);
-      //Codigo numpre do Recibo 
+      //Codigo numpre do Recibo
 			$rsNumnov   = pg_exec("select nextval('numpref_k03_numpre_seq') as k03_numnov");
 			$oNumnov    = db_utils::fieldsMemory($rsNumnov,0);
       $aDataPgto  = explode("-",$oNot->q51_dtemiss);
@@ -165,9 +165,9 @@ if (isset($post->recibo)){
 			$clarrecad->k00_valor  = str_replace(",",".",str_replace(".","",$post->vlrrectotal));
 			$clarrecad->k00_receit = $oPar->q60_receit;
 			$clarrecad->k00_tipo   = $oPar->q60_tipo;
-			$clarrecad->k00_dtoper = $oNot->q51_dtemiss; 
-			$clarrecad->k00_dtvenc = $dataPagto; 
-			$clarrecad->k00_numtot = 1; 
+			$clarrecad->k00_dtoper = $oNot->q51_dtemiss;
+			$clarrecad->k00_dtvenc = $dataPagto;
+			$clarrecad->k00_numtot = 1;
 			$clarrecad->k00_numdig = 1;
 			$clarrecad->k00_tipojm = 1;
 			$clarrecad->k00_hist   = $oPar->q60_histsemmov;
@@ -185,7 +185,7 @@ if (isset($post->recibo)){
            $clarrehist->k00_dtoper     = $oNot->q51_dtemiss;
            $clarrehist->k00_id_usuario = db_getsession("DB_id_usuario");
            $clarrehist->k00_hora       = date("h:i");
-           $clarrehist->k00_histtxt    = "Valor referente a nota fiscal avulsa nº ".$q62_issnotaavulsa." de (".db_formatar($oNot->q51_dtemiss,"d").")";
+           $clarrehist->k00_histtxt    = "Valor referente a nota fiscal avulsa nº ".$oNot->q51_numnota." de (".db_formatar($oNot->q51_dtemiss,"d").")";
            $clarrehist->k00_limithist  = null;
            $clarrehist->incluir(null);
            if ($clarrehist->erro_status == 0){
@@ -198,48 +198,48 @@ if (isset($post->recibo)){
       }
 			if (!$lSqlErro){
 
-        $clissnotaavulsanumpre = new cl_issnotaavulsanumpre(); 
+        $clissnotaavulsanumpre = new cl_issnotaavulsanumpre();
 				$clissnotaavulsanumpre->q52_issnotaavulsa = $q62_issnotaavulsa;
 				$clissnotaavulsanumpre->q52_numpre        = $oNum->k03_numpre;
 				$clissnotaavulsanumpre->q52_numnov        = $oNumnov->k03_numnov;
 				$clissnotaavulsanumpre->incluir(null);
        	if ($clissnotaavulsanumpre->erro_status == 0){
-             
+
 						 $lSqlErro = true;
 						 $erro_msg = $clissnotaavulsanumpre->erro_msg;
 
 				}
         if (!$lSqlErro){
-          
+
            $clarreinscr             = new cl_arreinscr();
            $clarreinscr->k00_perc   = 100;
-           $clarreinscr->k00_inscr  = $oNot->q02_inscr; 
-           $clarreinscr->k00_numpre = $oNum->k03_numpre; 
+           $clarreinscr->k00_inscr  = $oNot->q02_inscr;
+           $clarreinscr->k00_numpre = $oNum->k03_numpre;
            $clarreinscr->incluir($oNum->k03_numpre,$oNot->q02_inscr);
            if ($clarreinscr->erro_status == 0){
-                
+
                 $lSqlErro = true;
                 $erro_msg = $clarreinscr->erro_msg;
            }
         }
 
 			}
-			
-      db_fim_transacao($lSqlErro); 
+
+      db_fim_transacao($lSqlErro);
 			if ($lSqlErro){
 
         db_msgbox($erro_msg);
 			}else{
-         
+
        $db_botao = false;
        $rsObs    = $clissnotaavulsaservico->sql_record(
 			                      $clissnotaavulsaservico->sql_query(null,"sum(q62_vlrissqn) as tvlrissqn,
 														                                         sum(q62_vlrdeducao) as tvlrdeducoes,
 																																		 sum(q62_vlrtotal) as tvlrtotal",
-																															null,"q62_issnotaavulsa=".$post->q62_issnotaavulsa)); 			 
-			 $rsTom = $clissnotaavulsatomador->sql_record($clissnotaavulsatomador->sql_query_tomador($post->q62_issnotaavulsa)); 										
+																															null,"q62_issnotaavulsa=".$post->q62_issnotaavulsa));
+			 $rsTom = $clissnotaavulsatomador->sql_record($clissnotaavulsatomador->sql_query_tomador($post->q62_issnotaavulsa));
 			 $oTom  = db_utils::fieldsMemory($rsTom,0);
-		   $oObs  = db_utils::fieldsmemory($rsObs,0);												
+		   $oObs  = db_utils::fieldsmemory($rsObs,0);
        $obs   = "Referente a nota fiscal avulsa nº ".$oNot->q51_numnota."\n";
 			 $obs  .= "Tomador : ".$oTom->z01_cgccpf." - ".$oTom->z01_nome."\n";
 			 $obs  .= "Imposto : R$ ".trim(db_formatar($oObs->tvlrissqn,"f"))."\n";
@@ -248,11 +248,11 @@ if (isset($post->recibo)){
        session_register("DB_obsrecibo",$obs);
 			 db_putsession("DB_obsrecibo",$obs);
        $url   = "iss1_issnotaavulsarecibo.php?numpre=".$oNum->k03_numpre."&tipo=".$oPar->q60_tipo."&ver_inscr=".$oNot->q02_inscr;
-			 $url  .= "&numcgm=".$oNot->q02_numcgm."&emrec=t&CHECK10=".$oNum->k03_numpre."P1&tipo_debito=".$oPar->q60_tipo; 
+			 $url  .= "&numcgm=".$oNot->q02_numcgm."&emrec=t&CHECK10=".$oNum->k03_numpre."P1&tipo_debito=".$oPar->q60_tipo;
        $url  .= "&k03_tipo=".$oPar->q60_tipo."&k03_parcelamento=f&k03_perparc=f&ver_numcgm=".$oNot->q02_numcgm;
        $url  .= "&totregistros=1&k03_numnov=".$oNumnov->k03_numnov."&loteador=";
        echo "<script>\n";
-			 
+
 			 echo " window.open('$url','','location=0');\n";
        echo "</script>\n";
 
@@ -263,18 +263,18 @@ if (isset($post->recibo)){
 
 }
 if (isset($post->notaavulsa)){
-    
+
    if ($post->totlinhas > 40 ){
-    
+
     db_msgbox('Total das linhs da descrição da nota maior que o permitido (40 linha)');
-    $emitenota = true; 
+    $emitenota = true;
     $lGeraNota = true;
     $db_botao  = true;
- 
+
    }else{
       if ($clissnotaavulsa->emiteNotaAvulsa($post->q62_issnotaavulsa)){
 
-        $emitenota = false; 
+        $emitenota = false;
         $lGeraNota = false;
         $db_botao  = false;
       }
@@ -321,17 +321,17 @@ function js_emiteNota(num){
 
 if (isset($post->recibo)){
 
-    echo "document.getElementById('db_opcao').disabled=true;\n"; 
+    echo "document.getElementById('db_opcao').disabled=true;\n";
     echo "document.getElementById('recibo').disabled=true;\n";
- 
+
 
 }
 if (isset($post->notaavulsa)){
 
-    echo "document.getElementById('db_opcao').disabled=true;\n"; 
+    echo "document.getElementById('db_opcao').disabled=true;\n";
     echo "document.getElementById('recibo').disabled=true;\n";
     echo "document.getElementById('nota').disabled=true;\n";
- 
+
 
 }
 ?>
