@@ -326,6 +326,10 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 						$cExt20->si165_vlsaldoatualfonte     = $saldofinal;
 						$cExt20->si165_totaldebitos          = $saldodebito;
 						$cExt20->si165_totalcreditos         = $saldocredito;
+
+						$cExt20->si165_natsaldoanteriorfonte = $natsaldoanteriorfonte;
+						$cExt20->si165_natsaldoatualfonte    = $natsaldoatualfonte;
+
 						$cExt20->si165_mes                   = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 						$cExt20->si165_instit                = db_getsession("DB_instit");
 						$cExt20->ext30                       = array();
@@ -487,11 +491,11 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 			$cExt->si165_codext                = $oExt20->si165_codext;
 			$cExt->si165_codfontrecursos       = $oExt20->si165_codfontrecursos;
 			$cExt->si165_vlsaldoanteriorfonte  = abs($oExt20->si165_vlsaldoanteriorfonte);
-			$cExt->si165_natsaldoanteriorfonte = $oExt20->si165_vlsaldoanteriorfonte >= 0 ? 'D' : 'C';
+			$cExt->si165_natsaldoanteriorfonte = $oExt20->si165_natsaldoanteriorfonte;
 		    $cExt->si165_totaldebitos          = $oExt20->si165_totaldebitos;
 		    $cExt->si165_totalcreditos         = $oExt20->si165_totalcreditos;
 			$cExt->si165_vlsaldoatualfonte     = abs($oExt20->si165_vlsaldoatualfonte);
-			$cExt->si165_natsaldoatualfonte    = $oExt20->si165_vlsaldoatualfonte >= 0 ? 'D' : 'C';
+			$cExt->si165_natsaldoatualfonte    = $oExt20->si165_natsaldoatualfonte;
 			$cExt->si165_mes                   = $oExt20->si165_mes;
 			$cExt->si165_instit                = $oExt20->si165_instit;
 			$cExt->incluir(null);
