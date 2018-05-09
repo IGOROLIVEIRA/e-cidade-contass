@@ -22,6 +22,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
   $this->objpdf->text(134, $xlin -8, 'DATA DE EMISSÃO : ');
   $this->objpdf->text(175, $xlin -8, $this->emissao);
 
+
   if (strtoupper(trim($this->municpref)) != 'GUAIBA') {
     $this->objpdf->text(159, $xlin -3, 'TIPO : ');
     $this->objpdf->text(175, $xlin -3, $this->emptipo);
