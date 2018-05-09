@@ -22,7 +22,6 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
   $this->objpdf->text(134, $xlin -8, 'DATA DE EMISSÃO : ');
   $this->objpdf->text(175, $xlin -8, $this->emissao);
 
-
   if (strtoupper(trim($this->municpref)) != 'GUAIBA') {
     $this->objpdf->text(159, $xlin -3, 'TIPO : ');
     $this->objpdf->text(175, $xlin -3, $this->emptipo);
@@ -85,7 +84,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx ++) {
 
   $this->objpdf->text($xcol +17, $xlin +26, ':  '.db_formatar($this->sintetico, 'elemento_int'));
   $this->objpdf->setxy($xcol +18, $xlin +27);
-  $this->objpdf->multicell(90, 3, substr($this->descr_sintetico, 0, 55), 0, "L");
+  $this->objpdf->multicell(90, 3, substr($this->descr_sintetico, 0, 42), 0, "L");
 
   $this->objpdf->text($xcol +17, $xlin +32.7, ':  '.$this->recurso.' - '.substr($this->descr_recurso,0,42));
 
