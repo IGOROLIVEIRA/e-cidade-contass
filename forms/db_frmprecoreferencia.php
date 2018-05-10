@@ -71,7 +71,7 @@ db_textarea('si01_justificativa',7,60,$Isi01_justificativa,true,'text',$db_opcao
 <input name="imprimir" type="submit" id="imprimir" value="Imprimir PDF">
 <input name="imprimircsv" type="submit" id="imprimircsv" value="Imprimir CSV">
 <? } ?>
-    <b>Quantidade de cassas decimais:</b>
+    <b>Quantidade de casas decimais:</b>
     <?php
     $aQuant_casas = array("2" => "2", "3" => "3");
     db_select("quant_casas", $aQuant_casas, true, 4, "style='width:83px;'");
