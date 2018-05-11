@@ -323,7 +323,11 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $this->objpdf->Setfont('Arial', '', 6);
 
 
-        $iLinhasRestantesItem = (int) ((($this->objpdf->h - 125) - $this->objpdf->GetY()) / 3);
+        if ($pagina != 1){
+        $iLinhasRestantesItem = (int) ((($this->objpdf->h - 35) - $this->objpdf->GetY()) / 3);
+        } else{
+          $iLinhasRestantesItem = (int) ((($this->objpdf->h - 125) - $this->objpdf->GetY()) / 3);
+        }
 
         $iLinhasMulticellItem = (int) $this->objpdf->NbLines(122, $descricaoitem);
 
@@ -368,7 +372,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             ), 3, false, 4);
         } else {
 
-          $this->objpdf->sety($this->objpdf->h - 25);
+          $this->objpdf->sety($this->objpdf->h - 35);
           $this->objpdf->Row(array(
             '',
             "Continua na página $proxima_pagina",
