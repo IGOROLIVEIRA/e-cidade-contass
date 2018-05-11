@@ -385,7 +385,7 @@ if ( isset($oPost->gerar) ) {
 
           $oPessoal = db_utils::fieldsMemory($rsDados, $i);
           if ($oPessoal->tipo == 2) {
-            $oPessoal->rh01_regist = $oPessoal->z01_numcgm;
+            $oPessoal->rh01_regist = $oPessoal->z01_numcgm.'9999';
           }
           $nSalarioMaternidade = 0;
           $nSalarioFamilia     = 0;
@@ -661,7 +661,7 @@ if ( isset($oPost->gerar) ) {
 
           $oPessoal = db_utils::fieldsMemory($rsDados, $i);
           if ($oPessoal->tipo == 2) {
-            $oPessoal->rh01_regist = $oPessoal->z01_numcgm;
+            $oPessoal->rh01_regist = $oPessoal->z01_numcgm.'9999';
           }
           if((int)$oPessoal->rh16_pis > 0 && $alteraender == 'S'){
 
@@ -700,7 +700,7 @@ if ( isset($oPost->gerar) ) {
 
           $oPessoal = db_utils::fieldsmemory($rsDados, $i);
           if ($oPessoal->tipo == 2) {
-            $oPessoal->rh01_regist = $oPessoal->z01_numcgm;
+            $oPessoal->rh01_regist = $oPessoal->z01_numcgm.'9999';
           }
           if((int)$oPessoal->rh16_pis > 0 ){
 
