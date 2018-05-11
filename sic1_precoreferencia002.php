@@ -18,7 +18,7 @@ if (isset($imprimir)){
 	} else {
 		
     echo "<script>
-    jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$si01_processocompra},
+    jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$si01_processocompra}+'&quant_casas='+$quant_casas,
 			   
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -36,7 +36,7 @@ if (isset($imprimircsv)){
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia005.php?codigo_preco='+{$si01_processocompra},
+    jan = window.open('sic1_precoreferencia005.php?codigo_preco='+{$si01_processocompra}+'&quant_casas='+$quant_casas,
 
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
