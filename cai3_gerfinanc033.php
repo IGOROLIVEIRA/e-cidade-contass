@@ -648,6 +648,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->imppred    = "-";
     $pdf1->impterr    = "-";
     $pdf1->totaliptu  = trim(db_formatar($oIptucalc->totaliptu,'f'));
+    $pdf1->descrquadro = "";
     for ($iCont=0; $iCont < pg_num_rows($rsDescrQuadro); $iCont++) {
       $pdf1->descrquadro .= db_utils::fieldsMemory($rsDescrQuadro, $iCont)->descrquadro."\n";
     }
