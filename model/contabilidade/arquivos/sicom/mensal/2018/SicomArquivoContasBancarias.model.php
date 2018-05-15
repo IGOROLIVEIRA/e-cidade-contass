@@ -757,7 +757,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
               throw new Exception($cCtb20->erro_msg);
         }
         if( db_getsession("DB_anousu")==2018 && $this->sDataFinal['5'] . $this->sDataFinal['6']==1 && $alterarAplicacao){
-            if($oCtb20->si96_vlsaldoinicialfonte > 0) {
+            if($oCtb20->si96_vlsaldofinalfonte > 0) {
 
                 //criar o movimento de saldo do saldo da conta de origem
                 $cCtb21alt = new cl_ctb212018();
@@ -779,7 +779,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
                     throw new Exception($cCtb21alt->erro_msg);
                 }
-            }else if($oCtb20->si96_vlsaldoinicialfonte < 0) {
+            }else if($oCtb20->si96_vlsaldofinalfonte < 0) {
 
 
                 //criar o movimento de saldo do saldo da conta de origem
@@ -824,7 +824,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                 if ($cCtb20alt->erro_status == 0) {
                     throw new Exception($cCtb20alt->erro_msg);
                 }
-                if($oCtb20->si96_vlsaldoinicialfonte > 0) {
+                if($oCtb20->si96_vlsaldofinalfonte > 0) {
                     //zerar o saldo da conta de origem
                     $cCtb20alt->si96_vlsaldofinalfonte = 0;
 
@@ -848,7 +848,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 
                         throw new Exception($cCtb21alt2->erro_msg);
                     }
-                }else if($oCtb20->si96_vlsaldoinicialfonte < 0) {
+                }else if($oCtb20->si96_vlsaldofinalfonte < 0) {
                     //zerar o saldo da conta de origem
                     $cCtb20alt->si96_vlsaldofinalfonte = 0;
 
