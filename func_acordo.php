@@ -60,107 +60,113 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
 </head>
 <body style="background-color: #CCCCCC">
 
-<div class="container">
-  <form name="form2" method="post" action="" >
-    <fieldset>
-      <legend class="bold">Filtros</legend>
+  <div class="container">
+    <form name="form2" method="post" action="" >
+      <fieldset>
+        <legend class="bold">Filtros</legend>
 
-      <table border="0" align="center" cellspacing="0">
-        <tr>
-          <td width="4%" align="left" nowrap title="<?php echo $Tac16_sequencial; ?>">
-            <?php echo $Lac16_sequencial; ?>
-          </td>
-          <td width="96%" align="left" nowrap>
-            <?php
-            db_input("ac16_sequencial",10,$Iac16_sequencial,true,"text",4,"","chave_ac16_sequencial");
-            ?>
-          </td>
-        </tr>
+        <table border="0" align="center" cellspacing="0">
+          <tr>
+            <td width="4%" align="left" nowrap title="<?php echo $Tac16_sequencial; ?>">
+              <?php echo $Lac16_sequencial; ?>
+            </td>
+            <td width="96%" align="left" nowrap>
+              <?php
+              db_input("ac16_sequencial",10,$Iac16_sequencial,true,"text",4,"","chave_ac16_sequencial");
+              ?>
+            </td>
+          </tr>
 
-        <tr>
-          <td width="4%" align="left" nowrap title="<?php echo $Tac16_numeroacordo; ?>" class="bold">
-            Número do Acordo:
-          </td>
-          <td width="96%" align="left" nowrap>
-            <?php db_input("ac16_numeroacordo", 10, 0, true, "text", 4); ?>
-          </td>
-        </tr>
+          <tr>
+            <td width="4%" align="left" nowrap title="<?php echo $Tac16_numeroacordo; ?>" class="bold">
+              Número do Acordo:
+            </td>
+            <td width="96%" align="left" nowrap>
+              <?php db_input("ac16_numeroacordo", 10, 0, true, "text", 4); ?>
+            </td>
+          </tr>
 
-        <tr>
-          <td nowrap title="<?php echo @$Tac16_acordogrupo; ?>" class="bold" align="">
-            <?php
-            db_ancora("Grupo:", "js_pesquisaac16_acordogrupo(true);", 1);
-            ?>
-          </td>
-          <td>
-            <?php
-            db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', 1, "onchange='js_pesquisaac16_acordogrupo(false);'");
-            db_input('ac02_descricao', 30, "", true, 'text', 3);
-            ?>
-          </td>
-        </tr>
-      </table>
+          <tr>
+            <td nowrap title="<?php echo @$Tac16_acordogrupo; ?>" class="bold" align="">
+              <?php
+              db_ancora("Grupo:", "js_pesquisaac16_acordogrupo(true);", 1);
+              ?>
+            </td>
+            <td>
+              <?php
+              db_input('ac16_acordogrupo', 10, $Iac16_acordogrupo, true, 'text', 1, "onchange='js_pesquisaac16_acordogrupo(false);'");
+              db_input('ac02_descricao', 30, "", true, 'text', 3);
+              ?>
+            </td>
+          </tr>
+        </table>
 
-    </fieldset>
-    <p align="center">
-      <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-      <input name="limpar" type="reset" id="limpar" value="Limpar" >
-      <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_acordo.hide();">
-    </p>
+      </fieldset>
+      <p align="center">
+        <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+        <input name="limpar" type="reset" id="limpar" value="Limpar" >
+        <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_acordo.hide();">
+      </p>
 
-  </form>
-</div>
+    </form>
+  </div>
 
-<fieldset style="width: 98%">
-  <legend class="bold">Registros</legend>
+  <fieldset style="width: 98%">
+    <legend class="bold">Registros</legend>
 
 
 
-  <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <tr>
-      <td align="center" valign="top">
-        <?php
+    <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+      <tr>
+        <td align="center" valign="top">
+          <?php
 
-        $sWhere  = " 1 = 1 ";
+          $sWhere  = " 1 = 1 ";
 
-        $sWhere .= " and ac16_instit = {$iInstituicaoSessao} ";
-        if (!isset($lNovoDetalhe)) {
+          $sWhere .= " and ac16_instit = {$iInstituicaoSessao} ";
+          if (!isset($lNovoDetalhe)) {
 
-          if (!isset($lDepartamento)) {
+            if (!isset($lDepartamento)) {
 
-            $sDepartamentos = "( ac16_coddepto = ".db_getsession("DB_coddepto"). " or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." )";
-            $sWhere .= " and {$sDepartamentos} ";
-          }
-          if($pc01_liberaautorizacao <> 't') {
+              $sDepartamentos = "( ac16_coddepto = ".db_getsession("DB_coddepto"). " or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." )";
+              $sWhere .= " and {$sDepartamentos} ";
+            }
+            if($pc01_liberaautorizacao <> 't') {
               if (isset($iTipoFiltro)) {
-                  $sWhere .= " and ac16_acordosituacao in ({$iTipoFiltro})";
+                $sWhere .= " and ac16_acordosituacao in ({$iTipoFiltro})";
               }
-          }
+            }
+            if (isset($ac16_acordosituacao)) {
+                $sWhere .= " and ac16_acordosituacao = $ac16_acordosituacao";
+            }
 
-          if (isset($lParaExcluir) && $lParaExcluir == true) {
-            $sWhere .= "
+            if (isset($lParaExcluir) && $lParaExcluir == true) {
+              $sWhere .= "
               AND NOT EXISTS
-                (SELECT
-                    acordo_sub.ac16_sequencial,
-                    empautoriza.e54_autori,
-                    empautoriza.e54_anulad
-                  FROM acordo acordo_sub
-                  INNER JOIN acordoposicao                  ON acordoposicao.ac26_acordo = acordo_sub.ac16_sequencial
-                  INNER JOIN acordoitem                     ON acordoitem.ac20_acordoposicao = acordoposicao.ac26_sequencial
-                  INNER JOIN acordoitemexecutado            ON acordoitemexecutado.ac29_acordoitem = acordoitem.ac20_sequencial
-                  INNER JOIN acordoitemexecutadoempautitem  ON acordoitemexecutadoempautitem.ac19_acordoitemexecutado = acordoitemexecutado.ac29_sequencial
-                  INNER JOIN empautitem                     ON empautitem.e55_autori = acordoitemexecutadoempautitem.ac19_autori AND empautitem.e55_sequen = acordoitemexecutadoempautitem.ac19_sequen
-                  INNER JOIN empautoriza                    ON empautoriza.e54_autori = empautitem.e55_autori
-                  WHERE
-                    ac16_sequencial = acordo.ac16_sequencial
-                    AND e54_anulad IS NULL
-                  )
-            ";
-          }
+              (SELECT
+              acordo_sub.ac16_sequencial,
+              empautoriza.e54_autori,
+              empautoriza.e54_anulad
+              FROM acordo acordo_sub
+              INNER JOIN acordoposicao                  ON acordoposicao.ac26_acordo = acordo_sub.ac16_sequencial
+              INNER JOIN acordoitem                     ON acordoitem.ac20_acordoposicao = acordoposicao.ac26_sequencial
+              INNER JOIN acordoitemexecutado            ON acordoitemexecutado.ac29_acordoitem = acordoitem.ac20_sequencial
+              INNER JOIN acordoitemexecutadoempautitem  ON acordoitemexecutadoempautitem.ac19_acordoitemexecutado = acordoitemexecutado.ac29_sequencial
+              INNER JOIN empautitem                     ON empautitem.e55_autori = acordoitemexecutadoempautitem.ac19_autori AND empautitem.e55_sequen = acordoitemexecutadoempautitem.ac19_sequen
+              INNER JOIN empautoriza                    ON empautoriza.e54_autori = empautitem.e55_autori
+              WHERE
+              ac16_sequencial = acordo.ac16_sequencial
+              AND e54_anulad IS NULL
+              )
+              ";
+            }
 
-          if ( !empty($lLancamento) ) {
-            $sWhere .= " and exists (select 1 from conlancamacordo where c87_acordo = ac16_sequencial limit 1) ";
-          }
+            if ( !empty($lLancamento) ) {
+              $sWhere .= " and exists (select 1 from conlancamacordo where c87_acordo = ac16_sequencial limit 1) ";
+            }
+            if ( !empty($assinatura) && $assinatura ==true ) {
+              $sWhere .= " and (acordo.ac16_dataassinatura IS NULL) ";
+            }
 
           /**
            * Caso tenha sido setado $lComExecucao como false, buscamos os acordos que nao tiveram item executado
@@ -168,11 +174,11 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
           if (isset($lComExecucao) && $lComExecucao == 'false') {
 
             $sWhere .= " and not exists (select 1 from acordoitemexecutadoperiodo     aitemexecutadoperiodo
-	                                                   inner join acordoitemexecutado aitemexecutado on aitemexecutado.ac29_sequencial = aitemexecutadoperiodo.ac38_acordoitemexecutado
-	                                                   inner join acordoitemprevisao  aitemprevisao  on aitemprevisao.ac37_sequencial  = aitemexecutadoperiodo.ac38_acordoitemprevisao
-	                                                   inner join acordoitem          aitem          on aitem.ac20_sequencial          = aitemprevisao.ac37_acordoitem
-	                                        where aitemprevisao.ac37_acordoitem = acordoitem.ac20_sequencial
-	                                    )";
+            inner join acordoitemexecutado aitemexecutado on aitemexecutado.ac29_sequencial = aitemexecutadoperiodo.ac38_acordoitemexecutado
+            inner join acordoitemprevisao  aitemprevisao  on aitemprevisao.ac37_sequencial  = aitemexecutadoperiodo.ac38_acordoitemprevisao
+            inner join acordoitem          aitem          on aitem.ac20_sequencial          = aitemprevisao.ac37_acordoitem
+            where aitemprevisao.ac37_acordoitem = acordoitem.ac20_sequencial
+            )";
           }
 
           if (isset($lAtivo)) {
@@ -212,7 +218,7 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
             if (file_exists("funcoes/db_func_acordo.php") == true) {
 
               $campos  = "distinct acordo.ac16_sequencial, ";
-              $campos .= "(ac16_numeroacordo || '/' || ac16_anousu)::varchar as ac16_numeroacordo, ";
+              $campos .= "CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END ac16_numeroacordo, ";
               $campos .= "ac17_descricao as dl_Situação, ";
               $campos .= "acordo.ac16_contratado, ";
               $campos .= "cgm.z01_nome, ";
@@ -221,8 +227,8 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
               //$campos .= "nomeinst, ";
               //$campos .= "acordo.ac16_numero, ";
               $campos .= "acordo.ac16_dataassinatura, ";
-              $campos .= "acordo.ac16_datainicio, ";
-              $campos .= "acordo.ac16_datafim, ";
+              $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, ";
+              $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, ";
               $campos .= "ac28_descricao as dl_Origem,";
               $campos .= "acordo.ac16_coddepto, ";
               $campos .= "descrdepto ";
@@ -235,23 +241,27 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
           /**
            * Numero e ano do acordo - separados por '/', caso nao for informado ano, pega da sessao
            */
+          if(isset($semvigencia) && $semvigencia == true){
+            $sWhere .= " and ac16_semvigencia = 'f' ";
+          }
           if (!empty($ac16_numeroacordo)) {
 
             $aNumeroAcordo = explode('/', $ac16_numeroacordo);
             $iNumero = $aNumeroAcordo[0];
             $iAno    = !empty($aNumeroAcordo[1]) ? $aNumeroAcordo[1] : db_getsession("DB_anousu");
             $sWhere  = "ac16_numeroacordo = {$iNumero} and ac16_anousu = {$iAno} and ac16_instit = {$iInstituicaoSessao} and {$sDepartamentos}";
+
           }
 
           if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial)!="")) {
 
             $sql = $clacordo->sql_query_acordoitemexecutado(null, $campos,"ac16_sequencial desc",
-                                                            "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao}");
+              "ac16_sequencial = {$chave_ac16_sequencial} and $sWhere and ac16_instit = {$iInstituicaoSessao}");
 
           } else if (isset($ac16_acordogrupo) && (trim($ac16_acordogrupo)!="")) {
 
             $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc",
-                                                            "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}");
+              "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao}");
           } else {
             $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc", $sWhere . " and ac16_instit = {$iInstituicaoSessao} " );
           }
@@ -266,14 +276,16 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
 
         } else {
 
-
+          if(isset($semvigencia) && $semvigencia == true){
+            $sWhere .= " and ac16_semvigencia = 'f' ";
+          }
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
             $sSqlBuscaAcordo = $clacordo->sql_query_acordoitemexecutado(null,
-                                                                        "*",
-                                                                        null,
-                                                                        "ac16_sequencial = {$pesquisa_chave}
-                                                                       and {$sWhere}");
+              "*",
+              null,
+              "ac16_sequencial = {$pesquisa_chave}
+              and {$sWhere}");
 
 
             $result = $clacordo->sql_record($sSqlBuscaAcordo);
@@ -315,7 +327,7 @@ if (!isset($pesquisa_chave)) {
   ?>
   <script>
   </script>
-<?
+  <?
 }
 ?>
 <script>
@@ -326,7 +338,7 @@ if (!isset($pesquisa_chave)) {
    * @param {object} elemento
    * @returns {void}
    */
-  function js_formatarNumeroAno(elemento) {
+   function js_formatarNumeroAno(elemento) {
 
     /**
      * Formata a cada tecla digitada
@@ -334,7 +346,7 @@ if (!isset($pesquisa_chave)) {
      * @param {object} elemento
      * @returns {boolean}
      */
-    elemento.onkeypress = function(event) {
+     elemento.onkeypress = function(event) {
 
       var iTecla = event.keyCode ? event.keyCode : event.charCode;
       var sTecla = String.fromCharCode(iTecla);
@@ -342,7 +354,7 @@ if (!isset($pesquisa_chave)) {
       /**
        * Nao permite por 2x '/' ou como primeiro caracter
        */
-      if (sTecla == '/') {
+       if (sTecla == '/') {
 
         if (this.value.indexOf('/') !== -1 || this.value == '') {
           return false;

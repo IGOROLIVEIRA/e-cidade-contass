@@ -70,33 +70,33 @@ switch($oParam->exec) {
    */
   case "getPosicoesAcordo":
 
-    $lGeraAutorizacao = false;
-    if (!empty($oParam->lGeracaoAutorizacao)) {
-      $lGeraAutorizacao = true;
-    }
+  $lGeraAutorizacao = false;
+  if (!empty($oParam->lGeracaoAutorizacao)) {
+    $lGeraAutorizacao = true;
+  }
 
-     if (isset ($_SESSION["oContrato"])) {
-       unset($_SESSION["oContrato"]);
-     }
+  if (isset ($_SESSION["oContrato"])) {
+   unset($_SESSION["oContrato"]);
+ }
 
-     $oContrato              = new Acordo($oParam->iAcordo);
-     $_SESSION["oContrato"]  = $oContrato;
+ $oContrato              = new Acordo($oParam->iAcordo);
+ $_SESSION["oContrato"]  = $oContrato;
 
-     $aPosicoes              = $oContrato->getPosicoes();
-     $oRetorno->posicoes     = array();
-     $oRetorno->tipocontrato = $oContrato->getOrigem();
-     foreach ($aPosicoes as $oPosicaoContrato) {
+ $aPosicoes              = $oContrato->getPosicoes();
+ $oRetorno->posicoes     = array();
+ $oRetorno->tipocontrato = $oContrato->getOrigem();
+ foreach ($aPosicoes as $oPosicaoContrato) {
 
-       $oPosicao        = new stdClass();
-       $lOrigemEmpenho = false;
-       if ($oContrato->getOrigem() == Acordo::ORIGEM_EMPENHO) {
-         $lOrigemEmpenho = true;
-       }
+   $oPosicao        = new stdClass();
+   $lOrigemEmpenho = false;
+   if ($oContrato->getOrigem() == Acordo::ORIGEM_EMPENHO) {
+     $lOrigemEmpenho = true;
+   }
 
 //       if ($oPosicaoContrato->getTipo() == AcordoPosicao::TIPO_VIGENCIA) {
 //         continue;
 //       }
-       $iTipoPosicao =  $oPosicaoContrato->getTipo();
+   $iTipoPosicao =  $oPosicaoContrato->getTipo();
 
        /**
         * Mostrará apenas as posições de tipo inclusão ou vigência, para acordos de origem empenho
@@ -106,19 +106,22 @@ switch($oParam->exec) {
        }
 
        $oPosicao->codigo         = $oPosicaoContrato->getCodigo();
+       $oPosicao->codigoaditivo  = $oPosicaoContrato->getCodigoAditivo();
        $oPosicao->data           = $oPosicaoContrato->getData();
        $oPosicao->tipo           = $oPosicaoContrato->getTipo();
+       $oPosicao->dataassinatura = $oPosicaoContrato->getDataAssinatura();
+       $oPosicao->datapublicacao = $oPosicaoContrato->getDataPublicacao();
        $oPosicao->numerocontrato = $oContrato->getGrupo()." - ".$oContrato->getNumero()."/".$oContrato->getAno();
        $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
-       $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumero(), "0", 7)."";
+       $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7)."";
        $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
        array_push($oRetorno->posicoes, $oPosicao);
 
      }
 
-    break;
+     break;
 
-    case "getAditamentos":
+     case "getAditamentos":
 
      if (isset ($_SESSION["oContrato"])) {
        unset($_SESSION["oContrato"]);
@@ -143,20 +146,24 @@ switch($oParam->exec) {
        $oPosicao->tipo           = $oPosicaoContrato->getTipo();
        $oPosicao->numerocontrato = $oContrato->getGrupo()." - ".$oContrato->getNumero()."/".$oContrato->getAno();
        $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
-       $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumero(), "0", 7)."";
+       if($oPosicaoContrato->getTipo() == 14 || $oPosicaoContrato->getTipo() == 15 || $oPosicaoContrato->getTipo() == 16){
+        $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroApostilamento(), "0", 7)."";
+       }else{
+        $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7)."";
+       }
        $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
        array_push($oRetorno->posicoes, $oPosicao);
 
      }
 
      if(count($oRetorno->posicoes) == 0 ){
-         $oRetorno->status   = 2;
-         $oRetorno->message  = urlencode('Nenhum aditamento encontrado!');
+       $oRetorno->status   = 2;
+       $oRetorno->message  = urlencode('Nenhum aditamento encontrado!');
      }
 
-    break;
+     break;
 
-    case "getApostilamentos":
+     case "getApostilamentos":
 
      if (isset ($_SESSION["oContrato"])) {
        unset($_SESSION["oContrato"]);
@@ -181,26 +188,26 @@ switch($oParam->exec) {
        $oPosicao->tipo           = $oPosicaoContrato->getTipo();
        $oPosicao->numerocontrato = $oContrato->getGrupo()." - ".$oContrato->getNumero()."/".$oContrato->getAno();
        $oPosicao->descricaotipo  = urlencode($oPosicaoContrato->getDescricaoTipo());
-       $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumero(), "0", 7)."";
+       $oPosicao->numero         = (string)"".str_pad($oPosicaoContrato->getNumeroAditamento(), "0", 7)."";
        $oPosicao->emergencial    = urlencode($oPosicaoContrato->isEmergencial()?"Sim":"Não");
        array_push($oRetorno->posicoes, $oPosicao);
 
      }
 
      if(count($oRetorno->posicoes) == 0 ){
-         $oRetorno->status   = 2;
-         $oRetorno->message  = urlencode('Nenhum apostilamento encontrado!');
+       $oRetorno->status   = 2;
+       $oRetorno->message  = urlencode('Nenhum apostilamento encontrado!');
      }
 
-    break;
+     break;
 
-  case "getPosicaoItens":
+     case "getPosicaoItens":
 
-    if (isset ($_SESSION["oContrato"])) {
+     if (isset ($_SESSION["oContrato"])) {
 
       $oContrato = $_SESSION["oContrato"];
       $aItens    = array();
-      
+
       $oRetorno->iCasasDecimais = 2;
       //echo 'info contrato ';
       //print_r($oContrato);
@@ -217,28 +224,28 @@ switch($oParam->exec) {
         $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
         $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
       }else if ($oRetorno->iOrigemContrato == 3 )  {
-              $aLicitacoesVinculadas = $oContrato->getLicitacoes();
+        $aLicitacoesVinculadas = $oContrato->getLicitacoes();
 
-              if(empty($aLicitacoesVinculadas[0])){
+        if(empty($aLicitacoesVinculadas[0])){
 
-                  $oRetorno->iCodigoLicitacao     = '';
-                  $oRetorno->iEdital              = '';
-                  $oRetorno->iAnoLicitacao        = '';
-                  $oRetorno->iModalidadeLicitacao = '';
-                  $oRetorno->pc50_codcom          = '';
-                  $oRetorno->l03_tipo             = '';
+          $oRetorno->iCodigoLicitacao     = '';
+          $oRetorno->iEdital              = '';
+          $oRetorno->iAnoLicitacao        = '';
+          $oRetorno->iModalidadeLicitacao = '';
+          $oRetorno->pc50_codcom          = '';
+          $oRetorno->l03_tipo             = '';
 
-              }else{
+        }else{
 
-                  $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
-                  $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
-                  $oRetorno->iEdital              = $oStdDados->l20_edital;
-                  $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
-                  $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
-                  $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
-                  $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+          $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+          $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
+          $oRetorno->iEdital              = $oStdDados->l20_edital;
+          $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
+          $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+          $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
+          $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
 
-              }
+        }
 
       }
 
@@ -248,36 +255,36 @@ switch($oParam->exec) {
 
           foreach ($oPosicaoContrato->getItens() as $oItem) {
 
-              $oItemRetorno                      = new stdClass();
-              $oItemRetorno->codigo              = $oItem->getCodigo();
-              $oItemRetorno->material            = $oItem->getMaterial()->getDescricao();
-              $oItemRetorno->codigomaterial      = urlencode($oItem->getMaterial()->getMaterial());
-              $oItemRetorno->elemento            = $oItem->getElemento();
-              $oItemRetorno->desdobramento       = $oItem->getDesdobramento();
-              $oItemRetorno->valorunitario       = $oItem->getValorUnitario();
-              $oItemRetorno->valortotal          = $oItem->getValorTotal();
-              $oItemRetorno->quantidade          = $oItem->getQuantidade();
-              $oItemRetorno->lControlaQuantidade = $oItem->getControlaQuantidade();
+            $oItemRetorno                      = new stdClass();
+            $oItemRetorno->codigo              = $oItem->getCodigo();
+            $oItemRetorno->material            = $oItem->getMaterial()->getDescricao();
+            $oItemRetorno->codigomaterial      = urlencode($oItem->getMaterial()->getMaterial());
+            $oItemRetorno->elemento            = $oItem->getElemento();
+            $oItemRetorno->desdobramento       = $oItem->getDesdobramento();
+            $oItemRetorno->valorunitario       = $oItem->getValorUnitario();
+            $oItemRetorno->valortotal          = $oItem->getValorTotal();
+            $oItemRetorno->quantidade          = $oItem->getQuantidade();
+            $oItemRetorno->lControlaQuantidade = $oItem->getControlaQuantidade();
 
-              $aCasasDecimais = explode(".", $oItemRetorno->valorunitario);
-              if (count($aCasasDecimais) > 1 && strlen($aCasasDecimais[1]) > 2) {
-                $oRetorno->iCasasDecimais = 3;
-              }
+            $aCasasDecimais = explode(".", $oItemRetorno->valorunitario);
+            if (count($aCasasDecimais) > 1 && strlen($aCasasDecimais[1]) > 2) {
+              $oRetorno->iCasasDecimais = 3;
+            }
 
-              foreach ($oItem->getDotacoes() as $oDotacao) {
+            foreach ($oItem->getDotacoes() as $oDotacao) {
 
-                $oDotacaoSaldo = new Dotacao($oDotacao->dotacao, $oDotacao->ano);
-                $oDotacao->saldoexecutado = 0;
-                $oDotacao->valorexecutar  = 0;
-                $oDotacao->saldodotacao   = $oDotacaoSaldo->getSaldoFinal();
+              $oDotacaoSaldo = new Dotacao($oDotacao->dotacao, $oDotacao->ano);
+              $oDotacao->saldoexecutado = 0;
+              $oDotacao->valorexecutar  = 0;
+              $oDotacao->saldodotacao   = $oDotacaoSaldo->getSaldoFinal();
 
-                $oDotacao->valor -= $oDotacao->executado;
+              $oDotacao->valor -= $oDotacao->executado;
 
-              }
-              $oItemRetorno->dotacoes       = $oItem->getDotacoes();
-              $oItemRetorno->saldos         = $oItem->getSaldos();
-              $oItemRetorno->servico        = $oItem->getMaterial()->isServico();
-              $oRetorno->itens[]            = $oItemRetorno;
+            }
+            $oItemRetorno->dotacoes       = $oItem->getDotacoes();
+            $oItemRetorno->saldos         = $oItem->getSaldos();
+            $oItemRetorno->servico        = $oItem->getMaterial()->isServico();
+            $oRetorno->itens[]            = $oItemRetorno;
           }
           break;
         }
@@ -289,7 +296,7 @@ switch($oParam->exec) {
     }
     break;
 
-  case "processarAutorizacoes":
+    case "processarAutorizacoes":
 
     $oContrato = $_SESSION["oContrato"];
 
@@ -336,7 +343,7 @@ switch($oParam->exec) {
       $oRetorno->message = urlencode($eErro->getMessage());
     }
 
-   break;
+    break;
 
     case "processarExclusaoPosicao":
 
@@ -348,19 +355,19 @@ switch($oParam->exec) {
       arsort($oParam->aPosicoes);
       foreach ($oParam->aPosicoes as $oPosicao) {
 
-          if($oPosicao->codigo == $oContrato->getUltimaPosicao(true)->getCodigo()) {
-              $oAcordoPosicao = new AcordoPosicao($oPosicao->codigo);
-              $oAcordoPosicao->remover();
-          } else {
-              throw new BusinessException( " Não é possível excluir uma aditamento/apostilamento que não seja o último. Para excluir um aditamento/apostilamento, faça a partir do último " ) ;
-          }
+        if($oPosicao->codigo == $oContrato->getUltimaPosicao(true)->getCodigo()) {
+          $oAcordoPosicao = new AcordoPosicao($oPosicao->codigo);
+          $oAcordoPosicao->remover();
+        } else {
+          throw new BusinessException( " Não é possível excluir uma aditamento/apostilamento que não seja o último. Para excluir um aditamento/apostilamento, faça a partir do último " ) ;
+        }
 
       }
 
 
       db_fim_transacao(false);
-        $oRetorno->status = 2;
-        $oRetorno->message = urlencode('Aditamento excluído com sucesso!');
+      $oRetorno->status = 2;
+      $oRetorno->message = urlencode('Aditamento excluído com sucesso!');
     } catch (Exception $eErro) {
 
       db_fim_transacao(true);
@@ -368,74 +375,94 @@ switch($oParam->exec) {
       $oRetorno->message = urlencode($eErro->getMessage());
     }
 
+    break;
+
+    case "getAutorizacoesAcordo":
+
+    if (isset ($_SESSION["oContrato"])) {
+     unset($_SESSION["oContrato"]);
+   }
+
+   $oContrato    = new Acordo($oParam->iAcordo);
+   $_SESSION["oContrato"]  = $oContrato;
+   $oRetorno->autorizacoes = $oContrato->getAutorizacoes();
    break;
-
-   case "getAutorizacoesAcordo":
-
-     if (isset ($_SESSION["oContrato"])) {
-       unset($_SESSION["oContrato"]);
-     }
-
-     $oContrato    = new Acordo($oParam->iAcordo);
-     $_SESSION["oContrato"]  = $oContrato;
-     $oRetorno->autorizacoes = $oContrato->getAutorizacoes();
-     break;
 
    case "anularAutorizacoes":
 
-     $oContrato = $_SESSION["oContrato"];
-     try {
+   $oContrato = $_SESSION["oContrato"];
+   try {
 
-       db_inicio_transacao();
-       foreach ($oParam->aAutorizacoes as $iAutorizacao) {
-         $oContrato->anularAutorizacao($iAutorizacao);
-       }
-       db_fim_transacao(false);
-     } catch (Exception $eErro) {
-
-       db_fim_transacao(true);
-       $oRetorno->status  = 2;
-       $oRetorno->message = urlencode($eErro->getMessage());
+     db_inicio_transacao();
+     foreach ($oParam->aAutorizacoes as $iAutorizacao) {
+       $oContrato->anularAutorizacao($iAutorizacao);
      }
+     db_fim_transacao(false);
+   } catch (Exception $eErro) {
 
-     break;
+     db_fim_transacao(true);
+     $oRetorno->status  = 2;
+     $oRetorno->message = urlencode($eErro->getMessage());
+   }
+
+   break;
+
+   case "excluirAutorizacoes":
+
+   $oContrato = $_SESSION["oContrato"];
+   try {
+     $aiAutorizacao = array();
+     db_inicio_transacao();
+     foreach ($oParam->aAutorizacoes as $iAutorizacao) {
+       array_push($aiAutorizacao, $iAutorizacao);
+     }
+     $oContrato->excluirAutorizacao($aiAutorizacao);
+     db_fim_transacao(false);
+   } catch (Exception $eErro) {
+
+     db_fim_transacao(true);
+     $oRetorno->status  = 2;
+     $oRetorno->message = urlencode($eErro->getMessage());
+   }
+
+   break;
 
    case "salvarMovimentacaoEmpenhoManual":
 
-     $oContrato = $_SESSION["oContrato"];
-     $oUltimaPosicao = $oContrato->getUltimaPosicao();
-     $oRetorno->iPosicao = $oUltimaPosicao->getCodigo();
-     try {
-       db_inicio_transacao();
-       foreach ($oParam->aItens as $oItem) {
+   $oContrato = $_SESSION["oContrato"];
+   $oUltimaPosicao = $oContrato->getUltimaPosicao();
+   $oRetorno->iPosicao = $oUltimaPosicao->getCodigo();
+   try {
+     db_inicio_transacao();
+     foreach ($oParam->aItens as $oItem) {
 
-         $oItemContrato = $oUltimaPosicao->getItemByCodigo($oItem->codigo);
-         $oItemContrato->baixarMovimentacaoManual(1,$oItem->quantidadeexecutada, $oItem->valorexecutado);
-       }
-       db_fim_transacao(false);
-     } catch (Exception $eErro) {
-
-       db_fim_transacao(true);
-       $oRetorno->status  = 2;
-       $oRetorno->message = urlencode($eErro->getMessage());
-
+       $oItemContrato = $oUltimaPosicao->getItemByCodigo($oItem->codigo);
+       $oItemContrato->baixarMovimentacaoManual(1,$oItem->quantidadeexecutada, $oItem->valorexecutado);
      }
+     db_fim_transacao(false);
+   } catch (Exception $eErro) {
+
+     db_fim_transacao(true);
+     $oRetorno->status  = 2;
+     $oRetorno->message = urlencode($eErro->getMessage());
+
+   }
    break;
 
    case 'getDadosAcordo' :
 
-     $oAcordo = new Acordo($oParam->iCodigoAcordo);
+   $oAcordo = new Acordo($oParam->iCodigoAcordo);
 
-     $oRetorno->sLicitacao  =    urlencode($oAcordo->getLicitacao());
-     $oRetorno->iModalidade =    urlencode($oAcordo->getModalidade());
-     $oRetorno->sTipo       =    urlencode($oAcordo->getTipo());
+   $oRetorno->sLicitacao  =    urlencode($oAcordo->getLicitacao());
+   $oRetorno->iModalidade =    urlencode($oAcordo->getModalidade());
+   $oRetorno->sTipo       =    urlencode($oAcordo->getTipo());
 
-     $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
+   $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
 
 
 
    break;
-}
+ }
 
-echo $oJson->encode($oRetorno);
-?>
+ echo $oJson->encode($oRetorno);
+ ?>

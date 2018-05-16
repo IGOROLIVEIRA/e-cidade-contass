@@ -214,6 +214,15 @@ switch($oParam->exec) {
           if($oAcordo->getOrigem() == Acordo::ORIGEM_MANUAL && count($oAcordo->getItens()) == 0){
               $lAcordoValido = false;
               throw new Exception("Acordo sem itens Cadastrados.");
+          }else{
+              $itens = $oAcordo->getItens();
+              foreach ($itens as $item) {
+
+                 if($item->getPeriodosItem() == null){
+                  $lAcordoValido = false;
+                  throw new Exception("Preencha as datas de previsão de execução dos ítens.");
+                 }
+              }
           }
 
       	$oAssinatura->save();

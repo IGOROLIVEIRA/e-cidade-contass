@@ -1,36 +1,40 @@
 <?php
 //MODULO: acordos
 //CLASSE DA ENTIDADE parametroscontratos
-class cl_parametroscontratos { 
-  // cria variaveis de erro 
-  public $rotulo     = null; 
-  public $query_sql  = null; 
-  public $numrows    = 0; 
-  public $numrows_incluir = 0; 
-  public $numrows_alterar = 0; 
-  public $numrows_excluir = 0; 
-  public $erro_status= null; 
-  public $erro_sql   = null; 
-  public $erro_banco = null;  
-  public $erro_msg   = null;  
-  public $erro_campo = null;  
-  public $pagina_retorno = null; 
-  // cria variaveis do arquivo 
-  public $pc01_liberaautorizacao = 'f'; 
-  // cria propriedade com as variaveis do arquivo 
+class cl_parametroscontratos {
+  // cria variaveis de erro
+  public $rotulo     = null;
+  public $query_sql  = null;
+  public $numrows    = 0;
+  public $numrows_incluir = 0;
+  public $numrows_alterar = 0;
+  public $numrows_excluir = 0;
+  public $erro_status= null;
+  public $erro_sql   = null;
+  public $erro_banco = null;
+  public $erro_msg   = null;
+  public $erro_campo = null;
+  public $pagina_retorno = null;
+  // cria variaveis do arquivo
+  public $pc01_liberaautorizacao = 'f';
+  public $pc01_liberarcadastrosemvigencia = 'f';
+  public $pc01_liberarsemassinaturaaditivo = 'f';
+  // cria propriedade com as variaveis do arquivo
   public $campos = "
-                 pc01_liberaautorizacao = bool = Liberar autorização de empenho sem assinatura 
+                 pc01_liberaautorizacao = bool = Liberar autorização de empenho sem assinatura
+                 pc01_liberarcadastrosemvigencia = bool = Liberar cadastro de contratos sem vigência
+                 pc01_liberarsemassinaturaaditivo = bool = Liberar autotização de empenho sem assinatura de aditivo
                  ";
 
-  //funcao construtor da classe 
-  function __construct() { 
+  //funcao construtor da classe
+  function __construct() {
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("parametroscontratos"); 
+    $this->rotulo = new rotulo("parametroscontratos");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
 
-  //funcao erro 
-  function erro($mostra,$retorna) { 
+  //funcao erro
+  function erro($mostra,$retorna) {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )) {
       echo "<script>alert(\"".$this->erro_msg."\");</script>";
       if ($retorna==true) {
@@ -43,14 +47,16 @@ class cl_parametroscontratos {
   function atualizacampos($exclusao=false) {
     if ($exclusao==false) {
        $this->pc01_liberaautorizacao = ($this->pc01_liberaautorizacao == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_liberaautorizacao"]:$this->pc01_liberaautorizacao);
+       $this->pc01_liberarcadastrosemvigencia = ($this->pc01_liberarcadastrosemvigencia == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_liberarcadastrosemvigencia"]:$this->pc01_liberarcadastrosemvigencia);
+       $this->pc01_liberarsemassinaturaaditivo = ($this->pc01_liberarsemassinaturaaditivo == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_liberarsemassinaturaaditivo"]:$this->pc01_liberarsemassinaturaaditivo);
      } else {
      }
    }
 
   // funcao para inclusao
-  function incluir () { 
+  function incluir () {
       $this->atualizacampos();
-     if ($this->pc01_liberaautorizacao == null ) { 
+     if ($this->pc01_liberaautorizacao == null ) {
        $this->erro_sql = " Campo Liberar autorização de empenho sem assinatura não informado.";
        $this->erro_campo = "pc01_liberaautorizacao";
        $this->erro_banco = "";
@@ -59,14 +65,36 @@ class cl_parametroscontratos {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->pc01_liberarcadastrosemvigencia == null ) {
+       $this->erro_sql = " Campo Liberar autorização de empenho sem assinatura não informado.";
+       $this->erro_campo = "pc01_liberarcadastrosemvigencia";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if ($this->pc01_liberarsemassinaturaaditivo == null ) {
+       $this->erro_sql = " Campo Liberar autorização de empenho sem assinatura não informado.";
+       $this->erro_campo = "pc01_liberarsemassinaturaaditivo";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      $sql = "insert into parametroscontratos(
-                                       pc01_liberaautorizacao 
+                                       pc01_liberaautorizacao,
+                                       pc01_liberarcadastrosemvigencia,
+                                       pc01_liberarsemassinaturaaditivo,
                        )
                 values (
-                                '$this->pc01_liberaautorizacao' 
+                                '$this->pc01_liberaautorizacao' ,
+                                '$this->pc01_liberarcadastrosemvigencia' ,
+                                '$this->pc01_liberarsemassinaturaaditivo' ,
                       )";
-     $result = db_query($sql); 
-     if ($result==false) { 
+     $result = db_query($sql);
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
          $this->erro_sql   = "parametroscontratos () nao Incluído. Inclusao Abortada.";
@@ -97,14 +125,14 @@ class cl_parametroscontratos {
   }
 
   // funcao para alteracao
-  function alterar ( $oid=null ) { 
+  function alterar ( $oid=null ) {
       $this->atualizacampos();
      $sql = " update parametroscontratos set ";
      $virgula = "";
-     if (trim($this->pc01_liberaautorizacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_liberaautorizacao"])) { 
+     if (trim($this->pc01_liberaautorizacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_liberaautorizacao"])) {
        $sql  .= $virgula." pc01_liberaautorizacao = '$this->pc01_liberaautorizacao' ";
        $virgula = ",";
-       if (trim($this->pc01_liberaautorizacao) == null ) { 
+       if (trim($this->pc01_liberaautorizacao) == null ) {
          $this->erro_sql = " Campo Liberar autorização de empenho sem assinatura não informado.";
          $this->erro_campo = "pc01_liberaautorizacao";
          $this->erro_banco = "";
@@ -114,9 +142,35 @@ class cl_parametroscontratos {
          return false;
        }
      }
+     if (trim($this->pc01_liberarcadastrosemvigencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_liberarcadastrosemvigencia"])) {
+       $sql  .= $virgula." pc01_liberarcadastrosemvigencia = '$this->pc01_liberarcadastrosemvigencia' ";
+       $virgula = ",";
+       if (trim($this->pc01_liberarcadastrosemvigencia) == null ) {
+         $this->erro_sql = " Campo Liberar autorização de empenho sem assinatura não informado.";
+         $this->erro_campo = "pc01_liberarcadastrosemvigencia";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if (trim($this->pc01_liberarsemassinaturaaditivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_liberarsemassinaturaaditivo"])) {
+       $sql  .= $virgula." pc01_liberarsemassinaturaaditivo = '$this->pc01_liberarsemassinaturaaditivo' ";
+       $virgula = ",";
+       if (trim($this->pc01_liberarsemassinaturaaditivo) == null ) {
+         $this->erro_sql = " Campo Liberar autorização de empenho sem assinatura não informado.";
+         $this->erro_campo = "pc01_liberarsemassinaturaaditivo";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
      $sql .= " where ";
 $sql .= "oid = '$oid'";     $result = db_query($sql);
-     if ($result==false) { 
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "parametroscontratos nao Alterado. Alteracao Abortada.\\n";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -145,8 +199,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     }
   }
 
-  // funcao para exclusao 
-  function excluir ( $oid=null ,$dbwhere=null) { 
+  // funcao para exclusao
+  function excluir ( $oid=null ,$dbwhere=null) {
 
      $sql = " delete from parametroscontratos
                     where ";
@@ -157,7 +211,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if ($result==false) { 
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "parametroscontratos nao Excluído. Exclusão Abortada.\\n";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -186,8 +240,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     }
   }
 
-  // funcao do recordset 
-  function sql_record($sql) { 
+  // funcao do recordset
+  function sql_record($sql) {
      $result = db_query($sql);
      if ($result==false) {
        $this->numrows    = 0;
@@ -210,8 +264,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     return $result;
   }
 
-  // funcao do sql 
-  function sql_query ( $oid = null,$campos="parametroscontratos.oid,*",$ordem=null,$dbwhere="") { 
+  // funcao do sql
+  function sql_query ( $oid = null,$campos="parametroscontratos.oid,*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -245,8 +299,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
     return $sql;
   }
 
-  // funcao do sql 
-  function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") { 
+  // funcao do sql
+  function sql_query_file ( $oid = null,$campos="*",$ordem=null,$dbwhere="") {
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);

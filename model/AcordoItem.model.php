@@ -159,7 +159,7 @@ class AcordoItem {
      * dataincial
      * @var date
      */
-  protected $dtDataInicial;
+    protected $dtDataInicial;
 
   /*
    * data inicial
@@ -304,9 +304,21 @@ class AcordoItem {
   private $nValorAtualizadoRenovacao = 0;
 
   /**
+   * Parametro de obrigatorierade da data de vigência
+   * @var boolean
+   */
+  public $lParametroVigencia = false;
+
+  /**
    * @param integer $iCodigoItem código do item
    */
   public function __construct($iCodigoItem = null) {
+
+    $oDaoParametro = db_utils::getDao('parametroscontratos');
+    $oDaoParametro = $oDaoParametro->sql_query(null,'*');
+    $oDaoParametro = db_query($oDaoParametro);
+    $oDaoParametro = db_utils::fieldsMemory($oDaoParametro);
+    $this->lParametroVigencia = ($oDaoParametro->pc01_liberarcadastrosemvigencia == 't')?true:false;
 
     if (!empty($iCodigoItem) != null) {
 
@@ -358,64 +370,64 @@ class AcordoItem {
         }
 
         $this->setCodigo($oDadosItem->ac20_sequencial)
-              ->setMaterial(new MaterialCompras($oDadosItem->ac20_pcmater))
-              ->setElemento($oDadosItem->ac20_elemento)
-              ->setUnidade($oDadosItem->ac20_matunid)
-              ->setQuantidade($oDadosItem->ac20_quantidade)
-              ->setValorAditado($oDadosItem->ac20_valoraditado)
-              ->setQuantiAditada($oDadosItem->ac20_quantidadeaditada)
-              ->setValorTotal($oDadosItem->ac20_valortotal)
-              ->setValorUnitario($oDadosItem->ac20_valorunitario)
-              ->setCodigoPosicao($oDadosItem->ac20_acordoposicao)
-              ->setCodigoPosicaoTipo($oDadosItem->ac20_acordoposicaotipo)
-              ->setResumo($oDadosItem->ac20_resumo)
-              ->setDescricaoUnidade($oDadosItem->m61_descr)
-              ->setTipoControle($oDadosItem->ac20_tipocontrole)
-              ->setEstruturalElemento($oDadosItem->o56_elemento)
-              ->setDescEstruturalElemento($oDadosItem->o56_descr)
-              ->setControlaQuantidade($oDadosItem->pc11_servicoquantidade == ''? 'f':$oDadosItem->pc11_servicoquantidade)
-              ->setServicoQuantidade($oDadosItem->ac20_servicoquantidade == ''? $this->getControlaQuantidade() : $oDadosItem->ac20_servicoquantidade)
-              ->setOrdem($oDadosItem->ac20_ordem);
-              $this->sDescricaoElemento = $oDadosItem->o56_descr;
+        ->setMaterial(new MaterialCompras($oDadosItem->ac20_pcmater))
+        ->setElemento($oDadosItem->ac20_elemento)
+        ->setUnidade($oDadosItem->ac20_matunid)
+        ->setQuantidade($oDadosItem->ac20_quantidade)
+        ->setValorAditado($oDadosItem->ac20_valoraditado)
+        ->setQuantiAditada($oDadosItem->ac20_quantidadeaditada)
+        ->setValorTotal($oDadosItem->ac20_valortotal)
+        ->setValorUnitario($oDadosItem->ac20_valorunitario)
+        ->setCodigoPosicao($oDadosItem->ac20_acordoposicao)
+        ->setCodigoPosicaoTipo($oDadosItem->ac20_acordoposicaotipo)
+        ->setResumo($oDadosItem->ac20_resumo)
+        ->setDescricaoUnidade($oDadosItem->m61_descr)
+        ->setTipoControle($oDadosItem->ac20_tipocontrole)
+        ->setEstruturalElemento($oDadosItem->o56_elemento)
+        ->setDescEstruturalElemento($oDadosItem->o56_descr)
+        ->setControlaQuantidade($oDadosItem->pc11_servicoquantidade == ''? 'f':$oDadosItem->pc11_servicoquantidade)
+        ->setServicoQuantidade($oDadosItem->ac20_servicoquantidade == ''? $this->getControlaQuantidade() : $oDadosItem->ac20_servicoquantidade)
+        ->setOrdem($oDadosItem->ac20_ordem);
+        $this->sDescricaoElemento = $oDadosItem->o56_descr;
               /**
                * Caso estejam diferentes, manter o valor de pc11_servicoquantidade
                */
               $this->setServicoQuantidade($this->getControlaQuantidade());
 
 
-        $sSqlItemPeriodo = $oDaoAcordoItem->sql_query_periodo($iCodigoItem);
-        $rsItemPeriodo   = $oDaoAcordoItem->sql_record($sSqlItemPeriodo);
-        $iItemPeriodo    = $oDaoAcordoItem->numrows;
+              $sSqlItemPeriodo = $oDaoAcordoItem->sql_query_periodo($iCodigoItem);
+              $rsItemPeriodo   = $oDaoAcordoItem->sql_record($sSqlItemPeriodo);
+              $iItemPeriodo    = $oDaoAcordoItem->numrows;
 
-        for ($i = 0; $i < $iItemPeriodo; $i++) {
+              for ($i = 0; $i < $iItemPeriodo; $i++) {
 
-          $oItemPeriodos              = db_utils::fieldsMemory($rsItemPeriodo, $i);
-          $oPeriodos                  = new stdClass();
-          $oPeriodos->dtDataInicial   = $oItemPeriodos->ac41_datainicial;
-          $oPeriodos->dtDataFinal     = $oItemPeriodos->ac41_datafinal;
-          $oPeriodos->ac41_sequencial = $oItemPeriodos->ac41_sequencial;
+                $oItemPeriodos              = db_utils::fieldsMemory($rsItemPeriodo, $i);
+                $oPeriodos                  = new stdClass();
+                $oPeriodos->dtDataInicial   = $oItemPeriodos->ac41_datainicial;
+                $oPeriodos->dtDataFinal     = $oItemPeriodos->ac41_datafinal;
+                $oPeriodos->ac41_sequencial = $oItemPeriodos->ac41_sequencial;
 
-          $this->aPeriodosItem[] = $oPeriodos;
+                $this->aPeriodosItem[] = $oPeriodos;
+              }
+
+              $this->iItemVinculo = $oDadosItem->ac33_acordoitempai;
+
+              if ($oDadosItem->ac23_pcprocitem != "") {
+                $this->setOrigem($oDadosItem->ac23_pcprocitem, 1, $oDadosItem->pc81_codproc);
+              }
+
+              if ($oDadosItem->ac24_liclicitem != "") {
+                $this->setOrigem($oDadosItem->ac24_liclicitem, 2, $oDadosItem->l21_codliclicita);
+              }
+
+              if (!empty($oDadosItem->ac44_empempitem)) {
+                $this->setOrigem($oDadosItem->ac44_empempitem, 6);
+              }
+              unset($oDadosItem);
+              $this->getDotacoes();
+            }
+          }
         }
-
-        $this->iItemVinculo = $oDadosItem->ac33_acordoitempai;
-
-        if ($oDadosItem->ac23_pcprocitem != "") {
-          $this->setOrigem($oDadosItem->ac23_pcprocitem, 1, $oDadosItem->pc81_codproc);
-        }
-
-        if ($oDadosItem->ac24_liclicitem != "") {
-          $this->setOrigem($oDadosItem->ac24_liclicitem, 2, $oDadosItem->l21_codliclicita);
-        }
-
-        if (!empty($oDadosItem->ac44_empempitem)) {
-          $this->setOrigem($oDadosItem->ac44_empempitem, 6);
-        }
-        unset($oDadosItem);
-        $this->getDotacoes();
-      }
-    }
-  }
 
 
   /**
@@ -431,18 +443,18 @@ class AcordoItem {
       $sSqlSomaExecucao      .= "   where ac32_acordoitem = ac22_acordoitem ";
       $sSqlSomaExecucao      .= "     and ac32_coddot     = ac22_coddot) as executado,";
       $sSqlDotacoes           = $oDaoAcordoItemDotacao->sql_query_reserva(null,
-                                                                      "ac22_coddot as dotacao,
-                                                                      {$sSqlSomaExecucao}
-                                                                       ac22_quantidade as quantidade,
-                                                                       ac22_sequencial  as codigodotacaoitem,
-                                                                       ac22_valor as valor,
-                                                                       o84_orcreserva as reserva,
-                                                                       o80_valor      as valorreserva,
-                                                                       ac22_anousu as ano",
-                                                                      "ac22_coddot",
-                                                                      "ac22_acordoitem={$this->getCodigo()}
-                                                                       and ac22_anousu=".db_getsession("DB_anousu").""
-                                                                     );
+        "ac22_coddot as dotacao,
+        {$sSqlSomaExecucao}
+        ac22_quantidade as quantidade,
+        ac22_sequencial  as codigodotacaoitem,
+        ac22_valor as valor,
+        o84_orcreserva as reserva,
+        o80_valor      as valorreserva,
+        ac22_anousu as ano",
+        "ac22_coddot",
+        "ac22_acordoitem={$this->getCodigo()}
+        and ac22_anousu=".db_getsession("DB_anousu").""
+        );
       $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
       $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
     }
@@ -777,17 +789,17 @@ class AcordoItem {
    * @param date $dtDatainicial
    * @return AcordoItem
    */
-  public function setDataInicial($dtDataInicial){
+   public function setDataInicial($dtDataInicial){
 
-  	$this->dtDataInicial = $dtDataInicial;
-  	return $this;
-  }
+     $this->dtDataInicial = $dtDataInicial;
+     return $this;
+   }
 
-  public function getDataInicial(){
+   public function getDataInicial(){
 
-  	return $this->dtDataInicial;
+     return $this->dtDataInicial;
 
-  }
+   }
 
 
    /**
@@ -795,25 +807,25 @@ class AcordoItem {
    * @param date $dtDatafinal
    * @return AcordoItem
    */
-  public function setDataFinal($dtDataFinal){
+   public function setDataFinal($dtDataFinal){
 
-  	$this->dtDataFinal = $dtDataFinal;
-  	return $this;
+     $this->dtDataFinal = $dtDataFinal;
+     return $this;
 
-  }
+   }
 
-  public function getDataFinal(){
+   public function getDataFinal(){
 
-  	return $this->dtDataFinal;
+     return $this->dtDataFinal;
 
-  }
+   }
 
    /**
    * Define o tipo de controle
    * @param integer $sTipoControle
    * @return AcordoItem
    */
-  public function setTipoControle($iTipocontrole){
+   public function setTipoControle($iTipocontrole){
 
     $this->iTipoControle = $iTipocontrole;
     return $this;
@@ -902,26 +914,26 @@ class AcordoItem {
 
         $oDaoVinculoLicitacao->incluir(null);
         if ($oDaoVinculoLicitacao->erro_status == 0) {
-           throw new Exception("Não foi possivel salvar item\n[ET]: {$oDaoVinculoLicitacao->erro_msg}");
-        }
-      }
+         throw new Exception("Não foi possivel salvar item\n[ET]: {$oDaoVinculoLicitacao->erro_msg}");
+       }
+     }
 
      /**
       * Salva na PCPROCITEM
       */
      if ($this->iCodigoItemProcesso != "") {
 
-        $oDaoVinculoProcesso = db_utils::getDao("acordopcprocitem");
-        $oDaoVinculoProcesso->ac23_acordoitem = $this->getCodigo();
-        $oDaoVinculoProcesso->ac23_pcprocitem = $this->iCodigoItemProcesso;
-        $oDaoVinculoProcesso->ac23_quantidade = $this->getQuantidade();
-        $oDaoVinculoProcesso->ac23_valor      = $this->getValorTotal();
-        $oDaoVinculoProcesso->incluir(null);
-        if ($oDaoVinculoProcesso->erro_status == 0) {
-           throw new Exception(pg_last_error()." Não foi possivel salvar item\n[ET]: {$oDaoVinculoProcesso->erro_msg}");
-        }
-      }
-    }
+      $oDaoVinculoProcesso = db_utils::getDao("acordopcprocitem");
+      $oDaoVinculoProcesso->ac23_acordoitem = $this->getCodigo();
+      $oDaoVinculoProcesso->ac23_pcprocitem = $this->iCodigoItemProcesso;
+      $oDaoVinculoProcesso->ac23_quantidade = $this->getQuantidade();
+      $oDaoVinculoProcesso->ac23_valor      = $this->getValorTotal();
+      $oDaoVinculoProcesso->incluir(null);
+      if ($oDaoVinculoProcesso->erro_status == 0) {
+       throw new Exception(pg_last_error()." Não foi possivel salvar item\n[ET]: {$oDaoVinculoProcesso->erro_msg}");
+     }
+   }
+ }
 
     /**
      * Salva vinculo do acordoitem com empempitem, quando origem é empenho
@@ -929,58 +941,58 @@ class AcordoItem {
     if (!empty($this->iCodigoItemEmpenho)) {
 
 
-        $oDaoVinculoProcesso = db_utils::getDao("acordoempempitem");
-        $oDaoVinculoProcesso->ac44_acordoitem = $this->getCodigo();
-        $oDaoVinculoProcesso->ac44_empempitem = $this->iCodigoItemEmpenho;
-        $oDaoVinculoProcesso->incluir(null);
+      $oDaoVinculoProcesso = db_utils::getDao("acordoempempitem");
+      $oDaoVinculoProcesso->ac44_acordoitem = $this->getCodigo();
+      $oDaoVinculoProcesso->ac44_empempitem = $this->iCodigoItemEmpenho;
+      $oDaoVinculoProcesso->incluir(null);
 
-        if ($oDaoVinculoProcesso->erro_status == 0) {
-           throw new Exception("Erro técnico: erro ao vincular item de empenho (acordoempempitem)");
-        }
-    }
+      if ($oDaoVinculoProcesso->erro_status == 0) {
+       throw new Exception("Erro técnico: erro ao vincular item de empenho (acordoempempitem)");
+     }
+   }
 
-    $oDaoAcordoItemVinculo = db_utils::getDao("acordoitemvinculo");
+   $oDaoAcordoItemVinculo = db_utils::getDao("acordoitemvinculo");
 
-    $oDaoAcordoItemVinculo->excluir(null,"ac33_acordoitemfilho={$this->getCodigo()}");
+   $oDaoAcordoItemVinculo->excluir(null,"ac33_acordoitemfilho={$this->getCodigo()}");
+
+   if ($oDaoAcordoItemVinculo->erro_status == "0") {
+    throw new Exception("Não foi possivel excluir item\n[ET]: {$oDaoAcordoItemVinculo->erro_msg}");
+  }
+
+  if (!empty($this->iItemVinculo)) {
+
+    $oDaoAcordoItemVinculo->ac33_acordoitemfilho = $this->getCodigo();
+    $oDaoAcordoItemVinculo->ac33_acordoitempai   = $this->iItemVinculo;
+    $oDaoAcordoItemVinculo->ac33_tipo            = 1;
+    $oDaoAcordoItemVinculo->ac33_valorunitario   = (float)$this->getValorUnitario();
+    $oDaoAcordoItemVinculo->ac33_quantidade      = $this->getQuantidade();
+    $oDaoAcordoItemVinculo->ac33_valortotal      = $this->getValorTotal();
+    $oDaoAcordoItemVinculo->incluir(null);
 
     if ($oDaoAcordoItemVinculo->erro_status == "0") {
-      throw new Exception("Não foi possivel excluir item\n[ET]: {$oDaoAcordoItemVinculo->erro_msg}");
+      throw new Exception("[3] - Não foi possivel salvar item\n[ET]: {$oDaoAcordoItemVinculo->erro_msg}");
     }
+  }
 
-    if (!empty($this->iItemVinculo)) {
+  if ($oDaoAcordoItem->erro_status == "0") {
+    throw new Exception("[4] - Não foi possivel salvar item\n[ET]: {$oDaoAcordoItem->erro_msg}");
+  }
 
-      $oDaoAcordoItemVinculo->ac33_acordoitemfilho = $this->getCodigo();
-      $oDaoAcordoItemVinculo->ac33_acordoitempai   = $this->iItemVinculo;
-      $oDaoAcordoItemVinculo->ac33_tipo            = 1;
-      $oDaoAcordoItemVinculo->ac33_valorunitario   = (float)$this->getValorUnitario();
-      $oDaoAcordoItemVinculo->ac33_quantidade      = $this->getQuantidade();
-      $oDaoAcordoItemVinculo->ac33_valortotal      = $this->getValorTotal();
-      $oDaoAcordoItemVinculo->incluir(null);
+  $oDaoAcordoItemPeriodo = db_utils::getDao("acordoitemperiodo");
+  $aPeriodoItens         = $this->getPeriodosItem();
+  $oDaoAcordoItemPeriodo->excluir(null, "ac41_acordoitem = {$this->getCodigo()} and ac41_acordoposicao = {$this->getCodigoPosicao()}");
 
-      if ($oDaoAcordoItemVinculo->erro_status == "0") {
-        throw new Exception("[3] - Não foi possivel salvar item\n[ET]: {$oDaoAcordoItemVinculo->erro_msg}");
-      }
-    }
+  if ($oDaoAcordoItemPeriodo->erro_status == 0) {
 
-    if ($oDaoAcordoItem->erro_status == "0") {
-      throw new Exception("[4] - Não foi possivel salvar item\n[ET]: {$oDaoAcordoItem->erro_msg}");
-    }
+    throw  new Exception("[ 5 ] - ERRO - atualizando periodos - " . $oDaoAcordoItemPeriodo->erro_msg);
+  }
 
-    $oDaoAcordoItemPeriodo = db_utils::getDao("acordoitemperiodo");
-    $aPeriodoItens         = $this->getPeriodosItem();
-    $oDaoAcordoItemPeriodo->excluir(null, "ac41_acordoitem = {$this->getCodigo()} and ac41_acordoposicao = {$this->getCodigoPosicao()}");
+  foreach($aPeriodoItens as $iIndicePeriodo => $oPeriodo) {
 
-    if ($oDaoAcordoItemPeriodo->erro_status == 0) {
-
-      throw  new Exception("[ 5 ] - ERRO - atualizando periodos - " . $oDaoAcordoItemPeriodo->erro_msg);
-    }
-
-    foreach($aPeriodoItens as $iIndicePeriodo => $oPeriodo) {
-
-      $oDaoAcordoItemPeriodo->ac41_acordoitem    = $this->getCodigo();
-      $oDaoAcordoItemPeriodo->ac41_datainicial   = implode("-", array_reverse(explode("/", $oPeriodo->dtDataInicial)));
-      $oDaoAcordoItemPeriodo->ac41_datafinal     = implode("-", array_reverse(explode("/", $oPeriodo->dtDataFinal)));
-      $oDaoAcordoItemPeriodo->ac41_acordoposicao = $this->getCodigoPosicao();
+    $oDaoAcordoItemPeriodo->ac41_acordoitem    = $this->getCodigo();
+    $oDaoAcordoItemPeriodo->ac41_datainicial   = implode("-", array_reverse(explode("/", $oPeriodo->dtDataInicial)));
+    $oDaoAcordoItemPeriodo->ac41_datafinal     = implode("-", array_reverse(explode("/", $oPeriodo->dtDataFinal)));
+    $oDaoAcordoItemPeriodo->ac41_acordoposicao = $this->getCodigoPosicao();
       /**
        * Valida se deve ser feita a inclusão ou alteração do período de um item.
        */
@@ -992,7 +1004,7 @@ class AcordoItem {
       $aPeriodoItens[$iIndicePeriodo]->ac41_sequencial = $oDaoAcordoItemPeriodo->ac41_sequencial;
 
       if ($oDaoAcordoItemPeriodo->erro_status == 0) {
-        throw new Exception("Não foi possível incluir os períodos cadastrados para o item.".pg_last_error());
+       // throw new Exception("Não foi possível incluir os períodos cadastrados para o item.".pg_last_error());
       }
     }
 
@@ -1003,9 +1015,9 @@ class AcordoItem {
     $oDaoReserva                  = db_utils::getDao("orcreserva");
     $oDaoAcordoItemDotacao = db_utils::getDao("acordoitemdotacao");
     $sSqlDotacoes          = $oDaoAcordoItemDotacao->sql_query_file(null,"*",
-                                                                    null,
-                                                                    "ac22_acordoitem={$this->getCodigo()}"
-                                                                   );
+      null,
+      "ac22_acordoitem={$this->getCodigo()}"
+      );
 
     $rsDotacoes           = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
     $iNumRowsDotacao      = $oDaoAcordoItemDotacao->numrows;
@@ -1013,11 +1025,11 @@ class AcordoItem {
     foreach ($aDotacoesCadastradas as $oDotacaoCadastrada) {
 
       $sSqlReserva = $oDaoAcordoItemDotacaoReserva->sql_query_file(null,
-                                                                   "*",
-                                                                   null,
-                                                                   "o84_acordoitemdotacao =
-                                                                   {$oDotacaoCadastrada->ac22_sequencial}"
-                                                                  );
+       "*",
+       null,
+       "o84_acordoitemdotacao =
+       {$oDotacaoCadastrada->ac22_sequencial}"
+       );
       $rsReservaItem = $oDaoAcordoItemDotacaoReserva->sql_record($sSqlReserva);
       if ($oDaoAcordoItemDotacaoReserva->numrows > 0) {
 
@@ -1156,63 +1168,63 @@ class AcordoItem {
             }
 
             $oDaoAcordoItemPrevisao->ac37_valor = "".(round($oPeriodoExecucao->quantidade*$this->getValorTotal(), 2)) / $nQuantidadeTotal."";
-          break;
+            break;
 
-          case 3:
+            case 3:
             $oDaoAcordoItemPrevisao->ac37_valor = "".(round($oPeriodoExecucao->quantidade*$this->getValorTotal(), 2)) / $nQuantidadeTotal."";
-          break;
+            break;
 
-          default:
+            default:
             $oDaoAcordoItemPrevisao->ac37_valor = "".round(($oPeriodoExecucao->quantidade * $this->getValorUnitario()), 2)."";
 
-        }
-
-        $oDaoAcordoItemPrevisao->ac37_quantidade         = $oPeriodoExecucao->quantidade;
-        $oDaoAcordoItemPrevisao->ac37_quantidadeprevista = "{$oPeriodoExecucao->quantidadeprevista}";
-
-        if ($lAlteraPrevisaoExistente) {
-
-          $oDaoAcordoItemPrevisao->ac37_sequencial = $oDadoItemPrevisao->ac37_sequencial;
-          $oDaoAcordoItemPrevisao->alterar($oDadoItemPrevisao->ac37_sequencial);
-          if ($oDaoAcordoItemPrevisao->erro_status == 0) {
-
-            throw new Exception("Erro ao Salvar Previsao.\n{$oDaoAcordoItemPrevisao->erro_msg} >>> ".pg_last_error());
           }
 
-        } else {
+          $oDaoAcordoItemPrevisao->ac37_quantidade         = $oPeriodoExecucao->quantidade;
+          $oDaoAcordoItemPrevisao->ac37_quantidadeprevista = "{$oPeriodoExecucao->quantidadeprevista}";
 
-          $nTotalSemRound    += $oDaoAcordoItemPrevisao->ac37_valor;
-          $nTotalComRound    += round($oDaoAcordoItemPrevisao->ac37_valor, 2);
-          $nDiferenca         = round($nTotalSemRound - $nTotalComRound,2);
-          $nTotalComDiferenca = $oDaoAcordoItemPrevisao->ac37_valor + $nDiferenca;
+          if ($lAlteraPrevisaoExistente) {
 
-          $oDaoAcordoItemPrevisao->incluir(null);
-          if ($oDaoAcordoItemPrevisao->erro_status == '0') {
+            $oDaoAcordoItemPrevisao->ac37_sequencial = $oDadoItemPrevisao->ac37_sequencial;
+            $oDaoAcordoItemPrevisao->alterar($oDadoItemPrevisao->ac37_sequencial);
+            if ($oDaoAcordoItemPrevisao->erro_status == 0) {
 
-            throw new Exception("Erro ao Salvar Previsao.\n{$oDaoAcordoItemPrevisao->erro_msg} >>> ".pg_last_error());
-        	}
+              throw new Exception("Erro ao Salvar Previsao.\n{$oDaoAcordoItemPrevisao->erro_msg} >>> ".pg_last_error());
+            }
+
+          } else {
+
+            $nTotalSemRound    += $oDaoAcordoItemPrevisao->ac37_valor;
+            $nTotalComRound    += round($oDaoAcordoItemPrevisao->ac37_valor, 2);
+            $nDiferenca         = round($nTotalSemRound - $nTotalComRound,2);
+            $nTotalComDiferenca = $oDaoAcordoItemPrevisao->ac37_valor + $nDiferenca;
+
+            $oDaoAcordoItemPrevisao->incluir(null);
+            if ($oDaoAcordoItemPrevisao->erro_status == '0') {
+
+              throw new Exception("Erro ao Salvar Previsao.\n{$oDaoAcordoItemPrevisao->erro_msg} >>> ".pg_last_error());
+            }
+          }
+
+          $oPeriodoExecucao->codigo =  $oDaoAcordoItemPrevisao->ac37_sequencial;
+
         }
 
-        $oPeriodoExecucao->codigo =  $oDaoAcordoItemPrevisao->ac37_sequencial;
+        if ($nTotalSemRound > $nTotalComRound) {
 
-      }
+          $oAcordoItemPrevisao = db_utils::getDao("AcordoItemPrevisao");
+          $oAcordoItemPrevisao->ac37_sequencial = $oDaoAcordoItemPrevisao->ac37_sequencial;
+          $oAcordoItemPrevisao->ac37_valor = "$nTotalComDiferenca";
+          $oAcordoItemPrevisao->alterar($oAcordoItemPrevisao->ac37_sequencial);
+          if ($oDaoAcordoItemPrevisao->erro_status == 0) {
 
-      if ($nTotalSemRound > $nTotalComRound) {
-
-        $oAcordoItemPrevisao = db_utils::getDao("AcordoItemPrevisao");
-        $oAcordoItemPrevisao->ac37_sequencial = $oDaoAcordoItemPrevisao->ac37_sequencial;
-        $oAcordoItemPrevisao->ac37_valor = "$nTotalComDiferenca";
-        $oAcordoItemPrevisao->alterar($oAcordoItemPrevisao->ac37_sequencial);
-        if ($oDaoAcordoItemPrevisao->erro_status == 0) {
-
-          throw new Exception("Erro ao Atualizar valor com diferença da Previsao.\n{$oAcordoItemPrevisao->erro_msg} >>> ".pg_last_error());
+            throw new Exception("Erro ao Atualizar valor com diferença da Previsao.\n{$oAcordoItemPrevisao->erro_msg} >>> ".pg_last_error());
+          }
         }
-      }
 
+      }
+      $this->aPeriodosExecucao = array();
+      return $this;
     }
-    $this->aPeriodosExecucao = array();
-    return $this;
-  }
 
   /**
    * define a origem do item
@@ -1231,15 +1243,15 @@ class AcordoItem {
 
       case 1:
 
-        $this->iCodigoItemProcesso = $iCodigoItem;
-        break;
+      $this->iCodigoItemProcesso = $iCodigoItem;
+      break;
 
       case 2:
-        $this->iCodigoItemLicitacao = $iCodigoItem;
-        break;
+      $this->iCodigoItemLicitacao = $iCodigoItem;
+      break;
 
       case 6:
-        $this->iCodigoItemEmpenho  = $iCodigoItem;
+      $this->iCodigoItemEmpenho  = $iCodigoItem;
       break;
 
 
@@ -1296,11 +1308,11 @@ class AcordoItem {
 
    $this->iItemVinculo = $iItem;
    return $this;
-  }
+ }
 
-  public function getItemVinculo() {
+ public function getItemVinculo() {
    return $this->iItemVinculo;
-  }
+ }
 
   /**
    * Retorna do desdobramento do elemento usado no material.
@@ -1315,7 +1327,7 @@ class AcordoItem {
     $sWhereOrcElemento  .= " and o56_anousu = ".db_getsession("DB_anousu");
     $sCamposOrcElemento  = "o56_elemento, o56_descr";
     $sSqlOrcElemento     = $oDaoOrcElemento->sql_query_file(null, null, $sCamposOrcElemento,
-                                                            null, $sWhereOrcElemento);
+      null, $sWhereOrcElemento);
     $rsSqlOrcElemento    = $oDaoOrcElemento->sql_record($sSqlOrcElemento);
     $iNumRowsOrcElemento = $oDaoOrcElemento->numrows;
     if ($iNumRowsOrcElemento > 0) {
@@ -1343,17 +1355,20 @@ class AcordoItem {
       $sMessagemInvalido = "Item com autorizações geradas.\n Não será possível a exclusão desse item.";
       throw new Exception($sMessagemInvalido);
     }
-   if ($oSaldos->valorexecutado > 0) {
+    if ($oSaldos->valorexecutado > 0) {
 
       $sMessagemInvalido = "Item com ordem de compras geradas.\n Não será possível a exclusão desse item.";
       throw new Exception($sMessagemInvalido);
     }
-    $oDaoAcordoItem         = db_utils::getDao("acordoitem");
-    $oDaoAcordoItemprevisao = db_utils::getDao("acordoitemprevisao");
-    $oDaoVinculoLicitacao   = db_utils::getDao("acordoliclicitem");
-    $oDaoVinculoProcesso    = db_utils::getDao("acordopcprocitem");
-    $oDaoItemPeriodo        = db_utils::getDao("acordoitemperiodo");
-    $oDaoItemEmpenho        = db_utils::getDao("acordoempempitem");
+    $oDaoAcordoItem                  = db_utils::getDao("acordoitem");
+    $oDaoAcordoItemExecutado         = db_utils::getDao("acordoitemexecutado");
+    $oDaoAcordoItemExecutadoDotacao  = db_utils::getDao("acordoitemexecutadodotacao");
+    $oDaoAcordoItemprevisao          = db_utils::getDao("acordoitemprevisao");
+    $oDaoVinculoLicitacao            = db_utils::getDao("acordoliclicitem");
+    $oDaoVinculoProcesso             = db_utils::getDao("acordopcprocitem");
+    $oDaoItemPeriodo                 = db_utils::getDao("acordoitemperiodo");
+    $oDaoItemEmpenho                 = db_utils::getDao("acordoempempitem");
+    $oDaoAcordoItemExecutadoEmpautItem= db_utils::getDao("acordoitemexecutadoempautitem");
 
     /**
      * Excluimos todas as dotaçoes vinculadas com o item e incluimos novamente
@@ -1385,26 +1400,26 @@ class AcordoItem {
     $oDaoAcordoItemprevisao->excluir(null, "ac37_acordoitem={$this->getCodigo()}");
     if ($oDaoAcordoItemprevisao->erro_status == 0) {
      throw new Exception("Erro[4] ao remover item {$this->getMaterial()->getDescricao()}");
+   }
+
+   $oDaoAcordoItemDotacao = db_utils::getDao("acordoitemdotacao");
+
+   $sSqlItemDotacao = $oDaoAcordoItemDotacao->sql_query_file(null, "ac22_sequencial", null, "ac22_acordoitem = {$this->getCodigo()}");
+   $rsItemDotacao   = $oDaoAcordoItemDotacao->sql_record($sSqlItemDotacao);
+   if ($oDaoAcordoItemDotacao->numrows > 0) {
+
+    $oDaoOrcreservaAcordoItemDotacao = db_utils::getDao("orcreservaacordoitemdotacao");
+    $oDaoOrcreservaAcordoItemDotacao->excluir(null, "o84_acordoitemdotacao in ({$sSqlItemDotacao})");
+    if ($oDaoOrcreservaAcordoItemDotacao->erro_status == 0) {
+      throw new Exception("Erro ao remover dotações item {$this->getMaterial()->getDescricao()}\n{$oDaoOrcreservaAcordoItemDotacao->erro_msg}");
     }
 
-    $oDaoAcordoItemDotacao = db_utils::getDao("acordoitemdotacao");
+  }
 
-    $sSqlItemDotacao = $oDaoAcordoItemDotacao->sql_query_file(null, "ac22_sequencial", null, "ac22_acordoitem = {$this->getCodigo()}");
-    $rsItemDotacao   = $oDaoAcordoItemDotacao->sql_record($sSqlItemDotacao);
-    if ($oDaoAcordoItemDotacao->numrows > 0) {
-
-      $oDaoOrcreservaAcordoItemDotacao = db_utils::getDao("orcreservaacordoitemdotacao");
-      $oDaoOrcreservaAcordoItemDotacao->excluir(null, "o84_acordoitemdotacao in ({$sSqlItemDotacao})");
-      if ($oDaoOrcreservaAcordoItemDotacao->erro_status == 0) {
-        throw new Exception("Erro ao remover dotações item {$this->getMaterial()->getDescricao()}\n{$oDaoOrcreservaAcordoItemDotacao->erro_msg}");
-      }
-
-    }
-
-    $oDaoAcordoItemDotacao->excluir(null, "ac22_acordoitem={$this->getCodigo()}");
-    if ($oDaoAcordoItemDotacao->erro_status == 0) {
-      throw new Exception("Erro ao remover dotações item {$this->getMaterial()->getDescricao()}\n{$oDaoAcordoItemDotacao->erro_msg}");
-    }
+  $oDaoAcordoItemDotacao->excluir(null, "ac22_acordoitem={$this->getCodigo()}");
+  if ($oDaoAcordoItemDotacao->erro_status == 0) {
+    throw new Exception("Erro ao remover dotações item {$this->getMaterial()->getDescricao()}\n{$oDaoAcordoItemDotacao->erro_msg}");
+  }
 
     /**
      * Exclui os períodos de um item (acordoitemperiodo)
@@ -1423,11 +1438,28 @@ class AcordoItem {
     }
 
 
+    $oDaoAcordoItemExecutadoEmpautItem->excluir(null, "ac19_acordoitemexecutado IN (select ac29_sequencial from acordoitemexecutado where ac29_acordoitem = {$this->getCodigo()})");
+    if ($oDaoAcordoItemExecutadoEmpautItem->erro_status == 0) {
+      $sErroMsg = "Erro[4] ao remover item {$this->getMaterial()->getDescricao()}\nErro:{$oDaoAcordoItemExecutadoEmpautItem->erro_msg}";
+      throw new Exception($sErroMsg);
+    }
+
+    $oDaoAcordoItemExecutado->excluir(null, "ac29_acordoitem = {$this->getCodigo()}");
+    if ($oDaoAcordoItemExecutado->erro_status == 0) {
+      $sErroMsg = "Erro[5] ao remover item {$this->getMaterial()->getDescricao()}\nErro:{$oDaoAcordoItemExecutado->erro_msg}";
+      throw new Exception($sErroMsg);
+    }
+
+    $oDaoAcordoItemExecutadoDotacao->excluir(null, "ac32_acordoitem = {$this->getCodigo()}");
+    if ($oDaoAcordoItemExecutadoDotacao->erro_status == 0) {
+      $sErroMsg = "Erro[6] ao remover item {$this->getMaterial()->getDescricao()}\nErro:{$oDaoAcordoItemExecutadoDotacao->erro_msg}";
+      throw new Exception($sErroMsg);
+    }
 
     $oDaoAcordoItem->excluir(null,"ac20_sequencial = {$this->getCodigo()}");
     if ($oDaoAcordoItem->erro_status == 0) {
 
-      $sErroMsg = "Erro[4] ao remover item {$this->getMaterial()->getDescricao()}\nErro:{$oDaoAcordoItem->erro_msg}";
+      $sErroMsg = "Erro[7] ao remover item {$this->getMaterial()->getDescricao()}\nErro:{$oDaoAcordoItem->erro_msg}";
       throw new Exception($sErroMsg);
     }
 
@@ -1749,19 +1781,19 @@ class AcordoItem {
         switch ($this->getTipocontrole()) {
 
           case self::CONTROLE_DIVISAO_VALOR:
-            $nValor =  round(($oDados->quantidade_executada*$this->getValorTotal()) / $nQuantidadeTotal, 2);
-            break;
+          $nValor =  round(($oDados->quantidade_executada*$this->getValorTotal()) / $nQuantidadeTotal, 2);
+          break;
 
           case self::CONTROLE_VALOR:
-            $nValor = 0;
-            foreach ($aExecucoes as $oExecucao) {
-              $nValor += $oExecucao->valor;
-            }
-            break;
+          $nValor = 0;
+          foreach ($aExecucoes as $oExecucao) {
+            $nValor += $oExecucao->valor;
+          }
+          break;
 
           default:
-            $nValor =  ($oDados->quantidade_executada * $oDados->ac37_valorunitario);
-            break;
+          $nValor =  ($oDados->quantidade_executada * $oDados->ac37_valorunitario);
+          break;
         }
         $oPeriodo->valorexecutado     = $nValor;
         $oPeriodo->execucoes          = $aExecucoes;
@@ -1887,14 +1919,18 @@ class AcordoItem {
          * Busca o sequencial em acordoposicao de acordo com o mes/ano
          */
         $sSqlAcordoPosicao = $oDaoAcordoPosicao->sql_query_file(null,
-                                                                "ac36_sequencial",
-                                                                null,
-                                                                "ac36_acordoposicao={$this->iCodigoPosicao}
-                                                                and (extract(month from ac36_datainicial) =  {$iMesInicial}
-                                                                and  extract(year from ac36_datainicial) =  {$iAnoInicial})"
-                                                                );
+          "ac36_sequencial",
+          null,
+          "ac36_acordoposicao={$this->iCodigoPosicao}
+          and (extract(month from ac36_datainicial) =  {$iMesInicial}
+          and  extract(year from ac36_datainicial) =  {$iAnoInicial})"
+          );
         $rsAcordoPosicao    = $oDaoAcordoPosicao->sql_record($sSqlAcordoPosicao);
-        if ($oDaoAcordoPosicao->numrows == 0) {
+
+
+
+        if ($oDaoAcordoPosicao->numrows == 0 && $this->lParametroVigencia == false) {
+
           throw new Exception("Data informada para previsão de execução do item não confere com a data de vigência do contrato.");
         }
         $iCodigoVigencia    = db_utils::fieldsMemory($rsAcordoPosicao, 0)->ac36_sequencial;
@@ -1994,7 +2030,7 @@ class AcordoItem {
       $sSql  = $oDaoAcordoPosicaoPeriodo->sql_query_file(null, "*", "ac36_datainicial asc", $sWhere);
       $rs    = $oDaoAcordoPosicaoPeriodo->sql_record($sSql);
 
-      if($oDaoAcordoPosicaoPeriodo->numrows == 0) {
+      if($oDaoAcordoPosicaoPeriodo->numrows == 0 && $this->lParametroVigencia == false) {
         throw new Exception("Data informada para previsão de execução do item não confere com a data de vigência do contrato.");
       }
 
@@ -2164,10 +2200,10 @@ class AcordoItem {
       foreach ($aPeriodosValidar as $iPeriodo => $oPeriodo) {
 
         $lComparaDatas = DBTime::db_DataOverlaps(($aPeriodosTimeStamp[$iIndiceTimestamp]->dtInicial),
-                                                 ($aPeriodosTimeStamp[$iIndiceTimestamp]->dtFinal),
-                                                 ($oPeriodo->dtInicial),
-                                                 ($oPeriodo->dtFinal)
-                                                 );
+         ($aPeriodosTimeStamp[$iIndiceTimestamp]->dtFinal),
+         ($oPeriodo->dtInicial),
+         ($oPeriodo->dtFinal)
+         );
         if ($lComparaDatas) {
 
           $sPeriodoInicial = implode("/", array_reverse(explode("-", $oPeriodo->dtInicial)));
@@ -2272,32 +2308,32 @@ class AcordoItem {
    */
   public function getExecucoesPeriodo($iPeriodo) {
 
-     $aExecucoes           = array();
-     $oDaoPeriodoExecutado = db_utils::getDao("acordoitemprevisao");
-     $sWhere               = "ac38_acordoitemprevisao = {$iPeriodo}";
-     $sSqlExecucoes        = $oDaoPeriodoExecutado->sql_query_execucao(null, "*", 'ac38_sequencial', $sWhere);
-     $rsExecucoes          = $oDaoPeriodoExecutado->sql_record($sSqlExecucoes);
-     if ($oDaoPeriodoExecutado->numrows > 0) {
+   $aExecucoes           = array();
+   $oDaoPeriodoExecutado = db_utils::getDao("acordoitemprevisao");
+   $sWhere               = "ac38_acordoitemprevisao = {$iPeriodo}";
+   $sSqlExecucoes        = $oDaoPeriodoExecutado->sql_query_execucao(null, "*", 'ac38_sequencial', $sWhere);
+   $rsExecucoes          = $oDaoPeriodoExecutado->sql_record($sSqlExecucoes);
+   if ($oDaoPeriodoExecutado->numrows > 0) {
 
-       for ($i = 0; $i < $oDaoPeriodoExecutado->numrows; $i++) {
+     for ($i = 0; $i < $oDaoPeriodoExecutado->numrows; $i++) {
 
-         $oDadoExecucao = db_utils::fieldsMemory($rsExecucoes, $i);
+       $oDadoExecucao = db_utils::fieldsMemory($rsExecucoes, $i);
 
-         $oExecucao                      = new stdClass();
-         $oExecucao->codigo              = $oDadoExecucao->ac38_sequencial;
-         $oExecucao->datainicial         = db_formatar($oDadoExecucao->ac38_datainicial, "d");
-         $oExecucao->datafinal           = db_formatar($oDadoExecucao->ac38_datafinal, "d");
-         $oExecucao->quantidade          = $oDadoExecucao->ac29_quantidade;
-         $oExecucao->valor               = $oDadoExecucao->ac29_valor;
-         $oExecucao->notafiscal          = $oDadoExecucao->ac29_notafiscal;
-         $oExecucao->processo            = $oDadoExecucao->ac29_numeroprocesso;
-         $oExecucao->observacao          = $oDadoExecucao->ac29_observacao;
-         $aExecucoes[]                   = $oExecucao;
-         unset($oDadoExecucao);
-       }
+       $oExecucao                      = new stdClass();
+       $oExecucao->codigo              = $oDadoExecucao->ac38_sequencial;
+       $oExecucao->datainicial         = db_formatar($oDadoExecucao->ac38_datainicial, "d");
+       $oExecucao->datafinal           = db_formatar($oDadoExecucao->ac38_datafinal, "d");
+       $oExecucao->quantidade          = $oDadoExecucao->ac29_quantidade;
+       $oExecucao->valor               = $oDadoExecucao->ac29_valor;
+       $oExecucao->notafiscal          = $oDadoExecucao->ac29_notafiscal;
+       $oExecucao->processo            = $oDadoExecucao->ac29_numeroprocesso;
+       $oExecucao->observacao          = $oDadoExecucao->ac29_observacao;
+       $aExecucoes[]                   = $oExecucao;
+       unset($oDadoExecucao);
      }
-     return $aExecucoes;
-  }
+   }
+   return $aExecucoes;
+ }
 
   /**
    * Retorna a última posição do campo ordem disponível
@@ -2311,7 +2347,7 @@ class AcordoItem {
   	$sWhereBuscaPosicaoOrdem  = " ac20_acordoposicao = {$this->getCodigoPosicao()} ";
 
   	$sSqlBuscaPosicaoOrdem    = $oDaoAcordoItem->sql_query_file(null, $sCamposBuscaPosicaoOrdem,
-  	                                                            null, $sWhereBuscaPosicaoOrdem);
+     null, $sWhereBuscaPosicaoOrdem);
   	$rsBuscaPosicaoOrdem      = $oDaoAcordoItem->sql_record($sSqlBuscaPosicaoOrdem);
   	$iUltimaSequencia         = (int) db_utils::fieldsMemory($rsBuscaPosicaoOrdem, 0)->ultima_posicao;
 
@@ -2402,9 +2438,9 @@ class AcordoItem {
     list($iAnoPrevisaoOrigemInicio, $iMesPrevisaoOrigemInicio, $iDiaPrevisaoOrigemInicio) = explode("-", $oAcordoPrevisaoOrigem->ac37_datainicial);
     list($iAnoPrevisaoOrigemFinal, $iMesPrevisaoOrigemFinal, $iDiaPrevisaoOrigemFinal)    = explode("-", $oAcordoPrevisaoOrigem->ac37_datafinal);
     if ( ($iMesPrevisaoOrigemInicio == $iMesInicialDestino && $iAnoPrevisaoOrigemInicio == $iAnoInicialDestino) ||
-         ($iMesPrevisaoOrigemFinal  == $iMesFinalDestino   && $iAnoPrevisaoOrigemFinal  == $iAnoFinalDestino)) {
+     ($iMesPrevisaoOrigemFinal  == $iMesFinalDestino   && $iAnoPrevisaoOrigemFinal  == $iAnoFinalDestino)) {
       throw new Exception("As datas fornecidas possuem o mesmo mês e ano da previsão original.");
-    }
+  }
 
     /**
      * Buscamos as quantidades e valores executados no períodos de ORIGEM
@@ -2413,7 +2449,7 @@ class AcordoItem {
     $sCamposItemExecutadoPeriodo .= " coalesce(sum(coalesce(ac29_quantidade, 0)), 0) as quantidade_executada";
     $sWhereItemExecutadoPeriodo   = " ac38_acordoitemprevisao = {$oAcordoPrevisaoOrigem->ac37_sequencial} ";
     $sSqlItemExecutadoPeriodo     = $oDaoItemExecutadoPeriodo->sql_query_executado(null, $sCamposItemExecutadoPeriodo,
-                                                                                   null, $sWhereItemExecutadoPeriodo);
+     null, $sWhereItemExecutadoPeriodo);
     $rsItemExecutadoPeriodo       = $oDaoItemExecutadoPeriodo->sql_record($sSqlItemExecutadoPeriodo);
     $oItemExecutadoOrigem         = db_utils::fieldsMemory($rsItemExecutadoPeriodo, 0);
     /*
@@ -2422,10 +2458,10 @@ class AcordoItem {
     if ($oItemExecutadoOrigem->quantidade_executada != 0) {
 
       if ($oItemExecutadoOrigem->ac37_quantidadeprevista == $oItemExecutadoOrigem->quantidade_executada &&
-         ($this->getTipoControle() != 4 && $this->getTipocontrole() != 5)) {
+       ($this->getTipoControle() != 4 && $this->getTipocontrole() != 5)) {
         throw new Exception("A quantidade prevista para o período já foi executada. Operação não realizada.");
-      }
     }
+  }
 
     /**
      * Busco os dados da previsão do período de DESTINO
@@ -2752,7 +2788,7 @@ class AcordoItem {
 
       $oDaoAcordoItem = db_utils::getDao("acordoitem");
       $sWhere = "ac20_pcmater = {$iCodMaterial} and ac20_acordoposicao in (select ac26_sequencial from acordoposicao where ac26_acordo = {$iCodAcordo})
-        and ((ac20_quantidade > 0 and ac20_valorunitario > 0) or (ac20_acordoposicaotipo in (9,10)))";
+      and ((ac20_quantidade > 0 and ac20_valorunitario > 0) or (ac20_acordoposicaotipo in (9,10)))";
       $sSqlAcordoitem = $oDaoAcordoItem->sql_query_file(null, "*", "ac20_acordoposicao desc", $sWhere);
       $rsAcordoItem   = $oDaoAcordoItem->sql_record($sSqlAcordoitem);
       if ($oDaoAcordoItem->numrows > 0) {
@@ -2773,7 +2809,7 @@ class AcordoItem {
     $oDaoAcordoitem  = new cl_acordoitem;
 
     $sCampos    = "SUM(CASE WHEN ac26_numero = {$iNumeroAditamento} THEN ac20_quantidade
-                            WHEN ac26_numero = ".($iNumeroAditamento-1)." THEN ac20_quantidade*-1 END) AS aditivado";
+    WHEN ac26_numero = ".($iNumeroAditamento-1)." THEN ac20_quantidade*-1 END) AS aditivado";
     $sWhere     = "ac16_sequencial = {$this->getPosicao()->getAcordo()} AND ac20_ordem = {$this->getOrdem()} AND ac20_pcmater = ".$this->getMaterial()->getMaterial();
     $sSqlItens  = $oDaoAcordoitem->sql_query_transparencia( $sCampos, null, $sWhere);
     $rsItem     = $oDaoAcordoitem->sql_record($sSqlItens);

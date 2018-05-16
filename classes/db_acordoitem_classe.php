@@ -57,6 +57,7 @@ class cl_acordoitem {
    var $ac20_valoraditado = 0;//OC5304
    var $ac20_quantidadeaditada = 0;//OC5304
    // cria propriedade com as variaveis do arquivo
+
    var $campos = "
                  ac20_sequencial = int4 = Sequencial
                  ac20_acordoposicao = int4 = Acordo

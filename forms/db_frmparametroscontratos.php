@@ -17,6 +17,30 @@ db_select('pc01_liberaautorizacao',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
+  <tr>
+    <td nowrap title="<?=@$pc01_liberarcadastrosemvigencia?>">
+    <input name="oid" type="hidden" value="<?=@$oid?>">
+       Liberar cadastro de contratos sem vigência:
+    </td>
+    <td>
+<?
+$x = array("f"=>"NAO","t"=>"SIM");
+db_select('pc01_liberarcadastrosemvigencia',$x,true,$db_opcao,"");
+?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$pc01_liberarsemassinaturaaditivo?>">
+    <input name="oid" type="hidden" value="<?=@$oid?>">
+       Liberar autotização de empenho sem assinatura de aditivo?:
+    </td>
+    <td>
+<?
+$x = array("f"=>"NAO","t"=>"SIM");
+db_select('pc01_liberarsemassinaturaaditivo',$x,true,$db_opcao,"");
+?>
+    </td>
+  </tr>
  </table>
  <table style="width: 100px" >
      <tr align="center">

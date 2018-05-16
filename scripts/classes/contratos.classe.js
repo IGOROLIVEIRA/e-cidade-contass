@@ -282,7 +282,7 @@ contrato = function () {
 	  var iComissao                 = $F('ac16_acordocomissao');
 	  var dtInicio                  = $F('ac16_datainicio');
 	  var dtTermino                 = $F('ac16_datafim');
-	  var sLei                      = $F('ac16_lei');
+	  //var sLei                      = $F('ac16_lei');
 	  var iAnousu                   = $F('ac16_anousu');
 	  var sObjeto                   = $F('ac16_objeto');
 	  var iQtdRenovacao             = $F('ac16_qtdrenovacao');
@@ -350,7 +350,7 @@ contrato = function () {
 	    $('ac16_acordocomissão').focus();
 	    return false;
 	  }
-
+/*
 	  if (sLei == "") {
 
 	    alert('Informe a número da lei.');
@@ -358,7 +358,7 @@ contrato = function () {
 	    return false;
 
 	  }
-
+*/
 	  if (iAnousu == "") {
 
 	    alert('Informe o ano do contrato.');
@@ -421,7 +421,7 @@ contrato = function () {
 	  oParam.contrato.iContratado               = iContratado;
 	  oParam.contrato.iDepartamentoResponsavel  = iDepartamentoResponsavel;
 	  oParam.contrato.iComissao                 = iComissao;
-	  oParam.contrato.sLei                      = sLei;
+	  // oParam.contrato.sLei                      = sLei;
 	  oParam.contrato.iAnousu                   = iAnousu;
 	  oParam.contrato.dtInicio                  = dtInicio;
 	  oParam.contrato.dtTermino                 = dtTermino;

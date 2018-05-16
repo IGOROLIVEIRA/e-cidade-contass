@@ -36,14 +36,38 @@ require_once("classes/db_acordo_classe.php");
 require_once("classes/db_acordoacordogarantia_classe.php");
 require_once("classes/db_acordoacordopenalidade_classe.php");
 require_once("classes/db_acordoitem_classe.php");
-$clacordo = new cl_acordo;
+require_once("classes/db_acordoaux_classe.php");
+require_once("classes/db_parametroscontratos_classe.php");
+
+$oParam = new cl_parametroscontratos;
+
+$oParam = $oParam->sql_query(null,'*');
+$oParam = db_query($oParam);
+$oParam = db_utils::fieldsMemory($oParam);
+$oParam = $oParam->pc01_liberarcadastrosemvigencia;
+if($oParam == 't'){
+ $clacordo = new cl_acordoaux;
+}else{
+ $clacordo = new cl_acordo;
+}
+if(isset($chavepesquisa)){
+  $oAcordoVigencia = $clacordo->sql_query($chavepesquisa, 'ac16_semvigencia as vigencia');
+  $oAcordoVigencia = $clacordo->sql_record($oAcordoVigencia);
+  $oAcordoVigencia = db_utils::fieldsMemory($oAcordoVigencia);
+  $vigente = $oAcordoVigencia->vigencia;
+}
+if($oParam != 't' || $vigente != 't'){
+ $clacordo = new cl_acordo;
+}
+
+
   /*
 $clacordoacordogarantia = new cl_acordoacordogarantia;
 $clacordoacordopenalidade = new cl_acordoacordopenalidade;
 $clacordoitem = new cl_acordoitem;
   */
 db_postmemory($HTTP_POST_VARS);
-   $db_opcao = 22;
+$db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
   $sqlerro=false;
@@ -54,31 +78,41 @@ if(isset($alterar)){
   }
   $erro_msg = $clacordo->erro_msg;
   db_fim_transacao($sqlerro);
-   $db_opcao = 2;
-   $db_botao = true;
+  $db_opcao = 2;
+  $db_botao = true;
 }else if(isset($chavepesquisa)) {
-   $db_opcao = 2;
-   $db_botao = true;
+ $db_opcao = 2;
+ $db_botao = true;
    //$result = $clacordo->sql_record($clacordo->sql_query($chavepesquisa));
-   db_fieldsmemory($result,0);
+ db_fieldsmemory($result,0);
 }
 unset($_SESSION["oContrato"]);
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
-db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js");
-db_app::load("dbmessageBoard.widget.js, prototype.js, contratos.classe.js");
-db_app::load("estilos.css, grid.style.css");
-?>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?
+  db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js");
+  db_app::load("dbmessageBoard.widget.js, prototype.js");
+  if($oParam == 't' && $vigente == 't'){
+    db_app::load("contratosaux.classe.js");
+  }else{
+    db_app::load("contratos.classe.js");
+  }
+  db_app::load("estilos.css, grid.style.css");
+  ?>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-	<?
-	require_once("forms/db_frmacordo.php");
-	?>
+  <?
+
+  if($oParam == 't' && $vigente == 't'){
+    include("forms/db_frmacordoalteraaux.php");
+  }else{
+    include("forms/db_frmacordo.php");
+ }
+ ?>
 </body>
 </html>
 <?
@@ -91,33 +125,33 @@ if(isset($alterar)){
     };
   }else{
    db_msgbox($erro_msg);
-  }
+ }
 }
 if(isset($chavepesquisa)){
  echo "
-  <script>
-      function js_db_libera() {
+ <script>
+  function js_db_libera() {
 
-         parent.document.formaba.acordo.disabled=false;
-         parent.document.formaba.acordogarantia.disabled=false;
-         top.corpo.iframe_acordogarantia.location.href='aco1_acordoacordogarantia001.php?ac12_acordo=".@$chavepesquisa."';
-         parent.document.formaba.acordopenalidade.disabled=false;
-         top.corpo.iframe_acordopenalidade.location.href='aco1_acordoacordopenalidade001.php?ac15_acordo=".@$chavepesquisa."';
-         parent.document.formaba.acordoitem.disabled=false;
-         top.corpo.iframe_acordoitem.location.href='aco1_acordoitem001.php?ac20_acordo=".@$chavepesquisa."';
-         parent.document.formaba.acordodocumento.disabled=false;
-         top.corpo.iframe_acordodocumento.location.href='aco1_acordodocumento001.php?ac40_acordo=".@$chavepesquisa."';
-     ";
-         if(isset($liberaaba)){
-         }
- echo"}\n
-    js_db_libera();
-  </script>\n
+   parent.document.formaba.acordo.disabled=false;
+   parent.document.formaba.acordogarantia.disabled=false;
+   top.corpo.iframe_acordogarantia.location.href='aco1_acordoacordogarantia001.php?ac12_acordo=".@$chavepesquisa."';
+   parent.document.formaba.acordopenalidade.disabled=false;
+   top.corpo.iframe_acordopenalidade.location.href='aco1_acordoacordopenalidade001.php?ac15_acordo=".@$chavepesquisa."';
+   parent.document.formaba.acordoitem.disabled=false;
+   top.corpo.iframe_acordoitem.location.href='aco1_acordoitem001.php?ac20_acordo=".@$chavepesquisa."';
+   parent.document.formaba.acordodocumento.disabled=false;
+   top.corpo.iframe_acordodocumento.location.href='aco1_acordodocumento001.php?ac40_acordo=".@$chavepesquisa."';
+   ";
+   if(isset($liberaaba)){
+   }
+   echo"}\n
+   js_db_libera();
+ </script>\n
  ";
 }
- if($db_opcao==22||$db_opcao==33){
-    echo "<script>document.form1.pesquisar.click();</script>";
- }
+if($db_opcao==22||$db_opcao==33){
+  echo "<script>document.form1.pesquisar.click();</script>";
+}
 
  //echo "<script>alert($('ac16_origem').disabled);</script>";
 

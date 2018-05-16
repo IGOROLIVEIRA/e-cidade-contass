@@ -26,13 +26,13 @@
  */
 
 $campos  = "acordo.ac16_sequencial, ";
-$campos .= "(acordo.ac16_numero || '/' || acordo.ac16_anousu)::varchar as ac16_numero, ";
+$campos .= "CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END ac16_numeroacordo, ";
 $campos .= "acordo.ac16_dataassinatura, ";
 $campos .= "acordo.ac16_contratado, cgm.z01_nome,";
 $campos .= "acordo.ac16_valor,";
 $campos .= "acordo.ac16_datapublicacao,";
-$campos .= "acordo.ac16_datainicio, ";
-$campos .= "acordo.ac16_datafim ";
+$campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, ";
+$campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim ";
 /*$campos .= "acordo.ac16_acordosituacao,acordo.ac16_coddepto, ";
 $campos .= "descrdepto,codigo, ";
 $campos .= "nomeinst, ";

@@ -1,3 +1,4 @@
+
 <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
@@ -47,19 +48,35 @@ try {
      */
     case "getItensAditar":
 
-      $oContrato  = AcordoRepository::getByCodigo($oParam->iAcordo);
+    $oContrato  = AcordoRepository::getByCodigo($oParam->iAcordo);
 
-      $oPosicao                    = $oContrato->getUltimaPosicao(true);
-      $oRetorno->tipocontrato      = $oContrato->getOrigem();
-      $oRetorno->datainicial       = $oContrato->getDataInicial();
-      $oRetorno->datafinal         = $oContrato->getDataFinal();
-      $oRetorno->valores           = $oContrato->getValoresItens();
-      $oRetorno->seqaditivo        = $oContrato->getProximoNumeroAditivo($oParam->iAcordo);
+    $oPosicao                    = $oContrato->getUltimaPosicao(true);
+    $oRetorno->tipocontrato      = $oContrato->getOrigem();
+    $oRetorno->datainicial       = $oContrato->getDataInicial();
+    $oRetorno->datafinal         = $oContrato->getDataFinal();
+    $oRetorno->valores           = $oContrato->getValoresItens();
+    $oRetorno->seqaditivo        = $oContrato->getProximoNumeroAditivo($oParam->iAcordo);
+    $oAditivo = db_utils::getDao('acordoposicaoaditamento');
+    $oResult = $oAditivo->sql_query(null,"*", null, "ac16_sequencial={$oParam->iAcordo}");
+      //echo $oResult;
+    $oResult = $oAditivo->sql_record($oResult);
+    $oResult = db_utils::getColectionByRecord($oResult);
 
-      $aItens = array();
-      foreach ($oPosicao->getItens() as $oItemPosicao) {
+    $oRetorno->infoaditivo       = $oResult;
 
-        $oItem                 = new stdClass();
+    $aItens = array();
+
+
+    $oParamC = db_utils::getDao('parametroscontratos');
+    $oParamC = $oParamC->sql_query(null,'*');
+    $oParamC = db_query($oParamC);
+    $oParamC = db_utils::fieldsMemory($oParamC);
+    $oParamC = $oParamC->pc01_liberarcadastrosemvigencia;
+    if($oParamC == 't'){
+    }
+    foreach ($oPosicao->getItens() as $oItemPosicao) {
+
+      $oItem                 = new stdClass();
 
         $oItem->codigo         = $oItemPosicao->getCodigo();
         $oItem->codigoitem     = $oItemPosicao->getMaterial()->getMaterial();
@@ -71,11 +88,25 @@ try {
         $oItem->quantiaditada  = $oItemPosicao->getQuantiAditada();//OC5304
         $oItem->valor          = $oItemPosicao->getValorAtualizadoRenovacao();
         $aItemPosicao          = $oItemPosicao->getPeriodosItem();
-        $oItem->periodoini     = $aItemPosicao[0]->dtDataInicial;
-        $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
+        if($oParamC == 't'){
+          if($aItemPosicao[0]->dtDataInicial == null || $aItemPosicao[0]->dtDataInicial == ""){
+            $oItem->periodoini = $oContrato->getDataInicial();
+          }else{
+            $oItem->periodoini = $aItemPosicao[0]->dtDataInicial;
+          }
+          if($aItemPosicao[0]->dtDataFinal == null || $aItemPosicao[0]->dtDataFinal == ""){
+            $oItem->periodofim = $oContrato->getDataFinal();
+          }else{
+            $oItem->periodofim = $aItemPosicao[0]->dtDataFinal;
+          }
+        }else{
+            $oItem->periodoini = $aItemPosicao[0]->dtDataInicial;
+            $oItem->periodofim = $aItemPosicao[0]->dtDataFinal;
+        }
         $oItem->servico        = $oItemPosicao->getMaterial()->isServico();
         $oItem->controlaquantidade = $oItemPosicao->getServicoQuantidade();
         $oItem->dotacoes       = array();
+
 
         /**
          * retornar saldo do item conforme autorizacoes
@@ -106,10 +137,10 @@ try {
             $nValorDot = $oDotacao->valor;
           }
           $oItem->dotacoes[] = (object) array(
-              'dotacao' => $oDotacao->dotacao,
-              'quantidade' => $iQuantDot,
-              'valor' => $nValorDot,
-              'valororiginal' => $nValorDot
+            'dotacao' => $oDotacao->dotacao,
+            'quantidade' => $iQuantDot,
+            'valor' => $nValorDot,
+            'valororiginal' => $nValorDot
             );
         }
 
@@ -119,18 +150,29 @@ try {
       $oRetorno->itens = $aItens;
       break;
 
-    case "processarAditamento":
+      case "processarAditamento":
+
+
+      $oAditivo = db_utils::getDao('acordoposicaoaditamento');
+      $oResult = $oAditivo->sql_query(null,"*", 'ac35_sequencial', "ac35_dataassinaturatermoaditivo is null and ac16_sequencial={$oParam->iAcordo}");
+     // echo $oResult;
+      $oResult = $oAditivo->sql_record($oResult);
+
+      if(count(db_utils::getColectionByRecord($oResult)) > 0){
+        throw new Exception('Este acordo possui aditamentos sem assinatura.');
+      }
 
       $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);//var_dump($oParam->sVigenciaalterada);
       $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura,$oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada);
+
       break;
 
-    case "getUnidades":
+      case "getUnidades":
 
       $oDaoMatUnid  = db_utils::getDao("matunid");
       $sSqlUnidades = $oDaoMatUnid->sql_query_file( null,
-                                                    "m61_codmatunid,substr(m61_descr,1,20) as m61_descr",
-                                                    "m61_descr" );
+        "m61_codmatunid,substr(m61_descr,1,20) as m61_descr",
+        "m61_descr" );
       $rsUnidades      = $oDaoMatUnid->sql_record($sSqlUnidades);
       $iNumRowsUnidade = $oDaoMatUnid->numrows;
       for ($i = 0; $i < $iNumRowsUnidade; $i++) {
@@ -140,16 +182,47 @@ try {
       }
       $oRetorno->itens = $aUnidades;
       break;
+      case "salvaAssinatura":
 
+      $oAditivo = db_utils::getDao('acordoposicaoaditamento');
+      //seta variaveis
+
+      $iAcordo = $oParam->iAcordo;
+      $iCodigoAditivo = $oParam->iCodigoAditivo;
+      $sData = $oParam->sData;
+      $sDataPublicacao = $oParam->sDataPublicacao;
+      $sVeiculoDivulgacao = $oParam->sVeiculoDivulgacao;
+      //var_dump($oParam);
+      $sData = str_replace("/", "-", $sData);
+      $sData = date('Y-m-d', strtotime($sData));
+      $sDataPublicacao = str_replace("/", "-", $sDataPublicacao);
+      $sDataPublicacao = date('Y-m-d', strtotime($sDataPublicacao));
+
+      //
+      $oAditivo->ac35_sequencial= $iCodigoAditivo;
+      $oAditivo->ac35_dataassinaturatermoaditivo= $sData;
+      $oAditivo->ac35_datapublicacao= $sDataPublicacao;
+      $oAditivo->ac35_veiculodivulgacao= $sVeiculoDivulgacao;
+
+      $oAditivo->alterar($iCodigoAditivo);
+      if($oAditivo->erro_status == 0){
+        throw new Exception($oAditivo->erro_msg);
+      }else{
+        $oRetorno->message = "Assinatura salva com sucesso";
+      }
+
+
+      break;
+
+    }
+
+    db_fim_transacao(false);
+
+  } catch (Exception $eErro) {
+
+    db_fim_transacao (true);
+    $oRetorno->erro  = true;
+    $oRetorno->message = urlencode($eErro->getMessage());
   }
 
-  db_fim_transacao(false);
-
-} catch (Exception $eErro) {
-
-  db_fim_transacao (true);
-  $oRetorno->erro  = true;
-  $oRetorno->message = urlencode($eErro->getMessage());
-}
-
-echo json_encode($oRetorno);
+  echo json_encode($oRetorno);

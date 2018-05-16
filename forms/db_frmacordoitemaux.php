@@ -47,6 +47,7 @@ if ($oDaoAcordo->numrows > 0) {
 
   $oAcordo = db_utils::fieldsMemory($rsAcordo, 0);
 }
+
 ?>
 <style>
   .fracionado input[type='checkbox'] {
@@ -190,7 +191,7 @@ db_app::load("estilos.css, grid.style.css");
                 </td>
                 <td>
                   <?
-                  db_select("ac20_servicoquantidade", array("f" => "NÂO", "t" => "SIM"), true, $db_opcao, "onChange='js_verificaServico();'");
+                  db_select("ac20_servicoquantidade", array("f" => "NÃO", "t" => "SIM"), true, $db_opcao, "onChange='js_verificaServico();'");
                   ?>
                 </td>
               </tr>
@@ -207,7 +208,7 @@ db_app::load("estilos.css, grid.style.css");
               </tr>
 
             </table>
-            <table style="width: 100%;">
+            <table style="width: 100%; display:none;">
               <tr>
                 <td colspan="4">
                   <fieldset class='fieldsetinterno'>
@@ -261,7 +262,7 @@ db_app::load("estilos.css, grid.style.css");
       </tr>
       <tr>
         <td colspan="2" align="center">
-          <input name="incluir" type="button" id="db_opcao" value="Incluir">
+          <input name="incluir" type="button" id="db_opcao" onclick="addPeriodo();js_saveItem();" value="Incluir">
           <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_limparFormulario();"
           style='display:none'>
 
@@ -288,7 +289,7 @@ db_app::load("estilos.css, grid.style.css");
   </center>
 </form>
 <script>
-  var sURL = "con4_contratos.RPC.php";
+  var sURL = "con4_contratosaux.RPC.php";
   iCodigoItem = '';
   iElementoDotacao = '';
   iCasasDecimais = <?=$iCasasDecimais?>;
@@ -542,7 +543,6 @@ db_app::load("estilos.css, grid.style.css");
       oRetorno.itens.each(function (oLinha, id) {
 
         with (oLinha) {
-
           var sCor = '';
           if (valortotal == totaldotacoes) {
             var sCor = '';
@@ -552,6 +552,7 @@ db_app::load("estilos.css, grid.style.css");
           }else{
             var sCor = 'background-color: red;';
           }
+
           var aLinha = new Array();
           aLinha[0] = ordem;
           aLinha[1] = codigo;
@@ -670,7 +671,7 @@ db_app::load("estilos.css, grid.style.css");
   }
 
   function js_retornoSaveItem(oAjax) {
-
+    js_getItens();
     js_removeObj('msgBox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
 
@@ -678,12 +679,10 @@ db_app::load("estilos.css, grid.style.css");
 
       if (iCodigoItem != "") {
 
-     //
         if (oRetorno.lAlterarDotacao) {
 
-          //sFunction = $('openDotacoes' + iCodigoItem).onclick;
-          //sFunction();
-     //alert(1);
+          sFunction = $('openDotacoes' + iCodigoItem).onclick;
+          sFunction();
         }
       }
       iCodigoItem = '';
@@ -693,7 +692,8 @@ db_app::load("estilos.css, grid.style.css");
     } else {
       alert(oRetorno.message.urlDecode());
     }
-    //oGridPeriodos.clearAll(true);
+
+    oGridPeriodos.clearAll(true);
   }
 
   function js_excluir(iCodigo) {
@@ -720,11 +720,11 @@ db_app::load("estilos.css, grid.style.css");
   function js_retornoExcluirItem(oAjax) {
 
     js_removeObj('msgBox');
+    js_getItens();
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
 
       alert('Item Excluido com sucesso!');
-      js_getItens();
       js_desabilitaItemSelecionar();
     } else {
       alert(oRetorno.message.urlDecode());
@@ -782,170 +782,169 @@ db_app::load("estilos.css, grid.style.css");
     $('ac20_quantidade').value = '';
     $('ac20_elemento').options.length = 1;
     $('ac20_matunid').value = '';
-    $('ac41_datainicial').value = '';
-    $('ac41_datafinal').value = '';
+
     $('ac20_resumo').value = '';
     $('db_opcao').value = 'Incluir';
     $('cancelar').style.display = 'none';
     $('ac20_servicoquantidade').value = 'f';
-    // aPeriodoItem = new Array();
-    // oGridItens.clearAll(true);
 
-    js_desabilitaItemSelecionar();
-  }
-
-
-  function js_bloqueiaCampos(iTipoContrato) {
-
-    var CONTRATO_PROCESSO_COMPRAS = 1;
-    var CONTRATO_LICITACAO = 2;
-    var CONTRATO_MANUAL = 3;
-    var CONTRATO_EMPENHO = 6;
-
-    if (iTipoContrato == CONTRATO_EMPENHO) {
-      $('itensEmpenho').style.display = '';
+      // js_getItens();
+      // js_desabilitaItemSelecionar();
+      return false;
     }
 
-    if (iTipoContrato != CONTRATO_PROCESSO_COMPRAS && iTipoContrato != CONTRATO_LICITACAO) {
-      $('verificarItens').style.display = 'none';
-    }
 
-    if (iTipoContrato == CONTRATO_LICITACAO || iTipoContrato == CONTRATO_PROCESSO_COMPRAS || iTipoContrato == CONTRATO_EMPENHO) {
+    function js_bloqueiaCampos(iTipoContrato) {
 
-      $('cancelar').style.display = 'none';
+      var CONTRATO_PROCESSO_COMPRAS = 1;
+      var CONTRATO_LICITACAO = 2;
+      var CONTRATO_MANUAL = 3;
+      var CONTRATO_EMPENHO = 6;
 
-      $('ac20_pcmater').readOnly = true;
-      $('ac20_pcmater').style.background = '#DEB887';
-
-      $('ac20_quantidade').readOnly = true;
-      $('ac20_quantidade').style.background = '#DEB887';
-
-      $('ac20_matunid').disabled = true;
-      $('ac20_matunid').style.background = '#DEB887';
-
-      $('ac20_valorunitario').readOnly = true;
-      $('ac20_valorunitario').style.background = '#DEB887';
-
-      $('ac20_servicoquantidade').disabled = true;
-      $('ac20_servicoquantidade').style.background = '#DEB887';
-
-      $('ac20_elemento').disabled = true;
-      $('ac20_elemento').style.background = '#DEB887';
-
-      $('db_opcao').style.display = '';
-
-      $('tdMatMater').innerHTML = "<strong>Código do Item:</strong>";
-
-    } else {
-
-      $('cancelar').style.display = '';
-
-      var sAncora = "<a class='dbancora' onclick='js_pesquisaac20_pcmater(true);' style='text-decoration: underline;' href='#'>";
-      sAncora += "<strong>Código do Item:</strong>";
-      sAncora += "</a>";
-      $('tdMatMater').innerHTML = sAncora;
-    }
-
-  }
-
-  function js_editar(iCodigo, iTipoContrato) {
-
-    js_bloqueiaCampos(iTipoContrato);
-
-    js_divCarregando('Aguarde, pesquisando material', 'msgBox');
-    var oParam = new Object();
-    oParam.iCodigoItem = iCodigo;
-    oParam.exec = "getItensAcordo";
-
-    var oAjax = new Ajax.Request(
-      sURL,
-      {
-        method: 'post',
-        parameters: 'json=' + Object.toJSON(oParam),
-        onComplete: js_retornoEditar
+      if (iTipoContrato == CONTRATO_EMPENHO) {
+        $('itensEmpenho').style.display = '';
       }
-      );
 
-  }
-
-  function js_retornoEditar(oAjax) {
-
-    js_removeObj("msgBox");
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-    if (oRetorno.status == 1) {
-      with (oRetorno.item) {
-
-        iCodigoItem = codigo;
-        $('ac20_pcmater').value = codigomaterial;
-        $('pc01_descrmater').value = material.urlDecode();
-        $('ac20_valorunitario').value = valorunitario;
-        $('ac20_quantidade').value = quantidade;
-        $('ac20_elemento').value = elemento;
-        $('ac20_matunid').value = unidade;
-        $('ac20_resumo').value = resumo.urlDecode();
-        $('ac20_tipocontrole').value = tipocontrole;
-        $('ac20_servicoquantidade').value = servicoquantidade;
-        isServico = servico?'t':'f';
-
-        $('db_opcao').value = 'Alterar';
-        js_getElementosMateriais(elemento);
-        js_desabilitaItemSelecionar();
-        js_verificaServico();
+      if (iTipoContrato != CONTRATO_PROCESSO_COMPRAS && iTipoContrato != CONTRATO_LICITACAO) {
+        $('verificarItens').style.display = 'none';
       }
-      aPeriodoItem = oRetorno.item.aPeriodosItem;
-      oGridPeriodos.clearAll(true);
-      getPeriodos();
-    }
-  }
 
-  function js_adicionarDotacao(iElemento, iLinha, iItem) {
-    oDadosItem = oGridItens.aRows[iLinha];
-    var iHeight = js_round((window.innerHeight / 1.3), 0);
-    var iWidth = document.width / 2;
-    windowDotacaoItem = new windowAux(
-      'wndDotacoesItem',
-      'Dotações Item ',
-      iWidth,
-      iHeight
-      );
-    var sContent = "<div id='addDotacao'>";
-    sContent += "<fieldset><legend><b>Adicionar Dotação</b>";
-    sContent += "  <table>";
-    sContent += "   <tr>";
-    sContent += "     <td>";
-    sContent += "     <a href='#' class='dbancora' style='text-decoration: underline;'";
-    sContent += "       onclick='js_pesquisao47_coddot(true);'><b>Dotação:</b></a>";
-    sContent += "     </td>";
-    sContent += "     <td id='inputdotacao'></td>";
-    sContent += "     <td>";
-    sContent += "      <b>Saldo Dotação:</b>";
-    sContent += "     </td>";
-    sContent += "     <td id='inputsaldodotacao'></td>";
-    sContent += "   </tr>";
-    sContent += "   <tr>";
-    sContent += "     <td>";
-    sContent += "      <b>Quantidade:</b>";
-    sContent += "     </td>";
-    sContent += "     <td id='inputquantidadedotacao'></td>";
-    sContent += "     <td>";
-    sContent += "      <b>Valor:</b>";
-    sContent += "     </td>";
-    sContent += "     <td id='inputvalordotacao'></td>";
-    sContent += "    </tr>";
-    sContent += "    <tr>";
-    sContent += "     <td colspan='4' style='text-align:center'>";
-    sContent += "       <input type='button' value='Salvar' id='btnSalvarDotacao' "+((isExecutado[iItem]==true||desabilitaDotacao==false)?"disabled='disabled'":"")+">";
-    sContent += "     </td>";
-    sContent += "    </tr>";
-    sContent += "  </table>";
-    sContent += "</fieldset>";
-    sContent += "<fieldset>";
-    sContent += "  <div id='cntgridDotacoes'>";
-    sContent += "  </div>";
-    sContent += "</fieldset>";
-    sContent += "</div>";
-    windowDotacaoItem.setContent(sContent);
-    windowDotacaoItem.setShutDownFunction(function () {
+      if (iTipoContrato == CONTRATO_LICITACAO || iTipoContrato == CONTRATO_PROCESSO_COMPRAS || iTipoContrato == CONTRATO_EMPENHO) {
+
+        $('cancelar').style.display = 'none';
+
+        $('ac20_pcmater').readOnly = true;
+        $('ac20_pcmater').style.background = '#DEB887';
+
+        $('ac20_quantidade').readOnly = true;
+        $('ac20_quantidade').style.background = '#DEB887';
+
+        $('ac20_matunid').disabled = true;
+        $('ac20_matunid').style.background = '#DEB887';
+
+        $('ac20_valorunitario').readOnly = true;
+        $('ac20_valorunitario').style.background = '#DEB887';
+
+        $('ac20_servicoquantidade').disabled = true;
+        $('ac20_servicoquantidade').style.background = '#DEB887';
+
+        $('ac20_elemento').disabled = true;
+        $('ac20_elemento').style.background = '#DEB887';
+
+        $('db_opcao').style.display = '';
+
+        $('tdMatMater').innerHTML = "<strong>Código do Item:</strong>";
+
+      } else {
+
+        $('cancelar').style.display = '';
+
+        var sAncora = "<a class='dbancora' onclick='js_pesquisaac20_pcmater(true);' style='text-decoration: underline;' href='#'>";
+        sAncora += "<strong>Código do Item:</strong>";
+        sAncora += "</a>";
+        $('tdMatMater').innerHTML = sAncora;
+      }
+
+    }
+
+    function js_editar(iCodigo, iTipoContrato) {
+
+      js_bloqueiaCampos(iTipoContrato);
+
+      js_divCarregando('Aguarde, pesquisando material', 'msgBox');
+      var oParam = new Object();
+      oParam.iCodigoItem = iCodigo;
+      oParam.exec = "getItensAcordo";
+
+      var oAjax = new Ajax.Request(
+        sURL,
+        {
+          method: 'post',
+          parameters: 'json=' + Object.toJSON(oParam),
+          onComplete: js_retornoEditar
+        }
+        );
+
+    }
+
+    function js_retornoEditar(oAjax) {
+
+      js_removeObj("msgBox");
+      var oRetorno = eval("(" + oAjax.responseText + ")");
+      if (oRetorno.status == 1) {
+        with (oRetorno.item) {
+
+          iCodigoItem = codigo;
+          $('ac20_pcmater').value = codigomaterial;
+          $('pc01_descrmater').value = material.urlDecode();
+          $('ac20_valorunitario').value = valorunitario;
+          $('ac20_quantidade').value = quantidade;
+          $('ac20_elemento').value = elemento;
+          $('ac20_matunid').value = unidade;
+          $('ac20_resumo').value = resumo.urlDecode();
+          $('ac20_tipocontrole').value = tipocontrole;
+          $('ac20_servicoquantidade').value = servicoquantidade;
+          isServico = servico?'t':'f';
+
+          $('db_opcao').value = 'Alterar';
+          js_getElementosMateriais(elemento);
+          js_desabilitaItemSelecionar();
+          js_verificaServico();
+        }
+        aPeriodoItem = oRetorno.item.aPeriodosItem;
+        oGridPeriodos.clearAll(true);
+        getPeriodos();
+      }
+    }
+
+    function js_adicionarDotacao(iElemento, iLinha, iItem) {
+      oDadosItem = oGridItens.aRows[iLinha];
+      var iHeight = js_round((window.innerHeight / 1.3), 0);
+      var iWidth = document.width / 2;
+      windowDotacaoItem = new windowAux(
+        'wndDotacoesItem',
+        'Dotações Item ',
+        iWidth,
+        iHeight
+        );
+      var sContent = "<div id='addDotacao'>";
+      sContent += "<fieldset><legend><b>Adicionar Dotação</b>";
+      sContent += "  <table>";
+      sContent += "   <tr>";
+      sContent += "     <td>";
+      sContent += "     <a href='#' class='dbancora' style='text-decoration: underline;'";
+      sContent += "       onclick='js_pesquisao47_coddot(true);'><b>Dotação:</b></a>";
+      sContent += "     </td>";
+      sContent += "     <td id='inputdotacao'></td>";
+      sContent += "     <td>";
+      sContent += "      <b>Saldo Dotação:</b>";
+      sContent += "     </td>";
+      sContent += "     <td id='inputsaldodotacao'></td>";
+      sContent += "   </tr>";
+      sContent += "   <tr>";
+      sContent += "     <td>";
+      sContent += "      <b>Quantidade:</b>";
+      sContent += "     </td>";
+      sContent += "     <td id='inputquantidadedotacao'></td>";
+      sContent += "     <td>";
+      sContent += "      <b>Valor:</b>";
+      sContent += "     </td>";
+      sContent += "     <td id='inputvalordotacao'></td>";
+      sContent += "    </tr>";
+      sContent += "    <tr>";
+      sContent += "     <td colspan='4' style='text-align:center'>";
+      sContent += "       <input type='button' value='Salvar' id='btnSalvarDotacao' "+((isExecutado[iItem]==true||desabilitaDotacao==false)?"disabled='disabled'":"")+">";
+      sContent += "     </td>";
+      sContent += "    </tr>";
+      sContent += "  </table>";
+      sContent += "</fieldset>";
+      sContent += "<fieldset>";
+      sContent += "  <div id='cntgridDotacoes'>";
+      sContent += "  </div>";
+      sContent += "</fieldset>";
+      sContent += "</div>";
+      windowDotacaoItem.setContent(sContent);
+      windowDotacaoItem.setShutDownFunction(function () {
           /*var nTemp1 = js_strToFloat(oDadosItem.aCells[4].getValue());
           var nTemp2 = oGridDotacoes.sum(2, false);
 
@@ -959,110 +958,110 @@ db_app::load("estilos.css, grid.style.css");
             windowDotacaoItem.destroy();
 
           });
-    windowDotacaoItem.show(25,420);
-    oMessageBoard = new DBMessageBoard('msgboard1',
-      'Adicionar Dotacoes',
-      'Dotações Item ' + oDadosItem.aCells[1].getValue(),
-      windowDotacaoItem.getContentContainer()
-      );
+      windowDotacaoItem.show(25,420);
+      oMessageBoard = new DBMessageBoard('msgboard1',
+        'Adicionar Dotacoes',
+        'Dotações Item ' + oDadosItem.aCells[1].getValue(),
+        windowDotacaoItem.getContentContainer()
+        );
 
-    oMessageBoard.show();
+      oMessageBoard.show();
 
-    $('btnSalvarDotacao').observe("click", js_saveDotacao);
-    oTxtDotacao = new DBTextField('oTxtDotacao', 'oTxtDotacao', '', 10);
-    oTxtDotacao.show($('inputdotacao'));
-    oTxtDotacao.setReadOnly(true);
+      $('btnSalvarDotacao').observe("click", js_saveDotacao);
+      oTxtDotacao = new DBTextField('oTxtDotacao', 'oTxtDotacao', '', 10);
+      oTxtDotacao.show($('inputdotacao'));
+      oTxtDotacao.setReadOnly(true);
 
-    oTxtValorDotacao = new DBTextField('oTxtValorDotacao', 'oTxtValorDotacao', '', 10);
-    oTxtValorDotacao.addEvent("onKeyPress","return js_mask(event,\"0-9|,\")");
-    oTxtValorDotacao.show($('inputvalordotacao'));
-    oTxtValorDotacao.setReadOnly(true);
+      oTxtValorDotacao = new DBTextField('oTxtValorDotacao', 'oTxtValorDotacao', '', 10);
+      oTxtValorDotacao.addEvent("onKeyPress","return js_mask(event,\"0-9|,\")");
+      oTxtValorDotacao.show($('inputvalordotacao'));
+      oTxtValorDotacao.setReadOnly(true);
 
-    oTxtQuantidadeDotacao = new DBTextField('oTxtQuantidadeDotacao', 'oTxtQuantidadeDotacao', '', 10);
-    var nValorMaximo = oDadosItem.aCells[3].getValue();
-    var nValorUnitario = js_strToFloat(oDadosItem.aCells[4].getValue()).valueOf();
-    var sEvent = ";js_validaValorDotacao(this," + nValorMaximo + "," + nValorUnitario + ",\"oTxtValorDotacao\");";
-    oTxtQuantidadeDotacao.addEvent("onChange", sEvent);
-    oTxtQuantidadeDotacao.addEvent("onKeyPress","return js_mask(event,\"0-9|,\")");
-    oTxtQuantidadeDotacao.show($('inputquantidadedotacao'));
+      oTxtQuantidadeDotacao = new DBTextField('oTxtQuantidadeDotacao', 'oTxtQuantidadeDotacao', '', 10);
+      var nValorMaximo = oDadosItem.aCells[3].getValue();
+      var nValorUnitario = js_strToFloat(oDadosItem.aCells[4].getValue()).valueOf();
+      var sEvent = ";js_validaValorDotacao(this," + nValorMaximo + "," + nValorUnitario + ",\"oTxtValorDotacao\");";
+      oTxtQuantidadeDotacao.addEvent("onChange", sEvent);
+      oTxtQuantidadeDotacao.addEvent("onKeyPress","return js_mask(event,\"0-9|,\")");
+      oTxtQuantidadeDotacao.show($('inputquantidadedotacao'));
 
-    oTxtSaldoDotacao = new DBTextField('oTxtSaldoDotacao', 'oTxtSaldoDotacao', '', 10);
-    oTxtSaldoDotacao.show($('inputsaldodotacao'));
-    oTxtSaldoDotacao.setReadOnly(true);
+      oTxtSaldoDotacao = new DBTextField('oTxtSaldoDotacao', 'oTxtSaldoDotacao', '', 10);
+      oTxtSaldoDotacao.show($('inputsaldodotacao'));
+      oTxtSaldoDotacao.setReadOnly(true);
 
-    oGridDotacoes = new DBGrid('gridDotacoes');
-    oGridDotacoes.nameInstance = 'oGridDotacoes';
-    oGridDotacoes.setCellAlign(new Array("center", "right", "right", "Center"));
-    oGridDotacoes.setCellWidth(new Array("28%", "28%", "28%", "10%"));
-    oGridDotacoes.setHeader(new Array("Dotação", "Qtd", "Valor", "Ação"));
-    oGridDotacoes.setHeight(iHeight / 3);
-    oGridDotacoes.show($('cntgridDotacoes'));
+      oGridDotacoes = new DBGrid('gridDotacoes');
+      oGridDotacoes.nameInstance = 'oGridDotacoes';
+      oGridDotacoes.setCellAlign(new Array("center", "right", "right", "Center"));
+      oGridDotacoes.setCellWidth(new Array("28%", "28%", "28%", "10%"));
+      oGridDotacoes.setHeader(new Array("Dotação", "Qtd", "Valor", "Ação"));
+      oGridDotacoes.setHeight(iHeight / 3);
+      oGridDotacoes.show($('cntgridDotacoes'));
 
-    js_getDotacoesItens(iItem);
-  }
+      js_getDotacoesItens(iItem);
+    }
 
-  function getSaldoDotacao(iDotacao) {
+    function getSaldoDotacao(iDotacao) {
 
-    var oParam = new Object();
-    oParam.exec = "getSaldoDotacao";
-    oParam.iDotacao = iDotacao;
-    js_divCarregando('Aguarde, pesquisando saldo Dotações', 'msgBox');
-    var oAjax = new Ajax.Request(
-      sURL,
-      {
-        method: 'post',
-        parameters: 'json=' + Object.toJSON(oParam),
-        onComplete: js_retornoGetSaldotacao
-      }
-      );
+      var oParam = new Object();
+      oParam.exec = "getSaldoDotacao";
+      oParam.iDotacao = iDotacao;
+      js_divCarregando('Aguarde, pesquisando saldo Dotações', 'msgBox');
+      var oAjax = new Ajax.Request(
+        sURL,
+        {
+          method: 'post',
+          parameters: 'json=' + Object.toJSON(oParam),
+          onComplete: js_retornoGetSaldotacao
+        }
+        );
 
-  }
+    }
 
-  function js_retornoGetSaldotacao(oAjax) {
+    function js_retornoGetSaldotacao(oAjax) {
 
-    js_removeObj('msgBox');
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-    oTxtSaldoDotacao.setValue(js_formatar(oRetorno.saldofinal, "f"));
-    js_desabilitaItemSelecionar();
-  }
+      js_removeObj('msgBox');
+      var oRetorno = eval("(" + oAjax.responseText + ")");
+      oTxtSaldoDotacao.setValue(js_formatar(oRetorno.saldofinal, "f"));
+      js_desabilitaItemSelecionar();
+    }
 
-  function js_getDotacoesItens(iItem) {
+    function js_getDotacoesItens(iItem) {
 
-    var oParam = new Object();
-    oParam.exec = "getDotacoesItens";
-    oParam.iCodigoItem = iItem;
-    js_divCarregando('Aguarde, pesquisando Dotações', 'msgBox');
-    var oAjax = new Ajax.Request(
-      sURL,
-      {
-        method: 'post',
-        parameters: 'json=' + Object.toJSON(oParam),
-        onComplete: (function(ret){
+      var oParam = new Object();
+      oParam.exec = "getDotacoesItens";
+      oParam.iCodigoItem = iItem;
+      js_divCarregando('Aguarde, pesquisando Dotações', 'msgBox');
+      var oAjax = new Ajax.Request(
+        sURL,
+        {
+          method: 'post',
+          parameters: 'json=' + Object.toJSON(oParam),
+          onComplete: (function(ret){
                       js_retornoGetDotacoes(ret, iItem);
                     } )
-      }
-      );
+        }
+        );
 
-  }
-
-  function js_retornoGetDotacoes(oAjax,iItem) {
-
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-    js_removeObj('msgBox');
-    js_preencheDotacoes(oRetorno.dotacoes,iItem);
-    if (oRetorno.servicoquantidade == 'f' && oRetorno.servico) {
-      oTxtValorDotacao.setReadOnly(false);
-      oTxtQuantidadeDotacao.setReadOnly(true);
-      oTxtQuantidadeDotacao.setValue(1);
-    } else if (oRetorno.servicoquantidade == 't' && oRetorno.servico) {
-      oTxtValorDotacao.setReadOnly(true);
-    } else {
-      oTxtValorDotacao.setReadOnly(true);
     }
-    windowDotacaoItem.show();
-    iElementoDotacao = oRetorno.iElementoDotacao;
 
-  }
+    function js_retornoGetDotacoes(oAjax,iItem) {
+
+      var oRetorno = eval("(" + oAjax.responseText + ")");
+      js_removeObj('msgBox');
+      js_preencheDotacoes(oRetorno.dotacoes,iItem);
+      if (oRetorno.servicoquantidade == 'f' && oRetorno.servico) {
+        oTxtValorDotacao.setReadOnly(false);
+        oTxtQuantidadeDotacao.setReadOnly(true);
+        oTxtQuantidadeDotacao.setValue(1);
+      } else if (oRetorno.servicoquantidade == 't' && oRetorno.servico) {
+        oTxtValorDotacao.setReadOnly(true);
+      } else {
+        oTxtValorDotacao.setReadOnly(true);
+      }
+      windowDotacaoItem.show();
+      iElementoDotacao = oRetorno.iElementoDotacao;
+
+    }
 
     function js_preencheDotacoes(oDados,iItem) {
 
@@ -1082,176 +1081,182 @@ db_app::load("estilos.css, grid.style.css");
       oGridDotacoes.renderRows();
     }
 
-  function js_validaValorDotacao(obj, iQuantMax, nValUnitario, oValorTotal) {
+    function js_validaValorDotacao(obj, iQuantMax, nValUnitario, oValorTotal) {
 
-    if (js_strToFloat(obj.value) > iQuantMax) {
-      obj.value = iQuantMax;
-    } else if (obj.value == 0) {
-      obj.value = iQuantMax;
+      if (js_strToFloat(obj.value) > iQuantMax) {
+        obj.value = iQuantMax;
+      } else if (obj.value == 0) {
+        obj.value = iQuantMax;
+      }
+
+      var nValorTotal = js_strToFloat(obj.value) * nValUnitario;
+      $(oValorTotal).value = js_formatar(nValorTotal, 'f');
     }
 
-    var nValorTotal = js_strToFloat(obj.value) * nValUnitario;
-    $(oValorTotal).value = js_formatar(nValorTotal, 'f');
-  }
-
-  function js_saveDotacao() {
+    function js_saveDotacao() {
 
       if(isExecutado[oDadosItem.aCells[1].getValue()] == true){
         alert("Não é possivel adicionar uma dotação a um ítem já executado.");
         return false;
       }
-    if (oTxtDotacao.getValue() == "") {
 
-      alert('Informe a dotação!');
-      js_pesquisao47_coddot(true);
-      return false;
+      if (oTxtDotacao.getValue() == "") {
 
-    }
-    if (js_strToFloat(oTxtQuantidadeDotacao.getValue()) == 0) {
+        alert('Informe a dotação!');
+        js_pesquisao47_coddot(true);
+        return false;
 
-      alert('Informe uma quantidade para o item!');
-      $('oTxtQuantidadeDotacao').focus();
-      return false;
-    }
-    if (((js_round(oGridDotacoes.sum(1, false),2)+js_strToFloat(oTxtQuantidadeDotacao.getValue())) > oDadosItem.aCells[3].getValue()) && oTxtQuantidadeDotacao.lReadOnly == false) {
-      alert('Quantidade Dotação maior que quantidade do item!');
-      $('oTxtQuantidadeDotacao').focus();
-      return false;
-    }
-    if (js_round((js_round(oGridDotacoes.sum(2, false),2)+js_strToFloat(oTxtValorDotacao.getValue())),2) > js_strToFloat(oDadosItem.aCells[5].getValue())) {
-      alert('Valor Dotação maior que Valor Total do item!');
-      $('oTxtValorDotacao').focus();
-      return false;
-    }
-    for (var i = 0; i < oGridDotacoes.aRows.length; i++) {
-      if(oGridDotacoes.aRows[i].aCells[0].getValue() == oTxtDotacao.getValue()) {
-        alert('Dotação já existe para este item!');
+      }
+      if (js_strToFloat(oTxtQuantidadeDotacao.getValue()) == 0) {
+
+        alert('Informe uma quantidade para o item!');
+        $('oTxtQuantidadeDotacao').focus();
         return false;
       }
-    }
-    var oParam = new Object();
-    oParam.exec = "saveDotacaoItens";
-    oParam.iCodigoItem = oDadosItem.aCells[1].getValue();
-    oParam.iDotacao = oTxtDotacao.getValue();
-    oParam.nQuantidade = oTxtQuantidadeDotacao.getValue();
-    oParam.nValor = js_strToFloat(oTxtValorDotacao.getValue()).valueOf();
-    js_divCarregando('Aguarde, salvando Dotações', 'msgBox');
-    var oAjax = new Ajax.Request(
-      sURL,
-      {
-        method: 'post',
-        parameters: 'json=' + Object.toJSON(oParam),
-        onComplete: js_retornoSaveDotacoes
+      if (((js_round(oGridDotacoes.sum(1, false),2)+js_strToFloat(oTxtQuantidadeDotacao.getValue())) > oDadosItem.aCells[3].getValue()) && oTxtQuantidadeDotacao.lReadOnly == false) {
+        alert('Quantidade Dotação maior que quantidade do item!');
+        $('oTxtQuantidadeDotacao').focus();
+        return false;
       }
-      );
-  }
-
-  function js_retornoSaveDotacoes(oAjax) {
-
-    js_removeObj('msgBox');
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-    if (oRetorno.status == 1) {
-
-      oTxtValorDotacao.setValue('');
-      oTxtQuantidadeDotacao.setValue('');
-      oTxtDotacao.setValue('');
-      oTxtSaldoDotacao.setValue('');
-      if (oTxtQuantidadeDotacao.lReadOnly == true) {
-        oTxtQuantidadeDotacao.setReadOnly(true);
-        oTxtQuantidadeDotacao.setValue(1);
+      if (js_round((js_round(oGridDotacoes.sum(2, false),2)+js_strToFloat(oTxtValorDotacao.getValue())),2) > js_strToFloat(oDadosItem.aCells[5].getValue())) {
+        alert('Valor Dotação maior que Valor Total do item!');
+        $('oTxtValorDotacao').focus();
+        return false;
       }
-
-      js_getItens();
-      js_preencheDotacoes(oRetorno.dotacoes);
-    } else {
-      alert(oRetorno.message.urlDecode());
-    }
-  }
-
-  function js_excluirDotacao(iDotacao) {
-
-    var oParam = new Object();
-    oParam.exec = "excluirDotacaoItens";
-    oParam.iDotacao = iDotacao;
-    oParam.iCodigoItem = oDadosItem.aCells[1].getValue();
-    js_divCarregando('Aguarde, excluindo Dotações', 'msgBox');
-    var oAjax = new Ajax.Request(
-      sURL,
-      {
-        method: 'post',
-        parameters: 'json=' + Object.toJSON(oParam),
-        onComplete: js_excluirSaveDotacoes
+      for (var i = 0; i < oGridDotacoes.aRows.length; i++) {
+        if(oGridDotacoes.aRows[i].aCells[0].getValue() == oTxtDotacao.getValue()) {
+          alert('Dotação já existe para este item!');
+          return false;
+        }
       }
-      );
-  }
-  function js_excluirSaveDotacoes(oAjax) {
-    js_removeObj('msgBox');
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-    if (oRetorno.status == 1) {
-      js_getItens();
-      js_preencheDotacoes(oRetorno.dotacoes);
-    } else {
-      alert(oRetorno.message.urlDecode());
+      var oParam = new Object();
+      oParam.exec = "saveDotacaoItens";
+      oParam.iCodigoItem = oDadosItem.aCells[1].getValue();
+      oParam.iDotacao = oTxtDotacao.getValue();
+      oParam.nQuantidade = oTxtQuantidadeDotacao.getValue();
+      oParam.nValor = js_strToFloat(oTxtValorDotacao.getValue()).valueOf();
+      js_divCarregando('Aguarde, salvando Dotações', 'msgBox');
+      var oAjax = new Ajax.Request(
+        sURL,
+        {
+          method: 'post',
+          parameters: 'json=' + Object.toJSON(oParam),
+          onComplete: js_retornoSaveDotacoes
+        }
+        );
     }
-  }
 
-  function js_montaGridItensOrigens() {
+    function js_retornoSaveDotacoes(oAjax) {
 
-    oGridItensOrigem = new DBGrid('gridItensOrigem');
-    oGridItensOrigem.nameInstance = 'oGridItensOrigem';
-    oGridItensOrigem.setCheckbox(0);
+      js_removeObj('msgBox');
+      var oRetorno = eval("(" + oAjax.responseText + ")");
+      if (oRetorno.status == 1) {
 
-    oGridItensOrigem.setCellAlign(new Array("right",
-      "right",
-      "right",
-      "left",
-      'right',
-      'right',
-      'right',
-      "left",
-      "center",
-      "center",
-      "center",
-      "center"
-      ));
+        oTxtValorDotacao.setValue('');
+        oTxtQuantidadeDotacao.setValue('');
+        oTxtDotacao.setValue('');
+        oTxtSaldoDotacao.setValue('');
+        if (oTxtQuantidadeDotacao.lReadOnly == true) {
+          oTxtQuantidadeDotacao.setReadOnly(true);
+          oTxtQuantidadeDotacao.setValue(1);
+        }
 
-    oGridItensOrigem.setCellWidth(new Array("10%",
-      '1%',
-      "10%",
-      "40%",
-      '10%',
-      '10%',
-      '10%',
-      "10%",
-      "1%",
-      "20%",
-      "20%",
-      "15%",
-      "15%"
-      ));
+        js_getItens();
+        js_preencheDotacoes(oRetorno.dotacoes);
+      } else {
+        alert(oRetorno.message.urlDecode());
+      }
+    }
 
-    oGridItensOrigem.setHeader(new Array("Código",
-      '',
-      "Cod.Mater",
-      "Material",
-      "Quantidade",
-      "Vlr Un",
-      "Total",
-      "Tipo",
-      "",
-      "Previsão Inicial",
-      "Previsão Final",
-      "Serviço",
-      "Elemento"
-      ));
+    function js_excluirDotacao(iDotacao) {
 
-    oGridItensOrigem.aHeaders[1].lDisplayed = false;
-    oGridItensOrigem.aHeaders[2].lDisplayed = false;
-    oGridItensOrigem.aHeaders[7].lDisplayed = false;
-    oGridItensOrigem.aHeaders[9].lDisplayed = false;
-    oGridItensOrigem.aHeaders[12].lDisplayed = false;
-    oGridItensOrigem.aHeaders[13].lDisplayed = false;
-    oGridItensOrigem.show($('ctngridItensOrigem'));
+      var oParam = new Object();
+      oParam.exec = "excluirDotacaoItens";
+      oParam.iDotacao = iDotacao;
+      oParam.iCodigoItem = oDadosItem.aCells[1].getValue();
+      js_divCarregando('Aguarde, excluindo Dotações', 'msgBox');
+      var oAjax = new Ajax.Request(
+        sURL,
+        {
+          method: 'post',
+          parameters: 'json=' + Object.toJSON(oParam),
+          onComplete: js_excluirSaveDotacoes
+        }
+        );
+    }
+    function js_excluirSaveDotacoes(oAjax) {
+      js_removeObj('msgBox');
+      var oRetorno = eval("(" + oAjax.responseText + ")");
+      if (oRetorno.status == 1) {
+        js_getItens();
+        js_preencheDotacoes(oRetorno.dotacoes);
+      } else {
+        alert(oRetorno.message.urlDecode());
+      }
+    }
+
+    function js_montaGridItensOrigens() {
+
+      oGridItensOrigem = new DBGrid('gridItensOrigem');
+      oGridItensOrigem.nameInstance = 'oGridItensOrigem';
+      oGridItensOrigem.setCheckbox(0);
+
+      oGridItensOrigem.setCellAlign(new Array(
+        "right",
+        "right",
+        "right",
+        "left",
+        'right',
+        'right',
+        'right',
+        "left",
+        "center",
+        "center",
+        "center",
+        "center"
+        ));
+
+      oGridItensOrigem.setCellWidth(new Array(
+        "1%",
+        '1%',
+        "7%",
+        "50%",
+        '15%',
+        '10%',
+        '10%',
+        "10%",
+        "1%",
+        "1%",
+        "1%",
+        "1%",
+        "1%"
+        ));
+
+      oGridItensOrigem.setHeader(new Array(
+        "Código",
+        '',
+        "Cod.Mater",
+        "Material",
+        "Quantidade",
+        "Vlr Un",
+        "Total",
+        "Tipo",
+        "",
+        "Previsão Inicial",
+        "Previsão Final",
+        "Serviço",
+        "Elemento"
+        ));
+
+      oGridItensOrigem.aHeaders[1].lDisplayed = false;
+      oGridItensOrigem.aHeaders[2].lDisplayed = false;
+      oGridItensOrigem.aHeaders[7].lDisplayed = false;
+      oGridItensOrigem.aHeaders[9].lDisplayed = false;
+      oGridItensOrigem.aHeaders[10].lDisplayed = false;
+      oGridItensOrigem.aHeaders[11].lDisplayed = false;
+      oGridItensOrigem.aHeaders[12].lDisplayed = false;
+      oGridItensOrigem.aHeaders[13].lDisplayed = false;
+      oGridItensOrigem.show($('ctngridItensOrigem'));
 
     /**
      * Verifica o 'click' do botao Replicar. Percorre as linhas da Grid, verificando quais estao selecionadas e quais
@@ -1316,7 +1321,7 @@ db_app::load("estilos.css, grid.style.css");
       );
 
     var sContent = "<div>";
-    sContent += "<fieldset><legend><b>Replicar Informações</b></legend>";
+    sContent += "<fieldset style='display:none;'><legend><b>Replicar Informações</b></legend>";
     sContent += "  <div id='ctnReplicaInformacoes'>";
     sContent += "    <table>";
     sContent += "      <tr>";
@@ -1333,7 +1338,7 @@ db_app::load("estilos.css, grid.style.css");
     sContent += "  </div>";
     sContent += "</fieldset>";
     sContent += "<center>";
-    sContent += "  <input type='button' value='Replicar' id='btnReplicar'>";
+    sContent += "  <input style='display:none;' type='button' value='Replicar' id='btnReplicar'>";
     sContent += "</center>";
     sContent += "<fieldset><legend><b>Escolha os Itens</b></legend>";
     sContent += "  <div id='ctngridItensOrigem'>";
@@ -1447,10 +1452,10 @@ db_app::load("estilos.css, grid.style.css");
      */
      aCodigos.each(function (oLinha, iSeq) {
 
-      $('oTxtDataEmissaoInicial' + oLinha).setValue(oRetorno.dtInicialAcordo);
+      $('oTxtDataEmissaoInicial' + oLinha).setValue("");
       $('oTxtDataEmissaoInicial' + oLinha).className = 'classDataEmissaoInicial';
 
-      $('oTxtDataEmissaoFinal' + oLinha).setValue(oRetorno.dtFinalAcordo);
+      $('oTxtDataEmissaoFinal' + oLinha).setValue("");
       $('oTxtDataEmissaoFinal' + oLinha).className = 'classDataEmissaoFinal';
     });
    }
@@ -1483,7 +1488,7 @@ db_app::load("estilos.css, grid.style.css");
       oDadosItens.servico = aRow[12];
       oDadosItens.elemento = aRow[13];
 
-      if (oDadosItens.dtInicial == null || oDadosItens.dtInicial == '') {
+/*      if (oDadosItens.dtInicial == null || oDadosItens.dtInicial == '') {
 
         alert('Preencha as datas iniciais do período de execução.');
         lErro = true;
@@ -1495,7 +1500,7 @@ db_app::load("estilos.css, grid.style.css");
         alert('Preencha as datas finais do período de execução.');
         lErro = true;
         throw $break;
-      }
+      }*/
 
       aListaItens.push(oDadosItens);
     });
@@ -1527,11 +1532,12 @@ db_app::load("estilos.css, grid.style.css");
   function js_getRetornoVincularItens(oAjax) {
 
     js_removeObj('msgBox');
+    js_getItens();
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
 
       windowItensOrigem.destroy();
-      js_getItens();
+
     } else {
       alert(oRetorno.message.urlDecode());
     }
@@ -1828,18 +1834,21 @@ db_app::load("estilos.css, grid.style.css");
       oGridPeriodos.addRow(aRow);
     });
     oGridPeriodos.renderRows();
+
   }
 
   /**
    * Adiciona um objeto de periodo no array de periodos
    */
    function addPeriodo() {
-
+    if(document.form1.db_opcao.value == "Alterar"){
+      return true;
+    }
     var oPeriodo = new Object();
-    var oDtInicial = $("ac41_datainicial");
-    var oDtFinal = $("ac41_datafinal");
+    var oDtInicial = '<?php echo date("d/m/Y", strtotime($oAcordo->ac16_datainicio)); ?>';//$("ac41_datainicial");
+    var oDtFinal = '<?php echo date("d/m/Y", strtotime($oAcordo->ac16_datafim)); ?>';//$("ac41_datafinal");
 
-    if (oDtInicial.value == "" || oDtFinal.value == "") {
+    if (oDtInicial == "" || oDtFinal == "") {
 
       alert("Ambos os Periodos devem serem preenchidos.");
       return false;
@@ -1848,24 +1857,25 @@ db_app::load("estilos.css, grid.style.css");
     /**
      * Valida se as datas informadas não conflitam com a data de vigência do contrato
      */
-     var dtContratoInicio = parent.iframe_acordo.document.form1.ac16_datainicio.value;
-     var dtContratoFim = parent.iframe_acordo.document.form1.ac16_datafim.value;
+     var dtContratoInicio = parent.iframe_acordo.document.form1.ac16_datainicio1.value;
+     var dtContratoFim = parent.iframe_acordo.document.form1.ac16_datafim1.value;
 
-     if (js_comparadata(oDtInicial.value, dtContratoInicio, "<") || js_comparadata(oDtFinal.value, dtContratoFim, ">") ||
-      js_comparadata(oDtInicial.value, dtContratoFim, ">") || js_comparadata(oDtFinal.value, dtContratoInicio, "<")) {
-      alert("Há conflito entre as datas do item e a data de vigência do contrato.");
+     if (js_comparadata(oDtInicial, dtContratoInicio, "<") || js_comparadata(oDtFinal, dtContratoFim, ">") ||
+      js_comparadata(oDtInicial, dtContratoFim, ">") || js_comparadata(oDtFinal, dtContratoInicio, "<")) {
+      //alert("Há conflito entre as datas do item e a data de vigência do contrato.");
     return false;
   }
 
-  if (!js_validaData(oDtInicial.value, oDtFinal.value)) {
+  if (!js_validaData(oDtInicial, oDtFinal)) {
+    //alert("Nao sei");
     return false;
   }
-  oPeriodo.dtDataInicial = oDtInicial.value;
-  oPeriodo.dtDataFinal = oDtFinal.value;
+  oPeriodo.dtDataInicial = oDtInicial;
+  oPeriodo.dtDataFinal = oDtFinal;
   aPeriodoItem.push(oPeriodo);
 
-  oDtInicial.value = "";
-  oDtFinal.value = "";
+  oDtInicial = "";
+  oDtFinal = "";
 
   showPeriodos();
 }
@@ -1888,12 +1898,12 @@ db_app::load("estilos.css, grid.style.css");
 
         if (js_comparaPeriodo(sDtInicial, sDtFinal, aPeriodoItem[i].dtDataInicial, aPeriodoItem[i].dtDataFinal)) {
 
-          var sMsgErro = "Há conflito entre os períodos informados. Confira:\n";
+         /* var sMsgErro = "Há conflito entre os períodos informados. Confira:\n";
           sMsgErro += sDtInicial + " - " + sDtFinal + "\n";
           sMsgErro += aPeriodoItem[i].dtDataInicial + " - " + aPeriodoItem[i].dtDataFinal;
           alert(sMsgErro);
           lErro = true;
-          break;
+          break;*/
         }
       }
     }
@@ -2182,12 +2192,12 @@ db_app::load("estilos.css, grid.style.css");
   function js_mostrarTelaModificacaoItens() {
 
     oWindowAuxEmpenho.hide();
-    $('db_opcao').onclick = js_saveItem;
+    //$('db_opcao').onclick = js_saveItem;
     js_init();
     js_desabilitaItemSelecionar();
   }
 
-  $('db_opcao').onclick = js_saveItem;
+  //$('db_opcao').onclick = js_saveItem;
 
   function js_salvaVinculoItensEmpenho() {
 

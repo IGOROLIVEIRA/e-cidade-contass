@@ -68,6 +68,12 @@ class AcordoPosicao {
    * @var integer
    */
   protected $iCodigo = null;
+  /**
+   * Codigo sequencial do aditivo
+   *
+   * @var integer
+   */
+  protected $iCodigoAditivo = null;
 
   /**
    * Código da posição de um acordo
@@ -122,6 +128,20 @@ class AcordoPosicao {
    * @var string
    */
   protected $dtVigenciaFinal   = '';
+
+  /**
+   * data da assinatura final
+   *
+   * @var string
+   */
+  protected $dtAssinatura   = '';
+
+  /**
+   * data da publicacao final
+   *
+   * @var string
+   */
+  protected $dtPublicacao   = '';
 
   /**
    * Posisao foi realizada emergencialmente
@@ -210,8 +230,11 @@ class AcordoPosicao {
       $this->setData(db_formatar($oDadosPosicao->ac26_data, 'd'));
       $this->setSituacao($oDadosPosicao->ac26_situacao);
       $this->setTipo($oDadosPosicao->ac26_acordoposicaotipo);
+      $this->setCodigoAditivo($oDadosPosicao->ac35_sequencial);
       $this->setVigenciaInicial(db_formatar($oDadosPosicao->ac18_datainicio, "d"));
       $this->setVigenciaFinal(db_formatar($oDadosPosicao->ac18_datafim, "d"));
+      $this->setDataAssinatura(db_formatar($oDadosPosicao->ac35_dataassinaturatermoaditivo, "d"));
+      $this->setDataPublicacao(db_formatar($oDadosPosicao->ac35_datapublicacao, "d"));
       $this->sDescricaoTipo = $oDadosPosicao->ac27_descricao;
       $this->oDadosAnteriores = $oDadosPosicao;
       $this->setObservacao($oDadosPosicao->ac26_observacao);
@@ -326,6 +349,15 @@ class AcordoPosicao {
 
     return $this->iCodigo;
   }
+  /**
+   * retorna o codigo sequencial do aditivo
+   * @return integer
+   *
+   */
+  public function getCodigoAditivo() {
+
+    return $this->iCodigoAditivo;
+  }
 
   /**
    * retorna o numero da posicao
@@ -344,6 +376,16 @@ class AcordoPosicao {
   public function setNumero($iNumero) {
 
     $this->iNumero = $iNumero;
+    return $this;
+  }
+  /**
+   * define o numero do aditivo
+   * @param integer $aditivo
+   * @return iCodigoAditivo
+   */
+  public function setCodigoAditivo($iCodigoAditivo) {
+
+    $this->iCodigoAditivo = $iCodigoAditivo;
     return $this;
   }
 
@@ -435,6 +477,20 @@ class AcordoPosicao {
 
     return $this->dtVigenciaFinal;
   }
+  /**
+   * @return string
+   */
+  public function getDataAssinatura() {
+
+    return $this->dtAssinatura;
+  }
+  /**
+   * @return string
+   */
+  public function getDataPublicacao() {
+
+    return $this->dtPublicacao;
+  }
 
   /**
    * define a data de vigencia final do contrato
@@ -444,6 +500,16 @@ class AcordoPosicao {
   public function setVigenciaFinal($dtVigenciaFinal) {
 
     $this->dtVigenciaFinal = $dtVigenciaFinal;
+    return $this;
+  }
+  public function setDataAssinatura($dtAssinatura) {
+
+    $this->dtAssinatura = $dtAssinatura;
+    return $this;
+  }
+  public function setDataPublicacao($dtPublicacao) {
+
+    $this->dtPublicacao = $dtPublicacao;
     return $this;
   }
 
