@@ -506,7 +506,7 @@ switch ($tpimpressao) {
     foreach ($aConsulta as $aOpSlip) {
 
       $iQuebra  = $aOpSlip['codrecurso'];
-      $iOrdslip = $aOpSlip['z01_numcgm'];
+      $iCredorOS = $aOpSlip['z01_numcgm']."-".$aOpSlip['ordslip'];
 
       if (!isset($aOpSlips[$iQuebra])) {
         $oNovoQuebra = new stdClass();
@@ -517,18 +517,18 @@ switch ($tpimpressao) {
 
       }
 
-      if (!isset($aOpSlips[$iQuebra]->ordempslips[$iOrdslip])) {
+      if (!isset($aOpSlips[$iQuebra]->ordempslips[$iCredorOS])) {
 
         $valortotal += $aOpSlip['valor'];
         $oNovoOrdemSlip = new stdClass();
-        $oNovoOrdemSlip->ordslip     = $iOrdslip;
+        $oNovoOrdemSlip->ordslip     = $iCredorOS;
         $oNovoOrdemSlip->z01_numcgm  = $aOpSlip['z01_numcgm'];
         $oNovoOrdemSlip->z01_nome    = $aOpSlip['z01_nome'];
         $oNovoOrdemSlip->codrecurso  = $aOpSlip['codrecurso'];
         $oNovoOrdemSlip->nomerecurso = $aOpSlip['nomerecurso'];
         $oNovoOrdemSlip->valor       = $aOpSlip['valor'];
 
-        $aOpSlips[$iQuebra]->ordempslips[$iOrdslip] = $oNovoOrdemSlip;
+        $aOpSlips[$iQuebra]->ordempslips[$iCredorOS] = $oNovoOrdemSlip;
 
       }
     }
