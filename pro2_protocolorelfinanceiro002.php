@@ -404,7 +404,7 @@ try {
             }
         }
       break;
-    }die($sSQL);
+    }
   $rsConsulta = db_query($sSQL);
   if (pg_num_rows($rsConsulta) == 0) {
     db_redireciona("db_erros.php?fechar=true&db_erro=Não exitem dados com os parâmetros informados.");
