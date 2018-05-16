@@ -8,76 +8,76 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/flpg/Ger
 
 
 /**
-* gerar arquivo pessoal Sicom Acompanhamento Mensal
-* @author marcelo
-* @package Contabilidade
-*/
+ * gerar arquivo pessoal Sicom Acompanhamento Mensal
+ * @author marcelo
+ * @package Contabilidade
+ */
 class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
- /**
-  *
-  * Codigo do layout. (db_layouttxt.db50_codigo)
-  * @var Integer
-  */
- protected $iCodigoLayout = 0;
+    /**
+     *
+     * Codigo do layout. (db_layouttxt.db50_codigo)
+     * @var Integer
+     */
+    protected $iCodigoLayout = 0;
 
- /**
-  *
-  * NOme do arquivo a ser criado
-  * @var String
-  */
- protected $sNomeArquivo = 'PESSOA';
+    /**
+     *
+     * NOme do arquivo a ser criado
+     * @var String
+     */
+    protected $sNomeArquivo = 'PESSOA';
 
- /**
-  *
-  * Contrutor da classe
-  */
- public function __construct() {
+    /**
+     *
+     * Contrutor da classe
+     */
+    public function __construct() {
 
- }
+    }
 
- /**
-  * Retorna o codigo do layout
-  *
-  * @return Integer
-  */
- public function getCodigoLayout(){
-   return $this->iCodigoLayout;
- }
+    /**
+     * Retorna o codigo do layout
+     *
+     * @return Integer
+     */
+    public function getCodigoLayout(){
+        return $this->iCodigoLayout;
+    }
 
- /**
-  *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
-  */
- public function getCampos(){
+    /**
+     *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
+     */
+    public function getCampos(){
 
- }
+    }
 
- /**
-  * selecionar os dados de indentificacao da remessa pra gerar o arquivo
-  * @see iPadArquivoBase::gerarDados()
-  */
- public function gerarDados(){
+    /**
+     * selecionar os dados de indentificacao da remessa pra gerar o arquivo
+     * @see iPadArquivoBase::gerarDados()
+     */
+    public function gerarDados(){
 
-   /**
-    * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
-    */
-   $clpessoa = new cl_pessoaflpgo102018();
+        /**
+         * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
+         */
+        $clpessoa = new cl_pessoaflpgo102018();
 
-   /**
-    * excluir informacoes do mes selecionado
-    */
-   db_inicio_transacao();
-   $result = $clpessoa->sql_record($clpessoa->sql_query(NULL,"*",NULL,"si193_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si193_inst = ".db_getsession("DB_instit")));
-   if (pg_num_rows($result) > 0) {
-     $clpessoa->excluir(NULL,"si193_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si193_inst = ".db_getsession("DB_instit"));
-     if ($clpessoa->erro_status == 0) {
-       throw new Exception($clpessoa->erro_msg);
-     }
-   }
+        /**
+         * excluir informacoes do mes selecionado
+         */
+        db_inicio_transacao();
+        $result = $clpessoa->sql_record($clpessoa->sql_query(NULL,"*",NULL,"si193_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si193_inst = ".db_getsession("DB_instit")));
+        if (pg_num_rows($result) > 0) {
+            $clpessoa->excluir(NULL,"si193_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si193_inst = ".db_getsession("DB_instit"));
+            if ($clpessoa->erro_status == 0) {
+                throw new Exception($clpessoa->erro_msg);
+            }
+        }
 
-   if ($this->sDataFinal['5'].$this->sDataFinal['6'] != 01) {
+        if ($this->sDataFinal['5'].$this->sDataFinal['6'] != 01) {
 
-     $sSql  = "
+            $sSql  = "
  (SELECT DISTINCT CASE
                       WHEN length(z01_cgccpf) < 11 THEN lpad(z01_cgccpf, 11, '0')
                       ELSE z01_cgccpf
@@ -269,8 +269,8 @@ WHERE (z01_cgccpf != '00000000000'
  AND db_config.codigo = " . db_getsession("DB_instit") . "
                ";
 
-   } else {
-     $sSql  = "SELECT z01_cgccpf,
+        } else {
+            $sSql  = "SELECT z01_cgccpf,
       z01_nome,
       z01_sexo,
       CASE
@@ -442,38 +442,38 @@ WHERE (z01_cgccpf != '00000000000'
  AND z01_cadast >= '2013-01-01'
  AND z01_cadast <= '{$this->sDataFinal}'
  AND (rh01_admiss <= '{$this->sDataFinal}' OR z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}')
- AND db_config.codigo = " . db_getsession("DB_instit") . "";
-   }
-   echo $sSql;die;
-   $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
-   $aPessoas    =  array();
-   $aCpfPessoas = array("00000000000","00000000000000","11111111111","11111111111111","22222222222","22222222222222","33333333333","33333333333333",
-       "44444444444","4n4444444444444","55555555555","55555555555555","66666666666","66666666666666","77777777777","77777777777777","88888888888","88888888888888",
-       "99999999999","99999999999999");
-   $what = array("'","°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
+ AND db_config.codigo = " . db_getsession("DB_instit") . " ";
+        }
 
-   // matriz de saída
-   $by   = array('','','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
-   for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+        $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
+        $aPessoas    =  array();
+        $aCpfPessoas = array("00000000000","00000000000000","11111111111","11111111111111","22222222222","22222222222222","33333333333","33333333333333",
+            "44444444444","4n4444444444444","55555555555","55555555555555","66666666666","66666666666666","77777777777","77777777777777","88888888888","88888888888888",
+            "99999999999","99999999999999");
+        $what = array("'","°",chr(13),chr(10), 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û','À','Á','Ã','É','Í','Ó','Ú','ñ','Ñ','ç','Ç',' ','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','º' );
 
-     $clpessoa = new cl_pessoaflpgo102018();
-     $oDados = db_utils::fieldsMemory($rsResult, $iCont);
+        // matriz de saída
+        $by   = array('','','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
+        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+            $clpessoa = new cl_pessoaflpgo102018();
+            $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
 
-     if (in_array($oDados->z01_cgccpf, $aCpfPessoas)) {
-       continue;
-     }
+            if (in_array($oDados->z01_cgccpf, $aCpfPessoas)) {
+                continue;
+            }
 
-     if(($this->sDataFinal['5'].$this->sDataFinal['6']) != '01' && db_getsession("DB_anousu") != 2018){
+            if(($this->sDataFinal['5'].$this->sDataFinal['6']) != '01' && db_getsession("DB_anousu") != 2018){
 
-       if ($oDados->z01_ultalt >= $this->sDataInicial && $oDados->z01_ultalt <= $this->sDataFinal) {
+                if ($oDados->z01_ultalt >= $this->sDataInicial && $oDados->z01_ultalt <= $this->sDataFinal) {
 
-         $sTipoCadastro = 1;
-         $sJustificativaalteracao = ' ';
+                    $sTipoCadastro = 1;
+                    $sJustificativaalteracao = ' ';
 
-       } else {
+                } else {
 
-         $sSqlAlt = "SELECT
+                    $sSqlAlt = "SELECT
          z01_numcgm,
          case
               when z01_nome <> z05_nome then ' nome '
@@ -490,35 +490,35 @@ WHERE (z01_cgccpf != '00000000000'
                 OR z01_cgccpf <> z05_cgccpf)
            AND z01_cgccpf = '$oDados->z01_cgccpf' ";
 
-         $rsResultAlt = db_query($sSqlAlt);
-         $sJustificativaalteracao = '';
-         if(pg_num_rows($rsResultAlt) > 0 ) {
+                    $rsResultAlt = db_query($sSqlAlt);
+                    $sJustificativaalteracao = '';
+                    if(pg_num_rows($rsResultAlt) > 0 ) {
 
-           for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResultAlt); $iCont2++) {
+                        for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResultAlt); $iCont2++) {
 
-             $oDadosAlt = db_utils::fieldsMemory($rsResultAlt, $iCont2);
+                            $oDadosAlt = db_utils::fieldsMemory($rsResultAlt, $iCont2);
 
-             $sTipoCadastro = 2;
-             $sJustificativaalteracao .= ' '.$oDadosAlt->justificativa;
+                            $sTipoCadastro = 2;
+                            $sJustificativaalteracao .= ' '.$oDadosAlt->justificativa;
 
-           }
+                        }
 
-         } else {
+                    } else {
 
-           $sTipoCadastro = 1;
-           $sJustificativaalteracao = '';
+                        $sTipoCadastro = 1;
+                        $sJustificativaalteracao = '';
 
-         }
+                    }
 
-       }
-     }else{
-       if(($this->sDataFinal['5'].$this->sDataFinal['6']) != '01'){
-         if ($oDados->z01_ultalt >= $this->sDataInicial && $oDados->z01_ultalt <= $this->sDataFinal) {
-           $sTipoCadastro = 1;
-           $sJustificativaalteracao = ' ';
-         } else {
+                }
+            }else{
+                if(($this->sDataFinal['5'].$this->sDataFinal['6']) != '01'){
+                    if ($oDados->z01_ultalt >= $this->sDataInicial && $oDados->z01_ultalt <= $this->sDataFinal) {
+                        $sTipoCadastro = 1;
+                        $sJustificativaalteracao = ' ';
+                    } else {
 
-           $sSqlAlt = "SELECT
+                        $sSqlAlt = "SELECT
            z01_numcgm,
            case
                 when z01_nome <> z05_nome then ' nome '
@@ -535,60 +535,60 @@ WHERE (z01_cgccpf != '00000000000'
                   OR z01_cgccpf <> z05_cgccpf)
              AND z01_cgccpf = '$oDados->z01_cgccpf' ";
 
-           $rsResultAlt = db_query($sSqlAlt);
-           $sJustificativaalteracao = '';
-           if(pg_num_rows($rsResultAlt) > 0 ) {
+                        $rsResultAlt = db_query($sSqlAlt);
+                        $sJustificativaalteracao = '';
+                        if(pg_num_rows($rsResultAlt) > 0 ) {
 
-             for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResultAlt); $iCont2++) {
+                            for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResultAlt); $iCont2++) {
 
-               $oDadosAlt = db_utils::fieldsMemory($rsResultAlt, $iCont2);
+                                $oDadosAlt = db_utils::fieldsMemory($rsResultAlt, $iCont2);
 
-               $sTipoCadastro = 2;
-               $sJustificativaalteracao .= ' '.$oDadosAlt->justificativa;
+                                $sTipoCadastro = 2;
+                                $sJustificativaalteracao .= ' '.$oDadosAlt->justificativa;
 
-             }
+                            }
 
-           }else{
-             $sTipoCadastro = 1;
-             $sJustificativaalteracao = '';
-           }
-         }
-       }else{
-         $sTipoCadastro = 1;
-         $sJustificativaalteracao = ' ';
-       }
-     }
-     $aHash = $oDados->z01_cgccpf;
+                        }else{
+                            $sTipoCadastro = 1;
+                            $sJustificativaalteracao = '';
+                        }
+                    }
+                }else{
+                    $sTipoCadastro = 1;
+                    $sJustificativaalteracao = ' ';
+                }
+            }
+            $aHash = $oDados->z01_cgccpf;
 
-     if(!isset($aPessoas[$aHash])) {
+            if(!isset($aPessoas[$aHash])) {
 
-       $clpessoa->si193_tiporegistro           = 10;
-       $clpessoa->si193_tipodocumento          = strlen($oDados->z01_cgccpf) <= 11 ? 1 : 2;
-       $clpessoa->si193_nrodocumento           = $oDados->z01_cgccpf;
-       $clpessoa->si193_nome                   = trim(preg_replace("/[^a-zA-Z0-9 ]/", "",substr(str_replace($what, $by, $oDados->z01_nome), 0, 200)));
-       $clpessoa->si193_indsexo                = $oDados->z01_sexo;
-       $clpessoa->si193_datanascimento         = $oDados->z01_nasc;
-       $clpessoa->si193_tipocadastro           = $sTipoCadastro;
-       $clpessoa->si193_justalteracao          = $sJustificativaalteracao;
-       $clpessoa->si193_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
-       $clpessoa->si193_inst                   = db_getsession("DB_instit");
+                $clpessoa->si193_tiporegistro           = 10;
+                $clpessoa->si193_tipodocumento          = strlen($oDados->z01_cgccpf) <= 11 ? 1 : 2;
+                $clpessoa->si193_nrodocumento           = $oDados->z01_cgccpf;
+                $clpessoa->si193_nome                   = trim(preg_replace("/[^a-zA-Z0-9 ]/", "",substr(str_replace($what, $by, $oDados->z01_nome), 0, 200)));
+                $clpessoa->si193_indsexo                = $oDados->z01_sexo;
+                $clpessoa->si193_datanascimento         = $oDados->z01_nasc;
+                $clpessoa->si193_tipocadastro           = $sTipoCadastro;
+                $clpessoa->si193_justalteracao          = $sJustificativaalteracao;
+                $clpessoa->si193_mes                    = $this->sDataFinal['5'].$this->sDataFinal['6'];
+                $clpessoa->si193_inst                   = db_getsession("DB_instit");
 
-       $clpessoa->incluir(null);
-       if ($clpessoa->erro_status == 0) {
-         throw new Exception($clpessoa->erro_msg);
-       }
-       $aPessoas[$aHash] = $clpessoa;
-     }
+                $clpessoa->incluir(null);
+                if ($clpessoa->erro_status == 0) {
+                    throw new Exception($clpessoa->erro_msg);
+                }
+                $aPessoas[$aHash] = $clpessoa;
+            }
 
 
-   }
-   db_fim_transacao();
+        }
+        db_fim_transacao();
 
-   $oGerarPESSOA       = new GerarPESSOA();
-   $oGerarPESSOA->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
-   $oGerarPESSOA->gerarDados();
+        $oGerarPESSOA       = new GerarPESSOA();
+        $oGerarPESSOA->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
+        $oGerarPESSOA->gerarDados();
 
- }
+    }
 
 }
 
