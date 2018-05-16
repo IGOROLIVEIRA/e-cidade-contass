@@ -330,6 +330,7 @@ try {
             WHERE e53_vlrpag >= 0 AND e53_vlrpag < e53_valor AND e53_vlranu = 0
           {$filtroAutPag}
         ";
+
         $sqlSLIP = "
           SELECT DISTINCT slip.k17_codigo ordslip,
               cgm.z01_numcgm,
@@ -357,6 +358,7 @@ try {
           WHERE k17_situacao = 1
          {$filtroSlip}
         ";
+
         if (empty($aFiltros['e53_codord']) && empty($aFiltros['k17_codigo']) && empty($aFiltros['e60_codemp'])) {
           if (!empty($aFiltros['z01_numcgm'])) {
             $z01_numcgm = $aFiltros['z01_numcgm'];
@@ -373,7 +375,7 @@ try {
                   ";
 
         } else {
-            if (!empty($aFiltros['e53_codord']) && !empty($aFiltros['e60_codemp'])) {
+            if (!empty($aFiltros['e53_codord']) || !empty($aFiltros['e60_codemp'])) {
               if (!empty($aFiltros['z01_numcgm'])) {
                 $z01_numcgm = $aFiltros['z01_numcgm'];
                 if(!empty($whereFiltro)) {
