@@ -136,7 +136,7 @@ try {
           if(!empty($filtroAutPag)) {
             $filtroAutPag .= " AND e60_codemp = '{$e60_codemp}' AND e60_anousu = {$e60_anousu} ";
           } else {
-              $filtroAutPag = " WHERE e60_codemp = '{$e60_codemp}'' AND e60_anousu = {$e60_anousu} ";
+              $filtroAutPag = " WHERE e60_codemp = '{$e60_codemp}' AND e60_anousu = {$e60_anousu} ";
           }
         }
 
@@ -223,7 +223,7 @@ try {
          {$filtroSlip}
         ";
 
-        if (empty($aFiltros['e53_codord']) && empty($aFiltros['k17_codigo'])) {
+        if (empty($aFiltros['e53_codord']) && empty($aFiltros['k17_codigo']) && empty($aFiltros['e60_codemp'])) {
           if (empty($ordem)) {
             if (!empty($orderby)) {
               $orderby .= " ,ORDSLIP.ordslip ";
@@ -246,10 +246,12 @@ try {
                   ";
 
         } else {
-            if (empty($ordem)) {
+            if (!empty($ordem)) {
               $orderby .= " ,ORDSLIP.ordslip ";
+            } else {
+                $orderby .= " ORDER BY ORDSLIP.ordslip ";
             }
-            if (!empty($aFiltros['e53_codord'])) {
+            if (!empty($aFiltros['e53_codord']) || !empty($aFiltros['e60_codemp'])) {
               if (!empty($aFiltros['z01_numcgm'])) {
                 if(!empty($whereFiltro)) {
                   $whereFiltro .= " AND ORDSLIP.z01_numcgm = {$z01_numcgm} ";
@@ -355,7 +357,7 @@ try {
           WHERE k17_situacao = 1
          {$filtroSlip}
         ";
-        if (empty($aFiltros['e53_codord']) && empty($aFiltros['k17_codigo'])) {
+        if (empty($aFiltros['e53_codord']) && empty($aFiltros['k17_codigo']) && empty($aFiltros['e60_codemp'])) {
           if (!empty($aFiltros['z01_numcgm'])) {
             $z01_numcgm = $aFiltros['z01_numcgm'];
             if (!empty($whereFiltro)) {
@@ -371,7 +373,7 @@ try {
                   ";
 
         } else {
-            if (!empty($aFiltros['e53_codord'])) {
+            if (!empty($aFiltros['e53_codord']) && !empty($aFiltros['e60_codemp'])) {
               if (!empty($aFiltros['z01_numcgm'])) {
                 $z01_numcgm = $aFiltros['z01_numcgm'];
                 if(!empty($whereFiltro)) {
@@ -402,7 +404,7 @@ try {
             }
         }
       break;
-    }
+    }die($sSQL);
   $rsConsulta = db_query($sSQL);
   if (pg_num_rows($rsConsulta) == 0) {
     db_redireciona("db_erros.php?fechar=true&db_erro=Não exitem dados com os parâmetros informados.");
