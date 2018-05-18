@@ -724,12 +724,15 @@ $db_opcao = 1;
 
           var sConferido = '';
           var sSelected = '';
-
-          if (aContasForne[i].pc63_contabanco == iContaForne) {
-            sSelected = " selected ";
-          }else if ( iContaForne == '' && aContasForne[i].pc63_contabanco == iCodigoUltimaConta ) {
-            sSelected = " selected ";
-          }
+          /*comentado por solicitação de barbara OC 6184*/
+          // if (aContasForne[i].pc63_contabanco == iContaForne) {
+          //   sSelected = " selected ";
+          // }else if ( iContaForne == '' && aContasForne[i].pc63_contabanco == iCodigoUltimaConta ) {
+          //   sSelected = " selected ";
+          // }
+            if (aContasForne.padrao = "t"){
+                sSelected = "selected";
+            }
 
           sRetorno += "<option value ='"+pc63_contabanco+"' "+sSelected+">";
           if (pc63_agencia_dig.trim() != ""){
