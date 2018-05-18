@@ -753,7 +753,7 @@ ob_start();
             <?php $totalquebra += $ordempslip->valor; ?>
           <tr>
             <td id="col1"><?= $ordempslip->z01_nome ?></td>
-            <td id="col2"><?= number_format($ordempslip->valor, 2, ',', '.') ?></td>
+            <td id="col2">R$<?= number_format($ordempslip->valor, 2, ',', '.') ?></td>
           </tr>
           <?php endforeach; ?>
           <tr>
