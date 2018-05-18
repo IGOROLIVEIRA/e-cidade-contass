@@ -318,6 +318,14 @@ try {
           INNER JOIN pagordem ON pagordem.e50_codord = pagordemele.e53_codord
           INNER JOIN protpagordem ON protpagordem.p105_codord = pagordem.e50_codord
           INNER JOIN empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
+          INNER JOIN (
+            select sum(e53_valor) as e53_valor, e60_numemp
+             from empempenho
+              inner join pagordem on e50_numemp = e60_numemp
+              inner join pagordemele on e53_codord = e50_codord
+              inner join autprotpagordem ON p107_codord = e50_codord
+                group by e60_numemp
+          ) AS total ON total.e60_numemp = empempenho.e60_numemp
           INNER JOIN orcelemento ON orcelemento.o56_codele = pagordemele.e53_codele
           INNER JOIN orcdotacao ON orcdotacao.o58_coddot = empempenho.e60_coddot
             AND orcdotacao.o58_anousu = empempenho.e60_anousu
@@ -505,8 +513,8 @@ switch ($tpimpressao) {
   case 's':
     foreach ($aConsulta as $aOpSlip) {
 
-      $iQuebra  = $aOpSlip['codrecurso'];
-      $iCredorOS = $aOpSlip['z01_numcgm']."-".$aOpSlip['ordslip'];
+      $iQuebra = $aOpSlip['codrecurso'];
+      $iCredor = $aOpSlip['z01_numcgm'];
 
       if (!isset($aOpSlips[$iQuebra])) {
         $oNovoQuebra = new stdClass();
@@ -517,18 +525,18 @@ switch ($tpimpressao) {
 
       }
 
-      if (!isset($aOpSlips[$iQuebra]->ordempslips[$iCredorOS])) {
+      if (!isset($aOpSlips[$iQuebra]->ordempslips[$iCredor])) {
 
         $valortotal += $aOpSlip['valor'];
         $oNovoOrdemSlip = new stdClass();
-        $oNovoOrdemSlip->ordslip     = $iCredorOS;
+        $oNovoOrdemSlip->ordslip     = $iCredor;
         $oNovoOrdemSlip->z01_numcgm  = $aOpSlip['z01_numcgm'];
         $oNovoOrdemSlip->z01_nome    = $aOpSlip['z01_nome'];
         $oNovoOrdemSlip->codrecurso  = $aOpSlip['codrecurso'];
         $oNovoOrdemSlip->nomerecurso = $aOpSlip['nomerecurso'];
         $oNovoOrdemSlip->valor       = $aOpSlip['valor'];
 
-        $aOpSlips[$iQuebra]->ordempslips[$iCredorOS] = $oNovoOrdemSlip;
+        $aOpSlips[$iQuebra]->ordempslips[$iCredor] = $oNovoOrdemSlip;
 
       }
     }
