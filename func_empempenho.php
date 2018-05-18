@@ -165,7 +165,7 @@ $rotulo->label("z01_cgccpf");
                  *
                  */
                 if ($filtroabast == 1) {
-                    $dbwhere .= " and elementoempenho.o56_elemento in ('3339030010000','339033010000','339033990000','3339033990000','3339030030000','3339092000000') ";
+                    $dbwhere .= " and elementoempenho.o56_elemento in ('3339030010000','339033010000','339033990000','3339033990000','3339030030000','3339092000000','3339033000000') ";
                     $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
                     $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date '".$ve70_abast."')";
                     $filtroempelemento = 1;
@@ -251,7 +251,7 @@ $rotulo->label("z01_cgccpf");
                          *
                          */
                         if ($filtroabast == 1) {
-                            $sWherePesquisaPorCodigoEmpenho .= " and elementoempenho.o56_elemento in ('3339030990000','339033010000','339033990000','3339033990000'.'3339030030000','3339092000000') ";
+                            $sWherePesquisaPorCodigoEmpenho .= " and elementoempenho.o56_elemento in ('3339030990000','339033010000','339033990000','3339033990000'.'3339030030000','3339092000000','3339033000000') ";
                             $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
                             $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date '".$ve70_abast."')";
                             $filtroempelemento = 1;
