@@ -41,7 +41,7 @@ $classinatura = new cl_assinatura;
 
 if (USE_PCASP) {
 
-  $sql = "select k152_sequencial,
+    $sql = "select k152_sequencial,
                  upper(k152_descricao) as k152_descricao,
                  slip.*,
                  cgm.z01_numcgm ,
@@ -98,7 +98,7 @@ if (USE_PCASP) {
 
 } else {
 
-  $sql = "select slip.*,
+    $sql = "select slip.*,
           z01_cgccpf,
           z01_numcgm ,
           z01_nome ,
@@ -124,22 +124,22 @@ if (USE_PCASP) {
 
 try {
 
-  $dados = db_query($sql);
-  $sEvento = "";
+    $dados = db_query($sql);
+    $sEvento = "";
 
-  if (pg_numrows($dados) > 0){
+    if (pg_numrows($dados) > 0){
 
-    $aMotivo = db_fieldsMemory($dados,0);
-    $motivo  = $k18_motivo;
-    if (USE_PCASP) {
+        $aMotivo = db_fieldsMemory($dados,0);
+        $motivo  = $k18_motivo;
+        if (USE_PCASP) {
 
-      $sEvento = $k152_sequencial . " - " . $k152_descricao;
+            $sEvento = $k152_sequencial . " - " . $k152_descricao;
+        }
     }
-  }
 
 
-  // seleciona os recursos envolvidos, ligados a conta recebedora do slip
-  $sql = "select k29_recurso,
+    // seleciona os recursos envolvidos, ligados a conta recebedora do slip
+    $sql = "select k29_recurso,
                  o15_descr,
                  k29_valor
           from sliprecurso
@@ -147,159 +147,161 @@ try {
     where k29_slip= $numslip
     order by k29_recurso
          ";
-  $recursos  = db_query($sql);
-  // se houverem registros, monta um array
-  $array_recursos =  array();
-  if (pg_numrows($recursos)>0){
-      for($x=0;$x < pg_numrows($recursos);$x++){
-      db_fieldsmemory($recursos,$x);
-          $array_recursos[] = "$k29_recurso#$o15_descr#$k29_valor";
-      }
+    $recursos  = db_query($sql);
+    // se houverem registros, monta um array
+    $array_recursos =  array();
+    if (pg_numrows($recursos)>0){
+        for($x=0;$x < pg_numrows($recursos);$x++){
+            db_fieldsmemory($recursos,$x);
+            $array_recursos[] = "$k29_recurso#$o15_descr#$k29_valor";
+        }
 
-  }
-  // print_r($array_recursos); exit;
-
-
-  if (pg_numrows($dados) == 0) {
-    throw new Exception('Documento de Slip não Cadastrado.');
-  }
-
-  db_fieldsmemory($dados,0);
-
-  $sqlcai = "select * from caiparametro where k29_instit = ".db_getsession('DB_instit');
-  $resultcai = db_query($sqlcai) or die($sqlcai);
-  if (pg_numrows($resultcai) == 0) {
-    $k29_modslipnormal = 36;
-    $k29_modsliptransf = 36;
-  } else {
-    db_fieldsmemory($resultcai, 0);
-    if ($k29_modslipnormal != 36 and $k29_modslipnormal != 37 and $k29_modslipnormal != 381) {
-      $k29_modslipnormal = 36;
     }
-    if ($k29_modsliptransf != 36 and $k29_modsliptransf != 37 and $k29_modslipnormal != 381) {
-      $k29_modsliptransf = 36;
+    // print_r($array_recursos); exit;
+
+
+    if (pg_numrows($dados) == 0) {
+        throw new Exception('Documento de Slip não Cadastrado.');
     }
-  }
 
-  $quantdeb = 0;
-  if ($k17_debito > 0) {
-    $clsaltes->sql_record($clsaltes->sql_query_file($k17_debito));
-    $quantdeb = $clsaltes->numrows;
-  }
+    db_fieldsmemory($dados,0);
 
-  $quantcre = 0;
-  if ($k17_credito > 0) {
-    $clsaltes->sql_record($clsaltes->sql_query_file($k17_credito));
-    $quantcre = $clsaltes->numrows;
-  }
+    $sqlcai = "select * from caiparametro where k29_instit = ".db_getsession('DB_instit');
+    $resultcai = db_query($sqlcai) or die($sqlcai);
+    if (pg_numrows($resultcai) == 0) {
+        $k29_modslipnormal = 36;
+        $k29_modsliptransf = 36;
+    } else {
+        db_fieldsmemory($resultcai, 0);
+        if ($k29_modslipnormal != 36 and $k29_modslipnormal != 37 and $k29_modslipnormal != 381) {
+            $k29_modslipnormal = 36;
+        }
+        if ($k29_modsliptransf != 36 and $k29_modsliptransf != 37 and $k29_modslipnormal != 381) {
+            $k29_modsliptransf = 36;
+        }
+    }
 
-  if ($quantdeb > 0 and $quantcre > 0) {
-    $codmodelo = $k29_modsliptransf;
-  } else {
-    $codmodelo = $k29_modslipnormal;
-  }
+    $quantdeb = 0;
+    if ($k17_debito > 0) {
+        $clsaltes->sql_record($clsaltes->sql_query_file($k17_debito));
+        $quantdeb = $clsaltes->numrows;
+    }
 
-  $pdf1 = new scpdf();
-  $pdf1->Open();
-  $pdf = new db_impcarne($pdf1, $codmodelo);
-  $pdf->objpdf->AddPage();
-  $pdf->objpdf->SetTextColor(0, 0, 0);
+    $quantcre = 0;
+    if ($k17_credito > 0) {
+        $clsaltes->sql_record($clsaltes->sql_query_file($k17_credito));
+        $quantcre = $clsaltes->numrows;
+    }
 
-  // trecho para relatorio
-  $head1 = "Texto numero 1";
-  $head2 = "Texto numero 2";
-  $head3 = "Texto numero 3";
-  $head4 = "Texto numero 4";
-  //$head5 = "Texto numero 5";
-  $head6 = "Texto numero 6";
-  $head7 = "Texto numero 7";
-  $head8 = "Texto numero 8";
-  $head9 = "Texto numero 9";
-  $head10 = "Texto numero 10";
-  // trecho para relatorio
+    if ($quantdeb > 0 and $quantcre > 0) {
+        $codmodelo = $k29_modsliptransf;
+    } else {
+        $codmodelo = $k29_modslipnormal;
+    }
 
-  $sql = "select * from db_config where codigo = ".db_getsession('DB_instit');
-  $dadospref = db_query($sql);
-  db_fieldsmemory($dadospref, 0);
+    $pdf1 = new scpdf();
+    $pdf1->Open();
+    $pdf = new db_impcarne($pdf1, $codmodelo);
+    $pdf->objpdf->AddPage();
+    $pdf->objpdf->SetTextColor(0, 0, 0);
 
-  $pdf->dados    = $dados;
-  $pdf->recursos = $array_recursos;
+    // trecho para relatorio
+    $head1 = "Texto numero 1";
+    $head2 = "Texto numero 2";
+    $head3 = "Texto numero 3";
+    $head4 = "Texto numero 4";
+    //$head5 = "Texto numero 5";
+    $head6 = "Texto numero 6";
+    $head7 = "Texto numero 7";
+    $head8 = "Texto numero 8";
+    $head9 = "Texto numero 9";
+    $head10 = "Texto numero 10";
+    // trecho para relatorio
 
-  /**
-   * dados bancarios do credor
-   */
-  $iCpfCnpjCredor       = $z01_cgccpf;
-  $oDaoPcfornecon      = db_utils::getDao('pcfornecon');
-  $sCamposDadosCredor  = "pc63_banco, pc63_agencia, pc63_agencia_dig, pc63_conta, pc63_conta_dig,";
-  $sCamposDadosCredor .= "(select db90_descr from db_bancos where db90_codban = pc63_banco) as descricrao_banco ";
-  $sWhereDadosCredor   = "pc63_cnpjcpf = '{$iCpfCnpjCredor}'";
-  $sSqlDadosCredor     = $oDaoPcfornecon->sql_query_padrao(null, $sCamposDadosCredor, null, $sWhereDadosCredor);
-  $rsDadosCredor       = db_query($sSqlDadosCredor);
-  /**
-   * Erro no sql
-   */
-  if ( !$rsDadosCredor ) {
+    $sql = "select * from db_config where codigo = ".db_getsession('DB_instit');
+    $dadospref = db_query($sql);
+    db_fieldsmemory($dadospref, 0);
 
-    $sMensagemErro = "Erro ao buscar dados do credor.\n\n" . pg_last_error();
-    throw new Exception($sMensagemErro);
-  }
+    $pdf->dados    = $dados;
+    $pdf->recursos = $array_recursos;
 
-  /**
-   * Dados bancarios da conta padrao
-   */
-  if ( pg_num_rows($rsDadosCredor) > 0 ) {
+    /**
+     * dados bancarios do credor
+     */
+    $iCpfCnpjCredor       = $z01_numcgm;
+    $oDaoPcfornecon      = db_utils::getDao('pcfornecon');
+    $sCamposDadosCredor  = "pc63_banco, pc63_agencia, pc63_agencia_dig, pc63_conta, pc63_conta_dig,";
+    $sCamposDadosCredor .= "(select db90_descr from db_bancos where db90_codban = pc63_banco) as descricrao_banco, ";
+    $sCamposDadosCredor .= "pc64_contabanco";
+    $sWhereDadosCredor   = "pc63_numcgm = {$iCpfCnpjCredor} ";
+    $sWhereDadosCredor  .= "ORDER BY pc64_contabanco ";
+    $sSqlDadosCredor     = $oDaoPcfornecon->sql_query_padrao(null, $sCamposDadosCredor, null, $sWhereDadosCredor);
+    $rsDadosCredor       = db_query($sSqlDadosCredor);
+    /**
+     * Erro no sql
+     */
+    if ( !$rsDadosCredor ) {
 
-    $oDadosCredor         = db_utils::fieldsMemory($rsDadosCredor, 0);
-    $oDadosBancarioCredor = new StdClass();
+        $sMensagemErro = "Erro ao buscar dados do credor.\n\n" . pg_last_error();
+        throw new Exception($sMensagemErro);
+    }
 
-    $oDadosBancarioCredor->iBanco         = $oDadosCredor->pc63_banco;
-    $oDadosBancarioCredor->sBanco         = $oDadosCredor->descricrao_banco;
-    $oDadosBancarioCredor->iAgencia       = $oDadosCredor->pc63_agencia;
-    $oDadosBancarioCredor->iAgenciaDigito = $oDadosCredor->pc63_agencia_dig;
-    $oDadosBancarioCredor->iConta         = $oDadosCredor->pc63_conta;
-    $oDadosBancarioCredor->iContaDigito   = $oDadosCredor->pc63_conta_dig;
+    /**
+     * Dados bancarios da conta padrao
+     */
+    if ( pg_num_rows($rsDadosCredor) > 0 ) {
 
-    $pdf->oDadosBancarioCredor = $oDadosBancarioCredor;
-  }
+        $oDadosCredor         = db_utils::fieldsMemory($rsDadosCredor, 0);
+        $oDadosBancarioCredor = new StdClass();
+
+        $oDadosBancarioCredor->iBanco         = $oDadosCredor->pc63_banco;
+        $oDadosBancarioCredor->sBanco         = $oDadosCredor->descricrao_banco;
+        $oDadosBancarioCredor->iAgencia       = $oDadosCredor->pc63_agencia;
+        $oDadosBancarioCredor->iAgenciaDigito = $oDadosCredor->pc63_agencia_dig;
+        $oDadosBancarioCredor->iConta         = $oDadosCredor->pc63_conta;
+        $oDadosBancarioCredor->iContaDigito   = $oDadosCredor->pc63_conta_dig;
+
+        $pdf->oDadosBancarioCredor = $oDadosBancarioCredor;
+    }
 
 
-  /**
-  * assinturas
-  */
-  $tes =  "______________________________"."\n"."Secretário de Fazenda";
-  $pdf->tesoureiro      = $classinatura->assinatura(1004,$tes);
+    /**
+     * assinturas
+     */
+    $tes =  "______________________________"."\n"."Secretário de Fazenda";
+    $pdf->tesoureiro      = $classinatura->assinatura(1004,$tes);
 
-  $pdf->contador        = $contador;
-  $pdf->crc             = $crc;
-  $pdf->controleinterno = $controleinterno;
+    $pdf->contador        = $contador;
+    $pdf->crc             = $crc;
+    $pdf->controleinterno = $controleinterno;
 
-  /*OC4401*/
-  $pdf->usuario = $nome;
-  /*FIM - OC4401*/
+    /*OC4401*/
+    $pdf->usuario = $nome;
+    /*FIM - OC4401*/
 
-  $pdf->logo     = $logo;
-  $pdf->nomeinst = $nomeinst;
-  $pdf->ender    = $ender;
-  $pdf->munic    = $munic;
-  $pdf->telef    = $telef;
-  $pdf->email    = $email;
-  $pdf->logo     = $logo;
-  $pdf->motivo   = $motivo;
-  $pdf->sEvento  = $sEvento;
-  $pdf->objpdf->AliasNbPages();
-  $pdf->objpdf->settopmargin(1);
+    $pdf->logo     = $logo;
+    $pdf->nomeinst = $nomeinst;
+    $pdf->ender    = $ender;
+    $pdf->munic    = $munic;
+    $pdf->telef    = $telef;
+    $pdf->email    = $email;
+    $pdf->logo     = $logo;
+    $pdf->motivo   = $motivo;
+    $pdf->sEvento  = $sEvento;
+    $pdf->objpdf->AliasNbPages();
+    $pdf->objpdf->settopmargin(1);
 
-  $pdf->imprime();
-  $pdf->objpdf->Output();
+    $pdf->imprime();
+    $pdf->objpdf->Output();
 
 } catch (Exception $oErro) {
 
-  $sErro = str_replace("\n", '\n', $oErro->getMessage());
+    $sErro = str_replace("\n", '\n', $oErro->getMessage());
 
-  $sMensagemErro .= "<script>                                 ";
-  $sMensagemErro .= "  alert('{$sErro}'); ";
-  $sMensagemErro .= "  window.close();                        ";
-  $sMensagemErro .= "</script>                                ";
+    $sMensagemErro .= "<script>                                 ";
+    $sMensagemErro .= "  alert('{$sErro}'); ";
+    $sMensagemErro .= "  window.close();                        ";
+    $sMensagemErro .= "</script>                                ";
 
-  echo $sMensagemErro;
+    echo $sMensagemErro;
 }

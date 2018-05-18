@@ -1247,11 +1247,13 @@ if (count($aParametrosEmpenho) > 0) {
         function (oConta, iLinha) {
 
           var sSelecionado = "";
-          if (oConta.pc63_contabanco == oConta.conta_historico_fornecedor && iContaForne == "") {
-            sSelecionado = " selected ";
-          } else if (iContaForne != "" && iContaForne == oConta.pc63_contabanco) {
-            sSelecionado = " selected ";
-          } else if (oConta.padrao == "t") {
+/*comentado por solicitação de barbara OC 6184*/
+          // if (oConta.pc63_contabanco == oConta.conta_historico_fornecedor && iContaForne == "") {
+          //   sSelecionado = " selected ";
+          // } else if (iContaForne != "" && iContaForne == oConta.pc63_contabanco) {
+          //   sSelecionado = " selected ";
+          // } else
+          if (oConta.padrao == "t") {
             sSelecionado = " selected ";
           }
 
