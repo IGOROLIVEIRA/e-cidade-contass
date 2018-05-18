@@ -313,7 +313,7 @@ try {
              orctiporec.o15_codigo codrecurso,
              orctiporec.o15_descr nomerecurso,
              to_char(p107_dt_cadastro,'DD/MM/YYYY') dtautorizacao,
-             pagordemele.e53_valor valor
+             total.e53_valor valor
           FROM pagordemele
           INNER JOIN pagordem ON pagordem.e50_codord = pagordemele.e53_codord
           INNER JOIN protpagordem ON protpagordem.p105_codord = pagordem.e50_codord
@@ -335,7 +335,9 @@ try {
             AND orcelemento.o56_anousu = empempenho.e60_anousu
           INNER JOIN autprotpagordem on autprotpagordem.p107_codord = pagordem.e50_codord
           INNER JOIN protocolos ON protocolos.p101_sequencial = autprotpagordem.p107_protocolo
-            WHERE e53_vlrpag >= 0 AND e53_vlrpag < e53_valor AND e53_vlranu = 0
+            WHERE pagordemele.e53_vlrpag >= 0
+             AND pagordemele.e53_vlrpag < pagordemele.e53_valor
+             AND pagordemele.e53_vlranu = 0
           {$filtroAutPag}
         ";
 
