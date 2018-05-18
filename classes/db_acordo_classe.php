@@ -339,15 +339,7 @@ function incluir ($ac16_sequencial){
        $this->erro_status = "0";
        return false;
      }
-     if($this->ac16_lei == null ){
-       $this->erro_sql = " Campo Lei não informado.";
-       $this->erro_campo = "ac16_lei";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+
      if($this->ac16_acordogrupo == null ){
        $this->erro_sql = " Campo Acordo Grupo não informado.";
        $this->erro_campo = "ac16_acordogrupo";

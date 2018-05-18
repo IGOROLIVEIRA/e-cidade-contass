@@ -168,8 +168,7 @@ class cl_parametroscontratos {
          return false;
        }
      }
-     $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
+     $result = db_query($sql);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "parametroscontratos nao Alterado. Alteracao Abortada.\\n";
