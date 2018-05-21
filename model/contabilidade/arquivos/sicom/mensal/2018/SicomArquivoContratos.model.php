@@ -652,7 +652,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 if (!isset($aDadosAgrupados12[$sHash])) {
 
                                     $sCodUnidade = str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
-                                    if ($oDadosElemento->o41_subunidade == 1) {
+                                    if ($oDadosElemento->o41_subunidade != 0 || $oDadosElemento->o41_subunidade = null) {
                                         $sCodUnidade .= str_pad($oDadosElemento->o41_subunidade, 3, "0", STR_PAD_LEFT);
                                     }
                                     $result = db_dotacaosaldo(8, 2, 2, true, " o58_coddot = {$oDadosElemento->o58_coddot} and o58_anousu = {$oAcordo->getAno()}",
@@ -790,7 +790,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             if (!isset($aDadosAgrupados12[$sHash])) {
 
                                 $sCodUnidade = str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
-                                if ($oDadosElemento->o41_subunidade == 1) {
+                                if ($oDadosElemento->o41_subunidade != 0 || $oDadosElemento->o41_subunidade = null) {
                                     $sCodUnidade .= str_pad($oDadosElemento->o41_subunidade, 3, "0", STR_PAD_LEFT);
                                 }
                                 $result = db_dotacaosaldo(8, 2, 2, true, " o58_coddot = {$oDadosElemento->o58_coddot} and o58_anousu = {$oAcordo->getAno()}",
