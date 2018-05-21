@@ -63,8 +63,8 @@ db_app::load("strings.js");
 db_app::load("prototype.js, scripts.js, strings.js, prototype.maskedinput.js");
 db_app::load("estilos.css");
 ?>
-<form name="form1" method="post" action=""
-onSubmit="return js_verifica('<?= $db_opcao ?>'); return js_verificaDataAbastecimento();">
+<form name="form1" method="post" action="" <? if($db_opcao == 1 || $db_opcao == 2 || $db_opcao == 22 ){ ?> onSubmit="return <? } ?>
+        js_verifica('<?= $db_opcao ?>'); return js_verificaDataAbastecimento();">
 <input type="hidden" value="" name="self">
 <center>
   <table>

@@ -34,44 +34,56 @@ include("classes/db_veicabast_classe.php");
 include("classes/db_veicabastposto_classe.php");
 include("classes/db_veicabastpostoempnota_classe.php");
 include("classes/db_veicabastretirada_classe.php");
+include("classes/db_veicabastanu_classe.php");
+include("classes/db_empveiculos_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_veicparam_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
-$clveiculos = new cl_veiculos;
-$clveicabast = new cl_veicabast;
-$clveicabastposto = new cl_veicabastposto;
+$clveiculos              = new cl_veiculos;
+$clveicabast             = new cl_veicabast;
+$clveicabastposto        = new cl_veicabastposto;
 $clveicabastpostoempnota = new cl_veicabastpostoempnota;
-$clveicabastretirada = new cl_veicabastretirada;
+$clveicabastretirada     = new cl_veicabastretirada;
+$clveicparam             = new cl_veicparam;
+$clveicabastanu          = new cl_veicabastanu;
+$clempveiculos           = new cl_empveiculos;
+
 
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
+  if ($sqlerro==false) {
+        $clempveiculos->excluir('',"si05_codabast = $ve70_codigo");
+        $erro_msg=$clempveiculos->erro_msg;
+        if ($clempveiculos->erro_status=="0"){
+            $sqlerro=true;
+        }
+  }
+  if ($sqlerro==false) {
+      $clveicabastanu->excluir('',"ve74_veicabast = $ve70_codigo");
+      $erro_msg=$clveicabastanu->erro_msg;
+      if ($clveicabastanu->erro_status=="0"){
+          $sqlerro=true;
+      }
+  }
+  if ($sqlerro==false){
+      $clveicabastposto->excluir(null,"ve71_veicabast=$ve70_codigo");
+      if ($clveicabastposto->erro_status=="0"){
+        $sqlerro=true;
+        $erro_msg=$clveicabastposto->erro_msg;
+      }
+  }
   $result_retirada=$clveicabastretirada->sql_record($clveicabastretirada->sql_query(null,"*",null,"ve73_veicabast=$ve70_codigo"));
   if ($clveicabastretirada->numrows>0){
-  	$clveicabastretirada->excluir(null,"ve73_veicabast=$ve70_codigo");  	
-  	if ($clveicabastretirada->erro_status=="0"){
-  		$sqlerro=true;
-  		$erro_msg=$clveicabastretirada->erro_msg;
-  	}
-  }
-  $result_empnota=$clveicabastpostoempnota->sql_record($clveicabastpostoempnota->sql_query(null,"ve72_codigo",null,"ve71_veicabast=$ve70_codigo"));
-  if ($clveicabastpostoempnota->numrows>0){
-  	db_fieldsmemory($result_empnota,0);  	
-  	$clveicabastpostoempnota->alterar($ve72_codigo);  	
-  	if ($clveicabastpostoempnota->erro_status=="0"){
-  		$sqlerro=true;
-  		$erro_msg=$clveicabastpostoempnota->erro_msg;
-  	}     
-  }
-  if ($sqlerro==false){  	
-  	$clveicabastposto->excluir(null,"ve71_veicabast=$ve70_codigo");  	
-  	if ($clveicabastposto->erro_status=="0"){
-  		$sqlerro=true;
-  		$erro_msg=$clveicabastposto->erro_msg;
-  	}      	  	  	
+      $clveicabastretirada->excluir(null,"ve73_veicabast=$ve70_codigo");
+      if ($clveicabastretirada->erro_status=="0"){
+          $sqlerro=true;
+          $erro_msg=$clveicabastretirada->erro_msg;
+      }
   }
   if ($sqlerro==false){
   	$clveicabast->excluir($ve70_codigo);
