@@ -518,7 +518,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $oDados20 = new stdClass();
 
-                if ($oResult20->subunidade == 1) {
+                if ($oResult20->subunidade != 0 ||$oResult20->subunidade = null) {
                     /*
                     * O campo codUnidadeSubEmpenho torna-se de
                     * preenchimento obrigatório se a origem do gasto foi
