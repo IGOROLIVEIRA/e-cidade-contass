@@ -452,14 +452,19 @@ for ($ii = 0; $ii < $this->linhasdositens ; $ii++) {
   if (isset($just) && trim($just)!="") {
     $just = "JUSTIFICATIVA: ".trim(stripslashes($just));
   }
+  /*echo '$servico: '.$servico;
+  echo ' $unid: '.$unid;exit;*/
 
   if ((isset($servico) && (trim($servico)=="f" || trim($servico)=="")) || !isset($servico)) {
     $unid = trim(substr($unid,0,10));
     if ($susaquant=="t") {
-      $unid .= " \n$quantunid UNIDADES\n";
+      $unid .= " \n$quantunid \n";
+
     }
   } else {
-    $unid = "SERVIÇO";
+    //$unid = "SERVIÇO";
+      $unid = trim(substr($unid,0,10));
+      $unid .= " \n$quantunid \n";
   }
 
   //    $descricaoitem .= " - ".$unid;
