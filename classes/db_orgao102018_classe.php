@@ -206,7 +206,7 @@ class cl_orgao102018
                                ,$this->si14_instit
                                ,$this->si14_assessoriacontabil
                                ,".($this->si14_tipodocumentoassessoria == '' ? 'null' : $this->si14_tipodocumentoassessoria)."
-                               ,".($this->si14_nrodocumentoassessoria == '' ? 'null' : $this->si14_nrodocumentoassessoria)."
+                               ,'".($this->si14_nrodocumentoassessoria == '' ? 'null' : $this->si14_nrodocumentoassessoria)."'
                       )";
     $result = db_query($sql);
     if ($result == false) {
