@@ -123,6 +123,13 @@ $tpag_vlr  =  0;
 $tpag_anu  =  0;
 $tpag_pag  =  0;
 
+$tfnota_vlr =  0;
+$tfnota_anu =  0;
+$tfnota_liq =  0;
+$tfpag_vlr  =  0;
+$tfpag_anu  =  0;
+$tfpag_pag  =  0;
+
 
 for($x = 0; $x < pg_numrows($result);$x++){
    db_fieldsmemory($result,$x,true);
@@ -148,7 +155,14 @@ for($x = 0; $x < pg_numrows($result);$x++){
       	  $pdf->cell(20,$alt," - ",'T',0,"C",0); 
 	  $pdf->cell(20,$alt,db_formatar($tpag_vlr,'f'),'T',0,"R",0); 
 	  $pdf->cell(20,$alt,db_formatar($tpag_anu,'f'),'T',0,"R",0); 
-	  $pdf->cell(20,$alt,db_formatar($tpag_pag,'f'),'T',1,"R",0);   	 
+	  $pdf->cell(20,$alt,db_formatar($tpag_pag,'f'),'T',1,"R",0);
+
+	  $tfnota_vlr +=  $tnota_vlr;
+      $tfnota_anu +=  $tnota_anu;
+      $tfnota_liq +=  $tnota_liq;
+      $tfpag_vlr  +=  $tpag_vlr;
+      $tfpag_anu  +=  $tpag_anu;
+      $tfpag_pag  +=  $tpag_pag;
 
 	  $tnota_vlr =  0;
 	  $tnota_anu =  0;
@@ -222,7 +236,16 @@ for($x = 0; $x < pg_numrows($result);$x++){
 
 }
 
+ $tfnota_vlr+=$tnota_vlr;
+ $tfnota_anu+=$tnota_anu;
+ $tfnota_liq+=$tnota_liq;
+ $tfpag_vlr+=$tpag_vlr;
+ $tfpag_anu+=$tpag_anu;
+ $tfpag_pag+=$tpag_pag;
+
+
  $pdf->setX(85);
+
  $pdf->cell(20,$alt,"SUBTOTAL",'TB',0,"R",0); 
  $pdf->cell(20,$alt,db_formatar($tnota_vlr,'f'),'TB',0,"R",0); 
  $pdf->cell(20,$alt,db_formatar($tnota_anu,'f'),'TB',0,"R",0); 
@@ -230,9 +253,22 @@ for($x = 0; $x < pg_numrows($result);$x++){
  $pdf->cell(20,$alt," - ",'TB',0,"C",0); 
  $pdf->cell(20,$alt,db_formatar($tpag_vlr,'f'),'TB',0,"R",0); 
  $pdf->cell(20,$alt,db_formatar($tpag_anu,'f'),'TB',0,"R",0); 
- $pdf->cell(20,$alt,db_formatar($tpag_pag,'f'),'TB',1,"R",0);   	 
+ $pdf->cell(20,$alt,db_formatar($tpag_pag,'f'),'TB',1,"R",0);
 
-$pdf->cell(185,$alt,'TOTAL DE REGISTROS:  '.$total,"T",0,"L",0);
+ $pdf->setX(10);
+
+$pdf->cell(75,$alt,'TOTAL DE REGISTROS:  '.$total,"T",0,"L",0);
+
+ $pdf->cell(20,$alt,"TOTAL",'TB',0,"R",0);
+ $pdf->cell(20,$alt,db_formatar($tfnota_vlr,'f'),'TB',0,"R",0);
+ $pdf->cell(20,$alt,db_formatar($tfnota_anu,'f'),'TB',0,"R",0);
+ $pdf->cell(20,$alt,db_formatar($tfnota_liq,'f'),'TB',0,"R",0);
+ $pdf->cell(20,$alt," - ",'TB',0,"C",0);
+ $pdf->cell(20,$alt,db_formatar($tfpag_vlr,'f'),'TB',0,"R",0);
+ $pdf->cell(20,$alt,db_formatar($tfpag_anu,'f'),'TB',0,"R",0);
+ $pdf->cell(20,$alt,db_formatar($tfpag_pag,'f'),'TB',1,"R",0);
+
+
 
 $pdf->Output();
    
