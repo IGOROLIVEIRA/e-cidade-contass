@@ -27,45 +27,47 @@
 
 //MODULO: empenho
 //CLASSE DA ENTIDADE empautitem
-class cl_empautitem { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $e55_autori = 0; 
-   var $e55_item = 0; 
-   var $e55_sequen = 0; 
-   var $e55_quant = 0; 
-   var $e55_vltot = 0; 
-   var $e55_descr = null; 
-   var $e55_codele = 0; 
-   var $e55_vlrun = 0; 
+class cl_empautitem {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $e55_autori = 0;
+   var $e55_item = 0;
+   var $e55_sequen = 0;
+   var $e55_quant = 0;
+   var $e55_vltot = 0;
+   var $e55_descr = null;
+   var $e55_codele = 0;
+   var $e55_vlrun = 0;
    //campo para unidade do item na autorização
    var $e55_unid = null;
-   
-   var $e55_servicoquantidade = 'false'; 
-   // cria propriedade com as variaveis do arquivo 
+   var $e55_marca = null;
+
+   var $e55_servicoquantidade = 'false';
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 e55_autori = int4 = Autorização 
-                 e55_item = int4 = Item 
-                 e55_sequen = int4 = Sequencia 
-                 e55_quant = float8 = Quantidade 
-                 e55_vltot = float8 = Valor total 
-                 e55_descr = text = Descrição 
-                 e55_codele = int4 = Elemento 
-                 e55_vlrun = float8 = Valor Unitário 
-                 e55_servicoquantidade = bool = Serviço Controlado por Quantidade 
-                 e55_unid = int4 = Referência 
+                 e55_autori = int4 = Autorização
+                 e55_item = int4 = Item
+                 e55_sequen = int4 = Sequencia
+                 e55_quant = float8 = Quantidade
+                 e55_vltot = float8 = Valor total
+                 e55_descr = text = Descrição
+                 e55_codele = int4 = Elemento
+                 e55_vlrun = float8 = Valor Unitário
+                 e55_servicoquantidade = bool = Serviço Controlado por Quantidade
+                 e55_unid = int4 = Referência
+                 e55_marca = varchar(150) = Marca
                  ";
    //funcao construtor da classe
    function cl_empautitem() {
@@ -94,6 +96,7 @@ class cl_empautitem {
        $this->e55_codele = ($this->e55_codele == ""?@$GLOBALS["HTTP_POST_VARS"]["e55_codele"]:$this->e55_codele);
        $this->e55_vlrun = ($this->e55_vlrun == ""?@$GLOBALS["HTTP_POST_VARS"]["e55_vlrun"]:$this->e55_vlrun);
        $this->e55_servicoquantidade = ($this->e55_servicoquantidade == "f"?@$GLOBALS["HTTP_POST_VARS"]["e55_servicoquantidade"]:$this->e55_servicoquantidade);
+       $this->e55_marca = ($this->e55_marca == ""?@$GLOBALS["HTTP_POST_VARS"]["e55_marca"]:$this->e55_marca);
      }else{
        $this->e55_autori = ($this->e55_autori == ""?@$GLOBALS["HTTP_POST_VARS"]["e55_autori"]:$this->e55_autori);
        $this->e55_sequen = ($this->e55_sequen == ""?@$GLOBALS["HTTP_POST_VARS"]["e55_sequen"]:$this->e55_sequen);
@@ -168,7 +171,7 @@ class cl_empautitem {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->e55_unid == null) || ($this->e55_unid == "") ){ 
+     if(($this->e55_unid == null) || ($this->e55_unid == "") ){
        $this->e55_unid = 0;
      }
      $sql = "insert into empautitem(
@@ -181,7 +184,8 @@ class cl_empautitem {
                                       ,e55_codele
                                       ,e55_vlrun
                                       ,e55_servicoquantidade
-                                      ,e55_unid 
+                                      ,e55_unid
+                                      ,e55_marca
                        )
                 values (
                                 $this->e55_autori
@@ -193,8 +197,10 @@ class cl_empautitem {
                                ,$this->e55_codele
                                ,$this->e55_vlrun
                                ,'$this->e55_servicoquantidade'
-                               ,'$this->e55_unid' 
+                               ,'$this->e55_unid'
+                               ,'$this->e55_marca'
                       )";
+
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -312,6 +318,10 @@ class cl_empautitem {
        $sql  .= $virgula." e55_descr = '$this->e55_descr' ";
        $virgula = ",";
      }
+     if(trim($this->e55_marca)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e55_marca"])){
+       $sql  .= $virgula." e55_marca = '$this->e55_marca' ";
+       $virgula = ",";
+     }
      if(trim($this->e55_codele)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e55_codele"])){
        $sql  .= $virgula." e55_codele = $this->e55_codele ";
        $virgula = ",";
@@ -342,12 +352,12 @@ class cl_empautitem {
        $sql  .= $virgula." e55_servicoquantidade = '$this->e55_servicoquantidade' ";
        $virgula = ",";
      }
-     
-   	 if(trim($this->e55_unid)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e55_unid"])){ 
+
+   	 if(trim($this->e55_unid)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e55_unid"])){
        $sql  .= $virgula." e55_unid = '$this->e55_unid' ";
        $virgula = ",";
      }
-     
+
      $sql .= " where ";
      if($e55_autori!=null){
        $sql .= " e55_autori = $this->e55_autori";

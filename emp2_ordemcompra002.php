@@ -132,6 +132,7 @@ for($i = 0;$i < $num;$i++){
                                                          m52_numemp,
                                                          m52_vlruni,
                                                          m52_valor,
+                                                         e55_marca,
                                                          case when matunid.m61_abrev is null or matunid.m61_abrev = '' then coalesce(matunidaut.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) else coalesce(matunid.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) end as m61_abrev,
                                                          pcmater.pc01_descrmater,
                                                          pc01_codmater,
@@ -214,6 +215,7 @@ for($i = 0;$i < $num;$i++){
    $pdf1->unid           = 'm61_abrev';
    $pdf1->condpag        = 'e54_conpag';
    $pdf1->destino        = 'e54_destin';
+   $pdf1->obs_ordcom_orcamval = "e55_marca";
    $pdf1->sOrigem        = $iOrigem . " - " .$sOrigem;
    //$pdf1->iOrigem        = $iOrigem;
 //   $pdf1->quantitememp   = 'e62_quant';
@@ -241,7 +243,7 @@ if ($clempparametro->numrows>0){
 
    $pdf1->Snumeroproc    = "pc81_codproc";
    $pdf1->Snumero        = "pc11_numero";
-   $pdf1->obs_ordcom_orcamval = "pc23_obs";
+   $pdf1->obs_ordcom_orcamval = "e55_marca";
 
    $pdf1->imprime();
 

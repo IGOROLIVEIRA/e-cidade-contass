@@ -167,6 +167,12 @@ class AcordoItem {
    */
   protected $dtDataFinal;
 
+  /*
+   * marca
+   * @var text
+   */
+  protected $sMarca;
+
   /**
    * Perídos do Item do Acordo
    */
@@ -331,6 +337,7 @@ class AcordoItem {
       $sCamposItens .= "ac20_quantidade,                                         ";
       $sCamposItens .= "ac20_valortotal,                                         ";
       $sCamposItens .= "ac20_valorunitario,                                      ";
+      $sCamposItens .= "ac20_marca,                                      ";
       $sCamposItens .= "ac20_acordoposicao,                                      ";
       $sCamposItens .= "ac20_acordoposicaotipo,                                  ";
       $sCamposItens .= "ac20_resumo,                                             ";
@@ -381,6 +388,7 @@ class AcordoItem {
         ->setCodigoPosicao($oDadosItem->ac20_acordoposicao)
         ->setCodigoPosicaoTipo($oDadosItem->ac20_acordoposicaotipo)
         ->setResumo($oDadosItem->ac20_resumo)
+        ->setMarca($oDadosItem->ac20_marca)
         ->setDescricaoUnidade($oDadosItem->m61_descr)
         ->setTipoControle($oDadosItem->ac20_tipocontrole)
         ->setEstruturalElemento($oDadosItem->o56_elemento)
@@ -438,10 +446,10 @@ class AcordoItem {
     if (count($this->aDotacoes) == 0) {
 
       $oDaoAcordoItemDotacao  = new cl_acordoitemdotacao;
-      $sSqlSomaExecucao       = " (select sum(ac32_valor)";
+      $sSqlSomaExecucao       = " COALESCE((select sum(ac32_valor)";
       $sSqlSomaExecucao      .= "    from acordoitemexecutadodotacao";
       $sSqlSomaExecucao      .= "   where ac32_acordoitem = ac22_acordoitem ";
-      $sSqlSomaExecucao      .= "     and ac32_coddot     = ac22_coddot) as executado,";
+      $sSqlSomaExecucao      .= "     and ac32_coddot     = ac22_coddot),0) as executado,";
       $sSqlDotacoes           = $oDaoAcordoItemDotacao->sql_query_reserva(null,
         "ac22_coddot as dotacao,
         {$sSqlSomaExecucao}
@@ -455,9 +463,11 @@ class AcordoItem {
         "ac22_acordoitem={$this->getCodigo()}
         and ac22_anousu=".db_getsession("DB_anousu").""
         );
+
       $rsDotacoes            = $oDaoAcordoItemDotacao->sql_record($sSqlDotacoes);
       $this->aDotacoes  = db_utils::getCollectionByRecord($rsDotacoes);
     }
+
     return $this->aDotacoes;
   }
 
@@ -803,6 +813,24 @@ class AcordoItem {
 
 
    /**
+   * Define a marca
+   * @param text $sMarca
+   * @return AcordoItem
+   */
+   public function setMarca($sMarca){
+
+     $this->sMarca = $sMarca;
+     return $this;
+
+   }
+
+   public function getMarca(){
+
+     return $this->sMarca;
+
+   }
+
+   /**
    * Define a data final
    * @param date $dtDatafinal
    * @return AcordoItem
@@ -877,6 +905,7 @@ class AcordoItem {
     $oDaoAcordoItem->ac20_matunid           = $this->getUnidade();
     $oDaoAcordoItem->ac20_quantidade        = "{$this->getQuantidade()}";
     $oDaoAcordoItem->ac20_valorunitario     = $nValorUnitario;
+    $oDaoAcordoItem->ac20_marca             = $this->getMarca();
     $oDaoAcordoItem->ac20_valoraditado      = $nValorAditado;//OC5304
     $oDaoAcordoItem->ac20_quantidadeaditada = $nQuantidadeAditada;//OC5304
     $oDaoAcordoItem->ac20_valortotal        = "".round(($this->getQuantidade() * $nValorUnitario), 2)."";

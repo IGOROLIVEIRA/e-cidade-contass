@@ -243,6 +243,7 @@ class AutorizacaoEmpenho {
           $oItem->codigoelemento = $oDadosItem->e55_codele;
           $oItem->valorunitario = $oDadosItem->e55_vlrun;
           $oItem->sequencial = $oDadosItem->e55_sequen;
+          $oItem->marca = $oDadosItem->e55_marca;
           $this->aItens[] = $oItem;
         }
       }
@@ -744,6 +745,7 @@ class AutorizacaoEmpenho {
       $oDaoEmpAutItem->e55_descr  = $oItem->observacao;
       $oDaoEmpAutItem->e55_codele = $oItem->codigoelemento;
       $oDaoEmpAutItem->e55_vlrun  = $oItem->valorunitario;
+      $oDaoEmpAutItem->e55_marca  = $oItem->marca;
       $oDaoEmpAutItem->e55_servicoquantidade = $lServicoQuantidade;
       $oDaoEmpAutItem->e55_unid   = $iUnidade;
 

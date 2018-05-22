@@ -56,6 +56,7 @@ class cl_acordoitem {
    var $ac20_servicoquantidade = null;
    var $ac20_valoraditado = 0;//OC5304
    var $ac20_quantidadeaditada = 0;//OC5304
+   var $ac20_marca = 0;//OC6257
    // cria propriedade com as variaveis do arquivo
 
    var $campos = "
@@ -74,6 +75,7 @@ class cl_acordoitem {
                  ac20_servicoquantidade = boolean = Controla Servico Quantidade
                  ac20_valoraditado = float8 = Valor Aditado
                  ac20_quantidadeaditada = float8 = Quantidade Aditada
+                 ac20_marca = varchar = Marca do ítem
                  ";
    //funcao construtor da classe
    function cl_acordoitem() {
@@ -106,6 +108,7 @@ class cl_acordoitem {
        $this->ac20_tipocontrole = ($this->ac20_tipocontrole == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_tipocontrole"]:$this->ac20_tipocontrole);
        $this->ac20_acordoposicaotipo = ($this->ac20_acordoposicaotipo == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_acordoposicaotipo"]:$this->ac20_acordoposicaotipo);
        $this->ac20_servicoquantidade = ($this->ac20_servicoquantidade == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_servicoquantidade"]:$this->ac20_servicoquantidade);
+       $this->ac20_marca = ($this->ac20_marca == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_marca"]:$this->ac20_marca);
      }else{
        $this->ac20_sequencial = ($this->ac20_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac20_sequencial"]:$this->ac20_sequencial);
      }
@@ -242,6 +245,7 @@ class cl_acordoitem {
                                       ,ac20_servicoquantidade
                                       ,ac20_valoraditado
                                       ,ac20_quantidadeaditada
+                                      ,ac20_marca
                        )
                 values (
                                 $this->ac20_sequencial
@@ -259,6 +263,7 @@ class cl_acordoitem {
                                ,'$this->ac20_servicoquantidade'
                                ,$this->ac20_valoraditado
                                ,$this->ac20_quantidadeaditada
+                               ,'$this->ac20_marca'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -430,6 +435,12 @@ class cl_acordoitem {
        $sql  .= $virgula." ac20_resumo = '$this->ac20_resumo' ";
        $virgula = ",";
      }
+     /*OC6257*/
+     if(trim($this->ac20_marca)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac20_marca"])){
+       $sql  .= $virgula." ac20_marca = '$this->ac20_marca' ";
+       $virgula = ",";
+     }
+     /*FIM*/
      /*OC5304*/
      if(trim($this->ac20_valoraditado)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac20_valoraditado"])){
        $sql  .= $virgula." ac20_valoraditado = $this->ac20_valoraditado ";

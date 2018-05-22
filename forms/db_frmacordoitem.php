@@ -49,56 +49,56 @@ if ($oDaoAcordo->numrows > 0) {
 }
 ?>
 <style>
-  .fracionado input[type='checkbox'] {
-    display: none;
-    height: 15px
-  }
+.fracionado input[type='checkbox'] {
+  display: none;
+  height: 15px
+}
 
-  .fracionado input[type='button'] {
-    height: 15px;
-  }
+.fracionado input[type='button'] {
+  height: 15px;
+}
 
-  .fracionado {
-    background-color: #FFFFFF
-  }
+.fracionado {
+  background-color: #FFFFFF
+}
 
-  .fracionado td {
-    empty-cells: show;
-  }
+.fracionado td {
+  empty-cells: show;
+}
 
-  .fracionadoinvalido {
-    background-color: #FF4649
-  }
+.fracionadoinvalido {
+  background-color: #FF4649
+}
 
-  .fieldsetinterno {
-    border: 0px;
-    border-top: 2px groove white;
-    border-bottom: 2px groove white;
-  }
+.fieldsetinterno {
+  border: 0px;
+  border-top: 2px groove white;
+  border-bottom: 2px groove white;
+}
 
-  fieldset.fieldsetinterno table {
+fieldset.fieldsetinterno table {
 
-    width: 100%;
-    table-layout: auto;
-  }
+  width: 100%;
+  table-layout: auto;
+}
 
-  fieldset.fieldsetinterno table tr TD:FIRST-CHILD {
+fieldset.fieldsetinterno table tr TD:FIRST-CHILD {
 
-    width: 80px;
-    white-space: nowrap;
-  }
+  width: 80px;
+  white-space: nowrap;
+}
 
-  select {
-    width: 100%;
-  }
+select {
+  width: 100%;
+}
 
-  fieldset.fieldsetinterno table tr TD {
-    white-space: nowrap;
-  }
+fieldset.fieldsetinterno table tr TD {
+  white-space: nowrap;
+}
 
-  legend {
-    font-weight: bold;
-  }
+legend {
+  font-weight: bold;
+}
 </style>
 
 <script type="text/javascript" src="scripts/classes/DBViewAcordoPrevisao.classe.js"></script>
@@ -206,6 +206,18 @@ db_app::load("estilos.css, grid.style.css");
                 </td>
               </tr>
 
+              <tr>
+                <td nowrap title="<?= @$Tac20_marca ?>">
+                  <b>Marca</b>
+                </td>
+                <td colspan="3">
+                  <?
+                  db_input('ac20_marca', 52, $Iac20_marca, true, 'text', $db_opcao, "")
+                  ?>
+                </td>
+
+
+              </tr>
             </table>
             <table style="width: 100%;">
               <tr>
@@ -590,6 +602,7 @@ db_app::load("estilos.css, grid.style.css");
     var iAcordo = $F('ac20_acordo');
     var nValorUnitario = $F('ac20_valorunitario');
     var nQuantidade = $F('ac20_quantidade');
+    var sMarca = $F('ac20_marca');
     var sResumo = $F('ac20_resumo');
     var iElemento = $F('ac20_elemento');
     var iUnidade = $F('ac20_matunid');
@@ -653,6 +666,7 @@ db_app::load("estilos.css, grid.style.css");
     oParam.material.iElemento = iElemento;
     oParam.material.nQuantidade = nQuantidade;
     oParam.material.nValorUnitario = nValorUnitario;
+    oParam.material.sMarca = sMarca;
     oParam.material.sResumo = encodeURIComponent(tagString(sResumo));
     oParam.material.aPeriodo = aPeriodo;
     oParam.material.iTipoControle = iTipoControle;
@@ -679,20 +693,20 @@ db_app::load("estilos.css, grid.style.css");
       if (iCodigoItem != "") {
 
      //
-        if (oRetorno.lAlterarDotacao) {
+     if (oRetorno.lAlterarDotacao) {
 
           //sFunction = $('openDotacoes' + iCodigoItem).onclick;
           //sFunction();
      //alert(1);
-        }
-      }
-      iCodigoItem = '';
-      js_limparFormulario();
-      js_getItens();
-      js_desabilitaItemSelecionar();
-    } else {
-      alert(oRetorno.message.urlDecode());
-    }
+   }
+ }
+ iCodigoItem = '';
+ js_limparFormulario();
+ js_getItens();
+ js_desabilitaItemSelecionar();
+} else {
+  alert(oRetorno.message.urlDecode());
+}
     //oGridPeriodos.clearAll(true);
   }
 
@@ -785,6 +799,7 @@ db_app::load("estilos.css, grid.style.css");
     $('ac41_datainicial').value = '';
     $('ac41_datafinal').value = '';
     $('ac20_resumo').value = '';
+    $('ac20_marca').value = '';
     $('db_opcao').value = 'Incluir';
     $('cancelar').style.display = 'none';
     $('ac20_servicoquantidade').value = 'f';
@@ -882,6 +897,7 @@ db_app::load("estilos.css, grid.style.css");
         $('ac20_quantidade').value = quantidade;
         $('ac20_elemento').value = elemento;
         $('ac20_matunid').value = unidade;
+        $('ac20_marca').value = marca;
         $('ac20_resumo').value = resumo.urlDecode();
         $('ac20_tipocontrole').value = tipocontrole;
         $('ac20_servicoquantidade').value = servicoquantidade;
@@ -1038,8 +1054,8 @@ db_app::load("estilos.css, grid.style.css");
         method: 'post',
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: (function(ret){
-                      js_retornoGetDotacoes(ret, iItem);
-                    } )
+          js_retornoGetDotacoes(ret, iItem);
+        } )
       }
       );
 
@@ -1064,23 +1080,23 @@ db_app::load("estilos.css, grid.style.css");
 
   }
 
-    function js_preencheDotacoes(oDados,iItem) {
+  function js_preencheDotacoes(oDados,iItem) {
 
-      oGridDotacoes.clearAll(true);
-      oDados.each(function (oRow, iSeq) {
-        console.log(oRow);
-        var aLinha = new Array();
-        aLinha[0] = oRow.dotacao;
-        aLinha[1] = oRow.quantidade;
-        if(oRow.executado != ""){
-          isExecutado[iItem] = true;
-        }
-        aLinha[2] = js_formatar(oRow.valor, 'f');
-        aLinha[3] = "<input type='button' value='E' onclick='js_excluirDotacao(" + oRow.dotacao + ")' "+(isExecutado[iItem] == true || desabilitaDotacao==false?"disabled='disabled'":"")+" style='width:100%'>";
-        oGridDotacoes.addRow(aLinha);
-      });
-      oGridDotacoes.renderRows();
-    }
+    oGridDotacoes.clearAll(true);
+    oDados.each(function (oRow, iSeq) {
+      console.log(oRow);
+      var aLinha = new Array();
+      aLinha[0] = oRow.dotacao;
+      aLinha[1] = oRow.quantidade;
+      if(oRow.executado != ""){
+        isExecutado[iItem] = true;
+      }
+      aLinha[2] = js_formatar(oRow.valor, 'f');
+      aLinha[3] = "<input type='button' value='E' onclick='js_excluirDotacao(" + oRow.dotacao + ")' "+(isExecutado[iItem] == true || desabilitaDotacao==false?"disabled='disabled'":"")+" style='width:100%'>";
+      oGridDotacoes.addRow(aLinha);
+    });
+    oGridDotacoes.renderRows();
+  }
 
   function js_validaValorDotacao(obj, iQuantMax, nValUnitario, oValorTotal) {
 
@@ -1096,10 +1112,10 @@ db_app::load("estilos.css, grid.style.css");
 
   function js_saveDotacao() {
 
-      if(isExecutado[oDadosItem.aCells[1].getValue()] == true){
-        alert("Não é possivel adicionar uma dotação a um ítem já executado.");
-        return false;
-      }
+    if(isExecutado[oDadosItem.aCells[1].getValue()] == true){
+      alert("Não é possivel adicionar uma dotação a um ítem já executado.");
+      return false;
+    }
     if (oTxtDotacao.getValue() == "") {
 
       alert('Informe a dotação!');

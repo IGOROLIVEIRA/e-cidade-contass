@@ -50,56 +50,56 @@ if ($oDaoAcordo->numrows > 0) {
 
 ?>
 <style>
-  .fracionado input[type='checkbox'] {
-    display: none;
-    height: 15px
-  }
+.fracionado input[type='checkbox'] {
+  display: none;
+  height: 15px
+}
 
-  .fracionado input[type='button'] {
-    height: 15px;
-  }
+.fracionado input[type='button'] {
+  height: 15px;
+}
 
-  .fracionado {
-    background-color: #FFFFFF
-  }
+.fracionado {
+  background-color: #FFFFFF
+}
 
-  .fracionado td {
-    empty-cells: show;
-  }
+.fracionado td {
+  empty-cells: show;
+}
 
-  .fracionadoinvalido {
-    background-color: #FF4649
-  }
+.fracionadoinvalido {
+  background-color: #FF4649
+}
 
-  .fieldsetinterno {
-    border: 0px;
-    border-top: 2px groove white;
-    border-bottom: 2px groove white;
-  }
+.fieldsetinterno {
+  border: 0px;
+  border-top: 2px groove white;
+  border-bottom: 2px groove white;
+}
 
-  fieldset.fieldsetinterno table {
+fieldset.fieldsetinterno table {
 
-    width: 100%;
-    table-layout: auto;
-  }
+  width: 100%;
+  table-layout: auto;
+}
 
-  fieldset.fieldsetinterno table tr TD:FIRST-CHILD {
+fieldset.fieldsetinterno table tr TD:FIRST-CHILD {
 
-    width: 80px;
-    white-space: nowrap;
-  }
+  width: 80px;
+  white-space: nowrap;
+}
 
-  select {
-    width: 100%;
-  }
+select {
+  width: 100%;
+}
 
-  fieldset.fieldsetinterno table tr TD {
-    white-space: nowrap;
-  }
+fieldset.fieldsetinterno table tr TD {
+  white-space: nowrap;
+}
 
-  legend {
-    font-weight: bold;
-  }
+legend {
+  font-weight: bold;
+}
 </style>
 
 <script type="text/javascript" src="scripts/classes/DBViewAcordoPrevisao.classe.js"></script>
@@ -194,6 +194,19 @@ db_app::load("estilos.css, grid.style.css");
                   db_select("ac20_servicoquantidade", array("f" => "NÃO", "t" => "SIM"), true, $db_opcao, "onChange='js_verificaServico();'");
                   ?>
                 </td>
+              </tr>
+
+              <tr>
+                <td nowrap title="<?= @$Tac20_marca ?>">
+                  <b>Marca</b>
+                </td>
+                <td colspan="3">
+                  <?
+                  db_input('ac20_marca', 52, $Iac20_marca, true, 'text', $db_opcao, "")
+                  ?>
+                </td>
+
+
               </tr>
               <tr>
                 <td nowrap title="<?= @$Tac20_elemento ?>">
@@ -592,6 +605,7 @@ db_app::load("estilos.css, grid.style.css");
     var nValorUnitario = $F('ac20_valorunitario');
     var nQuantidade = $F('ac20_quantidade');
     var sResumo = $F('ac20_resumo');
+    var sMarca = $F('ac20_marca');
     var iElemento = $F('ac20_elemento');
     var iUnidade = $F('ac20_matunid');
     var iServicoQuantidade = $F('ac20_servicoquantidade');
@@ -653,6 +667,7 @@ db_app::load("estilos.css, grid.style.css");
     oParam.material.iUnidade = iUnidade;
     oParam.material.iElemento = iElemento;
     oParam.material.nQuantidade = nQuantidade;
+    oParam.material.sMarca = sMarca;
     oParam.material.nValorUnitario = nValorUnitario;
     oParam.material.sResumo = encodeURIComponent(tagString(sResumo));
     oParam.material.aPeriodo = aPeriodo;
@@ -784,6 +799,7 @@ db_app::load("estilos.css, grid.style.css");
     $('ac20_matunid').value = '';
 
     $('ac20_resumo').value = '';
+    $('ac20_marca').value = '';
     $('db_opcao').value = 'Incluir';
     $('cancelar').style.display = 'none';
     $('ac20_servicoquantidade').value = 'f';
@@ -881,6 +897,7 @@ db_app::load("estilos.css, grid.style.css");
           $('ac20_quantidade').value = quantidade;
           $('ac20_elemento').value = elemento;
           $('ac20_matunid').value = unidade;
+          $('ac20_marca').value = marca;
           $('ac20_resumo').value = resumo.urlDecode();
           $('ac20_tipocontrole').value = tipocontrole;
           $('ac20_servicoquantidade').value = servicoquantidade;
@@ -1037,8 +1054,8 @@ db_app::load("estilos.css, grid.style.css");
           method: 'post',
           parameters: 'json=' + Object.toJSON(oParam),
           onComplete: (function(ret){
-                      js_retornoGetDotacoes(ret, iItem);
-                    } )
+            js_retornoGetDotacoes(ret, iItem);
+          } )
         }
         );
 

@@ -243,7 +243,7 @@ inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem
 inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
 inner join pcprocitem on pcprocitem.pc81_codprocitem = pcorcamitemproc.pc31_pcprocitem
 inner join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
-inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen 
+inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen
 inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
 where e55_autori=$e54_autori and pc93_pontuacao=1),'') = '' then (coalesce((SELECT DISTINCT 'Marca: '||pc23_obs
 FROM empautitem empautiteminter
@@ -269,7 +269,8 @@ inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
 where e55_autori=$e54_autori and pc93_pontuacao=1),'')
  end)) as pc01_descrmater,
        				   e55_autori,
-		                   e55_sequen,
+                       e55_sequen,
+		                   e55_marca,
 		                   e55_item,
 		                   e55_quant,
 		                   e55_vltot,
@@ -300,11 +301,11 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 	   					";
 
 
-   $resultitem = db_query($sqlitem);
-
    $sqltot = "select sum(e55_vltot) as tot_item from empautitem where e55_autori = $e54_autori";
    $resulttot = db_query($sqltot);
    db_fieldsmemory($resulttot,0);
+   $resultitem = db_query($sqlitem);
+
    //echo " [6] " . db_criatabela($resulttot). "<br>------------------<br>";
 
    $sSqlPacto  = " SELECT distinct pactoplano.* ";
@@ -392,6 +393,8 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
    $pdf1->valoritem              = 'e55_vltot';
    $pdf1->valor                  = 'e55_vlrun';
    $pdf1->descricaoitem          = 'pc01_descrmater';
+   $pdf1->marca                  = 'e55_marca';
+
 
    $pdf1->processoadministrativo = $sProcessoAdministrativo;
 

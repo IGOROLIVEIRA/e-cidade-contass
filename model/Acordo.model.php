@@ -1922,7 +1922,7 @@ class Acordo
             $oItemAut->iCodigoItemProcesso  = $oItemContrato->getCodigoItemProcessoCompras();
             $oItemAut->iCodigoItemEmpenho   = $oItemContrato->getCodigoItemEmpenho();
             $oItemAut->unidade              = $oItemContrato->getUnidade();
-
+            $oItemAut->marca                = $oItemContrato->getMarca();
             $oItemAut->controlaquantidade = $oItemContrato->getControlaQuantidade();
             if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getControlaQuantidade() == 'f') {
 
@@ -1960,6 +1960,7 @@ class Acordo
             $oItemAut->iCodigoItemProcesso  = $oItemContrato->getCodigoItemProcessoCompras();
             $oItemAut->iCodigoItemEmpenho   = $oItemContrato->getCodigoItemEmpenho();
             $oItemAut->unidade              = $oItemContrato->getUnidade();
+            $oItemAut->marca                = $oItemContrato->getMarca();
 
             $oItemAut->controlaquantidade = $oItemContrato->getControlaQuantidade();
             if ($oItemContrato->getMaterial()->isServico() && $oItemContrato->getControlaQuantidade() == 'f') {
@@ -2069,6 +2070,7 @@ class Acordo
                   $oItem->reserva            = $oStdItemAutorizacao->reserva;
                   $oItem->controlaquantidade = $oStdItemAutorizacao->controlaquantidade;
                   $oItem->unidade            = $oStdItemAutorizacao->unidade;
+                  $oItem->marca              = $oStdItemAutorizacao->marca;
 
                   $oAutorizacaoEmpenho->addItem($oItem);
                 }

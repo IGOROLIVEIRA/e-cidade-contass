@@ -827,6 +827,7 @@ switch($oParam->exec) {
                     $oItemContrato->setTipoControle($oParam->material->iTipoControle);
                     $oItemContrato->setServicoQuantidade($oParam->material->iServicoQuantidade);
                     $oItemContrato->setPeriodos($oParam->material->aPeriodo);
+                    $oItemContrato->setMarca($oParam->material->sMarca);
                     $oItemContrato->setPeriodosExecucao($oContrato->getCodigoAcordo(), $oContrato->getPeriodoComercial());
                     $oItemContrato->save();
 
@@ -870,6 +871,7 @@ switch($oParam->exec) {
                       $oItem->valortotal            = $oItemContrato->getValorUnitario()*$oItemContrato->getQuantidade();
                       $oItem->quantidade            = $oItemContrato->getQuantidade();
                       $oItem->elemento              = $oItemContrato->getElemento();
+                      $oItem->marca                 = $oItemContrato->getMarca();
                       $oItem->elementocodigo        = $oItemContrato->getDesdobramento();
                       $oItem->elementodescricao     = urlencode(str_replace("\\n", "\n",urldecode($oItemContrato->getDescricaoElemento())));
                       $oItem->unidade               = $oItemContrato->getUnidade();
@@ -944,6 +946,7 @@ switch($oParam->exec) {
                 ->setTipoControle($oParam->material->iTipoControle)
                 ->setServicoQuantidade($oParam->material->iServicoQuantidade)
                 ->setPeriodos($oParam->material->aPeriodo)
+                ->setMarca($oParam->material->sMarca)
                 ->setPeriodosExecucao($oContrato->getCodigoAcordo(), $oContrato->getPeriodoComercial());
                 $oItemContrato->setMaterial(new MaterialCompras($oParam->material->iMaterial));
 

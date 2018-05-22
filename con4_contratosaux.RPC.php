@@ -831,7 +831,7 @@ switch($oParam->exec) {
             $oItemContrato->setQuantidade($oParam->material->nQuantidade);
             $oItemContrato->setValorUnitario($oParam->material->nValorUnitario);
             $oItemContrato->setUnidade($oParam->material->iUnidade);
-            //$oItemContrato->setResumo(utf8_decode($oParam->material->sResumo));
+            $oItemContrato->setMarca(utf8_decode($oParam->material->sMarca));
             $oItemContrato->setResumo(addslashes(db_stdClass::normalizeStringJson($oParam->material->sResumo)));
             $oItemContrato->setMaterial(new MaterialCompras($oParam->material->iMaterial));
             $oItemContrato->setTipoControle($oParam->material->iTipoControle);
@@ -879,6 +879,7 @@ switch($oParam->exec) {
                 $oItem->valortotal            = $oItemContrato->getValorUnitario()*$oItemContrato->getQuantidade();
                 $oItem->quantidade            = $oItemContrato->getQuantidade();
                 $oItem->elemento              = $oItemContrato->getElemento();
+                $oItem->marca                 = $oItemContrato->getMarca();
                 $oItem->elementocodigo        = $oItemContrato->getDesdobramento();
                 $oItem->elementodescricao     = urlencode(str_replace("\\n", "\n",urldecode($oItemContrato->getDescricaoElemento())));
                 $oItem->unidade               = $oItemContrato->getUnidade();
@@ -951,6 +952,7 @@ switch($oParam->exec) {
                     //->setResumo(utf8_decode($oParam->material->sResumo))
                     ->setResumo(addslashes(db_stdClass::normalizeStringJson($oParam->material->sResumo)))
                     ->setTipoControle($oParam->material->iTipoControle)
+                    ->setMarca($oParam->material->sMarca)
                     ->setServicoQuantidade($oParam->material->iServicoQuantidade);
                 //->setPeriodos($oParam->material->aPeriodo)
                 //->setPeriodosExecucao($oContrato->getCodigoAcordo(), $oContrato->getPeriodoComercial());
