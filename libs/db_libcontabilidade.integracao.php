@@ -1,5 +1,26 @@
 <?
-require_once(DB_DBFORMS ."dbforms/db_funcoes.php");
+function db_inicio_transacao() {
+  //#00#//db_inicio_transacao
+  //#10#//função para abrir uma transação
+  //#15#//db_inicio_transacao();
+  //#99#//Uma transação é um conjunto de execuções no banco de dados que deverão ser gravadas somente
+  //#99#//se todas as execuções tiverem sucesso, caso contrário, nenhuma das execuções deverá ser
+  //#99#//confirmada
+  db_query('BEGIN');
+  return;
+}
+function db_fim_transacao($erro = false) {
+    //#00#//db_fim_transacao
+    //#10#//função para finalizar uma transação
+    //#20#//false : Finaliza transação com sucesso (commit)
+    //#20#//true  : Transação com erro, desfaz os procedimentos executados (rollback)
+  if ($erro == true) {
+    db_query('ROLLBACK');
+  } else {
+    db_query('COMMIT');
+  }
+  return;
+}
 function db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql = false, $where = '', $estrut_inicial = '',
   $acumula_reduzido = 'true', $encerramento = 'false', $join = '', $aOrcParametro = array()) {
 
@@ -278,7 +299,7 @@ function db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql = false
       case when c61_reduz = 0 then
       estrut_mae
       else
-        estrut
+      estrut
       end as estrutural,
       c61_reduz,
       c61_codcon,
@@ -293,19 +314,19 @@ function db_planocontassaldo_matriz($anousu, $dataini, $datafim, $retsql = false
       case when saldo_anterior < 0 then  'C'
       when saldo_anterior > 0 then 'D'
       else ' '
-        end as  sinal_anterior,
+      end as  sinal_anterior,
       case when saldo_final < 0 then 'C'
       when saldo_final > 0 then 'D'
       else ' '
-        end as  sinal_final,
+      end as  sinal_final,
       case when c60_identificadorfinanceiro = 'N' then ''
       else c60_identificadorfinanceiro
-        end as isf,
+      end as isf,
       case when c60_consistemaconta = 0 then ''
       when c60_consistemaconta = 1 then 'O'
       when c60_consistemaconta = 2 then 'P'
       else 'C'
-        end as sis
+      end as sis
       from work_pl
       order by estrut_mae,estrut";
 
