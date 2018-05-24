@@ -349,7 +349,7 @@ function certidao_comprobatorio($regist,$data_cert,$numcert,$emissor){
     $pdf->setfont('arial','',8);
 		$pdf->ln(3);												
 	  $pdf->multicell(0,$alt,db_geratexto($texto),0,"J",0,40);
-	  $pdf->multicell(0,$alt,ucfirst(strtolower($munic)).', '.$data.'.',0,"J",0,40);
+	  $pdf->multicell(0,$alt,mb_convert_case($munic, MB_CASE_TITLE).', '.$data.'.',0,"J",0,40);
 		$pdf->ln(8);												
 	  $pdf->multicell(0,$alt,$emissor_nome.'                  ',0,"R",0,40);
 		$pdf->ln(5);												
