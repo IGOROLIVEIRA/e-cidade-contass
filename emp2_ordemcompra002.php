@@ -148,7 +148,8 @@ for($i = 0;$i < $num;$i++){
                                                               else  pcprocitem.pc81_codproc end as pc81_codproc,
                                                          case when solrp.pc11_numero is not null then solrp.pc11_numero
                                                               else  solicitem.pc11_numero end as pc11_numero,
-                                                         case when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '')
+                                                         case when e55_marca IS NOT NULL then e55_marca 
+                                                         when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '')
                                                               when  pcorcamval.pc23_obs is null then coalesce(trim(pcorcamvalsl.pc23_obs),trim(pcorcamvalac.pc23_obs), '')
                                                               else  coalesce(trim(pcorcamval.pc23_obs),trim(pcorcamvalac.pc23_obs), '') end as pc23_obs,
 	                                                       pc50_descr",
@@ -243,7 +244,7 @@ if ($clempparametro->numrows>0){
 
    $pdf1->Snumeroproc    = "pc81_codproc";
    $pdf1->Snumero        = "pc11_numero";
-   $pdf1->obs_ordcom_orcamval = "e55_marca";
+   $pdf1->obs_ordcom_orcamval = "pc23_obs";
 
    $pdf1->imprime();
 
