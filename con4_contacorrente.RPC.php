@@ -644,7 +644,7 @@ try {
                                             inner join empempenho on e60_numemp = c19_numemp
                                             inner join empelemento on e64_numemp = e60_numemp
                                             inner join empresto on e91_numemp = e60_numemp
-                                where c19_contacorrente = {$iCorrente}
+                                where c19_contacorrente = {$iCorrente} 
                                     and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = {$iAnousuEmp} and e60_anousu < {$iAnousuEmp}
                                     and c19_instit = " . db_getsession('DB_instit');
 
@@ -728,6 +728,7 @@ try {
                                              INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
                                              AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = {$iAnousuEmp}
                                              WHERE c19_reduz = {$iReduzido}
+                                               AND c19_conplanoreduzanousu =  $iAnousuEmp
                                                AND c17_sequencial = {$iCorrente}
                                                AND c19_numemp = {$oLancamentos->e60_numemp}) AS saldoimplantado,
 
@@ -744,6 +745,7 @@ try {
                                          AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
                                          AND c19_contacorrente = {$iCorrente}
                                          AND c19_reduz = {$iReduzido}
+                                         AND c19_conplanoreduzanousu =  $iAnousuEmp
                                          AND c19_instit = " . db_getsession("DB_instit") . "
                                          AND c19_numemp = {$oLancamentos->e60_numemp}
                                          AND conhistdoc.c53_tipo not in (1000)
@@ -762,6 +764,7 @@ try {
                                          AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
                                          AND c19_contacorrente = {$iCorrente}
                                          AND c19_reduz = {$iReduzido}
+                                         AND c19_conplanoreduzanousu =  $iAnousuEmp
                                          AND c19_instit = " . db_getsession("DB_instit") . "
                                          AND c19_numemp = {$oLancamentos->e60_numemp}
                                          AND conhistdoc.c53_tipo not in (1000)
@@ -780,6 +783,7 @@ try {
                                          AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
                                          AND c19_contacorrente = {$iCorrente}
                                          AND c19_reduz = {$iReduzido}
+                                         AND c19_conplanoreduzanousu =  $iAnousuEmp
                                          AND c19_instit = " . db_getsession("DB_instit") . "
                                          AND c19_numemp = {$oLancamentos->e60_numemp}
                                          AND conhistdoc.c53_tipo not in (1000)
@@ -798,6 +802,7 @@ try {
                                          AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
                                          AND c19_contacorrente = {$iCorrente}
                                          AND c19_reduz = {$iReduzido}
+                                         AND c19_conplanoreduzanousu =  $iAnousuEmp 
                                          AND c19_instit = " . db_getsession("DB_instit") . "
                                          AND c19_numemp = {$oLancamentos->e60_numemp}
                                          AND conhistdoc.c53_tipo not in (1000)
@@ -816,6 +821,7 @@ try {
                                              AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
                                              AND c19_contacorrente = {$iCorrente}
                                              AND c19_reduz = {$iReduzido}
+                                             AND c19_conplanoreduzanousu =  $iAnousuEmp
                                              AND c19_instit = " . db_getsession("DB_instit") . "
                                              AND c19_numemp = {$oLancamentos->e60_numemp}
                                              AND conhistdoc.c53_tipo in (1000)
@@ -834,6 +840,7 @@ try {
                                              AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
                                              AND c19_contacorrente = {$iCorrente}
                                              AND c19_reduz = {$iReduzido}
+                                             AND c19_conplanoreduzanousu =  $iAnousuEmp
                                              AND c19_instit = " . db_getsession("DB_instit") . "
                                              AND c19_numemp = {$oLancamentos->e60_numemp}
                                              AND conhistdoc.c53_tipo in (1000)
@@ -859,25 +866,26 @@ try {
                              *  6327 - 6321												63171 - 6311
                              */
 
-                            if ($nSaldoFinal == 0) {
-                                $oDaoEmpresto = db_utils::getDao("empresto");
-                                $WhereEmpresto = "e91_anousu = {$iAnoSessao}";
+                            if ($nSaldoFinal == 0 || $iAnoSessao > 2016) {
+                                $oDaoEmpresto = db_utils::getDao("empempenho");
+
                                 /*
                                  * Processados
                                  * else
                                  * Não processados
                                  */
                                 if ($sEstrutural == "5321" || $sEstrutural == "5327" || $sEstrutural == "6327" || $sEstrutural == "6321" || $sEstrutural == "5322" ) {
-                                    $WhereEmpresto .= " and e60_numemp = {$oLancamentos->e60_numemp} and e60_instit = ".db_getsession('DB_instit')." group by 1 having round(sum(e91_vlrliq - e91_vlrpag),4) > 0";
-                                    $sCampos = "e91_numemp, round(sum(e91_vlrliq - e91_vlrpag),4) as valor";
+                                    $sSqlEmpresto = $oDaoEmpresto->sql_query_saldo_abertura_rp($iAnousuEmp,$oLancamentos->e60_numemp);
+                                    $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+//
+                                    $nSaldoFinal = db_utils::fieldsMemory($rsSqlEmpresto,0)->valor_processado;
 
                                 } else {
-                                    $WhereEmpresto .= " and e60_numemp = {$oLancamentos->e60_numemp} and e60_instit = ".db_getsession('DB_instit')." group by 1 having round(coalesce(sum(e91_vlremp - e91_vlranu - e91_vlrliq), 0),4) > 0";
-                                    $sCampos = "e91_numemp, round(sum(e91_vlremp - e91_vlranu - e91_vlrliq),4) as valor";
+                                    $sSqlEmpresto = $oDaoEmpresto->sql_query_saldo_abertura_rp($iAnousuEmp, $oLancamentos->e60_numemp);
+                                    $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
+                                    $nSaldoFinal = db_utils::fieldsMemory($rsSqlEmpresto,0)->valor_nao_processado;
                                 }
-                                $sSqlEmpresto = $oDaoEmpresto->sql_query_empenho(null, null, $sCampos, null, $WhereEmpresto);
-                                $rsSqlEmpresto = $oDaoEmpresto->sql_record($sSqlEmpresto);
-                                $nSaldoFinal = db_utils::fieldsMemory($rsSqlEmpresto,0)->valor;
+
                             }
 
                             $iContaCorrenteDetalhe = 0;
@@ -890,7 +898,7 @@ try {
                             $iContaCorrenteDetalhe = db_utils::fieldsMemory($rsCCDetalhe, 0)->c19_sequencial;
                               
                             //verifica se existe ccdetalhe para o anouso se não existir cria um novo.
-                            if($iContaCorrenteDetalhe == null || $iContaCorrenteDetalhe == '0'){                               
+                            if( ($iContaCorrenteDetalhe == null || $iContaCorrenteDetalhe == '0') && $nSaldoFinal > 0  ){
 
                                 //$oDaoCCDetalhe->c19_sequencial          =;
                                 $oDaoCCDetalhe->c19_contacorrente       = $iCorrente;

@@ -1731,6 +1731,38 @@ class cl_empempenho {
         return $sql;
     }
 
+    /**
+     * Retorna o sql com os saldos por empenho.
+     * Query usada para abertura do exercicio PCASP.
+     * @author: igor@contass
+     * @return string
+     */
+    function sql_query_saldo_abertura_rp($anousu, $numemp){
+        $sqlperiodo = " SELECT (vlremp - vlrliq) AS valor_nao_processado,vou
+                                (vlrliq - vlrpag) AS valor_processado
+                           FROM
+                            (SELECT sum(round(CASE WHEN c53_tipo = 10 THEN c70_valor ELSE 
+                                             (CASE WHEN c53_tipo = 11 THEN c70_valor * -1 ELSE 0 END) END,2)) AS vlremp,
+                                    sum(round(CASE WHEN c53_tipo = 20 THEN c70_valor ELSE 
+                                             (CASE WHEN c53_tipo = 21 THEN c70_valor * -1 ELSE 0 END) END,2)) AS vlrliq,
+                                    sum(round(CASE WHEN c53_tipo = 30 THEN c70_valor ELSE 
+                                             (CASE WHEN c53_tipo = 31 THEN c70_valor * -1 ELSE 0 END) END,2)) AS vlrpag
+                             FROM empempenho
+                             INNER JOIN conlancamemp ON c75_numemp=e60_numemp
+                             INNER JOIN conlancamdoc ON c71_codlan = c75_codlan
+                             INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                             INNER JOIN conlancam ON c70_codlan = c75_codlan
+                             INNER JOIN empresto ON e91_numemp = e60_numemp
+                             WHERE e91_anousu = ".db_getsession("DB_anousu")."
+                               AND c70_data BETWEEN e60_emiss AND '".$anousu."-12-31'
+                               AND e60_instit = ".db_getsession("DB_instit")."
+                               AND e60_numemp= $numemp
+                            ) AS X ";
+
+
+        return $sqlperiodo;
+    }
+
     function sql_query_buscaempenhos ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
