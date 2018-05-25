@@ -74,16 +74,19 @@ switch ($oParam->exec) {
 
                         
 
-                        if ($data[0] != 99 &&
+                        if ((($data[0] != 99 &&
                             $aArquivoCSV[0] == 'EMP' || $aArquivoCSV[0] == 'ANL' || $aArquivoCSV[0] == 'LQD' || $aArquivoCSV[0] == 'ALQ' ||
                             $aArquivoCSV[0] == 'OPS' || $aArquivoCSV[0] == 'AOP' || $aArquivoCSV[0] == 'EXT' || $aArquivoCSV[0] == 'CTB' ||
-                            $aArquivoCSV[0] == 'RSP' || $aArquivoCSV[0] == 'BALANCETE' || $aArquivoCSV[0] == 'CVC'
+                            $aArquivoCSV[0] == 'RSP' || $aArquivoCSV[0] == 'BALANCETE' || $aArquivoCSV[0] == 'CVC' ) && ($ano > 2013)) ||
+                            ($data[0] != 99 && $aArquivoCSV[0] == 'EMP' && $ano == 2013)
                         ) {
                             if ($data[0] == 99) {
                                 continue;
                             }
                             $sCaminhoClasse = "classes/db_" . strtolower($aArquivoCSV[0]) . $data[0] . $ano . "_classe.php";
-                            if (file_exists($sCaminhoClasse) && $sCaminhoClasse != 'classes/db_ext24'.$ano.'_classe.php') {
+
+                            if (file_exists($sCaminhoClasse) && $sCaminhoClasse != 'classes/db_ext24'.$ano.'_classe.php'
+                                && ($sCaminhoClasse != 'classes/db_ext21'.$ano.'_classe.php' && $ano>2015) ) {
 
                                 require_once $sCaminhoClasse;
                                 $sTabela = strtolower($aArquivoCSV[0]) . $data[0] . $ano;
@@ -109,7 +112,8 @@ switch ($oParam->exec) {
                                  * EXCLUIR DADOS DA TABELA
                                  */
 
-                                $sSqlDeleteTables = "SELECT distinct table_name FROM information_schema.columns WHERE table_name ilike '" . strtolower($aArquivoCSV[0]) . "%" . $ano . "' order by 1 DESC";
+                                $sSqlDeleteTables = "SELECT distinct table_name FROM information_schema.columns WHERE table_name ilike '" .
+                                    strtolower($aArquivoCSV[0]) . "%" . $ano . "' order by 1 DESC";
                                 $rsSqlDeleteTables = db_query($sSqlDeleteTables);
                                 $aTables = db_utils::getColectionByRecord($rsSqlDeleteTables);
 
@@ -185,6 +189,7 @@ switch ($oParam->exec) {
                             }
 
                             try {
+
                                 $oClasse->incluir(null);
                                 if($oClasse->erro_status == 0) {
                                     $oRetorno->message = ("Erro importacao. {$oClasse->erro_msg}");
