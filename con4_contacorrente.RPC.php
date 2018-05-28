@@ -871,7 +871,7 @@ try {
 
                                 /*
                                  * Processados
-                                 * else
+                                 * se não
                                  * Não processados
                                  */
                                 if ($sEstrutural == "5321" || $sEstrutural == "5327" || $sEstrutural == "6327" || $sEstrutural == "6321" || $sEstrutural == "5322" ) {
@@ -898,7 +898,7 @@ try {
                             $iContaCorrenteDetalhe = db_utils::fieldsMemory($rsCCDetalhe, 0)->c19_sequencial;
                               
                             //verifica se existe ccdetalhe para o anouso se não existir cria um novo.
-                            if( ($iContaCorrenteDetalhe == null || $iContaCorrenteDetalhe == '0') && $nSaldoFinal > 0  ){
+                            if( ($iContaCorrenteDetalhe == null || $iContaCorrenteDetalhe == '0')   ){
 
                                 //$oDaoCCDetalhe->c19_sequencial          =;
                                 $oDaoCCDetalhe->c19_contacorrente       = $iCorrente;
@@ -943,7 +943,8 @@ try {
                         //echo "<pre>";print_r($aDadosAgrupados);exit;
                         db_query('drop table if exists omov; create table omov ( c19_sequencial integer, c17_sequencial integer, c17_contacorrente varchar,c17_descricao varchar, e60_codemp integer, e60_anousu integer, c69_valor float);') or die(pg_last_error());
                         foreach ($aDadosAgrupados as $oMov) {
-                            db_query("insert into omov values ({$oMov->c19_sequencial},106,'CC 106','{$oMov->c17_descricao}',{$oMov->e60_codemp},{$oMov->e60_anousu}, {$oMov->c69_valor});") or die(pg_last_error());
+                            if($oMov->c69_valor > 0)
+                              db_query("insert into omov values ({$oMov->c19_sequencial},106,'CC 106','{$oMov->c17_descricao}',{$oMov->e60_codemp},{$oMov->e60_anousu}, {$oMov->c69_valor});") or die(pg_last_error());
                         }
 
                     } else {

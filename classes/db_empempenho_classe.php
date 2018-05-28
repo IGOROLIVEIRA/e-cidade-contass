@@ -1738,7 +1738,7 @@ class cl_empempenho {
      * @return string
      */
     function sql_query_saldo_abertura_rp($anousu, $numemp){
-        $sqlperiodo = " SELECT (vlremp - vlrliq) AS valor_nao_processado,vou
+        $sqlperiodo = " SELECT (vlremp - vlrliq) AS valor_nao_processado,
                                 (vlrliq - vlrpag) AS valor_processado
                            FROM
                             (SELECT sum(round(CASE WHEN c53_tipo = 10 THEN c70_valor ELSE 
