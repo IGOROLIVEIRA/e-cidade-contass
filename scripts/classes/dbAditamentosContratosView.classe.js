@@ -924,21 +924,20 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
 
-            if ($('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 13) {
-
-
-              var dt1 = me.oTxtDataFinal.getValue().split("/");
-              var dt2 = me.oTxtDataFinalCompara.getValue().split("/");
-
-              var datafim1 = dt1[2] + "-" + dt1[1] + "-" + dt1[0];
-              var datafim2 = dt2[2] + "-" + dt2[1] + "-" + dt2[0];
-
-              if (datafim1 <= datafim2) {
-                lAditar = false;
-                return alert("A nova data final do contrato deve ser maior que a data inserida!");
-              }
-
-            }
+            // /*comentado para atender a OC 6387*/
+            // if ($('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 13) {
+            //
+            //
+            //     var dt1 = me.oTxtDataFinal.getValue().split("/");
+            //     var dt2 = me.oTxtDataFinalCompara.getValue().split("/");
+            //
+            //     var datafim1 = dt1[2] + "-" + dt1[1] + "-" + dt1[0];
+            //     var datafim2 = dt2[2] + "-" + dt2[1] + "-" + dt2[0];
+            // if (datafim1 <= datafim2) {
+            //   lAditar = false;
+            //   return alert("A nova data final do contrato deve ser maior que a data inserida!");
+            // }
+            // }
 
             if ($('oCboTipoAditivo').value == 14) {
               var dt1 = me.oTxtDataFinal.getValue().split("/");
