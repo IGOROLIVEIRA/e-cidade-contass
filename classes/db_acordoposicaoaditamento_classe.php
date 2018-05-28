@@ -158,8 +158,8 @@ class cl_acordoposicaoaditamento {
                                 $this->ac35_sequencial
                                ,$this->ac35_valor
                                ,$this->ac35_acordoposicao
-                               ,'$this->ac35_dataassinaturatermoaditivo'
-                               ,'$this->ac35_datapublicacao'
+                               ,".($this->ac35_dataassinaturatermoaditivo == "null" ? "null" : "'".$this->ac35_dataassinaturatermoaditivo."'")."
+                               ,".($this->ac35_datapublicacao == "null" ? "null" : "'".$this->ac35_datapublicacao."'")."
                                ,'$this->ac35_descricaoalteracao'
                                ,'$this->ac35_veiculodivulgacao'
                       )";
