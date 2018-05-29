@@ -69,11 +69,28 @@ if(isset($alterar) || isset($excluir) || isset($incluir)|| isset($verificado)) {
     $erro_msg  = "\\nusuário:\\n\\n Fornecedor com débito na prefeitura !\\n\\n\\n\\n";
   }
 
+  //VERIFICA SE O FORNECEDOR ESTÁ BLOQUEADO
+  $oForne = db_utils::getDao("pcforne");
+  $oForne = $oForne->sql_record($oForne->sql_query($pc21_numcgm));
+  $oForne = db_utils::fieldsMemory($oForne);
+
+  if(!empty($oForne->pc60_databloqueio_ini) && !empty($oForne->pc60_databloqueio_fim)){
+
+    if(strtotime(date("Y-m-d",db_getsession("DB_datausu"))) >= strtotime($oForne->pc60_databloqueio_ini) &&
+      strtotime(date("Y-m-d",db_getsession("DB_datausu"))) <= strtotime($oForne->pc60_databloqueio_fim)){
+      $erro_msg  = "\\nusuário:\\n\\n Fornecedor ".$oForne->z01_nome." está bloqueado para fornecer orçamentos !\\n\\n\\n\\n";
+      $sqlerro=true;
+    }
+
+  }
+
+
   $clpcorcamforne->pc21_orcamforne = $pc21_orcamforne;
   $clpcorcamforne->pc21_codorc = $pc21_codorc;
   $clpcorcamforne->pc21_numcgm = $pc21_numcgm;
   $clpcorcamforne->pc21_importado = '0';
 }
+
 
 if (isset($incluir)) {
 
