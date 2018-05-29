@@ -600,7 +600,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
 //     $sql .= "      inner join db_config  on  db_config.codigo = solicita.pc10_instit";
      $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = solicita.pc10_login";
      $sql .= "      inner join db_depart    on  db_depart.coddepto = solicita.pc10_depto";
-     $sql .= "      inner join solicitem    on  solicita.pc10_numero = solicitem.pc11_numero";
+     $sql .= "      left join solicitem    on  solicita.pc10_numero = solicitem.pc11_numero";
      $sql .= "      left  join solicitaregistropreco  on  solicita.pc10_numero = solicitaregistropreco.pc54_solicita";
      $sql .= "      left  join pcprocitem   on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
      $sql .= "      left  join liclicitem   on  pcprocitem.pc81_codprocitem = l21_codpcprocitem";
