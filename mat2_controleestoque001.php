@@ -133,6 +133,31 @@ $iAnoPeriodoFinal = date('Y', $iPeriodoFinal);
             </td>
           </tr>
 
+        <tr id='filtroMaterial'>
+          <td>
+            <?
+            db_ancora("<b>Material:</b>", "js_pesquisaMaterial2(true)", 1);
+            ?>
+          </td>
+          <td>
+            <?
+            $funcaoJsMaterial = "onchange = ''";
+            db_input('iMaterial2', 10, false, true, 'text', 1, $funcaoJsMaterial);
+            //db_input('sMaterial', 35, $Inomeinst, true, 'text',3);
+            ?>
+
+            <?
+            db_ancora("<b>Até:</b>", "js_pesquisaMaterial3(true)", 1);
+            ?>
+
+            <?
+            $funcaoJsMaterial = "onchange = ''";
+            db_input('iMaterial3', 10, false, true, 'text', 1, $funcaoJsMaterial);
+            //db_input('sDepartamento', 35, $Inomeinst, true, 'text',3);
+            ?>
+          </td>
+        </tr>
+
           <tr>
             <td colspan="2">
               <div id="ctnMaterial"></div>
@@ -170,6 +195,9 @@ oLancadorMaterial.setTituloJanela("Pesquisar Material");
 oLancadorMaterial.setNomeInstancia("oLancadorMaterial");
 oLancadorMaterial.setParametrosPesquisa("func_matestoque.php", ["m60_codmater", "m60_descr"], 'servico=false&material');
 oLancadorMaterial.setGridHeight(150);
+oLancadorMaterial.setCallbackBotao(function(){
+  $("filtroMaterial").style.display="none";
+});
 oLancadorMaterial.show($("ctnMaterial"));
 
 $("ctnAlmoxarifado").getElementsByTagName('fieldset')[0].id = 'fieldsetAlmoxarifado';
@@ -181,7 +209,7 @@ new DBToogle('fieldsetMaterial', false);
 function js_validarFormulario() {
 
   var sPeriodoInicial = $('periodoInicial').value;
-  var sPeriodoFinal = $('periodoFinal').value;
+  var sPeriodoFinal   = $('periodoFinal').value;
 
   if (!empty(sPeriodoInicial) && !empty(sPeriodoFinal)) {
 
@@ -193,6 +221,11 @@ function js_validarFormulario() {
       return false;
     }
   }
+  if(($("iMaterial2").value == "" && $("iMaterial3").value != "") || ($("iMaterial2").value != "" && $("iMaterial3").value == "")){
+    alert("Preencha um intervalo válido de códigos de materiais.");
+    return false;
+  }
+
 
   return true
 }
@@ -231,10 +264,85 @@ function js_imprimir() {
   sParametros += '&tipoImpressao=' + $('tipoImpressao').value;
   sParametros += '&sAlmoxarifados=' + sAlmoxarifados;
   sParametros += '&sMateriais=' + sMateriais;
+  sParametros += '&sdeMaterial=' + $("iMaterial2").value;
+  sParametros += '&sateMaterial=' + $("iMaterial3").value;
   sParametros += '&ativos=' + $('ativos').value;
   sParametros += '&totalizador=' + $('totalizador').value;
 
   var janela = window.open('mat2_controleestoque002.php?' + sParametros,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   janela.moveTo(0,0);
 }
+
+
+  function js_pesquisaMaterial2(lMostra) {
+
+
+    if ($('iMaterial2').value == "" && lMostra == false){
+      $('iMaterial2').value = "";
+      //$('sMaterial').value = "";
+
+      return false;
+    }
+
+
+    sUrlLookup = "func_matestoque.php?pesquisa_chave="+$('iMaterial2').value+"&funcao_js=parent.js_preencheMaterial2";
+    if (lMostra) {
+      var sUrlLookup = "func_matestoque.php?funcao_js=parent.js_mostraMaterial2|m60_codmater|m60_descr";
+    }
+    js_OpenJanelaIframe('', 'db_iframe_db_departorg', sUrlLookup, 'Pesquisa Materials', lMostra);
+  }
+
+  function js_mostraMaterial2(iCodigoMaterial, sDescricao) {
+
+    $('iMaterial2').value = iCodigoMaterial;
+    //$('sMaterial').value = sDescricao;
+    db_iframe_db_departorg.hide();
+    if($('iMaterial2').value != "" && $('iMaterial3').value != ""){
+        document.getElementById("ctnMaterial").style.display="none";
+    }
+  }
+
+  function js_preencheMaterial2(sDescricao, lErro) {
+
+    //$('sMaterial').value = sDescricao;
+    if (lErro) {
+      $('iMaterial2').value = "";
+    }
+  }
+  function js_pesquisaMaterial3(lMostra) {
+
+
+    if ($('iMaterial3').value == "" && lMostra == false){
+      $('iMaterial3').value = "";
+      //$('sMaterial').value = "";
+
+      return false;
+    }
+
+
+    sUrlLookup = "func_matestoque.php?pesquisa_chave="+$('iMaterial3').value+"&funcao_js=parent.js_preencheMaterial3";
+    if (lMostra) {
+      var sUrlLookup = "func_matestoque.php?funcao_js=parent.js_mostraMaterial3|m60_codmater|m60_descr";
+    }
+    js_OpenJanelaIframe('', 'db_iframe_db_departorg', sUrlLookup, 'Pesquisa Materials', lMostra);
+  }
+
+  function js_mostraMaterial3(iCodigoMaterial, sDescricao) {
+
+    $('iMaterial3').value = iCodigoMaterial;
+    //$('sMaterial').value = sDescricao;
+    db_iframe_db_departorg.hide();
+    if($('iMaterial2').value != "" && $('iMaterial3').value != ""){
+        document.getElementById("ctnMaterial").style.display="none";
+    }
+  }
+
+  function js_preencheMaterial3(sDescricao, lErro) {
+
+
+    //$('sMaterial').value = sDescricao;
+    if (lErro) {
+      $('iMaterial3').value = "";
+    }
+  }
 </script>
