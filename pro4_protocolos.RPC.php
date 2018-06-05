@@ -1129,4 +1129,81 @@ if (isset($oRetorno->erro)) {
 
 echo $oJson->encode($oRetorno);
 
+/*
+  Funções criadas para popular registros anteriores antes da rotina
+
+  BEGIN;
+SELECT fc_startsession();
+create or replace
+ function insere_autprotpagordem() returns void as $$
+
+   declare
+    reg record;
+
+   begin
+   -- realiza um loop e busca todas as vendas
+   -- no período informado
+   for reg in (
+    select p105_codord, p105_protocolo, p101_dt_protocolo
+     from protpagordem
+      inner join protocolos on protocolos.p101_sequencial = protpagordem.p105_protocolo
+      left join autprotpagordem on autprotpagordem.p107_codord = protpagordem.p105_codord
+       where p101_coddeptoorigem = 31 and p101_coddeptodestino = 10
+        and p107_sequencial is null
+   )loop
+
+  -- insere na tabela autprotpagordem os resultados da consulta
+   insert into autprotpagordem(p107_sequencial, p107_codord, p107_protocolo, p107_dt_cadastro, p107_autorizado)
+    values((select nextval('autprotpagordem_p107_sequencial_seq')),reg.p105_codord, reg.p105_protocolo, reg.p101_dt_protocolo, 't');
+
+   end loop;
+end
+$$
+language plpgsql;
+COMMIT;
+
+
+
+BEGIN;
+ SELECT fc_startsession();
+ select insere_autprotpagordem();
+COMMIT;
+
+-- Função para a tabela autprotslip
+BEGIN;
+SELECT fc_startsession();
+create or replace
+ function insere_autprotslip() returns void as $$
+
+   declare
+    reg record;
+
+   begin
+   -- realiza um loop e busca todas as vendas
+   -- no período informado
+   for reg in (
+    select p106_slip, p106_protocolo, p101_dt_protocolo
+     from protslip
+      inner join protocolos on protocolos.p101_sequencial = protslip.p106_protocolo
+      left join autprotslip on autprotslip.p108_slip = protslip.p106_slip
+       where p101_coddeptoorigem = 31 and p101_coddeptodestino = 10
+        and p108_sequencial is null
+   )loop
+
+  -- insere na tabela autprotslip os resultados da consulta
+   insert into autprotslip(p108_sequencial, p108_slip, p108_protocolo, p108_dt_cadastro, p108_autorizado)
+    values((select nextval('autprotslip_p108_sequencial_seq')),reg.p106_slip, reg.p106_protocolo, reg.p101_dt_protocolo, 't');
+
+   end loop;
+end
+$$
+language plpgsql;
+COMMIT;
+
+BEGIN;
+ SELECT fc_startsession();
+ select insere_autprotslip();
+COMMIT;
+*/
+
 ?>

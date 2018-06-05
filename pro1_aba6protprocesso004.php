@@ -129,7 +129,7 @@ if (isset($aFiltros['pesquisa']) && !empty($aFiltros['pesquisa'])) {
     </table>
     <td align="left">
       <input id="bt_excluir" style="margin-left: -3px; display: none" type="button" value="Remover" onclick="excluir(<?php echo $protocolo; ?>);">
-      <?php if (db_getsession("DB_id_usuario") == 1 || ("DB_coddepto") == 10 || db_getsession("DB_coddepto") == 31) : ?>
+      <?php if (db_getsession("DB_id_usuario") == 1 || ("DB_coddepto") == 10) : ?>
         <input id="bt_autorizar" style="margin-left: 3px; display: none" type="button" value="Liberar" onclick="autorizar(<?php echo $protocolo; ?>);">
       <?php endif ; ?>
     </td>

@@ -156,7 +156,7 @@ try {
              cgm.z01_numcgm,
              cgm.z01_nome,
              to_char(e50_data,'DD/MM/YYYY') dataopslip,
-             orctiporec.o15_codigo codrecurso,
+             orctiporec.o15_codtri codrecurso,
              orctiporec.o15_descr nomerecurso,
              pagordemele.e53_valor valor,
              to_char(p107_dt_cadastro,'DD/MM/YYYY') dtautorizacao,
@@ -194,7 +194,7 @@ try {
               cgm.z01_numcgm,
               cgm.z01_nome,
               to_char(k17_data,'DD/MM/YYYY') dataopslip,
-              orctiporec.o15_codigo codrecurso,
+              orctiporec.o15_codtri codrecurso,
               orctiporec.o15_descr nomerecurso,
               slip.k17_valor valor,
               to_char(p108_dt_cadastro,'DD/MM/YYYY') dtautorizacao,
@@ -234,9 +234,9 @@ try {
           if (!empty($aFiltros['z01_numcgm'])) {
             $z01_numcgm = $aFiltros['z01_numcgm'];
             if (!empty($whereFiltro)) {
-              $whereFiltro .= " WHERE ORDSLIP.z01_numcgm = {$z01_numcgm} ";
+              $whereFiltro .= " AND ORDSLIP.z01_numcgm = {$z01_numcgm} ";
             } else {
-                $whereFiltro .= " AND ORDSLIP.z01_numcgm = {$z01_numcgm} ";
+                $whereFiltro .= " WHERE ORDSLIP.z01_numcgm = {$z01_numcgm} ";
             }
           }
           $sSQL = "SELECT *
@@ -310,7 +310,7 @@ try {
           SELECT DISTINCT pagordem.e50_codord ordslip,
              cgm.z01_numcgm,
              cgm.z01_nome,
-             orctiporec.o15_codigo codrecurso,
+             orctiporec.o15_codtri codrecurso,
              orctiporec.o15_descr nomerecurso,
              to_char(p107_dt_cadastro,'DD/MM/YYYY') dtautorizacao,
              total.e53_valor valor
@@ -318,14 +318,6 @@ try {
           INNER JOIN pagordem ON pagordem.e50_codord = pagordemele.e53_codord
           INNER JOIN protpagordem ON protpagordem.p105_codord = pagordem.e50_codord
           INNER JOIN empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
-          INNER JOIN (
-            select sum(e53_valor) as e53_valor, e60_numemp
-             from empempenho
-              inner join pagordem on e50_numemp = e60_numemp
-              inner join pagordemele on e53_codord = e50_codord
-              inner join autprotpagordem ON p107_codord = e50_codord
-                group by e60_numemp
-          ) AS total ON total.e60_numemp = empempenho.e60_numemp
           INNER JOIN orcelemento ON orcelemento.o56_codele = pagordemele.e53_codele
           INNER JOIN orcdotacao ON orcdotacao.o58_coddot = empempenho.e60_coddot
             AND orcdotacao.o58_anousu = empempenho.e60_anousu
@@ -333,6 +325,23 @@ try {
           INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
           INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
             AND orcelemento.o56_anousu = empempenho.e60_anousu
+          INNER JOIN (
+            select sum(e53_valor) as e53_valor, o15_codigo, e60_numcgm
+             from empempenho
+              inner join cgm ON z01_numcgm = e60_numcgm
+              inner join pagordem on e50_numemp = e60_numemp and e50_anousu = e60_anousu
+              inner join pagordemele on e53_codord = e50_codord
+              inner join autprotpagordem ON p107_codord = e50_codord
+              inner join protocolos on p101_sequencial = p107_protocolo
+              inner join orcdotacao ON o58_coddot = e60_coddot
+                and orcdotacao.o58_anousu = empempenho.e60_anousu
+                and orcdotacao.o58_instit = empempenho.e60_instit
+              inner join  orctiporec ON o15_codigo = o58_codigo
+               where e53_vlrpag >= 0
+               and e53_vlrpag < e53_valor
+               and e53_vlranu = 0
+                group by o15_codigo, e60_numcgm
+          ) AS total ON total.o15_codigo = orctiporec.o15_codigo and total.e60_numcgm = empempenho.e60_numcgm
           INNER JOIN autprotpagordem on autprotpagordem.p107_codord = pagordem.e50_codord
           INNER JOIN protocolos ON protocolos.p101_sequencial = autprotpagordem.p107_protocolo
             WHERE pagordemele.e53_vlrpag >= 0
@@ -345,7 +354,7 @@ try {
           SELECT DISTINCT slip.k17_codigo ordslip,
               cgm.z01_numcgm,
               cgm.z01_nome,
-              orctiporec.o15_codigo codrecurso,
+              orctiporec.o15_codtri codrecurso,
               orctiporec.o15_descr nomerecurso,
               to_char(p108_dt_cadastro,'DD/MM/YYYY') dtautorizacao,
               slip.k17_valor valor
@@ -373,9 +382,9 @@ try {
           if (!empty($aFiltros['z01_numcgm'])) {
             $z01_numcgm = $aFiltros['z01_numcgm'];
             if (!empty($whereFiltro)) {
-              $whereFiltro .= " WHERE ORDSLIP.z01_numcgm = {$z01_numcgm} ";
+              $whereFiltro .= " AND ORDSLIP.z01_numcgm = {$z01_numcgm} ";
             } else {
-                $whereFiltro .= " AND ORDSLIP.z01_numcgm = {$z01_numcgm} ";
+                $whereFiltro .= " WHERE ORDSLIP.z01_numcgm = {$z01_numcgm} ";
             }
           }
           $sSQL = "SELECT *
@@ -411,7 +420,7 @@ try {
               $sSQL = "SELECT *
                         FROM ($sqlSLIP) AS ORDSLIP
                           {$whereFiltro}
-                      ORDER BY codrecurso, z01_numcgm, ordslip
+                      ORDER BY ORDSLIP.codrecurso, ORDSLIP.z01_numcgm, ORDSLIP.ordslip
                   ";
             }
         }
@@ -431,7 +440,7 @@ try {
 } catch (Exception $e) {
     echo $e->getMessage();
 }
-
+//echo "<pre>"; ini_set("display_errors", true);
 $aOpSlips    = array();
 $valortotal  = 0;
 $totalquebra = 0;
@@ -592,7 +601,7 @@ ob_start();
       .table th {border: 1px solid #bbb;background-color: #ddd;padding: 1px 3px;font-size: 10px;}
       .left {text-align: left;}
       ._1 { background-color: #dfe2ff;}
-      .pagina { clear: both;  height: 100%; margin-bottom: 0; padding: 0; page-break-after: initial;}
+      .pagina { clear: both;  height: 100%; margin-bottom: 0; padding: 0; }/*page-break-after: initial;*/
       #empenho {width: 45px;}
       #ordslip {width: 70px;}
       #credor {width: 200px;}
@@ -729,8 +738,7 @@ ob_start();
       .table {border: 1px solid #bbb;background-color: #fff;font-size: 11px; width: 100%;}
       .table td {border: 1px solid #bbb;padding: 1px 3px;font-size: 10px;}
       .titulo {background-color: #ddd;text-align: center; font-weight: bold;}
-      .left {text-align: left;}
-      .pagina { clear: both;  height: 100%; margin-bottom: 0; padding: 0; page-break-after: initial;}
+      /*.pagina { clear: both;  height: 100%; margin-bottom: 0; padding: 0;}page-break-after: initial;*/
       #col1 {width: 70%;}
       #col2 {width: 30%;}
     </style>
@@ -760,7 +768,9 @@ ob_start();
             <td>
               <strong>Total do Recurso <?= $aOpSlip->codrecurso ?></strong>
             </td>
-            <td>R$<?= number_format($totalquebra, 2, ',', '.'); $totalquebra = 0; ?></td>
+            <td>
+              <strong>R$<?= number_format($totalquebra, 2, ',', '.'); $totalquebra = 0; ?></strong>
+            </td>
           </tr>
         <?php endforeach; ?>
         </tbody>
