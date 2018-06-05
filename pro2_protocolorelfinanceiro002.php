@@ -656,7 +656,7 @@ ob_start();
               <tr>
                 <td><?= $ordempslip->empenho ?></td>
                 <td><?= $ordempslip->ordslip ?></td>
-                <td><?= $ordempslip->z01_nome ?></td>
+                <td><?= $ordempslip->z01_numcgm." - ".$ordempslip->z01_nome ?></td>
                 <td><?= $ordempslip->dataopslip ?></td>
                 <td><?= $ordempslip->codrecurso ?></td>
                 <td><?= number_format($ordempslip->valor, 2, ',', '.') ?></td>
@@ -694,7 +694,7 @@ ob_start();
             <tr class="_<?php echo ($contador % 2 == 0) ?>">
               <td><?= $aOpSlip->empenho ?></td>
               <td><?= $aOpSlip->ordslip ?></td>
-              <td><?= $aOpSlip->z01_nome ?></td>
+              <td><?= $aOpSlip->z01_numcgm." - ".$aOpSlip->z01_nome ?></td>
               <td><?= $aOpSlip->dataopslip ?></td>
               <td><?= $aOpSlip->codrecurso ?></td>
               <td><?= number_format($aOpSlip->valor, 2, ',', '.') ?></td>
@@ -738,7 +738,7 @@ ob_start();
       .table {border: 1px solid #bbb;background-color: #fff;font-size: 11px; width: 100%;}
       .table td {border: 1px solid #bbb;padding: 1px 3px;font-size: 10px;}
       .titulo {background-color: #ddd;text-align: center; font-weight: bold;}
-      /*.pagina { clear: both;  height: 100%; margin-bottom: 0; padding: 0;}page-break-after: initial;*/
+      .pagina { clear: both;  height: 100%; margin-bottom: 0; padding: 0;}page-break-after: initial;*/
       #col1 {width: 70%;}
       #col2 {width: 30%;}
     </style>
