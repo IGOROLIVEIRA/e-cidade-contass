@@ -39,65 +39,86 @@ $clmatordem->rotulo->label("m51_data");
 ?>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr>
-    <td height="63" align="center" valign="top">
+  <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+    <tr>
+      <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
-	     <form name="form2" method="post" action="" >
-          <tr>
-            <td width="4%" align="right" nowrap title="<?=$Tm51_codordem?>">
-              <?=$Lm51_codordem?>
-            </td>
-            <td width="96%" align="left" nowrap>
-              <?
-		       db_input("m51_codordem",10,$Im51_codordem,true,"text",4,"","chave_m51_codordem");
-		       ?>
-            </td>
-          </tr>
-          <tr>
-            <td width="4%" align="right" nowrap title="<?=$Tm51_data?>">
-              <?=$Lm51_data?>
-            </td>
-            <td width="96%" align="left" nowrap>
-              <?
-		       db_input("m51_data",10,$Im51_data,true,"text",4,"","chave_m51_data");
-		       ?>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" align="center">
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-              <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_matordem.hide();">
-             </td>
-          </tr>
-        </form>
+          <form name="form2" method="post" action="" >
+            <tr>
+              <td width="4%" align="right" nowrap title="<?=$Tm51_codordem?>">
+                <?=$Lm51_codordem?>
+              </td>
+              <td width="96%" align="left" nowrap>
+                <?
+                db_input("m51_codordem",10,$Im51_codordem,true,"text",4,"","chave_m51_codordem");
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td width="4%" align="right" nowrap title="<?=$Tm51_data?>">
+                <?=$Lm51_data?>
+              </td>
+              <td width="96%" align="left" nowrap>
+                <?
+                db_input("m51_data",10,$Im51_data,true,"text",4,"","chave_m51_data");
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center">
+                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                <input name="limpar" type="reset" id="limpar" value="Limpar" >
+                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_matordem.hide();">
+              </td>
+            </tr>
+          </form>
         </table>
       </td>
-  </tr>
-  <tr>
-    <td align="center" valign="top">
-      <?
-      $where_instit = " e60_instit = ".db_getsession("DB_instit");
-      if(!isset($pesquisa_chave)){
-        if(isset($campos)==false){
+    </tr>
+    <tr>
+      <td align="center" valign="top">
+        <?
+        $where_instit = " e60_instit = ".db_getsession("DB_instit");
+        if(!isset($pesquisa_chave)){
+          if(isset($campos)==false){
            if(file_exists("funcoes/db_func_matordem.php")==true){
              include("funcoes/db_func_matordemanulada.php");
            }else{
-           $campos = "matordem.*";
+             $campos = "matordem.*";
            }
-        }
-        if(isset($chave_m51_codordem) && (trim($chave_m51_codordem)!="") ){
-	         $sql = $clmatordem->sql_query_anu($chave_m51_codordem." and ".$where_instit,$campos,"m51_codordem","");
+         }
+         if(isset($chave_m51_codordem) && (trim($chave_m51_codordem)!="") ){
+          $sql = $clmatordem->sql_query_anu($chave_m51_codordem." and ".$where_instit,$campos,"m51_codordem","");
         }else if(isset($chave_m51_data) && (trim($chave_m51_data)!="") ){
-	         $sql = $clmatordem->sql_query_anu("",$campos,"m51_data"," m51_data like '$chave_m51_data%' and ".$where_instit);
+          $sql = $clmatordem->sql_query_anu("",$campos,"m51_data"," m51_data like '$chave_m51_data%' and ".$where_instit);
         }else{
-           $sql = $clmatordem->sql_query_anu("",$campos,"m51_codordem",$where_instit);
+          $where_empenho = "";
+          $where_fornecedor = "";
+          $where_periodo = "";
+          if(isset($empenho) && $empenho != ""){
+            $empenho = explode('.', $empenho);
+            $where_empenho = " and e60_codemp = '".$empenho[0]."' and e60_anousu = ".$empenho[1];
+          }
+          if(isset($fornecedor) && $fornecedor != ""){
+            $where_fornecedor = " and z01_numcgm = ".$fornecedor;
+          }
+          if(isset($periodoini) && $periodoini != ""){
+            $periodo = explode('/',$periodoini);
+            $periodoini = $periodo[2].'-'.$periodo[1].'-'.$periodo[0];
+            $where_periodo = " and m51_data >= '$periodoini'";
+          }
+          if(isset($periodofim) && $periodofim != ""){
+            $periodo = explode('/',$periodofim);
+            $periodofim = $periodo[2].'-'.$periodo[1].'-'.$periodo[0];
+            $where_periodo .= " and m51_data <= '$periodofim'";
+          }
+          $sql = $clmatordem->sql_query_anu("",$campos,"m51_codordem",$where_instit.$where_empenho.$where_fornecedor.$where_periodo);
+
         }
         //echo $sql;die;
         db_lovrot($sql,15,"()","",$funcao_js);
@@ -114,15 +135,15 @@ $clmatordem->rotulo->label("m51_data");
             }
 
           }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+            echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
         }else{
-	       echo "<script>".$funcao_js."('',false);</script>";
+          echo "<script>".$funcao_js."('',false);</script>";
         }
       }
       ?>
-     </td>
-   </tr>
+    </td>
+  </tr>
 </table>
 </body>
 </html>

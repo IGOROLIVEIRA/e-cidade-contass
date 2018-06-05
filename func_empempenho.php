@@ -222,7 +222,28 @@ $rotulo->label("z01_cgccpf");
                 $repassa = array(
                     "chave_z01_nome" => @$chave_z01_nome
                 );
+                if(isset($relordemcompra) && $relordemcompra==true){
+                  $campos.=",z01_numcgm";
+                  $whereRelCompra = ' 1=1 ';
+                  if(isset($periodoini) && $periodoini != ""){
 
+                    $data = explode("/",$periodoini);
+                    $periodoini = $data[2].'-'.$data[1].'-'.$data[0];
+
+                    $whereRelCompra .= " AND e60_emiss >= '$periodoini'";
+                  }
+                  if(isset($periodofim) && $periodofim != ""){
+                    $data = explode("/",$periodofim);
+                    $periodofim = $data[2].'-'.$data[1].'-'.$data[0];
+
+                    $whereRelCompra .= " AND e60_emiss <= '$periodofim'";
+                  }
+                  if(isset($fornecedor) && $fornecedor!=""){
+                    $whereRelCompra .= " AND z01_numcgm = $fornecedor";
+                  }
+                  $sql = $clempempenho->sql_query(null,$campos,null,$whereRelCompra);
+
+                }
                 $result = $clempempenho->sql_record($sql);
 
                 ?>
