@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -45,7 +45,7 @@ $cldb_almox     = new cl_db_almox;
 $oDaoMatRequiCriterio = db_utils::getDao("matrequiitemcriteriocustorateio");
 $aParamKeys          = array( db_getsession("DB_anousu") );
 $aParametrosCustos   = db_stdClass::getParametro("parcustos",$aParamKeys);
-$iTipoControleCustos = 0; 
+$iTipoControleCustos = 0;
 
 if (count($aParametrosCustos) > 0) {
   $iTipoControleCustos = $aParametrosCustos[0]->cc09_tipocontrole;
@@ -103,7 +103,7 @@ if ( isset($incluir) ) {
 			 if ($oDaoMatRequiCriterio->erro_status == 0) {
 
 				 $sqlerro  = true;
-				 $erro_msg = $oDaoMatRequiCriterio->erro_msg;  
+				 $erro_msg = $oDaoMatRequiCriterio->erro_msg;
 
 			 }
 		 }
@@ -111,8 +111,34 @@ if ( isset($incluir) ) {
 
   db_fim_transacao($sqlerro);
 
-} elseif ( isset($alterar) ) {
-  
+}
+else if (isset($finalizar)) {
+  $sqlerro=false;
+  db_inicio_transacao();
+  $resultado = $clmatrequiitem->sql_record($clmatrequiitem->sql_query(null,'*',null,"m41_codmatrequi = $m40_codigo "));
+
+  if (pg_num_rows($resultado) == 0) {
+     $erro_msg = "Inclua um material para finalizar a requisição";
+     $sqlerro  = true;
+  } else {
+     $data = date('Y-m-d');
+     $rsResult = db_query("
+        BEGIN;
+          update matrequi set m40_finalizado = 't', m40_dtfinalizado = '{$data}' where m40_codigo = {$m40_codigo};
+        COMMIT;
+     ");
+
+     if ($rsResult == false) {
+        $erro_msg = "Erro finalizar ao requisição";
+        $sqlerro  = true;
+     } else {
+        $erro_msg = "Requisição finalizada com sucesso!";
+     }
+  }
+  db_fim_transacao($sqlerro);
+}
+else if ( isset($alterar) ) {
+
   $sqlerro=false;
   db_inicio_transacao();
   $clmatrequiitem->m41_codunid=$codunid;
@@ -122,18 +148,18 @@ if ( isset($incluir) ) {
     $sqlerro=true;
   }
   if (!$sqlerro) {
-     $oDaoMatRequiCriterio->excluir(null, "cc13_matrequiitem={$m41_codigo}"); 
+     $oDaoMatRequiCriterio->excluir(null, "cc13_matrequiitem={$m41_codigo}");
     if (isset($cc08_sequencial) && $cc08_sequencial != "") {
-      
+
       $oDaoMatRequiCriterio = db_utils::getDao("matrequiitemcriteriocustorateio");
       $oDaoMatRequiCriterio->cc13_custocriteriorateio = $cc08_sequencial;
       $oDaoMatRequiCriterio->cc13_matrequiitem        = $m41_codigo;
       $oDaoMatRequiCriterio->incluir(null);
       if ($oDaoMatRequiCriterio->erro_status == 0) {
-        
+
         $sqlerro  = true;
-        $erro_msg = $oDaoMatRequiCriterio->erro_msg;  
-        
+        $erro_msg = $oDaoMatRequiCriterio->erro_msg;
+
       }
     }
   }
@@ -145,7 +171,7 @@ if ( isset($incluir) ) {
   }
   db_fim_transacao($sqlerro);
 
-} elseif ( isset($excluir) ) {
+} else if ( isset($excluir) ) {
 
   $sqlerro = false;
 
@@ -158,7 +184,7 @@ if ( isset($incluir) ) {
   if ($clmatrequiitem->erro_status==0){
     $sqlerro=true;
   }
-  if ( $sqlerro == false ) { 
+  if ( $sqlerro == false ) {
 
     $m41_codmatmater="";
     $m41_obs="";
@@ -169,7 +195,7 @@ if ( isset($incluir) ) {
 }
 
 if ( !empty($m41_codigo) ) {
-  
+
   $sSql       = $oDaoMatRequiCriterio->sql_query(null,"cc08_descricao, cc08_sequencial",null,"cc13_matrequiitem= $m41_codigo");
   $rsCriterio = $oDaoMatRequiCriterio->sql_record($sSql);
 
@@ -190,8 +216,8 @@ if ( !empty($m41_codigo) ) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 			<?php include("forms/db_frmmatrequiitemalt.php"); ?>
     </center>
@@ -201,10 +227,9 @@ if ( !empty($m41_codigo) ) {
 </body>
 </html>
 <?
-if(isset($incluir) || isset($alterar) || isset($excluir)){
+if(isset($incluir) || isset($alterar) || isset($excluir) || isset($finalizar)){
   if($sqlerro==true){
-//    $clmatrequiitem->erro(true,false);
-      db_msgbox($erro_msg);
+    db_msgbox($erro_msg);
     if($clmatrequiitem->erro_campo!=""){
       echo "<script> parent.document.form1.".$clmatrequiitem->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> parent.document.form1.".$clmatrequiitem->erro_campo.".focus();</script>";
@@ -216,5 +241,5 @@ if(isset($incluir) || isset($alterar) || isset($excluir)){
    </script>";
 
   }
-}  
+}
 ?>
