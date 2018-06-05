@@ -1,78 +1,78 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
 //CLASSE DA ENTIDADE rhregime
-class cl_rhregime { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $rh30_codreg = 0; 
-   var $rh30_vinculomanad = 0; 
-   var $rh30_descr = null; 
-   var $rh30_regime = 0; 
-   var $rh30_vinculo = null; 
-   var $rh30_instit = 0; 
-   var $rh30_naturezaregime = 0; 
-   var $rh30_utilizacao = 0; 
-   var $rh30_periodoaquisitivo = 0; 
-   var $rh30_periodogozoferias = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_rhregime {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $rh30_codreg = 0;
+   var $rh30_vinculomanad = 0;
+   var $rh30_descr = null;
+   var $rh30_regime = 0;
+   var $rh30_vinculo = null;
+   var $rh30_instit = 0;
+   var $rh30_naturezaregime = 0;
+   var $rh30_utilizacao = 0;
+   var $rh30_periodoaquisitivo = 0;
+   var $rh30_periodogozoferias = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 rh30_codreg = int4 = Código do Vínculo 
-                 rh30_vinculomanad = int4 = Vínculo Manad 
-                 rh30_descr = varchar(40) = Descrição 
-                 rh30_regime = int4 = Regime 
-                 rh30_vinculo = varchar(1) = Situação 
-                 rh30_instit = int4 = Cod. Instituição 
-                 rh30_naturezaregime = int4 = Codigo da Natureza 
-                 rh30_utilizacao = int4 = Utilização 
-                 rh30_periodoaquisitivo = int4 = Duração Período Aquisitivo 
-                 rh30_periodogozoferias = int4 = Periodo de Gozo 
+                 rh30_codreg = int4 = Código do Vínculo
+                 rh30_vinculomanad = int4 = Vínculo Manad
+                 rh30_descr = varchar(40) = Descrição
+                 rh30_regime = int4 = Regime
+                 rh30_vinculo = varchar(1) = Situação
+                 rh30_instit = int4 = Cod. Instituição
+                 rh30_naturezaregime = int4 = Codigo da Natureza
+                 rh30_utilizacao = int4 = Utilização
+                 rh30_periodoaquisitivo = int4 = Duração Período Aquisitivo
+                 rh30_periodogozoferias = int4 = Periodo de Gozo
                  ";
-   //funcao construtor da classe 
-   function cl_rhregime() { 
+   //funcao construtor da classe
+   function cl_rhregime() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("rhregime"); 
+     $this->rotulo = new rotulo("rhregime");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -98,9 +98,9 @@ class cl_rhregime {
      }
    }
    // funcao para inclusao
-   function incluir ($rh30_codreg){ 
+   function incluir ($rh30_codreg){
       $this->atualizacampos();
-     if($this->rh30_vinculomanad == null ){ 
+     if($this->rh30_vinculomanad == null ){
        $this->erro_sql = " Campo Vínculo Manad nao Informado.";
        $this->erro_campo = "rh30_vinculomanad";
        $this->erro_banco = "";
@@ -109,7 +109,7 @@ class cl_rhregime {
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh30_descr == null ){ 
+     if($this->rh30_descr == null ){
        $this->erro_sql = " Campo Descrição nao Informado.";
        $this->erro_campo = "rh30_descr";
        $this->erro_banco = "";
@@ -118,7 +118,7 @@ class cl_rhregime {
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh30_regime == null ){ 
+     if($this->rh30_regime == null ){
        $this->erro_sql = " Campo Regime nao Informado.";
        $this->erro_campo = "rh30_regime";
        $this->erro_banco = "";
@@ -127,7 +127,7 @@ class cl_rhregime {
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh30_vinculo == null ){ 
+     if($this->rh30_vinculo == null ){
        $this->erro_sql = " Campo Situação nao Informado.";
        $this->erro_campo = "rh30_vinculo";
        $this->erro_banco = "";
@@ -136,7 +136,7 @@ class cl_rhregime {
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh30_instit == null ){ 
+     if($this->rh30_instit == null ){
        $this->erro_sql = " Campo Cod. Instituição nao Informado.";
        $this->erro_campo = "rh30_instit";
        $this->erro_banco = "";
@@ -145,7 +145,7 @@ class cl_rhregime {
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh30_naturezaregime == null ){ 
+     if($this->rh30_naturezaregime == null ){
        $this->erro_sql = " Campo Codigo da Natureza nao Informado.";
        $this->erro_campo = "rh30_naturezaregime";
        $this->erro_banco = "";
@@ -154,7 +154,7 @@ class cl_rhregime {
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh30_utilizacao == null ){ 
+     if($this->rh30_utilizacao == null ){
        $this->erro_sql = " Campo Utilização nao Informado.";
        $this->erro_campo = "rh30_utilizacao";
        $this->erro_banco = "";
@@ -163,7 +163,7 @@ class cl_rhregime {
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh30_periodoaquisitivo == null ){ 
+     if($this->rh30_periodoaquisitivo == null ){
        $this->erro_sql = " Campo Duração Período Aquisitivo nao Informado.";
        $this->erro_campo = "rh30_periodoaquisitivo";
        $this->erro_banco = "";
@@ -172,7 +172,7 @@ class cl_rhregime {
        $this->erro_status = "0";
        return false;
      }
-     if($this->rh30_periodogozoferias == null ){ 
+     if($this->rh30_periodogozoferias == null ){
        $this->erro_sql = " Campo Periodo de Gozo nao Informado.";
        $this->erro_campo = "rh30_periodogozoferias";
        $this->erro_banco = "";
@@ -182,16 +182,16 @@ class cl_rhregime {
        return false;
      }
      if($rh30_codreg == "" || $rh30_codreg == null ){
-       $result = db_query("select nextval('rhregime_rh30_codreg_seq')"); 
+       $result = db_query("select nextval('rhregime_rh30_codreg_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: rhregime_rh30_codreg_seq do campo: rh30_codreg"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: rhregime_rh30_codreg_seq do campo: rh30_codreg";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->rh30_codreg = pg_result($result,0,0); 
+       $this->rh30_codreg = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from rhregime_rh30_codreg_seq");
        if(($result != false) && (pg_result($result,0,0) < $rh30_codreg)){
@@ -202,10 +202,10 @@ class cl_rhregime {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->rh30_codreg = $rh30_codreg; 
+         $this->rh30_codreg = $rh30_codreg;
        }
      }
-     if(($this->rh30_codreg == null) || ($this->rh30_codreg == "") ){ 
+     if(($this->rh30_codreg == null) || ($this->rh30_codreg == "") ){
        $this->erro_sql = " Campo rh30_codreg nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -214,32 +214,32 @@ class cl_rhregime {
        return false;
      }
      $sql = "insert into rhregime(
-                                       rh30_codreg 
-                                      ,rh30_vinculomanad 
-                                      ,rh30_descr 
-                                      ,rh30_regime 
-                                      ,rh30_vinculo 
-                                      ,rh30_instit 
-                                      ,rh30_naturezaregime 
-                                      ,rh30_utilizacao 
-                                      ,rh30_periodoaquisitivo 
-                                      ,rh30_periodogozoferias 
+                                       rh30_codreg
+                                      ,rh30_vinculomanad
+                                      ,rh30_descr
+                                      ,rh30_regime
+                                      ,rh30_vinculo
+                                      ,rh30_instit
+                                      ,rh30_naturezaregime
+                                      ,rh30_utilizacao
+                                      ,rh30_periodoaquisitivo
+                                      ,rh30_periodogozoferias
                        )
                 values (
-                                $this->rh30_codreg 
-                               ,$this->rh30_vinculomanad 
-                               ,'$this->rh30_descr' 
-                               ,$this->rh30_regime 
-                               ,'$this->rh30_vinculo' 
-                               ,$this->rh30_instit 
-                               ,$this->rh30_naturezaregime 
-                               ,$this->rh30_utilizacao 
+                                $this->rh30_codreg
+                               ,$this->rh30_vinculomanad
+                               ,'$this->rh30_descr'
+                               ,$this->rh30_regime
+                               ,'$this->rh30_vinculo'
+                               ,$this->rh30_instit
+                               ,$this->rh30_naturezaregime
+                               ,$this->rh30_utilizacao
                                ,null
                                ,null
                       )";
-     
-     $result = db_query($sql); 
-     if($result==false){ 
+
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Regime dos funcionários ($this->rh30_codreg) nao Incluído. Inclusao Abortada.";
@@ -286,16 +286,16 @@ class cl_rhregime {
        }
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($rh30_codreg=null) { 
+   function alterar ($rh30_codreg=null) {
       $this->atualizacampos();
      $sql = " update rhregime set ";
      $virgula = "";
-     if(trim($this->rh30_codreg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_codreg"])){ 
+     if(trim($this->rh30_codreg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_codreg"])){
        $sql  .= $virgula." rh30_codreg = $this->rh30_codreg ";
        $virgula = ",";
-       if(trim($this->rh30_codreg) == null ){ 
+       if(trim($this->rh30_codreg) == null ){
          $this->erro_sql = " Campo Código do Vínculo nao Informado.";
          $this->erro_campo = "rh30_codreg";
          $this->erro_banco = "";
@@ -305,10 +305,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_vinculomanad)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_vinculomanad"])){ 
+     if(trim($this->rh30_vinculomanad)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_vinculomanad"])){
        $sql  .= $virgula." rh30_vinculomanad = $this->rh30_vinculomanad ";
        $virgula = ",";
-       if(trim($this->rh30_vinculomanad) == null ){ 
+       if(trim($this->rh30_vinculomanad) == null ){
          $this->erro_sql = " Campo Vínculo Manad nao Informado.";
          $this->erro_campo = "rh30_vinculomanad";
          $this->erro_banco = "";
@@ -318,10 +318,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_descr"])){ 
+     if(trim($this->rh30_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_descr"])){
        $sql  .= $virgula." rh30_descr = '$this->rh30_descr' ";
        $virgula = ",";
-       if(trim($this->rh30_descr) == null ){ 
+       if(trim($this->rh30_descr) == null ){
          $this->erro_sql = " Campo Descrição nao Informado.";
          $this->erro_campo = "rh30_descr";
          $this->erro_banco = "";
@@ -331,10 +331,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_regime)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_regime"])){ 
+     if(trim($this->rh30_regime)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_regime"])){
        $sql  .= $virgula." rh30_regime = $this->rh30_regime ";
        $virgula = ",";
-       if(trim($this->rh30_regime) == null ){ 
+       if(trim($this->rh30_regime) == null ){
          $this->erro_sql = " Campo Regime nao Informado.";
          $this->erro_campo = "rh30_regime";
          $this->erro_banco = "";
@@ -344,10 +344,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_vinculo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_vinculo"])){ 
+     if(trim($this->rh30_vinculo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_vinculo"])){
        $sql  .= $virgula." rh30_vinculo = '$this->rh30_vinculo' ";
        $virgula = ",";
-       if(trim($this->rh30_vinculo) == null ){ 
+       if(trim($this->rh30_vinculo) == null ){
          $this->erro_sql = " Campo Situação nao Informado.";
          $this->erro_campo = "rh30_vinculo";
          $this->erro_banco = "";
@@ -357,10 +357,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_instit"])){ 
+     if(trim($this->rh30_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_instit"])){
        $sql  .= $virgula." rh30_instit = $this->rh30_instit ";
        $virgula = ",";
-       if(trim($this->rh30_instit) == null ){ 
+       if(trim($this->rh30_instit) == null ){
          $this->erro_sql = " Campo Cod. Instituição nao Informado.";
          $this->erro_campo = "rh30_instit";
          $this->erro_banco = "";
@@ -370,10 +370,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_naturezaregime)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_naturezaregime"])){ 
+     if(trim($this->rh30_naturezaregime)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_naturezaregime"])){
        $sql  .= $virgula." rh30_naturezaregime = $this->rh30_naturezaregime ";
        $virgula = ",";
-       if(trim($this->rh30_naturezaregime) == null ){ 
+       if(trim($this->rh30_naturezaregime) == null ){
          $this->erro_sql = " Campo Codigo da Natureza nao Informado.";
          $this->erro_campo = "rh30_naturezaregime";
          $this->erro_banco = "";
@@ -383,10 +383,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_utilizacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_utilizacao"])){ 
+     if(trim($this->rh30_utilizacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_utilizacao"])){
        $sql  .= $virgula." rh30_utilizacao = $this->rh30_utilizacao ";
        $virgula = ",";
-       if(trim($this->rh30_utilizacao) == null ){ 
+       if(trim($this->rh30_utilizacao) == null ){
          $this->erro_sql = " Campo Utilização nao Informado.";
          $this->erro_campo = "rh30_utilizacao";
          $this->erro_banco = "";
@@ -396,10 +396,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_periodoaquisitivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_periodoaquisitivo"])){ 
+     if(trim($this->rh30_periodoaquisitivo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_periodoaquisitivo"])){
        $sql  .= $virgula." rh30_periodoaquisitivo = $this->rh30_periodoaquisitivo ";
        $virgula = ",";
-       if(trim($this->rh30_periodoaquisitivo) == null ){ 
+       if(trim($this->rh30_periodoaquisitivo) == null ){
          $this->erro_sql = " Campo Duração Período Aquisitivo nao Informado.";
          $this->erro_campo = "rh30_periodoaquisitivo";
          $this->erro_banco = "";
@@ -409,10 +409,10 @@ class cl_rhregime {
          return false;
        }
      }
-     if(trim($this->rh30_periodogozoferias)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_periodogozoferias"])){ 
+     if(trim($this->rh30_periodogozoferias)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh30_periodogozoferias"])){
        $sql  .= $virgula." rh30_periodogozoferias = $this->rh30_periodogozoferias ";
        $virgula = ",";
-       if(trim($this->rh30_periodogozoferias) == null ){ 
+       if(trim($this->rh30_periodogozoferias) == null ){
          $this->erro_sql = " Campo Periodo de Gozo nao Informado.";
          $this->erro_campo = "rh30_periodogozoferias";
          $this->erro_banco = "";
@@ -463,7 +463,7 @@ class cl_rhregime {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Regime dos funcionários nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->rh30_codreg;
@@ -491,11 +491,11 @@ class cl_rhregime {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($rh30_codreg=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($rh30_codreg=null,$dbwhere=null) {
 
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
@@ -504,7 +504,7 @@ class cl_rhregime {
        if ($dbwhere==null || $dbwhere=="") {
 
          $resaco = $this->sql_record($this->sql_query_file($rh30_codreg));
-       } else { 
+       } else {
          $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
        }
        if (($resaco != false) || ($this->numrows!=0)) {
@@ -542,7 +542,7 @@ class cl_rhregime {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Regime dos funcionários nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$rh30_codreg;
@@ -570,11 +570,11 @@ class cl_rhregime {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -596,8 +596,8 @@ class cl_rhregime {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $rh30_codreg=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $rh30_codreg=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -609,6 +609,7 @@ class cl_rhregime {
      }else{
        $sql .= $campos;
      }
+     $instit = db_getsession("DB_instit");
      $sql .= " from rhregime ";
      $sql .= "      inner join db_config  on  db_config.codigo = rhregime.rh30_instit";
      $sql .= "      inner join rhcadregime  on  rhcadregime.rh52_regime = rhregime.rh30_regime";
@@ -616,13 +617,14 @@ class cl_rhregime {
      $sql .= "      inner join vinculomanad  on  vinculomanad.rh84_sequencial = rhregime.rh30_vinculomanad";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
+     $sql .= "       where rhregime.rh30_instit = {$instit}  ";
      $sql2 = "";
      if($dbwhere==""){
        if($rh30_codreg!=null ){
-         $sql2 .= " where rhregime.rh30_codreg = $rh30_codreg "; 
-       } 
+         $sql2 .= " and rhregime.rh30_codreg = $rh30_codreg ";
+       }
      }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
+       $sql2 = " and $dbwhere";
      }
      $sql .= $sql2;
      if($ordem != null ){
@@ -636,8 +638,8 @@ class cl_rhregime {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $rh30_codreg=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $rh30_codreg=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -653,8 +655,8 @@ class cl_rhregime {
      $sql2 = "";
      if($dbwhere==""){
        if($rh30_codreg!=null ){
-         $sql2 .= " where rhregime.rh30_codreg = $rh30_codreg "; 
-       } 
+         $sql2 .= " where rhregime.rh30_codreg = $rh30_codreg ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -714,52 +716,52 @@ class cl_rhregime {
 	 * @param integer $iVinculoServidor Código do vínculo
 	 * @param string $sCampos Campos das tabelas envolvidas
 	 * @param string $iInstituicao Instituicao do servidor
-	 * @param string $sWhere 
+	 * @param string $sWhere
 	 * @return string
 	 */
 	function sql_query_servidorerPorVinculo($iAnoUsu, $iMesUsu, $iVinculoServidor, $sCampos = null, $sInstituicao = null, $sWhere = null) {
-		
+
 		if ( empty($sCampos) ) {
 			$sCampos = "*";
 		}
-	
+
 		if ( empty($sInstituicao) ) {
 			$sInstituicao = db_getsession('DB_instit');
 		}
-	
+
 		$sSql  = "select {$sCampos}                                            ";
 		$sSql .= "  from rhpessoalmov                                          ";
 		$sSql .= "       inner join rhpessoal     on rh01_regist = rh02_regist ";
 		$sSql .= "       inner join rhregime      on rh30_codreg = rh02_codreg ";
 		$sSql .= "        left join rhpesrescisao on rh05_seqpes = rh02_seqpes ";
-		
+
 		/**
-		 * Inativos 
+		 * Inativos
 		 */
 		if ($iVinculoServidor > 0) {
 			$sSql .= "    inner join rhtipoapos on rhtipoapos.rh88_sequencial = rhpessoalmov.rh02_rhtipoapos \n";
 		}
-		
+
 		$sSql .= " where rh02_anousu = {$iAnoUsu}               ";
 		$sSql .= "   and rh02_mesusu = {$iMesUsu}               ";
 		$sSql .= "   and rh02_instit in ({$sInstituicao})       ";
-		
-		if ($iVinculoServidor == 0) {			
+
+		if ($iVinculoServidor == 0) {
 			$sSql .= " and rh30_vinculo    = 'A'                  ";
-		}  else {		                                            
+		}  else {
 			$sSql .= " and rh30_vinculo    in ('P', 'I')          ";
 			$sSql .= " and rh88_sequencial = {$iVinculoServidor}  ";
 		}
-		
+
 		if ( !empty($sWhere) ) {
 			$sSql .= " and {$sWhere} 														  ";
 		}
-	
+
 		$sSql .= "   and rh05_seqpes is null                    ";
-		
+
 		$sSql .= "order by {$sCampos}";
-		
-		return $sSql;	
+
+		return $sSql;
 	}
    function sql_query_servidores($iAnoUsu, $iMesUsu, $iTipoRegime, $sCampos=null , $iInstituicao = null) {
 
@@ -778,9 +780,9 @@ class cl_rhregime {
    	$sSql.= "   and rh02_mesusu = $iMesUsu                             \n";
    	$sSql.= "   and rh02_instit = $iInstituicao                        \n";
    	$sSql.= "   and rh30_regime = $iTipoRegime                         \n";
-   	
+
    	return $sSql;
-   	
+
 	}
 }
 ?>
