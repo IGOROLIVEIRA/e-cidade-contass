@@ -158,21 +158,21 @@ try {
       $head4   .= "LOCAIS DE TRABALHO";
       $head4 .= " DE ".$lci." A ".$lcf;
     }
-    else if (sset($aFiltros['lci']) && !empty($aFiltros['lci'])) {
+    else if (isset($aFiltros['lci']) && !empty($aFiltros['lci'])) {
       // Se for por intervalos e vier somente local inicial
       $lci = $aFiltros['lci'];
       $where.= $andwhere." rh55_estrut >= '".$lci."' ";
       $head4   .= "LOCAIS DE TRABALHO";
       $head4.= " SUPERIORES A ".$lci;
     }
-    else if(sset($aFiltros['lcf']) && !empty($aFiltros['lcf'])) {
+    else if(isset($aFiltros['lcf']) && !empty($aFiltros['lcf'])) {
       // Se for por intervalos e vier somente local final
       $lcf = $aFiltros['lcf'];
       $where.= $andwhere." rh55_estrut <= '".$lcf."' ";
       $head4   .= "LOCAIS DE TRABALHO";
       $head4.= " INFERIORES A ".$lcf;
     }
-    else if(sset($aFiltros['flc']) && !empty($aFiltros['flc'])) {
+    else if(isset($aFiltros['flc']) && !empty($aFiltros['flc'])) {
       // Se for por selecionados
       $flc = $aFiltros['flc'];
       $where.= $andwhere." rh55_estrut in ('".str_replace(",","','",$flc)."') ";
