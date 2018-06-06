@@ -72,7 +72,7 @@ if (isset($oPost->k00_numpre)) {
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <?
-   if (db_getsession("DB_id_usuario") != 1) {
+/*   if (db_getsession("DB_id_usuario") != 1) {
    	
    	$sString  = "<center>";
    	$sString .= "<fieldset style=\"width: 500px; margin-top: 25px;\">";
@@ -84,7 +84,7 @@ if (isset($oPost->k00_numpre)) {
    	
    	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
    	die($sString);
-   }
+   }*/
   ?>
     <table  border="0" cellpadding="0" cellspacing="0">
       <tr> 
