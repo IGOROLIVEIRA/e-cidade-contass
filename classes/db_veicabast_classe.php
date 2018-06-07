@@ -1296,5 +1296,61 @@ if($dbwhere==""){
      }
      return $sql;
   }
+
+    function sql_query_anulado ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere="",$agrupar=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from veicabast ";
+        $sql .= "      inner join db_usuarios           on db_usuarios.id_usuario = veicabast.ve70_usuario";
+        $sql .= "      inner join veiculoscomb          on  veiculoscomb.ve06_veiccadcomb = veicabast.ve70_veiculoscomb  and ve70_veiculos=veiculoscomb.ve06_veiculos";
+        $sql .= "      inner join veiccadcomb           on veiccadcomb.ve26_codigo = veiculoscomb.ve06_veiccadcomb";
+        $sql .= "      inner join veiculos              on veiculos.ve01_codigo = veicabast.ve70_veiculos";
+        $sql .= "      inner join veiccentral           on veiccentral.ve40_veiculos          = veiculos.ve01_codigo";
+        $sql .= "      inner join veiccadcentral        on veiccadcentral.ve36_sequencial     = veiccentral.ve40_veiccadcentral";
+        $sql .= "      inner join ceplocalidades        on ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades";
+        $sql .= "      inner join veiccadtipo           on veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo";
+        $sql .= "      inner join veiccadmarca          on veiccadmarca.ve21_codigo = veiculos.ve01_veiccadmarca";
+        $sql .= "      inner join veiccadmodelo         on veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo";
+        $sql .= "      inner join veiccadcor            on veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor";
+        $sql .= "      inner join veiccadtipocapacidade on veiccadtipocapacidade.ve24_codigo = veiculos.ve01_veiccadtipocapacidade";
+        $sql .= "      inner join veiccadcategcnh       on veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
+        $sql .= "      inner join veiccadproced         on veiccadproced.ve25_codigo = veiculos.ve01_veiccadproced";
+        $sql .= "      inner join veiccadpotencia       on veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
+        $sql .= "      inner join veiccadcateg  as b    on b.ve32_codigo = veiculos.ve01_veiccadcateg";
+        $sql .= "      left  join veicabastposto        on veicabastposto.ve71_veicabast    = veicabast.ve70_codigo";
+        $sql .= "      left  join veiccadposto          on veiccadposto.ve29_codigo         = veicabastposto.ve71_veiccadposto";
+        $sql .= "      left  join veiccadpostointerno   on veiccadpostointerno.ve35_veiccadposto = veiccadposto.ve29_codigo";
+        $sql .= "      left  join veiccadpostoexterno   on veiccadpostoexterno.ve34_veiccadposto = veiccadposto.ve29_codigo";
+        $sql .= "      left  join veiccadcentraldepart on veiccadcentraldepart.ve37_veiccadcentral = veiccadcentral.ve36_sequencial";
+        $sql .= "      inner join veicabastanu on veicabastanu.ve74_veicabast=veicabast.ve70_codigo ";
+        $sql2 = "";
+        if($dbwhere==""){
+            if($ve70_codigo!=null ){
+                $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 }
 ?>

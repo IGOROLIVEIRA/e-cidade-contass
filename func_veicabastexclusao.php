@@ -31,13 +31,19 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_veicabast_classe.php");
+include("classes/db_veiccadcentraldepart_classe.php");
+
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
-$clveicabast = new cl_veicabast;
+
+$clveicabast            = new cl_veicabast;
+$clveiccadcentraldepart = new cl_veiccadcentraldepart;
+
 $clveicabast->rotulo->label("ve70_codigo");
-$clveicabast->rotulo->label("ve70_codigo");
+$clveiccadcentraldepart->rotulo->label("ve37_veiccadcentral");
 
 ?>
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -48,8 +54,8 @@ $clveicabast->rotulo->label("ve70_codigo");
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
   <tr> 
     <td height="63" align="center" valign="top">
-        <table width="35%" border="0" align="center" cellspacing="0">
-	     <form name="form2" method="post" action="" >
+        <table width="40%" border="0" align="center" cellspacing="0">
+	     <form name="form1" method="post" action="" >
           <tr> 
             <td width="4%" align="right" nowrap title="<?=$Tve70_codigo?>">
               <?=$Lve70_codigo?>
@@ -59,7 +65,7 @@ $clveicabast->rotulo->label("ve70_codigo");
 		       db_input("ve70_codigo",10,$Ive70_codigo,true,"text",4,"","chave_ve70_codigo");
 		       ?>
             </td>
-          </tr>          
+          </tr>
           <tr>
             <td width="4%" align="right" nowrap title="Tipo de Posto"><b>Tipo de Posto:</b></td>
             <td width="96%" align="left" nowrap> 
@@ -84,46 +90,43 @@ $clveicabast->rotulo->label("ve70_codigo");
   <tr> 
     <td align="center" valign="top"> 
       <?
-      $where="";
-      $distinct="distinct on (ve70_codigo)";
-      if (isset($anul)&&$anul==true){
-      	$where="ve70_ativo=1 and ve01_instit=".db_getsession("DB_instit");
+      $dbwhere = " ve70_ativo = 0 ";
+      
+      if (isset($chave_ve37_sequencial) && trim($chave_ve37_sequencial) != "" && $chave_ve37_sequencial != "0"){
+        $dbwhere .= " and ve37_sequencial = $chave_ve37_sequencial "; 
+      } else {
+        $dbwhere .= " and (ve36_coddepto = ".db_getsession("DB_coddepto")." or 
+                           ve37_coddepto = ".db_getsession("DB_coddepto").") ";
       }
+
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_veicabast.php")==true){
              include("funcoes/db_func_veicabast.php");
-             
            }else{
            $campos = "veicabast.*";
            }
         }
+
         if(isset($chave_ve70_codigo) && (trim($chave_ve70_codigo)!="") ){
-        	if ($where!=""){
-        		$where="and ".$where;
-        	}
-	         $sql = $clveicabast->sql_query_posto(null,"$distinct $campos","ve70_codigo","ve70_codigo=$chave_ve70_codigo $where");
+	         $sql = $clveicabast->sql_query_anulado(null,$campos,"ve70_codigo","ve70_codigo = $chave_ve70_codigo and $dbwhere");
         }else if(isset($tipo_posto) && $tipo_posto == 1){  // interno
-           $sql = $clveicabast->sql_query_posto("","$distinct $campos","ve70_codigo","$where and (ve71_nota is null or ve71_nota = '')");
-
+           $sql = $clveicabast->sql_query_anulado("",$campos,"ve70_codigo","$dbwhere and (ve71_nota is null or ve71_nota = '')");
         }else if(isset($tipo_posto) && $tipo_posto == 2){ // externo
-           $sql = $clveicabast->sql_query_posto("","$distinct $campos","ve70_codigo","$where and ve34_veiccadposto is not null");
-
+           $sql = $clveicabast->sql_query_anulado("",$campos,"ve70_codigo","$dbwhere and ve34_veiccadposto is not null");
         }else {
-           $sql = $clveicabast->sql_query_posto("","$distinct $campos","",$where);
+           $sql = $clveicabast->sql_query_anulado("","distinct $campos","","$dbwhere");
         }
         $repassa = array();
         if(isset($chave_ve70_codigo)){
           $repassa = array("chave_ve70_codigo"=>$chave_ve70_codigo);
         }
+        echo $sql;
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          if ($where!=""){
-        	$where="and ".$where;
-          }
-          $result = $clveicabast->sql_record($clveicabast->sql_query(null,"*",null,"ve70_codigo=$pesquisa_chave $where"));
-
+            echo $clveicabast->sql_query_anulado(null,"*",null,"ve70_codigo = $pesquisa_chave and $dbwhere");
+          $result = $clveicabast->sql_record($clveicabast->sql_query_anulado(null,"*",null,"ve70_codigo = $pesquisa_chave and $dbwhere"));
           if($clveicabast->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$ve70_codigo',false);</script>";

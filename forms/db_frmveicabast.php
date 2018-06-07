@@ -757,9 +757,22 @@ db_app::load("estilos.css");
 
 
         }
+
+        <?
+        if($db_opcao==3 || $db_opcao==33){
+        ?>
         function js_pesquisa() {
-          js_OpenJanelaIframe('top.corpo', 'db_iframe_veicabast', 'func_veicabast.php?funcao_js=parent.js_preenchepesquisa|dl_Cod_Abast', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_veicabast', 'func_veicabastexclusao.php?funcao_js=parent.js_preenchepesquisa|dl_Cod_Abast', 'Pesquisa', true);
         }
+        <?
+        }else{
+        ?>
+        function js_pesquisa() {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_veicabast', 'func_veicabast.php?funcao_js=parent.js_preenchepesquisa|dl_Cod_Abast', 'Pesquisa', true);
+        }
+        <?
+        }
+        ?>
         function js_preenchepesquisa(chave) {
           db_iframe_veicabast.hide();
           <?
