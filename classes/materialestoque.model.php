@@ -540,7 +540,7 @@ class materialEstoque {
    * @param string  $sObservaca observação do movimento
    * @return unknown
    */
-  function saidaMaterial($nQuantidade, $sObservacao = null, $lServico = false) {
+  function saidaMaterial($nQuantidade, $sObservacao = null, $lServico = false, $tipoSaida = 5) {
 
     if (empty($nQuantidade) || $nQuantidade <= 0) {
 
@@ -567,7 +567,7 @@ class materialEstoque {
 
           $oMatEstoqueIni               = db_utils::getDao("matestoqueini");
           $oMatEstoqueIni->m80_coddepto = $this->getCodDepto();
-          $oMatEstoqueIni->m80_codtipo  = $lServico ? 20 : 5; //saida Manual
+          $oMatEstoqueIni->m80_codtipo  = $lServico ? 20 : $tipoSaida; //saida Manual
           $oMatEstoqueIni->m80_data     = date("Y-m-d", db_getsession("DB_datausu"));
           $oMatEstoqueIni->m80_login    = db_getsession("DB_id_usuario");
           $oMatEstoqueIni->m80_hora     = db_hora();
