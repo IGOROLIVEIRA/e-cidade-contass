@@ -104,8 +104,7 @@ $oPDF->cell(0,8,"PROCESSO LICITATORIO : $l20_edital/$l20_datacria",0,1,"C",0);
 $oPDF->cell(0,8,"$l03_descr Nº $l20_numero/$l20_datacria",0,1,"C",0);
 $oPDF->setfont('arial','',8);
 $oPDF->ln();
-$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais Adjudica o julgamento proferido pela comissão de Licitação,\n do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." modalidade ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências.",0,"J",0,0);
-$oPDF->MultiCell(0,4,"Fica adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l30_portaria.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
+$oPDF->MultiCell(0,4,"O Sr.(a), ".$pregoeiro." no uso de suas atribuições legais Adjudica o julgamento proferido pela comissão de Licitação, do Processo Licitatorio Nº".$l20_edital."/".$l20_datacria." modalidade ".$l20_numero."/".$l20_datacria." OBJETO: ".$l20_objeto." dando providências. Fica adjudicado o julgamento pela Comissão de licitação, nomeada pela portaria Nº ".$l30_portaria.". Os itens relacionados para os fornecedores abaixo:",0,"J",0,0);
 $result_munic=pg_exec("select * from db_config where codigo=$dbinstit");
 db_fieldsmemory($result_munic,0);
 
@@ -126,9 +125,7 @@ for($x = 0; $x < $numrows_forne;$x++){
     db_fieldsmemory($result_forne,$x);
     $result_itens=$clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,"distinct l21_ordem,pc22_orcamitem,pc11_resum,pc01_descrmater","l21_ordem","pc22_codorc=$orcamento"));
     $numrows_itens=$clpcorcamitem->numrows;
-    if ($oPDF->gety() > $oPDF->h - 30){
-        $oPDF->addpage();
-    }
+
     for($w=0;$w<$numrows_itens;$w++){
         db_fieldsmemory($result_itens,$w);
         $result_valor=$clpcorcamval->sql_record($clpcorcamval->sql_query_julg(null,null,"pc23_valor,pc23_quant,pc24_pontuacao",null,"pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1"));
@@ -139,14 +136,12 @@ for($x = 0; $x < $numrows_forne;$x++){
             }
             if ($z01_nome!=$z01_nomeant){
                 if ($quant_forne!=0){
-                    $oPDF->cell(80,$alt,"SUB-TOTAL","T",0,"R",0);
-                    $oPDF->cell(30,$alt,$quant_forne,"T",0,"R",0);
-                    $oPDF->cell(30,$alt,db_formatar($val_forne, 'f'),"T",1,"R",0);
+                    $oPDF->cell(80,$alt,"VALOR TOTAL ADJUDICADO:","T",0,"R",0);
+                    $oPDF->cell(30,$alt,"R$".db_formatar($val_forne, 'f'),"T",1,"R",0);
                     $oPDF->ln();
                     $quant_forne = 0;
                     $val_forne = 0;
                 }
-                $oPDF->ln();
                 $oPDF->setfont('arial','b',9);
                 $z01_nomeant = $z01_nome;
                 $oPDF->cell(80,$alt,substr($z01_nome,0,40),0,1,"L",0);
@@ -155,6 +150,7 @@ for($x = 0; $x < $numrows_forne;$x++){
                 $oPDF->ln();
                 $oPDF->setfont('arial','',8);
             }
+
             if ($cor == 0) {
                 $cor = 1;
             } else {
@@ -167,32 +163,26 @@ for($x = 0; $x < $numrows_forne;$x++){
             $val_tot += $pc23_valor;
             $quant_forne += $pc23_quant;
             $val_forne += $pc23_valor;
-            if ($oPDF->gety() > $oPDF->h - 30){
-                $oPDF->addpage();
             }
         }
     }
 
-    if ($oPDF->gety() > $oPDF->h - 30){
-        $oPDF->addpage();
-    }
-}
 
-$oPDF->ln();
-$oPDF->cell(80,$alt,"VALOR ADJUNDICADO:",'T',0,"R",0);
-$oPDF->cell(30,$alt,db_formatar($val_tot, 'f'),'T',1,"R",0);
-$oPDF->ln();
+$oPDF->cell(80,$alt,"VALOR TOTAL ADJUDICADO:",'T',0,"R",0);
+$oPDF->cell(30,$alt,"R$".db_formatar($val_tot, 'f'),'T',1,"R",0);
 
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
-$dataformatada = strftime('%d de %B de %Y',strtotime($l202_dataadjudicacao));
+$hoje = date("Y-m-d",db_getsession("DB_datausu"));
+$dataformatada = strftime('%d de %B de %Y',strtotime($hoje));
 
+$oPDF->ln();
 $oPDF->cell(90,0.5," ",0,0,"R",0);
-$oPDF->cell(90,$alt,$munic.", ".$dataformatada.".",0,1,"C",0);
+$oPDF->cell(135,$alt,$munic.", ".$dataformatada.".",0,1,"C",0);
 $oPDF->ln();
 $oPDF->ln();
-$oPDF->ln();
-$oPDF->cell(90,$alt,$pregoeiro,'T',"R",1);
+$oPDF->cell(185,$alt,"__________________________________",0,1,"R",0);
+$oPDF->cell(180,$alt,$pregoeiro,0,0,"R",0);
 
 /**
  *comentado por mario junior pois as linhas seram criadas de forma manual no relatorio.
