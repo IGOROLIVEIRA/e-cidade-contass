@@ -85,8 +85,7 @@ switch ($oParam->exec) {
                             }
                             $sCaminhoClasse = "classes/db_" . strtolower($aArquivoCSV[0]) . $data[0] . $ano . "_classe.php";
 
-                            if (file_exists($sCaminhoClasse) && $sCaminhoClasse != 'classes/db_ext24'.$ano.'_classe.php'
-                                && ($sCaminhoClasse != 'classes/db_ext21'.$ano.'_classe.php' && $ano>2015) ) {
+                            if (file_exists($sCaminhoClasse) && $sCaminhoClasse != 'classes/db_ext24'.$ano.'_classe.php') {
 
                                 require_once $sCaminhoClasse;
                                 $sTabela = strtolower($aArquivoCSV[0]) . $data[0] . $ano;
@@ -100,7 +99,7 @@ switch ($oParam->exec) {
                             }
 
 
-                            $sSqlCampos = "SELECT column_name,data_type FROM information_schema.columns WHERE table_name ='" . $sTabela . "'";
+                            $sSqlCampos = "SELECT column_name,data_type FROM information_schema.columns WHERE table_name ='" . $sTabela . "' order by table_name";
                             $rsSqlCampos = db_query($sSqlCampos);
                             $aCampos = db_utils::getColectionByRecord($rsSqlCampos);
 
@@ -128,7 +127,8 @@ switch ($oParam->exec) {
                                     $result = db_query("Select * from $oTable->table_name where $aSiglaDelete[0]_mes = " . $mes . " and $aSiglaDelete[0]_instit = " . db_getsession("DB_instit"));
                                     if (pg_num_rows($result) > 0) {
 
-                                        db_query("delete from $oTable->table_name where $aSiglaDelete[0]_mes = " . $mes . " and $aSiglaDelete[0]_instit = " . db_getsession("DB_instit")) or die(pg_last_error());
+                                        db_query("delete from $oTable->table_name where $aSiglaDelete[0]_mes = " . $mes . " and $aSiglaDelete[0]_instit = " . db_getsession("DB_instit"))
+                                        or die("Erro aqui".pg_last_error());
 
                                     }
                                 }
@@ -157,7 +157,8 @@ switch ($oParam->exec) {
                                     $oCamposAnteriores = db_utils::fieldsMemory($rsSqlCamposAnteriores, 0);
 
                                     $oClasseAnterior = new $sClasseAnterior;
-                                    $rsResultAnterior = db_query($oClasseAnterior->sql_query('', "max($oCamposAnteriores->column_name) as chave")) or die(pg_last_error());
+                                    $rsResultAnterior = db_query($oClasseAnterior->sql_query('', "max($oCamposAnteriores->column_name) as chave"))
+                                    or die("Erro aqui ".$sClasseAnterior.pg_last_error());
                                     $iChave = db_utils::fieldsMemory($rsResultAnterior, 0)->chave;
 
                                     $oClasse->$sColuna = $iChave;
@@ -192,7 +193,9 @@ switch ($oParam->exec) {
 
                                 $oClasse->incluir(null);
                                 if($oClasse->erro_status == 0) {
-                                    $oRetorno->message = ("Erro importacao. {$oClasse->erro_msg}");
+                                    print_r($oClasse);exit;
+                                    $oRetorno->status = 2;
+                                    $oRetorno->message = ("Erro importacao  $sClasse  {$oClasse->erro_msg}");
                                 }
                                 if ($iCtrListaArquivos == 0) {
                                     $oArquivoImportado->nome = $aArquivoCSV[0];

@@ -606,8 +606,7 @@ class cl_ext302017
       $sql .= $campos;
     }
     $sql .= " from ext302017 ";
-    $sql .= "      left  join ext212017  on  ext212017.si125_sequencial = ext302017.si126_reg21";
-    $sql .= "      left  join ext202017  on  ext202017.si165_sequencial = ext212017.si125_reg20";
+
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si126_sequencial != null) {
