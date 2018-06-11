@@ -301,7 +301,7 @@ function mensagem(oResponse) {
     return;
   }
   else {
-    alert('Erro ao realizar exclusão!');
+    alert(oRetorno.message);
   }
 }
 

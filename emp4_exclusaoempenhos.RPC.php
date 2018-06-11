@@ -425,7 +425,8 @@
 
 
           } catch (Exception $eExeption) {
-            $oRetorno->message  = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            //$oRetorno->message  = urlencode(str_replace("\\n","\n",$eExeption->getMessage()));
+            $oRetorno->message = utf8_encode(pg_last_error());
             $oRetorno->status   = 2;
           }
 
