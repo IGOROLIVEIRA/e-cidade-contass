@@ -149,6 +149,18 @@ abstract class Transferencia {
           $iCodigoDocumento = 162;
           break;
 
+        case 120:
+          $iCodigoDocumento = 121;
+          break;
+
+        case 130:
+          $iCodigoDocumento = 131;
+          break;
+
+        case 140:
+          $iCodigoDocumento = 141;
+          break;
+
         case 150:
           $iCodigoDocumento = 152;
           break;

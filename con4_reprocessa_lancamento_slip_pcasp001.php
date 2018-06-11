@@ -88,58 +88,53 @@ if (isset($_POST["processar"])) {
 
     db_inicio_transacao();
 
-    echo "Limpando lançamentos contabeis de receita<br>";
+    echo "Limpando lançamentos contabeis de Slip<br>";
     flush();
 
-    echo "Iniciando Reprocessando da arrecadacao de Receita<br>";
+    echo "Iniciando Reprocessando da arrecadacao de Slip<br>";
     flush();
     db_inicio_transacao();
 
-    $sSqlReceita = "select distinct
-                           corrente.k12_conta,
-                           corrente.k12_valor,
-                           slip.k17_codigo       as slip,
-                           k153_slipoperacaotipo as slipoperacaotipo,
-                           corrente.k12_id       as id,
-                           corrente.k12_autent   as codautent,
-                           corrente.k12_data     as data,
-                           corrente.k12_estorn   as estorno,
-                           cardeb.k131_concarpeculiar as cpdebito,
-                           carcre.k131_concarpeculiar as cpcredito,
-                           case
-                             when substr(c60_estrut,1,4) = '1111'
-                               then '5'
-                             else '13'
-                           end as tipooperacaonovo
-
-                      From corrente
-                           inner join corlanc on corlanc.k12_id         = corrente.k12_id
-                                             and corlanc.k12_data       = corrente.k12_data
-                                             and corlanc.k12_autent     = corrente.k12_autent
-                           inner join slip           on slip.k17_codigo = corlanc.k12_codigo
-                           inner join conplanoreduz  on slip.k17_debito = conplanoreduz.c61_reduz
-                                                    and conplanoreduz.c61_anousu = {$iAno}
-                           inner join conplano       on conplanoreduz.c61_anousu = conplano.c60_anousu
-                                                    and conplanoreduz.c61_codcon = conplano.c60_codcon
-                           left  join sliptipooperacaovinculo      on sliptipooperacaovinculo.k153_slip = corlanc.k12_codigo
-                           left  join conlancamslip cls            on cls.c84_slip = corlanc.k12_codigo
-                           left  join slipconcarpeculiar cardeb on cardeb.k131_slip = slip.k17_codigo
-                                                               and cardeb.k131_tipo = 1
-                           left  join slipconcarpeculiar carcre on carcre.k131_slip = slip.k17_codigo
-                                                               and carcre.k131_tipo = 2
-
-                    where corrente.k12_data between '{$sData}' and '{$sDataFinal}'
-                      and corrente.k12_instit = ".db_getsession("DB_instit")."
-                      
-                      and slip.k17_debito<>slip.k17_credito
-                    order by corrente.k12_data,
-                             corrente.k12_id,
-                             corrente.k12_autent";
+    $sSqlReceita = "SELECT DISTINCT corrente.k12_conta,
+                                    corrente.k12_valor,
+                                    slip.k17_codigo AS slip,
+                                    k153_slipoperacaotipo AS slipoperacaotipo,
+                                    corrente.k12_id AS id,
+                                    corrente.k12_autent AS codautent,
+                                    corrente.k12_data AS DATA,
+                                    corrente.k12_estorn AS estorno,
+                                    cardeb.k131_concarpeculiar AS cpdebito,
+                                    carcre.k131_concarpeculiar AS cpcredito,
+                                    CASE
+                                        WHEN substr(c60_estrut, 1, 4) = '1111' THEN '5'
+                                        ELSE '13'
+                                    END AS tipooperacaonovo,
+                                    cls.c84_conlancam AS lancam
+                    FROM corrente
+                    INNER JOIN corlanc ON corlanc.k12_id = corrente.k12_id
+                    AND corlanc.k12_data = corrente.k12_data
+                    AND corlanc.k12_autent = corrente.k12_autent
+                    INNER JOIN slip ON slip.k17_codigo = corlanc.k12_codigo
+                    INNER JOIN conplanoreduz ON slip.k17_debito = conplanoreduz.c61_reduz
+                    AND conplanoreduz.c61_anousu = {$iAno}
+                    INNER JOIN conplano ON conplanoreduz.c61_anousu = conplano.c60_anousu
+                    AND conplanoreduz.c61_codcon = conplano.c60_codcon
+                    LEFT JOIN sliptipooperacaovinculo ON sliptipooperacaovinculo.k153_slip = corlanc.k12_codigo
+                    LEFT JOIN conlancamcorrente ON (c86_id,c86_data,c86_autent) = (corrente.k12_id, corrente.k12_data, corrente.k12_autent)
+                    LEFT JOIN conlancamslip cls ON cls.c84_conlancam = conlancamcorrente.c86_conlancam
+                    LEFT JOIN slipconcarpeculiar cardeb ON cardeb.k131_slip = slip.k17_codigo AND cardeb.k131_tipo = 1
+                    LEFT JOIN slipconcarpeculiar carcre ON carcre.k131_slip = slip.k17_codigo AND carcre.k131_tipo = 2
+                    WHERE corrente.k12_data BETWEEN '{$sData}' AND '{$sDataFinal}'
+                      AND corrente.k12_instit = ".db_getsession("DB_instit")."
+                      AND slip.k17_debito<>slip.k17_credito
+                      AND cls.c84_conlancam IS NOT NULL
+                    ORDER BY corrente.k12_data, corrente.k12_id, corrente.k12_autent";
 
     //die($sSqlReceita);
     $rsReceitas   = db_query($sSqlReceita);
     //db_criatabela($rsReceitas);exit;
     $iTotalLinhas = pg_num_rows($rsReceitas);
+
     echo "<pre>";
     $aSlipIncluidosTipo = array();
     $aSlipConcar        = array();
@@ -150,7 +145,7 @@ if (isset($_POST["processar"])) {
 
         $sSqlDelLancSlip  = "drop table if EXISTS  w_lancamentos; ";
         $sSqlDelLancSlip .= "create temporary table w_lancamentos on commit drop as ";
-        $sSqlDelLancSlip .= " select c84_conlancam as lancam from conlancamslip  where c84_slip in  ($oDadosAutenticacao->slip); ";
+        $sSqlDelLancSlip .= "SELECT c84_conlancam AS lancam FROM conlancamslip WHERE c84_conlancam IN ($oDadosAutenticacao->lancam);";
         $sSqlDelLancSlip .= "DELETE FROM conlancamemp WHERE c75_codlan IN (SELECT lancam FROM w_lancamentos); ";
         $sSqlDelLancSlip .= "DELETE FROM conlancambol WHERE c77_codlan IN (SELECT lancam FROM w_lancamentos); ";
         $sSqlDelLancSlip .= "DELETE FROM conlancamcgm WHERE c76_codlan IN (SELECT lancam FROM w_lancamentos); ";
@@ -172,12 +167,12 @@ if (isset($_POST["processar"])) {
 
          $rsDelLancSlip   = db_query($sSqlDelLancSlip);
          if ( ! $rsDelLancSlip) {
-             throw new Exception("Erro ao ao excluir os dados na tabela para o slip {$oDadosAutenticacao->slip} tipoOP: {$oDadosAutenticacao->tipooperacaonovo}".pg_last_error());
+             throw new Exception("Erro ao excluir os dados nas tabelas para o Slip {$oDadosAutenticacao->slip} tipoOP: {$oDadosAutenticacao->tipooperacaonovo}".pg_last_error());
          }
 
        $lEstorno           = $oDadosAutenticacao->estorno == 't' ? true : false;
 
-       echo "Sli {$oDadosAutenticacao->slip} processando {$oDadosAutenticacao->data} - AUT:{$oDadosAutenticacao->codautent} ID:{$oDadosAutenticacao->id}\n";
+       echo "Slip {$oDadosAutenticacao->slip} processando {$oDadosAutenticacao->data} - AUT:{$oDadosAutenticacao->codautent} ID:{$oDadosAutenticacao->id}\n";
        flush();
 
        if ($oDadosAutenticacao->slipoperacaotipo == '' && !in_array($oDadosAutenticacao->slip, $aSlipIncluidosTipo)) {
@@ -269,19 +264,16 @@ if (isset($_POST["processar"])) {
        $oTransferencia->setIDTerminal($oDadosAutenticacao->id);
        $oTransferencia->setDataAutenticacao($oDadosAutenticacao->data);
        $oTransferencia->setNumeroAutenticacao($oDadosAutenticacao->codautent);
-       $oTransferencia->executarLancamentoContabil($oDadosAutenticacao->data);
+       $oTransferencia->executarLancamentoContabil($oDadosAutenticacao->data,$lEstorno);
 
 //       var_dump($oTransferencia);
 
        //fputs($rsErros, "Arrecadacao {$oDadosAutenticacao->k12_numpre} - {$oDadosAutenticacao->data} - AUT:{$oDadosAutenticacao->codautent} ID:{$oDadosAutenticacao->id} não foi efetuado lançamento contábil.\n");
 
     }
-    echo "Termino do  Reprocessamento da arrecadacao de Receita<br>";
-    flush();
 
-
-    db_fim_transacao(false);
-    echo "Fim do processamento das planilhas de arrecadacao <br>";
+      db_fim_transacao(false);
+      echo "Fim do Reprocessamento de Slip <br>";
     flush();
 
   } catch (Exception $eErro) {
@@ -313,7 +305,7 @@ echo "</pre>";
     <form action="" method="post">
     <fieldset>
       <legend>
-        <b>Reprocessamento dos lançamentos Receita do PCASP</b>
+        <b>Reprocessamento dos lançamentos Slip do PCASP</b>
       </legend>
       <table>
          <tr>
