@@ -469,7 +469,8 @@ if ($oDaoInventari->erro_status == "0"){
 }
 $oDaoMatestoque                 = db_utils::getDao("matestoque");
 //verifica se os materiais estao com o estoque real diferente do estoque salvo no ato da manutencao
-$oResult = $oInventarioMaterial->sql_query(null,'*',null,"i77_inventario = {$oParam->iInventario} and m70_quant <> i77_estoque ");
+$oResult = $oInventarioMaterial->sql_query(null,'*',null,"i77_inventario = {$oParam->iInventario} and m70_quant <> i77_estoqueinicial ");
+
 $oResult = $oInventarioMaterial->sql_record($oResult);
 
 if($oInventarioMaterial->numrows > 0){
