@@ -1065,18 +1065,17 @@ function salvaCopiaAutCompra($protocolo, $protocoloCopia) {
 function salvaCopiaAutPagamento($protocolo, $protocoloCopia) {
   try {
 
-    $rsBusca = buscaAutCompras($protocoloCopia);
-    $aAutCompras = db_utils::getCollectionByRecord($rsBusca);
-
-    foreach ($aAutCompras as $aAutCompra) {
+    $rsBusca = buscaAutPagamentos($protocoloCopia);
+    $aAutPagamentos = db_utils::getCollectionByRecord($rsBusca);
+    foreach ($aAutPagamentos as $aAutPagamento) {
 
       $verifica = false;
-      $verifica = verificaAutPagamento($aAutCompra->m51_codordem, $protocolo);
+      $verifica = verificaAutPagamento($aAutPagamento->e50_codord, $protocolo);
       if ($verifica == true) {
         continue;
       }
       $oAutPagamento = new cl_protpagordem;
-      $oAutPagamento->p105_codord    = $aAutCompra->m51_codordem;
+      $oAutPagamento->p105_codord    = $aAutPagamento->e50_codord;
       $oAutPagamento->p105_protocolo = $protocolo;
       $oAutPagamento->incluir(null);
 
