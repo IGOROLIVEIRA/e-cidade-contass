@@ -2279,7 +2279,7 @@ class Acordo
                   DROP AS
                   SELECT acordoempautoriza.ac45_acordo AS contrato,
                   acordoempautoriza.ac45_empautoriza AS autorizacao,
-                  acordoitemexecutado.ac29_acordoitem AS itens_contrato
+                  acordoitemexecutado.ac29_acordoitem AS itens_contrato,
                   acordoitemexecutado.ac29_sequencial AS itemexecutado
                   FROM acordo
                   JOIN acordoempautoriza ON ac45_acordo = ac16_sequencial
