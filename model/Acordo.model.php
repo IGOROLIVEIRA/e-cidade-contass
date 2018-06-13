@@ -2322,7 +2322,10 @@ class Acordo
                   if($clempautitempcprocitem->erro_status == 0){
                     throw new Exception($clempautitempcprocitem->erro_msg);
                   }
-
+                  $clacordoitemexecutadoempautitem->excluir(null,"ac19_autori=".$oAutorizacao->autorizacao);
+                  if($clacordoitemexecutadoempautitem->erro_status == 0){
+                    throw new Exception($clacordoitemexecutadoempautitem->erro_msg);
+                  }
                   $clempautitem->excluir($oAutorizacao->autorizacao);
                   if($clempautitem->erro_status == 0){
                     throw new Exception($clempautitem->erro_msg);
@@ -2339,6 +2342,8 @@ class Acordo
                   if($clempautoriza->erro_status == 0){
                     throw new Exception($clempautoriza->erro_msg);
                   }
+
+
               }
               $rsexcluirAutorizacaoItens = db_query("SELECT DISTINCT itens_contrato FROM contratos_excluir");
               $rsexcluirAutorizacaoItens = db_utils::getCollectionByRecord($rsexcluirAutorizacaoItens);
@@ -2349,8 +2354,7 @@ class Acordo
 
                   if($clacordoitemexecutadoempautitem->erro_status == 0){
                     throw new Exception($clacordoitemexecutadoempautitem->erro_msg);
-                  }
-
+                 }
                   $clacordoitemexecutado->excluir(null, "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato);
 
                   if($clacordoitemexecutado->erro_status == 0){
