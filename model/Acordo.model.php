@@ -2280,6 +2280,7 @@ class Acordo
                   SELECT acordoempautoriza.ac45_acordo AS contrato,
                   acordoempautoriza.ac45_empautoriza AS autorizacao,
                   acordoitemexecutado.ac29_acordoitem AS itens_contrato
+                  acordoitemexecutado.ac29_sequencial AS itemexecutado
                   FROM acordo
                   JOIN acordoempautoriza ON ac45_acordo = ac16_sequencial
                   JOIN acordoposicao ON ac26_acordo = ac16_sequencial
@@ -2350,7 +2351,7 @@ class Acordo
 
               foreach ($rsexcluirAutorizacaoItens as $oAutorizacaoItens) {
 
-                  $clacordoitemexecutado->excluir(null, "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato);
+                  $clacordoitemexecutado->excluir(null, "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato." and ac29_sequencial =".$oAutorizacaoItens->itemexecutado);
 
                   if($clacordoitemexecutado->erro_status == 0){
                     throw new Exception($clacordoitemexecutado->erro_msg);
