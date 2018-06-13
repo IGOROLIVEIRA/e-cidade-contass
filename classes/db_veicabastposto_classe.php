@@ -393,8 +393,8 @@ class cl_veicabastposto {
      $sql .= "      inner join veiccadposto on veiccadposto.ve29_codigo     = veicabastposto.ve71_veiccadposto";
      $sql .= "      inner join veicabast    on veicabast.ve70_codigo        = veicabastposto.ve71_veicabast";
      $sql .= "      inner join db_usuarios  on db_usuarios.id_usuario       = veicabast.ve70_usuario";
-     $sql .= "      inner join veiculoscomb on veiculoscomb.ve06_sequencial = veicabast.ve70_veiculoscomb";
-     $sql .= "      inner join veiccadcomb  on veiccadcomb.ve26_codigo      = veiculoscomb.ve06_veiccadcomb";
+     $sql .= "      left join veiculoscomb on veiculoscomb.ve06_sequencial = veicabast.ve70_veiculoscomb";
+     $sql .= "      left join veiccadcomb  on veiccadcomb.ve26_codigo      = veiculoscomb.ve06_veiccadcomb";
      $sql .= "      inner join veiculos     on veiculos.ve01_codigo         = veicabast.ve70_veiculos";
      $sql2 = "";
      if($dbwhere==""){

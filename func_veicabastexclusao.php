@@ -121,7 +121,6 @@ $clveiccadcentraldepart->rotulo->label("ve37_veiccadcentral");
         if(isset($chave_ve70_codigo)){
           $repassa = array("chave_ve70_codigo"=>$chave_ve70_codigo);
         }
-        echo $sql;
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
