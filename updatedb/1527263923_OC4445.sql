@@ -280,7 +280,7 @@ begin
               );
   return round(nPrecoMedio, 5);
 end;
-$function$ -- Fim do script
-
+$function$ ;
+-- Fim do script
 COMMIT;
 
