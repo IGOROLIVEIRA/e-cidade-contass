@@ -2353,17 +2353,7 @@ class Acordo
 
                   $whereItemExecutado = "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato." and ac29_sequencial =".$oAutorizacaoItens->itemexecutado;
                   $clacordoitemexecutado->excluir(null, $whereItemExecutado);
-
-                  if($clacordoitemexecutado->erro_status == 0){
-                    throw new Exception($clacordoitemexecutado->erro_msg);
-                  }
-
                   $clacordoitemexecutadodotacao->excluir(null, "ac32_acordoitem =".$oAutorizacaoItens->itens_contrato);
-
-                  if($clacordoitemexecutadodotacao->erro_status == 0){
-                    throw new Exception($clacordoitemexecutadodotacao->erro_msg);
-                  }
-
 
             }
 
