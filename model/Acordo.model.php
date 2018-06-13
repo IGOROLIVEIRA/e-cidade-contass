@@ -2346,11 +2346,11 @@ class Acordo
 
 
               }
-              $rsexcluirAutorizacaoItens = db_query("SELECT DISTINCT itens_contrato FROM contratos_excluir");
+              $rsexcluirAutorizacaoItens = db_query("SELECT DISTINCT itens_contrato,itemexecutado FROM contratos_excluir");
               $rsexcluirAutorizacaoItens = db_utils::getCollectionByRecord($rsexcluirAutorizacaoItens);
 
               foreach ($rsexcluirAutorizacaoItens as $oAutorizacaoItens) {
-                var_dump($oAutorizacaoItens);
+
                   $whereItemExecutado = "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato." and ac29_sequencial =".$oAutorizacaoItens->itemexecutado;
                   $clacordoitemexecutado->excluir(null, $whereItemExecutado);
 
