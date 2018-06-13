@@ -2350,8 +2350,9 @@ class Acordo
               $rsexcluirAutorizacaoItens = db_utils::getCollectionByRecord($rsexcluirAutorizacaoItens);
 
               foreach ($rsexcluirAutorizacaoItens as $oAutorizacaoItens) {
-
-                  $clacordoitemexecutado->excluir(null, "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato." and ac29_sequencial =".$oAutorizacaoItens->itemexecutado);
+                var_dump($oAutorizacaoItens);
+                  $whereItemExecutado = "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato." and ac29_sequencial =".$oAutorizacaoItens->itemexecutado;
+                  $clacordoitemexecutado->excluir(null, $whereItemExecutado);
 
                   if($clacordoitemexecutado->erro_status == 0){
                     throw new Exception($clacordoitemexecutado->erro_msg);
