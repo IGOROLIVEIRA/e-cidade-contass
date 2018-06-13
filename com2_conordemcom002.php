@@ -92,6 +92,11 @@ try {
   e53_vlrpag,
   e62_vltot,
   e62_quant,
+  e64_vlremp,
+  e64_vlrliq,
+  e64_vlranu,
+  e64_vlrpag,
+  e70_vlranu,
   pc01_servico,
   CASE
   WHEN e69_dtrecebe IS NULL THEN 'PENDENTE'
@@ -105,14 +110,16 @@ try {
   LEFT JOIN   empempitem        ON matordemitem.m52_numemp=empempitem.e62_numemp
   AND matordemitem.m52_sequen=empempitem.e62_sequen
   INNER JOIN  empempenho       ON e62_numemp=e60_numemp
+  LEFT JOIN empelemento ON e64_numemp=e60_numemp
+  LEFT JOIN empnotaele ON e69_codnota=e70_codnota
   LEFT JOIN   pcmater           ON empempitem.e62_item=pcmater.pc01_codmater
   LEFT JOIN   pagordemnota      ON e71_codnota = empnota.e69_codnota
   LEFT JOIN   pagordemele       ON  e53_codord               = pagordemnota.e71_codord
   INNER JOIN  cgm               ON cgm.z01_numcgm=matordem.m51_numcgm
-  INNER JOIN  db_depart destino ON destino.coddepto=matordem.m51_depto
-  INNER JOIN  db_depart origem  ON origem.coddepto=matordem.m51_deptoorigem
+  INNER JOIN  db_depart destino ON destino.coddepto=matordem.m51_depto  and destino.instit=e60_instit
+  INNER JOIN  db_depart origem  ON origem.coddepto=matordem.m51_deptoorigem  and origem.instit=e60_instit
   LEFT JOIN   matordemanu       ON matordemanu.m53_codordem = matordem.m51_codordem
-  WHERE m53_codordem IS NULL ";
+  WHERE m53_codordem IS NULL AND e60_instit = ".db_getsession('DB_instit');
   if($situacao == '0'){
     $sSql .= " AND e69_dtrecebe IS NULL ";
   }
@@ -160,7 +167,6 @@ try {
   }else{
     $sSql .= " ORDER BY e60_codemp, m51_codordem; ";
   }
-
   //echo $sSql; die;
   $rsSql       = db_query($sSql);
   $rsResultado = db_utils::getCollectionByRecord($rsSql);
@@ -194,10 +200,12 @@ $nTotalRegistros = 0;
 $totalPorSessao = 0;
 $totalLiquidadoPorSessao = 0;
 $totalEmpenhadoPorSessao = 0;
+$totalAGerarPorSessao = 0;
 
 $totalGeral = 0;
 $totalLiquidadoGeral = 0;
 $totalEmpenhadoGeral = 0;
+$$totalAGerarGeral = 0;
 
 $troca = true;
 
@@ -246,32 +254,7 @@ foreach($rsResultado as $oRegistro):
 
     if ($pdf->gety() > $pdf->h - 50) {
       $pdf->AddPage('A4-L');
-/*      if($m51_codordem!=0){
 
-
-        $pdf->SetFont('arial','B',8);
-        $pdf->Cell(192,0,""                                                               ,0,1,"C",0);
-        $pdf->Cell(20,$alt,"Total Registros: "                                           ,0,0,"C",0);
-        $pdf->Cell(115,$alt,$nTotalRegistrosOrdem                                              ,0,0,"L",0);
-        $pdf->Cell(30,$alt,"Total Empenhado:"                                              ,0,0,"L",0);
-        $pdf->Cell(35,$alt,db_formatar($totalEmpenhadoPorSessao,'f')                                              ,0,0,"L",0);
-
-
-        $pdf->Cell(19,$alt,"Valor Liquidado: "                                                     ,0,0,"C",0);
-        $pdf->Cell(20,$alt,db_formatar($totalLiquidadoPorSessao, 'f'),0,0,"C",0);
-
-        $pdf->Cell(17,$alt,"Valor Total: "                                                     ,0,0,"R",0);
-        $pdf->Cell(20,$alt,db_formatar($totalPorSessao-$totalLiquidadoPorSessao, 'f')                               ,0,0,"L",0);
-
-        $pdf->Cell(192,8,"",0,1,"C",0);
-        $totalEmpenhadoGeral += $totalEmpenhadoPorSessao;
-        $totalPorSessao=0;
-        $totalLiquidadoPorSessao=0;
-        $totalEmpenhadoPorSessao=0;
-        $nTotalRegistrosOrdem = 0;
-
-
-      }*/
     }else{
 
       if($m51_codordem!=0 ){
@@ -279,22 +262,24 @@ foreach($rsResultado as $oRegistro):
         $pdf->SetFont('arial','B',8);
         $pdf->Cell(192,0,""                                                               ,0,1,"C",0);
         $pdf->Cell(20,$alt,"Total Registros: "                                           ,0,0,"C",0);
-        $pdf->Cell(115,$alt,$nTotalRegistrosOrdem                                              ,0,0,"L",0);
+        $pdf->Cell(50,$alt,$nTotalRegistrosOrdem                                              ,0,0,"L",0);
+        $pdf->Cell(30,$alt,"Valor a gerar:"                                              ,0,0,"R",0);
+        $pdf->Cell(35,$alt,db_formatar($totalAGerarPorSessao, 'f')                                              ,0,0,"C",0);
         $pdf->Cell(30,$alt,"Total Empenhado:"                                              ,0,0,"L",0);
         $pdf->Cell(35,$alt,db_formatar($totalEmpenhadoPorSessao, 'f')                                              ,0,0,"L",0);
 
-//170
         $pdf->Cell(19,$alt,"Valor Liquidado: "                                                     ,0,0,"C",0);
         $pdf->Cell(20,$alt,db_formatar($totalLiquidadoPorSessao, 'f'),0,0,"C",0);
 
         $pdf->Cell(17,$alt,"Valor Total: "                                                     ,0,0,"R",0);
-        $pdf->Cell(20,$alt,db_formatar($totalPorSessao-$totalLiquidadoPorSessao, 'f')                               ,0,0,"L",0);
+        $pdf->Cell(20,$alt,db_formatar($totalPorSessao, 'f')                               ,0,0,"L",0);
 
         $pdf->Cell(192,8,"",0,1,"C",0);
         $totalEmpenhadoGeral += $totalEmpenhadoPorSessao;
         $totalPorSessao=0;
         $totalLiquidadoPorSessao=0;
         $totalEmpenhadoPorSessao=0;
+        $totalAGerarPorSessao=0;
 
         $nTotalRegistrosOrdem = 0;
 
@@ -324,78 +309,84 @@ foreach($rsResultado as $oRegistro):
     $pdf->Cell(15,$alt,"Situação"                                           ,1,0,"C",1);
     $pdf->Cell(25,$alt,"Vlr. Unitário"                                           ,1,1,"C",1);
 
-    endif;
+  endif;
                 // materiais
-    $pdf->SetFont('arial','',7);
-    $pdf->Cell(23,$alt,$oRegistro->e60_codemp.'/'.$oRegistro->e60_anousu                           ,1,0,"C",0);
-    $pdf->Cell(27,$alt,$oRegistro->m51_codordem                                         ,1,0,"C",0);
-    $pdf->Cell(15,$alt,db_formatar($oRegistro->m51_data, 'd')                                    ,1,0,"C",0);
-    $pdf->Cell(15,$alt,$oRegistro->e69_codnota                                               ,1,0,"C",0);
-    $pdf->Cell(15,$alt,db_formatar($oRegistro->e69_dtnota, 'd')                                               ,1,0,"C",0);
-    $pdf->Cell(15,$alt,$oRegistro->pc01_codmater                                               ,1,0,"C",0);
-    $pdf->Cell(129,$alt,substr($oRegistro->pc01_descrmater,0,60)                                   ,1,0,"C",0);
-    $pdf->Cell(15,$alt,$oRegistro->status                                           ,1,0,"C",0);
-    $pdf->Cell(25,$alt,db_formatar($oRegistro->valoritem, 'f')                                           ,1,1,"C",0);
+  $pdf->SetFont('arial','',7);
+  $pdf->Cell(23,$alt,$oRegistro->e60_codemp.'/'.$oRegistro->e60_anousu                           ,1,0,"C",0);
+  $pdf->Cell(27,$alt,$oRegistro->m51_codordem                                         ,1,0,"C",0);
+  $pdf->Cell(15,$alt,db_formatar($oRegistro->m51_data, 'd')                                    ,1,0,"C",0);
+  $pdf->Cell(15,$alt,$oRegistro->e69_codnota                                               ,1,0,"C",0);
+  $pdf->Cell(15,$alt,db_formatar($oRegistro->e69_dtnota, 'd')                                               ,1,0,"C",0);
+  $pdf->Cell(15,$alt,$oRegistro->pc01_codmater                                               ,1,0,"C",0);
+  $pdf->Cell(129,$alt,substr($oRegistro->pc01_descrmater,0,60)                                   ,1,0,"C",0);
+  $pdf->Cell(15,$alt,$oRegistro->status                                           ,1,0,"C",0);
+  $pdf->Cell(25,$alt,db_formatar($oRegistro->valoritem, 'f')                                           ,1,1,"C",0);
 
-    $nTotalRegistrosOrdem++;
-    $nTotalRegistros++;
+  $nTotalRegistrosOrdem++;
+  $nTotalRegistros++;
 
-    $m51_codordem = $oRegistro->m51_codordem;
-    $m51_numcgm = $oRegistro->m51_numcgm;
-    $e60_codemp = $oRegistro->e60_codemp;
-    $status = $oRegistro->status;
+  $m51_codordem = $oRegistro->m51_codordem;
+  $m51_numcgm = $oRegistro->m51_numcgm;
+  $e60_codemp = $oRegistro->e60_codemp;
+  $status = $oRegistro->status;
 
-    $totalPorSessao += $oRegistro->valoritem;
-    $totalLiquidadoPorSessao += $oRegistro->e53_vlranu;
-    if($oRegistro->pc01_servico == 't'){
-      $totalEmpenhadoPorSessao = ($oRegistro->e62_vltot);
-    }else{
-      $totalEmpenhadoPorSessao += ($oRegistro->e62_vltot);
-    }
+  $totalPorSessao += $oRegistro->valoritem;
+  $totalLiquidadoPorSessao = ($oRegistro->e64_vlrliq - $oRegistro->e70_vlranu);
+  $totalAGerarPorSessao = ($oRegistro->e64_vlremp-$oRegistro->e64_vlrliq);
+  if($oRegistro->pc01_servico == 't'){
+    $totalEmpenhadoPorSessao = ($oRegistro->e64_vlremp - $oRegistro->e64_vlranu);
+  }else{
+    $totalEmpenhadoPorSessao = ($oRegistro->e64_vlremp - $oRegistro->e64_vlranu);
+  }
 
-    $totalGeral += $oRegistro->valoritem;
-    $totalLiquidadoGeral += $oRegistro->e53_vlranu;
+  $totalGeral += $oRegistro->valoritem;
+  $totalLiquidadoGeral += ($oRegistro->e64_vlrliq - $oRegistro->e70_vlranu);
+  $totalAGerarGeral += ($oRegistro->e64_vlremp-$oRegistro->e64_vlrliq);
 
-    endforeach;
-    if ($pdf->gety() > $pdf->h - 50) {
-      $pdf->AddPage('A4-L');
-    }
+endforeach;
+if ($pdf->gety() > $pdf->h - 50) {
+  $pdf->AddPage('A4-L');
+}
 
-    $pdf->SetFont('arial','B',8);
-    $pdf->Cell(192,0,""                                                               ,0,1,"C",0);
-    $pdf->Cell(20,$alt,"Total Registros: "                                           ,0,0,"C",0);
-    $pdf->Cell(115,$alt,$nTotalRegistrosOrdem                                              ,0,0,"L",0);
-    $pdf->Cell(30,$alt,"Total Empenhado:"                                              ,0,0,"L",0);
-    $pdf->Cell(35,$alt,db_formatar($totalEmpenhadoPorSessao, 'f')                                              ,0,0,"L",0);
+$pdf->SetFont('arial','B',8);
+$pdf->Cell(192,0,""                                                               ,0,1,"C",0);
+$pdf->Cell(20,$alt,"Total Registros: "                                           ,0,0,"C",0);
+$pdf->Cell(30,$alt,$nTotalRegistrosOrdem                                              ,0,0,"L",0);
+$pdf->Cell(50,$alt,"Valor a gerar:"                                              ,0,0,"R",0);
+$pdf->Cell(35,$alt,db_formatar($totalAGerarPorSessao, 'f')                                              ,0,0,"C",0);
+$pdf->Cell(30,$alt,"Total Empenhado:"                                              ,0,0,"L",0);
+$pdf->Cell(35,$alt,db_formatar($totalEmpenhadoPorSessao, 'f')                                              ,0,0,"L",0);
 
-    $pdf->Cell(19,$alt,"Valor Liquidado: "                                                     ,0,0,"C",0);
-    $pdf->Cell(20,$alt,db_formatar($totalPorSessaoLiquidado, 'f'),0,0,"C",0);
+$pdf->Cell(19,$alt,"Valor Liquidado: "                                                     ,0,0,"C",0);
+$pdf->Cell(20,$alt,db_formatar($totalLiquidadoPorSessao, 'f'),0,0,"C",0);
 
-    $pdf->Cell(17,$alt,"Valor Total: "                                                     ,0,0,"R",0);
-    $pdf->Cell(20,$alt,db_formatar($totalPorSessao-$totalLiquidadoPorSessao, 'f')                               ,0,0,"L",0);
+$pdf->Cell(17,$alt,"Valor Total: "                                                     ,0,0,"R",0);
+$pdf->Cell(20,$alt,db_formatar($totalPorSessao, 'f')                               ,0,0,"L",0);
 
-    $pdf->Cell(192,8,"",0,1,"C",0);
+$pdf->Cell(192,8,"",0,1,"C",0);
 
-    $totalEmpenhadoGeral += $totalEmpenhadoPorSessao;
-    $pdf->SetFont('arial','B',8);
-    $pdf->Cell(278,0,""                                                               ,0,1,"C",0);
-    $pdf->Cell(278,0,""                                                               ,"T",1,"C",0);
+$totalEmpenhadoGeral += $totalEmpenhadoPorSessao;
+$pdf->SetFont('arial','B',8);
+$pdf->Cell(278,0,""                                                               ,0,1,"C",0);
+$pdf->Cell(278,0,""                                                               ,"T",1,"C",0);
 
-    $pdf->Cell(35,$alt,"Total Geral de Registros: "                                  ,0,0,"L",0);
-    $pdf->Cell(90,$alt,$nTotalRegistros                                               ,0,0,"L",0);
+$pdf->Cell(35,$alt,"Total Geral de Registros: "                                  ,0,0,"L",0);
+$pdf->Cell(40,$alt,$nTotalRegistros                                               ,0,0,"L",0);
+$pdf->Cell(25,$alt,"Total a gerar"                                               ,0,0,"L",0);
+$pdf->Cell(25,$alt,db_formatar($totalAGerarGeral,'f')                                               ,0,0,"C",0);
 
-    $pdf->Cell(35,$alt,"Total Empenhado:"                                               ,0,0,"L",0);
-    $pdf->Cell(35,$alt,db_formatar($totalEmpenhadoGeral, 'f')                                               ,0,0,"L",0);
+$pdf->Cell(35,$alt,"Total Empenhado:"                                               ,0,0,"L",0);
+$pdf->Cell(35,$alt,db_formatar($totalEmpenhadoGeral, 'f')                                               ,0,0,"C",0);
 
-    $pdf->Cell(17,$alt,"Total Liquidado: "                                               ,0,0,"R",0);
-    $pdf->Cell(22,$alt,db_formatar($totalLiquidadoGeral  , 'f')                                           ,0,0,"C",0);
+$pdf->Cell(17,$alt,"Total Liquidado: "                                               ,0,0,"R",0);
+$pdf->Cell(22,$alt,db_formatar($totalLiquidadoGeral  , 'f')                                           ,0,0,"C",0);
 
-    $pdf->Cell(17,$alt,"Total Geral: "                                               ,0,0,"R",0);
-    $pdf->Cell(20,$alt,db_formatar($totalGeral , 'f')                                            ,0,0,"C",0);
+$pdf->Cell(17,$alt,"Total Geral: "                                               ,0,0,"R",0);
+$pdf->Cell(20,$alt,db_formatar($totalGeral-$totalLiquidadoGeral , 'f')                                            ,0,0,"C",0);
 
 
-    $pdf->Cell(192,2,""                                                               ,0,1,"C",0);
+$pdf->Cell(192,2,""                                                               ,0,1,"C",0);
 
-    $pdf->Output();
+$pdf->Output();
 
-    ?>
+?>
