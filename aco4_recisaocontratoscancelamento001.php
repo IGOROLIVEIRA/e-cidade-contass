@@ -277,6 +277,7 @@ function js_cancelarRecisao() {
   var oParam        = new Object();
   oParam.exec       = "cancelarRescisao";
   oParam.codigo     = $F('ac10_sequencial');
+  oParam.sData     = $F('ac10_datamovimento');
   oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
 
   var oAjax   = new Ajax.Request( sUrl, {

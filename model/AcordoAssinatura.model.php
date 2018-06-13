@@ -178,5 +178,12 @@ class AcordoAssinatura extends AcordoMovimentacao {
 
     return $this;
   }
+
+  /**
+   * @return Boolean
+   */
+  public function verificaPeriodoContabil() {
+    return parent::verificaPeriodoContabil();
+  }
 }
 ?>

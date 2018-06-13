@@ -8,6 +8,7 @@ include("classes/db_parecerlicitacao_classe.php");
 include("classes/db_precomedio_classe.php");
 include("classes/db_liclicita_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
@@ -35,6 +36,17 @@ if(isset($incluir)){
         "<script>alert('Data de julgamento maior que data de Homologação')</script>";
         db_redireciona('lic1_homologacaoadjudica001.php');
     }
+  /**
+   * Verificar Encerramento Periodo Contabil
+   */
+  if (!empty($l202_datahomologacao)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($l202_datahomologacao)) {
+      echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
+      db_redireciona('lic1_homologacaoadjudica001.php');
+    }
+  }
+
   $parecer     = pg_num_rows($clparecerlicitacao->sql_record($clparecerlicitacao->sql_query(null,'*',null,"l200_licitacao = $l202_licitacao ")));
   $precomedio  = pg_num_rows($clprecomedio->sql_record($clprecomedio->sql_query(null,'*',null,'l209_licitacao ='.$l202_licitacao)));
   

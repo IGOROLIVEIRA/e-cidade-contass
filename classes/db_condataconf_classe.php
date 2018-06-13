@@ -464,6 +464,19 @@ class cl_condataconf {
      }
      return $sql;
   }
+
+  function verificaPeriodoContabil($data) {
+    $result = db_query($this->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_data'));
+    $c99_data = db_utils::fieldsMemory($result, 0)->c99_data;
+    if (strpos($data, "/")) {
+      $data = implode("-",array_reverse(explode("/",$data)));
+    }
+    if ($data <= $c99_data  ) {
+      $this->erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato o suporte.";
+      return false;
+    }
+    return true;
+  }
   
 }
 ?>

@@ -293,5 +293,12 @@ class AcordoRescisao extends AcordoMovimentacao {
   	$this->corrigeReservas();
     return $this;
   }
+
+  /**
+   * @return Boolean
+   */
+  public function verificaPeriodoContabil($sData = null) {
+    return parent::verificaPeriodoContabil($sData);
+  }
 }
 ?>

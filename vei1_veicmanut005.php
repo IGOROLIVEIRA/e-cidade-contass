@@ -43,6 +43,7 @@ include("classes/db_veicabast_classe.php");
 include("classes/db_veictipoabast_classe.php");
 include("classes/db_veicmanutitempcmater_classe.php");
 require_once("classes/db_pcmater_classe.php");
+require_once("classes/db_condataconf_classe.php");
 db_app::import("veiculos.*");
 
 $clveiculos = new cl_veiculos;
@@ -88,11 +89,24 @@ if(isset($chavepesquisa)){
 }
 if(isset($alterar)){
   db_inicio_transacao();
-  $clveicmanut->alterar($ve62_codigo);
-  if($clveicmanut->erro_status==0){
-    $sqlerro=true;
+  /**
+   * Verificar Encerramento Periodo Contabil
+   */
+  $dtmanut = db_utils::fieldsMemory(db_query($clveicmanut->sql_query_file($ve62_codigo,"ve62_dtmanut")),0)->ve62_dtmanut;
+  if (!empty($dtmanut)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($dtmanut) || !$clcondataconf->verificaPeriodoContabil($ve62_dtmanut)) {
+      $sqlerro  = true;
+      $erro_msg=$clcondataconf->erro_msg;
+    }
   }
-  $erro_msg = $clveicmanut->erro_msg;
+  if ($sqlerro==false){
+    $clveicmanut->alterar($ve62_codigo);
+    if($clveicmanut->erro_status==0){
+      $sqlerro=true;
+    }
+    $erro_msg = $clveicmanut->erro_msg;
+  }
   if ($sqlerro==false){
     $result_oficina=$clveicmanutoficina->sql_record($clveicmanutoficina->sql_query(null,"ve66_codigo",null,"ve66_veicmanut=$ve62_codigo"));
     if (isset($ve66_veiccadoficinas)&&$ve66_veiccadoficinas!=""){
@@ -151,11 +165,7 @@ if(isset($alterar)){
       }
     }
   }
-  db_fim_transacao($sqlerro);
-    /*\d select * from veicmanutitem where ve63_veicmanut = 24
-    delete from veicmanutitempcmater where ve64_veicmanutitem in (select ve63_codigo from veicmanutitem where ve63_veicmanut = 24 )
-    delete from veicmanutitem where ve63_veicmanut = 24
-    select * from veicmanutitempcmater where ve64_veicmanutitem = 133*/
+  
 
     db_query("delete from veicmanutitempcmater where ve64_veicmanutitem in (select ve63_codigo from veicmanutitem where ve63_veicmanut = ".$ve62_codigo." )");
     db_query("delete from veicmanutitem where ve63_veicmanut = ".$ve62_codigo."");
@@ -164,7 +174,6 @@ if(isset($alterar)){
       if($item!=null){
 
         if($sqlerro==false){
-          db_inicio_transacao();
           $clveicmanutitem->incluir("",$item,$ve62_codigo);
           $erro_msg = $clveicmanutitem->erro_msg;
           if($clveicmanutitem->erro_status==0){
@@ -180,11 +189,11 @@ if(isset($alterar)){
               }
             }
           }
-          db_fim_transacao($sqlerro);
+          
         }
       }
     }
-    db_redireciona("vei1_veicmanut005.php?liberaaba=true&chavepesquisa=$ve62_codigo");
+    db_fim_transacao($sqlerro);
 
   }
 
@@ -249,5 +258,13 @@ if(isset($alterar)){
 </script>
 </html>
 <?
+
+  if($sqlerro==true){
+    db_msgbox($erro_msg);
+    if($clveicmanut->erro_campo!=""){
+      echo "<script> document.form1.".$clveicmanut->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$clveicmanut->erro_campo.".focus();</script>";
+    };
+  }
 
 ?>

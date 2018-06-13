@@ -43,6 +43,7 @@ include("classes/db_veicabast_classe.php");
 include("classes/db_veictipoabast_classe.php");
 include("classes/db_veicmanutitempcmater_classe.php");
 require_once("classes/db_pcmater_classe.php");
+require_once("classes/db_condataconf_classe.php");
 db_app::import("veiculos.*");
 
 $clveiculos = new cl_veiculos;
@@ -165,6 +166,16 @@ if (isset($incluir)) {
       db_msgbox("Medida de manutenção maior que Medida de Devolucao");
       $sqlerro = true;
       $erro_msg = "Não foi possível incluir.";
+    }
+    /**
+     * Verificar Encerramento Periodo Contabil
+     */
+    if (!empty($ve62_dtmanut)) {
+      $clcondataconf = new cl_condataconf;
+      if (!$clcondataconf->verificaPeriodoContabil($ve62_dtmanut)) {
+        $sqlerro  = true;
+        $erro_msg=$clcondataconf->erro_msg;
+      }
     }
 
     if ($sqlerro == false) {

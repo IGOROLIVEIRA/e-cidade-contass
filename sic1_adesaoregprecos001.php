@@ -6,6 +6,7 @@ include("libs/db_usuariosonline.php");
 include("classes/db_adesaoregprecos_classe.php");
 include("classes/db_itensregpreco_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clcflicita          = new cl_cflicita;
@@ -16,8 +17,23 @@ $db_botao = true;
 if(isset($incluir)){
 
   db_inicio_transacao();
-  $cladesaoregprecos->incluir(null);
-if($cladesaoregprecos->erro_status=="0"){
+  $sqlerro    = false;
+
+  /**
+    * Verificar Encerramento Periodo Contabil
+    */
+  if (!empty($si06_dataadesao)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
+      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
+      $cladesaoregprecos->erro_status="0";
+      $sqlerro  = true;
+    }
+  }
+  if ($sqlerro == false) {
+    $cladesaoregprecos->incluir(null);
+  }
+  if($cladesaoregprecos->erro_status=="0"){
 
     $cladesaoregprecos->erro(true,false);
     $db_botao=true;
@@ -46,7 +62,22 @@ if($cladesaoregprecos->erro_status=="0"){
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $cladesaoregprecos->alterar($si06_sequencial);
+  $sqlerro  = false;
+
+  /**
+    * Verificar Encerramento Periodo Contabil
+    */
+  if (!empty($si06_dataadesao)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
+      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg." $si06_dataadesao";
+      $cladesaoregprecos->erro_status="0";
+      $sqlerro  = true;
+    }
+  }
+  if ($sqlerro == false) {
+    $cladesaoregprecos->alterar($si06_sequencial);
+  }
   db_fim_transacao();
   $_SESSION["codigoAdesao"] = $si06_sequencial;
   echo "<script>

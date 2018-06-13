@@ -171,6 +171,10 @@ switch($oParam->exec) {
       	$oAssinatura->setObservacao($sObservacao);
         $oAcordo = new Acordo($oParam->acordo);
 
+        if (!$oAssinatura->verificaPeriodoContabil()) {
+          $lAcordoValido = false;
+        }
+
         if ($oDataPublicacao->getTimeStamp() < $oDataMovimentacao->getTimeStamp()) {
           throw new Exception("A data de assinatura do contrato não pode ser menor que a data de publicação.");
         }
@@ -248,6 +252,9 @@ switch($oParam->exec) {
         db_inicio_transacao();
 
         $oAssinatura = new AcordoAssinatura($oParam->codigo);
+        if (!$oAssinatura->verificaPeriodoContabil()) {
+          $lAcordoValido = false;
+        }
         $oAssinatura->setDataMovimento();
         $oAssinatura->setObservacao($sObservacao);
         $oAssinatura->cancelar();
@@ -305,6 +312,10 @@ switch($oParam->exec) {
         $oRecisao->setObservacao($sObservacao);
         $oRecisao->setValorRescisao($nValorRescisao);
 
+        if (!$oRecisao->verificaPeriodoContabil()) {
+          $lAcordoValido = false;
+        }
+
         if ($oRecisao->getValorRescisao() > $oAcordo->getValorContrato()) {
           throw new Exception("O valor rescindido não pode ser maior que o valor do acordo.");
         }
@@ -332,6 +343,9 @@ switch($oParam->exec) {
         db_inicio_transacao();
 
         $oRecisao = new AcordoRescisao($oParam->codigo);
+        if (!$oRecisao->verificaPeriodoContabil() || !$oRecisao->verificaPeriodoContabil($oParam->sData)) {
+          $lAcordoValido = false;
+        }
         $oRecisao->setDataMovimento();
         $oRecisao->setValorRescisao(0);
         $oRecisao->setObservacao($sObservacao);
@@ -357,6 +371,9 @@ switch($oParam->exec) {
         db_inicio_transacao();
 
         $oRecisao = new AcordoRescisao($oParam->codigo);
+        if (!$oRecisao->verificaPeriodoContabil() || !$oRecisao->verificaPeriodoContabil($oParam->sData)) {
+          $lAcordoValido = false;
+        }
         $oRecisao->setObservacao($sObservacao);
         $oRecisao->setDataMovimento();
         $oRecisao->desfazerCancelamento();

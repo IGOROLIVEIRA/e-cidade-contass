@@ -6,6 +6,7 @@ include("libs/db_usuariosonline.php");
 include("classes/db_homologacaoadjudica_classe.php");
 include("classes/db_liclicita_classe.php");
 include("dbforms/db_funcoes.php");
+include("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
@@ -18,6 +19,18 @@ if(isset($alterar)){
   if($l20_usaregistropreco == 'f' && empty($l202_dataadjudicacao)) {
     echo "<script>alert('Campo Data Adjudicação é Obrigatório');</script>";
     db_redireciona('lic1_homologacaoadjudica001.php');
+  }
+
+  /**
+   * Verificar Encerramento Periodo Contabil
+   */
+  $datahomologacao = db_utils::fieldsMemory(db_query($clhomologacaoadjudica->sql_query_file($l202_sequencial,"l202_datahomologacao")),0)->l202_datahomologacao;
+  if (!empty($datahomologacao)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($datahomologacao)) {
+      echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
+      db_redireciona('lic1_homologacaoadjudica002.php');
+    }
   }
 
   db_inicio_transacao();

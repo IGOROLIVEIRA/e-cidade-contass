@@ -43,6 +43,7 @@ require_once("classes/db_pcorcamdescla_classe.php");
 require_once("classes/db_cflicita_classe.php");
 require_once("classes/db_homologacaoadjudica_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
+require_once("classes/db_condataconf_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -170,14 +171,28 @@ if(isset($alterar)){
       }
     }
   }
-  $clliclicita->l20_numero       = $iNumero;
-  $clliclicita->l20_procadmin    = $sProcAdmin;
-  $clliclicita->l20_equipepregao = $l20_equipepregao;
+  /**
+   * Verificar Encerramento Periodo Contabil
+   */
+  $dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
+  if (!empty($dtpubratificacao)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($dtpubratificacao)) {
+      $erro_msg = $clcondataconf->erro_msg;
+      $sqlerro  = true;
+    }
+  }
+  if ($sqlerro == false){
+    $clliclicita->l20_numero       = $iNumero;
+    $clliclicita->l20_procadmin    = $sProcAdmin;
+    $clliclicita->l20_equipepregao = $l20_equipepregao;
   //$clliclicita->l20_horaaber     = $l20_horaaber;
-  $clliclicita->alterar($l20_codigo,$descricao);
+    $clliclicita->alterar($l20_codigo,$descricao);
 
-  if ($clliclicita->erro_status == "0") {
-    $sqlerro = true;
+    if ($clliclicita->erro_status == "0") {
+      $erro_msg = $clliclicita->erro_msg;
+      $sqlerro = true;
+    }
   }
 
 
@@ -543,7 +558,8 @@ if(isset($alterar)){
   if($sqlerro == true){
 
     //  db_msgbox($erro_sql);
-
+    $clliclicita->erro_msg = $erro_msg;
+    $clliclicita->erro_status = 0;
     $clliclicita->erro(true,false);
     $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";

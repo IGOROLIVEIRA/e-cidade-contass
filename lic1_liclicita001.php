@@ -39,6 +39,7 @@ require_once("classes/db_liclicitasituacao_classe.php");
 require_once("classes/db_cflicita_classe.php");
 require_once("classes/db_liclocal_classe.php");
 require_once("classes/db_liccomissao_classe.php");
+require_once("classes/db_condataconf_classe.php");
 
 include("classes/db_decretopregao_classe.php");
 
@@ -138,6 +139,17 @@ if(isset($incluir)){
 		  $erro_msg="Já existe licitação número $l20_edital.Verificar numeração por edital.";
 		  $sqlerro = true;
 		}
+
+    /**
+     * Verificar Encerramento Periodo Contabil
+     */
+    if (!empty($l20_dtpubratificacao)) {
+			$clcondataconf = new cl_condataconf;
+	    if (!$clcondataconf->verificaPeriodoContabil($l20_dtpubratificacao)) {
+	      $erro_msg = $clcondataconf->erro_msg;
+	      $sqlerro  = true;
+	    }
+    }
 
 
 		if ($sqlerro == false){

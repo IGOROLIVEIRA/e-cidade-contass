@@ -39,6 +39,7 @@ include("classes/db_veicabastretirada_classe.php");
 include("classes/db_veicparam_classe.php");
 include("classes/db_veicretirada_classe.php");
 include("classes/db_empveiculos_classe.php");
+require_once("classes/db_condataconf_classe.php");
 
 require("libs/db_app.utils.php");
 db_app::import("veiculos.*");
@@ -180,6 +181,18 @@ if (isset($sel_proprio) && $sel_proprio==2) {
     }
 
   }
+
+    /**
+     * Verificar Encerramento Periodo Contabil
+     */
+    if (!empty($ve70_dtabast)) {
+      $clcondataconf = new cl_condataconf;
+      if (!$clcondataconf->verificaPeriodoContabil($ve70_dtabast)) {
+        db_msgbox($clcondataconf->erro_msg);
+        $sqlerro  = true;
+        $erro_msg="Não foi possível incluir.";
+      }
+    }
 
 if (isset($incluir) && $self != "") {
   if ($sqlerro==false) {

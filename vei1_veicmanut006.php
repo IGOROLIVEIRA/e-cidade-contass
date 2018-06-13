@@ -43,6 +43,7 @@ include("classes/db_veicabast_classe.php");
 include("classes/db_veictipoabast_classe.php");
 include("classes/db_veicmanutitempcmater_classe.php");
 require_once("classes/db_pcmater_classe.php");
+require_once("classes/db_condataconf_classe.php");
 db_app::import("veiculos.*");
 
 $clveiculos = new cl_veiculos;
@@ -80,6 +81,17 @@ if(isset($excluir)){
         $erro_msg=$clveicmanutretirada->erro_msg;
         $sqlerro=true;
       }
+    }
+  }
+  /**
+   * Verificar Encerramento Periodo Contabil
+   */
+  $dtmanut = db_utils::fieldsMemory(db_query($clveicmanut->sql_query_file($ve62_codigo,"ve62_dtmanut")),0)->ve62_dtmanut;
+  if (!empty($dtmanut)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($dtmanut)) {
+      $sqlerro  = true;
+      $erro_msg=$clcondataconf->erro_msg;
     }
   }
   if ($sqlerro==false){

@@ -31,6 +31,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_veicabastanu_classe.php");
 include("classes/db_veicabast_classe.php");
+include("classes/db_condataconf_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clveicabast = new cl_veicabast;
@@ -57,6 +58,17 @@ if(isset($incluir)){
   		$sqlerro=true;
   		$erro_msg=$clveicabast->erro_msg;
   	}  	  	
+  }
+  /**
+   * Verificar Encerramento Periodo Contabil
+   */
+  $ve70_dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve74_veicabast,"ve70_dtabast")),0)->ve70_dtabast;
+  if (!empty($ve70_dtabast)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($ve70_dtabast)) {
+      $sqlerro  = true;
+      $erro_msg=$clcondataconf->erro_msg;
+    }
   }
   db_fim_transacao($sqlerro);
 }

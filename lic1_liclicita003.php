@@ -41,6 +41,7 @@ include("classes/db_liclicitemanu_classe.php");
 include("classes/db_liclicitasituacao_classe.php");
 include("classes/db_cflicita_classe.php");
 include("classes/db_liccomissaocgm_classe.php");
+require_once("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
@@ -138,6 +139,18 @@ if(isset($excluir)){
     $erro_msg = $clliclicitaproc->erro_msg;
     if ($clliclicitaproc->erro_status==0){
       $sqlerro=true;
+    }
+  }
+
+  /*
+   * Verificar Encerramento Periodo Contabil
+   */
+  $dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
+  if (!empty($dtpubratificacao)) {
+    $clcondataconf = new cl_condataconf;
+    if (!$clcondataconf->verificaPeriodoContabil($dtpubratificacao)) {
+      $erro_msg = $clcondataconf->erro_msg;
+      $sqlerro  = true;
     }
   }
   

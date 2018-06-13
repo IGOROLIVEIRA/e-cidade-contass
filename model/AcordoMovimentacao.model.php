@@ -570,9 +570,12 @@ abstract class AcordoMovimentacao {
   /**
    * @return Boolean
    */
-  public function verificaPeriodoContabil() {
+  public function verificaPeriodoContabil($sData = null) {
+    if ($sData == null) {
+      $sData = $this->dtMovimento;
+    }
     $oDaoCondataconf = db_utils::getDao("condataconf");
-    $retorno = $oDaoCondataconf->verificaPeriodoContabil($this->dtMovimento);
+    $retorno = $oDaoCondataconf->verificaPeriodoContabil($sData);
     if (!$retorno) {
       throw new Exception($oDaoCondataconf->erro_msg);
     }

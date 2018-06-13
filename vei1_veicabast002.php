@@ -40,6 +40,7 @@ include("classes/db_veiculos_classe.php");
 include("classes/db_veictipoabast_classe.php");
 include("classes/db_veicretirada_classe.php");
 include("classes/db_empveiculos_classe.php");
+include("classes/db_condataconf_classe.php");
 require("libs/db_app.utils.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -176,6 +177,19 @@ if( (isset($proximamedida) && $proximamedida > 0) && $proximamedida < $medida){
  $sqlerro  = true;
  $erro_msg = "Medida informada maior que a proxima medida {$proximamedida}! Verique!";
  $clveicabast->erro_campo = "ve70_medida";
+}
+
+/**
+ * Verificar Encerramento Periodo Contabil
+ */
+$dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve70_codigo,"ve70_dtabast")),0)->ve70_dtabast;
+if (!empty($dtabast)) {
+  $clcondataconf = new cl_condataconf;
+  if (!$clcondataconf->verificaPeriodoContabil($dtabast) || !$clcondataconf->verificaPeriodoContabil($dataabast)) {
+    db_msgbox($clcondataconf->erro_msg);
+    $sqlerro  = true;
+    $erro_msg="Não foi possível alterar.";
+  }
 }
 
 

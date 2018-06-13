@@ -7,6 +7,7 @@ include("classes/db_homologacaoadjudica_classe.php");
 include("classes/db_liclicita_classe.php");
 include("dbforms/db_funcoes.php");
 include("libs/db_utils.php");
+include("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clhomologacaoadjudica = new cl_homologacaoadjudica;
@@ -26,6 +27,17 @@ if(isset($excluir)){
   } else {
     db_inicio_transacao();
     $db_opcao = 3;
+   /**
+    * Verificar Encerramento Periodo Contabil
+    */
+    $datahomologacao = db_utils::fieldsMemory(db_query($clhomologacaoadjudica->sql_query_file($l202_sequencial,"l202_datahomologacao")),0)->l202_datahomologacao;
+    if (!empty($datahomologacao)) {
+      $clcondataconf = new cl_condataconf;
+      if (!$clcondataconf->verificaPeriodoContabil($datahomologacao)) {
+        echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
+        db_redireciona('lic1_homologacaoadjudica003.php');
+      }
+    }
     $clhomologacaoadjudica->excluirItens($l202_sequencial);
     $clhomologacaoadjudica->excluir($l202_sequencial);
     $clhomologacaoadjudica->alteraLicitacao($l202_licitacao,1);
