@@ -548,7 +548,7 @@ class cl_acordoitemexecutado {
          if($sql2!=""){
            $sql2 .= " and ";
          }
-         $sql2 .= " ac29_sequencial = $ac29_sequencial cascade";
+         $sql2 .= " ac29_sequencial = $ac29_sequencial ";
        }
      }else{
        $sql2 = $dbwhere;
