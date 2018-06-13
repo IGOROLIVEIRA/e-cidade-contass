@@ -2279,8 +2279,7 @@ class Acordo
                   DROP AS
                   SELECT acordoempautoriza.ac45_acordo AS contrato,
                   acordoempautoriza.ac45_empautoriza AS autorizacao,
-                  acordoitemexecutado.ac29_acordoitem AS itens_contrato,
-                  acordoitemexecutado.ac29_sequencial AS itemexecutado
+                  acordoitemexecutado.ac29_acordoitem AS itens_contrato
                   FROM acordo
                   JOIN acordoempautoriza ON ac45_acordo = ac16_sequencial
                   JOIN acordoposicao ON ac26_acordo = ac16_sequencial
@@ -2323,10 +2322,7 @@ class Acordo
                   if($clempautitempcprocitem->erro_status == 0){
                     throw new Exception($clempautitempcprocitem->erro_msg);
                   }
-                  $clacordoitemexecutadoempautitem->excluir(null,"ac19_autori=".$oAutorizacao->autorizacao);
-                  if($clacordoitemexecutadoempautitem->erro_status == 0){
-                    throw new Exception($clacordoitemexecutadoempautitem->erro_msg);
-                  }
+
                   $clempautitem->excluir($oAutorizacao->autorizacao);
                   if($clempautitem->erro_status == 0){
                     throw new Exception($clempautitem->erro_msg);
@@ -2343,17 +2339,30 @@ class Acordo
                   if($clempautoriza->erro_status == 0){
                     throw new Exception($clempautoriza->erro_msg);
                   }
-
-
               }
-              $rsexcluirAutorizacaoItens = db_query("SELECT DISTINCT itens_contrato,itemexecutado FROM contratos_excluir");
+              $rsexcluirAutorizacaoItens = db_query("SELECT DISTINCT itens_contrato FROM contratos_excluir");
               $rsexcluirAutorizacaoItens = db_utils::getCollectionByRecord($rsexcluirAutorizacaoItens);
 
               foreach ($rsexcluirAutorizacaoItens as $oAutorizacaoItens) {
+                  $sqlAcordoItemExecutado = $clacordoitemexecutado->sql_query(null,"ac29_sequencial", null, "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato);
+                  $clacordoitemexecutadoempautitem->excluir(null,"ac19_acordoitemexecutado in ($sqlAcordoItemExecutado)");
 
-                  $whereItemExecutado = "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato." and ac29_sequencial =".$oAutorizacaoItens->itemexecutado;
-                  $clacordoitemexecutado->excluir(null, $whereItemExecutado);
+                  if($clacordoitemexecutadoempautitem->erro_status == 0){
+                    throw new Exception($clacordoitemexecutadoempautitem->erro_msg);
+                  }
+
+                  $clacordoitemexecutado->excluir(null, "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato);
+
+                  if($clacordoitemexecutado->erro_status == 0){
+                    throw new Exception($clacordoitemexecutado->erro_msg);
+                  }
+
                   $clacordoitemexecutadodotacao->excluir(null, "ac32_acordoitem =".$oAutorizacaoItens->itens_contrato);
+
+                  if($clacordoitemexecutadodotacao->erro_status == 0){
+                    throw new Exception($clacordoitemexecutadodotacao->erro_msg);
+                  }
+
 
             }
 
