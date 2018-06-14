@@ -5799,6 +5799,14 @@ class cl_estrutura_sistema {
      * @param $dtfim
      */
     function criaWorkDotacao($sWhere, $aAnousu, $dtini, $dtfim){
+        $aDatas = array();
+        $dt_inicial = "";
+        $dt_final   = "";
+        if (count($aAnousu) == 2) {
+          $aDatas[$aAnousu[0]] = $dtini.'a'.$aAnousu[0].'-12-31';
+          $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtfim;
+        }
+
         $sSqlCriaTabela = " CREATE TABLE IF NOT EXISTS work_dotacao
                         (
                           o58_instit    INTEGER,
@@ -5853,6 +5861,7 @@ class cl_estrutura_sistema {
                           vinculado DOUBLE PRECISION
                           ); TRUNCATE work_dotacao;";
         foreach($aAnousu as $anousu) {
+
             $sSql .= " INSERT INTO work_dotacao
                     SELECT *,
                            (CASE
@@ -5926,8 +5935,11 @@ class cl_estrutura_sistema {
                               substr(fc_dotacaosaldo,368,12)::float8 AS reservado_automatico_ate_data,
                               substr(fc_dotacaosaldo,381,12)::float8 AS reservado_ate_data,
                               o55_tipo,
-                              o15_tipo from
-                         (SELECT *, fc_dotacaosaldo({$anousu},o58_coddot,2,'{$dtini}','{$dtfim}')
+                              o15_tipo from ";
+                    if (count($aAnousu) == 2) {
+                      $dt_inicial = explode("a",$aDatas[$anousu]);
+                      $dt_final   = explode("a",$aDatas[$anousu]);
+                      $sSql .= " (SELECT *, fc_dotacaosaldo({$anousu},o58_coddot,2,'{$dt_inicial[0]}','{$dt_final[1]}')
                           FROM orcdotacao w
                           INNER JOIN orcelemento e ON w.o58_codele = e.o56_codele
                           AND e.o56_anousu = w.o58_anousu
@@ -5935,10 +5947,21 @@ class cl_estrutura_sistema {
                           INNER JOIN orcprojativ ope ON w.o58_projativ = ope.o55_projativ
                           AND ope.o55_anousu = w.o58_anousu
                           INNER JOIN orctiporec ON orctiporec.o15_codigo = w.o58_codigo
-                          WHERE o58_anousu = {$anousu}
-                            AND {$sWhere}
-                          ORDER BY o58_orgao, o58_unidade, o58_funcao, o58_subfuncao, o58_programa, o58_projativ, o56_codele, o56_elemento, o58_coddot, o58_codigo) AS x) AS xxx; ";
+                          WHERE o58_anousu = {$anousu} ";
+                    } else {
+                        $sSql .= " (SELECT *, fc_dotacaosaldo({$anousu},o58_coddot,2,'{$dtini}','{$dtfim}')
+                          FROM orcdotacao w
+                          INNER JOIN orcelemento e ON w.o58_codele = e.o56_codele
+                          AND e.o56_anousu = w.o58_anousu
+                          AND e.o56_orcado IS TRUE
+                          INNER JOIN orcprojativ ope ON w.o58_projativ = ope.o55_projativ
+                          AND ope.o55_anousu = w.o58_anousu
+                          INNER JOIN orctiporec ON orctiporec.o15_codigo = w.o58_codigo
+                          WHERE o58_anousu = {$anousu} ";
+                    }
+                    $sSql .= " AND {$sWhere}
+                    ORDER BY o58_orgao, o58_unidade, o58_funcao, o58_subfuncao, o58_programa, o58_projativ, o56_codele, o56_elemento, o58_coddot, o58_codigo) AS x) AS xxx; ";
         }
         db_query($sSqlCriaTabela.$sSql) or die(pg_last_error());
     }
-    ?>
+?>

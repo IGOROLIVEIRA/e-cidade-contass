@@ -47,7 +47,7 @@ $dtini = $oDataIni->getDate();
 $dtfim = $oDataFim->getDate();
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",", $instits);
-
+$soma=0;
 if (count($aInstits) > 1) {
     $oInstit = new Instituicao();
     $oInstit = $oInstit->getDadosPrefeitura();
@@ -69,8 +69,9 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
 
     $db_filtro = " o70_instit in({$instits}) ";
     $anousu = db_getsession("DB_anousu");
-
-    $oUltimoano = db_receitasaldo(11,1,3,true,$db_filtro,$anousu-1,$dtini,$dtfim,false,' * ',true,0);
+    $anousu_aux = $anousu-1;
+    $dtfim_aux  = $anousu_aux.'-12-31';
+    $oUltimoano = db_receitasaldo(11,1,3,true,$db_filtro,$anousu-1,$dtini,$dtfim_aux,false,' * ',true,0);
     $oUltimoano = db_utils::getColectionByRecord($oUltimoano);
     foreach ($oUltimoano as $oDados) {
         if($oDados->o57_fonte == "410000000000000"){
@@ -111,7 +112,8 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
     }
     db_query("drop table if exists work_receita");
 
-    $oAnoatual = db_receitasaldo(11,1,3,true,$db_filtro,$anousu,$dtini,$dtfim,false,' * ',true,0);
+    $dtini_aux = $anousu.'-01-01';
+    $oAnoatual = db_receitasaldo(11,1,3,true,$db_filtro,$anousu,$dtini_aux,$dtfim,false,' * ',true,0);
     $oAnoatual = db_utils::getColectionByRecord($oAnoatual);
     foreach ($oAnoatual as $oDados) {
         if($oDados->o57_fonte == "410000000000000"){
@@ -121,31 +123,31 @@ function getDespesasReceitas($instits,$dtini,$dtfim){
             $fTotalarrecadado+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102907000000"){
+        if($oDados->o57_fonte == "412100421000000"){
             $fCSACRPPS+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102909000000"){
+        if($oDados->o57_fonte == "412100431000000"){
             $fCSICRPPS+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102911000000"){
+        if($oDados->o57_fonte == "412100441000000"){
             $fCPRPPS+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102917000000"){
+        if($oDados->o57_fonte == "412100461000000"){
             $fRRCSACOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102918000000"){
+        if($oDados->o57_fonte == "412100471000000"){
             $fRRCSICOPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "412102919000000"){
+        if($oDados->o57_fonte == "412100481000000"){
             $fRRCPPSJ+=$oDados->saldo_arrecadado;
         }
 
-        if($oDados->o57_fonte == "419221000000000"){
+        if($oDados->o57_fonte == "419900311000000"){
             $fCFRP+=$oDados->saldo_arrecadado;
         }
 
@@ -237,165 +239,19 @@ ob_start();
 <html>
 <head>
     <style type="text/css">
-        .ritz .waffle a {
-            color: inherit;
-        }
-
-        .ritz .waffle .s1 {
-            background-color: #d8d8d8;
-            border-bottom: 1px SOLID #000000;
-            border-right: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            font-weight: bold;
-            padding: 0px 3px 0px 3px;
-            text-align: left;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s2 {
-            background-color: #ffffff;
-            border-bottom: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            padding: 0px 3px 0px 3px;
-            text-align: left;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s4 {
-            background-color: #ffffff;
-            border-right: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            padding: 0px 3px 0px 3px;
-            text-align: left;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s3 {
-            background-color: #ffffff;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            padding: 0px 3px 0px 3px;
-            text-align: left;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s10 {
-            background-color: #d8d8d8;
-            border-bottom: 1px SOLID #000000;
-            border-right: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            font-weight: bold;
-            padding: 0px 3px 0px 3px;
-            text-align: right;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s6 {
-            background-color: #ffffff;
-            border-bottom: 1px SOLID #000000;
-            border-right: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            padding: 0px 3px 0px 3px;
-            text-align: right;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s7 {
-            background-color: #ffffff;
-            border-bottom: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            font-weight: bold;
-            padding: 0px 3px 0px 3px;
-            text-align: left;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s8 {
-            background-color: #ffffff;
-            border-bottom: 1px SOLID #000000;
-            border-right: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            font-weight: bold;
-            padding: 0px 3px 0px 3px;
-            text-align: right;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s5 {
-            background-color: #ffffff;
-            border-right: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            padding: 0px 3px 0px 3px;
-            text-align: right;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s0 {
-            background-color: #d8d8d8;
-            border-right: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            font-weight: bold;
-            padding: 0px 3px 0px 3px;
-            text-align: center;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .ritz .waffle .s9 {
-            background-color: #ffffff;
-            border-bottom: 1px SOLID #000000;
-            border-right: 1px SOLID #000000;
-            color: #000000;
-            direction: ltr;
-            font-family: 'Calibri', Arial;
-            font-size: 11pt;
-            padding: 0px 3px 0px 3px;
-            text-align: left;
-            vertical-align: bottom;
-            white-space: nowrap;
-        }
-
-        .column-headers-background {
-            background-color: #d8d8d8;
-        }
+        .ritz .waffle a { color: inherit; }
+        .ritz .waffle .s1 { background-color: #d8d8d8; border-bottom: 1px SOLID #000000; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s2 {background-color: #ffffff; border-bottom: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s4 { background-color: #ffffff; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s3 { background-color: #ffffff; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s10 { background-color: #d8d8d8; border-bottom: 1px SOLID #000000; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: right; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s6 { background-color: #ffffff; border-bottom: 1px SOLID #000000; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: right; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s7 {background-color: #ffffff; border-bottom: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s8 { background-color: #ffffff; border-bottom: 1px SOLID #000000; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: right; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s5 { background-color: #ffffff; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: right; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s0 {background-color: #d8d8d8; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; font-weight: bold; padding: 0px 3px 0px 3px; text-align: center; vertical-align: bottom; white-space: nowrap; }
+        .ritz .waffle .s9 { background-color: #ffffff; border-bottom: 1px SOLID #000000; border-right: 1px SOLID #000000; color: #000000; direction: ltr; font-family: 'Calibri', Arial; font-size: 11pt; padding: 0px 3px 0px 3px; text-align: left; vertical-align: bottom; white-space: nowrap; }
+        .column-headers-background { background-color: #d8d8d8; }
     </style>
 </head>
 <body>
@@ -435,7 +291,7 @@ ob_start();
          */
         $i = 1;
         $fTotalDespesas = 0;
-        foreach ($aInstits as $iInstit) {
+        foreach ($aInstits as $iInstit) :
 
             $oInstit = new Instituicao($iInstit);
 
@@ -454,26 +310,26 @@ ob_start();
             <?php
             $fTotalLiquidado = 0;
             $aDespesas = getSaldoDespesa(null, "o58_elemento, o56_descr,sum(liquidado) as liquidado", null, "o58_elemento like '331%' and o58_instit = {$oInstit->getCodigo()} group by 1,2");
-            foreach ($aDespesas as $oDespesa) {
+            foreach ($aDespesas as $oDespesa) :
 
-                if ($oDespesa->o58_elemento == '3317170000000') {
-                    /**
-                     * Solicitado por Wesley@contass em 28/03/2017
-                     */
-                    //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
-                    $oDespesa->liquidado = $oDespesa->liquidado;
-                }
-                $fTotalLiquidado += $oDespesa->liquidado;
-                ?>
-                <tr style='height:19px;'>
-                    <td class="s3 bdleft" colspan="2">
-                        <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
-                    </td>
-                    <td class="s5">
-                        <?php echo db_formatar($oDespesa->liquidado, "f"); ?>
-                    </td>
-                </tr>
-            <?php } ?>
+              if ($oDespesa->o58_elemento == '3317170000000') {
+                  /**
+                   * Solicitado por Wesley@contass em 28/03/2017
+                   */
+                  //$oDespesa->liquidado = getConsolidacaoConsorcios($oDataIni, $oDataFim) == 0 ? $oDespesa->liquidado : getConsolidacaoConsorcios($oDataIni, $oDataFim);
+                  $oDespesa->liquidado = $oDespesa->liquidado;
+              }
+              $fTotalLiquidado += $oDespesa->liquidado;
+              ?>
+              <tr style='height:19px;'>
+                  <td class="s3 bdleft" colspan="2">
+                      <?php echo db_formatar($oDespesa->o58_elemento, "elemento") . " - " . $oDespesa->o56_descr; ?>
+                  </td>
+                  <td class="s5">
+                      <?php echo db_formatar($oDespesa->liquidado, "f"); ?>
+                  </td>
+              </tr>
+            <?php endforeach; ?>
             <tr style='height:19px;'>
                 <td class="s2 bdleft bdtop" colspan="2">SUB-TOTAL</td>
                 <td class="s6 bdtop">
@@ -481,7 +337,7 @@ ob_start();
                     $fTotalDespesas += $fTotalLiquidado; ?>
                 </td>
             </tr>
-        <?php } ?>
+        <?php endforeach; ?>
 
         <tr style='height:19px;'>
             <td class="s3 bdleft" colspan="2">TOTAL DAS DESPESAS COM PESSOAL NO MUNICÍPIO</td>
@@ -568,8 +424,9 @@ ob_start();
             <td class="s8">
                 <?php
                 $fValorManualRCL = getValorManual($codigorelatorio, 1, $oInstit->getCodigo(), $o116_periodo, $iAnousu);
-                $fRCL = $fValorManualRCL == NULL ? $fTotalReceitasArrecadadas : $fValorManualRCL;
-                echo db_formatar($fRCL, "f");
+                $fRCL += $fValorManualRCL == NULL ? $fTotalReceitasArrecadadas : $fValorManualRCL;
+                echo db_formatar($fTotalReceitasArrecadadas, "f");
+                //echo db_formatar($fRCL, "f");
                 ?>
             </td>
         </tr>
