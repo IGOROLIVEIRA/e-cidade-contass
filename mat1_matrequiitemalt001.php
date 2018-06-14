@@ -137,6 +137,24 @@ else if (isset($finalizar)) {
   }
   db_fim_transacao($sqlerro);
 }
+
+else if (isset($cancfinalizacao)) {
+  $sqlerro=false;
+  db_inicio_transacao();
+   $rsResult = db_query("
+      BEGIN;
+        update matrequi set m40_finalizado = 'f', m40_dtfinalizado = null where m40_codigo = {$m40_codigo};
+      COMMIT;
+   ");
+
+   if ($rsResult == false) {
+      $erro_msg = "Erro  ao cancelar finalização";
+      $sqlerro  = true;
+   } else {
+      $erro_msg = "Finalização cancelada com sucesso!";
+   }
+  db_fim_transacao($sqlerro);
+}
 else if ( isset($alterar) ) {
 
   $sqlerro=false;
@@ -227,7 +245,7 @@ if ( !empty($m41_codigo) ) {
 </body>
 </html>
 <?
-if(isset($incluir) || isset($alterar) || isset($excluir) || isset($finalizar)){
+if(isset($incluir) || isset($alterar) || isset($excluir) || isset($finalizar) || isset($cancfinalizacao)){
   if($sqlerro==true){
     db_msgbox($erro_msg);
     if($clmatrequiitem->erro_campo!=""){

@@ -323,6 +323,26 @@ db_input('db_opcao',10,'',true,'hidden',3);
 <? if ($db_opcao==1) : ?>
   <input style="margin-left: 3px; display: <?php echo ($m40_finalizado == 'f') ? 'inline-block' : 'none'; ?>" id='finalizar' name='finalizar' type='submit' value='Finalizar Requisição'>
 <?endif;?>
+<?php
+  $id_usuario = db_getsession('DB_id_usuario');
+  $sql = "select *
+    from db_permissao p
+        inner join db_itensmenu m on m.id_item = p .id_item
+        inner join db_menu on db_menu.id_item_filho = m.id_item
+            where p.anousu = ".date('Y')."
+              and p.id_item in (select id_item from db_itensmenu where descricao = 'Cancelar Finalizacao' and help = 'Cancelar Finalizacao' and funcao = '' and desctec = 'Cancelar Finalizacao')
+              and db_menu.modulo = 480
+              and id_usuario = {$id_usuario}";
+  $res = pg_query($sql);
+  $permissao = 0;
+
+  if (pg_numrows($res) > 0 || $id_usuario == 1) {
+    $permissao = 1;
+  }
+?>
+
+<input style="margin-left: 3px; display: <?php echo ($m40_finalizado == 't' && $permissao == 1) ? 'inline-block' : 'none'; ?>" id='cancfinalizacao' name='cancfinalizacao' type='submit' value='Cancelar Finalização'>
+
 </td>
 </tr>
 </table>
