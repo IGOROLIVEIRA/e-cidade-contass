@@ -20,8 +20,8 @@ if($data_ini!="" && $data_fim!=""){
   $sInfo = "Até {$data_ini}";
 }
 
-$head3 = "RELATÓRIO DE CONTROLE DE ORDEM DE COMPRAS";
-$head5 = $sInfo;
+$head5 = "RELATÓRIO DE CONTROLE DE ORDEM DE COMPRAS";
+
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
@@ -52,122 +52,123 @@ if(($data_ini!="")&&($data_fim!="")){
 db_inicio_transacao();
 try {
   /*CONSULTA*/
-  if($agrupar == '1'){
-    $totalizador = "";
+  $order_by = " x.z01_nome, x.empenho, x.m51_codordem ";
+  if($ordenar == 1){
+    $order_by = " x.empenho, x.m51_codordem ";
   }
-  else if($agrupar == '2'){
-    $totalizador = "";
-  }
-  else if($agrupar == '3'){
-    $totalizador = "";
-  }else{
-    $totalizador = "";
-  }
+  $where =" e60_instit = ".db_getsession('DB_instit');
 
-  $sSql = "
-  SELECT DISTINCT on (m51_codordem,
-  pc01_codmater,
-  e60_codemp,
-  e60_anousu,
-  m51_numcgm,
-  e69_dtrecebe)
-  m51_codordem,
-  pc01_codmater,
-  e60_codemp,
-  e60_anousu,
-  m51_numcgm,
-  e69_dtrecebe
-  m51_data,
-  e69_codnota,
-  e69_dtnota,
-  pc01_descrmater,
-  destino.descrdepto AS destino,
-  z01_nome,
-  m51_valortotal,
-  matordemitem.m52_valor as valoritem,
-  m51_prazoent,
-  origem.descrdepto AS solicitante,
-  e53_valor,
-  e53_vlranu,
-  e53_vlrpag,
-  e62_vltot,
-  e62_quant,
-  e64_vlremp,
-  e64_vlrliq,
-  e64_vlranu,
-  e64_vlrpag,
-  e70_vlranu,
-  pc01_servico,
-  CASE
-  WHEN e69_dtrecebe IS NULL THEN 'PENDENTE'
-  ELSE 'RECEBIDO'
-  END AS status,
-  (m51_data+m51_prazoent::int) AS dataprevista
-  FROM matordem
-  INNER JOIN  matordemitem      ON matordemitem.m52_codordem=matordem.m51_codordem
-  LEFT JOIN   empnotaord        ON empnotaord.m72_codordem=matordem.m51_codordem
-  LEFT JOIN   empnota           ON empnota.e69_codnota=empnotaord.m72_codnota
-  LEFT JOIN   empempitem        ON matordemitem.m52_numemp=empempitem.e62_numemp
-  AND matordemitem.m52_sequen=empempitem.e62_sequen
-  INNER JOIN  empempenho       ON e62_numemp=e60_numemp
-  LEFT JOIN empelemento ON e64_numemp=e60_numemp
-  LEFT JOIN empnotaele ON e69_codnota=e70_codnota
-  LEFT JOIN   pcmater           ON empempitem.e62_item=pcmater.pc01_codmater
-  LEFT JOIN   pagordemnota      ON e71_codnota = empnota.e69_codnota
-  LEFT JOIN   pagordemele       ON  e53_codord               = pagordemnota.e71_codord
-  INNER JOIN  cgm               ON cgm.z01_numcgm=matordem.m51_numcgm
-  INNER JOIN  db_depart destino ON destino.coddepto=matordem.m51_depto  and destino.instit=e60_instit
-  INNER JOIN  db_depart origem  ON origem.coddepto=matordem.m51_deptoorigem  and origem.instit=e60_instit
-  LEFT JOIN   matordemanu       ON matordemanu.m53_codordem = matordem.m51_codordem
-  WHERE m53_codordem IS NULL AND e60_instit = ".db_getsession('DB_instit');
-  if($situacao == '0'){
-    $sSql .= " AND e69_dtrecebe IS NULL ";
-  }
-  if($situacao == '1'){
-    $sSql .= " AND e69_dtrecebe IS NOT NULL ";
-  }
   if($codordem ==""){
     if($data_ini!=""){
-      $sSql .= " AND m51_data>='{$data_ini}' ";
+      $where .= " AND m51_data>='{$data_ini}' ";
     }
     if($data_fim!=""){
-      $sSql .= " AND m51_data<='{$data_fim}' ";
+      $where .= " AND m51_data<='{$data_fim}' ";
     }
-    if($departamentos!=""){
-      $sSql .= " AND (origem.coddepto IN ({$departamentos}) OR destino.coddepto IN ({$departamentos})) ";
-    }
-    if($materiais!=""){
-      $sSql .= " AND pc01_codmater IN ({$materiais}) ";
-    }
-    if($fornecedor!=""){
-      $sSql .= " AND m51_numcgm IN ({$fornecedor}) ";
-    }
-    if($fornecedor!=""){
-      $sSql .= " AND m51_numcgm IN ({$fornecedor}) ";
+    if($fornecedor!="" && $empenho == ""){
+      $where .= " AND m51_numcgm IN ({$fornecedor}) ";
     }
     if($empenho!=""){
       $infoEmp = explode('/', $empenho);
       $codemp = $infoEmp[0];
       $anoemp = $infoEmp[1];
 
-      $sSql .= " AND e60_codemp = '{$codemp}' AND e60_anousu = {$anoemp} ";
+      $where .= " AND e60_codemp = '{$codemp}' AND e60_anousu = {$anoemp} ";
     }
   }else{
-    $sSql .= " AND m51_codordem = $codordem";
+    $where .= " AND m51_codordem = $codordem";
   }
+  $sSql = "SELECT DISTINCT ON ($order_by) x.m51_codordem,
+                                               x.empenho,
+                                               x.m51_data,
+                                               x.z01_nome,
+                                               x.e60_vlremp,
+                                               x.e60_numemp,
+                                               coalesce(coalesce(sum(x.m52_valor),0),0) AS totalordem,
+                                               coalesce(coalesce(sum(x.m36_vrlanu),0),0) AS anulado,
+                                               coalesce(coalesce(sum(x.lancado),0)/count(x.m51_codordem),0) AS lancado,
+                                               coalesce(coalesce(sum(x.e70_vlrliq),0)/count(x.m51_codordem),0) AS liquidado,
+                                               coalesce(coalesce(sum(x.lancado),0)/count(x.m51_codordem)-coalesce(sum(x.e70_vlrliq),0)/count(x.m51_codordem),0) AS aliquidar,
+                                               coalesce(coalesce(sum(x.m52_valor),0) - coalesce(sum(x.m36_vrlanu),0) - coalesce(sum(x.lancado),0)/count(x.m51_codordem),0) AS alancar
+                            FROM
+                                (SELECT DISTINCT ON (m52_codlanc,
+                                                     m51_codordem) m52_codlanc,
+                                                    count(m52_codlanc) AS COUNT,
+                                                    count(e70_codnota) AS counte70_codnota,
+                                                    m52_vlruni,
+                                                    m51_codordem,
+                                                    m52_quant,
+                                                    CASE
+                                                        WHEN count(e70_codnota) > 0
+                                                             AND count(e70_codnota) <> count(m52_codlanc) THEN m52_valor/count(e70_codnota)
+                                                        ELSE m52_valor
+                                                    END AS m52_valor,
+                                                    e60_vlremp,
+                                                    sum(coalesce(m36_vrlanu,0))/count(m52_codlanc) AS m36_vrlanu,
+                                                    sum(CASE
+                                                            WHEN
+                                                                     (SELECT sum(m71_valor)
+                                                                      FROM matestoqueitemoc
+                                                                      INNER JOIN matordemitem ON matordemitem.m52_codlanc = matestoqueitemoc.m73_codmatordemitem
+                                                                      INNER JOIN matestoqueitem ON matestoqueitem.m71_codlanc = matestoqueitemoc.m73_codmatestoqueitem
+                                                                      INNER JOIN matordem ON matordem.m51_codordem = matordemitem.m52_codordem
+                                                                      INNER JOIN matestoque AS a ON a.m70_codigo = matestoqueitem.m71_codmatestoque
+                                                                      WHERE m52_codordem = x.m51_codordem) IS NULL THEN e70_vlrliq
+                                                            ELSE
+                                                                     (SELECT sum(m71_valor)
+                                                                      FROM matestoqueitemoc
+                                                                      INNER JOIN matordemitem ON matordemitem.m52_codlanc = matestoqueitemoc.m73_codmatordemitem
+                                                                      INNER JOIN matestoqueitem ON matestoqueitem.m71_codlanc = matestoqueitemoc.m73_codmatestoqueitem
+                                                                      INNER JOIN matordem ON matordem.m51_codordem = matordemitem.m52_codordem
+                                                                      INNER JOIN matestoque AS a ON a.m70_codigo = matestoqueitem.m71_codmatestoque
+                                                                      WHERE m52_codordem = x.m51_codordem)
+                                                        END)/count(m52_codlanc) AS lancado,
+                                                    sum(coalesce(m71_valor,0))/count(m52_codlanc) AS m71_valor,
+                                                    CASE
+                                                        WHEN count(m52_codlanc) = count(e70_codnota) THEN sum(e70_vlrliq)/count(m52_codlanc)
+                                                        ELSE sum(e70_vlrliq)
+                                                    END AS e70_vlrliq,
+                                                    e60_codemp||'/'||e60_anousu AS empenho,
+                                                       m51_data,
+                                                       z01_numcgm||' - '||z01_nome AS z01_nome,
+                                                       e60_numemp
+                                 FROM matordem x
+                                 LEFT JOIN empnotaord ON m72_codordem = x.m51_codordem
+                                 LEFT JOIN empnotaitem ON e72_codnota = m72_codnota
+                                 LEFT JOIN empnota ON e69_codnota = e72_codnota
+                                 LEFT JOIN matordemitem ON matordemitem.m52_codordem=x.m51_codordem
+                                 LEFT JOIN empempenho ON empempenho.e60_numemp = matordemitem.m52_numemp
+                                 LEFT JOIN matestoqueitemoc ON matordemitem.m52_codlanc = matestoqueitemoc.m73_codmatordemitem
+                                 LEFT JOIN matestoqueitem ON matestoqueitem.m71_codlanc = matestoqueitemoc.m73_codmatestoqueitem
+                                 LEFT JOIN matordemanu ON m53_codordem = m51_codordem
+                                 LEFT JOIN empnotaele ON e70_codnota = e69_codnota
+                                 LEFT JOIN empelemento ON e64_numemp=e60_numemp
+                                 LEFT JOIN cgm ON e60_numcgm = z01_numcgm
+                                 LEFT JOIN pagordemnota ON e70_codnota = e71_codnota
+                                 AND e71_anulado IS FALSE
+                                 LEFT JOIN pagordemele ON e71_codord = e53_codord
+                                 LEFT JOIN matordemitemanu ON m52_codlanc = m36_matordemitem
+                   WHERE $where
+                                GROUP BY e70_codnota,
+                                              m51_codordem,
+                                              m52_codlanc,
+                                              e60_codemp||'/'||e60_anousu,
+                                                 m51_data,
+                                                 z01_numcgm||' - '||z01_nome,
+                                                 e60_vlremp,
+                                                 e60_numemp
+                                     ORDER BY m52_codlanc,
+                                              m51_codordem) x
+                                GROUP BY x.m51_codordem,
+                                         x.empenho,
+                                         x.m51_data,
+                                         x.z01_nome,
+                                         x.e60_vlremp,
+                                         x.e60_numemp
+                                ORDER BY
+              $order_by";
 
-  if($agrupar == '1'){
-    $sSql .= " ORDER BY m51_numcgm, e60_codemp, m51_codordem; ";
-  }
-  else if($agrupar == '2'){
-    $sSql .= " ORDER BY e60_codemp, m51_codordem; ";
-  }
-  else if($agrupar == '3'){
-    $sSql .= " ORDER BY e69_dtrecebe, e60_codemp, m51_codordem; ";
-  }else{
-    $sSql .= " ORDER BY e60_codemp, m51_codordem; ";
-  }
-  //echo $sSql; die;
+  //echo $sSql;die;
   $rsSql       = db_query($sSql);
   $rsResultado = db_utils::getCollectionByRecord($rsSql);
   /*TRATAMENTO DE ERRO*/
@@ -190,203 +191,146 @@ catch(Exception $oException) {
 
 <?php
 $m51_codordem = 0;
-$m51_numcgm = 0;
-$e60_codemp = 0;
-$status = 0;
 
-$nTotalRegistrosOrdem = 0;
+$e60_codemp = 0;
+$z01_nome = $rsResultado[0]->z01_nome;
+
 $nTotalRegistros = 0;
 
-$totalPorSessao = 0;
-$totalLiquidadoPorSessao = 0;
-$totalEmpenhadoPorSessao = 0;
-$totalAGerarPorSessao = 0;
-
-$totalGeral = 0;
-$totalLiquidadoGeral = 0;
-$totalEmpenhadoGeral = 0;
-$$totalAGerarGeral = 0;
 
 $troca = true;
+$trocaCredor = true;
+$pdf->addpage('P');
+if((isset($fornecedor) && $fornecedor != "") && $empenho == "" && $codordem == ""){
+  $pdf->SetFont('arial','B',8);
+  $pdf->Cell(20,$alt,"Credor:",0,0,"L",0);
+  $pdf->SetFont('arial','',8);
+  $pdf->Cell(150,$alt,$rsResultado[0]->z01_nome,0,1,"L",0);
 
-$pdf->addpage('A4-L');
+}
 foreach($rsResultado as $oRegistro):
 
-  if($agrupar == '1'){
-    if($m51_numcgm != $oRegistro->m51_numcgm){
-      $troca = true;
-    }else{
-      $troca = false;
-    }
-  }
-  else if($agrupar == '2'){
-    if($e60_codemp != $oRegistro->e60_codemp){
-      $troca = true;
-    }else{
-      $troca = false;
-    }
-  }
-  else if($agrupar == '3'){
-   if($status != $oRegistro->status){
-    $troca = true;
-  }else{
-    $troca = false;
-  }
-}else{
 
-  if($e60_codemp != $oRegistro->e60_codemp){
+
+  if($e60_codemp != $oRegistro->empenho){
     $troca = true;
+    if($z01_nome != $oRegistro->z01_nome){
+      $trocaCredor = true;
+    }else{
+      $trocaCredor = false;
+    }
   }else{
     $troca = false;
   }
-}
-  /**CONDIÇÕES PARA INSERCAO DO TOTALIZADOR
-  *
-  * VERIFICA SE O CRITÉRIO DE AGRUPAMENTO E NA PRIMEIRA VEZ QUE ENTRAR NO LAÇO DA CONDIÇÃO DE TROCA
-  * FAZ UMA SUBQUERY E SALVA OS TOTALIZADORES DE ACORDO COM O CRITERIO DE AGRUPAMENTO E SALVA UMA VARIÁVEL
-  * PARA EVITAR QUE TODA VEZ QUE ENTRAR NO LAÇO REPITA A SUBQUERY
-  * CASO HAJA A TROCA, EXIBA OS TOTALIZADORES DO ANTIGO AGRUPAMENTO, ZERA AS VARIAVEIS E RECALCULA
-  *
-  *
-  *
-  **/
+
   if($troca || $pdf->gety() > $pdf->h - 50):
 
+    $sSQLemp  = " select sum((select round(rnsaldovalor,2) from fc_saldoitensempenho(e60_numemp, e62_sequencial))) as saldonaoutilizado";
+    $sSQLemp .= "  from empempenho ";
+    $sSQLemp .= "       inner join empempitem on e62_numemp       = e60_numemp ";
+    $sSQLemp .= "       inner join pcmater    on pc01_codmater    = e62_item";
+    $sSQLemp .= "       inner join pcsubgrupo on pc04_codsubgrupo = pc01_codsubgrupo";
+    $sSQLemp .= "       inner join pctipo     on pc05_codtipo     = pc04_codtipo";
+    $sSQLemp .= "       left  join empempaut             on empempaut.e61_numemp            = empempenho.e60_numemp";
+    $sSQLemp .= "       left  join empautoriza           on empempaut.e61_autori            = empautoriza.e54_autori";
+    $sSQLemp .= "       left  join empautitem            on empempaut.e61_autori            = empautitem.e55_autori and empempitem.e62_sequen          = empautitem.e55_sequen";
+    $sSQLemp .= "       left join empautitempcprocitem  pcprocitemaut  on pcprocitemaut.e73_autori        = empautitem.e55_autori and pcprocitemaut.e73_sequen        = empautitem.e55_sequen";
+    $sSQLemp .= "       left join pcprocitem                           on pcprocitem.pc81_codprocitem     = pcprocitemaut.e73_pcprocitem";
+    $sSQLemp .= "       left join solicitem                            on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem";
+    $sSQLemp .= "       left join solicitemunid                on solicitemunid.pc17_codigo                = solicitem.pc11_codigo";
+    $sSQLemp .= "       left join matunid                on solicitemunid.pc17_unid                = matunid.m61_codmatunid";
+    $sSQLemp .= "       left join matunid matunidaut               on empautitem.e55_unid                = matunidaut.m61_codmatunid";
+    $sSQLemp .= "       left join matunid matunidsol               on solicitemunid.pc17_unid                = matunidsol.m61_codmatunid";
+    $sSQLemp .= " where  e60_numemp = ".$oRegistro->e60_numemp;
+
+
+    $result   = db_query($sSQLemp);
+    $result = db_utils::fieldsMemory($result);
+
+    $saldonaoutilizado = $result->saldonaoutilizado;
+    if($filtro == 1 && $saldonaoutilizado == 0){
+      continue;
+    }
+    if($filtro == 2 && $oRegistro->alancar <= 0){
+      continue;
+    }
+    if($filtro == 3 && $oRegistro->aliquidar <= 0){
+      continue;
+    }
+    if($filtro == 4 && ($oRegistro->aliquidar <= 0 && $oRegistro->alancar <= 0 && $saldonaoutilizado <= 0)){
+      continue;
+    }
+
     if ($pdf->gety() > $pdf->h - 50) {
-      $pdf->AddPage('A4-L');
+      $pdf->AddPage('P');
 
     }else{
 
       if($m51_codordem!=0 ){
 
-        $pdf->SetFont('arial','B',8);
-        $pdf->Cell(192,0,""                                                               ,0,1,"C",0);
-        $pdf->Cell(20,$alt,"Total Registros: "                                           ,0,0,"C",0);
-        $pdf->Cell(50,$alt,$nTotalRegistrosOrdem                                              ,0,0,"L",0);
-        $pdf->Cell(30,$alt,"Valor a gerar:"                                              ,0,0,"R",0);
-        $pdf->Cell(35,$alt,db_formatar($totalAGerarPorSessao, 'f')                                              ,0,0,"C",0);
-        $pdf->Cell(30,$alt,"Total Empenhado:"                                              ,0,0,"L",0);
-        $pdf->Cell(35,$alt,db_formatar($totalEmpenhadoPorSessao, 'f')                                              ,0,0,"L",0);
-
-        $pdf->Cell(19,$alt,"Valor Liquidado: "                                                     ,0,0,"C",0);
-        $pdf->Cell(20,$alt,db_formatar($totalLiquidadoPorSessao, 'f'),0,0,"C",0);
-
-        $pdf->Cell(17,$alt,"Valor Total: "                                                     ,0,0,"R",0);
-        $pdf->Cell(20,$alt,db_formatar($totalPorSessao, 'f')                               ,0,0,"L",0);
-
         $pdf->Cell(192,8,"",0,1,"C",0);
-        $totalEmpenhadoGeral += $totalEmpenhadoPorSessao;
-        $totalPorSessao=0;
-        $totalLiquidadoPorSessao=0;
-        $totalEmpenhadoPorSessao=0;
-        $totalAGerarPorSessao=0;
-
         $nTotalRegistrosOrdem = 0;
-
 
       }
     }
+    /**/
 
-    $pdf->setfont('arial','b',8);
-    $pdf->cell(20,$alt,'Fornecedor: ',0,0,"L",0);
-    $pdf->setfont('arial','b',8);
-    $pdf->cell(120,$alt,$oRegistro->z01_nome,0,1,"L",0);
-                // terceira linha do cabecalho
-
-    $pdf->setfont('arial','b',8);
-    $pdf->cell(20,$alt,'Solicitante: ',0,0,"L",0);
-    $pdf->setfont('arial','b',8);
-    $pdf->cell(120,$alt,$oRegistro->solicitante,0,1,"L",0);
+      $pdf->Ln();
+    /**/
+    if((!isset($fornecedor) || $fornecedor == "") && $trocaCredor == true || $nTotalRegistrosotal == 0){
+      $pdf->SetFont('arial','B',8);
+      $pdf->Cell(20,$alt,"Credor:",0,0,"L",0);
+      $pdf->SetFont('arial','',8);
+      $pdf->Cell(150,$alt,$oRegistro->z01_nome,0,1,"L",0);
+    }
 
     $pdf->SetFont('arial','B',8);
-    $pdf->Cell(23,$alt,"Nº Empenho"                                         ,1,0,"C",1);
-    $pdf->Cell(27,$alt,"Ordem de Compra"                                         ,1,0,"C",1);
-    $pdf->Cell(15,$alt,"Data"                                    ,1,0,"C",1);
-    $pdf->Cell(15,$alt,"Cod. Nota"                                               ,1,0,"C",1);
-    $pdf->Cell(15,$alt,"Data Nota"                                               ,1,0,"C",1);
-    $pdf->Cell(15,$alt,"Cod. Item"                                               ,1,0,"C",1);
-    $pdf->Cell(129,$alt,"Descricao do material"                                   ,1,0,"C",1);
-    $pdf->Cell(15,$alt,"Situação"                                           ,1,0,"C",1);
-    $pdf->Cell(25,$alt,"Vlr. Unitário"                                           ,1,1,"C",1);
+    $pdf->Cell(33,$alt,"Empenho:",1,0,"L",1);
+    $pdf->SetFont('arial','',8);
+    $pdf->Cell(33,$alt,$oRegistro->empenho,1,0,"L",1);
+
+    $pdf->SetFont('arial','B',8);
+    $pdf->Cell(33,$alt,"Valor Empenhado:",1,0,"L",1);
+    $pdf->SetFont('arial','',8);
+    $pdf->Cell(33,$alt,number_format($oRegistro->e60_vlremp,2),1,0,"L",1);
+
+    $pdf->SetFont('arial','B',8);
+    $pdf->Cell(33,$alt,"Saldo não utilizado:",1,0,"L",1);
+    $pdf->SetFont('arial','',8);
+    $pdf->Cell(25,$alt,number_format($saldonaoutilizado, 2),1,1,"L",1);
+
+    $pdf->SetFont('arial','B',8);
+    $pdf->Cell(20,$alt,"Ordem"                                         ,1,0,"C",1);
+    $pdf->Cell(15,$alt,"Data"                                         ,1,0,"C",1);
+    $pdf->Cell(25,$alt,"Total da ordem"                                    ,1,0,"C",1);
+    $pdf->Cell(25,$alt,"Valor anulado"                                               ,1,0,"C",1);
+    $pdf->Cell(25,$alt,"Valor a lançar"                                           ,1,0,"C",1);
+    $pdf->Cell(25,$alt,"Valor de entrada"                                           ,1,0,"C",1);
+    $pdf->Cell(25,$alt,"Valor a liquidar"                                           ,1,0,"C",1);
+    $pdf->Cell(30,$alt,"Valor liquidado"                                           ,1,1,"C",1);
 
   endif;
                 // materiais
   $pdf->SetFont('arial','',7);
-  $pdf->Cell(23,$alt,$oRegistro->e60_codemp.'/'.$oRegistro->e60_anousu                           ,1,0,"C",0);
-  $pdf->Cell(27,$alt,$oRegistro->m51_codordem                                         ,1,0,"C",0);
+  $pdf->Cell(20,$alt,$oRegistro->m51_codordem                                         ,1,0,"C",0);
   $pdf->Cell(15,$alt,db_formatar($oRegistro->m51_data, 'd')                                    ,1,0,"C",0);
-  $pdf->Cell(15,$alt,$oRegistro->e69_codnota                                               ,1,0,"C",0);
-  $pdf->Cell(15,$alt,db_formatar($oRegistro->e69_dtnota, 'd')                                               ,1,0,"C",0);
-  $pdf->Cell(15,$alt,$oRegistro->pc01_codmater                                               ,1,0,"C",0);
-  $pdf->Cell(129,$alt,substr($oRegistro->pc01_descrmater,0,60)                                   ,1,0,"C",0);
-  $pdf->Cell(15,$alt,$oRegistro->status                                           ,1,0,"C",0);
-  $pdf->Cell(25,$alt,db_formatar($oRegistro->valoritem, 'f')                                           ,1,1,"C",0);
+  $pdf->Cell(25,$alt,$oRegistro->totalordem                                               ,1,0,"C",0);
+  $pdf->Cell(25,$alt,$oRegistro->anulado                                               ,1,0,"C",0);
+  $pdf->Cell(25,$alt,$oRegistro->alancar                                               ,1,0,"C",0);
+  $pdf->Cell(25,$alt,$oRegistro->lancado                                               ,1,0,"C",0);
+  $pdf->Cell(25,$alt,$oRegistro->aliquidar                                               ,1,0,"C",0);
+  $pdf->Cell(30,$alt,$oRegistro->liquidado                                               ,1,1,"C",0);
 
-  $nTotalRegistrosOrdem++;
   $nTotalRegistros++;
 
-  $m51_codordem = $oRegistro->m51_codordem;
-  $m51_numcgm = $oRegistro->m51_numcgm;
-  $e60_codemp = $oRegistro->e60_codemp;
-  $status = $oRegistro->status;
+  $e60_codemp = $oRegistro->empenho;
+  $z01_nome = $oRegistro->z01_nome;
 
-  $totalPorSessao += $oRegistro->valoritem;
-  $totalLiquidadoPorSessao = ($oRegistro->e64_vlrliq - $oRegistro->e70_vlranu);
-  $totalAGerarPorSessao = ($oRegistro->e64_vlremp-$oRegistro->e64_vlrliq);
-  if($oRegistro->pc01_servico == 't'){
-    $totalEmpenhadoPorSessao = ($oRegistro->e64_vlremp - $oRegistro->e64_vlranu);
-  }else{
-    $totalEmpenhadoPorSessao = ($oRegistro->e64_vlremp - $oRegistro->e64_vlranu);
-  }
-
-  $totalGeral += $oRegistro->valoritem;
-  $totalLiquidadoGeral += ($oRegistro->e64_vlrliq - $oRegistro->e70_vlranu);
-  $totalAGerarGeral += ($oRegistro->e64_vlremp-$oRegistro->e64_vlrliq);
 
 endforeach;
-if ($pdf->gety() > $pdf->h - 50) {
-  $pdf->AddPage('A4-L');
+if($nTotalRegistros==0){
+  db_redireciona("db_erros.php?fechar=true&db_erro=Não foram encontrados registros.");
 }
-
-$pdf->SetFont('arial','B',8);
-$pdf->Cell(192,0,""                                                               ,0,1,"C",0);
-$pdf->Cell(20,$alt,"Total Registros: "                                           ,0,0,"C",0);
-$pdf->Cell(30,$alt,$nTotalRegistrosOrdem                                              ,0,0,"L",0);
-$pdf->Cell(50,$alt,"Valor a gerar:"                                              ,0,0,"R",0);
-$pdf->Cell(35,$alt,db_formatar($totalAGerarPorSessao, 'f')                                              ,0,0,"C",0);
-$pdf->Cell(30,$alt,"Total Empenhado:"                                              ,0,0,"L",0);
-$pdf->Cell(35,$alt,db_formatar($totalEmpenhadoPorSessao, 'f')                                              ,0,0,"L",0);
-
-$pdf->Cell(19,$alt,"Valor Liquidado: "                                                     ,0,0,"C",0);
-$pdf->Cell(20,$alt,db_formatar($totalLiquidadoPorSessao, 'f'),0,0,"C",0);
-
-$pdf->Cell(17,$alt,"Valor Total: "                                                     ,0,0,"R",0);
-$pdf->Cell(20,$alt,db_formatar($totalPorSessao, 'f')                               ,0,0,"L",0);
-
-$pdf->Cell(192,8,"",0,1,"C",0);
-
-$totalEmpenhadoGeral += $totalEmpenhadoPorSessao;
-$pdf->SetFont('arial','B',8);
-$pdf->Cell(278,0,""                                                               ,0,1,"C",0);
-$pdf->Cell(278,0,""                                                               ,"T",1,"C",0);
-
-$pdf->Cell(35,$alt,"Total Geral de Registros: "                                  ,0,0,"L",0);
-$pdf->Cell(40,$alt,$nTotalRegistros                                               ,0,0,"L",0);
-$pdf->Cell(25,$alt,"Total a gerar"                                               ,0,0,"L",0);
-$pdf->Cell(25,$alt,db_formatar($totalAGerarGeral,'f')                                               ,0,0,"C",0);
-
-$pdf->Cell(35,$alt,"Total Empenhado:"                                               ,0,0,"L",0);
-$pdf->Cell(35,$alt,db_formatar($totalEmpenhadoGeral, 'f')                                               ,0,0,"C",0);
-
-$pdf->Cell(17,$alt,"Total Liquidado: "                                               ,0,0,"R",0);
-$pdf->Cell(22,$alt,db_formatar($totalLiquidadoGeral  , 'f')                                           ,0,0,"C",0);
-
-$pdf->Cell(17,$alt,"Total Geral: "                                               ,0,0,"R",0);
-$pdf->Cell(20,$alt,db_formatar($totalGeral-$totalLiquidadoGeral , 'f')                                            ,0,0,"C",0);
-
-
-$pdf->Cell(192,2,""                                                               ,0,1,"C",0);
-
 $pdf->Output();
 
 ?>
