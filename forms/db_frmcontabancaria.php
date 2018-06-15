@@ -168,20 +168,49 @@ $clrotulo->label("db89_codagencia");
 	    </td>
 	    <td> 
 				<?
-				  $aTipoAplicacao = array('00' => 'NÃO INFORMADO','01' => 'Títulos do Tesouro Nacional - SELIC - Art. 7º, I, "a"',
-				  '02' => 'FI 100% títulos TN - Art. 7º, I, "b"',
-				  '03' => 'Operações Compromissadas - Art. 7º, II',
-				  '04' => 'FI Renda Fixa / Referenciado RF - Art. 7º, III',
-				  '05' => 'FI de renda fixa - Art. 7º, IV',
-				  '06' => 'Poupança - Art. 7º, V',
-				  '07' => 'FI em direitos creditórios - aberto - Art. 7º, VI',
-				  '08' => 'FI em direitos creditórios - fechado - Art. 7º, VII, "a"',
-				  '09' => 'FI renda fixa "Crédito Privado" - - Art. 7º, VII, "b"',
-				  '10' => 'FI Previdenciário em Ações - Art. 8º, I, "b"',
-				  '11' => 'FI de índice referenciado em Ações - - Art. 8º, II',
-				  '12' => 'FI em Ações - - Art. 8º, III','13' => 'FI Multimercado aberto - - Art. 8º, IV','14' => 'FI em participações fechado - Art. 8º V',
-				  '15' => 'FI Imobiliário - cotas negociadas em bolsa - - Art. 8º, VI');
-				  db_select('db83_tipoaplicacao', $aTipoAplicacao, true, $db_opcao,"");
+                if(db_getsession("DB_anousu") < 2018) {
+                    $aTipoAplicacao = array(
+                        '00' => 'NÃO INFORMADO',
+                        '01' => 'Títulos do Tesouro Nacional - SELIC - Art. 7º, I, "a"',
+                        '02' => 'FI 100% títulos TN - Art. 7º, I, "b"',
+                        '03' => 'Operações Compromissadas - Art. 7º, II',
+                        '04' => 'FI Renda Fixa / Referenciado RF - Art. 7º, III',
+                        '05' => 'FI de renda fixa - Art. 7º, IV',
+                        '06' => 'Poupança - Art. 7º, V',
+                        '07' => 'FI em direitos creditórios - aberto - Art. 7º, VI',
+                        '08' => 'FI em direitos creditórios - fechado - Art. 7º, VII, "a"',
+                        '09' => 'FI renda fixa "Crédito Privado" - - Art. 7º, VII, "b"',
+                        '10' => 'FI Previdenciário em Ações - Art. 8º, I, "b"',
+                        '11' => 'FI de índice referenciado em Ações - - Art. 8º, II',
+                        '12' => 'FI em Ações - - Art. 8º, III', '13' => 'FI Multimercado aberto - - Art. 8º, IV', '14' => 'FI em participações fechado - Art. 8º V',
+                        '15' => 'FI Imobiliário - cotas negociadas em bolsa - - Art. 8º, VI');
+                    db_select('db83_tipoaplicacao', $aTipoAplicacao, true, $db_opcao, "");
+                }else{
+                    $aTipoAplicacao = array(
+                        '00' => 'NÃO INFORMADO',
+                        '16' => 'Títulos Públicos de emissão do Tesouro Nacional (SELIC) - Art. 7°, I, a',
+                        '17' => 'Fundos referenciados 100% Títulos Públicos - Art.7°, I, b',
+                        '18' => 'Fundos de índices carteira 100% Títulos Públicos -Art. 7°, I, c',
+                        '19' => 'Operações Compromissadas - Art. 7°, II',
+                        '20' => 'Fundos Referenciados em indicadores RF - Art. 7°,III, a',
+                        '21' => 'Fundos de índices (ETF) em indicadores Títulos Públicos - Art. 7°, III, b',
+                        '22' => 'Fundos de Renda Fixa em geral - Art. 7°, IV, a',
+                        '23' => 'Fundos de índices (ETF) - quaisquer indicadores - Art. 7°, IV, b',
+                        '24' => 'Letra Imobiliária Garantida (LIG) - Art. 7°, V, b',
+                        '25' => 'Certificado de Depósito Bancário (CDB) - Art. 7°, VI, a',
+                        '26' => 'Poupança - Art. 7°, VI, b',
+                        '27' => 'FIDCs - Cota Sênior - Art. 7°, VII, a',
+                        '28' => 'Fundos de Renda Fixa - Crédito Privado - Art. 7°,VII, b',
+                        '29' => 'Fundos de Debêntures de Infraestrutura - Art. 7°,VII, c',
+                        '30' => 'Fundo de Ações (índices c/ no mínimo 50 ações)-Art. 8°, I, a',
+                        '31' => 'ETF (índices c/ no mínimo 50 ações) - Art. 8°, I, b',
+                        '32' => 'Fundo de Ações em geral (com até 20% de ativos) - Art. 8°, II, a',
+                        '33' => 'ETF (índices em geral) - Art. 8°, II, b',
+                        '34' => 'Fundos Multimercado (com até 20% ativos exterior)- Art. 8°, III',
+                        '35' => 'Fundos de Investimento em Participações - FIP - Art. 8°, IV, a',
+                        '36' => 'Fundo de Investimento Imobiliário - FII - Art. 8°, IV, b');
+                    db_select('db83_tipoaplicacao', $aTipoAplicacao, true, $db_opcao, "");
+                }
 				?>
 	    </td>
 	  </tr>
