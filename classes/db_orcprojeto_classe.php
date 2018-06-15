@@ -1,90 +1,92 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
 //CLASSE DA ENTIDADE orcprojeto
-class cl_orcprojeto { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $o39_codproj = 0; 
-   var $o39_descr = null; 
-   var $o39_codlei = 0; 
-   var $o39_tipoproj = 0; 
-   var $o39_anousu = 0; 
-   var $o39_numero = null; 
-   var $o39_data_dia = null; 
-   var $o39_data_mes = null; 
-   var $o39_data_ano = null; 
-   var $o39_data = null; 
-   var $o39_lei = null; 
-   var $o39_leidata_dia = null; 
-   var $o39_leidata_mes = null; 
-   var $o39_leidata_ano = null; 
-   var $o39_leidata = null; 
-   var $o39_texto = null; 
-   var $o39_textolivre = null; 
-   var $o39_compllei = null; 
-   var $o39_usalimite = 'f'; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_orcprojeto {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $o39_codproj = 0;
+   var $o39_descr = null;
+   var $o39_codlei = 0;
+   var $o39_tipoproj = 0;
+   var $o39_anousu = 0;
+   var $o39_numero = null;
+   var $o39_data_dia = null;
+   var $o39_data_mes = null;
+   var $o39_data_ano = null;
+   var $o39_data = null;
+   var $o39_lei = null;
+   var $o39_leidata_dia = null;
+   var $o39_leidata_mes = null;
+   var $o39_leidata_ano = null;
+   var $o39_leidata = null;
+   var $o39_texto = null;
+   var $o39_textolivre = null;
+   var $o39_compllei = null;
+   var $o39_usalimite = 'f';
+   var $o39_tiposuplementacao = null;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 o39_codproj = int4 = codigo do projeto 
-                 o39_descr = text = descr do projeto 
-                 o39_codlei = int4 = codigo da lei 
-                 o39_tipoproj = int4 = tipo do projeto 
-                 o39_anousu = int4 = exercicio 
-                 o39_numero = varchar(25) = Numero do Decreto 
-                 o39_data = date = Data da Decreto 
-                 o39_lei = varchar(25) = numero da lei 
-                 o39_leidata = date = data da lei 
-                 o39_texto = text = texto do projeto 
-                 o39_textolivre = text = Texto Livre 
-                 o39_compllei = text = Compl. Lei 
-                 o39_usalimite = bool = Usa limite da Loa 
+                 o39_codproj = int4 = codigo do projeto
+                 o39_descr = text = descr do projeto
+                 o39_codlei = int4 = codigo da lei
+                 o39_tipoproj = int4 = tipo do projeto
+                 o39_anousu = int4 = exercicio
+                 o39_numero = varchar(25) = Numero do Decreto
+                 o39_data = date = Data da Decreto
+                 o39_lei = varchar(25) = numero da lei
+                 o39_leidata = date = data da lei
+                 o39_texto = text = texto do projeto
+                 o39_textolivre = text = Texto Livre
+                 o39_compllei = text = Compl. Lei
+                 o39_usalimite = bool = Usa limite da Loa
+                 o39_tiposuplementacao = int = tipo de suplementacao
                  ";
-   //funcao construtor da classe 
-   function cl_orcprojeto() { 
+   //funcao construtor da classe
+   function cl_orcprojeto() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("orcprojeto"); 
+     $this->rotulo = new rotulo("orcprojeto");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -122,14 +124,15 @@ class cl_orcprojeto {
        $this->o39_textolivre = ($this->o39_textolivre == ""?@$GLOBALS["HTTP_POST_VARS"]["o39_textolivre"]:$this->o39_textolivre);
        $this->o39_compllei = ($this->o39_compllei == ""?@$GLOBALS["HTTP_POST_VARS"]["o39_compllei"]:$this->o39_compllei);
        $this->o39_usalimite = ($this->o39_usalimite == "f"?@$GLOBALS["HTTP_POST_VARS"]["o39_usalimite"]:$this->o39_usalimite);
+       $this->o39_tiposuplementacao = ($this->o39_tiposuplementacao == null?@$GLOBALS["HTTP_POST_VARS"]["o39_tiposuplementacao"]:$this->o39_tiposuplementacao);
      }else{
        $this->o39_codproj = ($this->o39_codproj == ""?@$GLOBALS["HTTP_POST_VARS"]["o39_codproj"]:$this->o39_codproj);
      }
    }
    // funcao para inclusao
-   function incluir ($o39_codproj){ 
+   function incluir ($o39_codproj){
       $this->atualizacampos();
-     if($this->o39_descr == null ){ 
+     if($this->o39_descr == null ){
        $this->erro_sql = " Campo descr do projeto nao Informado.";
        $this->erro_campo = "o39_descr";
        $this->erro_banco = "";
@@ -138,7 +141,7 @@ class cl_orcprojeto {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o39_codlei == null ){ 
+     if($this->o39_codlei == null ){
        $this->erro_sql = " Campo codigo da lei nao Informado.";
        $this->erro_campo = "o39_codlei";
        $this->erro_banco = "";
@@ -147,7 +150,7 @@ class cl_orcprojeto {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o39_tipoproj == null ){ 
+     if($this->o39_tipoproj == null ){
        $this->erro_sql = " Campo tipo do projeto nao Informado.";
        $this->erro_campo = "o39_tipoproj";
        $this->erro_banco = "";
@@ -156,7 +159,7 @@ class cl_orcprojeto {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o39_anousu == null ){ 
+     if($this->o39_anousu == null ){
        $this->erro_sql = " Campo exercicio nao Informado.";
        $this->erro_campo = "o39_anousu";
        $this->erro_banco = "";
@@ -165,26 +168,26 @@ class cl_orcprojeto {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o39_data == null ){ 
+     if($this->o39_data == null ){
        $this->o39_data = "null";
      }
-     if($this->o39_leidata == null ){ 
+     if($this->o39_leidata == null ){
        $this->o39_leidata = "null";
      }
-     if($this->o39_usalimite == null ){ 
+     if($this->o39_usalimite == null ){
        $this->o39_usalimite = "false";
      }
      if($o39_codproj == "" || $o39_codproj == null ){
-       $result = db_query("select nextval('orcprojeto_o39_codproj_seq')"); 
+       $result = db_query("select nextval('orcprojeto_o39_codproj_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: orcprojeto_o39_codproj_seq do campo: o39_codproj"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: orcprojeto_o39_codproj_seq do campo: o39_codproj";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->o39_codproj = pg_result($result,0,0); 
+       $this->o39_codproj = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from orcprojeto_o39_codproj_seq");
        if(($result != false) && (pg_result($result,0,0) < $o39_codproj)){
@@ -195,10 +198,10 @@ class cl_orcprojeto {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->o39_codproj = $o39_codproj; 
+         $this->o39_codproj = $o39_codproj;
        }
      }
-     if(($this->o39_codproj == null) || ($this->o39_codproj == "") ){ 
+     if(($this->o39_codproj == null) || ($this->o39_codproj == "") ){
        $this->erro_sql = " Campo o39_codproj nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -206,7 +209,7 @@ class cl_orcprojeto {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o39_numero == null ){ 
+     if($this->o39_numero == null ){
        $this->erro_sql = " Campo Número do Decreto não Informado.";
        $this->erro_campo = "o39_numero";
        $this->erro_banco = "";
@@ -215,7 +218,7 @@ class cl_orcprojeto {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o39_data == null ){ 
+     if($this->o39_data == null ){
        $this->erro_sql = " Campo Data do Decreto não Informado.";
        $this->erro_campo = "o39_data";
        $this->erro_banco = "";
@@ -224,38 +227,43 @@ class cl_orcprojeto {
        $this->erro_status = "0";
        return false;
      }
+     if($this->o39_tiposuplementacao == null){
+      $this->o39_tiposuplementacao = "null";
+     }
      $sql = "insert into orcprojeto(
-                                       o39_codproj 
-                                      ,o39_descr 
-                                      ,o39_codlei 
-                                      ,o39_tipoproj 
-                                      ,o39_anousu 
-                                      ,o39_numero 
-                                      ,o39_data 
-                                      ,o39_lei 
-                                      ,o39_leidata 
-                                      ,o39_texto 
-                                      ,o39_textolivre 
-                                      ,o39_compllei 
-                                      ,o39_usalimite 
+                                       o39_codproj
+                                      ,o39_descr
+                                      ,o39_codlei
+                                      ,o39_tipoproj
+                                      ,o39_anousu
+                                      ,o39_numero
+                                      ,o39_data
+                                      ,o39_lei
+                                      ,o39_leidata
+                                      ,o39_texto
+                                      ,o39_textolivre
+                                      ,o39_compllei
+                                      ,o39_usalimite
+                                      ,o39_tiposuplementacao
                        )
                 values (
-                                $this->o39_codproj 
-                               ,'$this->o39_descr' 
-                               ,$this->o39_codlei 
-                               ,$this->o39_tipoproj 
-                               ,$this->o39_anousu 
-                               ,'$this->o39_numero' 
-                               ,".($this->o39_data == "null" || $this->o39_data == ""?"null":"'".$this->o39_data."'")." 
-                               ,'$this->o39_lei' 
-                               ,".($this->o39_leidata == "null" || $this->o39_leidata == ""?"null":"'".$this->o39_leidata."'")." 
-                               ,'$this->o39_texto' 
-                               ,'$this->o39_textolivre' 
-                               ,'$this->o39_compllei' 
-                               ,'$this->o39_usalimite' 
+                                $this->o39_codproj
+                               ,'$this->o39_descr'
+                               ,$this->o39_codlei
+                               ,$this->o39_tipoproj
+                               ,$this->o39_anousu
+                               ,'$this->o39_numero'
+                               ,".($this->o39_data == "null" || $this->o39_data == ""?"null":"'".$this->o39_data."'")."
+                               ,'$this->o39_lei'
+                               ,".($this->o39_leidata == "null" || $this->o39_leidata == ""?"null":"'".$this->o39_leidata."'")."
+                               ,'$this->o39_texto'
+                               ,'$this->o39_textolivre'
+                               ,'$this->o39_compllei'
+                               ,'$this->o39_usalimite'
+                               ,$this->o39_tiposuplementacao
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = " ($this->o39_codproj) nao Incluído. Inclusao Abortada.";
@@ -299,16 +307,16 @@ class cl_orcprojeto {
        $resac = db_query("insert into db_acount values($acount,969,17714,'','".AddSlashes(pg_result($resaco,0,'o39_usalimite'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($o39_codproj=null) { 
+   function alterar ($o39_codproj=null) {
       $this->atualizacampos();
      $sql = " update orcprojeto set ";
      $virgula = "";
-     if(trim($this->o39_codproj)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_codproj"])){ 
+     if(trim($this->o39_codproj)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_codproj"])){
        $sql  .= $virgula." o39_codproj = $this->o39_codproj ";
        $virgula = ",";
-       if(trim($this->o39_codproj) == null ){ 
+       if(trim($this->o39_codproj) == null ){
          $this->erro_sql = " Campo codigo do projeto nao Informado.";
          $this->erro_campo = "o39_codproj";
          $this->erro_banco = "";
@@ -318,10 +326,10 @@ class cl_orcprojeto {
          return false;
        }
      }
-     if(trim($this->o39_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_descr"])){ 
+     if(trim($this->o39_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_descr"])){
        $sql  .= $virgula." o39_descr = '$this->o39_descr' ";
        $virgula = ",";
-       if(trim($this->o39_descr) == null ){ 
+       if(trim($this->o39_descr) == null ){
          $this->erro_sql = " Campo descr do projeto nao Informado.";
          $this->erro_campo = "o39_descr";
          $this->erro_banco = "";
@@ -331,10 +339,10 @@ class cl_orcprojeto {
          return false;
        }
      }
-     if(trim($this->o39_codlei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_codlei"])){ 
+     if(trim($this->o39_codlei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_codlei"])){
        $sql  .= $virgula." o39_codlei = $this->o39_codlei ";
        $virgula = ",";
-       if(trim($this->o39_codlei) == null ){ 
+       if(trim($this->o39_codlei) == null ){
          $this->erro_sql = " Campo codigo da lei nao Informado.";
          $this->erro_campo = "o39_codlei";
          $this->erro_banco = "";
@@ -344,10 +352,10 @@ class cl_orcprojeto {
          return false;
        }
      }
-     if(trim($this->o39_tipoproj)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_tipoproj"])){ 
+     if(trim($this->o39_tipoproj)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_tipoproj"])){
        $sql  .= $virgula." o39_tipoproj = $this->o39_tipoproj ";
        $virgula = ",";
-       if(trim($this->o39_tipoproj) == null ){ 
+       if(trim($this->o39_tipoproj) == null ){
          $this->erro_sql = " Campo tipo do projeto nao Informado.";
          $this->erro_campo = "o39_tipoproj";
          $this->erro_banco = "";
@@ -357,10 +365,10 @@ class cl_orcprojeto {
          return false;
        }
      }
-     if(trim($this->o39_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_anousu"])){ 
+     if(trim($this->o39_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_anousu"])){
        $sql  .= $virgula." o39_anousu = $this->o39_anousu ";
        $virgula = ",";
-       if(trim($this->o39_anousu) == null ){ 
+       if(trim($this->o39_anousu) == null ){
          $this->erro_sql = " Campo exercicio nao Informado.";
          $this->erro_campo = "o39_anousu";
          $this->erro_banco = "";
@@ -370,10 +378,10 @@ class cl_orcprojeto {
          return false;
        }
      }
-     if(trim($this->o39_numero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_numero"])){ 
+     if(trim($this->o39_numero)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_numero"])){
        $sql  .= $virgula." o39_numero = '$this->o39_numero' ";
        $virgula = ",";
-       if($this->o39_numero == null ){ 
+       if($this->o39_numero == null ){
          $this->erro_sql = " Campo Número do Decreto não Informado.";
          $this->erro_campo = "o39_numero";
          $this->erro_banco = "";
@@ -383,10 +391,10 @@ class cl_orcprojeto {
          return false;
        }
      }
-     if(trim($this->o39_data)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_data_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["o39_data_dia"] !="") ){ 
+     if(trim($this->o39_data)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_data_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["o39_data_dia"] !="") ){
        $sql  .= $virgula." o39_data = '$this->o39_data' ";
        $virgula = ",";
-       if($this->o39_data == null ){ 
+       if($this->o39_data == null ){
          $this->erro_sql = " Campo Data do Decreto não Informado.";
          $this->erro_campo = "o39_data";
          $this->erro_banco = "";
@@ -395,11 +403,11 @@ class cl_orcprojeto {
          $this->erro_status = "0";
          return false;
        }
-     } else { 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["o39_data_dia"])){ 
+     } else {
+       if(isset($GLOBALS["HTTP_POST_VARS"]["o39_data_dia"])){
          $sql  .= $virgula." o39_data = null ";
          $virgula = ",";
-         if(trim($this->o39_data) == null ){ 
+         if(trim($this->o39_data) == null ){
            $this->erro_sql = " Campo Data do Decreto nao Informado.";
            $this->erro_campo = "o39_data_dia";
            $this->erro_banco = "";
@@ -410,39 +418,44 @@ class cl_orcprojeto {
          }
        }
      }
-     if(trim($this->o39_lei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_lei"])){ 
+     if(trim($this->o39_lei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_lei"])){
        $sql  .= $virgula." o39_lei = '$this->o39_lei' ";
        $virgula = ",";
      }
-     if(trim($this->o39_leidata)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_leidata_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["o39_leidata_dia"] !="") ){ 
+     if(trim($this->o39_leidata)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_leidata_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["o39_leidata_dia"] !="") ){
        $sql  .= $virgula." o39_leidata = '$this->o39_leidata' ";
        $virgula = ",";
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["o39_leidata_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["o39_leidata_dia"])){
          $sql  .= $virgula." o39_leidata = null ";
          $virgula = ",";
        }
      }
-     if(trim($this->o39_texto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_texto"])){ 
+     if(trim($this->o39_texto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_texto"])){
        $sql  .= $virgula." o39_texto = '$this->o39_texto' ";
        $virgula = ",";
      }
-     if(trim($this->o39_textolivre)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_textolivre"])){ 
+     if(trim($this->o39_textolivre)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_textolivre"])){
        $sql  .= $virgula." o39_textolivre = '$this->o39_textolivre' ";
        $virgula = ",";
      }
-     if(trim($this->o39_compllei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_compllei"])){ 
+     if(trim($this->o39_compllei)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_compllei"])){
        $sql  .= $virgula." o39_compllei = '$this->o39_compllei' ";
        $virgula = ",";
      }
-     if(trim($this->o39_usalimite)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_usalimite"])){ 
+     if(trim($this->o39_usalimite)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_usalimite"])){
        $sql  .= $virgula." o39_usalimite = '$this->o39_usalimite' ";
        $virgula = ",";
+     }
+     if(trim($this->o39_tiposuplementacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o39_tiposuplementacao"])){
+       $sql  .= $virgula." o39_tiposuplementacao = '$this->o39_tiposuplementacao' ";
+
      }
      $sql .= " where ";
      if($o39_codproj!=null){
        $sql .= " o39_codproj = $this->o39_codproj";
      }
+
      $resaco = $this->sql_record($this->sql_query_file($this->o39_codproj));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
@@ -479,7 +492,7 @@ class cl_orcprojeto {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = " nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->o39_codproj;
@@ -507,14 +520,14 @@ class cl_orcprojeto {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($o39_codproj=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($o39_codproj=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($o39_codproj));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -552,7 +565,7 @@ class cl_orcprojeto {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = " nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$o39_codproj;
@@ -580,11 +593,11 @@ class cl_orcprojeto {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -719,7 +732,7 @@ class cl_orcprojeto {
 
     $sql = "select ";
     if ($campos != "*") {
-      
+
       $campos_sql = split("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i ++) {
@@ -749,7 +762,7 @@ class cl_orcprojeto {
       $campos_sql = split("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i ++) {
-        
+
         $sql .= $virgula.$campos_sql[$i];
         $virgula = ",";
       }

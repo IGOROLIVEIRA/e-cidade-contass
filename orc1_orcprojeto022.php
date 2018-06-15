@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -32,6 +32,8 @@ include("libs/db_usuariosonline.php");
 include("classes/db_orcprojeto_classe.php");
 include("classes/db_orcprojlan_classe.php");
 include("classes/db_db_usuarios_classe.php");
+include("classes/db_orcsuplemtipo_classe.php");
+include("classes/db_orcsuplem_classe.php");
 
 include("dbforms/db_funcoes.php");
 
@@ -42,19 +44,25 @@ db_postmemory($HTTP_POST_VARS);
 $clorcprojeto = new cl_orcprojeto;
 $clorcprojlan = new cl_orcprojlan;
 $cldbusuarios = new cl_db_usuarios;
+$clorcsuplem  = new cl_orcsuplem;
+$clorcsuplemtipo = new cl_orcsuplemtipo;
 
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
+
   db_inicio_transacao();
   $db_opcao = 2;
   $db_botao = true;
+  if(isset($o39_tiposuplementacao)){
+    $clorcprojeto->o39_tiposuplementacao = $o39_tiposuplementacao;
+  }
   $clorcprojeto->alterar($o39_codproj);
   db_fim_transacao();
 
 }else if(isset($chavepesquisa) && $chavepesquisa!=""){
    $db_opcao = 2;
-   $result = $clorcprojeto->sql_record($clorcprojeto->sql_query($chavepesquisa)); 
+   $result = $clorcprojeto->sql_record($clorcprojeto->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
    $rr = $clorcprojlan->sql_record($clorcprojlan->sql_query_file($chavepesquisa));
    if ($clorcprojlan->numrows > 0){
@@ -62,8 +70,8 @@ if(isset($alterar)){
      $rr = $cldbusuarios->sql_record($cldbusuarios->sql_query_file($o51_id_usuario));
      if ($cldbusuarios->numrows > 0){
         db_fieldsmemory($rr,0);
-     }  
-   }  
+     }
+   }
    $db_botao = true;
    echo "<script>
          parent.iframe_emissao.location.href='orc1_orcprojeto012.php?o39_codproj=$o39_codproj';
@@ -82,9 +90,9 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+<table width="1000" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmorcprojeto.php");

@@ -7,6 +7,10 @@ include("classes/db_orcprojetolei_classe.php");
 include("dbforms/db_funcoes.php");
 include('classes/db_orcleialtorcamentaria_classe.php');
 include('classes/db_orcalteracaopercloa_classe.php');
+include("classes/db_orcsuplemtipo_classe.php");
+include("classes/db_orcsuplem_classe.php");
+$clorcsuplemtipo = new cl_orcsuplemtipo;
+$clorcsuplem     = new cl_orcsuplem;
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clorcprojetolei = new cl_orcprojetolei;
@@ -15,13 +19,24 @@ $clorcalteracaopercloa   = new cl_orcalteracaopercloa;
 $db_opcao = 22;
 $db_botao = true;
 if(isset($alterar)){
+
   db_inicio_transacao();
   $db_opcao = 2;
   $clorcprojetolei->alterar($o138_sequencial);
+
+  $oDaoDecreto               = db_utils::getDao("orcprojeto");
+  $decreto  = $oDaoDecreto->sql_record("(select o39_codproj from orcprojetoorcprojetolei join orcprojeto on o139_orcprojeto=o39_codproj join orcprojetolei on o139_orcprojetolei=o138_sequencial where o138_sequencial = {$o138_sequencial})");
+  db_fieldsmemory($decreto,0);
+  if(isset($o138_tiposuplementacao)){
+    $oDaoDecreto->o39_tiposuplementacao = $o138_tiposuplementacao;
+  }
+  $oDaoDecreto->o39_codproj = $o39_codproj;
+  $oDaoDecreto->alterar($o39_codproj);
+
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
-   $result = $clorcprojetolei->sql_record($clorcprojetolei->sql_query($chavepesquisa)); 
+   $result = $clorcprojetolei->sql_record($clorcprojetolei->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
    $db_botao = true;
 }
@@ -36,8 +51,8 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
     <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmorcprojetolei.php");
@@ -59,7 +74,20 @@ if(isset($alterar)){
       echo "<script> document.form1.".$clorcprojetolei->erro_campo.".focus();</script>";
     }
   }else{
-  	db_msgbox($clorcprojetolei->erro_msg);
+    db_msgbox($clorcprojetolei->erro_msg);
+    //db_redireciona("orc1_orcleialtorcamentaria001.php?o200_orcprojetolei=".$o138_sequencial." ");
+  }
+
+  if($oDaoDecreto->erro_status=="0"){
+    $oDaoDecreto->erro(true,false);
+    $db_botao=true;
+    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    if($oDaoDecreto->erro_campo!=""){
+      echo "<script> document.form1.".$oDaoDecreto->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$oDaoDecreto->erro_campo.".focus();</script>";
+    }
+  }else{
+  	db_msgbox($oDaoDecreto->erro_msg);
     //db_redireciona("orc1_orcleialtorcamentaria001.php?o200_orcprojetolei=".$o138_sequencial." ");
   }
 }

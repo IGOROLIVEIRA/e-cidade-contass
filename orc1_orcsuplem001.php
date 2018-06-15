@@ -165,6 +165,10 @@ if (isset($chavepesquisa) && $chavepesquisa !="") {
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script>
 function js_incluir(projeto,tiposup){
+
+  document.form1.o46_tiposup.disabled = "true";
+  document.form1.o46_tiposupdescr.disabled = "true";
+
   js_OpenJanelaIframe('top.corpo','db_iframe_suplementacao','orc1_orcsuplem008.php?projeto='+projeto+'&tiposup='+tiposup,'Pesquisa',true);
 }
 function js_alterar(projeto,codsup,tiposup){
@@ -281,6 +285,9 @@ function js_preenchepesquisa(chave){
       		array_push($aWhere, "1001","1002","1003","1004","1017","1016","1014","1015");
       	}
 
+        if($o39_tiposuplementacao != null){
+         $aWhere = array($o39_tiposuplementacao);
+        }
         $sSqlTipoSuplem = $clorcsuplemtipo->sql_query("","o48_tiposup as o46_tiposup,o48_descr","o48_tiposup","o48_tiposup in (".implode(",", $aWhere).")");
 	      $rtipo          = $clorcsuplemtipo->sql_record($sSqlTipoSuplem);
         db_fieldsmemory($rtipo,0);

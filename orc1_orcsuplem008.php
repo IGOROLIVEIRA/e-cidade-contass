@@ -65,6 +65,10 @@ if (isset($codsup) && $codsup !=""){
    $clorcsuplem->o46_instit = db_getsession("DB_instit");
    $clorcsuplem->o46_tiposup = $tiposup;
    $clorcsuplem->incluir(null);
+
+   $clorcprojeto->o39_tiposuplementacao = $tiposup;
+   $clorcprojeto->o39_codproj = $projeto;
+   $clorcprojeto->alterar($projeto);
    $codsup = $clorcsuplem->o46_codsup;
    if ($clorcsuplem->erro_status == "0" ){
          db_msgbox($clorcsuplem->erro_msg);

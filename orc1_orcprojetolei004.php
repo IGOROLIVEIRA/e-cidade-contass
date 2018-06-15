@@ -5,66 +5,70 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_orcprojetolei_classe.php");
+include("classes/db_orcorcsuplemtipo_classe.php");
+include("classes/db_orcsuplem_classe.php");
 include("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_POST_VARS);
 $clorcprojetolei         = new cl_orcprojetolei;
+$clorcsuplemtipo         = new cl_orcsuplemtipo;
+$clorcsuplem         = new cl_orcsuplem;
 
 $db_opcao = 1;
 $db_botao = true;
 if (isset($incluir)) {
-  
+
   $lErro    = false;
   $sErroMsg = "";
   db_inicio_transacao();
-  
+
   $clorcprojetolei->o138_instit = db_getsession("DB_instit");
   $clorcprojetolei->incluir(null);
   if ($clorcprojetolei->erro_status == 0) {
-    
+
     $sErroMsg .= $clorcprojetolei->erro_msg;
     $lErro     = true;
   }
   /**
-   * incluimos uma lei de orçamento para esse projeto 
+   * incluimos uma lei de orçamento para esse projeto
    */
   if (!$lErro) {
-    
+
     $oDaoOrcLei = db_utils::getDao("orclei");
-    $oDaoOrcLei->o45_dataini = db_getsession("DB_anousu")."-01-01"; 
-    $oDaoOrcLei->o45_datafim = db_getsession("DB_anousu")."-12-31"; 
-    $oDaoOrcLei->o45_descr   = "Lei do Projeto de lei {$o138_numerolei}"; 
-    $oDaoOrcLei->o45_numlei  = "{$o138_numerolei}"; 
+    $oDaoOrcLei->o45_dataini = db_getsession("DB_anousu")."-01-01";
+    $oDaoOrcLei->o45_datafim = db_getsession("DB_anousu")."-12-31";
+    $oDaoOrcLei->o45_descr   = "Lei do Projeto de lei {$o138_numerolei}";
+    $oDaoOrcLei->o45_numlei  = "{$o138_numerolei}";
     $oDaoOrcLei->o45_tipolei = 2;
     $oDaoOrcLei->incluir(null);
     if ($oDaoOrcLei->erro_status == 0) {
-      
+
       $lErro     = true;
-      $sErroMsg .= $oDaoOrcLei->erro_msg; 
+      $sErroMsg .= $oDaoOrcLei->erro_msg;
     }
   }
-  
+
   /**
    * incluimos a ligação da lei com o projeto de lei
    */
   if (!$lErro) {
-    
+
     $oDaoOrcLeiProjeto = db_utils::getDao("orcleiorcprojetolei");
     $oDaoOrcLeiProjeto->o140_orcprojetolei = $clorcprojetolei->o138_sequencial;
     $oDaoOrcLeiProjeto->o140_orclei        = $oDaoOrcLei->o45_codlei;
     $oDaoOrcLeiProjeto->incluir(null);
     if ($oDaoOrcLeiProjeto->erro_status == 0) {
-      
+
       $lErro     = true;
       $sErroMsg .= $oDaoOrcLeiProjeto->erro_msg;
     }
   }
-  
+
   /**
    * incluimos o decreto
    */
   if (!$lErro) {
-    
+
     $oDaoDecreto               = db_utils::getDao("orcprojeto");
     $oDaoDecreto->o39_anousu   = db_getsession("DB_anousu");
     $oDaoDecreto->o39_codlei   = $oDaoOrcLei->o45_codlei;
@@ -74,24 +78,25 @@ if (isset($incluir)) {
     $oDaoDecreto->o39_numero   = "{$o138_numerolei}";
     $oDaoDecreto->o39_texto    = "Decreto do Projeto de lei {$o138_numerolei}";
     $oDaoDecreto->o39_tipoproj = "2";
+    //$oDaoDecreto->o39_tiposuplementacao = $o39_tiposuplementacao;
     $oDaoDecreto->incluir(null);
     if ($oDaoDecreto->erro_status == 0) {
-      
+
       $lErro     = true;
       $sErroMsg .= $oDaoDecreto->erro_msg;
     }
   }
   /**
    * incluimos a ligação do projeto com o decreto
-   */  
+   */
   if (!$lErro) {
-    
+
     $oDaoProjetoDecreto = db_utils::getDao("orcprojetoorcprojetolei");
     $oDaoProjetoDecreto->o139_orcprojeto    = $oDaoDecreto->o39_codproj;
     $oDaoProjetoDecreto->o139_orcprojetolei = $clorcprojetolei->o138_sequencial;
     $oDaoProjetoDecreto->incluir(null);
     if ($oDaoProjetoDecreto->erro_status == 0) {
-      
+
       $lErro     = true;
       $sErroMsg .= $oDaoProjetoDecreto->erro_msg;
     }
@@ -102,7 +107,7 @@ if (isset($incluir)) {
     $clorcprojetolei->erro_msg    = $sErroMsg;
   }
   db_fim_transacao($lErro);
-  
+
 }
 ?>
 <html>
@@ -115,8 +120,8 @@ if (isset($incluir)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmorcprojetolei.php");
@@ -134,7 +139,7 @@ js_tabulacaoforms("form1","o138_numerolei",true,1,"o138_numerolei",true);
 <?
 if(isset($incluir)){
   if($clorcprojetolei->erro_status=="0"){
-  	
+
     $clorcprojetolei->erro(true,false);
     $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
@@ -152,7 +157,7 @@ if(isset($incluir)){
       </script>
      ";
    // db_redireciona("orc1_orcleialtorcamentaria001.php?o200_orcprojetolei=".$clorcprojetolei->o138_sequencial." ");
-    
+
     /**
      * redirecionamos para a inclusão do projeto
      */

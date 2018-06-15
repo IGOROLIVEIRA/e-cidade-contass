@@ -3,7 +3,7 @@
 //MODULO: orcamento
 //CLASSE DA ENTIDADE orcprojeto
 class cl_orcprojeto {
-	// cria variaveis de erro 
+	// cria variaveis de erro
 	var $rotulo = null;
 	var $query_sql = null;
 	var $numrows = 0;
@@ -16,7 +16,7 @@ class cl_orcprojeto {
 	var $erro_msg = null;
 	var $erro_campo = null;
 	var $pagina_retorno = null;
-	// cria variaveis do arquivo 
+	// cria variaveis do arquivo
 	var $o39_codproj = 0;
 	var $o39_descr = null;
 	var $o39_codlei = 0;
@@ -33,28 +33,30 @@ class cl_orcprojeto {
 	var $o39_leidata_ano = null;
 	var $o39_leidata = null;
 	var $o39_texto = null;
-	var $o39_textolivre = null;
-	// cria propriedade com as variaveis do arquivo 
+  var $o39_textolivre = null;
+	var $o39_tiposuplementacao = null;
+	// cria propriedade com as variaveis do arquivo
 	var $campos = "
-	                 o39_codproj = int4 = codigo do projeto 
-	                 o39_descr = text = descr do projeto 
-	                 o39_codlei = int4 = codigo da lei 
-	                 o39_tipoproj = int4 = tipo do projeto 
-	                 o39_anousu = int4 = exercicio 
-	                 o39_numero = varchar(25) = Numero do Decreto 
-	                 o39_data = date = Data da Decreto 
-	                 o39_lei = varchar(25) = numero da lei 
-	                 o39_leidata = date = data da lei 
-	                 o39_texto = text = texto do projeto 
-	                 o39_textolivre = text = texto livre
+	                 o39_codproj = int4 = codigo do projeto
+	                 o39_descr = text = descr do projeto
+	                 o39_codlei = int4 = codigo da lei
+	                 o39_tipoproj = int4 = tipo do projeto
+	                 o39_anousu = int4 = exercicio
+	                 o39_numero = varchar(25) = Numero do Decreto
+	                 o39_data = date = Data da Decreto
+	                 o39_lei = varchar(25) = numero da lei
+	                 o39_leidata = date = data da lei
+	                 o39_texto = text = texto do projeto
+                   o39_textolivre = text = texto livre
+	                 o39_tiposuplementacao = text = tipo de suplementacao
 	                 ";
-	//funcao construtor da classe 
+	//funcao construtor da classe
 	function cl_orcprojeto() {
 		//classes dos rotulos dos campos
 		$this->rotulo = new rotulo("orcprojeto");
 		$this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
 	}
-	//funcao erro 
+	//funcao erro
 	function erro($mostra, $retorna) {
 		if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
 			echo "<script>alert(\"".$this->erro_msg."\");</script>";
@@ -90,7 +92,8 @@ class cl_orcprojeto {
 				}
 			}
 			$this->o39_texto = ($this->o39_texto == "" ? @ $GLOBALS["HTTP_POST_VARS"]["o39_texto"] : $this->o39_texto);
-			$this->o39_textolivre = ($this->o39_textolivre == "" ? @ $GLOBALS["HTTP_POST_VARS"]["o39_textolivre"] : $this->o39_textolivre);
+      $this->o39_textolivre = ($this->o39_textolivre == "" ? @ $GLOBALS["HTTP_POST_VARS"]["o39_textolivre"] : $this->o39_textolivre);
+			$this->o39_tiposuplementacao = ($this->o39_tiposuplementacao == "" ? @ $GLOBALS["HTTP_POST_VARS"]["o39_tiposuplementacao"] : $this->o39_tiposuplementacao);
 		} else {
 			$this->o39_codproj = ($this->o39_codproj == "" ? @ $GLOBALS["HTTP_POST_VARS"]["o39_codproj"] : $this->o39_codproj);
 		}
@@ -173,28 +176,30 @@ class cl_orcprojeto {
 			return false;
 		}
 		$sql = "insert into orcprojeto(
-		                                       o39_codproj 
-		                                      ,o39_descr 
-		                                      ,o39_codlei 
-		                                      ,o39_tipoproj 
-		                                      ,o39_anousu 
-		                                      ,o39_numero 
-		                                      ,o39_data 
-		                                      ,o39_lei 
-		                                      ,o39_leidata 
-		                                      ,o39_texto 
+		                                       o39_codproj
+		                                      ,o39_descr
+		                                      ,o39_codlei
+		                                      ,o39_tipoproj
+		                                      ,o39_anousu
+		                                      ,o39_numero
+		                                      ,o39_data
+		                                      ,o39_lei
+		                                      ,o39_leidata
+                                          ,o39_texto
+		                                      ,o39_tiposuplementacao
 		                       )
 		                values (
-		                                $this->o39_codproj 
-		                               ,'$this->o39_descr' 
-		                               ,$this->o39_codlei 
-		                               ,$this->o39_tipoproj 
-		                               ,$this->o39_anousu 
-		                               ,'$this->o39_numero' 
-		                               ,". ($this->o39_data == "null" || $this->o39_data == "" ? "null" : "'".$this->o39_data."'")." 
-		                               ,'$this->o39_lei' 
-		                               ,". ($this->o39_leidata == "null" || $this->o39_leidata == "" ? "null" : "'".$this->o39_leidata."'")." 
-		                               ,'$this->o39_texto' 
+		                                $this->o39_codproj
+		                               ,'$this->o39_descr'
+		                               ,$this->o39_codlei
+		                               ,$this->o39_tipoproj
+		                               ,$this->o39_anousu
+		                               ,'$this->o39_numero'
+		                               ,". ($this->o39_data == "null" || $this->o39_data == "" ? "null" : "'".$this->o39_data."'")."
+		                               ,'$this->o39_lei'
+		                               ,". ($this->o39_leidata == "null" || $this->o39_leidata == "" ? "null" : "'".$this->o39_leidata."'")."
+                                   ,'$this->o39_texto'
+		                               ,$this->o39_tiposuplementacao
 		                      )";
 		$result = @ pg_exec($sql);
 		if ($result == false) {
@@ -338,14 +343,19 @@ class cl_orcprojeto {
 			$sql .= $virgula." o39_texto = '$this->o39_texto' ";
 			$virgula = ",";
 		}
-		if (trim($this->o39_textolivre) != "" || isset ($GLOBALS["HTTP_POST_VARS"]["o39_textolivre"])) {
-			$sql .= $virgula." o39_textolivre = '$this->o39_textolivre' ";
+    if (trim($this->o39_textolivre) != "" || isset ($GLOBALS["HTTP_POST_VARS"]["o39_textolivre"])) {
+      $sql .= $virgula." o39_textolivre = '$this->o39_textolivre' ";
+      $virgula = ",";
+    }
+		if (trim($this->o39_tiposuplementacao) != "" || isset ($GLOBALS["HTTP_POST_VARS"]["o39_tiposuplementacao"])) {
+			$sql .= $virgula." o39_tiposuplementacao = $this->o39_tiposuplementacao ";
 			$virgula = ",";
 		}
 		$sql .= " where ";
 		if ($o39_codproj != null) {
 			$sql .= " o39_codproj = $this->o39_codproj";
 		}
+
 		$resaco = $this->sql_record($this->sql_query_file($this->o39_codproj));
 		if ($this->numrows > 0) {
 			for ($conresaco = 0; $conresaco < $this->numrows; $conresaco ++) {
@@ -407,7 +417,7 @@ class cl_orcprojeto {
 			}
 		}
 	}
-	// funcao para exclusao 
+	// funcao para exclusao
 	function excluir($o39_codproj = null, $dbwhere = null) {
 		if ($dbwhere == null || $dbwhere == "") {
 			$resaco = $this->sql_record($this->sql_query_file($o39_codproj));
@@ -476,7 +486,7 @@ class cl_orcprojeto {
 			}
 		}
 	}
-	// funcao do recordset 
+	// funcao do recordset
 	function sql_record($sql) {
 		$result = @ pg_query($sql);
 		if ($result == false) {
@@ -499,7 +509,7 @@ class cl_orcprojeto {
 		}
 		return $result;
 	}
-	// funcao do sql 
+	// funcao do sql
 	function sql_query($o39_codproj = null, $campos = "*", $ordem = null, $dbwhere = "") {
 		$sql = "select ";
 		if ($campos != "*") {
@@ -516,7 +526,7 @@ class cl_orcprojeto {
 		$sql .= "      inner join orclei  on  orclei.o45_codlei = orcprojeto.o39_codlei";
 		$sql .= "      left outer join orcsuplem on o46_codlei = orcprojeto.o39_codproj ";
 		$sql .= "      left outer join orcsuplemretif retif on retif.o48_retificado = orcprojeto.o39_codproj ";
-		$sql .= "      left outer join orcsuplemretif proj on proj.o48_projeto = orcprojeto.o39_codproj ";		
+		$sql .= "      left outer join orcsuplemretif proj on proj.o48_projeto = orcprojeto.o39_codproj ";
 		$sql2 = "";
 		if ($dbwhere == "") {
 			if ($o39_codproj != null) {
@@ -535,10 +545,10 @@ class cl_orcprojeto {
 				$sql .= $virgula.$campos_sql[$i];
 				$virgula = ",";
 			}
-		}		
+		}
 		return $sql;
 	}
-	// funcao do sql 
+	// funcao do sql
 	function sql_query_file($o39_codproj = null, $campos = "*", $ordem = null, $dbwhere = "") {
 		$sql = "select ";
 		if ($campos != "*") {
