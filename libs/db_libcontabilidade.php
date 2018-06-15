@@ -1518,16 +1518,18 @@ class cl_translan extends cl_contranslan {
 
     $sCodigoDocumento = implode(",", $aCodigoDocumento);
 
-    $sSqlContaCreditoLiquidacao  = " select conlancamval.c69_credito";
-    $sSqlContaCreditoLiquidacao .= "   from conlancamemp";
-    $sSqlContaCreditoLiquidacao .= "        inner join conlancam    on conlancam.c70_codlan    = conlancamemp.c75_codlan";
-    $sSqlContaCreditoLiquidacao .= "        inner join conlancamdoc on conlancamdoc.c71_codlan = conlancam.c70_codlan";
-    $sSqlContaCreditoLiquidacao .= "        inner join conlancamval on conlancamval.c69_codlan = conlancam.c70_codlan";
-    $sSqlContaCreditoLiquidacao .= "  where conlancamemp.c75_numemp  = {$iNumeroEmpenho}";
-    $sSqlContaCreditoLiquidacao .= "    and conlancamdoc.c71_coddoc in ({$sCodigoDocumento})";
-    $sSqlContaCreditoLiquidacao .= "    and conlancam.c70_anousu     = {$iAnoSessao}";
-    $sSqlContaCreditoLiquidacao .= "  order by conlancamval.c69_codlan desc, conlancamval.c69_sequen asc ";
-    $sSqlContaCreditoLiquidacao .= "  limit 1";
+    $sSqlContaCreditoLiquidacao = " SELECT conlancamval.c69_credito FROM conlancamemp
+                                    INNER JOIN conlancam ON conlancam.c70_codlan = conlancamemp.c75_codlan
+                                    INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancam.c70_codlan
+                                    INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancam.c70_codlan
+                                    INNER JOIN conplanoreduz ON c61_reduz = c69_credito AND c61_anousu = c69_anousu
+                                    INNER JOIN conplano ON c60_codcon = c61_codcon AND c61_anousu = c60_anousu
+                                    WHERE conlancamemp.c75_numemp = {$iNumeroEmpenho}
+                                      AND conlancamdoc.c71_coddoc IN ({$sCodigoDocumento})
+                                      AND conlancam.c70_anousu = {$iAnoSessao}
+                                      AND substr(c60_estrut,1,2) = '21'
+                                    ORDER BY conlancamval.c69_sequen ASC, conlancamval.c69_codlan DESC
+                                    LIMIT 1";
     $rsBuscaContaLiquidacao = db_query($sSqlContaCreditoLiquidacao);
     if (!$rsBuscaContaLiquidacao || pg_num_rows($rsBuscaContaLiquidacao) == 0) {
       throw new Exception("Ocorreu um erro ao buscar a conta da liquidação do empenho {$iNumeroEmpenho}.\n".pg_last_error());
