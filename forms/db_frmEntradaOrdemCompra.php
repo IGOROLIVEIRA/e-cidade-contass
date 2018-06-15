@@ -42,6 +42,7 @@ $clrotulo->label("e70_valor");
 $clrotulo->label("m51_valortotal");
 $clrotulo->label("m80_obs");
 $clrotulo->label("m51_depto");
+$clrotulo->label("m51_data");
 $clrotulo->label("descrdepto");
 $clrotulo->label("m90_liqentoc");
 $clrotulo->label("cc08_sequencial");
@@ -96,8 +97,10 @@ if (count($aParametrosEmpenho) > 0) {
 <form name="form1" method="post">
 
 <fieldset style='text-align: left'><Legend><b>Dados</b></legend>
+
 <table>
   <?
+  db_input('m51_data', 10, null, true, 'hidden', 1);
   //echo $iControlaPit;
   if($iControlaPit == 1){
   ?>
@@ -315,6 +318,12 @@ if (count($aParametrosEmpenho) > 0) {
             db_input('qtdeRecebido', 10, null, true, 'text', 1, "onblur='js_calculaQuant();' onkeypress='return js_teclas(event)'");
             ?>
             <b>(<span id='saldoitens'>0</span>)</b>
+           <!-- ESTE CAMPO ESTÁ OCULTO PORQUE FOI SOLICITADA ALTERAÇÃO -->
+           <!-- NA ROTINA DO CONSUMO IMEDIATO  -->
+           <!-- OC5819 -->
+           <span style="display:none;"> <b>Consumo Imediato:</b>
+            <?php db_input('consumoImediato', 10, null, true, 'text', 1, ""); ?>
+           </span>
          </td>
       </tr>
       <tr id="qtdCorrigido" style="display:none">
@@ -631,9 +640,11 @@ function js_retornoGetDados(oAjax) {
     alert(oJson.mensagem.urlDecode());
     return false;
   }
+
   $('pesquisar').disabled = false;
   $('m51_codordem').value   = oJson.m51_codordem;
   $('m51_depto').value      = oJson.m51_depto;
+  $('m51_data').value       = oJson.m51_data;
   $('m51_valortotal').value = oJson.m51_valortotal;
   $('descrdepto').value     = oJson.descrdepto.urlDecode();
   $('m51_numcgm').value     = oJson.m51_numcgm;
@@ -680,7 +691,7 @@ function js_retornoGetDados(oAjax) {
 
     //percorremos itens da ordem de Compra. e populamos a grid.;
     for (var iItens = 0; iItens < oJson.itens.length; iItens++) {
-
+      background="background-color:#82E094;";
       with (oJson.itens[iItens]) {
 
         iCodLinha  =  m52_codlanc+'_'+iIndiceEntrada;
@@ -695,9 +706,11 @@ function js_retornoGetDados(oAjax) {
            sClassName = "disabled";
            sDisabled  = "disabled";
            checked    = "";
+           background = "";
            sReturn    = " return false; ";
 
         }
+
         //Se devemos mostrar o checkbox para o usuário. apenas mostramos se o item não e um item fracionado
         sShowCheckbox = '';
         if (iIndiceEntrada > 0) {
@@ -833,6 +846,9 @@ function js_retornoSend(oAjax) {
     if ($F('m77_dtvalidade') != oItemAnt.m77_dtvalidade) {
       lModificado = true;
     }
+    if ($F('consumoImediato') != oItemAnt.consumoImediato) {
+      lModificado = true;
+    }
     if (lModificado) {
       if (!confirm('Há Modificações no item Anterior que nao foram salvas.\nContinuar?')) {
 
@@ -846,6 +862,7 @@ function js_retornoSend(oAjax) {
 
   $('m77_lote').value               = oItemAtivo.m77_lote;
   $('m77_dtvalidade').value         = oItemAtivo.m77_dtvalidade;
+  $('consumoImediato').value        = oItemAtivo.consumoImediato;
   $('qtdeRecebido').value           = oItemAtivo.m52_quant;
   $('valorRecebido').value          = new Number(oItemAtivo.m52_valor).toFixed(2);
   $('saldovalor').innerHTML         = new Number(oItemAtivo.saldovalor).toFixed(2);
@@ -1039,6 +1056,7 @@ function js_saveMaterial(lFraciona) {
     oItemAtivo.e62_descr         = '';
     oItemAtivo.m60_descr         = '';
     oItemAtivo.iTotalFracionados = 0;
+    oItemAtivo.consumoImediato = $F('consumoImediato');
     oItemAtivo.pc01_descrmater   = encodeURIComponent($('matmater').options[$('matmater').selectedIndex].descr);
     oItemAtivo.checked           = " checked ";
 
@@ -1069,6 +1087,7 @@ function js_saveMaterial(lFraciona) {
   oItemAtivo.unidade           = $F('unidadeentrada');
   oItemAtivo.m77_lote          = $F('m77_lote');
   oItemAtivo.m77_dtvalidade    = $F('m77_dtvalidade');
+  oItemAtivo.consumoImediato   = $F('consumoImediato');
   oItemAtivo.aMateriaisEstoque = '';
 
   var oJson = new Object();
@@ -1147,7 +1166,7 @@ function js_getDadosEntrada(iCodLanc) {
  * Retorno da Requisição da consulta dos itens da ordem.
  */
 function js_retornoGetDadosEntrada(oAjax) {
-
+  //console.log(oAjax);
   js_removeObj("msgBox");
   js_bloqueiaLiberaBotao(false);
    var oJson            = eval("("+oAjax.responseText+")");
@@ -1157,8 +1176,12 @@ function js_retornoGetDadosEntrada(oAjax) {
     var sRow          = '';
     var nTotalLancado = new Number(0);
     for (var iItens = 0; iItens < oJson.aItens.length; iItens++) {
-
       with (oJson.aItens[iItens]) {
+      if(consumoImediato != "undefined" && consumoImediato != "" && consumoImediato != "null" && consumoImediato > 0){
+        background="background-color:#82E094;";
+      }else{
+        background=" ";
+      }
 
         iCodLinha  =  m52_codlanc+'_'+iIndiceEntrada;
         sClassName = " normal";
@@ -1177,6 +1200,7 @@ function js_retornoGetDadosEntrada(oAjax) {
            sClassName = "disabled";
            sDisabled  = "disabled";
            checked    = "";
+           background = "";
            sReturn    = " return false; ";
 
         }
@@ -1197,7 +1221,11 @@ function js_retornoGetDadosEntrada(oAjax) {
         } else {
           sImgSrc = "joinbottom";
         }
-        sRow += "<tr style='cursor:default' ";
+        if(checked!=""){
+          sRow += "<tr style='cursor:default; "+background+" height:25px;' ";
+        }else{
+          sRow += "<tr style='cursor:default; height:25px;' ";
+        }
         sRow += "    class='"+sClassName+"' onclick=\""+sReturn+"js_send($('chk"+iCodLinha+"'),"+m52_codlanc+","+iIndiceEntrada+")\"";
         sRow += "    id='trchk"+iCodLinha+"'>";
         sRow += "  <td class='"+sClassCHK+"' style='text-align:right'>";
@@ -1419,10 +1447,17 @@ function js_calculaValor() {
  * faz algumas verificações antes de realmente fazer o envio.
  */
 function js_confirmaEntrada() {
-
+  //alert($F('m51_data'));
   if (confirm('Confirma a entrada dos Itens Selecionados no estoque?')) {
 
    //Número da nota, é obrigatorio
+
+/*   if(new Date('<?php echo date("Y-m-d", db_getsession("DB_datausu")); ?>') > new Date($F('m51_data'))){
+      alert('A data da emissão é inferior à data do sistema!');
+
+      return false;
+
+   }*/
    if ($F('e69_numero').trim() == '') {
 
       alert('Número nota deve ser preenchida!');
@@ -1430,6 +1465,7 @@ function js_confirmaEntrada() {
       return false;
 
     }
+
     //Data da nota deve estar preenchida
     if ($F('e69_dtnota') == '') {
 
@@ -1576,7 +1612,7 @@ function js_confirmaEntrada() {
     var sNumero                 = encodeURIComponent(tagString($F('e69_numero')));
     var sProcessoAdministrativo = encodeURIComponent(tagString($F('e04_numeroprocesso')));
 
-    var sJson  = '{"method":"confirmarEntrada","m51_codordem":"'+$F('m51_codordem')+'",';
+    var sJson  = '{"method":"confirmarEntrada","m51_codordem":"'+$F('m51_codordem')+'","m51_depto":"'+$F('m51_depto')+'",';
     sJson     += '"sNumero":"'+sNumero+'","dtDataNota":"'+$F('e69_dtnota')+'", "e04_numeroprocesso": "'+sProcessoAdministrativo+'",';
     sJson     += '"sNotaFiscalEletronica":"'+$F('e69_notafiscaleletronica')+'","sChaveAcesso":"'+$F('e69_chaveacesso')+'", "sNumeroSerie": "'+$F('e69_nfserie')+'",';
     sJson     += '"oInfoNota":{"iCfop":"'+iCfop+'","iTipoDocumentoFiscal":"'+iTipoDocumentoFiscal+'","iInscrSubstituto":"'+iInscrSubstituto+'",';
@@ -1807,6 +1843,7 @@ function js_limpaInfoItem() {
   $('m78_matfabricante').value      = '';;
   $('m77_lote').value               = '';
   $('m77_dtvalidade').value         = '';
+  $('consumoImediato').value         = '';
   $('doFracionar').disabled         = true;
   $('sJson').value                  = '';
   lSalvo                            = true;

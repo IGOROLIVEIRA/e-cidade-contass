@@ -974,6 +974,7 @@ class ordemCompra {
       $oMaterial->m77_lote          = "";
       $oMaterial->pc01_servico      = $this->dadosOrdem->itens[$iInd]->pc01_servico;
       $oMaterial->m77_dtvalidade    = "";
+      $oMaterial->consumoImediato    = "";
       $oMaterial->m78_matfabricante = "";
       $oMaterial->m76_nome          = "";
       $oMaterial->checked           = "checked";
@@ -1033,6 +1034,7 @@ class ordemCompra {
     $oMaterial->e62_descr       = urlencode(urldecode($oMaterial->e62_descr));
     $oMaterial->m76_nome        = urlencode(urldecode($oMaterial->m76_nome));
     $oMaterial->m60_descr       = urlencode(urldecode($oMaterial->m60_descr));
+    $oMaterial->consumoImediato = urlencode(urldecode($oMaterial->consumoImediato));
     if ($oMaterial->iIndiceEntrada != "") {
 
 
