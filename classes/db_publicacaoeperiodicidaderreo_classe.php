@@ -1,7 +1,7 @@
 <?
-//MODULO: sicom
-//CLASSE DA ENTIDADE dclrf302018
-class cl_dclrf302018 {
+//MODULO: contabilidade
+//CLASSE DA ENTIDADE publicacaoeperiodicidaderreo
+class cl_publicacaoeperiodicidaderreo {
    // cria variaveis de erro
    var $rotulo     = null;
    var $query_sql  = null;
@@ -13,30 +13,28 @@ class cl_dclrf302018 {
    var $erro_campo = null;
    var $pagina_retorno = null;
    // cria variaveis do arquivo
-   var $si192_reg10 = 0;
-   var $si192_publiclrf = 0;
-   var $si192_dtpublicacaorelatoriolrf_dia = null;
-   var $si192_dtpublicacaorelatoriolrf_mes = null;
-   var $si192_dtpublicacaorelatoriolrf_ano = null;
-   var $si192_dtpublicacaorelatoriolrf = null;
-   var $si192_localpublicacao = null;
-   var $si192_tpbimestre = 0;
-   var $si192_exerciciotpbimestre = 0;
-   var $si192_tiporegistro = 0;
+   var $c220_dadoscomplementareslrf = 0;
+   var $c220_publiclrf = 0;
+   var $c220_dtpublicacaorelatoriolrf_dia = null;
+   var $c220_dtpublicacaorelatoriolrf_mes = null;
+   var $c220_dtpublicacaorelatoriolrf_ano = null;
+   var $c220_dtpublicacaorelatoriolrf = null;
+   var $c220_localpublicacao = null;
+   var $c220_tpbimestre = 0;
+   var $c220_exerciciotpbimestre = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si192_reg10 = int4 = Sequencial DCLRF
-                 si192_publiclrf = int4 = Publicação do RREO da LRF
-                 si192_dtpublicacaorelatoriolrf = date = Data de publicação do RREO da LRF
-                 si192_localpublicacao = text = Onde foi dada a publicidade do RREO
-                 si192_tpbimestre = int4 = Bimestre a que se refere a data de publi
-                 si192_exerciciotpbimestre = int4 = Exercício a que se refere o período
-                 si192_tiporegistro = int4 = Tipo registro
+                 c220_dadoscomplementareslrf = int4 = Sequencial DCLRF
+                 c220_publiclrf = int4 = Publicação do RREO da LRF
+                 c220_dtpublicacaorelatoriolrf = date = Data da Publicação do RREO
+                 c220_localpublicacao = text = Local da Publicação da RREO
+                 c220_tpbimestre = int4 = Bimestre a que se refere a publicação do RREO
+                 c220_exerciciotpbimestre = int4 = Exercício a que se refere o período
                  ";
    //funcao construtor da classe
-   function cl_dclrf302018() {
+   function cl_publicacaoeperiodicidaderreo() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("dclrf302018");
+     $this->rotulo = new rotulo("publicacaoeperiodicidaderreo");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
    //funcao erro
@@ -51,107 +49,74 @@ class cl_dclrf302018 {
    // funcao para atualizar campos
    function atualizacampos($exclusao=false) {
      if($exclusao==false){
-       $this->si192_reg10 = ($this->si192_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si192_reg10"]:$this->si192_reg10);
-       $this->si192_publiclrf = ($this->si192_publiclrf == ""?@$GLOBALS["HTTP_POST_VARS"]["si192_publiclrf"]:$this->si192_publiclrf);
-       if($this->si192_dtpublicacaorelatoriolrf == ""){
-         $this->si192_dtpublicacaorelatoriolrf_dia = @$GLOBALS["HTTP_POST_VARS"]["si192_dtpublicacaorelatoriolrf_dia"];
-         $this->si192_dtpublicacaorelatoriolrf_mes = @$GLOBALS["HTTP_POST_VARS"]["si192_dtpublicacaorelatoriolrf_mes"];
-         $this->si192_dtpublicacaorelatoriolrf_ano = @$GLOBALS["HTTP_POST_VARS"]["si192_dtpublicacaorelatoriolrf_ano"];
-         if($this->si192_dtpublicacaorelatoriolrf_dia != ""){
-            $this->si192_dtpublicacaorelatoriolrf = $this->si192_dtpublicacaorelatoriolrf_ano."-".$this->si192_dtpublicacaorelatoriolrf_mes."-".$this->si192_dtpublicacaorelatoriolrf_dia;
+       $this->c220_dadoscomplementareslrf = ($this->c220_dadoscomplementareslrf == ""?@$GLOBALS["HTTP_POST_VARS"]["c220_dadoscomplementareslrf"]:$this->c220_dadoscomplementareslrf);
+       $this->c220_publiclrf = ($this->c220_publiclrf == ""?@$GLOBALS["HTTP_POST_VARS"]["c220_publiclrf"]:$this->c220_publiclrf);
+       if($this->c220_dtpublicacaorelatoriolrf == ""){
+         $this->c220_dtpublicacaorelatoriolrf_dia = @$GLOBALS["HTTP_POST_VARS"]["c220_dtpublicacaorelatoriolrf_dia"];
+         $this->c220_dtpublicacaorelatoriolrf_mes = @$GLOBALS["HTTP_POST_VARS"]["c220_dtpublicacaorelatoriolrf_mes"];
+         $this->c220_dtpublicacaorelatoriolrf_ano = @$GLOBALS["HTTP_POST_VARS"]["c220_dtpublicacaorelatoriolrf_ano"];
+         if($this->c220_dtpublicacaorelatoriolrf_dia != ""){
+            $this->c220_dtpublicacaorelatoriolrf = $this->c220_dtpublicacaorelatoriolrf_ano."-".$this->c220_dtpublicacaorelatoriolrf_mes."-".$this->c220_dtpublicacaorelatoriolrf_dia;
          }
        }
-       $this->si192_localpublicacao = ($this->si192_localpublicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si192_localpublicacao"]:$this->si192_localpublicacao);
-       $this->si192_tpbimestre = ($this->si192_tpbimestre == ""?@$GLOBALS["HTTP_POST_VARS"]["si192_tpbimestre"]:$this->si192_tpbimestre);
-       $this->si192_exerciciotpbimestre = ($this->si192_exerciciotpbimestre == ""?@$GLOBALS["HTTP_POST_VARS"]["si192_exerciciotpbimestre"]:$this->si192_exerciciotpbimestre);
-       $this->si192_tiporegistro = ($this->si192_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si192_tiporegistro"]:$this->si192_tiporegistro);
+       $this->c220_localpublicacao = ($this->c220_localpublicacao == ""?@$GLOBALS["HTTP_POST_VARS"]["c220_localpublicacao"]:$this->c220_localpublicacao);
+       $this->c220_tpbimestre = ($this->c220_tpbimestre == ""?@$GLOBALS["HTTP_POST_VARS"]["c220_tpbimestre"]:$this->c220_tpbimestre);
+       $this->c220_exerciciotpbimestre = ($this->c220_exerciciotpbimestre == ""?@$GLOBALS["HTTP_POST_VARS"]["c220_exerciciotpbimestre"]:$this->c220_exerciciotpbimestre);
      }else{
      }
    }
    // funcao para inclusao
    function incluir (){
       $this->atualizacampos();
-     if($this->si192_reg10 == null ){
+     if($this->c220_dadoscomplementareslrf == null ){
        $this->erro_sql = " Campo Sequencial DCLRF nao Informado.";
-       $this->erro_campo = "si192_reg10";
+       $this->erro_campo = "c220_dadoscomplementareslrf";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si192_publiclrf == null ){
+     if($this->c220_publiclrf == null ){
        $this->erro_sql = " Campo Publicação do RREO da LRF nao Informado.";
-       $this->erro_campo = "si192_publiclrf";
+       $this->erro_campo = "c220_publiclrf";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si192_dtpublicacaorelatoriolrf == null ){
-       $this->erro_sql = " Campo Data de publicação do RREO da LRF nao Informado.";
-       $this->erro_campo = "si192_dtpublicacaorelatoriolrf_dia";
+
+     if($this->c220_tpbimestre == null ){
+       $this->erro_sql = " Campo Bimestre a que se refere a publicação do RREO nao Informado.";
+       $this->erro_campo = "c220_tpbimestre";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si192_localpublicacao == null ){
-       $this->erro_sql = " Campo Onde foi dada a publicidade do RREO nao Informado.";
-       $this->erro_campo = "si192_localpublicacao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->c220_exerciciotpbimestre == null || $this->c220_exerciciotpbimestre == ""){
+      $this->c220_exerciciotpbimestre = 'null';
      }
-     if($this->si192_tpbimestre == null ){
-       $this->erro_sql = " Campo Bimestre a que se refere a data de publi nao Informado.";
-       $this->erro_campo = "si192_tpbimestre";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si192_exerciciotpbimestre == null ){
-       $this->erro_sql = " Campo Exercício a que se refere o período nao Informado.";
-       $this->erro_campo = "si192_exerciciotpbimestre";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si192_tiporegistro == null ){
-       $this->erro_sql = " Campo Tipo registro nao Informado.";
-       $this->erro_campo = "si192_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     $result = @pg_query("insert into dclrf302018(
-                                       si192_reg10
-                                      ,si192_publiclrf
-                                      ,si192_dtpublicacaorelatoriolrf
-                                      ,si192_localpublicacao
-                                      ,si192_tpbimestre
-                                      ,si192_exerciciotpbimestre
-                                      ,si192_tiporegistro
+     $sql = "insert into publicacaoeperiodicidaderreo(
+                                       c220_dadoscomplementareslrf
+                                      ,c220_publiclrf
+                                      ,c220_dtpublicacaorelatoriolrf
+                                      ,c220_localpublicacao
+                                      ,c220_tpbimestre
+                                      ,c220_exerciciotpbimestre
                        )
                 values (
-                                $this->si192_reg10
-                               ,$this->si192_publiclrf
-                               ,".($this->si192_dtpublicacaorelatoriolrf == "null" || $this->si192_dtpublicacaorelatoriolrf == ""?"null":"'".$this->si192_dtpublicacaorelatoriolrf."'")."
-                               ,'$this->si192_localpublicacao'
-                               ,$this->si192_tpbimestre
-                               ,$this->si192_exerciciotpbimestre
-                               ,$this->si192_tiporegistro
-                      )");
+                                $this->c220_dadoscomplementareslrf
+                               ,$this->c220_publiclrf
+                               ,".($this->c220_dtpublicacaorelatoriolrf == "null" || $this->c220_dtpublicacaorelatoriolrf == ""?"null":"'".$this->c220_dtpublicacaorelatoriolrf."'")."
+                               ,'$this->c220_localpublicacao'
+                               ,$this->c220_tpbimestre
+                               ,$this->c220_exerciciotpbimestre
+                      )";
+
+     $result = @pg_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -175,19 +140,19 @@ class cl_dclrf302018 {
      return true;
    }
    // funcao para alteracao
-   function alterar ( $si192_reg10=null ) {
+   function alterar ( $c220_dadoscomplementareslrf=null ) {
       $this->atualizacampos();
-     $sql = " update dclrf302018 set ";
+     $sql = " update publicacaoeperiodicidaderreo set ";
      $virgula = "";
-     if(trim($this->si192_reg10)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si192_reg10"])){
-        if(trim($this->si192_reg10)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si192_reg10"])){
-           $this->si192_reg10 = "0" ;
+     if(trim($this->c220_dadoscomplementareslrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c220_dadoscomplementareslrf"])){
+        if(trim($this->c220_dadoscomplementareslrf)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c220_dadoscomplementareslrf"])){
+           $this->c220_dadoscomplementareslrf = "0" ;
         }
-       $sql  .= $virgula." si192_reg10 = $this->si192_reg10 ";
+       $sql  .= $virgula." c220_dadoscomplementareslrf = $this->c220_dadoscomplementareslrf ";
        $virgula = ",";
-       if(trim($this->si192_reg10) == null ){
+       if(trim($this->c220_dadoscomplementareslrf) == null ){
          $this->erro_sql = " Campo Sequencial DCLRF nao Informado.";
-         $this->erro_campo = "si192_reg10";
+         $this->erro_campo = "c220_dadoscomplementareslrf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -195,15 +160,15 @@ class cl_dclrf302018 {
          return false;
        }
      }
-     if(trim($this->si192_publiclrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si192_publiclrf"])){
-        if(trim($this->si192_publiclrf)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si192_publiclrf"])){
-           $this->si192_publiclrf = "0" ;
+     if(trim($this->c220_publiclrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c220_publiclrf"])){
+        if(trim($this->c220_publiclrf)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c220_publiclrf"])){
+           $this->c220_publiclrf = "0" ;
         }
-       $sql  .= $virgula." si192_publiclrf = $this->si192_publiclrf ";
+       $sql  .= $virgula." c220_publiclrf = $this->c220_publiclrf ";
        $virgula = ",";
-       if(trim($this->si192_publiclrf) == null ){
-         $this->erro_sql = " Campo Publicação do RREO da LRF nao Informado.";
-         $this->erro_campo = "si192_publiclrf";
+       if(trim($this->c220_publiclrf) == null ){
+         $this->erro_sql = " Campo Houve publicação do RREO nao Informado.";
+         $this->erro_campo = "c220_publiclrf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -211,12 +176,12 @@ class cl_dclrf302018 {
          return false;
        }
      }
-     if(trim($this->si192_dtpublicacaorelatoriolrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si192_dtpublicacaorelatoriolrf_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si192_dtpublicacaorelatoriolrf_dia"] !="") ){
-       $sql  .= $virgula." si192_dtpublicacaorelatoriolrf = '$this->si192_dtpublicacaorelatoriolrf' ";
+     if(trim($this->c220_dtpublicacaorelatoriolrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c220_dtpublicacaorelatoriolrf_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["c220_dtpublicacaorelatoriolrf_dia"] !="") ){
+       $sql  .= $virgula." c220_dtpublicacaorelatoriolrf = '$this->c220_dtpublicacaorelatoriolrf' ";
        $virgula = ",";
-       if(trim($this->si192_dtpublicacaorelatoriolrf) == null ){
-         $this->erro_sql = " Campo Data de publicação do RREO da LRF nao Informado.";
-         $this->erro_campo = "si192_dtpublicacaorelatoriolrf_dia";
+       if(trim($this->c220_dtpublicacaorelatoriolrf) == null ){
+         $this->erro_sql = " Campo Data da Publicação do RREO nao Informado.";
+         $this->erro_campo = "c220_dtpublicacaorelatoriolrf_dia";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -224,12 +189,12 @@ class cl_dclrf302018 {
          return false;
        }
      }     else{
-       if(isset($GLOBALS["HTTP_POST_VARS"]["si192_dtpublicacaorelatoriolrf_dia"])){
-         $sql  .= $virgula." si192_dtpublicacaorelatoriolrf = null ";
+       if(isset($GLOBALS["HTTP_POST_VARS"]["c220_dtpublicacaorelatoriolrf_dia"])){
+         $sql  .= $virgula." c220_dtpublicacaorelatoriolrf = null ";
          $virgula = ",";
-         if(trim($this->si192_dtpublicacaorelatoriolrf) == null ){
-           $this->erro_sql = " Campo Data de publicação do RREO da LRF nao Informado.";
-           $this->erro_campo = "si192_dtpublicacaorelatoriolrf_dia";
+         if(trim($this->c220_dtpublicacaorelatoriolrf) == null ){
+           $this->erro_sql = " Campo Data da Publicação do RREO nao Informado.";
+           $this->erro_campo = "c220_dtpublicacaorelatoriolrf_dia";
            $this->erro_banco = "";
            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -238,12 +203,12 @@ class cl_dclrf302018 {
          }
        }
      }
-     if(trim($this->si192_localpublicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si192_localpublicacao"])){
-       $sql  .= $virgula." si192_localpublicacao = '$this->si192_localpublicacao' ";
+     if(trim($this->c220_localpublicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c220_localpublicacao"])){
+       $sql  .= $virgula." c220_localpublicacao = '$this->c220_localpublicacao' ";
        $virgula = ",";
-       if(trim($this->si192_localpublicacao) == null ){
-         $this->erro_sql = " Campo Onde foi dada a publicidade do RREO nao Informado.";
-         $this->erro_campo = "si192_localpublicacao";
+       if(trim($this->c220_localpublicacao) == null ){
+         $this->erro_sql = " Campo Local da Publicação da RREO nao Informado.";
+         $this->erro_campo = "c220_localpublicacao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -251,15 +216,15 @@ class cl_dclrf302018 {
          return false;
        }
      }
-     if(trim($this->si192_tpbimestre)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si192_tpbimestre"])){
-        if(trim($this->si192_tpbimestre)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si192_tpbimestre"])){
-           $this->si192_tpbimestre = "0" ;
+     if(trim($this->c220_tpbimestre)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c220_tpbimestre"])){
+        if(trim($this->c220_tpbimestre)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c220_tpbimestre"])){
+           $this->c220_tpbimestre = "0" ;
         }
-       $sql  .= $virgula." si192_tpbimestre = $this->si192_tpbimestre ";
+       $sql  .= $virgula." c220_tpbimestre = $this->c220_tpbimestre ";
        $virgula = ",";
-       if(trim($this->si192_tpbimestre) == null ){
-         $this->erro_sql = " Campo Bimestre a que se refere a data de publi nao Informado.";
-         $this->erro_campo = "si192_tpbimestre";
+       if(trim($this->c220_tpbimestre) == null ){
+         $this->erro_sql = " Campo Bimestre a que se refere a publicação do RREO nao Informado.";
+         $this->erro_campo = "c220_tpbimestre";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -267,15 +232,15 @@ class cl_dclrf302018 {
          return false;
        }
      }
-     if(trim($this->si192_exerciciotpbimestre)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si192_exerciciotpbimestre"])){
-        if(trim($this->si192_exerciciotpbimestre)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si192_exerciciotpbimestre"])){
-           $this->si192_exerciciotpbimestre = "0" ;
+     if(trim($this->c220_exerciciotpbimestre)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c220_exerciciotpbimestre"])){
+        if(trim($this->c220_exerciciotpbimestre)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c220_exerciciotpbimestre"])){
+           $this->c220_exerciciotpbimestre = "0" ;
         }
-       $sql  .= $virgula." si192_exerciciotpbimestre = $this->si192_exerciciotpbimestre ";
+       $sql  .= $virgula." c220_exerciciotpbimestre = $this->c220_exerciciotpbimestre ";
        $virgula = ",";
-       if(trim($this->si192_exerciciotpbimestre) == null ){
+       if(trim($this->c220_exerciciotpbimestre) == null ){
          $this->erro_sql = " Campo Exercício a que se refere o período nao Informado.";
-         $this->erro_campo = "si192_exerciciotpbimestre";
+         $this->erro_campo = "c220_exerciciotpbimestre";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -283,23 +248,7 @@ class cl_dclrf302018 {
          return false;
        }
      }
-     if(trim($this->si192_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si192_tiporegistro"])){
-        if(trim($this->si192_tiporegistro)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si192_tiporegistro"])){
-           $this->si192_tiporegistro = "0" ;
-        }
-       $sql  .= $virgula." si192_tiporegistro = $this->si192_tiporegistro ";
-       $virgula = ",";
-       if(trim($this->si192_tiporegistro) == null ){
-         $this->erro_sql = " Campo Tipo registro nao Informado.";
-         $this->erro_campo = "si192_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     $sql .= " where si192_reg10 = $si192_reg10 ";
+     $sql .= " where c220_dadoscomplementareslrf = $c220_dadoscomplementareslrf ";
      $result = @pg_exec($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -327,12 +276,12 @@ class cl_dclrf302018 {
      }
    }
    // funcao para exclusao
-   function excluir ( $si192_reg10=null ) {
+   function excluir ( $c220_dadoscomplementareslrf=null ) {
      $this->atualizacampos(true);
-     $sql = " delete from dclrf302018
+     $sql = " delete from publicacaoeperiodicidaderreo
                     where ";
      $sql2 = "";
-     $sql2 = "si192_reg10 = $si192_reg10";
+     $sql2 = "c220_dadoscomplementareslrf = $c220_dadoscomplementareslrf";
      $result = @pg_exec($sql.$sql2);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -383,7 +332,7 @@ class cl_dclrf302018 {
      return $result;
    }
    // funcao do sql
-   function sql_query ( $si192_reg10 = null,$campos="dclrf302018.si192_reg10,*",$ordem=null,$dbwhere=""){
+   function sql_query ( $c220_dadoscomplementareslrf = null,$campos="publicacaoeperiodicidaderreo.c220_dadoscomplementareslrf,*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -395,11 +344,11 @@ class cl_dclrf302018 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dclrf302018 ";
+     $sql .= " from publicacaoeperiodicidaderreo ";
      $sql2 = "";
      if($dbwhere==""){
-       if( $si192_reg10 != "" && $si192_reg10 != null){
-          $sql2 = " where dclrf302018.si192_reg10 = $si192_reg10";
+       if( $c220_dadoscomplementareslrf != "" && $c220_dadoscomplementareslrf != null){
+          $sql2 = " where publicacaoeperiodicidaderreo.c220_dadoscomplementareslrf = $c220_dadoscomplementareslrf";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
@@ -417,7 +366,7 @@ class cl_dclrf302018 {
      return $sql;
   }
    // funcao do sql
-   function sql_query_file ( $si192_reg10 = null,$campos="*",$ordem=null,$dbwhere=""){
+   function sql_query_file ( $c220_dadoscomplementareslrf = null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -429,7 +378,7 @@ class cl_dclrf302018 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dclrf302018 ";
+     $sql .= " from publicacaoeperiodicidaderreo ";
      $sql2 = "";
      if($dbwhere==""){
      }else if($dbwhere != ""){

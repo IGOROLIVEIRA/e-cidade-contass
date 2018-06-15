@@ -1,7 +1,7 @@
 <?
-//MODULO: sicom
-//CLASSE DA ENTIDADE dclrf202018
-class cl_dclrf202018 {
+//MODULO: contabilidade
+//CLASSE DA ENTIDADE operacoesdecreditolrf
+class cl_operacoesdecreditolrf {
    // cria variaveis de erro
    var $rotulo     = null;
    var $query_sql  = null;
@@ -13,31 +13,29 @@ class cl_dclrf202018 {
    var $erro_campo = null;
    var $pagina_retorno = null;
    // cria variaveis do arquivo
-   var $si191_reg10 = 0;
-   var $si191_contopcredito = 0;
-   var $si191_dsccontopcredito = null;
-   var $si191_realizopcredito = 0;
-   var $si191_tiporealizopcreditocapta = 0;
-   var $si191_tiporealizopcreditoreceb = 0;
-   var $si191_tiporealizopcreditoassundir = 0;
-   var $si191_tiporealizopcreditoassunobg = 0;
-   var $si191_tiporegistro = 0;
+   var $c219_dadoscomplementareslrf = 0;
+   var $c219_contopcredito = 0;
+   var $c219_dsccontopcredito = 0;
+   var $c219_realizopcredito = 0;
+   var $c219_tiporealizopcreditocapta = 0;
+   var $c219_tiporealizopcreditoreceb = 0;
+   var $c219_tiporealizopcreditoassundir = 0;
+   var $c219_tiporealizopcreditoassunobg = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si191_reg10 = int4 = Sequencial DCLRF
-                 si191_contopcredito = int4 = Contratação de operação de crédito
-                 si191_dsccontopcredito = text = Descrição da ocorrência
-                 si191_realizopcredito = int4 = operações de crédito vedadas
-                 si191_tiporealizopcreditocapta = int4 = Tipo da realização de operações de créd
-                 si191_tiporealizopcreditoreceb = int4 = Tipo da realização de operações de créd
-                 si191_tiporealizopcreditoassundir = int4 = Tipo da realização de operações de créd
-                 si191_tiporealizopcreditoassunobg = int4 = Tipo da realização de operações de créd
-                 si191_tiporegistro = int2 = Tipo registro
+                 c219_dadoscomplementareslrf = int4 = Sequencial DCLRF
+                 c219_contopcredito = int4 = Contratação de operação de crédito
+                 c219_dsccontopcredito = int4 = Descrição da ocorrência
+                 c219_realizopcredito = int4 = operações de crédito vedadas
+                 c219_tiporealizopcreditocapta = int4 = Tipo da realização de operações de créd
+                 c219_tiporealizopcreditoreceb = int4 = Tipo da realização de operações de créd
+                 c219_tiporealizopcreditoassundir = int4 = Tipo da realização de operações de créd
+                 c219_tiporealizopcreditoassunobg = int4 = Tipo da realização de operações de créd
                  ";
    //funcao construtor da classe
-   function cl_dclrf202018() {
+   function cl_operacoesdecreditolrf() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("dclrf202018");
+     $this->rotulo = new rotulo("operacoesdecreditolrf");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
    //funcao erro
@@ -52,123 +50,102 @@ class cl_dclrf202018 {
    // funcao para atualizar campos
    function atualizacampos($exclusao=false) {
      if($exclusao==false){
-       $this->si191_reg10 = ($this->si191_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_reg10"]:$this->si191_reg10);
-       $this->si191_contopcredito = ($this->si191_contopcredito == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_contopcredito"]:$this->si191_contopcredito);
-       $this->si191_dsccontopcredito = ($this->si191_dsccontopcredito == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_dsccontopcredito"]:$this->si191_dsccontopcredito);
-       $this->si191_realizopcredito = ($this->si191_realizopcredito == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_realizopcredito"]:$this->si191_realizopcredito);
-       $this->si191_tiporealizopcreditocapta = ($this->si191_tiporealizopcreditocapta == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditocapta"]:$this->si191_tiporealizopcreditocapta);
-       $this->si191_tiporealizopcreditoreceb = ($this->si191_tiporealizopcreditoreceb == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoreceb"]:$this->si191_tiporealizopcreditoreceb);
-       $this->si191_tiporealizopcreditoassundir = ($this->si191_tiporealizopcreditoassundir == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoassundir"]:$this->si191_tiporealizopcreditoassundir);
-       $this->si191_tiporealizopcreditoassunobg = ($this->si191_tiporealizopcreditoassunobg == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoassunobg"]:$this->si191_tiporealizopcreditoassunobg);
-       $this->si191_tiporegistro = ($this->si191_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si191_tiporegistro"]:$this->si191_tiporegistro);
+       $this->c219_dadoscomplementareslrf = ($this->c219_dadoscomplementareslrf == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_dadoscomplementareslrf"]:$this->c219_dadoscomplementareslrf);
+       $this->c219_contopcredito = ($this->c219_contopcredito == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_contopcredito"]:$this->c219_contopcredito);
+       $this->c219_dsccontopcredito = ($this->c219_dsccontopcredito == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_dsccontopcredito"]:$this->c219_dsccontopcredito);
+       $this->c219_realizopcredito = ($this->c219_realizopcredito == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_realizopcredito"]:$this->c219_realizopcredito);
+       $this->c219_tiporealizopcreditocapta = ($this->c219_tiporealizopcreditocapta == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditocapta"]:$this->c219_tiporealizopcreditocapta);
+       $this->c219_tiporealizopcreditoreceb = ($this->c219_tiporealizopcreditoreceb == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoreceb"]:$this->c219_tiporealizopcreditoreceb);
+       $this->c219_tiporealizopcreditoassundir = ($this->c219_tiporealizopcreditoassundir == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoassundir"]:$this->c219_tiporealizopcreditoassundir);
+       $this->c219_tiporealizopcreditoassunobg = ($this->c219_tiporealizopcreditoassunobg == ""?@$GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoassunobg"]:$this->c219_tiporealizopcreditoassunobg);
      }else{
      }
    }
    // funcao para inclusao
    function incluir (){
       $this->atualizacampos();
-     if($this->si191_reg10 == null ){
+     if($this->c219_dadoscomplementareslrf == null ){
        $this->erro_sql = " Campo Sequencial DCLRF nao Informado.";
-       $this->erro_campo = "si191_reg10";
+       $this->erro_campo = "c219_dadoscomplementareslrf";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_contopcredito == null ){
+     if($this->c219_contopcredito == null ){
        $this->erro_sql = " Campo Contratação de operação de crédito nao Informado.";
-       $this->erro_campo = "si191_contopcredito";
+       $this->erro_campo = "c219_contopcredito";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_dsccontopcredito == null ){
-       $this->erro_sql = " Campo Descrição da ocorrência nao Informado.";
-       $this->erro_campo = "si191_dsccontopcredito";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si191_realizopcredito == null ){
+     if($this->c219_realizopcredito == null ){
        $this->erro_sql = " Campo operações de crédito vedadas nao Informado.";
-       $this->erro_campo = "si191_realizopcredito";
+       $this->erro_campo = "c219_realizopcredito";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_tiporealizopcreditocapta == null ){
+     if($this->c219_tiporealizopcreditocapta == null ){
        $this->erro_sql = " Campo Tipo da realização de operações de créd nao Informado.";
-       $this->erro_campo = "si191_tiporealizopcreditocapta";
+       $this->erro_campo = "c219_tiporealizopcreditocapta";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_tiporealizopcreditoreceb == null ){
+     if($this->c219_tiporealizopcreditoreceb == null ){
        $this->erro_sql = " Campo Tipo da realização de operações de créd nao Informado.";
-       $this->erro_campo = "si191_tiporealizopcreditoreceb";
+       $this->erro_campo = "c219_tiporealizopcreditoreceb";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_tiporealizopcreditoassundir == null ){
+     if($this->c219_tiporealizopcreditoassundir == null ){
        $this->erro_sql = " Campo Tipo da realização de operações de créd nao Informado.";
-       $this->erro_campo = "si191_tiporealizopcreditoassundir";
+       $this->erro_campo = "c219_tiporealizopcreditoassundir";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_tiporealizopcreditoassunobg == null ){
+     if($this->c219_tiporealizopcreditoassunobg == null ){
        $this->erro_sql = " Campo Tipo da realização de operações de créd nao Informado.";
-       $this->erro_campo = "si191_tiporealizopcreditoassunobg";
+       $this->erro_campo = "c219_tiporealizopcreditoassunobg";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_tiporegistro == null ){
-       $this->erro_sql = " Campo Tipo registro nao Informado.";
-       $this->erro_campo = "si191_tiporegistro";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     $result = @pg_query("insert into dclrf202018(
-                                       si191_reg10
-                                      ,si191_contopcredito
-                                      ,si191_dsccontopcredito
-                                      ,si191_realizopcredito
-                                      ,si191_tiporealizopcreditocapta
-                                      ,si191_tiporealizopcreditoreceb
-                                      ,si191_tiporealizopcreditoassundir
-                                      ,si191_tiporealizopcreditoassunobg
-                                      ,si191_tiporegistro
+     $result = @pg_query("insert into operacoesdecreditolrf(
+                                       c219_dadoscomplementareslrf
+                                      ,c219_contopcredito
+                                      ,c219_dsccontopcredito
+                                      ,c219_realizopcredito
+                                      ,c219_tiporealizopcreditocapta
+                                      ,c219_tiporealizopcreditoreceb
+                                      ,c219_tiporealizopcreditoassundir
+                                      ,c219_tiporealizopcreditoassunobg
                        )
                 values (
-                                $this->si191_reg10
-                               ,$this->si191_contopcredito
-                               ,'$this->si191_dsccontopcredito'
-                               ,$this->si191_realizopcredito
-                               ,$this->si191_tiporealizopcreditocapta
-                               ,$this->si191_tiporealizopcreditoreceb
-                               ,$this->si191_tiporealizopcreditoassundir
-                               ,$this->si191_tiporealizopcreditoassunobg
-                               ,$this->si191_tiporegistro
+                                $this->c219_dadoscomplementareslrf
+                               ,$this->c219_contopcredito
+                               ,'$this->c219_dsccontopcredito'
+                               ,$this->c219_realizopcredito
+                               ,$this->c219_tiporealizopcreditocapta
+                               ,$this->c219_tiporealizopcreditoreceb
+                               ,$this->c219_tiporealizopcreditoassundir
+                               ,$this->c219_tiporealizopcreditoassunobg
                       )");
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -193,19 +170,19 @@ class cl_dclrf202018 {
      return true;
    }
    // funcao para alteracao
-   function alterar ( $si191_reg10=null ) {
+   function alterar ( $c219_dadoscomplementareslrf=null ) {
       $this->atualizacampos();
-     $sql = " update dclrf202018 set ";
+     $sql = " update operacoesdecreditolrf set ";
      $virgula = "";
-     if(trim($this->si191_reg10)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_reg10"])){
-        if(trim($this->si191_reg10)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si191_reg10"])){
-           $this->si191_reg10 = "0" ;
+     if(trim($this->c219_dadoscomplementareslrf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_dadoscomplementareslrf"])){
+        if(trim($this->c219_dadoscomplementareslrf)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_dadoscomplementareslrf"])){
+           $this->c219_dadoscomplementareslrf = "0" ;
         }
-       $sql  .= $virgula." si191_reg10 = $this->si191_reg10 ";
+       $sql  .= $virgula." c219_dadoscomplementareslrf = $this->c219_dadoscomplementareslrf ";
        $virgula = ",";
-       if(trim($this->si191_reg10) == null ){
+       if(trim($this->c219_dadoscomplementareslrf) == null ){
          $this->erro_sql = " Campo Sequencial DCLRF nao Informado.";
-         $this->erro_campo = "si191_reg10";
+         $this->erro_campo = "c219_dadoscomplementareslrf";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -213,15 +190,15 @@ class cl_dclrf202018 {
          return false;
        }
      }
-     if(trim($this->si191_contopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_contopcredito"])){
-        if(trim($this->si191_contopcredito)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si191_contopcredito"])){
-           $this->si191_contopcredito = "0" ;
+     if(trim($this->c219_contopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_contopcredito"])){
+        if(trim($this->c219_contopcredito)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_contopcredito"])){
+           $this->c219_contopcredito = "0" ;
         }
-       $sql  .= $virgula." si191_contopcredito = $this->si191_contopcredito ";
+       $sql  .= $virgula." c219_contopcredito = $this->c219_contopcredito ";
        $virgula = ",";
-       if(trim($this->si191_contopcredito) == null ){
+       if(trim($this->c219_contopcredito) == null ){
          $this->erro_sql = " Campo Contratação de operação de crédito nao Informado.";
-         $this->erro_campo = "si191_contopcredito";
+         $this->erro_campo = "c219_contopcredito";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -229,28 +206,23 @@ class cl_dclrf202018 {
          return false;
        }
      }
-     if(trim($this->si191_dsccontopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_dsccontopcredito"])){
-       $sql  .= $virgula." si191_dsccontopcredito = '$this->si191_dsccontopcredito' ";
-       $virgula = ",";
-       if(trim($this->si191_dsccontopcredito) == null ){
-         $this->erro_sql = " Campo Descrição da ocorrência nao Informado.";
-         $this->erro_campo = "si191_dsccontopcredito";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si191_realizopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_realizopcredito"])){
-        if(trim($this->si191_realizopcredito)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si191_realizopcredito"])){
-           $this->si191_realizopcredito = "0" ;
+     if(trim($this->c219_dsccontopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_dsccontopcredito"])){
+        if(trim($this->c219_dsccontopcredito)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_dsccontopcredito"])){
+           $this->c219_dsccontopcredito = "0" ;
         }
-       $sql  .= $virgula." si191_realizopcredito = $this->si191_realizopcredito ";
+       $sql  .= $virgula." c219_dsccontopcredito = '$this->c219_dsccontopcredito' ";
        $virgula = ",";
-       if(trim($this->si191_realizopcredito) == null ){
+
+     }
+     if(trim($this->c219_realizopcredito)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_realizopcredito"])){
+        if(trim($this->c219_realizopcredito)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_realizopcredito"])){
+           $this->c219_realizopcredito = "0" ;
+        }
+       $sql  .= $virgula." c219_realizopcredito = $this->c219_realizopcredito ";
+       $virgula = ",";
+       if(trim($this->c219_realizopcredito) == null ){
          $this->erro_sql = " Campo operações de crédito vedadas nao Informado.";
-         $this->erro_campo = "si191_realizopcredito";
+         $this->erro_campo = "c219_realizopcredito";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -258,15 +230,15 @@ class cl_dclrf202018 {
          return false;
        }
      }
-     if(trim($this->si191_tiporealizopcreditocapta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditocapta"])){
-        if(trim($this->si191_tiporealizopcreditocapta)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditocapta"])){
-           $this->si191_tiporealizopcreditocapta = "0" ;
+     if(trim($this->c219_tiporealizopcreditocapta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditocapta"])){
+        if(trim($this->c219_tiporealizopcreditocapta)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditocapta"])){
+           $this->c219_tiporealizopcreditocapta = "0" ;
         }
-       $sql  .= $virgula." si191_tiporealizopcreditocapta = $this->si191_tiporealizopcreditocapta ";
+       $sql  .= $virgula." c219_tiporealizopcreditocapta = $this->c219_tiporealizopcreditocapta ";
        $virgula = ",";
-       if(trim($this->si191_tiporealizopcreditocapta) == null ){
+       if(trim($this->c219_tiporealizopcreditocapta) == null ){
          $this->erro_sql = " Campo Tipo da realização de operações de créd nao Informado.";
-         $this->erro_campo = "si191_tiporealizopcreditocapta";
+         $this->erro_campo = "c219_tiporealizopcreditocapta";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -274,15 +246,15 @@ class cl_dclrf202018 {
          return false;
        }
      }
-     if(trim($this->si191_tiporealizopcreditoreceb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoreceb"])){
-        if(trim($this->si191_tiporealizopcreditoreceb)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoreceb"])){
-           $this->si191_tiporealizopcreditoreceb = "0" ;
+     if(trim($this->c219_tiporealizopcreditoreceb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoreceb"])){
+        if(trim($this->c219_tiporealizopcreditoreceb)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoreceb"])){
+           $this->c219_tiporealizopcreditoreceb = "0" ;
         }
-       $sql  .= $virgula." si191_tiporealizopcreditoreceb = $this->si191_tiporealizopcreditoreceb ";
+       $sql  .= $virgula." c219_tiporealizopcreditoreceb = $this->c219_tiporealizopcreditoreceb ";
        $virgula = ",";
-       if(trim($this->si191_tiporealizopcreditoreceb) == null ){
+       if(trim($this->c219_tiporealizopcreditoreceb) == null ){
          $this->erro_sql = " Campo Tipo da realização de operações de créd nao Informado.";
-         $this->erro_campo = "si191_tiporealizopcreditoreceb";
+         $this->erro_campo = "c219_tiporealizopcreditoreceb";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -290,15 +262,15 @@ class cl_dclrf202018 {
          return false;
        }
      }
-     if(trim($this->si191_tiporealizopcreditoassundir)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoassundir"])){
-        if(trim($this->si191_tiporealizopcreditoassundir)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoassundir"])){
-           $this->si191_tiporealizopcreditoassundir = "0" ;
+     if(trim($this->c219_tiporealizopcreditoassundir)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoassundir"])){
+        if(trim($this->c219_tiporealizopcreditoassundir)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoassundir"])){
+           $this->c219_tiporealizopcreditoassundir = "0" ;
         }
-       $sql  .= $virgula." si191_tiporealizopcreditoassundir = $this->si191_tiporealizopcreditoassundir ";
+       $sql  .= $virgula." c219_tiporealizopcreditoassundir = $this->c219_tiporealizopcreditoassundir ";
        $virgula = ",";
-       if(trim($this->si191_tiporealizopcreditoassundir) == null ){
+       if(trim($this->c219_tiporealizopcreditoassundir) == null ){
          $this->erro_sql = " Campo Tipo da realização de operações de créd nao Informado.";
-         $this->erro_campo = "si191_tiporealizopcreditoassundir";
+         $this->erro_campo = "c219_tiporealizopcreditoassundir";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -306,15 +278,15 @@ class cl_dclrf202018 {
          return false;
        }
      }
-     if(trim($this->si191_tiporealizopcreditoassunobg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoassunobg"])){
-        if(trim($this->si191_tiporealizopcreditoassunobg)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporealizopcreditoassunobg"])){
-           $this->si191_tiporealizopcreditoassunobg = "0" ;
+     if(trim($this->c219_tiporealizopcreditoassunobg)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoassunobg"])){
+        if(trim($this->c219_tiporealizopcreditoassunobg)=="" && isset($GLOBALS["HTTP_POST_VARS"]["c219_tiporealizopcreditoassunobg"])){
+           $this->c219_tiporealizopcreditoassunobg = "0" ;
         }
-       $sql  .= $virgula." si191_tiporealizopcreditoassunobg = $this->si191_tiporealizopcreditoassunobg ";
+       $sql  .= $virgula." c219_tiporealizopcreditoassunobg = $this->c219_tiporealizopcreditoassunobg ";
        $virgula = ",";
-       if(trim($this->si191_tiporealizopcreditoassunobg) == null ){
+       if(trim($this->c219_tiporealizopcreditoassunobg) == null ){
          $this->erro_sql = " Campo Tipo da realização de operações de créd nao Informado.";
-         $this->erro_campo = "si191_tiporealizopcreditoassunobg";
+         $this->erro_campo = "c219_tiporealizopcreditoassunobg";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -322,23 +294,7 @@ class cl_dclrf202018 {
          return false;
        }
      }
-     if(trim($this->si191_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporegistro"])){
-        if(trim($this->si191_tiporegistro)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si191_tiporegistro"])){
-           $this->si191_tiporegistro = "0" ;
-        }
-       $sql  .= $virgula." si191_tiporegistro = $this->si191_tiporegistro ";
-       $virgula = ",";
-       if(trim($this->si191_tiporegistro) == null ){
-         $this->erro_sql = " Campo Tipo registro nao Informado.";
-         $this->erro_campo = "si191_tiporegistro";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     $sql .= " where si191_reg10 = $si191_reg10 ";
+     $sql .= " where c219_dadoscomplementareslrf = $c219_dadoscomplementareslrf ";
      $result = @pg_exec($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -366,12 +322,12 @@ class cl_dclrf202018 {
      }
    }
    // funcao para exclusao
-   function excluir ( $si191_reg10=null ) {
+   function excluir ( $c219_dadoscomplementareslrf=null ) {
      $this->atualizacampos(true);
-     $sql = " delete from dclrf202018
+     $sql = " delete from operacoesdecreditolrf
                     where ";
      $sql2 = "";
-     $sql2 = "si191_reg10 = $si191_reg10";
+     $sql2 = "c219_dadoscomplementareslrf = $c219_dadoscomplementareslrf";
      $result = @pg_exec($sql.$sql2);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -422,7 +378,7 @@ class cl_dclrf202018 {
      return $result;
    }
    // funcao do sql
-   function sql_query ( $si191_reg10 = null,$campos="dclrf202018.si191_reg10,*",$ordem=null,$dbwhere=""){
+   function sql_query ( $c219_dadoscomplementareslrf = null,$campos="operacoesdecreditolrf.c219_dadoscomplementareslrf,*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -434,11 +390,11 @@ class cl_dclrf202018 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dclrf202018 ";
+     $sql .= " from operacoesdecreditolrf ";
      $sql2 = "";
      if($dbwhere==""){
-       if( $si191_reg10 != "" && $si191_reg10 != null){
-          $sql2 = " where dclrf202018.si191_reg10 = $si191_reg10";
+       if( $c219_dadoscomplementareslrf != "" && $c219_dadoscomplementareslrf != null){
+          $sql2 = " where operacoesdecreditolrf.c219_dadoscomplementareslrf = $c219_dadoscomplementareslrf";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
@@ -456,7 +412,7 @@ class cl_dclrf202018 {
      return $sql;
   }
    // funcao do sql
-   function sql_query_file ( $si191_reg10 = null,$campos="*",$ordem=null,$dbwhere=""){
+   function sql_query_file ( $c219_dadoscomplementareslrf = null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -468,7 +424,7 @@ class cl_dclrf202018 {
      }else{
        $sql .= $campos;
      }
-     $sql .= " from dclrf202018 ";
+     $sql .= " from operacoesdecreditolrf ";
      $sql2 = "";
      if($dbwhere==""){
      }else if($dbwhere != ""){

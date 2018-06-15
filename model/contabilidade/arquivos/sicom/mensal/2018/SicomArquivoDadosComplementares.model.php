@@ -2,15 +2,20 @@
 require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once ("classes/db_dclrf102018_classe.php");
+require_once ("classes/db_dclrf202018_classe.php");
 require_once ("classes/db_dclrf302018_classe.php");
+require_once ("classes/db_dclrf402018_classe.php");
+require_once ("classes/db_infocomplementaresinstit_classe.php");
+require_once ("classes/db_dadoscomplementareslrf_classe.php");
 require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarDCLRF.model.php");
+
 
  /**
   * Dados Complementares Sicom Acompanhamento Mensal
-  * @author marcelo
+  * @author marcony
   * @package Contabilidade
   */
-class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadArquivoBaseCSV {
+ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadArquivoBaseCSV {
 
 	/**
 	 *
@@ -56,115 +61,140 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
    */
   public function gerarDados() {
 
-    $cldclrf10 = new cl_dclrf102018();
-  	$cldclrf30 = new cl_dclrf302018();
+    $cldclrf10                  = new cl_dclrf102018();
+    $cldclrf20                  = new cl_dclrf202018();
+    $cldclrf30                  = new cl_dclrf302018();
+    $cldclrf40                  = new cl_dclrf402018();
+    $cldadoscomplementareslrf   = new cl_dadoscomplementareslrf();
+    $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
+
+    //PEGA O CÓDIGO DO ÓRGAO
+    $oInstituicao = $clinfocomplementaresinstit->sql_query_file(null,"*",null,"si09_instit = ".db_getsession('DB_instit'));
+    $oInstituicao = $clinfocomplementaresinstit->sql_record($oInstituicao);
+    $oInstituicao = db_utils::fieldsMemory($oInstituicao);
+    $iCodOrgao = $oInstituicao->si09_codorgaotce;
 
     db_inicio_transacao();
 
-    /*
-     * excluir informacoes do mes selecionado registro 10
-     */
-    $result = $cldclrf10->sql_record($cldclrf10->sql_query(NULL,"*",NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit") ));
-    if (pg_num_rows($result) > 0) {
-      $cldclrf10->excluir(NULL,"si157_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si157_instit = ".db_getsession("DB_instit"));
-      if ($cldclrf10->erro_status == 0) {
-        throw new Exception($cldclrf10->erro_msg);
-      }
+
+    // $this->sDataFinal['5'].$this->sDataFinal['6']
+
+    //LIMPA AS TABELAS
+    $cldclrf40->excluir("(SELECT si190_sequencial FROM dclrf102018 WHERE si190_codorgao = '{$iCodOrgao}' AND si190_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
+    if($cldclrf40->erro_status == 0){
+      throw new Exception($cldclrf40->erro_msg);
+    }
+    $cldclrf30->excluir("(SELECT si190_sequencial FROM dclrf102018 WHERE si190_codorgao = '{$iCodOrgao}' AND si190_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
+    if($cldclrf30->erro_status == 0){
+      throw new Exception($cldclrf30->erro_msg);
+    }
+    $cldclrf20->excluir("(SELECT si190_sequencial FROM dclrf102018 WHERE si190_codorgao = '{$iCodOrgao}' AND si190_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." )");
+    if($cldclrf20->erro_status == 0){
+      throw new Exception($cldclrf20->erro_msg);
+    }
+    $cldclrf10->excluir($this->sDataFinal['5'].$this->sDataFinal['6'], $iCodOrgao);
+    if($cldclrf10->erro_status == 0){
+      throw new Exception($cldclrf10->erro_msg);
     }
 
-    /*
-     * excluir informacoes do mes selecionado registro 30
-     */
-    $result = $cldclrf30->sql_record($cldclrf30->sql_query(NULL,"*",NULL,"si178_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si178_instit = ".db_getsession("DB_instit") ));
-    if (pg_num_rows($result) > 0) {
-      $cldclrf30->excluir(NULL,"si178_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']." and si178_instit = ".db_getsession("DB_instit"));
-      if ($cldclrf30->erro_status == 0) {
-        throw new Exception($cldclrf30->erro_msg);
-      }
-    }
-
-    $sSql  = "SELECT si09_codorgaotce AS codorgao, si09_tipoinstit AS tipoinstit
-              FROM infocomplementaresinstit
-              WHERE si09_instit = ".db_getsession("DB_instit");
-
-    $rsResult    = db_query($sSql);
-    $sCodorgao   = db_utils::fieldsMemory($rsResult, 0)->codorgao;
 
     /*
      * selecionar informacoes registro 10
      */
 
-        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{ $this->sDataFinal['5'].$this->sDataFinal['6'] }' and si170_instit = ". db_getsession("DB_instit");
+    $sSqldadoscomplementares = $cldadoscomplementareslrf->sql_query(null,"*",null, "c218_mesusu=".$this->sDataFinal['5'].$this->sDataFinal['6']." AND c218_codorgao = '$iCodOrgao' AND c218_anousu = ".db_getsession('DB_anousu')." ");
 
-        $rsResult10 = db_query($sSql);
+    $rsDadoscomplementares = $cldadoscomplementareslrf->sql_record($sSqldadoscomplementares);
+    $rsDadoscomplementares = db_utils::getColectionByRecord($rsDadoscomplementares);
+    //var_dump($rsDadoscomplementares);
+    foreach ($rsDadoscomplementares as $dados) {
 
-        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+      $cldclrf10 = new cl_dclrf102018();
+      $cldclrf10->si190_tiporegistro = 10;
+      $cldclrf10->si190_codorgao = $dados->c218_codorgao;
+      $cldclrf10->si190_passivosreconhecidos = $dados->c218_passivosreconhecidos;
+      $cldclrf10->si190_vlsaldoatualconcgarantiainterna = $dados->c218_vlsaldoatualconcgarantiainterna;
+      $cldclrf10->si190_vlsaldoatualconcgarantia = $dados->c218_vlsaldoatualconcgarantia;
+      $cldclrf10->si190_vlsaldoatualcontragarantiainterna = $dados->c218_vlsaldoatualcontragarantiainterna;
+      $cldclrf10->si190_vlsaldoatualcontragarantiaexterna = $dados->c218_vlsaldoatualcontragarantiaexterna;
+      $cldclrf10->si190_medidascorretivas = $this->removeCaracteres($dados->c218_medidascorretivas);
+      $cldclrf10->si190_recalieninvpermanente = $dados->c218_recalieninvpermanente;
+      $cldclrf10->si190_vldotatualizadaincentcontrib = $dados->c218_vldotatualizadaincentcontrib;
+      $cldclrf10->si190_vlempenhadoicentcontrib = $dados->c218_vlempenhadoicentcontrib;
+      $cldclrf10->si190_vldotatualizadaincentinstfinanc = $dados->c218_vldotatualizadaincentinstfinanc;
+      $cldclrf10->si190_vlempenhadoincentinstfinanc = $dados->c218_vlempenhadoincentinstfinanc;
+      $cldclrf10->si190_vlliqincentcontrib = $dados->c218_vlliqincentcontrib;
+      $cldclrf10->si190_vlliqincentinstfinanc = $dados->c218_vlliqincentinstfinanc;
+      $cldclrf10->si190_vlirpnpincentcontrib = $dados->c218_vlirpnpincentcontrib;
+      $cldclrf10->si190_vlirpnpincentinstfinanc = $dados->c218_vlirpnpincentinstfinanc;
+      $cldclrf10->si190_vlrecursosnaoaplicados = $dados->c218_vlrecursosnaoaplicados;
+      $cldclrf10->si190_vlapropiacaodepositosjudiciais = $dados->c218_vlapropiacaodepositosjudiciais;
+      $cldclrf10->si190_vloutrosajustes = $dados->c218_vloutrosajustes;
+      $cldclrf10->si190_metarrecada = $dados->c218_metarrecada;
+      $cldclrf10->si190_dscmedidasadotadas = $this->removeCaracteres($dados->c218_dscmedidasadotadas);
+      $cldclrf10->si190_mes = $dados->c218_mesusu;
 
-          $cldclrf10 = new cl_dclrf102018();
-          $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
+      $cldclrf10->incluir(null);
+      if ($cldclrf10->erro_status == 0) {
+        throw new Exception($cldclrf10->erro_msg);
+      }
 
-          $cldclrf10->si157_tiporegistro                        = 10;
-          $cldclrf10->si157_codorgao                            = $sCodorgao;
-          $cldclrf10->si157_vlsaldoatualconcgarantiainterna     = $oDados10->si170_vlsaldoatualconcgarantiainterna;
-          $cldclrf10->si157_vlsaldoatualconcgarantia            = $oDados10->si170_vlsaldoatualconcgarantia;
-          $cldclrf10->si157_vlsaldoatualcontragarantiainterna   = $oDados10->si170_vlsaldoatualcontragarantiainterna;
-          $cldclrf10->si157_vlsaldoatualcontragarantiaexterna   = $oDados10->si170_vlsaldoatualcontragarantiaexterna;
-          $cldclrf10->si157_medidascorretivas                   = $this->removeCaracteres($oDados10->si170_medidascorretivas);
-          $cldclrf10->si157_recprivatizacao                     = $oDados10->si170_recprivatizacao;
-          $cldclrf10->si157_vlliqincentcontrib                  = $oDados10->si170_vlliqincentcontrib;
-          $cldclrf10->si157_vlliqincentinstfinanc               = $oDados10->si170_vlliqincentInstfinanc;
-          $cldclrf10->si157_vlirpnpincentcontrib                = $oDados10->si170_vlIrpnpincentcontrib;
-          $cldclrf10->si157_vlirpnpincentinstfinanc             = $oDados10->si170_vllrpnpincentinstfinanc;
-          $cldclrf10->si157_vlcompromissado                     = $oDados10->si170_vlcompromissado;
-          $cldclrf10->si157_vlrecursosnaoaplicados              = $oDados10->si170_vlrecursosnaoaplicados;
-          $cldclrf10->si157_publiclrf                           = $oDados10->si170_publiclrf;
-          $cldclrf10->si157_dtpublicacaorelatoriolrf            = $oDados10->si170_dtpublicacaorelatoriolrf;
-          $cldclrf10->si157_tpbimestre                          = $oDados10->si170_tpbimestre;
-          $cldclrf10->si157_metarrecada                         = $oDados10->si170_metarrecada;
-          $cldclrf10->si157_dscmedidasadotadas                  = $this->removeCaracteres($oDados10->si170_dscmedidasadotadas);
-          $cldclrf10->si157_mes                                 = $this->sDataFinal['5'].$this->sDataFinal['6'];
-          $cldclrf10->si157_instit                              = db_getsession("DB_instit");
+      if(db_getsession('DB_instit') == 1){
+        if($this->sDataFinal['5'].$this->sDataFinal['6'] == '12'){
+          $cldclrf20 = new cl_dclrf202018();
+          $cldclrf20->si191_tiporegistro = 20;
+          $cldclrf20->si191_reg10 = $cldclrf10->si190_sequencial;
+          $cldclrf20->si191_contopcredito = $dados->c219_contopcredito;
+          $cldclrf20->si191_dsccontopcredito = $this->removeCaracteres($dados->c219_dsccontopcredito);
+          $cldclrf20->si191_realizopcredito = $dados->c219_realizopcredito;
+          $cldclrf20->si191_tiporealizopcreditocapta = $dados->c219_tiporealizopcreditocapta;
+          $cldclrf20->si191_tiporealizopcreditoreceb = $dados->c219_tiporealizopcreditoreceb;
+          $cldclrf20->si191_tiporealizopcreditoassundir = $dados->c219_tiporealizopcreditoassundir;
+          $cldclrf20->si191_tiporealizopcreditoassunobg = $dados->c219_tiporealizopcreditoassunobg;
 
-          $cldclrf10->incluir(null);
-          if ($cldclrf10->erro_status == 0) {
-            throw new Exception($cldclrf10->erro_msg);
+          $cldclrf20->incluir(null);
+          if ($cldclrf20->erro_status == 0) {
+            throw new Exception($cldclrf20->erro_msg);
           }
 
         }
+        $cldclrf30 = new cl_dclrf302018();
+        $cldclrf30->si192_tiporegistro = 30;
+        $cldclrf30->si192_reg10 = $cldclrf10->si190_sequencial;
+        $cldclrf30->si192_publiclrf = $dados->c220_publiclrf;
+        $cldclrf30->si192_dtpublicacaorelatoriolrf = $dados->c220_dtpublicacaorelatoriolrf;
+        $cldclrf30->si192_localpublicacao = $this->removeCaracteres($dados->c220_localpublicacao);
+        $cldclrf30->si192_tpbimestre = $dados->c220_tpbimestre;
+        $cldclrf30->si192_exerciciotpbimestre = $dados->c220_exerciciotpbimestre;
 
-
-        // Registro 30
-
-        // @TODO
-        // configurar o SELECT corretamente
-        $sSql = "select * from dadoscomplementareslrf where si170_mesreferencia = '{ $this->sDataFinal['5'].$this->sDataFinal['6'] }' and si170_instit = ". db_getsession("DB_instit");
-
-        $rsResult30 = db_query($sSql);
-
-        for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
-
-          $cldclrf30 = new cl_dclrf102018();
-          $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
-
-          $cldclrf30->si178_tiporegistro              = 30;
-          $cldclrf30->si178_publiclrf                 = $oDados30->si170_publiclrf;
-          $cldclrf30->si178_dtpublicacaorelatoriolrf  = $oDados30->si170_dtpublicacaorelatoriolrf;
-          $cldclrf30->si178_localpublicacao           = 'SITE OFICIAL DO MUNICIPIO';
-          $cldclrf30->si178_tpbimestre                = $oDados30->si170_tpbimestre;
-          $cldclrf30->si178_mes                       = $this->sDataFinal['5'].$this->sDataFinal['6'];
-          $cldclrf30->si178_instit                    = db_getsession("DB_instit");
-          $cldclrf30->incluir(null);
-          if ($cldclrf30->erro_status == 0) {
-            throw new Exception($cldclrf30->erro_msg);
-          }
-
+        $cldclrf30->incluir(null);
+        if ($cldclrf30->erro_status == 0) {
+          throw new Exception($cldclrf30->erro_msg);
         }
+
+      }
+      $cldclrf40 = new cl_dclrf402018();
+      $cldclrf40->si193_tiporegistro = 40;
+      $cldclrf40->si193_reg10 = $cldclrf10->si190_sequencial;
+      $cldclrf40->si193_publicrgf = $dados->c221_publicrgf;
+      $cldclrf40->si193_dtpublicacaorelatoriorgf = $dados->c221_dtpublicacaorelatoriorgf;
+      $cldclrf40->si193_localpublicacaorgf = $this->removeCaracteres($dados->c221_localpublicacaorgf);
+      $cldclrf40->si193_tpperiodo = $dados->c221_tpperiodo;
+      $cldclrf40->si193_exerciciotpperiodo = $dados->c221_exerciciotpperiodo;
+
+      $cldclrf40->incluir(null);
+      if ($cldclrf40->erro_status == 0) {
+        throw new Exception($cldclrf40->erro_msg);
+      }
+
+    }
 
 
     db_fim_transacao();
 
     $oGerarDCLRF = new GerarDCLRF();
     $oGerarDCLRF->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
+    $oGerarDCLRF->iOrgao = $iCodOrgao;
     $oGerarDCLRF->gerarDados();
 
   }
