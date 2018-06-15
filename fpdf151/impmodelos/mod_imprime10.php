@@ -242,8 +242,8 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
     //$sObsItem = substr($obsitem,0,1421);
 
     //// troca de pagina
-	  if( ($this->objpdf->gety() > $this->objpdf->h - 90 && $pagina == 1 )
-	      || ( $this->objpdf->gety() > $this->objpdf->h - 50 && $pagina != 1 )) {
+	  if( ($this->objpdf->gety() > $this->objpdf->h - 140 && $pagina == 1 )
+	      || ( $this->objpdf->gety() > $this->objpdf->h - 100 && $pagina != 1 )) {
 
 	    $this->objpdf->Setfont('Arial','B',7);
       if ($this->objpdf->PageNo() == 1) {
@@ -262,8 +262,8 @@ $this->objpdf->SetAligns(array('C', 'C', 'C', 'R', 'L', 'R', 'R'));
 	      $xlin = 20;
 	      $xcol = 4;
 			$this->objpdf->rect($xcol, $xlin + 205, 154, 10, 2, 'DF', '34');
-			$this->objpdf->rect($xcol + 154, $xlin + 205, 28, 10, 2, 'DF', '34');
-			$this->objpdf->rect($xcol + 182, $xlin + 205, 21, 10, 2, 'DF', '34');
+			$this->objpdf->rect($xcol + 154, $xlin + 205, 26, 10, 2, 'DF', '34');
+			$this->objpdf->rect($xcol + 180, $xlin + 205, 22, 10, 2, 'DF', '34');
 			$this->objpdf->text($xcol + 111, $xlin + 211, 'T O T A L   D A   P Á G I N A');
 
 	      $this->objpdf->SetXY(173,$xlin+205);
