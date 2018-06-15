@@ -1203,8 +1203,8 @@ INNER JOIN acordo ON si03_acordo=ac16_sequencial
 WHERE si03_dataapostila <='{$this->sDataFinal}'
     AND si03_dataapostila >= '{$this->sDataInicial}'
     AND si03_instit = " . db_getsession("DB_instit");
-
         $rsResult30 = db_query($sSql);
+//        echo $sSql; db_criatabela($rsResult30);
 
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
@@ -1244,7 +1244,7 @@ WHERE si03_dataapostila <='{$this->sDataFinal}'
             $clcontratos30->si89_dataapostila = $oDados30->si03_dataapostila;
             $clcontratos30->si89_tipoalteracaoapostila = $oDados30->tipoalteracaoapostila;
             $clcontratos30->si89_dscalteracao = substr($this->removeCaracteres($oDados30->si03_descrapostila), 0, 250);
-            $clcontratos30->si89_valorapostila = $oDados30->tipoalteracaoapostila == 3 ? 0 : $oDados30->si89_valorapostila;
+            $clcontratos30->si89_valorapostila = $oDados30->si03_valorapostila;
             $clcontratos30->si89_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos30->si89_instit = $oDados30->si03_instit;
             $clcontratos30->incluir(null);

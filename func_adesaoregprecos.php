@@ -50,10 +50,20 @@ $cladesaoregprecos = new cl_adesaoregprecos;
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($pesquisa_chave,"*","","si06_instit = ".db_getsession("DB_instit")));
+            if(isset($par) && $par = true){
+              $sSQL = "select si06_objetoadesao from adesaoregprecos where si06_sequencial = {$pesquisa_chave}";
+              $result = $cladesaoregprecos->sql_record($sSQL);
+          }else {
+                $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($pesquisa_chave, "*", "", "si06_instit = " . db_getsession("DB_instit")));
+            }
+
           if($cladesaoregprecos->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$oid',false);</script>";
+              if(isset($par) && $par = true){
+                  echo "<script>".$funcao_js."('$si06_objetoadesao',false);</script>";
+              }else {
+                  echo "<script>" . $funcao_js . "('$oid',false);</script>";
+              }
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

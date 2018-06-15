@@ -175,22 +175,8 @@ db_app::load("dbtextFieldData.widget.js");
                                                         );
                                                     }
                                                     db_select('ac16_origem', $aValores, true, $db_opcao,
-                                                        " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_verificaOrigem(this.value);js_validaCampoValor();' style='width:100%;'");
+                                                        " onchange='js_desabilitaselecionar();js_exibeBotaoJulgamento();js_validaCampoValor();' style='width:100%;'");
 
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr id="trLicitacao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
-                                                <td nowrap>
-                                                    <?
-                                                    db_ancora('<b>Licitação:</b>',"js_pesquisa_liclicita(true)", 1);
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,
-                                                        "onchange='js_pesquisa_liclicita(false)'");
-                                                    db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
                                                     ?>
                                                 </td>
                                             </tr>
@@ -212,13 +198,51 @@ db_app::load("dbtextFieldData.widget.js");
                                                         8 => '8 - Licitação realizada por consorcio público',
                                                         9 => '9 - Licitação realizada por outro ente da federação',
                                                     );
-                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao,
-                                                        "  style='width:100%;'");
+                                                    db_select('ac16_tipoorigem', $aValores, true, $db_opcao,"onchange='js_verificatipoorigem()'","style='width:100%;'");
 
                                                     ?>
                                                 </td>
                                             </tr>
-
+                                            <tr id="trlicoutroorgao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                                                <td nowrap title="<?@$Tac16_licoutroorgao?>">
+                                                    <?=
+                                                    db_ancora("Licitação Outro Órgão:","js_pesquisaac16_licoutroorgao(true)",$db_opcao);
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?
+                                                    db_input('ac16_licoutroorgao', 10, $Iac16_licoutroorgao, true, 'text', $db_opcao,"onchange='js_pesquisaac16_licoutroorgao(false)';");
+                                                    db_input('z01_nome', 43, $Iac02_sequencial, true, 'text', 3);
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <tr id="tradesaoregpreco" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                                                <td nowrap title="<?@$Tac16_adesaoregpreco?>">
+                                                    <?=
+                                                    db_ancora("Adesão de Registro Preço:","js_pesquisaaadesaoregpreco(true)",$db_opcao);
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?
+                                                    db_input('ac16_adesaoregpreco', 10, $Iac16_adesaoregpreco, true, 'text', $db_opcao,"onchange='js_pesquisaaadesaoregpreco(false)';");
+                                                    db_input('si06_objetoadesao', 43, $Iac02_sequencial, true, 'text', 3);
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <tr id="trLicitacao" style="display: <?= $db_opcao == 2 ? 'table-row' : 'none' ?> ;">
+                                                <td nowrap>
+                                                    <?
+                                                    db_ancora('<b>Licitação:</b>',"js_pesquisa_liclicita(true)", 1);
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?
+                                                    db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,
+                                                        "onchange='js_pesquisa_liclicita(false)'");
+                                                    db_input("l20_objeto",40,$Il20_objeto,true,"text",3,'');
+                                                    ?>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td nowrap title="<?= @$Tac16_acordogrupo ?>">
                                                     <?
@@ -578,31 +602,142 @@ db_app::load("dbtextFieldData.widget.js");
      */
     function js_preencheLicitacao(codigo,objeto)
     {
-
         document.form1.ac16_licitacao.value = codigo;
         document.form1.l20_objeto.value = objeto;
-        db_iframe_liclicita.hide();
-    }
-
-    function js_preencheLicitacao1(codigo,objeto)
-    {
-
-
-        document.form1.l20_objeto.value = codigo;
         db_iframe_liclicita.hide();
     }
 
     /**
      * funcao para verificar origem do acordo para listar ancora da licitacao
      */
-    function js_verificaOrigem(iValor)
-    {
-        if (iValor == 3) {
-            $("trLicitacao").style.display = "";
+    function js_verificatipoorigem(){
+        value = document.form1.ac16_tipoorigem.value;
+        value1 = document.form1.ac16_origem.value;
+        console.log(value);
+        console.log(value1);
+
+        if(value == 5 && value1 == 3){
+            document.getElementById('trlicoutroorgao').style.display = "";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trLicitacao').style.display = "none";
+        }
+
+        if(value == 4 && value1 == 3){
+            document.getElementById('tradesaoregpreco').style.display = "";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+            document.getElementById('trLicitacao').style.display = "none";
+        }
+
+        if(value == 2 && value1 == 3){
+            document.getElementById('trLicitacao').style.display = "";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if((value1 == 2 && value == 2) || (value1 == 2 && value == 3)){
+            document.getElementById('trLicitacao').style.display = "none";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if(value1 == 3 && value == 3){
+            document.getElementById('trLicitacao').style.display = "";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if((value1 == 3 && value == 1) || (value1 == 3 && value == 6) || (value1 == 3 && value == 7) || (value1 == 3 && value == 8) || (value1 == 3 && value == 9)){
+            document.getElementById('trLicitacao').style.display = "none";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if(value != 4){
+            document.form1.ac16_adesaoregpreco.value = "";
+            document.form1.si06_objetoadesao.value = "";
+        }
+        if(value != 5 || value != 6) {
+            document.form1.ac16_licoutroorgao.value = "";
+            document.form1.z01_nome.value = "";
+        }
+
+    }
+
+    /**
+     * função para retornar licitações de outros orgaos
+     */
+
+    function js_pesquisaac16_licoutroorgao(mostra) {
+        if (mostra == true) {
+            var sUrl = 'func_liclicitaoutrosorgaos.php?funcao_js=parent.js_buscalicoutrosorgaos|lic211_sequencial|z01_nome';
+            js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos',sUrl,'Pesquisar',true,'0');
         } else {
-            $("trLicitacao").style.display = "none";
+            if (document.form1.ac16_licoutroorgao.value != '') {
+                js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos','func_liclicitaoutrosorgaos.php?poo=true&pesquisa_chave=' +document.form1.ac16_licoutroorgao.value+'&funcao_js=parent.js_mostrarlicoutroorgao',
+                    'Pesquisar licitação Outro Órgão',
+                    false,
+                    '0');
+            } else {
+                $('z01_nome').value = '';
+            }
         }
     }
+
+    /**
+     * função para carregar os dados da licitação selecionada no campo
+     */
+    function js_buscalicoutrosorgaos(chave1,chave2) {
+
+        $('ac16_licoutroorgao').value = chave1;
+        $('z01_nome').value = chave2;
+        db_iframe_liclicitaoutrosorgaos.hide();
+    }
+
+    function js_mostrarlicoutroorgao(chave,erro) {
+        document.form1.z01_nome.value = chave;
+
+        if(erro==true){
+            document.form1.z01_nome.focus();
+        }
+    }
+
+    /**
+     * funcao para buscar as adesões de registro de preco
+     * */
+
+    function js_pesquisaaadesaoregpreco(mostra) {
+        if (mostra == true) {
+            var sUrl = 'func_adesaoregprecos.php?funcao_js=parent.js_buscaadesaoregpreco|si06_sequencial|si06_objetoadesao';
+            js_OpenJanelaIframe('','db_iframe_adesaoregprecos',sUrl,'Pesquisar',true,'0');
+        } else {
+            if (document.form1.ac16_adesaoregpreco.value != '') {
+                js_OpenJanelaIframe('','db_iframe_adesaoregprecos','func_adesaoregprecos.php?par=true&pesquisa_chave=' +document.form1.ac16_adesaoregpreco.value+'&funcao_js=parent.js_mostraradesao',
+                    'Pesquisar',false,'0');
+            } else {
+                $('si06_objetoadesao').value = '';
+            }
+        }
+    }
+
+    /**
+     * funcao para carregar adesao de registro de preco escolhida no campo
+     * */
+    function js_buscaadesaoregpreco(chave1,chave2) {
+
+        $('ac16_adesaoregpreco').value = chave1;
+        $('si06_objetoadesao').value = chave2;
+        db_iframe_adesaoregprecos.hide();
+    }
+
+    function js_mostraradesao(chave,erro){
+        document.form1.si06_objetoadesao.value = chave;
+
+        if(erro==true){
+            document.form1.si06_objetoadesao.focus();
+        }
+    }
+
+
 
     /**
      * funcao que ira realizar vinculo dos empenhos selecionados
@@ -1125,9 +1260,9 @@ db_app::load("dbtextFieldData.widget.js");
 
         db_iframe_acordo.hide();
         <?
-          if($db_opcao!=1){
+        if($db_opcao!=1){
             echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
-          }
+        }
         ?>
 
     }
@@ -1161,29 +1296,29 @@ db_app::load("dbtextFieldData.widget.js");
 
         if (mostra == true) {
 
-          js_OpenJanelaIframe(
-            'top.corpo.iframe_acordo',
-            'db_iframe_contratado',
-            'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
-            'Pesquisa',
-            true,
-            '0',
-            '1'
-          );
+            js_OpenJanelaIframe(
+                'top.corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
+                'Pesquisa',
+                true,
+                '0',
+                '1'
+            );
 
         } else {
 
             if ($('ac16_contratado').value != '') {
 
-              js_OpenJanelaIframe(
-                'top.corpo.iframe_acordo',
-                'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
-                'Pesquisa',
-                false,
-                '0',
-                '1'
-              );
+                js_OpenJanelaIframe(
+                    'top.corpo.iframe_acordo',
+                    'db_iframe_contratado',
+                    'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
+                    'Pesquisa',
+                    false,
+                    '0',
+                    '1'
+                );
 
             } else {
                 $('nomecontratado').value = '';
@@ -1376,11 +1511,11 @@ db_app::load("dbtextFieldData.widget.js");
 
     $('db_opcao').onclick = oContrato.alteraContrato;
     <?
-      if ($db_opcao == 2) {
+    if ($db_opcao == 2) {
         echo "\noContrato.getContrato({$chavepesquisa});\n";
-      } else {
-          echo "\njs_somardias();\n";
-      }
+    } else {
+        echo "\njs_somardias();\n";
+    }
     ?>
 
     $('ac16_valor').observe("change", function () {
@@ -1391,4 +1526,132 @@ db_app::load("dbtextFieldData.widget.js");
     top.corpo.mo_camada('acordoitem');
     parent.js_verificaTipoAcordo();
     <?php endif; ?>
+
+    /**
+     *funçao para verificar tipo origem do acordo para listar ancorar relacionada
+     */
+    function js_verificatipoorigem(){
+        value = document.form1.ac16_tipoorigem.value;
+        value1 = document.form1.ac16_origem.value;
+
+        if(value == 5 && value1 == 3){
+            document.getElementById('trlicoutroorgao').style.display = "";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trLicitacao').style.display = "none";
+        }
+
+        if(value == 4 && value1 == 3){
+            document.getElementById('tradesaoregpreco').style.display = "";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+            document.getElementById('trLicitacao').style.display = "none";
+        }
+
+        if(value == 2 && value1 == 3){
+            document.getElementById('trLicitacao').style.display = "";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if((value1 == 2 && value == 2) || (value1 == 2 && value == 3)){
+            document.getElementById('trLicitacao').style.display = "none";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if(value1 == 3 && value == 3){
+            document.getElementById('trLicitacao').style.display = "";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if((value1 == 3 && value == 1) || (value1 == 3 && value == 6) || (value1 == 3 && value == 7) || (value1 == 3 && value == 8) || (value1 == 3 && value == 9)){
+            document.getElementById('trLicitacao').style.display = "none";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if(value != 4){
+            document.form1.ac16_adesaoregpreco.value = "";
+            document.form1.si06_objetoadesao.value = "";
+        }
+        if(value != 5 || value != 6) {
+            document.form1.ac16_licoutroorgao.value = "";
+            document.form1.z01_nome.value = "";
+        }
+
+    }
+
+    /**
+     * função para retornar licitações de outros orgaos
+     */
+
+    function js_pesquisaac16_licoutroorgao(mostra) {
+        if (mostra == true) {
+            var sUrl = 'func_liclicitaoutrosorgaos.php?funcao_js=parent.js_buscalicoutrosorgaos|lic211_sequencial|z01_nome';
+            js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos',sUrl,'Pesquisar',true,'0');
+        } else {
+            if (document.form1.ac16_licoutroorgao.value != '') {
+                js_OpenJanelaIframe('','db_iframe_liclicitaoutrosorgaos','func_liclicitaoutrosorgaos.php?poo=true&pesquisa_chave=' +document.form1.ac16_licoutroorgao.value+'&funcao_js=parent.js_mostrarlicoutroorgao',
+                    'Pesquisar licitação Outro Órgão',
+                    false,
+                    '0');
+            } else {
+                $('z01_nome').value = '';
+            }
+        }
+    }
+
+    /**
+     * função para carregar os dados da licitação selecionada no campo
+     */
+    function js_buscalicoutrosorgaos(chave1,chave2) {
+
+        $('ac16_licoutroorgao').value = chave1;
+        $('z01_nome').value = chave2;
+        db_iframe_liclicitaoutrosorgaos.hide();
+    };
+
+    function js_mostrarlicoutroorgao(chave,erro) {
+        document.form1.z01_nome.value = chave;
+
+        if(erro==true){
+            document.form1.z01_nome.focus();
+        }
+    }
+
+    /**
+     * funcao para buscar as adesões de registro de preco
+     * */
+
+    function js_pesquisaaadesaoregpreco(mostra) {
+        if (mostra == true) {
+            var sUrl = 'func_adesaoregprecos.php?funcao_js=parent.js_buscaadesaoregpreco|si06_sequencial|si06_objetoadesao';
+            js_OpenJanelaIframe('','db_iframe_adesaoregprecos',sUrl,'Pesquisar',true,'0');
+        } else {
+            if (document.form1.ac16_adesaoregpreco.value != '') {
+                js_OpenJanelaIframe('','db_iframe_adesaoregprecos','func_adesaoregprecos.php?par=true&pesquisa_chave=' +document.form1.ac16_adesaoregpreco.value+'&funcao_js=parent.js_mostraradesao',
+                    'Pesquisar',false,'0');
+            } else {
+                $('si06_objetoadesao').value = '';
+            }
+        }
+    }
+
+    /**
+     * funcao para carregar adesao de registro de preco escolhida no campo
+     * */
+    function js_buscaadesaoregpreco(chave1,chave2) {
+
+        $('ac16_adesaoregpreco').value = chave1;
+        $('si06_objetoadesao').value = chave2;
+        db_iframe_adesaoregprecos.hide();
+    }
+
+    function js_mostraradesao(chave,erro){
+        document.form1.si06_objetoadesao.value = chave;
+
+        if(erro==true){
+            document.form1.si06_objetoadesao.focus();
+        }
+    }
 </script>

@@ -97,6 +97,8 @@ class cl_acordoaux {
     var $ac16_datarescisao = null;
     var $ac16_valorrescisao = null;
     var $ac16_semvigencia = 't';
+    var $ac16_licoutroorgao = null;
+    var $ac16_adesaoregpreco = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac16_sequencial = int4 = Acordo
@@ -131,9 +133,11 @@ class cl_acordoaux {
                  ac16_formafornecimento = Forma de fornecimento acordo
                  ac16_formapagamento = Forma de pagamento acordo
                  ac16_veiculodivulgacao = varchar(50) = Veículo de divulgação
-                  ac16_datarescisao = date = Data Rescisão
+                 ac16_datarescisao = date = Data Rescisão
                  ac16_valorrescisao = float8 = Valor da rescisão do acordo
                  ac16_semvigencia = bool = Contrato criado sem vigência
+                 ac16_licoutroorgao = int8 = licitacao de outros orgaos
+                 ac16_adesaoregpreco = int8 = adesao de registro de precos
                  ";
    //funcao construtor da classe
    function cl_acordoaux() {
@@ -223,7 +227,9 @@ class cl_acordoaux {
             $this->ac16_datarescisao = $this->ac16_datarescisao_ano."-".$this->ac16_datarescisao_mes."-".$this->ac16_datarescisao_dia;
          }
        }
-       $this->ac16_valorrescisao = ($this->ac16_valorrescisao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_valorrescisao"]:$this->ac16_valorrescisao);
+         $this->ac16_valorrescisao = ($this->ac16_valorrescisao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_valorrescisao"]:$this->ac16_valorrescisao);
+         $this->ac16_licoutroorgao = ($this->ac16_licoutroorgao === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_licoutroorgao"]:$this->ac16_licoutroorgao);
+         $this->ac16_adesaoregpreco = ($this->ac16_adesaoregpreco === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"]:$this->ac16_adesaoregpreco);
      }else{
        $this->ac16_sequencial = ($this->ac16_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"]:$this->ac16_sequencial);
      }
@@ -282,7 +288,28 @@ class cl_acordoaux {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ac16_datainicio == null ){
+
+       if($this->ac16_licoutroorgao == null && $this->ac16_tipoorigem == 5){
+           $this->erro_sql = " Campo Licitação de Outros Orgaos não informado.";
+           $this->erro_campo = "ac16_licoutroorgao";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+
+       if($this->ac16_adesaoregpreco == null && $this->ac16_adesaoregpreco == 4){
+           $this->erro_sql = " Campo Licitação de Outros Orgaos não informado.";
+           $this->erro_campo = "ac16_adesaoregpreco";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+       }
+
+       if($this->ac16_datainicio == null ){
        $this->erro_sql = " Campo Data de Início não informado.";
        $this->erro_campo = "ac16_datainicio_dia";
        $this->erro_banco = "";
@@ -300,15 +327,7 @@ class cl_acordoaux {
        $this->erro_status = "0";
        return false;
      }
-     /*if($this->ac16_resumoobjeto == null ){
-       $this->erro_sql = " Campo Resumo Objeto não informado.";
-       $this->erro_campo = "ac16_resumoobjeto";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }*/
+
      if($this->ac16_objeto == null ){
        $this->erro_sql = " Campo Objeto do Contrato não informado.";
        $this->erro_campo = "ac16_objeto";
@@ -327,16 +346,7 @@ class cl_acordoaux {
        $this->erro_status = "0";
        return false;
      }
-/*
-     if($this->ac16_lei == null ){
-       $this->erro_sql = " Campo Lei não informado.";
-       $this->erro_campo = "ac16_lei";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }*/
+
      if($this->ac16_acordogrupo == null ){
        $this->erro_sql = " Campo Acordo Grupo não informado.";
        $this->erro_campo = "ac16_acordogrupo";
@@ -400,15 +410,7 @@ class cl_acordoaux {
      if($this->ac16_acordocategoria == null ){
        $this->ac16_acordocategoria = "0";
      }
-     /*if($this->ac16_acordoclassificacao == null ){
-       $this->erro_sql = " Campo Sequencial da Classificação do Contrato não informado.";
-       $this->erro_campo = "ac16_acordoclassificacao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }*/
+
      if($this->ac16_numeroacordo == null ){
        $result = db_query("select nextval('acordo_ac16_numeroacordo_seq')");
         $this->ac16_numeroacordo = pg_result($result,0,0);
@@ -419,24 +421,6 @@ class cl_acordoaux {
      if($this->ac16_valorrescisao == null ){
        $this->ac16_valorrescisao = "0";
      }
-    /* if($this->ac16_formafornecimento == null ){
-       $this->erro_sql = " Campo Forma de fornecimento não informado.";
-       $this->erro_campo = "ac16_formafornecimento";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }*/
-    /* if($this->ac16_formapagamento == null ){
-       $this->erro_sql = " Campo Forma de pagamento não informado.";
-       $this->erro_campo = "ac16_formapagamento";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }*/
      if($ac16_sequencial == "" || $ac16_sequencial == null ){
        $result = db_query("select nextval('acordo_ac16_sequencial_seq')");
        if($result==false){
@@ -504,6 +488,8 @@ class cl_acordoaux {
                                       ,ac16_formapagamento
                                       ,ac16_licitacao
                                       ,ac16_semvigencia
+                                      ,ac16_licoutroorgao
+                                      ,ac16_adesaoregpreco
                        )
                 values (
                                 $this->ac16_sequencial
@@ -540,8 +526,9 @@ class cl_acordoaux {
                                ,'$this->ac16_formapagamento'
                                ,".($this->ac16_licitacao == "null" || $this->ac16_licitacao == ""?'null':$this->ac16_licitacao)."
                                ,'t'
+                               ,".($this->ac16_licoutroorgao == "" ? 'null' : $this->ac16_licoutroorgao)."
+                               ,".($this->ac16_adesaoregpreco == "" ? 'null' : $this->ac16_adesaoregpreco)."
                       )";
-
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -990,6 +977,33 @@ class cl_acordoaux {
        }
      }
 
+       if(($this->ac16_licoutroorgao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_veiculodivulgacao"])){
+           $sql  .= $virgula." ac16_licoutroorgao = '$this->ac16_licoutroorgao' ";
+           $virgula = ",";
+           if(($this->ac16_licoutroorgao) == null ){
+               $this->erro_sql = " Campo Licitação Outro Orgão não informado.";
+               $this->erro_campo = "ac16_licoutroorgao";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
+
+       if(($this->ac16_adesaoregpreco)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"])){
+           $sql  .= $virgula." ac16_adesaoregpreco = '$this->ac16_adesaoregpreco' ";
+           $virgula = ",";
+           if(($this->ac16_adesaoregpreco) == null ){
+               $this->erro_sql = " Campo Licitação Outro Orgão não informado.";
+               $this->erro_campo = "ac16_adesaoregpreco";
+               $this->erro_banco = "";
+               $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+               $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+               $this->erro_status = "0";
+               return false;
+           }
+       }
 
        if(trim($this->ac16_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])){
        $sql  .= $virgula." ac16_licitacao = $this->ac16_licitacao ";

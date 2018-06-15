@@ -605,8 +605,9 @@ switch($oParam->exec) {
             $oContrato->setCategoriaAcordo($oParam->contrato->iCategoriaAcordo);
             $oContrato->setTipoUnidadeTempoVigencia($oParam->contrato->iTipoUnidadeTempoVigencia);
             $oContrato->setQtdPeriodoVigencia($oParam->contrato->iQtdPeriodoVigencia);
-                //$oContrato->setClassificacao( new AcordoClassificacao($oParam->contrato->iClassificacao));
             $oContrato->setLicitacao($oParam->contrato->iLicitacao);
+            $oContrato->setiLicoutroorgao($oParam->contrato->iLicoutroorgao);
+            $oContrato->setiAdesaoregpreco($oParam->contrato->iAdesaoregpreco);
             $oContrato->setValorContrato($oParam->contrato->nValorContrato);
             $oContrato->setDataInclusao(date("Y-m-d"));
             $oContrato->save();
@@ -789,7 +790,8 @@ switch($oParam->exec) {
                     $oDadosContrato->iQtdPeriodoVigencia          = $oContrato->getQtdPeriodoVigencia();
                     $oDadosContrato->lEmergencial                 = $oContrato->isEmergencial();
                     $oDadosContrato->iLicitacao                   = $oContrato->getLicitacao();
-            //$oDadosContrato->iClassificacao               = $oContrato->getClassificacao()->getCodigo();
+                    $oDadosContrato->iLicoutroorgao               = $oContrato->getiLicoutroorgao();
+                    $oDadosContrato->iAdesaoregpreco              = $oContrato->getiAdesaoregpreco();
                     $oDadosContrato->nValorContrato               = $oContrato->getValorContrato();
 
                     $oRetorno->contrato = $oDadosContrato;

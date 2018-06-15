@@ -391,6 +391,18 @@ class Acordoaux
 
     protected $iLicitacao;
 
+    /**
+     * licitacao de outros orgaos
+     * @var
+     */
+    protected $iLicoutroorgao;
+
+    /**
+     * licitacao de outros orgaos
+     * @var
+     */
+
+    protected $iAdesaoregpreco;
 
     /**
      * Modalidade
@@ -420,6 +432,40 @@ class Acordoaux
      */
     private $nValorRescisao;
 
+    /**
+     * @return mixed
+     */
+    public function getiLicoutroorgao()
+    {
+        return $this->iLicoutroorgao;
+    }
+
+    /**
+     * @param mixed $iLicoutroorgao
+     */
+    public function setiLicoutroorgao($iLicoutroorgao)
+    {
+        $this->iLicoutroorgao = $iLicoutroorgao;
+        return $this;
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getiAdesaoregpreco()
+    {
+        return $this->iAdesaoregpreco;
+    }
+
+    /**
+     * @param mixed $iAdesaoregpreco
+     */
+    public function setiAdesaoregpreco($iAdesaoregpreco)
+    {
+        $this->iAdesaoregpreco = $iAdesaoregpreco;
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -534,7 +580,8 @@ class Acordoaux
                 }else{
                     $this->setLicitacao($oDadosAcordo->e54_numerl);
                 }
-
+                $this->setiAdesaoregpreco($oDadosAcordo->ac16_adesaoregpreco);
+                $this->setiLicoutroorgao($oDadosAcordo->ac16_licoutroorgao);
                 $this->setModalidade($oDadosAcordo->modalidade);
                 $this->setTipo($oDadosAcordo->tipo);
 
@@ -1537,6 +1584,8 @@ class Acordoaux
         $oDaoAcordo->ac16_numeroacordo = $this->getNumeroAcordo();
         $oDaoAcordo->ac16_licitacao = $this->getLicitacao();
         $oDaoAcordo->ac16_semvigencia = 'false';
+        $oDaoAcordo->ac16_licoutroorgao = $this->getiLicoutroorgao();
+        $oDaoAcordo->ac16_adesaoregpreco = $this->getiAdesaoregpreco();
         $iCodigoAcordo = $this->getCodigoAcordo();
 
         /**

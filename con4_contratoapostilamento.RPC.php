@@ -92,7 +92,6 @@ try {
       break;
 
     case "processarApostilamento":
-
       $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
       $oContrato->apostilar($oParam->aItens, $oParam->oApostila, $oParam->datainicial, $oParam->datafinal, $oParam->aSelecionados);
       break;

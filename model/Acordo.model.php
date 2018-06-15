@@ -391,6 +391,18 @@ class Acordo
 
     protected $iLicitacao;
 
+    /**
+     * licitacao de outros orgaos
+     * @var
+     */
+    protected $iLicoutroorgao;
+
+    /**
+     * licitacao de outros orgaos
+     * @var
+     */
+
+    protected $iAdesaoregpreco;
 
     /**
      * Modalidade
@@ -426,6 +438,41 @@ class Acordo
      * @var boolean
      */
     private $lSituacaoVigencia;
+
+    /**
+     * @return mixed
+     */
+    public function getiLicoutroorgao()
+    {
+        return $this->iLicoutroorgao;
+    }
+
+    /**
+     * @param mixed $iLicoutroorgao
+     */
+    public function setiLicoutroorgao($iLicoutroorgao)
+    {
+        $this->iLicoutroorgao = $iLicoutroorgao;
+        return $this;
+
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getiAdesaoregpreco()
+    {
+        return $this->iAdesaoregpreco;
+    }
+
+    /**
+     * @param mixed $iAdesaoregpreco
+     */
+    public function setiAdesaoregpreco($iAdesaoregpreco)
+    {
+        $this->iAdesaoregpreco = $iAdesaoregpreco;
+        return $this;
+    }
 
     /**
      * @return mixed
@@ -556,7 +603,8 @@ class Acordo
           } else {
             $this->setLicitacao($oDadosAcordo->e54_numerl);
           }
-
+          $this->setiAdesaoregpreco($oDadosAcordo->ac16_adesaoregpreco);
+          $this->setiLicoutroorgao($oDadosAcordo->ac16_licoutroorgao);
           $this->setModalidade($oDadosAcordo->modalidade);
           $this->setTipo($oDadosAcordo->tipo);
 
@@ -1550,6 +1598,8 @@ class Acordo
       $oDaoAcordo->ac16_valor                    = $this->getValorContrato();
       $oDaoAcordo->ac16_numeroacordo             = $this->getNumeroAcordo();
       $oDaoAcordo->ac16_licitacao                = $this->getLicitacao();
+      $oDaoAcordo->ac16_licoutroorgao            = $this->getiLicoutroorgao();
+      $oDaoAcordo->ac16_adesaoregpreco           = $this->getiAdesaoregpreco();
       $iCodigoAcordo                             = $this->getCodigoAcordo();
 
         /**
@@ -3582,9 +3632,8 @@ class Acordo
       $nValorItens = 0;
 
       foreach ($aItens as $oItem) {
-        $nValorItens += round($oItem->valorunitario * $oItem->quantidade, 2);
+        $nValorItens += round(abs($oItem->valorapostilado), 2);
       }
-
 
         /**
          * cancelamos a ultima posição do acordo.
@@ -3621,6 +3670,7 @@ class Acordo
         /**
          * Vincular o acordo com o apostilamento
          */
+
         $oApostila->valorapostila = $nValorItens;
         $oNovaPosicao->salvarApostilamento($oApostila, $this->getDataAssinatura());
 
@@ -3634,7 +3684,7 @@ class Acordo
 
           $oItemContrato = $this->getUltimaPosicao(true)->getItemByCodigo($oItem->codigo);
 
-          $oNovoItem = new AcordoItem(null);
+              $oNovoItem = new AcordoItem(null);
           $oNovoItem->setCodigoPosicao($oNovaPosicao->getCodigo());
 
           $oNovoItem->setCodigoPosicaoTipo($oApostila->tipoalteracaoapostila);
@@ -3668,6 +3718,7 @@ class Acordo
           $oNovoItem->setQuantidade((float) $oItem->quantidade);
           $oNovoItem->setValorUnitario((float) $oItem->valorunitario);
           $oNovoItem->setValorTotal(round($oItem->valorunitario * $oItem->quantidade, 2));
+          $oNovoItem->setValorAditado($oItem->valorapostilado);
 
             /**
              * Caso seja servico e nao controlar quantidade,
@@ -3680,9 +3731,9 @@ class Acordo
               $nValorComparar = $oItemContrato->getValorUnitario();
             }
 
-
-            if ((($oNovoItem->getValorUnitario() > $nValorComparar && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA) || ($oNovoItem->getValorUnitario() < $nValorComparar && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA) || ($oNovoItem->getValorUnitario() == $nValorComparar && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_SEMALTERACAO_APOSTILA)) && in_array($oItem->codigoitem, $aSelecionados)) {
-              throw new Exception("Valor do item {$oItem->codigoitem} não compatível com o Tipo de alteração Apostila.");
+            if (($oItem->valorapostilado < 0 && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_ACRESCIMOVALOR_APOSTILA)
+                || ($oItem->valorapostilado > 0 && $oApostila->tipoalteracaoapostila != AcordoPosicao::TIPO_DECRESCIMOVALOR_APOSTILA)) {
+                throw new Exception("Valor do item Cod {$oItem->codigoitem} não compatível com o Tipo de alteração Apostila.");
             }
 
             foreach ($oItem->dotacoes as $oDotacao) {
