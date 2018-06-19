@@ -36,6 +36,7 @@ class Instituicao {
   const TIPO_INSTIT_RPPS_SAUDE = 6;
   const TIPO_INSTIT_EMPRESA_PUBLICA = 8;
   const TIPO_INSTIT_SOCIEDADE_ECONOMIA_MISTA = 9;
+  CONST COD_CLI_PMPIRAPORA = 58;
 
   /**
    * Código da Instituicao

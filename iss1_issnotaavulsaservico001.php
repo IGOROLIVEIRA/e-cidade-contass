@@ -66,6 +66,15 @@ $lGeraNota              = false;
 $emitenota              = true;
 $rsPar                  = $clparissqn->sql_record($clparissqn->sql_query(null,"*"));
 $oPar                   = db_utils::fieldsMemory($rsPar,0);
+
+/**
+ * Em Pmpirapora o tipo de débito para a nota avulsa tem que ser diferente do da NFSe devido à taxa de expediente.
+ * @todo criar um parametro para guardar o tipo de debito para nota avulsa.
+ */
+$oInstit = new Instituicao(db_getsession('DB_instit'));
+if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
+  $oPar->q60_tipo = 61;
+}
 if(isset($post->alterar) || isset($post->excluir) || isset($post->incluir)){
   $sqlerro = false;
   /*
@@ -156,9 +165,18 @@ if (isset($post->recibo)){
 			$oNum       = db_utils::fieldsMemory($rsNum,0);
       //Codigo numpre do Recibo
 			$rsNumnov   = pg_exec("select nextval('numpref_k03_numpre_seq') as k03_numnov");
-			$oNumnov    = db_utils::fieldsMemory($rsNumnov,0);
-      $aDataPgto  = explode("-",$oNot->q51_dtemiss);
-      $dataPagto  = date("Y-m-d",mktime(0,0,0,$aDataPgto[1],$aDataPgto[2]+$oPar->q60_notaavulsadiasprazo,$aDataPgto[0]));
+      $rsTom = $clissnotaavulsatomador->sql_record($clissnotaavulsatomador->sql_query_tomador($post->q62_issnotaavulsa));
+      $oTom  = db_utils::fieldsMemory($rsTom,0);
+      /**
+      * A data do vencimento do ISSQN é sempre no mês subsequente ao do fato gerador
+      * $oPar->q60_notaavulsadiasprazo -> dia do vencimento
+      */
+      $oDataPgto  = new DateTime(date($oTom->q53_dtservico));
+      $oDataPgto->modify('+ 1 month');
+      $oNumnov    = db_utils::fieldsMemory($rsNumnov,0);
+      $aDataPgto  = explode("-",$oDataPgto->format('Y-m-d'));
+      $dataPagto  = date("Y-m-d",mktime(0,0,0,$aDataPgto[1],$oPar->q60_notaavulsadiasprazo,$aDataPgto[0]));
+
       $clarrecad->k00_numpre = $oNum->k03_numpre;
 			$clarrecad->k00_numpar = 1;
 			$clarrecad->k00_numcgm = $oNot->q02_numcgm;
@@ -237,8 +255,6 @@ if (isset($post->recibo)){
 														                                         sum(q62_vlrdeducao) as tvlrdeducoes,
 																																		 sum(q62_vlrtotal) as tvlrtotal",
 																															null,"q62_issnotaavulsa=".$post->q62_issnotaavulsa));
-			 $rsTom = $clissnotaavulsatomador->sql_record($clissnotaavulsatomador->sql_query_tomador($post->q62_issnotaavulsa));
-			 $oTom  = db_utils::fieldsMemory($rsTom,0);
 		   $oObs  = db_utils::fieldsmemory($rsObs,0);
        $obs   = "Referente a nota fiscal avulsa nº ".$oNot->q51_numnota."\n";
 			 $obs  .= "Tomador : ".$oTom->z01_cgccpf." - ".$oTom->z01_nome."\n";
