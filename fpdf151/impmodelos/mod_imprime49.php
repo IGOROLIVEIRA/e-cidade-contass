@@ -1,6 +1,6 @@
 <?
 
-$sSQLTomadorDBConfig  = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}'";
+$sSQLTomadorDBConfig  = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
 $rsTomadorDBConfig    = db_query($sSQLTomadorDBConfig);
 $lTomadorEhPrefeitura = !!pg_num_rows($rsTomadorDBConfig);
 
