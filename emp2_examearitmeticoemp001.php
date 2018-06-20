@@ -17,14 +17,14 @@ include("dbforms/db_classesgenericas.php");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table valign="top" marginwidth="0" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr> 
+  <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
+  <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <form name='form1'>
         <fieldset>
           <legend><b>Exame Aritmético</b></legend>
@@ -48,11 +48,18 @@ include("dbforms/db_classesgenericas.php");
           	 </select>
           	 </td>
           	</tr>
-          	
+
           	<tr>
-             
+             <td><b>Exibir histórico do empenho:</b></td>
+             <td>
+                 <select name="ExibirHistoricoDoEmpenho" id="ExibirHistoricoDoEmpenho">
+                     <option value="01">Sim</option>
+                     <option value="02">Não</option>
+                 </select>
+             </td>
+
             </tr>
-            
+
             <tr>
              <!--  <td><b>Tipos de Pastas:</b></td>-->
              <td>
@@ -79,7 +86,7 @@ include("dbforms/db_classesgenericas.php");
 				    ?>
              </td>
             </tr>
-          	
+
           </table>
         </fieldset>
       </form>
@@ -87,7 +94,7 @@ include("dbforms/db_classesgenericas.php");
   </tr>
   <tr>
     <td align='center'>
-      <input name='pesquisar' type='button' value='Consultar' onclick='js_abre();'>      
+      <input name='pesquisar' type='button' value='Consultar' onclick='js_abre();'>
     </td>
   </tr>
 </table>
@@ -97,31 +104,32 @@ include("dbforms/db_classesgenericas.php");
 <script>
 
 function js_abre(){
-	
+
 	   obj = document.form1;
 	   query  = "MesReferencia="+obj.MesReferencia.value;
 	  // query += "&tipoExame="+obj.tipoExame.value;
 	  // query += "&tipoPasta="+obj.tipoPasta.value;
 	   query += "&recursos="+js_campo_recebe_valores_recursos ();
-	   
+     query += "&ExibirHistoricoDoEmpenho="+obj.ExibirHistoricoDoEmpenho.value;
+
 	   jan = window.open('emp2_examearitmetico002.php?'+query,
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
-	  
+
 	}
 
 function mostra_tipo_pasta() {
-  
+
   if (document.getElementById("tipoExame").selectedIndex == 1) {
-	  
+
 	  document.getElementById("tipoPasta").options[1].style.visibility = "hidden";
 	  document.getElementById("tipoPasta").options[2].style.visibility = "hidden";
 	  document.getElementById("tipoPasta").options[3].style.visibility = "hidden";
 	  document.getElementById("tipoPasta").options[4].style.visibility = "hidden";
 	  document.getElementById("tipoPasta").options[5].style.visibility = "hidden";
 	  parent.document.formaba.db_slip.disabled = 1;
-	 
+
 	} else {
 
 	  document.getElementById("tipoPasta").options[1].style.visibility = "visible";
