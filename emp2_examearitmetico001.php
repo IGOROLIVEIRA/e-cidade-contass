@@ -19,7 +19,7 @@ $clcriaabas     = new cl_criaabas;
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="25%" height="18">&nbsp;</td>
     <td width="25%">&nbsp;</td>
     <td width="25%">&nbsp;</td>
@@ -27,19 +27,19 @@ $clcriaabas     = new cl_criaabas;
   </tr>
 </table>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
      <?
-	 $clcriaabas->identifica = array("db_empenhos"=>"Empenho","db_slip"=>"Slip"); 
-	 $clcriaabas->src = array("db_empenhos"=>"emp2_examearitmeticoemp001.php","db_slip"=>"emp2_examearitmeticoslip001.php"); 
-	 $clcriaabas->cria_abas(); 
-       ?> 
+	 $clcriaabas->identifica = array("db_empenhos"=>"Empenho","db_slip"=>"Slip");
+	 $clcriaabas->src = array("db_empenhos"=>"emp2_examearitmeticoemp001.php","db_slip"=>"emp2_examearitmeticoslip001.php");
+	 $clcriaabas->cria_abas();
+       ?>
        </td>
     </tr>
   </table>
   <form name="form1">
   </form>
-      <? 
+      <?
 	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
       ?>
   </body>
