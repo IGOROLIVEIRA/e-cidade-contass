@@ -985,7 +985,9 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
         /*
          * REGISTRO 50 CONTAS ENCERRADAS
          */
-        $sSqlCtbEncerradas2 = "select distinct si09_codorgaotce,si95_codtceant from  acertactb left join infocomplementaresinstit on si09_instit = ".db_getsession("DB_instit");
+        $sSqlCtbEncerradas2 = "select distinct si09_codorgaotce,si95_codtceant from  acertactb 
+        join conplanoreduz on c61_reduz = si95_reduz and c61_anousu = ".db_getsession("DB_anousu")." 
+         join infocomplementaresinstit on c61_instit = si09_instit and si09_instit = ".db_getsession("DB_instit");
         $rsCtbEncerradas2 = db_query($sSqlCtbEncerradas2);
         if (pg_num_rows($rsCtbEncerradas2) != 0) {
 

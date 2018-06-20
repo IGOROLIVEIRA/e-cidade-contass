@@ -2593,6 +2593,25 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
     }
 
+    if(db_getsession("DB_anousu")==2018){
+      $sSqlEncerradas = "select distinct si95_reduz,si95_codtceant from  acertactb 
+        join conplanoreduz on c61_reduz = si95_reduz and c61_anousu = ".db_getsession("DB_anousu")." 
+         join infocomplementaresinstit on c61_instit = si09_instit and si09_instit = ".db_getsession("DB_instit")." order by si95_reduz desc";
+      $rsEncerradas = db_query($sSqlEncerradas);
+      $aEncerradas = array();
+      $aEncerradas['si95_reduz'][]     = array();
+      $aEncerradas['si95_codtceant'][] = array();
+      if (pg_num_rows($rsEncerradas) != 0) {
+        for ($iCont = 0; $iCont < pg_num_rows($rsEncerradas); $iCont++) {
+
+          $oEncerradas = db_utils::fieldsMemory($rsEncerradas, $iCont);
+          $aEncerradas['si95_reduz'][$oEncerradas->si95_codtceant]     = $oEncerradas->si95_reduz;
+          $aEncerradas['si95_codtceant'][] = $oEncerradas->si95_codtceant;
+
+        }
+      } 
+    }
+
     /*
     * DESAGRUPANDO O REGISTRO 10 PARA INSERIR NAS TABELAS DO SICOM
     */
@@ -2840,6 +2859,30 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $obalreg17->si184_mes = $reg17->si184_mes;
         $obalreg17->si184_reg10 = $obalancete10->si177_sequencial;
 
+        if(db_getsession("DB_anousu")==2018 
+          && $this->sDataFinal['5'] . $this->sDataFinal['6']==1
+          && in_array($obalreg17->si184_codctb,$aEncerradas['si95_codtceant'])) {
+          $obalreg17Encerrar = clone $obalreg17;
+          if($obalreg17Encerrar->si184_naturezasaldoinicialctb == 'D') {
+            $obalreg17Encerrar->si184_totalcreditosctb = $obalreg17Encerrar->si184_saldofinalctb;
+          } else {
+            $obalreg17Encerrar->si184_totaldebitosctb = $obalreg17Encerrar->si184_saldofinalctb;
+          }
+          $obalreg17Encerrar->si184_saldofinalctb = '0.00';
+          $obalreg17Encerrar->incluir(null);
+
+          $obalreg17->si184_codctb = $aEncerradas['si95_reduz'][$obalreg17->si184_codctb];
+          $obalreg17->si184_saldoinicialctb = '0.00';
+          if($obalreg17->si184_naturezasaldoinicialctb == 'D') {
+            $obalreg17->si184_totaldebitosctb = $obalreg17->si184_saldofinalctb;
+            $obalreg17->si184_totalcreditosctb = '0.00';
+          } else {
+            $obalreg17->si184_totalcreditosctb = $obalreg17->si184_saldofinalctb;
+            $obalreg17->si184_totaldebitosctb = '0.00';
+          }
+        } else if(db_getsession("DB_anousu")==2018 && in_array($obalreg17->si184_codctb,$aEncerradas['si95_codtceant'])){
+          $obalreg17->si184_codctb = $aEncerradas['si95_reduz'][$obalreg17->si184_codctb];
+        }
         $obalreg17->incluir(null);
 
         if ($obalreg17->erro_status == 0) {
