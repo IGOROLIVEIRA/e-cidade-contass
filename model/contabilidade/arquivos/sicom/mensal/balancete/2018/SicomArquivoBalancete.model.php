@@ -2880,6 +2880,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             $obalreg17->si184_totalcreditosctb = $obalreg17->si184_saldofinalctb;
             $obalreg17->si184_totaldebitosctb = '0.00';
           }
+
+          $obalancete10->si177_totaldebitos  += $obalreg17->si184_saldofinalctb;
+          $obalancete10->si177_totalcreditos += $obalreg17->si184_saldofinalctb;
+          $obalancete10->alterar($obalancete10->si177_sequencial) ;
         } else if(db_getsession("DB_anousu")==2018 && in_array($obalreg17->si184_codctb,$aEncerradas['si95_codtceant'])){
           $obalreg17->si184_codctb = $aEncerradas['si95_reduz'][$obalreg17->si184_codctb];
         }
