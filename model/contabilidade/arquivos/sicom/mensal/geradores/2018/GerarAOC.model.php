@@ -128,7 +128,7 @@ class GerarAOC extends GerarAM
             $aCSVAOC14['si42_origemrecalteracao'] = $this->padLeftZero($aAOC14['si42_origemrecalteracao'], 2);
             $aCSVAOC14['si42_tipoalteracao']      = substr($aAOC14['si42_tipoalteracao'], 0, 1);
             $aCSVAOC14['si42_codorgao']           = $this->padLeftZero($aAOC14['si42_codorgao'], 2);
-            $aCSVAOC14['si42_codunidadesub']      = substr($aAOC14['si42_codunidadesub'], 0, 5);
+            $aCSVAOC14['si42_codunidadesub']      = substr($aAOC14['si42_codunidadesub'], 0, strlen($aAOC14['si42_codunidadesub']) > 5 ? 8 : 5);
             $aCSVAOC14['si42_codfuncao']          = $this->padLeftZero($aAOC14['si42_codfuncao'], 2);
             $aCSVAOC14['si42_codsubfuncao']       = $this->padLeftZero($aAOC14['si42_codsubfuncao'], 3);
             $aCSVAOC14['si42_codprograma']        = $this->padLeftZero($aAOC14['si42_codprograma'], 4);

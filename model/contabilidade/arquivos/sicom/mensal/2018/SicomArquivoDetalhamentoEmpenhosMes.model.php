@@ -392,10 +392,10 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
 
 
 
-            if ($sTrataCodUnidade == 2) {
+            if ($sTrataCodUnidade == 1) {
 
-                $sCodUnidade = str_pad($oEmpenho->o58_orgao, 3, "0", STR_PAD_LEFT);
-                $sCodUnidade .= str_pad($oEmpenho->o58_unidade, 2, "0", STR_PAD_LEFT);
+                $sCodUnidade = str_pad($oEmpenho->o58_orgao, 2, "0", STR_PAD_LEFT);
+                $sCodUnidade .= str_pad($oEmpenho->o58_unidade, 3, "0", STR_PAD_LEFT);
 
 
             } else {
