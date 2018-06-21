@@ -1,4 +1,4 @@
-<?
+    <?
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2012  DBselller Servicos de Informatica             
@@ -153,6 +153,7 @@ $db_botao = true;
       </table>
       </center>
       <input name="incluir" type="button" id="db_opcao" onclick="js_enviardados();" value="Gerar">
+      <input name="incluir" type="button" id="db_opcao" onclick="js_enviardadosxls();" value="Gerar Excel">
       </form>
     </center>
     </td>
@@ -199,5 +200,43 @@ function js_enviardados(){
     jan.moveTo(0,0);
 
   }
+}
+
+
+function js_enviardadosxls(){
+
+    if(document.form1.anofolha.value == ""){
+        alert("Informe o ano a ser pesquisado.");
+        document.form1.anofolha.focus();
+    }else if(document.form1.mesfolha.value == ""){
+        alert("Informe o mês a ser pesquisado.");
+        document.form1.mesfolha.focus();
+    }else{
+
+        stringretorno = "?anofolha=" + document.form1.anofolha.value;
+        stringretorno+= "&mesfolha=" + document.form1.mesfolha.value;
+        stringretorno+= "&ano=" + document.form1.ano.value;
+        stringretorno+= "&sel="+document.form1.selecao.value;
+        stringretorno+= "&tipo="+document.form1.tipo.value;
+
+        stringretorno+= "&ponts=";
+        virstrretorno = "";
+        for(i=0;i<document.form1.objeto2.length;i++){
+            stringretorno+= virstrretorno+document.form1.objeto2.options[i].value;
+            virstrretorno = ",";
+        }
+
+        stringretorno+= "&rubrs=";
+        virstrretorno = "";
+        for(i=0;i<document.form1.selrubri.length;i++){
+            stringretorno+= virstrretorno+document.form1.selrubri.options[i].value;
+            virstrretorno = ",";
+        }
+
+
+        jan = window.open('pes2_rubricasanuais003.php' + stringretorno,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+        jan.moveTo(0,0);
+
+    }
 }
 </script>
