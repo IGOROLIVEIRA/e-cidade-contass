@@ -198,6 +198,7 @@ if ($oParametros->order == 1) {
 
   $sCampoOrdenar = "e20_descricao";
   $sHeaderOrdem  = "Descrição";
+
 }
 /*OC4581*/
 /*if ($oParametros->iTipoLancamento != "" || $oParametros->isubtipo != "" || $oParametros->idesdobramento != "") {
@@ -225,6 +226,19 @@ if ($oParametros->group == 2) {
     $sCampoOrdenar = "z01_numcgm";
   } else {
     $sCampoOrdenar = "z01_nome";
+  }
+
+} else if($oParametros->group == 4){
+
+  // Quebra por ano
+  $sCampoQuebrar = "e60_anousu";
+  $sNomeQuebra   = "Ano: ";
+  $sHeaderQuebra = "Ano";
+
+  if ($oParametros->order == 1) {
+    $sCampoOrdenar = "e60_anousu";
+  } else {
+    $sCampoOrdenar = "c60_descr";
   }
 
 }
@@ -266,6 +280,8 @@ for ($i = 0; $i < $iTotalRetencoes; $i++) {
 
        if ($oParametros->group == 3) {
          $aRetencoes[$oRetencao->$sCampoQuebrar]->texto    = $oRetencao->$sCampoQuebrar." - ".$oRetencao->$sNomeQuebra . " - CPF/CNPJ: $cCnpjCpf - PIS: $cPis " . (strlen(trim($cCbo)) == 0?"":" - CBO: $cCbo");
+       } else if($oParametros->group == 4){
+           $aRetencoes[$oRetencao->$sCampoQuebrar]->texto    = $oRetencao->$sCampoQuebrar;
        } else {
          $aRetencoes[$oRetencao->$sCampoQuebrar]->texto    = $oRetencao->$sCampoQuebrar." - ".$oRetencao->$sNomeQuebra;
        }
@@ -340,6 +356,14 @@ foreach ($aRetencoes as $oQuebra) {
       }
 
       if ($oQuebra->texto != "") {
+          // Quebra por ano
+
+          if($oParametros->group == 4){
+              $oPdf->SetFont('Times', "b",$iTamFonte+4);
+              $oPdf->cell(8,5, $sNomeQuebra,0,0);
+          }
+
+        $oPdf->SetFont('Times', "",$iTamFonte+4);
         $oPdf->cell(0,5, $oQuebra->texto,0,1);
       }
 
