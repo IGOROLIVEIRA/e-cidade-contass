@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -80,15 +80,24 @@ db_fieldsmemory($rsLicitacao,0);
 
 /*pega a equipe de pregao*/
 
-$sSqlequipe = "SELECT l45_numatonomeacao,
+/*$sSqlequipe = "SELECT l45_numatonomeacao,
                       z01_nome as pregoeiro
                FROM licpregao
                INNER JOIN licpregaocgm ON l46_licpregao = l45_sequencial
                INNER JOIN cgm ON z01_numcgm = l46_numcgm
                WHERE l45_sequencial = {$l20_equipepregao}
-               AND l46_tipo = 6";
-$rsDadosEquipe = db_query($sSqlequipe);
+               AND l46_tipo = 6";*/
+$sSqlequipe = "
+    SELECT DISTINCT l31_numcgm,
+    (SELECT cgm.z01_nome
+     FROM cgm
+     WHERE z01_numcgm = l31_numcgm) AS pregoeiro
+FROM liccomissaocgm
+WHERE l31_licitacao={$l20_codigo}
+    AND l31_tipo = '7'
+";
 
+$rsDadosEquipe = db_query($sSqlequipe);
 db_fieldsmemory($rsDadosEquipe,0);
 
 $l20_datacria=substr($l20_datacria,0,4);
