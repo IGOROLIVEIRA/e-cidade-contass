@@ -35,84 +35,97 @@
  */
 AjaxRequest = function(sPathFile, oParameters, fnCallback) {
 
-  /**
-   * Código da requisição
-   * @type {number}
-   */
-  this.id = 0;
+    /**
+     * Código da requisição
+     * @type {number}
+     */
+    this.id = 0;
 
-  /**
-   * Caminho do arquivo que receberá a requisição
-   * @type {string}
-   */
-  this.sPathFile = sPathFile;
+    /**
+     * Caminho do arquivo que receberá a requisição
+     * @type {string}
+     */
+    this.sPathFile = sPathFile;
 
-  /**
-   * Função de callback que será executada após a conclusão da requisição
-   * - Ela será devolvida com dois parâmetros fnCallback(oObject, lErro)
-   * @type {Function}
-   */
-  this.fnCallback = fnCallback;
+    /**
+     * Função de callback que será executada após a conclusão da requisição
+     * - Ela será devolvida com dois parâmetros fnCallback(oObject, lErro)
+     * @type {Function}
+     */
+    this.fnCallback = fnCallback;
 
-  /**
-   * Parâmetros da requisição
-   * @type {object}
-   */
-  this.oParameters = oParameters;
-
-  /**
-   * Asynchronous
-   * @type {boolean}
-   */
-  this.lAsynchronous = true;
-
-  /**
-   * Mensagem padrão
-   * @type {string}
-   */
-  this.sMessage = "Aguarde...";
-
-  /**
-   * Arquivos
-   * @type {Array}
-   */
-  this.aFiles = [];
-
-  /**
-   * @param {boolean} lAsynchronous
-   */
-  this.asynchronous = function (lAsynchronous) {
-    this.lAsynchronous = lAsynchronous;
-    return this;
-  };
-
-  /**
-   * @param sMessage
-   */
-  this.setMessage = function(sMessage) {
-
-    this.sMessage = sMessage;
-    return this;
-  };
-
-
-  this.setParameters = function(oParameters) {
+    /**
+     * Parâmetros da requisição
+     * @type {object}
+     */
     this.oParameters = oParameters;
-  };
 
-  this.setCallBack   = function(fnCallBack) {
-    this.fnCallback = fnCallBack;
-  }
+    /**
+     * Asynchronous
+     * @type {boolean}
+     */
+    this.lAsynchronous = true;
 
-  /**
-   * Adiciona um arquivo a ser carregado
-   * @param {object} oInput
-   */
-  this.addFileInput = function(oInput) {
+    /**
+     * Mensagem padrão
+     * @type {string}
+     */
+    this.sMessage = "Aguarde...";
 
-    this.aFiles.push(oInput);
-    return this;
-  }
+    /**
+     * Arquivos
+     * @type {Array}
+     */
+    this.aFiles = [];
+
+    /**
+     * @param {boolean} lAsynchronous
+     */
+    this.asynchronous = function (lAsynchronous) {
+        this.lAsynchronous = lAsynchronous;
+        return this;
+    };
+
+    /**
+     * @param sMessage
+     */
+    this.setMessage = function(sMessage) {
+
+        this.sMessage = sMessage;
+        return this;
+    };
+
+
+    this.setParameters = function(oParameters) {
+        this.oParameters = oParameters;
+    };
+
+    this.setCallBack   = function(fnCallBack) {
+        this.fnCallback = fnCallBack;
+    }
+
+    /**
+     * Adiciona um arquivo a ser carregado
+     * @param {object} oInput
+     */
+    this.addFileInput = function(oInput) {
+
+        this.aFiles.push(oInput);
+        return this;
+    }
+};
+
+/**
+ * ID unico da requisicao
+ * @type {number}
+ */
+AjaxRequest._uid = 0;
+
+/**
+ * Construtor estátitco
+ */
+AjaxRequest.create = function(sPathFile, oParameters, fnCallback) {
+    return new AjaxRequest(sPathFile, oParameters, fnCallback);
 };
 
 /**
@@ -120,73 +133,73 @@ AjaxRequest = function(sPathFile, oParameters, fnCallback) {
  */
 AjaxRequest.prototype.execute = function() {
 
-  js_divCarregando(this.sMessage, 'msgBox' + (++this.id));
+    js_divCarregando(this.sMessage, 'msgBox' + (++this.id));
 
-  var oRequest = {
-    method : 'post',
-    asynchronous : this.lAsynchronous,
-    onComplete : function(oAjax) {
+    var oRequest = {
+        method : 'post',
+        asynchronous : this.lAsynchronous,
+        onComplete : function(oAjax) {
 
-        js_removeObj('msgBox' + this.id);
-        var oReturn = JSON.parse(oAjax.responseText);
+            js_removeObj('msgBox' + this.id);
+            var oReturn = JSON.parse(oAjax.responseText);
 
-        if (oReturn.erro == undefined) {
-          oReturn.erro = true;
-          console.log("Variável para controle de erro não localizada. Crie uma variavel no RPC chamada 'erro'.");
-        }
+            if (oReturn.erro == undefined) {
+                oReturn.erro = true;
+                console.log("Variável para controle de erro não localizada. Crie uma variavel no RPC chamada 'erro'.");
+            }
 
-        this.fnCallback(oReturn, oReturn.erro);
-      }.bind(this)
-  };
-
-  /**
-   * Verifica se deve fazer upload de algum arquivo e muda os cabeçalhos da requisição
-   */
-  if (this.aFiles.length > 0) {
+            this.fnCallback(oReturn, oReturn.erro);
+        }.bind(this)
+    };
 
     /**
-     * Cria o formulario de upload com os campos de arquivos
+     * Verifica se deve fazer upload de algum arquivo e muda os cabeçalhos da requisição
      */
-    var oForm = new FormData();
+    if (this.aFiles.length > 0) {
 
-    oForm.append("json", Object.toJSON(this.oParameters));
+        /**
+         * Cria o formulario de upload com os campos de arquivos
+         */
+        var oForm = new FormData();
 
-    this.aFiles.each(function(oFile) {
-      oForm.append(oFile.name, oFile.files.item(0));
-    });
+        oForm.append("json", Object.toJSON(this.oParameters));
 
-    oRequest.contentType = '';
-    oRequest.encoding    = false;
-    oRequest.postBody    = oForm;
+        this.aFiles.each(function(oFile) {
+            oForm.append(oFile.name, oFile.files.item(0));
+        });
 
-    /**
-     * Altera a função setRequestHeader do XMLHttpRequest quando for utilizar o FormData
-     *
-     * No Chrome esta setando a propriedade Content-Type vazio devido a uma limitação
-     * do Prototype.js, o que acaba ocasionando um erro na requisição
-     */
-    if (window.XMLHttpRequest) {
+        oRequest.contentType = '';
+        oRequest.encoding    = false;
+        oRequest.postBody    = oForm;
 
-      var bkpSetRequestHeader = XMLHttpRequest.prototype.setRequestHeader;
+        /**
+         * Altera a função setRequestHeader do XMLHttpRequest quando for utilizar o FormData
+         *
+         * No Chrome esta setando a propriedade Content-Type vazio devido a uma limitação
+         * do Prototype.js, o que acaba ocasionando um erro na requisição
+         */
+        if (window.XMLHttpRequest) {
 
-      XMLHttpRequest.prototype.setRequestHeader = function(header, value) {
+            var bkpSetRequestHeader = XMLHttpRequest.prototype.setRequestHeader;
 
-        if (value != '') {
-          bkpSetRequestHeader.call(this, header, value);
+            XMLHttpRequest.prototype.setRequestHeader = function(header, value) {
+
+                if (value != '') {
+                    bkpSetRequestHeader.call(this, header, value);
+                }
+            }
         }
-      }
+
+    } else {
+        oRequest.parameters = 'json=' + Object.toJSON(this.oParameters);
     }
 
-  } else {
-    oRequest.parameters = 'json=' + Object.toJSON(this.oParameters);
-  }
+    new Ajax.Request(this.sPathFile, oRequest);
 
-  new Ajax.Request(this.sPathFile, oRequest);
-
-  /**
-   * Restaura a função setRequestHeader do XMLHttpRequest
-   */
-  if (this.aFiles.length > 0 && window.XMLHttpRequest) {
-    XMLHttpRequest.prototype.setRequestHeader = bkpSetRequestHeader;
-  }
+    /**
+     * Restaura a função setRequestHeader do XMLHttpRequest
+     */
+    if (this.aFiles.length > 0 && window.XMLHttpRequest) {
+        XMLHttpRequest.prototype.setRequestHeader = bkpSetRequestHeader;
+    }
 };
