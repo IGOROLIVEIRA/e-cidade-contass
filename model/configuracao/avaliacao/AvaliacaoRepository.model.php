@@ -57,7 +57,6 @@
      * @return Avaliacao
      */
     public static function getAvaliacaoByCodigo($iCodigoAvaliacao) {
-      
       if (!array_key_exists($iCodigoAvaliacao, AvaliacaoRepository::getInstance()->aAvaliacao)) {
         AvaliacaoRepository::getInstance()->aAvaliacao[$iCodigoAvaliacao] = new Avaliacao($iCodigoAvaliacao);
       }

@@ -169,6 +169,7 @@ class Avaliacao {
                                                                 "db102_sequencial",
                                                                 "db102_avaliacao = {$this->iAvaliacao}"
                                                                );
+
       $rsGrupos  = $oDaoGrupoPerguntas->sql_record($sSqlGrupos);
       if ($oDaoGrupoPerguntas->numrows > 0) {
 
