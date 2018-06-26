@@ -1,7 +1,7 @@
 <?
 /*
  *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica             
  *                            www.dbseller.com.br                     
  *                         e-cidade@dbseller.com.br                   
  *                                                                    
@@ -55,31 +55,69 @@ if (isset($oPost->incluir)) {
   if ($sqlerro == false) {
   	
     db_inicio_transacao();
-    $clavaliacaogrupopergunta->db102_avaliacao     = $oPost->db102_avaliacao;
-    $clavaliacaogrupopergunta->db102_descricao     = $oPost->db102_descricao;
-    $clavaliacaogrupopergunta->db102_identificador = $oPost->db102_identificador;
-    $clavaliacaogrupopergunta->incluir(null);
-    $erro_msg = $clavaliacaogrupopergunta->erro_msg;
-    if ($clavaliacaogrupopergunta->erro_status == 0) {
-      $sqlerro = true;
+
+    $sWhereVerificaExistenciaGrupoPerguntaPorIdentificador = " db102_identificador = '{$oPost->db102_identificador}'";
+    $sSqlVerificaExistenciaGrupoPerguntaPorIdentificador   = $clavaliacaogrupopergunta->sql_query(null, '*', null, $sWhereVerificaExistenciaGrupoPerguntaPorIdentificador);
+    $rsVerificaExistenciaGrupoPerguntaPorIdentificador     = db_query($sSqlVerificaExistenciaGrupoPerguntaPorIdentificador);
+
+    if(!$rsVerificaExistenciaGrupoPerguntaPorIdentificador) {
+      $erro_msg = "Ocorreu um erro ao consultar o grupo pelo identificador.";
+      $sqlerro  = true;
+    }
+    
+    if(!$sqlerro && pg_num_rows($rsVerificaExistenciaGrupoPerguntaPorIdentificador) > 0) {
+      $erro_msg = "Já existe um grupo com o identificador informado.";
+      $sqlerro  = true;
+    }
+
+    if(!$sqlerro) {
+
+      $clavaliacaogrupopergunta->db102_avaliacao     = $oPost->db102_avaliacao;
+      $clavaliacaogrupopergunta->db102_descricao     = $oPost->db102_descricao;
+      $clavaliacaogrupopergunta->db102_identificador = $oPost->db102_identificador;
+      $clavaliacaogrupopergunta->incluir(null);
+      $erro_msg = $clavaliacaogrupopergunta->erro_msg;
+      if ($clavaliacaogrupopergunta->erro_status == 0) {
+        $sqlerro = true;
+      }
     }
 
     db_fim_transacao($sqlerro);
   }
 } else if (isset($oPost->alterar)) {
-	
+  
   if ($sqlerro == false) {
-  	
-    db_inicio_transacao();
     
-    $clavaliacaogrupopergunta->db102_sequencial    = $oPost->db102_sequencial;
-    $clavaliacaogrupopergunta->db102_avaliacao     = $oPost->db102_avaliacao;
-    $clavaliacaogrupopergunta->db102_descricao     = $oPost->db102_descricao;
-    $clavaliacaogrupopergunta->db102_identificador = $oPost->db102_identificador;
-    $clavaliacaogrupopergunta->alterar($clavaliacaogrupopergunta->db102_sequencial);
-    $erro_msg = $clavaliacaogrupopergunta->erro_msg;
-    if ($clavaliacaogrupopergunta->erro_status == 0) {
-      $sqlerro = true;
+    db_inicio_transacao();
+
+    $sWhereVerificaExistenciaGrupoPerguntaPorIdentificador  = " db102_identificador = '{$oPost->db102_identificador}'";
+    $sSqlVerificaExistenciaGrupoPerguntaPorIdentificador    = $clavaliacaogrupopergunta->sql_query(null, '*', null, $sWhereVerificaExistenciaGrupoPerguntaPorIdentificador);
+    $rsVerificaExistenciaGrupoPerguntaPorIdentificador      = db_query($sSqlVerificaExistenciaGrupoPerguntaPorIdentificador);
+
+    if(!$rsVerificaExistenciaGrupoPerguntaPorIdentificador) {
+      $erro_msg = "Ocorreu um erro ao consultar o grupo pelo identificador.";
+      $sqlerro  = true;
+    }
+    
+    if(!$sqlerro && pg_num_rows($rsVerificaExistenciaGrupoPerguntaPorIdentificador) > 0) {
+
+      if($oPost->db102_sequencial != db_utils::fieldsMemory($rsVerificaExistenciaGrupoPerguntaPorIdentificador, 0)->db102_sequencial) {
+        $erro_msg = "Já existe um grupo com o identificador informado.";
+        $sqlerro  = true;
+      }
+    }
+    
+    if(!$sqlerro) {
+
+      $clavaliacaogrupopergunta->db102_sequencial    = $oPost->db102_sequencial;
+      $clavaliacaogrupopergunta->db102_avaliacao     = $oPost->db102_avaliacao;
+      $clavaliacaogrupopergunta->db102_descricao     = $oPost->db102_descricao;
+      $clavaliacaogrupopergunta->db102_identificador = $oPost->db102_identificador;
+      $clavaliacaogrupopergunta->alterar($clavaliacaogrupopergunta->db102_sequencial);
+      $erro_msg = $clavaliacaogrupopergunta->erro_msg;
+      if ($clavaliacaogrupopergunta->erro_status == 0) {
+        $sqlerro = true;
+      }
     }
     
     db_fim_transacao($sqlerro);
