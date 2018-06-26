@@ -855,4 +855,87 @@ if (class_exists('PEAR_Error')) {
     }
 
 }
+
+
+/**
+ * Classe para manipulação do JSON
+ *
+ * @author  Rafael Serpa Nery <rafael.nery@dbseller.com.br>
+ * @author  Maurício Costa <mauricio@dbseller.com.br>
+ */
+class JSON {
+
+    /**
+     * Tipos de conversores aplicados as strings.
+     */
+    const URL_ENCODE  = 1;
+    const UTF8_ENCODE = 10;
+
+    const URL_DECODE  = 100;
+    const UTF8_DECODE = 1000;
+
+    /**
+     * Instância única do Objeto
+     *
+     * @var \JSON
+     */
+    private static $instance;
+
+    /**
+     * Construtor da classe
+     */
+    private function __construct() { }
+
+    /**
+     * Transforma em objeto a representação JSON passada
+     *
+     * @param  String $string - String com a Representação JSON
+     * @return Mixed          - Objeto transformado
+     */
+    public function parse($string, $formatacao = \JSON::UTF8_DECODE) {
+
+        if(!db_utils::isUTF8($string)) {
+            $string = \DBString::utf8_encode_all($string);
+        }
+
+        $retorno = json_decode($string);
+
+        $retorno = \DBString::urldecode_all($retorno);
+
+        if ($formatacao & \JSON::UTF8_DECODE) {
+            $retorno = \DBString::utf8_decode_all($retorno); // Pois a conexão com o banco é mista
+        }
+
+        return $retorno;
+    }
+
+    /**
+     * Transforma o objeto em uma string JSON
+     *
+     * @param  mixed $object Dado a ser convertido
+     * @return String Representação
+     */
+    public function stringify($in, $formatacao = \JSON::UTF8_ENCODE) {
+
+        if ($formatacao & \JSON::URL_ENCODE) {
+            $in = \DBString::urlencode_all($in);
+        }
+
+        if ($formatacao & \JSON::UTF8_ENCODE) {
+            $in = \DBString::utf8_encode_all($in);
+        }
+
+        return json_encode($in);
+    }
+
+    public static function create() {
+
+        if (!self::$instance) {
+            self::$instance = new \JSON();
+        }
+        return self::$instance;
+    }
+}
+
+
 ?>

@@ -38,6 +38,9 @@ class _db_fields {}
  */
 class db_utils {
 
+    const ITERATION_CONTINUE = '$__DB_UTILS_::_ITERATION__CONTINUE__$';
+    const ITERATION_BREAK    = '$__DB_UTILS_::_ITERATION__BREAK__$';
+
   /**
    * Construtor da Classe
    */
@@ -279,5 +282,52 @@ class db_utils {
     }
     return db_utils::fieldsMemory($rsRow, 0);
   }
+
+
+    /**
+     * Cria a representação da Linha de Query no formato especificado na Closure
+     *
+     * @param RecordSet  $rsRecord - Recordset do Resultado da query
+     * @param Closure    $fRetorno - Função que descreverá o retorno
+     * @param Integer    $iIndice  - Indice da linha do resultado, caso não seja informada pegará a próxima(fetch)
+     *
+     * @return mixed - Retorno informado na Closure
+     */
+    public static function makeFromRecord($rsRecord, Closure $fRetorno, $iIndice = null) {
+        return $fRetorno(pg_fetch_object($rsRecord, $iIndice));
+    }
+
+
+    /**
+     * Cria a representação da Coleção de Resultados de Query no formato especificado na Closure
+     *
+     * @param RecordSet  $rsRecord - Recordset do Resultado da query
+     * @param Closure    $fRetorno - Função que descreverá o retorno
+     *
+     * @return array - Coleção criada
+     */
+    public static function makeCollectionFromRecord($rsRecord, Closure $fRetorno) {
+
+        $aRetorno     = array();
+        $iTotalLinhas = pg_num_rows($rsRecord);
+
+        for ( $iIndice = 0; $iIndice < $iTotalLinhas; $iIndice++ ) {
+
+            $mRetorno   = self::makeFromRecord($rsRecord, $fRetorno);
+
+            if ($mRetorno === null || $mRetorno === self::ITERATION_CONTINUE) {
+                continue;
+            }
+
+            if ($mRetorno === self::ITERATION_BREAK) {
+                break;
+            }
+
+            $aRetorno[] = $mRetorno;
+        }
+
+        return $aRetorno;
+    }
+
 
 }

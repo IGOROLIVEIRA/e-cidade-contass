@@ -76,6 +76,7 @@ function db_autoload($sClassName) {
   $aIncludeDirs[] = "model/educacao/relatorio/";
   $aIncludeDirs[] = "model/empenho/";
   $aIncludeDirs[] = "model/empenho/relatorio/";
+  $aIncludeDirs[] = "model/esocial/";
   $aIncludeDirs[] = "model/estoque/";
   $aIncludeDirs[] = "model/farmacia/";
   $aIncludeDirs[] = "model/financeiro/";
@@ -218,3 +219,21 @@ function db_autoload($sClassName) {
 }
 
 spl_autoload_register('db_autoload');
+
+
+//
+// ECIDADE CUSTOM AUTOLOADER - PHPFIG-BASED
+//
+
+// o autoloader aqui requerido, contém modificacoes especificas para o ecidade
+// como por exemplo, a inclusao da funcao modification nos requires da classe.
+// a classe é um cópia da classe de autoloader disponibilizado pelo PHP-FIG,
+// com o adicional de um método para a utilizacao como um singleton :(
+
+require_once('src/Core/Autoloader.php');
+
+$ecidadeLoader = new Autoloader();
+$ecidadeLoader->addNamespace("ECidade\\","src/");
+$ecidadeLoader->addNamespace("ECidade\\Api\\", "api/");
+
+$ecidadeLoader->register();
