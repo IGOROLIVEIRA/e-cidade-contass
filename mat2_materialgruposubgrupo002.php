@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -76,12 +76,27 @@ if ( isset($oParametros->grupos) && trim($oParametros->grupos) != "" )  {
   $sWhereMater  .= " and db121_sequencial in ({$oParametros->grupos}) ";
 }
 
+/*OC6563*/
+if (isset($oParametros->ativo)) {
+  if($oParametros->ativo == 't') {
+    $sWhereMater  .= " and m60_ativo = 't' ";
+  } else {
+     $sWhereMater  .= " and m60_ativo = 'f' ";
+  }
+}
+
+if (isset($oParametros->listestz)) {
+  if($oParametros->listestz == 'f') {
+    $sWhereMater  .= " and m70_quant > 0 ";
+  }
+}
+
 $WhereAlmoxarifados = " ";
 if (!empty($sAlmoxarifados)) {
   $WhereAlmoxarifados .= "             and db_almox.m91_codigo in ({$sAlmoxarifados})                                           ";
 }
 
-$sSqlMovimentacao  = " select  coalesce(sum(case when m81_tipo = 1 then m82_quant ";
+$sSqlMovimentacao  = " select  coalesce  (sum(case when m81_tipo = 1 then m82_quant ";
 $sSqlMovimentacao .= "             when m81_tipo = 2 then m82_quant*-1  end), 0) as quantidadeestoque";
 $sSqlMovimentacao .= "                  from matestoqueini   ";
 $sSqlMovimentacao .= "                       inner join matestoquetipo   on m80_codtipo        = m81_codtipo ";
@@ -126,7 +141,7 @@ $sSqlMateriais .= "       inner join materialestoquegrupo         on m68_materia
 $sSqlMateriais .= "       inner join db_estruturavalor            on m65_db_estruturavalor    = db121_sequencial ";
 $sSqlMateriais .= "       inner join matparam                     on db121_db_estrutura       = m90_db_estrutura ";
 
-$sSqlMateriais .= "       inner join matestoque                   on m70_codmatmater          = m60_codmater     ";  
+$sSqlMateriais .= "       inner join matestoque                   on m70_codmatmater          = m60_codmater     ";
 $sSqlMateriais .= "       inner join db_depart                    on m70_coddepto             = coddepto ";
 $sSqlMateriais .= "                                              and instit                   = ".db_getsession("DB_instit");
 $sSqlMateriais .= "       left  join db_almox                     on db_almox.m91_depto       = db_depart.coddepto ";
