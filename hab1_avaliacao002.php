@@ -25,12 +25,12 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once(("libs/db_stdlib.php"));
-require_once(("libs/db_conecta.php"));
-require_once(("libs/db_sessoes.php"));
-require_once(("libs/db_usuariosonline.php"));
-require_once(("dbforms/db_funcoes.php"));
-require_once(("dbforms/db_classesgenericas.php"));
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_funcoes.php");
+require_once("dbforms/db_classesgenericas.php");
 
 $clcriaabas  = new cl_criaabas;
 $db_opcao    = 1;
@@ -41,73 +41,73 @@ $db_opcao    = 1;
  */
 $iTipoAvaliacao = null;
 if(isset($_GET['iModulo']) && $_GET['iModulo'] == 10216) {
-  $iTipoAvaliacao = 5; // Tipo de avaliação do e-Social
+    $iTipoAvaliacao = 5; // Tipo de avaliação do e-Social
 }
 if(isset($_GET['iTipoAvaliacao'])) {
-  $iTipoAvaliacao = $_GET['iTipoAvaliacao']; // Tipo passado por parametro, por exemplo: Questionarios Internos
+    $iTipoAvaliacao = $_GET['iTipoAvaliacao']; // Tipo passado por parametro, por exemplo: Questionarios Internos
 }
 ?>
 <html>
 <head>
-  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <meta http-equiv="Expires" CONTENT="0">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  <link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr>
-    <td width="360">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
+    <tr>
+        <td width="360">&nbsp;</td>
+        <td width="263">&nbsp;</td>
+        <td width="25">&nbsp;</td>
+        <td width="140">&nbsp;</td>
+    </tr>
 </table>
 <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-     <?
-       $clcriaabas->identifica  = array("avaliacao"=>"Formulário",
-                                        "avaliacaogrupopergunta"=>"Grupos",
-                                        "avaliacaopergunta"=>"Perguntas",
-                                        "carga"=>"Carga");
+    <tr>
+        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+            <?
+            $clcriaabas->identifica  = array("avaliacao"=>"Formulário",
+                "avaliacaogrupopergunta"=>"Grupos",
+                "avaliacaopergunta"=>"Perguntas",
+                "carga"=>"Carga");
 
-       $clcriaabas->title       = array("avaliacao"=>"Formulário",
-                                        "avaliacaogrupopergunta"=>"Grupos",
-                                        "avaliacaopergunta"=>"Perguntas",
-                                        "carga"=>"Carga");
+            $clcriaabas->title       = array("avaliacao"=>"Formulário",
+                "avaliacaogrupopergunta"=>"Grupos",
+                "avaliacaopergunta"=>"Perguntas",
+                "carga"=>"Carga");
 
-	     $clcriaabas->src         = array("avaliacao"=>"hab1_avaliacao005.php?iTipoAvaliacao={$iTipoAvaliacao}",
-                                        "carga"=>"hab1_avaliacao005.php?db101_sequencial={$iTipoAvaliacao}");
+            $clcriaabas->src         = array("avaliacao"=>"hab1_avaliacao005.php?iTipoAvaliacao={$iTipoAvaliacao}",
+                "carga"=>"hab1_avaliacao005.php?db101_sequencial={$iTipoAvaliacao}");
 
-       $clcriaabas->sizecampo   = array("avaliacao"=>"23",
-                                        "avaliacaogrupopergunta"=>"23",
-                                        "avaliacaopergunta"=>"23",
-                                        "carga"=>"23");
+            $clcriaabas->sizecampo   = array("avaliacao"=>"23",
+                "avaliacaogrupopergunta"=>"23",
+                "avaliacaopergunta"=>"23",
+                "carga"=>"23");
 
-       $clcriaabas->disabled    = array("avaliacaopergunta"=>"true",
-                                        "avaliacaogrupopergunta"=>"true",
-                                        "carga"=>"true");
+            $clcriaabas->disabled    = array("avaliacaopergunta"=>"true",
+                "avaliacaogrupopergunta"=>"true",
+                "carga"=>"true");
 
-        // Caso seja Questionário interno, cria aba nova
-        if ($iTipoAvaliacao == 6) {
+            // Caso seja Questionário interno, cria aba nova
+            if ($iTipoAvaliacao == 6) {
 
-          $clcriaabas->identifica["avaliacaolista"] = "Usuários Alvos";
-          $clcriaabas->title["avaliacaolista"]      = "Usuários Alvos";
-          $clcriaabas->sizecampo["avaliacaolista"]  = "23";
-          $clcriaabas->disabled["avaliacaolista"]   = "true";
-        }
+                $clcriaabas->identifica["avaliacaolista"] = "Usuários Alvos";
+                $clcriaabas->title["avaliacaolista"]      = "Usuários Alvos";
+                $clcriaabas->sizecampo["avaliacaolista"]  = "23";
+                $clcriaabas->disabled["avaliacaolista"]   = "true";
+            }
 
-        $clcriaabas->cria_abas();
-     ?>
-    </td>
-  </tr>
+            $clcriaabas->cria_abas();
+            ?>
+        </td>
+    </tr>
 </table>
 <form name="form1">
 </form>
 <?
-	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>

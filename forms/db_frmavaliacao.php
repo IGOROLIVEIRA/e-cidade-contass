@@ -1,7 +1,7 @@
 <?
 /*
  *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
  *
@@ -37,13 +37,13 @@ if ($db_opcao == 1) {
   $db_action="hab1_avaliacao006.php";
 }
 ?>
-<form name="form1" method="post" action="<?=$db_action?>">
+<form name="form1" method="post" action="<?=$db_action?>" class="container">
 <fieldset>
-<legend><b>Avaliação</b></legend>
-<table border="0">
+<legend><b>Formulário</b></legend>
+<table border="0" class="form-container">
   <tr>
     <td nowrap title="<?=@$Tdb101_sequencial?>">
-      <b>Código da Avaliação:</b>
+      <b>Código do Formulário:</b>
     </td>
     <td>
 			<?
@@ -53,7 +53,7 @@ if ($db_opcao == 1) {
   </tr>
   <tr>
     <td nowrap title="<?=@$Tdb101_avaliacaotipo?>">
-      <?=@$Ldb101_avaliacaotipo?>
+      <label for="db101_avaliacaotipo">Formulário tipo:</label>
     </td>
     <td>
 		  <?
@@ -68,7 +68,7 @@ if ($db_opcao == 1) {
           $aAvaliacaoTipo[$oAvaliacaoTipo->db100_sequencial] = $oAvaliacaoTipo->db100_descricao;
         }
 
-        db_select('db101_avaliacaotipo', $aAvaliacaoTipo, true, $db_opcao, " onchange='js_desabilitaselecionar();'");
+        db_select('db101_avaliacaotipo', $aAvaliacaoTipo, true, $db_opcao_tipoAvaliacao, " onchange='js_desabilitaselecionar();'");
        ?>
     </td>
   </tr>
@@ -103,6 +103,17 @@ if ($db_opcao == 1) {
       ?>
     </td>
   </tr>
+  <tr>
+    <td nowrap title="<?=@$Tdb101_permiteedicao?>">
+       <?=@$Ldb101_permiteedicao?>
+    </td>
+    <td>
+      <?
+        $lAtivo = array("t"=>"SIM","f"=>"NÃO");
+        db_select('db101_permiteedicao',$lAtivo,true,$db_opcao,"");
+      ?>
+    </td>
+  </tr>
 
   <tr>
     <td nowrap colspan="2">
@@ -111,8 +122,8 @@ if ($db_opcao == 1) {
 	       <table border="0" cellpadding="0" cellspacing="0">
 				   <tr valign="top">
 				     <td>
-				       <?
-			 	         db_textarea('db101_obs', 5, 70, $Idb101_obs, true, 'text', $db_opcao, "");
+				       <?php
+			 	         db_textarea('db101_obs', 5, 70, $Idb101_obs, true, 'text', $db_opcao, "style='width: 535px;'");
 				       ?>
 				     </td>
 				   </tr>
@@ -165,14 +176,25 @@ function js_validarcampos() {
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_avaliacao','db_iframe_avaliacao','func_avaliacao.php?funcao_js=parent.js_preenchepesquisa|db101_sequencial','Pesquisa',true,'0');
+  <?php if(isset($iTipoAvaliacao) && $iTipoAvaliacao == 5){ ?>
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_avaliacao','db_iframe_avaliacao','func_avaliacao.php?iTipoAvaliacao=5&funcao_js=parent.js_preenchepesquisa|db101_sequencial','Pesquisa',true,'0');
+  <?php } else if(isset($iTipoAvaliacao) && $iTipoAvaliacao == 6){ ?>
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_avaliacao','db_iframe_avaliacao','func_avaliacao.php?iTipoAvaliacao=6&funcao_js=parent.js_preenchepesquisa|db101_sequencial','Pesquisa',true,'0');
+  <?php } else { ?>
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_avaliacao','db_iframe_avaliacao','func_avaliacao.php?funcao_js=parent.js_preenchepesquisa|db101_sequencial','Pesquisa',true,'0');
+  <?php } ?>
 }
 
 function js_preenchepesquisa(chave){
   db_iframe_avaliacao.hide();
   <?
   if($db_opcao!=1){
-    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
+    if(isset($iTipoAvaliacao) && ($iTipoAvaliacao == 5 || $iTipoAvaliacao == 6)){
+      echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])
+        . "?iTipoAvaliacao=" . $iTipoAvaliacao . "&chavepesquisa='+chave";
+    } else {
+      echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
+    }
   }
   ?>
 }
