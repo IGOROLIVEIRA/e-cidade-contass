@@ -105,6 +105,7 @@ border: 1px solid #cccccc;
         border-bottom-color: <?=$cor?>;
         background-color: #cccccc;
 }
+
 </style>
 <form name="form1" method="post" action="" >
 <center>
@@ -287,29 +288,28 @@ if ($clmatparam->numrows>0){
 if($pesqemp == true){
   ?>  
     <table border='0' cellspacing="0" cellpadding="0" 
-    style='border:2px inset white' width='100%' bgcolor="white">
+    style='border:2px inset white; padding-bottom:15px;' width='100%' bgcolor="white" id="dadosDaOrdem">
     <tr class=''>
-    <td class='table_header' title='Marca/desmarca todos' align='center'>
-     <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca()'>
-     	<a onclick='js_marca()' style='cursor:pointer'>M</a></b></td>
-    <td class='table_header' align='center'><b>Número do Empenho</b></td>
-    <td class='table_header' align='center'><b>Seq .Empenho</b></td>
-    <td class='table_header' align='center'><b>Cod. Item</b></td>
-    <td class='table_header' align='center'><b>Item</b></td>
-      <td class='table_header' align='center'><b>UN</b></td>
-    <td class='table_header' align='center'><b>Sequencia</b></td>
-    <td class='table_header' align='center'><b>Descrição</b></td>
-    <td class='table_header' align='center'><b>Quantidade</b></td>
-    <td class='table_header' align='center'><b>Valor Total</b></td>
-    <td class='table_header' align='center'><b>Vlr. Uni.</b></td>
-    <td class='table_header' align='center'><b>Quantidade</b></td>
-    <td class='table_header' align='center'><b>Valor</b></td>         
-    <td class='table_header' style='width:18px' align='center'><b>&nbsp;</b></td> 
+        <td class='table_header' title='Marca/desmarca todos' align='center'>
+         <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca()'>
+            <a onclick='js_marca()' style='cursor:pointer'><b>M</b></a>
+        </td>
+        <td class='table_header' align='center'><b>Seq.</b></td>
+        <td class='table_header' align='center'><b>N. Empenho</b></td>
+        <td class='table_header' align='center'><b>Seq .Empenho</b></td>
+        <td class='table_header' align='center'><b>Cod. Item</b></td>
+        <td class='table_header' align='center' style='width:26%'><b>Item</b></td>
+        <td class='table_header' align='center'><b>Unid.</b></td>
+
+        <!--<td class='table_header' align='center'><b>Descrição</b></td>-->
+        <td class='table_header' align='center'><b>Quantidade</b></td>
+        <td class='table_header' align='center'><b>Vlr. Uni.</b></td>
+        <td class='table_header' align='center'><b>Valor Total</b></td>
+        <td class='table_header' align='center'><b>Quantidade</b></td>
+        <td class='table_header' align='center'><b>Valor</b></td>
     </tr>
     <tbody id='dados' style='height:150px;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
     <?
-
-
     if ((isset($e60_numcgm) && $e60_numcgm!= "")){
 
       $where="";
@@ -356,11 +356,11 @@ if($pesqemp == true){
       $numrows  = pg_num_rows($result);
       $sClassName = 'normal';
       $sChecked   = '';
-      if ($numrows == 1) {
-        
-        $sChecked   = " checked ";
-        $sClassName = " marcado ";
-      }
+//      if ($numrows == 1) {
+//
+//        $sChecked   = " checked ";
+//        $sClassName = " marcado ";
+//      }
       
       for ($i = 0; $i < $numrows; $i++) {
 
@@ -368,45 +368,74 @@ if($pesqemp == true){
         $iOpcao      = 1;
         $sClassName  = "normal";
         db_fieldsmemory($result,$i);
-        if ($e62_vltot <= 0  || $e62_quant <= 0){
+        if ($e62_vltot <= 0 || $e62_quant <= 0){
           
           $disabled   = " disabled ";
           $sChecked   =  '';
           $iOpcao     = 3;
           $sClassName  = "disabled";
         }
-        echo "<tr id='trchk{$e62_sequencial}' class='{$sClassName}'>";	    
+
+        echo "<tr id='trchk{$e62_sequencial}' class='{$sClassName}'>";
+
+        // Marcar
         echo "  <td class='linhagrid' title='Inverte a marcação' align='center'>";
         echo "  <input type='checkbox' {$sChecked} {$disabled} id='chk{$e62_sequencial}' class='itensEmpenho'";
-        echo "    name='itensOrdem[]' value='{$e62_sequencial}' onclick='js_marcaLinha(this)'></td>";
+        echo "    name='itensOrdem[]' value='{$e62_sequencial}' onclick='js_marcaLinha(this, $e62_sequencial)'></td>";
+
+        // Sequencia
+        echo "  <td class='linhagrid' id='sequen{$e62_sequencial}' align='center'>$e62_sequen</td>";
+
+        // Número do empenho
         echo "  <td class='linhagrid' align='center'>";
 					 				db_ancora($e60_codemp,"js_pesquisaEmpenho({$e60_numemp});","1"); 
 				echo "	</td>";
+
+        // Sequência do empenho
         echo "  <td class='linhagrid'id='empenho{$e62_sequencial}' align='center'>$e60_numemp</td>";
-        echo "  <td class='linhagrid' align='center'><small>$e62_item  </small></td>";		    
+
+        // Código do item
+        echo "  <td class='linhagrid' align='center'><small>$e62_item</small></td>";
+
+        // Item
         echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater'><small>".substr($pc01_descrmater,0,20)."&nbsp;</small></td>";
+
+        // Unidade
         echo "  <td class='linhagrid' id='m61_abrev{$e62_sequencial}' nowrap align='left' title='$m61_abrev'>{$m61_abrev}</td>";
-        echo "  <td class='linhagrid' id='sequen{$e62_sequencial}' align='center'>$e62_sequen</td>";
-        echo "  <td class='linhagrid' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr,0,20)."&nbsp;</small></td>";
+
+        // Descrição
+        // echo "  <td class='linhagrid' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr,0,20)."&nbsp;</small></td>";
+
+        // Quantidade
         echo "  <td class='linhagrid' id='e62_quant{$e62_sequencial}' align='center'>$e62_quant</td>";
-        echo "  <td class='linhagrid' id='e62_vltot{$e62_sequencial}'align='center'>$e62_vltot</td>";
+
+        // Valor unitário
         echo "  <td class='linhagrid' id='e62_vluni{$e62_sequencial}'align='center'>";
         echo "  <input type='text' style='border:0px' readonly id='vlrunitario{$e62_sequencial}' ";
         echo "         size='6' name='vlrunitario{$e62_sequencial}' value='{$e62_vlrun}'</td>";
+
+        // Valor total
+        echo "  <td class='linhagrid' id='e62_vltot{$e62_sequencial}'align='center'>$e62_vltot</td>";
+
+
         ${"quantidade{$e62_sequencial}"} =  $e62_quant;
         ${"valor{$e62_sequencial}"}      =  $e62_vltot;
         if ($pc01_servico == 'f') {
-          
+
+        // Quantidade
           $pc01_fraciona = $pc01_fraciona == 'f' ? "false" : "true";
           echo"<td class='linhagrid' align='center'>";
           db_input("quantidade{$e62_sequencial}",6,0,true,
               'text',$iOpcao,"onkeyPress='return js_validaFracionamento(event,{$pc01_fraciona},this)'
-               onchange='js_verifica($e62_quant,this.value,this.name,$e62_vlrun,$e60_numemp,$e62_sequencial);'"
+              onchange='js_verifica($e62_quant,this.value,this.name,$e62_vlrun,$e60_numemp,$e62_sequencial)'"
               ,'','','text-align:right');
-          echo "</td>
-            <td class='linhagrid' align='center'>";
+          echo "</td>";
+
+        // Valor
+        echo "<td class='linhagrid' align='center'>";
           db_input("valor{$e62_sequencial}",6,0,true,'text',3,
-              "onkeyPress='return js_teclas(event)' 
+              "onkeyPress='return js_teclas(event)'
+              id='e62_vl{$e62_sequencial}'
               onchange='js_verifica($e62_vltot,this.value,this.name,$e62_vlrun,$e60_numemp,$e62_sequencial)'",'','','text-align:right');
           echo "</td>";
           echo "</tr> ";
@@ -434,11 +463,15 @@ if($pesqemp == true){
           }
 
           echo"<td class='linhagrid' align='center'><small>";
-          db_input("quantidade{$e62_sequencial}",6,0,true,'text',$iControlaQuantidade, "onchange='js_verifica($e62_quant,this.value,this.name,$e62_vlrun,$e60_numemp,$e62_sequencial);'", '', '', $sStyle);
+          db_input("quantidade{$e62_sequencial}",6,0,true,'text',$iControlaQuantidade,
+              "onchange='js_verifica($e62_quant,this.value,this.name,$e62_vlrun,$e60_numemp,$e62_sequencial);'", '', '', $sStyle);
           echo "</small></td>
           <td class='linhagrid' align='center'><small>";
           db_input("valor{$e62_sequencial}",6,0,true,'text',$iControlaValor,
-                   "onkeyPress='return js_teclas(event)';",'','','text-align:right');
+                   "onkeyPress='return js_teclas(event)'
+                   onfocus='this.oldValue = this.value'
+                   onchange='alteraValor($e62_vltot,this.value,this.name,$e62_vlrun,$e60_numemp,$e62_sequencial,this.oldValue)'
+                   ",'','','text-align:right');
           echo "</small></td>";
           echo "</tr> ";
         }
@@ -446,10 +479,24 @@ if($pesqemp == true){
 
     }
     ?>
-    <tr style='height: auto'><td>&nbsp;</td>
-            </tr>
+        <tr style='height: auto'><td>&nbsp;</td></tr>
+
+<!--        <tr style='height: auto; background-color:#EEEFF2; border-top:1px solid #444444;'>-->
+<!--            <td></td>-->
+<!--            <td colspan="9"><b>Total de itens: </b><span id="total_de_itens">0</span></td>-->
+<!--            <td colspan="2"><b>Valor total: </b><span id="valor_total">0.00</span></td>-->
+<!--        </tr>-->
      </tbody>   
      </table>
+
+    <div style="display: block;height: auto; background-color:#EEEFF2; border-top:1px solid #444444; padding: 6px 42px 19px 10px;">
+        <div style="float: left; width: 50%; text-align: left">
+            <b>Total de Registros: </b><span id="total_de_itens">0</span>
+        </div>
+        <div style="float: left; width: 50%; text-align: right">
+            <b>Valor total: </b><span id="valor_total">0.00</span>
+        </div>
+    </div>
      
      <?
     }
@@ -542,21 +589,8 @@ if($pesqemp == true){
     } else {
       return true;
     }
-  
-
-	}
-  
-  function js_verifica(max,quan,nome,valoruni,numemp,sequencia){
-    if (max<quan){
-      
-      alert("Informe uma quantidade valida!!");
-      eval("document.form1."+nome+".value='';");
-      eval("document.form1."+nome+".focus();");
-      
-    } else{
-      $("valor"+sequencia).value = round(new Number(quan * valoruni), 2);
-    }
   }
+
 function js_marca(){
   
 	 obj = document.getElementById('mtodos');
@@ -567,24 +601,89 @@ function js_marca(){
 	}
    itens = js_getElementbyClass(form1,'itensEmpenho');
 	 for (i = 0;i < itens.length;i++){
-     if (itens[i].disabled == false){
-        if (obj.checked == true){
-					itens[i].checked=true;
-          js_marcaLinha(itens[i]);
-       }else{
-					itens[i].checked=false;
-          js_marcaLinha(itens[i]);
-			 }
-     }
+         if (itens[i].disabled == false){
+            if (obj.checked == true){
+                        itens[i].checked=true;
+              js_marcaLinha(itens[i]);
+           }else{
+                    itens[i].checked=false;
+                    js_marcaLinha(itens[i]);
+                 }
+         }
 	 }
 }
-function js_marcaLinha(obj){
- 
-  if (obj.checked){
-   $('tr'+obj.id).className='marcado';
-  }else{
-   $('tr'+obj.id).className='normal';
-  }
+
+function js_marcaLinha(obj, sequencia){
+
+    if (obj.checked){
+
+        $('tr'+obj.id).className='marcado';
+
+        $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) + 1;
+        var temp = (parseFloat($("valor_total").innerText) + parseFloat($("valor"+sequencia).value)).toFixed(2);
+        //temp = temp.toFixed(2);
+        $("valor_total").innerText = definePontoFlutuante(temp);
+        return
+
+    }
+
+    $('tr'+obj.id).className='normal';
+    $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) >= 1 ?
+                                    parseInt($("total_de_itens").innerText, 10) - 1 : 0;
+
+    var temp = (parseFloat($("valor_total").innerText) - parseFloat($("valor"+sequencia).value)).toFixed(2);
+    //temp = temp.toFixed(2);
+
+    $("valor_total").innerText = definePontoFlutuante(temp);
 
 }
+
+function js_verifica(max,quan,nome,valoruni,numemp,sequencia){
+    if (max<quan){
+
+        alert("Informe uma quantidade valida!!");
+        eval("document.form1."+nome+".value='';");
+        eval("document.form1."+nome+".focus();");
+        quan = 0;
+        js_verifica(max,quan,nome,valoruni,numemp,sequencia);
+        return
+
+    }
+
+    var valorAntigo = $("valor"+sequencia).value;
+
+    //  Insere novo valor na coluna
+    $("valor"+sequencia).value = definePontoFlutuante(round(new Number(quan * valoruni), 2));
+
+    //  Atualiza valor total
+    if($("chk"+sequencia).checked){
+        $("valor_total").innerText = definePontoFlutuante(parseFloat($("valor_total").innerText)
+                                                            - parseFloat(valorAntigo)
+                                                            + parseFloat($("valor"+sequencia).value));
+    }
+}
+
+function alteraValor(max,quan,nome,valoruni,numemp,sequencia,valorAntigo){
+    if($("valor"+sequencia).value > max || $("valor"+sequencia).value < 0){
+        alert("Informe um valor válido!");
+        $("valor"+sequencia).value = definePontoFlutuante(0);
+    }
+
+    //  Atualiza valor total
+    if($("chk"+sequencia).checked){
+
+        $("valor_total").innerText = definePontoFlutuante(parseFloat($("valor_total").innerText)
+            - parseFloat(valorAntigo)
+            + parseFloat($("valor"+sequencia).value));
+
+    }
+}
+
+function definePontoFlutuante(temp){
+    if(Number.isInteger(parseFloat(temp))){
+        return(temp + ".00");
+    }
+    return(temp);
+}
+
 </script>
