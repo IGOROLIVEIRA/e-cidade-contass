@@ -81,27 +81,49 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
     $rsResultUnidade = db_query($sSqlUnidade);
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
 
-    $sSql = "SELECT  e50_id_usuario,(rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) as codreduzido,
-    (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) as nroliquidacao,
-    e50_codord, e50_DATA, e60_anousu,e60_numemp,
-			           e60_codemp, e60_emiss, lpad((CASE WHEN o40_codtri = '0'
-         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
-           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade, z01_nome,
-				   z01_cgccpf, e53_valor,e53_vlranu,  o15_codtri,  si09_codorgaotce,
-				   o41_subunidade AS subunidade,o56_elemento,o40_orgao,o41_unidade,e60_datasentenca
-			     FROM pagordem
-			     JOIN empempenho ON e50_numemp = e60_numemp
-			     JOIN orcdotacao ON e60_coddot = o58_coddot AND o58_anousu = e60_anousu
-			     JOIN orcelemento ON o56_codele = o58_codele AND o56_anousu = o58_anousu
-			     JOIN orcorgao ON o40_anousu = o58_anousu AND o40_orgao = o58_orgao
-			     JOIN orcunidade ON o58_anousu = o41_anousu AND o58_orgao = o41_orgao AND o58_unidade = o41_unidade
-			     JOIN cgm ON e60_numcgm = z01_numcgm
-			     JOIN pagordemele ON e53_codord = e50_codord
-			     JOIN pagordemnota ON e71_codord = e50_codord
-			     JOIN orctiporec ON o58_codigo = o15_codigo
-			LEFT JOIN infocomplementaresinstit ON o58_instit = si09_instit
-          where e50_data >= '" . $this->sDataInicial . "' and e50_data <= '" . $this->sDataFinal . "'
-          and o58_anousu = e60_anousu and e60_instit = " . db_getsession("DB_instit");
+   $sSql = "SELECT e50_id_usuario,
+                   (rpad(e71_codnota::varchar, 7, '0') ||'0'|| lpad(e71_codord::varchar, 7, '0')) AS codreduzido,
+                   (rpad(e71_codnota::varchar, 9, '0') || lpad(e71_codord::varchar, 9, '0')) AS nroliquidacao,
+                   e50_codord,
+                   e50_DATA,
+                   e60_anousu,
+                   e60_numemp,
+                   e60_codemp,
+                   e60_emiss,
+                   lpad((CASE
+                             WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar
+                             ELSE o40_codtri
+                         END),2, 0) AS o58_orgao,
+                   lpad((CASE
+                             WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar
+                             ELSE o41_codtri
+                         END),3, 0) AS o58_unidade,
+                   z01_nome,
+                   z01_cgccpf,
+                   e53_valor,
+                   e53_vlranu,
+                   o15_codtri,
+                   si09_codorgaotce,
+                   o41_subunidade AS subunidade,
+                   o56_elemento,
+                   o40_orgao,
+                   o41_unidade,
+                   e60_datasentenca
+            FROM pagordem
+            JOIN empempenho ON e50_numemp = e60_numemp
+            JOIN orcdotacao ON e60_coddot = o58_coddot AND o58_anousu = e60_anousu
+            JOIN orcelemento ON o56_codele = o58_codele AND o56_anousu = o58_anousu
+            JOIN orcorgao ON o40_anousu = o58_anousu AND o40_orgao = o58_orgao
+            JOIN orcunidade ON o58_anousu = o41_anousu AND o58_orgao = o41_orgao AND o58_unidade = o41_unidade
+            JOIN cgm ON e60_numcgm = z01_numcgm
+            JOIN pagordemele ON e53_codord = e50_codord
+            JOIN pagordemnota ON e71_codord = e50_codord
+            JOIN orctiporec ON o58_codigo = o15_codigo
+            LEFT JOIN infocomplementaresinstit ON o58_instit = si09_instit
+            WHERE e50_data >= '" . $this->sDataInicial . "'
+              AND e50_data <= '" . $this->sDataFinal . "'
+              AND o58_anousu = e60_anousu
+              AND e60_instit = " . db_getsession("DB_instit");
 
     $rsLiquidacao = db_query($sSql);
     //echo $sSql;
@@ -154,20 +176,17 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
           $stpLiquidacao = 2;
         }
 
-        if ($sTrataCodUnidade == "2") {
+        if (($sTrataCodUnidade == "2") && ($oLiquidacao->subunidade != '' && $oLiquidacao->subunidade != 0)) {
 
-          $sCodUnidade = str_pad($oLiquidacao->o58_orgao, 3, "0", STR_PAD_LEFT);
-          $sCodUnidade .= str_pad($oLiquidacao->o58_unidade, 2, "0", STR_PAD_LEFT);
+          $sCodUnidade = str_pad($oLiquidacao->o58_orgao, 2, "0", STR_PAD_LEFT);
+          $sCodUnidade .= str_pad($oLiquidacao->o58_unidade, 3, "0", STR_PAD_LEFT);
+          $sCodUnidade .= str_pad($oLiquidacao->subunidade, 3, "0", STR_PAD_LEFT);
 
         } else {
 
           $sCodUnidade = str_pad($oLiquidacao->o58_orgao, 2, "0", STR_PAD_LEFT);
           $sCodUnidade .= str_pad($oLiquidacao->o58_unidade, 3, "0", STR_PAD_LEFT);
 
-        }
-
-        if ($oLiquidacao->subunidade != '' && $oLiquidacao->subunidade != 0) {
-          $sCodUnidade .= str_pad($oLiquidacao->subunidade, 3, "0", STR_PAD_LEFT);
         }
 
         $oDadosLiquidacao = new stdClass();

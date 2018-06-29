@@ -71,6 +71,13 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
     $clops12 = new cl_ops122018();
     $clops13 = new cl_ops132018();
 
+      $sSqlUnidade = "SELECT * FROM infocomplementares
+                      WHERE si08_anousu = " . db_getsession("DB_anousu") . "
+                        AND si08_instit = " . db_getsession("DB_instit");
+
+      $rsResultUnidade = db_query($sSqlUnidade);
+      $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
+
     db_inicio_transacao();
     /**
      * excluir informacoes do mes caso ja tenha sido gerado anteriormente
@@ -120,36 +127,46 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
     }
 
 
-    $sSql = "      select  10 as tiporesgistro,
-                  si09_codorgaotce as codorgao,
-                  lpad((CASE WHEN o40_codtri = '0'
-                  OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                  OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub,
-                  c71_codlan||lpad(e50_codord,10,0) as nroop,
-                  c80_data as dtpagamento,
-                  c70_valor  as valor,
-                  e50_obs as especificacaoop,
-                  o41_ordpagamento,o41_orgao,o41_unidade,o41_anousu,
-                  o.z01_cgccpf as cpfresppgto,
-                  e50_codord as ordem,e60_numemp,
-                          o41_subunidade as subunidade,c71_codlan as lancamento
-             from pagordem
-             join pagordemele on e53_codord = e50_codord
-             join empempenho on e50_numemp = e60_numemp
-             join orcdotacao on o58_anousu = e60_anousu and e60_coddot = o58_coddot
-             join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade =o41_unidade
-        JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-             join conlancamord on c80_codord = e50_codord
-             join conlancamdoc on c71_codlan = c80_codlan
-             join conlancam on c70_codlan = c71_codlan
-        left join db_usuacgm on id_usuario = e50_id_usuario
-        left join infocomplementaresinstit on si09_instit = e60_instit
-        left join cgm o on o.z01_numcgm = o41_ordpagamento
-            where c80_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-              and c71_coddoc in (5,35,37)
-              and e60_instit = " . db_getsession("DB_instit") . "
-
-          order by e50_codord,c80_codlan";
+    $sSql = "SELECT 10 AS tiporesgistro,
+                   si09_codorgaotce AS codorgao,
+                   lpad((CASE
+                             WHEN o40_codtri = '0'
+                                  OR NULL THEN o40_orgao::varchar
+                             ELSE o40_codtri
+                         END),2,0)||lpad((CASE
+                                              WHEN o41_codtri = '0'
+                                                   OR NULL THEN o41_unidade::varchar
+                                              ELSE o41_codtri
+                                          END),3,0) AS codunidadesub,
+                   c71_codlan||lpad(e50_codord,10,0) AS nroop,
+                   c80_data AS dtpagamento,
+                   c70_valor AS valor,
+                   e50_obs AS especificacaoop,
+                   o41_ordpagamento,
+                   o41_orgao,
+                   o41_unidade,
+                   o41_anousu,
+                   o.z01_cgccpf AS cpfresppgto,
+                   e50_codord AS ordem,
+                   e60_numemp,
+                   o41_subunidade AS subunidade,
+                   c71_codlan AS lancamento
+            FROM pagordem
+            JOIN pagordemele ON e53_codord = e50_codord
+            JOIN empempenho ON e50_numemp = e60_numemp
+            JOIN orcdotacao ON o58_anousu = e60_anousu AND e60_coddot = o58_coddot
+            JOIN orcunidade ON o58_anousu = o41_anousu AND o58_orgao = o41_orgao AND o58_unidade =o41_unidade
+            JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
+            JOIN conlancamord ON c80_codord = e50_codord
+            JOIN conlancamdoc ON c71_codlan = c80_codlan
+            JOIN conlancam ON c70_codlan = c71_codlan
+            LEFT JOIN db_usuacgm ON id_usuario = e50_id_usuario
+            LEFT JOIN infocomplementaresinstit ON si09_instit = e60_instit
+            LEFT JOIN cgm o ON o.z01_numcgm = o41_ordpagamento
+            WHERE c80_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
+                AND c71_coddoc IN (5, 35, 37)
+                AND e60_instit = " . db_getsession("DB_instit") . "
+            ORDER BY e50_codord, c80_codlan";
     // $sSql;exit;
     $rsEmpenhosPagosGeral = db_query($sSql);
 
@@ -180,9 +197,17 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
         if (!isset($aInformado[$sHash])) {
 
           $clops10 = new cl_ops102018();
-          if ($oEmpPago->subunidade != '' && $oEmpPago->subunidade != 0) {
-            $oEmpPago->codunidadesub .= str_pad($oEmpPago->subunidade, 3, "0", STR_PAD_LEFT);
-          }
+
+            if (($sTrataCodUnidade == 2) && ($oEmpPago->subunidade != '' && $oEmpPago->subunidade != 0)) {
+
+                $sCodUnidade  = $oEmpPago->codunidadesub;
+                $sCodUnidade .= str_pad($oEmpPago->subunidade, 3, "0", STR_PAD_LEFT);
+
+            } else {
+
+                $sCodUnidade  = $oEmpPago->codunidadesub;
+
+            }
           /*
            * Verifica se o empenho existe na tabela dotacaorpsicom
            * Caso exista, busca os dados da dotação.
@@ -196,7 +221,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops10->si132_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
           } else {
             $clops10->si132_codorgao = $oEmpPago->codorgao;
-            $clops10->si132_codunidadesub = $oEmpPago->codunidadesub;
+            $clops10->si132_codunidadesub = $sCodUnidade;
           }
           $clops10->si132_tiporegistro = $oEmpPago->tiporesgistro;
           $clops10->si132_nroop = $oEmpPago->nroop;

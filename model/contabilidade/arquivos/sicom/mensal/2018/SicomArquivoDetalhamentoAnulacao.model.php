@@ -98,60 +98,73 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
     $rsResultUnidade = db_query($sSqlUnidade);
     $sTrataCodUnidade = db_utils::fieldsMemory($rsResultUnidade, 0)->si08_tratacodunidade;
 
-    $sSql = "SELECT e50_data,
-                   case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else 
-                   (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0')) end as codreduzido,
-                   case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
-                   (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao, 
-                   c80_data, orctiporec.o15_codtri,e60_codemp, e60_emiss,  e60_anousu,e60_numemp,
-                  lpad((CASE WHEN o40_codtri = '0'
-         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao , lpad((CASE WHEN o41_codtri = '0'
-           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade,o41_subunidade, e60_codcom, sum(c70_valor) as c70_valor, c70_data, c53_tipo, c70_data,si09_codorgaotce
-              ,o56_elemento
-              FROM empempenho
-              INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
-              INNER JOIN conlancam ON c70_codlan = c75_codlan
-              LEFT JOIN conlancamnota ON c66_codlan = c70_codlan
-              INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
-              INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
-              INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
-              INNER JOIN db_config ON db_config.codigo = empempenho.e60_instit
-              INNER JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu
-              AND orcdotacao.o58_coddot = empempenho.e60_coddot
-              AND orcdotacao.o58_instit = empempenho.e60_instit
-              INNER JOIN emptipo ON emptipo.e41_codtipo = empempenho.e60_codtipo
-              INNER JOIN db_config AS a ON a.codigo = orcdotacao.o58_instit
-              INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
-              INNER JOIN orcfuncao ON orcfuncao.o52_funcao = orcdotacao.o58_funcao
-              INNER JOIN orcsubfuncao ON orcsubfuncao.o53_subfuncao = orcdotacao.o58_subfuncao
-              INNER JOIN orcprograma ON orcprograma.o54_anousu = orcdotacao.o58_anousu
-              AND orcprograma.o54_programa = orcdotacao.o58_programa
-              INNER JOIN orcelemento ON orcelemento.o56_codele = orcdotacao.o58_codele
-              AND orcdotacao.o58_anousu = orcelemento.o56_anousu
-              INNER JOIN orcprojativ ON orcprojativ.o55_anousu = orcdotacao.o58_anousu
-              AND orcprojativ.o55_projativ = orcdotacao.o58_projativ
-              INNER JOIN orcorgao ON orcorgao.o40_anousu = orcdotacao.o58_anousu
-              AND orcorgao.o40_orgao = orcdotacao.o58_orgao
-              INNER JOIN orcunidade ON orcunidade.o41_anousu = orcdotacao.o58_anousu
-              AND orcunidade.o41_orgao = orcdotacao.o58_orgao
-              AND orcunidade.o41_unidade = orcdotacao.o58_unidade
-              LEFT JOIN empemphist ON empemphist.e63_numemp = empempenho.e60_numemp
-              LEFT JOIN emphist ON emphist.e40_codhist = empemphist.e63_codhist
-              INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = empempenho.e60_codcom
-              LEFT JOIN empresto ON e60_numemp = e91_numemp AND e60_anousu = e91_anousu
-              join conlancamord on c80_codlan = c75_codlan
-              join pagordemnota on e71_codord = c80_codord
-              join pagordem on  e71_codord = e50_codord
-              left join  infocomplementaresinstit on o58_instit = si09_instit
-              WHERE c53_tipo IN (21)  AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-                AND 1=1  AND e60_instit IN (" . db_getsession('DB_instit') . ")
-              GROUP BY e60_numemp, e60_resumo, e60_destin, e60_codemp, e60_emiss, e60_numcgm,
-                 z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist,
-                 e40_descr, e60_vlrpag, e60_anousu, e60_coddot, o58_coddot, o58_orgao, o40_orgao,
-                 o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr,
-                 c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp,e71_codnota,c80_data,e50_data,si09_codorgaotce,o41_subunidade,pagordemnota.e71_codord
-                 ,o40_codtri,orcorgao.o40_orgao,orcunidade.o41_codtri,orcunidade.o41_unidade,o56_elemento
-                 ORDER BY e60_numemp,c70_codlan";
+   $sSql = "SELECT e50_data,
+                   CASE
+                       WHEN date_part('year',e50_data) < 2015 THEN e71_codnota::varchar
+                       ELSE (rpad(e71_codnota::varchar,7,'0') ||'0'|| lpad(e71_codord::varchar,7,'0'))
+                   END AS codreduzido,
+                   CASE
+                       WHEN date_part('year',e50_data) < 2015 THEN e71_codnota::varchar
+                       ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
+                   END AS nroliquidacao,
+                   c80_data,
+                   orctiporec.o15_codtri,
+                   e60_codemp,
+                   e60_emiss,
+                   e60_anousu,
+                   e60_numemp,
+                   lpad((CASE
+                             WHEN o40_codtri = '0'
+                                  OR NULL THEN o40_orgao::varchar
+                             ELSE o40_codtri
+                         END),2,0) AS o58_orgao,
+                   lpad((CASE
+                             WHEN o41_codtri = '0'
+                                  OR NULL THEN o41_unidade::varchar
+                             ELSE o41_codtri
+                         END),3,0) AS o58_unidade,
+                   o41_subunidade,
+                   e60_codcom,
+                   sum(c70_valor) AS c70_valor,
+                   c70_data,
+                   c53_tipo,
+                   c70_data,
+                   si09_codorgaotce ,
+                   o56_elemento
+            FROM empempenho
+            INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
+            INNER JOIN conlancam ON c70_codlan = c75_codlan
+            LEFT JOIN conlancamnota ON c66_codlan = c70_codlan
+            INNER JOIN conlancamdoc ON c71_codlan = c70_codlan
+            INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+            INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
+            INNER JOIN db_config ON db_config.codigo = empempenho.e60_instit
+            INNER JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu AND orcdotacao.o58_coddot = empempenho.e60_coddot AND orcdotacao.o58_instit = empempenho.e60_instit
+            INNER JOIN emptipo ON emptipo.e41_codtipo = empempenho.e60_codtipo
+            INNER JOIN db_config AS a ON a.codigo = orcdotacao.o58_instit
+            INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
+            INNER JOIN orcfuncao ON orcfuncao.o52_funcao = orcdotacao.o58_funcao
+            INNER JOIN orcsubfuncao ON orcsubfuncao.o53_subfuncao = orcdotacao.o58_subfuncao
+            INNER JOIN orcprograma ON orcprograma.o54_anousu = orcdotacao.o58_anousu AND orcprograma.o54_programa = orcdotacao.o58_programa
+            INNER JOIN orcelemento ON orcelemento.o56_codele = orcdotacao.o58_codele AND orcdotacao.o58_anousu = orcelemento.o56_anousu
+            INNER JOIN orcprojativ ON orcprojativ.o55_anousu = orcdotacao.o58_anousu AND orcprojativ.o55_projativ = orcdotacao.o58_projativ
+            INNER JOIN orcorgao ON orcorgao.o40_anousu = orcdotacao.o58_anousu AND orcorgao.o40_orgao = orcdotacao.o58_orgao
+            INNER JOIN orcunidade ON orcunidade.o41_anousu = orcdotacao.o58_anousu AND orcunidade.o41_orgao = orcdotacao.o58_orgao AND orcunidade.o41_unidade = orcdotacao.o58_unidade
+            LEFT JOIN empemphist ON empemphist.e63_numemp = empempenho.e60_numemp
+            LEFT JOIN emphist ON emphist.e40_codhist = empemphist.e63_codhist
+            INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = empempenho.e60_codcom
+            LEFT JOIN empresto ON e60_numemp = e91_numemp AND e60_anousu = e91_anousu
+            JOIN conlancamord ON c80_codlan = c75_codlan
+            JOIN pagordemnota ON e71_codord = c80_codord
+            JOIN pagordem ON e71_codord = e50_codord
+            LEFT JOIN infocomplementaresinstit ON o58_instit = si09_instit
+            WHERE c53_tipo IN (21)
+                AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
+                AND e60_instit IN (" . db_getsession('DB_instit') . ")
+            GROUP BY e60_numemp, e60_resumo, e60_destin, e60_codemp, e60_emiss, e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, e40_descr, e60_vlrpag, e60_anousu, 
+                     60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp, e71_codnota,
+                     c80_data, e50_data, si09_codorgaotce, o41_subunidade, pagordemnota.e71_codord , o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, o56_elemento
+            ORDER BY e60_numemp, c70_codlan";
     // and e60_numemp not in (select e91_numemp from empresto where e91_anousu = ".db_getsession('DB_anousu').")
     //echo $sSql;
     $rsDetalhamentos = db_query($sSql);

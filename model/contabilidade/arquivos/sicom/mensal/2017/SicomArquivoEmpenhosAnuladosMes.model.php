@@ -126,27 +126,49 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
 				and o58_anousu = ".db_getsession("DB_anousu")." 
 				and o58_instit = ".db_getsession("DB_instit");*/
 
-    $sSql = "SELECT c70_codlan, c70_data, c72_complem, 1 as tipoanulacao, e60_numemp, c70_valor, e60_codemp, e60_emiss,
-                case when o40_codtri::int = 0 then o40_orgao::int else o40_codtri::int end as o58_orgao ,
-                case when o41_codtri::int = 0 then o41_unidade::int else o41_codtri::int end as o58_unidade,
-				o15_codtri,si09_codorgaotce,o41_subunidade as subunidade,
-				lpad((CASE WHEN o40_codtri = '0'
-         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as codunidadesub
-				from conlancam
-                                        join conlancamcompl on c70_codlan = c72_codlan
-                                        join conlancamemp on c75_codlan = c70_codlan
-                                        join conlancamdoc on c70_codlan = c71_codlan and c71_coddoc in (2,411)
-					join empempenho on c75_numemp = e60_numemp
-					join orcdotacao on o58_coddot = e60_coddot
-					join orcorgao on o58_anousu = o40_anousu and o40_orgao = o58_orgao
-					join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
-					join orctiporec on o58_codigo = o15_codigo
-					join emptipo on e60_codtipo = e41_codtipo
-					left join  infocomplementaresinstit on o58_instit = si09_instit
-				where c70_data >= '" . $this->sDataInicial . "' and c70_data <= '" . $this->sDataFinal . "' and e60_anousu = " . db_getsession("DB_anousu") . "
-				and o58_anousu = " . db_getsession("DB_anousu") . "
-				and o58_instit = " . db_getsession("DB_instit");
+   $sSql = "SELECT c70_codlan,
+                   c70_data,
+                   c72_complem,
+                   1 AS tipoanulacao,
+                   e60_numemp,
+                   c70_valor,
+                   e60_codemp,
+                   e60_emiss,
+                   CASE
+                       WHEN o40_codtri::int = 0 THEN o40_orgao::int
+                       ELSE o40_codtri::int
+                   END AS o58_orgao,
+                   CASE
+                       WHEN o41_codtri::int = 0 THEN o41_unidade::int
+                       ELSE o41_codtri::int
+                   END AS o58_unidade,
+                   o15_codtri,
+                   si09_codorgaotce,
+                   o41_subunidade AS subunidade,
+                   lpad((CASE
+                             WHEN o40_codtri = '0'
+                                  OR NULL THEN o40_orgao::varchar
+                             ELSE o40_codtri
+                         END),2,0)||lpad((CASE
+                                              WHEN o41_codtri = '0'
+                                                   OR NULL THEN o41_unidade::varchar
+                                              ELSE o41_codtri
+                                          END),3,0) AS codunidadesub
+            FROM conlancam
+            JOIN conlancamcompl ON c70_codlan = c72_codlan
+            JOIN conlancamemp ON c75_codlan = c70_codlan
+            JOIN conlancamdoc ON c70_codlan = c71_codlan AND c71_coddoc IN (2, 411)
+            JOIN empempenho ON c75_numemp = e60_numemp
+            JOIN orcdotacao ON o58_coddot = e60_coddot
+            JOIN orcorgao ON o58_anousu = o40_anousu AND o40_orgao = o58_orgao
+            JOIN orcunidade ON o58_anousu = o41_anousu AND o58_orgao = o41_orgao AND o58_unidade = o41_unidade
+            JOIN orctiporec ON o58_codigo = o15_codigo
+            JOIN emptipo ON e60_codtipo = e41_codtipo
+            LEFT JOIN infocomplementaresinstit ON o58_instit = si09_instit
+            WHERE c70_data >= '" . $this->sDataInicial . "' AND c70_data <= '" . $this->sDataFinal . "'
+              AND e60_anousu = " . db_getsession("DB_anousu") . "
+              AND o58_anousu = " . db_getsession("DB_anousu") . "
+              AND o58_instit = " . db_getsession("DB_instit");
     $rsEmpenhoAnulados = db_query($sSql);
     
     //db_criatabela($rsEmpenhoAnulados);exit;
@@ -180,20 +202,18 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
       $oEmpenhoAnulado = db_utils::fieldsMemory($rsEmpenhoAnulados, $iCont);
 
 
-      if ($sTrataCodUnidade == 2) {
+      if (($sTrataCodUnidade == 2) && ($oEmpenhoAnulado->subunidade != '' && $oEmpenhoAnulado->subunidade != 0)) {
 
-        $sCodUnidade = str_pad($oEmpenhoAnulado->o58_orgao, 3, "0", STR_PAD_LEFT);
-        $sCodUnidade .= str_pad($oEmpenhoAnulado->o58_unidade, 2, "0", STR_PAD_LEFT);
+        $sCodUnidade = str_pad($oEmpenhoAnulado->o58_orgao, 2, "0", STR_PAD_LEFT);
+        $sCodUnidade .= str_pad($oEmpenhoAnulado->o58_unidade, 3, "0", STR_PAD_LEFT);
+        $sCodUnidade .= str_pad($oEmpenhoAnulado->subunidade, 3, "0", STR_PAD_LEFT);
 
 
       } else {
 
-        $sCodUnidade = $oEmpenhoAnulado->codunidadesub;
+        $sCodUnidade = str_pad($oEmpenhoAnulado->o58_orgao, 2, "0", STR_PAD_LEFT);
+        $sCodUnidade .= str_pad($oEmpenhoAnulado->o58_unidade, 3, "0", STR_PAD_LEFT);
 
-      }
-      
-      if ($oEmpenhoAnulado->subunidade != '' && $oEmpenhoAnulado->subunidade != 0) {
-        $sCodUnidade .= str_pad($oEmpenhoAnulado->subunidade, 3, "0", STR_PAD_LEFT);
       }
 
       $oDadosEmpenhoAnulado = new cl_anl102017();

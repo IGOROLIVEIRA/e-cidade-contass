@@ -98,69 +98,75 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
       }
     }
 
-    $sSql = "SELECT c71_coddoc,e50_codord,c71_codlan,
-				c70_data as dtanulacao,
-				e50_data as dtordem,
-				e50_data as dtliquida,
-				(select c71_codlan as dtpagamento
-				   from conlancamdoc
-				  where c71_codlan = (select max(c71_codlan)
-				  						from conlancamdoc
-				  						join conlancamord on c80_codlan = c71_codlan
-									   where c80_codord = e50_codord
-										 and c71_coddoc in (5,35,37)
-										 and c71_codlan < c70_codlan)
-				)||lpad(e50_codord,10,0) as numordem,
-				e50_codord as numLiquida,
-				c70_valor as vlrordem,
-				(select c71_data as dtpagamento
-				   from conlancamdoc
-				  where c71_codlan = (select max(c71_codlan)
-				      					from conlancamdoc
-				      					join conlancamord on c80_codlan = c71_codlan
-					 				   where c80_codord = e50_codord
-					   					 and c71_coddoc in (5,35,37) and c71_codlan < c70_codlan)
-			    ) as dtpag,
-				e60_codemp,e60_numemp,
-				e60_emiss as dtempenho,
-				z01_nome,
-				z01_cgccpf,
-				lpad((CASE WHEN o40_codtri = '0'
-         OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0) as o58_orgao,
-				lpad((CASE WHEN o41_codtri = '0'
-           OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0) as o58_unidade,
-				o58_funcao,
-				o58_subfuncao,
-				o58_programa,
-				o58_projativ,
-				substr(o56_elemento,2,6) as elemento,
-				substr(o56_elemento,8,2) as subelemento,
-				substr(o56_elemento,2,2) as divida,
-				o15_codtri as recurso,
-				e50_obs,
-				case when date_part('year',e50_data) < 2015 then e71_codnota::varchar else
-                   (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0')) end as nroliquidacao,
-				si09_codorgaotce,
-				o41_subunidade as subunidade
-			from conlancam
-				join conlancamdoc on c71_codlan = c70_codlan
-				join conlancamord on c80_codlan = c71_codlan
-				join pagordem on c80_codord = e50_codord
-				join pagordemele on e53_codord = e50_codord
-				join pagordemnota on e71_codord = c80_codord
-				join empempenho on e50_numemp = e60_numemp
-				join cgm on e60_numcgm = z01_numcgm
-				join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
-				join orcelemento on o58_codele = o56_codele and o58_anousu = o56_anousu
-				join orctiporec on o58_codigo  = o15_codigo
-				join orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
-				JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-		   left join  infocomplementaresinstit on e60_instit = si09_instit and si09_instit = " . db_getsession("DB_instit") . "
-			   where c71_coddoc in (6,36,38)
-			     and o41_instit = " . db_getsession("DB_instit") . "
-			     and e60_instit = " . db_getsession("DB_instit") . "
-			     and c71_data between '" . $this->sDataInicial . "'
-			     and  '" . $this->sDataFinal . "'";
+   $sSql = "SELECT c71_coddoc,
+                   e50_codord,
+                   c71_codlan,
+                   c70_data AS dtanulacao,
+                   e50_data AS dtordem,
+                   e50_data AS dtliquida,
+                  (SELECT c71_codlan AS dtpagamento FROM conlancamdoc
+                   WHERE c71_codlan =
+                       (SELECT max(c71_codlan) FROM conlancamdoc
+                        JOIN conlancamord ON c80_codlan = c71_codlan
+                        WHERE c80_codord = e50_codord
+                          AND c71_coddoc IN (5, 35, 37)
+                          AND c71_codlan < c70_codlan) )||lpad(e50_codord, 10, 0) AS numordem,
+                   e50_codord AS numLiquida,
+                   c70_valor AS vlrordem,            
+                  (SELECT c71_data AS dtpagamento FROM conlancamdoc
+                   WHERE c71_codlan =  (SELECT max(c71_codlan) FROM conlancamdoc
+                                        JOIN conlancamord ON c80_codlan = c71_codlan
+                                        WHERE c80_codord = e50_codord
+                                          AND c71_coddoc IN (5, 35, 37)
+                                          AND c71_codlan < c70_codlan) ) AS dtpag,
+                   e60_codemp,
+                   e60_numemp,
+                   e60_emiss AS dtempenho,
+                   z01_nome,
+                   z01_cgccpf,
+                   lpad((CASE
+                             WHEN o40_codtri = '0'
+                                  OR NULL THEN o40_orgao::varchar
+                             ELSE o40_codtri
+                         END),2, 0) AS o58_orgao,
+                   lpad((CASE
+                             WHEN o41_codtri = '0'
+                                  OR NULL THEN o41_unidade::varchar
+                             ELSE o41_codtri
+                         END),3, 0) AS o58_unidade,
+                   o58_funcao,
+                   o58_subfuncao,
+                   o58_programa,
+                   o58_projativ,
+                   substr(o56_elemento, 2, 6) AS elemento,
+                   substr(o56_elemento, 8, 2) AS subelemento,
+                   substr(o56_elemento, 2, 2) AS divida,
+                   o15_codtri AS recurso,
+                   e50_obs,
+                   CASE
+                       WHEN date_part('year', e50_data) < 2015 THEN e71_codnota::varchar
+                       ELSE (rpad(e71_codnota::varchar, 9, '0') || lpad(e71_codord::varchar, 9, '0'))
+                   END AS nroliquidacao,
+                   si09_codorgaotce,
+                   o41_subunidade AS subunidade
+            FROM conlancam
+            JOIN conlancamdoc ON c71_codlan = c70_codlan
+            JOIN conlancamord ON c80_codlan = c71_codlan
+            JOIN pagordem ON c80_codord = e50_codord
+            JOIN pagordemele ON e53_codord = e50_codord
+            JOIN pagordemnota ON e71_codord = c80_codord
+            JOIN empempenho ON e50_numemp = e60_numemp
+            JOIN cgm ON e60_numcgm = z01_numcgm
+            JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu
+            JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+            JOIN orctiporec ON o58_codigo = o15_codigo
+            JOIN orcunidade ON o58_anousu = o41_anousu AND o58_orgao = o41_orgao AND o58_unidade = o41_unidade
+            JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
+            LEFT JOIN infocomplementaresinstit ON e60_instit = si09_instit AND si09_instit = " . db_getsession("DB_instit") . "
+            WHERE c71_coddoc IN (6, 36, 38)
+              AND o41_instit = " . db_getsession("DB_instit") . "
+              AND e60_instit = " . db_getsession("DB_instit") . "
+              AND c71_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
     //echo $sSql;
     $rsAnulacao = db_query($sSql);
     //db_criatabela($rsAnulacao);
@@ -192,21 +198,20 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
       }
 
-      if ($sTrataCodUnidade == "2") {
+        if (($sTrataCodUnidade == "2") && ($oAnulacoes->subunidade != '' && $oAnulacoes->subunidade != 0)){
 
-        $sCodUnidade = str_pad($oAnulacoes->o58_orgao, 3, "0", STR_PAD_LEFT);
-        $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 2, "0", STR_PAD_LEFT);
+            $sCodUnidade = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT);
+            $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
+            $sCodUnidade .= str_pad($oAnulacoes->subunidade, 3, "0", STR_PAD_LEFT);
 
-      } else {
+        } else {
 
-        $sCodUnidade = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT);
-        $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
+            $sCodUnidade = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT);
+            $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
 
-      }
+        }
 
-      if ($oAnulacoes->subunidade != '' && $oAnulacoes->subunidade != 0) {
-        $sCodUnidade .= str_pad($oAnulacoes->subunidade, 3, "0", STR_PAD_LEFT);
-      }
+
       /**
        * pegar quantidade de extornos
        */
