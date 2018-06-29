@@ -247,7 +247,7 @@ if( ($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
             </td>
 
             <td nowrap title="Colocar não para prestadores de serviço (autônomo)">
-              <b>Envio sicom: </b>
+              <b>Envio Sicom / Portal: </b>
             </td>
             <td>
               <?
