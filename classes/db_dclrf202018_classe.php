@@ -85,7 +85,7 @@ class cl_dclrf202018 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si191_dsccontopcredito == null ){
+     /*if($this->si191_dsccontopcredito == null ){
        $this->erro_sql = " Campo Descrição da ocorrência nao Informado.";
        $this->erro_campo = "si191_dsccontopcredito";
        $this->erro_banco = "";
@@ -93,7 +93,7 @@ class cl_dclrf202018 {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->si191_realizopcredito == null ){
        $this->erro_sql = " Campo operações de crédito vedadas nao Informado.";
        $this->erro_campo = "si191_realizopcredito";

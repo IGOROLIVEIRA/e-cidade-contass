@@ -74,7 +74,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarDCL
     $oInstituicao = db_utils::fieldsMemory($oInstituicao);
     $iCodOrgao = $oInstituicao->si09_codorgaotce;
 
-    db_inicio_transacao();
+    //db_inicio_transacao();
 
 
     // $this->sDataFinal['5'].$this->sDataFinal['6']
@@ -103,10 +103,9 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarDCL
      */
 
     $sSqldadoscomplementares = $cldadoscomplementareslrf->sql_query(null,"*",null, "c218_mesusu=".$this->sDataFinal['5'].$this->sDataFinal['6']." AND c218_codorgao = '$iCodOrgao' AND c218_anousu = ".db_getsession('DB_anousu')." ");
-
     $rsDadoscomplementares = $cldadoscomplementareslrf->sql_record($sSqldadoscomplementares);
     $rsDadoscomplementares = db_utils::getColectionByRecord($rsDadoscomplementares);
-    //var_dump($rsDadoscomplementares);
+    //echo '<pre>'; var_dump($rsDadoscomplementares);die;
     foreach ($rsDadoscomplementares as $dados) {
 
       $cldclrf10 = new cl_dclrf102018();
@@ -190,7 +189,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarDCL
     }
 
 
-    db_fim_transacao();
+    //db_fim_transacao();
 
     $oGerarDCLRF = new GerarDCLRF();
     $oGerarDCLRF->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];

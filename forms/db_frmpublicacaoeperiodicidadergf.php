@@ -40,7 +40,7 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
      </td>
      <td>
       <?
-      db_input('c221_localpublicacaorgf',80,0,true,'text',$db_opcao,"")
+      db_input('c221_localpublicacaorgf',80,0,true,'text',$db_opcao,"","","","",1000)
       ?>
     </td>
   </tr>
@@ -138,17 +138,17 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
         }
       }
       /*VALIDAÇÕES DOS OUTROS FORMS DAS OUTRAS ABAS*/
-      if(top.corpo.dadoscomplementares.c218_mesusu == "0"){
+      if(top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value == "0"){
         alert('O campo "Mês de Referência" não foi preenchido.');
         return false;
       }
           <?php if(db_getsession("DB_instit") == 1): ?>
-      if(top.corpo.dadoscomplementares.c218_metarrecada == "0" && (top.corpo.dadoscomplementares.c218_mesusu % 2) == 0){
+      if(top.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "0" && (top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value % 2) == 0){
         alert('O campo "A meta bimestral de arrecadação foi cumprida" não foi preenchido.');
         return false;
       }    <?php endif; ?>
-      if(top.corpo.dadoscomplementares.c218_metarrecada == "2"){
-        if(top.corpo.dadoscomplementares.c218_dscmedidasadotadas == ""){
+      if(top.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "2"){
+        if(top.corpo.iframe_dadoscomplementares.document.form1.c218_dscmedidasadotadas.value == ""){
           alert('O campo "Medidas adotadas e a adotar" não foi preenchido.');
           return false;
         }
@@ -156,51 +156,51 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
       <?php if(db_getsession('DB_instit') == 1): ?>
     // SÓ VALIDA OPERACOES DE CREDITO SE A INSTITUIÇÃO FOR PREFEITURA
     // E O MES DE REFERENCIA FOR DEZEMBRO
-    if(top.corpo.dadoscomplementares.c218_mesusu == "12"){
-     if(top.corpo.operacoesdecredito.c219_contopcredito == "0"){
+    if(top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value == "12"){
+     if(top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value == "0"){
       alert('O campo "Contratação de Operação que não atendeu limites Art. 33 LC 101/2000" não foi preenchido.');
       return false;
     }
-    if(top.corpo.operacoesdecredito.c219_realizopcredito == "0"){
+    if(top.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value == "0"){
       alert('O campo "Realização de Operações de crédito vedadas pelo Art. 37 LC 101/2000" não foi preenchido.');
       return false;
     }
-    if(top.corpo.operacoesdecredito.c219_tiporealizopcreditocapta == "0"){
+    if(top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value == "0"){
       alert('O campo "Tipo de realização de operações de crédito vedada (Captação)" não foi preenchido.');
       return false;
     }
-    if(top.corpo.operacoesdecredito.c219_tiporealizopcreditoreceb == "0"){
+    if(top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.value == "0"){
       alert('O campo "Tipo de realização de operações de crédito vedada (Recebimento)" não foi preenchido.');
       return false;
     }
-    if(top.corpo.operacoesdecredito.c219_tiporealizopcreditoassundir == "0"){
+    if(top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.value == "0"){
       alert('O campo "Tipo de realização de operações de crédito vedada (Assução direta)" não foi preenchido.');
       return false;
     }
-    if(top.corpo.operacoesdecredito.c219_tiporealizopcreditoassunobg == "0"){
+    if(top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.value == "0"){
       alert('O campo "Tipo de realização de operações de crédito vedada (Assução de obrigação)" não foi preenchido.');
       return false;
     }
   }
     // VALIDA A ABA PUBLICACAO E PERIODICIDADE RREO
-    if(top.corpo.publicacaoeperiodicidaderreo.c220_publiclrf == "0"){
+    if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value == "0"){
       alert('O campo "Houve publicação do RREO" não foi preenchido.');
       return false;
     }else{
-      if(top.corpo.publicacaoeperiodicidaderreo.c220_publiclrf == "1"){
-        if(top.corpo.publicacaoeperiodicidaderreo.c220_dtpublicacaorelatoriolrf == ""){
+      if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value == "1"){
+        if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_dtpublicacaorelatoriolrf.value == ""){
           alert('O campo "Data de publicação do RREO da LRF" não foi preenchido.');
           return false;
         }
-        if(top.corpo.publicacaoeperiodicidaderreo.c220_localpublicacao == ""){
+        if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_localpublicacao.value == ""){
           alert('O campo "Onde foi dada a publicidade do RREO" não foi preenchido.');
           return false;
         }
-        if(top.corpo.publicacaoeperiodicidaderreo.c220_tpbimestre == "0"){
+        if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.value == "0"){
           alert('O campo "Bimestre a que se refere a data de publicação do RREO da LRF" não foi preenchido.');
           return false;
         }
-        if(top.corpo.publicacaoeperiodicidaderreo.c220_exerciciotpbimestre == ""){
+        if(top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_exerciciotpbimestre.value == ""){
           alert('O campo "Exercício a que se refere o período da publicação do RREO da LRF" não foi preenchido.');
           return false;
         }

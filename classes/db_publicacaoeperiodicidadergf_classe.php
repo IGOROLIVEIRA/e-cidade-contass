@@ -90,7 +90,7 @@ class cl_publicacaoeperiodicidadergf {
                 values (
                                 $this->c221_dadoscomplementareslrf
                                ,$this->c221_publicrgf
-                               ,'$this->c221_dtpublicacaorelatoriorgf'
+                               ,".($this->c221_dtpublicacaorelatoriorgf == "null" || $this->c221_dtpublicacaorelatoriorgf == ""?"null":"'".$this->c221_dtpublicacaorelatoriorgf."'")."
                                ,'$this->c221_localpublicacaorgf'
                                ,$this->c221_tpperiodo
                                ,$this->c221_exerciciotpperiodo

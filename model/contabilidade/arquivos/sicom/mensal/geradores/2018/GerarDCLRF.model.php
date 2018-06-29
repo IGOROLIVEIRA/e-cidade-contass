@@ -73,7 +73,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
           $this->sLinha = $aCSVDCLRF10;
           $this->adicionaLinha();
         endif;
-        if($iMes == 12){
+        if($this->iMes == 12){
           if($aDCLRF['si191_reg10'] != null || $aDCLRF['si191_reg10'] != ""){
 
             $aCSVDCLRF20['si191_tiporegistro']                = str_pad($aDCLRF['si191_tiporegistro'], 2, "0", STR_PAD_LEFT);
@@ -93,7 +93,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
         if($aDCLRF['si192_reg10'] != null || $aDCLRF['si192_reg10'] != ""){
             $aCSVDCLRF30['si192_tiporegistro']              = $aDCLRF['si192_tiporegistro'];
             $aCSVDCLRF30['si192_publiclrf']                 = $aDCLRF['si192_publiclrf'];
-            $aCSVDCLRF30['si192_dtpublicacaorelatoriolrf']  = date('dmY', strtotime($aDCLRF['si192_dtpublicacaorelatoriolrf']));
+            $aCSVDCLRF30['si192_dtpublicacaorelatoriolrf']  = ($aDCLRF['si192_dtpublicacaorelatoriolrf'] != '' || $aDCLRF['si192_dtpublicacaorelatoriolrf'] != null) ? date('dmY', strtotime($aDCLRF['si192_dtpublicacaorelatoriolrf'])) : '';
             $aCSVDCLRF30['si192_localpublicacao']           = $aDCLRF['si192_localpublicacao'] == '' ? ' ': substr($aDCLRF['si192_localpublicacao'], 0, 1000);
             $aCSVDCLRF30['si192_tpbimestre']                = $aDCLRF['si192_tpbimestre'] == 0 ? ' ' : $aDCLRF['si192_tpbimestre'] ;
             $aCSVDCLRF30['si192_exerciciotpbimestre']       = $aDCLRF['si192_exerciciotpbimestre'] == '' ? ' ' : substr($aDCLRF['si192_exerciciotpbimestre'], 0, 4) ;
@@ -104,7 +104,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
         if($aDCLRF['si193_reg10'] != null || $aDCLRF['si193_reg10'] != ""){
             $aCSVDCLRF40['si193_tiporegistro']              = $aDCLRF['si193_tiporegistro'];
             $aCSVDCLRF40['si193_publicrgf']                 = $aDCLRF['si193_publicrgf'];
-            $aCSVDCLRF40['si193_dtpublicacaorelatoriorgf']  = date('dmY', strtotime($aDCLRF['si193_dtpublicacaorelatoriorgf']));
+            $aCSVDCLRF40['si193_dtpublicacaorelatoriorgf']  = ($aDCLRF['si193_dtpublicacaorelatoriorgf'] != '' || $aDCLRF['si193_dtpublicacaorelatoriorgf'] != null) ? date('dmY', strtotime($aDCLRF['si193_dtpublicacaorelatoriorgf'])) : '';
             $aCSVDCLRF40['si193_localpublicacaorgf']        = $aDCLRF['si193_localpublicacaorgf'] == '' ? ' ': substr($aDCLRF['si193_localpublicacaorgf'], 0, 1000);
             $aCSVDCLRF40['si193_tpperiodo']                 = $aDCLRF['si193_tpperiodo'] == 0 ? ' ' : $aDCLRF['si193_tpperiodo'] ;
             $aCSVDCLRF40['si193_exerciciotpperiodo']        = $aDCLRF['si193_exerciciotpperiodo'] == '' ? ' ' : substr($aDCLRF['si193_exerciciotpperiodo'], 0, 4) ;

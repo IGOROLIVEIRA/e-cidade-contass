@@ -89,7 +89,8 @@ class cl_dclrf402018 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si193_dtpublicacaorelatoriorgf == null ){
+
+     /*if($this->si193_dtpublicacaorelatoriorgf == null ){
        $this->erro_sql = " Campo Data de publicação do RGF da LRF nao Informado.";
        $this->erro_campo = "si193_dtpublicacaorelatoriorgf_dia";
        $this->erro_banco = "";
@@ -124,7 +125,7 @@ class cl_dclrf402018 {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->si193_tiporegistro == null ){
        $this->erro_sql = " Campo Tipo Registro nao Informado.";
        $this->erro_campo = "si193_tiporegistro";
@@ -146,12 +147,30 @@ class cl_dclrf402018 {
                 values (
                                 $this->si193_reg10
                                ,$this->si193_publicrgf
-                               ,".($this->si193_dtpublicacaorelatoriorgf == "null" || $this->si193_dtpublicacaorelatoriorgf == ""?"null":"'".$this->si193_dtpublicacaorelatoriorgf."'")."
-                               ,'$this->si193_localpublicacaorgf'
-                               ,$this->si193_tpperiodo
-                               ,$this->si193_exerciciotpperiodo
+                               ,".($this->si193_dtpublicacaorelatoriorgf == "null" || $this->si193_dtpublicacaorelatoriorgf == "" ? "null" : "'".$this->si193_dtpublicacaorelatoriorgf."'")."
+                               ,".($this->si193_localpublicacaorgf == "null" || $this->si193_localpublicacaorgf == "" ? "null" : "'".$this->si193_localpublicacaorgf."'")."
+                               ,".($this->si193_tpperiodo == "null" || $this->si193_tpperiodo == "" ? "null" : $this->si193_tpperiodo)."
+                               ,".($this->si193_exerciciotpperiodo == "null" || $this->si193_exerciciotpperiodo == "" ? "null" : $this->si193_exerciciotpperiodo)."
                                ,$this->si193_tiporegistro
                       )");
+     /*die("insert into dclrf402018(
+                                       si193_reg10
+                                      ,si193_publicrgf
+                                      ,si193_dtpublicacaorelatoriorgf
+                                      ,si193_localpublicacaorgf
+                                      ,si193_tpperiodo
+                                      ,si193_exerciciotpperiodo
+                                      ,si193_tiporegistro
+                       )
+                values (
+                                $this->si193_reg10
+                               ,$this->si193_publicrgf
+                               ,".($this->si193_dtpublicacaorelatoriorgf == "null" || $this->si193_dtpublicacaorelatoriorgf == "" ? "null" : "'".$this->si193_dtpublicacaorelatoriorgf."'")."
+                               ,".($this->si193_localpublicacaorgf == "null" || $this->si193_localpublicacaorgf == "" ? "null" : "'".$this->si193_localpublicacaorgf."'")."
+                               ,".($this->si193_tpperiodo == "null" || $this->si193_tpperiodo == "" ? "null" : $this->si193_tpperiodo)."
+                               ,".($this->si193_exerciciotpperiodo == "null" || $this->si193_exerciciotpperiodo == "" ? "null" : $this->si193_exerciciotpperiodo)."
+                               ,$this->si193_tiporegistro
+                      )");*/
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){

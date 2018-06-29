@@ -129,7 +129,7 @@ switch ($oParam->exec) {
     if(!$erro){
       $oDaoPublicacaoeperiodicidadergf->c221_dadoscomplementareslrf = $oDaoDadoscomplementareslrf->c218_sequencial;
       $oDaoPublicacaoeperiodicidadergf->c221_publicrgf = $oParam->publicacaoeperiodicidadergf->c221_publicrgf;
-      $oDaoPublicacaoeperiodicidadergf->c221_dtpublicacaorelatoriorgf = date('Y-m-d', strtotime($oParam->publicacaoeperiodicidadergf->c221_dtpublicacaorelatoriorgf));
+      $oDaoPublicacaoeperiodicidadergf->c221_dtpublicacaorelatoriorgf = $oParam->publicacaoeperiodicidadergf->c221_dtpublicacaorelatoriorgf;
       $oDaoPublicacaoeperiodicidadergf->c221_localpublicacaorgf = $oParam->publicacaoeperiodicidadergf->c221_localpublicacaorgf;
       $oDaoPublicacaoeperiodicidadergf->c221_tpperiodo = $oParam->publicacaoeperiodicidadergf->c221_tpperiodo;
       $oDaoPublicacaoeperiodicidadergf->c221_exerciciotpperiodo = $oParam->publicacaoeperiodicidadergf->c221_exerciciotpperiodo;
@@ -156,7 +156,6 @@ switch ($oParam->exec) {
   }
 
 }
-
 db_fim_transacao($erro);
 
 break;
@@ -202,9 +201,15 @@ break;
 case 'getSaldo':
 
 $oDaoDividaconsolidada = db_utils::getDao('dividaconsolidada');
-$oDividaconsolidada = $oDaoDividaconsolidada->sql_query_file(null,"*",null,'si167_mesreferencia = '.$oParam->mesReferencia.' AND si167_anoreferencia = '.db_getsession('DB_anousu').' AND si167_instit = '.db_getsession('DB_instit').' ');
+//$oDividaconsolidada = $oDaoDividaconsolidada->sql_query_file(null,"*",null,'si167_mesreferencia = '.$oParam->mesReferencia.' AND si167_anoreferencia = '.db_getsession('DB_anousu').' AND si167_instit = '.db_getsession('DB_instit').' ');
+$sSQL = "
+  SELECT SUM(si167_vlsaldoatual) si167_vlsaldoatual
+    FROM dividaconsolidada
+     WHERE si167_anoreferencia = ".db_getsession('DB_anousu')."
+      AND si167_mesreferencia = {$oParam->mesReferencia}
+";
 
-$oDividaconsolidada = $oDaoDividaconsolidada->sql_record($oDividaconsolidada);
+$oDividaconsolidada = $oDaoDividaconsolidada->sql_record($sSQL);
 $oDividaconsolidada = db_utils::fieldsMemory($oDividaconsolidada);
 
 $si167_vlsaldoatual = $oDividaconsolidada->si167_vlsaldoatual;

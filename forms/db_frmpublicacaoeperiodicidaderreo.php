@@ -42,7 +42,7 @@ $clpublicacaoeperiodicidaderreo->rotulo->label();
      </td>
      <td>
       <?
-      db_input('c220_localpublicacao',80,0,true,'text',$db_opcao,"")
+      db_input('c220_localpublicacao',80,'',true,'text',$db_opcao,"","","","",1000)
       ?>
     </td>
   </tr>

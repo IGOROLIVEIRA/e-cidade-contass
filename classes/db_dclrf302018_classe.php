@@ -89,14 +89,13 @@ class cl_dclrf302018 {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si192_dtpublicacaorelatoriolrf == null ){
+     /*if($this->si192_dtpublicacaorelatoriolrf == null ){
        $this->erro_sql = " Campo Data de publicação do RREO da LRF nao Informado.";
        $this->erro_campo = "si192_dtpublicacaorelatoriolrf_dia";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
-       return false;
      }
      if($this->si192_localpublicacao == null ){
        $this->erro_sql = " Campo Onde foi dada a publicidade do RREO nao Informado.";
@@ -124,7 +123,7 @@ class cl_dclrf302018 {
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
-     }
+     }*/
      if($this->si192_tiporegistro == null ){
        $this->erro_sql = " Campo Tipo registro nao Informado.";
        $this->erro_campo = "si192_tiporegistro";
@@ -146,10 +145,10 @@ class cl_dclrf302018 {
                 values (
                                 $this->si192_reg10
                                ,$this->si192_publiclrf
-                               ,".($this->si192_dtpublicacaorelatoriolrf == "null" || $this->si192_dtpublicacaorelatoriolrf == ""?"null":"'".$this->si192_dtpublicacaorelatoriolrf."'")."
-                               ,'$this->si192_localpublicacao'
-                               ,$this->si192_tpbimestre
-                               ,$this->si192_exerciciotpbimestre
+                               ,".($this->si192_dtpublicacaorelatoriolrf == "null" || $this->si192_dtpublicacaorelatoriolrf == "" ? "null" : "'".$this->si192_dtpublicacaorelatoriolrf."'")."
+                               ,".($this->si192_localpublicacao == "null" || $this->si192_localpublicacao == "" ? "null" : "'".$this->si192_localpublicacao."'")."
+                               ,".($this->si192_tpbimestre == "null" || $this->si192_tpbimestre == "" ? "null" : $this->si192_tpbimestre)."
+                               ,".($this->si192_exerciciotpbimestre == "null" || $this->si192_exerciciotpbimestre == "" ? "null" : $this->si192_exerciciotpbimestre)."
                                ,$this->si192_tiporegistro
                       )");
      if($result==false){

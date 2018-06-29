@@ -242,7 +242,7 @@ $cldadoscomplementareslrf->rotulo->label();
  </td>
  <td align="right">
   <?
-  db_select('c218_metarrecada',array('Selecione',1=>'Sim', 2=>'Não'),true,$db_opcao,"onchange='js_metaBimestral();'");
+  db_select('c218_metarrecada',array('Selecione',1=>'Sim', 2=>'Não'),true,1,"onchange='js_metaBimestral();'");
   ?>
 </td>
 </tr>
@@ -383,6 +383,8 @@ function js_preenchepesquisa(chave){
       document.form1.c218_vlapropiacaodepositosjudiciais.value = oRetorno.c218_vlapropiacaodepositosjudiciais;
       document.form1.c218_vloutrosajustes.value = oRetorno.c218_vloutrosajustes;
       document.form1.c218_metarrecada.value = oRetorno.c218_metarrecada;
+      document.form1.c218_metarrecada.disabled = "true";
+      document.form1.c218_metarrecada.style.background = "#DEB887";
       document.form1.c218_dscmedidasadotadas.value = oRetorno.c218_dscmedidasadotadas;
 
       top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value = oRetorno.c219_contopcredito;
@@ -394,13 +396,13 @@ function js_preenchepesquisa(chave){
       top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.value = oRetorno.c219_tiporealizopcreditoassunobg;
 
       top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value = oRetorno.c220_publiclrf;
-      top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_dtpublicacaorelatoriolrf.value = oRetorno.c220_dtpublicacaorelatoriolrf;
+      top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_dtpublicacaorelatoriolrf.value = oRetorno.c220_dtpublicacaorelatoriolrf.split("-").reverse().join("/");;
       top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_localpublicacao.value = oRetorno.c220_localpublicacao;
       top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.value = oRetorno.c220_tpbimestre;
       top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_exerciciotpbimestre.value = oRetorno.c220_exerciciotpbimestre;
 
       top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_publicrgf.value = oRetorno.c221_publicrgf;
-      top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_dtpublicacaorelatoriorgf.value = oRetorno.c221_dtpublicacaorelatoriorgf;
+      top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_dtpublicacaorelatoriorgf.value = oRetorno.c221_dtpublicacaorelatoriorgf.split("-").reverse().join("/");
       top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_localpublicacaorgf.value = oRetorno.c221_localpublicacaorgf;
       top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_tpperiodo.value = oRetorno.c221_tpperiodo;
       top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_exerciciotpperiodo.value = oRetorno.c221_exerciciotpperiodo;
@@ -451,6 +453,8 @@ function js_preenchepesquisa(chave){
       <?php if($db_opcao == 3): ?>
 
       // DISABILITAÇÃO DOS CAMPOS SELECT QUANDO A OPCAO É EXCLUSAO
+      document.form1.c218_metarrecada.disabled = false;
+
       top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.disabled = true;
       top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.style.background = "#DEB887";
 
@@ -488,14 +492,20 @@ function js_preenchepesquisa(chave){
       }else{
         top.corpo.formaba[1].setAttribute("onclick", "");
       }
+      if((document.form1.c218_mesusu.value % 2) == 0){
+        document.getElementById("metaArrecadada").style.display = "";
+        document.getElementById("c218_metarrecada").style.width = "100%";
+      }else{
+        document.getElementById("metaArrecadada").style.display = "none";
+      }
     <?php endif; ?>
     js_removeObj('msgBox');
- if(oRetorno.c218_metarrecada == "2"){
-    document.getElementById("medidasAdotadas").style.display = "";
+   if(oRetorno.c218_metarrecada == "2"){
+      document.getElementById("medidasAdotadas").style.display = "";
 
-  }else{
-    document.getElementById("medidasAdotadas").style.display = "none";
-  }
+    }else{
+      document.getElementById("medidasAdotadas").style.display = "none";
+    }
 
   if(oRetorno.c218_medidascorretivas!=""){
     document.form1.medidasCorretivas.value = 1;
@@ -503,19 +513,19 @@ function js_preenchepesquisa(chave){
   }
   })
 });
-js_getSaldo();
+//js_getSaldo();
 }
+
 function js_getSaldo(){
- <?php if(db_getsession("DB_instit") == 1): ?>
- if((document.form1.c218_mesusu.value % 2) == 0){
-  document.getElementById("metaArrecadada").style.display = "";
-  document.getElementById("c218_metarrecada").style.width = "100%";
-}else{
-  document.getElementById("metaArrecadada").style.display = "none";
-}
+<?php if(db_getsession("DB_instit") == 1): ?>
+   if((document.form1.c218_mesusu.value % 2) == 0){
+    document.getElementById("metaArrecadada").style.display = "";
+    document.getElementById("c218_metarrecada").style.width = "100%";
+  }else{
+    document.getElementById("metaArrecadada").style.display = "none";
+  }
 <?php endif;?>
 var oParametros = new Object();
-
 oParametros.exec = 'getSaldo';
 oParametros.mesReferencia = document.form1.c218_mesusu.value;
 js_divCarregando('Carregando...', 'msgBox');
