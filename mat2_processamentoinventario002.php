@@ -99,7 +99,7 @@ if($tipoimpressao == 1){
                                                       c60_anousu)
                 JOIN db_estruturavalor e ON m65_db_estruturavalor = db121_sequencial
                 WHERE i77_inventario = $inventario $whereMateriais
-                ORDER BY i77_db_depart";
+                ORDER BY i77_db_depart, m60_descr";
 
     $rsSql       = db_query($sSql);
     $rsResultado = db_utils::getCollectionByRecord($rsSql);
