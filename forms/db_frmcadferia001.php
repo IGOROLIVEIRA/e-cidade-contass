@@ -295,32 +295,78 @@ if(isset($r30_regist)) {
     <?
     if($dbopcao == false){
     ?>
+
+    <!-- PERÍODO DIAS REMUNERADOS -->
+
     <tr>
-      <td nowrap title="Período a gozar" align="right">
+        <td nowrap title="Período dias remunerados" align="right">
+            <?
+            db_ancora("<b>Período dias remunerados:</b>", "", 3);
+            ?>
+        </td>
+        <td colspan="3">
+            <?
+            if(!isset($r30_per1i)){
+                $r30_per1i = "";
+                $r30_per1i_dia = "";
+                $r30_per1i_mes = "";
+                $r30_per1i_ano = "";
+
+                $r30_per1f = "";
+                $r30_per1f_dia = "";
+                $r30_per1f_mes = "";
+                $r30_per1f_ano = "";
+            }
+
+            db_inputdata('r30_per1i', @$r30_per1i_dia, @$r30_per1i_mes, @$r30_per1i_ano, true, 'text', $db_opcao, "onchange='js_verificadataini(1);'","","","parent.js_verificadataini(1);");
+            ?>
+            &nbsp;&nbsp;<b>a</b>&nbsp;&nbsp;
+            <?
+            db_inputdata('r30_per1f', @$r30_per1f_dia, @$r30_per1f_mes, @$r30_per1f_ano, true, 'text', $db_opcao, "onchange='js_verificadatafim(1);'","","","parent.js_verificadatafim(1);");
+            ?>
+        </td>
+    </tr>
+
+<!--    CHECKBOX    -->
+    <tr>
+        <td nowrap title="Dias a gozar" align="right">
+            <?
+            db_ancora("<b>Novo período recibo:</b>", "", 3);
+            ?>
+        </td>
+        <td>
+            <input type="checkbox" onclick="js_exibeNovoPeriodoRecibo(this)">
+        </td>
+    </tr>
+
+<!-- PERÍODO A GOZAR - RECIBO -->
+
+    <tr id="linhaPeriodoAGozarRecibo" style="display: none;">
+      <td nowrap title="Período a gozar - Recibo" align="right">
         <?
-        db_ancora("<b>Período a gozar:</b>", "", 3);
+        db_ancora("<b>Período a gozar - Recibo:</b>", "", 3);
         ?>
       </td>
       <td colspan="3">
         <?
-        if(!isset($r30_per1i)){
-          $r30_per1i = "";
-          $r30_per1i_dia = "";
-          $r30_per1i_mes = "";
-          $r30_per1i_ano = "";
+        if(!isset($r30_periodogozrecini)){
+          $r30_periodogozrecini = "";
+          $r30_periodogozrecini_dia = "";
+          $r30_periodogozrecini_mes = "";
+          $r30_periodogozrecini_ano = "";
 
-          $r30_per1f = "";
-          $r30_per1f_dia = "";
-          $r30_per1f_mes = "";
-          $r30_per1f_ano = "";
+          $r30_periodogozrecfim = "";
+          $r30_periodogozrecfim_dia = "";
+          $r30_periodogozrecfim_mes = "";
+          $r30_periodogozrecfim_ano = "";
         }
 
 
-        db_inputdata('r30_per1i', @$r30_per1i_dia, @$r30_per1i_mes, @$r30_per1i_ano, true, 'text', $db_opcao, "onchange='js_verificadataini(1);'","","","parent.js_verificadataini(1);");
+        db_inputdata('r30_periodogozrecini', @$r30_periodogozrecini_dia, @$r30_periodogozrecini_mes, @$r30_periodogozrecini_ano, true, 'text', $db_opcao, "onchange='js_verificaperiodogozrecini();'","","","parent.js_verificaperiodogozrecini();");
         ?>
-        &nbsp;&nbsp;<b>a</b>&nbsp;&nbsp;
+        &nbsp;&nbsp;<b>a</b>
         <?
-        db_inputdata('r30_per1f', @$r30_per1f_dia, @$r30_per1f_mes, @$r30_per1f_ano, true, 'text', $db_opcao, "onchange='js_verificadatafim(1);'","","","parent.js_verificadatafim(1);");
+        db_inputdata('r30_periodogozrecfim', @$r30_periodogozrecfim_dia, @$r30_periodogozrecfim_mes, @$r30_periodogozrecfim_ano, true, 'text', $db_opcao, "onchange='js_verificaperiodogozrecfim();'","","","parent.js_verificaperiodogozrecfim();");
         ?>
       </td>
     </tr>
@@ -792,6 +838,15 @@ if(isset($dbopcao) && $dbopcao == true){
   }
 
 }
+
+function js_exibeNovoPeriodoRecibo(checkbox){
+    if(checkbox.checked){
+        $("linhaPeriodoAGozarRecibo").show();
+        return
+    }
+    $("linhaPeriodoAGozarRecibo").hide();
+}
+
 function js_faltas(opcao,perai,peraf,antes,nfalt,navos,debug){
   qry = 'opcao='+opcao;
   qry+= '&perai='+perai;
@@ -1114,7 +1169,6 @@ function js_verificadataini(campo){
 }
 
 
-
 function js_verificadatafim(campo){
   x = document.form1;
 
@@ -1178,6 +1232,152 @@ function js_verificadatafim(campo){
     evaldiai.focus();
   }
 }
+
+// r30_periodogozrecini
+
+function js_verificaperiodogozrecini(campo){
+
+    x = document.form1;
+
+    evaldiai = eval("x.r30_periodogozrecini_dia");
+    evalmesi = eval("x.r30_periodogozrecini_mes");
+    evalanoi = eval("x.r30_periodogozrecini_ano");
+    evaldatacompletai = eval("x.r30_periodogozrecini");
+
+    evaldiaf = eval("x.r30_periodogozrecfim_dia");
+    evalmesf = eval("x.r30_periodogozrecfim_mes");
+    evalanof = eval("x.r30_periodogozrecfim_ano");
+
+    evaldatacompletaf = eval("x.r30_periodogozrecfim");
+
+    if(evaldiai.value!= "" && evalmesi.value != "" && evalanoi.value != ""){
+        nsaldo = new Number(x.nsaldo.value);
+        if(nsaldo > 0){
+            somadias = new Number(evaldiai.value);
+            somadias+= new Number(nsaldo);
+            somadias-= new Number(1);
+        }else{
+            somadias = 0;
+        }
+
+        qualmess = new Number(evalmesi.value);
+        qualmess-= new Number(1);
+
+
+        per2i = new Date(evalanoi.value,qualmess,evaldiai.value,1,0,0);
+
+        per2f = new Date(evalanoi.value,qualmess,somadias,1,0,0);
+
+        diaci = new Date(<?=db_anofolha()?>,(<?=db_mesfolha()?> - 1),1);
+        diacf = new Date(<?=db_anofolha()?>,(<?=db_mesfolha()?> - 1),(<?=db_dias_mes(db_anofolha(),db_mesfolha())?> + 180));
+
+        if(per2i >= diaci && per2f <= diacf){
+            if(per2i > per2f){
+                per2f = per2i;
+            }
+            evaldiaf.value = per2f.getDate()<10?"0"+per2f.getDate():per2f.getDate();
+            evalmesf.value = (per2f.getMonth() + 1)<10?"0"+(per2f.getMonth() + 1):(per2f.getMonth() + 1);
+            evalanof.value = per2f.getFullYear();
+            <?
+            if(isset($dbopcao) && $dbopcao == false){
+            ?>
+            js_faltas('vafast','','','','','');
+            <?
+            }
+            ?>
+        }else{
+            alert("A data para gozo deve ficar entre o primeiro dia do mês de competência\n e até 180 dias após o fim do período de competência");
+            evaldiaf.value = '';
+            evalmesf.value = '';
+            evalanof.value = '';
+            evaldiai.value = '';
+            evalmesi.value = '';
+            evalanoi.value = '';
+
+            evaldiai.focus();
+        }
+    }else{
+        evaldiaf.value = '';
+        evalmesf.value = '';
+        evalanof.value = '';
+    }
+    if (evaldiai.value != '') {
+        evaldatacompletai.value = evaldiai.value+'/'+evalmesi.value+'/'+evalanoi.value;
+    }
+
+    if (evaldiaf.value != '') {
+        evaldatacompletaf.value = evaldiaf.value+'/'+evalmesf.value+'/'+evalanof.value;
+    }
+
+}
+
+// r30_periodogozrecfim
+
+function js_verificaperiodogozrecfim(){
+    x = document.form1;
+
+    evaldiai = eval("x.r30_periodogozrecini_dia");
+    evalmesi = eval("x.r30_periodogozrecini_mes");
+    evalanoi = eval("x.r30_periodogozrecini_ano");
+
+    evaldiaf = eval("x.r30_periodogozrecfim_dia");
+    evalmesf = eval("x.r30_periodogozrecfim_mes");
+    evalanof = eval("x.r30_periodogozrecfim_ano");
+
+    if(evaldiai.value != "" && evalmesi.value != "" && evalanoi.value != ""){
+        if(evaldiaf.value != "" && evalmesf.value != "" && evalanof.value != ""){
+            qualmesi = new Number(evalmesi.value);
+            qualmesi-= new Number(1);
+
+            qualmesf = new Number(evalmesf.value);
+            qualmesf-= new Number(1);
+
+            per2i = new Date(evalanoi.value,qualmesi,evaldiai.value);
+            per2f = new Date(evalanof.value,qualmesf,evaldiaf.value);
+
+            qualmess = new Number(<?=db_mesfolha()?>);
+            qualmess-= new Number(1);
+
+            qualdias = new Number(<?=db_dias_mes(db_anofolha(),db_mesfolha())?>);
+            qualdias+= new Number(180);
+
+            diaci = new Date(<?=db_anofolha()?>,qualmess,1);
+            diacf = new Date(<?=db_anofolha()?>,qualmess,qualdias);
+
+            if(per2f > diacf){
+                alert("A data para gozo deve ficar entre o primeiro dia do mês de competência\n e até 180 dias após o fim do período de competência");
+                evaldiaf.value = '';
+                evalmesf.value = '';
+                evalanof.value = '';
+
+                evaldiaf.focus();
+            }else if(per2i > per2f){
+                alert("A data final para gozo deve ser inferior à data inicial.");
+                evaldiaf.value = '';
+                evalmesf.value = '';
+                evalanof.value = '';
+
+                evaldiaf.focus();
+            }
+        }else{
+            <?
+            if(isset($dbopcao) && $dbopcao == false){
+            ?>
+            js_faltas('vafast','','','','','');
+            <?
+            }
+            ?>
+        }
+    }else{
+        alert("Informe o período para gozo inicial.");
+        evaldiaf.value = '';
+        evalmesf.value = '';
+        evalanof.value = '';
+        evaldiai.focus();
+    }
+}
+
+
 function js_habilitaperiodo(opcao){
   if(document.form1.saldo.selectedIndex == 0){
     document.form1.dtjs_r30_per2i.disabled = false;

@@ -32,6 +32,7 @@ function grava_cadferia (){
   global $nabono, $r30_ndias, $paga_13, $mpsal ,$subpes,$cadferia, $r30_peri,$r30_perf, $mtipo, $nsaldo, $mpsal;
   global $r30_periodolivreinicial_dia, $r30_periodolivreinicial_mes, $r30_periodolivreinicial_ano, $r30_periodolivreinicial;
   global $r30_periodolivrefinal_dia, $r30_periodolivrefinal_mes, $r30_periodolivrefinal_ano, $r30_periodolivrefinal,$r30_obs;
+  global $r30_periodogozrecini, $r30_periodogozrecfim;
   
   $condicaoaux  =  " and r30_regist = ".db_sqlformat( $pessoal[0]["r01_regist"] ) ;
   $condicaoaux .=  " and r30_perai = ".db_sqlformat($r30_perai) ;
@@ -57,6 +58,8 @@ function grava_cadferia (){
        $matriz1[16] = "r30_anousu";
        $matriz1[17] = "r30_mesusu";
        $matriz1[18] = "r30_obs";
+       $matriz1[19] = "r30_periodogozrecini";
+       $matriz1[20] = "r30_periodogozrecfim";
        if (isset($r30_tipoapuracaomedia) && $r30_tipoapuracaomedia == 2) {
 
          $matriz1[19] = "r30_tipoapuracaomedia";
@@ -64,6 +67,7 @@ function grava_cadferia (){
          $matriz1[21] = "r30_periodolivrefinal";
          
        }
+
      
        $matriz2[1] = $pessoal[0]["r01_regist"];
        $matriz2[2] = $pessoal[0]["r01_numcgm"];
@@ -99,6 +103,12 @@ function grava_cadferia (){
          $r30_peraf =     $r30_periodolivrefinal;
        }
 
+//      $matriz2[19] = db_nulldata($r30_periodogozrecini_ano."-".$r30_periodogozrecini_mes."-".$r30_periodogozrecini_dia);
+//      $matriz2[20] = db_nulldata($r30_periodogozrecfim_ano."-".$r30_periodogozrecfim_mes."-".$r30_periodogozrecfim_dia);
+
+      $matriz2[19] = db_nulldata($r30_periodogozrecini);
+      $matriz2[20] = db_nulldata($r30_periodogozrecfim);
+
      if ($debug == true) {
        echo "grava_cadferia: Inserindo em cadferia: <br>";
        echo "grava_cadferia: Valores: <br>";
@@ -106,8 +116,10 @@ function grava_cadferia (){
        print_r($matriz2);
        echo "</pre>";
        echo "<br>";
-     }  
+     }
+
      db_insert( "cadferia", $matriz1, $matriz2 );
+
   } else if( $mtipo == "09") {
      
     db_debug1("vai gravar r30_per2i --> $r30_peri");
