@@ -107,8 +107,9 @@ try {
     if($oInventarioMaterial->numrows > 0){
      throw new BusinessException('Inventario já foi processado.');
    }else{
-
-     $oResult = $oInventarioMaterial->sql_query(null,'*',null,"i77_inventario = {$oParam->iInventario}", "m70_codmatmater");
+     $campos_ = "inventariomaterial.*,db_depart.*,matestoque.*,inventario.*,db_config.*,db_depart.*,
+        translate(matmater.m60_descr,'ÁÂÉÊÍÓÔÇ','AAEEIOOC') m60_descr";
+     $oResult = $oInventarioMaterial->sql_query(null,$campos_," m60_descr,m70_codmatmater ","i77_inventario = {$oParam->iInventario}");
      $oResult = $oInventarioMaterial->sql_record($oResult);
      if($oInventarioMaterial->numrows == 0){
       throw new BusinessException('Inventario não possui materiais vinculados.');
@@ -120,7 +121,7 @@ try {
 
 
   break;
-  case "getMateriaisVinculadosProcessados" :
+  case "getMateriaisVinculadosProcessados":
         //verifica se ja esta processado
   $sSql = "SELECT * FROM inventariomaterial WHERE i77_inventario = {$oParam->iInventario} AND i77_dataprocessamento IS NOT NULL";
   $oInventarioMaterial->sql_record($sSql);
@@ -129,7 +130,9 @@ try {
    throw new BusinessException('Inventario não processado.');
  }else{
 
-   $oResult = $oInventarioMaterial->sql_query(null,'*',null,"i77_inventario = {$oParam->iInventario}", "m70_codmatmater");
+   $campos_ = "inventariomaterial.*,db_depart.*,matestoque.*,inventario.*,db_config.*,db_depart.*,
+        translate(matmater.m60_descr,'ÁÂÉÊÍÓÔÇ','AAEEIOOC') m60_descr";
+   $oResult = $oInventarioMaterial->sql_query(null,$campos_," m60_descr,m70_codmatmater ","i77_inventario = {$oParam->iInventario}");
    $oResult = $oInventarioMaterial->sql_record($oResult);
    if($oInventarioMaterial->numrows == 0){
     throw new BusinessException('Inventario não possui materiais vinculados.');
@@ -203,9 +206,9 @@ $sWhereMat = implode(" and ",$aWhere);
 
 $sData = date("Y-m-d", db_getsession("DB_datausu"));
 $sHora = date("H:i:s");
-$sSql = "SELECT DISTINCT ON (m70_codigo, m70_codmatmater) m70_codigo, m70_codigo AS codigo,
+$sSql = "SELECT DISTINCT ON (m60_descr,m70_codmatmater, m70_codigo) m70_codigo, m70_codigo AS codigo,
 m70_codmatmater AS codigo_material,
-m60_descr AS descricao,
+translate(m60_descr,'ÁÂÉÊÍÓÔÇ','AAEEIOOC') AS descricao,
 m70_quant AS estoque,
 i77_valormedio AS valormedio,
 i77_contagem as contagem,
@@ -224,7 +227,7 @@ i77_dataprocessamento AS dataprocessamento,
   JOIN db_depart ON m70_coddepto = coddepto
   inner JOIN matmater ON m70_codmatmater = m60_codmater
   LEFT JOIN inventariomaterial ON i77_estoque = m70_codigo
-  WHERE ".$sWhereMat." and  m60_ativo = 't' ORDER BY m70_codigo , m70_codmatmater, (case when i77_inventario = {$oParam->inventario}
+  WHERE ".$sWhereMat." and  m60_ativo = 't' ORDER BY m60_descr,m70_codmatmater,m70_codigo, (case when i77_inventario = {$oParam->inventario}
   then 1 else 2 end )  ";
 
   $oResult = $oInventarioMaterial->sql_record($sSql);
