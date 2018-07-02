@@ -718,7 +718,10 @@ foreach ($aDadosRelatorio as $aDadosOrigem) {
        foreach ($aDadosProcessoForo as $aDados) {
 
          foreach ($aDados as $aDadosNumpre) {
-
+             /**
+              * Busca os dados do registro de imovel
+              */
+             $aDadosRegImovel = getDadosRegImovel($aDadosNumpre->numpre);
              /*
               * Montamos os objetos utilizados para totalização dos valores de acordo com o grupo de registros
               * - Origem
@@ -790,9 +793,11 @@ foreach ($aDadosRelatorio as $aDadosOrigem) {
              $oPdf->Cell( 13, 4 , db_formatar($aDadosNumpre->dtoper, "d")                ,"R"   ,0, "C", 0);
              $oPdf->Cell( 13, 4 , db_formatar($aDadosNumpre->dtvenc, "d")                ,"R"   ,0, "C", 0);
              $oPdf->cell( 13, 4 , $aDadosNumpre->origem                                  ,"R"   ,0, "L", 0);
+             $oPdf->cell( 13, 4 , $aDadosRegImovel->j04_quadraregimo                     ,"R"   ,0, "L", 0);
+             $oPdf->cell( 13, 4 , $aDadosRegImovel->j04_loteregimo                       ,"R"   ,0, "L", 0);
              $oPdf->Cell( 30, 4 , substr(trim($aDadosNumpre->histcalc_descricao) ,0,20)  ,"R"   ,0, "L", 0);
              $oPdf->Cell( 6 , 4 , $aDadosNumpre->receita                                 ,"R"   ,0, "C", 0);
-             $oPdf->Cell( 107, 4 , substr(trim($aDadosNumpre->receita_descricao) ,0,15)   ,"R"   ,0, "L", 0);
+             $oPdf->Cell( 81, 4 , substr(trim($aDadosNumpre->receita_descricao) ,0,15)   ,"R"   ,0, "L", 0);
 
              $oPdf->SetFont('arial','',6);
              $oPdf->Cell( 15 , 4 , db_formatar($aDadosNumpre->total_historico,'f')      ,"R"   ,0, "R", 0);
@@ -1139,9 +1144,11 @@ function fc_cabecalhoDebitos($oPdf) {
   $oPdf->Cell( 13 , 5 ,"OPER."    ,1,0,"C",0);
   $oPdf->Cell( 13 , 5 ,"VENC."    ,1,0,"C",0);
   $oPdf->Cell( 13 , 5 ,"ORIGEM"   ,1,0,"C",0);
+  $oPdf->Cell( 13 , 5 ,"LOTE"   ,1,0,"C",0);
+  $oPdf->Cell( 13 , 5 ,"QUADRA"   ,1,0,"C",0);
   $oPdf->Cell( 30 , 5 ,"DESCRIÇÃO",1,0,"C",0);
   $oPdf->Cell( 6  , 5 ,"REC"      ,1,0,"C",0);
-  $oPdf->Cell( 107 , 5 ,"DESCRIÇÃO",1,0,"C",0);
+  $oPdf->Cell( 81 , 5 ,"DESCRIÇÃO",1,0,"C",0);
   $oPdf->Cell( 15 , 5 ,"VALOR"    ,1,0,"C",0);
   $oPdf->Cell( 15 , 5 ,"CORRIGIDO",1,0,"C",0);
   $oPdf->Cell( 15 , 5 ,"JUROS"    ,1,0,"C",0);
@@ -1338,4 +1345,30 @@ function multiCell($oPdf,$aTexto,$iTamFixo,$iTam,$iTamCampo) {
   }
   $oPdf->x = $pos_x+$iTamCampo;
   $oPdf->y = $pos_y;
+}
+
+/**
+ * Método que retorna os dados do registro de imóveis
+ * @param #iNumpre
+ * @return stdClass Object
+ */
+function getDadosRegImovel($iNumpre){
+    $oRetorno = new stdClass();
+    $oDaoArrematric          = db_utils::getDao("arrematric");
+    $rsArrematric           = $oDaoArrematric->sql_record($oDaoArrematric->sql_query_file($iNumpre));
+    $oDadoArrematric = db_utils::fieldsMemory($rsArrematric, 0);
+
+    $oDaoIptuBaseRegImo      = db_utils::getDao("iptubaseregimovel");
+    $rsBaseRegImo  = $oDaoIptuBaseRegImo->sql_record($oDaoIptuBaseRegImo->sql_query_file(null, "*",null," j04_matric = {$oDadoArrematric->k00_matric}"));
+    $oDadoIptuBaseRegImo = db_utils::fieldsMemory($rsBaseRegImo, 0);
+
+    if(!isset($oDadoIptuBaseRegImo->j04_matric)){
+        $oRetorno->j04_quadraregimo = '-';
+        $oRetorno->j04_loteregimo = '-';
+    }else{
+        $oRetorno->j04_quadraregimo = $oDadoIptuBaseRegImo->j04_quadraregimo;
+        $oRetorno->j04_loteregimo = $oDadoIptuBaseRegImo->j04_loteregimo;
+    }
+
+    return $oRetorno;
 }
