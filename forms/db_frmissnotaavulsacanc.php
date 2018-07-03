@@ -86,10 +86,10 @@ db_textarea('q63_motivo',6,50,$Iq63_motivo,true,'text',$db_opcao,"")
 <script>
 function js_pesquisaq63_issnotaavulsa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_issnotaavulsa','func_issnotaavulsaalt.php?filtrabaixa=1&filtraarrecad=1&funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|z01_nome|q51_numnota','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_issnotaavulsa','func_issnotaavulsaalt.php?filtrabaixa=1&funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|z01_nome|q51_numnota','Pesquisa',true);
   }else{
      if(document.form1.q51_numnota.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_issnotaavulsa','func_issnotaavulsaalt.php?filtrabaixa=1&filtraarrecad=1&pesquisa_chave='+document.form1.q51_numnota.value+'&funcao_js=parent.js_mostraissnotaavulsa','Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo','db_iframe_issnotaavulsa','func_issnotaavulsaalt.php?filtrabaixa=1&pesquisa_chave='+document.form1.q51_numnota.value+'&funcao_js=parent.js_mostraissnotaavulsa','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = ''; 
      }
