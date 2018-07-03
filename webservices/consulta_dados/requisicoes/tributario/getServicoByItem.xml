@@ -3,6 +3,7 @@
   <campos>
     <campo campo="db121_estrutural" label="estrutural"   />
     <campo campo="q136_valor_reduzido" label="aliq_reduz"   />
+    <campo campo="db121_descricao" label="desc_item_servico"   />
   </campos>
   <from tabela="issgruposervico"/>
   <juncoes>
