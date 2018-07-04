@@ -42,7 +42,8 @@ include("classes/db_arrecant_classe.php");
 include("classes/db_arrecad_classe.php");
 include("dbforms/db_funcoes.php");
 include ("libs/db_sql.php");
-
+include("src/Tributario/Arrecadacao/TipoDebito.php");
+use \ECidade\Tributario\Arrecadacao\TipoDebito as TipoDebito;
 $post                  = db_utils::postmemory($_POST);
 $clissnotaavulsacanc   = new cl_issnotaavulsacanc();
 $clissnotaavulsanumpre = new cl_issnotaavulsanumpre();
@@ -53,14 +54,18 @@ $clcancdebitosprocreg  = new cl_cancdebitosprocreg();
 $clarrepaga            = new cl_arrepaga();
 $clarrecant            = new cl_arrecant();
 $clarrecad             = new cl_arrecad();
+$clnotaavulsa          = new cl_issnotaavulsa();
+$clissbase             = new cl_issbase();
+$clissnotaavulsacanc   = new cl_issnotaavulsacanc();
 (integer)$db_opcao     = 1;
 (boolean)$db_botao     = true;
 (boolean)$lSqlErro     = false;
 (string)$erro_msg      = null;
 (integer)$q52_numpre   = null;
+$lNotaPago = false;
 
 if(isset($post->incluir)){
-     
+    db_inicio_transacao();
     //Verificando se a nota já foi paga, ou cancelada;
     $rsNumpre = $clissnotaavulsanumpre->sql_record($clissnotaavulsanumpre->sql_query(null,"*",
                                                    null,"q52_issnotaavulsa=".$post->q63_issnotaavulsa));
@@ -68,16 +73,10 @@ if(isset($post->incluir)){
      
       $oNumpre    = db_utils::fieldsMemory($rsNumpre,0);
       $q52_numpre = $oNumpre->q52_numpre;
-      //Nota paga
-      $rsPago     = $clarrepaga->sql_record($clarrepaga->sql_query(null,"*",null,"k00_numpre = ".$oNumpre->q52_numpre));
-      if ($clarrepaga->numrows > 0){
 
-          $lSqlErro = true;
-          $erro_msg = "Nota já paga. Não pode ser Cancelada";
-      }
       //Nota Cancelada
-      $rsPago  = $clarrecant->sql_record($clarrecant->sql_query(null,"*",null,"k00_numpre = ".$oNumpre->q52_numpre));
-      if ($clarrecant->numrows > 0){
+      $rsIssnotaavulsacanc  = $clissnotaavulsacanc->sql_record($clissnotaavulsacanc->sql_query($post->q63_issnotaavulsa));
+      if ($clissnotaavulsacanc->numrows > 0){
 
           $lSqlErro = true;
           $erro_msg = "Nota já Cancelada. Não pode ser Cancelada";
@@ -86,7 +85,6 @@ if(isset($post->incluir)){
    }
    if (!$lSqlErro){ 
 
-     db_inicio_transacao();
      $clissnotaavulsacanc->q63_usuario       = db_getsession("DB_id_usuario");
      $clissnotaavulsacanc->q63_data          = date("Y/m/d",db_getsession("DB_datausu"));
      $clissnotaavulsacanc->q63_hora          = date("h:i"); 
@@ -100,8 +98,57 @@ if(isset($post->incluir)){
       
      }
    }
+    if(!empty($q52_numpre)) {
+        /**
+         * caso a nota ja tenha sido pago, não cancela o débito mas lança um crédito manual para posterior utilização
+         */
+        $rsPago = $clarrepaga->sql_record($clarrepaga->sql_query(null, "*", null, "k00_numpre = " . $oNumpre->q52_numpre));
+
+        if ($clarrepaga->numrows > 0 && !$lSqlErro) {
+
+            $lNotaPago = true;
+
+            try {
+
+                $oArrepaga = db_utils::fieldsMemory($rsPago, 0);
+
+                /*
+                 * Busca os dados da nota avulsa
+                 */
+                $rsNotaAvulsa = $clnotaavulsa->sql_record($clnotaavulsa->sql_query($post->q63_issnotaavulsa));
+                $oIssNotaAvulsa = db_utils::fieldsMemory($rsNotaAvulsa, 0);
+
+                /*
+                 * Busca os dados da inscrição municipal
+                 */
+                $rsIssbase = $clissbase->sql_record($clissbase->sql_query($oIssNotaAvulsa->q51_inscr));
+                $oInscricao = db_utils::fieldsMemory($rsIssbase, 0);
+
+                $oCreditoManual = new CreditoManual();
+                $oRegraCompensacao = getRegraCompensacao();
+
+                if ($oRegraCompensacao instanceof RegraCompensacao) {
+                    $oCreditoManual->adicionarRegra($oRegraCompensacao);
+                    $oCreditoManual->setDataLancamento(new DBDate(date('Y-m-d', db_getsession('DB_datausu'))));
+
+                    $oCreditoManual->setHora(date('H:i'));
+                    $oCreditoManual->setUsuario(db_getsession('DB_id_usuario'));
+                    $oCreditoManual->setInstituicao(db_getsession('DB_instit'));
+                    $oCreditoManual->setValor($oArrepaga->k00_valor);
+                    $oCreditoManual->setObservacao("Lançamento automático de crédito manual referente a cancelamento da Nota Avulsa Número {$oIssNotaAvulsa->q51_numnota} de " . db_formatar($oIssNotaAvulsa->q51_data, 'd') . ", Numpre: {$oArrepaga->k00_numpre}, pago em " . db_formatar($oArrepaga->k00_dtpaga, 'd') . ". Motivo: {$post->q63_motivo}");
+                    $oCreditoManual->setPercentual(100);
+                    $oCreditoManual->setCgm(CgmFactory::getInstanceByCgm($oInscricao->q02_numcgm));
+                    $oCreditoManual->salvar();
+                } else {
+                    throw new Exception("Regra de compensação não encontrada.");
+                }
+            } catch (Exception $ex) {
+                $erro_msg = urlencode($ex->getMessage());
+            }
+        }
+    }
    //se possuir numpre, incluimos o debito na cancdebitos, e excluimos da arrecad e incluimos na arrecant
-   if (!$lSqlErro and $q52_numpre != null){
+   if (!$lSqlErro and $q52_numpre != null and !$lNotaPago){
     
     //Incluindo na cancdebitos
       $clcancdebitos->k20_descr           = $post->q63_motivo;
@@ -235,5 +282,28 @@ if(isset($post->incluir)){
   }else{
     $clissnotaavulsacanc->erro(true,true);
   }
+}
+
+/**
+ * Método que retorna a regra de compensação do tipo lançamento  manual para o grupo de debito 3 (ISSQN Variavel)
+ * @return RegraCompensacao
+ */
+function getRegraCompensacao(){
+
+    $aRegrasCompsansacao = RegraCompensacao::getRegrasCompensacaoPorTipo(RegraCompensacao::LANCAMENTO_MANUAL);
+
+    if(count($aRegrasCompsansacao) > 0) {
+        foreach ($aRegrasCompsansacao as $oRegraCompensacao) {
+            /*
+             * Verica se o grupo do débito configurado na regra é de ISSQN
+             */
+            $oArretipo = new TipoDebito($oRegraCompensacao->getCodigoTipoDebitoOrigem());
+            if ($oArretipo->getCodigoGrupoDebito() == TipoDebito::GRUPO_DEBITO_ISSQN_VARIAVEL) {
+
+                return $oRegraCompensacao;
+
+            }
+        }
+    }
 }
 ?>
