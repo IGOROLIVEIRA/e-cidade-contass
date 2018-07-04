@@ -172,8 +172,8 @@ class cl_apostilamento {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si03_valorapostila == null ){ 
-       $this->erro_sql = " Campo Valor da Aposlila nao Informado.";
+     if($this->si03_valorapostila == null && $this->si03_tipoapostila != 3){
+       $this->erro_sql = " Campo Valor da Aposlila nao Informado. aquiiiiii";
        $this->erro_campo = "si03_valorapostila";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -248,7 +248,7 @@ class cl_apostilamento {
                                ,'$this->si03_descrapostila' 
                                ,$this->si03_tipoalteracaoapostila 
                                ,$this->si03_numapostilamento 
-                               ,$this->si03_valorapostila 
+                               ,".($this->si03_valorapostila == null ? 0 : $this->si03_valorapostila)."
                                ,$this->si03_instit
                                ,".($this->si03_numcontratoanosanteriores==null ? '0' : $this->si03_numcontratoanosanteriores)." 
                                ,".($this->si03_acordoposicao == null || $this->si03_acordoposicao == ""?"null":$this->si03_acordoposicao)."

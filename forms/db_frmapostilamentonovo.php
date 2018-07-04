@@ -832,8 +832,9 @@ $clrotulo->label("ac16_resumoobjeto");
             }
 
             var oItemAdicionar = {};
-
-            var valorApostiladoReal = oItem.valor - (oItem.quantidade * oItem.valorunitario);
+            var valoranterior = (oItem.qtdeanterior * oItem.vlunitanterior);
+            var valoratual =(oItem.quantidade * oItem.valorunitario);
+            var valorApostiladoReal = valoranterior - valoratual;
 
             oItemAdicionar.codigo = oItem.codigo;
             oItemAdicionar.codigoitem = oItem.codigoitem;
@@ -843,7 +844,6 @@ $clrotulo->label("ac16_resumoobjeto");
             oItemAdicionar.quantidade = oItem.quantidade;
             oItemAdicionar.valorunitario = oItem.valorunitario;
             oItemAdicionar.valorapostilado = valorApostiladoReal;
-            oItemAdicionar.valor = oItem.valor;
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
 
@@ -857,10 +857,12 @@ $clrotulo->label("ac16_resumoobjeto");
                 oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[11].getValue();
                 oItemAdicionar.tipoalteracaoitem = oSelecionados[iIndice].aCells[14].getValue();
 
+
                 /**
                  * Validamos o total do item com as dotacoes
                  */
                 var nValorDotacao = Number(0);
+
                 oItem.dotacoes.forEach(function (oDotacao) {
 
                     /**
@@ -871,7 +873,6 @@ $clrotulo->label("ac16_resumoobjeto");
                         lAditar = false;
                         return alert("Os Valores das dotações para o item " + oItem.descricaoitem.urlDecode() + " não podem estar zeradas.");
                     }*/
-
                     nValorDotacao += Number(oDotacao.valor);
                 });
 
@@ -885,7 +886,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
 
             } else {
-                oItemAdicionar.dotacoes = oItem.dotacoesoriginal;
+                oItemAdicionar.dotacoes = oItem.dotacoes;
             }
 
             oParam.aItens.push(oItemAdicionar);
@@ -904,7 +905,6 @@ $clrotulo->label("ac16_resumoobjeto");
             alert("Apostilamento realizado com sucesso.");
             js_limparCampos();
             js_pesquisaac16_sequencial(true);
-
         }).setMessage("Aguarde, apostilando contrato.")
             .execute();
     }
@@ -934,9 +934,9 @@ $clrotulo->label("ac16_resumoobjeto");
         });
     }
     function js_limparCampos() {
-        $("si03_sequencial").value = "";
+        $("ac16_sequencial").value = "";
         $("si03_dataapostila").value = "";
-        $("si03_tipoapostila").value = 1;
+        $("si03_tipoapostila").value = "";
         $("si03_descrapostila").value = "";
         $("si03_tipoalteracaoapostila").value = 1;
         $("si03_numapostilamento").value = "";

@@ -163,7 +163,7 @@ class cl_apostilamento {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si03_valorapostila == null ){ 
+     if($this->si03_valorapostila == null && $this->si03_tipoapostila != 3){
        $this->erro_sql = " Campo Valor da Aposlila nao Informado.";
        $this->erro_campo = "si03_valorapostila";
        $this->erro_banco = "";
