@@ -2864,9 +2864,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
           && in_array($obalreg17->si184_codctb,$aEncerradas['si95_codtceant'])) {
           $obalreg17Encerrar = clone $obalreg17;
           if($obalreg17Encerrar->si184_naturezasaldoinicialctb == 'D') {
-            $obalreg17Encerrar->si184_totalcreditosctb = $obalreg17Encerrar->si184_saldofinalctb;
+            $obalreg17Encerrar->si184_totalcreditosctb += $obalreg17Encerrar->si184_saldofinalctb;
           } else {
-            $obalreg17Encerrar->si184_totaldebitosctb = $obalreg17Encerrar->si184_saldofinalctb;
+            $obalreg17Encerrar->si184_totaldebitosctb += $obalreg17Encerrar->si184_saldofinalctb;
           }
           $obalreg17Encerrar->si184_saldofinalctb = '0.00';
           $obalreg17Encerrar->incluir(null);
