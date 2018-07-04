@@ -43,18 +43,18 @@ $clcriaabas = new cl_criaabas;
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body class="body-default abas">
-  <?php
-  
-    $clcriaabas->identifica = array("g1"=>"Setor","g2"=>"Quadra","g3"=>"Lote"); 
-    $clcriaabas->title = array("g1"=>"Setor","g2"=>"Quadra","g3"=>"Com as ruas");    
-    $clcriaabas->abas_top = 50;
-    $clcriaabas->src = array("g1"=>"cad2_matric003.php","g2"=>"cad2_matric004.php","g3"=>"cad2_matric005.php");
-    $clcriaabas->cria_abas();
-  ?> 
+<?php
 
-  <?php
-    db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-  ?>
+$clcriaabas->identifica = array("g1"=>"Setor","g2"=>"Quadra","g3"=>"Lote");
+$clcriaabas->title = array("g1"=>"Setor","g2"=>"Quadra","g3"=>"Com as ruas");
+$clcriaabas->abas_top = 50;
+$clcriaabas->src = array("g1"=>"cad2_matric003.php","g2"=>"cad2_matric004.php","g3"=>"cad2_matric005.php");
+$clcriaabas->cria_abas();
+?>
+
+<?php
+db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+?>
 </body>
 </html>
 <script>

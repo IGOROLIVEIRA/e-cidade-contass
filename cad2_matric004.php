@@ -65,6 +65,7 @@ if(isset($j34_setor) && $j34_setor != "") {
   function js_nome(obj) {
 
     j37_quadra = "";
+    j34_setor  = "";
     vir = "";
     x = 0;
     for(i=0;i<quadras.document.form1.length;i++) {
@@ -73,66 +74,75 @@ if(isset($j34_setor) && $j34_setor != "") {
         if(quadras.document.form1.elements[i].checked == true) {
           valor = quadras.document.form1.elements[i].value.split("_")
           j37_quadra += vir + valor[0];
+          j34_setor  += vir + valor[1];
           vir = ",";
-          x += 1; 
+          x += 1;
         }
       }
     }
 
     if( x != 0) {
-	
+
       parent.document.formaba.g3.disabled = false;
     } else {
 
       parent.document.formaba.g3.disabled = true;
     }
 
-	  parent.iframe_g3.document.form1.j37_quadra.value = j37_quadra;
+    parent.iframe_g3.document.form1.j37_quadra.value = j37_quadra;
     if(document.form1.setor.value == "") {
-	 	   
-		  document.form1.setor.value ='<?=$set2?>';
-	  }
-	 
-    parent.iframe_g3.document.form1.j34_setor.value = document.form1.setor.value;	 
-	  parent.iframe_g3.document.form1.submit();
+
+      document.form1.setor.value ='<?=$set2?>';
+    }
+
+    parent.iframe_g3.document.form1.j34_setor.value = j34_setor;
+    parent.iframe_g3.document.form1.submit();
+
+    parent.iframe_g1.document.form1.quadraParametro.value = j37_quadra;
+    parent.iframe_g1.document.form1.setorParametro.value  = j34_setor;
+    parent.iframe_g1.document.form1.loteParametro.value  = "";
+
+    if (empty(j37_quadra)) {
+      parent.iframe_g1.js_nome(this);
+    }
   }
 
 </script>
 <body class="body-default">
-  <div class="container">
-		<form name="form1" method="post" action="" target="">
-			<table border="0">
-				<tr>
-					<td align="top" colspan="2">
-						<?php
-							
-              if(isset($j34_setor)&& $j34_setor!="") {
-								$cliframe_seleciona->campos  = "j37_setor,j37_quadra";
-								$cliframe_seleciona->legenda="Quadra";
-								$cliframe_seleciona->sql=$clface->sql_query("","distinct j37_quadra,j37_setor","j37_setor,j37_quadra","j37_setor in ($set)");
-								$cliframe_seleciona->textocabec ="darkblue";
-								$cliframe_seleciona->textocorpo ="black";
-								$cliframe_seleciona->fundocabec ="#aacccc";
-								$cliframe_seleciona->fundocorpo ="#ccddcc";
-								$cliframe_seleciona->iframe_height ="250";
-								$cliframe_seleciona->iframe_width ="700";
-								$cliframe_seleciona->iframe_nome ="quadras";
-								$cliframe_seleciona->chaves ="j37_quadra,j37_setor";
-								$cliframe_seleciona->dbscript ="onClick='parent.js_nome(this)'";
-								$cliframe_seleciona->js_marcador="parent.js_nome()";
-                $cliframe_seleciona->alignlegenda  = "left";
-								$cliframe_seleciona->iframe_seleciona(@$db_opcao);   
-              } else {
-								
-                echo "<br><strong>SELECIONE UM SETOR PARA ESCOLHER A(S) QUADRAS(S)</strong>";
-                echo "<script>parent.document.formaba.g3.disabled = true;</script>";
-              }
-            ?>   
-					</td>
-					<input type="hidden"  name="setor">
-				</tr>
-			</table>
-		</form>
-  </div>
+<div class="container">
+  <form name="form1" method="post" action="" target="">
+    <table border="0">
+      <tr>
+        <td align="top" colspan="2">
+          <?php
+
+          if(isset($j34_setor)&& $j34_setor!="") {
+            $cliframe_seleciona->campos  = "j37_setor,j37_quadra";
+            $cliframe_seleciona->legenda="Quadra";
+            $cliframe_seleciona->sql=$clface->sql_query("","distinct j37_quadra,j37_setor","j37_setor,j37_quadra","j37_setor in ($set)");
+            $cliframe_seleciona->textocabec ="darkblue";
+            $cliframe_seleciona->textocorpo ="black";
+            $cliframe_seleciona->fundocabec ="#aacccc";
+            $cliframe_seleciona->fundocorpo ="#ccddcc";
+            $cliframe_seleciona->iframe_height ="250";
+            $cliframe_seleciona->iframe_width ="700";
+            $cliframe_seleciona->iframe_nome ="quadras";
+            $cliframe_seleciona->chaves ="j37_quadra,j37_setor";
+            $cliframe_seleciona->dbscript ="onClick='parent.js_nome(this)'";
+            $cliframe_seleciona->js_marcador="parent.js_nome()";
+            $cliframe_seleciona->alignlegenda  = "left";
+            $cliframe_seleciona->iframe_seleciona(@$db_opcao);
+          } else {
+
+            echo "<br><strong>SELECIONE UM SETOR PARA ESCOLHER A(S) QUADRAS(S)</strong>";
+            echo "<script>parent.document.formaba.g3.disabled = true;</script>";
+          }
+          ?>
+        </td>
+        <input type="hidden"  name="setor">
+      </tr>
+    </table>
+  </form>
+</div>
 </body>
 </html>

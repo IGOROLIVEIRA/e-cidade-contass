@@ -50,127 +50,121 @@ $clrotulo->label("z01_nome");
 </head>
 <script>
   function js_imprime() {
-    
-    if(document.form1.idbql.value!="") {
 
-      jan = window.open('','rel','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
-      jan.moveTo(0,0);
-      document.form1.action = "cad2_matric002.php";
-      document.form1.target = "rel";
-      document.form1.submit();
-    } else {
-     
-      alert("Selecione corretamente os setores, as quadras e os lotes que deverão constar no relatório.");
-      return false;
-    }
+    jan = window.open('','rel','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+    jan.moveTo(0,0);
+    document.form1.action = "cad2_matric002.php";
+    document.form1.target = "rel";
+    document.form1.submit();
   }
-  
+
   function js_nome(obj){
-    
+
     j34_setor = "";
     vir = "";
     x = 0;
     for(i=0;i<setor.document.form1.length;i++) {
-      
+
       if(setor.document.form1.elements[i].type == "checkbox") {
 
         if(setor.document.form1.elements[i].checked == true) {
-       
-          valor = setor.document.form1.elements[i].value.split("_")
+
+          valor      = setor.document.form1.elements[i].value.split("_")
           j34_setor += vir + valor[0];
-          vir = ",";
-          x += 1; 
+          vir        = ",";
+          x += 1;
         }
       }
     }
-  
-    parent.iframe_g2.location.href = '../cad2_matric004.php?j34_setor='+j34_setor;
-    if(j34_setor == "") {
 
-      parent.iframe_g1.document.form1.idbql.value = '';    
-    }
+    parent.iframe_g2.location.href = '../cad2_matric004.php?j34_setor='+j34_setor;
+    parent.iframe_g1.document.form1.setorParametro.value  = j34_setor;
+    parent.iframe_g1.document.form1.quadraParametro.value = '';
+    parent.iframe_g1.document.form1.loteParametro.value   = '';
   }
 
 </script>
 
 <body class="body-default">
-  <div class="container">
-    <form name="form1" method="post">
+<div class="container">
+  <form name="form1" method="post">
+    <table border="0" align='center'>
+      <tr>
+        <td align="top" align='center' colspan="5">
+          <?php
+          $cliframe_seleciona->campos        = "j30_codi,j30_descr";
+          $cliframe_seleciona->legenda       = "Setor";
+          $cliframe_seleciona->sql=$clsetor->sql_query(""," * ","j30_codi");
+          $cliframe_seleciona->textocabec    = "darkblue";
+          $cliframe_seleciona->textocorpo    = "black";
+          $cliframe_seleciona->fundocabec    = "#aacccc";
+          $cliframe_seleciona->fundocorpo    = "#ccddcc";
+          $cliframe_seleciona->iframe_height = "250";
+          $cliframe_seleciona->iframe_width  = "700";
+          $cliframe_seleciona->iframe_nome   = "setor";
+          $cliframe_seleciona->chaves        = "j30_codi,j30_descr";
+          $cliframe_seleciona->dbscript      = "onClick='parent.js_nome(this)'";
+          $cliframe_seleciona->marcador      = true;
+          $cliframe_seleciona->js_marcador   = "parent.js_nome()";
+          $cliframe_seleciona->alignlegenda  = "left";
+          $cliframe_seleciona->iframe_seleciona(@$db_opcao);
+          ?>
+        </td>
+      </tr>
+    </table >
+    <?
+    db_input('setorParametro',"",0,true,'hidden',3,"");
+    db_input('quadraParametro',"",0,true,'hidden',3,"");
+    db_input('loteParametro',"",0,true,'hidden',3,"");
+    ?>
+    <fieldset>
+      <legend>Opções</legend>
       <table border="0" align='center'>
         <tr>
-          <td align="top" align='center' colspan="5">
+          <td colspan=2 align='right' >
+            <strong>Tipo Imóvel:</strong>
+          </td>
+          <td colspan=3 align='left' >
             <?php
-               $cliframe_seleciona->campos        = "j30_codi,j30_descr";
-               $cliframe_seleciona->legenda       = "Setor";
-               $cliframe_seleciona->sql=$clsetor->sql_query(""," * ","j30_codi");      
-               $cliframe_seleciona->textocabec    = "darkblue";
-               $cliframe_seleciona->textocorpo    = "black";
-               $cliframe_seleciona->fundocabec    = "#aacccc";
-               $cliframe_seleciona->fundocorpo    = "#ccddcc";
-               $cliframe_seleciona->iframe_height = "250";
-               $cliframe_seleciona->iframe_width  = "700";
-               $cliframe_seleciona->iframe_nome   = "setor";
-               $cliframe_seleciona->chaves        = "j30_codi,j30_descr";
-               $cliframe_seleciona->dbscript      = "onClick='parent.js_nome(this)'";
-               $cliframe_seleciona->marcador      = true;
-               $cliframe_seleciona->js_marcador   = "parent.js_nome()";
-               $cliframe_seleciona->alignlegenda  = "left";
-               $cliframe_seleciona->iframe_seleciona(@$db_opcao);    
+
+            $tipo_t = array("T"=>"Todos","B"=>"Territorial","P"=>"Predial");
+            db_select("terreno",$tipo_t,true,2);
             ?>
           </td>
-        </tr> 
-        </table >
-          <?
-            db_input('idbql',"",0,true,'hidden',3,"");
-          ?>
-        <fieldset>
-          <legend>Opções</legend>     
-        <table border="0" align='center'>  
-        <tr>
-	        <td colspan=2 align='right' >
-	          <strong>Tipo Imóvel:</strong>
-	        </td>
-          <td colspan=3 align='left' >
-	          <?php
-
-	            $tipo_t = array("T"=>"Todos","B"=>"Territorial","P"=>"Predial");
-	            db_select("terreno",$tipo_t,true,2); 	      
-	          ?>
-	        </td>
         </tr>
         <tr>
-	        <td colspan=2 align='right' >
+          <td colspan=2 align='right' >
             <strong>Listar: </strong>
           </td>
           <td colspan=3 align='left' >
-	          <select name="process" id="process">
-	            <option value="T" selected>Todos</option>
-	            <option value="S">Baixados</option>
-	            <option value="N">Não baixados</option>
-	          </select>
+            <select name="process" id="process">
+              <option value="T" selected>Todos</option>
+              <option value="S">Baixados</option>
+              <option value="N">Não baixados</option>
+            </select>
           </td>
         </tr>
         <tr>
-	        <td colspan=2 align='right' >
-	          <strong>Mostrar Endereço:</strong>
-	        </td>
+          <td colspan=2 align='right' >
+            <strong>Mostrar Endereço:</strong>
+          </td>
           <td colspan=3 align='left' >
-	          <?php
-	            $tipo_m = array("n"=>"Não","s"=>"Sim");
-	            db_select("mostra",$tipo_m,true,2); 	      
-	          ?>
-	        </td>
-        </tr>
-        </table>
-        </fieldset>
-        <table align="center">
-        <tr>	
-          <td colspan='5' align='center'>
-	          <input type="submit" name="relatorio1" value="Gerar relatório" onClick="return js_imprime();">
-          </td>          	
+            <?php
+            $tipo_m = array("n"=>"Não","s"=>"Sim");
+            db_select("mostra",$tipo_m,true,2);
+            ?>
+          </td>
         </tr>
       </table>
-    </form>
-  </div>
+    </fieldset>
+    <table align="center">
+      <tr>
+        <td colspan='5' align='center'>
+          <input type="submit" name="relatorio1" value="Gerar relatório" onClick="return js_imprime();">
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
 </body>
 </html>

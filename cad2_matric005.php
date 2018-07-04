@@ -44,14 +44,14 @@ if(isset($j37_quadra) && $j37_quadra != "") {
   $vir = "";
   $qua = "";
   for($i=0;$i<count($quadra);$i++) {
-    
+
     $qua .= $vir."'".$quadra[$i]."'";
     $vir = ",";
   }
 }
 
 if(isset($j34_setor) && $j34_setor != "") {
-  
+
   $setor = split(",",$j34_setor);
   $vir = "";
   $set = "";
@@ -74,92 +74,111 @@ if(isset($j34_setor) && $j34_setor != "") {
 <script>
 
   function js_loadVars(iInicio,iFinal) {
-	
-	  var oColection = lote.document.getElementsByTagName('input');
-		for(var i = iInicio; i <  iFinal  ; i++ ) {
+
+    var oColection = lote.document.getElementsByTagName('input');
+    for(var i = iInicio; i <  iFinal  ; i++ ) {
 
       if(oColection[i].type == "checkbox") {
 
-			  if(oColection[i].checked == true) {
+        if(oColection[i].checked == true) {
 
-		  		j34_idbql += vir +  lote.document.form1.elements[i].value;
-		  		vir = ",";
+          var valor = lote.document.form1.elements[i].value.split("_");
+
+          setorParametro  += vir + valor[0];
+          quadraParametro += vir + valor[1];
+          loteParametro   += vir + valor[2];
+          vir = ",";
         }
       }
     }
 
-	  if (i == aCol.length) {
+    if (i == aCol.length) {
 
-		  parent.iframe_g1.document.form1.idbql.value = j34_idbql;
-		  js_removeObj("msgbox");
-	  }
+      parent.iframe_g1.document.form1.loteParametro.value   = loteParametro;
+
+      if ( !empty(parent.iframe_g1.document.form1.setorParametro.value) ) {
+        parent.iframe_g1.document.form1.setorParametro.value  = setorParametro;
+      }
+
+      if ( !empty(parent.iframe_g1.document.form1.quadraParametro.value) ) {
+        parent.iframe_g1.document.form1.quadraParametro.value = quadraParametro;
+      }
+
+      js_removeObj("msgbox");
+    }
+
+    if ( empty(loteParametro) ) {
+      parent.iframe_g2.js_nome(this);
+    }
   }
 
 
   function js_nome(obj) {
-    
-    js_divCarregando('Aguarde, efetuando pesquisa ....','msgbox');
-	  j34_idbql      = "";
-	  vir			 	     = "";
-	  iQuantidade		 = 0;
-    aCol					 = lote.document.getElementsByTagName('input');
-	  iTamanhoVoltas = ( aCol.length / 10);
-	  iResto				 = ( aCol.length % 10);
-	  iTamanhoVoltas = Math.floor(iTamanhoVoltas);	
-	  if ( iTamanhoVoltas > 500 ) {  
-		
-		  for ( var ii = 0 ; ii < 10; ii++ ) {
 
-		  	tmp = setTimeout("js_loadVars("+iQuantidade+","+( ii==9?eval(iQuantidade+iResto+iTamanhoVoltas):eval(iQuantidade+iTamanhoVoltas))+")",2000);
-		  	iQuantidade = eval(iQuantidade+iTamanhoVoltas);
-		  }	
-	  } else {
-    
-		  js_loadVars(0,aCol.length);
-	  }
+    js_divCarregando('Aguarde, efetuando pesquisa ....','msgbox');
+    setorParametro = "";
+    quadraParametro= "";
+    loteParametro  = "";
+    vir            = "";
+    iQuantidade		 = 0;
+    aCol					 = lote.document.getElementsByTagName('input');
+    iTamanhoVoltas = ( aCol.length / 10);
+    iResto				 = ( aCol.length % 10);
+    iTamanhoVoltas = Math.floor(iTamanhoVoltas);
+    if ( iTamanhoVoltas > 500 ) {
+
+      for ( var ii = 0 ; ii < 10; ii++ ) {
+
+        tmp = setTimeout("js_loadVars("+iQuantidade+","+( ii==9?eval(iQuantidade+iResto+iTamanhoVoltas):eval(iQuantidade+iTamanhoVoltas))+")",2000);
+        iQuantidade = eval(iQuantidade+iTamanhoVoltas);
+      }
+    } else {
+
+      js_loadVars(0,aCol.length);
+    }
   }
 
 </script>
 <body class="body-default">
-  <div class="container">
-		<form name="form1" method="post" action="cad2_matric005.php" target="">
-		  <table border="0">
-				<tr>
-					<td align="top" colspan="2">
-            <?php
-              if(isset($j37_quadra)&& $j37_quadra!="") {
+<div class="container">
+  <form name="form1" method="post" action="cad2_matric005.php" target="">
+    <table border="0">
+      <tr>
+        <td align="top" colspan="2">
+          <?php
+          if(isset($j37_quadra)&& $j37_quadra!="") {
 
-                $sql = 	$cllote->sql_query(""," distinct on(j34_setor,j34_quadra,j34_lote) j34_setor,j34_quadra,j34_lote ,j34_idbql","j34_setor,j34_quadra,j34_lote","j34_quadra in ($qua) and j34_setor in ($set)");       
-								$cliframe_seleciona->campos  = "j34_setor,j34_quadra,j34_lote";
-                $cliframe_seleciona->legenda="Lote";
-                $cliframe_seleciona->sql=$sql;
-                $cliframe_seleciona->textocabec ="darkblue";
-                $cliframe_seleciona->textocorpo ="black";
-                $cliframe_seleciona->fundocabec ="#aacccc";
-                $cliframe_seleciona->fundocorpo ="#ccddcc";
-                $cliframe_seleciona->iframe_height ="250";
-                $cliframe_seleciona->iframe_width ="700";
-                $cliframe_seleciona->iframe_nome ="lote";
-                $cliframe_seleciona->chaves ="j34_idbql";
-                $cliframe_seleciona->dbscript ="onClick='parent.js_nome(this)'";
-                $cliframe_seleciona->js_marcador="parent.js_nome()";
-                $cliframe_seleciona->alignlegenda  = "left";
-                $cliframe_seleciona->iframe_seleciona(@$db_opcao);   
-							} else {
+            $sql = 	$cllote->sql_query("","distinct j34_setor,j34_quadra,j34_lote","j34_setor,j34_quadra,j34_lote","j34_quadra in ($qua) and j34_setor in ($set)");
+            $cliframe_seleciona->campos  = "j34_setor,j34_quadra,j34_lote";
+            $cliframe_seleciona->legenda="Lote";
+            $cliframe_seleciona->sql=$sql;
+            $cliframe_seleciona->textocabec ="darkblue";
+            $cliframe_seleciona->textocorpo ="black";
+            $cliframe_seleciona->fundocabec ="#aacccc";
+            $cliframe_seleciona->fundocorpo ="#ccddcc";
+            $cliframe_seleciona->iframe_height ="250";
+            $cliframe_seleciona->iframe_width ="700";
+            $cliframe_seleciona->iframe_nome ="lote";
+            $cliframe_seleciona->chaves ="j34_setor,j34_quadra,j34_lote";
+            $cliframe_seleciona->dbscript ="onClick='parent.js_nome(this)'";
+            $cliframe_seleciona->js_marcador="parent.js_nome()";
+            $cliframe_seleciona->alignlegenda  = "left";
+            $cliframe_seleciona->iframe_seleciona(@$db_opcao);
+          } else {
 
-								echo "<br><strong>SELECIONE UMA QUADRA PARA ESCOLHER O(S) LOTES(S)</strong>";
-						  }
-					  ?>   
-				  </td>
-			  </tr>
-				<tr>
-					<td>
-						<input type="hidden" name="j37_quadra">
-						<input type="hidden" name="j34_setor" value="<?@$j34_setor?>">
-					</td>
-			  </tr>
-			</table>
-	  </form>
-  </div>
+            echo "<br><strong>SELECIONE UMA QUADRA PARA ESCOLHER O(S) LOTES(S)</strong>";
+          }
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="hidden" name="j37_quadra">
+          <input type="hidden" name="j34_setor" value="<?@$j34_setor?>">
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
 </body>
 </html>
