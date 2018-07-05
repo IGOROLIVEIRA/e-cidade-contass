@@ -950,7 +950,7 @@ db_app::load("estilos.css, grid.style.css");
     sContent += "    </tr>";
     sContent += "    <tr>";
     sContent += "     <td colspan='4' style='text-align:center'>";
-    sContent += "       <input type='button' value='Salvar' id='btnSalvarDotacao' "+((isExecutado[iItem]==true||desabilitaDotacao==false)?"disabled='disabled'":"")+">";
+    sContent += "       <input type='button' value='Salvar' id='btnSalvarDotacao' "+(desabilitaDotacao==false ?"disabled='disabled'":"")+">";
     sContent += "     </td>";
     sContent += "    </tr>";
     sContent += "  </table>";
@@ -1092,7 +1092,7 @@ db_app::load("estilos.css, grid.style.css");
         isExecutado[iItem] = true;
       }
       aLinha[2] = js_formatar(oRow.valor, 'f');
-      aLinha[3] = "<input type='button' value='E' onclick='js_excluirDotacao(" + oRow.dotacao + ")' "+(isExecutado[iItem] == true || desabilitaDotacao==false?"disabled='disabled'":"")+" style='width:100%'>";
+      aLinha[3] = "<input type='button' value='E' onclick='js_excluirDotacao(" + oRow.dotacao + ")' "+(desabilitaDotacao==false?"disabled='disabled'":"")+" style='width:100%'>";
       oGridDotacoes.addRow(aLinha);
     });
     oGridDotacoes.renderRows();
@@ -1112,10 +1112,6 @@ db_app::load("estilos.css, grid.style.css");
 
   function js_saveDotacao() {
 
-    if(isExecutado[oDadosItem.aCells[1].getValue()] == true){
-      alert("Não é possivel adicionar uma dotação a um ítem já executado.");
-      return false;
-    }
     if (oTxtDotacao.getValue() == "") {
 
       alert('Informe a dotação!');
