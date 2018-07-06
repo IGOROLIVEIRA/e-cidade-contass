@@ -230,7 +230,7 @@ spl_autoload_register('db_autoload');
 // a classe é um cópia da classe de autoloader disponibilizado pelo PHP-FIG,
 // com o adicional de um método para a utilizacao como um singleton :(
 
-require_once('src/Core/Autoloader.php');
+require_once(realpath(dirname(__DIR__)).'/src/Core/Autoloader.php');
 
 $ecidadeLoader = new Autoloader();
 $ecidadeLoader->addNamespace("ECidade\\","src/");
