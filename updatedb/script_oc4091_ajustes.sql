@@ -41,4 +41,3 @@ INSERT INTO tipodereceitarateio
 ;
 
 COMMIT;
-MIT;
