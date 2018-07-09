@@ -269,6 +269,9 @@ db_input('e54_conpag',30,$Ie54_conpag,true,'text',$db_opcao,"")
   </center>
   </form>
   </div>
+
+<script src="scripts/math.min.js">
+</script>
 </body>
 </html>
 <script>
@@ -478,6 +481,45 @@ function js_getItensPosicao(iCodigo, iLinha) {
                                    )
 }
 
+function js_roundDecimal(x,qtdCasasDecimais) {
+
+    var radixPos = String(x).indexOf('.');
+
+    // now we can use slice, on a String, to get '.15'
+    var value = String(x).slice(radixPos+1);
+
+    var k = Array.from(value.toString()).map(Number);
+    var temp = 0;
+
+    for (var i = k.length - 1; i >= 0; i--) {
+        k[i] += temp;
+        temp = 0;
+        if(k[i] >= 5 && i >= qtdCasasDecimais){
+            temp = 1;
+        }
+
+        if(k[i] > 9){
+            if(i <= (qtdCasasDecimais-1)){
+                temp = 1;
+            }
+            k[i] = 0;
+        }
+
+    }
+
+    // Renderizar resultado final
+    var render = "";
+    for(var i = 0; i < qtdCasasDecimais; i++){
+        if(k[i] != undefined){
+            render += k[i];
+        }
+    }
+
+    render = String(Math.floor(x)+temp)+"."+render;
+
+    return render;
+}
+
 function js_retornoGetItensPosicao(oAjax) {
 
   js_removeObj("msgbox");
@@ -533,13 +575,28 @@ function js_retornoGetItensPosicao(oAjax) {
      });
 
      var nQtdeAut  = oItem.saldos.quantidadeautorizar;
-     var nValorAut = js_formatar(oItem.saldos.valorautorizar, "f",iCasasDecimais);
+     var vTotal = oItem.valorunitario * oItem.quantidade;
+     //var nValorAut = js_formatar(oItem.saldos.valorautorizar, "f",iCasasDecimais);
+     var nValorAut = js_formatar(js_roundDecimal(vTotal, 2), "f",2);
+
      aLinha    = new Array();
      aLinha[0] = oItem.codigomaterial;
+     // Descrição
      aLinha[1] = oItem.material.urlDecode();
+
+     // Quantidade
      aLinha[2] = js_formatar(oItem.quantidade, 'f',iCasasDecimais);
+
+     // Valor unitário
      aLinha[3] = oItem.valorunitario;
-     aLinha[4] = js_formatar(oItem.valortotal, 'f',iCasasDecimais);
+
+
+
+
+     // Valor total
+     //aLinha[4] = js_formatar(oItem.valortotal, 'f',4);
+     aLinha[4] = js_roundDecimal(vTotal,2);
+
      /**
        * Caso for serviço e o mesmo não for controlado por quantidade, setamos a sua quantidade para 1
       */
@@ -588,6 +645,7 @@ function js_retornoGetItensPosicao(oAjax) {
 
      aLinha[8] = new String(iSeq).valueOf();
 
+
      lDesativaLinha = false;
      if (nQtdeAut == 0 || nValorAut == '0,00') {
        lDesativaLinha = true;
@@ -602,6 +660,7 @@ function js_retornoGetItensPosicao(oAjax) {
   });
 
 }
+
 
 /**
  * bloqueia  o input passado como parametro para a digitacao.
@@ -661,7 +720,8 @@ function js_calculaValor(obj, iLinha, lVerificaDot) {
 
     var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue());
     aLinha.aCells[7].content.setValue(js_formatar(new String(nValorTotal), "f",iCasasDecimais));
-    $("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
+    //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
+    $("valoritem" + iLinha).value = js_formatar(js_roundDecimal(nValorTotal,2), "f",2);
   }
   //js_salvarInfoDotacoes(iLinha, lVerificaDot);
 }
@@ -769,7 +829,9 @@ function js_ajusteDotacao(iLinha,tipo) {
   var nValorTotal     = nValor;
   aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
-    nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
+    //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
+      // Valor da dotação
+    nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
 
 
      aLinha    = new Array();
@@ -900,7 +962,8 @@ function js_ajustaQuantDot(Obj, iDot, iLinha) {
     Obj.value = nValorObjeto;
   } else {
     oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_round(nQuant*Number(oDadosItem.aCells[4].getValue()),iCasasDecimais));
-    $("valordot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[3].getValue();
+    // $("valordot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[3].getValue();
+    $("valordot"+iDot).value = js_formatar(js_roundDecimal(oGridDotacoes.aRows[iDot].aCells[3].getValue(), 2), "f",2);
   }
 }
 /**
