@@ -100,78 +100,79 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
     AND rh01_regist NOT IN
       (SELECT si195_codvinculopessoa
        FROM flpgo102018
-       WHERE si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
+       WHERE si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si195_nrodocumento
        FROM flpgo102017
        inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si195_nrodocumento
        FROM flpgo102016
        inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si195_nrodocumento
        FROM flpgo102015
        inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si195_nrodocumento
        FROM flpgo102014
        inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si195_nrodocumento
        FROM flpgo102013
        inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si193_nrodocumento
        FROM pessoaflpgo102018
        inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE z01_ultalt < '{$this->sDataInicial}')
+       WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si193_nrodocumento
        FROM pessoaflpgo102017
        inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si193_nrodocumento
        FROM pessoaflpgo102016
        inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si193_nrodocumento
        FROM pessoaflpgo102015
        inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si193_nrodocumento
        FROM pessoaflpgo102014
        inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
       (SELECT si193_nrodocumento
        FROM pessoaflpgo102013
        inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
        inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}')
+       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1 )
     AND DATE_PART('YEAR',rh01_admiss) >= 2013
    AND z01_cadast <= '{$this->sDataFinal}'
    AND (rh01_admiss <= '{$this->sDataFinal}' OR z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}' )
 
    AND rh01_instit = " . db_getsession("DB_instit") . ")
+   AND   rh01_sicom = 1
 UNION
 SELECT DISTINCT CASE
                    WHEN length(z01_cgccpf) < 11 THEN lpad(z01_cgccpf, 11, '0')
@@ -201,72 +202,73 @@ WHERE (z01_cgccpf != '00000000000'
     FROM flpgo102017
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102016
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102015
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102014
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102013
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102018
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102017
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102016
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102015
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102014
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102013
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND prefeitura = 't'
  AND z01_cadast >= '2013-01-01'
  AND z01_cadast <= '{$this->sDataFinal}'
  AND (rh01_admiss <= '{$this->sDataFinal}' OR z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}')
  AND db_config.codigo = " . db_getsession("DB_instit") . "
+ AND   rh01_sicom = 1
                ";
 
         } else {
@@ -291,72 +293,73 @@ WHERE (z01_cgccpf != '00000000000'
     FROM flpgo102017
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102016
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102015
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102014
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102013
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102018
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102017
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102016
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102015
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102014
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102013
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND DATE_PART('YEAR',rh01_admiss) >= 2013
  AND z01_cadast <= '{$this->sDataFinal}'
  AND (rh01_admiss <= '{$this->sDataFinal}' OR z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}' )
 
  AND rh01_instit = " . db_getsession("DB_instit") . "
+ AND   rh01_sicom = 1
 UNION
 SELECT z01_cgccpf,
       z01_nome,
@@ -378,61 +381,61 @@ WHERE (z01_cgccpf != '00000000000'
     FROM flpgo102017
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102016
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102015
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102014
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si195_nrodocumento
     FROM flpgo102013
     inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102018
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102017
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102016
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102015
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102014
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
     JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}')
+    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1 )
  AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102013
@@ -442,7 +445,9 @@ WHERE (z01_cgccpf != '00000000000'
  AND z01_cadast >= '2013-01-01'
  AND z01_cadast <= '{$this->sDataFinal}'
  AND (rh01_admiss <= '{$this->sDataFinal}' OR z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}')
- AND db_config.codigo = " . db_getsession("DB_instit") . " ";
+ AND db_config.codigo = " . db_getsession("DB_instit") .
+                " 
+                AND   rh01_sicom = 1";
         }
 
         $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;

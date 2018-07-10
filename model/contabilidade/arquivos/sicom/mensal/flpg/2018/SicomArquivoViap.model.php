@@ -105,6 +105,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                      and date_part('YEAR',rh05_recis) = 2017 
                     )
                   )
+              AND   rh01_sicom = 1    
 			  ";
         }else{
 
@@ -129,6 +130,7 @@ class SicomArquivoViap extends SicomArquivoBase implements iPadArquivoBaseCSV {
                      and date_part('YEAR',rh05_recis) = 2017 
                     )
                   )
+              AND   rh01_sicom = 1    
 			  ";
 
         }

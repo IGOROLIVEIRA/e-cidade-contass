@@ -177,7 +177,7 @@ WHERE
                             AND DATE_PART('YEAR',r45_dtreto) = 2018
                             AND r45_situac <> 5 
                             AND rh01_instit =  " . db_getsession("DB_instit") . "
-                            
+                            AND   rh01_sicom = 1
                             ";
             }else{
 
@@ -242,7 +242,7 @@ WHERE
                             AND DATE_PART('YEAR',r45_dtreto) = 2018
                             AND r45_situac <> 5 
                             AND rh01_instit =  " . db_getsession("DB_instit") . "
-                            
+                            AND   rh01_sicom = 1
                             ";
 
             }
