@@ -483,6 +483,10 @@ function js_getItensPosicao(iCodigo, iLinha) {
 
 function js_roundDecimal(x,qtdCasasDecimais) {
 
+    if(Number.isInteger(x)){
+        return x;
+    }
+
     var radixPos = String(x).indexOf('.');
 
     // now we can use slice, on a String, to get '.15'
