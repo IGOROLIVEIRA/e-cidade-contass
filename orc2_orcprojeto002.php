@@ -42,6 +42,7 @@
  $aux      = new cl_orcsuplem;
 
  parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+ // print_r($HTTP_SERVER_VARS["QUERY_STRING"]);die();
 
  $anousu = db_getsession("DB_anousu");
  $projeto = (isset($o46_codlei)&&!empty($o46_codlei))?$o46_codlei:'null';
@@ -654,10 +655,28 @@ if ($timbre =='s'){
    }
 
  $pdf->ln();
-
  // assinaturas
  // include("dbforms/db_assinaturas_balancetes.php");
 
+// $pdf->setfont('arial','',6);
+
+ // if($)
+ if($ass=='s'){
+      $pdf->ln();
+      $assin      =  "\n\n_______________________________________________________"."\n";
+      $assin     .=  $pref."\n"; 
+      $assin     .= " PREFEITO MUNICIPAL DE ".$munic." - ".$uf;
+
+      $ass_pref     = $classinatura->assinatura(1000,$assin);
+      if( $pdf->gety() > ( $pdf->h - 35 ) )
+         $pdf->addpage($pdf->CurOrientation);
+
+      $largura = $pdf->w;
+      // print_r($largura);die();
+
+      $pos = $pdf->gety();
+      $pdf->multicell($largura,5,ucwords($ass_pref),0,"C",0,0);
+ }
 
  $pdf->Output();
 

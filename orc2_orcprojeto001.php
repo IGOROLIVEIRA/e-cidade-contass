@@ -89,6 +89,10 @@ function emite(){
       } else if (obj.modelo.value=='4') {
           jan = window.open('orc2_orcprojeto002.php?o46_codlei='+obj.o46_codlei.value+'&timbre=n','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
           jan.moveTo(0,0);
+      } else if (obj.modelo.value=='5') {
+          // $ass = true;
+          jan = window.open('orc2_orcprojeto002.php?o46_codlei='+obj.o46_codlei.value+'&timbre=s&ass=s','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+          jan.moveTo(0,0);
       }
    }  
 }
@@ -117,7 +121,7 @@ function emite(){
 	  if ($clorcparametro->numrows > 0 ){
 	     db_fieldsmemory($rr,0);
 	  }
-          $m = array("1"=>"1-com Timbre","2"=>"2-Dotacao Sintetica","3"=>"3-Com CodDot","4"=>"4-Sem Timbre");
+          $m = array("1"=>"1-Com Timbre","2"=>"2-Dotacao Sintetica","3"=>"3-Com CodDot","4"=>"4-Sem Timbre","5-Com Assinatura");
           db_select("modelo",$m,True,1);               
       ?>
       </td>
