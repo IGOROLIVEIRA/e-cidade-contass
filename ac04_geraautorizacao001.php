@@ -483,6 +483,8 @@ function js_getItensPosicao(iCodigo, iLinha) {
 
 function js_roundDecimal(x,qtdCasasDecimais) {
 
+    x = parseFloat(x);
+
     if(Number.isInteger(x)){
         return x;
     }
@@ -723,7 +725,8 @@ function js_calculaValor(obj, iLinha, lVerificaDot) {
   } else {
 
     var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue());
-    aLinha.aCells[7].content.setValue(js_formatar(new String(nValorTotal), "f",iCasasDecimais));
+
+    aLinha.aCells[7].content.setValue(js_formatar(js_roundDecimal(nValorTotal,2), "f",2));
     //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
     $("valoritem" + iLinha).value = js_formatar(js_roundDecimal(nValorTotal,2), "f",2);
   }
