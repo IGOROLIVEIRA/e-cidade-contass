@@ -79,15 +79,36 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
   }
 
-  public function getCodOrgaoTce($iCodInstit)
+  public function getCodOrgaoTce($iTipoInstit)
   {
-    $sSqlorgao = "select si09_codorgaotce as codorgao,numcgm from infocomplementaresinstit inner join db_config on codigo = si09_instit where codigo = {$iCodInstit}";
+    $sSqlorgao = "select si09_codorgaotce as codorgao from infocomplementaresinstit where si09_tipoinstit = {$iTipoInstit}";
     $iCodOrgaoTce = db_utils::fieldsMemory(db_query($sSqlorgao), 0)->codorgao;
     if ($iCodOrgaoTce == "") {
-      throw new Exception("Não foi possível encontrar o código do TCE do instituição {$iCodInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
+      throw new Exception("Não foi possível encontrar o código do TCE do instituição {$iTipoInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
     }
 
     return $iCodOrgaoTce;
+  }
+
+    public function getCodUnidadeTce($iTipoInstit)
+    {
+        $sSqlunidade = "select si09_codunidadesubunidade from infocomplementaresinstit where si09_tipoinstit = {$iTipoInstit}";
+        $iCodUnidadeTce = db_utils::fieldsMemory(db_query($sSqlunidade), 0)->si09_codunidadesubunidade;
+        if ($iCodUnidadeTce == "") {
+            throw new Exception("Não foi possível encontrar o código do TCE do instituição {$iTipoInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
+        }
+
+        return $iCodUnidadeTce;
+    }
+
+  public function getTipoinstit($CodInstit){
+      $sSqltipoistint = "select si09_tipoinstit from infocomplementaresinstit inner join db_config on codigo = si09_instit where codigo = {$CodInstit}";
+      $iTipoInstit = db_utils::fieldsMemory(db_query($sSqltipoistint), 0)->si09_tipoinstit;
+      if ($iTipoInstit == "") {
+          throw new Exception("Não foi possível encontrar o código do TCE do instituição {$CodInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
+      }
+
+      return $iTipoInstit;
   }
 
   /**
@@ -288,7 +309,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where c60_anousu = " . db_getsession("DB_anousu") . " {$sWhere10} ) as x
+                             where c60_anousu = " . db_getsession("DB_anousu") . " {$sWhere10}) as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 //where c60_anousu = " . db_getsession("DB_anousu") . " and substr(c60_estrut,1,9) = '511100000') as x
 
@@ -2477,8 +2498,16 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
               $obalancete24->si191_tiporegistro = 24;
               $obalancete24->si191_contacontabil = $oContas10->si177_contacontaabil;
               $obalancete24->si191_codfundo = "00000000";
-              $obalancete24->si191_codorgao = $this->getCodOrgaoTce(db_getsession("DB_instit"));
-              $obalancete24->si191_codunidadesub = "";
+              if($this->getTipoinstit(db_getsession("DB_instit")) == 2){
+                  $obalancete24->si191_codorgao = $this->getCodOrgaoTce(1);
+                  $obalancete24->si191_codunidadesub = $this->getCodUnidadeTce(1);
+              }elseif ($this->getTipoinstit(db_getsession("DB_instit")) == 1){
+                  $obalancete24->si191_codorgao = $this->getCodOrgaoTce(2);
+                  $obalancete24->si191_codunidadesub = $this->getCodUnidadeTce(2);
+              }else{
+                  $obalancete24->si191_codorgao = "00";
+                  $obalancete24->si191_codunidadesub = "00000000";
+              }
               $obalancete24->si191_saldoinicialorgao = $oReg24Saldo->saldoanterior;
               $obalancete24->si191_naturezasaldoinicialorgao = $oReg24Saldo->saldoanterior >= 0 ? 'D' : 'C';
               $obalancete24->si191_totaldebitosorgao = $oReg24Saldo->debitos;
@@ -3067,7 +3096,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $obalreg24->si191_contacontabil = $reg24->si191_contacontabil;
         $obalreg24->si191_codfundo = "00000000";
         $obalreg24->si191_codorgao = $reg24->si191_codorgao;
-        $obalreg24->si191_codunidadesub = "";
+        $obalreg24->si191_codunidadesub = $reg24->si191_codunidadesub;
         $obalreg24->si191_saldoinicialorgao = number_format(abs($reg24->si191_saldoinicialorgao == '' ? 0 : $reg24->si191_saldoinicialorgao), 2, ".", "");
         $obalreg24->si191_naturezasaldoinicialorgao = $obalreg24->si191_naturezasaldoinicialorgao = $reg24->si191_saldoinicialorgao == 0 ? $oDado10->naturezasaldo : ($reg24->si191_saldoinicialorgao > 0 ? 'D' : 'C');
         $obalreg24->si191_totaldebitosorgao = number_format(abs($reg24->si191_totaldebitosorgao), 2, ".", "");

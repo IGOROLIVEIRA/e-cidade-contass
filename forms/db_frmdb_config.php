@@ -673,6 +673,16 @@ if ($db_opcao == 1) {
 	      ?>
 	    </td>
 	  </tr>
+      <tr>
+          <td nowrap title="<?=@$Tsi09_codunidadesubunidade?>">
+              <?=@$Lsi09_codunidadesubunidade?>
+          </td>
+          <td>
+              <?
+              db_input('si09_codunidadesubunidade',12,$Isi09_codunidadesubunidade,true,'text',$db_opcao,"",0);
+              ?>
+          </td>
+      </tr>
 	  <tr>
 	    <td nowrap title="<?=@$Tsi09_opcaosemestralidade?>">
 	       <?=@$Lsi09_opcaosemestralidade?>

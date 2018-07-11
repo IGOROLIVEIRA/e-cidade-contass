@@ -1,50 +1,52 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE infocomplementaresinstit
-class cl_infocomplementaresinstit { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $si09_sequencial = 0; 
-   var $si09_tipoinstit = 0; 
-   var $si09_codorgaotce = 0; 
-   var $si09_opcaosemestralidade = 0; 
-   var $si09_gestor = 0; 
-   var $si09_cnpjprefeitura = 0; 
+class cl_infocomplementaresinstit {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $si09_sequencial = 0;
+   var $si09_tipoinstit = 0;
+   var $si09_codorgaotce = 0;
+   var $si09_codunidadesubunidade = 0;
+   var $si09_opcaosemestralidade = 0;
+   var $si09_gestor = 0;
+   var $si09_cnpjprefeitura = 0;
    var $si09_instit = 0;
    var $si09_assessoriacontabil = 0;
-   var $si09_cgmassessoriacontabil = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $si09_cgmassessoriacontabil = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 si09_sequencial = int8 = Código Sequencial 
-                 si09_tipoinstit = int8 = Tipo de Instituição 
-                 si09_codorgaotce = int8 = Código do Orgão no TCE/MG 
-                 si09_opcaosemestralidade = int8 = Opção Semestralidade 
-                 si09_gestor = int8 = CGM do Gestor 
-                 si09_cnpjprefeitura = int8 = Cnpj da Prefeitura 
-                 si09_instit = float8 = Intituição 
+                 si09_sequencial = int8 = Código Sequencial
+                 si09_tipoinstit = int8 = Tipo de Instituição
+                 si09_codorgaotce = int8 = Código do Orgão no TCE/MG
+                 si09_codunidadesubunidade = int8 = Codigo da unidade ou Subunidade
+                 si09_opcaosemestralidade = int8 = Opção Semestralidade
+                 si09_gestor = int8 = CGM do Gestor
+                 si09_cnpjprefeitura = int8 = Cnpj da Prefeitura
+                 si09_instit = float8 = Intituição
                  si09_assessoriacontabil = int8 = Assessoria Contabil
                  si09_cgmassessoriacontabil = int8 = Cgm Assessoria Contabil
                  ";
-   //funcao construtor da classe 
-   function cl_infocomplementaresinstit() { 
+   //funcao construtor da classe
+   function cl_infocomplementaresinstit() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("infocomplementaresinstit"); 
+     $this->rotulo = new rotulo("infocomplementaresinstit");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -58,6 +60,7 @@ class cl_infocomplementaresinstit {
        $this->si09_sequencial = ($this->si09_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_sequencial"]:$this->si09_sequencial);
        $this->si09_tipoinstit = ($this->si09_tipoinstit == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_tipoinstit"]:$this->si09_tipoinstit);
        $this->si09_codorgaotce = ($this->si09_codorgaotce == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_codorgaotce"]:$this->si09_codorgaotce);
+       $this->si09_codunidadesubunidade = ($this->si09_codunidadesubunidade == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_codunidadesubunidade"]:$this->si09_codunidadesubunidade);
        $this->si09_opcaosemestralidade = ($this->si09_opcaosemestralidade == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_opcaosemestralidade"]:$this->si09_opcaosemestralidade);
        $this->si09_gestor = ($this->si09_gestor == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_gestor"]:$this->si09_gestor);
        $this->si09_cnpjprefeitura = ($this->si09_cnpjprefeitura == ""?@$GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"]:$this->si09_cnpjprefeitura);
@@ -69,9 +72,9 @@ class cl_infocomplementaresinstit {
      }
    }
    // funcao para inclusao
-   function incluir ($si09_sequencial){ 
+   function incluir ($si09_sequencial){
       $this->atualizacampos();
-     if($this->si09_tipoinstit == null ){ 
+     if($this->si09_tipoinstit == null ){
        $this->erro_sql = " Campo Tipo de Instituição nao Informado.";
        $this->erro_campo = "si09_tipoinstit";
        $this->erro_banco = "";
@@ -80,7 +83,7 @@ class cl_infocomplementaresinstit {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si09_codorgaotce == null ){ 
+     if($this->si09_codorgaotce == null ){
        $this->erro_sql = " Campo Código do Orgão no TCE/MG nao Informado.";
        $this->erro_campo = "si09_codorgaotce";
        $this->erro_banco = "";
@@ -89,7 +92,16 @@ class cl_infocomplementaresinstit {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si09_opcaosemestralidade == null ){ 
+     if($this->si09_codunidadesubunidade == null){
+         $this->erro_sql = "Campo Cod. Unidade ou Subunidade? não informado.";
+         $this->erro_campo = "si09_codunidadedesubunidade";
+         $this->erro_banco = "";
+         $this->erro_msg = "Usuário: \\n\\n".$this->erro_sql."\\n\\";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+     }
+     if($this->si09_opcaosemestralidade == null ){
        $this->erro_sql = " Campo Opção Semestralidade nao Informado.";
        $this->erro_campo = "si09_opcaosemestralidade";
        $this->erro_banco = "";
@@ -98,7 +110,7 @@ class cl_infocomplementaresinstit {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si09_gestor == null ){ 
+     if($this->si09_gestor == null ){
        $this->erro_sql = " Campo CGM do Gestor nao Informado.";
        $this->erro_campo = "si09_gestor";
        $this->erro_banco = "";
@@ -107,7 +119,7 @@ class cl_infocomplementaresinstit {
        $this->erro_status = "0";
        return false;
      }
-     if(($this->si09_cnpjprefeitura == null || $this->si09_cnpjprefeitura == "0") && $this->si09_tipoinstit != 2){ 
+     if(($this->si09_cnpjprefeitura == null || $this->si09_cnpjprefeitura == "0") && $this->si09_tipoinstit != 2){
        $this->erro_sql = " Campo Cnpj da prefeitura nao Informado.";
        $this->erro_campo = "si09_cnpjprefeitura";
        $this->erro_banco = "";
@@ -120,7 +132,7 @@ class cl_infocomplementaresinstit {
      	  $this->si09_cnpjprefeitura = "0";
      	}
      }
-     if($this->si09_instit == null ){ 
+     if($this->si09_instit == null ){
        $this->erro_sql = " Campo Intituição nao Informado.";
        $this->erro_campo = "si09_instit";
        $this->erro_banco = "";
@@ -129,7 +141,7 @@ class cl_infocomplementaresinstit {
        $this->erro_status = "0";
        return false;
      }
-     if($this->si09_assessoriacontabil == 1 && empty($this->si09_cgmassessoriacontabil)){ 
+     if($this->si09_assessoriacontabil == 1 && empty($this->si09_cgmassessoriacontabil)){
        $this->erro_sql = " Campo Cgm Assessoria Contabil nao Informado.";
        $this->erro_campo = "si09_cgmassessoriacontabil";
        $this->erro_banco = "";
@@ -139,16 +151,16 @@ class cl_infocomplementaresinstit {
        return false;
      }
      if($si09_sequencial == "" || $si09_sequencial == null ){
-       $result = db_query("select nextval('infocomplementaresinstit_si09_sequencial_seq')"); 
+       $result = db_query("select nextval('infocomplementaresinstit_si09_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: infocomplementaresinstit_si09_sequencial_seq do campo: si09_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: infocomplementaresinstit_si09_sequencial_seq do campo: si09_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->si09_sequencial = pg_result($result,0,0); 
+       $this->si09_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from infocomplementaresinstit_si09_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si09_sequencial)){
@@ -159,10 +171,10 @@ class cl_infocomplementaresinstit {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->si09_sequencial = $si09_sequencial; 
+         $this->si09_sequencial = $si09_sequencial;
        }
      }
-     if(($this->si09_sequencial == null) || ($this->si09_sequencial == "") ){ 
+     if(($this->si09_sequencial == null) || ($this->si09_sequencial == "") ){
        $this->erro_sql = " Campo si09_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -171,29 +183,31 @@ class cl_infocomplementaresinstit {
        return false;
      }
      $sql = "insert into infocomplementaresinstit(
-                                       si09_sequencial 
-                                      ,si09_tipoinstit 
-                                      ,si09_codorgaotce 
-                                      ,si09_opcaosemestralidade 
-                                      ,si09_gestor 
-                                      ,si09_cnpjprefeitura 
+                                       si09_sequencial
+                                      ,si09_tipoinstit
+                                      ,si09_codorgaotce
+                                      ,si09_opcaosemestralidade
+                                      ,si09_gestor
+                                      ,si09_cnpjprefeitura
                                       ,si09_instit
                                       ,si09_assessoriacontabil
-                                      ,si09_cgmassessoriacontabil 
+                                      ,si09_cgmassessoriacontabil
+                                      ,si09_codunidadesubunidade
                        )
                 values (
-                                $this->si09_sequencial 
-                               ,$this->si09_tipoinstit 
-                               ,$this->si09_codorgaotce 
-                               ,$this->si09_opcaosemestralidade 
-                               ,$this->si09_gestor 
-                               ,$this->si09_cnpjprefeitura 
+                                $this->si09_sequencial
+                               ,$this->si09_tipoinstit
+                               ,$this->si09_codorgaotce
+                               ,$this->si09_opcaosemestralidade
+                               ,$this->si09_gestor
+                               ,$this->si09_cnpjprefeitura
                                ,$this->si09_instit
                                ,$this->si09_assessoriacontabil
-                               ,".($this->si09_cgmassessoriacontabil == '' ? 'null' : $this->si09_cgmassessoriacontabil)." 
+                               ,".($this->si09_cgmassessoriacontabil == '' ? 'null' : $this->si09_cgmassessoriacontabil)."
+                               ,".($this->si09_codunidadesubunidade == '' ? 0 : $this->si09_codunidadesubunidade)."
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Informações complementares tce/mg ($this->si09_sequencial) nao Incluído. Inclusao Abortada.";
@@ -231,16 +245,16 @@ class cl_infocomplementaresinstit {
        $resac = db_query("insert into db_acount values($acount,2010228,2009473,'','".AddSlashes(pg_result($resaco,0,'si09_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
    function alterar ($si09_sequencial=null) {
       $this->atualizacampos();
      $sql = " update infocomplementaresinstit set ";
      $virgula = "";
-     if(trim($this->si09_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_sequencial"])){ 
+     if(trim($this->si09_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_sequencial"])){
        $sql  .= $virgula." si09_sequencial = $this->si09_sequencial ";
        $virgula = ",";
-       if(trim($this->si09_sequencial) == null ){ 
+       if(trim($this->si09_sequencial) == null ){
          $this->erro_sql = " Campo Código Sequencial nao Informado.";
          $this->erro_campo = "si09_sequencial";
          $this->erro_banco = "";
@@ -250,10 +264,10 @@ class cl_infocomplementaresinstit {
          return false;
        }
      }
-     if(trim($this->si09_tipoinstit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_tipoinstit"])){ 
+     if(trim($this->si09_tipoinstit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_tipoinstit"])){
        $sql  .= $virgula." si09_tipoinstit = $this->si09_tipoinstit ";
        $virgula = ",";
-       if(trim($this->si09_tipoinstit) == null ){ 
+       if(trim($this->si09_tipoinstit) == null ){
          $this->erro_sql = " Campo Tipo de Instituição nao Informado.";
          $this->erro_campo = "si09_tipoinstit";
          $this->erro_banco = "";
@@ -263,10 +277,10 @@ class cl_infocomplementaresinstit {
          return false;
        }
      }
-     if(trim($this->si09_codorgaotce)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_codorgaotce"])){ 
+     if(trim($this->si09_codorgaotce)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_codorgaotce"])){
        $sql  .= $virgula." si09_codorgaotce = $this->si09_codorgaotce ";
        $virgula = ",";
-       if(trim($this->si09_codorgaotce) == null ){ 
+       if(trim($this->si09_codorgaotce) == null ){
          $this->erro_sql = " Campo Código do Orgão no TCE/MG nao Informado.";
          $this->erro_campo = "si09_codorgaotce";
          $this->erro_banco = "";
@@ -276,10 +290,23 @@ class cl_infocomplementaresinstit {
          return false;
        }
      }
-     if(trim($this->si09_opcaosemestralidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_opcaosemestralidade"])){ 
+     if(trim($this->si09_codunidadesubunidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_codunidadesubunidade"])){
+       $sql  .= $virgula." si09_codunidadesubunidade = $this->si09_codunidadesubunidade ";
+       $virgula = ",";
+       if(trim($this->si09_codunidadesubunidade) == null ){
+         $this->erro_sql = " Campo Código do Orgão no TCE/MG nao Informado.";
+         $this->erro_campo = "si09_codunidadesubunidade";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si09_opcaosemestralidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_opcaosemestralidade"])){
        $sql  .= $virgula." si09_opcaosemestralidade = $this->si09_opcaosemestralidade ";
        $virgula = ",";
-       if(trim($this->si09_opcaosemestralidade) == null ){ 
+       if(trim($this->si09_opcaosemestralidade) == null ){
          $this->erro_sql = " Campo Opção Semestralidade nao Informado.";
          $this->erro_campo = "si09_opcaosemestralidade";
          $this->erro_banco = "";
@@ -289,10 +316,10 @@ class cl_infocomplementaresinstit {
          return false;
        }
      }
-     if(trim($this->si09_gestor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_gestor"])){ 
+     if(trim($this->si09_gestor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_gestor"])){
        $sql  .= $virgula." si09_gestor = $this->si09_gestor ";
        $virgula = ",";
-       if(trim($this->si09_gestor) == null ){ 
+       if(trim($this->si09_gestor) == null ){
          $this->erro_sql = " Campo CGM do Gestor nao Informado.";
          $this->erro_campo = "si09_gestor";
          $this->erro_banco = "";
@@ -302,11 +329,11 @@ class cl_infocomplementaresinstit {
          return false;
        }
      }
-     if(trim($this->si09_cnpjprefeitura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"])){ 
-        if(trim($this->si09_cnpjprefeitura)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"])){ 
-           $this->si09_cnpjprefeitura = "0" ; 
+     if(trim($this->si09_cnpjprefeitura)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"])){
+        if(trim($this->si09_cnpjprefeitura)=="" && isset($GLOBALS["HTTP_POST_VARS"]["si09_cnpjprefeitura"])){
+           $this->si09_cnpjprefeitura = "0" ;
         }
-       if(($this->si09_cnpjprefeitura == null || $this->si09_cnpjprefeitura == "0") && $this->si09_tipoinstit != 2){ 
+       if(($this->si09_cnpjprefeitura == null || $this->si09_cnpjprefeitura == "0") && $this->si09_tipoinstit != 2){
          $this->erro_sql = " Campo Cnpj da prefeitura nao Informado.";
          $this->erro_campo = "si09_cnpjprefeitura";
          $this->erro_banco = "";
@@ -322,10 +349,10 @@ class cl_infocomplementaresinstit {
        $sql  .= $virgula." si09_cnpjprefeitura = $this->si09_cnpjprefeitura ";
        $virgula = ",";
      }
-     if(trim($this->si09_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_instit"])){ 
+     if(trim($this->si09_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_instit"])){
        $sql  .= $virgula." si09_instit = $this->si09_instit ";
        $virgula = ",";
-       if(trim($this->si09_instit) == null ){ 
+       if(trim($this->si09_instit) == null ){
          $this->erro_sql = " Campo Intituição nao Informado.";
          $this->erro_campo = "si09_instit";
          $this->erro_banco = "";
@@ -335,14 +362,14 @@ class cl_infocomplementaresinstit {
          return false;
        }
      }
-     if(trim($this->si09_assessoriacontabil)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_assessoriacontabil"])){ 
+     if(trim($this->si09_assessoriacontabil)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_assessoriacontabil"])){
        $sql  .= $virgula." si09_assessoriacontabil = $this->si09_assessoriacontabil ";
        $virgula = ",";
      }
-    if(trim($this->si09_cgmassessoriacontabil)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_cgmassessoriacontabil"])){ 
+    if(trim($this->si09_cgmassessoriacontabil)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_cgmassessoriacontabil"])){
        $sql  .= $virgula." si09_cgmassessoriacontabil = ".($this->si09_cgmassessoriacontabil == '' ? 'null' : $this->si09_cgmassessoriacontabil);
        $virgula = ",";
-       if($this->si09_assessoriacontabil == 1 && empty($this->si09_cgmassessoriacontabil)){ 
+       if($this->si09_assessoriacontabil == 1 && empty($this->si09_cgmassessoriacontabil)){
          $this->erro_sql = " Campo Cgm Assessoria Contabil nao Informado.";
          $this->erro_campo = "si09_cgmassessoriacontabil";
          $this->erro_banco = "";
@@ -380,7 +407,7 @@ class cl_infocomplementaresinstit {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Informações complementares tce/mg nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->si09_sequencial;
@@ -408,14 +435,14 @@ class cl_infocomplementaresinstit {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($si09_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($si09_sequencial=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($si09_sequencial));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -447,7 +474,7 @@ class cl_infocomplementaresinstit {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Informações complementares tce/mg nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$si09_sequencial;
@@ -475,11 +502,11 @@ class cl_infocomplementaresinstit {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -501,8 +528,8 @@ class cl_infocomplementaresinstit {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $si09_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $si09_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -520,8 +547,8 @@ class cl_infocomplementaresinstit {
      $sql2 = "";
      if($dbwhere==""){
        if($si09_sequencial!=null ){
-         $sql2 .= " where infocomplementaresinstit.si09_sequencial = $si09_sequencial "; 
-       } 
+         $sql2 .= " where infocomplementaresinstit.si09_sequencial = $si09_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -537,8 +564,8 @@ class cl_infocomplementaresinstit {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $si09_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $si09_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -554,8 +581,8 @@ class cl_infocomplementaresinstit {
      $sql2 = "";
      if($dbwhere==""){
        if($si09_sequencial!=null ){
-         $sql2 .= " where infocomplementaresinstit.si09_sequencial = $si09_sequencial "; 
-       } 
+         $sql2 .= " where infocomplementaresinstit.si09_sequencial = $si09_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
