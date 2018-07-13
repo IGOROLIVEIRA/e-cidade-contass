@@ -36,14 +36,7 @@ if($tipoimpressao == 1){
                        m60_codmater AS codigo_item,
                        m60_descr AS descricao_item,
                        db121_estrutural AS estrutural_subgrupo,
-                       (i77_estoqueinicial*
-                            (SELECT m85_precomedio
-                             FROM matmaterprecomedio p
-                             WHERE m85_matmater = q.m70_codmatmater
-                                 AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                 AND p.m85_precomedio IS NOT NULL
-                             ORDER BY m85_data DESC, m85_hora DESC
-                             LIMIT 1)) AS saldo_inicial,
+                       i77_estoqueinicial*i77_valormedio AS saldo_inicial,
                        i77_estoqueinicial AS quantidade_inicial,
                        i77_contagem AS contagem,
                        CASE
@@ -55,27 +48,13 @@ if($tipoimpressao == 1){
                            ELSE 0
                        END AS entrada,
                        CASE
-                           WHEN (i77_contagem-i77_estoqueinicial)*m85_precomedio IS NULL THEN (i77_contagem-i77_estoqueinicial)*
-                                    (SELECT m85_precomedio
-                                     FROM matmaterprecomedio p
-                                     WHERE m85_matmater = q.m70_codmatmater
-                                         AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                         AND p.m85_precomedio IS NOT NULL
-                                     ORDER BY m85_data DESC, m85_hora DESC
-                                     LIMIT 1)
-                           ELSE (i77_contagem-i77_estoqueinicial)*m85_precomedio
+                           WHEN (i77_contagem-i77_estoqueinicial)* i77_valormedio IS NULL THEN (i77_contagem-i77_estoqueinicial) * i77_valormedio
+                           ELSE (i77_contagem-i77_estoqueinicial)* i77_valormedio
                        END AS diferenca,
                        (i77_contagem-i77_estoqueinicial)+i77_estoqueinicial AS quantidade_final,
                        CASE
-                           WHEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*m85_precomedio IS NULL THEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*
-                                    (SELECT m85_precomedio
-                                     FROM matmaterprecomedio p
-                                     WHERE m85_matmater = q.m70_codmatmater
-                                         AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                         AND p.m85_precomedio IS NOT NULL
-                                     ORDER BY m85_data DESC, m85_hora DESC
-                                     LIMIT 1)
-                           ELSE ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*m85_precomedio
+                           WHEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial) * i77_valormedio IS NULL THEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial) * i77_valormedio
+                           ELSE ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)* i77_valormedio
                        END AS valor_final
                 FROM inventariomaterial x
                 JOIN matestoque q ON m70_codigo = i77_estoque
@@ -227,35 +206,15 @@ $pdf->cell(20,$alt,number_format($totalvalor_final, 2, ',','.'),0,1,"C",0);
                      db121_descricao AS descricao_subgrupo,
                      c61_reduz AS reduzido,
                      db121_estrutural AS estrutural_subgrupo,
-                     sum((i77_estoqueinicial*
-                              (SELECT m85_precomedio
-                               FROM matmaterprecomedio p
-                               WHERE m85_matmater = q.m70_codmatmater
-                                   AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                   AND p.m85_precomedio IS NOT NULL
-                               ORDER BY m85_data DESC, m85_hora DESC
-                               LIMIT 1))) AS saldo_inicial,
+                     sum((i77_estoqueinicial*i77_valormedio)) AS saldo_inicial,
                      sum(CASE
-                         WHEN (i77_contagem-i77_estoqueinicial)*m85_precomedio IS NULL THEN (i77_contagem-i77_estoqueinicial)*
-                                  (SELECT m85_precomedio
-                                   FROM matmaterprecomedio p
-                                   WHERE m85_matmater = q.m70_codmatmater
-                                       AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                       AND p.m85_precomedio IS NOT NULL
-                                   ORDER BY m85_data DESC, m85_hora DESC
-                                   LIMIT 1)
-                         ELSE (i77_contagem-i77_estoqueinicial)*m85_precomedio
+                         WHEN (i77_contagem-i77_estoqueinicial)*i77_valormedio IS NULL THEN (i77_contagem-i77_estoqueinicial)*i77_valormedio
+                         ELSE (i77_contagem-i77_estoqueinicial)*i77_valormedio
                      END) AS diferenca,
                      sum(CASE
-                         WHEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*m85_precomedio IS NULL THEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*
-                                  (SELECT m85_precomedio
-                                   FROM matmaterprecomedio p
-                                   WHERE m85_matmater = q.m70_codmatmater
-                                       AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                       AND p.m85_precomedio IS NOT NULL
-                                   ORDER BY m85_data DESC, m85_hora DESC
-                                   LIMIT 1)
-                         ELSE ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*m85_precomedio
+                         WHEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*i77_valormedio IS NULL 
+                          THEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*i77_valormedio
+                            ELSE ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*i77_valormedio
                      END) AS valor_final
               FROM inventariomaterial x
               JOIN matestoque q ON m70_codigo = i77_estoque
@@ -292,35 +251,16 @@ $pdf->cell(20,$alt,number_format($totalvalor_final, 2, ',','.'),0,1,"C",0);
     $rsResultado = db_utils::getCollectionByRecord($rsSql);
     // agrupa pelo almoxarifado
     $sSqlAlm = "SELECT descrdepto,
-                       sum((i77_estoqueinicial*
-                                (SELECT m85_precomedio
-                                 FROM matmaterprecomedio p
-                                 WHERE m85_matmater = q.m70_codmatmater
-                                     AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                     AND p.m85_precomedio IS NOT NULL
-                                 ORDER BY m85_data DESC, m85_hora DESC
-                                 LIMIT 1))) AS saldo_inicial,
+                       sum((i77_estoqueinicial*i77_valormedio)) AS saldo_inicial,
                        sum(CASE
-                               WHEN (i77_contagem-i77_estoqueinicial)*m85_precomedio IS NULL THEN (i77_contagem-i77_estoqueinicial)*
-                                        (SELECT m85_precomedio
-                                         FROM matmaterprecomedio p
-                                         WHERE m85_matmater = q.m70_codmatmater
-                                             AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                             AND p.m85_precomedio IS NOT NULL
-                                         ORDER BY m85_data DESC, m85_hora DESC
-                                         LIMIT 1)
-                               ELSE (i77_contagem-i77_estoqueinicial)*m85_precomedio
+                               WHEN (i77_contagem-i77_estoqueinicial)*i77_valormedio IS NULL 
+                                THEN (i77_contagem-i77_estoqueinicial)*i77_valormedio
+                                  ELSE (i77_contagem-i77_estoqueinicial)*i77_valormedio
                            END) AS diferenca,
                        sum(CASE
-                               WHEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*m85_precomedio IS NULL THEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*
-                                        (SELECT m85_precomedio
-                                         FROM matmaterprecomedio p
-                                         WHERE m85_matmater = q.m70_codmatmater
-                                             AND to_timestamp(m85_data || ' ' || m85_hora, 'YYYY-MM-DD HH24:MI:SS') < to_timestamp(w.m80_data || ' ' || w.m80_hora, 'YYYY-MM-DD HH24:MI:SS')
-                                             AND p.m85_precomedio IS NOT NULL
-                                         ORDER BY m85_data DESC, m85_hora DESC
-                                         LIMIT 1)
-                               ELSE ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*m85_precomedio
+                               WHEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*i77_valormedio IS NULL 
+                                THEN ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*i77_valormedio
+                                  ELSE ((i77_contagem-i77_estoqueinicial)+i77_estoqueinicial)*i77_valormedio
                            END) AS valor_final
                 FROM inventariomaterial x
                 JOIN matestoque q ON m70_codigo = i77_estoque

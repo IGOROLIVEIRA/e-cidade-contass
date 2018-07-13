@@ -273,14 +273,9 @@ function js_ComparaDatas(dInicial, dFinal) {
   var nova_data1 = parseInt(data1.split("/")[2].toString() + data1.split("/")[1].toString() + data1.split("/")[0].toString());
   var nova_data2 = parseInt(data2.split("/")[2].toString() + data2.split("/")[1].toString() + data2.split("/")[0].toString());
 
-  if (nova_data2 > nova_data1) {
+  if (nova_data2 >= nova_data1) {
     return true;
-  }else if (nova_data1 == nova_data2) {
-
-    alert("As datas de períodos inicial e final devem ser diferentes.");
-    return false;
-  }else {
-
+  }else if (nova_data2 < nova_data1) {
     alert("Data período inicial deve ser menor que a data período final.");
     return false;
   }

@@ -248,7 +248,12 @@ i77_dataprocessamento AS dataprocessamento,
             //verifica se ja existe o material vinculado ao inventario
             //informacoes sobre o estoque
 
-            $sSql = "SELECT * FROM matestoque WHERE m70_codigo = {$oParam->iCodigoEstoque}";
+            $sSql = "SELECT * FROM matmater 
+                     INNER JOIN matestoque ON m70_codmatmater = m60_codmater
+                     INNER JOIN matmaterprecomedio on m85_matmater = m60_codmater
+                     WHERE m70_codigo = {$oParam->iCodigoEstoque} 
+                     AND m70_coddepto = 1 ORDER BY m85_sequencial DESC LIMIT 1";
+
             $oEstoque = db_utils::fieldsMemory(db_query($sSql));
             //informacoes sobre o inventario
             $sSql = "SELECT * FROM inventariomaterial WHERE i77_inventario = {$oParam->iCodigoInventario} AND i77_estoque = {$oParam->iCodigoEstoque}";
@@ -259,7 +264,7 @@ i77_dataprocessamento AS dataprocessamento,
             //seta as alteracoes
             $oInventarioMaterial->i77_ultimolancamento = ($oLanc->m80_codigo == '' || $oLanc->m80_codigo == null)?'null':$oLanc->m80_codigo;
             $oInventarioMaterial->i77_contagem = str_replace(",",".",str_replace(".", "", $oParam->iContagem));
-            $oInventarioMaterial->i77_valormedio = str_replace(",",".",str_replace(".", "", $oParam->iPreco));
+            $oInventarioMaterial->i77_valormedio = $oEstoque->m85_precomedio;
             //caso exista, atualize
             if($oInventarioMaterial->numrows > 0){
 
@@ -283,9 +288,8 @@ i77_dataprocessamento AS dataprocessamento,
                 $oInventarioMaterial->i77_estoque = $oParam->iCodigoEstoque;
                 $oInventarioMaterial->i77_db_depart = $oParam->iDepartamento;
                 $oInventarioMaterial->i77_estoqueinicial = $oParam->iValorEstoqueInicial;
-
-                $oInventarioMaterial->i77_valorinicial = $oEstoque->m70_valor;
                 $oInventarioMaterial->i77_vinculoinventario = 't';
+                $oInventarioMaterial->i77_valorinicial =  $oEstoque->m70_quant * $oEstoque->m85_precomedio;
                 $oInventarioMaterial->i77_datainclusao = date('Y-m-d');
                 $oInventarioMaterial->incluir();
                 if($oInventarioMaterial->erro_status == '0'){
