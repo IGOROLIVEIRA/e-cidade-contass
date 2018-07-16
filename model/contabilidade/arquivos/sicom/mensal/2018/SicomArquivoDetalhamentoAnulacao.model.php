@@ -209,20 +209,17 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $tpLiquidacao = 2;
       }
 
-      if ($sTrataCodUnidade == '2') {
+      if (($sTrataCodUnidade == "2") && ($oDetalhamento->o41_subunidade != '' && $oDetalhamento->o41_subunidade != 0)) {
 
-        $sCodUnidade = str_pad($oDetalhamento->o58_orgao, 3, "0", STR_PAD_LEFT);
-        $sCodUnidade .= str_pad($oDetalhamento->o58_unidade, 2, "0", STR_PAD_LEFT);
+        $sCodUnidade = str_pad($oDetalhamento->o58_orgao, 2, "0", STR_PAD_LEFT);
+        $sCodUnidade .= str_pad($oDetalhamento->o58_unidade, 3, "0", STR_PAD_LEFT);
+        $sCodUnidade .= str_pad($oDetalhamento->o41_subunidade, 3, "0", STR_PAD_LEFT);
 
       } else {
 
         $sCodUnidade = str_pad($oDetalhamento->o58_orgao, 2, "0", STR_PAD_LEFT);
         $sCodUnidade .= str_pad($oDetalhamento->o58_unidade, 3, "0", STR_PAD_LEFT);
 
-      }
-
-      if ($oDetalhamento->o41_subunidade != '' && $oDetalhamento->o41_subunidade != 0) {
-        $sCodUnidade .= str_pad($oDetalhamento->o41_subunidade, 3, "0", STR_PAD_LEFT);
       }
 
       $sHash = substr($oDetalhamento->nroliquidacao, 0, 19);
