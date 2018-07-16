@@ -838,7 +838,7 @@ class cl_empresto {
      	 $where_datas = " between '$dtini' and '$dtfim' ";
      }
     $sqlperiodo = "
-	select distinct on (e60_anousu, e60_codemp::integer)
+	select
 	    e91_numemp,
 	    e91_vlremp,
 	    e91_vlranu,
