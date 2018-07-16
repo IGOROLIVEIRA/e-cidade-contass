@@ -162,13 +162,13 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                 AND c70_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
                 AND e60_instit IN (" . db_getsession('DB_instit') . ")
             GROUP BY e60_numemp, e60_resumo, e60_destin, e60_codemp, e60_emiss, e60_numcgm, z01_nome, z01_cgccpf, z01_munic, e60_vlremp, e60_vlranu, e60_vlrliq, e63_codhist, e40_descr, e60_vlrpag, e60_anousu, 
-                     60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp, e71_codnota,
+                     e60_coddot, o58_coddot, o58_orgao, o40_orgao, o40_descr, o58_unidade, o41_descr, o15_codigo, o15_descr, e60_codcom, pc50_descr, c70_data, c70_codlan, c53_tipo, c53_descr, e91_numemp, e71_codnota,
                      c80_data, e50_data, si09_codorgaotce, o41_subunidade, pagordemnota.e71_codord , o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, o56_elemento
             ORDER BY e60_numemp, c70_codlan";
     // and e60_numemp not in (select e91_numemp from empresto where e91_anousu = ".db_getsession('DB_anousu').")
-    //echo $sSql;
+//    echo $sSql;
     $rsDetalhamentos = db_query($sSql);
-    //db_criatabela($rsDetalhamentos);echo pg_last_error();
+//    db_criatabela($rsDetalhamentos);echo pg_last_error();
 
     $clalq10 = new cl_alq102018();
     $clalq11 = new cl_alq112018();
