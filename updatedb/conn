@@ -7,7 +7,7 @@ e-cidade	5432	cmmoc
 e-cidade	5432	fumasa
 e-cidade	5432	pmcristalia
 e-cidade	5433	pmibiracatu
-e-cidade    5432    pmjanuaria
+e-cidade  5432  pmjanuaria
 e-cidade	5432	pmitacambira
 e-cidade	5433	pmlagoadospatos
 e-cidade	5433	pmpatis
@@ -19,13 +19,14 @@ e-cidade	5432	cmuba
 e-cidade	5432	pmmontezuma
 e-cidade	5432	pmpirapora
 e-cidade	5432	cisaje
-e-cidade    5432	prevmoc
+e-cidade  5432	prevmoc
 e-cidade	5432	pmverdelandia
 e-cidade	5432	pmluislandia
 e-cidade	5432	pmvarzelandia
 e-cidade	5432	pmclarodospocoes
+e-cidade	5432	ciiamaje
 cmbh2013	5433	cmbhecid
-cmbh39      5433    cmbhecid
+cmbh39    5433  cmbhecid
 cmnavarro	5432	cmnavarro
 cmfranciscodumont   5432    cmnavarro
 pirapora_teste_mario 5432 teste
