@@ -483,7 +483,10 @@ function js_getItensPosicao(iCodigo, iLinha) {
 
 function js_roundDecimal(x,qtdCasasDecimais) {
 
+    x = x.toString().replace(',','.');
     x = parseFloat(x);
+
+    console.log("js_roundDecimal: "+x);
 
     if(Number.isInteger(x)){
         return x;
@@ -522,6 +525,8 @@ function js_roundDecimal(x,qtdCasasDecimais) {
     }
 
     render = String(Math.floor(x)+temp)+"."+render;
+
+    console.log("js_roundDecimal saida: "+render);
 
     return render;
 }
@@ -789,20 +794,25 @@ function js_ajusteDotacao(iLinha,tipo) {
     console.log(js_round(nTotalDotacoes, iCasasDecimais));
     console.log(js_strToFloat(oDadosItem.aCells[7].getValue(), iCasasDecimais));
 
+
     if(tipo == 1){
-      if (js_round(nTotalDotacoes, iCasasDecimais) != js_strToFloat(oDadosItem.aCells[7].getValue(), iCasasDecimais) ) {
-        alert('o Valor Total das Dotações não conferem com o total que está sendo autorizado no item!');
-        return false;
-      }
+      // if (js_round(nTotalDotacoes, iCasasDecimais) != js_strToFloat(oDadosItem.aCells[7].getValue(), iCasasDecimais) ) {
+      //   alert('o Valor Total das Dotações não confere com o total que está sendo autorizado no item!');
+      //   return false;
+      // }
+        if (js_formatar(js_roundDecimal(nTotalDotacoes, 2), "f",2) != oDadosItem.aCells[7].getValue()) {
+            alert('o Valor Total das Dotações não confere com o total que está sendo autorizado no item!');
+            return false;
+        }
     }else{
       if (isNaN(+oDadosItem.aCells[7].getValue())){
         if (js_round(nTotalDotacoes, iCasasDecimais) != js_strToFloat(oDadosItem.aCells[7].getValue(), iCasasDecimais) ) {
-          alert('o Valor Total das Dotações não conferem com o total que está sendo autorizado no item!');
+          alert('o Valor Total das Dotações não confere com o total que está sendo autorizado no item!');
           return false;
         }
       }else{
         if (js_round(nTotalDotacoes, iCasasDecimais) != oDadosItem.aCells[7].getValue() ) {
-          alert('o Valor Total das Dotações não conferem com o total que está sendo autorizado no item!');
+          alert('o Valor Total das Dotações não confere com o total que está sendo autorizado no item!');
           return false;
         }
       }
@@ -1189,20 +1199,32 @@ function js_processarAutorizacoes(lProcessar) {
      });
 
       oItem.valor   =  js_formatar(oItem.valor , 'f',iCasasDecimais);
-      nValorDotacao =  js_formatar(nValorDotacao, 'f',iCasasDecimais);
-      nTotal        =  js_formatar(nTotal, 'f',iCasasDecimais);
+
+      nValorDotacao =  js_formatar(nValorDotacao, 'f',2);
+      nTotal        =  js_formatar(nTotal, 'f',2);
+
+        // nValorDotacao =  js_roundDecimal(nValorDotacao,2);
+        // nTotal        =  js_roundDecimal(nTotal,2);
 
       if (nTotal.valueOf() != nValorDotacao.valueOf()) {
-
+          /**
+          @todo
+          caso deseje-se que seja exibida uma mensagem informativa de uma dotação específica em caso de valores não
+          correspondentes, segue abaixo um exemplo
+          alert(nTotal.valueOf() +" <===> "+ nValorDotacao.valueOf()); */
         alert('Valor da (s) dotação(ões) diferente do valor do item.\nCorrija o valor das dotações.');
         js_removeObj('msgbox');
         return false;
       }
+      //alert(nTotal.valueOf() +" <===> "+ nValorDotacao.valueOf());
+
       oItem.valor    = js_strToFloat(oItem.valor);
       oItem.dotacoes = oDadosItem.dotacoes;
       oParam.aItens.push(oItem);
     }
   }
+    // alert("Sucesso!");
+    // return;
   var oAjax  = new Ajax.Request(sUrlRpc,
                                {method:'post',
                                 parameters:'json='+Object.toJSON(oParam),
