@@ -291,7 +291,7 @@ class cl_infocomplementaresinstit {
        }
      }
      if(trim($this->si09_codunidadesubunidade)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si09_codunidadesubunidade"])){
-       $sql  .= $virgula." si09_codunidadesubunidade = $this->si09_codunidadesubunidade ";
+       $sql  .= $virgula." si09_codunidadesubunidade = '$this->si09_codunidadesubunidade' ";
        $virgula = ",";
        if(trim($this->si09_codunidadesubunidade) == null ){
          $this->erro_sql = " Campo Código do Orgão no TCE/MG nao Informado.";
