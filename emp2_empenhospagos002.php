@@ -39,11 +39,13 @@ require_once("classes/db_pagordemnota_classe.php");
 $iAnoUsoSessao      = db_getsession("DB_anousu");
 $iInstituicaoSessao = db_getsession("DB_instit");
 $oGet               = db_utils::postMemory($_GET);
-
+// print_r($oGet);die();
+  
 $dtDataInicialBanco = implode("-", array_reverse(explode("/", $oGet->dtDataInicial)));
 $dtDataFinalBanco   = implode("-", array_reverse(explode("/", $oGet->dtDataFinal)));
 $oGet->lQuebraConta == "t" ? $oGet->lQuebraConta = true : $oGet->lQuebraConta = false;
 $oGet->lQuebraCredor == "t" ? $oGet->lQuebraCredor = true : $oGet->lQuebraCredor = false;
+$oGet->lQuebraRecurso == "t" ? $oGet->lQuebraRecurso = true : $oGet->lQuebraRecurso = false;
 
 $aOrderBy    = array();
 $aGroup_by   = array();
@@ -51,7 +53,8 @@ $aWhere      = array();
 $aWhereConta = array();
 
 if ($oGet->sTipoOrdem == "empenho") {
-	if (($oGet->lQuebraConta) && ($oGet->lQuebraCredor)) {
+
+  if (($oGet->lQuebraConta) && ($oGet->lQuebraCredor)) {
       $aGroup_by[] = " GROUP BY e60_numcgm,
                                todo.z01_nome,
                                k13_conta,
@@ -72,8 +75,10 @@ if ($oGet->sTipoOrdem == "empenho") {
                                 e60_numcgm,
                                 tipo,
                                 k13_conta,
+                                todo.o15_codtri,
                                 e60_codemp ";
-	}else if ($oGet->lQuebraCredor) {
+        // $where
+  }else if ($oGet->lQuebraCredor){
       $aGroup_by[] = "GROUP BY e60_numcgm,
                                todo.z01_nome,
                                k13_conta,
@@ -90,28 +95,23 @@ if ($oGet->sTipoOrdem == "empenho") {
                                todo.o15_codtri,
                                todo.k13_descr,
                                todo.k106_sequencial ";
-	} else {
+        $aOrderBy[] = "ORDER BY k12_data,
+                         e60_numcgm,
+                         o15_codtri,
+                         tipo,
+                         k13_conta,
+                         e60_codemp ";
+    }	 
+
+  else {
 		$aOrderBy[] = "ORDER BY k12_data,
 		                        tipo,
 		                        e60_codemp ";
 	}
 } else {
-	if ($oGet->lQuebraConta) {
-		$aOrderBy[] = "ORDER BY k13_conta,
-		                        k12_data,
-		                        tipo,
-		                        k12_autent ";
-	} else {
 		$aOrderBy[] = "ORDER BY k12_data,
 		                        tipo,
 		                        k12_autent";
-	}
-}
-
-$sWhereContaPagadora = "";
-if (!empty($oGet->iContaPagadora)) {
-  $sWhereContaPagadora = "k13_conta = $oGet->iContaPagadora";
-  $aWhere[]            = $sWhereContaPagadora;
 }
 
 
@@ -147,11 +147,22 @@ if ( !empty($oGet->dtDataInicial) && !empty($oGet->dtDataFinal) ) {
   $dtDataFinalBanco   = $oDadosData->menor;
   $head5 = "Ordem de {$oGet->dtDataInicial} até {$oGet->dtDataFinal}";
 }
+  
+$sWhereContaPagadora = "";
+if (!empty($oGet->sContasSelecionadas)) {
+  $sWhereContaPagadora = "k13_conta in ({$oGet->sContasSelecionadas})";
+  $aWhere[]            = $sWhereContaPagadora;
+} 
 
 if (!empty($oGet->sCredoresSelecionados)) {
-	$aWhere[] = "e60_numcgm in ({$oGet->sCredoresSelecionados})";
+  $aWhere[] = "e60_numcgm in ({$oGet->sCredoresSelecionados})";
 }
 
+$sWhereRecursosSelecionados = "";
+if (!empty($oGet->sRecursosSelecionados))  {
+  $sWhereRecursosSelecionados = "o15_codtri::integer in ({$oGet->sRecursosSelecionados})";
+  $aWhere[]                   = $sWhereRecursosSelecionados;
+}
 
 $sWhereEmpenho = "";
 if ($oGet->iListaEmpenho == 0) {
@@ -338,12 +349,13 @@ $sSqlBuscaEmpenhos .= "     WHERE tipo = 'ext') AS todo                         
 $sSqlBuscaEmpenhos .= " WHERE {$sWhereEmpenho}                                                          																					";
 $sSqlBuscaEmpenhos .= "   AND {$sImplodeWhere} {$sImplodeGroupBy} {$sImplodeOrderBy}                                                          												";
 
+// print_r($sSqlBuscaEmpenhos);die();
 $rsExecutaBuscaEmpenho = db_query($sSqlBuscaEmpenhos);
 $iLinhasRetornadasBuscaEmpenho = pg_num_rows($rsExecutaBuscaEmpenho);
 if ($iLinhasRetornadasBuscaEmpenho == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Não existem empenhos para o filtro selecionado.");
 }
-
+ 
 $total = 0;
 
 $aDadosImprimir = array();
@@ -401,26 +413,35 @@ $iQuantBanco  = 0;
 // Incluído quebra de página diversas por seleção dos filtros.
 // Esse filtro não funcionava anteriormente!
 
+$aTeste = array();
 foreach ($aDadosImprimir as $iIndice => $oDadoEmpenho) {
-
-    $oDadosAgrupados = new stdClass();
-    if (($oGet->lQuebraConta) && ($oGet->lQuebraCredor)) {
-        $aDadosAgrupados[$oDadoEmpenho->e60_numcgm][] = $oDadoEmpenho;
-    } else if ($oGet->lQuebraCredor) {
-        $aDadosAgrupados[$oDadoEmpenho->e60_numcgm][] = $oDadoEmpenho;
-    } else if ($oGet->lQuebraConta) {
-        $aDadosAgrupados[$oDadoEmpenho->k13_conta][] = $oDadoEmpenho;
-    } else $aDadosAgrupados[$oDadoEmpenho->k12_data][] = $oDadoEmpenho;
+  $oDadosAgrupados = new stdClass(); 
+  if ($oGet->lQuebraCredor && $oGet->lQuebraConta && $oGet->lQuebraRecurso ||($oGet->lQuebraConta && $oGet->lQuebraCredor)) { 
+         $aDadosAgrupados[$oDadoEmpenho->e60_numcgm.$oDadoEmpenho->k13_descr][] = $oDadoEmpenho;  
+  } else if($oGet->lQuebraCredor && $oGet->lQuebraRecurso){
+      $aDadosAgrupados[$oDadoEmpenho->e60_numcgm.$oDadoEmpenho->o15_codtri][] = $oDadoEmpenho;
+  } else if($oGet->lQuebraConta && $oGet->lQuebraRecurso){
+      $aDadosAgrupados[$oDadoEmpenho->k13_conta.$oDadoEmpenho->o15_codtri][] = $oDadoEmpenho;
+  } else if($oGet->lQuebraCredor){
+      $aDadosAgrupados[$oDadoEmpenho->e60_numcgm][] = $oDadoEmpenho;
+  } else if ($oGet->lQuebraConta) {
+      $aDadosAgrupados[$oDadoEmpenho->k13_conta][] = $oDadoEmpenho;
+  } else if ($oGet->lQuebraRecurso) {
+      $aDadosAgrupados[$oDadoEmpenho->o15_codtri][] = $oDadoEmpenho;
+  } 
+  else $aDadosAgrupados[$oDadoEmpenho->k12_data][] = $oDadoEmpenho;
 }
-
-foreach ($aDadosAgrupados as $aDadoEmpenhos) {
+$count_dados = 0;
+foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
   $total_nadata = 0;
+  
   foreach ($aDadoEmpenhos as $oDadoEmpenho) {
-
+    
     if ($oPdf->gety() > $oPdf->h - 30 || $lTroca) {
       imprimeCabecalho($oPdf, $iAltura);
       $lTroca = false;
     }
+    
 
     $notas = "";
     $sepnotas = "";
@@ -429,6 +450,8 @@ foreach ($aDadosAgrupados as $aDadoEmpenhos) {
     $oPdf->cell(15, $iAltura, $oDadoEmpenho->k12_autent, 0, 0, "C", 0);
     $oPdf->cell(15, $iAltura, $oDadoEmpenho->k13_conta, 0, 0, "C", 0);
     $oPdf->cell(40, $iAltura, substr($oDadoEmpenho->k13_descr, 0, 25), 0, 0, "L", 0);
+ 
+
     $oPdf->cell(18, $iAltura, $oDadoEmpenho->o15_codtri, 0, 0, "C", 0);
     $oPdf->cell(15, $iAltura, trim($oDadoEmpenho->e60_codemp) . '/' . $oDadoEmpenho->e60_anousu, 0, 0, "C", 0);
     $oPdf->cell(15, $iAltura, $oDadoEmpenho->e50_codord, 0, 0, "C", 0);
@@ -449,7 +472,7 @@ foreach ($aDadosAgrupados as $aDadoEmpenhos) {
     $oPdf->sety($iYlinha + 1);
 
     $total_nadata += $oDadoEmpenho->k12_valor;
-
+    $count_dados += 1; 
   }
   $total_geral += $total_nadata;
   $oPdf->setfont('arial', 'B', 7);
@@ -458,6 +481,7 @@ foreach ($aDadosAgrupados as $aDadoEmpenhos) {
   $oPdf->cell(35, 4, "", 1, 1, "R", 1);
   $oPdf->ln(3);
 }
+
 $oPdf->cell(226, 4, "Total Geral :", 1, 0, "R", 1);
 $oPdf->cell(20, 4, db_formatar($total_geral, 'f'), 1, 0, "R", 1);
 $oPdf->cell(35, 4, "", 1, 1, "R", 1);
