@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("libs/db_liborcamento.php");
@@ -42,8 +42,8 @@ $tipo_mesfim = 1;
 // 2 = subfuncao
 // 3 = programa
 // 4 = projeto/atividade
-// 5 = elemento 
-// 6 = recurso 
+// 5 = elemento
+// 6 = recurso
 $tipo_agrupa = 3;
 $tipo_nivel = 6;
 
@@ -62,7 +62,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 if ($orgaos == "") {
-  db_redireciona('db_erros.php?fechar=true&db_erro=Selecione orgao/unidade!');   
+  db_redireciona('db_erros.php?fechar=true&db_erro=Selecione orgao/unidade!');
 }
 
 $xtipo = 0;
@@ -86,10 +86,10 @@ $flag_abrev = false;
 for($xins = 0; $xins < pg_numrows($resultinst); $xins++){
   db_fieldsmemory($resultinst,$xins);
   if (strlen(trim($nomeinstabrev)) > 0){
-       $descr_inst .= $xvirg.$nomeinstabrev; 
+       $descr_inst .= $xvirg.$nomeinstabrev;
        $flag_abrev  = true;
   } else {
-       $descr_inst .= $xvirg.$nomeinst; 
+       $descr_inst .= $xvirg.$nomeinst;
   }
 
   $xvirg = ', ';
@@ -117,15 +117,15 @@ $head5 = "INSTITUIÇÕES : ".$descr_inst;
     $resrec = pg_exec("select o15_descr from orctiporec where o15_codigo = $recurso");
     $head2 = "Recurso: ".$recurso."-".substr(pg_result($resrec,0,0),0,30);
     $sele_work .= " and o58_codigo = $recurso";
-  }   
+  }
   pg_exec("begin");
   pg_exec("create temp table t(o58_orgao int8,o58_unidade int8,o58_funcao int8,o58_subfuncao int8,o58_programa int8,o58_projativ int8,o58_elemento int8,o58_codigo int8)");
-    
+
   $xcampos = split("-",$orgaos);
-  
+
   for($i=0;$i < sizeof($xcampos);$i++){
      $where = '';
-     $virgula = ''; 
+     $virgula = '';
      $xxcampos = split("_",$xcampos[$i]);
      for($ii=0;$ii<sizeof($xxcampos);$ii++){
         if($ii > 0){
@@ -151,20 +151,22 @@ else
 
 
 $fp = fopen("tmp/baldesp.csv","w");
-fputs($fp,"Orgão;;Unidade;;Função;;Subfunção;;Programa;;ProjAtiv;;Elemento;;Recurso;;DotIni;Suplem;Especial;Reduzido;Empenhado;Anulado;Liquidado;Pago;Empenhado_Acumulado;Anulado_acumulado;Liquidado_acumulado;Pago_acumulado\n");
+fputs($fp,"Orgão;;Unidade;;Função;;Subfunção;;Programa;;ProjAtiv;;Elemento;;Recurso;;Reduz;DotIni;Suplem;Especial;Reduzido;Empenhado;Anulado;Liquidado;Pago;Empenhado_Acumulado;Anulado_acumulado;Liquidado_acumulado;Pago_acumulado\n");
 while($ln = pg_fetch_array($result)){
+   $reduz = $ln["o58_coddot"] != 0 ? $ln["o58_coddot"]."-".db_CalculaDV($ln["o58_coddot"]) : $ln["o58_coddot"];
    fputs($fp,$ln["o58_orgao"].";".$ln["o40_descr"].";".
              $ln["o58_unidade"].";".$ln["o41_descr"].";".
-	     $ln["o58_funcao"].";".$ln["o52_descr"].";".
-	     $ln["o58_subfuncao"].";".$ln["o53_descr"].";".
-	     $ln["o58_programa"].";".$ln["o54_descr"].";".
-	     $ln["o58_projativ"].";".$ln["o55_descr"].";".
-	     $ln["o58_elemento"].";".$ln["o56_descr"].";".
-	     $ln["o58_codigo"].";".$ln["o15_descr"].";"
+             $ln["o58_funcao"].";".$ln["o52_descr"].";".
+             $ln["o58_subfuncao"].";".$ln["o53_descr"].";".
+             $ln["o58_programa"].";".$ln["o54_descr"].";".
+             $ln["o58_projativ"].";".$ln["o55_descr"].";".
+             $ln["o58_elemento"].";".$ln["o56_descr"].";".
+             $ln["o58_codigo"].";".$ln["o15_descr"].";".
+             $reduz.";"
 	     );
    fputs($fp,db_formatar($ln["dot_ini"],'f').";".
              db_formatar($ln["suplementado_acumulado"],'f').";".
-	     db_formatar($ln["especial_acumulado"],'f').";".
+	           db_formatar($ln["especial_acumulado"],'f').";".
              db_formatar($ln["reduzido_acumulado"],'f').";".
              db_formatar($ln["empenhado"],'f').";".
              db_formatar($ln["anulado"],'f').";".
@@ -173,8 +175,8 @@ while($ln = pg_fetch_array($result)){
              db_formatar($ln["empenhado_acumulado"],'f').";".
              db_formatar($ln["anulado_acumulado"],'f').";".
              db_formatar($ln["liquidado_acumulado"],'f').";".
-	     db_formatar($ln["pago_acumulado"],'f').";\n ");
-}	
+	           db_formatar($ln["pago_acumulado"],'f').";\n ");
+}
 
 echo "<html><body bgcolor='#cccccc'><center><a href='tmp/baldesp.csv'>Clique com botão direito para Salvar o arquivo <b>baldesp.csv</b></a></body></html>";
 fclose($fp);
