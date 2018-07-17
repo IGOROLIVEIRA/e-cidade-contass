@@ -258,7 +258,7 @@ $rotulo->label("z01_cgccpf");
                  $sql = $clempempenho->sql_query(null,$campos,null,$whereRelCompra);
 
                }
-            echo $sql;
+
                $result = $clempempenho->sql_record($sql);
 
                ?>
