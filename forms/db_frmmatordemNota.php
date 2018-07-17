@@ -291,8 +291,8 @@ if($pesqemp == true){
     style='border:2px inset white; padding-bottom:15px;' width='100%' bgcolor="white" id="dadosDaOrdem">
     <tr class=''>
         <td class='table_header' title='Marca/desmarca todos' align='center'>
-         <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca()'>
-            <a onclick='js_marca()' style='cursor:pointer'><b>M</b></a>
+         <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca(false)'>
+            <a onclick='js_marca(true)' style='cursor:pointer'><b>M</b></a>
         </td>
         <td class='table_header' align='center'><b>Seq.</b></td>
         <td class='table_header' align='center'><b>N. Empenho</b></td>
@@ -353,7 +353,9 @@ if($pesqemp == true){
       $sSQLemp .= " where e60_numcgm = {$e60_numcgm} {$where} {$where1}";
       $sSQLemp .="  order by e60_numemp";
       $result   = db_query($sSQLemp);
+      // db_criatabela($result);die;
       $numrows  = pg_num_rows($result);
+      // print_r($numrows);die();
       $sClassName = 'normal';
       $sChecked   = '';
 //      if ($numrows == 1) {
@@ -512,8 +514,7 @@ if($pesqemp == true){
     </form>
 </center>
     <script>
-
-
+  
 	function js_pesquisaEmpenho(iNumEmp){
     js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho001.php?e60_numemp='+iNumEmp,'Pesquisa',true);
   }
@@ -591,51 +592,89 @@ if($pesqemp == true){
     }
   }
 
-function js_marca(){
-  
-	 obj = document.getElementById('mtodos');
+function js_marca(val){
+
+   // if(val){
+   //   $('valor_total').innerText = definePontoFlutuante(0);
+   // }
+
+   obj = document.getElementById('mtodos');
+   
 	 if (obj.checked){
 		 obj.checked = false;
 	}else{
 		 obj.checked = true;
 	}
    itens = js_getElementbyClass(form1,'itensEmpenho');
+   
 	 for (i = 0;i < itens.length;i++){
-         if (itens[i].disabled == false){
-            if (obj.checked == true){
-                        itens[i].checked=true;
-              js_marcaLinha(itens[i]);
-           }else{
-                    itens[i].checked=false;
-                    js_marcaLinha(itens[i]);
-                 }
-         }
+      if (itens[i].disabled == false){
+        if (obj.checked == true){
+          itens[i].checked=true;
+          js_marcaLinha(itens[i], itens[i].value);
+        }else{
+          itens[i].checked=false;
+          js_marcaLinha(itens[i], itens[i].value);
+        }
+      }
 	 }
 }
 
+
+
+
 function js_marcaLinha(obj, sequencia){
 
-    if (obj.checked){
+    var vlr_anterior = $('valor'+sequencia).value;
+    var qtd_anterior = $('quantidade'+sequencia).value;
 
-        $('tr'+obj.id).className='marcado';
+    if($("valor"+sequencia).value != ($("quantidade"+sequencia).value * $("vlrunitario"+sequencia).value)){
+      var vlr_unitario = $("valor"+sequencia).value;
+    }
+    else var vlr_unitario = $("vlrunitario"+sequencia).value;
+    
+    if (obj.checked){
+        
+        if($('tr'+obj.id).className === 'marcado'){
+            $('quantidade'+sequencia).on('change', function (event,ui){
+                var temp = parseFloat($('valor_total').innerText) + parseFloat($('valor'+sequencia).value);
+                // console.log('1 temp',temp);
+                // temp += $('valor'+sequencia).value;
+                // console.log('2',temp);
+                $("valor_total").innerText = definePontoFlutuante(temp);
+            });
+          return;
+        }   
 
         $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) + 1;
-        var temp = (parseFloat($("valor_total").innerText) + parseFloat($("valor"+sequencia).value)).toFixed(2);
-        //temp = temp.toFixed(2);
+        $('tr'+obj.id).className='marcado';
+
+
+        var temp = (parseFloat($('valor_total').innerText) + parseFloat(vlr_unitario) * parseFloat($('quantidade'+sequencia).value)).toFixed(2);
+        // console.log('2 temp',temp);
+        
         $("valor_total").innerText = definePontoFlutuante(temp);
-        return
+    
+    }else{
+          
+        if($('tr'+obj.id).className === 'marcado'){
+          $('tr'+obj.id).className='normal';
 
-    }
+          $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) >= 1 ?
+                                          parseInt($("total_de_itens").innerText, 10) - 1 : 0;
 
-    $('tr'+obj.id).className='normal';
-    $("total_de_itens").innerText = parseInt($("total_de_itens").innerText, 10) >= 1 ?
-                                    parseInt($("total_de_itens").innerText, 10) - 1 : 0;
+          if($("valor"+sequencia).value != ($("quantidade"+sequencia).value * $("vlrunitario"+sequencia).value)){
+            var vlr_unitario = $("valor"+sequencia).value;
+          }
+          else var vlr_unitario = $("vlrunitario"+sequencia).value;
 
-    var temp = (parseFloat($("valor_total").innerText) - parseFloat($("valor"+sequencia).value)).toFixed(2);
-    //temp = temp.toFixed(2);
+          var temp = (parseFloat($("valor_total").innerText) - parseFloat(vlr_unitario) * parseFloat($("quantidade"+sequencia).value)).toFixed(2);
+            $("valor_total").innerText = definePontoFlutuante(temp);
+          // console.log('3 temp',temp);
+        }
+      }
 
-    $("valor_total").innerText = definePontoFlutuante(temp);
-
+    
 }
 
 function js_verifica(max,quan,nome,valoruni,numemp,sequencia){
