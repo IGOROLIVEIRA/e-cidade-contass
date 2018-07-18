@@ -27,7 +27,6 @@
 
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
-
 $clrotulo = new rotulocampo;
 $clrotulo->label('r06_codigo');
 $clrotulo->label('r06_descr');
@@ -64,8 +63,8 @@ for($i=0; $i<6; $i++){
   }
   switch ( $valor ) {
     case "0" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Salário";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "SalÃ¡rio";
+               $varSQL .= (trim($varSQL) != "" ? " union all" : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r14", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
                                                                                                    "#s#_rubric",
@@ -75,7 +74,7 @@ for($i=0; $i<6; $i++){
                break;
     case "1" :
                $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Adiantamento";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+               $varSQL .= (trim($varSQL) != "" ? " union all" : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r22", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
                                                                                                    "#s#_rubric",
@@ -84,8 +83,8 @@ for($i=0; $i<6; $i++){
                $sigla = (isset($sigla) ? $sigla : "r22");
                break;
     case "2" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Férias";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "FÃ©rias";
+               $varSQL .= (trim($varSQL) != "" ? " union all " : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r31", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
                                                                                                    "#s#_rubric",
@@ -94,8 +93,8 @@ for($i=0; $i<6; $i++){
                $sigla = (isset($sigla) ? $sigla : "r31");
                break;
     case "3" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Rescisão";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "RescisÃ£o";
+               $varSQL .= (trim($varSQL) != "" ? " union all " : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r20", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
                                                                                                    "#s#_rubric",
@@ -105,7 +104,7 @@ for($i=0; $i<6; $i++){
                break;
     case "4" :
                $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Saldo do 13o.";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+               $varSQL .= (trim($varSQL) != "" ? " union all " : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r35", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
                                                                                                    "#s#_rubric",
@@ -115,7 +114,7 @@ for($i=0; $i<6; $i++){
                break;
     case "5" :
                $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Complementar";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+               $varSQL .= (trim($varSQL) != "" ? " union all " : "") . " ( " . $clgerasql->gerador_sql(
                                                                                                    "r48", $ano, $mes, null, null,
                                                                                                    "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
                                                                                                    "#s#_rubric",
@@ -169,11 +168,11 @@ $sqlFinal = $clgerasql->gerador_sql("",
 
 $result = $clgerasql->sql_record($sqlFinal);
 if($result === false || ($result !== false && $clgerasql->numrows_exec == 0)){
-   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem dados no período de '.$mes.' / '.$ano);
+   db_redireciona('db_erros.php?fechar=true&db_erro=NÃ£o existem dados no perÃ­odo de '.$mes.' / '.$ano);
 }
 
-$head3 = "Retenções e Consignações da Folha";
-$head5 = "Período : " . $mes . " / " . $ano;
+$head3 = "RetenÃ§Ãµes e ConsignaÃ§Ãµes da Folha";
+$head5 = "PerÃ­odo : " . $mes . " / " . $ano;
 $head7 = "Pontos: " . $headPontos;
 
 $pdf = new PDF();
@@ -197,7 +196,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
     $pdf->addpage();
     $pdf->setfont('arial','b',7);
     $pdf->cell(15,$alt,'RUBRICA',1,0,"C",1);
-    $pdf->cell(75,$alt,'DESCRIÇÃO',1,0,"C",1);
+    $pdf->cell(75,$alt,'DESCRIÃ‡ÃƒO',1,0,"C",1);
     $pdf->cell(75,$alt,'RECURSO',1,0,"C",1);
     $pdf->cell(25,$alt,'DESCONTO',1,1,"C",1);
     $troca = 0;
@@ -229,6 +228,8 @@ for($x = 0; $x < pg_numrows($result);$x++){
   $pdf->cell(75,$alt,$rh25_recurso . " - " .$o15_descr,0,0,"L",$cor);
   $pdf->cell(25,$alt,db_formatar($valor,"f"),0,1,"R",$cor);
   $total_rub += $valor;
+  // print_r($valor);
+  
   if($tipo == 1){
     $total_ger -= $valor;
   }else if ($tipo == 2){
@@ -239,12 +240,13 @@ for($x = 0; $x < pg_numrows($result);$x++){
 }
 $pdf->ln(3);
 $pdf->setfont('arial','B',7);
-$pdf->cell(165,$alt,"Total da rubrica ",0,0,"R",1);
+$pdf->cell(165,$alt,"Total da rubrica ",0,0,"R",1); 
 $pdf->cell( 25,$alt,db_formatar($total_rub, "f"),0,1,"R",1);
 $pdf->ln(1);
 $pdf->setfont('arial','B',8);
 $pdf->cell(165,$alt,"Total geral ","T",0,"R",1);
 $pdf->cell( 25,$alt,db_formatar($total_ger, "f"),"T",1,"R",1);
+
 
 if($totaliza == 's') {
   $sqlFinal = $clgerasql->gerador_sql("",
@@ -258,7 +260,7 @@ if($totaliza == 's') {
                                     "group by rh25_recurso,
                                               o15_descr"
                                    );
-  // die($sqlFinal);
+  // print_r($sqlFinal);die();  
   $result = $clgerasql->sql_record($sqlFinal);
   $pdf->setfont('arial','B',9);
   if($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
