@@ -22,6 +22,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
   * @var Integer
   */
    public $iOrgao;
+   public $iTipoIntint;
 
    public function gerarDados() {
 
@@ -33,7 +34,6 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
     $sSql .= " left join dclrf302018 on si190_sequencial = si192_reg10 ";
     $sSql .= " left join dclrf402018 on si190_sequencial = si193_reg10 ";
     $sSql .= " where si190_mes = '".$this->iMes."' and si190_codorgao = '".$this->iOrgao."'";
-
     $rsDCLRF    = db_query($sSql);
 
     if (pg_num_rows($rsDCLRF) == 0) {
@@ -47,7 +47,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/GerarAM.model
       for ($iCont = 0;$iCont < pg_num_rows($rsDCLRF); $iCont++) {
 
         $aDCLRF  = pg_fetch_array($rsDCLRF,$iCont);
-        if($aDCLRF['si190_codorgao'] == 2):
+        if($this->iTipoIntint == 2):
           $aCSVDCLRF10['si190_tiporegistro']                      = str_pad($aDCLRF['si190_tiporegistro'], 2, "0", STR_PAD_LEFT);
           $aCSVDCLRF10['si190_codorgao']                          = str_pad((int)$aDCLRF['si190_codorgao'], 2, "0", STR_PAD_LEFT);
           $aCSVDCLRF10['si190_passivosreconhecidos']              = number_format($aDCLRF['si190_passivosreconhecidos'], 2, ",", "");

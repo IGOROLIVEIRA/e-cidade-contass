@@ -55,6 +55,15 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarDCL
 
   }
 
+  public function getTipoinstit($CodInstit){
+  $sSqltipoistint = "select si09_tipoinstit from infocomplementaresinstit inner join db_config on codigo = si09_instit where codigo = {$CodInstit}";
+  $iTipoInstit = db_utils::fieldsMemory(db_query($sSqltipoistint), 0)->si09_tipoinstit;
+  if ($iTipoInstit == "") {
+  throw new Exception("Não foi possível encontrar o código do TCE do instituição {$CodInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
+  }
+    return $iTipoInstit;
+  }
+
   /**
    * selecionar os dados de Dados Complementares à LRF do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -194,6 +203,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarDCL
     $oGerarDCLRF = new GerarDCLRF();
     $oGerarDCLRF->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
     $oGerarDCLRF->iOrgao = $iCodOrgao;
+    $oGerarDCLRF->iTipoIntint = $this->getTipoinstit(db_getsession('DB_instit'));
     $oGerarDCLRF->gerarDados();
 
   }
