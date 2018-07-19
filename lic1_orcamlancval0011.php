@@ -136,7 +136,8 @@ function js_verquant(nome,val,max,param){
     }
     if(verpos==1){
       vltot = new Number(valpos*val);
-      eval("document.form1.valor_"+param+".value='"+vltot.toFixed(2)+"'");
+      //eval("document.form1.valor_"+param+".value='"+vltot.toFixed(2)+"'");
+      eval("document.form1.valor_"+param+".value='"+js_roundDecimal(vltot,2)+"'");
     }else if(verpos==2){
       vltot = new Number(valpos/val);
       eval("document.form1.vlrun_"+param+".value='"+vltot.toFixed(<?=$numdec?>)+"'");
@@ -145,31 +146,42 @@ function js_verquant(nome,val,max,param){
 }
 
 function js_calcvaltot(valor,param,nome){
+
   if(!isNaN(valor)){
     dec = 2;
     pos = valor.indexOf('.');
     if(pos!=-1){
       tam = new Number(valor.length);
       qts = valor.slice((pos+1),tam);
-      dec = qts.length;      
+      dec = qts.length;
     }
     if(dec<=1){
       dec = 2;
     }
     quant = eval("document.form1.qtde_"+param+".value");
+
     valortotal = new Number(eval("document.form1.valor_"+param+".value"));
+    //$("valor_"+param).value = 9;
     if(valor!='' && quant!=''){
       valor = new Number(valor);
       quant = new Number(quant);    
       valortotal = new Number(quant*valor);
+      document.getElementById("valor_"+param).value = valortotal;
     }
     if(valor==""){
       valor = 0;
     }
 
-    eval("document.form1.valor_"+param+".value='"+valortotal.toFixed(2)+"'");
-    eval("document.form1."+nome+".value='"+valor.toFixed(<?=$numdec?>)+"'");
-    if(valortotal==0){      
+    /**
+     * @todo
+     * Alterar arredondamento
+    **/
+
+    //eval("document.form1.valor_"+param+".value='"+valortotal.toFixed(2)+"'");
+    //eval("document.form1."+nome+".value='"+valor.toFixed(<?=$numdec?>)+"'");
+    //document.getElementById("valor_"+param).value = valortotal.toFixed(2);
+    document.getElementById("valor_"+param).value = js_roundDecimal(valortotal,2);
+    if(valortotal==0){
       eval("document.form1."+nome+".value='0.00'");
     }
   }else{
@@ -522,7 +534,7 @@ db_inputdata("pc23_validmin_$pc22_orcamitem",@$$dia,@$$mes,@$$ano,true,"text",$d
 	  $db_opcaoquant = 3;
 	}
   db_input("qtde_$pc22_orcamitem",10,$Ipc23_quant,true,'text',$db_opcaoquant,"onchange='js_verquant(this.name,this.value,$pc11_quant,$pc22_orcamitem);js_somavalor();' $disabled");
-	echo "</td>	"; 
+	echo "</td>	";
 	echo "<td align='center'  class='$class'>";
 	db_input("vlrun_$pc22_orcamitem",10,$Ipc23_valor,true,'text',$db_opcao,"onchange='js_calcvaltot(this.value,$pc22_orcamitem,this.name); js_passacampo(this.name,this.name.substr(0,6)); js_somavalor();' $disabled");
 	      echo "
@@ -696,5 +708,7 @@ function js_cancdescla(orcamento,licitacao){
   js_OpenJanelaIframe('top.corpo','db_iframe_cancdescla','lic1_pcorcamdesclacanc001.php?pc20_codorc='+orcamento+'&l20_codigo='+licitacao,'Cancelamento da desclassificacao',true);
 }
 </script>
+
+<script src="scripts/roundDecimal.js"></script>
 </body>
 </html>
