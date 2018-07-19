@@ -31,8 +31,40 @@ class GerarBALANCETE extends GerarAM
         $rsBALANCETE12 = db_query($sSql2);
         $sSql3 = "select * from balancete132017 where si180_mes = " . $this->iMes . " and si180_instit =" . db_getsession("DB_instit");
         $rsBALANCETE13 = db_query($sSql3);
-        $sSql4 = "select * from balancete142017 where si181_mes = " . $this->iMes . " and si181_instit =" . db_getsession("DB_instit");
+
+        $sSql4 = "SELECT
+                  si181_sequencial,
+                  si181_tiporegistro,
+                  si181_contacontabil,
+                  si181_codfundo,
+                  si181_codorgao,
+                  si181_codunidadesub,
+                  si181_codunidadesuborig,
+                  si181_codfuncao,
+                  si181_codsubfuncao,
+                  si181_codprograma,
+                  si181_idacao,
+                  si181_idsubacao,
+                  si181_naturezadespesa,
+                  si181_subelemento,
+                  si181_codfontrecursos,
+                  e60_codemp as si181_nroempenho,
+                  si181_anoinscricao,
+                  si181_saldoinicialrsp,
+                  si181_naturezasaldoinicialrsp,
+                  si181_totaldebitosrsp,
+                  si181_totalcreditosrsp,
+                  si181_saldofinalrsp,
+                  si181_naturezasaldofinalrsp,
+                  si181_mes,
+                  si181_instit,
+                  si181_reg10
+                  FROM balancete142017
+                  JOIN empempenho ON e60_codemp::int8 = si181_nroempenho::int8 AND e60_anousu = si181_anoinscricao
+                  WHERE si181_mes = " . $this->iMes . "
+                    AND si181_instit =" . db_getsession("DB_instit");
         $rsBALANCETE14 = db_query($sSql4);
+
         $sSql5 = "select * from balancete152017 where si182_mes = " . $this->iMes . " and si182_instit =" . db_getsession("DB_instit");
         $rsBALANCETE15 = db_query($sSql5);
         $sSql6 = "select * from balancete162017 where si183_mes = " . $this->iMes . " and si183_instit =" . db_getsession("DB_instit");
@@ -182,7 +214,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE14['si181_naturezadespesa']         = $this->padLeftZero($aBALACETE14['si181_naturezadespesa'], 6);
                         $aCSVBALANCETE14['si181_subelemento']             = $this->padLeftZero($aBALACETE14['si181_subelemento'], 2);
                         $aCSVBALANCETE14['si181_codfontrecursos']         = $this->padLeftZero($aBALACETE14['si181_codfontrecursos'], 3);
-                        $aCSVBALANCETE14['si181_nroempenho']              = $aBALACETE14['si181_nroempenho'];
+                        $aCSVBALANCETE14['si181_nroempenho']              = substr($aBALACETE14['si181_nroempenho'], 0, 22);
                         $aCSVBALANCETE14['si181_anoinscricao']            = $aBALACETE14['si181_anoinscricao'];
                         $aCSVBALANCETE14['si181_saldoinicialrsp']         = $this->sicomNumberReal($aBALACETE14['si181_saldoinicialrsp'], 2);
                         $aCSVBALANCETE14['si181_naturezasaldoinicialrsp'] = $this->padLeftZero($aBALACETE14['si181_naturezasaldoinicialrsp'], 1);
@@ -286,7 +318,7 @@ class GerarBALANCETE extends GerarAM
                         $this->adicionaLinha();
                     }
                 }
-                
+
                 for ($iCont23 = 0; $iCont23 < pg_num_rows($rsBALANCETE23); $iCont23++) {
 
                     $aBALACETE23 = pg_fetch_array($rsBALANCETE23, $iCont23);
@@ -308,7 +340,7 @@ class GerarBALANCETE extends GerarAM
                         $this->adicionaLinha();
                     }
                 }
-                
+
                 for ($iCont24 = 0; $iCont24 < pg_num_rows($rsBALANCETE24); $iCont24++) {
 
                     $aBALACETE24 = pg_fetch_array($rsBALANCETE24, $iCont24);
