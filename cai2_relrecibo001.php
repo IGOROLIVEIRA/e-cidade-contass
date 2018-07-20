@@ -30,9 +30,12 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
+include("dbforms/db_classesgenericas.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label("k02_codigo");
 $clrotulo->label("k02_drecei");
+
+$cgm	= new cl_arquivo_auxiliar;
 ?>
 <html>
 <head>
@@ -44,8 +47,14 @@ $clrotulo->label("k02_drecei");
 </head>
 <body bgcolor=#CCCCCC bgcolor="#cccccc" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <script>
+  var listaCgm = "";
+  var vir = "";
 function abra(){
- window.open("cai2_relrecibo002.php?k02_codigo="+document.form1.k02_codigo.value+"&dataini="+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value+'&datafim='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value+"&ordem="+document.form1.ordem.value+"&busca="+document.form1.busca.value,"Relatório","toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=no");
+  for(x=0;x<document.form1.cgm.length;x++){
+    listaCgm+=vir+document.form1.cgm.options[x].value;
+    vir=",";
+  }
+ window.open("cai2_relrecibo002.php?k02_codigo="+document.form1.k02_codigo.value+"&dataini="+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value+'&datafim='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value+"&ordem="+document.form1.ordem.value+"&busca="+document.form1.busca.value+"&cgm="+listaCgm,"Relatório","toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,directories=no,status=no");
 }
 function js_pesquisatabrec(mostra){
      if(mostra==true){
@@ -79,13 +88,13 @@ function js_mostratabrec1(chave1,chave2){
 <table border="0" cellpadding="0" align="center" cellspacing="0" bgcolor="#cccccc"><br><br>
   <form name="form1" method="post">
   <tr> 
-    <td align="right">
+    <td align="left">
       <br>
       <?
       db_ancora(@$Lk02_codigo,"js_pesquisatabrec(true);",4);
       ?>
     </td>
-    <td align="right"> 
+    <td>
       <br>
       <?
       db_input('k02_codigo',4,$Ik02_codigo,true,'text',4,"onchange='js_pesquisatabrec(false);'");
@@ -94,7 +103,7 @@ function js_mostratabrec1(chave1,chave2){
     </td>
   </tr>
   <tr>
-    <td align="right">
+    <td align="left">
       <br>
       <b> Período: </b> 
     </td>
@@ -109,7 +118,7 @@ function js_mostratabrec1(chave1,chave2){
     </td>
   </tr>
   <tr>
-    <td align="right">
+    <td align="left">
       <br>
       <strong>Ordenar por:</strong>
     </td>
@@ -122,7 +131,7 @@ function js_mostratabrec1(chave1,chave2){
     </td>
   </tr>
   <tr>
-    <td align="right">
+    <td align="left">
       <br>
       <strong>Situação:</strong>
     </td>
@@ -134,6 +143,33 @@ function js_mostratabrec1(chave1,chave2){
       ?>
     </td>
   </tr>
+    <tr>
+      <td>
+
+        <?php
+        // $aux = new cl_arquivo_auxiliar;
+        $cgm->cabecalho = "<b>CGM</b>";
+        $cgm->codigo = "z01_numcgm"; //chave de retorno da func
+        $cgm->descr  = "z01_nome";   //chave de retorno
+        $cgm->nomeobjeto = 'cgm';
+        $cgm->funcao_js = 'js_mostra_cgm';
+        $cgm->funcao_js_hide = 'js_mostra_cgm1';
+        $cgm->sql_exec  = "";
+        $cgm->func_arquivo = "func_nome.php";  //func a executar
+        $cgm->nomeiframe = "db_iframe_cgm";
+        $cgm->localjan = "";
+        $cgm->onclick = "";
+        $cgm->db_opcao = 2;
+        $cgm->tipo = 2;
+        $cgm->top = 0;
+        $cgm->linhas = 5;
+        $cgm->vwidth = 430;
+        $cgm->nome_botao = 'db_lanca_cgm';
+        $cgm->funcao_gera_formulario();
+        ?>
+
+      </td>
+    </tr>
   <tr>
     <td height="40" align="center" colspan="2">
       <input type="button" name="abrir" value="Gerar Relatório" onclick="abra()">

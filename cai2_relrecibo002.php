@@ -59,6 +59,10 @@ if (($dataini != "--") && ($datafim != "--")) {
 			$datafim = db_formatar($datafim, "d");
 			$info = "Até $datafim.";
 }
+if (trim($cgm) != "") {
+
+    $where .= " and recibo.k00_numcgm in (".$cgm.")";
+}
 
 if (isset($k02_codigo)&&$k02_codigo!=""){
   $where.=" and  recibo.k00_receit=$k02_codigo ";
@@ -89,6 +93,8 @@ $head5 = @$info;
 
 $sql= "select recibo.k00_numcgm ,
                  cgm.z01_nome	,
+                 recibo.k00_numpre,
+                 arrehist.k00_histtxt,
               recibo.k00_receit	,
 	      recibo.k00_dtoper	,
 	      recibo.k00_dtvenc	,
@@ -99,13 +105,14 @@ $sql= "select recibo.k00_numcgm ,
 	    left join arrepaga on recibo.k00_numpre = arrepaga.k00_numpre
 	                      and recibo.k00_numpar = arrepaga.k00_numpar
 	                      and recibo.k00_receit = arrepaga.k00_receit
-       where $where $order_by";																			
+	    left join arrehist on arrehist.k00_numpre = recibo.k00_numpre
+       where $where $order_by";
        //die($sql);
 $result=pg_exec($sql);																			
 if (pg_numrows($result) == 0){
    db_redireciona('db_erros.php?fechar=true&db_erro=Não existem registros cadastrados.');
 }
-$pdf = new PDF(); 
+$pdf = new PDF('L');
 $pdf->Open(); 
 $pdf->AliasNbPages(); 
 $total = 0;
@@ -123,8 +130,10 @@ for($x = 0; $x < pg_numrows($result);$x++){
       $pdf->addpage();
       $pdf->setfont('arial','b',8);
       $pdf->cell(20,$alt,$RLk00_numcgm  ,1,0,"C",1);
-      $pdf->cell(70,$alt,$RLz01_nome    ,1,0,"C",1); 
-      $pdf->cell(15,$alt,$RLk00_receit  ,1,0,"C",1); 
+      $pdf->cell(70,$alt,$RLz01_nome    ,1,0,"C",1);
+      $pdf->cell(15,$alt,"Numpre"    ,1,0,"C",1);
+      $pdf->cell(79,$alt,"HISTORICO"    ,1,0,"C",1);
+      $pdf->cell(15,$alt,$RLk00_receit  ,1,0,"C",1);
       $pdf->cell(20,$alt,$RLk00_dtoper  ,1,0,"C",1); 
       $pdf->cell(20,$alt,$RLk00_dtvenc  ,1,0,"C",1); 
       $pdf->cell(20,$alt,/*$RLk00_dtpaga*/"Dt. Pgto",1,0,"C",1); 
@@ -134,6 +143,8 @@ for($x = 0; $x < pg_numrows($result);$x++){
    $pdf->setfont('arial','',7);
    $pdf->cell(20,$alt,$k00_numcgm                   ,0,0,"C",$p);
    $pdf->cell(70,$alt,$z01_nome                     ,0,0,"L",$p);
+   $pdf->cell(15,$alt,$k00_numpre                   ,0,0,"C",$p);
+   $pdf->cell(79,$alt,substr($k00_histtxt,0,55),0,0,"L",$p);
    $pdf->cell(15,$alt,$k00_receit                   ,0,0,"C",$p);
    $pdf->cell(20,$alt,db_formatar($k00_dtoper,'d')  ,0,0,"C",$p);
    $pdf->cell(20,$alt,db_formatar($k00_dtvenc,'d')  ,0,0,"C",$p);
@@ -147,6 +158,6 @@ for($x = 0; $x < pg_numrows($result);$x++){
 }
 $pdf->setfont('arial','b',8);
 $pdf->cell(100,$alt,'TOTAL DE REGISTROS:  '.$total,"T",0,"L",0);
-$pdf->cell(85,$alt,'VALOR TOTAL:  '.db_formatar($totalval,'f'),"T",0,"R",0);
+$pdf->cell(179,$alt,'VALOR TOTAL:  '.db_formatar($totalval,'f'),"T",0,"R",0);
 $pdf->Output();
 ?>
