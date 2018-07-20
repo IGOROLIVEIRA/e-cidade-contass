@@ -323,6 +323,20 @@ if (trim($oGet->receita) != "") {
 
 $sAnd = $sWhere != "" ? " and " : "";
 
+if (trim($oGet->matric) != "") {
+
+  $sWhere .= $sAnd." EXISTS (SELECT 1 FROM arrematric where arrepaga.k00_numpre = arrematric.k00_numpre and arrematric.k00_matric = ".$oGet->matric.")";
+}
+
+$sAnd = $sWhere != "" ? " and " : "";
+
+if (trim($oGet->cgm) != "") {
+
+  $sWhere .= $sAnd." arrepaga.k00_numcgm in (".$oGet->cgm.")";
+}
+
+$sAnd = $sWhere != "" ? " and " : "";
+
 if (trim($oGet->cboDemonstracao) != "" && $oGet->cboDemonstracao == 2) {
   $sFiltroDemonstracao .= " Imposto/Taxa ";
   $sWhere .= $sAnd." arrepaga.k00_hist in (400,401) ";

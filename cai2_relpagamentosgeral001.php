@@ -35,6 +35,10 @@ include("dbforms/db_classesgenericas.php");
 
 $aux  = new cl_arquivo_auxiliar;
 $aux1	= new cl_arquivo_auxiliar;
+$cgm	= new cl_arquivo_auxiliar;
+
+$clrotulo    = new rotulocampo();
+$clrotulo->label('j01_matric');
 
 ?>
 <html>
@@ -151,9 +155,61 @@ db_app::load("estilos.css");
 </fieldset>  
 </td>
 </tr>
+    <tr>
+    <td>
+    <fieldset style="width:600px;">
+    <legend>Matricula do imóvel</legend>
+    <table align="center" width="600" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+        <td>
+
+        <input type="hidden" name="testaentra" value="true">
+        <?
+          db_ancora($Lj01_matric,' js_matri(true); ',1);
+        ?>
+        </td>
+
+        <td>
+        <?
+          db_input('j01_matric',10,0,true,'text',1,"onchange='js_matri(false)'");
+          db_input('z01_nomepropri',50,0,true,'text',3,"");
+        ?>
+        </td>
+        </tr>
+        </table>
+        </fieldset>
+    </td>
+    </tr>
 <tr>
 <td>
   
+    <?
+    // $aux = new cl_arquivo_auxiliar;
+    $cgm->cabecalho = "<b>CGM</b>";
+    $cgm->codigo = "z01_numcgm"; //chave de retorno da func
+    $cgm->descr  = "z01_nome";   //chave de retorno
+    $cgm->nomeobjeto = 'cgm';
+    $cgm->funcao_js = 'js_mostra';
+    $cgm->funcao_js_hide = 'js_mostra1';
+    $cgm->sql_exec  = "";
+    $cgm->func_arquivo = "func_nome.php";  //func a executar
+    $cgm->nomeiframe = "db_iframe_cgm";
+    $cgm->localjan = "";
+    $cgm->onclick = "";
+    $cgm->db_opcao = 2;
+    $cgm->tipo = 2;
+    $cgm->top = 0;
+    $cgm->linhas = 5;
+    $cgm->vwidth = 430;
+    $cgm->nome_botao = 'db_lanca_cgm';
+    $cgm->funcao_gera_formulario();
+    ?>
+  
+</td>
+</tr>
+    <tr>
+<td>
+
     <?
     // $aux = new cl_arquivo_auxiliar;
     $aux->cabecalho = "<b>Tipo de débito</b>";
@@ -175,7 +231,7 @@ db_app::load("estilos.css");
     $aux->nome_botao = 'db_lanca_tipo';
     $aux->funcao_gera_formulario();
     ?>
-  
+
 </td>
 </tr>
 <tr>
@@ -369,6 +425,14 @@ function js_abre(){
     var sQuery = "";
     var sDtIni = "";
     var sDtFim = "";
+
+    var vir="";
+    var lista="";
+
+    for(x=0;x<document.form1.cgm.length;x++){
+        lista+=vir+document.form1.cgm.options[x].value;
+        vir=",";
+    }
     
     sDtIni = $F('dtini') != '' ? js_formatar($F('dtini'),'d') : '';
     sDtFim = $F('dtfim') != '' ? js_formatar($F('dtfim'),'d') : '';
@@ -383,7 +447,8 @@ function js_abre(){
     sQuery += "&vlFim="+$F('vlfinal');
     sQuery += "&dtini="+sDtIni;
     sQuery += "&dtfim="+sDtFim;
-      
+    sQuery += "&cgm="+lista;
+    sQuery += "&matric="+$F('j01_matric');
 
     
     if  ($('cboOrdenacao').options[$('cboOrdenacao').selectedIndex].innerHTML == 'Valor') {
@@ -436,7 +501,26 @@ function js_abre(){
     jan.moveTo(0,0);
     
 }
-
+function js_matri(mostra){
+    var matri=document.form1.j01_matric.value;
+    if(mostra==true){
+        js_OpenJanelaIframe('','db_iframe','func_iptubase.php?funcao_js=parent.js_mostramatric|0|2','Pesquisa',true);
+    }else{
+        js_OpenJanelaIframe('','db_iframe','func_iptubase.php?pesquisa_chave='+matri+'&funcao_js=parent.js_mostramatric1','Pesquisa',false);
+    }
+}
+function js_mostramatric(chave1,chave2){
+    document.form1.j01_matric.value = chave1;
+    document.form1.z01_nomepropri.value = chave2;
+    db_iframe.hide();
+}
+function js_mostramatric1(chave,erro){
+    document.form1.z01_nomepropri.value = chave;
+    if(erro==true){
+        document.form1.j01_matric.focus();
+        document.form1.j01_matric.value = '';
+    }
+}
 </script>
 </body>
 </html>
