@@ -21,10 +21,10 @@ $this->objpdf->Setfont('Arial', 'B', 16);
 $this->objpdf->text(165, $xlin -8, 'SLIP: ' .  db_formatar(pg_result($this->dados, 0, "k17_codigo"), 's', '0', 6, 'e'));
 
 if (USE_PCASP) {
-  
+
   $this->objpdf->Setfont('Arial', '', 9);
   //$this->objpdf->text(115, $xlin -2, substr("Evento: " . $this->sEvento, 0, 55), 's', '0', 6, 'e');
-  
+
   $y   = $this->objpdf->getY();
   $this->objpdf->setY($y + 5);
   $this->objpdf->cell(190,  4, substr("Evento: " . $this->sEvento, 0, 55),      "",  1, "R", 0);
@@ -33,50 +33,67 @@ if (USE_PCASP) {
 
 /// retângulo dos dados da transferência
 
-$this->objpdf->rect($xcol, $xlin +2, $xcol +180, 60, 10, 'DF', '1234');
+$this->objpdf->rect($xcol, $xlin +2, $xcol +180, 75, 10, 'DF', '1234');
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->text($xcol +2, $xlin +7, 'DATA');
 $this->objpdf->text($xcol +6, $xlin +11,  db_formatar(pg_result($this->dados, 0, "k17_data"), 'd'));
+
 $this->objpdf->text($xcol +152, $xlin +7, 'VALOR');
+
 $this->objpdf->Setfont('Arial', 'B', 11);
 $this->objpdf->text($xcol +156, $xlin +11, 'R$');
 $this->objpdf->text($xcol +158, $xlin +11, db_formatar(pg_result($this->dados, 0, "k17_valor"), 'f'));
+
 $this->objpdf->Setfont('Arial', 'B', 9);
 
 $this->objpdf->text($xcol +2, $xlin + 18, 'FORNECEDOR');
 $this->objpdf->text($xcol +6, $xlin + 22,  pg_result($this->dados, 0, "z01_numcgm"). ' - '. pg_result($this->dados, 0, "z01_nome"));
+
+$tamanho = (strlen(pg_result($this->dados, 0, "z01_cgccpf")));
+
+if($tamanho==14){
+  $nomenclatura = 'CNPJ';
+  $mascara = '##.###.###/####.##';
+}else{
+  $nomenclatura = 'CPF';
+  $mascara = '###.###.###-##';
+}
+
+
+$this->objpdf->text($xcol +2, $xlin + 30, $nomenclatura);
+$this->objpdf->text($xcol +6, $xlin + 34,  format_cpfcnpj(pg_result($this->dados, 0, "z01_cgccpf"), $mascara));
 
 /**
  * Dados bancarios do credor
  */
 if ( !empty($this->oDadosBancarioCredor) ) {
 
-  $this->objpdf->text($xcol + 2, $xlin + 30, 'CONTA BANCÁRIA FORNECEDOR');
+  $this->objpdf->text($xcol + 2, $xlin + 42, 'CONTA BANCÁRIA FORNECEDOR');
 
   $sTextoDadosBancariosCredor  = $this->oDadosBancarioCredor->iBanco;
   $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->sBanco;
-  $sTextoDadosBancariosCredor .= '  Agência: ' . $this->oDadosBancarioCredor->iAgencia; 
+  $sTextoDadosBancariosCredor .= '  Agência: ' . $this->oDadosBancarioCredor->iAgencia;
   $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->iAgenciaDigito;
   $sTextoDadosBancariosCredor .= '  Conta: '   . $this->oDadosBancarioCredor->iConta;
   $sTextoDadosBancariosCredor .= ' - '         . $this->oDadosBancarioCredor->iContaDigito;
 
-  $this->objpdf->text($xcol + 6, $xlin + 34,  $sTextoDadosBancariosCredor);
+  $this->objpdf->text($xcol + 6, $xlin + 46,  $sTextoDadosBancariosCredor);
 }
 
-$this->objpdf->text($xcol + 2, $xlin + 43, 'DÉBITO');
-$this->objpdf->text($xcol + 6, $xlin + 47, pg_result($this->dados, 0, "k17_debito").'   -   '.pg_result($this->dados, 0, "descr_debito"));
-$this->objpdf->text($xcol + 2, $xlin + 56, 'CRÉDITO');
-$this->objpdf->text($xcol + 6, $xlin + 60, pg_result($this->dados, 0, "k17_credito").'   -   '.pg_result($this->dados, 0, "descr_credito"));
+$this->objpdf->text($xcol + 2, $xlin + 54, 'DÉBITO');
+$this->objpdf->text($xcol + 6, $xlin + 58, pg_result($this->dados, 0, "k17_debito").'   -   '.pg_result($this->dados, 0, "descr_debito"));
+$this->objpdf->text($xcol + 2, $xlin + 70, 'CRÉDITO');
+$this->objpdf->text($xcol + 6, $xlin + 74, pg_result($this->dados, 0, "k17_credito").'   -   '.pg_result($this->dados, 0, "descr_credito"));
 
 /// retângulo do histórico
 
-$this->objpdf->rect($xcol, $xlin +80, $xcol +180, 60, 10, 'DF', '1234');
+$this->objpdf->rect($xcol, $xlin +100, $xcol +180, 60, 10, 'DF', '1234');
 $this->objpdf->Setfont('Arial', 'B', 9);
-$this->objpdf->text($xcol +2, $xlin +85, 'HISTÓRICO');
+$this->objpdf->text($xcol +2, $xlin +105, 'HISTÓRICO');
 $this->objpdf->Setfont('Arial', '', 9);
-$this->objpdf->text($xcol +6, $xlin +95, pg_result($this->dados, 0, "k17_hist").'  -  '.pg_result($this->dados,0, "descr_hist"));
+$this->objpdf->text($xcol +6, $xlin +115, pg_result($this->dados, 0, "k17_hist").'  -  '.pg_result($this->dados,0, "descr_hist"));
 
-$this->objpdf->setxy($xcol +2, $xlin +103);
+$this->objpdf->setxy($xcol +2, $xlin +119);
 $this->objpdf->multicell(190, 3, pg_result($this->dados, 0, "k17_texto"), 0, "L");
 $this->objpdf->ln(2);
 if(pg_result($this->dados,0,"k17_situacao") == 3){
@@ -117,7 +134,22 @@ foreach ($aParagrafo as $oParag) {
   if ($oParag->oParag->db02_tipo == 3) {
     $texto = $oParag->oParag->db02_texto;
     eval($texto);
-  }    
+  }
 }
 
+function format_cpfcnpj($val, $mask){
+  $maskared = '';
+  $k = 0;
+  for($i = 0; $i<=strlen($mask)-1; $i++){
+  if($mask[$i] == '#'){
+    if(isset($val[$k]))
+      $maskared .= $val[$k++];
+  }
+  else{
+    if(isset($mask[$i]))
+      $maskared .= $mask[$i];
+    }
+  }
+ return $maskared;
+}
 ?>
