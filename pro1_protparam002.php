@@ -78,7 +78,9 @@ if (isset($alterar)) {
       if ($clprotparam->erro_status == "0") {
         $sqlerro = true;
       }
-      if (!empty($p109_coddeptoorigem) && !empty($p109_coddeptodestino) && $p109_coddeptoorigem != $p109_coddeptodestino) {
+  }
+  db_fim_transacao($sqlerro);
+  if (!empty($p109_coddeptoorigem) && !empty($p109_coddeptodestino) && $p109_coddeptoorigem != $p109_coddeptodestino) {
 
         $sSQL = "select p109_sequencial from protconfigdepartaut where p109_coddeptoorigem = {$p109_coddeptoorigem} and p109_coddeptodestino = {$p109_coddeptodestino}";
         $rsResult = db_query($sSQL);
@@ -95,13 +97,12 @@ if (isset($alterar)) {
             $clprotconfigdepartaut->incluir();
             if ($clprotconfigdepartaut->erro_status == "0") {
               $sqlerro = true;
+            } else {
+               db_query('END');
             }
         }
 
-      }
-
   }
- db_fim_transacao($sqlerro);
 }
 
 $db_opcao = 2;
