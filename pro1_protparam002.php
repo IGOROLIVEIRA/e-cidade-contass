@@ -97,8 +97,6 @@ if (isset($alterar)) {
             $clprotconfigdepartaut->incluir();
             if ($clprotconfigdepartaut->erro_status == "0") {
               $sqlerro = true;
-            } else {
-               db_query('END');
             }
         }
 
