@@ -17,7 +17,6 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("std/DBDate.php");
-
 db_postmemory($_POST);
 
 $oJson  = new services_json();
@@ -118,8 +117,8 @@ switch ($oParam->exec) {
       salvaCopiaAutEmpenho($oParam->protocolo, $oParam->copiaProtocolo);
       salvaCopiaEmpenho($oParam->protocolo, $oParam->copiaProtocolo);
       salvaCopiaAutCompra($oParam->protocolo, $oParam->copiaProtocolo);
-      salvaCopiaAutPagamento($oParam->protocolo, $oParam->copiaProtocolo);
-      salvaCopiaSlip($oParam->protocolo, $oParam->copiaProtocolo);
+      salvaCopiaAutPagamento($oParam->protocolo, $oParam->copiaProtocolo, $oParam->instit);
+      salvaCopiaSlip($oParam->protocolo, $oParam->copiaProtocolo, $oParam->instit);
 
     } catch (Exception $e) {
         $oRetorno->erro   = $e->getMessage();
@@ -268,14 +267,24 @@ switch ($oParam->exec) {
         $departorig  = $protocolo->p101_coddeptoorigem;
         $departdest  = $protocolo->p101_coddeptodestino;
 
-        if ($departorig == 31 && $departdest == 10) {
-          $resultRecec = db_query("
-            select p105_sequencial, p105_codord from protpagordem where p105_protocolo = {$oParam->protocolo} and p105_codord = {$oParam->autpagamento}
-          ");
+        $rsConfig  = db_query("
+                      select p90_autprotocolo from protparam where p90_instit = {$oParam->instit}");
+        $configDepart = db_utils::fieldsMemory($rsConfig,0);
 
-          $aAutPagamento = db_utils::fieldsMemory($resultRecec, 0);
+        $sSQL = " SELECT p109_sequencial
+                    FROM protconfigdepartaut
+                      INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
+                      INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
+                      INNER JOIN db_config ON codigo = p109_instit
+                        WHERE p109_instit =  {$oParam->instit}
+                         AND p109_coddeptoorigem = {$departorig}
+                         AND p109_coddeptodestino = {$departdest}
+                ";
+        $rsResult = db_query($sSQL);
+
+        if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {//15, 167
           $sSQL = "
-            select p107_protocolo from autprotpagordem where p107_codord = {$aAutPagamento->p105_codord}
+            select p107_protocolo from autprotpagordem where p107_codord = {$oParam->autpagamento}
           ";
           $ordemAutorizada = db_query($sSQL);
 
@@ -320,15 +329,25 @@ switch ($oParam->exec) {
       $departorig  = $protocolo->p101_coddeptoorigem;
       $departdest  = $protocolo->p101_coddeptodestino;
 
-      if ($departorig == 31 && $departdest == 10) {
+      $rsConfig  = db_query("
+                      select p90_autprotocolo from protparam where p90_instit = {$oParam->instit}");
+        $configDepart = db_utils::fieldsMemory($rsConfig,0);
 
-        $resultRecec = db_query("
-          select p106_sequencial, p106_slip from protslip where p106_protocolo = {$oParam->protocolo} and p106_slip = {$oParam->slip}
-        ");
+        $sSQL = " SELECT p109_sequencial
+                    FROM protconfigdepartaut
+                      INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
+                      INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
+                      INNER JOIN db_config ON codigo = p109_instit
+                        WHERE p109_instit =  {$oParam->instit}
+                         AND p109_coddeptoorigem = {$departorig}
+                         AND p109_coddeptodestino = {$departdest}
+                ";
+        $rsResult = db_query($sSQL);
 
-        $aSlip = db_utils::fieldsMemory($resultRecec, 0);
+        if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {//15, 167
+
         $sSQL = "
-          select p108_protocolo from autprotslip where p108_slip = {$aSlip->p106_slip}
+          select p108_protocolo from autprotslip where p108_slip = {$oParam->slip}
         ";
         $slipAutorizada = db_query($sSQL);
         if (pg_num_rows($slipAutorizada) > 0) {
@@ -608,15 +627,28 @@ switch ($oParam->exec) {
     try {
 
       $resultado = db_query("
-        select p105_sequencial
+        select p105_sequencial, p105_codord
               from protpagordem
                 where p105_protocolo = {$oParam->protocolo} and p105_codord in (".implode(",",$oParam->autpagamentos).")
       ");
 
       $aAutPagamentos = db_utils::getCollectionByRecord($resultado);
       foreach ($aAutPagamentos as $aAutPagamento) {
-        $resultado = excluirAutPagamento($aAutPagamento->p105_sequencial);
+        $sSQL = "
+          select p107_sequencial from autprotpagordem where p107_codord = {$aAutPagamento->p105_codord} and p107_protocolo = {$oParam->protocolo}
+        ";
+        $ordemAutorizada = db_query($sSQL);
+        $aOrdemAutorizada = db_utils::fieldsMemory($ordemAutorizada, 0);
+        if (pg_num_rows($ordemAutorizada) > 0) {
+          $excluir = db_query("
+            BEGIN; delete from autprotpagordem where p107_sequencial = {$aOrdemAutorizada->p107_sequencial}; COMMIT;
+          ");
+          if ($excluir == false) {
+            throw new Exception ("Erro ao excluir a liberação da ordem de pagamento!");
+          }
+        }
 
+        $resultado = excluirAutPagamento($aAutPagamento->p105_sequencial);
         if ($resultado == false) {
           throw new Exception ("Erro ao excluir Autorização de Pagamento!");
         }
@@ -633,15 +665,26 @@ switch ($oParam->exec) {
     try {
 
       $resultado = db_query("
-        select p106_sequencial
+        select p106_sequencial, p106_slip
               from protslip
                 where p106_protocolo = {$oParam->protocolo} and p106_slip in (".implode(",",$oParam->slips).")
       ");
 
       $aSlips = db_utils::getCollectionByRecord($resultado);
       foreach ($aSlips as $aSlip) {
-        $resultado = excluirSlip($aSlip->p106_sequencial);
+        $sSQL = " select p108_sequencial from autprotslip where p108_slip = {$aSlip->p106_slip} and p108_protocolo = {$oParam->protocolo} ";
+        $slipAutorizada = db_query($sSQL);
+        $aSlipAutorizada = db_utils::fieldsMemory($slipAutorizada, 0);
+        if (pg_num_rows($slipAutorizada) > 0) {
+          $excluir = db_query("
+            BEGIN; delete from autprotslip where p108_sequencial = {$aSlipAutorizada->p108_sequencial}; COMMIT;
+          ");
+          if ($excluir == false) {
+            throw new Exception ("Erro ao excluir a liberação do slip!");
+          }
+        }
 
+        $resultado = excluirSlip($aSlip->p106_sequencial);
         if ($resultado == false) {
           throw new Exception ("Erro ao excluir Slip!");
         }
@@ -653,18 +696,43 @@ switch ($oParam->exec) {
     }
   break;
 
+  case 'buscaDepartamentosConfig';
+
+    $sSQL = " SELECT p109_sequencial,
+               p109_coddeptoorigem,
+               dog.descrdepto origem,
+               p109_coddeptodestino,
+               dd.descrdepto destino
+                FROM protconfigdepartaut
+                  INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
+                  INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
+                  INNER JOIN db_config ON codigo = p109_instit
+                    WHERE p109_instit =  {$oParam->instit}";
+    $rsResult = db_query($sSQL);
+    $aDepartConfig = db_utils::getCollectionByRecord($rsResult);
+    $oRetorno->departamentos = $aDepartConfig;
+
+  break;
+
+  case 'excluiDepartConfig';
+    try {
+      $excluir = db_query("
+          BEGIN; delete from protconfigdepartaut where p109_sequencial = {$oParam->p109_sequencial}; COMMIT;
+        ");
+        if ($excluir == false) {
+          throw new Exception ("Erro ao excluir configuração!");
+        }
+    } catch (Exception $e) {
+        $oRetorno->erro = $e;
+    }
+  break;
+
 }
 
 // Funções
 
 function autorizarOrdemPagamento($ordempagamento, $protocolo, $data) {
-
-  $ordemAutorizada = db_query("
-          select p107_sequencial
-            from autprotpagordem
-              where p107_codord = {$ordempagamento}
-        ");
-
+  $ordemAutorizada = db_query(" select p107_sequencial from autprotpagordem where p107_codord = {$ordempagamento} ");
   try {
     $aOrdemAutorizada = db_utils::fieldsMemory($ordemAutorizada, 0);
       if (!empty($aOrdemAutorizada->p107_sequencial)) {
@@ -697,11 +765,7 @@ function autorizarOrdemPagamento($ordempagamento, $protocolo, $data) {
 
 function autorizarSlip($slip, $protocolo, $data) {
 
-  $slipAutorizada = db_query("
-          select p108_sequencial
-            from autprotslip
-              where p108_slip = {$slip}
-        ");
+  $slipAutorizada = db_query(" select p108_sequencial from autprotslip where p108_slip = {$slip} ");
 
   try {
     $aSlipAutorizada = db_utils::fieldsMemory($slipAutorizada, 0);
@@ -831,7 +895,7 @@ function buscaAutEmpenhos($protocolo) {
     return $rsConsulta;
 }
 
-function buscaEmpenhos($protocolo, $instituicao) {
+function buscaEmpenhos($protocolo) {
     $sSQL = "
       SELECT e60_numemp,
                 e60_codemp || '/' || e60_anousu as e60_codemp,
@@ -1062,25 +1126,61 @@ function salvaCopiaAutCompra($protocolo, $protocoloCopia) {
   }
 }
 
-function salvaCopiaAutPagamento($protocolo, $protocoloCopia) {
+function salvaCopiaAutPagamento($protocolo, $protocoloCopia, $instituicao) {
   try {
 
     $rsBusca = buscaAutPagamentos($protocoloCopia);
     $aAutPagamentos = db_utils::getCollectionByRecord($rsBusca);
+
+    $rsProtocolo = buscaProtocolo($protocolo);
+    $protoDepart = db_utils::fieldsMemory($rsProtocolo,0);
+    $departorig  = $protoDepart->p101_coddeptoorigem;
+    $departdest  = $protoDepart->p101_coddeptodestino;
+
+    $rsConfig  = db_query("select p90_autprotocolo from protparam where p90_instit = {$instituicao}");
+    $configDepart = db_utils::fieldsMemory($rsConfig,0);
+
+    $sSQL = " SELECT p109_sequencial
+                  FROM protconfigdepartaut
+                    INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
+                    INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
+                    INNER JOIN db_config ON codigo = p109_instit
+                      WHERE p109_instit =  {$instituicao}
+                       AND p109_coddeptoorigem = {$departorig}
+                       AND p109_coddeptodestino = {$departdest}
+              ";
+    $rsResult = db_query($sSQL);
+
     foreach ($aAutPagamentos as $aAutPagamento) {
 
       $verifica = false;
       $verifica = verificaAutPagamento($aAutPagamento->e50_codord, $protocolo);
       if ($verifica == true) {
         continue;
-      }
-      $oAutPagamento = new cl_protpagordem;
-      $oAutPagamento->p105_codord    = $aAutPagamento->e50_codord;
-      $oAutPagamento->p105_protocolo = $protocolo;
-      $oAutPagamento->incluir(null);
+      } else {
 
-      if ($oAutPagamento->erro_status != 1) {
-        throw new Exception($oAutPagamento->erro_msg);
+        $oAutPagamento = new cl_protpagordem;
+        $oAutPagamento->p105_codord    = $aAutPagamento->e50_codord;
+        $oAutPagamento->p105_protocolo = $protocolo;
+        $oAutPagamento->incluir(null);
+
+        if ($oAutPagamento->erro_status != 1) {
+          throw new Exception($oAutPagamento->erro_msg);
+        }
+
+        if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {
+          $sSQL = "
+            select p107_protocolo from autprotpagordem where p107_codord = {$aAutPagamento->e50_codord}
+          ";
+          $ordemAutorizada = db_query($sSQL);
+          if (pg_num_rows($ordemAutorizada) == 0) {
+            $resultado = autorizarOrdemPagamento($aAutPagamento->e50_codord, $protocolo, date("Y-m-d"));
+            if ($resultado == false) {
+              throw new Exception ("Erro ao liberar ordem de pagamento!");
+            }
+          }
+
+        }
       }
     }
 
@@ -1090,11 +1190,30 @@ function salvaCopiaAutPagamento($protocolo, $protocoloCopia) {
   }
 }
 
-function salvaCopiaSlip($protocolo, $protocoloCopia) {
+function salvaCopiaSlip($protocolo, $protocoloCopia, $instituicao) {
   try {
 
     $rsBusca = buscaSlips($protocoloCopia);
     $aSlips = db_utils::getCollectionByRecord($rsBusca);
+
+    $rsProtocolo = buscaProtocolo($protocolo);
+    $protoDepart = db_utils::fieldsMemory($rsProtocolo,0);
+    $departorig  = $protoDepart->p101_coddeptoorigem;
+    $departdest  = $protoDepart->p101_coddeptodestino;
+
+    $rsConfig  = db_query("select p90_autprotocolo from protparam where p90_instit = {$instituicao}");
+    $configDepart = db_utils::fieldsMemory($rsConfig,0);
+
+    $sSQL = " SELECT p109_sequencial
+                  FROM protconfigdepartaut
+                    INNER JOIN db_depart dog ON dog.coddepto = p109_coddeptoorigem
+                    INNER JOIN db_depart dd ON dd.coddepto = p109_coddeptodestino
+                    INNER JOIN db_config ON codigo = p109_instit
+                      WHERE p109_instit =  {$instituicao}
+                       AND p109_coddeptoorigem = {$departorig}
+                       AND p109_coddeptodestino = {$departdest}
+              ";
+    $rsResult = db_query($sSQL);
 
     foreach ($aSlips as $aSlip) {
 
@@ -1102,14 +1221,29 @@ function salvaCopiaSlip($protocolo, $protocoloCopia) {
       $verifica = verificaSlip($aSlip->k17_codigo, $protocolo);
       if ($verifica == true) {
         continue;
-      }
-      $oSlip = new cl_protslip;
-      $oSlip->p106_slip      = $aSlip->k17_codigo;
-      $oSlip->p106_protocolo = $protocolo;
-      $oSlip->incluir(null);
+      } else {
+          $oSlip = new cl_protslip;
+          $oSlip->p106_slip      = $aSlip->k17_codigo;
+          $oSlip->p106_protocolo = $protocolo;
+          $oSlip->incluir(null);
 
-      if ($oSlip->erro_status != 1) {
-        throw new Exception($oSlip->erro_msg);
+          if ($oSlip->erro_status != 1) {
+            throw new Exception($oSlip->erro_msg);
+          }
+
+          if (pg_num_rows($rsResult) > 0 && $configDepart->p90_autprotocolo == 't') {
+            $sSQL = "
+              select p108_protocolo from autprotslip where p108_slip = {$aSlip->k17_codigo}
+            ";
+            $ordemSlip = db_query($sSQL);
+            if (pg_num_rows($ordemSlip) == 0) {
+              $resultado = autorizarSlip($aSlip->k17_codigo, $protocolo, date("Y-m-d"));
+              if ($resultado == false) {
+                throw new Exception ("Erro ao liberar Slip!");
+              }
+            }
+
+          }
       }
 
     }

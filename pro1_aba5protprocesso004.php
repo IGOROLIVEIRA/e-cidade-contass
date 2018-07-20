@@ -236,7 +236,8 @@ function incluirAutPagamento(iProtocolo, iAutPagamento) {
   var params = {
     exec: 'insereAutPagamento',
     protocolo: iProtocolo,
-    autpagamento: iAutPagamento
+    autpagamento: iAutPagamento,
+    instit: <?php echo db_getsession("DB_instit"); ?>
   };
   js_divCarregando('Aguarde', 'div_aguarde');
   novoAjax(params, function(e) {

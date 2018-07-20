@@ -209,7 +209,8 @@ function incluirSlip(iProtocolo, iSlip) {
   var params = {
     exec: 'insereSlip',
     protocolo: iProtocolo,
-    slip: iSlip
+    slip: iSlip,
+    instit: <?php echo db_getsession("DB_instit"); ?>
   };
   js_divCarregando('Aguarde', 'div_aguarde');
   novoAjax(params, function(e) {
