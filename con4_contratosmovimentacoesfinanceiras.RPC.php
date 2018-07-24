@@ -54,7 +54,8 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/db_sessoes.php");
 $oJson    = new services_json();
 $oRetorno = new stdClass();
-$oParam   = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
+//$oParam   = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
+$oParam   = json_decode(str_replace('\\', '', $_POST["json"]));
 
 $oRetorno->status   = 1;
 $oRetorno->message  = '';
@@ -341,6 +342,7 @@ switch($oParam->exec) {
       db_fim_transacao(true);
       $oRetorno->status = 2;
       $oRetorno->message = urlencode($eErro->getMessage());
+
     }
 
     break;
@@ -350,6 +352,7 @@ switch($oParam->exec) {
     $oContrato = $_SESSION["oContrato"];
 
     try {
+
       db_inicio_transacao();
 
       arsort($oParam->aPosicoes);
