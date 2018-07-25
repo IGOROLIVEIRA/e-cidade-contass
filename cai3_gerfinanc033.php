@@ -637,7 +637,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->totcon =  trim(db_formatar($oIptucalc->j23_areaed,'f'));;
     $pdf1->testad = trim(db_formatar($oIptucalc->j23_testad,'f'));
     $pdf1->m2terr = trim(db_formatar($oIptucalc->j23_m2terr,'f'));
-    $pdf1->vlcons = trim(db_formatar($j22_valor,'f'));
+    $pdf1->vlcons = trim(db_formatar($oIptucalc->j22_valor,'f'));
     $pdf1->vlrter = trim(db_formatar($oIptucalc->j23_vlrter,'f'));
     $pdf1->vm2 = trim(db_formatar($oIptucalc->j22_vm2,'f'));
     $pdf1->vlvenaltot = trim(db_formatar($oIptucalc->j23_vlrter+$oIptucalc->j22_valor,'f'));
