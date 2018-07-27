@@ -75,88 +75,110 @@ try {
 
   switch ($oParam->exec) {
 
-		case 'reaberturaPrestacaoConta' :
+    case 'reaberturaPrestacaoConta' :
 
-      db_inicio_transacao();
+    db_inicio_transacao();
 
- 		  $GLOBALS["HTTP_POST_VARS"]["e45_acerta_dia"] = '';
+    $GLOBALS["HTTP_POST_VARS"]["e45_acerta_dia"] = '';
 
-      $oDaoEmppresta = db_utils::getDao('emppresta');
-			$oDaoEmppresta->e45_acerta = null;
-      $oDaoEmppresta->e45_sequencial = $oParam->iSequencialEmpenho;
-			$oDaoEmppresta->alterar($oParam->iSequencialEmpenho);
+    $oDaoEmppresta = db_utils::getDao('emppresta');
+    $oDaoEmppresta->e45_acerta = null;
+    $oDaoEmppresta->e45_sequencial = $oParam->iSequencialEmpenho;
+    $oDaoEmppresta->alterar($oParam->iSequencialEmpenho);
 
-			if ( $oDaoEmppresta->erro_status == 0 ) {
+    if ( $oDaoEmppresta->erro_status == 0 ) {
 
-			  $sMsgErro  = 'Não foi possível reabrir a prestação de contas.\n';
-			  $sMsgErro .= $oDaoEmppresta->erro_msg;
-				throw new Exception($sMsgErro);
-			}
+     $sMsgErro  = 'Não foi possível reabrir a prestação de contas.\n';
+     $sMsgErro .= $oDaoEmppresta->erro_msg;
+     throw new Exception($sMsgErro);
+   }
 
-      db_fim_transacao(false);
+   db_fim_transacao(false);
 
-			$oRetorno->message = "Prestação de contas reaberta.";
+   $oRetorno->message = "Prestação de contas reaberta.";
 
-		  break;
+   break;
 
-		case 'reaberturaConferencia' :
+   case 'reaberturaConferencia' :
 
-      db_inicio_transacao();
+   db_inicio_transacao();
 
- 		  $GLOBALS["HTTP_POST_VARS"]["e45_conferido_dia"] = '';
+   $GLOBALS["HTTP_POST_VARS"]["e45_conferido_dia"] = '';
 
  		  /**
  		   * Libera data de encerramento - e45_conferido
  		   */
+      $dataLancamento = new DBDate($oParam->dataLancamento);
+      $dataLancamento = $dataLancamento->getDate();
+
       $oDaoEmppresta = db_utils::getDao('emppresta');
-			$oDaoEmppresta->e45_conferido = null;
-			$oDaoEmppresta->e45_sequencial = $oParam->iSequencialEmpenho;
-			$oDaoEmppresta->alterar($oParam->iSequencialEmpenho);
+      $oDaoEmppresta->e45_conferido = null;
+      $oDaoEmppresta->e45_sequencial = $oParam->iSequencialEmpenho;
 
-			if ( $oDaoEmppresta->erro_status == 0 ) {
+      if(pg_num_rows(db_query("SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." "))>0){
+        $oConsultaFimPeriodoContabil = db_query("SELECT * FROM condataconf WHERE c99_data < '$dataLancamento' AND c99_anousu = ".db_getsession('DB_anousu')." ");
 
-			  $sMsgErro  = 'Não foi possível reabrir a Conferência.\n';
-			  $sMsgErro .= $oDaoEmppresta->erro_msg;
-				throw new Exception($sMsgErro);
-			}
+        if(pg_num_rows($oConsultaFimPeriodoContabil) == 0){
+          throw new Exception("Data informada inferior à data do fim do período contábil.");
+        }
+      }
+
+      $oConsultaDataLancamento = db_query("SELECT *
+                FROM conlancamemp
+                JOIN conlancam ON c75_codlan=c70_codlan
+                WHERE c75_numemp = {$oParam->iNumeroEmpenho} AND c75_data > '$dataLancamento'
+                ORDER by c75_data DESC");
+
+      if(pg_num_rows($oConsultaDataLancamento) > 0){
+        throw new Exception("Já existe um lançamento com a data posterior à informada.");
+      }
+
+      $oDaoEmppresta->alterar($oParam->iSequencialEmpenho);
+
+      if ( $oDaoEmppresta->erro_status == 0 ) {
+
+       $sMsgErro  = 'Não foi possível reabrir a Conferência.\n';
+       $sMsgErro .= $oDaoEmppresta->erro_msg;
+       throw new Exception($sMsgErro);
+     }
 
 			/**
 			 * Lancamento contabil
 			 */
 			$oEmpenhoFinanceiro = new EmpenhoFinanceiro($oParam->iNumeroEmpenho);
-			$oPrestacaoConta    = new PrestacaoConta($oEmpenhoFinanceiro, $oParam->iSequencialEmpenho);
+			$oPrestacaoConta    = new PrestacaoConta($oEmpenhoFinanceiro, $oParam->iSequencialEmpenho, $oParam->dataLancamento);
 			$sComplemento       = db_stdClass::normalizeStringJson($oParam->sComplemento);
 
 			$oPrestacaoConta->estornarLancamento($sComplemento);
 
       db_fim_transacao(false);
 
-			$oRetorno->message = "Conferência de contas reaberta.";
+      $oRetorno->message = "Conferência de contas reaberta.";
 
-		  break;
+      break;
 
-		case "getDadosPrestacaoContas":
+      case "getDadosPrestacaoContas":
 
-			$oEmpenhoFinanceiro   = new EmpenhoFinanceiro($oParam->iNumeroEmpenho);
-			$oDadosPrestacaoConta = $oEmpenhoFinanceiro->getDadosPrestacaoContas();
+      $oEmpenhoFinanceiro   = new EmpenhoFinanceiro($oParam->iNumeroEmpenho);
+      $oDadosPrestacaoConta = $oEmpenhoFinanceiro->getDadosPrestacaoContas();
 
-			if (!$oDadosPrestacaoConta) {
-				throw new BusinessException("Este empenho não é uma prestação de contas.");
-			}
+      if (!$oDadosPrestacaoConta) {
+        throw new BusinessException("Este empenho não é uma prestação de contas.");
+      }
 
-			$oPrestacaoConta = new stdClass();
-			$oPrestacaoConta->iNumeroEmpenho				  = $oDadosPrestacaoConta->e45_numemp;
-			$oPrestacaoConta->dtData								  = db_formatar($oDadosPrestacaoConta->e45_data, 'd');
-			$oPrestacaoConta->dtFechamento					  = db_formatar($oParam->$oDadosPrestacaoConta->e45_conferido, 'd');
-			$oPrestacaoConta->dtAcertoPrestacaoContas = db_formatar($oDadosPrestacaoConta->e45_acerta, 'd');
-			$oPrestacaoConta->iTipo                   = $oDadosPrestacaoConta->e45_tipo;
-			$oPrestacaoConta->sObservacao             = urlencode($oDadosPrestacaoConta->e45_obs);
+      $oPrestacaoConta = new stdClass();
+      $oPrestacaoConta->iNumeroEmpenho				  = $oDadosPrestacaoConta->e45_numemp;
+      $oPrestacaoConta->dtData								  = db_formatar($oDadosPrestacaoConta->e45_data, 'd');
+      $oPrestacaoConta->dtFechamento					  = db_formatar($oParam->$oDadosPrestacaoConta->e45_conferido, 'd');
+      $oPrestacaoConta->dtAcertoPrestacaoContas = db_formatar($oDadosPrestacaoConta->e45_acerta, 'd');
+      $oPrestacaoConta->iTipo                   = $oDadosPrestacaoConta->e45_tipo;
+      $oPrestacaoConta->sObservacao             = urlencode($oDadosPrestacaoConta->e45_obs);
 
-			$oRetorno->dados = $oPrestacaoConta;
+      $oRetorno->dados = $oPrestacaoConta;
 
-		  break;
+      break;
 
-    case 'verificaDevolucaoAdiantamento':
+      case 'verificaDevolucaoAdiantamento':
 
       $oDaoComlancamEmp = new cl_conlancamemp();
       $sSqlBuscaLancamentos = $oDaoComlancamEmp->sql_query_documentos(null, "c71_coddoc", 'c03_ordem desc', "c75_numemp = {$oParam->iCodigoEmpenho}");
@@ -181,41 +203,41 @@ try {
       $oRetorno->lPodeReabrir = $lPodeReabrir;
       break;
 
-    default:
+      default:
       throw new Exception("Nenhuma Opção Definida");
 
+    }
+
+
+  } catch (BusinessException $oErro) {
+
+    $oRetorno->status   = 2;
+    $oRetorno->message = $oErro->getMessage();
+    $oRetorno->erro     = true;
+    db_fim_transacao(true);
+
+  } catch (DBException $oErro) {
+
+    $oRetorno->status   = 2;
+    $oRetorno->mensage = $oErro->getMessage();
+    $oRetorno->erro     = true;
+    db_fim_transacao(true);
+
+  } catch (ParameterException $oErro) {
+
+    $oRetorno->iStatus   = 2;
+    $oRetorno->message = $oErro->getMessage();
+    $oRetorno->erro     = true;
+
+  } catch (Exception $oErro) {
+
+    $oRetorno->status   = 2;
+    $oRetorno->message = $oErro->getMessage();
+    $oRetorno->erro     = true;
+
+    db_fim_transacao(true);
   }
 
+  $oRetorno->message = urlEncode($oRetorno->message);
 
-} catch (BusinessException $oErro) {
-
-  $oRetorno->status   = 2;
-  $oRetorno->message = $oErro->getMessage();
-  $oRetorno->erro     = true;
-  db_fim_transacao(true);
-
-} catch (DBException $oErro) {
-
-  $oRetorno->status   = 2;
-	$oRetorno->mensage = $oErro->getMessage();
-  $oRetorno->erro     = true;
-	db_fim_transacao(true);
-
-} catch (ParameterException $oErro) {
-
-  $oRetorno->iStatus   = 2;
-  $oRetorno->message = $oErro->getMessage();
-  $oRetorno->erro     = true;
-
-} catch (Exception $oErro) {
-
-  $oRetorno->status   = 2;
-	$oRetorno->message = $oErro->getMessage();
-  $oRetorno->erro     = true;
-
-	db_fim_transacao(true);
-}
-
-$oRetorno->message = urlEncode($oRetorno->message);
-
-echo $oJson->encode($oRetorno);
+  echo $oJson->encode($oRetorno);

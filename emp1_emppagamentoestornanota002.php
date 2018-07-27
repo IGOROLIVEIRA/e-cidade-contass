@@ -64,7 +64,7 @@ $clempparamentro = new cl_empparametro;
 require_once("libs/db_utils.php");
 require_once("classes/ordemPagamento.model.php");
 require_once("model/retencaoNota.model.php");
-
+require_once("std/DBDate.php");
 require_once("classes/db_conlancam_classe.php");
 require_once("classes/db_conlancamele_classe.php");
 require_once("classes/db_conlancampag_classe.php");
@@ -141,7 +141,6 @@ if (isset($e81_codmov) && !empty($e81_codmov)) {
 
 if (isset($confirmar)) {
   try {
-
     db_inicio_transacao();
     $oOrdemPagamento = new ordemPagamento($e50_codord);
     $oOrdemPagamento->setCheque($k12_cheque);
@@ -149,6 +148,27 @@ if (isset($confirmar)) {
     $oOrdemPagamento->setConta($k13_conta);
     $oOrdemPagamento->setValorPago($vlrpag_estornar);
     $oOrdemPagamento->setHistorico($c72_complem);
+    $nEmpenho = $oOrdemPagamento->getDadosOrdem()->e50_numemp;
+
+    $dataLancamento = new DBDate($dataLancamento);
+    $dataLancamento = $dataLancamento->getDate();
+    if(pg_num_rows(db_query("SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." "))>0){
+      $oConsultaFimPeriodoContabil = db_query("SELECT * FROM condataconf WHERE c99_data < '$dataLancamento' AND c99_anousu = ".db_getsession('DB_anousu')." ");
+
+      if(pg_num_rows($oConsultaFimPeriodoContabil) == 0){
+        throw new Exception("Data informada inferior à data do fim do período contábil.");
+      }
+    }
+
+    $oConsultaDataLancamento = db_query("SELECT *
+      FROM conlancamemp
+      JOIN conlancam ON c75_codlan=c70_codlan
+      WHERE c75_numemp = {$nEmpenho} AND c75_data > '$dataLancamento'
+      ORDER by c75_data DESC");
+
+    if(pg_num_rows($oConsultaDataLancamento) > 0){
+      throw new Exception("Já existe um lançamento com a data posterior à informada.");
+    }
     $oOrdemPagamento->estornarOrdem();
 
     db_fim_transacao(false);
@@ -170,7 +190,7 @@ if (isset($confirmar)) {
 }
 
 // autentica na impressora
- if( ( isset($confirmar) && $sqlerro==false && $k11_tipautent == 1)  || isset($retorno_imp)) {
+if( ( isset($confirmar) && $sqlerro==false && $k11_tipautent == 1)  || isset($retorno_imp)) {
 
   if (isset($retorno_imp)) {
     $retorno = $retorno_imp;
@@ -214,7 +234,7 @@ if (isset($pag_emp) && empty($confirmar) ) {
     }
 
     $sql = $clempempenho->sql_query("", "*", "e60_numemp",
-         " e60_codemp =  '".$arr[0]."' $dbwhere_ano and e60_instit = ".db_getsession("DB_instit"));
+     " e60_codemp =  '".$arr[0]."' $dbwhere_ano and e60_instit = ".db_getsession("DB_instit"));
   } else {
     $sql = $clempempenho->sql_query($e60_numemp);
   }
@@ -258,34 +278,34 @@ if (isset($pag_emp) && empty($confirmar) ) {
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?php
-db_app::load("scripts.js");
-db_app::load("prototype.js");
-db_app::load("datagrid.widget.js");
-db_app::load("strings.js");
-db_app::load("grid.style.css");
-db_app::load("estilos.css");
-?>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?php
+  db_app::load("scripts.js");
+  db_app::load("prototype.js");
+  db_app::load("datagrid.widget.js");
+  db_app::load("strings.js");
+  db_app::load("grid.style.css");
+  db_app::load("estilos.css");
+  ?>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr>
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-	<?
+  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="360" height="18">&nbsp;</td>
+      <td width="263">&nbsp;</td>
+      <td width="25">&nbsp;</td>
+      <td width="140">&nbsp;</td>
+    </tr>
+  </table>
+  <?
 
 
-if (isset ($confirmar) && $sqlerro == false) {
-	$c72_complem = '';
-}
-if ($oParametro->e30_agendaautomatico == "t") {
+  if (isset ($confirmar) && $sqlerro == false) {
+   $c72_complem = '';
+ }
+ if ($oParametro->e30_agendaautomatico == "t") {
   require_once ("forms/db_frmestornamovimento.php");
 } else {
   require_once ("forms/db_frmemppagamentoestorna.php");
@@ -305,40 +325,40 @@ if (isset ($confirmar)) {
 		db_msgbox($erro_msg);
 	} else {
 		echo "
-		       <script>
-		          if(confirm('Alteração efetuada com sucesso. \\n \\n Deseja imprimir o relatório? ')){
-			    jan = window.open('emp2_emiteestornoemp002.php?codord=$e50_codord&codlan=$c70_codlan','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-			    jan.moveTo(0,0);
-		          }
-		       </script>
+   <script>
+    if(confirm('Alteração efetuada com sucesso. \\n \\n Deseja imprimir o relatório? ')){
+     jan = window.open('emp2_emiteestornoemp002.php?codord=$e50_codord&codlan=$c70_codlan','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+     jan.moveTo(0,0);
+   }
+ </script>
 
-		    ";
+ ";
 
-	}
+}
 }
 
 if( (isset($retorno) && $k11_tipautent == 1) ||  (isset($retorno_imp)) ){
-   echo "
-       <script>
+ echo "
+ <script>
          // função para dispara a autenticação
-	 function aut(){
-	      retorna = confirm('Autenticar novamente?');
-	      if(retorna == true){
-	          obj=document.createElement('input');
-	          obj.setAttribute('name','retorno_imp');
-	          obj.setAttribute('type','hidden');
-	          obj.setAttribute('value','$retorno');
-	          document.form1.appendChild(obj);
-	          obj=document.createElement('input');
-	          obj.setAttribute('name','k11_tipautent');
-	          obj.setAttribute('type','hidden');
-	          obj.setAttribute('value','1');
-	          document.form1.appendChild(obj);
-	          document.form1.submit();
-  	      }
-	 }
-       </script>
-  ";
+  function aut(){
+   retorna = confirm('Autenticar novamente?');
+   if(retorna == true){
+     obj=document.createElement('input');
+     obj.setAttribute('name','retorno_imp');
+     obj.setAttribute('type','hidden');
+     obj.setAttribute('value','$retorno');
+     document.form1.appendChild(obj);
+     obj=document.createElement('input');
+     obj.setAttribute('name','k11_tipautent');
+     obj.setAttribute('type','hidden');
+     obj.setAttribute('value','1');
+     document.form1.appendChild(obj);
+     document.form1.submit();
+   }
+ }
+</script>
+";
 }
 
 ?>

@@ -46,6 +46,12 @@ class PrestacaoConta {
    */
   private $iSequencialPrestacaoConta;
 
+  /**
+   * Número do Sequencial do registro da prestação de contas da tabela emppresta
+   * @var Integer
+   */
+  public $dataLancamento = null;
+
 	/**
 	 * Itens da prestacao de contas
 	 * @var array
@@ -57,9 +63,10 @@ class PrestacaoConta {
 	 * @param EmpenhoFinanceiro $oEmpenhoFinanceiro
    * @param Integer $iSequencialPrestacaoConta
 	 */
-	public function __construct(EmpenhoFinanceiro $oEmpenhoFinanceiro, $iSequencialPrestacaoConta) {
+	public function __construct(EmpenhoFinanceiro $oEmpenhoFinanceiro, $iSequencialPrestacaoConta, $dataLancamento = null) {
     $this->oEmpenhoFinanceiro        = $oEmpenhoFinanceiro;
-		$this->iSequencialPrestacaoConta = $iSequencialPrestacaoConta;
+    $this->iSequencialPrestacaoConta = $iSequencialPrestacaoConta;
+		$this->dataLancamento = $dataLancamento;
 	}
 
   /**
@@ -75,7 +82,7 @@ class PrestacaoConta {
   	$oDocumentoContabil       = SingletonRegraDocumentoContabil::getDocumento($iCodigoDocumento);
   	$iCodigoDocumentoExecutar = $oDocumentoContabil->getCodigoDocumento();
   	$oEventoContabil          = new EventoContabil($iCodigoDocumentoExecutar, db_getsession("DB_anousu"));
-  	$oEventoContabil->executaLancamento($oLancamentoAuxiliarEmpenho);
+  	$oEventoContabil->executaLancamento($oLancamentoAuxiliarEmpenho, $this->dataLancamento);
 
   	return true;
   }
@@ -136,10 +143,10 @@ class PrestacaoConta {
 
       /**
        * Conta corrente do tipo credor, codigo 104
-       */ 
+       */
       $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
       $oContaCorrenteDetalhe->setCredor($this->oEmpenhoFinanceiro->getCgm());
-      $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe); 
+      $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
 
   		$this->executarLancamentoContabil($oLancamentoAuxiliar, $iCodigoDocumento);
   	}
@@ -197,10 +204,10 @@ class PrestacaoConta {
 
     /**
      * Conta corrente do tipo credor, codigo 104
-     */ 
+     */
     $oContaCorrenteDetalhe = new ContaCorrenteDetalhe();
     $oContaCorrenteDetalhe->setCredor($this->oEmpenhoFinanceiro->getCgm());
-    $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe); 
+    $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
 
   	$this->executarLancamentoContabil($oLancamentoAuxiliar, $iCodigoDocumento);
   	return true;
@@ -237,8 +244,19 @@ class PrestacaoConta {
     $nValorTotalNota = 0;
     $aItemPrestacaoConta = $this->getItens();
     foreach ($aItemPrestacaoConta as $oStdItem) {
-      $nValorTotalNota += $oStdItem->e46_valor;
+      $nValorTotalNota += $oStdItem->e46_valor - (float)$oStdItem->e46_desconto;
     }
+    //busca o desconto da nota
+
+    $oDaoempdescontonota  = db_utils::getDao('empdescontonota');
+    $Odesconto = $oDaoempdescontonota->sql_record("SELECT sum(x.e999_desconto) as desconto FROM
+    (SELECT DISTINCT e999_nota,
+                     e999_empenho,
+                     e999_desconto
+     FROM empdescontonota
+     WHERE e999_empenho = {$this->oEmpenhoFinanceiro->getNumero()}) x");
+    $Odesconto = db_utils::fieldsMemory($Odesconto);
+    $nValorTotalNota = $nValorTotalNota - (float) $Odesconto->desconto;
     return $nValorTotalNota;
   }
 

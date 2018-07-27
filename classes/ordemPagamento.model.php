@@ -113,11 +113,11 @@ class ordemPagamento {
    * metodo construtor;
    * @param integer $iCodOrdem codigo da ordem
    */
-  function __construct($iCodOrdem) {
+  function __construct($iCodOrdem, $dataLancamento = null) {
 
     $this->iCodOrdem    = $iCodOrdem;
     $this->iAnoUsu      = db_getsession("DB_anousu");
-    $this->dtDataUsu    = date("Y-m-d",db_getsession("DB_datausu"));
+    $this->dtDataUsu    = ($dataLancamento==null)?date("Y-m-d",db_getsession("DB_datausu")):$dataLancamento;
     $this->oDaoPagOrdem = db_utils::getDao("pagordem");
   }
   /**
@@ -655,7 +655,7 @@ class ordemPagamento {
       $oLancamentoAuxiliarPrestacaoConta->setNumeroEmpenho($oDadosOrdem->e60_numemp);
       $oLancamentoAuxiliarPrestacaoConta->setValorTotal($this->getValorPago());
       $oLancamentoAuxiliarPrestacaoConta->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
-      $oEventoContabilPrestacaoConta->executaLancamento($oLancamentoAuxiliarPrestacaoConta);
+      $oEventoContabilPrestacaoConta->executaLancamento($oLancamentoAuxiliarPrestacaoConta, $this->dtDataUsu);
     }
 
     /*
@@ -1256,7 +1256,7 @@ class ordemPagamento {
       $oLancamentoAuxiliar->setNumeroEmpenho($oDadosOrdem->e60_numemp);
       $oLancamentoAuxiliar->setValorTotal($this->getValorPago());
 
-      $oEventoContabil->executaLancamento($oLancamentoAuxiliar);
+      $oEventoContabil->executaLancamento($oLancamentoAuxiliar, $this->dtDataUsu);
     }
     // Fim dos lancamento de prestacao de conta
 

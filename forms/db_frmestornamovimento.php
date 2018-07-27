@@ -82,9 +82,10 @@ if (!isset($reimpressao)) {  // quando reimpessão não precisa validar
 
       $clempprestaitem = new cl_empprestaitem();
       $sSql            = $clempprestaitem->sql_query( null,
-        "sum(e46_valor) as total_prestado, e45_conferido",
+        "coalesce(sum(e46_valor)-(sum(e46_desconto)+(select coalesce(sum(e999_desconto),0) from empdescontonota where e999_empenho  = emppresta.e45_numemp)),0) AS total_prestado, e45_conferido",
         null,
-        "e45_numemp = {$e50_numemp} and e45_codmov = {$e81_codmov} group by e45_conferido" );
+        "e45_numemp = {$e50_numemp} and e45_codmov = {$e81_codmov} group by e45_conferido,e45_numemp" );
+
       $result          = $clempprestaitem->sql_record( $sSql );
 
       $sql             = $clempagemov->sql_query_file( null,
@@ -334,6 +335,14 @@ if ($oDaoPagOrdemConta->numrows > 0) {
                 </td>
                 <td>
                   <? db_textarea('c72_complem', 2, 50, 0, true, 'text', $db_opcao, "") ?>
+                </td>
+              </tr>
+              <tr>
+                <td nowrap title="Data de lançamento">
+                  <b>Data de lançamento</b>
+                </td>
+                <td>
+                  <?  db_inputdata('dataLancamento','','','',true,'text',2); ?>
                 </td>
               </tr>
             </table>
@@ -858,6 +867,10 @@ if ($oDaoPagOrdemConta->numrows > 0) {
     if ($('estornarpagamento').checked) {
       lEstornarPagamento = true;
     }
+    if($F('dataLancamento')==''){
+      alert('Data de lançamento não informada.');
+      return false;
+    }
     var aRetencoes             = gridRetencoes.getSelection();
 
     if (!lEstornarPagamento && aRetencoes.length == 0) {
@@ -895,6 +908,7 @@ if ($oDaoPagOrdemConta->numrows > 0) {
     oRequisicao.iCheque        = $F('k12_cheque');
     oRequisicao.iNota          = $F('e50_codord');
     oRequisicao.iConta         = $F('k13_conta');
+    oRequisicao.dataLancamento = $F('dataLancamento');
     oRequisicao.lEstornaCheque = $('estornarcheque').checked;
     oRequisicao.lEstornarPgto  = lEstornarPagamento;
     oRequisicao.sHistorico     = encodeURIComponent($F('c72_complem').replace(/\"/g, "<aspa>"));

@@ -112,6 +112,16 @@ db_app::load("estilos.css, AjaxRequest.js");
           </td>
         </tr>
         <tr>
+          <td nowrap="nowrap">
+            <b>Data de lançamento</b>
+          </td>
+          <td nowrap="nowrap">
+            <?php
+              db_inputdata('dataLancamento','','','',true,'text',2);
+            ?>
+          </td>
+        </tr>
+        <tr>
           <td colspan="2">
             <fieldset>
               <legend><b>Motivo da Reabertura</b></legend>
@@ -203,11 +213,17 @@ oBotaoProcessar.observe('click', function() {
     alert('Você deve informar o motivo da Reabertura.')
     return false;
   }
+  if ($F('dataLancamento') == '') {
+
+    alert('Você deve informar a data de lançamento.')
+    return false;
+  }
 
   var oObject                = new Object();
   oObject.exec               = "reaberturaConferencia";
   oObject.iSequencialEmpenho = $F('e45_sequencial');
   oObject.iNumeroEmpenho = $F('e45_numemp');
+  oObject.dataLancamento = $F('dataLancamento');
   oObject.sComplemento       = encodeURIComponent(tagString($F('complementoReabertura')));
 
   js_divCarregando('Processando Reabertura da Conferência...','msgBox');

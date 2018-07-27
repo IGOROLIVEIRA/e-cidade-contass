@@ -68,107 +68,107 @@ switch ($oParam->exec) {
 
   case "getNotas" :
 
-    $oAgenda = new agendaPagamento();
-    $oAgenda->setUrlEncode(true);
-    $sWhere  = " ((round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2)) > 0 ";
-    $sWhere .= " and (round(e60_vlremp,2)-round(e60_vlranu,2)-round(e60_vlrpag,2)) > 0) ";
-    $sWhere .= " and e80_data  <= '".date("Y-m-d",db_getsession("DB_datausu"))."'";
-    $sWhere .= " and e97_codforma = {$oParam->params[0]->iForma} and e81_cancelado is null";
+  $oAgenda = new agendaPagamento();
+  $oAgenda->setUrlEncode(true);
+  $sWhere  = " ((round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2)) > 0 ";
+  $sWhere .= " and (round(e60_vlremp,2)-round(e60_vlranu,2)-round(e60_vlrpag,2)) > 0) ";
+  $sWhere .= " and e80_data  <= '".date("Y-m-d",db_getsession("DB_datausu"))."'";
+  $sWhere .= " and e97_codforma = {$oParam->params[0]->iForma} and e81_cancelado is null";
 
-    if ($oParam->params[0]->iForma == 2) {
+  if ($oParam->params[0]->iForma == 2) {
 
-      $sWhere .= " and e91_codcheque is not null";
-      if ($oParam->params[0]->dtChequeIni != "" && $oParam->params[0]-> dtChequeFim== "") {
-        $sWhere .= " and e86_data = '".implode("-",array_reverse(explode("/",$oParam->params[0]->dtChequeIni)))."'";
-      } else if ($oParam->params[0]->dtChequeIni != "" && $oParam->params[0]->dtChequeFim != "") {
+    $sWhere .= " and e91_codcheque is not null";
+    if ($oParam->params[0]->dtChequeIni != "" && $oParam->params[0]-> dtChequeFim== "") {
+      $sWhere .= " and e86_data = '".implode("-",array_reverse(explode("/",$oParam->params[0]->dtChequeIni)))."'";
+    } else if ($oParam->params[0]->dtChequeIni != "" && $oParam->params[0]->dtChequeFim != "") {
 
-        $dtChequeIni = implode("-",array_reverse(explode("/",$oParam->params[0]->dtChequeIni)));
-        $dtChequeFim = implode("-",array_reverse(explode("/",$oParam->params[0]->dtChequeFim)));
-        $sWhere .= " and e86_data between '{$dtChequeIni}' and '{$dtChequeFim}'";
+      $dtChequeIni = implode("-",array_reverse(explode("/",$oParam->params[0]->dtChequeIni)));
+      $dtChequeFim = implode("-",array_reverse(explode("/",$oParam->params[0]->dtChequeFim)));
+      $sWhere .= " and e86_data between '{$dtChequeIni}' and '{$dtChequeFim}'";
 
-      } else if ($oParam->params[0]->dtChequeIni == "" && $oParam->params[0]->dtChequeFim != "") {
+    } else if ($oParam->params[0]->dtChequeIni == "" && $oParam->params[0]->dtChequeFim != "") {
 
-        $dtChequeFim  = implode("-",array_reverse(explode("/",$oParam->params[0]->dtChequeFim)));
-        $sWhere    .= " and e86_data <= '{$dtChequeFim}'";
-      }
-
-      if ($oParam->params[0]->sNumeroCheque != "") {
-        $sWhere    .= " and e91_cheque = '{$oParam->params[0]->sNumeroCheque}'";
-      }
-
+      $dtChequeFim  = implode("-",array_reverse(explode("/",$oParam->params[0]->dtChequeFim)));
+      $sWhere    .= " and e86_data <= '{$dtChequeFim}'";
     }
 
-    $sWhere .= " and k12_data is null";
-    $sWhere .= " and e60_instit = ".db_getsession("DB_instit");
-    if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim == "") {
-      $sWhere .= " and e50_codord = {$oParam->params[0]->iOrdemIni}";
-    } else if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim != "") {
-      $sWhere .= " and e50_codord between  {$oParam->params[0]->iOrdemIni} and {$oParam->params[0]->iOrdemFim}";
+    if ($oParam->params[0]->sNumeroCheque != "") {
+      $sWhere    .= " and e91_cheque = '{$oParam->params[0]->sNumeroCheque}'";
     }
 
-    if (isset($oParam->params[0]->iOrdemBanc) && $oParam->params[0]->iOrdemBanc != '') {
-      $sSqlOrdem = "select k00_codord from ordembancariapagamento where k00_codordembancaria = {$oParam->params[0]->iOrdemBanc}";
-      $rsResultOrdem = db_query($sSqlOrdem);
-      $aOrdem = array();
-      for ($iCont = 0; $iCont < pg_num_rows($rsResultOrdem); $iCont++) {
-        $aOrdem[] = db_utils::fieldsMemory($rsResultOrdem, $iCont)->k00_codord;
-      }
-      $sWhere .= " and e50_codord in (".implode(",", $aOrdem).") ";
+  }
+
+  $sWhere .= " and k12_data is null";
+  $sWhere .= " and e60_instit = ".db_getsession("DB_instit");
+  if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim == "") {
+    $sWhere .= " and e50_codord = {$oParam->params[0]->iOrdemIni}";
+  } else if ($oParam->params[0]->iOrdemIni != '' && $oParam->params[0]->iOrdemFim != "") {
+    $sWhere .= " and e50_codord between  {$oParam->params[0]->iOrdemIni} and {$oParam->params[0]->iOrdemFim}";
+  }
+
+  if (isset($oParam->params[0]->iOrdemBanc) && $oParam->params[0]->iOrdemBanc != '') {
+    $sSqlOrdem = "select k00_codord from ordembancariapagamento where k00_codordembancaria = {$oParam->params[0]->iOrdemBanc}";
+    $rsResultOrdem = db_query($sSqlOrdem);
+    $aOrdem = array();
+    for ($iCont = 0; $iCont < pg_num_rows($rsResultOrdem); $iCont++) {
+      $aOrdem[] = db_utils::fieldsMemory($rsResultOrdem, $iCont)->k00_codord;
     }
+    $sWhere .= " and e50_codord in (".implode(",", $aOrdem).") ";
+  }
 
-    if ($oParam->params[0]->dtDataIni != "" && $oParam->params[0]->dtDataFim == "") {
-      $sWhere .= " and e50_data = '".implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataIni)))."'";
-    } else if ($oParam->params[0]->dtDataIni != "" && $oParam->params[0]->dtDataFim != "") {
+  if ($oParam->params[0]->dtDataIni != "" && $oParam->params[0]->dtDataFim == "") {
+    $sWhere .= " and e50_data = '".implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataIni)))."'";
+  } else if ($oParam->params[0]->dtDataIni != "" && $oParam->params[0]->dtDataFim != "") {
 
-      $dtDataIni = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataIni)));
-      $dtDataFim = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataFim)));
-      $sWhere .= " and e50_data between '{$dtDataIni}' and '{$dtDataFim}'";
+    $dtDataIni = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataIni)));
+    $dtDataFim = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataFim)));
+    $sWhere .= " and e50_data between '{$dtDataIni}' and '{$dtDataFim}'";
 
-    } else if ($oParam->params[0]->dtDataIni == "" && $oParam->params[0]->dtDataFim != "") {
+  } else if ($oParam->params[0]->dtDataIni == "" && $oParam->params[0]->dtDataFim != "") {
 
-      $dtDataFim  = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataFim)));
-      $sWhere    .= " and e50_data <= '{$dtDataFim}'";
-    }
+    $dtDataFim  = implode("-",array_reverse(explode("/",$oParam->params[0]->dtDataFim)));
+    $sWhere    .= " and e50_data <= '{$dtDataFim}'";
+  }
 
     //Filtro para Empenho
-    if ($oParam->params[0]->iCodEmp != '' and $oParam->params[0]->iCodEmp2 == "") {
+  if ($oParam->params[0]->iCodEmp != '' and $oParam->params[0]->iCodEmp2 == "") {
 
-      if (strpos($oParam->params[0]->iCodEmp,"/")) {
+    if (strpos($oParam->params[0]->iCodEmp,"/")) {
 
-        $aEmpenho = explode("/",$oParam->params[0]->iCodEmp);
-        $sWhere .= " and e60_codemp = '{$aEmpenho[0]}' and e60_anousu={$aEmpenho[1]}";
+      $aEmpenho = explode("/",$oParam->params[0]->iCodEmp);
+      $sWhere .= " and e60_codemp = '{$aEmpenho[0]}' and e60_anousu={$aEmpenho[1]}";
 
-      } else {
-        $sWhere .= " and e60_codemp = '{$oParam->params[0]->iCodEmp}' and e60_anousu=".db_getsession("DB_anousu");
-      }
-
-    } else if ($oParam->params[0]->iCodEmp != "" and $oParam->params[0]->iCodEmp2 != "") {
-
-      $sWhere .= "  and (";
-      if (strpos($oParam->params[0]->iCodEmp,"/")) {
-
-        $aEmpenho = explode("/",$oParam->params[0]->iCodEmp);
-        $sWhere .= " (cast(e60_codemp as integer) >= {$aEmpenho[0]} and e60_anousu={$aEmpenho[1]} )";
-
-      } else {
-        $sWhere .= " (cast(e60_codemp as integer) >= {$oParam->params[0]->iCodEmp} and e60_anousu=".db_getsession("DB_anousu").")";
-      }
-      if (strpos($oParam->params[0]->iCodEmp2,"/")) {
-
-        $aEmpenho = explode("/",$oParam->params[0]->iCodEmp2);
-        $sWhere .= " or  (cast(e60_codemp as integer) <= {$aEmpenho[0]} and e60_anousu={$aEmpenho[1]} )";
-
-      } else {
-        $sWhere .= "  or (cast(e60_codemp as integer) <= {$oParam->params[0]->iCodEmp2} and e60_anousu=".db_getsession("DB_anousu").")";
-      }
-      $sWhere .= ") ";
-
+    } else {
+      $sWhere .= " and e60_codemp = '{$oParam->params[0]->iCodEmp}' and e60_anousu=".db_getsession("DB_anousu");
     }
+
+  } else if ($oParam->params[0]->iCodEmp != "" and $oParam->params[0]->iCodEmp2 != "") {
+
+    $sWhere .= "  and (";
+    if (strpos($oParam->params[0]->iCodEmp,"/")) {
+
+      $aEmpenho = explode("/",$oParam->params[0]->iCodEmp);
+      $sWhere .= " (cast(e60_codemp as integer) >= {$aEmpenho[0]} and e60_anousu={$aEmpenho[1]} )";
+
+    } else {
+      $sWhere .= " (cast(e60_codemp as integer) >= {$oParam->params[0]->iCodEmp} and e60_anousu=".db_getsession("DB_anousu").")";
+    }
+    if (strpos($oParam->params[0]->iCodEmp2,"/")) {
+
+      $aEmpenho = explode("/",$oParam->params[0]->iCodEmp2);
+      $sWhere .= " or  (cast(e60_codemp as integer) <= {$aEmpenho[0]} and e60_anousu={$aEmpenho[1]} )";
+
+    } else {
+      $sWhere .= "  or (cast(e60_codemp as integer) <= {$oParam->params[0]->iCodEmp2} and e60_anousu=".db_getsession("DB_anousu").")";
+    }
+    $sWhere .= ") ";
+
+  }
     //echo "<br>".$sWhere;
     //filtro para filtrar por credor
-    if ($oParam->params[0]->iNumCgm != '') {
-      $sWhere .= " and (e60_numcgm = {$oParam->params[0]->iNumCgm})";
-    }
+  if ($oParam->params[0]->iNumCgm != '') {
+    $sWhere .= " and (e60_numcgm = {$oParam->params[0]->iNumCgm})";
+  }
 
     /*
      * Conta pagadora
@@ -213,7 +213,7 @@ switch ($oParam->exec) {
     }
     break;
 
-  case "pagarMovimento" :
+    case "pagarMovimento" :
 
     $oRetorno = new stdClass();
     $oRetorno->status       = 1;
@@ -268,7 +268,7 @@ switch ($oParam->exec) {
     echo $oJson->encode($oRetorno);
     break;
 
-  case "estornarPagamento":
+    case "estornarPagamento":
 
     $oRetorno = new stdClass();
     $oRetorno->status         = 1;
@@ -280,13 +280,37 @@ switch ($oParam->exec) {
 
 
       db_inicio_transacao();
-      $oOrdemPagamento = new ordemPagamento($oParam->iNota);
+      $dataLancamento = new DBDate($oParam->dataLancamento);
+      $dataLancamento = $dataLancamento->getDate();
+
+      $oOrdemPagamento = new ordemPagamento($oParam->iNota, $dataLancamento);
       $oOrdemPagamento->setCheque($oParam->iCheque);
       $oOrdemPagamento->setChequeAgenda($oParam->iCodCheque);
       $oOrdemPagamento->setConta($oParam->iConta);
       $oOrdemPagamento->setValorPago($oParam->nValorEstornar);
       $oOrdemPagamento->setMovimentoAgenda($oParam->iCodMov);
       $oOrdemPagamento->setHistorico($oParam->sHistorico);
+      $nEmpenho = $oOrdemPagamento->getDadosOrdem()->e50_numemp;
+
+
+
+      if(pg_num_rows(db_query("SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." "))>0){
+        $oConsultaFimPeriodoContabil = db_query("SELECT * FROM condataconf WHERE c99_data < '$dataLancamento' AND c99_anousu = ".db_getsession('DB_anousu')." ");
+
+        if(pg_num_rows($oConsultaFimPeriodoContabil) == 0){
+          throw new Exception("Data informada inferior à data do fim do período contábil.");
+        }
+      }
+
+      $oConsultaDataLancamento = db_query("SELECT *
+        FROM conlancamemp
+        JOIN conlancam ON c75_codlan=c70_codlan
+        WHERE c75_numemp = {$nEmpenho} AND c75_data > '$dataLancamento'
+        ORDER by c75_data DESC");
+
+      if(pg_num_rows($oConsultaDataLancamento) > 0){
+        throw new Exception("Já existe um lançamento com a data posterior à informada.");
+      }
 
       if ($oParam->lEstornarPgto) {
 
@@ -392,7 +416,7 @@ switch ($oParam->exec) {
     echo $oJson->encode($oRetorno);
     break;
 
-  case "Autenticar" :
+    case "Autenticar" :
 
     $oRetorno = new stdClass();
     $oRetorno->status         = 1;
@@ -424,7 +448,7 @@ switch ($oParam->exec) {
    echo $oJson->encode($oRetorno);
    if ($fd) {
     fclose($fd);
-   } */
+  } */
 
-    break;
+  break;
 }

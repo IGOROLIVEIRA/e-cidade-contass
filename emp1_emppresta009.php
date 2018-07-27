@@ -26,6 +26,7 @@
  */
 
 require_once("libs/db_stdlib.php");
+require_once ("std/DBDate.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_app.utils.php");
 require_once("libs/db_utils.php");
@@ -90,57 +91,77 @@ if ( isset($alterar) ) {
   if (USE_PCASP) {
 
     try {
+     $dataLancamento = new DBDate($e45_conferido);
+     $dataLancamento = $dataLancamento->getDate();
 
-      $oEmpenhoFinanceiro = new EmpenhoFinanceiro($e45_numemp);
-      $oPrestacaoConta    = new PrestacaoConta($oEmpenhoFinanceiro, $e45_sequencial);
+     if(pg_num_rows(db_query("SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." "))>0){
+      $oConsultaFimPeriodoContabil = db_query("SELECT * FROM condataconf WHERE c99_data < '$dataLancamento' AND c99_anousu = ".db_getsession('DB_anousu')." ");
 
-      if (count($oPrestacaoConta->getItens()) == 0) {
-        throw new Exception("Nenhum item lançado para prestação de contas.");
+      if(pg_num_rows($oConsultaFimPeriodoContabil) == 0){
+        throw new Exception("Data informada inferior à data do fim do período contábil.");
       }
-
-      $oPrestacaoConta->processarLancamento($observacao_lancamento);
-
-    } catch (Exception $eException) {
-
-      $erro_msg = $eException->getMessage();
-      $sqlerro = true;
-
-    } catch (BusinessException $eBusinessException) {
-
-      $erro_msg = $$eBusinessException->getMessage();
-      $sqlerro = true;
     }
-  }
-  db_fim_transacao($sqlerro);
 
-   $db_opcao = 2;
-   $db_botao = true;
+    $oConsultaDataLancamento = db_query("SELECT *
+      FROM conlancamemp
+      JOIN conlancam ON c75_codlan=c70_codlan
+      WHERE c75_numemp = $e45_numemp AND c75_data > '$dataLancamento'
+      ORDER by c75_data DESC");
+
+    if(pg_num_rows($oConsultaDataLancamento) > 0){
+      throw new Exception("Já existe um lançamento com a data posterior à informada.");
+    }
+
+    $oEmpenhoFinanceiro = new EmpenhoFinanceiro($e45_numemp);
+    $oPrestacaoConta    = new PrestacaoConta($oEmpenhoFinanceiro, $e45_sequencial, $e45_conferido);
+
+    if (count($oPrestacaoConta->getItens()) == 0) {
+      throw new Exception("Nenhum item lançado para prestação de contas.");
+    }
+
+    $oPrestacaoConta->processarLancamento($observacao_lancamento);
+
+  } catch (Exception $eException) {
+
+    $erro_msg = $eException->getMessage();
+    $sqlerro = true;
+
+  } catch (BusinessException $eBusinessException) {
+
+    $erro_msg = $$eBusinessException->getMessage();
+    $sqlerro = true;
+  }
+}
+db_fim_transacao($sqlerro);
+
+$db_opcao = 2;
+$db_botao = true;
 } else if(isset($chavepesquisa)) {
 
-   $db_opcao = 2;
-   $db_botao = true;
-   $result = $clemppresta->sql_record( $clemppresta->sql_query_emp( null,
-                                                                    '*',
-                                                                    null,
-                                                                    "e45_numemp = {$chavepesquisa} and e45_codmov = {$chavemovimento}") );
-   db_fieldsmemory($result,0);
+ $db_opcao = 2;
+ $db_botao = true;
+ $result = $clemppresta->sql_record( $clemppresta->sql_query_emp( null,
+  '*',
+  null,
+  "e45_numemp = {$chavepesquisa} and e45_codmov = {$chavemovimento}") );
+ db_fieldsmemory($result,0);
 }
 ?>
 <html>
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC style="margin-top: 30px;">
-<center>
-	<?
-	include("forms/db_frmemppresta09.php");
-	?>
-</center>
+  <center>
+   <?
+   include("forms/db_frmemppresta09.php");
+   ?>
+ </center>
 </body>
 </html>
 <?php
@@ -158,31 +179,31 @@ if ( isset($alterar) ) {
 
   } else {
 
-		db_msgbox(str_replace("\n","\\n",$erro_msg));
+    db_msgbox(str_replace("\n","\\n",$erro_msg));
 
-		echo "
-			<script>
-				parent.location.href = 'emp1_emppresta008.php';
-			</script>\n
-		";
+    echo "
+    <script>
+      parent.location.href = 'emp1_emppresta008.php';
+    </script>\n
+    ";
   }
 }
 
 if ( isset($chavepesquisa) && !isset($alterar) ) {
  echo "
-  <script>
-    function js_db_libera() {
+ <script>
+  function js_db_libera() {
 
-		  parent.document.formaba.encerra.disabled       = false;
-		  parent.document.formaba.empprestaitem.disabled = false;
+    parent.document.formaba.encerra.disabled       = false;
+    parent.document.formaba.empprestaitem.disabled = false;
 
-		  top.corpo.iframe_empprestaitem.location.href = 'emp1_empprestaitem001.php?tranca=true&e60_codemp=$e60_codemp&e46_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}';
-		  top.corpo.iframe_encerra.location.href       = 'emp1_empprestaencerra.php?tranca=true&e60_codemp=$e60_codemp&e60_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}';
-    }\n
+    top.corpo.iframe_empprestaitem.location.href = 'emp1_empprestaitem001.php?tranca=true&e60_codemp=$e60_codemp&e46_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}';
+    top.corpo.iframe_encerra.location.href       = 'emp1_empprestaencerra.php?tranca=true&e60_codemp=$e60_codemp&e60_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}';
+  }\n
 
-		js_db_libera();
-  </script>\n
- ";
+  js_db_libera();
+</script>\n
+";
 }
 
 if ( $db_opcao == 22 || $db_opcao == 33 ) {
