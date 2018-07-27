@@ -45,6 +45,7 @@ class cl_empprestaitem {
    var $e46_codigo = 0;
    var $e46_numemp = 0;
    var $e46_nota = null;
+   var $e46_desconto = 0;
    var $e46_valor = 0;
    var $e46_descr = null;
    var $e46_id_usuario = 0;
@@ -59,6 +60,7 @@ class cl_empprestaitem {
                  e46_codmater = int8 = Cód. Item
                  e46_nota = varchar(20) = Nota fiscal
                  e46_valor = float4 = Valor
+                 e46_desconto = float4 = Desconto
                  e46_valorunit = float8 = Valor Unit.
                  e46_quantidade = float8 = Quantidade
                  e46_descr = text = Descrição
@@ -92,6 +94,7 @@ class cl_empprestaitem {
        $this->e46_codmater = ($this->e46_codmater == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_codmater"]:$this->e46_codmater);
        $this->e46_nota = ($this->e46_nota == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_nota"]:$this->e46_nota);
        $this->e46_valorunit = ($this->e46_valorunit == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_valorunit"]:$this->e46_valorunit);
+       $this->e46_desconto = ($this->e46_desconto == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_desconto"]:$this->e46_desconto);
        $this->e46_quantidade = ($this->e46_quantidade == ""?@$GLOBALS["HTTP_POST_VARS"]["e46_quantidade"]:$this->e46_quantidade);
        $this->e46_quantidade = ($this->getServicoByItem($this->e46_codmater) == "t" ? 1 : $this->e46_quantidade);
        $this->e46_valor = ($this->e46_valorunit*$this->e46_quantidade);
@@ -138,6 +141,9 @@ class cl_empprestaitem {
      }
      if($this->e46_valor == null ){
        $this->e46_valor = 0;
+     }
+     if($this->e46_desconto == null ){
+       $this->e46_desconto = 0;
      }
      if($this->e46_valorunit == null ){
        $this->erro_sql = " Campo Valor Unit. não informado.";
@@ -232,6 +238,7 @@ class cl_empprestaitem {
                                       ,e46_codmater
                                       ,e46_nota
                                       ,e46_valor
+                                      ,e46_desconto
                                       ,e46_valorunit
                                       ,e46_quantidade
                                       ,e46_descr
@@ -248,6 +255,7 @@ class cl_empprestaitem {
                                ,$this->e46_codmater
                                ,'$this->e46_nota'
                                ,$this->e46_valor
+                               ,$this->e46_desconto
                                ,$this->e46_valorunit
                                ,$this->e46_quantidade
                                ,'$this->e46_descr'
@@ -373,6 +381,13 @@ class cl_empprestaitem {
        $virgula = ",";
        if(trim($this->e46_valor) == null ){
          $this->e46_valor = 0;
+       }
+     }
+     if(trim($this->e46_desconto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_desconto"])){
+       $sql  .= $virgula." e46_desconto = $this->e46_desconto ";
+       $virgula = ",";
+       if(trim($this->e46_desconto) == null){
+        $this->e46_desconto = 0;
        }
      }
      if(trim($this->e46_valorunit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e46_valorunit"])){

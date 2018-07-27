@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -60,30 +60,38 @@ if (isset($incluir)) {
   if (empty($e45_codmov)) {
 
     $erro_msg = _M("financeiro.empenho.emp1_empprestaitem001.movimento_nao_selecionado");
-  } else if ($sqlerro == false) {
+  }
+  else if ($sqlerro == false) {
 
 
-    $sSqlVerificaTotalItem = $clempprestaitem->sql_query_file(null, "coalesce(sum(e46_valor), 0) as valor ",
+    /*$sSqlVerificaTotalItem     = $clempprestaitem->sql_query_file(null, " coalesce(sum(e46_valor), 0) as valor ",
+                                                              null,
+                                                              "e46_emppresta  = {$oGet->e45_sequencial}"
+                                                             );
+    $sSqlVerificaTotalDesconto = $clempprestaitem->sql_query_file(null, " coalesce(sum(e46_desconto), 0) as desconto ",
                                                               null,
                                                               "e46_emppresta  = {$oGet->e45_sequencial}"
                                                              );
 
     $rsTotalItens        = $clempprestaitem->sql_record($sSqlVerificaTotalItem);
+    $rsTotalDesc         = $clempprestaitem->sql_record($sSqlVerificaTotalDesconto);
     $nValorTotalItens    = db_utils::fieldsMemory($rsTotalItens, 0)->valor;
+    $nDesconto           = db_utils::fieldsMemory($rsTotalDesc, 0)->desconto;
     $oEmpenhooFinanceiro = EmpenhoFinanceiroRepository::getEmpenhoFinanceiroPorNumero($e46_numemp);
 
       // OC 2489 - Acrescentado formatação dos valores.
-    if (round(($nValorTotalItens + $e46_valor),2) > round($oEmpenhooFinanceiro->getValorEmpenho(),2)) {
-
+    if (round(($nValorTotalItens + ($e46_valor-$e46_desconto)) - $nDesconto,2) > round($oEmpenhooFinanceiro->getValorEmpenho(),2)) {
       $sqlerro  = true;
       $erro_msg = _M("financeiro.empenho.emp1_empprestaitem001.valor_prestacao_maior_empenho");
-    }
+    }*/
     if (!$sqlerro) {
 
       db_inicio_transacao();
 
       $clempprestaitem->e46_id_usuario = db_getsession("DB_id_usuario");
       $clempprestaitem->e46_emppresta  = $oGet->e45_sequencial;
+      $clempprestaitem->e46_codmater   = $pc01_codmater;
+      $clempprestaitem->e46_desconto   = ($e46_desconto == '') ? 0 : $e46_desconto;
       $clempprestaitem->incluir(null);
 
       $erro_msg = $clempprestaitem->erro_msg;
@@ -100,24 +108,33 @@ if (isset($incluir)) {
     $erro_msg = _M("financeiro.empenho.emp1_empprestaitem001.movimento_nao_selecionado");
   } else if ($sqlerro == false) {
 
-    $sSqlVerificaTotalItem = $clempprestaitem->sql_query_file(null, "coalesce(sum(e46_valor), 0) as valor ",
+    /*$sSqlVerificaTotalItem = $clempprestaitem->sql_query_file(null, "coalesce(sum(e46_valor), 0) as valor ",
                                                               null,
                                                               "e46_emppresta  = {$oGet->e45_sequencial}
                                                               and e46_codigo <> {$e46_codigo}"
                                                             );
+    $sSqlVerificaTotalDesconto = $clempprestaitem->sql_query_file(null, " coalesce(sum(e46_desconto), 0) as desconto ",
+                                                              null,
+                                                              "e46_emppresta  = {$oGet->e45_sequencial}"
+                                                             );
 
     $rsTotalItens        = $clempprestaitem->sql_record($sSqlVerificaTotalItem);
+    $rsTotalDesc         = $clempprestaitem->sql_record($sSqlVerificaTotalDesconto);
     $nValorTotalItens    = db_utils::fieldsMemory($rsTotalItens, 0)->valor;
+    $nDesconto           = db_utils::fieldsMemory($rsTotalDesc, 0)->desconto;
     $oEmpenhooFinanceiro = EmpenhoFinanceiroRepository::getEmpenhoFinanceiroPorNumero($e46_numemp);
-    if (($nValorTotalItens + $e46_valor) > $oEmpenhooFinanceiro->getValorEmpenho()) {
+    if (round(($nValorTotalItens + ($e46_valor-$e46_desconto)) - $nDesconto,2) > round($oEmpenhooFinanceiro->getValorEmpenho(),2)) {
 
       $sqlerro  = true;
       $erro_msg = _M("financeiro.empenho.emp1_empprestaitem001.valor_prestacao_maior_empenho");
-    }
+    }*/
     if (!$sqlerro) {
 
       db_inicio_transacao();
+
       $clempprestaitem->e46_emppresta = $oGet->e45_sequencial;
+      $clempprestaitem->e46_codmater  = $pc01_codmater;
+      $clempprestaitem->e46_desconto  = !empty($e46_desconto) ? $e46_desconto : "0";
       $clempprestaitem->alterar($e46_codigo);
       $erro_msg = $clempprestaitem->erro_msg;
 
@@ -126,7 +143,7 @@ if (isset($incluir)) {
       }
 
 
-      db_fim_transacao($sqlerro);
+       db_fim_transacao($sqlerro);
     }
   }
 } else if (isset($excluir)) {
@@ -145,7 +162,7 @@ if (isset($incluir)) {
     db_fim_transacao($sqlerro);
   }
 }else if(isset($opcao)){
-   $result = $clempprestaitem->sql_record($clempprestaitem->sql_query_emp($e46_numemp,$e46_codigo));
+   $result = $clempprestaitem->sql_record($clempprestaitem->sql_query_emp($e46_numemp,$e46_codigo,'*'));
    if($result!=false && $clempprestaitem->numrows>0){
      db_fieldsmemory($result,0);
    }
@@ -170,7 +187,7 @@ if (isset($incluir)) {
 <?
 if (isset($alterar) || isset($excluir) || isset($incluir)) {
     db_msgbox($erro_msg);
-
+    echo " <script> top.corpo.iframe_encerra.location.reload(); </script> ";
     if ($clempprestaitem->erro_campo != "") {
         echo "<script> document.form1.".$clempprestaitem->erro_campo.".style.backgroundColor='#99A9AE';</script>";
         echo "<script> document.form1.".$clempprestaitem->erro_campo.".focus();</script>";

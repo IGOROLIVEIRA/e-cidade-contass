@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -109,7 +109,7 @@ db_app::load("estilos.css");
     <input type="button" id='btnProcessar' name='btnProcessar' value='Processar'>
   </form>
 </center>
-<? 
+<?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -126,9 +126,9 @@ var sRpc = "emp4_suprimentoFundos.RPC.php";
 function js_pesquisa() {
 
   var sUrl  = 'func_emppresta.php?';
-  sUrl     += 'fechamento=null&acertoPrestacaoContas=notnull&exibeMovimento=1'; 
+  sUrl     += 'fechamento=null&acertoPrestacaoContas=notnull&exibeMovimento=1';
   sUrl     += '&funcao_js=parent.js_preenchePesquisa|e45_sequencial|e60_numemp|e45_codmov|z01_nome|e45_acerta';
-    
+
   js_OpenJanelaIframe('',
                       'db_iframe_emppresta',
                       sUrl,
@@ -136,7 +136,7 @@ function js_pesquisa() {
 }
 
 function js_preenchePesquisa(iSequencial, iNumeroEmpenho, iCodigoMovimento, sCredor, dtAcertoPrestacaoContas) {
-  
+
   db_iframe_emppresta.hide();
   $('e45_sequencial').value = iSequencial;
   $('e45_numemp').value     = iNumeroEmpenho;
@@ -155,22 +155,23 @@ $('btnProcessar').observe('click', function() {
   var oObject            = new Object();
   oObject.exec           = "reaberturaPrestacaoConta";
   oObject.iSequencialEmpenho = $F('e45_sequencial');
-  
+  oObject.iNumeroEmpenho = $F('e45_numemp');
+
   js_divCarregando('Processando Reabertura...','msgBox');
   var objAjax   = new Ajax.Request (sRpc,{
                                           method:'post',
-                                          parameters:'json='+Object.toJSON(oObject), 
+                                          parameters:'json='+Object.toJSON(oObject),
                                           onComplete:js_retornoReabertura
                                          }
                                    );
-  
+
 });
 
 function js_retornoReabertura(oJson) {
 
-  js_removeObj("msgBox");  
+  js_removeObj("msgBox");
   var oRetorno = eval("("+oJson.responseText+")");
-  
+
   alert(oRetorno.message.urlDecode());
   js_pesquisa();
 

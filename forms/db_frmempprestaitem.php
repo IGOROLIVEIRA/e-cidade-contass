@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: empenho
@@ -54,7 +54,6 @@ if (isset($tranca)) {
     $db_botao = true;
     if (isset($novo) || isset($alterar) || isset($excluir) || (isset($incluir) && $sqlerro == false)) {
         $e46_codigo = "";
-        $e46_nota = "";
         $e46_valor = "";
         $e46_descr = "";
         $e46_id_usuario = "";
@@ -65,6 +64,7 @@ if (isset($tranca)) {
         $e46_codmater = "";
         $pc01_descrmater = "";
         $e46_valorunit = "";
+        $e46_desconto = "";
         $e46_quantidade = "";
     }
 }
@@ -123,7 +123,7 @@ if (isset($tranca)) {
                     </td>
                     <td>
                         <?
-                        db_input('e46_codmater', 8, $Ie46_codmater, true, 'text', 1, " onchange='js_pesquisa(false);'")
+                        db_input('e46_codmater', 8, $Ie46_codmater, true, 'text', 1, " onchange='js_pesquisa(false);'",'','','',10)
                         ?>
                         <?
                         db_input('pc01_descrmater', 30, @$Ipc01_descrmater, true, 'text', 3, '')
@@ -138,6 +138,11 @@ if (isset($tranca)) {
                         <?
                         db_input('e46_valorunit', 10, $Ie46_valorunit, true, 'text', $db_opcao, "onchange='js_calcula();'")
                         ?>
+                        <span style="float:right;">
+
+                        <b> Desconto:</b>
+                        <? db_input('e46_desconto', 10, $Ie46_desconto, true, 'text', $db_opcao, "") ?>
+                        </span>
                     </td>
                 </tr>
                 <tr>
@@ -158,6 +163,8 @@ if (isset($tranca)) {
                         <?
                         db_input('e46_valor', 10, $Ie46_valor, true, 'text', 3, "")
                         ?>
+
+
                     </td>
                 </tr>
                 <tr>
@@ -230,8 +237,8 @@ if (isset($tranca)) {
                     $chavepri = array("e46_numemp" => $e46_numemp, "e46_codigo" => @$e46_codigo);
                     $cliframe_alterar_excluir->chavepri = $chavepri;
                     $cliframe_alterar_excluir->sql = $clempprestaitem->sql_query_file(null, "*", "", "e46_emppresta=$oGet->e45_sequencial {$sWhere}");
-                    $cliframe_alterar_excluir->campos = "e46_codigo,e46_nome,e46_nota,e46_codmater,e46_quantidade,e46_valor,e46_cnpj,e46_cpf";
-                    $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
+                    $cliframe_alterar_excluir->campos = "e46_codigo,e46_nome,e46_nota,e46_codmater,e46_quantidade,e46_valor,e46_desconto,e46_cnpj,e46_cpf";
+                    $cliframe_alterar_excluir->legenda = "ITENS LAN\C7ADOS";
                     $cliframe_alterar_excluir->iframe_height = "160";
                     $cliframe_alterar_excluir->iframe_width = "700";
                     $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
@@ -240,13 +247,37 @@ if (isset($tranca)) {
             </tr>
         </table>
     </center>
+    <input type="hidden" name="controlaserv" id="controlaserv" value="">
 </form>
 <script>
+    <?php if($clempprestaitem->erro_status != 0) : ?>
+
+    if(confirm("Deseja adicionar outro \n item a esta mesma nota?") == true){
+      document.form1.e46_nota.value = '<?php echo $_POST['e46_nota']; ?>';
+      document.form1.e46_nota.readOnly = true;
+      document.form1.e46_nota.style.background = "#DEB887";
+      document.form1.e46_nota.style.color = "#643f4a";
+    } else {
+      document.form1.e46_nota.value = '';
+    }
+    <?php endif;?>
+    <?php if ($clempprestaitem->erro_status == 0 && $novo != true) : ?>
+      var verifica = '<?php echo $_POST['controlaserv']; ?>';
+      if (verifica == "true") {
+        document.form1.e46_quantidade.disabled = true;
+        document.form1.e46_quantidade.value = '1';
+      }
+    <?php endif;?>
+    <?php if($db_opcao == 2) : ?>
+      js_OpenJanelaIframe('', 'db_iframe_pcmater', 'func_pcmater.php?pesquisa_chave=' + document.form1.e46_codmater.value + '&funcao_js=parent.js_mostra', 'Pesquisa', false);
+    <?php endif;?>
     function js_pesquisa(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=parent.js_mostra1|pc01_codmater|pc01_descrmater|pc01_servico', 'Pesquisa', true);
         } else {
-            js_OpenJanelaIframe('', 'db_iframe_pcmater', 'func_pcmater.php?pesquisa_chave=' + document.form1.pc01_codmater.value + '&funcao_js=parent.js_mostra', 'Pesquisa', false);
+           if (document.form1.e46_codmater.value != '') {
+              js_OpenJanelaIframe('', 'db_iframe_pcmater', 'func_pcmater.php?pesquisa_chave=' + document.form1.e46_codmater.value + '&funcao_js=parent.js_mostra', 'Pesquisa', false);
+           }
         }
         if (document.form1.e46_codmater.value == "") {
             document.form1.e46_descrmater.value = "";
@@ -272,6 +303,8 @@ if (isset($tranca)) {
         opcao.setAttribute("name", "novo");
         opcao.setAttribute("value", "true");
         document.form1.appendChild(opcao);
+        document.form1.e46_nota.value = "";
+        document.form1.e46_quantidade.value = "";
         document.form1.submit();
     }
 
@@ -279,20 +312,24 @@ if (isset($tranca)) {
         if(serv == "t"){
             document.form1.e46_quantidade.disabled = true;
             document.form1.e46_quantidade.value = '1';
+            document.form1.controlaserv.value = true;
         }else{
             document.form1.e46_quantidade.disabled = false;
-            document.form1.e46_quantidade.value = '';
+            <?php if ($db_opcao != 2) : ?>
+              document.form1.e46_quantidade.value = '';
+            <?php endif; ?>
+            document.form1.controlaserv.value = false;
         }
         js_calcula();
     }
 
     function js_calcula(){
-        var vlUn = document.form1.e46_valorunit.value;
+        var vlUn  = document.form1.e46_valorunit.value;
         var quant = document.form1.e46_quantidade.value;
         document.form1.e46_valor.value = (vlUn * quant);
     }
 
-    // Pega o código da movimentacao do campo na primeira aba
+    // Pega o c\F3digo da movimentacao do campo na primeira aba
     document.form1.e45_codmov.value = top.corpo.iframe_emppresta.document.form1.e45_codmov.value;
 
     /**
@@ -312,33 +349,33 @@ if (isset($tranca)) {
 
     function cpfCnpj(v){
 
-        //Remove tudo o que não é dígito
+        //Remove tudo o que n\E3o \E9 d\EDgito
         v=v.replace(/\D/g,"")
 
         if (v_len > 11) { //CNPJ
 
-            //Coloca ponto entre o segundo e o terceiro dígitos
+            //Coloca ponto entre o segundo e o terceiro d\EDgitos
             v=v.replace(/^(\d{2})(\d)/,"$1.$2")
 
-            //Coloca ponto entre o quinto e o sexto dígitos
+            //Coloca ponto entre o quinto e o sexto d\EDgitos
             v=v.replace(/^(\d{2})\.(\d{3})(\d)/,"$1.$2.$3")
 
-            //Coloca uma barra entre o oitavo e o nono dígitos
+            //Coloca uma barra entre o oitavo e o nono d\EDgitos
             v=v.replace(/\.(\d{3})(\d)/,".$1/$2")
 
-            //Coloca um hífen depois do bloco de quatro dígitos
+            //Coloca um h\EDfen depois do bloco de quatro d\EDgitos
             v=v.replace(/(\d{4})(\d)/,"$1-$2")
 
         } else { //CPF
 
-            //Coloca um ponto entre o terceiro e o quarto dígitos
+            //Coloca um ponto entre o terceiro e o quarto d\EDgitos
             v=v.replace(/(\d{3})(\d)/,"$1.$2")
 
-            //Coloca um ponto entre o terceiro e o quarto dígitos
-            //de novo (para o segundo bloco de números)
+            //Coloca um ponto entre o terceiro e o quarto d\EDgitos
+            //de novo (para o segundo bloco de n\FAmeros)
             v=v.replace(/(\d{3})(\d)/,"$1.$2")
 
-            //Coloca um hífen entre o terceiro e o quarto dígitos
+            //Coloca um h\EDfen entre o terceiro e o quarto d\EDgitos
             v=v.replace(/(\d{3})(\d{1,2})$/,"$1-$2")
 
         }
