@@ -333,6 +333,7 @@ $subtotal_geral_finais = 0;
 //total
 $total_rp_n_proc = 0;
 $total_rp_proc = 0;
+$total_rp_nproc = 0;
 
 $total_anula_rp_n_proc = 0;
 $total_anula_rp_proc = 0;
@@ -357,7 +358,8 @@ $vprojativ = "";
 for ($x = 0; $x < $rows; $x++) {
   db_fieldsmemory($res, $x);
   $total_rp_proc += ($e91_vlrliq - $e91_vlrpag);
-  $total_mov_pagmento += $vlrpag;
+  $total_rp_nproc += round($vlrpagnproc,2);
+  $total_mov_pagmento += ($vlrpag+$vlrpagnproc);
 }
   // $total_rp_proc.' ';
   // $total_mov_pagmento.' ';
@@ -368,8 +370,9 @@ for ($x = 0; $x < $rows; $x++) {
 saldo de restos < saldo inicial das contas bancárias -> 0
 pago < saldo inicial das contas bancárias -> 0
 se nao : pago - saldo inicial das contas bancárias
+round(((e91_vlremp - e91_vlranu) - e91_vlrliq),2) total_rp_nproc
 */
-if($total_rp_proc < $total_anterior||$total_mov_pagmento < $total_anterior){
+if(($total_rp_proc + $total_rp_nproc) < $total_anterior || $total_mov_pagmento < $total_anterior){
   $iRestosAPagar = db_formatar(0,"f");
 }
 else{
@@ -879,7 +882,7 @@ ob_start();
                   db_fim_transacao();
                   $fTotalAnexoII = getTotalAnexoIISaude($instits,$dtini,$dtfim,$anousu);
                   ?>
-                  <td class="s20 bdleft" dir="ltr"  colspan="8">05 - Restos a pagar processados pagos inscritos sem disponibilidade - Consulta N. 932.736/2015</td>
+                  <td class="s20 bdleft" dir="ltr"  colspan="8">05 - Restos a pagar pagos inscritos sem disponibilidade - Consulta N. 932.736/2015</td>
                   <td class="s21" colspan="2"><?= db_formatar($iRestosAPagar,"f") ?></td>
                 </tr>
 
