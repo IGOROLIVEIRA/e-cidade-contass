@@ -244,16 +244,6 @@ VALUES (
                                          889,
                                          0);
 
-INSERT INTO empdescontonota (e999_empenho, e999_nota, e999_valor, e999_desconto)
-SELECT e46_numemp, e46_nota,
-                       (sum(COALESCE(e46_valor,0))-sum(COALESCE(e46_desconto,0))) AS valor,
-                       COALESCE(e999_desconto,0)
-FROM empprestaitem
-JOIN emppresta ON e46_emppresta=e45_sequencial
-LEFT JOIN empdescontonota ON e999_empenho=e46_numemp
-AND e999_nota = e46_nota
-GROUP BY e46_nota, e46_numemp, e999_desconto
-ORDER BY e46_nota;
 -- Fim do script
 
 COMMIT;
