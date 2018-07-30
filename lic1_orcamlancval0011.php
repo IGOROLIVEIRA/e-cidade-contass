@@ -62,6 +62,7 @@ $arr_vlnomesitens = Array();
 $arr_valoresitens = Array();
 $arr_quantitens = Array();
 $arr_vtnomesitens = Array();
+$arr_observacoes = Array();
 
 $res_empparametro = $clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu"),"e30_numdec")); if ($clempparametro->numrows > 0){ 
   db_fieldsmemory($res_empparametro,0); 
@@ -518,6 +519,7 @@ db_inputdata("pc23_validmin_$pc22_orcamitem",@$$dia,@$$mes,@$$ano,true,"text",$d
 		$arr_quantitens[$i] = $pc11_quant;
     $arr_vtnomesitens[$i] = "valor_$pc22_orcamitem";
     $arr_quantitensOrcada[$i] ="qtdeOrcada_$pc22_orcamitem"; 
+    $arr_observacoes[$i] = "obs_$pc22_orcamitem";
 	
   if($clpcorcamval->numrows>0){
 		  if(strpos($$valor,".")==""){
@@ -638,6 +640,7 @@ function js_importar(TouF){
     echo "}else{";
     echo "  document.form1.".$arr_vlnomesitens[$i].".value = '0.00';";
     echo "  document.form1.".$arr_vtnomesitens[$i].".value = '0.00';";
+    echo "  document.form1.".$arr_observacoes[$i].".value = '';";
     echo "}";
   }
   ?>
