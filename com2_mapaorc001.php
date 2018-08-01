@@ -131,7 +131,7 @@ $clrotulo->label("pc20_codorc");
                 </td>
               </tr>
               <tr>
-                  <td><b>Quantidade de cassas decimais:</b></td>
+                  <td><b>Quantidade de casas decimais:</b></td>
                   <td>
                       <?php
                       $aQuant_casas = array("2" => "2", "3" => "3");

@@ -258,11 +258,22 @@ if ($modelo == 1) {
     $pdf->cell(20, $alt, "", 0, 0, "L", 0);
     $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
     $pdf->cell(20, $alt, number_format($total_unit/$iContOrcamento,$oGet->quant_casas,',','.'), 0, 0, "R", 0);
-    $pdf->cell(20, $alt, number_format(($total_unit/$iContOrcamento)*$quant, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
+    if($quant_casas == 2){
+      $pdf->cell(20, $alt, number_format(round(($total_unit/$iContOrcamento),2)*$quant, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
+    }
+    else{
+      $pdf->cell(20, $alt, number_format(round(($total_unit/$iContOrcamento),3)*$quant, $oGet->quant_casas,',','.'), 0, 1, "R", 0); 
+    }
     $pdf->cell(279,$alt,'','',1,"L",0);
-    $total_media += ($total_unit/$iContOrcamento)*$quant;
+    if($quant_casas == 2){
+      $total_media += round(($total_unit/$iContOrcamento),2)*$quant;  
+    }
+    else{
+      $total_media += round($total_unit/$iContOrcamento,3)*$quant;   
+    }
+    
 
-  }
+  } 
 
   $troca = 1;
   for($y = 0; $y < $numrows_forne; $y ++) {
