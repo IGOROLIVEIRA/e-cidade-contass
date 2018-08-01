@@ -123,12 +123,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
 
 
-        $sSql = "SELECT si09_codorgaotce AS codorgao
+        $sSql = "SELECT si09_codorgaotce AS codorgao,
+                        si09_tipoinstit
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");
 
         $rsResult = db_query($sSql);
-        $sCodorgao = db_utils::fieldsMemory($rsResult, 0)->codorgao;
+        $sCodorgao = db_utils::fieldsMemory($rsResult, 0);
 
         $sSql = "SELECT DISTINCT 10 AS tiporegistro,
                 CASE
@@ -305,7 +306,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 ac16_deptoresponsavel,
                 2 as si106_despdecconvenioconge,
                 NULL as si106_nroconvenioconge,
-                NULL as si106_dataassinaturaconvenioconge
+                NULL as si106_dataassinaturaconvenioconge,
+                e60_tipodespesa
 
 FROM empempenho
 JOIN orcdotacao ON e60_coddot = o58_coddot
@@ -367,9 +369,11 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
 
             $oEmpenho = db_utils::fieldsMemory($rsEmpenho, $iCont);
 
-
-
-            $sSql = "select CASE WHEN o40_codtri = '0'
+            /**
+             *pega os codigos de unidade e subunidade do departamento do contrato somente necessario quando despesa for de contrato.
+             */
+            if($oEmpenho->despdeccontrato == 1) {
+                $sSql = "select CASE WHEN o40_codtri = '0'
                      OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,
                      CASE WHEN o41_codtri = '0'
                      OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS db01_unidade,o41_subunidade from db_departorg
@@ -377,31 +381,23 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
                      and db01_anousu = o41_anousu
                      JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                      where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oEmpenho->ac16_deptoresponsavel;
+                $rsDepart = db_query($sSql);
 
-            $rsDepart = db_query($sSql);
-            $sOrgDepart = db_utils::fieldsMemory($rsDepart, 0)->db01_orgao;
-            $sUnidDepart = db_utils::fieldsMemory($rsDepart, 0)->db01_unidade;
-            $sSubUnidade = db_utils::fieldsMemory($rsDepart, 0)->o41_subunidade;
+                $sOrgDepart = db_utils::fieldsMemory($rsDepart, 0)->db01_orgao;
+                $sUnidDepart = db_utils::fieldsMemory($rsDepart, 0)->db01_unidade;
+                $sSubUnidade = db_utils::fieldsMemory($rsDepart, 0)->o41_subunidade;
 
-
-            $sCodUnidade = str_pad($sOrgDepart, 2, "0", STR_PAD_LEFT) . str_pad($sUnidDepart, 3, "0", STR_PAD_LEFT);
-            if ($sSubUnidade == 1) {
-                $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
+                $sCodUnidade = str_pad($sOrgDepart, 2, "0", STR_PAD_LEFT) . str_pad($sUnidDepart, 3, "0", STR_PAD_LEFT);
+                if ($sSubUnidade == 1) {
+                    $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
+                }
             }
 
-
-
-
             if ($sTrataCodUnidade == 1) {
-
                 $sCodUnidade = str_pad($oEmpenho->o58_orgao, 2, "0", STR_PAD_LEFT);
                 $sCodUnidade .= str_pad($oEmpenho->o58_unidade, 3, "0", STR_PAD_LEFT);
-
-
             } else {
-
                 $sCodUnidade = $oEmpenho->codunidadesub;
-
             }
 
             $sElemento = substr($oEmpenho->naturezadadespesa, 0, 8);
@@ -446,7 +442,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             if (date('m', strtotime($oEmpenho->dtempenho)) < date('m', strtotime($oEmpenho->dataassinaturacontrato)) || $oEmpenho->dataassinaturacontrato == null) {
                 $oDadosEmpenho->si106_despdeccontrato = 2;
                 if ($oEmpenho->despdeccontrato == 3) {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
+                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao->codorgao;
                 } else {
                     $oDadosEmpenho->si106_codorgaorespcontrato = '';
                 }
@@ -457,7 +453,7 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
             }else {
                 $oDadosEmpenho->si106_despdeccontrato = $oEmpenho->despdeccontrato;
                 if ($oEmpenho->despdeccontrato == 3) {
-                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao;
+                    $oDadosEmpenho->si106_codorgaorespcontrato = $sCodorgao->codorgao;
                 } else {
                     $oDadosEmpenho->si106_codorgaorespcontrato = '';
                 }
@@ -493,15 +489,16 @@ LEFT JOIN acordo on ac26_acordo = ac16_sequencial
                 $oDadosEmpenho->si106_tipoprocesso = $oEmpenho->tipoprocesso;
             }
             $oDadosEmpenho->si106_cpfordenador = substr($oEmpenho->ordenador, 0, 11);
-
             /*
              * verificar se o tipo de despesa se enquadra nos elementos necessários para informar esse campo para RPPS
              */
-            $oDadosEmpenho->si106_tipodespesaemprpps = in_array(substr($sElemento, 0, 6), $aTipoDespEmpRPPS) ? ($oEmpenho->tipodespesa == '0' ? 1 : $oEmpenho->tipodespesa) : '0';
-
+            if($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6){
+                $oDadosEmpenho->si106_tipodespesaemprpps = $oEmpenho->e60_tipodespesa;
+            }else{
+                $oDadosEmpenho->si106_tipodespesaemprpps = null;
+            }
             $oDadosEmpenho->si106_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $oDadosEmpenho->si106_instit = db_getsession("DB_instit");
-
 
             $oDadosEmpenho->incluir();
             if ($oDadosEmpenho->erro_status == 0) {

@@ -271,20 +271,6 @@ db_app::load("DBFormCache.js");
       ?>
     </td>
   </tr>
-  <tr>
-      <td nowrap title="Tipos de despesa">
-        <strong>Tipos de despesa :</strong>
-      </td>
-      <td>
-        <?
-        /*if($e44_obriga == 0 && empty($e44_tipo)) {
-            $e44_tipo = $tipo;
-        }*/
-        $arr  = array('0'=>'Não se aplica','1'=>'Executivo','2'=>'Legislativo');
-        db_select("e54_tipodespesa", $arr, true, 1);
-        ?>
-      </td>
-  </tr>
 <?
  } else {
    $e54_concarpeculiar = 0;

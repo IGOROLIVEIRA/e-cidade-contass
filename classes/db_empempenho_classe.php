@@ -75,6 +75,7 @@ class cl_empempenho {
     var $e60_dataconvenio = null;
     /*OC4604 - LQD*/
     var $e60_datasentenca = null;
+    var $e60_tipodespesa = null;
     /*FIM OC4604 - LQD*/
     /*OC4401*/
     var $e60_id_usuario = null;
@@ -108,6 +109,7 @@ class cl_empempenho {
                  e60_dataconvenio = date = Data Convênio
                  e60_datasentenca = date = Data Senteça Judicial
                  e60_id_usuario = int4 = Número
+                 e60_e60_tipodespesa = int8 = tipo de despesa
                  ";
     //funcao construtor da classe
     function cl_empempenho() {
@@ -184,6 +186,7 @@ class cl_empempenho {
         }else{
             $this->e60_numemp = ($this->e60_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_numemp"]:$this->e60_numemp);
         }
+            $this->e60_tipodespesa = ($this->e60_tipodespesa == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"]:$this->e60_tipodespesa);
     }
     // funcao para inclusao
     function incluir ($e60_numemp){
@@ -415,6 +418,7 @@ class cl_empempenho {
                                       ,e60_dataconvenio
                                       ,e60_datasentenca
                                       ,e60_id_usuario
+                                      ,e60_tipodespesa
                        )
                 values (
                                 $this->e60_numemp
@@ -444,6 +448,7 @@ class cl_empempenho {
                                ,".($this->e60_dataconvenio == "null" || $this->e60_dataconvenio == ""?"null":"'".$this->e60_dataconvenio."'")."
                                ,".($this->e60_datasentenca == "null" || $this->e60_datasentenca == ""?"null":"'".$this->e60_datasentenca."'")."
                                ,$this->e60_id_usuario
+                               ,$this->e60_tipodespesa
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -778,6 +783,19 @@ class cl_empempenho {
             if(trim($this->e60_numconvenio) == null && $this->e60_convenio == 1){
                 $this->erro_sql = " Campo Número Convênio nao Informado.";
                 $this->erro_campo = "e60_numconvenio";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if(trim($this->e60_tipodespesa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"])){
+            $sql  .= $virgula." e60_tipodespesa = ".($this->e60_tipodespesa == ''? 'null' : $this->e60_tipodespesa);
+            $virgula = ",";
+            if(trim($this->e60_tipodespesa) == null){
+                $this->erro_sql = " Campo Tipo de Despesa não Informado.";
+                $this->erro_campo = "e60_tipodespesa";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
