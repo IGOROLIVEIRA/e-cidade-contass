@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -35,26 +35,30 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_coremp_classe.php");
 require_once("classes/db_pagordemnota_classe.php");
+include ("libs/db_liborcamento.php");
 
 $iAnoUsoSessao      = db_getsession("DB_anousu");
 $iInstituicaoSessao = db_getsession("DB_instit");
-$oGet               = db_utils::postMemory($_GET);
-// print_r($oGet);die();
-  
-$dtDataInicialBanco = implode("-", array_reverse(explode("/", $oGet->dtDataInicial)));
-$dtDataFinalBanco   = implode("-", array_reverse(explode("/", $oGet->dtDataFinal)));
-$oGet->lQuebraConta == "t" ? $oGet->lQuebraConta = true : $oGet->lQuebraConta = false;
-$oGet->lQuebraCredor == "t" ? $oGet->lQuebraCredor = true : $oGet->lQuebraCredor = false;
-$oGet->lQuebraRecurso == "t" ? $oGet->lQuebraRecurso = true : $oGet->lQuebraRecurso = false;
+$oPost               = db_utils::postMemory($_POST);
+$clselorcdotacao = new cl_selorcdotacao();
+
+
+$clselorcdotacao->setDados($oPost->filtra_despesa); // passa os parametros vindos da func_selorcdotacao_abas.php
+$sele_work = $clselorcdotacao->getDados(false);
+$dtDataInicialBanco = implode("-", array_reverse(explode("/", $oPost->dtDataInicial)));
+$dtDataFinalBanco   = implode("-", array_reverse(explode("/", $oPost->dtDataFinal)));
+$oPost->lQuebraConta == "t" ? $oPost->lQuebraConta = true : $oPost->lQuebraConta = false;
+$oPost->lQuebraCredor == "t" ? $oPost->lQuebraCredor = true : $oPost->lQuebraCredor = false;
+$oPost->lQuebraRecurso == "t" ? $oPost->lQuebraRecurso = true : $oPost->lQuebraRecurso = false;
 
 $aOrderBy    = array();
 $aGroup_by   = array();
 $aWhere      = array();
 $aWhereConta = array();
 
-if ($oGet->sTipoOrdem == "empenho") {
+if ($oPost->sTipoOrdem == "empenho") {
 
-  if (($oGet->lQuebraConta) && ($oGet->lQuebraCredor)) {
+  if (($oPost->lQuebraConta) && ($oPost->lQuebraCredor)) {
       $aGroup_by[] = " GROUP BY e60_numcgm,
                                todo.z01_nome,
                                k13_conta,
@@ -77,8 +81,8 @@ if ($oGet->sTipoOrdem == "empenho") {
                                 k13_conta,
                                 todo.o15_codtri,
                                 e60_codemp ";
-        // $where
-  }else if ($oGet->lQuebraCredor){
+
+  }else if ($oPost->lQuebraCredor){
       $aGroup_by[] = "GROUP BY e60_numcgm,
                                todo.z01_nome,
                                k13_conta,
@@ -101,7 +105,7 @@ if ($oGet->sTipoOrdem == "empenho") {
                          tipo,
                          k13_conta,
                          e60_codemp ";
-    }	 
+    }
 
   else {
 		$aOrderBy[] = "ORDER BY k12_data,
@@ -118,20 +122,20 @@ if ($oGet->sTipoOrdem == "empenho") {
 /*
  * Validar Datas
  */
-if ( !empty($oGet->dtDataInicial) && !empty($oGet->dtDataFinal) ) {
-  
+if ( !empty($oPost->dtDataInicial) && !empty($oPost->dtDataFinal) ) {
+
   $aWhere[] = "k12_data between '{$dtDataInicialBanco}' and '{$dtDataFinalBanco}'";
-  $head5    = "Ordem de {$oGet->dtDataInicial} até {$oGet->dtDataFinal}";
-} else if (!empty($oGet->dtDataInicial)) {
-  
+  $head5    = "Ordem de {$oPost->dtDataInicial} até {$oPost->dtDataFinal}";
+} else if (!empty($oPost->dtDataInicial)) {
+
   $aWhere[] = "k12_data >= '{$dtDataInicialBanco}'";
-  $head5    = "Ordem a partir de: {$oGet->dtDataInicial}";
-} else if (!empty($oGet->dtDataFinal)) {
-  
+  $head5    = "Ordem a partir de: {$oPost->dtDataInicial}";
+} else if (!empty($oPost->dtDataFinal)) {
+
   $aWhere[] = "k12_data <= '{$dtDataFinalBanco}'";
-  $head5    = "Ordem até: {$oGet->dtDataInicial}";
+  $head5    = "Ordem até: {$oPost->dtDataInicial}";
 } else {
-  
+
   $sSqlBuscaDataEmp   = "  select max(coremp.k12_data) as maior,                                    ";
   $sSqlBuscaDataEmp  .= "         min(coremp.k12_data) as menor                                     ";
   $sSqlBuscaDataEmp  .= "    from coremp                                                            ";
@@ -145,33 +149,33 @@ if ( !empty($oGet->dtDataInicial) && !empty($oGet->dtDataFinal) ) {
   $oDadosData         = db_utils::fieldsMemory($rsBuscaData, 0);
   $dtDataInicialBanco = $oDadosData->maior;
   $dtDataFinalBanco   = $oDadosData->menor;
-  $head5 = "Ordem de {$oGet->dtDataInicial} até {$oGet->dtDataFinal}";
+  $head5 = "Ordem de {$oPost->dtDataInicial} até {$oPost->dtDataFinal}";
 }
-  
-$sWhereContaPagadora = "";
-if (!empty($oGet->sContasSelecionadas)) {
-  $sWhereContaPagadora = "k13_conta in ({$oGet->sContasSelecionadas})";
-  $aWhere[]            = $sWhereContaPagadora;
-} 
 
-if (!empty($oGet->sCredoresSelecionados)) {
-  $aWhere[] = "e60_numcgm in ({$oGet->sCredoresSelecionados})";
+$sWhereContaPagadora = "";
+if (!empty($oPost->sContasSelecionadas)) {
+  $sWhereContaPagadora = "k13_conta in ({$oPost->sContasSelecionadas})";
+  $aWhere[]            = $sWhereContaPagadora;
+}
+
+if (!empty($oPost->sCredoresSelecionados)) {
+  $aWhere[] = "e60_numcgm in ({$oPost->sCredoresSelecionados})";
 }
 
 $sWhereRecursosSelecionados = "";
-if (!empty($oGet->sRecursosSelecionados))  {
-  $sWhereRecursosSelecionados = "o15_codtri::integer in ({$oGet->sRecursosSelecionados})";
+if (!empty($oPost->sRecursosSelecionados))  {
+  $sWhereRecursosSelecionados = "o15_codtri::integer in ({$oPost->sRecursosSelecionados})";
   $aWhere[]                   = $sWhereRecursosSelecionados;
 }
 
 $sWhereEmpenho = "";
-if ($oGet->iListaEmpenho == 0) {
+if ($oPost->iListaEmpenho == 0) {
   $sWhereEmpenho = '1 = 1';
 } else {
-  
-  if ($oGet->iListaEmpenho == 1) {
+
+  if ($oPost->iListaEmpenho == 1) {
     $sWhereEmpenho = "tipo = 'Emp'";
-  }elseif($oGet->iListaEmpenho == 3){
+  }elseif($oPost->iListaEmpenho == 3){
     $sWhereEmpenho = "tipo = 'EXT'";
   }
   else {
@@ -179,9 +183,9 @@ if ($oGet->iListaEmpenho == 0) {
   }
 }
 
-if (!empty($oGet->iTipoBaixa) && $oGet->iTipoBaixa == 2) {
+if (!empty($oPost->iTipoBaixa) && $oPost->iTipoBaixa == 2) {
   $aWhere[] = "k106_sequencial <> 2";
-} elseif (!empty($oGet->iTipoBaixa) && $oGet->iTipoBaixa == 3) {
+} elseif (!empty($oPost->iTipoBaixa) && $oPost->iTipoBaixa == 3) {
   $aWhere[] = "k106_sequencial = 2";
 }
 
@@ -216,7 +220,8 @@ $sSqlBuscaEmpenhos .= "            END AS tipo,                                 
 $sSqlBuscaEmpenhos .= "            k106_sequencial                                                          																				";
 $sSqlBuscaEmpenhos .= "     FROM coremp                                                          																							";
 $sSqlBuscaEmpenhos .= "     INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = {$iInstituicaoSessao}                                                      					";
-$sSqlBuscaEmpenhos .= "     INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu                                                          							";
+$sSqlBuscaEmpenhos .= "     INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu                                                                       ";
+$sSqlBuscaEmpenhos .= "     INNER JOIN orcelemento ON o58_codele = o56_codele                                                          							";
 $sSqlBuscaEmpenhos .= "     INNER JOIN orctiporec ON o58_codigo = o15_codigo                                                          														";
 $sSqlBuscaEmpenhos .= "     INNER JOIN pagordem ON e50_codord = k12_codord                                                          														";
 $sSqlBuscaEmpenhos .= "     LEFT  JOIN pagordemconta ON e50_codord = e49_codord                                                          													";
@@ -225,7 +230,8 @@ $sSqlBuscaEmpenhos .= "     INNER JOIN cgm ON cgm.z01_numcgm = e60_numcgm       
 $sSqlBuscaEmpenhos .= "     LEFT  JOIN cgm cgmordem ON cgmordem.z01_numcgm = e49_numcgm                                                          											";
 $sSqlBuscaEmpenhos .= "     INNER JOIN saltes ON saltes.k13_conta = corrente.k12_conta                                                          											";
 $sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupocorrente ON k105_id = corrente.k12_id AND k105_data = corrente.k12_data AND k105_autent = corrente.k12_autent            					";
-$sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupotipo ON k106_sequencial = k105_corgrupotipo                                                          										";
+$sSqlBuscaEmpenhos .= "     LEFT  JOIN corgrupotipo ON k106_sequencial = k105_corgrupotipo                                                                              ";
+$sSqlBuscaEmpenhos .= "     where {$sele_work}                                                          										";
 $sSqlBuscaEmpenhos .= "     UNION                                                          																									";
 $sSqlBuscaEmpenhos .= "     SELECT k12_empen,                                                          																						";
 $sSqlBuscaEmpenhos .= "                  k12_empen AS e60_numemp,                                                          																	";
@@ -241,7 +247,7 @@ $sSqlBuscaEmpenhos .= "                  k12_data,                              
 $sSqlBuscaEmpenhos .= "                  credito AS k13_conta,                                                          																	";
 $sSqlBuscaEmpenhos .= "                  o15_codtri,                                                          																				";
 $sSqlBuscaEmpenhos .= "                  descr_credito AS k13_descr,                                                          																";
-$sSqlBuscaEmpenhos .= "                  tipo,                                                          																					";
+$sSqlBuscaEmpenhos .= "                  tipo,                                                           																					";
 $sSqlBuscaEmpenhos .= "                  0 AS k106_sequencial                                                          																		";
 $sSqlBuscaEmpenhos .= "     FROM                                                          																									";
 $sSqlBuscaEmpenhos .= "         (SELECT k12_id,                                                          																					";
@@ -341,7 +347,7 @@ $sSqlBuscaEmpenhos .= "          INNER JOIN conplanoexe g ON saiu = g.c62_reduz 
 $sSqlBuscaEmpenhos .= "          INNER JOIN conplanoreduz j ON g.c62_reduz = j.c61_reduz AND j.c61_anousu = {$iAnoUsoSessao}                                                          		";
 $sSqlBuscaEmpenhos .= "          INNER JOIN orctiporec l ON j.c61_codigo = l.o15_codigo                                                          											";
 $sSqlBuscaEmpenhos .= "          INNER JOIN conplano h ON j.c61_codcon = h.c60_codcon AND j.c61_anousu = h.c60_anousu                                                          				";
-$sSqlBuscaEmpenhos .= "          ORDER BY tipo,                                                          																					";
+$sSqlBuscaEmpenhos .= "          ORDER BY tipo,                                                           																					";
 $sSqlBuscaEmpenhos .= "                   credito,                                                          																				";
 $sSqlBuscaEmpenhos .= "                   k12_data,                                                          																				";
 $sSqlBuscaEmpenhos .= "                   k12_autent) AS y                                                          																		";
@@ -349,18 +355,17 @@ $sSqlBuscaEmpenhos .= "     WHERE tipo = 'ext') AS todo                         
 $sSqlBuscaEmpenhos .= " WHERE {$sWhereEmpenho}                                                          																					";
 $sSqlBuscaEmpenhos .= "   AND {$sImplodeWhere} {$sImplodeGroupBy} {$sImplodeOrderBy}                                                          												";
 
-// print_r($sSqlBuscaEmpenhos);die();
 $rsExecutaBuscaEmpenho = db_query($sSqlBuscaEmpenhos);
 $iLinhasRetornadasBuscaEmpenho = pg_num_rows($rsExecutaBuscaEmpenho);
 if ($iLinhasRetornadasBuscaEmpenho == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Não existem empenhos para o filtro selecionado.");
 }
- 
+
 $total = 0;
 
 $aDadosImprimir = array();
 for ($iRowBusca = 0; $iRowBusca < $iLinhasRetornadasBuscaEmpenho; $iRowBusca++) {
-  
+
   $oDadoEmpenho = db_utils::fieldsMemory($rsExecutaBuscaEmpenho, $iRowBusca);
 
   if ( $oDadoEmpenho->tipo == "Emp" ) {
@@ -415,33 +420,33 @@ $iQuantBanco  = 0;
 
 $aTeste = array();
 foreach ($aDadosImprimir as $iIndice => $oDadoEmpenho) {
-  $oDadosAgrupados = new stdClass(); 
-  if ($oGet->lQuebraCredor && $oGet->lQuebraConta && $oGet->lQuebraRecurso ||($oGet->lQuebraConta && $oGet->lQuebraCredor)) { 
-         $aDadosAgrupados[$oDadoEmpenho->e60_numcgm.$oDadoEmpenho->k13_descr][] = $oDadoEmpenho;  
-  } else if($oGet->lQuebraCredor && $oGet->lQuebraRecurso){
+  $oDadosAgrupados = new stdClass();
+  if ($oPost->lQuebraCredor && $oPost->lQuebraConta && $oPost->lQuebraRecurso ||($oPost->lQuebraConta && $oPost->lQuebraCredor)) {
+         $aDadosAgrupados[$oDadoEmpenho->e60_numcgm.$oDadoEmpenho->k13_descr][] = $oDadoEmpenho;
+  } else if($oPost->lQuebraCredor && $oPost->lQuebraRecurso){
       $aDadosAgrupados[$oDadoEmpenho->e60_numcgm.$oDadoEmpenho->o15_codtri][] = $oDadoEmpenho;
-  } else if($oGet->lQuebraConta && $oGet->lQuebraRecurso){
+  } else if($oPost->lQuebraConta && $oPost->lQuebraRecurso){
       $aDadosAgrupados[$oDadoEmpenho->k13_conta.$oDadoEmpenho->o15_codtri][] = $oDadoEmpenho;
-  } else if($oGet->lQuebraCredor){
+  } else if($oPost->lQuebraCredor){
       $aDadosAgrupados[$oDadoEmpenho->e60_numcgm][] = $oDadoEmpenho;
-  } else if ($oGet->lQuebraConta) {
+  } else if ($oPost->lQuebraConta) {
       $aDadosAgrupados[$oDadoEmpenho->k13_conta][] = $oDadoEmpenho;
-  } else if ($oGet->lQuebraRecurso) {
+  } else if ($oPost->lQuebraRecurso) {
       $aDadosAgrupados[$oDadoEmpenho->o15_codtri][] = $oDadoEmpenho;
-  } 
+  }
   else $aDadosAgrupados[$oDadoEmpenho->k12_data][] = $oDadoEmpenho;
 }
 $count_dados = 0;
 foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
   $total_nadata = 0;
-  
+
   foreach ($aDadoEmpenhos as $oDadoEmpenho) {
-    
+
     if ($oPdf->gety() > $oPdf->h - 30 || $lTroca) {
       imprimeCabecalho($oPdf, $iAltura);
       $lTroca = false;
     }
-    
+
 
     $notas = "";
     $sepnotas = "";
@@ -450,7 +455,7 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $oPdf->cell(15, $iAltura, $oDadoEmpenho->k12_autent, 0, 0, "C", 0);
     $oPdf->cell(15, $iAltura, $oDadoEmpenho->k13_conta, 0, 0, "C", 0);
     $oPdf->cell(40, $iAltura, substr($oDadoEmpenho->k13_descr, 0, 25), 0, 0, "L", 0);
- 
+
 
     $oPdf->cell(18, $iAltura, $oDadoEmpenho->o15_codtri, 0, 0, "C", 0);
     $oPdf->cell(15, $iAltura, trim($oDadoEmpenho->e60_codemp) . '/' . $oDadoEmpenho->e60_anousu, 0, 0, "C", 0);
@@ -472,7 +477,7 @@ foreach ($aDadosAgrupados as $iIndice => $aDadoEmpenhos) {
     $oPdf->sety($iYlinha + 1);
 
     $total_nadata += $oDadoEmpenho->k12_valor;
-    $count_dados += 1; 
+    $count_dados += 1;
   }
   $total_geral += $total_nadata;
   $oPdf->setfont('arial', 'B', 7);
@@ -490,7 +495,7 @@ $oPdf->ln(3);
 $oPdf->Output();
 
 function imprimeCabecalho($oPdf, $iAltura) {
-  
+
   $oPdf->addpage("L");
   $oPdf->SetFont('arial','b',8);
   $oPdf->cell(20, $iAltura, "Data Autent",     1, 0, "C", 1);
