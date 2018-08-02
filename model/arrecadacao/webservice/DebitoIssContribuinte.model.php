@@ -175,6 +175,7 @@ class DebitoIssContribuinte {
     $oReciboDebito->setDataPagamento($this->oDataPagamento);
     $oReciboDebito->setTipoDebito($this->sTipoDebito);
     $oReciboDebito->setCodigoGuia($oDadosPlanilha->codigo_guia);
+    $oReciboDebito->setValorDesconto($oDadosPlanilha->nDesconto);
 
     $oDadosDebito = $oReciboDebito->gerarGuia();
 
