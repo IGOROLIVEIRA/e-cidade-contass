@@ -177,9 +177,14 @@ function js_executaIframe(val) {
           @db_selectrecord("pc01_codgrupo",$result,true,$db_opcao,"","","","0","js_troca(this.value);");
         ?>
 
+        <?
+          $arr_truefalse = array('f'=>'Não','t'=>'Sim');
+          db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);
+        ?>
+
     </td>
   </tr>
-   <? if(isset($pc01_codgrupo) || $db_opcao != 1) { ?>
+   <? if(isset($pc01_codgrupo) || $db_opcao != 1) : ?>
      <tr>
        <td> <?=$Lpc04_codsubgrupo?> </td>
        <td align='left'>
@@ -226,7 +231,36 @@ function js_executaIframe(val) {
         ?>
       </td>
       </tr>
-   <? }    ?>
+   <? endif;    ?>
+
+  <!--OC3770-->
+    <tr>
+      <td>
+        <strong>
+           Tabela
+        <strong>
+      </td>
+      <td>
+        <?
+        $aTabela = array("f"=>"Não","t"=>"Sim");
+        db_select("pc01_tabela",$aTabela,true,$db_opcao);
+        ?>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>
+           Taxa
+        <strong>
+      </td>
+      <td>
+        <?
+        $aTaxa = array("f"=>"Não","t"=>"Sim");
+        db_select("pc01_taxa",$aTaxa,true,$db_opcao);
+        ?>
+      </td>
+    </tr>
+    <!--FIM OC3770 -->
 
    <tr>
 		 <td>&nbsp;<td>

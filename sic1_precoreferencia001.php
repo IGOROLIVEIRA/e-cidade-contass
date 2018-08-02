@@ -28,12 +28,15 @@ if(isset($incluir)){
      	$sFuncao = "min";
      }
 
-     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),3) as valor from pcproc
-join pcprocitem on pc80_codproc = pc81_codproc 
-join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
-join pcorcamitem on pc31_orcamitem = pc22_orcamitem
-join pcorcamval on pc22_orcamitem = pc23_orcamitem
-where pc80_codproc = $si01_processocompra group by pc23_orcamitem";
+     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),3) as valor,
+                      round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
+                      round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
+                        from pcproc
+                        join pcprocitem on pc80_codproc = pc81_codproc
+                        join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
+                        join pcorcamitem on pc31_orcamitem = pc22_orcamitem
+                        join pcorcamval on pc22_orcamitem = pc23_orcamitem
+                        where pc80_codproc = $si01_processocompra group by pc23_orcamitem";
 
      $rsResult = db_query($sSql);
 
@@ -42,8 +45,15 @@ where pc80_codproc = $si01_processocompra group by pc23_orcamitem";
      	 $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
        $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
        $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
-
        $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;
+       if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
+        $clitemprecoreferencia->si02_vlpercreferencia = 0;
+       }
+       else if ($oItemOrc->percreferencia1 > 0 && $oItemOrc->percreferencia2 == 0) {
+        $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia1;
+       } else {
+          $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia2;
+       }
        $clitemprecoreferencia->incluir(null);
 
      }
@@ -70,7 +80,7 @@ where pc80_codproc = $si01_processocompra group by pc23_orcamitem";
 
     echo "<script>
     jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$clprecoreferencia->si01_processocompra}+'&quant_casas='+$quant_casas,
-			   
+
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);

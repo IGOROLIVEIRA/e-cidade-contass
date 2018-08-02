@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clpcorcam->rotulo->label();
@@ -37,7 +37,7 @@ function js_data_prazo(){
   var dia_atual = new Number(<?=date("d",db_getsession("DB_datausu"));?>);
   var mes_atual = new Number(<?=date("m",db_getsession("DB_datausu"));?>);
   var ano_atual = new Number(<?=date("Y",db_getsession("DB_datausu"));?>);
-  
+
   var dia_prazo = new Number(frm.pc21_prazoent_dia.value);
   var mes_prazo = new Number(frm.pc21_prazoent_mes.value);
   var ano_prazo = new Number(frm.pc21_prazoent_ano.value);
@@ -55,7 +55,7 @@ function js_data_prazo(){
   if (dia_atual.toString().length < 2){
        dia_atual = "0"+dia_atual;
   }
-  
+
   if (mes_atual.toString().length < 2){
        mes_atual = "0"+mes_atual;
   }
@@ -93,7 +93,7 @@ function js_data_validade(){
   if (dia_atual.toString().length < 2){
        dia_atual = "0"+dia_atual;
   }
-  
+
   if (mes_atual.toString().length < 2){
        mes_atual = "0"+mes_atual;
   }
@@ -116,8 +116,8 @@ function js_dias_prazo(){
   var dia_atual         = new Number(<?=date("d",db_getsession("DB_datausu"));?>);
   var mes_atual         = new Number(<?=date("m",db_getsession("DB_datausu"));?>);
   var ano_atual         = new Number(<?=date("Y",db_getsession("DB_datausu"));?>);
-  
-  var pc21_prazoent_dia = dia_atual + 1; 
+
+  var pc21_prazoent_dia = dia_atual + 1;
   var pc21_prazoent_mes = mes_atual;
   var pc21_prazoent_ano = ano_atual;
 
@@ -138,7 +138,7 @@ function js_dias_prazo(){
 
   if (mes == 0){
        mes += 1;
-  } 
+  }
 
   pc21_prazoent_mes = mes;
   pc21_prazoent_ano = data.getFullYear();
@@ -153,7 +153,7 @@ function js_dias_prazo(){
 
   frm.pc21_prazoent_dia.value = pc21_prazoent_dia;
   frm.pc21_prazoent_mes.value = pc21_prazoent_mes;
-  frm.pc21_prazoent_ano.value = pc21_prazoent_ano; 
+  frm.pc21_prazoent_ano.value = pc21_prazoent_ano;
 
   if (js_VerDaTa("pc21_prazoent_dia",pc21_prazoent_dia,pc21_prazoent_mes,pc21_prazoent_ano)==false||
       js_VerDaTa("pc21_prazoent_mes",pc21_prazoent_dia,pc21_prazoent_mes,pc21_prazoent_ano)==false||
@@ -207,7 +207,7 @@ function js_dias_validade(){
 
   if (mes == 0){
        mes += 1;
-  } 
+  }
 
   pc21_validadorc_mes = mes;
   pc21_validadorc_ano = data.getFullYear();
@@ -222,7 +222,7 @@ function js_dias_validade(){
 
   frm.pc21_validadorc_dia.value = pc21_validadorc_dia;
   frm.pc21_validadorc_mes.value = pc21_validadorc_mes;
-  frm.pc21_validadorc_ano.value = pc21_validadorc_ano; 
+  frm.pc21_validadorc_ano.value = pc21_validadorc_ano;
 
   if (js_VerDaTa("pc21_validadorc_dia",pc21_validadorc_dia,pc21_validadorc_mes,pc21_validadorc_ano)==false||
       js_VerDaTa("pc21_validadorc_mes",pc21_validadorc_dia,pc21_validadorc_mes,pc21_validadorc_ano)==false||
@@ -236,7 +236,7 @@ function js_dias_validade(){
        return false;
   }
 }
-function js_dalocation(valor){
+function js_dalocation(valor) {
   location.href = 'com1_orcamlancval001.php?pc20_codorc=<?=$pc20_codorc?>&sol=<?=$sol?>&pc21_orcamforne='+valor;
   document.form1.submit();
 }
@@ -250,33 +250,31 @@ function js_buscarcod(){
   for(var ii=0; ii < aColDatas.length; ii++) {
     if (aColDatas[ii].value == '') {
       alert('Preencha o(s) campo(s) validade mínima que estão marcados com *.');
-      return false;      
+      return false;
     }
   }
-
 
 
   for(i=0;i<obj.elements.length;i++){
     if(obj.elements[i].name.substr(0,6)=="valor_"){
       var valor=new Number(obj.elements[i].value);
-      retorno+=obj.elements[i].name+"_"+valor;	
+      retorno+=obj.elements[i].name+"_"+valor;
       erro0++;
     }
   }
- 
 
-  document.form1.valores.value = retorno;  
-  
+  document.form1.valores.value = retorno;
+
   retorno = "";
   for(i=0;i<obj.elements.length;i++){
     if(obj.elements[i].name.substr(0,6)=="vlrun_"){
       var valor=new Number(obj.elements[i].value);
-      retorno+=obj.elements[i].name+"_"+valor;	
+      retorno+=obj.elements[i].name+"_"+valor;
       erro0++;
     }
   }
   document.form1.valoresun.value = retorno;
-  
+
   retorno = "";
   for(i=0;i<obj.elements.length;i++){
     if(obj.elements[i].name.substr(0,5)=="qtde_"){
@@ -287,8 +285,20 @@ function js_buscarcod(){
   }
   document.form1.qtdades.value = retorno;
 
+  /*OC3770*/
+  retorno = "";
+  for(i=0;i<obj.elements.length;i++){
+    if(obj.elements[i].name.substr(0,13)=="percdesctaxa_"){
+      var valor=new Number(obj.elements[i].value);
+      retorno+=obj.elements[i].name+"_"+valor;
+      erro1++;
+    }
+  }
+  document.form1.valorperc.value = retorno;
+  /*FIM OC3770*/
 
-/*  
+
+/*
   retorno = "";
   ifen = "";
   div = "#";
@@ -319,10 +329,10 @@ function js_buscarcod(){
             div="";
        }
     }
-  } 
+  }
   document.form1.dataval.value = retorno;
-*/  
-  
+*/
+
   retorno = "";
   ifen = "";
   div = "#";
@@ -341,17 +351,17 @@ function js_buscarcod(){
           div="#";
        }else{
          div="";
-       }     
+       }
 		 }
 
     }
 
-  } 
+  }
 
 //  alert(retorno);
 //  return false;
 
-  document.form1.dataval.value = retorno;  
+  document.form1.dataval.value = retorno;
 
 
 retorno = "";
@@ -394,20 +404,24 @@ retorno = "";
 	  </td>
 	  <td width="50%" align='left'>
 	  <?
-    
+
 	    db_input('pc20_codorc',8,$Ipc20_codorc,true,'text',3,"");
-          db_input('valores',40,0,true,'hidden',3,"");
-          db_input('valoresun',40,0,true,'hidden',3,"");
-          db_input('qtdades',8,0,true,'hidden',3,"");
-          db_input('obss',8,0,true,'hidden',3,"");
-          db_input('sol',6,0,true,'hidden',3,"");
-          db_input('dataval',40,0,true,'hidden',3,"");	 
+      db_input('valores',40,0,true,'hidden',3,"");
+      db_input('valoresun',40,0,true,'hidden',3,"");
+      db_input('qtdades',8,0,true,'hidden',3,"");
+      db_input('obss',8,0,true,'hidden',3,"");
+      db_input('sol',6,0,true,'hidden',3,"");
+      db_input('dataval',40,0,true,'hidden',3,"");
+      /*OC3770*/
+      db_input('valorperc',40,0,true,'hidden',3,"");
+      db_input('pc80_criterioadjudicacao',40,0,true,'hidden',3,"");
+      /*FIM - OC3770*/
 	  ?>
 	  </td>
-        </tr>	
+        </tr>
 	<?
 	$voltar = false;
-	
+
 	$result_forne = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_orcamforne,z01_nome","pc21_orcamforne","pc21_codorc=$pc20_codorc"));
 	$numrows_forne = $clpcorcamforne->numrows;
 	if($numrows_forne>0){
@@ -416,9 +430,9 @@ retorno = "";
 	  }
           $qry = "";
 	  if(isset($pc21_orcamforne) && trim($pc21_orcamforne)!=""){
-	    $qry = "&pc21_orcamforne=$pc21_orcamforne";	    
+	    $qry = "&pc21_orcamforne=$pc21_orcamforne";
 	    $result_lancados = $clpcorcamval->sql_record($clpcorcamval->sql_query(null,null,"pc23_orcamforne,pc23_orcamitem,pc23_valor","","pcorcam.pc20_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));
-        // echo ($clpcorcamval->sql_query(null,null,"pc23_orcamforne,pc23_orcamitem,pc23_valor","","pcorcam.pc20_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));
+
 	    if($clpcorcamval->numrows>0 && $db_opcao!=3 && $db_opcao!=33){
 	      $voltar = true;
 	      $db_opcao=2;
@@ -431,78 +445,84 @@ retorno = "";
 		    </td>
 		    <td width='50%' align='left'>";
 	  db_selectrecord("pc21_orcamforne",$result_forne,true,$db_opcao,"","","","","js_dalocation(document.form1.pc21_orcamforne.value);");
-	  echo "    <td>      
+	  echo "    <td>
 		  </tr>";
 		  ?>
 		  <tr>
       <td align='right'><?=$Lpc21_validadorc?>
-      
-      	
-      <?
-      if(isset($pc21_orcamforne) && trim($pc21_orcamforne)!=""){
-      	$datausu = date("Y-m-d",db_getsession("DB_datausu"));
-        $result_data = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_validadorc,pc21_prazoent,pc21_validadorc - date '$datausu' as dias_validade,pc21_prazoent - date '$datausu'   as dias_prazo","pc21_orcamforne","pc21_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));
-      	if ($clpcorcamforne->numrows>0){
-      		db_fieldsmemory($result_data,0);
-      	}
-      }
-       
-      db_inputdata("pc21_validadorc",@$pc21_validadorc_dia,@$pc21_validadorc_mes,@$pc21_validadorc_ano,true,"text",$db_opcao,"onChange='js_data_validade();';","","","parent.js_data_validade();","",""); 
 
-      ?></td>
-      
+        <?
+        if(isset($pc21_orcamforne) && trim($pc21_orcamforne)!=""){
+        	$datausu = date("Y-m-d",db_getsession("DB_datausu"));
+          $result_data = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_validadorc,pc21_prazoent,pc21_validadorc - date '$datausu' as dias_validade,pc21_prazoent - date '$datausu'   as dias_prazo","pc21_orcamforne","pc21_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));
+        	if ($clpcorcamforne->numrows>0){
+        		db_fieldsmemory($result_data,0);
+        	}
+        }
+
+        db_inputdata("pc21_validadorc",@$pc21_validadorc_dia,@$pc21_validadorc_mes,@$pc21_validadorc_ano,true,"text",$db_opcao,"onChange='js_data_validade();';","","","parent.js_data_validade();","","");
+
+        ?>
+
+      </td>
+
       <td><?=$Lpc21_prazoent?>
       <?
-        db_inputdata("pc21_prazoent",@$pc21_prazoent_dia,@$pc21_prazoent_mes,@$pc21_prazoent_ano,true,"text",$db_opcao,"onChange='js_data_prazo();'","","","parent.js_data_prazo();","",""); 
+        db_inputdata("pc21_prazoent",@$pc21_prazoent_dia,@$pc21_prazoent_mes,@$pc21_prazoent_ano,true,"text",$db_opcao,"onChange='js_data_prazo();'","","","parent.js_data_prazo();","","");
       ?>
       </td>
-      </tr> 
+      </tr>
       <tr>
-	<td align="right">
-	<b>Dias de validade:</b><?
-	db_input("dias_validade",5,"",false,"text",$db_opcao,"onChange='js_dias_validade();'");
-      ?>
-	</td>
+      	<td align="right">
+      	<b>Dias de validade:</b>
+        <?
+      	 db_input("dias_validade",5,"",false,"text",$db_opcao,"onChange='js_dias_validade();'");
+        ?>
+      	</td>
         <td>
-        <b>Dias de prazo:</b><?
-	db_input("dias_prazo",5,"",false,"text",$db_opcao,"onChange='js_dias_prazo();'");
-      ?>
+        <b>Dias de prazo:</b>
+        <?
+	        db_input("dias_prazo",5,"",false,"text",$db_opcao,"onChange='js_dias_prazo();'");
+        ?>
         </td>
       </tr>
       <?
-      
-	  echo "  <tr>
+
+	    echo
+      "<tr>
 		    <td align='center' colspan='2'>
 		      <iframe name='elementos' id='elementos'  marginwidth='0' marginheight='0' frameborder='0' src='com1_orcamlancval0011.php?pc20_codorc=$pc20_codorc&db_opcao=$db_opcao".$qry."&sol=$sol' width='100%' height='400'>
 		      </iframe>
-		    <td>      
+		    <td>
 		  </tr>";
-     
-	  echo "  <tr>  
-		    <td colspan='2' align='center'>
+
+  	  echo
+      "<tr>
+  	    <td colspan='2' align='center'>
         <br><br>
         <b>Campo(s) com * preenchimento obrigatório</b>
         <br><br>
-        
-		      <input name='".($db_opcao==1?"incluir":"alterar")."' type='submit' id='db_opcao' value='".($db_opcao==1?"Incluir":"Alterar")."'  ".($db_botao==false?"disabled":"")." onclick='return  js_buscarcod();'>
-		      <input name='voltar' type='button' id='voltar' value='Voltar'  onclick='document.location.href=\"com1_selorc001.php?sol=$sol\"'>
-		      <input name='importar' type='button' id='importar' value='Valores unitários'  onclick='elementos.js_importar(true);elementos.js_somavalor();'>
-		      <input name='zerar'  type='button' id='zerar' value='Zerar valores'  onclick='elementos.js_importar(false);elementos.js_somavalor();'>";
-	  if($voltar==true){
-          echo " <input name='trocar' type='button' id='trocar' value='Julgar orçamento'  onclick='document.location.href=\"com1_pcorcamtroca001.php?pc20_codorc=$pc20_codorc&sol=$sol\"'>";
-	  }
-	}else{
-	  echo "  <tr>
+
+        <input name='".($db_opcao==1?"incluir":"alterar")."' type='submit' id='db_opcao' value='".($db_opcao==1?"Incluir":"Alterar")."'  ".($db_botao==false?"disabled":"")." onclick='return js_buscarcod();'>
+        <input name='voltar' type='button' id='voltar' value='Voltar'  onclick='document.location.href=\"com1_selorc001.php?sol=$sol\"'>
+        <input name='importar' type='button' id='importar' value='Valores unitários'  onclick='elementos.js_importar(true);elementos.js_somavalor();'>
+        <input name='zerar'  type='button' id='zerar' value='Zerar valores'  onclick='elementos.js_importar(false);elementos.js_somavalor();'>";
+  	  if($voltar==true){
+        echo " <input name='trocar' type='button' id='trocar' value='Julgar orçamento'  onclick='document.location.href=\"com1_pcorcamtroca001.php?pc20_codorc=$pc20_codorc&sol=$sol\"'>";
+  	  }
+	} else {
+	  echo
+    "<tr>
 		    <td align='center' colspan='2'>
 		      <br><br>
 		      <strong>Não existem itens para este orçamento.</strong>
 		      <br><br>
-		    <td>      
-		  </tr>";
+		    <td>
+		</tr>";
 	}
-  
+
 	?>
-  
+
       </table>
     </td>
   </tr>

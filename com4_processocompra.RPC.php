@@ -79,13 +79,13 @@ try {
        */
       $oDaoOrcamentoItem = new cl_pcorcamitemproc();
       $sQueryOrcamento   = $oDaoOrcamentoItem->sql_query(null, null, "*", null, "pc80_codproc = {$iSequencialProcessoCompra} limit 1");
-
-      $oDaoOrcamentoItem->sql_record($sQueryOrcamento);
+      $teste = $oDaoOrcamentoItem->sql_record($sQueryOrcamento);
       if ($oDaoOrcamentoItem->numrows > 0) {
         $oRetorno->lOrcamento = true;
       }
 
       $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
+
       $oRetorno->pc80_codproc = $oProcessoCompra->getCodigo();
       $oRetorno->pc80_data =  $oProcessoCompra->getDataEmissao();
       $oRetorno->id_usuario = $oProcessoCompra->getUsuario();
@@ -94,6 +94,9 @@ try {
       $oRetorno->descrdepto = urlencode($oProcessoCompra->getDescricaoDepartamento());
       $oRetorno->pc80_resumo = urlencode($oProcessoCompra->getResumo());
       $oRetorno->pc80_tipoprocesso = $oProcessoCompra->getTipoProcesso();
+      /*OC3770*/
+      $oRetorno->pc80_criterioadjudicacao = $oProcessoCompra->getCriterioAdjudicacao();
+
 
       $aLotes = array();
       foreach ($oProcessoCompra->getLotes() as $oLotesProcessoCompra) {
@@ -101,7 +104,7 @@ try {
       }
       $oRetorno->aLotes = $aLotes;
 
-      break;
+    break;
 
     case "getItens":
 
@@ -143,6 +146,8 @@ try {
       $iSequencialProcessoCompra = $oParam->iProcessoCompra;
       $aLotes                    = $oParam->aItens;
       $sResumo                   = db_stdClass::normalizeStringJsonEscapeString($oParam->sResumo);
+      /*OC3770*/
+      $sCriterioAjudicacao       = $oParam->criterioaj;
 
       if (empty($iSequencialProcessoCompra)) {
         throw new DBException(_M(MENSAGENS . "nao_informado_processo_compra"));
@@ -150,6 +155,7 @@ try {
 
       $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
       $oProcessoCompra->setResumo($sResumo);
+      $oProcessoCompra->setCriterioAdjudicacao($sCriterioAjudicacao);
 
       foreach ($aLotes as $oStdLote) {
 

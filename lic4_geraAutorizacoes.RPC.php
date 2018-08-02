@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -64,21 +64,21 @@ $oRetorno->message = "";
 switch ($oParam->exec) {
 
   case "getProcessoAdministrativo" :
-    
+
     $oDaoSolicitaProtProcesso = new cl_solicitaprotprocesso();
     $sSqlProcesso = $oDaoSolicitaProtProcesso->sql_query_file(null, "*", null, " pc90_solicita = {$oParam->iSolicitacao} ");
     $rsProcesso   = $oDaoSolicitaProtProcesso->sql_record($sSqlProcesso);
     $oRetorno->pc90_numeroprocesso = '';
     if ($oDaoSolicitaProtProcesso->numrows > 0) {
-     die($sSqlProcesso); 
+     die($sSqlProcesso);
       $sProcesso = urlencode(db_utils::fieldsMemory($rsProcesso, 0)->pc90_numeroprocesso);
       $oRetorno->pc90_numeroprocesso = $sProcesso;
     }
-    
-  break;  
-  
-  
-  
+
+  break;
+
+
+
   case "getTipoLicitacao":
 
     $oDaoCfgLiclicita          = db_utils::getDao("cflicita");
@@ -106,46 +106,46 @@ switch ($oParam->exec) {
    * Busca os Tipos de Compra
    */
   case "getTipoCompraEmpenho":
-    
+
     /**
      * Buscando resumo da solicitacao de compras
      */
     $oRetorno->sResumo = "";
     $oDaoSolicitacao   = db_utils::getDao("solicita");
-    
+
     /*
      * Valida a origem dos dados.
      * 1 - Processo de Compras
      * 2 - Solicitação de Compras
-     * undefined - Licitacao 
+     * undefined - Licitacao
      */
     if (isset($oParam->iOrigemDados) && $oParam->iOrigemDados == 1) {
-      
+
       $sWhereResumo     = "pc81_codproc = {$oParam->iCodigo}";
       $oDaoBuscaDotacao = new ProcessoCompras($oParam->iCodigo);
     } else if (isset($oParam->iOrigemDados) && $oParam->iOrigemDados == 2) {
-      
+
       $sWhereResumo     = "pc10_numero = {$oParam->iCodigo}";
       $oDaoBuscaDotacao = new solicitacaoCompra($oParam->iCodigo);
     } else {
-      
+
       $sWhereResumo     = "l20_codigo = {$oParam->iCodigo}";
       $oDaoBuscaDotacao = new licitacao($oParam->iCodigo);
     }
-    
+
     $aSolicitacaoComDotacaoAnoAnterior = $oDaoBuscaDotacao->getSolicitacoesDotacaoAnoAnterior();
     $oRetorno->solicitacaoComDotacaoAnoAnterior = $aSolicitacaoComDotacaoAnoAnterior;
-    
+
     $sOrderResumo      = "pc10_numero desc limit 1";
     $sSqlBuscaResumo   = $oDaoSolicitacao->sql_query_estregistro(null, "pc10_resumo", $sOrderResumo, $sWhereResumo);
     $rsResumo          = $oDaoSolicitacao->sql_record($sSqlBuscaResumo);
-    
+
     if ($rsResumo && pg_num_rows($rsResumo) > 0) {
-      
+
       $oResumo           = db_utils::fieldsMemory($rsResumo,0, false, false, false);
       $oRetorno->sResumo = utf8_encode($oResumo->pc10_resumo);
     }
-    
+
 
     /*
      * Busca os Tipos de Compra
@@ -164,54 +164,54 @@ switch ($oParam->exec) {
 
       $oRetorno->aPcTipoCompra = $aPcTipoCompra;
     }
-    
+
     /**
      * Busca o tipo de compra do registro
      * Tipos:  1 - Processo de Compras, 2 - Solicitação de Compras
      */
     !isset($oParam->iOrigemDados) ? $oParam->iOrigemDados = "" : $oParam->iOrigemDados;
     switch ($oParam->iOrigemDados) {
-    	
+
     	case 1:
-    		
+
     		$oDaoPcProc         = db_utils::getDao('pcproc');
     		$sSqlProcessoCompra = $oDaoPcProc->sql_query_tipocompra($oParam->iCodigo, "pc50_codcom");
     		$rsProcessoCompra   = $oDaoPcProc->sql_record($sSqlProcessoCompra);
     		if ($oDaoPcProc->numrows > 0) {
-    			
+
     			$iTipoCompra                  = db_utils::fieldsMemory($rsProcessoCompra, 0)->pc50_codcom;
     			$oRetorno->iTipoCompraInicial = $iTipoCompra;
     		}
-    		
+
     		break;
-    		
+
     	case 2:
-				
+
     		$oDaoSolicita        = db_utils::getDao('solicita');
     		$sSqlBuscaTipoCompra = $oDaoSolicita->sql_query_tipocompra($oParam->iCodigo, "pc50_codcom");
     		$rsBuscaTipoCompra   = $oDaoSolicita->sql_record($sSqlBuscaTipoCompra);
     		if ($oDaoSolicita->numrows > 0) {
-    		
+
     			$iTipoCompra = db_utils::fieldsMemory($rsBuscaTipoCompra, 0)->pc50_codcom;
     			$oRetorno->iTipoCompraInicial = $iTipoCompra;
     		}
     		break;
-    		
+
     	default:
-    		
+
     		$oDaoLicLicita       = db_utils::getDao('liclicita');
     		$sSqlBuscaTipoCompra = $oDaoLicLicita->sql_query($oParam->iCodigo, "pc50_codcom");
     		$rsBuscaTipoCompra   = $oDaoLicLicita->sql_record($sSqlBuscaTipoCompra);
     		if ($oDaoLicLicita->numrows > 0) {
-    		
+
     			$iTipoCompra = db_utils::fieldsMemory($rsBuscaTipoCompra, 0)->pc50_codcom;
     			$oRetorno->iTipoCompraInicial = $iTipoCompra;
     		}
     }
-    
+
     /*
      * Busca os Tipos de Empenho
-     */    
+     */
     $sSqlTipoEmpenho   = $oDaoEmpTipo->sql_query_file();
     $rsExecTipoEmpenho = $oDaoEmpTipo->sql_record($sSqlTipoEmpenho);
 
@@ -227,7 +227,7 @@ switch ($oParam->exec) {
 
       $oRetorno->aTipoEmpenho = $aTipoEmpenho;
     }
-    
+
     if (count($aPcTipoCompra) > 0 && count($aTipoEmpenho) > 0) {
       $oRetorno->status = 0;
     }
@@ -243,7 +243,7 @@ switch ($oParam->exec) {
     $oRetorno->aItens = $oLicitacao->getItensParaAutorizacao();
 
   break;
-  
+
   /**
    * Gera Autorização
    */
@@ -282,48 +282,144 @@ switch ($oParam->exec) {
         }
 
 		if (!isset($oParam->aAutorizacoes)) {
-			
+
 			$oRetorno->status  = 2;
 			$oRetorno->message = urlencode("Há muitos itens selecionados. É necessário selecionar menos itens para gerar a autorização de empenho.");
-			
+
 		} else {
-  	
+
 	    try {
-	
+
 	      /**
 	       * corrigimos as strings antes de salvarmos os dados
 	       */
 	      foreach ($oParam->aAutorizacoes as $oAutorizacao) {
-	      	 
+
 	        $oAutorizacao->destino           = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->destino))));
           $oAutorizacao->sContato          = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sContato))));
           $oAutorizacao->sOutrasCondicoes  = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sOutrasCondicoes))));
 	        $oAutorizacao->condicaopagamento = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->condicaopagamento))));
 	        $oAutorizacao->prazoentrega      = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->prazoentrega))));
 	        $oAutorizacao->resumo            = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->resumo))));
-	        
+
 	        foreach ($oAutorizacao->itens as $oItem) {
 	          $oItem->observacao = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oItem->observacao))));
 	        }
 	      }
-	
+
 	      db_inicio_transacao();
 	      $oLicitacao = new licitacao($oParam->iCodigo);
 	      $oRetorno->autorizacoes = $oLicitacao->gerarAutorizacoes($oParam->aAutorizacoes);
 	      db_fim_transacao(false);
-	      
+
 	      $oRetorno->status  = 1;
 	      $oRetorno->message = urlencode("Autorização efetuada com sucesso.");
-	      
+
 	    } catch (Exception $eErro) {
-	
+
 	      $oRetorno->status  = 2;
 	      $oRetorno->message = urlencode($eErro->getMessage());
 	      db_fim_transacao(true);
 	    }
 		}
-    
+
   break;
+
+  case "getFonercedoresLic":
+
+  try {
+
+    $oRetorno->cgms = getFonercedoresLic($oParam->licitacao);
+
+  } catch (Exception $e) {
+    $oRetorno->erro = $e->getMessage();
+    $oRetorno->status   = 2;
+  }
+
+  break;
+
+  case "verificaSaldoCriterio":
+
+  try {
+
+    $oRetorno->itens = verificaSaldoCriterio($oParam->e55_autori,$oParam->e55_item,$oParam->tipoitem);
+
+  } catch (Exception $e) {
+    $oRetorno->erro = $e->getMessage();
+    $oRetorno->status   = 2;
+  }
+
+  break;
+}
+
+function getFonercedoresLic($licitacao) {
+  $sSQL = "SELECT DISTINCT z01_numcgm ,z01_nome
+  FROM liclicitem
+    INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+    INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+    INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+    INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+    INNER JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+    LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+    LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+    LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+    LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+    LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+    LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+    LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+    LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+      AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+    LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+    LEFT JOIN cgm ON pc21_numcgm = z01_numcgm
+    LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+    LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+    LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+    LEFT JOIN pcsubgrupo ON pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo
+    LEFT JOIN pctipo ON pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo
+    LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
+    LEFT JOIN orcelemento ON orcelemento.o56_codele = solicitemele.pc18_codele
+      AND orcelemento.o56_anousu = ".db_getsession("DB_datausu")."
+    LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
+    LEFT JOIN empautitem ON empautitem.e55_autori = empautitempcprocitem.e73_autori
+      AND empautitem.e55_sequen = empautitempcprocitem.e73_sequen
+    LEFT JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+    LEFT JOIN empempaut ON empempaut.e61_autori = empautitem.e55_autori
+    LEFT JOIN empempenho ON empempenho.e60_numemp = empempaut.e61_numemp
+    LEFT JOIN pcdotac ON solicitem.pc11_codigo = pcdotac.pc13_codigo
+    LEFT JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
+      WHERE l21_codliclicita = {$licitacao} and pc24_pontuacao=1";
+
+  $rsConsulta = db_query($sSQL);
+  $oCgm = db_utils::getCollectionByRecord($rsConsulta);
+  return $oCgm;
+}
+
+function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem) {
+  $sSQL = "";
+  if (strcasecmp($tipoitem, 'item') === 0) {
+    $sSQL = "
+     select sum(e55_vltot) as totalitens
+      from empautitem
+       inner join empautoriza on e54_autori = e55_autori
+        where e54_codlicitacao = ( select e54_codlicitacao from empautoriza where e54_autori = {$e55_autori} )
+         and e55_item = {$e55_item}
+    ";
+  } else {
+      $sSQL = "
+      select sum(e55_vltot) as totalitens
+      from empautitem
+       inner join empautoriza on e54_autori = e55_autori
+        where e54_codlicitacao = (
+                                  select e54_codlicitacao
+                                   from empautoriza
+                                    where e54_autori = {$e55_autori}
+                                  )
+    ";
+  }
+
+  $rsConsulta = db_query($sSQL);
+  $oItens = db_utils::getCollectionByRecord($rsConsulta);
+  return $oItens;
 }
 
 echo $oJson->encode($oRetorno);

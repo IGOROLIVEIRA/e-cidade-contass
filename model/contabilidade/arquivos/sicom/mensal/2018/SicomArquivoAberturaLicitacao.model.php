@@ -281,7 +281,11 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
        liclicita.l20_execucaoentrega AS prazoExecucao,
        liclicita.l20_condicoespag AS formaPagamento,
        liclicita.l20_aceitabilidade AS criterioAceitabilidade,
-       case when liclicita.l20_descontotab = 2 then 3 else liclicita.l20_descontotab end AS descontoTabela,
+       CASE
+           WHEN liclicita.l20_criterioadjudicacao is null
+            THEN 3
+           ELSE liclicita.l20_criterioadjudicacao
+       END AS criterioAdjudicacao,
        	(CASE liclicita.l20_tipojulg
     WHEN 3 THEN 1
     ELSE 2
@@ -322,7 +326,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
       $claberlic10->si46_codunidadesubresp = $oDados10->codunidadesubresp;
       $claberlic10->si46_criterioaceitabilidade = substr($this->removeCaracteres($oDados10->criterioaceitabilidade), 0, 80);
       $claberlic10->si46_criteriodesempate = $oDados10->criteriodesempate;
-      $claberlic10->si46_descontotabela = $oDados10->descontotabela;
+      $claberlic10->si46_descontotabela = $oDados10->criterioAdjudicacao;
       $claberlic10->si46_destinacaoexclusiva = $oDados10->destinacaoexclusiva;
       $claberlic10->si46_dtabertura = $oDados10->dtabertura;
       $claberlic10->si46_dteditalconvite = $oDados10->dteditalconvite;
@@ -572,6 +576,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112018.si47_nrolote ELSE 0 END AS nroLote,
     (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
     precoreferencia.si01_datacotacao as dtCotacao,
+    itemprecoreferencia.si02_vlpercreferencia AS vlRefPercentual,
     itemprecoreferencia.si02_vlprecoreferencia as vlCotPrecosUnitario,
     pcorcamval.pc23_quant as quantidade,
     '0' as vlMinAlienBens
@@ -667,7 +672,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
           $oDados14->si50_reg10 = $claberlic10->si46_sequencial;// chave estrangeira
           $oDados14->si50_coditem = $oResult14->coditem;
           $oDados14->si50_dtcotacao = $oResult14->dtcotacao;
-          $oDados14->si50_vlrefpercentual = 0;
+          $oDados14->si50_vlrefpercentual = isset($oResult14->si02_vlpercreferencia) ? number_format($oResult14->si02_vlpercreferencia,'2',',','.') : 0;
           $oDados14->si50_vlcotprecosunitario = $oResult14->vlcotprecosunitario;
           $oDados14->si50_quantidade = $oResult14->quantidade;
           $oDados14->si50_vlminalienbens = $oResult14->vlminalienbens;

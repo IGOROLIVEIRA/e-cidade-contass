@@ -72,6 +72,7 @@
        var $e54_depto = 0;
        var $e54_concarpeculiar = null;
        var $e54_gestaut = 0;
+       var $e54_codlicitacao = 0;
        // cria propriedade com as variaveis do arquivo
        var $campos = "
                      e54_autori = int4 = Autorização
@@ -99,6 +100,7 @@
                      e54_concarpeculiar = varchar(100) = Caracteristica Peculiar
                      e54_gestaut = int4 = Gestor do Empenho
                      e54_tipodespesa = int4 = Tipos de empenhos do RPPS
+                     e54_codlicitacao = int4 = Código da licitação
                      ";
        //funcao construtor da classe
        function cl_empautoriza() {
@@ -227,6 +229,12 @@
          if($this->e54_emiss == null ){
            $this->e54_emiss = "null";
          }
+         if ($this->e54_codlicitacao == null || $this->e54_codlicitacao == "") {
+          $this->e54_codlicitacao = 0;
+         }
+         if ($this->e54_gestaut == null || $this->e54_gestaut == "") {
+          $this->e54_gestaut = 0;
+         }
          if($this->e54_codtipo == null ){
            $this->erro_sql = " Campo Tipo Empenho nao Informado.";
            $this->erro_campo = "e54_codtipo";
@@ -264,9 +272,7 @@
            $this->erro_status = "0";
            return false;
          }
-         if($this->e54_gestaut == "" || $this->e54_gestaut == null ){
-          $this->e54_gestaut = 0;
-         }
+
          if($e54_autori == "" || $e54_autori == null ){
            $result = db_query("select nextval('empautoriza_e54_autori_seq')");
            if($result==false){
@@ -324,7 +330,9 @@
                                           ,e54_depto
                                           ,e54_concarpeculiar
                                           ,e54_gestaut
+                                          ,e54_codlicitacao
                                           ,e54_tipodespesa
+
                            )
                     values (
                                     $this->e54_autori
@@ -351,6 +359,7 @@
                                    ,$this->e54_depto
                                    ,'$this->e54_concarpeculiar'
                                    ,'$this->e54_gestaut'
+                                   ,$this->e54_codlicitacao
                                    ,".($this->e54_tipodespesa == "null" || $this->e54_tipodespesa == ""?"null":"'".$this->e54_tipodespesa."'")."
                           )";
          $result = db_query($sql);

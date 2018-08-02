@@ -29,7 +29,7 @@
 //CLASSE DA ENTIDADE liclicita
 class cl_liclicita
 {
-    // cria variaveis de erro 
+    // cria variaveis de erro
     var $rotulo = null;
     var $query_sql = null;
     var $numrows = 0;
@@ -42,7 +42,7 @@ class cl_liclicita
     var $erro_msg = null;
     var $erro_campo = null;
     var $pagina_retorno = null;
-    // cria variaveis do arquivo 
+    // cria variaveis do arquivo
     var $l20_codigo = 0;
     var $l20_codtipocom = 0;
     var $l20_numero = 0;
@@ -123,51 +123,52 @@ class cl_liclicita
     var $l20_codepartamento = null;
     var $l20_diames = null;
     var $l20_execucaoentrega = null;
+    var $l20_criterioadjudicacao = null;
 
 
-    // cria propriedade com as variaveis do arquivo 
+    // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 l20_codigo = int8 = Sequencial 
-                 l20_codtipocom = int4 = Código do tipo de compra 
-                 l20_numero = int8 = Numeração 
-                 l20_id_usucria = int4 = Cod. Usuário 
-                 l20_datacria = date = Data Criação 
-                 l20_horacria = char(5) = Hora Criação 
-                 l20_dataaber = date = Data Edital/Convite 
-                 l20_dtpublic = date = Data Publicação 
-                 l20_horaaber = char(5) = Hora Abertura 
-                 l20_local = text = Local da Licitação 
-                 l20_objeto = text = Objeto 
-                 l20_tipojulg = int4 = Tipo de Julgamento 
-                 l20_liccomissao = int4 = Código da Comissão 
-                 l20_liclocal = int4 = Código do Local da Licitação 
-                 l20_procadmin = varchar(50) = Processo Administrativo 
-                 l20_correto = bool = Correto 
-                 l20_instit = int4 = Instituição 
-                 l20_licsituacao = int4 = Situação da Licitação 
-                 l20_edital = int8 = Licitacao 
-                 l20_anousu = int4 = Exercício 
-                 l20_usaregistropreco = bool = Registro Preço 
-                 l20_localentrega = text = Local de Entrega 
-                 l20_prazoentrega = text = Prazo Entrega 
-                 l20_condicoespag = text = Forma  de Pagamento 
-                 l20_validadeproposta = text = Validade da Proposta 
-                 l20_razao = text = Razão 
+                 l20_codigo = int8 = Sequencial
+                 l20_codtipocom = int4 = Código do tipo de compra
+                 l20_numero = int8 = Numeração
+                 l20_id_usucria = int4 = Cod. Usuário
+                 l20_datacria = date = Data Criação
+                 l20_horacria = char(5) = Hora Criação
+                 l20_dataaber = date = Data Edital/Convite
+                 l20_dtpublic = date = Data Publicação
+                 l20_horaaber = char(5) = Hora Abertura
+                 l20_local = text = Local da Licitação
+                 l20_objeto = text = Objeto
+                 l20_tipojulg = int4 = Tipo de Julgamento
+                 l20_liccomissao = int4 = Código da Comissão
+                 l20_liclocal = int4 = Código do Local da Licitação
+                 l20_procadmin = varchar(50) = Processo Administrativo
+                 l20_correto = bool = Correto
+                 l20_instit = int4 = Instituição
+                 l20_licsituacao = int4 = Situação da Licitação
+                 l20_edital = int8 = Licitacao
+                 l20_anousu = int4 = Exercício
+                 l20_usaregistropreco = bool = Registro Preço
+                 l20_localentrega = text = Local de Entrega
+                 l20_prazoentrega = text = Prazo Entrega
+                 l20_condicoespag = text = Forma  de Pagamento
+                 l20_validadeproposta = text = Validade da Proposta
+                 l20_razao = text = Razão
      l20_formacontroleregistropreco = int4 = Forma de Controle RP
-                 l20_justificativa = int8 = Justificativa 
-                 l20_aceitabilidade = text = Citério de Aceitabilidade 
-                 l20_equipepregao = int8 = Equipe Pregão 
-                 l20_nomeveiculo2 = varchar(50) = Nome Veículo Divulgação 2 
-                 l20_datapublicacao2 = date = Data Publicação Edital Veiculo 2 
-                 l20_nomeveiculo1 = varchar(50) = Nome Veículo Divulgação 1 
-                 l20_datapublicacao1 = date = Data Publicação Edital Veiculo 1 
-                 l20_datadiario = date = Data de Publicação em Diário Oficial 
-                 l20_recdocumentacao = date = Recebimento Documentação 
-                 l20_numeroconvidado = int8 = Número de convidados 
-                 l20_descontotab = int8 = Desconto Tabela 
-                 l20_regimexecucao = int8 = Regime da Execução 
-                 l20_naturezaobjeto = int8 = Natureza do Objeto 
-                 l20_tipliticacao = int8 = Tipo da Licitação 
+                 l20_justificativa = int8 = Justificativa
+                 l20_aceitabilidade = text = Citério de Aceitabilidade
+                 l20_equipepregao = int8 = Equipe Pregão
+                 l20_nomeveiculo2 = varchar(50) = Nome Veículo Divulgação 2
+                 l20_datapublicacao2 = date = Data Publicação Edital Veiculo 2
+                 l20_nomeveiculo1 = varchar(50) = Nome Veículo Divulgação 1
+                 l20_datapublicacao1 = date = Data Publicação Edital Veiculo 1
+                 l20_datadiario = date = Data de Publicação em Diário Oficial
+                 l20_recdocumentacao = date = Recebimento Documentação
+                 l20_numeroconvidado = int8 = Número de convidados
+                 l20_descontotab = int8 = Desconto Tabela
+                 l20_regimexecucao = int8 = Regime da Execução
+                 l20_naturezaobjeto = int8 = Natureza do Objeto
+                 l20_tipliticacao = int8 = Tipo da Licitação
                  l20_tipnaturezaproced = int8 = Natureza do Procedimento
                  l20_dtpubratificacao = date= Data Publicação Termo Ratificação
                  l20_critdesempate = int8= Critério de Desempate
@@ -176,20 +177,19 @@ class cl_liclicita
              l20_limitcontratacao = int8= Limite Contratação
              l20_tipoprocesso = int8= Tipo  de processo
              l20_regata = int8 = Registrado Presença em Ata
-                 l20_interporrecurso = Interpor Recurso 
+                 l20_interporrecurso = Interpor Recurso
                  l20_descrinterporrecurso = Descrição
                  l20_veicdivulgacao= Veiculo de Divulgaçao
-                 
-                 
                  l20_clausulapro= text = Prorrogacao
-         l20_codepartamento=int8= Codigo departamento 
+         l20_codepartamento=int8= Codigo departamento
          l20_diames=int8= Dia mes
          l20_execucaoentrega=int8= Execucao da entrega
-                 
-                 
+         l20_criterioadjudicacao = int4 = Criterio de adjudicacao
+
+
                  ";
 
-    //funcao construtor da classe 
+    //funcao construtor da classe
     function cl_liclicita()
     {
         //classes dos rotulos dos campos
@@ -197,7 +197,7 @@ class cl_liclicita
         $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
 
-    //funcao erro 
+    //funcao erro
     function erro($mostra, $retorna)
     {
         if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -501,11 +501,11 @@ class cl_liclicita
 
             $this->l20_horaaber = $this->l20_horacria;
         }
-        // validacao sicom 
+        // validacao sicom
         if ($this->l20_dtpublic != null) {
             // aqui
             if ($this->l20_dtpublic < $this->l20_datacria) {
-                //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao. 
+                //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
                 $this->erro_sql = " A data da publicação em diário oficial deve ser superior ou igual a data de criação.";
                 $this->erro_campo = "l20_dtpublic";
                 $this->erro_banco = "";
@@ -610,7 +610,7 @@ class cl_liclicita
      }else{
       $sql= "select l30_data  from liccomissao where l30_codigo=$this->l20_liccomissao";
       $result = db_query($sql);
-      $l30_data = pg_result($result,0,0); 
+      $l30_data = pg_result($result,0,0);
       if($l30_data  > $this->l20_datacria){
         $this->erro_sql = " A data da comissão não deve ser superior a data da criação .";
           $this->erro_campo = "l20_liccomissao";
@@ -619,7 +619,7 @@ class cl_liclicita
           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
           $this->erro_status = "0";
           return false;
-      }  
+      }
      }*/
 
 
@@ -740,7 +740,7 @@ class cl_liclicita
         if ($this->l20_numeroconvidado == null) {
             $this->l20_numeroconvidado = 'null';
         }
-        if ($this->l20_descontotab == null) {
+        /*if ($this->l20_descontotab == null) {
             $this->erro_sql = " Campo Desconto Tabela não Informado.";
             $this->erro_campo = "l20_descontotab";
             $this->erro_banco = "";
@@ -748,7 +748,7 @@ class cl_liclicita
             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
-        }
+        }*/
 
         if ($this->l20_naturezaobjeto == null) {
             $this->erro_sql = " Campo Natureza do Objeto não Informado.";
@@ -770,7 +770,7 @@ class cl_liclicita
                 return false;
             }
         } else {
-            $this->l20_regimexecucao = 'NULL';// aqui 
+            $this->l20_regimexecucao = 'NULL';// aqui
         }
 
         if ($this->l20_prazoentrega == null) {
@@ -862,6 +862,16 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
+
+        if ($this->l20_criterioadjudicacao == null) {
+            $this->erro_sql = " Campo Critério de adjudicação não foi informado.";
+            $this->erro_campo = "l20_criterioadjudicacao";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
         //echo pg_last_error();exit;
 
         if ($l20_codigo == "" || $l20_codigo == null) {
@@ -923,7 +933,6 @@ class cl_liclicita
                 ,l20_tipliticacao
                 ,l20_naturezaobjeto
                 ,l20_regimexecucao
-                ,l20_descontotab
                 ,l20_numeroconvidado
                 ,l20_dataaber
                 ,l20_horaaber
@@ -949,7 +958,7 @@ class cl_liclicita
                 ,l20_validadeproposta
                 ,l20_aceitabilidade
                 ,l20_justificativa
-                ,l20_razao 
+                ,l20_razao
                 ,l20_instit
                 ,l20_tipnaturezaproced
                 ,l20_tipoprocesso
@@ -963,12 +972,13 @@ class cl_liclicita
                 ,l20_diames
                 ,l20_execucaoentrega
                 ,l20_anousu
-                ,l20_dtpubratificacao  
+                ,l20_dtpubratificacao
                 ,l20_formacontroleregistropreco
+                ,l20_criterioadjudicacao
                        )
                 values (
-                
-                
+
+
                          $this->l20_codigo
                 ,$this->l20_edital
                 ,$this->l20_codtipocom
@@ -977,7 +987,6 @@ class cl_liclicita
                 ,$this->l20_tipliticacao
                 ,$this->l20_naturezaobjeto
                 ,$this->l20_regimexecucao
-                ,$this->l20_descontotab
                 ,$this->l20_numeroconvidado
                 ," . ($this->l20_dataaber == "null" || $this->l20_dataaber == "" ? "null" : "'" . $this->l20_dataaber . "'") . "
                 ,'$this->l20_horaaber'
@@ -1017,9 +1026,9 @@ class cl_liclicita
                 ,$this->l20_diames
                 ,$this->l20_execucaoentrega
                 ,$this->l20_anousu
-                ," . ($this->l20_dtpubratificacao == "null" || $this->l20_dtpubratificacao == "" ? "null" : "'" . $this->l20_dtpubratificacao . "'") . "   
+                ," . ($this->l20_dtpubratificacao == "null" || $this->l20_dtpubratificacao == "" ? "null" : "'" . $this->l20_dtpubratificacao . "'") . "
                 ,$this->l20_formacontroleregistropreco
-                
+                ,$this->l20_criterioadjudicacao
                       )";
 
         $result = db_query($sql);
@@ -1234,15 +1243,15 @@ class cl_liclicita
         /*if(trim($this->l20_razao !="" || isset($GLOBALS["HTTP_POST_VARS"]["l20_razao"])) && ($tribunal==29 || $tribunal==101 ||  $tribunal==102) ){
     $sql  .= $virgula." l20_razao = '$this->l20_razao' ";
       $virgula = ",";
-    
-    if($tribunal==100 || $tribunal==101 ||  $tribunal==102){ 
+
+    if($tribunal==100 || $tribunal==101 ||  $tribunal==102){
         $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Tipo de Processo, \\n\\n Data Publicação Termo Ratificação, Veiculo de Divulgação,Justificativa,Razão";
           $this->erro_campo = "l20_razao";
           $this->erro_banco = "";
           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
           $this->erro_status = "0";
-          return false; 
+          return false;
         }
   }else{
      $sql  .= $virgula." l20_razao = ''";
@@ -1411,7 +1420,7 @@ class cl_liclicita
             }
         }
         //2013-12-06 f 2013-12-19
-        //A data da publicacao em diario oficial  deve ser superior  ou igual a data de criacao. 
+        //A data da publicacao em diario oficial  deve ser superior  ou igual a data de criacao.
 
         if ($this->l20_horaaber == null) {
 
@@ -1613,7 +1622,7 @@ class cl_liclicita
             $virgula = ",";
         }
 
-        //echo 
+        //echo
         if (trim($this->l20_correto != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_correto"]))) {
             $sql .= $virgula . " l20_correto = '$this->l20_correto' ";
             $virgula = ",";
@@ -1912,6 +1921,11 @@ class cl_liclicita
             $virgula = ",";
         }
 
+        if (trim($this->l20_criterioadjudicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_criterioadjudicacao"])) {
+            $sql .= $virgula . " l20_criterioadjudicacao =' $this->l20_criterioadjudicacao' ";
+            $virgula = ",";
+        }
+
 
         if (trim($this->l20_codepartamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_codepartamento"])) {
             $sql .= $virgula . " l20_codepartamento = $this->l20_codepartamento ";
@@ -2076,7 +2090,7 @@ class cl_liclicita
         }
     }
 
-    // funcao para exclusao 
+    // funcao para exclusao
     public function excluir($l20_codigo = null, $dbwhere = null)
     {
 
@@ -2186,7 +2200,7 @@ class cl_liclicita
         }
     }
 
-    // funcao do recordset 
+    // funcao do recordset
     public function sql_record($sql)
     {
         $result = db_query($sql);
@@ -2211,7 +2225,7 @@ class cl_liclicita
         return $result;
     }
 
-    // funcao do sql 
+    // funcao do sql
 
     function sql_query($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "",$groupby=null)
     {
@@ -2283,7 +2297,7 @@ class cl_liclicita
     }
 
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query_file($l20_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
@@ -2932,7 +2946,7 @@ class cl_liclicita
         $result = db_query($sSql);
         $tribunal = pg_result($result, 0, 0);
 
-        /* Chave identica para todos os clientes , este é o codigo do tribunal 
+        /* Chave identica para todos os clientes , este é o codigo do tribunal
         CONVITE=30
         INEXIGIBILIDADE=29
         Dispensa de Licitacao=101

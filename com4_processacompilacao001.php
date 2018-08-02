@@ -136,6 +136,24 @@ db_app::load("widgets/windowAux.widget.js");
                 <input type="button" value='visualizar Itens' id='btnVisualizarItens'>
               </td>
             </tr>
+            <!--OC3770-->
+            <tr>
+              <td align="left">
+                <label class="bold">Critério de Adjudicação:</label>
+              </td>
+              <td colspan='2'>
+                <?php
+
+                  $aCriterios = array("" => "Selecione",
+                                   3 => 'Outros',
+                                   1 => 'Desconto sobre tabela',
+                                   2 => 'Menor taxa ou percentual');
+
+                  db_select('pc80_criterioadjudicacao', $aCriterios, true, '', 'style="width:30%"');
+                ?>
+              </td>
+            </tr>
+            <!-- FIM - OC3770-->
           </table>
           </fieldset>
         </td>
@@ -288,11 +306,16 @@ function js_processarCompilacao() {
     if (!confirm(sMsg)) {
       return false;
     }
+    if ($F('pc80_criterioadjudicacao') == "") {
+      alert("Campo Critério de Adjudicação não informado.");
+      return false;
+    }
     js_divCarregando("Aguarde, processando Compilação.<br>Esse pocesso pode demorar um pouco.","msgBox");
     var oParam          = new Object();
     oParam.exec         = "geraProcessoCompras";
     oParam.iSolicitacao = $F('pc10_numero');
     oParam.tipo         = 6;
+    oParam.criterioadj  = $F('pc80_criterioadjudicacao');
     db_iframe_solicita.hide();
     var oAjax           = new Ajax.Request(sUrlRC,
                                          {

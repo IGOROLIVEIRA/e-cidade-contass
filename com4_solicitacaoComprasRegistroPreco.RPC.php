@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -45,34 +45,34 @@ $oRetorno->message = '';
 $oRetorno->erro    = false;
 
 switch ($oParam->exec) {
-	
+
 	/*
 	 * case para gerar um arquivo CSV de uma estimativa de registro de preço
 	 */
 	case 'gerarestimativaCSV':
-		
+
 		$iAbertura      = $oParam->iAbertura;
 		$sArquivo       = "tmp/abertura_{$iAbertura}.csv";
 		$aDepartamentos = array();
-		
+
 		try{
-		
+
 			$oAbertura            = new aberturaRegistroPreco($iAbertura);
 			$aItensAbertura       = $oAbertura->getItens();
       $aEstimativas         = $oAbertura->getEstimativas();
       $aCodigoDepartamentos = array();
-      
-      $aHeaderArquivo       = array(0 => "RESUMO DAS ESTIMATIVAS - ABERTURA REGISTRO DE PREÇO {$iAbertura} "); 
-      
-			
+
+      $aHeaderArquivo       = array(0 => "RESUMO DAS ESTIMATIVAS - ABERTURA REGISTRO DE PREÇO {$iAbertura} ");
+
+
 			//Define objeto standart para representar a abertura com suas estimativas
 			$oAbertura   						   						= new stdClass();
 			$oAbertura->aItens				 						= array();
 			$oAbertura->aDepartamentosEstimativas = array();
-			
+
 			// percorre as estimativas de cada departamento
 			foreach ($aEstimativas as $oEstimativa) {
-								
+
 				$aItensEstimativa                                     = $oEstimativa->getItens();
 				$iDepartamento                                        = $oEstimativa->getCodigoDepartamento();
 				$oDepartamento                                        = new DBDepartamento($iDepartamento);
@@ -83,13 +83,13 @@ switch ($oParam->exec) {
 
 				//Totaliza as quantidades de cada item, por departamento
 				foreach ($aItensEstimativa as $oItemEstimativa) {
-					
+
           $sIndice = $oItemEstimativa->getOrdem()."|".$oItemEstimativa->getCodigoMaterial();
           if (empty($oAbertura->aItens[$sIndice])) {
 
             $oStdItemAbertura                  = new stdClass();
             $oStdItemAbertura->sDescricao      = urldecode($oItemEstimativa->getDescricaoMaterial());
-            $oStdItemAbertura->aDepartamentos  = array(); 
+            $oStdItemAbertura->aDepartamentos  = array();
             $oStdItemAbertura->iTotal          = 0;
             $oAbertura->aItens[$sIndice] =  $oStdItemAbertura;
           }
@@ -97,7 +97,7 @@ switch ($oParam->exec) {
 					$oAbertura->aItens[$sIndice]->aDepartamentos[$iDepartamento] = $oItemEstimativa->getQuantidade();
           $oAbertura->aItens[$sIndice]->iTotal                        += $oItemEstimativa->getQuantidade();
 				}
-				
+
 			}
 
 			/**
@@ -110,7 +110,7 @@ switch ($oParam->exec) {
 			ksort($aDepartamentos);
 			fputcsv($fArquivo,$aHeaderArquivo, ";");
 			fputcsv($fArquivo, $aDepartamentos, ";");
-			
+
       foreach ($oAbertura->aItens as $oItem) {
 
         $sDescricao            = $oItem->sDescricao;
@@ -124,15 +124,15 @@ switch ($oParam->exec) {
       }
 			fclose($fArquivo);
 			$oRetorno->sArquivo = $sArquivo;
-		
+
 		} catch (Exception $eErro) {
-		
+
 			db_fim_transacao(true);
 			$oRetorno->message = urlencode($eErro->getMessage());
 			$oRetorno->status  = 2;
-		
+
 		}
-		
+
 	break;
 
 
@@ -335,8 +335,12 @@ switch ($oParam->exec) {
     $oSolicita =  $_SESSION["oSolicita"];
     try {
 
+      $criterio = null;
+      if (isset($oParam->criterioadj)) {
+        $criterio = $oParam->criterioadj;
+      }
       db_inicio_transacao();
-      $oSolicita->toProcessoCompra();
+      $oSolicita->toProcessoCompra($criterio);
       $oRetorno->iProcessoCompras = $oSolicita->getProcessodeCompras();
       db_fim_transacao(false);
 
@@ -580,18 +584,18 @@ switch ($oParam->exec) {
   break;
 
   /**
-   * Pesquisa a quantidade restante do item da estimativa para o departamento logado  
+   * Pesquisa a quantidade restante do item da estimativa para o departamento logado
    */
   case "getQuantidadeRestanteItemEstimativa" :
 
     $oRetorno->iQuantidadeRestante = 0;
 
-    $sSqlItemEstimativa  = "select pc11_codigo"; 
-    $sSqlItemEstimativa .= "  from solicitemvinculo"; 
-    $sSqlItemEstimativa .= "       inner join solicitem on pc55_solicitempai = pc11_codigo"; 
+    $sSqlItemEstimativa  = "select pc11_codigo";
+    $sSqlItemEstimativa .= "  from solicitemvinculo";
+    $sSqlItemEstimativa .= "       inner join solicitem on pc55_solicitempai = pc11_codigo";
     $sSqlItemEstimativa .= "       inner join solicita  on pc10_numero       = pc11_numero";
-    $sSqlItemEstimativa .= "       left  join solicitaanulada on pc10_numero = pc67_solicita"; 
-    $sSqlItemEstimativa .= " where pc10_depto = ".db_getsession("DB_coddepto"); 
+    $sSqlItemEstimativa .= "       left  join solicitaanulada on pc10_numero = pc67_solicita";
+    $sSqlItemEstimativa .= " where pc10_depto = ".db_getsession("DB_coddepto");
     $sSqlItemEstimativa .= "   and pc55_solicitemfilho = {$oParam->iItemOrigem}";
     $sSqlItemEstimativa .= "   and pc67_solicita is null";
     $rsItemEstimativa    = db_query($sSqlItemEstimativa);
@@ -608,7 +612,7 @@ switch ($oParam->exec) {
     $oItemEstimativa = new ItemEstimativa($iCodigoItemEstimativa);
     $oSaldosItem     = $oItemEstimativa->getMovimentacao();
 
-    $oRetorno->iQuantidadeRestante = $oSaldosItem->saldo;  
+    $oRetorno->iQuantidadeRestante = $oSaldosItem->saldo;
 
   break;
 

@@ -201,8 +201,8 @@ if ($modelo == 1) {
       }
       $pdf->setfont('arial', 'b', 9);
       $pdf->cell(15, $alt, "Item", 1, 0, "C", 1);
-      $pdf->cell(194, $alt, "Material", 1, 0, "C", 1);
-      $pdf->cell(30, $alt, "Obs/Marca", 1, 0, "C", 1);
+      $pdf->cell(60, $alt, "Material", 1, 0, "C", 1);
+      $pdf->cell(164, $alt, "Obs/Marca", 1, 0, "C", 1);
       $pdf->cell(20, $alt, "Vl. Unitário", 1, 0, "C", 1);
       $pdf->cell(20, $alt, "Quantidade", 1, 1, "C", 1);
       $p = 0;
@@ -214,8 +214,8 @@ if ($modelo == 1) {
     db_fieldsmemory($result_valor_item);
     $pdf->setfont('arial', '', 8);
     $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
-    $pdf->cell(194, $alt,substr($pc01_descrmater,0,190), 1, 0, "L", 0);
-    $pdf->cell(30, $alt,substr($pc23_obs,0,30), 1, 0, "L", 0);
+    $pdf->cell(60, $alt,substr($pc01_descrmater,0,190), 1, 0, "L", 0);
+    $pdf->cell(164, $alt,substr($pc23_obs,0,30), 1, 0, "L", 0);
     $pdf->cell(20, $alt, number_format($vlrunit,$oGet->quant_casas,',','.'), 1, 0, "R", 0);
     $pdf->cell(20, $alt, $quant, 1, 1, "R", 0);
     $pdf->cell(279,$alt/2,'','',1,"L",0);
@@ -232,13 +232,14 @@ if ($modelo == 1) {
         $p = 0;
         $pdf->setfont('arial', 'b', 8);
         $pdf->cell(15, $alt, "Cgm", 1, 0, "C", 1);
-        $pdf->cell(224, $alt, "Fornecedor", 1, 0, "C", 1);
+        $pdf->cell(200, $alt, "Fornecedor", 1, 0, "C", 1);
+        $pdf->cell(24, $alt, "Taxa/Tabela", 1, 0, "C", 1);//OC3770
         $pdf->cell(20, $alt, "Vl. Unitário", 1, 0, "C", 1);
         $pdf->cell(20, $alt, "Vl. Total", 1, 1, "C", 1);
         $troca = 0;
       }
 
-      $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as pc23_vlrun,pc23_quant,pc23_valor,pc24_pontuacao", null,
+      $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as pc23_vlrun,pc23_quant,pc23_valor,pc23_perctaxadesctabela,pc23_percentualdesconto,pc24_pontuacao", null,
           "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
       if(pg_num_rows($result_valor) == 0){
@@ -247,8 +248,20 @@ if ($modelo == 1) {
       db_fieldsmemory($result_valor);
       $pdf->setfont('arial', '', 7);
       $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
-      $pdf->cell(224, $alt, $z01_nome, 1, 0, "L", 0);
-      $pdf->cell(20, $alt, number_format($pc23_vlrun,$oGet->quant_casas,',','.'), 1, 0, "R", 0);
+      $pdf->cell(200, $alt, $z01_nome, 1, 0, "L", 0);
+      /*OC3770*/
+      if ($pc23_perctaxadesctabela != 0) {
+        $pdf->cell(24, $alt, $pc23_perctaxadesctabela."%", 1, 0, "R", 0);
+        $pdf->cell(20, $alt, "", 1, 0, "R", 0);
+      }
+      else if ($pc23_percentualdesconto != 0) {
+        $pdf->cell(24, $alt, $pc23_percentualdesconto."%", 1, 0, "R", 0);
+        $pdf->cell(20, $alt, "", 1, 0, "R", 0);
+      } else {
+         $pdf->cell(24, $alt, "", 1, 0, "R", 0);
+         $pdf->cell(20, $alt, number_format($pc23_vlrun,$oGet->quant_casas,',','.'), 1, 0, "R", 0);
+      }
+      /*FIM - OC3770*/
       $pdf->cell(20, $alt, number_format($pc23_valor,$oGet->quant_casas,',','.'), 1, 1, "R", 0);
       $total_unit  += $pc23_vlrun;
       $iContOrcamento++;
@@ -257,13 +270,22 @@ if ($modelo == 1) {
     $pdf->setfont('arial', '', 9);
     $pdf->cell(20, $alt, "", 0, 0, "L", 0);
     $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
-    $pdf->cell(20, $alt, number_format($total_unit/$iContOrcamento,$oGet->quant_casas,',','.'), 0, 0, "R", 0);
+
+    /*OC3770*/
+    if ($pc23_perctaxadesctabela != 0 || $pc23_percentualdesconto != 0) {
+       $pdf->cell(20, $alt, "", 0, 0, "R", 0);
+    } else {
+       $pdf->cell(20, $alt, number_format($total_unit/$iContOrcamento,$oGet->quant_casas,',','.'), 0, 0, "R", 0);
+    }
+    /*FIM - OC3770*/
+
     if($quant_casas == 2){
       $pdf->cell(20, $alt, number_format(round(($total_unit/$iContOrcamento),2)*$quant, $oGet->quant_casas,',','.'), 0, 1, "R", 0);
     }
     else{
       $pdf->cell(20, $alt, number_format(round(($total_unit/$iContOrcamento),3)*$quant, $oGet->quant_casas,',','.'), 0, 1, "R", 0); 
     }
+
     $pdf->cell(279,$alt,'','',1,"L",0);
     if($quant_casas == 2){
       $total_media += round(($total_unit/$iContOrcamento),2)*$quant;  

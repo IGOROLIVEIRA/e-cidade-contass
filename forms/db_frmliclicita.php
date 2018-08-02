@@ -171,7 +171,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                                 echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
                                             }
                                         }
-                                        ?><input	type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
+                                        ?><input  type="hidden" id="descricao" name="descricao" value=""   onchange="js_convite()">
 
                                     </td>
                                 </tr>
@@ -264,19 +264,34 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-
+                                <!--
                                 <tr>
-                                    <td nowrap title="<?=@$Tl20_descontotab?>" id="descontotab">
-                                        <?=@$Ll20_descontotab?>
+                                    <td nowrap title="<?//@$Tl20_descontotab?>" id="descontotab">
+                                        <?//@$Ll20_descontotab?>
                                     </td>
                                     <td>
                                         <?
-                                        $al20_descontotab = array("2"=>"2- Não","1"=>"1- Sim");
-                                        db_select("l20_descontotab",$al20_descontotab,true,$db_opcao);
+                                        //$al20_descontotab = array("2"=>"2- Não","1"=>"1- Sim");
+                                        //db_select("l20_descontotab",$al20_descontotab,true,$db_opcao);
                                         ?>
                                     </td>
                                 </tr>
+                                -->
 
+                                <tr>
+                                    <td id="descontotab">
+                                      <label class="bold">Critério de Adjudicação:</label>
+                                    </td>
+                                    <td>
+                                      <? //OC3770
+                                      if(!isset($l20_criterioadjudicacao) || $l20_criterioadjudicacao == '') {
+                                        $l20_criterioadjudicacao = "";
+                                      }
+                                      $aCriterios = array("" => "Selecione..", "3" => "Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
+                                      db_select("l20_criterioadjudicacao", $aCriterios, true, '');
+                                      ?>
+                                  </td>
+                                </tr>
 
 
                                 <tr>
@@ -425,7 +440,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                         </fieldset>
 
                         <fieldset>
-                            <legend><strong>Detalhamento para ME e EPP	</strong></legend>
+                            <legend><strong>Detalhamento para ME e EPP  </strong></legend>
                             <table>
                                 <tr>
                                     <td nowrap title="<?=@$Tl20_critdesempate?>">
@@ -469,7 +484,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                         </fieldset>
 
                         <fieldset>
-                            <legend><strong>Informações Adicionais	</strong></legend>
+                            <legend><strong>Informações Adicionais  </strong></legend>
                             <table>
 
                                 <tr id="trTipoJulgamento">
@@ -869,7 +884,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display='none';
             document.form1.l20_tipnaturezaproced.style.display='none';
-            document.form1.l20_descontotab.style.display='none';
+            document.form1.l20_criterioadjudicacao.style.display='none';
             document.form1.l20_numeroconvidado.style.display='none';
             document.form1.l20_dataaber.style.display='none';
             document.form1.dtjs_l20_dataaber.style.display='none';
@@ -918,7 +933,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display='inline';
             document.form1.l20_tipnaturezaproced.style.display='inline';
-            document.form1.l20_descontotab.style.display='inline';
+            document.form1.l20_criterioadjudicacao.style.display='inline';
             document.form1.l20_numeroconvidado.style.display='inline';
             document.form1.l20_dataaber.style.display='inline';
             document.form1.dtjs_l20_dataaber.style.display='inline';
@@ -1433,7 +1448,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
 
-    /*Para desabilitar o combo 	Usa Registro de Preço */
+    /*Para desabilitar o combo  Usa Registro de Preço */
     var campo=$(l20_tipnaturezaproced).value;
     if(campo=='2'){
         $('l20_usaregistropreco').value='t';
@@ -1442,7 +1457,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
 
-    $('l20_descontotab').value='2';
+    //$('l20_descontotab').value='2';
 
 
     document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';

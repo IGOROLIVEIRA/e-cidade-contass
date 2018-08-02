@@ -170,6 +170,25 @@ $val = false;
           </td>
           <td colspan="2"></td>
         </tr>
+        <!--OC3770-->
+        <tr>
+          <td align="left">
+            <label class="bold">Critério de Adjudicação:</label>
+          </td>
+          <td>
+            <?php
+
+              $aCriterios = array('' => 'Selecione',
+                               3 => 'Outros',
+                               1 => 'Desconto sobre tabela',
+                               2 => 'Menor taxa ou percentual');
+
+              db_select('pc80_criterioadjudicacao', $aCriterios, true, '', 'style="width:100%"');
+            ?>
+          </td>
+          <td colspan="2"></td>
+        </tr>
+        <!-- FIM - OC3770-->
         <tr>
           <td align="left" nowrap title="<?=@$Tpc10_resumo?>" colspan="4">
             <fieldset>

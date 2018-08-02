@@ -144,7 +144,10 @@ if(isset($o56_codele) and trim($o56_codele) != ''){
       $dDataAtual = date('Y-m-d', db_getsession("DB_datausu"));
       //echo($clpcmaterele->sql_query_file(null,null,"pc07_codmater as pc01_codmater","pc07_codmater"," pc07_codele=$o56_codele "));exit;
       $where_ativo = " pc07_codele is not null ";
-      $where_ativo .= " and pc01_data <= '$dDataAtual' ";
+      /*
+        Trecho descontinuado devido a OC3770
+        $where_ativo .= " and pc01_data <= '$dDataAtual' ";
+      */
       if(isset($opcao) && trim($opcao)!="i"){
         $where_ativo .= " and pc01_ativo='$opcao' ";
       }
@@ -194,7 +197,7 @@ if(isset($o56_codele) and trim($o56_codele) != ''){
             $where_subgrupo = "";
           }
           $sql = $clpcmater->sql_query_desdobra("",$campos,"pc01_codmater","pc03_codgrupo = $chave_pc03_codgrupo and pc04_codsubgrupo = pc01_codsubgrupo and pc04_codgrupo = pc03_codgrupo and $where_ativo $where_subgrupo");
-        }
+        }//print_r($sql);die;
         db_lovrot(@$sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){

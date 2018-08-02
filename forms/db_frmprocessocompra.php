@@ -102,6 +102,22 @@ $clrotulo->label("descrdepto");
             </td>
           </tr>
           <tr>
+          <!--OC3770-->
+        <tr>
+          <td>
+            <label class="bold">Critério de Adjudicação:</label>
+          </td>
+          <td>
+            <?
+
+              $aCriterios = array("" => "Selecione",
+                "3" => "Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
+              db_select("pc80_criterioadjudicacao", $aCriterios, true, '');
+            ?>
+          </td>
+          <td colspan="2"></td>
+        </tr>
+        <!-- FIM - OC3770-->
             <td colspan="4">
 
               <fieldset class="text-center">
@@ -165,14 +181,13 @@ $clrotulo->label("descrdepto");
   </div>
 
   <div class="subcontainer">
-    <input name="excluir" type="button" value="Excluir" id="excluir" disabled/>
-    <input name="alterar" type="button" value="Alterar" id="alterar" disabled/>
-    <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();"/>
+    <input name="excluir" type="button" value="Excluir" id="excluir" disabled>
+    <input name="alterar" type="button" value="Alterar" id="alterar" disabled>
+    <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
   </div>
 </form>
 
 <script>
-
   (function(exports) {
 
     const MENSAGENS = 'patrimonial.compras.com4_processocompra.';
@@ -198,7 +213,8 @@ $clrotulo->label("descrdepto");
           descricao_departamento : $('descrdepto'),
           resumo                 : $('pc80_resumo'),
           tipo_processo          : $('pc80_tipoprocesso'),
-          lote                   : $('lote')
+          lote                   : $('lote'),
+          criterioajudicacao     : $('pc80_criterioadjudicacao')
         },
         lRedirecionaLote = false;
 
@@ -263,6 +279,8 @@ $clrotulo->label("descrdepto");
       oCampos.resumo.value                 = '';
       oCampos.tipo_processo.value          = '';
       oCampos.lote.value                   = '';
+
+      oCampos.criterioajudicacao.value     = '';
 
       oBotaoOperacao.disabled = true;
       oAbaLote.bloquear();
@@ -330,6 +348,16 @@ $clrotulo->label("descrdepto");
           oCampos.descricao_departamento.value = oRetorno.descrdepto.urlDecode();
           oCampos.resumo.value                 = oRetorno.pc80_resumo.urlDecode();
           oCampos.tipo_processo.value          = (oRetorno.pc80_tipoprocesso == 1 ? "Item" : "Lote");
+          /*OC3770*/
+          if (oRetorno.pc80_criterioadjudicacao == 3) {
+            document.getElementById('pc80_criterioadjudicacao').selectedIndex = 1;
+          }
+          else if (oRetorno.pc80_criterioadjudicacao == 1) {
+            document.getElementById('pc80_criterioadjudicacao').selectedIndex = 2;
+          }
+          else {
+            document.getElementById('pc80_criterioadjudicacao').selectedIndex = 3;
+          }
 
           aLotes = (Object.isArray(oRetorno.aLotes) ? {} : oRetorno.aLotes);
 
@@ -561,6 +589,11 @@ $clrotulo->label("descrdepto");
         return false;
       }
 
+      if (oCampos.criterioajudicacao.value == '') {
+        alert("Campo Critério de Adjudicação não informado.");
+        return false;
+      }
+
       /**
        * Monta o array de lotes
        */
@@ -597,8 +630,9 @@ $clrotulo->label("descrdepto");
           sExecutar : "salvar",
           iProcessoCompra : iCodigoProcesso,
           sResumo : oCampos.resumo.value,
+          criterioaj : oCampos.criterioajudicacao.value,
           aItens : aItensLote
-        }
+      }
 
       new AjaxRequest(sRpc, oParametros, function(oRetorno, erro) {
 
@@ -625,7 +659,7 @@ $clrotulo->label("descrdepto");
       var oParametros = {
           sExecutar : "excluir",
           iProcessoCompra : iCodigoProcesso
-        }
+      }
 
       new AjaxRequest(sRpc, oParametros, function(oRetorno, erro) {
 

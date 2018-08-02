@@ -170,6 +170,9 @@ if (isset($datafinal)){
           $campos = "pcorcam.*";
         }
       }
+      /*OC3770*/
+          $campos += ", pc80_criterioadjudicacao ";
+      /*FIM - OC3770*/
       $where_sol = "";
       if(isset($sol) && $sol=='true'){
         $where_sol = " and pc29_orcamitem is not null and c.pc10_depto=".db_getsession('DB_coddepto');
@@ -195,7 +198,13 @@ if (isset($datafinal)){
         //          $where_sol = " and pc31_orcamitem is not null";
         //        }
         $where_sol.= " and d.pc10_instit=".db_getsession('DB_instit');
-        $campos = "pcproc.pc80_codproc,".$campos.",pcproc.pc80_resumo";
+        /*OC3770*/
+        if ($campos == 0) {
+          $campos = " pc20_codorc,pcproc.pc80_codproc,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao";
+        } else {
+          $campos = $campos." pc20_codorc,pcproc.pc80_codproc,f.coddepto,f.descrdepto,pc80_data,pc80_criterioadjudicacao";
+        }
+        /*FIM - OC3770*/
       }else if(isset($lic) && $lic=='true'){
         $where_sol = " and pc26_orcamitem is not null";
         $where_sol.= " and j.pc10_instit=".db_getsession('DB_instit');
@@ -247,32 +256,35 @@ if (isset($datafinal)){
         $where_sol .= " and (d.pc10_solicitacaotipo not in (3, 4) or d.pc10_numero is null)";
       }
 
-      if(!isset($pesquisa_chave)){
-        if(isset($chave_pc20_codorc) && (trim($chave_pc20_codorc)!="") ){
+      if (!isset($pesquisa_chave)) {
+        if (isset($chave_pc20_codorc) && (trim($chave_pc20_codorc)!="") ) {
           $sql = $clpcorcam->sql_query_solproc(null,$campos,"pc20_codorc desc","pc20_codorc=$chave_pc20_codorc ".$where_sol);
-        }else if(isset($chave_pc10_numero) && (trim($chave_pc10_numero)!="") ){
+        } else if (isset($chave_pc10_numero) && (trim($chave_pc10_numero)!="") ) {
           $sql = $clpcorcam->sql_query_solproc(null,$campos,"pc20_codorc desc"," c.pc10_numero=$chave_pc10_numero ".$where_sol);
-        }else if(isset($chave_pc80_codproc) && (trim($chave_pc80_codproc)!="") ){
+        } else if (isset($chave_pc80_codproc) && (trim($chave_pc80_codproc)!="") ) {
           $sql = $clpcorcam->sql_query_solproc(null,$campos,"pcproc.pc80_codproc"," pcproc.pc80_codproc=$chave_pc80_codproc ".$where_sol);
-        }else if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
+        } else if (isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ) {
           $sql = $clpcorcam->sql_query_solproc(null,$campos,"l20_codigo"," l20_codigo=$chave_l20_codigo ".$where_sol);
-        }else if(isset($exc)){
-          $sql = $clpcorcam->sql_query_solproc(null,$campos,"pc20_codorc desc "," 1=1 ".$where_sol);
-        }else{
-          $sql = $clpcorcam->sql_query_solproc(null,$campos,"pc20_codorc desc",' 1=1 '.$where_sol);
+        } else if (isset($exc)) {
+          $sql = $clpcorcam->sql_query_solproc(null,$campos,"pc80_codproc desc "," 1=1 ".$where_sol);
+        } else {
+          $sql = $clpcorcam->sql_query_solproc(null,$campos,"pc80_codproc desc",' 1=1 '.$where_sol);
         }
-
+//print_r($sql);die;
         db_lovrot($sql,15,"()","",$funcao_js, "", "NoMe", array(), false);
-      }else{
-        if($pesquisa_chave!=null && $pesquisa_chave!=""){
+      } else {
+        if ($pesquisa_chave!=null && $pesquisa_chave!="") {
+          /*OC3770*/
+          $campos += ", pc80_criterioadjudicacao ";
+          /*FIM - OC3770*/
           $result = $clpcorcam->sql_record($clpcorcam->sql_query_solproc(null,$campos,"","pc20_codorc=$pesquisa_chave ".$where_sol));
-          if($clpcorcam->numrows!=0){
+          if ($clpcorcam->numrows!=0) {
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$pc20_codorc',false);</script>";
-          }else{
+            echo "<script>".$funcao_js."('$pc20_codorc', '$pc80_criterioadjudicacao',false);</script>";
+          } else {
             echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
-        }else{
+        } else {
           echo "<script>".$funcao_js."('',false);</script>";
         }
       }

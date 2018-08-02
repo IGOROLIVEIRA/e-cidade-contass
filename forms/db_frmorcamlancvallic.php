@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clpcorcam->rotulo->label();
@@ -55,18 +55,18 @@ function js_buscarcod(){
     if(obj.elements[i].name.substr(0,6)=="valor_"){
       valor=obj.elements[i].value;
       //var valor=new Number(obj.elements[i].value);
-      retorno+=obj.elements[i].name+"_"+valor;	
+      retorno+=obj.elements[i].name+"_"+valor;
       erro0++;
     }
   }
   document.form1.valores.value = retorno;
-  
+
   retorno = "";
   for(i=0;i<obj.elements.length;i++){
     if(obj.elements[i].name.substr(0,6)=="vlrun_"){
       //var valor=new Number(obj.elements[i].value);
       valor=obj.elements[i].value;
-      retorno+=obj.elements[i].name+"_"+valor;	
+      retorno+=obj.elements[i].name+"_"+valor;
       erro0++;
     }
   }
@@ -81,7 +81,7 @@ function js_buscarcod(){
     }
   }
   document.form1.qtdades.value = retorno;
-  
+
   retorno = "";
   for(i=0;i<obj.elements.length;i++){
     if(obj.elements[i].name.substr(0,11)=="qtdeOrcada_"){
@@ -110,12 +110,12 @@ function js_buscarcod(){
         div="#";
        }else{
        div="";
-       }     
+       }
 		 }
     }
-  }  
-  document.form1.dataval.value = retorno;  
-  
+  }
+  document.form1.dataval.value = retorno;
+
   retorno = "";
   for(i=0;i<obj.elements.length;i++){
     if(obj.elements[i].name.substr(0,4)=="obs_"){
@@ -134,6 +134,29 @@ function js_buscarcod(){
     }
   }
   document.form1.obss.value = retorno;
+
+  /*OC3770*/
+  retorno = "";
+  for(i=0;i<obj.elements.length;i++){
+    if(obj.elements[i].name.substr(0,13)=="percdesctaxa_"){
+      var valor=new Number(obj.elements[i].value);
+      retorno+=obj.elements[i].name+"_"+valor;
+      erro1++;
+    }
+  }
+  document.form1.valorperc.value = retorno;
+
+  retorno = "";
+  for(i=0;i<obj.elements.length;i++){
+    if(obj.elements[i].name.substr(0,4)=="chk_"){
+      var valor=obj.elements[i].value;
+      retorno+=valor;
+      erro1++;
+    }
+  }
+  document.form1.lotes.value = retorno;
+
+  /*FIM - OC3770*/
   /*
   if(erro0!=erro1){
     alert('Usuário: \n\nInforme quantidade e valor dos orçamentos. \n\nAdministrador:'+erro0+' -- '+erro1);
@@ -150,27 +173,31 @@ function js_buscarcod(){
   <tr>
     <td>
       <table border="0">
-<?
-   if (isset($pc20_codorc) && trim($pc20_codorc) != ""){
-?>
+      <?
+        if (isset($pc20_codorc) && trim($pc20_codorc) != ""){
+      ?>
         <tr>
           <td nowrap align='right' width="50%" title="<?=@$Tpc20_codorc?>">
-	  <?=@$Lpc20_codorc?>
-	  </td>
-	  <td width="50%" align='left'>
-	  <?
-	    db_input('pc20_codorc',8,$Ipc20_codorc,true,'text',3,"");
-      db_input('valores',40,0,true,'hidden',3,"");
-      db_input('valoresun',40,0,true,'hidden',3,"");
-      db_input('qtdades',8,0,true,'hidden',3,"");
-      db_input('qtdadesOrcadas',8,0,true,'hidden',3,"");
-      db_input('obss',8,0,true,'hidden',3,"");
-      db_input('lic',6,0,true,'hidden',3,"");
-      db_input('lc20_codigo',6,0,true,'text',3,"");
-      db_input('dataval',40,0,true,'hidden',3,"");	  
-	  ?>
-	  </td>
-        </tr>	
+      	  <?=@$Lpc20_codorc?>
+      	  </td>
+      	  <td width="50%" align='left'>
+      	  <?
+      	    db_input('pc20_codorc',8,$Ipc20_codorc,true,'text',3,"");
+            db_input('valores',40,0,true,'hidden',3,"");
+            db_input('valoresun',40,0,true,'hidden',3,"");
+            db_input('qtdades',8,0,true,'hidden',3,"");
+            db_input('qtdadesOrcadas',8,0,true,'hidden',3,"");
+            db_input('obss',8,0,true,'hidden',3,"");
+            db_input('lic',6,0,true,'hidden',3,"");
+            db_input('lc20_codigo',6,0,true,'text',3,"");
+            db_input('dataval',40,0,true,'hidden',3,"");
+            /*OC3770*/
+            db_input('valorperc',40,0,true,'hidden',3,"");
+            db_input('lotes',40,0,true,'hidden',3,"");
+            /*FIM - OC3770*/
+      	  ?>
+      	  </td>
+        </tr>
 	<?
 
 	$voltar = false;
@@ -183,9 +210,9 @@ function js_buscarcod(){
           $qry = "";
 	  if(isset($pc21_orcamforne) && trim($pc21_orcamforne)!=""){
 	    $qry = "&pc21_orcamforne=$pc21_orcamforne";
-	    $result_lancados = $clpcorcamval->sql_record($clpcorcamval->sql_query(null,null,"pc23_orcamforne,pc23_orcamitem,pc23_valor","","pcorcam.pc20_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));
-        // echo ($clpcorcamval->sql_query(null,null,"pc23_orcamforne,pc23_orcamitem,pc23_valor","","pcorcam.pc20_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));
-	    if($clpcorcamval->numrows>0 && $db_opcao!=3 && $db_opcao!=33){
+	    $result_lancados = $clpcorcamval->sql_record($clpcorcamval->sql_query(null,null,"pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_perctaxadesctabela","","pcorcam.pc20_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));
+        //print_r($clpcorcamval->sql_query(null,null,"pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_perctaxadesctabela","","pcorcam.pc20_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));die;
+  	    if($clpcorcamval->numrows>0 && $db_opcao!=3 && $db_opcao!=33){
 	      $voltar = true;
 	      $db_opcao=2;
 	      $db_botao=true;
@@ -198,10 +225,10 @@ function js_buscarcod(){
 		    </td>
 		    <td width='50%' align='left'>";
 	  db_selectrecord("pc21_orcamforne",$result_forne,true,$db_opcao,"","","","","js_dalocation(document.form1.pc21_orcamforne.value);");
-	  echo "    <td>      
+	  echo "    <td>
 		  </tr>";
 
-    db_input("l20_codigo",10,"",true,"hidden",3);     
+    db_input("l20_codigo",10,"",true,"hidden",3);
     $achou         = false;
     $res_liclicita = $clliclicita->sql_record($clliclicita->sql_query_file(@$l20_codigo,"l20_tipojulg"));
     if ($clliclicita->numrows > 0){
@@ -263,12 +290,12 @@ function js_buscarcod(){
                    }
               }
          }
-    }           
+    }
 		  ?>
 		    <tr>
       <td align='right'><?=$Lpc21_validadorc?>
-      
-      	
+
+
       <?
       if(isset($pc21_orcamforne) && trim($pc21_orcamforne)!=""){
       $result_data = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_validadorc,pc21_prazoent","pc21_orcamforne","pc21_codorc=$pc20_codorc and pc21_orcamforne=$pc21_orcamforne"));
@@ -276,9 +303,9 @@ function js_buscarcod(){
       		db_fieldsmemory($result_data,0);
       	}
       }
-       
+
       db_inputdata("pc21_validadorc",@$pc21_validadorc_dia,@$pc21_validadorc_mes,@$pc21_validadorc_ano,true,"text",$db_opcao); ?></td>
-      
+
       <td><?=$Lpc21_prazoent?>
       <?db_inputdata("pc21_prazoent",@$pc21_prazoent_dia,@$pc21_prazoent_mes,@$pc21_prazoent_ano,true,"text",$db_opcao); ?></td>
       </tr>
@@ -291,10 +318,10 @@ function js_buscarcod(){
 		    <td align='center' colspan='2'>
 		      <iframe name='elementos' id='elementos'  marginwidth='0' marginheight='0' frameborder='0' src='lic1_orcamlancval0011.php?pc20_codorc=$pc20_codorc&db_opcao=$db_opcao".$qry."&lic=".@$lic."' width='1200' height='300'>
 		      </iframe>
-		    <td>      
+		    <td>
 		  </tr>\n";
 	  echo "  <tr>
-              <td colspan='2' height='30'>&nbsp;</td>  
+              <td colspan='2' height='30'>&nbsp;</td>
             </tr>\n
             <tr>
 		    <td colspan='2' align='center'>
@@ -303,9 +330,9 @@ function js_buscarcod(){
 		      <input name='importar' type='button' id='importar' value='Valores unitários'  onclick='elementos.js_importar(true);elementos.js_somavalor();'>
 		      <input name='zerar'  type='button' id='zerar' value='Zerar valores'  onclick='elementos.js_importar(false);elementos.js_somavalor();'>
           <input name='bt_descla' type='button' id='bt_descla' value='Desclassificar itens' onClick='elementos.js_abrejan();'>\n";
-          
+
     echo "<input name='cancdescla' type='button' id='cancdescla' value='Cancelar desclassificacao de itens' onClick='elementos.js_cancdescla($pc20_codorc,$l20_codigo);'>\n";
-    
+
 	  if($voltar==true){
         echo "<input name='trocar' type='button' id='trocar' value='Julgar licitação' onclick='document.location.href=\"lic1_pcorcamtroca001.php?pc20_codorc=$pc20_codorc&pc21_orcamforne=$pc21_orcamforne&l20_codigo=$l20_codigo\"'>";
 	  }
@@ -315,7 +342,7 @@ function js_buscarcod(){
 		      <br><br>
 		      <strong>Não existem itens para este orçamento.</strong>
 		      <br><br>
-		    <td>      
+		    <td>
 		  </tr>";
 	}
    } else {
@@ -327,8 +354,8 @@ function js_buscarcod(){
 		      <br><br>
 		      <strong>Licitação sem itens cadastrados.</strong>
 		      <br><br>
-		    <td>      
-		  </tr>";			
+		    <td>
+		  </tr>";
 		} else {
 			echo "<script>alert('Licitação sem fornecedores cadastrados');</script>";
       echo "<script>document.location.href=\"lic1_fornec001.php?chavepesquisa={$l20_codigo}\"</script>";
@@ -338,9 +365,9 @@ function js_buscarcod(){
 		    <td align='center' colspan='2'>
 		      <input name='voltar' type='button' id='voltar' value='Voltar'  onclick='document.location.href=\"lic1_lancavallic001.php\"'>
         </td>
-       </tr>"; 
+       </tr>";
    }
-	?>  
+	?>
       </table>
     </td>
   </tr>

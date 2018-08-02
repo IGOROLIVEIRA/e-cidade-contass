@@ -405,17 +405,19 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
    $pdf1->compl                  = $z01_compl;
 
    $arr_numerl = split("/",$e54_numerl);
-
+   //var_dump($arr_numerl);die;
    if (sizeof($arr_numerl) > 1) {
         $numerl = db_formatar($arr_numerl[0],"s","0",strlen($arr_numerl[0])+1,"e",0)."/".$arr_numerl[1];
         $pdf1->edital_licitacao = $arr_numerl[0];
         $pdf1->ano_licitacao    = $arr_numerl[1];
    } else {
         if (sizeof($arr_numerl) == 1){
-	     $numerl = $arr_numerl[0];
-	} else {
-             $numerl = "";
-	}
+          $numerl = $arr_numerl[0];
+          $pdf1->edital_licitacao = $e54_numerl;
+          $pdf1->ano_licitacao    = $e54_anousu;
+        } else {
+              $numerl = $e54_numerl;
+        }
    }
 
    //$pdf1->num_licitacao    = $l03_codcom." - ".$l03_descr;

@@ -67,10 +67,10 @@ if(isset($incluir)){
   $anousu     = db_getsession("DB_anousu");
 
   	if(in_array(db_utils::fieldsMemory($clcflicita->sql_record($clcflicita->sql_query($l20_codtipocomdescr,"distinct l03_pctipocompratribunal")),0)->l03_pctipocompratribunal,array("52","53"))){
-  		$result = $cldecretopregao->sql_record($cldecretopregao->sql_query('','*')); 
+  		$result = $cldecretopregao->sql_record($cldecretopregao->sql_query('','*'));
   		if($cldecretopregao->numrows == 0){
   			$erro_msg="Não há decreto pregão";
-    		$sqlerro = true;			
+    		$sqlerro = true;
   		}
   	}
 	//verifica se as duas modalidades estão configuradas.
@@ -162,6 +162,8 @@ if(isset($incluir)){
 		  $clliclicita->l20_anousu      =  $anousu;
 		  $clliclicita->l20_licsituacao = '0';
 		  $clliclicita->l20_instit      = db_getsession("DB_instit");
+
+      $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
 
 		  $clliclicita->incluir(null);
 

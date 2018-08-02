@@ -1,4 +1,4 @@
-<?php
+  <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -187,7 +187,8 @@ if(isset($alterar)){
     $clliclicita->l20_procadmin    = $sProcAdmin;
     $clliclicita->l20_equipepregao = $l20_equipepregao;
   //$clliclicita->l20_horaaber     = $l20_horaaber;
-    $clliclicita->alterar($l20_codigo,$descricao);
+  $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao;//OC3770
+  $clliclicita->alterar($l20_codigo,$descricao);
 
     if ($clliclicita->erro_status == "0") {
       $erro_msg = $clliclicita->erro_msg;

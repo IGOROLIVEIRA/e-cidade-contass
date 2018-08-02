@@ -457,6 +457,11 @@ class cl_pcorcamitem {
                                           and  pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne ";
      $sql .= "      left  join liclicitemlote on liclicitemlote.l04_liclicitem = liclicitem.l21_codigo ";
      $sql .= "      left  join licsituacao on  liclicita.l20_licsituacao = licsituacao.l08_sequencial ";
+     /*OC3770*/
+     $sql .= "      LEFT JOIN pcproc ON  pcproc.pc80_codproc = pcprocitem.pc81_codproc ";
+     $sql .= " LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne ";
+     /*FIM - OC3770*/
+
      $sql2 = "";
      if($dbwhere==""){
        if($pc22_orcamitem!=null ){
@@ -501,6 +506,7 @@ class cl_pcorcamitem {
      $sql .= "      left  join processocompralote      on  pc68_sequencial = pc69_processocompralote";
      $sql .= "      left join solicitemunid  on  solicitemunid.pc17_codigo = solicitem.pc11_codigo";
      $sql .= "      left join matunid  on  matunid.m61_codmatunid = solicitemunid.pc17_unid";
+
      $sql2 = "";
      if($dbwhere==""){
        if($pc22_orcamitem!=null ){

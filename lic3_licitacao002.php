@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -202,13 +202,13 @@ if (!empty($oProcessoProtocolo)) {
         <?php echo $oLicitatacao->l08_descr; ?>
       </td>
     </tr>
-    
+
     <tr>
-      <td nowrap="nowrap" title="<?=@$Tl20_descontotab?>">
-        <?=@$Ll20_descontotab?>
+      <td nowrap="nowrap" title="<?=@$Tl20_criterioadjudicacao?>">
+        <?=@$Ll20_criterioadjudicacao?>
       </td>
       <td nowrap="nowrap" class="valor" style="text-align: left;">
-        <?php echo $oLicitatacao->l20_descontotab == 1 ? 'Sim' : 'Não' ?>
+        <?php echo $oLicitatacao->l20_criterioadjudicacao == 1 ? 'Tabela' : $oLicitatacao->l20_criterioadjudicacao == 2 ? 'Taxa' : 'Outros' ?>
       </td>
 
       <td nowrap="nowrap" title="<?=@$Tl20_usaregistropreco?>">
@@ -218,7 +218,7 @@ if (!empty($oProcessoProtocolo)) {
         <?php echo $oLicitatacao->l20_usaregistropreco == 't' ? 'Sim' : 'Não'; ?>
       </td>
     </tr>
-    
+
     <tr>
       <td nowrap="nowrap" title="<?=@$Tl20_local?>">
         <b><?=@$Ll20_local?></b>
@@ -289,16 +289,16 @@ if (!empty($oProcessoProtocolo)) {
 
   $oVerticalTab->add('dadosAcordo', 'Acordos',
       "com3_pesquisalicitacaocontrato.php?{$sGetUrl}");
-  
+
   $oVerticalTab->add('dadosHomologacao', 'Homologação',
       "com3_pesquisahomologacao.php?{$sGetUrl}");
-  
+
   $oVerticalTab->add('dadosResponsaveis', 'Responsáveis pela Licitação',
       "com3_pesquisaresponsaveis.php?{$sGetUrl}");
-  
+
   $oVerticalTab->add('dadosComissao', 'Comissão de Licitação',
       "com3_pesquisacomissao.php?{$sGetUrl}");
-  
+
   $oVerticalTab->add('dadosComissao', 'Fornecedores Habilitados',
       "lic3_fornhabilitados.php?{$sGetUrl}");
 

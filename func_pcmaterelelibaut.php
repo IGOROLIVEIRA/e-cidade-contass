@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -78,27 +78,27 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
        <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tpc07_codmater?>">
               <?=$Lpc07_codmater?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <? db_input("pc07_codmater",6,$Ipc07_codmater,true,"text",4,"","chave_pc07_codmater"); ?>
             </td>
           </tr>
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$To56_elemento?>">
               <?=$Lo56_elemento?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?  db_input("o56_elemento",15,$Io56_elemento,true,"text",4,"","chave_o56_elemento");	 ?>
             </td>
           </tr>
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tpc01_descrmater?>">
               <?=$Lpc01_descrmater?>
             </td>
@@ -106,7 +106,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
              <td width="96%" align="left" nowrap><? db_input("pc01_descrmater",80,$Ipc01_descrmater,true,"text",4,"","chave_pc01_descrmater"); ?></td>
 
           </tr>
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="Selecionar todos, ativos ou inativos"><b>Seleção por:</b></td>
             <td width="96%" align="left" nowrap>
               <?
@@ -117,26 +117,26 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
       	        $opcao_bloq = 1;
               }
               $arr_opcao = array("i"=>"Todos","f"=>"Ativos","t"=>"Inativos");
-              db_select('opcao',$arr_opcao,true,$opcao_bloq,"onchange='js_reload();'"); 
+              db_select('opcao',$arr_opcao,true,$opcao_bloq,"onchange='js_reload();'");
               ?>
             </td>
            </tr>
-           <tr> 
-             <td colspan="2" align="center"> 
-               <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+           <tr>
+             <td colspan="2" align="center">
+               <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
                <input name="limpar" type="reset" id="limpar" value="Limpar" >
                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_pcmaterele.hide();">
              </td>
            </tr>
-           <script>  	      
+           <script>
              document.form2.chave_pc01_descrmater.focus();
            </script>
          </form>
        </table>
      </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
       $where_libaut = "1=1";
 
@@ -173,12 +173,12 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
           }
         }
         if (isset($chave_pc07_codmater) && (trim($chave_pc07_codmater)!="") ) {
-          
+
           $sql = $clpcmaterele->sql_query(null,null,$campos,"pc07_codmater"," pc07_codmater=$chave_pc07_codmater $where_ativo and $where_libaut {$sWhereElementoAutorizacao}");
           $repassa["chave_pc07_codmater"] = $chave_pc07_codmater;
 
         } else if (isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater)!="") && isset($chave_o56_elemento) && (trim($chave_o56_elemento)!="" ) ) {
-          
+
           $sql = $clpcmaterele->sql_query_funcauteledescr("","",$campos,"pc07_codmater","$chave_pc01_descrmater#$chave_o56_elemento", $sWhereElementoAutorizacao);
           $repassa["chave_pc01_descrmater"] = $chave_pc01_descrmater;
           $repassa["chave_o56_elemento"]    = $chave_o56_elemento;
@@ -194,23 +194,174 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
           $sWhere .= " and {$where_libaut} ";
           $sWhere .= "     {$where_ativo} ";
           $sWhere .= "     {$sPesquisaPorElemento}";
-                            
+
           $sql = $clpcmaterele->sql_query_funcaut(null, null, $campos, "pc07_codmater", $sWhere, $sWhereElementoAutorizacao );
           $repassa["chave_pc01_descrmater"] = $chave_pc01_descrmater;
 
         } else if (isset($chave_o56_elemento) && (trim($chave_o56_elemento)!="") ) {
-          
+
           $sql = $clpcmaterele->sql_query_funcautele("","",$campos,"pc07_codmater"," o56_elemento like '$chave_o56_elemento%' and o56_anousu = " . db_getsession("DB_anousu"),  " {$sWhereElementoAutorizacao} ");
           $repassa["chave_o56_elemento"]    = $chave_o56_elemento;
 
-        } else {
-          
-          $sql = $clpcmaterele->sql_query_funcaut("","",$campos,"pc07_codmater#pc07_codele"," 1=1 and $where_libaut $where_ativo {$sWhereElementoAutorizacao}");
-          $sql = "";
-
         }
 
-        
+        else if (isset($criterioadjudicacao) && $criterioadjudicacao == true && isset($z01_numcgm)) {
+          $sql = "
+          SELECT * FROM (
+            SELECT DISTINCT pcmater.pc01_codmater,
+                            pcmater.pc01_descrmater,
+                            o56_elemento,
+                            o56_descr,
+                            pc07_codele,
+                            pcmater.pc01_servico,
+                            pc23_orcamforne,
+                            z01_numcgm,
+                            pc23_quant,
+                            pc23_vlrun,
+                            pc23_valor,
+                            pc80_criterioadjudicacao,
+                            pcmater.pc01_servico,
+                            'itemtabela' as tipoitem
+            FROM liclicitem
+            LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+            LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+            LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+            LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+            LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+            LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+            LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+            LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+            LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+            LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+            LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+            LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+            LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+            LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+            LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                        AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+            LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+            LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+            LEFT JOIN pcmater itemtabela ON itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
+            LEFT JOIN pctabela ON pctabela.pc94_codmater = itemtabela.pc01_codmater
+            LEFT JOIN pctabelaitem ON pctabelaitem.pc95_codtabela = pctabela.pc94_sequencial
+            LEFT JOIN pcmater ON pcmater.pc01_codmater = pctabelaitem.pc95_codmater
+            LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pctabelaitem.pc95_codmater
+            INNER JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+                        AND orcelemento.o56_anousu = ".db_getsession('DB_anousu')."
+            WHERE l20_codigo =
+                    (SELECT e54_codlicitacao
+                     FROM empautoriza
+                     WHERE e54_autori = {$iCodigoAutorizacao})
+                AND pc24_pontuacao=1
+
+            UNION
+
+            SELECT DISTINCT pcmater.pc01_codmater,
+                            pcmater.pc01_descrmater,
+                            o56_elemento,
+                            o56_descr,
+                            pc07_codele,
+                            pcmater.pc01_servico,
+                            pc23_orcamforne,
+                            z01_numcgm,
+                            pc23_quant,
+                            pc23_vlrun,
+                            pc23_valor,
+                            pc80_criterioadjudicacao,
+                            pcmater.pc01_servico,
+                            'item' as tipoitem
+            FROM liclicitem
+            LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+            LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+            LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+            LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+            LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+            LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+            LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+            LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+            LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+            LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+            LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+            LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+            LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+            LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+            LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                        AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+            LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+            LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+            LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+            LEFT JOIN pcmater itemtabela ON itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
+            LEFT JOIN pctabela ON pctabela.pc94_codmater = itemtabela.pc01_codmater
+            LEFT JOIN pctabelaitem ON pctabelaitem.pc95_codtabela = pctabela.pc94_sequencial
+            LEFT JOIN pcmater itemtabela2 ON itemtabela2.pc01_codmater = itemtabela.pc01_codmater
+            LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = itemtabela.pc01_codmater
+            INNER JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+                        AND orcelemento.o56_anousu = ".db_getsession('DB_anousu')."
+            WHERE l20_codigo =
+                    (SELECT e54_codlicitacao
+                     FROM empautoriza
+                     WHERE e54_autori = {$iCodigoAutorizacao})
+                AND pc24_pontuacao=1
+                AND pcmater.pc01_tabela = 'f'
+                AND pcmater.pc01_taxa = 'f'
+
+            UNION
+
+            SELECT DISTINCT pcmater.pc01_codmater,
+                     pcmater.pc01_descrmater,
+                     o56_elemento,
+                     o56_descr,
+                     pc07_codele,
+                     pcmater.pc01_servico,
+                     pc23_orcamforne,
+                     z01_numcgm,
+                     pc23_quant,
+                     pc23_vlrun,
+                     pc23_valor,
+                     pc80_criterioadjudicacao,
+                     pcmater.pc01_servico,
+                     'naoitem' as tipoitem
+           FROM liclicitem
+           LEFT JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+           LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+           LEFT JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+           LEFT JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+           LEFT JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto
+           LEFT JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+           LEFT JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+           LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+           LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+           LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+           LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+           LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+           LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+           LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
+           LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+           AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+           LEFT JOIN db_usuarios ON pcproc.pc80_usuario = db_usuarios.id_usuario
+           LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+           LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+           LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pcmater.pc01_codmater
+           LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
+           AND orcelemento.o56_anousu = ".db_getsession('DB_anousu')."
+           WHERE l20_codigo =
+                   (SELECT e54_codlicitacao
+                    FROM empautoriza
+                    WHERE e54_autori = {$iCodigoAutorizacao})
+               AND pc24_pontuacao=1
+               AND (pcmater.pc01_tabela = 't' OR pcmater.pc01_taxa = 't')
+               AND pcmater.pc01_codmater NOT IN (select pc94_codmater from pctabela)
+
+          ) fornecedores
+           WHERE fornecedores.z01_numcgm = {$z01_numcgm}
+           ORDER BY fornecedores.pc01_codmater
+          ";
+        }
+
+        else {
+          $sql = $clpcmaterele->sql_query_funcaut("","",$campos,"pc07_codmater#pc07_codele"," 1=1 and $where_libaut $where_ativo {$sWhereElementoAutorizacao}");
+          $sql = "";
+        }
         db_lovrot($sql, 12, "()", "", $funcao_js, "", "NoMe", $repassa);
       } else {
         if ($pesquisa_chave!=null && $pesquisa_chave!="") {
@@ -219,7 +370,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
           if (isset($chave_o56_elemento) && !empty($chave_o56_elemento)) {
             $sWhereElemento = " and o56_elemento like '{$chave_o56_elemento}%'";
           }
-          
+
           $result = $clpcmaterele->sql_record($clpcmaterele->sql_query(null,null,"*",""," pc07_codmater=$pesquisa_chave and $where_libaut $where_ativo $sWhereElemento {$sWhereElementoAutorizacao}"));
           if ($clpcmaterele->numrows!=0) {
             db_fieldsmemory($result,0);
@@ -236,7 +387,7 @@ if (!empty($oGet->iCodigoAutorizacao) && in_array($iCodCli, array(1,20,123))  ) 
    </tr>
 </table>
 </body>
-</html>  
+</html>
 <?
 if(!isset($pesquisa_chave)){
   ?>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -50,15 +50,15 @@ $clrotulo->label("z01_numcgm");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload='document.form1.chave_e54_autori.focus();'>
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td height="63" align="center" valign="top">
         <table width="35%" border="0" align="center" cellspacing="0">
 	     <form name="form2" method="post" action="" >
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Te54_autori?>">
               <?=$Le54_autori?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
               <?
 		       db_input("e54_autori",6,$Ie54_autori,true,"text",4,"","chave_e54_autori");
 		       ?>
@@ -72,21 +72,21 @@ $clrotulo->label("z01_numcgm");
             <td width="4%" align="right" nowrap title="<?=$Tz01_numcgm?>">
               <?=$Lz01_numcgm?>
             </td>
-            <td width="96%" align="left" nowrap> 
+            <td width="96%" align="left" nowrap>
             <? db_input("z01_numcgm",8,$Iz01_numcgm,true,"text",4,"","chave_z01_numcgm");?>
             </td>
          </tr>
-          <tr> 
+          <tr>
             <td width="4%" align="right" nowrap title="<?=$Tz01_nome?>">
               <?=$Lz01_nome?>
             </td>
-            <td width="96%" align="left" nowrap colspan='4'> 
+            <td width="96%" align="left" nowrap colspan='4'>
             <? db_input("z01_nome",40,$Iz01_nome,true,"text",4,"","chave_z01_nome");?>
             </td>
          </tr>
-          <tr> 
-            <td colspan="5" align="center"> 
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+          <tr>
+            <td colspan="5" align="center">
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
               <input name="limpar" type="reset" id="limpar" value="Limpar" >
               <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_selempautoriza.hide();">
              </td>
@@ -95,8 +95,8 @@ $clrotulo->label("z01_numcgm");
         </table>
       </td>
   </tr>
-  <tr> 
-    <td align="center" valign="top"> 
+  <tr>
+    <td align="center" valign="top">
       <?
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
@@ -117,10 +117,53 @@ $clrotulo->label("z01_numcgm");
 	   $sql = $clempautoriza->sql_query("",$campos,"z01_nome"," $dbwhere and z01_numcgm = $chave_z01_numcgm");
         }else if(isset($chave_z01_nome) && (trim($chave_z01_nome)!="") ){
 	   $sql = $clempautoriza->sql_query("",$campos,"z01_nome"," $dbwhere and z01_nome like '$chave_z01_nome%' ");
-        }else{
+        }
+
+        else if(isset($criterioadjudicacao) && $criterioadjudicacao == true){
+          $sql = "
+            SELECT
+                  e54_autori,
+                  e54_emiss,
+                  e54_numcgm,
+                  z01_nome,
+                  db_usuarios.login,
+                  CASE WHEN e61_numemp is NOT NULL THEN e60_codemp ELSE '' END AS e60_codemp,
+                  e54_codcom,
+                  e54_codtipo,
+                  e54_tipol,
+                  e54_codlicitacao,
+                  e54_anousu
+                FROM
+                  empautoriza
+                  INNER JOIN cgm ON cgm.z01_numcgm = empautoriza.e54_numcgm
+                  INNER JOIN db_config ON db_config.codigo = empautoriza.e54_instit
+                  INNER JOIN db_usuarios ON db_usuarios.id_usuario = empautoriza.e54_login
+                  INNER JOIN db_depart ON db_depart.coddepto = empautoriza.e54_depto
+                  INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = empautoriza.e54_codcom
+                  /*INNER JOIN cflicita
+                                    ON cflicita.l03_codcom = pctipocompra.pc50_codcom
+                                INNER JOIN liclicita ON liclicita.l20_codtipocom = cflicita.l03_codigo*/
+                  INNER JOIN concarpeculiar ON concarpeculiar.c58_sequencial = empautoriza.e54_concarpeculiar
+                  LEFT JOIN empempaut ON empautoriza.e54_autori = empempaut.e61_autori
+                  LEFT JOIN empempenho ON empempenho.e60_numemp = empempaut.e61_numemp
+                  LEFT JOIN empautidot ON e56_autori = empautoriza.e54_autori
+                  AND e56_anousu = e54_anousu
+                  LEFT JOIN orcdotacao ON e56_Coddot = o58_coddot
+                  AND e56_anousu = o58_anousu
+                WHERE
+                  e61_autori is null
+                  AND e54_anulad is null
+                  AND e54_codlicitacao is not null
+                  AND e54_instit = ".db_getsession("DB_instit")."
+                ORDER BY
+                  e54_autori DESC
+          ";
+        }
+
+        else{
            $sql = $clempautoriza->sql_query("",$campos,"e54_autori desc",$dbwhere);
         }
-//	echo $sql;
+
         db_lovrot($sql,13,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){

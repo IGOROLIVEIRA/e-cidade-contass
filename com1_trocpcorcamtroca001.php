@@ -130,23 +130,25 @@ try {
       /**
        * Faz a troca das pontuações dos fornecedores
        */
-      $clpcorcamjulg->pc24_orcamitem  = $iCodigoItem;
-      $clpcorcamjulg->pc24_pontuacao  = $aPontuacoes[$pc24_orcamforne_ant];
-      $clpcorcamjulg->pc24_orcamforne = $pc24_orcamforne;
-      $clpcorcamjulg->alterar($iCodigoItem, $pc24_orcamforne);
+      if ($aPontuacoes[$pc24_orcamforne] != 1) {
+        $clpcorcamjulg->pc24_orcamitem  = $iCodigoItem;
+        $clpcorcamjulg->pc24_pontuacao  = $aPontuacoes[$pc24_orcamforne_ant];
+        $clpcorcamjulg->pc24_orcamforne = $pc24_orcamforne;
+        $clpcorcamjulg->alterar($iCodigoItem, $pc24_orcamforne);
 
-      if ($clpcorcamjulg->erro_status == 0) {
-        throw new Exception($clpcorcamjulg->erro_msg);
-      }
+        if ($clpcorcamjulg->erro_status == 0) {
+          throw new Exception($clpcorcamjulg->erro_msg);
+        }
 
-      $clpcorcamjulg->pc24_orcamitem  = $iCodigoItem;
-      $clpcorcamjulg->pc24_pontuacao  = $aPontuacoes[$pc24_orcamforne];
-      $clpcorcamjulg->pc24_orcamforne = $pc24_orcamforne_ant;
-      $clpcorcamjulg->alterar($iCodigoItem, $pc24_orcamforne_ant);
+        $clpcorcamjulg->pc24_orcamitem  = $iCodigoItem;
+        $clpcorcamjulg->pc24_pontuacao  = $aPontuacoes[$pc24_orcamforne];
+        $clpcorcamjulg->pc24_orcamforne = $pc24_orcamforne_ant;
+        $clpcorcamjulg->alterar($iCodigoItem, $pc24_orcamforne_ant);
 
-      if ($clpcorcamjulg->erro_status == 0) {
-        throw new Exception($clpcorcamjulg->erro_msg);
-      }
+        if ($clpcorcamjulg->erro_status == 0) {
+          throw new Exception($clpcorcamjulg->erro_msg);
+        }
+     }
     }
   }
 
