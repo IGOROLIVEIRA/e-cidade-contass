@@ -594,28 +594,8 @@ db_inputdata("pc23_validmin_$pc22_orcamitem",@$$dia,@$$mes,@$$ano,true,"text",$d
     $arr_valoresitens[$i] = $pc11_vlrun;
     $arr_quantitens[$i] = $pc11_quant;
     $arr_vtnomesitens[$i] = "valor_$pc22_orcamitem";
-<<<<<<< .mine
     $arr_quantitensOrcada[$i] ="qtdeOrcada_$pc22_orcamitem";
-||||||| .r3456
-    $arr_quantitensOrcada[$i] ="qtdeOrcada_$pc22_orcamitem"; 
-	
-  if($clpcorcamval->numrows>0){
-		  if(strpos($$valor,".")==""){
-		    $$valor .= ".00";
-        
-		  }
-		}
-=======
-    $arr_quantitensOrcada[$i] ="qtdeOrcada_$pc22_orcamitem"; 
     $arr_observacoes[$i] = "obs_$pc22_orcamitem";
-	
-  if($clpcorcamval->numrows>0){
-		  if(strpos($$valor,".")==""){
-		    $$valor .= ".00";
-        
-		  }
-		}
->>>>>>> .r3467
 
   if($clpcorcamval->numrows>0) {
     if(strpos($$valor,".")==""){
