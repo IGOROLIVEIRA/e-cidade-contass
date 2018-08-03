@@ -309,7 +309,7 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
   $resumo = "";
 
   $descricaoitem = trim(pg_result($this->recorddositens,$ii,$this->descricaoitem));
-    $descricaoitem .= 'KKKK';
+
 
   if(trim(pg_result($this->recorddositens,$ii,$this->sprazo))!=""){
     $prazo = pg_result($this->recorddositens,$ii,$this->sprazo);
