@@ -62,7 +62,7 @@ $arr_vlnomesitens = Array();
 $arr_valoresitens = Array();
 $arr_quantitens = Array();
 $arr_vtnomesitens = Array();
-<<<<<<< .mine
+$arr_observacoes = Array();
 $res_empparametro = $clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu"),"e30_numdec"));
 if ($clempparametro->numrows > 0){
   db_fieldsmemory($res_empparametro,0);
@@ -75,10 +75,6 @@ if ($clempparametro->numrows > 0){
 } else {
   $numdec = 2;
 }
-||||||| .r3456
-=======
-$arr_observacoes = Array();
->>>>>>> .r3467
 
 ?>
 <html>
