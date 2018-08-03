@@ -314,6 +314,7 @@ class solicitacaoCompra {
         $oDaoPcProc->pc80_resumo   = "Processo de Compras Criado automatico para a soliciticao {$this->iSolicitacao} ";
         $oDaoPcProc->pc80_resumo  .= "do registro de preços {$iRegistroPreco}";
         $oDaoPcProc->pc80_situacao = 2;
+        $oDaoPcProc->pc80_criterioadjudicacao = 3;//OC3770 e OC7064
         $oDaoPcProc->incluir(null);
         if ($oDaoPcProc->erro_status == 0) {
 
@@ -820,7 +821,7 @@ class solicitacaoCompra {
     }
 
     $sSqlSolicitacao = $oDaoSolicita->sql_query_gerautsol(null, $sCampos, $sOrder, $sWhere);
-    //die($sSqlSolicitacao);
+    die($sSqlSolicitacao);
     $rsSolicitacao   = $oDaoSolicita->sql_record($sSqlSolicitacao);
     $iRowSolicitacao = $oDaoSolicita->numrows;
     $aItens          = array();
