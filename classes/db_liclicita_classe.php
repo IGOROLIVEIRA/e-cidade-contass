@@ -864,15 +864,8 @@ class cl_liclicita
         }
 
         if ($this->l20_criterioadjudicacao == null) {
-            $this->erro_sql = " Campo Critério de adjudicação não foi informado.";
-            $this->erro_campo = "l20_criterioadjudicacao";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+          $this->l20_criterioadjudicacao = "3";
         }
-        //echo pg_last_error();exit;
 
         if ($l20_codigo == "" || $l20_codigo == null) {
             $result = db_query("select nextval('liclicita_l20_codigo_seq')");
