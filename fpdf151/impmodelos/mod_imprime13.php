@@ -23,7 +23,7 @@ $this->objpdf->setfillcolor(245);
 $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
 
 $this->objpdf->setfillcolor(255,255,255);
-$this->objpdf->Setfont('Arial','B',9);
+$this->objpdf->Setfont('Arial','B',5);
 
 $oDaoDbConfig    = db_utils::getDao("db_config");
 $sLogo           = $oDaoDbConfig->getParametrosInstituicao()->logo;
@@ -225,11 +225,11 @@ if(isset($tiramenos)){
 
 $alturaini -= 18; // 18 é o tamanho da caixa com dados dos produtos.
 
-/*if ($this->linhasdositens <= 18){
+if ($this->linhasdositens <= 18){
      if (strlen(trim($this->declaracao)) > 0){
           $alturaini = (137);
      }
-}*/
+}
 
 /* 1 pagina */
 // Caixa dos itens
@@ -309,6 +309,7 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
   $resumo = "";
 
   $descricaoitem = trim(pg_result($this->recorddositens,$ii,$this->descricaoitem));
+    $descricaoitem .= 'KKKK';
 
   if(trim(pg_result($this->recorddositens,$ii,$this->sprazo))!=""){
     $prazo = pg_result($this->recorddositens,$ii,$this->sprazo);
@@ -379,7 +380,7 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
     $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
 
     $this->objpdf->setfillcolor(255,255,255);
-    $this->objpdf->Setfont('Arial','B',9);
+    $this->objpdf->Setfont('Arial','B',5);
     $this->objpdf->Image('imagens/files/'.$sLogo,15,$xlin-17,12); //.$this->logo
     $this->objpdf->text(130,$xlin-15,"ORÇAMENTO N".CHR(176));
     $this->objpdf->text(185,$xlin-15,db_formatar($this->orccodigo,'s','0',6,'e'));
@@ -404,7 +405,7 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
     $this->objpdf->text(40,$xlin+ 1,db_formatar($this->cgcpref,'cnpj'));
 
     $xlin = -30;
-    $this->objpdf->Setfont('Arial','B',8);
+    $this->objpdf->Setfont('Arial','B',5);
 
     // Caixas dos label's
     $this->objpdf->rect($xcol    ,$xlin+54,12,6,2,'DF','12');
@@ -456,12 +457,12 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
 
 // Separa cada item com uma linha
   if($ii > 0 && $muda_pagina == false && $volta_impressao == 0){
-    $linha = $this->objpdf->gety()+3;
-    $this->objpdf->rect(4,$linha,202,0,1,'DF','1234');
+    $linha = $this->objpdf->gety()+1;
+    $this->objpdf->rect(2,$linha,202,0,1,'DF','1234');
     $this->objpdf->ln();
   }
 
-  $this->objpdf->Setfont('Arial','',7);
+  $this->objpdf->Setfont('Arial','',5);
 
   if($volta_impressao == 0){
     $this->objpdf->Row(array(pg_result($this->recorddositens,$ii,$this->item),
@@ -472,7 +473,7 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
       '',
       '',
       '',
-    ),4,false,5);
+    ),3,false,8);
   }else if($volta_impressao == 1){
     $resumo = $texto_impressao;
   }else if($volta_impressao == 2){
