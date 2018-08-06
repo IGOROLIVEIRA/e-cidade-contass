@@ -1028,15 +1028,15 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
     }
 
-    function js_ativaregistro(){
+    function js_ativaregistro() {
 
-        var campo=$(l20_tipnaturezaproced).value;
-        $('l20_usaregistropreco').disabled="";
-        var campo         = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
-        var convite       =document.getElementById('l20_numeroconvidado').value;
+      var campo=$(l20_tipnaturezaproced).value;
+      $('l20_usaregistropreco').disabled="";
+      var campo         = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
+      var convite       =document.getElementById('l20_numeroconvidado').value;
 
-        document.getElementById('descricao').value=campo;
-        document.form1.submit();
+      document.getElementById('descricao').value=campo;
+      document.form1.submit();
 
     }
 
@@ -1392,20 +1392,35 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
     }
 
+    function js_verificaCritAdj(valor) {
+      var codtipocom = $F('l20_codtipocom');
+      return valor == codtipocom;
+    }
+
     function js_confirmadatas() {
 
         var dataCriacao    = $F('l20_datacria');
         var dataPublicacao = $F('l20_dtpublic');
         var dataAbertura   = $F('l20_dataaber');
+        var critadjudicac  = $F('l20_criterioadjudicacao');
+        var matriz         = [1,2,3,4,5,11,19];
+        var verifica       = matriz.find(js_verificaCritAdj);
+
+        if (verifica) {
+          if (!critadjudicac) {
+            alert("Informe Critério de Adjudicação");
+            return false;
+          }
+        }
 
         if( js_CompararDatas(dataCriacao, dataPublicacao, '<=') ) {
             if( js_CompararDatas(dataPublicacao, dataAbertura, '<=') ) {
                 <?
-                if($db_opcao==2 || $db_opcao==22) {
-                    echo 'return js_confirmar();';
-                } else {
-                    echo 'return true;';
-                }
+                  if($db_opcao==2 || $db_opcao==22) {
+                      echo 'return js_confirmar();';
+                  } else {
+                      echo 'return true;';
+                  }
                 ?>
             } else {
 
