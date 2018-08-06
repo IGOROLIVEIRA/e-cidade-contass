@@ -219,7 +219,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $arr_tipo = array("1"=>"1- Menor Preço","2"=>"2- Melhor Técnica","3"=>"3- Técnica e Preço","4"=>"4- Maior Lance ou Oferta");
+                                        $arr_tipo = array("0"=>"Selecione","1"=>"1- Menor Preço","2"=>"2- Melhor Técnica","3"=>"3- Técnica e Preço","4"=>"4- Maior Lance ou Oferta");
                                         db_select("l20_tipliticacao",$arr_tipo,true,$db_opcao);
                                         ?>
                                     </td>
@@ -232,7 +232,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $al20_tipnaturezaproced =array("1"=>"1-Licitação Normal","2"=>"2-Registro de Preço","3"=>"3-Credenciamento/Chamada");
+                                        $al20_tipnaturezaproced =array("0"=>"Selecione","1"=>"1-Licitação Normal","2"=>"2-Registro de Preço","3"=>"3-Credenciamento/Chamada");
                                         db_select("l20_tipnaturezaproced",$al20_tipnaturezaproced,true,$db_opcao,"onchange='js_naturezaprocedimento(this.value);'");
                                         ?>
                                     </td>
@@ -244,10 +244,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        if(!isset($l20_naturezaobjeto) || $l20_naturezaobjeto == '') {
-                                            $l20_naturezaobjeto = 2;
-                                        }
-                                        $al20_naturezaobjeto = array("1"=>"1- Obras e Serviços de Engenharia","2"=>"2- Compras e outros serviços","3"=>"3- Locação de Imóveis","4"=>"4- Concessão","5"=>"5- Permissão","6"=>"6- Alienação de bens" );
+                                        $al20_naturezaobjeto = array("0"=>"Selecione","1"=>"1- Obras e Serviços de Engenharia","2"=>"2- Compras e outros serviços","3"=>"3- Locação de Imóveis","4"=>"4- Concessão","5"=>"5- Permissão","6"=>"6- Alienação de bens" );
                                         db_select("l20_naturezaobjeto",$al20_naturezaobjeto,true,$db_opcao,"onchange='js_regime(this.value);'");
                                         ?>
                                     </td>
@@ -259,25 +256,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        $al20_regimexecucao = array("0"=>"","1"=>"1- Empreitada por Preço Global","2"=>"2- Empreitada por Preço Unitário","3"=>"3- Empreitada Integral","4"=>"4- Tarefa","5"=>"5-Execução Direta");
+                                        $al20_regimexecucao = array("0"=>"Não se Aplica","1"=>"1- Empreitada por Preço Global","2"=>"2- Empreitada por Preço Unitário","3"=>"3- Empreitada Integral","4"=>"4- Tarefa","5"=>"5-Execução Direta");
                                         db_select("l20_regimexecucao",$al20_regimexecucao,true,$db_opcao);
                                         ?>
                                     </td>
                                 </tr>
-                                <!--
-                                <tr>
-                                    <td nowrap title="<?//@$Tl20_descontotab?>" id="descontotab">
-                                        <?//@$Ll20_descontotab?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        //$al20_descontotab = array("2"=>"2- Não","1"=>"1- Sim");
-                                        //db_select("l20_descontotab",$al20_descontotab,true,$db_opcao);
-                                        ?>
-                                    </td>
-                                </tr>
-                                -->
-
                                 <tr>
                                     <td id="descontotab">
                                       <label class="bold">Critério de Adjudicação:</label>
@@ -287,7 +270,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                       if(!isset($l20_criterioadjudicacao) || $l20_criterioadjudicacao == '') {
                                         $l20_criterioadjudicacao = "";
                                       }
-                                      $aCriterios = array("" => "Selecione..", "3" => "Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
+                                      $aCriterios = array("Outros", "1" => "Desconto sobre tabela", "2" => "Menor taxa ou percentual");
                                       db_select("l20_criterioadjudicacao", $aCriterios, true, '');
                                       ?>
                                   </td>
@@ -326,26 +309,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                         <fieldset class="fieldsetinterno">
                             <legend><strong>Datas</strong></legend>
                             <table>
-
-                                <tr>
-                                    <td nowrap title="Data Emis/Alt Edital/Convite" id="dataaber">
-                                        <b> Data Emis/Alt Edital/Convite : </b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_inputdata("l20_dataaber",@$l20_dataaber_dia,@$l20_dataaber_mes,@$l20_dataaber_ano,true,'text',$db_opcao);
-                                        ?>
-                                        <?=@$Ll20_horaaber?>
-                                        <?
-                                        if (empty($l20_horaaber)) {
-                                            $l20_horaaber= db_hora();
-                                        }
-                                        // db_input('l20_horaaber',5,$Il20_horaaber,true,'text',$db_opcao,"OnKeyUp='mascara_hora(this.value)'");echo "hh:mm";
-                                        db_input('l20_horaaber', 5, $Il20_horaaber, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");echo "hh:mm";
-                                        ?>
-                                    </td>
-                                </tr>
-
                                 <tr>
                                     <td nowrap title="Data Abertura Proc. Adm.">
                                         <b>Data Abertura Proc. Adm. :</b>
@@ -368,6 +331,26 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
+
+                                <tr>
+                                    <td nowrap title="Data Emis/Alt Edital/Convite" id="dataaber">
+                                        <b> Data Emis/Alt Edital/Convite : </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_inputdata("l20_dataaber",@$l20_dataaber_dia,@$l20_dataaber_mes,@$l20_dataaber_ano,true,'text',$db_opcao);
+                                        ?>
+                                        <?=@$Ll20_horaaber?>
+                                        <?
+                                        if (empty($l20_horaaber)) {
+                                            $l20_horaaber= db_hora();
+                                        }
+                                        db_input('l20_horaaber', 5, $Il20_horaaber, true, 'text', $db_opcao, "onchange='js_verifica_hora(this.value,this.name)';onkeypress='return js_mask(event, \"0-9|:|0-9\"); '");echo "hh:mm";
+                                        ?>
+                                    </td>
+                                </tr>
+
+
 
                                 <tr>
                                     <td nowrap title="Data Publicação DO" id="dtpublic">
@@ -509,7 +492,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         if (!isset($l20_usaregistropreco)) {
                                             $l20_usaregistropreco = "f";
                                         }
-                                        db_select("l20_usaregistropreco",array("t"=>"Sim", "f"=>"Não"),true,$db_opcao,"onchange='js_registropreco(this.value);'");
+                                        db_select("l20_usaregistropreco",array("t"=>"Sim", "f"=>"Não"),true,$db_opcao,"");
                                         ?>
                                     </td>
                                 </tr>
@@ -808,12 +791,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     document.form1.l20_local.style.backgroundColor = '#E6E4F1';
 
     js_busca();
-
-    function js_registropreco(campo){
-        if(campo==1){
-            $('l20_tipnaturezaproced').value='2';
-        }
-    }
 
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc,res) {
@@ -1461,7 +1438,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             return false;
         }
     }
-
 
     /*Para desabilitar o combo  Usa Registro de Preço */
     var campo=$(l20_tipnaturezaproced).value;
