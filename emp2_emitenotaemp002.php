@@ -295,7 +295,6 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $sqlitem .= "        e62_vlrun, ";
     $sqlitem .= "        e62_codele, ";
     $sqlitem .= "        o56_elemento, ";
-    $sqlitem .= "        $tipos as tipos, ";
     $sqlitem .= "        o56_descr, ";
     $sqlitem .= "        rp.pc81_codproc, ";
     $sqlitem .= "        solrp.pc11_numero, ";
