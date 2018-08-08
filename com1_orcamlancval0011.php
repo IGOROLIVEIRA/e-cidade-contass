@@ -178,6 +178,7 @@ function js_calcvaltot(valor,param,nome){
       valor = new Number(valor);
       quant = new Number(quant);
       valortotal = new Number(quant*valor);
+      // valortotal = 3;
     }
     if(valor==""){
       valor = 0;
