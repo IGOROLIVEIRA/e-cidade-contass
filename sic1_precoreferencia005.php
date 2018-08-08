@@ -87,7 +87,12 @@ $nTotalItens = 0;
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
       $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-      $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
+
+      if($quant_casas == 2){
+        $lTotal = number_format(round($oResult->si02_vlprecoreferencia,2) * $oResult->pc11_quant);
+      }
+      else $lTotal = number_format(round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant);
+
       $nTotalItens += $lTotal;
 
       $oDadosDaLinha = new stdClass();
