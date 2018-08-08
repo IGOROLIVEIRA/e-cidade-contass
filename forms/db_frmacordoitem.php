@@ -495,6 +495,7 @@ db_app::load("estilos.css, grid.style.css");
     js_getItens();
   }
 
+
   function js_getItens() {
 
     var oParam = new Object();
@@ -551,19 +552,25 @@ db_app::load("estilos.css, grid.style.css");
       }
 
       var nTotal = 0;
+      var somaDotacoes = 0;
       oRetorno.itens.each(function (oLinha, id) {
 
-        with (oLinha) {
 
+        with (oLinha) {
           var sCor = '';
+
           if (valortotal == totaldotacoes) {
+            somaDotacoes += totaldotacoes;
+            localStorage.setItem('TotalDotacoes',somaDotacoes);
             var sCor = '';
             if(aPeriodosItem.length == 0){
               var sCor = 'background-color: #fcd032;';
             }
+
           }else{
             var sCor = 'background-color: red;';
           }
+
           var aLinha = new Array();
           aLinha[0] = ordem;
           aLinha[1] = codigo;
@@ -591,6 +598,7 @@ db_app::load("estilos.css, grid.style.css");
 
       oGridItens.renderRows();
       $('TotalForCol5').innerHTML = js_formatar(nTotal.toFixed(2), 'f');
+
     }
   }
 

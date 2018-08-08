@@ -50,6 +50,16 @@ $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 $clrotulo->label("ac10_datamovimento");
 $clrotulo->label("ac10_obs");
+
+if($_POST['json']){
+  $sequencial_valor = str_replace('\\','', $_POST);
+  $sequencial_valor = json_decode($sequencial_valor['json']);
+  $sSqlAcordo = $clacordo->sql_query($sequencial_valor->sequencial);
+  $rsAcordo = $clacordo->sql_record($sSqlAcordo);
+  $clacordo = db_utils::fieldsMemory($rsAcordo, 0);
+  echo $clacordo->ac16_valor;die();
+}
+
 ?>
 <html>
 <head>
@@ -78,27 +88,30 @@ fieldset table td:first-child {
     <td valign="top" align="center">
       <fieldset>
         <legend><b>Assinatura do Acordo</b></legend>
-	      <table align="center" border="0">
-	        <tr>
-	          <td title="<?=@$Tac16_sequencial?>" align="left">
-	            <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
-	          </td>
-	          <td align="left">
-	            <?
+        <table align="center" border="0">
+          <tr>
+            <td title="<?=@$Tac16_sequencial?>" align="left">
+              <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
+            </td>
+            <td align="left">
+              <?
                 db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text',
                          $db_opcao," onchange='js_pesquisaac16_sequencial(false);'");
               ?>
-	          </td>
-	          <td align="left">
+            </td>
+            <td align="left">
               <?
                 db_input('ac16_resumoobjeto',40,$Iac16_resumoobjeto,true,'text',3);
               ?>
-	          </td>
-	        </tr>
+            </td>
+
+          </tr>
+
           <tr>
             <td title="<?=@$Tac10_datamovimento?>" align="left">
               <b>Data:</b>
             </td>
+
             <td align="left">
               <?
                 db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia,
@@ -153,15 +166,18 @@ fieldset table td:first-child {
   </tr>
   <tr>
     <td align="center">
-      <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_assinarContrato();">
+      <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_checaValor();">
     </td>
   </tr>
 </table>
+
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
+
 </body>
 <script>
+
 $('ac16_sequencial').style.width   = "100%";
 $('ac16_resumoobjeto').style.width = "100%";
 
@@ -228,7 +244,30 @@ function js_mostraacordo1(chave1,chave2) {
 /**
  * Incluir assinatura para o contrato
  */
-function js_assinarContrato() {
+
+function js_checaValor(){
+
+  var oParam = new Object();
+  oParam.sequencial = $('ac16_sequencial').value;
+  var sUrl = 'aco4_assinaturacontratosinclusao001.php';
+  var oAjax   = new Ajax.Request( sUrl, {
+                                          method: 'post',
+                                          parameters:'json='+Object.toJSON(oParam),
+                                          onComplete: js_assinarContrato
+                                        }
+                                );
+}
+
+function js_assinarContrato(obj) {
+
+  var valorCadastrado = parseFloat(obj.responseText);
+  var valorDotacao = localStorage.getItem('TotalDotacoes');
+  valorDotacao = parseFloat(valorDotacao);
+
+  if(valorCadastrado != valorDotacao){
+    alert('Existem itens sem dotação, insira as dotações e tente novamente');
+    return;
+  }
 
   try {
 
