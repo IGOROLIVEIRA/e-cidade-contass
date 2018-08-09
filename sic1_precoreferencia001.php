@@ -36,8 +36,9 @@ if(isset($incluir)){
                         join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
                         join pcorcamitem on pc31_orcamitem = pc22_orcamitem
                         join pcorcamval on pc22_orcamitem = pc23_orcamitem
-                        where pc80_codproc = $si01_processocompra group by pc23_orcamitem";
+                        where pc80_codproc = $si01_processocompra and pc23_vlrun > 0 group by pc23_orcamitem";
 
+     // die($sSql);
      $rsResult = db_query($sSql);
 
      for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
