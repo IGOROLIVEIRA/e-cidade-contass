@@ -28,7 +28,7 @@ if(isset($incluir)){
      	$sFuncao = "min";
      }
 
-     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),3) as valor,
+     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),$quant_casas) as valor,
                       round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
                       round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
                         from pcproc
@@ -78,7 +78,6 @@ if(isset($incluir)){
 
   db_fim_transacao($sqlerro);
   if ($clprecoreferencia->erro_status != 0){
-
     echo "<script>
     jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$clprecoreferencia->si01_processocompra}+'&quant_casas='+$quant_casas,
 
