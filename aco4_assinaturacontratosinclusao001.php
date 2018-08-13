@@ -50,253 +50,293 @@ $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 $clrotulo->label("ac10_datamovimento");
 $clrotulo->label("ac10_obs");
+
+if($_POST['json']){
+  $sequencial_valor = str_replace('\\','', $_POST);
+  $sequencial_valor = json_decode($sequencial_valor['json']);
+  $sSqlAcordo = $clacordo->sql_query($sequencial_valor->sequencial);
+  $rsAcordo = $clacordo->sql_record($sSqlAcordo);
+  $clacordo = db_utils::fieldsMemory($rsAcordo, 0);
+  echo $clacordo->ac16_valor;die();
+}
+
 ?>
 <html>
 <head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <meta http-equiv="Expires" CONTENT="0">
-    <?
-    db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
-    db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
-    db_app::load("estilos.css, grid.style.css");
-    ?>
-    <style>
-        td {
-            white-space: nowrap;
-        }
+<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Expires" CONTENT="0">
+<?
+  db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
+  db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
+  db_app::load("estilos.css, grid.style.css");
+?>
+<style>
+td {
+  white-space: nowrap;
+}
 
-        fieldset table td:first-child {
-            width: 80px;
-            white-space: nowrap;
-        }
-    </style>
+fieldset table td:first-child {
+  width: 80px;
+  white-space: nowrap;
+}
+</style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-    <tr>
-        <td valign="top" align="center">
-            <fieldset>
-                <legend><b>Assinatura do Acordo</b></legend>
-                <table align="center" border="0">
-                    <tr>
-                        <td title="<?=@$Tac16_sequencial?>" align="left">
-                            <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
-                        </td>
-                        <td align="left">
-                            <?
-                            db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text',
-                                $db_opcao," onchange='js_pesquisaac16_sequencial(false);'");
-                            ?>
-                        </td>
-                        <td align="left">
-                            <?
-                            db_input('ac16_resumoobjeto',40,$Iac16_resumoobjeto,true,'text',3);
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td title="<?=@$Tac10_datamovimento?>" align="left">
-                            <b>Data:</b>
-                        </td>
-                        <td align="left">
-                            <?
-                            db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia,
-                                @$ac10_datamovimento_mes,
-                                @$ac10_datamovimento_ano, true, 'text', $db_opcao, "");
-                            ?>
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td align="left" title="<?= @$Tac16_datapublicacao ?>">
-                            <?= @$Lac16_datapublicacao ?>
-                        </td>
+  <tr>
+    <td valign="top" align="center">
+      <fieldset>
+        <legend><b>Assinatura do Acordo</b></legend>
+        <table align="center" border="0">
+          <tr>
+            <td title="<?=@$Tac16_sequencial?>" align="left">
+              <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
+            </td>
+            <td align="left">
+              <?
+                db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text',
+                         $db_opcao," onchange='js_pesquisaac16_sequencial(false);'");
+              ?>
+            </td>
+            <td align="left">
+              <?
+                db_input('ac16_resumoobjeto',40,$Iac16_resumoobjeto,true,'text',3);
+              ?>
+            </td>
 
-                        <td align="left">
-                            <?
-                            db_inputdata('ac16_datapublicacao', @$ac16_datapublicacao_dia, @$ac16_datapublicacao_mes,
-                                @$ac16_datapublicacao_ano, true, 'text', $db_opcao);
-                            ?>
-                        </td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    <tr>
-                        <td align="left" title="<?= @$Tac16_veiculodivulgacao ?>">
-                            <?= @$Lac16_veiculodivulgacao ?>
-                        </td>
-                        <td align="left" colspan="2">
-                            <?
-                            db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao);
-                            ?>
-                        </td>
+          </tr>
 
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <fieldset>
-                                <legend>
-                                    <b>Observação</b>
-                                </legend>
-                                <?
-                                db_textarea('ac10_obs',5,66,$Iac10_obs,true,'text',$db_opcao,"");
-                                ?>
-                            </fieldset>
-                        </td>
-                    </tr>
-                </table>
-            </fieldset>
-        </td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td>
-    </tr>
-    <tr>
-        <td align="center">
-            <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_assinarContrato();">
-        </td>
-    </tr>
+          <tr>
+            <td title="<?=@$Tac10_datamovimento?>" align="left">
+              <b>Data:</b>
+            </td>
+
+            <td align="left">
+              <?
+                db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia,
+                                                   @$ac10_datamovimento_mes,
+                                                   @$ac10_datamovimento_ano, true, 'text', $db_opcao, "");
+              ?>
+            </td>
+            <td>&nbsp;</td>
+          </tr>
+              <tr>
+                  <td align="left" title="<?= @$Tac16_datapublicacao ?>">
+                      <?= @$Lac16_datapublicacao ?>
+                  </td>
+
+                  <td align="left">
+                      <?
+                      db_inputdata('ac16_datapublicacao', @$ac16_datapublicacao_dia, @$ac16_datapublicacao_mes,
+                          @$ac16_datapublicacao_ano, true, 'text', $db_opcao);
+                      ?>
+                  </td>
+                  <td>&nbsp;</td>
+              </tr>
+              <tr>
+                  <td align="left" title="<?= @$Tac16_veiculodivulgacao ?>">
+                      <?= @$Lac16_veiculodivulgacao ?>
+                  </td>
+                  <td align="left" colspan="2">
+                      <?
+                      db_input('ac16_veiculodivulgacao', 50, $Iac16_veiculodivulgacao, true, 'text', $db_opcao);
+                      ?>
+                  </td>
+
+              </tr>
+		      <tr>
+		        <td colspan="3">
+		          <fieldset>
+		            <legend>
+		              <b>Observação</b>
+		            </legend>
+		              <?
+		                db_textarea('ac10_obs',5,66,$Iac10_obs,true,'text',$db_opcao,"");
+		              ?>
+		          </fieldset>
+		        </td>
+		      </tr>
+	      </table>
+      </fieldset>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td align="center">
+      <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_checaValor();">
+    </td>
+  </tr>
 </table>
+
 <?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
+
 </body>
 <script>
-    $('ac16_sequencial').style.width   = "100%";
-    $('ac16_resumoobjeto').style.width = "100%";
 
-    var sUrl = 'con4_contratosmovimento.RPC.php';
+$('ac16_sequencial').style.width   = "100%";
+$('ac16_resumoobjeto').style.width = "100%";
 
-    /**
-     * Pesquisa acordos
-     */
-    function js_pesquisaac16_sequencial(lMostrar) {
+var sUrl = 'con4_contratosmovimento.RPC.php';
 
-        if (lMostrar == true) {
+/**
+ * Pesquisa acordos
+ */
+function js_pesquisaac16_sequencial(lMostrar) {
 
-            var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto';
-            js_OpenJanelaIframe('top.corpo',
-                'db_iframe_acordo',
-                sUrl,
-                'Pesquisar Acordo',
-                true);
-        } else {
+  if (lMostrar == true) {
 
-            if ($('ac16_sequencial').value != '') {
+    var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto';
+    js_OpenJanelaIframe('top.corpo',
+                        'db_iframe_acordo',
+                        sUrl,
+                        'Pesquisar Acordo',
+                        true);
+  } else {
 
-                var sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
-                    '&funcao_js=parent.js_mostraacordo';
+    if ($('ac16_sequencial').value != '') {
 
-                js_OpenJanelaIframe('top.corpo',
-                    'db_iframe_acordo',
-                    sUrl,
-                    'Pesquisar Acordo',
-                    false);
-            } else {
-                $('ac16_sequencial').value = '';
-            }
-        }
+      var sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
+                 '&funcao_js=parent.js_mostraacordo';
+
+      js_OpenJanelaIframe('top.corpo',
+                          'db_iframe_acordo',
+                          sUrl,
+                          'Pesquisar Acordo',
+                          false);
+     } else {
+       $('ac16_sequencial').value = '';
+     }
+  }
+}
+
+/**
+ * Retorno da pesquisa acordos
+ */
+function js_mostraacordo(chave1,chave2,erro) {
+
+  if (erro == true) {
+
+    $('ac16_sequencial').value   = '';
+    $('ac16_resumoobjeto').value = chave1;
+    $('ac16_sequencial').focus();
+  } else {
+
+    $('ac16_sequencial').value   = chave1;
+    $('ac16_resumoobjeto').value = chave2;
+  }
+}
+
+/**
+ * Retorno da pesquisa acordos
+ */
+function js_mostraacordo1(chave1,chave2) {
+
+  $('ac16_sequencial').value    = chave1;
+  $('ac16_resumoobjeto').value  = chave2;
+  db_iframe_acordo.hide();
+}
+
+/**
+ * Incluir assinatura para o contrato
+ */
+
+function js_checaValor(){
+
+  var oParam = new Object();
+  oParam.sequencial = $('ac16_sequencial').value;
+  var sUrl = 'aco4_assinaturacontratosinclusao001.php';
+  var oAjax   = new Ajax.Request( sUrl, {
+                                          method: 'post',
+                                          parameters:'json='+Object.toJSON(oParam),
+                                          onComplete: js_assinarContrato
+                                        }
+                                );
+}
+
+function js_assinarContrato(obj) {
+
+  var valorCadastrado = parseFloat(obj.responseText);
+  var valorDotacao = localStorage.getItem('TotalDotacoes');
+  valorDotacao = parseFloat(valorDotacao);
+  localStorage.removeItem('TotalDotacoes');
+
+  if(valorCadastrado != valorDotacao){
+    alert('Existem itens sem dotações, realize as alterações e tente novamente');
+    return;
+  }
+
+  try {
+
+    if ($('ac16_sequencial').value == '') {
+      throw new Error('Acordo não informado!');
+    }
+    if ($('ac10_datamovimento').value == '') {
+      throw new Error('Data não informada!');
     }
 
-    /**
-     * Retorno da pesquisa acordos
-     */
-    function js_mostraacordo(chave1,chave2,erro) {
-
-        if (erro == true) {
-
-            $('ac16_sequencial').value   = '';
-            $('ac16_resumoobjeto').value = chave1;
-            $('ac16_sequencial').focus();
-        } else {
-
-            $('ac16_sequencial').value   = chave1;
-            $('ac16_resumoobjeto').value = chave2;
-        }
+    if ($('ac16_datapublicacao').value == '') {
+      throw new Error('Data da publicação não informada!');
     }
 
-    /**
-     * Retorno da pesquisa acordos
-     */
-    function js_mostraacordo1(chave1,chave2) {
-
-        $('ac16_sequencial').value    = chave1;
-        $('ac16_resumoobjeto').value  = chave2;
-        db_iframe_acordo.hide();
+    if ($('ac16_veiculodivulgacao').value == '') {
+      throw new Error('Veículo de divulgação não informado!');
     }
 
-    /**
-     * Incluir assinatura para o contrato
-     */
-    function js_assinarContrato() {
+  } catch (e) {
 
-        try {
+    alert(e.message);
+    return false;
 
-            if ($('ac16_sequencial').value == '') {
-                throw new Error('Acordo não informado!');
-            }
-            if ($('ac10_datamovimento').value == '') {
-                throw new Error('Data não informada!');
-            }
+  }
 
-            if ($('ac16_datapublicacao').value == '') {
-                throw new Error('Data da publicação não informada!');
-            }
+  js_divCarregando('Aguarde incluindo assinatura...','msgBoxAssianturaContrato');
 
-            if ($('ac16_veiculodivulgacao').value == '') {
-                throw new Error('Veículo de divulgação não informado!');
-            }
+  var oParam            = new Object();
+  oParam.exec           = "assinarContrato";
+  oParam.acordo         = $F('ac16_sequencial');
+  oParam.dtmovimentacao = $F('ac10_datamovimento');
+  oParam.dtpublicacao   = $F('ac16_datapublicacao');
+  oParam.veiculodivulgacao   = encodeURIComponent(tagString($F('ac16_veiculodivulgacao')));
+  oParam.observacao     = encodeURIComponent(tagString($F('ac10_obs')));
 
-        } catch (e) {
+  var oAjax   = new Ajax.Request( sUrl, {
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
+                                          onComplete: js_retornoDadosAssinatura
+                                        }
+                                );
+}
 
-            alert(e.message);
-            return false;
+/**
+ * Retorna os dados da inclusão assinatura
+ */
+function js_retornoDadosAssinatura(oAjax) {
 
-        }
+  js_removeObj("msgBoxAssianturaContrato");
 
-        js_divCarregando('Aguarde incluindo assinatura...','msgBoxAssianturaContrato');
+  var oRetorno = eval("("+oAjax.responseText+")");
 
-        var oParam            = new Object();
-        oParam.exec           = "assinarContrato";
-        oParam.acordo         = $F('ac16_sequencial');
-        oParam.dtmovimentacao = $F('ac10_datamovimento');
-        oParam.dtpublicacao   = $F('ac16_datapublicacao');
-        oParam.veiculodivulgacao   = encodeURIComponent(tagString($F('ac16_veiculodivulgacao')));
-        oParam.observacao     = encodeURIComponent(tagString($F('ac10_obs')));
+  $('ac16_sequencial').value     = "";
+  $('ac16_resumoobjeto').value   = "";
+  $('ac10_datamovimento').value  = "";
+  $('ac16_datapublicacao').value = "";
+  $('ac16_veiculodivulgacao').value = "";
+  $('ac10_obs').value            = "";
 
-        var oAjax   = new Ajax.Request( sUrl, {
-                method: 'post',
-                parameters: 'json='+js_objectToJson(oParam),
-                onComplete: js_retornoDadosAssinatura
-            }
-        );
-    }
+  if (oRetorno.status == 2) {
 
-    /**
-     * Retorna os dados da inclusão assinatura
-     */
-    function js_retornoDadosAssinatura(oAjax) {
+    alert(oRetorno.erro.urlDecode());
+    return false;
+  } else {
 
-        js_removeObj("msgBoxAssianturaContrato");
-
-        var oRetorno = eval("("+oAjax.responseText+")");
-
-        $('ac16_sequencial').value     = "";
-        $('ac16_resumoobjeto').value   = "";
-        $('ac10_datamovimento').value  = "";
-        $('ac16_datapublicacao').value = "";
-        $('ac16_veiculodivulgacao').value = "";
-        $('ac10_obs').value            = "";
-
-        if (oRetorno.status == 2) {
-
-            alert(oRetorno.erro.urlDecode());
-            return false;
-        } else {
-
-            alert("Inclusão efetuada com Sucesso.");
-            return true;
-        }
-    }
+    alert("Inclusão efetuada com Sucesso.");
+    return true;
+  }
+}
 </script>
 </html>
