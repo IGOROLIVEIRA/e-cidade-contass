@@ -98,7 +98,6 @@ try {
 
     switch ($oParam->exec) {
 
-
         case "getMateriaisVinculados" :
             //verifica se ja esta processado
             $sSql = "SELECT * FROM inventariomaterial WHERE i77_inventario = {$oParam->iInventario} AND i77_dataprocessamento IS NOT NULL";
@@ -108,19 +107,16 @@ try {
                 throw new BusinessException('Inventario já foi processado.');
             }else{
                 $campos_ = "inventariomaterial.*,db_depart.*,matestoque.*,inventario.*,db_config.*,db_depart.*,
-        translate(matmater.m60_descr,'ÁÂÉÊÍÓÔÇ','AAEEIOOC') m60_descr";
+                            translate(matmater.m60_descr,'ÁÂÉÊÍÓÔÇ','AAEEIOOC') m60_descr";
                 $oResult = $oInventarioMaterial->sql_query(null,$campos_," m60_descr,m70_codmatmater ","i77_inventario = {$oParam->iInventario}");
                 $oResult = $oInventarioMaterial->sql_record($oResult);
-                if($oInventarioMaterial->numrows == 0){
-                    throw new BusinessException('Inventario não possui materiais vinculados.');
-                }
+//                if($oInventarioMaterial->numrows == 0){
+//                    throw new BusinessException('Inventario não possui materiais vinculados.');
+//                }
                 $oRetorno->aDados = db_utils::getCollectionByRecord($oResult);
-
             }
-            //throw new BusinessException();
-
-
             break;
+
         case "getMateriaisVinculadosProcessados":
             //verifica se ja esta processado
             $sSql = "SELECT * FROM inventariomaterial WHERE i77_inventario = {$oParam->iInventario} AND i77_dataprocessamento IS NOT NULL";
@@ -131,17 +127,16 @@ try {
             }else{
 
                 $campos_ = "inventariomaterial.*,db_depart.*,matestoque.*,inventario.*,db_config.*,db_depart.*,
-        translate(matmater.m60_descr,'ÁÂÉÊÍÓÔÇ','AAEEIOOC') m60_descr";
+                            translate(matmater.m60_descr,'ÁÂÉÊÍÓÔÇ','AAEEIOOC') m60_descr";
                 $oResult = $oInventarioMaterial->sql_query(null,$campos_," m60_descr,m70_codmatmater ","i77_inventario = {$oParam->iInventario}");
                 $oResult = $oInventarioMaterial->sql_record($oResult);
-                if($oInventarioMaterial->numrows == 0){
-                    throw new BusinessException('Inventario não possui materiais vinculados.');
-                }
+
+//                if($oInventarioMaterial->numrows == 0){
+//                    throw new BusinessException('Inventario não possui materiais vinculados.');
+//                }
                 $oRetorno->aDados = db_utils::getCollectionByRecord($oResult);
 
             }
-            //throw new BusinessException();
-
 
             break;
 
@@ -252,7 +247,7 @@ i77_dataprocessamento AS dataprocessamento,
                      INNER JOIN matestoque ON m70_codmatmater = m60_codmater
                      INNER JOIN matmaterprecomedio on m85_matmater = m60_codmater
                      WHERE m70_codigo = {$oParam->iCodigoEstoque} 
-                     AND m70_coddepto = 1 ORDER BY m85_sequencial DESC LIMIT 1";
+                     ORDER BY m85_sequencial DESC LIMIT 1";
 
             $oEstoque = db_utils::fieldsMemory(db_query($sSql));
             //informacoes sobre o inventario
@@ -283,7 +278,6 @@ i77_dataprocessamento AS dataprocessamento,
                 }
 
             }else{
-
                 $oInventarioMaterial->i77_inventario = $oParam->iCodigoInventario;
                 $oInventarioMaterial->i77_estoque = $oParam->iCodigoEstoque;
                 $oInventarioMaterial->i77_db_depart = $oParam->iDepartamento;

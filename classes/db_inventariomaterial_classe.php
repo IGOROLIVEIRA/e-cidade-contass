@@ -128,7 +128,7 @@ class cl_inventariomaterial {
        }
        $this->i77_sequencial = pg_result($result,0,0);
      }
-     $result = @pg_query("insert into inventariomaterial(
+     $sql = "insert into inventariomaterial(
                                        i77_sequencial
                                       ,i77_inventario
                                       ,i77_estoque
@@ -155,7 +155,8 @@ class cl_inventariomaterial {
                                ,".($this->i77_datainclusao == "null" || $this->i77_datainclusao == ""?"null":"'".$this->i77_datainclusao."'")."
                                ,".($this->i77_dataprocessamento == "null" || $this->i77_dataprocessamento == ""?"null":"'".$this->i77_dataprocessamento."'")."
                                ,".($this->i77_ultimolancamento == "null" || $this->i77_ultimolancamento == ""?"null":"'".$this->i77_ultimolancamento."'")."
-                      )");
+                      )";
+     $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
