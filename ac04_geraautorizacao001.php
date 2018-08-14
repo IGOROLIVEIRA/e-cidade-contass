@@ -40,6 +40,7 @@ require_once("classes/db_pctipocompra_classe.php");
 require_once("classes/db_emptipo_classe.php");
 require_once("classes/db_empautoriza_classe.php");
 require_once("classes/db_cflicita_classe.php");
+
 $clpcproc = new cl_pcproc;
 $clcflicita = new cl_cflicita;
 $clpcparam = new cl_pcparam;
@@ -61,6 +62,66 @@ $clrotulo->label("pc10_resumo");
 $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
+
+// funcao do sql
+function sql_query_file ( $c99_anousu=null,$c99_instit=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+        $campos_sql = split("#",$campos);
+        $virgula = "";
+        for($i=0;$i<sizeof($campos_sql);$i++){
+            $sql .= $virgula.$campos_sql[$i];
+            $virgula = ",";
+        }
+    }else{
+        $sql .= $campos;
+    }
+    $sql .= " from condataconf ";
+    $sql2 = "";
+    if($dbwhere==""){
+        if($c99_anousu!=null ){
+            $sql2 .= " where condataconf.c99_anousu = $c99_anousu ";
+        }
+        if($c99_instit!=null ){
+            if($sql2!=""){
+                $sql2 .= " and ";
+            }else{
+                $sql2 .= " where ";
+            }
+            $sql2 .= " condataconf.c99_instit = $c99_instit ";
+        }
+    }else if($dbwhere != ""){
+        $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+        $sql .= " order by ";
+        $campos_sql = split("#",$ordem);
+        $virgula = "";
+        for($i=0;$i<sizeof($campos_sql);$i++){
+            $sql .= $virgula.$campos_sql[$i];
+            $virgula = ",";
+        }
+    }
+    return $sql;
+}
+
+$result = db_query(sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit')));
+$c99_data = db_utils::fieldsMemory($result, 0)->c99_data;
+
+$x = str_replace('\\','',$_POST);
+$x = json_decode($x['json']);
+
+if($x->consultarDataDoSistema == true){
+
+    $dataDoSistema = date("Y-m-d", db_getsession('DB_datausu'));
+    $lProcessar = isset($x->lProcessar) ? $x->lProcessar : false;
+
+    //echo $oJson->encode($oRetorno);
+    echo json_encode(array('dataDoSistema'=>$dataDoSistema, 'dataFechamentoContabil' => $c99_data, 'processar'=>$lProcessar));
+    die();
+}
+
 ?>
 <html>
 <head>
@@ -74,6 +135,7 @@ db_app::load("estilos.css, grid.style.css");
 ?>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+<input id="dataDoSistema" type="hidden" value="<?php echo date("Y-m-d", db_getsession('DB_datausu')); ?>">
   <br>
   <br>
   <center>
@@ -159,7 +221,9 @@ db_app::load("estilos.css, grid.style.css");
     }
     $result_tipocompra=$clpctipocompra->sql_record($clpctipocompra->sql_query_file(null,"pc50_codcom,pc50_descr"));
     db_selectrecord("e54_codcom",$result_tipocompra,true,1,"","","","","js_buscarTipoLicitacao(this.value)");
+
     ?>
+
     </td>
   </tr>
   <tr>
@@ -262,7 +326,7 @@ db_input('e54_conpag',30,$Ie54_conpag,true,'text',$db_opcao,"")
   </tr>
    <tr>
      <td style="text-align: center">
-          <input type='button' value='Incluir Autorizações' onclick="js_processarAutorizacoes(false)">
+          <input type='button' value='Incluir Autorizações' onclick="js_consultarDataDoSistema(false)">
         </td>
       </tr>
   </table>
@@ -272,6 +336,7 @@ db_input('e54_conpag',30,$Ie54_conpag,true,'text',$db_opcao,"")
 
 <script src="scripts/math.min.js">
 </script>
+
 </body>
 </html>
 <script>
@@ -406,7 +471,7 @@ function js_main() {
    oGridItens.setHeader(new Array("Código", "Material", "Quantidade", "Val. Unitário",
                                   "Valor Total", "Qtde Autorizar", "Valor Autorizar", "Dotacoes", "iSeq"));
    oGridItens.aHeaders[4].lDisplayed = false;
-   oGridItens.aHeaders[9].lDisplayed = false;
+        oGridItens.aHeaders[9].lDisplayed = false;
    //oGridItens.aHeaders[8].lDisplayed = false;
    oGridItens.setHeight(160);
    oGridItens.show($('ctnGridItens'));
@@ -485,8 +550,6 @@ function js_roundDecimal(x,qtdCasasDecimais) {
 
     x = x.toString().replace(',','.');
     x = parseFloat(x);
-
-    console.log("js_roundDecimal: "+x);
 
     if(Number.isInteger(x)){
         return x;
@@ -576,19 +639,24 @@ function js_retornoGetItensPosicao(oAjax) {
   aItensPosicao.each(function (oItem, iSeq) {
 
     oItem.dotacoes.each( function (oDotItem) {
+
       if (oItem.dotacoes.length == 1) {
+
         oDotItem.quantidade -= js_round(oDotItem.executado/oItem.valorunitario,iCasasDecimais);
         oDotItem.quantdot = oDotItem.quantidade;
+
       } else {
         oDotItem.quantdot = oDotItem.quantidade = 0;
       }
 
-     });
+    });
 
      var nQtdeAut  = oItem.saldos.quantidadeautorizar;
      var vTotal = oItem.valorunitario * oItem.quantidade;
-     //var nValorAut = js_formatar(oItem.saldos.valorautorizar, "f",iCasasDecimais);
-     var nValorAut = js_formatar(js_roundDecimal(vTotal, 2), "f",2);
+     var vTotalAut = oItem.valorunitario * nQtdeAut;
+
+     //var nValorAut = js_formatar(js_roundDecimal(vTotal, 2), "f",2);
+     var nValorAut = js_formatar(js_roundDecimal(vTotalAut, 2), "f",2);
 
      aLinha    = new Array();
      aLinha[0] = oItem.codigomaterial;
@@ -601,9 +669,6 @@ function js_retornoGetItensPosicao(oAjax) {
      // Valor unitário
      aLinha[3] = oItem.valorunitario;
 
-
-
-
      // Valor total
      //aLinha[4] = js_formatar(oItem.valortotal, 'f',4);
      aLinha[4] = js_roundDecimal(vTotal,2);
@@ -614,7 +679,9 @@ function js_retornoGetItensPosicao(oAjax) {
      if (oItem.servico && (oItem.lControlaQuantidade == "" || oItem.lControlaQuantidade == "f")) {
        nQtdeAut = 1;
        oItem.saldos.quantidadeautorizar = 1;
+       nValorAut = js_formatar(js_roundDecimal(oItem.saldos.valorautorizar, 2), 'f',2);
      }
+
      aLinha[5] = eval("qtditem"+iSeq+" = new DBTextField('qtditem"+iSeq+"','qtditem"+iSeq+"','"+nQtdeAut+"')");
      aLinha[5].addStyle("text-align","right");
      aLinha[5].addStyle("height","100%");
@@ -643,7 +710,15 @@ function js_retornoGetItensPosicao(oAjax) {
      aLinha[6].addEvent("onKeyPress","return js_teclas(event,this);");
      //aLinha[6].addEvent("onBlur","js_salvarInfoDotacoes("+iSeq+", true);");
      aLinha[6].addEvent("onKeyDown","return js_verifica(this,event,true);");
-     if (!oItem.servico || (oItem.servico && oItem.lControlaQuantidade == "t")) {
+
+      if (oItem.servico && (oItem.lControlaQuantidade == "" || oItem.lControlaQuantidade == "f")) {
+
+          aLinha[6].addEvent("onFocus","js_tempOldValue("+iSeq+",this.value);");
+          aLinha[6].addEvent("onBlur","js_verificaValorTotal("+js_arrangeDotAndComma(nValorAut)+","+iSeq+");");
+
+      }
+
+      if (!oItem.servico || (oItem.servico && oItem.lControlaQuantidade == "t")) {
 
        aLinha[6].setReadOnly(true);
        aLinha[6].addEvent("onFocus","js_bloqueiaDigitacao(this, true);");
@@ -657,7 +732,7 @@ function js_retornoGetItensPosicao(oAjax) {
      aLinha[8] = new String(iSeq).valueOf();
 
 
-     lDesativaLinha = false;
+      lDesativaLinha = false;
      if (nQtdeAut == 0 || nValorAut == '0,00') {
        lDesativaLinha = true;
      }
@@ -671,7 +746,6 @@ function js_retornoGetItensPosicao(oAjax) {
   });
 
 }
-
 
 /**
  * bloqueia  o input passado como parametro para a digitacao.
@@ -705,6 +779,69 @@ function js_liberaDigitacao(object, lFormata) {
   object.select();
 
 }
+
+function js_tempOldValue(iSeq, oldValue){
+
+    oldValue = js_arrangeDotAndComma(oldValue);
+
+    // Buscar elemento pai
+    var elemento_pai = document.body;
+
+    if(!document.getElementById("oldValue"+iSeq)){
+
+        // Criar elemento
+        eval("var oldValue"+iSeq+" = document.createElement('input');");
+    }
+
+    // Inserir (anexar) o elemento filho (oldValue) ao elemento pai (body)
+    eval("elemento_pai.appendChild(oldValue"+iSeq+");");
+
+    eval("oldValue"+iSeq+".value = "+oldValue+";");
+    eval("oldValue"+iSeq+".type = 'hidden';");
+    eval("oldValue"+iSeq+".id = 'oldValue"+iSeq+"';");
+}
+
+function js_arrangeDotAndComma(value){
+
+    if (value.toString().indexOf(",") >= 0){
+
+        value = value.toString().replace('.','');
+        value = value.toString().replace(',','.');
+
+        return parseFloat(value);
+    }
+    return value;
+}
+
+function js_verificaValorTotal(nValueAut, iSeq) {
+    console.log("js_verificaValorTotal //////////////////////////////////////////////////////////////////////");
+    console.log("nValueAut::::"+nValueAut);
+
+    var aLinha = oGridItens.aRows[iSeq];
+
+    var value = js_arrangeDotAndComma($("valoritem"+iSeq).value);
+    var oldValue = js_arrangeDotAndComma($("oldValue"+iSeq).value);
+    nValueAut = js_arrangeDotAndComma(nValueAut);
+
+    console.log("oldValue::::"+oldValue);
+    console.log("value::::"+value);
+    console.log("js_roundDecimal(value,2)::::"+js_roundDecimal(value,2));
+    console.log("nValueAut::::"+nValueAut);
+
+    if (value > nValueAut) {
+        //oGridDotacoes.aRows[iDot].aCells[3].content.setValue(oldValue);
+        $("valoritem"+iSeq).value = js_formatar(oldValue,'f',2);
+        aLinha.aCells[7].content.setValue(js_formatar(js_roundDecimal(oldValue,2), "f",2));
+        console.log("js_verificaValorTotal //////////////////////////////////////////////////////////////////////");
+        return;
+    }
+
+    $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
+    //oDotacao.valorexecutar = $("valoritem"+iSeq).value;
+
+    console.log("js_verificaValorTotal //////////////////////////////////////////////////////////////////////");
+}
+
 /**
  * Verifica se  o usuário cancelou a digitação dos valores.
  * Caso foi cancelado, voltamos ao valor do objeto, e
@@ -738,6 +875,8 @@ function js_calculaValor(obj, iLinha, lVerificaDot) {
   //js_salvarInfoDotacoes(iLinha, lVerificaDot);
 }
 
+
+// Abertura de dotações
 function js_ajusteDotacao(iLinha,tipo) {
 
   if ($('wndDotacoesItem')) {
@@ -763,7 +902,7 @@ function js_ajusteDotacao(iLinha,tipo) {
   oMessageBoard = new DBMessageBoard('msgboard1',
                                     'Adicionar Dotacoes',
                                     'Dotações Item '+oDadosItem.aCells[1].getValue()+" (valor A Autorizar: <b>"+
-                                    oDadosItem.aCells[7].getValue()+"</b>)",
+                                    js_formatar(oDadosItem.aCells[7].getValue(), "f",2)+"</b>)",
                                     $('windowwndDotacoesItem_content')
                                     );
   windowDotacaoItem.setShutDownFunction(function() {
@@ -778,22 +917,6 @@ function js_ajusteDotacao(iLinha,tipo) {
 //       alert('o Valor Total das Dotações não conferem com o total que está sendo autorizado no item!');
 //       return false;
 //     }
-
-    console.log(tipo);
-
-    console.log(js_round(nTotalDotacoes, iCasasDecimais));
-    console.log(js_strToFloat(oDadosItem.aCells[7].getValue(), iCasasDecimais));
-
-    console.log(nTotalDotacoes);
-    console.log(+oDadosItem.aCells[7].getValue());
-
-
-    console.log(js_strToFloat(oDadosItem.aCells[7].getValue(), iCasasDecimais));
-
-    console.log('condicao: ');
-    console.log(js_round(nTotalDotacoes, iCasasDecimais));
-    console.log(js_strToFloat(oDadosItem.aCells[7].getValue(), iCasasDecimais));
-
 
     if(tipo == 1){
       // if (js_round(nTotalDotacoes, iCasasDecimais) != js_strToFloat(oDadosItem.aCells[7].getValue(), iCasasDecimais) ) {
@@ -818,15 +941,12 @@ function js_ajusteDotacao(iLinha,tipo) {
       }
     }
 
-
-
-
      aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
-        var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(),"f",iCasasDecimais));
+                var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(),"f",iCasasDecimais));
 
         oDotacao.valorexecutar = nValue;
-        var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(),"f",iCasasDecimais));
+                var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(),"f",iCasasDecimais));
         oDotacao.quantidade = nQuant;
      });
      oGridItens.aRows[iLinha].select(true);
@@ -844,11 +964,12 @@ function js_ajusteDotacao(iLinha,tipo) {
   var nValor          =  js_strToFloat(oDadosItem.aCells[7].getValue());
   var nValorTotalItem = js_strToFloat(oDadosItem.aCells[5].getValue());
   var nValorTotal     = nValor;
+
   aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
-    //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
+            //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
       // Valor da dotação
-    nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
+            nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
 
 
      aLinha    = new Array();
@@ -900,9 +1021,13 @@ function js_ajusteDotacao(iLinha,tipo) {
 
 function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
 
+    console.log("js_salvarInfoDotacoes //////////////////////////");
+    console.log("iLinha: "+iLinha);
+    console.log("iLinha: "+lAjustaDot);
+
   var oDadosItem      =  oGridItens.aRows[iLinha];
-  console.log('js_salvarInfoDotacoes');
-  console.log(oDadosItem);
+        console.log('js_salvarInfoDotacoes');
+        console.log(oDadosItem);
   if (aItensPosicao[iLinha].dotacoes.length >= 1 && lAjustaDot) {
     js_ajusteDotacao(iLinha);
     return;
@@ -918,9 +1043,11 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
   aItensPosicao[iLinha].dotacoes.each(function (oDotacao, iDot) {
 
     if (aItensPosicao[iLinha].dotacoes.length >= 1 && lAjustaDot==false) {
+
       var nQuantDot  = aItensPosicao[iLinha].dotacoes[iDot].quantidade;
       aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorUnit*nQuantDot,iCasasDecimais);
       return;
+
     }
 
     var nPercentual    = (new Number(oDotacao.quantidade) * 100)/nValorTotalItem;
@@ -933,7 +1060,7 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
         nValorDotacao += nValorTotal;
       }
     }
-     aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorDotacao,iCasasDecimais);
+            aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorDotacao,iCasasDecimais);
 
      if (aItensPosicao[iLinha].dotacoes.length == 1) {
        oDotacao.quantidade = nQuantAutorizar;
@@ -941,9 +1068,6 @@ function js_salvarInfoDotacoes(iLinha, lAjustaDot) {
   });
 
 }
-
-
-
 
 function js_ajustaValorDot(Obj, iDot, tipo) {
 
@@ -1059,7 +1183,7 @@ function js_visualizarAutorizacoes(oAjax) {
   sContent     += "  </div>";
   sContent     += "</fieldset>";
   sContent     += "<center>";
-  sContent     += "<input type='button' id='btnSalvarAutorizacoes' value='Gerar Autorizações' onclick='js_processarAutorizacoes(true)'>";
+  sContent     += "<input type='button' id='btnSalvarAutorizacoes' value='Gerar Autorizações' onclick='js_consultarDataDoSistema(true)'>";
   sContent     += "</center>";
   windowAutorizacaoItem.setContent(sContent);
   oMessageBoardAut = new DBMessageBoard('msgboard1',
@@ -1127,25 +1251,55 @@ function js_visualizarAutorizacoes(oAjax) {
   oGridAutorizacoes.setNumRows(iAut - 1);
 }
 
-function js_processarAutorizacoes(lProcessar) {
+function js_consultarDataDoSistema(lProcessar){
+
+    var oParam = new Object();
+    oParam.consultarDataDoSistema = true;
+    oParam.lProcessar = lProcessar;
+
+    var oAjax  = new Ajax.Request(
+        'ac04_geraautorizacao001.php',
+        {
+            method:'post',
+            parameters:'json='+Object.toJSON(oParam),
+            onComplete: js_processarAutorizacoes
+        }
+    );
+
+}
+
+function js_processarAutorizacoes(oAjax) {
+
+    var x = JSON.parse(oAjax.responseText);
+
+    console.log('x.processar');
+    console.log(x.processar);
+
+    if(Date.parse(x['dataDoSistema']) <= Date.parse(x.dataFechamentoContabil)){
+
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        return
+
+    }
 
   var aItens = oGridItens.getSelection("object");
   if (aItens.length == 0) {
 
     alert('Nenhum item Selecionado');
     return false;
+
   }
 
   var funcaoRetorno = js_retornoProcessarAutorizacoes;
 
-  if (!lProcessar) {
+  if (!x['processar']) {
     funcaoRetorno = js_visualizarAutorizacoes;
   }
 
   js_divCarregando('Aguarde, processando.....', 'msgbox');
   var oParam        = new Object();
   oParam.exec       = "processarAutorizacoes";
-  oParam.lProcessar = lProcessar;
+  oParam.lProcessar = x['processar'];
   oParam.aItens     = new Array();
   oParam.dados      = new Object();
 
@@ -1164,7 +1318,7 @@ function js_processarAutorizacoes(lProcessar) {
       return false;
   }
 
-  if (lProcessar) {
+  if (x['processar']) {
 
     oParam.dados.destino                 = encodeURIComponent(tagString( $F('e54_destin')));
     oParam.dados.tipolicitacao           = $F('e54_tipol');
@@ -1194,17 +1348,26 @@ function js_processarAutorizacoes(lProcessar) {
      var nValorDotacao = 0;
 
      oDadosItem.dotacoes.each(function(oDotacao, id) {
+         console.log("*********");
 
-       nValorDotacao += oDotacao.valorexecutar;
+         console.debug(oDotacao);
+         console.log("Valoooooooor:");
+         console.debug(oDotacao.valor);
+         nValorDotacao += oDotacao.valorexecutar;
      });
 
       oItem.valor   =  js_formatar(oItem.valor , 'f',iCasasDecimais);
-
       nValorDotacao =  js_formatar(nValorDotacao, 'f',2);
       nTotal        =  js_formatar(nTotal, 'f',2);
 
         // nValorDotacao =  js_roundDecimal(nValorDotacao,2);
         // nTotal        =  js_roundDecimal(nTotal,2);
+
+
+        console.log("nTotal.valueOf()="+nTotal.valueOf());
+        console.log("nValorDotacao="+nValorDotacao);
+        console.log("nValorDotacao.valueOf()="+nValorDotacao.valueOf());
+        console.log("aCells[7].getValue()="+aCells[7].getValue());
 
       if (nTotal.valueOf() != nValorDotacao.valueOf()) {
           /**
@@ -1223,8 +1386,7 @@ function js_processarAutorizacoes(lProcessar) {
       oParam.aItens.push(oItem);
     }
   }
-    // alert("Sucesso!");
-    // return;
+
   var oAjax  = new Ajax.Request(sUrlRpc,
                                {method:'post',
                                 parameters:'json='+Object.toJSON(oParam),
@@ -1305,6 +1467,7 @@ function setInformacoesAutorizacao() {
  * @param {integer} Código do tipo de compra
  */
 function js_buscarTipoLicitacao(iTipoCompra) {
+
     console.log('itipocompra: ');
     console.log(iTipoCompra);
 
