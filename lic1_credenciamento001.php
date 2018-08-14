@@ -65,7 +65,7 @@ if(isset($pc20_codorc) && !empty($pc20_codorc) && !isset($chavepesquisa)) {
    $sWhere  = "pc21_codorc=".@$pc20_codorc;
    $result_forn = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_numcgm,z01_nome","",$sWhere));
 
-   $result  = $clcredenciamento->sql_record($clcredenciamento->sql_query('','*','',"l205_fornecedor = $l205_fornecedor"));
+   $result  = $clcredenciamento->sql_record($clcredenciamento->sql_query('','*','',"l205_fornecedor = $l205_fornecedor and l205_licitacao = $l20_codigo"));
    db_fieldsmemory($result,0);
 
    $result2 =  $clcgm->sql_record($clcgm->sql_query('','*','',"z01_numcgm = $l205_fornecedor"));
