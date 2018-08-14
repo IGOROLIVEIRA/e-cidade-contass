@@ -1046,7 +1046,7 @@ if($totaliza == "A") {
   $pdf->cell(30,$alt,db_formatar($totliquidado_acumulado,'f'),0,0,"R",0);
   $pdf->cell(30,$alt,db_formatar($totpago_acumulado,'f'),0,0,"R",0);
   $pdf->cell(30,$alt,db_formatar($totliquidado_acumulado - $totpago_acumulado,'f'),0,1,"R",0);
-  $pdf->setfont('arial','',7);
+  $pdf->setfont('arial','',4);
 
 }
 
@@ -1057,22 +1057,31 @@ $ass_sec  = $classinatura->assinatura(9000,"",'0');
 $ass_tes  = $classinatura->assinatura(9000,"",'2');
 $ass_cont = $classinatura->assinatura(9000,"",'3');
 
+
+
+if(!empty($ass_pref) && !empty($ass_sec) && !empty($ass_tes) && !empty($ass_cont) ) {
+
 //echo $ass_pref;
 if( $pdf->gety() > ( $pdf->h - 30 ) ){
 $pdf->addpage();
 }
-$pdf->setfont('arial','',8);
-$largura = ( $pdf->w ) / 2;
-$pdf->ln(30);
-$pos = $pdf->gety();
-$pdf->multicell($largura,4,$ass_pref,0,"L",0,0);
-$pdf->setxy($largura,$pos);
-$pdf->multicell($largura,4,$ass_sec,0,"L",0,0);
-$pos = $pdf->gety();
-$pdf->sety($pos+20);
-$pdf->multicell($largura,4,$ass_tes,0,"L",0,0);
-$pdf->setxy($largura,$pos+20);
-$pdf->multicell($largura,4,$ass_cont,0,"L",0,0);
+
+
+
+    $pdf->setfont('arial', '', 8);
+    $largura = ($pdf->w) / 2;
+    $pdf->ln(15);
+    $pos = $pdf->gety();
+    $pdf->multicell($largura, 4, $ass_pref, 0, "L", 0, 0);
+    $pdf->setxy($largura, $pos);
+    $pdf->multicell($largura, 4, $ass_sec, 0, "L", 0, 0);
+    $pos = $pdf->gety();
+    $pdf->sety($pos + 20);
+    $pdf->multicell($largura, 4, $ass_tes, 0, "L", 0, 0);
+    $pdf->setxy($largura, $pos + 20);
+    $pdf->multicell($largura, 4, $ass_cont, 0, "L", 0, 0);
+
+}
 
 $pdf->Output();
 ?>
