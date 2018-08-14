@@ -263,7 +263,6 @@ function js_assinarContrato(obj) {
   var valorCadastrado = parseFloat(obj.responseText);
   var valorDotacao = localStorage.getItem('TotalDotacoes');
   valorDotacao = parseFloat(valorDotacao);
-  localStorage.removeItem('TotalDotacoes');
 
   if(valorCadastrado != valorDotacao){
     alert('Existem itens sem dotações, realize as alterações e tente novamente');
