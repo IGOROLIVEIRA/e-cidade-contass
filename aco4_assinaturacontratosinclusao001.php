@@ -67,7 +67,7 @@ if($_POST['json']){
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <?
-  db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
+  db_app::load("scripts.js, strings.js, prototype.js, roundDecimal.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
 ?>
@@ -264,7 +264,7 @@ function js_assinarContrato(obj) {
   var valorDotacao = localStorage.getItem('TotalDotacoes');
   valorDotacao = parseFloat(valorDotacao);
 
-  if(valorCadastrado != valorDotacao){
+  if(valorCadastrado != js_roundDecimal(valorDotacao,2)){
     alert('Existem itens sem dotações, realize as alterações e tente novamente');
     return;
   }
