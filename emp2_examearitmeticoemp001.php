@@ -59,6 +59,17 @@ include("dbforms/db_classesgenericas.php");
              </td>
 
             </tr>
+              <tr>
+                  <td>
+                      <strong>Ordernar por:</strong>
+                  </td>
+                  <td>
+                      <select name="ordenar" id="ordenar">
+                          <option value="01">Órgão</option>
+                          <option value="02">Dotação</option>
+                      </select>
+                  </td>
+              </tr>
 
             <tr>
              <!--  <td><b>Tipos de Pastas:</b></td>-->
@@ -110,7 +121,8 @@ function js_abre(){
 	  // query += "&tipoExame="+obj.tipoExame.value;
 	  // query += "&tipoPasta="+obj.tipoPasta.value;
 	   query += "&recursos="+js_campo_recebe_valores_recursos ();
-     query += "&ExibirHistoricoDoEmpenho="+obj.ExibirHistoricoDoEmpenho.value;
+       query += "&ExibirHistoricoDoEmpenho="+obj.ExibirHistoricoDoEmpenho.value;
+       query += "&ordenar="+obj.ordenar.value;
 
 	   jan = window.open('emp2_examearitmetico002.php?'+query,
 	                 '',

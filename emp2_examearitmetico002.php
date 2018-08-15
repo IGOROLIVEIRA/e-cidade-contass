@@ -76,7 +76,8 @@ $pdf->SetFillColor(235);
 $pdf->SetFont('Arial', 'B', 8);
 $tam = '05';
 
-$sSql = "select * from
+if($ordenar == 01) {
+    $sSql = "select * from
 	( select coremp.k12_empen, e60_numemp, e60_codemp, e60_emiss, e60_numerol,e60_tipol,
 		case when e49_numcgm is null then e60_numcgm
 			else e49_numcgm end as
@@ -121,6 +122,44 @@ $sSql = "select * from
 		inner join saltes on saltes.k13_conta = corrente.k12_conta
 	  where coremp.k12_data between '" . $sDataInicial . "' and '" . $sDataFinal . "' " . $sWhere . "
 	  order by o58_orgao, o58_unidade, o58_subfuncao, o58_funcao, o58_programa, o58_projativ, o56_elemento,e60_codemp) as xxxxx where 1 = 1";
+}else{
+    $sSql = "SELECT *
+FROM
+    (SELECT coremp.k12_empen,e60_numemp,e60_codemp,e60_emiss,e60_numerol,e60_tipol,
+            CASE
+                WHEN e49_numcgm IS NULL THEN e60_numcgm
+                ELSE e49_numcgm
+            END AS e60_numcgm,
+            k12_codord AS e50_codord,
+            CASE
+                WHEN e49_numcgm IS NULL THEN cgm.z01_nome
+                ELSE cgmordem.z01_nome
+            END AS z01_nome,
+            k12_valor,k12_cheque,e60_anousu,coremp.k12_autent,coremp.k12_data,k13_conta,
+            k13_descr,o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,o58_funcao,
+            o58_programa,o55_descr,o15_codtri,o15_descr,o15_tipo,o56_elemento,o56_descr,e50_data,
+            CASE
+                WHEN e60_anousu < " . db_getsession("DB_anousu") . " THEN 'RP'
+                ELSE 'Emp'
+            END AS tipo,
+            e50_obs
+     FROM coremp
+     INNER JOIN empempenho ON e60_numemp = k12_empen AND e60_instit = " . db_getsession("DB_instit") . "
+     INNER JOIN orcdotacao ON e60_anousu = o58_anousu AND e60_coddot = o58_coddot
+     INNER JOIN orcprojativ ON o58_anousu = o55_anousu AND o58_projativ = o55_projativ
+     INNER JOIN orctiporec ON o58_codigo = o15_codigo
+     INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+     INNER JOIN pagordem ON e50_codord = k12_codord
+     LEFT JOIN pagordemconta ON e50_codord = e49_codord
+     INNER JOIN corrente ON corrente.k12_id = coremp.k12_id AND corrente.k12_data=coremp.k12_data
+     AND corrente.k12_autent = coremp.k12_autent
+     INNER JOIN cgm ON cgm.z01_numcgm = e60_numcgm
+     LEFT JOIN cgm cgmordem ON cgmordem.z01_numcgm = e49_numcgm
+     INNER JOIN saltes ON saltes.k13_conta = corrente.k12_conta
+     WHERE coremp.k12_data BETWEEN '" . $sDataInicial . "' and '" . $sDataFinal . "' " . $sWhere . "
+     ORDER BY o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_funcao,o58_programa,o58_projativ,o56_elemento,e60_codemp) AS xxxxx
+WHERE 1 = 1";
+}
 
 $rsResult = db_query($sSql);
 $aDadosAgrupados = array();
