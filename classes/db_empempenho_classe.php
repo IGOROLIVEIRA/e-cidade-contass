@@ -1704,47 +1704,68 @@ class cl_empempenho {
      */
     function sql_query_saldo_encerramento_rp(){
 
-        $sql = "select * from (select
-                       e60_numemp,
-                       (vlremp - vlranu - (vlrliq  + vlremliqliquidado) - (vlremliq - vlremliqliquidado)) as valor_nao_processado,
-                       (vlremliq - vlremliqliquidado) as valor_em_liquidacao,
-                       (vlremliqliquidado + vlrliq - vlrpag) as valor_processado
-                 from (select
-                        e60_numemp,
-                        sum(case when c71_coddoc IN (select c53_coddoc from conhistdoc where c53_tipo = 10) then round(c70_valor,2) else 0 end) as vlremp,
-                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 11) then round(c70_valor,2) else 0 end) as vlranu,
-                        sum(case when c71_coddoc in (502,412,84,310,506,306,23,3) then round(c70_valor,2)
-                        when c71_coddoc in (4,24,85,307,311,413,503,507) then round(c70_valor,2) *-1
-                        else 0 end) as vlrliq,
-                        sum(case when c71_coddoc in (208,210,212,200) then round(c70_valor,2)
-                        when c71_coddoc in (209,211,213,201) then round(c70_valor,2) *-1
-                        else 0 end) as vlremliq,
-                        sum(case when c71_coddoc in (202,204,206) then round(c70_valor,2)
-                        when c71_coddoc in (203,205,207) then round(c70_valor,2) *-1
-                        else 0 end) as vlremliqliquidado,
-                        sum(case when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 30) then round(c70_valor,2)
-                        when c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo = 31) then round(c70_valor,2) *-1
-                        else 0 end) as vlrpag
-                       from     empempenho
-                                inner join conlancamemp on e60_numemp = c75_numemp
-                                inner join conlancamcgm on c75_codlan = c76_codlan
-                                inner join cgm          on c76_numcgm = z01_numcgm
-                                inner join conlancamdoc on c75_codlan = c71_codlan
-                                inner join conlancam    on c75_codlan = c70_codlan
-                                inner join orcdotacao   on e60_coddot = o58_coddot
-                                                       and e60_anousu = o58_anousu
-                                inner join orcelemento  on o58_codele = o56_codele
-                                                       and o58_anousu = o56_anousu
-                                inner join orctiporec on o58_codigo = o15_codigo
-                                inner join db_config on codigo = e60_instit
-                                inner join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o41_anousu = o58_anousu
-                                inner JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-                                left join infocomplementaresinstit on codigo = si09_instit
-                       where    e60_anousu = ".db_getsession("DB_anousu")." and e60_instit = ".db_getsession("DB_instit")."
-                            and c70_data between '".db_getsession("DB_anousu")."-01-01' and '".db_getsession("DB_anousu")."-12-31'
-                     group by   e60_numemp
-                                ) as restos) as x
-                                where valor_nao_processado > 0 or valor_processado > 0 or valor_em_liquidacao > 0";
+        $sql = "SELECT * FROM
+                    (SELECT e60_numemp,
+                            (vlremp - vlranu - (vlrliq + vlremliqliquidado) - (vlremliq - vlremliqliquidado)) AS valor_nao_processado,
+                            (vlremliq - vlremliqliquidado) AS valor_em_liquidacao,
+                            (vlremliqliquidado + vlrliq - vlrpag) AS valor_processado
+                     FROM
+                         (SELECT e60_numemp,
+                                 sum(CASE
+                                         WHEN c71_coddoc IN
+                                                  (SELECT c53_coddoc FROM conhistdoc
+                                                   WHERE c53_tipo = 10) THEN round(c70_valor,2)
+                                         ELSE 0
+                                     END) AS vlremp,
+                                 sum(CASE
+                                         WHEN c71_coddoc IN
+                                                  (SELECT c53_coddoc FROM conhistdoc
+                                                   WHERE c53_tipo = 11) THEN round(c70_valor,2)
+                                         ELSE 0
+                                     END) AS vlranu,
+                                 sum(CASE
+                                         WHEN c71_coddoc IN (502,412,84,310,506,306,23,3) THEN round(c70_valor,2)
+                                         WHEN c71_coddoc IN (4,24,85,307,311,413,503,507) THEN round(c70_valor,2) *-1
+                                         ELSE 0
+                                     END) AS vlrliq,
+                                 sum(CASE
+                                         WHEN c71_coddoc IN (208,210,212,200) THEN round(c70_valor,2)
+                                         WHEN c71_coddoc IN (209,211,213,201) THEN round(c70_valor,2) *-1
+                                         ELSE 0
+                                     END) AS vlremliq,
+                                 sum(CASE
+                                         WHEN c71_coddoc IN (202,204,206) THEN round(c70_valor,2)
+                                         WHEN c71_coddoc IN (203,205,207) THEN round(c70_valor,2) *-1
+                                         ELSE 0
+                                     END) AS vlremliqliquidado,
+                                 sum(CASE
+                                         WHEN c71_coddoc IN
+                                                  (SELECT c53_coddoc FROM conhistdoc
+                                                   WHERE c53_tipo = 30) THEN round(c70_valor,2)
+                                         WHEN c71_coddoc IN
+                                                  (SELECT c53_coddoc FROM conhistdoc
+                                                   WHERE c53_tipo = 31) THEN round(c70_valor,2) *-1
+                                         ELSE 0
+                                     END) AS vlrpag
+                          FROM empempenho
+                          INNER JOIN conlancamemp ON e60_numemp = c75_numemp
+                          INNER JOIN cgm ON e60_numcgm = z01_numcgm
+                          INNER JOIN conlancamdoc ON c75_codlan = c71_codlan
+                          INNER JOIN conlancam ON c75_codlan = c70_codlan
+                          INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu
+                          INNER JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+                          INNER JOIN orctiporec ON o58_codigo = o15_codigo
+                          INNER JOIN db_config ON codigo = e60_instit
+                          INNER JOIN orcunidade ON o58_orgao = o41_orgao AND o58_unidade = o41_unidade AND o41_anousu = o58_anousu
+                          INNER JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
+                          LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
+                          WHERE e60_anousu = ".db_getsession("DB_anousu")."
+                            AND e60_instit = ".db_getsession("DB_instit")."
+                            AND c70_data BETWEEN '".db_getsession("DB_anousu")."-01-01' AND '".db_getsession("DB_anousu")."-12-31'
+                          GROUP BY e60_numemp ) AS restos) AS x
+                WHERE valor_nao_processado > 0
+                    OR valor_processado > 0
+                    OR valor_em_liquidacao > 0";
 
         return $sql;
     }
