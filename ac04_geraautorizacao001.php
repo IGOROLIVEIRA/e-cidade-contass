@@ -770,9 +770,9 @@ function js_liberaDigitacao(object, lFormata) {
 
   nValorObjeto        = object.value;
   object.value        = object.value;
-  if (lFormata) {
-    object.value        = js_strToFloat(object.value).valueOf();
-  }
+  // if (lFormata) {
+  //   object.value        = js_strToFloat(object.value).valueOf();
+  // }
   object.style.border = '1px solid black';
   object.readOnly     = false;
   object.style.fontWeight = "bold";
@@ -1102,7 +1102,7 @@ function js_ajustaQuantDot(Obj, iDot, iLinha) {
     oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
     Obj.value = nValorObjeto;
   } else {
-    oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_round(nQuant*Number(oDadosItem.aCells[4].getValue()),iCasasDecimais));
+    oGridDotacoes.aRows[iDot].aCells[3].content.setValue(js_roundDecimal(nQuant*Number(oDadosItem.aCells[4].getValue()),2));
     // $("valordot"+iDot).value = oGridDotacoes.aRows[iDot].aCells[3].getValue();
     $("valordot"+iDot).value = js_formatar(js_roundDecimal(oGridDotacoes.aRows[iDot].aCells[3].getValue(), 2), "f",2);
   }
