@@ -310,7 +310,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
                                                       '52',
                                                       '53',
                                                       '54')";
-    $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);
+    $rsResult10 = db_query($sSql);
     /**
      * registro 10
      */
@@ -326,7 +326,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
       $claberlic10->si46_codunidadesubresp = $oDados10->codunidadesubresp;
       $claberlic10->si46_criterioaceitabilidade = substr($this->removeCaracteres($oDados10->criterioaceitabilidade), 0, 80);
       $claberlic10->si46_criteriodesempate = $oDados10->criteriodesempate;
-      $claberlic10->si46_descontotabela = $oDados10->criterioAdjudicacao;
+      $claberlic10->si46_descontotabela = $oDados10->criterioadjudicacao;
       $claberlic10->si46_destinacaoexclusiva = $oDados10->destinacaoexclusiva;
       $claberlic10->si46_dtabertura = $oDados10->dtabertura;
       $claberlic10->si46_dteditalconvite = $oDados10->dteditalconvite;
@@ -353,7 +353,6 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
       $claberlic10->si46_veiculo1publicacao = $this->removeCaracteres($oDados10->veiculo1publicacao);
       $claberlic10->si46_veiculo2publicacao = $this->removeCaracteres($oDados10->veiculo2Publicacao);
       $claberlic10->si46_instit = db_getsession("DB_instit");
-
       $claberlic10->incluir(null);
       if ($claberlic10->erro_status == 0) {
         throw new Exception($claberlic10->erro_msg);
