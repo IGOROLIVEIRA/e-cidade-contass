@@ -1368,15 +1368,15 @@ class cl_liclicita
 
 
         if (trim($this->l20_horacria != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horacria"]))) {
-            if($this->l20_datacria > $this->l20_dataaber){
-                $this->erro_sql = "Data Abertura Proc. Adm deve ser menor que Data Emis/Alt Edital/Convite.";
-                $this->erro_campo = "l20_datacria";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+//            if($this->l20_codtipocom == && $this->l20_datacria > $this->l20_dataaber){
+//                $this->erro_sql = "Data Abertura Proc. Adm deve ser menor que Data Emis/Alt Edital/Convite.";
+//                $this->erro_campo = "l20_datacria";
+//                $this->erro_banco = "";
+//                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+//                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+//                $this->erro_status = "0";
+//                return false;
+//            }
             $sql .= $virgula . " l20_horacria = '$this->l20_horacria' ";
             $virgula = ",";
             if ($this->l20_horacria == null) {
