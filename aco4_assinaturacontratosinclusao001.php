@@ -57,7 +57,7 @@ if($_POST['json']){
   $sSqlAcordo = $clacordo->sql_query($sequencial_valor->sequencial);
   $rsAcordo = $clacordo->sql_record($sSqlAcordo);
   $clacordo = db_utils::fieldsMemory($rsAcordo, 0);
-  echo $clacordo->ac16_valor;die();
+  // echo $clacordo->ac16_valor;die();
 }
 
 ?>
@@ -102,6 +102,11 @@ fieldset table td:first-child {
             <td align="left">
               <?
                 db_input('ac16_resumoobjeto',40,$Iac16_resumoobjeto,true,'text',3);
+              ?>
+            </td>
+            <td align="left">
+              <?
+                db_input('ac16_origem',2,$Iac16_origem,true,'hidden',3);
               ?>
             </td>
 
@@ -190,7 +195,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
 
-    var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto';
+    var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_origem';
     js_OpenJanelaIframe('top.corpo',
                         'db_iframe_acordo',
                         sUrl,
@@ -228,14 +233,15 @@ function js_mostraacordo(chave1,chave2,erro) {
 
     $('ac16_sequencial').value   = chave1;
     $('ac16_resumoobjeto').value = chave2;
+    $('ac16_origem').value = chave3;
   }
 }
 
 /**
  * Retorno da pesquisa acordos
  */
-function js_mostraacordo1(chave1,chave2) {
-
+function js_mostraacordo1(chave1,chave2,chave3) {
+  origem = chave3;
   $('ac16_sequencial').value    = chave1;
   $('ac16_resumoobjeto').value  = chave2;
   db_iframe_acordo.hide();
@@ -264,9 +270,11 @@ function js_assinarContrato(obj) {
   var valorDotacao = localStorage.getItem('TotalDotacoes');
   valorDotacao = parseFloat(valorDotacao);
 
-  if(valorCadastrado != js_roundDecimal(valorDotacao,2)){
-    alert('Existem itens sem dotações, realize as alterações e tente novamente');
-    return;
+  if(origem == '3'){
+    if(valorCadastrado != js_roundDecimal(valorDotacao,2)){
+      alert('Existem itens sem dotações, realize as alterações e tente novamente');
+      return;
+    }
   }
 
   try {

@@ -223,6 +223,7 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
               $campos .= "acordo.ac16_contratado, ";
               $campos .= "cgm.z01_nome, ";
               $campos .= "acordo.ac16_resumoobjeto::text, ";
+              $campos .= "acordo.ac16_origem::text, ";
               //$campos .= "codigo, ";
               //$campos .= "nomeinst, ";
               //$campos .= "acordo.ac16_numero, ";
@@ -294,7 +295,7 @@ $pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros,0)->pc01_liberaau
 
               db_fieldsmemory($result,0);
               if (isset($descricao) && $descricao == 'true') {
-                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto',false);</script>";
+                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac16_origem',false);</script>";
               } else {
                 echo "<script>".$funcao_js."('$ac16_sequencial',false);</script>";
               }
