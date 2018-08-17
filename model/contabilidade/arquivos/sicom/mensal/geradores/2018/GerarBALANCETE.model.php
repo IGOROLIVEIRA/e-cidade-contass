@@ -31,8 +31,40 @@ class GerarBALANCETE extends GerarAM
         $rsBALANCETE12 = db_query($sSql2);
         $sSql3 = "select * from balancete132018 where si180_mes = " . $this->iMes . " and si180_instit =" . db_getsession("DB_instit");
         $rsBALANCETE13 = db_query($sSql3);
-        $sSql4 = "select * from balancete142018 where si181_mes = " . $this->iMes . " and si181_instit =" . db_getsession("DB_instit");
+
+        $sSql4 = "SELECT
+                  si181_sequencial,
+                  si181_tiporegistro,
+                  si181_contacontabil,
+                  si181_codfundo,
+                  si181_codorgao,
+                  si181_codunidadesub,
+                  si181_codunidadesuborig,
+                  si181_codfuncao,
+                  si181_codsubfuncao,
+                  si181_codprograma,
+                  si181_idacao,
+                  si181_idsubacao,
+                  si181_naturezadespesa,
+                  si181_subelemento,
+                  si181_codfontrecursos,
+                  e60_codemp as si181_nroempenho,
+                  si181_anoinscricao,
+                  si181_saldoinicialrsp,
+                  si181_naturezasaldoinicialrsp,
+                  si181_totaldebitosrsp,
+                  si181_totalcreditosrsp,
+                  si181_saldofinalrsp,
+                  si181_naturezasaldofinalrsp,
+                  si181_mes,
+                  si181_instit,
+                  si181_reg10
+                  FROM balancete142018
+                  JOIN empempenho ON e60_codemp::int8 = si181_nroempenho::int8 AND e60_anousu = si181_anoinscricao
+                  WHERE si181_mes = " . $this->iMes . "
+                    AND si181_instit =" . db_getsession("DB_instit");
         $rsBALANCETE14 = db_query($sSql4);
+
         $sSql5 = "select * from balancete152018 where si182_mes = " . $this->iMes . " and si182_instit =" . db_getsession("DB_instit");
         $rsBALANCETE15 = db_query($sSql5);
         $sSql6 = "select * from balancete162018 where si183_mes = " . $this->iMes . " and si183_instit =" . db_getsession("DB_instit");
