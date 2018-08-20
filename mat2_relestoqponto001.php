@@ -116,7 +116,7 @@ $cldb_almox        = new cl_db_almox;
         </td>
         <td align="left">
             <?
-            $arr_listar = array("t"=>"Todos","a"=>"Ativo","i"=>"Inativo");
+            $arr_listar = array("a"=>"Ativo","i"=>"Inativo","t"=>"Todos");
             db_select('lista',$arr_listar,true,4,"");
             ?>
         </td>
