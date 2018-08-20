@@ -391,14 +391,14 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
   left join infocomplementaresinstit on codigo = si09_instit
   where o46_codlei in ({$oDados10->codigovinc}) order by o46_codsup";
         $rsResult14 = db_query($sSql);
-        //db_criatabela($rsResult14);
+//        db_criatabela($rsResult14);
 
         $aDadosAgrupados14 = array();
         for ($iCont14 = 0; $iCont14 < pg_num_rows($rsResult14); $iCont14++) {
 
           $oDadosSql14 = db_utils::fieldsMemory($rsResult14, $iCont14);
-          $sHash = $oDadosSql14->codreduzidodecreto . $oDadosSql14->tipoalteracao . $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao;
-          $sHash .= $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
+          $sHash  = $oDadosSql14->codreduzidodecreto . $oDadosSql14->tipoalteracao . $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao;
+          $sHash .= $oDadosSql14->codsubfuncao . $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
 
           if (!isset($aDadosAgrupados14[$sHash])) {
 
