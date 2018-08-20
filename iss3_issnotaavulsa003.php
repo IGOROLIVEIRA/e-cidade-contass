@@ -112,11 +112,17 @@ function js_marca(obj){
     <td><b>Nome/Razão Social:</b></td>
     <td colspan="3" class='texto'><?=$oNota->z01_nome?></td>
 </tr>    
-</tr>
+<tr>
     <td><b>Endereço/Nº:</b></td>
     <td colspan="3" class='texto'><?=$oNota->z01_ender?></td>
     <td class='texto'><?=$oNota->z01_numero?></td>
-</tr>    
+</tr>
+    <tr>
+        <td><b>Usuário:</b></td>
+        <td class='texto'><?=$oNota->nome?></td>
+        <td><b>Hora:</b></td>
+        <td class='texto'><?=$oNota->q51_hora?></td>
+    </tr>
 </table>
 </fieldset>
 </td></tr>
