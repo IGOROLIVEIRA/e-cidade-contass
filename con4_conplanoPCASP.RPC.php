@@ -79,15 +79,14 @@ switch ($oParam->exec) {
             $oPlanoPCASP->setClassificacaoConta(new ClassificacaoConta($oParam->iClassificacao));
             $oPlanoPCASP->setSistemaConta(new SistemaConta($oParam->iDetalhamentoSistema));
             $oPlanoPCASP->setSubSistema(new SubSistemaConta($oParam->iSistemaConta));
-
             $oPlanoPCASP->setTipoLancamento($oParam->iTipoLancamento);
             $oPlanoPCASP->setSubTipo(is_numeric($oParam->iSubTipo) == true && $oParam->iSubTipo != 0 ? $oParam->iSubTipo : 0);
             $oPlanoPCASP->setDesdobramento(is_numeric($oParam->iDesdobramento) == true && $oParam->iDesdobramento != 0 ? $oParam->iDesdobramento : 0);
-
             if (!empty($oParam->iContaBancaria)) {
-                $oPlanoPCASP->setContaBancaria(new ContaBancaria($oParam->iContaBancaria));
+            $oPlanoPCASP->setContaBancaria(new ContaBancaria($oParam->iContaBancaria));
             }
             $oPlanoPCASP->setCgmPessoa($oParam->iCgmPessoa);
+            $oPlanoPCASP->setNaturezadaReceita($oParam->iNaturezaReceita);
 
 
             /**
@@ -143,11 +142,11 @@ switch ($oParam->exec) {
             $oRetorno->iDetalhamentoSistema = $oParam->iDetalhamentoSistema;
             $oRetorno->iSubSistemaConta = $oParam->iSistemaConta;
             $oRetorno->iCodigoConta = $oPlanoPCASP->getCodigoConta();
-
             $oRetorno->iTipoLancamento = $oPlanoPCASP->getTipoLancamento();
             $oRetorno->iSubTipo = $oPlanoPCASP->getSubTipo();
             $oRetorno->iDesdobramento = $oPlanoPCASP->getDesdobramento();
             $oRetorno->iCgmPessoa = $oPlanoPCASP->getCgmPessoa();
+            $oRetorno->iNaturezaReceita = $oPlanoPCASP->getNaturezadaReceita();
 
             db_fim_transacao(false);
         } catch (Exception $eErro) {
@@ -271,7 +270,8 @@ switch ($oParam->exec) {
         $oRetorno->dados->sDescricaoDetalhamentoSistema = urlencode($oPlanoPCASP->getSistemaConta()->getDescricao());
         $oRetorno->dados->iClassificacao = $oPlanoPCASP->getClassificacaoConta()->getCodigoClasse();
         $oRetorno->dados->sIndicadorSuperavit = $oPlanoPCASP->getIdentificadorFinanceiro();
-
+        $oRetorno->dados->c60_naturezadareceita = $oPlanoPCASP->getNaturezadaReceita();
+        $oRetorno->dados->c60_descr = $oPlanoPCASP->getDescrNaturezareceita($oPlanoPCASP->getNaturezadaReceita());
         $oRetorno->dados->iTipoLancamento = $oPlanoPCASP->getTipoLancamento();
         $oRetorno->dados->isubtipo = $oPlanoPCASP->getSubTipo();
         $oRetorno->dados->idesdobramento = $oPlanoPCASP->getDesdobramento();

@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
+//ini_set("display_errors","on");
 //MODULO: contabilidade
 //CLASSE DA ENTIDADE conplano
 class cl_conplano {
@@ -59,6 +59,7 @@ class cl_conplano {
 
 	var $c60_nregobrig = null;
 	var $c60_cgmpessoa = null;
+	var $c60_naturezadareceita = null;
 	var $aContasCgmPessoa = array();
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
@@ -78,6 +79,7 @@ class cl_conplano {
 	c60_desdobramneto = int8 = Desdobramento
 	c60_nregobrig = int8 = Registro
 	c60_cgmpessoa = int8 = Cgm
+	c60_naturezadareceita = int8 = natureza da receita
 	";
 	//funcao construtor da classe
 	function cl_conplano() {
@@ -116,6 +118,7 @@ class cl_conplano {
 
 			$this->c60_nregobrig = ($this->c60_nregobrig == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_nregobrig"]:$this->c60_nregobrig);
 			$this->c60_cgmpessoa = ($this->c60_cgmpessoa == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_cgmpessoa"]:$this->c60_cgmpessoa);
+			$this->c60_naturezadareceita = ($this->c60_naturezadareceita == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_naturezadareceita"]:$this->c60_naturezadareceita);
 		}else{
 			$this->c60_codcon = ($this->c60_codcon == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_codcon"]:$this->c60_codcon);
 			$this->c60_anousu = ($this->c60_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["c60_anousu"]:$this->c60_anousu);
@@ -247,13 +250,11 @@ class cl_conplano {
 			$this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
 			$this->erro_status = "0";
 			return false;
-		}// aqui 
-		//$subtipo
-		//pg_last_error()
-		
+		}
+
 	    /**
 		 * tipo de Detalhamento do Sistema ==7 entao obriga o preenchimento dos campos
-		 */ 
+		 */
 		if($this->c60_codsis ==7){
 	      if(trim($this->c60_tipolancamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c60_tipolancamento"])){
 	        if(trim($this->c60_tipolancamento) == null ){
@@ -266,7 +267,7 @@ class cl_conplano {
 			  return false;
 			}
 		  }
-			
+
 		  if(($this->c60_tipolancamento != null) || ($this->c60_tipolancamento != "") ){
 		    if($subtipo ==  " "){
 			  $this->erro_sql = " Campo sub tipolancamento nao Informado.";
@@ -278,9 +279,9 @@ class cl_conplano {
 			  return false;
 			}
 				//a validação e realizada via javascript no arquivo de form   para  o c60_desdobramneto
-		  }	
+		  }
 		}
-		
+
 		$sql = "insert into conplano(
 		c60_codcon
 		,c60_anousu
@@ -298,6 +299,7 @@ class cl_conplano {
 		,c60_desdobramneto
 		,c60_nregobrig
 		,c60_cgmpessoa
+		,c60_naturezadareceita
 		)
 		values (
 		$this->c60_codcon
@@ -316,6 +318,7 @@ class cl_conplano {
 		,".($this->c60_desdobramneto==''?'null':$this->c60_desdobramneto)."	
 		,$this->c60_nregobrig
 		,".($this->c60_cgmpessoa=='null'?'null':$this->c60_cgmpessoa)."
+		,".($this->c60_naturezadareceita==null?'null':$this->c60_naturezadareceita)."
 		)";
 		$result = db_query($sql);
 		if($result==false){
@@ -501,10 +504,10 @@ class cl_conplano {
 				return false;
 			}
 		}
-		
+
 	/**
 		 * tipo de Detalhamento do Sistema ==7 entao obriga o preenchimento dos campos
-		 */ 
+		 */
 		if($this->c60_codsis ==7){
 			if(trim($this->c60_tipolancamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c60_tipolancamento"])){
 					$sql  .= $virgula." c60_tipolancamento = $this->c60_tipolancamento ";
@@ -519,7 +522,7 @@ class cl_conplano {
 						return false;
 					}
 				}
-			
+
 			if(($this->c60_tipolancamento != null) || ($this->c60_tipolancamento != "") ){
 				if($subtipo ==  " "){
 				  	    $this->erro_sql = " Campo sub tipolancamento nao Informado.";
@@ -534,7 +537,7 @@ class cl_conplano {
 					    $virgula = ",";
 				    }
 				}
-				
+
 				//a validação e realizada via javascript no arquivo de form
 			   if(trim($this->c60_desdobramneto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c60_desdobramneto"])){
 			     if($this->c60_desdobramneto =="0"){
@@ -551,14 +554,14 @@ class cl_conplano {
 		}else{
 		  $sql  .= $virgula." c60_tipolancamento = null";
 		  $virgula = ",";
-		  
+
 		  $sql  .= $virgula." c60_subtipolancamento = null";
 		  $virgula = ",";
-		  
+
 		  $sql  .= $virgula." c60_desdobramneto =null";
 		  $virgula = ",";
 		}
-		
+
 	  if(trim($this->c60_nregobrig)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c60_nregobrig"])){
 			$sql  .= $virgula." c60_nregobrig = '$this->c60_nregobrig' ";
 			$virgula = ",";
@@ -572,7 +575,22 @@ class cl_conplano {
 				return false;
 			}
 		}
-		if((trim($this->c60_cgmpessoa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c60_cgmpessoa"])) 
+
+        if(trim($this->c60_naturezadareceita)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c60_naturezadareceita"])){
+            $sql  .= $virgula." c60_naturezadareceita = '$this->c60_naturezadareceita' ";
+            $virgula = ",";
+            if(trim($this->c60_naturezadareceita) == null ){
+                $this->erro_sql = " Campo Função nao Informado.";
+                $this->erro_campo = "c60_naturezadareceita";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+		if((trim($this->c60_cgmpessoa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c60_cgmpessoa"]))
 			&& (in_array(substr($this->c60_estrut,0,7), $this->aContasCgmPessoa[0]) || in_array(substr($this->c60_estrut,0,9),$this->aContasCgmPessoa[1])) && $iTipoConta == 1){
 			$sql  .= $virgula." c60_cgmpessoa = $this->c60_cgmpessoa ";
 			$virgula = ",";
