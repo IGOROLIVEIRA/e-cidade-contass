@@ -46,6 +46,13 @@ if($ponto == 'p'){
 
 }
 
+if($lista == 'a'){
+    $dbwhere .=" and coalesce(m60_ativo,false) = true ";
+}
+if($lista == 'i'){
+    $dbwhere .=" and coalesce(m60_ativo,false) = false ";
+}
+
 $sql_estoqponto = "select m91_codigo,
                           coddepto,
                           descrdepto,

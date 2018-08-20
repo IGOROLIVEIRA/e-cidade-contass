@@ -107,6 +107,23 @@ $cldb_almox        = new cl_db_almox;
 	  </td>
   </tr>
 
+    <tr>
+        <td colspan="2">&nbsp;</td>
+    </tr>
+
+    <tr>
+        <td align="right" ><strong>Listar :&nbsp;&nbsp;</strong>
+        </td>
+        <td align="left">
+            <?
+            $arr_listar = array("t"=>"Todos","a"=>"Ativo","i"=>"Inativo");
+            db_select('lista',$arr_listar,true,4,"");
+            ?>
+        </td>
+    </tr>
+
+
+
   <tr>
      <td colspan="2" height="50" align="center"><input type="submit" value="Emitir" onClick="return js_valida_dados();"></td>
   </tr>
@@ -137,7 +154,8 @@ function js_valida_dados(){
 
   query  = "coddeposito="+codigo;
   query += "&ordem="+document.form1.ordem.value ; 
-  query += "&ponto="+document.form1.ponto.value ; 
+  query += "&ponto="+document.form1.ponto.value ;
+  query += "&lista="+document.form1.lista.value ;
 
   jan = window.open("mat2_relestoqponto002.php?"+query,"","width="+(screen.availWidth-5)+",height="+(screen.availHeight-40)+",scrollbars=1,location=0");
   jan.moveTo(0,0);
