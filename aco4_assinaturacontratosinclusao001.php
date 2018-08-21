@@ -57,7 +57,6 @@ if($_POST['json']){
   $sSqlAcordo = $clacordo->sql_query($sequencial_valor->sequencial);
   $rsAcordo = $clacordo->sql_record($sSqlAcordo);
   $clacordo = db_utils::fieldsMemory($rsAcordo, 0);
-  // echo $clacordo->ac16_valor;die();
 }
 
 ?>
@@ -265,13 +264,11 @@ function js_checaValor(){
 }
 
 function js_assinarContrato(obj) {
-
   var valorCadastrado = parseFloat(obj.responseText);
   var valorDotacao = localStorage.getItem('TotalDotacoes');
   valorDotacao = parseFloat(valorDotacao);
-
   if(origem == '3'){
-    if(valorCadastrado != js_roundDecimal(valorDotacao,2)){
+    if(js_roundDecimal(valorCadastrado,2) != js_roundDecimal(valorDotacao,2)){
       alert('Existem itens sem dotações, realize as alterações e tente novamente');
       return;
     }

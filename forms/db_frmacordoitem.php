@@ -104,7 +104,7 @@ legend {
 <script type="text/javascript" src="scripts/classes/DBViewAcordoPrevisao.classe.js"></script>
 <script type="text/javascript" src="scripts/classes/DBViewAcordoExecucao.classe.js"></script>
 <?
-db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js, DBHint.widget.js");
+db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js, DBHint.widget.js, roundDecimal.js");
 db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js,dbtextFieldData.widget.js");
 db_app::load("time.js");
 db_app::load("estilos.css, grid.style.css");
@@ -558,10 +558,10 @@ db_app::load("estilos.css, grid.style.css");
 
         with (oLinha) {
           var sCor = '';
-
-          if (valortotal == totaldotacoes) {
+          if (js_roundDecimal(valortotal,2) == js_roundDecimal(totaldotacoes,2)) {
             somaDotacoes += totaldotacoes;
             localStorage.setItem('TotalDotacoes',somaDotacoes);
+
             var sCor = '';
             if(aPeriodosItem.length == 0){
               var sCor = 'background-color: #fcd032;';
