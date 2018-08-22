@@ -1521,7 +1521,7 @@ class retencaoNota
     $nValorRetencoes = $this->getValorRetSession();
 
     $nResultado = $nValorMovimento - $nValorRetencoes;
-    $nResultado = $nResultado - $nValorDessa;
+    $nResultado = round($nResultado,4) - $nValorDessa;
 
     return ($nResultado >= 0)? true : false;
   }
