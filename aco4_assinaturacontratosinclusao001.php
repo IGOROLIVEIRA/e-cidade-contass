@@ -53,10 +53,11 @@ $clrotulo->label("ac10_obs");
 
 if($_POST['json']){
   $sequencial_valor = str_replace('\\','', $_POST);
-  $sequencial_valor = json_decode($sequencial_valor['json']);
-  $sSqlAcordo = $clacordo->sql_query($sequencial_valor->sequencial);
-  $rsAcordo = $clacordo->sql_record($sSqlAcordo);
-  $clacordo = db_utils::fieldsMemory($rsAcordo, 0);
+    $sequencial_valor = json_decode($sequencial_valor['json']);
+    $sSqlAcordo = $clacordo->sql_query($sequencial_valor->sequencial,'ac16_valor');
+    $rsAcordo = $clacordo->sql_record($sSqlAcordo);
+    $valor = db_utils::fieldsMemory($rsAcordo, 0);
+    echo $valor->ac16_valor;
 }
 
 ?>
@@ -240,9 +241,9 @@ function js_mostraacordo(chave1,chave2,erro) {
  * Retorno da pesquisa acordos
  */
 function js_mostraacordo1(chave1,chave2,chave3) {
-  origem = chave3;
   $('ac16_sequencial').value    = chave1;
   $('ac16_resumoobjeto').value  = chave2;
+  $('ac16_origem').value = chave3;
   db_iframe_acordo.hide();
 }
 
@@ -267,6 +268,8 @@ function js_assinarContrato(obj) {
   var valorCadastrado = parseFloat(obj.responseText);
   var valorDotacao = localStorage.getItem('TotalDotacoes');
   valorDotacao = parseFloat(valorDotacao);
+  var origem = $('ac16_origem').value;
+
   if(origem == '3'){
     if(js_roundDecimal(valorCadastrado,2) != js_roundDecimal(valorDotacao,2)){
       alert('Existem itens sem dotações, realize as alterações e tente novamente');
