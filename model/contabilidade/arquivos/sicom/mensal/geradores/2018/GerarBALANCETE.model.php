@@ -32,7 +32,7 @@ class GerarBALANCETE extends GerarAM
         $sSql3 = "select * from balancete132018 where si180_mes = " . $this->iMes . " and si180_instit =" . db_getsession("DB_instit");
         $rsBALANCETE13 = db_query($sSql3);
 
-        $sSql4 = "SELECT
+        $sSql4 = "SELECT DISTINCT
                   si181_sequencial,
                   si181_tiporegistro,
                   si181_contacontabil,
