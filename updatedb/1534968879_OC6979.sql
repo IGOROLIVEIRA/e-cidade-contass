@@ -26,7 +26,7 @@ CREATE TABLE balancete252018
   si194_mes bigint NOT NULL DEFAULT 0,
   si194_instit bigint DEFAULT 0,
   si194_reg10 bigint NOT NULL,
-  CONSTRAINT balancete152018_sequ_pk PRIMARY KEY (si194_sequencial),
+  CONSTRAINT balancete252018_sequ_pk PRIMARY KEY (si194_sequencial),
   CONSTRAINT fk_balancete102018_si77_sequencial FOREIGN KEY (si194_reg10)
       REFERENCES balancete102018 (si177_sequencial) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
