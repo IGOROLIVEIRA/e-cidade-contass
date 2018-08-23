@@ -493,8 +493,8 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap title="<?= @$Te60_datasentenca ?>">
-                        <?= @$Le60_datasentenca ?>
+                    <td nowrap title="Data da Sentença Judical">
+                        <strong>Data da Sentença Judical:</strong>
                     </td>
                     <td>
                         <?

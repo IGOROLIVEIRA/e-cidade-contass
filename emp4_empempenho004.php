@@ -507,6 +507,7 @@ if(isset($incluir)) {
             $clempempenho->e60_codtipo        = $e54_codtipo;
             $clempempenho->e60_resumo         = $e54_resumo;
             $clempempenho->e60_instit         = db_getsession("DB_instit");
+            $clempempenho->e60_datasentenca   = $e60_datasentenca;
             $clempempenho->e60_concarpeculiar = $e54_concarpeculiar;
 
             /**
@@ -555,8 +556,25 @@ if(isset($incluir)) {
                 $clempempenho->e60_tipodespesa = null;
                 $sqlerro = false;
             }
+            /**
+             * Validação solicitada pela OC 8359
+             *
+             */
+
+            $elementosemp = array('3319091');
+
+            if(in_array(substr($o56_elemento,0,-6), $elementosemp)){
+                if($clempempenho->e60_datasentenca == null){
+                    if(substr($o56_elemento,0,-6) == '3319091'){
+                        $erro_msg = "Usuário: Para este elemento é obrigatório informar a data da sentença judicial";
+                        db_msgbox($erro_msg);
+                        $sqlerro = true;
+                    }
+                }
+            }
 
             if($sqlerro == false) {
+
                 $clempempenho->incluir($e60_numemp);
                 if ($clempempenho->erro_status == 0) {
                     $sqlerro = true;
@@ -615,20 +633,20 @@ if(isset($incluir)) {
     }
     /*final*/
 
-  //rotina para pegar o elemento da dotação
-  if ($sqlerro == false) {
+    //rotina para pegar o elemento da dotação
+    if ($sqlerro == false) {
 
-    $result09  = $clorcdotacao->sql_record($clorcdotacao->sql_query_ele(db_getsession("DB_anousu"), $e56_coddot, "o56_elemento as elemento_emp"));
-    $numrows09 = $clorcdotacao->numrows;
-    if ($numrows09 > 0) {
-      db_fieldsmemory($result09, 0);
-    } else {
+        $result09  = $clorcdotacao->sql_record($clorcdotacao->sql_query_ele(db_getsession("DB_anousu"), $e56_coddot, "o56_elemento as elemento_emp"));
+        $numrows09 = $clorcdotacao->numrows;
+        if ($numrows09 > 0) {
+            db_fieldsmemory($result09, 0);
+        } else {
 
-      $sqlerro  = true;
-      $erro_msg = "Não existe elemento para dotação $e56_coddot";
+            $sqlerro  = true;
+            $erro_msg = "Não existe elemento para dotação $e56_coddot";
+        }
     }
-  }
-  //final
+    //final
 
     /*rotina que inclui na tabela empempitem*/
     if ($sqlerro == false) {
