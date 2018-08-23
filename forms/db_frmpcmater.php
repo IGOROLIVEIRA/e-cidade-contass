@@ -178,8 +178,8 @@ function js_executaIframe(val) {
         ?>
 
         <?
-          $arr_truefalse = array('f'=>'Não','t'=>'Sim');
-          db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);
+          /*$arr_truefalse = array('f'=>'Não','t'=>'Sim');
+          db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);*/
         ?>
 
     </td>
