@@ -552,22 +552,19 @@ db_app::load("estilos.css, grid.style.css");
       }
 
       var nTotal = 0;
-      var somaDotacoes = 0;
       oRetorno.itens.each(function (oLinha, id) {
 
 
         with (oLinha) {
           var sCor = '';
-          if (js_roundDecimal(valortotal,2) == js_roundDecimal(totaldotacoes,2)) {
-            somaDotacoes += totaldotacoes;
-            localStorage.setItem('TotalDotacoes',somaDotacoes);
-
-            var sCor = '';
-            if(aPeriodosItem.length == 0){
-              var sCor = 'background-color: #fcd032;';
+          if (valortotal == totaldotacoes) {
+              var sCor = '';
+              if(aPeriodosItem.length == 0){
+                var sCor = 'background-color: #fcd032;';
             }
 
-          }else{
+          }
+          else{
             var sCor = 'background-color: red;';
           }
 
@@ -590,7 +587,8 @@ db_app::load("estilos.css, grid.style.css");
             aLinha[9] += "<input type='button' style='width:50%' value='E' onclick='js_excluir(" + codigo + ")'>";
           }
 
-          nTotal = nTotal + parseFloat(valortotal);
+          nTotal = nTotal + parseFloat(totaldotacoes);
+          console.log(nTotal);
           oGridItens.addRow(aLinha);
           oGridItens.aRows[id].sStyle += ';padding:1px;'+sCor;
         }

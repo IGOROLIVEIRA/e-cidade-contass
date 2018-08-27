@@ -34,12 +34,14 @@ require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_acordo_classe.php");
 require_once("classes/db_acordomovimentacao_classe.php");
+require_once("classes/db_acordoitemdotacao_classe.php");
 
 $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
 
 $clacordo             = new cl_acordo;
 $clacordomovimentacao = new cl_acordomovimentacao;
+$clacordoitemdotacao  = new cl_acordoitemdotacao;
 
 $db_opcao = 1;
 
@@ -54,10 +56,17 @@ $clrotulo->label("ac10_obs");
 if($_POST['json']){
   $sequencial_valor = str_replace('\\','', $_POST);
     $sequencial_valor = json_decode($sequencial_valor['json']);
+    $valoresTotais = array();
     $sSqlAcordo = $clacordo->sql_query($sequencial_valor->sequencial,'ac16_valor');
     $rsAcordo = $clacordo->sql_record($sSqlAcordo);
-    $valor = db_utils::fieldsMemory($rsAcordo, 0);
-    echo $valor->ac16_valor;
+    $valorTotal = db_utils::fieldsMemory($rsAcordo, 0);
+    $valoresTotais[] = $valorTotal->ac16_valor;
+    $sSqlItensDotados = $clacordoitemdotacao->sql_buscaSomaItens('sum(ac22_valor)',null,"ac16_sequencial = $sequencial_valor->sequencial and ac26_acordoposicaotipo = 1");
+    $valorDotado = $clacordoitemdotacao->sql_record($sSqlItensDotados);
+    $valor = db_utils::fieldsMemory($valorDotado, 0);
+    $valoresTotais[] = $valor->sum;
+    echo json_encode($valoresTotais);
+    die();
 }
 
 ?>
@@ -222,8 +231,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 /**
  * Retorno da pesquisa acordos
  */
-function js_mostraacordo(chave1,chave2,erro) {
-
+function js_mostraacordo(chave1,chave2,chave3,erro) {
   if (erro == true) {
 
     $('ac16_sequencial').value   = '';
@@ -265,17 +273,17 @@ function js_checaValor(){
 }
 
 function js_assinarContrato(obj) {
-  var valorCadastrado = parseFloat(obj.responseText);
-  var valorDotacao = localStorage.getItem('TotalDotacoes');
-  valorDotacao = parseFloat(valorDotacao);
-  var origem = $('ac16_origem').value;
+    var valor = JSON.parse(obj.responseText);
+    var valorAcordo = parseFloat(valor[0]);
+    var valorDotado = parseFloat(valor[1]);
+    var origem = $('ac16_origem').value;
 
-  if(origem == '3'){
-    if(js_roundDecimal(valorCadastrado,2) != js_roundDecimal(valorDotacao,2)){
-      alert('Existem itens sem dotações, realize as alterações e tente novamente');
-      return;
+    if(origem == '3'){
+        if(valorAcordo != valorDotado){
+            alert('Existem itens sem dotações, realize as alterações e tente novamente');
+            return;
+        }
     }
-  }
 
   try {
 

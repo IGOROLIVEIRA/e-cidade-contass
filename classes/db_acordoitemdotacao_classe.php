@@ -501,6 +501,36 @@ class cl_acordoitemdotacao {
      }
      return $sql;
   }
+
+    function sql_buscaSomaItens ($campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from acordoitemdotacao ";
+        $sql .= "      inner join acordoitem on ac22_acordoitem= ac20_sequencial";
+        $sql .= "      inner join acordoposicao on ac20_acordoposicao= ac26_sequencial";
+        $sql .= "      inner join acordo on ac26_acordo = ac16_sequencial";
+        $sql2 = "      where $dbwhere";
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
    // funcao do sql
    function sql_query_file ( $ac22_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
