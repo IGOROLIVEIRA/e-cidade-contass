@@ -805,12 +805,15 @@ function js_arrangeDotAndComma(value){
 
     if (value.toString().indexOf(",") >= 0){
 
-        value = value.toString().replace('.','');
+        while(value.toString().indexOf(".") >= 0){
+            value = value.toString().replace('.','');
+        }
         value = value.toString().replace(',','.');
-
         return parseFloat(value);
+
     }
     return value;
+
 }
 
 function js_verificaValorTotal(nValueAut, iSeq) {
