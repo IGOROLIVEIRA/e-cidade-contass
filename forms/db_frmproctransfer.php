@@ -59,7 +59,7 @@ $clrotulo->label("descrdepto");
           <fieldset>
             <table>
               <tr>
-                <td nowrap align="right" title="Usuário" width="10%">
+                <td nowrap align="right" title="Usuário" width="16%">
                   <b>Usuário:</b>
                 </td>
                 <td>
@@ -71,7 +71,7 @@ $clrotulo->label("descrdepto");
                 </td>
               </tr>
               <tr>
-                <td nowrap align="right" title="Usuário" width="10%" >
+                <td nowrap align="right" title="Usuário" width="16%" >
                   <b>Departamento:</b>
                 </td>
                 <td>
@@ -82,7 +82,7 @@ $clrotulo->label("descrdepto");
                 </td>
               </tr>
                 <tr>
-                  <td nowrap align="right" title="<?=@$Tp62_codtran?>" width="10%" >
+                  <td nowrap align="right" title="<?=@$Tp62_codtran?>" width="16%" >
                      <?=@$Lp62_codtran?>
                   </td>
                   <td>
@@ -92,7 +92,7 @@ $clrotulo->label("descrdepto");
                   </td>
                 </tr>
                 <tr>
-                  <td nowrap align="right" title="<?=@$Tp62_dttran?>" width="10%">
+                  <td nowrap align="right" title="<?=@$Tp62_dttran?>" width="16%">
                      <?=@$Lp62_dttran?>
                   </td>
                   <td>
@@ -126,9 +126,22 @@ $clrotulo->label("descrdepto");
 
                   </td>
                 </tr>
+                <tr id="trdespacho">
+                    <td>
+                        <?php
+                        db_ancora("<b>Despacho Padrão:</b>", "js_buscardespachopadrao(true);", $db_opcao);
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                        db_input("p201_sequencial", 6, false, 3, "text", $db_opcao, "onchange='js_buscardespachopadrao(false);'");
+                        db_input("p201_descricao", 15, false, 3, "text", 3, "", "","", "width:90%;");
+                        ?>
+                    </td>
+                </tr>
                 <tr>
                   <td  nowrap title="p62_despacho">
-                     <strong>Despacho</strong>
+                     <strong>Despacho:</strong>
                   </td>
                   <td nowrap>
                   <?
@@ -273,7 +286,7 @@ $clrotulo->label("descrdepto");
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("p58_numeracao")  ;' >Numeração                </a></b></td>
                 <td align='center' bgcolor='#999999' style = "padding-right: 5px;" ><b><a href='' onClick ='return js_ordena("proxdepto")  ;' >Proximo Departamento</a></b></td>
              </tr>
-             <tbody style='height:300;overflow:scroll;' id="listaProcesso">
+             <tbody style='height:300px;overflow:scroll;' id="listaProcesso">
 
              <?
                 //<td align='center' bgcolor='#999999'><b>Depto padrão</b></td>
@@ -1030,5 +1043,35 @@ function js_ordena(ord){
        js_ajaxRequest(document.form1.p62_coddeptorec.value);
      }
   }
+
+function js_buscardespachopadrao(mostra){
+    if(mostra==true){
+        js_OpenJanelaIframe('','db_iframe_despachopadrao','func_despachopadrao.php?funcao_js=parent.js_mostradespacho1|p201_sequencial|p201_descricao|p201_textopadrao','Pesquisa',true);
+    }else{
+        js_OpenJanelaIframe('','db_iframe_despachopadrao','func_despachopadrao.php?pesquisa_chave='+document.form1.p201_sequencial.value+'&funcao_js=parent.js_mostradespacho','Pesquisa',false);
+    }
+}
+
+function js_mostradespacho(p201_sequencial,p201_descricao,p201_textopadrao,erro){
+    document.form1.p201_descricao.value = p201_descricao;
+    document.form1.p62_despacho.value = p201_textopadrao;
+    document.form1.p62_despacho.value = document.form1.p62_despacho.value.replace(/<br>/g , "\n");
+
+    if(erro==false){
+        document.form1.p201_sequencial.focus();
+        document.form1.p201_descricao.value = '';
+        document.form1.p62_despacho.value = '';
+    }
+}
+
+function js_mostradespacho1(p201_sequencial,p201_descricao,p201_textopadrao,erro){
+
+    document.form1.p201_sequencial.value = p201_sequencial;
+    document.form1.p201_descricao.value = p201_descricao;
+    document.form1.p62_despacho.value = p201_textopadrao;
+    document.form1.p62_despacho.value = document.form1.p62_despacho.value.replace(/<br>/g , "\n");
+
+    db_iframe_despachopadrao.hide();
+}
 
 </script>
