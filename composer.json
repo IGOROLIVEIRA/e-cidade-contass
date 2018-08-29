@@ -2,12 +2,15 @@
   "name": "contass/e-cidade",
   "authors": [
     {
-      "name": "Gabriel Prates",
-      "email": "me@gabsprates.com"
+      "name": "Marcelo",
+      "email": "marcelo@contassconsultoria.com.br"
     }
   ],
   "require": {
     "mpdf/mpdf": "6.0.0",
-    "ruckusing/ruckusing-migrations": "*"
+    "silex/silex": "~1.3",
+    "league/fractal": "0.11.0",
+    "robmorgan/phinx": "^0.4.6",
+    "dbseller/phinx_postgres": "^1.0"
   }
 }

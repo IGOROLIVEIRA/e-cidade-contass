@@ -2,6 +2,11 @@
 
 define('PATH', __DIR__ .'/');
 
+
+if (preg_match('/[^?]*api\/v\d\//', $_SERVER['REQUEST_URI'])) {
+    return require_once 'api/api.php';
+}
+
 function fixQueryString($sPath) {
 
   $aQueryString = array();

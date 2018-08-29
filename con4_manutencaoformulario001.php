@@ -452,6 +452,7 @@ var instituicao = <?=db_getsession('DB_instit')?>;
       }).then(function (data) {
 
         js_removeObj('msgDiv');
+
         if (buildGrid) {
 
           var iTamanho = (100 / data.data.fields.length);
