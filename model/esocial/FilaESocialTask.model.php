@@ -5,6 +5,7 @@ use ECidade\RecursosHumanos\ESocial\Integracao\Recurso;
 use \ECidade\V3\Extension\Registry;
 
 require_once ("interfaces/iTarefa.interface.php");
+require_once ("model/configuracao/Task.model.php");
 
 class FilaESocialTask extends Task implements iTarefa
 {

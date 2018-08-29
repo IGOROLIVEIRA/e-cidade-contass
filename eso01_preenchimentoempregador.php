@@ -121,7 +121,7 @@ try {
     <input type="button" id="proximo"  name="proximo"  value="Próximo"  class="controle" />
     <br>
     <br>
-    <input type="button" hidden="hidden" id="envioESocial"  name="envioESocial"  value="Enviar para eSocial" />
+    <input type="button" id="envioESocial"  name="envioESocial"  value="Enviar para eSocial" />
   <form>
   <script type="text/javascript">
   	var viewAvaliacao      = '';

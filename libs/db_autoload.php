@@ -237,3 +237,9 @@ $ecidadeLoader->addNamespace("ECidade\\","src/");
 $ecidadeLoader->addNamespace("ECidade\\Api\\", "api/");
 
 $ecidadeLoader->register();
+
+// separador de diretorios: '/'
+define('DS', DIRECTORY_SEPARATOR);
+
+// caminho absoluto do ecidade (ex.: /var/www/e-cidade/ )
+define('ECIDADE_PATH', __DIR__ . DS .'..');

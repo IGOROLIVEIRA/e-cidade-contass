@@ -58,11 +58,11 @@ class ESocial
         ));
         $this->httpRequest = $httpRequest;
 
-        $httpRequest->addOptions(array(
-            'headers' => array(
-                'X-Access-Token' => $this->login()
-            )
-        ));
+        // $httpRequest->addOptions(array(
+        //     'headers' => array(
+        //         'X-Access-Token' => $this->login()
+        //     )
+        // ));
 
         $this->recurso = $recurso;
     }
