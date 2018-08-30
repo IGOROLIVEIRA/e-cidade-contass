@@ -1983,10 +1983,10 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
     parent.document.getElementById('btmarca').value = "Marcar Todas";
     parent.document.getElementById('enviar').disabled = true;
     var tipo = <?=(!isset($tipo)?-1:$tipo)?>;
-    if(tipo == 3) {
-      parent.document.getElementById('enviar').value = 'Agrupar';
-      parent.document.getElementById('enviar').disabled = false;
-    }
+//    if(tipo == 3) {
+//      parent.document.getElementById('enviar').value = 'Agrupar';
+//      parent.document.getElementById('enviar').disabled = false;
+//    }
   </script>
   <?
 }
