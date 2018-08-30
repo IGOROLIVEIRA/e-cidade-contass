@@ -109,7 +109,7 @@ class Desconto extends Abatimento {
       return false;
     }
 
-    $sCamposDesconto = 'k00_tipo, k00_numpre, k00_numpar, k00_receit, k128_valorabatido, k128_correcao, k128_juros, k128_multa';
+    $sCamposDesconto = 'k00_tipo, k00_numpre, k00_numpar, k00_receit, k128_valorabatido, k128_correcao, k128_juros, k128_multa, k125_observacao';
     $sWhereDesconto  = 'k125_sequencial = ' . $iCodigoAbatimento;
     $oDaoAbatimento  = db_utils::getDao('abatimento');
     $sSqlDesconto    = $oDaoAbatimento->sql_queryDescontos($sCamposDesconto, $sWhereDesconto);
@@ -128,6 +128,7 @@ class Desconto extends Abatimento {
     $this->nValorDescontadoJuros    = $oAbatimento->k128_juros;
     $this->nValorDescontadoMulta    = $oAbatimento->k128_multa;
     $this->iTipoDebito              = $oAbatimento->k00_tipo;
+    $this->setObservacao($oAbatimento->k125_observacao);
   }
 
   /**

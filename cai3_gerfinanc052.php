@@ -117,7 +117,7 @@ $oGet  = db_utils::postMemory($_GET);
     $oDados->k00_hist        = Desconto::HISTORICO;
     $oDados->k01_descr       = 'DESCONTO';
     $oDados->k125_usuario    = $oDescontos->getUsuario()->getIdUsuario();
-    $oDados->k125_observacao = $oDescontos->getObservacao();
+    $oDados->k125_observacao = substr($oDescontos->getObservacao(),0,50)."...";
 
     if ( $oDescontos->getSituacao() == Abatimento::SITUACAO_CANCELADO ) {
 

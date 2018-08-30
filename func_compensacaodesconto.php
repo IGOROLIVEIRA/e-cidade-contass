@@ -56,7 +56,8 @@ $sCamposDadosDesconto .= 'k125_datalanc,   ';
 $sCamposDadosDesconto .= 'k125_hora,       ';
 $sCamposDadosDesconto .= 'nome,            ';
 $sCamposDadosDesconto .= 'k125_valor,      ';
-$sCamposDadosDesconto .= 'k125_perc        ';
+$sCamposDadosDesconto .= 'k125_perc,       ';
+$sCamposDadosDesconto .= 'k125_observacao   ';
 
 $sWhereDadosDesconto = 'k125_tipoabatimento = ' . Abatimento::TIPO_DESCONTO;
 
@@ -124,6 +125,7 @@ if ( $clAbatimento->numrows == 0 ) {
                   <tr><td align="right">Usuário :            &nbsp;</td><td><?php echo $oDadosDesconto->nome;                           ?></td></tr>
                   <tr><td align="right">Valor :              &nbsp;</td><td><?php echo db_formatar($oDadosDesconto->k125_valor,'f');    ?></td></tr>
                   <tr><td align="right">Percentual :         &nbsp;</td><td><?php echo $oDadosDesconto->k125_perc." %";                 ?></td></tr>
+                  <tr><td align="right">Observação :         &nbsp;</td><td><?php echo $oDadosDesconto->k125_observacao;                ?></td></tr>
                 </table>
               </fieldset>
             </td>    
