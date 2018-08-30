@@ -53,7 +53,8 @@ $dadosbaixaempresa     = "";
 $dadosalvaraprovisorio = "";
 $dadosbaixamatricula   = "";
 
-$textarea =  db_stdClass::db_stripTagsJson($textarea);
+$textarea =  utf8_decode(db_stdClass::db_stripTagsJsonSemEscape($textarea));
+
 if (isset ($textarea) && $textarea != "") {
 	$historico = $textarea;
 } else {
