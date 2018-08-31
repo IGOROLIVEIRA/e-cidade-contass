@@ -295,6 +295,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $sqlitem .= "        e62_vlrun, ";
     $sqlitem .= "        e62_codele, ";
     $sqlitem .= "        o56_elemento, ";
+    $sqlitem .= "        $tipos as tipos, ";
     $sqlitem .= "        o56_descr, ";
     $sqlitem .= "        rp.pc81_codproc, ";
     $sqlitem .= "        solrp.pc11_numero, ";
@@ -352,7 +353,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $sqlitem .= "       left join liclicita on liclicitem.l21_codliclicita = liclicita.l20_codigo ";
     $sqlitem .= "  where e62_numemp = '{$e60_numemp}' ";
     $sqlitem .= " order by e62_sequen, o56_elemento,pc01_descrmater";
-
+//    echo $sqlitem;exit;
     $resultitem = db_query($sqlitem);
 
     db_fieldsmemory($resultitem);
@@ -582,9 +583,6 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
             $pdf1->agencia          = $c63_agencia;
             $pdf1->conta            = $c63_conta;
         }
-    }
-
-    if($tipos == 2){
     }
 
     $pdf1->emissao          = db_formatar($e60_emiss,'d');

@@ -66,7 +66,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     }
     $this->objpdf->text($xcol + 2, $xlin + 43, 'Licitação');
     $this->objpdf->text($xcol + 32, $xlin + 43, 'Modalidade');
-    $this->objpdf->text($xcol + 2, $xlin + 49, 'Solicitação');
+    $this->objpdf->text($xcol + 2, $xlin + 50, 'Solicitação');
 
     if ($this->prazo_ent != "") {
         $this->objpdf->text($xcol + 2, $xlin + 47, 'Prazo Entrega');
@@ -103,6 +103,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->text($xcol + 17, $xlin + 43, ':  ' . ($this->num_licitacao != null ? $this->num_licitacao . '' : '') . $this->ano_licitacao);
     $this->objpdf->text($xcol + 48, $xlin + 43, ':  ' . ($this->edital_licitacao != null ? $this->edital_licitacao . ' - ' : '') . $this->descr_licitacao);
     $this->objpdf->text($xcol + 18, $xlin + 49, ':  ' . $this->pc10_numero);
+    $this->objpdf->text($xcol + 18, $xlin + 50, ':  ' . pg_result($this->recorddositens, $ii, $this->Snumero));
     if ($this->prazo_ent != "") {
         $this->objpdf->text($xcol + 22, $xlin + 47, ':  ' . $this->prazo_ent);
     }
@@ -227,11 +228,11 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             $quantitem     = pg_result($this->recorddositens, $ii, $this->quantitem);
             $descricaoitem = pg_result($this->recorddositens, $ii, $this->descricaoitem);
 
-            if (pg_result($this->recorddositens, $ii, $this->Snumero) != "") {
-                $descricaoitem .= "\n" . 'SOLICITAÇÃO: ' . pg_result($this->recorddositens, $ii, $this->Snumero);
-            }
+//            if (pg_result($this->recorddositens, $ii, $this->Snumero) != "") {
+////                $descricaoitem .= "\n" . 'SOLICITAÇÃO: ' . pg_result($this->recorddositens, $ii, $this->Snumero);
+//            }
 
-            $obsitem      = pg_result($this->recorddositens, $ii, $this->observacaoitem);
+            $obsitem = pg_result($this->recorddositens, $ii, $this->observacaoitem);
             $valoritemuni = db_formatar(pg_result($this->recorddositens, $ii, $this->valor), 'v', " ", $this->casadec);
             $valoritemtot = db_formatar(pg_result($this->recorddositens, $ii, $this->valoritem), 'f');
 
@@ -264,7 +265,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
             }
 
-            $descricaoitem .= "\n" . $obsitem . "\n";
+            $descricaoitem .= "\n" . $obsitem . "\n"."\n";
         } else {
 
             $descricaoitem = $descricaoitemimprime;
@@ -327,7 +328,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         if ($pagina != 1){
             $iLinhasRestantesItem = (int) ((($this->objpdf->h - 35) - $this->objpdf->GetY()) / 3);
         } else{
-            $iLinhasRestantesItem = (int) ((($this->objpdf->h - 125) - $this->objpdf->GetY()) / 3);
+            $iLinhasRestantesItem = (int) ((($this->objpdf->h - 122) - $this->objpdf->GetY()) / 3);
         }
 
         $iLinhasMulticellItem = (int) $this->objpdf->NbLines(122, $descricaoitem);
@@ -338,7 +339,6 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             $descricaoitem = substr($descricaoitem, 0, $CaracteresPermitidos);
             $continuaProximaPagia = true;
         }
-
 
         $descricaoitemimprime = $this->objpdf->Row_multicell(array(
             $quantitem,
@@ -362,25 +362,25 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
             $proxima_pagina = $pagina + 1;
 
-            if ($proxima_pagina == 2) {
-
-                $this->objpdf->sety($this->objpdf->h - 125);
-                $this->objpdf->Row(array(
-                    '',
-                    "Continua na página $proxima_pagina",
-                    '',
-                    ''
-                ), 3, false, 4);
-            } else {
-
-                $this->objpdf->sety($this->objpdf->h - 35);
-                $this->objpdf->Row(array(
-                    '',
-                    "Continua na página $proxima_pagina",
-                    '',
-                    ''
-                ), 3, false, 4);
-            }
+//            if ($proxima_pagina == 2) {
+//
+//                $this->objpdf->sety($this->objpdf->h - 125);
+//                $this->objpdf->Row(array(
+//                    '',
+//                    "Continua na página $proxima_pagina",
+//                    '',
+//                    ''
+//                ), 3, false, 4);
+//            } else {
+//
+//                $this->objpdf->sety($this->objpdf->h - 35);
+//                $this->objpdf->Row(array(
+//                    '',
+//                    "Continua na página $proxima_pagina",
+//                    '',
+//                    ''
+//                ), 3, false, 4);
+//            }
 
 
 
@@ -501,13 +501,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             if($continuaProximaPagia == true){
                 $this->objpdf->Setfont('Arial', '', 6);
                 $descricaoitem = substr($descricaoitemInteira,$CaracteresPermitidos, strlen($descricaoitemInteira));
-                $descricaoitemimprime = $this->objpdf->Row_multicell(array(
-                    $quantitem,
-                    pg_result($this->recorddositens, $ii, 'pc01_codmater'),
-                    $descricaoitem,
-                    $valoritemuni,
-                    $valoritemtot
-                ), 3, false, 5, 0, true, true, 1, $set_altura_row);
+                $descricaoitemimprime = $this->objpdf->Row_multicell(array(), 3, false, 5, 0, true, true, 1, $set_altura_row);
             }
 
             $descricaoitemimprime = str_replace('\\n', '\n', $descricaoitemimprime);
@@ -592,9 +586,8 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
      * @Solicitante
      * @Autor
      */
-    $tipo = pg_result($this->recorddositens, 1, 'tipos');
 
-    if ($tipo == 2 ){
+    if ($this->tipos == 2 ){
 
         for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 
