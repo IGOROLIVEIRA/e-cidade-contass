@@ -33,6 +33,10 @@ include("vendor/mpdf/mpdf/mpdf.php");
 include("libs/db_liborcamento.php");
 include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
+require_once("classes/db_empresto_classe.php");
+$clselorcdotacao = new cl_selorcdotacao();
+$clempresto = new cl_empresto;
+
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -100,7 +104,7 @@ foreach ($aReceitas as $Receitas) {
   if(strstr($Receitas->o57_fonte, '417180611000000'))$fICMS+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '417280111000000'))$fPARTICMS+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '417280121000000'))$fIPVA+=$Receitas->saldo_arrecadado;
-  if(strstr($Receitas->o57_fonte, '417280171000000'))$fIPI+=$Receitas->saldo_arrecadado;
+  if(strstr($Receitas->o57_fonte, '417280131000000'))$fIPI+=$Receitas->saldo_arrecadado;
 
   if(strstr($Receitas->o57_fonte, '411120112000000'))$fMJITR+=$Receitas->saldo_arrecadado;
   if(strstr($Receitas->o57_fonte, '411180112000000'))$fMJIPTU+=$Receitas->saldo_arrecadado;
@@ -133,6 +137,127 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
  *
  * Nenhum dos parâmetros é obrigatório
  */
+
+/*OC7063*/
+//echo '<pre>';ini_set("display_errors",true);
+$where = " c61_instit in ({$instits})" ;
+$where .= " and (c61_codigo = '101' or c61_codigo = '1101') ";
+
+$result = db_planocontassaldo_matriz(db_getsession("DB_anousu"),($DBtxt21_ano.'-'.$DBtxt21_mes.'-'.$DBtxt21_dia),$dtfim,false,$where);
+
+$total_anterior    = 0;
+$total_debitos  = 0;
+$total_creditos = 0;
+$total_final    = 0;
+$iAjustePcasp   = 0;
+
+if (USE_PCASP) {
+  $iAjustePcasp = 8;
+}
+
+for($x = 0; $x < pg_numrows($result);$x++){
+ db_fieldsmemory($result,$x);
+
+ if( ( $tipo == "S" ) && ( $c61_reduz != 0 ) ) {
+   continue;
+ }
+
+ if (USE_PCASP) {
+ } else {
+    if(substr($estrutural,0,1) == '3' ) {
+      if(substr($estrutural,2)+0 > 0 )
+        continue;
+    }
+    if(substr($estrutural,0,1) == '4' ) {
+      if(substr($estrutural,2)+0 > 0 )
+        continue;
+    }
+ }
+
+  if( ( $movimento == "S" ) && ( ( $saldo_anterior + $saldo_anterior_debito + $saldo_anterior_credito) == 0 ) ) {
+   continue;
+  }
+
+  if(substr($estrutural,1,14) == '00000000000000'){
+
+    if($sinal_anterior == "C")
+     $total_anterior -= $saldo_anterior;
+   else
+     $total_anterior += $saldo_anterior;
+
+   if($sinal_final == "C")
+     $total_final -= $saldo_final;
+   else
+     $total_final += $saldo_final;
+
+   $total_debitos  += $saldo_anterior_debito;
+   $total_creditos += $saldo_anterior_credito;
+  }
+
+}
+$total_final = $total_anterior + $total_debitos - $total_creditos;
+
+$sInst = '';
+foreach ($aInstits as $inst) {
+  $sInst .='instit_'.$inst.'-';
+}
+$filtra_despesa = $sInst."recurso_101-recurso_1101";
+$clselorcdotacao->setDados($filtra_despesa);
+$sql_filtro = $clselorcdotacao->getDados(false);
+
+function retorna_desdob($elemento, $e64_codele, $clorcelemento)
+{
+  return pg_query($clorcelemento->sql_query_file(null, null, "o56_elemento as estrutural,o56_descr as descr", null, "o56_codele = $e64_codele and o56_elemento like '$elemento%'"));
+}
+
+
+$resultinst = pg_exec("select codigo,nomeinstabrev from db_config where codigo in (" .$instits. ") ");
+
+
+$sele_work = ' e60_instit in (' . $instits . ') ';
+$sele_work1 = '';//tipo de recurso
+$anoatual = db_getsession("DB_anousu");
+$tipofiltro = "Órgão";
+$commovfiltro = "Todos";
+
+$sOpImpressao = 'Sintético';
+
+
+$sExercicio = db_getsession("DB_anousu") - 1;
+
+$sql_order = " order by o58_orgao,e60_anousu,e60_codemp::integer";
+$sql_where_externo .= "  ";
+$sql_where_externo .= ' and e60_anousu = ' . $sExercicio;
+$sql_where_externo .= " and " . $sql_filtro;
+
+$sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
+$res = $clempresto->sql_record($sqlempresto);
+
+if ($clempresto->numrows == 0) {
+  db_redireciona("db_erros.php?fechar=true&db_erro=Sem movimentação de restos a pagar.");
+  exit;
+}
+
+$rows = $clempresto->numrows;
+
+$total_rp_proc = 0;
+$total_rp_nproc = 0;
+$total_mov_pagmento = 0;
+
+for ($x = 0; $x < $rows; $x++) {
+  db_fieldsmemory($res, $x);
+  $total_rp_proc += ($e91_vlrliq - $e91_vlrpag);
+  $total_rp_nproc += round($vlrpagnproc,2);
+  $total_mov_pagmento += ($vlrpag+$vlrpagnproc);
+}
+
+if(($total_rp_proc + $total_rp_nproc) < $total_anterior || $total_mov_pagmento < $total_anterior){
+  $iRestosAPagar = db_formatar(0,"f");
+}
+else{
+  $iRestosAPagar = $total_mov_pagmento-$total_anterior;
+}
+/*FIM - OC7063*/
 
 $mPDF = new mpdf('', '', 0, '', 15, 15, 20, 15, 5, 11);
 
@@ -314,11 +439,11 @@ ob_start();
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">Subtotal</td>
-            <td class="s3"></td>
+            <td class="s3"><?php $fSubTotalImposto = array_sum(array($fIPTR,$fIPTU,$fIRRF,$fIRRFO,$fITBI,$fISS)); echo db_formatar($fSubTotalImposto,"f"); ?></td>
           </tr>
           <tr style='height:20px;'>
-            <td class="s3 bdleft" colspan="9">&nbsp;</td>
-            <td class="s3"><?php $fSubTotalImposto = array_sum(array($fIPTR,$fIPTU,$fIRRF,$fIRRFO,$fITBI,$fISS)); echo db_formatar($fSubTotalImposto,"f"); ?></td>
+            <td class="s6 bdleft" colspan="9">&nbsp;</td>
+            <td class="s3">&nbsp;</td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">B - Transferências Correntes:</td>
@@ -422,13 +547,11 @@ ob_start();
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">Subtotal</td>
-            <td class="s3"></td>
+            <td class="s3"><?php $fSubTotalCorrentes = array_sum(array($fFPM,$fFPM1DEZ,$fFPM1JUL,$fITR,$fICMS,$fPARTICMS,$fIPVA,$fIPI)); echo db_formatar($fSubTotalCorrentes,"f"); ?></td>
           </tr>
           <tr style='height:20px;'>
-            <td class="s3 bdleft" colspan="9">&nbsp;</td>
-            <td class="s3">
-              <?php $fSubTotalCorrentes = array_sum(array($fFPM,$fFPM1DEZ,$fFPM1JUL,$fITR,$fICMS,$fPARTICMS,$fIPVA,$fIPI)); echo db_formatar($fSubTotalCorrentes,"f"); ?>
-            </td>
+            <td class="s6 bdleft" colspan="9">&nbsp;</td>
+            <td class="s3">&nbsp;</td>
           </tr>
           <tr style='height:20px;'>
             <td class="s6 bdleft" colspan="9">C - Outras Receitas Correntes</td>
@@ -627,11 +750,11 @@ ob_start();
                 <?php } ?>
                 <tr style='height:20px;'>
                   <td class="s6 bdleft" colspan="9">Subtotal</td>
-                  <td class="s3"></td>
+                  <td class="s3"><?=db_formatar($fTotalDeducoes,"f")?></td>
                 </tr>
                 <tr style='height:20px;'>
                   <td class="s6 bdleft bdbottom" colspan="9">&nbsp;</td>
-                  <td class="s3 bdbottom"><?=db_formatar($fTotalDeducoes,"f")?></td>
+                  <td class="s3 bdbottom">&nbsp;</td>
                 </tr>
 
                 <tr style='height:20px;'>
@@ -644,12 +767,30 @@ ob_start();
                 </tr>
                 <tr style='height:20px;'>
                   <?php
+                    db_query("drop table if exists work_receita");
+                    db_fim_transacao();
+                    $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
+                  ?>
+                  <td class="s20 bdleft" colspan="9">04 - Aplicação no Exercício</td>
+                  <td class="s21"><?php echo db_formatar($fTotalAnexoII,"f");?></td>
+                </tr>
+                <tr style='height:20px;'>
+                  <?php
+                    db_query("drop table if exists work_receita");
+                    db_fim_transacao();
+                    $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
+                  ?>
+                  <td class="s20 bdleft" colspan="9">05 - Restos a pagar processados pagos inscritos sem disponibilidade - Consulta N. 932.736/2015</td>
+                  <td class="s21"><?php echo db_formatar($iRestosAPagar,"f");?></td>
+                </tr>
+                <tr style='height:20px;'>
+                  <?php
                   db_query("drop table if exists work_receita");
                   db_fim_transacao();
                   $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
                   ?>
-                  <td class="s20 bdleft" dir="ltr" colspan="9">04 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
-                  <td class="s22"><?=db_formatar($fTotalAnexoII,"f")?></td>
+                  <td class="s20 bdleft" dir="ltr" colspan="9">06 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII+$iRestosAPagar)*100)/$fTotalReceitas,"f");//echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
+                  <td class="s21"><?=db_formatar(($fTotalAnexoII+$iRestosAPagar),"f")?></td>
                 </tr>
               <?php else: ?>
                <tr style='height:20px;'>
@@ -734,11 +875,11 @@ ob_start();
               </tr>
               <tr style='height:20px;'>
                 <td class="s6 bdleft" colspan="9">Subtotal</td>
-                <td class="s3"></td>
+                <td class="s3"><?php $fSubTotalImposto = array_sum(array($fIPTR,$fIPTU,$fIRRF,$fIRRFO,$fITBI,$fISS)); echo db_formatar($fSubTotalImposto,"f"); ?></td>
               </tr>
               <tr style='height:20px;'>
                 <td class="s3 bdleft" colspan="9">&nbsp;</td>
-                <td class="s3"><?php $fSubTotalImposto = array_sum(array($fIPTR,$fIPTU,$fIRRF,$fIRRFO,$fITBI,$fISS)); echo db_formatar($fSubTotalImposto,"f"); ?></td>
+                <td class="s3">&nbsp;</td>
               </tr>
               <tr style='height:20px;'>
                 <td class="s6 bdleft" colspan="9">B - Transferências Correntes:</td>
@@ -816,7 +957,7 @@ ob_start();
               </tr>
               <tr style='height:20px;'>
                 <td class="s10 bdleft"></td>
-                <td class="s11">17280171</td>
+                <td class="s11">17280131</td>
                 <td class="s12" colspan="7">Cota-parte do Imposto sobre Produtos Industrializados - IPI</td>
                 <td class="s13">
                   <?php
@@ -826,13 +967,11 @@ ob_start();
               </tr>
               <tr style='height:20px;'>
                 <td class="s6 bdleft" colspan="9">Subtotal</td>
-                <td class="s3"></td>
+                <td class="s3"><?php $fSubTotalCorrentes = array_sum(array($fFPM,$fFPM1DEZ,$fFPM1JUL,$fITR,$fICMS,$fPARTICMS,$fIPVA,$fIPI)); echo db_formatar($fSubTotalCorrentes,"f"); ?></td>
               </tr>
               <tr style='height:20px;'>
                 <td class="s3 bdleft" colspan="9">&nbsp;</td>
-                <td class="s3">
-                  <?php $fSubTotalCorrentes = array_sum(array($fFPM,$fFPM1DEZ,$fFPM1JUL,$fITR,$fICMS,$fPARTICMS,$fIPVA,$fIPI)); echo db_formatar($fSubTotalCorrentes,"f"); ?>
-                </td>
+                <td class="s3">&nbsp;</td>
               </tr>
               <tr style='height:20px;'>
                 <td class="s6 bdleft" colspan="9">C - Outras Receitas Correntes</td>
@@ -1008,11 +1147,11 @@ ob_start();
                     <?php } ?>
                     <tr style='height:20px;'>
                       <td class="s6 bdleft" colspan="9">Subtotal</td>
-                      <td class="s3"></td>
+                      <td class="s3"><?=db_formatar($fTotalDeducoes,"f")?></td>
                     </tr>
                     <tr style='height:20px;'>
                       <td class="s6 bdleft bdbottom" colspan="9">&nbsp;</td>
-                      <td class="s3 bdbottom"><?=db_formatar($fTotalDeducoes,"f")?></td>
+                      <td class="s3 bdbottom">&nbsp;</td>
                     </tr>
 
                     <tr style='height:20px;'>
@@ -1025,12 +1164,30 @@ ob_start();
                     </tr>
                     <tr style='height:20px;'>
                       <?php
+                        db_query("drop table if exists work_receita");
+                        db_fim_transacao();
+                        $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
+                      ?>
+                      <td class="s20 bdleft" colspan="9">04 - Aplicação no Exercício</td>
+                      <td class="s21"><?php echo db_formatar($fTotalAnexoII,"f");?></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                      <?php
+                        db_query("drop table if exists work_receita");
+                        db_fim_transacao();
+                        $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
+                      ?>
+                      <td class="s20 bdleft" colspan="9">05 - Restos a pagar processados pagos inscritos sem disponibilidade - Consulta N. 932.736/2015</td>
+                      <td class="s21"><?php echo db_formatar($iRestosAPagar,"f");?></td>
+                    </tr>
+                    <tr style='height:20px;'>
+                      <?php
                       db_query("drop table if exists work_receita");
                       db_fim_transacao();
                       $fTotalAnexoII = getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu);
                       ?>
-                      <td class="s20 bdleft" dir="ltr" colspan="9">04 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
-                      <td class="s22"><?=db_formatar($fTotalAnexoII,"f")?></td>
+                      <td class="s20 bdleft" dir="ltr" colspan="9">06 - Aplicação na Manut. e Desenv. Ensino (Anexo II) % = <?php echo db_formatar((($fTotalAnexoII+$iRestosAPagar)*100)/$fTotalReceitas,"f"); //echo db_formatar((($fTotalAnexoII/($fTotalReceitas*0.25))*0.25)*100,"f"); ?></td>
+                      <td class="s21"><?=db_formatar(($fTotalAnexoII+$iRestosAPagar),"f")?></td>
                     </tr>
                   <?php endif; ?>
                 </tbody>
