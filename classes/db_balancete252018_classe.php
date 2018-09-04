@@ -220,6 +220,44 @@ class cl_balancete252018 {
        return false;
      }
 
+    if ($si194_sequencial == "" || $si194_sequencial == null) {
+      $result = db_query("select nextval('balancete252018_si194_sequencial_seq')");
+      
+      if ($result == false) {
+        $this->erro_banco = str_replace("
+", "", @pg_last_error());
+        $this->erro_sql = "Verifique o cadastro da sequencia: balancete252018_si194_sequencial_seq do campo: si194_sequencial";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+        
+        return false;
+      }
+      $this->si194_sequencial = pg_result($result, 0, 0);
+    } else {
+      $result = db_query("select last_value from balancete252018_si194_sequencial_seq");
+      if (($result != false) && (pg_result($result, 0, 0) < $si194_sequencial)) {
+        $this->erro_sql = " Campo si194_sequencial maior que último número da sequencia.";
+        $this->erro_banco = "Sequencia menor que este número.";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+        
+        return false;
+      } else {
+        $this->si194_sequencial = $si194_sequencial;
+      }
+    }
+    if (($this->si194_sequencial == null) || ($this->si194_sequencial == "")) {
+      $this->erro_sql = " Campo si194_sequencial nao declarado.";
+      $this->erro_banco = "Chave Primaria zerada.";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+      
+      return false;
+    }
+
      $sql = "insert into balancete252018(
                                        si194_sequencial 
                                       ,si194_tiporegistro 
@@ -238,7 +276,7 @@ class cl_balancete252018 {
                                       ,si194_reg10 
                        )
                 values (
-                                nextval('balancete252018_si194_sequencial_seq') 
+                                $this->si194_sequencial 
                                ,$this->si194_tiporegistro 
                                ,$this->si194_contacontabil 
                                ,'$this->si194_codfundo' 
@@ -279,7 +317,7 @@ class cl_balancete252018 {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+/*     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
        $resaco = $this->sql_record($this->sql_query_file($this->si194_sequencial  ));
@@ -305,7 +343,7 @@ class cl_balancete252018 {
          $resac = db_query("insert into db_acount values($acount,1010193,1009264,'','".AddSlashes(pg_result($resaco,0,'si194_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1010193,1009265,'','".AddSlashes(pg_result($resaco,0,'si194_reg10'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-    }
+    }*/
     return true;
   }
 
@@ -514,7 +552,7 @@ class cl_balancete252018 {
        $sql .= " si194_sequencial = $this->si194_sequencial";
      }
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+    /* if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
        && ($lSessaoDesativarAccount === false))) {
 
        $resaco = $this->sql_record($this->sql_query_file($this->si194_sequencial));
@@ -558,7 +596,7 @@ class cl_balancete252018 {
              $resac = db_query("insert into db_acount values($acount,1010193,1009265,'".AddSlashes(pg_result($resaco,$conresaco,'si194_reg10'))."','$this->si194_reg10',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
-     }
+     }*/
      $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -605,7 +643,7 @@ class cl_balancete252018 {
        } else { 
          $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
        }
-       if (($resaco != false) || ($this->numrows!=0)) {
+/*       if (($resaco != false) || ($this->numrows!=0)) {
 
          for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
 
@@ -629,7 +667,7 @@ class cl_balancete252018 {
            $resac  = db_query("insert into db_acount values($acount,1010193,1009264,'','".AddSlashes(pg_result($resaco,$iresaco,'si194_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,1010193,1009265,'','".AddSlashes(pg_result($resaco,$iresaco,'si194_reg10'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
-       }
+       }*/
      }
      $sql = " delete from balancete252018
                     where ";
