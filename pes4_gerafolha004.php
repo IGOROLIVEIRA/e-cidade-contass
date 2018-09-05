@@ -1676,7 +1676,7 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
       continue;
    }
 
-   /*OC6893*/
+   /*OC6893
    $condicaoaux  = " and r30_regist = ".db_sqlformat( $pontofe[0]["r29_regist"] );
    $condicaoaux .= " order by r30_perai desc limit 1";
    $sSQL = "select r30_per1i from cadferia ".bb_condicaosubpes( "r30_" ).$condicaoaux;
@@ -1687,9 +1687,9 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
    $sSQL = "select r45_dtreto from afasta ".bb_condicaosubpes( "r45_" ).$condicaoaux;
    $rsResult = db_query($sSQL);
    $r45_dtreto = db_utils::fieldsMemory($rsResult, 0)->r45_dtreto;
-
-   /*FIM OC6893*/
    if( db_at(db_str($situacao_funcionario,1),"2-7") > 0 && strtotime($r30_per1i) < strtotime($r45_dtreto)){
+   FIM OC6893*/
+   if( db_at(db_str($situacao_funcionario,1),"2-7") > 0){
       // Afastado sem Remuneracao
       // Licensa sem Vencimento, cessao sem onus
       continue;
@@ -5037,11 +5037,11 @@ function gerfsal($opcao_geral=null,$opcao_tipo=1)
 
           }
 
-          /*OC6893*/
+          /*OC6893
           if ($r14_quant > $dias_pagamento && in_array($situacao_funcionario, array(2,3,4,6,7))) {
             $r14_quant = $dias_pagamento;
             $r14_valor = ( $r14_valor / 30 ) * $r14_quant;
-          }
+          }*/
 
 // Fim --> Calcula conforme a formula da quantidade da rubrica
 
