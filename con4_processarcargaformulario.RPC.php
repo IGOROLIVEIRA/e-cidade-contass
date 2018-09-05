@@ -56,9 +56,9 @@ try {
         
         $formulario    = \ECidade\Configuracao\Formulario\Repository\Formulario::getById((int)$formulario);
         $processamento = new \ECidade\Configuracao\Formulario\Processamento\Carga($formulario);
-        echo "<pre>";
-        var_dump(get_included_files());
-        die;
+        // echo "<pre>";
+        // var_dump(get_included_files());
+        // die;
         $processamento->executar();
 
       }
