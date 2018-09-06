@@ -93,10 +93,14 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
       document.getElementById('exercicio').style.display="";
     }else{
       document.getElementById('data').style.display="none";
+      document.getElementById('c221_dtpublicacaorelatoriorgf').value = "";
       document.getElementById('local').style.display="none";
+      document.getElementById('c221_localpublicacaorgf').value = "";
       document.getElementById('bimestre').style.display="none";
+      document.getElementById('c221_localpublicacaorgf').value = "";
       document.getElementById('exercicio').style.display="none";
-
+      document.getElementById('c221_exerciciotpperiodo').value = "";
+      document.getElementById('c221_tpperiodo').value = 0;
     }
   }
   function js_incluirDados(){
@@ -108,7 +112,7 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
      <?php else: ?>
        oParametros.exec = 'salvarDados';
        <?php if($db_opcao == 1): ?>
-        oParametros.alteracao = false;
+        oParametros.inclusao = false;
         <?php else: ?>
           oParametros.alteracao = true;
         <?php endif; ?>
@@ -142,7 +146,7 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
         alert('O campo "Mês de Referência" não foi preenchido.');
         return false;
       }
-          <?php if(db_getsession("DB_instit") == 1): ?>
+          <?php if($tipoInstint == 2): ?>
       if(top.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "0" && (top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value % 2) == 0){
         alert('O campo "A meta bimestral de arrecadação foi cumprida" não foi preenchido.');
         return false;
@@ -153,7 +157,7 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
           return false;
         }
       }
-      <?php if(db_getsession('DB_instit') == 1): ?>
+      <?php if($tipoInstint == 2): ?>
     // SÓ VALIDA OPERACOES DE CREDITO SE A INSTITUIÇÃO FOR PREFEITURA
     // E O MES DE REFERENCIA FOR DEZEMBRO
     if(top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value == "12"){
@@ -210,7 +214,7 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
   <?php endif; ?>
 
 
-
+  top.corpo.dadoscomplementares.c218_sequencial = top.corpo.iframe_dadoscomplementares.document.form1.c218_sequencial.value;
   top.corpo.dadoscomplementares.c218_mesusu = top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value;
   top.corpo.dadoscomplementares.c218_passivosreconhecidos = top.corpo.iframe_dadoscomplementares.document.form1.c218_passivosreconhecidos.value;
   top.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantiainterna = top.corpo.iframe_dadoscomplementares.document.form1.c218_vlsaldoatualconcgarantiainterna.value;
@@ -275,6 +279,7 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
 
 }
 function js_validarInclusao(oAjax){
+
   js_removeObj('msgBox');
   //parent.mo_camada('operacoesdecredito');
 

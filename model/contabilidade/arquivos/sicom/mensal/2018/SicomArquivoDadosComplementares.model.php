@@ -147,7 +147,7 @@ require_once ("model/contabilidade/arquivos/sicom/mensal/geradores/2018/GerarDCL
         throw new Exception($cldclrf10->erro_msg);
       }
 
-      if(db_getsession('DB_instit') == 1){
+      if($this->getTipoinstit(db_getsession('DB_instit')) == 2){
         if($this->sDataFinal['5'].$this->sDataFinal['6'] == '12'){
           $cldclrf20 = new cl_dclrf202018();
           $cldclrf20->si191_tiporegistro = 20;

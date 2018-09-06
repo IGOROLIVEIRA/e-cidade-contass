@@ -225,7 +225,7 @@ class cl_dadoscomplementareslrf {
          $this->c218_sequencial = $c218_sequencial;
        }
      }
-     $result = @pg_query("insert into dadoscomplementareslrf(
+     $sql = "insert into dadoscomplementareslrf(
                                        c218_sequencial
                                       ,c218_codorgao
                                       ,c218_passivosreconhecidos
@@ -276,7 +276,9 @@ class cl_dadoscomplementareslrf {
                                ,'$this->c218_dscmedidasadotadas'
                                ,'$this->c218_anousu'
                                ,'$this->c218_mesusu'
-                      )");
+                      )";
+//     echo $sql;exit;
+     $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){

@@ -29,6 +29,10 @@ $db_opcao = 1;
     <tr>
       <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
        <?
+       $instituicao = db_getsession("DB_instit");
+       $sql = "SELECT si09_tipoinstit FROM infocomplementaresinstit WHERE si09_instit = {$instituicao}";
+       $iTipoInstit = db_utils::fieldsMemory(db_query($sql), 0)->si09_tipoinstit;
+
        $clcriaabas->identifica = array(
 
         "dadoscomplementares"=>"Dados Complementares à LRF",
@@ -40,10 +44,10 @@ $db_opcao = 1;
 
        $clcriaabas->src = array(
 
-        "dadoscomplementares"=>"sic1_dadoscomplementares001.php?db_opcao=1",
-        "operacoesdecredito"=>"sic1_operacoesdecredito001.php?db_opcao=1",
-        "publicacaoeperiodicidaderreo"=>"sic1_publicacaoeperiodicidaderreo001.php?db_opcao=1",
-        "publicacaoeperiodicidadergf"=>"sic1_publicacaoeperiodicidadergf001.php?db_opcao=1",
+        "dadoscomplementares"=>"sic1_dadoscomplementares001.php?db_opcao=1&tipoInstint=$iTipoInstit",
+        "operacoesdecredito"=>"sic1_operacoesdecredito001.php?db_opcao=1&tipoInstint=$iTipoInstit",
+        "publicacaoeperiodicidaderreo"=>"sic1_publicacaoeperiodicidaderreo001.php?db_opcao=1&tipoInstint=$iTipoInstit",
+        "publicacaoeperiodicidadergf"=>"sic1_publicacaoeperiodicidadergf001.php?db_opcao=1&tipoInstint=$iTipoInstit",
 
         );
 
@@ -55,7 +59,7 @@ $db_opcao = 1;
         "publicacaoeperiodicidadergf"=>"40",
 
         );
-       if(db_getsession('DB_instit') == 1){
+       if($iTipoInstit == 2){
          $clcriaabas->disabled   =  array(
           "dadoscomplementares"=>"false",
           "operacoesdecredito"=>"false",
@@ -89,7 +93,7 @@ $db_opcao = 1;
   var publicacaoeperiodicidaderreo = new Object();
   var publicacaoeperiodicidadergf = new Object();
 
-  document.getElementsByName("operacoesdecredito")[0].setAttribute("onclick", "");
+  //document.getElementsByName("operacoesdecredito")[0].setAttribute("onclick", "");
 
 </script>
 </html>

@@ -43,7 +43,7 @@ $cldadoscomplementareslrf->rotulo->label();
   </td>
 </tr>
 
-<tr  <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr  <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_passivosreconhecidos?>">
    <b>Valores dos passivos reconhecidos:</b>
  </td>
@@ -53,7 +53,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlsaldoatualconcgarantiainterna?>">
    <b>Saldo atual das concessões com garantia interna:</b>
  </td>
@@ -63,7 +63,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlsaldoatualconcgarantia?>">
    <b>Saldo atual das concessões com garantia externa:</b>
  </td>
@@ -73,7 +73,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlsaldoatualcontragarantiainterna?>">
    <b>Saldo atual das contragarantias  interna recebidas:</b>
  </td>
@@ -83,7 +83,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlsaldoatualcontragarantiaexterna?>">
    <b>Saldo atual das contragarantias externas recebidas:</b>
  </td>
@@ -93,13 +93,14 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap >
    <b>O limite de concessão de Garantia foi ultrapassado:</b>
  </td>
  <td align="right">
   <?
-  db_select('medidasCorretivas',array(2=>'Não',1=>'Sim'),true,$db_opcao,"onchange='js_medidasCorretivas();'");
+
+  db_select('medidasCorretivas',array('Selecione',1=>'Sim', 2=>'Não'),true,$db_opcao,"onchange='js_medidasCorretivas();'");
   ?>
 </td>
 </tr>
@@ -116,7 +117,7 @@ $cldadoscomplementareslrf->rotulo->label();
     </fieldset>
   </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_recalieninvpermanente?>">
    <b>Receita de Alienação de Investimentos Permanentes:</b>
  </td>
@@ -126,7 +127,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vldotatualizadaincentcontrib?>">
    <b>Valor da dotação atualizada de Incentivo a Contribuinte:</b>
  </td>
@@ -136,7 +137,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlempenhadoicentcontrib?>">
     <b>Valor empenhado de Incentivo a Contribuinte:</b>
   </td>
@@ -146,7 +147,7 @@ $cldadoscomplementareslrf->rotulo->label();
     ?>
   </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vldotatualizadaincentinstfinanc?>">
    <b>Valor da dotação atualizada de Incentivo concedido por Instituição Financeira:</b>
  </td>
@@ -156,7 +157,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlempenhadoincentinstfinanc?>">
    <b>Valor empenhado de Incentivo concedido por Instituição Financeira:</b>
  </td>
@@ -166,7 +167,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlliqincentcontrib?>">
    <b>Valor Liquidado de Incentivo:</b>
  </td>
@@ -176,7 +177,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlliqincentinstfinanc?>">
    <b>Valor concedido por Instituição</b>
  </td>
@@ -186,7 +187,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlirpnpincentcontrib?>">
    <b>Valor Inscrito em RP Não Processados:</b>
  </td>
@@ -196,7 +197,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlirpnpincentinstfinanc?>">
    <b>Valor Inscrito em RP Não Processados IF:</b>
  </td>
@@ -206,7 +207,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlrecursosnaoaplicados?>">
    <b>Recursos do FUNDEB não aplicados:</b>
  </td>
@@ -216,7 +217,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vlapropiacaodepositosjudiciais?>">
    <b>Saldo apurado da apropriação de depósitos judiciais:</b>
  </td>
@@ -226,7 +227,7 @@ $cldadoscomplementareslrf->rotulo->label();
   ?>
 </td>
 </tr>
-<tr <?php if(db_getsession("DB_instit") != 1): ?> style="display:none;" <?php endif;?>>
+<tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
   <td nowrap title="<?=@$Tc218_vloutrosajustes?>">
    <b>Valor de outros ajustes não considerados:</b>
  </td>
@@ -286,7 +287,6 @@ $cldadoscomplementareslrf->rotulo->label();
   }
 
   function js_incluirDados(){
-
    /*VALIDAÇÕES*/
    if(document.form1.c218_mesusu.value == "0"){
     alert('O campo "Mês de Referência" não foi preenchido.');
@@ -296,12 +296,20 @@ $cldadoscomplementareslrf->rotulo->label();
    //  alert('O campo "A meta bimestral de arrecadação foi cumprida" não foi preenchido.');
    //  return false;
    // }
+   <?php if($tipoInstint == 2): ?>
+   if(document.form1.medidasCorretivas.value == 0){
+       alert('O campo limite de concessão de Garantia foi ultrapassado" é obrigatório.');
+       return false;
+   }
+   <?php endif; ?>
+
    if(document.form1.c218_metarrecada.value == "2"){
     if(document.form1.c218_dscmedidasadotadas.value == ""){
       alert('O campo "Medidas adotadas e a adotar" não foi preenchido.');
       return false;
     }
   }
+
   top.corpo.dadoscomplementares.c218_sequencial = document.form1.c218_sequencial.value;
   top.corpo.dadoscomplementares.c218_mesusu = document.form1.c218_mesusu.value;
   top.corpo.dadoscomplementares.c218_passivosreconhecidos = document.form1.c218_passivosreconhecidos.value;
@@ -326,7 +334,7 @@ $cldadoscomplementareslrf->rotulo->label();
   top.corpo.dadoscomplementares.c218_dscmedidasadotadas = document.form1.c218_dscmedidasadotadas.value;
 
 
-  <?php if(db_getsession('DB_instit') != 1): ?>
+  <?php if($tipoInstint == 1): ?>
    parent.mo_camada('publicacaoeperiodicidadergf');
    <?php else: ?>
      if(top.corpo.dadoscomplementares.c218_mesusu == 12){
@@ -486,7 +494,7 @@ function js_preenchepesquisa(chave){
       top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_tpperiodo.style.background = "#DEB887";
 
     <?php endif; ?>
-    <?php if(db_getsession("DB_instit") == 1): ?>
+    <?php if($tipoInstint == 2): ?>
       if(document.form1.c218_mesusu.value == 12){
         top.corpo.formaba[1].setAttribute("onclick", "mo_camada('operacoesdecredito')");
       }else{
@@ -517,7 +525,7 @@ function js_preenchepesquisa(chave){
 }
 
 function js_getSaldo(){
-<?php if(db_getsession("DB_instit") == 1): ?>
+<?php if($tipoInstint == 2): ?>
    if((document.form1.c218_mesusu.value % 2) == 0){
     document.getElementById("metaArrecadada").style.display = "";
     document.getElementById("c218_metarrecada").style.width = "100%";
@@ -540,7 +548,7 @@ var oAjaxLista = new Ajax.Request("sic1_dadoscomplementareslrf.RPC.php",
     js_removeObj('msgBox');
   })
 });
-<?php if(db_getsession("DB_instit") == 1): ?>
+<?php if($tipoInstint == 2): ?>
   if(document.form1.c218_mesusu.value == 12){
     top.corpo.formaba[1].setAttribute("onclick", "mo_camada('operacoesdecredito')");
   }else{

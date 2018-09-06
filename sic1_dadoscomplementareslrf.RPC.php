@@ -10,10 +10,14 @@ require_once("dbforms/db_funcoes.php");
 
 $oJson    = new services_json();
 $oParam   = $oJson->decode(str_replace("\\","",$_POST["json"]));
-
+//echo '<pre>';var_dump($oParam);exit;
 $oRetorno = new stdClass();
 $oRetorno->status  = 1;
 $erro = false;
+
+$instituicao = db_getsession("DB_instit");
+$sql = "SELECT si09_tipoinstit FROM infocomplementaresinstit WHERE si09_instit = {$instituicao}";
+$iTipoInstit = db_utils::fieldsMemory(db_query($sql), 0)->si09_tipoinstit;
 
 $oDaoDadoscomplementareslrf = db_utils::getDao('dadoscomplementareslrf');
 $oDaoOperacoesdecreditolrf = db_utils::getDao('operacoesdecreditolrf');
@@ -68,13 +72,14 @@ switch ($oParam->exec) {
   }else{
     $oDaoDadoscomplementareslrf->incluir(null);
   }
+      //print_r($oDaoDadoscomplementareslrf);exit;
   if($oDaoDadoscomplementareslrf->erro_status == 0){
     $erro = true;
     $oRetorno->status = 2;
     $oRetorno->msg = $oDaoDadoscomplementareslrf->erro_msg;
   }else{
 
-    if(db_getsession('DB_instit') == 1){
+    if($iTipoInstit == 2){
 
 
       //INCLUI DO 20 E 30 SOMENTE SE FOR PREFEITURA
@@ -127,16 +132,23 @@ switch ($oParam->exec) {
       }
     }
     if(!$erro){
-      $oDaoPublicacaoeperiodicidadergf->c221_dadoscomplementareslrf = $oDaoDadoscomplementareslrf->c218_sequencial;
+
+      //$result = $oDaoPublicacaoeperiodicidadergf->sql_record($oDaoPublicacaoeperiodicidadergf->sql_query_file(null,"c221_dadoscomplementareslrf",null,"c221_dadoscomplementareslrf = {$oDaoDadoscomplementareslrf->c218_sequencial}"));
+      if(empty($oParam->dadoscomplementares->c218_sequencial)){
+          $oDaoPublicacaoeperiodicidadergf->c221_dadoscomplementareslrf = $oDaoDadoscomplementareslrf->c218_sequencial;
+      }else{
+          $oDaoPublicacaoeperiodicidadergf->c221_dadoscomplementareslrf = $oParam->dadoscomplementares->c218_sequencial;
+      }
       $oDaoPublicacaoeperiodicidadergf->c221_publicrgf = $oParam->publicacaoeperiodicidadergf->c221_publicrgf;
       $oDaoPublicacaoeperiodicidadergf->c221_dtpublicacaorelatoriorgf = $oParam->publicacaoeperiodicidadergf->c221_dtpublicacaorelatoriorgf;
       $oDaoPublicacaoeperiodicidadergf->c221_localpublicacaorgf = $oParam->publicacaoeperiodicidadergf->c221_localpublicacaorgf;
       $oDaoPublicacaoeperiodicidadergf->c221_tpperiodo = $oParam->publicacaoeperiodicidadergf->c221_tpperiodo;
       $oDaoPublicacaoeperiodicidadergf->c221_exerciciotpperiodo = $oParam->publicacaoeperiodicidadergf->c221_exerciciotpperiodo;
+
       if($oParam->alteracao){
-        $oDaoPublicacaoeperiodicidadergf->alterar($oParam->dadoscomplementares->c218_sequencial);
+          $oDaoPublicacaoeperiodicidadergf->alterar($oParam->dadoscomplementares->c218_sequencial);
       }else{
-       $oDaoPublicacaoeperiodicidadergf->incluir(null);
+          $oDaoPublicacaoeperiodicidadergf->incluir();
      }
 
 
@@ -161,7 +173,7 @@ db_fim_transacao($erro);
 break;
 case 'excluirDados':
 db_inicio_transacao();
-if(db_getsession('DB_instit') == 1){
+if($iTipoInstit == 2){
   if($oParam->dadoscomplementares->c218_mesusu == 12){
     $oDaoOperacoesdecreditolrf->excluir($oParam->dadoscomplementares->c218_sequencial);
     if($oDaoOperacoesdecreditolrf->erro_status == 0){
