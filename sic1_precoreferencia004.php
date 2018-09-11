@@ -56,10 +56,11 @@ WHERE pc81_codproc = $codigo_preco
   AND pc10_instit = " . db_getsession("DB_instit") . "
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
+                pc11_seq,
                 pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
-                si02_vlprecoreferencia as si02_vlprecoreferencia,
+                (sum(pc23_vlrun)/count(pc01_codmater)) as si02_vlprecoreferencia,
                 pc01_codmater,
                 si01_datacotacao
 FROM pcproc
@@ -73,9 +74,9 @@ JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
 WHERE pc80_codproc = $codigo_preco
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
+GROUP BY pc11_seq, pc01_codmater,si01_datacotacao ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
 ;
-
+//print_r($sSql);die();
 $rsResult = db_query($sSql) or die(pg_last_error());
 //db_criatabela($rsResult);exit;
 
@@ -182,20 +183,19 @@ ob_start();
 
       $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-      if($quant_casas == 2){
-        $lTotal = round($oResult->si02_vlprecoreferencia,2) * $oResult->pc11_quant;
-      }
-      else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
+//      if($quant_casas == 2){
+        $lTotal = round($oResult->si02_vlprecoreferencia,$quant_casas) * $oResult->pc11_quant;
+//      }
+//      else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
       $nTotalItens += $lTotal;
-
       $oDadosDaLinha = new stdClass();
       $oDadosDaLinha->item = $iCont + 1;
       $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
       $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $quant_casas, ",", ".");
       $oDadosDaLinha->quantidade = $oResult->pc11_quant;
       $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-      $oDadosDaLinha->total = number_format($lTotal, $quant_casas, ",", ".");
+      $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
 
       echo <<<HTML
         <div class="tr row">
@@ -230,7 +230,7 @@ HTML;
         VALOR TOTAL DOS ITENS
       </div>
       <div class="th col-valor_total-valor align-right">
-        <?= "R$" . number_format($nTotalItens, $quant_casas, ",", ".") ?>
+        <?= "R$" . number_format($nTotalItens, 2, ",", ".") ?>
       </div>
     </div>
   </div>
