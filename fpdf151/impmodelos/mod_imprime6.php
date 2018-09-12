@@ -278,7 +278,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
 
         $set_altura_row = $this->objpdf->h - 125;
-        if ($pagina != 1) {
+        if ($pagina > 1) {
             $set_altura_row = $this->objpdf->h - 30;
         }
 
@@ -325,7 +325,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $this->objpdf->Setfont('Arial', '', 6);
 
 
-        if ($pagina != 1){
+        if ($pagina > 1){
             $iLinhasRestantesItem = (int) ((($this->objpdf->h - 35) - $this->objpdf->GetY()) / 3);
         } else{
             $iLinhasRestantesItem = (int) ((($this->objpdf->h - 122) - $this->objpdf->GetY()) / 3);
@@ -334,10 +334,10 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $iLinhasMulticellItem = (int) $this->objpdf->NbLines(122, $descricaoitem);
 
         if($iLinhasRestantesItem < $iLinhasMulticellItem){
-            $CaracteresPermitidos = (122 * $iLinhasRestantesItem);
-            $descricaoitemInteira = $descricaoitem;
-            $descricaoitem = substr($descricaoitem, 0, $CaracteresPermitidos);
-            $continuaProximaPagia = true;
+          $CaracteresPermitidos = (122 * $iLinhasRestantesItem);
+          $descricaoitemInteira = trim($descricaoitem);
+          $descricaoitem = substr(trim($descricaoitem), 0, $CaracteresPermitidos);
+          $continuaProximaPagia = true;
         }
 
         $descricaoitemimprime = $this->objpdf->Row_multicell(array(
@@ -442,6 +442,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             }
 
             $this->objpdf->addpage();
+
             $pagina += 1;
 
             $this->objpdf->settopmargin(1);
@@ -496,12 +497,12 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             $this->objpdf->text($xcol + 65, $xlin + 58, 'MATERIAL OU SERVIÇO');
             $this->objpdf->text($xcol + 155, $xlin + 58, 'VALOR UNITÁRIO');
             $this->objpdf->text($xcol + 179, $xlin + 58, 'VALOR TOTAL');
-            $this->objpdf->text($xcol + 38, $xlin + 63, 'Continuação da Página ' . ($this->objpdf->PageNo() - 1));
 
             if($continuaProximaPagia == true){
-                $this->objpdf->Setfont('Arial', '', 6);
-                $descricaoitem = substr($descricaoitemInteira,$CaracteresPermitidos, strlen($descricaoitemInteira));
-                $descricaoitemimprime = $this->objpdf->Row_multicell(array(), 3, false, 5, 0, true, true, 1, $set_altura_row);
+              $this->objpdf->text($xcol + 38, $xlin + 63, 'Continuação da Página ' . ($this->objpdf->PageNo() - 1));
+              $this->objpdf->Setfont('Arial', '', 6);
+              $descricaoitem = substr($descricaoitemInteira,$CaracteresPermitidos, strlen($descricaoitemInteira));
+              $descricaoitemimprime = $this->objpdf->Row_multicell(array(), 3, false, 5, 0, true, true, 1, $set_altura_row);
             }
 
             $descricaoitemimprime = str_replace('\\n', '\n', $descricaoitemimprime);

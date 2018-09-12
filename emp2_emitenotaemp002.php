@@ -283,6 +283,11 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $sProcessoAdministrativo = db_utils::fieldsMemory($rsBuscaProcessoAdmin, 0)->e150_numeroprocesso;
     }
 
+    $sCondtipos = "";
+    if (isset($tipos) && !empty($tipos)) {
+      $sCondtipos = " $tipos as tipos, ";
+    }
+
     $sqlitem  = " select distinct ";
     $sqlitem .= "        pc01_complmater, ";
     $sqlitem .= "        pc01_descrmater, ";
@@ -295,7 +300,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $sqlitem .= "        e62_vlrun, ";
     $sqlitem .= "        e62_codele, ";
     $sqlitem .= "        o56_elemento, ";
-    $sqlitem .= "        $tipos as tipos, ";
+    $sqlitem .=          $sCondtipos;
     $sqlitem .= "        o56_descr, ";
     $sqlitem .= "        rp.pc81_codproc, ";
     $sqlitem .= "        solrp.pc11_numero, ";
@@ -461,7 +466,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     }
 
-    if (isset($resumo_lic)&&$resumo_lic!=""){
+    if (isset($resumo_lic) && $resumo_lic!=""){
         if ($e30_impobslicempenho=='t') {
             $pdf1->resumo = $resumo_lic."\n".$e60_resumo;
         } else {
@@ -587,7 +592,6 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     $pdf1->emissao          = db_formatar($e60_emiss,'d');
     $pdf1->texto            = "";
-
     $pdf1->imprime();
 }
 //include("fpdf151/geraarquivo.php");
@@ -614,7 +618,6 @@ if ($oConfiguracaoGed->utilizaGED()) {
         db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
     }
 } else {
-
     $pdf1->objpdf->Output();
 }
 ?>
