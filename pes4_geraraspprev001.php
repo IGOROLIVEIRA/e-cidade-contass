@@ -544,9 +544,9 @@ INNER JOIN db_config ON codigo = rh02_instit
   AND gerfres.r20_pd in (1,2)
 
 INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-INNER JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
+LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
  and rh138_instit = rh02_instit
-INNER JOIN contabancaria ON rh138_contabancaria = db83_sequencial
+LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
 LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
  where 1 = 1
 AND rh30_vinculo = 'A'
