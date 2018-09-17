@@ -502,7 +502,7 @@ group by x.rh02_mesusu,x.rh02_anousu,x.pref_mat,x.matricula,x.campobranco,x.cpf,
        $xseparador ||lpad($ano,4,0)
        $xseparador ||lpad($mes,2,0)
        $xseparador ||lpad(".date('Ymd').",8,0)
-       $xseparador ||lpad(translate( (coalesce(r14_valor,0.00)+ coalesce(r48_valor,0.00)+coalesce(r20_valor,0.00))::varchar,'.',''),10,'0')
+       $xseparador ||lpad(translate( coalesce(r14_valor,0.00)::varchar,'.',''),10,'0')
        $xseparador || 'N'
 
 
@@ -529,19 +529,7 @@ INNER JOIN db_config ON codigo = rh02_instit
   AND gerfsal.r14_instit = rhpessoalmov.rh02_instit
   AND gerfsal.r14_pd in (1,2)
 
-  LEFT JOIN gerfcom ON gerfcom.r48_anousu = rhpessoalmov.rh02_anousu
-  AND gerfcom.r48_mesusu = rhpessoalmov.rh02_mesusu
-  AND rhpessoalmov.rh02_instit = ".db_getsession('DB_instit')."
-  AND gerfcom.r48_regist = rhpessoalmov.rh02_regist
-  AND gerfcom.r48_instit = rhpessoalmov.rh02_instit
-  AND gerfcom.r48_pd in (1,2)
-
-  LEFT JOIN gerfres ON gerfres.r20_anousu = rhpessoalmov.rh02_anousu
-  AND gerfres.r20_mesusu = rhpessoalmov.rh02_mesusu
-  AND rhpessoalmov.rh02_instit = ".db_getsession('DB_instit')."
-  AND gerfres.r20_regist = rhpessoalmov.rh02_regist
-  AND gerfres.r20_instit = rhpessoalmov.rh02_instit
-  AND gerfres.r20_pd in (1,2)
+  
 
 INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
 LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
@@ -555,6 +543,111 @@ AND r14_valor is not null
 $wh
 
 union all
+
+
+SELECT lpad(5,3,0)
+       $xseparador ||lpad(rh01_regist,10,0)
+       $xseparador ||lpad(0,1,0)
+       $xseparador ||lpad(replace(r48_rubric,'R','9'),4,0)
+       $xseparador ||lpad($ano,4,0)
+       $xseparador ||lpad($mes,2,0)
+       $xseparador ||lpad($ano,4,0)
+       $xseparador ||lpad($mes,2,0)
+       $xseparador ||lpad(".date('Ymd').",8,0)
+       $xseparador ||lpad(translate( coalesce(r48_valor,0.00)::varchar,'.',''),10,'0')
+       $xseparador || 'N'
+
+
+       AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $ano
+AND rh02_mesusu = $mes
+AND rh02_instit = ".db_getsession('DB_instit')."
+INNER JOIN cgm ON rh01_numcgm = z01_numcgm
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh02_funcao
+AND rh37_instit = rh02_instit
+LEFT JOIN rhpespadrao ON rh03_seqpes = rh02_seqpes
+INNER JOIN db_config ON codigo = rh02_instit
+
+  LEFT JOIN gerfcom ON gerfcom.r48_anousu = rhpessoalmov.rh02_anousu
+  AND gerfcom.r48_mesusu = rhpessoalmov.rh02_mesusu
+  AND rhpessoalmov.rh02_instit = ".db_getsession('DB_instit')."
+  AND gerfcom.r48_regist = rhpessoalmov.rh02_regist
+  AND gerfcom.r48_instit = rhpessoalmov.rh02_instit
+  AND gerfcom.r48_pd in (1,2)
+
+  
+
+INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
+ and rh138_instit = rh02_instit
+LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
+LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+ where 1 = 1
+AND rh30_vinculo = 'A'
+AND rh30_regime = 1
+AND r48_valor is not null
+$wh
+
+union all
+
+
+SELECT lpad(5,3,0)
+       $xseparador ||lpad(rh01_regist,10,0)
+       $xseparador ||lpad(0,1,0)
+       $xseparador ||lpad(replace(r20_rubric,'R','9'),4,0)
+       $xseparador ||lpad($ano,4,0)
+       $xseparador ||lpad($mes,2,0)
+       $xseparador ||lpad($ano,4,0)
+       $xseparador ||lpad($mes,2,0)
+       $xseparador ||lpad(".date('Ymd').",8,0)
+       $xseparador ||lpad(translate( coalesce(r20_valor,0.00)::varchar,'.',''),10,'0')
+       $xseparador || 'N'
+
+
+       AS todo
+FROM rhpessoal
+INNER JOIN rhpessoalmov ON rh02_regist = rh01_regist
+AND rh02_anousu = $ano
+AND rh02_mesusu = $mes
+AND rh02_instit = ".db_getsession('DB_instit')."
+INNER JOIN cgm ON rh01_numcgm = z01_numcgm
+INNER JOIN rhlota ON r70_codigo = rh02_lota
+AND r70_instit = rh02_instit
+INNER JOIN rhregime ON rh30_codreg = rh02_codreg
+AND rh30_instit = rh02_instit
+INNER JOIN rhfuncao ON rh37_funcao = rh02_funcao
+AND rh37_instit = rh02_instit
+LEFT JOIN rhpespadrao ON rh03_seqpes = rh02_seqpes
+INNER JOIN db_config ON codigo = rh02_instit
+
+  LEFT JOIN gerfres ON gerfres.r20_anousu = rhpessoalmov.rh02_anousu
+  AND gerfres.r20_mesusu = rhpessoalmov.rh02_mesusu
+  AND rhpessoalmov.rh02_instit = ".db_getsession('DB_instit')."
+  AND gerfres.r20_regist = rhpessoalmov.rh02_regist
+  AND gerfres.r20_instit = rhpessoalmov.rh02_instit
+  AND gerfres.r20_pd in (1,2)
+
+  
+
+INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+LEFT JOIN rhpessoalmovcontabancaria ON rh138_rhpessoalmov = rh02_seqpes
+ and rh138_instit = rh02_instit
+LEFT JOIN contabancaria ON rh138_contabancaria = db83_sequencial
+LEFT JOIN rhpesrescisao ON rhpesrescisao.rh05_seqpes = rhpessoalmov.rh02_seqpes
+ where 1 = 1
+AND rh30_vinculo = 'A'
+AND rh30_regime = 1
+AND r20_valor is not null
+$wh
+
+union all
+
 
       SELECT lpad(5,3,0)
        $xseparador ||lpad(rh01_regist,10,0)
@@ -604,7 +697,7 @@ AND r35_valor is not null
 $wh
 
 ";
-
+//echo $sql;exit;
     $result = db_query($sql);
     $num = pg_numrows($result);
     for($x = 0;$x < pg_numrows($result);$x++){
