@@ -86,7 +86,7 @@ if($numrows_pcorcamforne==0){
       db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado ou orçamento sem fornecedores!");
   }
 }
-$result_itens = $clpcorcamitemproc->sql_record($clpcorcamitemproc->sql_query_solicitem(null,null,"distinct pc11_codigo,pc11_quant,substr((pc01_descrmater ||'. '|| pc01_complmater),1,1100) as pc01_descrmater,pc11_resum,pc11_pgto,pc11_prazo,pc81_codprocitem,pc10_numero,pc81_codproc as pc80_codproc,m61_usaquant,m61_descr,pc17_codigo,pc17_quant,pc01_servico,pc01_validademinima","pc81_codprocitem","pc22_codorc=$pc20_codorc"));
+$result_itens = $clpcorcamitemproc->sql_record($clpcorcamitemproc->sql_query_solicitem(null,null,"distinct pc11_codigo,pc11_quant,substr((pc01_descrmater ||'. '|| pc01_complmater),1) as pc01_descrmater,pc01_codmater,pc11_resum,pc11_pgto,pc11_prazo,pc81_codprocitem,pc10_numero,pc81_codproc as pc80_codproc,m61_usaquant,m61_descr,pc17_codigo,pc17_quant,pc01_servico,pc01_validademinima","pc81_codprocitem","pc22_codorc=$pc20_codorc"));
 $numrows_itens= $clpcorcamitemproc->numrows;
 if($numrows_itens==0){
   db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum item encontrado neste orçamento!");
@@ -100,6 +100,7 @@ $pdf->Open();
 //$pdf1 = new db_impcarne($pdf,'13');
 
 $pdf1 = new db_impcarne($pdf,$oParam->pc30_modeloorc);
+
 //$pdf1->modelo = 13;
 $pdf1->objpdf->SetTextColor(0,0,0);
 $numcgm_ant = "";
@@ -131,6 +132,8 @@ for($i=0;$i<$numrows_pcorcamforne;$i++){
   if($clpcproc->numrows > 0){
     db_fieldsmemory($result_pcproc,0);
   }
+
+
 
 /*
   die($clpcprocitemunid->sql_query(null,"pc17_codigo,m61_descr","","ere pc17_codigo in (".$clpcorcamitemsol->sql_query_pcmater(null,null,"pc11_codigo","","pc22_codorc=$pc20_codorc").") "));
@@ -210,29 +213,30 @@ for($i=0;$i<$numrows_pcorcamforne;$i++){
   $pdf1->cep        = @$z01_cep;
   $pdf1->telefone   = @$z01_telef;
 
-  $pdf1->Scoddepto   = "coddepto";
-  $pdf1->Sdescrdepto = "descrdepto";
-  $pdf1->Snumdepart  = "numdepart";
+  $pdf1->Scoddepto       = "coddepto";
+  $pdf1->Sdescrdepto     = "descrdepto";
+  $pdf1->Snumdepart      = "numdepart";
   $pdf1->recorddosdepart = @$result_departs;
   $pdf1->linhasdosdepart = @$numrows_departs;
 
-  $pdf1->Snumero= @$pc80_codproc;
-  $pdf1->Sdepart= @$descrdepto;
-  $pdf1->Sdata  = @$pc80_data;
+  $pdf1->Snumero        = @$pc80_codproc;
+  $pdf1->Sdepart        = @$descrdepto;
+  $pdf1->Sdata          = @$pc80_data;
 //  $pdf1->Svalor = $pc12_vlrap;
 //  $pdf1->Stipcom= $pc50_descr;
-  $pdf1->Sresumo= @$pc80_resumo;
-  $pdf1->telefpref  = @$telef;
-  $pdf1->emailpref  = @$email;
-  $pdf1->cgcpref    = @$cgc;
-  $pdf1->faxpref    = @$fax;
+  $pdf1->Sresumo        = @$pc80_resumo;
+  $pdf1->telefpref      = @$telef;
+  $pdf1->emailpref      = @$email;
+  $pdf1->cgcpref        = @$cgc;
+  $pdf1->faxpref        = @$fax;
 
   $pdf1->recorddositens = @$result_itens;
   $pdf1->linhasdositens = @$numrows_itens;
-  $pdf1->item         = 'pc81_codprocitem';
+  $pdf1->item           = 'pc81_codprocitem';
   $pdf1->quantitem      = 'pc11_quant';
   $pdf1->descricaoitem  = 'pc01_descrmater';
-  $pdf1->sresum         = 'pc11_resum';
+  $pdf1->codmater       = 'pc01_codmater';
+//  $pdf1->sresum         = 'pc11_resum';
   $pdf1->sprazo         = 'pc11_prazo';
   $pdf1->spgto          = 'pc11_pgto';
   $pdf1->sunidade       = 'm61_descr';

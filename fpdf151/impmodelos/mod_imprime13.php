@@ -23,7 +23,7 @@ $this->objpdf->setfillcolor(245);
 $this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
 
 $this->objpdf->setfillcolor(255,255,255);
-$this->objpdf->Setfont('Arial','B',5);
+$this->objpdf->Setfont('Arial','B',6.5);
 
 $oDaoDbConfig    = db_utils::getDao("db_config");
 $sLogo           = $oDaoDbConfig->getParametrosInstituicao()->logo;
@@ -42,7 +42,7 @@ $this->objpdf->text(146,$xlin-5,": ".$this->fonedepto." / ".$this->ramaldepto);
 $this->objpdf->text(146,$xlin-2,": ".$this->faxdepto);
 $this->objpdf->text(130,$xlin+1,$this->emaildepto);
 $this->objpdf->text(195,$xlin+1,"Página ".$pagina);
-$this->objpdf->Setfont('Arial','B',9);
+$this->objpdf->Setfont('Arial','B',8);
 $this->objpdf->text(40,$xlin-15,$this->prefeitura);
 $this->objpdf->Setfont('Arial','',7);
 $this->objpdf->text(40,$xlin-11,$this->enderpref);
@@ -104,9 +104,8 @@ $this->objpdf->multicell(175,4,stripslashes($Sresumo),0,"J");
 $this->objpdf->rect($xcol,$xlin+3,$xcol+198,$this->objpdf->gety()-($xlin+3),2,'DF','1234');
 
 $xlin = ($this->objpdf->getY()-30);
+
 // Caixa com dados dos fornecedores
-
-
 $this->objpdf->rect($xcol,$xlin+32,$xcol+198,16,2,'DF','1234');
 $this->objpdf->Setfont('Arial','',6);
 $this->objpdf->text($xcol+2,$xlin+34,'Dados do Fornecedor');
@@ -145,6 +144,7 @@ $this->objpdf->text($xcol+2,$xlin+56,'Prazo de entrega ');
 $this->objpdf->text($xcol+2,$xlin+60,'Validade do orçamento ');
 $this->objpdf->text($xcol+2,$xlin+64,'Observações ');
 
+// Imprime dados da entrega
 $this->objpdf->Setfont('Arial','',8);
 $this->objpdf->text($xcol+42,$xlin+56,": {$this->orcprazo}");
 $this->objpdf->text($xcol+42,$xlin+60,": {$this->orcvalidade}");
@@ -202,10 +202,11 @@ if($this->linhasdosdepart>0){
 $this->objpdf->Setfont('Arial','B',8);
 
 $this->objpdf->rect($xcol    ,$xlin+$getdoy,12,6,2,'DF','12');
-$this->objpdf->rect($xcol+ 12,$xlin+$getdoy,15,6,2,'DF','12');
-$this->objpdf->rect($xcol+ 27,$xlin+$getdoy,18,6,2,'DF','12');
-$this->objpdf->rect($xcol+ 45,$xlin+$getdoy,70,6,2,'DF','12');
-$this->objpdf->rect($xcol+115,$xlin+$getdoy,49,6,2,'DF','12');
+$this->objpdf->rect($xcol+ 12,$xlin+$getdoy,12,6,2,'DF','12');
+$this->objpdf->rect($xcol+ 24,$xlin+$getdoy,15,6,2,'DF','12');
+$this->objpdf->rect($xcol+ 39,$xlin+$getdoy,18,6,2,'DF','12');
+$this->objpdf->rect($xcol+ 57,$xlin+$getdoy,70,6,2,'DF','12');
+$this->objpdf->rect($xcol+127,$xlin+$getdoy,37,6,2,'DF','12');
 if ($imprimevalidmin=="true"){
   $this->objpdf->rect($xcol+141,$xlin+$getdoy,23,6,2,'DF','12');
 }
@@ -232,26 +233,29 @@ if ($this->linhasdositens <= 18){
 }
 
 /* 1 pagina */
-// Caixa dos itens
+// Caixa da sequência
 $this->objpdf->rect($xcol,    $xlin+$getdoy+6,12,$alturaini,2,'DF','34');
 
+// Caixa dos itens
+$this->objpdf->rect($xcol + 12,    $xlin+$getdoy+6,12,$alturaini,2,'DF','34');
+
 // Caixa da quantidade
-$this->objpdf->rect($xcol+ 12,$xlin+$getdoy+6,15,$alturaini,2,'DF','34');
+$this->objpdf->rect($xcol+ 24,$xlin+$getdoy+6,15,$alturaini,2,'DF','34');
 
 // Caixa da referencia
-$this->objpdf->rect($xcol+ 27,$xlin+$getdoy+6,18,$alturaini,2,'DF','34');
+$this->objpdf->rect($xcol+ 39,$xlin+$getdoy+6,18,$alturaini,2,'DF','34');
 
 // Caixa dos materiais ou serviços
-$this->objpdf->rect($xcol+ 45,$xlin+$getdoy+6,70,$alturaini,2,'DF','34');
+$this->objpdf->rect($xcol+ 57,$xlin+$getdoy+6,70,$alturaini,2,'DF','34');
 
 // Caixa das marcas
 //$this->objpdf->rect($xcol+115,$xlin+$getdoy+6,49,$alturaini,2,'DF','34');
 if ($imprimevalidmin=="true"){
 
-  $this->objpdf->rect($xcol+115,$xlin+$getdoy+6,49,$alturaini,2,'DF','34');
+  $this->objpdf->rect($xcol+127,$xlin+$getdoy+6,37,$alturaini,2,'DF','34');
 }
 else{
-  $this->objpdf->rect($xcol+115,$xlin+$getdoy+6,49,$alturaini,2,'DF','34');
+  $this->objpdf->rect($xcol+127,$xlin+$getdoy+6,37,$alturaini,2,'DF','34');
 }
 
 // Caixa dos validade minima
@@ -272,25 +276,29 @@ $alt = 4;
 // Label das colunas
 $this->objpdf->Setfont('Arial','B',8);
 
-$this->objpdf->text($xcol+   2,$xlin+$getdoy+4,'ITEM');
-$this->objpdf->text($xcol+  13,$xlin+$getdoy+4,'QUANT');
-$this->objpdf->text($xcol+  28,$xlin+$getdoy+4,'UNIDADE');
-$this->objpdf->text($xcol+  56,$xlin+$getdoy+4,'MATERIAL OU SERVIÇO');
+$this->objpdf->text($xcol+   2,$xlin+$getdoy+4,'SEQ.');
+$this->objpdf->text($xcol+   15,$xlin+$getdoy+4,'ITEM');
+$this->objpdf->text($xcol+  26,$xlin+$getdoy+4,'QUANT');
+$this->objpdf->text($xcol+  41,$xlin+$getdoy+4,'UNIDADE');
+$this->objpdf->text($xcol+  74,$xlin+$getdoy+4,'MATERIAL OU SERVIÇO');
 if ($imprimevalidmin=="true"){
-  $this->objpdf->text($xcol+ 122,$xlin+$getdoy+4,'MARCA');
-}else{
   $this->objpdf->text($xcol+ 135,$xlin+$getdoy+4,'MARCA');
+}else{
+  $this->objpdf->text($xcol+ 140,$xlin+$getdoy+4,'MARCA');
 }
 
 if ($imprimevalidmin=="true"){
-  $this->objpdf->text($xcol+ 142,$xlin+$getdoy+4,'VALIDAD. MIN.');
+  $this->objpdf->text($xcol+ 155,$xlin+$getdoy+4,'VALIDAD. MIN.');
 }
 $this->objpdf->text($xcol+ 167,$xlin+$getdoy+4,'VLR UNIT.');
 $this->objpdf->text($xcol+ 186,$xlin+$getdoy+4,'VLR TOT.');
 
 $maiscol = 0;
-$this->objpdf->SetWidths(array(12,15,19,69,29,23,7,17));
-$this->objpdf->SetAligns(array('C','C','C','J','J','J','R','R'));
+
+// AJUSTAR LARGURA DOS TEXTOS DOS ITENS
+//$this->objpdf->SetWidths(array(12,15,19,69,29,23,7,17));
+$this->objpdf->SetWidths(array(12, 12, 15, 18, 70, 37, 19, 17));
+$this->objpdf->SetAligns(array('C','C','C','C','J','J','J','J'));
 
 $this->objpdf->setleftmargin(4);
 $this->objpdf->sety($xlin+$getdoy+7);
@@ -302,7 +310,7 @@ $muda_pagina     = false;
 $volta_impressao = 0;
 
 for($ii = 0; $ii < $this->linhasdositens; $ii++){
-  db_fieldsmemory($this->recorddositens,$ii);
+//  var_dump(db_fieldsmemory($this->recorddositens,$ii));die("Ham");
 
   $prazo  = "";
   $pgto   = "";
@@ -329,7 +337,7 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
     }
   }
 
-  $unid			= pg_result($this->recorddositens,$ii,$this->sunidade);
+  $unid			 = pg_result($this->recorddositens,$ii,$this->sunidade);
   $codunid   = pg_result($this->recorddositens,$ii,$this->scodunid);
   $servico   = pg_result($this->recorddositens,$ii,$this->sservico);
   $quantunid = pg_result($this->recorddositens,$ii,$this->squantunid);
@@ -407,23 +415,26 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
     $xlin = -30;
     $this->objpdf->Setfont('Arial','B',5);
 
-    // Caixas dos label's
+    // Caixas dos label's (cabeçalhos)
     $this->objpdf->rect($xcol    ,$xlin+54,12,6,2,'DF','12');
-    $this->objpdf->rect($xcol+ 12,$xlin+54,15,6,2,'DF','12');
-    $this->objpdf->rect($xcol+ 27,$xlin+54,18,6,2,'DF','12');
-    $this->objpdf->rect($xcol+ 45,$xlin+54,70,6,2,'DF','12');
-    $this->objpdf->rect($xcol+115,$xlin+54,49,6,2,'DF','12');
+    $this->objpdf->rect($xcol+ 12,$xlin+54,12,6,2,'DF','12');
+    $this->objpdf->rect($xcol+ 24,$xlin+54,15,6,2,'DF','12');
+    $this->objpdf->rect($xcol+ 39,$xlin+54,18,6,2,'DF','12');
+    $this->objpdf->rect($xcol+ 57,$xlin+54,70,6,2,'DF','12');
+    $this->objpdf->rect($xcol+127,$xlin+54,37,6,2,'DF','12');
     if ($imprimevalidmin=="true"){
       $this->objpdf->rect($xcol+141,$xlin+54,23,6,2,'DF','12');
     }
     $this->objpdf->rect($xcol+164,$xlin+54,19,6,2,'DF','12');
     $this->objpdf->rect($xcol+183,$xlin+54,19,6,2,'DF','12');
 
+    //Caixas dos itens
     $this->objpdf->rect($xcol,    $xlin+54,12,($linha-25),2,'DF','34');
-    $this->objpdf->rect($xcol+ 12,$xlin+54,15,($linha-25),2,'DF','34');
-    $this->objpdf->rect($xcol+ 27,$xlin+54,18,($linha-25),2,'DF','34');
-    $this->objpdf->rect($xcol+ 45,$xlin+54,70,($linha-25),2,'DF','34');
-    $this->objpdf->rect($xcol+115,$xlin+54,49,($linha-25),2,'DF','34');
+    $this->objpdf->rect($xcol+ 12,$xlin+54,12,($linha-25),2,'DF','34');
+    $this->objpdf->rect($xcol+ 24,$xlin+54,15,($linha-25),2,'DF','34');
+    $this->objpdf->rect($xcol+ 39,$xlin+54,18,($linha-25),2,'DF','34');
+    $this->objpdf->rect($xcol+ 57,$xlin+54,70,($linha-25),2,'DF','34');
+    $this->objpdf->rect($xcol+127,$xlin+54,37,($linha-25),2,'DF','34');
     if ($imprimevalidmin=="true"){
       $this->objpdf->rect($xcol+141,$xlin+54,23,6,2,'DF','12');
     }
@@ -434,20 +445,28 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
     $alt = 4;
 
     // Label das colunas
-    $this->objpdf->text($xcol+   2,$xlin+58,'ITEM');
-    $this->objpdf->text($xcol+  13,$xlin+58,'QUANT');
-    $this->objpdf->text($xcol+  28,$xlin+58,'UNIDADE');
-    $this->objpdf->text($xcol+  56,$xlin+58,'MATERIAL OU SERVIÇO');
-    if ($imprimevalidmin=="true") {
-      $this->objpdf->text($xcol+ 122,$xlin+58,'MARCA');
-    } else {
-      $this->objpdf->text($xcol+ 135,$xlin+58,'MARCA');
-    }
+    $this->objpdf->text($xcol+   2,$xlin+58,'SEQ.');
+    $this->objpdf->text($xcol+   15,$xlin+58,'ITEM');
+    $this->objpdf->text($xcol+  26,$xlin+58,'QUANT');
+    $this->objpdf->text($xcol+  41,$xlin+58,'UNIDADE');
+    $this->objpdf->text($xcol+  74,$xlin+58,'MATERIAL OU SERVIÇO');
     if ($imprimevalidmin=="true"){
-      $this->objpdf->text($xcol+ 142,$xlin+58,'VALIDAD. MIN.');
+      $this->objpdf->text($xcol+ 135,$xlin+58,'MARCA');
+    }else{
+      $this->objpdf->text($xcol+ 140,$xlin+58,'MARCA');
+    }
+
+    if ($imprimevalidmin=="true"){
+      $this->objpdf->text($xcol+ 155,$xlin+58,'VALIDAD. MIN.');
     }
     $this->objpdf->text($xcol+ 167,$xlin+58,'VLR UNIT.');
     $this->objpdf->text($xcol+ 186,$xlin+58,'VLR TOT.');
+
+
+
+
+
+
 
     $maiscol = 0;
     $xlin    = 20;
@@ -458,22 +477,24 @@ for($ii = 0; $ii < $this->linhasdositens; $ii++){
 // Separa cada item com uma linha
   if($ii > 0 && $muda_pagina == false && $volta_impressao == 0){
     $linha = $this->objpdf->gety()+1;
-    $this->objpdf->rect(2,$linha,202,0,1,'DF','1234');
+    $this->objpdf->rect(4,$linha,202,0,1,'DF','1234');
     $this->objpdf->ln();
   }
 
   $this->objpdf->Setfont('Arial','',5);
 
+  // TEXTO DOS ITENS
   if($volta_impressao == 0){
     $this->objpdf->Row(array(pg_result($this->recorddositens,$ii,$this->item),
+      pg_result($this->recorddositens,$ii,$this->codmater),
       pg_result($this->recorddositens,$ii,$this->quantitem),
       $unid,
-      stripslashes($descricaoitem)."\n\n",
+      stripslashes($descricaoitem)."\n",
       '',
       '',
       '',
       '',
-    ),3,false,8);
+    ),3,false,3);
   }else if($volta_impressao == 1){
     $resumo = $texto_impressao;
   }else if($volta_impressao == 2){
