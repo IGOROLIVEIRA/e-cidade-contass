@@ -40,6 +40,7 @@ $clliccomissao = new cl_liccomissao;
 $clliclicita   = new cl_liclicita;
 $db_opcao = 22;
 $db_botao = false;
+$oPost = db_utils::postMemory($_POST);
 
 if(isset($alterar) || isset($excluir) || isset($incluir)){
   $sqlerro = false;
@@ -49,9 +50,26 @@ $clliccomissaocgm->l31_liccomissao = $l31_liccomissao;
 $clliccomissaocgm->l31_numcgm = $l31_numcgm;
 */
 }
+$cpf = $oPost->z01_cgccpf;
+$cpfCnpj = false;
+if($cpf != null){
+    if($cpf == '00000000000'){
+      $sigla = 'CPF';
+    }else if($cpf  == '00000000000000'){
+      $sigla = 'CNPJ';
+    }else if($cpf == ''){
+      $sigla = 'CPF/CNPJ';
+    }else $cpfCnpj = true;
 
-if(isset($incluir)){
-  if($sqlerro==false){
+    if(!$cpfCnpj){
+        echo "<script>alert('O CGM selecionado não possui ".$sigla.", corrija o cadastro e em seguida tente novamente.')</script>";
+    }
+}
+
+
+if(isset($incluir) && $cpfCnpj){
+   if($sqlerro==false){
+
     db_inicio_transacao();
     $clliccomissaocgm->l31_licitacao = $l31_licitacao;
     $clliccomissaocgm->incluir(null);
@@ -61,43 +79,45 @@ if(isset($incluir)){
     }
     db_fim_transacao($sqlerro);
 
-    $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
+          $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
 
-    if ($clliclicita->numrows > 0) {
+          if ($clliclicita->numrows > 0) {
 
-      $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+              $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7)"));
-      if ($clliccomissaocgm->numrows == 7) {
-        $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+              if ($clliccomissaocgm->numrows == 7) {
+                  $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
-        echo $script;
-      }
+                  echo $script;
+              }
 
-    }else {
+          }else {
 
-      if ($l20_naturezaobjeto == 6) {
+              if ($l20_naturezaobjeto == 6) {
 
-        $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+                  $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7,8,9)"));
-        if ($clliccomissaocgm->numrows == 9) {
-          $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+                  if ($clliccomissaocgm->numrows == 9) {
+                      $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
-          echo $script;
-        }
+                      echo $script;
+                  }
 
-      } else {
-        $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
+              } else {
+                  $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query('', 'distinct l31_tipo', '', "l31_licitacao = $l31_licitacao
     and l31_tipo::int in (1,2,3,4,5,6,7,8)"));
-        if ($clliccomissaocgm->numrows == 8) {
-          $script = "<script>parent.document.formaba.liclicitem.disabled=false;
+                  if ($clliccomissaocgm->numrows == 8) {
+                      $script = "<script>parent.document.formaba.liclicitem.disabled=false;
       </script>";
-          echo $script;
-        }
+                      echo $script;
+                  }
+              }
+
+          }
       }
+      $clliccomissaocgm->l31_licitacao = $l31_licitacao;
 
-    }
 
-  }
 }else if(isset($alterar)){
   if($sqlerro==false){
     db_inicio_transacao();
@@ -246,7 +266,9 @@ if ($clliclicita->numrows > 0) {
 </html>
 <?
 if(isset($alterar) || isset($excluir) || isset($incluir)){
-    db_msgbox($erro_msg);
+
+    //    db_msgbox($erro_msg);
+
     if($clliccomissaocgm->erro_campo!=""){
         echo "<script> document.form1.".$clliccomissaocgm->erro_campo.".style.backgroundColor='#99A9AE';</script>";
         echo "<script> document.form1.".$clliccomissaocgm->erro_campo.".focus();</script>";

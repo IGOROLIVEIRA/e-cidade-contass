@@ -546,6 +546,8 @@ function js_saida(oAjax) {
       }
     }
   }
+    cpf = obj.z01_cgccpf.urlDecode()
+    js_checaCpfCnpj(cpf);
 
     $('e60_codemp').value  = obj.e60_codemp.urlDecode()+"/"+obj.e60_anousu.urlDecode();
     $('e60_numemp').value  = obj.e60_numemp.urlDecode();
@@ -709,6 +711,12 @@ function js_marcaLinha(obj){
 }
 
 function js_liquidar(metodo) {
+
+   /* Nova validação do CPF/CNPJ zerados ao incluir empenho*/
+   valorCpf = js_checaCpfCnpj(cpf);
+   if(!valorCpf){
+      return;
+   }
 
    itens = js_getElementbyClass(form1,'chkmarca');
    notas = '';
@@ -903,6 +911,7 @@ function js_liquidar(metodo) {
          oParam.historico  = encodeURIComponent(tagString($F("historico")));;//encodeURIComponent($F('historico'));
          oParam.pars       = $F('e60_numemp');
          oParam.z01_credor = $F('e49_numcgm');
+         oParam.z01_cgccpf = $F('z01_cgccpf');
          oParam.e03_numeroprocesso = encodeURIComponent($F('e03_numeroprocesso'));
 
      var oInfoNota                      = new Object();
@@ -1065,25 +1074,43 @@ function js_pesquisae49_numcgm(mostra){
                         'Consulta CGM',true);
   }else{
      if(document.form1.e49_numcgm.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm',
-                            'func_nome.php?pesquisa_chave='+document.form1.e49_numcgm.value
-                            +'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+          js_OpenJanelaIframe('top.corpo','db_iframe_cgm',
+                              'func_nome.php?pesquisa_chave='+document.form1.e49_numcgm.value
+                              +'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
        document.form1.z01_credor.value = '';
      }
   }
 }
-function js_mostracgm(erro,chave){
-  document.form1.z01_credor.value = chave;
+
+function js_mostracgm(erro,chave,chave1){
+  if(confereCpf(chave1)){
+    document.form1.z01_credor.value = chave;
+  }else {
+    js_limpaCampos();
+    return;
+  }
   if(erro==true){
     document.form1.e49_numcgm.focus();
     document.form1.e49_numcgm.value = '';
   }
 }
-function js_mostracgm1(chave1,chave2){
-  document.form1.e49_numcgm.value = chave1;
-  document.form1.z01_credor.value = chave2;
+
+function js_mostracgm1(chave1,chave2,chave3){
+
   db_iframe_cgm.hide();
+  if(confereCpf(chave3)){
+    document.form1.e49_numcgm.value = chave1;
+    document.form1.z01_credor.value = chave2;
+  }else{
+    js_limpaCampos();
+  }
+
+}
+
+function js_limpaCampos(){
+  document.form1.e49_numcgm.value = '';
+  document.form1.z01_credor.value = '';
 }
 
 function js_setValorTotal() {
@@ -1282,5 +1309,20 @@ function js_verificaChaveAcesso(iChaveAcesso) {
     return false;
   }
 
+}
+
+function confereCpf(cpfcnpj){
+  if(cpfcnpj == null || cpfcnpj == ''){
+    alert('O CGM selecionado não possui CPF/CNPJ, corrija o cadastro e em seguida tente novamente.');
+    return false;
+  }
+  if(cpfcnpj =='00000000000'){
+    alert('O CGM selecionado não possui CPF, corrija o cadastro e em seguida tente novamente.');
+    return false;
+  }else if(cpfcnpj =='00000000000000'){
+    alert('O CGM selecionado não possui CNPJ, corrija o cadastro e em seguida tente novamente.');
+    return false;
+  }
+  return true;
 }
 </script>

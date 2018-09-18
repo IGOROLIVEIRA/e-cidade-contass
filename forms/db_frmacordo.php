@@ -78,7 +78,7 @@ if ($oDaoAcordoLeis->numrows > 0) {
 
 }
 
-db_app::load("dbtextFieldData.widget.js");
+db_app::load("dbtextFieldData.widget.js, verificaCpfCnpj.js");
 
 ?>
 <style>
@@ -280,6 +280,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     db_input('ac16_contratado', 10, $Iac16_contratado, true, 'text', 3,
                                                         "onchange='js_pesquisaac16_contratado(false);'");
                                                     db_input('nomecontratado', 30, $Iz01_nome, true, 'text', 3);
+                                                    db_input('z01_cgccpf', 15, $Iz01_cgcpf, true, 'hidden', 3);
                                                     ?>
                                                 </td>
                                             </tr>
@@ -535,10 +536,13 @@ db_app::load("dbtextFieldData.widget.js");
 </style>
 
 <script>
-
     var sCaminhoMensagens = "patrimonial.contratos.db_frmacordo";
 
     $('trValorAcordo').style.display = 'none';
+    $('z01_cgccpf').value = '';
+    $('ac02_descricao').value = '';
+    $('nomecontratado').value = '';
+    $('ac50_sequencial').value = '';
 
     function js_validaCampoValor() {
 
@@ -960,7 +964,6 @@ db_app::load("dbtextFieldData.widget.js");
 
     }
 
-
     var oContrato = new contrato();
     var sURL = "con4_contratos.RPC.php";
 
@@ -979,6 +982,7 @@ db_app::load("dbtextFieldData.widget.js");
         //Limpa opções de contratado previamente selecionadas
         $("ac16_contratado").value = '';
         $("nomecontratado").value = '';
+        $("z01_cgccpf").value = '';
 
         var iAcordoOrigem = $('ac16_origem').value;
 
@@ -1149,7 +1153,7 @@ db_app::load("dbtextFieldData.widget.js");
             }else{
                 js_OpenJanelaIframe('top.corpo.iframe_acordo',
                     'db_iframe_contratado',
-                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm',
+                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf',
                     'CGM Contratado',
                     true,
                     '0');
@@ -1167,7 +1171,7 @@ db_app::load("dbtextFieldData.widget.js");
           js_OpenJanelaIframe(
             'top.corpo.iframe_acordo',
             'db_iframe_contratado',
-            'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
+            'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
             'Pesquisa',
             true,
             '0',
@@ -1181,7 +1185,7 @@ db_app::load("dbtextFieldData.widget.js");
               js_OpenJanelaIframe(
                 'top.corpo.iframe_acordo',
                 'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm',
+                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
                 'Pesquisa',
                 false,
                 '0',
@@ -1190,6 +1194,7 @@ db_app::load("dbtextFieldData.widget.js");
 
             } else {
                 $('nomecontratado').value = '';
+                $('z01_cgccpf').value = '';
             }
         }
     }
@@ -1201,6 +1206,7 @@ db_app::load("dbtextFieldData.widget.js");
 
             $('ac16_contratado').focus();
             $('ac16_contratado').value = '';
+            $('z01_cgccpf').value = '';
         } else {
             oContrato.verificaLicitacoes();
 
@@ -1211,10 +1217,10 @@ db_app::load("dbtextFieldData.widget.js");
         }
     }
 
-    function js_mostracontratado1(chave1, chave2) {
-
+    function js_mostracontratado1(chave1, chave2, chave3) {
         $('ac16_contratado').value = chave2;
         $('nomecontratado').value = chave1;
+        $('z01_cgccpf').value = chave3;
         oContrato.verificaLicitacoes();
 
         if ($('ac16_origem').value == 6) {
@@ -1377,7 +1383,16 @@ db_app::load("dbtextFieldData.widget.js");
             '0');
     }
 
-    $('db_opcao').onclick = oContrato.saveContrato;
+    $('db_opcao').onclick = function(){
+        if(typeof($('z01_cgccpf').value !== undefined)){
+            if(js_checaCpfCnpj($('z01_cgccpf').value )){
+                oContrato.saveContrato();
+            }
+        }
+    }
+
+
+
     <?
       if ($db_opcao == 2) {
         echo "\noContrato.getContrato({$chavepesquisa});\n";

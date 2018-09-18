@@ -87,7 +87,9 @@ db_input('l31_codigo',10,$Il31_codigo,true,'hidden',3,"");
 db_input('l31_numcgm',10,$Il31_numcgm,true,'text',$db_opcao," onchange='js_pesquisal31_numcgm(false);'");
 ?>
        <?
-db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
+db_input('z01_nome',40,$Iz01_nome,true,'text',3,'');
+db_input('z01_cgccpf',15,$Iz01_cgccpf,true,'hidden',3,'');
+
        ?>
     </td>
   </tr>
@@ -100,10 +102,8 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
 $result_pres=$clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,"*",null,"l31_licitacao=$l31_licitacao and l31_tipo='P'"));
 
 $clliclicita->sql_record($clliclicita->sql_query('', '*', '', "l20_codigo = $l31_licitacao and pc50_pctipocompratribunal in (100,101,102,103)"));
-
 $bDispenca = false;
 if($clliclicita->numrows > 0) {
-
     $x = array('1' => 'Autorização para abertura do procedimento de dispensa ou inexigibilidade
 	', '2' => 'Cotação de preços
 	', '3' => 'Informação de existência de recursos orçamentários
@@ -162,7 +162,8 @@ if($clliclicita->numrows > 0) {
     <?
 	 $chavepri= array("l31_codigo"=>@$l31_codigo,"l31_licitacao"=>@$l31_licitacao);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
-     if ($bDispenca == true) {
+
+	 if ($bDispenca == true) {
 
          $cliframe_alterar_excluir->sql = $clliccomissaocgm->sql_query_file(null, "l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome ,
    case
@@ -213,14 +214,11 @@ if($clliclicita->numrows > 0) {
 
 
      }
-
-	 $cliframe_alterar_excluir->campos  ="l31_codigo,l31_numcgm, z01_nome,l31_tipo";
+     $cliframe_alterar_excluir->campos  ="l31_codigo,l31_numcgm, z01_nome, l31_tipo";
 	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
 	 $cliframe_alterar_excluir->iframe_width ="700";
 	 $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
-
-
 
 
     ?>
@@ -263,7 +261,7 @@ function js_mostraliccomissao1(chave1,chave2){
 }
 function js_pesquisal31_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_resplicita','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&filtro=1','Pesquisa',true,'0','1');
+    js_OpenJanelaIframe('top.corpo.iframe_resplicita','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_cpf&filtro=1','Pesquisa',true,'0','1');
   }else{
      if(document.form1.l31_numcgm.value != ''){
         js_OpenJanelaIframe('top.corpo.iframe_resplicita','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.l31_numcgm.value+'&funcao_js=parent.js_mostracgm&filtro=1','Pesquisa',false);
@@ -272,16 +270,19 @@ function js_pesquisal31_numcgm(mostra){
      }
   }
 }
-function js_mostracgm(erro,chave){
-  document.form1.z01_nome.value = chave; 
+function js_mostracgm(erro,chave,chave1){
+  document.form1.z01_nome.value = chave;
+  document.form1.z01_cgccpf.value = chave1;
   if(erro==true){ 
     document.form1.l31_numcgm.focus(); 
-    document.form1.l31_numcgm.value = ''; 
+    document.form1.l31_numcgm.value = '';
+    document.form1.z01_cgccpf.value = '';
   }
 }
-function js_mostracgm1(chave1,chave2){
+function js_mostracgm1(chave1,chave2,chave3){
   document.form1.l31_numcgm.value = chave1;
   document.form1.z01_nome.value = chave2;
+  document.form1.z01_cgccpf.value = chave3;
   db_iframe_cgm.hide();
 }
 </script>

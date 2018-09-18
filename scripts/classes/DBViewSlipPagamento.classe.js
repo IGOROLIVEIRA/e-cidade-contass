@@ -44,7 +44,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
 
   /*
    * 1 para inclusao
-   * 2 para estorno
+   * 2 para requi
    */
   me.iOpcao = iOpcao;
 
@@ -709,6 +709,21 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
    */
   me.oButtonSalvar.observe('click', function() {
 
+    cpf = ($('oTxtFavorecidoInputDescricao').value).substr(0,19);
+
+    if(/^[0-9]/g.test(cpf)){
+        cpf = cpf.replace(/[A-Z]/g,'');
+    }else{
+        cpf = '';
+    }
+
+    cpf = ((cpf.replace(/\./g,'')).replace('/','')).replace(/-/g,'');
+    cpf = cpf.trim();
+
+    if(!js_checaCpfCnpj(cpf)){
+      return false;
+    }
+
     if (!me.validarInstituicao()) {
       return false;
     }
@@ -821,6 +836,7 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
 
     js_removeObj("msgBox");
     var oRetorno = eval("("+oAjax.responseText+")");
+
     if (oRetorno.status == 1) {
 
       if (confirm(oRetorno.message.urlDecode()+" Deseja emitir o documento?")) {
@@ -1023,7 +1039,6 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
    * Abre lookup de pesquisa do CGM
    */
   me.pesquisaFavorecido = function(lMostra) {
-
     if (me.oTxtFavorecidoInputCodigo.getValue() == "") {
 
       me.oTxtFavorecidoInputCodigo.setValue('');
@@ -1042,7 +1057,6 @@ DBViewSlipPagamento = function(sNomeInstancia, iTipoTransferencia, iOpcao, oDivD
    * Preenche o favorecido da transferencia
    */
   me.preencheFavorecido = function (lErro, sNome, sCnpj) {
-
     var sCnpjTratado = "";
     if (sCnpj != "" && sCnpj != undefined) {
       sCnpjTratado = js_formatar(sCnpj, 'cpfcnpj')+ " - ";

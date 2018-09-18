@@ -96,6 +96,7 @@ db_app::load("DBFormCache.js");
       <?
         db_input('e54_numcgm',10,$Ie54_numcgm,true,'text',isset($emprocesso)&&$emprocesso==true?"3":$db_opcao," onchange='js_pesquisae54_numcgm(false);'");
         db_input('z01_nome',48,$Iz01_nome,true,'text',3,'');
+        db_input('z01_cgccpf',15,$Iz01_cgccpf,true,'hidden',3);
       ?>
     </td>
   </tr>
@@ -323,14 +324,17 @@ db_app::load("DBFormCache.js");
 
 </form>
 <script>
-  function js_validaLicitacao() {
+ function js_validaLicitacao() {
+    // if(!js_checaCpfCnpj(document.form1.z01_cgccpf.value)){
+    //     return false;
+    // }
     if($('dop').value != 3 && ($('e54_numerl').value == '' || $('e54_numerl').value == 0)) {
       alert("Para esse Tipo de Compra é necessário informar o campo Número da Licitação.");
       return false;
     } else {
       return true;
     }
-  }
+ }
 var db_opcao = <?php echo $db_opcao; ?>;
 
 var oDBFormCache = new DBFormCache('oDBFormCache', 'db_frmempautoriza.php');
@@ -351,7 +355,6 @@ if (db_opcao == 1) {
 }
 
 function js_salvaCache(){
-
   oDBFormCache.save();
   return true;
 }
@@ -394,6 +397,8 @@ function js_nova(){
 }
 // lançar empenho
 function js_lanc_empenho(){
+  if(!js_checaCpfCnpj(document.form1.z01_cgccpf.value))
+      return false;
 
   autori = document.form1.e54_autori.value;
   var iElemento = $F("o58_codele");
@@ -412,12 +417,12 @@ function js_reload(valor){
   obj.setAttribute('name','tipocompra');
   obj.setAttribute('type','hidden');
   obj.setAttribute('value',valor);
-  document.form1.appendChild(obj);
+  document.form1.appendChild(obj)
   document.form1.submit();
 }
 function js_pesquisae54_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true,'0','1');
+    js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_cgccpf','Pesquisa',true,'0','1');
   }else{
      if(document.form1.e54_numcgm.value != ''){
         js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.e54_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
@@ -427,9 +432,10 @@ function js_pesquisae54_numcgm(mostra){
   }
 }
 
-function js_mostracgm(erro,chave){
+function js_mostracgm(erro,chave,chave1){
 
   document.form1.z01_nome.value = chave;
+  document.form1.z01_cgccpf.value = chave1;
   if(erro==true){
     document.form1.e54_numcgm.focus();
     document.form1.e54_numcgm.value = '';
@@ -438,13 +444,20 @@ function js_mostracgm(erro,chave){
   }
 }
 
-function js_mostracgm1(chave1,chave2){
+function js_mostracgm1(chave1,chave2,chave3){
 
   document.form1.e54_numcgm.value = chave1;
   document.form1.z01_nome.value = chave2;
+  document.form1.z01_cgccpf.value =  chave3
   db_iframe_cgm.hide();
 
   js_debitosemaberto();
+}
+
+function limpaCampos(){
+  document.form1.e54_numcgm.value = '';
+  document.form1.z01_nome.value = '';
+  document.form1.z01_cgccpf.value =  '';
 }
 
 function js_pesquisae54_login(mostra){
@@ -705,4 +718,5 @@ function js_emitircartanotificacao(iCodigoNotificaBloqueioFornecedor) {
                         ',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
       jan.moveTo(0,0);
 }
+
 </script>
