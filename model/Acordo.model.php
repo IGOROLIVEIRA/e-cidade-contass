@@ -2234,10 +2234,10 @@ class Acordo
              * incluimos um saldo executado negativo, informando que houve um estorno
              */
             foreach ($aItens as $oItem) {
+
               if (isset($aItensEmpempItem[$oItem->ac20_pcmater])) {
                 $oItem->quantidade = $aItensEmpempItem[$oItem->ac20_pcmater]->quantidade;
                 $oItem->valor      = $aItensEmpempItem[$oItem->ac20_pcmater]->vlrtot;
-              }
 
                 /**
                  * incluirmos na tabela acordoitemexecutado
@@ -2275,7 +2275,7 @@ class Acordo
                 if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
                   throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
                 }
-
+              }
                 //$oItemContrato = $this->getUltimaPosicao()->getItemByCodigo($oItem->codigo);
                 $aDotacoes    = array();
                 $oDotacaoItem = null;
