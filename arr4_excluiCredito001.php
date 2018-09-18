@@ -49,19 +49,6 @@ include_once("libs/db_utils.php");
 </head>
 <body bgcolor="#cccccc" onload="js_pesquisaAbatimento()">
 <br><br>
-<?php
-  if (db_getsession("DB_id_usuario") != 1) {
-  	?>
-  	 <div align="center">
-  	 <fieldset style="width: 300px;">
-  	   <b>Procedimento indisponível</b>
-  	 </fieldset>
-  	 </div>
-  	<?
-  	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-  	exit;
-  } 
-?>
 <div align="center">
 <fieldset style="width: 300px;">
 <legend> <b>Excluir Crédito</b> </legend>
