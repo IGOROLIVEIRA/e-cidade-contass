@@ -89,17 +89,29 @@ if(isset($chavepesquisa)){
 }
 if(isset($alterar)){
   db_inicio_transacao();
+//  /**
+//   * Verificar Encerramento Periodo Contabil
+//   */
+//  $dtmanut = db_utils::fieldsMemory(db_query($clveicmanut->sql_query_file($ve62_codigo,"ve62_dtmanut")),0)->ve62_dtmanut;
+//  if (!empty($dtmanut)) {
+//    $clcondataconf = new cl_condataconf;
+//    if (!$clcondataconf->verificaPeriodoContabil($dtmanut) || !$clcondataconf->verificaPeriodoContabil($ve62_dtmanut)) {
+//      $sqlerro  = true;
+//      $erro_msg=$clcondataconf->erro_msg;
+//    }
+//  }
+
   /**
-   * Verificar Encerramento Periodo Contabil
+   * Verificar Encerramento Periodo Patrimonial
    */
-  $dtmanut = db_utils::fieldsMemory(db_query($clveicmanut->sql_query_file($ve62_codigo,"ve62_dtmanut")),0)->ve62_dtmanut;
-  if (!empty($dtmanut)) {
+  if (!empty($ve62_dtmanut)) {
     $clcondataconf = new cl_condataconf;
-    if (!$clcondataconf->verificaPeriodoContabil($dtmanut) || !$clcondataconf->verificaPeriodoContabil($ve62_dtmanut)) {
+    if (!$clcondataconf->verificaPeriodoPatrimonial($ve62_dtmanut)) {
       $sqlerro  = true;
       $erro_msg=$clcondataconf->erro_msg;
     }
   }
+
   if ($sqlerro==false){
     $clveicmanut->alterar($ve62_codigo);
     if($clveicmanut->erro_status==0){

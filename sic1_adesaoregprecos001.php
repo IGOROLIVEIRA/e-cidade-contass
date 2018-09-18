@@ -19,17 +19,30 @@ if(isset($incluir)){
   db_inicio_transacao();
   $sqlerro    = false;
 
+//  /**
+//    * Verificar Encerramento Periodo Contabil
+//    */
+//  if (!empty($si06_dataadesao)) {
+//    $clcondataconf = new cl_condataconf;
+//    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
+//      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
+//      $cladesaoregprecos->erro_status="0";
+//      $sqlerro  = true;
+//    }
+//  }
+
   /**
-    * Verificar Encerramento Periodo Contabil
+    * Verificar Encerramento Periodo Patrimonial
     */
   if (!empty($si06_dataadesao)) {
     $clcondataconf = new cl_condataconf;
-    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
+    if (!$clcondataconf->verificaPeriodoPatrimonial($si06_dataadesao)) {
       $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
       $cladesaoregprecos->erro_status="0";
       $sqlerro  = true;
     }
   }
+
   if ($sqlerro == false) {
     $cladesaoregprecos->incluir(null);
   }
@@ -64,17 +77,32 @@ if(isset($alterar)){
   $db_opcao = 2;
   $sqlerro  = false;
 
-  /**
-    * Verificar Encerramento Periodo Contabil
-    */
-  if (!empty($si06_dataadesao)) {
-    $clcondataconf = new cl_condataconf;
-    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
-      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg." $si06_dataadesao";
-      $cladesaoregprecos->erro_status="0";
-      $sqlerro  = true;
+//  /**
+//    * Verificar Encerramento Periodo Contabil
+//    */
+//  if (!empty($si06_dataadesao)) {
+//    $clcondataconf = new cl_condataconf;
+//    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
+//      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg." $si06_dataadesao";
+//      $cladesaoregprecos->erro_status="0";
+//      $sqlerro  = true;
+//    }
+//  }
+
+    /**
+     * Verificar Encerramento Periodo Patrimonial
+     */
+    $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial,"si06_dataadesao")),0)->si06_dataadesao;
+
+    if (!empty($si06_dataadesao)) {
+        $clcondataconf = new cl_condataconf;
+        if (!$clcondataconf->verificaPeriodoPatrimonial($dataadesao) || !$clcondataconf->verificaPeriodoPatrimonial($si06_dataadesao)) {
+            $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
+            $cladesaoregprecos->erro_status="0";
+            $sqlerro  = true;
+        }
     }
-  }
+
   if ($sqlerro == false) {
     $cladesaoregprecos->alterar($si06_sequencial);
   }
@@ -100,9 +128,29 @@ if(isset($alterar)){
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
-  $clitensregpreco = new cl_itensregpreco;
-  $clitensregpreco->excluir(null," si07_sequencialadesao = $si06_sequencial");
-  $cladesaoregprecos->excluir($si06_sequencial);
+
+    /**
+     * Verificar Encerramento Periodo Patrimonial
+     */
+    $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial,"si06_dataadesao")),0)->si06_dataadesao;
+
+    if(!empty($si06_dataadesao)) {
+        $clcondataconf = new cl_condataconf;
+        if(!$clcondataconf->verificaPeriodoPatrimonial($dataadesao)) {
+            $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
+            $cladesaoregprecos->erro_status="0";
+
+            $sqlerro  = true;
+            $erro_msg=$clcondataconf->erro_msg;
+        }
+    }
+
+    if ($sqlerro == false) {
+        $clitensregpreco = new cl_itensregpreco;
+        $clitensregpreco->excluir(null," si07_sequencialadesao = $si06_sequencial");
+        $cladesaoregprecos->excluir($si06_sequencial);
+    }
+
   db_fim_transacao();
 }else if(isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])){
    //$db_opcao = 3;

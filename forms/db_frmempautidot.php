@@ -1,4 +1,5 @@
 <?
+
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -25,6 +26,37 @@
  *                                licenca/licenca_pt.txt
  */
 
+$x = str_replace('\\','',$_POST);
+$x = json_decode($x['json']);
+
+if($x->consultarDataDoSistema == true){
+//    require_once("../libs/db_stdlib.php");
+//require_once("../libs/db_utils.php");
+
+    require_once("../libs/db_stdlib.php");
+    require_once("../libs/db_utils.php");
+    require_once("../libs/db_app.utils.php");
+    require_once("../libs/db_conecta.php");
+    require_once("../libs/db_sessoes.php");
+//require_once("../libs/db_usuariosonline.php");
+    require_once("../model/Dotacao.model.php");
+    require_once("../dbforms/db_funcoes.php");
+
+
+
+    $result = db_query(sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit')));
+    $c99_data = db_utils::fieldsMemory($result, 0)->c99_data;
+
+    $dataDoSistema = date("Y-m-d", db_getsession('DB_datausu'));
+
+    echo json_encode(array(
+                            "dataDoSistema" => $dataDoSistema,
+                            "dataFechamentoContabil" => $c99_data,
+                            "chave1" => $x->chave1
+                    ));
+    die();
+}
+
 //MODULO: empenho
 $clempautidot->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -37,13 +69,39 @@ $clrotulo->label("c53_descr");
 $clrotulo->label("e54_valor");
 $clrotulo->label("o56_elemento");
 
+
+db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
+
 $result = $clempautitem->sql_record($clempautitem->sql_query_file($e56_autori));
+
+
+//        unset($incluir);
+//        db_msgbox("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+//        header('emp1_empautoriza001.php');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 if($clempautitem->numrows==0){
   $db_opcao_item = 33;
   $db_botao = false;
 }else{
   $db_opcao_item = 1;
 }
+$db_botao_c = true;
+$db_botao = true;
 ?>
   <form name="form1" method="post" action="">
     <center>
@@ -324,15 +382,39 @@ if(isset($tot) && $tot<0 && empty($cancelar) && isset($pesquisa_dot)){
       }
     }
 
-    function js_mostraorcdotacao1(chave1){
-      document.form1.o47_coddot.value = chave1;
+    function js_consultarDataDoSistema(chave1){
 
-      if( document.form1.dtSistema.value <= document.form1.c99_data.value  ){
-        alert('Encerramento do periodo contabil para '+ formattedDate(document.form1.c99_data.value));
-      }else{
+        var oParam = new Object();
+        oParam.consultarDataDoSistema = true;
+        oParam.chave1 = chave1;
+
+        var oAjax  = new Ajax.Request(
+            'forms/db_frmempautidot.php',
+            {
+                method:'post',
+                parameters:'json='+Object.toJSON(oParam),
+                onComplete:js_mostraorcdotacao1
+            }
+        );
+
+    }
+
+    function js_mostraorcdotacao1(chave1){
+
+        if(Number.isInteger(parseInt(chave1))){
+            js_consultarDataDoSistema(chave1);
+            return
+        }
+
+        var x = JSON.parse(chave1.responseText);
+        console.log("x.dataDoSistema="+x.dataDoSistema+" - x.dataFechamentoContabil="+x.dataFechamentoContabil);
+        if(x.dataDoSistema <= x.dataFechamentoContabil){
+            alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+            return;
+        }
+        document.form1.o47_coddot.value = x.chave1;
         js_dot();
         db_iframe_orcdotacao.hide();
-      }
 
     }
     function js_pesquisa(){

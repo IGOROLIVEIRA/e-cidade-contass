@@ -40,48 +40,106 @@ $clcondataconf = new cl_condataconf;
 $db_opcao = 22;
 $db_botao = false;
 
-if (isset($alterar)) {
-  
-   try {
-     db_inicio_transacao();
-     
-     $rsConDataConf = $clcondataconf->sql_record($clcondataconf->sql_query_file($c99_anousu,$c99_instit));
-     $clcondataconf->c99_usuario = db_getsession("DB_id_usuario");
-      
-     if($rsConDataConf == false || $clcondataconf->numrows==0) {
-       
-       if (empty($c99_data)) {
-         throw new Exception("Para encerramento do período contábil, informe a data limite!");
-       }
-       $clcondataconf->incluir($c99_anousu,$c99_instit);
-       $sMsg = "Inclusão do encerramento do período contábil realizada com sucesso!";
-       
-     } else {
-       
-       if(!empty($c99_data)) {
-         $clcondataconf->alterar($c99_anousu,$c99_instit);
-         $sMsg = "Alteração do encerramento do período contábil realizada com sucesso!";
-       } else {
-         $clcondataconf->excluir($c99_anousu,$c99_instit);
-         $sMsg = "Exclusão do encerramento do período contábil realizada com sucesso!";
-       }
-       
-     }
-     
-     if ($clcondataconf->erro_status == 0) {
-       throw new Exception($clcondataconf->erro_msg);
-     }
-     
-     db_fim_transacao(false);
-     db_msgbox($sMsg);
-     
-   } catch (Exception $oException) {
-     
-     db_msgbox($oException->getMessage());
-     db_fim_transacao(true);
-     
-   }
-   
+if(isset($c99_alterar2)){
+
+    try {
+        db_inicio_transacao();
+
+        $rsConDataConf = $clcondataconf->sql_record($clcondataconf->sql_query_file($c99_anousu,$c99_instit));
+        $clcondataconf->c99_usuario = db_getsession("DB_id_usuario");
+
+        //  Se não houver um registro criado
+        if($rsConDataConf == false || $clcondataconf->numrows==0) {
+
+            if (empty($c99_datapat)) {
+                throw new Exception($c99_datapat."Para encerramento do período patrimonial, informe a data limite!");
+            }
+            $clcondataconf->incluirPeriodoPatrimonial($c99_anousu,$c99_instit, $c99_datapat);
+            $sMsg = "Inclusão do encerramento do período patrimonial realizada com sucesso!";
+
+        }else{
+
+            $sMsg = empty($c99_datapat) ? "Exclusão do encerramento do período patrimonial realizada com sucesso!" :
+                "Alteração do encerramento do período patrimonial realizada com sucesso!";
+            if(empty($c99_data) && empty($c99_datapat)){
+                $clcondataconf->excluirPeriodoPatrimonial($c99_anousu,$c99_instit);
+            }else{
+                $clcondataconf->alterarPeriodoPatrimonial($c99_anousu,$c99_instit, $c99_datapat);
+            }
+
+        }
+
+        if ($clcondataconf->erro_status == 0) {
+            throw new Exception($clcondataconf->erro_msg);
+        }
+
+        db_fim_transacao(false);
+        db_msgbox($sMsg);
+
+    } catch (Exception $oException) {
+
+        db_msgbox($oException->getMessage());
+        db_fim_transacao(true);
+
+    }
+}else{
+    if (isset($alterar)) {
+
+        try {
+            db_inicio_transacao();
+
+            $rsConDataConf = $clcondataconf->sql_record($clcondataconf->sql_query_file($c99_anousu,$c99_instit));
+            $clcondataconf->c99_usuario = db_getsession("DB_id_usuario");
+
+            if($rsConDataConf == false || $clcondataconf->numrows==0) {
+
+                if (empty($c99_data)) {
+                    throw new Exception("Para encerramento do período contábil, informe a data limite!");
+                }
+                $clcondataconf->incluir($c99_anousu,$c99_instit);
+                $sMsg = "Inclusão do encerramento do período contábil realizada com sucesso!";
+
+            } else {
+
+                if(!empty($c99_data)) {
+
+                    $clcondataconf->alterar($c99_anousu,$c99_instit);
+                    $sMsg = "Alteração do encerramento do período contábil realizada com sucesso!";
+
+                } else {
+
+                    if(!empty($c99_datapat)){
+
+                        $c99_data = "";
+                        $clcondataconf->alterar($c99_anousu,$c99_instit);
+                        $sMsg = "Exclusão do encerramento do período contábil realizada com sucesso!";
+
+                    }else{
+
+                        $clcondataconf->excluir($c99_anousu,$c99_instit,$c99_datapat);
+                        $sMsg = "Exclusão do encerramento do período contábil realizada com sucesso!";
+
+                    }
+
+                }
+
+            }
+
+            if ($clcondataconf->erro_status == 0) {
+                throw new Exception($clcondataconf->erro_msg);
+            }
+
+            db_fim_transacao(false);
+            db_msgbox($sMsg);
+
+        } catch (Exception $oException) {
+
+            db_msgbox($oException->getMessage());
+            db_fim_transacao(true);
+
+        }
+
+    }
 }
 
 $db_opcao = 2;

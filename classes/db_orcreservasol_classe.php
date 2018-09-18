@@ -298,8 +298,15 @@ class cl_orcreservasol {
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
        } 
-     } 
-   } 
+     }
+   }
+
+    /**
+     * @todo resolver problema com a exclusão
+     * @param null $o82_sequencial
+     * @param null $dbwhere
+     * @return bool
+     */
    // funcao para exclusao 
    function excluir ($o82_sequencial=null,$dbwhere=null) { 
      if($dbwhere==null || $dbwhere==""){
@@ -362,8 +369,8 @@ class cl_orcreservasol {
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
        } 
-     } 
-   } 
+     }
+   }
    // funcao do recordset 
    function sql_record($sql) { 
      $result = db_query($sql);
@@ -477,7 +484,7 @@ class cl_orcreservasol {
      $sql2 = "";
      if($dbwhere==""){
        if($o82_codres!=null ){
-         $sql2 .= " where orcreservasol.o82_codres = $o82_codres "; 
+         $sql2 .= " where orcreservasol.o82_codres = $o82_codres ";
        } 
        if($o82_solicitem!=null ){
          if($sql2!=""){
@@ -522,7 +529,7 @@ class cl_orcreservasol {
      $sql2 = "";
      if($dbwhere==""){
        if($o82_codres!=null ){
-         $sql2 .= " where orcreservasol.o82_codres = $o82_codres "; 
+         $sql2 .= " where orcreservasol.o82_codres = $o82_codres ";
        } 
        if($o82_solicitem!=null ){
          if($sql2!=""){

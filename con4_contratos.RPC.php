@@ -266,8 +266,8 @@ switch($oParam->exec) {
       $oRetorno->sDescricao      = urlencode($oAcordoPenalidade->getDescricao());
       $oRetorno->sObservacao     = urlencode($oAcordoPenalidade->getObservacao());
       $oRetorno->sTextoPadrao    = urlencode($oAcordoPenalidade->getTextoPadrao());
-      $oRetorno->dtValidade      = urlencode(db_formatar($oAcordoPenalidade->getDataLimite(),'d'));
-      $oRetorno->aTiposContratos = $oAcordoPenalidade->getTiposContratos();
+        $oRetorno->dtValidade      = urlencode(db_formatar($oAcordoPenalidade->getDataLimite(),'d'));
+        $oRetorno->aTiposContratos = $oAcordoPenalidade->getTiposContratos();
     } catch (Exception $eExeption){
 
       $oRetorno->status = 2;

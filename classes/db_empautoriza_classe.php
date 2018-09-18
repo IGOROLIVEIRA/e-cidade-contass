@@ -183,15 +183,16 @@
            $this->erro_status = "0";
            return false;
          }
-         if($this->e54_codcom == null ){
-           $this->erro_sql = " Campo Tipo de compra nao Informado.";
-           $this->erro_campo = "e54_codcom";
-           $this->erro_banco = "";
-           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-           $this->erro_status = "0";
-           return false;
-         }
+//
+//           if($this->e54_codcom == null ){
+//           $this->erro_sql = " Campo Tipo de compr4 nao Informad0.".$this->e54_codcom.$_SESSION["e54_codcom"]."t99=>".$this->e54_codcom."<=";
+//           $this->erro_campo = "e54_codcom";
+//           $this->erro_banco = "";
+//           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//           $this->erro_status = "0";
+//           return false;
+//         }
            /**
             * removido validação pois outras rotinas que utilizam essa classe para inserir estavam passando nessa validação
             * a validação foi feita via javascript conforme solicitado na ocorrência 2087

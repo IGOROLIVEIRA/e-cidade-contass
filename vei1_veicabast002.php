@@ -179,13 +179,25 @@ if( (isset($proximamedida) && $proximamedida > 0) && $proximamedida < $medida){
  $clveicabast->erro_campo = "ve70_medida";
 }
 
+///**
+// * Verificar Encerramento Periodo Contabil
+// */
+//$dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve70_codigo,"ve70_dtabast")),0)->ve70_dtabast;
+//if (!empty($dtabast)) {
+//  $clcondataconf = new cl_condataconf;
+//  if (!$clcondataconf->verificaPeriodoContabil($dtabast) || !$clcondataconf->verificaPeriodoContabil($dataabast)) {
+//    db_msgbox($clcondataconf->erro_msg);
+//    $sqlerro  = true;
+//    $erro_msg="Não foi possível alterar.";
+//  }
+//}
+
 /**
- * Verificar Encerramento Periodo Contabil
+ * Verificar Encerramento Periodo Patrimonial
  */
-$dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve70_codigo,"ve70_dtabast")),0)->ve70_dtabast;
-if (!empty($dtabast)) {
+if (!empty($ve70_dtabast)) {
   $clcondataconf = new cl_condataconf;
-  if (!$clcondataconf->verificaPeriodoContabil($dtabast) || !$clcondataconf->verificaPeriodoContabil($dataabast)) {
+  if (!$clcondataconf->verificaPeriodoPatrimonial($ve70_dtabast)) {
     db_msgbox($clcondataconf->erro_msg);
     $sqlerro  = true;
     $erro_msg="Não foi possível alterar.";

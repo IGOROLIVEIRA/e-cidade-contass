@@ -294,6 +294,13 @@ class AcordoRescisao extends AcordoMovimentacao {
     return $this;
   }
 
+    /**
+     * @return Boolean
+     */
+    public function verificaPeriodoPatrimonial() {
+        return parent::verificaPeriodoPatrimonial();
+    }
+
   /**
    * @return Boolean
    */

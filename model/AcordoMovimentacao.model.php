@@ -581,5 +581,15 @@ abstract class AcordoMovimentacao {
     }
     return $retorno;
   }
+
+    public function verificaPeriodoPatrimonial(){
+        $sData = $this->dtMovimento;
+        $oDaoCondataconf = db_utils::getDao("condataconf");
+        $retorno = $oDaoCondataconf->verificaPeriodoPatrimonial($sData);
+        if (!$retorno) {
+            throw new Exception($oDaoCondataconf->erro_msg);
+        }
+
+        return $retorno;
+    }
 }
-?>

@@ -200,6 +200,8 @@ require_once ("model/CgmJuridico.model.php");
 require_once ("model/CgmFisico.model.php");
 require_once ("model/Dotacao.model.php");
 
+require_once ("classes/db_condataconf_classe.php");
+
 
 $clempautret	  	= new cl_empautret;
 $clempempret	  	= new cl_empempret;
@@ -262,26 +264,52 @@ if (!empty($iElemento)) {
 
 if(isset($incluir)) {
 
+  // Data do sistema
+  $dtDataUsu = date("Y-m-d", db_getsession('DB_datausu'));
+
+  $clcondataconf = new cl_condataconf;
+
+  $result = db_query($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit')));
+  $c99_data = db_utils::fieldsMemory($result, 0)->c99_data;
+
+  if(strtotime($dtDataUsu) <= strtotime($c99_data)){
+
+    $erro_msg  = "Não foi possível incluir os lançamentos do evento contabil.\n\n";
+    $erro_msg .= "Erro Técnico: ";
+    $erro_sql   = "Valores lançamentos (".pg_result(db_query('select max(c69_sequen)+1 from conlancamval'),0,0).") nao Incluído. Inclusao Abortada.";
+    $erro_msg   .= "Usuário: \\n\\n ".$erro_sql." \\n\\n";
+    $erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n "));
+    $erro_msg   .=  " ERRO: DATA INVÁLIDA. LIMITE: {$c99_data} \\n\\n";
+    $erro_status = "0";
+
+    unset($incluir);
+    db_msgbox($erro_msg);
+
+  }
+
     /* Ocorrência 2630
      * Validações de datas para geração de autorizações de empenhos e geração de empenhos
      * 1. Validar impedimento para geração de autorizações/empenhos com data anterior a data de homologação
      * 2. Validar impedimento para geração de autorizações de empenhos de licitações que não estejam homologadas.
      */
-    $sSqlLicitacao = "select e54_emiss
+  $sSqlLicitacao = "select e54_emiss
                           from empautoriza
                           inner join liclicita  on ltrim(((string_to_array(e54_numerl, '/'))[1])::varchar,'0') = l20_numero::varchar AND l20_anousu::varchar = ((string_to_array(e54_numerl, '/'))[2])::varchar
                           where e54_autori = {$e54_autori} limit 1";
 
     if(pg_num_rows(db_query($sSqlLicitacao))) {
-        if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > db_getsession('DB_datausu')) {
-            db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").");
-            db_redireciona("emp4_empempenho004.php");
-        }
+
+      if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > db_getsession('DB_datausu')) {
+
+        db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".date("d/m/Y",db_getsession('DB_datausu')).").");
+        db_redireciona("emp4_empempenho004.php");
+
+      }
+
     }
 
     $sqlerro = false;
     db_inicio_transacao();
-
 
     // atualiza o campo do gestor do empenho
     $sSql = " UPDATE empautoriza SET e54_gestaut = '{$e54_gestaut}' "
@@ -327,15 +355,23 @@ if(isset($incluir)) {
 				 left join arqproc 	on p68_codproc = x.p63_codproc
 			where p64_codtran is null and p68_codproc is null and x.e54_autori = {$e54_autori}";
         $result_tran = db_query($sqltran);
+
         if (pg_numrows($result_tran) != 0) {
+
             for ($w = 0; $w < pg_numrows($result_tran); $w++) {
-                db_fieldsmemory($result_tran, $w);
-                $recebetransf = recprocandsol($p62_codtran);
-                if ($recebetransf == true) {
-                    $sqlerro = true;
-                    break;
-                }
+
+              db_fieldsmemory($result_tran, $w);
+              $recebetransf = recprocandsol($p62_codtran);
+
+              if ($recebetransf == true) {
+
+                $sqlerro = true;
+                break;
+
+              }
+
             }
+
         }
     }
 
@@ -375,9 +411,11 @@ if(isset($incluir)) {
 							  ");
 
     if ($clempempaut->numrows > 0) {
-        db_fieldsmemory($resdiftot, 0);
-        $erro_msg = "Valor total dos itens diferente do valor total da autorização. Vlr. da Autorização: $e54_valor - Vlr. Total dos Itens: $e55_vltot ";
-        $sqlerro  = true;
+
+      db_fieldsmemory($resdiftot, 0);
+      $erro_msg = "Valor total dos itens diferente do valor total da autorização. Vlr. da Autorização: $e54_valor - Vlr. Total dos Itens: $e55_vltot ";
+      $sqlerro  = true;
+
     }
 
     if ($sqlerro == false) {
@@ -393,7 +431,6 @@ if(isset($incluir)) {
 
 
     /*inicio-conlancamval*/
-
     $cltranslan->db_trans_empenho($e54_codcom, db_getsession("DB_anousu"));
     $arr_debito     = $cltranslan->arr_debito;
     $arr_credito    = $cltranslan->arr_credito;
@@ -401,10 +438,9 @@ if(isset($incluir)) {
     $arr_seqtranslr = $cltranslan->arr_seqtranslr;
 
     if (count($arr_credito) == 0) {
-        $sqlerro  = true;
-        $erro_msg = "Não existem transações cadastradas para esta instituição.";
+      $sqlerro  = true;
+      $erro_msg = "Não existem transações cadastradas para esta instituição.";
     }
-
 
     //final
 
@@ -415,7 +451,7 @@ if(isset($incluir)) {
 
         /*
          *  NÃO COMENTAR A LINHA ABAIXO,
-        *  ELA SERVER PARA NUMERAR OS EMPENHOS EM BAGE, ONDE EXISTE O EMPENHO 1 NA PREFEITURA,1 NO DAEBE E 1 NA CAMARA
+        *  ELA SERVE PARA NUMERAR OS EMPENHOS EM BAGE, ONDE EXISTE O EMPENHO 1 NA PREFEITURA,1 NO DAEBE E 1 NA CAMARA
         *
         */
         $result = $clempparamnum->sql_record($clempparamnum->sql_query_file($anousu, db_getsession("DB_instit"), " (e29_codemp + 1) as e60_codemp"));
@@ -596,7 +632,9 @@ if(isset($incluir)) {
         $oDaoEmpempenhoContrato              = db_utils::getDao("empempenhocontrato");
         $oDaoEmpempenhoContrato->e100_acordo = $ac16_sequencial;
         $oDaoEmpempenhoContrato->e100_numemp = $e60_numemp;
+
         $oDaoEmpempenhoContrato->incluir(null);
+
         if ($oDaoEmpempenhoContrato->erro_status == 0) {
 
             $erro_msg = $oDaoEmpempenhoContrato->erro_msg;
@@ -664,7 +702,7 @@ if(isset($incluir)) {
             } else {
 
                 $sqlerro  = true;
-                $erro_msg = "Não existe elemento para o iten $e55_item";
+                $erro_msg = "Não existe elemento para o item $e55_item";
             }
             //final
 
@@ -694,7 +732,7 @@ if(isset($incluir)) {
                 }
 
                 /*
-                 * Verificamos se o item está vinculado a uma autorização de um pacto sem solicitação
+                * Verificamos se o item está vinculado a uma autorização de um pacto sem solicitação
                 * Se a autorização foi gerada sem solicitaçao, controla o saldo do pacto, do contrário esse controle foi realizado
                 * no momento da inclusão da solicitação
                 *
@@ -1280,4 +1318,3 @@ echo "
 if($db_opcao==33){
     echo "<script>document.form1.pesquisar.click();</script>";
 }
-?>

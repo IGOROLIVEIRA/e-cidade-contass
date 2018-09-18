@@ -172,9 +172,95 @@ class cl_condataconf {
        $resac = db_query("insert into db_acount values($acount,1350,8874,'','".AddSlashes(pg_result($resaco,0,'c99_usuario'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
-   // funcao para alteracao
-   function alterar ($c99_anousu=null,$c99_instit=null) { 
+   }
+
+    // funcao para inclusao de período patrimonial
+    function incluirPeriodoPatrimonial ($c99_anousu,$c99_instit,$c99_datapat){
+        $this->atualizacampos();
+        if($c99_datapat == null ){
+            $c99_datapat = "null";
+        }
+        if($this->c99_usuario == null ){
+            $this->erro_sql = " Campo Usuário nao Informado.";
+            $this->erro_campo = "c99_usuario";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        $this->c99_anousu = $c99_anousu;
+        $this->c99_instit = $c99_instit;
+        if(($this->c99_anousu == null) || ($this->c99_anousu == "") ){
+            $this->erro_sql = " Campo c99_anousu nao declarado.";
+            $this->erro_banco = "Chave Primaria zerada.";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if(($this->c99_instit == null) || ($this->c99_instit == "") ){
+            $this->erro_sql = " Campo c99_instit nao declarado.";
+            $this->erro_banco = "Chave Primaria zerada.";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        $sql = "insert into condataconf(
+                                       c99_anousu 
+                                      ,c99_instit 
+                                      ,c99_datapat 
+                                      ,c99_usuario 
+                       )
+                values (
+                                $this->c99_anousu 
+                               ,$this->c99_instit 
+                               ,".($c99_datapat == "null" || $c99_datapat == ""?"null":"'".$c99_datapat."'")." 
+                               ,$this->c99_usuario 
+                      )";
+        $result = db_query($sql);
+        if($result==false){
+            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
+                $this->erro_sql   = "Configuracao Data ($this->c99_anousu."-".$this->c99_instit) nao Incluído. Inclusao Abortada.";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_banco = "Configuracao Data já Cadastrado";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            }else{
+                $this->erro_sql   = "Configuracao Data ($this->c99_anousu."-".$this->c99_instit) nao Incluído. Inclusao Abortada.";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            }
+            $this->erro_status = "0";
+            $this->numrows_incluir= 0;
+            return false;
+        }
+        $this->erro_banco = "";
+        $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
+        $this->erro_sql .= "Valores : ".$this->c99_anousu."-".$this->c99_instit;
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "1";
+        $this->numrows_incluir= pg_affected_rows($result);
+        $resaco = $this->sql_record($this->sql_query_file($this->c99_anousu,$this->c99_instit));
+        if(($resaco!=false)||($this->numrows!=0)){
+            $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+            $acount = pg_result($resac,0,0);
+            $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+            $resac = db_query("insert into db_acountkey values($acount,8009,'$this->c99_anousu','I')");
+            $resac = db_query("insert into db_acountkey values($acount,8010,'$this->c99_instit','I')");
+            $resac = db_query("insert into db_acount values($acount,1350,8009,'','".AddSlashes(pg_result($resaco,0,'c99_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,1350,8010,'','".AddSlashes(pg_result($resaco,0,'c99_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,1350,8011,'','".AddSlashes(pg_result($resaco,0,'c99_datapat'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,1350,8874,'','".AddSlashes(pg_result($resaco,0,'c99_usuario'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        }
+        return true;
+    }
+
+
+    // funcao para alteracao
+   function alterar ($c99_anousu=null,$c99_instit=null) {
       $this->atualizacampos();
      $sql = " update condataconf set ";
      $virgula = "";
@@ -282,12 +368,90 @@ class cl_condataconf {
          return true;
        } 
      } 
-   } 
-   // funcao para exclusao 
-   function excluir ($c99_anousu=null,$c99_instit=null,$dbwhere=null) { 
+   }
+
+   // funcao para alteracao patrimonial
+    function alterarPeriodoPatrimonial ($c99_anousu=null,$c99_instit=null, $c99_datapat) {
+        $this->atualizacampos();
+        $sql = "update condataconf set ";
+        $virgula = "";
+
+        if(trim($this->c99_datapat)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c99_datapat_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["c99_datapat_dia"] !="") ){
+            $sql  .= $virgula." c99_datapat = '$c99_datapat' ";
+            $virgula = ",";
+        }     else{
+            if(isset($GLOBALS["HTTP_POST_VARS"]["c99_datapat_dia"])){
+                $sql  .= $virgula." c99_datapat = null ";
+                $virgula = ",";
+            }
+        }
+
+        $sql .= " where ";
+        if($c99_anousu!=null){
+            $sql .= " c99_anousu = $this->c99_anousu";
+        }
+        if($c99_instit!=null){
+            $sql .= " and  c99_instit = $this->c99_instit";
+        }
+        $resaco = $this->sql_record($this->sql_query_file($this->c99_anousu,$this->c99_instit));
+        if($this->numrows>0){
+            for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+                $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+                $acount = pg_result($resac,0,0);
+                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+                $resac = db_query("insert into db_acountkey values($acount,8009,'$this->c99_anousu','A')");
+                $resac = db_query("insert into db_acountkey values($acount,8010,'$this->c99_instit','A')");
+                if(isset($GLOBALS["HTTP_POST_VARS"]["c99_anousu"]))
+                    $resac = db_query("insert into db_acount values($acount,1350,8009,'".AddSlashes(pg_result($resaco,$conresaco,'c99_anousu'))."','$this->c99_anousu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if(isset($GLOBALS["HTTP_POST_VARS"]["c99_instit"]))
+                    $resac = db_query("insert into db_acount values($acount,1350,8010,'".AddSlashes(pg_result($resaco,$conresaco,'c99_instit'))."','$this->c99_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if(isset($GLOBALS["HTTP_POST_VARS"]["c99_datapat"]))
+                    $resac = db_query("insert into db_acount values($acount,1350,8011,'".AddSlashes(pg_result($resaco,$conresaco,'c99_datapat'))."','$this->c99_datapat',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if(isset($GLOBALS["HTTP_POST_VARS"]["c99_usuario"]))
+                    $resac = db_query("insert into db_acount values($acount,1350,8874,'".AddSlashes(pg_result($resaco,$conresaco,'c99_usuario'))."','$this->c99_usuario',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            }
+        }
+
+        $result = db_query($sql);
+        if($result==false){
+            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_sql   = "Configuracao Data nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql .= "Valores : ".$this->c99_anousu."-".$this->c99_instit;
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            $this->numrows_alterar = 0;
+            return false;
+        }else{
+            if(pg_affected_rows($result)==0){
+                $this->erro_banco = "";
+                $this->erro_sql = "Configuracao Data nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql .= "Valores : ".$this->c99_anousu."-".$this->c99_instit;
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "1";
+                $this->numrows_alterar = 0;
+                return true;
+            }else{
+                $this->erro_banco = "";
+                $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+                $this->erro_sql .= "Valores : ".$this->c99_anousu."-".$this->c99_instit;
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "1";
+                $this->numrows_alterar = pg_affected_rows($result);
+                return true;
+            }
+        }
+    }
+
+
+    // funcao para exclusao
+   function excluir ($c99_anousu=null,$c99_instit=null,$dbwhere=null) {
+
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($c99_anousu,$c99_instit));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -353,8 +517,83 @@ class cl_condataconf {
          return true;
        } 
      } 
-   } 
-   // funcao do recordset 
+   }
+
+    // funcao para exclusao
+    function excluirPeriodoPatrimonial ($c99_anousu=null,$c99_instit=null,$dbwhere=null) {
+
+        if($dbwhere==null || $dbwhere==""){
+            $resaco = $this->sql_record($this->sql_query_file($c99_anousu,$c99_instit));
+        }else{
+            $resaco = $this->sql_record($this->sql_query_file(null,null,"*",null,$dbwhere));
+        }
+        if(($resaco!=false)||($this->numrows!=0)){
+            for($iresaco=0;$iresaco<$this->numrows;$iresaco++){
+                $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+                $acount = pg_result($resac,0,0);
+                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+                $resac = db_query("insert into db_acountkey values($acount,8009,'$c99_anousu','E')");
+                $resac = db_query("insert into db_acountkey values($acount,8010,'$c99_instit','E')");
+                $resac = db_query("insert into db_acount values($acount,1350,8009,'','".AddSlashes(pg_result($resaco,$iresaco,'c99_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,1350,8010,'','".AddSlashes(pg_result($resaco,$iresaco,'c99_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,1350,8011,'','".AddSlashes(pg_result($resaco,$iresaco,'c99_datapat'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,1350,8874,'','".AddSlashes(pg_result($resaco,$iresaco,'c99_usuario'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            }
+        }
+        $sql = " delete from condataconf
+                    where ";
+        $sql2 = "";
+        if($dbwhere==null || $dbwhere ==""){
+            if($c99_anousu != ""){
+                if($sql2!=""){
+                    $sql2 .= " and ";
+                }
+                $sql2 .= " c99_anousu = $c99_anousu ";
+            }
+            if($c99_instit != ""){
+                if($sql2!=""){
+                    $sql2 .= " and ";
+                }
+                $sql2 .= " c99_instit = $c99_instit ";
+            }
+        }else{
+            $sql2 = $dbwhere;
+        }
+        $result = db_query($sql.$sql2);
+        if($result==false){
+            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_sql   = "Configuracao Data nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql .= "Valores : ".$c99_anousu."-".$c99_instit;
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            $this->numrows_excluir = 0;
+            return false;
+        }else{
+            if(pg_affected_rows($result)==0){
+                $this->erro_banco = "";
+                $this->erro_sql = "Configuracao Data nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql .= "Valores : ".$c99_anousu."-".$c99_instit;
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "1";
+                $this->numrows_excluir = 0;
+                return true;
+            }else{
+                $this->erro_banco = "";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_sql .= "Valores : ".$c99_anousu."-".$c99_instit;
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "1";
+                $this->numrows_excluir = pg_affected_rows($result);
+                return true;
+            }
+        }
+    }
+
+
+    // funcao do recordset
    function sql_record($sql) { 
      $result = db_query($sql);
      if($result==false){
@@ -477,6 +716,26 @@ class cl_condataconf {
     }
     return true;
   }
+
+    function verificaPeriodoPatrimonial($datahomo) {
+        $result = db_query($this->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+        $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+
+        if(empty($c99_datapat)){
+            return true;
+        }
+
+        if (strpos($datahomo, "/")) {
+            $datahomo = implode("-",array_reverse(explode("/",$datahomo)));
+        }
+
+        if ($datahomo <= $c99_datapat) {
+            $this->erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+            return false;
+        }
+
+        return true;
+    }
   
 }
 ?>

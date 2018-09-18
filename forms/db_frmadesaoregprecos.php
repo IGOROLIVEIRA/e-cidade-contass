@@ -238,7 +238,9 @@ db_input('si06_processocompra',10,$Isi06_processocompra,true,'text',$db_opcao," 
   </center>
 </fieldset>
 <div align="center">
+<? if($db_opcao == 1 || $db_opcao == 2 || $db_opcao == 22){ ?>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+<? } ?>
 <input name="excluir" type="submit" id="db_opcao" value="Excluir">
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </div>

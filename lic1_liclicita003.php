@@ -142,17 +142,30 @@ if(isset($excluir)){
     }
   }
 
-  /*
-   * Verificar Encerramento Periodo Contabil
-   */
-  $dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
-  if (!empty($dtpubratificacao)) {
-    $clcondataconf = new cl_condataconf;
-    if (!$clcondataconf->verificaPeriodoContabil($dtpubratificacao)) {
-      $erro_msg = $clcondataconf->erro_msg;
-      $sqlerro  = true;
+//  /*
+//   * Verificar Encerramento Periodo Contabil
+//   */
+//  $dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
+//  if (!empty($dtpubratificacao)) {
+//    $clcondataconf = new cl_condataconf;
+//    if (!$clcondataconf->verificaPeriodoContabil($dtpubratificacao)) {
+//      $erro_msg = $clcondataconf->erro_msg;
+//      $sqlerro  = true;
+//    }
+//  }
+
+    /*
+     * Verificar Encerramento Periodo Patrimonial
+     */
+//    die("die: ".$l20_dtpubratificacao);
+    //$dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
+    if (!empty($l20_dtpubratificacao)) {
+        $clcondataconf = new cl_condataconf;
+        if (!$clcondataconf->verificaPeriodoPatrimonial($l20_dtpubratificacao)) {
+            $erro_msg = $clcondataconf->erro_msg;
+            $sqlerro  = true;
+        }
     }
-  }
   
   if ($sqlerro==false){
     $clliclicita->excluir($l20_codigo);

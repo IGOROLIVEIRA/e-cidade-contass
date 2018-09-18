@@ -140,17 +140,27 @@ if(isset($incluir)){
 		  $sqlerro = true;
 		}
 
-    /**
-     * Verificar Encerramento Periodo Contabil
-     */
-    if (!empty($l20_dtpubratificacao)) {
-			$clcondataconf = new cl_condataconf;
-	    if (!$clcondataconf->verificaPeriodoContabil($l20_dtpubratificacao)) {
-	      $erro_msg = $clcondataconf->erro_msg;
-	      $sqlerro  = true;
-	    }
-    }
+//    /**
+//     * Verificar Encerramento Periodo Contabil
+//     */
+//    if (!empty($l20_dtpubratificacao)) {
+//			$clcondataconf = new cl_condataconf;
+//	    if (!$clcondataconf->verificaPeriodoContabil($l20_dtpubratificacao)) {
+//	      $erro_msg = $clcondataconf->erro_msg;
+//	      $sqlerro  = true;
+//	    }
+//    }
 
+        /**
+         * Verificar Encerramento Periodo Patrimonial
+         */
+        if (!empty($l20_dtpubratificacao)) {
+            $clcondataconf = new cl_condataconf;
+            if (!$clcondataconf->verificaPeriodoPatrimonial($l20_dtpubratificacao)) {
+                $erro_msg = $clcondataconf->erro_msg;
+                $sqlerro  = true;
+            }
+        }
 
 		if ($sqlerro == false){
 

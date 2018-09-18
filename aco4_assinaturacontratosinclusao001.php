@@ -53,6 +53,53 @@ $clrotulo->label("ac16_resumoobjeto");
 $clrotulo->label("ac10_datamovimento");
 $clrotulo->label("ac10_obs");
 
+// funcao do sql
+function sql_query_file ( $c99_anousu=null,$c99_instit=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+        $campos_sql = split("#",$campos);
+        $virgula = "";
+        for($i=0;$i<sizeof($campos_sql);$i++){
+            $sql .= $virgula.$campos_sql[$i];
+            $virgula = ",";
+        }
+    }else{
+        $sql .= $campos;
+    }
+    $sql .= " from condataconf ";
+    $sql2 = "";
+    if($dbwhere==""){
+        if($c99_anousu!=null ){
+            $sql2 .= " where condataconf.c99_anousu = $c99_anousu ";
+        }
+        if($c99_instit!=null ){
+            if($sql2!=""){
+                $sql2 .= " and ";
+            }else{
+                $sql2 .= " where ";
+            }
+            $sql2 .= " condataconf.c99_instit = $c99_instit ";
+        }
+    }else if($dbwhere != ""){
+        $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+        $sql .= " order by ";
+        $campos_sql = split("#",$ordem);
+        $virgula = "";
+        for($i=0;$i<sizeof($campos_sql);$i++){
+            $sql .= $virgula.$campos_sql[$i];
+            $virgula = ",";
+        }
+    }
+    return $sql;
+}
+
+$result = db_query(sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat'));
+$c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+
+
 if($_POST['json']){
   $sequencial_valor = str_replace('\\','', $_POST);
     $sequencial_valor = json_decode($sequencial_valor['json']);
@@ -92,6 +139,7 @@ fieldset table td:first-child {
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<?='<input id="c99_datapat_hidden" type="hidden" value="'.$c99_datapat.'">'?>
 <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
   <tr>
     <td valign="top" align="center">
@@ -309,8 +357,6 @@ function js_assinarContrato(obj) {
 
   }
 
-  js_divCarregando('Aguarde incluindo assinatura...','msgBoxAssianturaContrato');
-
   var oParam            = new Object();
   oParam.exec           = "assinarContrato";
   oParam.acordo         = $F('ac16_sequencial');
@@ -318,6 +364,24 @@ function js_assinarContrato(obj) {
   oParam.dtpublicacao   = $F('ac16_datapublicacao');
   oParam.veiculodivulgacao   = encodeURIComponent(tagString($F('ac16_veiculodivulgacao')));
   oParam.observacao     = encodeURIComponent(tagString($F('ac10_obs')));
+
+/**
+ * Verificar Encerramento Periodo Patrimonial
+ */
+  //    DATA DO MOVIMENTO
+     var partesData = oParam.dtmovimentacao.split("/");
+     var dataMovimento = new Date(partesData[2], partesData[1]-1, partesData[0]);
+
+  //    DATA DO FECHAMENTO PATRIMONIAL
+    var partesData = $("c99_datapat_hidden").value.split("-");
+    var dataPatrimonial = new Date(partesData[0], partesData[1]-1, partesData[2]);
+
+    if(dataMovimento <= dataPatrimonial){
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        return;
+    }
+
+    js_divCarregando('Aguarde incluindo assinatura...','msgBoxAssianturaContrato');
 
   var oAjax   = new Ajax.Request( sUrl, {
                                           method: 'post',

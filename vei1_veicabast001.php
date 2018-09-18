@@ -182,12 +182,24 @@ if (isset($sel_proprio) && $sel_proprio==2) {
 
   }
 
+//    /**
+//     * Verificar Encerramento Periodo Contabil
+//     */
+//    if (!empty($ve70_dtabast)) {
+//      $clcondataconf = new cl_condataconf;
+//      if (!$clcondataconf->verificaPeriodoContabil($ve70_dtabast)) {
+//        db_msgbox($clcondataconf->erro_msg);
+//        $sqlerro  = true;
+//        $erro_msg="Não foi possível incluir.";
+//      }
+//    }
     /**
-     * Verificar Encerramento Periodo Contabil
+     * Verificar Encerramento Periodo Patrimonial
      */
+
     if (!empty($ve70_dtabast)) {
       $clcondataconf = new cl_condataconf;
-      if (!$clcondataconf->verificaPeriodoContabil($ve70_dtabast)) {
+      if (!$clcondataconf->verificaPeriodoPatrimonial($ve70_dtabast)) {
         db_msgbox($clcondataconf->erro_msg);
         $sqlerro  = true;
         $erro_msg="Não foi possível incluir.";

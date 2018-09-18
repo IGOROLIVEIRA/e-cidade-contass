@@ -27,17 +27,31 @@ if(isset($excluir)){
   } else {
     db_inicio_transacao();
     $db_opcao = 3;
-   /**
-    * Verificar Encerramento Periodo Contabil
-    */
-    $datahomologacao = db_utils::fieldsMemory(db_query($clhomologacaoadjudica->sql_query_file($l202_sequencial,"l202_datahomologacao")),0)->l202_datahomologacao;
-    if (!empty($datahomologacao)) {
-      $clcondataconf = new cl_condataconf;
-      if (!$clcondataconf->verificaPeriodoContabil($datahomologacao)) {
-        echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
-        db_redireciona('lic1_homologacaoadjudica003.php');
+//   /**
+//    * Verificar Encerramento Periodo Contabil
+//    */
+//    $datahomologacao = db_utils::fieldsMemory(db_query($clhomologacaoadjudica->sql_query_file($l202_sequencial,"l202_datahomologacao")),0)->l202_datahomologacao;
+//    if (!empty($datahomologacao)) {
+//      $clcondataconf = new cl_condataconf;
+//      if (!$clcondataconf->verificaPeriodoContabil($datahomologacao)) {
+//        echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
+//        db_redireciona('lic1_homologacaoadjudica003.php');
+//      }
+//    }
+
+      /**
+       * Verificar Encerramento Periodo Patrimonial
+       */
+      $datahomologacao = db_utils::fieldsMemory(db_query($clhomologacaoadjudica->sql_query_file($l202_sequencial,"l202_datahomologacao")),0)->l202_datahomologacao;
+
+      if (!empty($datahomologacao)) {
+          $clcondataconf = new cl_condataconf;
+          if (!$clcondataconf->verificaPeriodoPatrimonial($datahomologacao)) {
+              echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
+              db_redireciona('lic1_homologacaoadjudica003.php');
+          }
       }
-    }
+
     $clhomologacaoadjudica->excluirItens($l202_sequencial);
     $clhomologacaoadjudica->excluir($l202_sequencial);
     $clhomologacaoadjudica->alteraLicitacao($l202_licitacao,1);

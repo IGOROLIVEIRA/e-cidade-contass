@@ -59,17 +59,32 @@ if(isset($incluir)){
   		$erro_msg=$clveicabast->erro_msg;
   	}  	  	
   }
-  /**
-   * Verificar Encerramento Periodo Contabil
-   */
+//  /**
+//   * Verificar Encerramento Periodo Contabil
+//   */
+//  $ve70_dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve74_veicabast,"ve70_dtabast")),0)->ve70_dtabast;
+//  if (!empty($ve70_dtabast)) {
+//    $clcondataconf = new cl_condataconf;
+//    if (!$clcondataconf->verificaPeriodoContabil($ve70_dtabast)) {
+//        echo "<script>alert(\"Qualquer coisa\");</script>";
+//      $sqlerro  = true;
+//      $erro_msg=$clcondataconf->erro_msg;
+//    }
+//  }
+
+    /**
+     * Verificar Encerramento Periodo Patrimonial
+     */
+
   $ve70_dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve74_veicabast,"ve70_dtabast")),0)->ve70_dtabast;
   if (!empty($ve70_dtabast)) {
     $clcondataconf = new cl_condataconf;
-    if (!$clcondataconf->verificaPeriodoContabil($ve70_dtabast)) {
+    if (!$clcondataconf->verificaPeriodoPatrimonial($ve70_dtabast)) {
       $sqlerro  = true;
       $erro_msg=$clcondataconf->erro_msg;
     }
   }
+
   db_fim_transacao($sqlerro);
 }
 if (isset($abast)&&$abast!=""){

@@ -21,13 +21,26 @@ if(isset($alterar)){
     db_redireciona('lic1_homologacaoadjudica001.php');
   }
 
-  /**
-   * Verificar Encerramento Periodo Contabil
-   */
-  $datahomologacao = db_utils::fieldsMemory(db_query($clhomologacaoadjudica->sql_query_file($l202_sequencial,"l202_datahomologacao")),0)->l202_datahomologacao;
-  if (!empty($datahomologacao)) {
+//  /**
+//   * Verificar Encerramento Periodo Contabil
+//   */
+//  $datahomologacao = db_utils::fieldsMemory(db_query($clhomologacaoadjudica->sql_query_file($l202_sequencial,"l202_datahomologacao")),0)->l202_datahomologacao;
+//  if (!empty($datahomologacao)) {
+//    $clcondataconf = new cl_condataconf;
+//    if (!$clcondataconf->verificaPeriodoContabil($datahomologacao)) {
+//      echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
+//      db_redireciona('lic1_homologacaoadjudica002.php');
+//    }
+//  }
+
+
+    /**
+     * Verificar Encerramento Periodo Patrimonial
+     */
+
+  if (!empty($l202_datahomologacao)) {
     $clcondataconf = new cl_condataconf;
-    if (!$clcondataconf->verificaPeriodoContabil($datahomologacao)) {
+    if (!$clcondataconf->verificaPeriodoPatrimonial($l202_datahomologacao)) {
       echo "<script>alert('{$clcondataconf->erro_msg}');</script>";
       db_redireciona('lic1_homologacaoadjudica002.php');
     }

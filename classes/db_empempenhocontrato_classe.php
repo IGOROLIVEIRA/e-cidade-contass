@@ -78,6 +78,68 @@ class cl_empempenhocontrato {
    }
    // funcao para inclusao
    function incluir ($e100_sequencial){
+
+       // Data do sistema
+       $dtDataUsu = date("Y-m-d", db_getsession('DB_datausu'));
+
+       // Data do fechamento contábil
+       function sql_query_file ( $c99_anousu=null,$c99_instit=null,$campos="*",$ordem=null,$dbwhere=""){
+           $sql = "select ";
+           if($campos != "*" ){
+               $campos_sql = split("#",$campos);
+               $virgula = "";
+               for($i=0;$i<sizeof($campos_sql);$i++){
+                   $sql .= $virgula.$campos_sql[$i];
+                   $virgula = ",";
+               }
+           }else{
+               $sql .= $campos;
+           }
+           $sql .= " from condataconf ";
+           $sql2 = "";
+           if($dbwhere==""){
+               if($c99_anousu!=null ){
+                   $sql2 .= " where condataconf.c99_anousu = $c99_anousu ";
+               }
+               if($c99_instit!=null ){
+                   if($sql2!=""){
+                       $sql2 .= " and ";
+                   }else{
+                       $sql2 .= " where ";
+                   }
+                   $sql2 .= " condataconf.c99_instit = $c99_instit ";
+               }
+           }else if($dbwhere != ""){
+               $sql2 = " where $dbwhere";
+           }
+           $sql .= $sql2;
+           if($ordem != null ){
+               $sql .= " order by ";
+               $campos_sql = split("#",$ordem);
+               $virgula = "";
+               for($i=0;$i<sizeof($campos_sql);$i++){
+                   $sql .= $virgula.$campos_sql[$i];
+                   $virgula = ",";
+               }
+           }
+           return $sql;
+       }
+
+       $result = db_query(sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit')));
+       $c99_data = db_utils::fieldsMemory($result, 0)->c99_data;
+
+       if(strtotime($dtDataUsu) <= strtotime($c99_data)){
+           $this->erro_msg  = "Não foi possível incluir os lançamentos do evento contabil.\n\n";
+           $this->erro_msg .= "Erro Técnico: ";
+           $this->erro_sql   = "Valores lançamentos (".pg_result(db_query('select max(c69_sequen)+1 from conlancamval'),0,0).") nao Incluído. Inclusao Abortada.";
+           $this->erro_msg   .= "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n "));
+           $this->erro_msg   .=  " ERRO: DATA INVÁLIDA. LIMITE: {$c99_data} \\n\\n";
+           $this->erro_status = "0";
+           return false;
+       }
+
+
       $this->atualizacampos();
      if($this->e100_numemp == null ){
        $this->erro_sql = " Campo Código do Empenho nao Informado.";

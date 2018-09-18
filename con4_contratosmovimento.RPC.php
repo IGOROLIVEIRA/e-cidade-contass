@@ -171,7 +171,7 @@ switch($oParam->exec) {
       	$oAssinatura->setObservacao($sObservacao);
         $oAcordo = new Acordo($oParam->acordo);
 
-        if (!$oAssinatura->verificaPeriodoContabil()) {
+        if (!$oAssinatura->verificaPeriodoPatrimonial()) {
           $lAcordoValido = false;
         }
 
@@ -252,7 +252,8 @@ switch($oParam->exec) {
         db_inicio_transacao();
 
         $oAssinatura = new AcordoAssinatura($oParam->codigo);
-        if (!$oAssinatura->verificaPeriodoContabil()) {
+
+        if (!$oAssinatura->verificaPeriodoPatrimonial()) {
           $lAcordoValido = false;
         }
         $oAssinatura->setDataMovimento();
@@ -281,7 +282,9 @@ switch($oParam->exec) {
         $oRetorno->codigo        = $oRecisao->getCodigo();
         $oRetorno->valorrescisao = $oAcordo->getValorRescisao();
         $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
+
         $oRetorno->datamovimento = date("Y-m-d",db_getsession("DB_datausu"));
+        $oRetorno->datamovimentoantiga = $oRecisao->getDataMovimento();
         $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
 
       } catch (Exception $eExeption){
@@ -312,7 +315,7 @@ switch($oParam->exec) {
         $oRecisao->setObservacao($sObservacao);
         $oRecisao->setValorRescisao($nValorRescisao);
 
-        if (!$oRecisao->verificaPeriodoContabil()) {
+        if (!$oRecisao->verificaPeriodoPatrimonial()) {
           $lAcordoValido = false;
         }
 
@@ -343,7 +346,8 @@ switch($oParam->exec) {
         db_inicio_transacao();
 
         $oRecisao = new AcordoRescisao($oParam->codigo);
-        if (!$oRecisao->verificaPeriodoContabil() || !$oRecisao->verificaPeriodoContabil($oParam->sData)) {
+
+        if (!$oRecisao->verificaPeriodoPatrimonial()) {
           $lAcordoValido = false;
         }
         $oRecisao->setDataMovimento();
@@ -371,7 +375,7 @@ switch($oParam->exec) {
         db_inicio_transacao();
 
         $oRecisao = new AcordoRescisao($oParam->codigo);
-        if (!$oRecisao->verificaPeriodoContabil() || !$oRecisao->verificaPeriodoContabil($oParam->sData)) {
+        if (!$oRecisao->verificaPeriodoPatrimonial()) {
           $lAcordoValido = false;
         }
         $oRecisao->setObservacao($sObservacao);

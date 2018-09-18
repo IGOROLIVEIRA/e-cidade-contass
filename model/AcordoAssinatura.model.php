@@ -179,6 +179,13 @@ class AcordoAssinatura extends AcordoMovimentacao {
     return $this;
   }
 
+    /**
+     * @return Boolean
+     */
+    public function verificaPeriodoPatrimonial($sData = null) {
+        return parent::verificaPeriodoPatrimonial($sData);
+    }
+
   /**
    * @return Boolean
    */

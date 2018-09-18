@@ -52,6 +52,52 @@ $clrotulo->label("ac16_resumoobjeto");
 $clrotulo->label("ac16_valorrescisao");
 $clrotulo->label("ac10_datamovimento");
 $clrotulo->label("ac10_obs");
+
+// funcao do sql
+function sql_query_file ( $c99_anousu=null,$c99_instit=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+        $campos_sql = split("#",$campos);
+        $virgula = "";
+        for($i=0;$i<sizeof($campos_sql);$i++){
+            $sql .= $virgula.$campos_sql[$i];
+            $virgula = ",";
+        }
+    }else{
+        $sql .= $campos;
+    }
+    $sql .= " from condataconf ";
+    $sql2 = "";
+    if($dbwhere==""){
+        if($c99_anousu!=null ){
+            $sql2 .= " where condataconf.c99_anousu = $c99_anousu ";
+        }
+        if($c99_instit!=null ){
+            if($sql2!=""){
+                $sql2 .= " and ";
+            }else{
+                $sql2 .= " where ";
+            }
+            $sql2 .= " condataconf.c99_instit = $c99_instit ";
+        }
+    }else if($dbwhere != ""){
+        $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+        $sql .= " order by ";
+        $campos_sql = split("#",$ordem);
+        $virgula = "";
+        for($i=0;$i<sizeof($campos_sql);$i++){
+            $sql .= $virgula.$campos_sql[$i];
+            $virgula = ",";
+        }
+    }
+    return $sql;
+}
+
+$result = db_query(sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit')));
+$c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 ?>
 <html>
 <head>
@@ -75,6 +121,7 @@ fieldset table td:first-child {
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_pesquisarRecisao();">
+<?='<input id="c99_datapat_hidden" type="hidden" value="'.$c99_datapat.'">'?>
 <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
   <tr>
     <td valign="top" align="center">
@@ -121,6 +168,16 @@ fieldset table td:first-child {
             </td>
             <td>&nbsp;</td>
           </tr>
+
+
+<!--  Data do movimento      -->
+        <?
+        db_inputdata('ac10_datamovimentoantiga',@$ac10_datamovimentoantiga_dia,
+            @$ac10_datamovimentoantiga_mes,
+            @$ac10_datamovimentoatiga_ano, true, 'hidden', $db_opcao, "");
+        ?>
+
+
           <tr>
             <td title="<?=@$Tac16_valorrescisao?>" align="left">
               <b>Valor Rescindido:</b>
@@ -241,9 +298,11 @@ function js_retornoGetDadosRecisao(oAjax) {
     $('ac10_sequencial').value     = oRetorno.codigo;
     $('ac16_sequencial').value     = oRetorno.acordo;
     $('ac10_datamovimento').value  = js_formatar(oRetorno.datamovimento,'d');
+    $('ac10_datamovimentoantiga').value  = js_formatar(oRetorno.datamovimentoantiga,'d');
     $('ac16_resumoobjeto').value   = oRetorno.descricao.urlDecode();
     $('ac16_valorrescisao').value  = js_formatar(oRetorno.valorrescisao,'f');
     $('ac10_obs').value            = "";
+
     return true;
   }
 
@@ -271,6 +330,26 @@ function js_cancelarRecisao() {
     alert('Código da recisão não informado! Verifique a pesquisa.');
     return false;
   }
+
+    /**
+     * Verificar Encerramento Periodo Patrimonial
+     */
+        //    DATA MOVIMENTO
+
+    var partesData = $('ac10_datamovimentoantiga').value.split("/");
+    var data = new Date(partesData[2], partesData[1]-1, partesData[0]);
+    var dataDoMovimento = data;
+
+    //    DATA DO SISTEMA
+    var partesData = $("c99_datapat_hidden").value.split("-");
+    var data = new Date(partesData[0], partesData[1]-1, partesData[2]);
+    var dataPatrimonial = data;
+
+    if(dataDoMovimento <= dataPatrimonial){
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        return;
+    }
+
 
   js_divCarregando('Aguarde cancelando recisão...','msgBoxCancelarRecisao');
 

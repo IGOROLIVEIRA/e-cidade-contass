@@ -110,6 +110,7 @@ if(isset($incluir) || isset($autori_importa)) {
 }
 
 if (isset($incluir)) {
+
   $sqlerro=false;
 
   if($sqlerro==false){
@@ -233,6 +234,7 @@ if (isset($incluir)) {
 
 
   db_fim_transacao($sqlerro);
+
 
 } else if (isset($autori_importa)) {
 

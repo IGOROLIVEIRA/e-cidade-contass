@@ -514,6 +514,8 @@ class EventoContabilLancamento {
     $oDaoValorLancamento->c69_anousu  = $iAnoUsu;
     $oDaoValorLancamento->incluir(null);
 
+    //die("Vitor Vitor Vitor $oDaoValorLancamento->c69_data");
+
     if ($oDaoValorLancamento->erro_status == 0) {
 
       $sErroMsg  = "Não foi possível incluir os lançamentos do evento contabil.\n\n";

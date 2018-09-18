@@ -83,17 +83,31 @@ if(isset($excluir)){
       }
     }
   }
-  /**
-   * Verificar Encerramento Periodo Contabil
+//  /**
+//   * Verificar Encerramento Periodo Contabil
+//   */
+//  $dtmanut = db_utils::fieldsMemory(db_query($clveicmanut->sql_query_file($ve62_codigo,"ve62_dtmanut")),0)->ve62_dtmanut;
+//  if (!empty($dtmanut)) {
+//    $clcondataconf = new cl_condataconf;
+//    if (!$clcondataconf->verificaPeriodoContabil($dtmanut)) {
+//      $sqlerro  = true;
+//      $erro_msg=$clcondataconf->erro_msg;
+//    }
+//  }
+
+    /**
+   * Verificar Encerramento Periodo Patrimonial
    */
   $dtmanut = db_utils::fieldsMemory(db_query($clveicmanut->sql_query_file($ve62_codigo,"ve62_dtmanut")),0)->ve62_dtmanut;
   if (!empty($dtmanut)) {
     $clcondataconf = new cl_condataconf;
-    if (!$clcondataconf->verificaPeriodoContabil($dtmanut)) {
+    if (!$clcondataconf->verificaPeriodoPatrimonial($dtmanut)) {
       $sqlerro  = true;
       $erro_msg=$clcondataconf->erro_msg;
     }
   }
+
+
   if ($sqlerro==false){
     $clveicmanut->excluir($ve62_codigo);
     if($clveicmanut->erro_status==0){

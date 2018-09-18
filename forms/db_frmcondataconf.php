@@ -35,13 +35,15 @@ $clrotulo->label("nomeinst");
 <table border="0">
   <tr>
     <td nowrap title="<?=@$Tc99_anousu?>">
+        <br>
        <?=@$Lc99_anousu?>
+        <?
+        $c99_anousu = db_getsession('DB_anousu');
+        db_input('c99_anousu',4,$Ic99_anousu,true,'text',3,"")
+        ?>
     </td>
-    <td> 
-<?
-$c99_anousu = db_getsession('DB_anousu');
-db_input('c99_anousu',4,$Ic99_anousu,true,'text',3,"")
-?>
+    <td>
+
     </td>
   </tr>
   <tr>
@@ -49,28 +51,69 @@ db_input('c99_anousu',4,$Ic99_anousu,true,'text',3,"")
        <?
        db_ancora(@$Lc99_instit,"js_pesquisac99_instit(true);",3);
        ?>
+
+       <?
+       $c99_instit = db_getsession('DB_instit');
+       db_input('c99_instit',2,$Ic99_instit,true,'text',3," onchange='js_pesquisac99_instit(false);'")
+       ?>
     </td>
-    <td> 
-<?
-$c99_instit = db_getsession('DB_instit');
-db_input('c99_instit',2,$Ic99_instit,true,'text',3," onchange='js_pesquisac99_instit(false);'")
-?>
+    <td>
+
     </td>
   </tr>
+
+    <!--    Label Encerramento do período contábil  -->
+    <tr>
+        <td nowrap title="<?=@$Tc99_encpercont?>">
+            <br>
+            <strong><?=@$Lc99_encpercont?></strong>
+        </td>
+    </tr>
+
+    <!--    Input encerramento do período contábil  -->
   <tr>
     <td nowrap title="<?=@$Tc99_data?>">
        <?=@$Lc99_data?>
+       <?
+       db_inputdata('c99_data',@$c99_data_dia,@$c99_data_mes,@$c99_data_ano,true,'text',$db_opcao,"")
+       ?>
+
+        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
     </td>
-    <td> 
-<?
-db_inputdata('c99_data',@$c99_data_dia,@$c99_data_mes,@$c99_data_ano,true,'text',$db_opcao,"")
-?>
+    <td>
+
+      <td style="padding-left:6px;"></td>
     </td>
   </tr>
+
+<!--    Label Encerramento do período patrimonial   -->
+    <tr>
+        <td nowrap title="<?=@$Tc99_encperpat?>">
+            <br>
+            <strong><?=@$Lc99_encperpat?></strong>
+        </td>
+    </tr>
+
+<!--    Input Encerramento do período patrimonial   -->
+    <tr>
+        <td nowrap title="<?=@$Tc99_data?>">
+            <?=@$Lc99_data?>
+            <?
+            db_inputdata('c99_datapat',@$c99_datapat_dia,@$c99_datapat_mes,@$c99_datapat_ano,true,'text',$db_opcao,"","","style='background-color:#E6E4F1'")
+            ?>
+            <input id="c99_alterar2" name="c99_alterar2" type="submit" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+        </td>
+        <td>
+
+        <td style="padding-left:6px;"></td>
+        </td>
+    </tr>
+
+
   </table>
   </center>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+
+<!--<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >-->
 </form>
 <script>
 function js_pesquisac99_instit(mostra){
@@ -106,5 +149,10 @@ function js_preenchepesquisa(chave,chave1){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&chavepesquisa1='+chave1";
   }
   ?>
+}
+function js_datapat(){
+    document.getElementById("c99_alterar2").setAttribute("name", 2);
+    alert(document.getElementById("c99_alterar2").getAttribute("name"));
+    document.form1.submit();
 }
 </script>
