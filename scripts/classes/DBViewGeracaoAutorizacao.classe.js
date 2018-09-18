@@ -103,10 +103,10 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
   me.oTipoLicitacao     = new DBComboBox('oCboTipoLicitacao', me.sInstancia + '.oTipoLicitacao', new Array(), 370);
 
   me.oProcessoAdm       = new DBTextField('oTxtProcessoAdm', me.sInstancia + '.oProcessoAdm', '', 50);
-  
+
   me.oCaractPeculiarCod  = new DBTextField('oTxtCaractPeculiarCod' , me.sInstancia + '.oCaractPeculiarCod' , '', 5);
   me.oCaractPeculiarDesc = new DBTextField('oTxtCaractPeculiarDesc', me.sInstancia + '.oCaractPeculiarDesc', '', 41);
-  
+
   me.oTipoCompra.onChange     = "; " + me.sInstancia + ".buscarTipoLicitacao(this.value);";
   me.oNumeroLicitacao.addEvent("onKeyPress", "return js_mask(event,\"0-9\")");
 
@@ -172,12 +172,12 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         sContentForm += "            <td id='td_condpagamento_"+me.sInstancia+"'>"+me.oCaractPeculiarCod.toInnerHtml()+"";
         sContentForm += "            "+me.oCaractPeculiarDesc.toInnerHtml()+"</td>";
         sContentForm += "          </tr>";
-        
+
         sContentForm += "          <tr>";
         sContentForm += "            <td nowrap='nowrap'><b>Processo Administrativo:</b></td>";
         sContentForm += "            <td id='td_processoadm_" + me.sInstancia + "'>" + me.oProcessoAdm.toInnerHtml() + "</td>";
-        sContentForm += "          </tr>";        
-        
+        sContentForm += "          </tr>";
+
         sContentForm += "          <tr>";
         sContentForm += "            <td colspan='2'>";
         sContentForm += "              <fieldset style='width:500px;'>";
@@ -259,10 +259,10 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
       var oParam                   = new Object();
       oParam.iCodigo           = me.getOrigem();
       oParam.exec                  = "getDados";
-      var oAjaxTipoCompra          = new Ajax.Request(me.sRPC, 
+      var oAjaxTipoCompra          = new Ajax.Request(me.sRPC,
                                                       {
-                                                        method: 'post', 
-                                                        parameters:'json='+Object.toJSON(oParam), 
+                                                        method: 'post',
+                                                        parameters:'json='+Object.toJSON(oParam),
                                                         onComplete:me.preencheCampos
                                                       }
                                                      );
@@ -272,7 +272,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
    * Preenche os campos da tela
    */
   this.preencheCampos = function(oAjax) {
-    
+
     var oRetorno = eval("("+oAjax.responseText+")");
 
     $('oTxtNumeroLicitacao').value=oRetorno.aDados[0].numerolicitacao;
@@ -290,10 +290,10 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         $('oCboTipoEmpenho').disabled   = true;
         //$('oTxtTipoCompra').disabled    = true;
     }
-    console.log($('oTxtNumeroLicitacao').value);
+    // console.log($('oTxtNumeroLicitacao').value);
 
   }
-  
+
   /**
    * retorna o processo cadastrado na solicitação
    */
@@ -313,7 +313,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                       }
                     );
   };
-  
+
   this.setProcessoAdministrativo = function(oAjaxRetorno) {
 
     js_removeObj("msgBox");
@@ -322,10 +322,10 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
       $('oTxtProcessoAdm').value =  oRetorno.pc90_numeroprocesso.urlDecode();
       me.oProcessoAdm.setValue(oRetorno.pc90_numeroprocesso.urlDecode());
     }
-  };  
-  
-  
-  
+  };
+
+
+
   /**
    * Funçao GetTipoCompraEmpenho
    * Busca os dados cadastrados pctipocompra para montar o combo box
@@ -399,7 +399,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
       });
 
       /**
-       * Busca os tipos de licitação para o tipo de compra escolhido 
+       * Busca os tipos de licitação para o tipo de compra escolhido
        */
       //me.buscarTipoLicitacao(me.oTipoCompra.getValue());
     }
@@ -520,7 +520,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
      */
     $('btnVisualizarAutorizacao').observe('click', function() {
       me.visualizarAutorizacao();
-    }); 
+    });
 
     $('btnEscolherLicitacao').observe('click', function() {
       me.setLocation();
@@ -585,7 +585,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
         var sNomeQuant = "oDbTextQuant"+oItem.codigodotacaoitem;
         var sNomeValor = "oDbTextValor"+oItem.codigodotacaoitem;
-        var aRow = new Array();
+        aRow = new Array();
         aRow[0]  = oItem.codigodotacaoitem;
         aRow[1]  = oItem.descricaomaterial.urlDecode().substr(0,10);
         aRow[2]  = oItem.codigosolicitacao;
@@ -602,7 +602,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         aRow[10]  = eval(sNomeQuant+" = new DBTextField('"+sNomeQuant+"', '"+sNomeQuant+"', '"+oItem.saldoquantidade+"', 3);");
         aRow[10].addEvent('onKeyPress', ';return '+me.sInstancia+'.validaValor(event);');
         aRow[10].addStyle('text-align', 'right');
-
+        aRow['cgccpf'] = oItem.cgcfornecedor.urlDecode();
+        // console.log(aRow['cgccpf']);
 
 
         /*
@@ -784,7 +785,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
 
   /**
-   * Busca o tipo de licitação para o tipo de compra escolhido 
+   * Busca o tipo de licitação para o tipo de compra escolhido
    * @param {integer} Código do tipo de compra
    */
   this.buscarTipoLicitacao = function(iTipoCompra) {
@@ -795,18 +796,18 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
       var oParamTipoCompra         = new Object();
       oParamTipoCompra.iTipoCompra = iTipoCompra;
       oParamTipoCompra.exec        = "getTipoLicitacao";
-      var oAjaxTipoCompra          = new Ajax.Request(me.sRPC, 
+      var oAjaxTipoCompra          = new Ajax.Request(me.sRPC,
                                                       {
-                                                        method: 'post', 
-                                                        parameters:'json='+Object.toJSON(oParamTipoCompra), 
+                                                        method: 'post',
+                                                        parameters:'json='+Object.toJSON(oParamTipoCompra),
                                                         onComplete:me.preencheTipoLicitacao
                                                       }
-                                                     ); 
+                                                     );
     }
   }
 
   /**
-   * Preenche os tipos de licitação encontrados 
+   * Preenche os tipos de licitação encontrados
    */
   this.preencheTipoLicitacao = function(oAjax) {
 
@@ -837,7 +838,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
   this.calcularSaldoItem = function(oCampo, iItem) {
 
     var nSaldoCampo = new Number(oCampo.value);
-    
+
     var nSaldoItem  = new Number(me.aItens[iItem].saldoquantidade);
 
 
@@ -983,9 +984,10 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
    *  Abre a janela para visualizar as autorizações de uma licitação
    */
   this.visualizarAutorizacao = function () {
-  
+
 
     var oItensSelecionados = me.oDataGridItens.getSelection('object');
+
     if (oItensSelecionados.length == 0 ) {
 
       alert("Selecione um item para continuar.");
@@ -1379,9 +1381,15 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
    */
   this.processarAutorizacoes = function () {
 
+    if(!js_checaCpfCnpj(aRow['cgccpf'])){
+      return false;
+    }
+
     if (!confirm("Confirma a geração das autorizações?")) {
       return false;
     }
+
+
     $('btnGerarAutorizacao').disabled    = true;
     $('btnCancelarAutorizacao').disabled = true;
     var oParamAutorizacao                = new Object();
@@ -1402,7 +1410,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
         oAutorizacao.condicaopagamento = encodeURIComponent(tagString(me.oCondicaoPagamento.getValue()));
         oAutorizacao.resumo            = encodeURIComponent(tagString($F('oTxtObservacoes')));
 
-        
+
         oAutorizacao.sTelefone         = me.oTelefone.getValue();
         oAutorizacao.sTipoLicitacao    = me.oTipoLicitacao.getValue();
         oAutorizacao.iNumeroLicitacao  = me.oNumeroLicitacao.getValue();
