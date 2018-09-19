@@ -484,7 +484,6 @@ class ProcessoCompras {
     $sCampos .= "pc23_quant as quantfornecedor,";
     $sCampos .= "z01_numcgm as codigofornecedor,";
     $sCampos .= "z01_nome as fornecedor,";
-    $sCampos .= "z01_cgccpf as cgcfornecedor,";
     $sCampos .= "m61_descr,";
     $sCampos .= "m61_usaquant,";
     $sCampos .= "pc10_numero as codigosolicitacao,";

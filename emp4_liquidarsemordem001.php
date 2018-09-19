@@ -110,7 +110,6 @@ $tela_estorno = false;
 <script language="JavaScript" type="text/javascript" src="scripts/notaliquidacao.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/verificaCpfCnpj.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
 </head>

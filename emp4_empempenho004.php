@@ -551,7 +551,7 @@ if(isset($incluir)) {
              * @author MarioJunior
              */
 
-            $sSql = "SELECT si09_tipoinstit AS tipoinstit
+            $sSql = "SELECT si09_tipoinstit AS tipoinstit 
               FROM infocomplementaresinstit
               WHERE si09_instit = " . db_getsession("DB_instit");
 
@@ -1161,6 +1161,7 @@ if(isset($incluir)) {
     $db_botao = true;
 }else if(isset($chavepesquisa)){
     $db_opcao = 1;
+
     $result = $clempautoriza->sql_record($clempautoriza->sql_query($chavepesquisa));
     db_fieldsmemory($result,0);
 
@@ -1225,7 +1226,6 @@ if(isset($incluir)) {
     <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/verificaCpfCnpj.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body style="background-color:#CCCCCC; margin-top:30px;" >

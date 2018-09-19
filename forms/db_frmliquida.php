@@ -271,13 +271,10 @@ function js_consultaEmpenho(iEmpenho,operacao){
   * Preenche o formulário com os dados do empenho
   */
 function js_saida(oAjax){
+
    js_removeObj("msgBox");
     var iNumEmpOld = $F('e60_numemp');
     obj  = eval("("+oAjax.responseText+")");
-
-    cpf = js_decodeUrl(obj.z01_cgccpf);
-    js_checaCpfCnpj(cpf);
-
     $('e60_codemp').value = obj.e60_codemp;
     $('e60_numemp').value = obj.e60_numemp;
     $('e60_numcgm').value = js_decodeUrl(obj.e60_numcgm);
@@ -420,12 +417,6 @@ function js_marcaLinha(obj){
 
 function js_liquidar(metodo){
 
-   valorCpf = js_checaCpfCnpj(cpf);
-
-   if(!valorCpf){
-      return;
-   }
-
    itens = js_getElementbyClass(form1,'chkmarca');
    notas = '';
    sV    = '';
@@ -537,7 +528,7 @@ function js_mostracgm(erro,chave){
     document.form1.e49_numcgm.value = '';
   }
 }
-function js_mostracgm1(chave1,chave2,chave3){
+function js_mostracgm1(chave1,chave2){
   document.form1.e49_numcgm.value = chave1;
   document.form1.z01_credor.value = chave2;
   db_iframe_cgm.hide();

@@ -191,7 +191,6 @@ if (count($aParametrosEmpenho) > 0) {
                           <?
                           db_input('z01_numcgm',10,$Iz01_numcgm,true,'text',$db_opcao," onchange='js_pesquisaz01_numcgm(false);'");
                           db_input('z01_nome',40,$Iz01_nome,true,'text',3,'');
-                          db_input('z01_cgccpf',15,$Iz01_cgccpf,true,'hidden',3,'');
                           ?>
                         </td>
                       </tr>
@@ -447,11 +446,9 @@ if (count($aParametrosEmpenho) > 0) {
             <input name="pesquisar" id='pesquisar' type="button"  value="Pesquisar" onclick='js_pesquisarOrdens();' />
             <input name="atualizar" id='atualizar' type="button"  value="Atualizar" onclick='js_configurar()' />
             <input name="emitecheque" id='emitecheque' type="button"
-                       value='Emitir Cheque' onclick="js_analisaEmissao('emp4_empageformache001.php')" />
-<!--                   value='Emitir Cheque' onclick='location.href="emp4_empageformache001.php"' />-->
+                   value='Emitir Cheque' onclick='location.href="emp4_empageformache001.php"' />
             <input name="emitetxt" id='emitetxt' type="button"
-                       value='Emitir Arquivo Texto' onclick="js_analisaEmissao('emp4_empageconfgera001.php')" />
-<!--                   value='Emitir Arquivo Texto' onclick='location.href="emp4_empageconfgera001.php"' />-->
+                   value='Emitir Arquivo Texto' onclick='location.href="emp4_empageconfgera001.php"' />
             <input name='agruparmovimentos' id='agruparmovimentos' value='Agrupar Movimentos' type='button' />
             <input name='relatorioagenda' id='relatorioagenda' value='Relatório' type='button'
                    onclick="js_visualizarRelatorio()" />
@@ -636,7 +633,7 @@ if (count($aParametrosEmpenho) > 0) {
     if(mostra==true){
       js_OpenJanelaIframe('',
         'func_nome',
-        'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_cgccpf',
+        'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',
         'Pesquisar CGM',
         true,
         22,
@@ -669,26 +666,13 @@ if (count($aParametrosEmpenho) > 0) {
     }
   }
 
-  function js_mostracgm1(chave1,chave2,chave3){
+  function js_mostracgm1(chave1,chave2){
 
-    if(chave3==null){
-      alert('O CGM selecionado não possui CPF/CNPJ, corrija o cadastro e em seguida tente novamente.');
-      limpaCampos();
-      return;
-    }
     document.form1.z01_numcgm.value = chave1;
     document.form1.z01_nome.value   = chave2;
-    document.form1.z01_cgccpf.value = chave3;
     func_nome.hide();
 
   }
-
-  function limpaCampos(){
-    $('e54_numcgm').value = '';
-    $('z01_nome').value = '';
-    $('z01_cgccpf').value =  '';
-  }
-
   function js_pesquisae42_sequencial(mostra){
     if(mostra==true){
       js_OpenJanelaIframe('',
@@ -1172,7 +1156,7 @@ if (count($aParametrosEmpenho) > 0) {
 
     var sComboInputHidden  = "<input type='hidden' id='tipoconta"+iCodMov+"' ";
     var sComboInputText = "<input type='text' id='ctapag"+iCodMov+"' class='ctapag' onfocus='this.select();mostrarPesquisa("+iCodMov+")' onkeyup='pesquisaConta("+iCodMov+",event)' onkeydown='pesquisaConta("+iCodMov+",event)' onclick='this.select();' onblur='fecharPesquisa("+iCodMov+");js_getSaldos("+iCodMov+")' placeholder='Selecione' title='' "+sDisabled;
-
+    
     var sComboUL = "<ul id='pesquisaConta"+iCodMov+"' class='pesquisaConta'>";
     if (aContas != null) {
 
@@ -1188,7 +1172,7 @@ if (count($aParametrosEmpenho) > 0) {
     sComboUL += "</ul>";
     sComboInputHidden += " /> ";
     sComboInputText += " /> ";
-
+    
     return sComboInputHidden+sComboInputText+sComboUL;
   }
 
@@ -1352,11 +1336,8 @@ if (count($aParametrosEmpenho) > 0) {
   }
 
   function js_configurar() {
-      if(!js_checaCpfCnpj(document.form1.z01_cgccpf.value)){
-          return false;
-      }
 
-      var aMovimentos = gridNotas.getSelection();
+    var aMovimentos = gridNotas.getSelection();
     /*
      * Validamos o movimento configurado, conforme a forma de pagamento escolhido.
      * - cheque, é obrigatorio ter informado a conta pagadora, e o valor;
@@ -2051,7 +2032,7 @@ if (count($aParametrosEmpenho) > 0) {
     filter = input.value.toUpperCase();
     ul = document.getElementById("pesquisaConta"+conta);
     li = ul.getElementsByTagName("li");
-
+  
     for (i = 0; i < li.length; i++) {
       descricao = li[i].getElementsByTagName("span")[0];
       if (descricao.innerHTML.toUpperCase().indexOf(filter) > -1) {
@@ -2070,7 +2051,7 @@ if (count($aParametrosEmpenho) > 0) {
         }
       }
     }
-
+    
   }
 
   function mostrarPesquisa(conta) {
@@ -2078,7 +2059,7 @@ if (count($aParametrosEmpenho) > 0) {
   }
 
   function fecharPesquisa(conta) {
-    setTimeout(function(){
+    setTimeout(function(){ 
       document.getElementById("pesquisaConta"+conta).style.display = "none";
     }, 100);
   }
@@ -2086,15 +2067,5 @@ if (count($aParametrosEmpenho) > 0) {
   function selecionarConta(elemento,conta) {
     document.getElementById("tipoconta"+conta).value = elemento.getElementsByTagName("div")[0].textContent;
     document.getElementById("ctapag"+conta).value = elemento.getElementsByTagName("span")[0].textContent;
-  }
-
-  function js_analisaEmissao(arquivo){
-      cpf = document.form1.z01_cgccpf.value;
-      if(cpf != null){
-          if(!js_checaCpfCnpj(cpf)){
-              return;
-          }else location.href= arquivo;
-      }
-
   }
 </script>

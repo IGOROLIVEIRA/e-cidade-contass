@@ -29,7 +29,6 @@
 $clempautoriza->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
-$clrotulo->label("z01_cgccpf");
 $clrotulo->label("nome");
 $clrotulo->label("e44_tipo");
 $clrotulo->label("pc50_descr");
@@ -161,11 +160,10 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         <?= $Le54_numcgm ?>
                     </td>
                     <td>
-                      <?
+                        <?
                         db_input('e54_numcgm', 10, $Ie54_numcgm, true, 'text', 3);
                         db_input('z01_nome', 40, $Iz01_nome, true, 'text', 3, '');
-                        db_input('z01_cgccpf', 40, $Iz01_cgccpf, true, 'hidden', 3, '');
-                      ?>
+                        ?>
                     </td>
                 </tr>
                 <tr>
@@ -541,7 +539,6 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 </style>
 
 <script>
-    cpf = document.form1.z01_cgccpf.value;
 
 /*===========================================
     =            pesquisa 54_gestaut            =
@@ -627,9 +624,6 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         db_iframe_concarpeculiar.hide();
     }
     function js_naoimprimir() {
-        if(!js_checaCpfCnpj(cpf)){
-          return false;
-        }
         if (!js_valida()) {
             return false;
         }
@@ -659,27 +653,18 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             }
         }
     }
-
-    function js_mostracgm(erro, chave, chave1) {
-      document.form1.z01_nome.value = chave;
-      if (erro == true) {
-          document.form1.e54_numcgm.focus();
-          document.form1.e54_numcgm.value = '';
-      }
+    function js_mostracgm(erro, chave) {
+        document.form1.z01_nome.value = chave;
+        if (erro == true) {
+            document.form1.e54_numcgm.focus();
+            document.form1.e54_numcgm.value = '';
+        }
     }
-
-    function js_mostracgm1(chave1, chave2, chave3) {
-      document.form1.e54_numcgm.value = chave1;
-      document.form1.z01_nome.value = chave2;
-      db_iframe_cgm.hide();
+    function js_mostracgm1(chave1, chave2) {
+        document.form1.e54_numcgm.value = chave1;
+        document.form1.z01_nome.value = chave2;
+        db_iframe_cgm.hide();
     }
-
-    function limpaCampos(){
-      document.form1.pc21_numcgm.value = '';
-      document.form1.z01_nome.value = '';
-      document.form1.z01_cgccpf.value = '';
-    }
-
     function js_pesquisae54_login(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('top.corpo.iframe_empempenho', 'db_iframe_db_usuarios', 'func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome', 'Pesquisa', true);
@@ -704,18 +689,18 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         db_iframe_db_usuarios.hide();
     }
     function js_pesquisa() {
+
+        //alert(666);
         js_OpenJanelaIframe('top.corpo.iframe_empempenho', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_preenchepesquisa|e54_autori|e55_codele', 'Pesquisa', true, 0);
     }
     function js_preenchepesquisa(chave, chave2) {
+        // alert(chave2);
         db_iframe_orcreservaaut.hide();
         <?
         echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&iElemento='+chave2";
         ?>
     }
     function js_valida() {
-        if(!js_checaCpfCnpj(cpf)){
-          return false;
-        }
         options = document.form1.op;
         sValor = '';
         for (var i = 0; i < options.length; i++) {

@@ -48,7 +48,7 @@ $oGet = db_utils::postMemory($_GET);
   <link href="estilos.css" rel="stylesheet" type="text/css">
   <?php 
     db_app::load("scripts.js, strings.js, estilos.css, prototype.js, datagrid.widget.js, grid.style.css");
-    db_app::load("classes/DBViewSlipPagamento.classe.js, widgets/dbtextField.widget.js, widgets/dbcomboBox.widget.js, verificaCpfCnpj.js");
+    db_app::load("classes/DBViewSlipPagamento.classe.js, widgets/dbtextField.widget.js, widgets/dbcomboBox.widget.js");
   ?>
 </head>
 <body style="background-color: #cccccc; margin-top: 25px;">

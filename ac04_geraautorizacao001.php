@@ -130,7 +130,7 @@ if($x->consultarDataDoSistema == true){
 <meta http-equiv="Expires" CONTENT="0">
 <?
 db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
-db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, verificaCpfCnpj.js");
+db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js");
 db_app::load("estilos.css, grid.style.css");
 ?>
 </head>
@@ -397,7 +397,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
 
-    var sUrl = 'func_acordo.php?lDepartamento=1&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|z01_cgccpf&iTipoFiltro=4&lGeraAutorizacao=true';
+    var sUrl = 'func_acordo.php?lDepartamento=1&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4&lGeraAutorizacao=true';
     js_OpenJanelaIframe('top.corpo',
                         'db_iframe_acordo',
                         sUrl,
@@ -424,7 +424,7 @@ function js_pesquisaac16_sequencial(lMostrar) {
 /**
  * Retorno da pesquisa acordos
  */
-function js_mostraacordo(chave1,chave2,erro, chave3) {
+function js_mostraacordo(chave1,chave2,erro) {
 
   if (erro == true) {
 
@@ -435,19 +435,17 @@ function js_mostraacordo(chave1,chave2,erro, chave3) {
 
     oTxtCodigoAcordo.setValue(chave1);
     oTxtDescricaoAcordo.setValue(chave2);
-    cpfCnpj = chave3;
   }
 }
 
 /**
  * Retorno da pesquisa acordos
  */
-function js_mostraacordo1(chave1,chave2,chave3) {
+function js_mostraacordo1(chave1,chave2) {
 
   oTxtCodigoAcordo.setValue(chave1);
   oTxtDescricaoAcordo.setValue(chave2);
   db_iframe_acordo.hide();
-  cpfCnpj = chave3;
 }
 
 function js_main() {
@@ -819,8 +817,8 @@ function js_arrangeDotAndComma(value){
 }
 
 function js_verificaValorTotal(nValueAut, iSeq) {
-    // console.log("js_verificaValorTotal //////////////////////////////////////////////////////////////////////");
-    // console.log("nValueAut::::"+nValueAut);
+    console.log("js_verificaValorTotal //////////////////////////////////////////////////////////////////////");
+    console.log("nValueAut::::"+nValueAut);
 
     var aLinha = oGridItens.aRows[iSeq];
 
@@ -1257,10 +1255,6 @@ function js_visualizarAutorizacoes(oAjax) {
 }
 
 function js_consultarDataDoSistema(lProcessar){
-
-    if(!js_checaCpfCnpj(cpfCnpj)){
-        return;
-    }
 
     var oParam = new Object();
     oParam.consultarDataDoSistema = true;

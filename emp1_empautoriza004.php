@@ -69,7 +69,7 @@ $clempparametro                   = new cl_empparametro;
 $clpcparam 	                      = new cl_pcparam;
 $clconcarpeculiar                 = new cl_concarpeculiar;
 $oDaoEmpenhoProcessoAdminitrativo = new cl_empautorizaprocesso;
-$oPost = db_utils::postMemory($_POST);
+
 
 $db_opcao    = 1;
 $db_botao    = true;
@@ -83,27 +83,11 @@ if ($clempparametro->numrows > 0) {
     $sUrlEmpenho = "emp4_empempenho001.php";
   }
 }
+if(isset($incluir) || isset($autori_importa)) {
 
-$cpfCnpj = $oPost->z01_cgccpf;
-$passCpf = false;
-if(isset($incluir)){
-    if($cpfCnpj == '00000000000'){
-        $sigla = 'CPF';
-    }else if($cpfCnpj == '00000000000000'){
-        $sigla = 'CNPJ';
-    }else if($cpfCnpj == null){
-        $sigla = 'CPF/CNPJ';
-    }else $passCpf = true;
-
-    if(!$passCpf){
-        echo "<script>alert('O CGM selecionado não possui ".$sigla.", corrija o cadastro e em seguida tente novamente.')</script>";
-    }
-}
-
-if((isset($incluir) || isset($autori_importa) && $passCpf)) {
-    if(isset($autori_importa)){
-	    $result = $clempautoriza->sql_record( $clempautoriza->sql_query_processo($autori_importa) );
-        db_fieldsmemory($result,0);
+	if(isset($autori_importa)){
+	  $result = $clempautoriza->sql_record( $clempautoriza->sql_query_processo($autori_importa) );
+    db_fieldsmemory($result,0);
 	}
 
   try {
@@ -125,7 +109,7 @@ if((isset($incluir) || isset($autori_importa) && $passCpf)) {
   }
 }
 
-if (isset($incluir) && $passCpf) {
+if (isset($incluir)) {
 
   $sqlerro=false;
 
@@ -168,7 +152,7 @@ if (isset($incluir) && $passCpf) {
 
   db_inicio_transacao();
 
-  if(!$sqlerro) {
+  if (!$sqlerro) {
 
     $clempautoriza->e54_autori  = $e54_autori;
     $clempautoriza->e54_numcgm  = $e54_numcgm;
@@ -253,11 +237,12 @@ if (isset($incluir) && $passCpf) {
 
 
 } else if (isset($autori_importa)) {
-  $sqlerro=false;
+
+	$sqlerro=false;
   db_inicio_transacao();
 
   if ($sqlerro == false) {
-      //verifica inclui os registros do empautoriza
+	  //verifica inclui os registros do empautoriza
 	  $result = $clempautoriza->sql_record($clempautoriza->sql_query_file($autori_importa));
 	  db_fieldsmemory($result,0);
 
@@ -270,7 +255,7 @@ if (isset($incluir) && $passCpf) {
 	  $clempautoriza->e54_codcom = $e54_codcom;
 	  $clempautoriza->e54_destin = $e54_destin;
 	  $clempautoriza->e54_tipol  = $e54_tipol ;
-      $clempautoriza->e54_numerl = $e54_numerl;
+    $clempautoriza->e54_numerl = $e54_numerl;
 	  $clempautoriza->e54_emiss  = date("Y-m-d",db_getsession("DB_datausu"));
 	  //db_msgbox(date("Y-m-d",db_getsession("DB_datausu")));
 	  $clempautoriza->e54_codtipo = $e54_codtipo;
@@ -440,8 +425,7 @@ if (isset($incluir) && $passCpf) {
                 widgets/dbtextFieldData.widget.js,
                 DBFormCache.js,
                 estilos.css,
-                grid.style.css,
-                verificaCpfCnpj.js
+                grid.style.css
   ");
 ?>
 </head>
@@ -457,8 +441,7 @@ if (isset($incluir) && $passCpf) {
 </body>
 </html>
 <?
-
-if(isset($incluir) || isset($autori_importa)) {
+if(isset($incluir) || isset($autori_importa) ) {
   if($sqlerro==true){
     db_msgbox($erro_msg);
     $db_botao=true;
@@ -466,19 +449,14 @@ if(isset($incluir) || isset($autori_importa)) {
       echo "<script> document.form1.".$clempautoriza->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clempautoriza->erro_campo.".focus();</script>";
     }
-  }else {
-      //db_msgbox($ok_msg);
-//      var_dump($passCpf);die();
-      if($passCpf) {
-          echo "
+  }else{
+    //db_msgbox($ok_msg);
+    echo "
            <script>
                 parent.mo_camada('empautitem');
-    	   </script>
-            ";
-
-          db_redireciona("emp1_empautoriza005.php?chavepesquisa=$e54_autori");
-      }
-
+	   </script>
+         ";
+    db_redireciona("emp1_empautoriza005.php?chavepesquisa=$e54_autori");
   }
 }
 ?>
