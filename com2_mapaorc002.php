@@ -178,11 +178,11 @@ if ($modelo == 1) {
 
   if ($sOrigem == "solicitacao") {
     $sSqlMater = $clpcorcamitem->sql_query_pcmatersol(null,
-        "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum",
+        "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum,pc80_criterioadjudicacao",
         "pc11_seq", "pc22_codorc=$orcamento");
   } else if ($sOrigem == "processo") {
     $sSqlMater = $clpcorcamitem->sql_query_pcmaterproc(null,
-        "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum",
+        "distinct pc11_seq,pc22_orcamitem,pc01_descrmater,pc11_resum,pc80_criterioadjudicacao",
         "pc11_seq", "pc22_codorc=$orcamento");
   }
 
@@ -191,8 +191,10 @@ if ($modelo == 1) {
 
   $pdf->addpage('L');
   $total_media = 0;
+  $condCriterioadj = "";
   for($x = 0; $x < $numrows_itens; $x ++) {
 
+    $condCriterioadj = (empty($pc80_criterioadjudicacao) || $pc80_criterioadjudicacao == 3) ? " and pc23_valor <> 0 " : "";
     $troca = 1;
     db_fieldsmemory($result_itens, $x);
     if ($pdf->gety() > $pdf->h - 60 || $troca != 0) {
@@ -201,21 +203,21 @@ if ($modelo == 1) {
       }
       $pdf->setfont('arial', 'b', 9);
       $pdf->cell(15, $alt, "Item", 1, 0, "C", 1);
-      $pdf->cell(60, $alt, "Material", 1, 0, "C", 1);
-      $pdf->cell(164, $alt, "Obs/Marca", 1, 0, "C", 1);
+      $pdf->cell(159, $alt, "Material", 1, 0, "C", 1);
+      $pdf->cell(65, $alt, "Obs/Marca", 1, 0, "C", 1);
       $pdf->cell(20, $alt, "Vl. Unitário", 1, 0, "C", 1);
       $pdf->cell(20, $alt, "Quantidade", 1, 1, "C", 1);
       $p = 0;
       $troca = 0;
     }
     $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as vlrunit,pc23_quant as quant,pc24_pontuacao,pc23_obs", null,
-        "pc23_orcamitem=$pc22_orcamitem and pc24_pontuacao=1");
+        "pc23_orcamitem=$pc22_orcamitem {$condCriterioadj}");
     $result_valor_item = $clpcorcamval->sql_record($sSqlJulg);
     db_fieldsmemory($result_valor_item);
     $pdf->setfont('arial', '', 8);
     $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
-    $pdf->cell(60, $alt,substr($pc01_descrmater,0,190), 1, 0, "L", 0);
-    $pdf->cell(164, $alt,substr($pc23_obs,0,30), 1, 0, "L", 0);
+    $pdf->cell(159, $alt,substr($pc01_descrmater,0,190), 1, 0, "L", 0);
+    $pdf->cell(65, $alt,substr($pc23_obs,0,30), 1, 0, "L", 0);
     $pdf->cell(20, $alt, number_format($vlrunit,$oGet->quant_casas,',','.'), 1, 0, "R", 0);
     $pdf->cell(20, $alt, $quant, 1, 1, "R", 0);
     $pdf->cell(279,$alt/2,'','',1,"L",0);
@@ -240,7 +242,7 @@ if ($modelo == 1) {
       }
 
       $sSqlJulg = $clpcorcamval->sql_query_julg(null, null, "pc23_vlrun as pc23_vlrun,pc23_quant,pc23_valor,pc23_perctaxadesctabela,pc23_percentualdesconto,pc24_pontuacao", null,
-          "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem");
+          "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem {$condCriterioadj}");
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
       if(pg_num_rows($result_valor) == 0){
         continue;
