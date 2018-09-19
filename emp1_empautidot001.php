@@ -39,6 +39,7 @@ include("classes/db_orcreservaaut_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_empautitem_classe.php");
 include("classes/db_condataconf_classe.php");
+
 $clempautitem = new cl_empautitem;
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -56,7 +57,6 @@ $clorcreservaaut = new cl_orcreservaaut;
 $clcondataconf = new cl_condataconf;
 $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_data'));
 db_fieldsmemory($resultControle,0);
-
 $dtSistema = date("Y-m-d", db_getsession("DB_datausu"));
 
 if(empty($db_opcao) and $dtSistema > $c99_data  ){
@@ -244,6 +244,7 @@ if(isset($confirmar)){
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
