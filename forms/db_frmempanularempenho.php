@@ -677,7 +677,7 @@ if (empty ($e60_numemp)) {
         lRecriarReserva = false;
       }
 
-      var sJson  = '{"method":"anularEmpenhoParcial","iEmpenho":"'+$F('e60_numemp')+'","itensAnulados":['+itensEmp+'],"nValor":"'+valorTotal+'",';
+      var sJson  = '{"method":"anularEmpenho","iEmpenho":"'+$F('e60_numemp')+'","itensAnulados":['+itensEmp+'],"nValor":"'+valorTotal+'",';
       sJson     += '"aSolicitacoes":['+sSolicAtend+'],"lRecriarReserva":'+lRecriarReserva+',"sMotivo":"'+encodeURIComponent($F('motivo'))+'",';
       sJson     += '"iTipoAnulacao":'+$F('e94_empanuladotipo')+'}';
       if (itensEmp != ''){
