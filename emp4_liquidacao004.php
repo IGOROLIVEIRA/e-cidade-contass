@@ -468,27 +468,6 @@ switch ($objJson->method) {
     echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
     break;
 
-    case "anularEmpenhoParcial":
-
-    $objEmpenho->setRecriarSaldo($objJson->lRecriarReserva);
-    $objEmpenho->anularAutorizacaoParcial($objJson->itensAnulados,
-      $objJson->nValor,
-      $objJson->sMotivo,
-      $objJson->aSolicitacoes,
-      $objJson->iTipoAnulacao);
-    if ($objEmpenho->lSqlErro) {
-
-      $nMensagem = urlencode($objEmpenho->sErroMsg);
-      $iStatus = 2;
-
-    }else{
-      $nMensagem = '';
-      $iStatus = 1;
-    }
-
-    echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
-    break;
-
     case "getDadosRP":
 
     if ($objEmpenho->getDadosRP($objJson->iTipoRP)) {
