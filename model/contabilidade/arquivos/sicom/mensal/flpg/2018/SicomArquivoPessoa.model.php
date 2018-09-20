@@ -171,8 +171,8 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
    AND z01_cadast <= '{$this->sDataFinal}'
    AND (rh01_admiss <= '{$this->sDataFinal}' OR z01_ultalt between '{$this->sDataInicial}' and '{$this->sDataFinal}' )
 
-   AND rh01_instit = " . db_getsession("DB_instit") . ")
-   AND   rh01_sicom = 1
+   AND rh01_instit = " . db_getsession("DB_instit") . " AND   rh01_sicom = 1)
+   
 UNION
 SELECT DISTINCT CASE
                    WHEN length(z01_cgccpf) < 11 THEN lpad(z01_cgccpf, 11, '0')
