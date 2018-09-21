@@ -34,11 +34,13 @@ include("classes/db_issnotaavulsaservico_classe.php");
 include("classes/db_issnotaavulsa_classe.php");
 include("classes/db_issnotaavulsatomador_classe.php");
 include("classes/db_parissqnviasnotaavulsavias_classe.php");
+include("classes/db_issnotaavulsacanc_classe.php");
 
 $clissnotaavulsaservico       = new cl_issnotaavulsaservico();
 $clissnotaavulsa              = new cl_issnotaavulsa();
 $clissnotaavulsatomador       = new cl_issnotaavulsatomador();
 $clparissqnviasnotaavulsavias = new cl_parissqnviasnotaavulsavias();
+$clissnotaavulsacanc = new cl_issnotaavulsacanc();
 
 $sqlpref = "select * from db_config where codigo = ".db_getsession("DB_instit");
 $resultpref = pg_exec($sqlpref);
@@ -69,6 +71,8 @@ $rsServico = $clissnotaavulsaservico->sql_record($clissnotaavulsaservico->sql_qu
 $pdf1->qteServicos = $clissnotaavulsaservico->numrows;
 $pdf1->rsServico   = $rsServico;
 $pdf1->dadosTomador = db_utils::fieldsMemory($rsTom,0);
+$rsNotaCancelada = $clissnotaavulsacanc->sql_record($clissnotaavulsacanc->sql_query(null,"q63_sequencial",null,"q63_issnotaavulsa = ".$get->q51_sequencial));
+$pdf1->notaCancelada = empty(db_utils::fieldsMemory($rsNotaCancelada,0)->q63_sequencial) ? false : true;
 //dados de config
 $pdf1->imprime();
 $pdf1->objpdf->Output();

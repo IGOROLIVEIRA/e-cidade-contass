@@ -32,7 +32,10 @@ for ($j = 0;$j < $confNumRows;$j++){
     $this->objpdf->text(40, $xlin -5, $this->telefpref);
     $this->objpdf->text(40, $xlin -2, $this->emailpref);
     $this->objpdf->text(40, $xlin +1, db_formatar($this->cgcpref, 'cnpj'));
-
+    if($this->notaCancelada) {
+        $this->setWaterMark(40, 180, "Cancelada", 45, 130);
+        $this->printWaterMark();
+    }
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->text(40,$xlin+5,"NOTA FISCAL DE SERVICOS AVULSA");
     $this->objpdf->text(160,$xlin+5,"Nº ".$this->dadosPrestador->q51_numnota);
