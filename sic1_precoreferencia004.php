@@ -18,6 +18,10 @@ join pcmater on pc16_codmater = pc01_codmater
 join itemprecoreferencia on pc23_orcamitem = si02_itemproccompra
 where pc80_codproc = $codigo_preco order by pc11_seq";*/
 
+$rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
+$criterio    = db_utils::fieldsMemory($rsResultado,0)->pc80_criterioadjudicacao;
+$sCondCrit   = ($criterio == 3) ? " AND pc23_valor <> 0 " : "";
+
 $sSql = "select * from (SELECT
                 pc01_codmater,
                 pc01_descrmater||'. '||pc01_complmater as pc01_descrmater,
@@ -52,7 +56,7 @@ LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
 LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
 LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-WHERE pc81_codproc = $codigo_preco
+WHERE pc81_codproc = {$codigo_preco}
   AND pc10_instit = " . db_getsession("DB_instit") . "
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
@@ -60,7 +64,7 @@ ORDER BY pc11_seq) as x GROUP BY
                 pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
-                (sum(pc23_vlrun)/count(pc01_codmater)) as si02_vlprecoreferencia,
+                (sum(pc23_vlrun)/count(pc23_orcamforne)) as si02_vlprecoreferencia,
                 pc01_codmater,
                 si01_datacotacao
 FROM pcproc
@@ -68,12 +72,13 @@ JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
 JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
 JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
 JOIN solicitem ON pc81_solicitem = pc11_codigo
 JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = $codigo_preco
+WHERE pc80_codproc = {$codigo_preco} {$sCondCrit}
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
 ;
 //print_r($sSql);die();
