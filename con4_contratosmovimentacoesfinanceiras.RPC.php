@@ -398,7 +398,7 @@ switch($oParam->exec) {
 
      db_inicio_transacao();
      foreach ($oParam->aAutorizacoes as $iAutorizacao) {
-       $oContrato->anularAutorizacao($iAutorizacao);
+       $oContrato->anularAutorizacao2($iAutorizacao);
      }
      db_fim_transacao(false);
    } catch (Exception $eErro) {
