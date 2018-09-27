@@ -20,7 +20,7 @@ where pc80_codproc = $codigo_preco order by pc11_seq";*/
 
 $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
 $criterio    = db_utils::fieldsMemory($rsResultado,0)->pc80_criterioadjudicacao;
-$sCondCrit   = ($criterio == 3) ? " AND pc23_valor <> 0 " : "";
+$sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : "";
 
 $sSql = "select * from (SELECT
                 pc01_codmater,
