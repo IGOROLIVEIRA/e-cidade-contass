@@ -209,7 +209,7 @@ $clempretencao	  = new cl_empretencao;
 
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
-db_postmemory($HTTP_POST_VARS);
+//db_postmemory($HTTP_POST_VARS);
 
 if (isset($e54_concarpeculiar) && trim(@$e54_concarpeculiar) != ""){
     $concarpeculiar       = $e54_concarpeculiar;
@@ -571,7 +571,7 @@ if(isset($incluir)) {
                 }
             }
 
-            $sqlElemento = "select o56_elemento from orcelemento where o56_codele ={$e56_codele} and o56_anousu =".db_getsession("DB_anousu");
+            $sqlElemento = "select o56_elemento from orcelemento where o56_codele ={$iElemento} and o56_anousu =".db_getsession("DB_anousu");
             $rsResultEle = db_query($sqlElemento);
             db_fieldsmemory($rsResultEle, 0);
 
@@ -722,7 +722,7 @@ if(isset($incluir)) {
                 $clempempitem->e62_servicoquantidade = $e55_servicoquantidade == "f" ? "false" : "true";
                 $e55_descr                           = AddSlashes($e55_descr);
                 $clempempitem->e62_descr             = $e55_descr;
-                $clempempitem->e62_codele            = $e56_codele;
+                $clempempitem->e62_codele            = $iElemento;
                 $clempempitem->incluir($e60_numemp, $e55_sequen);
                 $erro_msg = $clempempitem->erro_msg;
 
@@ -776,12 +776,12 @@ if(isset($incluir)) {
         $clempelemento->e64_numemp = $e60_numemp;
         for ($i = 0; $i < $numrows; $i++) {
             db_fieldsmemory($result, $i);
-            $clempelemento->e64_codele = $e56_codele;
+            $clempelemento->e64_codele = $iElemento;
             $clempelemento->e64_vlremp = number_format($e55_vltot, "2", '.', "");      //valor dos itens
             $clempelemento->e64_vlrliq = '0';
             $clempelemento->e64_vlrpag = '0';
             $clempelemento->e64_vlranu = '0';
-            $clempelemento->incluir($e60_numemp, $e56_codele);
+            $clempelemento->incluir($e60_numemp, $iElemento);
             $erro_msg = $clempelemento->erro_msg;
             if ($clempelemento->erro_status == 0) {
                 $sqlerro = true;
@@ -959,7 +959,7 @@ if(isset($incluir)) {
                 $oEventoContabil     = new EventoContabil($c71_coddoc, $anousu);
                 $oLancamentoAuxiliar = new LancamentoAuxiliarEmpenho();
                 $oLancamentoAuxiliar->setCaracteristicaPeculiar($clempempenho->e60_concarpeculiar);
-                $oLancamentoAuxiliar->setCodigoElemento($e56_codele);
+                $oLancamentoAuxiliar->setCodigoElemento($iElemento);
                 $oLancamentoAuxiliar->setFavorecido($oEmpenhoFinanceiro->getCgm()->getCodigo());
                 $oLancamentoAuxiliar->setNumeroEmpenho($e60_numemp);
                 $oLancamentoAuxiliar->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
