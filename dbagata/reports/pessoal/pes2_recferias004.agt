@@ -89,7 +89,7 @@
 
             <Where></Where>
             <GroupBy></GroupBy>
-            <OrderBy></OrderBy>
+            <OrderBy>cgm.z01_nome asc</OrderBy>
             <Config>
                 <Distinct></Distinct>
                 <OffSet>0</OffSet>
