@@ -83,7 +83,7 @@ try {
   LEFT JOIN
   matordemitemanu ON m36_matordemitem=m52_codlanc
   INNER JOIN
-  matordem ON m51_codordem=m52_codordem
+  matordem ON m51_codordem=m52_codordem AND e139_codordem = m51_codordem
   INNER JOIN
   cgm ON z01_numcgm = e60_numcgm
   INNER JOIN

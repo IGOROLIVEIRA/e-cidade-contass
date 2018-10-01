@@ -48,6 +48,7 @@ class cl_bensdispensatombamento {
    var $e139_codcla = 0;
    var $e139_justificativa = null;
    var $e139_datadispensa = null;
+   var $e139_codordem = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e139_sequencial = int4 = Codigo sequencial
@@ -56,6 +57,7 @@ class cl_bensdispensatombamento {
                  e139_justificativa = text = Justificativa
                  e139_codcla = int8 = Codigo da Classificacao
                  e139_datadispensa = date = Data da dispensa
+                 e139_codordem = int4 = Código da ordem de compra
                  ";
    //funcao construtor da classe
    function cl_bensdispensatombamento() {
@@ -81,6 +83,7 @@ class cl_bensdispensatombamento {
        $this->e139_codcla = ($this->e139_codcla == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_codcla"]:$this->e139_codcla);
        $this->e139_justificativa = ($this->e139_justificativa == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_justificativa"]:$this->e139_justificativa);
        $this->e139_datadispensa = ($this->e139_datadispensa == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_datadispensa"]:$this->e139_datadispensa);
+       $this->e139_codordem = ($this->e139_codordem == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_codordem"]:$this->e139_codordem);
      }else{
        $this->e139_sequencial = ($this->e139_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["e139_sequencial"]:$this->e139_sequencial);
      }
@@ -154,6 +157,7 @@ class cl_bensdispensatombamento {
                                       ,e139_justificativa
                                       ,e139_codcla
                                       ,e139_datadispensa
+                                      ,e139_codordem
                        )
                 values (
                                 $this->e139_sequencial
@@ -162,6 +166,7 @@ class cl_bensdispensatombamento {
                                ,'$this->e139_justificativa'
                                ,$this->e139_codcla
                                ,'$this->e139_datadispensa'
+                               ,$this->e139_codordem
                       )";
      $result = db_query($sql);
      if($result==false){
