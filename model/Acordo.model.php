@@ -2452,7 +2452,7 @@ class Acordo
                   JOIN acordoitem ON ac26_sequencial = ac20_acordoposicao
                   JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
                   WHERE acordoempautoriza.ac45_empautoriza IN ($sAutorizacao);
-                  ");
+                ");
 
                 $clorcreservaaut = db_utils::getDao("orcreservaaut");
                 $clempautorizaprocesso = db_utils::getDao("empautorizaprocesso");
@@ -2466,77 +2466,80 @@ class Acordo
                 $clacordoitemexecutado = db_utils::getDao("acordoitemexecutado");
                 $clacordoitemexecutadodotacao = db_utils::getDao("acordoitemexecutadodotacao");
 
-                $rsexcluirAutorizacao = db_query("SELECT DISTINCT autorizacao FROM contratos_excluir");
-                $rsexcluirAutorizacao = db_utils::getCollectionByRecord($rsexcluirAutorizacao);
+                $rsexcluirAutorizacaoItens = db_query("SELECT DISTINCT * FROM contratos_excluir");
+                $rsexcluirAutorizacaoItens = db_utils::getCollectionByRecord($rsexcluirAutorizacaoItens);
 
-                foreach ($rsexcluirAutorizacao as $oAutorizacao) {
+                foreach ($rsexcluirAutorizacaoItens as $oAutorizacaoItens) {
+                      $where = ' ac29_acordoitem='.$oAutorizacaoItens->itens_contrato;
+                      $where.= ' and e54_autori = '.$oAutorizacaoItens->autorizacao;
+                      $sqlBuscaAnulados = $clacordoitemexecutado->sql_buscaAnulados(null,'ac29_sequencial', null, $where);
+                      $rsAnulados = db_query($sqlBuscaAnulados);
+                      $codAnulacao = db_utils::getCollectionByRecord($rsAnulados);
+                      $clacordoitemexecutadoempautitem->excluir(null,"ac19_acordoitemexecutado in ($sqlBuscaAnulados)");
+                      if($clacordoitemexecutadoempautitem->erro_status == 0){
+                          throw new Exception($clacordoitemexecutadoempautitem->erro_msg);
+                      }
 
-                  $clorcreservaaut->excluir(null,"o83_autori=".$oAutorizacao->autorizacao);
+                      $clacordoitemexecutadodotacao->excluir(null, "ac32_acordoitem =".$oAutorizacaoItens->itens_contrato);
 
-                  if($clorcreservaaut->erro_status == 0){
-                    throw new Exception($clorcreservaaut->erro_msg);
-                  }
-                  $clempautorizaprocesso->excluir(null,"e150_empautoriza =".$oAutorizacao->autorizacao);
-                  if($clempautorizaprocesso->erro_status == 0){
-                    throw new Exception($clempautorizaprocesso->erro_msg);
-                  }
-                  $clempautidot->excluir(null,"e56_autori=".$oAutorizacao->autorizacao);
-                  if($clempautidot->erro_status == 0){
-                    throw new Exception($clempautidot->erro_msg);
-                  }
-                  $clempautitempcprocitem->excluir(null,"e73_autori=".$oAutorizacao->autorizacao);
-                  if($clempautitempcprocitem->erro_status == 0){
-                    throw new Exception($clempautitempcprocitem->erro_msg);
-                  }
-                  $clacordoitemexecutadoempautitem->excluir(null,"ac19_autori=".$oAutorizacao->autorizacao);
-                  if($clacordoitemexecutadoempautitem->erro_status == 0){
-                    throw new Exception($clacordoitemexecutadoempautitem->erro_msg);
-                  }
-                  $clempautitem->excluir($oAutorizacao->autorizacao);
-                  if($clempautitem->erro_status == 0){
-                    throw new Exception($clempautitem->erro_msg);
-                  }
-                  $clempempaut->excluir(null,"e61_autori=".$oAutorizacao->autorizacao);
-                  if($clempempaut->erro_status == 0){
-                    throw new Exception($clempempaut->erro_msg);
-                  }
-                  $clacordoempautoriza->excluir(null,"ac45_empautoriza=".$oAutorizacao->autorizacao);
-                  if($clacordoempautoriza->erro_status == 0){
-                    throw new Exception($clacordoempautoriza->erro_msg);
-                  }
-                  $clempautoriza->excluir(null,"e54_autori=".$oAutorizacao->autorizacao);
-                  if($clempautoriza->erro_status == 0){
-                    throw new Exception($clempautoriza->erro_msg);
+                      if($clacordoitemexecutadodotacao->erro_status == 0){
+                          throw new Exception($clacordoitemexecutadodotacao->erro_msg);
+                      }
+
+                      $clacordoitemexecutado->excluir(null, "ac29_acordoitem = $oAutorizacaoItens->itens_contrato and ac29_sequencial in ($sqlBuscaAnulados)");
+                      if($clacordoitemexecutado->erro_status == 0){
+                          throw new Exception($clacordoitemexecutado->erro_msg);
+                      }
+
                   }
 
 
-              }
-              $rsexcluirAutorizacaoItens = db_query("SELECT DISTINCT itens_contrato FROM contratos_excluir");
-              $rsexcluirAutorizacaoItens = db_utils::getCollectionByRecord($rsexcluirAutorizacaoItens);
+                  $rsexcluirAutorizacao = db_query("SELECT DISTINCT autorizacao FROM contratos_excluir");
+                  $rsexcluirAutorizacao = db_utils::getCollectionByRecord($rsexcluirAutorizacao);
 
-              foreach ($rsexcluirAutorizacaoItens as $oAutorizacaoItens) {
-                  $sqlAcordoItemExecutado = $clacordoitemexecutado->sql_query(null,"ac29_sequencial", null, "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato);
-                  $clacordoitemexecutadoempautitem->excluir(null,"ac19_acordoitemexecutado in ($sqlAcordoItemExecutado)");
+                  foreach ($rsexcluirAutorizacao as $oAutorizacao) {
 
-                  if($clacordoitemexecutadoempautitem->erro_status == 0){
-                    throw new Exception($clacordoitemexecutadoempautitem->erro_msg);
-                 }
-                  $clacordoitemexecutado->excluir(null, "ac29_acordoitem =".$oAutorizacaoItens->itens_contrato);
+                    $clorcreservaaut->excluir(null,"o83_autori=".$oAutorizacao->autorizacao);
 
-                  if($clacordoitemexecutado->erro_status == 0){
-                    throw new Exception($clacordoitemexecutado->erro_msg);
-                  }
+                    if($clorcreservaaut->erro_status == 0){
+                        throw new Exception($clorcreservaaut->erro_msg);
+                    }
+                    $clempautorizaprocesso->excluir(null,"e150_empautoriza =".$oAutorizacao->autorizacao);
+                    if($clempautorizaprocesso->erro_status == 0){
+                        throw new Exception($clempautorizaprocesso->erro_msg);
+                    }
+                    $clempautidot->excluir(null,"e56_autori=".$oAutorizacao->autorizacao);
+                    if($clempautidot->erro_status == 0){
+                        throw new Exception($clempautidot->erro_msg);
+                    }
+                    $clempautitempcprocitem->excluir(null,"e73_autori=".$oAutorizacao->autorizacao);
+                    if($clempautitempcprocitem->erro_status == 0){
+                        throw new Exception($clempautitempcprocitem->erro_msg);
+                    }
+                    $clacordoitemexecutadoempautitem->excluir(null,"ac19_autori=".$oAutorizacao->autorizacao);
+                    if($clacordoitemexecutadoempautitem->erro_status == 0){
+                        throw new Exception($clacordoitemexecutadoempautitem->erro_msg);
+                    }
+                    $clempautitem->excluir($oAutorizacao->autorizacao);
+                    if($clempautitem->erro_status == 0){
+                        throw new Exception($clempautitem->erro_msg);
+                    }
+                    $clempempaut->excluir(null,"e61_autori=".$oAutorizacao->autorizacao);
+                    if($clempempaut->erro_status == 0){
+                        throw new Exception($clempempaut->erro_msg);
+                    }
+                    $clacordoempautoriza->excluir(null,"ac45_empautoriza=".$oAutorizacao->autorizacao);
+                    if($clacordoempautoriza->erro_status == 0){
+                        throw new Exception($clacordoempautoriza->erro_msg);
+                    }
+                    $clempautoriza->excluir(null,"e54_autori=".$oAutorizacao->autorizacao);
+                    if($clempautoriza->erro_status == 0){
+                        throw new Exception($clempautoriza->erro_msg);
+                    }
 
-                  $clacordoitemexecutadodotacao->excluir(null, "ac32_acordoitem =".$oAutorizacaoItens->itens_contrato);
+                }
 
-                  if($clacordoitemexecutadodotacao->erro_status == 0){
-                    throw new Exception($clacordoitemexecutadodotacao->erro_msg);
-                  }
-
-
-            }
-
-            return true;
+                  return true;
 
           }
           public function getLicitacoes()
@@ -2653,6 +2656,7 @@ class Acordo
       $sSqlAutorizacoes .= "        left join empempaut on e61_autori = e54_autori ";
       $sSqlAutorizacoes .= "        left join empempenho on e61_numemp = e60_numemp ";
       $sSqlAutorizacoes .= "  where ac26_acordo =  {$this->getCodigoAcordo()} ";
+
       if ($iAutoriza != '') {
         $sSqlAutorizacoes .= " and e54_autori = {$iAutoriza}";
       }

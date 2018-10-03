@@ -540,6 +540,7 @@ class cl_acordoitemexecutado {
          $resac = db_query("insert into db_acount values($acount,2942,18485,'','".AddSlashes(pg_result($resaco,$iresaco,'ac29_observacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
+
      $sql = " delete from acordoitemexecutado
                     where ";
      $sql2 = "";
@@ -630,7 +631,7 @@ class cl_acordoitemexecutado {
        $sql .= " order by {$ordem}";
      }
      return $sql;
-  }
+   }
    // funcao do sql
    public function sql_query_file ($ac29_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "") {
 
@@ -648,7 +649,32 @@ class cl_acordoitemexecutado {
      if (!empty($ordem)) {
        $sql .= " order by {$ordem}";
      }
+
      return $sql;
-  }
+   }
+
+    public function sql_buscaAnulados ($ac29_sequencial = null,$campos = "*", $ordem = null, $dbwhere = "") {
+
+        $sql  = "select {$campos}";
+        $sql .= "  from acordoitem ";
+        $sql .= "      inner join acordoitemexecutado on ac20_sequencial = ac29_acordoitem";
+        $sql .= "      inner join acordoitemexecutadoempautitem on ac29_sequencial = ac19_acordoitemexecutado";
+        $sql .= "      inner join empautitem on e55_sequen = ac19_sequen and ac19_autori = e55_autori";
+        $sql .= "      inner join empautoriza on e54_autori = e55_autori";
+        $sql2 = "";
+        if (empty($dbwhere)) {
+            if (!empty($ac29_sequencial)) {
+                $sql2 .= " where ac29_acordoitem = $ac29_sequencial ";
+            }
+        } else if (!empty($dbwhere)) {
+            $sql2 = " where $dbwhere and e54_anulad is not null";
+        }
+        $sql .= $sql2;
+        if (!empty($ordem)) {
+            $sql .= " order by {$ordem}";
+        }
+
+        return $sql;
+    }
 
 }
