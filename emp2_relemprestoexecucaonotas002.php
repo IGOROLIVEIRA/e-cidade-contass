@@ -367,9 +367,9 @@ for ($i = 0; $i < count($arr_tipos); $i++) {
 }
 
 if(stristr($sql_order, 'e60_anousu') === FALSE) {
-    $sql_order .= " , e60_anousu, e60_codemp::integer ";
+    $sql_order .= " , e60_anousu, e60_codemp::bigint ";
 } else {
-  $sql_order .= " , e60_codemp::integer";
+  $sql_order .= " , e60_codemp::bigint";
 }
 
 

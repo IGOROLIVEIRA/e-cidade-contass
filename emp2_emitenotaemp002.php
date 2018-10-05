@@ -201,7 +201,7 @@ $sqlemp .= " LEFT JOIN empautoriza ON e61_autori = e54_autori ";
 $sqlemp .= " LEFT JOIN empautidot ON e61_autori = e56_autori ";
 $sqlemp .= " LEFT OUTER JOIN emptipo ON e60_codtipo= e41_codtipo ";
 $sqlemp .= " WHERE $dbwhere ";
-$sqlemp .= " order by e60_codemp::integer ";
+$sqlemp .= " order by e60_codemp::bigint ";
 
 $result = db_query($sqlemp);
 
