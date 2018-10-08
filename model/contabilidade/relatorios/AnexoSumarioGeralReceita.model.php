@@ -170,7 +170,7 @@ class AnexoSumarioGeralReceita extends RelatoriosLegaisBase {
       $oLinha->desdobrar  = false;
       $oLinha->contas     = array();
       $oLinha->nivellinha = $aLinhasRelatorio[$iLinha]->getNivel();
-      if ($iLinha == 22) {
+      if ($iLinha == 26) {
         $oLinha->funcoes = $aFuncoes;
       } 
       foreach ($aColunasRelatorio as $oColuna) {
@@ -187,7 +187,7 @@ class AnexoSumarioGeralReceita extends RelatoriosLegaisBase {
                                                                               
         foreach($aValoresColunasLinhas as $oValor) {
           
-          if ($iLinha == 22) {
+          if ($iLinha == 26) {
           
             if (isset($oLinha->funcoes[$oValor->colunas[0]->o117_valor])) {
               $oLinha->funcoes[$oValor->colunas[0]->o117_valor]->total += $oValor->colunas[1]->o117_valor;
@@ -204,7 +204,7 @@ class AnexoSumarioGeralReceita extends RelatoriosLegaisBase {
         /**
          *  verificamos se a a conta cadastrada existe no balancete, e somamos o valor encontrado na linha
          */
-        if ($iLinha >= 1 && $iLinha <= 19) {
+        if ($iLinha >= 1 && $iLinha <= 23) {
          
           /**
            * linhas que usam o balancete de receita.
@@ -236,7 +236,7 @@ class AnexoSumarioGeralReceita extends RelatoriosLegaisBase {
         /**
          * Processa os dados do plano de contas 
          */
-        if ($this->iOrigemFase != 1 && ($iLinha == 20 || $iLinha == 23)) {
+        if ($this->iOrigemFase != 1 && ($iLinha == 24 || $iLinha == 27)) {
           
           for ($i = 0; $i < $iTotalLinhasPlano; $i++) {
     
@@ -263,8 +263,8 @@ class AnexoSumarioGeralReceita extends RelatoriosLegaisBase {
     /**
      * Percorre o array de funções somando o valor total de cada função
      */
-    foreach ($aLinhas[22]->funcoes as $oFuncao) {
-      $aLinhas[22]->total += $oFuncao->total;
+    foreach ($aLinhas[26]->funcoes as $oFuncao) {
+      $aLinhas[26]->total += $oFuncao->total;
     }
     
     /*
