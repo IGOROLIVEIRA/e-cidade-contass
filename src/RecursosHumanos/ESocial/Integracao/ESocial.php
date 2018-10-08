@@ -41,11 +41,11 @@ class ESocial
      */
     private $dados;
 
-    public function __construct(Config $config, $recurso)
+    public function __construct(Config $config, $recurso = NULL)
     {
         $this->config = $config;
 
-        $this->validaConfiguracao();
+        // $this->validaConfiguracao();
 
         $dadosAPI = $this->config->get('app.api');
         $httpRequest = new DBHttpRequest(Registry::get('app.config'));
@@ -82,6 +82,7 @@ class ESocial
      */
     public function request()
     {
+        
         $data = json_encode($this->dados);
 
         $this->httpRequest->send($this->recurso, 'POST', array(
@@ -93,6 +94,7 @@ class ESocial
         if ($this->httpRequest->getResponseCode() >= 400) {
             throw new Exception($result->message);
         }
+        
         return $result;
     }
 

@@ -6,12 +6,18 @@ use \ECidade\V3\Extension\Registry;
 
 require_once ("interfaces/iTarefa.interface.php");
 require_once ("model/configuracao/Task.model.php");
+require_once ("classes/db_esocialenvio_classe.php");
 
 class FilaESocialTask extends Task implements iTarefa
 {
     public function iniciar()
     {
-        parent::iniciar();
+        // $job = new \Job();
+        // $job->setNome("eSocial_Evento_" . $this->tipoEvento . "_$idFila");
+
+        // $this->setTarefa($job);
+
+        // parent::iniciar();
 
         if (!isset($_SESSION)) {
             $_SESSION = array();
@@ -30,37 +36,50 @@ class FilaESocialTask extends Task implements iTarefa
              * Conecta no banco com variaveis definidas no 'libs/db_conn.php'
              */
             if (!($conn = @pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA"))) {
-                throw new Exception('Erro ao conectar ao banco.');
+                die("\nErro ao conectar ao banco. host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA \n");
             }
-
-            $parametros = $this->oTarefa->getParametros();
 
             $dao = new \cl_esocialenvio();
-            $sql = $dao->sql_query_file($parametros['id_fila']);
-            $rs  = \db_query($sql);
+            $sql = $dao->sql_query_file(null, "*", "rh213_sequencial", "rh213_situacao = 1");
+            
+            $rs  = \db_query($sql."\n");
 
             if (!$rs && pg_num_rows($rs) == 0) {
-                throw new \Exception('Agendamento nao encontrado.');
+                die("Agendamento nao encontrado. \n");
             }
-            $dadosEnvio = \db_utils::fieldsMemory($rs, 0);
-            $dados = array(json_decode($dadosEnvio->rh213_dados));
+            for ($iCont=0; $iCont < pg_num_rows($rs); $iCont++) { 
+                
+                $dadosEnvio = \db_utils::fieldsMemory($rs, $iCont);
 
-            $sRecurso = Recurso::getRecursoByEvento($dadosEnvio->rh213_evento);
-            $exportar = new ESocial(Registry::get('app.config'), $sRecurso);
-            $exportar->setDados($dados);
-            $retorno = $exportar->request();
+                $daoEsocialCertificado = new \cl_esocialcertificado();
+                $sql = $daoEsocialCertificado->sql_query_file(null, "rh214_senha as senha,rh214_certificado as certificado", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
+                $rsEsocialCertificado  = \db_query($sql."\n");
 
-            $dao->rh213_situacao = 2;
-            $dao->rh213_sequencial = $parametros['id_fila'];
-            $dao->alterar($parametros['id_fila']);
+                if (!$rsEsocialCertificado && pg_num_rows($rsEsocialCertificado) == 0) {
+                    die("Certificado nao encontrado. \n");
+                }
+                $dadosCertificado = \db_utils::fieldsMemory($rsEsocialCertificado, 0);
 
-            if ($dao->erro_status == 0) {
-                throw new \Exception("Não foi possível alterar situação da fila.");
+                $dados = array($dadosCertificado,json_decode($dadosEnvio->rh213_dados));
+
+                // $sRecurso = Recurso::getRecursoByEvento($dadosEnvio->rh213_evento);
+
+                $exportar = new ESocial(Registry::get('app.config'));
+                $exportar->setDados($dados);
+                $retorno = $exportar->request();
+                echo "<br> \n ";
+            // $dao->rh213_situacao = 2;
+            // $dao->rh213_sequencial = $parametros['id_fila'];
+            // $dao->alterar($parametros['id_fila']);
+
+            // if ($dao->erro_status == 0) {
+            //     die("Não foi possível alterar situação da fila. \n");
+            // }
             }
         } catch (\Exception $e) {
             $this->log("Erro na execução:\n{$e->getMessage()} - ");
         }
-        parent::terminar();
+        // parent::terminar();
     }
 
     public function cancelar()

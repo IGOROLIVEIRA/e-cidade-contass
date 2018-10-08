@@ -136,8 +136,8 @@ class DBHttpRequest
             $contextOptions['http']['content'] = $options['body'];
         }
 
-        echo ' contextOptions ';
-        print_r($contextOptions);exit;
+        // echo $url.' contextOptions ';
+        // print_r($contextOptions);exit;
         $context = stream_context_create($contextOptions);
         $result = @file_get_contents($url, false, $context);
 
@@ -149,7 +149,7 @@ class DBHttpRequest
             $error = error_get_last();
             throw new BusinessException("Erro ao executar requisição:\nRetorno: " . $error['message']);
         }
-
+        print_r($result);
         return $result;
     }
 

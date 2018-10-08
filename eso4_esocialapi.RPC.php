@@ -43,14 +43,14 @@ Registry::set('app.config', new AppConfig());
     'app.api' => array(
         'centraldeajuda' => 'http://centraldeajuda.dbseller.com.br/help/api/index.php/',
         'esocial' => array(
-            'url' => 'http://172.16.212.213/sped-esocial-master/run.php', // informe a api do eSocial
+            'url' => 'http://172.16.212.213/sped-esocial-master/run.php', // informe a api do eSocial. ESTE IP E DA MAQUINA DE ROBSON. LEMBRAR DE MUDAR.
             'login' => '', // login do cliente
             'password' => '' // senha do cliente
         )
     ),
 
     /**
-     * Configuração de proxy para o e-cidade
+     * ConfiguraÃ§Ã£o de proxy para o e-cidade
      */
     'app.proxy' => array(
         'http'  => '172.16.212.254:3128', // e.g. 172.16.212.254:3128
@@ -62,7 +62,7 @@ Registry::set('app.config', new AppConfig());
      * Requisicoes que usaram sessao
      * @type string - glob pattern
      */
-    'app.request.session.attachOn' => '*.php',
+    'app.request.session.   ' => '*.php',
 
     /**
      * Requisicoes que usaram sessao somente leitura
@@ -157,11 +157,11 @@ try {
             $rs = db_query($sql);
 
             if (!$rs) {
-                throw new DBException("Ocorreu um erro ao consultar os CGM vinculados as lotações.\nContate o suporte.");
+                throw new DBException("Ocorreu um erro ao consultar os CGM vinculados as lotaÃ§Ãµes.\nContate o suporte.");
             }
 
             if (pg_num_rows($rs) == 0) {
-                throw new Exception("Não existe empregadores cadastrados na base.");
+                throw new Exception("NÃ£o existe empregadores cadastrados na base.");
             }
 
             $oRetorno->empregadores = db_utils::getCollectionByRecord($rs);
@@ -172,16 +172,19 @@ try {
                 throw new Exception("Houve um erro ao realizar upload do arquivo. Tente novamente.");
             }
 
-            $empregador = new \stdClass();
-            $empregador->inscricao = $oParam->documento;
-            $empregador->razao_social = $oParam->razao_social;
-            $empregador->tipo_inscricao = strlen($oParam->documento) == 11 ? 'cpf' : 'cnpj';
-            $empregador->senha = $oParam->senha;
-            $empregador->certificado = base64_encode(file_get_contents($oParam->sPath));
+            $oDaoEsocialcertificado = db_utils::getDao("esocialcertificado");
+            $oDaoEsocialcertificado->rh214_cgm = $oParam->empregador;
+            $oDaoEsocialcertificado->rh214_senha = base64_encode($oParam->senha);
+            $oDaoEsocialcertificado->rh214_certificado = base64_encode(file_get_contents($oParam->sPath));
+            $oDaoEsocialcertificado->rh214_instit = db_getsession("DB_instit");
+            $oDaoEsocialcertificado->incluir();
+            if ($oDaoEsocialcertificado->erro_status == 0) {
+                throw new \Exception("Erro ao enviar certificado. ".$oDaoEsocialcertificado->erro_msg);
+            }
 
-            $exportar = new ESocial(Registry::get('app.config'), Recurso::CADASTRO_EMPREGADOR);
-            $exportar->setDados(array($empregador));
-            $retorno = $exportar->request();
+            // $exportar = new ESocial(Registry::get('app.config'), Recurso::CADASTRO_EMPREGADOR);
+            // $exportar->setDados(array($empregador));
+            // $retorno = $exportar->request();
             $oRetorno->sMessage = "Certificado enviado com sucesso.";
 
             unlink($oParam->sPath);

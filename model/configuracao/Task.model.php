@@ -25,7 +25,8 @@
  *                                licenca/licenca_pt.txt 
  */
 
-db_app::import("configuracao.DBLog");
+// db_app::import("configuracao.DBLog");
+require_once("model/configuracao/DBLog.model.php");
 /**
  * Classe para Gerenciamento de Dados da Sessao
  */
@@ -194,7 +195,7 @@ abstract class Task {
    */
   public function isLiberadaExecucao() {
 
-    $this->sCaminhoArquivoLock = TaskManager::PATH_LOCKS . $this->oTarefa->getNome() . ".lock";
+    $this->sCaminhoArquivoLock = TaskManager::PATH_LOCKS . "Tarefa" . ".lock";
 
     if ( file_exists($this->sCaminhoArquivoLock) ) {
       return false;

@@ -7,10 +7,7 @@ return array(
                 'nome_api'=> 'tpInsc',
                 'type' => 'int'
             ),
-            'nrInsc' => array(
-                'nome_api'=> 'nrInsc4',
-                'type' => 'int'
-            ),
+            'nrInsc' => 'nrInsc',
             'iniValid' => 'iniValid',
             'fimValid' => 'fimValid'
         )
@@ -18,7 +15,10 @@ return array(
     'dadosEstab' => array(
         'nome_api' => 'dadosEstab',
         'properties' => array(
-            'cnaePrep' => 'cnaePrep'
+            'cnaePrep' => array(
+                        'nome_api'=>'cnaePrep',
+                        'type' => 'int'
+                    )
         ),
         'groups' => array (
             'aliqGilrat' => array(
@@ -45,7 +45,7 @@ return array(
                                 'type' => 'int'
                             ),
                             'nrProc' => 'nrProc',
-                            'codSusp' => 'codSuspo'
+                            'codSusp' => 'codSusp'
                         )
                     ),
                     'procAdmJudFap' => array (
@@ -55,7 +55,7 @@ return array(
                                 'type' => 'int'
                             ),
                             'nrProc' => 'nrProc',
-                            'codSusp' => 'codSuspo'
+                            'codSusp' => 'codSusp'
                         )
                     )
                 )
