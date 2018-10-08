@@ -941,7 +941,7 @@ try {
 
                         }
                         //echo "<pre>";print_r($aDadosAgrupados);exit;
-                        db_query('drop table if exists omov; create table omov ( c19_sequencial integer, c17_sequencial integer, c17_contacorrente varchar,c17_descricao varchar, e60_codemp integer, e60_anousu integer, c69_valor float);') or die(pg_last_error());
+                        db_query('drop table if exists omov; create table omov ( c19_sequencial integer, c17_sequencial integer, c17_contacorrente varchar,c17_descricao varchar, e60_codemp bigint, e60_anousu integer, c69_valor float);') or die(pg_last_error());
                         foreach ($aDadosAgrupados as $oMov) {
                             if($oMov->c69_valor > 0)
                               db_query("insert into omov values ({$oMov->c19_sequencial},106,'CC 106','{$oMov->c17_descricao}',{$oMov->e60_codemp},{$oMov->e60_anousu}, {$oMov->c69_valor});") or die(pg_last_error());
