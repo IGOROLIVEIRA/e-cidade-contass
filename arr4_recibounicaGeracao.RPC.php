@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
+use ECidade\Tributario\Arrecadacao\EmissaoGeral\EmissaoGeral;
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_utils.php");
 require_once ("libs/db_app.utils.php");
@@ -43,7 +43,7 @@ $oParam                 = $oJson->decode(str_replace("\\","",$_POST["json"]));
 $oRetorno               = new stdClass();
 $oRetorno->status       = 1;
 $oRetorno->message      = '';
-
+$iReceitaIptu           = 0;
 $aDadosRetorno          = array();
 
 try {
@@ -104,6 +104,13 @@ try {
   		  $oDaoReciboUnicaGeracao->ar40_observacao         = $oParam->oDados->sObservacoes;
   		  $oDaoReciboUnicaGeracao->incluir(null);
 
+		  /**
+		   * Verifica a receita quando é IPTU (desconto somente sobre o valor do iptu)
+		   */
+		  if($oParam->oDados->iCadTipoDebito == EmissaoGeral::TIPO_IPTU){
+			 $iReceitaIptu = getReceitaIptu();
+		  }
+
   		  if($oDaoReciboUnicaGeracao->erro_status == 0) {
   		    throw new Exception($oDaoReciboUnicaGeracao->erro_msg);
   		  } else {
@@ -118,6 +125,7 @@ try {
     		    $oDaoReciboUnica->k00_percdes            = $oParam->oDados->nPercentual;
     		    $oDaoReciboUnica->k00_tipoger            = $sTipoGeracao;
     		    $oDaoReciboUnica->k00_recibounicageracao = $oDaoReciboUnicaGeracao->ar40_sequencial;
+    		    $oDaoReciboUnica->k00_receit             = $iReceitaIptu;
     		    $oDaoReciboUnica->incluir(null);
 
     		    if ($oDaoReciboUnica->erro_status == 0) {
@@ -193,3 +201,10 @@ $oRetorno->msg    = urlencode($oRetorno->msg);
 $oRetorno->aDados = $aDadosRetorno;
 
 echo $oJson->encode($oRetorno);
+
+function getReceitaIptu(){
+
+	$oDaoCfIptu = db_utils::getDao('cfiptu');
+	return db_utils::fieldsMemory($oDaoCfIptu->sql_record($oDaoCfIptu->sql_query_file(db_getsession('DB_anousu'),"j18_rpredi")),0)->j18_rpredi;
+
+}
