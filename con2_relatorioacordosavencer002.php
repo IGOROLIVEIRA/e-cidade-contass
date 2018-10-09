@@ -123,7 +123,7 @@ if(!empty($oPost->ac50_sequencial)) {
 /*$sWhere     .= "{$sAnd} ( ac16_coddepto = ".db_getsession("DB_coddepto");
 $sWhere     .= "          or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." ) ";*/
 
-$sSqlAcordo  = $clacordo->sql_query_completo(null, "acordo.ac16_sequencial, acordotipo.ac04_descricao", $sOrder, $sWhere);
+$sSqlAcordo  = $clacordo->sql_query_completo(null, "DISTINCT acordo.ac16_sequencial, acordotipo.ac04_descricao, acordo.ac16_deptoresponsavel, depresp.descrdepto, acordo.ac16_datafim", $sOrder, $sWhere);
 $rsSqlAcordo = $clacordo->sql_record($sSqlAcordo);
 if ( $clacordo->numrows == 0  ) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
@@ -140,15 +140,16 @@ for ($iInd = 0; $iInd < $clacordo->numrows; $iInd++) {
    */
   $oDadosAcordo                   = new stdClass();
   $oDadosAcordo->getCodigo        = $oAcordo->getCodigoAcordo();
+  $oDadosAcordo->getNumeroAno     = $oAcordo->getNumeroAcordo()."/".$oAcordo->getAno();
   $oDadosAcordo->getTipoAcordo    = $oAcordoCompleto->ac04_descricao;
+  $oDadosAcordo->getDepartamento  = $oAcordo->getDepartamentoResponsavel()." - ".$oAcordoCompleto->descrdepto;
   $oDadosAcordo->getContratado    = $oAcordo->getContratado()->getCodigo()." - ".$oAcordo->getContratado()->getNome();
   $oDadosAcordo->getAssinatura    = $oAcordo->getDataAssinatura();
-  $oDadosAcordo->getVigencia      = $oAcordo->getDataInicial().' a '.$oAcordo->getDataFinal();
+  $oDadosAcordo->getVigencia      = $oAcordo->getDataFinal();
   $oDadosAcordo->getValorTotal    = $oAcordo->getValoresItens()->valoratual;
-  $oDadosAcordo->getResumoObjeto  = $oAcordo->getResumoObjeto();
+  $oDadosAcordo->getObjeto        = substr($oAcordo->getObjeto(),"0","249");
   $aDadosAcordo[] = $oDadosAcordo;
 }
-
 $head2 = "Acordo: {$sAcordo}";
 $head4 = "Data de Início: {$sDataInicio}  Data de Fim: {$sDataFim}";
 $head6 = "Ordem: {$sOrdemDescricao}";
@@ -183,20 +184,20 @@ foreach ($aDadosAcordo as $oDadoAcordo) {
   }
   
   $oPdf->SetFont('Arial','',$iFonte-1);
-  $oPdf->Cell(40 ,$iAlt,$oDadoAcordo->getCodigo                                                ,'TBR',0,'C',$iCorFundo);
-  $oPdf->Cell(40 ,$iAlt,$oDadoAcordo->getTipoAcordo                                                ,1,0,'L',$iCorFundo);
-  $oPdf->Cell(78 ,$iAlt,substr($oDadoAcordo->getContratado, 0, 46)                                 ,1,0,'L',$iCorFundo);
-  $oPdf->Cell(40 ,$iAlt,$oDadoAcordo->getAssinatura                                                ,1,0,'C',$iCorFundo);
-  $oPdf->Cell(40 ,$iAlt,$oDadoAcordo->getVigencia                                                  ,1,0,'C',$iCorFundo);
-  $oPdf->Cell(40 ,$iAlt,trim(db_formatar($oDadoAcordo->getValorTotal, 'f'))                    ,'TBL',1,'R',$iCorFundo);
-  $oPdf->MultiCell(278,$iAlt,urldecode($oDadoAcordo->getResumoObjeto)                             ,'TB','L',$iCorFundo);
+  $oPdf->Cell(20 ,$iAlt,$oDadoAcordo->getCodigo,'TBR',0,'C',$iCorFundo);
+  $oPdf->Cell(22 ,$iAlt,$oDadoAcordo->getNumeroAno,1,0,'C',$iCorFundo);
+  $oPdf->Cell(78 ,$iAlt,substr($oDadoAcordo->getContratado, 0, 46),1,0,'C',$iCorFundo);
+  $oPdf->Cell(78 ,$iAlt,$oDadoAcordo->getDepartamento,1,0,'C',$iCorFundo);
+  $oPdf->Cell(40 ,$iAlt,$oDadoAcordo->getAssinatura,1,0,'C',$iCorFundo);
+  $oPdf->Cell(40 ,$iAlt,$oDadoAcordo->getVigencia,'TBL',1,'C',$iCorFundo);
+  $oPdf->MultiCell(278,$iAlt,urldecode($oDadoAcordo->getObjeto      ),'TB','L',$iCorFundo);
   
 }
   
 $oPdf->SetFont('Arial','B',$iFonte);
-$oPdf->Cell(278 ,$iAlt-3,''                                                                                 ,0,1,'C',0);
-$oPdf->Cell(30 ,$iAlt,'Total de Registros:'                                                                 ,0,0,'L',0);
-$oPdf->Cell(30 ,$iAlt,''.count($aDadosAcordo).''                                                            ,0,0,'L',0);
+$oPdf->Cell(278 ,$iAlt-3,'',0,1,'C',0);
+$oPdf->Cell(30 ,$iAlt,'Total de Registros:',0,0,'L',0);
+$oPdf->Cell(30 ,$iAlt,''.count($aDadosAcordo).'',0,0,'L',0);
 
 $oPdf->Output();
 
@@ -210,13 +211,13 @@ function imprimirCabecalhoAcordos($oPdf, $iFonte, $iAlt, $lImprime) {
 		$oPdf->AddPage('L');
     $oPdf->SetFont('Arial','B',$iFonte);
     $oPdf->SetFillColor(220);
-    $oPdf->Cell(40 ,$iAlt,'Código'                                                                          ,1,0,'C',1);
-    $oPdf->Cell(40 ,$iAlt,'Tipo de Acordo'                                                                  ,1,0,'C',1);
-    $oPdf->Cell(78 ,$iAlt,'Contratado'                                                                      ,1,0,'C',1);
-    $oPdf->Cell(40 ,$iAlt,'Assinatura'                                                                      ,1,0,'C',1);
-    $oPdf->Cell(40 ,$iAlt,'Vigência'                                                                        ,1,0,'C',1);
-    $oPdf->Cell(40 ,$iAlt,'Valor Total'                                                                     ,1,1,'C',1);
-    $oPdf->Cell(278 ,$iAlt,'Resumo'                                                                         ,1,1,'L',1);
+    $oPdf->Cell(20 ,$iAlt,'Código',1,0,'C',1);
+    $oPdf->Cell(22 ,$iAlt,'Acordo',1,0,'C',1);
+    $oPdf->Cell(78 ,$iAlt,'Contratado',1,0,'C',1);
+    $oPdf->Cell(78 ,$iAlt,'Departamento',1,0,'C',1);
+    $oPdf->Cell(40 ,$iAlt,'Assinatura',1,0,'C',1);
+    $oPdf->Cell(40 ,$iAlt,'Vigência',1,1,'C',1);
+    $oPdf->Cell(278 ,$iAlt,'Objeto',1,1,'L',1);
 	}
 }
 ?>
