@@ -133,7 +133,7 @@ create table terem202019(
     constraint terem202019_sequ_pk     
     primary key,     
   si196_tiporegistro                bigint default 0            not null,
-  si196_codteto                     bigint 0                    not null,
+  si196_codteto                     bigint default 0                    not null,
   si196_vlrparateto                 double precision default 0  not null,
   si196_nrleiteto                   bigint default 0            not null,
   si196_dtpublicacaolei             date                        not null,
