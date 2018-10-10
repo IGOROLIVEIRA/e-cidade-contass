@@ -37,8 +37,8 @@ CREATE TABLE pessoa102019 (
 );
 
 ALTER TABLE pessoa102019 OWNER TO dbportal;
-CREATE SEQUENCE pessoa102019_si12_sequencial_seq
-ALTER TABLE pessoa102019_si12_sequencial_seq OWNER TO dbportal;
+CREATE SEQUENCE pessoa102019_si12_sequencial_seq;
+ALTER SEQUENCE pessoa102019_si12_sequencial_seq OWNER TO dbportal;
 
 CREATE TABLE viap102019 (
     si198_sequencial                 integer DEFAULT 0 NOT NULL
@@ -54,7 +54,7 @@ CREATE TABLE viap102019 (
 
 ALTER TABLE viap102019 OWNER TO dbportal;
 CREATE SEQUENCE viap102019_si198_sequencial_seq;
-ALTER TABLE viap102019_si198_sequencial_seq OWNER TO dbportal;
+ALTER SEQUENCE viap102019_si198_sequencial_seq OWNER TO dbportal;
 
 create table afast102019(
   si199_sequencial                  integer default 0 not null
@@ -73,7 +73,7 @@ create table afast102019(
 
 ALTER TABLE afast102019 OWNER TO dbportal;
 CREATE SEQUENCE afast102019_si199_sequencial_seq;
-ALTER TABLE afast102019_si199_sequencial_seq OWNER TO dbportal;
+ALTER SEQUENCE afast102019_si199_sequencial_seq OWNER TO dbportal;
 
 create table afast202019(
   si200_sequencial                  integer default 0 not null
@@ -89,7 +89,7 @@ create table afast202019(
 
 ALTER TABLE afast202019 OWNER TO dbportal;
 CREATE SEQUENCE afast202019_si200_sequencial_seq;
-ALTER TABLE afast202019_si200_sequencial_seq OWNER TO dbportal;
+ALTER SEQUENCE afast202019_si200_sequencial_seq OWNER TO dbportal;
 
 create table afast302019(
   si201_sequencial                  integer default 0 not null
@@ -105,7 +105,7 @@ create table afast302019(
 
 ALTER TABLE afast302019 OWNER TO dbportal;
 CREATE SEQUENCE afast302019_si201_sequencial_seq;
-ALTER TABLE afast302019_si201_sequencial_seq OWNER TO dbportal;
+ALTER SEQUENCE afast302019_si201_sequencial_seq OWNER TO dbportal;
 
 CREATE TABLE terem102019 (
     si194_sequencial          bigint DEFAULT 0            NOT NULL
@@ -125,8 +125,8 @@ CREATE TABLE terem102019 (
 );
 
 ALTER TABLE terem102019 OWNER TO dbportal;
-CREATE SEQUENCE terem102019_si194_sequencial_seq
-ALTER TABLE terem102019_si194_sequencial_seq OWNER TO dbportal;
+CREATE SEQUENCE terem102019_si194_sequencial_seq;
+ALTER SEQUENCE terem102019_si194_sequencial_seq OWNER TO dbportal;
 
 create table terem202019(
   si196_sequencial                  bigint default 0            not null
@@ -143,8 +143,8 @@ create table terem202019(
 );
 
 ALTER TABLE terem202019 owner to dbportal;
-CREATE SEQUENCE terem202019_si196_sequencial_seq
-ALTER TABLE terem202019_si196_sequencial_seq OWNER TO dbportal;
+CREATE SEQUENCE terem202019_si196_sequencial_seq;
+ALTER SEQUENCE terem202019_si196_sequencial_seq OWNER TO dbportal;
 
 create table flpgo102019(
   si195_sequencial                      bigint default 0 not null
@@ -185,9 +185,8 @@ create table flpgo102019(
 );
 
 ALTER TABLE flpgo102019 owner to dbportal;
-CREATE SEQUENCE flpgo102019_si195_sequencial_seq
-ALTER TABLE flpgo102019_si195_sequencial_seq OWNER TO dbportal;
-
+CREATE SEQUENCE flpgo102019_si195_sequencial_seq;
+ALTER SEQUENCE flpgo102019_si195_sequencial_seq OWNER TO dbportal;
 
 CREATE TABLE flpgo112019 (
     si196_sequencial                  bigint DEFAULT 0 NOT NULL
@@ -207,9 +206,8 @@ CREATE TABLE flpgo112019 (
 );
 
 ALTER TABLE flpgo112019 OWNER TO dbportal;
-CREATE SEQUENCE flpgo112019_si196_sequencial_seq
-ALTER TABLE flpgo112019_si196_sequencial_seq OWNER TO dbportal;
-\d  flpgo122018
+CREATE SEQUENCE flpgo112019_si196_sequencial_seq;
+ALTER SEQUENCE flpgo112019_si196_sequencial_seq OWNER TO dbportal;
 
 CREATE TABLE flpgo122019 (
     si197_sequencial                  bigint DEFAULT 0 NOT NULL,
@@ -229,8 +227,8 @@ CREATE TABLE flpgo122019 (
 );
 
 ALTER TABLE flpgo122019 OWNER TO dbportal;
-CREATE SEQUENCE flpgo122019_si197_sequencial_seq
-ALTER TABLE flpgo122019_si197_sequencial_seq OWNER TO dbportal;
+CREATE SEQUENCE flpgo122019_si197_sequencial_seq;
+ALTER SEQUENCE flpgo122019_si197_sequencial_seq OWNER TO dbportal;
 
 CREATE TABLE respinf2019(
   si197_sequencial                    bigint default 0 not null
@@ -244,8 +242,8 @@ CREATE TABLE respinf2019(
 );
 
 ALTER TABLE respinf2019 OWNER TO dbportal;
-CREATE SEQUENCE respinf2019_si197_sequencial_seq
-ALTER TABLE respinf2019_si197_sequencial_seq OWNER TO dbportal;
+CREATE SEQUENCE respinf2019_si197_sequencial_seq;
+ALTER SEQUENCE respinf2019_si197_sequencial_seq OWNER TO dbportal;
 
 create table consid102019(
   si158_sequencial                    bigint default 0 not null
@@ -261,7 +259,7 @@ create table consid102019(
 );
 
 ALTER TABLE consid102019 owner to dbportal;
-CREATE SEQUENCE consid102019_si158_sequencial_seq
-ALTER TABLE consid102019_si158_sequencial_seq OWNER TO dbportal;
+CREATE SEQUENCE consid102019_si158_sequencial_seq;
+ALTER SEQUENCE consid102019_si158_sequencial_seq OWNER TO dbportal;
 
 commit;
