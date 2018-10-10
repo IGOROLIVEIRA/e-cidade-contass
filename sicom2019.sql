@@ -202,7 +202,7 @@ CREATE TABLE flpgo112019 (
       constraint flpgo112019_reg10_fk
       references flpgo102019,
     si196_mes                         bigint,
-    si196_inst                        bigint,
+    si196_inst                        bigint
 );
 
 ALTER TABLE flpgo112019 OWNER TO dbportal;
@@ -210,7 +210,7 @@ CREATE SEQUENCE flpgo112019_si196_sequencial_seq;
 ALTER SEQUENCE flpgo112019_si196_sequencial_seq OWNER TO dbportal;
 
 CREATE TABLE flpgo122019 (
-    si197_sequencial                  bigint DEFAULT 0 NOT NULL,
+    si197_sequencial                  bigint DEFAULT 0 NOT NULL
       constraint flpgo122019_sequ_pk
       primary key,
     si197_tiporegistro                bigint,
@@ -219,11 +219,11 @@ CREATE TABLE flpgo122019 (
     si197_codrubricadesconto          varchar(4),
     si197_desctiporubricadesconto     varchar(150),
     si197_vlrdescontodetalhado        double precision,
-    si197_reg10
+    si197_reg10			      bigint default 0
       constraint flpgo122019_reg10_fk
       references flpgo102019,
     si197_mes                         bigint,
-    si197_inst                        bigint,
+    si197_inst                        bigint
 );
 
 ALTER TABLE flpgo122019 OWNER TO dbportal;
@@ -237,8 +237,8 @@ CREATE TABLE respinf2019(
   si197_nrodocumento                  varchar(11) not null,
   si197_dtinicio                      date,
   si197_dtfinal                       date,
-  si197_mes                           bigint default,
-  si197_instit                        bigint default
+  si197_mes                           bigint,
+  si197_instit                        bigint
 );
 
 ALTER TABLE respinf2019 OWNER TO dbportal;
@@ -254,8 +254,8 @@ create table consid102019(
   si158_exercicioreferenciaconsid     bigint default 0,
   si158_mesreferenciaconsid           varchar(2),
   si158_consideracoes                 varchar(4000)    not null,
-  si158_mes                           bigint default 0 not null,
-  si158_instit                        bigint default 0
+  si158_mes                           bigint,
+  si158_instit                        bigint
 );
 
 ALTER TABLE consid102019 owner to dbportal;
