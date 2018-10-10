@@ -160,7 +160,8 @@ if (isset ($autori_importa)) {
 					$clempautitem->e55_vltot = $e55_vltot;
 					$clempautitem->e55_vlrun = $e55_vluni;
           $clempautitem->e55_descr = $e55_descr;
-          $clempautitem->e55_servicoquantidade = $lControlaQuantidade;
+					$clempautitem->e55_servicoquantidade = $lControlaQuantidade;
+					$clempautitem->e55_marca = $e55_marca;
           $clempautitem->incluir($atual_autori, $e55_seq);
 					if ($clempautitem->erro_status == "0") {
 						$erro_msg = $clempautitem->erro_msg;
@@ -196,8 +197,9 @@ if (isset ($autori_importa)) {
 
 			$clempautitem->e55_codele = $codele;
 			$clempautitem->e55_sequen = $e55_sequen;
-      $clempautitem->e55_vlrun = $e55_vluni;
-		
+			$clempautitem->e55_vlrun = $e55_vluni;
+			$clempautitem->e55_marca = $e55_marca;
+			
       //incluindo unidade/referencia na tabela empautitem
       $clempautitem->e55_unid = $e55_unid;
       
@@ -226,12 +228,13 @@ if (isset ($autori_importa)) {
 				$clempautitem->e55_sequen = $e55_sequen;
 				$clempautitem->e55_codele = $pc07_codele;
         $clempautitem->e55_vlrun = $e55_vluni;
-        $clempautitem->e55_servicoquantidade = $lControlaQuantidade;
+				$clempautitem->e55_servicoquantidade = $lControlaQuantidade;
+				$clempautitem->e55_marca = $e55_marca;
         
         //incluindo unidade/referencia na tabela empautitem
       	$clempautitem->e55_unid = $e55_unid;		
 
-      		$clempautitem->alterar($e55_autori, $e55_sequen);
+      	$clempautitem->alterar($e55_autori, $e55_sequen);
 				$erro_msg = $clempautitem->erro_msg;
 				if ($clempautitem->erro_status == "0") {
 					$sqlerro = true;
@@ -282,11 +285,7 @@ if (isset ($autori_importa)) {
   <tr> 
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
     <center>
-	<?
-
-
-include ("forms/db_frmempautitem.php");
-?>
+		<? include ("forms/db_frmempautitem.php");?>
     </center>
 	</td>
   </tr>
@@ -308,9 +307,9 @@ if (isset ($incluir) || isset ($alterar) || isset ($excluir) || isset ($autori_i
 	} else {
 		// variavel $tot_valor é gerada no formulário
 		echo "
-		            <script> 
+			<script> 
 				top.corpo.iframe_empautidot.js_calc('$tot_valor');\n
-		            </script> 
+			</script> 
 		   ";
 
 		//db_msgbox($erro_msg);
@@ -320,18 +319,16 @@ if (isset ($incluir) || isset ($alterar) || isset ($excluir) || isset ($autori_i
 		if ($liberado == false) {
 			db_msgbox("Elemento do item diferente!");
 			echo "
-					      <script>
-						 document.form1.e55_item.value='';
-						 document.form1.pc01_descrmater.value='';
-						 document.form1.submit();
-					      </script>
-					   ";
+				<script>
+						document.form1.e55_item.value='';
+						document.form1.pc01_descrmater.value='';
+						document.form1.submit();
+				</script> ";
 		} else {
 			echo "
-					      <script>
-						document.form1.e55_quant.focus();
-					      </script>
-					   ";
+				<script>
+				document.form1.e55_quant.focus();
+				</script> ";
 		}
 	}
 if (isset ($consultando)) {

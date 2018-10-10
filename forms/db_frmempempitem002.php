@@ -121,7 +121,7 @@ $clrotulo->label("pc01_descrmater");
             $sSQlItens .= "       case when pcorcamval.pc23_obs is not null 
                                        then pcorcamval.pc23_obs
                                        else pcorcamvalpai.pc23_obs 
-                                  end as pc23_obs";
+                                  end as pc23_obs, e55_marca";
             $sSQlItens .= "  from fc_saldoitensempenho({$e60_numemp}) ";  
             $sSQlItens .= "       inner join empempitem                         on ricoditem                          = e62_sequencial ";
             $sSQlItens .= "       inner join empempenho                         on e62_numemp                         = e60_numemp ";

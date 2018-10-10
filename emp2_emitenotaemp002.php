@@ -151,6 +151,7 @@ $sqlemp .= "        fc_estruturaldotacao(o58_anousu,o58_coddot) AS estrutural, "
 $sqlemp .= "        e41_descr, ";
 $sqlemp .= "        c58_descr, ";
 $sqlemp .= "        e56_orctiporec, ";
+$sqlemp .= "        e55_marca, ";
 $sqlemp .= "        e54_praent, ";
 $sqlemp .= "        e54_codout, ";
 $sqlemp .= "        e54_conpag, ";
@@ -199,6 +200,7 @@ $sqlemp .= " LEFT JOIN cgm AS controleinterno ON controleinterno.z01_numcgm = co
 $sqlemp .= " LEFT OUTER JOIN empempaut ON e60_numemp = e61_numemp ";
 $sqlemp .= " LEFT JOIN empautoriza ON e61_autori = e54_autori ";
 $sqlemp .= " LEFT JOIN empautidot ON e61_autori = e56_autori ";
+$sqlemp .= "LEFT JOIN empautitem ON e55_autori = e56_autori";
 $sqlemp .= " LEFT OUTER JOIN emptipo ON e60_codtipo= e41_codtipo ";
 $sqlemp .= " WHERE $dbwhere ";
 $sqlemp .= " order by e60_codemp::bigint ";
@@ -306,6 +308,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $sqlitem .= "        solrp.pc11_numero, ";
     $sqlitem .= "        solrp.pc11_codigo, ";
     $sqlitem .= "        l20_prazoentrega, ";
+    $sqlitem .= "        e55_marca, ";
     /*OC4401*/
     $sqlempm .= "        e60_id_usuario, ";
     $sqlempm .= "        db_usuarios.nome, ";
@@ -443,6 +446,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->observacaoitem       = "pc23_obs";
     $pdf1->Snumeroproc          = "pc81_codproc";
     $pdf1->Snumero              = "pc11_numero";
+    $pdf1->marca                = "e55_marca";
     $pdf1->processo_administrativo = $sProcessoAdministrativo;
 
     //Zera as variáveis
@@ -564,6 +568,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->conta            = null;
     $pdf1->tipos            = $tipos;
     $pdf1->fax              = $z01_fax;
+    $pdf1->marca            = 'e55_marca';
 
     $sql  = "select c61_codcon
               from conplanoreduz
@@ -613,7 +618,7 @@ if ($oConfiguracaoGed->utilizaGED()) {
         $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$e60_numemp}.pdf");
         $oGerenciador->moverArquivo(array($oStdDadosGED));
 
-    } catch (Exception $eErro) {
+    } catch (Exception $eErro) { 
 
         db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
     }

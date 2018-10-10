@@ -162,6 +162,7 @@ if (isset ($autori_importa)) {
           $clempautitem->e55_vltot = $e55_vltot;
           $clempautitem->e55_vlrun = $e55_vluni;
           $clempautitem->e55_descr = $e55_descr;
+          $clempautitem->e55_marca = $e55_marca;
           $clempautitem->e55_servicoquantidade = $lControlaQuantidade;
           $clempautitem->incluir($atual_autori, $e55_seq);
           if ($clempautitem->erro_status == "0") {
@@ -199,6 +200,7 @@ if (isset ($autori_importa)) {
       $clempautitem->e55_codele = $codele;
       $clempautitem->e55_sequen = $e55_sequen;
       $clempautitem->e55_vlrun = $e55_vluni;
+      $clempautitem->e55_marca = $e55_marca;
 
       //incluindo unidade/referencia na tabela empautitem
       $clempautitem->e55_unid = $e55_unid;
@@ -229,6 +231,7 @@ if (isset ($autori_importa)) {
         $clempautitem->e55_codele = $pc07_codele;
         $clempautitem->e55_vlrun = $e55_vluni;
         $clempautitem->e55_servicoquantidade = $lControlaQuantidade;
+        $clempautitem->e55_marca = $e55_marca;
 
         //incluindo unidade/referencia na tabela empautitem
         $clempautitem->e55_unid = $e55_unid;

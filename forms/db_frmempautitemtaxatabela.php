@@ -74,6 +74,7 @@ if(isset($opcao) && $opcao=="alterar"){
       $e55_vltot  ="";
       $e55_descr  ="";
       $e55_vluni  ="";
+      $e55_marca  = "";
       $pc01_descrmater  ="";
     }
 }
@@ -180,7 +181,7 @@ function js_troca(codele) {
        <?=@$Le55_sequen?>
     </td>
       <td>
-         <?  db_input('e55_sequen',6,$Ie55_sequen,true,'text',3)  ?>
+         <?  db_input('e55_sequen',8,$Ie55_sequen,true,'text',3)  ?>
       </td>
     </tr>
     <tr style="height: 20px;">
@@ -188,18 +189,28 @@ function js_troca(codele) {
    <? db_ancora(@$Le55_item,"js_pesquisae55_item(true);",$db_opcao); ?>
       </td>
       <td>
-         <?  db_input('e55_item',6,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
-         <?  db_input('pc01_descrmater',50,$Ipc01_descrmater,true,'text',3,'')   ?>
-         <?
-         $result_unidade = array ();
-         $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
-         $numrows_unid = $clmatunid->numrows;
-         for ($i = 0; $i < $numrows_unid; $i++){
-          db_fieldsmemory($result_sql_unid, $i);
-          $result_unidade[$m61_codmatunid] = $m61_descr;
-         }
+         <?  db_input('e55_item',8,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
+         <?  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3,'')   ?>
+      </td>
+    </tr>
 
-         db_select("e55_unid", $result_unidade, true, $db_opcao) ?>
+    <tr>
+      <td><b>Unidade:</b></td>
+      <td>
+      <?
+	       $result_unidade = array ();
+	       $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
+           $numrows_unid = $clmatunid->numrows;
+           for ($i = 0; $i < $numrows_unid; $i++){
+                            db_fieldsmemory($result_sql_unid, $i);
+                            $result_unidade[$m61_codmatunid] = $m61_descr;
+           }
+           
+         db_select("e55_unid", $result_unidade, true, $db_opcao) ;
+         
+      ?>
+      <label style="margin-left: 20px"><b>Marca:</b></label>
+      <? db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','',100)	 ?>
       </td>
     </tr>
 
@@ -280,7 +291,7 @@ function js_troca(codele) {
           } else {
             $db_opcao_e55_quant = $db_opcao;
           }
-          db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"");
+          db_input('e55_quant',11,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"");
           ?>
 
           <script>
@@ -290,65 +301,62 @@ function js_troca(codele) {
             oQuantidade.setAttribute("onkeyup" ,"js_ValidaCampos(this,4,'Quantidade','f','f',event);");
             oQuantidade.setAttribute("onblur", "js_ValidaMaiusculo(this,'f',event);");
           </script>
-
-          <?php
-
-          if (isset($pc01_servico) and $pc01_servico=='t') {
+        <label><b>Valor unitário:</b></label>
+        <?
+          if(isset($opcao)){
+            if(!isset($e55_vlrun)){
+              $e55_vlrun = number_format($e55_vltot/$e55_quant,2,".","");
+            }
+            $e55_vluni=$e55_vlrun;
+          }
+          db_input('e55_vluni',10,$Ie55_vltot,true,'text',1,"onchange=\"js_calcula('uni');\"");
+        ?>
+        <?=@$Le55_vltot?>
+        <?
+          if(isset($pc01_servico) and $pc01_servico=='t') {
+            $db_opcao_e55_vltot = 3;
+          } else {
+            $db_opcao_e55_vltot = $db_opcao;
+          }
+          db_input('e55_vltot',10,$Ie55_vltot,true,'text',3,"onblur=\"js_calcula('tot');\"");
+        ?>
+      </td>
+    </tr>
+    <tr style="height: 20px;">
+      <td>
+        <strong>Utilizado: </strong>
+      </td>
+      <td>
+        <? db_input('utilizado',11,"",true,'text',3,""); ?>
+        <strong style="margin-right:15px">Disponível: </strong>
+        <? db_input('disponivel',10,"",true,'text',3,""); ?>
+        <? db_input('totalad',9,"",true,'hidden',3,""); ?>
+      </td>
+    </tr>
+   <tr style="height: 20px;">
+      <td>&nbsp;</td>
+      <td>
+        <?php if (isset($pc01_servico) and $pc01_servico=='f') :
             echo "<font color='red'><b>** SERVIÇO **</b></font>";
 
             if (!isset($e55_servicoquantidade)) {
               $e55_servicoquantidade = "false";
             }
-            ?>
+          ?>
 
-            <b>Controlar por quantidade:</b>
-            <select name="lControlaQuantidade" id="lControlaQuantidade" onchange="js_verificaControlaQuantidade(this.value);" <?php echo $db_opcao == 3 ? " disabled='true'" : "" ?>>
-              <option value="false">NÃO</option>
-              <option value="true">SIM</option>
-            </select>
-            <script>
-              lControlaQuantidade = "<?php echo $e55_servicoquantidade == 't' ? 'true' : 'false';?>";
-              $("lControlaQuantidade").value = lControlaQuantidade;
-              js_verificaControlaQuantidade($F("lControlaQuantidade"));
-            </script>
-            <?php
-          }
-        ?>
+          <b>Controlar por quantidade:</b>
+          <select name="lControlaQuantidade" id="lControlaQuantidade" onchange="js_verificaControlaQuantidade(this.value);" <?php echo $db_opcao == 3 ? " disabled='true'" : "" ?>>
+          <option value="false">NÃO</option>
+          <option value="true">SIM</option>
+          </select>
+          <script>
+          lControlaQuantidade = "<?php echo $e55_servicoquantidade == 't' ? 'true' : 'false';?>";
+          $("lControlaQuantidade").value = lControlaQuantidade;
+          js_verificaControlaQuantidade($F("lControlaQuantidade"));
+          </script>
+        <?php endif; ?>
       </td>
     </tr>
-    <tr style="height: 20px;">
-      <td nowrap title="Valor unitário">
-        <b>Valor unitário:</b>
-      </td>
-      <td>
-  <?
-  if(isset($opcao)){
-    if(!isset($e55_vlrun)){
-      $e55_vlrun = number_format($e55_vltot/$e55_quant,2,".","");
-    }
-    $e55_vluni=$e55_vlrun;
-  }
-  db_input('e55_vluni',10,$Ie55_vltot,true,'text',1,"onchange=\"js_calcula('uni');\"")
-  ?>
-  <?=@$Le55_vltot?>
-  <?
-    if(isset($pc01_servico) and $pc01_servico=='t') {
-      $db_opcao_e55_vltot = 3;
-    } else {
-      $db_opcao_e55_vltot = $db_opcao;
-    }
-
-    db_input('e55_vltot',10,$Ie55_vltot,true,'text',3,"onblur=\"js_calcula('tot');\"");
-
-    ?>
-
-    <strong>Utilizado: </strong>
-    <? db_input('utilizado',9,"",true,'text',3,""); ?>
-    <strong>Disponível: </strong>
-    <? db_input('disponivel',9,"",true,'text',3,""); ?>
-    <? db_input('totalad',9,"",true,'hidden',3,""); ?>
-    </td>
-   </tr>
    <tr style="height: 20px;">
       <td nowrap title="<?=@$Te55_descr?>">
    <?=@$Le55_descr?>
@@ -408,12 +416,12 @@ function js_troca(codele) {
     <tr>
       <td valign="top"  align='center' width="90%"  height="100%">
        <?
-        $sql_item = $clempautitem->sql_query_pcmaterele($e55_autori,null,"e55_autori,e55_item,pc07_codele,e55_sequen,e55_descr,e55_quant,e55_vlrun, round(e55_vltot,2) as e55_vltot ,pc01_descrmater","e55_sequen");
+        $sql_item = $clempautitem->sql_query_pcmaterele($e55_autori,null,"e55_autori,e55_item,pc07_codele,e55_sequen,e55_descr,e55_marca,e55_quant,e55_vlrun, round(e55_vltot,2) as e55_vltot ,pc01_descrmater","e55_sequen");
         //echo $sql_item;
         $chavepri= array("e55_autori"=>$e55_autori,"e55_sequen"=>@$e55_sequen);
         $cliframe_alterar_excluir->chavepri=$chavepri;
         $cliframe_alterar_excluir->sql     = $sql_item;
-        $cliframe_alterar_excluir->campos  ="e55_sequen,e55_item,pc07_codele,pc01_descrmater,e55_descr,e55_quant,e55_vlrun,e55_vltot";
+        $cliframe_alterar_excluir->campos  ="e55_sequen,e55_item,pc07_codele,pc01_descrmater,e55_descr,e55_quant,e55_marca,e55_vlrun,e55_vltot";
         $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
         $cliframe_alterar_excluir->strFormatar   ="";
         $cliframe_alterar_excluir->iframe_height ="160";

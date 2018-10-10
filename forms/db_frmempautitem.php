@@ -50,30 +50,32 @@ if (!isset($e30_numdec)){
   $e30_numdec=4;
 }  
 
-if(isset($db_opcaoal)){
+if (isset($db_opcaoal)) {
     $db_opcao=3;
       $db_botao=false;
-}else{
-  $db_botao=true;
+} else {
+    $db_botao=true;
 }
-if(isset($opcao) && $opcao=="alterar"){
+if (isset($opcao) && $opcao=="alterar") {
     $db_opcao = 2;
-}elseif(isset($opcao) && $opcao=="excluir" || isset($db_opcao) && $db_opcao==3){
+} else if (isset($opcao) && $opcao=="excluir" || isset($db_opcao) && $db_opcao==3) {
     $db_opcao = 3;
     if(isset($db_opcaoal)){
-	$db_opcao=33;
+	    $db_opcao=33;
     }
-}else{  
+} else {  
     $db_opcao = 1;
     $db_botao=true;
-    if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
-      $e55_item   ="";
-      $e55_sequen ="";
-      $e55_quant  ="";
-      $e55_vltot  ="";
-      $e55_descr  ="";
-      $e55_vluni  ="";
-      $pc01_descrmater  ="";
+    if (isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ) {
+      $e55_item         = "";
+      $e55_sequen       = "";
+      $e55_quant        = "";
+      $e55_vltot        = "";
+      $e55_descr        = "";
+      $e55_vluni        = "";
+      $e55_vluni        = "";
+      $e55_marca        = "";
+      $pc01_descrmater  = "";
     }
 }
 ?>
@@ -149,7 +151,6 @@ function js_troca(codele) {
 
   descr = eval("document.form1.ele_"+codele+".value");
   arr =  descr.split("#");
-   
   elemento  = arr[0]; 
   descricao = arr[1]; 
   document.form1.elemento01.value = elemento;
@@ -174,7 +175,7 @@ function js_troca(codele) {
        <?=@$Le55_sequen?>
     </td>
       <td> 
-         <?   db_input('e55_sequen',6,$Ie55_sequen,true,'text',3)  ?>
+         <?   db_input('e55_sequen',8,$Ie55_sequen,true,'text',3)  ?>
       </td>
     </tr>
     <tr style="height: 20px;">
@@ -182,18 +183,26 @@ function js_troca(codele) {
 	 <? db_ancora(@$Le55_item,"js_pesquisae55_item(true);",$db_opcao); ?>
       </td>
       <td> 
-         <?  db_input('e55_item',6,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
-	       <?  db_input('pc01_descrmater',50,$Ipc01_descrmater,true,'text',3,'')	 ?>
-	       <?
+         <?  db_input('e55_item',8,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
+	       <?  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3,'')	 ?>
+	       
+      </td>
+    </tr>
+    <tr>
+      <td><b>Unidade:</b></td>
+      <td style = 'width: 100px'>
+      <?
 	       $result_unidade = array ();
 	       $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
            $numrows_unid = $clmatunid->numrows;
            for ($i = 0; $i < $numrows_unid; $i++){
                             db_fieldsmemory($result_sql_unid, $i);
                             $result_unidade[$m61_codmatunid] = $m61_descr;
-           }
-           
-	       db_select("e55_unid", $result_unidade, true, $db_opcao) ?>
+           }        
+         db_select("e55_unid", $result_unidade, true, $db_opcao,"") 
+      ?>
+      <label style="margin-left: 20px"><b>Marca:</b></label>
+      <? db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','',100)	 ?>
       </td>
     </tr>
 
@@ -220,126 +229,118 @@ function js_troca(codele) {
   <?    
     $ero=$clempautitem->erro_msg;
 
-
     $result88 = $clempautitem->sql_record($clempautitem->sql_query_pcmaterele($e55_autori,null,"o56_codele as codele,o56_elemento as elemento01,o56_descr"));
     if($clempautitem->numrows>0){
          $numrows88= $clpcmater->numrows;  
          db_fieldsmemory($result88,0);//$codele é o primeiro elemento incluido
          echo "
    	   <script>
-		  parent.document.formaba.empautidot.disabled=false;\n
-	   </script>
+		    parent.document.formaba.empautidot.disabled=false;\n
+	     </script>
          ";
-    }else{
-      echo "
-	  <script>
-		  parent.document.formaba.empautidot.disabled=false;\n
-	  </script>
-      
-      ";
-      if(isset($e55_item) && $e55_item!=""){
-	 $result99  = $clpcmater->sql_record($clpcmater->sql_query_elemento($e55_item,"o56_codele as  codele,o56_elemento as elemento01,o56_descr"));
-	 $numrows99 = $clpcmater->numrows;
-	 db_fieldsmemory($result99,0);//$codele é o primeiro elemento incluido
-      }else{
-	 $elemento01='';
-	 $o56_descr='';
-      }   
+    } else {
+        echo "
+          <script>
+            parent.document.formaba.empautidot.disabled=false;\n
+          </script>   
+        ";
+        if (isset($e55_item) && $e55_item!="") {
+          $result99  = $clpcmater->sql_record($clpcmater->sql_query_elemento($e55_item,"o56_codele as  codele,o56_elemento as elemento01,o56_descr"));
+          $numrows99 = $clpcmater->numrows;
+          db_fieldsmemory($result99,0);//$codele é o primeiro elemento incluido
+        } else {
+            $elemento01='';
+            $o56_descr='';
+        }   
     }    
     $clempautitem->erro_msg=$ero;
     db_input('elemento01',20,0,true,'text',3);
     db_input('o56_descr',40,0,true,'text',3);
-    if(isset($numrows99) && $numrows99>0){
-	for($i=0; $i<$numrows99; $i++){
-	  db_fieldsmemory($result99,$i);
-	  $r="ele_$codele"; 
-	  $$r = "$elemento01#$o56_descr";
-	  db_input("ele_$codele",20,0,true,'hidden',3);
-	}
+    if (isset($numrows99) && $numrows99>0) {
+      for($i=0; $i<$numrows99; $i++){
+        db_fieldsmemory($result99,$i);
+        $r="ele_$codele"; 
+        $$r = "$elemento01#$o56_descr";
+        db_input("ele_$codele",20,0,true,'hidden',3);
+      }
     }      
-  ?>
+     ?>
       </td>
     </tr>
     <tr style="height: 20px;">
       <td nowrap title="<?=@$Te55_quant?>">
-	 <?=@$Le55_quant?>
+	      <?=@$Le55_quant?>
       </td>
       <td> 
-      <?php
-          if(isset($pc01_servico) and $pc01_servico=='t') {
+        <?php
+            if(isset($pc01_servico) and $pc01_servico=='t') {
 
-            if (!isset($e55_servicoquantidade) || $e55_servicoquantidade == "f") {
-              $e55_quant = 1;
+              if (!isset($e55_servicoquantidade) || $e55_servicoquantidade == "f") {
+                $e55_quant = 1;
+              }
+              $db_opcao_e55_quant = 3;
+            } else {
+                $db_opcao_e55_quant = $db_opcao;
             }
-            $db_opcao_e55_quant = 3;
-          } else {
-            $db_opcao_e55_quant = $db_opcao;
+            db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"");
+        ?>
+        <script>
+          ///Controla a validação de vírgulas e pontos.
+          var oQuantidade = $("e55_quant");
+          oQuantidade.setAttribute("onkeydown" ,"return js_controla_tecla_enter(this,event);");
+          oQuantidade.setAttribute("onkeyup" ,"js_ValidaCampos(this,4,'Quantidade','f','f',event);");
+          oQuantidade.setAttribute("onblur", "js_ValidaMaiusculo(this,'f',event);");
+        </script>
+        <label><b>Valor unitário:</b></label>
+        <?
+          if(isset($opcao)){
+          if(!isset($e55_vlrun)){
+            $e55_vlrun = number_format($e55_vltot/$e55_quant,2,".","");
           }
-          db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"");
-          ?>
+          $e55_vluni=$e55_vlrun;
+          }
+          db_input('e55_vluni',14,$Ie55_vltot,true,'text',$db_opcao,"onchange=\"js_calcula('uni');\"")
+        ?>
+        
+        <?= @$Le55_vltot ?>
+        <?
+          if(isset($pc01_servico) and $pc01_servico=='t') {
+            $db_opcao_e55_vltot = 3;
+          } else {
+            $db_opcao_e55_vltot = $db_opcao;
+          }
 
-          <script>
-            //Controla a validação de vírgulas e pontos.
-            var oQuantidade = $("e55_quant");
-            oQuantidade.setAttribute("onkeydown" ,"return js_controla_tecla_enter(this,event);");
-            oQuantidade.setAttribute("onkeyup" ,"js_ValidaCampos(this,4,'Quantidade','f','f',event);");
-            oQuantidade.setAttribute("onblur", "js_ValidaMaiusculo(this,'f',event);");
-          </script>
-
-          <?php 
-
-          if (isset($pc01_servico) and $pc01_servico=='t') {
+          db_input('e55_vltot',15,$Ie55_vltot,true,'text',$db_opcao_e55_vltot,"onblur=\"js_calcula('tot');\"");
+        ?>
+      </td>
+    </tr>
+    <tr style="height: 20px;">
+      <td>&nbsp;</td>
+      <td>
+        <?php if (isset($pc01_servico) and $pc01_servico=='f') :
             echo "<font color='red'><b>** SERVIÇO **</b></font>";
 
             if (!isset($e55_servicoquantidade)) {
               $e55_servicoquantidade = "false";
             }
-            ?>
+          ?>
 
-            <b>Controlar por quantidade:</b>
-            <select name="lControlaQuantidade" id="lControlaQuantidade" onchange="js_verificaControlaQuantidade(this.value);" <?php echo $db_opcao == 3 ? " disabled='true'" : "" ?>>
-              <option value="false">NÃO</option>
-              <option value="true">SIM</option>
-            </select>
-            <script>
-              lControlaQuantidade = "<?php echo $e55_servicoquantidade == 't' ? 'true' : 'false';?>";
-              $("lControlaQuantidade").value = lControlaQuantidade;
-              js_verificaControlaQuantidade($F("lControlaQuantidade"));
-            </script>
-            <?php
-          }
-        ?>
-      </td>
-    </tr>
-    <tr style="height: 20px;">
-      <td nowrap title="Valor unitário">
-	<b>Valor unitário:</b>
-      </td>
-      <td> 
-  <?
-  if(isset($opcao)){
-  	if(!isset($e55_vlrun)){
-  	  $e55_vlrun = number_format($e55_vltot/$e55_quant,2,".","");
-  	}
-    $e55_vluni=$e55_vlrun;
-  }
-  db_input('e55_vluni',13,$Ie55_vltot,true,'text',$db_opcao,"onchange=\"js_calcula('uni');\"")
-  ?>
-  <?=@$Le55_vltot?>
-  <?
-    if(isset($pc01_servico) and $pc01_servico=='t') {
-      $db_opcao_e55_vltot = 3;
-    } else {
-      $db_opcao_e55_vltot = $db_opcao;
-    }
-
-    db_input('e55_vltot',13,$Ie55_vltot,true,'text',$db_opcao_e55_vltot,"onblur=\"js_calcula('tot');\"");
-  ?>
+          <b>Controlar por quantidade:</b>
+          <select name="lControlaQuantidade" id="lControlaQuantidade" onchange="js_verificaControlaQuantidade(this.value);" <?php echo $db_opcao == 3 ? " disabled='true'" : "" ?>>
+          <option value="false">NÃO</option>
+          <option value="true">SIM</option>
+          </select>
+          <script>
+          lControlaQuantidade = "<?php echo $e55_servicoquantidade == 't' ? 'true' : 'false';?>";
+          $("lControlaQuantidade").value = lControlaQuantidade;
+          js_verificaControlaQuantidade($F("lControlaQuantidade"));
+          </script>
+        <?php endif; ?>
       </td>
     </tr>
     <tr style="height: 20px;">
       <td nowrap title="<?=@$Te55_descr?>">
-	 <?=@$Le55_descr?>
+	     <?= @$Le55_descr ?>
       </td>
       <td> 
          <?  
@@ -397,47 +398,46 @@ function js_troca(codele) {
     <tr>
       <td valign="top"  align='center' width="90%"  height="100%">  
        <?
-       $sql_item = $clempautitem->sql_query_pcmaterele($e55_autori,null,"e55_autori,e55_item,pc07_codele,e55_sequen,e55_descr,e55_quant,e55_vlrun, round(e55_vltot,2) as e55_vltot ,pc01_descrmater","e55_sequen");
-     //  echo $sql_item;
-	$chavepri= array("e55_autori"=>$e55_autori,"e55_sequen"=>@$e55_sequen);
-	$cliframe_alterar_excluir->chavepri=$chavepri;
- 	$cliframe_alterar_excluir->sql     = $sql_item;
-    $cliframe_alterar_excluir->campos  ="e55_sequen,e55_item,pc07_codele,pc01_descrmater,e55_descr,e55_quant,e55_vlrun,e55_vltot";
-	$cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
-    $cliframe_alterar_excluir->strFormatar   ="";	
-	$cliframe_alterar_excluir->iframe_height ="160";
-	$cliframe_alterar_excluir->iframe_width ="100%";
-	$cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);    
+        $sql_item = $clempautitem->sql_query_pcmaterele($e55_autori,null,"e55_autori,e55_item,pc07_codele,e55_sequen,e55_descr,e55_marca,e55_quant,e55_vlrun, round(e55_vltot,2) as e55_vltot ,pc01_descrmater","e55_sequen");
+        //  echo $sql_item;
+        $chavepri= array("e55_autori"=>$e55_autori,"e55_sequen"=>@$e55_sequen);
+        $cliframe_alterar_excluir->chavepri=$chavepri;
+        $cliframe_alterar_excluir->sql     = $sql_item;
+        $cliframe_alterar_excluir->campos  ="e55_sequen,e55_item,pc07_codele,pc01_descrmater,e55_descr,e55_marca,e55_quant,e55_vlrun,e55_vltot";
+        $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
+        $cliframe_alterar_excluir->strFormatar   ="";	
+        $cliframe_alterar_excluir->iframe_height ="160";
+        $cliframe_alterar_excluir->iframe_width ="100%";
+        $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);    
        ?>
       </td>
     </tr>
     <tr>
       <td><b>Total de itens:</b>
-  <?
-  $result02 = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori,null,"count(e55_sequen) as tot_item")); 
-   db_fieldsmemory($result02,0);
+        <?
+        $result02 = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori,null,"count(e55_sequen) as tot_item")); 
+        db_fieldsmemory($result02,0);
 
-  if($tot_item>0){
-     $result = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori,null,"sum(round(e55_vltot,2)) as tot_valor")); 
-     db_fieldsmemory($result,0);
-     if(empty($tot_valor) ||  $tot_valor==""){
-       $tot_valor='0';
-       $tot_item='0';
-     }else{
-       $tot_valor= number_format($tot_valor,2,".","");
-     }
-  }else{
-    
-    $tot_valor='0';
-    $tot_item='0';
-  }
-  db_input('tot_item',8,0,true,'text',3);
-  ?>
-      <b>Total dos valores:</b>
-  <?
-  db_input('tot_valor',13,0,true,'text',3,"onchange=\"js_calcula('quant');\"")
-  ?>
-      
+        if($tot_item>0){
+          $result = $clempautitem->sql_record($clempautitem->sql_query_file($e55_autori,null,"sum(round(e55_vltot,2)) as tot_valor")); 
+          db_fieldsmemory($result,0);
+          if(empty($tot_valor) ||  $tot_valor==""){
+            $tot_valor='0';
+            $tot_item='0';
+          }else{
+            $tot_valor= number_format($tot_valor,2,".","");
+          }
+        }else{
+          
+          $tot_valor='0';
+          $tot_item='0';
+        }
+        db_input('tot_item',8,0,true,'text',3);
+        ?>
+        <b>Total dos valores:</b>
+        <?
+        db_input('tot_valor',13,0,true,'text',3,"onchange=\"js_calcula('quant');\"")
+        ?> 
       </td>
     </tr>
     </table>
@@ -527,8 +527,6 @@ function js_pesquisae55_item(mostra){
   }
   ?>
 
-
-
   if(mostra==true){
     js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele"+qry,'Pesquisa',true,"0","1");
   }else{
@@ -575,15 +573,14 @@ function js_preenchepesquisa(chave,chave1){
 
 <?
   if(isset($incluir) || isset($alterar) || isset($excluir) ) {
-
     echo "\n\ntop.corpo.iframe_empautidot.location.href =  'emp1_empautidot001.php?anulacao=true&e56_autori=$e55_autori';\n";
   }   
 ?>
 
-<?if(isset($numrows99) && $numrows99>0){?>
+<? if(isset($numrows99) && $numrows99>0) : ?>
   codele = document.form1.pc07_codele.value;
   if(codele!=''){
      js_troca(codele);
   }  
-<?}?>  
+<? endif; ?>  
 </script>
