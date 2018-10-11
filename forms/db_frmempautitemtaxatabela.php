@@ -202,8 +202,8 @@ function js_troca(codele) {
 	       $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
            $numrows_unid = $clmatunid->numrows;
            for ($i = 0; $i < $numrows_unid; $i++){
-                            db_fieldsmemory($result_sql_unid, $i);
-                            $result_unidade[$m61_codmatunid] = $m61_descr;
+              db_fieldsmemory($result_sql_unid, $i);
+              $result_unidade[$m61_codmatunid] = $m61_descr;
            }
            
          db_select("e55_unid", $result_unidade, true, $db_opcao) ;
@@ -336,7 +336,7 @@ function js_troca(codele) {
    <tr style="height: 20px;">
       <td>&nbsp;</td>
       <td>
-        <?php if (isset($pc01_servico) and $pc01_servico=='f') :
+        <?php if (isset($pc01_servico) and $pc01_servico=='t') :
             echo "<font color='red'><b>** SERVIÇO **</b></font>";
 
             if (!isset($e55_servicoquantidade)) {

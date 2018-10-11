@@ -317,13 +317,13 @@ function js_troca(codele) {
     <tr style="height: 20px;">
       <td>&nbsp;</td>
       <td>
-        <?php if (isset($pc01_servico) and $pc01_servico=='f') :
+        <?php if (isset($pc01_servico) && $pc01_servico == 't') :
             echo "<font color='red'><b>** SERVIÇO **</b></font>";
 
             if (!isset($e55_servicoquantidade)) {
               $e55_servicoquantidade = "false";
             }
-          ?>
+        ?>
 
           <b>Controlar por quantidade:</b>
           <select name="lControlaQuantidade" id="lControlaQuantidade" onchange="js_verificaControlaQuantidade(this.value);" <?php echo $db_opcao == 3 ? " disabled='true'" : "" ?>>
@@ -477,17 +477,17 @@ function js_troca(codele) {
     opcao.setAttribute("name","consultando");
     opcao.setAttribute("value","true");
     document.form1.appendChild(opcao);
-<?
-   if(isset($opcao) && $opcao=="alterar"){
-?>  
+    <?
+      if(isset($opcao) && $opcao=="alterar"){
+    ?>  
     var opcao = document.createElement("input");
     opcao.setAttribute("type","hidden");
     opcao.setAttribute("name","opcao");
     opcao.setAttribute("value","alterar");
     document.form1.appendChild(opcao);
-<?
-  }
-?>    
+    <?
+      }
+    ?>    
   document.form1.submit();
 }
 function js_cancelar(){
