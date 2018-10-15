@@ -151,7 +151,7 @@ $sqlemp .= "        fc_estruturaldotacao(o58_anousu,o58_coddot) AS estrutural, "
 $sqlemp .= "        e41_descr, ";
 $sqlemp .= "        c58_descr, ";
 $sqlemp .= "        e56_orctiporec, ";
-$sqlemp .= "        e55_marca, ";
+//$sqlemp .= "        e55_marca, ";
 $sqlemp .= "        e54_praent, ";
 $sqlemp .= "        e54_codout, ";
 $sqlemp .= "        e54_conpag, ";
@@ -200,7 +200,7 @@ $sqlemp .= " LEFT JOIN cgm AS controleinterno ON controleinterno.z01_numcgm = co
 $sqlemp .= " LEFT OUTER JOIN empempaut ON e60_numemp = e61_numemp ";
 $sqlemp .= " LEFT JOIN empautoriza ON e61_autori = e54_autori ";
 $sqlemp .= " LEFT JOIN empautidot ON e61_autori = e56_autori ";
-$sqlemp .= "LEFT JOIN empautitem ON e55_autori = e56_autori";
+//$sqlemp .= "LEFT JOIN empautitem ON e55_autori = e56_autori";
 $sqlemp .= " LEFT OUTER JOIN emptipo ON e60_codtipo= e41_codtipo ";
 $sqlemp .= " WHERE $dbwhere ";
 $sqlemp .= " order by e60_codemp::bigint ";
