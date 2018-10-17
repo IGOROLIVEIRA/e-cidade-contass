@@ -4,6 +4,21 @@ require("libs/db_utils.php");
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
+$oGet = db_utils::postmemory($_GET);
+
+switch ($oGet->tipoprecoreferencia) {
+  case 2:
+    $tipoReferencia = " MAX(pc23_vlrun) ";
+    break;
+
+  case 3:
+    $tipoReferencia = " MIN(pc23_vlrun) ";
+    break;
+
+  default:
+    $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+    break;
+}
 
 $sSql = "select * from (SELECT
                 pc01_codmater,
@@ -39,14 +54,15 @@ LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
 LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
 LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-WHERE pc81_codproc = $codigo_preco
+WHERE pc81_codproc = {$codigo_preco}
   AND pc10_instit = " . db_getsession("DB_instit") . "
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
+                pc11_seq,
                 pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
-                round(si02_vlprecoreferencia,2) as si02_vlprecoreferencia,
+                {$tipoReferencia} as si02_vlprecoreferencia,
                 pc01_codmater,
                 si01_datacotacao
 FROM pcproc
@@ -54,13 +70,14 @@ JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
 JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
 JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
 JOIN solicitem ON pc81_solicitem = pc11_codigo
 JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = $codigo_preco
-ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
+WHERE pc80_codproc = {$codigo_preco} {$sCondCrit}
+GROUP BY pc11_seq, pc01_codmater,si01_datacotacao ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
 ;
 
 $rsResult = db_query($sSql) or die(pg_last_error());//db_criatabela($rsResult);exit;
@@ -98,7 +115,7 @@ $nTotalItens = 0;
       $oDadosDaLinha = new stdClass();
       $oDadosDaLinha->item = $iCont + 1;
       $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
-      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia,2, ",", ".");
+      $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia,$quant_casas, ",", ".");
       $oDadosDaLinha->quantidade = $oResult->pc11_quant;
       $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
       $oDadosDaLinha->total = number_format($lTotal, 1, ",", ".");

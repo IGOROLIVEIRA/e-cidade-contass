@@ -5,6 +5,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_precoreferencia_classe.php");
 include("dbforms/db_funcoes.php");
+$oPost = db_utils::postMemory($_POST);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprecoreferencia = new cl_precoreferencia;
@@ -12,21 +13,22 @@ $db_opcao = 22;
 $db_botao = false;
 
 if (isset($imprimir)){
-  	
+
 	if (!isset($si01_processocompra) || $si01_processocompra == '') {
 		echo "<script>alert(\"Nenhum processo foi selecionado\")</script>";
 	} else {
-		
+
     echo "<script>
-    jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$si01_processocompra}+'&quant_casas='+$quant_casas,
-			   
+    jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
+
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
     </script>";
-    
+
 	}
-   
+
  }
 
 if (isset($imprimircsv)){
@@ -36,7 +38,8 @@ if (isset($imprimircsv)){
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia005.php?codigo_preco='+{$si01_processocompra}+'&quant_casas='+$quant_casas,
+    jan = window.open('sic1_precoreferencia005.php?codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
 
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -55,7 +58,7 @@ if(isset($alterar)){
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
-   $result = $clprecoreferencia->sql_record($clprecoreferencia->sql_query($chavepesquisa)); 
+   $result = $clprecoreferencia->sql_record($clprecoreferencia->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
    $db_botao = true;
 }
@@ -70,7 +73,7 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -78,8 +81,8 @@ if(isset($alterar)){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmprecoreferencia.php");

@@ -3,9 +3,23 @@ require_once 'model/relatorios/Relatorio.php';
 
 // include("fpdf151/pdf.php");
 require("libs/db_utils.php");
-
+$oGet = db_utils::postMemory($_GET);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
+
+switch ($oGet->tipoprecoreferencia) {
+  case 2:
+    $tipoReferencia = " MAX(pc23_vlrun) ";
+    break;
+
+  case 3:
+    $tipoReferencia = " MIN(pc23_vlrun) ";
+    break;
+
+  default:
+    $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+    break;
+}
 
 /*$sSql = "select distinct pc11_seq,pc01_codmater,pc01_descrmater,si02_vlprecoreferencia,pc23_quant from pcproc
 join pcprocitem on pc80_codproc = pc81_codproc
@@ -64,7 +78,7 @@ ORDER BY pc11_seq) as x GROUP BY
                 pc01_descrmater,pc01_complmater,m61_abrev ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
-                (sum(pc23_vlrun)/count(pc23_orcamforne)) as si02_vlprecoreferencia,
+                {$tipoReferencia} as si02_vlprecoreferencia,
                 pc01_codmater,
                 si01_datacotacao
 FROM pcproc
@@ -81,9 +95,8 @@ JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferenc
 WHERE pc80_codproc = {$codigo_preco} {$sCondCrit}
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by pc11_seq"
 ;
-//print_r($sSql);die();
+
 $rsResult = db_query($sSql) or die(pg_last_error());
-//db_criatabela($rsResult);exit;
 
 $head3 = "Preço de Referência";
 $head5 = "Processo de Compra: $codigo_preco";
