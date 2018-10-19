@@ -59,6 +59,47 @@ $db_botao = true;
 
 if(isset($incluir)){
 
+  $oPost = db_utils::postmemory($_POST);
+
+  // ID's dos options campo "Modalidade"
+
+  $validaLic = array('3','32','1','40','6','41');
+  $validaLic2 = array('37','7','36','34');
+  $erro = false;
+
+
+  /*
+    Verifica se os Campos "Tipo de Licitação", "Natureza do Procedimento" e "Natureza do Objeto"
+    não foram selecionados.
+  */
+
+  if(in_array($oPost->l20_codtipocomdescr,$validaLic)){
+    if($oPost->l20_naturezaobjeto == '0'){
+      $msg = 'Campo Natureza do Objeto não informado';
+      $erro = true;
+    }
+    if($oPost->l20_tipnaturezaproced == '0'){
+      $msg = 'Campo Natureza do Procedimento não informado';
+      $erro = true;
+    }
+    if($oPost->l20_tipliticacao == '0'){
+      $msg = 'Campo Tipo de Licitação não informado';
+      $erro = true;
+    }
+  }
+
+  /*
+    Verifica se os Campos "Natureza do Objeto" não foi selecionado.
+  */
+
+  if(in_array($oPost->l20_codtipocomdescr,$validaLic2)){
+    if($oPost->l20_naturezaobjeto == '0'){
+      $msg = 'Campo Natureza do Objeto não informado';
+      $erro = true;
+    }
+  }
+
+
   db_inicio_transacao();
 
   $sqlerro    = false;
@@ -249,7 +290,10 @@ $l20_liclocal = 0;
 </html>
 <?
 if(isset($incluir)){
-
+  if($erro){
+    echo "<script>alert('".$msg."');</script>";
+    die();
+  }
   if($clliclicita->erro_status=="0"){
     $clliclicita->erro(true,false);
     $db_botao=true;
