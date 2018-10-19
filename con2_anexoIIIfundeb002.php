@@ -201,11 +201,6 @@ $sql_where_externo .= " and " . $sql_filtro;
 $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
 $res = $clempresto->sql_record($sqlempresto);
 
-if ($clempresto->numrows == 0) {
-    db_redireciona("db_erros.php?fechar=true&db_erro=Sem movimentação de restos a pagar.");
-    exit;
-}
-
 $rows = $clempresto->numrows;
 
 $total_rp_proc = 0;
