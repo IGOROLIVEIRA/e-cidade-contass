@@ -841,8 +841,9 @@ INNER JOIN conhistdoc ON conhistdoc.c53_coddoc = orcsuplemtipo.o48_coddocsup
 INNER JOIN orclei ON orclei.o45_codlei = orcprojeto.o39_codlei
 LEFT JOIN orcsuplemlan ON o49_codsup= orcsuplem.o46_codsup
 LEFT JOIN db_usuarios ON id_usuario = o49_id_usuario
-WHERE orcprojeto.o39_anousu = 2017
+WHERE orcprojeto.o39_anousu = ".db_getsession("DB_anousu")."
     AND orcprojeto.o39_usalimite = 't'
+    AND orcsuplemlan.o49_codsup IS NOT NULL
 ORDER BY o46_codsup";
 $rsSuplementacoes = db_query($sSqlSuplementacoes);
 $aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
