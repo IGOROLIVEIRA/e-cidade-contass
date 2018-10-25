@@ -202,15 +202,15 @@ class cl_orcreserva {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o80_justificativa == null ){ 
-       $this->erro_sql = " Campo Justificativa nao Informado.";
-       $this->erro_campo = "o80_justificativa";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+//     if($this->o80_justificativa == null ){
+//       $this->erro_sql = " Campo Justificativa nao Informado.";
+//       $this->erro_campo = "o80_justificativa";
+//       $this->erro_banco = "";
+//       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+//       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+//       $this->erro_status = "0";
+//       return false;
+//     }
      if($o80_codres == "" || $o80_codres == null ){
        $result = db_query("select nextval('orcreserva_o80_codres_seq')"); 
        if($result==false){
