@@ -123,6 +123,9 @@ $descricao  = $formulario->getNome();
   <input type="button" id="pesquisar" name="Pesquisar" value="Pesquisar" class="controle" />
   <input type="button" id="voltar"    name="voltar" value="Voltar" class="controle" />
   <input type="button" id="proximo"   name="proximo"   value="Próximo"   class="controle" />
+  <br>
+  <br>
+  <input type="button" id="envioESocial"  name="envioESocial"  value="Enviar para eSocial" />
 </form>
 </body>
 </html>
@@ -499,6 +502,19 @@ var instituicao = <?=db_getsession('DB_instit')?>;
         console.log(message);
       });
     }
+
+    $('envioESocial').addEventListener('click', function(){
+
+        // var parametros = {'exec': 'agendarTabelaRubricas',  'cgm': $F('cgm')};
+        var parametros = {'exec': 'agendarTabelaRubricas'};
+        new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
+
+            alert(retorno.sMessage);
+            if (retorno.erro) {
+                return false;
+            }
+        }).setMessage('Agendando envio para o eSocial').execute();
+    });
 
     exports.controlarBotoes  = controlarBotoes;
     exports.pesquisar        = pesquisar;

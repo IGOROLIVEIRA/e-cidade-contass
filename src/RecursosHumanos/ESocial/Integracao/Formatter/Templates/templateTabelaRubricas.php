@@ -1,9 +1,11 @@
 <?php
 return array(
-    'infoRubrica' => array(
+    'ideRubrica' => array(
         'properties' => array(
             'codRubr' => 'codRubr',
-            'ideTabRubr' => 'ideTabRubr',
+            'ideTabRubr' => array(
+                'ideTabRubr' => 'ideTabRubr',
+                'type' => 'string'),
             'iniValid' => 'iniValid',
             'fimValid' => 'fimValid'
         )
@@ -11,26 +13,28 @@ return array(
     'dadosRubrica' => array(
         'properties' => array(
             'dscRubr' => 'dscRubr',
-            'natRubr' => 'natRubr',
+            'natRubr' => array(
+                'natRubr' => 'natRubr', 
+                'type' => 'int'),
             'tpRubr' => array(
                 'tpRubr' => 'tpRubr',
                 'type' => 'int'
             ),
             'codIncCP' => array(
                 'codIncCP' => 'codIncCP',
-                'type' => 'int'
+                'type' => 'string'
             ),
             'codIncIRRF' => array (
                 'codIncIRRF' => 'codIncIRRF',
-                'type' => 'int'
+                'type' => 'string'
             ),
             'codIncFGTS' => array (
                 'codIncFGTS' => 'codIncFGTS',
-                'type' => 'int'
+                'type' => 'string'
             ),
             'codIncSIND' => array (
                 'codIncSIND' => 'codIncSIND',
-                'type' => 'int'
+                'type' => 'string'
             ),
             'observacao' => 'observacao')
     ),

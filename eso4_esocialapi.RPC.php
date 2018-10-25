@@ -210,6 +210,34 @@ try {
 
             $oRetorno->sMessage = "Dados do empregador agendado para envio.";
             break;
+
+        case "agendarTabelaRubricas":
+
+            $dadosESocial = new DadosESocial();
+
+            $dao = new cl_db_config();
+            $sql = $dao->sql_query_file(null, "numcgm", null, "codigo = ".db_getsession("DB_instit"));
+
+            $rs = db_query($sql);
+            $iCgm = db_utils::fieldsMemory($rs,0)->numcgm;
+
+            $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
+            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA);
+
+            $formatter = FormatterFactory::get(Tipo::RUBRICA);
+            $dadosDoTabelaRubricas = $formatter->formatar($dadosDoPreenchimento);
+            
+            /**
+             * Limitado array em 50 pois e o maximo que um lote pode enviar
+             */
+            foreach (array_chunk($dadosDoTabelaRubricas,50) as $aTabelaRubricas) {
+                $eventoFila = new Evento(TIPO::S1010, $iCgm, $iCgm, $aTabelaRubricas);
+                $eventoFila->adicionarFila();
+            }
+
+            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
+            break;
+
     }
     db_fim_transacao(false);
 } catch (Exception $eErro) {

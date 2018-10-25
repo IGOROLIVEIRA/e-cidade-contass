@@ -52,14 +52,14 @@ class FilaESocialTask extends Task implements iTarefa
                 $dadosEnvio = \db_utils::fieldsMemory($rs, $iCont);
 
                 $daoEsocialCertificado = new \cl_esocialcertificado();
-                $sql = $daoEsocialCertificado->sql_query_file(null, "rh214_senha as senha,rh214_certificado as certificado", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
+                $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, z01_cgccpf as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
                 $rsEsocialCertificado  = \db_query($sql."\n");
 
                 if (!$rsEsocialCertificado && pg_num_rows($rsEsocialCertificado) == 0) {
                     die("Certificado nao encontrado. \n");
                 }
                 $dadosCertificado = \db_utils::fieldsMemory($rsEsocialCertificado, 0);
-
+                $dadosCertificado->nmrazao = utf8_encode($dadosCertificado->nmrazao); 
                 $dados = array($dadosCertificado,json_decode($dadosEnvio->rh213_dados));
 
                 // $sRecurso = Recurso::getRecursoByEvento($dadosEnvio->rh213_evento);
@@ -68,13 +68,13 @@ class FilaESocialTask extends Task implements iTarefa
                 $exportar->setDados($dados);
                 $retorno = $exportar->request();
                 echo "<br> \n ";
-            // $dao->rh213_situacao = 2;
-            // $dao->rh213_sequencial = $parametros['id_fila'];
-            // $dao->alterar($parametros['id_fila']);
+            $dao->rh213_situacao = 2;
+            $dao->rh213_sequencial = $dadosEnvio->rh213_sequencial;
+            $dao->alterar($dadosEnvio->rh213_sequencial);
 
-            // if ($dao->erro_status == 0) {
-            //     die("Não foi possível alterar situação da fila. \n");
-            // }
+            if ($dao->erro_status == 0) {
+                die("Não foi possível alterar situação da fila. \n");
+            }
             }
         } catch (\Exception $e) {
             $this->log("Erro na execução:\n{$e->getMessage()} - ");

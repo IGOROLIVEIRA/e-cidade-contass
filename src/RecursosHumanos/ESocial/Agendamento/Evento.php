@@ -106,27 +106,30 @@ class Evento
      */
     private function adicionarEvento($codigo = null)
     {
+        $aDadosRubricas = $this->montarDadosAPI();
         $daoFilaEsocial = new \cl_esocialenvio();
         $daoFilaEsocial->rh213_sequencial = $codigo;
         $daoFilaEsocial->rh213_evento = $this->tipoEvento;
         $daoFilaEsocial->rh213_empregador = $this->empregador;
         $daoFilaEsocial->rh213_responsavelpreenchimento = $this->responsavelPreenchimento;
         
-        $daoFilaEsocial->rh213_dados = pg_escape_string(json_encode(\DBString::utf8_encode_all($this->montarDadosAPI())));
+        $daoFilaEsocial->rh213_dados = pg_escape_string(json_encode(\DBString::utf8_encode_all($aDadosRubricas)));
         $daoFilaEsocial->rh213_md5 = $this->md5;
         $daoFilaEsocial->rh213_situacao = 1;
 
-        if (empty($codigo)) {
-            $daoFilaEsocial->incluir(null);
-        } else {
-            $daoFilaEsocial->alterar($codigo);
-        }
+        if(count($aDadosRubricas) > 0) {
+            
+            if (empty($codigo)) {
+                $daoFilaEsocial->incluir(null);
+            } else {
+                $daoFilaEsocial->alterar($codigo);
+            }
 
-        if ($daoFilaEsocial->erro_status == 0) {
-            throw new \Exception("Não foi possível adicionar na fila.");
-        }
+            if ($daoFilaEsocial->erro_status == 0) {
+                throw new \Exception("Não foi possível adicionar na fila.");
+            }
 
-        $this->adicionarTarefa($daoFilaEsocial->rh213_sequencial);
+        }
     }
 
     /**
@@ -156,7 +159,8 @@ class Evento
             case Tipo::S1005:
                 return $this->montarDadosS1005API();
                 break;
-            case Tipo::RUBRICA:
+            case Tipo::S1010:
+                return $this->montarDadosS1010API();
                 break;
             case Tipo::SERVIDOR:
                 break;
@@ -238,5 +242,41 @@ class Evento
 
         return $oDadosAPI;
 
+    }
+
+    private function montarDadosS1010API() {
+
+        $aDadosAPI = array();
+        foreach ($this->dado as $iKey => $oDado) {
+            if (!isset($oDado->dadosRubrica->natRubr)) {
+                continue;
+            }
+            $oDadosAPI = new \stdClass;
+            $oDadosAPI->evtTabRubrica = new \stdClass;
+            $oDadosAPI->evtTabRubrica->sequencial = $iKey;
+            $oDadosAPI->evtTabRubrica->codRubr = $oDado->ideRubrica->codRubr;
+            $oDadosAPI->evtTabRubrica->ideTabRubr = $oDado->ideRubrica->ideTabRubr;
+            $oDadosAPI->evtTabRubrica->inivalid = $oDado->ideRubrica->iniValid;
+            if(!empty($oDado->ideRubrica->fimValid)) {
+                $oDadosAPI->evtTabRubrica->fimvalid = $oDado->ideRubrica->fimValid;
+            }
+            $oDadosAPI->evtTabRubrica->modo = 'INC';
+            $oDadosAPI->evtTabRubrica->dadosRubrica = $oDado->dadosRubrica;
+            if (!empty($oDado->ideProcessoCP->nrProc)) {
+                $oDadosAPI->evtTabRubrica->ideProcessoCP = $oDado->ideProcessoCP;
+            }
+            if (!empty($oDado->ideProcessoIRRF->nrProc)) {
+                $oDadosAPI->evtTabRubrica->ideProcessoIRRF = $oDado->ideProcessoIRRF;
+            }
+            if (!empty($oDado->ideProcessoFGTS->nrProc)) {
+                $oDadosAPI->evtTabRubrica->ideProcessoFGTS = $oDado->ideProcessoFGTS;
+            }
+            if (!empty($oDado->ideProcessoSIND->nrProc)) {
+                $oDadosAPI->evtTabRubrica->ideProcessoSIND = $oDado->ideProcessoSIND;
+            }
+            $aDadosAPI[] = $oDadosAPI;
+        }
+
+        return $aDadosAPI;
     }
 }

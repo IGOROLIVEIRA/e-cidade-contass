@@ -438,7 +438,7 @@ class cl_esocialcertificado {
      $sql .= " from esocialcertificado ";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = esocialcertificado.rh214_cgm";
      $sql .= "      inner join db_config  on  db_config.codigo = esocialcertificado.rh214_instit";
-     $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
+     // $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
      $sql2 = "";
      if ($dbwhere=="") {
