@@ -166,7 +166,7 @@ class Avaliacao {
       $oDaoGrupoPerguntas = db_utils::getDao("avaliacaogrupopergunta");
       $sSqlGrupos         = $oDaoGrupoPerguntas->sql_query_file(null,
                                                                 "*",
-                                                                "db102_sequencial",
+                                                                "db102_ordem,db102_sequencial",
                                                                 "db102_avaliacao = {$this->iAvaliacao}"
                                                                );
 
