@@ -108,7 +108,7 @@ WHERE
             if($this->sDataFinal['5'] . $this->sDataFinal['6'] == 01) {
 
                 $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
-                  10||r45_regist as si199_codafastamento,
+                  10||r45_codigo as si199_codafastamento,
                   
                   case when r45_dtreto >
 				             (SELECT si199_dtretornoafastamento
@@ -182,7 +182,7 @@ WHERE
             }else{
 
                 $sSql = "SELECT distinct r45_regist as si199_codvinculopessoa,
-                  10||r45_regist as si199_codafastamento,
+                  10||r45_codigo as si199_codafastamento,
                   
                   case when r45_dtreto >
 				             (SELECT si199_dtretornoafastamento
@@ -307,7 +307,7 @@ WHERE
 
 
             $sSql = "SELECT distinct r45_regist as codvinculopessoa,
-                  10||r45_regist as codafastamento,
+                  10||r45_codigo as codafastamento,
                   r45_dtafas as dtinicioafastamento,
                   r45_dtreto as dtretornoafastamento,
                   case when r45_situac = 4 and r45_codafa <> 'W' then 2 
