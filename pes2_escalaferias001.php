@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,7 +46,7 @@ db_postmemory($HTTP_POST_VARS);
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta http-equiv="Expires" CONTENT="0">
-  <?php 
+  <?php
     db_app::load("estilos.css");
     db_app::load("grid.style.css");
     db_app::load("prototype.js");
@@ -59,10 +59,10 @@ db_postmemory($HTTP_POST_VARS);
     db_app::load("DBAncora.widget.js");
   ?>
   <style>
-    #intervalo input[type="text"]{ 
+    #intervalo input[type="text"]{
       width: 90px;
     }
-    select { 
+    select {
       width: 100%;
     }
   </style>
@@ -94,7 +94,7 @@ db_postmemory($HTTP_POST_VARS);
                 db_ancora("Seleção", "js_pesquisaSelecao(true)", 1);
               ?>
             </td>
-            <td> 
+            <td>
               <?php
                 db_input('r44_selec', 10,  1, true, 'text', "", "onchange='js_pesquisaSelecao(false)'");
                 db_input('r44_des',   51, "", true, 'text', 3);
@@ -107,10 +107,10 @@ db_postmemory($HTTP_POST_VARS);
             </td>
             <td align="left">
               <?php
-                $regime = array( 
+                $regime = array(
                   "0" => "Todos",
                   "1" => "Estatutário",
-                  "2" => "CLT", 
+                  "2" => "CLT",
                   "3" => "Extra Quadro"
                 );
                 db_select('regime', $regime, true, 1);
@@ -126,11 +126,11 @@ db_postmemory($HTTP_POST_VARS);
                 $tipo_relatorio = array(
                                         "geral"          => "Geral",
                                         "lotacao"        => "Lotação",
-                                        "orgao"          => "Órgão", 
-                                        "matricula"      => "Matrícula", 
+                                        "orgao"          => "Órgão",
+                                        "matricula"      => "Matrícula",
                                         "locaistrabalho" => "Locais de Trabalho"
                                        );
-                db_select('tiporelatorio',$tipo_relatorio ,true,1, "onChange='js_tiporelatorio()'");                
+                db_select('tiporelatorio',$tipo_relatorio ,true,1, "onChange='js_tiporelatorio()'");
               ?>
             </td>
           </tr>
@@ -144,11 +144,11 @@ db_postmemory($HTTP_POST_VARS);
                                      "intervalo"=>"Intervalo",
                                      "selecionado"=>"Selecionado"
                                     );
-                db_select('tipofiltro',$tipo_filtro ,true,1, "onChange='js_filtros()'");                
+                db_select('tipofiltro',$tipo_filtro ,true,1, "onChange='js_filtros()'");
               ?>
             </td>
           </tr>
-          
+
           <tr id="intervalo" style="display: none;">
             <td>
               <strong>De<strong>
@@ -177,7 +177,7 @@ db_postmemory($HTTP_POST_VARS);
               <?
                 $tipo_ordem = array("numerica"=>"Numérica",
                                     "alfabetica"=>"Alfabética");
-                db_select('tipoordem',$tipo_ordem ,true,1);               
+                db_select('tipoordem',$tipo_ordem ,true,1);
               ?>
             </td>
           </tr>
@@ -188,17 +188,18 @@ db_postmemory($HTTP_POST_VARS);
             <td align="left">
               <?
                 $imprime_afastados = array("false" => "Não", "true" => "Sim");
-                db_select('imprimeafastados',$imprime_afastados ,true,1);               
+                db_select('imprimeafastados',$imprime_afastados ,true,1);
               ?>
             </td>
           </tr>
       </table>
      </fieldset>
      </td>
-  </tr>    
+  </tr>
   <tr>
-    <td colspan="2" align="center"> 
-      <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
+    <td align="center">
+      <input name="emite2" id="emite2" type="button" value="Imprimir PDF" onclick="js_emitePdf();js_emite();">
+      <input name="emite3" id="emite3" type="button" value="Imprimir CSV" onclick="js_emiteCsv();">
     </td>
   </tr>
 </form>
@@ -212,7 +213,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
 /**
  * Instancias dos lancadores
- * usados para pegar os registros lancados por cada tipo de relatorio 
+ * usados para pegar os registros lancados por cada tipo de relatorio
  *
  * @see js_getSelecionados
  */
@@ -227,20 +228,20 @@ js_matricula();
 js_locaisTrabalho();
 
 /**
- * Verifica o tipo de relatorio em caso de F5 
+ * Verifica o tipo de relatorio em caso de F5
  */
 js_tiporelatorio();
 
 /**
- * Busca os registros selecionados/lancados na grid do DBLancador 
- * 
+ * Busca os registros selecionados/lancados na grid do DBLancador
+ *
  * @access public
  * @return string com os codigos separados por virgula
  */
 function js_getSelecionados() {
 
   /**
-   * Tipo de relatorio escolhido 
+   * Tipo de relatorio escolhido
    * lotacao, orgao, matricula e locais de trabalho
    */
   var sTipoRelatorio = $F('tiporelatorio');
@@ -258,29 +259,29 @@ function js_getSelecionados() {
     aSelecionados.push(sCodigo);
   }
 
-  return aSelecionados.join(','); 
+  return aSelecionados.join(',');
 }
 
 /**
  * Mostra selecionado pelo tipo do relatorio
- * 
+ *
  * @access public
  * @return void
  */
 function js_selecionados() {
 
   /**
-   * Esconde outros tipos de relatorio 
+   * Esconde outros tipos de relatorio
    */
   js_escondeSelecionados();
 
   /**
-   * Tipo de relatorio escolhido 
+   * Tipo de relatorio escolhido
    */
   var sTipoRelatorio = $F('tiporelatorio');
 
   /**
-   * Objeto com tipos de relatorio para ter o container 
+   * Objeto com tipos de relatorio para ter o container
    * usado para mostrar Lancador de pesquisa
    */
   var oTipoRelatorio = {
@@ -294,8 +295,8 @@ function js_selecionados() {
 }
 
 /**
- * Esconde todas as pesquisas pelo tipo de relatorio 
- * 
+ * Esconde todas as pesquisas pelo tipo de relatorio
+ *
  * @access public
  * @return void
  */
@@ -309,8 +310,8 @@ function js_escondeSelecionados() {
 }
 
 /**
- * Monta lancador para pesquisar lotacao 
- * 
+ * Monta lancador para pesquisar lotacao
+ *
  * @access public
  * @return void
  */
@@ -323,14 +324,14 @@ function js_lotacao() {
   oLancadorLotacao.show($('ctnLancadorLotacao'));
 
   /**
-   * Adiciona instancia do lancador de lotacoes para depois buscar registros lancados 
+   * Adiciona instancia do lancador de lotacoes para depois buscar registros lancados
    */
   aInstanciaLancador.lotacao = oLancadorLotacao;
 }
 
 /**
- * Monta lancador para pesquisar orgao 
- * 
+ * Monta lancador para pesquisar orgao
+ *
  * @access public
  * @return void
  */
@@ -341,16 +342,16 @@ function js_orgao() {
   oLancadorOrgao.setLabelAncora('Órgão:');
   oLancadorOrgao.setParametrosPesquisa('func_orcorgao.php', ['o40_orgao' , 'o40_descr'], 'instit=' + <?php echo db_getsession('DB_instit'); ?>);
   oLancadorOrgao.show($('ctnLancadorOrgao'));
-  
+
   /**
-   * Adiciona instancia do lancador de orgaos para depois buscar registros lancados 
+   * Adiciona instancia do lancador de orgaos para depois buscar registros lancados
    */
   aInstanciaLancador.orgao = oLancadorOrgao;
 }
 
 /**
- * Monta lancador para pesquisar matricula 
- * 
+ * Monta lancador para pesquisar matricula
+ *
  * @access public
  * @return void
  */
@@ -363,14 +364,14 @@ function js_matricula() {
   oLancadorMatricula.show($('ctnLancadorMatricula'));
 
   /**
-   * Adiciona instancia do lancador de matriculas para depois buscar registros lancados 
+   * Adiciona instancia do lancador de matriculas para depois buscar registros lancados
    */
   aInstanciaLancador.matricula = oLancadorMatricula;
 }
 
 /**
- * Monta lancador para pesquisar locais de trabalho 
- * 
+ * Monta lancador para pesquisar locais de trabalho
+ *
  * @access public
  * @return void
  */
@@ -383,32 +384,32 @@ function js_locaisTrabalho() {
   oLancadorLocaisTrabalho.show($('ctnLancadorLocaisTrabalho'));
 
   /**
-   * Adiciona instancia do lancador de locais de trabalho para depois buscar registros lancados 
+   * Adiciona instancia do lancador de locais de trabalho para depois buscar registros lancados
    */
   aInstanciaLancador.locaistrabalho = oLancadorLocaisTrabalho;
 }
 
 /**
  * Tipo de relatorio, mostra/esconde filtros
- * 
+ *
  * @access public
  * @return void
  */
 function js_tiporelatorio() {
 
   /**
-   * Diferente de geral, mostra filtros 
+   * Diferente de geral, mostra filtros
    */
   if ( $F('tiporelatorio') != 'geral') {
 
-    $('filtros').show();    
+    $('filtros').show();
     js_filtros();
     return;
-  } 
+  }
 
   /**
    * tipo relatorio = geral
-   * Esconde filtros 
+   * Esconde filtros
    */
   $('filtros').hide();
   $('intervalo').hide();
@@ -416,61 +417,61 @@ function js_tiporelatorio() {
 }
 
 /**
- * Filtros de pequisa 
+ * Filtros de pequisa
  * Mostra campos para pesquisa pelo tipo de filtro, intervalo ou selecionado
- * 
+ *
  * @access public
  * @return void
  */
 function js_filtros() {
 
   /**
-   * Intervalo, mostra dois campos com intervalo dos sequencias a ser pesquisado 
+   * Intervalo, mostra dois campos com intervalo dos sequencias a ser pesquisado
    */
   if ($F('tipofiltro') == 'intervalo') {
 
-    $('intervalo').show();    
-    $('ctnSelecionados').hide();    
+    $('intervalo').show();
+    $('ctnSelecionados').hide();
     return;
-  }  
+  }
 
   /**
-   * Selecionado, mostra grid com lockup de pesquisa 
+   * Selecionado, mostra grid com lockup de pesquisa
    */
   if ( $F('tipofiltro') == 'selecionado') {
 
     $('intervalo').hide();
-    $('ctnSelecionados').show();    
+    $('ctnSelecionados').show();
     js_selecionados();
   }
 }
 
 function js_pesquisaSelecao(mostra) {
-  
+
   if (mostra == true) {
     js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?funcao_js=parent.js_geraform_mostraselecao1|r44_selec|r44_descr&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
   }else{
     if (document.form1.r44_selec.value != "") {
       js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?pesquisa_chave='+document.form1.r44_selec.value+'&funcao_js=parent.js_geraform_mostraselecao&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
     }else{
-      document.form1.r44_des.value = ""; 
+      document.form1.r44_des.value = "";
     }
   }
 }
 
 function js_geraform_mostraselecao(sDescricao, lErro) {
 
-  if (lErro) { 
+  if (lErro) {
 
     document.form1.r44_selec.value = '';
-    document.form1.r44_selec.focus(); 
+    document.form1.r44_selec.focus();
   }
 
-  document.form1.r44_des.value = sDescricao; 
+  document.form1.r44_des.value = sDescricao;
 }
 
 function js_geraform_mostraselecao1(chave1,chave2) {
-  
+
   document.form1.r44_selec.value = chave1;
   if(document.form1.r44_des){
     document.form1.r44_des.value = chave2;
@@ -479,23 +480,32 @@ function js_geraform_mostraselecao1(chave1,chave2) {
 }
 
 /**
- * Abre janela com relatorio 
- * 
+ * Abre janela com relatorio
+ *
  * @access public
  * @return bool
  */
+
+function js_emitePdf(){
+  sUrl = 'pes2_escalaferias002.php?periodo=' + $F('periodovencido');
+}
+
+function js_emiteCsv(){
+  sUrl = 'pes2_escalaferias003.php?periodo=' + $F('periodovencido');
+  js_emite();
+}
+
 function js_emite(){
 
   /**
-   * Valida se foi passado periodo 
+   * Valida se foi passado periodo
    */
-  if ( $F('periodovencido') == '' ) {  
+  if ( $F('periodovencido') == '' ) {
 
-    alert('Informe o períodos vencido.');
+    alert('Informe os períodos vencidos.');
     return false;
   }
 
-  var sUrl          = 'pes2_escalaferias002.php?periodo=' + $F('periodovencido');
   var sWidth        = document.body.clientWidth;
   var sHeight       = document.body.clientHeight;
   var sFiltros      = '';
@@ -505,12 +515,12 @@ function js_emite(){
 
     /**
      * tipo de filtro selecionado
-     * Valida se foi passado algum registro 
+     * Valida se foi passado algum registro
      */
     if ( $F('tipofiltro') == 'selecionado' ) {
 
       /**
-       * String com os codigos dos registros selecionados 
+       * String com os codigos dos registros selecionados
        */
       sSelecionados = js_getSelecionados();
 
@@ -538,9 +548,9 @@ function js_emite(){
       sFiltros += '&iIntervaloFinal=' + iIntervarloFinal;
     }
   }
-  
+
   /**
-   * Selecao 
+   * Selecao
    */
   if ( $F('r44_selec') != '' ) {
     sFiltros += '&iSelecao=' + $F('r44_selec');
@@ -552,8 +562,7 @@ function js_emite(){
   sFiltros += '&sTipoOrdem=' + $F('tipoordem');
   sFiltros += '&lImprimeAfastados=' + $F('imprimeafastados');
   sUrl     += sFiltros;
-
-  oJanela = window.open(sUrl, '', 'width=' + sWidth +',height='+ sHeight +',scrollbars=1,location=0 ');
+  oJanela  = window.open(sUrl, '', 'width=' + sWidth +',height='+ sHeight +',scrollbars=1,location=0 ');
   oJanela.moveTo(0,0);
 }
 </script>
