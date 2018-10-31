@@ -382,18 +382,18 @@ if ($intNumrows > 0) {
         		</tr>
         		<?php
                for ($iContArrevenc = 0; $iContArrevenc < $iLinhaArrevenc; $iContArrevenc++) {
-                 db_fieldsmemory($resultarrevenc, $iContArrevenc);
-                 if ($k00_dtfim != "") {
-                   $dDataFim = db_formatar($k00_dtfim,"d");
+                 $oArrevenc = db_utils::fieldsMemory($rsArrevenc, $iContArrevenc);
+                 if ($oArrevenc->k00_dtfim != "") {
+                   $dDataFim = db_formatar($oArrevenc->k00_dtfim,"d");
                  } else {
                    $dDataFim = "";
                  }
                  echo "
                        <tr>
-                         <td align='center'>$k00_numpar</td>
-                      	 <td align='center'>".db_formatar($k00_dtini,"d")."</td>
+                         <td align='center'>$oArrevenc->k00_numpar</td>
+                      	 <td align='center'>".db_formatar($oArrevenc->k00_dtini,"d")."</td>
                       	 <td align='center'>$dDataFim</td>
-                      	 <td align='center'>$k00_obs</td>
+                      	 <td align='center'>$oArrevenc->k00_obs</td>
                     	 </tr>
                  ";              
               }
