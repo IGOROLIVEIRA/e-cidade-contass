@@ -102,36 +102,6 @@ class SicomArquivoPessoa extends SicomArquivoBase implements iPadArquivoBaseCSV 
        FROM flpgo102018
        WHERE si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6'])." AND   rh01_sicom = 1)
     AND z01_cgccpf NOT IN
-      (SELECT si195_nrodocumento
-       FROM flpgo102017
-       inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-       inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
-    AND z01_cgccpf NOT IN
-      (SELECT si195_nrodocumento
-       FROM flpgo102016
-       inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-       inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
-    AND z01_cgccpf NOT IN
-      (SELECT si195_nrodocumento
-       FROM flpgo102015
-       inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-       inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
-    AND z01_cgccpf NOT IN
-      (SELECT si195_nrodocumento
-       FROM flpgo102014
-       inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-       inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
-    AND z01_cgccpf NOT IN
-      (SELECT si195_nrodocumento
-       FROM flpgo102013
-       inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-       inner JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-       WHERE rh01_admiss < '{$this->sDataInicial}' or z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
-    AND z01_cgccpf NOT IN
       (SELECT si193_nrodocumento
        FROM pessoaflpgo102018
        inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
@@ -198,36 +168,6 @@ WHERE (z01_cgccpf != '00000000000'
     FROM flpgo102018
     WHERE si195_mes < ".($this->sDataFinal['5'].$this->sDataFinal['6']).")
  AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102017
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102016
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102015
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102014
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102013
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102018
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
@@ -289,36 +229,6 @@ WHERE (z01_cgccpf != '00000000000'
  AND (z01_cgccpf != ''
       AND z01_cgccpf IS NOT NULL)
  AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102017
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102016
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102015
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102014
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102013
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102018
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
@@ -377,36 +287,6 @@ WHERE (z01_cgccpf != '00000000000'
       AND z01_cgccpf IS NOT NULL)
  AND prefeitura = 't'
  AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102017
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102016
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102015
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102014
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
-   (SELECT si195_nrodocumento
-    FROM flpgo102013
-    inner JOIN cgm ON si195_nrodocumento = z01_cgccpf
-    JOIN rhpessoal ON rh01_numcgm = z01_numcgm
-    WHERE z01_ultalt < '{$this->sDataInicial}' AND   rh01_sicom = 1)
- AND z01_cgccpf NOT IN
    (SELECT si193_nrodocumento
     FROM pessoaflpgo102018
     inner JOIN cgm ON si193_nrodocumento = z01_cgccpf
@@ -450,7 +330,7 @@ WHERE (z01_cgccpf != '00000000000'
                 AND   rh01_sicom = 1";
         }
 
-        $rsResult  = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
+        $rsResult  = db_query($sSql);//echo $sSql;exit;//db_criatabela($rsResult);exit;
         $aPessoas    =  array();
         $aCpfPessoas = array("00000000000","00000000000000","11111111111","11111111111111","22222222222","22222222222222","33333333333","33333333333333",
             "44444444444","4n4444444444444","55555555555","55555555555555","66666666666","66666666666666","77777777777","77777777777777","88888888888","88888888888888",
