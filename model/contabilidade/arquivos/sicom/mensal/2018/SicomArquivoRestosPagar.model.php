@@ -343,7 +343,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
 					       c70_valor as vlmovimentacao,
 					       ' ' as codorgaoencampatribuic,
 					       ' ' as codunidadesubencampatribuic,
-					       e94_motivo as justificativa,
+					       c72_complem as justificativa,
 					       e60_codemp as atocancelamento,
 					       c71_data as dataatocancelamento,o15_codtri as codfontrecursos
         from conlancamdoc 
@@ -354,13 +354,15 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
         join orcelemento  on o58_codele = o56_codele and o58_anousu = o56_anousu
         join orctiporec on o58_codigo = o15_codigo
         join db_config on codigo = e60_instit
-        join empanulado on e94_numemp = e60_numemp and c71_data = e94_data and c70_valor = e94_valor
+        JOIN conlancamcompl ON c72_codlan = c71_codlan
         left join infocomplementaresinstit on codigo = si09_instit
         JOIN orcunidade ON o58_orgao=o41_orgao
         AND o58_unidade=o41_unidade
        AND o58_anousu = o41_anousu
        JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-        where e60_instit = " . db_getsession("DB_instit") . " and c71_coddoc in (31,32) and c71_data between '{$this->sDataInicial}' and '{$this->sDataFinal}' ";
+        where e60_instit = " . db_getsession("DB_instit") . " and c71_coddoc in (31,32)
+        and exists (select distinct e94_numemp from empanulado where e94_numemp = e60_numemp and e94_data = c71_data and e94_valor = c70_valor) 
+        and c71_data between '{$this->sDataInicial}' and '{$this->sDataFinal}' ";
     
     $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);die($sSql);
     
