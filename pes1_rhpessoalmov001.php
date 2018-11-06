@@ -83,6 +83,9 @@ if (isset($incluir) && !$lErro) {
   $clrhpessoalmov->rh02_funcao         = $rh02_funcao;
   $clrhpessoalmov->rh02_instit         = db_getsession("DB_instit");
   $clrhpessoalmov->rh02_equip          = "false";
+  $clrhpessoalmov->rh02_cgminstituidor = $rh02_cgminstituidor;
+  $clrhpessoalmov->rh02_dtobitoinstituidor = $rh02_dtobitoinstituidor;
+  $clrhpessoalmov->rh02_tipoparentescoinst = $rh02_tipoparentescoinst;
 
   if($rh02_diasgozoferias >= 30) {
 
@@ -233,6 +236,9 @@ if (isset($incluir) && !$lErro) {
   $sqlerro = false;
   $clrhpessoalmov->rh02_diasgozoferias = $rh02_diasgozoferias;
   $clrhpessoalmov->rh02_instit         = db_getsession('DB_instit');
+  $clrhpessoalmov->rh02_cgminstituidor = $rh02_cgminstituidor;
+  $clrhpessoalmov->rh02_dtobitoinstituidor = $rh02_dtobitoinstituidor;
+  $clrhpessoalmov->rh02_tipoparentescoinst = $rh02_tipoparentescoinst;
 
   if($rh02_diasgozoferias >= 30) {
 

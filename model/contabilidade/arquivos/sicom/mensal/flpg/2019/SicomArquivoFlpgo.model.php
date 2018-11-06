@@ -46,6 +46,15 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		return $this->iCodigoLayout;
 	}
 
+	public function getcpf($z01_numcgm,$matricula){
+        $sql = "select z01_cgccpf from cgm where z01_numcgm = {$z01_numcgm}";
+        $result = db_utils::fieldsMemory(db_query($sql), 0)->z01_cgccpf;
+        if ( $result == 0) {
+            throw new Exception("Cgm do Constituinte nao informado para matricula {$matricula} / cod vinculoS");
+        }
+        return $result;
+    }
+
 	/**
 	 *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
 	 *@return Array
@@ -132,12 +141,20 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
 		z01_cgccpf as si195_nrodocumento,
     'C' as si195_regime,
     'M' as si195_indtipopagamento,
+   rh30_vinculo,
+   rh02_cgminstituidor,
+   rh02_dtobitoinstituidor,
+   rh02_tipoparentescoinst,
+       CASE
+           WHEN rh37_exerceatividade = 't' THEN 1
+           WHEN rh37_exerceatividade = 'f' THEN 2
+           ELSE NULL
+       END AS rh37_exerceatividade,
     case
     when (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1 ) is not null then (select distinct rh25_vinculo from rhlotavinc where rh25_codigo = rhlota.r70_codigo and rh25_anousu = ".db_getsession('DB_anousu')." limit 1)
     else 'A'
       end as si195_indsituacaoservidorpensionista,
     rh01_admiss as si195_datconcessaoaposentadoriapensao,
-
     case
     when rh20_cargo <> 0 then rh04_descr
     else rh37_descr
@@ -219,9 +236,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
    else 'C'
      end as si195_natsaldoliquido_res,
    sum (case when y.ordem = 'gerfres' then provento else 0 end) - sum (case when y.ordem = 'gerfres' then desconto else 0 end) as si195_vlrremuneracaoliquida_res
-
-
-   from
+   FROM
    (
    SELECT 'gerfsal' AS ordem,
    'R950'::varchar(4) AS rubrica,
@@ -372,17 +387,14 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      FROM gerfres
      WHERE r20_anousu = ".db_getsession("DB_anousu")."
        AND r20_mesusu =" .$this->sDataFinal['5'].$this->sDataFinal['6']."))))
-
    AND   rh01_sicom = 1
-
    AND rh01_instit = ".db_getsession('DB_instit')."
-
-   group by 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19
+   GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24
    ";
 
    $rsResult10 = db_query($sSql);
-		//echo $sSql;
-		//db_criatabela($rsResult10);exit;
+//		echo $sSql;
+//		db_criatabela($rsResult10);exit;
 
    for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -442,7 +454,7 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
      'tipo'=>'4',
      );
   }
-  //Descrição do tipo de pagamento extra
+  //Descriï¿½ï¿½o do tipo de pagamento extra
   if($aTiposPagamento[$iQuantTipoPagamento]['si195_indtipopagamento'] == 'E'){
     //Consulta se o servidor possui ferias cadastradas no mes
     $sSqlFerias = "SELECT *
@@ -480,30 +492,40 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10                                          = new cl_flpgo102019();
         $clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
         $clflpgo10->si195_codvinculopessoa                  = $oDados10->rh02_regist;
-				$clflpgo10->si195_regime             		            = $oDados10->si195_regime;
-				$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
+		$clflpgo10->si195_regime             		        = $oDados10->si195_regime;
+		$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
         $clflpgo10->si195_dsctipopagextra                   = $this->convert_accented_characters($aTiposPagamento[$iContEx]['si195_dsctipopagextra']);
         $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
+        if($oDados10->rh30_vinculo == 'P') {
+            $clflpgo10->si195_nrocpfinstituidor             = $this->getcpf($oDados10->rh02_cgminstituidor,$oDados10->rh02_regist);
+            $clflpgo10->si195_datobitoinstituidor           = implode("-",array_reverse(explode("-",$oDados10->rh02_dtobitoinstituidor)));
+            $clflpgo10->si195_tipodependencia               = $oDados10->rh02_tipoparentescoinst;
+        }else{
+            $clflpgo10->si195_nrocpfinstituidor             = "";
+            $clflpgo10->si195_datobitoinstituidor           = "";
+            $clflpgo10->si195_tipodependencia               = "";
+        }
         $clflpgo10->si195_dscsituacao                       = $this->convert_accented_characters($oDados10->si195_dscsituacao);
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
         $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
         $clflpgo10->si195_codcargo                          = ($oDados10->si195_indsituacaoservidorpensionista!='P')?$oDados10->rh37_cbo:0;
-        $clflpgo10->si195_sglcargo 							            = $this->convert_accented_characters($oDados10->si195_sglcargo);
+        $clflpgo10->si195_sglcargo 							= $this->convert_accented_characters($oDados10->si195_sglcargo);
         $clflpgo10->si195_dscsiglacargo                     = $this->convert_accented_characters($oDados10->si195_dscsiglacargo);
-        $clflpgo10->si195_dscapo           					        = $this->convert_accented_characters($dscAPO);
-        $clflpgo10->si195_reqcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);
-        $clflpgo10->si195_dscreqcargo 							        = ($oDados10->si195_reqcargo == 4)?substr($this->convert_accented_characters($oDados10->rh37_atividadedocargo),0,150):' ';
-        $clflpgo10->si195_indcessao 						            = $this->convert_accented_characters($oDados10->si195_indcessao);
-        $clflpgo10->si195_dsclotacao 						            = $this->convert_accented_characters($oDados10->si195_dsclotacao);
-        $clflpgo10->si195_vlrcargahorariasemanal 		        = $oDados10->si195_vlrcargahorariasemanal;
+        $clflpgo10->si195_dscapo           					= $this->convert_accented_characters($dscAPO);
+        $clflpgo10->si195_natcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);
+        $clflpgo10->si195_dscnatcargo 						= ($oDados10->si195_reqcargo == 4)?substr($this->convert_accented_characters($oDados10->rh37_atividadedocargo),0,150):' ';
+        $clflpgo10->si195_indcessao 						= $this->convert_accented_characters($oDados10->si195_indcessao);
+        $clflpgo10->si195_dsclotacao 						= $this->convert_accented_characters($oDados10->si195_dsclotacao);
+        $clflpgo10->si195_indsalaaula 						= $oDados10->rh37_exerceatividade;
+        $clflpgo10->si195_vlrcargahorariasemanal 		    = $oDados10->si195_vlrcargahorariasemanal;
         $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;
         $clflpgo10->si195_datcomissionadoexclusao           = $oDados10->si195_datexclusao;
         $clflpgo10->si195_vlrremuneracaobruta               = $aTiposPagamento[$iContEx]['si195_vlrremuneracaobruta'];
-        $clflpgo10->si195_natsaldoliquido                   = $aTiposPagamento[$iContEx]['si195_natsaldoliquido'];
+        $clflpgo10->si195_vlrdescontos                      = $aTiposPagamento[$iContEx]['si195_vlrdescontos'];
         $clflpgo10->si195_vlrremuneracaoliquida             = $aTiposPagamento[$iContEx]['si195_vlrremuneracaoliquida'];
-        $clflpgo10->si195_vlrdescontos                       = $aTiposPagamento[$iContEx]['si195_vlrdescontos'];
+        $clflpgo10->si195_natsaldoliquido                   = $aTiposPagamento[$iContEx]['si195_natsaldoliquido'];
         $clflpgo10->si195_mes                               = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $clflpgo10->si195_inst                              = db_getsession("DB_instit");
 

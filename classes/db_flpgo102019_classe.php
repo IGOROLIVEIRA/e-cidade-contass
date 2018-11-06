@@ -239,7 +239,7 @@ class cl_flpgo102019 {
             return false;
         }
         if($this->si195_dsctipopagextra == null ){
-            $this->si195_dsctipopagextra = "null";
+            $this->si195_dsctipopagextra = null;
         }
         if($this->si195_indsituacaoservidorpensionista == null ){
             $this->erro_sql = " Campo Indica a situação do servidor público não informado.";
@@ -250,24 +250,7 @@ class cl_flpgo102019 {
             $this->erro_status = "0";
             return false;
         }
-        if($this->si195_nrocpfinstituidor == null ){
-            $this->si195_nrocpfinstituidor = "null";
-        }
-        if($this->si195_datobitoinstituidor == null ){
-            $this->si195_datobitoinstituidor = "null";
-        }
-        if($this->si195_tipodependencia == null ){
-            $this->si195_tipodependencia = "null";
-        }
-        if($this->si195_dscsituacao == null ){
-            $this->si195_dscsituacao = "null";
-        }
-        if($this->si195_datconcessaoaposentadoriapensao == null ){
-            $this->si195_datconcessaoaposentadoriapensao = "null";
-        }
-        if($this->si195_dsccargo == null ){
-            $this->si195_dsccargo = "null";
-        }
+
         if($this->si195_codcargo == null ){
             $this->si195_codcargo=0;
         }
@@ -280,43 +263,11 @@ class cl_flpgo102019 {
             $this->erro_status = "0";
             return false;
         }
-        if($this->si195_dscsiglacargo == null ){
-            $this->si195_dscsiglacargo = "null";
-        }
-        if($this->si195_dscapo == null ){
-            $this->si195_dscapo = "null";
-        }
-        if($this->si195_natcargo == null ){
-            $this->si195_natcargo = "null";
-        }
-        if($this->si195_dscnatcargo == null ){
-            $this->si195_dscnatcargo = "null";
-        }
-        if($this->si195_indcessao == null ){
-            $this->si195_indcessao = "null";
-        }
-        if($this->si195_dsclotacao == null ){
-            $this->si195_dsclotacao = "null";
-        }
-        if($this->si195_indsalaaula == null ){
-            $this->si195_indsalaaula = "null";
-        }
 
         if($this->si195_vlrcargahorariasemanal == null ){
             $this->si195_vlrcargahorariasemanal = "0";
         }
-        if($this->si195_datefetexercicio== null ){
-            $this->si195_datefetexercicio= "null";
-        }
-        if($this->si195_datcomissionado== null ){
-            $this->si195_datcomissionado= "null";
-        }
-        if($this->si195_datexclusao == null ){
-            $this->si195_datexclusao = "null";
-        }
-        if($this->si195_datcomissionadoexclusao == null ){
-            $this->si195_datcomissionadoexclusao = "null";
-        }
+
         if($this->si195_vlrremuneracaobruta == null ){
             $this->erro_sql = " Campo Valor total dos rendimentos não informado.";
             $this->erro_campo = "si195_vlrremuneracaobruta";
@@ -365,8 +316,7 @@ class cl_flpgo102019 {
         if($si195_sequencial == "" || $si195_sequencial == null ){
             $result = db_query("select nextval('flpgo102019_si195_sequencial_seq')");
             if($result==false){
-                $this->erro_banco = str_replace("
-","",@pg_last_error());
+                $this->erro_banco = str_replace("","",@pg_last_error());
                 $this->erro_sql   = "Verifique o cadastro da sequencia: flpgo102019_si195_sequencial_seq do campo: si195_sequencial";
                 $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
@@ -398,8 +348,8 @@ class cl_flpgo102019 {
 
         $sql = "insert into flpgo102019(
                                        si195_sequencial
-                                      ,si195_codvinculopessoa
                                       ,si195_tiporegistro
+                                      ,si195_codvinculopessoa
                                       ,si195_regime
                                       ,si195_indtipopagamento
                                       ,si195_dsctipopagextra
@@ -425,23 +375,23 @@ class cl_flpgo102019 {
                                       ,si195_datexclusao
                                       ,si195_datcomissionadoexclusao
                                       ,si195_vlrremuneracaobruta
-                                      ,si195_natsaldoliquido
-                                      ,si195_vlrremuneracaoliquida
                                       ,si195_vlrdescontos
+                                      ,si195_vlrremuneracaoliquida
+                                      ,si195_natsaldoliquido
                                       ,si195_mes
                                       ,si195_inst
                        )
                 values (
                                 $this->si195_sequencial
-                               ,$this->si195_codvinculopessoa
                                ,$this->si195_tiporegistro
+                               ,$this->si195_codvinculopessoa
                                ,'$this->si195_regime'
                                ,'$this->si195_indtipopagamento'
                                ,'$this->si195_dsctipopagextra'
                                ,'$this->si195_indsituacaoservidorpensionista'
                                ,'$this->si195_nrocpfinstituidor'
                                ,".($this->si195_datobitoinstituidor== "null" || $this->si195_datobitoinstituidor == ""?"null":"'".$this->si195_datobitoinstituidor."'")."
-                               ,'$this->si195_tipodependencia'
+                               ,".($this->si195_tipodependencia== "null" || $this->si195_tipodependencia == ""?"0":"'".$this->si195_tipodependencia."'")."
                                ,'$this->si195_dscsituacao'
                                ,".($this->si195_datconcessaoaposentadoriapensao == "null" || $this->si195_datconcessaoaposentadoriapensao == ""?"null":"'".$this->si195_datconcessaoaposentadoriapensao."'")."
                                ,'$this->si195_dsccargo'
@@ -449,7 +399,7 @@ class cl_flpgo102019 {
                                ,'$this->si195_sglcargo'
                                ,'$this->si195_dscsiglacargo'
                                ,'$this->si195_dscapo'
-                               ,$this->si195_natcargo
+                               ,".($this->si195_natcargo == "null" || $this->si195_natcargo == ""?"null":"'".$this->si195_natcargo."'")."
                                ,'$this->si195_dscnatcargo'
                                ,'$this->si195_indcessao'
                                ,'$this->si195_dsclotacao'
@@ -460,17 +410,15 @@ class cl_flpgo102019 {
                                ,".($this->si195_datexclusao == "null" || $this->si195_datexclusao == ""?"null":"'".$this->si195_datexclusao."'")."
                                ,".($this->si195_datcomissionadoexclusao == "null" || $this->si195_datcomissionadoexclusao == ""?"null":"'".$this->si195_datcomissionadoexclusao."'")."
                                ,'$this->si195_vlrremuneracaobruta'
-                               ,'$this->si195_natsaldoliquido'
-                               ,'$this->si195_vlrremuneracaoliquida'
                                ,'$this->si195_vlrdescontos'
+                               ,'$this->si195_vlrremuneracaoliquida'
+                               ,'$this->si195_natsaldoliquido'
                                ,$this->si195_mes
                                ,$this->si195_inst
                       )";
-
         $result = db_query($sql);
-        if($result==false){
-            $this->erro_banco = str_replace("
-","",@pg_last_error());
+            if($result==false){
+            $this->erro_banco = str_replace("","",@pg_last_error());
             if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
                 $this->erro_sql   = "flpgo102019 ($this->si195_sequencial) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -864,8 +812,7 @@ class cl_flpgo102019 {
 //        }
         $result = db_query($sql);
         if($result==false){
-            $this->erro_banco = str_replace("
-","",@pg_last_error());
+            $this->erro_banco = str_replace("","",@pg_last_error());
             $this->erro_sql   = "flpgo102019 nao Alterado. Alteracao Abortada.\n";
             $this->erro_sql .= "Valores : ".$this->si195_sequencial;
             $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -956,8 +903,7 @@ class cl_flpgo102019 {
         }
         $result = db_query($sql.$sql2);
         if($result==false){
-            $this->erro_banco = str_replace("
-","",@pg_last_error());
+            $this->erro_banco = str_replace("","",@pg_last_error());
             $this->erro_sql   = "flpgo102019 nao Excluído. Exclusão Abortada.\n";
             $this->erro_sql .= "Valores : ".$si195_sequencial;
             $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -992,8 +938,7 @@ class cl_flpgo102019 {
         $result = db_query($sql);
         if($result==false){
             $this->numrows    = 0;
-            $this->erro_banco = str_replace("
-","",@pg_last_error());
+            $this->erro_banco = str_replace("","",@pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
             $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));

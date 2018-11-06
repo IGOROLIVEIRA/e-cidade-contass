@@ -29,193 +29,217 @@
 $clrhfuncao->rotulo->label();
 
 if ($db_opcao == 2) {
-  $sTituloFormulario = "Alteração";  
+    $sTituloFormulario = "Alteração";
 } else if ($db_opcao == 3) {
-  $sTituloFormulario = "Exclusão";
+    $sTituloFormulario = "Exclusão";
 } else {
-  $sTituloFormulario = "Cadastro";
+    $sTituloFormulario = "Cadastro";
 }
 ?>
 <form name="form1" method="post" action="">
-<center>
-  <fieldset style="width: 500px;">
-    <legend style="font-weight: bold;">&nbsp;<?=$sTituloFormulario;?> de Cargos&nbsp;</legend>
-    <table width="100%">
-      <tr>
-        <td width="100" nowrap title="<?=@$Trh37_funcao?>"><?=@$Lrh37_funcao?></td>
-        <td>
-          <?
-            db_input('rh37_funcao', 10, $Irh37_funcao, true, 'text', $db_opcao, "")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Trh37_descr?>"><?=@$Lrh37_descr?></td>
-        <td>
-          <?
-            db_input('rh37_descr', 44, $Irh37_descr, true, 'text', $db_opcao,"")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Trh37_funcaogrupo?>">
-          <? 
-            db_ancora($Lrh37_funcaogrupo,'js_buscagrupo(true);',1); 
-          ?>
-        </td>
-        <td>
-          <?
-            db_input('rh37_funcaogrupo'     , 10, $Irh37_funcaogrupo, true, 'text', $db_opcao, "onchange='js_buscagrupo(false);'");
-            db_input('rh37_funcaogrupodescr', 30, '', true, 'text', 3, '');
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Trh37_vagas?>"><?=@$Lrh37_vagas?></td>
-        <td>
-          <?
-            db_input('rh37_vagas', 10, $Irh37_vagas, true, 'text', $db_opcao, "")
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Trh37_cbo?>"><?=@$Lrh37_cbo?></td>
-        <td>
-          <?
-            db_input('rh37_cbo', 10, $Irh37_cbo, true, 'text', $db_opcao, "")
-          ?>
-        </td>    
-      </tr>
-      <tr>
-        <td nowrap title="<?=@$Trh37_class?>"><?=@$Lrh37_class?></td>
-        <td>
-          <?
-            db_input('rh37_class', 10, $Irh37_class, true, 'text', $db_opcao, "");
-          ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap title="Requisito do Cargo"><b>Requisito do Cargo: </b></td>
-        <td>
-          <?
-          $areqCargo = array("1"=>"Nível superior completo ou nível médio com especialização (Ex: Magistrados, Técnicos em Contabilidade, etc)",
-              "2"=>"Profissão regulamentada privativa de profissionais de saúde (Ex: Médicos, Assistentes Sociais, Técnicos em Enfermagem etc)",
-              "3"=>"Professor",
-              "4"=>"Outras");
-          db_select('rh37_reqcargo', $areqCargo, true, $db_opcao,"onchange='js_showOutros()'");
-          ?>
-        </td>
-      </tr>
-      </table>
-      <table>
-      <tr id="atividadedocargo" <? if($rh37_reqcargo != 4){ ?> style="display: none;" <? }else{ ?> style="display: inline;" <? } ?>>
-          <td nowrap title="Atividade do cargo"><b>Escolaridade do cargo: </b></td>
-          <td>
-          <?
-          db_textarea('rh37_atividadedocargo',5,60,$Irh37_atividadedocargo,true,'text',$db_opcao,"","","","150");
-          ?>
-          </td>
-      </tr>
-      </table>
+    <center>
+        <fieldset style="width: 500px;">
+            <legend style="font-weight: bold;">&nbsp;<?=$sTituloFormulario;?> de Cargos&nbsp;</legend>
+            <table width="100%">
+                <tr>
+                    <td width="100" nowrap title="<?=@$Trh37_funcao?>"><?=@$Lrh37_funcao?></td>
+                    <td>
+                        <?
+                        db_input('rh37_funcao', 10, $Irh37_funcao, true, 'text', $db_opcao, "")
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="<?=@$Trh37_descr?>"><?=@$Lrh37_descr?></td>
+                    <td>
+                        <?
+                        db_input('rh37_descr', 44, $Irh37_descr, true, 'text', $db_opcao,"")
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="<?=@$Trh37_funcaogrupo?>">
+                        <?
+                        db_ancora($Lrh37_funcaogrupo,'js_buscagrupo(true);',1);
+                        ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('rh37_funcaogrupo'     , 10, $Irh37_funcaogrupo, true, 'text', $db_opcao, "onchange='js_buscagrupo(false);'");
+                        db_input('rh37_funcaogrupodescr', 30, '', true, 'text', 3, '');
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="<?=@$Trh37_vagas?>"><?=@$Lrh37_vagas?></td>
+                    <td>
+                        <?
+                        db_input('rh37_vagas', 10, $Irh37_vagas, true, 'text', $db_opcao, "")
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="<?=@$Trh37_cbo?>"><?=@$Lrh37_cbo?></td>
+                    <td>
+                        <?
+                        db_input('rh37_cbo', 10, $Irh37_cbo, true, 'text', $db_opcao, "")
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="<?=@$Trh37_class?>"><?=@$Lrh37_class?></td>
+                    <td>
+                        <?
+                        db_input('rh37_class', 10, $Irh37_class, true, 'text', $db_opcao, "");
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="Requisito do Cargo"><b>Requisito do Cargo: </b></td>
+                    <td>
+                        <?
+                        $areqCargo = array("1"=>"Nível superior completo ou nível médio com especialização (Ex: Magistrados, Técnicos em Contabilidade, etc)",
+                            "2"=>"Profissão regulamentada privativa de profissionais de saúde (Ex: Médicos, Assistentes Sociais, Técnicos em Enfermagem etc)",
+                            "3"=>"Professor",
+                            "4"=>"Outras",
+                            "5"=>"Agente Policico");
+                        db_select('rh37_reqcargo', $areqCargo, true, $db_opcao,"onchange='js_showOutros(value);js_verificacargo(value)'");
+                        ?>
+                    </td>
+                </tr>
+                <tr id="trexerceratividade" style="display:<?= $db_opcao == 2 ? 'table-row' : 'none' ?>;">
+                    <td>
+                        <strong>Professor exerce suas atividades em sala de aula?</strong>
+                    </td>
+                    <td>
+                        <?
+                        $sTipo = array(
+                                ""  => "Selecione",
+                                "t" => "Sim",
+                                "f" => "Não"
+                        );
+                        db_select('rh37_exerceatividade', $sTipo, true, $db_opcao,"onchange=''");
+                        ?>
+                    </td>
+                </tr>
+            </table>
+            <table>
+      <tr id="atividadedocargo" style="display:<?= $db_opcao == 2 ? 'table-row' : '' ?>;">
+                    <td nowrap title="Atividade do cargo"><b>Escolaridade do cargo: </b></td>
+                    <td>
+                        <?
+                        db_textarea('rh37_atividadedocargo',5,60,$Irh37_atividadedocargo,true,'text',$db_opcao,"","","","150");
+                        ?>
+                    </td>
+                </tr>
+            </table>
 
-      <table>
-      <tr>
-        <td nowrap title="<?=@$Trh37_ativo?>"><?=@$Lrh37_ativo?></td>
-        <td> 
-          <?
-            $aAtivo = array("t"=>"Sim","f"=>"Não");
-            db_select('rh37_ativo', $aAtivo, true, $db_opcao,"");
-          ?>
-      </td>
-      </tr>
-    <fieldset>
-    <legend style="font-weight: bold;">&nbsp;Lei&nbsp;</legend>
-      <?
-        db_textarea('rh37_lei',5,60,$Irh37_lei,true,'text',$db_opcao,"");
-      ?>
-    </fieldset>
+            <table>
+                <tr>
+                    <td nowrap title="<?=@$Trh37_ativo?>"><?=@$Lrh37_ativo?></td>
+                    <td>
+                        <?
+                        $aAtivo = array("t"=>"Sim","f"=>"Não");
+                        db_select('rh37_ativo', $aAtivo, true, $db_opcao,"");
+                        ?>
+                    </td>
+                </tr>
+                <fieldset>
+                    <legend style="font-weight: bold;">&nbsp;Lei&nbsp;</legend>
+                    <?
+                    db_textarea('rh37_lei',5,60,$Irh37_lei,true,'text',$db_opcao,"");
+                    ?>
+                </fieldset>
 
-      </table>
-  </fieldset>
-  </center>
-  <br />
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> onClick="return validaCampos()" >
-<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
+            </table>
+        </fieldset>
+    </center>
+    <br />
+    <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> onClick="return validaCampos()" >
+    <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 
 <script>
 
-<?
-if($db_opcao==1){
- echo "top.corpo.document.form1.rh37_reqcargo.value='4'";
-}
-?>
-
-function js_showOutros() {
-
-
-
-    if (document.form1.rh37_reqcargo.value == 4) {
-        document.getElementById('atividadedocargo').style.display = "inline";
-        console.log(document.getElementById('atividadedocargo'));
-    } else {
-        document.getElementById('atividadedocargo').style.display = "none";
-        console.log(document.getElementById('atividadedocargo'));
+    <?
+    if($db_opcao==1){
+        echo "top.corpo.document.form1.rh37_reqcargo.value='4'";
     }
-}
+    ?>
 
-function js_buscagrupo(mostra) {
-  if(mostra==true){
-    var sUrlOpen = 'func_rhfuncaogrupo.php?funcao_js=parent.js_preencheGrupo|rh100_sequencial|rh100_descricao';
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_rhfuncao', sUrlOpen, 'Pesquisa', true);
-  }else{
-     if(document.form1.rh37_funcaogrupo.value != ''){
-        var iFuncaoGrupo  = document.form1.rh37_funcaogrupo.value;
-        var sUrlOpenGrupo = 'func_rhfuncaogrupo.php?pesquisa_chave='+iFuncaoGrupo+'&funcao_js=parent.js_mostrargrupos';
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_rhfuncao', sUrlOpenGrupo, 'Pesquisa', false);
-     }else{
-       document.form1.rh37_funcaogrupodescr.value = ''; 
-     }
-  }
-}
+    function js_showOutros(value) {
 
-function js_mostrargrupos(chave,erro) {
-  document.form1.rh37_funcaogrupodescr.value   = chave; 
-  if (erro==true) { 
-    document.form1.rh37_funcaogrupo.focus(); 
-    document.form1.rh37_funcaogrupo.value = ''; 
-  }
-}
+        if (value == 4) {
+            document.getElementById('atividadedocargo').style.display = '';
+            document.getElementById('trexerceratividade').style.display = 'none';
+            document.getElementById('rh37_exerceatividade').value = 0;
 
-function js_preencheGrupo(chave, descricao) {
-  document.form1.rh37_funcaogrupo.value      = chave;
-  document.form1.rh37_funcaogrupodescr.value = descricao;
-  db_iframe_rhfuncao.hide();  
-}
+        } else {
+            document.getElementById('atividadedocargo').style.display = 'none';
+        }
+    }
+    js_showOutros(document.getElementById('rh37_reqcargo').value);
 
-
-function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_rhfuncao','func_rhfuncao.php?funcao_js=parent.js_preenchepesquisa|rh37_funcao','Pesquisa',true);
-}
-function js_preenchepesquisa(chave){
-  db_iframe_rhfuncao.hide();
-  <?
-  if($db_opcao!=1){
-    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
-  }
-  ?>
-}
-
-function validaCampos() {
-
-    if (document.form1.rh37_reqcargo.value == 4) {
-        console.log(document.getElementById('rh37_atividadedocargo'));
-        if(document.getElementById('rh37_atividadedocargo').value == "") {
-            alert("O campo Atividade do cargo é obrigatório");
-            return false;
+    function js_buscagrupo(mostra) {
+        if(mostra==true){
+            var sUrlOpen = 'func_rhfuncaogrupo.php?funcao_js=parent.js_preencheGrupo|rh100_sequencial|rh100_descricao';
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_rhfuncao', sUrlOpen, 'Pesquisa', true);
+        }else{
+            if(document.form1.rh37_funcaogrupo.value != ''){
+                var iFuncaoGrupo  = document.form1.rh37_funcaogrupo.value;
+                var sUrlOpenGrupo = 'func_rhfuncaogrupo.php?pesquisa_chave='+iFuncaoGrupo+'&funcao_js=parent.js_mostrargrupos';
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_rhfuncao', sUrlOpenGrupo, 'Pesquisa', false);
+            }else{
+                document.form1.rh37_funcaogrupodescr.value = '';
+            }
         }
     }
 
-    return true;
-}
+    function js_mostrargrupos(chave,erro) {
+        document.form1.rh37_funcaogrupodescr.value   = chave;
+        if (erro==true) {
+            document.form1.rh37_funcaogrupo.focus();
+            document.form1.rh37_funcaogrupo.value = '';
+        }
+    }
+
+    function js_preencheGrupo(chave, descricao) {
+        document.form1.rh37_funcaogrupo.value      = chave;
+        document.form1.rh37_funcaogrupodescr.value = descricao;
+        db_iframe_rhfuncao.hide();
+    }
+
+
+    function js_pesquisa(){
+        js_OpenJanelaIframe('top.corpo','db_iframe_rhfuncao','func_rhfuncao.php?funcao_js=parent.js_preenchepesquisa|rh37_funcao','Pesquisa',true);
+    }
+    function js_preenchepesquisa(chave){
+        db_iframe_rhfuncao.hide();
+        <?
+        if($db_opcao!=1){
+            echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
+        }
+        ?>
+    }
+
+    function validaCampos() {
+
+        if (document.form1.rh37_reqcargo.value == 4) {
+            console.log(document.getElementById('rh37_atividadedocargo'));
+            if(document.getElementById('rh37_atividadedocargo').value == "") {
+                alert("O campo Atividade do cargo é obrigatório");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function js_verificacargo(value) {
+        if (value == 3){
+            document.getElementById('trexerceratividade').style.display = ''
+        }else{
+            document.getElementById('trexerceratividade').style.display = 'none'
+        }
+    }
 </script>

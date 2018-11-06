@@ -42,6 +42,7 @@ if(isset($incluir)){
   $clrhfuncao->rh37_reqcargo = $rh37_reqcargo;
   $clrhfuncao->rh37_ativo = 'true';
   $clrhfuncao->rh37_atividadedocargo = $rh37_atividadedocargo;
+  $clrhfuncao->rh37_exerceatividade = $rh37_exerceatividade;
   $clrhfuncao->incluir($rh37_funcao,db_getsession("DB_instit"));
   db_fim_transacao();
 
