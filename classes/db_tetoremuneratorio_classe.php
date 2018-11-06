@@ -11,7 +11,7 @@ class cl_tetoremuneratorio {
    var $numrows_excluir = 0; 
    var $erro_status= null; 
    var $erro_sql   = null; 
-   var $erro_banco = null;  
+   var $erro_banco = null;
    var $erro_msg   = null;  
    var $erro_campo = null;  
    var $pagina_retorno = null; 
@@ -33,6 +33,7 @@ class cl_tetoremuneratorio {
    var $te01_dtpublicacaolei_ano = null;
    var $te01_dtpublicacaolei = null;
    var $te01_justificativa = null;
+   var $te01_codteto = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  te01_sequencial = int4 = sequencial 
@@ -43,6 +44,7 @@ class cl_tetoremuneratorio {
                  te01_dtpublicacaolei = Data da publicação da lei do teto remuneratório 
                  te01_dtfinal = date = Data Final
                  te01_justificativa = varchar(250) = Justificativa 
+                 te01_codteto = int4 = Codigo Teto
                  ";
    //funcao construtor da classe 
    function cl_tetoremuneratorio() { 
@@ -91,6 +93,7 @@ class cl_tetoremuneratorio {
          }
        }
        $this->te01_justificativa = ($this->te01_justificativa == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_justificativa"]:$this->te01_justificativa);
+       $this->te01_codteto = ($this->te01_codteto == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_codteto"]:$this->te01_codteto);
      }else{
        $this->te01_sequencial = ($this->te01_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_sequencial"]:$this->te01_sequencial);
      }
@@ -193,6 +196,7 @@ class cl_tetoremuneratorio {
                                       ,te01_dtpublicacaolei
                                       ,te01_dtfinal 
                                       ,te01_justificativa 
+                                      ,te01_codteto
                        )
                 values (
                                 $this->te01_sequencial 
@@ -202,7 +206,8 @@ class cl_tetoremuneratorio {
                                ,$this->te01_nrleiteto
                                ,".($this->te01_dtpublicacaolei == "null" || $this->te01_dtpublicacaolei == ""?"null":"'".$this->te01_dtpublicacaolei."'")."
                                ,".($this->te01_dtfinal == "null" || $this->te01_dtfinal == ""?"null":"'".$this->te01_dtfinal."'")." 
-                               ,'$this->te01_justificativa' 
+                               ,'$this->te01_justificativa'
+                               ,$this->te01_codteto 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -250,8 +255,10 @@ class cl_tetoremuneratorio {
      return true;
    } 
    // funcao para alteracao
-   function alterar ($te01_sequencial=null) { 
-      $this->atualizacampos();
+   function alterar ($te01_sequencial=null) {
+
+     $this->atualizacampos();
+
      $sql = " update tetoremuneratorio set ";
      $virgula = "";
      if(trim($this->te01_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["te01_sequencial"])){ 
@@ -267,6 +274,7 @@ class cl_tetoremuneratorio {
          return false;
        }
      }
+
      if(trim($this->te01_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["te01_valor"])){ 
        $sql  .= $virgula." te01_valor = $this->te01_valor ";
        $virgula = ",";
@@ -293,6 +301,8 @@ class cl_tetoremuneratorio {
          return false;
        }
      }
+
+
      if(trim($this->te01_dtinicial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["te01_dtinicial_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["te01_dtinicial_dia"] !="") ){ 
        $sql  .= $virgula." te01_dtinicial = '$this->te01_dtinicial' ";
        $virgula = ",";
@@ -362,7 +372,7 @@ class cl_tetoremuneratorio {
              $sql  .= $virgula." te01_dtpublicacaolei = null ";
              $virgula = ",";
              if(trim($this->te01_dtpublicacaolei) == null ){
-                 $this->erro_sql = " Campo Data Final não informado.";
+                 $this->erro_sql = " Campo Data publicação lei não informado.";
                  $this->erro_campo = "te01_dtpublicacaolei_dia";
                  $this->erro_banco = "";
                  $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -375,6 +385,19 @@ class cl_tetoremuneratorio {
      if(trim($this->te01_justificativa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["te01_justificativa"])){ 
        $sql  .= $virgula." te01_justificativa = '$this->te01_justificativa' ";
        $virgula = ",";
+     }
+     if(trim($this->te01_codteto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["te01_codteto"])){
+       $sql  .= $virgula." te01_codteto = '$this->te01_codteto' ";
+       $virgula = ",";
+         if(trim($this->te01_codteto) == null ){
+             $this->erro_sql = " Campo cod teto não informado.";
+             $this->erro_campo = "te01_codteto";
+             $this->erro_banco = "";
+             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+             $this->erro_status = "0";
+             return false;
+         }
      }
      $sql .= " where ";
      if($te01_sequencial!=null){

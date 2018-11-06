@@ -31,15 +31,15 @@ class cl_terem202019 {
   var $si196_inst = 0;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
-                 si196_sequencial = int8 = si194_sequencial 
+                 si196_sequencial = int8 = si196_sequencial 
                  si196_tiporegistro = int8 = Tipo registro
                  si196_codteto = int8 = Código do Teto remuneratório
                  si196_vlrparateto = float8 = Valor para o teto remuneratório 
                  si196_nrleiteto = int8 = Número da lei do teto
                  si196_dtpublicacaolei = date = Data da publicação
-                 si196_justalteracao = varchar(250) = Justificativa para a alteração 
-                 si196_mes = int8 = si194_mes 
-                 si196_inst = int8 = si194_inst 
+                 si196_justalteracaoteto = varchar(250) = Justificativa para a alteração 
+                 si196_mes = int8 = si196_mes 
+                 si196_inst = int8 = si196_inst 
                  ";
   //funcao construtor da classe 
   function cl_terem202019() {
@@ -59,11 +59,11 @@ class cl_terem202019 {
   // funcao para atualizar campos
   function atualizacampos($exclusao=false) {
     if($exclusao==false){
-      $this->si196_sequencial = ($this->si194_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_sequencial"]:$this->si194_sequencial);
-      $this->si196_tiporegistro = ($this->si194_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_tiporegistro"]:$this->si194_tiporegistro);
-      $this->si196_codteto = ($this->si194_codteto == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_codteto"]:$this->si194_codteto);
-      $this->si196_vlrparateto = ($this->si194_vlrparateto == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_vlrparateto"]:$this->si194_vlrparateto);
-      $this->si196_nrleiteto = ($this->si194_nrleiteto == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_nrleiteto"]:$this->si194_nrleiteto);
+      $this->si196_sequencial = ($this->si196_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_sequencial"]:$this->si196_sequencial);
+      $this->si196_tiporegistro = ($this->si196_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_tiporegistro"]:$this->si196_tiporegistro);
+      $this->si196_codteto = ($this->si196_codteto == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_codteto"]:$this->si196_codteto);
+      $this->si196_vlrparateto = ($this->si196_vlrparateto == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_vlrparateto"]:$this->si196_vlrparateto);
+      $this->si196_nrleiteto = ($this->si196_nrleiteto == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_nrleiteto"]:$this->si196_nrleiteto);
       if($this->te01_dtinicial == ""){
         $this->te01_dtinicial_dia = ($this->te01_dtinicial_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtinicial_dia"]:$this->te01_dtinicial_dia);
         $this->te01_dtinicial_mes = ($this->te01_dtinicial_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["te01_dtinicial_mes"]:$this->te01_dtinicial_mes);
@@ -72,13 +72,13 @@ class cl_terem202019 {
           $this->te01_dtinicial = $this->te01_dtinicial_ano."-".$this->te01_dtinicial_mes."-".$this->te01_dtinicial_dia;
         }
       }
-      $this->si196_justalteracaoteto = ($this->si194_justalteracaoteto == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_justalteracaoteto"]:$this->si194_justalteracaoteto);
+      $this->si196_justalteracaotetoteto = ($this->si196_justalteracaotetoteto == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_justalteracaotetoteto"]:$this->si196_justalteracaoteto);
     }else{
-      $this->si196_sequencial = ($this->si194_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si194_sequencial"]:$this->si194_sequencial);
+      $this->si196_sequencial = ($this->si196_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si196_sequencial"]:$this->si196_sequencial);
     }
   }
   // funcao para inclusao
-  function incluir ($si196_sequencial){
+  function  incluir ($si196_sequencial){
     $this->atualizacampos();
     if($this->si196_tiporegistro == null ){
       $this->erro_sql = " Campo Tipo registro não informado.";
@@ -164,12 +164,13 @@ class cl_terem202019 {
       $this->erro_status = "0";
       return false;
     }
-    if($si196_sequencial == "" || $si194_sequencial == null ){
+
+    if($si196_sequencial == "" || $si196_sequencial == null ){
       $result = db_query("select nextval('terem202019_si196_sequencial_seq')");
       if($result==false){
         $this->erro_banco = str_replace("
 ","",@pg_last_error());
-        $this->erro_sql   = "Verifique o cadastro da sequencia: terem202019_si196_sequencial_seq do campo: si194_sequencial";
+        $this->erro_sql   = "Verifique o cadastro da sequencia: terem202019_si196_sequencial_seq do campo: si196_sequencial";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
         $this->erro_status = "0";
@@ -186,10 +187,10 @@ class cl_terem202019 {
         $this->erro_status = "0";
         return false;
       }else{
-        $this->si196_sequencial = $si194_sequencial;
+        $this->si196_sequencial = $si196_sequencial;
       }
     }
-    if(($this->si196_sequencial == null) || ($this->si194_sequencial == "") ){
+    if(($this->si196_sequencial == null) || ($this->si196_sequencial == "") ){
       $this->erro_sql = " Campo si196_sequencial nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
       $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -200,11 +201,11 @@ class cl_terem202019 {
     $sql = "insert into terem202019(
                                        si196_sequencial 
                                       ,si196_tiporegistro
-                                      ,si196_codteto,
+                                      ,si196_codteto
                                       ,si196_vlrparateto 
                                       ,si196_nrleiteto
                                       ,si196_dtpublicacaolei
-                                      ,si196_justalteracao 
+                                      ,si196_justalteracaoteto 
                                       ,si196_mes 
                                       ,si196_inst 
                        )
@@ -214,16 +215,16 @@ class cl_terem202019 {
                                ,'$this->si196_codteto'
                                ,$this->si196_vlrparateto 
                                ,$this->si196_nrleiteto
-                               ,".($this->si196_dtpublicacaolei == "null" || $this->si194_dtpublicacaolei == ""?"null":"'".$this->si194_dtpublicacaolei."'")."
-                               ,'$this->si196_justalteracao' 
+                               ,".($this->si196_dtpublicacaolei == "null" || $this->si196_dtpublicacaolei == ""?"null":"'".$this->si196_dtpublicacaolei."'")."
+                               ,'$this->si196_justalteracaoteto' 
                                ,$this->si196_mes 
                                ,$this->si196_inst 
                       )";
 
     $result = db_query($sql);
+
     if($result==false){
-      $this->erro_banco = str_replace("
-","",@pg_last_error());
+      $this->erro_banco = str_replace("","",@pg_last_error());
       if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
         $this->erro_sql   = "terem202019 ($this->si196_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
@@ -238,6 +239,7 @@ class cl_terem202019 {
       $this->numrows_incluir= 0;
       return false;
     }
+
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\n";
     $this->erro_sql .= "Valores : ".$this->si196_sequencial;
@@ -260,7 +262,7 @@ class cl_terem202019 {
         $resac = db_query("insert into db_acount values($acount,1010194,1009270,'','".AddSlashes(pg_result($resaco,0,'si196_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010194,1009271,'','".AddSlashes(pg_result($resaco,0,'si196_vlrparateto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010194,1009272,'','".AddSlashes(pg_result($resaco,0,'si196_tipocadastro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        $resac = db_query("insert into db_acount values($acount,1010194,1009273,'','".AddSlashes(pg_result($resaco,0,'si196_justalteracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        $resac = db_query("insert into db_acount values($acount,1010194,1009273,'','".AddSlashes(pg_result($resaco,0,'si196_justalteracaoteto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010194,1009274,'','".AddSlashes(pg_result($resaco,0,'si196_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         $resac = db_query("insert into db_acount values($acount,1010194,1009275,'','".AddSlashes(pg_result($resaco,0,'si196_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
       }
@@ -272,8 +274,8 @@ class cl_terem202019 {
     $this->atualizacampos();
     $sql = " update terem202019 set ";
     $virgula = "";
-    if(trim($this->si196_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_sequencial"])){
-      $sql  .= $virgula." si196_sequencial = $this->si194_sequencial ";
+    if(trim($this->si196_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_sequencial"])){
+      $sql  .= $virgula." si196_sequencial = $this->si196_sequencial ";
       $virgula = ",";
       if(trim($this->si196_sequencial) == null ){
         $this->erro_sql = " Campo si196_sequencial não informado.";
@@ -285,8 +287,8 @@ class cl_terem202019 {
         return false;
       }
     }
-    if(trim($this->si196_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_tiporegistro"])){
-      $sql  .= $virgula." si196_tiporegistro = $this->si194_tiporegistro ";
+    if(trim($this->si196_tiporegistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_tiporegistro"])){
+      $sql  .= $virgula." si196_tiporegistro = $this->si196_tiporegistro ";
       $virgula = ",";
       if(trim($this->si196_tiporegistro) == null ){
         $this->erro_sql = " Campo Tipo registro não informado.";
@@ -298,8 +300,8 @@ class cl_terem202019 {
         return false;
       }
     }
-    if(trim($this->si196_vlrparateto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_vlrparateto"])){
-      $sql  .= $virgula." si196_vlrparateto = $this->si194_vlrparateto ";
+    if(trim($this->si196_vlrparateto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_vlrparateto"])){
+      $sql  .= $virgula." si196_vlrparateto = $this->si196_vlrparateto ";
       $virgula = ",";
       if(trim($this->si196_vlrparateto) == null ){
         $this->erro_sql = " Campo Valor para o teto não informado.";
@@ -311,12 +313,12 @@ class cl_terem202019 {
         return false;
       }
     }
-    if(trim($this->si196_justalteracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_justalteracao"])){
-      $sql  .= $virgula." si196_justalteracao = '$this->si194_justalteracao' ";
+    if(trim($this->si196_justalteracaoteto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_justalteracaoteto"])){
+      $sql  .= $virgula." si196_justalteracaoteto = '$this->si196_justalteracaoteto' ";
       $virgula = ",";
     }
-    if(trim($this->si196_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_mes"])){
-      $sql  .= $virgula." si196_mes = $this->si194_mes ";
+    if(trim($this->si196_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_mes"])){
+      $sql  .= $virgula." si196_mes = $this->si196_mes ";
       $virgula = ",";
       if(trim($this->si196_mes) == null ){
         $this->erro_sql = " Campo si196_mes não informado.";
@@ -328,8 +330,8 @@ class cl_terem202019 {
         return false;
       }
     }
-    if(trim($this->si196_inst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si194_inst"])){
-      $sql  .= $virgula." si196_inst = $this->si194_inst ";
+    if(trim($this->si196_inst)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si196_inst"])){
+      $sql  .= $virgula." si196_inst = $this->si196_inst ";
       $virgula = ",";
       if(trim($this->si196_inst) == null ){
         $this->erro_sql = " Campo si196_inst não informado.";
@@ -343,7 +345,7 @@ class cl_terem202019 {
     }
     $sql .= " where ";
     if($si196_sequencial!=null){
-      $sql .= " si196_sequencial = $this->si194_sequencial";
+      $sql .= " si196_sequencial = $this->si196_sequencial";
     }
     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
@@ -358,20 +360,20 @@ class cl_terem202019 {
           $acount = pg_result($resac,0,0);
           $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
           $resac = db_query("insert into db_acountkey values($acount,1009269,'$this->si196_sequencial','A')");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_sequencial"]) || $this->si194_sequencial != "")
-            $resac = db_query("insert into db_acount values($acount,1010194,1009269,'".AddSlashes(pg_result($resaco,$conresaco,'si196_sequencial'))."','$this->si194_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_tiporegistro"]) || $this->si194_tiporegistro != "")
-            $resac = db_query("insert into db_acount values($acount,1010194,1009270,'".AddSlashes(pg_result($resaco,$conresaco,'si196_tiporegistro'))."','$this->si194_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_vlrparateto"]) || $this->si194_vlrparateto != "")
-            $resac = db_query("insert into db_acount values($acount,1010194,1009271,'".AddSlashes(pg_result($resaco,$conresaco,'si196_vlrparateto'))."','$this->si194_vlrparateto',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_tipocadastro"]) || $this->si194_tipocadastro != "")
-            $resac = db_query("insert into db_acount values($acount,1010194,1009272,'".AddSlashes(pg_result($resaco,$conresaco,'si196_tipocadastro'))."','$this->si194_tipocadastro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_justalteracao"]) || $this->si194_justalteracao != "")
-            $resac = db_query("insert into db_acount values($acount,1010194,1009273,'".AddSlashes(pg_result($resaco,$conresaco,'si196_justalteracao'))."','$this->si194_justalteracao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_mes"]) || $this->si194_mes != "")
-            $resac = db_query("insert into db_acount values($acount,1010194,1009274,'".AddSlashes(pg_result($resaco,$conresaco,'si196_mes'))."','$this->si194_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_inst"]) || $this->si194_inst != "")
-            $resac = db_query("insert into db_acount values($acount,1010194,1009275,'".AddSlashes(pg_result($resaco,$conresaco,'si196_inst'))."','$this->si194_inst',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_sequencial"]) || $this->si196_sequencial != "")
+            $resac = db_query("insert into db_acount values($acount,1010194,1009269,'".AddSlashes(pg_result($resaco,$conresaco,'si196_sequencial'))."','$this->si196_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_tiporegistro"]) || $this->si196_tiporegistro != "")
+            $resac = db_query("insert into db_acount values($acount,1010194,1009270,'".AddSlashes(pg_result($resaco,$conresaco,'si196_tiporegistro'))."','$this->si196_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_vlrparateto"]) || $this->si196_vlrparateto != "")
+            $resac = db_query("insert into db_acount values($acount,1010194,1009271,'".AddSlashes(pg_result($resaco,$conresaco,'si196_vlrparateto'))."','$this->si196_vlrparateto',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_tipocadastro"]) || $this->si196_tipocadastro != "")
+            $resac = db_query("insert into db_acount values($acount,1010194,1009272,'".AddSlashes(pg_result($resaco,$conresaco,'si196_tipocadastro'))."','$this->si196_tipocadastro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_justalteracaoteto"]) || $this->si196_justalteracaoteto != "")
+            $resac = db_query("insert into db_acount values($acount,1010194,1009273,'".AddSlashes(pg_result($resaco,$conresaco,'si196_justalteracaoteto'))."','$this->si196_justalteracaoteto',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_mes"]) || $this->si196_mes != "")
+            $resac = db_query("insert into db_acount values($acount,1010194,1009274,'".AddSlashes(pg_result($resaco,$conresaco,'si196_mes'))."','$this->si196_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          if(isset($GLOBALS["HTTP_POST_VARS"]["si196_inst"]) || $this->si196_inst != "")
+            $resac = db_query("insert into db_acount values($acount,1010194,1009275,'".AddSlashes(pg_result($resaco,$conresaco,'si196_inst'))."','$this->si196_inst',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
         }
       }
     }
@@ -433,7 +435,7 @@ class cl_terem202019 {
           $resac  = db_query("insert into db_acount values($acount,1010194,1009270,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010194,1009271,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_vlrparateto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010194,1009272,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_tipocadastro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010194,1009273,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_justalteracao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          $resac  = db_query("insert into db_acount values($acount,1010194,1009273,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_justalteracaoteto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010194,1009274,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
           $resac  = db_query("insert into db_acount values($acount,1010194,1009275,'','".AddSlashes(pg_result($resaco,$iresaco,'si196_inst'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
         }
@@ -447,7 +449,7 @@ class cl_terem202019 {
         if($sql2!=""){
           $sql2 .= " and ";
         }
-        $sql2 .= " si196_sequencial = $si194_sequencial ";
+        $sql2 .= " si196_sequencial = $si196_sequencial ";
       }
     }else{
       $sql2 = $dbwhere;
@@ -526,7 +528,7 @@ class cl_terem202019 {
     $sql2 = "";
     if($dbwhere==""){
       if($si196_sequencial!=null ){
-        $sql2 .= " where terem202019.si196_sequencial = $si194_sequencial ";
+        $sql2 .= " where terem202019.si196_sequencial = $si196_sequencial ";
       }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";
@@ -560,7 +562,7 @@ class cl_terem202019 {
     $sql2 = "";
     if($dbwhere==""){
       if($si196_sequencial!=null ){
-        $sql2 .= " where terem202019.si196_sequencial = $si194_sequencial ";
+        $sql2 .= " where terem202019.si196_sequencial = $si196_sequencial ";
       }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";

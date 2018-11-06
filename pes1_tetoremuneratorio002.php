@@ -16,8 +16,8 @@ if(isset($alterar)){
   $cltetoremuneratorio->alterar($te01_sequencial);
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
-   $db_opcao = 2;
 
+   $db_opcao = 2;
    $rsTeto       = $cltetoremuneratorio->sql_record($cltetoremuneratorio->sql_query(null,'*','te01_sequencial desc limit 1',''));
    $iSequencil = db_utils::fieldsMemory($rsTeto, 0)->te01_sequencial;
    $result = $cltetoremuneratorio->sql_record($cltetoremuneratorio->sql_query($chavepesquisa)); 

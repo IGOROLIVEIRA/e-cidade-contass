@@ -6,12 +6,40 @@ include("libs/db_usuariosonline.php");
 include("classes/db_tetoremuneratorio_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
+
+$cltetoremuneratorioanterior = new cl_tetoremuneratorio;
 $cltetoremuneratorio = new cl_tetoremuneratorio;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
+
+
   db_inicio_transacao();
+
+  $rsUltimoTeto                                    = $cltetoremuneratorioanterior->sql_record($cltetoremuneratorioanterior->sql_query(null,'*','te01_sequencial desc limit 1',''));
+  $ultimoSequencial                                = db_utils::fieldsMemory($rsUltimoTeto, 0)->te01_sequencial;
+  $cltetoremuneratorioanterior->te01_dtinicial     = db_utils::fieldsMemory($rsUltimoTeto, 0)->te01_dtinicial;
+  $cltetoremuneratorioanterior->te01_dtfinal       = db_utils::fieldsMemory($rsUltimoTeto, 0)->te01_dtfinal;
+  $cltetoremuneratorioanterior->te01_codteto       = db_utils::fieldsMemory($rsUltimoTeto, 0)->te01_codteto;
+  $cltetoremuneratorioanterior->te01_tipocadastro  = db_utils::fieldsMemory($rsUltimoTeto, 0)->te01_tipocadastro;
+  $cltetoremuneratorioanterior->te01_justificativa = db_utils::fieldsMemory($rsUltimoTeto, 0)->te01_justificativa;
+  $cltetoremuneratorioanterior->te01_nrleiteto     = db_utils::fieldsMemory($rsUltimoTeto, 0)->te01_nrleiteto;
+  $cltetoremuneratorioanterior->te01_valor         = db_utils::fieldsMemory($rsUltimoTeto, 0)->te01_valor;
+
+  $ToDataFinal                       = date('Y-m-d',strtotime(implode('-', array_reverse(explode('/', $te01_dtinicial)))));
+
+  $cltetoremuneratorioanterior->te01_dtfinal           = date('Y-m-d',strtotime("-1 days", strtotime($ToDataFinal)));
+  $cltetoremuneratorioanterior->te01_sequencial = $ultimoSequencial;
+  $cltetoremuneratorioanterior->alterar($ultimoSequencial);
+
+  db_fim_transacao();
+
+
+
+  db_inicio_transacao();
+
   $cltetoremuneratorio->incluir($te01_sequencial);
+
   db_fim_transacao();
 }
 

@@ -18,6 +18,16 @@ db_input('te01_sequencial',10,$Ite01_sequencial,true,'text',3,"")
     </td>
   </tr>
   <tr>
+      <td nowrap title="Cod. Teto">
+          <strong>Cod. Teto: </strong>
+      </td>
+      <td>
+          <?
+          db_input('te01_codteto',10,$Ite01_codteto,true,'text',$db_opcao,"")
+          ?>
+      </td>
+  </tr>
+  <tr>
     <td nowrap title="Valor">
         <strong>Valor: </strong>
     </td>
@@ -34,11 +44,13 @@ db_input('te01_valor',10,$Ite01_valor,true,'text',$db_opcao,"")
     <td> 
 <?
 //db_input('te01_tipocadastro',10,$Ite01_tipocadastro,true,'text',$db_opcao,"")
-if($bDisable == true){
-    $x = array('1'=>'Cadastro Inicial');
-}else{
-    $x = array('2'=>'Alteração de Cadastro');
-}
+//if($bDisable == true){
+//    $x = array('1'=>'Cadastro Inicial');
+//}else{
+//    $x = array('2'=>'Alteração de Cadastro');
+//}
+
+$x = array('1'=>'Cadastro Inicial','2'=>'Alteração de Cadastro');
 
 db_select("te01_tipocadastro",$x,true,$db_opcao)
 
@@ -51,7 +63,7 @@ db_select("te01_tipocadastro",$x,true,$db_opcao)
     </td>
     <td> 
 <?
-db_inputdata('te01_dtinicial',@$te01_dtinicial_dia,@$te01_dtinicial_mes,@$te01_dtinicial_ano,false,'text',($bDisable==true?$db_opcao:3),"onchange='validaIntervaloDatas();'","","","parent.validaIntervaloDatas();")
+db_inputdata('te01_dtinicial',@$te01_dtinicial_dia,@$te01_dtinicial_mes,@$te01_dtinicial_ano,false,'text',$db_opcao,"onchange='validaIntervaloDatas();'","","","parent.validaIntervaloDatas();")
 ?>
     </td>
   </tr>
@@ -61,7 +73,11 @@ db_inputdata('te01_dtinicial',@$te01_dtinicial_dia,@$te01_dtinicial_mes,@$te01_d
     </td>
     <td> 
 <?
-db_inputdata('te01_dtfinal',@$te01_dtfinal_dia,@$te01_dtfinal_mes,@$te01_dtfinal_ano,true,'text',$db_opcao,"onchange='validaIntervaloDatas();'","","","parent.validaIntervaloDatas();")
+if($db_opcao == 1) {
+    db_inputdata('te01_dtfinal', @$te01_dtfinal_dia, @$te01_dtfinal_mes, @$te01_dtfinal_ano, true, 'text', 3, "onchange='validaIntervaloDatas();'", "", "", "parent.validaIntervaloDatas();");
+}else{
+    db_inputdata('te01_dtfinal', @$te01_dtfinal_dia, @$te01_dtfinal_mes, @$te01_dtfinal_ano, true, 'text', $db_opcao, "onchange='validaIntervaloDatas();'", "", "", "parent.validaIntervaloDatas();");
+}
 ?>
     </td>
   </tr>
@@ -100,14 +116,14 @@ db_inputdata('te01_dtfinal',@$te01_dtfinal_dia,@$te01_dtfinal_mes,@$te01_dtfinal
 
     <tr>
         <td>
-            <input type="hidden" name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"  value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false || $bDisable==true?"disabled":"")?>  />
+            <input type="hidden" name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"  value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" />
         </td>
     </tr>
 
   </table>
      </fieldset>
     </center>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="button" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false || $bDisable==true?"disabled":"")?> onclick="js_salvar();" >
+<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="button" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"  onclick="js_salvar();" >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>

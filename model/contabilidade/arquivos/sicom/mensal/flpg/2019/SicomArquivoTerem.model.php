@@ -72,13 +72,9 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $CNPJ = db_utils::fieldsMemory($rsResult, 0)->cnpjmunicipio;
 
         $clterem10 = new cl_terem102019();
+        $clterem20 = new cl_terem202019();
 
         db_inicio_transacao();
-
-
-        $cltetoremuneratorio = new cl_tetoremuneratorio;
-        $rsCadastroTeto = $cltetoremuneratorio->sql_record($cltetoremuneratorio->sql_query(null,'*'));
-        $iQtdCadastro = pg_numrows($rsCadastroTeto);
 
         /*
          * excluir informacoes do mes selecionado registro 10
@@ -90,58 +86,57 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 throw new Exception($clterem10->erro_msg);
             }
         }
+        /*
+         * excluir informacoes do mes selecionado registro 20
+         */
+        $result = $clterem20->sql_record($clterem20->sql_query(NULL,"*",NULL,"si196_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']));
+        if (pg_num_rows($result) > 0) {
+            $clterem20->excluir(NULL,"si196_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']);
+            if ($clterem20->erro_status == 0) {
+                throw new Exception($clterem20->erro_msg);
+            }
+        }
 
-        $sSql = "select te01_sequencial
-        from tetoremuneratorio order by te01_sequencial asc limit 1";
-
-        $rsResult = db_query($sSql);//echo $sSql;db_criatabela($rsResult);
-        $oDadoTerem = db_utils::fieldsMemory($rsResult, 0);
+        $sSql = "select round(te01_valor,2) as te01_valor
+              ,te01_codteto 
+              ,te01_justificativa
+              ,te01_dtinicial
+              ,te01_dtfinal
+              ,te01_tipocadastro
+              ,te01_dtpublicacaolei
+              ,te01_nrleiteto
+              ,te01_sequencial
+              from tetoremuneratorio
+              where DATE_PART('YEAR',te01_dtinicial)  = ".db_getsession("DB_anousu") ."
+              and   DATE_PART('MONTH',te01_dtinicial) = ". $this->sDataFinal['5'].$this->sDataFinal['6'] ."
+              and te01_codteto not in (select si196_codteto from terem202019)
+              ";
 
         $rsResult = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
 
-        /*
-         * selecionar informacoes registro 10
-         */
+        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-        $sSql = "select round(te01_valor,2) as te01_valor 
-      ,te01_justificativa
-      ,te01_dtinicial
-      ,te01_dtfinal
-      ,te01_tipocadastro
-      ,te01_dtpublicacaolei
-      ,te01_nrleiteto
-      ,te01_sequencial
-      from tetoremuneratorio
-      where DATE_PART('YEAR',te01_dtinicial)  = ".db_getsession("DB_anousu") ."
-      and   DATE_PART('MONTH',te01_dtinicial) = ". $this->sDataFinal['5'].$this->sDataFinal['6'];
-
-        $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);exit;
-
-
-        for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
+            $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
             $clterem10 = new cl_terem102019();
-            $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
             $clterem10->si194_tiporegistro          = 10;
-            $clterem10->si194_vlrparateto           = $oDados10->te01_valor;
-            $clterem10->si194_cnpj                  = $CNPJ;//$oDados10->si194_vlrparateto;
-            if( $oDadoTerem->te01_sequencial == $oDados10->te01_sequencial) {
-                $clterem10->si194_tipocadastro = 1;
-            }else{
-                $clterem10->si194_tipocadastro = 2;
-            }
-            $clterem10->si194_dtinicial             = $oDados10->te01_dtinicial;
 
-            if( $oDadoTerem->te01_sequencial == $oDados10->te01_sequencial) {
-                $clterem10->si194_dtfinal = '';
-            }else{
-                $dtfinal = date('Y-m-d', strtotime("-1 days",strtotime($oDados10->te01_dtinicial)));
-                $clterem10->si194_dtfinal           = $dtfinal;
-            }
-            $clterem10->si194_nrleiteto             = $oDados10->te01_nrleiteto;
-            $clterem10->si194_dtpublicacaolei       = $oDados10->te01_dtpublicacaolei;
-            $clterem10->si194_justalteracao         = $oDados10->te01_justificativa;
+            $clterem10->si194_vlrparateto           = $oDados->te01_valor;
+            $clterem10->si194_cnpj                  = $CNPJ;//$oDados->si194_vlrparateto;
+            $clterem10->si194_codteto               = $oDados->te01_codteto;//$oDados->si194_vlrparateto;
+
+            $clterem10->si194_tipocadastro          = $oDados->te01_tipocadastro;
+
+            $clterem10->si194_dtinicial             = $oDados->te01_dtinicial;
+
+            $ToDataFinal                            = date('Y-m-d',strtotime(implode('-', array_reverse(explode('/', $oDados->te01_dtinicial)))));
+
+            $clterem10->si194_dtfinal               = date('Y-m-d',strtotime("-1 days", strtotime($ToDataFinal)));
+
+            $clterem10->si194_nrleiteto             = $oDados->te01_nrleiteto;
+            $clterem10->si194_dtpublicacaolei       = $oDados->te01_dtpublicacaolei;
+            $clterem10->si194_justalteracao         = $oDados->te01_justificativa;
             $clterem10->si194_mes                   = $this->sDataFinal['5'].$this->sDataFinal['6'];
             $clterem10->si194_inst                  = db_getsession("DB_instit");
 
@@ -150,12 +145,71 @@ class SicomArquivoTerem extends SicomArquivoBase implements iPadArquivoBaseCSV {
                 throw new Exception($clterem10->erro_msg);
             }
 
+
+        }
+
+        $sSql = "SELECT round(te01_valor,2) as te01_valor
+              ,te01_codteto 
+              ,te01_justificativa
+              ,te01_dtinicial
+              ,te01_dtfinal
+              ,te01_tipocadastro
+              ,te01_dtpublicacaolei
+              ,te01_nrleiteto
+              ,te01_sequencial
+              ,te01_codteto
+              FROM tetoremuneratorio
+              WHERE DATE_PART('YEAR',te01_dtinicial)  = ".db_getsession("DB_anousu") ."
+              AND te01_codteto = (select si194_codteto from terem102019
+              where si194_codteto = te01_codteto
+                  and (
+                       si194_vlrparateto     <> te01_valor
+                       or
+                       si194_nrleiteto       <> te01_nrleiteto
+                       or
+                       si194_dtpublicacaolei <> te01_dtpublicacaolei 
+                      )  
+              )";
+
+        $rsResult = db_query($sSql);//echo $sSql;db_criatabela($rsResult);exit;
+
+
+        for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+            $oDados = db_utils::fieldsMemory($rsResult, $iCont);
+
+            $clterem20 = new cl_terem202019();
+
+            $clterem20->si196_tiporegistro          = 20;
+            $clterem20->si196_vlrparateto           = $oDados->te01_valor;
+            $clterem20->si196_cnpj                  = $CNPJ;//$oDados->si194_vlrparateto;
+            $clterem20->si196_codteto               = $oDados->te01_codteto;//$oDados->si194_vlrparateto;
+            $clterem20->si196_tipocadastro          = 2;
+            $clterem20->si196_dtinicial             = $oDados->te01_dtinicial;
+
+            $dtfinal                                = date('Y-m-d', strtotime("-1 days", strtotime($oDados->te01_dtinicial)));
+            $clterem20->si196_dtfinal               = $dtfinal;
+
+            $clterem20->si196_nrleiteto             = $oDados->te01_nrleiteto;
+            $clterem20->si196_dtpublicacaolei       = $oDados->te01_dtpublicacaolei;
+            $clterem20->si196_justalteracaoteto     = $oDados->te01_justificativa;
+            $clterem20->si196_mes                   = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $clterem20->si196_inst                  = db_getsession("DB_instit");
+
+            $clterem20->incluir(null);
+
+            if ($clterem20->erro_status == 0) {
+                throw new Exception($clterem20->erro_msg);
+            }
+
         }
 
         db_fim_transacao();
 
         $oGerarTEREM = new GerarTEREM();
+
         $oGerarTEREM->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];
+
         $oGerarTEREM->gerarDados();
 
     }

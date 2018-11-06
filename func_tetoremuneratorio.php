@@ -35,7 +35,7 @@ $cltetoremuneratorio = new cl_tetoremuneratorio;
            $campos = "tetoremuneratorio.oid,tetoremuneratorio.*";
            }
         }
-	         $sql = $cltetoremuneratorio->sql_query();
+	         $sql = $cltetoremuneratorio->sql_query('',$campos);
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';
