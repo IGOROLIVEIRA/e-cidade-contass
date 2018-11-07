@@ -553,38 +553,22 @@ if ($contapagina == 1) {
 }
 
 if ($contapagina == 1) {
-
-    $sqlparag  = "select db02_texto ";
-    $sqlparag .= "  from db_documento ";
-    $sqlparag .= "       inner join db_docparag on db03_docum = db04_docum ";
-    $sqlparag .= "       inner join db_tipodoc on db08_codigo  = db03_tipodoc ";
-    $sqlparag .= "       inner join db_paragrafo on db04_idparag = db02_idparag ";
-    $sqlparag .= " where db03_tipodoc = 1400 and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
-
-    $resparag = @db_query($sqlparag);
-
-    if (@pg_numrows($resparag) > 0) {
-        db_fieldsmemory($resparag,0);
-
-        eval($db02_texto);
-    } else {
 //
 // CODIGO PHP RODAPE SOLICITACAO DE COMPRAS PADRAO
 //
-        $this->objpdf->rect($xcol,    $xlin+224.7,142,10.8,2,'DF','34');
-        $this->objpdf->rect($xcol+142,$xlin+224.7,30, 10.8,2,'DF','34');
-        $this->objpdf->rect($xcol+172,$xlin+224.7,30, 10.8,2,'DF','34');
-        $this->objpdf->text($xcol+120,$xlin+230.7,'T O T A L');
-        $this->objpdf->text(180,$xlin+230,db_formatar($xtotal,'f'));
-        $this->objpdf->rect($xcol,$xlin+237,99,35,2,'DF','1234');
-        $this->objpdf->rect($xcol+103,$xlin+237,99,35,2,'DF','1234');
-        $this->objpdf->setfillcolor(0,0,0);
-        $this->objpdf->setfillcolor(0,0,0);
-        $this->objpdf->text($xcol+20,$xlin+244,strtoupper($this->municpref).', '.substr($this->emissao,8,2).' DE '.strtoupper(db_mes(substr($this->emissao,5,2))).' DE '.substr($this->emissao,0,4).'.');
-        $this->objpdf->text($xcol+40,$xlin+256,"AUTORIZO",0,4);
-        $this->objpdf->text($xcol+20,$xlin+268,substr($this->Sorgao,0,35));
-        $this->objpdf->text($xcol+130,$xlin+256,"ORDENADOR DA DESPESA",0,4);
-    }
+    $this->objpdf->rect($xcol,    $xlin+224.7,142,10.8,2,'DF','34');
+    $this->objpdf->rect($xcol+142,$xlin+224.7,30, 10.8,2,'DF','34');
+    $this->objpdf->rect($xcol+172,$xlin+224.7,30, 10.8,2,'DF','34');
+    $this->objpdf->text($xcol+120,$xlin+230.7,'T O T A L');
+    $this->objpdf->text(180,$xlin+230,db_formatar($xtotal,'f'));
+    $this->objpdf->rect($xcol,$xlin+237,99,35,2,'DF','1234');
+    $this->objpdf->rect($xcol+103,$xlin+237,99,35,2,'DF','1234');
+    $this->objpdf->setfillcolor(0,0,0);
+    $this->objpdf->setfillcolor(0,0,0);
+    $this->objpdf->text($xcol+20,$xlin+244,strtoupper($this->municpref).', '.substr($this->emissao,8,2).' DE '.strtoupper(db_mes(substr($this->emissao,5,2))).' DE '.substr($this->emissao,0,4).'.');
+    $this->objpdf->text($xcol+40,$xlin+256,"AUTORIZO",0,4);
+    $this->objpdf->text($xcol+42,$xlin+268,substr($this->Sorgao,0,35));
+    $this->objpdf->text($xcol+130,$xlin+256,"ORDENADOR DA DESPESA",0,4);
 } else {
     $this->objpdf->rect($xcol, $xlin +262, 142, 10, 2, 'DF', '34');
     $this->objpdf->rect($xcol +142, $xlin +262, 30, 10, 2, 'DF', '34');
