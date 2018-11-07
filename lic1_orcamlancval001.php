@@ -341,7 +341,6 @@ if (isset($alterar) || isset($incluir)) {
               }
           }
         } else {
-            //if ($pc80_criterioadjudicacao == 1 || $pc80_criterioadjudicacao == 2 || $orcamval != 0) {
 
             if (trim($validmin)!= '' ) {
 
@@ -394,7 +393,6 @@ if (isset($alterar) || isset($incluir)) {
                 $sqlerro=true;
               }
             }
-        //}
       }
 
 
@@ -425,7 +423,12 @@ if (isset($alterar) || isset($incluir)) {
           $oDaoRegistroValor->pc56_ativo          = "true";
           $oDaoRegistroValor->pc56_orcamforne     = $pc21_orcamforne;
           $oDaoRegistroValor->pc56_orcamitem      = $orcamitem;
-          $oDaoRegistroValor->pc56_valorunitario  = $valorunit;
+          if (empty($valorunit)) {
+              $oDaoRegistroValor->pc56_valorunitario    = "0";
+          } else {
+              $oDaoRegistroValor->pc56_valorunitario = $valorunit;
+          }
+
           $oDaoRegistroValor->pc56_solicitem      = $oDadosRegistroPreco->pc81_solicitem;
           $oDaoRegistroValor->incluir(null);
           $erro_msg = $oDaoRegistroValor->erro_msg;
