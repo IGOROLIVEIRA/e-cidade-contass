@@ -61,6 +61,7 @@ $clorcparamsubfunc  = new cl_orcparamsubfunc;
 $clorcparamfunc     = new cl_orcparamfunc;
 
 $oGet               = db_utils::postMemory($_GET);
+
 $iCodigoRelatorio   = $oGet->c83_codrel;
 
 $clrotulo = new rotulocampo;
@@ -76,9 +77,12 @@ if (!isset($filtrar_seq)) {
 }
 
 $res = $clorcparamrel->sql_record($clorcparamrel->sql_query($c83_codrel));
+
 if ($clorcparamrel->numrows > 0) {
   db_fieldsmemory($res, 0);
 }
+
+
 function atualiza_nivel($rel,$linha,$valor){
 
   $msg = "0| Registro Atualizado !";
@@ -110,6 +114,8 @@ function atualiza_nivel($rel,$linha,$valor){
 
   return $msg;
 }
+
+
 function atualiza_nivel_exclusao($rel, $linha, $valor) {
 
   $msg = "0| Registro Atualizado !";

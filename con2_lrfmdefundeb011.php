@@ -34,6 +34,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/db_liborcamento.php");
 require_once("model/relatorioContabil.model.php");
 $oGet = db_utils::postMemory($_GET);
+
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
@@ -82,7 +83,7 @@ function js_emite(){
 
   var query = "";
   var obj   = document.form1;
-  query = "&periodo="+obj.o116_periodo.value;
+  query = "&periodo="+obj.o116_periodo.value+'&codrel=<?=$oGet->codrel?>';
   jan    = window.open(sNomeArquivoEdicao+'?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 

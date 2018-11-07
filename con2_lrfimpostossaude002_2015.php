@@ -19,7 +19,7 @@ try {
 
   $oInstituicao = InstituicaoRepository::getInstituicaoPrefeitura();
 
-  $oRelatorio = new AnexoXIIDemonstrativoDasDespesasComSaude(db_getsession("DB_anousu"), AnexoXIIDemonstrativoDasDespesasComSaude::CODIGO_RELATORIO, $oGet->periodo );
+  $oRelatorio = new AnexoXIIDemonstrativoDasDespesasComSaude(db_getsession("DB_anousu"), (int) $oGet->codrel, $oGet->periodo );
   $oRelatorio->setInstituicoes($oInstituicao->getCodigo());
 
   $oRelatorio->emitir();

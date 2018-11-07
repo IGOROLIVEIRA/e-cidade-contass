@@ -115,7 +115,10 @@ $sDtInicial01     = "{$anousu}-01-01";
 $sDtFinal01       = "{$anousu}-04-30";
 $sDtInicial02     = "{$anousu}-09-01";
 $sDtFinal02       = "{$anousu}-12-31";
-$iCodigoRelatorio = 91;
+
+$oGet = db_utils::postMemory($_GET);
+$iCodigoRelatorio = (int)$oGet->codrel;
+
 if ($sSiglaPeriodo == "1Q") {
 
   $lTem1Quad = true;

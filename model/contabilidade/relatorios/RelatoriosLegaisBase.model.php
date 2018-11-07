@@ -224,7 +224,7 @@ class RelatoriosLegaisBase {
     $oDadosPeriodo    = db_utils::fieldsMemory($rsPeriodo, 0);
     $this->oPeriodo   = $oDadosPeriodo;
 
-    if ($oDadosPeriodo->o114_sequencial > 1 && $oDadosPeriodo->o114_sequencial < 17) {
+    if ($oDadosPeriodo->o114_sequencial > 1 && $oDadosPeriodo->o114_sequencial < 17 || $oDadosPeriodo->o114_sequencial == 47) {
 
       $aPeriodo       = data_periodo($this->iAnoUsu, $oDadosPeriodo->o114_sigla);
       $sDataExercicio = $aPeriodo[1];
@@ -306,10 +306,12 @@ class RelatoriosLegaisBase {
       if ($oLinha->totalizar) {
 
         foreach ($oLinha->colunas as $iColuna => $oColuna) {
-
+//          echo "<br><br><h3>Início $iColuna</h3>";
           if (trim($oColuna->o116_formula) != "") {
             $this->parseFormula($aLinhas, $iLinha, $iColuna);
           }
+//          echo '<pre>';
+//          print_r($oColuna);
         }
       }
     }
@@ -339,10 +341,13 @@ class RelatoriosLegaisBase {
    * @throws \Exception
    */
   private function parseFormula(&$aLinhas, $iLinha, $iColuna) {
+    try {
+      $sFormula = $this->oRelatorioLegal->parseFormula('aLinhas', $aLinhas[$iLinha]->colunas[$iColuna]->o116_formula, $iColuna, $aLinhas);
+    } catch (Exception $e) {
+      echo 'Exceção capturada: ',  $e->getMessage(), "\n";
+    }
 
-    $sFormula = $this->oRelatorioLegal->parseFormula('aLinhas', $aLinhas[$iLinha]->colunas[$iColuna]->o116_formula, $iColuna, $aLinhas);
     $evaluate = "\$aLinhas[{$iLinha}]->{$aLinhas[$iLinha]->colunas[$iColuna]->o115_nomecoluna} = {$sFormula};";
-
     ob_start();
     eval($evaluate);
     $sRetorno = ob_get_contents();

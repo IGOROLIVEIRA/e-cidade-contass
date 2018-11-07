@@ -39,6 +39,10 @@ $clCriaAbas = new cl_criaabas;
 $iAnoUsu    = db_getsession("DB_anousu");
 $iCodRel    = 106;
 
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $iCodRel = 163;
+}
+
 ?>
 <html>
 <head>

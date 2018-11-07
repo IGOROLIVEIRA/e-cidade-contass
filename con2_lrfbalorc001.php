@@ -39,7 +39,9 @@ $oGet = db_utils::postMemory($_GET,0);
 $clCriaAbas = new cl_criaabas;
 $iAnoUsu    = db_getsession("DB_anousu");
 
-if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
+if(isset($oGet->newlrf) && $oGet->newlrf == true){
+    $iCodRel = 155;
+} else if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
   $iCodRel = 79;
 
 	if ($iAnoUsu >= 2015) {
@@ -54,6 +56,7 @@ if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
 	  $iCodRel = 22;
 	}
 }
+
 ?>
 <html>
 <head>

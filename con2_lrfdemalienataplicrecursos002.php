@@ -67,7 +67,10 @@ function js_emite() {
     return false;
   }
 
-  var sGetParam = sFonte+'?db_selinstit='+oDocument.db_selinstit.value+'&periodo='+$('o116_periodo').value;
+  var sGetParam  = sFonte+'?db_selinstit='+oDocument.db_selinstit.value;
+      sGetParam += '&periodo='+$('o116_periodo').value;
+      sGetParam += '&codrel=<?=$oGet->codrel?>';
+
   var jan       = window.open(sGetParam,'',
                               'width='+(screen.availWidth-5)+
                               ',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -85,7 +88,7 @@ function js_emite() {
    </tr>
    <tr>
     <td colspan=3  class='table_header'>
-      Anexo XI - Dem. Alien. At. Aplic. Recursos
+      Anexo XIV - Dem. Alien. At. Aplic. Recursos
     </td>
    </tr>
    <tr>

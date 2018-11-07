@@ -61,6 +61,12 @@ if ($anousu = 2010) {
   $codrel = 90;
   $sFonteParametros = "con4_parametrosrelatorioslegais001.php?c83_codrel={$codrel}";
 }
+
+$oGet = db_utils::postMemory($_GET,0);
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 167;
+    $sFonteParametros = "con4_parametrosrelatorioslegais001.php?c83_codrel={$codrel}";
+}
 ?>
 <html>
 <head>

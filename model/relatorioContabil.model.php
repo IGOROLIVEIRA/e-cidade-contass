@@ -119,13 +119,69 @@ class relatorioContabil {
 
   function getPeriodos() {
 
+    switch ($this->codigo){
+      case 155:
+        $orcparamrel = 145;
+        break;
+      case 156:
+        $orcparamrel = 96 ;
+        break;
+      case 157:
+        $orcparamrel = 148;
+        break;
+      case 158:
+        $orcparamrel = 88 ;
+        break;
+      case 159:
+        $orcparamrel = 146;
+        break;
+      case 160:
+        $orcparamrel = 147;
+        break;
+      case 161:
+        $orcparamrel = 105;
+        break;
+      case 162:
+        $orcparamrel = 149;
+        break;
+      case 163:
+        $orcparamrel = 106;
+        break;
+      case 164:
+        $orcparamrel = 107;
+        break;
+      case 165:
+        $orcparamrel = 87 ;
+        break;
+      case 166:
+        $orcparamrel = 89 ;
+        break;
+      case 167:
+        $orcparamrel = 90 ;
+        break;
+      case 168:
+        $orcparamrel = 91 ;
+        break;
+      case 169:
+        $orcparamrel = 92 ;
+        break;
+      case 170:
+        $orcparamrel = 108;
+        break;
+      default:
+        $orcparamrel = $this->codigo;
+        break;
+
+    }
+
     $sSqlPeriodo  = "select o114_sequencial,";
     $sSqlPeriodo .= "       o114_descricao, ";
     $sSqlPeriodo .= "       o114_sigla ";
     $sSqlPeriodo .= "  from orcparamrelperiodos  ";
     $sSqlPeriodo .= "       inner join  periodo on o114_sequencial = o113_periodo ";
-    $sSqlPeriodo .= " where o113_orcparamrel = {$this->codigo}";
+    $sSqlPeriodo .= " where o113_orcparamrel = {$orcparamrel}";
     $sSqlPeriodo .= " order by o114_ordem";
+
     $rsPeriodo   = db_query($sSqlPeriodo);
     $aPeriodos   = db_utils::getCollectionByRecord($rsPeriodo);
     return $aPeriodos;
@@ -147,7 +203,7 @@ class relatorioContabil {
     return false;
   }
 
-  function getNotaExplicativa (FPDF $oPdf, $iPeriodo,$iTam = 190) {
+  function getNotaExplicativa (FPDF &$oPdf, $iPeriodo,$iTam = 190) {
 
     /**
      * Tamanhos das fontes para as Notas Explicativas
@@ -533,10 +589,10 @@ class relatorioContabil {
    * @return string com a formula processada
    */
   function parseFormula($sVarNome, $sFormula, $iColuna, $aLinhas) {
-
     $iTamanhoFormula = strlen(strtolower($sFormula));
     $sFormula        = strtolower($sFormula);
     $sFormulaRetorno = '';
+
     for ($i = 0; $i < $iTamanhoFormula; $i++) {
 
       $iCaracterAtual    = substr($sFormula, $i,1);
@@ -557,7 +613,6 @@ class relatorioContabil {
            * verifica se linha
            */
           if ($iCaracterAtual == "f") {
-
             $sFormulaRetorno .= $this->parseFormula($sVarNome,
                                                     ${$sVarNome}[$iCodigoLinha]->colunas[$iColuna]->o116_formula,
                                                     $iColuna,
@@ -576,7 +631,9 @@ class relatorioContabil {
         $sFormulaRetorno .= $iCaracterAtual;
       }
     }
-    return $sFormulaRetorno;
+
+      return $sFormulaRetorno;
+
   }
 
   /**

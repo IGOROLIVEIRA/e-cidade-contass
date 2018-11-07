@@ -50,6 +50,8 @@ $sizecp  = array();
 $codrel  = 31; // relatorio de MDE FUNDEB
 $anousu  = db_getsession("DB_anousu");
 
+$oGet = db_utils::postMemory($_GET,0);
+
 if ($anousu > 2008){
   $codrel  = 61;
 }
@@ -60,6 +62,10 @@ if ($anousu >= 2010) {
 
 if ($anousu >= 2015) {
   $codrel = AnexoVIIIManutencaoDesenvolvimentoEnsino::CODIGO_RELATORIO;
+}
+
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 160;
 }
 
 ?>

@@ -49,7 +49,9 @@ $fontes  = array();
 $sizecp  = array();
 $iAnoUso = db_getsession("DB_anousu");
 
-if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
+if(isset($oGet->newlrf) && $oGet->newlrf == true){
+    $codrel = 156;
+}else if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
   $codrel = 81;
 } else {
 	

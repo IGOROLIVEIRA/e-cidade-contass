@@ -40,12 +40,13 @@ db_app::import("contabilidade.relatorios.AnexoXIRREO");
 
 $oPost             = db_utils::postMemory($_POST);
 $oGet              = db_utils::postMemory($_GET);
+$iCodRelatorio = (int)$oGet->codrel;
 $iAnoUsu           = db_getsession('DB_anousu');
 $sInstituicoes     = str_replace('-', ',', $oGet->db_selinstit);
 
 $cldb_config       = new cl_db_config;
-$oReltorioContabil = new relatorioContabil(105, false);
-$oAnexoXI          = new AnexoXIRREO($iAnoUsu, 105, $oGet->periodo);
+$oReltorioContabil = new relatorioContabil($iCodRelatorio, false);
+$oAnexoXI          = new AnexoXIRREO($iAnoUsu, $iCodRelatorio, $oGet->periodo);
 $oAnexoXI->setInstituicoes($sInstituicoes);
 
 $aDadosAnexoXI = $oAnexoXI->getDados();

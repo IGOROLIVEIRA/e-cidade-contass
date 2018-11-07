@@ -56,6 +56,11 @@ if ($anousu <= 2007){
  $codrel = 89;
 }
 
+$oGet = db_utils::postMemory($_GET,0);
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 166;
+}
+
 ?>
 <html>
 <head>

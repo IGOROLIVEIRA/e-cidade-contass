@@ -52,7 +52,9 @@ $sizecp  = array();
 
 $anousu = db_getsession("DB_anousu");
 
-if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
+if(isset($oGet->newlrf) && $oGet->newlrf == true){
+    $codrel = 156;
+}else if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
 	$codrel = 96;
 } else {
 	$codrel = 52;

@@ -35,6 +35,7 @@ include("libs/db_liborcamento.php");
 require_once("model/relatorioContabil.model.php");
 
 $oGet = db_utils::postMemory($_GET);
+
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
@@ -43,7 +44,7 @@ $oRelatorio = new relatorioContabil($oGet->c83_codrel);
 db_postmemory($HTTP_POST_VARS);
 $iAnoUsu   = db_getsession("DB_anousu");
 $sFonteRel = "con2_lrfdemonstrativoprojatuarialrpps002_2010.php";
-$sLabelMsg = "Anexo X - Demonstrativo da Projeção Atuarial  RPP";
+$sLabelMsg = "Anexo XIII - Demonstrativo da Projeção Atuarial  RPP";
 ?>
 <html>
 <head>
@@ -79,6 +80,7 @@ function js_emite(){
 
     query  = "db_selinstit="+obj.db_selinstit.value;
     query += "&periodo="+obj.o116_periodo.value;
+    query += "&codrel=<?=$oGet->c83_codrel?>";
 
     obj = document.form1;
     jan = window.open('<?=$sFonteRel?>?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');

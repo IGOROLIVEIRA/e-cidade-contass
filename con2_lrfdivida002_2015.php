@@ -75,7 +75,11 @@ for($x = 0; $x < $numrowsinstit; $x ++) {
     $virgula      = ",";
   }
 }
-$iCodigoRelatorio = 90;
+
+$oGet = db_utils::postMemory($_GET);
+
+$iCodigoRelatorio = (int)$oGet->codrel;
+
 $sTodasInstit     = $instituicao;
 if ($instit_rpps != "") {
   $sTodasInstit .= ",".$instit_rpps;

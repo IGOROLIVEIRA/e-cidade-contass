@@ -42,7 +42,8 @@ $oPost             = db_utils::postMemory($_POST);
 $oGet              = db_utils::postMemory($_GET);
 $iAnoUsu           = db_getsession('DB_anousu');
 $sInstituicoes     = str_replace('-', ',', $oGet->db_selinstit);
-$iCodigoRelatorio  = 108;
+
+$iCodigoRelatorio  = $oGet->codrel;
 
 $cldb_config       = new cl_db_config;
 $oReltorioContabil = new relatorioContabil($iCodigoRelatorio, false);

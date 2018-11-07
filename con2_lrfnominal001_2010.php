@@ -47,7 +47,15 @@ $titulos = array();
 $fontes  = array();
 $sizecp  = array();
 
-$codrel = 88; // relatorio de gastos com MDE	
+$oGet = db_utils::postMemory($_GET,0);
+
+if(isset($oGet->newlrf) && $oGet->newlrf == true){
+    $codrel = 158; // relatorio de gastos com MDE
+}else{
+    $codrel = 88; // relatorio de gastos com MDE
+
+}
+
 ?>
 <html>
 <head>

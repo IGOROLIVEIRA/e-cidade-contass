@@ -36,5 +36,10 @@ require_once 'fpdf151/assinatura.php';
 
 $oGet = db_utils::postMemory($_GET);
 $o    = new AnexoVIResultadoPrimario(db_getsession("DB_anousu"), AnexoVIResultadoPrimario::CODIGO_RELATORIO, $oGet->periodo);
+
+if($oGet->codrel == 159){
+  $o    = new AnexoVIResultadoPrimario(db_getsession("DB_anousu"), AnexoVIResultadoPrimario::CODIGO_RELATORIO_POS_2018, $oGet->periodo);
+}
+
 $o->setInstituicoes(str_replace('-', ',', $oGet->db_selinstit));
 $o->emitir();

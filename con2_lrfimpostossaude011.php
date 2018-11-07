@@ -59,7 +59,7 @@ var variavel = 1;
 
 function js_buscaEdicaoLrf(iAnousu,sFontePadrao){
   var url       = 'con4_lrfbuscaedicaoRPC.php';
-  var parametro = 'ianousu='+iAnousu+'&sfontepadrao='+sFontePadrao ;
+  var parametro = 'ianousu='+iAnousu+'&sfontepadrao='+sFontePadrao+'&codrel=<?=$oGet->codrel?>' ;
   var objAjax   = new Ajax.Request (url, { method:'post',
                                            parameters:parametro, 
                                            onComplete:js_setNomeArquivo}
@@ -75,7 +75,7 @@ js_buscaEdicaoLrf(<?=db_getsession("DB_anousu")?>,"con2_lrfimpostossaude002");
 function js_emite(anousu){
   obj                = document.form1;
   query              = "";
-  query             += sNomeArquivoEdicao+"?periodo="+obj.o116_periodo.value;
+  query             += sNomeArquivoEdicao+"?periodo="+obj.o116_periodo.value+'&codrel=<?=$oGet->codrel?>';
 
   if (obj.o116_periodo.value == 0) {
 

@@ -49,7 +49,10 @@ $fontes  = array();
 $sizecp  = array();
 $anousu  = db_getsession('DB_anousu');
 
-if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
+
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 157;
+}else if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
   if ($anousu >= 2015) {
     $codrel = AnexoIVDemonstrativoRPPS::CODIGO_RELATORIO;
   } else {

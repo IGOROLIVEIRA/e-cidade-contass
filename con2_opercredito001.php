@@ -74,6 +74,12 @@ $sizecp  = array();
    $sFonteParametros = "con4_parametrosrelatorioslegais001.php?c83_codrel={$iCodRel}";
    $sTituloParametro = "Parametros";
  }
+$oGet = db_utils::postMemory($_GET,0);
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $iCodRel = 169;
+    $sFonteParametros = "con4_parametrosrelatorioslegais001.php?c83_codrel={$iCodRel}";
+    $sTituloParametro = "Parametros";
+}
 ?>
 <html>
 <head>

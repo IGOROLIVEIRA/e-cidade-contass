@@ -37,6 +37,12 @@ $clcriaabas  = new cl_criaabas;
 $clrotulo    = new rotulocampo;
 
 $codrel      = 105;
+
+$oGet = db_utils::postMemory($_GET,0);
+
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 161;
+}
 ?>
 <html>
 <head>

@@ -76,7 +76,7 @@ $oPost = db_utils::postMemory($_POST);
 
 $aPeriodosRelatorios = $oRelatorio->getPeriodos();
 if (count($aPeriodosRelatorios)> 0) {
-  
+
   foreach ($aPeriodosRelatorios as $oPeriodo) { 
     $aPeriodos[$oPeriodo->o114_sequencial] = $oPeriodo->o114_descricao; 
   }

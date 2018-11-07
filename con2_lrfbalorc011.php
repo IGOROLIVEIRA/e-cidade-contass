@@ -39,8 +39,8 @@ $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
 $clrotulo->label('o116_periodo');
-$oRelatorio = new relatorioContabil($oGet->c83_codrel);
 
+$oRelatorio = new relatorioContabil($oGet->c83_codrel);
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -81,6 +81,7 @@ function js_setNomeArquivo(oResposta){
 }
 
 js_buscaEdicaoLrf(<?=db_getsession("DB_anousu")?>,'con2_lrfbalorc002');
+
 function js_emite(){
 
   var sel_instit  = new Number(document.form1.db_selinstit.value);
@@ -100,10 +101,14 @@ function js_emite(){
     var obj   = document.form1;
 
     query  =  sNomeArquivoEdicao+"?db_selinstit="+obj.db_selinstit.value;
+    console.log('obj.o116_periodo.value: '+obj.o116_periodo.value,'$oGet->c83_codrel',<?=$oGet->c83_codrel?>);
     query += "&bimestre="+obj.o116_periodo.value;
+    query += "&relatorio="+<?=$oGet->c83_codrel?>;
+
 
     obj = document.form1;
     jan = window.open(query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+
     jan.moveTo(0,0);
   }
 }

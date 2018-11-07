@@ -45,7 +45,11 @@ try {
 
   $oInstituicao = InstituicaoRepository::getInstituicaoPrefeitura();
 
-  $oRelatorio = new AnexoVIIIManutencaoDesenvolvimentoEnsino(db_getsession("DB_anousu"), AnexoVIIIManutencaoDesenvolvimentoEnsino::CODIGO_RELATORIO, $oGet->periodo);
+  if((int)$oGet->codrel == 160){
+    $oRelatorio = new AnexoVIIIManutencaoDesenvolvimentoEnsino(db_getsession("DB_anousu"), AnexoVIIIManutencaoDesenvolvimentoEnsino::CODIGO_RELATORIO_POS_2018, $oGet->periodo);
+  }else{
+    $oRelatorio = new AnexoVIIIManutencaoDesenvolvimentoEnsino(db_getsession("DB_anousu"), AnexoVIIIManutencaoDesenvolvimentoEnsino::CODIGO_RELATORIO, $oGet->periodo);
+  }
   $oRelatorio->setInstituicoes($oInstituicao->getCodigo());
   $oRelatorio->emitir();
 

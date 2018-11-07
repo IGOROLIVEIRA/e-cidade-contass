@@ -50,8 +50,12 @@ $sizecp  = array();
 $codrel  = 87; // relatorio de MDE FUNDEB
 $anousu  = db_getsession("DB_anousu");
 if ($anousu < 2010){
-  
   $codrel  = 61; 
+}
+
+$oGet = db_utils::postMemory($_GET,0);
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 165;
 }
 ?>
 <html>

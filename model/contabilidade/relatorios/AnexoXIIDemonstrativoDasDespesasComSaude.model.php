@@ -73,7 +73,7 @@ class AnexoXIIDemonstrativoDasDespesasComSaude extends RelatoriosLegaisBase {
     $this->oPdf->setAutoNewLineMulticell(true);
     $this->getNotaExplicativa($this->oPdf, $this->iCodigoPeriodo, $this->oPdf->getAvailWidth());
 
-    $this->oPdf->ln(10);
+    $this->oPdf->ln(11);
 
     $this->escreverAssinaturas();
 
@@ -837,7 +837,53 @@ class AnexoXIIDemonstrativoDasDespesasComSaude extends RelatoriosLegaisBase {
     $nLargura = $this->oPdf->getAvailWidth() / 3;
 
     $oAssinatura = new cl_assinatura();
-    assinaturas($this->oPdf, &$oAssinatura,'LRF');
+//    assinaturas($this->oPdf, $oAssinatura,'LRF');
+
+
+
+    $controle =  "______________________________"."\n"."Controle Interno";
+    $sec      =  "______________________________"."\n"."Secretaria da Fazenda";
+    $cont     =  "______________________________"."\n"."Contadoria";
+    $pref     =  "______________________________"."\n"."Prefeito";
+
+    $ass_pref     = $oAssinatura->assinatura(1000,$pref);
+    $ass_sec      = $oAssinatura->assinatura(1002,$sec);
+    $ass_cont     = $oAssinatura->assinatura(1005,$cont);
+    $ass_controle = $oAssinatura->assinatura(1009,$controle);
+
+
+
+    if ($this->oPdf->gety() > ($this->oPdf->h - 10)){
+      $this->oPdf->addPage($this->oPdf->CurOrientation);
+      $this->oPdf->Ln(10);
+    }
+    $largura = ( $this->oPdf->w ) / 3;
+
+    $pos = $this->oPdf->gety();
+    $this->oPdf->multicell($largura,3,$ass_pref,0,"C",0,0);
+
+    // o rpps não tem a assinatura abaixo
+    global $db21_idtribunal;
+    db_sel_instit(db_getsession("DB_instit"));
+
+    $this->oPdf->setxy($largura*1,$pos);
+
+    $this->oPdf->multicell($largura,3,$ass_cont,0,"C",0,0);
+
+
+    if ($db21_idtribunal==6  || $db21_idtribunal==7   ){
+      //  não tem esse campo 6-RPPS(Autarquia) , 7-RPPS (Exceto Autarquia )
+    } else {
+      $this->oPdf->setxy($largura*2,$pos);
+      $this->oPdf->multicell($largura,3,$ass_sec,0,"C",0,0);
+
+    }
+
+
+
+    $this->oPdf->Output();
+
+
     $this->oPdf->setAutoNewLineMulticell(true);
   }
 

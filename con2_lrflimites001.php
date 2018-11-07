@@ -49,6 +49,11 @@ $sizecp  = array();
 
 $codrel = 93;
 $anousu = db_getsession("DB_anousu");
+
+$oGet = db_utils::postMemory($_GET,0);
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 172;
+}
 ?>
 <html>
 <head>

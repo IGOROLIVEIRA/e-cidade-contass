@@ -29,6 +29,7 @@
 class AnexoVIIIManutencaoDesenvolvimentoEnsino extends RelatoriosLegaisBase {
 
   const CODIGO_RELATORIO = 147;
+  const CODIGO_RELATORIO_POS_2018 = 160;
 
   const LINHA_INICIO_RECEITAS_ENSINO         = 1;
   const LINHA_FIM_RECEITAS_ENSINO            = 42;

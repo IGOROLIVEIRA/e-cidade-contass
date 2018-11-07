@@ -51,6 +51,10 @@ $codrel = 18; // relatorio de simplificado
 if (db_getsession("DB_anousu") >= 2010) {
   $codrel = 98;
 }
+$oGet = db_utils::postMemory($_GET,0);
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 98;
+}
 ?>
 <html>
 <head>

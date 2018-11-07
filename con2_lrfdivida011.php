@@ -74,12 +74,11 @@ js_buscaEdicaoLrf(<?=db_getsession("DB_anousu")?> ,'con2_lrfdivida002');
 
 function js_emite(sFonte){
 
-		
   obj = document.form1;
-  
+
   data_ini = '';
   data_fin = '';
- 	
+
  	executar = sNomeArquivoEdicao;
   var sInstit  = '';
   if(obj.db_selinstit) {
@@ -97,8 +96,9 @@ function js_emite(sFonte){
   if (obj.trajetoria) {
     sTrajetoria = obj.trajetoria.value;
   } 
-  var sUrl = executar+'?db_selinstit='+sInstit+'&dtini=&dtfin=&periodo='+obj.o116_periodo.value+
-            '&trajetoria='+sTrajetoria
+  var sUrl = executar+'?db_selinstit='+sInstit+'&dtini=&dtfin=&periodo='+obj.o116_periodo.value+'&trajetoria='+sTrajetoria;
+      sUrl += '&codrel=<?=$oGet->c83_codrel?>';
+
   jan = window.open(sUrl,
                     '',
                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');

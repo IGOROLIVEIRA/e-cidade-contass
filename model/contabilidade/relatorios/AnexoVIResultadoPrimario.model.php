@@ -43,6 +43,8 @@ class AnexoVIResultadoPrimario extends RelatoriosLegaisBase {
 
   CONST CODIGO_RELATORIO = 146;
 
+  CONST CODIGO_RELATORIO_POS_2018 = 159;
+
   /**
    * Instância relatório AnexoVI do RREO
    * @param int $iAnoUsu          Ano de emissão
@@ -354,7 +356,7 @@ class AnexoVIResultadoPrimario extends RelatoriosLegaisBase {
 
     $this->oPdf->ln(10);
     $oAssinatura = new cl_assinatura();
-    assinaturas($this->oPdf, &$oAssinatura, 'LRF');
+    assinaturas($this->oPdf, $oAssinatura, 'LRF');
 
 
   }

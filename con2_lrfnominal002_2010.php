@@ -74,7 +74,11 @@ if ($per >1 ){
 } else {
   $periodo_ant= '1B';
 }
-$iCodigoRelatorio = 88;
+
+$oGet = db_utils::postMemory($_GET);
+
+$iCodigoRelatorio = $oGet->codrel == 158 ? 158 : 88;
+
 $anousu_ant  = db_getsession("DB_anousu");
 
 
@@ -782,13 +786,11 @@ if (!isset($arqinclude)){
   ///////////////////////////////////////////////////////////////////////////////
   $pdf->Ln();
   $oRelatorio = new relatorioContabil($iCodigoRelatorio, false);
-  $oRelatorio->getNotaExplicativa(&$pdf, $iCodigoPeriodo);
+  $oRelatorio->getNotaExplicativa($pdf, $iCodigoPeriodo);
   $pdf->Ln(24);
 
-  assinaturas(&$pdf,&$classinatura,'LRF');
+  assinaturas($pdf,$classinatura,'LRF');
 
   $pdf->Output();
 
 }  // end !include
-
-?>

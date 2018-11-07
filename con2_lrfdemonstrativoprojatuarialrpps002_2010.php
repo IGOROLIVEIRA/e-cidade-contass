@@ -60,7 +60,10 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_SERVER_VARS);
 $iAnoUsu  = db_getsession("DB_anousu");
 db_app::import("contabilidade.relatorios.AnexoXIIILRF");
-$iCodigoRelatorio   = 106;
+
+$oGet = db_utils::postMemory($_GET);
+
+$iCodigoRelatorio   = (int)$oGet->codrel;
 $oDaoPeriodo        = db_utils::getDao("periodo");
 $iCodigoPeriodo     = $periodo;
 $sSqlPeriodo        = $oDaoPeriodo->sql_query($periodo);

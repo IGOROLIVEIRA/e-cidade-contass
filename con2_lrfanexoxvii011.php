@@ -39,11 +39,12 @@ $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
 $clrotulo->label('o116_periodo');
 $oRelatorio = new relatorioContabil($oGet->codrel);
+
 db_postmemory($HTTP_POST_VARS);
 
 $anousu = db_getsession("DB_anousu");
 
-$sLabelMsg = "Anexo XIII - Demonstrativo das Parcerias Público-Privadas";
+$sLabelMsg = "Anexo XVII - Demonstrativo das Parcerias Público-Privadas";
 ?>
 <html>
 <head>
@@ -58,7 +59,7 @@ var variavel = 1;
 
 function js_buscaEdicaoLrf(iAnousu,sFontePadrao){
   var url       = 'con4_lrfbuscaedicaoRPC.php';
-  var parametro = 'ianousu='+iAnousu+'&sfontepadrao='+sFontePadrao ;
+  var parametro = 'ianousu='+iAnousu+'&sfontepadrao='+sFontePadrao;
   var objAjax   = new Ajax.Request (url, { method:'post',
                                            parameters:parametro,
                                            onComplete:js_setNomeArquivo}
@@ -82,7 +83,7 @@ function js_emite(){
   }
   var query = "";
   var obj   = document.form1;
-  query += sNomeArquivoEdicao+"?&periodo="+obj.o116_periodo.value;
+  query += sNomeArquivoEdicao+"?&periodo="+obj.o116_periodo.value+'&codrel=<?=$oGet->codrel?>';
   jan    = window.open(query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 

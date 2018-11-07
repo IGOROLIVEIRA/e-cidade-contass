@@ -35,6 +35,13 @@ require_once("dbforms/db_classesgenericas.php");
 
 $clcriaabas  = new cl_criaabas;
 $clrotulo    = new rotulocampo;
+
+$iCodRel = 108;
+
+$oGet = db_utils::postMemory($_GET,0);
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $iCodRel = 170;
+}
 ?>
 <html>
 <head>
@@ -67,9 +74,9 @@ $clrotulo    = new rotulocampo;
 	                                     "notas"    => "Fonte/Notas Explicativas",
 	                                     "parametro"=> "Parametros");
 	    
-	    $clcriaabas->src        = array("relatorio" => "con2_lrfdemdisponibcaixa002.php?codrel=108",
-	                                    "notas"     => "con2_conrelnotas.php?c83_codrel=108",
-	                                    "parametro" => "con4_parametrosrelatorioslegais001.php?c83_codrel=108"
+	    $clcriaabas->src        = array("relatorio" => "con2_lrfdemdisponibcaixa002.php?codrel=$iCodRel",
+	                                    "notas"     => "con2_conrelnotas.php?c83_codrel=$iCodRel",
+	                                    "parametro" => "con4_parametrosrelatorioslegais001.php?c83_codrel=$iCodRel"
 	                             );
 	                             
 	    $clcriaabas->sizecampo  = array("relatorio" => "23", 

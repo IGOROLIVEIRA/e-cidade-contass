@@ -79,7 +79,7 @@ function js_emite(){
     obj = document.form1;
     periodo = obj.o116_periodo.value;
 
-    jan = window.open(sNomeArquivoEdicao+'?db_selinstit='+obj.db_selinstit.value+'&dtini=&dtfin=&periodo='+periodo,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+    jan = window.open(sNomeArquivoEdicao+'?db_selinstit='+obj.db_selinstit.value+'&dtini=&dtfin=&periodo='+periodo+'&codrel=<?=$oGet->codrel?>','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
     jan.moveTo(0,0);
   }
 }

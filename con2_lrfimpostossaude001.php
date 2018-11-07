@@ -68,6 +68,11 @@ if ($anousu >= 2013) {
 if ($anousu >= 2015) {
   $codrel = AnexoXIIDemonstrativoDasDespesasComSaude::CODIGO_RELATORIO;
 }
+
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 162;
+}
+
 ?>
 <html>
 <head>

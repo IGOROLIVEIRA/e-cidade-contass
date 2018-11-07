@@ -35,6 +35,7 @@ require_once("libs/db_liborcamento.php");
 require_once("model/relatorioContabil.model.php");
 
 $oGet     = db_utils::postMemory($_GET);
+
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');

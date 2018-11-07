@@ -26,6 +26,7 @@
  */
 
 if (!isset($arqinclude)){
+
   // se este arquivo no esta incluido por outro
 
   include("fpdf151/pdf.php");
@@ -35,16 +36,16 @@ if (!isset($arqinclude)){
   include("libs/db_liborcamento.php");
   include("libs/db_libcontabilidade.php");
   include("libs/db_libtxt.php");
-  include("dbforms/db_funcoes.php");
+
   include("model/linhaRelatorioContabil.model.php");
   include("model/relatorioContabil.model.php");
   include("classes/db_periodo_classe.php");
   include("classes/db_db_config_classe.php");
+
   include("classes/db_conrelinfo_classe.php");
   include("classes/db_conrelvalor_classe.php");
   include("classes/db_orcparamrel_classe.php");
   include("classes/db_empresto_classe.php");
-
   parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
   db_postmemory($HTTP_SERVER_VARS);
 
@@ -54,11 +55,11 @@ if (!isset($arqinclude)){
   $clconrelvalor        = new cl_conrelvalor;
   $clempresto           = new cl_empresto;
   $iCodigoPeriodo  = $periodo;
+  $oGet = db_utils::postMemory($_GET);
 
-
-  // no dbforms/db_funcoes.php
   // data final do periodo
 }
+
   $cldb_config          = new cl_db_config;
   $anousu     = db_getsession("DB_anousu");
   $instit     = db_getsession("DB_instit");
@@ -67,7 +68,8 @@ if (!isset($arqinclude)){
   $sSqlPeriodo   = $oDaoPeriodo->sql_query($periodo);
   $sSiglaPeriodo = db_utils::fieldsMemory($oDaoPeriodo->sql_record($sSqlPeriodo),0)->o114_sigla;
   $periodo_selecionado = $sSiglaPeriodo;
-  $oRelatorioContabil   = new relatorioContabil(87, false);
+
+  $oRelatorioContabil   = new relatorioContabil($oGet->codrel, false);
   $aLinhas              = $oRelatorioContabil->getLinhasRelatorio(false);
   $dt     = data_periodo($anousu,$sSiglaPeriodo);
   $dt_ini = $dt[0];
@@ -532,8 +534,7 @@ if (!isset($arqinclude)) {
 // Assinaturas
   $pdf->Ln(30);
 
-  assinaturas(&$pdf,&$classinatura,'LRF');
+  assinaturas($pdf,$classinatura,'LRF');
 
   $pdf->Output();
 }
-?>

@@ -67,7 +67,7 @@ function js_emite() {
     return false;
   }
 
-  var sGetParam = sFonte+'?db_selinstit='+oDocument.db_selinstit.value+'&periodo='+$('o116_periodo').value;
+  var sGetParam = sFonte+'?db_selinstit='+oDocument.db_selinstit.value+'&periodo='+$('o116_periodo').value+'&codrel=<?=$oGet->codrel?>';
   var jan       = window.open(sGetParam,'',
                               'width='+(screen.availWidth-5)+
                               ',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');

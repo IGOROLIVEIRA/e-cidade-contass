@@ -86,7 +86,7 @@ function js_emite(sFonte){
   	}	
 	}
   executar = sNomeArquivoEdicao;					
-  jan = window.open(executar+'?db_selinstit='+sInstit+'&periodo='+obj.o116_periodo.value,
+  jan = window.open(executar+'?db_selinstit='+sInstit+'&periodo='+obj.o116_periodo.value+'&codrel=<?=$oGet->c83_codrel?>',
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }

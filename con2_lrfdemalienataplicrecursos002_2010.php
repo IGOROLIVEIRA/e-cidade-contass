@@ -44,8 +44,9 @@ $iAnoUsu           = db_getsession('DB_anousu');
 $sInstituicoes     = str_replace('-', ',', $oGet->db_selinstit);
 
 $cldb_config       = new cl_db_config;
-$oReltorioContabil = new relatorioContabil(107, false);
-$oAnexoXIV         = new AnexoXIVRREO($iAnoUsu, 107, $oGet->periodo);
+
+$oReltorioContabil = new relatorioContabil($oGet->codrel, false);
+$oAnexoXIV         = new AnexoXIVRREO($iAnoUsu, (int)$oGet->codrel, $oGet->periodo);
 $oAnexoXIV->setInstituicoes($sInstituicoes);
 
 $aDadosAnexoXIV = $oAnexoXIV->getDados();
@@ -163,4 +164,3 @@ $oReltorioContabil->getNotaExplicativa($oPdf, $oGet->periodo);
 $oReltorioContabil->assinatura($oPdf, 'LRF');
 
 $oPdf->Output();
-?>

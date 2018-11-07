@@ -48,10 +48,14 @@ $titulos = array();
 $fontes  = array();
 $sizecp  = array();
 
+$codrel = 28;
+
 if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
 	$codrel = 97;
-} else {
-	$codrel = 28;
+}
+
+if (isset($oGet->newlrf) && $oGet->newlrf == true) {
+    $codrel = 97;
 }
 ?>
 <html>

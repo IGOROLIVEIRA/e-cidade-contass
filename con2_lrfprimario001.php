@@ -48,6 +48,7 @@ $titulos = array();
 $fontes  = array();
 $sizecp  = array();
 
+
 if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
 	$codrel = 83;
 } else {
@@ -55,6 +56,9 @@ if (isset($oGet->dfiscal) && $oGet->dfiscal == true) {
 }
 if (db_getsession("DB_anousu") >= 2015) {
   $codrel = AnexoVIResultadoPrimario::CODIGO_RELATORIO;
+}
+if(isset($oGet->newlrf) && $oGet->newlrf == true){
+    $codrel = 159;
 }
 ?>
 <html>

@@ -48,7 +48,13 @@ $aTitulos = array();
 $aFontes  = array();
 $aTamanho  = array();
 $dtAnousu = db_getsession("DB_anousu");
-$iCodigoRelatorio = 96;
+
+if(isset($oGet->newlrf) && $oGet->newlrf == true){
+    $iCodigoRelatorio = 96;
+}else{
+    $iCodigoRelatorio = 96;
+
+}
 
 ?>
 <html>
