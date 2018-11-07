@@ -38,6 +38,7 @@ require_once("classes/db_orcparamrel_classe.php");
 db_app::import("linhaRelatorioContabil");
 db_app::import("relatorioContabil");
 db_app::import("contabilidade.relatorios.AnexoIRGF");
+db_app::import("contabilidade.relatorios.AnexoIRGF_2018");
 
 $classinatura       = new cl_assinatura();
 $orcparamrel        = new cl_orcparamrel();
@@ -48,10 +49,15 @@ $oPost              = db_utils::postMemory($_POST);
 $oGet               = db_utils::postMemory($_GET);
 $iAnoUsu            = db_getsession('DB_anousu');
 $sInstituicoes      = str_replace('-', ',', $oGet->db_selinstit);
-$iCodigoRelatorio   = 89;
+$iCodigoRelatorio   = $oGet->codrel;
 
-$oReltorioContabil  = new relatorioContabil($iCodigoRelatorio, false);
-$oAnexoIRGF         = new AnexoIRGF($iAnoUsu, $iCodigoRelatorio, $oGet->periodo);
+$oRelatorioContabil  = new relatorioContabil($iCodigoRelatorio, false);
+
+if((int)$iCodigoRelatorio == 166){
+  $oAnexoIRGF         = new AnexoIRGF_2018($iAnoUsu, $iCodigoRelatorio, $oGet->periodo);
+}else{
+  $oAnexoIRGF         = new AnexoIRGF($iAnoUsu, $iCodigoRelatorio, $oGet->periodo);
+}
 $oAnexoIRGF->setInstituicoes($sInstituicoes);
 
 /**
@@ -64,6 +70,14 @@ $aDadosAnexoIRGF->quadrodespesabruta                 = $aDadosAnexoIRGFIntermedi
 $aDadosAnexoIRGF->quadrodespesanaocomputadas         = $aDadosAnexoIRGFIntermediario->quadrodespesanaocomputadas;
 $aDadosAnexoIRGF->quadrodespesaliquida               = $aDadosAnexoIRGFIntermediario->quadrodespesaliquida;
 $aDadosAnexoIRGF->quadroreceitatotalcorrenteliquida  = $aDadosAnexoIRGFIntermediario->quadroreceitatotalcorrenteliquida;
+
+if((int)$iCodigoRelatorio == 166){
+
+  $aDadosAnexoIRGF->quadrotransferenciasobrigatorias   = $aDadosAnexoIRGFIntermediario->quadrotransferenciasobrigatorias;
+  $aDadosAnexoIRGF->quadroreceitacorrenteliquidaajust  = $aDadosAnexoIRGFIntermediario->quadroreceitacorrenteliquidaajust;
+
+}
+
 $aDadosAnexoIRGF->quadrodespesatotalcompessoal       = $aDadosAnexoIRGFIntermediario->quadrodespesatotalcompessoal;
 $aDadosAnexoIRGF->quadrolimitemaximo                 = $aDadosAnexoIRGFIntermediario->quadrolimitemaximo;
 $aDadosAnexoIRGF->quadrolimiteprudencial             = $aDadosAnexoIRGFIntermediario->quadrolimiteprudencial;
@@ -192,25 +206,24 @@ if ($oPeriodo->o114_sigla == "3Q" || $oPeriodo->o114_sigla == "2S"  || $oPeriodo
 
   $sDescricaoPeriodo  = "JANEIRO/{$iAnoUsu} A ".strtoupper(db_mes($dtFinal[1]))."";
   $sDescricaoPeriodo .= " DE {$iAnoUsu}";
+
 } else {
 
   $sDescricaoPeriodo  = strtoupper(db_mes($dtInicial[1]))."/{$dtInicial[0]} A ";
   $sDescricaoPeriodo .= strtoupper(db_mes($dtFinal[1]))." DE {$iAnoUsu}";
+
 }
 
 /**
  * Mostra header da descrição por período.
  */
-if ($lTemCamara == true && $lTemPrefeitura == false && $lTemAdminD == false) {
+if($lTemCamara == true && $lTemPrefeitura == false && $lTemAdminD == false){
   $head7 = $sDescricaoPeriodo;
-} else {
-
-	if ($lTemMinisterio == true) {
+}else if($lTemMinisterio == true){
 		$head7 = $sDescricaoPeriodo;
-	} else {
+	}else{
     $head6 = $sDescricaoPeriodo;
 	}
-}
 
 $oPdf  = new PDF();
 $oPdf->Open();
@@ -273,41 +286,45 @@ if ($oGet->emissao == 1) {
   /**
    * Monta as linhas de cada quadro de totalização.
    */
-  foreach ($aDadosAnexoIRGF as $sIndice => $oDadoQuadroLinha) {
+  foreach($aDadosAnexoIRGF as $sIndice => $oDadoQuadroLinha){
 
     /**
      * Verifica se for quadrodespesaliquida poem borda conforme havia no relatório padrão.
      */
     $oPdf->SetFont('arial', 'b', $iTamFonte);
-    if ($sIndice == 'quadrodespesaliquida') {
+    switch ($sIndice) {
+      case 'quadrodespesaliquida':
+        $oPdf->Cell(135, $iAltCell, $oDadoQuadroLinha->quadrodescricao, 'TBR', 0, "L", 0);
+        $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->exercicio, 'f'), 'TBR', 0, "R", 0);
+        $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->inscritas, 'f'), 'TBL', 1, "R", 0);
 
-      $oPdf->Cell(135, $iAltCell, $oDadoQuadroLinha->quadrodescricao, 'TBR', 0, "L", 0);
-      $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->exercicio, 'f'), 'TBR', 0, "R", 0);
-      $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->inscritas, 'f'), 'TBL', 1, "R", 0);
+        $oPdf->Cell(284, $iAltCell, "",0, 1, "C", 0);
+        $oPdf->SetFont('arial', 'b', $iTamFonte);
 
-      $oPdf->Cell(284, $iAltCell, "",0, 1, "C", 0);
+        if((int)$iCodigoRelatorio == 166){
+          $oPdf->Cell(135, $iAltCell, "DTP e Apuração do Cumprimento do Limite Legal","RTB", 0, "C", 0);
+        }else{
+          $oPdf->Cell(135, $iAltCell, "APURAÇÃO DO CUMPRIMENTO DO LIMITE LEGAL","RTB", 0, "C", 0);
+        }
 
-      $oPdf->SetFont('arial', 'b', $iTamFonte);
-      $oPdf->Cell(135, $iAltCell, "APURAÇÃO DO CUMPRIMENTO DO LIMITE LEGAL","RTB", 0, "C", 0);
-      $oPdf->Cell(30, $iAltCell, "VALOR", "RTB", 0, "C", 0);
-      $oPdf->Cell(30, $iAltCell, "% SOBRE A RCL", "TB", 1, "C", 0);
-    } else {
+        $oPdf->Cell(30, $iAltCell, "VALOR", "RTB", 0, "C", 0);
+        $oPdf->Cell(30, $iAltCell, "% SOBRE A RCL", "TB", 1, "C", 0);
+        break;
 
-      if ($sIndice == 'quadrodespesabruta'
-        || $sIndice == 'quadrodespesanaocomputadas'
-       	|| $sIndice == 'quadrodespesaliquida') {
-
-
+      case 'quadrodespesabruta':
+      case 'quadrodespesanaocomputadas':
+      case 'quadrodespesanaocomputadas':
         /**
          * Imprime linha quadro despesa bruta.
          * Imprime linha quadro despesa nao computadas.
          * Imprime linha quadro despesa liquida.
          */
         $oPdf->Cell(135, $iAltCell, $oDadoQuadroLinha->quadrodescricao, 'R', 0, "L", 0);
-	      $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->exercicio, 'f'), 'R', 0, "R", 0);
-	      $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->inscritas, 'f'), 'L', 1, "R", 0);
-      } else {
+        $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->exercicio, 'f'), 'R', 0, "R", 0);
+        $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->inscritas, 'f'), 'L', 1, "R", 0);
+        break;
 
+      default:
         $oPdf->SetFont('arial', '', $iTamFonte);
         /**
          * Imprime linha quadro receita total corrente líquida.
@@ -318,20 +335,21 @@ if ($oGet->emissao == 1) {
         $sAlinhamento     = "R";
         $sValorPercentual = db_formatar($oDadoQuadroLinha->percentuallimite, 'f');
 
-        if ($sIndice == 'quadroreceitatotalcorrenteliquida') {
+        if($sIndice == 'quadroreceitatotalcorrenteliquida') {
 
           $sAlinhamento     = "C";
           $sValorPercentual = "-";
+
         }
 
-        if ($sIndice == 'quadrodespesatotalcompessoal') {
+        if($sIndice == 'quadrodespesatotalcompessoal') {
           $sValorPercentual = db_formatar($oDadoQuadroLinha->percentualsobrercl, 'f');
         }
 
         $oPdf->Cell(135, $iAltCell, $oDadoQuadroLinha->quadrodescricao,"RB", 0, "L", 0);
         $oPdf->Cell(30, $iAltCell, db_formatar($oDadoQuadroLinha->valorapurado, 'f'), "RB", 0, "R", 0);
         $oPdf->Cell(30, $iAltCell, $sValorPercentual , "B", 1, $sAlinhamento, 0);
-      }
+        break;
     }
 
     /**
@@ -344,6 +362,7 @@ if ($oGet->emissao == 1) {
       $oPdf->Cell(30, $iAltCell, db_formatar($oDadoLinha->exercicio, 'f'), 'R', 0, "R", 0);
       $oPdf->Cell(30, $iAltCell, db_formatar($oDadoLinha->inscritas, 'f'), 'L', 0, "R", 0);
       $oPdf->Ln();
+
     }
   }
 } else {
@@ -371,12 +390,25 @@ if ($oGet->emissao == 1) {
   /**
    * Monta cabeçalhos do quadro Despesa com o Pessoal
    */
-  $oPdf->MultiCell(50, $iAltCell * 6, "DESPESA COM PESSOAL", 'TBR', "C");
-  $oPdf->SetXY($iPosX + 50, $iPosY);
-  $iPosXDespesasExecutadas = $oPdf->GetX();
-  $oPdf->Cell(($iTamCell * 14 + 10), $iAltCell, "DESPESAS EXECUTADAS (Últimos 12 meses)", 'T', 1, "C", 0);
-  $oPdf->SetX($iPosXDespesasExecutadas);
-  $oPdf->Cell(($iTamCell * 14 + 10), $iAltCell, "LIQUIDADAS", 'T', 1, "C", 0);
+  if((int)$iCodigoRelatorio == 166){
+
+    $oPdf->MultiCell(50, 22, "DESPESA COM PESSOAL", 'TBR', "C");
+    $oPdf->SetXY($iPosX + 50, $iPosY);
+    $iPosXDespesasExecutadas = $oPdf->GetX();
+    $oPdf->Cell(($iTamCell * 14 + 10), 6, "DESPESAS EXECUTADAS (Últimos 12 meses)", 'T', 1, "C", 0);
+    $oPdf->SetX($iPosXDespesasExecutadas);
+    $oPdf->Cell(($iTamCell * 14 + 7), 6, "LIQUIDADAS", 'T', 1, "C", 0);
+
+  }else{
+
+    $oPdf->MultiCell(50, $iAltCell * 6, "DESPESA COM PESSOAL", 'TBR', "C");
+    $oPdf->SetXY($iPosX + 50, $iPosY);
+    $iPosXDespesasExecutadas = $oPdf->GetX();
+    $oPdf->Cell(($iTamCell * 14 + 10), $iAltCell, "DESPESAS EXECUTADAS (Últimos 12 meses)", 'T', 1, "C", 0);
+    $oPdf->SetX($iPosXDespesasExecutadas);
+    $oPdf->Cell(($iTamCell * 14 + 10), $iAltCell, "LIQUIDADAS", 'T', 1, "C", 0);
+
+  }
 
   /**
    * Lista meses do período anterior ( exercício anterior ) para mostrar a descrição dos mesmos.
@@ -384,8 +416,18 @@ if ($oGet->emissao == 1) {
   $oPdf->SetX($iPosXDespesasExecutadas);
   $oPdf->SetFont('arial', '', $iTamFonte);
   $aDadosColuna = $oAnexoIRGF->getDadosColuna();
-  foreach ($aDadosColuna as $oDadoColuna) {
-    $oPdf->Cell($iTamCell, $iAltCell*4, $oDadoColuna->sDescricao, 'TBR', 0, "C", 0);
+  if((int)$iCodigoRelatorio == 166){
+
+    foreach($aDadosColuna as $oDadoColuna) {
+      $oPdf->Cell($iTamCell, 10, $oDadoColuna->sDescricao, 'TBR', 0, "C", 0);
+    }
+
+  }else{
+
+    foreach ($aDadosColuna as $oDadoColuna) {
+      $oPdf->Cell($iTamCell, $iAltCell*4, $oDadoColuna->sDescricao, 'TBR', 0, "C", 0);
+    }
+
   }
 
   /**
@@ -393,14 +435,27 @@ if ($oGet->emissao == 1) {
    */
   $iPosX = $oPdf->GetX();
   $iPosY = $oPdf->GetY();
-  $oPdf->MultiCell($iTamCell + 5, $iAltCell, "TOTAL\n(ÚLTIMOS 12 MESES)\n(a)", 'TBR', 'C', 0, 0);
+  if((int)$iCodigoRelatorio == 166){
+    $oPdf->MultiCell($iTamCell + 5, $iAltCell-2.5, "TOTAL\n(ÚLTIMOS 12 MESES)\n(a)", 'TBR', 'C', 0, 0);
+  }else{
+    $oPdf->MultiCell($iTamCell + 5, $iAltCell, "TOTAL\n(ÚLTIMOS 12 MESES)\n(a)", 'TBR', 'C', 0, 0);
+  }
 
   /**
    * Monta totalizações restos a pagar não processados
+   *
    */
-  $oPdf->SetXY($iPosX + 21, $iPosY);
-  $oPdf->MultiCell($iTamCell + 5, $iAltCell - 1, "INSCRITAS EM RESTOS A PAGAR NÃO PROCESSADOS (b)", 'TBL', 'C', 0, 0);
+  if((int)$iCodigoRelatorio == 166) {
 
+    $oPdf->SetXY($iPosX + 21, $iPosY - 6);
+    $oPdf->MultiCell($iTamCell + 5, $iAltCell - 1.8, "INSCRITAS EM RESTOS A PAGAR NÃO PROCESSADOS (b)", 'TBL', 'C', 0, 0);
+
+  }else{
+
+    $oPdf->SetXY($iPosX + 21, $iPosY);
+    $oPdf->MultiCell($iTamCell + 5, $iAltCell - 1, "INSCRITAS EM RESTOS A PAGAR NÃO PROCESSADOS (b)", 'TBL', 'C', 0, 0);
+
+  }
   /**
    * Ajusta a altura das células
    */
@@ -422,58 +477,60 @@ if ($oGet->emissao == 1) {
      * Verifica se for o quadrodespesanaocomputadas poem multicell para o
      * campo $oDadoQuadroLinha->quadrodescricao não sobrepor a linha e ajusta as demais.
      */
-    if ($sIndice == 'quadrodespesanaocomputadas') {
+    switch ($sIndice){
+      case 'quadrodespesanaocomputadas':
+        /**
+         * Imprime linha quadro despesa nao computadas.
+         */
+        $sDescricao = str_replace("AS (§", "AS \n (§", $oDadoQuadroLinha->quadrodescricao);
+        $oPdf->MultiCell(50, $iAltCell, $sDescricao, 'R', 'L', 0, 0);
+        $oPdf->SetXY($iPosX+50, $iPosY);
+        break;
 
-      /**
-       * Imprime linha quadro despesa nao computadas.
-       */
-      $sDescricao = str_replace("AS (§", "AS \n (§", $oDadoQuadroLinha->quadrodescricao);
-      $oPdf->MultiCell(50, $iAltCell, $sDescricao, 'R', 'L', 0, 0);
-      $oPdf->SetXY($iPosX+50, $iPosY);
-    } else {
+      case 'quadrodespesaliquida':
+        /**
+         * Imprime linhas quadro despesa total com pessoal.
+         */
+        $oPdf->Cell(50, $iAltCell, $oDadoQuadroLinha->quadrodescricao,"RTB", 0, "L", 0);
+        break;
 
-        if ($sIndice == 'quadrodespesaliquida') {
+      case 'quadrodespesabruta':
+        /**
+         * Imprime linha quadro despesa bruta.
+         */
+        $oPdf->Cell(50, $iAltCell, $oDadoQuadroLinha->quadrodescricao, 'R', 0, "L", 0);
+        break;
 
-          /**
-           * Imprime linhas quadro despesa total com pessoal.
-           */
-          $oPdf->Cell(50, $iAltCell, $oDadoQuadroLinha->quadrodescricao,"RTB", 0, "L", 0);
-        } else {
+      default:
+        $oPdf->SetFont('arial', '', $iTamFonte);
+        /**
+         * Imprime linha quadro receita total corrente líquida.
+         * Imprime linha quadro despesa total com pessoal.
+         * Imprime linha quadro limite máximo.
+         * Imprime linha quadro limite prudencial.
+         */
+        $sAlinhamento     = "R";
+        $sValorPercentual = db_formatar($oDadoQuadroLinha->percentuallimite, 'f');
 
-          if ($sIndice == 'quadrodespesabruta') {
+        if ($sIndice == 'quadroreceitatotalcorrenteliquida' ||
+            $sIndice == 'quadroreceitacorrenteliquidaajust' ||
+            $sIndice == 'quadrotransferenciasobrigatorias') {
 
-            /**
-             * Imprime linha quadro despesa bruta.
-             */
-            $oPdf->Cell(50, $iAltCell, $oDadoQuadroLinha->quadrodescricao, 'R', 0, "L", 0);
-          } else {
-
-            $oPdf->SetFont('arial', '', $iTamFonte);
-            /**
-             * Imprime linha quadro receita total corrente líquida.
-             * Imprime linha quadro despesa total com pessoal.
-             * Imprime linha quadro limite máximo.
-             * Imprime linha quadro limite prudencial.
-             */
-            $sAlinhamento     = "R";
-            $sValorPercentual = db_formatar($oDadoQuadroLinha->percentuallimite, 'f');
-
-            if ($sIndice == 'quadroreceitatotalcorrenteliquida') {
-
-              $sAlinhamento     = "C";
-              $sValorPercentual = "-";
-            }
-
-            if ($sIndice == 'quadrodespesatotalcompessoal') {
-              $sValorPercentual = db_formatar($oDadoQuadroLinha->percentualsobrercl, 'f');
-            }
-
-            $oPdf->Cell(200, $iAltCell, $oDadoQuadroLinha->quadrodescricao, "RB", 0, "L", 0);
-            $oPdf->Cell(42, $iAltCell, db_formatar($oDadoQuadroLinha->valorapurado, 'f'), "RB", 0, "R", 0);
-            $oPdf->Cell(42, $iAltCell, $sValorPercentual , "B", 0, $sAlinhamento, 0);
-          }
+          $sAlinhamento     = "C";
+          $sValorPercentual = "-";
         }
+
+        if ($sIndice == 'quadrodespesatotalcompessoal') {
+          $sValorPercentual = db_formatar($oDadoQuadroLinha->percentualsobrercl, 'f');
+        }
+
+        $oPdf->Cell(200, $iAltCell, $oDadoQuadroLinha->quadrodescricao, "RB", 0, "L", 0);
+        $oPdf->Cell(42, $iAltCell, db_formatar($oDadoQuadroLinha->valorapurado, 'f'), "RB", 0, "R", 0);
+        $oPdf->Cell(42, $iAltCell, $sValorPercentual , "B", 0, $sAlinhamento, 0);
+        break;
+
     }
+
 
     /**
      * Preenche os registros dos últimos 12 meses no relatório.
@@ -497,6 +554,7 @@ if ($oGet->emissao == 1) {
           $oPdf->Cell($iTamCell, $iAltCell, db_formatar($oDadoQuadroLinhaColuna->nValor, 'f'), 'R', 0, "R", 0);
         }
       }
+
     }
 
     /**
@@ -526,6 +584,7 @@ if ($oGet->emissao == 1) {
            */
           $oPdf->Cell($iTamCell+5, $iAltCell, db_formatar($oDadoQuadroLinha->exercicio, 'f'), 'R', 0, "R", 0);
           $oPdf->Cell($iTamCell+5, $iAltCell, db_formatar($oDadoQuadroLinha->inscritas, 'f'), 'L', 0, "R", 0);
+
         }
       }
 
@@ -549,7 +608,6 @@ if ($oGet->emissao == 1) {
      * Preenche as linhas internas dos quadros despesa bruta e despesa líquida.
      */
     foreach ($oDadoQuadroLinha->linhas as $oDadoLinha) {
-
 
       $oPdf->SetFont('arial', '', $iTamFonte);
 
@@ -580,10 +638,46 @@ if ($oGet->emissao == 1) {
  * Assinaturas notas explicativas
  */
 $oRelatorio = new relatorioContabil($iCodigoRelatorio, false);
-$oRelatorio->getNotaExplicativa(&$oPdf, $oGet->periodo, $iLarguraTotal);
+$oRelatorio->getNotaExplicativa($oPdf, $oGet->periodo, $iLarguraTotal);
 $oPdf->Ln(5);
 
 $oPdf->SetFont('arial', '', $iTamFonte);
-assinaturas(&$oPdf, &$classinatura, 'GF');
+
+// Assinaturas
+if($oGet->emissao == 2 && $oGet->codrel == 166){
+
+  $sPref     =  "______________________________"."\n"."Prefeito";
+  $sSec      =  "______________________________"."\n"."Secretaria da Fazenda";
+  $sCont     =  "______________________________"."\n"."Contadoria";
+  $sControle =  "______________________________"."\n"."Controle Interno";
+
+  $ass_pref     = $classinatura->assinatura(1000,$sPref);
+  $ass_sec      = $classinatura->assinatura(1002,$sSec);
+  $ass_cont     = $classinatura->assinatura(1005,$sCont);
+  $ass_controle = $classinatura->assinatura(1009,$sControle);
+
+  if ($lVerificaQuebra && ($oPdf->gety() > ($oPdf->h - 20))){
+
+    $oPdf->addPage($oPdf->CurOrientation);
+    $oPdf->Ln(10);
+  }
+
+  $largura = ( ($oPdf->w)-15 ) / 4;
+
+  $pos = $oPdf->gety();
+  $oPdf->multicell($largura,4,$ass_pref,0,"C",0,0);
+
+  $oPdf->setxy($largura*1,$pos);
+  $oPdf->multicell($largura,4,$ass_sec,0,"C",0,0);
+
+  $oPdf->setxy($largura*2,$pos);
+  $oPdf->multicell($largura,4,$ass_cont,0,"C",0,0);
+
+  $oPdf->setxy($largura*3,$pos);
+  $oPdf->multicell($largura,4,$ass_controle,0,"C",0,0);
+
+}else{
+assinaturas($oPdf, $classinatura,'GF');
+}
 
 $oPdf->Output();

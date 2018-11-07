@@ -75,7 +75,7 @@ js_buscaEdicaoLrf(<?=db_getsession("DB_anousu")?>,"con2_lrfrecdesprpps002");
 
 function js_emite(){
   periodo = document.form1.o116_periodo.value;
-  jan     = window.open(sNomeArquivoEdicao+'?periodo='+periodo,'',
+  jan     = window.open(sNomeArquivoEdicao+'?periodo='+periodo+"&codrel=<?=$oGet->codrel?>",'',
                         'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }

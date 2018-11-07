@@ -176,7 +176,8 @@ function js_emite(sFonte) {
                       oDocument.db_selinstit.value+
                       '&dtfin='+sDataFim+
                       '&periodo='+iPeriodo+
-                      '&emissao='+iFormaEmissao;
+                      '&emissao='+iFormaEmissao+
+                      '&codrel='+<?=$oGet->c83_codrel?>;
   
   if (iSelInstit == 0) {
   

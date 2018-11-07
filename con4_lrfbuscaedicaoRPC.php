@@ -37,11 +37,14 @@ while ($bControle){
 	if	($iAnousu < 2000) {
 		echo $oPost->sfontepadrao.".php";
 		$bControle = false;
-	} else 	if (file_exists($oPost->sfontepadrao."_".$iAnousu.".php")) {
+	} else if((int)$oPost->codrel == 81 && file_exists($oPost->sfontepadrao."_2010.php") ){
+	  echo $oPost->sfontepadrao."_2010.php";
+    $bControle = false;
+  }
+	else 	if (file_exists($oPost->sfontepadrao."_".$iAnousu.".php")) {
 		echo $oPost->sfontepadrao."_".$iAnousu.".php";
 		$bControle = false;
 	} else {
 		$iAnousu--;
 	}	
 }
-?>

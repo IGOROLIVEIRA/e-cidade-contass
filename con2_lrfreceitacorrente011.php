@@ -57,9 +57,9 @@ $sLabelMsg = "Anexo III - Receita Corrente Líquida";
 variavel = 1;
 
 function js_buscaEdicaoLrf(iAnousu,sFontePadrao){
-  
+  var sCodRel = <?=$oGet->codrel?>;
   var url       = 'con4_lrfbuscaedicaoRPC.php';
-  var parametro = 'ianousu='+iAnousu+'&sfontepadrao='+sFontePadrao ;
+  var parametro = 'ianousu='+iAnousu+'&sfontepadrao='+sFontePadrao+'&codrel='+sCodRel;
   var objAjax   = new Ajax.Request (url, { method:'post',
                                            parameters:parametro, 
                                            onComplete:js_setNomeArquivo}
@@ -76,6 +76,7 @@ function js_emite(){
 
     obj = document.form1;
     periodo = obj.o116_periodo.value;
+    codrel = <?=$oGet->codrel?>;
 
     data_ini = '';
     data_fin = '';
@@ -89,7 +90,7 @@ function js_emite(){
      }
     } 
     */
-    jan = window.open(sNomeArquivoEdicao+'?db_selinstit=&dtini='+data_ini+'&dtfin='+data_fin+'&periodo='+periodo,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan = window.open(sNomeArquivoEdicao+'?db_selinstit=&dtini='+data_ini+'&dtfin='+data_fin+'&periodo='+periodo+'&codrel='+codrel,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
 }
 </script>  

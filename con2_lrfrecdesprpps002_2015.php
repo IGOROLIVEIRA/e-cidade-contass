@@ -53,7 +53,11 @@ try {
     $sInstituicoes = "0";
   }
 
-  $oRelatorio = new AnexoIVDemonstrativoRPPS( db_getsession("DB_anousu"), AnexoIVDemonstrativoRPPS::CODIGO_RELATORIO, $oGet->periodo );
+  if($oGet->codrel == 157){
+    $oRelatorio = new AnexoIVDemonstrativoRPPS( db_getsession("DB_anousu"), AnexoIVDemonstrativoRPPS::CODIGO_RELATORIO_POS_2018, $oGet->periodo);
+  }else{
+    $oRelatorio = new AnexoIVDemonstrativoRPPS( db_getsession("DB_anousu"), AnexoIVDemonstrativoRPPS::CODIGO_RELATORIO, $oGet->periodo);
+  }
   $oRelatorio->setInstituicoes($sInstituicoes);
 
   $oRelatorio->emitir();

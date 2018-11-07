@@ -1496,7 +1496,7 @@ function datas_quadrimestre($quadrimestre, $ano) {
 /////////////////////////////////////////////////////////////////////////////////
 
 
-function assinaturas($pdf,$classinatura,$tipo='LRF', $lVerificaQuebra = true, $lOutPut = true){
+function assinaturas(&$pdf,&$classinatura,$tipo='LRF', $lVerificaQuebra = true, $lOutPut = true){
  //#10#// assinaturas dos relatorios da LRF
  //#10#// e de gestão fiscal
  //#20#//

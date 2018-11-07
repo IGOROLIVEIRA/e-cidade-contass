@@ -31,6 +31,7 @@ require_once "fpdf151/assinatura.php";
 class AnexoIVDemonstrativoRPPS extends RelatoriosLegaisBase {
 
   const CODIGO_RELATORIO = 148;
+  const CODIGO_RELATORIO_POS_2018 = 157;
 
   const LINHA_INICIO_RECEITAS = 1;
   const LINHA_FIM_RECEITAS    = 26;

@@ -83,7 +83,7 @@ $tipo_emissao='periodo';
 $iExercAnt  = (db_getsession('DB_anousu')-1);
 $iExercicio = (db_getsession('DB_anousu'));
 
-  // Exclui elementos referente ao exercício anterior;
+// Exclui elementos referente ao exercício anterior;
 duplicaReceitaaCorrenteLiquida($iExercicio, $iCodigoRelatorio);
 if (!isset($arqinclude)) {
 
@@ -105,7 +105,6 @@ if (!isset($arqinclude)) {
     $dt_fin_ant= $dt[1];
   } else {
 
-
     $iUltimoDiaMes         = cal_days_in_month(CAL_GREGORIAN, $oPeriodo->o114_mesfinal, $anousu);
     $iUltimoDiaMesAnterior = cal_days_in_month(CAL_GREGORIAN, $oPeriodo->o114_mesfinal, $anousu_ant);
     $dt_fin                = "{$anousu}-{$oPeriodo->o114_mesfinal}-$iUltimoDiaMes";
@@ -117,7 +116,7 @@ if (!isset($arqinclude)) {
   // $texto = $dt['texto'];
   // $txtper = $dt['periodo'];
 
-                     // data final do período
+  // data final do período
 
   $bimestre = substr($sSiglaPeriodo,0,1); // bimestre do exercicio atual
 
@@ -235,7 +234,7 @@ if (!isset($arqinclude)){
   $head6 = "$txt";
 
 }
-for ($iLinha = 1; $iLinha <= 22; $iLinha++) {
+for ($iLinha = 1; $iLinha <= 23; $iLinha++) {
 
   $param[$iLinha] = new linhaRelatorioContabil($iCodigoRelatorio, $iLinha);
   $param[$iLinha]->oParametroAnterior = $param[$iLinha]->getParametros($anousu - 1);
@@ -247,27 +246,27 @@ $rec[1][0]  = "    IPTU";
 $rec[2][0]  = "    ISS";
 $rec[3][0]  = "    ITBI";
 $rec[4][0]  = "    IRRF";
-$rec[5][0]  = "    Outras Receitas Tributárias";
-$rec[6][0]  = "  Receita de Contribuições";
-$rec[7][0]  = "  Receita Patrimonial";
-$rec[8][0]  = "  Receita Agropecuária";
-$rec[9][0]  = "  Receita Industrial";
-$rec[10][0]  = "  Receita de Serviços";
-$rec[11][0] = "    Cota-Parte do FPM";
-$rec[12][0] = "    Cota-Parte do ICMS";
-$rec[13][0] = "    Cota-Parte do IPVA";
-//$rec[12][0] = "    Cota-Parte do IPVA";
-$rec[14][0] = "    Cota-Parte do ITR";
-$rec[15][0] = "    Transferências da LC 87/1996";
-$rec[16][0] = "    Transferências da LC 61/1989";
-$rec[17][0] = "    Transferências do FUNDEB";
-$rec[18][0] = "    Outras Transferências Correntes";
-$rec[19][0] = "  Outras Receitas Correntes";
+$rec[5][0]  = "    Outros Impostos, Taxas e Contribuições de Melhoria";
+$rec[6][0]  = "  Contribuições";
+$rec[7][0]  = "    Rendimentos de Aplicação Financeira";
+$rec[8][0]  = "    Outras Receitas Patrimoniais";
+$rec[9][0]  = " Receita Agropecuária";
+$rec[10][0]  = " Receita Industrial";
+$rec[11][0]  = " Receita de Serviços";
+$rec[12][0] = "    Cota-Parte do FPM";
+$rec[13][0] = "    Cota-Parte do ICMS";
+$rec[14][0] = "    Cota-Parte do IPVA";
+$rec[15][0] = "    Cota-Parte do ITR";
+$rec[16][0] = "    Transferências da LC 87/1996";
+$rec[17][0] = "    Transferências da LC 61/1989";
+$rec[18][0] = "    Transferências do FUNDEB";
+$rec[19][0] = "    Outras Transferências Correntes";
+$rec[20][0] = "  Outras Receitas Correntes";
 
 // - Deduções
-$rec[20][0] = "    Contrib. para o Plano de Previdência do Servidor";
-$rec[21][0] = "    Compensação Financ. entre Regimes Previd.";
-$rec[22][0] = "    Deduções da Receitas para Formação do FUNDEB";
+$rec[21][0] = " Contrib. do Servidor para o Plano de Previdência";
+$rec[22][0] = " Compensações Financ. entre Regimes Previdência";
+$rec[23][0] = " Dedução de Receita para Formação do FUNDEB";
 
 // monta receita do bimestre do exercicio anterior, quando for o caso
 $dt1 = ($anousu - 1).'-01-01';
@@ -290,115 +289,115 @@ $clreceita_saldo_mes->instit = $todasinstit;
 $clreceita_saldo_mes->sql_record();
 //db_criatabela($clreceita_saldo_mes->result);exit;
 db_query("drop table work_plano");
-  // 18 é a quantidade de parametros (linhas existentes nos parametros)
+// 18 é a quantidade de parametros (linhas existentes nos parametros)
 for ($i = 0; $i < $clreceita_saldo_mes->numrows; $i++) {
 
-  for ( $p = 1; $p <= 22; $p++) {
+  for ( $p = 1; $p <= 23; $p++) {
 
     $oReceita       = db_utils::fieldsmemory($clreceita_saldo_mes->result, $i);
     $oParametro     = $param[$p]->oParametroAnterior;
     foreach ($oParametro->contas as $oEstrutural) {
-    $oRetornoVerificacao = $param[$p]->match($oEstrutural ,$oParametro->orcamento, $oReceita, 1);
-    if ($oRetornoVerificacao->match) {
+      $oRetornoVerificacao = $param[$p]->match($oEstrutural ,$oParametro->orcamento, $oReceita, 1);
+      if ($oRetornoVerificacao->match) {
 
-      if ($oRetornoVerificacao->exclusao) {
+        if ($oRetornoVerificacao->exclusao) {
 
-        $oReceita->janeiro   *= -1;
-        $oReceita->fevereiro *= -1;
-        $oReceita->marco     *= -1;
-        $oReceita->abril     *= -1;
-        $oReceita->maio      *= -1;
-        $oReceita->junho     *= -1;
-        $oReceita->julho     *= -1;
-        $oReceita->agosto    *= -1;
-        $oReceita->setembro  *= -1;
-        $oReceita->outubro   *= -1;
-        $oReceita->novembro  *= -1;
-        $oReceita->dezembro  *= -1;
-        $oReceita->o70_valor *= -1;
-        $oReceita->adicional *= -1;
-      }
-      if ($p == 22 ) {
+          $oReceita->janeiro   *= -1;
+          $oReceita->fevereiro *= -1;
+          $oReceita->marco     *= -1;
+          $oReceita->abril     *= -1;
+          $oReceita->maio      *= -1;
+          $oReceita->junho     *= -1;
+          $oReceita->julho     *= -1;
+          $oReceita->agosto    *= -1;
+          $oReceita->setembro  *= -1;
+          $oReceita->outubro   *= -1;
+          $oReceita->novembro  *= -1;
+          $oReceita->dezembro  *= -1;
+          $oReceita->o70_valor *= -1;
+          $oReceita->adicional *= -1;
+        }
+        if ($p == 23 ) {
 
-        $oReceita->janeiro   *= -1;
-        $oReceita->fevereiro *= -1;
-        $oReceita->marco     *= -1;
-        $oReceita->abril     *= -1;
-        $oReceita->maio      *= -1;
-        $oReceita->junho     *= -1;
-        $oReceita->julho     *= -1;
-        $oReceita->agosto    *= -1;
-        $oReceita->setembro  *= -1;
-        $oReceita->outubro   *= -1;
-        $oReceita->novembro  *= -1;
-        $oReceita->dezembro  *= -1;
-        $oReceita->o70_valor *= -1;
-        $oReceita->adicional *= -1;
+          $oReceita->janeiro   *= -1;
+          $oReceita->fevereiro *= -1;
+          $oReceita->marco     *= -1;
+          $oReceita->abril     *= -1;
+          $oReceita->maio      *= -1;
+          $oReceita->junho     *= -1;
+          $oReceita->julho     *= -1;
+          $oReceita->agosto    *= -1;
+          $oReceita->setembro  *= -1;
+          $oReceita->outubro   *= -1;
+          $oReceita->novembro  *= -1;
+          $oReceita->dezembro  *= -1;
+          $oReceita->o70_valor *= -1;
+          $oReceita->adicional *= -1;
 
-      }
-      if (!isset($rec[$p][1]))  $rec[$p][1]  = $oReceita->janeiro;    else $rec[$p][1]  += $oReceita->janeiro;
-      if (!isset($rec[$p][2]))  $rec[$p][2]  = $oReceita->fevereiro;  else $rec[$p][2]  += $oReceita->fevereiro;
-      if (!isset($rec[$p][3]))  $rec[$p][3]  = $oReceita->marco;      else $rec[$p][3]  += $oReceita->marco;
-      if (!isset($rec[$p][4]))  $rec[$p][4]  = $oReceita->abril;      else $rec[$p][4]  += $oReceita->abril;
-      if (!isset($rec[$p][5]))  $rec[$p][5]  = $oReceita->maio;       else $rec[$p][5]  += $oReceita->maio;
-      if (!isset($rec[$p][6]))  $rec[$p][6]  = $oReceita->junho;      else $rec[$p][6]  += $oReceita->junho;
-      if (!isset($rec[$p][7]))  $rec[$p][7]  = $oReceita->julho;      else $rec[$p][7]  += $oReceita->julho;
-      if (!isset($rec[$p][8]))  $rec[$p][8]  = $oReceita->agosto;     else $rec[$p][8]  += $oReceita->agosto;
-      if (!isset($rec[$p][9]))  $rec[$p][9]  = $oReceita->setembro;   else $rec[$p][9]  += $oReceita->setembro;
-      if (!isset($rec[$p][10])) $rec[$p][10] = $oReceita->outubro;    else $rec[$p][10] += $oReceita->outubro;
-      if (!isset($rec[$p][11])) $rec[$p][11] = $oReceita->novembro;   else $rec[$p][11] += $oReceita->novembro;
-      if (!isset($rec[$p][12])) $rec[$p][12] = $oReceita->dezembro;   else $rec[$p][12] += $oReceita->dezembro;
+        }
+        if (!isset($rec[$p][1]))  $rec[$p][1]  = $oReceita->janeiro;    else $rec[$p][1]  += $oReceita->janeiro;
+        if (!isset($rec[$p][2]))  $rec[$p][2]  = $oReceita->fevereiro;  else $rec[$p][2]  += $oReceita->fevereiro;
+        if (!isset($rec[$p][3]))  $rec[$p][3]  = $oReceita->marco;      else $rec[$p][3]  += $oReceita->marco;
+        if (!isset($rec[$p][4]))  $rec[$p][4]  = $oReceita->abril;      else $rec[$p][4]  += $oReceita->abril;
+        if (!isset($rec[$p][5]))  $rec[$p][5]  = $oReceita->maio;       else $rec[$p][5]  += $oReceita->maio;
+        if (!isset($rec[$p][6]))  $rec[$p][6]  = $oReceita->junho;      else $rec[$p][6]  += $oReceita->junho;
+        if (!isset($rec[$p][7]))  $rec[$p][7]  = $oReceita->julho;      else $rec[$p][7]  += $oReceita->julho;
+        if (!isset($rec[$p][8]))  $rec[$p][8]  = $oReceita->agosto;     else $rec[$p][8]  += $oReceita->agosto;
+        if (!isset($rec[$p][9]))  $rec[$p][9]  = $oReceita->setembro;   else $rec[$p][9]  += $oReceita->setembro;
+        if (!isset($rec[$p][10])) $rec[$p][10] = $oReceita->outubro;    else $rec[$p][10] += $oReceita->outubro;
+        if (!isset($rec[$p][11])) $rec[$p][11] = $oReceita->novembro;   else $rec[$p][11] += $oReceita->novembro;
+        if (!isset($rec[$p][12])) $rec[$p][12] = $oReceita->dezembro;   else $rec[$p][12] += $oReceita->dezembro;
 
-      // matriz de totalizador do exercicio anterior
-      if ($p <= 19) {
+        // matriz de totalizador do exercicio anterior
+        if ($p <= 20) {
 
-        // Trec da linha 0 (zero) contem o total da arrecadação da receita corrente
-        if (!isset($Trec[0][1]))  $Trec[0][1]  = $oReceita->janeiro;    else $Trec[0][1]  += $oReceita->janeiro;
-        if (!isset($Trec[0][2]))  $Trec[0][2]  = $oReceita->fevereiro;  else $Trec[0][2]  += $oReceita->fevereiro;
-        if (!isset($Trec[0][3]))  $Trec[0][3]  = $oReceita->marco;      else $Trec[0][3]  += $oReceita->marco;
-        if (!isset($Trec[0][4]))  $Trec[0][4]  = $oReceita->abril;      else $Trec[0][4]  += $oReceita->abril;
-        if (!isset($Trec[0][5]))  $Trec[0][5]  = $oReceita->maio;       else $Trec[0][5]  += $oReceita->maio;
-        if (!isset($Trec[0][6]))  $Trec[0][6]  = $oReceita->junho;      else $Trec[0][6]  += $oReceita->junho;
-        if (!isset($Trec[0][7]))  $Trec[0][7]  = $oReceita->julho;      else $Trec[0][7]  += $oReceita->julho;
-        if (!isset($Trec[0][8]))  $Trec[0][8]  = $oReceita->agosto;     else $Trec[0][8]  += $oReceita->agosto;
-        if (!isset($Trec[0][9]))  $Trec[0][9]  = $oReceita->setembro;   else $Trec[0][9]  += $oReceita->setembro;
-        if (!isset($Trec[0][10])) $Trec[0][10] = $oReceita->outubro;    else $Trec[0][10] += $oReceita->outubro;
-        if (!isset($Trec[0][11])) $Trec[0][11] = $oReceita->novembro;   else $Trec[0][11] += $oReceita->novembro;
-        if (!isset($Trec[0][12])) $Trec[0][12] = $oReceita->dezembro;   else $Trec[0][12] += $oReceita->dezembro;
+          // Trec da linha 0 (zero) contem o total da arrecadação da receita corrente
+          if (!isset($Trec[0][1]))  $Trec[0][1]  = $oReceita->janeiro;    else $Trec[0][1]  += $oReceita->janeiro;
+          if (!isset($Trec[0][2]))  $Trec[0][2]  = $oReceita->fevereiro;  else $Trec[0][2]  += $oReceita->fevereiro;
+          if (!isset($Trec[0][3]))  $Trec[0][3]  = $oReceita->marco;      else $Trec[0][3]  += $oReceita->marco;
+          if (!isset($Trec[0][4]))  $Trec[0][4]  = $oReceita->abril;      else $Trec[0][4]  += $oReceita->abril;
+          if (!isset($Trec[0][5]))  $Trec[0][5]  = $oReceita->maio;       else $Trec[0][5]  += $oReceita->maio;
+          if (!isset($Trec[0][6]))  $Trec[0][6]  = $oReceita->junho;      else $Trec[0][6]  += $oReceita->junho;
+          if (!isset($Trec[0][7]))  $Trec[0][7]  = $oReceita->julho;      else $Trec[0][7]  += $oReceita->julho;
+          if (!isset($Trec[0][8]))  $Trec[0][8]  = $oReceita->agosto;     else $Trec[0][8]  += $oReceita->agosto;
+          if (!isset($Trec[0][9]))  $Trec[0][9]  = $oReceita->setembro;   else $Trec[0][9]  += $oReceita->setembro;
+          if (!isset($Trec[0][10])) $Trec[0][10] = $oReceita->outubro;    else $Trec[0][10] += $oReceita->outubro;
+          if (!isset($Trec[0][11])) $Trec[0][11] = $oReceita->novembro;   else $Trec[0][11] += $oReceita->novembro;
+          if (!isset($Trec[0][12])) $Trec[0][12] = $oReceita->dezembro;   else $Trec[0][12] += $oReceita->dezembro;
 
-      } else {
-        // Trec da linha 1 contem o total da dedução da receita corrente
-        if (db_conplano_grupo($anousu - 1, substr($oReceita->o57_fonte, 0, 3)."%", 9001) == true) {  // 497 e 917
-
-          if (!isset($Trec[1][1]))  $Trec[1][1]  = ($oReceita->janeiro);   else {$Trec[1][1]  += ($oReceita->janeiro);}
-          if (!isset($Trec[1][2]))  $Trec[1][2]  = ($oReceita->fevereiro); else {$Trec[1][2]  += ($oReceita->fevereiro);}
-          if (!isset($Trec[1][3]))  $Trec[1][3]  = ($oReceita->marco);     else {$Trec[1][3]  += ($oReceita->marco);}
-          if (!isset($Trec[1][4]))  $Trec[1][4]  = ($oReceita->abril);     else {$Trec[1][4]  += ($oReceita->abril);}
-          if (!isset($Trec[1][5]))  $Trec[1][5]  = ($oReceita->maio);      else {$Trec[1][5]  += ($oReceita->maio);}
-          if (!isset($Trec[1][6]))  $Trec[1][6]  = ($oReceita->junho);     else {$Trec[1][6]  += ($oReceita->junho);}
-          if (!isset($Trec[1][7]))  $Trec[1][7]  = ($oReceita->julho);     else {$Trec[1][7]  += ($oReceita->julho);}
-          if (!isset($Trec[1][8]))  $Trec[1][8]  = ($oReceita->agosto);    else {$Trec[1][8]  += ($oReceita->agosto);}
-          if (!isset($Trec[1][9]))  $Trec[1][9]  = ($oReceita->setembro);  else {$Trec[1][9]  += ($oReceita->setembro);}
-          if (!isset($Trec[1][10])) $Trec[1][10] = ($oReceita->outubro);   else {$Trec[1][10] += ($oReceita->outubro);}
-          if (!isset($Trec[1][11])) $Trec[1][11] = ($oReceita->novembro);  else {$Trec[1][11] += ($oReceita->novembro);}
-          if (!isset($Trec[1][12])) $Trec[1][12] = ($oReceita->dezembro);  else {$Trec[1][12] += ($oReceita->dezembro);}
         } else {
-          if (!isset($Trec[1][1]))  $Trec[1][1] = ($oReceita->janeiro);    else $Trec[1][1] += ($oReceita->janeiro);
-          if (!isset($Trec[1][2]))  $Trec[1][2] = ($oReceita->fevereiro);  else $Trec[1][2] += ($oReceita->fevereiro);
-          if (!isset($Trec[1][3]))  $Trec[1][3] = ($oReceita->marco);      else $Trec[1][3] += ($oReceita->marco);
-          if (!isset($Trec[1][4]))  $Trec[1][4] = ($oReceita->abril);      else $Trec[1][4] += ($oReceita->abril);
-          if (!isset($Trec[1][5]))  $Trec[1][5] = ($oReceita->maio);       else $Trec[1][5] += ($oReceita->maio);
-          if (!isset($Trec[1][6]))  $Trec[1][6] = ($oReceita->junho);      else $Trec[1][6] += ($oReceita->junho);
-          if (!isset($Trec[1][7]))  $Trec[1][7] = ($oReceita->julho);      else $Trec[1][7] += ($oReceita->julho);
-          if (!isset($Trec[1][8]))  $Trec[1][8] = ($oReceita->agosto);     else $Trec[1][8] += ($oReceita->agosto);
-          if (!isset($Trec[1][9]))  $Trec[1][9] = ($oReceita->setembro);   else $Trec[1][9] += ($oReceita->setembro);
-          if (!isset($Trec[1][10])) $Trec[1][10]= ($oReceita->outubro);    else $Trec[1][10] += ($oReceita->outubro);
-          if (!isset($Trec[1][11])) $Trec[1][11]= ($oReceita->novembro);   else $Trec[1][11] += ($oReceita->novembro);
-          if (!isset($Trec[1][12])) $Trec[1][12]= ($oReceita->dezembro);  else $Trec[1][12] += ($oReceita->dezembro);
+          // Trec da linha 1 contem o total da dedução da receita corrente
+          if (db_conplano_grupo($anousu - 1, substr($oReceita->o57_fonte, 0, 3)."%", 9001) == true) {  // 497 e 917
+
+            if (!isset($Trec[1][1]))  $Trec[1][1]  = ($oReceita->janeiro);   else {$Trec[1][1]  += ($oReceita->janeiro);}
+            if (!isset($Trec[1][2]))  $Trec[1][2]  = ($oReceita->fevereiro); else {$Trec[1][2]  += ($oReceita->fevereiro);}
+            if (!isset($Trec[1][3]))  $Trec[1][3]  = ($oReceita->marco);     else {$Trec[1][3]  += ($oReceita->marco);}
+            if (!isset($Trec[1][4]))  $Trec[1][4]  = ($oReceita->abril);     else {$Trec[1][4]  += ($oReceita->abril);}
+            if (!isset($Trec[1][5]))  $Trec[1][5]  = ($oReceita->maio);      else {$Trec[1][5]  += ($oReceita->maio);}
+            if (!isset($Trec[1][6]))  $Trec[1][6]  = ($oReceita->junho);     else {$Trec[1][6]  += ($oReceita->junho);}
+            if (!isset($Trec[1][7]))  $Trec[1][7]  = ($oReceita->julho);     else {$Trec[1][7]  += ($oReceita->julho);}
+            if (!isset($Trec[1][8]))  $Trec[1][8]  = ($oReceita->agosto);    else {$Trec[1][8]  += ($oReceita->agosto);}
+            if (!isset($Trec[1][9]))  $Trec[1][9]  = ($oReceita->setembro);  else {$Trec[1][9]  += ($oReceita->setembro);}
+            if (!isset($Trec[1][10])) $Trec[1][10] = ($oReceita->outubro);   else {$Trec[1][10] += ($oReceita->outubro);}
+            if (!isset($Trec[1][11])) $Trec[1][11] = ($oReceita->novembro);  else {$Trec[1][11] += ($oReceita->novembro);}
+            if (!isset($Trec[1][12])) $Trec[1][12] = ($oReceita->dezembro);  else {$Trec[1][12] += ($oReceita->dezembro);}
+          } else {
+            if (!isset($Trec[1][1]))  $Trec[1][1] = ($oReceita->janeiro);    else $Trec[1][1] += ($oReceita->janeiro);
+            if (!isset($Trec[1][2]))  $Trec[1][2] = ($oReceita->fevereiro);  else $Trec[1][2] += ($oReceita->fevereiro);
+            if (!isset($Trec[1][3]))  $Trec[1][3] = ($oReceita->marco);      else $Trec[1][3] += ($oReceita->marco);
+            if (!isset($Trec[1][4]))  $Trec[1][4] = ($oReceita->abril);      else $Trec[1][4] += ($oReceita->abril);
+            if (!isset($Trec[1][5]))  $Trec[1][5] = ($oReceita->maio);       else $Trec[1][5] += ($oReceita->maio);
+            if (!isset($Trec[1][6]))  $Trec[1][6] = ($oReceita->junho);      else $Trec[1][6] += ($oReceita->junho);
+            if (!isset($Trec[1][7]))  $Trec[1][7] = ($oReceita->julho);      else $Trec[1][7] += ($oReceita->julho);
+            if (!isset($Trec[1][8]))  $Trec[1][8] = ($oReceita->agosto);     else $Trec[1][8] += ($oReceita->agosto);
+            if (!isset($Trec[1][9]))  $Trec[1][9] = ($oReceita->setembro);   else $Trec[1][9] += ($oReceita->setembro);
+            if (!isset($Trec[1][10])) $Trec[1][10]= ($oReceita->outubro);    else $Trec[1][10] += ($oReceita->outubro);
+            if (!isset($Trec[1][11])) $Trec[1][11]= ($oReceita->novembro);   else $Trec[1][11] += ($oReceita->novembro);
+            if (!isset($Trec[1][12])) $Trec[1][12]= ($oReceita->dezembro);  else $Trec[1][12] += ($oReceita->dezembro);
+          }
         }
       }
     }
-  }
   }
 }
 
@@ -416,7 +415,7 @@ $clreceita_saldo_mes->sql_record();
 //db_criatabela($clreceita_saldo_mes->result);
 //exit;
 db_query("drop table work_plano");
-for ($p = 1; $p <= 22; $p++) {
+for ($p = 1; $p <= 23; $p++) {
   // 18 é a quantidade de parametros ou linhas existentes nos parametros
   for ($i=0;$i<$clreceita_saldo_mes->numrows;$i++) {
 
@@ -445,7 +444,7 @@ for ($p = 1; $p <= 22; $p++) {
           $oReceita->adicional *= -1;
         }
 
-        if ($p == 22 ) {
+        if ($p == 23 ) {
 
           $oReceita->janeiro   *= -1;
           $oReceita->fevereiro *= -1;
@@ -477,16 +476,19 @@ for ($p = 1; $p <= 22; $p++) {
         if (!isset($recB[$p][12])) $recB[$p][12] = $oReceita->dezembro;  else $recB[$p][12] += $oReceita->dezembro;
         // a coluna 13 ira guardar a previsao
         if (!isset($recB[$p][13])){
-           $recB[$p][13]= ($oReceita->o70_valor+$oReceita->adicional);
+          $recB[$p][13]= ($oReceita->o70_valor+$oReceita->adicional);
         }  else {
           $recB[$p][13]+= ($oReceita->o70_valor+$oReceita->adicional);
         }
+
+//        echo '<pre>';
+//        var_dump($rec);die('okok');
 
         /*
            chamamos de "recB" esta segunda matriz, porque "rec" é foi a primeira matriz criada
            que ira quardar os dados do exercicio-1, e este "recB" ira guardar dados do exercicio atual
          */
-        if ($p <= 19) {
+        if ($p <= 20) {
 
           // Trec da linha 0 (zero) contem o total da arrecadação da receita corrente
           if (!isset($TrecB[0][1]))  $TrecB[0][1]  = $oReceita->janeiro;   else $TrecB[0][1]     += $oReceita->janeiro;
@@ -536,9 +538,9 @@ for ($p = 1; $p <= 22; $p++) {
             if (!isset($TrecB[1][7]))  $TrecB[1][7]  = ($oReceita->julho);      else $TrecB[1][7]  += ($oReceita->julho);
             if (!isset($TrecB[1][8]))  $TrecB[1][8]  = ($oReceita->agosto);     else $TrecB[1][8]  += ($oReceita->agosto);
             if (!isset($TrecB[1][9]))  $TrecB[1][9]  = ($oReceita->setembro);   else $TrecB[1][9]  += ($oReceita->setembro);
-            if (!isset($TrecB[1][10])) $TrecB[1][10] = ($oReceita->outubro);   else $TrecB[1][10] += ($oReceita->outubro);
-            if (!isset($TrecB[1][11])) $TrecB[1][11] = ($oReceita->novembro);  else $TrecB[1][11] += ($oReceita->novembro);
-            if (!isset($TrecB[1][12])) $TrecB[1][12] = ($oReceita->dezembro);  else $TrecB[1][12] += ($oReceita->dezembro);
+            if (!isset($TrecB[1][10])) $TrecB[1][10] = ($oReceita->outubro);    else $TrecB[1][10] += ($oReceita->outubro);
+            if (!isset($TrecB[1][11])) $TrecB[1][11] = ($oReceita->novembro);   else $TrecB[1][11] += ($oReceita->novembro);
+            if (!isset($TrecB[1][12])) $TrecB[1][12] = ($oReceita->dezembro);   else $TrecB[1][12] += ($oReceita->dezembro);
             if (!isset($TrecB[1][13])) {
               $TrecB[1][13] = ($oReceita->o70_valor+$oReceita->adicional);
             } else {
@@ -582,13 +584,47 @@ for ($x = 1; $x <= 5; $x++) {
   }
 }
 
+
+//Somar Receita Patrimonial
+$tot_rec_pat = array(); //zera matriz
+
+for ($x = 0; $x <= 13; $x++) {
+  $tot_rec_pat[0][$x]=0;
+}
+for ($x = 7;$x <= 8; $x++) {
+
+  for ($y = $iMesInicialAnterior; $y <= 12;$y++) {
+
+    if (isset($rec[$x][$y])) {
+      $tot_rec_pat[0][$y] += $rec[$x][$y];
+    } else
+      $tot_rec_pat[0][$y] += 0;
+  }
+  // procura valores do exercicio atual
+  for ($y=1; $y <= $iMesFinalAtual; $y++) {
+
+    if (isset($recB[$x][$y])) {
+      $tot_rec_pat[0][$y] += $recB[$x][$y];
+    } else
+      $tot_rec_pat[0][$y] += 0;
+  }
+
+  // listamos a previsão
+  if (isset($recB[$x][13])) {
+    $tot_rec_pat[0][13] += $recB[$x][13];
+  } else {
+    $tot_rec_pat[0][13] += 0;
+  }
+}
+
+
 //
 $tot_transf = array(); //zera matriz
 
 for ($x = 0; $x <= 13; $x++) {
   $tot_transf[0][$x]=0;
 }
-for ($x = 11;$x <= 18; $x++) {
+for ($x = 12;$x <= 19; $x++) {
 
   for ($y = $iMesInicialAnterior; $y <= 12;$y++) {
 
@@ -653,9 +689,9 @@ if (!isset($arqinclude)){
   $pdf->ln();
   $pdf->cell(60,$alt,"",'BR',0,"C",0);
   if ($bimestre != 6 && $bimestre != "D") {
-   $ano = $anousu-1;
+    $ano = $anousu-1;
   } else {
-   $ano = $anousu;
+    $ano = $anousu;
   }
 
   if ($iMesFinalAnterior !=13) {
@@ -665,20 +701,21 @@ if (!isset($arqinclude)){
     for ($x= $iMesInicialAnterior; $x <= 12; $x++) {
 
       $pdf->cell($cl, $alt, $mes_dresc[$x]."/".$ano, 'TBR', 0, "C", 0);
- 	    if ($mes_dresc[$x] == "Dez" ) {
-	  	  $ano++;
-	    }
+      if ($mes_dresc[$x] == "Dez" ) {
+        $ano++;
+      }
+
     }
   }
 
   // meses do exercicio atual
   for ($x = 1;$x <= $iMesFinalAtual; $x++) {
 
-  	$pdf->cell($cl, $alt, $mes_dresc[$x]."/".$ano, 'TBR', 0, "C", 0);
+    $pdf->cell($cl, $alt, $mes_dresc[$x]."/".$ano, 'TBR', 0, "C", 0);
 
-  	if ($mes_dresc[$x] == "Dez" ) {
-	   $ano++;
- 	  }
+    if ($mes_dresc[$x] == "Dez" ) {
+      $ano++;
+    }
   }
 
   $pdf->cell($cl, $alt, "ULT 12 MESES", 'BR', 0, "C", 0);
@@ -687,7 +724,7 @@ if (!isset($arqinclude)){
 
   $total = 0; // esse total é sempre calculado para cada linha
   // imprime as linhas/valores do exercicio anterior
-  for ($x = 1; $x <= 22; $x++) { // 18 é a qtd de parametros existentes
+  for ($x = 1; $x <= 23; $x++) { // 18 é a qtd de parametros existentes
 
     // ----------------------------------
     if ($x == 1) {
@@ -701,6 +738,7 @@ if (!isset($arqinclude)){
 
           $pdf->cell($cl, $alt, db_formatar($Trec[0][$y], 'f'), 'R', 0, "R", 0);
           $total += $Trec[0][$y];
+
         } else {
           $pdf->cell($cl, $alt, db_formatar(0, 'f'), 'R', 0, "R", 0);
         }
@@ -758,8 +796,48 @@ if (!isset($arqinclude)){
       $pdf->ln();
 
     }
+
     //-------------------------------
-    if ($x == 11) {
+    if ($x == 7) {
+
+      $pdf->setfont('arial', '', 6);
+      $pdf->cell(60, $alt, " Receita Patrimonial", 'R', 0, "L", 0);
+      $total = 0;
+      for ($y = $iMesInicialAnterior; $y <= 12; $y++) {
+
+        if (isset($tot_rec_pat[0][$y])) {
+
+          $pdf->cell($cl, $alt, db_formatar($tot_rec_pat[0][$y], 'f'), 'R', 0, "R", 0);
+          $total += $tot_rec_pat[0][$y];
+        } else {
+          $pdf->cell($cl, $alt, db_formatar(0, 'f'), 'R', 0, "R", 0);
+        }
+      }
+      for ($y = 1; $y <= $iMesFinalAtual; $y++) {
+
+        if (isset($tot_rec_pat[0][$y])) {
+
+          $pdf->cell($cl, $alt, db_formatar($tot_rec_pat[0][$y], 'f'), 'R', 0, "R", 0);
+          $total += $tot_rec_pat[0][$y];
+
+        } else {
+          $pdf->cell($cl, $alt, db_formatar(0, 'f'), 'R', 0, "R", 0);
+        }
+      }
+      // listamos o total das 12 colunas
+      $pdf->cell($cl, $alt, db_formatar($total, 'f'), 'R', 0, "R", 0);
+
+      // listamos a previsão
+      if (isset($tot_rec_pat[0][13])) {
+        $pdf->cell($cl, $alt, db_formatar($tot_rec_pat[0][13], 'f'), 0, 0, "R", 0);
+      } else {
+        $pdf->cell($cl, $alt, db_formatar(0, 'f'), 0, 0, "R", 0);
+      }
+      $pdf->ln();
+    }
+
+    //-------------------------------
+    if ($x == 12) {
 
       $pdf->setfont('arial', '', 6);
       $pdf->cell(60, $alt, " Transferências Correntes", 'R', 0, "L", 0);
@@ -796,12 +874,13 @@ if (!isset($arqinclude)){
       }
       $pdf->ln();
     }
+
     // ----------------------------------
-    if ($x == 20) {
+    if ($x == 21) {
 
       // aqui imprime a linha com os totalizadores das deduções
       $pdf->setfont('arial', 'b', 6);
-      $pdf->cell(60 ,$alt, "DEDUÇÕES(II)", 'R', 0, "L", 0);
+      $pdf->cell(60 ,$alt, "DEDUÇÕES (II)", 'R', 0, "L", 0);
       $total = 0;
       for ($y = $iMesInicialAnterior; $y <= 12; $y++) {
 
@@ -842,7 +921,7 @@ if (!isset($arqinclude)){
 
       if (isset($rec[$x][$y])) {
         //ivertemos o sinal para apresentação;
-        if ($x == 22) {
+        if ($x == 23) {
           $rec[$x][$y] *= -1;
         }
         $pdf->cell($cl, $alt, db_formatar($rec[$x][$y], 'f'), 'R', 0, "R", 0);
@@ -856,7 +935,7 @@ if (!isset($arqinclude)){
 
       if (isset($recB[$x][$y])) {
 
-        if ($x == 22) {
+        if ($x == 23) {
           $recB[$x][$y] *= -1;
         }
         $pdf->cell($cl, $alt, db_formatar($recB[$x][$y], 'f'), 'R', 0, "R", 0);
@@ -871,7 +950,7 @@ if (!isset($arqinclude)){
     // listamos a previsão
 
     if (isset($recB[$x][13])) {
-      if ($x == 22) {
+      if ($x == 23) {
         $recB[$x][13] *= -1;
       }
       $pdf->cell($cl, $alt, db_formatar($recB[$x][13], 'f'), 0, 0, "R", 0);
@@ -936,15 +1015,13 @@ if (!isset($arqinclude)){
   }else {
     $pdf->cell($cl, $alt, db_formatar(0, 'f'), 'TB', 0, "R", 0);
   }
-
+//die('Here');
   $pdf->ln();
   // ----------------------------------------------------------------
   $oRelatorio = new relatorioContabil($iCodigoRelatorio, false);
-  $oRelatorio->getNotaExplicativa(&$pdf, $iCodigoPeriodo,280);
+  $oRelatorio->getNotaExplicativa($pdf, $iCodigoPeriodo,280);
   $pdf->ln(15);
-  assinaturas(&$pdf,&$classinatura,'LRF');
+  assinaturas($pdf,$classinatura,'LRF');
   $pdf->Output();
 
 }
-
-?>

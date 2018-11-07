@@ -36,11 +36,18 @@ require_once("fpdf151/assinatura.php");
 try {
 
   $oGet = db_utils::postMemory($_GET);
+  $iCodRelatorio = AnexoIBalancoOrcamentario::CODIGO_RELATORIO;
+
+  if($oGet->relatorio == 155){
+      $iCodRelatorio = AnexoIBalancoOrcamentario::CODIGO_RELATORIO_POS_2018;
+  }
+
   $oAnexoI = new AnexoIBalancoOrcamentario(
     db_getsession('DB_anousu'),
-    AnexoIBalancoOrcamentario::CODIGO_RELATORIO,
+    $iCodRelatorio,
     $oGet->bimestre
   );
+
   $oAnexoI->setInstituicoes(str_replace("-", ",",$oGet->db_selinstit));
   $oAnexoI->emitir();
 

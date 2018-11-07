@@ -38,6 +38,8 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
    */
   const CODIGO_RELATORIO = 145;
 
+  const CODIGO_RELATORIO_POS_2018 = 155;
+
   /**
    * @type PDFDocument
    */
@@ -134,7 +136,6 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
   public function emitir() {
 
     $this->getDados();
-
     $this->processar();
     $this->processarExerciciosAnteriores();
 
@@ -268,6 +269,7 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
     }
 
     return $this->aLinhasConsistencia;
+
   }
 
   /**
@@ -486,7 +488,7 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
       $iLarguraColunaDotacaoAtual   += 10;
     }
 
-    $sDescricao = $lDespesaIntra ? "DESPESAS INTRA-ORÇAMENTÁRIAS" : "DESPESAS";
+    $sDescricao = $lDespesaIntra ? "DESPESAS INTRA-ORÇAMENTÁRIAS" : "DESPESAS ORÇAMENTÁRIAS";
 
     $this->oPdf->setBold(true);
     $this->oPdf->Cell($iLarguraColunaDespesa, 15, $sDescricao, "TB", 0, PDFDocument::ALIGN_CENTER);
@@ -549,6 +551,7 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
 
     $this->iCodigoPeriodo == 11 ? $lSextoBimestre = true : $lSextoBimestre = false ;
     $aDespesas = $lReceitaIntra ? $this->aDespesasIntra : $this->aDespesas;
+
     foreach ($aDespesas as $iOrdem => $oStdDespesa) {
 
       if ($this->oPdf->getAvailHeight() <= 10) {
@@ -590,7 +593,7 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
    */
   private function imprimirCabecalhoReceita($lReceitaIntra = false) {
 
-    $sDescricao = $lReceitaIntra ? "RECEITAS INTRA-ORÇAMENTÁRIAS" : "RECEITAS";
+    $sDescricao = $lReceitaIntra ? "RECEITAS INTRA-ORÇAMENTÁRIAS" : "RECEITAS ORÇAMENTÁRIAS";
 
     $this->oPdf->setBold(true);
     $this->oPdf->SetFontSize(6);
@@ -620,6 +623,7 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
   private function imprimirReceita($lReceitaIntra = false) {
 
     $aReceitas = $lReceitaIntra ? $this->aReceitasIntra : $this->aReceitas;
+
     foreach ($aReceitas as $oStdLinha) {
 
       if ($this->oPdf->getAvailHeight() <= 10) {
@@ -657,7 +661,7 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
 
     $this->oPdf->ln(10);
     $oAssinatura = new cl_assinatura();
-    assinaturas($this->oPdf, &$oAssinatura,'LRF');
+    assinaturas($this->oPdf, $oAssinatura,'LRF');
   }
 
 
@@ -702,5 +706,6 @@ class AnexoIBalancoOrcamentario extends RelatoriosLegaisBase  {
     $oDados->nPagas                     = $aDados[97]->pago;
     $oDados->nSuperavitOrcamentario     = $aDados[98]->liq_atebim;
     return $oDados;
+
   }
 }
