@@ -70,26 +70,16 @@ try {
   e139_datadispensa AS Datadispensa
   FROM
   bensdispensatombamento
-  INNER JOIN
-  empnotaitem ON e72_sequencial=e139_empnotaitem
-  INNER JOIN
-  empnota ON e69_codnota=e72_codnota
-  INNER JOIN
-  empempitem ON e62_sequencial=e72_empempitem
-  INNER JOIN
-  empempenho ON e60_numemp=e62_numemp
-  INNER JOIN
-  matordemitem ON (m52_numemp, m52_sequen) = (e62_numemp, e62_sequen)
-  LEFT JOIN
-  matordemitemanu ON m36_matordemitem=m52_codlanc
-  INNER JOIN
-  matordem ON m51_codordem=m52_codordem AND e139_codordem = m51_codordem
-  INNER JOIN
-  cgm ON z01_numcgm = e60_numcgm
-  INNER JOIN
-  db_depart ON m51_depto=coddepto
-  INNER JOIN
-  pcmater ON pc01_codmater=e62_item
+  INNER JOIN  empnotaitem ON e72_sequencial=e139_empnotaitem
+  INNER JOIN  empnota ON e69_codnota=e72_codnota
+  INNER JOIN  empempitem ON e62_sequencial=e72_empempitem
+  INNER JOIN  empempenho ON e60_numemp=e62_numemp
+  INNER JOIN  matordemitem ON (m52_numemp, m52_sequen) = (e62_numemp, e62_sequen)
+  LEFT JOIN  matordemitemanu ON m36_matordemitem=m52_codlanc
+  LEFT JOIN  matordem ON m51_codordem=m52_codordem AND e139_codordem = m51_codordem
+  INNER JOIN  cgm ON z01_numcgm = e60_numcgm
+  LEFT JOIN  db_depart ON m51_depto=coddepto
+  INNER JOIN  pcmater ON pc01_codmater=e62_item
   ";
   $sWhere = "";
   $sCondicoes = " WHERE m36_sequencial is null ";
