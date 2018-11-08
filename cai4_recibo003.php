@@ -757,13 +757,7 @@ $pdf1->valtotal		      = db_formatar(@$valor_parm,'f');
 $pdf1->linhadigitavel	  = $linhadigitavel;
 $pdf1->codigobarras    	= $codigobarras;
 if (isset($lReemissao) && $lReemissao ) {
-	
-  if (!isset($lBarra)) {
-  	
-	  $pdf1->linhadigitavel	  = null;
-    $pdf1->codigobarras     = null;
-  }
-  
+
   
   $sSqlCodAutenticador       = " SELECT k12_codautent 
                                    from cornump 

@@ -38,67 +38,93 @@ include("classes/db_parissqn_classe.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label("q51_numnota");
 $clrotulo->label("q63_issnotaavulsa");
-$db_opcao              = 1;
-$post                  = db_utils::postMemory($_POST);
-$clissnotaavulsanumpre = new cl_issnotaavulsanumpre();
-$clrecibopaga          = new cl_recibopaga();
-$clparissqn            = new cl_parissqn;
-$rsPar                 = $clparissqn->sql_record($clparissqn->sql_query(null,"*"));
-$oPar                  = db_utils::fieldsMemory($rsPar,0); 
-if (isset($post->reemite)){
+$db_opcao               = 1;
+$post                   = db_utils::postMemory($_POST);
+$clissnotaavulsanumpre  = new cl_issnotaavulsanumpre();
+$clissnotaavulsatomador = new cl_issnotaavulsatomador();
+$clissnotaavulsaservico = new cl_issnotaavulsaservico();
+$clrecibopaga           = new cl_recibopaga();
+$clparissqn             = new cl_parissqn;
+$rsPar                  = $clparissqn->sql_record($clparissqn->sql_query(null,"*"));
+$oPar                   = db_utils::fieldsMemory($rsPar,0);
 
-   $rsNumpre = $clissnotaavulsanumpre->sql_record($clissnotaavulsanumpre->sql_query(null,"*",null,
-                                      "q51_numnota = ".$post->q51_numnota));
-   if ($clissnotaavulsanumpre->numrows > 0){
+/**
+ * Em Pmpirapora o tipo de débito para a nota avulsa tem que ser diferente do da NFSe devido à taxa de expediente.
+ * @todo criar um parametro para guardar o tipo de debito para nota avulsa.
+ */
+$oInstit = new Instituicao(db_getsession('DB_instit'));
+if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
+    $oPar->q60_tipo = 61;
+}
 
+if (isset($post->reemite)) {
 
-       $oNumpre  = db_utils::fieldsMemory($rsNumpre,0);
-       $rsRecibo = $clrecibopaga->sql_record($clrecibopaga->sql_query(null,"*",null,"k00_numnov=".$oNumpre->q52_numnov));
-       if ($clrecibopaga->numrows > 0){
-         
-          $oRecibo = db_utils::fieldsMemory($rsRecibo,0);
-          if (db_strtotime(date("Y-m-d",db_getsession("DB_datausu"))) <= db_strtotime($oRecibo->k00_dtvenc)){
-           
-            $url   = "iss1_issnotaavulsarecibo.php?numpre=".$oNumpre->q52_numnov."&tipo=".$oPar->q60_tipo."&ver_inscr=".$oNumpre->q02_inscr;
-			      $url  .= "&numcgm=".$oNumpre->q02_numcgm."&emrec=t&CHECK10=&tipo_debito=".$oPar->q60_tipo; 
-            $url  .= "&k03_tipo=".$oPar->q60_tipo."&k03_parcelamento=f&k03_perparc=f&ver_numcgm=".$oNumpre->q02_numcgm;
-            $url  .= "&totregistros=1&reemite_recibo=1&k03_numpre=".$oNumpre->q52_numnov."&k03_numnov=".$oNumpre->q52_numpre."&k00_histtxt=";
+    $rsNumpre = $clissnotaavulsanumpre->sql_record($clissnotaavulsanumpre->sql_query(null, "*", null,
+        "q51_numnota = " . $post->q51_numnota));
+    if ($clissnotaavulsanumpre->numrows > 0) {
+
+        $oNumpre = db_utils::fieldsMemory($rsNumpre, 0);
+
+        $rsTom = $clissnotaavulsatomador->sql_record($clissnotaavulsatomador->sql_query_tomador($oNumpre->q52_issnotaavulsa));
+        $oTom = db_utils::fieldsMemory($rsTom, 0);
+        $rsObs = $clissnotaavulsaservico->sql_record($clissnotaavulsaservico->sql_query(null, "sum(q62_vlrissqn) as tvlrissqn,sum(q62_vlrdeducao) as tvlrdeducoes, sum(q62_vlrtotal) as tvlrtotal", null, "q62_issnotaavulsa=" . $oNumpre->q52_issnotaavulsa));
+        $oObs = db_utils::fieldsmemory($rsObs, 0);
+
+        $obs = "Referente a nota fiscal avulsa nº " . $oNot->q51_numnota . "\n";
+        $obs .= "Tomador : " . $oTom->z01_cgccpf . " - " . $oTom->z01_nome . "\n";
+        $obs .= "Imposto : R$ " . trim(db_formatar($oObs->tvlrissqn, "f")) . "\n";
+        $obs .= "Deduções: R$ " . trim(db_formatar($oObs->tvlrdeducoes, "f")) . "\n";
+        $obs .= "Valor serviço: R$ " . trim(db_formatar($oObs->tvlrtotal, "f")) . "\n";
+        session_register("DB_obsrecibo", $obs);
+        db_putsession("DB_obsrecibo", $obs);
+
+        $rsRecibo = $clrecibopaga->sql_record($clrecibopaga->sql_query(null, "*", null, "k00_numnov=" . $oNumpre->q52_numnov));
+        if ($clrecibopaga->numrows > 0) {
+
+            $oRecibo = db_utils::fieldsMemory($rsRecibo, 0);
+            if (db_strtotime(date("Y-m-d", db_getsession("DB_datausu"))) <= db_strtotime($oRecibo->k00_dtvenc)) {
+
+                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo . "&ver_inscr=" . $oNumpre->q02_inscr;
+                $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=&tipo_debito=" . $oPar->q60_tipo;
+                $url .= "&k03_tipo=" . $oPar->q60_tipo . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
+                $url .= "&totregistros=1&reemite_recibo=1&k03_numpre=" . $oNumpre->q52_numnov . "&k03_numnov=" . $oNumpre->q52_numnov . "&k00_histtxt=";
+
+                echo "<script>\n";
+                echo "if (confirm('Reeemitir Recibo?')){\n";
+                echo "   window.open('$url','','location=0');";
+                echo "}</script>";
+
+            } else {
+
+                $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo . "&ver_inscr=" . $oNumpre->q02_inscr;
+                $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=" . $oNumpre->q52_numpre . "P1&tipo_debito=" . $oPar->q60_tipo;
+                $url .= "&k03_tipo=" . $oPar->q60_tipo . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
+                $url .= "&totregistros=1";
+                echo "<script>\n";
+                echo "if (confirm('O recibo está vencido.\\nReeemitir Recibo?')){\n";
+                echo "   window.open('$url','','location=0');";
+                echo "}</script>";
+
+            }
+
+        } else {
+
+            $url = "iss1_issnotaavulsarecibo.php?numpre=" . $oNumpre->q52_numpre . "&tipo=" . $oPar->q60_tipo . "&ver_inscr=" . $oNumpre->q02_inscr;
+            $url .= "&numcgm=" . $oNumpre->q02_numcgm . "&emrec=t&CHECK10=" . $oNumpre->q52_numpre . "P1&tipo_debito=" . $oPar->q60_tipo;
+            $url .= "&k03_tipo=" . $oPar->q60_tipo . "&k03_parcelamento=f&k03_perparc=f&ver_numcgm=" . $oNumpre->q02_numcgm;
+            $url .= "&totregistros=1";
             echo "<script>\n";
-            echo "if (confirm('Reeemitir Recibo?')){\n";
-            echo "   window.open('$url','','location=0');";    
+            echo "if (confirm(' Nâo Ha recibo lancado para essa nota.\\nGerar Recibo?')){\n";
+            echo "   window.open('$url','','location=0');";
             echo "}</script>";
 
-       }else{
+        }
 
-          $url   = "iss1_issnotaavulsarecibo.php?numpre=".$oNumpre->q52_numpre."&tipo=".$oPar->q60_tipo."&ver_inscr=".$oNumpre->q02_inscr;
-			    $url  .= "&numcgm=".$oNumpre->q02_numcgm."&emrec=t&CHECK10=".$oNumpre->q52_numpre."P1&tipo_debito=".$oPar->q60_tipo; 
-          $url  .= "&k03_tipo=".$oPar->q60_tipo."&k03_parcelamento=f&k03_perparc=f&ver_numcgm=".$oNumpre->q02_numcgm;
-          $url  .= "&totregistros=1";
-          echo "<script>\n";
-          echo "if (confirm('O recibo está vencido.\\nReeemitir Recibo?')){\n";
-          echo "   window.open('$url','','location=0');";    
-          echo "}</script>";
-         
-       }
+    } else {
 
-   }else{
+        db_msgbox("Não é possivel a Reemissão do recibo para essa Nota.\\nNota sem Imposto");
 
-        $url   = "iss1_issnotaavulsarecibo.php?numpre=".$oNumpre->q52_numpre."&tipo=".$oPar->q60_tipo."&ver_inscr=".$oNumpre->q02_inscr;
-		    $url  .= "&numcgm=".$oNumpre->q02_numcgm."&emrec=t&CHECK10=".$oNumpre->q52_numpre."P1&tipo_debito=".$oPar->q60_tipo; 
-        $url  .= "&k03_tipo=".$oPar->q60_tipo."&k03_parcelamento=f&k03_perparc=f&ver_numcgm=".$oNumpre->q02_numcgm;
-        $url  .= "&totregistros=1";
-        echo "<script>\n";
-        echo "if (confirm(' Nâo Ha recibo lancado para essa nota.\\nGerar Recibo?')){\n";
-        echo "   window.open('$url','','location=0');";    
-        echo "}</script>";
-
-   }
-
- }else{
-
-    db_msgbox("Não é possivel a Reemissão do recibo para essa Nota.\\nNota sem Imposto");
-
- }
+    }
 }
 
 ?>

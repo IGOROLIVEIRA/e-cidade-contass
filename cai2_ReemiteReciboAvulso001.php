@@ -48,54 +48,54 @@ if (isset($oPost->k00_numpre)) {
 		db_redireciona();
 	}
 
-	$oDadosRecibo = db_utils::fieldsMemory($rsDadosRecibo, 0);
+  $oDadosRecibo = db_utils::fieldsMemory($rsDadosRecibo, 0);
 
-	$sUrl  = "cai4_recibo003.php?iNumpre={$oDadosRecibo->k00_numpre}&tipo={$oDadosRecibo->k00_tipo}&ver_inscr=";
-	$sUrl .= "&numcgm={$oDadosRecibo->k00_numcgm}&emrec=t&CHECK10=&tipo_debito={$oDadosRecibo->k00_tipo}&lReemissao=true";
-	$sUrl .= "&k03_tipo={$oDadosRecibo->k00_tipo}&k03_parcelamento=f&k03_perparc=f&ver_numcgm={$oDadosRecibo->k00_numcgm}";
+  $sUrl  = "cai4_recibo003.php?iNumpre={$oDadosRecibo->k00_numpre}&tipo={$oDadosRecibo->k00_tipo}&ver_inscr=";
+  $sUrl .= "&numcgm={$oDadosRecibo->k00_numcgm}&emrec=t&CHECK10=&tipo_debito={$oDadosRecibo->k00_tipo}&lReemissao=true";
+  $sUrl .= "&k03_tipo={$oDadosRecibo->k00_tipo}&k03_parcelamento=f&k03_perparc=f&ver_numcgm={$oDadosRecibo->k00_numcgm}";
 
-	echo "<script> ";
-	echo "   window.open('{$sUrl}','','location=0'); ";
-	echo "</script>";
+  echo "<script> ";
+  echo "   window.open('{$sUrl}','','location=0'); ";
+  echo "</script>";
 
 }
 
 ?>
 <html>
-  <head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <meta http-equiv="Expires" CONTENT="0">
-    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-    <link href="estilos.css" rel="stylesheet" type="text/css">
-  </head>
-  <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <?
-/*   if (db_getsession("DB_id_usuario") != 1) {
-   	
-   	$sString  = "<center>";
-   	$sString .= "<fieldset style=\"width: 500px; margin-top: 25px;\">";
-   	$sString .= "<p>";
-   	$sString .= "<b>Rotina bloqueada</b>";
-   	$sString .= "</p>";
-   	$sString .= "</fieldset>";
-   	$sString .= "</center>";
-   	
-   	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-   	die($sString);
-   }*/
-  ?>
-    <table  border="0" cellpadding="0" cellspacing="0">
-      <tr> 
-        <td width="360" height="18">&nbsp;</td>
-        <td width="263">&nbsp;</td>
-        <td width="25">&nbsp;</td>
-        <td width="140">&nbsp;</td>
-     </tr>
-  </table>
-  <center>
-    <form name='form1' method="POST">
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+</head>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<?
+if (db_getsession("DB_id_usuario") != 1) {
+
+  $sString  = "<center>";
+  $sString .= "<fieldset style=\"width: 500px; margin-top: 25px;\">";
+  $sString .= "<p>";
+  $sString .= "<b>Rotina bloqueada</b>";
+  $sString .= "</p>";
+  $sString .= "</fieldset>";
+  $sString .= "</center>";
+
+  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+  die($sString);
+}
+?>
+<table  border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="360" height="18">&nbsp;</td>
+    <td width="263">&nbsp;</td>
+    <td width="25">&nbsp;</td>
+    <td width="140">&nbsp;</td>
+  </tr>
+</table>
+<center>
+  <form name='form1' method="POST">
     <table width="250">
       <tr>
         <td align="center">
@@ -104,10 +104,10 @@ if (isset($oPost->k00_numpre)) {
             <table>
               <tr>
                 <td nowrap title="<?=@$k00_numpre?>">
-                 <?=$Lk00_numpre?>
+                  <?=$Lk00_numpre?>
                 </td>
-                <td nowrap> 
-                 <? db_input('k00_numpre',10,$Ik00_numpre,true,'text',1)  ?>
+                <td nowrap>
+                  <? db_input('k00_numpre',10,$Ik00_numpre,true,'text',1)  ?>
                 </td>
               </tr>
             </table>
@@ -120,24 +120,24 @@ if (isset($oPost->k00_numpre)) {
         </td>
       </tr>
     </table>
-    </form>
-  </center>
-  </body>
+  </form>
+</center>
+</body>
 </html>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 <script>
 
-function js_Reemitir() {
-	if ($F(k00_numpre) == "") {
-		alert("Informe o Numpre do Recibo Avulso que deseja reemitir");
-		return false;
-	}	
+  function js_Reemitir() {
+    if ($F(k00_numpre) == "") {
+      alert("Informe o Numpre do Recibo Avulso que deseja reemitir");
+      return false;
+    }
 
-	if (confirm('Reemitir Recibo?')) {
-    document.form1.submit();
-		return true;
-	}
-}
+    if (confirm('Reemitir Recibo?')) {
+      document.form1.submit();
+      return true;
+    }
+  }
 </script>
