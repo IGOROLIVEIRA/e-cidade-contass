@@ -70,10 +70,10 @@ $sCaminhoMensagem  = "financeiro.contabilidade.con1_conplanoorcamento.";
 		    $oSistemaConta       = new SistemaConta($oParam->iSistemaContaPlano);
 		    $oSubsistemaConta    = new SubSistemaConta($oParam->iSubsistemaConta);
 		    $oClassificacaoConta = new ClassificacaoConta($oParam->iClassificacaoContaPlano);
-	      $oContaPcasp         = new ContaPlanoPCASP($oParam->iContaPcasp, db_getsession("DB_anousu"));
+	        $oContaPcasp         = new ContaPlanoPCASP($oParam->iContaPcasp, db_getsession("DB_anousu"));
 
-	      $sDescricao  = db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoPlano);
-	      $sFinalidade = db_stdClass::normalizeStringJsonEscapeString($oParam->sFinalidadePlano);
+	        $sDescricao  = db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoPlano);
+	        $sFinalidade = db_stdClass::normalizeStringJsonEscapeString($oParam->sFinalidadePlano);
 		    $oPlano->setEstrutural($oParam->iEstruturalPlano);
 		    $oPlano->setDescricao($sDescricao);
 		    $oPlano->setFinalidade($sFinalidade);
@@ -85,6 +85,7 @@ $sCaminhoMensagem  = "financeiro.contabilidade.con1_conplanoorcamento.";
 		    $oPlano->setIdentificadorFinanceiro($oParam->sIdentificadorFinanceiro);
 		    $oPlano->setContraPartida(0);
 		    $oPlano->setNaturezaSaldo($oParam->iNaturezaDeSaldo);
+		    $oPlano->setTipoConta($oParam->sTipoConta);
 		    if ($oContaPcasp != null) {
 		      $oPlano->setPlanoContaPCASP($oContaPcasp);
 		    }

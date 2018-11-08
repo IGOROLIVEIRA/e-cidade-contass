@@ -56,7 +56,7 @@ abstract class ContaPlano {
     protected $oSubSistemaConta     = null;
     protected $iCgmPessoa;
     protected $iNaturezadaReceita;
-
+    protected $sTipoConta;
     /**
      * @type ClassificacaoConta
      */
@@ -773,6 +773,22 @@ abstract class ContaPlano {
     public function setNaturezadaReceita($iNaturezadaReceita){
         $this->iNaturezadaReceita = $iNaturezadaReceita;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTipoConta()
+    {
+        return $this->sTipoConta;
+    }
+
+    /**
+     * @param mixed $sTipoConta
+     */
+    public function setTipoConta($sTipoConta)
+    {
+        $this->sTipoConta = $sTipoConta;
     }
 
     /**

@@ -233,6 +233,7 @@ class ContaOrcamento extends ContaPlano {
         $this->oDaoConplanoconplanoorcamento->c72_conplano          = $this->getPlanoContaPCASP()->getCodigoConta();
         $this->oDaoConplanoconplanoorcamento->c72_conplanoorcamento = $iCodigoConta;
         $this->oDaoConplanoconplanoorcamento->c72_anousu            = $iAnoInclusao;
+        $this->oDaoConplanoconplanoorcamento->sTipoConta            = $this->getTipoConta();
 
         $this->oDaoConplanoconplanoorcamento->incluir(null);
 
