@@ -105,10 +105,7 @@ if (isset($_POST["processar"])) {
                                     corrente.k12_estorn AS estorno,
                                     cardeb.k131_concarpeculiar AS cpdebito,
                                     carcre.k131_concarpeculiar AS cpcredito,
-                                    CASE
-                                        WHEN substr(c60_estrut, 1, 4) = '1111' THEN '5'
-                                        ELSE '13'
-                                    END AS tipooperacaonovo,
+                                    k153_slipoperacaotipo AS tipooperacaonovo,
                                     cls.c84_conlancam AS lancam
                     FROM corrente
                     INNER JOIN corlanc ON corlanc.k12_id = corrente.k12_id
