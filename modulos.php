@@ -159,11 +159,15 @@ function js_atualizacao_versao(){
 <?
 //if (db_getsession("DB_id_usuario") == 1) {
 
-  $sSql  = "select id_usuario, anousu   ";
-  $sSql .= "  from db_permissao         ";
-  $sSql .= " where id_usuario = ".db_getsession("DB_id_usuario");
-  $sSql .= "group by id_usuario, anousu ";
-  $sSql .= "order by anousu desc        ";
+  $sSql  = "select db_permissao.id_usuario, anousu   ";
+  $sSql .= "from db_permissao       ";
+  $sSql .= "WHERE db_permissao.id_usuario IN";
+  $sSql .= "    (SELECT db_permherda.id_perfil";
+  $sSql .= "     FROM db_permherda";
+  $sSql .= "     WHERE db_permherda.id_usuario = ".db_getsession("DB_id_usuario").")";
+  $sSql .= "OR db_permissao.id_usuario = ".db_getsession("DB_id_usuario");
+  $sSql .= "group by db_permissao.id_usuario, db_permissao.anousu ";
+  $sSql .= "order by db_permissao.anousu desc ";
 /*} else {
 
   $sSql  = " select distinct on (anousu) anousu, id_usuario                                     ";
