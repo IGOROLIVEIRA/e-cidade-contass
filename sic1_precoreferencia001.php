@@ -8,19 +8,34 @@ include("classes/db_itemprecoreferencia_classe.php");
 include("dbforms/db_funcoes.php");
 require("libs/db_utils.php");
 db_postmemory($HTTP_POST_VARS);
+$oPost = db_utils::postMemory($_POST);
 
 $clprecoreferencia     = new cl_precoreferencia;
 $clitemprecoreferencia = new cl_itemprecoreferencia;
 $db_opcao = 1;
 $db_botao = true;
+
 if(isset($incluir)){
-	db_inicio_transacao();
 
-  $clprecoreferencia->incluir(null);
+  db_inicio_transacao();
 
-  if ($clprecoreferencia->erro_status != 0) {
+  $processoValidado = true;
+  $sqlProc = $clprecoreferencia->sql_query("",'si01_processocompra',null,"si01_processocompra='".$si01_processocompra."'");
+  $procReferencia = db_query($sqlProc);
+  $procReferencia = db_utils::fieldsMemory($procReferencia,0);
 
-  	if ($si01_tipoprecoreferencia == 1) {
+  if($procReferencia->si01_processocompra != ''){
+      echo "<script>alert('Já existe preço referência para esse processo de compra');</script>";
+      $processoValidado = false;
+  }
+
+  if($processoValidado){
+    $clprecoreferencia->incluir(null);
+  }
+
+  if ($clprecoreferencia->erro_status != 0 && $processoValidado) {
+
+    if ($si01_tipoprecoreferencia == 1) {
      	$sFuncao = "avg";
      } else if ($si01_tipoprecoreferencia == 2) {
      	$sFuncao = "max";
@@ -39,12 +54,15 @@ if(isset($incluir)){
                         where pc80_codproc = $si01_processocompra and pc23_vlrun > 0 group by pc23_orcamitem";
 
      $rsResult = db_query($sSql);
-     //Queremos commitar
+
+
      for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
-     	 $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
+       $oItemOrc = db_utils::fieldsMemory($rsResult, $iCont);
        $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
        $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
+
+
        $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;
        if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
         $clitemprecoreferencia->si02_vlpercreferencia = 0;
@@ -54,6 +72,7 @@ if(isset($incluir)){
        } else {
           $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia2;
        }
+
        $clitemprecoreferencia->incluir(null);
 
      }
@@ -78,7 +97,8 @@ if(isset($incluir)){
   db_fim_transacao($sqlerro);
   if ($clprecoreferencia->erro_status != 0){
     echo "<script>
-    jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$clprecoreferencia->si01_processocompra}+'&quant_casas='+$quant_casas,
+    jan = window.open('sic1_precoreferencia004.php?codigo_preco='+{$clprecoreferencia->si01_processocompra}+'&quant_casas='+$quant_casas
+    +'&tipoprecoreferencia='+$si01_tipoprecoreferencia,
 
 	                 '',
 	                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
