@@ -26,7 +26,6 @@
  */
 
 require_once ("RelatoriosLegaisBase.model.php");
-require_once("con2_execucaodecontratosaux.php");
 /**
  * Classe para controle dos valores do Anexo I da RGF.
  *
@@ -66,7 +65,6 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
    * @param integer $iCodigoPeriodo Código do período de emissão do relatório.
    */
   function __construct($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo) {
-
     parent::__construct($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);
 
     $oDaoPeriodo       = db_utils::getDao("periodo");
@@ -610,7 +608,6 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
       	}
       }
     }
-//        ExecucaoDeContratos::vd($oDespesaBruta->linhas);
 
     /**
      * Calcula linhas totalizadoras da despesa não computada.
@@ -749,7 +746,6 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
     unset($aLinhasRelatorio);
 
     $this->oDados = $oRetorno;
-//    ExecucaoDeContratos::vd($oRetorno);
     return $this->oDados;
   }
 
@@ -946,4 +942,5 @@ final class AnexoIRGF_2018 extends RelatoriosLegaisBase {
 
     return $sDescricaoMes;
   }
+
 }
