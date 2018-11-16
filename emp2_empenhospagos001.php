@@ -316,9 +316,7 @@ $oRotuloSaltes->label();
       var map = window.open("", name, windowfeature);
       if (map) {
           mapForm.submit();
-      } else {
-          alert('You must allow popups for this map to work.');
-      }
+      } 
     }
 
     filtra_despesa = parent.iframe_filtro.js_atualiza_variavel_retorno();
