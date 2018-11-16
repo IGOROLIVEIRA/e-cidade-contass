@@ -342,6 +342,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->nome             = $z01_nome;
    $pdf1->cnpj             = $z01_cgccpf;
    $pdf1->ender            = $z01_ender;
+   $pdf1->cep              = $z01_cep;
    $pdf1->ufFornecedor     = $z01_uf;
    $pdf1->munic            = $z01_munic;
    $pdf1->ordpag           = $e50_codord;
