@@ -71,21 +71,6 @@ if (isset($oPost->k00_numpre)) {
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<?
-if (db_getsession("DB_id_usuario") != 1) {
-
-  $sString  = "<center>";
-  $sString .= "<fieldset style=\"width: 500px; margin-top: 25px;\">";
-  $sString .= "<p>";
-  $sString .= "<b>Rotina bloqueada</b>";
-  $sString .= "</p>";
-  $sString .= "</fieldset>";
-  $sString .= "</center>";
-
-  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-  die($sString);
-}
-?>
 <table  border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td width="360" height="18">&nbsp;</td>
