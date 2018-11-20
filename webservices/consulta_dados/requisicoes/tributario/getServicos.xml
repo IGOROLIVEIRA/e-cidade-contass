@@ -29,8 +29,8 @@
     <filtro condicao="q81_tipo = 1"         obrigatorio="false"/>
     <filtro condicao="q85_var = true"       obrigatorio="false"/>
     <filtro condicao="q72_cnae is not null" obrigatorio="false"/>
-    <filtro label="exercicio"   condicao = "q136_exercicio = '$exercicio'" obrigatorio="true"                           />
+    <filtro label="exercicio"   condicao="q136_exercicio = '$exercicio'" obrigatorio="true"                           />
   </filtros>
   <agrupamento campos=""         />
-  <ordenacao   campos="q03_descr"/>
+  <ordenacao   campos="3"/>
 </consulta>
