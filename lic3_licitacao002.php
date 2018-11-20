@@ -208,7 +208,21 @@ if (!empty($oProcessoProtocolo)) {
         <?=@$Ll20_criterioadjudicacao?>
       </td>
       <td nowrap="nowrap" class="valor" style="text-align: left;">
-        <?php echo $oLicitatacao->l20_criterioadjudicacao == 1 ? 'Tabela' : $oLicitatacao->l20_criterioadjudicacao == 2 ? 'Taxa' : 'Outros' ?>
+        <?php
+          //OC7708
+          switch($oLicitatacao->l20_criterioadjudicacao) {
+            case 1:
+              echo "Tabela";
+            break;
+            case 2:
+              echo "Taxa";
+            break;
+            case 3:
+              echo "Outros";
+            break;
+            default: echo "Outros";
+          }
+          ?>
       </td>
 
       <td nowrap="nowrap" title="<?=@$Tl20_usaregistropreco?>">
