@@ -2,7 +2,8 @@
 <consulta distinct="true">
   <campos>
     <campo campo="q03_ativ"         label="cod_atividade"/>
-    <campo campo="q03_descr"        label="atividade"    />
+    <campo campo= "q136_sequencial"          label="cod_servico"   	   />
+    <campo campo= "coalesce((db121_estrutural||' - '||q71_estrutural||' '||q71_descr||' - '||round(q136_valor,2)::varchar||case when q136_tipotributacao = 2 then '%' else ' R$' end),q03_descr)" label="atividade"/>
     <campo campo="q03_deducao"      label="deducao"      />
     <campo campo="q71_estrutural"   label="estrut_cnae"  />
     <campo campo="q71_descr"        label="desc_cnae"    />
