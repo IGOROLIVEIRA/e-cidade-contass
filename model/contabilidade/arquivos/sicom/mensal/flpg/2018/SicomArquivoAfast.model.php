@@ -91,12 +91,11 @@ class SicomArquivoAfast extends SicomArquivoBase implements iPadArquivoBaseCSV {
             }
         }
 
-
         $sSql = "select r45_regist
                      from afasta 
 WHERE 
      DATE_PART('YEAR',r45_dtreto) = 2018
-    AND r45_situac <> 5    
+    AND r45_situac <> 5   
     group by 1";
 
         $rsResult = db_query($sSql);//db_criatabela($rsResult);exit;
@@ -143,18 +142,22 @@ WHERE
                                                (SELECT si199_codvinculopessoa
                                                 FROM afast102018
                                                 WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                    AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " ) or r45_regist IN
+                                                    AND si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " ) 
+                                                    
+                                                or 
+                                                
+                                                r45_regist IN
                                                 (SELECT si199_codvinculopessoa
                                                  FROM afast102018
                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
                                                      and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )
 
-                                                    and
+                                                and
 
                                                  r45_dtreto > (SELECT si199_dtretornoafastamento
                                                  FROM afast102018
                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )  
+                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " limit 1 )  
                             )  
                             
                             
@@ -228,7 +231,7 @@ WHERE
                                                  r45_dtreto > (SELECT si199_dtretornoafastamento
                                                  FROM afast102018
                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )  
+                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " limit 1 )  
                             )  
                             
                             
@@ -307,7 +310,9 @@ WHERE
 
 
             $sSql = "SELECT distinct r45_regist as codvinculopessoa,
-                  10||r45_codigo as codafastamento,
+                  (SELECT DISTINCT si199_codafastamento
+	          FROM afast102018
+	          WHERE si199_codvinculopessoa = $oDados->r45_regist) as codafastamento,
                   r45_dtafas as dtinicioafastamento,
                   r45_dtreto as dtretornoafastamento,
                   case when r45_situac = 4 and r45_codafa <> 'W' then 2 
@@ -329,14 +334,22 @@ WHERE
                                                 (SELECT si199_codvinculopessoa
                                                  FROM afast102018
                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ")
-
-                                                    and
-
+                                                     and si199_codafastamento = (SELECT DISTINCT si199_codafastamento
+                                                                                  FROM afast102018
+                                                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist)
+                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
+                                                     order by si199_codafastamento desc limit 1)
+                            
+                                                 AND
+                                                 
                                                  r45_dtreto < (SELECT si199_dtretornoafastamento
                                                  FROM afast102018
                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
-                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " )  
+                                                     and si199_codafastamento = (SELECT DISTINCT si199_codafastamento
+                                                                                  FROM afast102018
+                                                                                  WHERE si199_codvinculopessoa = $oDados->r45_regist
+                                                                                  order by si199_codafastamento desc limit 1)
+                                                     and si199_mes < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " limit 1 )  
                             )
                             
                             AND r45_regist::varchar||r45_dtreto not in (select si200_codvinculopessoa::varchar||si200_dtterminoafastamento from afast202018 )
@@ -346,7 +359,8 @@ WHERE
                             AND DATE_PART('YEAR',r45_dtreto) = 2018
                             AND r45_situac <> 5";
 
-            $rsResult3 = db_query($sSql);//echo $sSql;db_criatabela($rsResult3);
+            $rsResult3 = db_query($sSql);//echo $sSql;db_criatabela($rsResult3);exit;
+            //echo $sSql;db_criatabela($rsResult3);
 
             for ($iCont2 = 0; $iCont2 < pg_num_rows($rsResult3); $iCont2++) {
 
