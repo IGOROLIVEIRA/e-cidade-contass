@@ -37,7 +37,7 @@ $fila = new FilaESocialTask();
     'app.api' => array(
         'centraldeajuda' => 'http://centraldeajuda.dbseller.com.br/help/api/index.php/',
         'esocial' => array(
-            'url' => 'http://172.16.212.213/sped-esocial-master/run.php', // informe a api do eSocial. ESTE IP E DA MAQUINA DE ROBSON. LEMBRAR DE MUDAR.
+            'url' => 'http://172.16.212.56/sped-esocial-master/run.php', // informe a api do eSocial. ESTE IP E DA MAQUINA DE ROBSON. LEMBRAR DE MUDAR.
             'login' => '', // login do cliente
             'password' => '' // senha do cliente
         )
